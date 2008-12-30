@@ -1604,8 +1604,6 @@ build_search_box (EphyBookmarksEditor *editor)
 	GtkWidget *box;
 	GtkWidget *label;
 	GtkWidget *entry;
-	GtkWidget *cleaner;
-	GtkWidget *ebox;
 	char *str;
 
 	box = gtk_hbox_new (FALSE, 6);
@@ -1614,21 +1612,6 @@ build_search_box (EphyBookmarksEditor *editor)
 
 	entry = ephy_search_entry_new ();
 	editor->priv->search_entry = entry;
-	
-	cleaner = gtk_image_new_from_stock (GTK_STOCK_CLEAR,
-					    GTK_ICON_SIZE_MENU);
-	ebox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-	
-	gtk_widget_add_events (ebox, GDK_BUTTON_PRESS_MASK |
-			       GDK_BUTTON_RELEASE_MASK);
-	g_signal_connect (ebox , "button-release-event",
-			  G_CALLBACK (search_entry_clear_cb), 
-			  entry);
-	gtk_widget_set_tooltip_text (ebox,
-			             _("Clear"));
-	gtk_container_add (GTK_CONTAINER (ebox), cleaner);
-	ephy_icon_entry_pack_widget ((EPHY_ICON_ENTRY (entry)), ebox, FALSE);
 	
 	g_signal_connect (G_OBJECT (entry), "search",
 			  G_CALLBACK (search_entry_search_cb),

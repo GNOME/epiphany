@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
@@ -45,7 +44,7 @@ enum
 
 static guint ephy_search_entry_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (EphySearchEntry, ephy_search_entry, EPHY_TYPE_ICON_ENTRY)
+G_DEFINE_TYPE (EphySearchEntry, ephy_search_entry, GTK_TYPE_ENTRY)
 
 static void
 ephy_search_entry_class_init (EphySearchEntryClass *klass)
@@ -69,9 +68,8 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 static gboolean
 ephy_search_entry_timeout_cb (EphySearchEntry *entry)
 {
-	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
-				   gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
-								  (EPHY_ICON_ENTRY (entry)))));
+	g_signal_emit (entry, ephy_search_entry_signals[SEARCH], 0,
+		       gtk_entry_get_text (GTK_ENTRY (entry)));
 	entry->priv->timeout = 0;
 
 	return FALSE;
@@ -83,9 +81,8 @@ ephy_search_entry_changed_cb (GtkEditable *editable,
 {
 	if (entry->priv->clearing == TRUE)
 	{
-		g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
-			       gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
-							      (EPHY_ICON_ENTRY (entry)))));	
+		g_signal_emit (entry, ephy_search_entry_signals[SEARCH], 0,
+			       gtk_entry_get_text (GTK_ENTRY (entry)));
 		return;
 	}
 
@@ -109,16 +106,49 @@ ephy_search_entry_destroy_cb (GtkEditable *editable,
 	}
 }
 
+static gboolean
+search_entry_clear_cb (GtkWidget *entry,
+		       GtkEntryIconPosition position,
+		       GdkEventButton *event,
+		       gpointer user_data)
+{
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+	
+	if (event->button == 1 /* left */ && 
+	    state == 0 &&
+	    position == GTK_ENTRY_ICON_SECONDARY)
+	{	
+		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
+		
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
 static void
 ephy_search_entry_init (EphySearchEntry *entry)
 {
 	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
 
-	g_signal_connect (ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry)),
+	gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				       GTK_ENTRY_ICON_SECONDARY,
+				       GTK_STOCK_CLEAR);
+	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+					GTK_ENTRY_ICON_SECONDARY,
+					TRUE);
+	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+					 GTK_ENTRY_ICON_SECONDARY,
+					 _("Clear"));
+	g_signal_connect (entry,
+			  "icon-pressed",
+			  G_CALLBACK (search_entry_clear_cb),
+			  NULL);
+	g_signal_connect (entry,
 			  "destroy",
 			  G_CALLBACK (ephy_search_entry_destroy_cb),
 			  entry);
-	g_signal_connect (ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry)),
+	g_signal_connect (entry,
 			  "changed",
 			  G_CALLBACK (ephy_search_entry_changed_cb),
 			  entry);
@@ -134,12 +164,7 @@ ephy_search_entry_init (EphySearchEntry *entry)
 GtkWidget *
 ephy_search_entry_new (void)
 {
-	GtkWidget *entry;
-
-	entry = GTK_WIDGET (g_object_new (EPHY_TYPE_SEARCH_ENTRY,
-					  NULL));
-
-	return entry;
+	return gtk_widget_new (EPHY_TYPE_SEARCH_ENTRY, NULL);
 }
 
 /**
@@ -160,8 +185,7 @@ ephy_search_entry_clear (EphySearchEntry *entry)
 
 	entry->priv->clearing = TRUE;
 
-	gtk_entry_set_text (GTK_ENTRY (ephy_icon_entry_get_entry
-				       (EPHY_ICON_ENTRY (entry))), "");
+	gtk_entry_set_text (GTK_ENTRY (entry), "");
 
 	entry->priv->clearing = FALSE;
 }

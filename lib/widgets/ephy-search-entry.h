@@ -25,7 +25,7 @@
 #ifndef EPHY_SEARCH_ENTRY_H
 #define EPHY_SEARCH_ENTRY_H
 
-#include "ephy-icon-entry.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -42,14 +42,14 @@ typedef struct _EphySearchEntryPrivate	EphySearchEntryPrivate;
 
 struct _EphySearchEntryClass
 {
-	EphyIconEntryClass parent;
+	GtkEntryClass parent;
 
 	void (*search) (EphySearchEntry *view, const char *text);
 };
 
 struct _EphySearchEntry
 {
-	EphyIconEntry parent;
+	GtkEntry parent;
 
 	/*< private >*/
 	EphySearchEntryPrivate *priv;

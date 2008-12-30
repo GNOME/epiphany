@@ -916,8 +916,7 @@ add_by_word_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 {
 	const char *search_text;
 
-	search_text = gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
-						     (EPHY_ICON_ENTRY (editor->priv->search_entry))));
+	search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
 	if (search_text == NULL) return;
 
 	ephy_node_filter_add_expression
@@ -1017,31 +1016,11 @@ time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 	setup_filters (editor, TRUE, TRUE);
 }
 
-static gboolean
-search_entry_clear_cb (GtkWidget *ebox,
-		       GdkEventButton *event,
-		       GtkWidget *entry)
-{
-	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-	
-	if (event->type == GDK_BUTTON_RELEASE && 
-	    event->button == 1 /* left */ && 
-	    state == 0)
-	{	
-		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
-		
-		return TRUE;
-	}
-	
-	return FALSE;
-}
-
 static GtkWidget *
 build_search_box (EphyHistoryWindow *editor)
 {
 	GtkWidget *box, *label, *entry;
 	GtkWidget *combo;
-	GtkWidget *cleaner, *ebox;
 	char *str;
 	int time_range;
 
@@ -1053,21 +1032,6 @@ build_search_box (EphyHistoryWindow *editor)
 	add_focus_monitor (editor, entry);
 	add_entry_monitor (editor, entry);
 	editor->priv->search_entry = entry;
-    
-	cleaner = gtk_image_new_from_stock (GTK_STOCK_CLEAR,
-					    GTK_ICON_SIZE_MENU);
-	ebox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-	
-	gtk_widget_add_events (ebox, GDK_BUTTON_PRESS_MASK |
-			       GDK_BUTTON_RELEASE_MASK);
-	g_signal_connect (ebox , "button-release-event",
-			  G_CALLBACK (search_entry_clear_cb), 
-			  entry);
-	gtk_widget_set_tooltip_text (ebox,
-			             _("Clear"));
-	gtk_container_add (GTK_CONTAINER (ebox), cleaner);
-	ephy_icon_entry_pack_widget ((EPHY_ICON_ENTRY (entry)), ebox, FALSE);
     
 	gtk_widget_show_all (entry);
 
