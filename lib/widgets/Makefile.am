@@ -1,8 +1,6 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
-	ephy-icon-entry.c			\
-	ephy-icon-entry.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-node-view.c			\
