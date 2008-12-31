@@ -834,8 +834,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 
 	g_signal_connect (priv->entry, "drag-data-get",
 			  G_CALLBACK (favicon_drag_data_get_cb), lentry);
-	g_signal_connect (priv->entry, "drag-begin",
-			  G_CALLBACK (favicon_drag_begin_cb), lentry);
+	g_signal_connect_after (priv->entry, "drag-begin",
+				G_CALLBACK (favicon_drag_begin_cb), lentry);
 
 	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (priv->entry),
 					 GTK_ENTRY_ICON_PRIMARY,
