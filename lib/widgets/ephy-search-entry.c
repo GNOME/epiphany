@@ -141,7 +141,7 @@ ephy_search_entry_init (EphySearchEntry *entry)
 					 GTK_ENTRY_ICON_SECONDARY,
 					 _("Clear"));
 	g_signal_connect (entry,
-			  "icon-pressed",
+			  "icon-press",
 			  G_CALLBACK (search_entry_clear_cb),
 			  NULL);
 	g_signal_connect (entry,

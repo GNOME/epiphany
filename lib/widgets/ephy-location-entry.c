@@ -850,7 +850,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
 					GTK_ENTRY_ICON_SECONDARY,
 					TRUE);
-	g_signal_connect (priv->entry, "icon-pressed",
+	g_signal_connect (priv->entry, "icon-press",
 			  G_CALLBACK (icon_button_press_event_cb), lentry);
 
 	g_signal_connect (priv->entry, "populate_popup",
