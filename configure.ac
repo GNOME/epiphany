@@ -307,9 +307,9 @@ AC_SUBST([GECKO_LIBS])
 # Weasel UA version
 # *****************
 
-# FIXMEchpe: find a way to always automatically use the latest weasel minor version!
-
-if test "$gecko_cv_gecko" = "libxul" -o "$gecko_cv_gecko" = "libxul-embedding"; then
+if test "$gecko_cv_have_gecko_1_9_1" = "yes"; then
+  WEASEL_UA_VERSION="3.1"
+elif test "$gecko_cv_have_gecko_1_9_0" = "yes"; then
   WEASEL_UA_VERSION="3.0"
 elif test "$gecko_cv_gecko_version_int" -ge "1009000"; then
   WEASEL_UA_VERSION="3.0"
