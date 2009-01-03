@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2008-06-12 17:21+0000\n"
-"PO-Revision-Date: 2008-06-13 10:19+0300\n"
+"product=epiphany&amp;component=general\n"
+"POT-Creation-Date: 2008-12-12 00:14+0000\n"
+"PO-Revision-Date: 2008-12-22 21:18+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany veebisirvija"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
-#: ../src/ephy-main.c:628
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:676
 msgid "Web Browser"
 msgstr "Veebisirvija"
 
@@ -241,11 +240,15 @@ msgstr "Java lubamine"
 msgid "Enable JavaScript"
 msgstr "JavaScript'i lubamine"
 
-#: ../data/epiphany.schemas.in.h:16
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:20
+msgid "Enable Web Inspector"
+msgstr "Veebiinspektori lubamine"
+
+#: ../data/epiphany.schemas.in.h:17
 msgid "Enable smooth scrolling"
 msgstr "Sujuv kerimine lubatud"
 
-#: ../data/epiphany.schemas.in.h:17
+#: ../data/epiphany.schemas.in.h:18
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -253,15 +256,15 @@ msgstr ""
 "Allalaadimiste akna peitmine või näitamine. Peidetud oleku korral näidatakse "
 "uue faili allalaadimise alguses vastavat teadet."
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:19
 msgid "History pages time range"
 msgstr "Ajaloolehtede ajavahemik"
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:20
 msgid "Home page"
 msgstr "Algusleht"
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:21
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -270,11 +273,11 @@ msgstr ""
 "\" (tavaline), \"once\" (animatsioon ainult üks kord) ja \"disabled"
 "\" (keelatud)."
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:22
 msgid "How to print frames"
 msgstr "Kuidas paneele printida"
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
@@ -282,30 +285,31 @@ msgstr ""
 "Kuidas paneelidega lehti näidatakse. Võimalikud väärtused on \"normal"
 "\" (tavaline), \"separately\" (eraldi) ja \"selected\" (valik)."
 
-#: ../data/epiphany.schemas.in.h:23
+#. Translators: this is the default encoding used by Epiphany for Web pages display
+#: ../data/epiphany.schemas.in.h:25
 msgid "ISO-8859-1"
 msgstr "ISO-8859-15"
 
-#: ../data/epiphany.schemas.in.h:24
+#: ../data/epiphany.schemas.in.h:26
 msgid "Image animation mode"
 msgstr "Piltide animeerimisrežiim"
 
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:27
 msgid "Languages"
 msgstr "Keeled"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:28
 msgid "Lists the active extensions."
 msgstr "Aktiivsete laienduste nimekiri."
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:29
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "Valitud teksti poolt viidatud veebilehe avamine keskmise hiirenupu "
 "klõpsamisel"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:30
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -313,27 +317,27 @@ msgstr ""
 "Vaatepaanil keskmise hiirenupuga klõpsamise korral avatakse valitud teksti "
 "poolt viidatav veebileht."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:31
 msgid "Minimum font size"
 msgstr "Väikseim kirjatüübi suurus"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:32
 msgid "Preferred languages, two letter codes."
 msgstr "Eelistatud keeled, kahetäheliste koodidega."
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:33
 msgid "Remember passwords"
 msgstr "Paroolide meeldejätmine"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:34
 msgid "Show bookmarks bar by default"
 msgstr "Järjehoidjariba vaikimisi näitamine"
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:35
 msgid "Show statusbar by default"
 msgstr "Olekuriba vaikimisi näitamine"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:36
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -342,27 +346,27 @@ msgstr ""
 "\"ever\" (kõiki), \"last_two_days\" (viimase kahe päeva jooksul), "
 "\"last_three_days\" (viimase kolme päeva jooksul), \"today\" (täna)."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Kas sakiriba näidataks ka ainult ühe avatud kaardi korral."
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:38
 msgid "Show toolbars by default"
 msgstr "Tööriistaribade vaikimisi näitamine"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:39
 msgid "Size of disk cache"
 msgstr "Kettapuhvri suurus"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:40
 msgid "Size of disk cache, in MB."
 msgstr "Kettapuhvri suurus megabaitides."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:41
 msgid "The bookmark information shown in the editor view"
 msgstr "Redaktorivaates kuvatavad järjehoidja andmed"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:42
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -370,11 +374,11 @@ msgstr ""
 "Redaktorivaates kuvatavad järjehoidja andmed. Loendi võimalikud väärtused on "
 "\"address\" (aadress) ja \"title\" (pealkiri)."
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:43
 msgid "The currently selected fonts language"
 msgstr "Käesolevaga valitud kirjatüüpide keel"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:44
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -393,17 +397,17 @@ msgstr ""
 "\"x-unicode\" (muud keeled), \"x-western\" (ladina tähestikku kasutavad "
 "keeled), \"x-tamil\" (tamili) and \"x-devanagari\" (devanagaari)."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:45
 msgid "The downloads folder"
 msgstr "Allalaadimiste kataloog"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "Kooditabeli automaattuvastaja. Tühi string tähendab, et automaattuvastus on "
 "välja lülitatud."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -424,11 +428,11 @@ msgstr ""
 "kodeeringud), \"zhtw_parallel_state_machine\" (hiina traditsioonilised "
 "kodeeringud) ja \"universal_charset_detector\" (kõik kodeeringud)."
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid "The page information shown in the history view"
 msgstr "Ajaloovaates kuvatavad lehe andmed"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -437,7 +441,7 @@ msgstr ""
 "on \"ViewTitle\" (pealkiri), \"ViewAddress\" (aadress) ja \"ViewDateTime"
 "\" (kuupäev ja kellaaeg)."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -446,11 +450,11 @@ msgstr ""
 "vaikimisi kausta jaoks või \"Desktop\", kui allalaadimised toimuvad "
 "töölauale."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "Tööriistariba laad"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -460,31 +464,31 @@ msgstr ""
 "\"both\" (tekst ja ikoonid), \"both-horiz\" (teksti ikoonide kõrval), \"icons"
 "\" (ikoonid), ja \"text\" (tekst)."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
 msgstr "Oma värvuste kasutamine"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid "Use own fonts"
 msgstr "Kirjatüüpide kasutamine"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
 msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 "Kui märgitud, siis kasutatakse lehe poolt määratud värvuste asemel enda "
 "poolt määratud värvuseid."
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Kui märgitud, siis kasutatakse lehe poolt määratud kirjatüüpide asemel enda "
 "poolt määratud kirjatüüpe."
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:57
 msgid "Visibility of the downloads window"
 msgstr "Allalaadimiste akna nähtavalolek"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:58
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -492,7 +496,7 @@ msgstr ""
 "Kui faile pole veebisirvija poolt võimalik avada, siis laaditakse need "
 "automaatselt allalaadimiste kataloogi ja avatakse sobiva rakendusega."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -501,35 +505,35 @@ msgstr ""
 "\"anywhere\" (kõikjalt), \"current site\" (ainult samast saidist) ja "
 "\"nowhere\" (mitte kuskilt)."
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
 msgstr "Kas printida ka taustavärv"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:61
 msgid "Whether to print the background images"
 msgstr "Kas printida ka taustapildid"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:62
 msgid "Whether to print the date in the footer"
 msgstr "Kas jaluses prinditakse kuupäeva"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:63
 msgid "Whether to print the page address in the header"
 msgstr "Kas päises prinditakse lehe aadress"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Kas jaluses prinditakse leheküljenumbreid (x koguarvust)"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the page title in the header"
 msgstr "Kas päises prinditakse lehe pealkiri"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "Kas salvestada ja eeltäita veebilehtede paroole."
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "x-western"
 msgstr "x-western"
 
@@ -574,7 +578,7 @@ msgid "Field _Value"
 msgstr "_Välja väärtus"
 
 #: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.glade.h:23
 msgid "General"
 msgstr "Üldine"
 
@@ -619,7 +623,7 @@ msgid "Cookies"
 msgstr "Küpsised"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "Allalaadimised"
 
@@ -660,7 +664,7 @@ msgid "_Certificate:"
 msgstr "Sert_ifikaat:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
+#: ../lib/ephy-password-dialog.c:420 ../lib/ephy-password-dialog.c:434
 msgid "_Password:"
 msgstr "_Parool:"
 
@@ -700,30 +704,34 @@ msgstr "<b>Ajutised failid</b>"
 msgid "<b>Web Content</b>"
 msgstr "<b>Veebi sisu</b>"
 
+#: ../data/glade/prefs-dialog.glade.h:9
+msgid "<b>Web Development</b>"
+msgstr "<b>Veebiarendus</b>"
+
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr ""
 "<small>Aga mitte näiteks nendele saitidele riputatud reklaamide pakkujailt</"
 "small>"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "A_utomatically download and open files"
 msgstr "Failide laaditakse a_utomaatselt alla ja avatakse"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.glade.h:13
 msgid "Add Language"
 msgstr "Keele lisamine"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "Allow popup _windows"
 msgstr "Hü_pikaknad on lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/glade/prefs-dialog.glade.h:15
 msgid "Au_todetect:"
 msgstr "Au_tomaattuvastus:"
 
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.glade.h:16
 msgid "Choose a l_anguage:"
 msgstr "Vali _keel:"
 
@@ -731,100 +739,101 @@ msgstr "Vali _keel:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../data/glade/prefs-dialog.glade.h:17
+#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:248
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "Pu_hasta"
 
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.glade.h:18
 msgid "De_fault:"
 msgstr "_Vaikimisi:"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "Enable Java_Script"
 msgstr "Ja_vaScript on lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:21
 msgid "Enable _Java"
 msgstr "_Java on lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:22
 msgid "Fonts & Style"
 msgstr "Kirjatüübid ja laad"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:944
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:945
 msgid "Language"
 msgstr "Keel"
 
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Let web pages specify their own _fonts"
 msgstr "Veebilehed võivad määrata omi _kirjatüüpe"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Let web pages specify their own c_olors"
 msgstr "Veebilehed võivad määrata omi _värvuseid"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Only _from sites you visit"
 msgstr "Ainult _külastatavatest saitidest"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Preferences"
 msgstr "Eelistused"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:30
 msgid "Privacy"
 msgstr "Privaatsus"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:31
 msgid "Set to Current _Page"
 msgstr "Vali p_raegune leht"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:32
 msgid "Set to _Blank Page"
 msgstr "Vali _tühi leht"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "Use custom _stylesheet"
 msgstr "Kasutatakse kohandatud _laaditabelit"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "Use s_mooth scrolling"
 msgstr "Su_juv kerimine on lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Address:"
 msgstr "_Aadress:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Always accept"
 msgstr "Alati _lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Disk space:"
 msgstr "Ke_ttaruum"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Download folder:"
 msgstr "_Allalaadimiskataloog:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Edit Stylesheet…"
 msgstr "_Redigeeri laaditabelit…"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Minimum size:"
 msgstr "_Väikseim suurus:"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "Pol_e lubatud"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Remember passwords"
 msgstr "Pa_roolid jäetakse meelde"
 
@@ -881,39 +890,39 @@ msgid "_Page address"
 msgstr "Lehe aa_dress"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:174
+#: ../embed/downloader-view.c:168
 msgid "_Show Downloads"
 msgstr "_Näita allalaadimisi"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:314
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u: %02u.%02u"
 
-#: ../embed/downloader-view.c:331
+#: ../embed/downloader-view.c:318
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:392
+#: ../embed/downloader-view.c:379
 msgid "_Pause"
 msgstr "_Paus"
 
-#: ../embed/downloader-view.c:392
+#: ../embed/downloader-view.c:379
 msgid "_Resume"
 msgstr "_Jätka"
 
-#: ../embed/downloader-view.c:430
+#: ../embed/downloader-view.c:417
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Fail „%s“ on alla laaditud."
 
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:420
 msgid "Download finished"
 msgstr "Allalaadimine on lõppenud"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:458
+#: ../embed/downloader-view.c:445
 #, c-format
 msgid ""
 "%s\n"
@@ -923,49 +932,49 @@ msgstr ""
 "%s %s-st"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:468 ../embed/downloader-view.c:473
+#: ../embed/downloader-view.c:455 ../embed/downloader-view.c:460
 #: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1688
+#: ../src/ephy-window.c:1705
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:492
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d allalaadimine"
 msgstr[1] "%d allalaadimist"
 
-#: ../embed/downloader-view.c:610
+#: ../embed/downloader-view.c:599
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Fail „%s” lisati allalaaditavate failide järjekorda."
 
-#: ../embed/downloader-view.c:613
+#: ../embed/downloader-view.c:602
 msgid "Download started"
 msgstr "Allalaadimine käivitatud"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:687 ../embed/downloader-view.c:700
+#: ../embed/downloader-view.c:679 ../embed/downloader-view.c:692
 msgid "download status|Unknown"
 msgstr "Teadmata"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:692
+#: ../embed/downloader-view.c:684
 msgid "download status|Failed"
 msgstr "Nurjunud"
 
-#: ../embed/downloader-view.c:759 ../src/bookmarks/ephy-bookmarks-editor.c:988
+#: ../embed/downloader-view.c:751 ../src/bookmarks/ephy-bookmarks-editor.c:987
 msgid "File"
 msgstr "Fail"
 
-#: ../embed/downloader-view.c:782
+#: ../embed/downloader-view.c:774
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:793
+#: ../embed/downloader-view.c:785
 msgid "Remaining"
 msgstr "Aega jäänud"
 
@@ -976,28 +985,28 @@ msgstr "Aega jäänud"
 msgid "Blank page"
 msgstr "Tühi leht"
 
-#: ../embed/ephy-base-embed.c:1070
+#: ../embed/ephy-base-embed.c:1015
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Ümbersuunamine aadressile „%s“…"
 
-#: ../embed/ephy-base-embed.c:1072
+#: ../embed/ephy-base-embed.c:1017
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Andmete ülekandmine aadressilt „%s“…"
 
-#: ../embed/ephy-base-embed.c:1074
+#: ../embed/ephy-base-embed.c:1019
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Volituste ootamine aadressilt „%s“…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1080 ../embed/ephy-base-embed.c:1255
+#: ../embed/ephy-base-embed.c:1025 ../embed/ephy-base-embed.c:1201
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Aadressi „%s“ laadimine…"
 
-#: ../embed/ephy-base-embed.c:1257
+#: ../embed/ephy-base-embed.c:1203
 msgid "Loading…"
 msgstr "Laadimine…"
 
@@ -1414,18 +1423,6 @@ msgstr ""
 "GConfi viga:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "Avamine: %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "%d kirje avamine"
-msgstr[1] "%d kirje avamine"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -1466,67 +1463,67 @@ msgstr "Valitud tööriistariba eemaldamine"
 msgid "Separator"
 msgstr "Eraldaja"
 
-#: ../lib/ephy-file-chooser.c:411
+#: ../lib/ephy-file-chooser.c:412
 msgid "All supported types"
 msgstr "Kõik toetatud tüübid"
 
-#: ../lib/ephy-file-chooser.c:422
+#: ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "Veebilehed"
 
-#: ../lib/ephy-file-chooser.c:430
+#: ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "Pildid"
 
-#: ../lib/ephy-file-chooser.c:438 ../src/bookmarks/ephy-bookmarks-editor.c:767
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "All files"
 msgstr "Kõik failid"
 
-#: ../lib/ephy-file-helpers.c:296
+#: ../lib/ephy-file-helpers.c:291
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ajutist kataloogi pole võimalik „%s” alla luua."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:364
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Fail „%s” on juba olemas, palun tõsta see eest ära."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Tõrge kataloogi „%s” loomisel."
 
-#: ../lib/ephy-gui.c:285
+#: ../lib/ephy-gui.c:284
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Kataloogi „%s” jaoks pole kirjutusõigust"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:288
 msgid "You do not have permission to create files in this directory."
 msgstr "Sul ei ole öiguseid selles kaustas faile luua."
 
-#: ../lib/ephy-gui.c:292
+#: ../lib/ephy-gui.c:291
 msgid "Directory not Writable"
 msgstr "Kataloog pole kirjutatav"
 
-#: ../lib/ephy-gui.c:322
+#: ../lib/ephy-gui.c:321
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Olemasolevat faili „%s” pole võimalik üle kirjutada"
 
-#: ../lib/ephy-gui.c:326
+#: ../lib/ephy-gui.c:325
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
 "Selle nimega fail on juba olemas ja sul ei ole õigust selle ülekirjutamiseks."
 
-#: ../lib/ephy-gui.c:329
+#: ../lib/ephy-gui.c:328
 msgid "Cannot Overwrite File"
 msgstr "Faili pole võimalik üle kirjutada"
 
-#: ../lib/ephy-gui.c:368
+#: ../lib/ephy-gui.c:414
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Abiteavet pole võimalik kuvada: %s"
@@ -1687,35 +1684,35 @@ msgstr "Lääne"
 msgid "select fonts for|Other Scripts"
 msgstr "Muud kirjaviisid"
 
-#: ../lib/ephy-password-dialog.c:396
+#: ../lib/ephy-password-dialog.c:392
 msgid "_Username:"
 msgstr "_Kasutajanimi:"
 
-#: ../lib/ephy-password-dialog.c:410
+#: ../lib/ephy-password-dialog.c:406
 msgid "_Domain:"
 msgstr "_Domeen:"
 
-#: ../lib/ephy-password-dialog.c:437
+#: ../lib/ephy-password-dialog.c:433
 msgid "_New password:"
 msgstr "_Uus parool:"
 
-#: ../lib/ephy-password-dialog.c:447
+#: ../lib/ephy-password-dialog.c:443
 msgid "Con_firm password:"
 msgstr "Parooli _kontroll:"
 
-#: ../lib/ephy-password-dialog.c:473
+#: ../lib/ephy-password-dialog.c:469
 msgid "Password quality:"
 msgstr "Parooli kvaliteet:"
 
-#: ../lib/ephy-password-dialog.c:491
+#: ../lib/ephy-password-dialog.c:487
 msgid "Do not remember this password"
 msgstr "Ära salvesta seda parooli"
 
-#: ../lib/ephy-password-dialog.c:495
+#: ../lib/ephy-password-dialog.c:491
 msgid "_Remember password for this session"
 msgstr "Jäta _parool selle seansi jaoks meelde"
 
-#: ../lib/ephy-password-dialog.c:499
+#: ../lib/ephy-password-dialog.c:495
 msgid "Save password in _keyring"
 msgstr "Sal_vesta parool võtmerõngas"
 
@@ -1723,19 +1720,19 @@ msgstr "Sal_vesta parool võtmerõngas"
 msgid "Popup Windows"
 msgstr "Hüpikaknad "
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1277
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1276
 msgid "History"
 msgstr "Ajalugu"
 
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1483
+#: ../src/ephy-window.c:1501
 msgid "Bookmark"
 msgstr "Järjehoidja"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:898
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1778
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1487
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:897
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1777
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1505
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
@@ -1816,46 +1813,16 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:868
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sellele lehele viida loomiseks lohista seda ikooni"
 
-#: ../plugins/desktop-file/plugin.cpp:377
-msgid "Unsafe protocol."
-msgstr "Ebaturvaline protokoll."
-
-#: ../plugins/desktop-file/plugin.cpp:378
-msgid ""
-"The address has not been loaded, because it refers to an unsafe protocol and "
-"thereby presents a security risk to your system."
-msgstr ""
-"Aadressi pole võimalik laadida kuna see viitab ebaturvalisele protokollile "
-"ja kujutab seetõttu turvariski sinu süsteemile."
-
-#: ../plugins/desktop-file/plugin.cpp:406
-msgid "No address found."
-msgstr "Aadressi ei leitud."
-
-#: ../plugins/desktop-file/plugin.cpp:407
-msgid "No web address could be found in this file."
-msgstr "Sellest failist pole võimalik veebiaadresse leida."
-
-#. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:442
-msgid "Epiphany Desktop File Plugin"
-msgstr "Epiphany töölauafaili plugin"
-
-#: ../plugins/desktop-file/plugin.cpp:446
-msgid "This plugin handles “.desktop” and “.url” files containing web links."
-msgstr ""
-"See plugin tegeleb veebiviiteid sisaldavate „.desktop” ja “.url” failidega."
-
-#: ../src/bookmarks/ephy-bookmark-action.c:321
+#: ../src/bookmarks/ephy-bookmark-action.c:319
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:498
+#: ../src/bookmarks/ephy-bookmark-action.c:496
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Skripti „%s“ käivitamine"
@@ -1942,26 +1909,26 @@ msgid "Work"
 msgstr "Töö"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:461
+#: ../src/bookmarks/ephy-bookmarks.c:462
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Kas uuendada järjehoidjat „%s“?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:466
+#: ../src/bookmarks/ephy-bookmarks.c:467
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Järhehoidjatesse lisatud leht on teisaldatud asukohta „%s“."
 
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:471
 msgid "_Don't Update"
 msgstr "Ä_ra uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:473
 msgid "_Update"
 msgstr "_Uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:476
 msgid "Update Bookmark?"
 msgstr "Uuendada järjehoidjat?"
 
@@ -1969,7 +1936,7 @@ msgstr "Uuendada järjehoidjat?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1217
+#: ../src/bookmarks/ephy-bookmarks.c:1224
 msgid "bookmarks|All"
 msgstr "Kõik"
 
@@ -1977,7 +1944,7 @@ msgstr "Kõik"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1223
+#: ../src/bookmarks/ephy-bookmarks.c:1230
 msgid "bookmarks|Most Visited"
 msgstr "Enimkülastatud"
 
@@ -1986,7 +1953,7 @@ msgstr "Enimkülastatud"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1237
 msgid "bookmarks|Not Categorized"
 msgstr "Liigitamata"
 
@@ -1995,242 +1962,242 @@ msgstr "Liigitamata"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1238
+#: ../src/bookmarks/ephy-bookmarks.c:1245
 msgid "bookmarks|Nearby Sites"
 msgstr "Lähedalasuvad saidid"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1473
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1299
 msgid "Untitled"
 msgstr "Nimetu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:80
+#: ../src/bookmarks/ephy-bookmarks-editor.c:79
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:81
+#: ../src/bookmarks/ephy-bookmarks-editor.c:80
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:132
 msgid "Remove from this topic"
 msgstr "Kustuta see selle teema alt"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:113
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:113
 msgid "_File"
 msgstr "_Fail"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
 msgid "_Edit"
 msgstr "_Redaktor"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:115
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
 msgid "_View"
 msgstr "_Vaade"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:120
 msgid "_Help"
 msgstr "A_bi"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "_New Topic"
 msgstr "_Uus teema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "Create a new topic"
 msgstr "Loo uus teema"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
-#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:156
-#: ../src/ephy-history-window.c:707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1350
+#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:155
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "_Ava uues aknas"
 msgstr[1] "_Ava uutes akendes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Open the selected bookmark in a new window"
 msgstr "Avab valitud järjehoidja uues aknas"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
-#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:159
-#: ../src/ephy-history-window.c:710
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1353
+#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:158
+#: ../src/ephy-history-window.c:709
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "A_va uuel kaardil"
 msgstr[1] "A_va uutel kaartidel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "Open the selected bookmark in a new tab"
 msgstr "Valitud järjehoidja avamine uuel kaardil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Rename…"
 msgstr "_Muuda nime…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Rename the selected bookmark or topic"
 msgstr "Valitud järjehoidja või teema nime muutmine"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 #: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "_Properties"
 msgstr "_Omadused"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Valitud järjehoidja omaduste vaatamine või muutmine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "_Import Bookmarks…"
 msgstr "_Impordi järjehoidjad…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Järjehoidjate importimine mõnest teisest sirvijast või järjehoidjate failist"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "_Export Bookmarks…"
 msgstr "_Ekspordi järjehoidjad…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Export bookmarks to a file"
 msgstr "Järjehoidjate eksportimine faili"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:145
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:145
 msgid "_Close"
 msgstr "_Sulge"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Close the bookmarks window"
 msgstr "Järjehoidjate akna sulgemine"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:157
 msgid "Cu_t"
 msgstr "_Lõika"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:158
 msgid "Cut the selection"
 msgstr "Lõika valik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1364
-#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:720
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1363
+#: ../src/ephy-history-window.c:172 ../src/ephy-history-window.c:719
 #: ../src/ephy-window.c:160
 msgid "_Copy"
 msgstr "_Kopeeri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/ephy-history-window.c:173 ../src/ephy-window.c:161
 msgid "Copy the selection"
 msgstr "Kopeeri valik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
-#: ../src/ephy-history-window.c:176 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/ephy-history-window.c:175 ../src/ephy-window.c:163
 msgid "_Paste"
 msgstr "_Aseta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/ephy-history-window.c:176
 msgid "Paste the clipboard"
 msgstr "Kleebib lõikepuhvri sisu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/ephy-history-window.c:178
 msgid "_Delete"
 msgstr "_Kustuta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Delete the selected bookmark or topic"
 msgstr "Valitud järjehoidja või teema kustutamine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/ephy-history-window.c:181 ../src/ephy-window.c:169
 msgid "Select _All"
 msgstr "_Vali kõik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Select all bookmarks or text"
 msgstr "Vali kõik järjehoidjad või tekst"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:263
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/ephy-history-window.c:189 ../src/ephy-window.c:263
 msgid "_Contents"
 msgstr "_Sisu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Display bookmarks help"
 msgstr "Näita järjehoidjate kohta abimaterjale"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:266
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:266
 msgid "_About"
 msgstr "_Programmist lähemalt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:267
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:267
 msgid "Display credits for the web browser creators"
 msgstr "Veebisirvija loojate andmete kuvamine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
 msgid "_Show on Toolbar"
 msgstr "Näita _tööriistaribal"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Valitud järjehoidja näitamine tööriistaribal"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-#: ../src/ephy-history-window.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/ephy-history-window.c:207
 msgid "_Title"
 msgstr "_Pealkiri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
 msgid "Show only the title column"
 msgstr "Näita ainult pealkirja tulpa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
 msgid "T_itle and Address"
 msgstr "_Pealkiri ja aadress"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:235
+#: ../src/bookmarks/ephy-bookmarks-editor.c:234
 msgid "Show both the title and address columns"
 msgstr "Näita pealkirja ja aadressi tulpa samaaegselt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:278
+#: ../src/bookmarks/ephy-bookmarks-editor.c:277
 msgid "Type a topic"
 msgstr "_Uus teema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:396
+#: ../src/bookmarks/ephy-bookmarks-editor.c:395
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Kas kustutada teema „%s“?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+#: ../src/bookmarks/ephy-bookmarks-editor.c:398
 msgid "Delete this topic?"
 msgstr "Kustutada see teema?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:401
+#: ../src/bookmarks/ephy-bookmarks-editor.c:400
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2239,44 +2206,44 @@ msgstr ""
 "kategoriseerimata, välja arvatud juhul, kui nad lisaks kuuluvad veel "
 "teistesse teemadesse. Järjehoidjad ei kustutata."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:404
+#: ../src/bookmarks/ephy-bookmarks-editor.c:403
 msgid "_Delete Topic"
 msgstr "_Kustuta teema"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:628
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:643
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla „%s“ profiil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:647
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:650
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:679
 msgid "Import failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:682
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:685
+#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2285,69 +2252,69 @@ msgstr ""
 "Järjehoidjad “%s”-st pole võimalik importida kuna faili on rikutud või pole "
 "selle faili tüüo toetatud."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Import Bookmarks from File"
 msgstr "Järjehoidjate importimine failist"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:754
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefoxi/Mozilla järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:759
+#: ../src/bookmarks/ephy-bookmarks-editor.c:758
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeoni/Konquerori järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "Epiphany bookmarks"
 msgstr "Epiphany järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:886
 msgid "Export Bookmarks"
 msgstr "Järjehoidjate eksportimine"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:904
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "File f_ormat:"
 msgstr "Failiv_orming:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:948
+#: ../src/bookmarks/ephy-bookmarks-editor.c:947
 msgid "Import Bookmarks"
 msgstr "Järjehoidjate importimine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:954
+#: ../src/bookmarks/ephy-bookmarks-editor.c:953
 msgid "I_mport"
 msgstr "_Impordi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:968
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "Import bookmarks from:"
 msgstr "Kustkohast järjehoidjaid imporditakse:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1360
-#: ../src/ephy-history-window.c:716
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1359
+#: ../src/ephy-history-window.c:715
 msgid "_Copy Address"
 msgstr "K_opeeri lehe aadress"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/ephy-history-window.c:1069
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1629
+#: ../src/ephy-history-window.c:1068
 msgid "Clear"
 msgstr "Puhasta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
-#: ../src/ephy-history-window.c:1077
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1643
+#: ../src/ephy-history-window.c:1076
 msgid "_Search:"
 msgstr "_Otsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1842
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1841
 msgid "Topics"
 msgstr "Teemad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1912
-#: ../src/ephy-history-window.c:1400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1911
+#: ../src/ephy-history-window.c:1399
 msgid "Title"
 msgstr "Pealkiri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1923
-#: ../src/ephy-history-window.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1922
+#: ../src/ephy-history-window.c:1408
 msgid "Address"
 msgstr "Aadress"
 
@@ -2364,11 +2331,11 @@ msgid "Open this bookmark in a new window"
 msgstr "Valitud järjehoidja avamine uues aknas"
 
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:77
+#: ../src/bookmarks/ephy-open-tabs-action.c:75
 msgid "Open in New _Tabs"
 msgstr "A_va uuel kaardil"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:78
+#: ../src/bookmarks/ephy-open-tabs-action.c:76
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Selle teema järjehoidjate avamine uutel kaartidel"
 
@@ -2401,46 +2368,46 @@ msgstr "Teised kodeeringud"
 msgid "_Automatic"
 msgstr "_Automaatne"
 
-#: ../src/ephy-find-toolbar.c:128
+#: ../src/ephy-find-toolbar.c:150
 msgid "Not found"
 msgstr "Ei leitud"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:162
 msgid "Wrapped"
 msgstr "Murtud"
 
-#: ../src/ephy-find-toolbar.c:160
+#: ../src/ephy-find-toolbar.c:182
 msgid "Find links:"
 msgstr "Viitade otsing:"
 
-#: ../src/ephy-find-toolbar.c:160
+#: ../src/ephy-find-toolbar.c:182
 msgid "Find:"
 msgstr "Otsing:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:352 ../src/ephy-find-toolbar.c:474
+#: ../src/ephy-find-toolbar.c:449 ../src/ephy-find-toolbar.c:571
 msgid "_Case sensitive"
 msgstr "_Tõstutundlik"
 
-#: ../src/ephy-find-toolbar.c:457
+#: ../src/ephy-find-toolbar.c:554
 msgid "Find Previous"
 msgstr "Otsi eelmist"
 
-#: ../src/ephy-find-toolbar.c:460
+#: ../src/ephy-find-toolbar.c:557
 msgid "Find previous occurrence of the search string"
 msgstr "Otsi otsingufraasi eelmist esinemist"
 
-#: ../src/ephy-find-toolbar.c:466
+#: ../src/ephy-find-toolbar.c:563
 msgid "Find Next"
 msgstr "Otsi järgmist"
 
-#: ../src/ephy-find-toolbar.c:469
+#: ../src/ephy-find-toolbar.c:566
 msgid "Find next occurrence of the search string"
 msgstr "Otsi otsingufraasi järgmist esinemist"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:544
+#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:532
 msgid "Leave Fullscreen"
 msgstr "Välju täisekraanvaatest"
 
@@ -2448,71 +2415,71 @@ msgstr "Välju täisekraanvaatest"
 msgid "Go"
 msgstr "Mine"
 
-#: ../src/ephy-history-window.c:157
+#: ../src/ephy-history-window.c:156
 msgid "Open the selected history link in a new window"
 msgstr "Valitud ajalooviida avamine uues aknas"
 
-#: ../src/ephy-history-window.c:160
+#: ../src/ephy-history-window.c:159
 msgid "Open the selected history link in a new tab"
 msgstr "Valitud ajalooviida avamine uuel kaardil"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:161
 msgid "Add _Bookmark…"
 msgstr "_Lisa järjehoidja…"
 
-#: ../src/ephy-history-window.c:163
+#: ../src/ephy-history-window.c:162
 msgid "Bookmark the selected history link"
 msgstr "Lisa valitud viit järjehoidjatesse"
 
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:165
 msgid "Close the history window"
 msgstr "Sulge külastatud lehtede aken"
 
-#: ../src/ephy-history-window.c:180
+#: ../src/ephy-history-window.c:179
 msgid "Delete the selected history link"
 msgstr "Valitud viida kustutamine"
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:182
 msgid "Select all history links or text"
 msgstr "Vali kõik ajaloo viidad või tekst"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:184
 msgid "Clear _History"
 msgstr "_Puhasta ajalugu"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:185
 msgid "Clear your browsing history"
 msgstr "Puhasta oma sirvimise ajalugu"
 
-#: ../src/ephy-history-window.c:191
+#: ../src/ephy-history-window.c:190
 msgid "Display history help"
 msgstr "Näita ajaloo abi"
 
-#: ../src/ephy-history-window.c:209
+#: ../src/ephy-history-window.c:208
 msgid "Show the title column"
 msgstr "Pealkirjaveeru näitamine"
 
-#: ../src/ephy-history-window.c:210
+#: ../src/ephy-history-window.c:209
 msgid "_Address"
 msgstr "_Aadress"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:210
 msgid "Show the address column"
 msgstr "Aadressiveeru näitamine"
 
-#: ../src/ephy-history-window.c:212
+#: ../src/ephy-history-window.c:211
 msgid "_Date and Time"
 msgstr "_Kuupäev ja kellaaeg"
 
-#: ../src/ephy-history-window.c:213
+#: ../src/ephy-history-window.c:212
 msgid "Show the date and time column"
 msgstr "Kuupäeva- ja kellaajaveeru näitamine"
 
-#: ../src/ephy-history-window.c:239
+#: ../src/ephy-history-window.c:238
 msgid "Clear browsing history?"
 msgstr "Puhasta sirvimise ajalugu?"
 
-#: ../src/ephy-history-window.c:243
+#: ../src/ephy-history-window.c:242
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2520,88 +2487,92 @@ msgstr ""
 "Sirvimise ajaloo puhastamine toob kaasa kõigi sirvitud linkide jääva "
 "kustutamise."
 
-#: ../src/ephy-history-window.c:258
+#: ../src/ephy-history-window.c:257
 msgid "Clear History"
 msgstr "Ajaloo puhastamine"
 
-#: ../src/ephy-history-window.c:1086
+#: ../src/ephy-history-window.c:1085
 msgid "Last 30 minutes"
 msgstr "Viimase 30 minuti jooksul"
 
-#: ../src/ephy-history-window.c:1087
+#: ../src/ephy-history-window.c:1086
 msgid "Today"
 msgstr "Täna"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1088 ../src/ephy-history-window.c:1091
-#: ../src/ephy-history-window.c:1095
+#: ../src/ephy-history-window.c:1087 ../src/ephy-history-window.c:1090
+#: ../src/ephy-history-window.c:1094
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Viimase %d päeva jooksul"
 msgstr[1] "Viimase %d päeva jooksul"
 
-#: ../src/ephy-history-window.c:1337
+#: ../src/ephy-history-window.c:1336
 msgid "Sites"
 msgstr "Saidid"
 
-#: ../src/ephy-history-window.c:1417
+#: ../src/ephy-history-window.c:1416
 msgid "Date"
 msgstr "Kuupäev"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:77 ../src/ephy-main.c:558 ../src/window-commands.c:882
+msgid "GNOME Web Browser"
+msgstr "GNOME Veebisirvija"
+
+#: ../src/ephy-main.c:86
 msgid "Open a new tab in an existing browser window"
 msgstr "Uue kaardi avamine sirvija olemasolevas aknas"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:88
 msgid "Open a new browser window"
 msgstr "Sirvija uue akna avamine"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:90
 msgid "Launch the bookmarks editor"
 msgstr "Järjehoidjaredaktori avamine"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:92
 msgid "Import bookmarks from the given file"
 msgstr "Järjehoidjate importimine määratud failist"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:92 ../src/ephy-main.c:94
 msgid "FILE"
 msgstr "FAIL"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "Load the given session file"
 msgstr "Valitud seansifaili laadimine"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "Add a bookmark"
 msgstr "Järjehoidja lisamine"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:98
 msgid "Start a private instance"
 msgstr "Privaatinstantsi käivitamine"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "Profile directory to use in the private instance"
 msgstr "Privaatinstantsi jaoks määratud profiili kataloog"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "DIR"
 msgstr "KATALOOG"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:102
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:405
+#: ../src/ephy-main.c:419
 msgid "Could not start GNOME Web Browser"
 msgstr "GNOME Veebisirvijat pole võimalik käivitada"
 
-#: ../src/ephy-main.c:408
+#: ../src/ephy-main.c:422
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2610,11 +2581,7 @@ msgstr ""
 "Tõrge käivitamisel järgneva veat tõttu:\n"
 "%s"
 
-#: ../src/ephy-main.c:511 ../src/window-commands.c:869
-msgid "GNOME Web Browser"
-msgstr "GNOME Veebisirvija"
-
-#: ../src/ephy-main.c:512
+#: ../src/ephy-main.c:559
 msgid "GNOME Web Browser options"
 msgstr "GNOME Veebisirvija valikud"
 
@@ -2622,7 +2589,7 @@ msgstr "GNOME Veebisirvija valikud"
 msgid "Close tab"
 msgstr "Sulge kaart"
 
-#: ../src/ephy-session.c:114
+#: ../src/ephy-session.c:115
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -2633,11 +2600,11 @@ msgstr[1] ""
 "Allalaadimised katkestatakase ja väljalogimisprotsess jätkub %d sekundi "
 "pärast."
 
-#: ../src/ephy-session.c:230
+#: ../src/ephy-session.c:227
 msgid "Abort pending downloads?"
 msgstr "Katkestada käimasolevad allalaadimised?"
 
-#: ../src/ephy-session.c:234
+#: ../src/ephy-session.c:232
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -2645,19 +2612,19 @@ msgstr ""
 "Praegu on veel osad allalaadimised käimas. Kui Sa praegu välja logid, siis "
 "need allalaadimised katkestatakse ja failid lähevad kaotsi."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:236
 msgid "_Cancel Logout"
 msgstr "_Tühista väljalogimine"
 
-#: ../src/ephy-session.c:240
+#: ../src/ephy-session.c:238
 msgid "_Abort Downloads"
 msgstr "_Katkesta allalaadimised"
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:564
 msgid "Recover previous browser windows and tabs?"
 msgstr "Taastada eelmise sirvija aknad ja kaardid?"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:568
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2665,15 +2632,15 @@ msgstr ""
 "Epiphany paistab olevat viimase töötamise lõpetanud ootamatult. Sul on "
 "võimalik avatud aknaid ja kaarte taastada."
 
-#: ../src/ephy-session.c:581
+#: ../src/ephy-session.c:572
 msgid "_Don't Recover"
 msgstr "Ä_ra taasta"
 
-#: ../src/ephy-session.c:583
+#: ../src/ephy-session.c:574
 msgid "_Recover"
 msgstr "_Taasta"
 
-#: ../src/ephy-session.c:585
+#: ../src/ephy-session.c:576
 msgid "Crash Recovery"
 msgstr "Krahhist taastamine"
 
@@ -3074,7 +3041,8 @@ msgstr "_Asukoht…"
 msgid "Go to a specified location"
 msgstr "Liigu määratud asukohta"
 
-#: ../src/ephy-window.c:239
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "A_jalugu"
 
@@ -3280,110 +3248,110 @@ msgstr ""
 msgid "Close _Document"
 msgstr "_Sulge dokument"
 
-#: ../src/ephy-window.c:1477 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1495 ../src/window-commands.c:288
 msgid "Open"
 msgstr "Ava"
 
-#: ../src/ephy-window.c:1479 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1497 ../src/window-commands.c:314
 msgid "Save As"
 msgstr "Salvestamine kui"
 
-#: ../src/ephy-window.c:1481
+#: ../src/ephy-window.c:1499
 msgid "Print"
 msgstr "Printimine"
 
-#: ../src/ephy-window.c:1485
+#: ../src/ephy-window.c:1503
 msgid "Find"
 msgstr "Otsing"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1498
+#: ../src/ephy-window.c:1516
 msgid "Larger"
 msgstr "Suurem"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1501
+#: ../src/ephy-window.c:1519
 msgid "Smaller"
 msgstr "Väiksem"
 
-#: ../src/ephy-window.c:1691
+#: ../src/ephy-window.c:1708
 msgid "Insecure"
 msgstr "Ebaturvaline"
 
-#: ../src/ephy-window.c:1696
+#: ../src/ephy-window.c:1713
 msgid "Broken"
 msgstr "Katkine"
 
-#: ../src/ephy-window.c:1708
+#: ../src/ephy-window.c:1725
 msgid "Low"
 msgstr "Madal"
 
-#: ../src/ephy-window.c:1715
+#: ../src/ephy-window.c:1732
 msgid "High"
 msgstr "Kõrge"
 
-#: ../src/ephy-window.c:1725
+#: ../src/ephy-window.c:1742
 #, c-format
 msgid "Security level: %s"
 msgstr "Turvalisuse tase: %s"
 
-#: ../src/ephy-window.c:1768
+#: ../src/ephy-window.c:1785
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d peidetud hüpikaken"
 msgstr[1] "%d peidetud hüpikakent"
 
-#: ../src/ephy-window.c:2027
+#: ../src/ephy-window.c:2048
 #, c-format
 msgid "Open image “%s”"
 msgstr "Pildi „%s“ avamine"
 
-#: ../src/ephy-window.c:2032
+#: ../src/ephy-window.c:2053
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Pildi „%s“ kasutamine töölaua taustana"
 
-#: ../src/ephy-window.c:2037
+#: ../src/ephy-window.c:2058
 #, c-format
 msgid "Save image “%s”"
 msgstr "Pildi „%s“ salvestamine"
 
-#: ../src/ephy-window.c:2042
+#: ../src/ephy-window.c:2063
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Pildi aadressi „%s“ kopeerimine"
 
-#: ../src/ephy-window.c:2055
+#: ../src/ephy-window.c:2076
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "E-posti saatmine aadressile „%s“"
 
-#: ../src/ephy-window.c:2061
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-posti aadressi „%s“ kopeerimine"
 
-#: ../src/ephy-window.c:2073
+#: ../src/ephy-window.c:2094
 #, c-format
 msgid "Save link “%s”"
 msgstr "Viida „%s“ salvestamine"
 
-#: ../src/ephy-window.c:2079
+#: ../src/ephy-window.c:2100
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Viida „%s“ lisamine järjehoidjatesse"
 
-#: ../src/ephy-window.c:2085
+#: ../src/ephy-window.c:2106
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Viida aadressi „%s“ kopeerimine"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Vali isiklikud andmed, mida soovid nullida</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3393,31 +3361,26 @@ msgstr ""
 "isiklikke andmeid. Enne jätkamist märgi palun need andmetüübid, mida sa "
 "soovid kustutada:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "Kõigi isiklike andmete nullimine"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "_Küpsised"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "Salvestatud _paroolid"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "_Ajalugu"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "A_jutised failid"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3425,55 +3388,55 @@ msgstr ""
 "<small><i><b>Märkus:</b> Seda tegevust pole võimalik tagasi võtta. "
 "Nullitavad andmed kustutatakse igaveseks.</i></small>"
 
-#: ../src/pdm-dialog.c:592
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "Küpsise omadused"
 
-#: ../src/pdm-dialog.c:609
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "Sisu:"
 
-#: ../src/pdm-dialog.c:625
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "Asukoht:"
 
-#: ../src/pdm-dialog.c:641
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "Saada:"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "Ainult krüptitud ühendustele"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "Kõikidele ühendusetüüpidele"
 
-#: ../src/pdm-dialog.c:656
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "Aegub:"
 
-#: ../src/pdm-dialog.c:667
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "Käesoleva seansi lõpp"
 
-#: ../src/pdm-dialog.c:800
+#: ../src/pdm-dialog.c:812
 msgid "Domain"
 msgstr "Domeen"
 
-#: ../src/pdm-dialog.c:812
+#: ../src/pdm-dialog.c:824
 msgid "Name"
 msgstr "Nimi"
 
-#: ../src/pdm-dialog.c:1211
+#: ../src/pdm-dialog.c:1223
 msgid "Host"
 msgstr "Server"
 
-#: ../src/pdm-dialog.c:1223
+#: ../src/pdm-dialog.c:1235
 msgid "User Name"
 msgstr "Kasutajanimi"
 
-#: ../src/pdm-dialog.c:1235
+#: ../src/pdm-dialog.c:1247
 msgid "User Password"
 msgstr "Kasutaja parool"
 
@@ -3537,7 +3500,7 @@ msgstr "Sulge printimise eelvaade"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:632 ../src/prefs-dialog.c:640
+#: ../src/prefs-dialog.c:633 ../src/prefs-dialog.c:641
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -3547,23 +3510,23 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:651
+#: ../src/prefs-dialog.c:652
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Kasutaja kirjeldatud (%s)"
 
-#: ../src/prefs-dialog.c:673
+#: ../src/prefs-dialog.c:674
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Süsteemne keel (%s)"
 msgstr[1] "Süsteemsed keeled (%s)"
 
-#: ../src/prefs-dialog.c:1065
+#: ../src/prefs-dialog.c:1066
 msgid "Select a Directory"
 msgstr "Kataloogi valimine"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:777
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3575,7 +3538,7 @@ msgstr ""
 "Tarkvara Fondi poolt avaldatud; kas Litsentsi versioon number 2 või "
 "(vastavalt Teie valikule) ükskõik milline hilisem versioon."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:781
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3587,7 +3550,7 @@ msgstr ""
 "SOBIVUSELE TEATUD KINDLAKS EESMÄRGIKS.  Üksikasjade suhtes vaata GNU Üldist "
 "Avalikku Litsentsi ja Unicode autoriõiguseid."
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:785
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3597,20 +3560,20 @@ msgstr ""
 "programmiga, kui ei, siis võtke ühendust Free Software Foundation'iga, 51 "
 "Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:833 ../src/window-commands.c:849
+#: ../src/window-commands.c:860
 msgid "Contact us at:"
 msgstr "Võta meiega ühendust:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:836
 msgid "Contributors:"
 msgstr "Kaastöötajad:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:839
 msgid "Past developers:"
 msgstr "Eelmised arendajad:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:872
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3627,12 +3590,48 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:898
 msgid "translator-credits"
 msgstr ""
 "Priit Laes <amd@store20.com>, 2003-2007.\n"
 "Ivar Smolin <okul@linux.ee>, 2005-2008."
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:901
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
+
+#~ msgid "Opening %s"
+#~ msgstr "Avamine: %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "%d kirje avamine"
+#~ msgstr[1] "%d kirje avamine"
+
+#~ msgid "Unsafe protocol."
+#~ msgstr "Ebaturvaline protokoll."
+
+#~ msgid ""
+#~ "The address has not been loaded, because it refers to an unsafe protocol "
+#~ "and thereby presents a security risk to your system."
+#~ msgstr ""
+#~ "Aadressi pole võimalik laadida kuna see viitab ebaturvalisele "
+#~ "protokollile ja kujutab seetõttu turvariski sinu süsteemile."
+
+#~ msgid "No address found."
+#~ msgstr "Aadressi ei leitud."
+
+#~ msgid "No web address could be found in this file."
+#~ msgstr "Sellest failist pole võimalik veebiaadresse leida."
+
+#~ msgid "Epiphany Desktop File Plugin"
+#~ msgstr "Epiphany töölauafaili plugin"
+
+#~ msgid ""
+#~ "This plugin handles “.desktop” and “.url” files containing web links."
+#~ msgstr ""
+#~ "See plugin tegeleb veebiviiteid sisaldavate „.desktop” ja “.url” "
+#~ "failidega."
+
+#~ msgid "_History"
+#~ msgstr "_Ajalugu"
