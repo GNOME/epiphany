@@ -111,10 +111,10 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, EPHY_TYPE_BASE_EMBED,
                                                 ephy_command_manager_iface_init))
 
 static void
-webkit_embed_title_changed_cb (WebKitWebView *web_view,
-                               WebKitWebFrame *web_frame,
-                               const gchar *title,
-                               EphyEmbed *embed)
+title_changed_cb (WebKitWebView *web_view,
+                  WebKitWebFrame *web_frame,
+                  const gchar *title,
+                  EphyEmbed *embed)
 {
   ephy_base_embed_set_title (EPHY_BASE_EMBED (embed),
                              title);
@@ -191,9 +191,9 @@ restore_zoom_level (WebKitEmbed *embed,
 }
 
 static void
-webkit_embed_load_committed_cb (WebKitWebView *web_view,
-                                WebKitWebFrame *web_frame,
-                                EphyEmbed *embed)
+load_committed_cb (WebKitWebView *web_view,
+                   WebKitWebFrame *web_frame,
+                   EphyEmbed *embed)
 {
   const gchar* uri = webkit_web_frame_get_uri(web_frame);
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
@@ -207,9 +207,9 @@ webkit_embed_load_committed_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_load_started_cb (WebKitWebView *web_view,
-                              WebKitWebFrame *web_frame,
-                              EphyEmbed *embed)
+load_started_cb (WebKitWebView *web_view,
+                 WebKitWebFrame *web_frame,
+                 EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
@@ -218,9 +218,9 @@ webkit_embed_load_started_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_load_progress_changed_cb (WebKitWebView *web_view,
-                                       int progress,
-                                       EphyEmbed *embed)
+load_progress_changed_cb (WebKitWebView *web_view,
+                          int progress,
+                          EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
@@ -231,9 +231,9 @@ webkit_embed_load_progress_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_load_finished_cb (WebKitWebView *web_view,
-                               WebKitWebFrame *web_frame,
-                               EphyEmbed *embed)
+load_finished_cb (WebKitWebView *web_view,
+                  WebKitWebFrame *web_frame,
+                  EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
@@ -242,10 +242,10 @@ webkit_embed_load_finished_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_hovering_over_link_cb (WebKitWebView *web_view,
-                                    char *title,
-                                    char *location,
-                                    EphyEmbed *embed)
+hovering_over_link_cb (WebKitWebView *web_view,
+                       char *title,
+                       char *location,
+                       EphyEmbed *embed)
 {
   ephy_base_embed_set_link_message (EPHY_BASE_EMBED (embed), location);
 }
@@ -337,12 +337,12 @@ webkit_embed_inspect_close_cb (WebKitWebInspector *inspector,
 }
 
 static gboolean
-webkit_embed_mime_type_policy_decision_requested (WebKitWebView *web_view,
-                                                  WebKitWebFrame *frame,
-                                                  WebKitNetworkRequest *request,
-                                                  const char *mime_type,
-                                                  WebKitWebPolicyDecision *decision,
-                                                  WebKitEmbed *embed)
+mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
+                                        WebKitWebFrame *frame,
+                                        WebKitNetworkRequest *request,
+                                        const char *mime_type,
+                                        WebKitWebPolicyDecision *decision,
+                                        WebKitEmbed *embed)
 {
   EphyEmbedDocumentType type;
 
@@ -392,13 +392,13 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
   g_object_connect (web_view,
-                    "signal::load-committed", G_CALLBACK (webkit_embed_load_committed_cb), embed,
-                    "signal::load-started", G_CALLBACK (webkit_embed_load_started_cb), embed,
-                    "signal::load_finished", G_CALLBACK (webkit_embed_load_finished_cb), embed,
-                    "signal::title-changed", G_CALLBACK (webkit_embed_title_changed_cb), embed,
-                    "signal::load-progress-changed", G_CALLBACK (webkit_embed_load_progress_changed_cb), embed,
-                    "signal::hovering-over-link", G_CALLBACK (webkit_embed_hovering_over_link_cb), embed,
-                    "signal::mime-type-policy-decision-requested", G_CALLBACK (webkit_embed_mime_type_policy_decision_requested), embed,
+                    "signal::load-committed", G_CALLBACK (load_committed_cb), embed,
+                    "signal::load-started", G_CALLBACK (load_started_cb), embed,
+                    "signal::load_finished", G_CALLBACK (load_finished_cb), embed,
+                    "signal::title-changed", G_CALLBACK (title_changed_cb), embed,
+                    "signal::load-progress-changed", G_CALLBACK (load_progress_changed_cb), embed,
+                    "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
+                    "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     NULL);
 
   g_signal_connect (web_view, "notify::zoom-level",
