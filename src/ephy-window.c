@@ -3701,12 +3701,12 @@ ephy_window_finalize (GObject *object)
 
 	g_hash_table_destroy (priv->tabs_to_remove);
 
+	if (priv->clear_progress_timeout_id)
+		g_source_remove (priv->clear_progress_timeout_id);
+
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
-
-	if (priv->clear_progress_timeout_id)
-		g_source_remove (priv->clear_progress_timeout_id);
 
 #ifdef ENABLE_PYTHON
 	ephy_python_schedule_gc ();
