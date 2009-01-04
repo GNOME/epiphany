@@ -17,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
@@ -1285,7 +1284,7 @@ menu_item_select_cb (GtkMenuItem *proxy,
 	action = g_object_get_data (G_OBJECT (proxy),  "gtk-action");
 	g_return_if_fail (action != NULL);
 	
-	g_object_get (G_OBJECT (action), "tooltip", &message, NULL);
+	g_object_get (action, "tooltip", &message, NULL);
 	if (message)
 	{
 		gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
@@ -1318,7 +1317,7 @@ tool_item_enter_cb (GtkWidget *proxy,
 		action = g_object_get_data (G_OBJECT (item),  "gtk-action");
 		g_return_val_if_fail (action != NULL, FALSE);
 		
-		g_object_get (G_OBJECT (action), "tooltip", &message, NULL);
+		g_object_get (action, "tooltip", &message, NULL);
 		if (message)
 		{
 			gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
@@ -1803,7 +1802,7 @@ sync_tab_popup_windows (EphyEmbed *embed,
 	guint num_popups = 0;
 	char *tooltip = NULL;
 
-	g_object_get (G_OBJECT (embed),
+	g_object_get (embed,
 		      "hidden-popup-count", &num_popups,
 		      NULL);
 
@@ -1838,7 +1837,7 @@ sync_tab_popups_allowed (EphyEmbed *embed,
 					      "ViewPopupWindows");
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	g_object_get (G_OBJECT (embed), "popups-allowed", &allow, NULL);
+	g_object_get (embed, "popups-allowed", &allow, NULL);
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (action),
@@ -1909,7 +1908,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 
 	if (window->priv->closing) return;
 
-	g_object_get (G_OBJECT (web_view),
+	g_object_get (web_view,
 		      "zoom-level", &zoom,
 		      NULL);
 
@@ -3956,7 +3955,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-	g_object_get (G_OBJECT (web_view), "zoom-level", &current_zoom, NULL);
+	g_object_get (web_view, "zoom-level", &current_zoom, NULL);
 
 	if (zoom == ZOOM_IN)
 	{
