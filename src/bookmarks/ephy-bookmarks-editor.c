@@ -1579,25 +1579,6 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 	ephy_node_filter_done_changing (editor->priv->bookmarks_filter);
 }
 
-static gboolean
-search_entry_clear_cb (GtkWidget *ebox,
-					   GdkEventButton *event,
-					   GtkWidget *entry)
-{
-	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-	
-	if (event->type == GDK_BUTTON_RELEASE && 
-	    event->button == 1 && 
-	    state == 0 /* left */)
-	{
-		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
-		
-		return TRUE;
-	}
-	
-	return FALSE;
-}
-
 static GtkWidget *
 build_search_box (EphyBookmarksEditor *editor)
 {
