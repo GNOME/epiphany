@@ -2518,12 +2518,16 @@ navigation_policy_decision_required_cb (WebKitWebView *web_view,
 {
 	WebKitWebNavigationReason reason;
 	gint button;
+	gint state;
 
 	reason = webkit_web_navigation_action_get_reason (action);
 	button = webkit_web_navigation_action_get_button (action);
+	state = webkit_web_navigation_action_get_modifier_state (action);
 
+	/* Open in new tab for middle click or ctrl+click */
 	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
-	    button == 2 /* middle button */) {
+	    (button == 2 /* middle button */ ||
+	     (button == 1 && state == GDK_CONTROL_MASK) /* ctrl + left button */)) {
 		const char *uri;
 		EphyEmbed *embed;
 
