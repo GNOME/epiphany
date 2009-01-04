@@ -550,8 +550,9 @@ ns_get_bookmark_item (FILE *f, GString *name, GString *url)
 	 */
 	
 	/* check if it's a bookmark */
-	regex = g_regex_new ("<a href=\"(?P<url>\\w.*)\".*>(?P<name>\\w.*)</a>", 
-				G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
+	regex = g_regex_new
+		 ("<a href=\"(?P<url>[^\"]*).*?>\\s*(?P<name>.*?)\\s*</a>",
+		 G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
 	g_regex_match (regex, line, 0, &match_info);
 	
 	if (g_match_info_matches (match_info))
@@ -595,7 +596,7 @@ ns_get_bookmark_item (FILE *f, GString *name, GString *url)
 		 * @regex. Note that this two free/unrefs correspond to the last 
 		 * if() block too.
 		 */
-        g_match_info_free (match_info);
+		g_match_info_free (match_info);
 		g_regex_unref (regex);
 
 		if (match_name)
