@@ -336,6 +336,38 @@ webkit_embed_inspect_close_cb (WebKitWebInspector *inspector,
   return TRUE;
 }
 
+static gboolean
+webkit_embed_mime_type_policy_decision_requested (WebKitWebView *web_view,
+                                                  WebKitWebFrame *frame,
+                                                  WebKitNetworkRequest *request,
+                                                  const char *mime_type,
+                                                  WebKitWebPolicyDecision *decision,
+                                                  WebKitEmbed *embed)
+{
+  EphyEmbedDocumentType type;
+
+  g_return_val_if_fail (mime_type, FALSE);
+
+  type = EPHY_EMBED_DOCUMENT_OTHER;
+
+  if (!strcmp (mime_type, "text/html"))
+    type = EPHY_EMBED_DOCUMENT_HTML;
+  else if (!strcmp (mime_type, "application/xhtml+xml"))
+    type = EPHY_EMBED_DOCUMENT_XML;
+  else if (!strncmp (mime_type, "image/", 6))
+    type = EPHY_EMBED_DOCUMENT_IMAGE;
+
+  /* FIXME: maybe it makes more sense to have an API to query the mime
+   * type when the load of a page starts than doing this here.
+   */
+  /* FIXME: rename ge-document-type (and all ge- signals...) to
+   * something else
+   */
+  g_signal_emit_by_name (embed, "ge-document-type", type);
+
+  return FALSE;
+}
+                                                  
 static void
 webkit_embed_init (WebKitEmbed *embed)
 {
@@ -366,6 +398,7 @@ webkit_embed_init (WebKitEmbed *embed)
                     "signal::title-changed", G_CALLBACK (webkit_embed_title_changed_cb), embed,
                     "signal::load-progress-changed", G_CALLBACK (webkit_embed_load_progress_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (webkit_embed_hovering_over_link_cb), embed,
+                    "signal::mime-type-policy-decision-requested", G_CALLBACK (webkit_embed_mime_type_policy_decision_requested), embed,
                     NULL);
 
   g_signal_connect (web_view, "notify::zoom-level",
