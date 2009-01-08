@@ -16,7 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
@@ -156,7 +155,6 @@ window_cmd_file_send_to	(GtkAction *action,
 	g_free (command);
 }
 
-#if 0
 static gboolean
 event_with_shift (void)
 {
@@ -183,7 +181,6 @@ event_with_shift (void)
 
 	return (state & GDK_SHIFT_MASK) != 0;
 }
-#endif
 
 void
 window_cmd_go_location (GtkAction *action,
@@ -212,6 +209,7 @@ window_cmd_view_reload (GtkAction *action,
 		        EphyWindow *window)
 {
 	EphyEmbed *embed;
+	WebKitWebView *view;
 
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (window));
@@ -219,12 +217,11 @@ window_cmd_view_reload (GtkAction *action,
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-	/* FIXME: no way to bypass cache when reloading
-	 * with WebKit right now. Old code did:
-	 * ephy_embed_reload (embed, event_with_shift ());
-	 * WebKit bug: https://bugs.webkit.org/show_bug.cgi?id=19815
-	 */
-	webkit_web_view_reload (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	if (event_with_shift ())
+		webkit_web_view_reload_bypass_cache (view);
+	else
+		webkit_web_view_reload (view);
 }
 
 void
