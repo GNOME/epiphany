@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 enum
 {
@@ -920,7 +919,7 @@ disconnect_signals (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 }
 
 static void
-init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GladeXML *gxml)
+init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GtkBuilder *builder)
 {
 	int i;
 
@@ -935,7 +934,7 @@ init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GladeXML *
 		info->string_enum = NULL;
 		info->data_col = -1;
 
-		info->widget = glade_xml_get_widget (gxml, info->id);
+		info->widget = (GtkWidget*)gtk_builder_get_object (builder, info->id);
 		
 		if (GTK_IS_COMBO_BOX (info->widget))
 		{
@@ -1068,12 +1067,20 @@ impl_construct (EphyDialog *dialog,
 		const char *domain)
 {
 	EphyDialogPrivate *priv = dialog->priv;
-	GladeXML *gxml;
+	GtkBuilder *builder;
+	GError *error = NULL;
 
-	gxml = glade_xml_new (file, name, domain);
-	g_return_if_fail (gxml != NULL);
+	builder = gtk_builder_new ();
+	gtk_builder_set_translation_domain (builder, domain);
+	gtk_builder_add_from_file (builder, file, &error);
+	if (error)
+	{
+		g_warning ("Unable to load UI file %s: %s", file, error->message);
+		g_error_free (error);
+		return;
+	}
 
-	priv->dialog = glade_xml_get_widget (gxml, name);
+	priv->dialog = (GtkWidget*)gtk_builder_get_object (builder, name);
 	g_return_if_fail (priv->dialog != NULL);
 
 	if (priv->name == NULL)
@@ -1083,13 +1090,13 @@ impl_construct (EphyDialog *dialog,
 
 	if (properties)
 	{
-		init_props (dialog, properties, gxml);
+		init_props (dialog, properties, builder);
 	}
 
 	g_signal_connect_object (dialog->priv->dialog, "destroy",
 				 G_CALLBACK(dialog_destroy_cb), dialog, 0);
 
-	g_object_unref (gxml);
+	g_object_unref (builder);
 }
 
 static void

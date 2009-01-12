@@ -97,7 +97,7 @@ GECKO_WARN_CXXFLAGS="-Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 if test "$enable_maintainer_mode" = "yes"; then
 	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
 	enable_debug=yes
-	DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+	DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
 	GECKO_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $GECKO_WARN_CXXFLAGS"
 fi
 
@@ -105,7 +105,6 @@ GLIB_REQUIRED=2.16.0
 GTK_REQUIRED=2.15.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
-LIBGLADE_REQUIRED=2.3.1
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 LIBNOTIFY_REQUIRED=0.4
 DBUS_GLIB_REQUIRED=0.35
@@ -138,7 +137,6 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  sm
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
-		  libglade-2.0 >= $LIBGLADE_REQUIRED
 		  gconf-2.0
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  $LIBNOTIFY_PACKAGE
@@ -510,6 +508,15 @@ GTK_DOC_CHECK([1.0])
 AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
 AC_SUBST([SVN_MODULE],[epiphany])
 AC_SUBST([SVN_BRANCH],[epiphany_branch])
+
+# **************************
+# gtk-builder-convert binary
+# **************************
+
+AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
+if test "$GTK_BUILDER_CONVERT" = "false"; then
+  AC_MSG_ERROR([gtk-builder-convert not found])
+fi
 
 # ************
 # Output files

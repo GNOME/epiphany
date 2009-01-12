@@ -710,7 +710,7 @@ setup_add_language_dialog (PrefsDialog *pd)
 
 	ephy_dialog_construct (dialog, 
 			       add_lang_props,
-			       ephy_file ("prefs-dialog.glade"),
+			       ephy_file ("prefs-dialog.ui"),
 			       "add_language_dialog",
 			       NULL);
 
@@ -1167,7 +1167,7 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_dialog_construct (dialog,
 			       properties,
-			       ephy_file ("prefs-dialog.glade"),
+			       ephy_file ("prefs-dialog.ui"),
 			       "prefs_dialog",
 			       NULL);
 

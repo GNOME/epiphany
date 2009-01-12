@@ -712,7 +712,7 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	ephy_dialog_construct (d,
 			       properties,
-			       ephy_file ("epiphany.glade"),
+			       ephy_file ("epiphany.ui"),
 			       "download_manager_dialog",
 			       NULL);
 

@@ -296,7 +296,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       properties,
-			       ephy_file ("epiphany.glade"),
+			       ephy_file ("epiphany.ui"),
 			       "encoding_dialog",
 			       NULL);
 
