@@ -1,6 +1,4 @@
-SUBDIRS = $(with_engine)
-
-DIST_SUBDIRS = mozilla webkit
+SUBDIRS = mozilla
 
 NULL =
 
@@ -89,22 +87,10 @@ libephyembedfactory_la_SOURCES =	\
 	ephy-embed-factory.h
 
 libephyembedfactory_la_CPPFLAGS = \
-	-I$(top_srcdir)/embed/$(with_engine)		\
+	-I$(top_srcdir)/embed/mozilla	\
 	$(AM_CPPFLAGS)
 
-if WITH_XULRUNNER_ENGINE
-libephyembedfactory_la_CPPFLAGS += \
-	-I$(srcdir)/xulrunner/src		\
-	-I$(srcdir)/xulrunner/embed		\
-	-I$(top_builddir)/embed/xulrunner/src	\
-	-I$(top_builddir)/embed/xulrunner/embed	\
-	$(LIBXUL_INCLUDES)			\
-	$(NULL)
-endif
-
-if WITH_GECKO_ENGINE
 libephyembedfactory_la_CPPFLAGS += -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz
-endif
 
 libephyembedfactory_la_CFLAGS = \
 	$(GECKO_CFLAGS) \

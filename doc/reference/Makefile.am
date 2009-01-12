@@ -80,9 +80,6 @@ IGNORE_HFILES = \
 	mozilla-notifiers.h \
 	MozillaPrivate.h \
 	MozRegisterComponents.h \
-	webkit-embed.h \
-	webkit-embed-persist.h \
-	webkit-embed-single.h \
 	PrintingPromptService.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
@@ -152,30 +149,17 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
 
-if WITH_GECKO_ENGINE
 GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
 		 -I$(GECKO_INCLUDE_ROOT) \
 	         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
 		 $(GECKO_CFLAGS)
-endif
-
-if WITH_WEBKIT_ENGINE
-GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
-		 $(WEBKIT_CFLAGS)
-endif
 
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la
 
-if WITH_GECKO_ENGINE
 GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
-endif
-
-if WITH_WEBKIT_ENGINE
-GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
-endif
 
 GTKDOC_LIBS += \
 	$(top_builddir)/embed/libephyembed.la \

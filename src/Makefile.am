@@ -147,14 +147,14 @@ libpyphany_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/embed		\
-	-I$(top_srcdir)/embed/$(with_engine)	\
+	-I$(top_srcdir)/embed/mozilla	\
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/src/bookmarks	\
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_builddir)/lib/egg	\
 	-I$(top_builddir)/embed		\
-	-I$(top_builddir)/embed/$(with_engine)	\
+	-I$(top_builddir)/embed/mozilla	\
 	-I$(top_builddir)/src		\
 	-I$(top_builddir)/src/bookmarks	\
 	$(PYTHON_INCLUDES)		\
@@ -215,24 +215,9 @@ epiphany_LDADD = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la
 
-if WITH_XULRUNNER_ENGINE
-epiphany_LDADD += \
-	$(top_builddir)/embed/xulrunner/utils/libephyxulrunnerutils.la	\
-	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed.la	\
-	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la	\
-	$(top_builddir)/embed/xulrunner/components/libephycomponents.la
-endif
-
-if WITH_GECKO_ENGINE
 epiphany_LDADD += \
 	$(GECKO_LIBS) \
 	$(top_builddir)/embed/mozilla/libephymozillaembed.la
-endif
-
-if WITH_WEBKIT_ENGINE
-epiphany_LDADD += \
-	$(top_builddir)/embed/webkit/libephywebkitembed.la
-endif
 
 epiphany_LDADD += \
 	$(top_builddir)/embed/libephyembed.la \
@@ -240,12 +225,6 @@ epiphany_LDADD += \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la
 
-if WITH_XULRUNNER_ENGINE
-epiphany_LDFLAGS += -R$(LIBXUL_LIBDIR)
-epiphany_LDADD += $(LIBXUL_LIBS) -lxpcomglue
-endif
-
-if WITH_GECKO_ENGINE
 if !HAVE_GECKO_XPCOM_GLUE
 epiphany_LDFLAGS += -R$(GECKO_HOME)
 endif
@@ -254,12 +233,6 @@ epiphany_LDADD += \
 	$(GECKO_LIBS) \
 	$(GECKO_EXTRA_LIBS) \
 	$(GECKO_GLUE_LIBS)
-endif
-
-if WITH_WEBKIT_ENGINE
-epiphany_LDADD += \
-	$(WEBKIT_LIBS)
-endif
 
 epiphany_LDADD += \
 	$(GECKO_LIBS) \

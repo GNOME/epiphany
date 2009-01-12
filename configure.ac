@@ -213,29 +213,11 @@ if test "$enable_maintainer_mode" = "yes"; then
 	AC_LANG_POP([C])
 fi
 
-# ************
-# Engine check
-# ************
-
-AC_MSG_CHECKING(for which engine to use)
-
-AC_ARG_WITH([engine],
-	AS_HELP_STRING([--with-engine@<:@=mozilla|webkit|xulrunner@:>@],
-		[Which engine to build against @<:@mozilla@:>@]),
-	[],[with_engine="mozilla"])
-
-AC_MSG_RESULT($with_engine)
-AC_SUBST([with_engine])
-
 # *******
 # Mozilla
 # *******
 
-if test "$with_engine" = "mozilla"; then
-
 GECKO_INIT([GECKO])
-
-AC_DEFINE([WITH_GECKO_ENGINE],[1],[Define if you wish to enable mozilla engine])
 
 AC_SUBST([GECKO])
 AC_SUBST([GECKO_FLAVOUR])
@@ -417,49 +399,11 @@ fi
 #GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 #	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 
-fi # with_engine = mozilla
-
 GECKO_DEFINES
-AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
 AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner" -o "$gecko_cv_gecko" = "libxul" -o "$gecko_cv_gecko" = "libxul-embedding"])
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
 AM_CONDITIONAL([HAVE_NSIBADCERTLISTENER_H],[test "$have_nsibadcertlistener" = "yes"])
-
-# *********
-# Xulrunner
-# *********
-
-# This is the mozilla backend for xulrunner 1.9
-
-if test "$with_engine" = "xulrunner"; then
-
-LIBXUL_INIT
-
-AC_DEFINE([WITH_XULRUNNER_ENGINE],[1],[Define if building the Xulrunner backend])
-
-WEASEL_UA_VERSION=3.0
-AC_SUBST([WEASEL_UA_VERSION])
-
-
-fi
-
-LIBXUL_DEFINES
-
-AM_CONDITIONAL([WITH_XULRUNNER_ENGINE],[test "$with_engine" = "xulrunner"])
-
-# ******
-# WebKit
-# ******
-
-if test "$with_engine" = "webkit" ; then
-   AC_DEFINE([WITH_WEBKIT_ENGINE],[1],[Define if you wish to enable webkit engine])
-   PKG_CHECK_MODULES([WEBKIT], [webkit-1.0])
-   AC_SUBST([WEBKIT_CFLAGS])
-   AC_SUBST([WEBKIT_LIBS])
-fi # with_engine = webkit
-
-AM_CONDITIONAL([WITH_WEBKIT_ENGINE], test "$with_engine" = "webkit")
 
 # ***************
 # Multimedia keys
@@ -577,8 +521,6 @@ AC_SUBST([EPIPHANY_FEATURES])
 # Gecko 1.9 can handle .desktop files from file: URLs itself, but we
 # also support windows .lnk files, so always enable this plugin
 
-if test "$with_engine" = "mozilla" ; then
-
 AC_MSG_CHECKING([whether to build the deskop file plugin])
 AC_ARG_ENABLE([desktop-file-plugin],
 	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
@@ -598,10 +540,6 @@ fi
 if test "$enable_desktop_file_plugin" = "yes"; then
 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
 fi
-
-else # with_engine = mozilla
-        enable_desktop_file_plugin=no
-fi   # with_engine != mozilla
 
 AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" = "yes"])
 
@@ -668,8 +606,6 @@ AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"]
 # Enchant spell checking
 # Does not appear to work on gecko 1.8.0, so only offer for >= 1.8.1
 
-if test "$with_engine" = "mozilla" ; then
-
 if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
 
 # Default to 'disabled' until it's fully functional
@@ -696,11 +632,6 @@ if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"; 
 
 	AC_DEFINE([ENABLE_SPELLCHECKER],[1],[Define to enable the spell checker])
 fi
-
-else # with_engine = mozilla
-        enable_spell_checker=no
-fi   # with_engine != mozilla
-
 
 AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
 
@@ -820,7 +751,6 @@ lib/egg/Makefile
 lib/widgets/Makefile
 embed/Makefile
 embed/mozilla/Makefile
-embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
 src/ephy-version.h
@@ -851,11 +781,6 @@ Epiphany was configured with the following options:
  	Desktop file plugin        : $enable_desktop_file_plugin
  	Spellchecker               : $enable_spell_checker (experimental)
  
-        Engine                     : $with_engine
- "
-
-if test "$with_engine" = "mozilla"; then
-echo "        Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
+	Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
 	PSM support                : $enable_psm
 "
-fi

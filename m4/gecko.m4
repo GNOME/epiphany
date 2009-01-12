@@ -347,7 +347,7 @@ if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
 fi
 
 if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
-	PKG_CHECK_EXISTS([${gecko_cv_gecko} >= 1.9.1],[gecko_cv_have_gecko_1_9_1=yes],[gecko_cv_have_gecko_1_9_1=no])
+	PKG_CHECK_EXISTS([${gecko_cv_gecko} >= 1.9.1],[gecko_cv_have_gecko_1_9_1=yes gecko_cv_gecko_version="1.9.1" gecko_cv_gecko_version_int=1009001],[gecko_cv_have_gecko_1_9_1=no])
 else
 	gecko_cv_have_gecko_1_9_1=no
 fi
