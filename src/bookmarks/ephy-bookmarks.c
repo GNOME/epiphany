@@ -960,7 +960,10 @@ resolver_found_cb (GaServiceResolver *resolver,
 	
 	ephy_node_db_set_immutable (priv->db, was_immutable);
 
-	g_hash_table_unref (text_table);
+	if (text_table != NULL)
+	{
+		g_hash_table_unref (text_table);
+	}
 }
 
 static void
