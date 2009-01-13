@@ -392,7 +392,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		
 		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy),
 							match_func,
-							NULL,
+							proxy,
 							NULL);
 
 		add_completion_actions (action, proxy);

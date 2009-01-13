@@ -996,7 +996,7 @@ ephy_location_entry_set_match_func (EphyLocationEntry *le,
 	GtkEntryCompletion *completion;
 	
 	completion = gtk_entry_get_completion (GTK_ENTRY (priv->icon_entry->entry));
-	gtk_entry_completion_set_match_func (completion, match_func, le, notify);
+	gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
 }
 
 void
