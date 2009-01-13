@@ -85,18 +85,6 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyLocationAction, ephy_location_action, EPHY_TYPE_LINK_ACTION)
 
-typedef struct
-{
-	EphyLocationEntry *entry;
-	EphyLocationAction *action;
-} LocationEntryAction;
-
-static void
-destroy_match_func (gpointer data)
-{
-	g_slice_free (LocationEntryAction, data);
-}
-
 static gboolean
 match_func (GtkEntryCompletion *completion,
 		const char *key,
@@ -109,11 +97,8 @@ match_func (GtkEntryCompletion *completion,
 	char *extra = NULL;
 
 	gboolean ret = FALSE;
-	EphyLocationActionPrivate *priv;
 	GtkTreeModel *model;
 	GRegex *regex;
-
-	priv = EPHY_LOCATION_ACTION (((LocationEntryAction *) data)->action)->priv;
 
 	model = gtk_entry_completion_get_model (completion);
 
@@ -127,7 +112,7 @@ match_func (GtkEntryCompletion *completion,
 	if (!key)
 		return FALSE;
 	
-	regex = ephy_location_entry_get_regex (((LocationEntryAction *) data)->entry);
+	regex = ephy_location_entry_get_regex ((EphyLocationEntry *) data);
 	
 	ret = (g_regex_match (regex, item, G_REGEX_MATCH_NOTEMPTY, NULL)
 		|| g_regex_match (regex, url, G_REGEX_MATCH_NOTEMPTY, NULL)
@@ -393,7 +378,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 		EphyCompletionModel *model;
 		GtkWidget *entry;
-		LocationEntryAction *lea;
 
 		model = ephy_completion_model_new ();
 		ephy_location_entry_set_completion (EPHY_LOCATION_ENTRY (proxy),
@@ -406,14 +390,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_EXTRA_COL,
 						    EPHY_COMPLETION_FAVICON_COL);
 		
-		lea = g_slice_new (LocationEntryAction);
-		lea->entry = EPHY_LOCATION_ENTRY (proxy);
-		lea->action = EPHY_LOCATION_ACTION (action);
-		
-		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy), 
-							match_func, 
-							lea,
-							destroy_match_func);
+		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy),
+							match_func,
+							NULL,
+							NULL);
 
 		add_completion_actions (action, proxy);
 
