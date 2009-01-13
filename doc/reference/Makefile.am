@@ -127,7 +127,6 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 		-I$(top_builddir)/lib/egg \
 		-I$(top_srcdir)/embed/webkit \
 		$(DEPENDENCIES_CFLAGS) \
-		$(WEBKIT_CFLAGS) \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
 
@@ -141,7 +140,6 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
         $(DEPENDENCIES_LIBS) \
-        $(WEBKIT_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 

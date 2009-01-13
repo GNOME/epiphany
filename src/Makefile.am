@@ -213,7 +213,6 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
-	$(WEBKIT_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 

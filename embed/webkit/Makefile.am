@@ -14,7 +14,6 @@ libephywebkitembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\
 	-I$(top_srcdir)		    		\
-	$(WEBKIT_CFLAGS)                        \
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
 	-DBUILDING_GDK__=1 \
 	-DBUILDING_CAIRO__=1 \

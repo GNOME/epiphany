@@ -76,7 +76,6 @@ libephyembed_la_CPPFLAGS = \
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(DEPENDENCIES_CFLAGS) 	\
-	$(WEBKIT_CFLAGS)	\
 	$(AM_CFLAGS)
 
 libephyembedfactory_la_SOURCES =	\

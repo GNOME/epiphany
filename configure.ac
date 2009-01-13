@@ -204,14 +204,6 @@ if test "$enable_maintainer_mode" = "yes"; then
 	AC_LANG_POP([C])
 fi
 
-# ******
-# WebKit
-# ******
-
-PKG_CHECK_MODULES([WEBKIT], [webkit-1.0])
-AC_SUBST([WEBKIT_CFLAGS])
-AC_SUBST([WEBKIT_LIBS])
-
 # ***************
 # Multimedia keys
 # ***************
