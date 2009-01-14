@@ -388,6 +388,7 @@ BINDING_HEADERS_SRCDIR_IN = \
 	src/ephy-shell.h				\
 	src/ephy-statusbar.h				\
 	src/ephy-toolbar.h				\
+	src/ephy-web-view.h				\
 	src/ephy-window.h
 
 BINDING_HEADERS_SRCDIR_IGNORE_IN = \

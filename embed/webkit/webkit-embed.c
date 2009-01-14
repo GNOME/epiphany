@@ -41,6 +41,7 @@
 #include "ephy-embed-event.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
+#include "ephy-web-view.h"
 
 #include <webkit/webkit.h>
 #include <errno.h>
@@ -352,7 +353,7 @@ webkit_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
   GtkWidget *inspector_sw = GTK_WIDGET (data);
   GtkWidget *inspector_web_view;
 
-  inspector_web_view = webkit_web_view_new ();
+  inspector_web_view = ephy_web_view_new ();
   gtk_container_add (GTK_CONTAINER (inspector_sw), inspector_web_view);
 
   gtk_widget_show_all (gtk_widget_get_toplevel (inspector_sw));
@@ -726,7 +727,7 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-  web_view = WEBKIT_WEB_VIEW (webkit_web_view_new ());
+  web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   embed->priv->web_view = web_view;
   gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (web_view));
   gtk_widget_show (sw);

@@ -31,7 +31,9 @@ INST_H_FILES = \
 	ephy-embed-utils.h              \
 	ephy-history.h			\
 	ephy-password-manager.h		\
-	ephy-permission-manager.h
+	ephy-permission-manager.h   \
+	ephy-web-view.h
+
 
 BUILT_SOURCES = \
 	ephy-embed-type-builtins.c	\
@@ -56,6 +58,8 @@ libephyembed_la_SOURCES = \
 	ephy-history.c			\
 	ephy-password-manager.c		\
 	ephy-permission-manager.c	\
+	ephy-web-view.c
+
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
