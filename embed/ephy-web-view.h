@@ -60,6 +60,9 @@ GType        ephy_web_view_get_type            (void);
 
 GtkWidget   *ephy_web_view_new                 (void);
 
+void         ephy_web_view_load_request        (EphyWebView *web_view,
+                                                WebKitNetworkRequest *request);
+
 G_END_DECLS
 
 #endif

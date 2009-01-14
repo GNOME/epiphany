@@ -55,3 +55,22 @@ ephy_web_view_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
 }
 
+/**
+ * ephy_web_view_load_request:
+ * @web_view: the #EphyWebView in which to load the request
+ * @request: the #WebKitNetworkRequest to be loaded
+ *
+ * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
+ **/
+void
+ephy_web_view_load_request (EphyWebView *web_view,
+                            WebKitNetworkRequest *request)
+{
+  WebKitWebFrame *main_frame;
+
+	g_return_if_fail(EPHY_IS_WEB_VIEW(web_view));
+	g_return_if_fail(WEBKIT_IS_NETWORK_REQUEST(request));
+
+	main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
+  webkit_web_frame_load_request(main_frame, request);
+}
