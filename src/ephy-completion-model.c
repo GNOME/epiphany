@@ -243,8 +243,10 @@ ephy_completion_model_get_column_type (GtkTreeModel *tree_model,
 		case EPHY_COMPLETION_TEXT_COL:
 		case EPHY_COMPLETION_ACTION_COL:
 		case EPHY_COMPLETION_KEYWORDS_COL:
-		case EPHY_COMPLETION_EXTRA_COL:
 			type =  G_TYPE_STRING;
+			break;
+		case EPHY_COMPLETION_EXTRA_COL:
+			type = G_TYPE_BOOLEAN;
 			break;
 		case EPHY_COMPLETION_FAVICON_COL:
 			type = GDK_TYPE_PIXBUF;
@@ -456,10 +458,8 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 	switch (column)
 	{
 		case EPHY_COMPLETION_EXTRA_COL:
-			g_value_init (value, G_TYPE_STRING);
-			g_value_set_string (value,
-					ephy_node_get_property_string
-					 (node, EPHY_NODE_PAGE_PROP_LOCATION));
+			g_value_init (value, G_TYPE_BOOLEAN);
+			g_value_set_boolean (value, (group == BOOKMARKS_GROUP));
 			break;
 		case EPHY_COMPLETION_TEXT_COL:
 			g_value_init (value, G_TYPE_STRING);

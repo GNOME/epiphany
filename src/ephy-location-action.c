@@ -133,13 +133,11 @@ match_func (GtkEntryCompletion *completion,
 	ret = (g_regex_match (regex, item, G_REGEX_MATCH_NOTEMPTY, NULL)
 		|| g_regex_match (regex, url, G_REGEX_MATCH_NOTEMPTY, NULL)
 		|| g_regex_match (regex, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)
-		|| (extra && g_regex_match (regex, extra, G_REGEX_MATCH_NOTEMPTY, NULL))
 		);
 
 	g_free (item);
 	g_free (url);
 	g_free (keywords);
-	g_free (extra);
 
 	return ret;
 }

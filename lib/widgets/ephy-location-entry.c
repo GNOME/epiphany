@@ -92,6 +92,11 @@ static void textcell_data_func (GtkCellLayout *cell_layout,
 			GtkTreeModel *tree_model,
 			GtkTreeIter *iter,
 			gpointer data);
+static void extracell_data_func (GtkCellLayout *cell_layout,
+			GtkCellRenderer *cell,
+			GtkTreeModel *tree_model,
+			GtkTreeIter *iter,
+			gpointer data);
 
 enum signalsEnum
 {
@@ -998,6 +1003,33 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	g_free (url);
 }
 
+static void
+extracell_data_func (GtkCellLayout *cell_layout,
+			GtkCellRenderer *cell,
+			GtkTreeModel *tree_model,
+			GtkTreeIter *iter,
+			gpointer data)
+{
+	EphyLocationEntryPrivate *priv;
+	gboolean is_bookmark = FALSE;
+	GValue visible = { 0, };
+
+	priv = EPHY_LOCATION_ENTRY (data)->priv;
+	gtk_tree_model_get (tree_model, iter,
+			priv->extra_col, &is_bookmark,
+			-1);
+
+	if (is_bookmark)
+		g_object_set (G_OBJECT (cell),
+				"stock-id", EPHY_STOCK_BOOKMARK,
+				NULL);
+
+	g_value_init (&visible, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&visible, is_bookmark);
+	g_object_set_property (G_OBJECT (cell), "visible", &visible);
+	g_value_unset (&visible);
+}
+
 /**
  * ephy_location_entry_set_match_func:
  * @entry: an #EphyLocationEntry widget
@@ -1054,7 +1086,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
-	GtkCellRenderer *cell, *iconcell;
+	GtkCellRenderer *cell, *iconcell, *extracell;
 
 	entry->priv->text_col = text_col;
 	entry->priv->action_col = action_col;
@@ -1100,6 +1132,14 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
 					cell, textcell_data_func,
+					entry,
+					NULL);
+
+	extracell = gtk_cell_renderer_pixbuf_new ();
+	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
+				    extracell, FALSE);
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
+					extracell, extracell_data_func,
 					entry,
 					NULL);
 
