@@ -49,7 +49,6 @@ struct _EphyLocationEntryPrivate
 	GdkColor secure_bg_colour;
 	GdkColor secure_fg_colour;
 
-	GtkCellRenderer *extracell;
 	GRegex *regex;
 
 	char *before_completion;
@@ -88,11 +87,11 @@ static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
-static void extracell_data_func (GtkCellLayout *cell_layout,
-				GtkCellRenderer *cell,
-				GtkTreeModel *tree_model,
-				GtkTreeIter *iter,
-				gpointer data);
+static void textcell_data_func (GtkCellLayout *cell_layout,
+			GtkCellRenderer *cell,
+			GtkTreeModel *tree_model,
+			GtkTreeIter *iter,
+			gpointer data);
 
 enum signalsEnum
 {
@@ -128,10 +127,6 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	}
 
 	title_fg_colour = widget->style->text[GTK_STATE_INSENSITIVE];
-	g_object_set (entry->priv->extracell, 
-		      "foreground-gdk", &title_fg_colour,
-		      "foreground-set", TRUE,
-		      NULL);
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 	g_object_get (settings, "gtk-theme-name", &theme, NULL);
@@ -911,8 +906,13 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 			    &item, -1);
 	entry = gtk_entry_completion_get_entry (completion);
 
+	/* Prevent the update so we keep the highlight from our input.
+	 * See textcell_data_func().
+	 */
+	le->priv->block_update = TRUE;
 	gtk_entry_set_text (GTK_ENTRY (entry), item);
 	gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+	le->priv->block_update = FALSE;
 
 	g_free (item);
 
@@ -920,32 +920,82 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 }
 
 static void
-extracell_data_func (GtkCellLayout *cell_layout,
+textcell_data_func (GtkCellLayout *cell_layout,
 			GtkCellRenderer *cell,
 			GtkTreeModel *tree_model,
 			GtkTreeIter *iter,
 			gpointer data)
 {
-	char *cdata;
-	GValue visible = { 0, };
-	GValue text = { 0, };
 	EphyLocationEntryPrivate *priv;
+	PangoAttrList *list;
+	PangoAttribute *att;
+	GMatchInfo *match;
+
+	int start, end;
+
+	char *ctext;
+	char *title;
+	char *url;
+
+	GtkStyle *style;
+	GdkColor color;
+
+	GValue text = { 0, };
 
 	priv = EPHY_LOCATION_ENTRY (data)->priv;
+	gtk_tree_model_get (tree_model, iter,
+			priv->text_col, &title,
+			priv->url_col, &url,
+			-1);
 
-	gtk_tree_model_get (tree_model, iter, priv->extra_col, &cdata, -1);
+	list = pango_attr_list_new ();
+
+	if (url)
+	{
+		ctext = g_strdup_printf ("%s\n%s", title, url);
+
+		style = gtk_widget_get_style (priv->entry);
+		color = style->text[GTK_STATE_INSENSITIVE];
+
+		att = pango_attr_foreground_new
+			(color.red, color.green, color.blue);
+		att->start_index = strlen (title)+1;
+
+		pango_attr_list_insert (list, att);
+	}
+	else
+	{
+		ctext = title;
+	}
+
+	g_regex_match (priv->regex, ctext, G_REGEX_MATCH_NOTEMPTY, &match);
+
+	while (g_match_info_matches (match))
+	{
+		g_match_info_fetch_pos (match, 0, &start, &end);
+
+		att = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+		att->start_index = start;
+		att->end_index = end;
+
+		pango_attr_list_insert (list, att);
+		g_match_info_next (match, NULL);
+	}
+
+	g_object_set (G_OBJECT (cell),
+			"attributes", list,
+			NULL);
 
 	g_value_init (&text, G_TYPE_STRING);
-	g_value_init (&visible, G_TYPE_BOOLEAN);
-	
-	g_value_take_string (&text, cdata);
-	g_value_set_boolean (&visible, (cdata != NULL));
-
+	g_value_take_string (&text, ctext);
 	g_object_set_property (G_OBJECT (cell), "text", &text);
-	g_object_set_property (G_OBJECT (cell), "visible", &visible);
-	
 	g_value_unset (&text);
-	g_value_unset (&visible);
+
+	pango_attr_list_unref (list);
+	g_match_info_free (match);
+
+	g_free (title);
+	g_free (url);
 }
 
 /**
@@ -1046,19 +1096,10 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
+	gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
 
-	entry->priv->extracell = gtk_cell_renderer_text_new ();
-	g_object_set (entry->priv->extracell,
-		      "ellipsize", PANGO_ELLIPSIZE_END,
-		      "ellipsize-set", TRUE,
-		      "alignment", PANGO_ALIGN_LEFT,
-		      NULL);
-
-	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
-				  entry->priv->extracell, TRUE);
-	
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					entry->priv->extracell, extracell_data_func, 
+					cell, textcell_data_func,
 					entry,
 					NULL);
 
