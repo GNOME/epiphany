@@ -3599,17 +3599,7 @@ ephy_window_open_link (EphyLink *link,
 	}
 	else
 	{
-		if (flags & EPHY_LINK_ALLOW_FIXUP)
-		{
-			ephy_embed_load (embed, 
-					 address, 
-					 EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP,
-					 NULL);
-		}
-		else
-		{
-			ephy_embed_load_url (embed, address);
-		}
+		ephy_embed_load_url (embed, address);
 
 		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
 		{

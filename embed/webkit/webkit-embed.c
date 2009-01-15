@@ -791,7 +791,6 @@ impl_load_url (EphyEmbed *embed,
 static void
 impl_load (EphyEmbed *embed,
            const char *url,
-           EphyEmbedLoadFlags flags,
            EphyEmbed *preview_embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);

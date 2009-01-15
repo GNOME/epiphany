@@ -520,18 +520,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
-		EphyEmbedLoadFlags load_flags = 0;
-
 		g_assert (request != NULL);
-
-		if (flags & EPHY_NEW_TAB_ALLOW_FIXUP)
-		{
-			load_flags = EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
-		}
-		else
-		{
-			load_flags = EPHY_EMBED_LOAD_FLAGS_NONE;
-		}
 
 		ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
 					    request);

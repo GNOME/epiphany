@@ -368,7 +368,6 @@ ephy_embed_load_url (EphyEmbed *embed,
  * ephy_embed_load:
  * @embed: an #EphyEmbed
  * @url: an URL
- * @flags: flags modifying load behaviour
  * @previous_embed: the referrer embed or %NULL
  *
  * Loads a new web page in @embed.
@@ -376,11 +375,10 @@ ephy_embed_load_url (EphyEmbed *embed,
 void
 ephy_embed_load (EphyEmbed *embed,
 		 const char *url,
-		 EphyEmbedLoadFlags flags,
 		 EphyEmbed *referring_embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->load (embed, url, flags, referring_embed);
+	iface->load (embed, url, referring_embed);
 }
 
 /**
