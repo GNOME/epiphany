@@ -21,7 +21,6 @@
  *
  * Ephy port by Marco Pesenti Gritti <marco@it.gnome.org>
  * 
- * $Id$
  */
 
 #ifndef COMPILING_TESTSPINNER

@@ -19,7 +19,6 @@
  *
  * Author: Andy Hertzfeld <andy@eazel.com>
  *
- * $Id$
  */
 
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)

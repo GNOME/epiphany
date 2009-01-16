@@ -21,7 +21,6 @@
 
    Authors: Ramiro Estrugo <ramiro@eazel.com>
 
-   $Id$
 */
 
 #ifndef EEL_GCONF_EXTENSIONS_H

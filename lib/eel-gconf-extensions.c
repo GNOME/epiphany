@@ -21,7 +21,6 @@
 
    Authors: Ramiro Estrugo <ramiro@eazel.com>
 
-   $Id$
 */
 
 #include "config.h"
