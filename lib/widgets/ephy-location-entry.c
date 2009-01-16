@@ -88,15 +88,15 @@ static void ephy_location_entry_init (EphyLocationEntry *le);
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
 static void textcell_data_func (GtkCellLayout *cell_layout,
-			GtkCellRenderer *cell,
-			GtkTreeModel *tree_model,
-			GtkTreeIter *iter,
-			gpointer data);
+				GtkCellRenderer *cell,
+				GtkTreeModel *tree_model,
+				GtkTreeIter *iter,
+				gpointer data);
 static void extracell_data_func (GtkCellLayout *cell_layout,
-			GtkCellRenderer *cell,
-			GtkTreeModel *tree_model,
-			GtkTreeIter *iter,
-			gpointer data);
+				 GtkCellRenderer *cell,
+				 GtkTreeModel *tree_model,
+				 GtkTreeIter *iter,
+				 gpointer data);
 
 enum signalsEnum
 {
@@ -987,9 +987,9 @@ textcell_data_func (GtkCellLayout *cell_layout,
 		g_match_info_next (match, NULL);
 	}
 
-	g_object_set (G_OBJECT (cell),
-			"attributes", list,
-			NULL);
+	g_object_set (cell,
+		      "attributes", list,
+		      NULL);
 
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_take_string (&text, ctext);
@@ -1016,13 +1016,13 @@ extracell_data_func (GtkCellLayout *cell_layout,
 
 	priv = EPHY_LOCATION_ENTRY (data)->priv;
 	gtk_tree_model_get (tree_model, iter,
-			priv->extra_col, &is_bookmark,
-			-1);
+			    priv->extra_col, &is_bookmark,
+			    -1);
 
 	if (is_bookmark)
-		g_object_set (G_OBJECT (cell),
-				"stock-id", EPHY_STOCK_BOOKMARK,
-				NULL);
+		g_object_set (cell,
+			      "stock-id", EPHY_STOCK_BOOKMARK,
+			      NULL);
 
 	g_value_init (&visible, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&visible, is_bookmark);
@@ -1137,11 +1137,11 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 
 	extracell = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
-				    extracell, FALSE);
+				  extracell, FALSE);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					extracell, extracell_data_func,
-					entry,
-					NULL);
+					    extracell, extracell_data_func,
+					    entry,
+					    NULL);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
