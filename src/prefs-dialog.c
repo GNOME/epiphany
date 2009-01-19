@@ -624,32 +624,26 @@ get_name_for_lang_code (PrefsDialog *pd,
 
 		if (localename != NULL)
 		{
-			/* Translators: The text before the "|" is context to help you decide on
-			 * the correct translation. You MUST OMIT it in the translated string.
-			 * Translators: the first %s is the language name, and the
+			/* Translators: the first %s is the language name, and the
 			 * second %s is the locale name. Example:
 			 * "French (France)"
 			 */
-			name = g_strdup_printf (Q_("language|%s (%s)"),
+			name = g_strdup_printf (C_("language", "%s (%s)"),
 						dgettext (ISO_639_DOMAIN, langname),
 						dgettext (ISO_3166_DOMAIN, localename));
 		}
 		else
 		{
-			/* Translators: The text before the "|" is context to help you decide on
-			 * the correct translation. You MUST OMIT it in the translated string. */
-			name = g_strdup_printf (Q_("language|%s (%s)"),
+			name = g_strdup_printf (C_("language", "%s (%s)"),
 						dgettext (ISO_639_DOMAIN, langname), str[1]);
 		}
 	}
 	else
 	{
-		/* Translators: The text before the "|" is context to help you decide on
-		 * the correct translation. You MUST OMIT it in the translated string.
-		 * Translators: this refers to a user-define language code
+		/* Translators: this refers to a user-define language code
 		 * (one which isn't in our built-in list).
 		 */
-		name = g_strdup_printf (Q_("language|User defined (%s)"), code);
+		name = g_strdup_printf (C_("language", "User defined (%s)"), code);
 	}
 
 	g_strfreev (str);

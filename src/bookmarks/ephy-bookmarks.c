@@ -1219,32 +1219,20 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 {
 	EphyNodeDb *db;
 
-	/* Translators: The text before the "|" is context to help you
-	 * decide on the correct translation. You MUST OMIT it in the
-	 * translated string. */
 	/* Translators: this topic contains all bookmarks */
-	const char *bk_all = Q_("bookmarks|All");
+	const char *bk_all = C_("bookmarks", "All");
 
-	/* Translators: The text before the "|" is context to help you
-	 * decide on the correct translation. You MUST OMIT it in the
-	 * translated string. */
 	/* Translators: this topic contains the most used bookmarks */
-	const char *bk_most_visited = Q_("bookmarks|Most Visited");
+	const char *bk_most_visited = C_("bookmarks", "Most Visited");
 
-	/* Translators: The text before the "|" is context to help you
-	 * decide on the correct translation. You MUST OMIT it in the
-	 * translated string. */
 	/* Translators: this topic contains the not categorized
 	   bookmarks */
-	const char *bk_not_categorized = Q_("bookmarks|Not Categorized");
+	const char *bk_not_categorized = C_("bookmarks", "Not Categorized");
 	
-#ifdef ENABLE_ZEROCONF	
-	/* Translators: The text before the "|" is context to help you
-	 * decide on the correct translation. You MUST OMIT it in the
-	 * translated string. */
+#ifdef ENABLE_ZEROCONF
 	/* Translators: this is an automatic topic containing local
 	 * websites bookmarks autodiscovered with zeroconf. */
-	const char *bk_local_sites = Q_("bookmarks|Nearby Sites");
+	const char *bk_local_sites = C_("bookmarks", "Nearby Sites");
 #endif
 
 	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);

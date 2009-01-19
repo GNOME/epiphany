@@ -673,22 +673,16 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 	switch (state)
 	{
 		case EPHY_DOWNLOAD_INITIALISING:
-			/* Translators: The text before the "|" is context to help you decide on
-			 * the correct translation. You MUST OMIT it in the translated string. */
-			text = Q_("download status|Unknown");
+			text = C_("download status", "Unknown");
 			break;
 		case EPHY_DOWNLOAD_FAILED:
-			/* Translators: The text before the "|" is context to help you decide on
-			 * the correct translation. You MUST OMIT it in the translated string. */
-			text = Q_("download status|Failed");
+			text = C_("download status", "Failed");
 			break;
 		case EPHY_DOWNLOAD_DOWNLOADING:
 		case EPHY_DOWNLOAD_PAUSED:
 			if (percent == -1)
 			{
-				/* Translators: The text before the "|" is context to help you decide on
-				 * the correct translation. You MUST OMIT it in the translated string. */
-				text = Q_("download status|Unknown");
+				text = C_("download status", "Unknown");
 				percent = 0;
 			}
 			break;

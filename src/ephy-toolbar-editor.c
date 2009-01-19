@@ -68,14 +68,12 @@ static const struct
 }
 toolbar_styles [] =
 {
-	{ /* Translators: The text before the "|" is context to help you decide on
-	   * the correct translation. You MUST OMIT it in the translated string. */
-	  N_("toolbar style|Default"), 0, FALSE },
+	{ NC_("toolbar style", "Default"), 0, FALSE },
 	{ NULL /* separator row */, 0, FALSE },
-	{ N_("Text below icons"), EGG_TB_MODEL_BOTH, TRUE },
-	{ N_("Text beside icons"), EGG_TB_MODEL_BOTH_HORIZ, TRUE },
-	{ N_("Icons only"), EGG_TB_MODEL_ICONS, TRUE },
-	{ N_("Text only"), EGG_TB_MODEL_TEXT, TRUE }
+	{ NC_("toolbar style", "Text below icons"), EGG_TB_MODEL_BOTH, TRUE },
+	{ NC_("toolbar style", "Text beside icons"), EGG_TB_MODEL_BOTH_HORIZ, TRUE },
+	{ NC_("toolbar style", "Icons only"), EGG_TB_MODEL_ICONS, TRUE },
+	{ NC_("toolbar style", "Text only"), EGG_TB_MODEL_TEXT, TRUE }
 };
 
 enum
@@ -216,7 +214,7 @@ ephy_toolbar_editor_constructor (GType type,
 
 		if (text != NULL)
 		{
-			tr_text= Q_(text);
+			tr_text = g_dpgettext2 (NULL, "toolbar style", text);
 		}
 
 		gtk_list_store_append (store, &iter);
