@@ -49,7 +49,7 @@ struct _EphyLocationEntryPrivate
 	GdkColor secure_bg_colour;
 	GdkColor secure_fg_colour;
 
-	GRegex *regex;
+	GSList *search_terms;
 
 	char *before_completion;
 	char *saved_text;
@@ -171,6 +171,17 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	ephy_location_entry_set_secure (entry, priv->secure);
 }
 
+inline static void
+free_search_terms (GSList *search_terms)
+{
+	GSList *iter;
+	
+	for (iter = search_terms; iter != NULL; iter = iter->next)
+		g_regex_unref ((GRegex*)iter->data);
+	
+	g_slist_free (search_terms);
+}
+
 static void
 ephy_location_entry_finalize (GObject *object)
 {
@@ -184,10 +195,10 @@ ephy_location_entry_finalize (GObject *object)
 		g_object_unref (priv->favicon);
 	}
 	
-	if (priv->regex)
+	if (priv->search_terms)
 	{
-		g_regex_unref (priv->regex);
-		priv->regex = NULL;
+		free_search_terms (priv->search_terms);
+		priv->search_terms = NULL;
 	}
 
 	G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
@@ -316,24 +327,88 @@ editable_changed_cb (GtkEditable *editable,
 		priv->can_redo = FALSE;
 	}	
 	
-	if (priv->regex)
+	if (priv->search_terms)
 	{
-		g_regex_unref (priv->regex);
-		priv->regex = NULL;
+		free_search_terms (priv->search_terms);
+		priv->search_terms = NULL;
 	}
-	
+
 	text = gtk_entry_get_text (GTK_ENTRY (editable));
 
+	/*
+	 * user is specifying a regular expression, so we will
+	 * have only one search term
+	 */
 	if (g_str_has_prefix (text, "re:"))
+	{
+		GRegex *regex;
 		pattern = g_strdup (text+3);
+		regex = g_regex_new (pattern,
+				     G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+				     G_REGEX_MATCH_NOTEMPTY, NULL);
+		priv->search_terms = g_slist_append (priv->search_terms, regex);
+		g_free (pattern);
+	}
 	else
-		pattern = g_regex_escape_string (text, -1);
+	{
+		const char *current;
+		const char *ptr;
+		char *tmp;
+		char *term;
+		GRegex *term_regex;
+		GRegex *quote_regex;
+		guint count;
+		gboolean inside_quotes = FALSE;
 
-	priv->regex = g_regex_new (pattern, 
-				G_REGEX_CASELESS | G_REGEX_OPTIMIZE, 
-				G_REGEX_MATCH_NOTEMPTY, NULL);
+		quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
+					   G_REGEX_MATCH_NOTEMPTY, NULL);
+		
+		/*
+		 * This code loops through the string using pointer arythmetics.
+		 * Although the string we are handling may contain UTF-8 chars
+		 * this works because only ASCII chars affect what is actually
+		 * copied from the string as a search term.
+		 */
+		for (count = 0, current = ptr = text; ptr[0] != '\0'; ptr++, count++)
+		{
+			/*
+			 * If we found a double quote character; we will 
+			 * consume bytes up until the next quote, or
+			 * end of line;
+			 */
+			if (ptr[0] == '"')
+				inside_quotes = !inside_quotes;
 
-	g_free (pattern);
+			/*
+			 * If we found a space, and we are not looking for a
+			 * closing double quote, or if the next char is the
+			 * end of the string, append what we have already as
+			 * a search term.
+			 */
+			if (((ptr[0] == ' ') && (!inside_quotes)) || ptr[1] == '\0')
+			{
+				/*
+				 * remove quotes, and quote any regex-sensitive
+				 * characters
+				 */
+				tmp = g_regex_escape_string (current, count);
+				term = g_regex_replace (quote_regex, tmp, -1, 0,
+							"", G_REGEX_MATCH_NOTEMPTY, NULL);
+				g_free (tmp);
+
+				term_regex = g_regex_new (g_strstrip (term),
+							  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+							  G_REGEX_MATCH_NOTEMPTY, NULL);
+				priv->search_terms = g_slist_append (priv->search_terms, term_regex);
+				g_free (term);
+
+				count = 0;
+				current = ptr + 1;
+			}
+		}
+
+		g_regex_unref (quote_regex);
+	}
 
 	update_favicon (entry);
 
@@ -884,7 +959,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->user_changed = FALSE;
 	p->block_update = FALSE;
 	p->saved_text = NULL;
-	p->regex = NULL;
+	p->search_terms = NULL;
 	
 	ephy_location_entry_construct_contents (le);
 
@@ -973,18 +1048,32 @@ textcell_data_func (GtkCellLayout *cell_layout,
 		ctext = title;
 	}
 
-	g_regex_match (priv->regex, ctext, G_REGEX_MATCH_NOTEMPTY, &match);
-
-	while (g_match_info_matches (match))
+	if (priv->search_terms)
 	{
-		g_match_info_fetch_pos (match, 0, &start, &end);
+		GSList *iter;
+		GRegex *regex;
 
-		att = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-		att->start_index = start;
-		att->end_index = end;
+		for (iter = priv->search_terms; iter != NULL; iter = iter->next)
+		{
+			regex = (GRegex*) iter->data;
+			g_regex_match (regex, ctext, G_REGEX_MATCH_NOTEMPTY, &match);
 
-		pango_attr_list_insert (list, att);
-		g_match_info_next (match, NULL);
+			while (g_match_info_matches (match))
+			{
+				g_match_info_fetch_pos (match, 0, &start, &end);
+
+				att = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+				att->start_index = start;
+				att->end_index = end;
+
+				pango_attr_list_insert (list, att);
+				g_match_info_next (match, NULL);
+			}
+
+			g_match_info_free (match);
+			match = NULL;
+		}
+
 	}
 
 	g_object_set (cell,
@@ -997,7 +1086,6 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	g_value_unset (&text);
 
 	pango_attr_list_unref (list);
-	g_match_info_free (match);
 
 	g_free (title);
 	g_free (url);
@@ -1521,18 +1609,19 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 }
 
 /**
- * ephy_location_entry_get_regex:
+ * ephy_location_entry_get_search_terms:
  * @entry: an #EphyLocationEntry widget
  *
- * Return the internal #GRegex formed in @entry on user changes.
+ * Return the internal #GSList containing the search terms as #GRegex
+ * instances, formed in @entry on user changes.
  *
- * Return value: the internal #GRegex
+ * Return value: the internal #GSList
  *
  **/
-GRegex *
-ephy_location_entry_get_regex (EphyLocationEntry *entry)
+GSList *
+ephy_location_entry_get_search_terms (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	
-	return priv->regex;
+	return priv->search_terms;
 }

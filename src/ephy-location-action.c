@@ -98,7 +98,7 @@ match_func (GtkEntryCompletion *completion,
 
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
-	GRegex *regex;
+	GSList *search_terms;
 
 	model = gtk_entry_completion_get_model (completion);
 
@@ -112,12 +112,26 @@ match_func (GtkEntryCompletion *completion,
 	if (!key)
 		return FALSE;
 	
-	regex = ephy_location_entry_get_regex (data);
-	
-	ret = (g_regex_match (regex, item, G_REGEX_MATCH_NOTEMPTY, NULL)
-		|| g_regex_match (regex, url, G_REGEX_MATCH_NOTEMPTY, NULL)
-		|| g_regex_match (regex, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)
-		);
+	search_terms = ephy_location_entry_get_search_terms (data);
+
+	if (search_terms)
+	{
+		GSList *iter;
+		GRegex *current = NULL;
+
+		ret = TRUE;
+		for (iter = search_terms; iter != NULL; iter = iter->next)
+		{
+			current = (GRegex*) iter->data;
+			if ((!g_regex_match (current, item, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
+			    (!g_regex_match (current, url, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
+			    (!g_regex_match (current, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)))
+			{
+				ret = FALSE;
+				break;
+			}
+		}
+	}
 
 	g_free (item);
 	g_free (url);
