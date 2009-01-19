@@ -243,8 +243,10 @@ ephy_completion_model_get_column_type (GtkTreeModel *tree_model,
 		case EPHY_COMPLETION_TEXT_COL:
 		case EPHY_COMPLETION_ACTION_COL:
 		case EPHY_COMPLETION_KEYWORDS_COL:
-		case EPHY_COMPLETION_EXTRA_COL:
 			type =  G_TYPE_STRING;
+			break;
+		case EPHY_COMPLETION_EXTRA_COL:
+			type = G_TYPE_BOOLEAN;
 			break;
 		case EPHY_COMPLETION_FAVICON_COL:
 			type = GDK_TYPE_PIXBUF;
@@ -267,7 +269,7 @@ init_text_col (GValue *value, EphyNode *node, int group)
 		case BOOKMARKS_GROUP:
 		case HISTORY_GROUP:
 			text = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_TITLE);
+				(node, EPHY_NODE_PAGE_PROP_TITLE);
 			break;
 
 		default:
@@ -422,15 +424,8 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 	switch (column)
 	{
 		case EPHY_COMPLETION_EXTRA_COL:
-			g_value_init (value, G_TYPE_STRING);
-			/* We set an additional text for the item title only for 
-			 * history, since we assume that people know the url of 
-			 * their bookmarks 
-			 */
-			const char *text;
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_LOCATION);
-			g_value_set_string (value, text);
+			g_value_init (value, G_TYPE_BOOLEAN);
+			g_value_set_boolean (value, (group == BOOKMARKS_GROUP));
 			break;
 		case EPHY_COMPLETION_TEXT_COL:
 			g_value_init (value, G_TYPE_STRING);
