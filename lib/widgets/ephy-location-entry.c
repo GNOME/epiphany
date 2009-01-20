@@ -357,7 +357,7 @@ editable_changed_cb (GtkEditable *editable,
 		char *term;
 		GRegex *term_regex;
 		GRegex *quote_regex;
-		guint count;
+		gint count;
 		gboolean inside_quotes = FALSE;
 
 		quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
@@ -388,6 +388,15 @@ editable_changed_cb (GtkEditable *editable,
 			if (((ptr[0] == ' ') && (!inside_quotes)) || ptr[1] == '\0')
 			{
 				/*
+				 * We special-case the end of the line because
+				 * we would otherwise not copy the last character
+				 * of the search string, since the for loop will
+				 * stop before that.
+				 */
+				if (ptr[1] == '\0')
+					count++;
+				
+				/*
 				 * remove quotes, and quote any regex-sensitive
 				 * characters
 				 */
@@ -402,7 +411,8 @@ editable_changed_cb (GtkEditable *editable,
 				priv->search_terms = g_slist_append (priv->search_terms, term_regex);
 				g_free (term);
 
-				count = 0;
+				 /* count will be incremented by the for loop */
+				count = -1;
 				current = ptr + 1;
 			}
 		}
