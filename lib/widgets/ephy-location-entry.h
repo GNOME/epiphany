@@ -89,7 +89,7 @@ gboolean	ephy_location_entry_get_can_undo	(EphyLocationEntry *le);
 
 gboolean	ephy_location_entry_get_can_redo	(EphyLocationEntry *entry);
 
-GRegex *	ephy_location_entry_get_regex		(EphyLocationEntry *entry);
+GSList         *ephy_location_entry_get_search_terms	(EphyLocationEntry *entry);
 
 gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
 
