@@ -435,12 +435,17 @@ editable_changed_cb (GtkEditable *editable,
 				tmp = g_regex_escape_string (current, count);
 				term = g_regex_replace (quote_regex, tmp, -1, 0,
 							"", G_REGEX_MATCH_NOTEMPTY, NULL);
+				g_strstrip (term);
 				g_free (tmp);
 
-				term_regex = g_regex_new (g_strstrip (term),
-							  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-							  G_REGEX_MATCH_NOTEMPTY, NULL);
-				priv->search_terms = g_slist_append (priv->search_terms, term_regex);
+				/* we don't want empty search terms */
+				if (term[0] != '\0')
+				{
+					term_regex = g_regex_new (term,
+								  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+								  G_REGEX_MATCH_NOTEMPTY, NULL);
+					priv->search_terms = g_slist_append (priv->search_terms, term_regex);
+				}
 				g_free (term);
 
 				 /* count will be incremented by the for loop */
