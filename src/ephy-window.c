@@ -1614,6 +1614,7 @@ static void
 sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
 	gdouble progress;
+	gboolean loading;
 
 	if (window->priv->closing) return;
 
@@ -1624,7 +1625,9 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 	}
 
 	progress = ephy_embed_get_load_percent (embed)/100.0;
-	if (progress == 1.0)
+	loading = ephy_embed_get_load_status (embed);
+
+	if (progress == 1.0 && loading)
 	{
 		window->priv->clear_progress_timeout_id =
 			g_timeout_add (500,
@@ -1632,7 +1635,10 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 				       window);
 	}
 
-	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry), progress);
+	/* Do not set progress in the entry if the load is already
+	   finished */
+	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry),
+					 loading ? progress : 0.0);
 }
 
 static void
