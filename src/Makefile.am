@@ -379,7 +379,6 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	lib/ephy-file-helpers.h				\
 	lib/ephy-glade.h				\
 	lib/ephy-gui.h					\
-	lib/widgets/ephy-icon-entry.h			\
 	lib/ephy-langs.h				\
 	lib/ephy-loader.h				\
 	lib/ephy-module.h				\
