@@ -11,5 +11,5 @@ glade_in_files = \
 
 glade_DATA = $(glade_in_files:.glade=.ui)
 
-CLEAN_FILES= $(glade_DATA)
+CLEANFILES= $(glade_DATA)
 EXTRA_DIST = $(glade_in_files)
