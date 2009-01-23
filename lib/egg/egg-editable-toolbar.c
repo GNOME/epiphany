@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- *  $Id$
+ *  $Id: egg-editable-toolbar.c 925 2009-01-23 17:58:16Z xan $
  */
 
 #include "config.h"
@@ -200,7 +200,7 @@ drag_begin_cb (GtkWidget          *widget,
   
   gtk_widget_hide (widget);
 
-  action = g_object_get_data (G_OBJECT (widget), "gtk-action");
+  action = gtk_widget_get_action (widget);
   if (action == NULL) return;
   
   flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
@@ -226,7 +226,7 @@ drag_end_cb (GtkWidget          *widget,
     {
       gtk_widget_show (widget);
 
-      action = g_object_get_data (G_OBJECT (widget), "gtk-action");
+      action = gtk_widget_get_action (widget);
       if (action == NULL) return;
       
       flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
@@ -497,8 +497,7 @@ configure_item_cursor (GtkToolItem *item,
 static void
 configure_item_tooltip (GtkToolItem *item)
 {
-  GtkAction *action = g_object_get_data (G_OBJECT (item),
-					 "gtk-action");
+  GtkAction *action = gtk_widget_get_action (GTK_WIDGET (item));
   
   if (action != NULL)
     {
@@ -560,14 +559,12 @@ create_item_from_action (EggEditableToolbar *etoolbar,
 			 const char *name)
 {
   GtkToolItem *item;
-  gboolean visible;
 
   g_return_val_if_fail (name != NULL, NULL);
   
   if (strcmp (name, "_separator") == 0)
     {
       item = gtk_separator_tool_item_new ();
-      visible = TRUE;
     }
   else
     {
@@ -584,11 +581,9 @@ create_item_from_action (EggEditableToolbar *etoolbar,
      
       g_signal_connect_object (action, "notify::sensitive",
                                G_CALLBACK (action_sensitive_cb), item, 0);
-      visible = gtk_action_get_visible (action);
     }
 
-  if (visible)
-    gtk_widget_show (GTK_WIDGET (item));
+  gtk_widget_show (GTK_WIDGET (item));
 
   g_object_set_data_full (G_OBJECT (item), EGG_ITEM_NAME,
                           g_strdup (name), g_free);  
@@ -1812,7 +1807,7 @@ new_pixbuf_from_widget (GtkWidget *widget)
 }
 
 static GdkPixbuf *
-new_separator_pixbuf ()
+new_separator_pixbuf (void)
 {
   GtkWidget *separator;
   GdkPixbuf *pixbuf;
