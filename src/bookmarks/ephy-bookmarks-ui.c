@@ -116,7 +116,7 @@ activate_bookmark_properties (GtkAction *action,
 
 	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
 					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
+	baction = widget ? gtk_widget_get_action (widget) : NULL;
 	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
 
 	ephy_bookmarks_ui_show_bookmark (ephy_bookmark_action_get_bookmark
@@ -132,7 +132,7 @@ activate_bookmark_open_tab (GtkAction *action,
 
 	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
 					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
+	baction = widget ? gtk_widget_get_action (widget) : NULL;
 	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
 
 	ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (baction), widget,
@@ -148,7 +148,7 @@ activate_bookmark_open_window (GtkAction *action,
 
 	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
 					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
+	baction = widget ? gtk_widget_get_action (widget) : NULL;
 	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
 
 	ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (baction), widget,
@@ -170,7 +170,7 @@ selected_bookmark_action (EggEditableToolbar *etoolbar,
 	{
 		widget = egg_editable_toolbar_get_selected (etoolbar);
 		widget = widget ? gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) : NULL;
-		baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
+		baction = widget ? gtk_widget_get_action (widget) : NULL;
 		visible = EPHY_IS_BOOKMARK_ACTION (baction);
 	}
 	  
