@@ -229,55 +229,54 @@ find_prev_cb (EphyFindToolbar *toolbar)
 static void
 set_string_and_highlight (EphyFindToolbarPrivate *priv, const char *find_string)
 {
-  WebKitWebView *web_view = priv->web_view;
-  gboolean case_sensitive;
+        WebKitWebView *web_view = priv->web_view;
+        gboolean case_sensitive;
 
-  if (g_strcmp0 (priv->find_string, find_string) != 0) {
-    g_free (priv->find_string);
-    priv->find_string = g_strdup (find_string);
-  }
+        if (g_strcmp0 (priv->find_string, find_string) != 0) {
+                g_free (priv->find_string);
+                priv->find_string = g_strdup (find_string);
+        }
 
-  case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+        case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
-  webkit_web_view_unmark_text_matches (web_view);
-  webkit_web_view_mark_text_matches (web_view,
-				     priv->find_string,
-				     case_sensitive,
-				     0);
-  webkit_web_view_set_highlight_text_matches (web_view, TRUE);
+        webkit_web_view_unmark_text_matches (web_view);
+        webkit_web_view_mark_text_matches (web_view,
+                                           priv->find_string,
+                                           case_sensitive,
+                                           0);
+        webkit_web_view_set_highlight_text_matches (web_view, TRUE);
 }
 
 static void
 ephy_find_toolbar_set_properties (EphyFindToolbar *toolbar,
                                   const char *find_string)
 {
-  EphyFindToolbarPrivate *priv = toolbar->priv;
+        EphyFindToolbarPrivate *priv = toolbar->priv;
 
-  set_string_and_highlight (priv, find_string);
+        set_string_and_highlight (priv, find_string);
 }
 
 static EphyEmbedFindResult
 real_find (EphyFindToolbarPrivate *priv,
 	   gboolean forward)
 {
-  WebKitWebView *web_view = priv->web_view;
+        WebKitWebView *web_view = priv->web_view;
+        gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
-  gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+        if (!webkit_web_view_search_text
+            (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
+                /* not found, try to wrap */
+                if (!webkit_web_view_search_text
+                    (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
+                        /* there's no result */
+                        return EPHY_FIND_NOTFOUND;
+                } else {
+                        /* found wrapped */
+                        return EPHY_FIND_FOUNDWRAPPED;
+                }
+        }
 
-  if (!webkit_web_view_search_text
-	 (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
-    /* not found, try to wrap */
-    if (!webkit_web_view_search_text
-	   (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
-      /* there's no result */
-      return EPHY_FIND_NOTFOUND;
-    } else {
-      /* found wrapped */
-      return EPHY_FIND_FOUNDWRAPPED;
-    }
-  }
-
-  return EPHY_FIND_FOUND;
+        return EPHY_FIND_FOUND;
 }
 
 static EphyEmbedFindResult
@@ -285,11 +284,11 @@ ephy_find_toolbar_find (EphyFindToolbar *toolbar,
                         const char *find_string,
                         gboolean links_only)
 {
-  EphyFindToolbarPrivate *priv = toolbar->priv;
+        EphyFindToolbarPrivate *priv = toolbar->priv;
 
-  set_string_and_highlight (priv, find_string);
+        set_string_and_highlight (priv, find_string);
 
-  return real_find (priv, TRUE);
+        return real_find (priv, TRUE);
 }
 
 static void
@@ -314,7 +313,7 @@ static gboolean
 ephy_find_toolbar_activate_link (EphyFindToolbar *toolbar,
                                  GdkModifierType mask)
 {
-  return FALSE;
+        return FALSE;
 }
 
 static gboolean
@@ -878,9 +877,9 @@ static void
 ephy_find_toolbar_set_selection (EphyFindToolbar *toolbar,
                                  gboolean attention)
 {
-  WebKitWebView *web_view = toolbar->priv->web_view;
+        WebKitWebView *web_view = toolbar->priv->web_view;
 
-  webkit_web_view_set_highlight_text_matches (web_view, attention);
+        webkit_web_view_set_highlight_text_matches (web_view, attention);
 }
 
 void
