@@ -503,59 +503,6 @@ ephy_embed_get_js_status (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_scroll:
- * @embed: an #EphyEmbed
- * @num_lines: The number of lines to scroll by
- *
- * Scrolls the view by lines. Positive numbers scroll down, negative
- * numbers scroll up
- *
- **/
-void
-ephy_embed_scroll (EphyEmbed *embed,
-		   int num_lines)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->scroll_lines (embed, num_lines);
-}
-
-/**
- * ephy_embed_page_scroll:
- * @embed: an #EphyEmbed
- * @num_lines: The number of pages to scroll by
- *
- * Scrolls the view by pages. Positive numbers scroll down, negative
- * numbers scroll up
- *
- **/
-void
-ephy_embed_page_scroll (EphyEmbed *embed,
-			int num_pages)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->scroll_pages (embed, num_pages);
-}
-
-/**
- * ephy_embed_scroll_pixels:
- * @embed: an #EphyEmbed
- * @dx: the number of pixels to scroll in X direction
- * @dy: the number of pixels to scroll in Y direction
- *
- * Scrolls the view by pixels. Positive numbers scroll down resp. right,
- * negative numbers scroll up resp. left.
- *
- **/
-void
-ephy_embed_scroll_pixels (EphyEmbed *embed,
-			  int dx,
-			  int dy)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->scroll_pixels (embed, dx, dy);
-}
-
-/**
  * ephy_embed_shistory_copy:
  * @source: the #EphyEmbed to copy the history from
  * @dest: the #EphyEmbed to copy the history to

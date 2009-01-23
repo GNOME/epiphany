@@ -82,38 +82,34 @@ static guint signals[LAST_SIGNAL];
 /* private functions */
 
 static void
-impl_scroll_lines (WebKitWebView *web_view,
-                   int num_lines)
+scroll_lines (WebKitWebView *web_view,
+              int num_lines)
 {
-        /* FIXME: implement! */
+        GtkScrolledWindow *scrolled_window;
+        GtkAdjustment *vadj;
+        gdouble value;
+
+        scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
+        vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
+
+        value = vadj->value + (num_lines * vadj->step_increment);
+        gtk_adjustment_set_value (vadj, value);
 }
 
 static void
-impl_scroll_pages (WebKitWebView *web_view,
-                   int num_pages)
+scroll_pages (WebKitWebView *web_view,
+              int num_pages)
 {
-        /* FIXME: implement! */
+        GtkScrolledWindow *scrolled_window;
+        GtkAdjustment *vadj;
+        gdouble value;
+
+        scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
+        vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
+
+        value = vadj->value + (num_pages * vadj->page_increment);
+        gtk_adjustment_set_value (vadj, value);
 }
-
-#if 0
-static void
-impl_scroll_pixels (WebKitWebView *web_view,
-                    int dx,
-                    int dy)
-{
-  GtkAdjustment *hadj;
-  GtkAdjustment *vadj;
-  GtkScrolledWindow *scrolled_window;
-
-  scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
-
-  hadj = gtk_scrolled_window_get_hadjustment (scrolled_window);
-  vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
-
-  gtk_adjustment_set_value (hadj, CLAMP (hadj->value + dx, hadj->lower, hadj->upper - hadj->page_size));
-  gtk_adjustment_set_value (vadj, CLAMP (vadj->value + dy, vadj->lower, vadj->upper - vadj->page_size));
-}
-#endif
 
 static gboolean
 set_status_notfound_cb (EphyFindToolbar *toolbar)
@@ -337,19 +333,19 @@ entry_key_press_event_cb (GtkEntry *entry,
 		{
 		case GDK_Up:
 		case GDK_KP_Up:
-			impl_scroll_lines (priv->web_view, -1);
+			scroll_lines (priv->web_view, -1);
 			break;
 		case GDK_Down:
 		case GDK_KP_Down:
-			impl_scroll_lines (priv->web_view, 1);
+			scroll_lines (priv->web_view, 1);
 			break;
 		case GDK_Page_Up:
 		case GDK_KP_Page_Up:
-			impl_scroll_pages (priv->web_view, -1);
+			scroll_pages (priv->web_view, -1);
 			break;
 		case GDK_Page_Down:
 		case GDK_KP_Page_Down:
-			impl_scroll_pages (priv->web_view, 1);
+			scroll_pages (priv->web_view, 1);
 			break;
 		case GDK_Escape:
 			/* Hide the toolbar when ESC is pressed */

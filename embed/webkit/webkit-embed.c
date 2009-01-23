@@ -508,34 +508,6 @@ impl_get_location (EphyEmbed *embed,
 }
 
 static void
-impl_scroll_lines (EphyEmbed *embed,
-                   int num_lines)
-{
-}
-
-static void
-impl_scroll_pages (EphyEmbed *embed,
-                   int num_pages)
-{
-}
-
-static void
-impl_scroll_pixels (EphyEmbed *embed,
-                    int dx,
-                    int dy)
-{
-  GtkAdjustment *hadj;
-  GtkAdjustment *vadj;
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  hadj = gtk_scrolled_window_get_hadjustment (wembed->priv->scrolled_window);
-  vadj = gtk_scrolled_window_get_vadjustment (wembed->priv->scrolled_window);
-
-  gtk_adjustment_set_value (hadj, CLAMP (hadj->value + dx, hadj->lower, hadj->upper - hadj->page_size));
-  gtk_adjustment_set_value (vadj, CLAMP (vadj->value + dy, vadj->lower, vadj->upper - vadj->page_size));
-}
-
-static void
 impl_shistory_copy (EphyEmbed *source,
                     EphyEmbed *dest,
                     gboolean copy_back,
@@ -609,9 +581,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->go_up = impl_go_up;
   iface->get_location = impl_get_location;
   iface->get_js_status = impl_get_js_status;
-  iface->scroll_lines = impl_scroll_lines;
-  iface->scroll_pages = impl_scroll_pages;
-  iface->scroll_pixels = impl_scroll_pixels;
   iface->shistory_copy = impl_shistory_copy;
   iface->show_page_certificate = impl_show_page_certificate;
   iface->set_encoding = impl_set_encoding;
