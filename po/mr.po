@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-01-24 16:34+0530\n"
-"PO-Revision-Date: 2009-01-24 16:53+0530\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-01-24 12:22+0000\n"
+"PO-Revision-Date: 2009-01-24 18:08+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -926,6 +926,18 @@ msgstr "फाइल “%s” डाउनलोड रांगेत समा
 msgid "Download started"
 msgstr "डाउनलोड प्रारंभ केले"
 
+#: ../embed/downloader-view.c:676 ../embed/downloader-view.c:685
+#| msgid "Unknown"
+msgctxt "download status"
+msgid "Unknown"
+msgstr "अपरिचीत"
+
+#: ../embed/downloader-view.c:679
+#| msgid "File"
+msgctxt "download status"
+msgid "Failed"
+msgstr "अपयशी"
+
 #: ../embed/downloader-view.c:744 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "फाइल"
@@ -1388,6 +1400,7 @@ msgstr ""
 "  %s"
 
 #: ../lib/egg/eggdesktopfile.c:165
+#, c-format
 msgid "File is not a valid .desktop file"
 msgstr "फाइल वैध .desktop फाइल नाही"
 
@@ -1402,6 +1415,7 @@ msgid "Starting %s"
 msgstr "%s सुरू करत आहे"
 
 #: ../lib/egg/eggdesktopfile.c:1100
+#, c-format
 msgid "Application does not accept documents on command line"
 msgstr "अनुप्रयोग आदेश ओळवरून दस्तऐवज स्वीकारत नाही"
 
@@ -1411,10 +1425,12 @@ msgid "Unrecognized launch option: %d"
 msgstr "अपरिचीत दाखलन पर्याय: %d"
 
 #: ../lib/egg/eggdesktopfile.c:1373
+#, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
 msgstr "'Type=Link' डेस्कटॉप नोंदणी करीता दस्तऐवज URIs पुरवू शकत नाही"
 
 #: ../lib/egg/eggdesktopfile.c:1392
+#, c-format
 msgid "Not a launchable item"
 msgstr "दाखलनजोगी घटक नाही"
 
@@ -1959,6 +1975,33 @@ msgstr "अद्ययावत(_U)"
 #: ../src/bookmarks/ephy-bookmarks.c:475
 msgid "Update Bookmark?"
 msgstr "खूणगाठ अद्ययावत करा?"
+
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1223
+#| msgid "All"
+msgctxt "bookmarks"
+msgid "All"
+msgstr "सर्व"
+
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1226
+msgctxt "bookmarks"
+msgid "Most Visited"
+msgstr "बहुतांशवेळी भेट दिलेले"
+
+#. Translators: this topic contains the not categorized
+#. bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1230
+msgctxt "bookmarks"
+msgid "Not Categorized"
+msgstr "विभाजीत नाही"
+
+#. Translators: this is an automatic topic containing local
+#. * websites bookmarks autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1235
+msgctxt "bookmarks"
+msgid "Nearby Sites"
+msgstr "जवळील स्थान"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1470
 #: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1299
@@ -2733,6 +2776,34 @@ msgstr "नविन खिडकी(_N)"
 msgid "Open a new window"
 msgstr "निवन खिडकी उघडा"
 
+#: ../src/ephy-toolbar-editor.c:71
+#| msgid "De_fault:"
+msgctxt "toolbar style"
+msgid "Default"
+msgstr "मुलभूत"
+
+#. separator row
+#: ../src/ephy-toolbar-editor.c:73
+msgctxt "toolbar style"
+msgid "Text below icons"
+msgstr "चिन्ह खालिल पाठ्य"
+
+#: ../src/ephy-toolbar-editor.c:74
+msgctxt "toolbar style"
+msgid "Text beside icons"
+msgstr "चिन्हाच्या बाजूचे पाठ्य"
+
+#: ../src/ephy-toolbar-editor.c:75
+msgctxt "toolbar style"
+msgid "Icons only"
+msgstr "फक्त चिन्ह"
+
+#: ../src/ephy-toolbar-editor.c:76
+#| msgid "Text Encoding"
+msgctxt "toolbar style"
+msgid "Text only"
+msgstr "फक्त पाठ्य"
+
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
 msgstr "उपकरणपट्टी संपादक"
@@ -3443,6 +3514,25 @@ msgstr "बंद करा"
 #: ../src/ppview-toolbar.c:102 ../src/ppview-toolbar.c:218
 msgid "Close print preview"
 msgstr "मुद्रण पुर्वदृश्य बंद करा"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:631 ../src/prefs-dialog.c:637
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:646
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "वापरकर्तानुरूप निश्चित (%s)"
 
 #: ../src/prefs-dialog.c:668
 #, c-format
