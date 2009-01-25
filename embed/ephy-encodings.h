@@ -77,7 +77,6 @@ enum
 	EPHY_NODE_ENCODING_PROP_COLLATION_KEY = 3,
 	EPHY_NODE_ENCODING_PROP_ENCODING = 4,
 	EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS = 5,
-	EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR = 6
 };
 
 struct _EphyEncodings
@@ -105,8 +104,6 @@ GList		*ephy_encodings_get_encodings	(EphyEncodings *encodings,
 						 EphyLanguageGroup group_mask);
 
 EphyNode	*ephy_encodings_get_all		(EphyEncodings *encodings);
-
-EphyNode	*ephy_encodings_get_detectors	(EphyEncodings *encodings);
 
 void		 ephy_encodings_add_recent	(EphyEncodings *encodings,
 						 const char *code);

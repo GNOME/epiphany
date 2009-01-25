@@ -92,7 +92,6 @@ enum
 	CLEAR_CACHE_BUTTON_PROP,
 
 	/* Language */
-	AUTO_ENCODING_PROP,
 	DEFAULT_ENCODING_PROP,
 	DEFAULT_ENCODING_LABEL_PROP,
 	AUTO_ENCODING_LABEL_PROP,
@@ -138,7 +137,6 @@ EphyDialogProperty properties [] =
 	{ "clear_cache_button",			NULL,				  PT_NORMAL,	0 },
 
 	/* Languages */
-	{ "auto_encoding_combo",	CONF_LANGUAGE_AUTODETECT_ENCODING,	PT_AUTOAPPLY,	G_TYPE_STRING },
 	{ "default_encoding_combo",	CONF_LANGUAGE_DEFAULT_ENCODING,		PT_AUTOAPPLY,	G_TYPE_STRING },
 	{ "default_encoding_label",	NULL,					PT_NORMAL,	0 },
 	{ "auto_encoding_label",	NULL,					PT_NORMAL,	0 },
@@ -344,96 +342,6 @@ create_node_combo (EphyDialog *dialog,
 
 	g_object_unref (nodemodel);
 	g_object_unref (sortmodel);
-}
-
-static void
-create_autodetectors_combo (EphyDialog *dialog,
-			    int prop,
-			    EphyEncodings *encodings,
-			    EphyNode *node,
-			    const char *key,
-			    const char *default_value)
-{
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GPtrArray *children;
-	GtkComboBox *combo;
-	GtkCellRenderer *renderer;
-	char *code;
-	const char *off_title = NULL;
-	guint i;
-
-	code = eel_gconf_get_string (key);
-	if (code == NULL || ephy_encodings_get_node (encodings, code, FALSE) == NULL)
-	{
-		/* safe default */
-		eel_gconf_set_string (key, default_value);
-	}
-	g_free (code);
-
-	combo = GTK_COMBO_BOX (ephy_dialog_get_control (dialog, properties[prop].id));
-
-	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-
-	children = ephy_node_get_children (node);
-	for (i = 0; i < children->len; ++i)
-	{
-		EphyNode *kid = g_ptr_array_index (children, i);
-		const char *code, *title;
-
-		code = ephy_node_get_property_string (kid, EPHY_NODE_ENCODING_PROP_ENCODING);
-		g_return_if_fail (code != NULL);
-
-		title = ephy_node_get_property_string (kid, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
-		if (code[0] == '\0')
-		{
-			off_title = title;
-		}
-		else
-		{	
-			gtk_list_store_insert_with_values (store, &iter, -1,
-							   COL_AUTODETECTOR_NAME, title,
-							   COL_AUTODETECTOR_DATA, code,
-							   COL_AUTODETECTOR_IS_SEP, FALSE,
-							   -1);
-		}
-	}
-
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-					      COL_AUTODETECTOR_NAME,
-					      GTK_SORT_ASCENDING);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-					      GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
-					      GTK_SORT_ASCENDING);
-
-	g_assert (off_title != NULL);
-
-	gtk_list_store_insert_with_values (store, &iter, 0,
-					   COL_AUTODETECTOR_NAME, off_title,
-					   COL_AUTODETECTOR_DATA, "",
-					   COL_AUTODETECTOR_IS_SEP, FALSE,
-					   -1);
-	gtk_list_store_insert_with_values (store, &iter, 1,
-					   COL_AUTODETECTOR_NAME, NULL,
-					   COL_AUTODETECTOR_DATA, "",
-					   COL_AUTODETECTOR_IS_SEP, TRUE,
-					   -1);
-
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
-	g_object_unref (store);
-
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combo),
-					      (GtkTreeViewRowSeparatorFunc) row_is_separator,
-					      GINT_TO_POINTER (COL_AUTODETECTOR_IS_SEP), NULL);
-
-
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-					"text", COL_AUTODETECTOR_NAME,
-					NULL);
-
-	ephy_dialog_set_data_column (dialog, properties[prop].id, COL_AUTODETECTOR_DATA);
 }
 
 static void
@@ -1210,9 +1118,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	create_node_combo (dialog, DEFAULT_ENCODING_PROP, encodings,
 			   ephy_encodings_get_all (encodings),
 			   CONF_LANGUAGE_DEFAULT_ENCODING, "ISO-8859-1");
-	create_autodetectors_combo (dialog, AUTO_ENCODING_PROP, encodings,
-				    ephy_encodings_get_detectors (encodings),
-				    CONF_LANGUAGE_AUTODETECT_ENCODING, "");
 
 	create_language_section	(dialog);
 

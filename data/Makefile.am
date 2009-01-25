@@ -1,4 +1,3 @@
-
 SUBDIRS = art glade icons ui
 
 @INTLTOOL_SERVER_RULE@

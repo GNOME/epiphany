@@ -32,16 +32,6 @@ G_BEGIN_DECLS
 #define ISO_639_DOMAIN	"iso_639"
 #define ISO_3166_DOMAIN	"iso_3166"
 
-typedef struct
-{
-	char *title;
-	char *code;
-} EphyFontsLanguageInfo;
-
-const EphyFontsLanguageInfo *ephy_font_languages	 (void);
-
-guint			     ephy_font_n_languages	 (void);
-
 void			     ephy_langs_append_languages (GArray *array);
 
 void			     ephy_langs_sanitise	 (GArray *array);

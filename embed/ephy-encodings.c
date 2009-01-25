@@ -37,7 +37,6 @@ struct _EphyEncodingsPrivate
 	EphyNodeDb *db;
 	EphyNode *root;
 	EphyNode *encodings;
-	EphyNode *detectors;
 	GHashTable *hash;
 	GSList *recent;
 };
@@ -53,125 +52,92 @@ struct
 	char *title;
 	char *code;
 	EphyLanguageGroup groups;
-	gboolean is_autodetector;
 }
 encoding_entries [] =
 { 
-	{ N_("Arabic (_IBM-864)"),                  "IBM864",                LG_ARABIC,		FALSE },
-	{ N_("Arabic (ISO-_8859-6)"),               "ISO-8859-6",            LG_ARABIC,		FALSE },
-	{ N_("Arabic (_MacArabic)"),                "x-mac-arabic",          LG_ARABIC,		FALSE },
-	{ N_("Arabic (_Windows-1256)"),             "windows-1256",          LG_ARABIC,		FALSE },
-	{ N_("Baltic (_ISO-8859-13)"),              "ISO-8859-13",           LG_BALTIC,		FALSE },
-	{ N_("Baltic (I_SO-8859-4)"),               "ISO-8859-4",            LG_BALTIC,		FALSE },
-	{ N_("Baltic (_Windows-1257)"),             "windows-1257",          LG_BALTIC,		FALSE },
-	{ N_("_Armenian (ARMSCII-8)"),              "armscii-8",             LG_CAUCASIAN,	FALSE },
-	{ N_("_Georgian (GEOSTD8)"),                "geostd8",               LG_CAUCASIAN,	FALSE },
-	{ N_("Central European (_IBM-852)"),        "IBM852",                LG_C_EUROPEAN,	FALSE },
-	{ N_("Central European (I_SO-8859-2)"),     "ISO-8859-2",	     LG_C_EUROPEAN,	FALSE },
-	{ N_("Central European (_MacCE)"),          "x-mac-ce",              LG_C_EUROPEAN,	FALSE },
-	{ N_("Central European (_Windows-1250)"),   "windows-1250",          LG_C_EUROPEAN,	FALSE },
-	{ N_("Chinese Simplified (_GB18030)"),      "gb18030",               LG_CHINESE_SIMP,	FALSE },
-	{ N_("Chinese Simplified (G_B2312)"),       "GB2312",                LG_CHINESE_SIMP,	FALSE },
-	{ N_("Chinese Simplified (GB_K)"),          "x-gbk",                 LG_CHINESE_SIMP,	FALSE },
-	{ N_("Chinese Simplified (_HZ)"),           "HZ-GB-2312",	     LG_CHINESE_SIMP,	FALSE },
-	{ N_("Chinese Simplified (_ISO-2022-CN)"),  "ISO-2022-CN",           LG_CHINESE_SIMP,	FALSE },
-	{ N_("Chinese Traditional (Big_5)"),        "Big5",                  LG_CHINESE_TRAD,	FALSE },
-	{ N_("Chinese Traditional (Big5-HK_SCS)"),  "Big5-HKSCS",	     LG_CHINESE_TRAD,	FALSE },
-	{ N_("Chinese Traditional (_EUC-TW)"),      "x-euc-tw",              LG_CHINESE_TRAD,	FALSE },
-	{ N_("Cyrillic (_IBM-855)"),                "IBM855",                LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic (I_SO-8859-5)"),             "ISO-8859-5",	     LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic (IS_O-IR-111)"),             "ISO-IR-111",	     LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic (_KOI8-R)"),                 "KOI8-R",                LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic (_MacCyrillic)"),            "x-mac-cyrillic",        LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic (_Windows-1251)"),           "windows-1251",          LG_CYRILLIC,	FALSE },
-	{ N_("Cyrillic/_Russian (IBM-866)"),        "IBM866",                LG_CYRILLIC,	FALSE },
-	{ N_("Greek (_ISO-8859-7)"),                "ISO-8859-7",            LG_GREEK,		FALSE },
-	{ N_("Greek (_MacGreek)"),                  "x-mac-greek",           LG_GREEK,		FALSE },
-	{ N_("Greek (_Windows-1253)"),              "windows-1253",          LG_GREEK,		FALSE },
-	{ N_("Gujarati (_MacGujarati)"),            "x-mac-gujarati",        LG_INDIAN,		FALSE },
-	{ N_("Gurmukhi (Mac_Gurmukhi)"),            "x-mac-gurmukhi",        LG_INDIAN,		FALSE },
-	{ N_("Hindi (Mac_Devanagari)"),             "x-mac-devanagari",      LG_INDIAN,		FALSE },
-	{ N_("Hebrew (_IBM-862)"),                  "IBM862",                LG_HEBREW,		FALSE },
-	{ N_("Hebrew (IS_O-8859-8-I)"),             "ISO-8859-8-I",          LG_HEBREW,		FALSE },
-	{ N_("Hebrew (_MacHebrew)"),                "x-mac-hebrew",          LG_HEBREW,		FALSE },
-	{ N_("Hebrew (_Windows-1255)"),             "windows-1255",          LG_HEBREW,		FALSE },
-	{ N_("_Visual Hebrew (ISO-8859-8)"),        "ISO-8859-8",            LG_HEBREW,		FALSE },
-	{ N_("Japanese (_EUC-JP)"),                 "EUC-JP",                LG_JAPANESE,	FALSE },
-	{ N_("Japanese (_ISO-2022-JP)"),            "ISO-2022-JP",           LG_JAPANESE,	FALSE },
-	{ N_("Japanese (_Shift-JIS)"),              "Shift_JIS",             LG_JAPANESE,	FALSE },
-	{ N_("Korean (_EUC-KR)"),                   "EUC-KR",                LG_KOREAN,		FALSE },
-	{ N_("Korean (_ISO-2022-KR)"),              "ISO-2022-KR",           LG_KOREAN,		FALSE },
-	{ N_("Korean (_JOHAB)"),                    "x-johab",               LG_KOREAN,		FALSE },
-	{ N_("Korean (_UHC)"),                      "x-windows-949",         LG_KOREAN,		FALSE },
-	{ N_("_Celtic (ISO-8859-14)"),              "ISO-8859-14",           LG_NORDIC,		FALSE },
-	{ N_("_Icelandic (MacIcelandic)"),          "x-mac-icelandic",       LG_NORDIC,		FALSE },
-	{ N_("_Nordic (ISO-8859-10)"),              "ISO-8859-10",           LG_NORDIC,		FALSE },
-	{ N_("_Persian (MacFarsi)"),                "x-mac-farsi",           LG_PERSIAN,	FALSE },
-	{ N_("Croatian (Mac_Croatian)"),            "x-mac-croatian",        LG_SE_EUROPEAN,	FALSE },
-	{ N_("_Romanian (MacRomanian)"),            "x-mac-romanian",        LG_SE_EUROPEAN,	FALSE },
-	{ N_("R_omanian (ISO-8859-16)"),            "ISO-8859-16",           LG_SE_EUROPEAN,	FALSE },
-	{ N_("South _European (ISO-8859-3)"),	    "ISO-8859-3",            LG_SE_EUROPEAN,	FALSE },
-	{ N_("Thai (TIS-_620)"),                    "TIS-620",               LG_THAI,		FALSE },
-	{ N_("Thai (IS_O-8859-11)"),                "iso-8859-11",           LG_THAI,		FALSE },
-	{ N_("_Thai (Windows-874)"),                "windows-874",           LG_THAI,		FALSE },
-	{ N_("Turkish (_IBM-857)"),                 "IBM857",                LG_TURKISH,	FALSE },
-	{ N_("Turkish (I_SO-8859-9)"),              "ISO-8859-9",            LG_TURKISH,	FALSE },
-	{ N_("Turkish (_MacTurkish)"),              "x-mac-turkish",         LG_TURKISH,	FALSE },
-	{ N_("Turkish (_Windows-1254)"),            "windows-1254",          LG_TURKISH,	FALSE },
-	{ N_("Unicode (UTF-_8)"),                   "UTF-8",                 LG_UNICODE,	FALSE },
-	{ N_("Cyrillic/Ukrainian (_KOI8-U)"),       "KOI8-U",                LG_UKRAINIAN,	FALSE },
-	{ N_("Cyrillic/Ukrainian (Mac_Ukrainian)"), "x-mac-ukrainian",       LG_UKRAINIAN,	FALSE },
-	{ N_("Vietnamese (_TCVN)"),                 "x-viet-tcvn5712",       LG_VIETNAMESE,	FALSE },
-	{ N_("Vietnamese (_VISCII)"),               "VISCII",                LG_VIETNAMESE,	FALSE },
-	{ N_("Vietnamese (V_PS)"),                  "x-viet-vps",            LG_VIETNAMESE,	FALSE },
-	{ N_("Vietnamese (_Windows-1258)"),         "windows-1258",          LG_VIETNAMESE,	FALSE },
-	{ N_("Western (_IBM-850)"),                 "IBM850",                LG_WESTERN,	FALSE },
-	{ N_("Western (_ISO-8859-1)"),              "ISO-8859-1",            LG_WESTERN,	FALSE },
-	{ N_("Western (IS_O-8859-15)"),             "ISO-8859-15",           LG_WESTERN,	FALSE },
-	{ N_("Western (_MacRoman)"),                "x-mac-roman",           LG_WESTERN,	FALSE },
-	{ N_("Western (_Windows-1252)"),            "windows-1252",          LG_WESTERN,	FALSE },
+	{ N_("Arabic (_IBM-864)"),                  "IBM864",                LG_ARABIC  },
+	{ N_("Arabic (ISO-_8859-6)"),               "ISO-8859-6",            LG_ARABIC },
+	{ N_("Arabic (_MacArabic)"),                "x-mac-arabic",          LG_ARABIC },
+	{ N_("Arabic (_Windows-1256)"),             "windows-1256",          LG_ARABIC },
+	{ N_("Baltic (_ISO-8859-13)"),              "ISO-8859-13",           LG_BALTIC },
+	{ N_("Baltic (I_SO-8859-4)"),               "ISO-8859-4",            LG_BALTIC },
+	{ N_("Baltic (_Windows-1257)"),             "windows-1257",          LG_BALTIC },
+	{ N_("_Armenian (ARMSCII-8)"),              "armscii-8",             LG_CAUCASIAN },
+	{ N_("_Georgian (GEOSTD8)"),                "geostd8",               LG_CAUCASIAN },
+	{ N_("Central European (_IBM-852)"),        "IBM852",                LG_C_EUROPEAN },
+	{ N_("Central European (I_SO-8859-2)"),     "ISO-8859-2",	     LG_C_EUROPEAN },
+	{ N_("Central European (_MacCE)"),          "x-mac-ce",              LG_C_EUROPEAN },
+	{ N_("Central European (_Windows-1250)"),   "windows-1250",          LG_C_EUROPEAN },
+	{ N_("Chinese Simplified (_GB18030)"),      "gb18030",               LG_CHINESE_SIMP },
+	{ N_("Chinese Simplified (G_B2312)"),       "GB2312",                LG_CHINESE_SIMP },
+	{ N_("Chinese Simplified (GB_K)"),          "x-gbk",                 LG_CHINESE_SIMP },
+	{ N_("Chinese Simplified (_HZ)"),           "HZ-GB-2312",	     LG_CHINESE_SIMP },
+	{ N_("Chinese Simplified (_ISO-2022-CN)"),  "ISO-2022-CN",           LG_CHINESE_SIMP },
+	{ N_("Chinese Traditional (Big_5)"),        "Big5",                  LG_CHINESE_TRAD },
+	{ N_("Chinese Traditional (Big5-HK_SCS)"),  "Big5-HKSCS",	     LG_CHINESE_TRAD },
+	{ N_("Chinese Traditional (_EUC-TW)"),      "x-euc-tw",              LG_CHINESE_TRAD },
+	{ N_("Cyrillic (_IBM-855)"),                "IBM855",                LG_CYRILLIC },
+	{ N_("Cyrillic (I_SO-8859-5)"),             "ISO-8859-5",	     LG_CYRILLIC },
+	{ N_("Cyrillic (IS_O-IR-111)"),             "ISO-IR-111",	     LG_CYRILLIC },
+	{ N_("Cyrillic (_KOI8-R)"),                 "KOI8-R",                LG_CYRILLIC },
+	{ N_("Cyrillic (_MacCyrillic)"),            "x-mac-cyrillic",        LG_CYRILLIC },
+	{ N_("Cyrillic (_Windows-1251)"),           "windows-1251",          LG_CYRILLIC },
+	{ N_("Cyrillic/_Russian (IBM-866)"),        "IBM866",                LG_CYRILLIC },
+	{ N_("Greek (_ISO-8859-7)"),                "ISO-8859-7",            LG_GREEK },
+	{ N_("Greek (_MacGreek)"),                  "x-mac-greek",           LG_GREEK },
+	{ N_("Greek (_Windows-1253)"),              "windows-1253",          LG_GREEK },
+	{ N_("Gujarati (_MacGujarati)"),            "x-mac-gujarati",        LG_INDIAN },
+	{ N_("Gurmukhi (Mac_Gurmukhi)"),            "x-mac-gurmukhi",        LG_INDIAN },
+	{ N_("Hindi (Mac_Devanagari)"),             "x-mac-devanagari",      LG_INDIAN },
+	{ N_("Hebrew (_IBM-862)"),                  "IBM862",                LG_HEBREW },
+	{ N_("Hebrew (IS_O-8859-8-I)"),             "ISO-8859-8-I",          LG_HEBREW },
+	{ N_("Hebrew (_MacHebrew)"),                "x-mac-hebrew",          LG_HEBREW },
+	{ N_("Hebrew (_Windows-1255)"),             "windows-1255",          LG_HEBREW },
+	{ N_("_Visual Hebrew (ISO-8859-8)"),        "ISO-8859-8",            LG_HEBREW },
+	{ N_("Japanese (_EUC-JP)"),                 "EUC-JP",                LG_JAPANESE },
+	{ N_("Japanese (_ISO-2022-JP)"),            "ISO-2022-JP",           LG_JAPANESE },
+	{ N_("Japanese (_Shift-JIS)"),              "Shift_JIS",             LG_JAPANESE },
+	{ N_("Korean (_EUC-KR)"),                   "EUC-KR",                LG_KOREAN },
+	{ N_("Korean (_ISO-2022-KR)"),              "ISO-2022-KR",           LG_KOREAN },
+	{ N_("Korean (_JOHAB)"),                    "x-johab",               LG_KOREAN },
+	{ N_("Korean (_UHC)"),                      "x-windows-949",         LG_KOREAN },
+	{ N_("_Celtic (ISO-8859-14)"),              "ISO-8859-14",           LG_NORDIC },
+	{ N_("_Icelandic (MacIcelandic)"),          "x-mac-icelandic",       LG_NORDIC },
+	{ N_("_Nordic (ISO-8859-10)"),              "ISO-8859-10",           LG_NORDIC },
+	{ N_("_Persian (MacFarsi)"),                "x-mac-farsi",           LG_PERSIAN },
+	{ N_("Croatian (Mac_Croatian)"),            "x-mac-croatian",        LG_SE_EUROPEAN },
+	{ N_("_Romanian (MacRomanian)"),            "x-mac-romanian",        LG_SE_EUROPEAN },
+	{ N_("R_omanian (ISO-8859-16)"),            "ISO-8859-16",           LG_SE_EUROPEAN },
+	{ N_("South _European (ISO-8859-3)"),	    "ISO-8859-3",            LG_SE_EUROPEAN },
+	{ N_("Thai (TIS-_620)"),                    "TIS-620",               LG_THAI },
+	{ N_("Thai (IS_O-8859-11)"),                "iso-8859-11",           LG_THAI },
+	{ N_("_Thai (Windows-874)"),                "windows-874",           LG_THAI },
+	{ N_("Turkish (_IBM-857)"),                 "IBM857",                LG_TURKISH },
+	{ N_("Turkish (I_SO-8859-9)"),              "ISO-8859-9",            LG_TURKISH },
+	{ N_("Turkish (_MacTurkish)"),              "x-mac-turkish",         LG_TURKISH },
+	{ N_("Turkish (_Windows-1254)"),            "windows-1254",          LG_TURKISH },
+	{ N_("Unicode (UTF-_8)"),                   "UTF-8",                 LG_UNICODE },
+	{ N_("Cyrillic/Ukrainian (_KOI8-U)"),       "KOI8-U",                LG_UKRAINIAN },
+	{ N_("Cyrillic/Ukrainian (Mac_Ukrainian)"), "x-mac-ukrainian",       LG_UKRAINIAN },
+	{ N_("Vietnamese (_TCVN)"),                 "x-viet-tcvn5712",       LG_VIETNAMESE },
+	{ N_("Vietnamese (_VISCII)"),               "VISCII",                LG_VIETNAMESE },
+	{ N_("Vietnamese (V_PS)"),                  "x-viet-vps",            LG_VIETNAMESE },
+	{ N_("Vietnamese (_Windows-1258)"),         "windows-1258",          LG_VIETNAMESE },
+	{ N_("Western (_IBM-850)"),                 "IBM850",                LG_WESTERN },
+	{ N_("Western (_ISO-8859-1)"),              "ISO-8859-1",            LG_WESTERN },
+	{ N_("Western (IS_O-8859-15)"),             "ISO-8859-15",           LG_WESTERN },
+	{ N_("Western (_MacRoman)"),                "x-mac-roman",           LG_WESTERN },
+	{ N_("Western (_Windows-1252)"),            "windows-1252",          LG_WESTERN },
 
 	/* the following encodings are so rarely used that we don't want to pollute the "related"
 	 * part of the encodings menu with them, so we set the language group to 0 here
 	 */
-	{ N_("English (_US-ASCII)"),                "us-ascii",              0,			FALSE },
-	{ N_("Unicode (UTF-_16 BE)"),               "UTF-16BE",              0,			FALSE },
-	{ N_("Unicode (UTF-1_6 LE)"),               "UTF-16LE",              0,			FALSE },
-	{ N_("Unicode (UTF-_32 BE)"),               "UTF-32BE",              0,			FALSE },
-	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0,			FALSE },
-
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("autodetectors|Off"),						    "",				   LG_NONE,								TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Chinese"),		    "zh_parallel_state_machine",   LG_CHINESE_TRAD | LG_CHINESE_SIMP,					TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Simplified Chinese"),    "zhcn_parallel_state_machine", LG_CHINESE_SIMP,							TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Traditional Chinese"),   "zhtw_parallel_state_machine", LG_CHINESE_TRAD,							TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|East Asian"),	    "cjk_parallel_state_machine",  LG_CHINESE_TRAD | LG_CHINESE_SIMP | LG_JAPANESE | LG_KOREAN,		TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Japanese"),		    "ja_parallel_state_machine",   LG_JAPANESE,								TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Korean"),		    "ko_parallel_state_machine",   LG_KOREAN,								TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Russian"),		    "ruprob",			   LG_CYRILLIC | LG_UKRAINIAN,						TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Universal"),	   	    "universal_charset_detector",  LG_ALL,								TRUE },
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("automatically detect ... character encodings|Ukrainian"),	   	    "ukprob",			   LG_UKRAINIAN,							TRUE }
+	{ N_("English (_US-ASCII)"),                "us-ascii",              0 },
+	{ N_("Unicode (UTF-_16 BE)"),               "UTF-16BE",              0 },
+	{ N_("Unicode (UTF-1_6 LE)"),               "UTF-16LE",              0 },
+	{ N_("Unicode (UTF-_32 BE)"),               "UTF-32BE",              0 },
+	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0 },
 };
-static const guint n_encoding_entries = G_N_ELEMENTS (encoding_entries);
 
 enum
 {
@@ -196,7 +162,6 @@ ephy_encodings_finalize (GObject *object)
 	g_hash_table_destroy (encodings->priv->hash);
 
 	ephy_node_unref (encodings->priv->encodings);
-	ephy_node_unref (encodings->priv->detectors);
 	ephy_node_unref (encodings->priv->root);
 
 	g_slist_foreach (encodings->priv->recent, (GFunc) g_free, NULL);
@@ -252,8 +217,7 @@ static EphyNode *
 add_encoding (EphyEncodings *encodings,
 	      const char *title,
 	      const char *code,
-	      EphyLanguageGroup groups,
-	      gboolean is_autodetector)
+	      EphyLanguageGroup groups)
 {
 	EphyNode *node;
 	char *elided, *normalised;
@@ -286,22 +250,11 @@ add_encoding (EphyEncodings *encodings,
 				    EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS,
 				    groups);
 				    
-	ephy_node_set_property_boolean (node,
-					EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR,
-					is_autodetector);
-
 	/* now insert the node in our structure */
 	ephy_node_add_child (encodings->priv->root, node);
 	g_hash_table_insert (encodings->priv->hash, g_strdup (code), node);
 
-	if (is_autodetector)
-	{
-		ephy_node_add_child (encodings->priv->detectors, node);
-	}
-	else
-	{
-		ephy_node_add_child (encodings->priv->encodings, node);
-	}
+        ephy_node_add_child (encodings->priv->encodings, node);
 
 	return node;
 }
@@ -326,7 +279,7 @@ ephy_encodings_get_node (EphyEncodings *encodings,
 		 * be displayed as.
 		 */
 		title = g_strdup_printf (_("Unknown (%s)"), code);
-		node = add_encoding (encodings, title, code, 0, FALSE);
+		node = add_encoding (encodings, title, code, 0);
 		g_free (title);
 	}
 
@@ -359,14 +312,6 @@ ephy_encodings_get_encodings (EphyEncodings *encodings,
 	}
 
 	return list;
-}
-
-EphyNode *
-ephy_encodings_get_detectors (EphyEncodings *encodings)
-{
-	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
-
-	return encodings->priv->detectors;
 }
 
 EphyNode *
@@ -456,18 +401,14 @@ ephy_encodings_init (EphyEncodings *encodings)
 
 	encodings->priv->root = ephy_node_new_with_id (db, ALL_NODE_ID);
 	encodings->priv->encodings = ephy_node_new_with_id (db, ENCODINGS_NODE_ID);
-	encodings->priv->detectors = ephy_node_new_with_id (db, DETECTORS_NODE_ID);
 
 	/* now fill the db */
-	for (i = 0; i < n_encoding_entries; i++)
+	for (i = 0; i < G_N_ELEMENTS (encoding_entries); i++)
 	{
 		add_encoding (encodings,
-			      encoding_entries[i].is_autodetector
-			      	? Q_(encoding_entries[i].title)
-			 	: _(encoding_entries[i].title),
+                              _(encoding_entries[i].title),
 			      encoding_entries[i].code,
-			      encoding_entries[i].groups,
-			      encoding_entries[i].is_autodetector);
+			      encoding_entries[i].groups);
 	}
 
 	/* get the list of recently used encodings */
