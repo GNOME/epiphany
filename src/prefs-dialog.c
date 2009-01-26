@@ -94,7 +94,6 @@ enum
 	/* Language */
 	DEFAULT_ENCODING_PROP,
 	DEFAULT_ENCODING_LABEL_PROP,
-	AUTO_ENCODING_LABEL_PROP,
 	LANGUAGE_ADD_BUTTON_PROP,
 	LANGUAGE_REMOVE_BUTTON_PROP,
 	LANGUAGE_UP_BUTTON_PROP,
@@ -139,7 +138,6 @@ EphyDialogProperty properties [] =
 	/* Languages */
 	{ "default_encoding_combo",	CONF_LANGUAGE_DEFAULT_ENCODING,		PT_AUTOAPPLY,	G_TYPE_STRING },
 	{ "default_encoding_label",	NULL,					PT_NORMAL,	0 },
-	{ "auto_encoding_label",	NULL,					PT_NORMAL,	0 },
 	{ "lang_add_button",		NULL,					PT_NORMAL,	0 },
 	{ "lang_remove_button",		NULL,					PT_NORMAL,	0 },
 	{ "lang_up_button",		NULL,					PT_NORMAL,	0 },
@@ -170,19 +168,6 @@ enum
 {
 	COL_LANG_NAME,
 	COL_LANG_CODE
-};
-
-enum
-{
-	COL_ENC_NAME,
-	COL_ENC_CODE
-};
-
-enum
-{
-	COL_AUTODETECTOR_NAME,
-	COL_AUTODETECTOR_DATA,
-	COL_AUTODETECTOR_IS_SEP
 };
 
 #define EPHY_PREFS_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PREFS_DIALOG, PrefsDialogPrivate))
