@@ -258,19 +258,6 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
 }
 
-static gboolean
-row_is_separator (GtkTreeModel *model,
-                  GtkTreeIter *iter,
-                  gpointer data)
-{
-	int column = GPOINTER_TO_INT (data);
-	gboolean is_sep;
-
-	gtk_tree_model_get (model, iter, column, &is_sep, -1);
-
-	return is_sep;
-}
-
 static void
 css_checkbox_toggled (GtkToggleButton *button,
 		      GtkWidget *widget)
