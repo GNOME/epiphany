@@ -263,6 +263,9 @@ real_find (EphyFindToolbarPrivate *priv,
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
+        if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
+                return EPHY_FIND_NOTFOUND;
+
         if (!webkit_web_view_search_text
             (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
                 /* not found, try to wrap */
