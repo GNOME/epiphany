@@ -301,10 +301,8 @@ entry_changed_cb (GtkEntry *entry,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
 	EphyEmbedFindResult result;
-	gboolean case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
-	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
 	ephy_find_toolbar_set_properties (toolbar, text);
 	result = ephy_find_toolbar_find (toolbar, text, priv->links_only);
