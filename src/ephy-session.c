@@ -1175,7 +1175,7 @@ ephy_session_save (EphySession *session,
 	xmlTextWriterPtr writer;
 	GList *w;
 	GFile *save_to_file, *tmp_file;
-	char *tmp_file_path;
+	char *tmp_file_path, *save_to_file_path;
 	int ret;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
@@ -1196,7 +1196,9 @@ ephy_session_save (EphySession *session,
 	}
 
 	save_to_file = get_session_file (filename);
-	tmp_file_path = g_strconcat (g_file_get_path (save_to_file), ".tmp", NULL);
+	save_to_file_path = g_file_get_path (save_to_file);
+	tmp_file_path = g_strconcat (save_to_file_path, ".tmp", NULL);
+	g_free (save_to_file_path);
 	tmp_file = g_file_new_for_path (tmp_file_path);
 
 	/* FIXME: do we want to turn on compression? */
