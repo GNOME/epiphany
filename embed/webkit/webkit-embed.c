@@ -195,7 +195,9 @@ load_committed_cb (WebKitWebView *web_view,
                    WebKitWebFrame *web_frame,
                    EphyEmbed *embed)
 {
-  const gchar* uri = webkit_web_frame_get_uri(web_frame);
+  const gchar* uri;
+
+  uri = webkit_web_frame_get_uri (web_frame);
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
                                     uri);
 
@@ -235,9 +237,18 @@ load_finished_cb (WebKitWebView *web_view,
                   WebKitWebFrame *web_frame,
                   EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
+  const gchar* title;
+  const gchar* uri;
 
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+
+  uri = webkit_web_frame_get_uri (web_frame);
+  title = webkit_web_frame_get_title (web_frame);
+  ephy_history_set_page_title (wembed->priv->history,
+                               uri,
+                               title);
+
+  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
   update_load_state (wembed, web_view);
 }
 
