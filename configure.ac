@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 m4_define([epiphany_version_major],[2])
-m4_define([epiphany_version_minor],[25])
+m4_define([epiphany_version_minor],[27])
 m4_define([epiphany_version_micro],[0])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
@@ -33,7 +33,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_API_VERSION=2.23
+EPIPHANY_API_VERSION=2.27
 
 # This should stay at the major version of the latest stable releases
 EPIPHANY_UA_VERSION=2.22
