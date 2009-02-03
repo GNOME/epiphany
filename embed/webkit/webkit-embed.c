@@ -116,8 +116,16 @@ title_changed_cb (WebKitWebView *web_view,
                   const gchar *title,
                   EphyEmbed *embed)
 {
+  const gchar* uri;
+
   ephy_base_embed_set_title (EPHY_BASE_EMBED (embed),
                              title);
+
+  uri = webkit_web_frame_get_uri (web_frame);
+  ephy_history_set_page_title (WEBKIT_EMBED (embed)->priv->history,
+                               uri,
+                               title);
+
 }
 
 static void
@@ -237,16 +245,7 @@ load_finished_cb (WebKitWebView *web_view,
                   WebKitWebFrame *web_frame,
                   EphyEmbed *embed)
 {
-  const gchar* title;
-  const gchar* uri;
-
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  uri = webkit_web_frame_get_uri (web_frame);
-  title = webkit_web_frame_get_title (web_frame);
-  ephy_history_set_page_title (wembed->priv->history,
-                               uri,
-                               title);
 
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
   update_load_state (wembed, web_view);
