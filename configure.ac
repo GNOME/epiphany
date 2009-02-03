@@ -39,7 +39,7 @@ EPIPHANY_API_VERSION=2.27
 EPIPHANY_UA_VERSION=2.22
 
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
-AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
+AC_SUBST([EPIPHANY_API_VERSION])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
 # for EPHY_CHECK_VERSION
