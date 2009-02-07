@@ -262,6 +262,10 @@ AC_ARG_ENABLE([seed],
   [],[enable_seed=no])
 AC_MSG_RESULT([$enable_seed])
 
+if test "$enable_seed" = "yes" -a "$enable_introspection" != "yes"; then
+  AC_MSG_ERROR([GObject introspection support must be enabled for Seed])
+fi
+
 if test "$enable_seed" = "yes"; then
   EPIPHANY_FEATURES="$EPIPHANY_FEATURES seed"
 
