@@ -684,9 +684,9 @@ nsresult EventContext::GetTargetCoords (nsIDOMEventTarget *aTarget, PRInt32 *aX,
 	{
 		PRInt32 val;
 #ifdef HAVE_GECKO_1_9_1
-		elem->GetOffsetTop(&val);	y += val;
+		htmlElem->GetOffsetTop(&val);	y += val;
 		elem->GetScrollTop(&val);	y -= val;
-		elem->GetOffsetLeft(&val);	x += val;
+		htmlElem->GetOffsetLeft(&val);	x += val;
 		elem->GetScrollLeft(&val);	x -= val;
 #else
 		htmlElem->GetOffsetTop(&val);	y += val;
