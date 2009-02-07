@@ -216,6 +216,11 @@ epiphany_LDADD = \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
+if ENABLE_INTROSPECTION
+epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
+epiphany_LDADD += $(INTROSPECTION_LIBS)
+endif
+
 if ENABLE_PYTHON
 epiphany_LDADD += \
 	libpyphany.la				\
@@ -494,4 +499,68 @@ check-python-binding:
 
 #check-local: check-python-binding
 
-endif
+endif # ENABLE_PYTHON
+
+if ENABLE_INTROSPECTION
+EPHY_GIR_H_FILES = \
+	$(top_srcdir)/embed/ephy-command-manager.h \
+	$(top_srcdir)/embed/ephy-cookie-manager.h \
+	$(top_srcdir)/embed/ephy-embed-event.h \
+	$(top_srcdir)/embed/ephy-embed-factory.h \
+	$(top_srcdir)/embed/ephy-embed.h \
+	$(top_srcdir)/embed/ephy-embed-persist.h \
+	$(top_srcdir)/embed/ephy-embed-shell.h \
+	$(top_srcdir)/embed/ephy-embed-single.h \
+	$(top_srcdir)/embed/ephy-favicon-cache.h \
+	$(top_srcdir)/embed/ephy-history.h \
+	$(top_srcdir)/embed/ephy-password-manager.h \
+	$(top_srcdir)/embed/ephy-permission-manager.h \
+	$(top_srcdir)/lib/ephy-dialog.h \
+	$(top_srcdir)/lib/ephy-node-db.h \
+	$(top_srcdir)/lib/ephy-node.h \
+	$(top_srcdir)/lib/ephy-state.h \
+	$(top_srcdir)/lib/egg/egg-editable-toolbar.h \
+	$(top_srcdir)/lib/egg/egg-toolbars-model.h \
+	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
+	$(top_srcdir)/lib/widgets/ephy-spinner.h \
+	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
+	$(top_srcdir)/src/ephy-extension.h \
+	$(top_srcdir)/src/ephy-extensions-manager.h \
+	$(top_srcdir)/src/ephy-find-toolbar.h \
+	$(top_srcdir)/src/ephy-link-action.h \
+	$(top_srcdir)/src/ephy-link.h \
+	$(top_srcdir)/src/ephy-location-action.h \
+	$(top_srcdir)/src/ephy-notebook.h \
+	$(top_srcdir)/src/ephy-session.h \
+	$(top_srcdir)/src/ephy-shell.h \
+	$(top_srcdir)/src/ephy-statusbar.h \
+	$(top_srcdir)/src/ephy-toolbar.h \
+	$(top_srcdir)/src/ephy-window.h \
+	$(NULL)
+
+Epiphany-$(EPIPHANY_API_VERSION).gir: epiphany $(G_IR_SCANNER)
+	$(G_IR_SCANNER) -v \
+		--namespace Epiphany \
+		--nsversion=$(EPIPHANY_API_VERSION) \
+		--add-include-path=. \
+		--add-include-path=$(srcdir) \
+		--include=Gtk-2.0 \
+		--include=libxml2-2.0 \
+		--program=./epiphany \
+		--output $@ \
+		--pkg epiphany-$(EPIPHANY_API_VERSION) \
+		$(EPHY_GIR_H_FILES)
+
+girdir = $(GIRDIR)
+gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
+
+typelibsdir = $(GIRTYPELIBDIR)
+typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
+
+Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(G_IR_COMPILER)
+	g-ir-compiler Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+
+EXTRA_DIST += Epiphany-$(EPIPHANY_API_VERSION).gir
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
+endif # ENABLE_INTROSPECTION

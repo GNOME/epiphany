@@ -45,6 +45,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef ENABLE_INTROSPECTION
+#include <girepository.h>
+#endif
+
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
@@ -79,6 +83,19 @@ option_version_cb (const gchar *option_name,
  return FALSE;
 }
  
+#ifdef ENABLE_INTROSPECTION
+static gboolean
+option_introspection_dump_cb (const gchar *option_name,
+                              const gchar *value,
+                              gpointer     data,
+                              GError     **error)
+{
+        g_irepository_dump (value, NULL);
+        exit (0);
+        return TRUE;
+}
+#endif /* ENABLE_INTROSPECTION */
+
 static const GOptionEntry option_entries[] =
 {
 	{ "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
@@ -101,6 +118,10 @@ static const GOptionEntry option_entries[] =
 	  "", N_("URL …")},
 	{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, 
 	  G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+#ifdef ENABLE_INTROSPECTION
+	{ "introspect-dump", 0, G_OPTION_FLAG_HIDDEN, 
+	  G_OPTION_ARG_CALLBACK, option_introspection_dump_cb, NULL, NULL },
+#endif
 	{ NULL }
 };
 
