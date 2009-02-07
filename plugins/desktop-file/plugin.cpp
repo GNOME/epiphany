@@ -34,7 +34,13 @@
 
 #include "ephy-stock-icons.h"
 
+#ifdef HAVE_GECKO_1_9_1
+#include <npfunctions.h>
+#include <npapi.h>
+#else
 #include <npupp.h>
+#endif
+
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
 #include "../../embed/mozilla/EphyUtils.h"
