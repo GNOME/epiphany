@@ -252,18 +252,43 @@ AC_SUBST([GIRTYPELIBDIR])
 
 AM_CONDITIONAL([ENABLE_INTROSPECTION],[test "$enable_introspection" = "yes"])
 
+# ****
+# Seed
+# ****
+
+AC_MSG_CHECKING([whether Seed support is requested])
+AC_ARG_ENABLE([seed],
+  [AS_HELP_STRING([--enable-seed],[Enable Seed support (default: disabled)]),
+  [],[enable_seed=no])
+AC_MSG_RESULT([$enable_seed])
+
+if test "$enable_seed" = "yes"; then
+  EPIPHANY_FEATURES="$EPIPHANY_FEATURES seed"
+
+  SEED_REQUIRED=0
+  PKG_CHECK_MODULES([SEED],[seed >= $SEED_REQUIRED])
+  AC_SUBST([SEED_CFLAGS])
+  AC_SUBST([SEED_LIBS])
+
+  AC_DEFINE([ENABLE_SEED],[1],[Define to compile with Seed support])
+fi
+
+AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
+
 # ******
 # Python
 # ******
 
 AC_MSG_CHECKING([whether Python support is requested])
-
 AC_ARG_ENABLE([python],
 	AS_HELP_STRING([--enable-python],[Enable python support]),
 	[enable_python=$enableval have_python=$enableval],
 	[enable_python=autodetect have_python=yes])
-
 AC_MSG_RESULT([$enable_python])
+
+if test "$enable_seed" = "yes" -a "$enable_python" = "yes"; then
+  AC_MSG_ERROR([cannot enable seed and python support at the same time])
+fi
 
 if test "$have_python" != "no"; then
 	AM_PATH_PYTHON([2.3],[],[no])
@@ -602,6 +627,7 @@ Epiphany was configured with the following options:
  	Zeroconf bookmarks support : $enable_zeroconf
  	NetworkManager support     : $enable_network_manager
  	GObject introspection      : $enable_introspection
+ 	Seed support               : $enable_seed
  	Python support             : $enable_python
  	Build tests                : $enable_tests
 "

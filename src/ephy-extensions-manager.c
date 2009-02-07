@@ -60,6 +60,10 @@
 #include "ephy-python-loader.h"
 #endif
 
+#ifdef ENABLE_SEED
+#include "ephy-seed-loader.h"
+#endif
+
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
 #define EE_GROUP		"Epiphany Extension"
 #define DOT_INI			".ephy-extension"
@@ -593,6 +597,20 @@ get_loader_for_type (EphyExtensionsManager *manager,
 #endif
 	}
 
+#ifdef ENABLE_SEED
+	if (strcmp (type, "seed") == 0)
+	{
+		info = g_new (LoaderInfo, 1);
+		info->type = g_strdup (type);
+		info->loader = g_object_new (EPHY_TYPE_SEED_LOADER, NULL);
+
+		manager->priv->factories =
+				g_list_append (manager->priv->factories, info);
+
+		return g_object_ref (info->loader);
+		return NULL;
+	}
+#endif
 	shlib_loader = get_loader_for_type (manager, "shlib");
 	g_return_val_if_fail (shlib_loader != NULL, NULL);
 

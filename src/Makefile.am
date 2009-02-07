@@ -124,6 +124,21 @@ libephymain_la_SOURCES += \
 	ephy-net-monitor.h
 endif
 
+if ENABLE_SEED
+NOINST_H_FILES += \
+	ephy-seed-extension.h \
+	ephy-seed-loader.h \
+	$(NULL)
+
+libephymain_la_SOURCES += \
+	ephy-seed-loader.c \
+	ephy-seed-extension.c \
+	$(NULL)
+
+libephymain_la_CFLAGS += $(SEED_CFLAGS)
+libephymain_la_LIBADD += $(SEED_LIBS)
+endif # ENABLE_SEED
+
 if ENABLE_PYTHON
 NOINST_H_FILES += \
 	ephy-python.h		\
