@@ -136,7 +136,6 @@ libephymain_la_SOURCES += \
 	$(NULL)
 
 libephymain_la_CFLAGS += $(SEED_CFLAGS)
-libephymain_la_LIBADD += $(SEED_LIBS)
 endif # ENABLE_SEED
 
 if ENABLE_PYTHON
@@ -235,6 +234,10 @@ if ENABLE_INTROSPECTION
 epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
 epiphany_LDADD += $(INTROSPECTION_LIBS)
 endif
+
+if ENABLE_SEED
+epiphany_LDADD += $(SEED_LIBS)
+endif # ENABLE_SEED
 
 if ENABLE_PYTHON
 epiphany_LDADD += \
