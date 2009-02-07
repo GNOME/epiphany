@@ -290,7 +290,7 @@ AC_ARG_ENABLE([python],
 	[enable_python=autodetect have_python=yes])
 AC_MSG_RESULT([$enable_python])
 
-if test "$enable_seed" = "yes" -a "$enable_python" = "yes"; then
+if test "$enable_seed" = "yes" -a "$enable_python" != "no"; then
   AC_MSG_ERROR([cannot enable seed and python support at the same time])
 fi
 
