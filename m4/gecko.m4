@@ -352,7 +352,7 @@ else
 	gecko_cv_have_gecko_1_9_1=no
 fi
 
-if test "gecko_cv_have_gecko_1_9_1" = "yes"; then
+if test "$gecko_cv_have_gecko_1_9_1" = "yes"; then
         AC_DEFINE([HAVE_GECKO_1_9_1],[1],[Define if we have gecko 1.9.1])
 fi
 
