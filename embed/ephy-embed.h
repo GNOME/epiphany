@@ -222,8 +222,6 @@ GType		  ephy_embed_net_state_get_type		(void);
 
 GType		  ephy_embed_chrome_get_type		(void);
 
-GType		  ephy_embed_ppv_navigation_get_type	(void);
-
 GType		  ephy_embed_security_level_get_type	(void);
 
 GType		  ephy_embed_document_type_get_type	(void);

@@ -75,8 +75,6 @@ GType			ephy_embed_event_get_type		(void);
 
 GType			ephy_embed_event_context_get_type	(void);
 
-GType			ephy_embed_event_type_get_type 		(void);
-
 EphyEmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
 
 guint			ephy_embed_event_get_button	(EphyEmbedEvent *event);
