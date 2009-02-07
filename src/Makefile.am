@@ -567,6 +567,12 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: epiphany $(G_IR_SCANNER)
 		--program=./epiphany \
 		--output $@ \
 		--pkg epiphany-$(EPIPHANY_API_VERSION) \
+		-DEPIPHANY_COMPILATION \
+		-I$(top_srcdir)/embed \
+		-I$(top_srcdir)/lib \
+		-I$(top_srcdir)/lib/egg \
+		-I$(top_srcdir)/src \
+		-I$(top_srcdir)/src/bookmarks \
 		$(EPHY_GIR_H_FILES)
 
 girdir = $(GIRDIR)
