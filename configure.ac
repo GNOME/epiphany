@@ -259,7 +259,7 @@ AM_CONDITIONAL([ENABLE_INTROSPECTION],[test "$enable_introspection" = "yes"])
 AC_MSG_CHECKING([whether Seed support is requested])
 AC_ARG_ENABLE([seed],
   [AS_HELP_STRING([--enable-seed],[Enable Seed support (default: disabled)]),
-  [],[enable_seed=no])
+  [],[enable_seed=no]])
 AC_MSG_RESULT([$enable_seed])
 
 if test "$enable_seed" = "yes" -a "$enable_introspection" != "yes"; then
