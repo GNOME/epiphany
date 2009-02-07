@@ -529,6 +529,24 @@ NP_Initialize (NPNetscapeFuncs *moz_funcs,
 	plugin_funcs->size = sizeof (NPPluginFuncs);
 	plugin_funcs->version = (NP_VERSION_MAJOR << 8) + NP_VERSION_MINOR;
 	plugin_funcs->newp = NewNPP_NewProc (plugin_new_instance);
+
+        /* FUCK YOU, MOZILLA! */
+#if HAVE_GECKO_1_9_1
+        plugin_funcs->newp = NPP_NewProcPtr (plugin_new_instance);
+	plugin_funcs->destroy = NPP_DestroyProcPtr (plugin_destroy_instance);
+	plugin_funcs->setwindow = NPP_SetWindowProcPtr (NULL);
+	plugin_funcs->newstream = NPP_NewStreamProcPtr (plugin_new_stream);
+	plugin_funcs->destroystream = NPP_DestroyStreamProcPtr (plugin_destroy_stream);
+	plugin_funcs->asfile = NPP_StreamAsFileProcPtr (plugin_stream_as_file);
+	plugin_funcs->writeready = NPP_WriteReadyProcPtr (plugin_write_ready);
+	plugin_funcs->write = NPP_WriteProcPtr (plugin_write);
+	plugin_funcs->print = NPP_PrintProcPtr (NULL);
+	plugin_funcs->event = NPP_HandleEventProcPtr (NULL);
+	plugin_funcs->urlnotify = NPP_URLNotifyProcPtr (NULL);
+	plugin_funcs->javaClass = NULL;
+	plugin_funcs->getvalue = NPP_GetValueProcPtr (plugin_get_value);
+	plugin_funcs->setvalue = NPP_SetValueProcPtr (NULL);
+#else
 	plugin_funcs->destroy = NewNPP_DestroyProc (plugin_destroy_instance);
 	plugin_funcs->setwindow = NewNPP_SetWindowProc (NULL);
 	plugin_funcs->newstream = NewNPP_NewStreamProc (plugin_new_stream);
@@ -542,6 +560,7 @@ NP_Initialize (NPNetscapeFuncs *moz_funcs,
 	plugin_funcs->javaClass = NULL;
 	plugin_funcs->getvalue = NewNPP_GetValueProc (plugin_get_value);
 	plugin_funcs->setvalue = NewNPP_SetValueProc (NULL);
+#endif
 
 	return NPERR_NO_ERROR;
 }
