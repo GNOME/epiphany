@@ -17,9 +17,9 @@
  *
  */
 
-#include <seed.h>
+#include <config.h>
 
-#include "config.h"
+#include <seed.h>
 
 #include "ephy-seed-extension.h"
 
