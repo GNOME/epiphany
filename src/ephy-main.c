@@ -83,19 +83,6 @@ option_version_cb (const gchar *option_name,
  return FALSE;
 }
  
-#ifdef ENABLE_INTROSPECTION
-static gboolean
-option_introspection_dump_cb (const gchar *option_name,
-                              const gchar *value,
-                              gpointer     data,
-                              GError     **error)
-{
-        g_irepository_dump (value, NULL);
-        exit (0);
-        return TRUE;
-}
-#endif /* ENABLE_INTROSPECTION */
-
 static const GOptionEntry option_entries[] =
 {
 	{ "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
@@ -118,10 +105,6 @@ static const GOptionEntry option_entries[] =
 	  "", N_("URL …")},
 	{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, 
 	  G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
-#ifdef ENABLE_INTROSPECTION
-	{ "introspect-dump", 0, G_OPTION_FLAG_HIDDEN, 
-	  G_OPTION_ARG_CALLBACK, option_introspection_dump_cb, NULL, NULL },
-#endif
 	{ NULL }
 };
 
@@ -584,6 +567,10 @@ main (int argc,
 	g_option_group_add_entries (option_group, option_entries);
 
 	g_option_context_set_main_group (option_context, option_group);
+
+#ifdef ENABLE_INTROSPECTION
+	g_option_context_add_group (option_context, g_irepository_get_option_group ());
+#endif
 
         g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
         g_option_context_add_group (option_context, egg_sm_client_get_option_group ());
