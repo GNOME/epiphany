@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2009, Robert Carr <carrr@rpi.edu>
  *
@@ -30,50 +31,49 @@
 
 struct _EphySeedLoaderPrivate
 {
-	gpointer dummy;
+  gpointer dummy;
 };
 
 static GObject *
 impl_get_object (EphyLoader *eloader,
-		 GKeyFile *keyfile)
+                 GKeyFile *keyfile)
 {
-	char *filename;
-	GObject *object;
+  char *filename;
+  GObject *object;
 
-	g_return_val_if_fail (keyfile != NULL, NULL);
+  g_return_val_if_fail (keyfile != NULL, NULL);
 
-	filename = g_key_file_get_string (keyfile, "Loader", "Module", NULL);
-	if (filename == NULL)
-	{
-		g_warning ("NULL module name!\n");
-		return NULL;
-	}
+  filename = g_key_file_get_string (keyfile, "Loader", "Module", NULL);
+  if (filename == NULL) {
+    g_warning ("NULL module name!\n");
+    return NULL;
+  }
 
-	object = g_object_new (EPHY_TYPE_SEED_EXTENSION,
-			       "filename", filename,
-			       NULL);
+  object = g_object_new (EPHY_TYPE_SEED_EXTENSION,
+                         "filename", filename,
+                         NULL);
 
-	g_free (filename);
+  g_free (filename);
 
-	/* we own one ref */
-	return g_object_ref (object);
+  /* we own one ref */
+  return g_object_ref (object);
 }
 
 static void
 impl_release_object (EphyLoader *eloader,
-		     GObject *object)
+                     GObject *object)
 {
-	g_return_if_fail (object != NULL);
+  g_return_if_fail (object != NULL);
 
-	g_object_unref (object);
+  g_object_unref (object);
 }
 
 static void
 ephy_seed_loader_iface_init (EphyLoaderIface *iface)
 {
-	iface->type = "seed";
-	iface->get_object = impl_get_object;
-	iface->release_object = impl_release_object;
+  iface->type = "seed";
+  iface->get_object = impl_get_object;
+  iface->release_object = impl_release_object;
 }
 
 G_DEFINE_TYPE_WITH_CODE (EphySeedLoader, ephy_seed_loader, G_TYPE_OBJECT,
@@ -82,27 +82,27 @@ G_DEFINE_TYPE_WITH_CODE (EphySeedLoader, ephy_seed_loader, G_TYPE_OBJECT,
 static void
 ephy_seed_loader_init (EphySeedLoader *loader)
 {
-	loader->priv = EPHY_SEED_LOADER_GET_PRIVATE (loader);
+  loader->priv = EPHY_SEED_LOADER_GET_PRIVATE (loader);
 
-	LOG ("EphySeedLoader initialising");
+  LOG ("EphySeedLoader initialising");
 
 }
 
 static void
 ephy_seed_loader_finalize (GObject *object)
 {
-	LOG ("EphySeedLoader finalising");
+  LOG ("EphySeedLoader finalising");
 
-	G_OBJECT_CLASS (ephy_seed_loader_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_seed_loader_parent_class)->finalize (object);
 }
 
 static void
 ephy_seed_loader_class_init (EphySeedLoaderClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = ephy_seed_loader_finalize;
+  object_class->finalize = ephy_seed_loader_finalize;
 
-	g_type_class_add_private (object_class, sizeof (EphySeedLoaderPrivate));
+  g_type_class_add_private (object_class, sizeof (EphySeedLoaderPrivate));
 }
 

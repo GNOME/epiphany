@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2009, Robert Carr <carrr@rpi.edu>
  *
@@ -42,15 +43,15 @@ typedef struct _EphySeedExtensionPrivate	EphySeedExtensionPrivate;
 
 struct _EphySeedExtensionClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 struct _EphySeedExtension
 {
-	GObject parent_instance;
+  GObject parent_instance;
 
-	/*< private >*/
-	EphySeedExtensionPrivate *priv;
+  /*< private >*/
+  EphySeedExtensionPrivate *priv;
 };
 
 GType	ephy_seed_extension_get_type		(void);

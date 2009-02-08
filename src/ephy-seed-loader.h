@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright Robert Carr, <carrr@rpi.edu> 2009
  *
@@ -42,15 +43,15 @@ typedef struct _EphySeedLoaderPrivate	EphySeedLoaderPrivate;
 
 struct _EphySeedLoaderClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 struct _EphySeedLoader
 {
-	GObject parent_instance;
+  GObject parent_instance;
 
-	/*< private >*/
-	EphySeedLoaderPrivate *priv;
+  /*< private >*/
+  EphySeedLoaderPrivate *priv;
 };
 
 GType	ephy_seed_loader_get_type		(void);

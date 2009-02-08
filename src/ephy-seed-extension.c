@@ -142,24 +142,21 @@ ephy_seed_extension_get_file (const gchar * name)
   dot_path = g_strconcat (dot_dir, "/", name, ".js", NULL);
   g_free (dot_dir);
 
-  if (g_file_test (dot_path, G_FILE_TEST_EXISTS))
-    {
-      return dot_path;
-    }
+  if (g_file_test (dot_path, G_FILE_TEST_EXISTS)) {
+    return dot_path;
+  }
 
   system_path = g_strconcat (EXTENSIONS_DIR, name, NULL);
-  if (g_file_test (system_path, G_FILE_TEST_EXISTS))
-    {
-      return system_path;
-    }
+  if (g_file_test (system_path, G_FILE_TEST_EXISTS)) {
+    return system_path;
+  }
   g_free (system_path);
 
   dirname = g_path_get_dirname (name);
-  if (g_path_is_absolute (dirname))
-    {
-      g_free (dirname);
-      return g_strdup (name);
-    }
+  if (g_path_is_absolute (dirname)) {
+    g_free (dirname);
+    return g_strdup (name);
+  }
   g_free (dirname);
 
   return NULL;
@@ -230,15 +227,14 @@ ephy_seed_extension_set_property (GObject *object,
 {
   EphySeedExtension *ext = EPHY_SEED_EXTENSION (object);
 
-  switch (prop_id)
-    {
+  switch (prop_id) {
     case PROP_FILENAME:
       ext->priv->filename =
         ephy_seed_extension_get_file (g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  }
 }
 
 static void
@@ -264,12 +260,11 @@ ephy_seed_extension_class_init (EphySeedExtensionClass *klass)
 
   g_type_class_add_private (object_class, sizeof (EphySeedExtensionPrivate));
 
-  if (global_eng == NULL)
-    {
-      global_eng = seed_init (NULL, NULL);
-      seed_simple_evaluate (global_eng->context,
-                            "Seed.import_namespace('Gtk');"
-                            "Seed.import_namespace('Epiphany');");
-    }
+  if (global_eng == NULL) {
+    global_eng = seed_init (NULL, NULL);
+    seed_simple_evaluate (global_eng->context,
+                          "Seed.import_namespace('Gtk');"
+                          "Seed.import_namespace('Epiphany');");
+  }
 }
 
