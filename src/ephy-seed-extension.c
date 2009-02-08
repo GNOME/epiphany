@@ -157,7 +157,7 @@ ephy_seed_extension_get_file (const gchar * name)
   if (g_path_is_absolute (dirname))
     {
       g_free (dirname);
-      return name;
+      return g_strdup (name);
     }
   g_free (dirname);
 
