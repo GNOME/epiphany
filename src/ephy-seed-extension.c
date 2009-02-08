@@ -71,22 +71,22 @@ call_seed_func (EphyExtension *extension,
   seed_ext = EPHY_SEED_EXTENSION (extension);
   priv = seed_ext->priv;
 
-  if (priv->obj == NULL || seed_value_is_null(priv->ctx, priv->obj))
+  if (priv->obj == NULL || seed_value_is_null (priv->ctx, priv->obj))
     return;
 	
-  function = seed_object_get_property(priv->ctx, priv->obj, func_name);
+  function = seed_object_get_property (priv->ctx, priv->obj, func_name);
   
-  if (!seed_value_is_function(priv->ctx, function))
+  if (!seed_value_is_function (priv->ctx, function))
     return;
 	
-  args[0] = seed_value_from_object(priv->ctx, G_OBJECT(window), exception);
+  args[0] = seed_value_from_object (priv->ctx, G_OBJECT(window), exception);
   if (embed != NULL)
-    args[1] = seed_value_from_object(priv->ctx, G_OBJECT(embed), exception);
+    args[1] = seed_value_from_object (priv->ctx, G_OBJECT(embed), exception);
 	
-  seed_object_call(global_eng->context, function, NULL, embed == NULL ? 1 : 2,
-		   args, &exception);
+  seed_object_call (global_eng->context, function, NULL, embed == NULL ? 1 : 2,
+                    args, &exception);
   if (exception)
-    printf("seed_exception: %s \n", seed_exception_to_string(priv->ctx, exception));
+    g_warning ("seed_exception: %s \n", seed_exception_to_string (priv->ctx, exception));
 	
 }
 
@@ -135,7 +135,7 @@ G_DEFINE_TYPE_WITH_CODE (EphySeedExtension, ephy_seed_extension, G_TYPE_OBJECT,
 static gchar *
 ephy_seed_extension_get_file (const gchar * name)
 {
-  gchar *dot_dir, *dot_path, *system_path, *absolute, *dirname;
+  gchar *dot_dir, *dot_path, *system_path, *dirname;
 
   dot_dir = g_strconcat (ephy_dot_dir (), "/extensions", NULL);
   dot_path = g_strconcat (dot_dir, "/", name, ".js", NULL);  
@@ -145,7 +145,7 @@ ephy_seed_extension_get_file (const gchar * name)
       return dot_path;
     }
   g_free (dot_dir);
-  
+
   system_path = g_strconcat (EXTENSIONS_DIR, name);
   if (g_file_test (system_path, G_FILE_TEST_EXISTS))
     {
@@ -156,10 +156,10 @@ ephy_seed_extension_get_file (const gchar * name)
   dirname = g_path_get_dirname (name);
   if (g_path_is_absolute (dirname))
     {
-      g_free(dirname);
+      g_free (dirname);
       return name;
     }
-  g_free(dirname);
+  g_free (dirname);
 
   return NULL;
 }
@@ -169,30 +169,30 @@ ephy_seed_extension_constructor (GType type,
 				 guint n_construct_properties,
 				 GObjectConstructParam *construct_params)
 {
-  SeedScript *script;
+  SeedScript *script = NULL;
   GObject *object;
   EphySeedExtension *ext;
 
   object =
     G_OBJECT_CLASS (ephy_seed_extension_parent_class)->constructor (type,
-						  n_construct_properties,
-							construct_params);
+                                                                    n_construct_properties,
+                                                                    construct_params);
 
   ext = EPHY_SEED_EXTENSION (object);
   
   if (ext->priv->filename)
-    script = seed_script_new_from_file(global_eng->context,
-				       ext->priv->filename);
+    script = seed_script_new_from_file (global_eng->context,
+                                        ext->priv->filename);
 	
-  ext->priv->ctx = seed_context_create(global_eng->group, NULL);
-  ext->priv->obj = seed_evaluate(global_eng->context,
-				 script,
-				 NULL);
+  ext->priv->ctx = seed_context_create (global_eng->group, NULL);
+  ext->priv->obj = seed_evaluate (global_eng->context,
+                                  script,
+                                  NULL);
   
-  if (seed_script_exception(script))
-    g_warning("seed_exception: %s", 
-	      seed_exception_to_string(global_eng->context,
-				       seed_script_exception(script)));
+  if (seed_script_exception (script))
+    g_warning ("seed_exception: %s", 
+               seed_exception_to_string (global_eng->context,
+                                         seed_script_exception (script)));
 	
 
   return object;
@@ -204,9 +204,9 @@ ephy_seed_extension_finalize (GObject *object)
   EphySeedExtension *extension =
     EPHY_SEED_EXTENSION (object);
 
-  seed_value_unprotect(extension->priv->ctx,
-		       extension->priv->obj);
-  seed_context_unref(extension->priv->ctx);
+  seed_value_unprotect (extension->priv->ctx,
+                        extension->priv->obj);
+  seed_context_unref (extension->priv->ctx);
 
   G_OBJECT_CLASS (ephy_seed_extension_parent_class)->finalize (object);
 }
@@ -233,10 +233,10 @@ ephy_seed_extension_set_property (GObject *object,
     {
     case PROP_FILENAME:
       ext->priv->filename = 
-	ephy_seed_extension_get_file(g_value_get_string (value));
+	ephy_seed_extension_get_file (g_value_get_string (value));
       break;
     default:
-      g_return_if_reached ();
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
     }
 }
 
@@ -265,10 +265,10 @@ ephy_seed_extension_class_init (EphySeedExtensionClass *klass)
 
   if (global_eng == NULL)
     {
-      global_eng = seed_init(NULL, NULL);
-      seed_simple_evaluate(global_eng->context,
-			   "Seed.import_namespace('Gtk');"
-			   "Seed.import_namespace('Epiphany');");
+      global_eng = seed_init (NULL, NULL);
+      seed_simple_evaluate (global_eng->context,
+                            "Seed.import_namespace('Gtk');"
+                            "Seed.import_namespace('Epiphany');");
     }
 }
 
