@@ -557,6 +557,7 @@ EPHY_GIR_H_FILES = \
 	$(NULL)
 
 Epiphany-$(EPIPHANY_API_VERSION).gir: epiphany $(G_IR_SCANNER)
+	PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
 	$(G_IR_SCANNER) -v \
 		--namespace Epiphany \
 		--nsversion=$(EPIPHANY_API_VERSION) \
