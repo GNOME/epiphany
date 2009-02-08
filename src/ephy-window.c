@@ -1281,7 +1281,7 @@ menu_item_select_cb (GtkMenuItem *proxy,
 	GtkAction *action;
 	char *message;
 
-	action = gtk_widget_get_action (GTK_WIDGET (proxy));
+	action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
 	g_return_if_fail (action != NULL);
 	
 	g_object_get (action, "tooltip", &message, NULL);
@@ -1314,7 +1314,7 @@ tool_item_enter_cb (GtkWidget *proxy,
     
 		item = GTK_TOOL_ITEM (gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOL_ITEM));
 		
-		action = gtk_widget_get_action (GTK_WIDGET (item));
+		action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (item));
 		g_return_val_if_fail (action != NULL, FALSE);
 		
 		g_object_get (action, "tooltip", &message, NULL);

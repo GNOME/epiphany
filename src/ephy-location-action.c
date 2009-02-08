@@ -182,7 +182,7 @@ entry_activate_cb (GtkEntry *entry,
 	char *address;
 	GtkAction *action;
 	
-	action = gtk_widget_get_action (GTK_WIDGET (proxy));
+	action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
 
 	if (EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
 	{
@@ -397,7 +397,7 @@ focus_in_event_cb (GtkWidget *entry,
 		   GtkWidget *proxy)
 {
 	GtkAction *action;
-	action = gtk_widget_get_action (proxy);
+	action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
 
 	if (!EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
 	{		
@@ -414,7 +414,7 @@ focus_out_event_cb (GtkWidget *entry,
 		    GtkWidget *proxy)
 {
 	GtkAction *action;
-	action = gtk_widget_get_action (GTK_WIDGET (proxy));
+	action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
 
 	if (EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
 	{
