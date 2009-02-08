@@ -146,7 +146,7 @@ ephy_seed_extension_get_file (const gchar * name)
     }
   g_free (dot_dir);
 
-  system_path = g_strconcat (EXTENSIONS_DIR, name);
+  system_path = g_strconcat (EXTENSIONS_DIR, name, NULL);
   if (g_file_test (system_path, G_FILE_TEST_EXISTS))
     {
       return system_path;
