@@ -138,13 +138,13 @@ ephy_seed_extension_get_file (const gchar * name)
   gchar *dot_dir, *dot_path, *system_path, *dirname;
 
   dot_dir = g_strconcat (ephy_dot_dir (), "/extensions", NULL);
-  dot_path = g_strconcat (dot_dir, "/", name, ".js", NULL);  
+  dot_path = g_strconcat (dot_dir, "/", name, ".js", NULL);
+  g_free (dot_dir);
+
   if (g_file_test (dot_path, G_FILE_TEST_EXISTS))
     {
-      g_free (dot_dir);
       return dot_path;
     }
-  g_free (dot_dir);
 
   system_path = g_strconcat (EXTENSIONS_DIR, name, NULL);
   if (g_file_test (system_path, G_FILE_TEST_EXISTS))
