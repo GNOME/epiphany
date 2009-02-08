@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2009, Robert Carr
  *
@@ -37,7 +38,7 @@ static void ephy_seed_extension_iface_init (EphyExtensionIface *iface);
 struct _EphySeedExtensionPrivate
 {
   char *filename;
-	
+
   SeedContext ctx;
   SeedObject obj;
 };
@@ -58,64 +59,64 @@ ephy_seed_extension_init (EphySeedExtension *extension)
 
 static void
 call_seed_func (EphyExtension *extension,
-		const char *func_name,
-		EphyWindow *window,
-		EphyEmbed *embed) /* HACK: tab may be NULL */
+                const char *func_name,
+                EphyWindow *window,
+                EphyEmbed *embed) /* HACK: tab may be NULL */
 {
   EphySeedExtension *seed_ext;
   EphySeedExtensionPrivate *priv;
   SeedObject function;
   SeedException exception = NULL;
   SeedValue args[2];
-	
+
   seed_ext = EPHY_SEED_EXTENSION (extension);
   priv = seed_ext->priv;
 
   if (priv->obj == NULL || seed_value_is_null (priv->ctx, priv->obj))
     return;
-	
+
   function = seed_object_get_property (priv->ctx, priv->obj, func_name);
-  
+
   if (!seed_value_is_function (priv->ctx, function))
     return;
-	
+
   args[0] = seed_value_from_object (priv->ctx, G_OBJECT(window), exception);
   if (embed != NULL)
     args[1] = seed_value_from_object (priv->ctx, G_OBJECT(embed), exception);
-	
+
   seed_object_call (global_eng->context, function, NULL, embed == NULL ? 1 : 2,
                     args, &exception);
   if (exception)
     g_warning ("seed_exception: %s \n", seed_exception_to_string (priv->ctx, exception));
-	
+
 }
 
 static void
 impl_attach_tab (EphyExtension *extension,
-		 EphyWindow *window,
-		 EphyEmbed *embed)
+                 EphyWindow *window,
+                 EphyEmbed *embed)
 {
   call_seed_func (extension, "attach_tab", window, embed);
 }
 
 static void
 impl_detach_tab (EphyExtension *extension,
-		 EphyWindow *window,
-		 EphyEmbed *embed)
+                 EphyWindow *window,
+                 EphyEmbed *embed)
 {
   call_seed_func (extension, "detach_tab", window, embed);
 }
 
 static void
 impl_attach_window (EphyExtension *extension,
-		    EphyWindow *window)
+                    EphyWindow *window)
 {
   call_seed_func (extension, "attach_window", window, NULL);
 }
 
 static void
 impl_detach_window (EphyExtension *extension,
-		    EphyWindow *window)
+                    EphyWindow *window)
 {
   call_seed_func (extension, "detach_window", window, NULL);
 }
@@ -152,7 +153,7 @@ ephy_seed_extension_get_file (const gchar * name)
       return system_path;
     }
   g_free (system_path);
-  
+
   dirname = g_path_get_dirname (name);
   if (g_path_is_absolute (dirname))
     {
@@ -166,8 +167,8 @@ ephy_seed_extension_get_file (const gchar * name)
 
 static GObject *
 ephy_seed_extension_constructor (GType type,
-				 guint n_construct_properties,
-				 GObjectConstructParam *construct_params)
+                                 guint n_construct_properties,
+                                 GObjectConstructParam *construct_params)
 {
   SeedScript *script = NULL;
   GObject *object;
@@ -179,21 +180,21 @@ ephy_seed_extension_constructor (GType type,
                                                                     construct_params);
 
   ext = EPHY_SEED_EXTENSION (object);
-  
+
   if (ext->priv->filename)
     script = seed_script_new_from_file (global_eng->context,
                                         ext->priv->filename);
-	
+
   ext->priv->ctx = seed_context_create (global_eng->group, NULL);
   ext->priv->obj = seed_evaluate (global_eng->context,
                                   script,
                                   NULL);
-  
+
   if (seed_script_exception (script))
-    g_warning ("seed_exception: %s", 
+    g_warning ("seed_exception: %s",
                seed_exception_to_string (global_eng->context,
                                          seed_script_exception (script)));
-	
+
 
   return object;
 }
@@ -213,9 +214,9 @@ ephy_seed_extension_finalize (GObject *object)
 
 static void
 ephy_seed_extension_get_property (GObject *object,
-				  guint prop_id,
-				  GValue *value,
-				  GParamSpec *pspec)
+                                  guint prop_id,
+                                  GValue *value,
+                                  GParamSpec *pspec)
 {
   /* no readable properties */
   g_return_if_reached ();
@@ -223,20 +224,20 @@ ephy_seed_extension_get_property (GObject *object,
 
 static void
 ephy_seed_extension_set_property (GObject *object,
-				  guint prop_id,
-				  const GValue *value,
-				  GParamSpec *pspec)
+                                  guint prop_id,
+                                  const GValue *value,
+                                  GParamSpec *pspec)
 {
   EphySeedExtension *ext = EPHY_SEED_EXTENSION (object);
 
   switch (prop_id)
     {
     case PROP_FILENAME:
-      ext->priv->filename = 
-	ephy_seed_extension_get_file (g_value_get_string (value));
+      ext->priv->filename =
+        ephy_seed_extension_get_file (g_value_get_string (value));
       break;
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -254,12 +255,12 @@ ephy_seed_extension_class_init (EphySeedExtensionClass *klass)
     (object_class,
      PROP_FILENAME,
      g_param_spec_string ("filename",
-			  "Filename",
-			  "Filename",
-			  NULL,
-			  G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | 
-			  G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-			  G_PARAM_CONSTRUCT_ONLY));
+                          "Filename",
+                          "Filename",
+                          NULL,
+                          G_PARAM_WRITABLE | G_PARAM_STATIC_NAME |
+                          G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
+                          G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (object_class, sizeof (EphySeedExtensionPrivate));
 
