@@ -126,8 +126,6 @@ create_tool_item (GtkAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (item), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
-	gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-					    action);
 
 	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 	gtk_widget_show (arrow);
