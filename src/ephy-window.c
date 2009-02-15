@@ -2496,11 +2496,27 @@ create_web_view_cb (WebKitWebView *web_view,
 {
 	EphyEmbed *embed;
 	WebKitWebView *new_web_view;
+	EphyNewTabFlags flags;
+	EphyWindow *parent_window;
+
+	if (eel_gconf_get_boolean (CONF_INTERFACE_OPEN_NEW_WINDOWS_IN_TAB))
+	{
+		parent_window = window;
+		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			EPHY_NEW_TAB_JUMP;
+
+	}
+	else
+	{
+		parent_window = NULL;
+		flags = EPHY_NEW_TAB_IN_NEW_WINDOW |
+			EPHY_NEW_TAB_DONT_SHOW_WINDOW;
+	}
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-					 NULL, NULL, NULL,
-					 EPHY_NEW_TAB_IN_NEW_WINDOW |
-					 EPHY_NEW_TAB_DONT_SHOW_WINDOW, 
+					 parent_window,
+					 NULL, NULL,
+					 flags,
 					 EPHY_EMBED_CHROME_ALL,
 					 FALSE,
 					 0);
