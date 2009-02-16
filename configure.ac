@@ -41,13 +41,13 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_API_VERSION=2.22
+EPIPHANY_API_VERSION=2.26
 
 # This should stay at the major version of the latest stable releases
 EPIPHANY_UA_VERSION=2.22
 
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
-AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
+AC_SUBST([EPIPHANY_API_VERSION])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
 # for EPHY_CHECK_VERSION
