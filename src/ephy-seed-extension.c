@@ -136,17 +136,19 @@ G_DEFINE_TYPE_WITH_CODE (EphySeedExtension, ephy_seed_extension, G_TYPE_OBJECT,
 static gchar *
 ephy_seed_extension_get_file (const gchar * name)
 {
-  gchar *dot_dir, *dot_path, *system_path, *dirname;
+  gchar *dot_path, *system_path, *dirname, *filename;
 
-  dot_dir = g_strconcat (ephy_dot_dir (), "/extensions", NULL);
-  dot_path = g_strconcat (dot_dir, "/", name, ".js", NULL);
-  g_free (dot_dir);
+  filename = g_strconcat (name, ".js", NULL);
+  dot_path = g_build_filename (ephy_dot_dir(), "extensions", filename, NULL);
 
   if (g_file_test (dot_path, G_FILE_TEST_EXISTS)) {
+    g_free(filename);
     return dot_path;
   }
+  g_free (dot_path);
 
-  system_path = g_strconcat (EXTENSIONS_DIR, name, NULL);
+  system_path = g_build_filename (EXTENSIONS_DIR, filename, NULL);
+  g_free (filename);
   if (g_file_test (system_path, G_FILE_TEST_EXISTS)) {
     return system_path;
   }
