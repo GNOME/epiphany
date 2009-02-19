@@ -1613,7 +1613,7 @@ clear_progress_cb (EphyWindow *window)
 static void
 sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
-	gdouble progress;
+	gdouble progress, previous_progress;
 	gboolean loading;
 
 	if (window->priv->closing) return;
@@ -1626,6 +1626,14 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 
 	progress = ephy_embed_get_load_percent (embed)/100.0;
 	loading = ephy_embed_get_load_status (embed);
+
+	/* Do not show a 'blink' progress from pages that go from 0 to 100,
+	 * for example about:blank. */
+	/* This might be refined by actually checking that the transition
+	 * from 0 to 100 indeed took almost no time at all */
+	previous_progress = gtk_entry_get_progress_fraction (GTK_ENTRY (window->priv->entry));
+	if (previous_progress == 0.0 && progress == 1.0)
+		return;
 
 	if (progress == 1.0 && loading)
 	{
