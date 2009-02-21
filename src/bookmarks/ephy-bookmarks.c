@@ -133,7 +133,9 @@ static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
 static void ephy_bookmarks_init		(EphyBookmarks *tab);
 static void ephy_bookmarks_finalize	(GObject *object);
 static char *impl_resolve_address	(EphyBookmarks*, const char*, const char*);
+#ifdef ENABLE_ZEROCONF
 static void ephy_local_bookmarks_start_client (EphyBookmarks *bookmarks);
+#endif
 
 G_DEFINE_TYPE_WITH_CODE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT,
 			 volatile GType flags_type; /* work around gcc's optimiser */
