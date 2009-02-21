@@ -492,8 +492,8 @@ update_status_icon (DownloaderView *dv)
                                                     "%d downloads", downloads), 
                                           downloads);
 
-	gtk_status_icon_set_tooltip (dv->priv->status_icon,
-				     downloadstring);
+	gtk_status_icon_set_tooltip_text (dv->priv->status_icon,
+					  downloadstring);
 	g_free (downloadstring);
 }
 
