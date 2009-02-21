@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany gnome-2-24\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-08-12 06:40+0900\n"
-"PO-Revision-Date: 2008-08-12 06:39+0900\n"
+"POT-Creation-Date: 2009-02-22 00:33+0900\n"
+"PO-Revision-Date: 2009-02-22 00:33+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -726,7 +726,8 @@ msgstr "言語の選択(_A):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:673 ../src/ephy-history-window.c:249
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "クリア(_E)"
 
@@ -927,7 +928,7 @@ msgid "Download finished"
 msgstr "ダウンロード完了"
 
 #: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:868
 msgid "GNOME Web Browser"
 msgstr "GNOME ウェブ・ブラウザ"
 
@@ -956,8 +957,8 @@ msgstr "不明"
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
-msgstr[0] "%d個ダウンロード"
-msgstr[1] "%d個ダウンロード"
+msgstr[0] "%d個のデータのダウンロード中"
+msgstr[1] "%d個のデータのダウンロード中"
 
 #: ../embed/downloader-view.c:610
 #, c-format
@@ -1436,17 +1437,17 @@ msgstr "保存"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "不明"
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "この安全ではなさそうなファイルをダウンロードしますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:298
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1459,14 +1460,14 @@ msgstr ""
 "\"%s\" を開くと潜在的にドキュメントを破壊するか、またはプライバシーを侵害する"
 "可能性あります。ただしダウンロードは可能です。"
 
-#: ../embed/mozilla/ContentHandler.cpp:308
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "このファイルを開きますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:315
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1477,13 +1478,13 @@ msgstr ""
 "\n"
 "\"%s\" を \"%s\" で開くか、または保存できます。"
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "このファイルをダウンロードしますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:329
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1494,7 +1495,7 @@ msgstr ""
 "\n"
 "\"%s\" を開く適当なアプリケーションがありませんが、ダウンロードは可能です。"
 
-#: ../embed/mozilla/ContentHandler.cpp:336
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "別名で保存(_S)..."
 
@@ -1793,7 +1794,7 @@ msgid "You may find an old version:|in the Internet Archive"
 msgstr "インターネット上のアーカイブを参照してみる"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks.c:1483
 #: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "名前なし"
@@ -1887,15 +1888,15 @@ msgstr "ウェブサイト \"%s\" が次の文章に署名するよう要求し�
 msgid "_Sign text"
 msgstr "文章に署名する(_S)"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:192
+#: ../embed/mozilla/GeckoPrintService.cpp:196
 msgid "Options"
 msgstr "オプション"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:456
+#: ../embed/mozilla/GeckoPrintService.cpp:460
 msgid "Print this page?"
 msgstr "このページを印刷しますか？"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:464
+#: ../embed/mozilla/GeckoPrintService.cpp:468
 msgid "Preparing to print"
 msgstr "印刷する準備をしています"
 
@@ -2331,18 +2332,6 @@ msgstr ""
 "GConf エラー:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "%s を開いています"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] " %d個のアイテムを開いています"
-msgstr[1] " %d個のアイテムを開いています"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -2350,32 +2339,32 @@ msgstr[1] " %d個のアイテムを開いています"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:918
 #, c-format
 msgid "Show “_%s”"
 msgstr "\"%s\" を表示する"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1381
 msgid "_Move on Toolbar"
 msgstr "ツールバー上で移動(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1382
 msgid "Move the selected item on the toolbar"
 msgstr "選択したアイテムをツールバー上で移動します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1383
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1384
 msgid "Remove the selected item from the toolbar"
 msgstr "選択したアイテムをツールバーから削除します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1385
 msgid "_Delete Toolbar"
 msgstr "ツールバーの削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1386
 msgid "Remove the selected toolbar"
 msgstr "選択したツールバーを削除します"
 
@@ -2717,15 +2706,15 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:958
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "このアイコンをドラッグ＆ドロップすると、このページのリンクを生成します"
 
-#: ../plugins/desktop-file/plugin.cpp:377
+#: ../plugins/desktop-file/plugin.cpp:383
 msgid "Unsafe protocol."
 msgstr "安全ではないプロトコルです"
 
-#: ../plugins/desktop-file/plugin.cpp:378
+#: ../plugins/desktop-file/plugin.cpp:384
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2734,20 +2723,20 @@ msgstr ""
 "ティ上危険な状態にさらすおそれがあるため、そのアドレスを読み込みませんでし"
 "た。"
 
-#: ../plugins/desktop-file/plugin.cpp:406
+#: ../plugins/desktop-file/plugin.cpp:412
 msgid "No address found."
 msgstr "アドレスが見つかりません"
 
-#: ../plugins/desktop-file/plugin.cpp:407
+#: ../plugins/desktop-file/plugin.cpp:413
 msgid "No web address could be found in this file."
 msgstr "そのファイルの中にはウェブのアドレスがありませんでした。"
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:442
+#: ../plugins/desktop-file/plugin.cpp:448
 msgid "Epiphany Desktop File Plugin"
 msgstr "Epiphany 提供のデスクトップ・ファイル向けプラグイン"
 
-#: ../plugins/desktop-file/plugin.cpp:446
+#: ../plugins/desktop-file/plugin.cpp:452
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr ""
 "このプラグインは \".desktop\" と \".url\" ファイルに含まれるウェブのリンクを"
@@ -2872,7 +2861,7 @@ msgstr "ブックマークを更新しますか？"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
+#: ../src/bookmarks/ephy-bookmarks.c:1227
 msgid "bookmarks|All"
 msgstr "全てのサイト"
 
@@ -2880,7 +2869,7 @@ msgstr "全てのサイト"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1233
 msgid "bookmarks|Most Visited"
 msgstr "訪問回数の多いサイト"
 
@@ -2889,7 +2878,7 @@ msgstr "訪問回数の多いサイト"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1240
 msgid "bookmarks|Not Categorized"
 msgstr "未分類のサイト"
 
@@ -2898,7 +2887,7 @@ msgstr "未分類のサイト"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
+#: ../src/bookmarks/ephy-bookmarks.c:1248
 msgid "bookmarks|Nearby Sites"
 msgstr "近くにあるサイト"
 
@@ -3963,7 +3952,8 @@ msgstr "場所(_L)..."
 msgid "Go to a specified location"
 msgstr "指定した場所へ移動します"
 
-#: ../src/ephy-window.c:239
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "履歴(_S)"
 
@@ -4160,11 +4150,11 @@ msgstr "いずれにしろドキュメントを閉じると、その情報は失
 msgid "Close _Document"
 msgstr "ドキュメントを閉じる(_D)"
 
-#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "開く"
 
-#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "別名で保存(_A)..."
 
@@ -4259,11 +4249,11 @@ msgstr "リンク先 \"%s\" をブックマークに追加します"
 msgid "Copy link's address “%s”"
 msgstr "リンク先のアドレス \"%s\" をコピーします"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>消去する個人データを選択して下さい</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -4272,31 +4262,26 @@ msgstr ""
 "訪問したウェブ・ページに関連する個人データを消去しようとしています。その前"
 "に、削除する情報の種類を確認して下さい:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "全ての個人データを消去する"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "クッキー(_O)"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "保存したパスワード(_P)"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "履歴(_H)"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "作業ファイル(_T)"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -4304,55 +4289,55 @@ msgstr ""
 "<small><i><b>注意:</b> この操作で消去したデータを元に戻すことはできません。"
 "データは完全に抹消されます。</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "クッキーのプロパティ"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "コンテンツ:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "パス名:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "送信先:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "暗号化した接続のみ"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "全ての接続"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "有効期限:"
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "現在のセッションの最後"
 
-#: ../src/pdm-dialog.c:804
+#: ../src/pdm-dialog.c:813
 msgid "Domain"
 msgstr "ドメイン"
 
-#: ../src/pdm-dialog.c:816
+#: ../src/pdm-dialog.c:825
 msgid "Name"
 msgstr "名称"
 
-#: ../src/pdm-dialog.c:1215
+#: ../src/pdm-dialog.c:1224
 msgid "Host"
 msgstr "ホスト"
 
-#: ../src/pdm-dialog.c:1227
+#: ../src/pdm-dialog.c:1236
 msgid "User Name"
 msgstr "ユーザ名"
 
-#: ../src/pdm-dialog.c:1239
+#: ../src/pdm-dialog.c:1248
 msgid "User Password"
 msgstr "ユーザのパスワード"
 
@@ -4446,7 +4431,7 @@ msgstr[1] "システム言語 (%s)"
 msgid "Select a Directory"
 msgstr "フォルダの選択"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4457,7 +4442,7 @@ msgstr ""
 "提供する GNU 一般公衆利用許諾契約書の第二版、あるいはそれ以降の版が定める条項"
 "の下で本プログラムを再頒布または変更することができます。"
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4468,7 +4453,7 @@ msgstr ""
 "び特定の目的、その適合性についての暗黙の保証を含めて、いかなる保証も行ないま"
 "せん。詳細については GNU 一般公衆利用許諾契約書をご覧下さい。"
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4478,20 +4463,20 @@ msgstr ""
 "るはずです。そうでない場合は、Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-1301 USA へ手紙を書いて下さい。"
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "連絡先:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "貢献者:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "前バージョンの開発者:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4508,7 +4493,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <takeshi.aihana@gmail.com>\n"
@@ -4519,6 +4504,17 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "GNOME ウェブ・ブラウザのウェブサイト"
+
+#~ msgid "Opening %s"
+#~ msgstr "%s を開いています"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] " %d個のアイテムを開いています"
+#~ msgstr[1] " %d個のアイテムを開いています"
+
+#~ msgid "_History"
+#~ msgstr "履歴(_H)"
