@@ -71,6 +71,7 @@ struct _EphyLocationEntryPrivate
 	guint secure : 1;
 	guint apply_colours : 1;
 	guint needs_reset : 1;
+	guint show_lock : 1;
 };
 
 static const GtkTargetEntry url_drag_types [] =
@@ -975,6 +976,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->block_update = FALSE;
 	p->saved_text = NULL;
 	p->search_terms = NULL;
+	p->show_lock = FALSE;
 	
 	ephy_location_entry_construct_contents (le);
 
@@ -1576,6 +1578,8 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 
 	priv = entry->priv;
 
+	priv->show_lock = show_lock != FALSE;
+
 	gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->entry),
 				       GTK_ENTRY_ICON_SECONDARY,
 				       show_lock ? priv->lock_stock_id : NULL);
@@ -1599,9 +1603,10 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 
 	entry->priv->lock_stock_id = (char*)stock_id;
 
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (entry->priv->entry),
-				       GTK_ENTRY_ICON_SECONDARY,
-				       stock_id);
+	if (entry->priv->show_lock)
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry->priv->entry),
+					       GTK_ENTRY_ICON_SECONDARY,
+					       stock_id);
 }
 
 /**
