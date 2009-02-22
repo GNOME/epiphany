@@ -1752,14 +1752,10 @@ sync_tab_security (EphyEmbed *embed,
 		case EPHY_EMBED_STATE_IS_BROKEN:
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
-			show_lock = TRUE;
-
-#ifndef HAVE_GECKO_1_8_1
-			/* In Gecko 1.8.1/1.9, we get a useful tooltip here */
-			g_free (description);
-			description = NULL;
-#endif
-			break;
+                        show_lock = TRUE;
+                        g_free (description);
+                        description = NULL;
+                        break;
 		case EPHY_EMBED_STATE_IS_SECURE_LOW:
 		case EPHY_EMBED_STATE_IS_SECURE_MED:
 			state = _("Low");
