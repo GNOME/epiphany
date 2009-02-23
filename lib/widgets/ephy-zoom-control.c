@@ -19,13 +19,10 @@
 
 #include "config.h"
 
-#include "ephy-zoom-control.h"
-#include "ephy-marshal.h"
-#include "ephy-zoom.h"
-#include "ephy-debug.h"
-
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+
+#include "ephy-zoom-control.h"
+#include "ephy-zoom.h"
 
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
 
@@ -50,39 +47,11 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-static GObjectClass *parent_class = NULL;
-
 static void	ephy_zoom_control_class_init	(EphyZoomControlClass *klass);
 static void	ephy_zoom_control_init		(EphyZoomControl *control);
 static void	ephy_zoom_control_finalize	(GObject *o);
 
-GType
-ephy_zoom_control_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-			{
-				sizeof (EphyZoomControlClass),
-				NULL, /* base_init */
-				NULL, /* base_finalize */
-				(GClassInitFunc) ephy_zoom_control_class_init,
-				NULL,
-				NULL, /* class_data */
-				sizeof (EphyZoomControl),
-				0, /* n_preallocs */
-				(GInstanceInitFunc) ephy_zoom_control_init,
-			};
-
-		type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-					       "EphyZoomControl",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyZoomControl, ephy_zoom_control, GTK_TYPE_TOOL_ITEM)
 
 static void
 combo_changed_cb (GtkComboBox *combo, EphyZoomControl *control)
@@ -199,8 +168,6 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 	GObjectClass *object_class;
 	GtkToolItemClass *tool_item_class;
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class = (GObjectClass *)klass;
 	tool_item_class = (GtkToolItemClass *)klass;
 
@@ -238,7 +205,7 @@ ephy_zoom_control_finalize (GObject *o)
 
 	g_object_unref (control->priv->combo);
 
-	G_OBJECT_CLASS (parent_class)->finalize (o);
+	G_OBJECT_CLASS (ephy_zoom_control_parent_class)->finalize (o);
 }
 
 /**
