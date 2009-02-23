@@ -20,13 +20,11 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ephy-zoom-action.h"
 #include "ephy-zoom-control.h"
 #include "ephy-zoom.h"
-
-#include <glib-object.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 
@@ -53,35 +51,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_zoom_action_get_type (void)
-{
-        static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-			{
-				sizeof (EphyZoomActionClass),
-				NULL, /* base_init */
-				NULL, /* base_finalize */
-				(GClassInitFunc) ephy_zoom_action_class_init,
-				NULL,
-				NULL, /* class_data */
-				sizeof (EphyZoomAction),
-				0, /* n_preallocs */
-				(GInstanceInitFunc) ephy_zoom_action_init,
-			};
-
-                type = g_type_register_static (GTK_TYPE_ACTION,
-					       "EphyZoomAction",
-					       &our_info, 0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (EphyZoomAction, ephy_zoom_action, GTK_TYPE_ACTION)
 
 static void
 zoom_to_level_cb (EphyZoomControl *control,
@@ -115,7 +85,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (zoom_to_level_cb), action);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_zoom_action_parent_class)->connect_proxy (action, proxy);
 }
 
 static void
@@ -164,7 +134,7 @@ create_menu_item (GtkAction *action)
 
 	gtk_widget_show (menu);
 
-        menu_item = GTK_ACTION_CLASS (parent_class)->create_menu_item (action);
+        menu_item = GTK_ACTION_CLASS (ephy_zoom_action_parent_class)->create_menu_item (action);
 
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
 
@@ -217,8 +187,6 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 
 	object_class->set_property = ephy_zoom_action_set_property;
 	object_class->get_property = ephy_zoom_action_get_property;
-
-	parent_class = g_type_class_peek_parent (class);
 
 	action_class->toolbar_item_type = EPHY_TYPE_ZOOM_CONTROL;
 	action_class->connect_proxy = connect_proxy;
