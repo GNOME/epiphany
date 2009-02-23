@@ -354,7 +354,6 @@ if ENABLE_PYTHON
 
 BINDING_HEADERS_SRCDIR_IN = \
 	embed/ephy-command-manager.h			\
-	embed/ephy-cookie-manager.h			\
 	embed/ephy-embed-event.h			\
 	embed/ephy-embed-factory.h			\
 	embed/ephy-embed.h				\
@@ -522,7 +521,6 @@ endif # ENABLE_PYTHON
 if ENABLE_INTROSPECTION
 EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-command-manager.h \
-	$(top_srcdir)/embed/ephy-cookie-manager.h \
 	$(top_srcdir)/embed/ephy-embed-event.h \
 	$(top_srcdir)/embed/ephy-embed-factory.h \
 	$(top_srcdir)/embed/ephy-embed.h \

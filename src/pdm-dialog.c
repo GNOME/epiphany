@@ -2,6 +2,7 @@
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2009 Igalia S.L., Author: Xan Lopez <xlopez@igalia.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +24,6 @@
 
 #include "pdm-dialog.h"
 #include "ephy-shell.h"
-#include "ephy-cookie-manager.h"
 #include "ephy-file-helpers.h"
 #include "ephy-password-manager.h"
 #include "ephy-gui.h"
@@ -38,8 +38,11 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <libsoup/soup.h>
+#include <webkit/webkit.h>
 
 #include <string.h>
+#include <time.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
 	
@@ -122,12 +125,12 @@ EphyDialogProperty properties [] =
 	{ "pdm_dialog",			NULL, PT_NORMAL, 0 },
 	{ "pdm_notebook",		NULL, PT_NORMAL, 0 },
 
-	{ "cookies_treeview",	   	NULL, PT_NORMAL, 0 },
-	{ "cookies_remove_button",     	NULL, PT_NORMAL, 0 },
-	{ "cookies_properties_button", 	NULL, PT_NORMAL, 0 },
-	{ "passwords_treeview",	       	NULL, PT_NORMAL, 0 },
-	{ "passwords_remove_button",   	NULL, PT_NORMAL, 0 },
-	{ "passwords_show_button",     	NULL, PT_NORMAL, 0 },
+	{ "cookies_treeview",		NULL, PT_NORMAL, 0 },
+	{ "cookies_remove_button",	NULL, PT_NORMAL, 0 },
+	{ "cookies_properties_button",	NULL, PT_NORMAL, 0 },
+	{ "passwords_treeview",		NULL, PT_NORMAL, 0 },
+	{ "passwords_remove_button",	NULL, PT_NORMAL, 0 },
+	{ "passwords_show_button",	NULL, PT_NORMAL, 0 },
 
 	{ NULL }
 };
@@ -136,7 +139,7 @@ static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
 
-static void passwords_changed_cb 		(EphyPasswordManager *manager,
+static void passwords_changed_cb		(EphyPasswordManager *manager,
 						 PdmDialog *dialog);
 
 
@@ -185,10 +188,31 @@ typedef struct
 	guint num_checked;
 } PdmClearAllDialogButtons;
 
+static SoupCookieJar*
+get_cookie_jar ()
+{
+	SoupSession* session;
+
+	session = webkit_get_default_session ();
+	return (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+}
+
 static void
 clear_all_dialog_release_cb (PdmClearAllDialogButtons *data)
 {
 	g_slice_free (PdmClearAllDialogButtons, data);
+}
+
+static void
+clear_all_cookies (SoupCookieJar *jar)
+{
+	GSList *l, *p;
+
+	l = soup_cookie_jar_all_cookies (jar);
+	for (p = l; p; p = p->next)
+		soup_cookie_jar_delete_cookie (jar, (SoupCookie*)p->data);
+
+	soup_cookies_free (l);
 }
 
 static void
@@ -207,7 +231,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_OK)
 	{
 		if (gtk_toggle_button_get_active 
-		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_history)))
+			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_history)))
 		{
 			EphyEmbedShell *shell;
 			EphyHistory *history;
@@ -217,17 +241,16 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			ephy_history_clear (history);
 		}
 		if (gtk_toggle_button_get_active
-		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))
+			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))
 		{
-			EphyCookieManager *manager;
+			SoupCookieJar *jar;
 
-			manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
-						       (EPHY_EMBED_SHELL (ephy_shell)));
+			jar = get_cookie_jar ();
 
-			ephy_cookie_manager_clear (manager);
+			clear_all_cookies (jar);
 		}
 		if (gtk_toggle_button_get_active
-		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
+			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
 		{
 			EphyPasswordManager *manager;
 
@@ -261,7 +284,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			}
 		}
 		if (gtk_toggle_button_get_active
-		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
+			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
 		{
 			EphyEmbedShell *shell;
 			EphyEmbedSingle *single;
@@ -405,7 +428,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	label = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (label),
 			      _("<small><i><b>Note:</b> You cannot undo this action. "
-			        "The data you are choosing to clear "
+				"The data you are choosing to clear "
 				"will be deleted forever.</i></small>"));
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    label, FALSE, FALSE, 0);
@@ -587,7 +610,7 @@ setup_action (PdmActionInfo *action)
 
 static void
 show_cookies_properties (PdmDialog *dialog,
-			 EphyCookie *info)
+			 SoupCookie *info)
 {
 	GtkWidget *gdialog;
 	GtkWidget *table;
@@ -658,7 +681,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
-	label = gtk_label_new (info->is_secure ? _("Encrypted connections only") : _("Any type of connection") );
+	label = gtk_label_new (info->secure ? _("Encrypted connections only") : _("Any type of connection") );
 	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
@@ -673,14 +696,16 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
-	if (info->is_session)
+	if (info->expires == NULL)
 	{
+		/* Session cookie */
 		str = g_strdup (_("End of current session"));
 	}
 	else
 	{
 		struct tm t;
-		str = eel_strdup_strftime ("%c", localtime_r (&info->expires, &t));
+		time_t out = soup_date_to_time_t(info->expires);
+		str = eel_strdup_strftime ("%c", localtime_r (&out, &t));
 	}
 	label = gtk_label_new (str);
 	g_free (str);
@@ -710,7 +735,7 @@ cookies_properties_clicked_cb (GtkWidget *button,
 	GValue val = {0, };
 	GtkTreeIter iter;
 	GtkTreePath *path;
-	EphyCookie *cookie;
+	SoupCookie *cookie;
 	GList *l;
 	GtkTreeSelection *selection;
 
@@ -722,7 +747,7 @@ cookies_properties_clicked_cb (GtkWidget *button,
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get_value
 		(model, &iter, COL_COOKIES_DATA, &val);
-	cookie = (EphyCookie *) g_value_get_boxed (&val);
+	cookie = (SoupCookie *) g_value_get_boxed (&val);
 
 	show_cookies_properties (dialog, cookie);
 
@@ -791,7 +816,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
-					EPHY_TYPE_COOKIE);
+					SOUP_TYPE_COOKIE);
 	gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
 	gtk_tree_view_set_headers_visible (treeview, TRUE);
 	selection = gtk_tree_view_get_selection (treeview);
@@ -843,19 +868,8 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 }
 
 static gboolean
-compare_cookies (const EphyCookie *cookie1,
-		 const EphyCookie *cookie2)
-{
-	g_return_val_if_fail (cookie1 != NULL || cookie2 != NULL, FALSE);
-
-	return (strcmp (cookie1->domain, cookie2->domain) == 0
-		&& strcmp (cookie1->path, cookie2->path) == 0
-		&& strcmp (cookie1->name, cookie2->name) == 0);
-}
-
-static gboolean
 cookie_to_iter (GtkTreeModel *model,
-		const EphyCookie *cookie,
+		const SoupCookie *cookie,
 		GtkTreeIter *iter)
 {
 	gboolean valid;
@@ -865,15 +879,15 @@ cookie_to_iter (GtkTreeModel *model,
 
 	while (valid)
 	{
-		EphyCookie *data;
+		SoupCookie *data;
 
 		gtk_tree_model_get (model, iter,
 				    COL_COOKIES_DATA, &data,
 				    -1);
 
-		found = compare_cookies (cookie, data);
+		found = soup_cookie_equal ((SoupCookie*)cookie, data);
 
-		ephy_cookie_free (data);
+		soup_cookie_free (data);
 
 		if (found) break;
 
@@ -884,67 +898,41 @@ cookie_to_iter (GtkTreeModel *model,
 }
 
 static void
-cookie_added_cb (EphyCookieManager *manager,
-		 const EphyCookie *cookie,
-		 PdmDialog *dialog)
-{
-	PdmActionInfo *info = dialog->priv->cookies;
-	
-	LOG ("cookie_added_cb");
-
-	info->add (info, (gpointer) ephy_cookie_copy (cookie));
-}
-
-static void
-cookie_changed_cb (EphyCookieManager *manager,
-		   const EphyCookie *cookie,
+cookie_changed_cb (SoupCookieJar *jar,
+		   const SoupCookie *old_cookie,
+		   const SoupCookie *new_cookie,
 		   PdmDialog *dialog)
 {
-	PdmActionInfo *info = dialog->priv->cookies;
+	PdmActionInfo *info;
 	GtkTreeIter iter;
+
+	g_return_if_fail (EPHY_IS_PDM_DIALOG (dialog));
+	info = dialog->priv->cookies;
 
 	LOG ("cookie_changed_cb");
 
-	if (cookie_to_iter (info->model, cookie, &iter))
+	g_return_if_fail (info);
+
+	if (old_cookie)
 	{
-		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
-		info->add (info, (gpointer) ephy_cookie_copy (cookie));
+		/* Cookie changed or deleted, let's get rid of the old one
+		   in any case */
+		if (cookie_to_iter (info->model, old_cookie, &iter))
+		{
+			gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);
+		}
+		else
+		{
+			g_warning ("Unable to find changed cookie in list!\n");
+		}
 	}
-	else
+
+	if (new_cookie)
 	{
-		g_warning ("Unable to find changed cookie in list!\n");
+		/* Cookie changed or added, let's add the new cookie in
+		   any case */
+		info->add (info, (gpointer) soup_cookie_copy ((SoupCookie*)new_cookie));
 	}
-}
-
-static void
-cookie_deleted_cb (EphyCookieManager *manager,
-		   const EphyCookie *cookie,
-		   PdmDialog *dialog)
-{
-	PdmActionInfo *info = dialog->priv->cookies;
-	GtkTreeIter iter;
-
-	LOG ("cookie_deleted_cb");
-
-	if (cookie_to_iter (info->model, cookie, &iter))
-	{
-		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
-	}
-	else
-	{
-		g_warning ("Unable to find deleted cookie in list!\n");
-	}
-}
-
-static void
-cookies_cleared_cb (EphyCookieManager *manager,
-		    PdmDialog *dialog)
-{
-	PdmActionInfo *info = dialog->priv->cookies;
-
-	LOG ("cookies_cleared_cb");
-
-	gtk_list_store_clear (GTK_LIST_STORE (info->model));
 }
 
 static gboolean
@@ -1038,15 +1026,13 @@ compare_cookie_host_keys (GtkTreeModel *model,
 static void
 pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 {
-	EphyCookieManager *manager;
-	GList *list, *l;
+	SoupCookieJar *jar;
+	GSList *list, *l;
 
 	g_assert (info->filled == FALSE);
 
-	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
-			(EPHY_EMBED_SHELL (ephy_shell)));
-
-	list = ephy_cookie_manager_list_cookies (manager);
+	jar = get_cookie_jar ();
+	list = soup_cookie_jar_all_cookies (jar);
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -1054,7 +1040,7 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 	}
 
 	/* the element data has been consumed, so we need only to free the list */
-	g_list_free (list);
+	g_slist_free (list);
 
 	/* Now turn on sorting */
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (info->model),
@@ -1067,15 +1053,8 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 	
 	info->filled = TRUE;
 
-	/* Now connect the callbacks on the EphyCookieManager */
-	g_signal_connect (manager, "cookie-added",
-			 G_CALLBACK (cookie_added_cb), info->dialog);
-	g_signal_connect (manager, "cookie-changed",
-			 G_CALLBACK (cookie_changed_cb), info->dialog);
-	g_signal_connect (manager, "cookie-deleted",
-			 G_CALLBACK (cookie_deleted_cb), info->dialog);
-	g_signal_connect (manager, "cookies-cleared",
-			 G_CALLBACK (cookies_cleared_cb), info->dialog);
+	g_signal_connect (jar, "changed",
+			  G_CALLBACK (cookie_changed_cb), info->dialog);
 
 	info->scroll_to (info);
 }
@@ -1091,7 +1070,7 @@ static void
 pdm_dialog_cookie_add (PdmActionInfo *info,
 		       gpointer data)
 {
-	EphyCookie *cookie = (EphyCookie *) data;
+	SoupCookie *cookie = (SoupCookie *) data;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	int column[4] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_NAME, COL_COOKIES_DATA };
@@ -1108,7 +1087,7 @@ pdm_dialog_cookie_add (PdmActionInfo *info,
 	g_value_init (&value[0], G_TYPE_STRING);
 	g_value_init (&value[1], G_TYPE_STRING);
 	g_value_init (&value[2], G_TYPE_STRING);
-	g_value_init (&value[3], EPHY_TYPE_COOKIE);
+	g_value_init (&value[3], SOUP_TYPE_COOKIE);
 
 	g_value_set_static_string (&value[0], cookie->domain);
 	g_value_take_string (&value[1], ephy_string_collate_key_for_domain (cookie->domain, -1));
@@ -1129,13 +1108,12 @@ static void
 pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  gpointer data)
 {
-	EphyCookie *cookie = (EphyCookie *) data;
-	EphyCookieManager *manager;
+	SoupCookie *cookie = (SoupCookie *) data;
+	SoupCookieJar *jar;
 
-	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
-			(EPHY_EMBED_SHELL (ephy_shell)));
+	jar = get_cookie_jar();
 
-	ephy_cookie_manager_remove_cookie (manager, cookie);
+	soup_cookie_jar_delete_cookie (jar, cookie);
 }
 
 static void
@@ -1513,6 +1491,8 @@ pdm_dialog_finalize (GObject *object)
 
 	g_signal_handlers_disconnect_matched
 		(single, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, object);
+
+	g_signal_handlers_disconnect_by_func (get_cookie_jar (), cookie_changed_cb, object);
 
 	dialog->priv->cookies->destruct (dialog->priv->cookies);
 	dialog->priv->passwords->destruct (dialog->priv->passwords);

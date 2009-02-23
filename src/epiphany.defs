@@ -20,12 +20,6 @@
   (gtype-id "EPHY_TYPE_COMMAND_MANAGER")
 )
 
-(define-interface CookieManager
-  (in-module "Ephy")
-  (c-name "EphyCookieManager")
-  (gtype-id "EPHY_TYPE_COOKIE_MANAGER")
-)
-
 (define-object Dialog
   (in-module "Ephy")
   (parent "GObject")
@@ -474,57 +468,6 @@
 )
 
 
-
-;; From ../../embed/ephy-cookie-manager.h
-
-(define-function ephy_cookie_get_type
-  (c-name "ephy_cookie_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_cookie_new
-  (c-name "ephy_cookie_new")
-  (is-constructor-of "EphyCookie")
-  (return-type "EphyCookie*")
-)
-
-(define-method copy
-  (of-object "EphyCookie")
-  (c-name "ephy_cookie_copy")
-  (return-type "EphyCookie*")
-)
-
-(define-method free
-  (of-object "EphyCookie")
-  (c-name "ephy_cookie_free")
-  (return-type "none")
-)
-
-(define-function ephy_cookie_manager_get_type
-  (c-name "ephy_cookie_manager_get_type")
-  (return-type "GType")
-)
-
-(define-method list_cookies
-  (of-object "EphyCookieManager")
-  (c-name "ephy_cookie_manager_list_cookies")
-  (return-type "GList*")
-)
-
-(define-method remove_cookie
-  (of-object "EphyCookieManager")
-  (c-name "ephy_cookie_manager_remove_cookie")
-  (return-type "none")
-  (parameters
-    '("const-EphyCookie*" "cookie")
-  )
-)
-
-(define-method clear
-  (of-object "EphyCookieManager")
-  (c-name "ephy_cookie_manager_clear")
-  (return-type "none")
-)
 
 ;; From ../../embed/ephy-embed-container.h
 
@@ -3510,22 +3453,6 @@
 
 
 ;; Boxed types ...
-
-(define-boxed Cookie
-  (in-module "Ephy")
-  (c-name "EphyCookie")
-  (gtype-id "EPHY_TYPE_COOKIE")
-  (fields
-    '("char*" "name")
-    '("char*" "value")
-    '("char*" "domain")
-    '("char*" "path")
-    '("gulong" "expires")
-    '("glong" "real_expires")
-    '("guint" "is_secure")
-    '("guint" "is_session")
-  )
-)
 
 (define-boxed PasswordInfo
   (in-module "Ephy")
