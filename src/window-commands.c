@@ -878,20 +878,20 @@ window_cmd_help_about (GtkAction *action,
 	gtk_show_about_dialog (GTK_WINDOW (window),
 			       "name", _("GNOME Web Browser"),
 			       "version", VERSION,
-			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
-					    "Copyright © 2003-2009 The GNOME Web Browser Developers",
+			       "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
+			                    "Copyright © 2003–2009 The GNOME Web Browser Developers",
 			       "artists", artists,
 			       "authors", authors,
 			       "comments", comments,
 			       "documenters", documenters,
-				/* Translators: This is a special message that shouldn't be translated
-				 * literally. It is used in the about box to give credits to
-				 * the translators.
-				 * Thus, you should translate it to your name and email address.
-				 * You should also include other translators who have contributed to
-				 * this translation; in that case, please write each of them on a separate
-				 * line seperated by newlines (\n).
-				 */
+			       /* Translators: This is a special message that shouldn't be translated
+			        * literally. It is used in the about box to give credits to
+			        * the translators.
+			        * Thus, you should translate it to your name and email address.
+			        * You should also include other translators who have contributed to
+			        * this translation; in that case, please write each of them on a separate
+			        * line seperated by newlines (\n).
+			        */
 			       "translator-credits", _("translator-credits"),
 			       "logo-icon-name", EPHY_STOCK_EPHY,
 			       "website", "http://www.gnome.org/projects/epiphany",
