@@ -49,7 +49,7 @@ static guint signals[LAST_SIGNAL];
 
 static void	ephy_zoom_control_class_init	(EphyZoomControlClass *klass);
 static void	ephy_zoom_control_init		(EphyZoomControl *control);
-static void	ephy_zoom_control_finalize	(GObject *o);
+static void	ephy_zoom_control_dispose	(GObject *o);
 
 G_DEFINE_TYPE (EphyZoomControl, ephy_zoom_control, GTK_TYPE_TOOL_ITEM)
 
@@ -173,7 +173,7 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 
 	object_class->set_property = ephy_zoom_control_set_property;
 	object_class->get_property = ephy_zoom_control_get_property;
-	object_class->finalize = ephy_zoom_control_finalize;
+	object_class->dispose = ephy_zoom_control_dispose;
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
@@ -199,13 +199,17 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 }
 
 static void
-ephy_zoom_control_finalize (GObject *o)
+ephy_zoom_control_dispose (GObject *o)
 {
 	EphyZoomControl *control = EPHY_ZOOM_CONTROL (o);
 
-	g_object_unref (control->priv->combo);
+	if (control->priv->combo)
+	{
+		g_object_unref (control->priv->combo);
+		control->priv->combo = NULL;
+	}
 
-	G_OBJECT_CLASS (ephy_zoom_control_parent_class)->finalize (o);
+	G_OBJECT_CLASS (ephy_zoom_control_parent_class)->dispose (o);
 }
 
 /**
