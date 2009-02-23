@@ -433,6 +433,7 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 			rv = GetDocURI (linkElement, getter_AddRefs (docUri));
 			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
 
+	                NS_ENSURE_TRUE (mOwner->mFixup, NS_OK);
                         nsCOMPtr<nsIURI> exposableURI;
                         rv = mOwner->mFixup->CreateExposableURI (docUri, getter_AddRefs (exposableURI));
                         NS_ENSURE_SUCCESS (rv, rv);
