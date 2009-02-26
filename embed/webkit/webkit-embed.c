@@ -561,12 +561,15 @@ static void
 impl_set_encoding (EphyEmbed *embed,
                    const char *encoding)
 {
+  WebKitWebView *view = WEBKIT_EMBED (embed)->priv->web_view;
+  webkit_web_view_set_custom_encoding (view, encoding);
 }
 
-static char *
+static const char *
 impl_get_encoding (EphyEmbed *embed)
 {
-  return NULL;
+  WebKitWebView *view = WEBKIT_EMBED (embed)->priv->web_view;
+  return webkit_web_view_get_custom_encoding (view);;
 }
 
 static gboolean

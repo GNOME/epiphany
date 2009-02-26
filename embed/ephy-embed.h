@@ -190,7 +190,7 @@ struct _EphyEmbedIface
 	void		   (* scroll_pixels)		  (EphyEmbed *embed,
 							   int dx,
 							   int dy);
-	char *		   (* get_encoding)		  (EphyEmbed *embed);
+	const char *	   (* get_encoding)		  (EphyEmbed *embed);
 	gboolean	   (* has_automatic_encoding)	  (EphyEmbed *embed);
 	void		   (* set_encoding)		  (EphyEmbed *embed,
 							   const char *encoding);
@@ -309,7 +309,7 @@ const char *	 ephy_embed_get_loading_title		(EphyEmbed *embed);
 
 gboolean	 ephy_embed_get_visibility		(EphyEmbed *embed);
 /* Encoding */
-char		 *ephy_embed_get_encoding		(EphyEmbed *embed);
+const char	 *ephy_embed_get_encoding		(EphyEmbed *embed);
 
 gboolean	  ephy_embed_has_automatic_encoding	(EphyEmbed *embed);
 

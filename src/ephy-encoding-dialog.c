@@ -83,7 +83,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
         GtkTreeModel *model;
         GList *rows;
 	GtkWidget *button;
-	char *encoding;
+	const char *encoding;
 	gboolean is_automatic;
 
 	dialog->priv->update_tag = TRUE;
@@ -122,8 +122,6 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
-
-	g_free (encoding);
 
 	dialog->priv->update_tag = FALSE;
 }

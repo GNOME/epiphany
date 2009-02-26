@@ -112,7 +112,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	EphyEmbed *embed;
 	GtkAction *action;
 	char name[128];
-	char *encoding;
+	const char *encoding;
 	EphyNode *enc_node;
 	GList *recent, *related = NULL, *l;
 	EphyLanguageGroup groups;
@@ -218,8 +218,6 @@ build_menu:
 	/* cleanup */
 	g_list_free (related);
 	g_list_free (recent);
-
-	g_free (encoding);
 
 	menu->priv->update_tag = FALSE;
 

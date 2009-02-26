@@ -583,7 +583,7 @@ ephy_embed_set_encoding (EphyEmbed *embed,
  * Returns: the @embed's document encoding
  *
  **/
-char *
+const char *
 ephy_embed_get_encoding (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
