@@ -569,7 +569,7 @@ static const char *
 impl_get_encoding (EphyEmbed *embed)
 {
   WebKitWebView *view = WEBKIT_EMBED (embed)->priv->web_view;
-  return webkit_web_view_get_custom_encoding (view);;
+  return webkit_web_view_get_custom_encoding (view);
 }
 
 static gboolean
