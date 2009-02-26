@@ -211,6 +211,7 @@ impl_init (EphyEmbedSingle *esingle)
 
   session = webkit_get_default_session ();
   soup_session_add_feature (session, SOUP_SESSION_FEATURE(jar));
+  g_object_unref (jar);
 
   return TRUE;
 }
