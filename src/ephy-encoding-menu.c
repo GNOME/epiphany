@@ -28,12 +28,14 @@
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <webkit/webkit.h>
 
 #define EPHY_ENCODING_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_MENU, EphyEncodingMenuPrivate))
 
@@ -117,6 +119,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	GList *recent, *related = NULL, *l;
 	EphyLanguageGroup groups;
 	gboolean is_automatic;
+	WebKitWebView *view;
 
 	START_PROFILER ("Rebuilding encoding menu")
 
@@ -130,7 +133,8 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	recent = ephy_encodings_get_recent (p->encodings);
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->window));
-	encoding = ephy_embed_get_encoding (embed);
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	encoding = webkit_web_view_get_custom_encoding (view);
 	if (encoding == NULL) goto build_menu;
 
 	enc_node = ephy_encodings_get_node (p->encodings, encoding, TRUE);
@@ -228,6 +232,7 @@ static void
 encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 {
 	EphyEmbed *embed;
+	WebKitWebView *view;
 	const char *name, *encoding;
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) == FALSE
@@ -241,7 +246,8 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (menu->priv->window));
 
-	ephy_embed_set_encoding (embed, encoding);
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	webkit_web_view_set_custom_encoding (view, encoding);
 
 	ephy_encodings_add_recent (menu->priv->encodings, encoding);
 }
@@ -301,6 +307,7 @@ static void
 ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 {
 	EphyEmbed *embed;
+	WebKitWebView *view;
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) == FALSE
 	    || menu->priv->update_tag)
@@ -311,8 +318,9 @@ ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (menu->priv->window));
 
-	/* setting "" will clear the forced encoding */
-	ephy_embed_set_encoding (embed, "");
+	/* setting NULL will clear the forced encoding */
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	webkit_web_view_set_custom_encoding (view, NULL);
 }
 
 static const GtkActionEntry menu_entries [] =

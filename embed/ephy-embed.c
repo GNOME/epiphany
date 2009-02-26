@@ -556,41 +556,6 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_set_encoding:
- * @embed: an #EphyEmbed
- * @encoding: the desired encoding
- *
- * Sets @embed's character encoding to @encoding. These cryptic encoding
- * strings are listed in <filename>embed/ephy-encodings.c</filename>.
- *
- * Pass an empty string (not NULL) in @encoding to reset @embed to use the
- * document-specified encoding.
- **/
-void
-ephy_embed_set_encoding (EphyEmbed *embed,
-			 const char *encoding)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->set_encoding (embed, encoding);
-}
-
-/**
- * ephy_embed_get_encoding:
- * @embed: an #EphyEmbed
- *
- * Returns the @embed's document encoding.
- *
- * Returns: the @embed's document encoding
- *
- **/
-const char *
-ephy_embed_get_encoding (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_encoding (embed);
-}
-
-/**
  * ephy_embed_has_automatic_encoding:
  * @embed: an #EphyEmbed
  *

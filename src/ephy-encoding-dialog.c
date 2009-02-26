@@ -26,6 +26,7 @@
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-node.h"
@@ -36,6 +37,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <webkit/webkit.h>
 
 enum
 {
@@ -85,13 +87,15 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	GtkWidget *button;
 	const char *encoding;
 	gboolean is_automatic;
+	WebKitWebView *view;
 
 	dialog->priv->update_tag = TRUE;
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	encoding = ephy_embed_get_encoding (embed);
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	encoding = webkit_web_view_get_custom_encoding (view);
 	if (encoding == NULL) return;
 
 	node = ephy_encodings_get_node (dialog->priv->encodings, encoding, TRUE);
@@ -194,6 +198,7 @@ activate_choice (EphyEncodingDialog *dialog)
 	EphyEmbed *embed;
 	GtkWidget *button;
 	gboolean is_automatic;
+	WebKitWebView *view;
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
@@ -201,9 +206,11 @@ activate_choice (EphyEncodingDialog *dialog)
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
 	if (is_automatic)
 	{
-		ephy_embed_set_encoding (embed, "");
+		webkit_web_view_set_custom_encoding (view, NULL);
 	}
 	else if (dialog->priv->selected_node != NULL)
 	{
@@ -212,7 +219,7 @@ activate_choice (EphyEncodingDialog *dialog)
 		code = ephy_node_get_property_string (dialog->priv->selected_node,
 						      EPHY_NODE_ENCODING_PROP_ENCODING);
 
-		ephy_embed_set_encoding (embed, code);
+		webkit_web_view_set_custom_encoding (view, code);
 
 		ephy_encodings_add_recent (dialog->priv->encodings, code);
 	}

@@ -190,10 +190,7 @@ struct _EphyEmbedIface
 	void		   (* scroll_pixels)		  (EphyEmbed *embed,
 							   int dx,
 							   int dy);
-	const char *	   (* get_encoding)		  (EphyEmbed *embed);
 	gboolean	   (* has_automatic_encoding)	  (EphyEmbed *embed);
-	void		   (* set_encoding)		  (EphyEmbed *embed,
-							   const char *encoding);
 	void		   (* set_print_preview_mode)	  (EphyEmbed *embed,
 							   gboolean mode);
 	int		   (* print_preview_n_pages)	  (EphyEmbed *embed);
@@ -308,13 +305,7 @@ gboolean	  ephy_embed_get_is_blank		(EphyEmbed *embed);
 const char *	 ephy_embed_get_loading_title		(EphyEmbed *embed);
 
 gboolean	 ephy_embed_get_visibility		(EphyEmbed *embed);
-/* Encoding */
-const char	 *ephy_embed_get_encoding		(EphyEmbed *embed);
-
-gboolean	  ephy_embed_has_automatic_encoding	(EphyEmbed *embed);
-
-void		  ephy_embed_set_encoding		(EphyEmbed *embed,
-							 const char *encoding);
+gboolean	 ephy_embed_has_automatic_encoding	(EphyEmbed *embed);
 
 /* Print */
 void		  ephy_embed_set_print_preview_mode	(EphyEmbed *embed,
