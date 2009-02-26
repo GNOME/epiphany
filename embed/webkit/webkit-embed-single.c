@@ -205,13 +205,18 @@ impl_init (EphyEmbedSingle *esingle)
 
   webkit_embed_prefs_init ();
 
+  session = webkit_get_default_session ();
+
+  /* Store cookies in moz-compatible SQLite format */
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
   jar = soup_cookie_jar_sqlite_new (filename, FALSE);
   g_free (filename);
 
-  session = webkit_get_default_session ();
   soup_session_add_feature (session, SOUP_SESSION_FEATURE(jar));
   g_object_unref (jar);
+
+  /* Use GNOME proxy settings through libproxy */
+  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
   return TRUE;
 }
