@@ -1075,12 +1075,6 @@
   (return-type "const-char*")
 )
 
-(define-method get_encoding
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_encoding")
-  (return-type "char*")
-)
-
 (define-method can_go_up
   (of-object "EphyEmbed")
   (c-name "ephy_embed_can_go_up")
@@ -1115,15 +1109,6 @@
   (of-object "EphyEmbed")
   (c-name "ephy_embed_has_automatic_encoding")
   (return-type "gboolean")
-)
-
-(define-method set_encoding
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_set_encoding")
-  (return-type "none")
-  (parameters
-    '("const-char*" "encoding")
-  )
 )
 
 (define-method set_print_preview_mode
