@@ -132,6 +132,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	/* get most recently used encodings */
 	recent = ephy_encodings_get_recent (p->encodings);
 
+	/* FIXME: need a plain get_encoding API in WebKit to complete this */
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->window));
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	encoding = webkit_web_view_get_custom_encoding (view);
