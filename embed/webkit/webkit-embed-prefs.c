@@ -25,6 +25,7 @@
 #include "webkit-embed-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-file-helpers.h"
 
 typedef struct
 {
@@ -101,6 +102,37 @@ webkit_pref_callback_string (GConfClient *client,
   g_object_set (settings, webkit_pref, value, NULL);
 }
 
+static void
+webkit_pref_callback_user_stylesheet (GConfClient *client,
+                                      guint cnxn_id,
+                                      GConfEntry *entry,
+                                      gpointer data)
+{
+  GConfValue *gcvalue;
+  gboolean value = FALSE;
+  char *uri = NULL;
+  char *webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_BOOL) {
+      value = gconf_value_get_bool (gcvalue);
+  }
+
+  if (value)
+    /* We need the leading file://, so use g_strconcat instead
+     * of g_build_filename */
+    uri = g_strconcat ("file://",
+                       ephy_dot_dir (),
+                       G_DIR_SEPARATOR_S,
+                       USER_STYLESHEET_FILENAME,
+                       NULL);
+  g_object_set (settings, webkit_pref, uri, NULL);
+  g_free (uri);
+}
+
 static const PrefData webkit_pref_entries[] =
   {
     { CONF_RENDERING_FONT_MIN_SIZE,
@@ -114,7 +146,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_string },
     { CONF_WEB_INSPECTOR_ENABLED,
       "enable-developer-extras",
-      webkit_pref_callback_boolean }
+      webkit_pref_callback_boolean },
+    { CONF_USER_CSS_ENABLED,
+      "user-stylesheet-uri",
+      webkit_pref_callback_user_stylesheet }
   };
 
 static void
