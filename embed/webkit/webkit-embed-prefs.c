@@ -25,6 +25,7 @@
 #include "webkit-embed-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 
 typedef struct
@@ -155,7 +156,7 @@ static const PrefData webkit_pref_entries[] =
 static void
 webkit_embed_prefs_apply (WebKitEmbed *embed, WebKitWebSettings *settings)
 {
-  webkit_web_view_set_settings (WEBKIT_WEB_VIEW (GTK_BIN (GTK_BIN (embed)->child)->child),
+  webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
 }
 
