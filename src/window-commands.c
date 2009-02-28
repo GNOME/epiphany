@@ -784,8 +784,6 @@ window_cmd_help_about (GtkAction *action,
 		   "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA")
 	};
 
-	EphyEmbedShell *shell;
-	EphyEmbedSingle *single;
 	char *licence, *comments;
 	GKeyFile *key_file;
 	GError *error = NULL;
@@ -863,11 +861,8 @@ window_cmd_help_about (GtkAction *action,
 
 	g_key_file_free (key_file);
 
-	shell = ephy_embed_shell_get_default ();
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
-
 	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
-				      "Powered by %s"), ephy_embed_single_get_backend_name (single) );
+				      "Powered by WebKit"));
 
 	licence = g_strjoin ("\n\n",
 			     _(licence_part[0]),

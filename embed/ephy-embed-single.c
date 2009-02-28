@@ -288,20 +288,3 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	return iface->open_window (single, parent, address, name, features);
 }
-
-/**
- * ephy_embed_single_get_backend_name
- * @single: the #EphyEmbedSingle
- *
- * Can be used to find the particular backend that is being used
- * for rendering pages.
- * 
- * Returns: the name of the backend. Valid returns are "gecko-1.7", 
- * "gecko-1.8", "gecko-1.9" and "WebKit"
- */
-const char *
-ephy_embed_single_get_backend_name (EphyEmbedSingle *single)
-{
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->get_backend_name (single);
-}

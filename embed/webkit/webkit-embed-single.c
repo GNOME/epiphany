@@ -128,14 +128,6 @@ impl_get_network_status (EphyEmbedSingle *esingle)
   return WEBKIT_EMBED_SINGLE (esingle)->priv->online;
 }
 
-static const char *
-impl_get_backend_name (EphyEmbedSingle *esingle)
-{
-  /* If you alter the return values here, remember to update
-   * the docs in ephy-embed-single.c */
-  return "WebKit";
-}
-
 static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
                     const char *langGroup)
@@ -325,7 +317,6 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
   iface->get_network_status = impl_get_network_status;
   iface->get_font_list = impl_get_font_list;
   iface->open_window = impl_open_window;
-  iface->get_backend_name = impl_get_backend_name;
 }
 
 static void
