@@ -534,7 +534,6 @@ NP_Initialize (NPNetscapeFuncs *moz_funcs,
 
 	plugin_funcs->size = sizeof (NPPluginFuncs);
 	plugin_funcs->version = (NP_VERSION_MAJOR << 8) + NP_VERSION_MINOR;
-	plugin_funcs->newp = NewNPP_NewProc (plugin_new_instance);
 
         /* FUCK YOU, MOZILLA! */
 #if HAVE_GECKO_1_9_1
@@ -553,6 +552,7 @@ NP_Initialize (NPNetscapeFuncs *moz_funcs,
 	plugin_funcs->getvalue = NPP_GetValueProcPtr (plugin_get_value);
 	plugin_funcs->setvalue = NPP_SetValueProcPtr (NULL);
 #else
+        plugin_funcs->newp = NewNPP_NewProc (plugin_new_instance);
 	plugin_funcs->destroy = NewNPP_DestroyProc (plugin_destroy_instance);
 	plugin_funcs->setwindow = NewNPP_SetWindowProc (NULL);
 	plugin_funcs->newstream = NewNPP_NewStreamProc (plugin_new_stream);
