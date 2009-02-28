@@ -33,7 +33,6 @@ DISTCLEANFILES = 		\
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-python			\
 	--enable-zeroconf		\
-	--enable-desktop-file-plugin	\
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
 	--disable-scrollkeeper

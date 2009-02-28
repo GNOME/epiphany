@@ -384,41 +384,6 @@ AM_CONDITIONAL([ENABLE_PYTHON],[test "$enable_python" = "yes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
 
-# *******
-# Plugins
-# *******
-
-# Gecko 1.9 can handle .desktop files from file: URLs itself, but we
-# also support windows .lnk files, so always enable this plugin
-
-# if test "$with_engine" = "mozilla" ; then
-# 
-# AC_MSG_CHECKING([whether to build the deskop file plugin])
-# AC_ARG_ENABLE([desktop-file-plugin],
-# 	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
-# 	[],[enable_desktop_file_plugin=yes])
-# AC_MSG_RESULT([$enable_desktop_file_plugin])
-# 
-# if test "$enable_desktop_file_plugin" = "yes"; then
-# 	if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
-# 		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko} mozilla-plugin gtk+-2.0 >= 2.6.0])
-# 	else
-# 		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
-# 	fi
-# 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
-# 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
-# fi
-# 
-# if test "$enable_desktop_file_plugin" = "yes"; then
-# 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
-# fi
-# 
-# else # with_engine = mozilla
-#         enable_desktop_file_plugin=no
-# fi   # with_engine != mozilla
-# 
-# AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" = "yes"])
-
 # *******************
 # Additional features
 # *******************
@@ -613,9 +578,6 @@ tests/Makefile
 ],
 [],
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
-
-# plugins/Makefile
-# plugins/desktop-file/Makefile
 
 AC_OUTPUT
 
