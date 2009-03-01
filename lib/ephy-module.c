@@ -49,35 +49,7 @@ typedef GType (*EphyModuleRegisterFunc) (GTypeModule *);
 static void ephy_module_init		(EphyModule *action);
 static void ephy_module_class_init	(EphyModuleClass *class);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_module_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyModuleClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_module_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyModule),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_module_init,
-		};
-
-		type = g_type_register_static (G_TYPE_TYPE_MODULE,
-					       "EphyModule",
-					       &type_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyModule, ephy_module, G_TYPE_TYPE_MODULE)
 
 static gboolean
 ephy_module_load (GTypeModule *gmodule)
@@ -214,7 +186,7 @@ ephy_module_finalize (GObject *object)
 
 	g_free (module->path);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_module_parent_class)->finalize (object);
 }
 
 static void
@@ -222,8 +194,6 @@ ephy_module_class_init (EphyModuleClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (class);
 
 	object_class->finalize = ephy_module_finalize;
 
