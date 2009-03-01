@@ -118,7 +118,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	EphyNode *enc_node;
 	GList *recent, *related = NULL, *l;
 	EphyLanguageGroup groups;
-	gboolean is_automatic;
+	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
 
 	START_PROFILER ("Rebuilding encoding menu")
@@ -132,17 +132,18 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	/* get most recently used encodings */
 	recent = ephy_encodings_get_recent (p->encodings);
 
-	/* FIXME: need a plain get_encoding API in WebKit to complete this */
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->window));
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	encoding = webkit_web_view_get_custom_encoding (view);
-	if (encoding == NULL) goto build_menu;
+	if (encoding == NULL)
+	{
+		encoding = webkit_web_view_get_encoding (view);
+		if (encoding == NULL) goto build_menu;
+		is_automatic = TRUE;
+	}
 
 	enc_node = ephy_encodings_get_node (p->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (enc_node));
-
-	/* check if encoding was overridden */
-	is_automatic = ephy_embed_has_automatic_encoding (embed);
 
 	action = gtk_action_group_get_action (p->action_group,
 					      "ViewEncodingAutomatic");

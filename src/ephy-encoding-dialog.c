@@ -86,7 +86,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
         GList *rows;
 	GtkWidget *button;
 	const char *encoding;
-	gboolean is_automatic;
+	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
 
 	dialog->priv->update_tag = TRUE;
@@ -96,7 +96,12 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	encoding = webkit_web_view_get_custom_encoding (view);
-	if (encoding == NULL) return;
+	if (encoding == NULL)
+	{
+		encoding = webkit_web_view_get_encoding (view);
+		if (encoding == NULL) return;
+		is_automatic = TRUE;
+	}
 
 	node = ephy_encodings_get_node (dialog->priv->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (node));
