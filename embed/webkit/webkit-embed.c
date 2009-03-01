@@ -558,12 +558,6 @@ impl_print_preview_navigate (EphyEmbed *embed,
 }
 
 static gboolean
-impl_has_automatic_encoding (EphyEmbed *embed)
-{
-  return FALSE;
-}
-
-static gboolean
 impl_has_modified_forms (EphyEmbed *embed)
 {
   return FALSE;
@@ -581,7 +575,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->get_js_status = impl_get_js_status;
   iface->shistory_copy = impl_shistory_copy;
   iface->show_page_certificate = impl_show_page_certificate;
-  iface->has_automatic_encoding = impl_has_automatic_encoding;
   iface->set_print_preview_mode = impl_set_print_preview_mode;
   iface->print_preview_n_pages = impl_print_preview_n_pages;
   iface->print_preview_navigate = impl_print_preview_navigate;

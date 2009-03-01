@@ -127,8 +127,6 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 		g_list_free (rows);
 	}
 
-	is_automatic = ephy_embed_has_automatic_encoding (embed);
-
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
 

@@ -556,22 +556,6 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_has_automatic_encoding:
- * @embed: an #EphyEmbed
- *
- * Returns whether the @embed's document encoding was determined by the 
- * document itself.
- *
- * Returns: if the @embed's document encoding was determined by itself
- **/
-gboolean
-ephy_embed_has_automatic_encoding (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->has_automatic_encoding (embed);
-}
-
-/**
  * ephy_embed_set_print_preview_mode:
  * @embed: an #EphyEmbed
  * @preview_mode: Whether the print preview mode is enabled.
