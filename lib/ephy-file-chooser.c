@@ -109,8 +109,8 @@ ephy_file_chooser_constructor (GType type,
 	GObject *object;
 	char *downloads_dir;
 
-	object = ephy_file_chooser_parent_class->constructor (type, n_construct_properties,
-							      construct_params);
+	object = G_OBJECT_CLASS (ephy_file_chooser_parent_class)->constructor (type, n_construct_properties,
+									       construct_params);
 
 	downloads_dir = ephy_file_get_downloads_dir ();
 	gtk_file_chooser_add_shortcut_folder
