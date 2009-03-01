@@ -53,35 +53,7 @@ enum
 #define PREVIEW_WIDTH 150
 #define PREVIEW_HEIGHT 150
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_file_chooser_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyFileChooserClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_file_chooser_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyFileChooser),
-			0,
-			(GInstanceInitFunc) ephy_file_chooser_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_FILE_CHOOSER_DIALOG,
-					       "EphyFileChooser",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyFileChooser, ephy_file_chooser, GTK_TYPE_FILE_CHOOSER_DIALOG)
 
 static void
 current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
@@ -137,8 +109,8 @@ ephy_file_chooser_constructor (GType type,
 	GObject *object;
 	char *downloads_dir;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = ephy_file_chooser_parent_class->constructor (type, n_construct_properties,
+							      construct_params);
 
 	downloads_dir = ephy_file_get_downloads_dir ();
 	gtk_file_chooser_add_shortcut_folder
@@ -159,7 +131,7 @@ ephy_file_chooser_finalize (GObject *object)
 
 	LOG ("EphyFileChooser finalised");
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_file_chooser_parent_class)->finalize (object);
 }
 
 void
@@ -302,8 +274,6 @@ static void
 ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_file_chooser_constructor;
 	object_class->finalize = ephy_file_chooser_finalize;
