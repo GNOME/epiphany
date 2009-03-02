@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-01-25 21:03+0000\n"
-"PO-Revision-Date: 2009-02-14 14:45+0100\n"
+"POT-Creation-Date: 2009-02-15 22:21+0000\n"
+"PO-Revision-Date: 2009-03-02 10:20+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgid "Epiphany Web Browser"
 msgstr "Navegador Web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:675
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:683
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -247,21 +247,32 @@ msgstr "Activar desplazamiento suave"
 
 #: ../data/epiphany.schemas.in.h:18
 msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+"Forzar que las peticiones de ventanas nuevas se abran en solapas en lugar de "
+"en nuevas ventanas."
+
+#: ../data/epiphany.schemas.in.h:19
+msgid "Force new windows to be opened in tabs"
+msgstr "Forzar la apertura de ventanas nuevas en solapas"
+
+#: ../data/epiphany.schemas.in.h:20
+msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
 msgstr ""
 "Mostrar u ocultar la ventana de descargas. Cuando está oculta, se mostrará "
 "una notificación al iniciarse nuevas descargas."
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
 msgstr "Rango de tiempo de búsqueda por el histórico"
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:22
 msgid "Home page"
 msgstr "Página inicial"
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -269,11 +280,11 @@ msgstr ""
 "Cómo se presentan las imágenes animadas. Los valores posibles son \"normal"
 "\", \"once\" (una vez) y \"disabled\" (desactivado)."
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:24
 msgid "How to print frames"
 msgstr "Cómo imprimir marcos"
 
-#: ../data/epiphany.schemas.in.h:23
+#: ../data/epiphany.schemas.in.h:25
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
@@ -282,30 +293,30 @@ msgstr ""
 "\"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
 
 #. Translators: this is the default encoding used by Epiphany for Web pages display
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:27
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:28
 msgid "Image animation mode"
 msgstr "Modo de animación de imágenes"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:29
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:30
 msgid "Lists the active extensions."
 msgstr "Lista las extensiones activas."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:31
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "Pulse el botón central del ratón para abrir la dirección a la que apunta en "
 "este momento el texto seleccionado"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:32
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -313,27 +324,27 @@ msgstr ""
 "Al pulsar el botón central del ratón en el panel principal de abrirá la "
 "dirección apuntada por el texto seleccionado en ese momento."
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:33
 msgid "Minimum font size"
 msgstr "Tamaño de tipografía mínimo"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:34
 msgid "Preferred languages, two letter codes."
 msgstr "Idiomas preferidos, código de dos letras."
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:35
 msgid "Remember passwords"
 msgstr "Recordar contraseñas"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:36
 msgid "Show bookmarks bar by default"
 msgstr "Mostrar la barra de marcadores de forma predeterminada"
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show statusbar by default"
 msgstr "Mostrar de forma predeterminada la barra de estado"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:38
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -342,28 +353,28 @@ msgstr ""
 "\"last_two_days\" (últimos dos días), \"last_three_days\" (últimos tres "
 "días), \"today\" (hoy)."
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:39
 msgid "Show the tab bar also when there is only one tab open."
 msgstr ""
 "Mostrar la barra de solapas también cuando sólo hay una solapa abierta."
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show toolbars by default"
 msgstr "Mostrar barras de herramientas de forma predeterminada"
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:41
 msgid "Size of disk cache"
 msgstr "Tamaño de la caché de disco"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache, in MB."
 msgstr "Tamaño de la caché de disco, en MiB."
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:43
 msgid "The bookmark information shown in the editor view"
 msgstr "La información de los marcadores mostrada en la vista del editor"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:44
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -371,11 +382,11 @@ msgstr ""
 "La información de los marcadores mostrada en la vista del editor. Los "
 "nombres válidos en la lista son \"address\" (dirección) y \"title\" (título)."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:45
 msgid "The currently selected fonts language"
 msgstr "El idioma seleccionado para la tipografía"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -395,15 +406,15 @@ msgstr ""
 "western\" (idiomas con escritura latina), \"x-tamil\" (tamil) y \"x-"
 "devanagari\" (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The downloads folder"
 msgstr "La carpeta de descargas"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid "The page information shown in the history view"
 msgstr "La información de la página mostrada en la vista del histórico"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -411,7 +422,7 @@ msgstr ""
 "La información de la página mostrada en la vista del histórico. Los valores "
 "válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -420,11 +431,11 @@ msgstr ""
 "para usar la carpeta de descargas predeterminada, o \"Desktop\" para usar la "
 "carpeta del escritorio."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "Estilo de barra de herramientas"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -434,27 +445,27 @@ msgstr ""
 "predefinido de GNOME)» «both» (texto e iconos), «both-horiz» (texto junto a "
 "los iconos), «icons», y «text»."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
 msgstr "Usar sus propios colores"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid "Use own fonts"
 msgstr "Usar sus propias tipografías"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Use sus propios colores en vez de los que la página pide."
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Use sus propias tipografías en vez de las que la página pida."
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:57
 msgid "Visibility of the downloads window"
 msgstr "Visibilidad de la ventana de descargas"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:58
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -463,7 +474,7 @@ msgstr ""
 "automáticamente a la carpeta de descargas y se abrirán con la aplicación "
 "apropiada."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -472,39 +483,39 @@ msgstr ""
 "\" (cualquier sitio), \"current site\" (sitio actual) y \"nowhere\" (ningún "
 "sitio)."
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
 msgstr "Indica si debe imprimir el color del fondo"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:61
 msgid "Whether to print the background images"
 msgstr "Indica si debe imprimir las imágenes del fondo"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:62
 msgid "Whether to print the date in the footer"
 msgstr "Indica si debe imprimir la fecha en el pie de página"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:63
 msgid "Whether to print the page address in the header"
 msgstr "Indica si debe imprimir la dirección de la página en la cabecera"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr ""
 "Indica si debe imprimir los números de páginas (x de total) en el pie de "
 "página"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the page title in the header"
 msgstr "Indica si debe imprimir el título de la página en la cabecera"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to store and prefill passwords in web sites."
 msgstr ""
 "Indica si se deben almacenar y precompletar las contraseñas en los sitios "
 "web."
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "x-western"
 msgstr "x-western"
 
@@ -726,7 +737,7 @@ msgstr "Activar _Java"
 msgid "Fonts & Style"
 msgstr "Tipografías y estilo"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:847
+#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:819
 msgid "Language"
 msgstr "Idioma"
 
@@ -920,13 +931,11 @@ msgid "Download started"
 msgstr "Descarga iniciada"
 
 #: ../embed/downloader-view.c:676 ../embed/downloader-view.c:685
-#| msgid "Unknown"
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Desconocido"
 
 #: ../embed/downloader-view.c:679
-#| msgid "File"
 msgctxt "download status"
 msgid "Failed"
 msgstr "Falló"
@@ -1319,8 +1328,7 @@ msgstr "Otros"
 msgid "Local files"
 msgstr "Archivos locales"
 
-#: ../embed/webkit/webkit-embed.c:417
-#| msgid "Enable Web Inspector"
+#: ../embed/webkit/webkit-embed.c:427
 msgid "Web Inspector"
 msgstr "Inspector web"
 
@@ -1377,7 +1385,7 @@ msgstr "Desactivar la conexión con el gestor de sesiones"
 msgid "Specify file containing saved configuration"
 msgstr "Especificar el archivo que contiene la configuración guardada"
 
-#: ../lib/egg/eggsmclient.c:227 ../src/ephy-main.c:91 ../src/ephy-main.c:93
+#: ../lib/egg/eggsmclient.c:227 ../src/ephy-main.c:95 ../src/ephy-main.c:97
 msgid "FILE"
 msgstr "ARCHIVO"
 
@@ -1550,11 +1558,11 @@ msgstr "Marcador"
 
 #: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1506
+#: ../src/bookmarks/ephy-topic-action.c:440 ../src/ephy-window.c:1506
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:272
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:275
 msgid "Address Entry"
 msgstr "Entrada de dirección"
 
@@ -1756,14 +1764,12 @@ msgstr "¿Quiere actualizar el marcador?"
 
 #. Translators: this topic contains all bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1223
-#| msgid "All"
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Todos"
 
 #. Translators: this topic contains the most used bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1226
-#| msgid "bookmarks|Most Visited"
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Más visitados"
@@ -1771,7 +1777,6 @@ msgstr "Más visitados"
 #. Translators: this topic contains the not categorized
 #. bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1230
-#| msgid "bookmarks|Not Categorized"
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Sin categorizar"
@@ -1779,13 +1784,12 @@ msgstr "Sin categorizar"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1235
-#| msgid "bookmarks|Nearby Sites"
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Sitios cercanos"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1470
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1299
+#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1301
 msgid "Untitled"
 msgstr "Sin título"
 
@@ -2197,32 +2201,32 @@ msgstr "Buscar:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:444 ../src/ephy-find-toolbar.c:566
+#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
 msgid "_Case sensitive"
 msgstr "Sensible a _capitalización"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:559
 msgid "Find Next"
 msgstr "Buscar siguiente"
 
-#: ../src/ephy-find-toolbar.c:561
+#: ../src/ephy-find-toolbar.c:562
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:531
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:534
 msgid "Leave Fullscreen"
 msgstr "Salir del modo a pantalla completa"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:302
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:305
 msgid "Go"
 msgstr "Ir"
 
@@ -2327,59 +2331,59 @@ msgstr "Sitios"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../src/ephy-main.c:76 ../src/ephy-main.c:557 ../src/window-commands.c:879
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:561 ../src/window-commands.c:879
 msgid "GNOME Web Browser"
 msgstr "Navegador web de GNOME"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:89
 msgid "Open a new tab in an existing browser window"
 msgstr "Abre una solapa nueva en una ventana existente del navegador"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:91
 msgid "Open a new browser window"
 msgstr "Abre una ventana nueva del navegador"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:93
 msgid "Launch the bookmarks editor"
 msgstr "Lanzar el editor de marcadores"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:95
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:97
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:99
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:99
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:101
 msgid "Start a private instance"
 msgstr "Iniciar una instancia privada"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:103
 msgid "Profile directory to use in the private instance"
 msgstr "Directorio de perfiles para usar en la instancia privada"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:103
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:101
+#: ../src/ephy-main.c:105
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:418
+#: ../src/ephy-main.c:422
 msgid "Could not start GNOME Web Browser"
 msgstr "No se pudo iniciar el navegador web de GNOME"
 
-#: ../src/ephy-main.c:421
+#: ../src/ephy-main.c:425
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2388,7 +2392,7 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:558
+#: ../src/ephy-main.c:562
 msgid "GNOME Web Browser options"
 msgstr "Opciones del navegador web de GNOME"
 
@@ -2478,118 +2482,113 @@ msgstr "En el modo de selección del teclado, pulse F7 para salir"
 msgid "Switch to this tab"
 msgstr "Cambiar a esta solapa"
 
-#: ../src/ephy-toolbar.c:211
+#: ../src/ephy-toolbar.c:214
 msgid "_Back"
 msgstr "A_trás"
 
-#: ../src/ephy-toolbar.c:213
+#: ../src/ephy-toolbar.c:216
 msgid "Go to the previous visited page"
 msgstr "Ir a la página visitada anterior"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:217
+#: ../src/ephy-toolbar.c:220
 msgid "Back history"
 msgstr "Atrás por el histórico"
 
-#: ../src/ephy-toolbar.c:231
+#: ../src/ephy-toolbar.c:234
 msgid "_Forward"
 msgstr "A_delante"
 
-#: ../src/ephy-toolbar.c:233
+#: ../src/ephy-toolbar.c:236
 msgid "Go to the next visited page"
 msgstr "Ir a la siguiente página visitada"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:237
+#: ../src/ephy-toolbar.c:240
 msgid "Forward history"
 msgstr "Avanzar por el histórico"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:253
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:255
 msgid "Go up one level"
 msgstr "Subir un nivel"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:259
 msgid "List of upper levels"
 msgstr "Lista de los niveles superiores"
 
-#: ../src/ephy-toolbar.c:274
+#: ../src/ephy-toolbar.c:277
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Introduzca una dirección web para abrir, o una frase para buscar"
 
-#: ../src/ephy-toolbar.c:290
+#: ../src/ephy-toolbar.c:293
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-toolbar.c:292
+#: ../src/ephy-toolbar.c:295
 msgid "Adjust the text size"
 msgstr "Ajustar el tamaño del texto"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:307
 msgid "Go to the address entered in the address entry"
 msgstr "Ir a la dirección introducida"
 
-#: ../src/ephy-toolbar.c:313
+#: ../src/ephy-toolbar.c:316
 msgid "_Home"
 msgstr "_Inicio"
 
-#: ../src/ephy-toolbar.c:315
+#: ../src/ephy-toolbar.c:318
 msgid "Go to the home page"
 msgstr "Ir página inicial"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:328
 msgid "New _Tab"
 msgstr "_Solapa nueva"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:330
 msgid "Open a new tab"
 msgstr "Abrir una solapa nueva"
 
-#: ../src/ephy-toolbar.c:336
+#: ../src/ephy-toolbar.c:339
 msgid "_New Window"
 msgstr "_Ventana nueva"
 
-#: ../src/ephy-toolbar.c:338
+#: ../src/ephy-toolbar.c:341
 msgid "Open a new window"
 msgstr "Abrir una ventana nueva"
 
 #: ../src/ephy-toolbar-editor.c:71
-#| msgid "De_fault:"
 msgctxt "toolbar style"
 msgid "Default"
 msgstr "Predeterminado"
 
 #. separator row
 #: ../src/ephy-toolbar-editor.c:73
-#| msgid "Text below icons"
 msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Texto debajo de los iconos"
 
 #: ../src/ephy-toolbar-editor.c:74
-#| msgid "Text beside icons"
 msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Texto junto a los iconos"
 
 #: ../src/ephy-toolbar-editor.c:75
-#| msgid "Icons only"
 msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Sólo iconos"
 
 #: ../src/ephy-toolbar-editor.c:76
-#| msgid "Text only"
 msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Sólo texto"
@@ -3313,9 +3312,8 @@ msgstr "Cerrar vista previa de impresión"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:539 ../src/prefs-dialog.c:545
+#: ../src/prefs-dialog.c:511 ../src/prefs-dialog.c:517
 #, c-format
-#| msgid "language|%s (%s)"
 msgctxt "language"
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3323,21 +3321,20 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:554
+#: ../src/prefs-dialog.c:526
 #, c-format
-#| msgid "language|User defined (%s)"
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido por el usuario (%s)"
 
-#: ../src/prefs-dialog.c:576
+#: ../src/prefs-dialog.c:548
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: ../src/prefs-dialog.c:968
+#: ../src/prefs-dialog.c:940
 msgid "Select a Directory"
 msgstr "Seleccione un directorio"
 
