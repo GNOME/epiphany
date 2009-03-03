@@ -813,49 +813,65 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	return ret >= 0 ? TRUE : FALSE;
 }
 
-#define OLD_RDF_TEMPORARY_HACK
-
 static void
-parse_rdf_subjects (xmlNodePtr node,
-		    GList **subjects)
+parse_rdf_lang_tag (xmlNode  *child,
+		    xmlChar **value,
+		    int      *best_match)
 {
-	xmlChar *subject;
+	const char * const *locales;
+	char *this_language;
+	xmlChar *lang;
+	xmlChar *content;
+	int i;
 
-#ifdef OLD_RDF_TEMPORARY_HACK
-	xmlNode *child;
+	if (*best_match == 0)
+		/* there's no way we can do better */
+		return;
 
-	child = node->children;
+	content = xmlNodeGetContent (child);
+	if (!content)
+		return;
 
-	while (child != NULL)
+	lang = xmlNodeGetLang (child);
+	if (lang == NULL)
 	{
-		if (xmlStrEqual (child->name, (xmlChar *) "Bag"))
+		const char *translated;
+
+		translated = _((char *) content);
+		if ((char *) content != translated)
 		{
-			child = child->children;
+			/* if we have a translation for the content of the
+			 * node, then we just use this */
+			if (*value) xmlFree (*value);
+			*value = (xmlChar *) g_strdup (translated);
+			*best_match = 0;
 
-			while (child != NULL)
-			{
-				if (xmlStrEqual (child->name, (xmlChar *) "li"))
-				{
-					subject = xmlNodeGetContent (child);
-					*subjects = g_list_append (*subjects, subject);
-				}
-
-				child = child->next;
-			}
-
+			xmlFree (content);
 			return;
 		}
 
-		child = child->next;
+		this_language = "C";
 	}
-#endif
+	else
+		this_language = (char *) lang;
 
-	subject = xmlNodeGetContent (node);
+	locales = g_get_language_names ();
 
-	if (subject)
-	{
-		*subjects = g_list_append (*subjects, subject);
+	for (i = 0; locales[i] && i < *best_match; i++) {
+		if (!strcmp (locales[i], this_language)) {
+			/* if we've already encountered a less accurate
+			 * translation, then free it */
+			if (*value) xmlFree (*value);
+
+			*value = content;
+			*best_match = i;
+
+			break;
+		}
 	}
+
+	if (lang) xmlFree (lang);
+	if (*value != content) xmlFree (content);
 }
 
 static void
@@ -863,43 +879,59 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 		xmlNodePtr node)
 {
 	xmlChar *title = NULL;
+	int best_match_title = INT_MAX;
 	xmlChar *link = NULL;
+	int best_match_link = INT_MAX;
+	/* we consider that it's better to use a non-localized smart link than
+	 * a localized link */
+	gboolean use_smartlink = FALSE;
+	xmlChar *subject = NULL;
 	GList *subjects = NULL, *l = NULL;
 	xmlNode *child;
-	EphyNode *bmk;
+	EphyNode *bmk = NULL;
 
 	child = node->children;
 
-#ifdef OLD_RDF_TEMPORARY_HACK
 	link = xmlGetProp (node, (xmlChar *) "about");
-#endif
 
 	while (child != NULL)
 	{
 		if (xmlStrEqual (child->name, (xmlChar *) "title"))
 		{
-			title = xmlNodeGetContent (child);
+			parse_rdf_lang_tag (child, &title, &best_match_title);
 		}
-#ifndef OLD_RDF_TEMPORARY_HACK
-		else if (xmlStrEqual (child->name, (xmlChar *) "link"))
+		else if (xmlStrEqual (child->name, (xmlChar *) "link") &&
+			 !use_smartlink)
 		{
-			link = xmlNodeGetContent (child);
+			parse_rdf_lang_tag (child, &link, &best_match_link);
 		}
-#endif
-		else if (xmlStrEqual (child->name, (xmlChar *) "subject"))
+		else if (child->ns &&
+			 xmlStrEqual (child->ns->prefix, (xmlChar *) "ephy") &&
+			 xmlStrEqual (child->name, (xmlChar *) "smartlink"))
 		{
-			parse_rdf_subjects (child, &subjects);
+			if (!use_smartlink)
+			{
+				use_smartlink = TRUE;
+				best_match_link = INT_MAX;
+			}
+
+			parse_rdf_lang_tag (child, &link, &best_match_link);
 		}
-		else if (xmlStrEqual (child->name, (xmlChar *) "smartlink"))
+		else if (child->ns &&
+			 xmlStrEqual (child->ns->prefix, (xmlChar *) "dc") &&
+			 xmlStrEqual (child->name, (xmlChar *) "subject"))
 		{
-			if (link) xmlFree (link);
-			link = xmlNodeGetContent (child);
+			subject = xmlNodeGetContent (child);
+			if (subject)
+				subjects = g_list_prepend (subjects, subject);
 		}
 
 		child = child->next;
 	}
 
-	bmk = bookmark_add (bookmarks, (char *) title, (char *) link);
+	if (link)
+		bmk = bookmark_add (bookmarks, (char *) title, (char *) link);
+
 	if (bmk)
 	{
 		l = subjects;
