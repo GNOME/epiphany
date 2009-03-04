@@ -21,8 +21,8 @@
 #define DOWNLOADER_VIEW_H
 
 #include "ephy-dialog.h"
-#include "ephy-download.h"
 
+#include <webkit/webkit.h>
 #include <glib-object.h>
 #include <glib.h>
 
@@ -57,10 +57,10 @@ GType           downloader_view_get_type              (void);
 DownloaderView *downloader_view_new                   (void);
 
 void            downloader_view_add_download          (DownloaderView *dv,
-						       EphyDownload *download);
+						       WebKitDownload *download);
 
 void            downloader_view_remove_download       (DownloaderView *dv,
-						       EphyDownload *download);
+						       WebKitDownload *download);
 
 G_END_DECLS
 

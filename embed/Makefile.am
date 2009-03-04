@@ -11,7 +11,6 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	downloader-view.h		\
-	ephy-download.h			\
 	ephy-embed-dialog.h		\
 	ephy-encodings.h		\
 	ephy-favicon-cache.h
@@ -44,7 +43,6 @@ libephyembed_la_SOURCES = \
 	ephy-base-embed.c               \
 	downloader-view.c		\
 	ephy-command-manager.c		\
-	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-container.c          \
 	ephy-embed-dialog.c		\

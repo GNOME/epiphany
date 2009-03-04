@@ -22,14 +22,19 @@
 
 #include "config.h"
 
+#include "downloader-view.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
+#include "ephy-file-chooser.h"
 #include "ephy-history.h"
+#include "ephy-embed-factory.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-persist.h"
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
 #include "ephy-embed-utils.h"
+#include "ephy-prefs.h"
 
 #include <webkit/webkit.h>
 #include <string.h>
@@ -377,6 +382,57 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 
   return FALSE;
 }
+
+static gboolean
+download_requested_cb (WebKitWebView *web_view,
+                       WebKitDownload *download,
+                       WebKitEmbed *embed)
+{
+  EphyFileChooser *dialog;
+
+  GtkWindow *window;
+
+  gint dialog_result;
+  gboolean handled = FALSE;
+
+  /* Try to get the toplevel window related to the WebView that caused the
+   * download, and use NULL otherwise; we don't want to pass the WebView
+   * or other widget as a parent window.
+   */
+  window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
+  if (!GTK_WIDGET_TOPLEVEL (window))
+    window = NULL;
+
+  dialog = ephy_file_chooser_new (_("Save"),
+                                  window ? GTK_WIDGET (window) : NULL,
+                                  GTK_FILE_CHOOSER_ACTION_SAVE,
+                                  CONF_STATE_SAVE_DIR,
+                                  EPHY_FILE_FILTER_ALL_SUPPORTED);
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
+                                     webkit_download_get_suggested_filename (download));
+
+  dialog_result = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (dialog_result == GTK_RESPONSE_ACCEPT)
+  {
+    DownloaderView *dview;
+    char *uri;
+    
+    uri = gtk_file_chooser_get_uri  (GTK_FILE_CHOOSER(dialog));
+    webkit_download_set_destination_uri (download, uri);
+    
+    dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+    downloader_view_add_download (dview, download);
+
+    handled = TRUE;
+  }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  return handled;
+}
                                                   
 static void
 webkit_embed_init (WebKitEmbed *embed)
@@ -409,6 +465,7 @@ webkit_embed_init (WebKitEmbed *embed)
                     "signal::load-progress-changed", G_CALLBACK (load_progress_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
+                    "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     NULL);
 
   g_signal_connect (web_view, "notify::zoom-level",

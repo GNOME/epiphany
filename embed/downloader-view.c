@@ -193,14 +193,19 @@ show_status_icon (DownloaderView *dv)
 }
 
 static gboolean
-remove_download (EphyDownload *download,
+remove_download (WebKitDownload *download,
 		 gpointer rowref,
 		 DownloaderView *view)
 {
+	WebKitDownloadState state;
+
 	g_signal_handlers_disconnect_matched
 		(download, G_SIGNAL_MATCH_DATA ,
 		 0, 0, NULL, NULL, view);
-	ephy_download_cancel (download);
+
+	state = webkit_download_get_state (download);
+	if (state == WEBKIT_DOWNLOAD_STATE_STARTED)
+		webkit_download_cancel (download);
 
 	g_object_unref (download);
 	return TRUE;
@@ -298,13 +303,13 @@ downloader_view_new (void)
 }
 
 static char *
-format_interval (gint64 interval)
+format_interval (gdouble interval)
 {
 	int hours, mins, secs;
 
-	hours = (int) interval / 3600;
+	hours = (int) (interval / 3600);
 	interval -= hours * 3600;
-	mins = (int) interval / 60;
+	mins = (int) (interval / 60);
 	interval -= mins * 60;
 	secs = (int) interval;
 
@@ -319,7 +324,7 @@ format_interval (gint64 interval)
 }
 
 static GtkTreeRowReference *
-get_row_from_download (DownloaderView *dv, EphyDownload *download)
+get_row_from_download (DownloaderView *dv, WebKitDownload *download)
 {
 	return  g_hash_table_lookup (dv->priv->downloads_hash, download);
 }
@@ -330,8 +335,8 @@ update_buttons (DownloaderView *dv)
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	EphyDownloadState state;
-	EphyDownload *download;
+	WebKitDownloadState state;
+	WebKitDownload *download;
 	gboolean pause_enabled = FALSE;
 	gboolean abort_enabled = FALSE;
 	gboolean label_pause = TRUE;
@@ -346,23 +351,12 @@ update_buttons (DownloaderView *dv)
 			return;
 		
 		gtk_tree_model_get (model, &iter, COL_DOWNLOAD_OBJECT, &download, -1);
-		state = ephy_download_get_state (download);
+		state = webkit_download_get_state (download);
 
-		switch (state)
-		{
-		case EPHY_DOWNLOAD_DOWNLOADING:
-			pause_enabled = TRUE;
-			abort_enabled = TRUE;
-			break;
-		case EPHY_DOWNLOAD_PAUSED:
-			pause_enabled = TRUE;
-			abort_enabled = TRUE;
-			label_pause = FALSE;
-			break;
-		default:
-			abort_enabled = TRUE;
-			break;
-		}
+		/* Pausing is not supported yet */
+		pause_enabled = FALSE;
+		label_pause = TRUE;
+		abort_enabled = TRUE;
 	}
 	else
 	{
@@ -378,14 +372,58 @@ update_buttons (DownloaderView *dv)
 			      label_pause ? _("_Pause") : _("_Resume"));
 }
 
+static char *
+ephy_download_get_name (WebKitDownload *download)
+{
+	const char *target;
+	char *result;
+
+	target = webkit_download_get_destination_uri (download);
+
+	if (target)
+	{
+		result = g_path_get_basename (target);
+	}
+	else
+	{
+		result = g_strdup (_("Unknown"));
+	}
+
+	return result;
+}
+
+static gdouble
+ephy_download_get_remaining_time (WebKitDownload *download)
+{
+	gint64 total, cur;
+	gdouble elapsed_time;
+	gdouble remaining_time;
+
+	total = webkit_download_get_total_size (download);
+	cur = webkit_download_get_current_size (download);
+	elapsed_time = webkit_download_get_elapsed_time (download);
+
+	if (cur <= 0)
+	{
+		return -1.0;
+	}
+
+	gdouble per_byte_time;
+	per_byte_time = elapsed_time / cur;
+	remaining_time = per_byte_time * (total - cur);
+
+	return remaining_time;
+}
+
 static void
-update_download_row (DownloaderView *dv, EphyDownload *download)
+update_download_row (DownloaderView *dv, WebKitDownload *download)
 {
 	GtkTreeRowReference *row_ref;
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	EphyDownloadState state;
-	gint64 remaining_secs = 0, total, current;
+	WebKitDownloadState state;
+	gint64 total, current;
+	gdouble remaining_seconds = 0.0;
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent = 0;
@@ -398,10 +436,10 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	g_return_if_fail (row_ref != NULL);
 
 	/* State special casing */
-	state = ephy_download_get_state (download);
+	state = webkit_download_get_state (download);
 
-	total = ephy_download_get_total_progress (download);
-	current = ephy_download_get_current_progress (download);
+	total = webkit_download_get_total_size (download);
+	current = webkit_download_get_current_size (download);
 
 	cur_progress = g_format_size_for_display (current);
 
@@ -409,9 +447,11 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	
 	switch (state)
 	{
-	case EPHY_DOWNLOAD_COMPLETED:
+	case WEBKIT_DOWNLOAD_STATE_CANCELLED:
 		downloader_view_remove_download (dv, download);
-		
+		return;
+	case WEBKIT_DOWNLOAD_STATE_FINISHED:
+		downloader_view_remove_download (dv, download);
 #ifdef HAVE_LIBNOTIFY
 		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 
 						name);
@@ -426,10 +466,9 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 #endif
 
 		return;
-	case EPHY_DOWNLOAD_PAUSED:
-	case EPHY_DOWNLOAD_DOWNLOADING:
-		percent = ephy_download_get_percent (download);
-		remaining_secs = ephy_download_get_remaining_time (download);
+	case WEBKIT_DOWNLOAD_STATE_STARTED:
+		percent = (int) (webkit_download_get_progress (download) * 100);
+		remaining_seconds = ephy_download_get_remaining_time (download);
 		break;
 	default:
 		break;
@@ -454,13 +493,13 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 		file = g_strdup_printf ("%s\n%s", name, _("Unknown"));
 	}
 
-	if (remaining_secs < 0)
+	if (remaining_seconds < 0)
 	{
 		remaining = g_strdup (_("Unknown"));
 	}
 	else
 	{
-		remaining = format_interval (remaining_secs);
+		remaining = format_interval (remaining_seconds);
 	}
 
 	path = gtk_tree_row_reference_get_path (row_ref);
@@ -498,7 +537,18 @@ update_status_icon (DownloaderView *dv)
 }
 
 static void
-download_changed_cb (EphyDownload *download, DownloaderView *dv)
+download_progress_cb (WebKitDownload *download, GParamSpec *pspec, DownloaderView *dv)
+{
+	WebKitDownloadState state = webkit_download_get_state (download);
+	if ((state != WEBKIT_DOWNLOAD_STATE_STARTED) && (state != WEBKIT_DOWNLOAD_STATE_FINISHED))
+		return;
+	if ((state == WEBKIT_DOWNLOAD_STATE_FINISHED) && (webkit_download_get_progress (download) < 1.0))
+		return;
+	update_download_row (dv, download);
+}
+
+static void
+download_error_cb (WebKitDownload *download, gint error_code, gint error_detail, const gchar *reason, DownloaderView *dv)
 {
 	update_download_row (dv, download);
 }
@@ -542,7 +592,7 @@ show_notification_window (DownloaderView *dv)
 
 void
 downloader_view_add_download (DownloaderView *dv,
-			      EphyDownload *download)
+			      WebKitDownload *download)
 {
 	GtkTreeRowReference *row_ref;
 	GtkTreeIter iter;
@@ -584,8 +634,11 @@ downloader_view_add_download (DownloaderView *dv,
 	gtk_tree_selection_unselect_all (selection);
 	gtk_tree_selection_select_iter (selection, &iter);
 
-	g_signal_connect_object (download, "changed",
-				 G_CALLBACK (download_changed_cb), dv, 0);
+	g_signal_connect_object (download, "notify::progress",
+				 G_CALLBACK (download_progress_cb), dv, 0);
+
+	g_signal_connect_object (download, "error",
+				 G_CALLBACK (download_error_cb), dv, 0);
 
 	/* Show it already */
 	g_value_init (&visible, G_TYPE_BOOLEAN);
@@ -595,8 +648,10 @@ downloader_view_add_download (DownloaderView *dv,
 	{
 
 #ifdef HAVE_LIBNOTIFY
+		char *name = ephy_download_get_name (download);
 		downloading = g_strdup_printf(_("The file “%s” has been added to the downloads queue."), 
-						ephy_download_get_name (download));
+						name);
+		g_free (name);
 		notify_notification_update (dv->priv->notification,
 					_("Download started"), 
 					downloading, 
@@ -661,7 +716,7 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 			 GtkTreeIter       *iter,
 			 gpointer           user_data)
 {
-	EphyDownloadState state;
+	WebKitDownloadState state;
 	const char *text = NULL;
 	int percent;
 
@@ -672,14 +727,15 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 
 	switch (state)
 	{
-		case EPHY_DOWNLOAD_INITIALISING:
+		case WEBKIT_DOWNLOAD_STATE_CREATED:
 			text = C_("download status", "Unknown");
 			break;
-		case EPHY_DOWNLOAD_FAILED:
+		case WEBKIT_DOWNLOAD_STATE_ERROR:
 			text = C_("download status", "Failed");
 			break;
-		case EPHY_DOWNLOAD_DOWNLOADING:
-		case EPHY_DOWNLOAD_PAUSED:
+		case WEBKIT_DOWNLOAD_STATE_CANCELLED:
+			text = C_("download status", "Cancelled");
+		case WEBKIT_DOWNLOAD_STATE_STARTED:
 			if (percent == -1)
 			{
 				text = C_("download status", "Unknown");
@@ -809,8 +865,8 @@ download_dialog_pause (DownloaderView *dv)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GValue val = {0, };
-	EphyDownload *download;
-	EphyDownloadState state;
+	WebKitDownload *download;
+	WebKitDownloadState state;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
 
@@ -819,16 +875,9 @@ download_dialog_pause (DownloaderView *dv)
 	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
 	download = g_value_get_object (&val);
 
-	state = ephy_download_get_state (download);
+	state = webkit_download_get_state (download);
 
-	if (state == EPHY_DOWNLOAD_DOWNLOADING)
-	{
-		ephy_download_pause (download);
-	}
-	else if (state == EPHY_DOWNLOAD_PAUSED)
-	{
-		ephy_download_resume (download);
-	}
+	g_warning ("Pause/resume not implemented");
 
 	g_value_unset (&val);
 
@@ -836,7 +885,7 @@ download_dialog_pause (DownloaderView *dv)
 }
 
 void
-downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
+downloader_view_remove_download (DownloaderView *dv, WebKitDownload *download)
 {
 	GtkTreeRowReference *row_ref;
 	GtkTreePath *path = NULL;
@@ -873,9 +922,8 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	/* Removal */
 
 	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter2);
-	g_hash_table_remove (dv->priv->downloads_hash,
-			     download);
-	g_object_unref (download);
+	g_hash_table_remove (dv->priv->downloads_hash, download);
+	remove_download (download, NULL, dv);
 
 	/* Actual selection */
 
@@ -910,7 +958,7 @@ download_dialog_stop (DownloaderView *dv)
 	GList *selected = NULL;
 	GList *downloads = NULL;
 	GList *l = NULL;
-	EphyDownload *download;
+	WebKitDownload *download;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW(dv->priv->treeview));
@@ -931,8 +979,7 @@ download_dialog_stop (DownloaderView *dv)
 	for (l = downloads; l; l = l->next)
 	{
 		if (!l->data) continue;
-		ephy_download_cancel ((EphyDownload*) l->data);
-		downloader_view_remove_download (dv, l->data);
+		webkit_download_cancel ((WebKitDownload*) l->data);
 		g_object_unref (l->data);
 	}
 	
