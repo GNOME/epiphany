@@ -398,6 +398,7 @@ ephy_download_get_remaining_time (WebKitDownload *download)
 	gint64 total, cur;
 	gdouble elapsed_time;
 	gdouble remaining_time;
+	gdouble per_byte_time;
 
 	total = webkit_download_get_total_size (download);
 	cur = webkit_download_get_current_size (download);
@@ -408,7 +409,6 @@ ephy_download_get_remaining_time (WebKitDownload *download)
 		return -1.0;
 	}
 
-	gdouble per_byte_time;
 	per_byte_time = elapsed_time / cur;
 	remaining_time = per_byte_time * (total - cur);
 

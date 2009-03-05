@@ -389,34 +389,37 @@ download_requested_cb (WebKitWebView *web_view,
                        WebKitEmbed *embed)
 {
   EphyFileChooser *dialog;
-
-  GtkWindow *window;
-
+  GtkWidget *window;
   gint dialog_result;
   gboolean handled = FALSE;
 
-  /* Try to get the toplevel window related to the WebView that caused the
-   * download, and use NULL otherwise; we don't want to pass the WebView
-   * or other widget as a parent window.
+  /* 
+   * Try to get the toplevel window related to the WebView that caused
+   * the download, and use NULL otherwise; we don't want to pass the
+   * WebView or other widget as a parent window.
    */
   window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
   if (!GTK_WIDGET_TOPLEVEL (window))
     window = NULL;
 
   dialog = ephy_file_chooser_new (_("Save"),
-                                  window ? GTK_WIDGET (window) : NULL,
+                                  window ? window : NULL,
                                   GTK_FILE_CHOOSER_ACTION_SAVE,
                                   CONF_STATE_SAVE_DIR,
                                   EPHY_FILE_FILTER_ALL_SUPPORTED);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-  
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
                                      webkit_download_get_suggested_filename (download));
 
+  /* 
+   * FIXME: agh! gtk_dialog_run. By default the download is cancelled
+   * if we return FALSE, so I think we should just return TRUE always
+   * here and cancel the download ourselves if the user does click
+   * Cancel
+   */
   dialog_result = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  if (dialog_result == GTK_RESPONSE_ACCEPT)
-  {
+  if (dialog_result == GTK_RESPONSE_ACCEPT) {
     DownloaderView *dview;
     char *uri;
     
