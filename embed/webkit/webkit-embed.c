@@ -3,6 +3,7 @@
 /*
  *  Copyright © 2007 Xan Lopez
  *  Copyright © 2008 Jan Alonzo
+ *  Copyright © 2009 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -209,6 +210,7 @@ load_committed_cb (WebKitWebView *web_view,
                    EphyEmbed *embed)
 {
   const gchar* uri;
+  EphyEmbedSecurityLevel security_level;
 
   uri = webkit_web_frame_get_uri (web_frame);
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
@@ -219,6 +221,18 @@ load_committed_cb (WebKitWebView *web_view,
                          uri,
                          FALSE,
                          FALSE);
+
+  /*
+   * FIXME: as a temporary workaround while soup lacks the needed
+   * security API, determine security level based on the existence of
+   * a 'https' prefix for the URI
+   */
+  if (uri && g_str_has_prefix (uri, "https"))
+    security_level = EPHY_EMBED_STATE_IS_SECURE_HIGH;
+  else
+    security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+
+  ephy_base_embed_set_security_level (EPHY_BASE_EMBED (embed), security_level);
 }
 
 static void
@@ -591,7 +605,16 @@ impl_get_security_level (EphyEmbed *embed,
                          EphyEmbedSecurityLevel *level,
                          char **description)
 {
-  if (level) *level = EPHY_EMBED_STATE_IS_UNKNOWN;
+  if (level) {
+    const gchar *uri = ephy_embed_get_address (embed);
+
+    /* FIXME: as a temporary workaround, determine security level
+       based on the existence of a 'https' prefix for the URI */
+    if (uri && g_str_has_prefix(uri, "https"))
+      *level = EPHY_EMBED_STATE_IS_SECURE_HIGH;
+    else
+      *level = EPHY_EMBED_STATE_IS_UNKNOWN;
+  }
 }
 
 static void
