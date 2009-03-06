@@ -279,23 +279,12 @@ init_text_col (GValue *value, EphyNode *node, int group)
 }
 
 static void
-init_action_col (GValue *value, EphyNode *node, int group)
+init_action_col (GValue *value, EphyNode *node)
 {
 	const char *text;
 
-	switch (group)
-	{
-		case BOOKMARKS_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_LOCATION);
-			break;
-		case HISTORY_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_LOCATION);
-			break;
-		default:
-			text = "";
-	}
+	text = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	
 	g_value_set_string (value, text);
 }
@@ -353,27 +342,19 @@ init_favicon_col (EphyCompletionModel *model, GValue *value,
 	g_value_take_object (value, pixbuf);
 }
 
+const GRegex *base_address_regex = NULL;
+
 static gboolean
 is_base_address (const char *address)
 {
-	int slashes = 0;
-
-	if (address == NULL) return FALSE;
-
-	while (*address != '\0')
-	{
-		if (*address == '/') slashes++;
-
-		address++;
-
-		/* Base uris has 3 slashes like http://www.gnome.org/ */
-		if (slashes == 3)
-		{
-			return (*address == '\0');
-		}
+	if (base_address_regex == NULL) {
+		base_address_regex = g_regex_new ("//.*/$",
+				G_REGEX_OPTIMIZE,
+				G_REGEX_MATCH_NOTEMPTY,
+				NULL);
 	}
 
-	return FALSE;
+	return g_regex_match (base_address_regex, address, G_REGEX_MATCH_NOTEMPTY, NULL);
 }
 
 static void
@@ -414,24 +395,12 @@ init_relevance_col (GValue *value, EphyNode *node, int group)
 }
 
 static void
-init_url_col (GValue *value, EphyNode *node, int group)
+init_url_col (GValue *value, EphyNode *node)
 {
         const char *url = NULL;
 
-	if (group == BOOKMARKS_GROUP)
-	{
-	        url = ephy_node_get_property_string
-		  (node, EPHY_NODE_BMK_PROP_LOCATION);
-	}
-	else if (group == HISTORY_GROUP)
-	{
-	        url = ephy_node_get_property_string
-		  (node, EPHY_NODE_PAGE_PROP_LOCATION);
-	}
-	else
-	{
-	        url = "";
-	}
+	url = ephy_node_get_property_string
+	  (node, EPHY_NODE_PAGE_PROP_LOCATION);
 	
 	g_value_set_string (value, url);
 }
@@ -470,7 +439,7 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
  			break;
 		case EPHY_COMPLETION_ACTION_COL:
 			g_value_init (value, G_TYPE_STRING);
-			init_action_col (value, node, group);
+			init_action_col (value, node);
 			break;
 		case EPHY_COMPLETION_KEYWORDS_COL:
 			g_value_init (value, G_TYPE_STRING);
@@ -482,7 +451,7 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 			break;
                 case EPHY_COMPLETION_URL_COL:
                         g_value_init (value, G_TYPE_STRING);
-                        init_url_col (value, node, group);
+                        init_url_col (value, node);
                         break;
 	}
 }
