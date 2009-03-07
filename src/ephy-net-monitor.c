@@ -21,13 +21,10 @@
 
 #include "ephy-net-monitor.h"
 
-#include "ephy-dbus.h"
-#include "ephy-shell.h"
-#include "ephy-session.h"
-#include "ephy-embed-single.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-prefs.h"
+#include "ephy-dbus.h"
 #include "ephy-debug.h"
+#include "ephy-prefs.h"
 
 #include <NetworkManager/NetworkManager.h>
 
@@ -129,7 +126,9 @@ ephy_net_monitor_check_network (EphyNetMonitor *monitor)
 
 	if (dbus_connection_send_with_reply (priv->bus, message, &reply, -1)) 
 	{
-		dbus_pending_call_set_notify (reply, ephy_net_monitor_dbus_notify, monitor, NULL);
+		dbus_pending_call_set_notify (reply,
+					      (DBusPendingCallNotifyFunction)ephy_net_monitor_dbus_notify,
+					      monitor, NULL);
 		dbus_pending_call_unref (reply);
 	}
 	
