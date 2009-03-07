@@ -20,12 +20,8 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <glib.h>
-#include <stdio.h>
-#include <string.h>
 #include <glib/gi18n.h>
 
-#include "ephy-file-helpers.h"
 #include "ephy-stock-icons.h"
 
 void
