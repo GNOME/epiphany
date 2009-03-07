@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2008-08-07 09:50+0000\n"
-"PO-Revision-Date: 2004-07-16 10:53+0300\n"
-"Last-Translator: Gil Osher <dolfin@rpg.org.il>\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-03-06 21:01+0000\n"
+"PO-Revision-Date: 2009-03-07 16:24+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.3.1\n"
 
 #: ../data/bme.desktop.in.in.h:1
@@ -634,8 +634,8 @@ msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
 msgstr ""
-"על מנת לאשר שברצונך לחתום על הטקסט הנ\"ל, יש לבחור תעודה לחתימה על "
-"הטקסט ולהכניס את סיסמתה למטה."
+"על מנת לאשר שברצונך לחתום על הטקסט הנ\"ל, יש לבחור תעודה לחתימה על הטקסט "
+"ולהכניס את סיסמתה למטה."
 
 #: ../data/glade/form-signing-dialog.glade.h:3
 msgid "_Certificate:"
@@ -714,7 +714,8 @@ msgstr "בחר _שפה:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:673 ../src/ephy-history-window.c:249
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "_נקה"
 
@@ -915,7 +916,7 @@ msgid "Download finished"
 msgstr "הורדה הסתיימה"
 
 #: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:868
 msgid "GNOME Web Browser"
 msgstr "דפדפן האינטרנט של GNOME"
 
@@ -1424,17 +1425,17 @@ msgstr "שמור"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "לא ידוע"
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "להוריד את הקובץ שעלול להיות מסוכן?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:298
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1447,14 +1448,14 @@ msgstr ""
 "לא בטוח לפתוח את הקובץ \"%s\", הוא עלול לפגוע במסמכים שלך או לפלוש לפרטיותך. "
 "אפשר לשמור אותו במקום זאת."
 
-#: ../embed/mozilla/ContentHandler.cpp:308
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "האם לפתוח את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:315
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1465,13 +1466,13 @@ msgstr ""
 "\n"
 "באפשרותך לפתוח את “%s“ בעזרת “%s“ או לשמור אותו."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "להוריד את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:329
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1482,7 +1483,7 @@ msgstr ""
 "\n"
 "אין לך יישום שיכול לפתוח את “%s“. אפשר להוריד אותו במקום."
 
-#: ../embed/mozilla/ContentHandler.cpp:336
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "שמור בשם..."
 
@@ -1762,7 +1763,7 @@ msgid "You may find an old version:|in the Internet Archive"
 msgstr "בארכיון האינטרנט"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks.c:1483
 #: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "ללא כותרת"
@@ -1856,15 +1857,15 @@ msgstr "האתר “%s“ מבקש שתחתום על הטקסט הבא:"
 msgid "_Sign text"
 msgstr "_חתום על הטקסט"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:192
+#: ../embed/mozilla/GeckoPrintService.cpp:196
 msgid "Options"
 msgstr "אפשרויות"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:456
+#: ../embed/mozilla/GeckoPrintService.cpp:460
 msgid "Print this page?"
 msgstr "האם להדפיס דף זה?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:464
+#: ../embed/mozilla/GeckoPrintService.cpp:468
 msgid "Preparing to print"
 msgstr "מתכונן להדפסה"
 
@@ -1898,8 +1899,7 @@ msgstr "בחר _תעודה"
 #: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
-msgstr ""
-"בחר תעודה שתוצג כזיהוי ל-\"%s\"."
+msgstr "בחר תעודה שתוצג כזיהוי ל-\"%s\"."
 
 #: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 msgid "Select a certificate to identify yourself."
@@ -1911,7 +1911,7 @@ msgstr "פרטי תעודה"
 
 #. Add the buttons
 #: ../embed/mozilla/GtkNSSDialogs.cpp:269
-#: ../embed/mozilla/GtkNSSDialogs.cpp:63ד3
+#: ../embed/mozilla/GtkNSSDialogs.cpp:633
 msgid "_View Certificate"
 msgstr "הצג _תעודה"
 
@@ -2021,15 +2021,13 @@ msgstr "_בטח ב-CA"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:656
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
-msgstr ""
-"לבטוח ברשות תעודות “%s“ לזיהוי אתרים?"
+msgstr "לבטוח ברשות תעודות “%s“ לזיהוי אתרים?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:661
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
-msgstr ""
-"לפני שתבטח ברשות תעודות (CA) ודא שהתעודה מקורית."
+msgstr "לפני שתבטח ברשות תעודות (CA) ודא שהתעודה מקורית."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:731
 msgid "Certificate already exists."
@@ -2059,8 +2057,7 @@ msgstr "הכנס את הסיסמה עבור תעודה זאת"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "Certificate Revocation List Imported"
-msgstr ""
-"רשימת תעודות שנשללו (CRL) יובאה"
+msgstr "רשימת תעודות שנשללו (CRL) יובאה"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:906
 msgid "Certificate Revocation List (CRL) successfully imported"
@@ -2286,20 +2283,8 @@ msgid ""
 "GConf error:\n"
 "  %s"
 msgstr ""
-"שגיאה של Gconf:\n"
+"שגיאה של GConf:\n"
 "  %s"
-
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "פותח את %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "פותח פריט אחד"
-msgstr[1] "פותח %d פריטים"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2308,33 +2293,33 @@ msgstr[1] "פותח %d פריטים"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:918
 #, c-format
 msgid "Show “_%s”"
 msgstr "הצג “_%s“"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1381
 msgid "_Move on Toolbar"
 msgstr "ה_זז בסרגל הכלים"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1382
 msgid "Move the selected item on the toolbar"
 msgstr "הזז את הפריט הנבחר בסרגל הכלים"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1383
 msgid "_Remove from Toolbar"
 msgstr "הסר מ_סרגל הכלים"
 
 #
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1384
 msgid "Remove the selected item from the toolbar"
 msgstr "הסר את הפריט הנבחר מסרגל הכלים"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1385
 msgid "_Delete Toolbar"
 msgstr "_מחק סרגל כלים"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1386
 msgid "Remove the selected toolbar"
 msgstr "הסר את סרגל הכלים הנבחר"
 
@@ -2500,13 +2485,13 @@ msgstr "בנגלי"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:91
 msgid "select fonts for|Unified Canadian Syllabics"
-msgstr ""
+msgstr "הברות קנדיות מאוחדות"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:94
 msgid "select fonts for|Ethiopic"
-msgstr "אתיופית"
+msgstr "געז (אמהרית)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2530,13 +2515,13 @@ msgstr "גורמוקי"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:106
 msgid "select fonts for|Khmer"
-msgstr ""
+msgstr "קמרית"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:109
 msgid "select fonts for|Malayalam"
-msgstr ""
+msgstr "מלאיאלאם"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2675,16 +2660,15 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:958
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "גרור ושחרר את איקון זה בכדי ליצור קישור לדף זה"
 
-#: ../plugins/desktop-file/plugin.cpp:377
+#: ../plugins/desktop-file/plugin.cpp:383
 msgid "Unsafe protocol."
-msgstr ""
-"פרוטוקול לא בטוח."
+msgstr "פרוטוקול לא בטוח."
 
-#: ../plugins/desktop-file/plugin.cpp:378
+#: ../plugins/desktop-file/plugin.cpp:384
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2692,20 +2676,20 @@ msgstr ""
 "הכתובת לא נטענה מכיון שהיא מתיחסת לפרוטוקול לא בטוח ולכן מהווה סיכון אבטחה "
 "למערכת."
 
-#: ../plugins/desktop-file/plugin.cpp:406
+#: ../plugins/desktop-file/plugin.cpp:412
 msgid "No address found."
 msgstr "לא נמצאה כתובת."
 
-#: ../plugins/desktop-file/plugin.cpp:407
+#: ../plugins/desktop-file/plugin.cpp:413
 msgid "No web address could be found in this file."
 msgstr "לא נמצאה כתובת אינטרנט בקובץ זה."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:442
+#: ../plugins/desktop-file/plugin.cpp:448
 msgid "Epiphany Desktop File Plugin"
 msgstr "תוסף לקבצי שולחן עבודה של Epiphany"
 
-#: ../plugins/desktop-file/plugin.cpp:446
+#: ../plugins/desktop-file/plugin.cpp:452
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr "תוסף זה מטפל בקבצי “.desktop” and “.url” שמכילים קישורים לאינטרנט."
 
@@ -2828,7 +2812,7 @@ msgstr "האם לעדכן סימנייה?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
+#: ../src/bookmarks/ephy-bookmarks.c:1227
 msgid "bookmarks|All"
 msgstr "הכל"
 
@@ -2836,7 +2820,7 @@ msgstr "הכל"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1233
 msgid "bookmarks|Most Visited"
 msgstr "הנצפים ביותר"
 
@@ -2845,7 +2829,7 @@ msgstr "הנצפים ביותר"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1240
 msgid "bookmarks|Not Categorized"
 msgstr "ללא קטגוריה"
 
@@ -2854,7 +2838,7 @@ msgstr "ללא קטגוריה"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
+#: ../src/bookmarks/ephy-bookmarks.c:1248
 msgid "bookmarks|Nearby Sites"
 msgstr "אתרים מקומיים"
 
@@ -3913,7 +3897,8 @@ msgstr "_מיקום…"
 msgid "Go to a specified location"
 msgstr "עבור למיקום מסוים"
 
-#: ../src/ephy-window.c:239
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "הי_סטוריה"
 
@@ -4110,11 +4095,11 @@ msgstr "אם תסגור את המסמך בכל זאת, המידע הזה יאב�
 msgid "Close _Document"
 msgstr "סגור _מסמך"
 
-#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "פתח"
 
-#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "שמור כ"
 
@@ -4210,11 +4195,11 @@ msgstr "הוסף קישור “%s“ לסימניות"
 msgid "Copy link's address “%s”"
 msgstr "העתק את כתובת הקישור \"%s\""
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>בחר את המידע האישי שברצונך לנקות</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -4223,31 +4208,26 @@ msgstr ""
 "אתה עומד לנקות את המידע האישי ששמור אודות דפי הרשת שביקרת בהם. לפני שאתה "
 "ממשיך, בדוק איזה סוגי מידע ברצונך להסיר:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "נקה את כל המידע האישי"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "עו_גיות"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "סיסמ_אות שמורות"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "היס_טוריה"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "קבצים _זמניים"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -4255,55 +4235,55 @@ msgstr ""
 "<small><i><b>הערה:</b> לא ניתן לבטל את פעולה זו. המידע שתבחר לנקות ימחק "
 "לתמיד.</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "מאפייני עוגייה"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "תוכן:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "נתיב:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "שלח ל:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "חיבור מוצפן בלבד"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "כל סוג של חיבור"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "תאריך תפוגה:"
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "סוף השיח הנוכחי"
 
-#: ../src/pdm-dialog.c:804
+#: ../src/pdm-dialog.c:813
 msgid "Domain"
 msgstr "תחום"
 
-#: ../src/pdm-dialog.c:816
+#: ../src/pdm-dialog.c:825
 msgid "Name"
 msgstr "שם"
 
-#: ../src/pdm-dialog.c:1215
+#: ../src/pdm-dialog.c:1224
 msgid "Host"
 msgstr "מארח"
 
-#: ../src/pdm-dialog.c:1227
+#: ../src/pdm-dialog.c:1236
 msgid "User Name"
 msgstr "שם משתמש"
 
-#: ../src/pdm-dialog.c:1239
+#: ../src/pdm-dialog.c:1248
 msgid "User Password"
 msgstr "סיסמת משתמש"
 
@@ -4397,7 +4377,7 @@ msgstr[1] "שפות מערכת (%s)"
 msgid "Select a Directory"
 msgstr "בחר סיפרייה"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4409,7 +4389,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4421,7 +4401,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4431,20 +4411,20 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "צור קשר ב:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "מפתחים בעבר:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4461,7 +4441,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr ""
 "רועי קרשטיין <sf_kersteinroie@bezeqint.net>\n"
@@ -4471,6 +4451,17 @@ msgstr ""
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "אתר דפדפן האינטרנט של GNOME"
+
+#~ msgid "Opening %s"
+#~ msgstr "פותח את %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "פותח פריט אחד"
+#~ msgstr[1] "פותח %d פריטים"
+
+#~ msgid "_History"
+#~ msgstr "היס_טוריה"
