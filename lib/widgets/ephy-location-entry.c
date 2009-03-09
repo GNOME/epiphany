@@ -923,11 +923,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 					GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
 	gtk_target_list_unref (targetlist);
 
-	g_signal_connect (priv->entry, "drag-data-get",
-			  G_CALLBACK (favicon_drag_data_get_cb), lentry);
-	g_signal_connect_after (priv->entry, "drag-begin",
-				G_CALLBACK (favicon_drag_begin_cb), lentry);
-
 	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (priv->entry),
 					 GTK_ENTRY_ICON_PRIMARY,
 					 _("Drag and drop this icon to create a link to this page"));
@@ -941,23 +936,23 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
 					GTK_ENTRY_ICON_SECONDARY,
 					TRUE);
-	g_signal_connect (priv->entry, "icon-press",
-			  G_CALLBACK (icon_button_press_event_cb), lentry);
 
-	g_signal_connect (priv->entry, "populate_popup",
-			  G_CALLBACK (entry_populate_popup_cb), lentry);
-	g_signal_connect (priv->entry, "key-press-event",
-			  G_CALLBACK (entry_key_press_cb), lentry);
+	g_object_connect (priv->entry,
+			  "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
+			  "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
+			  "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
+			  "signal::changed", G_CALLBACK (editable_changed_cb), lentry,
+			  "signal::drag-motion", G_CALLBACK (entry_drag_motion_cb), lentry,
+			  "signal::drag-drop", G_CALLBACK (entry_drag_drop_cb), lentry,
+			  "signal::drag-data-get", G_CALLBACK (favicon_drag_data_get_cb), lentry,
+			  NULL);
+			  
 	g_signal_connect_after (priv->entry, "key-press-event",
 				G_CALLBACK (entry_key_press_after_cb), lentry);
 	g_signal_connect_after (priv->entry, "activate",
 				G_CALLBACK (entry_activate_after_cb), lentry);
-	g_signal_connect (priv->entry, "changed",
-			  G_CALLBACK (editable_changed_cb), lentry);
-	g_signal_connect (priv->entry, "drag-motion",
-			  G_CALLBACK (entry_drag_motion_cb), lentry);
-	g_signal_connect (priv->entry, "drag-drop",
-			  G_CALLBACK (entry_drag_drop_cb), lentry);
+	g_signal_connect_after (priv->entry, "drag-begin",
+				G_CALLBACK (favicon_drag_begin_cb), lentry);
 
 	gtk_widget_show (priv->entry);
 }
