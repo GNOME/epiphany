@@ -1186,7 +1186,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
-	GtkCellRenderer *cell, *iconcell, *extracell;
+	GtkCellRenderer *cell;
 
 	entry->priv->text_col = text_col;
 	entry->priv->action_col = action_col;
@@ -1197,8 +1197,8 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	entry->priv->favicon_col = favicon_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
-
 	g_object_unref (model);
+
 	gtk_tree_sortable_set_sort_column_id 
 			(GTK_TREE_SORTABLE (sort_model),
 			 entry->priv->relevance_col,
@@ -1212,12 +1212,13 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	g_signal_connect_after (completion, "action-activated",
 				G_CALLBACK (action_activated_after_cb), entry);
 
-	iconcell = gtk_cell_renderer_pixbuf_new ();
-
+#if 0
+	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
-				    iconcell, FALSE);
+				    cell, FALSE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-				       iconcell, "pixbuf", favicon_col);
+				       cell, "pixbuf", favicon_col);
+#endif
 
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
@@ -1229,17 +1230,16 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
 	gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
-
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
 					cell, textcell_data_func,
 					entry,
 					NULL);
 
-	extracell = gtk_cell_renderer_pixbuf_new ();
+	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
-				  extracell, FALSE);
+				  cell, FALSE);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					    extracell, extracell_data_func,
+					    cell, extracell_data_func,
 					    entry,
 					    NULL);
 
