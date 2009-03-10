@@ -150,6 +150,11 @@ GTKDOC_LIBS += \
 	$(PYGTK_LIBS)
 endif
 
+if ENABLE_SEED
+GTKDOC_LIBS += \
+	$(SEED_LIBS)
+endif
+
 # If you need to override some of the declarations, place them in the
 # $(DOC_MODULE)-overrides.txt file and uncomment the second line here.
 DOC_OVERRIDES =
