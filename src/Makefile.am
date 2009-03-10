@@ -388,7 +388,6 @@ BINDING_HEADERS_SRCDIR_IN = \
 
 BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	embed/downloader-view.h				\
-	embed/ephy-download.h				\
 	embed/ephy-embed-dialog.h			\
 	embed/ephy-embed-find.h				\
 	embed/ephy-embed-prefs.h			\

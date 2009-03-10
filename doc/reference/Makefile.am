@@ -47,7 +47,6 @@ IGNORE_HFILES = \
 	ephy-tree-model-sort.h \
 	ephy-zoom-action.h \
 	downloader-view.h \
-	ephy-download.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \
 	ephy-embed-popup-control.h \
