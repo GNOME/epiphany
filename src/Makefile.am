@@ -122,6 +122,8 @@ if ENABLE_NETWORK_MANAGER
 libephymain_la_SOURCES += \
 	ephy-net-monitor.c	\
 	ephy-net-monitor.h
+
+libephymain_la_CFLAGS += $(NETWORK_MANAGER_CFLAGS)
 endif
 
 if ENABLE_SEED

@@ -419,8 +419,7 @@ AC_ARG_ENABLE([network-manager],
 AC_MSG_RESULT([$enable_network_manager])
 
 if test "$enable_network_manager" != "no"; then
-	AC_CHECK_HEADERS([NetworkManager/NetworkManager.h],
-		[have_network_manager=yes],[have_network_manager=no])
+	PKG_CHECK_MODULES(NETWORK_MANAGER, NetworkManager, [have_network_manager=yes],[have_network_manager=no])
 
 	if test "$enable_network_manager" = "yes" -a "$have_network_manager" = "no"; then
 		AC_MSG_ERROR([NetworkManager support requested but NetworkManager headers not found])

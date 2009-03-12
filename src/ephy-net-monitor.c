@@ -26,7 +26,7 @@
 #include "ephy-debug.h"
 #include "ephy-prefs.h"
 
-#include <NetworkManager/NetworkManager.h>
+#include <NetworkManager.h>
 
 #include <gmodule.h>
 
