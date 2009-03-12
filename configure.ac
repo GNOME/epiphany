@@ -133,16 +133,12 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  webkit-1.0 >= $WEBKIT_GTK_REQUIRED
 		  libsoup-gnome-2.4 >= $LIBSOUP_GNOME_REQUIRED
 		  ])
-AC_SUBST([DEPENDENCIES_CFLAGS])
-AC_SUBST([DEPENDENCIES_LIBS])
 
 # ****
 # DBUS
 # ****
 
 PKG_CHECK_MODULES([DBUS],[dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
-AC_SUBST([DBUS_CFLAGS])
-AC_SUBST([DBUS_LIBS])
 
 AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[no])
 
@@ -261,8 +257,6 @@ if test "$enable_seed" = "yes"; then
 
   SEED_REQUIRED=0
   PKG_CHECK_MODULES([SEED],[seed >= $SEED_REQUIRED])
-  AC_SUBST([SEED_CFLAGS])
-  AC_SUBST([SEED_LIBS])
 
   AC_DEFINE([ENABLE_SEED],[1],[Define to compile with Seed support])
 fi
@@ -399,9 +393,6 @@ if test "$enable_zeroconf" != "no"; then
         else
                 enable_zeroconf=no
         fi
-
-	AC_SUBST(AVAHI_CFLAGS)
-	AC_SUBST(AVAHI_LIBS)
 fi
 
 if test "$enable_zeroconf" = "yes"; then
