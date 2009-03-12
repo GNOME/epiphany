@@ -387,7 +387,10 @@ AC_MSG_RESULT([$enable_zeroconf])
 if test "$enable_zeroconf" != "no"; then
 	AVAHI_REQUIRED=0.6.22
 
-	PKG_CHECK_MODULES(AVAHI, [avahi-gobject >= $AVAHI_REQUIRED],[have_avahi=yes],[have_avahi=no])
+	PKG_CHECK_MODULES(AVAHI,
+                         [avahi-gobject >= $AVAHI_REQUIRED
+                          avahi-client >= $AVAHI_REQUIRED]
+                         ,[have_avahi=yes],[have_avahi=no])
 
         if test "$enable_zeroconf" = "yes" -a "$have_avahi" = "no"; then
                 AC_MSG_ERROR([zeroconf support was requested but avahi not found])
