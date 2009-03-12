@@ -40,7 +40,7 @@
 
 enum
 {
-	COL_STATE,
+	COL_STATUS,
 	COL_PERCENT,
 	COL_IMAGE,
 	COL_FILE,
@@ -197,14 +197,14 @@ remove_download (WebKitDownload *download,
 		 gpointer rowref,
 		 DownloaderView *view)
 {
-	WebKitDownloadState state;
+	WebKitDownloadStatus status;
 
 	g_signal_handlers_disconnect_matched
 		(download, G_SIGNAL_MATCH_DATA ,
 		 0, 0, NULL, NULL, view);
 
-	state = webkit_download_get_state (download);
-	if (state == WEBKIT_DOWNLOAD_STATE_STARTED)
+	status = webkit_download_get_status (download);
+	if (status == WEBKIT_DOWNLOAD_STATUS_STARTED)
 		webkit_download_cancel (download);
 
 	g_object_unref (download);
@@ -335,7 +335,7 @@ update_buttons (DownloaderView *dv)
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	WebKitDownloadState state;
+	WebKitDownloadStatus status;
 	WebKitDownload *download;
 	gboolean pause_enabled = FALSE;
 	gboolean abort_enabled = FALSE;
@@ -351,7 +351,7 @@ update_buttons (DownloaderView *dv)
 			return;
 		
 		gtk_tree_model_get (model, &iter, COL_DOWNLOAD_OBJECT, &download, -1);
-		state = webkit_download_get_state (download);
+		status = webkit_download_get_status (download);
 
 		/* Pausing is not supported yet */
 		pause_enabled = FALSE;
@@ -421,7 +421,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 	GtkTreeRowReference *row_ref;
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	WebKitDownloadState state;
+	WebKitDownloadStatus status;
 	gint64 total, current;
 	gdouble remaining_seconds = 0.0;
 	char *remaining, *file, *cur_progress, *name;
@@ -435,8 +435,8 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref != NULL);
 
-	/* State special casing */
-	state = webkit_download_get_state (download);
+	/* Status special casing */
+	status = webkit_download_get_status (download);
 
 	total = webkit_download_get_total_size (download);
 	current = webkit_download_get_current_size (download);
@@ -445,12 +445,12 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 
 	name = ephy_download_get_name (download);
 	
-	switch (state)
+	switch (status)
 	{
-	case WEBKIT_DOWNLOAD_STATE_CANCELLED:
+	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
 		downloader_view_remove_download (dv, download);
 		return;
-	case WEBKIT_DOWNLOAD_STATE_FINISHED:
+	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
 		downloader_view_remove_download (dv, download);
 #ifdef HAVE_LIBNOTIFY
 		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 
@@ -466,7 +466,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 #endif
 
 		return;
-	case WEBKIT_DOWNLOAD_STATE_STARTED:
+	case WEBKIT_DOWNLOAD_STATUS_STARTED:
 		percent = (int) (webkit_download_get_progress (download) * 100);
 		remaining_seconds = ephy_download_get_remaining_time (download);
 		break;
@@ -506,7 +506,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 	gtk_tree_model_get_iter (dv->priv->model, &iter, path);
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter,
-			    COL_STATE, state,
+			    COL_STATUS, status,
 			    COL_PERCENT, percent,
 			    COL_FILE, file,
 			    COL_REMAINING, remaining,
@@ -539,12 +539,17 @@ update_status_icon (DownloaderView *dv)
 static void
 download_progress_cb (WebKitDownload *download, GParamSpec *pspec, DownloaderView *dv)
 {
-	WebKitDownloadState state = webkit_download_get_state (download);
-	if ((state != WEBKIT_DOWNLOAD_STATE_STARTED) && (state != WEBKIT_DOWNLOAD_STATE_FINISHED))
-		return;
-	if ((state == WEBKIT_DOWNLOAD_STATE_FINISHED) && (webkit_download_get_progress (download) < 1.0))
-		return;
 	update_download_row (dv, download);
+}
+
+static void
+download_status_changed_cb (WebKitDownload *download, GParamSpec *pspec, DownloaderView *dv)
+{
+        /* We already have handlers for progress and cancel/error, so
+         * we only handle finished here.
+         */
+        if (webkit_download_get_status (download) == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+                update_download_row (dv, download);
 }
 
 static void
@@ -637,6 +642,9 @@ downloader_view_add_download (DownloaderView *dv,
 	g_signal_connect_object (download, "notify::progress",
 				 G_CALLBACK (download_progress_cb), dv, 0);
 
+	g_signal_connect_object (download, "notify::status",
+				 G_CALLBACK (download_status_changed_cb), dv, 0);
+
 	g_signal_connect_object (download, "error",
 				 G_CALLBACK (download_error_cb), dv, 0);
 
@@ -716,26 +724,26 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 			 GtkTreeIter       *iter,
 			 gpointer           user_data)
 {
-	WebKitDownloadState state;
+	WebKitDownloadStatus status;
 	const char *text = NULL;
 	int percent;
 
 	gtk_tree_model_get (model, iter,
-			    COL_STATE, &state,
+			    COL_STATUS, &status,
 			    COL_PERCENT, &percent,
 			    -1);
 
-	switch (state)
+	switch (status)
 	{
-		case WEBKIT_DOWNLOAD_STATE_CREATED:
+		case WEBKIT_DOWNLOAD_STATUS_CREATED:
 			text = C_("download status", "Unknown");
 			break;
-		case WEBKIT_DOWNLOAD_STATE_ERROR:
+		case WEBKIT_DOWNLOAD_STATUS_ERROR:
 			text = C_("download status", "Failed");
 			break;
-		case WEBKIT_DOWNLOAD_STATE_CANCELLED:
+		case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
 			text = C_("download status", "Cancelled");
-		case WEBKIT_DOWNLOAD_STATE_STARTED:
+		case WEBKIT_DOWNLOAD_STATUS_STARTED:
 			if (percent == -1)
 			{
 				text = C_("download status", "Unknown");
@@ -866,7 +874,7 @@ download_dialog_pause (DownloaderView *dv)
 	GtkTreeIter iter;
 	GValue val = {0, };
 	WebKitDownload *download;
-	WebKitDownloadState state;
+	WebKitDownloadStatus status;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
 
@@ -875,7 +883,7 @@ download_dialog_pause (DownloaderView *dv)
 	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
 	download = g_value_get_object (&val);
 
-	state = webkit_download_get_state (download);
+	status = webkit_download_get_status (download);
 
 	g_warning ("Pause/resume not implemented");
 
