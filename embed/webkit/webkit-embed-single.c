@@ -20,7 +20,6 @@
 #include "config.h"
 #include <glib/gi18n.h>
 #include <webkit/webkit.h>
-#include <libsoup/soup.h>
 #include <libsoup/soup-gnome.h>
 
 #include "webkit-embed-single.h"
@@ -85,12 +84,6 @@ webkit_embed_single_init (WebKitEmbedSingle *wes)
   wes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (wes);
 
   wes->priv->online = TRUE;
-}
-
-static void
-webkit_embed_single_dispose (GObject *object)
-{
-  G_OBJECT_CLASS (webkit_embed_single_parent_class)->dispose (object);
 }
 
 static void
@@ -297,7 +290,6 @@ webkit_embed_single_class_init (WebKitEmbedSingleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = webkit_embed_single_dispose;
   object_class->finalize = webkit_embed_single_finalize;
   object_class->get_property = webkit_embed_single_get_property;
   object_class->set_property = webkit_embed_single_set_property;
