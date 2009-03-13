@@ -31,6 +31,7 @@ NOINST_H_FILES = \
 	ephy-lockdown.h			\
 	ephy-location-action.h		\
 	ephy-navigation-action.h	\
+	ephy-profile-migration.h	\
 	ephy-tabs-menu.h		\
 	ephy-toolbars-model.h		\
 	ephy-toolbar.h			\
@@ -77,6 +78,7 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.c			\
 	ephy-navigation-action.c	\
 	ephy-notebook.c			\
+	ephy-profile-migration.c	\
 	ephy-session.c			\
 	ephy-shell.c			\
 	ephy-statusbar.c		\

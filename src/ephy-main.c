@@ -32,6 +32,7 @@
 #include "ephy-session.h"
 #include "ephy-shell.h"
 #include "ephy-prefs.h"
+#include "ephy-profile-migration.h"
 #include "ephy-debug.h"
 #include "eggsmclient.h"
 
@@ -737,7 +738,6 @@ main (int argc,
 	}
 
 	/* We're not remoting; start our services */
-
 	if (!ephy_file_helpers_init (profile_directory,
 				     private_instance,
 				     keep_temp_directory || profile_directory,
@@ -750,9 +750,12 @@ main (int argc,
 		exit (1);
 	}
 
+	/* Migrate profile */
+	_ephy_profile_migrate ();
+
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	ephy_stock_icons_init ();
-        load_accels ();
+	load_accels ();
 
 	/* Extensions may want these, so don't initialize in window-cmds */
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
