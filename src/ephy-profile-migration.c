@@ -132,5 +132,6 @@ _ephy_profile_migrate ()
   contents = g_strdup_printf ("%d", PROFILE_MIGRATION_VERSION);
   g_file_set_contents (migrated_file, contents, -1, NULL);
   g_free (contents);
+  g_free (migrated_file);
 }
 
