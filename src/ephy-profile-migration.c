@@ -117,6 +117,7 @@ _ephy_profile_migrate ()
 
     if (result != 1) {
       g_warning (_("Failed to read latest migration marker, aborting profile migration."));
+      g_free (migrated_file);
       return;
     }
   } else
