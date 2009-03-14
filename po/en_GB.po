@@ -5,18 +5,18 @@
 # Abigail Brady <morwen@evilmagic.org>, Bastien Nocera <hadess@hadess.net>, 2003.
 # Christian Persch  <chpe+epiphany@stud.uni-saarland.de>, 2003
 # Crispin Flowerday <gnome@flowerday.cx>, 2006
-# $Id: en_GB.po,v 1.45 2006/09/13 19:59:53 dlodge Exp $
+# Bruce Cowan <bcowan@fastmail.co.uk>, 2009.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2008-09-07 13:59+0100\n"
-"PO-Revision-Date: 2008-03-03 07:05+0000\n"
-"Last-Translator: David Lodge <dave@cirt.net>\n"
-"Language-Team: English/GB <en@li.org>\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-03-13 23:23+0000\n"
+"PO-Revision-Date: 2009-03-14 11:53+0000\n"
+"Last-Translator: Bruce Cowan <bcowan@fastmail.co.uk>\n"
+"Language-Team: British English <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -36,7 +36,7 @@ msgstr "Web Bookmarks"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
-msgstr "Browse the web"
+msgstr "Browse the Web"
 
 #: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
@@ -717,7 +717,8 @@ msgstr "Choose a l_anguage:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:673 ../src/ephy-history-window.c:249
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "Cl_ear"
 
@@ -751,11 +752,11 @@ msgstr "Language"
 
 #: ../data/glade/prefs-dialog.glade.h:25
 msgid "Let web pages specify their own _fonts"
-msgstr "Let web pages specify their own _fonts"
+msgstr "Let Web pages specify their own _fonts"
 
 #: ../data/glade/prefs-dialog.glade.h:26
 msgid "Let web pages specify their own c_olors"
-msgstr "Let web pages specify their own c_olours"
+msgstr "Let Web pages specify their own c_olours"
 
 #: ../data/glade/prefs-dialog.glade.h:27
 msgid "MB"
@@ -1777,7 +1778,7 @@ msgid "You may find an old version:|in the Internet Archive"
 msgstr "in the Internet Archive"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks.c:1483
 #: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "Untitled"
@@ -1871,15 +1872,15 @@ msgstr "The web site “%s” requests that you sign the following text:"
 msgid "_Sign text"
 msgstr "_Sign text"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:192
+#: ../embed/mozilla/GeckoPrintService.cpp:196
 msgid "Options"
 msgstr "Options"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:456
+#: ../embed/mozilla/GeckoPrintService.cpp:460
 msgid "Print this page?"
 msgstr "Print this page?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:464
+#: ../embed/mozilla/GeckoPrintService.cpp:468
 msgid "Preparing to print"
 msgstr "Preparing to print"
 
@@ -2322,32 +2323,32 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:918
 #, c-format
 msgid "Show “_%s”"
 msgstr "Show “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1381
 msgid "_Move on Toolbar"
 msgstr "_Move on Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1382
 msgid "Move the selected item on the toolbar"
 msgstr "Move the selected item on the toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1383
 msgid "_Remove from Toolbar"
 msgstr "_Remove from Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1384
 msgid "Remove the selected item from the toolbar"
 msgstr "Remove the selected item from the toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1385
 msgid "_Delete Toolbar"
 msgstr "_Delete Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1386
 msgid "Remove the selected toolbar"
 msgstr "Remove the selected toolbar"
 
@@ -2624,35 +2625,35 @@ msgstr "_Download"
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
 msgid "Today %I:%M %p"
-msgstr "Today %I:%M %p"
+msgstr "Today %H:%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:236
 msgid "Yesterday %I:%M %p"
-msgstr "Yesterday %I:%M %p"
+msgstr "Yesterday %H:%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:252
 msgid "%a %I:%M %p"
-msgstr "%a %I:%M %p"
+msgstr "%a %H:%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:264
 msgid "%b %d %I:%M %p"
-msgstr "%b %d %I:%M %p"
+msgstr "%d %b %H:%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
 #: ../lib/ephy-time-helpers.c:269
 msgid "%b %d %Y"
-msgstr "%b %d %Y"
+msgstr "%d %b %Y"
 
 #: ../lib/ephy-zoom.h:41
 msgid "50%"
@@ -2690,15 +2691,15 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:868
+#: ../lib/widgets/ephy-location-entry.c:958
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Drag and drop this icon to create a link to this page"
 
-#: ../plugins/desktop-file/plugin.cpp:377
+#: ../plugins/desktop-file/plugin.cpp:383
 msgid "Unsafe protocol."
 msgstr "Unsafe protocol."
 
-#: ../plugins/desktop-file/plugin.cpp:378
+#: ../plugins/desktop-file/plugin.cpp:384
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2706,20 +2707,20 @@ msgstr ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 
-#: ../plugins/desktop-file/plugin.cpp:406
+#: ../plugins/desktop-file/plugin.cpp:412
 msgid "No address found."
 msgstr "No address found."
 
-#: ../plugins/desktop-file/plugin.cpp:407
+#: ../plugins/desktop-file/plugin.cpp:413
 msgid "No web address could be found in this file."
 msgstr "No web address could be found in this file."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:442
+#: ../plugins/desktop-file/plugin.cpp:448
 msgid "Epiphany Desktop File Plugin"
 msgstr "Epiphany Desktop File Plugin"
 
-#: ../plugins/desktop-file/plugin.cpp:446
+#: ../plugins/desktop-file/plugin.cpp:452
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr "This plugin handles “.desktop” and “.url” files containing web links."
 
@@ -2842,7 +2843,7 @@ msgstr "Update Bookmark?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
+#: ../src/bookmarks/ephy-bookmarks.c:1227
 msgid "bookmarks|All"
 msgstr "All"
 
@@ -2850,7 +2851,7 @@ msgstr "All"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1233
 msgid "bookmarks|Most Visited"
 msgstr "Most Visited"
 
@@ -2859,7 +2860,7 @@ msgstr "Most Visited"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1240
 msgid "bookmarks|Not Categorized"
 msgstr "Not Categorised"
 
@@ -2868,7 +2869,7 @@ msgstr "Not Categorised"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
+#: ../src/bookmarks/ephy-bookmarks.c:1248
 msgid "bookmarks|Nearby Sites"
 msgstr "Nearby Sites"
 
@@ -3932,7 +3933,8 @@ msgstr "_Location…"
 msgid "Go to a specified location"
 msgstr "Go to a specified location"
 
-#: ../src/ephy-window.c:239
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "Hi_story"
 
@@ -4228,11 +4230,11 @@ msgstr "Bookmark link “%s”"
 msgid "Copy link's address “%s”"
 msgstr "Copy link's address “%s”"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Select the personal data you want to clear</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -4242,31 +4244,26 @@ msgstr ""
 "have visited. Before proceeding, check the types of information that you "
 "want to remove:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "Clear All Personal Data"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "Saved _passwords"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "_History"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "_Temporary files"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -4274,55 +4271,55 @@ msgstr ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "Cookie Properties"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "Content:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "Path:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "Send for:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "Encrypted connections only"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "Any type of connection"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "Expires:"
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "End of current session"
 
-#: ../src/pdm-dialog.c:804
+#: ../src/pdm-dialog.c:813
 msgid "Domain"
 msgstr "Domain"
 
-#: ../src/pdm-dialog.c:816
+#: ../src/pdm-dialog.c:825
 msgid "Name"
 msgstr "Name"
 
-#: ../src/pdm-dialog.c:1215
+#: ../src/pdm-dialog.c:1224
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1227
+#: ../src/pdm-dialog.c:1236
 msgid "User Name"
 msgstr "User Name"
 
-#: ../src/pdm-dialog.c:1239
+#: ../src/pdm-dialog.c:1248
 msgid "User Password"
 msgstr "User Password"
 
@@ -4469,7 +4466,7 @@ msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by %s"
 msgstr ""
-"Lets you view web pages and find information on the Internet.\n"
+"Lets you view Web pages and find information on the Internet.\n"
 "Powered by %s"
 
 #. Translators: This is a special message that shouldn't be translated
@@ -4485,11 +4482,15 @@ msgid "translator-credits"
 msgstr ""
 "Christian Persch <chpe@gnome.org>\n"
 "Gareth Owen <gowen72@yahoo.com>\n"
-"Crispin Flowerday <gnome@flowerday.cx>"
+"Crispin Flowerday <gnome@flowerday.cx>\n"
+"Bruce Cowan <bcowan@fastmail.co.uk>"
 
 #: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Web Browser Website"
+
+#~ msgid "_History"
+#~ msgstr "_History"
 
 #~ msgid "Opening %s"
 #~ msgstr "Opening %s"
