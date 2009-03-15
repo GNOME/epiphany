@@ -37,7 +37,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 
 ChangeLog:
-	@if test -f $(top_srcdir)/.git/HEAD; then
+	@if test -f $(top_srcdir)/.git/HEAD; then \
 		git log --stat > $@; \
 	fi
 
