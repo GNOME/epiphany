@@ -1,4 +1,4 @@
-# translation of el.po to Greek
+# translation of epiphany.gnome-2-26.po to Greek
 # kostas, 05Mar2003, initial translation,665 messages.
 # Nikos,  29jul2003, fixes and update translation,425 messages.
 # Nikos,  31jul2003, fixes access keys and update,461 messages.
@@ -13,6 +13,7 @@
 # Nikos: 27Jan2005, 835 translated messages.
 # Kostas Papadimas <pkst@gnome.org>, 2003, 2004, 2006.
 # Nikos Charonitakis <charosn@her.forthnet.gr>, 2004, 2004, 2005.
+# Jennie Petoumenou <epetoumenou@gmail.com>, 2009.
 # Epiphany Greek Translation.
 # Copyright (C) Free Software Foundation. 2003
 # This file is distributed under the same license as the PACKAGE package.
@@ -24,17 +25,18 @@
 # Nikos: 05Jan2005, start updating for gnome 2.10
 msgid ""
 msgstr ""
-"Project-Id-Version: el\n"
+"Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-03-19 17:21+0200\n"
-"PO-Revision-Date: 2008-03-03 23:46+0200\n"
-"Last-Translator: nikosCharonitakis <nikosx@gmail.com>\n"
+"POT-Creation-Date: 2009-03-15 08:47+0200\n"
+"PO-Revision-Date: 2009-03-03 12:50+0100\n"
+"Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -57,8 +59,8 @@ msgid "Epiphany Web Browser"
 msgstr "Περιηγητής διαδικτύου Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
-#: ../src/ephy-main.c:632
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:539
+#: ../src/ephy-main.c:639
 msgid "Web Browser"
 msgstr "Περιηγητής ιστοσελίδων"
 
@@ -89,7 +91,7 @@ msgid ""
 msgstr ""
 "Απενεργοποίηση όλων των πληροφοριών ιστορικού με την απενεργοποίηση της "
 "πλοήγησης πίσω και μπροστά, του ιστορικού και με την απόκρυψη της λίστας των "
-"πιό συχνά χρησιμοποιημένων σελιδοδεικτών."
+"πιο συχνά χρησιμοποιούμενων σελιδοδεικτών."
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable arbitrary URLs"
@@ -140,7 +142,7 @@ msgstr "Αδυναμία τερματισμού του Epiphany"
 
 #: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
-msgstr "Προεπιλεγμένη απόκρυψη της γραμμής κατάστασης"
+msgstr "Προεπιλεγμένη απόκρυψη της γραμμής μενού"
 
 #: ../data/epiphany-lockdown.schemas.in.h:17
 msgid "Hide the menubar by default."
@@ -650,7 +652,7 @@ msgstr "Προσωπικά δεδομένα"
 msgid "Text Encoding"
 msgstr "Κωδικοποίηση κειμένου"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:331
 msgid "Use the encoding specified by the document"
 msgstr "Χρήση της κωδικοποίησης που καθορίζεται από το έγγραφο"
 
@@ -675,8 +677,8 @@ msgid "_Certificate:"
 msgstr "Πιστο_ποιητικό:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../embed/mozilla/EphyPromptService.cpp:804
-#: ../embed/mozilla/EphyPromptService.cpp:831
+#: ../embed/mozilla/EphyPromptService.cpp:823
+#: ../embed/mozilla/EphyPromptService.cpp:850
 #: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Κωδικός:"
@@ -748,7 +750,8 @@ msgstr "Επιλογή μιας γ_λώσσας:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:584 ../src/ephy-history-window.c:269
+#: ../lib/widgets/ephy-location-entry.c:673 ../src/ephy-history-window.c:249
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "Ε_κκαθάριση"
 
@@ -776,7 +779,7 @@ msgstr "Γραμματοσειρές & Στυλ"
 msgid "For l_anguage:"
 msgstr "Για _γλώσσα:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1278
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1261
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -917,39 +920,48 @@ msgid "_Page address"
 msgstr "_Διεύθυνση σελίδας"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:189
+#: ../embed/downloader-view.c:172
 msgid "_Show Downloads"
 msgstr "_Εμφάνιση λήψεων"
 
-#: ../embed/downloader-view.c:344
+#: ../embed/downloader-view.c:320
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:348
+#: ../embed/downloader-view.c:324
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:409
+#: ../embed/downloader-view.c:385
 msgid "_Pause"
 msgstr "_Παύση"
 
-#: ../embed/downloader-view.c:409
+#: ../embed/downloader-view.c:385
 msgid "_Resume"
 msgstr "Συνέ_χεια"
 
-#: ../embed/downloader-view.c:447
+#: ../embed/downloader-view.c:423
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Ολοκληρώθηκε η λήψη του αρχείου “%s”"
 
-#: ../embed/downloader-view.c:450
+#: ../embed/downloader-view.c:426
 msgid "Download finished"
 msgstr "Η λήψη ολοκληρώθηκε"
 
+#: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
+#: ../src/window-commands.c:868
+msgid "GNOME Web Browser"
+msgstr "Περιηγητής Ιστοσελίδων  του GNOME"
+
+#: ../embed/downloader-view.c:438
+msgid "Download completed"
+msgstr "Η λήψη ολοκληρώθηκε"
+
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:458
 #, c-format
 msgid ""
 "%s\n"
@@ -959,57 +971,56 @@ msgstr ""
 "%s από %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:485 ../embed/downloader-view.c:490
+#: ../embed/downloader-view.c:468 ../embed/downloader-view.c:473
 #: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1689
+#: ../src/ephy-window.c:1683
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: ../embed/downloader-view.c:522
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d λήψη αρχείου"
 msgstr[1] "%d λήψεις αρχείων"
 
-#: ../embed/downloader-view.c:627
+#: ../embed/downloader-view.c:610
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Το “%s” προστέθηκε στην σειρά αρχείων που θα ληφθούν."
 
-#: ../embed/downloader-view.c:630
+#: ../embed/downloader-view.c:613
 msgid "Download started"
 msgstr "Η λήψη ξεκίνησε"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:704 ../embed/downloader-view.c:717
+#: ../embed/downloader-view.c:687 ../embed/downloader-view.c:700
 msgid "download status|Unknown"
 msgstr "Άγνωστη"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:709
+#: ../embed/downloader-view.c:692
 msgid "download status|Failed"
 msgstr "Απέτυχε"
 
-#: ../embed/downloader-view.c:776
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1007
+#: ../embed/downloader-view.c:759 ../src/bookmarks/ephy-bookmarks-editor.c:988
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../embed/downloader-view.c:799
+#: ../embed/downloader-view.c:782
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:810
+#: ../embed/downloader-view.c:793
 msgid "Remaining"
 msgstr "Απομένουν"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:107
+#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
 msgid "Blank page"
 msgstr "Κενή σελίδα"
 
@@ -1038,7 +1049,7 @@ msgstr "Γίνεται φόρτωση “%s”..."
 msgid "Loading…"
 msgstr "Γίνεται φόρτωση..."
 
-#: ../embed/ephy-embed-shell.c:244
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Το Epiphany δε μπορεί να χρησιμοποιηθεί αυτή τη στιγμή. Αποτυχία "
@@ -1444,24 +1455,24 @@ msgstr "Άλλοι"
 msgid "Local files"
 msgstr "Τοπικά αρχεία"
 
-#: ../embed/mozilla/ContentHandler.cpp:154
+#: ../embed/mozilla/ContentHandler.cpp:163
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "Αποθήκευση"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:267
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "Άγνωστος"
 
-#: ../embed/mozilla/ContentHandler.cpp:283
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "Λήψη του πιθανόν μη ασφαλούς αρχείου;"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:289
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1474,14 +1485,14 @@ msgstr ""
 "Αυτό το είδος αρχείου \"%s\" πιθανώς να βλάψει τα έγγραφα σας ή να "
 "παραβιάσει το προσωπικό σας απόρρητο. Καλύτερα να το αποθηκεύσετε πρώτα."
 
-#: ../embed/mozilla/ContentHandler.cpp:299
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "Άνοιγμα αυτού του αρχείου;"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:306
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1492,13 +1503,13 @@ msgstr ""
 "\n"
 "Μπορείτε να ανοίξετε το \"%s\" με το \"%s\" ή να το αποθηκεύσετε."
 
-#: ../embed/mozilla/ContentHandler.cpp:314
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "Λήψη αυτού του αρχείου;"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:320
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1510,7 +1521,7 @@ msgstr ""
 "Δεν έχετε κάποια εφαρμογή που μπορεί να ανοίξει το “%s”.. Μπορείτε να το "
 "αποθηκεύσετε πρώτα."
 
-#: ../embed/mozilla/ContentHandler.cpp:327
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "Αποθήκευση _ως..."
 
@@ -1811,26 +1822,26 @@ msgid "You may find an old version:|in the Internet Archive"
 msgstr "στην αρχειοθήκη διαδικτύου"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1502
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1314
+#: ../src/bookmarks/ephy-bookmarks.c:1483
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "Ανώνυμο"
 
-#: ../embed/mozilla/EphyPromptService.cpp:183
+#: ../embed/mozilla/EphyPromptService.cpp:195
 msgid "_Abort Script"
 msgstr "Ε_γκατάλειψη δέσμης ενεργειών"
 
-#: ../embed/mozilla/EphyPromptService.cpp:251
+#: ../embed/mozilla/EphyPromptService.cpp:263
 msgid "Don't Save"
 msgstr "Να μη γίνει αποθήκευση"
 
-#: ../embed/mozilla/EphyPromptService.cpp:803
+#: ../embed/mozilla/EphyPromptService.cpp:822
 #: ../lib/ephy-password-dialog.c:396
 msgid "_Username:"
 msgstr "Όνομα _xρήστη:"
 
-#: ../embed/mozilla/FilePicker.cpp:146 ../embed/mozilla/FilePicker.cpp:412
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: ../embed/mozilla/FilePicker.cpp:146 ../embed/mozilla/FilePicker.cpp:417
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:767
 msgid "All files"
 msgstr "Όλα τα αρχεία"
 
@@ -1905,15 +1916,15 @@ msgstr "Η ιστοσελίδα “%s”απαιτεί να υπογράψετε
 msgid "_Sign text"
 msgstr "_Υπογραφή κειμένου"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:192
+#: ../embed/mozilla/GeckoPrintService.cpp:196
 msgid "Options"
 msgstr "Επιλογές"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:456
+#: ../embed/mozilla/GeckoPrintService.cpp:460
 msgid "Print this page?"
 msgstr "Εκτύπωση αυτής της σελίδας;"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:464
+#: ../embed/mozilla/GeckoPrintService.cpp:468
 msgid "Preparing to print"
 msgstr "Γίνεται προετοιμασία εκτύπωσης"
 
@@ -2332,7 +2343,7 @@ msgstr ""
 "υποκλαπούν ή αλλοιωθούν από τρίτους."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:692
+#: ../embed/mozilla/MozDownload.cpp:706
 #, c-format
 msgid "%s Files"
 msgstr "%s Αρχεία"
@@ -2347,7 +2358,7 @@ msgstr "%s Αρχεία"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:173
+#: ../embed/mozilla/mozilla-embed-single.cpp:184
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2360,18 +2371,6 @@ msgstr ""
 "Σφάλμα GConf:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:403
-#, c-format
-msgid "Opening %s"
-msgstr "Άνοιγμα %s"
-
-#: ../lib/egg/eel-app-launch-context.c:406
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "Άνοιγμα %d στοιχείου"
-msgstr[1] "Άνοιγμα %d στοιχείων"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -2379,36 +2378,36 @@ msgstr[1] "Άνοιγμα %d στοιχείων"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:942
+#: ../lib/egg/egg-editable-toolbar.c:918
 #, c-format
 msgid "Show “_%s”"
 msgstr "Εμφάνιση “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1405
+#: ../lib/egg/egg-editable-toolbar.c:1381
 msgid "_Move on Toolbar"
 msgstr "_Μετακίνηση στην εργαλειοθήκη"
 
-#: ../lib/egg/egg-editable-toolbar.c:1406
+#: ../lib/egg/egg-editable-toolbar.c:1382
 msgid "Move the selected item on the toolbar"
 msgstr "Μετακίνηση του επιλεγμένου αντικειμένου στη γραμμή εργαλείων"
 
-#: ../lib/egg/egg-editable-toolbar.c:1407
+#: ../lib/egg/egg-editable-toolbar.c:1383
 msgid "_Remove from Toolbar"
 msgstr "_Απομάκρυνση από την εργαλειοθήκη"
 
-#: ../lib/egg/egg-editable-toolbar.c:1408
+#: ../lib/egg/egg-editable-toolbar.c:1384
 msgid "Remove the selected item from the toolbar"
 msgstr "Απομάκρυνση του επιλεγμένου αντικειμένου από τη γραμμή εργαλείων"
 
-#: ../lib/egg/egg-editable-toolbar.c:1409
+#: ../lib/egg/egg-editable-toolbar.c:1385
 msgid "_Delete Toolbar"
 msgstr "_Διαγραφή εργαλειοθήκης"
 
-#: ../lib/egg/egg-editable-toolbar.c:1410
+#: ../lib/egg/egg-editable-toolbar.c:1386
 msgid "Remove the selected toolbar"
 msgstr "Απομάκρυνση της επιλεγμένης γραμμής εργαλείων"
 
-#: ../lib/egg/egg-toolbar-editor.c:493
+#: ../lib/egg/egg-toolbar-editor.c:485
 msgid "Separator"
 msgstr "Διαχωριστικό"
 
@@ -2431,25 +2430,25 @@ msgstr "Το αρχείο“%s” υπάρχει ήδη, παρακαλώ απο
 msgid "Failed to create directory “%s”."
 msgstr "Αποτυχία δημιουργίας καταλόγου “%s”."
 
-#: ../lib/ephy-gui.c:293
+#: ../lib/ephy-gui.c:285
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Δεν επιτρέπεται η εγγραφή στον κατάλογο \"%s\""
 
-#: ../lib/ephy-gui.c:297
+#: ../lib/ephy-gui.c:289
 msgid "You do not have permission to create files in this directory."
 msgstr "Δεν έχετε δικαιώματα δημιουργίας αρχείων σε αυτό τον κατάλογο."
 
-#: ../lib/ephy-gui.c:300
+#: ../lib/ephy-gui.c:292
 msgid "Directory not Writable"
 msgstr "Δεν επιτρέπεται η εγγραφή στον κατάλογο"
 
-#: ../lib/ephy-gui.c:330
+#: ../lib/ephy-gui.c:322
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Αδυναμία αντικατάστασης του υπάρχοντος αρχείου \"%s\""
 
-#: ../lib/ephy-gui.c:334
+#: ../lib/ephy-gui.c:326
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
@@ -2457,11 +2456,11 @@ msgstr ""
 "Υπάρχει ήδη ένα αρχείο με αυτό το όνομα και δεν έχετε δικαιώματα "
 "αντικατάστασης του."
 
-#: ../lib/ephy-gui.c:337
+#: ../lib/ephy-gui.c:329
 msgid "Cannot Overwrite File"
 msgstr "Αδύνατη η αντικατάσταση αρχείου"
 
-#: ../lib/ephy-gui.c:376
+#: ../lib/ephy-gui.c:368
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Αδύνατη ή προβολή βοήθειας: %s"
@@ -2654,23 +2653,23 @@ msgstr "Αποθήκευση κωδικού στο _keyring"
 msgid "Popup Windows"
 msgstr "Αναδυόμενα Παράθυρα"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1297
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1277
 msgid "History"
 msgstr "Ιστορικό"
 
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1478
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1792
-#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1488
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:898
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1778
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1482
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:291
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:286
 msgid "Address Entry"
 msgstr "Εισαγωγή Διεύθυνσης"
 
@@ -2747,17 +2746,17 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:869
+#: ../lib/widgets/ephy-location-entry.c:958
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Σύρτε και αφήστε αυτό το εικονίδιο για να δημιουργήσετε σύνδεσμο σε αυτή τη "
 "σελίδα"
 
-#: ../plugins/desktop-file/plugin.cpp:379
+#: ../plugins/desktop-file/plugin.cpp:383
 msgid "Unsafe protocol."
 msgstr "Μη ασφαλές πρωτόκολλο."
 
-#: ../plugins/desktop-file/plugin.cpp:380
+#: ../plugins/desktop-file/plugin.cpp:384
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2765,76 +2764,76 @@ msgstr ""
 "Η διεύθυνση δεν φορτώθηκε, επειδή αναφέρεται σε ένα μη ασφαλές πρωτόκολλο "
 "και συνεπώς είναι ένας κίνδυνος για την ασφάλεια του συστήματος σας."
 
-#: ../plugins/desktop-file/plugin.cpp:408
+#: ../plugins/desktop-file/plugin.cpp:412
 msgid "No address found."
 msgstr "Δε βρέθηκε διεύθυνση."
 
-#: ../plugins/desktop-file/plugin.cpp:409
+#: ../plugins/desktop-file/plugin.cpp:413
 msgid "No web address could be found in this file."
 msgstr "Δε βρέθηκε διεύθυνση ιστού μέσα σε αυτό το αρχείο."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:444
+#: ../plugins/desktop-file/plugin.cpp:448
 msgid "Epiphany Desktop File Plugin"
 msgstr "Πρόσθετη λειτουργία επιφάνειας εργασίας Epiphany "
 
-#: ../plugins/desktop-file/plugin.cpp:448
+#: ../plugins/desktop-file/plugin.cpp:452
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr ""
 "Αυτή η πρόσθετη λειτουργία χειρίζεται αρχεία “.desktop” που περιέχουν "
 "δεσμούς σε ιστοσελίδες."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:332
+#: ../src/bookmarks/ephy-bookmark-action.c:319
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:509
+#: ../src/bookmarks/ephy-bookmark-action.c:496
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Εκτελεί το σενάριο εντολών “%s”"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:97
-#: ../src/bookmarks/ephy-bookmark-properties.c:623
+#: ../src/bookmarks/ephy-bookmark-properties.c:87
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _Παρόμοιο"
 msgstr[1] "%d _παρόμοια"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:270
+#: ../src/bookmarks/ephy-bookmark-properties.c:260
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "Ε_νοποίηση με %d όμοιο σελιδοδείκτη"
 msgstr[1] "Ε_νοποίηση με %d όμοιους σελιδοδείκτες"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:290
-#: ../src/bookmarks/ephy-bookmark-properties.c:312
+#: ../src/bookmarks/ephy-bookmark-properties.c:280
+#: ../src/bookmarks/ephy-bookmark-properties.c:302
 #, c-format
 msgid "Show “%s”"
 msgstr "Εμφάνιση “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
+#: ../src/bookmarks/ephy-bookmark-properties.c:428
 #, c-format
 msgid "“%s” Properties"
 msgstr "Ιδιότητες \"%s\""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:562
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Τίτλος:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "_Διεύθυνση:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:589
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "Θέ_ματα:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Εμ_φάνιση θεμάτων"
 
@@ -2842,60 +2841,60 @@ msgstr "Εμ_φάνιση θεμάτων"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:110
 msgid "Search the web"
 msgstr "Αναζήτηση στον ιστό"
 
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:110
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:115
 msgid "Entertainment"
 msgstr "Διασκέδαση"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "News"
 msgstr "Νέα"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "Shopping"
 msgstr "Αγορές"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Sports"
 msgstr "Αθλητικά"
 
-#: ../src/bookmarks/ephy-bookmarks.c:120
+#: ../src/bookmarks/ephy-bookmarks.c:119
 msgid "Travel"
 msgstr "Ταξίδια"
 
-#: ../src/bookmarks/ephy-bookmarks.c:121
+#: ../src/bookmarks/ephy-bookmarks.c:120
 msgid "Work"
 msgstr "Εργασία"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:493
+#: ../src/bookmarks/ephy-bookmarks.c:462
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Ενημέρωση σελιδοδείκτη \"%s\";"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:467
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Ο σελιδοδείκτης αυτής της σελίδας μεταφέρθηκε στο \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:502
+#: ../src/bookmarks/ephy-bookmarks.c:471
 msgid "_Don't Update"
 msgstr "Να μ_ην ενημερωθεί"
 
-#: ../src/bookmarks/ephy-bookmarks.c:504
+#: ../src/bookmarks/ephy-bookmarks.c:473
 msgid "_Update"
 msgstr "_Ενημέρωση"
 
-#: ../src/bookmarks/ephy-bookmarks.c:507
+#: ../src/bookmarks/ephy-bookmarks.c:476
 msgid "Update Bookmark?"
 msgstr "Ενημέρωση σελιδοδείκτη;"
 
@@ -2903,7 +2902,7 @@ msgstr "Ενημέρωση σελιδοδείκτη;"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1246
+#: ../src/bookmarks/ephy-bookmarks.c:1227
 msgid "bookmarks|All"
 msgstr "Όλοι"
 
@@ -2911,7 +2910,7 @@ msgstr "Όλοι"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1252
+#: ../src/bookmarks/ephy-bookmarks.c:1233
 msgid "bookmarks|Most Visited"
 msgstr "Περισσότερες επισκέψεις"
 
@@ -2920,7 +2919,7 @@ msgstr "Περισσότερες επισκέψεις"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1259
+#: ../src/bookmarks/ephy-bookmarks.c:1240
 msgid "bookmarks|Not Categorized"
 msgstr "Χωρίς κατηγορία"
 
@@ -2929,236 +2928,236 @@ msgstr "Χωρίς κατηγορία"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1267
+#: ../src/bookmarks/ephy-bookmarks.c:1248
 msgid "bookmarks|Nearby Sites"
 msgstr "Γειτονικοί τόποι"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:99
+#: ../src/bookmarks/ephy-bookmarks-editor.c:80
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:100
+#: ../src/bookmarks/ephy-bookmarks-editor.c:81
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:133
 msgid "Remove from this topic"
 msgstr "Απομάκρυνση από αυτό το θέμα"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:113
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:115
 msgid "_View"
 msgstr "_Προβολή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:126
+#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:120
 msgid "_Help"
 msgstr "_Βοήθεια"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "_New Topic"
 msgstr "_Νέο Θέμα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Create a new topic"
 msgstr "Δημιουργία νέου θέματος"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1370
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:176
-#: ../src/ephy-history-window.c:727
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:156
+#: ../src/ephy-history-window.c:707
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Άνοιγμα σε νέο _παράθυρο"
 msgstr[1] "Άνοιγμα σε νέα _παράθυρα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Open the selected bookmark in a new window"
 msgstr "Άνοιγμα του επιλεγμένου σελιδοδείκτη σε νέο παράθυρο"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1373
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:179
-#: ../src/ephy-history-window.c:730
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
+#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:159
+#: ../src/ephy-history-window.c:710
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Άνοιγμα σε νέα _καρτέλα"
 msgstr[1] "Άνοιγμα σε νέες _καρτέλες"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Open the selected bookmark in a new tab"
 msgstr "Άνοιγμα του επιλεγμένου σελιδοδείκτη σε νέα καρτέλα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "_Rename…"
 msgstr "_Μετονομασία..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "Rename the selected bookmark or topic"
 msgstr "Μετονομασία του επιλεγμένου σελιδοδείκτη ή θέματος"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
-#: ../src/bookmarks/ephy-bookmarks-ui.c:300
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "_Properties"
 msgstr "_Ιδιότητες"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Προβολή ή αλλαγή των ιδιοτήτων του επιλεγμένου σελιδοδείκτη"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "_Import Bookmarks…"
 msgstr "_Εισαγωγή σελιδοδεικτών..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Εισαγωγή σελιδοδεικτών από άλλο φυλλομετρητή ή από αρχείο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Export Bookmarks…"
 msgstr "Εξ_αγωγή σελιδοδεικτών..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Export bookmarks to a file"
 msgstr "Εξαγωγή σελιδοδεικτών σε αρχείο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/ephy-history-window.c:185 ../src/ephy-window.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:145
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "Close the bookmarks window"
 msgstr "Κλείσιμο παραθύρου σελιδοδεικτών"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:157
 msgid "Cu_t"
 msgstr "_Αποκοπή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:158
 msgid "Cut the selection"
 msgstr "Αποκοπή της επιλογής"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
-#: ../src/ephy-history-window.c:193 ../src/ephy-history-window.c:740
-#: ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1364
+#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:720
+#: ../src/ephy-window.c:160
 msgid "_Copy"
 msgstr "Α_ντιγραφή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:161
 msgid "Copy the selection"
 msgstr "Αντιγραφή της επιλογής"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/ephy-history-window.c:176 ../src/ephy-window.c:163
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
-#: ../src/ephy-history-window.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/ephy-history-window.c:177
 msgid "Paste the clipboard"
 msgstr "Επικόλληση του προχείρου"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/ephy-history-window.c:179
 msgid "_Delete"
 msgstr "_Διαγραφή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:221
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "Delete the selected bookmark or topic"
 msgstr "Διαγραφή του επιλεγμένου σελιδοδείκτη ή θέματος"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:202 ../src/ephy-window.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:169
 msgid "Select _All"
 msgstr "Επιλογή _Όλων"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:224
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "Select all bookmarks or text"
 msgstr "Επιλογή όλων των σελιδοδεικτών ή κειμένου"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:228
-#: ../src/ephy-history-window.c:210 ../src/ephy-window.c:266
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:260
 msgid "_Contents"
 msgstr "_Περιεχόμενα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:229
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Display bookmarks help"
 msgstr "Προβολή βοήθειας σελιδοδεικτών"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-#: ../src/ephy-history-window.c:213 ../src/ephy-window.c:269
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:263
 msgid "_About"
 msgstr "Π_ερί"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-#: ../src/ephy-history-window.c:214 ../src/ephy-window.c:270
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:264
 msgid "Display credits for the web browser creators"
 msgstr "Εμφάνιση μνείας των δημιουργών του φυλλομετρητή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:237
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
 msgid "_Show on Toolbar"
 msgstr "_Εμφάνιση στην εργαλειοθήκη"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:238
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Εμφάνιση του επιλεγμένου σελιδοδείκτη στην εργαλειοθήκη"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:251
-#: ../src/ephy-history-window.c:228
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:208
 msgid "_Title"
 msgstr "_Τίτλος"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:252
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
 msgid "Show only the title column"
 msgstr "Εμφάνιση μόνο της στήλης τίτλων"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:253
+#: ../src/bookmarks/ephy-bookmarks-editor.c:234
 msgid "T_itle and Address"
 msgstr "Τ_ίτλος και Διεύθυνση"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:254
+#: ../src/bookmarks/ephy-bookmarks-editor.c:235
 msgid "Show both the title and address columns"
 msgstr "Εμφάνιση και της στήλης τίτλου και της διεύθυνσης"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:297
+#: ../src/bookmarks/ephy-bookmarks-editor.c:278
 msgid "Type a topic"
 msgstr "Πληκτρολογήστε ένα θέμα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:415
+#: ../src/bookmarks/ephy-bookmarks-editor.c:396
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Διαγραφή θέματος \"%s\";"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:418
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
 msgid "Delete this topic?"
 msgstr "Διαγραφή αυτού του θέματος;"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:420
+#: ../src/bookmarks/ephy-bookmarks-editor.c:401
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -3167,44 +3166,44 @@ msgstr ""
 "σελιδοδείκτες που περιέχει, εκτός αν οι σελιδοδείκτες αυτοί ανοίγουν "
 "ταυτόχρονα και σε άλλα θέματα. Οι σελιδοδείκτες δεν θα διαγραφούν."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:423
+#: ../src/bookmarks/ephy-bookmarks-editor.c:404
 msgid "_Delete Topic"
 msgstr "_Διαγραφή θέματος"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:653
-#: ../src/bookmarks/ephy-bookmarks-editor.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:662
+#: ../src/bookmarks/ephy-bookmarks-editor.c:643
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Προφίλ Mozilla \"%s\" "
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:647
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:670
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:699
+#: ../src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Import failed"
 msgstr "Η εισαγωγή απέτυχε"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:701
+#: ../src/bookmarks/ephy-bookmarks-editor.c:682
 msgid "Import Failed"
 msgstr "Η Εισαγωγή απέτυχε"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:704
+#: ../src/bookmarks/ephy-bookmarks-editor.c:685
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -3213,81 +3212,81 @@ msgstr ""
 "Οι σελιδοδείκτες από το \"%s\" δεν μπορούν να εισαχθούν γιατί το αρχείο "
 "είναι καταστραμένο ή γιατί δεν υποστηρίζεται ο τύπος του."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:767
+#: ../src/bookmarks/ephy-bookmarks-editor.c:748
 msgid "Import Bookmarks from File"
 msgstr "Εισαγωγή σελιδοδεικτών από αρχείο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:774
+#: ../src/bookmarks/ephy-bookmarks-editor.c:755
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Σελιδοδείκτες Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:778
+#: ../src/bookmarks/ephy-bookmarks-editor.c:759
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Σελιδοδείκτες Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:782
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Epiphany bookmarks"
 msgstr "Σελιδοδείκτες Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:906
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Εξαγωγή σελιδοδεικτών"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:923
+#: ../src/bookmarks/ephy-bookmarks-editor.c:904
 msgid "File f_ormat:"
 msgstr "_Μορφή αρχείου:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:967
+#: ../src/bookmarks/ephy-bookmarks-editor.c:948
 msgid "Import Bookmarks"
 msgstr "Εισαγωγή σελιδοδεικτών"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:973
+#: ../src/bookmarks/ephy-bookmarks-editor.c:954
 msgid "I_mport"
 msgstr "_Εισαγωγή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:987
+#: ../src/bookmarks/ephy-bookmarks-editor.c:968
 msgid "Import bookmarks from:"
 msgstr "Εισαγωγή σελιδοδεικτών από:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1379
-#: ../src/ephy-history-window.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1360
+#: ../src/ephy-history-window.c:716
 msgid "_Copy Address"
 msgstr "_Αντιγραφή διεύθυνσης"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
-#: ../src/ephy-history-window.c:1089
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
+#: ../src/ephy-history-window.c:1069
 msgid "Clear"
 msgstr "Εκκαθάριση"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
-#: ../src/ephy-history-window.c:1097
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
+#: ../src/ephy-history-window.c:1077
 msgid "_Search:"
 msgstr "_Αναζήτηση:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1856
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1842
 msgid "Topics"
 msgstr "Θέματα"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1926
-#: ../src/ephy-history-window.c:1420
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1912
+#: ../src/ephy-history-window.c:1400
 msgid "Title"
 msgstr "Τίτλος"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
-#: ../src/ephy-history-window.c:1429
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1923
+#: ../src/ephy-history-window.c:1409
 msgid "Address"
 msgstr "Διεύθυνση"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:301
+#: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "Show properties for this bookmark"
 msgstr "Εμφάνιση ιδιοτήτων για αυτόν το σελιδοδείκτη"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:313
+#: ../src/bookmarks/ephy-bookmarks-ui.c:312
 msgid "Open this bookmark in a new tab"
 msgstr "Άνοιγμα του σελιδοδείκτη σε νέα καρτέλα"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:325
+#: ../src/bookmarks/ephy-bookmarks-ui.c:324
 msgid "Open this bookmark in a new window"
 msgstr "Άνοιγμα του σελιδοδείκτη σε νέο παράθυρο"
 
@@ -3300,7 +3299,7 @@ msgstr "Άνοιγμα σε νέες _καρτέλες"
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Άνοιγμα των σελιδοδεικτών αυτού του θέματος σε νέα καρτέλα"
 
-#: ../src/bookmarks/ephy-related-action.c:155
+#: ../src/bookmarks/ephy-related-action.c:153
 msgid "Related"
 msgstr "Σχετικά"
 
@@ -3308,139 +3307,139 @@ msgstr "Σχετικά"
 msgid "Topic"
 msgstr "Θέμα"
 
-#: ../src/bookmarks/ephy-topics-entry.c:331
+#: ../src/bookmarks/ephy-topics-entry.c:329
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Δημιουργία θέματος “%s”"
 
-#: ../src/ephy-encoding-dialog.c:317
+#: ../src/ephy-encoding-dialog.c:312
 msgid "Encodings"
 msgstr "Κωδικοποιήσεις"
 
-#: ../src/ephy-encoding-menu.c:326
+#: ../src/ephy-encoding-menu.c:323
 msgid "_Other…"
 msgstr "Άλ_λες..."
 
-#: ../src/ephy-encoding-menu.c:327
+#: ../src/ephy-encoding-menu.c:324
 msgid "Other encodings"
 msgstr "Άλλες κωδικοποίησεις"
 
-#: ../src/ephy-encoding-menu.c:333
+#: ../src/ephy-encoding-menu.c:330
 msgid "_Automatic"
 msgstr "_Αυτόματη"
 
-#: ../src/ephy-find-toolbar.c:139
+#: ../src/ephy-find-toolbar.c:128
 msgid "Not found"
 msgstr "Δε βρέθηκε"
 
-#: ../src/ephy-find-toolbar.c:151
+#: ../src/ephy-find-toolbar.c:140
 msgid "Wrapped"
 msgstr "Με αναδίπλωση"
 
-#: ../src/ephy-find-toolbar.c:171
+#: ../src/ephy-find-toolbar.c:160
 msgid "Find links:"
 msgstr "Εύρεση δεσμών:"
 
-#: ../src/ephy-find-toolbar.c:171
+#: ../src/ephy-find-toolbar.c:160
 msgid "Find:"
 msgstr "Εύρεση:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:363 ../src/ephy-find-toolbar.c:485
+#: ../src/ephy-find-toolbar.c:352 ../src/ephy-find-toolbar.c:474
 msgid "_Case sensitive"
 msgstr "Διάκριση πεζών από κεφαλαία"
 
-#: ../src/ephy-find-toolbar.c:468
+#: ../src/ephy-find-toolbar.c:457
 msgid "Find Previous"
 msgstr "Εύρεση προηγουμένου"
 
-#: ../src/ephy-find-toolbar.c:471
+#: ../src/ephy-find-toolbar.c:460
 msgid "Find previous occurrence of the search string"
 msgstr "Εύρεση προηγούμενης εμφάνισης της ζητούμενης λέξης ή φράσης"
 
-#: ../src/ephy-find-toolbar.c:477
+#: ../src/ephy-find-toolbar.c:466
 msgid "Find Next"
 msgstr "Εύρεση επομένου"
 
-#: ../src/ephy-find-toolbar.c:480
+#: ../src/ephy-find-toolbar.c:469
 msgid "Find next occurrence of the search string"
 msgstr "Εύρεση επόμενης εμφάνισης της ζητούμενης λέξης ή φράσης"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:272 ../src/ephy-toolbar.c:600
+#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:595
 msgid "Leave Fullscreen"
 msgstr "Έξοδος από πλήρη οθόνη"
 
-#: ../src/ephy-go-action.c:43 ../src/ephy-toolbar.c:321
+#: ../src/ephy-go-action.c:42 ../src/ephy-toolbar.c:316
 msgid "Go"
 msgstr "Μετάβαση"
 
-#: ../src/ephy-history-window.c:177
+#: ../src/ephy-history-window.c:157
 msgid "Open the selected history link in a new window"
 msgstr "Άνοιγμα του επιλεγμένου δεσμού ιστορικού σε νέο παράθυρο"
 
-#: ../src/ephy-history-window.c:180
+#: ../src/ephy-history-window.c:160
 msgid "Open the selected history link in a new tab"
 msgstr "Άνοιγμα του επιλεγμένου δεσμού ιστορικού σε νέα καρτέλα"
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:162
 msgid "Add _Bookmark…"
 msgstr "Προσθήκη _σελιδοδείκτη..."
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:163
 msgid "Bookmark the selected history link"
 msgstr "Δημιουργία σελιδοδείκτη για τον επιλεγμένο σύνδεσμο του ιστορικού"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:166
 msgid "Close the history window"
 msgstr "Κλείσιμο παραθύρου ιστορικού"
 
-#: ../src/ephy-history-window.c:200
+#: ../src/ephy-history-window.c:180
 msgid "Delete the selected history link"
 msgstr "Διαγραφή του επιλεγμένου δεσμού από το ιστορικό"
 
-#: ../src/ephy-history-window.c:203
+#: ../src/ephy-history-window.c:183
 msgid "Select all history links or text"
 msgstr "Επιλογή όλων των συνδέσμων ιστορικού ή κειμένου"
 
-#: ../src/ephy-history-window.c:205
+#: ../src/ephy-history-window.c:185
 msgid "Clear _History"
 msgstr "Εκκαθάριση _ιστορικού"
 
-#: ../src/ephy-history-window.c:206
+#: ../src/ephy-history-window.c:186
 msgid "Clear your browsing history"
 msgstr "Καθαρισμός του ιστορικού επισκέψεων σας"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:191
 msgid "Display history help"
 msgstr "Προβολή βοήθειας ιστορικού"
 
-#: ../src/ephy-history-window.c:229
+#: ../src/ephy-history-window.c:209
 msgid "Show the title column"
 msgstr "Εμφάνιση  της στήλης τίτλων"
 
-#: ../src/ephy-history-window.c:230
+#: ../src/ephy-history-window.c:210
 msgid "_Address"
 msgstr "_Διεύθυνση"
 
-#: ../src/ephy-history-window.c:231
+#: ../src/ephy-history-window.c:211
 msgid "Show the address column"
 msgstr "Εμφάνιση της στήλης διευθύνσεων"
 
-#: ../src/ephy-history-window.c:232
+#: ../src/ephy-history-window.c:212
 msgid "_Date and Time"
 msgstr "_Ημερομηνία και ώρα"
 
-#: ../src/ephy-history-window.c:233
+#: ../src/ephy-history-window.c:213
 msgid "Show the date and time column"
 msgstr "Εμφάνιση της στήλης ημερομηνίας και ώρας"
 
-#: ../src/ephy-history-window.c:259
+#: ../src/ephy-history-window.c:239
 msgid "Clear browsing history?"
 msgstr "Να καθαριστεί το ιστορικό επισκέψεων;"
 
-#: ../src/ephy-history-window.c:263
+#: ../src/ephy-history-window.c:243
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -3448,88 +3447,88 @@ msgstr ""
 "Ο καθαρισμός του ιστορικού επισκέψεων θα προκαλέσει τη μόνιμη διαγραφή όλων "
 "των συνδέσμων του ιστορικού."
 
-#: ../src/ephy-history-window.c:278
+#: ../src/ephy-history-window.c:258
 msgid "Clear History"
 msgstr "Εκκαθάριση Ιστορικού"
 
-#: ../src/ephy-history-window.c:1106
+#: ../src/ephy-history-window.c:1086
 msgid "Last 30 minutes"
 msgstr "Τελευταία 30 Λεπτά"
 
-#: ../src/ephy-history-window.c:1107
+#: ../src/ephy-history-window.c:1087
 msgid "Today"
 msgstr "Σήμερα"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1108 ../src/ephy-history-window.c:1111
-#: ../src/ephy-history-window.c:1115
+#: ../src/ephy-history-window.c:1088 ../src/ephy-history-window.c:1091
+#: ../src/ephy-history-window.c:1095
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Τελευταία %d ημέρα"
 msgstr[1] "Τελευταίες %d ημέρες"
 
-#: ../src/ephy-history-window.c:1357
+#: ../src/ephy-history-window.c:1337
 msgid "Sites"
 msgstr "Τοποθεσίες"
 
-#: ../src/ephy-history-window.c:1437
+#: ../src/ephy-history-window.c:1417
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
 msgstr "Άνοιγμα μιας νέας καρτέλας μέσα σε υπάρχον παράθυρο"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:80
 msgid "Open a new browser window"
 msgstr "Άνοιγμα ενός νέου παραθύρου"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "Εκκίνηση του επεξεργαστή σελιδοδεικτών"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "Εισαγωγή σελιδοδεικτών από το δοθέν αρχείο"
 
-#: ../src/ephy-main.c:82 ../src/ephy-main.c:84
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
 msgid "FILE"
 msgstr "ΑΡΧΕΙΟ"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:86
 msgid "Load the given session file"
 msgstr "Φόρτωση του καθορισμένου αρχείου συνεδρίας"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:88
 msgid "Add a bookmark"
 msgstr "Προσθήκη σελιδοδείκτη"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:90
 msgid "Start a private instance"
 msgstr "Έναρξη μιας ιδιωτικής συνεδρίας"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:92
 msgid "Profile directory to use in the private instance"
 msgstr "Κατάλογος προφίλ για χρήση σε ιδιωτική συνεδρία"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:92
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:94
 msgid "URL …"
 msgstr "URL ..."
 
-#: ../src/ephy-main.c:407
+#: ../src/ephy-main.c:409
 msgid "Could not start GNOME Web Browser"
 msgstr "Αδυναμία εκκίνησης του περιηγητή ιστοσελίδων του GNOME"
 
-#: ../src/ephy-main.c:410
+#: ../src/ephy-main.c:412
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3538,19 +3537,15 @@ msgstr ""
 "Η εκκίνηση απέτυχε λόγω του παρακάτω σφάλματος:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:874
-msgid "GNOME Web Browser"
-msgstr "Περιηγητής Ιστοσελίδων  του GNOME"
-
-#: ../src/ephy-main.c:516
+#: ../src/ephy-main.c:518
 msgid "GNOME Web Browser options"
 msgstr "Επιλογές περιηγητή ιστοσελίδων του GNOME"
 
-#: ../src/ephy-notebook.c:620
+#: ../src/ephy-notebook.c:612
 msgid "Close tab"
 msgstr "Κλείσιμο καρτέλας"
 
-#: ../src/ephy-session.c:122
+#: ../src/ephy-session.c:114
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -3559,11 +3554,11 @@ msgstr[0] ""
 msgstr[1] ""
 "Οι λήψεις αρχείων θα ακυρωθούν και η αποσύνδεση θα γίνει σε %d δευτερόλεπτα."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:230
 msgid "Abort pending downloads?"
 msgstr "Ακύρωση εκκρεμών λήψεων αρχείων;"
 
-#: ../src/ephy-session.c:242
+#: ../src/ephy-session.c:234
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3571,19 +3566,19 @@ msgstr ""
 "Υπάρχουν ακόμα εκκρεμείς λήψεις αρχείων. Αν αποσυνδεθείτε, θα ακυρωθούν και "
 "θα χαθούν."
 
-#: ../src/ephy-session.c:246
+#: ../src/ephy-session.c:238
 msgid "_Cancel Logout"
 msgstr "Α_κύρωση αποσύνδεσης"
 
-#: ../src/ephy-session.c:248
+#: ../src/ephy-session.c:240
 msgid "_Abort Downloads"
 msgstr "Α_κύρωση λήψεων"
 
-#: ../src/ephy-session.c:581
+#: ../src/ephy-session.c:573
 msgid "Recover previous browser windows and tabs?"
 msgstr "Ανάκτηση των προηγούμενων παραθύρων και καρτελών του περιηγητή;"
 
-#: ../src/ephy-session.c:585
+#: ../src/ephy-session.c:577
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3592,15 +3587,15 @@ msgstr ""
 "φορά που έτρεξε. Μπορείτε να ανακτήσετε τα παράθυρα και τις καρτέλες που "
 "είχατε ανοιχτά."
 
-#: ../src/ephy-session.c:589
+#: ../src/ephy-session.c:581
 msgid "_Don't Recover"
 msgstr "Να μ_η γίνει ανάκτηση"
 
-#: ../src/ephy-session.c:591
+#: ../src/ephy-session.c:583
 msgid "_Recover"
 msgstr "Ανά_κτηση"
 
-#: ../src/ephy-session.c:593
+#: ../src/ephy-session.c:585
 msgid "Crash Recovery"
 msgstr "Ανάκτηση από Κόλλημα"
 
@@ -3617,694 +3612,695 @@ msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Ο σύνδεσμος που κάνατε κλικ χρειάζεται την εγκατάσταση της επέκτασης sidebar."
 
-#: ../src/ephy-statusbar.c:91
+#: ../src/ephy-statusbar.c:85
 msgid "Caret"
 msgstr "Caret"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:98
+#: ../src/ephy-statusbar.c:92
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Σε λειτουργία πληκτρολογίου, πατήστε F7 για έξοδο"
 
-#: ../src/ephy-tabs-menu.c:208
+#: ../src/ephy-tabs-menu.c:202
 msgid "Switch to this tab"
 msgstr "Αλλαγή σε αυτή την καρτέλα"
 
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:225
 msgid "_Back"
 msgstr "_Πίσω"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:227
 msgid "Go to the previous visited page"
 msgstr "Μετάβαση στην προηγούμενη αναγνωσμένη σελίδα"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:236
+#: ../src/ephy-toolbar.c:231
 msgid "Back history"
 msgstr "Ιστορικό πίσω"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:245
 msgid "_Forward"
 msgstr "_Μπροστά"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:247
 msgid "Go to the next visited page"
 msgstr "Πήγαινε στην επόμενη αναγνωσμένη σελίδα"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:251
 msgid "Forward history"
 msgstr "Ιστορικό μπροστά"
 
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:264
 msgid "_Up"
 msgstr "_Επάνω"
 
-#: ../src/ephy-toolbar.c:271
+#: ../src/ephy-toolbar.c:266
 msgid "Go up one level"
 msgstr "Μετάβαση ένα επίπεδο επάνω"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:270
 msgid "List of upper levels"
 msgstr "Λίστα των επάνω επιπέδων"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:288
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
 "Εισάγετε μια διεύθυνση διαδικτύου για άνοιγμα, ή μία φράση για αναζήτηση"
 
-#: ../src/ephy-toolbar.c:309
+#: ../src/ephy-toolbar.c:304
 msgid "Zoom"
 msgstr "Μεγέθυνση"
 
-#: ../src/ephy-toolbar.c:311
+#: ../src/ephy-toolbar.c:306
 msgid "Adjust the text size"
 msgstr "Προσαρμογή μεγέθους κειμένου"
 
-#: ../src/ephy-toolbar.c:323
+#: ../src/ephy-toolbar.c:318
 msgid "Go to the address entered in the address entry"
 msgstr "Μετάβαση στη διεύθυνση που δόθηκε στην εισαγωγή διεύθυνσης"
 
-#: ../src/ephy-toolbar.c:332
+#: ../src/ephy-toolbar.c:327
 msgid "_Home"
 msgstr "_Αρχική σελίδα"
 
-#: ../src/ephy-toolbar.c:334
+#: ../src/ephy-toolbar.c:329
 msgid "Go to the home page"
 msgstr "Μετάβαση στην αρχική τοποθεσία"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:339
 msgid "New _Tab"
 msgstr "Νέα _καρτέλα"
 
-#: ../src/ephy-toolbar.c:346
+#: ../src/ephy-toolbar.c:341
 msgid "Open a new tab"
 msgstr "Άνοιγμα νέας καρτέλας"
 
-#: ../src/ephy-toolbar.c:355
+#: ../src/ephy-toolbar.c:350
 msgid "_New Window"
 msgstr "_Νέο παράθυρο"
 
-#: ../src/ephy-toolbar.c:357
+#: ../src/ephy-toolbar.c:352
 msgid "Open a new window"
 msgstr "Άνοιγμα ενός νέου παραθύρου"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:82
+#: ../src/ephy-toolbar-editor.c:74
 msgid "toolbar style|Default"
 msgstr "Προεπιλογή"
 
 #. separator row
-#: ../src/ephy-toolbar-editor.c:84
+#: ../src/ephy-toolbar-editor.c:76
 msgid "Text below icons"
 msgstr "Κείμενο κάτω από εικονίδια"
 
-#: ../src/ephy-toolbar-editor.c:85
+#: ../src/ephy-toolbar-editor.c:77
 msgid "Text beside icons"
 msgstr "Κείμενο δίπλα από εικονίδια"
 
-#: ../src/ephy-toolbar-editor.c:86
+#: ../src/ephy-toolbar-editor.c:78
 msgid "Icons only"
 msgstr "Εικονίδια μόνο"
 
-#: ../src/ephy-toolbar-editor.c:87
+#: ../src/ephy-toolbar-editor.c:79
 msgid "Text only"
 msgstr "Κείμενο μόνο"
 
-#: ../src/ephy-toolbar-editor.c:196
+#: ../src/ephy-toolbar-editor.c:188
 msgid "Toolbar Editor"
 msgstr "Επεξεργαστής εργαλειοθήκης"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:215
+#: ../src/ephy-toolbar-editor.c:207
 msgid "Toolbar _button labels:"
 msgstr "Ετικέτες _κουμπιών εργαλειοθήκης:"
 
-#: ../src/ephy-toolbar-editor.c:279
+#: ../src/ephy-toolbar-editor.c:271
 msgid "_Add a New Toolbar"
 msgstr "_Προσθήκη μιας νέας εργαλειοθήκης"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:116
 msgid "_Bookmarks"
 msgstr "_Σελιδοδείκτες"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:117
 msgid "_Go"
 msgstr "_Μετάβαση"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:118
 msgid "T_ools"
 msgstr "Εργα_λεία"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:119
 msgid "_Tabs"
 msgstr "_Καρτέλες"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:121
 msgid "_Toolbars"
 msgstr "_Εργαλειοθήκες"
 
 #. File menu
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:127
 msgid "_Open…"
 msgstr "_Άνοιγμα..."
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:128
 msgid "Open a file"
 msgstr "Άνοιγμα ενός αρχείου"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:130
 msgid "Save _As…"
 msgstr "Αποθήκευση _ως..."
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:131
 msgid "Save the current page"
 msgstr "Αποθήκευση της τρέχουσας σελίδας"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:133
 msgid "Page Set_up"
 msgstr "_Διαμόρφωση σελίδας"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:134
 msgid "Setup the page settings for printing"
 msgstr "Ρυθμίζει τη σελίδα για εκτύπωση"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:136
 msgid "Print Pre_view"
 msgstr "Προεπισκόπηση ε_κτύπωσης"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:137
 msgid "Print preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:139
 msgid "_Print…"
 msgstr "_Εκτύπωση"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:140
 msgid "Print the current page"
 msgstr "Εκτύπωση της τρέχουσας σελίδας"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:142
 msgid "S_end Link by Email…"
 msgstr "Α_ποστολή δεσμού σε Email..."
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:143
 msgid "Send a link of the current page"
 msgstr "Αποστολή δεσμού της τρέχουσας σελίδας"
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:146
 msgid "Close this tab"
 msgstr "Κλείσιμο αυτής της καρτέλας"
 
 #. Edit menu
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:151
 msgid "_Undo"
 msgstr "Α_ναίρεση"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:152
 msgid "Undo the last action"
 msgstr "Αναίρεση της τελευταίας ενέργειας"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:154
 msgid "Re_do"
 msgstr "Α_κύρωση αναίρεσης"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:155
 msgid "Redo the last undone action"
 msgstr "Ακύρωση της τελευταίας ανηρημένης ενέργειας"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:164
 msgid "Paste clipboard"
 msgstr "Επικόλληση προχείρου"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:167
 msgid "Delete text"
 msgstr "Διαγραφή κειμένου"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:170
 msgid "Select the entire page"
 msgstr "Επιλογή ολόκληρης σελίδας"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:172
 msgid "_Find…"
 msgstr "Ε_ύρεση..."
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:173
 msgid "Find a word or phrase in the page"
 msgstr "Εύρεση μίας λέξης ή μίας φράσης μέσα στη σελίδα"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:175
 msgid "Find Ne_xt"
 msgstr "Εύρεση ε_πομένου"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:176
 msgid "Find next occurrence of the word or phrase"
 msgstr "Εύρεση επόμενης εμφάνισης της λέξης ή φράσης"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:178
 msgid "Find Pre_vious"
 msgstr "Εύρεση προη_γουμένου"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:179
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Εύρεση προηγούμενης εμφάνισης της λέξης ή φράσης"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:181
 msgid "P_ersonal Data"
 msgstr "Προσωπικά _Δεδομένα"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:182
 msgid "View and remove cookies and passwords"
 msgstr "Προβολή και απομάκρυνση κωδικών και cookies"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:185
 msgid "Certificate_s"
 msgstr "Πιστο_ποιητικά"
 
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:186
 msgid "Manage Certificates"
 msgstr "Διαχείριση πιστοποιητικών"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:189
 msgid "P_references"
 msgstr "Π_ροτιμήσεις"
 
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:190
 msgid "Configure the web browser"
 msgstr "Ρύθμιση του περιηγητή ιστοσελίδων"
 
 #. View menu
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:195
 msgid "_Customize Toolbars…"
 msgstr "Προ_σαρμογή εργαλειοθηκών..."
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:196
 msgid "Customize toolbars"
 msgstr "Προσαρμογή εργαλειοθηκών"
 
-#: ../src/ephy-window.c:204 ../src/ephy-window.c:207
+#: ../src/ephy-window.c:198 ../src/ephy-window.c:201
 msgid "_Stop"
 msgstr "_Διακοπή"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:199
 msgid "Stop current data transfer"
 msgstr "Διακοπή τρέχουσας μεταφοράς δεδομένων"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:203
 msgid "_Reload"
 msgstr "Α_νανέωση"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:204
 msgid "Display the latest content of the current page"
 msgstr "Εμφάνιση των πιο πρόσφατων περιεχομένων της τρέχουσας σελίδας"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:206
 msgid "_Larger Text"
 msgstr "Με_γαλύτερο κείμενο"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:207
 msgid "Increase the text size"
 msgstr "Μεγέθυνση του κειμένου"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:209
 msgid "S_maller Text"
 msgstr "Μι_κρότερο κείμενο"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:210
 msgid "Decrease the text size"
 msgstr "Σμίκρυνση του κειμένου"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:212
 msgid "_Normal Size"
 msgstr "_Κανονικό μέγεθος"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:213
 msgid "Use the normal text size"
 msgstr "Χρήση κανονικού μεγέθους κειμένου"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:215
 msgid "Text _Encoding"
 msgstr "Κω_δικοποίηση κειμένου"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:216
 msgid "Change the text encoding"
 msgstr "Αλλαγή της κωδικοποίησης κειμένου"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:218
 msgid "_Page Source"
 msgstr "Π_ηγαίος κώδικας σελίδας"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:219
 msgid "View the source code of the page"
 msgstr "Προβολή του πηγαίου κώδικα της σελίδας"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:221
 msgid "Page _Security Information"
 msgstr "Πληροφορίες α_σφάλειας σελίδας"
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:222
 msgid "Display security information for the web page"
 msgstr "Προβολή πληροφοριών ασφαλείας για την ιστοσελίδα"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:227
 msgid "_Add Bookmark…"
 msgstr "_Προσθήκη σελιδοδείκτη..."
 
-#: ../src/ephy-window.c:234 ../src/ephy-window.c:305
+#: ../src/ephy-window.c:228 ../src/ephy-window.c:299
 msgid "Add a bookmark for the current page"
 msgstr "Προσθήκη σελιδοδείκτη για τη τρέχουσα σελίδα"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:230
 msgid "_Edit Bookmarks"
 msgstr "_Επεξεργασία σελιδοδεικτών"
 
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:231
 msgid "Open the bookmarks window"
 msgstr "Άνοιγμα παραθύρου σελιδοδεικτών"
 
 #. Go menu
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:236
 msgid "_Location…"
 msgstr "_Τοποθεσία..."
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:237
 msgid "Go to a specified location"
 msgstr "Μετάβαση σε καθορισμένη τοποθεσία"
 
-#: ../src/ephy-window.c:245
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "_Ιστορικό"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:240
 msgid "Open the history window"
 msgstr "Άνοιγμα του παραθύρου ιστορικού"
 
 #. Tabs menu
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:245
 msgid "_Previous Tab"
 msgstr "_Προηγούμενη καρτέλα"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:246
 msgid "Activate previous tab"
 msgstr "Ενεργοποίηση της προηγούμενης καρτέλας"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:248
 msgid "_Next Tab"
 msgstr "_Επόμενη καρτέλα"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:249
 msgid "Activate next tab"
 msgstr "Ενεργοποίηση επόμενης καρτέλας"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:251
 msgid "Move Tab _Left"
 msgstr "Μετακίνηση καρτέλας _αριστερά"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:252
 msgid "Move current tab to left"
 msgstr "Μετακίνηση της τρέχουσας καρτέλας αριστερά"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:254
 msgid "Move Tab _Right"
 msgstr "Μετακίνηση καρτέλας _δεξιά"
 
-#: ../src/ephy-window.c:261
+#: ../src/ephy-window.c:255
 msgid "Move current tab to right"
 msgstr "Μετακίνηση της τρέχουσας καρτέλας δεξιά"
 
-#: ../src/ephy-window.c:267
+#: ../src/ephy-window.c:261
 msgid "Display web browser help"
 msgstr "Προβολή βοήθειας περιηγητή"
 
 #. File Menu
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:272
 msgid "_Work Offline"
 msgstr "_Εργασία χωρίς σύνδεση"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:273
 msgid "Switch to offline mode"
 msgstr "Αλλαγή σε κατάσταση εργασίας χωρίς σύνδεση"
 
 #. View Menu
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:278
 msgid "_Hide Toolbars"
 msgstr "Απόκρυ_ψη εργαλειοθηκών"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:279
 msgid "Show or hide toolbar"
 msgstr "Προβολή ή απόκρυψη της εργαλειοθήκης"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:281
 msgid "St_atusbar"
 msgstr "Γ_ραμμή κατάστασης"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:282
 msgid "Show or hide statusbar"
 msgstr "Προβολή ή απόκρυψη της γραμμής κατάστασης"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:284
 msgid "_Fullscreen"
 msgstr "_Πλήρης οθόνη"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:285
 msgid "Browse at full screen"
 msgstr "Περιήγηση σε λειτουργία πλήρους οθόνης"
 
-#: ../src/ephy-window.c:293
+#: ../src/ephy-window.c:287
 msgid "Popup _Windows"
 msgstr "Αναδυόμενα _παράθυρα"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:288
 msgid "Show or hide unrequested popup windows from this site"
 msgstr ""
 "Εμφάνιση ή απόκρυψη απρόσκλητων αναδυόμενων παραθύρων από αυτήν τη σελίδα"
 
-#: ../src/ephy-window.c:296
+#: ../src/ephy-window.c:290
 msgid "Selection Caret"
 msgstr "Επιλογή  Caret"
 
 #. Document
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:298
 msgid "Add Boo_kmark…"
 msgstr "Προσθήκη σελιδο_δείκτη..."
 
 #. Framed document
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:304
 msgid "Show Only _This Frame"
 msgstr "Εμφάνιση μόνο αυτού του _πλαισίου"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:305
 msgid "Show only this frame in this window"
 msgstr "Εμφάνιση μόνο αυτού του πλαισίου σε αυτό το παράθυρο"
 
 #. Links
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:310
 msgid "_Open Link"
 msgstr "_Άνοιγμα δεσμού"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:311
 msgid "Open link in this window"
 msgstr "Άνοιγμα δεσμού σε αυτό το παράθυρο"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:313
 msgid "Open Link in New _Window"
 msgstr "Άνοιγμα δεσμού σε _νέο παράθυρο"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:314
 msgid "Open link in a new window"
 msgstr "Άνοιγμα δεσμού σε νέο παράθυρο"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:316
 msgid "Open Link in New _Tab"
 msgstr "Άνοιγμα δεσμού σε νέα  καρ_τέλα"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:317
 msgid "Open link in a new tab"
 msgstr "Άνοιγμα δεσμού σε νέα καρτέλα"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:319
 msgid "_Download Link"
 msgstr "_Λήψη δεσμού"
 
-#: ../src/ephy-window.c:327
+#: ../src/ephy-window.c:321
 msgid "_Save Link As…"
 msgstr "_Αποθήκευση δεσμού ως..."
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:322
 msgid "Save link with a different name"
 msgstr "Αποθήκευση δεσμού με διαφορετικό όνομα"
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:324
 msgid "_Bookmark Link…"
 msgstr "Δεσμός ως _σελιδοδείκτης..."
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:326
 msgid "_Copy Link Address"
 msgstr "Αν_τιγραφή διεύθυνσης δεσμού"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:332
 msgid "_Send Email…"
 msgstr "Α_ποστολή Email..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:334
 msgid "_Copy Email Address"
 msgstr "_Αντιγραφή διεύθυνσης Email"
 
 #. Images
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:339
 msgid "Open _Image"
 msgstr "Άνοιγμα _εικόνας"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:341
 msgid "_Save Image As…"
 msgstr "Απο_θήκευση εικόνας ως..."
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:343
 msgid "_Use Image As Background"
 msgstr "_Χρήση εικόνας ως παρασκήνιο"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:345
 msgid "Copy I_mage Address"
 msgstr "Αντιγραφή διεύθυνσης ε_ικόνας"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:347
 msgid "St_art Animation"
 msgstr "Έ_ναρξη  κινούμενων εικόνων"
 
-#: ../src/ephy-window.c:355
+#: ../src/ephy-window.c:349
 msgid "St_op Animation"
 msgstr "Διακο_πή κινούμενων εικόνων"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:522
 msgid "There are unsubmitted changes to form elements"
 msgstr "Υπάρχουν αλλαγές σε στοιχεία της φόρμας που δεν έχουν υποβληθεί"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:526
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Αν κλείσετε το έγγραφο, θα χάσετε τις πληροφορίες."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:530
 msgid "Close _Document"
 msgstr "_Κλείσιμο εγγράφου"
 
-#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "Αποθήκευση ως"
 
-#: ../src/ephy-window.c:1482
+#: ../src/ephy-window.c:1476
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../src/ephy-window.c:1486
+#: ../src/ephy-window.c:1480
 msgid "Find"
 msgstr "Εύρεση"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1493
 msgid "Larger"
 msgstr "Μεγαλύτερα"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1496
 msgid "Smaller"
 msgstr "Μικρότερα"
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1686
 msgid "Insecure"
 msgstr "Μη ασφαλές"
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1691
 msgid "Broken"
 msgstr "Broken"
 
-#: ../src/ephy-window.c:1709
+#: ../src/ephy-window.c:1703
 msgid "Low"
 msgstr "Χαμηλή"
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1710
 msgid "High"
 msgstr "Υψηλή"
 
-#: ../src/ephy-window.c:1726
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Security level: %s"
 msgstr "Επίπεδο ασφάλειας: %s"
 
-#: ../src/ephy-window.c:1769
+#: ../src/ephy-window.c:1763
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d κρυμένο αναδυόμενο παράθυρο"
 msgstr[1] "%d κρυμένα αναδυόμενα παράθυρα"
 
-#: ../src/ephy-window.c:2030
+#: ../src/ephy-window.c:2024
 #, c-format
 msgid "Open image “%s”"
 msgstr "Άνοιγμα εικόνας \"%s\""
 
-#: ../src/ephy-window.c:2035
+#: ../src/ephy-window.c:2029
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Χρήση ως παρασκήνιο \"%s\" επιφάνειας εργασίας"
 
-#: ../src/ephy-window.c:2040
+#: ../src/ephy-window.c:2034
 #, c-format
 msgid "Save image “%s”"
 msgstr "Αποθήκευση εικόνας \"%s\""
 
-#: ../src/ephy-window.c:2045
+#: ../src/ephy-window.c:2039
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Αντιγραφή διεύθυνσης εικόνας \"%s\""
 
-#: ../src/ephy-window.c:2058
+#: ../src/ephy-window.c:2052
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Αποστολή email στη διεύθυνση \"%s\""
 
-#: ../src/ephy-window.c:2064
+#: ../src/ephy-window.c:2058
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Αντιγραφή διεύθυνσης email \"%s\""
 
-#: ../src/ephy-window.c:2076
+#: ../src/ephy-window.c:2070
 #, c-format
 msgid "Save link “%s”"
 msgstr "Αποθήκευση δεσμού \"%s\""
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2076
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Σύνδεσμος \"%s\" ως σελιδοδείκτης"
 
-#: ../src/ephy-window.c:2088
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Αντιγραφή διεύθυνσης δεσμού \"%s\""
 
-#: ../src/pdm-dialog.c:330
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Επιλέξτε τα προσωπικά δεδομένα που θέλετε να διαγραφούν</b>"
 
-#: ../src/pdm-dialog.c:333
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -4314,31 +4310,26 @@ msgstr ""
 "ιστοσελίδες που επισκεφθήκατε. Πριν προχωρήσετε, ελέγξτε τους τύπους "
 "πληροφοριών που θέλετε να διαγράψετε."
 
-#: ../src/pdm-dialog.c:338
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "Διαγραφή όλων των προσωπικών δεδομένων"
 
 #. Cookies
-#: ../src/pdm-dialog.c:361
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:373
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "Αποθηκευμένοι κωδικοί"
 
-#. History
-#: ../src/pdm-dialog.c:385
-msgid "_History"
-msgstr "_Ιστορικό"
-
 #. Cache
-#: ../src/pdm-dialog.c:397
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "_Προσωρινά αρχεία"
 
-#: ../src/pdm-dialog.c:413
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -4346,111 +4337,111 @@ msgstr ""
 "<small><i><b>Σημείωση:</b> Δεν μπορείτε να αναιρέσετε αυτήν την ενέργεια. Τα "
 "δεδομένα που επιλέγετε να εκκαθαρίσετε θα διαγραφούν οριστικά</i></small>"
 
-#: ../src/pdm-dialog.c:606
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "Ιδιότητες Cookie "
 
-#: ../src/pdm-dialog.c:623
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "Περιεχόμενα:"
 
-#: ../src/pdm-dialog.c:639
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "Διαδρομή:"
 
-#: ../src/pdm-dialog.c:655
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "Αποστολή σε:"
 
-#: ../src/pdm-dialog.c:664
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "Κρυπτογραφημένες συνδέσεις μόνο"
 
-#: ../src/pdm-dialog.c:664
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "Κάθε τύπος σύνδεσης"
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "Λήγει:"
 
-#: ../src/pdm-dialog.c:681
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "Τέλος της τρέχουσας συνεδρίας"
 
-#: ../src/pdm-dialog.c:814
+#: ../src/pdm-dialog.c:813
 msgid "Domain"
 msgstr "Τομέας"
 
-#: ../src/pdm-dialog.c:826
+#: ../src/pdm-dialog.c:825
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/pdm-dialog.c:1225
+#: ../src/pdm-dialog.c:1224
 msgid "Host"
 msgstr "Σύστημα"
 
-#: ../src/pdm-dialog.c:1237
+#: ../src/pdm-dialog.c:1236
 msgid "User Name"
 msgstr "Όνομα Χρήστη"
 
-#: ../src/pdm-dialog.c:1249
+#: ../src/pdm-dialog.c:1248
 msgid "User Password"
 msgstr "Κωδικός χρήστη"
 
-#: ../src/popup-commands.c:261
+#: ../src/popup-commands.c:260
 msgid "Download Link"
 msgstr "Λήψη δεσμού"
 
-#: ../src/popup-commands.c:269
+#: ../src/popup-commands.c:268
 msgid "Save Link As"
 msgstr "Αποθήκευση δεσμού ως"
 
-#: ../src/popup-commands.c:276
+#: ../src/popup-commands.c:275
 msgid "Save Image As"
 msgstr "Αποθήκευση εικόνας ως"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:86
 msgid "First"
 msgstr "Πρώτη"
 
-#: ../src/ppview-toolbar.c:91
+#: ../src/ppview-toolbar.c:87
 msgid "Go to the first page"
 msgstr "Μετάβαση στην πρώτη σελίδα"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:90
 msgid "Last"
 msgstr "Τελευταία"
 
-#: ../src/ppview-toolbar.c:95
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the last page"
 msgstr "Μετάβαση στην τελευταία σελίδα"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:94
 msgid "Previous"
 msgstr "Προηγούμενο"
 
-#: ../src/ppview-toolbar.c:99
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the previous page"
 msgstr "Μετάβαση στην προηγούμενη σελίδα"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:98
 msgid "Next"
 msgstr "Επόμενο"
 
-#: ../src/ppview-toolbar.c:103
+#: ../src/ppview-toolbar.c:99
 msgid "Go to next page"
 msgstr "Μετάβαση στην επόμενη σελίδα"
 
-#: ../src/ppview-toolbar.c:106
+#: ../src/ppview-toolbar.c:102
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:223
+#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
 msgid "Close print preview"
 msgstr "Κλείσιμο της προεπισκόπησης εκτύπωσης"
 
-#: ../src/prefs-dialog.c:388
+#: ../src/prefs-dialog.c:371
 msgid "Default"
 msgstr "Προεπιλογή"
 
@@ -4462,7 +4453,7 @@ msgstr "Προεπιλογή"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:966 ../src/prefs-dialog.c:974
+#: ../src/prefs-dialog.c:949 ../src/prefs-dialog.c:957
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4472,23 +4463,23 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:985
+#: ../src/prefs-dialog.c:968
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Καθορισμένη από τον χρήστη (%s)"
 
-#: ../src/prefs-dialog.c:1007
+#: ../src/prefs-dialog.c:990
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Γλώσσα συστήματος (%s)"
 msgstr[1] "Γλώσσες συστήματος (%s)"
 
-#: ../src/prefs-dialog.c:1399
+#: ../src/prefs-dialog.c:1382
 msgid "Select a Directory"
 msgstr "Επιλογή ενός καταλόγου"
 
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4500,7 +4491,7 @@ msgstr ""
 "αυτή δημοσιεύτηκε από το Free Software Foundation, έκδοση 2 , ή  "
 "(προαιρετικά) οποιαδήποτε νεότερη  έκδοση."
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4511,7 +4502,7 @@ msgstr ""
 "ΧΩΡΙΣ ΚΑΜΜΙΑ ΑΠΟΛΥΤΩΣ ΕΓΓΥΗΣΗ για συγκεκριμένο σκοπό. Δείτε για περισσότερες "
 "λεπτομέρειες την GNU General Public License ."
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4521,20 +4512,20 @@ msgstr ""
 "με τον περιηγητή. Αν όχι γράψτε στο Free Software Foundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:825 ../src/window-commands.c:841
-#: ../src/window-commands.c:852
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "Επικοινωνήστε μαζί μας στο:"
 
-#: ../src/window-commands.c:828
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "Συντελεστές:"
 
-#: ../src/window-commands.c:831
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "Παλιοί συντελεστές:"
 
-#: ../src/window-commands.c:864
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4551,76 +4542,12 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr ""
 "Κώστας Παπαδήμας <pkst@gnome.org>\n"
 "Νίκος Χαρωνιτάκης <nikosx@gmail.com>"
 
-#: ../src/window-commands.c:893
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "Αρχική σελίδα του περιηγητή ιστοσελίδων του GNOME"
-
-#~ msgid ""
-#~ "The page “%s” in this tab was not fully loaded yet when the web browser "
-#~ "crashed; it could have caused the crash."
-#~ msgstr ""
-#~ "Η σελίδα “%s” σε αυτή τη καρτέλα δεν φορτώθηκε πλήρως όταν κόλλησε η "
-#~ "εφαρμογή. Πιθανώς να είναι αυτή που προκάλεσε το κόλλημα."
-
-#~ msgid "Title a_nd Address"
-#~ msgstr "Τ_ίτλος και διεύθυνση"
-
-#~ msgid ""
-#~ "Hide the menubar by default. The menubar can still be accessed using F10."
-#~ msgstr ""
-#~ "Απόκρυψη γραμμής μενού ως προεπιλογή.  Η πρόσβαση στη γραμμή μενού μπορεί "
-#~ "να γίνει με τη χρήση του F10."
-
-#~ msgid ""
-#~ "The padlock icon in the statusbar indicates whether a page is secure."
-#~ msgstr ""
-#~ "Το εικονίδιο λουκέτο στην γραμμή κατάστασης δείχνει αν η σελίδα είναι "
-#~ "ασφαλής."
-
-#~ msgid "Quick Bookmark"
-#~ msgstr "Γρήγορος σελιδοδείκτης"
-
-#~ msgid "Quick Topic"
-#~ msgstr "Γρήγορο θέμα"
-
-#~ msgid "_View Certificate..."
-#~ msgstr "Προ_βολή πιστοποιητικού..."
-
-#~ msgid "“%s” redirected too many times."
-#~ msgstr "“%s” έγινε ανακατεύθυνση πάρα πολλές φορές."
-
-#~ msgid "_Import Bookmarks..."
-#~ msgstr "Ει_σαγωγή σελιδοδεικτών..."
-
-#~ msgid "_Export Bookmarks..."
-#~ msgstr "Εξ_αγωγή σελιδοδεικτών..."
-
-#~ msgid "URL ..."
-#~ msgstr "URL ..."
-
-#~ msgid "_Open..."
-#~ msgstr "_Άνοιγμα..."
-
-#~ msgid "Save _As..."
-#~ msgstr "Αποθήκευση _ως..."
-
-#~ msgid "_Print..."
-#~ msgstr "_Εκτύπωση..."
-
-#~ msgid "_Find..."
-#~ msgstr "Ε_ύρεση..."
-
-#~ msgid "_Save Link As..."
-#~ msgstr "Αποθήκευση συνδέσμου _ως..."
-
-#~ msgid "_Save Image As..."
-#~ msgstr "Αποθήκευ_ση εικόνας ως..."
-
-#~ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
-#~ msgstr "<epiphany-list@gnome.org> ή <gnome-doc-list@gnome.org>"
