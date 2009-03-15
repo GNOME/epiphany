@@ -36,8 +36,10 @@ DISTCHECK_CONFIGURE_FLAGS = \
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 
-ChangeLog: $(top_srcdir)/.git/HEAD
-	git log --stat > $@
+ChangeLog:
+	@if test -f $(top_srcdir)/.git/HEAD; then
+		git log --stat > $@; \
+	fi
 
 dist: ChangeLog
 
