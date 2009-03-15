@@ -36,17 +36,8 @@ DISTCHECK_CONFIGURE_FLAGS = \
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 
-# Build ChangeLog from SVN history (r7394 was the first ChangeLog-less checkin).
-# Only build this when in an svn checkout.
-
-ChangeLog:
-	@if test -f $(top_srcdir)/.git/HEAD; then \
-		git log --stat > $@; \
-	elif test -f $(top_srcdir)/.svn/entries; then \
-		svn log -v --xml -r HEAD:7394 $(SVN_ROOT)/$(SVN_MODULE)/$(SVN_BRANCH) | \
-			xsltproc --stringparam strip-prefix "$(SVN_MODULE)/$(SVN_BRANCH)" \
-				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
-	fi
+ChangeLog: $(top_srcdir)/.git/HEAD
+	git log --stat > $@
 
 dist: ChangeLog
 
