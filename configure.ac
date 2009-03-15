@@ -290,7 +290,7 @@ AC_SUBST([GECKO_LIBS])
 # *****************
 
 if test "$gecko_cv_have_gecko_1_9_1" = "yes"; then
-  WEASEL_UA_VERSION="3.1"
+  WEASEL_UA_VERSION="3.5"
 elif test "$gecko_cv_have_gecko_1_9_0" = "yes"; then
   WEASEL_UA_VERSION="3.0"
 elif test "$gecko_cv_gecko_version_int" -ge "1009000"; then
