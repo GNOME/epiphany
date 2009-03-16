@@ -394,6 +394,14 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
    */
   g_signal_emit_by_name (embed, "ge-document-type", type);
 
+  /* If WebKit can't handle the mime type start the download
+     process */
+  /* FIXME: need to use ephy_file_check_mime if auto-downloading */
+  if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
+    webkit_web_policy_decision_download (decision);
+    return TRUE;
+  }
+
   return FALSE;
 }
 
