@@ -6,15 +6,15 @@
 # Abdulaziz Al-Arfaj <alarfaj0@yahoo.com>, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Mohamed Magdy <alnokta@yahoo.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2008-10-19 12:07+0100\n"
-"PO-Revision-Date: 2008-09-18 02:19+0100\n"
-"Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-03-16 06:02+0000\n"
+"PO-Revision-Date: 2009-02-09 14:04+0300\n"
+"Last-Translator: Osama Khalid <osamak.wfm@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -716,7 +716,7 @@ msgstr "اختر _لغة:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:673 ../src/ephy-history-window.c:249
 #: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "ا_مسح"
@@ -1685,14 +1685,12 @@ msgid "The server dropped the connection before any data could be read."
 msgstr "قام الخادوم بغلق الاتصال قبل قراءة أي بيانات."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:435
-#, fuzzy
 msgid "Cannot Load Document While Working Offline"
-msgstr "لا يمكن عرض المستند بينما أعمل دون اتصال"
+msgstr "لا يمكن تحميل المستند أثناء العمل دون اتصال"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:436
-#, fuzzy
 msgid "Cannot load document while working offline."
-msgstr "لا يمكن عرض المستند بينما أعمل دون اتصال."
+msgstr "لا يمكن تحميل المستند أثناء العمل دون اتصال."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid "To view this document, disable “Work Offline” and try again."
@@ -1771,7 +1769,7 @@ msgid "You may find an old version:|in the Internet Archive"
 msgstr "في أرشيف الإنترنت"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks.c:1483
 #: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "بدون عنوان"
@@ -1869,15 +1867,15 @@ msgstr "موقع الوِب “%s” يطلب أن توقع النص التال�
 msgid "_Sign text"
 msgstr "_وقّع النص"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:192
+#: ../embed/mozilla/GeckoPrintService.cpp:196
 msgid "Options"
 msgstr "خيارات"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:456
+#: ../embed/mozilla/GeckoPrintService.cpp:460
 msgid "Print this page?"
 msgstr "اطبع هذه الصفحة؟"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:464
+#: ../embed/mozilla/GeckoPrintService.cpp:468
 msgid "Preparing to print"
 msgstr "تحضير للطباعة"
 
@@ -2309,32 +2307,32 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:918
 #, c-format
 msgid "Show “_%s”"
 msgstr "اعرض “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1381
 msgid "_Move on Toolbar"
 msgstr "ا_نقل على شريط الأدوات"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1382
 msgid "Move the selected item on the toolbar"
 msgstr "انقل العنصر المحدد على شريط الأدوات"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1383
 msgid "_Remove from Toolbar"
 msgstr "ا_حذف من شريط الأدوات"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1384
 msgid "Remove the selected item from the toolbar"
 msgstr "احذف العنصر المحدد من شريط الأدوات"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1385
 msgid "_Delete Toolbar"
 msgstr "ا_حذف شريط الأدوات"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1386
 msgid "Remove the selected toolbar"
 msgstr "احذف شريط الأدوات المحدد"
 
@@ -2676,15 +2674,15 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:868
+#: ../lib/widgets/ephy-location-entry.c:958
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إلى هذه الصفحة"
 
-#: ../plugins/desktop-file/plugin.cpp:377
+#: ../plugins/desktop-file/plugin.cpp:383
 msgid "Unsafe protocol."
 msgstr "بروتوكول غير آمن."
 
-#: ../plugins/desktop-file/plugin.cpp:378
+#: ../plugins/desktop-file/plugin.cpp:384
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2692,20 +2690,20 @@ msgstr ""
 "لم يتم تحميل العنوان، لأنه يشير إلى بروتوكول غير آمن وهذا يعتبر تهديدا أمنيا "
 "للنظام."
 
-#: ../plugins/desktop-file/plugin.cpp:406
+#: ../plugins/desktop-file/plugin.cpp:412
 msgid "No address found."
 msgstr "لم يُعثر على أي عنوان."
 
-#: ../plugins/desktop-file/plugin.cpp:407
+#: ../plugins/desktop-file/plugin.cpp:413
 msgid "No web address could be found in this file."
 msgstr "لا يمكن إيجاد أي عنوان وِب في هذا الملف."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:442
+#: ../plugins/desktop-file/plugin.cpp:448
 msgid "Epiphany Desktop File Plugin"
 msgstr "ملحق ملف سطح المكتب لإبِفني"
 
-#: ../plugins/desktop-file/plugin.cpp:446
+#: ../plugins/desktop-file/plugin.cpp:452
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr "هذا الملحق يقرأ ملفات “.desktop” و “.url” المحتوية على وصلات وِب."
 
@@ -2836,7 +2834,7 @@ msgstr "تحديث العلامة؟"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
+#: ../src/bookmarks/ephy-bookmarks.c:1227
 msgid "bookmarks|All"
 msgstr "الكل"
 
@@ -2844,7 +2842,7 @@ msgstr "الكل"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1233
 msgid "bookmarks|Most Visited"
 msgstr "الأكثر زيارة"
 
@@ -2853,7 +2851,7 @@ msgstr "الأكثر زيارة"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1240
 msgid "bookmarks|Not Categorized"
 msgstr "غير مبوبة"
 
@@ -2862,7 +2860,7 @@ msgstr "غير مبوبة"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
+#: ../src/bookmarks/ephy-bookmarks.c:1248
 msgid "bookmarks|Nearby Sites"
 msgstr "مواقع محلية"
 
