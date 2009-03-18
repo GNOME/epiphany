@@ -475,9 +475,6 @@ AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
 
-# uninstalled share dir to search data
-AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
-
 AM_CONDITIONAL([ENABLE_SPELLCHECKER],[false])
 
 # ****************
