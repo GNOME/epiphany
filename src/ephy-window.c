@@ -460,9 +460,7 @@ struct _EphyWindowPrivate
 	guint ppv_mode : 1;
 	guint should_save_chrome : 1;
 	guint is_popup : 1;
-
-        guint present_on_insert : 1;
-
+	guint present_on_insert : 1;
 	guint key_theme_is_emacs : 1;
 };
 
@@ -2573,6 +2571,99 @@ navigation_policy_decision_required_cb (WebKitWebView *web_view,
 	return FALSE;
 }
 
+/* FIXME: get rid of this stuff when the DOM API lands */
+/* FIXME: would be nice to get transparent background/opaque text, but
+   not sure if I can be bothered */
+const char *add_node_string =
+	"var node = document.getElementById('epiphanyWebKitFloatingStatusBar');"\
+	"if (node) node.parentNode.removeChild(node);"\
+	"var node = document.createElement('div');"\
+	"node.id = 'epiphanyWebKitFloatingStatusBar';"\
+	"node.style.padding = '0.4em';"\
+	"node.style.border = '1px solid black';"\
+	"node.style.background = 'rgb(%d,%d,%d)';"\
+	"node.style.color = 'rgb(%d,%d,%d)';"\
+	"node.style.position = 'fixed';"\
+	"node.style.left = '0';"\
+	"node.style.bottom = '0';"\
+	"node.style.opacity = 0.95;"\
+	"var text = document.createTextNode('%s');"\
+	"var body = document.getElementsByTagName('body')[0];"\
+	"node.appendChild(text);"\
+	"body.appendChild(node);";
+
+const char *remove_node_string =
+	"var node = document.getElementById('epiphanyWebKitFloatingStatusBar');"\
+	"if (node) node.parentNode.removeChild(node);";
+
+static void
+ephy_window_link_message_cb (EphyEmbed *embed, GParamSpec *spec, EphyWindow *window)
+{
+	gboolean visible;
+	const char *link_message;
+	WebKitWebView *view;
+
+	g_object_get (window->priv->statusbar, "visible", &visible, NULL);
+
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	link_message = ephy_embed_get_link_message (embed);
+
+	/* If the statusbar is visible remove the test, it might get
+	   stuck otherwise */
+	if (link_message && visible == FALSE)
+	{
+		char *script;
+		GdkColor bg, fg;
+		GtkWidget *widget;
+		PangoLayout *layout;
+		PangoLayoutLine *line;
+		PangoLayoutRun *run;
+		PangoItem *item;
+		const char *text;
+		char *freeme;
+
+		widget = GTK_WIDGET (view);
+		layout = gtk_widget_create_pango_layout (widget, link_message);
+		pango_layout_set_width (layout, PANGO_SCALE * (widget->allocation.width * 0.9));
+		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+
+		line = pango_layout_get_line_readonly (layout, 0);
+		run = line->runs->data;
+		item = run->item;
+
+		freeme = NULL;
+		text = pango_layout_get_text (layout);
+		if (item->num_chars < g_utf8_strlen (text, -1))
+		{
+			char buffer[2048]; /* Should be enough ... */
+			g_utf8_strncpy (buffer, text, item->num_chars - 3);
+			freeme = g_strconcat (buffer, "...", NULL);
+		}
+			
+		g_utf8_strncpy (text, pango_layout_get_text (layout), item->num_chars);
+		bg = widget->style->bg[GTK_WIDGET_STATE(widget)];
+		fg = widget->style->fg[GTK_WIDGET_STATE(widget)];
+
+		script = g_strdup_printf(add_node_string,
+					 (int) (bg.red / 65535. * 255),
+					 (int) (bg.green / 65535. * 255),
+					 (int) (bg.blue / 65535. * 255),
+					 (int) (fg.red / 65535. * 255),
+					 (int) (fg.green / 65535. * 255),
+					 (int) (fg.blue / 65535. * 255),
+					 freeme ? freeme : text);
+		webkit_web_view_execute_script (view, script);
+		g_object_unref (layout);
+		g_free (script);
+		g_free (freeme);
+	}
+	else
+	{
+		const char *script = remove_node_string;
+		webkit_web_view_execute_script (view, script);
+	}
+}
+
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
@@ -2641,6 +2732,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (ephy_window_visibility_cb),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (ephy_window_link_message_cb),
 						      window);
 
 		g_signal_handlers_disconnect_by_func
@@ -2734,6 +2828,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (embed, "notify::visibility",
 					 G_CALLBACK (ephy_window_visibility_cb),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::link-message",
+					 G_CALLBACK (ephy_window_link_message_cb),
 					 window, 0);
 
 		g_object_notify (G_OBJECT (window), "active-child");
