@@ -127,6 +127,8 @@ static void
 ephy_file_chooser_init (EphyFileChooser *dialog)
 {
 	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
+
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
 }
 
 static GObject *

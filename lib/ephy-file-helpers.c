@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+#include <unistd.h>
+
 #include "ephy-file-helpers.h"
 
 #include "ephy-prefs.h"
@@ -31,6 +33,7 @@
 #include "ephy-string.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
@@ -260,6 +263,10 @@ ephy_file_helpers_init (const char *profile_dir,
 			GError **error)
 {
 	const char *uuid;
+
+	/* Make sure the server process doesn't hog any mountpoints! */
+	if (chdir ("/") < 0)
+		g_warning ("Failed to chdir to /: %s", g_strerror (errno));
 
 	/* See if we've been calling ourself, and abort if we have */
 	uuid = g_getenv (EPHY_UUID_ENVVAR);
