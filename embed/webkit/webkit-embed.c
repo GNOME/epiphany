@@ -442,7 +442,6 @@ download_requested_cb (WebKitWebView *web_view,
   const char *suggested_filename;
   char *tmp_filename;
   char *destination_uri;
-  int retval = 0;
 
   /* Make sure the cache directory exists */
   cache_dir = g_build_filename (g_get_user_cache_dir (), "Epiphany", NULL);
