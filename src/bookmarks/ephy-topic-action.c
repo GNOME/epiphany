@@ -375,7 +375,10 @@ button_enter_cb (GtkWidget *button,
 	    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (active_button)))
 	{
 		EphyTopicAction *active_action;
-		active_action = gtk_widget_get_action (GTK_WIDGET (active_button));
+		GtkWidget *ancestor;
+
+		ancestor = gtk_widget_get_ancestor (active_button, GTK_TYPE_TOOL_ITEM);
+		active_action = (EphyTopicAction*)gtk_activatable_get_related_action (GTK_ACTIVATABLE (ancestor));
 
 		erase_popup (active_action);
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (active_button), FALSE);
