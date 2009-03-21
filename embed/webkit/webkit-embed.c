@@ -38,6 +38,7 @@
 #include "ephy-prefs.h"
 
 #include <webkit/webkit.h>
+#include <errno.h>
 #include <string.h>
 #include <glib/gi18n.h>
 
@@ -405,6 +406,30 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
   return FALSE;
 }
 
+static void
+download_requested_dialog_response_cb (GtkDialog *dialog,
+                                       int response_id,
+                                       WebKitDownload *download)
+{
+  if (response_id == GTK_RESPONSE_ACCEPT) {
+    WebKitEmbed *embed;
+    DownloaderView *dview;
+    char *uri;
+
+    uri = gtk_file_chooser_get_uri  (GTK_FILE_CHOOSER(dialog));
+    webkit_download_set_destination_uri (download, uri);
+    g_free (uri);
+
+    embed = g_object_get_data (G_OBJECT(dialog), "webkit-embed");
+    dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+    downloader_view_add_download (dview, download);
+  }
+  else
+    webkit_download_cancel (download);
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 static gboolean
 download_requested_cb (WebKitWebView *web_view,
                        WebKitDownload *download,
@@ -412,8 +437,35 @@ download_requested_cb (WebKitWebView *web_view,
 {
   EphyFileChooser *dialog;
   GtkWidget *window;
-  gint dialog_result;
-  gboolean handled = FALSE;
+
+  char *cache_dir;
+  const char *suggested_filename;
+  char *tmp_filename;
+  char *destination_uri;
+  int retval = 0;
+
+  /* Make sure the cache directory exists */
+  cache_dir = g_build_filename (g_get_user_cache_dir (), "Epiphany", NULL);
+
+  if (g_mkdir_with_parents (cache_dir, 0700) == -1) {
+    g_critical ("Could not create temporary directory \"%s\": %s",
+                cache_dir, strerror (errno));
+    g_free (cache_dir);
+    return FALSE;
+  }
+
+  /* Use a temporary file to start the download while we ask the user
+   * for the location to where the file must go.
+   */
+  suggested_filename = webkit_download_get_suggested_filename (download);
+  tmp_filename = g_build_filename (cache_dir, suggested_filename, NULL);
+  destination_uri = g_strconcat ("file://", tmp_filename, NULL);
+
+  webkit_download_set_destination_uri (download, destination_uri);
+
+  g_free (cache_dir);
+  g_free (tmp_filename);
+  g_free (destination_uri);
 
   /* 
    * Try to get the toplevel window related to the WebView that caused
@@ -430,33 +482,15 @@ download_requested_cb (WebKitWebView *web_view,
                                   CONF_STATE_SAVE_DIR,
                                   EPHY_FILE_FILTER_ALL_SUPPORTED);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-                                     webkit_download_get_suggested_filename (download));
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
 
-  /* 
-   * FIXME: agh! gtk_dialog_run. By default the download is cancelled
-   * if we return FALSE, so I think we should just return TRUE always
-   * here and cancel the download ourselves if the user does click
-   * Cancel
-   */
-  dialog_result = gtk_dialog_run (GTK_DIALOG (dialog));
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (download_requested_dialog_response_cb), download);
 
-  if (dialog_result == GTK_RESPONSE_ACCEPT) {
-    DownloaderView *dview;
-    char *uri;
-    
-    uri = gtk_file_chooser_get_uri  (GTK_FILE_CHOOSER(dialog));
-    webkit_download_set_destination_uri (download, uri);
-    
-    dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
-    downloader_view_add_download (dview, download);
+  g_object_set_data (G_OBJECT (dialog), "webkit-embed", embed);
+  gtk_widget_show_all (GTK_WIDGET (dialog));
 
-    handled = TRUE;
-  }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-
-  return handled;
+  return TRUE;
 }
                                                   
 static void

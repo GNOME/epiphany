@@ -616,6 +616,11 @@ downloader_view_add_download (DownloaderView *dv,
 	char *downloading;
 #endif
 
+	/* dv may be unrefed inside update_download_row if the file
+	 * downloaded completely while the user was choosing where to
+	 * put it, so we need to protect it
+	 */
+	g_object_ref (dv);
 	g_object_ref (download);
 
 	gtk_list_store_append (GTK_LIST_STORE (dv->priv->model),
@@ -709,6 +714,9 @@ downloader_view_add_download (DownloaderView *dv,
 #endif
 
 	dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
+
+	/* see above */
+	g_object_unref (dv);
 }
 
 static void
