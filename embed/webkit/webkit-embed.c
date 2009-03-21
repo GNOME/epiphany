@@ -476,7 +476,7 @@ download_requested_cb (WebKitWebView *web_view,
     window = NULL;
 
   dialog = ephy_file_chooser_new (_("Save"),
-                                  window ? window : NULL,
+                                  window,
                                   GTK_FILE_CHOOSER_ACTION_SAVE,
                                   CONF_STATE_SAVE_DIR,
                                   EPHY_FILE_FILTER_ALL_SUPPORTED);
