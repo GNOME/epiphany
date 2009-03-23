@@ -5,9 +5,11 @@ need to stick to in order to get your patch accepted:
   be re-indented eventually. When modifying an existing file with 8-space
   indentation keep the old style please)
 - Use K&R style for the braces
+- No braces for one line control clauses.
 - please compare with NULL or FALSE isntead of using "!"
 - callback functions have a suffix _cb
 - all files have to be encoded in UTF-8
+- Use char/int/double/..., not gchar/gint/gdouble/... types.
 
 - data/kr-gnome-indent.cfg is provided as a reference config file for the
   uncrustify program to get correct indentation in new files.
