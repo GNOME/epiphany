@@ -987,7 +987,7 @@ end_startup_notification (GdkDisplay *display,
 					     NULL);
 }
 
-#define EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH (30 /* seconds */ * 1000)
+#define EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH (30 /* seconds */)
 
 typedef struct {
   GdkDisplay *display;
@@ -1017,8 +1017,8 @@ set_startup_notification_timeout (GdkDisplay *display,
   sn_data->display = g_object_ref (display);
   sn_data->startup_id = g_strdup (startup_id);
 
-  g_timeout_add (EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH,
-		 startup_notification_timeout, sn_data);
+  g_timeout_add_seconds (EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH,
+			 startup_notification_timeout, sn_data);
 }
 #endif /* GTK 2.12 */
 
@@ -1072,7 +1072,7 @@ egg_desktop_file_launchv (EggDesktopFile *desktop_file,
 			  GError **error)
 {
   EggDesktopFileLaunchOption option;
-  GSList *translated_documents, *docs;
+  GSList *translated_documents = NULL, *docs = NULL;
   char *command, **argv;
   int argc, i, screen_num;
   gboolean success, current_success;
@@ -1438,17 +1438,6 @@ egg_set_desktop_file (const char *desktop_file_path)
       g_warning ("Could not load desktop file '%s': %s",
 		 desktop_file_path, error->message);
       g_error_free (error);
-    }
-
-  /* Set localized application name and default window icon */
-  if (egg_desktop_file->name)
-    g_set_application_name (egg_desktop_file->name);
-  if (egg_desktop_file->icon)
-    {
-      if (g_path_is_absolute (egg_desktop_file->icon))
-	gtk_window_set_default_icon_from_file (egg_desktop_file->icon, NULL);
-      else
-	gtk_window_set_default_icon_name (egg_desktop_file->icon);
     }
 
   G_UNLOCK (egg_desktop_file);

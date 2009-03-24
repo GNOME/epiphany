@@ -178,6 +178,7 @@ egg_sm_client_class_init (EggSMClientClass *klass)
 static gboolean sm_client_disable = FALSE;
 static char *sm_client_state_file = NULL;
 static char *sm_client_id = NULL;
+static char *sm_config_prefix = NULL;
 
 static gboolean
 sm_client_post_parse_func (GOptionContext  *context,
@@ -228,9 +229,16 @@ egg_sm_client_get_option_group (void)
     { "sm-client-id", 0, 0,
       G_OPTION_ARG_STRING, &sm_client_id,
       N_("Specify session management ID"), N_("ID") },
-    /* Compatibility options */
+    /* GnomeClient compatibility option */
     { "sm-disable", 0, G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_NONE, &sm_client_disable,
+      NULL, NULL },
+    /* GnomeClient compatibility option. This is a dummy option that only
+     * exists so that sessions saved by apps with GnomeClient can be restored
+     * later when they've switched to EggSMClient. See bug #575308.
+     */
+    { "sm-config-prefix", 0, G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING, &sm_config_prefix,
       NULL, NULL },
     { NULL }
   };
