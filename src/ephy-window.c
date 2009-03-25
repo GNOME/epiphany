@@ -2532,12 +2532,12 @@ create_web_view_cb (WebKitWebView *web_view,
 }
 
 static gboolean
-navigation_policy_decision_required_cb (WebKitWebView *web_view,
-					WebKitWebFrame *web_frame,
-					WebKitNetworkRequest *request,
-					WebKitWebNavigationAction *action,
-					WebKitWebPolicyDecision *decision,
-					EphyWindow *window)
+policy_decision_required_cb (WebKitWebView *web_view,
+			     WebKitWebFrame *web_frame,
+			     WebKitNetworkRequest *request,
+			     WebKitWebNavigationAction *action,
+			     WebKitWebPolicyDecision *decision,
+			     EphyWindow *window)
 {
 	WebKitWebNavigationReason reason;
 	gint button;
@@ -2681,6 +2681,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	if (old_embed != NULL)
 	{
 		WebKitWebView *web_view;
+		guint sid;
 
 		embed = old_embed;
 		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -2694,9 +2695,24 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_handlers_disconnect_by_func (web_view,
 						      G_CALLBACK (create_web_view_cb),
 						      window);
-		g_signal_handlers_disconnect_by_func (web_view,
-						      G_CALLBACK (navigation_policy_decision_required_cb),
-						      window);
+		sid = g_signal_lookup ("navigation-policy-decision-requested",
+				       WEBKIT_TYPE_WEB_VIEW);
+		g_signal_handlers_disconnect_matched (web_view,
+						      G_SIGNAL_MATCH_ID |
+						      G_SIGNAL_MATCH_FUNC,
+						      sid,
+						      0, NULL,
+						      G_CALLBACK (policy_decision_required_cb),
+						      NULL);
+		sid = g_signal_lookup ("new-window-policy-decision-requested",
+				       WEBKIT_TYPE_WEB_VIEW);
+		g_signal_handlers_disconnect_matched (web_view,
+						      G_SIGNAL_MATCH_ID |
+						      G_SIGNAL_MATCH_FUNC,
+						      sid,
+						      0, NULL,
+						      G_CALLBACK (policy_decision_required_cb),
+						      NULL);
 
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_popup_windows),
@@ -2785,7 +2801,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 G_CALLBACK (create_web_view_cb),
 					 window, 0);
 		g_signal_connect_object (web_view, "navigation-policy-decision-requested",
-					 G_CALLBACK (navigation_policy_decision_required_cb),
+					 G_CALLBACK (policy_decision_required_cb),
+					 window, 0);
+		g_signal_connect_object (web_view, "new-window-policy-decision-requested",
+					 G_CALLBACK (policy_decision_required_cb),
 					 window, 0);
 
 		g_signal_connect_object (embed, "notify::hidden-popup-count",
