@@ -3,6 +3,7 @@
 /*
  *  Copyright © 2007 Xan Lopez
  *  Copyright © 2008 Jan Alonzo
+ *  Copyright © 2009 Gustavo Noronha Silva
  *  Copyright © 2009 Igalia S.L.
  *  Copyright © 2009 Collabora Ltd.
  *
