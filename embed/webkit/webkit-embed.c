@@ -27,6 +27,7 @@
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
 #include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-shell.h"
@@ -438,18 +439,18 @@ download_requested_cb (WebKitWebView *web_view,
   EphyFileChooser *dialog;
   GtkWidget *window;
 
-  char *cache_dir;
+  char *tmp_dir;
   const char *suggested_filename;
   char *tmp_filename;
   char *destination_uri;
 
   /* Make sure the cache directory exists */
-  cache_dir = g_build_filename (g_get_user_cache_dir (), "Epiphany", NULL);
+  tmp_dir = g_build_filename (ephy_dot_dir (), "downloads", NULL);
 
-  if (g_mkdir_with_parents (cache_dir, 0700) == -1) {
+  if (g_mkdir_with_parents (tmp_dir, 0700) == -1) {
     g_critical ("Could not create temporary directory \"%s\": %s",
-                cache_dir, strerror (errno));
-    g_free (cache_dir);
+                tmp_dir, strerror (errno));
+    g_free (tmp_dir);
     return FALSE;
   }
 
@@ -457,12 +458,12 @@ download_requested_cb (WebKitWebView *web_view,
    * for the location to where the file must go.
    */
   suggested_filename = webkit_download_get_suggested_filename (download);
-  tmp_filename = g_build_filename (cache_dir, suggested_filename, NULL);
+  tmp_filename = g_build_filename (tmp_dir, suggested_filename, NULL);
   destination_uri = g_strconcat ("file://", tmp_filename, NULL);
 
   webkit_download_set_destination_uri (download, destination_uri);
 
-  g_free (cache_dir);
+  g_free (tmp_dir);
   g_free (tmp_filename);
   g_free (destination_uri);
 
