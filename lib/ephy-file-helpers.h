@@ -103,6 +103,7 @@ gboolean    ephy_file_browse_to		 (GFile *file,
 
 void	   ephy_file_delete_directory	 (const char *path);
 
+void	   ephy_file_delete_uri		 (const char *uri);
 G_END_DECLS
 
 #endif /* EPHY_FILE_HELPERS_H */

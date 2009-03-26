@@ -996,6 +996,7 @@ download_dialog_stop (DownloaderView *dv)
 	{
 		if (!l->data) continue;
 		webkit_download_cancel ((WebKitDownload*) l->data);
+		ephy_file_delete_uri (webkit_download_get_destination_uri ((WebKitDownload*) l->data));
 		g_object_unref (l->data);
 	}
 	

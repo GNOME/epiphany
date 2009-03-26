@@ -425,8 +425,10 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
     dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
     downloader_view_add_download (dview, download);
   }
-  else
+  else {
     webkit_download_cancel (download);
+    ephy_file_delete_uri (webkit_download_get_destination_uri (download));
+  }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }

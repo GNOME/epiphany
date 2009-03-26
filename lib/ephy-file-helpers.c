@@ -754,3 +754,31 @@ ephy_file_delete_directory (const char *path)
 	}
 	g_object_unref (file);
 }
+
+/**
+ * ephy_file_delete_uri
+ * @uri: URI of the file to be deleted
+ *
+ * Remove the given URI.
+ *
+ */
+void
+ephy_file_delete_uri (const char *uri)
+{
+	GFile *file;
+	gboolean ret;
+
+	file = g_file_new_for_uri (uri);
+
+	ret = g_file_delete (file, NULL, NULL);
+
+	if (ret == TRUE)
+	{
+		LOG ("Deleted file at URI '%s'", uri);
+	}
+	else
+	{
+		LOG ("Couldn't file at URI '%s'", uri);
+	}
+	g_object_unref (file);
+}
