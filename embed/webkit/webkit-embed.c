@@ -4,6 +4,7 @@
  *  Copyright © 2007 Xan Lopez
  *  Copyright © 2008 Jan Alonzo
  *  Copyright © 2009 Igalia S.L.
+ *  Copyright © 2009 Collabora Ltd.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 #include "config.h"
 
 #include "downloader-view.h"
+#include "eel-gconf-extensions.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
 #include "ephy-file-chooser.h"
@@ -433,43 +435,18 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static gboolean
-download_requested_cb (WebKitWebView *web_view,
-                       WebKitDownload *download,
-                       WebKitEmbed *embed)
+static void
+request_destination_uri (WebKitWebView *web_view,
+                         WebKitDownload *download,
+                         WebKitEmbed *embed)
 {
   EphyFileChooser *dialog;
   GtkWidget *window;
-
-  char *tmp_dir;
   const char *suggested_filename;
-  char *tmp_filename;
-  char *destination_uri;
 
-  /* Make sure the cache directory exists */
-  tmp_dir = g_build_filename (ephy_dot_dir (), "downloads", NULL);
-
-  if (g_mkdir_with_parents (tmp_dir, 0700) == -1) {
-    g_critical ("Could not create temporary directory \"%s\": %s",
-                tmp_dir, strerror (errno));
-    g_free (tmp_dir);
-    return FALSE;
-  }
-
-  /* Use a temporary file to start the download while we ask the user
-   * for the location to where the file must go.
-   */
   suggested_filename = webkit_download_get_suggested_filename (download);
-  tmp_filename = g_build_filename (tmp_dir, suggested_filename, NULL);
-  destination_uri = g_strconcat ("file://", tmp_filename, NULL);
 
-  webkit_download_set_destination_uri (download, destination_uri);
-
-  g_free (tmp_dir);
-  g_free (tmp_filename);
-  g_free (destination_uri);
-
-  /* 
+  /*
    * Try to get the toplevel window related to the WebView that caused
    * the download, and use NULL otherwise; we don't want to pass the
    * WebView or other widget as a parent window.
@@ -491,6 +468,87 @@ download_requested_cb (WebKitWebView *web_view,
 
   g_object_set_data (G_OBJECT (dialog), "webkit-embed", embed);
   gtk_widget_show_all (GTK_WIDGET (dialog));
+}
+
+static gboolean
+define_destination_uri (WebKitDownload *download,
+                        gboolean temporary)
+{
+  char *tmp_dir;
+  char *tmp_filename;
+  char *destination_uri;
+  const char *suggested_filename;
+
+  suggested_filename = webkit_download_get_suggested_filename (download);
+
+  /* If we are not doing an automatic download, use a temporary file
+   * to start the download while we ask the user for the location to
+   * where the file must go.
+   */
+  if (temporary)
+    tmp_dir = g_build_filename (ephy_dot_dir (), "downloads", NULL);
+  else
+    tmp_dir = ephy_file_get_downloads_dir ();
+
+  /* Make sure the download directory exists */
+  if (g_mkdir_with_parents (tmp_dir, 0700) == -1) {
+    g_critical ("Could not create downloads directory \"%s\": %s",
+                tmp_dir, strerror (errno));
+    g_free (tmp_dir);
+    return FALSE;
+  }
+
+  tmp_filename = g_build_filename (tmp_dir, suggested_filename, NULL);
+  destination_uri = g_strconcat ("file://", tmp_filename, NULL);
+
+  webkit_download_set_destination_uri (download, destination_uri);
+
+  g_free (tmp_dir);
+  g_free (tmp_filename);
+  g_free (destination_uri);
+
+  return TRUE;
+}
+
+static void
+perform_auto_download (WebKitDownload *download,
+                       WebKitEmbed *embed)
+{
+  DownloaderView *dview;
+
+  if (!define_destination_uri (download, FALSE)) {
+    webkit_download_cancel (download);
+    ephy_file_delete_uri (webkit_download_get_destination_uri (download));
+    return;
+  }
+
+  dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+  downloader_view_add_download (dview, download);
+}
+
+static gboolean
+download_requested_cb (WebKitWebView *web_view,
+                       WebKitDownload *download,
+                       WebKitEmbed *embed)
+{
+  /* Is download locked down? */
+  if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
+    return FALSE;
+
+  /* Is auto-download enabled? */
+  if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
+    perform_auto_download (download, embed);
+    return TRUE;
+  }
+
+  /* If we are not performing an auto-download, we will ask the user
+   * where they want the file to go to; we will start downloading to a
+   * temporary location while the user decides.
+   */
+  if (!define_destination_uri (download, TRUE))
+    return FALSE;
+
+  request_destination_uri (web_view, download, embed);
 
   return TRUE;
 }
