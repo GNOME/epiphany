@@ -768,6 +768,8 @@ ephy_file_delete_uri (const char *uri)
 	GFile *file;
 	gboolean ret;
 
+	g_return_if_fail (uri);
+
 	file = g_file_new_for_uri (uri);
 
 	ret = g_file_delete (file, NULL, NULL);
