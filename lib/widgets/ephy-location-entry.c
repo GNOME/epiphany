@@ -109,10 +109,6 @@ enum signalsEnum
 };
 static gint signals[LAST_SIGNAL] = { 0 };
 
-#define MAX_LOC_HISTORY_ITEMS 10
-#define EPHY_LOC_HISTORY_XML_ROOT "ephy_location_history"
-#define EPHY_LOC_HISTORY_XML_VERSION "0.1"
-
 G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_TOOL_ITEM)
 
 static void
