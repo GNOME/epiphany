@@ -416,7 +416,6 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
                                        WebKitDownload *download)
 {
   if (response_id == GTK_RESPONSE_ACCEPT) {
-    WebKitEmbed *embed;
     DownloaderView *dview;
     char *uri;
 
@@ -424,11 +423,9 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
     webkit_download_set_destination_uri (download, uri);
     g_free (uri);
 
-    embed = g_object_get_data (G_OBJECT(dialog), "webkit-embed");
     dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
     downloader_view_add_download (dview, download);
-  }
-  else {
+  } else {
     webkit_download_cancel (download);
     ephy_file_delete_uri (webkit_download_get_destination_uri (download));
   }
@@ -438,8 +435,7 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
 
 static void
 request_destination_uri (WebKitWebView *web_view,
-                         WebKitDownload *download,
-                         WebKitEmbed *embed)
+                         WebKitDownload *download)
 {
   EphyFileChooser *dialog;
   GtkWidget *window;
@@ -467,7 +463,6 @@ request_destination_uri (WebKitWebView *web_view,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (download_requested_dialog_response_cb), download);
 
-  g_object_set_data (G_OBJECT (dialog), "webkit-embed", embed);
   gtk_widget_show_all (GTK_WIDGET (dialog));
 }
 
@@ -512,8 +507,7 @@ define_destination_uri (WebKitDownload *download,
 }
 
 static void
-perform_auto_download (WebKitDownload *download,
-                       WebKitEmbed *embed)
+perform_auto_download (WebKitDownload *download)
 {
   DownloaderView *dview;
 
@@ -529,8 +523,7 @@ perform_auto_download (WebKitDownload *download,
 
 static gboolean
 download_requested_cb (WebKitWebView *web_view,
-                       WebKitDownload *download,
-                       WebKitEmbed *embed)
+                       WebKitDownload *download)
 {
   /* Is download locked down? */
   if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
@@ -538,7 +531,7 @@ download_requested_cb (WebKitWebView *web_view,
 
   /* Is auto-download enabled? */
   if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
-    perform_auto_download (download, embed);
+    perform_auto_download (download);
     return TRUE;
   }
 
@@ -549,7 +542,7 @@ download_requested_cb (WebKitWebView *web_view,
   if (!define_destination_uri (download, TRUE))
     return FALSE;
 
-  request_destination_uri (web_view, download, embed);
+  request_destination_uri (web_view, download);
 
   return TRUE;
 }
