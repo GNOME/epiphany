@@ -127,8 +127,6 @@ static void
 ephy_file_chooser_init (EphyFileChooser *dialog)
 {
 	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
-
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
 }
 
 static GObject *
@@ -376,6 +374,9 @@ ephy_file_chooser_new (const char *title,
 	 * _after_ our instance_init and construct-param setters will have
 	 * run.
 	 */
+
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
+
 	if (persist_key != NULL)
 	{
 		ephy_file_chooser_set_persist_key (dialog, persist_key);
