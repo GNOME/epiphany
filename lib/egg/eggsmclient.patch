@@ -1,0 +1,198 @@
+diff --git a/libegg/smclient/eggdesktopfile.c b/libegg/smclient/eggdesktopfile.c
+index 357e548..c185998 100644
+--- a/libegg/smclient/eggdesktopfile.c
++++ b/libegg/smclient/eggdesktopfile.c
+@@ -1440,6 +1440,7 @@ egg_set_desktop_file (const char *desktop_file_path)
+       g_error_free (error);
+     }
+ 
++#if 0
+   if (egg_desktop_file) {
+     /* Set localized application name and default window icon */
+     if (egg_desktop_file->name)
+@@ -1452,6 +1453,7 @@ egg_set_desktop_file (const char *desktop_file_path)
+           gtk_window_set_default_icon_name (egg_desktop_file->icon);
+       }
+   }
++#endif
+ 
+   G_UNLOCK (egg_desktop_file);
+ }
+diff --git a/libegg/smclient/eggsmclient-xsmp.c b/libegg/smclient/eggsmclient-xsmp.c
+index 1a56156..81af7d2 100644
+--- a/libegg/smclient/eggsmclient-xsmp.c
++++ b/libegg/smclient/eggsmclient-xsmp.c
+@@ -88,6 +88,8 @@ struct _EggSMClientXSMP
+   char **restart_command;
+   gboolean set_restart_command;
+   int restart_style;
++  char **discard_command;
++  gboolean set_discard_command;
+ 
+   guint idle;
+ 
+@@ -117,6 +119,9 @@ static void     sm_client_xsmp_startup (EggSMClient *client,
+ static void     sm_client_xsmp_set_restart_command (EggSMClient  *client,
+ 						    int           argc,
+ 						    const char  **argv);
++static void     sm_client_xsmp_set_discard_command (EggSMClient  *client,
++						    int           argc,
++						    const char  **argv);
+ static void     sm_client_xsmp_will_quit (EggSMClient *client,
+ 					  gboolean     will_quit);
+ static gboolean sm_client_xsmp_end_session (EggSMClient         *client,
+@@ -150,7 +155,7 @@ static SmProp *card8_prop        (const char    *name,
+ static void set_properties         (EggSMClientXSMP *xsmp, ...);
+ static void delete_properties      (EggSMClientXSMP *xsmp, ...);
+ 
+-static GPtrArray *generate_command (char       **restart_command,
++static GPtrArray *generate_command (char       **argv,
+ 				    const char  *client_id,
+ 				    const char  *state_file);
+ 
+@@ -185,6 +190,7 @@ egg_sm_client_xsmp_class_init (EggSMClientXSMPClass *klass)
+ 
+   sm_client_class->startup             = sm_client_xsmp_startup;
+   sm_client_class->set_restart_command = sm_client_xsmp_set_restart_command;
++  sm_client_class->set_discard_command = sm_client_xsmp_set_discard_command;
+   sm_client_class->will_quit           = sm_client_xsmp_will_quit;
+   sm_client_class->end_session         = sm_client_xsmp_end_session;
+ }
+@@ -404,6 +410,24 @@ sm_client_xsmp_set_restart_command (EggSMClient  *client,
+ }
+ 
+ static void
++sm_client_xsmp_set_discard_command (EggSMClient  *client,
++				    int           argc,
++				    const char  **argv)
++{
++  EggSMClientXSMP *xsmp = (EggSMClientXSMP *)client;
++  int i;
++
++  g_strfreev (xsmp->discard_command);
++
++  xsmp->discard_command = g_new (char *, argc + 1);
++  for (i = 0; i < argc; i++)
++    xsmp->discard_command[i] = g_strdup (argv[i]);
++  xsmp->discard_command[i] = NULL;
++
++  xsmp->set_discard_command = TRUE;
++}
++
++static void
+ sm_client_xsmp_will_quit (EggSMClient *client,
+ 			  gboolean     will_quit)
+ {
+@@ -771,7 +795,7 @@ save_state (EggSMClientXSMP *xsmp)
+   GKeyFile *state_file;
+   char *state_file_path, *data;
+   EggDesktopFile *desktop_file;
+-  GPtrArray *restart;
++  GPtrArray *restart, *discard;
+   int offset, fd;
+ 
+   /* We set xsmp->state before emitting save_state, but our caller is
+@@ -787,7 +811,18 @@ save_state (EggSMClientXSMP *xsmp)
+ 		      ptrarray_prop (SmRestartCommand, restart),
+ 		      NULL);
+       g_ptr_array_free (restart, TRUE);
+-      delete_properties (xsmp, SmDiscardCommand, NULL);
++
++      if (xsmp->set_discard_command)
++        {
++          discard = generate_command (xsmp->discard_command, NULL, NULL);
++          set_properties (xsmp,
++                          ptrarray_prop (SmDiscardCommand, discard),
++                          NULL);
++          g_ptr_array_free (discard, TRUE);
++        }
++      else
++        delete_properties (xsmp, SmDiscardCommand, NULL);
++
+       return;
+     }
+ 
+@@ -1041,14 +1076,14 @@ xsmp_shutdown_cancelled (SmcConn   smc_conn,
+  * then free the array, but not its contents.
+  */
+ static GPtrArray *
+-generate_command (char **restart_command, const char *client_id,
++generate_command (char **argv, const char *client_id,
+ 		  const char *state_file)
+ {
+   GPtrArray *cmd;
+   int i;
+ 
+   cmd = g_ptr_array_new ();
+-  g_ptr_array_add (cmd, restart_command[0]);
++  g_ptr_array_add (cmd, argv[0]);
+ 
+   if (client_id)
+     {
+@@ -1062,8 +1097,8 @@ generate_command (char **restart_command, const char *client_id,
+       g_ptr_array_add (cmd, (char *)state_file);
+     }
+ 
+-  for (i = 1; restart_command[i]; i++)
+-    g_ptr_array_add (cmd, restart_command[i]);
++  for (i = 1; argv[i]; i++)
++    g_ptr_array_add (cmd, argv[i]);
+ 
+   return cmd;
+ }
+diff --git a/libegg/smclient/eggsmclient.c b/libegg/smclient/eggsmclient.c
+index efa901d..85aaee4 100644
+--- a/libegg/smclient/eggsmclient.c
++++ b/libegg/smclient/eggsmclient.c
+@@ -445,6 +445,27 @@ egg_sm_client_set_restart_command (EggSMClient  *client,
+ }
+ 
+ /**
++ * egg_sm_client_set_discard_command:
++ * @client: the client
++ * @argc: the length of @argv
++ * @argv: argument vector
++ *
++ * Sets the command used to discard a custom state file if using
++ * egg_sm_client_set_restart_command(), which must be called before 
++ * using this function.
++ **/
++void
++egg_sm_client_set_discard_command (EggSMClient  *client,
++				   int           argc,
++				   const char  **argv)
++{
++  g_return_if_fail (EGG_IS_SM_CLIENT (client));
++
++  if (EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command)
++    EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command (client, argc, argv);
++}
++
++/**
+  * egg_sm_client_will_quit:
+  * @client: the client
+  * @will_quit: whether or not the application is willing to quit
+diff --git a/libegg/smclient/eggsmclient.h b/libegg/smclient/eggsmclient.h
+index e620b75..f13bcec 100644
+--- a/libegg/smclient/eggsmclient.h
++++ b/libegg/smclient/eggsmclient.h
+@@ -72,6 +72,9 @@ struct _EggSMClientClass
+   void	   (*set_restart_command) (EggSMClient          *client,
+ 				   int                   argc,
+ 				   const char          **argv);
++  void	   (*set_discard_command) (EggSMClient          *client,
++				   int                   argc,
++				   const char          **argv);
+   void	   (*will_quit)           (EggSMClient          *client,
+ 				   gboolean              will_quit);
+   gboolean (*end_session)         (EggSMClient          *client,
+@@ -102,6 +105,9 @@ GKeyFile        *egg_sm_client_get_state_file      (EggSMClient *client);
+ void             egg_sm_client_set_restart_command (EggSMClient  *client,
+ 						    int           argc,
+ 						    const char  **argv);
++void             egg_sm_client_set_discard_command (EggSMClient  *client,
++						    int           argc,
++						    const char  **argv);
+ 
+ /* Handling "quit_requested" signal */
+ void             egg_sm_client_will_quit           (EggSMClient *client,
