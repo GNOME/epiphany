@@ -830,10 +830,14 @@ save_state (EggSMClientXSMP *xsmp)
   if (desktop_file)
     {
       GKeyFile *merged_file;
+      char *desktop_file_path;
 
       merged_file = g_key_file_new ();
-      if (g_key_file_load_from_file (merged_file,
-				     egg_desktop_file_get_source (desktop_file),
+      desktop_file_path =
+	g_filename_from_uri (egg_desktop_file_get_source (desktop_file),
+			     NULL, NULL);
+      if (desktop_file_path &&
+	  g_key_file_load_from_file (merged_file, desktop_file_path,
 				     G_KEY_FILE_KEEP_COMMENTS |
 				     G_KEY_FILE_KEEP_TRANSLATIONS, NULL))
 	{
@@ -876,8 +880,11 @@ save_state (EggSMClientXSMP *xsmp)
 				 EGG_DESKTOP_FILE_KEY_EXEC,
 				 exec);
 	  g_free (exec);
-
 	}
+      else
+	desktop_file = NULL;
+
+      g_free (desktop_file_path);
     }
 
   /* Now write state_file to disk. (We can't use mktemp(), because
