@@ -267,10 +267,10 @@ real_find (EphyFindToolbarPrivate *priv,
                 return EPHY_FIND_NOTFOUND;
 
         if (!webkit_web_view_search_text
-            (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
+            (web_view, priv->find_string, case_sensitive, forward, FALSE)) {
                 /* not found, try to wrap */
                 if (!webkit_web_view_search_text
-                    (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
+                    (web_view, priv->find_string, case_sensitive, forward, TRUE)) {
                         /* there's no result */
                         return EPHY_FIND_NOTFOUND;
                 } else {
