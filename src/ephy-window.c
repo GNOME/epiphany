@@ -2445,16 +2445,8 @@ static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
 		   gpointer user_data)
 {
-	WebKitWebWindowFeatures *features;
 	EphyWindow *window;
-	int width, height;
-
-	gboolean toolbar_visible;
-	gboolean statusbar_visible;
-	gboolean menubar_visible;
 	gboolean using_new_window;
-
-	EphyEmbedChrome chrome_mask;
 
 	using_new_window = GPOINTER_TO_INT (user_data);
 
@@ -2462,6 +2454,13 @@ web_view_ready_cb (WebKitWebView *web_view,
 
 	if (using_new_window)
 	{
+		int width, height;
+		gboolean toolbar_visible;
+		gboolean statusbar_visible;
+		gboolean menubar_visible;
+		EphyEmbedChrome chrome_mask;
+		WebKitWebWindowFeatures *features;
+
 		toolbar_visible = statusbar_visible = menubar_visible = TRUE;
 		features = webkit_web_view_get_window_features (web_view);
 
