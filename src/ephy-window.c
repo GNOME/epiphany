@@ -2443,7 +2443,7 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
-		   EphyEmbed *embed)
+		   gpointer user_data)
 {
 	WebKitWebWindowFeatures *features;
 	EphyWindow *window;
@@ -2452,39 +2452,45 @@ web_view_ready_cb (WebKitWebView *web_view,
 	gboolean toolbar_visible;
 	gboolean statusbar_visible;
 	gboolean menubar_visible;
+	gboolean using_new_window;
 
 	EphyEmbedChrome chrome_mask;
 
-	toolbar_visible = statusbar_visible = menubar_visible = TRUE;
+	using_new_window = GPOINTER_TO_INT (user_data);
 
 	window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
-	features = webkit_web_view_get_window_features (web_view);
 
-	chrome_mask = window->priv->chrome;
+	if (using_new_window)
+	{
+		toolbar_visible = statusbar_visible = menubar_visible = TRUE;
+		features = webkit_web_view_get_window_features (web_view);
 
-	g_object_get (features,
-		      "width", &width,
-		      "height", &height,
-		      "toolbar-visible", &toolbar_visible,
-		      "statusbar-visible", &statusbar_visible,
-		      "menubar-visible", &menubar_visible,
-		      NULL);
+		chrome_mask = window->priv->chrome;
 
-	gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+		g_object_get (features,
+			      "width", &width,
+			      "height", &height,
+			      "toolbar-visible", &toolbar_visible,
+			      "statusbar-visible", &statusbar_visible,
+			      "menubar-visible", &menubar_visible,
+			      NULL);
 
-	if (!toolbar_visible)
-		chrome_mask &= ~EPHY_EMBED_CHROME_TOOLBAR;
+		gtk_window_set_default_size (GTK_WINDOW (window), width, height);
 
-	if (!statusbar_visible)
-		chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
+		if (!toolbar_visible)
+			chrome_mask &= ~EPHY_EMBED_CHROME_TOOLBAR;
 
-	if (!menubar_visible)
-		chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
+		if (!statusbar_visible)
+			chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
 
-	window->priv->chrome = chrome_mask;
+		if (!menubar_visible)
+			chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
 
-	update_chromes_actions (window);
-	sync_chromes_visibility (window);
+		window->priv->chrome = chrome_mask;
+
+		update_chromes_actions (window);
+		sync_chromes_visibility (window);
+	}
 
 	gtk_widget_show (GTK_WIDGET (window));
 
@@ -2500,6 +2506,7 @@ create_web_view_cb (WebKitWebView *web_view,
 	WebKitWebView *new_web_view;
 	EphyNewTabFlags flags;
 	EphyWindow *parent_window;
+	gboolean using_new_window;
 
 	if (eel_gconf_get_boolean (CONF_INTERFACE_OPEN_NEW_WINDOWS_IN_TAB))
 	{
@@ -2523,10 +2530,12 @@ create_web_view_cb (WebKitWebView *web_view,
 					 FALSE,
 					 0);
 
+	using_new_window = parent_window == NULL;
+
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-	g_signal_connect_object (new_web_view, "web-view-ready",
-				 G_CALLBACK (web_view_ready_cb),
-				 NULL, 0);
+	g_signal_connect (new_web_view, "web-view-ready",
+			  G_CALLBACK (web_view_ready_cb),
+			  GINT_TO_POINTER (using_new_window));
 
 	return new_web_view;
 }
