@@ -123,19 +123,24 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, EPHY_TYPE_BASE_EMBED,
 
 static void
 title_changed_cb (WebKitWebView *web_view,
-                  WebKitWebFrame *web_frame,
-                  const gchar *title,
+                  GParamSpec *spec,
                   EphyEmbed *embed)
 {
-  const gchar* uri;
+  const char *uri;
+  char *title;
+  WebKitWebFrame *frame;
+
+  g_object_get (web_view, "title", &title, NULL);
 
   ephy_base_embed_set_title (EPHY_BASE_EMBED (embed),
                              title);
 
-  uri = webkit_web_frame_get_uri (web_frame);
+  frame = webkit_web_view_get_main_frame (web_view);
+  uri = webkit_web_frame_get_uri (frame);
   ephy_history_set_page_title (WEBKIT_EMBED (embed)->priv->history,
                                uri,
                                title);
+  g_free (title);
 
 }
 
@@ -285,9 +290,9 @@ hovering_over_link_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_web_view_zoom_change_cb (WebKitWebView *web_view,
-                                GParamSpec *pspec,
-                                EphyEmbed  *embed)
+zoom_changed_cb (WebKitWebView *web_view,
+                 GParamSpec *pspec,
+                 EphyEmbed  *embed)
 {
   char *address;
   float zoom;
@@ -574,15 +579,13 @@ webkit_embed_init (WebKitEmbed *embed)
                     "signal::load-committed", G_CALLBACK (load_committed_cb), embed,
                     "signal::load-started", G_CALLBACK (load_started_cb), embed,
                     "signal::load_finished", G_CALLBACK (load_finished_cb), embed,
-                    "signal::title-changed", G_CALLBACK (title_changed_cb), embed,
                     "signal::load-progress-changed", G_CALLBACK (load_progress_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
+                    "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
+                    "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
                     NULL);
-
-  g_signal_connect (web_view, "notify::zoom-level",
-                    G_CALLBACK (webkit_web_view_zoom_change_cb), embed);
 
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   inspector = webkit_web_view_get_inspector (web_view);
