@@ -225,6 +225,7 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 
 			g_free (path);
 			ephy_node_unref (kid);
+			priv->dirty = TRUE;
 		}
 	}
 }
