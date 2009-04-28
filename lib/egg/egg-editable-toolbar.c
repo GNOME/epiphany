@@ -200,7 +200,12 @@ drag_begin_cb (GtkWidget          *widget,
   
   gtk_widget_hide (widget);
 
+#if GTK_CHECK_VERSION (2, 16, 0)
+  action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget));
+#else
   action = gtk_widget_get_action (widget);
+#endif
+
   if (action == NULL) return;
   
   flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
@@ -226,7 +231,12 @@ drag_end_cb (GtkWidget          *widget,
     {
       gtk_widget_show (widget);
 
+#if GTK_CHECK_VERSION (2, 16, 0)
+      action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget));
+#else
       action = gtk_widget_get_action (widget);
+#endif
+
       if (action == NULL) return;
       
       flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
@@ -497,8 +507,14 @@ configure_item_cursor (GtkToolItem *item,
 static void
 configure_item_tooltip (GtkToolItem *item)
 {
-  GtkAction *action = gtk_widget_get_action (GTK_WIDGET (item));
-  
+  GtkAction *action;
+
+ #if GTK_CHECK_VERSION (2, 16, 0)
+   action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (item));
+ #else
+   action = gtk_widget_get_action (GTK_WIDGET (item));
+ #endif
+
   if (action != NULL)
     {
       g_object_notify (G_OBJECT (action), "tooltip");
