@@ -188,7 +188,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_boolean },
     { CONF_USER_CSS_ENABLED,
       "user-stylesheet-uri",
-      webkit_pref_callback_user_stylesheet }
+      webkit_pref_callback_user_stylesheet },
+    { CONF_CARET_BROWSING_ENABLED,
+      "enable-caret-browsing",
+      webkit_pref_callback_boolean }
   };
 
 static void

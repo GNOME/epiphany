@@ -16,6 +16,7 @@
 #define CONF_IMAGE_LOADING_MODE "/apps/epiphany/web/image_loading"
 #define CONF_DISPLAY_SMOOTHSCROLL "/apps/epiphany/web/smooth_scroll"
 #define CONF_WEB_INSPECTOR_ENABLED "/apps/epiphany/web/inspector_enabled"
+#define CONF_CARET_BROWSING_ENABLED "/apps/epiphany/web/browse_with_caret"
 
 /* These are defined gnome wide now */
 #define CONF_NETWORK_PROXY_MODE "/system/proxy/mode"
