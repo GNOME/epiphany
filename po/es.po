@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-03-13 08:30+0000\n"
-"PO-Revision-Date: 2009-04-12 16:09+0200\n"
+"POT-Creation-Date: 2009-04-17 06:21+0000\n"
+"PO-Revision-Date: 2009-05-02 12:35+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -715,7 +715,7 @@ msgstr "Elija un _idioma:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:642 ../src/ephy-history-window.c:247
+#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
 #: ../src/pdm-dialog.c:358
 msgid "Cl_ear"
 msgstr "_Borrar"
@@ -890,7 +890,7 @@ msgstr "_Continuar"
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:389 ../embed/downloader-view.c:493
 #: ../embed/downloader-view.c:498 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1745
+#: ../src/ephy-window.c:1743
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -920,39 +920,39 @@ msgid_plural "%d downloads"
 msgstr[0] "%d descarga"
 msgstr[1] "%d descargas"
 
-#: ../embed/downloader-view.c:660
+#: ../embed/downloader-view.c:665
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Se ha añadido el archivo «%s» a la cola de descargas."
 
-#: ../embed/downloader-view.c:664
+#: ../embed/downloader-view.c:669
 msgid "Download started"
 msgstr "Descarga iniciada"
 
-#: ../embed/downloader-view.c:739 ../embed/downloader-view.c:749
+#: ../embed/downloader-view.c:747 ../embed/downloader-view.c:757
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/downloader-view.c:742
+#: ../embed/downloader-view.c:750
 msgctxt "download status"
 msgid "Failed"
 msgstr "Falló"
 
-#: ../embed/downloader-view.c:745
+#: ../embed/downloader-view.c:753
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: ../embed/downloader-view.c:808 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:816 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Archivo"
 
-#: ../embed/downloader-view.c:831
+#: ../embed/downloader-view.c:839
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:842
+#: ../embed/downloader-view.c:850
 msgid "Remaining"
 msgstr "Restantes"
 
@@ -1332,12 +1332,11 @@ msgstr "Otros"
 msgid "Local files"
 msgstr "Archivos locales"
 
-#: ../embed/webkit/webkit-embed.c:419
-#| msgid "Save As"
+#: ../embed/webkit/webkit-embed.c:455
 msgid "Save"
 msgstr "Guardar"
 
-#: ../embed/webkit/webkit-embed.c:501
+#: ../embed/webkit/webkit-embed.c:597
 msgid "Web Inspector"
 msgstr "Inspector web"
 
@@ -1386,31 +1385,31 @@ msgstr ""
 msgid "Not a launchable item"
 msgstr "No es un elemento lanzable"
 
-#: ../lib/egg/eggsmclient.c:224
+#: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
 msgstr "Desactivar la conexión con el gestor de sesiones"
 
-#: ../lib/egg/eggsmclient.c:227
+#: ../lib/egg/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
 msgstr "Especificar el archivo que contiene la configuración guardada"
 
-#: ../lib/egg/eggsmclient.c:227 ../src/ephy-main.c:96 ../src/ephy-main.c:98
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: ../lib/egg/eggsmclient.c:230
+#: ../lib/egg/eggsmclient.c:231
 msgid "Specify session management ID"
 msgstr "Especifique el ID de gestión de la sesión"
 
-#: ../lib/egg/eggsmclient.c:230
+#: ../lib/egg/eggsmclient.c:231
 msgid "ID"
 msgstr "ID"
 
-#: ../lib/egg/eggsmclient.c:244
+#: ../lib/egg/eggsmclient.c:252
 msgid "Session management options:"
 msgstr "Opciones de gestión de la sesión:"
 
-#: ../lib/egg/eggsmclient.c:245
+#: ../lib/egg/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "Mostrar las opciones de gestión de la sesión"
 
@@ -1529,13 +1528,13 @@ msgstr "Histórico"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1500
 msgid "Bookmark"
 msgstr "Marcador"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:440 ../src/ephy-window.c:1506
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1504
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -1616,7 +1615,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:928
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastre y suelte este icono para crear un enlace a esta página"
 
@@ -2632,7 +2631,7 @@ msgstr "Guarda la página actual"
 
 #: ../src/ephy-window.c:132
 msgid "Page Set_up"
-msgstr "_Configuración de página"
+msgstr "Config_uración de página"
 
 #: ../src/ephy-window.c:133
 msgid "Setup the page settings for printing"
@@ -3038,113 +3037,113 @@ msgstr "_Iniciar animación"
 msgid "St_op Animation"
 msgstr "_Detener animación"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:526
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:530
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:534
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1496 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1494 ../src/window-commands.c:285
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1498 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1496 ../src/window-commands.c:311
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1500
+#: ../src/ephy-window.c:1498
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1504
+#: ../src/ephy-window.c:1502
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1517
+#: ../src/ephy-window.c:1515
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1520
+#: ../src/ephy-window.c:1518
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1748
+#: ../src/ephy-window.c:1746
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1753
+#: ../src/ephy-window.c:1751
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1759
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1768
+#: ../src/ephy-window.c:1766
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1778
+#: ../src/ephy-window.c:1776
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:1821
+#: ../src/ephy-window.c:1819
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ventana emergente oculta"
 msgstr[1] "%d ventanas emergentes ocultas"
 
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2087
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como tapiz del escritorio"
 
-#: ../src/ephy-window.c:2094
+#: ../src/ephy-window.c:2092
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:2099
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:2112
+#: ../src/ephy-window.c:2110
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:2118
+#: ../src/ephy-window.c:2116
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:2130
+#: ../src/ephy-window.c:2128
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:2136
+#: ../src/ephy-window.c:2134
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:2142
+#: ../src/ephy-window.c:2140
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
@@ -3375,9 +3374,6 @@ msgstr "Desarrolladores anteriores:"
 
 #: ../src/window-commands.c:864
 #, c-format
-#| msgid ""
-#| "Lets you view web pages and find information on the internet.\n"
-#| "Powered by %s"
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by WebKit"
