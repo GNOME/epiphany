@@ -266,7 +266,8 @@ ephy_seed_extension_class_init (EphySeedExtensionClass *klass)
     global_eng = seed_init (NULL, NULL);
     seed_simple_evaluate (global_eng->context,
                           "Seed.import_namespace('Gtk');"
-                          "Seed.import_namespace('Epiphany');");
+                          "Seed.import_namespace('Epiphany');",
+                          NULL);
   }
 }
 
