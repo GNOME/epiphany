@@ -183,13 +183,6 @@ struct _EphyEmbedIface
 							   EphyEmbedSecurityLevel *level,
 							   char **description);
 	void		   (* show_page_certificate)	  (EphyEmbed *embed);
-	void		   (* scroll_lines)		  (EphyEmbed *embed,
-							   int num_lines);
-	void		   (* scroll_pages)		  (EphyEmbed *embed,
-							   int num_pages);
-	void		   (* scroll_pixels)		  (EphyEmbed *embed,
-							   int dx,
-							   int dy);
 	void		   (* set_print_preview_mode)	  (EphyEmbed *embed,
 							   gboolean mode);
 	int		   (* print_preview_n_pages)	  (EphyEmbed *embed);
@@ -259,16 +252,6 @@ void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 
 void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
 
-/* Scroll */
-void		  ephy_embed_scroll			(EphyEmbed *embed,
-							 int num_lines);
-
-void		  ephy_embed_page_scroll		(EphyEmbed *embed,
-							 int num_pages);
-							 
-void		  ephy_embed_scroll_pixels		(EphyEmbed *embed,
-							 int dx,
-							 int dy);
 /* Document type */
 EphyEmbedDocumentType	ephy_embed_get_document_type	(EphyEmbed *embed);
 
