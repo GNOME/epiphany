@@ -585,6 +585,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
   EphyMimePermission mime_permission;
   GAppInfo *helper_app;
   const char *suggested_filename;
+  int default_response;
 
   parent_window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
   if (!GTK_WIDGET_TOPLEVEL (parent_window))
@@ -667,7 +668,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
 
   gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
-  int default_response = action == DOWNLOAD_ACTION_NONE
+  default_response = action == DOWNLOAD_ACTION_NONE
         ? (int) GTK_RESPONSE_CANCEL
         : (int) action;
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), default_response);
