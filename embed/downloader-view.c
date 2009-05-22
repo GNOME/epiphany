@@ -416,6 +416,39 @@ ephy_download_get_remaining_time (WebKitDownload *download)
 }
 
 static void
+do_open_downloaded_file (DownloaderView *dv, WebKitDownload *download, gboolean open_location)
+{
+	DownloaderViewPrivate *priv = dv->priv;
+	GdkDisplay *gdk_display;
+	const char *destination_uri = webkit_download_get_destination_uri (download);
+	GFile *downloaded_file = g_file_new_for_uri (destination_uri);
+
+	gdk_display = gtk_widget_get_display (priv->window);
+	if (open_location)
+	{
+		ephy_file_browse_to (downloaded_file, gdk_x11_display_get_user_time (gdk_display));
+	}
+	else
+	{
+		ephy_file_launch_handler (NULL, downloaded_file,
+					  gdk_x11_display_get_user_time (gdk_display));
+	}
+	g_object_unref (downloaded_file);
+}
+
+static void
+open_downloaded_file (DownloaderView *dv, WebKitDownload *download)
+{
+	do_open_downloaded_file (dv, download, FALSE);
+}
+
+static void
+open_downloaded_file_location (DownloaderView *dv, WebKitDownload *download)
+{
+	do_open_downloaded_file (dv, download, TRUE);
+}
+
+static void
 update_download_row (DownloaderView *dv, WebKitDownload *download)
 {
 	GtkTreeRowReference *row_ref;
@@ -427,7 +460,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent = 0;
-
+	DownloadAction action;
 #ifdef HAVE_LIBNOTIFY
 	char *downloaded;
 #endif
@@ -451,6 +484,22 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 		downloader_view_remove_download (dv, download);
 		return;
 	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
+		action = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(download),
+							    "download-action"));
+
+		switch (action)
+		{
+		case DOWNLOAD_ACTION_OPEN:
+			open_downloaded_file (dv, download);
+			break;
+		case DOWNLOAD_ACTION_OPEN_LOCATION:
+			open_downloaded_file_location (dv, download);
+			break;
+		default:
+			g_assert_not_reached ();
+			break;
+		}
+
 		downloader_view_remove_download (dv, download);
 #ifdef HAVE_LIBNOTIFY
 		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 

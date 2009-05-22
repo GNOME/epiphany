@@ -52,6 +52,23 @@ struct _DownloaderViewClass
         EphyDialogClass parent_class;
 };
 
+/* These represent actions to be performed after the download is
+ * successfully completed; NONE means no download will happen,
+ * DOWNLOAD is just a way to tell the mime content handler that a file
+ * chooser should be displayed so that the user can select where to
+ * download to, and is usually turned into OPEN_LOCATION after that
+ * happens (in other words, DOWNLOAD will never be an action when the
+ * download is finished). OPEN will try to run the default application
+ * that handles that file type.
+ */
+typedef enum
+{
+        DOWNLOAD_ACTION_NONE,
+        DOWNLOAD_ACTION_DOWNLOAD,
+        DOWNLOAD_ACTION_OPEN,
+        DOWNLOAD_ACTION_OPEN_LOCATION
+} DownloadAction;
+
 GType           downloader_view_get_type              (void);
 
 DownloaderView *downloader_view_new                   (void);

@@ -36,6 +36,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-persist.h"
+#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
 #include "ephy-embed-utils.h"
@@ -436,6 +437,7 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_object_unref (download);
 }
 
 static void
@@ -453,7 +455,7 @@ request_destination_uri (WebKitWebView *web_view,
    * the download, and use NULL otherwise; we don't want to pass the
    * WebView or other widget as a parent window.
    */
-  window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
+  window = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
   if (!GTK_WIDGET_TOPLEVEL (window))
     window = NULL;
 
@@ -523,7 +525,159 @@ perform_auto_download (WebKitDownload *download)
   }
 
   dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+
+  g_object_set_data (G_OBJECT(download), "download-action", GINT_TO_POINTER(DOWNLOAD_ACTION_OPEN));
   downloader_view_add_download (dview, download);
+}
+
+static void
+confirm_action_response_cb (GtkWidget *dialog,
+                            int response,
+                            WebKitDownload *download)
+{
+  WebKitWebView *web_view = g_object_get_data (G_OBJECT(dialog), "webkit-view");
+  DownloaderView *dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+
+  gtk_widget_destroy (dialog);
+
+  if (response > 0) {
+    switch (response) {
+    case DOWNLOAD_ACTION_OPEN:
+      g_object_set_data (G_OBJECT (download), "download-action",
+                         GINT_TO_POINTER (DOWNLOAD_ACTION_OPEN));
+      break;
+    case DOWNLOAD_ACTION_DOWNLOAD:
+    case DOWNLOAD_ACTION_OPEN_LOCATION:
+      g_object_set_data (G_OBJECT (download), "download-action",
+                         GINT_TO_POINTER (DOWNLOAD_ACTION_OPEN_LOCATION));
+      break;
+    }
+
+    if (response == DOWNLOAD_ACTION_DOWNLOAD) {
+      /* balanced in download_requested_dialog_response_cb */
+      g_object_ref (download);
+      request_destination_uri (web_view, download);
+    } else {
+      if (!define_destination_uri (download, FALSE)) {
+        goto cleanup;
+      }
+      downloader_view_add_download (dview, download);
+    }
+    g_object_unref (download);
+    return;
+  }
+
+cleanup:
+  webkit_download_cancel (download);
+  ephy_file_delete_uri (webkit_download_get_destination_uri (download));
+  g_object_unref (download);
+}
+
+static void
+confirm_action_from_mime (WebKitWebView *web_view,
+                          WebKitDownload *download,
+                          DownloadAction action)
+{
+  GtkWidget *parent_window;
+  GtkWidget *dialog, *button, *image;
+  const char *action_label;
+  char *mime_description;
+  EphyMimePermission mime_permission;
+  GAppInfo *helper_app;
+  const char *suggested_filename;
+
+  parent_window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
+  if (!GTK_WIDGET_TOPLEVEL (parent_window))
+    parent_window = NULL;
+
+  /* FIXME: we still have no way of getting the content type from
+   * webkit yet; we need to have a proper WebKitNetworkRequest
+   * implementation to do this here; see
+   * https://bugs.webkit.org/show_bug.cgi?id=18608
+   */
+  helper_app = NULL;
+  mime_description = NULL;
+  mime_permission = EPHY_MIME_PERMISSION_SAFE;
+  if (mime_description == NULL) {
+    /* Translators: The text before the "|" is context to help you decide on
+     * the correct translation. You MUST OMIT it in the translated string. */
+    mime_description = g_strdup (Q_("File Type:|Unknown"));
+    action = DOWNLOAD_ACTION_OPEN_LOCATION;
+  }
+
+  /* OPEN will never happen here, for now; see comment about
+   * WebKitNetworkRequest above!
+   */
+  action_label = (action == DOWNLOAD_ACTION_OPEN) ? GTK_STOCK_OPEN : STOCK_DOWNLOAD;
+  suggested_filename = webkit_download_get_suggested_filename (download);
+
+  if (mime_permission != EPHY_MIME_PERMISSION_SAFE && helper_app) {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+                                     _("Download this potentially unsafe file?"));
+
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              /* translators: First %s is the file type description,
+                                                 Second %s is the file name */
+                                              _("File Type: “%s”.\n\nIt is unsafe to open “%s” as "
+                                                "it could potentially damage your documents or "
+                                                "invade your privacy. You can download it instead."),
+                                              mime_description, suggested_filename);
+  } else if (action == DOWNLOAD_ACTION_OPEN && helper_app) {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                     _("Open this file?"));
+
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              /* translators: First %s is the file type description,
+                                                 Second %s is the file name,
+                                                 Third %s is the application used to open the file */
+                                              _("File Type: “%s”.\n\nYou can open “%s” using “%s” or save it."),
+                                              mime_description, suggested_filename,
+                                              g_app_info_get_name (helper_app));
+  } else  {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                     _("Download this file?"));
+
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              /* translators: First %s is the file type description,
+                                                 Second %s is the file name */
+                                              _("File Type: “%s”.\n\nYou have no application able to open “%s”. "
+                                                "You can download it instead."),
+                                              mime_description, suggested_filename);
+  }
+
+  g_free (mime_description);
+
+  button = gtk_button_new_with_label (_("_Save As..."));
+  image = gtk_image_new_from_stock (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+  /* don't show the image! see bug #307818 */
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, DOWNLOAD_ACTION_DOWNLOAD);
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         action_label, action);
+
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
+
+  int default_response = action == DOWNLOAD_ACTION_NONE
+        ? (int) GTK_RESPONSE_CANCEL
+        : (int) action;
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), default_response);
+
+  g_object_set_data (G_OBJECT (dialog), "webkit-view", web_view);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (confirm_action_response_cb),
+                    download);
+
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static gboolean
@@ -547,7 +701,13 @@ download_requested_cb (WebKitWebView *web_view,
   if (!define_destination_uri (download, TRUE))
     return FALSE;
 
-  request_destination_uri (web_view, download);
+  /* FIXME: when we are able to obtain the MIME information from
+   * WebKit, we will want to decide earlier whether we want to open or
+   * open the location to where the file was downloaded. See
+   * perform_auto_download, too.
+   */
+  g_object_ref (download); /* balanced in confirm_action_response_cb */
+  confirm_action_from_mime (web_view, download, DOWNLOAD_ACTION_DOWNLOAD);
 
   return TRUE;
 }
