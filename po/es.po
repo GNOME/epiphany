@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-04-17 06:21+0000\n"
-"PO-Revision-Date: 2009-05-03 19:43+0200\n"
+"POT-Creation-Date: 2009-05-22 21:46+0000\n"
+"PO-Revision-Date: 2009-05-23 19:46+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -888,23 +888,23 @@ msgid "_Resume"
 msgstr "_Continuar"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:389 ../embed/downloader-view.c:493
-#: ../embed/downloader-view.c:498 ../lib/ephy-time-helpers.c:279
+#: ../embed/downloader-view.c:389 ../embed/downloader-view.c:542
+#: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1743
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/downloader-view.c:456
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Se ha descargado el archivo «%s»."
 
-#: ../embed/downloader-view.c:459
+#: ../embed/downloader-view.c:508
 msgid "Download finished"
 msgstr "Descarga finalizada"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:483
+#: ../embed/downloader-view.c:532
 #, c-format
 msgid ""
 "%s\n"
@@ -913,46 +913,46 @@ msgstr ""
 "%s\n"
 "%s de %s"
 
-#: ../embed/downloader-view.c:530
+#: ../embed/downloader-view.c:579
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d descarga"
 msgstr[1] "%d descargas"
 
-#: ../embed/downloader-view.c:665
+#: ../embed/downloader-view.c:714
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Se ha añadido el archivo «%s» a la cola de descargas."
 
-#: ../embed/downloader-view.c:669
+#: ../embed/downloader-view.c:718
 msgid "Download started"
 msgstr "Descarga iniciada"
 
-#: ../embed/downloader-view.c:747 ../embed/downloader-view.c:757
+#: ../embed/downloader-view.c:796 ../embed/downloader-view.c:806
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/downloader-view.c:750
+#: ../embed/downloader-view.c:799
 msgctxt "download status"
 msgid "Failed"
 msgstr "Falló"
 
-#: ../embed/downloader-view.c:753
+#: ../embed/downloader-view.c:802
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: ../embed/downloader-view.c:816 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:865 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Archivo"
 
-#: ../embed/downloader-view.c:839
+#: ../embed/downloader-view.c:888
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:850
+#: ../embed/downloader-view.c:899
 msgid "Remaining"
 msgstr "Restantes"
 
@@ -1332,11 +1332,79 @@ msgstr "Otros"
 msgid "Local files"
 msgstr "Archivos locales"
 
-#: ../embed/webkit/webkit-embed.c:455
+#: ../embed/webkit/webkit-embed.c:462
 msgid "Save"
 msgstr "Guardar"
 
-#: ../embed/webkit/webkit-embed.c:597
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/webkit/webkit-embed.c:604
+msgid "File Type:|Unknown"
+msgstr "Desconocido"
+
+#: ../embed/webkit/webkit-embed.c:618
+msgid "Download this potentially unsafe file?"
+msgstr "¿Descargar este archivo potencialmente inseguro?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/webkit/webkit-embed.c:623
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
+"Tipo de archivo: «%s».\n"
+"\n"
+"No es seguro abrir «%s» ya que potencialmente podría dañar sus documentos o "
+"invadir su privacidad. En su lugar, puede descargarlo."
+
+#: ../embed/webkit/webkit-embed.c:631
+#| msgid "Open a file"
+msgid "Open this file?"
+msgstr "¿Abrir este archivo?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/webkit/webkit-embed.c:637
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
+"Tipo de archivo: «%s».\n"
+"\n"
+"Puede abrir «%s» usando «%s» o guardarlo."
+
+#: ../embed/webkit/webkit-embed.c:644
+#| msgid "_Download folder:"
+msgid "Download this file?"
+msgstr "¿Descargar este archivo?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/webkit/webkit-embed.c:649
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
+"Tipo de archivo: «%s».\n"
+"\n"
+"No tiene ninguna aplicación capaz de abrir «%s». En su lugar, puede "
+"descargarlo."
+
+#: ../embed/webkit/webkit-embed.c:656
+#| msgid "Save As"
+msgid "_Save As..."
+msgstr "Guardar _como…"
+
+#: ../embed/webkit/webkit-embed.c:760
 msgid "Web Inspector"
 msgstr "Inspector web"
 
@@ -1420,32 +1488,32 @@ msgstr "Mostrar las opciones de gestión de la sesión"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:918
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "Mostrar «_%s»"
 
-#: ../lib/egg/egg-editable-toolbar.c:1381
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Mover en la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1382
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Mueve el elemento seleccionado en la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1383
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "_Quitar de la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1384
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Quita el elemento seleccionado de la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1385
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Borrar barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Quita la barra de herramientas seleccionada"
 
