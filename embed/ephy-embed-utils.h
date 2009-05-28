@@ -36,6 +36,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN (embed))))))
+#define EPHY_WEBKIT_BACK_FORWARD_LIMIT 100
 
 char 	   * ephy_embed_utils_link_message_parse  (char *message);
 const char * ephy_embed_utils_get_title_composite (EphyEmbed *embed);

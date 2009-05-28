@@ -39,7 +39,6 @@
 
 #define HISTORY_ITEM_DATA_KEY	  "HistoryItem"
 #define URL_DATA_KEY	          "GoURL"
-#define WEBKIT_BACK_FORWARD_LIMIT 100
 
 #define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
 
@@ -197,10 +196,10 @@ webkit_construct_history_list (WebKitWebView *web_view, WebKitHistoryType hist_t
 
 	if (hist_type == WEBKIT_HISTORY_FORWARD)
 		webkit_items = webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
-											 WEBKIT_BACK_FORWARD_LIMIT);
+											 EPHY_WEBKIT_BACK_FORWARD_LIMIT);
 	else
 		webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
-										      WEBKIT_BACK_FORWARD_LIMIT);
+										      EPHY_WEBKIT_BACK_FORWARD_LIMIT);
 
 	return webkit_items;
 }
@@ -243,8 +242,8 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 
 		item = new_history_menu_item (title ? title : url, url);
 
-		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY, hitem,
-					(GDestroyNotify) g_object_unref);
+		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY,
+					g_object_ref (hitem), g_object_unref);
 
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (activate_back_or_forward_menu_item_cb),

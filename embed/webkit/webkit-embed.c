@@ -858,6 +858,37 @@ impl_shistory_copy (EphyEmbed *source,
                     gboolean copy_forward,
                     gboolean copy_current)
 {
+  WebKitWebView *source_view, *dest_view;
+  WebKitWebBackForwardList* source_bflist, *dest_bflist;
+  WebKitWebHistoryItem *item;
+  GList *items;
+
+  source_view = WEBKIT_EMBED (source)->priv->web_view;
+  dest_view = WEBKIT_EMBED (dest)->priv->web_view;
+
+  source_bflist = webkit_web_view_get_back_forward_list (source_view);
+  dest_bflist = webkit_web_view_get_back_forward_list (dest_view);
+
+  if (copy_back) {
+    items = webkit_web_back_forward_list_get_back_list_with_limit (source_bflist, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+    /* We want to add the items in the reverse order here, so the
+       history ends up the same */
+    items = g_list_reverse (items);
+    for (; items; items = items->next) {
+      item = (WebKitWebHistoryItem*)items->data;
+      webkit_web_back_forward_list_add_item (dest_bflist, g_object_ref (item));
+    }
+    g_list_free (items);
+  }
+
+  /* The ephy/gecko behavior is to add the current item of the source
+     embed at the end of the back history, so keep doing that */
+  item = webkit_web_back_forward_list_get_current_item (source_bflist);
+  webkit_web_back_forward_list_add_item (dest_bflist, g_object_ref (item));
+
+  /* We ignore the 'copy_current' flag, it's unused in Epiphany */
+  /* We ignore the 'copy_forward' flag, ephy/gecko did nothing with it
+     either AFAICT*/
 }
 
 static void
