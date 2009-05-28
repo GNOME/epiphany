@@ -796,16 +796,8 @@ impl_load (EphyEmbed *embed,
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   char *effective_url = NULL;
 
-  /* FIXME: WebKit has some strange bug for which there must be
-   * protocol prefix into the parsed URL, or it will not show images
-   * and lock badly.  I copied this function from WebKit's
-   * GdkLauncher.
-   */
-  if (strncmp ("about:", url, 6)   != 0 &&
-      strncmp ("http://", url, 7)  != 0 &&
-      strncmp ("https://", url, 8) != 0 &&
-      strncmp ("file://", url, 7)  != 0 &&
-      strncmp ("ftp://", url, 6)   != 0)
+  /* WebKit cannot handle URLs without a protocol */
+  if (ephy_embed_utils_address_has_web_scheme (url) == FALSE)
     effective_url = g_strconcat ("http://", url, NULL);
   else
     effective_url = g_strdup (url);
