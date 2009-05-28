@@ -48,6 +48,10 @@
 #include <nsToolkitCompsCID.h>
 #endif
 
+#ifdef HAVE_GECKO_1_9_1
+#include <nsXPCOMCIDInternal.h>
+#endif
+
 #ifdef HAVE_MOZILLA_PSM
 #include <nsISecureBrowserUI.h>
 #endif
