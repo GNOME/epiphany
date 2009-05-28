@@ -600,9 +600,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
   mime_description = NULL;
   mime_permission = EPHY_MIME_PERMISSION_SAFE;
   if (mime_description == NULL) {
-    /* Translators: The text before the "|" is context to help you decide on
-     * the correct translation. You MUST OMIT it in the translated string. */
-    mime_description = g_strdup (Q_("File Type:|Unknown"));
+    mime_description = g_strdup (C_("file type", "Unknown"));
     action = DOWNLOAD_ACTION_OPEN_LOCATION;
   }
 
