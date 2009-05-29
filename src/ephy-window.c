@@ -2562,16 +2562,16 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		const char *uri;
 		EphyEmbed *embed;
 
-		uri = webkit_network_request_get_uri (request);
 		embed = ephy_embed_container_get_active_child
 			(EPHY_EMBED_CONTAINER (window));
 
-		ephy_shell_new_tab (ephy_shell_get_default (),
-				    window,
-				    embed,
-				    uri,
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-				    EPHY_NEW_TAB_OPEN_PAGE);
+		ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 window,
+					 embed,
+					 request,
+					 EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+					 EPHY_NEW_TAB_OPEN_PAGE,
+					 EPHY_EMBED_CHROME_ALL, FALSE, 0);
 
 		return TRUE;
 	}

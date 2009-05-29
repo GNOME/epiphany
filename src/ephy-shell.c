@@ -35,6 +35,8 @@
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-web-view.h"
+#include "ephy-embed-utils.h"
 #include "ephy-window.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-import.h"
@@ -406,7 +408,7 @@ load_homepage (EphyEmbed *embed)
  * @shell: a #EphyShell
  * @parent_window: the target #EphyWindow or %NULL
  * @previous_embed: the referrer embed, or %NULL
- * @url: an url to load or %NULL
+ * @request: a #WebKitNetworkRequest to load or %NULL
  * @chrome: a #EphyEmbedChrome mask to use if creating a new window
  * @is_popup: whether the new window is a popup
  * @user_time: a timestamp, or 0
@@ -420,7 +422,7 @@ EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
 			 EphyWindow *parent_window,
 			 EphyEmbed *previous_embed,
-			 const char *url,
+			 WebKitNetworkRequest *request,
 			 EphyNewTabFlags flags,
 			 EphyEmbedChrome chrome,
 			 gboolean is_popup,
@@ -520,7 +522,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	{
 		EphyEmbedLoadFlags load_flags = 0;
 
-		g_assert (url != NULL);
+		g_assert (request != NULL);
 
 		if (flags & EPHY_NEW_TAB_ALLOW_FIXUP)
 		{
@@ -530,13 +532,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		{
 			load_flags = EPHY_EMBED_LOAD_FLAGS_NONE;
 		}
-		/* FIXME */
-		/* We need to audit every caller to see if this 
-		   won't make us send referer for undesirable loads.
-	           Passing NULL referrer atm  */
-		ephy_embed_load (embed, url, load_flags, NULL);
 
-		is_empty = url_is_empty (url);
+		ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
+					    request);
+		is_empty = url_is_empty (webkit_network_request_get_uri (request));
 	}
 
         /* Make sure the initial focus is somewhere sensible and not, for
@@ -582,9 +581,16 @@ ephy_shell_new_tab (EphyShell *shell,
 		    const char *url,
 		    EphyNewTabFlags flags)
 {
-	return ephy_shell_new_tab_full (shell, parent_window,
-					previous_embed, url, flags,
-					EPHY_EMBED_CHROME_ALL, FALSE, 0);
+	EphyEmbed *embed;
+	WebKitNetworkRequest *request = webkit_network_request_new (url);
+
+	embed = ephy_shell_new_tab_full (shell, parent_window,
+					 previous_embed, request, flags,
+					 EPHY_EMBED_CHROME_ALL, FALSE, 0);
+
+	g_object_unref (request);
+
+	return embed;
 }
 
 /**
