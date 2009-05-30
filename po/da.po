@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-09-24 00:36+0200\n"
-"PO-Revision-Date: 2008-09-24 00:10+0200\n"
+"POT-Creation-Date: 2009-05-30 17:32+0200\n"
+"PO-Revision-Date: 2009-05-15 00:16+0200\n"
 "Last-Translator: Kenneth Nielsen <k.nielsen81@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -66,8 +66,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany - internetbrowser"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
-#: ../src/ephy-main.c:632
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "Internetbrowser"
 
@@ -261,11 +260,24 @@ msgstr "Tillad Java"
 msgid "Enable JavaScript"
 msgstr "Tillad Javascript"
 
-#: ../data/epiphany.schemas.in.h:16
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+msgid "Enable Web Inspector"
+msgstr ""
+
+#: ../data/epiphany.schemas.in.h:17
 msgid "Enable smooth scrolling"
 msgstr "Slå blød rulning til"
 
-#: ../data/epiphany.schemas.in.h:17
+#: ../data/epiphany.schemas.in.h:18
+msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+
+#: ../data/epiphany.schemas.in.h:19
+msgid "Force new windows to be opened in tabs"
+msgstr ""
+
+#: ../data/epiphany.schemas.in.h:20
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -273,15 +285,15 @@ msgstr ""
 "Vis eller skjul downloadvinduet. Når det er skjult vil der blive vist en "
 "bemærkning når nye downloads påbegyndes."
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
 msgstr "Historiksidernes tidsinterval"
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:22
 msgid "Home page"
 msgstr "Startside"
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -289,11 +301,11 @@ msgstr ""
 "Hvordan animerede billeder præsenteres. Mulige værdier er \"normal\", \"once"
 "\" og \"disabled\"."
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:24
 msgid "How to print frames"
 msgstr "Hvordan rammer skal skrives ud"
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:25
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
@@ -301,54 +313,55 @@ msgstr ""
 "Hvordan sider der indeholder rammer skrives ud. Mulige værdier er \"normal"
 "\", \"separately\" og \"selected\"."
 
-#: ../data/epiphany.schemas.in.h:23
+#. Translators: this is the default encoding used by Epiphany for Web pages display
+#: ../data/epiphany.schemas.in.h:27
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../data/epiphany.schemas.in.h:24
+#: ../data/epiphany.schemas.in.h:28
 msgid "Image animation mode"
 msgstr "Billedanimationstilstand"
 
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:29
 msgid "Languages"
 msgstr "Sprog"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:30
 msgid "Lists the active extensions."
 msgstr "Vis liste over aktive udvidelser."
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:31
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr "Midterklik for at åbne side fra aktuelt markeret tekst"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:32
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
 msgstr "Midterklik i hovedvinduet for at åbne side fra aktuelt markeret tekst."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:33
 msgid "Minimum font size"
 msgstr "Mindste skriftstørrelse"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:34
 msgid "Preferred languages, two letter codes."
 msgstr "Foretrukne sprog, to bogstavs-koder."
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:35
 msgid "Remember passwords"
 msgstr "Husk adgangskoder"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:36
 msgid "Show bookmarks bar by default"
 msgstr "Vis bogmærkeværktøjslinje som standard"
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show statusbar by default"
 msgstr "Vis statuslinje som standard"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:38
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -356,27 +369,27 @@ msgstr ""
 "Vis historiksiderne som er besøgt inden for et tidsrum. Mulige værdier er "
 "\"ever\", \"last_two_days\", \"last_three_days\" og \"today\"."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:39
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Vis fanebladslinjen også selvom der kun er et faneblad åbent."
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show toolbars by default"
 msgstr "Vis værktøjslinjer som standard"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:41
 msgid "Size of disk cache"
 msgstr "Størrelse af diskmellemlager"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache, in MB."
 msgstr "Størrelse af diskmellemlager, i Mb."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:43
 msgid "The bookmark information shown in the editor view"
 msgstr "Bogmærkeoplysningerne som vises i redigeringsvinduet"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:44
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -384,11 +397,11 @@ msgstr ""
 "Bogmærkeoplysningerne som vises i redigeringsvinduet. Gyldige værdier i "
 "listen er \"adresse\" og \"titel\"."
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:45
 msgid "The currently selected fonts language"
 msgstr "Sprog for aktuelt valgte skrifttyper"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -407,41 +420,15 @@ msgstr ""
 "\" (tyrkisk), \"x-unicode\" (andre sprog), \"x-western\" (sprog skrevet med "
 "latinske tegn), \"x-tamil\" (tamilsk) og \"x-devanagari\" (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:47
 msgid "The downloads folder"
 msgstr "Overføringsmappe"
 
-#: ../data/epiphany.schemas.in.h:44
-msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr "Kodningsgætteren. En tom streng betyder at gæt slås fra"
-
-#: ../data/epiphany.schemas.in.h:45
-msgid ""
-"The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-"\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-"\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-"\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-"\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-"encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-"\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
-"\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
-"and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr ""
-"Kodningsgætteren. Gyldige værdier er \"\" (gæt ikke), "
-"\"cjk_parallel_state_machine\" (gæt øst-asiatiske kodninger), "
-"\"ja_parallel_state_machine\" (gæt japanske kodninger), "
-"\"ko_parallel_state_machine\" (gæt koreanske kodninger), \"ruprob\" (gæt "
-"russiske kodninger), \"ukprob\" (gæt ukrainske kodninger), "
-"\"zh_parallel_state_machine\" (gæt kinesiske kodninger), "
-"\"zhcn_parallel_state_machine\" (gæt forenklede kinesiske kodninger) og "
-"\"zhtw_parallel_state_machine\" (gæt traditionelle kinesiske kodninger) og "
-"\"universal_charset_detector\" (gæt de fleste kodninger)."
-
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid "The page information shown in the history view"
 msgstr "Oplysningerne om besøgte sider som vises i historikken"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -449,7 +436,7 @@ msgstr ""
 "Den information om besøgte sider som vises i historik-visning. Gyldige "
 "værdier i listen er \"ViewTitle\", \"ViewAddress\" og \"ViewDateTime\"."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -458,11 +445,11 @@ msgstr ""
 "for at bruge den forvalgte overførselsmappen, eller \"Desktop\" for at bruge "
 "skrivebordsmappen."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "Værktøjslinjestil"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -472,28 +459,28 @@ msgstr ""
 "standardstil), \"both\" (tekst og ikoner), \"both-horiz\" (tekst ved siden "
 "af ikoner), \"ikoner\" og \"text\"."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
 msgstr "Benyt selvvalgte farver"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid "Use own fonts"
 msgstr "Benyt selvvalgte skrifttyper"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Benyt de selvvalgte farver i stedet for de farver som siden beder om."
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Benyt de selvvalgte skrifttyper i stedet for de farver som siden beder om."
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:57
 msgid "Visibility of the downloads window"
 msgstr "Downloadvinduets synlighed"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:58
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -501,7 +488,7 @@ msgstr ""
 "Når filer ikke kan åbnes af browseren, bliver de automatisk hentet til "
 "overføringsmappen og åbnet med det rigtige program."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -509,35 +496,35 @@ msgstr ""
 "Hvor cookies skal accepteres fra. Mulige værdier er \"anywhere\", \"current "
 "site\", \"nowhere\"."
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
 msgstr "Om baggrundsfarven skal skrives ud"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:61
 msgid "Whether to print the background images"
 msgstr "Om baggrundsbillederne skal skrives ud"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:62
 msgid "Whether to print the date in the footer"
 msgstr "Om datoen skal udskrives i sidefoden"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:63
 msgid "Whether to print the page address in the header"
 msgstr "Om sidens adresse skal udskrives i sidehovedet"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Om sidetallet (x af total) skal udskrives i sidefoden"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the page title in the header"
 msgstr "Om sidetitlen skal udskrives i sidehovedet"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "Om adgangskoder på internetsider skal gemmes og udfyldes på forhånd."
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "x-western"
 msgstr "x-western"
 
@@ -582,7 +569,7 @@ msgid "Field _Value"
 msgstr "Felt_værdi"
 
 #: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.glade.h:22
 msgid "General"
 msgstr "Generelt"
 
@@ -627,7 +614,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "Hentede filer"
 
@@ -643,7 +630,7 @@ msgstr "Personlige data"
 msgid "Text Encoding"
 msgstr "Tekstkodning"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:331
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Benyt den kodning der er angivet af dokumentet"
 
@@ -669,7 +656,6 @@ msgid "_Certificate:"
 msgstr "Cert_ifikate:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Adgangskode:"
 
@@ -709,26 +695,27 @@ msgstr "<b>Midlertidige filer</b>"
 msgid "<b>Web Content</b>"
 msgstr "<b>Indhold</b>"
 
+#: ../data/glade/prefs-dialog.glade.h:9
+#, fuzzy
+msgid "<b>Web Development</b>"
+msgstr "<b>Indhold</b>"
+
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>For eksempel ikke fra annoncører på disse sider</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "A_utomatically download and open files"
 msgstr "Hent og åbn _automatisk filer"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.glade.h:13
 msgid "Add Language"
 msgstr "Tilføj sprog"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "Allow popup _windows"
 msgstr "Tillad pop op-_vinduer"
-
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Au_todetect:"
-msgstr "_Gæt automatisk:"
 
 #: ../data/glade/prefs-dialog.glade.h:15
 msgid "Choose a l_anguage:"
@@ -739,7 +726,8 @@ msgstr "Vælg et s_prog:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
+#: ../src/pdm-dialog.c:358
 msgid "Cl_ear"
 msgstr "_Ryd"
 
@@ -751,87 +739,87 @@ msgstr "_Standard:"
 msgid "Enable Java_Script"
 msgstr "Tillad Java_script"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "Enable _Java"
 msgstr "Tillad _Java"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:21
 msgid "Fonts & Style"
 msgstr "Skrifttyper og stil"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:944
+#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:819
 msgid "Language"
 msgstr "Sprog"
 
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:24
 msgid "Let web pages specify their own _fonts"
 msgstr "Lad sider angive deres egne _skrifttyper"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Let web pages specify their own c_olors"
 msgstr "Lad sider angive deres egne _farver"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Only _from sites you visit"
 msgstr "Kun _fra sider du besøger"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Preferences"
 msgstr "Indstillinger"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Privacy"
 msgstr "Beskyttelse af privatliv"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:30
 msgid "Set to Current _Page"
 msgstr "Sæt til n_uværende side"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:31
 msgid "Set to _Blank Page"
 msgstr "Sæt til _tom side"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.glade.h:32
 msgid "Use custom _stylesheet"
 msgstr "Brug brugerdefineret stila_rk"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "Use s_mooth scrolling"
 msgstr "Slå _blød rulning til"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Address:"
 msgstr "_Adresse:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Always accept"
 msgstr "Acceptér _altid"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "_Diskmellemlager:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
 msgstr "_Overføringsmappe:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
 msgstr "_Redigér stilark…"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Minimum size:"
 msgstr "_Mindste størrelse:"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Never accept"
 msgstr "_Acceptér aldrig"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Remember passwords"
 msgstr "_Husk adgangskoder"
 
@@ -888,39 +876,46 @@ msgid "_Page address"
 msgstr "_Sideadresse"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:169
+#: ../embed/downloader-view.c:167
 msgid "_Show Downloads"
 msgstr "_Vis overførsler"
 
-#: ../embed/downloader-view.c:315
+#: ../embed/downloader-view.c:318
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:319
+#: ../embed/downloader-view.c:322
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:380
+#: ../embed/downloader-view.c:372
 msgid "_Pause"
 msgstr "_Pause"
 
-#: ../embed/downloader-view.c:380
+#: ../embed/downloader-view.c:372
 msgid "_Resume"
 msgstr "_Genoptag"
 
-#: ../embed/downloader-view.c:418
+#. impossible time or broken locale settings
+#: ../embed/downloader-view.c:389 ../embed/downloader-view.c:542
+#: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1743
+msgid "Unknown"
+msgstr "Ukendt"
+
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Filen “%s” er blevet hentet."
 
-#: ../embed/downloader-view.c:421
+#: ../embed/downloader-view.c:508
 msgid "Download finished"
 msgstr "Download afsluttet"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:446
+#: ../embed/downloader-view.c:532
 #, c-format
 msgid ""
 "%s\n"
@@ -929,50 +924,48 @@ msgstr ""
 "%s\n"
 "%s af %s"
 
-#. impossible time or broken locale settings
-#: ../embed/downloader-view.c:456 ../embed/downloader-view.c:461
-#: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1688
-msgid "Unknown"
-msgstr "Ukendt"
-
-#: ../embed/downloader-view.c:493
+#: ../embed/downloader-view.c:579
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d overførsel"
 msgstr[1] "%d overførsler"
 
-#: ../embed/downloader-view.c:598
+#: ../embed/downloader-view.c:714
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Filen “%s” er blevet tilføjet til downloadkøen."
 
-#: ../embed/downloader-view.c:601
+#: ../embed/downloader-view.c:718
 msgid "Download started"
 msgstr "Download påbegyndt"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:675 ../embed/downloader-view.c:688
-msgid "download status|Unknown"
+#: ../embed/downloader-view.c:796 ../embed/downloader-view.c:806
+#, fuzzy
+msgctxt "download status"
+msgid "Unknown"
 msgstr "Ukendt"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:680
-msgid "download status|Failed"
-msgstr "Mislykkedes"
+#: ../embed/downloader-view.c:799
+#, fuzzy
+msgctxt "download status"
+msgid "Failed"
+msgstr "Fil"
 
-#: ../embed/downloader-view.c:747 ../src/bookmarks/ephy-bookmarks-editor.c:988
+#: ../embed/downloader-view.c:802
+msgctxt "download status"
+msgid "Cancelled"
+msgstr ""
+
+#: ../embed/downloader-view.c:865 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Fil"
 
-#: ../embed/downloader-view.c:770
+#: ../embed/downloader-view.c:888
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:781
+#: ../embed/downloader-view.c:899
 msgid "Remaining"
 msgstr "Resterende"
 
@@ -1008,7 +1001,7 @@ msgstr "Indlæser “%s”…"
 msgid "Loading…"
 msgstr "Indlæser…"
 
-#: ../embed/ephy-embed-shell.c:244
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kan ikke bruges i øjeblikket. Klargøring af Mozilla mislykkedes."
@@ -1018,402 +1011,414 @@ msgstr ""
 msgid "Send an email message to “%s”"
 msgstr "Send e-post til “%s”"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
 msgstr "Arabisk (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:59
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Arabisk (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:60
 msgid "Arabic (_MacArabic)"
 msgstr "Arabisk (_MacArabisk)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:61
 msgid "Arabic (_Windows-1256)"
 msgstr "Arabisk (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:62
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Baltisk (ISO-8859-_13)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:63
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Baltisk (ISO-8859-_4)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:64
 msgid "Baltic (_Windows-1257)"
 msgstr "Baltisk (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:65
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Armensk (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:66
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Georgisk (GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:67
 msgid "Central European (_IBM-852)"
 msgstr "Centraleuropæisk (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
 msgstr "Centraleuropæisk (ISO-8859-_2)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:69
 msgid "Central European (_MacCE)"
 msgstr "Centraleuropæisk (_MacCE)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
 msgstr "Centraleuropæisk (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Kinesisk, forenklet (_GB18030)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Kinesisk, forenklet (G_B2312)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (GB_K)"
 msgstr "Kinesisk, forenklet (GB_K)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_HZ)"
 msgstr "Kinesisk, forenklet (_HZ)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Kinesisk, forenklet (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big_5)"
 msgstr "Kinesisk, traditionelt (Big_5)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Kinesisk, traditionelt (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:78
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Kinesisk, traditionelt (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (_IBM-855)"
 msgstr "Kyrillisk (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Kyrillisk (ISO-8859-_5)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Kyrillisk (ISO-IR-_111)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Kyrillisk (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:83
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Kyrillisk (_MacKyrillisk)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:84
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Kyrillisk (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:85
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Kyrillisk/_russisk (IBM-866)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:86
 msgid "Greek (_ISO-8859-7)"
 msgstr "Græsk (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:87
 msgid "Greek (_MacGreek)"
 msgstr "Græsk (_MacGræsk)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:88
 msgid "Greek (_Windows-1253)"
 msgstr "Græsk (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:89
 msgid "Gujarati (_MacGujarati)"
 msgstr "Gujarati (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:90
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Gurmukhi (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:91
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Hindu (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:92
 msgid "Hebrew (_IBM-862)"
 msgstr "Hebraisk (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:93
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Hebraisk (ISO-8859-_8-I)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:94
 msgid "Hebrew (_MacHebrew)"
 msgstr "Hebraisk (_MacHebraisk)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:95
 msgid "Hebrew (_Windows-1255)"
 msgstr "Hebraisk (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:96
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Visuel hebraisk (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:97
 msgid "Japanese (_EUC-JP)"
 msgstr "Japansk (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:98
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Japansk (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:99
 msgid "Japanese (_Shift-JIS)"
 msgstr "Japansk (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:100
 msgid "Korean (_EUC-KR)"
 msgstr "Koreansk (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:101
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Koreansk (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:102
 msgid "Korean (_JOHAB)"
 msgstr "Koreansk (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:103
 msgid "Korean (_UHC)"
 msgstr "Koreansk (_UHC)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:104
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Keltisk (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:105
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Islandsk (MacIslandsk)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:106
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Nordisk (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:107
 msgid "_Persian (MacFarsi)"
 msgstr "_Persisk (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:108
 msgid "Croatian (Mac_Croatian)"
 msgstr "Kroatisk (Mac_Kroatisk)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:109
 msgid "_Romanian (MacRomanian)"
 msgstr "_Romansk (MacRomansk)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:110
 msgid "R_omanian (ISO-8859-16)"
 msgstr "Romansk (ISO-8859-_16)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:111
 msgid "South _European (ISO-8859-3)"
 msgstr "_Sydeuropæisk (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:112
 msgid "Thai (TIS-_620)"
 msgstr "Thailandsk (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:113
 msgid "Thai (IS_O-8859-11)"
 msgstr "Thailandsk (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:114
 msgid "_Thai (Windows-874)"
 msgstr "_Thailandsk (Windows-874)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:115
 msgid "Turkish (_IBM-857)"
 msgstr "Tyrkisk (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:116
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Tyrkisk (ISO-8859-_9)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:117
 msgid "Turkish (_MacTurkish)"
 msgstr "Tyrkisk (_MacTyrkisk)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:118
 msgid "Turkish (_Windows-1254)"
 msgstr "Tyrkisk (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:119
 msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Kyrillisk/ukrainsk (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Kyrillisk/ukrainsk (Mac_Ukrainsk)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:122
 msgid "Vietnamese (_TCVN)"
 msgstr "Vietnamesisk (_TCVN)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (_VISCII)"
 msgstr "Vietnamesisk (_VISCII)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (V_PS)"
 msgstr "Vietnamesisk (V_PS)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:125
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Vietnamesisk (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_IBM-850)"
 msgstr "Vestligt (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:127
 msgid "Western (_ISO-8859-1)"
 msgstr "Vestligt (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:128
 msgid "Western (IS_O-8859-15)"
 msgstr "Vestligt (ISO-8859-1_5)"
 
-#: ../embed/ephy-encodings.c:132
+#: ../embed/ephy-encodings.c:129
 msgid "Western (_MacRoman)"
 msgstr "Vestligt (_MacRomansk)"
 
-#: ../embed/ephy-encodings.c:133
+#: ../embed/ephy-encodings.c:130
 msgid "Western (_Windows-1252)"
 msgstr "Vestligt (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
 #.
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:135
 msgid "English (_US-ASCII)"
 msgstr "Engelsk (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:137
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:141
+#: ../embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:142
+#: ../embed/ephy-encodings.c:139
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:146
-msgid "autodetectors|Off"
-msgstr "Fra"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:149
-msgid "automatically detect ... character encodings|Chinese"
-msgstr "Kinesisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:152
-msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "Forenklet kinesisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:155
-msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "Tradionelt kinesisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:158
-msgid "automatically detect ... character encodings|East Asian"
-msgstr "Østeuropæisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:161
-msgid "automatically detect ... character encodings|Japanese"
-msgstr "Japansk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:164
-msgid "automatically detect ... character encodings|Korean"
-msgstr "Koreansk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:167
-msgid "automatically detect ... character encodings|Russian"
-msgstr "Russisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:170
-msgid "automatically detect ... character encodings|Universal"
-msgstr "Universelt"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:173
-msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "Ukrainsk"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:329
+#: ../embed/ephy-encodings.c:281
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Ukendt (%s)"
 
-#: ../embed/ephy-history.c:487
+#: ../embed/ephy-history.c:486
 msgid "All"
 msgstr "Alt"
 
-#: ../embed/ephy-history.c:655
+#: ../embed/ephy-history.c:654
 msgid "Others"
 msgstr "Andre"
 
-#: ../embed/ephy-history.c:661
+#: ../embed/ephy-history.c:660
 msgid "Local files"
 msgstr "Lokale filer"
 
-#: ../lib/eel-gconf-extensions.c:68
+#: ../embed/webkit/webkit-embed.c:463
+msgid "Save"
+msgstr "Gem"
+
+#: ../embed/webkit/webkit-embed.c:604
+#, fuzzy
+msgctxt "file type"
+msgid "Unknown"
+msgstr "Ukendt"
+
+#: ../embed/webkit/webkit-embed.c:618
+msgid "Download this potentially unsafe file?"
+msgstr "Hent denne potentielt usikre fil?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/webkit/webkit-embed.c:623
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
+"Filtype: “%s”.\n"
+"\n"
+"Det er ikke sikkert at åbne “%s” da filen potentielt kan ødelægge dine "
+"dokumenter eller trænge ind på dit privatliv. Du kan gemme den i stedet."
+
+#: ../embed/webkit/webkit-embed.c:631
+msgid "Open this file?"
+msgstr "Åbn denne fil?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/webkit/webkit-embed.c:637
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
+"Filtype: “%s”.\n"
+"\n"
+"Du kan åbne “%s” ved hjælp af “%s” eller gemme filen."
+
+#: ../embed/webkit/webkit-embed.c:644
+msgid "Download this file?"
+msgstr "Hent denne fil?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/webkit/webkit-embed.c:649
+#, c-format
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
+"Filtype: “%s”.\n"
+"\n"
+"Du har ikke et program der kan åbne “%s”. Du kan gemme filen i stedet."
+
+#: ../embed/webkit/webkit-embed.c:656
+msgid "_Save As..."
+msgstr "_Gem som..."
+
+#: ../embed/webkit/webkit-embed.c:760
+msgid "Web Inspector"
+msgstr ""
+
+#: ../lib/eel-gconf-extensions.c:67
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -1422,6 +1427,69 @@ msgstr ""
 "GConf-fejl:\n"
 "  %s"
 
+#: ../lib/egg/eggdesktopfile.c:165
+#, c-format
+msgid "File is not a valid .desktop file"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:188
+#, c-format
+msgid "Unrecognized desktop file Version '%s'"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:1100
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:1168
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:1373
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr ""
+
+#: ../lib/egg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:225
+msgid "Disable connection to session manager"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:228
+msgid "Specify file containing saved configuration"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
+msgid "FILE"
+msgstr "FIL"
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "Specify session management ID"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "ID"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:252
+msgid "Session management options:"
+msgstr ""
+
+#: ../lib/egg/eggsmclient.c:253
+msgid "Show session management options"
+msgstr ""
+
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -1429,32 +1497,32 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "Vis “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Flyt på værktøjslinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Flyt det valgte element på værktøjslinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "_Fjern fra værktøjslinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Fjern det valgte element fra værktøjslinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Slet værktøjslinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Fjern den valgte værktøjslinje"
 
@@ -1462,56 +1530,56 @@ msgstr "Fjern den valgte værktøjslinje"
 msgid "Separator"
 msgstr "Adskiller"
 
-#: ../lib/ephy-file-chooser.c:412
+#: ../lib/ephy-file-chooser.c:381
 msgid "All supported types"
 msgstr "Alle understøttede typer"
 
-#: ../lib/ephy-file-chooser.c:423
+#: ../lib/ephy-file-chooser.c:392
 msgid "Web pages"
 msgstr "Internetsider"
 
-#: ../lib/ephy-file-chooser.c:431
+#: ../lib/ephy-file-chooser.c:400
 msgid "Images"
 msgstr "Billeder"
 
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:767
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "All files"
 msgstr "Alle filer"
 
-#: ../lib/ephy-file-helpers.c:296
+#: ../lib/ephy-file-helpers.c:290
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunne ikke oprette en midlertidig mappe i “%s”."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:363
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen “%s” findes. Flyt den venligst et andet sted hen."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:374
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kunne ikke oprette mappen “%s”."
 
-#: ../lib/ephy-gui.c:285
+#: ../lib/ephy-gui.c:283
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Mappen “%s” er skrivebeskyttet"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:287
 msgid "You do not have permission to create files in this directory."
 msgstr "Du har ikke rettigheder til at oprette filer i denne mappe."
 
-#: ../lib/ephy-gui.c:292
+#: ../lib/ephy-gui.c:290
 msgid "Directory not Writable"
 msgstr "Skrivebeskyttet mappe"
 
-#: ../lib/ephy-gui.c:322
+#: ../lib/ephy-gui.c:320
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Kan ikke overskrive eksisterende fil “%s”"
 
-#: ../lib/ephy-gui.c:326
+#: ../lib/ephy-gui.c:324
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
@@ -1519,229 +1587,41 @@ msgstr ""
 "En fil med dette navn findes allerede, og du har ikke rettigheder til at "
 "overskrive den."
 
-#: ../lib/ephy-gui.c:329
+#: ../lib/ephy-gui.c:327
 msgid "Cannot Overwrite File"
 msgstr "Kan ikke overskrive fil"
 
-#: ../lib/ephy-gui.c:368
+#: ../lib/ephy-gui.c:413
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunne ikke fremvise hjælp: %s"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:40
-msgid "select fonts for|Arabic"
-msgstr "Arabisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:43
-msgid "select fonts for|Baltic"
-msgstr "Baltisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:46
-msgid "select fonts for|Central European"
-msgstr "Centraleuropæisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:49
-msgid "select fonts for|Cyrillic"
-msgstr "Kyrillisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:52
-msgid "select fonts for|Devanagari"
-msgstr "Devanagari"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:55
-msgid "select fonts for|Greek"
-msgstr "Græsk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:58
-msgid "select fonts for|Hebrew"
-msgstr "Hebræisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:61
-msgid "select fonts for|Japanese"
-msgstr "Japansk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:64
-msgid "select fonts for|Korean"
-msgstr "Koreansk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:67
-msgid "select fonts for|Simplified Chinese"
-msgstr "Forenklet kinesisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:70
-msgid "select fonts for|Tamil"
-msgstr "Tamilsk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:73
-msgid "select fonts for|Thai"
-msgstr "Thai"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:76
-msgid "select fonts for|Traditional Chinese"
-msgstr "Traditionelt kinesisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:79
-msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "Traditionelt kinesisk (Hong Kong)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:82
-msgid "select fonts for|Turkish"
-msgstr "Tyrkisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:85
-msgid "select fonts for|Armenian"
-msgstr "Armensk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:88
-msgid "select fonts for|Bengali"
-msgstr "Bengali"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:91
-msgid "select fonts for|Unified Canadian Syllabics"
-msgstr "Forenet canadisk stavning"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:94
-msgid "select fonts for|Ethiopic"
-msgstr "Etiopisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:97
-msgid "select fonts for|Georgian"
-msgstr "Georgisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:100
-msgid "select fonts for|Gujarati"
-msgstr "Gujaratisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:103
-msgid "select fonts for|Gurmukhi"
-msgstr "Gurmukhisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:106
-msgid "select fonts for|Khmer"
-msgstr "Khmerisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:109
-msgid "select fonts for|Malayalam"
-msgstr "Malajisk"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:112
-msgid "select fonts for|Western"
-msgstr "Vestligt"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:115
-msgid "select fonts for|Other Scripts"
-msgstr "Andre skriftarter"
-
-#: ../lib/ephy-password-dialog.c:396
-msgid "_Username:"
-msgstr "_Brugernavn:"
-
-#: ../lib/ephy-password-dialog.c:410
-msgid "_Domain:"
-msgstr "_Domæne:"
-
-#: ../lib/ephy-password-dialog.c:437
-msgid "_New password:"
-msgstr "_Ny adgangskode:"
-
-#: ../lib/ephy-password-dialog.c:447
-msgid "Con_firm password:"
-msgstr "_Bekræft adgangskode:"
-
-#: ../lib/ephy-password-dialog.c:473
-msgid "Password quality:"
-msgstr "Adgangskodekvalitet:"
-
-#: ../lib/ephy-password-dialog.c:491
-msgid "Do not remember this password"
-msgstr "Husk ikke denne adgangskode"
-
-#: ../lib/ephy-password-dialog.c:495
-msgid "_Remember password for this session"
-msgstr "_Husk adgangskode for denne session"
-
-#: ../lib/ephy-password-dialog.c:499
-msgid "Save password in _keyring"
-msgstr "Gem adgangskode i _nøglering"
-
-#: ../lib/ephy-stock-icons.c:52
+#: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "Pop op-vinduer"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1277
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
 msgid "History"
 msgstr "Historik"
 
 # udsagnsord
-#: ../lib/ephy-stock-icons.c:54
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1484
+#: ../lib/ephy-stock-icons.c:49
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:300
+#: ../src/ephy-window.c:1500
 msgid "Bookmark"
 msgstr "Bogmærk"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:898
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1778
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1488
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1504
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:273
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:275
 msgid "Address Entry"
 msgstr "Adresselinje"
 
-#: ../lib/ephy-stock-icons.c:57
+#: ../lib/ephy-stock-icons.c:52
 msgid "_Download"
 msgstr "_Hent"
 
@@ -1778,97 +1658,101 @@ msgstr "%d %b %I:%M %p"
 msgid "%b %d %Y"
 msgstr "%d %b %Y"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:44
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:45
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:46
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:47
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:48
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:49
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:50
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:52
+#: ../lib/ephy-zoom.h:51
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:53
+#: ../lib/ephy-zoom.h:52
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:868
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Træk og slip dette ikon for at oprette et link til denne side"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:319
+#: ../lib/widgets/ephy-search-entry.c:140
+msgid "Clear"
+msgstr "Ryd"
+
+#: ../src/bookmarks/ephy-bookmark-action.c:318
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:496
+#: ../src/bookmarks/ephy-bookmark-action.c:495
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Kører scriptet “%s”"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:87
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:86
+#: ../src/bookmarks/ephy-bookmark-properties.c:612
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _lignende"
 msgstr[1] "%d _lignende"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:260
+#: ../src/bookmarks/ephy-bookmark-properties.c:259
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Forén med %d identisk bogmærke"
 msgstr[1] "_Forén med %d identiske bogmærker"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
-#: ../src/bookmarks/ephy-bookmark-properties.c:302
+#: ../src/bookmarks/ephy-bookmark-properties.c:279
+#: ../src/bookmarks/ephy-bookmark-properties.c:301
 #, c-format
 msgid "Show “%s”"
 msgstr "Vis “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:427
 #, c-format
 msgid "“%s” Properties"
 msgstr "Egenskaber for “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:552
+#: ../src/bookmarks/ephy-bookmark-properties.c:551
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:568
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "A_dresse:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:579
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "E_mner:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:601
+#: ../src/bookmarks/ephy-bookmark-properties.c:600
 msgid "Sho_w all topics"
 msgstr "Vis a_lle emner"
 
@@ -1876,329 +1760,325 @@ msgstr "Vis a_lle emner"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:110
+#: ../src/bookmarks/ephy-bookmarks.c:109
 msgid "Search the web"
 msgstr "Søg på internettet"
 
-#: ../src/bookmarks/ephy-bookmarks.c:110
+#: ../src/bookmarks/ephy-bookmarks.c:109
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.dk/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:114
 msgid "Entertainment"
 msgstr "Underholdning"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:115
 msgid "News"
 msgstr "Nyheder"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "Shopping"
 msgstr "Forretninger"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Travel"
 msgstr "Rejser"
 
-#: ../src/bookmarks/ephy-bookmarks.c:120
+#: ../src/bookmarks/ephy-bookmarks.c:119
 msgid "Work"
 msgstr "Arbejde"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:462
+#: ../src/bookmarks/ephy-bookmarks.c:463
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Opdatér bogmærket “%s”?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:467
+#: ../src/bookmarks/ephy-bookmarks.c:468
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Siden som bogmærket refererer til, er flyttet til “%s”."
 
-#: ../src/bookmarks/ephy-bookmarks.c:471
+#: ../src/bookmarks/ephy-bookmarks.c:472
 msgid "_Don't Update"
 msgstr "Opdatér _ikke"
 
-#: ../src/bookmarks/ephy-bookmarks.c:473
+#: ../src/bookmarks/ephy-bookmarks.c:474
 msgid "_Update"
 msgstr "_Opdatér"
 
-#: ../src/bookmarks/ephy-bookmarks.c:476
+#: ../src/bookmarks/ephy-bookmarks.c:477
 msgid "Update Bookmark?"
 msgstr "Opdatér bogmærke?"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
-msgid "bookmarks|All"
-msgstr "Alle"
+#: ../src/bookmarks/ephy-bookmarks.c:1225
+#, fuzzy
+msgctxt "bookmarks"
+msgid "All"
+msgstr "Alt"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
-msgid "bookmarks|Most Visited"
+#: ../src/bookmarks/ephy-bookmarks.c:1228
+#, fuzzy
+msgctxt "bookmarks"
+msgid "Most Visited"
 msgstr "Mest besøgte"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
-msgid "bookmarks|Not Categorized"
+#: ../src/bookmarks/ephy-bookmarks.c:1232
+#, fuzzy
+msgctxt "bookmarks"
+msgid "Not Categorized"
 msgstr "Ikke kategoriseret"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
-msgid "bookmarks|Nearby Sites"
+#: ../src/bookmarks/ephy-bookmarks.c:1237
+#, fuzzy
+msgctxt "bookmarks"
+msgid "Nearby Sites"
 msgstr "Lokale steder"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1480
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1472
+#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1304
 msgid "Untitled"
 msgstr "Unavngiven"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:80
+#: ../src/bookmarks/ephy-bookmarks-editor.c:78
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:81
+#: ../src/bookmarks/ephy-bookmarks-editor.c:79
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:131
 msgid "Remove from this topic"
 msgstr "Fjern fra dette emne"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:112
 msgid "_File"
 msgstr "_Fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:113
 msgid "_Edit"
 msgstr "R_edigér"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:116
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
 msgid "_View"
 msgstr "_Vis"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:119
 msgid "_Help"
 msgstr "_Hjælp"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "_New Topic"
 msgstr "_Nyt emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Create a new topic"
 msgstr "Opret et nyt emne"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
-#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:156
-#: ../src/ephy-history-window.c:707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
+#: ../src/ephy-history-window.c:705
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Åbn i nyt _vindue"
 msgstr[1] "Åbn i nye _vinduer"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Open the selected bookmark in a new window"
 msgstr "Åbne det valgte bogmærke i et nyt vindue"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
-#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:159
-#: ../src/ephy-history-window.c:710
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
+#: ../src/ephy-history-window.c:708
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Åbn i nyt _faneblad"
 msgstr[1] "Åbn i nye _faneblade"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Open the selected bookmark in a new tab"
 msgstr "Åbn det valgte bogmærke i et nyt faneblad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "_Rename…"
 msgstr "_Omdøb…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "Rename the selected bookmark or topic"
 msgstr "Omdøb det valgte bogmærke eller emne"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/bookmarks/ephy-bookmarks-ui.c:299
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "_Properties"
 msgstr "_Egenskaber"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Vis eller ændr egenskaberne for det valgte bogmærke"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "_Import Bookmarks…"
 msgstr "_Importér bogmærker…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Importér bogmærker fra et andet browserprogram eller fra en bogmærkefil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_Export Bookmarks…"
 msgstr "_Eksportér bogmærker…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Export bookmarks to a file"
 msgstr "Eksportér bogmærker til fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:146
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:144
 msgid "_Close"
 msgstr "_Luk"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Close the bookmarks window"
 msgstr "Luk bogmærkevinduet"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:156
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:157
 msgid "Cut the selection"
 msgstr "Klip det markerede"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1364
-#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:720
-#: ../src/ephy-window.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
+#: ../src/ephy-window.c:159
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:160
 msgid "Copy the selection"
 msgstr "Kopiér det markerede"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
-#: ../src/ephy-history-window.c:176 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:162
 msgid "_Paste"
 msgstr "_Indsæt"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/ephy-history-window.c:175
+msgid "Paste the clipboard"
+msgstr "Indsæt fra udklipsholderen"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:199
 #: ../src/ephy-history-window.c:177
-msgid "Paste the clipboard"
-msgstr "Indsæt fra klippebord"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:179
 msgid "_Delete"
 msgstr "_Slet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Delete the selected bookmark or topic"
 msgstr "Slet det valgte bogmærke eller emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:168
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
 msgstr "Vælg alle bogmærker eller tekst"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:264
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:262
 msgid "_Contents"
 msgstr "_Indhold"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
 msgstr "Vis hjælpen til bogmærker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:267
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:265
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:266
 msgid "Display credits for the web browser creators"
 msgstr "Vis oplysninger om hvem der har være med til at lave webbrowseren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 msgid "_Show on Toolbar"
 msgstr "_Vis på værktøjslinje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Vis det valgte bogmærke på en værktøjslinje"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-#: ../src/ephy-history-window.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/ephy-history-window.c:206
 msgid "_Title"
 msgstr "_Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
 msgid "Show only the title column"
 msgstr "Vis kun titelkolonnen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
 msgid "T_itle and Address"
 msgstr "T_itel og adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:235
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
 msgid "Show both the title and address columns"
 msgstr "Vis både titel- og adressekolonnen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:278
+#: ../src/bookmarks/ephy-bookmarks-editor.c:276
 msgid "Type a topic"
 msgstr "Indtast et emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:396
+#: ../src/bookmarks/ephy-bookmarks-editor.c:394
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Slet emnet “%s”?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+#: ../src/bookmarks/ephy-bookmarks-editor.c:397
 msgid "Delete this topic?"
 msgstr "Slet dette emne?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:401
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2206,44 +2086,44 @@ msgstr ""
 "Ved at slette dette emne vil alle dets bogmærker miste deres kategorisering, "
 "med mindre de også tilhøre andre emner. Bogmærkerne vil ikke blive slettet."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:404
+#: ../src/bookmarks/ephy-bookmarks-editor.c:402
 msgid "_Delete Topic"
 msgstr "_Slet emne"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:636
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:643
+#: ../src/bookmarks/ephy-bookmarks-editor.c:641
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla-profilen “%s”"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:647
+#: ../src/bookmarks/ephy-bookmarks-editor.c:645
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:649
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:678
 msgid "Import failed"
 msgstr "Importering mislykkedes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:682
+#: ../src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Import Failed"
 msgstr "Importering mislykkedes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:685
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2252,98 +2132,93 @@ msgstr ""
 "Bogmærkerne fra “%s” kunne ikke importeres fordi filen er ødelagt eller dens "
 "type ikke er understøttet."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../src/bookmarks/ephy-bookmarks-editor.c:746
 msgid "Import Bookmarks from File"
 msgstr "Importér bogmærker fra fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:753
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-bogmærker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:759
+#: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-bogmærker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:761
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-bogmærker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:885
 msgid "Export Bookmarks"
 msgstr "Eksportér bogmærker"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:904
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File f_ormat:"
 msgstr "Filf_ormat:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:948
+#: ../src/bookmarks/ephy-bookmarks-editor.c:946
 msgid "Import Bookmarks"
 msgstr "Importér bogmærker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:954
+#: ../src/bookmarks/ephy-bookmarks-editor.c:952
 msgid "I_mport"
 msgstr "I_mportér"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:968
+#: ../src/bookmarks/ephy-bookmarks-editor.c:966
 msgid "Import bookmarks from:"
 msgstr "Importér bogmærker fra:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1360
-#: ../src/ephy-history-window.c:716
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
+#: ../src/ephy-history-window.c:714
 msgid "_Copy Address"
 msgstr "_Kopiér adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/ephy-history-window.c:1069
-msgid "Clear"
-msgstr "Ryd"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
-#: ../src/ephy-history-window.c:1077
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
+#: ../src/ephy-history-window.c:1039
 msgid "_Search:"
 msgstr "_Søg:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1842
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
 msgid "Topics"
 msgstr "Emner"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1912
-#: ../src/ephy-history-window.c:1400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
+#: ../src/ephy-history-window.c:1362
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1923
-#: ../src/ephy-history-window.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
+#: ../src/ephy-history-window.c:1371
 msgid "Address"
 msgstr "Adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:300
+#: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "Show properties for this bookmark"
 msgstr "Vis egenskaber for dette bogmærke"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312
+#: ../src/bookmarks/ephy-bookmarks-ui.c:311
 msgid "Open this bookmark in a new tab"
 msgstr "Åbn dette bogmærke i et nyt faneblad"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324
+#: ../src/bookmarks/ephy-bookmarks-ui.c:323
 msgid "Open this bookmark in a new window"
 msgstr "Åbne dette bogmærke et nyt vindue"
 
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:77
+#: ../src/bookmarks/ephy-open-tabs-action.c:74
 msgid "Open in New _Tabs"
 msgstr "Åbn i nye _faneblade"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:78
+#: ../src/bookmarks/ephy-open-tabs-action.c:75
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Åbn bogmærkerne i dette emne i nye faneblade"
 
-#: ../src/bookmarks/ephy-related-action.c:153
+#: ../src/bookmarks/ephy-related-action.c:152
 msgid "Related"
 msgstr "Relaterede"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:300
+#: ../src/bookmarks/ephy-topic-factory-action.c:299
 msgid "Topic"
 msgstr "Emne"
 
@@ -2352,137 +2227,137 @@ msgstr "Emne"
 msgid "Create topic “%s”"
 msgstr "Opret emnet “%s”"
 
-#: ../src/ephy-encoding-dialog.c:312
+#: ../src/ephy-encoding-dialog.c:319
 msgid "Encodings"
 msgstr "Kodninger"
 
-#: ../src/ephy-encoding-menu.c:323
+#: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
 msgstr "_Anden…"
 
-#: ../src/ephy-encoding-menu.c:324
+#: ../src/ephy-encoding-menu.c:331
 msgid "Other encodings"
 msgstr "Andre kodninger"
 
-#: ../src/ephy-encoding-menu.c:330
+#: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
 msgstr "_Automatisk"
 
-#: ../src/ephy-find-toolbar.c:148
+#: ../src/ephy-find-toolbar.c:146
 msgid "Not found"
 msgstr "Ikke fundet"
 
 # betyder at søgningen er startet forfra, altså "wrapped" omkring
-#: ../src/ephy-find-toolbar.c:160
+#: ../src/ephy-find-toolbar.c:158
 msgid "Wrapped"
 msgstr "Begyndt forfra"
 
-#: ../src/ephy-find-toolbar.c:180
+#: ../src/ephy-find-toolbar.c:178
 msgid "Find links:"
 msgstr "Find henvisninger:"
 
-#: ../src/ephy-find-toolbar.c:180
+#: ../src/ephy-find-toolbar.c:178
 msgid "Find:"
 msgstr "Find:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:447 ../src/ephy-find-toolbar.c:569
+#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
 msgid "_Case sensitive"
 msgstr "_Forskel på store/små bogstaver"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Previous"
 msgstr "Find forrige"
 
-#: ../src/ephy-find-toolbar.c:555
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find previous occurrence of the search string"
 msgstr "Find foregående optræden af søgeteksten"
 
-#: ../src/ephy-find-toolbar.c:561
+#: ../src/ephy-find-toolbar.c:559
 msgid "Find Next"
 msgstr "Find næste"
 
-#: ../src/ephy-find-toolbar.c:564
+#: ../src/ephy-find-toolbar.c:562
 msgid "Find next occurrence of the search string"
 msgstr "Find næste optræden af søgeteksten"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:544
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:534
 msgid "Leave Fullscreen"
 msgstr "Forlad fuldskærm"
 
-#: ../src/ephy-go-action.c:42 ../src/ephy-toolbar.c:303
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:305
 msgid "Go"
 msgstr "Kør"
 
-#: ../src/ephy-history-window.c:157
+#: ../src/ephy-history-window.c:155
 msgid "Open the selected history link in a new window"
 msgstr "Åbn den valgte historikadresse i et nyt vindue"
 
-#: ../src/ephy-history-window.c:160
+#: ../src/ephy-history-window.c:158
 msgid "Open the selected history link in a new tab"
 msgstr "Åbn den valgte historikadresse i et nyt faneblad"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:160
 msgid "Add _Bookmark…"
 msgstr "Tilføj _bogmærke…"
 
-#: ../src/ephy-history-window.c:163
+#: ../src/ephy-history-window.c:161
 msgid "Bookmark the selected history link"
 msgstr "Bogmærk den valgte historikadresse"
 
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:164
 msgid "Close the history window"
 msgstr "Luk historikvinduet"
 
-#: ../src/ephy-history-window.c:180
+#: ../src/ephy-history-window.c:178
 msgid "Delete the selected history link"
 msgstr "Slet den valgte historikadresse"
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:181
 msgid "Select all history links or text"
 msgstr "Vælg alle historikadresser eller -tekst"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:183
 msgid "Clear _History"
 msgstr "Ryd _historik"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:184
 msgid "Clear your browsing history"
 msgstr "Ryd navigeringshistorikken"
 
-#: ../src/ephy-history-window.c:191
+#: ../src/ephy-history-window.c:189
 msgid "Display history help"
 msgstr "Vis hjælpen til historik"
 
-#: ../src/ephy-history-window.c:209
+#: ../src/ephy-history-window.c:207
 msgid "Show the title column"
 msgstr "Vis titelkolonnen"
 
-#: ../src/ephy-history-window.c:210
+#: ../src/ephy-history-window.c:208
 msgid "_Address"
 msgstr "_Adresse"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:209
 msgid "Show the address column"
 msgstr "Vis adressekolonnen"
 
-#: ../src/ephy-history-window.c:212
+#: ../src/ephy-history-window.c:210
 msgid "_Date and Time"
 msgstr "_Dato og tid"
 
-#: ../src/ephy-history-window.c:213
+#: ../src/ephy-history-window.c:211
 msgid "Show the date and time column"
 msgstr "Vis tid/dato-kolonnen"
 
-#: ../src/ephy-history-window.c:239
+#: ../src/ephy-history-window.c:237
 msgid "Clear browsing history?"
 msgstr "Ryd navigeringshistorikken?"
 
 # "gemt i adresselinjen" virker mere brugervenligt end at sige at
 # historikken ryddes hvis historikken ryddes
-#: ../src/ephy-history-window.c:243
+#: ../src/ephy-history-window.c:241
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2490,88 +2365,88 @@ msgstr ""
 "Hvis navigeringshistorikken ryddes, vil alle adresser gemt i adresselinjen "
 "blive slettet permanent."
 
-#: ../src/ephy-history-window.c:258
+#: ../src/ephy-history-window.c:256
 msgid "Clear History"
 msgstr "Ryd historik"
 
-#: ../src/ephy-history-window.c:1086
+#: ../src/ephy-history-window.c:1048
 msgid "Last 30 minutes"
 msgstr "Sidste 30 minutter"
 
-#: ../src/ephy-history-window.c:1087
+#: ../src/ephy-history-window.c:1049
 msgid "Today"
 msgstr "I dag"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1088 ../src/ephy-history-window.c:1091
-#: ../src/ephy-history-window.c:1095
+#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
+#: ../src/ephy-history-window.c:1057
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Sidste %d dag"
 msgstr[1] "Sidste %d dage"
 
-#: ../src/ephy-history-window.c:1337
+#: ../src/ephy-history-window.c:1299
 msgid "Sites"
 msgstr "Steder"
 
-#: ../src/ephy-history-window.c:1417
+#: ../src/ephy-history-window.c:1379
 msgid "Date"
 msgstr "Dato"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:874
+msgid "GNOME Web Browser"
+msgstr "Gnomes Internetbrowser"
+
+#: ../src/ephy-main.c:90
 msgid "Open a new tab in an existing browser window"
 msgstr "Åbn et nyt faneblad i et eksisterende vindue"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:92
 msgid "Open a new browser window"
 msgstr "Åbn et nyt browservindue"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "Launch the bookmarks editor"
 msgstr "Start bogmærkeredigeringen"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "Import bookmarks from the given file"
 msgstr "Importér bogmærker fra den givne fil"
 
-#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
-msgid "FILE"
-msgstr "FIL"
-
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:98
 msgid "Load the given session file"
 msgstr "Indlæs den angivne sessionsfil"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "Add a bookmark"
 msgstr "Tilføj et bogmærke"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "URL"
 msgstr "Adresse"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:102
 msgid "Start a private instance"
 msgstr "Start en privat instans"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:104
 msgid "Profile directory to use in the private instance"
 msgstr "Profilmappe som skal bruges i den private instans"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:104
 msgid "DIR"
 msgstr "MAPPE"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:106
 msgid "URL …"
 msgstr "adresse …"
 
-#: ../src/ephy-main.c:409
+#: ../src/ephy-main.c:423
 msgid "Could not start GNOME Web Browser"
 msgstr "Kunne ikke starte Gnomes Internetbrowser"
 
-#: ../src/ephy-main.c:412
+#: ../src/ephy-main.c:426
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2580,11 +2455,7 @@ msgstr ""
 "Starten mislykkedes på grund af følgende fejl:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:874
-msgid "GNOME Web Browser"
-msgstr "Gnomes Internetbrowser"
-
-#: ../src/ephy-main.c:516
+#: ../src/ephy-main.c:563
 msgid "GNOME Web Browser options"
 msgstr "Indstillinger for Gnomes Internetbrowser"
 
@@ -2592,18 +2463,26 @@ msgstr "Indstillinger for Gnomes Internetbrowser"
 msgid "Close tab"
 msgstr "Luk faneblad"
 
-#: ../src/ephy-session.c:114
+#: ../src/ephy-profile-migration.c:64
+msgid "Failed to copy cookies file from Mozilla."
+msgstr ""
+
+#: ../src/ephy-profile-migration.c:119
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr ""
+
+#: ../src/ephy-session.c:115
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "Overførsler vil blive afbrudt og logud fortsætte om %d sekund."
 msgstr[1] "Overførsler vil blive afbrudt og logud fortsætte om %d sekunder."
 
-#: ../src/ephy-session.c:230
+#: ../src/ephy-session.c:227
 msgid "Abort pending downloads?"
 msgstr "Afbryd igangværende overførsler?"
 
-#: ../src/ephy-session.c:234
+#: ../src/ephy-session.c:232
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -2611,19 +2490,19 @@ msgstr ""
 "Der er stadig igangværende overførsler. Hvis du logger ud, vil de blive "
 "afbrudt og gå tabt."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:236
 msgid "_Cancel Logout"
 msgstr "_Annullér logud"
 
-#: ../src/ephy-session.c:240
+#: ../src/ephy-session.c:238
 msgid "_Abort Downloads"
 msgstr "Af_bryd overførsler"
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:564
 msgid "Recover previous browser windows and tabs?"
 msgstr "Genskab forrige browser-vinduer og -faneblade?"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:568
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2631,731 +2510,740 @@ msgstr ""
 "Epiphany ser ud til at være gået ned sidst programmet blev kørt. Du kan "
 "genskabe de åbnede vinduer og faneblade."
 
-#: ../src/ephy-session.c:581
+#: ../src/ephy-session.c:572
 msgid "_Don't Recover"
 msgstr "Genopret _ikke"
 
-#: ../src/ephy-session.c:583
+#: ../src/ephy-session.c:574
 msgid "_Recover"
 msgstr "_Genopret"
 
-#: ../src/ephy-session.c:585
+#: ../src/ephy-session.c:576
 msgid "Crash Recovery"
 msgstr "Genopretning fra nedbrud"
 
-#: ../src/ephy-shell.c:169
+#: ../src/ephy-shell.c:170
 msgid "Sidebar extension required"
 msgstr "Sidepaneludvidelse påkrævet"
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar Extension Required"
 msgstr "Sidepaneludvidelse påkrævet"
 
-#: ../src/ephy-shell.c:175
+#: ../src/ephy-shell.c:176
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Den henvisning du klikkede på, kræver at sidepaneludvidelsen er installeret."
 
-#: ../src/ephy-statusbar.c:85
+#: ../src/ephy-statusbar.c:83
 msgid "Caret"
 msgstr "Markør"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:92
+#: ../src/ephy-statusbar.c:90
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Tryk F7 for at afslutte tastaturmarkeringstilstand"
 
-#: ../src/ephy-tabs-menu.c:202
+#: ../src/ephy-tabs-menu.c:201
 msgid "Switch to this tab"
 msgstr "Skift til dette faneblad"
 
-#: ../src/ephy-toolbar.c:212
+#: ../src/ephy-toolbar.c:214
 msgid "_Back"
 msgstr "Til_bage"
 
-#: ../src/ephy-toolbar.c:214
+#: ../src/ephy-toolbar.c:216
 msgid "Go to the previous visited page"
 msgstr "Gå til den foregående besøgte side"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:218
+#: ../src/ephy-toolbar.c:220
 msgid "Back history"
 msgstr "Gå tilbage i historikken"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:234
 msgid "_Forward"
 msgstr "_Frem"
 
-#: ../src/ephy-toolbar.c:234
+#: ../src/ephy-toolbar.c:236
 msgid "Go to the next visited page"
 msgstr "Gå til den næste besøgte side"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:238
+#: ../src/ephy-toolbar.c:240
 msgid "Forward history"
 msgstr "Gå frem i historikken"
 
-#: ../src/ephy-toolbar.c:251
+#: ../src/ephy-toolbar.c:253
 msgid "_Up"
 msgstr "_Op"
 
-#: ../src/ephy-toolbar.c:253
+#: ../src/ephy-toolbar.c:255
 msgid "Go up one level"
 msgstr "Gå et niveau op"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:257
+#: ../src/ephy-toolbar.c:259
 msgid "List of upper levels"
 msgstr "Liste over øvre niveauer"
 
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:277
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Indtast en internetadresse at vise eller nogle ord at søge efter"
 
-#: ../src/ephy-toolbar.c:291
+#: ../src/ephy-toolbar.c:293
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:295
 msgid "Adjust the text size"
 msgstr "Justér tekststørrelsen"
 
-#: ../src/ephy-toolbar.c:305
+#: ../src/ephy-toolbar.c:307
 msgid "Go to the address entered in the address entry"
 msgstr "Gå til adressen indtastet i adresselinjen"
 
-#: ../src/ephy-toolbar.c:314
+#: ../src/ephy-toolbar.c:316
 msgid "_Home"
 msgstr "_Hjem"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:318
 msgid "Go to the home page"
 msgstr "Gå til startsiden"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:328
 msgid "New _Tab"
 msgstr "Nyt fane_blad"
 
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:330
 msgid "Open a new tab"
 msgstr "Åbn et nyt faneblad"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:339
 msgid "_New Window"
 msgstr "_Nyt vindue"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:341
 msgid "Open a new window"
 msgstr "Åbn et nyt vindue"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:74
-msgid "toolbar style|Default"
+#: ../src/ephy-toolbar-editor.c:71
+#, fuzzy
+msgctxt "toolbar style"
+msgid "Default"
 msgstr "Standard"
 
 #. separator row
-#: ../src/ephy-toolbar-editor.c:76
+#: ../src/ephy-toolbar-editor.c:73
+#, fuzzy
+msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Tekst under ikoner"
 
-#: ../src/ephy-toolbar-editor.c:77
+#: ../src/ephy-toolbar-editor.c:74
+#, fuzzy
+msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Tekst ved siden af ikoner"
 
-#: ../src/ephy-toolbar-editor.c:78
+#: ../src/ephy-toolbar-editor.c:75
+#, fuzzy
+msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Kun ikoner"
 
-#: ../src/ephy-toolbar-editor.c:79
+#: ../src/ephy-toolbar-editor.c:76
+#, fuzzy
+msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Kun tekst"
 
-#: ../src/ephy-toolbar-editor.c:188
+#: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
 msgstr "Tilpasning af værktøjslinjer"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:207
+#: ../src/ephy-toolbar-editor.c:204
 msgid "Toolbar _button labels:"
 msgstr "_Knapetiketter på værktøjslinjer:"
 
-#: ../src/ephy-toolbar-editor.c:271
+#: ../src/ephy-toolbar-editor.c:268
 msgid "_Add a New Toolbar"
 msgstr "_Tilføj en ny værktøjslinje"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:115
 msgid "_Bookmarks"
 msgstr "_Bogmærker"
 
 # rimeligt dækkende
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:116
 msgid "_Go"
 msgstr "_Navigering"
 
-#: ../src/ephy-window.c:119
+#: ../src/ephy-window.c:117
 msgid "T_ools"
 msgstr "Væ_rktøjer"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:118
 msgid "_Tabs"
 msgstr "F_aneblade"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:120
 msgid "_Toolbars"
 msgstr "_Værktøjslinjer"
 
 #. File menu
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:126
 msgid "_Open…"
 msgstr "_Åbn…"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:127
 msgid "Open a file"
 msgstr "Åbn en fil"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:129
 msgid "Save _As…"
 msgstr "Gem _som…"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:130
 msgid "Save the current page"
 msgstr "Gem den aktuelle side"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:132
 msgid "Page Set_up"
 msgstr "_Sideopsætning"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:133
 msgid "Setup the page settings for printing"
 msgstr "Konfigurér sideindstillingerne for udskrift"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:135
 msgid "Print Pre_view"
 msgstr "_Vis udskrift"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:136
 msgid "Print preview"
 msgstr "Vis hvordan en udskrift vil komme til at se ud"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:138
 msgid "_Print…"
 msgstr "_Udskriv…"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:139
 msgid "Print the current page"
 msgstr "Udskriv den aktuelle side"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:141
 msgid "S_end Link by Email…"
 msgstr "S_end adresse med e-post…"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:142
 msgid "Send a link of the current page"
 msgstr "Send adressen på den aktuelle side"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:145
 msgid "Close this tab"
 msgstr "Luk dette faneblad"
 
 #. Edit menu
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:150
 msgid "_Undo"
 msgstr "_Fortryd"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:151
 msgid "Undo the last action"
 msgstr "Fortryd den sidste handling"
 
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:153
 msgid "Re_do"
 msgstr "_Omgør"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:154
 msgid "Redo the last undone action"
 msgstr "Omgør den seneste fortrudte handling"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:163
 msgid "Paste clipboard"
-msgstr "Indsæt fra klippebordet"
+msgstr "Indsæt fra udklipsholder"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:166
 msgid "Delete text"
 msgstr "Slet tekst"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:169
 msgid "Select the entire page"
 msgstr "Markér hele siden"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:171
 msgid "_Find…"
 msgstr "_Find…"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:172
 msgid "Find a word or phrase in the page"
 msgstr "Find et stykke tekst på siden"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:174
 msgid "Find Ne_xt"
 msgstr "Find _næste"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:175
 msgid "Find next occurrence of the word or phrase"
 msgstr "Find næste optræden af teksten"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:177
 msgid "Find Pre_vious"
 msgstr "Find _forrige"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:178
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Find foregående optræden af teksten"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:180
 msgid "P_ersonal Data"
 msgstr "P_ersonlige data"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:181
 msgid "View and remove cookies and passwords"
 msgstr "Vis og fjern cookies og adgangskoder"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:184
 msgid "Certificate_s"
 msgstr "Cert_ifikater"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:185
 msgid "Manage Certificates"
 msgstr "Håndtér certifikater"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:188
 msgid "P_references"
 msgstr "_Indstillinger"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:189
 msgid "Configure the web browser"
 msgstr "Konfigurér browserprogrammet"
 
 #. View menu
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:194
 msgid "_Customize Toolbars…"
 msgstr "_Tilpas værktøjslinjer…"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:195
 msgid "Customize toolbars"
 msgstr "Tilpas værktøjslinjer"
 
-#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
+#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
 msgid "_Stop"
 msgstr "_Stop"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:198
 msgid "Stop current data transfer"
 msgstr "Stop igangværende dataoverførsel"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:202
 msgid "_Reload"
 msgstr "O_pdatér"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:203
 msgid "Display the latest content of the current page"
 msgstr "Genindlæs indholdet på den aktulle side"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:205
 msgid "_Larger Text"
 msgstr "_Større tekst"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:206
 msgid "Increase the text size"
 msgstr "Forøg tekststørrelsen"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:208
 msgid "S_maller Text"
 msgstr "_Mindre tekst"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:209
 msgid "Decrease the text size"
 msgstr "Formindsk tekststørrelsen"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:211
 msgid "_Normal Size"
 msgstr "_Normal størrelse"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:212
 msgid "Use the normal text size"
 msgstr "Benyt den normale tekststørrelse"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:214
 msgid "Text _Encoding"
 msgstr "Tekst_kodning"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:215
 msgid "Change the text encoding"
 msgstr "Skift tekstkodningen"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:217
 msgid "_Page Source"
 msgstr "Kilde_tekst"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:218
 msgid "View the source code of the page"
 msgstr "Vis kildekoden for den aktuelle side"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:220
 msgid "Page _Security Information"
 msgstr "Sidens _sikkerhedsoplysninger"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:221
 msgid "Display security information for the web page"
 msgstr "Vis sidens sikkerhedsoplysninger"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:226
 msgid "_Add Bookmark…"
 msgstr "_Tilføj bogmærke…"
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
+#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
 msgid "Add a bookmark for the current page"
 msgstr "Tilføj et bogmærke for den aktuelle side"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:229
 msgid "_Edit Bookmarks"
 msgstr "_Redigér bogmærker"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:230
 msgid "Open the bookmarks window"
 msgstr "Åbn bogmærkevinduet"
 
 #. Go menu
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:235
 msgid "_Location…"
 msgstr "_Placering…"
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:236
 msgid "Go to a specified location"
 msgstr "Gå til en angivet placering"
 
-#: ../src/ephy-window.c:240
+#. History
+#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:402
 msgid "Hi_story"
 msgstr "Hi_storik"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:239
 msgid "Open the history window"
 msgstr "Åbn historikvinduet"
 
 #. Tabs menu
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:244
 msgid "_Previous Tab"
 msgstr "_Forrige faneblad"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:245
 msgid "Activate previous tab"
 msgstr "Aktivér foregående faneblad"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:247
 msgid "_Next Tab"
 msgstr "_Næste faneblad"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:248
 msgid "Activate next tab"
 msgstr "Aktivér næste faneblad"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:250
 msgid "Move Tab _Left"
 msgstr "Flyt fane til _venstre"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:251
 msgid "Move current tab to left"
 msgstr "Flyt det aktuelle faneblad til venstre"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:253
 msgid "Move Tab _Right"
 msgstr "Flyt fane til _højre"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:254
 msgid "Move current tab to right"
 msgstr "Flyt det aktuelle faneblad til højre"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:256
 #, fuzzy
 msgid "_Detach Tab"
 msgstr "_Næste faneblad"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:257
 #, fuzzy
 msgid "Detach current tab"
 msgstr "Gem den aktuelle side"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:263
 msgid "Display web browser help"
 msgstr "Vis hjælpen for browserprogrammet"
 
 #. File Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:274
 msgid "_Work Offline"
 msgstr "_Arbejd frakoblet"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:275
 msgid "Switch to offline mode"
 msgstr "Skift til frakoblet tilstand"
 
 #. View Menu
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:280
 msgid "_Hide Toolbars"
 msgstr "_Skjul værktøjslinjer"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:281
 msgid "Show or hide toolbar"
 msgstr "Vis eller skjul værktøjslinjen"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:283
 msgid "St_atusbar"
 msgstr "S_tatuslinje"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:284
 msgid "Show or hide statusbar"
 msgstr "Vis eller skjul statuslinjen"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:286
 msgid "_Fullscreen"
 msgstr "_Fuldskærm"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:287
 msgid "Browse at full screen"
 msgstr "Gennemse med hele skærmen"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:289
 msgid "Popup _Windows"
 msgstr "Pop op-_vinduer"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:290
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Vis eller skjul ikke-forespurgte pop op-vinduer fra dette sted"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:292
 msgid "Selection Caret"
 msgstr "Markeringsmarkør"
 
 #. Document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:300
 msgid "Add Boo_kmark…"
 msgstr "Tilføj _bogmærke…"
 
 #. Framed document
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:306
 msgid "Show Only _This Frame"
 msgstr "Vis kun _denne ramme"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:307
 msgid "Show only this frame in this window"
 msgstr "Vis kun denne ramme i dette vindue"
 
 #. Links
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:312
 msgid "_Open Link"
 msgstr "_Gå til adresse"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:313
 msgid "Open link in this window"
 msgstr "Gå til adressen i dette vindue"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:315
 msgid "Open Link in New _Window"
 msgstr "Gå til adressen i nyt _vindue"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:316
 msgid "Open link in a new window"
 msgstr "Gå til adressen i et nyt vindue"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Tab"
 msgstr "Gå til adressen i nyt _faneblad"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:319
 msgid "Open link in a new tab"
 msgstr "Gå til adressen på et nyt faneblad"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:321
 msgid "_Download Link"
 msgstr "_Hent fra adresse"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:323
 msgid "_Save Link As…"
 msgstr "_Gem adresse som…"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:324
 msgid "Save link with a different name"
 msgstr "Gem fra henvisningen under et andet navn"
 
 # Engelsk "to mark" kan oversættes med "at afmærke,
 # markere, notere", så man kunne også skrive "Afmærk
 # _henvisningen ...". Men er det ikke rarest at genbruge ordet "bogmærke"?
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:326
 msgid "_Bookmark Link…"
 msgstr "Opret _bogmærke…"
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:328
 msgid "_Copy Link Address"
 msgstr "_Kopiér adresse"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:334
 msgid "_Send Email…"
 msgstr "S_end e-post…"
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:336
 msgid "_Copy Email Address"
 msgstr "_Kopiér e-post-adresse"
 
 #. Images
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:341
 msgid "Open _Image"
 msgstr "Åbn _billede"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:343
 msgid "_Save Image As…"
 msgstr "_Gem billede som…"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:345
 msgid "_Use Image As Background"
 msgstr "Benyt billede som _baggrund"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:347
 msgid "Copy I_mage Address"
 msgstr "Kopiér b_illedadresse"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:349
 msgid "St_art Animation"
 msgstr "Sta_rt animation"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:351
 msgid "St_op Animation"
 msgstr "St_op adresse"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:526
 msgid "There are unsubmitted changes to form elements"
 msgstr "Der er ændringer i formularelementer som ikke er blevet sendt"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:530
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet alligevel, vil du miste de oplysninger."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:534
 msgid "Close _Document"
 msgstr "Luk _dokument"
 
-#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
+#: ../src/ephy-window.c:1494 ../src/window-commands.c:285
 msgid "Open"
 msgstr "Åbn"
 
-#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
+#: ../src/ephy-window.c:1496 ../src/window-commands.c:311
 msgid "Save As"
 msgstr "Gem som"
 
-#: ../src/ephy-window.c:1482
+#: ../src/ephy-window.c:1498
 msgid "Print"
 msgstr "Udskriv"
 
-#: ../src/ephy-window.c:1486
+#: ../src/ephy-window.c:1502
 msgid "Find"
 msgstr "Søg"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1515
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1518
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1691
+#: ../src/ephy-window.c:1746
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1696
+#: ../src/ephy-window.c:1751
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1708
+#: ../src/ephy-window.c:1759
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1715
+#: ../src/ephy-window.c:1766
 msgid "High"
 msgstr "Høj"
 
-#: ../src/ephy-window.c:1725
+#: ../src/ephy-window.c:1776
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhedsniveau: %s"
 
-#: ../src/ephy-window.c:1768
+#: ../src/ephy-window.c:1819
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult pop op-vinduer"
 msgstr[1] "%d skjulte pop op-vinduer"
 
-#: ../src/ephy-window.c:2031
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åbn billedet “%s”"
 
-#: ../src/ephy-window.c:2036
+#: ../src/ephy-window.c:2087
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Benyt som skrivebordsbaggrund “%s”"
 
-#: ../src/ephy-window.c:2041
+#: ../src/ephy-window.c:2092
 #, c-format
 msgid "Save image “%s”"
 msgstr "Gem billedet “%s”"
 
-#: ../src/ephy-window.c:2046
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiér billedadressen “%s”"
 
-#: ../src/ephy-window.c:2059
+#: ../src/ephy-window.c:2110
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adressen “%s”"
 
-#: ../src/ephy-window.c:2065
+#: ../src/ephy-window.c:2116
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiér e-post-adressen “%s”"
 
-#: ../src/ephy-window.c:2077
+#: ../src/ephy-window.c:2128
 #, c-format
 msgid "Save link “%s”"
 msgstr "Gem fra henvisningen “%s”"
 
-#: ../src/ephy-window.c:2083
+#: ../src/ephy-window.c:2134
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Opret bogmærke for “%s”"
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2140
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiér adressen for “%s”"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:339
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Vælg de personlige oplysninger som du ønsker at fjerne</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:342
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3365,31 +3253,26 @@ msgstr ""
 "hjemmesider du har besøgt. Før du fortsætter skal du afkrydse hvilke typer "
 "informationer du ønsker fjernet:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:347
 msgid "Clear All Personal Data"
 msgstr "Fjern alle personlige data"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:378
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:390
 msgid "Saved _passwords"
 msgstr "_Gemte adgangskoder"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "_Historik"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:414
 msgid "_Temporary files"
 msgstr "Midler_tidige filer"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:430
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3397,145 +3280,142 @@ msgstr ""
 "<small><i><b>Bemærk:</b> Du kan ikke fortryde denne handling. De data du "
 "vælger at fjerne vil blive slettet permanent.</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:626
 msgid "Cookie Properties"
 msgstr "Egenskaber for cookies"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:643
 msgid "Content:"
 msgstr "Indhold:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:659
 msgid "Path:"
 msgstr "Sti:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:675
 msgid "Send for:"
 msgstr "Send for:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:684
 msgid "Encrypted connections only"
 msgstr "Krypterede forbindelser kun"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:684
 msgid "Any type of connection"
 msgstr "Enhver type forbindelse"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:690
 msgid "Expires:"
 msgstr "Udløber:"
 
-#: ../src/pdm-dialog.c:670
+#. Session cookie
+#: ../src/pdm-dialog.c:702
 msgid "End of current session"
 msgstr "Slut på den aktuelle session"
 
-#: ../src/pdm-dialog.c:803
+#: ../src/pdm-dialog.c:836
 msgid "Domain"
 msgstr "Domæne"
 
-#: ../src/pdm-dialog.c:815
+#: ../src/pdm-dialog.c:848
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/pdm-dialog.c:1214
+#: ../src/pdm-dialog.c:1200
 msgid "Host"
 msgstr "Vært"
 
-#: ../src/pdm-dialog.c:1226
+#: ../src/pdm-dialog.c:1212
 msgid "User Name"
 msgstr "Brugernavn"
 
-#: ../src/pdm-dialog.c:1238
+#: ../src/pdm-dialog.c:1224
 msgid "User Password"
 msgstr "Bruger-adgangskode"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:259
 msgid "Download Link"
 msgstr "Hent fra adresse"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:267
 msgid "Save Link As"
 msgstr "Gem fra adresse som"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:274
 msgid "Save Image As"
 msgstr "Gem billede som"
 
-#: ../src/ppview-toolbar.c:86
+#: ../src/ppview-toolbar.c:85
 msgid "First"
 msgstr "Første"
 
-#: ../src/ppview-toolbar.c:87
+#: ../src/ppview-toolbar.c:86
 msgid "Go to the first page"
 msgstr "Gå til første side"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:89
 msgid "Last"
 msgstr "Sidste"
 
-#: ../src/ppview-toolbar.c:91
+#: ../src/ppview-toolbar.c:90
 msgid "Go to the last page"
 msgstr "Gå til sidste side"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:93
 msgid "Previous"
 msgstr "Forrige"
 
-#: ../src/ppview-toolbar.c:95
+#: ../src/ppview-toolbar.c:94
 msgid "Go to the previous page"
 msgstr "Gå til foregående side"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:97
 msgid "Next"
 msgstr "Næste"
 
-#: ../src/ppview-toolbar.c:99
+#: ../src/ppview-toolbar.c:98
 msgid "Go to next page"
 msgstr "Gå til næste side"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:101
 msgid "Close"
 msgstr "Luk"
 
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
+#: ../src/ppview-toolbar.c:102 ../src/ppview-toolbar.c:218
 msgid "Close print preview"
 msgstr "Luk udskriftsvisning"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
+#. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:632 ../src/prefs-dialog.c:640
-#, c-format
-msgid "language|%s (%s)"
+#: ../src/prefs-dialog.c:511 ../src/prefs-dialog.c:517
+#, fuzzy, c-format
+msgctxt "language"
+msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
+#. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:651
-#, c-format
-msgid "language|User defined (%s)"
+#: ../src/prefs-dialog.c:526
+#, fuzzy, c-format
+msgctxt "language"
+msgid "User defined (%s)"
 msgstr "Brugerdefineret (%s)"
 
-#: ../src/prefs-dialog.c:673
+#: ../src/prefs-dialog.c:548
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemets sprog (%s)"
 msgstr[1] "Systemets sprog (%s)"
 
-#: ../src/prefs-dialog.c:1065
+#: ../src/prefs-dialog.c:940
 msgid "Select a Directory"
 msgstr "Vælg en mappe"
 
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:774
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3547,7 +3427,7 @@ msgstr ""
 "Free Software Foundation; enten version 2 af licensen eller (hvis du ønsker "
 "det) enhver senere version."
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:778
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3559,7 +3439,7 @@ msgstr ""
 "eller er BRUGBART TIL ET BESTEMT FORMÅL. Se GNU General Public License for "
 "flere detaljer."
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:782
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3569,24 +3449,24 @@ msgstr ""
 "Gnomes Internetbrowser; hvis ikke, så skriv til Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
-#: ../src/window-commands.c:825 ../src/window-commands.c:841
-#: ../src/window-commands.c:852
+#: ../src/window-commands.c:828 ../src/window-commands.c:844
+#: ../src/window-commands.c:855
 msgid "Contact us at:"
 msgstr "Kontakt os på:"
 
-#: ../src/window-commands.c:828
+#: ../src/window-commands.c:831
 msgid "Contributors:"
 msgstr "Bidragydere:"
 
-#: ../src/window-commands.c:831
+#: ../src/window-commands.c:834
 msgid "Past developers:"
 msgstr "Tidligere udviklere:"
 
 #: ../src/window-commands.c:864
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by %s"
+"Powered by WebKit"
 msgstr ""
 "Giver dig mulighed for at se hjemmesider og søge information på "
 "internettet.\n"
@@ -3620,6 +3500,181 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "Hjemmesiden for Gnomes Internetbrowser"
 
+#~ msgid "The encoding autodetector. Empty string means autodetect is off"
+#~ msgstr "Kodningsgætteren. En tom streng betyder at gæt slås fra"
+
+#~ msgid ""
+#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
+#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
+#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
+#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
+#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
+#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
+#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
+#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
+#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
+#~ "encodings)."
+#~ msgstr ""
+#~ "Kodningsgætteren. Gyldige værdier er \"\" (gæt ikke), "
+#~ "\"cjk_parallel_state_machine\" (gæt øst-asiatiske kodninger), "
+#~ "\"ja_parallel_state_machine\" (gæt japanske kodninger), "
+#~ "\"ko_parallel_state_machine\" (gæt koreanske kodninger), \"ruprob\" (gæt "
+#~ "russiske kodninger), \"ukprob\" (gæt ukrainske kodninger), "
+#~ "\"zh_parallel_state_machine\" (gæt kinesiske kodninger), "
+#~ "\"zhcn_parallel_state_machine\" (gæt forenklede kinesiske kodninger) og "
+#~ "\"zhtw_parallel_state_machine\" (gæt traditionelle kinesiske kodninger) "
+#~ "og \"universal_charset_detector\" (gæt de fleste kodninger)."
+
+#~ msgid "Au_todetect:"
+#~ msgstr "_Gæt automatisk:"
+
+#~ msgid "download status|Unknown"
+#~ msgstr "Ukendt"
+
+#~ msgid "download status|Failed"
+#~ msgstr "Mislykkedes"
+
+#~ msgid "autodetectors|Off"
+#~ msgstr "Fra"
+
+#~ msgid "automatically detect ... character encodings|Chinese"
+#~ msgstr "Kinesisk"
+
+#~ msgid "automatically detect ... character encodings|Simplified Chinese"
+#~ msgstr "Forenklet kinesisk"
+
+#~ msgid "automatically detect ... character encodings|Traditional Chinese"
+#~ msgstr "Tradionelt kinesisk"
+
+#~ msgid "automatically detect ... character encodings|East Asian"
+#~ msgstr "Østeuropæisk"
+
+#~ msgid "automatically detect ... character encodings|Japanese"
+#~ msgstr "Japansk"
+
+#~ msgid "automatically detect ... character encodings|Korean"
+#~ msgstr "Koreansk"
+
+#~ msgid "automatically detect ... character encodings|Russian"
+#~ msgstr "Russisk"
+
+#~ msgid "automatically detect ... character encodings|Universal"
+#~ msgstr "Universelt"
+
+#~ msgid "automatically detect ... character encodings|Ukrainian"
+#~ msgstr "Ukrainsk"
+
+#~ msgid "select fonts for|Arabic"
+#~ msgstr "Arabisk"
+
+#~ msgid "select fonts for|Baltic"
+#~ msgstr "Baltisk"
+
+#~ msgid "select fonts for|Central European"
+#~ msgstr "Centraleuropæisk"
+
+#~ msgid "select fonts for|Cyrillic"
+#~ msgstr "Kyrillisk"
+
+#~ msgid "select fonts for|Devanagari"
+#~ msgstr "Devanagari"
+
+#~ msgid "select fonts for|Greek"
+#~ msgstr "Græsk"
+
+#~ msgid "select fonts for|Hebrew"
+#~ msgstr "Hebræisk"
+
+#~ msgid "select fonts for|Japanese"
+#~ msgstr "Japansk"
+
+#~ msgid "select fonts for|Korean"
+#~ msgstr "Koreansk"
+
+#~ msgid "select fonts for|Simplified Chinese"
+#~ msgstr "Forenklet kinesisk"
+
+#~ msgid "select fonts for|Tamil"
+#~ msgstr "Tamilsk"
+
+#~ msgid "select fonts for|Thai"
+#~ msgstr "Thai"
+
+#~ msgid "select fonts for|Traditional Chinese"
+#~ msgstr "Traditionelt kinesisk"
+
+#~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
+#~ msgstr "Traditionelt kinesisk (Hong Kong)"
+
+#~ msgid "select fonts for|Turkish"
+#~ msgstr "Tyrkisk"
+
+#~ msgid "select fonts for|Armenian"
+#~ msgstr "Armensk"
+
+#~ msgid "select fonts for|Bengali"
+#~ msgstr "Bengali"
+
+#~ msgid "select fonts for|Unified Canadian Syllabics"
+#~ msgstr "Forenet canadisk stavning"
+
+#~ msgid "select fonts for|Ethiopic"
+#~ msgstr "Etiopisk"
+
+#~ msgid "select fonts for|Georgian"
+#~ msgstr "Georgisk"
+
+#~ msgid "select fonts for|Gujarati"
+#~ msgstr "Gujaratisk"
+
+#~ msgid "select fonts for|Gurmukhi"
+#~ msgstr "Gurmukhisk"
+
+#~ msgid "select fonts for|Khmer"
+#~ msgstr "Khmerisk"
+
+#~ msgid "select fonts for|Malayalam"
+#~ msgstr "Malajisk"
+
+#~ msgid "select fonts for|Western"
+#~ msgstr "Vestligt"
+
+#~ msgid "select fonts for|Other Scripts"
+#~ msgstr "Andre skriftarter"
+
+#~ msgid "_Username:"
+#~ msgstr "_Brugernavn:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domæne:"
+
+#~ msgid "_New password:"
+#~ msgstr "_Ny adgangskode:"
+
+#~ msgid "Con_firm password:"
+#~ msgstr "_Bekræft adgangskode:"
+
+#~ msgid "Password quality:"
+#~ msgstr "Adgangskodekvalitet:"
+
+#~ msgid "Do not remember this password"
+#~ msgstr "Husk ikke denne adgangskode"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "_Husk adgangskode for denne session"
+
+#~ msgid "Save password in _keyring"
+#~ msgstr "Gem adgangskode i _nøglering"
+
+#~ msgid "bookmarks|All"
+#~ msgstr "Alle"
+
+#~ msgid "toolbar style|Default"
+#~ msgstr "Standard"
+
+#~ msgid "_History"
+#~ msgstr "_Historik"
+
 #~ msgid "Fonts"
 #~ msgstr "Skrifttyper"
 
@@ -3638,52 +3693,8 @@ msgstr "Hjemmesiden for Gnomes Internetbrowser"
 #~ msgid "Download completed"
 #~ msgstr "Download fuldført"
 
-#~ msgid "Save"
-#~ msgstr "Gem"
-
 #~ msgid "File Type:|Unknown"
 #~ msgstr "Ukendt"
-
-#~ msgid "Download this potentially unsafe file?"
-#~ msgstr "Hent denne potentielt usikre fil?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "It is unsafe to open “%s” as it could potentially damage your documents "
-#~ "or invade your privacy. You can download it instead."
-#~ msgstr ""
-#~ "Filtype: “%s”.\n"
-#~ "\n"
-#~ "Det er ikke sikkert at åbne “%s” da filen potentielt kan ødelægge dine "
-#~ "dokumenter eller trænge ind på dit privatliv. Du kan gemme den i stedet."
-
-#~ msgid "Open this file?"
-#~ msgstr "Åbn denne fil?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You can open “%s” using “%s” or save it."
-#~ msgstr ""
-#~ "Filtype: “%s”.\n"
-#~ "\n"
-#~ "Du kan åbne “%s” ved hjælp af “%s” eller gemme filen."
-
-#~ msgid "Download this file?"
-#~ msgstr "Hent denne fil?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You have no application able to open “%s”. You can download it instead."
-#~ msgstr ""
-#~ "Filtype: “%s”.\n"
-#~ "\n"
-#~ "Du har ikke et program der kan åbne “%s”. Du kan gemme filen i stedet."
-
-#~ msgid "_Save As..."
-#~ msgstr "_Gem som..."
 
 #~ msgid "“%s” Protocol is not Supported"
 #~ msgstr "Protokollen “%s” er ikke understøttet"
@@ -4274,9 +4285,6 @@ msgstr "Hjemmesiden for Gnomes Internetbrowser"
 #~ msgstr ""
 #~ "Dette modul håndterer “.desktop”-filer og “.url”-filer som indeholder "
 #~ "internetadresser."
-
-#~ msgid "Default"
-#~ msgstr "Standard"
 
 #~ msgid "Opening %s"
 #~ msgstr "Åbner %s"
