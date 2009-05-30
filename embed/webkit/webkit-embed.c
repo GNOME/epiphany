@@ -785,6 +785,9 @@ impl_load_url (EphyEmbed *embed,
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
+  g_free (wembed->priv->loading_uri);
+  wembed->priv->loading_uri = g_strdup (url);
+
   webkit_web_view_open (wembed->priv->web_view, url);
 }
 
