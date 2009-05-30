@@ -22,6 +22,7 @@
 
 #include "ephy-web-view.h"
 #include "ephy-debug.h"
+#include "ephy-embed-utils.h"
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
@@ -73,4 +74,49 @@ ephy_web_view_load_request (EphyWebView *web_view,
 
 	main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
   webkit_web_frame_load_request(main_frame, request);
+}
+
+/**
+ * ephy_web_view_copy_back_history:
+ * @source: the #EphyWebView from which to get the back history
+ * @dest: the #EphyWebView to copy the history to
+ *
+ * Sets the back history (up to the current item) of @source as the
+ * back history of @dest.
+ *
+ * Useful to keep the history when opening links in new tabs or
+ * windows.
+ **/
+void
+ephy_web_view_copy_back_history (EphyWebView *source,
+																 EphyWebView *dest)
+{
+  WebKitWebView *source_view, *dest_view;
+  WebKitWebBackForwardList* source_bflist, *dest_bflist;
+  WebKitWebHistoryItem *item;
+  GList *items;
+
+	g_return_if_fail(EPHY_IS_WEB_VIEW(source));
+	g_return_if_fail(EPHY_IS_WEB_VIEW(dest));
+
+  source_view = WEBKIT_WEB_VIEW (source);
+  dest_view = WEBKIT_WEB_VIEW (dest);
+
+  source_bflist = webkit_web_view_get_back_forward_list (source_view);
+  dest_bflist = webkit_web_view_get_back_forward_list (dest_view);
+
+	items = webkit_web_back_forward_list_get_back_list_with_limit (source_bflist, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+	/* We want to add the items in the reverse order here, so the
+		 history ends up the same */
+	items = g_list_reverse (items);
+	for (; items; items = items->next) {
+		item = (WebKitWebHistoryItem*)items->data;
+		webkit_web_back_forward_list_add_item (dest_bflist, g_object_ref (item));
+	}
+	g_list_free (items);
+
+  /* The ephy/gecko behavior is to add the current item of the source
+     embed at the end of the back history, so keep doing that */
+  item = webkit_web_back_forward_list_get_current_item (source_bflist);
+  webkit_web_back_forward_list_add_item (dest_bflist, g_object_ref (item));
 }

@@ -1081,18 +1081,6 @@
   (return-type "none")
 )
 
-(define-method shistory_copy
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_shistory_copy")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "dest")
-    '("gboolean" "copy_back")
-    '("gboolean" "copy_forward")
-    '("gboolean" "copy_current")
-  )
-)
-
 (define-method show_page_certificate
   (of-object "EphyEmbed")
   (c-name "ephy_embed_show_page_certificate")

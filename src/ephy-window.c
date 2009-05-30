@@ -57,6 +57,7 @@
 #include "ephy-embed-persist.h"
 #include "ephy-embed-factory.h"
 #include "ephy-location-entry.h"
+#include "ephy-web-view.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -2264,11 +2265,9 @@ open_link_in_new (EphyWindow *window,
 
 	if (dest)
 	{
-		ephy_embed_shistory_copy (embed,
-					  dest,
-					  TRUE,   /* back history */
-					  FALSE,  /* forward history */
-					  FALSE); /* current index */
+                ephy_web_view_copy_back_history (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
+                                                 EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dest)));
+
 		return TRUE;
 	}
 

@@ -167,11 +167,6 @@ struct _EphyEmbedIface
 							   gboolean toplevel);
 	const char *	   (* get_link_message)		  (EphyEmbed *embed);
 	char *		   (* get_js_status)		  (EphyEmbed *embed);
-	void		   (* shistory_copy)		  (EphyEmbed *source,
-							   EphyEmbed *dest,
-							   gboolean copy_back,
-							   gboolean copy_forward,
-							   gboolean copy_current);
 	void		   (* get_security_level)	  (EphyEmbed *embed,
 							   EphyEmbedSecurityLevel *level,
 							   char **description);
@@ -231,12 +226,6 @@ gboolean	  ephy_embed_can_go_up			(EphyEmbed *embed);
 GSList		 *ephy_embed_get_go_up_list		(EphyEmbed *embed);
 
 void		  ephy_embed_go_up			(EphyEmbed *embed);
-
-void		  ephy_embed_shistory_copy		(EphyEmbed *source,
-							 EphyEmbed *dest,
-							 gboolean copy_back,
-							 gboolean copy_forward,
-							 gboolean copy_current);
 
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EphyEmbedSecurityLevel *level,

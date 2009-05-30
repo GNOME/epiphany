@@ -63,6 +63,9 @@ GtkWidget   *ephy_web_view_new                 (void);
 void         ephy_web_view_load_request        (EphyWebView *web_view,
                                                 WebKitNetworkRequest *request);
 
+void         ephy_web_view_copy_back_history   (EphyWebView *source,
+                                                EphyWebView *dest);
+
 G_END_DECLS
 
 #endif

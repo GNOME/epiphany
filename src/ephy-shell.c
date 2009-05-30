@@ -56,6 +56,7 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 #include "ephy-embed-factory.h"
+#include "ephy-web-view.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include "ephy-net-monitor.h"
@@ -491,11 +492,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	if (previous_embed != NULL)
 	{	
-		ephy_embed_shistory_copy (previous_embed,
-					  embed,
-					  TRUE,   /* back history */
-					  TRUE,   /* forward history */
-					  FALSE); /* current index */
+                ephy_web_view_copy_back_history (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (previous_embed)),
+                                                 EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)));
 	}		
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
