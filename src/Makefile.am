@@ -567,6 +567,7 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: epiphany $(G_IR_SCANNER)
 		--add-include-path=$(srcdir) \
 		--include=Gtk-2.0 \
 		--include=libxml2-2.0 \
+		--include=WebKit-1.0 \
 		--program=./epiphany \
 		--output $@ \
 		--pkg epiphany-$(EPIPHANY_API_VERSION) \
