@@ -518,11 +518,14 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
-		g_assert (request != NULL);
+		/* request can be NULL when trying to load about:blank */
+		if (request)
+		{
+			ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
+						    request);
+		}
 
-		ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
-					    request);
-		is_empty = url_is_empty (webkit_network_request_get_uri (request));
+		is_empty = !request || url_is_empty (webkit_network_request_get_uri (request));
 	}
 
         /* Make sure the initial focus is somewhere sensible and not, for
