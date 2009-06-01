@@ -792,16 +792,6 @@ impl_load_url (EphyEmbed *embed,
   webkit_web_view_open (wembed->priv->web_view, url);
 }
 
-static void
-impl_load (EphyEmbed *embed,
-           const char *url,
-           EphyEmbed *preview_embed)
-{
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  webkit_web_view_open (wembed->priv->web_view, url);
-}
-
 static gboolean
 impl_can_go_up (EphyEmbed *embed)
 {
@@ -883,7 +873,6 @@ static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
   iface->load_url = impl_load_url; 
-  iface->load = impl_load; 
   iface->can_go_up = impl_can_go_up;
   iface->get_go_up_list = impl_get_go_up_list;
   iface->go_up = impl_go_up;

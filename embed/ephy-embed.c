@@ -365,23 +365,6 @@ ephy_embed_load_url (EphyEmbed *embed,
 }
 
 /**
- * ephy_embed_load:
- * @embed: an #EphyEmbed
- * @url: an URL
- * @previous_embed: the referrer embed or %NULL
- *
- * Loads a new web page in @embed.
- **/
-void
-ephy_embed_load (EphyEmbed *embed,
-		 const char *url,
-		 EphyEmbed *referring_embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->load (embed, url, referring_embed);
-}
-
-/**
  * ephy_embed_can_go_up:
  * @embed: an #EphyEmbed
  *

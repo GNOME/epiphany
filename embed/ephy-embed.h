@@ -156,9 +156,6 @@ struct _EphyEmbedIface
 	/* Methods  */
 	void		   (* load_url)			  (EphyEmbed *embed,
 							   const char *url);
-	void		   (* load)			  (EphyEmbed *embed,
-							   const char *url,
-							   EphyEmbed *referring_embed);
 	gboolean	   (* can_go_up)		  (EphyEmbed *embed);
 	GSList *	   (* get_go_up_list)		  (EphyEmbed *embed);
 	void		   (* go_up)			  (EphyEmbed *embed);
@@ -208,9 +205,6 @@ GType		  ephy_embed_get_type			(void);
 /* Base */
 void		  ephy_embed_load_url			(EphyEmbed *embed,
 							 const char *url);
-void		  ephy_embed_load			(EphyEmbed *embed,
-							 const char *url,
-							 EphyEmbed *referring_embed);
 
 const char	 *ephy_embed_get_title			(EphyEmbed *embed);
 
