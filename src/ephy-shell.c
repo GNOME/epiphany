@@ -577,7 +577,8 @@ ephy_shell_new_tab (EphyShell *shell,
 					 previous_embed, request, flags,
 					 EPHY_EMBED_CHROME_ALL, FALSE, 0);
 
-	g_object_unref (request);
+	if (request)
+		g_object_unref (request);
 
 	return embed;
 }
