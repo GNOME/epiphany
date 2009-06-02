@@ -3598,7 +3598,7 @@ ephy_window_open_link (EphyLink *link,
 	}
 	else
 	{
-		ephy_embed_load_url (embed, address);
+		ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), address);
 
 		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
 		{
@@ -3990,7 +3990,7 @@ real_get_active_tab (EphyWindow *window, int page_num)
  * @url: the url to load
  *
  * Loads a new url in the active tab of @window.
- * Unlike ephy_embed_load_url(), this function activates
+ * Unlike ephy_web_view_load_url(), this function activates
  * the embed.
  *
  **/

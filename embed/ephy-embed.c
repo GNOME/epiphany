@@ -350,21 +350,6 @@ ephy_embed_base_init (gpointer g_class)
 }
 
 /**
- * ephy_embed_load_url:
- * @embed: an #EphyEmbed
- * @url: a URL
- *
- * Loads a new web page in @embed.
- **/
-void
-ephy_embed_load_url (EphyEmbed *embed,
-		     const char *url)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->load_url (embed, url);
-}
-
-/**
  * ephy_embed_can_go_up:
  * @embed: an #EphyEmbed
  *

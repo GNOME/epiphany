@@ -72,7 +72,6 @@ struct WebKitEmbedPrivate
   WebKitWebView *web_view;
   GtkScrolledWindow *scrolled_window;
   WebKitEmbedLoadState load_state;
-  char *loading_uri;
   EphyHistory *history;
   GtkWidget *inspector_window;
   guint is_setting_zoom : 1;
@@ -150,6 +149,7 @@ static void
 update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
 {
   EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
+  const char *loading_uri = ephy_embed_get_typed_address (embed);
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
     {
@@ -159,7 +159,7 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
                                     EPHY_EMBED_STATE_IS_REQUEST |
                                     EPHY_EMBED_STATE_IS_NETWORK);
 
-      g_signal_emit_by_name (embed, "new-document-now", embed->priv->loading_uri);
+      g_signal_emit_by_name (embed, "new-document-now", loading_uri);
     }
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_LOADING)
@@ -175,7 +175,7 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
                                     EPHY_EMBED_STATE_IS_NETWORK);
 
   ephy_base_embed_update_from_net_state (EPHY_BASE_EMBED (embed),
-                                         embed->priv->loading_uri,
+                                         loading_uri,
                                          (EphyEmbedNetState)estate);
 }
 
@@ -326,23 +326,9 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_finalize (GObject *object)
-{
-  WebKitEmbed *wembed = WEBKIT_EMBED (object);
-
-  g_free (wembed->priv->loading_uri);
-
-  G_OBJECT_CLASS (webkit_embed_parent_class)->finalize (object);
-}
-
-static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = webkit_embed_finalize;
-
-  g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
+  g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(WebKitEmbedPrivate));
 }
 
 static WebKitWebView *
@@ -784,12 +770,6 @@ static void
 impl_load_url (EphyEmbed *embed,
                const char *url)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  g_free (wembed->priv->loading_uri);
-  wembed->priv->loading_uri = g_strdup (url);
-
-  webkit_web_view_open (wembed->priv->web_view, url);
 }
 
 static gboolean
@@ -872,7 +852,6 @@ impl_has_modified_forms (EphyEmbed *embed)
 static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
-  iface->load_url = impl_load_url; 
   iface->can_go_up = impl_can_go_up;
   iface->get_go_up_list = impl_get_go_up_list;
   iface->go_up = impl_go_up;

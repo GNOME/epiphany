@@ -25,10 +25,12 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
+#include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-web-view.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -248,8 +250,7 @@ popup_cmd_open_link (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	value = ephy_embed_event_get_property (event, "link");
 	location = g_value_get_string (value);
-
-	ephy_embed_load_url (embed, location);
+	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), location);
 }
 
 void
@@ -373,8 +374,7 @@ popup_cmd_open_frame (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_embed_get_location (embed, FALSE);
-
-	ephy_embed_load_url (embed, location);
+	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), location);
 
 	g_free (location);
 }

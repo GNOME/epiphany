@@ -77,6 +77,23 @@ ephy_web_view_load_request (EphyWebView *web_view,
 }
 
 /**
+ * ephy_web_view_load_url:
+ * @embed: an #EphyWebView
+ * @url: a URL
+ *
+ * Loads @url in @embed.
+ **/
+void
+ephy_web_view_load_url (EphyWebView *view,
+                        const char *url)
+{
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_return_if_fail (url);
+
+  webkit_web_view_open (WEBKIT_WEB_VIEW (view), url);
+}
+
+/**
  * ephy_web_view_copy_back_history:
  * @source: the #EphyWebView from which to get the back history
  * @dest: the #EphyWebView to copy the history to

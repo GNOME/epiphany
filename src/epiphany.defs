@@ -951,15 +951,6 @@
   (return-type "GType")
 )
 
-(define-method load_url
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_load_url")
-  (return-type "none")
-  (parameters
-    '("const-char*" "url")
-  )
-)
-
 (define-method get_title
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_title")
