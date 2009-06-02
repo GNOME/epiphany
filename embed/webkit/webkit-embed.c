@@ -537,7 +537,7 @@ confirm_action_response_cb (GtkWidget *dialog,
                             WebKitDownload *download)
 {
   WebKitWebView *web_view = g_object_get_data (G_OBJECT(dialog), "webkit-view");
-  DownloaderView *dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
+  DownloaderView *dview;
 
   gtk_widget_destroy (dialog);
 
@@ -562,6 +562,7 @@ confirm_action_response_cb (GtkWidget *dialog,
       if (!define_destination_uri (download, FALSE)) {
         goto cleanup;
       }
+      dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
       downloader_view_add_download (dview, download);
     }
     g_object_unref (download);
