@@ -198,7 +198,7 @@ entry_activate_cb (GtkEntry *entry,
 	address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
 	g_return_if_fail (address != NULL);
 
-	ephy_link_open (EPHY_LINK (action), address, NULL, 
+	ephy_link_open (EPHY_LINK (action), g_strstrip (address), NULL, 
 		        ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
 
 	g_free (address);
