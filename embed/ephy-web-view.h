@@ -30,6 +30,8 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
+#include "ephy-embed-event.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_WEB_VIEW         (ephy_web_view_get_type ())

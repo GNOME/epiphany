@@ -195,7 +195,7 @@ static const PrefData webkit_pref_entries[] =
   };
 
 static void
-webkit_embed_prefs_apply (WebKitEmbed *embed, WebKitWebSettings *settings)
+webkit_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
 {
   webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
@@ -234,7 +234,7 @@ webkit_embed_prefs_shutdown (void)
 }
 
 void
-webkit_embed_prefs_add_embed (WebKitEmbed *embed)
+webkit_embed_prefs_add_embed (EphyEmbed *embed)
 {
   webkit_embed_prefs_apply (embed, settings);
 }

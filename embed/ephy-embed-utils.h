@@ -29,7 +29,7 @@
 #ifndef EPHY_EMBED_UTILS_H
 #define EPHY_EMBED_UTILS_H
 
-#include "ephy-embed.h"
+#include "ephy-web-view.h"
 
 #include <webkit/webkit.h>
 

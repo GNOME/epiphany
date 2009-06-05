@@ -48,29 +48,28 @@
 #include <string.h>
 #include <glib/gi18n.h>
 
-#include "webkit-embed.h"
 #include "webkit-embed-prefs.h"
 #include "ephy-embed.h"
 #include "ephy-base-embed.h"
 
-static void     webkit_embed_class_init (WebKitEmbedClass *klass);
-static void     webkit_embed_init       (WebKitEmbed *gs);
+static void     ephy_embed_class_init (EphyEmbedClass *klass);
+static void     ephy_embed_init       (EphyEmbed *gs);
 
-#define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
+#define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
 typedef enum
 {
-    WEBKIT_EMBED_LOAD_STARTED,
-    WEBKIT_EMBED_LOAD_REDIRECTING,
-    WEBKIT_EMBED_LOAD_LOADING,
-    WEBKIT_EMBED_LOAD_STOPPED
-} WebKitEmbedLoadState;
+    EPHY_EMBED_LOAD_STARTED,
+    EPHY_EMBED_LOAD_REDIRECTING,
+    EPHY_EMBED_LOAD_LOADING,
+    EPHY_EMBED_LOAD_STOPPED
+} EphyEmbedLoadState;
 
-struct WebKitEmbedPrivate
+struct EphyEmbedPrivate
 {
   WebKitWebView *web_view;
   GtkScrolledWindow *scrolled_window;
-  WebKitEmbedLoadState load_state;
+  EphyEmbedLoadState load_state;
   EphyHistory *history;
   GtkWidget *inspector_window;
   guint is_setting_zoom : 1;
@@ -80,7 +79,7 @@ static void
 impl_manager_do_command (EphyCommandManager *manager,
                          const char *command)
 {
-  WebKitWebView *web_view = WEBKIT_EMBED (manager)->priv->web_view;
+  WebKitWebView *web_view = EPHY_EMBED (manager)->priv->web_view;
 
   if (! strcmp (command, "cmd_copy"))
     return webkit_web_view_copy_clipboard (web_view);
@@ -96,7 +95,7 @@ static gboolean
 impl_manager_can_do_command (EphyCommandManager *manager,
                              const char *command)
 {
-  WebKitWebView *web_view = WEBKIT_EMBED (manager)->priv->web_view;
+  WebKitWebView *web_view = EPHY_EMBED (manager)->priv->web_view;
 
   if (! strcmp (command, "cmd_copy"))
     return webkit_web_view_can_copy_clipboard (web_view);
@@ -115,14 +114,7 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
   iface->can_do_command = impl_manager_can_do_command;
 }
 
-static void
-ephy_embed_iface_init (EphyEmbedIface *iface)
-{
-}
-
-G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, EPHY_TYPE_BASE_EMBED,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED,
-                                                ephy_embed_iface_init)
+G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, EPHY_TYPE_BASE_EMBED,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
                                                 ephy_command_manager_iface_init))
 
@@ -142,7 +134,7 @@ title_changed_cb (WebKitWebView *web_view,
 
   frame = webkit_web_view_get_main_frame (web_view);
   uri = webkit_web_frame_get_uri (frame);
-  ephy_history_set_page_title (WEBKIT_EMBED (embed)->priv->history,
+  ephy_history_set_page_title (EPHY_EMBED (embed)->priv->history,
                                uri,
                                title);
   g_free (title);
@@ -150,12 +142,12 @@ title_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
+update_load_state (EphyEmbed *embed, WebKitWebView *web_view)
 {
   EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
   const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (web_view));
 
-  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
+  if (embed->priv->load_state == EPHY_EMBED_LOAD_STARTED)
     {
       estate = (EphyWebViewNetState) (estate |
                                     EPHY_WEB_VIEW_STATE_START |
@@ -166,13 +158,13 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
       g_signal_emit_by_name (EPHY_WEB_VIEW (web_view), "new-document-now", loading_uri);
     }
 
-  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_LOADING)
+  if (embed->priv->load_state == EPHY_EMBED_LOAD_LOADING)
       estate = (EphyWebViewNetState) (estate |
                                     EPHY_WEB_VIEW_STATE_TRANSFERRING |
                                     EPHY_WEB_VIEW_STATE_IS_REQUEST |
                                     EPHY_WEB_VIEW_STATE_IS_NETWORK);
 
-  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STOPPED)
+  if (embed->priv->load_state == EPHY_EMBED_LOAD_STOPPED)
       estate = (EphyWebViewNetState) (estate |
                                     EPHY_WEB_VIEW_STATE_STOP |
                                     EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
@@ -184,10 +176,10 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
 }
 
 static void
-restore_zoom_level (WebKitEmbed *embed,
+restore_zoom_level (EphyEmbed *embed,
                     const char *address)
 {
-  WebKitEmbedPrivate *priv = embed->priv;
+  EphyEmbedPrivate *priv = embed->priv;
 
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
@@ -223,7 +215,7 @@ restore_zoom_level (WebKitEmbed *embed,
 static void
 load_committed_cb (WebKitWebView *web_view,
                    WebKitWebFrame *web_frame,
-                   WebKitEmbed *embed)
+                   EphyEmbed *embed)
 {
   const gchar* uri;
   EphyWebViewSecurityLevel security_level;
@@ -256,8 +248,8 @@ load_started_cb (WebKitWebView *web_view,
                  WebKitWebFrame *web_frame,
                  EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
+  EphyEmbed *wembed = EPHY_EMBED (embed);
+  wembed->priv->load_state = EPHY_EMBED_LOAD_STARTED;
 
   update_load_state (wembed, web_view);
 }
@@ -267,10 +259,10 @@ load_progress_changed_cb (WebKitWebView *web_view,
                           int progress,
                           EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  EphyEmbed *wembed = EPHY_EMBED (embed);
 
-  if (wembed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
-    wembed->priv->load_state = WEBKIT_EMBED_LOAD_LOADING;
+  if (wembed->priv->load_state == EPHY_EMBED_LOAD_STARTED)
+    wembed->priv->load_state = EPHY_EMBED_LOAD_LOADING;
 
   ephy_web_view_set_load_percent (EPHY_WEB_VIEW (web_view), progress);
 }
@@ -280,9 +272,9 @@ load_finished_cb (WebKitWebView *web_view,
                   WebKitWebFrame *web_frame,
                   EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  EphyEmbed *wembed = EPHY_EMBED (embed);
 
-  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
+  wembed->priv->load_state = EPHY_EMBED_LOAD_STOPPED;
   update_load_state (wembed, web_view);
 }
 
@@ -307,7 +299,7 @@ zoom_changed_cb (WebKitWebView *web_view,
                 "zoom-level", &zoom,
                 NULL);
 
-  if (WEBKIT_EMBED (embed)->priv->is_setting_zoom) {
+  if (EPHY_EMBED (embed)->priv->is_setting_zoom) {
     return;
   }
 
@@ -330,13 +322,13 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-webkit_embed_class_init (WebKitEmbedClass *klass)
+ephy_embed_class_init (EphyEmbedClass *klass)
 {
-  g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(WebKitEmbedPrivate));
+  g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
 
 static WebKitWebView *
-webkit_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
+ephy_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
                                   WebKitWebView *web_view,
                                   gpointer data)
 {
@@ -352,7 +344,7 @@ webkit_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
 }
 
 static gboolean
-webkit_embed_inspect_show_cb (WebKitWebInspector *inspector,
+ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
                               GtkWidget *widget)
 {
   gtk_widget_show (widget);
@@ -360,7 +352,7 @@ webkit_embed_inspect_show_cb (WebKitWebInspector *inspector,
 }
 
 static gboolean
-webkit_embed_inspect_close_cb (WebKitWebInspector *inspector,
+ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
                                GtkWidget *widget)
 {
   gtk_widget_hide (widget);
@@ -373,7 +365,7 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
                                         WebKitNetworkRequest *request,
                                         const char *mime_type,
                                         WebKitWebPolicyDecision *decision,
-                                        WebKitEmbed *embed)
+                                        EphyEmbed *embed)
 {
   EphyWebViewDocumentType type;
 
@@ -704,14 +696,14 @@ download_requested_cb (WebKitWebView *web_view,
 }
                                                   
 static void
-webkit_embed_init (WebKitEmbed *embed)
+ephy_embed_init (EphyEmbed *embed)
 {
   WebKitWebView *web_view;
   WebKitWebInspector *inspector;
   GtkWidget *sw;
   GtkWidget *inspector_sw;
 
-  embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
+  embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (sw);
@@ -757,11 +749,11 @@ webkit_embed_init (WebKitEmbed *embed)
                     NULL);
 
   g_object_connect (inspector,
-                    "signal::inspect-web-view", G_CALLBACK (webkit_embed_inspect_web_view_cb),
+                    "signal::inspect-web-view", G_CALLBACK (ephy_embed_inspect_web_view_cb),
                     inspector_sw,
-                    "signal::show-window", G_CALLBACK (webkit_embed_inspect_show_cb),
+                    "signal::show-window", G_CALLBACK (ephy_embed_inspect_show_cb),
                     embed->priv->inspector_window,
-                    "signal::close-window", G_CALLBACK (webkit_embed_inspect_close_cb),
+                    "signal::close-window", G_CALLBACK (ephy_embed_inspect_close_cb),
                     embed->priv->inspector_window,
                     NULL);
 

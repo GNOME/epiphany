@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "ephy-embed-factory.h"
-#include "webkit-embed.h"
 #include "webkit-embed-persist.h"
 #include "webkit-embed-single.h"
 #include "ephy-embed.h"
@@ -42,7 +41,7 @@ ephy_embed_factory_new_object (GType type)
 
 	if (type == EPHY_TYPE_EMBED)
 	{
-                object = g_object_new (WEBKIT_TYPE_EMBED, NULL);
+                object = g_object_new (EPHY_TYPE_EMBED, NULL);
 	}
 	else if (type == EPHY_TYPE_EMBED_PERSIST)
 	{
