@@ -1,4 +1,5 @@
- /*
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
+/*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -63,12 +64,12 @@ ephy_embed_single_get_property (GObject *object,
   EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
   switch (prop_id) {
-    case PROP_NETWORK_STATUS:
-      g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
+  case PROP_NETWORK_STATUS:
+    g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
   }
 }
 
@@ -81,12 +82,12 @@ ephy_embed_single_set_property (GObject *object,
   EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
   switch (prop_id) {
-    case PROP_NETWORK_STATUS:
-      ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
+  case PROP_NETWORK_STATUS:
+    ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
   }
 }
 
@@ -135,107 +136,107 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
   object_class->get_property = ephy_embed_single_get_property;
   object_class->set_property = ephy_embed_single_set_property;
 
-/**
- * EphyEmbedSingle::new-window:
- * @single:
- * @parent_embed: the #EphyEmbed requesting the new window, or %NULL
- * @mask: a #EphyEmbedChrome
- *
- * The ::new_window signal is emitted when a new window needs to be opened.
- * For example, when a JavaScript popup window was opened.
- *
- * Return a new #EphyEmbed.
- **/
-	g_signal_new ("new-window",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
-		      ephy_signal_accumulator_object, ephy_embed_get_type,
-		      ephy_marshal_OBJECT__OBJECT_FLAGS,
-		      GTK_TYPE_WIDGET,
-		      2,
-		      GTK_TYPE_WIDGET,
-		      EPHY_TYPE_WEB_VIEW_CHROME);
+  /**
+   * EphyEmbedSingle::new-window:
+   * @single:
+   * @parent_embed: the #EphyEmbed requesting the new window, or %NULL
+   * @mask: a #EphyEmbedChrome
+   *
+   * The ::new_window signal is emitted when a new window needs to be opened.
+   * For example, when a JavaScript popup window was opened.
+   *
+   * Return a new #EphyEmbed.
+   **/
+  g_signal_new ("new-window",
+                EPHY_TYPE_EMBED_SINGLE,
+                G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
+                ephy_signal_accumulator_object, ephy_embed_get_type,
+                ephy_marshal_OBJECT__OBJECT_FLAGS,
+                GTK_TYPE_WIDGET,
+                2,
+                GTK_TYPE_WIDGET,
+                EPHY_TYPE_WEB_VIEW_CHROME);
 
-/**
- * EphyEmbedSingle::handle_content:
- * @single:
- * @mime_type: the MIME type of the content
- * @address: the URL to the content
- *
- * The ::handle_content signal is emitted when encountering content of a mime
- * type Epiphany is unable to handle itself.
- *
- * If a connected callback returns %TRUE, the signal will stop propagating. For
- * example, this could be used by a download manager to prevent other
- * ::handle_content listeners from being called.
- **/
-	g_signal_new ("handle_content",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
-		      g_signal_accumulator_true_handled, NULL,
-		      ephy_marshal_BOOLEAN__STRING_STRING,
-		      G_TYPE_BOOLEAN,
-		      2,
-		      G_TYPE_STRING,
-		      G_TYPE_STRING);
+  /**
+   * EphyEmbedSingle::handle_content:
+   * @single:
+   * @mime_type: the MIME type of the content
+   * @address: the URL to the content
+   *
+   * The ::handle_content signal is emitted when encountering content of a mime
+   * type Epiphany is unable to handle itself.
+   *
+   * If a connected callback returns %TRUE, the signal will stop propagating. For
+   * example, this could be used by a download manager to prevent other
+   * ::handle_content listeners from being called.
+   **/
+  g_signal_new ("handle_content",
+                EPHY_TYPE_EMBED_SINGLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
+                g_signal_accumulator_true_handled, NULL,
+                ephy_marshal_BOOLEAN__STRING_STRING,
+                G_TYPE_BOOLEAN,
+                2,
+                G_TYPE_STRING,
+                G_TYPE_STRING);
 
-/**
- * EphyEmbedSingle::add-sidebar:
- * @single:
- * @url: The url of the sidebar to be added
- * @title: The title of the sidebar to be added
- *
- * The ::add-sidebar signal is emitted when the user clicks a javascript link that
- * requests adding a url to the sidebar.
- **/
-	g_signal_new ("add-sidebar",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleClass, add_sidebar),
-		      g_signal_accumulator_true_handled, NULL,
-		      ephy_marshal_BOOLEAN__STRING_STRING,
-		      G_TYPE_BOOLEAN,
-		      2,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  /**
+   * EphyEmbedSingle::add-sidebar:
+   * @single:
+   * @url: The url of the sidebar to be added
+   * @title: The title of the sidebar to be added
+   *
+   * The ::add-sidebar signal is emitted when the user clicks a javascript link that
+   * requests adding a url to the sidebar.
+   **/
+  g_signal_new ("add-sidebar",
+                EPHY_TYPE_EMBED_SINGLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (EphyEmbedSingleClass, add_sidebar),
+                g_signal_accumulator_true_handled, NULL,
+                ephy_marshal_BOOLEAN__STRING_STRING,
+                G_TYPE_BOOLEAN,
+                2,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-/**
- * EphyEmbedSingle::add-search-engine
- * @single:
- * @url: The url of the search engine definition file
- * @icon_url: The url of the icon to use for this engine
- * @title: The title of the search engine to be added
- *
- * The ::add-search-engine signal is emitted when the user clicks a javascript link that
- * requests adding a search engine to the sidebar.
- **/
-	g_signal_new ("add-search-engine",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleClass, add_search_engine),
-		      g_signal_accumulator_true_handled, NULL,
-		      ephy_marshal_BOOLEAN__STRING_STRING_STRING,
-		      G_TYPE_BOOLEAN,
-		      3,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  /**
+   * EphyEmbedSingle::add-search-engine
+   * @single:
+   * @url: The url of the search engine definition file
+   * @icon_url: The url of the icon to use for this engine
+   * @title: The title of the search engine to be added
+   *
+   * The ::add-search-engine signal is emitted when the user clicks a javascript link that
+   * requests adding a search engine to the sidebar.
+   **/
+  g_signal_new ("add-search-engine",
+                EPHY_TYPE_EMBED_SINGLE,
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (EphyEmbedSingleClass, add_search_engine),
+                g_signal_accumulator_true_handled, NULL,
+                ephy_marshal_BOOLEAN__STRING_STRING_STRING,
+                G_TYPE_BOOLEAN,
+                3,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-/**
- * EphyEmbedSingle::network-status:
- * 
- * Whether the network is on-line.
- */
-	g_object_class_install_property
-		(object_class,
-                 PROP_NETWORK_STATUS,
-		 g_param_spec_boolean ("network-status",
-				       "network-status",
-				       "network-status",
-				       FALSE,
-				       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  /**
+   * EphyEmbedSingle::network-status:
+   * 
+   * Whether the network is on-line.
+   */
+  g_object_class_install_property
+    (object_class,
+     PROP_NETWORK_STATUS,
+     g_param_spec_boolean ("network-status",
+                           "network-status",
+                           "network-status",
+                           FALSE,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
 }
@@ -425,7 +426,7 @@ ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
  **/
 void
 ephy_embed_single_set_network_status (EphyEmbedSingle *single,
-				      gboolean status)
+                                      gboolean status)
 {
   if (status != single->priv->online)
     single->priv->online = status;
@@ -460,7 +461,7 @@ ephy_embed_single_get_network_status (EphyEmbedSingle *single)
  **/
 GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *single,
-				 const char *lang_group)
+                                 const char *lang_group)
 {
   return NULL;
 }
@@ -485,10 +486,10 @@ ephy_embed_single_get_font_list (EphyEmbedSingle *single,
  */
 GtkWidget *
 ephy_embed_single_open_window (EphyEmbedSingle *single,
-			       EphyEmbed *parent,
-			       const char *address,
-			       const char *name,
-			       const char *features)
+                               EphyEmbed *parent,
+                               const char *address,
+                               const char *name,
+                               const char *features)
 {
   return NULL;
 }

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *
@@ -29,14 +30,14 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_SINGLE		(ephy_embed_single_get_type ())
-#define EPHY_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingle))
-#define EPHY_EMBED_SINGLE_IFACE(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
-#define EPHY_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SINGLE))
-#define EPHY_IS_EMBED_SINGLE_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
-#define EPHY_EMBED_SINGLE_GET_IFACE(i)	(G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
+#define EPHY_TYPE_EMBED_SINGLE    (ephy_embed_single_get_type ())
+#define EPHY_EMBED_SINGLE(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingle))
+#define EPHY_EMBED_SINGLE_IFACE(k)  (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
+#define EPHY_IS_EMBED_SINGLE(o)   (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SINGLE))
+#define EPHY_IS_EMBED_SINGLE_IFACE(k) (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
+#define EPHY_EMBED_SINGLE_GET_IFACE(i)  (G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
 
-typedef struct _EphyEmbedSingle		EphyEmbedSingle;
+typedef struct _EphyEmbedSingle   EphyEmbedSingle;
 typedef struct _EphyEmbedSingleClass    EphyEmbedSingleClass;
 typedef struct _EphyEmbedSinglePrivate  EphyEmbedSinglePrivate;
 
@@ -49,49 +50,49 @@ struct _EphyEmbedSingle {
 
 struct _EphyEmbedSingleClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 
-	/* Signals */
+  /* Signals */
 
-	EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
-				     EphyEmbed *parent_embed,
-				     EphyWebViewChrome chromemask);
+  EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
+                               EphyEmbed *parent_embed,
+                               EphyWebViewChrome chromemask);
 
-	gboolean (* handle_content) (EphyEmbedSingle *shell,
-				     char *mime_type,
-				     char *uri);
+  gboolean (* handle_content) (EphyEmbedSingle *shell,
+                               char *mime_type,
+                               char *uri);
 
-        gboolean (* add_sidebar)    (EphyEmbedSingle *single,
-				     const char *url,
-				     const char *title);
+  gboolean (* add_sidebar)    (EphyEmbedSingle *single,
+                               const char *url,
+                               const char *title);
 
-        gboolean (* add_search_engine) (EphyEmbedSingle *single,
-					const char *url,
-					const char *icon_url,
-					const char *title);
+  gboolean (* add_search_engine) (EphyEmbedSingle *single,
+                                  const char *url,
+                                  const char *icon_url,
+                                  const char *title);
 };
 
-GType		ephy_embed_single_get_type		(void);
+GType           ephy_embed_single_get_type           (void);
 
-gboolean	ephy_embed_single_initialize		(EphyEmbedSingle *single);
+gboolean        ephy_embed_single_initialize         (EphyEmbedSingle *single);
 
-GtkWidget      *ephy_embed_single_open_window		(EphyEmbedSingle *single,
-							 EphyEmbed *parent,
-							 const char *address,
-							 const char *name,
-							 const char *features);
+GtkWidget      *ephy_embed_single_open_window        (EphyEmbedSingle *single,
+                                                      EphyEmbed       *parent,
+                                                      const char      *address,
+                                                      const char      *name,
+                                                      const char      *features);
 
-void		ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
+void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
 
-void		ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
+void            ephy_embed_single_clear_auth_cache   (EphyEmbedSingle *single);
 
-void		ephy_embed_single_set_network_status	(EphyEmbedSingle *single,
-							 gboolean online);
+void            ephy_embed_single_set_network_status (EphyEmbedSingle *single,
+                                                      gboolean         online);
 
-gboolean	ephy_embed_single_get_network_status	(EphyEmbedSingle *single);
+gboolean        ephy_embed_single_get_network_status (EphyEmbedSingle *single);
 
-GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
-							 const char *lang_group);
+GList   *       ephy_embed_single_get_font_list      (EphyEmbedSingle *single,
+                                                      const char      *lang_group);
 
 G_END_DECLS
 
