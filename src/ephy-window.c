@@ -2613,7 +2613,7 @@ ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow
 
 	g_object_get (window->priv->statusbar, "visible", &visible, NULL);
 
-	view = EPHY_WEB_VIEW (web_view);
+	view = WEBKIT_WEB_VIEW (web_view);
 	link_message = ephy_web_view_get_link_message (web_view);
 
 	/* If the statusbar is visible remove the test, it might get
