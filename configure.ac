@@ -443,7 +443,6 @@ lib/Makefile
 lib/egg/Makefile
 lib/widgets/Makefile
 embed/Makefile
-embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
 src/epiphany.h
