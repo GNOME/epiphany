@@ -55,11 +55,6 @@
 #include <dirent.h>
 #include <string.h>
 
-#ifdef ENABLE_PYTHON
-#include "ephy-python-extension.h"
-#include "ephy-python-loader.h"
-#endif
-
 #ifdef ENABLE_SEED
 #include "ephy-seed-loader.h"
 #endif
@@ -583,18 +578,7 @@ get_loader_for_type (EphyExtensionsManager *manager,
 	}
 	if (strcmp (type, "python") == 0)
 	{
-#ifdef ENABLE_PYTHON
-		info = g_new (LoaderInfo, 1);
-		info->type = g_strdup (type);
-		info->loader = g_object_new (EPHY_TYPE_PYTHON_LOADER, NULL);
-
-		manager->priv->factories =
-				g_list_append (manager->priv->factories, info);
-
-		return g_object_ref (info->loader);
-#else
 		return NULL;
-#endif
 	}
 
 #ifdef ENABLE_SEED

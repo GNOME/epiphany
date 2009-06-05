@@ -263,107 +263,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
 
-# ******
-# Python
-# ******
-
-AC_MSG_CHECKING([whether Python support is requested])
-AC_ARG_ENABLE([python],
-	AS_HELP_STRING([--enable-python],[Enable python support]),
-	[enable_python=$enableval have_python=$enableval],
-	[enable_python=autodetect have_python=yes])
-AC_MSG_RESULT([$enable_python])
-
-if test "$enable_seed" = "yes" -a "$enable_python" != "no"; then
-  AC_MSG_ERROR([cannot enable seed and python support at the same time])
-fi
-
-if test "$have_python" != "no"; then
-	AM_PATH_PYTHON([2.3],[],[no])
-
-	if test "x$PYTHON" = "x:"; then
-		have_python=no
-	fi
-fi
-
-if test "$have_python" != "no"; then
-	AM_CHECK_PYTHON_HEADERS([],[have_python=no])
-fi
-
-if test "$have_python" != "no"; then
-	PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
-	PY_EXEC_PREFIX=`$PYTHON -c 'import sys ; print sys.exec_prefix'`
-	PYTHON_LIBS="-lpython$PYTHON_VERSION"
-	PYTHON_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PYTHON_VERSION/config"
-	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
-	PYTHON_MAKEFILE="$PY_EXEC_PREFIX/lib/python$PYTHON_VERSION/config/Makefile"
-	PYTHON_LOCALMODLIBS=`sed -n -e 's/^LOCALMODLIBS=\(.*\)/\1/p' $PYTHON_MAKEFILE`
-	PYTHON_BASEMODLIBS=`sed -n -e 's/^BASEMODLIBS=\(.*\)/\1/p' $PYTHON_MAKEFILE`
-	PYTHON_OTHER_LIBS=`sed -n -e 's/^LIBS=\(.*\)/\1/p' $PYTHON_MAKEFILE`
-	PYTHON_EXTRA_LIBS="$PYTHON_LOCALMODLIBS $PYTHON_BASEMODLIBS $PYTHON_OTHER_LIBS"
-	AC_SUBST([PYTHON_LIBS])
-	AC_SUBST([PYTHON_LIB_LOC])
-	AC_SUBST([PYTHON_CFLAGS])
-	AC_SUBST([PYTHON_EXTRA_LIBS])
-fi
-
-if test "$have_python" != "no"; then
-	PYGTK_REQUIRED=2.7.1
-	GNOME_PYTHON_REQUIRED=2.6.0
-
-	PKG_CHECK_MODULES([PYGTK], [pygtk-2.0 >= $PYGTK_REQUIRED gnome-python-2.0 >= $GNOME_PYTHON_REQUIRED],
-		[],[have_python=no])
-
-	AC_SUBST([PYGTK_CFLAGS])
-	AC_SUBST([PYGTK_LIBS])
-fi
-
-if test "$have_python" != "no"; then
-	AC_MSG_CHECKING([for pygtk defs])
-	PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
-	AC_MSG_RESULT([$PYGTK_DEFSDIR])
-
-	AC_MSG_CHECKING([for pygtk codegen])
-	PYGTK_CODEGEN="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/codegen.py"
-	AC_MSG_RESULT([$PYGTK_CODEGEN])
-
-	AC_MSG_CHECKING([for pygtk h2def])
-	PYGTK_H2DEF="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/h2def.py"
-	AC_MSG_RESULT([$PYGTK_H2DEF])
-	
-	AC_SUBST([PYGTK_DEFSDIR])
-	AC_SUBST([PYGTK_CODEGEN])
-	AC_SUBST([PYGTK_H2DEF])
-
-	# Check for -fno-strict-aliasing
-	FLAGS="-fno-strict-aliasing"
-	save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $FLAGS"
-	AC_MSG_CHECKING([whether [$]CC understands $FLAGS])
-	AC_TRY_COMPILE([], [], [compiler_has_option=yes], [compiler_has_option=no])
-	CFLAGS="$save_CFLAGS"
-	AC_MSG_RESULT($compiler_has_option)
-	if test $compiler_has_option = yes; then
-		NO_STRICT_ALIASING_CFLAGS="$FLAGS"
-	fi
-	AC_SUBST([NO_STRICT_ALIASING_CFLAGS])
-fi
-
-if test "$have_python" != "yes"; then
-	if test "$enable_python" = "yes"; then
-		AC_MSG_ERROR([Python not found])
-	elif test "$enable_python" = "autodetect"; then
-		enable_python=no
-		AC_MSG_WARN([Python not found, disabling python support])
-	fi
-elif test "$enable_python" != "no"; then
-	enable_python=yes
-	AC_DEFINE([ENABLE_PYTHON],[1],[Define to compile with python support])
-	EPIPHANY_FEATURES="$EPIPHANY_FEATURES python"
-fi
-
-AM_CONDITIONAL([ENABLE_PYTHON],[test "$enable_python" = "yes"])
-
 AC_SUBST([EPIPHANY_FEATURES])
 
 # *******************
@@ -572,6 +471,5 @@ Epiphany was configured with the following options:
  	NetworkManager support     : $enable_network_manager
  	GObject introspection      : $enable_introspection
  	Seed support               : $enable_seed
- 	Python support             : $enable_python
  	Build tests                : $enable_tests
 "

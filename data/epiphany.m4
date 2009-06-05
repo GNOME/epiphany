@@ -27,7 +27,6 @@
 # Side effects:
 #   EPIPHANY_EXTENSIONS_DIR is set to the directory to install extensions in
 #   EPIPHANY_EXTENSION_RULE can be used to translate .ephy-extension files
-#   EPIPHANY_HAS_PYTHON is set if the epiphany is compiled with python support
 AC_DEFUN([EPIPHANY_EXTENSION_INIT],
 [
 dnl Check we have an api-version
@@ -66,18 +65,6 @@ environment variable.])
 dnl set the EPIPHANY_EXTENSIONS_DIR variable
 EPIPHANY_EXTENSIONS_DIR="`$PKG_CONFIG --variable=extensionsdir epiphany-$_epiphany_api_version`"
 AC_SUBST([EPIPHANY_EXTENSIONS_DIR])
-
-dnl Look to see if epiphany has python support
-AC_MSG_CHECKING([whether epiphany has python support])
-_epiphany_features="`$PKG_CONFIG --variable=features epiphany-$_epiphany_api_version`"
-if echo "$_epiphany_features" | egrep '(^| )(python)($| )' > /dev/null; then
-    result=yes
-    EPIPHANY_HAS_PYTHON=1
-    AC_SUBST([EPIPHANY_HAS_PYTHON])
-else
-    result=no
-fi
-AC_MSG_RESULT([$result])
 
 dnl Add a rule that auto-translates the .ephy-extension files
 dnl (like the INTLTOOL_XML_RULE does for xml files)

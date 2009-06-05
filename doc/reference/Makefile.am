@@ -139,14 +139,6 @@ GTKDOC_LIBS = \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
-if ENABLE_PYTHON
-GTKDOC_LIBS += \
-	$(top_builddir)/src/libpyphany.la	\
-	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
-	$(PYTHON_EXTRA_LIBS)			\
-	$(PYGTK_LIBS)
-endif
-
 if ENABLE_SEED
 GTKDOC_LIBS += \
 	$(SEED_LIBS)

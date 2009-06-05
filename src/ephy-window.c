@@ -69,10 +69,6 @@
 #include <X11/XF86keysym.h>
 #endif
 
-#ifdef ENABLE_PYTHON
-#include "ephy-python.h"
-#endif
-
 static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_init			(EphyWindow *gs);
 static GObject *ephy_window_constructor		(GType type,
@@ -3852,10 +3848,6 @@ ephy_window_finalize (GObject *object)
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
-
-#ifdef ENABLE_PYTHON
-	ephy_python_schedule_gc ();
-#endif
 
 	g_object_unref (ephy_shell);
 }
