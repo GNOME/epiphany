@@ -18,7 +18,6 @@ NOINST_H_FILES = \
 INST_H_FILES = \
 	ephy-adblock.h			\
 	ephy-adblock-manager.h		\
-	ephy-base-embed.h               \
 	ephy-command-manager.h		\
 	ephy-embed.h			\
 	ephy-embed-container.h          \
@@ -42,7 +41,6 @@ BUILT_SOURCES = \
 libephyembed_la_SOURCES = \
 	ephy-adblock.c			\
 	ephy-adblock-manager.c		\
-	ephy-base-embed.c               \
 	downloader-view.c		\
 	ephy-command-manager.c		\
 	ephy-embed.c			\

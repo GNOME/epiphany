@@ -114,7 +114,7 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
   iface->can_do_command = impl_manager_can_do_command;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, EPHY_TYPE_BASE_EMBED,
+G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
                                                 ephy_command_manager_iface_init))
 
@@ -322,8 +322,55 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+ephy_embed_size_request (GtkWidget *widget,
+                         GtkRequisition *requisition)
+{
+  GtkWidget *child;
+
+  GTK_WIDGET_CLASS (ephy_embed_parent_class)->size_request (widget, requisition);
+
+  child = GTK_BIN (widget)->child;
+
+  if (child && GTK_WIDGET_VISIBLE (child)) {
+    GtkRequisition child_requisition;
+    gtk_widget_size_request (GTK_WIDGET (child), &child_requisition);
+  }
+}
+
+static void
+ephy_embed_size_allocate (GtkWidget *widget,
+                               GtkAllocation *allocation)
+{
+  GtkWidget *child;
+
+  widget->allocation = *allocation;
+
+  child = GTK_BIN (widget)->child;
+  g_return_if_fail (child != NULL);
+
+  gtk_widget_size_allocate (child, allocation);
+}
+
+static void
+ephy_embed_grab_focus (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child)
+    gtk_widget_grab_focus (child);
+}
+
+static void
 ephy_embed_class_init (EphyEmbedClass *klass)
 {
+  GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
+
+  widget_class->size_request = ephy_embed_size_request;
+  widget_class->size_allocate = ephy_embed_size_allocate;
+  widget_class->grab_focus = ephy_embed_grab_focus;
+
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
 
