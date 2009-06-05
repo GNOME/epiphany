@@ -48,9 +48,8 @@
 #include <string.h>
 #include <glib/gi18n.h>
 
-#include "webkit-embed-prefs.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed.h"
-#include "ephy-base-embed.h"
 
 static void     ephy_embed_class_init (EphyEmbedClass *klass);
 static void     ephy_embed_init       (EphyEmbed *gs);
@@ -804,7 +803,7 @@ ephy_embed_init (EphyEmbed *embed)
                     embed->priv->inspector_window,
                     NULL);
 
-  webkit_embed_prefs_add_embed (embed);
+  ephy_embed_prefs_add_embed (embed);
 
   embed->priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
 }

@@ -23,7 +23,7 @@
 #include <libsoup/soup-gnome.h>
 
 #include "webkit-embed-single.h"
-#include "webkit-embed-prefs.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-file-helpers.h"
 #include "ephy-password-manager.h"
@@ -89,7 +89,7 @@ webkit_embed_single_init (WebKitEmbedSingle *wes)
 static void
 webkit_embed_single_finalize (GObject *object)
 {
-  webkit_embed_prefs_shutdown ();
+  ephy_embed_prefs_shutdown ();
 
   G_OBJECT_CLASS (webkit_embed_single_parent_class)->finalize (object);
 }
@@ -188,7 +188,7 @@ impl_init (EphyEmbedSingle *esingle)
   SoupCookieJar *jar;
   char *filename;
 
-  webkit_embed_prefs_init ();
+  ephy_embed_prefs_init ();
 
   session = webkit_get_default_session ();
 

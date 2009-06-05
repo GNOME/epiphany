@@ -56,9 +56,8 @@ libephyembed_la_SOURCES = \
 	ephy-history.c			\
 	ephy-password-manager.c		\
 	ephy-permission-manager.c	\
+	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
-	webkit-embed-prefs.c            \
-	webkit-embed-prefs.h            \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 

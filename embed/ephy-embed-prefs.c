@@ -22,7 +22,6 @@
 #include <glib.h>
 #include <webkit/webkit.h>
 
-#include "webkit-embed-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
@@ -195,14 +194,14 @@ static const PrefData webkit_pref_entries[] =
   };
 
 static void
-webkit_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
+ephy_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
 {
   webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
 }
 
 void
-webkit_embed_prefs_init (void)
+ephy_embed_prefs_init (void)
 {
   int i;
 
@@ -222,7 +221,7 @@ webkit_embed_prefs_init (void)
 }
 
 void
-webkit_embed_prefs_shutdown (void)
+ephy_embed_prefs_shutdown (void)
 {
   int i;
 
@@ -234,8 +233,8 @@ webkit_embed_prefs_shutdown (void)
 }
 
 void
-webkit_embed_prefs_add_embed (EphyEmbed *embed)
+ephy_embed_prefs_add_embed (EphyEmbed *embed)
 {
-  webkit_embed_prefs_apply (embed, settings);
+  ephy_embed_prefs_apply (embed, settings);
 }
 

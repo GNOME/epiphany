@@ -28,7 +28,6 @@
 #include <webkit/webkit.h>
 
 #include "eel-gconf-extensions.h"
-#include "ephy-base-embed.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
