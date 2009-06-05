@@ -162,7 +162,6 @@ epiphany_LDFLAGS = -dlopen self
 epiphany_LDADD = \
 	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/webkit/libephywebkitembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
