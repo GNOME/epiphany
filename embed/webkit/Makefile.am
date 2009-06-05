@@ -2,9 +2,7 @@ noinst_LTLIBRARIES = libephywebkitembed.la
 
 libephywebkitembed_la_SOURCES = 	\
 	webkit-embed-persist.c          \
-	webkit-embed-persist.h		\
-	webkit-embed-single.c	        \
-	webkit-embed-single.h
+	webkit-embed-persist.h
 
 libephywebkitembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\

@@ -37,11 +37,19 @@ G_BEGIN_DECLS
 #define EPHY_EMBED_SINGLE_GET_IFACE(i)	(G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
 
 typedef struct _EphyEmbedSingle		EphyEmbedSingle;
-typedef struct _EphyEmbedSingleIface	EphyEmbedSingleIface;
+typedef struct _EphyEmbedSingleClass    EphyEmbedSingleClass;
+typedef struct _EphyEmbedSinglePrivate  EphyEmbedSinglePrivate;
 
-struct _EphyEmbedSingleIface
+struct _EphyEmbedSingle {
+  GObject parent;
+
+  /*< private >*/
+  EphyEmbedSinglePrivate *priv;
+};
+
+struct _EphyEmbedSingleClass
 {
-	GTypeInterface base_iface;
+	GObjectClass parent_class;
 
 	/* Signals */
 
@@ -61,28 +69,11 @@ struct _EphyEmbedSingleIface
 					const char *url,
 					const char *icon_url,
 					const char *title);
-
-	/* Methods */
-
-	gboolean	  (* init)		(EphyEmbedSingle *single);
-	GtkWidget *	  (* open_window)	(EphyEmbedSingle *single,
-						 EphyEmbed *parent,
-						 const char *address,
-						 const char *name,
-						 const char *features);
-	void		  (* clear_cache)	(EphyEmbedSingle *shell);
-	void		  (* clear_auth_cache)	(EphyEmbedSingle *shell);
-	void		  (* set_network_status)(EphyEmbedSingle *shell,
-						 gboolean offline);
-	gboolean	  (* get_network_status)(EphyEmbedSingle *single);
-	GList *		  (* get_font_list)	(EphyEmbedSingle *shell,
-						 const char *langGroup);
-	const char *      (* get_backend_name)  (EphyEmbedSingle *shell);
 };
 
 GType		ephy_embed_single_get_type		(void);
 
-gboolean	ephy_embed_single_init			(EphyEmbedSingle *single);
+gboolean	ephy_embed_single_initialize		(EphyEmbedSingle *single);
 
 GtkWidget      *ephy_embed_single_open_window		(EphyEmbedSingle *single,
 							 EphyEmbed *parent,

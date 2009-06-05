@@ -20,42 +20,121 @@
 #include "config.h"
 
 #include "ephy-embed-single.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-file-helpers.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-password-manager.h"
+#include "ephy-permission-manager.h"
 
-static void ephy_embed_single_iface_init (gpointer g_class);
+#ifdef ENABLE_CERTIFICATE_MANAGER
+#include "ephy-certificate-manager.h"
+#endif
 
-GType
-ephy_embed_single_get_type (void)
+#include <webkit/webkit.h>
+#include <libsoup/soup-gnome.h>
+
+#define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
+
+struct _EphyEmbedSinglePrivate {
+  guint online : 1;
+};
+
+enum {
+  PROP_0,
+  PROP_NETWORK_STATUS
+};
+
+static void ephy_embed_single_init (EphyEmbedSingle *single);
+static void ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
+static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
+static void ephy_password_manager_iface_init (EphyPasswordManagerIface *iface);
+#ifdef ENABLE_CERTIFICATE_MANAGER
+static void ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface);
+#endif
+
+static void
+ephy_embed_single_get_property (GObject *object,
+                                guint prop_id,
+                                GValue *value,
+                                GParamSpec *pspec)
 {
-	static GType type = 0;
+  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEmbedSingleIface),
-			ephy_embed_single_iface_init,
-			NULL,
-		};
-
-		type = g_type_register_static (G_TYPE_INTERFACE,
-					       "EphyEmbedSingle",
-					       &our_info,
-					       (GTypeFlags) 0);
-	}
-
-	return type;
+  switch (prop_id) {
+    case PROP_NETWORK_STATUS:
+      g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static void
-ephy_embed_single_iface_init (gpointer g_iface)
+ephy_embed_single_set_property (GObject *object,
+                                guint prop_id,
+                                const GValue *value,
+                                GParamSpec *pspec)
 {
-	static gboolean initialised = FALSE;
+  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
-	if (initialised == FALSE)
-	{
+  switch (prop_id) {
+    case PROP_NETWORK_STATUS:
+      ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+/* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
+   so we have to duplicate the whole thing */
+
+#ifdef ENABLE_CERTIFICATE_MANAGER
+G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
+                                                ephy_password_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
+                                                ephy_certificate_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
+                                                ephy_permission_manager_iface_init))
+#else
+G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
+                                                ephy_password_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
+                                                ephy_permission_manager_iface_init))
+#endif
+
+static void
+ephy_embed_single_finalize (GObject *object)
+{
+  ephy_embed_prefs_shutdown ();
+
+  G_OBJECT_CLASS (ephy_embed_single_parent_class)->finalize (object);
+}
+
+static void
+ephy_embed_single_init (EphyEmbedSingle *single)
+{
+  EphyEmbedSinglePrivate *priv;
+
+  single->priv = priv = EPHY_EMBED_SINGLE_GET_PRIVATE (single);
+  priv->online = TRUE;
+}
+
+static void
+ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ephy_embed_single_finalize;
+  object_class->get_property = ephy_embed_single_get_property;
+  object_class->set_property = ephy_embed_single_set_property;
+
 /**
  * EphyEmbedSingle::new-window:
  * @single:
@@ -70,7 +149,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 	g_signal_new ("new-window",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, new_window),
+		      G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
 		      ephy_signal_accumulator_object, ephy_embed_get_type,
 		      ephy_marshal_OBJECT__OBJECT_FLAGS,
 		      GTK_TYPE_WIDGET,
@@ -94,7 +173,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 	g_signal_new ("handle_content",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, handle_content),
+		      G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
 		      g_signal_accumulator_true_handled, NULL,
 		      ephy_marshal_BOOLEAN__STRING_STRING,
 		      G_TYPE_BOOLEAN,
@@ -114,7 +193,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 	g_signal_new ("add-sidebar",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, add_sidebar),
+		      G_STRUCT_OFFSET (EphyEmbedSingleClass, add_sidebar),
 		      g_signal_accumulator_true_handled, NULL,
 		      ephy_marshal_BOOLEAN__STRING_STRING,
 		      G_TYPE_BOOLEAN,
@@ -135,7 +214,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 	g_signal_new ("add-search-engine",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, add_search_engine),
+		      G_STRUCT_OFFSET (EphyEmbedSingleClass, add_search_engine),
 		      g_signal_accumulator_true_handled, NULL,
 		      ephy_marshal_BOOLEAN__STRING_STRING_STRING,
 		      G_TYPE_BOOLEAN,
@@ -149,30 +228,162 @@ ephy_embed_single_iface_init (gpointer g_iface)
  * 
  * Whether the network is on-line.
  */
-	g_object_interface_install_property
-		(g_iface,
+	g_object_class_install_property
+		(object_class,
+                 PROP_NETWORK_STATUS,
 		 g_param_spec_boolean ("network-status",
 				       "network-status",
 				       "network-status",
 				       FALSE,
 				       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-	initialised = TRUE;
-	}
+  g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
 }
 
+static void
+impl_permission_manager_add (EphyPermissionManager *manager,
+                             const char *host,
+                             const char *type,
+                             EphyPermission permission)
+{
+}
+
+static void
+impl_permission_manager_remove (EphyPermissionManager *manager,
+                                const char *host,
+                                const char *type)
+{
+}
+
+static void
+impl_permission_manager_clear (EphyPermissionManager *manager)
+{
+}
+
+static EphyPermission
+impl_permission_manager_test (EphyPermissionManager *manager,
+                              const char *host,
+                              const char *type)
+{
+  g_return_val_if_fail (type != NULL && type[0] != '\0', EPHY_PERMISSION_DEFAULT);
+
+  return (EphyPermission)0;
+}
+
+static GList *
+impl_permission_manager_list (EphyPermissionManager *manager,
+                              const char *type)
+{
+  GList *list = NULL;
+  return list;
+}
+
+static void
+ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
+{
+  iface->add = impl_permission_manager_add;
+  iface->remove = impl_permission_manager_remove;
+  iface->clear = impl_permission_manager_clear;
+  iface->test = impl_permission_manager_test;
+  iface->list = impl_permission_manager_list;
+}
+
+static GList *
+impl_list_passwords (EphyPasswordManager *manager)
+{
+  return NULL;
+}
+
+static void
+impl_remove_password (EphyPasswordManager *manager,
+                      EphyPasswordInfo *info)
+{
+}
+
+static void
+impl_remove_all_passwords (EphyPasswordManager *manager)
+{
+}
+
+static void
+impl_add_password (EphyPasswordManager *manager,
+                   EphyPasswordInfo *info)
+{
+}
+
+static void
+ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
+{
+  iface->add = impl_add_password;
+  iface->remove = impl_remove_password;
+  iface->remove_all = impl_remove_all_passwords;
+  iface->list = impl_list_passwords;
+}
+
+#ifdef ENABLE_CERTIFICATE_MANAGER
+
+static gboolean
+impl_remove_certificate (EphyCertificateManager *manager,
+                         EphyX509Cert *cert)
+{
+  return TRUE;
+}
+
+#define NICK_DELIMITER PRUnichar ('\001')
+static GList *
+impl_get_certificates (EphyCertificateManager *manager,
+                       EphyX509CertType type)
+{
+  return NULL;
+}
+
+static gboolean
+impl_import (EphyCertificateManager *manager,
+             const gchar *file)
+{
+  return TRUE;
+}
+
+static void
+ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
+{
+  iface->get_certificates = impl_get_certificates;
+  iface->remove_certificate = impl_remove_certificate;
+  iface->import = impl_import;
+}
+
+#endif /* ENABLE_CERTIFICATE_MANAGER */
+
 /**
- * ephy_embed_single_init:
+ * ephy_embed_single_initialize:
  * @single: the #EphyEmbedSingle
  * 
  * Performs startup initialisations. Must be called before calling
  * any other methods.
  **/
 gboolean
-ephy_embed_single_init (EphyEmbedSingle *single)
+ephy_embed_single_initialize (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->init (single);
+  SoupSession *session;
+  SoupCookieJar *jar;
+  char *filename;
+
+  ephy_embed_prefs_init ();
+
+  session = webkit_get_default_session ();
+
+  /* Store cookies in moz-compatible SQLite format */
+  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+  jar = soup_cookie_jar_sqlite_new (filename, FALSE);
+  g_free (filename);
+
+  soup_session_add_feature (session, SOUP_SESSION_FEATURE(jar));
+  g_object_unref (jar);
+
+  /* Use GNOME proxy settings through libproxy */
+  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+
+  return TRUE;
 }
 
 /**
@@ -184,8 +395,6 @@ ephy_embed_single_init (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->clear_cache (single);
 }
 
 /**
@@ -205,8 +414,6 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->clear_auth_cache (single);
 }
 
 /**
@@ -220,8 +427,8 @@ void
 ephy_embed_single_set_network_status (EphyEmbedSingle *single,
 				      gboolean status)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->set_network_status (single, status);
+  if (status != single->priv->online)
+    single->priv->online = status;
 }
 
 /**
@@ -235,8 +442,7 @@ ephy_embed_single_set_network_status (EphyEmbedSingle *single,
 gboolean
 ephy_embed_single_get_network_status (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->get_network_status (single);
+  return single->priv->online;
 }
 
 /**
@@ -256,8 +462,7 @@ GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 				 const char *lang_group)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->get_font_list (single, lang_group);
+  return NULL;
 }
 
 /**
@@ -285,6 +490,5 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
 			       const char *name,
 			       const char *features)
 {
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->open_window (single, parent, address, name, features);
+  return NULL;
 }

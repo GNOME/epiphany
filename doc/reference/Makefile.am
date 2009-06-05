@@ -57,9 +57,7 @@ IGNORE_HFILES = \
 	ephy-history.h \
 	find-dialog.h \
 	print-dialog.h \
-	webkit-embed.h \
 	webkit-embed-persist.h \
-	webkit-embed-single.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
 	eggmarshalers.h \

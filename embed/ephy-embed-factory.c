@@ -21,7 +21,6 @@
 
 #include "ephy-embed-factory.h"
 #include "webkit-embed-persist.h"
-#include "webkit-embed-single.h"
 #include "ephy-embed.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-single.h"
@@ -49,7 +48,7 @@ ephy_embed_factory_new_object (GType type)
 	}
 	else if (type == EPHY_TYPE_EMBED_SINGLE)
 	{
-		object = g_object_new (WEBKIT_TYPE_EMBED_SINGLE, NULL);
+		object = g_object_new (EPHY_TYPE_EMBED_SINGLE, NULL);
 	}
 	else
 	{
