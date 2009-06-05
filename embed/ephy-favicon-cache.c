@@ -30,7 +30,6 @@
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-persist.h"
-#include "ephy-embed-factory.h"
 #include "ephy-file-helpers.h"
 #include "ephy-node-common.h"
 #include "ephy-node.h"
@@ -510,7 +509,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	dest = g_build_filename (cache->priv->directory, filename, NULL);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |

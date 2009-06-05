@@ -23,7 +23,6 @@
 #include "popup-commands.h"
 #include "ephy-shell.h"
 #include "ephy-embed-container.h"
-#include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
@@ -215,7 +214,7 @@ save_property_url (GtkAction *action,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	ephy_embed_persist_set_fc_title (persist, title);
 	ephy_embed_persist_set_fc_parent (persist, GTK_WINDOW (window));
@@ -326,7 +325,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
@@ -448,7 +447,7 @@ save_temp_source (const char *address)
 	}
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	ephy_embed_persist_set_source (persist, address);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_FROM_CACHE |

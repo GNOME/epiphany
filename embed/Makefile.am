@@ -1,6 +1,6 @@
 NULL =
 
-noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
+noinst_LTLIBRARIES = libephyembed.la
 
 headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
 header_DATA = \
@@ -20,7 +20,6 @@ INST_H_FILES = \
 	ephy-embed.h			\
 	ephy-embed-container.h          \
 	ephy-embed-event.h		\
-	ephy-embed-factory.h		\
 	ephy-embed-persist.h		\
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
@@ -71,18 +70,6 @@ libephyembed_la_CPPFLAGS = \
 
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
-	$(DEPENDENCIES_CFLAGS) 	\
-	$(AM_CFLAGS)
-
-libephyembedfactory_la_SOURCES =	\
-	ephy-embed-factory.c		\
-	ephy-embed-factory.h
-
-libephyembedfactory_la_CPPFLAGS = \
-	$(AM_CPPFLAGS)
-
-libephyembedfactory_la_CFLAGS = \
-	$(GECKO_CFLAGS) \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
 

@@ -55,7 +55,6 @@
 #include "ephy-action-helper.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-embed-persist.h"
-#include "ephy-embed-factory.h"
 #include "ephy-location-entry.h"
 #include "ephy-web-view.h"
 
@@ -2292,7 +2291,7 @@ save_property_url (EphyEmbed *embed,
 	if (!ephy_embed_utils_address_has_web_scheme (location)) return FALSE;
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_flags (persist, 0);

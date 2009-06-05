@@ -28,7 +28,6 @@
 #include "downloader-view.h"
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
-#include "ephy-embed-factory.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-encodings.h"
@@ -228,7 +227,7 @@ impl_get_embed_single (EphyEmbedShell *shell)
 	if (priv->embed_single == NULL)
 	{
 		priv->embed_single = EPHY_EMBED_SINGLE
-			(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_SINGLE));
+                  (g_object_new (EPHY_TYPE_EMBED_SINGLE, NULL));
 		g_assert (priv->embed_single != NULL);
 
 		if (!ephy_embed_single_initialize (priv->embed_single))

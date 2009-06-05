@@ -56,7 +56,6 @@
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
-#include "ephy-embed-factory.h"
 #include "ephy-web-view.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
@@ -483,7 +482,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	if (active_is_blank == FALSE)
 	{
-		embed = EPHY_EMBED (ephy_embed_factory_new_object (EPHY_TYPE_EMBED));
+		embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, NULL));
 		g_assert (embed != NULL);
 		gtk_widget_show (GTK_WIDGET (embed));
 		

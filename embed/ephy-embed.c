@@ -32,7 +32,6 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
-#include "ephy-embed-factory.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-persist.h"
