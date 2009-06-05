@@ -80,28 +80,28 @@ ephy_embed_utils_link_message_parse (char *message)
 
 /**
  * ephy_embed_utils_get_title_composite:
- * @embed: an #EphyEmbed
+ * @view: an #EphyView
  *
  * Returns the title of the web page loaded in @embed.
  * 
  * This differs from #ephy_embed_utils_get_title in that this function
  * will return a special title while the page is still loading.
  *
- * Return value: @embed's web page's title. Will never be %NULL.
+ * Return value: @view's web page's title. Will never be %NULL.
  **/
 const char *
-ephy_embed_utils_get_title_composite (EphyEmbed *embed)
+ephy_embed_utils_get_title_composite (EphyWebView *view)
 {
 	const char *title = "";
 	const char *loading_title;
 	gboolean is_loading, is_blank;
 
-	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+	g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-	is_loading = ephy_embed_get_load_status (embed);
-	is_blank = ephy_embed_get_is_blank (embed);
-	loading_title = ephy_embed_get_loading_title (embed);
-	title = ephy_embed_get_title (embed);
+	is_loading = ephy_web_view_get_load_status (view);
+	is_blank = ephy_web_view_get_is_blank (view);
+	loading_title = ephy_web_view_get_loading_title (view);
+	title = ephy_web_view_get_title (view);
 
 	if (is_blank)
 	{

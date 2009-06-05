@@ -93,7 +93,7 @@ window_cmd_file_print_preview (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_embed_set_print_preview_mode (embed, TRUE);
+	ephy_web_view_set_print_preview_mode (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), TRUE);
 	_ephy_window_set_print_preview (window, TRUE);
 }
 
@@ -124,8 +124,8 @@ window_cmd_file_send_to	(GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_embed_get_address (embed);
-	title = ephy_embed_get_title (embed);
+	location = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	title = ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 
 	subject = g_uri_escape_string (title, NULL, TRUE);
 	body = g_uri_escape_string (location, NULL, TRUE);
@@ -247,8 +247,8 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
-					ephy_embed_get_address (embed),
-					ephy_embed_get_title (embed));
+					ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)),
+					ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
 }
 
 static void
@@ -665,7 +665,7 @@ window_cmd_view_page_source (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	address = ephy_embed_get_address (embed);
+	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 	user_time = gtk_get_current_event_time ();
 
 	if (g_str_has_prefix (address, "file://"))
@@ -693,7 +693,7 @@ window_cmd_view_page_security_info (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_embed_show_page_certificate (embed);
+	ephy_web_view_show_page_certificate (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 }
 
 void
@@ -721,7 +721,7 @@ window_cmd_edit_personal_data (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
-	address = ephy_embed_get_address (embed);
+	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 	
 	host = address != NULL ? ephy_string_get_host_name (address) : NULL;
 

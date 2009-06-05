@@ -31,6 +31,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-utils.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
@@ -111,7 +112,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 static EphyEmbed *
 ephy_shell_new_window_cb (EphyEmbedSingle *single,
 			  EphyEmbed *parent_embed,
-			  EphyEmbedChrome chromemask,
+			  EphyWebViewChrome chromemask,
 			  EphyShell *shell)
 {
 	GtkWidget *parent = NULL;
@@ -125,7 +126,7 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
 	{
-		chromemask = EPHY_EMBED_CHROME_ALL;
+		chromemask = EPHY_WEB_VIEW_CHROME_ALL;
 	}
 
 	if (parent_embed != NULL)
@@ -140,7 +141,7 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 	/* what's a popup ? ATM, any window opened with menubar toggled on 
    	 * is *not* a popup 
 	 */
-	is_popup = (chromemask & EPHY_EMBED_CHROME_MENUBAR) == 0;
+	is_popup = (chromemask & EPHY_WEB_VIEW_CHROME_MENUBAR) == 0;
 
 	return ephy_shell_new_tab_full
 		(shell,
@@ -424,7 +425,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			 EphyEmbed *previous_embed,
 			 WebKitNetworkRequest *request,
 			 EphyNewTabFlags flags,
-			 EphyEmbedChrome chrome,
+			 EphyWebViewChrome chrome,
 			 gboolean is_popup,
 			 guint32 user_time)
 {
@@ -474,7 +475,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		if (embed != NULL)
 		{
-			if (ephy_embed_get_is_blank (embed))
+			if (ephy_web_view_get_is_blank (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
 			{
 				active_is_blank = TRUE;
 			}
@@ -510,8 +511,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_embed_set_typed_address (embed, "",
-                                              EPHY_EMBED_ADDRESS_EXPIRE_NEXT);
+		ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "",
+						 EPHY_WEB_VIEW_ADDRESS_EXPIRE_NEXT);
 		ephy_toolbar_activate_location (toolbar);
 		is_empty = load_homepage (embed);
 	}
@@ -575,7 +576,7 @@ ephy_shell_new_tab (EphyShell *shell,
 
 	embed = ephy_shell_new_tab_full (shell, parent_window,
 					 previous_embed, request, flags,
-					 EPHY_EMBED_CHROME_ALL, FALSE, 0);
+					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
 
 	if (request)
 		g_object_unref (request);

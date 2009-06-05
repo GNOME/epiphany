@@ -22,6 +22,8 @@
 #include "config.h"
 
 #include "ephy-embed-container.h"
+#include "ephy-embed-utils.h"
+#include "ephy-web-view.h"
 #include "ephy-lockdown.h"
 #include "ephy-extension.h"
 #include "ephy-action-helper.h"
@@ -102,10 +104,10 @@ update_location_editable (EphyWindow *window,
 		/* embed is NULL on startup */
 		if (embed != NULL)
 		{
-			address = ephy_embed_get_location (embed, TRUE);
+			address = ephy_web_view_get_location (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), TRUE);
 			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address, NULL);
-			ephy_embed_set_typed_address (embed, NULL,
-                                                      EPHY_EMBED_ADDRESS_EXPIRE_CURRENT);
+			ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL,
+							 EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT);
 			g_free (address);
 		}
 	}

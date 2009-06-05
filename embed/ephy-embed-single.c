@@ -76,7 +76,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 		      GTK_TYPE_WIDGET,
 		      2,
 		      GTK_TYPE_WIDGET,
-		      EPHY_TYPE_EMBED_CHROME);
+		      EPHY_TYPE_WEB_VIEW_CHROME);
 
 /**
  * EphyEmbedSingle::handle_content:

@@ -60,7 +60,7 @@ GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
-EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome,
+EphyWindow	 *ephy_window_new_with_chrome	  (EphyWebViewChrome chrome,
 						   gboolean is_popup);
 
 void		 _ephy_window_set_print_preview	  (EphyWindow *window,

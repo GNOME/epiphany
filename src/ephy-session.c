@@ -23,6 +23,8 @@
 
 #include "ephy-session.h"
 
+#include "ephy-embed.h"
+#include "ephy-embed-utils.h"
 #include "ephy-embed-container.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
@@ -375,11 +377,11 @@ session_delete (EphySession *session,
 }
 
 static void
-load_status_notify_cb (EphyEmbed *embed,
+load_status_notify_cb (EphyWebView *view,
 		       GParamSpec *pspec,
 		       EphySession *session)
 {
-	if (ephy_embed_get_load_status (embed) == FALSE)
+	if (ephy_web_view_get_load_status (view) == FALSE)
 		ephy_session_save (session, SESSION_CRASHED);
 }
 
@@ -389,7 +391,7 @@ notebook_page_added_cb (GtkWidget *notebook,
 			guint position,
 			EphySession *session)
 {
-	g_signal_connect (embed, "notify::load-status",
+	g_signal_connect (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "notify::load-status",
 			  G_CALLBACK (load_status_notify_cb), session);
 }
 
@@ -402,7 +404,7 @@ notebook_page_removed_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_CRASHED);
 
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (load_status_notify_cb),
+		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (load_status_notify_cb),
 		 session);
 }
 
@@ -657,7 +659,7 @@ session_command_open_uris (EphySession *session,
 						 NULL /* parent tab */,
 						 request,
 						 flags | page_flags,
-						 EPHY_EMBED_CHROME_ALL,
+						 EPHY_WEB_VIEW_CHROME_ALL,
 						 FALSE /* is popup? */,
 						 user_time);
 		g_object_unref (request);
@@ -704,7 +706,7 @@ session_command_dispatch (EphySession *session)
 							 NULL /* NetworkRequest */,
 							 EPHY_NEW_TAB_IN_NEW_WINDOW |
 							 EPHY_NEW_TAB_HOME_PAGE,
-							 EPHY_EMBED_CHROME_ALL,
+							 EPHY_WEB_VIEW_CHROME_ALL,
 							 FALSE /* is popup? */,
 							 cmd->user_time);
 			}
@@ -1028,17 +1030,17 @@ write_tab (xmlTextWriterPtr writer,
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	address = ephy_embed_get_address (embed);
+	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
 
-	title = ephy_embed_get_title (embed);
+	title = ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;
 
-	if (ephy_embed_get_load_status (embed))
+	if (ephy_web_view_get_load_status (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",

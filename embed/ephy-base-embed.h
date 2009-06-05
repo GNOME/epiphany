@@ -53,31 +53,6 @@ struct _EphyBaseEmbed {
 };
 
 GType ephy_base_embed_get_type (void) G_GNUC_CONST;
-void  ephy_base_embed_set_title (EphyBaseEmbed *embed,
-                                 const char *title);
-void  ephy_base_embed_set_loading_title (EphyBaseEmbed *embed,
-                                         const char *title,
-                                         gboolean is_address);
-void  ephy_base_embed_set_address (EphyBaseEmbed *embed,
-                                   const char *address);
-void  ephy_base_embed_location_changed (EphyBaseEmbed *embed,
-                                        const char *location);
-void  ephy_base_embed_load_icon (EphyBaseEmbed *embed);
-void  ephy_base_embed_set_icon_address (EphyBaseEmbed *embed,
-                                        const char *address);
-void  ephy_base_embed_set_link_message (EphyBaseEmbed *embed,
-                                        char *link_message);
-void  ephy_base_embed_set_security_level (EphyBaseEmbed *embed,
-                                          EphyEmbedSecurityLevel level);
-void  ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
-                                          const char *address);
-void  ephy_base_embed_update_from_net_state (EphyBaseEmbed *embed,
-                                             const char *uri,
-                                             EphyEmbedNetState state);
-void  ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent);
-void  ephy_base_embed_popups_manager_reset (EphyBaseEmbed *embed);
-void  ephy_base_embed_set_visibility (EphyBaseEmbed *embed,
-                                      gboolean visibility);
 
 G_END_DECLS
 

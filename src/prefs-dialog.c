@@ -26,6 +26,7 @@
 #include "ephy-prefs.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-session.h"
 #include "ephy-embed-prefs.h"
@@ -1016,7 +1017,7 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	set_homepage_entry (dialog, ephy_embed_get_address (embed));
+	set_homepage_entry (dialog, ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
 }
 
 static void

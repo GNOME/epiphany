@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "ephy-embed-container.h"
+#include "ephy-embed-utils.h"
 #include "ephy-toolbar.h"
 #include "ephy-link.h"
 #include "ephy-go-action.h"
@@ -173,8 +174,8 @@ sync_user_input_cb (EphyLocationAction *action,
 	address = ephy_location_action_get_address (action);
 
 	priv->updating_address = TRUE;
-	ephy_embed_set_typed_address (embed, address,
-                                      EPHY_EMBED_ADDRESS_EXPIRE_CURRENT);
+	ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), address,
+                                         EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT);
 	priv->updating_address = FALSE;
 }
 

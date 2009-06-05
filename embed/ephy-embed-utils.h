@@ -36,10 +36,13 @@
 G_BEGIN_DECLS
 
 #define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN (embed))))))
+#define EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED(embed) (EPHY_WEB_VIEW (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN (embed))))))
+#define EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW(view) (EPHY_EMBED (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (view)))))
+
 #define EPHY_WEBKIT_BACK_FORWARD_LIMIT 100
 
 char 	   * ephy_embed_utils_link_message_parse  (char *message);
-const char * ephy_embed_utils_get_title_composite (EphyEmbed *embed);
+const char * ephy_embed_utils_get_title_composite (EphyWebView *view);
 gboolean     ephy_embed_utils_address_has_web_scheme (const char *address);
 
 G_END_DECLS

@@ -176,7 +176,7 @@ sync_tab_title (EphyEmbed *embed,
 {
 	const char *title;
 
-	title = ephy_embed_utils_get_title_composite (embed);
+	title = ephy_embed_utils_get_title_composite (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 
 	g_object_set (action, "label", title, NULL);
 }

@@ -25,6 +25,7 @@
 #define EPHY_EMBED_SINGLE_H
 
 #include "ephy-embed.h"
+#include "ephy-web-view.h"
 
 G_BEGIN_DECLS
 
@@ -46,7 +47,7 @@ struct _EphyEmbedSingleIface
 
 	EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
 				     EphyEmbed *parent_embed,
-				     EphyEmbedChrome chromemask);
+				     EphyWebViewChrome chromemask);
 
 	gboolean (* handle_content) (EphyEmbedSingle *shell,
 				     char *mime_type,

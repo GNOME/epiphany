@@ -103,7 +103,7 @@ EphyEmbed      *ephy_shell_new_tab_full			(EphyShell *shell,
 							 EphyEmbed *previous_embed,
 							 WebKitNetworkRequest *request,
 							 EphyNewTabFlags flags,
-							 EphyEmbedChrome chrome,
+							 EphyWebViewChrome chrome,
 							 gboolean is_popup,
 							 guint32 user_time);
 

@@ -95,10 +95,10 @@ static void ephy_window_view_toolbar_cb         (GtkAction *action,
 						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
-static void sync_tab_load_status		(EphyEmbed  *embed,
+static void sync_tab_load_status		(EphyWebView *view,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
-static void sync_tab_security			(EphyEmbed  *embed,
+static void sync_tab_security			(EphyWebView  *view,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 static void sync_tab_zoom			(WebKitWebView *web_view,
@@ -441,7 +441,7 @@ struct _EphyWindowPrivate
 	guint num_tabs;
 	guint tab_message_cid;
 	guint help_message_cid;
-	EphyEmbedChrome chrome;
+	EphyWebViewChrome chrome;
 	guint idle_resize_handler;
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
@@ -576,9 +576,8 @@ impl_remove_child (EphyEmbedContainer *container,
 	window = EPHY_WINDOW (container);
 	priv = window->priv;
 
-	modified = ephy_embed_has_modified_forms (child);
-	if (ephy_embed_has_modified_forms (child)
-	    && confirm_close_with_modified_forms (window) == FALSE)
+	modified = ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (child));
+	if (modified && confirm_close_with_modified_forms (window) == FALSE)
 	{
 		/* don't close the tab */
 		return;
@@ -609,7 +608,7 @@ impl_get_is_popup (EphyEmbedContainer *container)
 	return EPHY_WINDOW (container)->priv->is_popup;
 }
 
-static EphyEmbedChrome
+static EphyWebViewChrome
 impl_get_chrome (EphyEmbedContainer *container)
 {
 	return EPHY_WINDOW (container)->priv->chrome;
@@ -740,7 +739,7 @@ exit_fullscreen_clicked_cb (EphyWindow *window)
 static gboolean
 get_toolbar_visibility (EphyWindow *window)
 {
-	return ((window->priv->chrome & EPHY_EMBED_CHROME_TOOLBAR) != 0) &&
+	return ((window->priv->chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0) &&
 	       !window->priv->ppv_mode;
 }			
 
@@ -752,7 +751,7 @@ get_chromes_visibility (EphyWindow *window,
 			gboolean *show_tabsbar)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyEmbedChrome flags = priv->chrome;
+	EphyWebViewChrome flags = priv->chrome;
 
 	if (window->priv->ppv_mode)
 	{
@@ -763,15 +762,15 @@ get_chromes_visibility (EphyWindow *window,
 	}
 	else if (window->priv->fullscreen_mode)
 	{
-		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
+		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_menubar = *show_statusbar = FALSE;
 		*show_tabsbar = !priv->is_popup;
 	}
 	else
 	{
-		*show_menubar = (flags & EPHY_EMBED_CHROME_MENUBAR) != 0;
-		*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
-		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
+		*show_menubar = (flags & EPHY_WEB_VIEW_CHROME_MENUBAR) != 0;
+		*show_statusbar = (flags & EPHY_WEB_VIEW_CHROME_STATUSBAR) != 0;
+		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
 }
@@ -839,8 +838,8 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	/* sync status */
 	embed = window->priv->active_embed;
-	sync_tab_load_status (embed, NULL, window);
-	sync_tab_security (embed, NULL, window);
+	sync_tab_load_status (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, window);
+	sync_tab_security (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, window);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
@@ -1069,7 +1068,7 @@ ephy_window_delete_event (GtkWidget *widget,
 		EphyEmbed *embed;
 
 		embed = window->priv->active_embed;
-		ephy_embed_set_print_preview_mode (embed, FALSE);
+		ephy_web_view_set_print_preview_mode (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), FALSE);
 
 		_ephy_window_set_print_preview (window, FALSE);
 
@@ -1083,7 +1082,7 @@ ephy_window_delete_event (GtkWidget *widget,
 
 		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
-		if (ephy_embed_has_modified_forms (embed))
+		if (ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
 		{
 			modified = TRUE;
 			modified_embed = embed;
@@ -1533,7 +1532,7 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-sync_tab_address (EphyEmbed *embed,
+sync_tab_address (EphyWebView *view,
 	          GParamSpec *pspec,
 		  EphyWindow *window)
 {
@@ -1542,31 +1541,31 @@ sync_tab_address (EphyEmbed *embed,
 	if (priv->closing) return;
 
 	ephy_toolbar_set_location (priv->toolbar,
-				   ephy_embed_get_address (embed),
-				   ephy_embed_get_typed_address (embed));
+				   ephy_web_view_get_address (view),
+				   ephy_web_view_get_typed_address (view));
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
 static void
-sync_tab_document_type (EphyEmbed *embed,
+sync_tab_document_type (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group = priv->action_group;
 	GtkAction *action;
-	EphyEmbedDocumentType type;
+	EphyWebViewDocumentType type;
 	gboolean can_find, disable, is_image;
 
 	if (priv->closing) return;
 
 	/* update zoom actions */
-	sync_tab_zoom (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), NULL, window);
+	sync_tab_zoom (WEBKIT_WEB_VIEW (view), NULL, window);
 	
-	type = ephy_embed_get_document_type (embed);
-	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
-	is_image = type == EPHY_EMBED_DOCUMENT_IMAGE;
-	disable = (type != EPHY_EMBED_DOCUMENT_HTML);
+	type = ephy_web_view_get_document_type (view);
+	can_find = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
+	is_image = type == EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+	disable = (type != EPHY_WEB_VIEW_DOCUMENT_HTML);
 
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
@@ -1586,7 +1585,7 @@ sync_tab_document_type (EphyEmbed *embed,
 }
 
 static void
-sync_tab_icon (EphyEmbed *embed,
+sync_tab_icon (EphyWebView *view,
 	       GParamSpec *pspec,
 	       EphyWindow *window)
 {
@@ -1595,7 +1594,7 @@ sync_tab_icon (EphyEmbed *embed,
 
 	if (priv->closing) return;
 
-	icon = ephy_embed_get_icon (embed);
+	icon = ephy_web_view_get_icon (view);
 
 	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
@@ -1610,7 +1609,7 @@ clear_progress_cb (EphyWindow *window)
 }
 
 static void
-sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
+sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
 {
 	gdouble progress, previous_progress;
 	gboolean loading;
@@ -1623,8 +1622,8 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 		window->priv->clear_progress_timeout_id = 0;
 	}
 
-	progress = ephy_embed_get_load_percent (embed)/100.0;
-	loading = ephy_embed_get_load_status (embed);
+	progress = ephy_web_view_get_load_percent (view)/100.0;
+	loading = ephy_web_view_get_load_status (view);
 
 	/* Do not show a 'blink' progress from pages that go from 0 to 100,
 	 * for example about:blank. */
@@ -1649,14 +1648,14 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_message (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
+sync_tab_message (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkStatusbar *s = GTK_STATUSBAR (window->priv->statusbar);
 	const char *message;
 
 	if (window->priv->closing) return;
 
-	message = ephy_embed_get_status_message (embed);
+	message = ephy_web_view_get_status_message (view);
 
 	gtk_statusbar_pop (s, window->priv->tab_message_cid);
 
@@ -1667,11 +1666,11 @@ sync_tab_message (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_navigation (EphyEmbed *embed,
+sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
-	EphyEmbedNavigationFlags flags;
+	EphyWebViewNavigationFlags flags;
 	WebKitWebHistoryItem *item;
 	WebKitWebView *web_view;
 	WebKitWebBackForwardList *web_back_forward_list;
@@ -1680,17 +1679,17 @@ sync_tab_navigation (EphyEmbed *embed,
 
 	if (window->priv->closing) return;
 
-	flags = ephy_embed_get_navigation_flags (embed);
+	flags = ephy_web_view_get_navigation_flags (view);
 
-	if (flags & EPHY_EMBED_NAV_UP)
+	if (flags & EPHY_WEB_VIEW_NAV_UP)
 	{
 		up = TRUE;
 	}
-	if (flags & EPHY_EMBED_NAV_BACK)
+	if (flags & EPHY_WEB_VIEW_NAV_BACK)
 	{
 		back = TRUE;
 	}
-	if (flags & EPHY_EMBED_NAV_FORWARD)
+	if (flags & EPHY_WEB_VIEW_NAV_FORWARD)
 	{
 		forward = TRUE;
 	}
@@ -1698,7 +1697,7 @@ sync_tab_navigation (EphyEmbed *embed,
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
 
-	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	web_view = WEBKIT_WEB_VIEW (view);
 	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
 
 	item = webkit_web_back_forward_list_get_back_item (web_back_forward_list);
@@ -1721,12 +1720,12 @@ sync_tab_navigation (EphyEmbed *embed,
 }
 
 static void
-sync_tab_security (EphyEmbed *embed,
+sync_tab_security (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyEmbedSecurityLevel level;
+	EphyWebViewSecurityLevel level;
 	char *description = NULL;
 	char *state = NULL;
 	char *tooltip;
@@ -1736,34 +1735,34 @@ sync_tab_security (EphyEmbed *embed,
 
 	if (priv->closing) return;
 
-	ephy_embed_get_security_level (embed, &level, &description);
+	ephy_web_view_get_security_level (view, &level, &description);
 
 	switch (level)
 	{
-		case EPHY_EMBED_STATE_IS_UNKNOWN:
+		case EPHY_WEB_VIEW_STATE_IS_UNKNOWN:
 			state = _("Unknown");
 			break;
-		case EPHY_EMBED_STATE_IS_INSECURE:
+		case EPHY_WEB_VIEW_STATE_IS_INSECURE:
 			state = _("Insecure");
 			g_free (description);
 			description = NULL;
 			break;
-		case EPHY_EMBED_STATE_IS_BROKEN:
+		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
                         show_lock = TRUE;
                         g_free (description);
                         description = NULL;
                         break;
-		case EPHY_EMBED_STATE_IS_SECURE_LOW:
-		case EPHY_EMBED_STATE_IS_SECURE_MED:
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_MED:
 			state = _("Low");
 			/* We deliberately don't show the 'secure' icon
 			 * for low & medium secure sites; see bug #151709.
 			 */
 			stock_id = STOCK_LOCK_INSECURE;
 			break;
-		case EPHY_EMBED_STATE_IS_SECURE_HIGH:
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
 			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
 			show_lock = TRUE;
@@ -1804,14 +1803,14 @@ sync_tab_security (EphyEmbed *embed,
 }
 
 static void
-sync_tab_popup_windows (EphyEmbed *embed,
+sync_tab_popup_windows (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
 	guint num_popups = 0;
 	char *tooltip = NULL;
 
-	g_object_get (embed,
+	g_object_get (view,
 		      "hidden-popup-count", &num_popups,
 		      NULL);
 
@@ -1832,21 +1831,21 @@ sync_tab_popup_windows (EphyEmbed *embed,
 }
 
 static void
-sync_tab_popups_allowed (EphyEmbed *embed,
+sync_tab_popups_allowed (EphyWebView *view,
 			 GParamSpec *pspec,
 			 EphyWindow *window)
 {
 	GtkAction *action;
 	gboolean allow;
 
-	g_return_if_fail (EPHY_IS_EMBED (embed));
+	g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	action = gtk_action_group_get_action (window->priv->action_group,
 					      "ViewPopupWindows");
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	g_object_get (embed, "popups-allowed", &allow, NULL);
+	g_object_get (view, "popups-allowed", &allow, NULL);
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (action),
@@ -1862,7 +1861,7 @@ sync_tab_popups_allowed (EphyEmbed *embed,
 }
 
 static void
-sync_tab_load_status (EphyEmbed  *embed,
+sync_tab_load_status (EphyWebView  *view,
 		      GParamSpec *pspec,
 		      EphyWindow *window)
 {
@@ -1873,7 +1872,7 @@ sync_tab_load_status (EphyEmbed  *embed,
 
 	if (window->priv->closing) return;
 
-	loading = ephy_embed_get_load_status (embed);
+	loading = ephy_web_view_get_load_status (view);
 
 	action = gtk_action_group_get_action (action_group, "ViewStop");
 	gtk_action_set_sensitive (action, loading);
@@ -1893,7 +1892,7 @@ sync_tab_load_status (EphyEmbed  *embed,
 }
 
 static void
-sync_tab_title (EphyEmbed *embed,
+sync_tab_title (EphyWebView *view,
 		GParamSpec *pspec,
 		EphyWindow *window)
 {
@@ -1902,7 +1901,7 @@ sync_tab_title (EphyEmbed *embed,
 	if (priv->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
-			      ephy_embed_utils_get_title_composite (embed));
+			      ephy_embed_utils_get_title_composite (view));
 }
 
 static void
@@ -1910,7 +1909,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EphyEmbedDocumentType type;
+	EphyWebViewDocumentType type;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
 	float zoom;
 	EphyEmbed *embed = window->priv->active_embed;
@@ -1921,8 +1920,8 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 		      "zoom-level", &zoom,
 		      NULL);
 
-	type = ephy_embed_get_document_type (embed);
-	can_zoom = (type != EPHY_EMBED_DOCUMENT_IMAGE);
+	type = ephy_web_view_get_document_type (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
 
 	if (zoom >= ZOOM_MAXIMAL)
 	{
@@ -2237,11 +2236,14 @@ show_embed_popup (EphyWindow *window,
 }
 
 static gboolean
-tab_context_menu_cb (EphyEmbed *embed,
+tab_context_menu_cb (EphyWebView *view,
 		     EphyEmbedEvent *event,
 		     EphyWindow *window)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+	EphyEmbed *embed;
+
+	g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
+	embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
 	g_return_val_if_fail (window->priv->active_embed == embed, FALSE);
 
 	show_embed_popup (window, embed, event);
@@ -2432,7 +2434,7 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 {
 	gboolean visibility;
 
-	visibility = ephy_embed_get_visibility (embed);
+	visibility = ephy_web_view_get_visibility (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 
 	if (visibility)
 		gtk_widget_show (GTK_WIDGET (window));
@@ -2457,7 +2459,7 @@ web_view_ready_cb (WebKitWebView *web_view,
 		gboolean toolbar_visible;
 		gboolean statusbar_visible;
 		gboolean menubar_visible;
-		EphyEmbedChrome chrome_mask;
+		EphyWebViewChrome chrome_mask;
 		WebKitWebWindowFeatures *features;
 
 		toolbar_visible = statusbar_visible = menubar_visible = TRUE;
@@ -2476,13 +2478,13 @@ web_view_ready_cb (WebKitWebView *web_view,
 		gtk_window_set_default_size (GTK_WINDOW (window), width, height);
 
 		if (!toolbar_visible)
-			chrome_mask &= ~EPHY_EMBED_CHROME_TOOLBAR;
+			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
 
 		if (!statusbar_visible)
-			chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
+			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_STATUSBAR;
 
 		if (!menubar_visible)
-			chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
+			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
 
 		window->priv->chrome = chrome_mask;
 
@@ -2524,7 +2526,7 @@ create_web_view_cb (WebKitWebView *web_view,
 					 parent_window,
 					 NULL, NULL,
 					 flags,
-					 EPHY_EMBED_CHROME_ALL,
+					 EPHY_WEB_VIEW_CHROME_ALL,
 					 FALSE,
 					 0);
 
@@ -2558,7 +2560,6 @@ policy_decision_required_cb (WebKitWebView *web_view,
 	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
 	    (button == 2 /* middle button */ ||
 	     (button == 1 && state == GDK_CONTROL_MASK) /* ctrl + left button */)) {
-		const char *uri;
 		EphyEmbed *embed;
 
 		embed = ephy_embed_container_get_active_child
@@ -2570,7 +2571,7 @@ policy_decision_required_cb (WebKitWebView *web_view,
 					 request,
 					 EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 					 EPHY_NEW_TAB_OPEN_PAGE,
-					 EPHY_EMBED_CHROME_ALL, FALSE, 0);
+					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
 
 		return TRUE;
 	}
@@ -2605,7 +2606,7 @@ const char *remove_node_string =
 	"if (node) node.parentNode.removeChild(node);";
 
 static void
-ephy_window_link_message_cb (EphyEmbed *embed, GParamSpec *spec, EphyWindow *window)
+ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow *window)
 {
 	gboolean visible;
 	const char *link_message;
@@ -2613,8 +2614,8 @@ ephy_window_link_message_cb (EphyEmbed *embed, GParamSpec *spec, EphyWindow *win
 
 	g_object_get (window->priv->statusbar, "visible", &visible, NULL);
 
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-	link_message = ephy_embed_get_link_message (embed);
+	view = EPHY_WEB_VIEW (web_view);
+	link_message = ephy_web_view_get_link_message (web_view);
 
 	/* If the statusbar is visible remove the test, it might get
 	   stuck otherwise */
@@ -2648,7 +2649,7 @@ ephy_window_link_message_cb (EphyEmbed *embed, GParamSpec *spec, EphyWindow *win
 			freeme = g_strconcat (buffer, "...", NULL);
 		}
 			
-		g_utf8_strncpy (text, pango_layout_get_text (layout), item->num_chars);
+		g_utf8_strncpy ((gchar *)text, pango_layout_get_text (layout), item->num_chars);
 		bg = widget->style->bg[GTK_WIDGET_STATE(widget)];
 		fg = widget->style->fg[GTK_WIDGET_STATE(widget)];
 
@@ -2688,10 +2689,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	if (old_embed != NULL)
 	{
 		WebKitWebView *web_view;
+		EphyWebView *view;
 		guint sid;
 
 		embed = old_embed;
 		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+		view = EPHY_WEB_VIEW (web_view);
 
 		g_signal_handlers_disconnect_by_func (web_view,
 						      G_CALLBACK (sync_tab_zoom),
@@ -2721,50 +2724,50 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      G_CALLBACK (policy_decision_required_cb),
 						      NULL);
 
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_popup_windows),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_popups_allowed),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_security),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_document_type),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_load_progress),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_navigation),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_title),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_address),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_icon),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_message),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (ephy_window_visibility_cb),
 						      window);
-		g_signal_handlers_disconnect_by_func (embed,
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (ephy_window_link_message_cb),
 						      window);
 
 		g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (tab_context_menu_cb), window);
+			(view, G_CALLBACK (tab_context_menu_cb), window);
 		g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
+			(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
 
 	}
 
@@ -2773,22 +2776,25 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	if (new_embed != NULL)
 	{
 		WebKitWebView *web_view;
+		EphyWebView *view;
 
 		embed = new_embed;
+		view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed);
 
-		sync_tab_security	(embed, NULL, window);
-		sync_tab_document_type	(embed, NULL, window);
-		sync_tab_load_progress	(embed, NULL, window);
-		sync_tab_load_status	(embed, NULL, window);
-		sync_tab_navigation	(embed, NULL, window);
-		sync_tab_title		(embed, NULL, window);
-		sync_tab_address	(embed, NULL, window);
-		sync_tab_icon		(embed, NULL, window);
-		sync_tab_message	(embed, NULL, window);
-		sync_tab_popup_windows	(embed, NULL, window);
-		sync_tab_popups_allowed	(embed, NULL, window);
+		sync_tab_security	(view, NULL, window);
+		sync_tab_document_type	(view, NULL, window);
+		sync_tab_load_progress	(view, NULL, window);
+		sync_tab_load_status	(view, NULL, window);
+		sync_tab_navigation	(view, NULL, window);
+		sync_tab_title		(view, NULL, window);
+		sync_tab_address	(view, NULL, window);
+		sync_tab_icon		(view, NULL, window);
+		sync_tab_message	(view, NULL, window);
+		sync_tab_popup_windows	(view, NULL, window);
+		sync_tab_popups_allowed	(view, NULL, window);
 
 		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+		view = EPHY_WEB_VIEW (web_view);
 
 		sync_tab_zoom		(web_view, NULL, window);
 
@@ -2814,49 +2820,49 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 G_CALLBACK (policy_decision_required_cb),
 					 window, 0);
 
-		g_signal_connect_object (embed, "notify::hidden-popup-count",
+		g_signal_connect_object (view, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::popups-allowed",
+		g_signal_connect_object (view, "notify::popups-allowed",
 					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::title",
+		g_signal_connect_object (view, "notify::embed-title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::address",
+		g_signal_connect_object (view, "notify::address",
 					 G_CALLBACK (sync_tab_address),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::icon",
+		g_signal_connect_object (view, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::status-message",
+		g_signal_connect_object (view, "notify::status-message",
 					 G_CALLBACK (sync_tab_message),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::security-level",
+		g_signal_connect_object (view, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::document-type",
+		g_signal_connect_object (view, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::load-status",
+		g_signal_connect_object (view, "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::navigation",
+		g_signal_connect_object (view, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
-		g_signal_connect_object (embed, "ge-context-menu",
+		g_signal_connect_object (view, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);
-		g_signal_connect_object (embed, "notify::load-progress",
+		g_signal_connect_object (view, "notify::load-progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
-		g_signal_connect_object (embed, "ge_dom_mouse_click",
+		g_signal_connect_object (view, "ge_dom_mouse_click",
 					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::visibility",
+		g_signal_connect_object (view, "notify::visibility",
 					 G_CALLBACK (ephy_window_visibility_cb),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::link-message",
+		g_signal_connect_object (view, "notify::link-message",
 					 G_CALLBACK (ephy_window_link_message_cb),
 					 window, 0);
 
@@ -2912,7 +2918,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_embed_get_address (embed);
+	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
 	ephy_toolbar_set_location (priv->toolbar, address, NULL);
 
 	/* don't suppress alert */
@@ -3081,10 +3087,10 @@ notebook_page_added_cb (EphyNotebook *notebook,
 				 G_CONNECT_SWAPPED);
 #endif
 
-	g_signal_connect_object (embed, "close-request",
+	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "close-request",
 				 G_CALLBACK (embed_close_request_cb),
 				 window, 0);
-	g_signal_connect_object (embed, "ge-modal-alert",
+	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "ge-modal-alert",
 				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
 
 	/* Let the extensions attach themselves to the tab */
@@ -3131,9 +3137,9 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 	}
 
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (embed_modal_alert_cb), window);
+		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (embed_close_request_cb), window);
+		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (embed_close_request_cb), window);
 }
 
 static void
@@ -3158,7 +3164,7 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 		return;
 	}
 
-	if (!ephy_embed_has_modified_forms (embed) ||
+	if (!ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) ||
 	    confirm_close_with_modified_forms (window))
 	{
 		gtk_widget_destroy (GTK_WIDGET (embed));
@@ -3215,28 +3221,28 @@ setup_notebook (EphyWindow *window)
 }
 
 static void
-ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
+ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 {
-	EphyEmbedChrome chrome_mask = mask;
+	EphyWebViewChrome chrome_mask = mask;
 
-	if (mask == EPHY_EMBED_CHROME_ALL)
+	if (mask == EPHY_WEB_VIEW_CHROME_ALL)
 	{
 		window->priv->should_save_chrome = TRUE;
 	}
 
 	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
 	{
-		chrome_mask &= ~EPHY_EMBED_CHROME_TOOLBAR;
+		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
 	}
 
 	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
 	{
-		chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
+		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_STATUSBAR;
 	}
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
-		chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
+		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
 	}
 
 	window->priv->chrome = chrome_mask;
@@ -3543,7 +3549,7 @@ allow_popups_notifier (GConfClient *client,
 		embed = EPHY_EMBED (tabs->data);
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
-		g_object_notify (G_OBJECT (embed), "popups-allowed");
+		g_object_notify (G_OBJECT (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)), "popups-allowed");
 	}
 }
 
@@ -3871,7 +3877,7 @@ ephy_window_new (void)
 
 /**
  * ephy_window_new_with_chrome:
- * @chrome: an #EphyEmbedChrome
+ * @chrome: an #EphyWebViewChrome
  * @is_popup: whether the new window is a popup window
  *
  * Identical to ephy_window_new(), but allows you to specify a chrome.
@@ -3879,7 +3885,7 @@ ephy_window_new (void)
  * Return value: a new #EphyWindow
  **/
 EphyWindow *
-ephy_window_new_with_chrome (EphyEmbedChrome chrome,
+ephy_window_new_with_chrome (EphyWebViewChrome chrome,
 			     gboolean is_popup)
 {
 	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW,
@@ -4115,21 +4121,21 @@ ephy_window_set_zoom (EphyWindow *window,
 static void
 sync_prefs_with_chrome (EphyWindow *window)
 {
-	EphyEmbedChrome flags = window->priv->chrome;
+	EphyWebViewChrome flags = window->priv->chrome;
 
 	if (window->priv->should_save_chrome)
 	{
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
-				       flags & EPHY_EMBED_CHROME_TOOLBAR);
+				       flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
-				       flags & EPHY_EMBED_CHROME_STATUSBAR);
+				       flags & EPHY_WEB_VIEW_CHROME_STATUSBAR);
 	}
 }
 
 static void
 sync_chrome_with_view_toggle (GtkAction *action,
 			      EphyWindow *window,
-			      EphyEmbedChrome chrome_flag,
+			      EphyWebViewChrome chrome_flag,
 			      gboolean invert)
 {
 	gboolean active;
@@ -4148,7 +4154,7 @@ ephy_window_view_statusbar_cb (GtkAction *action,
 			       EphyWindow *window)
 {
 	sync_chrome_with_view_toggle (action, window,
-				      EPHY_EMBED_CHROME_STATUSBAR, FALSE);
+				      EPHY_WEB_VIEW_CHROME_STATUSBAR, FALSE);
 }
 
 static void
@@ -4156,7 +4162,7 @@ ephy_window_view_toolbar_cb (GtkAction *action,
 			     EphyWindow *window)
 {
 	sync_chrome_with_view_toggle (action, window,
-				      EPHY_EMBED_CHROME_TOOLBAR, TRUE);
+				      EPHY_WEB_VIEW_CHROME_TOOLBAR, TRUE);
 }
 
 static void
@@ -4180,7 +4186,7 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 		allow = FALSE;
 	}
 
-	g_object_set (G_OBJECT (embed), "popups-allowed", allow, NULL);
+	g_object_set (G_OBJECT (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)), "popups-allowed", allow, NULL);
 }
 
 /**

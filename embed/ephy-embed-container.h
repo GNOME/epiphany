@@ -25,6 +25,7 @@
 #define EPHY_EMBED_CONTAINER_H
 
 #include "ephy-embed.h"
+#include "ephy-web-view.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -62,7 +63,7 @@ struct _EphyEmbedContainerIface
 
   gboolean (* get_is_popup) (EphyEmbedContainer *container);
 
-  EphyEmbedChrome (* get_chrome) (EphyEmbedContainer *container);
+  EphyWebViewChrome (* get_chrome) (EphyEmbedContainer *container);
 };
 
 GType ephy_embed_container_get_type (void);
@@ -84,7 +85,7 @@ GList *ephy_embed_container_get_children (EphyEmbedContainer *container);
 
 gboolean ephy_embed_container_get_is_popup (EphyEmbedContainer *container);
 
-EphyEmbedChrome ephy_embed_container_get_chrome (EphyEmbedContainer *container);
+EphyWebViewChrome ephy_embed_container_get_chrome (EphyEmbedContainer *container);
 
 G_END_DECLS
 

@@ -535,6 +535,7 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-history.h \
 	$(top_srcdir)/embed/ephy-password-manager.h \
 	$(top_srcdir)/embed/ephy-permission-manager.h \
+	$(top_srcdir)/embed/ephy-web-view.h \
 	$(top_srcdir)/lib/ephy-dialog.h \
 	$(top_srcdir)/lib/ephy-node-db.h \
 	$(top_srcdir)/lib/ephy-node.h \

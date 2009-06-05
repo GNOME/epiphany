@@ -29,6 +29,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-dnd.h"
 #include "ephy-embed.h"
+#include "ephy-embed-utils.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
 #include "ephy-spinner.h"
@@ -500,7 +501,7 @@ ephy_notebook_finalize (GObject *object)
 }
 
 static void
-sync_load_status (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *proxy)
+sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *spinner, *icon;
 
@@ -508,7 +509,7 @@ sync_load_status (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *proxy)
 	icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 	g_return_if_fail (spinner != NULL && icon != NULL);
 
-	if (ephy_embed_get_load_status (embed))
+	if (ephy_web_view_get_load_status (view))
 	{
 		gtk_widget_hide (icon);
 		gtk_widget_show (spinner);
@@ -523,19 +524,19 @@ sync_load_status (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *proxy)
 }
 
 static void
-sync_icon (EphyEmbed *embed,
+sync_icon (EphyWebView *view,
 	   GParamSpec *pspec,
 	   GtkImage *icon)
 {
-	gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (embed));
+	gtk_image_set_from_pixbuf (icon, ephy_web_view_get_icon (view));
 }
 
 static void
-sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
+sync_label (EphyWebView *view, GParamSpec *pspec, GtkWidget *label)
 {
 	const char *title;
 
-	title = ephy_embed_get_title (embed);
+	title = ephy_web_view_get_title (view);
 
 	gtk_label_set_text (GTK_LABEL (label), title);
 
@@ -586,6 +587,7 @@ static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
 	GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon;
+	EphyWebView *view;
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
@@ -649,15 +651,16 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
 
 	/* Hook the label up to the tab properties */
-	sync_icon (embed, NULL, GTK_IMAGE (icon));
-	sync_label (embed, NULL, label);
-	sync_load_status (embed, NULL, hbox);
+	view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed);
+	sync_icon (view, NULL, GTK_IMAGE (icon));
+	sync_label (view, NULL, label);
+	sync_load_status (view, NULL, hbox);
 
-	g_signal_connect_object (embed, "notify::icon",
+	g_signal_connect_object (view, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
-	g_signal_connect_object (embed, "notify::title",
+	g_signal_connect_object (view, "notify::title",
 				 G_CALLBACK (sync_label), label, 0);
-	g_signal_connect_object (embed, "notify::load-status",
+	g_signal_connect_object (view, "notify::load-status",
 				 G_CALLBACK (sync_load_status), hbox, 0);
 
 	return hbox;
@@ -786,6 +789,7 @@ ephy_notebook_remove (GtkContainer *container,
 	EphyNotebookPrivate *priv = notebook->priv;
 	GtkWidget *tab_label, *tab_label_label, *tab_label_icon;
 	int position, curr;
+	EphyWebView *view;
 
 	g_assert (EPHY_IS_EMBED (tab_widget));
 
@@ -805,12 +809,14 @@ ephy_notebook_remove (GtkContainer *container,
 	tab_label_icon = g_object_get_data (G_OBJECT (tab_label), "icon");
 	tab_label_label = g_object_get_data (G_OBJECT (tab_label), "label");
 
+	view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (tab_widget);
+
 	g_signal_handlers_disconnect_by_func
-		(tab_widget, G_CALLBACK (sync_icon), tab_label_icon);
+		(view, G_CALLBACK (sync_icon), tab_label_icon);
 	g_signal_handlers_disconnect_by_func
-		(tab_widget, G_CALLBACK (sync_label), tab_label_label);
+		(view, G_CALLBACK (sync_label), tab_label_label);
 	g_signal_handlers_disconnect_by_func
-	  (tab_widget, G_CALLBACK (sync_load_status), tab_label);
+	  (view, G_CALLBACK (sync_load_status), tab_label);
 
 	GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
