@@ -224,7 +224,6 @@ epiphany_LDFLAGS = -dlopen self
 epiphany_LDADD = \
 	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembedfactory.la \
 	$(top_builddir)/embed/webkit/libephywebkitembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
@@ -359,7 +358,6 @@ if ENABLE_PYTHON
 BINDING_HEADERS_SRCDIR_IN = \
 	embed/ephy-command-manager.h			\
 	embed/ephy-embed-event.h			\
-	embed/ephy-embed-factory.h			\
 	embed/ephy-embed.h				\
 	embed/ephy-embed-persist.h			\
 	embed/ephy-embed-shell.h			\
@@ -526,7 +524,6 @@ if ENABLE_INTROSPECTION
 EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-command-manager.h \
 	$(top_srcdir)/embed/ephy-embed-event.h \
-	$(top_srcdir)/embed/ephy-embed-factory.h \
 	$(top_srcdir)/embed/ephy-embed.h \
 	$(top_srcdir)/embed/ephy-embed-persist.h \
 	$(top_srcdir)/embed/ephy-embed-shell.h \
