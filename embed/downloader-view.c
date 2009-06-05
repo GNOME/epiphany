@@ -32,7 +32,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
+#include <gdk/gdkx.h>
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
