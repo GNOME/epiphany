@@ -378,7 +378,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   jar = soup_cookie_jar_sqlite_new (filename, FALSE);
   g_free (filename);
 
-  soup_session_add_feature (session, SOUP_SESSION_FEATURE(jar));
+  soup_session_add_feature (session, SOUP_SESSION_FEATURE (jar));
   g_object_unref (jar);
 
   /* Use GNOME proxy settings through libproxy */
