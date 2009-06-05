@@ -1,5 +1,3 @@
-SUBDIRS = webkit
-
 NULL =
 
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
@@ -81,7 +79,6 @@ libephyembedfactory_la_SOURCES =	\
 	ephy-embed-factory.h
 
 libephyembedfactory_la_CPPFLAGS = \
-	-I$(top_srcdir)/embed/webkit	\
 	$(AM_CPPFLAGS)
 
 libephyembedfactory_la_CFLAGS = \
