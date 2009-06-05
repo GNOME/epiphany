@@ -57,7 +57,6 @@ IGNORE_HFILES = \
 	ephy-history.h \
 	find-dialog.h \
 	print-dialog.h \
-	webkit-embed-persist.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
 	eggmarshalers.h \
@@ -122,7 +121,6 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
-		-I$(top_srcdir)/embed/webkit \
 		$(DEPENDENCIES_CFLAGS) \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
@@ -130,7 +128,6 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/webkit/libephywebkitembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
