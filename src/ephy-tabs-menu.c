@@ -170,13 +170,13 @@ tab_action_activate_cb (GtkToggleAction *action,
 }
 
 static void
-sync_tab_title (EphyEmbed *embed,
+sync_tab_title (EphyWebView *view,
 		GParamSpec *pspec,
 		GtkAction *action)
 {
 	const char *title;
 
-	title = ephy_embed_utils_get_title_composite (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	title = ephy_embed_utils_get_title_composite (view);
 
 	g_object_set (action, "label", title, NULL);
 }
@@ -203,7 +203,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	sync_tab_title (embed, NULL, action);
 	/* make sure the action is alive when handling the signal, see bug #169833 */
-	g_signal_connect_object (embed, "notify::title",
+	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "notify::embed-title",
 				 G_CALLBACK (sync_tab_title), action, 0);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
@@ -245,7 +245,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
         free_tab_id (action);
 
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (sync_tab_title), action);
+		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (sync_tab_title), action);
 
 	g_signal_handlers_disconnect_by_func
 		(action, G_CALLBACK (tab_action_activate_cb), menu);
