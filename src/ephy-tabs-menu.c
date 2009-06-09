@@ -201,7 +201,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 			       "tooltip", _("Switch to this tab"),
 			       NULL);
 
-	sync_tab_title (embed, NULL, action);
+	sync_tab_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, action);
 	/* make sure the action is alive when handling the signal, see bug #169833 */
 	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "notify::embed-title",
 				 G_CALLBACK (sync_tab_title), action, 0);
