@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&amp;component=general\n"
-"POT-Creation-Date: 2008-12-12 00:14+0000\n"
-"PO-Revision-Date: 2009-05-12 08:57+0300\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-06-08 11:19+0000\n"
+"PO-Revision-Date: 2009-06-09 17:56+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -206,6 +206,13 @@ msgid "Enable smooth scrolling"
 msgstr "Sujuv kerimine lubatud"
 
 msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+
+msgid "Force new windows to be opened in tabs"
+msgstr ""
+
+msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
 msgstr ""
@@ -330,31 +337,6 @@ msgstr ""
 
 msgid "The downloads folder"
 msgstr "Allalaadimiste kataloog"
-
-msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr ""
-"Kooditabeli automaattuvastaja. Tühi string tähendab, et automaattuvastus on "
-"välja lülitatud."
-
-msgid ""
-"The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-"\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-"\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-"\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-"\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-"encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-"\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
-"\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
-"and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr ""
-"Kodeeringu automaattuvastus. Kehtivad kirjed on \"\" (automaattuvastus "
-"väljas), \"cjk_parallel_state_machine\" (ida aasia kodeeringud), "
-"\"ja_parallel_state_machine\" (jaapani kodeeringud), "
-"\"ko_parallel_state_machine\" (korea kodeeringud), \"ruprob\" (vene "
-"kodeeringud), \"ukprob\" (ukraina kodeeringud), \"zh_parallel_state_machine"
-"\" (hiina kodeeringud), \"zhcn_parallel_state_machine\" (hiina lihtsustatud "
-"kodeeringud), \"zhtw_parallel_state_machine\" (hiina traditsioonilised "
-"kodeeringud) ja \"universal_charset_detector\" (kõik kodeeringud)."
 
 msgid "The page information shown in the history view"
 msgstr "Ajaloovaates kuvatavad lehe andmed"
@@ -588,9 +570,6 @@ msgstr "Keele lisamine"
 msgid "Allow popup _windows"
 msgstr "Hü_pikaknad on lubatud"
 
-msgid "Au_todetect:"
-msgstr "Au_tomaattuvastus:"
-
 msgid "Choose a l_anguage:"
 msgstr "Vali _keel:"
 
@@ -727,6 +706,10 @@ msgstr "_Paus"
 msgid "_Resume"
 msgstr "_Jätka"
 
+#. impossible time or broken locale settings
+msgid "Unknown"
+msgstr "Tundmatu"
+
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Fail „%s“ on alla laaditud."
@@ -743,10 +726,6 @@ msgstr ""
 "%s\n"
 "%s %s-st"
 
-#. impossible time or broken locale settings
-msgid "Unknown"
-msgstr "Tundmatu"
-
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -760,15 +739,17 @@ msgstr "Fail „%s” lisati allalaaditavate failide järjekorda."
 msgid "Download started"
 msgstr "Allalaadimine käivitatud"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "download status|Unknown"
-msgstr "Teadmata"
+msgctxt "download status"
+msgid "Unknown"
+msgstr "Tundmatu"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "download status|Failed"
-msgstr "Nurjunud"
+msgctxt "download status"
+msgid "Failed"
+msgstr "Tõrge"
+
+msgctxt "download status"
+msgid "Cancelled"
+msgstr "Tühistatud"
 
 msgid "File"
 msgstr "Fail"
@@ -779,31 +760,56 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Aega jäänud"
 
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-msgid "Blank page"
-msgstr "Tühi leht"
+msgid "Save"
+msgstr "Salvesta"
 
+msgctxt "file type"
+msgid "Unknown"
+msgstr "Tundmatu"
+
+msgid "Download this potentially unsafe file?"
+msgstr "Kas laadide see potentsiaalselt ohtlik fail alla?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
 #, c-format
-msgid "Redirecting to “%s”…"
-msgstr "Ümbersuunamine aadressile „%s“…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
 
+msgid "Open this file?"
+msgstr "Kas avada see fail?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
 #, c-format
-msgid "Transferring data from “%s”…"
-msgstr "Andmete ülekandmine aadressilt „%s“…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
 
+msgid "Download this file?"
+msgstr "Kas laadida see fail alla?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
 #, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "Volituste ootamine aadressilt „%s“…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
 
-#. translators: %s here is the address of the web page
-#, c-format
-msgid "Loading “%s”…"
-msgstr "Aadressi „%s“ laadimine…"
+msgid "_Save As..."
+msgstr "Salvesta _kui..."
 
-msgid "Loading…"
-msgstr "Laadimine…"
+msgid "Web Inspector"
+msgstr "Veebiinspektor"
 
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphanyt pole võimalik praegu kasutada. Tõrge Mozilla lähtestamisel."
@@ -811,6 +817,12 @@ msgstr "Epiphanyt pole võimalik praegu kasutada. Tõrge Mozilla lähtestamisel.
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-posti saatmine aadressile „%s“"
+
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+msgid "Blank page"
+msgstr "Tühi leht"
 
 msgid "Arabic (_IBM-864)"
 msgstr "Araabia (_IBM-864)"
@@ -1049,56 +1061,6 @@ msgstr "Unikood (UTF-_32 BE)"
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unikood (UTF-3_2 LE)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "autodetectors|Off"
-msgstr "välja lülitatud"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Chinese"
-msgstr "Hiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "Lihtsustatud Hiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "Traditsiooniline Hiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|East Asian"
-msgstr "Ida-Aasia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Japanese"
-msgstr "Jaapani"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Korean"
-msgstr "Korea"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Russian"
-msgstr "Vene"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Universal"
-msgstr "Universaalne"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "Ukraina"
-
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
@@ -1116,12 +1078,81 @@ msgid "Local files"
 msgstr "Kohalikud failid"
 
 #, c-format
+msgid "Redirecting to “%s”…"
+msgstr "Ümbersuunamine aadressile „%s“…"
+
+#, c-format
+msgid "Transferring data from “%s”…"
+msgstr "Andmete ülekandmine aadressilt „%s“…"
+
+#, c-format
+msgid "Waiting for authorization from “%s”…"
+msgstr "Volituste ootamine aadressilt „%s“…"
+
+#. translators: %s here is the address of the web page
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Aadressi „%s“ laadimine…"
+
+msgid "Loading…"
+msgstr "Laadimine…"
+
+#, c-format
 msgid ""
 "GConf error:\n"
 "  %s"
 msgstr ""
 "GConfi viga:\n"
 "  %s"
+
+#, c-format
+msgid "File is not a valid .desktop file"
+msgstr "Fail pole korrektne .desktop fail"
+
+#, c-format
+msgid "Unrecognized desktop file Version '%s'"
+msgstr ""
+
+#, c-format
+msgid "Starting %s"
+msgstr "Käivitamine: %s"
+
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr ""
+
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr "Tundmatu käivitusvalik: %d"
+
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr ""
+
+#, c-format
+msgid "Not a launchable item"
+msgstr "Pole käivitatav kirje"
+
+msgid "Disable connection to session manager"
+msgstr "Seansihalduriga ühendumise keelamine"
+
+msgid "Specify file containing saved configuration"
+msgstr "Salvestatud seadistusi sisaldava faili määramine"
+
+msgid "FILE"
+msgstr "FAIL"
+
+msgid "Specify session management ID"
+msgstr "Seansihalduse ID määramine"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Session management options:"
+msgstr "Seansihalduse valikud:"
+
+msgid "Show session management options"
+msgstr "Seansihalduse valikute näitamine"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -1206,160 +1237,6 @@ msgstr "Faili pole võimalik üle kirjutada"
 msgid "Could not display help: %s"
 msgstr "Abiteavet pole võimalik kuvada: %s"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Arabic"
-msgstr "Araabia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Baltic"
-msgstr "Balti"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Central European"
-msgstr "Kesk-Euroopa"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Cyrillic"
-msgstr "Kirillitsa"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Devanagari"
-msgstr "Devanagari"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Greek"
-msgstr "Kreeka"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Hebrew"
-msgstr "Heebrea"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Japanese"
-msgstr "Jaapani"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Korean"
-msgstr "Korea"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Simplified Chinese"
-msgstr "Lihtsustatud Hiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Tamil"
-msgstr "Tamili"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Thai"
-msgstr "Tai"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Traditional Chinese"
-msgstr "Traditsiooniline Hiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "Traditsiooniline Hiina (Hong Kong)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Turkish"
-msgstr "Türgi"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Armenian"
-msgstr "Armeenia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Bengali"
-msgstr "Bengali"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Unified Canadian Syllabics"
-msgstr "Kanada unifitseeritud silpkiri"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Ethiopic"
-msgstr "Etioopia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Georgian"
-msgstr "Gruusia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Gujarati"
-msgstr "Gujarati"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Gurmukhi"
-msgstr "Gurmukhi"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Khmer"
-msgstr "Khmeeri"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Malayalam"
-msgstr "Malayalami"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Western"
-msgstr "Lääne"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "select fonts for|Other Scripts"
-msgstr "Muud kirjaviisid"
-
-msgid "_Username:"
-msgstr "_Kasutajanimi:"
-
-msgid "_Domain:"
-msgstr "_Domeen:"
-
-msgid "_New password:"
-msgstr "_Uus parool:"
-
-msgid "Con_firm password:"
-msgstr "Parooli _kontroll:"
-
-msgid "Password quality:"
-msgstr "Parooli kvaliteet:"
-
-msgid "Do not remember this password"
-msgstr "Ära salvesta seda parooli"
-
-msgid "_Remember password for this session"
-msgstr "Jäta _parool selle seansi jaoks meelde"
-
-msgid "Save password in _keyring"
-msgstr "Sal_vesta parool võtmerõngas"
-
 msgid "Popup Windows"
 msgstr "Hüpikaknad "
 
@@ -1435,6 +1312,9 @@ msgstr "400%"
 
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sellele lehele viida loomiseks lohista seda ikooni"
+
+msgid "Clear"
+msgstr "Puhasta"
 
 #, c-format
 msgid "%s:"
@@ -1526,34 +1406,26 @@ msgstr "_Uuenda"
 msgid "Update Bookmark?"
 msgstr "Uuendada järjehoidjat?"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains all bookmarks
-msgid "bookmarks|All"
+msgctxt "bookmarks"
+msgid "All"
 msgstr "Kõik"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the most used bookmarks
-msgid "bookmarks|Most Visited"
+msgctxt "bookmarks"
+msgid "Most Visited"
 msgstr "Enimkülastatud"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-msgid "bookmarks|Not Categorized"
+msgctxt "bookmarks"
+msgid "Not Categorized"
 msgstr "Liigitamata"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-msgid "bookmarks|Nearby Sites"
+msgctxt "bookmarks"
+msgid "Nearby Sites"
 msgstr "Lähedalasuvad saidid"
 
 msgid "Untitled"
@@ -1787,9 +1659,6 @@ msgstr "Kustkohast järjehoidjaid imporditakse:"
 msgid "_Copy Address"
 msgstr "K_opeeri lehe aadress"
 
-msgid "Clear"
-msgstr "Puhasta"
-
 msgid "_Search:"
 msgstr "_Otsi:"
 
@@ -1968,9 +1837,6 @@ msgstr "Järjehoidjaredaktori avamine"
 msgid "Import bookmarks from the given file"
 msgstr "Järjehoidjate importimine määratud failist"
 
-msgid "FILE"
-msgstr "FAIL"
-
 msgid "Load the given session file"
 msgstr "Valitud seansifaili laadimine"
 
@@ -2008,6 +1874,12 @@ msgstr "GNOME Veebisirvija valikud"
 
 msgid "Close tab"
 msgstr "Sulge kaart"
+
+msgid "Failed to copy cookies file from Mozilla."
+msgstr ""
+
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr ""
 
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
@@ -2141,21 +2013,24 @@ msgstr "_Uus aken"
 msgid "Open a new window"
 msgstr "Uue akna avamine"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-msgid "toolbar style|Default"
+msgctxt "toolbar style"
+msgid "Default"
 msgstr "Vaikimisi"
 
 #. separator row
+msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Tekst ikoonide all"
 
+msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Tekst ikoonide kõrval"
 
+msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Ainult ikoonid"
 
+msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Ainult tekst"
 
@@ -2648,6 +2523,7 @@ msgstr "Kõikidele ühendusetüüpidele"
 msgid "Expires:"
 msgstr "Aegub:"
 
+#. Session cookie
 msgid "End of current session"
 msgstr "Käesoleva seansi lõpp"
 
@@ -2705,25 +2581,21 @@ msgstr "Sulge"
 msgid "Close print preview"
 msgstr "Sulge printimise eelvaade"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
+#. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
 #, c-format
-msgid "language|%s (%s)"
+msgctxt "language"
+msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
+#. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
 #, c-format
-msgid "language|User defined (%s)"
+msgctxt "language"
+msgid "User defined (%s)"
 msgstr "Kasutaja kirjeldatud (%s)"
 
 #, c-format
@@ -2778,10 +2650,10 @@ msgstr "Eelmised arendajad:"
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by %s"
+"Powered by WebKit"
 msgstr ""
 "Veebilehtede vaatamine ja andmete otsimine internetist.\n"
-"Põhineb programmil %s"
+"Põhineb programmil WebKit"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -2798,3 +2670,30 @@ msgstr ""
 
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
+
+#~ msgid "Au_todetect:"
+#~ msgstr "Au_tomaattuvastus:"
+
+#~ msgid "_Username:"
+#~ msgstr "_Kasutajanimi:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domeen:"
+
+#~ msgid "_New password:"
+#~ msgstr "_Uus parool:"
+
+#~ msgid "Con_firm password:"
+#~ msgstr "Parooli _kontroll:"
+
+#~ msgid "Password quality:"
+#~ msgstr "Parooli kvaliteet:"
+
+#~ msgid "Do not remember this password"
+#~ msgstr "Ära salvesta seda parooli"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "Jäta _parool selle seansi jaoks meelde"
+
+#~ msgid "Save password in _keyring"
+#~ msgstr "Sal_vesta parool võtmerõngas"
