@@ -520,8 +520,11 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		/* request can be NULL when trying to load about:blank */
 		if (request)
 		{
-			ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
-						    request);
+                        ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed),
+                                                         webkit_network_request_get_uri (request),
+                                                         EPHY_WEB_VIEW_ADDRESS_EXPIRE_NEXT);
+                        ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
+                                                    request);
 		}
 
 		is_empty = !request || url_is_empty (webkit_network_request_get_uri (request));
