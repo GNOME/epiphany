@@ -517,9 +517,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
-                ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed),
-                                                 webkit_network_request_get_uri (request),
-                                                 EPHY_WEB_VIEW_ADDRESS_EXPIRE_NEXT);
                 ephy_web_view_load_request (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
                                             request);
 
