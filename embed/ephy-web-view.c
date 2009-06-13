@@ -69,7 +69,6 @@ struct _EphyWebViewPrivate {
   char *title;
   int cur_requests;
   int total_requests;
-  gint8 load_percent;
   char *loading_title;
   char *status_message;
   char *link_message;
@@ -100,7 +99,6 @@ enum {
   PROP_ICON,
   PROP_ICON_ADDRESS,
   PROP_LINK_MESSAGE,
-  PROP_LOAD_PROGRESS,
   PROP_LOAD_STATUS,
   PROP_NAVIGATION,
   PROP_POPUPS_ALLOWED,
@@ -411,9 +409,6 @@ ephy_web_view_get_property (GObject *object,
     case PROP_LINK_MESSAGE:
       g_value_set_string (value, priv->link_message);
       break;
-    case PROP_LOAD_PROGRESS:
-      g_value_set_int (value, priv->load_percent);
-      break;
     case PROP_NAVIGATION:
       g_value_set_flags (value, priv->nav_flags);
       break;
@@ -458,7 +453,6 @@ ephy_web_view_set_property (GObject *object,
     case PROP_HIDDEN_POPUP_COUNT:
     case PROP_ICON:
     case PROP_LINK_MESSAGE:
-    case PROP_LOAD_PROGRESS:
     case PROP_LOAD_STATUS:
     case PROP_NAVIGATION:
     case PROP_SECURITY:
@@ -574,15 +568,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                       EPHY_WEB_VIEW_DOCUMENT_HTML,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LOAD_PROGRESS,
-                                   g_param_spec_int ("load-progress",
-                                                     "Load progress",
-                                                     "The view's load progress in percent",
-                                                     0,
-                                                     100,
-                                                     0,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (gobject_class,
                                    PROP_LOAD_STATUS,
                                    g_param_spec_boolean ("load-status",
@@ -1331,50 +1316,6 @@ update_navigation_flags (EphyWebView *view)
   }
 }
 
-static int
-build_load_percent (int requests_done, int requests_total)
-{
-  int percent = 0;
-
-  if (requests_total > 0) {
-    percent = (requests_done * 100) / requests_total;
-    percent = CLAMP (percent, 0, 100);
-  }
-
-  return percent;
-}
-
-void
-ephy_web_view_set_load_percent (EphyWebView *view, int percent)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (percent != priv->load_percent) {
-    priv->load_percent = percent;
-
-    g_object_notify (G_OBJECT (view), "load-progress");
-  }
-}
-
-static void
-build_progress_from_requests (EphyWebView *view, EphyWebViewNetState state)
-{
-  int load_percent;
-
-  if (state & EPHY_WEB_VIEW_STATE_IS_REQUEST) {
-    if (state & EPHY_WEB_VIEW_STATE_START) {
-      view->priv->total_requests++;
-    } else if (state & EPHY_WEB_VIEW_STATE_STOP) {
-      view->priv->cur_requests++;
-    }
-
-    load_percent = build_load_percent (view->priv->cur_requests,
-                                       view->priv->total_requests);
-
-    ephy_web_view_set_load_percent (view, load_percent);
-  }
-}
-
 static void
 ephy_web_view_set_load_status (EphyWebView *view, gboolean status)
 {
@@ -1408,7 +1349,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       priv->total_requests = 0;
       priv->cur_requests = 0;
 
-      ephy_web_view_set_load_percent (view, 0);
       ephy_web_view_set_load_status (view, TRUE);
 
       ensure_page_info (view, uri);
@@ -1421,7 +1361,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
 
       g_object_freeze_notify (object);
 
-      ephy_web_view_set_load_percent (view, 100);
       ephy_web_view_set_load_status (view, FALSE);
 
       g_free (priv->loading_title);
@@ -1436,8 +1375,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
 
     update_navigation_flags (view);
   }
-
-  build_progress_from_requests (view, state);
 }
 
 void
@@ -1758,20 +1695,6 @@ EphyWebViewDocumentType
 ephy_web_view_get_document_type (EphyWebView *view)
 {
   return view->priv->document_type;
-}
-
-/**
- * ephy_web_view_get_load_percent:
- * @view: an #EphyWebView
- *
- * Returns the page load percentage (displayed in the progressbar).
- *
- * Return value: a percentage from 0 to 100.
- **/
-int
-ephy_web_view_get_load_percent (EphyWebView *view)
-{
-  return view->priv->load_percent;
 }
 
 /**

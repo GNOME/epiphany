@@ -1606,7 +1606,7 @@ clear_progress_cb (EphyWindow *window)
 static void
 sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
 {
-	gdouble progress, previous_progress;
+	gdouble progress;
 	gboolean loading;
 
 	if (window->priv->closing) return;
@@ -1617,16 +1617,8 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 		window->priv->clear_progress_timeout_id = 0;
 	}
 
-	progress = ephy_web_view_get_load_percent (view)/100.0;
+	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view))/100.0;
 	loading = ephy_web_view_get_load_status (view);
-
-	/* Do not show a 'blink' progress from pages that go from 0 to 100,
-	 * for example about:blank. */
-	/* This might be refined by actually checking that the transition
-	 * from 0 to 100 indeed took almost no time at all */
-	previous_progress = gtk_entry_get_progress_fraction (GTK_ENTRY (window->priv->entry));
-	if (previous_progress == 0.0 && progress == 1.0)
-		return;
 
 	if (progress == 1.0 && loading)
 	{
@@ -2848,7 +2840,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (view, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);
-		g_signal_connect_object (view, "notify::load-progress",
+		g_signal_connect_object (view, "notify::progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
 		g_signal_connect_object (view, "ge_dom_mouse_click",

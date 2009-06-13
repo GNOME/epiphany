@@ -254,15 +254,13 @@ load_started_cb (WebKitWebView *web_view,
 
 static void
 load_progress_changed_cb (WebKitWebView *web_view,
-                          int progress,
+                          GParamSpec *spec,
                           EphyEmbed *embed)
 {
   EphyEmbed *wembed = EPHY_EMBED (embed);
 
   if (wembed->priv->load_state == EPHY_EMBED_LOAD_STARTED)
     wembed->priv->load_state = EPHY_EMBED_LOAD_LOADING;
-
-  ephy_web_view_set_load_percent (EPHY_WEB_VIEW (web_view), progress);
 }
 
 static void
@@ -767,7 +765,7 @@ ephy_embed_init (EphyEmbed *embed)
                     "signal::load-committed", G_CALLBACK (load_committed_cb), embed,
                     "signal::load-started", G_CALLBACK (load_started_cb), embed,
                     "signal::load_finished", G_CALLBACK (load_finished_cb), embed,
-                    "signal::load-progress-changed", G_CALLBACK (load_progress_changed_cb), embed,
+                    "signal::notify::progress", G_CALLBACK (load_progress_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,

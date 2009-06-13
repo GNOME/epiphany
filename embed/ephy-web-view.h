@@ -181,7 +181,6 @@ gboolean                   ephy_web_view_get_load_status         (EphyWebView   
 const char *               ephy_web_view_get_loading_title       (EphyWebView                     *view);
 GdkPixbuf *                ephy_web_view_get_icon                (EphyWebView                     *view);
 EphyWebViewDocumentType    ephy_web_view_get_document_type       (EphyWebView                     *view);
-int                        ephy_web_view_get_load_percent        (EphyWebView                     *view);
 EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags    (EphyWebView                     *view);
 const char *               ephy_web_view_get_status_message      (EphyWebView                     *view);
 const char *               ephy_web_view_get_link_message        (EphyWebView                     *view);
@@ -233,8 +232,6 @@ void                       ephy_web_view_update_from_net_state   (EphyWebView   
                                                                   EphyWebViewNetState              state);
 void                       ephy_web_view_location_changed        (EphyWebView                     *view,
                                                                   const char                      *location);
-void                       ephy_web_view_set_load_percent        (EphyWebView                     *view,
-                                                                  int                              percent);
 void                       ephy_web_view_set_loading_title       (EphyWebView                     *view,
                                                                   const char                      *title,
                                                                   gboolean                         is_address);
