@@ -55,19 +55,10 @@ static void     ephy_embed_init       (EphyEmbed *gs);
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
-typedef enum
-{
-    EPHY_EMBED_LOAD_STARTED,
-    EPHY_EMBED_LOAD_REDIRECTING,
-    EPHY_EMBED_LOAD_LOADING,
-    EPHY_EMBED_LOAD_STOPPED
-} EphyEmbedLoadState;
-
 struct EphyEmbedPrivate
 {
   WebKitWebView *web_view;
   GtkScrolledWindow *scrolled_window;
-  EphyEmbedLoadState load_state;
   EphyHistory *history;
   GtkWidget *inspector_window;
   guint is_setting_zoom : 1;
@@ -140,40 +131,6 @@ title_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-update_load_state (EphyEmbed *embed, WebKitWebView *web_view)
-{
-  EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
-  const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (web_view));
-
-  if (embed->priv->load_state == EPHY_EMBED_LOAD_STARTED)
-    {
-      estate = (EphyWebViewNetState) (estate |
-                                    EPHY_WEB_VIEW_STATE_START |
-                                    EPHY_WEB_VIEW_STATE_NEGOTIATING |
-                                    EPHY_WEB_VIEW_STATE_IS_REQUEST |
-                                    EPHY_WEB_VIEW_STATE_IS_NETWORK);
-
-      g_signal_emit_by_name (EPHY_WEB_VIEW (web_view), "new-document-now", loading_uri);
-    }
-
-  if (embed->priv->load_state == EPHY_EMBED_LOAD_LOADING)
-      estate = (EphyWebViewNetState) (estate |
-                                    EPHY_WEB_VIEW_STATE_TRANSFERRING |
-                                    EPHY_WEB_VIEW_STATE_IS_REQUEST |
-                                    EPHY_WEB_VIEW_STATE_IS_NETWORK);
-
-  if (embed->priv->load_state == EPHY_EMBED_LOAD_STOPPED)
-      estate = (EphyWebViewNetState) (estate |
-                                    EPHY_WEB_VIEW_STATE_STOP |
-                                    EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
-                                    EPHY_WEB_VIEW_STATE_IS_NETWORK);
-
-  ephy_web_view_update_from_net_state (EPHY_WEB_VIEW (web_view),
-                                       loading_uri,
-                                       (EphyWebViewNetState)estate);
-}
-
-static void
 restore_zoom_level (EphyEmbed *embed,
                     const char *address)
 {
@@ -211,67 +168,60 @@ restore_zoom_level (EphyEmbed *embed,
 }
 
 static void
-load_committed_cb (WebKitWebView *web_view,
-                   WebKitWebFrame *web_frame,
-                   EphyEmbed *embed)
+load_status_changed_cb (WebKitWebView *view,
+                        GParamSpec *spec,
+                        EphyEmbed *embed)
 {
-  const gchar* uri;
-  EphyWebViewSecurityLevel security_level;
+  WebKitLoadStatus status = webkit_web_view_get_load_status (view);
 
-  uri = webkit_web_frame_get_uri (web_frame);
-  ephy_web_view_location_changed (EPHY_WEB_VIEW (web_view),
-                                  uri);
+  if (status == WEBKIT_LOAD_COMMITTED) {
+    const gchar* uri;
+    EphyWebViewSecurityLevel security_level;
+    
+    uri = webkit_web_view_get_uri (view);
+    ephy_web_view_location_changed (EPHY_WEB_VIEW (view),
+                                    uri);
 
-  restore_zoom_level (embed, uri);
-  ephy_history_add_page (embed->priv->history,
-                         uri,
-                         FALSE,
-                         FALSE);
+    restore_zoom_level (embed, uri);
+    ephy_history_add_page (embed->priv->history,
+                           uri,
+                           FALSE,
+                           FALSE);
 
-  /*
-   * FIXME: as a temporary workaround while soup lacks the needed
-   * security API, determine security level based on the existence of
-   * a 'https' prefix for the URI
-   */
-  if (uri && g_str_has_prefix (uri, "https"))
-    security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-  else
-    security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+    /*
+     * FIXME: as a temporary workaround while soup lacks the needed
+     * security API, determine security level based on the existence of
+     * a 'https' prefix for the URI
+     */
+    if (uri && g_str_has_prefix (uri, "https"))
+      security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
+    else
+      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
-  ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
-}
+    ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
+  } else {
+    EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
+    const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (view));
 
-static void
-load_started_cb (WebKitWebView *web_view,
-                 WebKitWebFrame *web_frame,
-                 EphyEmbed *embed)
-{
-  EphyEmbed *wembed = EPHY_EMBED (embed);
-  wembed->priv->load_state = EPHY_EMBED_LOAD_STARTED;
-
-  update_load_state (wembed, web_view);
-}
-
-static void
-load_progress_changed_cb (WebKitWebView *web_view,
-                          GParamSpec *spec,
-                          EphyEmbed *embed)
-{
-  EphyEmbed *wembed = EPHY_EMBED (embed);
-
-  if (wembed->priv->load_state == EPHY_EMBED_LOAD_STARTED)
-    wembed->priv->load_state = EPHY_EMBED_LOAD_LOADING;
-}
-
-static void
-load_finished_cb (WebKitWebView *web_view,
-                  WebKitWebFrame *web_frame,
-                  EphyEmbed *embed)
-{
-  EphyEmbed *wembed = EPHY_EMBED (embed);
-
-  wembed->priv->load_state = EPHY_EMBED_LOAD_STOPPED;
-  update_load_state (wembed, web_view);
+    if (status == WEBKIT_LOAD_PROVISIONAL) {
+      estate = (EphyWebViewNetState) (estate |
+                                      EPHY_WEB_VIEW_STATE_START |
+                                      EPHY_WEB_VIEW_STATE_NEGOTIATING |
+                                      EPHY_WEB_VIEW_STATE_IS_REQUEST |
+                                      EPHY_WEB_VIEW_STATE_IS_NETWORK);
+      
+      g_signal_emit_by_name (EPHY_WEB_VIEW (view), "new-document-now", loading_uri);
+    } else if (status == WEBKIT_LOAD_FINISHED) {
+      estate = (EphyWebViewNetState) (estate |
+                                      EPHY_WEB_VIEW_STATE_STOP |
+                                      EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
+                                      EPHY_WEB_VIEW_STATE_IS_NETWORK);
+    }
+    
+    ephy_web_view_update_from_net_state (EPHY_WEB_VIEW (view),
+                                         loading_uri,
+                                         (EphyWebViewNetState)estate);
+  }
 }
 
 static void
@@ -762,10 +712,7 @@ ephy_embed_init (EphyEmbed *embed)
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
   g_object_connect (web_view,
-                    "signal::load-committed", G_CALLBACK (load_committed_cb), embed,
-                    "signal::load-started", G_CALLBACK (load_started_cb), embed,
-                    "signal::load_finished", G_CALLBACK (load_finished_cb), embed,
-                    "signal::notify::progress", G_CALLBACK (load_progress_changed_cb), embed,
+                    "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
