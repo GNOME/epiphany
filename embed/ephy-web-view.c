@@ -1079,10 +1079,10 @@ ephy_web_view_load_request (EphyWebView *web_view,
 
 /**
  * ephy_web_view_load_url:
- * @embed: an #EphyWebView
+ * @view: an #EphyWebView
  * @url: a URL
  *
- * Loads @url in @embed.
+ * Loads @url in @view.
  **/
 void
 ephy_web_view_load_url (EphyWebView *view,
@@ -1140,11 +1140,11 @@ ephy_web_view_copy_back_history (EphyWebView *source,
 }
 
 void
-ephy_web_view_set_address (EphyWebView *embed,
+ephy_web_view_set_address (EphyWebView *view,
                            const char *address)
 {
-  EphyWebViewPrivate *priv = embed->priv;
-  GObject *object = G_OBJECT (embed);
+  EphyWebViewPrivate *priv = view->priv;
+  GObject *object = G_OBJECT (view);
 
   g_free (priv->address);
   priv->address = g_strdup (address);
