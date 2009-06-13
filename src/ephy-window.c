@@ -1607,7 +1607,6 @@ static void
 sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
 {
 	gdouble progress;
-	gboolean loading;
 	const char *uri;
 
 	if (window->priv->closing) return;
@@ -1618,7 +1617,6 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 		window->priv->clear_progress_timeout_id = 0;
 	}
 
-	loading = ephy_web_view_get_load_status (view);
 	/* If we are loading about:blank do not show progress, as the
 	   blink it causes is annoying. */
 	/* FIXME: for some reason webkit_web_view_get_uri returns NULL
