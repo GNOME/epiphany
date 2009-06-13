@@ -1608,6 +1608,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 {
 	gdouble progress;
 	gboolean loading;
+	const char *uri;
 
 	if (window->priv->closing) return;
 
@@ -1617,9 +1618,18 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 		window->priv->clear_progress_timeout_id = 0;
 	}
 
-	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view))/100.0;
 	loading = ephy_web_view_get_load_status (view);
+	/* If we are loading about:blank do not show progress, as the
+	   blink it causes is annoying. */
+	/* FIXME: for some reason webkit_web_view_get_uri returns NULL
+	   for about:blank until the load is finished, so assume NULL
+	   here means we are loading about:blank. This might not be
+	   rigt :) */
+	uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+	if (loading && (!uri || strcmp (uri, "about:blank") == 0))
+		return;
 
+	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view))/100.0;
 	if (progress == 1.0 && loading)
 	{
 		window->priv->clear_progress_timeout_id =
