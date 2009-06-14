@@ -61,7 +61,6 @@ struct _EphyWebViewPrivate {
 
   /* Flags */
   guint is_blank : 1;
-  guint is_loading : 1;
   guint visibility : 1;
 
   char *address;
@@ -99,7 +98,6 @@ enum {
   PROP_ICON,
   PROP_ICON_ADDRESS,
   PROP_LINK_MESSAGE,
-  PROP_LOAD_STATUS,
   PROP_NAVIGATION,
   PROP_POPUPS_ALLOWED,
   PROP_SECURITY,
@@ -384,9 +382,6 @@ ephy_web_view_get_property (GObject *object,
     case PROP_ADDRESS:
       g_value_set_string (value, priv->address);
       break;
-    case PROP_LOAD_STATUS:
-      g_value_set_boolean (value, priv->is_loading);
-      break;
     case PROP_EMBED_TITLE:
       g_value_set_string (value, priv->title);
       break;
@@ -453,7 +448,6 @@ ephy_web_view_set_property (GObject *object,
     case PROP_HIDDEN_POPUP_COUNT:
     case PROP_ICON:
     case PROP_LINK_MESSAGE:
-    case PROP_LOAD_STATUS:
     case PROP_NAVIGATION:
     case PROP_SECURITY:
     case PROP_STATUS_MESSAGE:
@@ -568,13 +562,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                       EPHY_WEB_VIEW_DOCUMENT_HTML,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LOAD_STATUS,
-                                   g_param_spec_boolean ("load-status",
-                                                         "Load status",
-                                                         "The view's load status",
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (gobject_class,
                                    PROP_NAVIGATION,
                                    g_param_spec_flags ("navigation",
@@ -1137,7 +1124,7 @@ ephy_web_view_set_address (EphyWebView *view,
   priv->is_blank = address == NULL ||
                    strcmp (address, "about:blank") == 0;
 
-  if (priv->is_loading &&
+  if (ephy_web_view_get_load_status (view) &&
       priv->address_expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW &&
       priv->typed_address != NULL) {
     g_free (priv->typed_address);
@@ -1316,21 +1303,6 @@ update_navigation_flags (EphyWebView *view)
   }
 }
 
-static void
-ephy_web_view_set_load_status (EphyWebView *view, gboolean status)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  guint is_loading;
-
-  is_loading = status != FALSE;
-
-  if (is_loading != priv->is_loading) {
-    priv->is_loading = is_loading;
-
-    g_object_notify (G_OBJECT (view), "load-status");
-  }
-}
-
 void
 ephy_web_view_update_from_net_state (EphyWebView *view,
                                      const char *uri,
@@ -1349,8 +1321,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       priv->total_requests = 0;
       priv->cur_requests = 0;
 
-      ephy_web_view_set_load_status (view, TRUE);
-
       ensure_page_info (view, uri);
 
       g_object_notify (object, "embed-title");
@@ -1360,8 +1330,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       GObject *object = G_OBJECT (view);
 
       g_object_freeze_notify (object);
-
-      ephy_web_view_set_load_status (view, FALSE);
 
       g_free (priv->loading_title);
       priv->loading_title = NULL;
@@ -1414,7 +1382,7 @@ ephy_web_view_file_monitor_reload_cb (EphyWebView *view)
     return TRUE;
   }
 
-  if (priv->is_loading) {
+  if (ephy_web_view_get_load_status (view)) {
     /* Wait a bit to reload if we're still loading! */
     priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
 
@@ -1645,7 +1613,10 @@ ephy_web_view_can_go_up (EphyWebView *view)
 gboolean
 ephy_web_view_get_load_status (EphyWebView *view)
 {
-  return view->priv->is_loading;
+  WebKitLoadStatus status;
+
+  status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
+  return status != WEBKIT_LOAD_FINISHED;
 }
 
 const char *
@@ -1870,7 +1841,7 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   priv->typed_address = g_strdup (address);
 
   if (expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT &&
-      !priv->is_loading) {
+      !ephy_web_view_get_load_status (view)) {
     priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
   } else {
     priv->address_expire = expire;
