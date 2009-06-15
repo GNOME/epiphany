@@ -1,4 +1,24 @@
 ===============
+Epiphany 2.27.3
+===============
+
+Changes:
+
+  - Preserve back/forward history when opening new tabs. (#583459)
+  - Preserve HTTP information (eg, referrer) when opening new tabs. (#120341)
+  - Strip superfluous whitespace from URLs before loading them. (#584466)
+  - Remove Python support for extensions, the only supported language
+    other than C/C++ is now JavaScript through Seed.
+  - Pretty large refactoring of internals: we now have a new
+    EphyWebView class, subclass of WebKitWebView, which holds most of
+    our extra methods/information that used to be in
+    EphyEmbed. EphyEmbed is no longer an interface, just a wrapper
+    that contains an EphyWebView and that properly sets it up. Since
+    there aren't any more interface classes to be implemented by
+    backends the webkit/ directory is gone, and all the code is now in
+    embed/.
+
+===============
 Epiphany 2.27.2
 ===============
 
