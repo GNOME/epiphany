@@ -1630,7 +1630,8 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	if (pspec && (!uri || strcmp (uri, "about:blank") == 0))
 		return;
 
-	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view))/100.0;
+	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view));
+	g_message ("PROGRESS IS %f", progress);
 	if (progress == 1.0 && pspec)
 	{
 		window->priv->clear_progress_timeout_id =
