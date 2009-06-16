@@ -42,14 +42,14 @@ typedef struct EphyEmbed EphyEmbed;
 typedef struct EphyEmbedPrivate EphyEmbedPrivate;
 
 struct EphyEmbed {
-  GtkBin parent_instance;
+  GtkScrolledWindow parent_instance;
 
   /*< private >*/
   EphyEmbedPrivate *priv;
 };
 
 struct EphyEmbedClass {
-  GtkBinClass parent_class;
+  GtkScrolledWindowClass parent_class;
 };
 
 GType            ephy_embed_get_type (void);

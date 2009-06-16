@@ -50,15 +50,15 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed.h"
 
-static void     ephy_embed_class_init (EphyEmbedClass *klass);
-static void     ephy_embed_init       (EphyEmbed *gs);
+static void     ephy_embed_class_init  (EphyEmbedClass *klass);
+static void     ephy_embed_init        (EphyEmbed *gs);
+static void     ephy_embed_constructed (GObject *object);
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
 struct EphyEmbedPrivate
 {
   WebKitWebView *web_view;
-  GtkScrolledWindow *scrolled_window;
   EphyHistory *history;
   GtkWidget *inspector_window;
   guint is_setting_zoom : 1;
@@ -103,7 +103,7 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
   iface->can_do_command = impl_manager_can_do_command;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, GTK_TYPE_SCROLLED_WINDOW,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
                                                 ephy_command_manager_iface_init))
 
@@ -268,36 +268,6 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-ephy_embed_size_request (GtkWidget *widget,
-                         GtkRequisition *requisition)
-{
-  GtkWidget *child;
-
-  GTK_WIDGET_CLASS (ephy_embed_parent_class)->size_request (widget, requisition);
-
-  child = GTK_BIN (widget)->child;
-
-  if (child && GTK_WIDGET_VISIBLE (child)) {
-    GtkRequisition child_requisition;
-    gtk_widget_size_request (GTK_WIDGET (child), &child_requisition);
-  }
-}
-
-static void
-ephy_embed_size_allocate (GtkWidget *widget,
-                               GtkAllocation *allocation)
-{
-  GtkWidget *child;
-
-  widget->allocation = *allocation;
-
-  child = GTK_BIN (widget)->child;
-  g_return_if_fail (child != NULL);
-
-  gtk_widget_size_allocate (child, allocation);
-}
-
-static void
 ephy_embed_grab_focus (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -311,10 +281,10 @@ ephy_embed_grab_focus (GtkWidget *widget)
 static void
 ephy_embed_class_init (EphyEmbedClass *klass)
 {
+  GObjectClass *object_class = (GObjectClass *)klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
 
-  widget_class->size_request = ephy_embed_size_request;
-  widget_class->size_allocate = ephy_embed_size_allocate;
+  object_class->constructed = ephy_embed_constructed;
   widget_class->grab_focus = ephy_embed_grab_focus;
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
@@ -687,29 +657,20 @@ download_requested_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
-                                                  
+
 static void
-ephy_embed_init (EphyEmbed *embed)
+ephy_embed_constructed (GObject *object)
 {
+  EphyEmbed *embed = (EphyEmbed*)object;
   WebKitWebView *web_view;
   WebKitWebInspector *inspector;
-  GtkWidget *sw;
   GtkWidget *inspector_sw;
 
   embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
-
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (sw);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   embed->priv->web_view = web_view;
-  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (web_view));
-  gtk_widget_show (sw);
+  gtk_container_add (GTK_CONTAINER (embed), GTK_WIDGET (web_view));
   gtk_widget_show (GTK_WIDGET (web_view));
-
-  gtk_container_add (GTK_CONTAINER (embed), sw);
 
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
@@ -750,5 +711,12 @@ ephy_embed_init (EphyEmbed *embed)
   ephy_embed_prefs_add_embed (embed);
 
   embed->priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
+}
+
+static void
+ephy_embed_init (EphyEmbed *embed)
+{
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (embed),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 }
 
