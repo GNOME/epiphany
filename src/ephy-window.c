@@ -1608,6 +1608,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 {
 	gdouble progress;
 	const char *uri;
+	gboolean loading;
 
 	if (window->priv->closing) return;
 
@@ -1623,15 +1624,13 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	   for about:blank until the load is finished, so assume NULL
 	   here means we are loading about:blank. This might not be
 	   rigt :) */
-	/* When pspec is not NULL it means we are actually loading
-	   something as oppossed to re-syncing the load state with the
-	   current view */
+	loading = ephy_web_view_get_load_status (view);
 	uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
-	if (pspec && (!uri || strcmp (uri, "about:blank") == 0))
+	if (loading && (!uri || strcmp (uri, "about:blank") == 0))
 		return;
 
 	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view));
-	if (progress == 1.0 && pspec)
+	if (progress == 1.0 && loading)
 	{
 		window->priv->clear_progress_timeout_id =
 			g_timeout_add (500,
@@ -1642,7 +1641,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	/* Do not set progress in the entry if the load is already
 	   finished */
 	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry),
-					 pspec ? progress : 0.0);
+					 loading ? progress : 0.0);
 }
 
 static void
