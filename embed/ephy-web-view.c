@@ -2015,3 +2015,40 @@ ephy_web_view_get_go_up_list (EphyWebView *view)
 {
   return NULL;
 }
+
+/**
+ * ephy_embed_utils_get_title_composite:
+ * @view: an #EphyView
+ *
+ * Returns the title of the web page loaded in @view.
+ * 
+ * This differs from #ephy_web_view_get_title in that this function
+ * will return a special title while the page is still loading.
+ *
+ * Return value: @view's web page's title. Will never be %NULL.
+ **/
+const char *
+ephy_web_view_get_title_composite (EphyWebView *view)
+{
+	const char *title = "";
+	const char *loading_title;
+	gboolean is_loading, is_blank;
+
+	g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+
+	is_loading = ephy_web_view_get_load_status (view);
+	is_blank = ephy_web_view_get_is_blank (view);
+	loading_title = ephy_web_view_get_loading_title (view);
+	title = ephy_web_view_get_title (view);
+
+	if (is_blank)
+	{
+		if (is_loading)
+			title = loading_title;
+		else
+			title = _("Blank page");
+	}
+
+	return title != NULL ? title : "";
+}
+

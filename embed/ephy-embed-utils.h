@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define EPHY_WEBKIT_BACK_FORWARD_LIMIT 100
 
 char 	   * ephy_embed_utils_link_message_parse  (char *message);
-const char * ephy_embed_utils_get_title_composite (EphyWebView *view);
 gboolean     ephy_embed_utils_address_has_web_scheme (const char *address);
 
 G_END_DECLS

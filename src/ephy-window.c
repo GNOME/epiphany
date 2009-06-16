@@ -1899,7 +1899,7 @@ sync_tab_title (EphyWebView *view,
 	if (priv->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
-			      ephy_embed_utils_get_title_composite (view));
+			      ephy_web_view_get_title_composite (view));
 }
 
 static void

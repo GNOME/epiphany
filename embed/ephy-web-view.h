@@ -220,7 +220,7 @@ const char *               ephy_web_view_get_icon_address        (EphyWebView   
 const char *               ephy_web_view_get_title               (EphyWebView                     *view);
 gboolean                   ephy_web_view_can_go_up               (EphyWebView                     *view);
 const char *               ephy_web_view_get_address             (EphyWebView                     *view);
-
+const char *               ephy_web_view_get_title_composite     (EphyWebView                     *view);
 
 /* These should be private */
 void                       ephy_web_view_set_address             (EphyWebView                     *embed,

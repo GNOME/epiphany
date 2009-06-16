@@ -176,7 +176,7 @@ sync_tab_title (EphyWebView *view,
 {
 	const char *title;
 
-	title = ephy_embed_utils_get_title_composite (view);
+	title = ephy_web_view_get_title_composite (view);
 
 	g_object_set (action, "label", title, NULL);
 }
