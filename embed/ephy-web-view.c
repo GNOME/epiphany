@@ -1393,7 +1393,7 @@ ephy_web_view_file_monitor_reload_cb (EphyWebView *view)
   priv->reload_scheduled_id = 0;
 
   LOG ("Reloading file '%s'", ephy_web_view_get_address (view));
-  webkit_web_view_reload (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (view));
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
 
   /* don't run again */
   return FALSE;
