@@ -658,7 +658,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 
 	g_signal_connect_object (view, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
-	g_signal_connect_object (view, "notify::title",
+	g_signal_connect_object (view, "notify::embed-title",
 				 G_CALLBACK (sync_label), label, 0);
 	g_signal_connect_object (view, "notify::load-status",
 				 G_CALLBACK (sync_load_status), hbox, 0);
