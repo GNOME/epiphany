@@ -52,7 +52,8 @@ struct EphyEmbedClass {
   GtkScrolledWindowClass parent_class;
 };
 
-GType            ephy_embed_get_type (void);
+GType        ephy_embed_get_type     (void);
+EphyWebView* ephy_embed_get_web_view (EphyEmbed *embed);
 
 G_END_DECLS
 

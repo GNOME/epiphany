@@ -720,3 +720,18 @@ ephy_embed_init (EphyEmbed *embed)
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 }
 
+/**
+ * ephy_embed_get_web_view:
+ * @embed: and #EphyEmbed
+ * 
+ * Returns the #EphyWebView wrapped by @embed.
+ * 
+ * Returns: an #EphyWebView
+ **/
+EphyWebView*
+ephy_embed_get_web_view (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+  return EPHY_WEB_VIEW (embed->priv->web_view);
+}
