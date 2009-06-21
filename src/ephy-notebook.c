@@ -734,11 +734,6 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 					     NULL,
 					     position);
 
-	/* FIXME gtk bug! */
-	/* FIXME: this should be fixed in gtk 2.12; check & remove this! */
-	/* The signal handler may have reordered the tabs */
-	position = gtk_notebook_page_num (gnotebook, GTK_WIDGET (embed));
-
 	if (jump_to)
 	{
 		gtk_notebook_set_current_page (gnotebook, position);
