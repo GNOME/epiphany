@@ -1,17 +1,16 @@
 # Vietnamese Translation for Epiphany.
 # Copyright © 2008 Gnome i18n Project for Vietnamese.
 # Trinh Minh Thanh <tmthanh@yahoo.com>, 2003.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2004,2007-2008.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2004,2007-2009.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany GNOME TRUNK\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2009-06-26 08:58+1000\n"
-"PO-Revision-Date: 2008-05-25 17:20+0930\n"
-"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2009-06-26 08:41+1000\n"
+"PO-Revision-Date: 2009-06-26 08:57+1000\n"
+"Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -240,7 +239,7 @@ msgstr "Bật JavaScript"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
 msgid "Enable Web Inspector"
-msgstr ""
+msgstr "Bật Thanh tra Web"
 
 #: ../data/epiphany.schemas.in.h:17
 msgid "Enable smooth scrolling"
@@ -249,11 +248,11 @@ msgstr "Bật cuộn mịn"
 #: ../data/epiphany.schemas.in.h:18
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr ""
+msgstr "Buộc yêu cầu tạo cửa sổ mới dùng thẻ thay vì tạo cửa sổ mới."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "Force new windows to be opened in tabs"
-msgstr ""
+msgstr "Buộc cửa sổ mới dùng thẻ"
 
 #: ../data/epiphany.schemas.in.h:20
 msgid ""
@@ -703,9 +702,8 @@ msgid "<b>Web Content</b>"
 msgstr "<b>Nội dung Web</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:9
-#, fuzzy
 msgid "<b>Web Development</b>"
-msgstr "<b>Nội dung Web</b>"
+msgstr "<b>Phát triển Web</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: ../data/glade/prefs-dialog.glade.h:11
@@ -947,21 +945,19 @@ msgid "Download started"
 msgstr "Tải về đã bắt đầu"
 
 #: ../embed/downloader-view.c:796 ../embed/downloader-view.c:806
-#, fuzzy
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Không rõ"
 
 #: ../embed/downloader-view.c:799
-#, fuzzy
 msgctxt "download status"
 msgid "Failed"
-msgstr "Tập tin"
+msgstr "Thất bại"
 
 #: ../embed/downloader-view.c:802
 msgctxt "download status"
 msgid "Cancelled"
-msgstr ""
+msgstr "Bị huỷ"
 
 #: ../embed/downloader-view.c:865 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
@@ -976,19 +972,17 @@ msgid "Remaining"
 msgstr "Còn lại"
 
 #: ../embed/ephy-embed.c:408
-#, fuzzy
 msgid "Save"
-msgstr "Lưu là"
+msgstr "Lưu"
 
 #: ../embed/ephy-embed.c:550
-#, fuzzy
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Không rõ"
 
 #: ../embed/ephy-embed.c:564
 msgid "Download this potentially unsafe file?"
-msgstr ""
+msgstr "Tải tập tin tiềm ẩn nguy cơ này chứ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
@@ -1000,11 +994,13 @@ msgid ""
 "It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
+"Loại tập tin: “%s”.\n"
+"\n"
+"Mở “%s” có thể không an toàn vì tiềm ẩn khả năng phá hoại tài liệu của bạn hoặc xâm nhập thông tin riêng tư của bạn. Thay vì vậy, bạn có thể tải về."
 
 #: ../embed/ephy-embed.c:577
-#, fuzzy
 msgid "Open this file?"
-msgstr "Mở tập tin"
+msgstr "Mở tập tin này chứ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
@@ -1016,11 +1012,13 @@ msgid ""
 "\n"
 "You can open “%s” using “%s” or save it."
 msgstr ""
+"Loại tập tin: “%s”.\n"
+"\n"
+"Bạn có thể mở “%s” bằng “%s” hoặc lưu lại."
 
 #: ../embed/ephy-embed.c:590
-#, fuzzy
 msgid "Download this file?"
-msgstr "_Thư mục tải về:"
+msgstr "Tải tập tin này về chứ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
@@ -1031,15 +1029,17 @@ msgid ""
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
+"Loại tập tin: “%s”.\n"
+"\n"
+"Bạn không có ứng dụng nào có thể mở “%s”. Thay vì vậy bạn có thể tải về."
 
 #: ../embed/ephy-embed.c:602
-#, fuzzy
 msgid "_Save As..."
-msgstr "Lưu là"
+msgstr "Lư_u là..."
 
 #: ../embed/ephy-embed.c:694
 msgid "Web Inspector"
-msgstr ""
+msgstr "Thanh tra Web"
 
 #: ../embed/ephy-embed-shell.c:242
 msgid "Epiphany can't be used now. Mozilla initialization failed."
@@ -1429,45 +1429,45 @@ msgstr ""
 #: ../lib/egg/eggdesktopfile.c:165
 #, c-format
 msgid "File is not a valid .desktop file"
-msgstr ""
+msgstr "Không phải tập tin .desktop hợp lệ"
 
 #: ../lib/egg/eggdesktopfile.c:188
 #, c-format
 msgid "Unrecognized desktop file Version '%s'"
-msgstr ""
+msgstr "Phiên bản tập tin desktop '%s' không nhận ra"
 
 #: ../lib/egg/eggdesktopfile.c:958
 #, c-format
 msgid "Starting %s"
-msgstr ""
+msgstr "Đang chạy %s"
 
 #: ../lib/egg/eggdesktopfile.c:1100
 #, c-format
 msgid "Application does not accept documents on command line"
-msgstr ""
+msgstr "Ứng dụng không chấp nhận tài liệu trên dòng lệnh"
 
 #: ../lib/egg/eggdesktopfile.c:1168
 #, c-format
 msgid "Unrecognized launch option: %d"
-msgstr ""
+msgstr "Tuỳ chọn chạy lạ: %d"
 
 #: ../lib/egg/eggdesktopfile.c:1373
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr ""
+msgstr "Không thể chuyển URI tài liệu cho mục desktop 'Type=Link'"
 
 #: ../lib/egg/eggdesktopfile.c:1392
 #, c-format
 msgid "Not a launchable item"
-msgstr ""
+msgstr "Không phải mục có thể chạy được"
 
 #: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
-msgstr ""
+msgstr "Tắt kết nối đến trình quản lí phiên làm việc"
 
 #: ../lib/egg/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
-msgstr ""
+msgstr "Xác định tập tin chứa cấu hình được lưu"
 
 #: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
 msgid "FILE"
@@ -1475,19 +1475,19 @@ msgstr "TẬP TIN"
 
 #: ../lib/egg/eggsmclient.c:231
 msgid "Specify session management ID"
-msgstr ""
+msgstr "Xác định ID quản lí phiên làm việc"
 
 #: ../lib/egg/eggsmclient.c:231
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../lib/egg/eggsmclient.c:252
 msgid "Session management options:"
-msgstr ""
+msgstr "Tuỳ chọn quản lí phiên làm việc:"
 
 #: ../lib/egg/eggsmclient.c:253
 msgid "Show session management options"
-msgstr ""
+msgstr "Hiện tuỳ chọn quản lí phiên làm việc"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -1813,14 +1813,12 @@ msgstr "Cập nhật liên kết lưu không?"
 
 #. Translators: this topic contains all bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1225
-#, fuzzy
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Tất cả"
 
 #. Translators: this topic contains the most used bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1228
-#, fuzzy
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Hay xem nhất"
@@ -1828,7 +1826,6 @@ msgstr "Hay xem nhất"
 #. Translators: this topic contains the not categorized
 #. bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1232
-#, fuzzy
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Chưa phân loại"
@@ -1836,7 +1833,6 @@ msgstr "Chưa phân loại"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1237
-#, fuzzy
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Địa chỉ cục bộ"
@@ -2452,11 +2448,11 @@ msgstr "Đóng thẻ"
 
 #: ../src/ephy-profile-migration.c:64
 msgid "Failed to copy cookies file from Mozilla."
-msgstr ""
+msgstr "Lỗi chép tập tin cookies từ Mozilla."
 
 #: ../src/ephy-profile-migration.c:119
 msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr ""
+msgstr "Lỗi đọc đánh dấu chuyển đổi lần cuối, ngừng chuyển đổi hồ sơ."
 
 #: ../src/ephy-session.c:117
 #, c-format
@@ -2623,32 +2619,27 @@ msgid "Open a new window"
 msgstr "Mở cửa sổ mới"
 
 #: ../src/ephy-toolbar-editor.c:71
-#, fuzzy
 msgctxt "toolbar style"
 msgid "Default"
-msgstr "_Mặc định:"
+msgstr "Mặc định"
 
 #. separator row
 #: ../src/ephy-toolbar-editor.c:73
-#, fuzzy
 msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Nhãn bên dưới hình"
 
 #: ../src/ephy-toolbar-editor.c:74
-#, fuzzy
 msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Nhãn bên cạnh hình"
 
 #: ../src/ephy-toolbar-editor.c:75
-#, fuzzy
 msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Chỉ hình"
 
 #: ../src/ephy-toolbar-editor.c:76
-#, fuzzy
 msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Chỉ nhãn"
@@ -2958,14 +2949,12 @@ msgid "Move current tab to right"
 msgstr "Chuyển thẻ hiện tại sang bên phải"
 
 #: ../src/ephy-window.c:252
-#, fuzzy
 msgid "_Detach Tab"
-msgstr "Thanh _kế"
+msgstr "_Tách rời thẻ"
 
 #: ../src/ephy-window.c:253
-#, fuzzy
 msgid "Detach current tab"
-msgstr "Lưu trang hiện tại"
+msgstr "Tách rời thẻ hiện thời"
 
 #: ../src/ephy-window.c:259
 msgid "Display web browser help"
@@ -3371,7 +3360,7 @@ msgstr "Đóng của sổ xem thử bản in"
 #. * "French (France)"
 #.
 #: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
-#, fuzzy, c-format
+#, c-format
 msgctxt "language"
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3380,7 +3369,7 @@ msgstr "%s (%s)"
 #. * (one which isn't in our built-in list).
 #.
 #: ../src/prefs-dialog.c:527
-#, fuzzy, c-format
+#, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Tự định nghĩa (%s)"
@@ -3444,13 +3433,13 @@ msgid "Past developers:"
 msgstr "Lập trình viên trước:"
 
 #: ../src/window-commands.c:863
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by WebKit"
 msgstr ""
-"Cho bạn khả năng xem trang Web và tìm thông tin qua Internet.\n"
-"Chạy bằng %s"
+"Cho phép bạn xem trang Web và tìm thông tin qua Internet.\n"
+"Chạy bằng WebKit"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3462,7 +3451,7 @@ msgstr ""
 #.
 #: ../src/window-commands.c:889
 msgid "translator-credits"
-msgstr "Nhóm Việt hoá GNOME (http://gnomevi.sourceforge.net)"
+msgstr "Nhóm Việt hoá GNOME (http://live.gnome.org/GnomeVi)"
 
 #: ../src/window-commands.c:892
 msgid "GNOME Web Browser Website"
