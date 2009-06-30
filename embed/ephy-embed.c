@@ -27,6 +27,7 @@
 
 #include "downloader-view.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-adblock-manager.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
@@ -192,6 +193,29 @@ restore_zoom_level (EphyEmbed *embed,
       g_object_set (web_view, "zoom-level", zoom, NULL);
       priv->is_setting_zoom = FALSE;
     }
+  }
+}
+
+static void
+resource_request_starting_cb (WebKitWebView *web_view,
+                              WebKitWebFrame *web_frame,
+                              WebKitWebResource *web_resource,
+                              WebKitNetworkRequest *request,
+                              WebKitNetworkResponse *response,
+                              EphyEmbed *embed)
+{
+  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER(ephy_embed_shell_get_adblock_manager (embed_shell));
+  const char* uri = webkit_network_request_get_uri(request);
+
+  /* FIXME: How do we implement the other CHECK_TYPEs?  Perhaps we
+   * should figure out a way of adding more information about what the
+   * resource is for to WebResource? */
+  if(!ephy_adblock_manager_should_load(adblock_manager, embed, uri,
+                                       AD_URI_CHECK_TYPE_OTHER)) {
+    g_signal_emit_by_name (EPHY_WEB_VIEW (web_view),
+                           "content-blocked", uri);
+
+    webkit_network_request_set_uri(request, "about:blank");
   }
 }
 
@@ -750,6 +774,7 @@ ephy_embed_constructed (GObject *object)
 
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
+                    "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
