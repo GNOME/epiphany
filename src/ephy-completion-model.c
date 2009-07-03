@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "ephy-completion-model.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-node.h"
@@ -347,14 +349,29 @@ const GRegex *base_address_regex = NULL;
 static gboolean
 is_base_address (const char *address)
 {
-	if (base_address_regex == NULL) {
-		base_address_regex = g_regex_new ("//.*/$",
-				G_REGEX_OPTIMIZE,
-				G_REGEX_MATCH_NOTEMPTY,
-				NULL);
-	}
+        if (address == NULL)
+          return FALSE;
 
-	return g_regex_match (base_address_regex, address, G_REGEX_MATCH_NOTEMPTY, NULL);
+        /* a base address is <scheme>://<host>/
+         * Neither scheme nor host contain a slash, so we can use slashes
+         * figure out if it's a base address.
+         *
+         * Note: previous code was using a GRegExp to do the same thing. 
+         * While regexps are much nicer to read, they're also a lot
+         * slower.
+         */
+        address = strchr (address, '/');
+        if (address == NULL ||
+            address[1] != '/')
+          return FALSE;
+
+        address += 2;
+        address = strchr (address, '/');
+        if (address == NULL ||
+            address[1] != 0)
+          return FALSE;
+
+        return TRUE;
 }
 
 static void
