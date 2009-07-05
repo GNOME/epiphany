@@ -23,7 +23,6 @@
 
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-history.h"
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
@@ -45,7 +44,6 @@ struct _EphyLocationActionPrivate
 	char *typed_address;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
-	EphyNode *history;
 	GdkPixbuf *icon;
 	char *lock_stock_id;
 	char *lock_tooltip;
@@ -810,9 +808,6 @@ ephy_location_action_init (EphyLocationAction *action)
 
 	init_actions_list (action);
 	
-	priv->history = ephy_history_get_pages (EPHY_HISTORY (
-			ephy_embed_shell_get_global_history (embed_shell)));
-
 	ephy_node_signal_connect_object (priv->smart_bmks,
 			                 EPHY_NODE_CHILD_ADDED,
 			                 (EphyNodeCallback)actions_child_added_cb,
