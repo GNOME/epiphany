@@ -344,13 +344,11 @@ init_favicon_col (EphyCompletionModel *model, GValue *value,
 	g_value_take_object (value, pixbuf);
 }
 
-const GRegex *base_address_regex = NULL;
-
 static gboolean
 is_base_address (const char *address)
 {
         if (address == NULL)
-          return FALSE;
+                return FALSE;
 
         /* a base address is <scheme>://<host>/
          * Neither scheme nor host contain a slash, so we can use slashes
@@ -363,13 +361,13 @@ is_base_address (const char *address)
         address = strchr (address, '/');
         if (address == NULL ||
             address[1] != '/')
-          return FALSE;
+                return FALSE;
 
         address += 2;
         address = strchr (address, '/');
         if (address == NULL ||
             address[1] != 0)
-          return FALSE;
+                return FALSE;
 
         return TRUE;
 }
