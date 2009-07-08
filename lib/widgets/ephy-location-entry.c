@@ -1050,6 +1050,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 		att->start_index = strlen (title)+1;
 
 		pango_attr_list_insert (list, att);
+	        g_free (title);
 	}
 	else
 	{
@@ -1095,7 +1096,6 @@ textcell_data_func (GtkCellLayout *cell_layout,
 
 	pango_attr_list_unref (list);
 
-	g_free (title);
 	g_free (url);
 }
 
