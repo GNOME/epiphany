@@ -1225,7 +1225,17 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
+        /*
+         * As the width of the entry completion is known in advance 
+         * (as big as the entry you are completing on), we can set 
+         * any fixed width (the 1 is just this random number here). 
+         * Since the height is known too, we avoid computing the actual 
+         * sizes of the cells, which takes a lot of CPU time and does
+         * not get used anyway.
+         */
+	gtk_cell_renderer_set_fixed_size (cell, 1, -1);
 	gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
+
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
 					cell, textcell_data_func,
 					entry,
