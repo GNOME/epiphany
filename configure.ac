@@ -128,6 +128,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gio-unix-2.0 >= $GLIB_REQUIRED
 		  gtk+-2.0 >= $GTK_REQUIRED
 		  gtk+-unix-print-2.0 >= $GTK_REQUIRED
+		  x11
 		  sm
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
