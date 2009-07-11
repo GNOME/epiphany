@@ -1172,7 +1172,7 @@ parse_time_into_date (GtkTreeViewColumn *column,
 	GList *renderers_list;
 	GtkCellRenderer *renderer;
 	
-	renderers_list = gtk_tree_view_column_get_cell_renderers (column);
+	renderers_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
 	renderer = GTK_CELL_RENDERER (renderers_list->data);
 	gtk_tree_view_column_set_cell_data_func (column, renderer,
 						 (GtkTreeCellDataFunc) convert_cell_data_func,
