@@ -1149,7 +1149,7 @@ convert_cell_data_func (GtkTreeViewColumn *column,
 			GtkTreeIter *iter,
 			gpointer user_data)
 {
-	int col_id = (int) user_data;
+	int col_id = GPOINTER_TO_INT (user_data);
 	int value;
 	time_t time;
 	char *friendly;
@@ -1176,7 +1176,7 @@ parse_time_into_date (GtkTreeViewColumn *column,
 	renderer = GTK_CELL_RENDERER (renderers_list->data);
 	gtk_tree_view_column_set_cell_data_func (column, renderer,
 						 (GtkTreeCellDataFunc) convert_cell_data_func,
-						 (gpointer) column_id,
+						 GINT_TO_POINTER (column_id),
 						 NULL);
 	g_list_free (renderers_list);
 }
