@@ -392,6 +392,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						"about:blank",
 						NULL,
 						EPHY_LINK_NEW_TAB);
+			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 		}
 		webkit_web_view_go_back (web_view);
 	}
@@ -403,6 +404,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						"about:blank",
 						NULL,
 						EPHY_LINK_NEW_TAB);
+			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 		}
 		webkit_web_view_go_forward (web_view);
 	}
