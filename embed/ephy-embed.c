@@ -202,6 +202,12 @@ load_status_changed_cb (WebKitWebView *view,
   } else {
     EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
     const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (view));
+    /* FIXME: typed address might be NULL when, for example, loading
+       from command line, so try plain address if that's the
+       case. This should be fixed to get the address from just one
+       place... */
+    if (loading_uri == NULL)
+      loading_uri = ephy_web_view_get_address (EPHY_WEB_VIEW (view));
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
       estate = (EphyWebViewNetState) (estate |
