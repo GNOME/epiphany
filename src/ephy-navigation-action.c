@@ -394,7 +394,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						    EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
 						    embed,
 						    NULL,
-						    EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+						    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 		}
 		webkit_web_view_go_back (web_view);
@@ -418,7 +418,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						    EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
 						    embed,
 						    NULL,
-						    EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+						    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 
 			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 			webkit_web_view_load_uri (web_view, forward_uri);
