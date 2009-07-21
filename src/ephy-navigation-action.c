@@ -33,6 +33,7 @@
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-shell.h"
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
@@ -388,10 +389,11 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	{
 		if (ephy_gui_is_middle_click ())
 		{
-			embed = ephy_link_open (EPHY_LINK (action),
-						"about:blank",
-						NULL,
-						EPHY_LINK_NEW_TAB);
+			embed = ephy_shell_new_tab (ephy_shell_get_default (),
+						    EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+						    embed,
+						    NULL,
+						    EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 		}
 		webkit_web_view_go_back (web_view);
@@ -400,13 +402,27 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	{
 		if (ephy_gui_is_middle_click ())
 		{
-			embed = ephy_link_open (EPHY_LINK (action),
-						"about:blank",
-						NULL,
-						EPHY_LINK_NEW_TAB);
+			const char *forward_uri;
+			WebKitWebHistoryItem *forward_item;
+			WebKitWebBackForwardList *history;
+
+			/* Forward history is not copied when opening
+			   a new tab, so get the forward URI manually
+			   and load it */
+			history = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+			forward_item = webkit_web_back_forward_list_get_forward_item (history);
+			forward_uri = webkit_web_history_item_get_original_uri (forward_item);
+
+			embed = ephy_shell_new_tab (ephy_shell_get_default (),
+						    EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+						    embed,
+						    NULL,
+						    EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+
 			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-		}
-		webkit_web_view_go_forward (web_view);
+			webkit_web_view_load_uri (web_view, forward_uri);
+		} else
+			webkit_web_view_go_forward (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
