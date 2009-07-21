@@ -26,7 +26,6 @@ INST_H_FILES = \
 	ephy-embed-shell.h		\
 	ephy-embed-utils.h              \
 	ephy-history.h			\
-	ephy-password-manager.h		\
 	ephy-permission-manager.h   \
 	ephy-web-view.h
 
@@ -51,7 +50,6 @@ libephyembed_la_SOURCES = \
 	ephy-encodings.c		\
 	ephy-favicon-cache.c		\
 	ephy-history.c			\
-	ephy-password-manager.c		\
 	ephy-permission-manager.c	\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\

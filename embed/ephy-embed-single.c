@@ -26,7 +26,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
-#include "ephy-password-manager.h"
 #include "ephy-permission-manager.h"
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
@@ -50,7 +49,6 @@ enum {
 static void ephy_embed_single_init (EphyEmbedSingle *single);
 static void ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
 static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
-static void ephy_password_manager_iface_init (EphyPasswordManagerIface *iface);
 #ifdef ENABLE_CERTIFICATE_MANAGER
 static void ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface);
 #endif
@@ -96,16 +94,12 @@ ephy_embed_single_set_property (GObject *object,
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
 G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
-                                                ephy_password_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
                                                 ephy_certificate_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
                                                 ephy_permission_manager_iface_init))
 #else
 G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
-                                                ephy_password_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
                                                 ephy_permission_manager_iface_init))
 #endif
@@ -287,38 +281,6 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
   iface->clear = impl_permission_manager_clear;
   iface->test = impl_permission_manager_test;
   iface->list = impl_permission_manager_list;
-}
-
-static GList *
-impl_list_passwords (EphyPasswordManager *manager)
-{
-  return NULL;
-}
-
-static void
-impl_remove_password (EphyPasswordManager *manager,
-                      EphyPasswordInfo *info)
-{
-}
-
-static void
-impl_remove_all_passwords (EphyPasswordManager *manager)
-{
-}
-
-static void
-impl_add_password (EphyPasswordManager *manager,
-                   EphyPasswordInfo *info)
-{
-}
-
-static void
-ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
-{
-  iface->add = impl_add_password;
-  iface->remove = impl_remove_password;
-  iface->remove_all = impl_remove_all_passwords;
-  iface->list = impl_list_passwords;
 }
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
