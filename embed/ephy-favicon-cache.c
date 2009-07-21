@@ -696,6 +696,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 			return NULL;
 		}
 		valid = strcmp (mime_type, "image/x-ico") == 0 ||
+			strcmp (mime_type, "image/vnd.microsoft.icon") == 0 ||
 			strcmp (mime_type, "image/png") == 0 ||
 			strcmp (mime_type, "image/gif") == 0;
 		is_ao = strcmp (mime_type, "application/octet-stream") == 0;
