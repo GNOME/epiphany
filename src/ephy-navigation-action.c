@@ -21,19 +21,19 @@
  */
 
 #include "config.h"
-
 #include "ephy-navigation-action.h"
-#include "ephy-type-builtins.h"
-#include "ephy-window.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-history.h"
+
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-link.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-gui.h"
-#include "ephy-debug.h"
+#include "ephy-history.h"
+#include "ephy-link.h"
 #include "ephy-shell.h"
+#include "ephy-type-builtins.h"
+#include "ephy-window.h"
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
