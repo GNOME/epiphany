@@ -265,7 +265,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 				gboolean result;
 
 				gtk_tree_model_get_value (model, &iter,
-						COL_PASSWORDS_PASS, &val);
+						COL_PASSWORDS_DATA, &val);
 				result = pdm_dialog_password_remove(pinfo,
 						g_value_get_boxed (&val));
 				g_value_unset (&val);
