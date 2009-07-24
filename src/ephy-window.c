@@ -3520,7 +3520,7 @@ browse_with_caret_notifier (GConfClient *client,
 	GtkAction *action;
 	gboolean enabled;
 
-	enabled = eel_gconf_get_boolean (CONF_BROWSE_WITH_CARET);
+	enabled = eel_gconf_get_boolean (CONF_CARET_BROWSING_ENABLED);
 	action = gtk_action_group_get_action (window->priv->action_group,
 					      "BrowseWithCaret");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), enabled);
@@ -3789,7 +3789,7 @@ ephy_window_constructor (GType type,
 	/* other notifiers */
 	browse_with_caret_notifier (NULL, 0, NULL, window);
 	priv->browse_with_caret_notifier_id = eel_gconf_notification_add
-		(CONF_BROWSE_WITH_CARET,
+		(CONF_CARET_BROWSING_ENABLED,
 		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
 
 	priv->allow_popups_notifier_id = eel_gconf_notification_add

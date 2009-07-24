@@ -1028,5 +1028,5 @@ window_cmd_browse_with_caret (GtkAction *action,
 	gboolean active;
 
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	eel_gconf_set_boolean (CONF_BROWSE_WITH_CARET, active);
+	eel_gconf_set_boolean (CONF_CARET_BROWSING_ENABLED, active);
 }

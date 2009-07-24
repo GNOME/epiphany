@@ -36,7 +36,6 @@
 #define CONF_SECURITY_COOKIES_ACCEPT "/apps/epiphany/web/cookie_accept"
 #define CONF_LANGUAGE_AUTODETECT_ENCODING "/apps/epiphany/web/autodetect_encoding"
 #define CONF_LANGUAGE_DEFAULT_ENCODING "/apps/epiphany/web/default_encoding"
-#define CONF_BROWSE_WITH_CARET "/apps/epiphany/web/browse_with_caret"
 #define CONF_IMAGE_ANIMATION_MODE "/apps/epiphany/web/image_animation"
 #define CONF_IMAGE_LOADING_MODE "/apps/epiphany/web/image_loading"
 #define CONF_DISPLAY_SMOOTHSCROLL "/apps/epiphany/web/smooth_scroll"
