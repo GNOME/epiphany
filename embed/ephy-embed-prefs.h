@@ -54,8 +54,8 @@
 #define CONF_NETWORK_SOCKS_PROXY_PORT "/system/proxy/socks_port"
 #define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
 #define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"
-#define CONF_DESKTOP_FONT_VAR_SIZE "/desktop/gnome/interface/font_name"
-#define CONF_DESKTOP_FONT_FIXED_SIZE "/desktop/gnome/interface/monospace_font_name"
+#define CONF_DESKTOP_FONT_VAR_NAME "/desktop/gnome/interface/font_name"
+#define CONF_DESKTOP_FONT_FIXED_NAME "/desktop/gnome/interface/monospace_font_name"
 
 /* DEPRECATED, we migrate them */
 #define CONF_RENDERING_FONT_VAR_SIZE_OLD "/apps/epiphany/web/font_var_size"

@@ -165,17 +165,52 @@ webkit_pref_callback_font_size (GConfClient *client,
   g_object_set (settings, webkit_pref, size, NULL);
 }
 
+static void
+webkit_pref_callback_font_family (GConfClient *client,
+                                  guint cnxn_id,
+                                  GConfEntry *entry,
+                                  gpointer data)
+{
+  GConfValue *gcvalue;
+  char *webkit_pref = data;
+  const char *value = NULL;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_STRING) {
+      value = gconf_value_get_string (gcvalue);
+  }
+
+  if (value) {
+    PangoFontDescription* desc;
+    const char *family = NULL;
+
+    desc = pango_font_description_from_string (value);
+    family = pango_font_description_get_family (desc);
+    g_object_set (settings, webkit_pref, family, NULL);
+    pango_font_description_free (desc);
+  }
+}
+
 static const PrefData webkit_pref_entries[] =
   {
     { CONF_RENDERING_FONT_MIN_SIZE,
       "minimum-font-size",
       webkit_pref_callback_int },
-    { CONF_DESKTOP_FONT_VAR_SIZE,
+    { CONF_DESKTOP_FONT_VAR_NAME,
       "default-font-size",
       webkit_pref_callback_font_size },
-    { CONF_DESKTOP_FONT_FIXED_SIZE,
+    { CONF_DESKTOP_FONT_VAR_NAME,
+      "default-font-family",
+      webkit_pref_callback_font_family },
+    { CONF_DESKTOP_FONT_FIXED_NAME,
       "default-monospace-font-size",
       webkit_pref_callback_font_size },
+    { CONF_DESKTOP_FONT_FIXED_NAME,
+      "monospace-font-family",
+      webkit_pref_callback_font_family },
     { CONF_SECURITY_JAVASCRIPT_ENABLED,
       "enable-scripts",
       webkit_pref_callback_boolean },
