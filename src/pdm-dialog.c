@@ -1270,26 +1270,32 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 }
 
 static void
+pdm_dialog_fill_passwords_list_async_cb (GnomeKeyringResult result,
+                                         GList *list,
+                                         gpointer data)
+{
+  GList *l;
+  PdmActionInfo *info = (PdmActionInfo *)data;
+
+  if (result != GNOME_KEYRING_RESULT_OK)
+    return;
+
+  for (l = list; l != NULL; l = l->next)
+    info->add (info, l->data);
+
+  info->filled = TRUE;
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
+                                        COL_PASSWORDS_HOST,
+                                        GTK_SORT_ASCENDING);
+}
+
+static void
 pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 {
-	GList *list, *l;
-    GnomeKeyringResult result;
-
-    result = gnome_keyring_list_item_ids_sync (GNOME_KEYRING_DEFAULT, &list);
-
-    if (result == GNOME_KEYRING_RESULT_OK)
-	{
-        for (l = list; l != NULL; l = l->next)
-            info->add (info, l->data);
-        g_list_free (list);
-    }
-
-	/* Let's get notified when the list changes */
-	info->filled = TRUE;
-
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
-					      COL_PASSWORDS_HOST,
-					      GTK_SORT_ASCENDING);
+  gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
+                               pdm_dialog_fill_passwords_list_async_cb,
+                               info,
+                               NULL);
 }
 
 static void
