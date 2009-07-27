@@ -1137,38 +1137,68 @@ pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 
 /* "Passwords" tab */
 static void
+passwords_data_func_get_item_cb (GnomeKeyringResult result,
+                                 GnomeKeyringItemInfo *info,
+                                 gpointer data)
+{
+    GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+
+    if (result == GNOME_KEYRING_RESULT_OK) {
+        GtkTreeIter iter;
+        GtkTreePath *path;
+        GtkTreeModel *model;
+
+        if (!gtk_tree_row_reference_valid (rowref))
+            return;
+
+        path = gtk_tree_row_reference_get_path (rowref);
+        model = gtk_tree_row_reference_get_model (rowref);
+
+        if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+            EphyPasswordInfo *epinfo;
+            GValue val = {0, };
+
+            gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
+            epinfo = g_value_get_boxed (&val);
+            epinfo->secret = gnome_keyring_memory_strdup (gnome_keyring_item_info_get_secret (info));
+
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                                COL_PASSWORDS_DATA, epinfo,
+                                COL_PASSWORDS_PASS, epinfo->secret, -1);
+            g_value_unset (&val);
+        }
+    }
+}
+
+static void
 passwords_data_func (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
             GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
-   EphyPasswordInfo *info;
-   GValue val = { 0, };
+    GValue val = { 0, };
+    EphyPasswordInfo *info;
 
-   if (!gtk_tree_view_column_get_visible (tree_column))
-       return;
+    if (!gtk_tree_view_column_get_visible (tree_column))
+        return;
 
-   gtk_tree_model_get_value (model, iter, COL_PASSWORDS_DATA, &val);
-   info = g_value_get_boxed (&val);
+    gtk_tree_model_get_value (model, iter, COL_PASSWORDS_DATA, &val);
+    info = g_value_get_boxed (&val);
 
-   /* get the password and store it */
-   if (info->secret == NULL) {
-       GnomeKeyringResult result;
-       GnomeKeyringItemInfo *kinfo;
-       result = gnome_keyring_item_get_info_full_sync (GNOME_KEYRING_DEFAULT,
-                           info->keyring_id,
-                           GNOME_KEYRING_ITEM_INFO_SECRET,
-                           &kinfo);
+    if (info->secret == NULL) {
+        GtkTreePath *path;
+        GtkTreeRowReference *rowref;
 
-       /* FIXME: get_secret makes insecure copy... */
-       if (result == GNOME_KEYRING_RESULT_OK) {
-           info->secret = gnome_keyring_memory_strdup (
-                       gnome_keyring_item_info_get_secret (kinfo));
-           gnome_keyring_item_info_free (kinfo);
-       }
+        path = gtk_tree_model_get_path (model, iter);
+        rowref = gtk_tree_row_reference_new (model, path);
 
-	   /* eek, this will do a strdup in GtkCellRendererText... */
-	   g_object_set (cell, "text", info->secret, NULL);
-	   g_value_unset(&val);
-   }
+        gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
+                                          info->keyring_id,
+                                          GNOME_KEYRING_ITEM_INFO_SECRET,
+                                          (GnomeKeyringOperationGetItemInfoCallback) passwords_data_func_get_item_cb,
+                                          rowref,
+                                          (GDestroyNotify) gtk_tree_row_reference_free);
+        gtk_tree_path_free (path);
+    }
+    g_value_unset (&val);
 }
 
 static void
@@ -1251,15 +1281,20 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
 
-    /* Initially shown as hidden colum */
-    gtk_tree_view_insert_column_with_data_func (treeview,
-                            COL_PASSWORDS_PASS,
-                            _("User Password"),
-                            renderer,
-                            passwords_data_func,
-                            info,
-                            NULL);
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_PASSWORDS_PASS,
+						     _("User Password"),
+						     renderer,
+						     "text", COL_PASSWORDS_PASS,
+						     NULL);
 	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASS);
+    gtk_tree_view_column_set_cell_data_func (column,
+                                             renderer,
+                                             passwords_data_func,
+                                             info,
+                                             NULL);
+    /* Initially shown as hidden colum */
     gtk_tree_view_column_set_visible (column, FALSE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
