@@ -216,6 +216,58 @@ clear_all_cookies (SoupCookieJar *jar)
 }
 
 static void
+clear_all_passwords_async_cb (GnomeKeyringResult result,
+                              gpointer data)
+{
+    GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+
+    if (result == GNOME_KEYRING_RESULT_OK) {
+        GtkTreeIter iter;
+        GtkTreePath *path;
+        GtkTreeModel *model;
+
+        if (!gtk_tree_row_reference_valid (rowref))
+            return;
+
+        path = gtk_tree_row_reference_get_path (rowref);
+        model = gtk_tree_row_reference_get_model (rowref);
+
+        if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+            /* FIXME! Do we have to drop the data too? */
+            gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+
+            gtk_tree_path_free (path);
+        }
+    }
+}
+
+static gboolean
+clear_all_passwords (GtkTreeModel *model,
+                     GtkTreePath *path,
+                     GtkTreeIter *iter,
+                     gpointer data)
+{
+    GtkTreeRowReference *row;
+    EphyPasswordInfo *info;
+    GValue val = { 0, };
+
+    row = gtk_tree_row_reference_new (model, path);
+
+    gtk_tree_model_get_value (model, iter,
+                              COL_PASSWORDS_DATA, &val);
+    info = g_value_get_boxed (&val);
+
+    gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
+                               info->keyring_id,
+                               (GnomeKeyringOperationDoneCallback) clear_all_passwords_async_cb,
+                               row,
+                               (GDestroyNotify) gtk_tree_row_reference_free);
+    g_value_unset (&val);
+
+    return FALSE;
+}
+
+static void
 clear_all_dialog_response_cb (GtkDialog *dialog,
 		int response,
 		PdmClearAllDialogButtons *checkbuttons)
@@ -254,27 +306,8 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 		{
 			PdmDialog *pdialog = EPHY_PDM_DIALOG (checkbuttons->dialog);
 			PdmActionInfo *pinfo = pdialog->priv->passwords;
-			GtkTreeModel *model = pinfo->model;
-			GtkTreeIter iter;
-			gboolean valid;
 
-			valid = gtk_tree_model_get_iter_first (model, &iter);
-
-			while (valid) {
-				GValue val = { 0, };
-				gboolean result;
-
-				gtk_tree_model_get_value (model, &iter,
-						COL_PASSWORDS_DATA, &val);
-				result = pdm_dialog_password_remove(pinfo,
-						g_value_get_boxed (&val));
-				g_value_unset (&val);
-
-				if (result)
-					valid = gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-				else
-					valid = gtk_tree_model_iter_next (model, &iter);
-			}
+            gtk_tree_model_foreach (pinfo->model, (GtkTreeModelForeachFunc) clear_all_passwords, NULL);
 		}
 		if (gtk_toggle_button_get_active
 				(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
