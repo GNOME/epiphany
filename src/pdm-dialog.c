@@ -57,7 +57,7 @@ struct PdmActionInfo
 	void (* fill)		(PdmActionInfo *info);
 	void (* add)		(PdmActionInfo *info,
 						 gpointer data);
-	void (* remove)	    (PdmActionInfo *info,
+	gboolean (* remove)	(PdmActionInfo *info,
 						 gpointer data);
 	void (* scroll_to)	(PdmActionInfo *info);
 
@@ -141,7 +141,7 @@ EphyDialogProperty properties [] =
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
-static void pdm_dialog_password_remove (PdmActionInfo *info, gpointer data);
+static gboolean pdm_dialog_password_remove (PdmActionInfo *info, gpointer data);
 
 G_DEFINE_TYPE (PdmDialog, pdm_dialog, EPHY_TYPE_DIALOG)
 
@@ -216,8 +216,8 @@ clear_all_cookies (SoupCookieJar *jar)
 }
 
 static void
-pdm_dialog_password_remove_cb (GnomeKeyringResult result,
-                               gpointer data)
+clear_all_passwords_async_cb (GnomeKeyringResult result,
+                              gpointer data)
 {
     GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
 
@@ -259,10 +259,11 @@ clear_all_passwords (GtkTreeModel *model,
 
     gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
                                info->keyring_id,
-                               (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_cb,
+                               (GnomeKeyringOperationDoneCallback) clear_all_passwords_async_cb,
                                row,
                                (GDestroyNotify) gtk_tree_row_reference_free);
     g_value_unset (&val);
+
     return FALSE;
 }
 
@@ -541,8 +542,30 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	gtk_tree_path_free (path);
 
 	/* Removal */
+
 	for (r = rlist; r != NULL; r = r->next)
-        action->remove (action, (GtkTreeRowReference *)r->data);
+	{
+		GValue val = { 0, };
+		gboolean remove;
+
+		path = gtk_tree_row_reference_get_path
+			((GtkTreeRowReference *)r->data);
+
+		gtk_tree_model_get_iter (model, &iter, path);
+		gtk_tree_model_get_value (model, &iter, action->data_col, &val);
+		remove = action->remove (action, g_value_get_boxed (&val));
+		g_value_unset (&val);
+
+        /*
+         * Remove the item:
+         * cookies are deleted using callback, passwords right here
+         */
+		if (remove)
+			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+
+		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
+		gtk_tree_path_free (path);
+	}
 
 	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (llist);
@@ -1109,39 +1132,17 @@ pdm_dialog_cookie_add (PdmActionInfo *info,
 	g_value_unset (&value[3]);
 }
 
-static void
+static gboolean
 pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  gpointer data)
 {
-    GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+	SoupCookie *cookie = (SoupCookie *) data;
+	SoupCookieJar *jar;
 
-    if (gtk_tree_row_reference_valid (rowref)) {
-        GtkTreeIter iter;
-        GtkTreePath *path;
-        GtkTreeModel *model;
+	jar = get_cookie_jar();
 
-        path = gtk_tree_row_reference_get_path (rowref);
-        model = gtk_tree_row_reference_get_model (rowref);
-
-        if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
-            SoupCookie *cookie;
-            SoupCookieJar *jar;
-            GValue val = { 0, };
-
-            gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
-
-            cookie = (SoupCookie *) g_value_get_boxed (&val);
-
-            g_value_unset (&val);
-
-            jar = get_cookie_jar();
-            soup_cookie_jar_delete_cookie (jar, cookie);
-
-            gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-            gtk_tree_path_free (path);
-        }
-        gtk_tree_row_reference_free (rowref);
-    }
+	soup_cookie_jar_delete_cookie (jar, cookie);
+    return FALSE;
 }
 
 static void
@@ -1448,37 +1449,16 @@ out:
    return;
 }
 
-static void
+static gboolean
 pdm_dialog_password_remove (PdmActionInfo *info,
-                            gpointer data)
+			    gpointer data)
 {
-    GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
+    GnomeKeyringResult result;
 
-    if (gtk_tree_row_reference_valid (rowref)) {
-        EphyPasswordInfo *pinfo;
-        GtkTreeIter iter;
-        GtkTreePath *path;
-        GtkTreeModel *model;
-        GValue val = { 0, };
-
-        path = gtk_tree_row_reference_get_path (rowref);
-        model = gtk_tree_row_reference_get_model (rowref);
-
-        if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
-
-            gtk_tree_model_get_value (model, &iter,
-                                      COL_PASSWORDS_DATA, &val);
-            pinfo = g_value_get_boxed (&val);
-
-            gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
-                                   pinfo->keyring_id,
-                                   (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_cb,
-                                   rowref,
-                                   (GDestroyNotify) gtk_tree_row_reference_free);
-            g_value_unset (&val);
-            gtk_tree_path_free (path);
-        }
-    }
+    result = gnome_keyring_item_delete_sync (GNOME_KEYRING_DEFAULT,
+                                             pinfo->keyring_id);
+    return result == GNOME_KEYRING_RESULT_OK;
 }
 
 /* common routines */
