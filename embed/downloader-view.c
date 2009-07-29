@@ -661,6 +661,10 @@ downloader_view_add_download (DownloaderView *dv,
 #endif
 	GValue visible = {0, };
 
+#ifdef HAVE_LIBNOTIFY
+	char *downloading;
+#endif
+
 	/* dv may be unrefed inside update_download_row if the file
 	 * downloaded completely while the user was choosing where to
 	 * put it, so we need to protect it
@@ -706,7 +710,6 @@ downloader_view_add_download (DownloaderView *dv,
 	{
 
 #ifdef HAVE_LIBNOTIFY
-        char *downloading;
 		char *name = ephy_download_get_name (download);
 		downloading = g_strdup_printf(_("The file “%s” has been added to the downloads queue."), 
 						name);
@@ -889,7 +892,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_view_column_set_cell_data_func(column, renderer, progress_cell_data_func, NULL, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
-	/* Remaining time column */
+	/* Remainng time column */
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set (renderer, "xalign", 0.5, NULL);
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
@@ -1004,6 +1007,7 @@ downloader_view_remove_download (DownloaderView *dv, WebKitDownload *download)
 	update_status_icon (dv);
 
 	/* Close the dialog if there are no more downloads */
+
 	if (!g_hash_table_size (dv->priv->downloads_hash))
 	{
 		g_object_unref (dv);
