@@ -1278,7 +1278,7 @@ parse_embed (xmlNodePtr child,
 		if (strcmp ((char *) child->name, "embed") == 0)
 		{
 			xmlChar *url, *attr;
-			char *recover_url, *freeme = NULL;
+			char *recover_url;
 			gboolean was_loading;
 
 			g_return_if_fail (window != NULL);
@@ -1292,40 +1292,20 @@ parse_embed (xmlNodePtr child,
 			url = xmlGetProp (child, (const xmlChar *) "url");
 			if (url == NULL) continue;
 
+			/* about:recover is not implemented, so tabs
+			   loading during crash wont be recovered (bug #583953) */
 			if (!was_loading ||
 			    strcmp ((const char *) url, "about:blank") == 0)
 			{
 				recover_url = (char *) url;
+
+				ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
+						    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+						    EPHY_NEW_TAB_OPEN_PAGE |
+						    EPHY_NEW_TAB_APPEND_LAST);
 			}
-			else
-			{
-				xmlChar *title;
-				char *escaped_url, *escaped_title;
-
-				title = xmlGetProp (child, (const xmlChar *) "title");
-				escaped_title = g_uri_escape_string (title ? (const char*) title : _("Untitled"),
-								     NULL, TRUE);
-
-				escaped_url = g_uri_escape_string ((const char *) url,
-								   NULL, TRUE);
-				freeme = recover_url =
-					g_strconcat ("about:recover?u=",
-						     escaped_url,
-						     "&c=UTF-8&t=",
-						     escaped_title, NULL);
-
-				xmlFree (title);
-				g_free (escaped_url);
-				g_free (escaped_title);
-			}
-
-			ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
-					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-					    EPHY_NEW_TAB_OPEN_PAGE |
-					    EPHY_NEW_TAB_APPEND_LAST);
 
 			xmlFree (url);
-			g_free (freeme);
 		}
 
 		child = child->next;
