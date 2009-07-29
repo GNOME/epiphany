@@ -1251,7 +1251,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
 
-    /* Initially shown as hidden colum */
+	/* FIXME: Mask passwords initially with '*' */
     gtk_tree_view_insert_column_with_data_func (treeview,
                             COL_PASSWORDS_PASS,
                             _("User Password"),
@@ -1260,7 +1260,6 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
                             info,
                             NULL);
 	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASS);
-    gtk_tree_view_column_set_visible (column, FALSE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
