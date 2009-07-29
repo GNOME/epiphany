@@ -72,6 +72,13 @@ struct PdmActionInfo
 	gboolean filled;
 };
 
+typedef struct PdmCallBackData PdmCallBackData;
+struct PdmCallBackData
+{
+    guint key;
+    GtkListStore *store;
+};
+
 #define EPHY_PDM_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PDM_DIALOG, PdmDialogPrivate))
 
 struct PdmDialogPrivate
@@ -1371,19 +1378,76 @@ pdm_dialog_passwords_destruct (PdmActionInfo *info)
 }
 
 static void
-pdm_dialog_password_add (PdmActionInfo *info,
-			 gpointer data)
+pdm_dialog_password_add_item_attrs_cb (GnomeKeyringResult result,
+                                       GnomeKeyringAttributeList *attributes,
+                                       gpointer data)
 {
-    GnomeKeyringResult result;
-    GnomeKeyringItemInfo *kinfo;
-    GnomeKeyringAttribute *attribute;
-    GnomeKeyringAttributeList *attributes;
-    gchar *user, *host, *protocol;
     EphyPasswordInfo *pinfo;
-	GtkListStore *store;
-	GtkTreeIter iter;
-    guint key_id = GPOINTER_TO_UINT(data);
+    PdmCallBackData *cbdata;
+    GnomeKeyringAttribute *attribute;
+    gchar *user, *host, *protocol;
+    GtkTreeIter iter;
     int i;
+
+    if (result != GNOME_KEYRING_RESULT_OK)
+        return;
+
+    cbdata = (PdmCallBackData *)data;
+
+    user = host = protocol = NULL;
+    attribute = (GnomeKeyringAttribute *) attributes->data;
+    for (i = 0; i < attributes->len; ++i) {
+        if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
+            if (strcmp (attribute[i].name, "server") == 0)
+                host = g_strdup (attribute[i].value.string);
+            else if (strcmp (attribute[i].name, "user") == 0)
+                user = g_strdup (attribute[i].value.string);
+            else if (strcmp (attribute[i].name, "protocol") == 0)
+                protocol = attribute[i].value.string;
+       }
+    }
+    if (!protocol || strncmp("http", protocol, 4) != 0)
+        return;
+
+    pinfo = ephy_password_info_new (cbdata->key);
+    if (!pinfo)
+        return;
+
+    gtk_list_store_append (cbdata->store, &iter);
+    gtk_list_store_set (cbdata->store, &iter,
+                        COL_PASSWORDS_HOST, host,
+                        COL_PASSWORDS_USER, user,
+                        COL_PASSWORDS_PASS, NULL,
+                        COL_PASSWORDS_DATA, pinfo,
+                        -1);
+}
+
+static void
+pdm_dialog_password_add_item_info_cb (GnomeKeyringResult result,
+                                      GnomeKeyringItemInfo *info,
+                                      gpointer data)
+{
+    if (result != GNOME_KEYRING_RESULT_OK)
+        return;
+
+    if (gnome_keyring_item_info_get_type (info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
+        PdmCallBackData *cbdata = (PdmCallBackData *)data;
+        gnome_keyring_item_get_attributes (GNOME_KEYRING_DEFAULT,
+                                           cbdata->key,
+                                           (GnomeKeyringOperationGetAttributesCallback) pdm_dialog_password_add_item_attrs_cb,
+                                           g_memdup (cbdata, sizeof (PdmCallBackData)),
+                                           (GDestroyNotify) g_free);
+
+    }
+
+}
+
+static void
+pdm_dialog_password_add (PdmActionInfo *info,
+                         gpointer data)
+{
+    PdmCallBackData *cbdata;
+    guint key_id = GPOINTER_TO_UINT(data);
 
     /*
      * We have the item id of the password. We will have to check if this
@@ -1392,60 +1456,17 @@ pdm_dialog_password_add (PdmActionInfo *info,
      * starts with http as Web Access and we will do the same here.
      */
 
+    cbdata = g_malloc (sizeof(PdmCallBackData *));
+    cbdata->key = key_id;
+    cbdata->store = GTK_LIST_STORE (info->model);
+
     /* Get the type of the key_id */
-    result = gnome_keyring_item_get_info_full_sync (GNOME_KEYRING_DEFAULT,
-							key_id,
-							GNOME_KEYRING_ITEM_INFO_BASICS,
-							&kinfo);
-
-	if (result != GNOME_KEYRING_RESULT_OK)
-		goto out;
-
-	if (gnome_keyring_item_info_get_type (kinfo) != GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
-		goto out_info_free;
-
-	/* Get the attributes to check protocol */
-	result = gnome_keyring_item_get_attributes_sync (GNOME_KEYRING_DEFAULT,
-							key_id, &attributes);
-	if (result != GNOME_KEYRING_RESULT_OK)
-		goto out_info_free;
-
-	user = host = protocol = NULL;
-	attribute = (GnomeKeyringAttribute *) attributes->data;
-	for (i = 0; i < attributes->len; ++i) {
-		if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
-			if (strcmp (attribute[i].name, "server") == 0)
-				host = g_strdup (attribute[i].value.string);
-			else if (strcmp (attribute[i].name, "user") == 0)
-				user = g_strdup (attribute[i].value.string);
-			else if (strcmp (attribute[i].name, "protocol") == 0)
-				protocol = attribute[i].value.string;
-       }
-	}
-	if (!protocol || strncmp("http", protocol, 4) != 0)
-		goto out_attr_free;
-
-	pinfo = ephy_password_info_new (key_id);
-	if (!pinfo)
-		goto out_attr_free;
-
-	store = GTK_LIST_STORE (info->model);
-
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store,
-			    &iter,
-			    COL_PASSWORDS_HOST, host,
-			    COL_PASSWORDS_USER, user,
-				COL_PASSWORDS_PASS, NULL,
-			    COL_PASSWORDS_DATA, pinfo,
-			    -1);
-
-out_attr_free:
-   gnome_keyring_attribute_list_free (attributes);
-out_info_free:
-   gnome_keyring_item_info_free (kinfo);
-out:
-   return;
+    gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
+                                      key_id,
+                                      GNOME_KEYRING_ITEM_INFO_BASICS,
+                                      (GnomeKeyringOperationGetItemInfoCallback) pdm_dialog_password_add_item_info_cb,
+                                      cbdata,
+                                      (GDestroyNotify) g_free);
 }
 
 static void
