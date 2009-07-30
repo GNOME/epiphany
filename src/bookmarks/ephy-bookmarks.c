@@ -94,21 +94,6 @@ struct _EphyBookmarksPrivate
 #endif
 };
 
-typedef struct
-{
-	const char *title;
-	const char *location;
-} EphyBookmarksBookmarkInfo;
-
-static const EphyBookmarksBookmarkInfo default_bookmarks [] =
-{
-	/* Translators you should change these links to respect your locale.
-	 * For instance in .nl these should be
-	 * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-	 */
-	{ N_("Search the web"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
-};
-
 static const char *default_topics [] =
 {
 	N_("Entertainment"),
@@ -152,13 +137,7 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		ephy_bookmarks_add_keyword (eb, _(default_topics[i]));
 	}
 
-	for (i = 0; i < G_N_ELEMENTS (default_bookmarks); i++)
-	{
-		EphyNode *bmk;
-
-		bmk = ephy_bookmarks_add (eb, _(default_bookmarks[i].title),
-					  _(default_bookmarks[i].location));
-	}
+	ephy_bookmarks_import_rdf (eb, DATADIR "/default-bookmarks.rdf");
 }
 
 static void

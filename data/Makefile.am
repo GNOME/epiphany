@@ -42,6 +42,17 @@ service_DATA = $(service_in_files:.service.in=.service)
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
 
+# Default bookmarks
+# We don't put translations in the resulting rdf since the code can get
+# the translations via gettext (although it can also get translations
+# from the rdf if they are there and not available via gettext)
+default_bookmarksdir = $(pkgdatadir)
+default_bookmarks_in_files = default-bookmarks.rdf.in
+default_bookmarks_DATA = $(default_bookmarks_in_files:.rdf.in=.rdf)
+$(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MERGE)
+	LC_ALL=C $(INTLTOOL_MERGE) -x -u /tmp $< $@.tmp
+	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g" $@.tmp > $@ || rm -f $@.tmp
+	rm -f $@.tmp
 
 install-data-local: $(schema_DATA)
 if GCONF_SCHEMAS_INSTALL
@@ -63,6 +74,7 @@ EXTRA_DIST = \
 	$(xsl_DATA)			\
 	$(service_DATA)			\
 	$(m4data_DATA)			\
+	$(default_bookmarks_in_files)	\
 	epiphany-service.xml		\
 	check-mime.py
 
@@ -70,4 +82,5 @@ DISTCLEANFILES = \
 	$(service_DATA)		\
 	$(schema_in_files:.schemas.in=.schemas)	\
 	$(pkgconfig_DATA)	\
-	$(desktop_DATA)
+	$(desktop_DATA)		\
+	$(default_bookmarks_DATA)
