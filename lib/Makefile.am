@@ -85,7 +85,7 @@ libephymisc_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
 	$(AM_CFLAGS)
 
-libephymisc_la_LIBADD =
+libephymisc_la_LIBADD = -lm
 
 if ENABLE_SPELLCHECKER
 libephymisc_la_SOURCES += \
