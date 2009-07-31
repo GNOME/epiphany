@@ -444,15 +444,6 @@ AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
 AC_SUBST([SVN_MODULE],[epiphany])
 AC_SUBST([SVN_BRANCH],[epiphany_branch])
 
-# **************************
-# gtk-builder-convert binary
-# **************************
-
-AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
-if test "$GTK_BUILDER_CONVERT" = "false"; then
-  AC_MSG_ERROR([gtk-builder-convert not found])
-fi
-
 # ************
 # Output files
 # ************
