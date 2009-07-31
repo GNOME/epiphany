@@ -3256,12 +3256,6 @@ ephy_window_set_is_popup (EphyWindow *window,
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
-static gboolean
-remove_true (void)
-{
-	return TRUE;
-}
-
 static void
 ephy_window_dispose (GObject *object)
 {
@@ -3304,7 +3298,7 @@ ephy_window_dispose (GObject *object)
 			priv->idle_resize_handler = 0;
 		}
 
-		g_hash_table_foreach_remove (priv->tabs_to_remove, (GHRFunc) remove_true, NULL);
+		g_hash_table_remove_all (priv->tabs_to_remove);
 
 		g_object_unref (priv->enc_menu);
 		priv->enc_menu = NULL;
