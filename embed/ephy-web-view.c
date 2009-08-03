@@ -58,6 +58,7 @@ struct _EphyWebViewPrivate {
   EphyWebViewSecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
+  WebKitLoadStatus load_status;
 
   /* Flags */
   guint is_blank : 1;
@@ -987,6 +988,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
   priv->is_blank = TRUE;
+  priv->load_status = WEBKIT_LOAD_PROVISIONAL;
   priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
@@ -1616,6 +1618,20 @@ ephy_web_view_get_load_status (EphyWebView *view)
   WebKitLoadStatus status;
 
   status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
+
+  /* Workaround for webkit bug: https://bugs.webkit.org/show_bug.cgi?id=26409
+   * FIRST_VISUALLY_NON_EMPTY_LAYOUT might be emitted
+   * after LOAD_FINISHED. We just ignore any status
+   * other than WEBKIT_LOAD_PROVISIONAL once LOAD_FINISHED
+   * has been set, as WEBKIT_LOAD_PROVISIONAL probably means
+   * that webview has been reloaded.
+   */
+  if (view->priv->load_status == WEBKIT_LOAD_FINISHED &&
+      status != WEBKIT_LOAD_PROVISIONAL)
+    return FALSE;
+
+  view->priv->load_status = status;
+
   return status != WEBKIT_LOAD_FINISHED;
 }
 
