@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-06-14 11:17+0200\n"
-"PO-Revision-Date: 2009-06-14 11:27+0100\n"
+"POT-Creation-Date: 2009-08-03 12:17+0200\n"
+"PO-Revision-Date: 2009-08-03 12:17+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,25 @@ msgstr "Epiphany-webbokmärken"
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "Webbokmärken"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "Sök på nätet"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.se"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.se/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -764,7 +783,7 @@ msgstr "_Återuppta"
 #: ../embed/downloader-view.c:542
 #: ../embed/downloader-view.c:547
 #: ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1740
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -832,22 +851,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Återstår"
 
-#: ../embed/ephy-embed.c:438
+#: ../embed/ephy-embed.c:408
 msgid "Save"
 msgstr "Spara"
 
-#: ../embed/ephy-embed.c:580
+#: ../embed/ephy-embed.c:550
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:564
 msgid "Download this potentially unsafe file?"
 msgstr "Hämta denna möjligen osäkra fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:569
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -858,14 +877,14 @@ msgstr ""
 "\n"
 "Det är osäkert att öppna \"%s\" eftersom den möjligen kan skada dina dokument eller inkräkta på din integritet. Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:607
+#: ../embed/ephy-embed.c:577
 msgid "Open this file?"
 msgstr "Öppna denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:613
+#: ../embed/ephy-embed.c:583
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -876,13 +895,13 @@ msgstr ""
 "\n"
 "Du kan öppna \"%s\" med hjälp av \"%s\" eller spara den."
 
-#: ../embed/ephy-embed.c:620
+#: ../embed/ephy-embed.c:590
 msgid "Download this file?"
 msgstr "Hämta denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:625
+#: ../embed/ephy-embed.c:595
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -893,11 +912,11 @@ msgstr ""
 "\n"
 "Du har inget program som kan öppna \"%s\". Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:632
+#: ../embed/ephy-embed.c:602
 msgid "_Save As..."
 msgstr "Spara so_m..."
 
-#: ../embed/ephy-embed.c:733
+#: ../embed/ephy-embed.c:694
 msgid "Web Inspector"
 msgstr "Webbinspektör"
 
@@ -909,14 +928,6 @@ msgstr "Epiphany kan inte användas nu. Initiering av Mozilla misslyckades."
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Skicka ett e-postmeddelande till \"%s\""
-
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-embed-utils.c:111
-#: ../embed/ephy-web-view.c:54
-msgid "Blank page"
-msgstr "Tom sida"
 
 #: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
@@ -1255,29 +1266,37 @@ msgstr "Andra"
 msgid "Local files"
 msgstr "Lokala filer"
 
-#: ../embed/ephy-web-view.c:1260
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54
+#: ../embed/ephy-web-view.c:2049
+msgid "Blank page"
+msgstr "Tom sida"
+
+#: ../embed/ephy-web-view.c:1247
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Omdirigerar till \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1262
+#: ../embed/ephy-web-view.c:1249
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Överför data från \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1264
+#: ../embed/ephy-web-view.c:1251
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Väntar på auktorisering från \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1270
-#: ../embed/ephy-web-view.c:1397
+#: ../embed/ephy-web-view.c:1257
+#: ../embed/ephy-web-view.c:1365
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Läser in \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1399
+#: ../embed/ephy-web-view.c:1367
 msgid "Loading…"
 msgstr "Läser in..."
 
@@ -1621,77 +1640,64 @@ msgstr "Äm_nen:"
 msgid "Sho_w all topics"
 msgstr "Visa _alla ämnen"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "Sök på nätet"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.se/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "Entertainment"
 msgstr "Nöje"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "News"
 msgstr "Nyheter"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Shopping"
 msgstr "Köp och sälj"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Travel"
 msgstr "Resor"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Work"
 msgstr "Arbete"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:442
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Uppdatera bokmärket \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:447
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Sidan i bokmärket har flyttat till \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:451
 msgid "_Don't Update"
 msgstr "Uppdatera _inte"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:453
 msgid "_Update"
 msgstr "_Uppdatera"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:456
 msgid "Update Bookmark?"
 msgstr "Uppdatera bokmärke?"
 
 # Detta används i historiken och bland bokmärkena i betydelserna
 # "alla webbplatser", "alla bokmärken".
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1204
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Alla"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1207
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Mest besökta"
@@ -1699,21 +1705,20 @@ msgstr "Mest besökta"
 # Detta ska vara plural
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1211
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Inte kategoriserade"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1216
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Närliggande webbplatser"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
+#: ../src/bookmarks/ephy-bookmarks.c:1451
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
-#: ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "Namnlös"
 
@@ -3023,75 +3028,75 @@ msgstr "Större"
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1744
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "Osäker"
 
-#: ../src/ephy-window.c:1749
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "Trasig"
 
-#: ../src/ephy-window.c:1757
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "Låg"
 
-#: ../src/ephy-window.c:1764
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "Hög"
 
-#: ../src/ephy-window.c:1774
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "Säkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1817
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d dolt popupfönster"
 msgstr[1] "%d dolda popupfönster"
 
-#: ../src/ephy-window.c:2080
+#: ../src/ephy-window.c:2079
 #, c-format
 msgid "Open image “%s”"
 msgstr "Öppna bilden \"%s\""
 
-#: ../src/ephy-window.c:2085
+#: ../src/ephy-window.c:2084
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Använd som skrivbordsbakgrund \"%s\""
 
-#: ../src/ephy-window.c:2090
+#: ../src/ephy-window.c:2089
 #, c-format
 msgid "Save image “%s”"
 msgstr "Spara bilden \"%s\""
 
-#: ../src/ephy-window.c:2095
+#: ../src/ephy-window.c:2094
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiera bildadressen \"%s\""
 
-#: ../src/ephy-window.c:2108
+#: ../src/ephy-window.c:2107
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Skicka e-post till adressen \"%s\""
 
-#: ../src/ephy-window.c:2114
+#: ../src/ephy-window.c:2113
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiera e-postadressen \"%s\""
 
-#: ../src/ephy-window.c:2126
+#: ../src/ephy-window.c:2125
 #, c-format
 msgid "Save link “%s”"
 msgstr "Spara länken \"%s\""
 
-#: ../src/ephy-window.c:2132
+#: ../src/ephy-window.c:2131
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lägg till bokmärke för länken \"%s\""
 
-#: ../src/ephy-window.c:2138
+#: ../src/ephy-window.c:2137
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiera länkens adress \"%s\""
