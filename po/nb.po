@@ -7,11 +7,10 @@
 # Øivind Hoel <ohoel@cvs.gnome.org>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 2.25.x\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2009-06-10 10:15+0200\n"
-"PO-Revision-Date: 2009-06-10 10:18+0200\n"
+"Project-Id-Version: epiphany 2.27.x\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2009-08-03 10:22+0200\n"
+"PO-Revision-Date: 2009-08-03 10:29+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +29,25 @@ msgstr "Epiphany-bokmerker"
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "Bokmerker på internett"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "Søk på nettet"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.no/"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.no/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -871,7 +889,7 @@ msgstr "_Gjenoppta"
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:389 ../embed/downloader-view.c:542
 #: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
+#: ../src/ephy-window.c:1740
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -937,64 +955,73 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: ../embed/ephy-embed.c:490
+#: ../embed/ephy-embed.c:408
 msgid "Save"
 msgstr "Lagre"
 
-#: ../embed/ephy-embed.c:632
+#: ../embed/ephy-embed.c:550
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../embed/ephy-embed.c:646
+#: ../embed/ephy-embed.c:564
 msgid "Download this potentially unsafe file?"
 msgstr "Vil du laste ned denne potensielt utrygge filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:651
-#, c-format
+#: ../embed/ephy-embed.c:569
+#, c-format, fuzzy
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
+"Filtype: «%s».\n"
+"\n"
+"Det er utrygt å åpne «%s» da det er mulig at denne kan skade dine dokumenter eller "
 
-#: ../embed/ephy-embed.c:659
+#: ../embed/ephy-embed.c:577
 msgid "Open this file?"
 msgstr "Åpne denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:665
+#: ../embed/ephy-embed.c:583
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You can open “%s” using “%s” or save it."
 msgstr ""
+"Filtype: «%s».\n"
+"\n"
+"Du kan åpne «%s» med «%s» eller lagre den."
 
-#: ../embed/ephy-embed.c:672
+#: ../embed/ephy-embed.c:590
 msgid "Download this file?"
 msgstr "Last ned denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:677
+#: ../embed/ephy-embed.c:595
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
+"Filtype: «%s».\n"
+"\n"
+"Du har ingen programmer som kan åpne «%s». Du kan laste den ned i stedet."
 
-#: ../embed/ephy-embed.c:684
+#: ../embed/ephy-embed.c:602
 msgid "_Save As..."
 msgstr "_Lagre som..."
 
-#: ../embed/ephy-embed.c:788
+#: ../embed/ephy-embed.c:694
 msgid "Web Inspector"
 msgstr "Inspeksjon av nettsider"
 
@@ -1006,13 +1033,6 @@ msgstr "Epiphany kan ikke brukes nå. Initiering av Mozilla feilet."
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Send e-post til «%s»"
-
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-embed-utils.c:111 ../embed/ephy-web-view.c:54
-msgid "Blank page"
-msgstr "Tom side"
 
 #: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
@@ -1349,28 +1369,35 @@ msgstr "Andre"
 msgid "Local files"
 msgstr "Lokale filer"
 
-#: ../embed/ephy-web-view.c:1275
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2049
+msgid "Blank page"
+msgstr "Tom side"
+
+#: ../embed/ephy-web-view.c:1247
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Omdirigerer til «%s»..."
 
-#: ../embed/ephy-web-view.c:1277
+#: ../embed/ephy-web-view.c:1249
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Overfører data fra «%s»..."
 
-#: ../embed/ephy-web-view.c:1279
+#: ../embed/ephy-web-view.c:1251
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Venter på autorisering fra «%s»..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1285 ../embed/ephy-web-view.c:1460
+#: ../embed/ephy-web-view.c:1257 ../embed/ephy-web-view.c:1365
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster «%s»..."
 
-#: ../embed/ephy-web-view.c:1462
+#: ../embed/ephy-web-view.c:1367
 msgid "Loading…"
 msgstr "Laster..."
 
@@ -1386,12 +1413,12 @@ msgstr ""
 #: ../lib/egg/eggdesktopfile.c:165
 #, c-format
 msgid "File is not a valid .desktop file"
-msgstr ""
+msgstr "Filen er ikke en gyldig .desktop-fil"
 
 #: ../lib/egg/eggdesktopfile.c:188
 #, c-format
 msgid "Unrecognized desktop file Version '%s'"
-msgstr ""
+msgstr "Kjenner ikke igjen Versjon «%s» i .desktop fil"
 
 #: ../lib/egg/eggdesktopfile.c:958
 #, c-format
@@ -1401,12 +1428,12 @@ msgstr "Starter %s"
 #: ../lib/egg/eggdesktopfile.c:1100
 #, c-format
 msgid "Application does not accept documents on command line"
-msgstr ""
+msgstr "Programmet godtar ikke dokumenter på kommandolinjen"
 
 #: ../lib/egg/eggdesktopfile.c:1168
 #, c-format
 msgid "Unrecognized launch option: %d"
-msgstr ""
+msgstr "Ikke gjenkjent oppstartsvalg: %d"
 
 #: ../lib/egg/eggdesktopfile.c:1373
 #, c-format
@@ -1416,7 +1443,7 @@ msgstr ""
 #: ../lib/egg/eggdesktopfile.c:1392
 #, c-format
 msgid "Not a launchable item"
-msgstr ""
+msgstr "Ikke en oppstartbar oppføring"
 
 #: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
@@ -1712,95 +1739,82 @@ msgstr "Em_ner:"
 msgid "Sho_w all topics"
 msgstr "_Vis alle emner"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "Søk på nettet"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "Entertainment"
 msgstr "Underholdning"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "News"
 msgstr "Nyheter"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Shopping"
 msgstr "Innkjøp"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Travel"
 msgstr "Reiser"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Work"
 msgstr "Arbeid"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:442
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Oppdater bokmerke «%s»?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:447
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Siden bokmerket peker til er flyttet til «%s»."
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:451
 msgid "_Don't Update"
 msgstr "_Ikke oppdater"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:453
 msgid "_Update"
 msgstr "_Oppdater"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:456
 msgid "Update Bookmark?"
 msgstr "Oppdater bokmerke?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1204
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Alle"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1207
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Oftest besøkt"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1211
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Ikke kategorisert"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1216
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Nettsteder i nærheten"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1451
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Uten tittel"
 
@@ -2417,7 +2431,7 @@ msgstr "Klarte ikke å kopiere informasjonskapsler fra Mozilla."
 
 #: ../src/ephy-profile-migration.c:119
 msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr ""
+msgstr "Klarte ikke å lese markør for siste migrering. Avbryter migrering av profil."
 
 #: ../src/ephy-session.c:117
 #, c-format
@@ -3103,75 +3117,75 @@ msgstr "Større"
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:2077
+#: ../src/ephy-window.c:2079
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2084
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:2087
+#: ../src/ephy-window.c:2089
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:2092
+#: ../src/ephy-window.c:2094
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:2105
+#: ../src/ephy-window.c:2107
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:2111
+#: ../src/ephy-window.c:2113
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:2123
+#: ../src/ephy-window.c:2125
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:2129
+#: ../src/ephy-window.c:2131
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:2135
+#: ../src/ephy-window.c:2137
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
