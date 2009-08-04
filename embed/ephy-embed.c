@@ -599,7 +599,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
 
   g_free (mime_description);
 
-  button = gtk_button_new_with_label (_("_Save As..."));
+  button = gtk_button_new_with_mnemonic (_("_Save As..."));
   image = gtk_image_new_from_stock (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_BUTTON);
   gtk_button_set_image (GTK_BUTTON (button), image);
   /* don't show the image! see bug #307818 */
