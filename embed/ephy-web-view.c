@@ -1110,7 +1110,8 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   /* The ephy/gecko behavior is to add the current item of the source
      embed at the end of the back history, so keep doing that */
   item = webkit_web_back_forward_list_get_current_item (source_bflist);
-  webkit_web_back_forward_list_add_item (dest_bflist, item);
+  if (item)
+    webkit_web_back_forward_list_add_item (dest_bflist, item);
 }
 
 void
