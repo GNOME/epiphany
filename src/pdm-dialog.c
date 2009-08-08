@@ -2,7 +2,8 @@
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
- *  Copyright © 2009 Igalia S.L., Author: Xan Lopez <xlopez@igalia.com>
+ *  Copyright © 2009 Igalia S.L.
+ *  Copyright © 2009 Holger Hans Peter Freyther
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +26,6 @@
 #include "pdm-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-password-manager.h"
 #include "ephy-gui.h"
 #include "ephy-state.h"
 #include "ephy-string.h"
@@ -35,17 +35,20 @@
 #include "ephy-embed-single.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
+#include "ephy-password-info.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
 #include <webkit/webkit.h>
+#include <gnome-keyring.h>
+#include <gnome-keyring-memory.h>
 
 #include <string.h>
 #include <time.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
-	
+
 struct PdmActionInfo
 {
 	/* Methods */
@@ -68,6 +71,13 @@ struct PdmActionInfo
 	char *scroll_to_host;
 	gboolean filled;
 	gboolean delete_row_on_remove;
+};
+
+typedef struct PdmCallBackData PdmCallBackData;
+struct PdmCallBackData
+{
+    guint key;
+    GtkListStore *store;
 };
 
 #define EPHY_PDM_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PDM_DIALOG, PdmDialogPrivate))
@@ -99,7 +109,7 @@ enum
 	COL_PASSWORDS_HOST,
 	COL_PASSWORDS_USER,
 	COL_PASSWORDS_PASSWORD,
-	COL_PASSWORDS_DATA
+	COL_PASSWORDS_DATA,
 };
 
 enum
@@ -138,10 +148,7 @@ EphyDialogProperty properties [] =
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
-
-static void passwords_changed_cb		(EphyPasswordManager *manager,
-						 PdmDialog *dialog);
-
+static void pdm_dialog_password_remove (PdmActionInfo *info, gpointer data);
 
 G_DEFINE_TYPE (PdmDialog, pdm_dialog, EPHY_TYPE_DIALOG)
 
@@ -216,6 +223,30 @@ clear_all_cookies (SoupCookieJar *jar)
 }
 
 static void
+pdm_dialog_password_remove_cb (GnomeKeyringResult result,
+			       gpointer data)
+{
+	GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+
+	if (result == GNOME_KEYRING_RESULT_OK) {
+		GtkTreeIter iter;
+		GtkTreePath *path;
+		GtkTreeModel *model;
+
+		if (!gtk_tree_row_reference_valid (rowref))
+			return;
+
+		path = gtk_tree_row_reference_get_path (rowref);
+		model = gtk_tree_row_reference_get_model (rowref);
+
+		if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+			gtk_tree_path_free (path);
+		}
+	}
+}
+
+static void
 clear_all_dialog_response_cb (GtkDialog *dialog,
 			      int response,
 			      PdmClearAllDialogButtons *checkbuttons)
@@ -246,41 +277,39 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			SoupCookieJar *jar;
 
 			jar = get_cookie_jar ();
-
 			clear_all_cookies (jar);
 		}
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
 		{
-			EphyPasswordManager *manager;
+			GtkTreeIter iter;
+			PdmDialog *pdialog = EPHY_PDM_DIALOG (checkbuttons->dialog);
+			PdmActionInfo *pinfo = pdialog->priv->passwords;
 
-			manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
-							 (EPHY_EMBED_SHELL (ephy_shell)));
+			gboolean valid = gtk_tree_model_get_iter_first (pinfo->model, &iter);
 
-			/* we don't remove the password from the liststore in the callback
-			 * like we do for cookies, since the callback doesn't carry that
-			 * information, and we'd have to reload the whole list, losing the
-			 * selection in the process.
-			 */
+			while (valid) {
+				GtkTreePath *path;
+				EphyPasswordInfo *info;
+				GtkTreeRowReference *row;
 
-			if (EPHY_IS_PDM_DIALOG (checkbuttons->dialog))
-			{
-				g_signal_handlers_block_by_func
-					(manager, G_CALLBACK (passwords_changed_cb), 
-					 EPHY_PDM_DIALOG (checkbuttons->dialog));
-			}
+				path = gtk_tree_model_get_path (pinfo->model, &iter);
+				row = gtk_tree_row_reference_new (pinfo->model, path);
 
-			/* Flush the list */
-			ephy_password_manager_remove_all_passwords (manager);
+				gtk_tree_model_get (pinfo->model, &iter,
+						    COL_PASSWORDS_DATA, &info,
+						    -1);
 
-			if (EPHY_IS_PDM_DIALOG (checkbuttons->dialog))
-			{
-				g_signal_handlers_unblock_by_func
-					(manager, G_CALLBACK (passwords_changed_cb),
-					 EPHY_PDM_DIALOG (checkbuttons->dialog));
+				gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
+							   info->keyring_id,
+							   (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_cb,
+							   row,
+							   (GDestroyNotify) gtk_tree_row_reference_free);
 
-				/* And now refresh explicitly */
-				passwords_changed_cb (manager, EPHY_PDM_DIALOG (checkbuttons->dialog));
+				valid = gtk_tree_model_iter_next (pinfo->model, &iter);
+
+				g_slice_free (EphyPasswordInfo, info);
+				gtk_tree_path_free (path);
 			}
 		}
 		if (gtk_toggle_button_get_active
@@ -309,7 +338,7 @@ clear_all_dialog_checkbutton_toggled_cb (GtkToggleButton *toggle,
 {
 	GtkWidget *dialog;
 	dialog = gtk_widget_get_toplevel (GTK_WIDGET (toggle));
-	
+
 	if (gtk_toggle_button_get_active (toggle) == TRUE)
 	{
 		data->num_checked++;
@@ -321,6 +350,7 @@ clear_all_dialog_checkbutton_toggled_cb (GtkToggleButton *toggle,
 	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
 					   data->num_checked != 0);
 }
+
 void
 pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 				  GtkWidget *parent,
@@ -409,7 +439,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	{
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 	}
-	
+
 	/* Cache */
 	check = gtk_check_button_new_with_mnemonic (_("_Temporary files"));
 	checkbuttons->checkbutton_cache = check;
@@ -491,14 +521,14 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	}
 
 	/* Intelligent selection logic, no actual selection yet */
-	
-	path = gtk_tree_row_reference_get_path 
+
+	path = gtk_tree_row_reference_get_path
 		((GtkTreeRowReference *) g_list_first (rlist)->data);
-	
+
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_path_free (path);
 	iter2 = iter;
-	
+
 	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter))
 	{
 		path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
@@ -513,16 +543,13 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 		}
 	}
 	gtk_tree_path_free (path);
-	
+
 	/* Removal */
-	
 	for (r = rlist; r != NULL; r = r->next)
 	{
 		GValue val = { 0, };
 
-		path = gtk_tree_row_reference_get_path
-			((GtkTreeRowReference *)r->data);
-
+		path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
 		gtk_tree_model_get_iter (model, &iter, path);
 		gtk_tree_model_get_value (model, &iter, action->data_col, &val);
 		action->remove (action, g_value_get_boxed (&val));
@@ -534,6 +561,7 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 		}
 
+		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 		gtk_tree_path_free (path);
 	}
@@ -543,7 +571,6 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	g_list_free (rlist);
 
 	/* Selection */
-	
 	if (row_ref != NULL)
 	{
 		path = gtk_tree_row_reference_get_path (row_ref);
@@ -627,7 +654,7 @@ show_cookies_properties (PdmDialog *dialog,
 		  GTK_WINDOW (parent),
 		  GTK_DIALOG_DESTROY_WITH_PARENT,
 		  GTK_STOCK_CLOSE, 0, NULL);
-	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties", 
+	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties",
 			       -1, -1, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
@@ -740,8 +767,7 @@ cookies_properties_clicked_cb (GtkWidget *button,
 	GtkTreeSelection *selection;
 
 	selection = gtk_tree_view_get_selection (dialog->priv->cookies->treeview);
-	l = gtk_tree_selection_get_selected_rows
-		(selection, &model);
+	l = gtk_tree_selection_get_selected_rows (selection, &model);
 
 	path = (GtkTreePath *)l->data;
 	gtk_tree_model_get_iter (model, &iter, path);
@@ -964,7 +990,7 @@ cookie_host_to_iter (GtkTreeModel *model,
 		/* Start on the \0 */
 		p = key1 + len;
 		q = key2 + strlen (key2);
-	
+
 		do
 		{
 			if (*p == '.') ++n;
@@ -1050,7 +1076,7 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
 					      COL_COOKIES_HOST_KEY,
 					      GTK_SORT_ASCENDING);
-	
+
 	info->filled = TRUE;
 
 	g_signal_connect (jar, "changed",
@@ -1109,11 +1135,8 @@ pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  gpointer data)
 {
 	SoupCookie *cookie = (SoupCookie *) data;
-	SoupCookieJar *jar;
 
-	jar = get_cookie_jar();
-
-	soup_cookie_jar_delete_cookie (jar, cookie);
+	soup_cookie_jar_delete_cookie (get_cookie_jar(), cookie);
 }
 
 static void
@@ -1140,6 +1163,70 @@ pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 }
 
 /* "Passwords" tab */
+static void
+passwords_data_func_get_item_cb (GnomeKeyringResult result,
+				 GnomeKeyringItemInfo *info,
+				 gpointer data)
+{
+	GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+
+	if (result == GNOME_KEYRING_RESULT_OK) {
+		GtkTreeIter iter;
+		GtkTreePath *path;
+		GtkTreeModel *model;
+
+		if (!gtk_tree_row_reference_valid (rowref))
+			return;
+
+		path = gtk_tree_row_reference_get_path (rowref);
+		model = gtk_tree_row_reference_get_model (rowref);
+
+		if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+			EphyPasswordInfo *epinfo;
+			GValue val = {0, };
+
+			gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
+			epinfo = g_value_get_boxed (&val);
+			epinfo->secret = gnome_keyring_memory_strdup (gnome_keyring_item_info_get_secret (info));
+
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+					    COL_PASSWORDS_DATA, epinfo,
+					    COL_PASSWORDS_PASSWORD, epinfo->secret, -1);
+			g_value_unset (&val);
+		}
+	}
+}
+
+static void
+passwords_data_func (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+		     GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+	GValue val = { 0, };
+	EphyPasswordInfo *info;
+
+	if (!gtk_tree_view_column_get_visible (tree_column))
+		return;
+
+	gtk_tree_model_get_value (model, iter, COL_PASSWORDS_DATA, &val);
+	info = g_value_get_boxed (&val);
+
+	if (info->secret == NULL) {
+		GtkTreePath *path;
+		GtkTreeRowReference *rowref;
+
+		path = gtk_tree_model_get_path (model, iter);
+		rowref = gtk_tree_row_reference_new (model, path);
+
+		gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
+						  info->keyring_id,
+						  GNOME_KEYRING_ITEM_INFO_SECRET,
+						  (GnomeKeyringOperationGetItemInfoCallback) passwords_data_func_get_item_cb,
+						  rowref,
+						  (GDestroyNotify) gtk_tree_row_reference_free);
+		gtk_tree_path_free (path);
+	}
+	g_value_unset (&val);
+}
 
 static void
 passwords_show_toggled_cb (GtkWidget *button,
@@ -1154,7 +1241,7 @@ passwords_show_toggled_cb (GtkWidget *button,
 	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
 
 	active = gtk_toggle_button_get_active ((GTK_TOGGLE_BUTTON (button)));
-	
+
 	gtk_tree_view_column_set_visible (column, active);
 }
 
@@ -1185,6 +1272,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					EPHY_TYPE_PASSWORD_INFO);
+
 	gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
 	gtk_tree_view_set_headers_visible (treeview, TRUE);
 	selection = gtk_tree_view_get_selection (treeview);
@@ -1207,6 +1295,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_HOST);
 
+	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (treeview,
 						     COL_PASSWORDS_USER,
 						     _("User Name"),
@@ -1219,6 +1308,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
 
+	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (treeview,
 						     COL_PASSWORDS_PASSWORD,
 						     _("User Password"),
@@ -1226,70 +1316,48 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 						     "text", COL_PASSWORDS_PASSWORD,
 						     NULL);
 	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
-	/* Hide this info by default */
+	gtk_tree_view_column_set_cell_data_func (column,
+						 renderer,
+						 passwords_data_func,
+						 info,
+						 NULL);
+	/* Initially shown as hidden colum */
 	gtk_tree_view_column_set_visible (column, FALSE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_PASSWORD);
 
 	info->treeview = treeview;
-
 	setup_action (info);
 }
 
 static void
-passwords_changed_cb (EphyPasswordManager *manager,
-		      PdmDialog *dialog)
+pdm_dialog_fill_passwords_list_async_cb (GnomeKeyringResult result,
+					 GList *list,
+					 gpointer data)
 {
-	GtkTreeModel *model = dialog->priv->passwords->model;
+	GList *l;
+	PdmActionInfo *info = (PdmActionInfo *)data;
 
-	LOG ("passwords changed");
+	if (result != GNOME_KEYRING_RESULT_OK)
+		return;
 
-	/* since the callback doesn't carry any information about what
-	 * exactly has changed, we have to rebuild the list from scratch.
-	 */
-	gtk_list_store_clear (GTK_LIST_STORE (model));
+	for (l = list; l != NULL; l = l->next)
+		info->add (info, l->data);
 
-	/* And turn off sorting */
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					      GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+	info->filled = TRUE;
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
+					      COL_PASSWORDS_HOST,
 					      GTK_SORT_ASCENDING);
-
-	dialog->priv->passwords->fill (dialog->priv->passwords);
 }
 
 static void
 pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 {
-	EphyPasswordManager *manager;
-	GList *list, *l;
-
-	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
-			(EPHY_EMBED_SHELL (ephy_shell)));
-
-	list = ephy_password_manager_list_passwords (manager);
-
-	for (l = list; l != NULL; l = l->next)
-	{
-		info->add (info, l->data);
-	}
-
-	/* the element data has been consumed, so we need only to free the list */
-	g_list_free (list);
-
-	/* Let's get notified when the list changes */
-	if (info->filled == FALSE)
-	{
-		g_signal_connect (manager, "passwords-changed",
-				  G_CALLBACK (passwords_changed_cb), info->dialog);
-	}
-
-	info->filled = TRUE;
-
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
-					      COL_PASSWORDS_HOST,
-					      GTK_SORT_ASCENDING);
+	gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
+				     pdm_dialog_fill_passwords_list_async_cb,
+				     info,
+				     NULL);
 }
 
 static void
@@ -1298,28 +1366,101 @@ pdm_dialog_passwords_destruct (PdmActionInfo *info)
 }
 
 static void
+pdm_dialog_password_add_item_attrs_cb (GnomeKeyringResult result,
+				       GnomeKeyringAttributeList *attributes,
+				       gpointer data)
+{
+	EphyPasswordInfo *pinfo;
+	PdmCallBackData *cbdata;
+	GnomeKeyringAttribute *attribute;
+	gchar *user, *host, *protocol;
+	GtkTreeIter iter;
+	int i;
+
+	if (result != GNOME_KEYRING_RESULT_OK)
+		return;
+
+	cbdata = (PdmCallBackData *)data;
+
+	user = host = protocol = NULL;
+	attribute = (GnomeKeyringAttribute *) attributes->data;
+	for (i = 0; i < attributes->len; ++i) {
+		if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
+			if (strcmp (attribute[i].name, "server") == 0)
+				host = g_strdup (attribute[i].value.string);
+			else if (strcmp (attribute[i].name, "user") == 0)
+				user = g_strdup (attribute[i].value.string);
+			else if (strcmp (attribute[i].name, "protocol") == 0)
+				protocol = attribute[i].value.string;
+			}
+		}
+	if (!protocol || strncmp("http", protocol, 4) != 0)
+		return;
+
+	pinfo = ephy_password_info_new (cbdata->key);
+	if (!pinfo)
+		return;
+
+	gtk_list_store_append (cbdata->store, &iter);
+	gtk_list_store_set (cbdata->store, &iter,
+			    COL_PASSWORDS_HOST, host,
+			    COL_PASSWORDS_USER, user,
+			    COL_PASSWORDS_PASSWORD, NULL,
+			    COL_PASSWORDS_DATA, pinfo,
+			    -1);
+}
+
+static void
+pdm_dialog_password_add_item_info_cb (GnomeKeyringResult result,
+				      GnomeKeyringItemInfo *info,
+				      gpointer data)
+{
+	if (result != GNOME_KEYRING_RESULT_OK)
+		return;
+
+	if (gnome_keyring_item_info_get_type (info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
+		PdmCallBackData *cbdata = (PdmCallBackData *)data;
+		gnome_keyring_item_get_attributes (GNOME_KEYRING_DEFAULT,
+						   cbdata->key,
+						   (GnomeKeyringOperationGetAttributesCallback) pdm_dialog_password_add_item_attrs_cb,
+						   g_memdup (cbdata, sizeof (PdmCallBackData)),
+						   (GDestroyNotify) g_free);
+
+	}
+
+}
+
+static void
 pdm_dialog_password_add (PdmActionInfo *info,
 			 gpointer data)
 {
-	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GValue value = { 0, };
+	PdmCallBackData *cbdata;
+	guint key_id = GPOINTER_TO_UINT(data);
 
-	store = GTK_LIST_STORE (info->model);
+	/*
+	 * We have the item id of the password. We will have to check if this
+	 * password entry is of the right type and then can proceed to get the
+	 * the private information. Seahorse is treating every protocol that
+	 * starts with http as Web Access and we will do the same here.
+	 */
 
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store,
-			    &iter,
-			    COL_PASSWORDS_HOST, pinfo->host,
-			    COL_PASSWORDS_USER, pinfo->username,
-			    COL_PASSWORDS_PASSWORD, pinfo->password,
-			    -1);
+	cbdata = g_malloc (sizeof (PdmCallBackData));
+	cbdata->key = key_id;
+	cbdata->store = GTK_LIST_STORE (info->model);
 
-	g_value_init (&value, EPHY_TYPE_PASSWORD_INFO);
-	g_value_take_boxed (&value, pinfo);
-	gtk_list_store_set_value (store, &iter, COL_PASSWORDS_DATA, &value);
-	g_value_unset (&value);
+	/* Get the type of the key_id */
+	gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
+					  key_id,
+					  GNOME_KEYRING_ITEM_INFO_BASICS,
+					  (GnomeKeyringOperationGetItemInfoCallback) pdm_dialog_password_add_item_info_cb,
+					  cbdata,
+					  (GDestroyNotify) g_free);
+}
+
+static void
+pdm_dialog_password_remove_dummy_cb (GnomeKeyringResult result,
+				     gpointer data)
+{
 }
 
 static void
@@ -1327,23 +1468,12 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 			    gpointer data)
 {
 	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
-	EphyPasswordManager *manager;
 
-	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
-			(EPHY_EMBED_SHELL (ephy_shell)));
-
-	/* we don't remove the password from the liststore in the callback
-	 * like we do for cookies, since the callback doesn't carry that
-	 * information, and we'd have to reload the whole list, losing the
-	 * selection in the process.
-	 */
-	g_signal_handlers_block_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
-
-	ephy_password_manager_remove_password (manager, pinfo);
-
-	g_signal_handlers_unblock_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
+	gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
+				   pinfo->keyring_id,
+				   (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_dummy_cb,
+				   NULL,
+				   NULL);
 }
 
 /* common routines */
@@ -1360,7 +1490,6 @@ sync_notebook_tab (GtkWidget *notebook,
 	if (page_num == 0 && priv->cookies->filled == FALSE)
 	{
 		priv->cookies->fill (priv->cookies);
-
 		priv->cookies->scroll_to (priv->cookies);
 	}
 	else if (page_num == 1 && priv->passwords->filled == FALSE)
@@ -1383,7 +1512,7 @@ pdm_dialog_response_cb (GtkDialog *widget,
 	{
 		int page;
 		GtkWidget *parent;
-		
+
 		parent = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 						  properties[PROP_WINDOW].id);
 
@@ -1391,14 +1520,14 @@ pdm_dialog_response_cb (GtkDialog *widget,
 		if (page == 0)
 		{
 			/* Cookies */
-			pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog), 
+			pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog),
 							  parent, CLEAR_ALL_COOKIES);
 		}
 		if (page == 1)
 		{
 			/* Passwords */
 			pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog),
-							  parent, CLEAR_ALL_PASSWORDS);			
+							  parent, CLEAR_ALL_PASSWORDS);
 		}
 		return;
 	}
