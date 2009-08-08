@@ -29,26 +29,25 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
-#include "ephy-file-chooser.h"
-#include "ephy-file-helpers.h"
-#include "ephy-history.h"
+#include "ephy-embed.h"
+#include "ephy-embed-event.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-persist.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
+#include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
+#include "ephy-history.h"
+#include "ephy-prefs.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
-#include "ephy-embed-event.h"
-#include "ephy-embed-utils.h"
-#include "ephy-prefs.h"
 #include "ephy-web-view.h"
 
-#include <webkit/webkit.h>
 #include <errno.h>
-#include <string.h>
 #include <glib/gi18n.h>
-
-#include "ephy-embed-prefs.h"
-#include "ephy-embed.h"
+#include <string.h>
+#include <webkit/webkit.h>
 
 static void     ephy_embed_class_init  (EphyEmbedClass *klass);
 static void     ephy_embed_init        (EphyEmbed *gs);
