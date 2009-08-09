@@ -1,4 +1,4 @@
-# Irish translations of epiphany package.
+# Irish translations for epiphany package.
 # Copyright (C) 2003-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 # Paul Duffy <dubhthach@frink.nuigalway.ie>, 2003.
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-08 05:46-0600\n"
-"PO-Revision-Date: 2009-08-08 06:00-0600\n"
+"POT-Creation-Date: 2009-08-08 20:54-0600\n"
+"PO-Revision-Date: 2009-08-08 21:17-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -710,7 +710,7 @@ msgstr "Roghnaigh _Teanga:"
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:358
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "Bánaigh"
 
@@ -756,7 +756,7 @@ msgstr "Sainroghanna"
 
 #: ../data/glade/prefs-dialog.glade.h:29
 msgid "Privacy"
-msgstr "Príobháid"
+msgstr "Príobháideachas"
 
 #: ../data/glade/prefs-dialog.glade.h:30
 msgid "Set to Current _Page"
@@ -861,7 +861,7 @@ msgstr ""
 
 #: ../data/glade/print.glade.h:13
 msgid "_Page address"
-msgstr "Seola_dh an Leathanaigh"
+msgstr "Seola_dh an leathanaigh"
 
 #. this opens the downloader window, or brings it to the foreground if already open
 #: ../embed/downloader-view.c:167
@@ -881,7 +881,7 @@ msgstr "%02u.%02u"
 
 #: ../embed/downloader-view.c:372
 msgid "_Pause"
-msgstr "_Glac sos"
+msgstr "_Sos"
 
 #: ../embed/downloader-view.c:372
 #, fuzzy
@@ -893,7 +893,7 @@ msgstr "Atosaigh"
 #: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1740
 msgid "Unknown"
-msgstr "Gan aithint"
+msgstr "Anaithnid"
 
 #: ../embed/downloader-view.c:505
 #, c-format
@@ -957,26 +957,25 @@ msgstr "%"
 
 #: ../embed/downloader-view.c:899
 msgid "Remaining"
-msgstr "Meid atá fanacht"
+msgstr "Fágtha"
 
-#: ../embed/ephy-embed.c:408
+#: ../embed/ephy-embed.c:407
 msgid "Save"
 msgstr "Sábháil"
 
-#: ../embed/ephy-embed.c:550
-#, fuzzy
+#: ../embed/ephy-embed.c:549
 msgctxt "file type"
 msgid "Unknown"
-msgstr "Gan aithint"
+msgstr "Anaithnid"
 
-#: ../embed/ephy-embed.c:564
+#: ../embed/ephy-embed.c:563
 #, fuzzy
 msgid "Download this potentially unsafe file?"
 msgstr "_Fillteán na nÍoschóipeanna"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:569
+#: ../embed/ephy-embed.c:568
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -985,7 +984,7 @@ msgid ""
 "invade your privacy. You can download it instead."
 msgstr ""
 
-#: ../embed/ephy-embed.c:577
+#: ../embed/ephy-embed.c:576
 #, fuzzy
 msgid "Open this file?"
 msgstr "Oscail comhad"
@@ -993,7 +992,7 @@ msgstr "Oscail comhad"
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:583
+#: ../embed/ephy-embed.c:582
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1001,14 +1000,14 @@ msgid ""
 "You can open “%s” using “%s” or save it."
 msgstr ""
 
-#: ../embed/ephy-embed.c:590
+#: ../embed/ephy-embed.c:589
 #, fuzzy
 msgid "Download this file?"
 msgstr "_Fillteán na nÍoschóipeanna"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:595
+#: ../embed/ephy-embed.c:594
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1016,12 +1015,12 @@ msgid ""
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
 
-#: ../embed/ephy-embed.c:602
+#: ../embed/ephy-embed.c:601
 #, fuzzy
 msgid "_Save As..."
 msgstr "Sábhail m_ar..."
 
-#: ../embed/ephy-embed.c:694
+#: ../embed/ephy-embed.c:693
 msgid "Web Inspector"
 msgstr ""
 
@@ -1611,7 +1610,7 @@ msgstr "Leabharmharc"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
 #: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
 msgid "Bookmarks"
-msgstr "L.mharcanna"
+msgstr "Leabharmharcanna"
 
 #: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:276
 msgid "Address Entry"
@@ -1625,38 +1624,35 @@ msgstr "Íoschóipeáil Nasc"
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
 msgid "Today %I:%M %p"
-msgstr ""
+msgstr "Inniu %I:%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:236
 msgid "Yesterday %I:%M %p"
-msgstr ""
+msgstr "Inné %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:252
-#, fuzzy
 msgid "%a %I:%M %p"
-msgstr "%a %d %b %Y"
+msgstr "%a %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:264
-#, fuzzy
 msgid "%b %d %I:%M %p"
-msgstr "%a %d %b %Y"
+msgstr "%d %b %I:%M %p"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
 #: ../lib/ephy-time-helpers.c:269
-#, fuzzy
 msgid "%b %d %Y"
-msgstr "%a %d %b %Y"
+msgstr "%d %b %Y"
 
 #: ../lib/ephy-zoom.h:44
 msgid "50%"
@@ -1699,9 +1695,8 @@ msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 
 #: ../lib/widgets/ephy-search-entry.c:140
-#, fuzzy
 msgid "Clear"
-msgstr "Bánaigh"
+msgstr "Glan"
 
 #: ../src/bookmarks/ephy-bookmark-action.c:318
 #, c-format
@@ -1842,7 +1837,7 @@ msgstr "Suímh _Lín"
 #: ../src/bookmarks/ephy-bookmarks.c:1451
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
-msgstr "Gan ainm"
+msgstr "Gan teideal"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:78
 msgid "Epiphany (RDF)"
@@ -1860,7 +1855,7 @@ msgstr ""
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
 #: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
 msgid "_File"
-msgstr "Comhad"
+msgstr "_Comhad"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
 #: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
@@ -2021,7 +2016,7 @@ msgstr "Roghnaigh leabharmharcanna nó téacs uile"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
 #: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
 msgid "_Contents"
-msgstr "_Ábhar"
+msgstr "_Inneachar"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
@@ -2030,7 +2025,7 @@ msgstr "Taispáin cabhair na leabharmharcanna"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
 #: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
 msgid "_About"
-msgstr "F_aoi"
+msgstr "_Maidir Leis Seo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
 #: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
@@ -2274,9 +2269,8 @@ msgid "Find links:"
 msgstr ""
 
 #: ../src/ephy-find-toolbar.c:178
-#, fuzzy
 msgid "Find:"
-msgstr "_Cuardaigh:"
+msgstr "Aimsigh:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
@@ -2310,7 +2304,7 @@ msgstr ""
 
 #: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:306
 msgid "Go"
-msgstr "Téir"
+msgstr "Téigh"
 
 #: ../src/ephy-history-window.c:155
 msgid "Open the selected history link in a new window"
@@ -2588,13 +2582,12 @@ msgstr ""
 #. * a menu with all sites you can go 'back' to
 #.
 #: ../src/ephy-toolbar.c:221
-#, fuzzy
 msgid "Back history"
-msgstr "Bánaigh stair"
+msgstr "Stair thiar"
 
 #: ../src/ephy-toolbar.c:235
 msgid "_Forward"
-msgstr "_Aniar"
+msgstr "Ar _Aghaidh"
 
 #: ../src/ephy-toolbar.c:237
 msgid "Go to the next visited page"
@@ -2604,9 +2597,8 @@ msgstr ""
 #. * a menu with all sites you can go 'forward' to
 #.
 #: ../src/ephy-toolbar.c:241
-#, fuzzy
 msgid "Forward history"
-msgstr "Bánaigh stair"
+msgstr "Stair ar aghaidh"
 
 #: ../src/ephy-toolbar.c:254
 msgid "_Up"
@@ -2713,7 +2705,7 @@ msgstr "_Leabharmharcanna"
 
 #: ../src/ephy-window.c:112
 msgid "_Go"
-msgstr "_Téir"
+msgstr "_Téigh"
 
 #: ../src/ephy-window.c:113
 #, fuzzy
@@ -2722,7 +2714,7 @@ msgstr "Barraí na nUirlisí"
 
 #: ../src/ephy-window.c:114
 msgid "_Tabs"
-msgstr "_Cluaisíní"
+msgstr "Cl_uaisíní"
 
 #: ../src/ephy-window.c:116
 #, fuzzy
@@ -2731,27 +2723,24 @@ msgstr "Barra na n_Uirlisí"
 
 #. File menu
 #: ../src/ephy-window.c:122
-#, fuzzy
 msgid "_Open…"
-msgstr "Oscail"
+msgstr "_Oscail..."
 
 #: ../src/ephy-window.c:123
 msgid "Open a file"
 msgstr "Oscail comhad"
 
 #: ../src/ephy-window.c:125
-#, fuzzy
 msgid "Save _As…"
-msgstr "Sábháil mar"
+msgstr "Sábháil _Mar..."
 
 #: ../src/ephy-window.c:126
 msgid "Save the current page"
 msgstr "Sábhail an leathanach reatha"
 
 #: ../src/ephy-window.c:128
-#, fuzzy
 msgid "Page Set_up"
-msgstr "Socrú Priontála"
+msgstr "Socrú _Leathanaigh"
 
 #: ../src/ephy-window.c:129
 msgid "Setup the page settings for printing"
@@ -2759,16 +2748,15 @@ msgstr "Socruithe priontála leathanach"
 
 #: ../src/ephy-window.c:131
 msgid "Print Pre_view"
-msgstr "Réamhamharc Priontála"
+msgstr "_Réamhamharc Priontála"
 
 #: ../src/ephy-window.c:132
 msgid "Print preview"
 msgstr "Réamhamharc priontála"
 
 #: ../src/ephy-window.c:134
-#, fuzzy
 msgid "_Print…"
-msgstr "Priontáil"
+msgstr "_Priontáil..."
 
 #: ../src/ephy-window.c:135
 msgid "Print the current page"
@@ -2790,7 +2778,7 @@ msgstr "Dún an fhuinneog"
 #. Edit menu
 #: ../src/ephy-window.c:146
 msgid "_Undo"
-msgstr "_Cealaigh"
+msgstr "Cea_laigh"
 
 #: ../src/ephy-window.c:147
 msgid "Undo the last action"
@@ -2862,7 +2850,7 @@ msgstr "_Feach ar an Teastas"
 
 #: ../src/ephy-window.c:184
 msgid "P_references"
-msgstr "Sain_roghanna"
+msgstr "_Sainroghanna"
 
 #: ../src/ephy-window.c:185
 msgid "Configure the web browser"
@@ -2884,11 +2872,11 @@ msgstr "_Stad"
 
 #: ../src/ephy-window.c:194
 msgid "Stop current data transfer"
-msgstr "Stad den aistriú reatha sonraí"
+msgstr "Stad aistriú sonraí reatha"
 
 #: ../src/ephy-window.c:198
 msgid "_Reload"
-msgstr "_Athlódail"
+msgstr "_Athluchtaigh"
 
 #: ../src/ephy-window.c:199
 msgid "Display the latest content of the current page"
@@ -2971,7 +2959,7 @@ msgid "Go to a specified location"
 msgstr "Téir go dtí áit éagsúil"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:402
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 #, fuzzy
 msgid "Hi_story"
 msgstr "Stair"
@@ -3054,7 +3042,7 @@ msgstr "Taispeáin nó folaigh barra an stádais"
 
 #: ../src/ephy-window.c:282
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Lánscáileán"
 
 #: ../src/ephy-window.c:283
 msgid "Browse at full screen"
@@ -3195,7 +3183,7 @@ msgstr "Oscail"
 
 #: ../src/ephy-window.c:1491 ../src/window-commands.c:310
 msgid "Save As"
-msgstr "Sábháil mar"
+msgstr "Sábháil Mar"
 
 #: ../src/ephy-window.c:1493
 msgid "Print"
@@ -3203,17 +3191,17 @@ msgstr "Priontáil"
 
 #: ../src/ephy-window.c:1497
 msgid "Find"
-msgstr "Cuardaigh"
+msgstr "Aimsigh"
 
 #. Translators: This refers to text size
 #: ../src/ephy-window.c:1510
 msgid "Larger"
-msgstr ""
+msgstr "Níos Mó"
 
 #. Translators: This refers to text size
 #: ../src/ephy-window.c:1513
 msgid "Smaller"
-msgstr ""
+msgstr "Níos Lú"
 
 #: ../src/ephy-window.c:1743
 msgid "Insecure"
@@ -3234,7 +3222,7 @@ msgstr "Ard"
 #: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
-msgstr "Leibhéal na Slándála: %s"
+msgstr "Leibhéal slándála: %s"
 
 #: ../src/ephy-window.c:1816
 #, fuzzy, c-format
@@ -3288,97 +3276,97 @@ msgstr "Nasc Leabharmharc..."
 msgid "Copy link's address “%s”"
 msgstr "Cóipeáil seoladh an Naisc"
 
-#: ../src/pdm-dialog.c:339
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr ""
 
-#: ../src/pdm-dialog.c:342
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
 "want to remove:"
 msgstr ""
 
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:377
 #, fuzzy
 msgid "Clear All Personal Data"
 msgstr "Sonraí Pearsanta"
 
 #. Cookies
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:408
 #, fuzzy
 msgid "C_ookies"
 msgstr "Fianáin"
 
 #. Passwords
-#: ../src/pdm-dialog.c:390
+#: ../src/pdm-dialog.c:420
 #, fuzzy
 msgid "Saved _passwords"
 msgstr "Roghnaigh Pasfhocal."
 
 #. Cache
-#: ../src/pdm-dialog.c:414
+#: ../src/pdm-dialog.c:444
 #, fuzzy
 msgid "_Temporary files"
 msgstr "<b>Comhaid Sealadacha</b>"
 
-#: ../src/pdm-dialog.c:430
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
 msgstr ""
 
-#: ../src/pdm-dialog.c:626
+#: ../src/pdm-dialog.c:653
 msgid "Cookie Properties"
 msgstr ""
 
-#: ../src/pdm-dialog.c:643
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "Ábhar:"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
-msgstr "Bealach:"
+msgstr "Conair:"
 
-#: ../src/pdm-dialog.c:675
+#: ../src/pdm-dialog.c:702
 #, fuzzy
 msgid "Send for:"
 msgstr "S_eol chuig..."
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
 msgstr ""
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
 msgstr ""
 
-#: ../src/pdm-dialog.c:690
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "Éag:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:702
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
 msgstr "Deireadh an seisiún reatha"
 
-#: ../src/pdm-dialog.c:836
+#: ../src/pdm-dialog.c:862
 msgid "Domain"
 msgstr "Fearann"
 
-#: ../src/pdm-dialog.c:848
+#: ../src/pdm-dialog.c:874
 msgid "Name"
 msgstr "Ainm"
 
-#: ../src/pdm-dialog.c:1200
+#: ../src/pdm-dialog.c:1288
 msgid "Host"
 msgstr "Óstach"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1301
 msgid "User Name"
-msgstr "Ainm an Úsáideora"
+msgstr "Ainm Úsáideora"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1314
 #, fuzzy
 msgid "User Password"
 msgstr "Pasfhocail"
@@ -3395,7 +3383,7 @@ msgstr "Sábhail m_ar..."
 
 #: ../src/popup-commands.c:274
 msgid "Save Image As"
-msgstr "Sábháil Íomha mar"
+msgstr "Sábháil Íomhá Mar"
 
 #: ../src/ppview-toolbar.c:86
 msgid "First"
@@ -3423,7 +3411,7 @@ msgstr "Téir go dtí an leathanach roimhe"
 
 #: ../src/ppview-toolbar.c:98
 msgid "Next"
-msgstr "Ar aghaidh"
+msgstr "Ar Aghaidh"
 
 #: ../src/ppview-toolbar.c:99
 msgid "Go to next page"
@@ -3445,7 +3433,7 @@ msgstr "Dún réamhamharc priontála"
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
@@ -3475,6 +3463,10 @@ msgid ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 msgstr ""
+"Is bogearraí saor é an Brabhsálaí Gréasáin GNOME; is féidir leat é a "
+"athdháileadh nó a athrú faoi théarmaí an GNU General Public License mar "
+"foilsíodh é ag an Free Software Foundation; leagan 2 an License, nó (de do "
+"rogha) aon leagan níos déanaí."
 
 #: ../src/window-commands.c:777
 msgid ""
@@ -3483,6 +3475,10 @@ msgid ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
+"Dáileadh an Brabhsálaí Gréasáin GNOME le súil go mbeidh sé úsáideach, ach "
+"GAN AON BHARÁNTA; gan an baránta intuigthe INDÍOLTÓIREACHTA nó OIRIÚNACHTA "
+"D'FHEIDHM ÁIRITHE fiú. Féach an GNU General Public License le haghaidh "
+"tuilleadh mionsonraí."
 
 #: ../src/window-commands.c:781
 msgid ""
@@ -3490,19 +3486,23 @@ msgid ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
+"Ba chóir go bhfuair tú cóip an GNU General Public License in éineacht leis "
+"an mBrabhsálaí Gréasáin GNOME; mura bhfuair tú é, scríobh chuig an Free "
+"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+"02110-1301 USA."
 
 #: ../src/window-commands.c:827 ../src/window-commands.c:843
 #: ../src/window-commands.c:854
 msgid "Contact us at:"
-msgstr ""
+msgstr "Déan teagmháil linn ag:"
 
 #: ../src/window-commands.c:830
 msgid "Contributors:"
-msgstr ""
+msgstr "Rannpháirtithe:"
 
 #: ../src/window-commands.c:833
 msgid "Past developers:"
-msgstr ""
+msgstr "Forbróirí roimhe seo:"
 
 #: ../src/window-commands.c:863
 #, c-format
@@ -3510,6 +3510,9 @@ msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by WebKit"
 msgstr ""
+"Ligeann duit amharc ar leathanaigh gréasáin agus eolas a aimsiú ar an "
+"idirlíon.\n"
+"Á chumhachtú ag WebKit"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3520,11 +3523,14 @@ msgstr ""
 #. * line seperated by newlines (\n).
 #.
 #: ../src/window-commands.c:889
-#, fuzzy
 msgid "translator-credits"
-msgstr "Pól Ó Dubhthaigh, David O'Callaghan, Michael Everson"
+msgstr ""
+"Paul Duffy <dubhthach@frink.nuigalway.ie>\n"
+"David O'Callaghan <david.ocallaghan@cs.tcd.ie>\n"
+"Michael Everson <everson@evertype.com>\n"
+"Alastair McKinstry <mckinstry@computer.org>\n"
+"Seán de Búrca <leftmostcat@gmail.com>"
 
 #: ../src/window-commands.c:892
-#, fuzzy
 msgid "GNOME Web Browser Website"
-msgstr "Brabhsálaí Lín"
+msgstr "Súiomh Gréasáin an Brabhsálaí Gréasáin GNOME"
