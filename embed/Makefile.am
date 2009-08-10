@@ -82,7 +82,7 @@ stamp_files = \
 ephy-embed-type-builtins.c: stamp-ephy-embed-type-builtins.c Makefile
 	@true
 stamp-ephy-embed-type-builtins.c: Makefile $(INST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -103,7 +103,7 @@ stamp-ephy-embed-type-builtins.c: Makefile $(INST_H_FILES)
 ephy-embed-type-builtins.h: stamp-ephy-embed-type-builtins.h Makefile
 	@true
 stamp-ephy-embed-type-builtins.h: Makefile $(INST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
 		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
 		--fhead "#endif\n\n" \

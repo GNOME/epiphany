@@ -205,7 +205,7 @@ stamp_files = \
 ephy-type-builtins.c: stamp-ephy-type-builtins.c Makefile
 	@true
 stamp-ephy-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -226,7 +226,7 @@ stamp-ephy-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 ephy-type-builtins.h: stamp-ephy-type-builtins.h Makefile
 	@true
 stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
 		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
 		--fhead "#endif\n\n" \
@@ -247,7 +247,7 @@ stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 ephy-dbus-server-bindings.h: stamp-ephy-dbus-server-bindings.h
 	@true
 stamp-ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
-	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
+	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
@@ -255,7 +255,7 @@ stamp-ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makef
 ephy-dbus-client-bindings.h: stamp-ephy-dbus-client-bindings.h
 	@true
 stamp-ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
-	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
+	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)

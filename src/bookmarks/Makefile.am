@@ -65,7 +65,7 @@ stamp_files = \
 ephy-bookmarks-type-builtins.c: stamp-ephy-bookmarks-type-builtins.c Makefile
 	@true
 stamp-ephy-bookmarks-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-bookmarks-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -86,7 +86,7 @@ stamp-ephy-bookmarks-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 ephy-bookmarks-type-builtins.h: stamp-ephy-bookmarks-type-builtins.h Makefile
 	@true
 stamp-ephy-bookmarks-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
 		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
 		--fhead "#endif\n\n" \

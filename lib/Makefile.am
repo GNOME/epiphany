@@ -118,19 +118,19 @@ stamp_files = \
 ephy-marshal.c: stamp-ephy-marshal.c
 	@true
 stamp-ephy-marshal.c: ephy-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c \
 	&& echo timestamp > $(@F)
 
 ephy-marshal.h: stamp-ephy-marshal.h
 	@true
 stamp-ephy-marshal.h: ephy-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
 	&& echo timestamp > $(@F)
 
 ephy-lib-type-builtins.c: stamp-ephy-lib-type-builtins.c Makefile
 	@true
 stamp-ephy-lib-type-builtins.c: Makefile $(TYPES_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-lib-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -151,7 +151,7 @@ stamp-ephy-lib-type-builtins.c: Makefile $(TYPES_H_FILES)
 ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h Makefile
 	@true
 stamp-ephy-lib-type-builtins.h: Makefile $(TYPES_H_FILES)
-	$(GLIB_MKENUMS) \
+	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
 		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
 		--fhead "#endif\n\n" \
