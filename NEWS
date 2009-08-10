@@ -1,3 +1,24 @@
+================
+Epiphany 2.27.90
+================
+
+Changes:
+
+  - Port PDM's password viewer to gnome-keyring so that it works
+    again. (#579217)
+  - Fix address normalization when opening URLs from the command line.
+  - Fix spurious whitespace when hiding downloader status
+    icons. (#591189)
+  - Re-add the spinner so that we have some kind of progress
+    notification before we receive any response from the
+    server. (#585035)
+  - Workaround bug in WebKitGTK+ that made us never stop the progress
+    notification while loading in some pages. (#590170)
+  - Move default bookmarks to a separate RDF file instead of
+    hardcoding them. (#300190)
+  - Do not show about:recover URLs for now, since the service is not
+    implemented. (#583953)
+
 ===============
 Epiphany 2.27.5
 ===============
