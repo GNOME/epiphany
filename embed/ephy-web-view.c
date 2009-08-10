@@ -634,7 +634,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_new_window signal is emitted after a new window has been opened by
  * the view. For example, when a JavaScript popup window is opened.
  **/
-		g_signal_new ("ge_new_window",
+    g_signal_new ("ge_new_window",
                   EPHY_TYPE_WEB_VIEW,
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (EphyWebViewClass, new_window),
@@ -653,17 +653,17 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_popup_blocked signal is emitted when the viewed web page requests
  * a popup window (with javascript:open()) but popup windows are not allowed.
  **/
-		g_signal_new ("ge_popup_blocked",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, popup_blocked),
-			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_STRING_STRING,
-			      G_TYPE_NONE,
-			      3,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("ge_popup_blocked",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, popup_blocked),
+            NULL, NULL,
+            ephy_marshal_VOID__STRING_STRING_STRING,
+            G_TYPE_NONE,
+            3,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::ge-context-menu:
  * @embed:
@@ -673,15 +673,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * displayed. This will usually happen when the user right-clicks on a part of
  * @embed.
  **/
-		g_signal_new ("ge_context_menu",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, context_menu),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__OBJECT,
-			      G_TYPE_BOOLEAN,
-			      1,
-			      G_TYPE_OBJECT);
+    g_signal_new ("ge_context_menu",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, context_menu),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__OBJECT,
+            G_TYPE_BOOLEAN,
+            1,
+            G_TYPE_OBJECT);
 /**
  * EphyWebView::ge-favicon:
  * @embed:
@@ -690,15 +690,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_favicon signal is emitted when @embed discovers that a favourite
  * icon (favicon) is available for the site it is visiting.
  **/
-		g_signal_new ("ge_favicon",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, favicon),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("ge_favicon",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, favicon),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__STRING,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::ge-search-link:
  * @embed:
@@ -709,17 +709,17 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_rss signal is emitted when @embed discovers that a search
  * description is available for the site it is visiting.
  **/
-		g_signal_new ("ge_search_link",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, search_link),
-			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_STRING_STRING,
-			      G_TYPE_NONE,
-			      3,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("ge_search_link",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, search_link),
+            NULL, NULL,
+            ephy_marshal_VOID__STRING_STRING_STRING,
+            G_TYPE_NONE,
+            3,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyWebView::ge-feed-link:
@@ -731,17 +731,17 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_rss signal is emitted when @embed discovers that a news feed
  * is available for the site it is visiting.
  **/
-		g_signal_new ("ge_feed_link",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, feed_link),
-			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_STRING_STRING,
-			      G_TYPE_NONE,
-			      3,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("ge_feed_link",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, feed_link),
+            NULL, NULL,
+            ephy_marshal_VOID__STRING_STRING_STRING,
+            G_TYPE_NONE,
+            3,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::ge-dom-mouse-click:
  * @embed:
@@ -749,15 +749,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  *
  * The ::ge_dom_mouse_click signal is emitted when the user clicks in @embed.
  **/
-		g_signal_new ("ge_dom_mouse_click",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_click),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__OBJECT,
-			      G_TYPE_BOOLEAN,
-			      1,
-			      G_TYPE_OBJECT);
+    g_signal_new ("ge_dom_mouse_click",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_click),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__OBJECT,
+            G_TYPE_BOOLEAN,
+            1,
+            G_TYPE_OBJECT);
 /**
  * EphyWebView::ge-dom-mouse-down:
  * @embed:
@@ -766,15 +766,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge_dom_mouse_down signal is emitted when the user depresses a mouse
  * button.
  **/
-		g_signal_new ("ge_dom_mouse_down",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_down),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__OBJECT,
-			      G_TYPE_BOOLEAN,
-			      1,
-			      G_TYPE_OBJECT);
+    g_signal_new ("ge_dom_mouse_down",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_down),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__OBJECT,
+            G_TYPE_BOOLEAN,
+            1,
+            G_TYPE_OBJECT);
 /**
  * EphyWebView::ge-modal-alert:
  * @embed:
@@ -784,14 +784,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  *
  * Return %TRUE to prevent the dialog from being opened.
  **/
-		g_signal_new ("ge_modal_alert",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, modal_alert),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__VOID,
-			      G_TYPE_BOOLEAN,
-			      0);
+    g_signal_new ("ge_modal_alert",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, modal_alert),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__VOID,
+            G_TYPE_BOOLEAN,
+            0);
 /**
  * EphyWebView::ge-modal-alert-closed:
  * @embed:
@@ -799,14 +799,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge-modal-alert-closed signal is emitted when a modal alert put up by a
  * DOM event was closed.
  **/
-		g_signal_new ("ge_modal_alert_closed",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, modal_alert_closed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+    g_signal_new ("ge_modal_alert_closed",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, modal_alert_closed),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__VOID,
+            G_TYPE_NONE,
+            0);
 
 /**
  * EphyWebView::ge-document-type:
@@ -815,15 +815,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  *
  * The ::ge-document-type signal is emitted when @embed determines the type of its document.
  **/
-		g_signal_new ("ge_document_type",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, document_type),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__ENUM,
-			      G_TYPE_NONE,
-			      1,
-			      EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE);
+    g_signal_new ("ge_document_type",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, document_type),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__ENUM,
+            G_TYPE_NONE,
+            1,
+            EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE);
 /**
  * EphyWebView::dom-content-loaded:
  * @embed:
@@ -832,15 +832,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * the document has been loaded (excluding images and other loads initiated by this document).
  * That's true also for frameset and all the frames within it.
  **/
-		g_signal_new ("dom_content_loaded",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, dom_content_loaded),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_POINTER);
+    g_signal_new ("dom_content_loaded",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, dom_content_loaded),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__POINTER,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_POINTER);
 
 /**
  * EphyWebView::ge-search-key-press:
@@ -850,15 +850,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::ge-search-key-press signal is emitted for keypresses which
  * should be used for find implementations.
  **/
-		g_signal_new ("ge-search-key-press",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, search_key_press),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__BOXED,
-			      G_TYPE_BOOLEAN,
-			      1,
-			      GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("ge-search-key-press",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, search_key_press),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__BOXED,
+            G_TYPE_BOOLEAN,
+            1,
+            GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyWebView::close-request
@@ -868,14 +868,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * Return %TRUE to prevent closing. You HAVE to process removal of the embed
  * as soon as possible after that.
  **/
-		g_signal_new ("close-request",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, close_request),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__VOID,
-			      G_TYPE_BOOLEAN,
-			      0);
+    g_signal_new ("close-request",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, close_request),
+            g_signal_accumulator_true_handled, NULL,
+            ephy_marshal_BOOLEAN__VOID,
+            G_TYPE_BOOLEAN,
+            0);
 /**
  * EphyWebView::content-blocked:
  * @embed:
@@ -883,15 +883,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  *
  * The ::content-blocked signal is emitted when an url has been blocked.
  **/
-		g_signal_new ("content-blocked",
-			      EPHY_TYPE_WEB_VIEW,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyWebViewClass, content_blocked),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("content-blocked",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, content_blocked),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__STRING,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::new-document-now:
  * @embed:
@@ -902,15 +902,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * related changes, for example to restore the zoom level of a page
  * or to set an user style sheet.
  **/
-	       g_signal_new ("new-document-now",
-			     EPHY_TYPE_WEB_VIEW,
-			     G_SIGNAL_RUN_FIRST,
-			     G_STRUCT_OFFSET (EphyWebViewClass, new_document_now),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__STRING,
-			     G_TYPE_NONE,
-			     1,
-			     G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+         g_signal_new ("new-document-now",
+           EPHY_TYPE_WEB_VIEW,
+           G_SIGNAL_RUN_FIRST,
+           G_STRUCT_OFFSET (EphyWebViewClass, new_document_now),
+           NULL, NULL,
+           g_cclosure_marshal_VOID__STRING,
+           G_TYPE_NONE,
+           1,
+           G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
@@ -1092,15 +1092,15 @@ ephy_web_view_load_url (EphyWebView *view,
  **/
 void
 ephy_web_view_copy_back_history (EphyWebView *source,
-																 EphyWebView *dest)
+                                 EphyWebView *dest)
 {
   WebKitWebView *source_view, *dest_view;
   WebKitWebBackForwardList* source_bflist, *dest_bflist;
   WebKitWebHistoryItem *item;
   GList *items;
 
-	g_return_if_fail(EPHY_IS_WEB_VIEW(source));
-	g_return_if_fail(EPHY_IS_WEB_VIEW(dest));
+  g_return_if_fail(EPHY_IS_WEB_VIEW(source));
+  g_return_if_fail(EPHY_IS_WEB_VIEW(dest));
 
   source_view = WEBKIT_WEB_VIEW (source);
   dest_view = WEBKIT_WEB_VIEW (dest);
@@ -1108,15 +1108,15 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   source_bflist = webkit_web_view_get_back_forward_list (source_view);
   dest_bflist = webkit_web_view_get_back_forward_list (dest_view);
 
-	items = webkit_web_back_forward_list_get_back_list_with_limit (source_bflist, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-	/* We want to add the items in the reverse order here, so the
-		 history ends up the same */
-	items = g_list_reverse (items);
-	for (; items; items = items->next) {
-		item = (WebKitWebHistoryItem*)items->data;
-		webkit_web_back_forward_list_add_item (dest_bflist, item);
-	}
-	g_list_free (items);
+  items = webkit_web_back_forward_list_get_back_list_with_limit (source_bflist, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+  /* We want to add the items in the reverse order here, so the
+     history ends up the same */
+  items = g_list_reverse (items);
+  for (; items; items = items->next) {
+    item = (WebKitWebHistoryItem*)items->data;
+    webkit_web_back_forward_list_add_item (dest_bflist, item);
+  }
+  g_list_free (items);
 
   /* The ephy/gecko behavior is to add the current item of the source
      embed at the end of the back history, so keep doing that */
@@ -1191,7 +1191,7 @@ ephy_web_view_set_title (EphyWebView *view,
  * ephy_web_view_get_is_blank:
  * @view: an #EphyWebView
  *
- * Returns whether the	@view's address is "blank".
+ * Returns whether the  @view's address is "blank".
  *
  * Return value: %TRUE if the @view's address is "blank"
  **/
@@ -1936,7 +1936,7 @@ ephy_web_view_go_up (EphyWebView *view)
  * Note that Epiphany does not display JavaScript statusbar messages.
  *
  * Return value: a message from JavaScript meant to be displayed in the
- *		 statusbar
+ *     statusbar
  **/
 char *
 ephy_web_view_get_js_status (EphyWebView *view)
@@ -2058,25 +2058,25 @@ ephy_web_view_get_go_up_list (EphyWebView *view)
 const char *
 ephy_web_view_get_title_composite (EphyWebView *view)
 {
-	const char *title = "";
-	const char *loading_title;
-	gboolean is_loading, is_blank;
+  const char *title = "";
+  const char *loading_title;
+  gboolean is_loading, is_blank;
 
-	g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-	is_loading = ephy_web_view_get_load_status (view);
-	is_blank = ephy_web_view_get_is_blank (view);
-	loading_title = ephy_web_view_get_loading_title (view);
-	title = ephy_web_view_get_title (view);
+  is_loading = ephy_web_view_get_load_status (view);
+  is_blank = ephy_web_view_get_is_blank (view);
+  loading_title = ephy_web_view_get_loading_title (view);
+  title = ephy_web_view_get_title (view);
 
-	if (is_blank)
-	{
-		if (is_loading)
-			title = loading_title;
-		else
-			title = _("Blank page");
-	}
+  if (is_blank)
+  {
+    if (is_loading)
+      title = loading_title;
+    else
+      title = _("Blank page");
+  }
 
-	return title != NULL ? title : "";
+  return title != NULL ? title : "";
 }
 
