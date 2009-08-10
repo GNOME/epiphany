@@ -300,7 +300,7 @@ EPHY_GIR_H_FILES = \
 	$(NULL)
 
 Epiphany-$(EPIPHANY_API_VERSION).gir: epiphany $(G_IR_SCANNER)
-	PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
+	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
 	$(G_IR_SCANNER) -v \
 		--namespace Epiphany \
 		--nsversion=$(EPIPHANY_API_VERSION) \
@@ -327,7 +327,7 @@ typelibsdir = $(GIRTYPELIBDIR)
 typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
 
 Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(G_IR_COMPILER)
-	g-ir-compiler Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+	$(AM_V_GEN) g-ir-compiler Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
 
 EXTRA_DIST += Epiphany-$(EPIPHANY_API_VERSION).gir
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
