@@ -245,6 +245,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 				     GTK_WINDOW (dialog));
 	
 	button = gtk_button_new_with_label (_("Cl_ear"));
+	gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (button), image);
 	/* don't show the image! see bug #307818 */
