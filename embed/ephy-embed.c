@@ -200,6 +200,11 @@ load_status_changed_cb (WebKitWebView *view,
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
   } else {
     EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
+    /* FIXME: this does not work for URLs opened without typing
+       (middle click, etc). We should use get_address, but WebKit does
+       not update its URI property until LOAD_COMMITTED, so we'll get
+       NULL here. We need to either change WebKit or fetch the address
+       we are trying to load from our side. */
     const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (view));
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
