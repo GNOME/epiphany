@@ -89,17 +89,12 @@ ephy_link_open (EphyLink *link,
 		EphyLinkFlags flags)
 {
 	EphyEmbed *new_embed = NULL;
-	char *effective_address;
 
 	LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
 
-	effective_address = ephy_embed_utils_normalize_address (address);
-
 	g_signal_emit (link, signals[OPEN_LINK], 0,
-		       effective_address, embed, flags,
+		       address, embed, flags,
 		       &new_embed);
-
-	g_free (effective_address);
 
 	return new_embed;
 }

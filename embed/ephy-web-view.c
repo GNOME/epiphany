@@ -1043,11 +1043,18 @@ ephy_web_view_load_request (EphyWebView *web_view,
                             WebKitNetworkRequest *request)
 {
   WebKitWebFrame *main_frame;
+  const char *url;
+  char *effective_url;
 
-	g_return_if_fail(EPHY_IS_WEB_VIEW(web_view));
-	g_return_if_fail(WEBKIT_IS_NETWORK_REQUEST(request));
+  g_return_if_fail(EPHY_IS_WEB_VIEW(web_view));
+  g_return_if_fail(WEBKIT_IS_NETWORK_REQUEST(request));
 
-	main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
+  url = webkit_network_request_get_uri (request);
+  effective_url = ephy_embed_utils_normalize_address (url);
+  webkit_network_request_set_uri (request, effective_url);
+  g_free (effective_url);
+
+  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
   webkit_web_frame_load_request(main_frame, request);
 }
 
@@ -1062,10 +1069,14 @@ void
 ephy_web_view_load_url (EphyWebView *view,
                         const char *url)
 {
+  char *effective_url;
+
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (url);
 
-  webkit_web_view_open (WEBKIT_WEB_VIEW (view), url);
+  effective_url = ephy_embed_utils_normalize_address (url);
+  webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+  g_free (effective_url);
 }
 
 /**
