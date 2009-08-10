@@ -1046,8 +1046,8 @@ ephy_web_view_load_request (EphyWebView *web_view,
   const char *url;
   char *effective_url;
 
-  g_return_if_fail(EPHY_IS_WEB_VIEW(web_view));
-  g_return_if_fail(WEBKIT_IS_NETWORK_REQUEST(request));
+  g_return_if_fail (EPHY_IS_WEB_VIEW(web_view));
+  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
 
   url = webkit_network_request_get_uri (request);
   effective_url = ephy_embed_utils_normalize_address (url);
