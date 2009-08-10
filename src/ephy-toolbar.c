@@ -32,6 +32,7 @@
 #include "ephy-navigation-action.h"
 #include "ephy-topic-action.h"
 #include "ephy-zoom-action.h"
+#include "ephy-spinner-tool-item.h"
 #include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
@@ -66,6 +67,8 @@ struct _EphyToolbarPrivate
 	GtkActionGroup *action_group;
 	GtkAction *actions[LAST_ACTION];
 	GtkWidget *fixed_toolbar;
+	EphySpinnerToolItem *spinner;
+	GtkToolItem *sep_item;
 	GtkToolItem *exit_button;
 	gulong set_focus_handler;
 
@@ -73,6 +76,7 @@ struct _EphyToolbarPrivate
 	guint show_lock : 1;
 	guint is_secure : 1;
 	guint leave_fullscreen_visible : 1;
+	guint spinning : 1;
 };
 
 static const GtkTargetEntry drag_targets [] =
@@ -123,11 +127,16 @@ ephy_toolbar_update_fixed_visibility (EphyToolbar *toolbar)
 	gboolean show;
 
 	show = priv->leave_fullscreen_visible;
-#if 0
-	g_object_set (priv->exit_button, "visible", show,
-					 "sensitive", show, NULL);
-#endif
+	g_object_set (priv->sep_item, "visible", show, NULL);
 	g_object_set (priv->fixed_toolbar, "visible", show, NULL);
+}
+
+static void
+ephy_toolbar_update_spinner (EphyToolbar *toolbar)
+{
+	EphyToolbarPrivate *priv = toolbar->priv;
+
+	ephy_spinner_tool_item_set_spinning (priv->spinner, priv->spinning);
 }
 
 static void 
@@ -490,6 +499,17 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 }
 
 void
+ephy_toolbar_set_spinning (EphyToolbar *toolbar,
+			   gboolean spinning)
+{
+	EphyToolbarPrivate *priv = toolbar->priv;
+
+	priv->spinning = spinning != FALSE;
+
+	ephy_toolbar_update_spinner (toolbar);
+}
+
+void
 ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 		       gboolean can_zoom,
 		       float zoom)
@@ -501,6 +521,26 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 }
 
 /* Class implementation */
+
+static void
+ephy_toolbar_show (GtkWidget *widget)
+{
+	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
+
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->show (widget);
+
+	ephy_toolbar_update_spinner (toolbar);
+}
+
+static void
+ephy_toolbar_hide (GtkWidget *widget)
+{
+	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
+
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->hide (widget);
+
+	ephy_toolbar_update_spinner (toolbar);
+}
 
 static void
 ephy_toolbar_init (EphyToolbar *toolbar)
@@ -530,6 +570,13 @@ ephy_toolbar_constructor (GType type,
 	priv->fixed_toolbar = gtk_toolbar_new ();
 	gtoolbar = GTK_TOOLBAR (priv->fixed_toolbar);
 	gtk_toolbar_set_show_arrow (gtoolbar, FALSE);
+
+	priv->spinner = EPHY_SPINNER_TOOL_ITEM (ephy_spinner_tool_item_new ());
+	gtk_toolbar_insert (gtoolbar, GTK_TOOL_ITEM (priv->spinner), -1);
+	gtk_widget_show (GTK_WIDGET (priv->spinner));
+
+	priv->sep_item = gtk_separator_tool_item_new ();
+	gtk_toolbar_insert (gtoolbar, priv->sep_item, -1);
 
 	priv->exit_button = gtk_tool_button_new_from_stock (GTK_STOCK_LEAVE_FULLSCREEN);
 	gtk_tool_button_set_label (GTK_TOOL_BUTTON (priv->exit_button), _("Leave Fullscreen"));
@@ -590,11 +637,15 @@ static void
 ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->constructor = ephy_toolbar_constructor;
 	object_class->finalize = ephy_toolbar_finalize;
 	object_class->set_property = ephy_toolbar_set_property;
 	object_class->get_property = ephy_toolbar_get_property;
+
+	widget_class->show = ephy_toolbar_show;
+	widget_class->hide = ephy_toolbar_hide;
 
 	signals[ACTIVATION_FINISHED] =
 		g_signal_new ("activation-finished",

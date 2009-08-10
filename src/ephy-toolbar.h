@@ -99,6 +99,9 @@ void		ephy_toolbar_set_security_state		(EphyToolbar *toolbar,
 							 const char *stock_id,
 							 const char *tooltip);
 
+void		ephy_toolbar_set_spinning		(EphyToolbar *toolbar,
+							 gboolean spinning);
+
 void		ephy_toolbar_set_zoom			(EphyToolbar *toolbar,
 							 gboolean can_zoom,
 							 float zoom);

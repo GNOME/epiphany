@@ -1880,6 +1880,8 @@ sync_tab_load_status (EphyWebView  *view,
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 
+	ephy_toolbar_set_spinning (priv->toolbar, loading);
+
 	if (priv->fullscreen_popup)
 	{
 		ephy_fullscreen_popup_set_spinning
