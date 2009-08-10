@@ -95,3 +95,18 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 
 	return has_web_scheme;
 }
+
+char*
+ephy_embed_utils_normalize_address (const char *address)
+{
+	char *effective_address;
+
+	g_return_val_if_fail (address, NULL);
+
+	if (ephy_embed_utils_address_has_web_scheme (address) == FALSE)
+		effective_address = g_strconcat ("http://", address, NULL);
+	else
+		effective_address = g_strdup (address);
+	
+	return effective_address;
+}

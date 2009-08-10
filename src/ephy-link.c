@@ -89,28 +89,17 @@ ephy_link_open (EphyLink *link,
 		EphyLinkFlags flags)
 {
 	EphyEmbed *new_embed = NULL;
-	char *effective_url = NULL;
-
-	/*
-	 * WebKit does not normalize URI's by itself, so we need to
-	 * handle this ourselves
-	 */
-	if (ephy_embed_utils_address_has_web_scheme (address) == FALSE)
-	{
-		effective_url = g_strconcat ("http://", address, NULL);
-	}
-	else
-	{
-		effective_url = g_strdup (address);
-	}
+	char *effective_address;
 
 	LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
 
+	effective_address = ephy_embed_utils_normalize_address (address);
+
 	g_signal_emit (link, signals[OPEN_LINK], 0,
-		       effective_url, embed, flags,
+		       effective_address, embed, flags,
 		       &new_embed);
 
-	g_free (effective_url);
+	g_free (effective_address);
 
 	return new_embed;
 }
