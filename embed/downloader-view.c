@@ -263,6 +263,11 @@ downloader_view_finalize (GObject *object)
 
 	if (priv->status_icon != NULL)
 	{
+		/* FIXME: this should not be necessary (setting visible to
+		 * FALSE), but we have to work-around a GTK+/gnome-panel bug:
+		 *   http://bugzilla.gnome.org/show_bug.cgi?id=340110
+		 */
+		gtk_status_icon_set_visible (priv->status_icon, FALSE);
 		g_object_unref (priv->status_icon);
 		priv->status_icon = NULL;
 	}
