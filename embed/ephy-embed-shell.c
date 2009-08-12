@@ -240,7 +240,7 @@ impl_get_embed_single (EphyEmbedShell *shell)
 					 GTK_MESSAGE_ERROR,
 					 GTK_BUTTONS_CLOSE,
 					 _("Epiphany can't be used now. "
-							 "Mozilla initialization failed."));
+					   "Initialization failed."));
 			gtk_dialog_run (GTK_DIALOG (dialog));
 
 			exit (0);

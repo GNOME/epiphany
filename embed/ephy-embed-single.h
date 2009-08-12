@@ -91,9 +91,6 @@ void            ephy_embed_single_set_network_status (EphyEmbedSingle *single,
 
 gboolean        ephy_embed_single_get_network_status (EphyEmbedSingle *single);
 
-GList   *       ephy_embed_single_get_font_list      (EphyEmbedSingle *single,
-                                                      const char      *lang_group);
-
 G_END_DECLS
 
 #endif

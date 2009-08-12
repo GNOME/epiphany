@@ -353,7 +353,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
  * ephy_embed_single_clear_cache:
  * @single: the #EphyEmbedSingle
  * 
- * Clears the Mozilla cache (temporarily saved web pages).
+ * Clears the HTTP cache (temporarily saved web pages).
  **/
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
@@ -364,7 +364,7 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
  * ephy_embed_single_clear_auth_cache:
  * @single: the #EphyEmbedSingle
  * 
- * Clears the Mozilla HTTP authentication cache.
+ * Clears the HTTP authentication cache.
  *
  * This does not clear regular website passwords; it only clears the HTTP
  * authentication cache. Websites which use HTTP authentication require the
@@ -406,26 +406,6 @@ gboolean
 ephy_embed_single_get_network_status (EphyEmbedSingle *single)
 {
   return single->priv->online;
-}
-
-/**
- * ephy_embed_single_get_font_list:
- * @single: the #EphyEmbedSingle
- * @lang_group: a mozilla font language group name, or %NULL
- * 
- * Returns the list of fonts matching @lang_group, or all fonts if @lang_group
- * is %NULL.
- *
- * The available @lang_group arguments are listed in Epiphany's Fonts and Colors
- * preferences.
- * 
- * Return value: a list of font names
- **/
-GList *
-ephy_embed_single_get_font_list (EphyEmbedSingle *single,
-                                 const char *lang_group)
-{
-  return NULL;
 }
 
 /**
