@@ -23,27 +23,26 @@
 
 #include "ephy-session.h"
 
+#include "eggdesktopfile.h"
+#include "eggsmclient.h"
+#include "ephy-bookmarks-editor.h"
+#include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed-container.h"
 #include "ephy-extension.h"
-#include "ephy-window.h"
-#include "ephy-shell.h"
-#include "ephy-history-window.h"
-#include "ephy-bookmarks-editor.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-prefs.h"
-#include "ephy-gui.h"
-#include "ephy-debug.h"
-#include "ephy-stock-icons.h"
 #include "ephy-glib-compat.h"
+#include "ephy-gui.h"
+#include "ephy-history-window.h"
 #include "ephy-notebook.h"
-#include "eggdesktopfile.h"
-#include "eggsmclient.h"
+#include "ephy-prefs.h"
+#include "ephy-shell.h"
+#include "ephy-stock-icons.h"
+#include "ephy-window.h"
 
 #include <glib/gi18n.h>
-#include <gio/gio.h>
 #include <gtk/gtk.h>
 
 #include <libxml/tree.h>
