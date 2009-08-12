@@ -561,7 +561,6 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 		}
 
-		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 		gtk_tree_path_free (path);
 	}
