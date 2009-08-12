@@ -26,6 +26,7 @@
 #include "ephy-embed.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed-container.h"
+#include "ephy-extension.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
 #include "ephy-history-window.h"

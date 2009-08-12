@@ -26,8 +26,6 @@
 #ifndef EPHY_SESSION_H
 #define EPHY_SESSION_H
 
-#include "ephy-extension.h"
-
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
