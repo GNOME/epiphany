@@ -248,6 +248,12 @@ ephy_dot_dir (void)
 }
 
 gboolean
+ephy_has_private_profile (void)
+{
+	return have_private_profile;
+}
+
+gboolean
 ephy_file_helpers_init (const char *profile_dir,
 			gboolean private_profile,
 			gboolean keep_temp_dir,

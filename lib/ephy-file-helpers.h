@@ -45,65 +45,47 @@ typedef enum
 	EPHY_MIME_PERMISSION_UNKNOWN	= 3
 } EphyMimePermission;
 
-gboolean    ephy_file_helpers_init       (const char *profile_dir,
-					  gboolean private_profile,
-					  gboolean keep_temp_dir,
-					  GError **error);
+gboolean           ephy_file_helpers_init        (const char  *profile_dir,
+                                                  gboolean     private_profile,
+                                                  gboolean     keep_temp_dir,
+                                                  GError     **error);
+const char *       ephy_file                     (const char  *filename);
+const char *       ephy_dot_dir                  (void);
+void               ephy_file_helpers_shutdown    (void);
+char       *       ephy_file_downloads_dir       (void);
+char	   *          ephy_file_get_downloads_dir   (void);
+char       *       ephy_file_desktop_dir         (void);
+const char *       ephy_file_tmp_dir             (void);
+char       *       ephy_file_tmp_filename        (const char  *base,
+                                                  const char  *extension);
+gboolean           ephy_ensure_dir_exists        (const char  *dir,
+                                                  GError **);
+GSList     *       ephy_file_find                (const char  *path,
+                                                  const char  *fname,
+                                                  gint         maxdepth);
+gboolean           ephy_file_switch_temp_file    (GFile       *file,
+                                                  GFile       *file_temp);
+void               ephy_file_delete_on_exit      (GFile       *file);
+void               ephy_file_add_recent_item     (const char  *uri,
+                                                  const char  *mime_type);
+EphyMimePermission ephy_file_check_mime          (const char  *mime_type);
+gboolean           ephy_file_launch_desktop_file (const char  *filename,
+                                                  const char  *parameter,
+                                                  guint32      user_time,
+                                                  GtkWidget   *widget);
+gboolean           ephy_file_launch_application  (GAppInfo    *app,
+                                                  GList       *files,
+                                                  guint32      user_time,
+                                                  GtkWidget   *parent);
+gboolean           ephy_file_launch_handler      (const char  *mime_type,
+                                                  GFile       *file,
+                                                  guint32      user_time);
+gboolean           ephy_file_browse_to           (GFile       *file,
+                                                  guint32      user_time);
+void               ephy_file_delete_directory    (const char  *path);
+void               ephy_file_delete_uri          (const char  *uri);
+gboolean           ephy_has_private_profile      (void);
 
-const char *ephy_file                    (const char *filename);
-
-const char *ephy_dot_dir                 (void);
-
-void        ephy_file_helpers_shutdown   (void);
-
-char       *ephy_file_downloads_dir      (void);
-
-char	   *ephy_file_get_downloads_dir	 (void);
-
-char       *ephy_file_desktop_dir	 (void);
-
-const char *ephy_file_tmp_dir	 	 (void);
-
-char       *ephy_file_tmp_filename	 (const char *base,
-					  const char *extension);
-
-gboolean    ephy_ensure_dir_exists       (const char *dir,
-					  GError **);
-
-GSList     *ephy_file_find               (const char *path,
-				          const char *fname,
-				          gint maxdepth);
-
-gboolean    ephy_file_switch_temp_file (GFile *file,
-					GFile *file_temp);
-
-void	    ephy_file_delete_on_exit	 (GFile *file);
-
-void	    ephy_file_add_recent_item	 (const char *uri,
-					  const char *mime_type);
-
-EphyMimePermission ephy_file_check_mime	 (const char *mime_type);
-
-gboolean    ephy_file_launch_desktop_file (const char *filename,
-					   const char *parameter,
-					   guint32 user_time,
-					   GtkWidget *widget);
-
-gboolean    ephy_file_launch_application (GAppInfo *app,
-					  GList *files,
-					  guint32 user_time,
-					  GtkWidget *parent);
-
-gboolean    ephy_file_launch_handler	 (const char *mime_type,
-					  GFile *file,
-					  guint32 user_time);
-
-gboolean    ephy_file_browse_to		 (GFile *file,
-					  guint32 user_time);
-
-void	   ephy_file_delete_directory	 (const char *path);
-
-void	   ephy_file_delete_uri		 (const char *uri);
 G_END_DECLS
 
 #endif /* EPHY_FILE_HELPERS_H */
