@@ -346,6 +346,13 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* Use GNOME proxy settings through libproxy */
   soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
+  /* Use GNOME keyring to store passwords. Only add the manager if we
+     are not using a private session, otherwise we want any new
+     password to expire when we exit *and* we don't want to use any
+     existing password in the keyring */
+  if (ephy_has_private_profile () == FALSE)
+    soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
+
   return TRUE;
 }
 
