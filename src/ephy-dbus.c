@@ -26,7 +26,6 @@
 #include "ephy-debug.h"
 #include "ephy-activation.h"
 #include "ephy-dbus-server-bindings.h"
-#include "ephy-glib-compat.h"
 
 #include <string.h>
 #include <dbus/dbus-glib-bindings.h>

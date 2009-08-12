@@ -37,8 +37,6 @@
 #include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
-#include "ephy-glib-compat.h"
-
 #include <libxml/tree.h>
 #include <libxml/xmlreader.h>
 #include <libxml/globals.h>

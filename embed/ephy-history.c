@@ -28,7 +28,6 @@
 #include "ephy-node-common.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "ephy-glib-compat.h"
 #include "ephy-string.h"
 
 #include <time.h>

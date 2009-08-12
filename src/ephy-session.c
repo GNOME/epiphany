@@ -33,7 +33,6 @@
 #include "ephy-extension.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-glib-compat.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
 #include "ephy-notebook.h"

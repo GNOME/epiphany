@@ -37,7 +37,6 @@
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-stock-icons.h"
-#include "ephy-glib-compat.h"
 
 #include "eel-gconf-extensions.h"
 

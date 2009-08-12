@@ -34,7 +34,6 @@
 #include "ephy-node-common.h"
 #include "ephy-node.h"
 #include "ephy-debug.h"
-#include "ephy-glib-compat.h"
 
 #include <glib.h>
 #include <glib/gstdio.h>
