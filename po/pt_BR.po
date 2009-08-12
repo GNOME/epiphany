@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation of epiphany.
-# Copyright (C) 2000-2007 Free Software Foundation, Inc.
+# Copyright (C) 2000-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 # Juan Carlos Castro y Castro <jcastro@vialink.com.br>, 2000.
 # Evandro Fernandes Giovanini <evandrofg@ig.com.br>, 2003, 2004, 2006.
@@ -11,16 +11,17 @@
 # Og Maciel <ogmaciel@gnome.org>, 2008.
 # César Veiga <tombs@linuxmail.org>, 2009.
 # Taylon Silmer <taylonsilva@gmail.com>, 2009.
+# André Gondim <andregondim@ubuntu.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-07-05 17:33+0000\n"
-"PO-Revision-Date: 2009-06-10 20:16-0300\n"
-"Last-Translator: Taylon Silmer <taylonsilva@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
+"POT-Creation-Date: 2009-08-09 09:34+0000\n"
+"PO-Revision-Date: 2009-08-10 17:19-0300\n"
+"Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,6 +38,25 @@ msgstr "Marcadores do Epiphany"
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "Marcadores da web"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "Pesquisar na web"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.com.br"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.com.br/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -714,7 +734,7 @@ msgstr "Selecione um _idioma:"
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:358
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "_Limpar"
 
@@ -954,23 +974,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:408
+#: ../embed/ephy-embed.c:407
 msgid "Save"
 msgstr "Salvar"
 
-#: ../embed/ephy-embed.c:550
-#, fuzzy
+#: ../embed/ephy-embed.c:549
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../embed/ephy-embed.c:564
+#: ../embed/ephy-embed.c:563
 msgid "Download this potentially unsafe file?"
 msgstr "Baixar o arquivo potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:569
+#: ../embed/ephy-embed.c:568
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -984,14 +1003,14 @@ msgstr ""
 "documentos ou invadir sua privacidade. Ao invés de abrir o arquivo você pode "
 "baixá-lo."
 
-#: ../embed/ephy-embed.c:577
+#: ../embed/ephy-embed.c:576
 msgid "Open this file?"
 msgstr "Abrir este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:583
+#: ../embed/ephy-embed.c:582
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1002,13 +1021,13 @@ msgstr ""
 "\n"
 "Você pode abrir \"%s\" usando \"%s\" ou salvá-lo."
 
-#: ../embed/ephy-embed.c:590
+#: ../embed/ephy-embed.c:589
 msgid "Download this file?"
 msgstr "Baixar este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:595
+#: ../embed/ephy-embed.c:594
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1020,11 +1039,11 @@ msgstr ""
 "Você não possui nenhum aplicativo capaz de abrir \"%s\". Ao invés de abrir o "
 "arquivo você pode baixá-lo."
 
-#: ../embed/ephy-embed.c:602
+#: ../embed/ephy-embed.c:601
 msgid "_Save As..."
 msgstr "Salvar _como..."
 
-#: ../embed/ephy-embed.c:694
+#: ../embed/ephy-embed.c:693
 msgid "Web Inspector"
 msgstr "Inspetor web"
 
@@ -1376,32 +1395,32 @@ msgstr "Arquivos locais"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2049
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2066
 msgid "Blank page"
 msgstr "Página em branco"
 
-#: ../embed/ephy-web-view.c:1247
+#: ../embed/ephy-web-view.c:1250
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redirecionando para \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1249
+#: ../embed/ephy-web-view.c:1252
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transferindo dados de \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1251
+#: ../embed/ephy-web-view.c:1254
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorização de \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1257 ../embed/ephy-web-view.c:1365
+#: ../embed/ephy-web-view.c:1260 ../embed/ephy-web-view.c:1368
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Carregando \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1367
+#: ../embed/ephy-web-view.c:1370
 msgid "Loading…"
 msgstr "Carregando..."
 
@@ -1752,95 +1771,82 @@ msgstr "Tópic_os:"
 msgid "Sho_w all topics"
 msgstr "Mos_trar todos os tópicos"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "Pesquisar na web"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com.br/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "Entertainment"
 msgstr "Entretenimento"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "News"
 msgstr "Notícias"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Shopping"
 msgstr "Compras"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Sports"
 msgstr "Esportes"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Travel"
 msgstr "Viagens"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Work"
 msgstr "Trabalho"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:442
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Atualizar o marcador \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:447
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "A página adicionada aos marcadores foi movida para \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:451
 msgid "_Don't Update"
 msgstr "_Não atualizar"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:453
 msgid "_Update"
 msgstr "_Atualizar"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:456
 msgid "Update Bookmark?"
 msgstr "Atualizar o marcador?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1204
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Todos"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1207
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Mais visitados"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1211
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Sem categoria"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1216
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Sites vizinhos"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1451
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Sem título"
 
@@ -2916,7 +2922,7 @@ msgid "Go to a specified location"
 msgstr "Vai para uma localização especificada"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:402
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "_Histórico"
 
@@ -3221,11 +3227,11 @@ msgstr "Adicionar aos marcadores o link \"%s\""
 msgid "Copy link's address “%s”"
 msgstr "Copiar o endereço do link \"%s\""
 
-#: ../src/pdm-dialog.c:339
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Selecionar os dados pessoais que quer limpar</b>"
 
-#: ../src/pdm-dialog.c:342
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3235,26 +3241,26 @@ msgstr ""
 "web que visitou. Antes de ir em frente, verifique os tipos de informação que "
 "quer remover:"
 
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "Limpar todos os dados pessoais"
 
 #. Cookies
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:390
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "_Senhas salvas"
 
 #. Cache
-#: ../src/pdm-dialog.c:414
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "Arquivos _temporários"
 
-#: ../src/pdm-dialog.c:430
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3262,56 +3268,56 @@ msgstr ""
 "<small><i><b>Nota:</b> Você não pode desfazer esta ação. Os dados escolhidos "
 "para serem limpos serão excluídos permanentemente.</i></small>"
 
-#: ../src/pdm-dialog.c:626
+#: ../src/pdm-dialog.c:653
 msgid "Cookie Properties"
 msgstr "Propriedades do cookie"
 
-#: ../src/pdm-dialog.c:643
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "Conteúdo:"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
 msgstr "Caminho:"
 
-#: ../src/pdm-dialog.c:675
+#: ../src/pdm-dialog.c:702
 msgid "Send for:"
 msgstr "Enviar para:"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
 msgstr "Apenas conexões criptografadas"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
 msgstr "Qualquer tipo de conexão"
 
-#: ../src/pdm-dialog.c:690
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "Expira:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:702
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
 msgstr "Fim da sessão atual"
 
-#: ../src/pdm-dialog.c:836
+#: ../src/pdm-dialog.c:862
 msgid "Domain"
 msgstr "Domínio"
 
-#: ../src/pdm-dialog.c:848
+#: ../src/pdm-dialog.c:874
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/pdm-dialog.c:1200
+#: ../src/pdm-dialog.c:1288
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1301
 msgid "User Name"
 msgstr "Nome do usuário"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1314
 msgid "User Password"
 msgstr "Senhas do usuário"
 
@@ -3476,7 +3482,8 @@ msgstr ""
 "Rodrigo Flores <rodrigomarquesflores@gmail.com>\n"
 "Fábio Nogueira <deb-user-ba@ubuntu.com>\n"
 "Og Maciel <ogmaciel@gnome.org>\n"
-"Taylon Silmer <taylonsilva@gmail.com>"
+"Taylon Silmer <taylonsilva@gmail.com>\n"
+"André Gondim <andregondim@ubuntu.com>"
 
 #: ../src/window-commands.c:892
 msgid "GNOME Web Browser Website"
@@ -4257,9 +4264,6 @@ msgstr "Site do Navegador web do GNOME"
 
 #~ msgid "%s Files"
 #~ msgstr "%s arquivos"
-
-#~ msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-#~ msgstr "http://www.google.com.br/search?ie=UTF-8&oe=UTF-8&q="
 
 #~ msgid "Unsafe protocol."
 #~ msgstr "Protocolo inseguro."
