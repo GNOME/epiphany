@@ -227,7 +227,7 @@ find_prev_cb (EphyFindToolbar *toolbar)
 }
 
 static void
-ephy_find_toolbar_set_properties (EphyFindToolbar *toolbar)
+ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
 {
         EphyFindToolbarPrivate *priv = toolbar->priv;
         WebKitWebView *web_view = priv->web_view;
@@ -280,7 +280,7 @@ entry_changed_cb (GtkEntry *entry,
 	g_free (priv->find_string);
 	priv->find_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
 
-	ephy_find_toolbar_set_properties (toolbar);
+	ephy_find_toolbar_mark_matches (toolbar);
 
 	result = real_find (priv, TRUE);
 	set_status (toolbar, result);
@@ -403,7 +403,7 @@ case_sensitive_toggled_cb (GtkWidget *check,
 			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
 	}
 
-	ephy_find_toolbar_set_properties (toolbar);
+	ephy_find_toolbar_mark_matches (toolbar);
 }
 
 static gboolean
