@@ -404,6 +404,24 @@ case_sensitive_toggled_cb (GtkWidget *check,
 	}
 
 	ephy_find_toolbar_mark_matches (toolbar);
+
+	/*
+	 * If we now use the stricter method (and are case sensitive),
+	 * check that the current selection still matches. If not, find the
+	 * next one.
+	 * This currently requires going back and then forward, because
+	 * there's no function in WebKit that would verify the current selection.
+	 */
+	if (case_sensitive)
+	{
+		EphyEmbedFindResult result;
+
+		result = real_find (toolbar->priv, FALSE);
+		if (result != EPHY_FIND_NOTFOUND)
+			result = real_find (toolbar->priv, TRUE);
+
+		set_status (toolbar, result);
+	}
 }
 
 static gboolean
