@@ -227,8 +227,10 @@ find_prev_cb (EphyFindToolbar *toolbar)
 }
 
 static void
-set_string_and_highlight (EphyFindToolbarPrivate *priv, const char *find_string)
+ephy_find_toolbar_set_properties (EphyFindToolbar *toolbar,
+                                  const char *find_string)
 {
+        EphyFindToolbarPrivate *priv = toolbar->priv;
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive;
 
@@ -245,15 +247,6 @@ set_string_and_highlight (EphyFindToolbarPrivate *priv, const char *find_string)
                                            case_sensitive,
                                            0);
         webkit_web_view_set_highlight_text_matches (web_view, TRUE);
-}
-
-static void
-ephy_find_toolbar_set_properties (EphyFindToolbar *toolbar,
-                                  const char *find_string)
-{
-        EphyFindToolbarPrivate *priv = toolbar->priv;
-
-        set_string_and_highlight (priv, find_string);
 }
 
 static EphyEmbedFindResult
@@ -289,7 +282,7 @@ ephy_find_toolbar_find (EphyFindToolbar *toolbar,
 {
         EphyFindToolbarPrivate *priv = toolbar->priv;
 
-        set_string_and_highlight (priv, find_string);
+        ephy_find_toolbar_set_properties (toolbar, find_string);
 
         return real_find (priv, TRUE);
 }
