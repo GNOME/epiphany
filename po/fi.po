@@ -4,15 +4,18 @@
 # Pauli Virtanen <pauli.virtanen@hut.fi>, 2003-2005.
 # Ilkka Tuohela <hile@iki.fi>, 2005-2008.
 # Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
+# Tommi Vainikainen <thv@iki.fi>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2008-08-13 15:13+0300\n"
-"PO-Revision-Date: 2009-03-02 20:29+0200\n"
-"Last-Translator: Ilkka Tuohela<hile@iki.fi>\n"
-"Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists.sourceforge.net>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2009-08-15 12:39+0300\n"
+"PO-Revision-Date: 2009-08-13 18:53+0300\n"
+"Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
+"Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
+"sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,6 +33,25 @@ msgstr "Epiphanyn WWW-kirjanmerkit"
 msgid "Web Bookmarks"
 msgstr "WWW-kirjanmerkit"
 
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "Etsi WWW:stä"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.fi"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.fi/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "Selaa Internetin WWW-sivuja"
@@ -39,8 +61,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany-selain"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
-#: ../src/ephy-main.c:632
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "WWW-selain"
 
@@ -235,11 +256,26 @@ msgstr "Käytä Javaa"
 msgid "Enable JavaScript"
 msgstr "Käytä JavaScriptiä"
 
-#: ../data/epiphany.schemas.in.h:16
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+msgid "Enable Web Inspector"
+msgstr "Käytä www-tutkainta"
+
+#: ../data/epiphany.schemas.in.h:17
 msgid "Enable smooth scrolling"
 msgstr "Käytä pehmennettyä vieritystä"
 
-#: ../data/epiphany.schemas.in.h:17
+#: ../data/epiphany.schemas.in.h:18
+msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+"Pakota uusien ikkunoiden pyynnöt avautumaan välilehdissä uusien ikkunoiden "
+"sijaan."
+
+#: ../data/epiphany.schemas.in.h:19
+msgid "Force new windows to be opened in tabs"
+msgstr "Pakota uudet ikkunat avautumaan välilehdissä"
+
+#: ../data/epiphany.schemas.in.h:20
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -247,15 +283,15 @@ msgstr ""
 "Piilota tai näytä noutoikkuna. Kun ikkuna on piilotettu, näytetään huomautus "
 "aloitettaessa uusia noutoja."
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
 msgstr "Sivuhistorian aikajakso"
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:22
 msgid "Home page"
 msgstr "Aloitussivu"
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -263,11 +299,11 @@ msgstr ""
 "Kuinka animoidut kuvat näytetään. Mahdolliset arvot ovat \"normal\", \"once"
 "\" ja \"disabled\"."
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:24
 msgid "How to print frames"
 msgstr "Kuinka raamit tulostetaan"
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:25
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
@@ -275,28 +311,29 @@ msgstr ""
 "Kuinka raameja sisältävät sivut tulostetaan. Mahdolliset arvot ovat \"normal"
 "\", \"separately\" ja \"selected\"."
 
-#: ../data/epiphany.schemas.in.h:23
+#. Translators: this is the default encoding used by Epiphany for Web pages display
+#: ../data/epiphany.schemas.in.h:27
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../data/epiphany.schemas.in.h:24
+#: ../data/epiphany.schemas.in.h:28
 msgid "Image animation mode"
 msgstr "Kuvien animointitapa"
 
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:29
 msgid "Languages"
 msgstr "Kielet"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:30
 msgid "Lists the active extensions."
 msgstr "Luettelo aktiivisista laajennoksista."
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:31
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr "Keskinapsautus avaa WWW-sivun, johon nykyisen valinnan teksti viittaa"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:32
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -304,27 +341,27 @@ msgstr ""
 "Päänäkymäpaneelin keskinapsautus avaa WWW-sivun, johon nykyisen valinnan "
 "teksti viittaa."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:33
 msgid "Minimum font size"
 msgstr "Pienin kirjasinkoko"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:34
 msgid "Preferred languages, two letter codes."
 msgstr "Halutut kielet kaksikirjaimisina koodeina."
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:35
 msgid "Remember passwords"
 msgstr "Muista salasanat"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:36
 msgid "Show bookmarks bar by default"
 msgstr "Näytä kirjanmerkkipalkki oletusarvoisesti"
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show statusbar by default"
 msgstr "Näytä tilarivi oletuksena"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:38
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -333,27 +370,27 @@ msgstr ""
 "\"last_two_days\" (kahden päivän aikana), \"last_three_days\" (kolmen päivän "
 "aikana), \"today\" (tänään)."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:39
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Näytä välilehtipalkki myös kun välilehtiä on vain yksi."
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show toolbars by default"
 msgstr "Näytä työkalupalkit oletuksena"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:41
 msgid "Size of disk cache"
 msgstr "Levyvälimuistin koko"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache, in MB."
 msgstr "Levyvälimuistin koko (Mt)."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:43
 msgid "The bookmark information shown in the editor view"
 msgstr "Muokkausnäkymässä näkyvät kirjanmerkkien tiedot"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:44
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -361,11 +398,11 @@ msgstr ""
 "Muokkausnäkymässä näkyvät kirjanmerkin tietokentät. Mahdolliset arvot "
 "luettelossa ovat \"address\" (osoite) ja \"title\" (otsikko)."
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:45
 msgid "The currently selected fonts language"
 msgstr "Nyt valittu kirjasinten kieli"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -384,44 +421,15 @@ msgstr ""
 "\"tr\" (turkki), \"x-unicode\" (muut kielet) and \"x-western\" (latinalaisia "
 "aakkosia käyttävät kielet)."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:47
 msgid "The downloads folder"
 msgstr "Tallennuskansio"
 
-#: ../data/epiphany.schemas.in.h:44
-msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr ""
-"Merkistön automaattinen tunnistus. Tyhjä merkkijono tarkoittaa ei käytössä."
-
-#: ../data/epiphany.schemas.in.h:45
-msgid ""
-"The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-"\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-"\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-"\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-"\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-"encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-"\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
-"\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
-"and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr ""
-"Merkistön automaattinen tunnistus. Käypiä arvoja ovat \"\" (tyhjä "
-"merkkijono, ei automaattitunnistusta), \"cjk_parallel_state_machine"
-"\" (tunnista itäaasialaiset merkistöt), \"ja_parallel_state_machine"
-"\" (tunnista japanilaiset merkistöt), \"ko_parallel_state_machine"
-"\" (tunnista korealaiset merkistöt), \"ruprob\" (tunnista venäläiset "
-"merkistöt), \"ukprob\" (tunnista ukrainalaiset merkistöt), "
-"\"zh_parallel_state_machine\" (tunnista kiinalaiset merkistöt), "
-"\"zhcn_parallel_state_machine\" (tunnista yksinkertaistetut kiinalaiset "
-"merkistöt), \"zhtw_parallel_state_machine\" (tunnista perinteiset "
-"kiinalaiset merkistöt) ja \"universal_charset_detector\" (tunnista useimmat "
-"merkistöt)."
-
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid "The page information shown in the history view"
 msgstr "Sivuhistoriassa näkyvät sivun tiedot"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -429,7 +437,7 @@ msgstr ""
 "Sivuhistoriassa näkyvät sivun tiedot. Mahdolliset arvot luettelossa ovat "
 "\"ViewTitle\", \"ViewAddress\" ja \"ViewDateTime\"."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -438,11 +446,11 @@ msgstr ""
 "\"Tallennetut\", joka tallentaa oletustallennuskansioon, ja \"Työpöytä\", "
 "joka tallentaa tiedostot työpöydän kansioon."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "Työkalupalkin tyyli"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -452,27 +460,27 @@ msgstr ""
 "\"both\" (teksti ja kuvat), \"both-horiz\" (teksti kuvien vierellä), \"icons"
 "\" (pelkät kuvakkeet) ja \"text\" (pelkkä teksti)."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
 msgstr "Käytä omia värejä"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid "Use own fonts"
 msgstr "Käytä omia kirjasimia"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Käytä omia värejä sivun määrittelemien sijaan."
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Käytä omia kirjasimia sivun määrittelemien sijaan."
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:57
 msgid "Visibility of the downloads window"
 msgstr "Noutoluetteloikkunan näkyvyys"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:58
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -480,7 +488,7 @@ msgstr ""
 "Kun tiedostoja ei voi avata selaimella, ne tallentuvat automaattisesti "
 "noutokansioon ja avautuvat sopivalla sovelluksella."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -488,35 +496,35 @@ msgstr ""
 "Mistä hyväksyä evästeitä. Mahdollisia arvoja ovat \"anywhere\" (kaikkialta), "
 "\"current site\" (nykyiseltä sivustolta) ja \"nowhere\" (ei mistään)."
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
 msgstr "Tulostetaanko taustaväri"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:61
 msgid "Whether to print the background images"
 msgstr "Tulostetaanko taustakuvat"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:62
 msgid "Whether to print the date in the footer"
 msgstr "Tulostuuko päiväys sivun alatunnukseen"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:63
 msgid "Whether to print the page address in the header"
 msgstr "Tulostuuko sivun osoite yläotsakkeeseen"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Tulostuvatko sivunumerot (x / yhteensä) sivun alatunnukseen"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the page title in the header"
 msgstr "Tulostuuko sivun otsikko sivun ylätunnukseen"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "Tallennetaanko ja esitäytetäänkö sivustojen salasanat."
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "x-western"
 msgstr "x-western"
 
@@ -561,7 +569,7 @@ msgid "Field _Value"
 msgstr "Kentän _arvo"
 
 #: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.glade.h:22
 msgid "General"
 msgstr "Yleistä"
 
@@ -606,7 +614,7 @@ msgid "Cookies"
 msgstr "Evästeet"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "Noudot"
 
@@ -622,7 +630,7 @@ msgstr "Omat tiedot"
 msgid "Text Encoding"
 msgstr "Tekstin merkistö"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:331
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Käytä asiakirjan määrittelemää merkistöä"
 
@@ -647,7 +655,6 @@ msgid "_Certificate:"
 msgstr "_Varmenne:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Salasana:"
 
@@ -687,26 +694,26 @@ msgstr "<b>Väliaikaistiedostot</b>"
 msgid "<b>Web Content</b>"
 msgstr "<b>WWW-sisältö</b>"
 
+#: ../data/glade/prefs-dialog.glade.h:9
+msgid "<b>Web Development</b>"
+msgstr "<b>WWW-kehitys</b>"
+
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Esimerkiksi ei mainostajilta näillä sivustoilla</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "A_utomatically download and open files"
 msgstr "Nouda ja avaa tiedostot a_utomaattisesti"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.glade.h:13
 msgid "Add Language"
 msgstr "Lisää kieli"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "Allow popup _windows"
 msgstr "Salli _ponnahdusikkunat"
-
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Au_todetect:"
-msgstr "Tunnista _automaattisesti:"
 
 #: ../data/glade/prefs-dialog.glade.h:15
 msgid "Choose a l_anguage:"
@@ -717,7 +724,8 @@ msgstr "Valitse k_ieli:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "T_yhjennä"
 
@@ -729,87 +737,87 @@ msgstr "_Oletus:"
 msgid "Enable Java_Script"
 msgstr "Käytä Java_Scriptiä"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "Enable _Java"
 msgstr "Käytä _Javaa"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:21
 msgid "Fonts & Style"
 msgstr "Kirjasimet ja tyylit"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:944
+#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
 msgid "Language"
 msgstr "Kieli"
 
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:24
 msgid "Let web pages specify their own _fonts"
 msgstr "Anna sivujen määritellä omat _kirjasimensa"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Let web pages specify their own c_olors"
 msgstr "Anna sivujen määritellä omat _värinsä"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "MB"
 msgstr "Mt"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Only _from sites you visit"
 msgstr "Vain _sivustoilta, joilla vieraillaan"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Privacy"
 msgstr "Yksityisyys"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:30
 msgid "Set to Current _Page"
 msgstr "Aseta _nykyiseksi sivuksi"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:31
 msgid "Set to _Blank Page"
 msgstr "Aseta t_yhjäksi sivuksi"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.glade.h:32
 msgid "Use custom _stylesheet"
 msgstr "Käytä omaa _tyylipohjaa"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "Use s_mooth scrolling"
 msgstr "Käytä _pehmennettyä vieritystä"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Address:"
 msgstr "_Osoite:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Always accept"
 msgstr "Hyväksy _aina"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "_Levytila:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
 msgstr "_Noutokansio:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
 msgstr "_Muokkaa tyylipohjaa..."
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Minimum size:"
 msgstr "_Pienin leveys:"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Never accept"
 msgstr "_Älä hyväksy koskaan"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Remember passwords"
 msgstr "_Muista salasanat"
 
@@ -866,39 +874,46 @@ msgid "_Page address"
 msgstr "Sivun o_soite"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:169
+#: ../embed/downloader-view.c:167
 msgid "_Show Downloads"
 msgstr "_Näytä noudettavat"
 
-#: ../embed/downloader-view.c:315
+#: ../embed/downloader-view.c:323
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:319
+#: ../embed/downloader-view.c:327
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:380
+#: ../embed/downloader-view.c:377
 msgid "_Pause"
 msgstr "_Keskeytä"
 
-#: ../embed/downloader-view.c:380
+#: ../embed/downloader-view.c:377
 msgid "_Resume"
 msgstr "_Jatka"
 
-#: ../embed/downloader-view.c:418
+#. impossible time or broken locale settings
+#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1740
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../embed/downloader-view.c:510
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Tiedoston \"%s\" nouto valmistui."
 
-#: ../embed/downloader-view.c:421
+#: ../embed/downloader-view.c:513
 msgid "Download finished"
 msgstr "Nouto valmis"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:446
+#: ../embed/downloader-view.c:537
 #, c-format
 msgid ""
 "%s\n"
@@ -907,490 +922,498 @@ msgstr ""
 "%s\n"
 "%s / %s"
 
-#. impossible time or broken locale settings
-#: ../embed/downloader-view.c:456 ../embed/downloader-view.c:461
-#: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1688
-msgid "Unknown"
-msgstr "Tuntematon"
-
-#: ../embed/downloader-view.c:493
+#: ../embed/downloader-view.c:584
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d nouto"
 msgstr[1] "%d noutoa"
 
-#: ../embed/downloader-view.c:598
+#: ../embed/downloader-view.c:719
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Tiedosto \"%s\" on lisätty noutojonoon."
 
-#: ../embed/downloader-view.c:601
+#: ../embed/downloader-view.c:723
 msgid "Download started"
 msgstr "Nouto aloitettu"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:675 ../embed/downloader-view.c:688
-msgid "download status|Unknown"
-msgstr "tuntematon"
+#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
+msgctxt "download status"
+msgid "Unknown"
+msgstr "Tuntematon"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:680
-msgid "download status|Failed"
-msgstr "epäonnistui"
+#: ../embed/downloader-view.c:804
+msgctxt "download status"
+msgid "Failed"
+msgstr "Epäonnistui"
 
-#: ../embed/downloader-view.c:747 ../src/bookmarks/ephy-bookmarks-editor.c:988
+#: ../embed/downloader-view.c:807
+msgctxt "download status"
+msgid "Cancelled"
+msgstr "Peruttu"
+
+#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Tiedosto"
 
-#: ../embed/downloader-view.c:770
+#: ../embed/downloader-view.c:893
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:781
+#: ../embed/downloader-view.c:904
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
-msgid "Blank page"
-msgstr "Tyhjä sivu"
+#: ../embed/ephy-embed.c:412
+msgid "Save"
+msgstr "Tallenna"
 
-#: ../embed/ephy-base-embed.c:1015
+#: ../embed/ephy-embed.c:554
+msgctxt "file type"
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../embed/ephy-embed.c:568
+msgid "Download this potentially unsafe file?"
+msgstr "Tallennetaanko mahdollisesti turvaton tiedosto?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:573
 #, c-format
-msgid "Redirecting to “%s”…"
-msgstr "Ohjautuu sivustolle \"%s\"..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
+"Tiedoston tyyppi: %s.\n"
+"\n"
+"Tiedoston \"%s\" avaaminen ei ole turvallista, sillä se saattaa vaurioittaa "
+"asiakirjojasi tai loukata yksityisyyttäsi. Voit kuitenkin noutaa sen levylle."
 
-#: ../embed/ephy-base-embed.c:1017
+#: ../embed/ephy-embed.c:581
+msgid "Open this file?"
+msgstr "Avataanko tiedosto?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/ephy-embed.c:587
 #, c-format
-msgid "Transferring data from “%s”…"
-msgstr "Siirretään tietoja lähteestä \"%s\"..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
+"Tiedoston tyyppi: %s.\n"
+"\n"
+"Voit avata tiedoston \"%s\" ohjelmalla \"%s\" tai tallentaa sen."
 
-#: ../embed/ephy-base-embed.c:1019
+#: ../embed/ephy-embed.c:594
+msgid "Download this file?"
+msgstr "Tallennetaanko tiedosto?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:599
 #, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "Odotetaan todennusta lähteestä \"%s\"..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
+"Tiedoston tyyppi: %s.\n"
+"\n"
+"Tiedoston \"%s\" avaamiseen ei löydy yhtäkään ohjelmaa. Voit kuitenkin "
+"noutaa sen levylle."
 
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1025 ../embed/ephy-base-embed.c:1201
-#, c-format
-msgid "Loading “%s”…"
-msgstr "Ladataan \"%s\"..."
+#: ../embed/ephy-embed.c:606
+msgid "_Save As..."
+msgstr "_Tallenna nimellä..."
 
-#: ../embed/ephy-base-embed.c:1203
-msgid "Loading…"
-msgstr "Ladataan..."
+#: ../embed/ephy-embed.c:698
+msgid "Web Inspector"
+msgstr "Www-tutkain"
 
-#: ../embed/ephy-embed-shell.c:244
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphanya ei voi käyttää nyt: Mozillan alustus ei onnistunut."
+#: ../embed/ephy-embed-shell.c:242
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "Epiphanya ei voi käyttää nyt: Alustus epäonnistui."
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Lähetä sähköposti osoitteeseen \"%s\""
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
 msgstr "Arabialainen (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:59
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Arabialainen (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:60
 msgid "Arabic (_MacArabic)"
 msgstr "Arabialainen (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:61
 msgid "Arabic (_Windows-1256)"
 msgstr "Arabialainen (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:62
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Balttilainen (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:63
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Balttilainen (I_SO-8859-4)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:64
 msgid "Baltic (_Windows-1257)"
 msgstr "Balttilainen (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:65
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Armenialainen (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:66
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Georgialainen (GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:67
 msgid "Central European (_IBM-852)"
 msgstr "Keskieurooppalainen (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
 msgstr "Keskieurooppalainen (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:69
 msgid "Central European (_MacCE)"
 msgstr "Keskieurooppalainen (_MacCE)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
 msgstr "Keskieurooppalainen (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Kiinalainen, yksinkertaistettu (_GB18030)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Kiinalainen, yksinkertaistettu (G_B2312)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (GB_K)"
 msgstr "Kiinalainen, yksinkertaistettu (GB_K)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_HZ)"
 msgstr "Kiinalainen, yksinkertaistettu (_HZ)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Kiinalainen, yksinkertaistettu (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big_5)"
 msgstr "Kiinalainen, perinteinen (Big_5)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Kiinalainen, perinteinen (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:78
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Kiinalainen, perinteinen (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (_IBM-855)"
 msgstr "Kyrillinen/Venäläinen (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Kyrillinen/Venäläinen (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Kyrillinen/Venäläinen (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Kyrillinen/Venäläinen (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:83
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Kyrillinen/Venäläinen (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:84
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Kyrillinen/Venäläinen (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:85
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Kyrillinen/_Venäläinen (IBM-866)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:86
 msgid "Greek (_ISO-8859-7)"
 msgstr "Kreikkalainen (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:87
 msgid "Greek (_MacGreek)"
 msgstr "Kreikkalainen (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:88
 msgid "Greek (_Windows-1253)"
 msgstr "Kreikkalainen (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:89
 msgid "Gujarati (_MacGujarati)"
 msgstr "Gujarati (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:90
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Gurmukhi (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:91
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Hindi (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:92
 msgid "Hebrew (_IBM-862)"
 msgstr "Heprealainen (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:93
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Heprealainen (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:94
 msgid "Hebrew (_MacHebrew)"
 msgstr "Heprealainen (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:95
 msgid "Hebrew (_Windows-1255)"
 msgstr "Heprealainen (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:96
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Visuaalinen heprea (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:97
 msgid "Japanese (_EUC-JP)"
 msgstr "Japanilainen (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:98
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Japanilainen (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:99
 msgid "Japanese (_Shift-JIS)"
 msgstr "Japanilainen (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:100
 msgid "Korean (_EUC-KR)"
 msgstr "Korealainen (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:101
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Korealainen (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:102
 msgid "Korean (_JOHAB)"
 msgstr "Korealainen (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:103
 msgid "Korean (_UHC)"
 msgstr "Korealainen (_UHC)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:104
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Kelttiläinen (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:105
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Islantilainen (MacIcelandic)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:106
 msgid "_Nordic (ISO-8859-10)"
 msgstr "Pohjoismaalai_nen (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:107
 msgid "_Persian (MacFarsi)"
 msgstr "_Persialainen (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:108
 msgid "Croatian (Mac_Croatian)"
 msgstr "Kroatialainen (Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:109
 msgid "_Romanian (MacRomanian)"
 msgstr "_Romanialainen (MacRomanian)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:110
 msgid "R_omanian (ISO-8859-16)"
 msgstr "R_omanialainen (ISO-8859-16)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:111
 msgid "South _European (ISO-8859-3)"
 msgstr "Etelä_eurooppalainen (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:112
 msgid "Thai (TIS-_620)"
 msgstr "Thai (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:113
 msgid "Thai (IS_O-8859-11)"
 msgstr "Balttilainen (IS_O-8859-13)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:114
 msgid "_Thai (Windows-874)"
 msgstr "_Thai (Windows-874)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:115
 msgid "Turkish (_IBM-857)"
 msgstr "Turkkilainen (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:116
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Turkkilainen (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:117
 msgid "Turkish (_MacTurkish)"
 msgstr "Turkkilainen (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:118
 msgid "Turkish (_Windows-1254)"
 msgstr "Turkkilainen (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:119
 msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Kyrillinen/Ukrainalainen (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Kyrillinen/Ukrainalainen (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:122
 msgid "Vietnamese (_TCVN)"
 msgstr "Vietnamilainen (_TCVN)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (_VISCII)"
 msgstr "Vietnamilainen (_VISCII)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (V_PS)"
 msgstr "Vietnamilainen (V_PS)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:125
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Vietnamilainen (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_IBM-850)"
 msgstr "Läntinen (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:127
 msgid "Western (_ISO-8859-1)"
 msgstr "Läntinen (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:128
 msgid "Western (IS_O-8859-15)"
 msgstr "Läntinen (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:132
+#: ../embed/ephy-encodings.c:129
 msgid "Western (_MacRoman)"
 msgstr "Läntinen (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:133
+#: ../embed/ephy-encodings.c:130
 msgid "Western (_Windows-1252)"
 msgstr "Läntinen (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
 #.
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:135
 msgid "English (_US-ASCII)"
 msgstr "Englantilainen (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16 BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:137
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:141
+#: ../embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:142
+#: ../embed/ephy-encodings.c:139
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:146
-msgid "autodetectors|Off"
-msgstr "ei mikään"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:149
-msgid "automatically detect ... character encodings|Chinese"
-msgstr "kiinalainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:152
-msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "yksinkertaistettu kiinalainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:155
-msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "perinteinen kiinalainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:158
-msgid "automatically detect ... character encodings|East Asian"
-msgstr "itäaasialainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:161
-msgid "automatically detect ... character encodings|Japanese"
-msgstr "japanilainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:164
-msgid "automatically detect ... character encodings|Korean"
-msgstr "korealainen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:167
-msgid "automatically detect ... character encodings|Russian"
-msgstr "venäläinen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:170
-msgid "automatically detect ... character encodings|Universal"
-msgstr "yleinen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:173
-msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "ukrainalainen"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:329
+#: ../embed/ephy-encodings.c:281
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Tuntematon (%s)"
 
-#: ../embed/ephy-history.c:487
+#: ../embed/ephy-history.c:485
 msgid "All"
 msgstr "Kaikki"
 
-#: ../embed/ephy-history.c:655
+#: ../embed/ephy-history.c:653
 msgid "Others"
 msgstr "Muut"
 
-#: ../embed/ephy-history.c:661
+#: ../embed/ephy-history.c:659
 msgid "Local files"
 msgstr "Paikalliset tiedostot"
 
-#: ../lib/eel-gconf-extensions.c:68
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+msgid "Blank page"
+msgstr "Tyhjä sivu"
+
+#: ../embed/ephy-web-view.c:1261
+#, c-format
+msgid "Redirecting to “%s”…"
+msgstr "Ohjautuu sivustolle \"%s\"..."
+
+#: ../embed/ephy-web-view.c:1263
+#, c-format
+msgid "Transferring data from “%s”…"
+msgstr "Siirretään tietoja lähteestä \"%s\"..."
+
+#: ../embed/ephy-web-view.c:1265
+#, c-format
+msgid "Waiting for authorization from “%s”…"
+msgstr "Odotetaan todennusta lähteestä \"%s\"..."
+
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Ladataan \"%s\"..."
+
+#: ../embed/ephy-web-view.c:1381
+msgid "Loading…"
+msgstr "Ladataan..."
+
+#: ../lib/eel-gconf-extensions.c:67
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -1399,17 +1422,69 @@ msgstr ""
 "GConf-virhe:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:402
+#: ../lib/egg/eggdesktopfile.c:165
 #, c-format
-msgid "Opening %s"
-msgstr "Avataan \"%s\""
+msgid "File is not a valid .desktop file"
+msgstr "Tiedosto ei ole kelvollinen .desktop-tiedosto"
 
-#: ../lib/egg/eel-app-launch-context.c:405
+#: ../lib/egg/eggdesktopfile.c:188
 #, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "Avataan %d kohta"
-msgstr[1] "Avataan %d kohtaa"
+msgid "Unrecognized desktop file Version '%s'"
+msgstr "Tunnistamaton työpöytätiedosto versiolla ”%s”"
+
+#: ../lib/egg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr "Käynnistetään %s"
+
+#: ../lib/egg/eggdesktopfile.c:1100
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr "Sovellus ei hyväksy asiakirjoja komentoriviltä"
+
+#: ../lib/egg/eggdesktopfile.c:1168
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr "Tunnistamaton käynnistysvalitsin: %d"
+
+#: ../lib/egg/eggdesktopfile.c:1373
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr ""
+"Ei voida syöttää asiakirjan URIa työpöytäalkiolle, jonka tyyppi on ”linkki”"
+
+#: ../lib/egg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr "Ei ole käynnistettävä kohde"
+
+#: ../lib/egg/eggsmclient.c:225
+msgid "Disable connection to session manager"
+msgstr "Katkaise yhteys istunnonhallintaan"
+
+#: ../lib/egg/eggsmclient.c:228
+msgid "Specify file containing saved configuration"
+msgstr "Määritä tiedosto, joka sisältää tallennetut asetukset"
+
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
+msgid "FILE"
+msgstr "TIEDOSTO"
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "Specify session management ID"
+msgstr "Määritä istunnonhallintatunniste"
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "ID"
+msgstr "TUNNISTE"
+
+#: ../lib/egg/eggsmclient.c:252
+msgid "Session management options:"
+msgstr "Istunnonhallinnan valitsimet:"
+
+#: ../lib/egg/eggsmclient.c:253
+msgid "Show session management options"
+msgstr "Näytä istunnonhallinnan valitsimet"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -1418,32 +1493,32 @@ msgstr[1] "Avataan %d kohtaa"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "Näytä \"_%s\""
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Siirrä työkalupalkissa"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Siirrä valittu kohta työkalupalkkiin"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "_Poista työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Poista valittu kohta työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Poista työkalupalkki"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Poista valittu työkalupalkki"
 
@@ -1451,19 +1526,19 @@ msgstr "Poista valittu työkalupalkki"
 msgid "Separator"
 msgstr "Erotin"
 
-#: ../lib/ephy-file-chooser.c:412
+#: ../lib/ephy-file-chooser.c:381
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-chooser.c:423
+#: ../lib/ephy-file-chooser.c:392
 msgid "Web pages"
 msgstr "WWW-sivut"
 
-#: ../lib/ephy-file-chooser.c:431
+#: ../lib/ephy-file-chooser.c:400
 msgid "Images"
 msgstr "Kuvat"
 
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:767
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -1482,25 +1557,25 @@ msgstr "Tiedosto \"%s\" on jo olemassa, siirrä se pois tieltä."
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota \"%s\" ei voi luoda."
 
-#: ../lib/ephy-gui.c:285
+#: ../lib/ephy-gui.c:283
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Kansioon %s ei voi kirjoittaa"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:287
 msgid "You do not have permission to create files in this directory."
 msgstr "Sinulla ei ole oikeuksia luoda tiedostoja tähän hakemistoon."
 
-#: ../lib/ephy-gui.c:292
+#: ../lib/ephy-gui.c:290
 msgid "Directory not Writable"
 msgstr "Hakemisto ei ole kirjoitettavissa"
 
-#: ../lib/ephy-gui.c:322
+#: ../lib/ephy-gui.c:320
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Olemassa olevaa tiedostoa \"%s\" ei voi ylikirjoittaa"
 
-#: ../lib/ephy-gui.c:326
+#: ../lib/ephy-gui.c:324
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
@@ -1508,228 +1583,40 @@ msgstr ""
 "Tämänniminen tiedosto on jo olemassa, eikä sinulla ole oikeuksia kirjoittaa "
 "sen päälle."
 
-#: ../lib/ephy-gui.c:329
+#: ../lib/ephy-gui.c:327
 msgid "Cannot Overwrite File"
 msgstr "Tiedoston päälle ei voi kirjoittaa"
 
-#: ../lib/ephy-gui.c:368
+#: ../lib/ephy-gui.c:413
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ohjeen näyttäminen ei onnistunut: %s"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:40
-msgid "select fonts for|Arabic"
-msgstr "arabia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:43
-msgid "select fonts for|Baltic"
-msgstr "balttilaiset kielet"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:46
-msgid "select fonts for|Central European"
-msgstr "keskieurooppalaiset kielet"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:49
-msgid "select fonts for|Cyrillic"
-msgstr "kyrillinen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:52
-msgid "select fonts for|Devanagari"
-msgstr "devanagari"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:55
-msgid "select fonts for|Greek"
-msgstr "kreikka"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:58
-msgid "select fonts for|Hebrew"
-msgstr "heprea"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:61
-msgid "select fonts for|Japanese"
-msgstr "japani"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:64
-msgid "select fonts for|Korean"
-msgstr "korea"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:67
-msgid "select fonts for|Simplified Chinese"
-msgstr "yksinkertaistettu kiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:70
-msgid "select fonts for|Tamil"
-msgstr "tamili"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:73
-msgid "select fonts for|Thai"
-msgstr "thai"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:76
-msgid "select fonts for|Traditional Chinese"
-msgstr "perinteinen kiina"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:79
-msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "perinteinen kiina (Hong Kong)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:82
-msgid "select fonts for|Turkish"
-msgstr "turkki"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:85
-msgid "select fonts for|Armenian"
-msgstr "armenia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:88
-msgid "select fonts for|Bengali"
-msgstr "bengali"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:91
-msgid "select fonts for|Unified Canadian Syllabics"
-msgstr "Yhtenäistetty kanadalainen tavutus"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:94
-msgid "select fonts for|Ethiopic"
-msgstr "etiopia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:97
-msgid "select fonts for|Georgian"
-msgstr "georgia"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:100
-msgid "select fonts for|Gujarati"
-msgstr "gujarati"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:103
-msgid "select fonts for|Gurmukhi"
-msgstr "gurmukhi"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:106
-msgid "select fonts for|Khmer"
-msgstr "khmer"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:109
-msgid "select fonts for|Malayalam"
-msgstr "malaylam"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:112
-msgid "select fonts for|Western"
-msgstr "läntinen merkistö"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:115
-msgid "select fonts for|Other Scripts"
-msgstr "muut kielet"
-
-#: ../lib/ephy-password-dialog.c:396
-msgid "_Username:"
-msgstr "_Käyttäjätunnus:"
-
-#: ../lib/ephy-password-dialog.c:410
-msgid "_Domain:"
-msgstr "_Toimialue:"
-
-#: ../lib/ephy-password-dialog.c:437
-msgid "_New password:"
-msgstr "_Uusi salasana:"
-
-#: ../lib/ephy-password-dialog.c:447
-msgid "Con_firm password:"
-msgstr "_Salasanan tarkistus:"
-
-#: ../lib/ephy-password-dialog.c:473
-msgid "Password quality:"
-msgstr "Salasanan laatu:"
-
-#: ../lib/ephy-password-dialog.c:491
-msgid "Do not remember this password"
-msgstr "Älä muista tätä salasanaa"
-
-#: ../lib/ephy-password-dialog.c:495
-msgid "_Remember password for this session"
-msgstr "Muista salasana tämän istunnon ajan"
-
-#: ../lib/ephy-password-dialog.c:499
-msgid "Save password in _keyring"
-msgstr "Tallenna salasana _avainrenkaaseen"
-
-#: ../lib/ephy-stock-icons.c:52
+#: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "Ponnahdusikkunat"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1277
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
 msgid "History"
 msgstr "Sivuhistoria"
 
-#: ../lib/ephy-stock-icons.c:54
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1484
+#: ../lib/ephy-stock-icons.c:49
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:300
+#: ../src/ephy-window.c:1495
 msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:898
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1778
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1488
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:273
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
 msgid "Address Entry"
 msgstr "Osoitekenttä"
 
-#: ../lib/ephy-stock-icons.c:57
+#: ../lib/ephy-stock-icons.c:52
 msgid "_Download"
 msgstr "_Tallenna"
 
@@ -1766,426 +1653,409 @@ msgstr "%e. %Bta %H.%M"
 msgid "%b %d %Y"
 msgstr "%e. %Bta %Y"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:44
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:45
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:46
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:47
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:48
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:49
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:50
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:52
+#: ../lib/ephy-zoom.h:51
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:53
+#: ../lib/ephy-zoom.h:52
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Vedä ja pudota tämä kuvake tehdäksesi tähän sivuun osoittavan linkin"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:319
+#: ../lib/widgets/ephy-search-entry.c:140
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: ../src/bookmarks/ephy-bookmark-action.c:318
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:496
+#: ../src/bookmarks/ephy-bookmark-action.c:495
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Suorittaa skriptin \"%s\""
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:87
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:86
+#: ../src/bookmarks/ephy-bookmark-properties.c:612
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _samanlainen"
 msgstr[1] "%d _samanlaista"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:260
+#: ../src/bookmarks/ephy-bookmark-properties.c:259
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Yhdistä %d identtisen kirjanmerkin kanssa"
 msgstr[1] "_Yhdistä %d identtisen kirjanmerkin kanssa"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
-#: ../src/bookmarks/ephy-bookmark-properties.c:302
+#: ../src/bookmarks/ephy-bookmark-properties.c:279
+#: ../src/bookmarks/ephy-bookmark-properties.c:301
 #, c-format
 msgid "Show “%s”"
 msgstr "Näytä \"%s\""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:427
 #, c-format
 msgid "“%s” Properties"
 msgstr "\"%s\" ominaisuudet"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:552
+#: ../src/bookmarks/ephy-bookmark-properties.c:551
 msgid "_Title:"
 msgstr "_Otsikko:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:568
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "_Osoite:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:579
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "_Aiheet:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:601
+#: ../src/bookmarks/ephy-bookmark-properties.c:600
 msgid "Sho_w all topics"
 msgstr "Näy_tä kaikki aiheet"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:110
-msgid "Search the web"
-msgstr "Etsi WWW:stä"
-
-#: ../src/bookmarks/ephy-bookmarks.c:110
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.fi/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
 msgstr "Viihde"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "News"
 msgstr "Uutiset"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Shopping"
 msgstr "Ostokset"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Sports"
 msgstr "Urheilu"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Travel"
 msgstr "Matkat"
 
-#: ../src/bookmarks/ephy-bookmarks.c:120
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Work"
 msgstr "Työ"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:462
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Päivitetäänkö kirjanmerkki \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:467
+#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Kirjanmerkin sisältämä sivu on siirretty osoitteeseen \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:471
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "_Don't Update"
 msgstr "_Älä päivitä"
 
-#: ../src/bookmarks/ephy-bookmarks.c:473
+#: ../src/bookmarks/ephy-bookmarks.c:452
 msgid "_Update"
 msgstr "_Päivitä"
 
-#: ../src/bookmarks/ephy-bookmarks.c:476
+#: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "Päivitetäänkö kirjanmerkki?"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1224
-msgid "bookmarks|All"
+#: ../src/bookmarks/ephy-bookmarks.c:1203
+msgctxt "bookmarks"
+msgid "All"
 msgstr "Kaikki"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
-msgid "bookmarks|Most Visited"
+#: ../src/bookmarks/ephy-bookmarks.c:1206
+msgctxt "bookmarks"
+msgid "Most Visited"
 msgstr "Useimmin vieraillut"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1237
-msgid "bookmarks|Not Categorized"
+#: ../src/bookmarks/ephy-bookmarks.c:1210
+msgctxt "bookmarks"
+msgid "Not Categorized"
 msgstr "Luokittelemattomat"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1245
-msgid "bookmarks|Nearby Sites"
+#: ../src/bookmarks/ephy-bookmarks.c:1215
+msgctxt "bookmarks"
+msgid "Nearby Sites"
 msgstr "Lähiympäristön sivustot"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1480
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1450
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:80
+#: ../src/bookmarks/ephy-bookmarks-editor.c:78
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:81
+#: ../src/bookmarks/ephy-bookmarks-editor.c:79
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:131
 msgid "Remove from this topic"
 msgstr "Poista tästä aiheesta"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:116
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
 msgid "_View"
 msgstr "_Näytä"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
 msgid "_Help"
 msgstr "O_hje"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "_New Topic"
 msgstr "_Uusi aihe"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Create a new topic"
 msgstr "Luo uusi aihe"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
-#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:156
-#: ../src/ephy-history-window.c:707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
+#: ../src/ephy-history-window.c:705
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Avaa uudessa _ikkunassa"
 msgstr[1] "Avaa uusissa _ikkunoissa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Open the selected bookmark in a new window"
 msgstr "Avaa valittu kirjanmerkki uuteen ikkunaan"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
-#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:159
-#: ../src/ephy-history-window.c:710
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
+#: ../src/ephy-history-window.c:708
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Avaa uusissa _välilehdissä"
 msgstr[1] "Avaa uudessa _välilehdessä"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Open the selected bookmark in a new tab"
 msgstr "Avaa valittu kirjanmerkki uuteen välilehteen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "_Rename…"
 msgstr "_Nimeä uudelleen..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "Rename the selected bookmark or topic"
 msgstr "Nimeä valittu kirjanmerkki tai aihe uudelleen"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/bookmarks/ephy-bookmarks-ui.c:299
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "_Properties"
 msgstr "_Ominaisuudet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Katsele tai muokkaa valitun kirjanmerkin ominaisuuksia"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "_Import Bookmarks…"
 msgstr "_Tuo kirjanmerkit..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Tuo kirjanmerkkejä muusta selaimesta tai kirjanmerkkitiedostosta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_Export Bookmarks…"
 msgstr "_Vie kirjanmerkit..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Export bookmarks to a file"
 msgstr "Vie kirjanmerkit tiedostoon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:146
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
 msgid "_Close"
 msgstr "_Sulje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Close the bookmarks window"
 msgstr "Sulje kirjanmerkki-ikkuna"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
 msgid "Cut the selection"
 msgstr "Leikkaa valinta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1364
-#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:720
-#: ../src/ephy-window.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
+#: ../src/ephy-window.c:155
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
 msgid "Copy the selection"
 msgstr "Kopioi valinta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
-#: ../src/ephy-history-window.c:176 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
 msgid "_Paste"
 msgstr "L_iitä"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/ephy-history-window.c:175
 msgid "Paste the clipboard"
 msgstr "Liitä leikepöydän sisältö"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/ephy-history-window.c:177
 msgid "_Delete"
 msgstr "_Poista"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Delete the selected bookmark or topic"
 msgstr "Poista valittu kirjanmerkki tai aihe"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
 msgstr "Valitse kaikki kirjanmerkit tai kaikki teksti"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:264
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
 msgid "_Contents"
 msgstr "_Sisältö"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
 msgstr "Näytä kirjanmerkkiohje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:267
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
 msgid "_About"
 msgstr "_Tietoja"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
 msgid "Display credits for the web browser creators"
 msgstr "Näytä luettelo tämän WWW-selaimen tekijöistä"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 msgid "_Show on Toolbar"
 msgstr "_Näytä työkalupalkissa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Näytä valittu kirjanmerkki työkalupalkissa"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-#: ../src/ephy-history-window.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/ephy-history-window.c:206
 msgid "_Title"
 msgstr "_Otsikko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
 msgid "Show only the title column"
 msgstr "Näytä vain otsikkosarake"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
 msgid "T_itle and Address"
 msgstr "_Otsikko ja osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:235
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
 msgid "Show both the title and address columns"
 msgstr "Näytä sekä otsikko- että osoitesarakkeet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:278
+#: ../src/bookmarks/ephy-bookmarks-editor.c:276
 msgid "Type a topic"
 msgstr "Kirjoita aihe"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:396
+#: ../src/bookmarks/ephy-bookmarks-editor.c:394
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Poistetaanko aihe \"%s\"?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+#: ../src/bookmarks/ephy-bookmarks-editor.c:397
 msgid "Delete this topic?"
 msgstr "Poistetaanko tämä aihe?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:401
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2194,44 +2064,44 @@ msgstr ""
 "luokittelemattomiksi, jolleivät ne kuulu johonkin toiseen aiheeseen. "
 "Kirjanmerkkejä ei poisteta."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:404
+#: ../src/bookmarks/ephy-bookmarks-editor.c:402
 msgid "_Delete Topic"
 msgstr "_Poista aihe"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:636
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:643
+#: ../src/bookmarks/ephy-bookmarks-editor.c:641
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozillan \"%s\"-profiili"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:647
+#: ../src/bookmarks/ephy-bookmarks-editor.c:645
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:649
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:678
 msgid "Import failed"
 msgstr "Tuonti epäonnistui"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:682
+#: ../src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Import Failed"
 msgstr "Tuonti epäonnistui"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:685
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2240,234 +2110,229 @@ msgstr ""
 "Tiedoston \"%s\" sisältämien kirjanmerkkien tuonti ei onnistunut, koska "
 "tiedosto on vioittunut tai tuntematonta tyyppiä."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../src/bookmarks/ephy-bookmarks-editor.c:746
 msgid "Import Bookmarks from File"
 msgstr "Tuo kirjanmerkit tiedostosta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:753
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefoxin tai Mozillan kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:759
+#: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeonin tai Konquerorin kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:761
 msgid "Epiphany bookmarks"
 msgstr "Epiphanyn kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:885
 msgid "Export Bookmarks"
 msgstr "Tuo kirjanmerkit"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:904
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File f_ormat:"
 msgstr "Tiedosto_muoto:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:948
+#: ../src/bookmarks/ephy-bookmarks-editor.c:946
 msgid "Import Bookmarks"
 msgstr "Tuo kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:954
+#: ../src/bookmarks/ephy-bookmarks-editor.c:952
 msgid "I_mport"
 msgstr "T_uo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:968
+#: ../src/bookmarks/ephy-bookmarks-editor.c:966
 msgid "Import bookmarks from:"
 msgstr "Tuo kirjanmerkit:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1360
-#: ../src/ephy-history-window.c:716
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
+#: ../src/ephy-history-window.c:714
 msgid "_Copy Address"
 msgstr "_Kopioi osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/ephy-history-window.c:1069
-msgid "Clear"
-msgstr "Tyhjennä"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
-#: ../src/ephy-history-window.c:1077
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
+#: ../src/ephy-history-window.c:1039
 msgid "_Search:"
 msgstr "_Etsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1842
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
 msgid "Topics"
 msgstr "Aiheet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1912
-#: ../src/ephy-history-window.c:1400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
+#: ../src/ephy-history-window.c:1362
 msgid "Title"
 msgstr "Otsikko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1923
-#: ../src/ephy-history-window.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
+#: ../src/ephy-history-window.c:1371
 msgid "Address"
 msgstr "Osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:300
+#: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "Show properties for this bookmark"
 msgstr "näytä kirjanmerkin ominaisuudet"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312
+#: ../src/bookmarks/ephy-bookmarks-ui.c:311
 msgid "Open this bookmark in a new tab"
 msgstr "Avaa kirjanmerkki uuteen välilehteen"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324
+#: ../src/bookmarks/ephy-bookmarks-ui.c:323
 msgid "Open this bookmark in a new window"
 msgstr "Avaa kirjanmerkki uuteen ikkunaan"
 
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:77
+#: ../src/bookmarks/ephy-open-tabs-action.c:74
 msgid "Open in New _Tabs"
 msgstr "Avaa uusissa _välilehdissä"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:78
+#: ../src/bookmarks/ephy-open-tabs-action.c:75
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Avaa tähän aiheen kirjanmerkit uusiin välilehtiin"
 
-#: ../src/bookmarks/ephy-related-action.c:153
+#: ../src/bookmarks/ephy-related-action.c:152
 msgid "Related"
 msgstr "Liittyy"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:300
+#: ../src/bookmarks/ephy-topic-factory-action.c:299
 msgid "Topic"
 msgstr "Aihe"
 
 #: ../src/bookmarks/ephy-topics-entry.c:329
 #, c-format
 msgid "Create topic “%s”"
-msgstr "Luo aihe \"%s\""
+msgstr "Luo aihe ”%s”"
 
-#: ../src/ephy-encoding-dialog.c:312
+#: ../src/ephy-encoding-dialog.c:319
 msgid "Encodings"
 msgstr "Merkistöt"
 
-#: ../src/ephy-encoding-menu.c:323
+#: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
 msgstr "_Muut..."
 
-#: ../src/ephy-encoding-menu.c:324
+#: ../src/ephy-encoding-menu.c:331
 msgid "Other encodings"
 msgstr "Muut merkistöt"
 
-#: ../src/ephy-encoding-menu.c:330
+#: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
 msgstr "_Automaattinen"
 
-#: ../src/ephy-find-toolbar.c:148
+#: ../src/ephy-find-toolbar.c:146
 msgid "Not found"
 msgstr "Ei löytynyt"
 
-#: ../src/ephy-find-toolbar.c:160
+#: ../src/ephy-find-toolbar.c:158
 msgid "Wrapped"
 msgstr "Jatkettiin alusta"
 
-#: ../src/ephy-find-toolbar.c:180
+#: ../src/ephy-find-toolbar.c:178
 msgid "Find links:"
 msgstr "Etsi linkkejä:"
 
-#: ../src/ephy-find-toolbar.c:180
+#: ../src/ephy-find-toolbar.c:178
 msgid "Find:"
 msgstr "Etsi:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:447 ../src/ephy-find-toolbar.c:569
+#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
 msgid "_Case sensitive"
 msgstr "_Huomioi kirjainkoko"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:541
 msgid "Find Previous"
 msgstr "Etsi edellinen"
 
-#: ../src/ephy-find-toolbar.c:555
+#: ../src/ephy-find-toolbar.c:544
 msgid "Find previous occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon edellinen esiintymä"
 
-#: ../src/ephy-find-toolbar.c:561
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Next"
 msgstr "Etsi seuraava"
 
-#: ../src/ephy-find-toolbar.c:564
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:544
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
 msgid "Leave Fullscreen"
 msgstr "Poistu kokoruututilasta"
 
-#: ../src/ephy-go-action.c:42 ../src/ephy-toolbar.c:303
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
 msgid "Go"
 msgstr "Siirry"
 
-#: ../src/ephy-history-window.c:157
+#: ../src/ephy-history-window.c:155
 msgid "Open the selected history link in a new window"
 msgstr "Avaa valittu linkki sivuhistoriasta uuteen ikkunaan"
 
-#: ../src/ephy-history-window.c:160
+#: ../src/ephy-history-window.c:158
 msgid "Open the selected history link in a new tab"
 msgstr "Avaa valittu linkki sivuhistoriasta uuteen välilehteen"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:160
 msgid "Add _Bookmark…"
 msgstr "_Lisää kirjanmerkki..."
 
-#: ../src/ephy-history-window.c:163
+#: ../src/ephy-history-window.c:161
 msgid "Bookmark the selected history link"
 msgstr "Lisää kirjamerkki valitulle sivuhistorian linkille"
 
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:164
 msgid "Close the history window"
 msgstr "Sulje sivuhistoria"
 
-#: ../src/ephy-history-window.c:180
+#: ../src/ephy-history-window.c:178
 msgid "Delete the selected history link"
 msgstr "Poista valittu linkki sivuhistoriasta"
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:181
 msgid "Select all history links or text"
 msgstr "Valitse kaikki linkit tai teksti sivuhistoriasta"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:183
 msgid "Clear _History"
 msgstr "Tyhjennä sivu_historia"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:184
 msgid "Clear your browsing history"
 msgstr "Tyhjentää aiemmin selattujen sivujen historian"
 
-#: ../src/ephy-history-window.c:191
+#: ../src/ephy-history-window.c:189
 msgid "Display history help"
 msgstr "Näytä sivuhistorian ohje"
 
-#: ../src/ephy-history-window.c:209
+#: ../src/ephy-history-window.c:207
 msgid "Show the title column"
 msgstr "Näytä otsikkosarake"
 
-#: ../src/ephy-history-window.c:210
+#: ../src/ephy-history-window.c:208
 msgid "_Address"
 msgstr "_Osoite"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:209
 msgid "Show the address column"
 msgstr "Näytä osoitesarake"
 
-#: ../src/ephy-history-window.c:212
+#: ../src/ephy-history-window.c:210
 msgid "_Date and Time"
 msgstr "_Päiväys ja aika"
 
-#: ../src/ephy-history-window.c:213
+#: ../src/ephy-history-window.c:211
 msgid "Show the date and time column"
 msgstr "Näytä päiväys- ja aikasarake"
 
-#: ../src/ephy-history-window.c:239
+#: ../src/ephy-history-window.c:237
 msgid "Clear browsing history?"
 msgstr "Tyhjennä sivuhistoria?"
 
-#: ../src/ephy-history-window.c:243
+#: ../src/ephy-history-window.c:241
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2475,88 +2340,88 @@ msgstr ""
 "Sivuhistorian tyhjentämisen seurauksena kaikki linkit poistetaan "
 "sivuhistoriasta pysyvästi."
 
-#: ../src/ephy-history-window.c:258
+#: ../src/ephy-history-window.c:256
 msgid "Clear History"
 msgstr "Tyhjennä sivuhistoria"
 
-#: ../src/ephy-history-window.c:1086
+#: ../src/ephy-history-window.c:1048
 msgid "Last 30 minutes"
 msgstr "Viimeiset 30 minuuttia"
 
-#: ../src/ephy-history-window.c:1087
+#: ../src/ephy-history-window.c:1049
 msgid "Today"
 msgstr "Tänään"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1088 ../src/ephy-history-window.c:1091
-#: ../src/ephy-history-window.c:1095
+#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
+#: ../src/ephy-history-window.c:1057
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Viimeisin %d päivä"
 msgstr[1] "Viimeisimmät %d päivää"
 
-#: ../src/ephy-history-window.c:1337
+#: ../src/ephy-history-window.c:1299
 msgid "Sites"
 msgstr "Sivustot"
 
-#: ../src/ephy-history-window.c:1417
+#: ../src/ephy-history-window.c:1379
 msgid "Date"
 msgstr "Päiväys"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+msgid "GNOME Web Browser"
+msgstr "Gnomen WWW-selain"
+
+#: ../src/ephy-main.c:90
 msgid "Open a new tab in an existing browser window"
 msgstr "Avaa uusi välilehti olemassa olevaan selainikkunaan"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:92
 msgid "Open a new browser window"
 msgstr "Avaa uusi selainikkuna"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "Launch the bookmarks editor"
 msgstr "Käynnistä kirjanmerkkimuokkain"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "Import bookmarks from the given file"
 msgstr "Tuo kirjanmerkkejä annetusta tiedostosta"
 
-#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
-msgid "FILE"
-msgstr "TIEDOSTO"
-
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:98
 msgid "Load the given session file"
 msgstr "Lataa annettu istuntotiedosto"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "Add a bookmark"
 msgstr "Lisää kirjanmerkki"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:102
 msgid "Start a private instance"
 msgstr "Käynnistä erillinen instanssi"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:104
 msgid "Profile directory to use in the private instance"
 msgstr "Henkilökohtaisille tiedoille käytetty profiilihakemisto"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:104
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:106
 msgid "URL …"
 msgstr "URL ..."
 
-#: ../src/ephy-main.c:409
+#: ../src/ephy-main.c:423
 msgid "Could not start GNOME Web Browser"
 msgstr "Gnomen WWW-selainta ei voi käynnistää"
 
-#: ../src/ephy-main.c:412
+#: ../src/ephy-main.c:426
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2565,30 +2430,35 @@ msgstr ""
 "Käynnistys ei onnistunut seuraavan virheen takia:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:875
-msgid "GNOME Web Browser"
-msgstr "Gnomen WWW-selain"
-
-#: ../src/ephy-main.c:516
+#: ../src/ephy-main.c:563
 msgid "GNOME Web Browser options"
 msgstr "Gnomen WWW-selaimen valinnat"
 
-#: ../src/ephy-notebook.c:624
+#: ../src/ephy-notebook.c:626
 msgid "Close tab"
 msgstr "Sulje välilehti"
 
-#: ../src/ephy-session.c:114
+#: ../src/ephy-profile-migration.c:64
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "Evästeiden kopiointi Mozillasta epäonnistui."
+
+#: ../src/ephy-profile-migration.c:119
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr ""
+"Tuoreimman siirrosmerkinnän luku epäonnistui, keskeytetään profiilin siirros."
+
+#: ../src/ephy-session.c:116
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "Noudot keskeytetään ja uloskirjautuminen jatkuu %d sekunnin päästä."
 msgstr[1] "Noudot keskeytetään ja uloskirjautuminen jatkuu %d sekunnin päästä."
 
-#: ../src/ephy-session.c:230
+#: ../src/ephy-session.c:228
 msgid "Abort pending downloads?"
 msgstr "Keskeytetäänkö valmistumattomat noudot?"
 
-#: ../src/ephy-session.c:234
+#: ../src/ephy-session.c:233
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -2596,19 +2466,19 @@ msgstr ""
 "Noutoja on vielä kesken. Jos kirjaudut ulos, noudot keskeytetään ja noudetut "
 "tiedostot hukataan."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:237
 msgid "_Cancel Logout"
 msgstr "_Keskeytä uloskirjautuminen"
 
-#: ../src/ephy-session.c:240
+#: ../src/ephy-session.c:239
 msgid "_Abort Downloads"
 msgstr "_Keskeytä noudot"
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:565
 msgid "Recover previous browser windows and tabs?"
 msgstr "Palautetaanko edelliset selainikkunat ja välilehdet?"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:569
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2616,724 +2486,728 @@ msgstr ""
 "Epiphany vaikuttaa viime kerralla kaatuneen, tai se on suljettu väkisin. "
 "Voit palauttaa viimeksi auki olleet ikkunat ja välilehdet nyt."
 
-#: ../src/ephy-session.c:581
+#: ../src/ephy-session.c:573
 msgid "_Don't Recover"
 msgstr "_Älä palauta"
 
-#: ../src/ephy-session.c:583
+#: ../src/ephy-session.c:575
 msgid "_Recover"
 msgstr "_Palauta"
 
-#: ../src/ephy-session.c:585
+#: ../src/ephy-session.c:577
 msgid "Crash Recovery"
 msgstr "Kaatumisesta palautuminen"
 
-#: ../src/ephy-shell.c:169
+#: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
 msgstr "Sivupalkkilaajennos vaaditaan"
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:173
 msgid "Sidebar Extension Required"
 msgstr "Sivupalkkilaajennos vaaditaan"
 
-#: ../src/ephy-shell.c:175
+#: ../src/ephy-shell.c:177
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Napsauttamasi linkki vaatii, että sivupalkkilaajennos on asennettu."
 
-#: ../src/ephy-statusbar.c:85
+#: ../src/ephy-statusbar.c:83
 msgid "Caret"
 msgstr "Kohdistin"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:92
+#: ../src/ephy-statusbar.c:90
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Poistu näppäimistövalintatilasta painamalla F7"
 
-#: ../src/ephy-tabs-menu.c:202
+#: ../src/ephy-tabs-menu.c:201
 msgid "Switch to this tab"
 msgstr "Vaihda tähän välilehteen"
 
-#: ../src/ephy-toolbar.c:212
+#: ../src/ephy-toolbar.c:224
 msgid "_Back"
 msgstr "_Takaisin"
 
-#: ../src/ephy-toolbar.c:214
+#: ../src/ephy-toolbar.c:226
 msgid "Go to the previous visited page"
 msgstr "Siirry edelliselle käydylle sivulle"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:218
+#: ../src/ephy-toolbar.c:230
 msgid "Back history"
 msgstr "Taaksepäin sivuhistoriassa"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:244
 msgid "_Forward"
 msgstr "_Eteenpäin"
 
-#: ../src/ephy-toolbar.c:234
+#: ../src/ephy-toolbar.c:246
 msgid "Go to the next visited page"
 msgstr "Siirry seuraavalle käydylle sivulle"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:238
+#: ../src/ephy-toolbar.c:250
 msgid "Forward history"
 msgstr "Eteenpäin sivuhistoriassa"
 
-#: ../src/ephy-toolbar.c:251
+#: ../src/ephy-toolbar.c:263
 msgid "_Up"
 msgstr "_Ylös"
 
-#: ../src/ephy-toolbar.c:253
+#: ../src/ephy-toolbar.c:265
 msgid "Go up one level"
 msgstr "Siirry yksi taso ylös"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:257
+#: ../src/ephy-toolbar.c:269
 msgid "List of upper levels"
 msgstr "Luettelo ylemmistä tasoista"
 
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:287
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Syötä avattava WWW-osoite tai etsittävä teksti"
 
-#: ../src/ephy-toolbar.c:291
+#: ../src/ephy-toolbar.c:303
 msgid "Zoom"
 msgstr "Mittakaava"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:305
 msgid "Adjust the text size"
 msgstr "Säädä tekstin kokoa"
 
-#: ../src/ephy-toolbar.c:305
+#: ../src/ephy-toolbar.c:317
 msgid "Go to the address entered in the address entry"
 msgstr "Siirry osoitteeseen, joka on osoitekentässä"
 
-#: ../src/ephy-toolbar.c:314
+#: ../src/ephy-toolbar.c:326
 msgid "_Home"
 msgstr "_Aloitus"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:328
 msgid "Go to the home page"
 msgstr "Siirry aloitussivulle"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:338
 msgid "New _Tab"
 msgstr "Uusi _välilehti"
 
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:340
 msgid "Open a new tab"
 msgstr "Avaa uusi välilehti"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:349
 msgid "_New Window"
 msgstr "Uusi _ikkuna"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:351
 msgid "Open a new window"
 msgstr "Avaa uusi ikkuna"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:74
-msgid "toolbar style|Default"
-msgstr "Oletusarvo"
+#: ../src/ephy-toolbar-editor.c:71
+msgctxt "toolbar style"
+msgid "Default"
+msgstr "Oletus"
 
 #. separator row
-#: ../src/ephy-toolbar-editor.c:76
+#: ../src/ephy-toolbar-editor.c:73
+msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Teksti kuvakkeiden alla"
 
-#: ../src/ephy-toolbar-editor.c:77
+#: ../src/ephy-toolbar-editor.c:74
+msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Teksti kuvakkeiden vieressä"
 
-#: ../src/ephy-toolbar-editor.c:78
+#: ../src/ephy-toolbar-editor.c:75
+msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Vain kuvakkeet"
 
-#: ../src/ephy-toolbar-editor.c:79
+#: ../src/ephy-toolbar-editor.c:76
+msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Vain teksti"
 
-#: ../src/ephy-toolbar-editor.c:188
+#: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
 msgstr "Työkalupalkkimuokkain"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:207
+#: ../src/ephy-toolbar-editor.c:204
 msgid "Toolbar _button labels:"
 msgstr "Työkalupalkin _painikkeiden nimiöt:"
 
-#: ../src/ephy-toolbar-editor.c:271
+#: ../src/ephy-toolbar-editor.c:268
 msgid "_Add a New Toolbar"
 msgstr "_Lisää uusi työkalupalkki"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:111
 msgid "_Bookmarks"
 msgstr "_Kirjanmerkit"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:112
 msgid "_Go"
 msgstr "_Siirry"
 
-#: ../src/ephy-window.c:119
+#: ../src/ephy-window.c:113
 msgid "T_ools"
 msgstr "T_yökalut"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:114
 msgid "_Tabs"
 msgstr "_Välilehdet"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:116
 msgid "_Toolbars"
 msgstr "_Työkalupalkit"
 
 #. File menu
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:122
 msgid "_Open…"
 msgstr "_Avaa..."
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:123
 msgid "Open a file"
 msgstr "Avaa tiedosto"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:125
 msgid "Save _As…"
 msgstr "Tallenna _nimellä..."
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:126
 msgid "Save the current page"
 msgstr "Tallenna nykyinen sivu"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:128
 msgid "Page Set_up"
 msgstr "Sivun t_ulostusasetukset"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:129
 msgid "Setup the page settings for printing"
 msgstr "Määrittele paperin asetukset tulostusta varten"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:131
 msgid "Print Pre_view"
 msgstr "Tulostuksen _esikatselu"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:132
 msgid "Print preview"
 msgstr "Esikatselu"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:134
 msgid "_Print…"
 msgstr "_Tulosta..."
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:135
 msgid "Print the current page"
 msgstr "Tulosta nykyinen sivu"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:137
 msgid "S_end Link by Email…"
 msgstr "Lähetä linkki _sähköpostina..."
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:138
 msgid "Send a link of the current page"
 msgstr "Postita linkki nykyiselle sivulle"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:141
 msgid "Close this tab"
 msgstr "Sulje tämä välilehti"
 
 #. Edit menu
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:146
 msgid "_Undo"
 msgstr "_Kumoa"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:147
 msgid "Undo the last action"
 msgstr "Kumoa viimeisin toiminto"
 
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:149
 msgid "Re_do"
 msgstr "_Tee uudelleen"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:150
 msgid "Redo the last undone action"
 msgstr "Tee viimeisin kumottu toiminto uudelleen"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:159
 msgid "Paste clipboard"
 msgstr "Liitä leikepöydältä"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:162
 msgid "Delete text"
 msgstr "Poista teksti"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:165
 msgid "Select the entire page"
 msgstr "Valitse koko sivu"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:167
 msgid "_Find…"
 msgstr "_Etsi..."
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:168
 msgid "Find a word or phrase in the page"
 msgstr "Etsi tekstiä sivulta"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:170
 msgid "Find Ne_xt"
 msgstr "Etsi _seuraava"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:171
 msgid "Find next occurrence of the word or phrase"
 msgstr "Etsi tekstin seuraava esiintymä"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:173
 msgid "Find Pre_vious"
 msgstr "Etsi e_dellinen"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:174
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Etsi tekstin edellinen esiintymä"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:176
 msgid "P_ersonal Data"
 msgstr "_Omat tiedot"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:177
 msgid "View and remove cookies and passwords"
 msgstr "Katsele ja poista tallentuneita evästeitä ja salasanoja"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:180
 msgid "Certificate_s"
 msgstr "_Varmenteet"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:181
 msgid "Manage Certificates"
 msgstr "Hallitse varmenteita"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:184
 msgid "P_references"
 msgstr "Aset_ukset"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:185
 msgid "Configure the web browser"
 msgstr "Säädä WWW-selainta"
 
 #. View menu
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:190
 msgid "_Customize Toolbars…"
 msgstr "_Mukauta työkalupalkkeja..."
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:191
 msgid "Customize toolbars"
 msgstr "Mukauta työkalupalkkeja"
 
-#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
+#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
 msgid "_Stop"
 msgstr "_Pysäytä"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:194
 msgid "Stop current data transfer"
 msgstr "Pysäytä meneillään oleva tiedonsiirto"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:198
 msgid "_Reload"
 msgstr "Päi_vitä"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:199
 msgid "Display the latest content of the current page"
 msgstr "Näytä nykyisen sivun viimeisin sisältö"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:201
 msgid "_Larger Text"
 msgstr "_Suurempi teksti"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:202
 msgid "Increase the text size"
 msgstr "Kasvata tekstin kokoa"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:204
 msgid "S_maller Text"
 msgstr "_Pienempi teksti"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:205
 msgid "Decrease the text size"
 msgstr "Pienennä tekstin kokoa"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:207
 msgid "_Normal Size"
 msgstr "_Tavallinen koko"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:208
 msgid "Use the normal text size"
 msgstr "Muuta tekstin koko tavalliseksi"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:210
 msgid "Text _Encoding"
 msgstr "Tekstin _merkistö"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:211
 msgid "Change the text encoding"
 msgstr "Vaihda tekstin merkistöä"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:213
 msgid "_Page Source"
 msgstr "_Sivun lähdekoodi"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:214
 msgid "View the source code of the page"
 msgstr "Näytä sivun lähdekoodi"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:216
 msgid "Page _Security Information"
 msgstr "Sivun _turvallisuustiedot"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:217
 msgid "Display security information for the web page"
 msgstr "Näytä sivuun liittyviä tietoturvatietoja"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:222
 msgid "_Add Bookmark…"
 msgstr "_Lisää kirjanmerkki..."
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
+#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
 msgid "Add a bookmark for the current page"
 msgstr "Lisää nykyiseen sivuun viittaava kirjanmerkki"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:225
 msgid "_Edit Bookmarks"
 msgstr "_Muokkaa kirjanmerkkejä"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:226
 msgid "Open the bookmarks window"
 msgstr "Avaa kirjanmerkki-ikkuna"
 
 #. Go menu
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:231
 msgid "_Location…"
 msgstr "_Sijainti..."
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:232
 msgid "Go to a specified location"
 msgstr "Lataa annettu sijainti"
 
-#: ../src/ephy-window.c:240
+#. History
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "_Historia"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:235
 msgid "Open the history window"
 msgstr "Avaa sivuhistoria"
 
 #. Tabs menu
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:240
 msgid "_Previous Tab"
 msgstr "_Edellinen välilehti"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:241
 msgid "Activate previous tab"
 msgstr "Aktivoi edellinen välilehti"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:243
 msgid "_Next Tab"
 msgstr "_Seuraava välilehti"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:244
 msgid "Activate next tab"
 msgstr "Aktivoi seuraava välilehti"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:246
 msgid "Move Tab _Left"
 msgstr "Siirrä välilehteä _vasemmalle"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:247
 msgid "Move current tab to left"
 msgstr "Siirrä nykyistä välilehteä vasemmalle"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:249
 msgid "Move Tab _Right"
 msgstr "Siirrä välilehteä _oikealle"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:250
 msgid "Move current tab to right"
 msgstr "Siirrä nykyistä välilehteä oikealle"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:252
 msgid "_Detach Tab"
 msgstr "_Irrota välilehti"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:253
 msgid "Detach current tab"
 msgstr "Irrota nykyinen sivu"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:259
 msgid "Display web browser help"
 msgstr "Näytä WWW-selaimen ohje"
 
 #. File Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:270
 msgid "_Work Offline"
 msgstr "_Yhteydetön tila"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:271
 msgid "Switch to offline mode"
 msgstr "Siirry yhteydettömään tilaan"
 
 #. View Menu
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:276
 msgid "_Hide Toolbars"
 msgstr "_Piilota työkalupalkit"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:277
 msgid "Show or hide toolbar"
 msgstr "Näytä tai piilota työkalupalkki"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:279
 msgid "St_atusbar"
 msgstr "Tila_rivi"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:280
 msgid "Show or hide statusbar"
 msgstr "Näytä tai piilota tilarivi"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:282
 msgid "_Fullscreen"
 msgstr "K_oko ruutu"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:283
 msgid "Browse at full screen"
 msgstr "Selaa kokoruututilassa"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:285
 msgid "Popup _Windows"
 msgstr "_Ponnahdusikkunat"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:286
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Näytä tai piilota pyytämättömät tämän sivuston ponnahdusikkunat"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:288
 msgid "Selection Caret"
 msgstr "Valinnan kohdistin"
 
 #. Document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:296
 msgid "Add Boo_kmark…"
 msgstr "Lisää _kirjanmerkki..."
 
 #. Framed document
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:302
 msgid "Show Only _This Frame"
 msgstr "Näytä vain tämä _kehys"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:303
 msgid "Show only this frame in this window"
 msgstr "Näytä vain tämä kehys tässä ikkunassa"
 
 #. Links
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:308
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:309
 msgid "Open link in this window"
 msgstr "Avaa linkki tässä ikkunassa"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:311
 msgid "Open Link in New _Window"
 msgstr "Avaa linkki _uudessa ikkunassa"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:312
 msgid "Open link in a new window"
 msgstr "Avaa linkki uudessa ikkunassa"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:314
 msgid "Open Link in New _Tab"
 msgstr "Avaa linkki uudessa _välilehdessä"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:315
 msgid "Open link in a new tab"
 msgstr "Avaa linkki uudessa välilehdessä"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:317
 msgid "_Download Link"
 msgstr "_Tallenna linkki"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:319
 msgid "_Save Link As…"
 msgstr "Tallenna linkki _nimellä..."
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:320
 msgid "Save link with a different name"
 msgstr "Tallenna linkki eri nimisenä"
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:322
 msgid "_Bookmark Link…"
 msgstr "_Lisää linkki kirjanmerkkeihin..."
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:324
 msgid "_Copy Link Address"
 msgstr "_Kopioi linkin osoite"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:330
 msgid "_Send Email…"
 msgstr "Lähetä _sähköposti..."
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:332
 msgid "_Copy Email Address"
 msgstr "_Kopioi sähköpostiosoite"
 
 #. Images
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:337
 msgid "Open _Image"
 msgstr "Avaa _kuva"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:339
 msgid "_Save Image As…"
 msgstr "_Tallenna kuva nimellä..."
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:341
 msgid "_Use Image As Background"
 msgstr "_Käytä kuvaa taustana"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:343
 msgid "Copy I_mage Address"
 msgstr "Kopioi kuvan _osoite"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:345
 msgid "St_art Animation"
 msgstr "_Käynnistä animaatio"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:347
 msgid "St_op Animation"
 msgstr "_Pysäytä animaatio"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:522
 msgid "There are unsubmitted changes to form elements"
 msgstr "Lähettämättömän lomakkeen kenttiä on muutettu"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:526
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jos suljet asiakirjan tästä huolimatta, menetät nämä tiedot."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:530
 msgid "Close _Document"
 msgstr "_Sulje asiakirja"
 
-#: ../src/ephy-window.c:1478 ../src/window-commands.c:281
+#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
 msgid "Open"
 msgstr "Avaa"
 
-#: ../src/ephy-window.c:1480 ../src/window-commands.c:307
+#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
-#: ../src/ephy-window.c:1482
+#: ../src/ephy-window.c:1493
 msgid "Print"
 msgstr "Tulosta"
 
-#: ../src/ephy-window.c:1486
+#: ../src/ephy-window.c:1497
 msgid "Find"
 msgstr "Etsi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1510
 msgid "Larger"
 msgstr "Suurempi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1513
 msgid "Smaller"
 msgstr "Pienempi"
 
-#: ../src/ephy-window.c:1691
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "Turvaton"
 
-#: ../src/ephy-window.c:1696
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "Rikki"
 
-#: ../src/ephy-window.c:1708
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "Matala"
 
-#: ../src/ephy-window.c:1715
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "Korkea"
 
-#: ../src/ephy-window.c:1725
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "Turvallisuustaso: %s"
 
-#: ../src/ephy-window.c:1768
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ponnahdusikkuna piilossa"
 msgstr[1] "%d ponnahdusikkunaa piilossa"
 
-#: ../src/ephy-window.c:2031
+#: ../src/ephy-window.c:2081
 #, c-format
 msgid "Open image “%s”"
 msgstr "Avaa kuva \"%s\""
 
-#: ../src/ephy-window.c:2036
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Käytä \"%s\" työpöydän taustana"
 
-#: ../src/ephy-window.c:2041
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save image “%s”"
 msgstr "Tallenna kuva \"%s\""
 
-#: ../src/ephy-window.c:2046
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopioi kuvan \"%s\" osoite"
 
-#: ../src/ephy-window.c:2059
+#: ../src/ephy-window.c:2109
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Lähetä sähköpostia osoitteeseen \"%s\""
 
-#: ../src/ephy-window.c:2065
+#: ../src/ephy-window.c:2115
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopioi sähköpostiosoite \"%s\""
 
-#: ../src/ephy-window.c:2077
+#: ../src/ephy-window.c:2127
 #, c-format
 msgid "Save link “%s”"
 msgstr "Tallenna linkki \"%s\""
 
-#: ../src/ephy-window.c:2083
+#: ../src/ephy-window.c:2133
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lisää kirjanmerkki linkkiin \"%s\""
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopioi linkin osoite \"%s\""
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Valitse poistettavat yksityiset tiedot</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3343,31 +3217,26 @@ msgstr ""
 "selaamiisi www-sivustoihin. Tarkista ennen poistamista tietotyypit, jotka "
 "haluat poistaa:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "Tyhjennä yksityiset tiedot"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "_Evästeet"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "Tallennetut _salasanat"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "Sivu_historia"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "_Väliaikaistiedostot"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3375,67 +3244,68 @@ msgstr ""
 "<small><i><b>Huomautus:</b> Et voi perua tätä toimintoa. Tiedot, jotka "
 "tyhjennät, poistetaan pysyvästi.</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "Evästeen ominaisuudet"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:669
 msgid "Content:"
 msgstr "Sisältö:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:685
 msgid "Path:"
 msgstr "Polku:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:701
 msgid "Send for:"
 msgstr "Lähetys:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:710
 msgid "Encrypted connections only"
 msgstr "Vain salatut yhteydet"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:710
 msgid "Any type of connection"
 msgstr "Kaikki yhteydet"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:716
 msgid "Expires:"
 msgstr "Vanhentuu:"
 
-#: ../src/pdm-dialog.c:670
+#. Session cookie
+#: ../src/pdm-dialog.c:728
 msgid "End of current session"
 msgstr "Nykyisen istunnon loppu"
 
-#: ../src/pdm-dialog.c:803
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "Verkkoalue"
 
-#: ../src/pdm-dialog.c:815
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "Nimi"
 
-#: ../src/pdm-dialog.c:1214
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "Verkkonimi"
 
-#: ../src/pdm-dialog.c:1226
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "Tunnus"
 
-#: ../src/pdm-dialog.c:1238
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
 msgstr "Käyttäjän salasanat"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:259
 msgid "Download Link"
 msgstr "Tallenna linkki"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:267
 msgid "Save Link As"
 msgstr "Tallenna linkki _nimellä"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:274
 msgid "Save Image As"
 msgstr "Tallenna kuva nimellä"
 
@@ -3479,41 +3349,37 @@ msgstr "Sulje"
 msgid "Close print preview"
 msgstr "Sulje tulosteen esikatselu"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
+#. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:632 ../src/prefs-dialog.c:640
+#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
-msgid "language|%s (%s)"
+msgctxt "language"
+msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
+#. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:651
+#: ../src/prefs-dialog.c:527
 #, c-format
-msgid "language|User defined (%s)"
+msgctxt "language"
+msgid "User defined (%s)"
 msgstr "Käyttäjän määrittelemä (%s)"
 
-#: ../src/prefs-dialog.c:673
+#: ../src/prefs-dialog.c:549
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Järjestelmän kieli (%s)"
 msgstr[1] "Järjestelmän kielet (%s)"
 
-#: ../src/prefs-dialog.c:1065
+#: ../src/prefs-dialog.c:941
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
-#: ../src/window-commands.c:770
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3525,7 +3391,7 @@ msgstr ""
 "Free Software Foundation on ne julkaissut; joko Lisenssin version 2, tai "
 "(valinnan mukaan) minkä tahansa myöhemmän version mukaisesti."
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:777
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3537,7 +3403,7 @@ msgstr ""
 "hyväksyttävästä laadusta tai soveltuvuudesta tiettyyn tarkoitukseen. Katso "
 "GPL lisenssistä lisää yksityiskohtia."
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:781
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3547,27 +3413,27 @@ msgstr ""
 "kirjoita osoitteeseen Free Software Foundation Inc., 51 Franklin Street, "
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:826 ../src/window-commands.c:842
-#: ../src/window-commands.c:853
+#: ../src/window-commands.c:827 ../src/window-commands.c:843
+#: ../src/window-commands.c:854
 msgid "Contact us at:"
 msgstr "Ota yhteyttä osoitteessa:"
 
-#: ../src/window-commands.c:829
+#: ../src/window-commands.c:830
 msgid "Contributors:"
 msgstr "Avustajat:"
 
-#: ../src/window-commands.c:832
+#: ../src/window-commands.c:833
 msgid "Past developers:"
 msgstr "Aikaisemmat kehittäjät:"
 
-#: ../src/window-commands.c:865
+#: ../src/window-commands.c:863
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by %s"
+"Powered by WebKit"
 msgstr ""
 "Mahdollistaa www-sivujen katselun ja tiedon etsimisen Internetistä.\n"
-"Käyttää %s-moottoria"
+"Käyttää WebKit-moottoria"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3577,7 +3443,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:891
+#: ../src/window-commands.c:889
 msgid "translator-credits"
 msgstr ""
 "Timo Jyrinki, 2008\n"
@@ -3586,9 +3452,196 @@ msgstr ""
 "\n"
 "http://gnome.fi/"
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:892
 msgid "GNOME Web Browser Website"
 msgstr "Gnomen WWW-selaimen WWW-sivut"
+
+#~ msgid "The encoding autodetector. Empty string means autodetect is off"
+#~ msgstr ""
+#~ "Merkistön automaattinen tunnistus. Tyhjä merkkijono tarkoittaa ei "
+#~ "käytössä."
+
+#~ msgid ""
+#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
+#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
+#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
+#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
+#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
+#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
+#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
+#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
+#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
+#~ "encodings)."
+#~ msgstr ""
+#~ "Merkistön automaattinen tunnistus. Käypiä arvoja ovat \"\" (tyhjä "
+#~ "merkkijono, ei automaattitunnistusta), \"cjk_parallel_state_machine"
+#~ "\" (tunnista itäaasialaiset merkistöt), \"ja_parallel_state_machine"
+#~ "\" (tunnista japanilaiset merkistöt), \"ko_parallel_state_machine"
+#~ "\" (tunnista korealaiset merkistöt), \"ruprob\" (tunnista venäläiset "
+#~ "merkistöt), \"ukprob\" (tunnista ukrainalaiset merkistöt), "
+#~ "\"zh_parallel_state_machine\" (tunnista kiinalaiset merkistöt), "
+#~ "\"zhcn_parallel_state_machine\" (tunnista yksinkertaistetut kiinalaiset "
+#~ "merkistöt), \"zhtw_parallel_state_machine\" (tunnista perinteiset "
+#~ "kiinalaiset merkistöt) ja \"universal_charset_detector\" (tunnista "
+#~ "useimmat merkistöt)."
+
+#~ msgid "Au_todetect:"
+#~ msgstr "Tunnista _automaattisesti:"
+
+#~ msgid "download status|Unknown"
+#~ msgstr "tuntematon"
+
+#~ msgid "download status|Failed"
+#~ msgstr "epäonnistui"
+
+#~ msgid "autodetectors|Off"
+#~ msgstr "ei mikään"
+
+#~ msgid "automatically detect ... character encodings|Chinese"
+#~ msgstr "kiinalainen"
+
+#~ msgid "automatically detect ... character encodings|Simplified Chinese"
+#~ msgstr "yksinkertaistettu kiinalainen"
+
+#~ msgid "automatically detect ... character encodings|Traditional Chinese"
+#~ msgstr "perinteinen kiinalainen"
+
+#~ msgid "automatically detect ... character encodings|East Asian"
+#~ msgstr "itäaasialainen"
+
+#~ msgid "automatically detect ... character encodings|Japanese"
+#~ msgstr "japanilainen"
+
+#~ msgid "automatically detect ... character encodings|Korean"
+#~ msgstr "korealainen"
+
+#~ msgid "automatically detect ... character encodings|Russian"
+#~ msgstr "venäläinen"
+
+#~ msgid "automatically detect ... character encodings|Universal"
+#~ msgstr "yleinen"
+
+#~ msgid "automatically detect ... character encodings|Ukrainian"
+#~ msgstr "ukrainalainen"
+
+#~ msgid "Opening %s"
+#~ msgstr "Avataan \"%s\""
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "Avataan %d kohta"
+#~ msgstr[1] "Avataan %d kohtaa"
+
+#~ msgid "select fonts for|Arabic"
+#~ msgstr "arabia"
+
+#~ msgid "select fonts for|Baltic"
+#~ msgstr "balttilaiset kielet"
+
+#~ msgid "select fonts for|Central European"
+#~ msgstr "keskieurooppalaiset kielet"
+
+#~ msgid "select fonts for|Cyrillic"
+#~ msgstr "kyrillinen"
+
+#~ msgid "select fonts for|Devanagari"
+#~ msgstr "devanagari"
+
+#~ msgid "select fonts for|Greek"
+#~ msgstr "kreikka"
+
+#~ msgid "select fonts for|Hebrew"
+#~ msgstr "heprea"
+
+#~ msgid "select fonts for|Japanese"
+#~ msgstr "japani"
+
+#~ msgid "select fonts for|Korean"
+#~ msgstr "korea"
+
+#~ msgid "select fonts for|Simplified Chinese"
+#~ msgstr "yksinkertaistettu kiina"
+
+#~ msgid "select fonts for|Tamil"
+#~ msgstr "tamili"
+
+#~ msgid "select fonts for|Thai"
+#~ msgstr "thai"
+
+#~ msgid "select fonts for|Traditional Chinese"
+#~ msgstr "perinteinen kiina"
+
+#~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
+#~ msgstr "perinteinen kiina (Hong Kong)"
+
+#~ msgid "select fonts for|Turkish"
+#~ msgstr "turkki"
+
+#~ msgid "select fonts for|Armenian"
+#~ msgstr "armenia"
+
+#~ msgid "select fonts for|Bengali"
+#~ msgstr "bengali"
+
+#~ msgid "select fonts for|Unified Canadian Syllabics"
+#~ msgstr "Yhtenäistetty kanadalainen tavutus"
+
+#~ msgid "select fonts for|Ethiopic"
+#~ msgstr "etiopia"
+
+#~ msgid "select fonts for|Georgian"
+#~ msgstr "georgia"
+
+#~ msgid "select fonts for|Gujarati"
+#~ msgstr "gujarati"
+
+#~ msgid "select fonts for|Gurmukhi"
+#~ msgstr "gurmukhi"
+
+#~ msgid "select fonts for|Khmer"
+#~ msgstr "khmer"
+
+#~ msgid "select fonts for|Malayalam"
+#~ msgstr "malaylam"
+
+#~ msgid "select fonts for|Western"
+#~ msgstr "läntinen merkistö"
+
+#~ msgid "select fonts for|Other Scripts"
+#~ msgstr "muut kielet"
+
+#~ msgid "_Username:"
+#~ msgstr "_Käyttäjätunnus:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Toimialue:"
+
+#~ msgid "_New password:"
+#~ msgstr "_Uusi salasana:"
+
+#~ msgid "Con_firm password:"
+#~ msgstr "_Salasanan tarkistus:"
+
+#~ msgid "Password quality:"
+#~ msgstr "Salasanan laatu:"
+
+#~ msgid "Do not remember this password"
+#~ msgstr "Älä muista tätä salasanaa"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "Muista salasana tämän istunnon ajan"
+
+#~ msgid "Save password in _keyring"
+#~ msgstr "Tallenna salasana _avainrenkaaseen"
+
+#~ msgid "bookmarks|All"
+#~ msgstr "Kaikki"
+
+#~ msgid "toolbar style|Default"
+#~ msgstr "Oletusarvo"
+
+#~ msgid "_History"
+#~ msgstr "Sivu_historia"
 
 #~ msgid "Fonts"
 #~ msgstr "Kirjasimet"
@@ -3605,54 +3658,8 @@ msgstr "Gnomen WWW-selaimen WWW-sivut"
 #~ msgid "_Variable width:"
 #~ msgstr "_Vaihteleva leveys:"
 
-#~ msgid "Save"
-#~ msgstr "Tallenna"
-
 #~ msgid "File Type:|Unknown"
 #~ msgstr "Tuntematon"
-
-#~ msgid "Download this potentially unsafe file?"
-#~ msgstr "Tallennetaanko mahdollisesti turvaton tiedosto?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "It is unsafe to open “%s” as it could potentially damage your documents "
-#~ "or invade your privacy. You can download it instead."
-#~ msgstr ""
-#~ "Tiedoston tyyppi: %s.\n"
-#~ "\n"
-#~ "Tiedoston \"%s\" avaaminen ei ole turvallista, sillä se saattaa "
-#~ "vaurioittaa asiakirjojasi tai loukata yksityisyyttäsi. Voit kuitenkin "
-#~ "noutaa sen levylle."
-
-#~ msgid "Open this file?"
-#~ msgstr "Avataanko tiedosto?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You can open “%s” using “%s” or save it."
-#~ msgstr ""
-#~ "Tiedoston tyyppi: %s.\n"
-#~ "\n"
-#~ "Voit avata tiedoston \"%s\" ohjelmalla \"%s\" tai tallentaa sen."
-
-#~ msgid "Download this file?"
-#~ msgstr "Tallennetaanko tiedosto?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You have no application able to open “%s”. You can download it instead."
-#~ msgstr ""
-#~ "Tiedoston tyyppi: %s.\n"
-#~ "\n"
-#~ "Tiedoston \"%s\" avaamiseen ei löydy yhtäkään ohjelmaa. Voit kuitenkin "
-#~ "noutaa sen levylle."
-
-#~ msgid "_Save As..."
-#~ msgstr "_Tallenna nimellä..."
 
 #~ msgid "“%s” Protocol is not Supported"
 #~ msgstr "Protokolla \"%s\" ei ole tuettu"
@@ -4215,9 +4222,6 @@ msgstr "Gnomen WWW-selaimen WWW-sivut"
 #~ msgid "%s Files"
 #~ msgstr "%s-tiedostot"
 
-#~ msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-#~ msgstr "http://www.google.fi/search?ie=UTF-8&oe=UTF-8&q="
-
 #~ msgid "Unsafe protocol."
 #~ msgstr "Turvaton yhteyskäytäntö."
 
@@ -4242,9 +4246,6 @@ msgstr "Gnomen WWW-selaimen WWW-sivut"
 #~ msgstr ""
 #~ "Tämä liitännäinen hallitsee \".desktop\"- ja \".url\"-tiedostojen "
 #~ "sisältämiä www-linkkejä."
-
-#~ msgid "Default"
-#~ msgstr "Oletus"
 
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
