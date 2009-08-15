@@ -1193,7 +1193,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	entry->priv->favicon_col = favicon_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
-	g_object_unref (model);
 
 	gtk_tree_sortable_set_sort_column_id 
 			(GTK_TREE_SORTABLE (sort_model),

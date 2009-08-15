@@ -443,6 +443,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_URL_COL,
 						    EPHY_COMPLETION_EXTRA_COL,
 						    EPHY_COMPLETION_FAVICON_COL);
+		g_object_unref (model);
 		
 		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy), 
 						    match_func, 
