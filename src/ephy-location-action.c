@@ -53,7 +53,7 @@ struct _EphyLocationActionPrivate
 	gboolean sync_address_is_blocked;
 };
 
-static void ephy_location_action_init       (EphyLocationAction *action);
+static void ephy_location_action_init	    (EphyLocationAction *action);
 static void ephy_location_action_class_init (EphyLocationActionClass *class);
 static void ephy_location_action_finalize   (GObject *object);
 static void user_changed_cb		    (GtkWidget *proxy,
@@ -141,7 +141,7 @@ match_func (GtkEntryCompletion *completion,
 
 static void
 action_activated_cb (GtkEntryCompletion *completion,
-                     gint index,
+		     gint index,
 		     EphyLocationAction *action)
 {
 	GtkWidget *entry;
@@ -157,7 +157,7 @@ action_activated_cb (GtkEntryCompletion *completion,
 
 		node = (EphyNode *)g_list_nth_data (action->priv->actions, index);
 		smart_url = ephy_node_get_property_string
-	                (node, EPHY_NODE_BMK_PROP_LOCATION);
+			(node, EPHY_NODE_BMK_PROP_LOCATION);
 		g_return_if_fail (smart_url != NULL);
 
 		url = ephy_bookmarks_resolve_address
@@ -165,8 +165,8 @@ action_activated_cb (GtkEntryCompletion *completion,
 		g_free (content);
 		if (url == NULL) return;
 
- 		ephy_link_open (EPHY_LINK (action), url, NULL,
-			        ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
+		ephy_link_open (EPHY_LINK (action), url, NULL,
+				ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
 
 		g_free (url);
 	}
@@ -198,7 +198,7 @@ entry_activate_cb (GtkEntry *entry,
 	g_return_if_fail (address != NULL);
 
 	ephy_link_open (EPHY_LINK (action), g_strstrip (address), NULL, 
-		        ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
+			ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
 
 	g_free (address);
 }
@@ -304,8 +304,8 @@ sync_secure (GtkAction *gaction,
 
 static void
 sync_show_lock (GtkAction *gaction,
-	        GParamSpec *pspec,
-	        GtkWidget *proxy)
+		GParamSpec *pspec,
+		GtkWidget *proxy)
 {
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
@@ -322,7 +322,7 @@ get_location_cb (EphyLocationEntry *entry,
 	EphyEmbed *embed;
 	
 	embed = ephy_embed_container_get_active_child 
-          (EPHY_EMBED_CONTAINER (priv->window));
+	  (EPHY_EMBED_CONTAINER (priv->window));
 
 	return g_strdup (ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
 }
@@ -334,7 +334,7 @@ get_title_cb (EphyLocationEntry *entry,
 	EphyEmbed *embed;
 
 	embed = ephy_embed_container_get_active_child 
-          (EPHY_EMBED_CONTAINER (action->priv->window));
+	  (EPHY_EMBED_CONTAINER (action->priv->window));
 
 	return g_strdup (ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
 }
@@ -382,7 +382,7 @@ add_completion_actions (GtkAction *gaction,
 
 		index = g_list_position (action->priv->actions, l);
 		title = ephy_node_get_property_string
-	                (bmk, EPHY_NODE_BMK_PROP_TITLE);
+			(bmk, EPHY_NODE_BMK_PROP_TITLE);
 		gtk_entry_completion_insert_action_text (completion, index, (char*)title);
 	}
 
@@ -445,9 +445,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_FAVICON_COL);
 		
 		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy), 
-							match_func, 
-							proxy,
-							NULL);
+						    match_func, 
+						    proxy,
+						    NULL);
 
 		add_completion_actions (action, proxy);
 
@@ -692,8 +692,8 @@ static int
 compare_actions (gconstpointer a,
 		 gconstpointer b)
 {
-        EphyNode *node_a = (EphyNode *)a;
-        EphyNode *node_b = (EphyNode *)b;
+	EphyNode *node_a = (EphyNode *)a;
+	EphyNode *node_b = (EphyNode *)b;
 	const char *title1, *title2;
 	int retval;
 
@@ -768,26 +768,26 @@ update_actions_list (EphyLocationAction *la)
 
 static void
 actions_child_removed_cb (EphyNode *node,
-		          EphyNode *child,
-		          guint old_index,
-		          EphyLocationAction *action)
+			  EphyNode *child,
+			  guint old_index,
+			  EphyLocationAction *action)
 {
 	update_actions_list (action);
 }
 
 static void
 actions_child_added_cb (EphyNode *node,
-		        EphyNode *child,
-		        EphyLocationAction *action)
+			EphyNode *child,
+			EphyLocationAction *action)
 {
 	update_actions_list (action);
 }
 
 static void
 actions_child_changed_cb (EphyNode *node,
-		          EphyNode *child,
+			  EphyNode *child,
 			  guint property_id,
-		          EphyLocationAction *action)
+			  EphyLocationAction *action)
 {
 	update_actions_list (action);
 }
@@ -809,17 +809,17 @@ ephy_location_action_init (EphyLocationAction *action)
 	init_actions_list (action);
 	
 	ephy_node_signal_connect_object (priv->smart_bmks,
-			                 EPHY_NODE_CHILD_ADDED,
-			                 (EphyNodeCallback)actions_child_added_cb,
-			                 G_OBJECT (action));
+					 EPHY_NODE_CHILD_ADDED,
+					 (EphyNodeCallback)actions_child_added_cb,
+					 G_OBJECT (action));
 	ephy_node_signal_connect_object (priv->smart_bmks,
-			                 EPHY_NODE_CHILD_REMOVED,
-			                 (EphyNodeCallback)actions_child_removed_cb,
-			                 G_OBJECT (action));
+					 EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback)actions_child_removed_cb,
+					 G_OBJECT (action));
 	ephy_node_signal_connect_object (priv->smart_bmks,
-			                 EPHY_NODE_CHILD_CHANGED,
-			                 (EphyNodeCallback)actions_child_changed_cb,
-			                 G_OBJECT (action));
+					 EPHY_NODE_CHILD_CHANGED,
+					 (EphyNodeCallback)actions_child_changed_cb,
+					 G_OBJECT (action));
 }
 
 static void
