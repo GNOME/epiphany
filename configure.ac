@@ -169,10 +169,14 @@ fi
 # Portability checks
 # ******************
 
-AC_CHECK_FUNCS([mkdtemp])
+AC_CHECK_FUNCS([localtime_r memchr memmove memset mkdir mkdtemp realpath sqrt strchr strcspn strdup strerror strrchr strtol strtoul strstr])
 
 # for backtrace()
-AC_CHECK_HEADERS([execinfo.h])
+AC_CHECK_HEADERS([execinfo.h fcntl.h])
+AC_C_INLINE
+AC_FUNC_MKTIME
+AC_FUNC_STRTOD
+AC_TYPE_SIZE_T
 
 # Check for -Wdeclaration-after-statement (since gcc 3.4)
 
