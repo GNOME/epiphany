@@ -284,6 +284,8 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 
 		gtk_image_menu_item_set_image
 			(GTK_IMAGE_MENU_ITEM (proxy), image);
+		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (proxy),
+							   TRUE);
 	}
 
 	if (pixbuf)
