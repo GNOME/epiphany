@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
+ *  Copyright © 2009 Collabora Ltd.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +57,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <webkit/webkit.h>
+#include <webkit/webkitwebdatasource.h>
 
 static void
 page_setup_done_cb (GtkPageSetup *setup,
@@ -595,29 +598,114 @@ window_cmd_view_zoom_normal (GtkAction *action,
 }
 
 static void
-save_source_completed_cb (EphyEmbedPersist *persist)
+save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointer data)
 {
-	const char *dest;
-	guint32 user_time;
+	char *uri;
 	GFile *file;
+	GError *error = NULL;
 
-	user_time = ephy_embed_persist_get_user_time (persist);
-	dest = ephy_embed_persist_get_dest (persist);
-	g_return_if_fail (dest != NULL);
+	g_output_stream_close_finish (ostream, result, &error);
+	if (error) {
+		g_warning ("Unable to close file: %s", error->message);
+		g_error_free (error);
+		return;
+	}
 
-	file = g_file_new_for_path (dest);
-	ephy_file_delete_on_exit (file);
+	uri = (char*)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
 
-	ephy_file_launch_handler ("text/plain", file, user_time);
+	file = g_file_new_for_uri (uri);
+	ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ());
 	g_object_unref (file);
+}
+
+static void
+save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
+{
+	GError *error = NULL;
+	gssize written;
+
+	written = g_output_stream_write_finish (ostream, result, &error);
+	if (error) {
+		g_string_free (data, TRUE);
+		g_warning ("Unable to write to file: %s", error->message);
+		g_error_free (error);
+
+		g_output_stream_close_async (ostream, G_PRIORITY_DEFAULT, NULL,
+					     (GAsyncReadyCallback)save_temp_source_close_cb,
+					     NULL);
+
+		return;
+	}
+
+	if (written == data->len) {
+		g_string_free (data, TRUE);
+
+		g_output_stream_close_async (ostream, G_PRIORITY_DEFAULT, NULL,
+					     (GAsyncReadyCallback)save_temp_source_close_cb,
+					     NULL);
+
+		return;
+	}
+
+	data->len -= written;
+	data->str += written;
+
+	g_output_stream_write_async (ostream,
+				     data->str, data->len,
+				     G_PRIORITY_DEFAULT, NULL,
+				     (GAsyncReadyCallback)save_temp_source_write_cb,
+				     data);
+}
+
+static void
+save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed)
+{
+	EphyWebView *view;
+	WebKitWebFrame *frame;
+	WebKitWebDataSource *data_source;
+	GString *const_data;
+	GString *data;
+	GFileOutputStream *ostream;
+	GError *error = NULL;
+
+	ostream = g_file_replace_finish (file, result, &error);
+	if (error) {
+		g_warning ("Unable to replace file: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	g_object_set_data_full (G_OBJECT (ostream),
+				"ephy-save-temp-source-uri",
+				g_file_get_uri (file),
+				g_free);
+
+	g_object_set_data (G_OBJECT (ostream),
+			   "ephy-save-temp-source-embed",
+			   embed);
+
+	view = ephy_embed_get_web_view (embed);
+	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
+	data_source = webkit_web_frame_get_data_source (frame);
+	const_data = webkit_web_data_source_get_data (data_source);
+
+	/* We create a new GString here because we need to make sure
+	 * we keep writing in case of partial writes */
+	data = g_string_new_len (const_data->str, const_data->len);
+
+	g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
+				     data->str, data->len,
+				     G_PRIORITY_DEFAULT, NULL,
+				     (GAsyncReadyCallback)save_temp_source_write_cb,
+				     data);
 }
 
 static void
 save_temp_source (EphyEmbed *embed,
 		  guint32 user_time)
 {
+	GFile *file;
 	char *tmp, *base;
-	EphyEmbedPersist *persist;
 	const char *static_temp_dir;
 
 	static_temp_dir = ephy_file_tmp_dir ();
@@ -634,21 +722,14 @@ save_temp_source (EphyEmbed *embed,
 		return;
 	}
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
+	file = g_file_new_for_path (tmp);
+	g_file_replace_async (file, NULL, FALSE,
+			      G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
+			      G_PRIORITY_DEFAULT, NULL,
+			      (GAsyncReadyCallback)save_temp_source_replace_cb,
+			      embed);
 
-	ephy_embed_persist_set_embed (persist, embed);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_COPY_PAGE |
-				      EPHY_EMBED_PERSIST_NO_VIEW);
-	ephy_embed_persist_set_dest (persist, tmp);
-	ephy_embed_persist_set_user_time (persist, user_time);
-
-	g_signal_connect (persist, "completed",
-			  G_CALLBACK (save_source_completed_cb), NULL);
-
-	ephy_embed_persist_save (persist);
-	g_object_unref (persist);
-
+	g_object_unref (file);
 	g_free (tmp);
 }
 
