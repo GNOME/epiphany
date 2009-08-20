@@ -276,6 +276,32 @@ open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
+static void
+save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		char *uri, *converted;
+
+		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+		if (uri != NULL)
+		{
+			converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+			if (converted != NULL)
+			{
+				EphyWebView *web_view = ephy_embed_get_web_view (embed);
+				ephy_web_view_save (web_view, converted);
+			}
+
+			g_free (converted);
+			g_free (uri);
+	        }
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 void
 window_cmd_file_open (GtkAction *action,
 		      EphyWindow *window)
@@ -299,26 +325,21 @@ window_cmd_file_save_as (GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyEmbed *embed;
-	EphyEmbedPersist *persist;
+	EphyFileChooser *dialog;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
+	dialog = ephy_file_chooser_new (_("Save"),
+					GTK_WIDGET (window),
+					GTK_FILE_CHOOSER_ACTION_SAVE,
+					CONF_STATE_SAVE_DIR,
+					EPHY_FILE_FILTER_ALL_SUPPORTED);
 
-	ephy_embed_persist_set_embed (persist, embed);
-	ephy_embed_persist_set_fc_title (persist, _("Save As"));
-	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (save_response_cb), embed);
 
-	ephy_embed_persist_set_flags
-		(persist, EPHY_EMBED_PERSIST_MAINDOC | EPHY_EMBED_PERSIST_ASK_DESTINATION);
-	ephy_embed_persist_set_persist_key
-		(persist, CONF_STATE_SAVE_DIR);
-
-	ephy_embed_persist_save (persist);
-
-	g_object_unref (G_OBJECT(persist));
+	gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 void

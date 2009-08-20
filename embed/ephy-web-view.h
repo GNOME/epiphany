@@ -229,6 +229,8 @@ void                       ephy_web_view_set_loading_title       (EphyWebView   
                                                                   gboolean                         is_address);
 void                       ephy_web_view_popups_manager_reset    (EphyWebView                     *view);
 
+void                       ephy_web_view_save                    (EphyWebView                     *view,
+                                                                  const char                      *uri);
 
 G_END_DECLS
 

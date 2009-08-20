@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2008 Gustavo Noronha Silva
+ *  Copyright © 2008, 2009 Gustavo Noronha Silva
  *  Copyright © 2009 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -2127,3 +2127,240 @@ ephy_web_view_get_title_composite (EphyWebView *view)
   return title != NULL ? title : "";
 }
 
+static void
+ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri);
+
+static void
+ephy_web_view_close_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
+{
+  GList *subresources;
+  char *sub_destination_uri;
+  GError *error = NULL;
+
+  subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
+                                            "ephy-web-view-save-subresources");
+
+  sub_destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
+                                                  "ephy-web-view-save-dest-uri");
+
+  g_output_stream_close_finish (ostream, result, &error);
+  g_object_unref (ostream);
+
+  if (error) {
+    g_list_free (subresources);
+    g_free (sub_destination_uri);
+    g_warning ("Unable to write to file: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  if (!subresources || !subresources->next) {
+    g_list_free (subresources);
+    g_free (sub_destination_uri);
+    return;
+  }
+
+  subresources = subresources->next;
+  ephy_web_view_save_sub_resource_start (subresources, sub_destination_uri);
+}
+
+static void
+ephy_web_view_save_write_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
+{
+  GError *error = NULL;
+  gssize written;
+
+  written = g_output_stream_write_finish (ostream, result, &error);
+  if (error) {
+    GList *subresources;
+    char *sub_destination_uri;
+
+    subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
+                                             "ephy-web-view-save-subresources");
+    g_list_free (subresources);
+
+    sub_destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
+                                                    "ephy-web-view-save-dest-uri");
+    g_free (sub_destination_uri);
+
+    g_string_free (data, FALSE);
+    g_object_unref (ostream);
+
+    g_warning ("Unable to write to file: %s", error->message);
+
+    g_error_free (error);
+    return;
+  }
+
+  if (written == data->len) {
+    g_string_free (data, FALSE);
+    g_output_stream_close_async (ostream, G_PRIORITY_DEFAULT, NULL,
+                                 (GAsyncReadyCallback)ephy_web_view_close_cb,
+                                 NULL);
+    return;
+  }
+
+  data->len -= written;
+  data->str += written;
+
+  g_output_stream_write_async (ostream,
+                               data->str, data->len,
+                               G_PRIORITY_DEFAULT, NULL,
+                               (GAsyncReadyCallback)ephy_web_view_save_write_cb,
+                               data);
+}
+
+static void
+ephy_web_view_save_replace_cb (GFile *file, GAsyncResult *result, GString *const_data)
+{
+  GFileOutputStream *ostream;
+  GList *subresources;
+  char *sub_destination_uri;
+  GString *data;
+  GError *error = NULL;
+
+  subresources = (GList*)g_object_get_data (G_OBJECT (file),
+                                            "ephy-web-view-save-subresources");
+
+  sub_destination_uri = (char*)g_object_get_data (G_OBJECT (file),
+                                                  "ephy-web-view-save-dest-uri");
+
+  ostream = g_file_replace_finish (file, result, &error);
+  if (error) {
+    g_warning ("Failed to save page: %s", error->message);
+    g_list_free (subresources);
+    g_free (sub_destination_uri);
+    g_error_free (error);
+    return;
+  }
+
+  if (const_data) {
+    data = g_string_sized_new (const_data->len);
+    data->str = const_data->str;
+    data->len = const_data->len;
+  } else
+    data = g_string_new ("");
+
+  /* If we have subresources to handle, pass the information along */
+  if (subresources) {
+    g_object_set_data (G_OBJECT (ostream),
+                       "ephy-web-view-save-subresources",
+                       subresources);
+
+    g_object_set_data (G_OBJECT (ostream),
+                       "ephy-web-view-save-dest-uri",
+                       sub_destination_uri);
+  }
+
+  g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
+                               data->str, data->len,
+                               G_PRIORITY_DEFAULT, NULL,
+                               (GAsyncReadyCallback)ephy_web_view_save_write_cb,
+                               data);
+}
+
+static void
+ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri)
+{
+  WebKitWebResource *resource;
+  GFile *file;
+  char *resource_uri;
+  char *resource_name;
+  const GString *data;
+
+  resource = WEBKIT_WEB_RESOURCE (subresources->data);
+
+  resource_uri = (char*)webkit_web_resource_get_uri (resource);
+  resource_name = g_path_get_basename (resource_uri);
+
+  resource_uri = g_strdup_printf ("%s/%s",
+                                  destination_uri,
+                                  resource_name);
+
+  file = g_file_new_for_uri (resource_uri);
+  g_free (resource_uri);
+
+  g_object_set_data (G_OBJECT (file),
+                     "ephy-web-view-save-dest-uri",
+                     destination_uri);
+
+  g_object_set_data (G_OBJECT (file),
+                     "ephy-web-view-save-subresources",
+                     subresources);
+
+  data = webkit_web_resource_get_data (resource);
+
+  g_file_replace_async (file, NULL, FALSE,
+                        G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
+                        G_PRIORITY_DEFAULT, NULL,
+                        (GAsyncReadyCallback)ephy_web_view_save_replace_cb,
+                        (GString*)data);
+
+  g_object_unref (file);
+}
+
+static void
+ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *subresources)
+{
+  GFile *file;
+  char *filename;
+  char *dotpos;
+  char *directory_uri;
+  char *destination_uri;
+  GError *error = NULL;
+
+  /* filename of the main resource without extension */
+  filename = g_path_get_basename (uri);
+  dotpos = g_strrstr (filename, ".");
+  if (dotpos)
+    *dotpos = '\0';
+
+  directory_uri = g_path_get_dirname (uri);
+  destination_uri = g_strdup_printf (_("%s/%s Files"), directory_uri, filename);
+
+  g_free (filename);
+  g_free (directory_uri);
+
+  file = g_file_new_for_uri (destination_uri);
+  if (!g_file_make_directory (file, NULL, &error)) {
+    g_warning ("Could not create directory: %s", error->message);
+    g_error_free (error);
+    g_object_unref (file);
+    return;
+  }
+  g_object_unref (file);
+
+  /* Now, let's start saving sub resources */
+  ephy_web_view_save_sub_resource_start (subresources, destination_uri);
+}
+
+void
+ephy_web_view_save (EphyWebView *view, const char *uri)
+{
+  WebKitWebFrame *frame;
+  WebKitWebDataSource *data_source;
+  GList *subresources;
+  const GString *data;
+  GFile *file;
+
+  /* Save main resource */
+  frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
+  data_source = webkit_web_frame_get_data_source (frame);
+  data = webkit_web_data_source_get_data (data_source);
+
+  file = g_file_new_for_uri (uri);
+  g_file_replace_async (file, NULL, FALSE,
+                        G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
+                        G_PRIORITY_DEFAULT, NULL,
+                        (GAsyncReadyCallback)ephy_web_view_save_replace_cb,
+                        (GString*)data);
+
+  g_object_unref (file);
+
+  /* If subresources exist, save them */
+  subresources = webkit_web_data_source_get_subresources (data_source);
+  if (!subresources)
+    return;
+
+  ephy_web_view_save_sub_resources (view, uri, subresources);
+}
