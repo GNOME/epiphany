@@ -105,6 +105,7 @@ impl_detach_tab (EphyExtension *extension,
                  EphyEmbed *embed)
 {
   call_seed_func (extension, "detach_tab", window, embed);
+  seed_context_collect (global_eng->context);
 }
 
 static void
@@ -119,6 +120,7 @@ impl_detach_window (EphyExtension *extension,
                     EphyWindow *window)
 {
   call_seed_func (extension, "detach_window", window, NULL);
+  seed_context_collect (global_eng->context);
 }
 
 static void

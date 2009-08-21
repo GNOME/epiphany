@@ -267,7 +267,7 @@ fi
 if test "$enable_seed" = "yes"; then
   EPIPHANY_FEATURES="$EPIPHANY_FEATURES seed"
 
-  SEED_REQUIRED=0
+  SEED_REQUIRED=2.27.91
   PKG_CHECK_MODULES([SEED],[seed >= $SEED_REQUIRED])
 
   AC_DEFINE([ENABLE_SEED],[1],[Define to compile with Seed support])
