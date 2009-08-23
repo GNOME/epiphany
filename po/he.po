@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-06-08 11:19+0000\n"
-"PO-Revision-Date: 2009-06-12 11:04+0200\n"
-"Last-Translator: Mark Krapivner <mark125@gmail.com>\n"
+"POT-Creation-Date: 2009-08-12 11:48+0000\n"
+"PO-Revision-Date: 2009-08-23 19:57+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,6 +31,27 @@ msgstr "סימניות הרשת של Epiphany"
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "סימניות"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "חפש באינטרנט"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+#| msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgid "http://www.google.com"
+msgstr "http://www.google.co.il"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.co.il/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -588,7 +609,7 @@ msgstr "בחר _שפה:"
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638
 #: ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:358
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "_נקה"
 
@@ -742,44 +763,44 @@ msgstr "_כתובת הדף"
 msgid "_Show Downloads"
 msgstr "הצג _הורדות"
 
-#: ../embed/downloader-view.c:318
+#: ../embed/downloader-view.c:323
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:322
+#: ../embed/downloader-view.c:327
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Pause"
 msgstr "ה_פסק"
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Resume"
 msgstr "המשך"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:389
-#: ../embed/downloader-view.c:542
+#: ../embed/downloader-view.c:394
 #: ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552
 #: ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
+#: ../src/ephy-window.c:1740
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:510
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "הקובץ “%s” הורד."
 
-#: ../embed/downloader-view.c:508
+#: ../embed/downloader-view.c:513
 msgid "Download finished"
 msgstr "הורדה הסתיימה"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:532
+#: ../embed/downloader-view.c:537
 #, c-format
 msgid ""
 "%s\n"
@@ -788,68 +809,67 @@ msgstr ""
 "%s\n"
 "%s מתוך %s"
 
-#: ../embed/downloader-view.c:579
+#: ../embed/downloader-view.c:584
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "הורדה אחת"
 msgstr[1] "%d הורדות"
 
-#: ../embed/downloader-view.c:714
+#: ../embed/downloader-view.c:719
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "הקובץ “%s” הוסף לתור ההורדות."
 
-#: ../embed/downloader-view.c:718
+#: ../embed/downloader-view.c:723
 msgid "Download started"
 msgstr "הורדה החלה"
 
-#: ../embed/downloader-view.c:796
-#: ../embed/downloader-view.c:806
+#: ../embed/downloader-view.c:801
+#: ../embed/downloader-view.c:811
 msgctxt "download status"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../embed/downloader-view.c:799
+#: ../embed/downloader-view.c:804
 msgctxt "download status"
 msgid "Failed"
 msgstr "נכשל"
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:807
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "בוטל"
 
-#: ../embed/downloader-view.c:865
+#: ../embed/downloader-view.c:870
 #: ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "קובץ"
 
-#: ../embed/downloader-view.c:888
+#: ../embed/downloader-view.c:893
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:899
+#: ../embed/downloader-view.c:904
 msgid "Remaining"
 msgstr "נשאר"
 
-#: ../embed/ephy-embed.c:490
+#: ../embed/ephy-embed.c:412
 msgid "Save"
 msgstr "שמור"
 
-#: ../embed/ephy-embed.c:632
-#| msgid "Unknown"
+#: ../embed/ephy-embed.c:554
 msgctxt "file type"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../embed/ephy-embed.c:646
+#: ../embed/ephy-embed.c:568
 msgid "Download this potentially unsafe file?"
 msgstr "להוריד את הקובץ המסוכן?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:651
+#: ../embed/ephy-embed.c:573
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -860,14 +880,14 @@ msgstr ""
 "‏\n"
 "לא בטוח לפתוח את הקובץ \"%s\", הוא עלול לפגוע במסמכים שלך או לפלוש לפרטיותך.אפשר לשמור אותו במקום זאת."
 
-#: ../embed/ephy-embed.c:659
+#: ../embed/ephy-embed.c:581
 msgid "Open this file?"
 msgstr "האם לפתוח את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:665
+#: ../embed/ephy-embed.c:587
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -878,13 +898,13 @@ msgstr ""
 "\n"
 "באפשרותך לפתוח את “%s“ בעזרת “%s“ או לשמור אותו."
 
-#: ../embed/ephy-embed.c:672
+#: ../embed/ephy-embed.c:594
 msgid "Download this file?"
 msgstr "להוריד את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:677
+#: ../embed/ephy-embed.c:599
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -895,30 +915,23 @@ msgstr ""
 "\n"
 "אין לך יישום שיכול לפתוח את “%s“. אפשר להוריד אותו במקום."
 
-#: ../embed/ephy-embed.c:684
+#: ../embed/ephy-embed.c:606
 msgid "_Save As..."
 msgstr "_שמור בשם..."
 
-#: ../embed/ephy-embed.c:788
+#: ../embed/ephy-embed.c:698
 msgid "Web Inspector"
 msgstr "מנתח האתרים"
 
 #: ../embed/ephy-embed-shell.c:242
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "לא ניתן להשתמש ב־Epiphany כעת. אתחול Mozilla נכשל."
+#| msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "לא ניתן להשתמש ב־Epiphany. ההפלה נכשלה."
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "שלח הודעת דוא\"ל אל “%s”"
-
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-embed-utils.c:111
-#: ../embed/ephy-web-view.c:54
-msgid "Blank page"
-msgstr "דף חלק"
 
 #: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
@@ -1243,42 +1256,50 @@ msgstr "יוניקוד (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "לא מוכר (%s)"
 
-#: ../embed/ephy-history.c:486
+#: ../embed/ephy-history.c:485
 msgid "All"
 msgstr "הכל"
 
-#: ../embed/ephy-history.c:654
+#: ../embed/ephy-history.c:653
 msgid "Others"
 msgstr "אחרים"
 
-#: ../embed/ephy-history.c:660
+#: ../embed/ephy-history.c:659
 msgid "Local files"
 msgstr "קבצים מקומיים"
 
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54
+#: ../embed/ephy-web-view.c:2077
+msgid "Blank page"
+msgstr "דף חלק"
+
 # c-format
-#: ../embed/ephy-web-view.c:1275
+#: ../embed/ephy-web-view.c:1261
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "מפנה אל “%s”…"
 
-#: ../embed/ephy-web-view.c:1277
+#: ../embed/ephy-web-view.c:1263
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "מעביר מידע מ־“%s”…"
 
-#: ../embed/ephy-web-view.c:1279
+#: ../embed/ephy-web-view.c:1265
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "מחכה לאישור מ־“%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1285
-#: ../embed/ephy-web-view.c:1460
+#: ../embed/ephy-web-view.c:1271
+#: ../embed/ephy-web-view.c:1379
 #, c-format
 msgid "Loading “%s”…"
 msgstr "טוען את “%s“…"
 
-#: ../embed/ephy-web-view.c:1462
+#: ../embed/ephy-web-view.c:1381
 msgid "Loading…"
 msgstr "טוען…"
 
@@ -1414,17 +1435,17 @@ msgstr "תמונות"
 msgid "All files"
 msgstr "כל הקבצים"
 
-#: ../lib/ephy-file-helpers.c:290
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "נכשל ביצירת הספרייה “%s“."
 
-#: ../lib/ephy-file-helpers.c:363
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "הקובץ ‏“%s“ קיים, אנא הסר אותו."
 
-#: ../lib/ephy-file-helpers.c:374
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "נכשל ביצירת הספרייה “%s“."
@@ -1484,7 +1505,7 @@ msgid "Bookmarks"
 msgstr "סימניות"
 
 #: ../lib/ephy-stock-icons.c:51
-#: ../src/ephy-toolbar.c:276
+#: ../src/ephy-toolbar.c:285
 msgid "Address Entry"
 msgstr "כניסת הכתובת"
 
@@ -1623,96 +1644,82 @@ msgstr "_נושאים:"
 msgid "Sho_w all topics"
 msgstr "הצג את _כל הנושאים"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "חפש באינטרנט"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.co.il/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
 msgstr "בידור"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "News"
 msgstr "חדשות"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Shopping"
 msgstr "קניות"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Sports"
 msgstr "ספורט"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Travel"
 msgstr "נסיעות"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Work"
 msgstr "עבודה"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "עדכן סימנייה \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "הדף המסומן עבר אל “%s“."
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "_Don't Update"
 msgstr "_אל תעדכן"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:452
 msgid "_Update"
 msgstr "עדכן"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "האם לעדכן סימנייה?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1203
 msgctxt "bookmarks"
 msgid "All"
 msgstr "הכל"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1206
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "הנצפים ביותר"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1210
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "ללא קטגוריה"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1215
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "אתרים סמוכים"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
+#: ../src/bookmarks/ephy-bookmarks.c:1450
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
-#: ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "ללא כותרת"
 
@@ -2155,12 +2162,12 @@ msgstr "חפש את ההופעה הבאה של המילה או הביטוי"
 
 #. exit button
 #: ../src/ephy-fullscreen-popup.c:263
-#: ../src/ephy-toolbar.c:535
+#: ../src/ephy-toolbar.c:582
 msgid "Leave Fullscreen"
 msgstr "צא ממסך מלא"
 
 #: ../src/ephy-go-action.c:41
-#: ../src/ephy-toolbar.c:306
+#: ../src/ephy-toolbar.c:315
 msgid "Go"
 msgstr "לך"
 
@@ -2341,46 +2348,46 @@ msgstr "העתקת העוגיות ממוזילה נכשלה."
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "קריאת סמן ההגירה האחרון נכשלה, הגירת הפרופיל מבוטלת."
 
-#: ../src/ephy-session.c:117
+#: ../src/ephy-session.c:116
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "ההורדות יבוטלו ותהליך היציאה ימשיך בעוד %d שניות."
 msgstr[1] "ההורדות יבוטלו ותהליך היציאה ימשיך בעוד %d שניות."
 
-#: ../src/ephy-session.c:229
+#: ../src/ephy-session.c:228
 msgid "Abort pending downloads?"
 msgstr "לבטל את ההורדות שלא הסתיימו?"
 
-#: ../src/ephy-session.c:234
+#: ../src/ephy-session.c:233
 msgid "There are still downloads pending. If you log out, they will be aborted and lost."
 msgstr "קיימות הורדות שעדיין לא הסתיימו. אם תצא עכשיו, הם יופסקו ויאבדו."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:237
 msgid "_Cancel Logout"
 msgstr "_בטל יציאה"
 
-#: ../src/ephy-session.c:240
+#: ../src/ephy-session.c:239
 msgid "_Abort Downloads"
 msgstr "ב_טל הורדות"
 
-#: ../src/ephy-session.c:566
+#: ../src/ephy-session.c:565
 msgid "Recover previous browser windows and tabs?"
 msgstr "לשחזר את החלונות והלשוניות מהריצה הקודמת?"
 
-#: ../src/ephy-session.c:570
+#: ../src/ephy-session.c:569
 msgid "Epiphany appears to have exited unexpectedly the last time it was run. You can recover the opened windows and tabs."
 msgstr "נראה ש־Epiphany נסגר בצורה בלתי צפויה בפעם האחרונה שהוא הורץ. יש באפשרותך לשחזר את החלונות והלשוניות שהיו פתוחים."
 
-#: ../src/ephy-session.c:574
+#: ../src/ephy-session.c:573
 msgid "_Don't Recover"
 msgstr "_אל תשחזר"
 
-#: ../src/ephy-session.c:576
+#: ../src/ephy-session.c:575
 msgid "_Recover"
 msgstr "_שחזר"
 
-#: ../src/ephy-session.c:578
+#: ../src/ephy-session.c:577
 msgid "Crash Recovery"
 msgstr "התאוששות מהתרסקות"
 
@@ -2411,88 +2418,88 @@ msgstr "מצב בחירת מקלדת, הקש F7 ליציאה"
 msgid "Switch to this tab"
 msgstr "עבור ללשונית זאת"
 
-#: ../src/ephy-toolbar.c:215
+#: ../src/ephy-toolbar.c:224
 msgid "_Back"
 msgstr "_אחורה"
 
-#: ../src/ephy-toolbar.c:217
+#: ../src/ephy-toolbar.c:226
 msgid "Go to the previous visited page"
 msgstr "עבור אל הדף הקודם"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:221
+#: ../src/ephy-toolbar.c:230
 msgid "Back history"
 msgstr "היסטוריית חזור"
 
-#: ../src/ephy-toolbar.c:235
+#: ../src/ephy-toolbar.c:244
 msgid "_Forward"
 msgstr "_קדימה"
 
-#: ../src/ephy-toolbar.c:237
+#: ../src/ephy-toolbar.c:246
 msgid "Go to the next visited page"
 msgstr "עבור אל הדף הבא"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:241
+#: ../src/ephy-toolbar.c:250
 msgid "Forward history"
 msgstr "היסטורית קדימה"
 
-#: ../src/ephy-toolbar.c:254
+#: ../src/ephy-toolbar.c:263
 msgid "_Up"
 msgstr "למעלה_"
 
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:265
 msgid "Go up one level"
 msgstr "עלה רמה אחת"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:260
+#: ../src/ephy-toolbar.c:269
 msgid "List of upper levels"
 msgstr "רשימת רמות למעלה"
 
-#: ../src/ephy-toolbar.c:278
+#: ../src/ephy-toolbar.c:287
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "הכנס כתובת לפתיחה, או ביטוי לחיפוש"
 
-#: ../src/ephy-toolbar.c:294
+#: ../src/ephy-toolbar.c:303
 msgid "Zoom"
 msgstr "זום"
 
-#: ../src/ephy-toolbar.c:296
+#: ../src/ephy-toolbar.c:305
 msgid "Adjust the text size"
 msgstr "כוון את גודל הטקסט"
 
-#: ../src/ephy-toolbar.c:308
+#: ../src/ephy-toolbar.c:317
 msgid "Go to the address entered in the address entry"
 msgstr "לך אל הכתובת שבכניסת הכתובת"
 
-#: ../src/ephy-toolbar.c:317
+#: ../src/ephy-toolbar.c:326
 msgid "_Home"
 msgstr "דף ה_בית"
 
-#: ../src/ephy-toolbar.c:319
+#: ../src/ephy-toolbar.c:328
 msgid "Go to the home page"
 msgstr "עבור אל דף הבית"
 
-#: ../src/ephy-toolbar.c:329
+#: ../src/ephy-toolbar.c:338
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-toolbar.c:331
+#: ../src/ephy-toolbar.c:340
 msgid "Open a new tab"
 msgstr "פתח לשונית חדשה"
 
-#: ../src/ephy-toolbar.c:340
+#: ../src/ephy-toolbar.c:349
 msgid "_New Window"
 msgstr "_חלון חדש"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:351
 msgid "Open a new window"
 msgstr "פתח חלון חדש"
 
@@ -2788,7 +2795,7 @@ msgstr "עבור למיקום מסוים"
 
 #. History
 #: ../src/ephy-window.c:234
-#: ../src/pdm-dialog.c:402
+#: ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "הי_סטוריה"
 
@@ -3021,161 +3028,161 @@ msgstr "גדול יותר"
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "לא בטוח"
 
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "שבור"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "נמוכה"
 
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "גבוהה"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "רמת אבטחה: %s"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "חלון קופץ מוסתר אחד"
 msgstr[1] "‏%d חלונות קופצים מוסתרים"
 
-#: ../src/ephy-window.c:2077
+#: ../src/ephy-window.c:2081
 #, c-format
 msgid "Open image “%s”"
 msgstr "פתח תמונה \"%s\""
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "השתמש כרקע שולחן העבודה \"%s\""
 
-#: ../src/ephy-window.c:2087
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save image “%s”"
 msgstr "שמור תמונה \"%s\""
 
-#: ../src/ephy-window.c:2092
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "העתק כתובת תמונה \"%s\""
 
 # ת c-format
-#: ../src/ephy-window.c:2105
+#: ../src/ephy-window.c:2109
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "שלח דוא\"ל אל \"%s\""
 
-#: ../src/ephy-window.c:2111
+#: ../src/ephy-window.c:2115
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "העתק כתובת דוא\"ל \"%s\""
 
-#: ../src/ephy-window.c:2123
+#: ../src/ephy-window.c:2127
 #, c-format
 msgid "Save link “%s”"
 msgstr "שמור קישור \"%s\""
 
-#: ../src/ephy-window.c:2129
+#: ../src/ephy-window.c:2133
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "הוסף קישור “%s“ לסימניות"
 
-#: ../src/ephy-window.c:2135
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "העתק את כתובת הקישור \"%s\""
 
-#: ../src/pdm-dialog.c:339
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>בחר את המידע האישי שברצונך לנקות</b>"
 
-#: ../src/pdm-dialog.c:342
+#: ../src/pdm-dialog.c:372
 msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
 msgstr "אתה עומד לנקות את המידע האישי ששמור אודות דפי הרשת שביקרת בהם. לפני שאתה ממשיך, בדוק איזה סוגי מידע ברצונך להסיר:"
 
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "נקה את כל המידע האישי"
 
 #. Cookies
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "עו_גיות"
 
 #. Passwords
-#: ../src/pdm-dialog.c:390
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "סיסמ_אות שמורות"
 
 #. Cache
-#: ../src/pdm-dialog.c:414
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "קבצים _זמניים"
 
-#: ../src/pdm-dialog.c:430
+#: ../src/pdm-dialog.c:460
 msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
 msgstr "<small><i><b>הערה:</b> לא ניתן לבטל את פעולה זו. המידע שתבחר לנקות ימחק לתמיד.</i></small>"
 
-#: ../src/pdm-dialog.c:626
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "מאפייני עוגייה"
 
-#: ../src/pdm-dialog.c:643
+#: ../src/pdm-dialog.c:669
 msgid "Content:"
 msgstr "תוכן:"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:685
 msgid "Path:"
 msgstr "נתיב:"
 
-#: ../src/pdm-dialog.c:675
+#: ../src/pdm-dialog.c:701
 msgid "Send for:"
 msgstr "שלח ל:"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Encrypted connections only"
 msgstr "חיבור מוצפן בלבד"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Any type of connection"
 msgstr "כל סוג של חיבור"
 
-#: ../src/pdm-dialog.c:690
+#: ../src/pdm-dialog.c:716
 msgid "Expires:"
 msgstr "תאריך תפוגה:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:702
+#: ../src/pdm-dialog.c:728
 msgid "End of current session"
 msgstr "סוף השיח הנוכחי"
 
-#: ../src/pdm-dialog.c:836
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "תחום"
 
-#: ../src/pdm-dialog.c:848
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "שם"
 
-#: ../src/pdm-dialog.c:1200
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "מארח"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "שם משתמש"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
 msgstr "סיסמת משתמש"
 
@@ -3759,8 +3766,6 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "מאובטח, ויכול להקרא על ידי צד שלישי בקלות."
 #~ msgid "%s Files"
 #~ msgstr "הקבצים של %s"
-#~ msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-#~ msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 #~ msgid "Opening %s"
 #~ msgstr "פותח את %s"
 #~ msgid "Opening %d Item"
