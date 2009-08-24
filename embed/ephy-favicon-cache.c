@@ -218,7 +218,7 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 						 filename, NULL);
 			if (g_unlink (path) < 0)
 			{
-				g_warning ("Unable to delete %s", path);
+				LOG ("Unable to delete %s", path);
 			}
 
 			g_free (path);
@@ -399,7 +399,7 @@ delete_file (GFile *dir,
 					 NULL);
 		if (g_unlink (path) < 0)
 		{
-			g_warning ("Unable to delete %s", path);
+			LOG ("Unable to delete %s", path);
 		}
 		
 		g_free (path);
@@ -481,7 +481,7 @@ favicon_download_cancelled_cb (EphyEmbedPersist *persist,
 		dest = ephy_embed_persist_get_dest (persist);
 	if (g_unlink (dest) < 0)
 	{
-		g_warning ("Unable to delete %s", dest);
+		LOG ("Unable to delete %s", dest);
 	}
 
 	/* FIXME: re-schedule to try again after n days? */
