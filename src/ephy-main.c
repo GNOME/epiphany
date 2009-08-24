@@ -750,8 +750,9 @@ main (int argc,
 		exit (1);
 	}
 
-	/* Migrate profile */
-	_ephy_profile_migrate ();
+	/* Migrate profile if we are not running a private instance */
+        if (ephy_has_private_profile () == FALSE)
+          _ephy_profile_migrate ();
 
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	ephy_stock_icons_init ();
