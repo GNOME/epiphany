@@ -1267,7 +1267,87 @@ out:
 	return ret >= 0 ? TRUE : FALSE;
 }
 
-static void
+
+static void 
+confirm_before_recover (EphyWindow* window, char* url, char* title)
+{
+	
+	GtkWidget *embed; 
+	GString *html = g_string_new ("");
+	char *message = g_markup_printf_escaped
+		/* Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux */
+		(_("This page was loading when the web browser closed unexpectedly. "
+		   "This might happen again if you reload the page. If it does, please report "
+		   "the problem to the %s developers."),
+		   LSB_DISTRIBUTOR);
+
+	const char *format =  
+	  "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+	  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+	  "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\">" /* language (twice) */
+	  "<head>"
+	  "<title>"
+	  "%s" /* web title */
+	  "</title>"
+	  "<style type=\"text/css\">"
+	  "div#body {"
+	  "top: 12px;"
+	  "right: 12px;"
+	  "bottom: 12px;"
+	  "left: 12px;"
+	  "overflow: auto;"
+	  "background-color:#dcdad5;"
+	  "font: message-box;"
+	  "border: 1px solid;"
+	  "background-repeat: no-repeat;"
+	  "background-position: center left;"
+	  "padding: 12px 12px 12px 72px;"
+	  "text-align:left;"
+		
+	  "h1 {"
+	  
+	  "margin: 0;"
+	  "font-size: 1.2em;"
+	  
+	  "}"
+	  "</style>"
+	
+	  "</head>"
+
+	  "<body dir=\"%s\">" /* rtl or ltr */
+	  "<div id=\"body\">"
+
+	  "<h1>"
+	  "%s" /* head of the message */
+	  "</h1>"
+
+	  "<p> %s </p>"   /* message */
+
+	  "</div>"
+	  "</body>"
+	  "</html>";
+
+	char *language = g_strdup (pango_language_to_string (gtk_get_default_language ()));
+	g_strdelimit (language, "_-@", '\0');
+
+	g_string_printf (html, format, language, language, title, 
+			 gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr", 
+			 _("Blank page"), message);
+
+  	embed  = (GtkWidget*) ephy_shell_new_tab (ephy_shell, window, NULL, NULL, 
+						  EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
+
+	/* show generated html and put the original URL in the navigation bar */
+	webkit_web_view_load_html_string (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
+					  html->str, 
+					  url);	
+	g_string_free (html, TRUE);
+	g_free (message);
+	g_free (language);
+}
+
+
+static void 
 parse_embed (xmlNodePtr child,
 	     EphyWindow *window,
 	     EphySession *session)
@@ -1289,10 +1369,15 @@ parse_embed (xmlNodePtr child,
 			xmlFree (attr);
 
 			url = xmlGetProp (child, (const xmlChar *) "url");
-			if (url == NULL) continue;
+			if (url == NULL) 
+			  continue;
 
-			/* about:recover is not implemented, so tabs
-			   loading during crash wont be recovered (bug #583953) */
+			/* in the case that crash happens before we receive the URL from the server,
+			   this will open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
+
+			   Otherwise, if the web was fully loaded, it is reloaded again.
+			
+			*/
 			if (!was_loading ||
 			    strcmp ((const char *) url, "about:blank") == 0)
 			{
@@ -1302,6 +1387,17 @@ parse_embed (xmlNodePtr child,
 						    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 						    EPHY_NEW_TAB_OPEN_PAGE |
 						    EPHY_NEW_TAB_APPEND_LAST);
+			}
+			else if (was_loading && url != NULL &&
+				 strcmp ((const char *) url, "about:blank") != 0)
+			{
+				/* shows a message to the user that warns that this page was
+				   loading during crash and make Epiphany crash again,
+				   in this case we know the URL */
+
+				xmlChar* title = xmlGetProp (child, (const xmlChar *) "title");
+			
+				confirm_before_recover (window, (char*) url, (char*) title);
 			}
 
 			xmlFree (url);
