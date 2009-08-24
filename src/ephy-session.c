@@ -70,7 +70,7 @@ struct _EphySessionPrivate
 	GQueue *queue;
 	guint queue_idle_id;
 
-        GtkWidget *quit_interact_dialog;
+	GtkWidget *quit_interact_dialog;
 
 	guint dont_save : 1;
 	guint quit_while_resuming : 1;
@@ -99,13 +99,13 @@ G_DEFINE_TYPE_WITH_CODE (EphySession, ephy_session, G_TYPE_OBJECT,
 
 typedef struct
 {
-        EphySession *session;
-        EggSMClient *sm_client;
-        GtkWidget *dialog;
-        GtkWidget *label;
-        guint timeout_id;
-        guint ticks;
-        int response;
+	EphySession *session;
+	EggSMClient *sm_client;
+	GtkWidget *dialog;
+	GtkWidget *label;
+	guint timeout_id;
+	guint ticks;
+	int response;
 } InteractData;
 
 static void
@@ -162,15 +162,15 @@ static void
 confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
 				     GObject *zombie)
 {
-        EphySessionPrivate *priv = data->session->priv;
-        EggSMClient *sm_client = data->sm_client;
+	EphySessionPrivate *priv = data->session->priv;
+	EggSMClient *sm_client = data->sm_client;
 	EphyShell *shell;
 	GObject *dv;
 	gboolean will_quit;
 
 	LOG ("confirm_shutdown_dialog_weak_ref_cb response %d", data->response);
 
-        priv->quit_interact_dialog = NULL;
+	priv->quit_interact_dialog = NULL;
 
 	shell = ephy_shell_get_default ();
 	if (shell != NULL)
@@ -197,15 +197,15 @@ confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
 
 	g_free (data);
 
-        egg_sm_client_will_quit (sm_client, will_quit);
-        g_object_unref (sm_client);
+	egg_sm_client_will_quit (sm_client, will_quit);
+	g_object_unref (sm_client);
 }
 
 static void
 client_quit_requested_cb (EggSMClient *sm_client,
-                          EphySession *session)
+			  EphySession *session)
 {
-        EphySessionPrivate *priv = session->priv;
+	EphySessionPrivate *priv = session->priv;
 	GObject *dv;
 	GtkWidget *dialog, *box;
 	InteractData *data;
@@ -214,11 +214,11 @@ client_quit_requested_cb (EggSMClient *sm_client,
 	 * remaining, since they can't be restarted.
 	 */
 	if (ephy_shell_get_default () == NULL ||
-            (dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ())) == NULL)
-        {
-                egg_sm_client_will_quit (sm_client, TRUE);
-                return;
-        }
+	    (dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ())) == NULL)
+	{
+		egg_sm_client_will_quit (sm_client, TRUE);
+		return;
+	}
 
 	dialog = gtk_message_dialog_new
 		(NULL,
@@ -226,7 +226,7 @@ client_quit_requested_cb (EggSMClient *sm_client,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_NONE,
 		 _("Abort pending downloads?"));
-        priv->quit_interact_dialog = dialog;
+	priv->quit_interact_dialog = dialog;
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),
@@ -244,8 +244,8 @@ client_quit_requested_cb (EggSMClient *sm_client,
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 
 	data = g_new (InteractData, 1);
-        data->sm_client = g_object_ref (sm_client);
-        data->session = session;
+	data->sm_client = g_object_ref (sm_client);
+	data->session = session;
 	data->dialog = dialog;
 	data->response = GTK_RESPONSE_REJECT;
 
@@ -285,30 +285,30 @@ client_quit_requested_cb (EggSMClient *sm_client,
 
 static void
 client_quit_cancelled_cb (EggSMClient *sm_client,
-                          EphySession *session)
+			  EphySession *session)
 {
-        EphySessionPrivate *priv = session->priv;
+	EphySessionPrivate *priv = session->priv;
 
-        if (priv->quit_interact_dialog)
-        {
-                gtk_dialog_response (GTK_DIALOG (priv->quit_interact_dialog),
-                                     GTK_RESPONSE_DELETE_EVENT);
-        }
+	if (priv->quit_interact_dialog)
+	{
+		gtk_dialog_response (GTK_DIALOG (priv->quit_interact_dialog),
+				     GTK_RESPONSE_DELETE_EVENT);
+	}
 }
 
 static void
 client_quit_cb (EggSMClient *sm_client,
-                EphySession *session)
+		EphySession *session)
 {
-        LOG ("quit-cb");
+	LOG ("quit-cb");
 
-        ephy_session_close (session);
+	ephy_session_close (session);
 }
 
 static void
 client_save_state_cb (EggSMClient *sm_client,
-                      GKeyFile *keyfile,
-                      EphySession *session)
+		      GKeyFile *keyfile,
+		      EphySession *session)
 {
 	char *argv[] = { NULL, "--load-session", NULL };
 	char *discard_argv[] = { "rm", "-f", NULL };
@@ -836,7 +836,7 @@ static void
 ephy_session_init (EphySession *session)
 {
 	EphySessionPrivate *priv;
-        EggSMClient *sm_client;
+	EggSMClient *sm_client;
 
 	LOG ("EphySession initialising");
 
@@ -844,15 +844,15 @@ ephy_session_init (EphySession *session)
 
 	priv->queue = g_queue_new ();
 
-        sm_client = egg_sm_client_get ();
-        g_signal_connect (sm_client, "save-state",
-                          G_CALLBACK (client_save_state_cb), session);
-        g_signal_connect (sm_client, "quit-requested",
-                          G_CALLBACK (client_quit_requested_cb), session);
-        g_signal_connect (sm_client, "quit-cancelled",
-                          G_CALLBACK (client_quit_cancelled_cb), session);
-        g_signal_connect (sm_client, "quit",
-                          G_CALLBACK (client_quit_cb), session);
+	sm_client = egg_sm_client_get ();
+	g_signal_connect (sm_client, "save-state",
+			  G_CALLBACK (client_save_state_cb), session);
+	g_signal_connect (sm_client, "quit-requested",
+			  G_CALLBACK (client_quit_requested_cb), session);
+	g_signal_connect (sm_client, "quit-cancelled",
+			  G_CALLBACK (client_quit_cancelled_cb), session);
+	g_signal_connect (sm_client, "quit",
+			  G_CALLBACK (client_quit_cb), session);
 }
 
 static void
@@ -860,7 +860,7 @@ ephy_session_dispose (GObject *object)
 {
 	EphySession *session = EPHY_SESSION (object);
 	EphySessionPrivate *priv = session->priv;
-        EggSMClient *sm_client;
+	EggSMClient *sm_client;
 
 	LOG ("EphySession disposing");
 
@@ -874,9 +874,9 @@ ephy_session_dispose (GObject *object)
 
 	session_command_queue_clear (session);
 
-        sm_client = egg_sm_client_get ();
-        g_signal_handlers_disconnect_matched (sm_client, G_SIGNAL_MATCH_DATA,
-                                              0, 0, NULL, NULL, session);
+	sm_client = egg_sm_client_get ();
+	g_signal_handlers_disconnect_matched (sm_client, G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, session);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
 }
@@ -1321,7 +1321,7 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 	  "%s" /* head of the message */
 	  "</h1>"
 
-	  "<p> %s </p>"   /* message */
+	  "<p> %s </p>"	  /* message */
 
 	  "</div>"
 	  "</body>"
@@ -1334,7 +1334,7 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 			 gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr", 
 			 _("Blank page"), message);
 
-  	embed  = (GtkWidget*) ephy_shell_new_tab (ephy_shell, window, NULL, NULL, 
+	embed  = (GtkWidget*) ephy_shell_new_tab (ephy_shell, window, NULL, NULL, 
 						  EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
 
 	/* show generated html and put the original URL in the navigation bar */
@@ -1370,7 +1370,7 @@ parse_embed (xmlNodePtr child,
 
 			url = xmlGetProp (child, (const xmlChar *) "url");
 			if (url == NULL) 
-			  continue;
+				continue;
 
 			/* in the case that crash happens before we receive the URL from the server,
 			   this will open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
@@ -1545,7 +1545,7 @@ ephy_session_load (EphySession *session,
 			}
 
 			gtk_widget_grab_focus (GTK_WIDGET (ephy_embed_container_get_active_child
-                                                           (EPHY_EMBED_CONTAINER (window))));
+							   (EPHY_EMBED_CONTAINER (window))));
 			gtk_widget_show (widget);
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
@@ -1657,8 +1657,8 @@ ephy_session_remove_window (EphySession *session,
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)
 {
-        EphyWindow *window = NULL;
-        EphyEmbedContainer *w;
+	EphyWindow *window = NULL;
+	EphyEmbedContainer *w;
 	GList *l;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
@@ -1669,7 +1669,7 @@ ephy_session_get_active_window (EphySession *session)
 
 		if (ephy_embed_container_get_is_popup (w) == FALSE)
 		{
-                        window = EPHY_WINDOW (w);
+			window = EPHY_WINDOW (w);
 			break;
 		}
 	}
