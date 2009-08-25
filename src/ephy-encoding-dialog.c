@@ -139,7 +139,7 @@ embed_net_stop_cb (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyEncodingDialog *dialog)
 {
-	if (ephy_web_view_get_load_status (view) == FALSE)
+	if (ephy_web_view_is_loading (view) == FALSE)
 		sync_encoding_against_embed (dialog);
 }
 

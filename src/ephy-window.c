@@ -1624,7 +1624,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	   for about:blank until the load is finished, so assume NULL
 	   here means we are loading about:blank. This might not be
 	   rigt :) */
-	loading = ephy_web_view_get_load_status (view);
+	loading = ephy_web_view_is_loading (view);
 	uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
 	if (loading && (!uri || strcmp (uri, "about:blank") == 0))
 		return;
@@ -1869,7 +1869,7 @@ sync_tab_load_status (EphyWebView  *view,
 
 	if (window->priv->closing) return;
 
-	loading = ephy_web_view_get_load_status (view);
+	loading = ephy_web_view_is_loading (view);
 
 	action = gtk_action_group_get_action (action_group, "ViewStop");
 	gtk_action_set_sensitive (action, loading);

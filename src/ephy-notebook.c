@@ -509,7 +509,7 @@ sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 	icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 	g_return_if_fail (spinner != NULL && icon != NULL);
 
-	if (ephy_web_view_get_load_status (view))
+	if (ephy_web_view_is_loading (view))
 	{
 		gtk_widget_hide (icon);
 		gtk_widget_show (spinner);

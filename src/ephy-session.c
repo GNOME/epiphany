@@ -380,7 +380,7 @@ load_status_notify_cb (EphyWebView *view,
 		       GParamSpec *pspec,
 		       EphySession *session)
 {
-	if (ephy_web_view_get_load_status (view) == FALSE)
+	if (ephy_web_view_is_loading (view) == FALSE)
 		ephy_session_save (session, SESSION_CRASHED);
 }
 
@@ -1039,7 +1039,7 @@ write_tab (xmlTextWriterPtr writer,
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;
 
-	if (ephy_web_view_get_load_status (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
+	if (ephy_web_view_is_loading (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",

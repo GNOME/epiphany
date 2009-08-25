@@ -475,7 +475,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		if (embed != NULL)
 		{
 			if (ephy_web_view_get_is_blank (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) &&
-			    ephy_web_view_get_load_status (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) == FALSE)
+			    ephy_web_view_is_loading (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) == FALSE)
 			{
 				active_is_blank = TRUE;
 			}

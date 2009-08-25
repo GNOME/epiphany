@@ -1138,7 +1138,7 @@ ephy_web_view_set_address (EphyWebView *view,
   priv->is_blank = address == NULL ||
                    strcmp (address, "about:blank") == 0;
 
-  if (ephy_web_view_get_load_status (view) &&
+  if (ephy_web_view_is_loading (view) &&
       priv->address_expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW &&
       priv->typed_address != NULL) {
     g_free (priv->typed_address);
@@ -1396,7 +1396,7 @@ ephy_web_view_file_monitor_reload_cb (EphyWebView *view)
     return TRUE;
   }
 
-  if (ephy_web_view_get_load_status (view)) {
+  if (ephy_web_view_is_loading (view)) {
     /* Wait a bit to reload if we're still loading! */
     priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
 
@@ -1615,7 +1615,7 @@ ephy_web_view_can_go_up (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_load_status:
+ * ephy_web_view_is_loading:
  * @view: an #EphyWebView
  *
  * Returns whether the web page in @view has finished loading. A web page is
@@ -1625,7 +1625,7 @@ ephy_web_view_can_go_up (EphyWebView *view)
  * Return value: %TRUE if the page is still loading, %FALSE if complete
  **/
 gboolean
-ephy_web_view_get_load_status (EphyWebView *view)
+ephy_web_view_is_loading (EphyWebView *view)
 {
   WebKitLoadStatus status;
 
@@ -1869,7 +1869,7 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   priv->typed_address = g_strdup (address);
 
   if (expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT &&
-      !ephy_web_view_get_load_status (view)) {
+      !ephy_web_view_is_loading (view)) {
     priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
   } else {
     priv->address_expire = expire;
@@ -2064,7 +2064,7 @@ ephy_web_view_get_title_composite (EphyWebView *view)
 
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-  is_loading = ephy_web_view_get_load_status (view);
+  is_loading = ephy_web_view_is_loading (view);
   is_blank = ephy_web_view_get_is_blank (view);
   loading_title = ephy_web_view_get_loading_title (view);
   title = ephy_web_view_get_title (view);
