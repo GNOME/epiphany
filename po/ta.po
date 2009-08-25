@@ -1,4 +1,4 @@
-# translation of epita.po to Tamil
+# translation of epiphany.master.ta.po to Tamil
 # translation of epiphany.gnome-2-26.ta.po to
 # translation of epiphany.gnome-2-24.ta.po to
 # translation of ta.po to
@@ -18,17 +18,17 @@
 # I. Felix <ifelix@redhat.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: epita\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-05-29 10:56+0530\n"
-"PO-Revision-Date: 2009-05-29 11:07+0530\n"
-"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: American English <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
+"Project-Id-Version: epiphany.master.ta\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-08-24 16:00+0000\n"
+"PO-Revision-Date: 2009-08-25 14:32+0530\n"
+"Last-Translator: I. Felix <ifelix@redhat.com>\n"
+"Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.2\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
 "\n"
 
 #: ../data/bme.desktop.in.in.h:1
@@ -42,6 +42,26 @@ msgstr "எபிபனி(Epiphany) இணைய புத்தகக்கு
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "இணைய புத்தகக்குறிகள்"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "இணையத்தில் தேடு"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.com"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -313,8 +333,7 @@ msgstr "செயல்படும் விரிவாக்கங்கள�
 
 #: ../data/epiphany.schemas.in.h:31
 msgid "Middle click to open the web page pointed to by the currently selected text"
-msgstr ""
-"தற்போது தேர்ந்தெடுக்கப்பட்ட உரை சுட்டும் வலைப்பக்கத்தை நடுச்சொடுக்குதலின் மூலம் திறக்கவும்"
+msgstr "தற்போது தேர்ந்தெடுக்கப்பட்ட உரை சுட்டும் வலைப்பக்கத்தை நடுச்சொடுக்குதலின் மூலம் திறக்கவும்"
 
 #: ../data/epiphany.schemas.in.h:32
 msgid ""
@@ -706,7 +725,7 @@ msgstr "ஒரு மொழியைத் தேர்வு செய்தல
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:358
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "துடைத்தல் (_e)"
 
@@ -726,7 +745,7 @@ msgstr "ஜாவாவை செயல்படுத்தவும் (_J)"
 msgid "Fonts & Style"
 msgstr "எழுத்துருக்கள் மற்றும் தோற்றம்"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:819
+#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
 msgid "Language"
 msgstr "மொழி"
 
@@ -859,42 +878,42 @@ msgstr "(_P) பக்க முகவரி"
 msgid "_Show Downloads"
 msgstr "பதிவிறக்கங்களை காட்டு (_S)"
 
-#: ../embed/downloader-view.c:318
+#: ../embed/downloader-view.c:323
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:322
+#: ../embed/downloader-view.c:327
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Pause"
 msgstr "(_P) தாமதி "
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Resume"
 msgstr "(_R) மீளஆரம்பி"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:389 ../embed/downloader-view.c:542
-#: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1743
+#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1740
 msgid "Unknown"
 msgstr "இனம் தெரியாத"
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:510
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "கோப்பு “%s” தரவிறக்கப்பட்டது"
 
-#: ../embed/downloader-view.c:508
+#: ../embed/downloader-view.c:513
 msgid "Download finished"
 msgstr "பதிவிறக்கம் முடிந்தது"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:532
+#: ../embed/downloader-view.c:537
 #, c-format
 msgid ""
 "%s\n"
@@ -903,84 +922,125 @@ msgstr ""
 "%s\n"
 "%s of %s"
 
-#: ../embed/downloader-view.c:579
+#: ../embed/downloader-view.c:584
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d பதிவிறக்கம்"
 msgstr[1] "%d பதிவிறக்கங்கள்"
 
-#: ../embed/downloader-view.c:714
+#: ../embed/downloader-view.c:719
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "“%s” கோப்பு தரவிறக்க வரிசையில் சேர்க்கப்பட்டது"
 
-#: ../embed/downloader-view.c:718
+#: ../embed/downloader-view.c:723
 msgid "Download started"
 msgstr "பதிவிறக்கம் துவங்கியது"
 
-#: ../embed/downloader-view.c:796 ../embed/downloader-view.c:806
+#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
 msgctxt "download status"
 msgid "Unknown"
 msgstr "தெரியாத"
 
-#: ../embed/downloader-view.c:799
+#: ../embed/downloader-view.c:804
 msgctxt "download status"
 msgid "Failed"
 msgstr "தோற்றது "
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:807
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "ரத்து செய்யப்பட்டது"
 
-#: ../embed/downloader-view.c:865 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "கோப்பு"
 
-#: ../embed/downloader-view.c:888
+#: ../embed/downloader-view.c:893
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:899
+#: ../embed/downloader-view.c:904
 msgid "Remaining"
 msgstr "மீதமுள்ளவை"
 
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
-msgid "Blank page"
-msgstr "வெற்று பக்கம்"
+#: ../embed/ephy-embed.c:432
+msgid "Save"
+msgstr "சேமி"
 
-#: ../embed/ephy-base-embed.c:1015
+#: ../embed/ephy-embed.c:574
+#| msgid "Unknown"
+msgctxt "file type"
+msgid "Unknown"
+msgstr "தெரியாத"
+
+#: ../embed/ephy-embed.c:588
+msgid "Download this potentially unsafe file?"
+msgstr "அனேகமாக பாதுகாப்பு இல்லாத கோப்பை தரவிறக்கலாமா?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:593
 #, c-format
-msgid "Redirecting to “%s”…"
-msgstr "“%s”க்கு  திசை திருப்பப்படுகிறது..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
+"கோப்பு வகை: “%s”.\n"
+"\n"
+" “%s” ஐ திறப்பது உங்கள் ஆவணங்களை சிதைக்கலாம் அல்லது உங்கள் அந்தரங்கத்துக்கு ஊறாகலாம். "
+"அதளால் பாதுகாப்பு இல்லாதது. அதற்கு பதிலாக அதை தரவிறக்கலாம்."
 
-#: ../embed/ephy-base-embed.c:1017
+#: ../embed/ephy-embed.c:601
+msgid "Open this file?"
+msgstr "கோப்பை திறக்கவா?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/ephy-embed.c:607
 #, c-format
-msgid "Transferring data from “%s”…"
-msgstr "“%s” இலிருந்து தகவல் மாற்றப்படுகிறது..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
+"கோப்பு வகை: “%s”.\n"
+"\n"
+"“%s” ஐ “%s” ஆல் திறக்கலாம் அல்லது சேமிக்கலாம்."
 
-#: ../embed/ephy-base-embed.c:1019
+#: ../embed/ephy-embed.c:614
+msgid "Download this file?"
+msgstr "இந்த கோப்பை தரவிறக்கவா?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:619
 #, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "“%s” இலிருந்து அங்கீகாரத்திற்கு காத்திருக்கிறது..."
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
+"கோப்பு வகை: “%s”.\n"
+"\n"
+"“%s” ஐ திறக்க தகுந்த நிரல் உங்களிடம் இல்லை. நீங்கள் அதை தரவிறக்கலாம்."
 
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1025 ../embed/ephy-base-embed.c:1201
-#, c-format
-msgid "Loading “%s”…"
-msgstr "“%s” ஏற்றப்படுகிறது..."
+#: ../embed/ephy-embed.c:626
+msgid "_Save As..."
+msgstr "(_S) இப்படி சேமி..."
 
-#: ../embed/ephy-base-embed.c:1203
-msgid "Loading…"
-msgstr "ஏற்றுகிறது..."
+#: ../embed/ephy-embed.c:719
+msgid "Web Inspector"
+msgstr "வலை ஆய்வாளர்"
 
-#: ../embed/ephy-embed-shell.c:243
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "எபிஃபனியை தற்போது பயன்படுத்த முடியாது. மொசில்லா துவக்கம் தோல்வியுற்றது "
+#: ../embed/ephy-embed-shell.c:242
+#| msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "எபிஃபனியை தற்போது பயன்படுத்த முடியாது. துவக்கம் தோல்வியுற்றது "
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
@@ -1310,89 +1370,50 @@ msgstr "யூனிகோடு (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "இனம் தெரியாத (%s)"
 
-#: ../embed/ephy-history.c:486
+#: ../embed/ephy-history.c:485
 msgid "All"
 msgstr "எல்லாம்"
 
-#: ../embed/ephy-history.c:654
+#: ../embed/ephy-history.c:653
 msgid "Others"
 msgstr "மற்றவை"
 
-#: ../embed/ephy-history.c:660
+#: ../embed/ephy-history.c:659
 msgid "Local files"
 msgstr "உள்ளமை கோப்புகள்"
 
-#: ../embed/webkit/webkit-embed.c:462
-msgid "Save"
-msgstr "சேமி"
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../src/ephy-session.c:1335
+msgid "Blank page"
+msgstr "வெற்று பக்கம்"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/webkit/webkit-embed.c:605
-msgid "File Type:|Unknown"
-msgstr "கோப்பு வகை:| தெரியாத"
-
-#: ../embed/webkit/webkit-embed.c:619
-msgid "Download this potentially unsafe file?"
-msgstr "அனேகமாக பாதுகாப்பு இல்லாத கோப்பை தரவிறக்கலாமா?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/webkit/webkit-embed.c:624
+#: ../embed/ephy-web-view.c:1261
 #, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
-msgstr ""
-"கோப்பு வகை: “%s”.\n"
-"\n"
-" “%s” ஐ திறப்பது உங்கள் ஆவணங்களை சிதைக்கலாம் அல்லது உங்கள் அந்தரங்கத்துக்கு ஊறாகலாம். அதளால் "
-"பாதுகாப்பு இல்லாதது. அதற்கு பதிலாக அதை தரவிறக்கலாம்."
+msgid "Redirecting to “%s”…"
+msgstr "“%s”க்கு  திசை திருப்பப்படுகிறது..."
 
-#: ../embed/webkit/webkit-embed.c:632
-msgid "Open this file?"
-msgstr "கோப்பை திறக்கவா?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name,
-#. Third %s is the application used to open the file
-#: ../embed/webkit/webkit-embed.c:638
+#: ../embed/ephy-web-view.c:1263
 #, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You can open “%s” using “%s” or save it."
-msgstr ""
-"கோப்பு வகை: “%s”.\n"
-"\n"
-"“%s” ஐ “%s” ஆல் திறக்கலாம் அல்லது சேமிக்கலாம்."
+msgid "Transferring data from “%s”…"
+msgstr "“%s” இலிருந்து தகவல் மாற்றப்படுகிறது..."
 
-#: ../embed/webkit/webkit-embed.c:645
-msgid "Download this file?"
-msgstr "இந்த கோப்பை தரவிறக்கவா?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/webkit/webkit-embed.c:650
+#: ../embed/ephy-web-view.c:1265
 #, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You have no application able to open “%s”. You can download it instead."
-msgstr ""
-"கோப்பு வகை: “%s”.\n"
-"\n"
-"“%s” ஐ திறக்க தகுந்த நிரல் உங்களிடம் இல்லை. நீங்கள் அதை தரவிறக்கலாம்."
+msgid "Waiting for authorization from “%s”…"
+msgstr "“%s” இலிருந்து அங்கீகாரத்திற்கு காத்திருக்கிறது..."
 
-#: ../embed/webkit/webkit-embed.c:657
-msgid "_Save As..."
-msgstr "(_S) இப்படி சேமி..."
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” ஏற்றப்படுகிறது..."
 
-#: ../embed/webkit/webkit-embed.c:761
-msgid "Web Inspector"
-msgstr "வலை ஆய்வாளர்"
+#: ../embed/ephy-web-view.c:1381
+msgid "Loading…"
+msgstr "ஏற்றுகிறது..."
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -1522,17 +1543,17 @@ msgstr "பிம்பங்கள்"
 msgid "All files"
 msgstr "எல்லா கோப்புகள்"
 
-#: ../lib/ephy-file-helpers.c:290
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s”.இல் தற்காலிக அடைவு உருவாக்க முடியவில்லை."
 
-#: ../lib/ephy-file-helpers.c:363
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "கோப்பு  “%s” ஏற்கனவே உள்ளது. அதை வழியிலிருந்து நீக்கவும்."
 
-#: ../lib/ephy-file-helpers.c:374
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "அடைவு “%s” ஐ உருவாக்க முடியவில்லை."
@@ -1580,17 +1601,17 @@ msgstr "வரலாறு"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1500
+#: ../src/ephy-window.c:1495
 msgid "Bookmark"
 msgstr "புத்தகக்குறி"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1504
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
 msgid "Bookmarks"
 msgstr "புத்தகக்குறிகள்"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:275
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
 msgid "Address Entry"
 msgstr "முகவரி உள்ளீடுகள்"
 
@@ -1675,12 +1696,12 @@ msgstr " இந்த பக்கத்திற்கு இணைப்பு
 msgid "Clear"
 msgstr "துடை"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr " “%s” குறுநிரலை துவக்குகிறது"
@@ -1729,95 +1750,82 @@ msgstr "தலைப்புகள்: (_o)"
 msgid "Sho_w all topics"
 msgstr "(_w) அனைத்து தலைப்புக்களையும் _காட்டுக"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "இணையத்தில் தேடு"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
 msgstr "கேளிக்கை"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "News"
 msgstr "செய்திகள்"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Shopping"
 msgstr "சந்தை விவரம்"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Sports"
 msgstr "விளையாட்டு"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Travel"
 msgstr "பயணம்"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Work"
 msgstr "வேலை"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr " “%s” புத்தகக்குறிகளை புதுப்பிக்கவா?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "புத்தக குறியிட்ட பக்கம் “%s” க்கு நகர்ந்து விட்டது."
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "_Don't Update"
 msgstr "(_D) புதுப்பிக்க வேண்டாம்"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:452
 msgid "_Update"
 msgstr "(_U) புதுப்பி"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "புத்தகக்குறியை புதுப்பிக்கவா?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1203
 msgctxt "bookmarks"
 msgid "All"
 msgstr "அனைத்து"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1206
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "அதிகமாக உலாவியவை"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1210
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "வகைப்படுத்தாதவை"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1215
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "அருகாமையில் உள்ள தளங்கள்"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1301
+#: ../src/bookmarks/ephy-bookmarks.c:1450
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "தலைப்பில்லாத"
 
@@ -1835,22 +1843,22 @@ msgstr "இந்த தலைப்பிலிருந்து நீக்�
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:112
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
 msgid "_File"
 msgstr "(_F) கோப்பு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:113
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
 msgid "_Edit"
 msgstr "(_E)திருத்துக"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
 msgid "_View"
 msgstr "(_V) பார்வை"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
 msgid "_Help"
 msgstr "(_H) உதவி"
 
@@ -1927,7 +1935,7 @@ msgid "Export bookmarks to a file"
 msgstr "புத்தகக் குறிப்புகளை கோப்பிற்கு ஏற்றுமதி செய்"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:144
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
 msgid "_Close"
 msgstr "(_C) மூடு"
 
@@ -1937,29 +1945,29 @@ msgstr "புத்தகக்குறிகள் சாளரத்தை �
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
 msgid "Cu_t"
 msgstr "(_t) வெட்டு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
 msgid "Cut the selection"
 msgstr "தேர்வு செய்யப்பட்டதை வெட்டு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1362
 #: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:155
 msgid "_Copy"
 msgstr "(_C) நகல் எடு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:160
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
 msgid "Copy the selection"
 msgstr "தேர்வு செய்யப்பட்டதை பிரதி எடு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:162
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
 msgid "_Paste"
 msgstr "(_P) ஒட்டு"
 
@@ -1978,7 +1986,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "தேர்ந்தெடுத்த புத்தக குறிகள் அல்லது தலைப்புகளை அழி"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:168
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
 msgid "Select _All"
 msgstr "(_A) அனைத்தையும் தேர்வு செய்"
 
@@ -1989,7 +1997,7 @@ msgstr "எல்லா புத்தகக்குறிகளை அல்�
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
 msgid "_Contents"
 msgstr "(_C) உள்ளடக்கம்"
 
@@ -1998,12 +2006,12 @@ msgid "Display bookmarks help"
 msgstr "புத்தகக்குறிகள் உதவியைக் காட்டு"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:265
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
 msgid "_About"
 msgstr "(_A) பற்றி"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:266
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
 msgid "Display credits for the web browser creators"
 msgstr "உலாவி உருவாக்குநர் பற்றிய விவரங்களை காண்பி"
 
@@ -2229,32 +2237,32 @@ msgstr "தேடுக:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
+#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
 msgid "_Case sensitive"
 msgstr "(_C) எழுத்துவகை உணர்வுள்ளது"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:541
 msgid "Find Previous"
 msgstr "முந்தையதைத் தேடுக"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:544
 msgid "Find previous occurrence of the search string"
 msgstr "வார்த்தை அல்லது சொல் தொடரின் முந்தைய தோன்றல்"
 
-#: ../src/ephy-find-toolbar.c:559
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Next"
 msgstr "அடுத்ததை தேடு"
 
-#: ../src/ephy-find-toolbar.c:562
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find next occurrence of the search string"
 msgstr "சொல் அல்லது சொற்றொடரின் அடுத்த நிகழ்வை தேடவும்"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:534
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
 msgid "Leave Fullscreen"
 msgstr "முழுத்திரையை விட்டு விலகவும்"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:305
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
 msgid "Go"
 msgstr "போ"
 
@@ -2357,7 +2365,7 @@ msgstr "தளங்கள்"
 msgid "Date"
 msgstr "தேதி"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:874
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
 msgid "GNOME Web Browser"
 msgstr "க்னோம் வலை உலாவி"
 
@@ -2422,7 +2430,7 @@ msgstr ""
 msgid "GNOME Web Browser options"
 msgstr "க்னோம் வலை உலாவி தேர்வுகள்"
 
-#: ../src/ephy-notebook.c:624
+#: ../src/ephy-notebook.c:626
 msgid "Close tab"
 msgstr "கீற்றை மூடு"
 
@@ -2434,37 +2442,36 @@ msgstr "மோசில்லா இடமிருந்து குக்க�
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "சமீபத்திய இடப்பெயர்ச்சி குறிப்பை படிக்க இயலவில்லை, உருவரை இடப்பெயர்ச்சி கைவிடப்படுகிறது."
 
-#: ../src/ephy-session.c:115
+#: ../src/ephy-session.c:116
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "%d நொடியில் கீழிறக்கங்கள்.கைவிடப்பட்டு வெளியேறுவோம்"
 msgstr[1] "%d நொடிகளில் கீழிறக்கங்கள் கைவிடப்பட்டு வெளியேறுவோம்"
 
-#: ../src/ephy-session.c:227
+#: ../src/ephy-session.c:228
 msgid "Abort pending downloads?"
 msgstr "முடிவுறா கீழிறக்கங்கள்.கைவிடப்பட வேண்டுமா?"
 
-#: ../src/ephy-session.c:232
+#: ../src/ephy-session.c:233
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
-msgstr ""
-"முடிவுறா கீழிறக்கங்கள் உள்ளன. இப்போது நீங்கள் வெளியேறினால் அவை கைவிடப்பட்டு அழிந்து போகும்."
+msgstr "முடிவுறா கீழிறக்கங்கள் உள்ளன. இப்போது நீங்கள் வெளியேறினால் அவை கைவிடப்பட்டு அழிந்து போகும்."
 
-#: ../src/ephy-session.c:236
+#: ../src/ephy-session.c:237
 msgid "_Cancel Logout"
 msgstr "வெளியேறுதலை ரத்து செய்க (_C)"
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:239
 msgid "_Abort Downloads"
 msgstr "கீழிறக்கங்களை கைவிடுக(_C)"
 
-#: ../src/ephy-session.c:564
+#: ../src/ephy-session.c:565
 msgid "Recover previous browser windows and tabs?"
 msgstr "முந்தய உலாவி சாளரங்களையும் கீற்றுகளையும் மீட்கவா?"
 
-#: ../src/ephy-session.c:568
+#: ../src/ephy-session.c:569
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2472,27 +2479,39 @@ msgstr ""
 "போன முறை இயக்கிய போது எபிஃபனி எதிர் பாராது முறிந்தது அல்லது முறிக்கப்பட்டது போல் "
 "உள்ளது. திறந்து இருந்த சாளரங்களையும் கீற்றுகளையும் மீட்க இயலும்"
 
-#: ../src/ephy-session.c:572
+#: ../src/ephy-session.c:573
 msgid "_Don't Recover"
 msgstr "(_D) மீட்காதே"
 
-#: ../src/ephy-session.c:574
+#: ../src/ephy-session.c:575
 msgid "_Recover"
 msgstr "(_R) மீட்க"
 
-#: ../src/ephy-session.c:576
+#: ../src/ephy-session.c:577
 msgid "Crash Recovery"
 msgstr "முறிவு மீட்டல்"
 
-#: ../src/ephy-shell.c:168
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1279
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+
+#: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
 msgstr "பக்கப் பட்டி விரிவு தேவை"
 
-#: ../src/ephy-shell.c:170
+#: ../src/ephy-shell.c:173
 msgid "Sidebar Extension Required"
 msgstr "பக்கப் பட்டி விரிவு தேவை"
 
-#: ../src/ephy-shell.c:174
+#: ../src/ephy-shell.c:177
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "நீங்கள் சொடுக்கிய இணைப்புக்கு பக்கப் பட்டி விரிவு தேவை."
 
@@ -2511,90 +2530,90 @@ msgstr "விசைப்பலகை தேர்வு பாணியில�
 msgid "Switch to this tab"
 msgstr "இந்த கீற்றுக்கு மாற்று"
 
-#: ../src/ephy-toolbar.c:214
+#: ../src/ephy-toolbar.c:224
 msgid "_Back"
 msgstr "(_B) பின்"
 
-#: ../src/ephy-toolbar.c:216
+#: ../src/ephy-toolbar.c:226
 msgid "Go to the previous visited page"
 msgstr "இதற்கு முன் பார்த்த பக்கத்துக்கு போகவும்"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:220
+#: ../src/ephy-toolbar.c:230
 msgid "Back history"
 msgstr "கடந்த வரலாறு"
 
-#: ../src/ephy-toolbar.c:234
+#: ../src/ephy-toolbar.c:244
 msgid "_Forward"
 msgstr "(_F) முன் அனுப்பு"
 
-#: ../src/ephy-toolbar.c:236
+#: ../src/ephy-toolbar.c:246
 msgid "Go to the next visited page"
 msgstr "இதற்கு அடுத்து பார்த்த பக்கத்துக்குப் போகவும்"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:240
+#: ../src/ephy-toolbar.c:250
 msgid "Forward history"
 msgstr "முன்னோக்கு வரலாறு"
 
-#: ../src/ephy-toolbar.c:253
+#: ../src/ephy-toolbar.c:263
 msgid "_Up"
 msgstr "(_U) மேல்"
 
-#: ../src/ephy-toolbar.c:255
+#: ../src/ephy-toolbar.c:265
 msgid "Go up one level"
 msgstr "ஒரு நிலை மேலே போகவும்"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:259
+#: ../src/ephy-toolbar.c:269
 msgid "List of upper levels"
 msgstr "மேலே போக நிலை பட்டியல்"
 
-#: ../src/ephy-toolbar.c:277
+#: ../src/ephy-toolbar.c:287
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
 "திறக்க வேண்டிய இணைய தள முகவரியை தேர்வு செய்யவும் அல்லது தேட வேண்டிய வாக்கியத்தை "
 "உள்ளிடவும்"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:303
 msgid "Zoom"
 msgstr "அணுகு"
 
-#: ../src/ephy-toolbar.c:295
+#: ../src/ephy-toolbar.c:305
 msgid "Adjust the text size"
 msgstr "உரை அளவை மாற்றுதல்"
 
-#: ../src/ephy-toolbar.c:307
+#: ../src/ephy-toolbar.c:317
 msgid "Go to the address entered in the address entry"
 msgstr "முகவரி உள்ளீட்டில் உள்ள முகவரிக்கு செல்லவும்"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:326
 msgid "_Home"
 msgstr "(_H) இல்லம்"
 
-#: ../src/ephy-toolbar.c:318
+#: ../src/ephy-toolbar.c:328
 msgid "Go to the home page"
 msgstr "இல்லப் பக்கத்துக்குப் போகவும்"
 
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:338
 msgid "New _Tab"
 msgstr "(_T) புதுக் கீற்று"
 
-#: ../src/ephy-toolbar.c:330
+#: ../src/ephy-toolbar.c:340
 msgid "Open a new tab"
 msgstr "புதுக் கீற்றை திற"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:349
 msgid "_New Window"
 msgstr "புதிய சாளரம் (_N)"
 
-#: ../src/ephy-toolbar.c:341
+#: ../src/ephy-toolbar.c:351
 msgid "Open a new window"
 msgstr "புதிய சாளரத்தை திற"
 
@@ -2637,565 +2656,565 @@ msgstr "(_b) கருவிப்பட்டை பொத்தான் ப�
 msgid "_Add a New Toolbar"
 msgstr "(_A) புதிய கருவிப்பட்டை சேர்"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:111
 msgid "_Bookmarks"
 msgstr "(_B) புத்தககு_றிகள்"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:112
 msgid "_Go"
 msgstr "(_G) செல்"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:113
 msgid "T_ools"
 msgstr "(_o) கருவிகள்"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:114
 msgid "_Tabs"
 msgstr "(_T) கீற்றுகள்"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:116
 msgid "_Toolbars"
 msgstr "(_T) கருவிப்பட்டைகள்"
 
 #. File menu
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:122
 msgid "_Open…"
 msgstr "(_O) திற..."
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:123
 msgid "Open a file"
 msgstr "கோப்பை திற"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:125
 msgid "Save _As…"
 msgstr "(_A) இப்படி சேமி..."
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:126
 msgid "Save the current page"
 msgstr "இந்தப் பக்கத்தை சேமிக்கவும்"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:128
 msgid "Page Set_up"
 msgstr "(_u) பக்கம் அமைப்பு"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:129
 msgid "Setup the page settings for printing"
 msgstr "அச்சிடுவதற்கான பக்க அமைப்புகளை அமைக்கவும்"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:131
 msgid "Print Pre_view"
 msgstr "அச்சு முன்னோட்டம் (_v)"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:132
 msgid "Print preview"
 msgstr "அச்சு முன்னோட்டம்"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:134
 msgid "_Print…"
 msgstr "(_P) அச்சிடுக..."
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:135
 msgid "Print the current page"
 msgstr "இந்தப்பக்கத்தை அச்சிடவும்"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:137
 msgid "S_end Link by Email…"
 msgstr "(_e) மின்னஞ்சல் மூலம் இணைப்பினை அனுப்புக..."
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:138
 msgid "Send a link of the current page"
 msgstr "இந்தப்பக்கத்தின் இணைப்பை அனுப்பவும்"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:141
 msgid "Close this tab"
 msgstr "இந்த கீற்றை மூடு"
 
 #. Edit menu
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:146
 msgid "_Undo"
 msgstr "(_U) ரத்து செய்"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:147
 msgid "Undo the last action"
 msgstr "கடைசி செயலை ரத்து செய்"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:149
 msgid "Re_do"
 msgstr "(_d) திரும்ப செய்"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:150
 msgid "Redo the last undone action"
 msgstr "கடைசியாக ரத்து செய்த செயலை திரும்ப செய்"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:159
 msgid "Paste clipboard"
 msgstr "ஒட்டுப் பலகையில் இருப்பது ஒட்டவும்"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:162
 msgid "Delete text"
 msgstr "உரையை அழி"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:165
 msgid "Select the entire page"
 msgstr "முழுப்பக்கத்தையும் தேர்ந்தெடு"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:167
 msgid "_Find…"
 msgstr "(_F) தேடுக..."
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:168
 msgid "Find a word or phrase in the page"
 msgstr "சொல் அல்லது சொற்றொடரை தேடவும்"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:170
 msgid "Find Ne_xt"
 msgstr "(_x) அடுத்தை தேடு"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:171
 msgid "Find next occurrence of the word or phrase"
 msgstr "சொல் அல்லது சொற்றொடரின் அடுத்த நிகழ்வை காணவும்"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:173
 msgid "Find Pre_vious"
 msgstr "(_v) முந்தையதை தேடு"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:174
 msgid "Find previous occurrence of the word or phrase"
 msgstr "வார்த்தை அல்லது வாக்கியத்தின் முந்தைய தோன்றல்"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:176
 msgid "P_ersonal Data"
 msgstr "(_e) சொந்த தகவல்"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:177
 msgid "View and remove cookies and passwords"
 msgstr "பணியாரங்களையும் கடவுச்சொல்களையும் பார்த்து நீக்கவும்"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:180
 msgid "Certificate_s"
 msgstr "சான்றிதழ்கள் (_s)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:181
 msgid "Manage Certificates"
 msgstr "சான்றிதழ்களை மேலாண்மை செய்யவும்"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:184
 msgid "P_references"
 msgstr "(_r) விருப்பங்கள்"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:185
 msgid "Configure the web browser"
 msgstr "உலாவியை வடிவமை"
 
 #. View menu
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:190
 msgid "_Customize Toolbars…"
 msgstr "(_C) தனிப்பயன் கருவிப்பட்டைகள்..."
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:191
 msgid "Customize toolbars"
 msgstr "கருவிப்பட்டைகளை தனிப்பயனாக்கு"
 
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
 msgid "_Stop"
 msgstr "(_S) நிறுத்து"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:194
 msgid "Stop current data transfer"
 msgstr "இந்த தகவல் தொடர்பை நிறுத்து"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:198
 msgid "_Reload"
 msgstr "(_R) மீளேற்று"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:199
 msgid "Display the latest content of the current page"
 msgstr "இந்தப் பக்கத்தின் சமீபத்திய பதிப்பைக் காட்டவும்"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:201
 msgid "_Larger Text"
 msgstr "(_L) பெரிய உரை"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:202
 msgid "Increase the text size"
 msgstr "உரை அளவை பெரிதாக்கவும்"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:204
 msgid "S_maller Text"
 msgstr "(_m) சிறிய உரை"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:205
 msgid "Decrease the text size"
 msgstr "உரை அளவை சிறிதாக்கவும்"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:207
 msgid "_Normal Size"
 msgstr "(_N) இயல்பான அளவு"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:208
 msgid "Use the normal text size"
 msgstr "இயல்பான உரை அளவை பயன்படுத்தவும்"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:210
 msgid "Text _Encoding"
 msgstr "(_E) உரை குறியாக்கம்"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:211
 msgid "Change the text encoding"
 msgstr "உரை குறியாக்கத்தை மாற்று"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:213
 msgid "_Page Source"
 msgstr "(_P) பக்கத்தின் மூலம்"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:214
 msgid "View the source code of the page"
 msgstr "பக்கத்தின் மூலநிரலைப் பார்க்கவும்"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:216
 msgid "Page _Security Information"
 msgstr "பக்கம் பாதுகாப்பு தகவல் (_S)"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:217
 msgid "Display security information for the web page"
 msgstr "வலை பக்கத்துக்கான பாதுகாப்பு விவரம் "
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:222
 msgid "_Add Bookmark…"
 msgstr "(_A) புத்தகக்குறி சேர்..."
 
-#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
+#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
 msgid "Add a bookmark for the current page"
 msgstr "இந்தப் பக்கத்துக்கு ஒரு புத்தகக்குறி சேர்க்கவும்"
 
-#: ../src/ephy-window.c:229
+#: ../src/ephy-window.c:225
 msgid "_Edit Bookmarks"
 msgstr "புத்தககுறிகளை திருத்து (_E)"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:226
 msgid "Open the bookmarks window"
 msgstr "புத்தகக்குறிகள் சாளரத்தை திறக்கவும்"
 
 #. Go menu
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:231
 msgid "_Location…"
 msgstr "(_L) இடம்..."
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:232
 msgid "Go to a specified location"
 msgstr "குறிப்பிட்ட இடத்துக்குப் போகவும்"
 
 #. History
-#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:402
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "(_s) வரலாறு"
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:235
 msgid "Open the history window"
 msgstr "வரலாறு சாளரத்தை திறக்கவும்"
 
 #. Tabs menu
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:240
 msgid "_Previous Tab"
 msgstr "(_P) முந்தைய கீற்று"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:241
 msgid "Activate previous tab"
 msgstr "முந்தைய கீற்றை செயல்படுத்து"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:243
 msgid "_Next Tab"
 msgstr "(_N) அடுத்த கீற்று"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:244
 msgid "Activate next tab"
 msgstr "அடுத்த கீற்றை செயல்படுத்து"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:246
 msgid "Move Tab _Left"
 msgstr "கீற்றை இடது பக்கம் நகர்த்தவும் (_L)"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:247
 msgid "Move current tab to left"
 msgstr "இந்த கீற்றை இடது பக்கம் நகர்த்தவும்"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:249
 msgid "Move Tab _Right"
 msgstr "கீற்றை வலது பக்கம் நகர்த்தவும்  (_R) "
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:250
 msgid "Move current tab to right"
 msgstr "இந்த கீற்றை  வலது பக்கம் நகர்த்தவும்"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:252
 msgid "_Detach Tab"
 msgstr "(_D) கீற்றை பிரி"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:253
 msgid "Detach current tab"
 msgstr "நடப்பு கீற்றை பிரி"
 
-#: ../src/ephy-window.c:263
+#: ../src/ephy-window.c:259
 msgid "Display web browser help"
 msgstr "உலாவி உதவியைக் காட்டவும்"
 
 #. File Menu
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:270
 msgid "_Work Offline"
 msgstr "(_W) இணையத்திலிருந் விலகி வேலைசெய்"
 
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:271
 msgid "Switch to offline mode"
 msgstr "இணையத்தோடு இணையாமல் வேலை பாணிக்கு மாறு"
 
 #. View Menu
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:276
 msgid "_Hide Toolbars"
 msgstr "கருவிப்பட்டைகளை மறை (_H)"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:277
 msgid "Show or hide toolbar"
 msgstr "கருவிப்பட்டையை காட்டவோ மறைக்கவோ செய்யவும்"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:279
 msgid "St_atusbar"
 msgstr "(_a) நிலைப்பட்டி"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:280
 msgid "Show or hide statusbar"
 msgstr "நிலைப்பட்டியை காட்டவோ மறைக்கவோ செய்யவும்"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:282
 msgid "_Fullscreen"
 msgstr "(_F) முழுத்திரை"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:283
 msgid "Browse at full screen"
 msgstr "முழுத் திரைக் காட்சியில் உலாவு"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:285
 msgid "Popup _Windows"
 msgstr "(_W) துள்ளல் சாளரங்கள்"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:286
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "இந்த இணைய தளத்திலிருந்து கேட்காது வரும் துள்ளல் சாளரங்களை காட்டு அல்லது மறை"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:288
 msgid "Selection Caret"
 msgstr "தேர்வு காரட்"
 
 #. Document
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:296
 msgid "Add Boo_kmark…"
 msgstr "(_k) புத்தகக்குறி சேர்..."
 
 #. Framed document
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:302
 msgid "Show Only _This Frame"
 msgstr "இந்த சட்டத்தை மட்டும் காட்டு (_T)"
 
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:303
 msgid "Show only this frame in this window"
 msgstr "இந்த சாளரத்தில் இந்த சட்டத்தை மட்டும் காட்டு"
 
 #. Links
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:308
 msgid "_Open Link"
 msgstr "இணைப்பை திற (_O)"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:309
 msgid "Open link in this window"
 msgstr "இந்த சாளரத்தில் இணைப்பினை திறக்கவும்"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:311
 msgid "Open Link in New _Window"
 msgstr "இணைப்பினை புது சாளரத்தில் திறக்கவும்  (_W)"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:312
 msgid "Open link in a new window"
 msgstr "இணைப்பினை புது சாளரத்தில் திறக்கவும்"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:314
 msgid "Open Link in New _Tab"
 msgstr "இணைப்பை புதிய கீற்றில் திறக்கவும் (_T) "
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:315
 msgid "Open link in a new tab"
 msgstr "இணைப்பினை புதிய கீற்றில் திறக்கவும்"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:317
 msgid "_Download Link"
 msgstr "(_D) இணைப்பை கீழிறக்கவும்"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:319
 msgid "_Save Link As…"
 msgstr "(_S) இணைப்பை இவ்வாறு சேமி..."
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:320
 msgid "Save link with a different name"
 msgstr "இணைப்பை வேறு பெயரில் சேமி "
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:322
 msgid "_Bookmark Link…"
 msgstr "(_B) இணைப்பை புத்தக குறிப்பிடு..."
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:324
 msgid "_Copy Link Address"
 msgstr "(_C) இணைப்பு முகவரியை நகல் செய்"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:330
 msgid "_Send Email…"
 msgstr "(_S) மின்னஞ்சல் அனுப்பு..."
 
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:332
 msgid "_Copy Email Address"
 msgstr "மின்னஞ்சல் முகவரியை நகலெடு (_C) "
 
 #. Images
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:337
 msgid "Open _Image"
 msgstr "(_I) சித்திரத்தை திற"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:339
 msgid "_Save Image As…"
 msgstr "(_S) சித்திரத்தை இப்படிச் சேமி..."
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:341
 msgid "_Use Image As Background"
 msgstr "(_U) சித்திரத்தை பின்னணியாகப் பயன்படுத்தவும்"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:343
 msgid "Copy I_mage Address"
 msgstr "(_m) சித்திர முகவரியை நகல் செய்யவும்"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:345
 msgid "St_art Animation"
 msgstr "அசைவூட்டத்தை துவக்கு (_a)"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:347
 msgid "St_op Animation"
 msgstr "அசைவூட்டத்தை  நிறுத்து (_o)"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:522
 msgid "There are unsubmitted changes to form elements"
 msgstr "உறுப்புகளில் சமர்ப்பிக்காத மாற்றங்கள் உள்ளன"
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:526
 msgid "If you close the document anyway, you will lose that information."
 msgstr "எப்படியிருந்தாலும் ஆவணத்தை மூடினால் தகவல் இழப்பு நேரும்"
 
-#: ../src/ephy-window.c:534
+#: ../src/ephy-window.c:530
 msgid "Close _Document"
 msgstr "(_D) ஆவணத்தை மூடவும்"
 
-#: ../src/ephy-window.c:1494 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
 msgid "Open"
 msgstr "திற"
 
-#: ../src/ephy-window.c:1496 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
 msgid "Save As"
 msgstr "இப்படி சேமி"
 
-#: ../src/ephy-window.c:1498
+#: ../src/ephy-window.c:1493
 msgid "Print"
 msgstr "அச்சிடு"
 
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1497
 msgid "Find"
 msgstr "தேடு"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1515
+#: ../src/ephy-window.c:1510
 msgid "Larger"
 msgstr "பெரிய"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1518
+#: ../src/ephy-window.c:1513
 msgid "Smaller"
 msgstr "சிறிய"
 
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "பாதுகாப்பில்லாத"
 
-#: ../src/ephy-window.c:1751
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "உடைந்த"
 
-#: ../src/ephy-window.c:1759
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "கீழ்நிலை"
 
-#: ../src/ephy-window.c:1766
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "மேல்நிலை"
 
-#: ../src/ephy-window.c:1776
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "பாதுகாப்பு நிலை: %s"
 
-#: ../src/ephy-window.c:1819
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d மறைக்கப்பட்ட துள்ளல் சாளரம்"
 msgstr[1] "%d மறைக்கப்பட்ட துள்ளல் சாளரங்கள்"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2081
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s” சித்திரத்தை திற"
 
-#: ../src/ephy-window.c:2087
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s” சித்திரத்தை மேல்மேசை பின்னணியாகப் பயன்படுத்தவும்"
 
-#: ../src/ephy-window.c:2092
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” சித்திரத்தை இப்படிச் சேமி"
 
-#: ../src/ephy-window.c:2097
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "“%s” சித்திர முகவரியை நகல் செய்யவும்"
 
-#: ../src/ephy-window.c:2110
+#: ../src/ephy-window.c:2109
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "முகவரி “%s”க்கு மின்னஞ்சல் அனுப்பவும்"
 
-#: ../src/ephy-window.c:2116
+#: ../src/ephy-window.c:2115
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "மின்னஞ்சல் முகவரி “%s”ஐ நகலெடுக்கவும்"
 
-#: ../src/ephy-window.c:2128
+#: ../src/ephy-window.c:2127
 #, c-format
 msgid "Save link “%s”"
 msgstr "“%s” இணைப்பை சேமி..."
 
-#: ../src/ephy-window.c:2134
+#: ../src/ephy-window.c:2133
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” இணைப்பை புத்தக குறிப்பாக்கவும்..."
 
-#: ../src/ephy-window.c:2140
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "“%s” இணைப்பு முகவரியை நகல் செய்"
 
-#: ../src/pdm-dialog.c:339
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>துப்புரவாக்க அந்தரங்க தரவை  தேர்வு செய்க</b>"
 
-#: ../src/pdm-dialog.c:342
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3204,26 +3223,26 @@ msgstr ""
 "நீங்கள் பார்த்த வலைப்பக்கங்கள் குறித்து சேமிக்கப்பட்ட அந்தரங்க தரவு    "
 "துப்புரவாக்கப்படுகிறது.  தொடரும் முன் எந்த வித தகவல்களை நீக்க வேன்டும் என தேர்வு செய்க:"
 
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "அனைத்து தனிப்பட்ட தரவையும் துடை "
 
 #. Cookies
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "(_o) நினைவிகள்"
 
 #. Passwords
-#: ../src/pdm-dialog.c:390
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "(_p) சேமித்த கடவுச்சொற்கள்"
 
 #. Cache
-#: ../src/pdm-dialog.c:414
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "தற்காலிகமான கோப்புகள் (_T)"
 
-#: ../src/pdm-dialog.c:430
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3231,56 +3250,56 @@ msgstr ""
 "<small><i><b> குறிப்பு:</b> நீங்கள் இந்த  செயலை மீட்க இயலாது. நீங்கள்  துப்புரவாக்க "
 "தேர்ந்தெடுக்கும் தரவு நிரந்தரமாக  நீக்கப்படும்.</i></small>"
 
-#: ../src/pdm-dialog.c:626
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "நினைவி பண்புகள்"
 
-#: ../src/pdm-dialog.c:643
+#: ../src/pdm-dialog.c:669
 msgid "Content:"
 msgstr "உள்ளடக்கம்:"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:685
 msgid "Path:"
 msgstr "பாதை:"
 
-#: ../src/pdm-dialog.c:675
+#: ../src/pdm-dialog.c:701
 msgid "Send for:"
 msgstr "அழை:"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Encrypted connections only"
 msgstr "குறிமுறையாக்கப்பட்ட இணைப்புகள் மட்டும்"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Any type of connection"
 msgstr "ஏதாவது ஒருவகை இணைப்பு"
 
-#: ../src/pdm-dialog.c:690
+#: ../src/pdm-dialog.c:716
 msgid "Expires:"
 msgstr "காலாவதியாகிறது:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:702
+#: ../src/pdm-dialog.c:728
 msgid "End of current session"
 msgstr "இந்த அமர்வின் முடிவு"
 
-#: ../src/pdm-dialog.c:836
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "தளம்"
 
-#: ../src/pdm-dialog.c:848
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "பெயர்"
 
-#: ../src/pdm-dialog.c:1200
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "வழங்கி"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "பயனர் பெயர்"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
 msgstr "பயனர் கடவுச்சொல்"
 
@@ -3296,43 +3315,43 @@ msgstr "இணைப்பை இவ்வாறு சேமி..."
 msgid "Save Image As"
 msgstr "சித்திரத்தை இப்படிச் சேமி"
 
-#: ../src/ppview-toolbar.c:85
+#: ../src/ppview-toolbar.c:86
 msgid "First"
 msgstr "முதல்"
 
-#: ../src/ppview-toolbar.c:86
+#: ../src/ppview-toolbar.c:87
 msgid "Go to the first page"
 msgstr "முதல் பக்கத்துக்குப் போ"
 
-#: ../src/ppview-toolbar.c:89
+#: ../src/ppview-toolbar.c:90
 msgid "Last"
 msgstr "கடைசி"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the last page"
 msgstr "கடைசி பக்கத்துக்குப் போ"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:94
 msgid "Previous"
 msgstr "முந்தைய"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the previous page"
 msgstr "முந்தைய பக்கத்துக்குப் போ"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:98
 msgid "Next"
 msgstr "அடுத்த"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:99
 msgid "Go to next page"
 msgstr "அடுத்தப் பக்கத்துக்குப் போ"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:102
 msgid "Close"
 msgstr "மூடு"
 
-#: ../src/ppview-toolbar.c:102 ../src/ppview-toolbar.c:218
+#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
 msgid "Close print preview"
 msgstr "அச்சு முன்னோட்டத்தை மூடு"
 
@@ -3340,7 +3359,7 @@ msgstr "அச்சு முன்னோட்டத்தை மூடு"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:511 ../src/prefs-dialog.c:517
+#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -3349,24 +3368,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:526
+#: ../src/prefs-dialog.c:527
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "பயனர் வரையறுத்தது (%s)"
 
-#: ../src/prefs-dialog.c:548
+#: ../src/prefs-dialog.c:549
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "கணினி மொழி (%s)"
 msgstr[1] "கணினி மொழிகள் (%s)"
 
-#: ../src/prefs-dialog.c:940
+#: ../src/prefs-dialog.c:941
 msgid "Select a Directory"
 msgstr "ஒரு அடைவினை தேர்ந்தெடுக்கவும்"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3377,7 +3396,7 @@ msgstr ""
 "ஜிஎன்யு பொது அனுமதிக்கான விதிகளின் படி இந்த 2ம் பதிப்பையோ அல்லது அடுத்த பதிப்புகளையோ "
 "நீங்கள் (விருப்பப்படி) மாற்றலாம். அல்லது மீண்டும் பறிமாறலாம்."
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:777
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3388,7 +3407,7 @@ msgstr ""
 "தகுதி, குறிப்பிட்ட  செயலுக்கான தகுதி உள்பட எந்த உத்திரவாதமும் அளிக்கப்படவில்லை. மேற் "
 "கொண்டு விவரங்களுக்கு ஜிஎன்யு பொது அனுமதிக்கான விதிகளை பார்க்கவும். "
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:781
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3398,20 +3417,20 @@ msgstr ""
 "கிடைத்திருக்க வேண்டும். இல்லையானால் கீழ் கண்ட முகவரிக்கு கடிதம் எழுதவும். Free Software "
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:828 ../src/window-commands.c:844
-#: ../src/window-commands.c:855
+#: ../src/window-commands.c:827 ../src/window-commands.c:843
+#: ../src/window-commands.c:854
 msgid "Contact us at:"
 msgstr "தொடர்புக்கு:"
 
-#: ../src/window-commands.c:831
+#: ../src/window-commands.c:830
 msgid "Contributors:"
 msgstr "உதவியவர்கள்:"
 
-#: ../src/window-commands.c:834
+#: ../src/window-commands.c:833
 msgid "Past developers:"
 msgstr "கடந்த கால மென்பொருள் உருவாக்குநர்கள்:"
 
-#: ../src/window-commands.c:864
+#: ../src/window-commands.c:863
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3428,7 +3447,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:889
 msgid "translator-credits"
 msgstr ""
 " Dinesh Nadarajah <n_dinesh@yahoo.com>, 2003, 2004.\n"
@@ -3436,11 +3455,11 @@ msgstr ""
 " Dinesh Nadarajah <dinesh_list@sbcglobal.net>, 2004.\n"
 " Jayaradha N <jaya@pune.redhat.com>, 2004.\n"
 " Felix <ifelix@redhat.com>, 2006, 2007.\n"
-" drtvasudevan <agnihot3@gmail.com>, 2006.\n"
+" Dr. T. vasudevan <agnihot3@gmail.com>, 2006.\n"
 " Jayaradha <jayaradhaa@gmail.com>, 2006.\n"
 " Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2008."
 
-#: ../src/window-commands.c:893
+#: ../src/window-commands.c:892
 msgid "GNOME Web Browser Website"
 msgstr "க்னோம் வலை உலாவி இணையதளம்"
 
