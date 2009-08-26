@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-08-13 09:55+0200\n"
-"PO-Revision-Date: 2009-08-13 09:56+0100\n"
+"POT-Creation-Date: 2009-08-26 06:10+0200\n"
+"PO-Revision-Date: 2009-08-26 06:11+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -851,22 +851,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Återstår"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:432
 msgid "Save"
 msgstr "Spara"
 
-#: ../embed/ephy-embed.c:554
+#: ../embed/ephy-embed.c:574
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:588
 msgid "Download this potentially unsafe file?"
 msgstr "Hämta denna möjligen osäkra fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:593
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -877,14 +877,14 @@ msgstr ""
 "\n"
 "Det är osäkert att öppna \"%s\" eftersom den möjligen kan skada dina dokument eller inkräkta på din integritet. Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:601
 msgid "Open this file?"
 msgstr "Öppna denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:607
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -895,13 +895,13 @@ msgstr ""
 "\n"
 "Du kan öppna \"%s\" med hjälp av \"%s\" eller spara den."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:614
 msgid "Download this file?"
 msgstr "Hämta denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:619
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -912,11 +912,11 @@ msgstr ""
 "\n"
 "Du har inget program som kan öppna \"%s\". Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:626
 msgid "_Save As..."
 msgstr "Spara so_m..."
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:719
 msgid "Web Inspector"
 msgstr "Webbinspektör"
 
@@ -1271,6 +1271,7 @@ msgstr "Lokala filer"
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
 #: ../embed/ephy-web-view.c:54
 #: ../embed/ephy-web-view.c:2077
+#: ../src/ephy-session.c:1335
 msgid "Blank page"
 msgstr "Tom sida"
 
@@ -1586,12 +1587,12 @@ msgstr "Drag och släpp denna ikon för att skapa en länk till denna sida"
 msgid "Clear"
 msgstr "Töm"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Kör skriptet \"%s\""
@@ -2139,24 +2140,24 @@ msgstr "Sök:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:445
-#: ../src/ephy-find-toolbar.c:567
+#: ../src/ephy-find-toolbar.c:436
+#: ../src/ephy-find-toolbar.c:558
 msgid "_Case sensitive"
 msgstr "_Gör skillnad på VERSALER och gemener"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:541
 msgid "Find Previous"
 msgstr "Sök föregående"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:544
 msgid "Find previous occurrence of the search string"
 msgstr "Sök föregående förekomst av söksträngen"
 
-#: ../src/ephy-find-toolbar.c:559
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Next"
 msgstr "Sök nästa"
 
-#: ../src/ephy-find-toolbar.c:562
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find next occurrence of the search string"
 msgstr "Sök nästa förekomst av söksträngen"
 
@@ -2390,6 +2391,12 @@ msgstr "_Återställ"
 #: ../src/ephy-session.c:577
 msgid "Crash Recovery"
 msgstr "Kraschåterställning"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1279
+#, c-format
+msgid "This page was loading when the web browser closed unexpectedly. This might happen again if you reload the page. If it does, please report the problem to the %s developers."
+msgstr "Denna sida lästes in när webbläsaren oväntat stängdes. Detta kan hända igen om du uppdaterar sidan. Om det sker så rapportera problemet till utvecklarna för %s."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
