@@ -81,6 +81,9 @@ struct _EphyWebViewPrivate {
   guint reload_scheduled_id;
   guint reload_delay_ticks;
 
+  /* Regex to figure out if we're dealing with a wanna-be URI */
+  GRegex *non_search_regex;
+
   GSList *hidden_popups;
   GSList *shown_popups;
 };
@@ -499,6 +502,11 @@ ephy_web_view_finalize (GObject *object)
   if (priv->icon != NULL) {
     g_object_unref (priv->icon);
     priv->icon = NULL;
+  }
+
+  if (priv->non_search_regex != NULL) {
+    g_regex_unref (priv->non_search_regex);
+    priv->non_search_regex = NULL;
   }
 
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
@@ -994,6 +1002,17 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
   priv->monitor_directory = FALSE;
 
+  priv->non_search_regex = g_regex_new ("(^localhost$|"
+                                        "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
+                                        "^::[0-9a-f:]*$|" /* IPv6 literals */
+                                        "^[0-9a-f:]+:[0-9a-f:]*$|" /* IPv6 literals */
+                                        "^[^\\.[:space:]]+\\.[^\\.[:space:]]+.*$|" /* foo.bar... */
+                                        "^https?://[^/\\.[:space:]]+.*$|"
+                                        "^about:.*$|"
+                                        "^data:.*$|"
+                                        "^file:.*$)",
+                                        G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+
   g_signal_connect_object (web_view, "ge_document_type",
                            G_CALLBACK (ge_document_type_cb),
                            web_view, (GConnectFlags)0);
@@ -1069,13 +1088,36 @@ void
 ephy_web_view_load_url (EphyWebView *view,
                         const char *url)
 {
+  EphyWebViewPrivate *priv;
+  SoupURI *soup_uri = NULL;
   char *effective_url;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (url);
 
-  effective_url = ephy_embed_utils_normalize_address (url);
+  priv = view->priv;
+
+  /* We use SoupURI as an indication of whether the value given in url
+   * is not something we want to search; we only do that, though, if
+   * the address has a web scheme, because SoupURI will consider any
+   * string: as a valid scheme, and we will end up prepending http://
+   * to it */
+  if (ephy_embed_utils_address_has_web_scheme (url))
+    soup_uri = soup_uri_new (url);
+
+  /* If the string doesn't look like an URI, let's search it; */
+  if (soup_uri == NULL &&
+      priv->non_search_regex &&
+      !g_regex_match (priv->non_search_regex, url, 0, NULL))
+    effective_url = g_strdup_printf (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"), url);
+  else
+    effective_url = ephy_embed_utils_normalize_address (url);
+
   webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+
+  if (soup_uri)
+    soup_uri_free (soup_uri);
+
   g_free (effective_url);
 }
 
