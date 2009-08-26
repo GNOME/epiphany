@@ -380,7 +380,13 @@ load_status_notify_cb (EphyWebView *view,
 		       GParamSpec *pspec,
 		       EphySession *session)
 {
-	if (ephy_web_view_is_loading (view) == FALSE)
+	WebKitLoadStatus status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
+
+	/* We won't know the URL we are loading in PROVISIONAL because
+	   of bug #593149, but save session anyway */
+	if (status == WEBKIT_LOAD_PROVISIONAL ||
+	    status == WEBKIT_LOAD_COMMITTED || 
+	    status == WEBKIT_LOAD_FINISHED)
 		ephy_session_save (session, SESSION_CRASHED);
 }
 
