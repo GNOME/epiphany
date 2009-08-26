@@ -9,16 +9,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
-"Report-Msgid-Bugs-To: "
-"http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-08-20 22:56+0300\n"
-"PO-Revision-Date: 2009-08-20 22:56+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2009-08-26 16:37-0300\n"
+"PO-Revision-Date: 2009-08-26 16:40-0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Virtaal 0.4.0\n"
@@ -963,22 +963,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "متبقّ"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:440
 msgid "Save"
 msgstr "احفظ"
 
-#: ../embed/ephy-embed.c:554
+#: ../embed/ephy-embed.c:582
 msgctxt "file type"
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:596
 msgid "Download this potentially unsafe file?"
 msgstr "تنزيل هذا الملف المحتمل خطره؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:601
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -991,14 +991,14 @@ msgstr ""
 "من الخطر فتح  “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:609
 msgid "Open this file?"
 msgstr "فتح الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:615
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1009,13 +1009,13 @@ msgstr ""
 "\n"
 "يمكن فتح “%s” ب “%s” أو حفظه."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:622
 msgid "Download this file?"
 msgstr "تنزيل الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:627
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1026,11 +1026,11 @@ msgstr ""
 "\n"
 "لا يوجد تطبيق لفتح “%s”. يمكنك حفظه."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:634
 msgid "_Save As..."
 msgstr "ا_حفظ ك‍…"
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:727
 msgid "Web Inspector"
 msgstr "فاحِص الوِب"
 
@@ -1381,32 +1381,38 @@ msgstr "الملفات المحلية"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
-#: ../embed/ephy-web-view.c:1261
+#: ../embed/ephy-web-view.c:1112
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1303
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "إعادة توجيه إلى “%s”…"
 
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1305
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "نقل البيانات من “%s”…"
 
-#: ../embed/ephy-web-view.c:1265
+#: ../embed/ephy-web-view.c:1307
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "انتظار التفويض من “%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
 #, c-format
 msgid "Loading “%s”…"
 msgstr "تحميل “%s”…"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1423
 msgid "Loading…"
 msgstr "تحميل…"
 
@@ -2448,11 +2454,11 @@ msgstr "خيارات متصفّح وِب جنوم"
 msgid "Close tab"
 msgstr "أغلق اللسان"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "فشل نسخ ملف الكعكات من موزيلا."
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "فشلت قراءة آخر علامة ترحيل، سأجهض ترحيل الإعدادات."
 
@@ -2485,11 +2491,11 @@ msgstr "ا_لغِ الخروج"
 msgid "_Abort Downloads"
 msgstr "ال_غِ التنزيلات"
 
-#: ../src/ephy-session.c:565
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "استعادة النوافذ و الألسنة السابقة؟"
 
-#: ../src/ephy-session.c:569
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2497,17 +2503,28 @@ msgstr ""
 "يبدو أن إبِفَني خرج بصورة غير طبيعية في بعد التشغيل الأخير, يمكنك إرجاء "
 "النوافذ و الألسنة المفتوحة."
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "_لا تستعِد"
 
-#: ../src/ephy-session.c:575
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "ا_ستعِد"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "استعادة الانهيار"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"كانت يتم تحميل هذه الصفحة عند اتغلاق المتصفح آليا. يمكن ان يحدث هذا مجددا "
+"اذا اهدت تحميلها. اذا حدث هذا، الرجاء اتصل بمتطوري %s."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
@@ -3869,14 +3886,6 @@ msgstr "موقع متصفح وِب جنوم"
 
 #~ msgid "The page uses an unsupported or invalid form of compression."
 #~ msgstr "تستعمل الصفحة نسق ضغط غير مدعوم."
-
-#~ msgid ""
-#~ "This page was loading when the web browser closed unexpectedly. This "
-#~ "might happen again if you reload the page. If it does, please report the "
-#~ "problem to the %s developers."
-#~ msgstr ""
-#~ "كانت يتم تحميل هذه الصفحة عند اتغلاق المتصفح آليا. يمكن ان يحدث هذا مجددا "
-#~ "اذا اهدت تحميلها. اذا حدث هذا، الرجاء اتصل بمتطوري %s."
 
 #~ msgid "You may find an old version:|in the Google Cache"
 #~ msgstr "في مخزن جوجل"

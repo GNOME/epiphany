@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-08-12 11:48+0000\n"
-"PO-Revision-Date: 2009-03-12 20:25+0530\n"
+"product=epiphany\n"
+"POT-Creation-Date: 2009-08-26 16:37-0300\n"
+"PO-Revision-Date: 2009-08-26 17:23-0300\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -965,23 +965,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "మిగిలినవి"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:440
 msgid "Save"
 msgstr "దాచు"
 
-#: ../embed/ephy-embed.c:554
+#: ../embed/ephy-embed.c:582
 #, fuzzy
 msgctxt "file type"
 msgid "Unknown"
 msgstr "అపరిచితము"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:596
 msgid "Download this potentially unsafe file?"
 msgstr "ప్రమాదకరమైన దస్త్రమును దిగుమతి చేయుము?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:601
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -994,14 +994,14 @@ msgstr ""
 "“%s” దస్త్రముమీపత్రాలనుధ్వంసంచేయవచ్చు, చొరబడి  మీఏకాంతానికి భంగంకలిగించవచ్చు.నేరుగా "
 "తెరవకుండా'దాచుకోగలరు."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:609
 msgid "Open this file?"
 msgstr "దస్త్రమును తెరువుము?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:615
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1012,13 +1012,13 @@ msgstr ""
 "\n"
 "మీరు “%s”ను “%s” వుపయోగించి తెరువగలరు లేదా దానిని దాయండి."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:622
 msgid "Download this file?"
 msgstr "దస్త్రమును దిగుమతి చేయుము?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:627
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1030,11 +1030,11 @@ msgstr ""
 "“%s”ను తెరువ గలుగుటకు మీరు ఎటువంటి అనువర్తనమును కలిగిలేరు. బదులుగా మీరు దానిని డౌనులోడు "
 "చేయగలరు."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:634
 msgid "_Save As..."
 msgstr "ఇలా దాచు... (_S)"
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:727
 msgid "Web Inspector"
 msgstr ""
 
@@ -1386,32 +1386,38 @@ msgstr "స్థానిక దస్త్రములు"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "ఖాళీ పుట"
 
-#: ../embed/ephy-web-view.c:1261
+#: ../embed/ephy-web-view.c:1112
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1303
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "“%s”కు మళ్ళించుచున్నది..."
 
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1305
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "“%s”నుండి  దత్తాంశం బదిలీచేయుచున్నది…"
 
-#: ../embed/ephy-web-view.c:1265
+#: ../embed/ephy-web-view.c:1307
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "“%s” నుండి అనుమతి కొరకు   నిరీక్షణ…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” ను నింపుతుంది..."
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1423
 msgid "Loading…"
 msgstr "నింపుతుంది…"
 
@@ -1696,12 +1702,12 @@ msgstr "ఈ పేజీకు లింకు సృష్టించుటక
 msgid "Clear"
 msgstr "శుభ్రంచేయి"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "“%s” స్క్రిప్టును నిర్వర్తిస్తుంది"
@@ -2240,23 +2246,23 @@ msgstr "కనిపెట్టు:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
+#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
 msgid "_Case sensitive"
 msgstr "చిన్నాపెద్దా అక్షరంతేడా (_C)"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:541
 msgid "Find Previous"
 msgstr "ముందుది వెతుకు"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:544
 msgid "Find previous occurrence of the search string"
 msgstr "మునుపటి సంభవము యొక్క పదబంధ వెతికి కనిపెట్టు"
 
-#: ../src/ephy-find-toolbar.c:559
+#: ../src/ephy-find-toolbar.c:550
 msgid "Find Next"
 msgstr "తర్వాతది వెతుకు"
 
-#: ../src/ephy-find-toolbar.c:562
+#: ../src/ephy-find-toolbar.c:553
 msgid "Find next occurrence of the search string"
 msgstr "తరువాతి సంభవము యొక్క పదబంధ వెతికి కనిపెట్టు"
 
@@ -2437,11 +2443,11 @@ msgstr "గ్నోమ్ మహాతల అన్వేషి ఇఛ్ఛా
 msgid "Close tab"
 msgstr "నెట్టు మూయుము"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr ""
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 
@@ -2472,27 +2478,38 @@ msgstr "కూర్పు రద్దు (_C)"
 msgid "_Abort Downloads"
 msgstr "దిగుమతులు అర్థాంతరంగా ఆపు (_A)"
 
-#: ../src/ephy-session.c:565
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "మునుపటి అన్వేషి గవాక్షములు మరియు నెట్టులను తిరిగి స్వాధీనపరచుకొనుము"
 
-#: ../src/ephy-session.c:569
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr "ఎపిఫనీ గతంలో వాడినప్పుడు  కుప్పకూలిగాని లేదా."
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "తిరిగి స్వాధీనపరచుకోకుము (_D)"
 
-#: ../src/ephy-session.c:575
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "తిరిగి స్వాధీనపరచుకొనుము (_R)"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "కుప్పకూలు తిరిగి స్వాధీనపరచుకొనుము"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"వెబ్ బ్రౌజర్ అనుకోకుండా మూయబడినప్పుడు ఈ పేజీ లోడవుచున్నది. మీరు మరలా తిరిగి లోడుచేస్తే యిది మరలా "
+"జరుగవచ్చు. మరలా జరిగితే, దయచేసి సమస్యను %s అభివృద్దికారులకు తెలియపర్చండి."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
@@ -3453,113 +3470,115 @@ msgid "GNOME Web Browser Website"
 msgstr "గ్నోమ్ మహాతల అన్వేషి మహాతల స్థానము"
 
 #, fuzzy
-msgid ""
-"It's not possible to view this file type directly in the browser. You can "
-"open it with \"%s\" or save it."
-msgstr "ఈరకమైనదస్త్రమును అన్వేషి ద్వారా దర్శించుటసాధ్యపడదు.వేరే కార్యక్షేత్రముద్వారాతెరవండిలేదాదాచండి."
+#~ msgid ""
+#~ "It's not possible to view this file type directly in the browser. You can "
+#~ "open it with \"%s\" or save it."
+#~ msgstr "ఈరకమైనదస్త్రమును అన్వేషి ద్వారా దర్శించుటసాధ్యపడదు.వేరే కార్యక్షేత్రముద్వారాతెరవండిలేదాదాచండి."
 
-msgid ""
-"It's not possible to view this file because there is no application "
-"installed that can open it. You can save it instead."
-msgstr ""
-"ఈదస్త్రమునుదర్శించుటసాధ్యంకాదుఎందుకంటేఈదస్త్రమునుతెరువుటకుకావలసినకార్యక్షేత్రము నెలకొల్పబడిలేదు.మీరు "
-"దానిని దాచుకోగలరు."
+#~ msgid ""
+#~ "It's not possible to view this file because there is no application "
+#~ "installed that can open it. You can save it instead."
+#~ msgstr ""
+#~ "ఈదస్త్రమునుదర్శించుటసాధ్యంకాదుఎందుకంటేఈదస్త్రమునుతెరువుటకుకావలసినకార్యక్షేత్రము నెలకొల్పబడిలేదు."
+#~ "మీరు దానిని దాచుకోగలరు."
 
-msgid "_Don't show this message again for this site"
-msgstr "_ఈ స్థలానికి ఈ సందేశాన్ని ఇక మీదుట చూపకుము"
+#~ msgid "_Don't show this message again for this site"
+#~ msgstr "_ఈ స్థలానికి ఈ సందేశాన్ని ఇక మీదుట చూపకుము"
 
-msgid "Please ask your system administrator for assistance."
-msgstr "దయచేసి మీ వ్యవస్థ నిర్వాహకుడిని సహాయం కొరకు అర్జించండి"
+#~ msgid "Please ask your system administrator for assistance."
+#~ msgstr "దయచేసి మీ వ్యవస్థ నిర్వాహకుడిని సహాయం కొరకు అర్జించండి"
 
-msgid "_Overwrite"
-msgstr "_చెరిపివ్రాయు"
+#~ msgid "_Overwrite"
+#~ msgstr "_చెరిపివ్రాయు"
 
-msgid "Empty"
-msgstr "ఖాళీ"
+#~ msgid "Empty"
+#~ msgstr "ఖాళీ"
 
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"బోనోబో గ్నోమ్ _ఎపిఫనీ_స్వయంచాలక , సేవికా దస్త్రమునుకనిపెట్టలేకపోయింది. use bonobo-activation-"
-"sysconf to configure the search path for bonobo server files."
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "బోనోబో గ్నోమ్ _ఎపిఫనీ_స్వయంచాలక , సేవికా దస్త్రమునుకనిపెట్టలేకపోయింది. use bonobo-activation-"
+#~ "sysconf to configure the search path for bonobo server files."
 
-msgid "Go back"
-msgstr "వెనుకకు వెళ్ళు"
+#~ msgid "Go back"
+#~ msgstr "వెనుకకు వెళ్ళు"
 
 #, fuzzy
-msgid "Trust \"%s\" to identify:"
-msgstr " \"%s\" ను గుర్తించుటకు నమ్ము"
+#~ msgid "Trust \"%s\" to identify:"
+#~ msgstr " \"%s\" ను గుర్తించుటకు నమ్ము"
 
-msgid "Postscript files"
-msgstr "పోస్ట్ స్క్రిప్ట్ దస్త్రములు"
+#~ msgid "Postscript files"
+#~ msgstr "పోస్ట్ స్క్రిప్ట్ దస్త్రములు"
 
-msgid "Failed to find %s"
-msgstr " %s వెతుకుట విఫలమైనది"
+#~ msgid "Failed to find %s"
+#~ msgstr " %s వెతుకుట విఫలమైనది"
 
-msgid "Ephy"
-msgstr "ఎఫీ"
+#~ msgid "Ephy"
+#~ msgstr "ఎఫీ"
 
-msgid "Toggle network status"
-msgstr "అల్లిక సుస్థితి మార్పు"
+#~ msgid "Toggle network status"
+#~ msgstr "అల్లిక సుస్థితి మార్పు"
 
-msgid "Desktop"
-msgstr "రంగస్థలం"
+#~ msgid "Desktop"
+#~ msgstr "రంగస్థలం"
 
-msgid "    "
-msgstr "    "
+#~ msgid "    "
+#~ msgstr "    "
 
-msgid "      "
-msgstr "      "
+#~ msgid "      "
+#~ msgstr "      "
 
-msgid "*"
-msgstr "*"
+#~ msgid "*"
+#~ msgstr "*"
 
-msgid "Open the file in another application?"
-msgstr "దస్త్రమును వేరే కార్య క్షేత్రము ద్వారా తెరువుము?"
+#~ msgid "Open the file in another application?"
+#~ msgstr "దస్త్రమును వేరే కార్య క్షేత్రము ద్వారా తెరువుము?"
 
-msgid ""
-"Drag an item onto the toolbars above to add it, from the toolbars in the "
-"items table to remove it."
-msgstr ""
-"పనిముట్ల పట్టీ చిట్టాలో అంశాలను  చేర్చుటకు   దానిమీదకు ఈడ్చండి. తీసివేయుటకు దాని నుండి   ఈడ్చండి"
+#~ msgid ""
+#~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
+#~ "items table to remove it."
+#~ msgstr ""
+#~ "పనిముట్ల పట్టీ చిట్టాలో అంశాలను  చేర్చుటకు   దానిమీదకు ఈడ్చండి. తీసివేయుటకు దాని నుండి   ఈడ్చండి"
 
-msgid "Input Methods"
-msgstr "ఎగుబడి పద్దతులు"
+#~ msgid "Input Methods"
+#~ msgstr "ఎగుబడి పద్దతులు"
 
-msgid "Used internally by the bonobo interface"
-msgstr "బోనోబో అనుసంథానం ద్వారా అంతర్గతంగా వాడబడినది"
+#~ msgid "Used internally by the bonobo interface"
+#~ msgstr "బోనోబో అనుసంథానం ద్వారా అంతర్గతంగా వాడబడినది"
 
-msgid "You can recover the opened tabs and windows."
-msgstr "నీవు తెరచిన గవాక్షములను, నెట్టులను మళ్ళీ పునర్జీవనం చేయగలవు."
+#~ msgid "You can recover the opened tabs and windows."
+#~ msgstr "నీవు తెరచిన గవాక్షములను, నెట్టులను మళ్ళీ పునర్జీవనం చేయగలవు."
 
-msgid "Custom [%s]"
-msgstr "వినియోగదారు నిర్వచించిన [%s]"
+#~ msgid "Custom [%s]"
+#~ msgstr "వినియోగదారు నిర్వచించిన [%s]"
 
-msgid "Go up"
-msgstr "పైకి వెళ్ళు"
+#~ msgid "Go up"
+#~ msgstr "పైకి వెళ్ళు"
 
-msgid "Favicon"
-msgstr "ప్రతిమ"
+#~ msgid "Favicon"
+#~ msgstr "ప్రతిమ"
 
-msgid "A GNOME browser based on Mozilla"
-msgstr "మొజాల్లా ఆధారిత గ్నోమ్ అన్వేషి"
+#~ msgid "A GNOME browser based on Mozilla"
+#~ msgstr "మొజాల్లా ఆధారిత గ్నోమ్ అన్వేషి"
 
-msgid "  "
-msgstr "  "
+#~ msgid "  "
+#~ msgstr "  "
 
-msgid "00.00"
-msgstr "00.00"
+#~ msgid "00.00"
+#~ msgstr "00.00"
 
-msgid ""
-"Hide the menubar by default. The menubar can still be accessed using F10."
-msgstr "అప్రమేయము ద్వారా జాబితా పట్టీని దాచుము. అయినప్పటికి జాబితా పట్టీ ని F10 ద్వారా సాంగత్య పరచవచ్చు."
+#~ msgid ""
+#~ "Hide the menubar by default. The menubar can still be accessed using F10."
+#~ msgstr ""
+#~ "అప్రమేయము ద్వారా జాబితా పట్టీని దాచుము. అయినప్పటికి జాబితా పట్టీ ని F10 ద్వారా సాంగత్య పరచవచ్చు."
 
-msgid "చరిత్ర దర్శినిలో పుట సమాచారము చూపబడినది. జాబితాలో వర్తించు విలువలు\"చిరునామా\", \"శీర్షిక\"."
-msgstr ""
-"The page information shown in the history view. Valid values in the list are "
-"\"address\", \"title\"."
+#~ msgid ""
+#~ "చరిత్ర దర్శినిలో పుట సమాచారము చూపబడినది. జాబితాలో వర్తించు విలువలు\"చిరునామా\", \"శీర్షిక\"."
+#~ msgstr ""
+#~ "The page information shown in the history view. Valid values in the list "
+#~ "are \"address\", \"title\"."
 
 #~ msgid "Au_todetect:"
 #~ msgstr "స్వయంచాలకముగా ఆచూకీతీయు (_t)"
@@ -4422,14 +4441,6 @@ msgstr ""
 #~ msgstr ""
 #~ "ఈ మీ ప్రోక్సీ సేవక అమరికలను పరిశీలించండి. అనుసంధానం యిప్పటికీ విఫలమైవుంటే, మీ ప్రోక్సీ సేవికతో లేదా మీ "
 #~ "నెట్వర్కు అనుసంధానముతో సమస్యవుండి వుండవచ్చును."
-
-#~ msgid ""
-#~ "This page was loading when the web browser closed unexpectedly. This "
-#~ "might happen again if you reload the page. If it does, please report the "
-#~ "problem to the %s developers."
-#~ msgstr ""
-#~ "వెబ్ బ్రౌజర్ అనుకోకుండా మూయబడినప్పుడు ఈ పేజీ లోడవుచున్నది. మీరు మరలా తిరిగి లోడుచేస్తే యిది మరలా "
-#~ "జరుగవచ్చు. మరలా జరిగితే, దయచేసి సమస్యను %s అభివృద్దికారులకు తెలియపర్చండి."
 
 #~ msgid "You already have %d cookie from this site."
 #~ msgid_plural "You already have %d cookies from this site."

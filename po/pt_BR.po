@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-08-18 23:04-0400\n"
-"PO-Revision-Date: 2009-08-18 23:04-0400\n"
+"POT-Creation-Date: 2009-08-26 16:37-0300\n"
+"PO-Revision-Date: 2009-08-26 17:20-0300\n"
 "Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -974,22 +974,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:440
 msgid "Save"
 msgstr "Salvar"
 
-#: ../embed/ephy-embed.c:554
+#: ../embed/ephy-embed.c:582
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:596
 msgid "Download this potentially unsafe file?"
 msgstr "Baixar o arquivo potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:601
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1003,14 +1003,14 @@ msgstr ""
 "documentos ou invadir sua privacidade. Ao invés de abrir o arquivo você pode "
 "baixá-lo."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:609
 msgid "Open this file?"
 msgstr "Abrir este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:615
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1021,13 +1021,13 @@ msgstr ""
 "\n"
 "Você pode abrir \"%s\" usando \"%s\" ou salvá-lo."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:622
 msgid "Download this file?"
 msgstr "Baixar este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:627
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1039,18 +1039,17 @@ msgstr ""
 "Você não possui nenhum aplicativo capaz de abrir \"%s\". Ao invés de abrir o "
 "arquivo você pode baixá-lo."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:634
 msgid "_Save As..."
 msgstr "Salvar _como..."
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:727
 msgid "Web Inspector"
 msgstr "Inspetor web"
 
 #: ../embed/ephy-embed-shell.c:242
 msgid "Epiphany can't be used now. Initialization failed."
-msgstr ""
-"O Epiphany não pode ser usado agora. A inicialização falhou."
+msgstr "O Epiphany não pode ser usado agora. A inicialização falhou."
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
@@ -1395,32 +1394,38 @@ msgstr "Arquivos locais"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "Página em branco"
 
-#: ../embed/ephy-web-view.c:1261
+#: ../embed/ephy-web-view.c:1112
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com.br/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1303
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redirecionando para \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1305
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transferindo dados de \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1265
+#: ../embed/ephy-web-view.c:1307
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorização de \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Carregando \"%s\"..."
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1423
 msgid "Loading…"
 msgstr "Carregando..."
 
@@ -2458,11 +2463,11 @@ msgstr "Opções do navegador web do GNOME"
 msgid "Close tab"
 msgstr "Fechar aba"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falha ao copiar os arquivos de cookie do Mozilla."
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Falha ao ler as últimas marcas de migração, abortando a migração do perfil."
@@ -2495,11 +2500,11 @@ msgstr "_Cancelar encerramento"
 msgid "_Abort Downloads"
 msgstr "_Abortar downloads"
 
-#: ../src/ephy-session.c:565
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "Recupera janelas e abas anteriores?"
 
-#: ../src/ephy-session.c:569
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2507,17 +2512,29 @@ msgstr ""
 "O Epiphany aparentemente terminou de forma inesperada na última vez que foi "
 "executado. Você pode recuperar as janelas e abas abertas."
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "_Não recuperar"
 
-#: ../src/ephy-session.c:575
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "_Recuperar"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "Recuperação de falhas"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"Esta página estava carregando quando o navegador da web fechou "
+"inesperadamente. Isso pode acontecer novamente se você recarregar a página. "
+"Se acontecer, por favor relate o problema aos desenvolvedores do %s."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
@@ -3878,16 +3895,6 @@ msgstr "Site do Navegador web do GNOME"
 
 #~ msgid "The page uses an unsupported or invalid form of compression."
 #~ msgstr "Esta página usa um tipo de compressão inválido ou sem suporte."
-
-#~ msgid ""
-#~ "This page was loading when the web browser closed unexpectedly. This "
-#~ "might happen again if you reload the page. If it does, please report the "
-#~ "problem to the %s developers."
-#~ msgstr ""
-#~ "Esta página estava carregando quando o navegador da web fechou "
-#~ "inesperadamente. Isso pode acontecer novamente se você recarregar a "
-#~ "página. Se acontecer, por favor relate o problema aos desenvolvedores do %"
-#~ "s."
 
 #~ msgid "You may find an old version:|in the Google Cache"
 #~ msgstr "no cache do Google"

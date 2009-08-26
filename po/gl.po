@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-08-19 15:07+0200\n"
-"PO-Revision-Date: 2009-08-19 10:44+0200\n"
+"POT-Creation-Date: 2009-08-26 16:37-0300\n"
+"PO-Revision-Date: 2009-08-26 17:10-0300\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@mancomun.org>\n"
 "MIME-Version: 1.0\n"
@@ -982,22 +982,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restante"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:440
 msgid "Save"
 msgstr "Gardar"
 
-#: ../embed/ephy-embed.c:554
+#: ../embed/ephy-embed.c:582
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:596
 msgid "Download this potentially unsafe file?"
 msgstr "Quere descargar este ficheiro potencialmente non seguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:601
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1010,14 +1010,14 @@ msgstr ""
 "non é seguro abrir “%s” porque podería danar potencialmente os seus "
 "documentos ou invadir a súa privacidade. En vez diso pode descargalo."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:609
 msgid "Open this file?"
 msgstr "Quere abrir este ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:615
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1028,13 +1028,13 @@ msgstr ""
 "\n"
 "Pode abrir “%s” usando “%s” ou gardalo."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:622
 msgid "Download this file?"
 msgstr "Quere descargar este ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:627
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1045,11 +1045,11 @@ msgstr ""
 "\n"
 "Non ten ningún aplicativo capaz de abrir “%s”. En vez diso pode descargalo."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:634
 msgid "_Save As..."
 msgstr "_Gardar como..."
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:727
 msgid "Web Inspector"
 msgstr "Inspector Web"
 
@@ -1400,32 +1400,38 @@ msgstr "Ficheiros locais"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "Páxina en branco"
 
-#: ../embed/ephy-web-view.c:1261
+#: ../embed/ephy-web-view.c:1112
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1303
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redireccionando a “%s”…"
 
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1305
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transferindo datos desde “%s”…"
 
-#: ../embed/ephy-web-view.c:1265
+#: ../embed/ephy-web-view.c:1307
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando pola autorización de “%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando “%s”…"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1423
 msgid "Loading…"
 msgstr "Cargando…"
 
@@ -2453,11 +2459,11 @@ msgstr "Opcións do navegador web de Gnome"
 msgid "Close tab"
 msgstr "Pechar o separador"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Ocorreu un fallo ao copiar o ficheiros de cookie de Mozilla."
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Ocorreu un fallo ao ler o último marcador de migración, abortando a "
@@ -2492,11 +2498,11 @@ msgstr "_Cancelar terminar a sesión"
 msgid "_Abort Downloads"
 msgstr "_Interromper as descargas"
 
-#: ../src/ephy-session.c:565
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "Quere recuperar as xanelas e os separadores anteriores?"
 
-#: ../src/ephy-session.c:569
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2504,17 +2510,26 @@ msgstr ""
 "O Epiphany parece que saíu de forma inesperada a última vez que se executou. "
 "Pode recuperar as xanelas e os separadores abertos."
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "_Non recuperar"
 
-#: ../src/ephy-session.c:575
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "_Recuperar"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "Recuperación de ruptura"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
