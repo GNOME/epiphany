@@ -140,6 +140,18 @@ libephymain_la_SOURCES += \
 libephymain_la_CFLAGS += $(SEED_CFLAGS)
 endif # ENABLE_SEED
 
+if ENABLE_NSS
+NOINST_H_FILES += \
+	ephy-nss-glue.h \
+	$(NULL)
+
+libephymain_la_SOURCES += \
+	ephy-nss-glue.c
+	$(NULL)
+
+libephymain_la_CFLAGS += $(NSS_CFLAGS)
+endif # ENABLE_NSS
+
 epiphany_SOURCES = ephy-main.c
 
 epiphany_CPPFLAGS = \
@@ -180,6 +192,10 @@ endif
 if ENABLE_SEED
 epiphany_LDADD += $(SEED_LIBS)
 endif # ENABLE_SEED
+
+if ENABLE_NSS
+epiphany_LDADD += $(NSS_LIBS)
+endif # ENABLE_NSS
 
 if ENABLE_NETWORK_MANAGER
 epiphany_LDADD += \

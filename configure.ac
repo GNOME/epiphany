@@ -277,6 +277,26 @@ AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
 
+# ***
+# NSS
+# ***
+
+AC_MSG_CHECKING([whether NSS support is requested])
+AC_ARG_ENABLE([nss],
+        [AS_HELP_STRING([--enable-nss], [Enable NSS support (default: enabled)])],
+        [], [enable_nss=yes])
+AC_MSG_RESULT([$enable_nss])
+
+if test "$enable_nss" = "yes"; then
+   EPIPHANY_FEATURES="$EPIPHANY_FEATURES nss"
+   PKG_CHECK_MODULES([NSS], [nss])
+
+   AC_DEFINE([ENABLE_NSS], [1], [Define to compile with NSS support])
+fi
+
+AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
+AC_SUBST([EPIPHANY_FEATURES])
+
 # *******************
 # Additional features
 # *******************
@@ -482,5 +502,6 @@ Epiphany was configured with the following options:
  	NetworkManager support     : $enable_network_manager
  	GObject introspection      : $enable_introspection
  	Seed support               : $enable_seed
+ 	NSS support                : $enable_nss
  	Build tests                : $enable_tests
 "
