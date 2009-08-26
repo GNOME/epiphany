@@ -77,6 +77,10 @@ impl_manager_do_command (EphyCommandManager *manager,
     return webkit_web_view_paste_clipboard (web_view);
   else if (! strcmp (command, "cmd_selectAll"))
     return webkit_web_view_select_all (web_view);
+  else if (! strcmp (command, "cmd_undo"))
+    return webkit_web_view_undo (web_view);
+  else if (! strcmp (command, "cmd_redo"))
+    return webkit_web_view_redo (web_view);
 }
 
 static gboolean
@@ -91,6 +95,10 @@ impl_manager_can_do_command (EphyCommandManager *manager,
     return webkit_web_view_can_cut_clipboard (web_view);
   else if (! strcmp (command, "cmd_paste"))
     return webkit_web_view_can_paste_clipboard (web_view);
+  else if (! strcmp (command, "cmd_undo"))
+    return webkit_web_view_can_undo (web_view);
+  else if (! strcmp (command, "cmd_redo"))
+    return webkit_web_view_can_redo (web_view);
 
   return FALSE;
 }
