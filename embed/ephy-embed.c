@@ -60,6 +60,7 @@ struct EphyEmbedPrivate
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
+  char *load_failed_uri;
   guint is_setting_zoom : 1;
 };
 
@@ -204,11 +205,22 @@ load_status_changed_cb (WebKitWebView *view,
   if (status == WEBKIT_LOAD_COMMITTED) {
     const gchar* uri;
     EphyWebViewSecurityLevel security_level;
-    
+
     uri = webkit_web_view_get_uri (view);
+
+    /* If the load failed for this URI, do nothing */
+    if (embed->priv->load_failed_uri &&
+        g_str_equal (embed->priv->load_failed_uri, uri)) {
+      g_free (embed->priv->load_failed_uri);
+      embed->priv->load_failed_uri = NULL;
+
+      ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), EPHY_WEB_VIEW_STATE_IS_UNKNOWN);
+
+      return;
+    }
+
     ephy_web_view_location_changed (EPHY_WEB_VIEW (view),
                                     uri);
-
     restore_zoom_level (embed, uri);
     ephy_history_add_page (embed->priv->history,
                            uri,
@@ -311,12 +323,23 @@ ephy_embed_grab_focus (GtkWidget *widget)
 }
 
 static void
+ephy_embed_finalize (GObject *object)
+{
+  EphyEmbed *embed = EPHY_EMBED (object);
+
+  g_free (embed->priv->load_failed_uri);
+
+  G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
+}
+
+static void
 ephy_embed_class_init (EphyEmbedClass *klass)
 {
   GObjectClass *object_class = (GObjectClass *)klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
 
   object_class->constructed = ephy_embed_constructed;
+  object_class->finalize = ephy_embed_finalize;
   widget_class->grab_focus = ephy_embed_grab_focus;
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
@@ -690,6 +713,21 @@ download_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
+static gboolean
+load_error_cb (WebKitWebView *web_view,
+               WebKitWebFrame *frame,
+               const char *uri,
+               GError *error,
+               EphyEmbed *embed)
+{
+  /* Flag the page as error. We need the flag to check it when
+     receiving COMMITTED status, since for some reason we are getting
+     that when the load fails too */
+  embed->priv->load_failed_uri = g_strdup (uri);
+
+  return FALSE;
+}
+
 static void
 ephy_embed_constructed (GObject *object)
 {
@@ -712,6 +750,7 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), embed,
+                    "signal::load-error", G_CALLBACK (load_error_cb), embed,
                     NULL);
 
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
