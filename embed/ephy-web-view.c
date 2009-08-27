@@ -2000,16 +2000,10 @@ ephy_web_view_get_security_level (EphyWebView *view,
                                   EphyWebViewSecurityLevel *level,
                                   char **description)
 {
-  if (level) {
-    const gchar *uri = ephy_web_view_get_address (view);
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-    /* FIXME: as a temporary workaround, determine security level
-       based on the existence of a 'https' prefix for the URI */
-    if (uri && g_str_has_prefix(uri, "https"))
-      *level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-    else
-      *level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-  }
+  if (level)
+    *level = view->priv->security_level;
 }
 
 /**
