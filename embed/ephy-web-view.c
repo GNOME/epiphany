@@ -486,6 +486,22 @@ ephy_web_view_file_monitor_cancel (EphyWebView *view)
   priv->reload_delay_ticks = 0;
 }
 
+static gboolean
+ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
+{
+    EphyWebView *web_view = EPHY_WEB_VIEW (widget);
+    gboolean key_handled = FALSE;
+
+    key_handled = GTK_WIDGET_CLASS (ephy_web_view_parent_class)->key_press_event (widget, event);
+
+    if (key_handled)
+      return TRUE;
+
+    g_signal_emit_by_name (web_view, "search-key-press", event, &key_handled);
+
+    return key_handled;
+}
+
 static void
 ephy_web_view_dispose (GObject *object)
 {
@@ -526,11 +542,14 @@ static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->dispose = ephy_web_view_dispose;
   gobject_class->finalize = ephy_web_view_finalize;
   gobject_class->get_property = ephy_web_view_get_property;
   gobject_class->set_property = ephy_web_view_set_property;
+
+  widget_class->key_press_event = ephy_web_view_key_press_event;
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADDRESS,
@@ -851,14 +870,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_POINTER);
 
 /**
- * EphyWebView::ge-search-key-press:
+ * EphyWebView::search-key-press:
  * @embed:
  * @event: the #GdkEventKey which triggered this signal
  *
- * The ::ge-search-key-press signal is emitted for keypresses which
+ * The ::search-key-press signal is emitted for keypresses which
  * should be used for find implementations.
  **/
-    g_signal_new ("ge-search-key-press",
+    g_signal_new ("search-key-press",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET (EphyWebViewClass, search_key_press),

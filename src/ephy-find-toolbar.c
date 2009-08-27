@@ -178,7 +178,6 @@ clear_status (EphyFindToolbar *toolbar)
 			    priv->links_only ? _("Find links:") : _("Find:"));
 }
 
-#if 0
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
  * gtk_tree_view_real_start_interactive_seach()
  */
@@ -212,7 +211,6 @@ tab_search_key_press_cb (EphyEmbed *embed,
 
 	return FALSE;
 }
-#endif
 
 static void
 find_next_cb (EphyFindToolbar *toolbar)
@@ -737,10 +735,9 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 
 	if (priv->web_view != NULL)
 	{
-                /*
-		g_signal_handlers_disconnect_matched (embed, G_SIGNAL_MATCH_DATA,
-						      0, 0, NULL, NULL, toolbar);
-                */
+                g_signal_handlers_disconnect_matched (EPHY_WEB_VIEW (web_view),
+                                                      G_SIGNAL_MATCH_DATA,
+                                                      0, 0, NULL, NULL, toolbar);
 	}
 
 	priv->web_view = web_view;
@@ -748,11 +745,9 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	{
 		clear_status (toolbar);
 
-		/* FIXME: this is never emitted
-		g_signal_connect_object (embed, "ge-search-key-press",
+		g_signal_connect_object (EPHY_WEB_VIEW (web_view), "search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
-                */
 	}
 }
 
