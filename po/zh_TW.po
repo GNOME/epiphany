@@ -8,11 +8,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 2.27.5\n"
+"Project-Id-Version: epiphany 2.27.92\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-07-15 06:06+0800\n"
-"PO-Revision-Date: 2009-07-13 16:54+0800\n"
+"POT-Creation-Date: 2009-08-29 21:13+0800\n"
+"PO-Revision-Date: 2009-08-29 08:53+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -31,6 +31,25 @@ msgstr "Epiphany 網頁書籤"
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
 msgstr "網頁書籤"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "搜尋網頁"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.com.tw"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.com.tw/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
@@ -687,7 +706,7 @@ msgstr "選擇語言(_A)："
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:358
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
@@ -840,42 +859,42 @@ msgstr "網頁位址(_P)"
 msgid "_Show Downloads"
 msgstr "顯示下載(_S)"
 
-#: ../embed/downloader-view.c:318
+#: ../embed/downloader-view.c:323
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:322
+#: ../embed/downloader-view.c:327
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Pause"
 msgstr "暫停(_P)"
 
-#: ../embed/downloader-view.c:372
+#: ../embed/downloader-view.c:377
 msgid "_Resume"
 msgstr "續傳(_R)"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:389 ../embed/downloader-view.c:542
-#: ../embed/downloader-view.c:547 ../lib/ephy-time-helpers.c:279
+#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1740
 msgid "Unknown"
 msgstr "不詳"
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:510
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "檔案“%s”已下載完成。"
 
-#: ../embed/downloader-view.c:508
+#: ../embed/downloader-view.c:513
 msgid "Download finished"
 msgstr "下載完成"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:532
+#: ../embed/downloader-view.c:537
 #, c-format
 msgid ""
 "%s\n"
@@ -884,64 +903,64 @@ msgstr ""
 "%1$s\n"
 "%3$s 之 %2$s"
 
-#: ../embed/downloader-view.c:579
+#: ../embed/downloader-view.c:584
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "下載 %d 個檔案"
 
-#: ../embed/downloader-view.c:714
+#: ../embed/downloader-view.c:719
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "檔案「%s」已加入下載佇列。"
 
-#: ../embed/downloader-view.c:718
+#: ../embed/downloader-view.c:723
 msgid "Download started"
 msgstr "下載已開始"
 
-#: ../embed/downloader-view.c:796 ../embed/downloader-view.c:806
+#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
 msgctxt "download status"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../embed/downloader-view.c:799
+#: ../embed/downloader-view.c:804
 msgctxt "download status"
 msgid "Failed"
 msgstr "失敗"
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:807
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "已取消"
 
-#: ../embed/downloader-view.c:865 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "檔案"
 
-#: ../embed/downloader-view.c:888
+#: ../embed/downloader-view.c:893
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:899
+#: ../embed/downloader-view.c:904
 msgid "Remaining"
 msgstr "剩餘"
 
-#: ../embed/ephy-embed.c:408
+#: ../embed/ephy-embed.c:463
 msgid "Save"
 msgstr "儲存"
 
-#: ../embed/ephy-embed.c:550
+#: ../embed/ephy-embed.c:605
 msgctxt "file type"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../embed/ephy-embed.c:564
+#: ../embed/ephy-embed.c:619
 msgid "Download this potentially unsafe file?"
 msgstr "下載這個可能不安全的檔案？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:569
+#: ../embed/ephy-embed.c:624
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -954,14 +973,14 @@ msgstr ""
 "開啟“%s”並不安全，它有可能會破壞您的文件或侵犯您的隱私權。您可以以下載來代"
 "替。"
 
-#: ../embed/ephy-embed.c:577
+#: ../embed/ephy-embed.c:632
 msgid "Open this file?"
 msgstr "開啟此檔案？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:583
+#: ../embed/ephy-embed.c:638
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -972,13 +991,13 @@ msgstr ""
 "\n"
 "您可以使用“%s”開啟“%s”或將它儲存。"
 
-#: ../embed/ephy-embed.c:590
+#: ../embed/ephy-embed.c:645
 msgid "Download this file?"
 msgstr "下載此檔案？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:595
+#: ../embed/ephy-embed.c:650
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -989,17 +1008,17 @@ msgstr ""
 "\n"
 "您沒有任何軟體能夠開啟“%s”，您可以以下載它來代替。"
 
-#: ../embed/ephy-embed.c:602
+#: ../embed/ephy-embed.c:657
 msgid "_Save As..."
 msgstr "另存新檔(_S)..."
 
-#: ../embed/ephy-embed.c:694
+#: ../embed/ephy-embed.c:766
 msgid "Web Inspector"
 msgstr "網頁檢查器"
 
 #: ../embed/ephy-embed-shell.c:242
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphany 目前無法使用，因為 Mozilla 初始化程序失敗。"
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "Epiphany 目前無法使用。初始化程序失敗。"
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
@@ -1330,47 +1349,53 @@ msgstr "統一碼 (UTF-3_2BE)"
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
-#: ../embed/ephy-history.c:486
+#: ../embed/ephy-history.c:485
 msgid "All"
 msgstr "全部"
 
-#: ../embed/ephy-history.c:654
+#: ../embed/ephy-history.c:653
 msgid "Others"
 msgstr "其它"
 
-#: ../embed/ephy-history.c:660
+#: ../embed/ephy-history.c:659
 msgid "Local files"
 msgstr "本機檔案"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2049
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "空白頁面"
 
-#: ../embed/ephy-web-view.c:1247
+#: ../embed/ephy-web-view.c:1131
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com.tw/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "重新導向至“%s”..."
 
-#: ../embed/ephy-web-view.c:1249
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "正在從“%s”傳送資料..."
 
-#: ../embed/ephy-web-view.c:1251
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "正在等待“%s”的授權..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1257 ../embed/ephy-web-view.c:1365
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在載入“%s”..."
 
-#: ../embed/ephy-web-view.c:1367
+#: ../embed/ephy-web-view.c:1442
 msgid "Loading…"
 msgstr "載入中..."
 
@@ -1502,17 +1527,17 @@ msgstr "圖形檔"
 msgid "All files"
 msgstr "所有檔案"
 
-#: ../lib/ephy-file-helpers.c:290
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "無法在“%s”建立暫存目錄。"
 
-#: ../lib/ephy-file-helpers.c:363
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "檔案“%s” 已經存在，請先將它移至其它位置。"
 
-#: ../lib/ephy-file-helpers.c:374
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "無法建立目錄“%s”。"
@@ -1570,7 +1595,7 @@ msgstr "加入書籤"
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:276
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
 msgid "Address Entry"
 msgstr "位址輸入欄"
 
@@ -1655,12 +1680,12 @@ msgstr "拖放這個圖示來建立連至該網頁的連結"
 msgid "Clear"
 msgstr "清除"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s："
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "執行命令稿“%s”"
@@ -1707,96 +1732,82 @@ msgstr "主題(_O)："
 msgid "Sho_w all topics"
 msgstr "顯示所有主題(_W)"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "搜尋網頁"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr ""
-"http://www.google.com.tw/search?q=%s&ie=UTF-8&oe=UTF-8&meta=cr%%3DcountryTW"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
 msgstr "娛樂"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "News"
 msgstr "新聞"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Shopping"
 msgstr "購物"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Sports"
 msgstr "運動"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Travel"
 msgstr "旅遊"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Work"
 msgstr "工作"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:463
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "更新書籤“%s”？"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:468
+#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "書籤中的網頁已移至“%s”。"
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "_Don't Update"
 msgstr "不要更新(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:474
+#: ../src/bookmarks/ephy-bookmarks.c:452
 msgid "_Update"
 msgstr "更新(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:477
+#: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "更新書籤？"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1225
+#: ../src/bookmarks/ephy-bookmarks.c:1203
 msgctxt "bookmarks"
 msgid "All"
 msgstr "全部"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1228
+#: ../src/bookmarks/ephy-bookmarks.c:1206
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "最常瀏覽"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1232
+#: ../src/bookmarks/ephy-bookmarks.c:1210
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "未分類"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1237
+#: ../src/bookmarks/ephy-bookmarks.c:1215
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "本地網站"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1472
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1306
+#: ../src/bookmarks/ephy-bookmarks.c:1450
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "未命名"
 
@@ -2204,32 +2215,32 @@ msgstr "尋找："
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "區分大小寫(_C)"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "找上一個"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "尋找上一個出現搜尋字串的地方"
 
-#: ../src/ephy-find-toolbar.c:559
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "找下一個"
 
-#: ../src/ephy-find-toolbar.c:562
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "尋找下一個出現搜尋字串的地方"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:535
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
 msgid "Leave Fullscreen"
 msgstr "離開全螢幕"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:306
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
 msgid "Go"
 msgstr "前往"
 
@@ -2400,59 +2411,70 @@ msgstr "GNOME 網頁瀏覽器選項"
 msgid "Close tab"
 msgstr "關閉分頁"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "從 Mozilla 複製 cookies 檔案失敗。"
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "讀取最新轉移標記失敗，放棄設定組合的轉移。"
 
-#: ../src/ephy-session.c:117
+#: ../src/ephy-session.c:116
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "下載將會被中止及在 %d 後登出。"
 
-#: ../src/ephy-session.c:229
+#: ../src/ephy-session.c:228
 msgid "Abort pending downloads?"
 msgstr "停止未完成的下載？"
 
-#: ../src/ephy-session.c:234
+#: ../src/ephy-session.c:233
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr "還有下載未完成。如果您登出，它們將會被中止及遺失。"
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:237
 msgid "_Cancel Logout"
 msgstr "取消登出(_C)"
 
-#: ../src/ephy-session.c:240
+#: ../src/ephy-session.c:239
 msgid "_Abort Downloads"
 msgstr "停止下載(_A)"
 
-#: ../src/ephy-session.c:566
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "回復先前的瀏覽器視窗及分頁？"
 
-#: ../src/ephy-session.c:570
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr "Epiphany 在上次執行時似乎突然關閉了。您可以回復已開啟的視窗或分頁。"
 
-#: ../src/ephy-session.c:574
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "不恢復狀態(_D)"
 
-#: ../src/ephy-session.c:576
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "恢復狀態(_R)"
 
-#: ../src/ephy-session.c:578
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "恢復瀏覽器視窗狀態"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"這個網頁尚在讀取但瀏覽器已異常關閉了。如果您重新載入該頁面仍然可能再度發生這"
+"個狀況。如果真的這樣，請將問題回報給 %s 開發團隊。"
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
@@ -2481,88 +2503,88 @@ msgstr "在鍵盤選取模式，按 F7 離開"
 msgid "Switch to this tab"
 msgstr "切換到此分頁"
 
-#: ../src/ephy-toolbar.c:215
+#: ../src/ephy-toolbar.c:224
 msgid "_Back"
 msgstr "上一頁(_B)"
 
-#: ../src/ephy-toolbar.c:217
+#: ../src/ephy-toolbar.c:226
 msgid "Go to the previous visited page"
 msgstr "前往上一個瀏覽的頁面"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:221
+#: ../src/ephy-toolbar.c:230
 msgid "Back history"
 msgstr "上一頁的記錄"
 
-#: ../src/ephy-toolbar.c:235
+#: ../src/ephy-toolbar.c:244
 msgid "_Forward"
 msgstr "下一頁(_F)"
 
-#: ../src/ephy-toolbar.c:237
+#: ../src/ephy-toolbar.c:246
 msgid "Go to the next visited page"
 msgstr "前往下一個瀏覽的頁面"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:241
+#: ../src/ephy-toolbar.c:250
 msgid "Forward history"
 msgstr "下一頁的記錄"
 
-#: ../src/ephy-toolbar.c:254
+#: ../src/ephy-toolbar.c:263
 msgid "_Up"
 msgstr "上一層(_U)"
 
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:265
 msgid "Go up one level"
 msgstr "前往上一層的頁面"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:260
+#: ../src/ephy-toolbar.c:269
 msgid "List of upper levels"
 msgstr "所有上層目錄"
 
-#: ../src/ephy-toolbar.c:278
+#: ../src/ephy-toolbar.c:287
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "輸入想開啟的網址，或者想搜尋的片語"
 
-#: ../src/ephy-toolbar.c:294
+#: ../src/ephy-toolbar.c:303
 msgid "Zoom"
 msgstr "縮放"
 
-#: ../src/ephy-toolbar.c:296
+#: ../src/ephy-toolbar.c:305
 msgid "Adjust the text size"
 msgstr "調整文字大小"
 
-#: ../src/ephy-toolbar.c:308
+#: ../src/ephy-toolbar.c:317
 msgid "Go to the address entered in the address entry"
 msgstr "前往位址輸入欄位中指定的位址"
 
-#: ../src/ephy-toolbar.c:317
+#: ../src/ephy-toolbar.c:326
 msgid "_Home"
 msgstr "首頁(_H)"
 
-#: ../src/ephy-toolbar.c:319
+#: ../src/ephy-toolbar.c:328
 msgid "Go to the home page"
 msgstr "前往首頁"
 
-#: ../src/ephy-toolbar.c:329
+#: ../src/ephy-toolbar.c:338
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
-#: ../src/ephy-toolbar.c:331
+#: ../src/ephy-toolbar.c:340
 msgid "Open a new tab"
 msgstr "開啟新的分頁"
 
-#: ../src/ephy-toolbar.c:340
+#: ../src/ephy-toolbar.c:349
 msgid "_New Window"
 msgstr "新增視窗(_N)"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:351
 msgid "Open a new window"
 msgstr "開啟新的視窗"
 
@@ -2855,7 +2877,7 @@ msgid "Go to a specified location"
 msgstr "前往指定的位置"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:402
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "歷史記錄(_S)"
 
@@ -3113,56 +3135,56 @@ msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個隱藏彈出式視窗"
 
-#: ../src/ephy-window.c:2079
+#: ../src/ephy-window.c:2081
 #, c-format
 msgid "Open image “%s”"
 msgstr "開啟圖片“%s”"
 
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "使用圖片作為桌面背景‘%s’"
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save image “%s”"
 msgstr "儲存圖片“%s”"
 
-#: ../src/ephy-window.c:2094
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "複製圖片位址“%s”"
 
-#: ../src/ephy-window.c:2107
+#: ../src/ephy-window.c:2109
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "傳送電郵至位址“%s”"
 
-#: ../src/ephy-window.c:2113
+#: ../src/ephy-window.c:2115
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "複製電郵位址“%s”"
 
-#: ../src/ephy-window.c:2125
+#: ../src/ephy-window.c:2127
 #, c-format
 msgid "Save link “%s”"
 msgstr "儲存連結“%s”"
 
-#: ../src/ephy-window.c:2131
+#: ../src/ephy-window.c:2133
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "書籤連結“%s”"
 
-#: ../src/ephy-window.c:2137
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "複製連結位址“%s”"
 
-#: ../src/pdm-dialog.c:339
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>選擇想要清除的個人資料</b>"
 
-#: ../src/pdm-dialog.c:342
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3171,26 +3193,26 @@ msgstr ""
 "您想要清除的個人資料儲存了您所參訪過的網頁。在開始清除之前，請確定要移除哪些"
 "類型的資訊："
 
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "清除所有的個人資料"
 
 #. Cookies
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:390
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "儲存的密碼(_P)"
 
 #. Cache
-#: ../src/pdm-dialog.c:414
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "暫存檔案(_T)"
 
-#: ../src/pdm-dialog.c:430
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3198,56 +3220,56 @@ msgstr ""
 "<small><i><b>注意：</b>您不能復原這個動作。您所選擇的資料將被永遠刪除。</i></"
 "small>"
 
-#: ../src/pdm-dialog.c:626
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "Cookie 屬性"
 
-#: ../src/pdm-dialog.c:643
+#: ../src/pdm-dialog.c:669
 msgid "Content:"
 msgstr "內容"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:685
 msgid "Path:"
 msgstr "路徑："
 
-#: ../src/pdm-dialog.c:675
+#: ../src/pdm-dialog.c:701
 msgid "Send for:"
 msgstr "傳送給："
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Encrypted connections only"
 msgstr "只限加密後的連線"
 
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:710
 msgid "Any type of connection"
 msgstr "任何類型的連線"
 
-#: ../src/pdm-dialog.c:690
+#: ../src/pdm-dialog.c:716
 msgid "Expires:"
 msgstr "時限："
 
 #. Session cookie
-#: ../src/pdm-dialog.c:702
+#: ../src/pdm-dialog.c:728
 msgid "End of current session"
 msgstr "結束目前的作業階段"
 
-#: ../src/pdm-dialog.c:836
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "網域"
 
-#: ../src/pdm-dialog.c:848
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/pdm-dialog.c:1200
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "主機"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "使用者名稱"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
 msgstr "使用者密碼"
 
@@ -3776,14 +3798,6 @@ msgstr "GNOME 網頁瀏覽器網站"
 #~ msgid "The page uses an unsupported or invalid form of compression."
 #~ msgstr "此頁面使用了不支援或無效的壓縮格式。"
 
-#~ msgid ""
-#~ "This page was loading when the web browser closed unexpectedly. This "
-#~ "might happen again if you reload the page. If it does, please report the "
-#~ "problem to the %s developers."
-#~ msgstr ""
-#~ "這個網頁尚在讀取但瀏覽器已異常關閉了。如果您重新載入該頁面仍然可能再度發生"
-#~ "這個狀況。如果真的這樣，請將問題回報給 %s 開發團隊。"
-
 #~ msgid "You may find an old version:|in the Google Cache"
 #~ msgstr "於 Google 的頁庫存檔"
 
@@ -4125,9 +4139,6 @@ msgstr "GNOME 網頁瀏覽器網站"
 
 #~ msgid "%s Files"
 #~ msgstr "%s 個檔案"
-
-#~ msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-#~ msgstr "http://www.google.com.tw/search?ie=UTF-8&oe=UTF-8&q="
 
 #~ msgid "Unsafe protocol."
 #~ msgstr "不安全的協定。"
