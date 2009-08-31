@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2009-08-26 16:37-0300\n"
-"PO-Revision-Date: 2009-08-26 16:58-0300\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-08-31 15:12+0000\n"
+"PO-Revision-Date: 2009-08-31 20:36+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: UTF-8\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
@@ -56,11 +56,16 @@ msgid "Browse the web"
 msgstr "Navegue por la web"
 
 #: ../data/epiphany.desktop.in.in.h:2
+#| msgid "Epiphany (RDF)"
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Navegador web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -975,22 +980,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:463
 msgid "Save"
 msgstr "Guardar"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:605
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:619
 msgid "Download this potentially unsafe file?"
 msgstr "¿Descargar este archivo potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
+#: ../embed/ephy-embed.c:624
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1003,14 +1008,14 @@ msgstr ""
 "No es seguro abrir «%s» ya que potencialmente podría dañar sus documentos o "
 "invadir su privacidad. En su lugar, puede descargarlo."
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:632
 msgid "Open this file?"
 msgstr "¿Abrir este archivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:638
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1021,13 +1026,13 @@ msgstr ""
 "\n"
 "Puede abrir «%s» usando «%s» o guardarlo."
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:645
 msgid "Download this file?"
 msgstr "¿Descargar este archivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:650
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1039,11 +1044,11 @@ msgstr ""
 "No tiene ninguna aplicación capaz de abrir «%s». En su lugar, puede "
 "descargarlo."
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:657
 msgid "_Save As..."
 msgstr "Guardar _como…"
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:766
 msgid "Web Inspector"
 msgstr "Inspector web"
 
@@ -1394,38 +1399,38 @@ msgstr "Archivos locales"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
 #: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1131
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redireccionando a «%s»…"
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transfiriendo datos desde «%s»…"
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorización de «%s»…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1442
 msgid "Loading…"
 msgstr "Cargando…"
 
@@ -2253,23 +2258,23 @@ msgstr "Buscar:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "Sensible a _capitalización"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "Buscar siguiente"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
