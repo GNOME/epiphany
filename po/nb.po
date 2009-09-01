@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 2.27.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-08-26 16:37-0300\n"
-"PO-Revision-Date: 2009-08-26 17:15-0300\n"
+"POT-Creation-Date: 2009-09-01 12:07+0200\n"
+"PO-Revision-Date: 2009-09-01 12:09+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -55,11 +55,15 @@ msgid "Browse the web"
 msgstr "Surf på nettet"
 
 #: ../data/epiphany.desktop.in.in.h:2
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Epiphany nettleser"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "Nettleser"
 
@@ -261,7 +265,7 @@ msgstr "Aktiver myk rulling"
 #: ../data/epiphany.schemas.in.h:18
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr ""
+msgstr "Tving nye vindusforespørsler til å åpnes i faner i stedet for å bruke nye vinduer."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "Force new windows to be opened in tabs"
@@ -956,23 +960,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:463
 msgid "Save"
 msgstr "Lagre"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:605
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:619
 msgid "Download this potentially unsafe file?"
 msgstr "Vil du laste ned denne potensielt utrygge filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
-#, fuzzy, c-format
+#: ../embed/ephy-embed.c:624
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
@@ -981,17 +985,16 @@ msgid ""
 msgstr ""
 "Filtype: «%s».\n"
 "\n"
-"Det er utrygt å åpne «%s» da det er mulig at denne kan skade dine dokumenter "
-"eller "
+"Det er utrygt å åpne «%s» da det er mulig at denne kan skade dine dokumenter eller misbruke privat informasjon. Du kan laste den ned i stedet."
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:632
 msgid "Open this file?"
 msgstr "Åpne denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:638
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1002,13 +1005,13 @@ msgstr ""
 "\n"
 "Du kan åpne «%s» med «%s» eller lagre den."
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:645
 msgid "Download this file?"
 msgstr "Last ned denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:650
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1019,11 +1022,11 @@ msgstr ""
 "\n"
 "Du har ingen programmer som kan åpne «%s». Du kan laste den ned i stedet."
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:657
 msgid "_Save As..."
 msgstr "_Lagre som..."
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:766
 msgid "Web Inspector"
 msgstr "Inspeksjon av nettsider"
 
@@ -1374,38 +1377,38 @@ msgstr "Lokale filer"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
 #: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "Tom side"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1131
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Omdirigerer til «%s»..."
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Overfører data fra «%s»..."
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Venter på autorisering fra «%s»..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster «%s»..."
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1442
 msgid "Loading…"
 msgstr "Laster..."
 
@@ -2236,23 +2239,23 @@ msgstr "Finn:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "_Skill mellom små/store bokstaver"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "Finn forrige"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "Finn forrige oppføring av søketeksten"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "Finn neste"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "Finn neste oppføring av søketeksten"
 
@@ -2500,7 +2503,7 @@ msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
 "happen again if you reload the page. If it does, please report the problem "
 "to the %s developers."
-msgstr ""
+msgstr "Denne siden holdt på å laste når nettleseren uventet ble lukket. Dette kan skje igjen hvis du laster siden på nytt. Vennligst rapporter problemet til utviklerene av %s hvis dette skjer."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
