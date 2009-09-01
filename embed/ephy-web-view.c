@@ -2,7 +2,7 @@
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2008, 2009 Gustavo Noronha Silva
- *  Copyright © 2009 Igalia S.L.
+ *  Copyright © 2009, 2010 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1997,17 +1997,142 @@ load_status_cb (WebKitWebView *web_view,
   g_object_thaw_notify (object);
 }
 
-static void set_main_frame_load_error (EphyWebView *view,
-                                       const char *uri)
+static char *
+get_file_content_as_base64 (const char *path)
 {
-  char *message;
+  GFile *file;
+  GFileInfo *file_info;
+  const char *image_type;
+  char *image_raw;
+  gsize len;
+  char *image_data;
+  char *image64;
 
-  message = g_strdup_printf (_("A problem occurred while loading %s"),
-                                   uri);
-  ephy_web_view_set_title (view, message);
-  g_free (message);
+  file = g_file_new_for_path (path);
+  file_info = g_file_query_info (file,
+                                 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 NULL, NULL);
+  image_type = g_file_info_get_content_type (file_info);
 
+  g_object_unref (file);
+  g_object_unref (file_info);
+
+  g_file_get_contents (path, &image_raw, &len, NULL);
+  image_data = g_base64_encode ((guchar *) image_raw, len);
+  image64 = g_strdup_printf ("data:%s;base64,%s", image_type, image_data);
+
+  g_free (image_raw);
+  g_free (image_data);
+
+  return image64;
+}
+
+/**
+ * ephy_web_view_load_error_page:
+ * @view: an #EphyWebView
+ * @uri: uri that caused the failure
+ * @page: one of #EphyWebViewErrorPage
+ * @error: a GError to inspect, or %NULL
+ *
+ * Loads an error page appropiate for @page in @view.
+ *
+ **/
+void
+ephy_web_view_load_error_page (EphyWebView *view,
+                               const char *uri,
+                               EphyWebViewErrorPage page,
+                               GError *error)
+{
+  GString *html = g_string_new ("");
+  const char *reason;
+
+  char *hostname;
+  char *lang;
+
+  char *page_title;
+  char *msg_title;
+  char *msg;
+  char *button_label;
+  const char *html_file;
+  const char *stock_icon;
+
+  GtkIconInfo *icon_info;
+  char *image_data;
+
+  char *template;
+
+  if (error)
+    reason = error->message;
+  else
+    reason = _("None specified");
+
+  hostname = ephy_string_get_host_name (uri);
+
+  lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
+  g_strdelimit (lang, "_-@", '\0');
+
+  switch (page) {
+    case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
+      page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
+
+      msg_title = g_strdup (_("Oops! It was impossible to load this website"));
+      msg = g_strdup_printf (_("The website at <strong>%s</strong> is probably unavailable, the precise error was:<br/><br/><em>%s</em>.<br/><br/> If this persist you might want to check your internet connection or if the website at <strong>%s</strong> is working correctly."), 
+                             uri, reason, hostname);
+
+      button_label = g_strdup (_("Try again"));
+
+      html_file = ephy_file ("error.html");
+      stock_icon = GTK_STOCK_DIALOG_ERROR;
+      break;
+    case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
+      page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
+
+      msg_title = g_strdup (_("Oops! This site might have caused Epiphany to close unexpectedly"));
+      msg = g_strdup_printf (_("This page was loading when the web browser closed unexpectedly.<br/> This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers."),
+                             LSB_DISTRIBUTOR);
+
+      button_label = g_strdup (_("Load again anyway"));
+
+      html_file = ephy_file ("recovery.html");
+      stock_icon = GTK_STOCK_DIALOG_INFO;
+      break;
+    default:
+      return;
+      break;
+  }
+  g_free (hostname);
+
+  icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                          stock_icon,
+                                          48,
+                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+
+  image_data = get_file_content_as_base64 (gtk_icon_info_get_filename (icon_info));
+
+  g_file_get_contents (html_file, &template, NULL, NULL);
+
+  ephy_web_view_set_title (view, page_title);
   _ephy_web_view_set_icon_address (view, NULL);
+
+  g_string_printf (html, template, lang, lang,
+                   page_title,
+                   gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr",
+                   uri,
+                   image_data,
+                   msg_title, msg, button_label);
+
+  g_free (template);
+  g_free (lang);
+  g_free (page_title);
+  g_free (msg_title);
+  g_free (msg);
+  g_free (button_label);
+  g_free (image_data);
+
+  webkit_web_view_load_string (WEBKIT_WEB_VIEW (view),
+                               html->str, "text/html", "utf8", uri);
+  g_string_free (html, TRUE);
 }
 
 static gboolean
@@ -2023,8 +2148,8 @@ load_error_cb (WebKitWebView *web_view,
     return FALSE;
 
   if (error->domain == SOUP_HTTP_ERROR) {
-    set_main_frame_load_error (view, uri);
-    return FALSE;
+    ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
+    return TRUE;
   }
 
   g_return_val_if_fail ((error->domain == WEBKIT_NETWORK_ERROR) ||
@@ -2045,8 +2170,8 @@ load_error_cb (WebKitWebView *web_view,
   case WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN:
   case WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE:
   case WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED:
-    set_main_frame_load_error (view, uri);
-    break;
+    ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
+    return TRUE;
   case WEBKIT_NETWORK_ERROR_CANCELLED:
     {
       EphyWebViewPrivate *priv = view->priv;
@@ -2092,6 +2217,7 @@ close_web_view_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
+
 
 static void
 adj_changed_cb (GtkAdjustment *adj, EphyWebView *view)

@@ -276,10 +276,12 @@ ephy_file (const char *filename)
 		SHARE_UNINSTALLED_DIR "/",
 		SHARE_UNINSTALLED_DIR "/glade/",
 		SHARE_UNINSTALLED_DIR "/art/",
+		SHARE_UNINSTALLED_DIR "/pages/",
 #endif
 		SHARE_DIR "/",
 		SHARE_DIR "/glade/",
-		SHARE_DIR "/art/"
+		SHARE_DIR "/art/",
+		SHARE_DIR "/pages/"
 	};
 
 	g_assert (files != NULL);

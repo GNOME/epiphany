@@ -86,6 +86,11 @@ typedef enum
 	EPHY_WEB_VIEW_DOCUMENT_OTHER
 } EphyWebViewDocumentType;
 
+typedef enum {
+  EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR,
+  EPHY_WEB_VIEW_ERROR_PAGE_CRASH
+} EphyWebViewErrorPage;
+
 struct _EphyWebView
 {
   WebKitWebView parent;
@@ -172,6 +177,11 @@ const char *               ephy_web_view_get_title                (EphyWebView  
 gboolean                   ephy_web_view_can_go_up                (EphyWebView               *view);
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
+
+void                       ephy_web_view_load_error_page          (EphyWebView		     *view,
+                                                                   const char		     *uri,
+                                                                   EphyWebViewErrorPage	      page,
+                                                                   GError		     *error);
 
 
 /* These should be private */

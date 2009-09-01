@@ -432,6 +432,7 @@ data/bme.desktop.in
 data/glade/Makefile
 data/icons/Makefile
 data/art/Makefile
+data/pages/Makefile
 data/ui/Makefile
 doc/Makefile
 doc/reference/Makefile

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+  Copyright © 2010 Vinicius Depizzol
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%s" lang="%s">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>%s</title>
+  <style type="text/css">
+    body {
+      margin: 0 auto;
+      padding: 7em;
+      font: message-box;
+      display: table;
+      direction: %s;
+    }
+    div#centeredContent {
+      display: table;
+      margin: 0 auto;
+    }
+    div#centeredContent h1 {
+      display: table-row;
+    }
+    div#centeredContent div {
+      display: table-row-group;
+    }
+    h1 {
+      font-size: 180%;
+    }
+    img {
+      vertical-align: middle;
+      float: left;
+      margin-right: 20px;
+      width: 50px;
+      height: 50px;
+    }
+    p.buttonbox {
+      text-align: right;
+    }
+  </style>
+  <script type="text/javascript">
+    function load_anyway()
+    {
+      window.location = '%s';
+    }
+  </script>
+</head>
+<body>
+<img src="%s"/>
+<div id="centeredContent">
+  <div>
+    <h1 style="text-align:left;">%s</h1>
+    <p class="message">%s</p>
+    <p class="buttonbox">
+      <button onclick="javascript:load_anyway()">%s</button></p>
+  </div>
+</div>
+</body>
+</html>
