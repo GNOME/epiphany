@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2006 Christian Persch
@@ -431,6 +432,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	EphyWindow *window;
 	EphyEmbed *embed = NULL;
 	gboolean in_new_window = TRUE;
+	gboolean open_page = FALSE;
 	gboolean jump_to;
 	gboolean active_is_blank = FALSE;
 	GtkWidget *nb;
@@ -438,11 +440,13 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	gboolean is_empty = FALSE;
 	EphyToolbar *toolbar;
 
+	if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
 	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
 	g_return_val_if_fail (in_new_window || !is_popup, NULL);
+	g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
@@ -568,12 +572,14 @@ ephy_shell_new_tab (EphyShell *shell,
 		    EphyNewTabFlags flags)
 {
 	EphyEmbed *embed;
-	WebKitNetworkRequest *request = webkit_network_request_new (url);
+	WebKitNetworkRequest *request = url ? webkit_network_request_new (url) : NULL;
 
 	embed = ephy_shell_new_tab_full (shell, parent_window,
 					 previous_embed, request, flags,
 					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
-        g_object_unref (request);
+
+	if (request)
+		g_object_unref (request);
 
 	return embed;
 }
