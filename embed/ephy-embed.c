@@ -238,16 +238,20 @@ load_status_changed_cb (WebKitWebView *view,
       security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
-  } else {
+  } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
     EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
-    /* FIXME: this does not work for URLs opened without typing
-       (middle click, etc). We should use get_address, but WebKit does
-       not update its URI property until LOAD_COMMITTED, so we'll get
-       NULL here. We need to either change WebKit or fetch the address
-       we are trying to load from our side. */
-    const char *loading_uri = ephy_web_view_get_typed_address (EPHY_WEB_VIEW (view));
+    const char *loading_uri;
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
+      WebKitWebFrame *frame;
+      WebKitWebDataSource *source;
+      WebKitNetworkRequest *request;
+
+      frame = webkit_web_view_get_main_frame (view);
+      source = webkit_web_frame_get_provisional_data_source (frame);
+      request = webkit_web_data_source_get_initial_request (source);
+      loading_uri = webkit_network_request_get_uri (request);
+      
       estate = (EphyWebViewNetState) (estate |
                                       EPHY_WEB_VIEW_STATE_START |
                                       EPHY_WEB_VIEW_STATE_NEGOTIATING |
@@ -256,6 +260,8 @@ load_status_changed_cb (WebKitWebView *view,
       
       g_signal_emit_by_name (EPHY_WEB_VIEW (view), "new-document-now", loading_uri);
     } else if (status == WEBKIT_LOAD_FINISHED) {
+      loading_uri = ephy_web_view_get_address (EPHY_WEB_VIEW (view));
+
       estate = (EphyWebViewNetState) (estate |
                                       EPHY_WEB_VIEW_STATE_STOP |
                                       EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
