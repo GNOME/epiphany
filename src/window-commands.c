@@ -58,7 +58,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <webkit/webkit.h>
-#include <webkit/webkitwebdatasource.h>
 
 static void
 page_setup_done_cb (GtkPageSetup *setup,
