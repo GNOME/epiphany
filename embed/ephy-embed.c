@@ -251,7 +251,7 @@ load_status_changed_cb (WebKitWebView *view,
       source = webkit_web_frame_get_provisional_data_source (frame);
       request = webkit_web_data_source_get_initial_request (source);
       loading_uri = webkit_network_request_get_uri (request);
-      
+
       estate = (EphyWebViewNetState) (estate |
                                       EPHY_WEB_VIEW_STATE_START |
                                       EPHY_WEB_VIEW_STATE_NEGOTIATING |
