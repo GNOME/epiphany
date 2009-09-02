@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-08-26 16:37-0300\n"
-"PO-Revision-Date: 2009-08-26 16:40-0300\n"
+"POT-Creation-Date: 2009-09-02 16:39+0200\n"
+"PO-Revision-Date: 2009-09-02 16:39+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -59,11 +59,15 @@ msgid "Browse the web"
 msgstr "تصفح الوِب"
 
 #: ../data/epiphany.desktop.in.in.h:2
+msgid "Epiphany"
+msgstr "إبِفَني"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "متصفّح الوِب إبِفَني"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "متصفّح وِب"
 
@@ -963,22 +967,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "متبقّ"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:463
 msgid "Save"
 msgstr "احفظ"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:605
 msgctxt "file type"
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:619
 msgid "Download this potentially unsafe file?"
 msgstr "تنزيل هذا الملف المحتمل خطره؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
+#: ../embed/ephy-embed.c:624
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -991,14 +995,14 @@ msgstr ""
 "من الخطر فتح  “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:632
 msgid "Open this file?"
 msgstr "فتح الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:638
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1009,13 +1013,13 @@ msgstr ""
 "\n"
 "يمكن فتح “%s” ب “%s” أو حفظه."
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:645
 msgid "Download this file?"
 msgstr "تنزيل الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:650
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1026,11 +1030,11 @@ msgstr ""
 "\n"
 "لا يوجد تطبيق لفتح “%s”. يمكنك حفظه."
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:657
 msgid "_Save As..."
 msgstr "ا_حفظ ك‍…"
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:766
 msgid "Web Inspector"
 msgstr "فاحِص الوِب"
 
@@ -1381,38 +1385,38 @@ msgstr "الملفات المحلية"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
 #: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1131
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "إعادة توجيه إلى “%s”…"
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "نقل البيانات من “%s”…"
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "انتظار التفويض من “%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
 #, c-format
 msgid "Loading “%s”…"
 msgstr "تحميل “%s”…"
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1442
 msgid "Loading…"
 msgstr "تحميل…"
 
@@ -2253,23 +2257,23 @@ msgstr "ابحث:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "_حسّاس لحالة الأحرف"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "ابحث عن السابق"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "ابحث عن التواجد السابق لعبارة البحث"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "ابحث عن التالي"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "ابحث عن التواجد التالي للعبارة"
 
@@ -2385,7 +2389,7 @@ msgstr "المواقع"
 msgid "Date"
 msgstr "التاريخ"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:954
 msgid "GNOME Web Browser"
 msgstr "متصفّح وِب جنوم"
 
@@ -2526,15 +2530,15 @@ msgstr ""
 "كانت يتم تحميل هذه الصفحة عند اتغلاق المتصفح آليا. يمكن ان يحدث هذا مجددا "
 "اذا اهدت تحميلها. اذا حدث هذا، الرجاء اتصل بمتطوري %s."
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar extension required"
 msgstr "مطلوب امتداد الشريط الجانبي"
 
-#: ../src/ephy-shell.c:173
+#: ../src/ephy-shell.c:174
 msgid "Sidebar Extension Required"
 msgstr "مطلوب امتداد الشريط الجانبي"
 
-#: ../src/ephy-shell.c:177
+#: ../src/ephy-shell.c:178
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "الوصلة التي نقرتها تحتاج لتثبيت امتداد الشريط الجانبي."
 
@@ -3132,11 +3136,11 @@ msgstr "ستخسر تلك المعلومات إذا أغلقت المستند."
 msgid "Close _Document"
 msgstr "أغلق ال_مستند"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
+#: ../src/ephy-window.c:1489 ../src/window-commands.c:287
 msgid "Open"
 msgstr "افتح"
 
-#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
+#: ../src/ephy-window.c:1491 ../src/window-commands.c:313
 msgid "Save As"
 msgstr "احفظ ك‍"
 
@@ -3414,7 +3418,7 @@ msgstr[5] "لغات النظام  (%s)"
 msgid "Select a Directory"
 msgstr "اختر دليلا"
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:854
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3425,7 +3429,7 @@ msgstr ""
 "العمومية العامة لجنو والتي نشرتها منظمة البرمجيات الحرة؛ سواء الإصدارة 2 من "
 "الرخصة أو أي إصدارة بعدها حسب رغبتك."
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:858
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3436,7 +3440,7 @@ msgstr ""
 "حتى أي ضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك "
 "مراجعة الرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:862
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3447,20 +3451,20 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301  USA."
 
-#: ../src/window-commands.c:827 ../src/window-commands.c:843
-#: ../src/window-commands.c:854
+#: ../src/window-commands.c:908 ../src/window-commands.c:924
+#: ../src/window-commands.c:935
 msgid "Contact us at:"
 msgstr "اتصل بنا على:"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:911
 msgid "Contributors:"
 msgstr "المساهمون:"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:914
 msgid "Past developers:"
 msgstr "المطورون السابقون:"
 
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:944
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3477,7 +3481,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:970
 msgid "translator-credits"
 msgstr ""
 "فريق عربآيز للترجمة http://www.arabeyes.org:\n"
@@ -3486,7 +3490,7 @@ msgstr ""
 "محمد مجدي\t<alnokta@yahoo.com>\n"
 "خالد حسني\t<khaledhosny@eglug.org>"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:973
 msgid "GNOME Web Browser Website"
 msgstr "موقع متصفح وِب جنوم"
 
