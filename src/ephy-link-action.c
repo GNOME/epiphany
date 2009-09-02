@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2004 Christian Persch
  *  Copyright © 2005 Philip Langdale
@@ -84,9 +85,13 @@ get_event_widget (GtkWidget *proxy)
 		 * The menu tool button's button is the first child
 		 * of the child hbox.
 		 */
-		GtkContainer *container =
-			GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (proxy)));
-		widget = GTK_WIDGET (gtk_container_get_children (container)->data);
+		GtkContainer *container;
+		GList *children;
+	  
+		container = GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (proxy)));
+		children = gtk_container_get_children (container);
+		widget = GTK_WIDGET (children->data);
+		g_list_free (children);
 	}
 	else if (GTK_IS_TOOL_BUTTON (proxy))
 	{
