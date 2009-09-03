@@ -648,7 +648,7 @@ session_command_open_uris (EphySession *session,
 	{
 		const char *url = uris[i];
 		EphyNewTabFlags page_flags;
-		WebKitNetworkRequest *request;
+		WebKitNetworkRequest *request = NULL;
 
 		if (url[0] == '\0')
 		{
@@ -657,9 +657,9 @@ session_command_open_uris (EphySession *session,
 		else
 		{
 			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+			request = webkit_network_request_new (url);
 		}
 
-		request = webkit_network_request_new (url);
 		embed = ephy_shell_new_tab_full (shell, window,
 						 NULL /* parent tab */,
 						 request,
@@ -667,7 +667,8 @@ session_command_open_uris (EphySession *session,
 						 EPHY_WEB_VIEW_CHROME_ALL,
 						 FALSE /* is popup? */,
 						 user_time);
-		g_object_unref (request);
+		if (request)
+			g_object_unref (request);
 
 		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 	}
