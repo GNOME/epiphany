@@ -67,8 +67,6 @@ struct _EphyWebViewPrivate {
   char *address;
   char *typed_address;
   char *title;
-  int cur_requests;
-  int total_requests;
   char *loading_title;
   char *status_message;
   char *link_message;
@@ -1392,9 +1390,6 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       GObject *object = G_OBJECT (view);
 
       g_object_freeze_notify (object);
-
-      priv->total_requests = 0;
-      priv->cur_requests = 0;
 
       ensure_page_info (view, uri);
 
