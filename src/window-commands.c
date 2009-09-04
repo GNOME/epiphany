@@ -690,7 +690,10 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 
 	/* We create a new GString here because we need to make sure
 	 * we keep writing in case of partial writes */
-	data = g_string_new_len (const_data->str, const_data->len);
+	if (const_data)
+		data = g_string_new_len (const_data->str, const_data->len);
+	else
+		data = g_string_new_len ("", 0);
 
 	g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
 				     data->str, data->len,
