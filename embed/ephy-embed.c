@@ -240,7 +240,7 @@ load_status_changed_cb (WebKitWebView *view,
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
   } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
     EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
-    const char *loading_uri;
+    const char *loading_uri = NULL;
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
       WebKitWebFrame *frame;
