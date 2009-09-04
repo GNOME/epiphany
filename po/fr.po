@@ -26,10 +26,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-08-28 13:13+0000\n"
-"PO-Revision-Date: 2009-08-29 00:24+0100\n"
-"Last-Translator: Nicolas Repentin <nicolas@shivaserv.fr>\n"
+"product=epiphany\n"
+"POT-Creation-Date: 2009-09-04 21:36+0200\n"
+"PO-Revision-Date: 2009-09-04 21:37+0200\n"
+"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,11 +72,15 @@ msgid "Browse the web"
 msgstr "Naviguer sur le Web"
 
 #: ../data/epiphany.desktop.in.in.h:2
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Navigateur Web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "Navigateur Web"
 
@@ -995,22 +999,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restant"
 
-#: ../embed/ephy-embed.c:463
+#: ../embed/ephy-embed.c:469
 msgid "Save"
 msgstr "Enregistrer"
 
-#: ../embed/ephy-embed.c:605
+#: ../embed/ephy-embed.c:611
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../embed/ephy-embed.c:619
+#: ../embed/ephy-embed.c:625
 msgid "Download this potentially unsafe file?"
 msgstr "Télécharger ce fichier potentiellement non sûr ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:624
+#: ../embed/ephy-embed.c:630
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1024,14 +1028,14 @@ msgstr ""
 "endommager vos documents ou violer votre sphère privée. Vous pourriez plutôt "
 "le télécharger."
 
-#: ../embed/ephy-embed.c:632
+#: ../embed/ephy-embed.c:638
 msgid "Open this file?"
 msgstr "Ouvrir ce fichier ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:638
+#: ../embed/ephy-embed.c:644
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1042,13 +1046,13 @@ msgstr ""
 "\n"
 "Vous pouvez ouvrir « %s » en utilisant « %s » ou l'enregistrer."
 
-#: ../embed/ephy-embed.c:645
+#: ../embed/ephy-embed.c:651
 msgid "Download this file?"
 msgstr "Télécharger ce fichier ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:650
+#: ../embed/ephy-embed.c:656
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1060,11 +1064,11 @@ msgstr ""
 "Vous n'avez aucune application capable d'ouvrir « %s ». Vous pouvez plutôt le "
 "télécharger."
 
-#: ../embed/ephy-embed.c:657
+#: ../embed/ephy-embed.c:663
 msgid "_Save As..."
 msgstr "_Enregistrer sous…"
 
-#: ../embed/ephy-embed.c:766
+#: ../embed/ephy-embed.c:772
 msgid "Web Inspector"
 msgstr "Inspecteur Web"
 
@@ -1416,38 +1420,38 @@ msgstr "Fichiers locaux"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
-#: ../src/ephy-session.c:1341
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2127
+#: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Page vide"
 
-#: ../embed/ephy-web-view.c:1131
+#: ../embed/ephy-web-view.c:1129
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.fr/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1322
+#: ../embed/ephy-web-view.c:1320
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redirection vers « %s »…"
 
-#: ../embed/ephy-web-view.c:1324
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transfert de données depuis « %s »…"
 
-#: ../embed/ephy-web-view.c:1326
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "En attente d'autorisation de « %s »…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
+#: ../embed/ephy-web-view.c:1330 ../embed/ephy-web-view.c:1435
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Chargement de « %s »…"
 
-#: ../embed/ephy-web-view.c:1442
+#: ../embed/ephy-web-view.c:1437
 msgid "Loading…"
 msgstr "Chargement…"
 
@@ -2410,7 +2414,7 @@ msgstr "Sites"
 msgid "Date"
 msgstr "Date"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:956
 msgid "GNOME Web Browser"
 msgstr "Navigateur Web de GNOME"
 
@@ -2544,7 +2548,7 @@ msgid "Crash Recovery"
 msgstr "Récupération après un arrêt brutal"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1285
+#: ../src/ephy-session.c:1286
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -2555,15 +2559,15 @@ msgstr ""
 "inopinément. Ceci peut se reproduire si vous rechargez la page. Si c'est le "
 "cas, veuillez rapporter le problème aux développeurs %s."
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar extension required"
 msgstr "L'extension panneau latéral est requise"
 
-#: ../src/ephy-shell.c:173
+#: ../src/ephy-shell.c:174
 msgid "Sidebar Extension Required"
 msgstr "Extension panneau latéral requise"
 
-#: ../src/ephy-shell.c:177
+#: ../src/ephy-shell.c:178
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Le lien sur lequel vous avez cliqué nécessite l'installation de l'extension "
@@ -3166,11 +3170,11 @@ msgstr "Si vous fermez malgré tout le document, vous perdrez ces informations."
 msgid "Close _Document"
 msgstr "_Fermer le document"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
+#: ../src/ephy-window.c:1489 ../src/window-commands.c:286
 msgid "Open"
 msgstr "Ouvrir"
 
-#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
+#: ../src/ephy-window.c:1491 ../src/window-commands.c:312
 msgid "Save As"
 msgstr "Enregistrer sous"
 
@@ -3442,7 +3446,7 @@ msgstr[1] "Langues du système (%s)"
 msgid "Select a Directory"
 msgstr "Sélectionnez un répertoire"
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:856
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3454,7 +3458,7 @@ msgstr ""
 "telle que publiée par la Free Software Foundation ; soit la version 2 de la "
 "licence, soit (à votre convenance) une version ultérieure."
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:860
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3466,7 +3470,7 @@ msgstr ""
 "COMMERCIALISATION ou D'ADÉQUATION À UN USAGE PARTICULIER. Voyez la Licence "
 "Publique Générale GNU pour plus de détails."
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:864
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3477,20 +3481,20 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  "
 "USA"
 
-#: ../src/window-commands.c:827 ../src/window-commands.c:843
-#: ../src/window-commands.c:854
+#: ../src/window-commands.c:910 ../src/window-commands.c:926
+#: ../src/window-commands.c:937
 msgid "Contact us at:"
 msgstr "Contactez-nous à :"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:913
 msgid "Contributors:"
 msgstr "Contributeurs :"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:916
 msgid "Past developers:"
 msgstr "Anciens développeurs :"
 
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:946
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3508,7 +3512,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:972
 msgid "translator-credits"
 msgstr ""
 "Christophe Fergeau <teuf@users.sourceforge.net>\n"
@@ -3529,662 +3533,6 @@ msgstr ""
 "Claude Paroz <claude@2xlibre.net>\n"
 "Yannick Tailliez <ytdispatch-libre02@yahoo.com>"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:975
 msgid "GNOME Web Browser Website"
 msgstr "Site Web du navigateur Web de GNOME"
-
-#~ msgid "Opening %s"
-#~ msgstr "Ouverture de %s"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "Ouverture de %d élément"
-#~ msgstr[1] "Ouverture de %d éléments"
-
-#~ msgid "_Username:"
-#~ msgstr "Nom d'_utilisateur :"
-
-#~ msgid "_Domain:"
-#~ msgstr "_Domaine :"
-
-#~ msgid "_New password:"
-#~ msgstr "_Nouveau mot de passe :"
-
-#~ msgid "Con_firm password:"
-#~ msgstr "_Confirmez le mot de passe :"
-
-#~ msgid "Password quality:"
-#~ msgstr "Qualité du mot de passe :"
-
-#~ msgid "Do not remember this password"
-#~ msgstr "Ne pas mémoriser ce mot de passe"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "Mémo_riser le mot de passe pour cette session"
-
-#~ msgid "Save password in _keyring"
-#~ msgstr "Enregistrer le mot de passe dans le _trousseau de clés"
-
-#~ msgid "_History"
-#~ msgstr "_Historique"
-
-#~ msgid "Fonts"
-#~ msgstr "Polices"
-
-#~ msgid "For l_anguage:"
-#~ msgstr "Pour la _langue :"
-
-#~ msgid "_Detailed Font Settings…"
-#~ msgstr "Paramètres _détaillés des polices…"
-
-#~ msgid "_Fixed width:"
-#~ msgstr "Largeur _constante :"
-
-#~ msgid "_Variable width:"
-#~ msgstr "Largeur _variable :"
-
-#~ msgid "Download completed"
-#~ msgstr "Téléchargement terminé"
-
-#~ msgid "“%s” Protocol is not Supported"
-#~ msgstr "Le protocole « %s » n'est pas pris en charge"
-
-#~ msgid "“%s” protocol is not supported."
-#~ msgstr "Le protocole « %s » n'est pas pris en charge."
-
-#~ msgid ""
-#~ "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
-#~ msgstr ""
-#~ "Les protocoles pris en charge sont « http », « https », « ftp », « file», "
-#~ "« smb » et « sftp »."
-
-#~ msgid "File “%s” not Found"
-#~ msgstr "Fichier « %s » non trouvé"
-
-#~ msgid "File “%s” not found."
-#~ msgstr "Fichier « %s » non trouvé."
-
-#~ msgid "Check the location of the file and try again."
-#~ msgstr "Vérifiez l'emplacement du fichier et essayez à nouveau."
-
-#~ msgid "“%s” Could not be Found"
-#~ msgstr "Impossible de trouver « %s »"
-
-#~ msgid "“%s” could not be found."
-#~ msgstr "Impossible de trouver « %s »."
-
-#~ msgid ""
-#~ "Check that you are connected to the internet, and that the address is "
-#~ "correct."
-#~ msgstr ""
-#~ "Vérifiez que vous êtes connecté à Internet et que l'adresse est correcte."
-
-#~ msgid "If this page used to exist, you may find an archived version:"
-#~ msgstr ""
-#~ "Si cette page a existé, vous pourriez trouver une version archivée :"
-
-#~ msgid "“%s” Refused the Connection"
-#~ msgstr "« %s » a refusé la connexion"
-
-#~ msgid "“%s” refused the connection."
-#~ msgstr "« %s » a refusé la connexion."
-
-#~ msgid "Likely causes of the problem are"
-#~ msgstr "Les causes probables du problème sont"
-
-#~ msgid ""
-#~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
-#~ "Services Configuration Tool in System > Control Center, or</"
-#~ "ul><ul><li>the port number %d is wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>le service %s n'est pas démarré.</li>Essayez de le démarrer en "
-#~ "utilisant l'outil de configuration des services dans Système > Centre de "
-#~ "contrôle, ou</ul><ul><li>le numéro de port %d est erroné.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>un service n'est pas démarré ou</li><li>le numéro de port %d est "
-#~ "erroné.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>you got the port number "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>un service n'est pas démarré ou</li><li>le numéro de port est "
-#~ "erroné.</li></ul>"
-
-#~ msgid ""
-#~ "The server may be busy or you may have a network connection problem. Try "
-#~ "again later."
-#~ msgstr ""
-#~ "Le serveur est peut-être occupé ou vous avez un problème de connexion. "
-#~ "Essayez à nouveau plus tard."
-
-#~ msgid "There may be an old version of the page you wanted:"
-#~ msgstr ""
-#~ "Il existe peut-être une ancienne version de la page que vous désirez :"
-
-#~ msgid "“%s” Interrupted the Connection"
-#~ msgstr "« %s » a interrompu la connexion"
-
-#~ msgid "“%s” interrupted the connection."
-#~ msgstr "« %s » a interrompu la connexion."
-
-#~ msgid "“%s” is not Responding"
-#~ msgstr "« %s » ne répond pas"
-
-#~ msgid "“%s” is not responding."
-#~ msgstr "« %s » ne répond pas."
-
-#~ msgid "The connection was lost because the server took too long to respond."
-#~ msgstr ""
-#~ "La connexion a été coupée car le serveur a mis trop de temps à répondre."
-
-#~ msgid "Invalid Address"
-#~ msgstr "Adresse non valide"
-
-#~ msgid "Invalid address."
-#~ msgstr "Adresse non valide."
-
-#~ msgid "The address you entered is not valid."
-#~ msgstr "L'adresse que vous avez saisie n'est pas valide."
-
-#~ msgid "“%s” Redirected Too Many Times"
-#~ msgstr "« %s » a été redirigé de trop nombreuses fois"
-
-#~ msgid "This page cannot load because of a problem with the Web site."
-#~ msgstr ""
-#~ "Impossible de charger cette page en raison d'un problème technique avec "
-#~ "le site Web."
-
-#~ msgid "The server “%s” is redirecting in a way that will never complete."
-#~ msgstr ""
-#~ "La redirection causée par le serveur « %s » occasionne une boucle sans fin."
-
-#~ msgid "“%s” Requires an Encrypted Connection"
-#~ msgstr "« %s » nécessite une connexion chiffrée"
-
-#~ msgid "“%s” requires an encrypted connection."
-#~ msgstr "« %s » nécessite une connexion chiffrée."
-
-#~ msgid ""
-#~ "The document could not be loaded because encryption support is not "
-#~ "installed."
-#~ msgstr ""
-#~ "Le document ne peut être chargé car la prise en charge du chiffrement "
-#~ "n'est pas installée."
-
-#~ msgid "“%s” Dropped the Connection"
-#~ msgstr "« %s » a fermé la connexion"
-
-#~ msgid "“%s” dropped the connection."
-#~ msgstr "« %s » a fermé la connexion."
-
-#~ msgid "The server dropped the connection before any data could be read."
-#~ msgstr ""
-#~ "Le serveur a fermé la connexion avant qu'aucune donnée n'ait pu être lue."
-
-#~ msgid "Cannot Load Document Whilst Working Offline"
-#~ msgstr "Ne peut charger ce document en mode déconnecté"
-
-#~ msgid "Cannot load document whilst working offline."
-#~ msgstr "Ne peut charger le document en mode déconnecté."
-
-#~ msgid "To view this document, disable “Work Offline” and try again."
-#~ msgstr ""
-#~ "Pour afficher ce document, désactivez « Travailler en mode déconnecté » et "
-#~ "essayez à nouveau."
-
-#~ msgid "Access Denied to Port “%d” of “%s”"
-#~ msgstr "Accès refusé au port « %d » de « %s »"
-
-#~ msgid "Access denied to port “%d” of “%s”."
-#~ msgstr "Accès refusé au port « %d » de « %s »"
-
-#~ msgid ""
-#~ "This address uses a network port which is normally used for purposes "
-#~ "other than Web browsing."
-#~ msgstr ""
-#~ "Cette adresse utilise un port réseau qui est normalement réservé à un "
-#~ "usage autre que la navigation sur le Web."
-
-#~ msgid "The request has been cancelled for your protection."
-#~ msgstr "La requête a été annulée pour votre protection."
-
-#~ msgid "Could not Connect to Proxy Server"
-#~ msgstr "Impossible de se connecter au serveur mandataire"
-
-#~ msgid "Could not connect to proxy server."
-#~ msgstr "Impossible de se connecter au serveur mandataire."
-
-#~ msgid ""
-#~ "Check your proxy server settings. If the connection still fails, there "
-#~ "may be a problem with your proxy server or your network connection."
-#~ msgstr ""
-#~ "Vérifiez vos configurations de serveur mandataire. Si la connexion échoue "
-#~ "encore, il se peut qu'il y ait un problème au niveau de votre serveur "
-#~ "mandataire ou de votre connexion réseau."
-
-#~ msgid "Could not Display Content"
-#~ msgstr "Impossible d'afficher le contenu"
-
-#~ msgid "Could not display content."
-#~ msgstr "Impossible d'afficher le contenu."
-
-#~ msgid "The page uses an unsupported or invalid form of compression."
-#~ msgstr ""
-#~ "Cette page utilise une forme de compression non prise en charge ou non "
-#~ "valide."
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "dans le cache de Google"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "dans Internet Archives"
-
-#~ msgid "_Abort Script"
-#~ msgstr "_Arrêter le script"
-
-#~ msgid "Don't Save"
-#~ msgstr "Ne pas enregistrer"
-
-#~ msgid "Text files"
-#~ msgstr "Fichiers texte"
-
-#~ msgid "XML files"
-#~ msgstr "Fichiers XML"
-
-#~ msgid "XUL files"
-#~ msgstr "Fichiers XUL"
-
-#~ msgid "Accept cookie from %s?"
-#~ msgstr "Accepter le cookie de %s ?"
-
-#~ msgid "Accept Cookie?"
-#~ msgstr "Accepter le cookie ?"
-
-#~ msgid "The site wants to modify an existing cookie."
-#~ msgstr "Le site veut modifier un cookie existant."
-
-#~ msgid "The site wants to set a cookie."
-#~ msgstr "Le site veut définir un cookie."
-
-#~ msgid "The site wants to set a second cookie."
-#~ msgstr "Le site veut définir un second cookie."
-
-#~ msgid "You already have %d cookie from this site."
-#~ msgid_plural "You already have %d cookies from this site."
-#~ msgstr[0] "Vous avez déjà un cookie de ce site."
-#~ msgstr[1] "Vous avez déjà %d cookies de ce site."
-
-#~ msgid "Apply this _decision to all cookies from this site"
-#~ msgstr "Appliquer cette _décision à tous les cookies de ce site"
-
-#~ msgid "_Reject"
-#~ msgstr "_Rejeter"
-
-#~ msgid "_Accept"
-#~ msgstr "_Accepter"
-
-#~ msgid "The web site “%s” requests that you sign the following text:"
-#~ msgstr "Le site Web « %s » vous demande de signer le texte suivant :"
-
-#~ msgid "_Sign text"
-#~ msgstr "_Signer le texte"
-
-#~ msgid "Options"
-#~ msgstr "Options"
-
-#~ msgid "Print this page?"
-#~ msgstr "Imprimer cette page ?"
-
-#~ msgid "Preparing to print"
-#~ msgstr "Préparation de l'impression"
-
-#~ msgid "Page %d of %d"
-#~ msgstr "Page %d sur %d"
-
-#~ msgid "Cancelling print"
-#~ msgstr "Annulation de l'impression"
-
-#~ msgid "Spooling..."
-#~ msgstr "Mise en file d'impression…"
-
-#~ msgid "Print error"
-#~ msgstr "Erreur d'impression"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "Impression de « %s »"
-
-#~ msgid "_Select Certificate"
-#~ msgstr "_Sélectionner le certificat"
-
-#~ msgid "Choose a certificate to present as identification to “%s”."
-#~ msgstr "Choisissez un certificat à présenter comme identification à « %s »."
-
-#~ msgid "Select a certificate to identify yourself."
-#~ msgstr "Sélectionnez un certificat qui vous identifie."
-
-#~ msgid "Certificate _Details"
-#~ msgstr "_Détails du certificat"
-
-#~ msgid "_View Certificate"
-#~ msgstr "_Voir le certificat"
-
-#~ msgid ""
-#~ "The site “%s” returned security information for “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "Le site « %s » a retourné des informations de sécurité pour « %s ». Il est "
-#~ "possible que quelqu'un soit en train d'intercepter votre communication "
-#~ "pour obtenir des informations confidentielles vous concernant."
-
-#~ msgid ""
-#~ "You should only accept the security information if you trust “%s” and “%"
-#~ "s”."
-#~ msgstr ""
-#~ "Vous ne devriez accepter les informations de sécurité que si vous avez "
-#~ "confiance en « %s » et « %s »."
-
-#~ msgid "Accept incorrect security information?"
-#~ msgstr "Accepter les informations de sécurité incorrectes ?"
-
-#~ msgid ""
-#~ "It was not possible to automatically trust “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "Votre navigateur a été incapable de valider automatiquement « %s ». Il est "
-#~ "possible que quelqu'un soit en train d'intercepter votre communication "
-#~ "pour obtenir des informations confidentielles vous concernant."
-
-#~ msgid ""
-#~ "You should only connect to the site if you are certain you are connected "
-#~ "to “%s”."
-#~ msgstr ""
-#~ "Vous ne devriez vous connecter au site que si vous êtes certain d'être "
-#~ "connecté à « %s »."
-
-#~ msgid "Connect to untrusted site?"
-#~ msgstr "Se connecter au site non sûr ?"
-
-#~ msgid "_Trust this security information from now on"
-#~ msgstr "_Faire dorénavant confiance à ces informations de sécurité"
-
-#~ msgid "Co_nnect"
-#~ msgstr "Se _connecter"
-
-#~ msgid "Accept expired security information?"
-#~ msgstr "Accepter les informations de sécurité qui ont expiré ?"
-
-#~ msgid "The security information for “%s” expired on %s."
-#~ msgstr "Les informations de sécurité pour « %s » ont expiré le %s."
-
-#~ msgid "Accept not yet valid security information?"
-#~ msgstr ""
-#~ "Accepter les informations de sécurité qui ne sont pas encore valides ?"
-
-#~ msgid "The security information for “%s” isn't valid until %s."
-#~ msgstr ""
-#~ "Les informations de sécurité pour « %s » ne sont pas valides avant le %s."
-
-#~ msgid "%a %d %b %Y"
-#~ msgstr "%a %d %b %Y"
-
-#~ msgid "You should ensure that your computer's time is correct."
-#~ msgstr ""
-#~ "Assurez-vous que l'heure et la date de votre ordinateur sont correctes."
-
-#~ msgid "Cannot establish connection to “%s”"
-#~ msgstr "Impossible d'établir la connexion à « %s »."
-
-#~ msgid ""
-#~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
-#~ "\n"
-#~ "Please ask your system administrator for assistance."
-#~ msgstr ""
-#~ "La liste de révocation des certificats (LRC) de « %s » a besoin d'être "
-#~ "mise à jour.\n"
-#~ "\n"
-#~ "Veuillez demander de l'aide à votre administrateur système."
-
-#~ msgid "Trust new Certificate Authority?"
-#~ msgstr "Faire confiance à la nouvelle autorité de certification ?"
-
-#~ msgid "_Trust CA"
-#~ msgstr "_Faire confiance à l'AC"
-
-#~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
-#~ msgstr ""
-#~ "Faire confiance à la nouvelle autorité de certification « %s » pour "
-#~ "identifier les sites Web ?"
-
-#~ msgid ""
-#~ "Before trusting a Certificate Authority (CA) you should verify the "
-#~ "certificate is authentic."
-#~ msgstr ""
-#~ "Avant de faire confiance à une autorité de certification (AC), vérifiez "
-#~ "que le certificat est authentique."
-
-#~ msgid "Certificate already exists."
-#~ msgstr "Le certificat existe déjà."
-
-#~ msgid "The certificate has already been imported."
-#~ msgstr "Le certificat a déjà été importé."
-
-#~ msgid "Select Password"
-#~ msgstr "Sélection du mot de passe"
-
-#~ msgid "Select a password to protect this certificate"
-#~ msgstr "Sélectionnez un mot de passe pour protéger ce certificat"
-
-#~ msgid "Enter the password for this certificate"
-#~ msgstr "Saisissez le mot de passe pour ce certificat"
-
-#~ msgid "Certificate Revocation List Imported"
-#~ msgstr "Liste de révocation des certificats importée"
-
-#~ msgid "Certificate Revocation List (CRL) successfully imported"
-#~ msgstr "Liste de révocation des certificats (LRC) importée avec succès"
-
-#~ msgid "Unit:"
-#~ msgstr "Unité :"
-
-#~ msgid "Next Update:"
-#~ msgstr "Prochaine mise à jour :"
-
-#~ msgid "Not part of certificate"
-#~ msgstr "Ne fait pas partie du certificat"
-
-#~ msgid "Certificate Properties"
-#~ msgstr "Propriétés du certificat"
-
-#~ msgid "This certificate has been verified for the following uses:"
-#~ msgstr "Ce certificat a été vérifié pour les utilisations suivantes :"
-
-#~ msgid "Could not verify this certificate because it has been revoked."
-#~ msgstr "Impossible de vérifier ce certificat car il a été révoqué."
-
-#~ msgid "Could not verify this certificate because it has expired."
-#~ msgstr "Impossible de vérifier ce certificat car il a expiré."
-
-#~ msgid "Could not verify this certificate because it is not trusted."
-#~ msgstr "Impossible de vérifier ce certificat car il n'est pas sûr."
-
-#~ msgid "Could not verify this certificate because the issuer is not trusted."
-#~ msgstr "Impossible de vérifier ce certificat car l'émetteur n'est pas sûr."
-
-#~ msgid "Could not verify this certificate because the issuer is unknown."
-#~ msgstr "Impossible de vérifier ce certificat car l'émetteur est inconnu."
-
-#~ msgid ""
-#~ "Could not verify this certificate because the CA certificate is invalid."
-#~ msgstr ""
-#~ "Impossible de vérifier ce certificat car le certificat de l'autorité de "
-#~ "certification n'est pas valide."
-
-#~ msgid "Could not verify this certificate for unknown reasons."
-#~ msgstr "Impossible de vérifier ce certificat pour des raisons inconnues."
-
-#~ msgid "Change Token Password"
-#~ msgstr "Modification du mot de passe du jeton"
-
-#~ msgid "Choose a password for the “%s” token"
-#~ msgstr "Choisissez un mot de passe pour le jeton « %s »"
-
-#~ msgid "Change the password for the “%s” token"
-#~ msgstr "Modifiez le mot de passe pour le jeton « %s »"
-
-#~ msgid "Get Token Password"
-#~ msgstr "Obtention du mot de passe du jeton"
-
-#~ msgid "Please enter the password for the “%s” token"
-#~ msgstr "Saisissez le mot de passe pour le jeton « %s »"
-
-#~ msgid "Please select a token:"
-#~ msgstr "Sélectionnez un jeton :"
-
-#~ msgid "_Select"
-#~ msgstr "_Sélectionner"
-
-#~ msgid "Escrow the secret key?"
-#~ msgstr "Déposer la clé secrète ?"
-
-#~ msgid ""
-#~ "The certificate authority “%s” requests that you give it a copy of the "
-#~ "newly generated secret key.\n"
-#~ "\n"
-#~ "This will enable the certificate authority read any communications "
-#~ "encrypted with this key without your knowledge or consent.\n"
-#~ "\n"
-#~ "It is strongly recommended not to allow it."
-#~ msgstr ""
-#~ "L'autorité de certification « %s » demande que vous lui donniez une copie "
-#~ "de la nouvelle clé secrète.\n"
-#~ "\n"
-#~ "Cela permettra à l'autorité de certification de lire toutes les "
-#~ "communications chiffrées avec cette clé sans que vous le sachiez et sans "
-#~ "votre consentement.\n"
-#~ "\n"
-#~ "Il est vivement recommandé de ne pas accepter."
-
-#~ msgid "_Allow"
-#~ msgstr "_Autoriser"
-
-#~ msgid "Generating Private Key."
-#~ msgstr "Génération de la clé privée."
-
-#~ msgid ""
-#~ "Please wait while a new private key is generated. This process could take "
-#~ "a few minutes."
-#~ msgstr ""
-#~ "Veuillez patienter pendant qu'une nouvelle clé privée est générée. Cela "
-#~ "peut prendre quelques minutes."
-
-#~ msgid "Security Notice"
-#~ msgstr "Niveau de sécurité"
-
-#~ msgid "This page is loaded over a secure connection"
-#~ msgstr "Cette page est chargée via une connexion sécurisée"
-
-#~ msgid ""
-#~ "For secure pages, the address entry has a distinct color and a locked "
-#~ "padlock icon is displayed.\n"
-#~ "\n"
-#~ "The padlock icon in the statusbar also indicates whether a page is secure."
-#~ msgstr ""
-#~ "Pour des raisons de sécurité, le champ de saisie d'adresse est associé à "
-#~ "une couleur distincte et à une icône de verrou lors de son affichage.\n"
-#~ "\n"
-#~ "L'icône du verrou présente dans la barre de statut indique aussi si une "
-#~ "page est sécurisée."
-
-#~ msgid "Security Warning"
-#~ msgstr "Avertissement de sécurité"
-
-#~ msgid "This page is loaded over a low security connection"
-#~ msgstr "Cette page est chargée via une connexion peu sécurisée"
-
-#~ msgid ""
-#~ "Any information you see or enter on this page could easily be intercepted "
-#~ "by a third party."
-#~ msgstr ""
-#~ "Toutes les informations que vous consultez ou saisissez sur cette page "
-#~ "pourraient être facilement interceptées par un tiers."
-
-#~ msgid "Some parts of this page are loaded over an insecure connection"
-#~ msgstr ""
-#~ "Certaines parties de cette page sont chargées via une connexion non "
-#~ "sécurisée"
-
-#~ msgid ""
-#~ "Some information you see or enter will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "Certaines informations que vous consultez ou saisissez seront envoyées "
-#~ "via une connexion non sécurisée. Elles pourront être facilement "
-#~ "interceptées par un tiers."
-
-#~ msgid "Send this information over an insecure connection?"
-#~ msgstr "Envoyer ces informations via une connexion non sécurisée ?"
-
-#~ msgid ""
-#~ "The information you have entered will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "Les informations que vous avez saisies seront envoyées via une connexion "
-#~ "non sécurisée. Elles pourront être facilement interceptées par un tiers."
-
-#~ msgid "_Send"
-#~ msgstr "_Envoyer"
-
-#~ msgid ""
-#~ "Although this page was loaded over a secure connection, the information "
-#~ "you have entered will be sent over an insecure connection, and could "
-#~ "easily be intercepted by a third party."
-#~ msgstr ""
-#~ "Bien que cette page ait été chargée via une connexion sécurisée, les "
-#~ "informations que vous avez saisies seront envoyées via une connexion non "
-#~ "sécurisée. Elles pourront donc être facilement interceptées par un tiers."
-
-#~ msgid "%s Files"
-#~ msgstr "%s fichiers"
-
-#~ msgid "Unsafe protocol."
-#~ msgstr "Protocole non sécurisé."
-
-#~ msgid ""
-#~ "The address has not been loaded, because it refers to an unsafe protocol "
-#~ "and thereby presents a security risk to your system."
-#~ msgstr ""
-#~ "L'adresse n'a pas été chargée car elle fait référence à un protocole non "
-#~ "sécurisé et présente donc un risque de sécurité pour votre système."
-
-#~ msgid "No address found."
-#~ msgstr "Aucune adresse trouvée."
-
-#~ msgid "No web address could be found in this file."
-#~ msgstr "Aucune adresse Web n'a pu être trouvée dans ce fichier."
-
-#~ msgid "Epiphany Desktop File Plugin"
-#~ msgstr "Greffon d'Epiphany pour les raccourcis du bureau"
-
-#~ msgid ""
-#~ "This plugin handles “.desktop” and “.url” files containing web links."
-#~ msgstr ""
-#~ "Ce greffon gère les fichiers « .desktop » (bureau) et « .url » (url) "
-#~ "contenant des liens vers des pages Web."
-
-#~ msgid ""
-#~ "The page “%s” in this tab was not fully loaded yet when the web browser "
-#~ "crashed; it could have caused the crash."
-#~ msgstr ""
-#~ "La page « %s » de cet onglet n'était pas complètement chargée lorsque le "
-#~ "navigateur Web s'est arrêté brutalement ; il se pourrait qu'elle soit la "
-#~ "cause du problème."
-
-#~ msgid "Title a_nd Address"
-#~ msgstr "T_itre et adresse"
