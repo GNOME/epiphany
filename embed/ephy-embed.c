@@ -504,12 +504,60 @@ request_destination_uri (WebKitWebView *web_view,
   gtk_widget_show_all (GTK_WIDGET (dialog));
 }
 
+/* From the old embed/mozilla/MozDownload.cpp */
+static const char*
+file_is_compressed (const char *filename)
+{
+  int i;
+  static const char * const compression[] = {".gz", ".bz2", ".Z", ".lz", NULL};
+
+  for (i = 0; compression[i] != NULL; i++) {
+    if (g_str_has_suffix (filename, compression[i]))
+      return compression[i];
+  }
+
+  return NULL;
+}
+
+static const char*
+parse_extension (const char *filename)
+{
+  const char *compression;
+
+  compression = file_is_compressed (filename);
+
+  /* if the file is compressed we might have a double extension */
+  if (compression != NULL) {
+    int i;
+    static const char * const extensions[] = {"tar", "ps", "xcf", "dvi", "txt", "text", NULL};
+
+    for (i = 0; extensions[i] != NULL; i++) {
+      char *suffix;
+      suffix = g_strdup_printf (".%s%s", extensions[i], compression);
+
+      if (g_str_has_suffix (filename, suffix)) {
+        char *p;
+
+        p = g_strrstr (filename, suffix);
+        g_free (suffix);
+
+        return p;
+      }
+
+      g_free (suffix);
+    }
+  }
+
+  /* no compression, just look for the last dot in the filename */
+  return g_strrstr (filename, ".");
+}
+
 static gboolean
 define_destination_uri (WebKitDownload *download,
                         gboolean temporary)
 {
   char *tmp_dir;
-  char *tmp_filename;
+  char *destination_filename;
   char *destination_uri;
   const char *suggested_filename;
 
@@ -532,13 +580,42 @@ define_destination_uri (WebKitDownload *download,
     return FALSE;
   }
 
-  tmp_filename = g_build_filename (tmp_dir, suggested_filename, NULL);
-  destination_uri = g_strconcat ("file://", tmp_filename, NULL);
+  destination_filename = g_build_filename (tmp_dir, suggested_filename, NULL);
+
+  if (g_file_test (destination_filename, G_FILE_TEST_EXISTS)) {
+    int i = 1;
+    const char *dot_pos;
+    gssize position;
+    char *serial = NULL;
+    GString *tmp_filename;
+
+    dot_pos = parse_extension (destination_filename);
+    if (dot_pos)
+      position = dot_pos - destination_filename;
+    else
+      position = strlen (destination_filename);
+
+    tmp_filename = g_string_new (NULL);
+
+    do {
+      serial = g_strdup_printf ("(%d)", i++);
+
+      g_string_assign (tmp_filename, destination_filename);
+      g_string_insert (tmp_filename, position, serial);
+
+      g_free (serial);
+    } while (g_file_test (tmp_filename->str, G_FILE_TEST_EXISTS));
+
+    destination_filename = g_strdup (tmp_filename->str);
+    g_string_free (tmp_filename, TRUE);
+  }
+
+  destination_uri = g_strconcat ("file://", destination_filename, NULL);
 
   webkit_download_set_destination_uri (download, destination_uri);
 
   g_free (tmp_dir);
-  g_free (tmp_filename);
+  g_free (destination_filename);
   g_free (destination_uri);
 
   return TRUE;
