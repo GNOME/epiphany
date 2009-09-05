@@ -367,6 +367,7 @@ static const struct
 	{ GDK_KP_Add,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
 	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
 	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
+	{ GDK_KP_0,		GDK_CONTROL_MASK,	"ViewZoomNormal",	FALSE },
 	/* These keys are a bit strange: when pressed with no modifiers, they emit
 	 * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
 	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
