@@ -1,4 +1,27 @@
 ================
+Epiphany 2.27.92
+================
+
+Changes:
+
+  - Import passwords from the gecko profile on first run. This adds a
+    dependency on NSS, which can be disabled with --disable-nss (but
+    then, of course, passwords won't be imported).
+  - Enable undo/redo on forms (#591072)
+  - Save session data more often to avoid data loss when crashing
+    (#593149)
+  - Reimplement direct search on the location bar (#583795)
+  - Do not save failed loads in history or show a valid security
+    status for them (#593200)
+  - Reimplement search by just pressing '/' (#587864)
+  - Fix .desktop file (#588979)
+  - Fix warning when loading NULL URIs (#593701)
+  - Reimplement view source functionality (#503968)
+  - Show initial request before the server responds to avoid empty
+    location entry (#591294)
+  - Reset font size with ctrl+0 from num block (#573624)
+
+================
 Epiphany 2.27.91
 ================
 
