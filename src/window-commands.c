@@ -604,7 +604,8 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
 	GError *error = NULL;
 
 	g_output_stream_close_finish (ostream, result, &error);
-	if (error) {
+	if (error)
+	{
 		g_warning ("Unable to close file: %s", error->message);
 		g_error_free (error);
 		return;
@@ -613,7 +614,29 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
 	uri = (char*)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
 
 	file = g_file_new_for_uri (uri);
-	ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ());
+	if (!ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ()))
+	{
+		/* Fallback to view the source inside the browser */
+		const char *uri;
+		EphyEmbed *embed, *new_embed;
+
+		uri = (const char*) g_object_get_data (G_OBJECT (ostream),
+						       "ephy-original-source-uri");
+		embed = (EphyEmbed*)g_object_get_data (G_OBJECT (ostream),
+						       "ephy-save-temp-source-embed");
+
+		new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+						EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+						embed,
+						NULL,
+						EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+
+		webkit_web_view_set_view_source_mode (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed),
+						      TRUE);
+		webkit_web_view_load_uri (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed),
+					  uri);
+	}
+
 	g_object_unref (file);
 }
 
@@ -624,7 +647,8 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 	gssize written;
 
 	written = g_output_stream_write_finish (ostream, result, &error);
-	if (error) {
+	if (error)
+	{
 		g_string_free (data, TRUE);
 		g_warning ("Unable to write to file: %s", error->message);
 		g_error_free (error);
@@ -636,7 +660,8 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 		return;
 	}
 
-	if (written == data->len) {
+	if (written == data->len)
+	{
 		g_string_free (data, TRUE);
 
 		g_output_stream_close_async (ostream, G_PRIORITY_DEFAULT, NULL,
@@ -668,7 +693,8 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 	GError *error = NULL;
 
 	ostream = g_file_replace_finish (file, result, &error);
-	if (error) {
+	if (error)
+	{
 		g_warning ("Unable to replace file: %s", error->message);
 		g_error_free (error);
 		return;
@@ -679,11 +705,16 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 				g_file_get_uri (file),
 				g_free);
 
+	view = ephy_embed_get_web_view (embed);
+
+	g_object_set_data (G_OBJECT (ostream),
+			   "ephy-original-source-uri",
+			   (gpointer)webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+
 	g_object_set_data (G_OBJECT (ostream),
 			   "ephy-save-temp-source-embed",
 			   embed);
 
-	view = ephy_embed_get_web_view (embed);
 	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
 	data_source = webkit_web_frame_get_data_source (frame);
 	const_data = webkit_web_data_source_get_data (data_source);
