@@ -197,7 +197,7 @@ webkit_pref_callback_font_family (GConfClient *client,
 static const PrefData webkit_pref_entries[] =
   {
     { CONF_RENDERING_FONT_MIN_SIZE,
-      "minimum-font-size",
+      "minimum-logical-font-size",
       webkit_pref_callback_int },
     { CONF_DESKTOP_FONT_VAR_NAME,
       "default-font-size",
