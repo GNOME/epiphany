@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
+
 #include "ephy-embed-single.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-type-builtins.h"
@@ -346,12 +348,14 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* Use GNOME proxy settings through libproxy */
   soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
+#ifdef SOUP_TYPE_PASSWORD_MANAGER
   /* Use GNOME keyring to store passwords. Only add the manager if we
      are not using a private session, otherwise we want any new
      password to expire when we exit *and* we don't want to use any
      existing password in the keyring */
   if (ephy_has_private_profile () == FALSE)
     soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
+#endif
 
   return TRUE;
 }
