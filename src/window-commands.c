@@ -707,9 +707,10 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 
 	view = ephy_embed_get_web_view (embed);
 
-	g_object_set_data (G_OBJECT (ostream),
-			   "ephy-original-source-uri",
-			   (gpointer)webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+	g_object_set_data_full (G_OBJECT (ostream),
+				"ephy-original-source-uri",
+				g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view))),
+				g_free),
 
 	g_object_set_data (G_OBJECT (ostream),
 			   "ephy-save-temp-source-embed",
