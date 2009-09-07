@@ -637,6 +637,7 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
 					  uri);
 	}
 
+	g_object_unref (ostream);
 	g_object_unref (file);
 }
 
