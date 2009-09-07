@@ -247,6 +247,10 @@ ephy_embed_prefs_init (void)
 
   settings = webkit_web_settings_new ();
 
+  /* Hardcoded settings */
+  g_object_set (settings, "auto-shrink-images", FALSE, NULL);
+
+  /* Connections */
   connections = g_malloc (sizeof (guint) * G_N_ELEMENTS (webkit_pref_entries));
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
