@@ -54,7 +54,6 @@ static void     ephy_web_view_init         (EphyWebView *gs);
 #define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
 
 struct _EphyWebViewPrivate {
-  EphyWebViewAddressExpire address_expire;
   EphyWebViewSecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
@@ -72,6 +71,7 @@ struct _EphyWebViewPrivate {
   char *link_message;
   char *icon_address;
   GdkPixbuf *icon;
+  gboolean expire_address_now;
 
   /* File watch */
   GFileMonitor *monitor;
@@ -441,8 +441,7 @@ ephy_web_view_set_property (GObject *object,
       ephy_web_view_set_popups_allowed (EPHY_WEB_VIEW (object), g_value_get_boolean (value));
       break;
     case PROP_TYPED_ADDRESS:
-      ephy_web_view_set_typed_address (EPHY_WEB_VIEW (object), g_value_get_string (value),
-                                       EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW);
+      ephy_web_view_set_typed_address (EPHY_WEB_VIEW (object), g_value_get_string (value));
       break;
       break;
     case PROP_ADDRESS:
@@ -1011,7 +1010,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
 
-  priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
+  priv->expire_address_now = TRUE;
   priv->is_blank = TRUE;
   priv->load_status = WEBKIT_LOAD_PROVISIONAL;
   priv->title = g_strdup (EMPTY_PAGE);
@@ -1198,7 +1197,7 @@ ephy_web_view_set_address (EphyWebView *view,
                    strcmp (address, "about:blank") == 0;
 
   if (ephy_web_view_is_loading (view) &&
-      priv->address_expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW &&
+      priv->expire_address_now == TRUE &&
       priv->typed_address != NULL) {
     g_free (priv->typed_address);
     priv->typed_address = NULL;
@@ -1293,7 +1292,7 @@ ensure_page_info (EphyWebView *view, const char *address)
   EphyWebViewPrivate *priv = view->priv;
 
   if ((priv->address == NULL || priv->address[0] == '\0') &&
-      priv->address_expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW) {
+      priv->expire_address_now == TRUE) {
     ephy_web_view_set_address (view, address);
   }
 
@@ -1404,7 +1403,7 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       g_free (priv->loading_title);
       priv->loading_title = NULL;
 
-      priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
+      priv->expire_address_now = TRUE;
 
       g_object_notify (object, "embed-title");
 
@@ -1909,27 +1908,23 @@ ephy_web_view_get_typed_address (EphyWebView *view)
  * ephy_web_view_set_typed_address:
  * @view: an #EphyWebView
  * @address: the new typed address, or %NULL to clear it
- * @expire: when to expire this address_expire
  * 
  * Sets the text that @view's #EphyWindow will display in its location toolbar
  * entry when @view is selected.
  **/
 void
 ephy_web_view_set_typed_address (EphyWebView *view,
-                                 const char *address,
-                                 EphyWebViewAddressExpire expire)
+                                 const char *address)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (view)->priv;
 
   g_free (priv->typed_address);
   priv->typed_address = g_strdup (address);
-
-  if (expire == EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT &&
-      !ephy_web_view_is_loading (view)) {
-    priv->address_expire = EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW;
-  } else {
-    priv->address_expire = expire;
-  }
+  /* If the page is loading prevent the typed address from going away,
+     since Epiphany will try to overwrite the typed address with the
+     confirmed full URL when passing through, for example, the
+     COMMITTED state. */
+  priv->expire_address_now = !ephy_web_view_is_loading (view);
 
   g_object_notify (G_OBJECT (view), "typed-address");
 }

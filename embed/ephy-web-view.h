@@ -108,13 +108,6 @@ typedef enum
 	EPHY_WEB_VIEW_DOCUMENT_OTHER
 } EphyWebViewDocumentType;
 
-typedef enum
-{
-	EPHY_WEB_VIEW_ADDRESS_EXPIRE_NOW,
-	EPHY_WEB_VIEW_ADDRESS_EXPIRE_NEXT,
-	EPHY_WEB_VIEW_ADDRESS_EXPIRE_CURRENT
-} EphyWebViewAddressExpire;
-
 struct _EphyWebView
 {
   WebKitWebView parent;
@@ -195,8 +188,7 @@ void                       ephy_web_view_set_visibility          (EphyWebView   
                                                                   gboolean                         visibility);
 const char *               ephy_web_view_get_typed_address       (EphyWebView                     *view);
 void                       ephy_web_view_set_typed_address       (EphyWebView                     *view,
-                                                                  const char                      *address,
-                                                                  EphyWebViewAddressExpire         expire);
+                                                                  const char                      *address);
 gboolean                   ephy_web_view_get_is_blank            (EphyWebView                     *view);
 gboolean                   ephy_web_view_has_modified_forms      (EphyWebView                     *view);
 char *                     ephy_web_view_get_location            (EphyWebView                     *view,

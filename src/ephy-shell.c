@@ -515,8 +515,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "",
-						 EPHY_WEB_VIEW_ADDRESS_EXPIRE_NEXT);
+		ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "");
 		ephy_toolbar_activate_location (toolbar);
 		is_empty = load_homepage (embed);
 	}
