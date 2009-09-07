@@ -168,15 +168,16 @@ update_widget (EphyTopicsEntry *entry)
 		gtk_editable_delete_text (editable, 0, -1);
 	}
 	
-	for (pos = -1, i = 0; i < topics->len; i++)
+	for (pos = 0, i = 0; i < topics->len; i++)
 	{
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
 		  
 		if (!is_focus && ephy_node_has_child (node, priv->bookmark))
 		{
+			if (pos > 0)
+				gtk_editable_insert_text (editable, ", ", -1, &pos);
 			gtk_editable_insert_text (editable, title, -1, &pos);
-			gtk_editable_insert_text (editable, ", ", -1, &pos);
 		}
 
 		tmp1 = g_utf8_casefold (title, -1);
