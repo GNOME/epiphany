@@ -868,7 +868,7 @@ ephy_location_action_set_address (EphyLocationAction *action,
 	priv->address = g_strdup (address);
 
 	g_free (priv->typed_address);
-	priv->typed_address = typed_address ? g_strdup (typed_address) : NULL;
+	priv->typed_address = g_strdup (typed_address);
 
 	g_object_notify (G_OBJECT (action), "address");
 }
