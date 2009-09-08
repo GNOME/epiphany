@@ -711,26 +711,24 @@ confirm_action_from_mime (WebKitWebView *web_view,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
-static gboolean
-download_requested_cb (WebKitWebView *web_view,
-                       WebKitDownload *download)
+static void
+download_status_changed_cb (GObject *object,
+                            GParamSpec *pspec,
+                            WebKitWebView *web_view)
 {
-  /* Is download locked down? */
-  if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
-    return FALSE;
+  WebKitDownload *download = WEBKIT_DOWNLOAD (object);
+
+  g_return_if_fail (webkit_download_get_status (download) == WEBKIT_DOWNLOAD_STATUS_STARTED);
+
+  g_signal_handlers_disconnect_by_func (download,
+                                        download_status_changed_cb,
+                                        web_view);
 
   /* Is auto-download enabled? */
   if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
     perform_auto_download (download);
-    return TRUE;
+    return;
   }
-
-  /* If we are not performing an auto-download, we will ask the user
-   * where they want the file to go to; we will start downloading to a
-   * temporary location while the user decides.
-   */
-  if (!define_destination_uri (download, TRUE))
-    return FALSE;
 
   /* FIXME: when we are able to obtain the MIME information from
    * WebKit, we will want to decide earlier whether we want to open or
@@ -739,6 +737,28 @@ download_requested_cb (WebKitWebView *web_view,
    */
   g_object_ref (download); /* balanced in confirm_action_response_cb */
   confirm_action_from_mime (web_view, download, DOWNLOAD_ACTION_DOWNLOAD);
+}
+
+static gboolean
+download_requested_cb (WebKitWebView *web_view,
+                       WebKitDownload *download)
+{
+  /* Is download locked down? */
+  if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
+    return FALSE;
+
+  /* Wait for the request to be sent in all cases, so that we have a
+   * response which may contain a suggested filename */
+  g_signal_connect (download, "notify::status",
+                    G_CALLBACK (download_status_changed_cb),
+                    web_view);
+
+  /* If we are not performing an auto-download, we will ask the user
+   * where they want the file to go to; we will start downloading to a
+   * temporary location while the user decides.
+   */
+  if (!define_destination_uri (download, TRUE))
+    return FALSE;
 
   return TRUE;
 }
