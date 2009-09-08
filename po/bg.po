@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-08-26 16:37-0300\n"
-"PO-Revision-Date: 2009-08-26 16:46-0300\n"
+"POT-Creation-Date: 2009-09-08 07:50+0300\n"
+"PO-Revision-Date: 2009-09-08 07:51+0300\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,11 +58,15 @@ msgid "Browse the web"
 msgstr "Сърфиране в Интернет"
 
 #: ../data/epiphany.desktop.in.in.h:2
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Интернет браузър (Epiphany)"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "Интернет браузър"
 
@@ -909,7 +913,7 @@ msgstr "_Продължаване"
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
 #: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1741
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -975,22 +979,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Остават"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:493
 msgid "Save"
 msgstr "Запазване"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:635
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:649
 msgid "Download this potentially unsafe file?"
 msgstr "Да бъде ли изтеглен потенциално опасния файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
+#: ../embed/ephy-embed.c:654
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1003,14 +1007,14 @@ msgstr ""
 "Опасно е да отваряте „%s“, възможно е да повреди документите ви или да "
 "застраши личните ви данни. Вместо това, можете да го изтеглите."
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:662
 msgid "Open this file?"
 msgstr "Отваряне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:668
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1021,13 +1025,13 @@ msgstr ""
 "\n"
 "Можете да отворите „%s“ чрез „%s“ или можете да го запазите."
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:675
 msgid "Download this file?"
 msgstr "Изтегляне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:680
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1039,11 +1043,11 @@ msgstr ""
 "Не разполагате с програма, способна да отвори „%s“. Вместо това, можете да "
 "го изтеглите."
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:687
 msgid "_Save As..."
 msgstr "Запазване _като…"
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:797
 msgid "Web Inspector"
 msgstr "Уеб инспектор"
 
@@ -1395,38 +1399,38 @@ msgstr "Локални файлове"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
-#: ../src/ephy-session.c:1341
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2122
+#: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1128
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.bg/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1319
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Пренасочване към „%s“…"
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1321
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Прехвърляне на данни от „%s“…"
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1323
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Изчакване за упълномощаване от „%s“…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1434
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Зареждане на „%s“…"
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1436
 msgid "Loading…"
 msgstr "Зареждане…"
 
@@ -1616,17 +1620,17 @@ msgstr "История"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1496
 msgid "Bookmark"
 msgstr "Отметка"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1500
 msgid "Bookmarks"
 msgstr "Отметки"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
 msgid "Address Entry"
 msgstr "Запис на адрес"
 
@@ -2253,32 +2257,32 @@ msgstr "Търсене:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "_Зачитане на малки/големи"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "Предишно търсене"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "Търсене на предишното място на търсен низ"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "Следващо търсене"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "Търсене на следващото споменаване на низ"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
 msgid "Leave Fullscreen"
 msgstr "Напускане на „Цял екран“"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
 msgid "Go"
 msgstr "Отиване"
 
@@ -2383,7 +2387,7 @@ msgstr "Интернет страници"
 msgid "Date"
 msgstr "Дата"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:990
 msgid "GNOME Web Browser"
 msgstr "Интернет браузър на GNOME"
 
@@ -2520,7 +2524,7 @@ msgid "Crash Recovery"
 msgstr "Възстановяване след срив"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1285
+#: ../src/ephy-session.c:1286
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -2531,15 +2535,15 @@ msgstr ""
 "повтори при презареждането на страницата. Ако това се случи, докладвайте за "
 "този проблем на разработчиците на %s."
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar extension required"
 msgstr "Изисква се разширение за страничната лента"
 
-#: ../src/ephy-shell.c:173
+#: ../src/ephy-shell.c:174
 msgid "Sidebar Extension Required"
 msgstr "Изисква се разширение за страничната лента"
 
-#: ../src/ephy-shell.c:177
+#: ../src/ephy-shell.c:178
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Връзката, която натиснахте, се нуждае от разширение за страничната лента."
@@ -2559,88 +2563,88 @@ msgstr "Режим на избор с курсор. За изход — нати
 msgid "Switch to this tab"
 msgstr "Превключване към този подпрозорец"
 
-#: ../src/ephy-toolbar.c:224
+#: ../src/ephy-toolbar.c:223
 msgid "_Back"
 msgstr "На_зад"
 
-#: ../src/ephy-toolbar.c:226
+#: ../src/ephy-toolbar.c:225
 msgid "Go to the previous visited page"
 msgstr "Отива на предишната посетена страница"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:229
 msgid "Back history"
 msgstr "Предишни страници"
 
-#: ../src/ephy-toolbar.c:244
+#: ../src/ephy-toolbar.c:243
 msgid "_Forward"
 msgstr "На_пред"
 
-#: ../src/ephy-toolbar.c:246
+#: ../src/ephy-toolbar.c:245
 msgid "Go to the next visited page"
 msgstr "Отиване на следващата посетена страница"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:249
 msgid "Forward history"
 msgstr "Следващи страници"
 
-#: ../src/ephy-toolbar.c:263
+#: ../src/ephy-toolbar.c:262
 msgid "_Up"
 msgstr "На_горе"
 
-#: ../src/ephy-toolbar.c:265
+#: ../src/ephy-toolbar.c:264
 msgid "Go up one level"
 msgstr "Нагоре с едно ниво"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:268
 msgid "List of upper levels"
 msgstr "Списък на предишните нива"
 
-#: ../src/ephy-toolbar.c:287
+#: ../src/ephy-toolbar.c:286
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Въведете адрес или фраза за търсене"
 
-#: ../src/ephy-toolbar.c:303
+#: ../src/ephy-toolbar.c:302
 msgid "Zoom"
 msgstr "Увеличение"
 
-#: ../src/ephy-toolbar.c:305
+#: ../src/ephy-toolbar.c:304
 msgid "Adjust the text size"
 msgstr "Промяна на размера на текста"
 
-#: ../src/ephy-toolbar.c:317
+#: ../src/ephy-toolbar.c:316
 msgid "Go to the address entered in the address entry"
 msgstr "Отиване на адреса въведен в полето за адреси"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:325
 msgid "_Home"
 msgstr "_У дома"
 
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:327
 msgid "Go to the home page"
 msgstr "Отиване в домашната страница"
 
-#: ../src/ephy-toolbar.c:338
+#: ../src/ephy-toolbar.c:337
 msgid "New _Tab"
 msgstr "Нов _подпрозорец"
 
-#: ../src/ephy-toolbar.c:340
+#: ../src/ephy-toolbar.c:339
 msgid "Open a new tab"
 msgstr "Отваряне на нов подпрозорец"
 
-#: ../src/ephy-toolbar.c:349
+#: ../src/ephy-toolbar.c:348
 msgid "_New Window"
 msgstr "_Нов прозорец"
 
-#: ../src/ephy-toolbar.c:351
+#: ../src/ephy-toolbar.c:350
 msgid "Open a new window"
 msgstr "Отваряне на нов прозорец"
 
@@ -3126,113 +3130,113 @@ msgstr "Ст_артиране на анимацията"
 msgid "St_op Animation"
 msgstr "Спира_не на анимацията"
 
-#: ../src/ephy-window.c:522
+#: ../src/ephy-window.c:523
 msgid "There are unsubmitted changes to form elements"
 msgstr "Има неизпратени промени по елементите от формуляра"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:527
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ако все пак затворите документа, ще загубите тази информация."
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:531
 msgid "Close _Document"
 msgstr "Затваряне на _документа"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
+#: ../src/ephy-window.c:1490 ../src/window-commands.c:286
 msgid "Open"
 msgstr "Отваряне"
 
-#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
+#: ../src/ephy-window.c:1492 ../src/window-commands.c:312
 msgid "Save As"
 msgstr "Запазване като"
 
-#: ../src/ephy-window.c:1493
+#: ../src/ephy-window.c:1494
 msgid "Print"
 msgstr "Печат"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1498
 msgid "Find"
 msgstr "Търсене"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1510
+#: ../src/ephy-window.c:1511
 msgid "Larger"
 msgstr "По-голям"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1513
+#: ../src/ephy-window.c:1514
 msgid "Smaller"
 msgstr "По-малък"
 
-#: ../src/ephy-window.c:1743
+#: ../src/ephy-window.c:1744
 msgid "Insecure"
 msgstr "Несигурно"
 
-#: ../src/ephy-window.c:1748
+#: ../src/ephy-window.c:1749
 msgid "Broken"
 msgstr "Развалено"
 
-#: ../src/ephy-window.c:1756
+#: ../src/ephy-window.c:1757
 msgid "Low"
 msgstr "Ниско"
 
-#: ../src/ephy-window.c:1763
+#: ../src/ephy-window.c:1764
 msgid "High"
 msgstr "Високо"
 
-#: ../src/ephy-window.c:1773
+#: ../src/ephy-window.c:1774
 #, c-format
 msgid "Security level: %s"
 msgstr "Ниво на сигурност: %s"
 
-#: ../src/ephy-window.c:1816
+#: ../src/ephy-window.c:1817
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d скрит изскачащ прозорец"
 msgstr[1] "%d скрити изскачащи прозорци"
 
-#: ../src/ephy-window.c:2081
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Open image “%s”"
 msgstr "Отваряне на изображението „%s“"
 
-#: ../src/ephy-window.c:2086
+#: ../src/ephy-window.c:2087
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Използване на изображението „%s“ като фон"
 
-#: ../src/ephy-window.c:2091
+#: ../src/ephy-window.c:2092
 #, c-format
 msgid "Save image “%s”"
 msgstr "Запазване на изображението „%s“"
 
-#: ../src/ephy-window.c:2096
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Копиране на адреса на изображението „%s“"
 
-#: ../src/ephy-window.c:2109
+#: ../src/ephy-window.c:2110
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Изпращане на е-писмо до „%s“"
 
-#: ../src/ephy-window.c:2115
+#: ../src/ephy-window.c:2116
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Копиране на адреса на е-поща „%s“"
 
-#: ../src/ephy-window.c:2127
+#: ../src/ephy-window.c:2128
 #, c-format
 msgid "Save link “%s”"
 msgstr "Запазване на връзката „%s“"
 
-#: ../src/ephy-window.c:2133
+#: ../src/ephy-window.c:2134
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Отмятане на връзката „%s“"
 
-#: ../src/ephy-window.c:2139
+#: ../src/ephy-window.c:2140
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Копиране на адреса на връзката „%s“"
@@ -3413,7 +3417,7 @@ msgstr[1] "Системни езици (%s)"
 msgid "Select a Directory"
 msgstr "Избор на папка"
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:890
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3425,7 +3429,7 @@ msgstr ""
 "е публикуван от Фондацията за свободен софтуер — версия 2 на лиценза или (по "
 "ваше решение) по-късна версия."
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:894
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3436,7 +3440,7 @@ msgstr ""
 "НИКАКВИ ГАРАНЦИИ, дори и косвените за ПРОДАЖБА или СЪОТВЕТСТВИЕ С КАКВАТО И "
 "ДА Е УПОТРЕБА. За подробности погледнете Общия публичен лиценз на GNU."
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:898
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3446,20 +3450,20 @@ msgstr ""
 "заедно с тази програма. Ако не сте, пишете до Free Software Foundation, "
 "Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:827 ../src/window-commands.c:843
-#: ../src/window-commands.c:854
+#: ../src/window-commands.c:944 ../src/window-commands.c:960
+#: ../src/window-commands.c:971
 msgid "Contact us at:"
 msgstr "Свържете се с нас на:"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:947
 msgid "Contributors:"
 msgstr "Допринесли:"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:950
 msgid "Past developers:"
 msgstr "Предишни разработчици:"
 
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:980
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3476,7 +3480,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:1006
 msgid "translator-credits"
 msgstr ""
 "Владимир „Kaladan“ Петков <vpetkov@i-space.org>\n"
@@ -3486,6 +3490,6 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:1009
 msgid "GNOME Web Browser Website"
 msgstr "Интернет браузър на GNOME"
