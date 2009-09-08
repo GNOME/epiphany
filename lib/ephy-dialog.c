@@ -146,18 +146,18 @@ set_sensitivity (PropertyInfo *info, gboolean sensitive)
 
 		for (l = list; l != NULL; l = l->next)
 		{
-			sensitive = gtk_widget_is_sensitive (GTK_WIDGET (l->data)) && sensitive;
+			sensitive = GTK_WIDGET_IS_SENSITIVE (GTK_WIDGET (l->data)) && sensitive;
 			gtk_widget_set_sensitive (GTK_WIDGET (l->data), sensitive);
 		}
 	}
 	else if (info->widget_type == PT_EDITABLE)
 	{
-		sensitive = gtk_widget_is_sensitive (info->widget) && sensitive;
+		sensitive = GTK_WIDGET_IS_SENSITIVE (info->widget) && sensitive;
 		gtk_editable_set_editable (GTK_EDITABLE (info->widget), sensitive);
 	}
 	else
 	{
-		sensitive = gtk_widget_is_sensitive (info->widget) && sensitive;
+		sensitive = GTK_WIDGET_IS_SENSITIVE (info->widget) && sensitive;
 		gtk_widget_set_sensitive (info->widget, sensitive);
 	}
 }
