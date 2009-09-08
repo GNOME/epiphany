@@ -204,18 +204,18 @@ resource_request_starting_cb (WebKitWebView *web_view,
                               WebKitNetworkResponse *response,
                               EphyEmbed *embed)
 {
-  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER(ephy_embed_shell_get_adblock_manager (embed_shell));
-  const char* uri = webkit_network_request_get_uri(request);
+  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
+  const char *uri = webkit_network_request_get_uri (request);
 
   /* FIXME: How do we implement the other CHECK_TYPEs?  Perhaps we
    * should figure out a way of adding more information about what the
    * resource is for to WebResource? */
-  if(!ephy_adblock_manager_should_load(adblock_manager, embed, uri,
-                                       AD_URI_CHECK_TYPE_OTHER)) {
+  if (!ephy_adblock_manager_should_load (adblock_manager, embed, uri,
+                                         AD_URI_CHECK_TYPE_OTHER)) {
     g_signal_emit_by_name (EPHY_WEB_VIEW (web_view),
                            "content-blocked", uri);
 
-    webkit_network_request_set_uri(request, "about:blank");
+    webkit_network_request_set_uri (request, "about:blank");
   }
 }
 
