@@ -1,17 +1,18 @@
-# translation of mr.po to marathi
+# translation of mr.po to Marathi
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Rahul Bhalerao <b.rahul.pm@gmail.com>, 2006.
 # Sandeep Shedmake <sandeep.shedmake@gmail.com>, 2008, 2009.
+# Sandeep Shedmake <sshedmak@redhat.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-01-25 21:03+0000\n"
-"PO-Revision-Date: 2009-01-29 13:03+0530\n"
-"Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
-"Language-Team: marathi\n"
+"POT-Creation-Date: 2009-08-31 15:12+0000\n"
+"PO-Revision-Date: 2009-09-09 14:28+0530\n"
+"Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
+"Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,26 +21,51 @@ msgstr ""
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
-msgstr "संचार करा व तुमचे ओळखचिन्ह व्यवस्थित करा"
+msgstr "संचार करा व तुमचे वाचनखूण व्यवस्थित करा"
 
 #: ../data/bme.desktop.in.in.h:2
 msgid "Epiphany Web Bookmarks"
-msgstr "Epiphany वेब ओळखचिन्ह"
+msgstr "Epiphany वेब वाचनखूण"
 
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
-msgstr "वेब ओळखचिन्ह"
+msgstr "वेब वाचनखूण"
+
+#: ../data/default-bookmarks.rdf.in.h:1
+msgid "Search the web"
+msgstr "वेब शोधा"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "http://www.google.com"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#: ../data/default-bookmarks.rdf.in.h:10
+#, no-c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "वेब चाळणे"
 
 #: ../data/epiphany.desktop.in.in.h:2
+#| msgid "Epiphany (RDF)"
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Epiphany वेब ब्राउझर"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:675
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "वेब ब्राउझर"
 
@@ -69,7 +95,7 @@ msgid ""
 "not allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
 "मागे व पुढे संचार करण्याकरीताचे सर्व इतिहास माहिती अकार्यान्वीत करा, इतिहास संवादला "
-"परवानगी न देता व जास्त वापरणीतले ओळखचिन्ह यादी लपवा."
+"परवानगी न देता व जास्त वापरणीतले वाचनखूण यादी लपवा."
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable arbitrary URLs"
@@ -77,7 +103,7 @@ msgstr "अकार्यान्वीत अनियमित URLs"
 
 #: ../data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable bookmark editing"
-msgstr "ओळखचिन्ह संपादन अकार्यान्वीत करा"
+msgstr "वाचनखूण संपादन अकार्यान्वीत करा"
 
 #: ../data/epiphany-lockdown.schemas.in.h:8
 msgid "Disable history"
@@ -85,7 +111,7 @@ msgstr "अकार्यान्वीत इतिहास"
 
 #: ../data/epiphany-lockdown.schemas.in.h:9
 msgid "Disable the user's ability to add or edit bookmarks."
-msgstr "ओळखचिन्ह जोडण्याची किंवा संपादीत करायची वापरकर्त्याची शैली अकार्यान्वीत करा."
+msgstr "वाचनखूण जोडण्याची किंवा संपादीत करायची वापरकर्त्याची शैली अकार्यान्वीत करा."
 
 #: ../data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit toolbars."
@@ -150,7 +176,7 @@ msgstr "पॉपअप स्वीकारा"
 #: ../data/epiphany.schemas.in.h:4
 msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"JavaScript चा वापर करून नविन चौकट उघडण्याकरीता स्थळांना परवानगी द्या (JavaScript "
+"JavaScript चा वापर करून नवीन चौकट उघडण्याकरीता स्थळांना परवानगी द्या (JavaScript "
 "कार्यान्वीत केले असल्यास)."
 
 #: ../data/epiphany.schemas.in.h:5
@@ -225,11 +251,11 @@ msgstr "मुलभूत फॉन्ट प्रकार. संभाव�
 
 #: ../data/epiphany.schemas.in.h:14
 msgid "Enable Java"
-msgstr "Java कार्यान्वित करा"
+msgstr "Java कार्यक्षम करा"
 
 #: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
-msgstr "JavaScript कार्यान्वित करा"
+msgstr "JavaScript कार्यक्षम करा"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
 msgid "Enable Web Inspector"
@@ -240,22 +266,30 @@ msgid "Enable smooth scrolling"
 msgstr "गुळगुळीत स्क्रोलींग कार्यान्वीत करा"
 
 #: ../data/epiphany.schemas.in.h:18
+msgid "Force new window requests to be opened in tabs instead of using a new window."
+msgstr "नवीन पटलाचा वापर करण्याएवजी नवीन पटल विनंतींना टॅब्स्मध्ये जबरन उघडण्यास प्रोत्साहीत करा."
+
+#: ../data/epiphany.schemas.in.h:19
+msgid "Force new windows to be opened in tabs"
+msgstr "नवीन पटलांना टॅब्स्मध्ये जबरन उघडण्यास प्रोत्साहीत करा"
+
+#: ../data/epiphany.schemas.in.h:20
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
 msgstr ""
-"डाउनलोड चौकट लपवा किंवा दर्शवा. लपविले असल्यास, नविन डाउनलोड सुरू झाल्यावर सूचना "
+"डाउनलोड चौकट लपवा किंवा दर्शवा. लपविले असल्यास, नवीन डाउनलोड सुरू झाल्यावर सूचना "
 "दर्शविले जाईल."
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
 msgstr "इतिहास पान वेळ क्षेत्र"
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:22
 msgid "Home page"
 msgstr "मुख्य पान"
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -263,40 +297,40 @@ msgstr ""
 "चित्रचेतनीकरण प्रतिमा कशी दर्शवायची. संभाव्य मुल्य आहे \"normal\", \"once\" व "
 "\"disabled\"."
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:24
 msgid "How to print frames"
 msgstr "फ्रेमची छपाई कशी करायची"
 
-#: ../data/epiphany.schemas.in.h:23
+#: ../data/epiphany.schemas.in.h:25
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
 msgstr ""
-"फ्रेम समाविष्टीत पानांची छपाई कशी करायची. परवानगीय मुल्य खालिल प्रकारे आहे \"normal\", "
-"\"separately\" व \"selected\"."
+"फ्रेम समाविष्टीत पानांची छपाई कशी करायची. परवानगीय मुल्य खालिल प्रकारे आहे \"normal"
+"\", \"separately\" व \"selected\"."
 
 #. Translators: this is the default encoding used by Epiphany for Web pages display
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:27
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:28
 msgid "Image animation mode"
 msgstr "प्रतिमा ऍनिमेशन रीत"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:29
 msgid "Languages"
 msgstr "भाषा"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:30
 msgid "Lists the active extensions."
 msgstr "सक्रिय विस्ताराची यादी."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:31
 msgid "Middle click to open the web page pointed to by the currently selected text"
 msgstr "सद्याचे निवडलेले पाठ्य द्वारे निर्देशीत वेब पान उघडण्याकरीता मध्य क्लिक दाबा"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:32
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -304,65 +338,67 @@ msgstr ""
 "मुख्य दृश्य पटलावरील मध्य क्लिक दाबल्यास सद्याचे निवडलेले पाठ्य द्वारे निर्देशीत वेब पान उघडले "
 "जाईल."
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:33
 msgid "Minimum font size"
 msgstr "किमान फॉन्ट आकार"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:34
 msgid "Preferred languages, two letter codes."
 msgstr "भाषा पसंती, दोन अक्षरी सांकेतीक."
 
-#: ../data/epiphany.schemas.in.h:33
-msgid "Remember passwords"
-msgstr "गुप्तशब्द लक्षात ठेवा"
-
-#: ../data/epiphany.schemas.in.h:34
-msgid "Show bookmarks bar by default"
-msgstr "ओळखचिन्ह पट्टी मुलभूतरित्या दर्शवा"
-
 #: ../data/epiphany.schemas.in.h:35
+msgid "Remember passwords"
+msgstr "पासवर्ड लक्षात ठेवा"
+
+#: ../data/epiphany.schemas.in.h:36
+msgid "Show bookmarks bar by default"
+msgstr "वाचनखूण पट्टी मुलभूतरित्या दर्शवा"
+
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show statusbar by default"
 msgstr "स्थितीपट्टी मुलभूतरित्या दर्शवा"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:38
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
-"भेट दिलेल्या पानांचा इतिहास खालिलरित्या दर्शवा \"ever\", \"last_two_days\", \"last_three_days"
-"\", \"today\"."
+"भेट दिलेल्या पानांचा इतिहास खालिलरित्या दर्शवा \"ever\", \"last_two_days\", "
+"\"last_three_days\", \"today\"."
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:39
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "एकच टॅब उघडे असल्यावर टॅब पट्टी दर्शवा."
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show toolbars by default"
 msgstr "साधनपट्टी मुलभूतरित्या दर्शवा"
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:41
 msgid "Size of disk cache"
 msgstr "तबकडी कॅशचा आकार"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache, in MB."
 msgstr "डिस्क कॅशेचे आकार, MB अंतर्गत."
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:43
 msgid "The bookmark information shown in the editor view"
 msgstr "संपादन दृश्यात खुणेच्या पानाची दाखवलेली माहिती"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:44
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
-msgstr "संपादक दृश्य मध्ये दर्शविलेली ओळखचिन्ह माहिती. यादीतील वैध मुल्य आहे \"address\" व \"title\"."
+msgstr ""
+"संपादक दृश्य मध्ये दर्शविलेली वाचनखूण माहिती. यादीतील वैध मुल्य आहे \"address\" व "
+"\"title\"."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:45
 msgid "The currently selected fonts language"
 msgstr "वर्तमानक्षणी निवडलेली फॉन्ट भाषा"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -380,21 +416,23 @@ msgstr ""
 "चायनीज), \"tr\" (टर्कीश), \"x-unicode\" (अन्य भाषा), \"x-western\" (लॅटीन "
 "स्क्रिप्ट द्वारे लिखीत भाषा), \"x-tamil\" (तामील) व \"x-devanagari\" (देवनागरी)."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The downloads folder"
 msgstr "डाउनलोडस् संचयीका"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid "The page information shown in the history view"
 msgstr "मागोवा दृश्यात दाखवलेली पानाविषयी माहिती"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-msgstr "हतिहास दृश्य मध्ये दर्शविण्याजोगी पानविषयी माहिती. यादीतील वैध मुल्य आहे \"ViewTitle\", \"ViewAddress\" व \"ViewDateTime\"."
+msgstr ""
+"हतिहास दृश्य मध्ये दर्शविण्याजोगी पानविषयी माहिती. यादीतील वैध मुल्य आहे \"ViewTitle"
+"\", \"ViewAddress\" व \"ViewDateTime\"."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -402,40 +440,41 @@ msgstr ""
 "डाउनलोड केलेले फाइल संचयीका मध्ये संचयीतकरायचे मार्ग; किंवा मुलभूत डाउनलोड संचयीका "
 "वापरण्याकरीताचे \"Downloads\", किंवा डेस्कटॉप संचयीका वापरण्याकरीताचे \"Desktop\"."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "उपकरणपट्टी शैली"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
-"साधनपट्टी शैली. परवांगीक मुल्य आहेत \"\" (GNOME मुलभूत शैलीचा वापर करा), \"both\" (पाठ्य व "
-"चिन्ह), \"both-horiz\" (चिन्हच्या व्यातिरिक्त पाठ्य), \"icons\", व \"text\"."
+"साधनपट्टी शैली. परवांगीक मुल्य आहेत \"\" (GNOME मुलभूत शैलीचा वापर करा), \"both"
+"\" (पाठ्य व चिन्ह), \"both-horiz\" (चिन्हच्या व्यातिरिक्त पाठ्य), \"icons\", व "
+"\"text\"."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
 msgstr "स्वतःचे रंग वापरा"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid "Use own fonts"
 msgstr "स्वतःचे फॉन्ट वापरा"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "पानाची विनंती केलेल्या रंगाच्या ऐवजी स्वत:चे रंग वापरा."
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "पानानी विनंती केलेल्या टंकमुद्रेऐवजी स्वत:ची टंकमुद्रा वापरा."
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:57
 msgid "Visibility of the downloads window"
 msgstr "डाउनलोड चौकटचे दृश्य"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:58
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -443,41 +482,43 @@ msgstr ""
 "जेव्हा फाइल ब्राउजर द्वारे उघडले जात नाही तेव्हा ते आपोआप डाउनलोड केले जाते व योग्य "
 "अनुप्रयोगास उघडले जाते."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
-msgstr "कुकीज कधी स्विकारायचे. संभाव्य मुल्य आहे \"anywhere\", \"current site\" व \"nowhere\"."
+msgstr ""
+"कुकीज कधी स्विकारायचे. संभाव्य मुल्य आहे \"anywhere\", \"current site\" व \"nowhere"
+"\"."
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
 msgstr "पार्श्वभूमी रंगचे छपाई करायचे की नाही"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:61
 msgid "Whether to print the background images"
 msgstr "पार्श्वभूमी प्रतिमाचे छपाई करायचे"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:62
 msgid "Whether to print the date in the footer"
 msgstr "तळटीपमध्ये दिनांक छापायची का नाही"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:63
 msgid "Whether to print the page address in the header"
 msgstr "शिरोभागामध्ये पानाचा पत्ता छापायचा का नाही"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "तळलेख मध्ये पान क्रमांकचे (पूर्ण पैकी x) छपाई करायचे का "
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the page title in the header"
 msgstr "पान शिर्षक हेडरमध्ये छापायचे का"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to store and prefill passwords in web sites."
-msgstr "संकेत स्थळ मधिल गुप्तशब्द संचयीत व पूर्वभरीव करायचे का."
+msgstr "संकेत स्थळ मधिल पासवर्ड संचयीत व पूर्वभरीव करायचे का."
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "x-western"
 msgstr "x-western"
 
@@ -499,11 +540,11 @@ msgstr "<b>मर्यादा</b>"
 
 #: ../data/glade/certificate-dialogs.glade.h:5
 msgid "Certificate _Fields"
-msgstr "प्रमाणपत्र क्षेत्र"
+msgstr "प्रमाणपत्र क्षेत्र (_F)"
 
 #: ../data/glade/certificate-dialogs.glade.h:6
 msgid "Certificate _Hierarchy"
-msgstr "प्रमाणपत्र_क्रमवारी"
+msgstr "प्रमाणपत्र श्रेणी (_H)"
 
 #: ../data/glade/certificate-dialogs.glade.h:7
 msgid "Common Name:"
@@ -573,7 +614,7 @@ msgstr "डाउनलोड्स"
 
 #: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
-msgstr "गुप्तशब्द"
+msgstr "पासवर्ड"
 
 #: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
@@ -583,13 +624,13 @@ msgstr "खाजगी माहिती"
 msgid "Text Encoding"
 msgstr "पाठ एनकोडिंग"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:330
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "दस्तऐवजात निर्देशित केल्याप्रमाणे कूट वापरा"
 
 #: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
-msgstr "गुप्तशब्द दर्शवा (_S)"
+msgstr "पासवर्ड दर्शवा (_S)"
 
 #: ../data/glade/form-signing-dialog.glade.h:1
 msgid "Sign Text"
@@ -601,20 +642,19 @@ msgid ""
 "sign the text with and enter its password below."
 msgstr ""
 "वरील पाठ्य करीता तुम्हाला स्वाक्षरी करायचे आहे हे निश्चित करा, पाठ्य स्वाक्षरी "
-"करण्याकरीता प्रमाणपत्र निवडा व खाली गुप्तशब्द प्रविष्ट करा."
+"करण्याकरीता प्रमाणपत्र निवडा व खाली पासवर्ड प्रविष्ट करा."
 
 #: ../data/glade/form-signing-dialog.glade.h:3
 msgid "_Certificate:"
 msgstr "प्रमाणपत्र(_C):"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../lib/ephy-password-dialog.c:420 ../lib/ephy-password-dialog.c:434
 msgid "_Password:"
-msgstr "गुप्तशब्द(_P):"
+msgstr "पासवर्ड(_P):"
 
 #: ../data/glade/form-signing-dialog.glade.h:5
 msgid "_View Certificate…"
-msgstr "प्रमाणपत्र पहा (_V)..."
+msgstr "प्रमाणपत्र पहा (_V)…"
 
 #: ../data/glade/prefs-dialog.glade.h:1
 msgid "<b>Cookies</b>"
@@ -638,7 +678,7 @@ msgstr "<b> भाषा</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:6
 msgid "<b>Passwords</b>"
-msgstr "<b>गुप्तशब्द</b>"
+msgstr "<b>पासवर्ड</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:7
 msgid "<b>Temporary Files</b>"
@@ -678,8 +718,8 @@ msgstr "भाषा निवडा(_a):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:641 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:335
+#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
+#: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "साफ करा(_e)"
 
@@ -689,17 +729,17 @@ msgstr "मुलभूत(_f):"
 
 #: ../data/glade/prefs-dialog.glade.h:18
 msgid "Enable Java_Script"
-msgstr "Java_Script कार्यान्वित करा"
+msgstr "JavaScript कार्यक्षम करा (_S)"
 
 #: ../data/glade/prefs-dialog.glade.h:20
 msgid "Enable _Java"
-msgstr "जावा कार्यान्वित करा"
+msgstr "Java कार्यक्षम करा (_J)"
 
 #: ../data/glade/prefs-dialog.glade.h:21
 msgid "Fonts & Style"
 msgstr "फॉन्ट्स आणि शैली"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:847
+#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
 msgid "Language"
 msgstr "भाषा"
 
@@ -717,15 +757,15 @@ msgstr "MB"
 
 #: ../data/glade/prefs-dialog.glade.h:27
 msgid "Only _from sites you visit"
-msgstr "फक्त तुम्ही भेट देत असलेल्या स्थळांवरील"
+msgstr "फक्त भेट दिलेल्या स्थळांपासूनच (_f)"
 
 #: ../data/glade/prefs-dialog.glade.h:28
 msgid "Preferences"
-msgstr "प्राधान्यता"
+msgstr "पसंती"
 
 #: ../data/glade/prefs-dialog.glade.h:29
 msgid "Privacy"
-msgstr "एकांत"
+msgstr "गोपणीयता"
 
 #: ../data/glade/prefs-dialog.glade.h:30
 msgid "Set to Current _Page"
@@ -745,39 +785,39 @@ msgstr "गुळगुळीत स्क्रोलींग वापरा 
 
 #: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Address:"
-msgstr "पत्ता(_A):"
+msgstr "पत्ता (_A):"
 
 #: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Always accept"
-msgstr "नेहमी स्वीकारा(_A)"
+msgstr "नेहमी स्वीकारा (_A)"
 
 #: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
-msgstr "डिस्क जागा(_D):"
+msgstr "डिस्क जागा (_D):"
 
 #: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
-msgstr "डाउनलोड फोल्डर(_D):"
+msgstr "डाउनलोड फोल्डर (_D):"
 
 #: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
-msgstr "स्टाईलशीट संपादीत करा (_E)..."
+msgstr "स्टाईलशीट संपादीत करा (_E)…"
 
 #: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Minimum size:"
-msgstr "किमान आकार(_M):"
+msgstr "किमान आकार (_M):"
 
 #: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Never accept"
-msgstr "कधीच स्वीकारू नका(_N)"
+msgstr "कधीच स्वीकारू नका (_N)"
 
 #: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Remember passwords"
-msgstr "गुप्तशब्द लक्षात ठेवा(_R)"
+msgstr "पासवर्ड लक्षात ठेवा (_R)"
 
 #: ../data/glade/print.glade.h:1
 msgid "<b>Background</b>"
-msgstr "<b> पार्श्वभूमी</b>"
+msgstr "<b>पार्श्वभूमी</b>"
 
 #: ../data/glade/print.glade.h:2
 msgid "<b>Footers</b>"
@@ -793,31 +833,31 @@ msgstr "<b>मथळे</b>"
 
 #: ../data/glade/print.glade.h:5
 msgid "As laid out on the _screen"
-msgstr "पडद्यावरील निश्चित केल्याप्रमाणे (_s)"
+msgstr "पडद्यावरील मांडणीप्रमाणे (_s)"
 
 #: ../data/glade/print.glade.h:6
 msgid "O_nly the selected frame"
-msgstr "फक्त निवडलेले पटल (_n)"
+msgstr "फक्त निवडलेली पटल (_n)"
 
 #: ../data/glade/print.glade.h:7
 msgid "P_age title"
-msgstr "पृष्ठ शिर्षक(_a)"
+msgstr "पृष्ठ शिर्षक (_a)"
 
 #: ../data/glade/print.glade.h:8
 msgid "Page _numbers"
-msgstr "पृष्ठ क्रमांक(_n)"
+msgstr "पृष्ठ क्रमांक (_n)"
 
 #: ../data/glade/print.glade.h:9
 msgid "Print background c_olors"
-msgstr "छापा"
+msgstr "पार्श्वभूमी रंगांची छपाई करा (_o)"
 
 #: ../data/glade/print.glade.h:10
 msgid "Print background i_mages"
-msgstr "छापा"
+msgstr "पार्श्वभूमी प्रतिमांची छपाई करा (_m)"
 
 #: ../data/glade/print.glade.h:11
 msgid "_Date"
-msgstr "तारीख (_D)"
+msgstr "दिनांक (_D)"
 
 #: ../data/glade/print.glade.h:12
 msgid "_Each frame separately"
@@ -825,42 +865,49 @@ msgstr "प्रत्येक पटल वेगळले (_E)"
 
 #: ../data/glade/print.glade.h:13
 msgid "_Page address"
-msgstr "पृष्ठ पत्ता(_P)"
+msgstr "पृष्ठ पत्ता (_P)"
 
 #. this opens the downloader window, or brings it to the foreground if already open
 #: ../embed/downloader-view.c:167
 msgid "_Show Downloads"
 msgstr "डाउनलोड्स दाखवा(_S)"
 
-#: ../embed/downloader-view.c:313
+#: ../embed/downloader-view.c:323
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:317
+#: ../embed/downloader-view.c:327
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:378
+#: ../embed/downloader-view.c:377
 msgid "_Pause"
 msgstr "थांबा(_P)"
 
-#: ../embed/downloader-view.c:378
+#: ../embed/downloader-view.c:377
 msgid "_Resume"
 msgstr "पुन्हा सुरू(_R)"
 
-#: ../embed/downloader-view.c:416
+#. impossible time or broken locale settings
+#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1740
+msgid "Unknown"
+msgstr "अपरिचित"
+
+#: ../embed/downloader-view.c:510
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "फाइल “%s” डाउनलोड केले."
 
-#: ../embed/downloader-view.c:419
+#: ../embed/downloader-view.c:513
 msgid "Download finished"
 msgstr "डाउनलोड पूर्ण"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:444
+#: ../embed/downloader-view.c:537
 #, c-format
 msgid ""
 "%s\n"
@@ -869,86 +916,128 @@ msgstr ""
 "%s\n"
 "%s चे %s"
 
-#. impossible time or broken locale settings
-#: ../embed/downloader-view.c:454 ../embed/downloader-view.c:459
-#: ../embed/ephy-download.c:98 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1737
-msgid "Unknown"
-msgstr "अपरिचित"
-
-#: ../embed/downloader-view.c:491
+#: ../embed/downloader-view.c:584
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d डाउनलोड"
 msgstr[1] "%d डाउनलोड"
 
-#: ../embed/downloader-view.c:598
+#: ../embed/downloader-view.c:719
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "फाइल “%s” डाउनलोड रांगेत समाविष्टीत करण्यात आले."
 
-#: ../embed/downloader-view.c:601
+#: ../embed/downloader-view.c:723
 msgid "Download started"
 msgstr "डाउनलोड प्रारंभ केले"
 
-#: ../embed/downloader-view.c:676 ../embed/downloader-view.c:685
+#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
 msgctxt "download status"
 msgid "Unknown"
 msgstr "अपरिचीत"
 
-#: ../embed/downloader-view.c:679
+#: ../embed/downloader-view.c:804
 msgctxt "download status"
 msgid "Failed"
 msgstr "अपयशी"
 
-#: ../embed/downloader-view.c:744 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:807
+msgctxt "download status"
+msgid "Cancelled"
+msgstr "रद्द केले"
+
+#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "फाइल"
 
-#: ../embed/downloader-view.c:767
+#: ../embed/downloader-view.c:893
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:778
+#: ../embed/downloader-view.c:904
 msgid "Remaining"
 msgstr "उर्वरित"
 
-#. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
-msgid "Blank page"
-msgstr "कोरे पान"
+#: ../embed/ephy-embed.c:463
+#| msgid "Save As"
+msgid "Save"
+msgstr "साठवा"
 
-#: ../embed/ephy-base-embed.c:1015
+#: ../embed/ephy-embed.c:605
+#| msgid "Unknown"
+msgctxt "file type"
+msgid "Unknown"
+msgstr "अपरिचीत"
+
+#: ../embed/ephy-embed.c:619
+msgid "Download this potentially unsafe file?"
+msgstr "संभाव्य असुरक्षीत फाइल डाऊनलोड करा?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:624
 #, c-format
-msgid "Redirecting to “%s”…"
-msgstr "“%s” करीता निर्देशीत केले…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"It is unsafe to open “%s” as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
+msgstr ""
+"फाइल प्रकार: “%s”.\n"
+"\n"
+"दस्तऐवज किंवा गोपणीयता सदोषीत होण्याच्या शक्यतामुळे “%s” उघडणे सुरक्षीत नाही. किंवा त्यांस डाऊनलोड करा."
 
-#: ../embed/ephy-base-embed.c:1017
+#: ../embed/ephy-embed.c:632
+#| msgid "Open a file"
+msgid "Open this file?"
+msgstr "ही फाइल उघडा?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/ephy-embed.c:638
 #, c-format
-msgid "Transferring data from “%s”…"
-msgstr "“%s” पासून माहिती स्थानंतरीत करत आहे…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You can open “%s” using “%s” or save it."
+msgstr ""
+"फाइल प्रकार: “%1$s”.\n"
+"\n"
+"“%3$s” चा वापर करून, तुम्ही “%2$s” उघडू शकता किंवा साठवू शकता."
 
-#: ../embed/ephy-base-embed.c:1019
+#: ../embed/ephy-embed.c:645
+#| msgid "_Download folder:"
+msgid "Download this file?"
+msgstr "ही फाइल डाउनलोड करा?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/ephy-embed.c:650
 #, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "“%s” पासून अधिप्रमाण करीता प्रतिक्षेत आहे…"
+msgid ""
+"File Type: “%s”.\n"
+"\n"
+"You have no application able to open “%s”. You can download it instead."
+msgstr ""
+"फाइल प्रकार: “%s”.\n"
+"\n"
+"“%s” उघडण्यासाठी तुमच्याकडे ऍप्लिकेशन नाही. किंवा त्यांस डाऊनलोड करा."
 
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1025 ../embed/ephy-base-embed.c:1201
-#, c-format
-msgid "Loading “%s”…"
-msgstr "“%s” दाखल करीत आहे…"
+#: ../embed/ephy-embed.c:657
+#| msgid "Save As"
+msgid "_Save As..."
+msgstr "असे साठवा (_S)..."
 
-#: ../embed/ephy-base-embed.c:1203
-msgid "Loading…"
-msgstr "दाखलन..."
+#: ../embed/ephy-embed.c:766
+msgid "Web Inspector"
+msgstr "वेब इन्सपेक्टर"
 
-#: ../embed/ephy-embed-shell.c:243
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "दृष्टांत आता वापरात येत नाही. मोझिला सुरू करण्यात अपयश."
+#: ../embed/ephy-embed-shell.c:242
+#| msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "Epiphany आत्ता वापरले जाऊ शकत नाही. प्रारंभ अपयशी."
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
@@ -1278,21 +1367,55 @@ msgstr "युनिकोड (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "अपरिचित (%s)"
 
-#: ../embed/ephy-history.c:486
+#: ../embed/ephy-history.c:485
 msgid "All"
 msgstr "सर्व"
 
-#: ../embed/ephy-history.c:654
+#: ../embed/ephy-history.c:653
 msgid "Others"
 msgstr "इतर"
 
-#: ../embed/ephy-history.c:660
+#: ../embed/ephy-history.c:659
 msgid "Local files"
 msgstr "स्थानिक फाइली"
 
-#: ../embed/webkit/webkit-embed.c:417
-msgid "Web Inspector"
-msgstr "Web Inspector"
+#. characters
+#. ms
+#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
+#: ../src/ephy-session.c:1341
+msgid "Blank page"
+msgstr "कोरे पान"
+
+#: ../embed/ephy-web-view.c:1131
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1322
+#, c-format
+msgid "Redirecting to “%s”…"
+msgstr "“%s” करीता निर्देशीत केले…"
+
+#: ../embed/ephy-web-view.c:1324
+#, c-format
+msgid "Transferring data from “%s”…"
+msgstr "“%s” पासून माहिती स्थानंतरीत करत आहे…"
+
+#: ../embed/ephy-web-view.c:1326
+#, c-format
+msgid "Waiting for authorization from “%s”…"
+msgstr "“%s” पासून अधिप्रमाण करीता प्रतिक्षेत आहे…"
+
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” दाखल करीत आहे…"
+
+#: ../embed/ephy-web-view.c:1442
+msgid "Loading…"
+msgstr "दाखलन…"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -1338,31 +1461,31 @@ msgstr "'Type=Link' डेस्कटॉप नोंदणी करीता 
 msgid "Not a launchable item"
 msgstr "दाखलनजोगी घटक नाही"
 
-#: ../lib/egg/eggsmclient.c:224
+#: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
 msgstr "सत्र व्यवस्थापकाशी जुळवणी अकार्यान्वीत करा"
 
-#: ../lib/egg/eggsmclient.c:227
+#: ../lib/egg/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
 msgstr "संचयीत संयोजना समाविष्टीत फाइल निर्देशीत करा"
 
-#: ../lib/egg/eggsmclient.c:227 ../src/ephy-main.c:91 ../src/ephy-main.c:93
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
 msgid "FILE"
 msgstr "FILE"
 
-#: ../lib/egg/eggsmclient.c:230
+#: ../lib/egg/eggsmclient.c:231
 msgid "Specify session management ID"
 msgstr "सत्र व्यवस्थापन ID निर्देशीत करा"
 
-#: ../lib/egg/eggsmclient.c:230
+#: ../lib/egg/eggsmclient.c:231
 msgid "ID"
 msgstr "ID"
 
-#: ../lib/egg/eggsmclient.c:244
+#: ../lib/egg/eggsmclient.c:252
 msgid "Session management options:"
 msgstr "सत्र व्यवस्थापन पर्याय:"
 
-#: ../lib/egg/eggsmclient.c:245
+#: ../lib/egg/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "सत्र व्यवस्थापन पर्याय दर्शवा"
 
@@ -1373,32 +1496,32 @@ msgstr "सत्र व्यवस्थापन पर्याय दर्
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:918
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "“_%s” दाखवा"
 
-#: ../lib/egg/egg-editable-toolbar.c:1381
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "उपकरणपट्टीवर हलवा(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1382
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "साधनपट्टीवर निवडलेले घटक स्थानांतरीत करा"
 
-#: ../lib/egg/egg-editable-toolbar.c:1383
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "उपकरणपट्टीवरून काढून टाका(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1384
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "साधनपट्टी मधून निवडलेले घटक काढूण टाका"
 
-#: ../lib/egg/egg-editable-toolbar.c:1385
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "उपकरणपट्टी नष्ट करा(_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "निवडलेली उपकरणपट्टी काढून टाका"
 
@@ -1406,33 +1529,33 @@ msgstr "निवडलेली उपकरणपट्टी काढून 
 msgid "Separator"
 msgstr "विभाजक"
 
-#: ../lib/ephy-file-chooser.c:411
+#: ../lib/ephy-file-chooser.c:381
 msgid "All supported types"
 msgstr "सर्व समर्थनीय प्रकार"
 
-#: ../lib/ephy-file-chooser.c:422
+#: ../lib/ephy-file-chooser.c:392
 msgid "Web pages"
 msgstr "वेब पृष्ठे"
 
-#: ../lib/ephy-file-chooser.c:430
+#: ../lib/ephy-file-chooser.c:400
 msgid "Images"
 msgstr "प्रतिमा"
 
-#: ../lib/ephy-file-chooser.c:438 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "All files"
 msgstr "सर्व फाइली"
 
-#: ../lib/ephy-file-helpers.c:290
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” मध्ये तात्पूरती संचयीका बनवू शकला नाही."
 
-#: ../lib/ephy-file-helpers.c:363
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "फाइल “%s” अस्तित्वात आहे. कृपया त्यास मार्गाच्या बाहेर काढा."
 
-#: ../lib/ephy-file-helpers.c:374
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "निर्देशिका “%s” निर्माण करण्यात अपयशी."
@@ -1472,63 +1595,31 @@ msgstr "फाइल गिरवू शकत नाही"
 msgid "Could not display help: %s"
 msgstr "मदत प्रदर्शित करू शकत नाही: %s"
 
-#: ../lib/ephy-password-dialog.c:392
-msgid "_Username:"
-msgstr "उपयोक्तानाम(_U):"
-
-#: ../lib/ephy-password-dialog.c:406
-msgid "_Domain:"
-msgstr "क्षेत्र(डोमेन)(_D):"
-
-#: ../lib/ephy-password-dialog.c:433
-msgid "_New password:"
-msgstr "नविन गुप्तशब्द(_N):"
-
-#: ../lib/ephy-password-dialog.c:443
-msgid "Con_firm password:"
-msgstr "गुप्तशब्द निश्चित करा(_f):"
-
-#: ../lib/ephy-password-dialog.c:469
-msgid "Password quality:"
-msgstr "गुप्तशब्द गुणवत्ता:"
-
-#: ../lib/ephy-password-dialog.c:487
-msgid "Do not remember this password"
-msgstr "हा गुप्तशब्द लक्षात ठेऊ नका"
-
-#: ../lib/ephy-password-dialog.c:491
-msgid "_Remember password for this session"
-msgstr "या सत्रासाठी गुप्तशब्द लक्षात ठेवा(_R)"
-
-#: ../lib/ephy-password-dialog.c:495
-msgid "Save password in _keyring"
-msgstr "कीरिंगमधील गुप्तशब्द संग्रह(_k)"
-
-#: ../lib/ephy-stock-icons.c:51
+#: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "पॉपअप विंडोज"
 
-#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
 msgid "History"
 msgstr "इतिहास"
 
-#: ../lib/ephy-stock-icons.c:53
+#: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1495
 msgid "Bookmark"
-msgstr "खूणगाठ"
+msgstr "वाचनखुण"
 
-#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:896
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1506
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
 msgid "Bookmarks"
-msgstr "ओळखचिन्ह"
+msgstr "वाचनखूण"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:272
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
 msgid "Address Entry"
 msgstr "पत्ता नोंद"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:52
 msgid "_Download"
 msgstr "डाउनलोड(_D)"
 
@@ -1601,20 +1692,20 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:932
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "या पान करीता लिंक देण्याकरीता हा चिन्ह ओढा व टाका"
 
-#: ../lib/widgets/ephy-search-entry.c:142
+#: ../lib/widgets/ephy-search-entry.c:140
 msgid "Clear"
 msgstr "पुसून टाका"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "स्क्रिप्ट “%s” कार्यान्वीत करतो"
@@ -1633,8 +1724,8 @@ msgstr[1] "%d समान (_S)"
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] "%d समान ओळखचिन्हाशी जुळवणी करा (_U)"
-msgstr[1] "%d समान ओळखचिन्हांशी जुळवणी करा (_U)"
+msgstr[0] "%d समान वाचनखूणाशी जुळवणी करा (_U)"
+msgstr[1] "%d समान वाचनखूणांशी जुळवणी करा (_U)"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:279
 #: ../src/bookmarks/ephy-bookmark-properties.c:301
@@ -1663,95 +1754,82 @@ msgstr "विषय(_o):"
 msgid "Sho_w all topics"
 msgstr "सर्व विषय दाखवा(_w)"
 
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:109
-msgid "Search the web"
-msgstr "वेब शोधा"
-
-#: ../src/bookmarks/ephy-bookmarks.c:109
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
 msgstr "मनोरंजन"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "News"
 msgstr "बातम्या"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Shopping"
 msgstr "खरेदी"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Sports"
 msgstr "खेळ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Travel"
 msgstr "प्रवास"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Work"
 msgstr "काम"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:461
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "Update bookmark “%s”?"
-msgstr "खूणगाठ “%s” अद्ययावत करा?"
+msgstr "वाचनखुण “%s” अद्ययावत करा?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:466
+#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "ओळचिन्हाकृत पान “%s” कडे हलविण्यात आले."
 
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "_Don't Update"
 msgstr "अद्ययावत करू नका(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:472
+#: ../src/bookmarks/ephy-bookmarks.c:452
 msgid "_Update"
 msgstr "अद्ययावत(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
-msgstr "खूणगाठ अद्ययावत करा?"
+msgstr "वाचनखुण अद्ययावत करा?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1223
+#: ../src/bookmarks/ephy-bookmarks.c:1203
 msgctxt "bookmarks"
 msgid "All"
 msgstr "सर्व"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1226
+#: ../src/bookmarks/ephy-bookmarks.c:1206
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "बहुतांशवेळी भेट दिलेले"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1230
+#: ../src/bookmarks/ephy-bookmarks.c:1210
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "विभाजीत नाही"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1235
+#: ../src/bookmarks/ephy-bookmarks.c:1215
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "जवळील स्थान"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1470
-#: ../src/bookmarks/ephy-bookmarks-import.c:270 ../src/ephy-session.c:1299
+#: ../src/bookmarks/ephy-bookmarks.c:1450
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "शिर्षकहीन"
 
@@ -1769,33 +1847,33 @@ msgstr "या विषयातून काढून टाका"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:112
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
 msgid "_File"
 msgstr "फाइल(_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:113
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
 msgid "_Edit"
 msgstr "संपादा(_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
 msgid "_View"
 msgstr "दृश्य(_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
 msgid "_Help"
 msgstr "मदत(_H)"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "_New Topic"
-msgstr "नविन विषय(_N)"
+msgstr "नवीन विषय(_N)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Create a new topic"
-msgstr "नविन विषय निर्माण करा"
+msgstr "नवीन विषय निर्माण करा"
 
 #. FIXME ngettext
 #. File Menu
@@ -1805,12 +1883,12 @@ msgstr "नविन विषय निर्माण करा"
 #: ../src/ephy-history-window.c:705
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
-msgstr[0] "नविन खिडकी उघडा (_W)"
-msgstr[1] "नविन खिडकी उघडा (_W)"
+msgstr[0] "नवीन पटल उघडा (_W)"
+msgstr[1] "नवीन पटल उघडा (_W)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Open the selected bookmark in a new window"
-msgstr "निवडलेला बुकमार्क नविन विंडोमध्ये उघडा"
+msgstr "निवडलेला बुकमार्क नवीन विंडोमध्ये उघडा"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
@@ -1819,16 +1897,16 @@ msgstr "निवडलेला बुकमार्क नविन विं
 #: ../src/ephy-history-window.c:708
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
-msgstr[0] "नविन टॅब उघडा (_T)"
-msgstr[1] "नविन टॅब उघडा (_T)"
+msgstr[0] "नवीन टॅब उघडा (_T)"
+msgstr[1] "नवीन टॅब उघडा (_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Open the selected bookmark in a new tab"
-msgstr "निवडलेला बुकमार्क नविन टॅबमध्ये उघडा"
+msgstr "निवडलेला बुकमार्क नवीन टॅबमध्ये उघडा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "_Rename…"
-msgstr "पुन्हनामांकन (_R)..."
+msgstr "पुन्हनामांकन (_R)…"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "Rename the selected bookmark or topic"
@@ -1846,22 +1924,22 @@ msgstr "निवडलेल्या खूणेच्या पानाच�
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "_Import Bookmarks…"
-msgstr "ओळखचिन्ह"
+msgstr "वाचनखूणा आयात करा (_I)…"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Import bookmarks from another browser or a bookmarks file"
-msgstr "दुसय्या संचारसाधना मधून किवा खूणेच्या पानांच्या फाइल मधून खूनेचे पान आर्यात करा"
+msgstr "दुसऱ्या ब्राऊजरपासून किंवा वाचणखुण फाइलपासून वाचणखूणा आयात करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_Export Bookmarks…"
-msgstr "ओळखचिन्ह"
+msgstr "वाचनखूणा एक्सपोर्ट करा (_E)…"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Export bookmarks to a file"
-msgstr "ओळखचिन्ह फाइलमध्ये निर्यात करा"
+msgstr "फाइलकरीता वाचनखुणा एक्सपोर्ट करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:144
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
 msgid "_Close"
 msgstr "बंद करा(_C)"
 
@@ -1871,29 +1949,29 @@ msgstr "बुकमार्कची विंडो बंद करा"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
 msgid "Cu_t"
 msgstr "कापा(_t)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
 msgid "Cut the selection"
 msgstr "निवड कापा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1362
 #: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:155
 msgid "_Copy"
 msgstr "प्रतिलिपी(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:160
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
 msgid "Copy the selection"
 msgstr "निवड प्रतिलिपी करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:162
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
 msgid "_Paste"
 msgstr "चिटकवा(_P)"
 
@@ -1909,35 +1987,35 @@ msgstr "नष्ट करा(_D)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Delete the selected bookmark or topic"
-msgstr "निवडलेली खूणगाठ किंवा विषय नष्ट करा"
+msgstr "निवडलेली वाचनखुण किंवा विषय नष्ट करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:168
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
 msgid "Select _All"
 msgstr "सर्व निवडा(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
-msgstr "सर्व ओळखचिन्ह किंवा पाठ निवडा"
+msgstr "सर्व वाचनखूण किंवा पाठ निवडा"
 
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
 msgid "_Contents"
 msgstr "अंतर्भूत बाबी(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
-msgstr "ओळखचिन्ह मदत प्रदर्शीत करा"
+msgstr "वाचनखूण मदत प्रदर्शीत करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:265
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
 msgid "_About"
 msgstr "च्या विषयी(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:266
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
 msgid "Display credits for the web browser creators"
 msgstr "वेब ब्राऊजरच्या निर्मात्यांचे लेखक"
 
@@ -1947,7 +2025,7 @@ msgstr "उपकरणपट्टीवर दाखवा(_S)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
 msgid "Show the selected bookmark on a toolbar"
-msgstr "साधनपट्टीवर निवडलेले ओळखचिन्ह दर्शवा"
+msgstr "साधनपट्टीवर निवडलेले वाचनखूण दर्शवा"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:230
@@ -1985,8 +2063,8 @@ msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
-"जोपर्यंत ते इतर विषयास कारणीभूत ठरत नाही तोपर्यंत हा विषय काढूण टाकल्यास सर्व ओळखचिन्ह "
-"विनाविभागीय होतील. ओळखचिन्ह काढूण टाकले जाऊ शकणार नाही."
+"जोपर्यंत ते इतर विषयास कारणीभूत ठरत नाही तोपर्यंत हा विषय काढूण टाकल्यास सर्व वाचनखूण "
+"विनाविभागीय होतील. वाचनखूण काढूण टाकले जाऊ शकणार नाही."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:402
 msgid "_Delete Topic"
@@ -2031,28 +2109,28 @@ msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
-"“%s” पासूनचे ओळखचिन्ह प्राप्त करू शकले नाही कारण फाइल सदोषीत आहे किंवा प्रकार "
+"“%s” पासूनचे वाचनखूण प्राप्त करू शकले नाही कारण फाइल सदोषीत आहे किंवा प्रकार "
 "विनासमर्थीत आहे."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:746
 msgid "Import Bookmarks from File"
-msgstr "ओळखचिन्ह फाइलमधून आयात करा"
+msgstr "वाचनखूण फाइलमधून आयात करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:753
 msgid "Firefox/Mozilla bookmarks"
-msgstr "Firefox/Mozilla ओळखचिन्ह"
+msgstr "Firefox/Mozilla वाचनखूण"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Galeon/Konqueror bookmarks"
-msgstr "गॅलिऑन/कॉन्करर ओळखचिन्ह"
+msgstr "गॅलिऑन/कॉन्करर वाचनखूण"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:761
 msgid "Epiphany bookmarks"
-msgstr "Epiphany ओळखचिन्ह"
+msgstr "Epiphany वाचनखूण"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:885
 msgid "Export Bookmarks"
-msgstr "ओळखचिन्ह निर्यात करा"
+msgstr "वाचनखूण निर्यात करा"
 
 #. Make a format selection combo & label
 #: ../src/bookmarks/ephy-bookmarks-editor.c:902
@@ -2061,7 +2139,7 @@ msgstr "फाइल स्वरूप(_o):"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:946
 msgid "Import Bookmarks"
-msgstr "ओळखचिन्ह आयात करा"
+msgstr "वाचनखूण आयात करा"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:952
 msgid "I_mport"
@@ -2069,7 +2147,7 @@ msgstr "आयात करा(_m)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:966
 msgid "Import bookmarks from:"
-msgstr "ओळखचिन्ह येथून आयात करा:"
+msgstr "वाचनखूण येथून आयात करा:"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/ephy-history-window.c:714
@@ -2097,24 +2175,24 @@ msgstr "पत्ता"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "Show properties for this bookmark"
-msgstr "या ओळखचिन्हसाठी गुणधर्म दाखवा "
+msgstr "या वाचनखूणसाठी गुणधर्म दाखवा "
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:311
 msgid "Open this bookmark in a new tab"
-msgstr "ही खूणगाठ नविन टॅबमध्ये उघडा"
+msgstr "ही वाचनखुण नवीन टॅबमध्ये उघडा"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:323
 msgid "Open this bookmark in a new window"
-msgstr "ही खूणगाठ नविन खिडकीमध्ये उघडा"
+msgstr "ही वाचनखुण नवीन पटलमध्ये उघडा"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
 msgid "Open in New _Tabs"
-msgstr "नविन टॅबमध्ये उघडा(_T)"
+msgstr "नवीन टॅबमध्ये उघडा(_T)"
 
 #: ../src/bookmarks/ephy-open-tabs-action.c:75
 msgid "Open the bookmarks in this topic in new tabs"
-msgstr "या विषयातील ओळखचिन्ह नविन टॅबमध्ये उघडा"
+msgstr "या विषयातील वाचनखूण नवीन टॅबमध्ये उघडा"
 
 #: ../src/bookmarks/ephy-related-action.c:152
 msgid "Related"
@@ -2129,19 +2207,19 @@ msgstr "विषय"
 msgid "Create topic “%s”"
 msgstr "विषय “%s” निर्माण करा"
 
-#: ../src/ephy-encoding-dialog.c:311
+#: ../src/ephy-encoding-dialog.c:319
 msgid "Encodings"
 msgstr "एनकोडिंग्स"
 
-#: ../src/ephy-encoding-menu.c:322
+#: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
-msgstr "इतर (_O)..."
+msgstr "इतर (_O)…"
 
-#: ../src/ephy-encoding-menu.c:323
+#: ../src/ephy-encoding-menu.c:331
 msgid "Other encodings"
 msgstr "इतर एनकोडिंग्स"
 
-#: ../src/ephy-encoding-menu.c:329
+#: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
 msgstr "स्वयंचलित(_A)"
 
@@ -2163,32 +2241,32 @@ msgstr "शोधा:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:444 ../src/ephy-find-toolbar.c:566
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "अक्षर आकार संवेदनशील (_C)"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "मागील शोधा"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "शोधायच्या अक्षरसंचाचे आधीचे आस्तित्व शोधा"
 
-#: ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "पुढील शोधा"
 
-#: ../src/ephy-find-toolbar.c:561
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "शोधायच्या अक्षरसंचाचे पुढील अस्तित्व शोधा"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:531
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
 msgid "Leave Fullscreen"
 msgstr "पूर्ण स्क्रीन सोडा"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:302
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
 msgid "Go"
 msgstr "जा"
 
@@ -2202,7 +2280,7 @@ msgstr "निवडलेली इतिहास जोडणी टॅबम
 
 #: ../src/ephy-history-window.c:160
 msgid "Add _Bookmark…"
-msgstr "खूणगाठ"
+msgstr "वाचनखुण समाविष्ट करा (_B)…"
 
 #: ../src/ephy-history-window.c:161
 msgid "Bookmark the selected history link"
@@ -2210,7 +2288,7 @@ msgstr "निवडलेल्या मागोवा दुवा खूण
 
 #: ../src/ephy-history-window.c:164
 msgid "Close the history window"
-msgstr "इतिहास खिडकी बंद करा"
+msgstr "इतिहास पटल बंद करा"
 
 #: ../src/ephy-history-window.c:178
 msgid "Delete the selected history link"
@@ -2291,59 +2369,59 @@ msgstr "साइट्स"
 msgid "Date"
 msgstr "दिवस"
 
-#: ../src/ephy-main.c:76 ../src/ephy-main.c:557 ../src/window-commands.c:879
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
 msgid "GNOME Web Browser"
 msgstr "GNOME वेब ब्राउजर"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:90
 msgid "Open a new tab in an existing browser window"
-msgstr "नविन टॅब अस्तित्वातील ब्राउजर चौकटीत उघडा"
+msgstr "नवीन टॅब अस्तित्वातील ब्राउजर चौकटीत उघडा"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:92
 msgid "Open a new browser window"
-msgstr "नविन ब्राउजर खिडकी उघडा"
+msgstr "नवीन ब्राउजर पटल उघडा"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:94
 msgid "Launch the bookmarks editor"
-msgstr "खूणगाठ संपादक प्रक्षेपित करा"
+msgstr "वाचनखुण संपादक प्रक्षेपित करा"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:96
 msgid "Import bookmarks from the given file"
-msgstr "ठराविक फाइल मधून ओळखचिन्ह प्राप्त करा"
+msgstr "ठराविक फाइल मधून वाचनखूण प्राप्त करा"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:98
 msgid "Load the given session file"
 msgstr "ठराविक सत्र फाइल दाखल करा"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:100
 msgid "Add a bookmark"
-msgstr "खूणगाठ जोडा"
+msgstr "वाचनखुण जोडा"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:100
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:102
 msgid "Start a private instance"
 msgstr "खासगी क्षण सुरू करा"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:104
 msgid "Profile directory to use in the private instance"
 msgstr "खासगी क्षणात वापरण्याजोगी संक्षिप्त चित्राची संचयीका"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:104
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:101
+#: ../src/ephy-main.c:106
 msgid "URL …"
 msgstr "URL"
 
-#: ../src/ephy-main.c:418
+#: ../src/ephy-main.c:423
 msgid "Could not start GNOME Web Browser"
 msgstr "GNOME वेब ब्राउजर सुरू करता आला नाही"
 
-#: ../src/ephy-main.c:421
+#: ../src/ephy-main.c:426
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2352,26 +2430,34 @@ msgstr ""
 "खालील त्रुटीमुळे प्रारंभ अपयशी झाले:\n"
 "%s"
 
-#: ../src/ephy-main.c:558
+#: ../src/ephy-main.c:563
 msgid "GNOME Web Browser options"
 msgstr "GNOME वेब ब्राउजर पर्याय"
 
-#: ../src/ephy-notebook.c:624
+#: ../src/ephy-notebook.c:626
 msgid "Close tab"
 msgstr "टॅब बंद करा"
 
-#: ../src/ephy-session.c:115
+#: ../src/ephy-profile-migration.c:80
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "Mozilla पासून कुकीज्ची प्रत निर्माण करण्यास अपयशी."
+
+#: ../src/ephy-profile-migration.c:375
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr "अलिकडील स्थानांतरन मार्कर वाचण्यास अपयशी, प्रोफाइल स्थानांतरन रद्द करत आहे."
+
+#: ../src/ephy-session.c:116
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "डाऊनलोड रद्द होतील व लॉगआऊट %d सेकंद नंतर कार्यान्वीत होईल."
 msgstr[1] "डाऊनलोड रद्द होतील व लॉगआऊट %d सेकंद नंतर कार्यान्वीत होईल."
 
-#: ../src/ephy-session.c:227
+#: ../src/ephy-session.c:228
 msgid "Abort pending downloads?"
 msgstr "उर्वरीत डाउनलोड रद्द करा?"
 
-#: ../src/ephy-session.c:232
+#: ../src/ephy-session.c:233
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -2379,19 +2465,19 @@ msgstr ""
 "आताही डाउनलोड बाकी राहिले आहे. तुम्ही लॉगऑउट केल्यास, ते रद्द केले जातील व प्राप्त करू "
 "शकणार नाही."
 
-#: ../src/ephy-session.c:236
+#: ../src/ephy-session.c:237
 msgid "_Cancel Logout"
 msgstr "बाहेर जाणे(लॉगआउट) रद्द(_C)"
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:239
 msgid "_Abort Downloads"
 msgstr "डाउनलोड्स सोडा(_A)"
 
-#: ../src/ephy-session.c:564
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "आधीच्या संचारसाधन विडो व टँब पुनरुजिवित करु का?"
 
-#: ../src/ephy-session.c:568
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2399,27 +2485,36 @@ msgstr ""
 "Epiphany शेवटच्याक्षणी चालविल्यापासून अनपेक्षीतरित्या बाहेर पडले. तुम्ही उघडलेले चौकट व टॅब "
 "पुन्हप्राप्त करू शकता."
 
-#: ../src/ephy-session.c:572
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "सुधारू नका(_D)"
 
-#: ../src/ephy-session.c:574
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "सुधारा(_R)"
 
-#: ../src/ephy-session.c:576
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "क्रॅश सुधारणा"
 
-#: ../src/ephy-shell.c:168
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr "वेब ब्राऊजर अनपेक्षीतरित्या बंद होतेवेळी हे पान लोड होत असे. पान पुनःलोड केल्यास याची पुनराकृती होईल. असे झाल्यास, कृपया अडचण %s डेव्हलपर्स्कडे पाठवा."
+
+#: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
 msgstr "साइडबार विस्तार आवश्यक"
 
-#: ../src/ephy-shell.c:170
+#: ../src/ephy-shell.c:173
 msgid "Sidebar Extension Required"
 msgstr "साइडबार विस्तार आवश्यक"
 
-#: ../src/ephy-shell.c:174
+#: ../src/ephy-shell.c:177
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "तुम्ही क्लिक केलेल्या दुव्यावर बाजूची पट्टी विस्तार प्रणाली कार्यरत करणे आवश्यक आहे."
 
@@ -2438,90 +2533,90 @@ msgstr "कळफलक निवड पध्दती मध्ये, बा�
 msgid "Switch to this tab"
 msgstr "या टॅबवर बदला"
 
-#: ../src/ephy-toolbar.c:211
+#: ../src/ephy-toolbar.c:224
 msgid "_Back"
 msgstr "मागे(_B)"
 
-#: ../src/ephy-toolbar.c:213
+#: ../src/ephy-toolbar.c:226
 msgid "Go to the previous visited page"
 msgstr "आधी भेट दिलेल्या पानावर जा "
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:217
+#: ../src/ephy-toolbar.c:230
 msgid "Back history"
 msgstr "मागे इतिहास"
 
-#: ../src/ephy-toolbar.c:231
+#: ../src/ephy-toolbar.c:244
 msgid "_Forward"
 msgstr "पुढे(_F)"
 
-#: ../src/ephy-toolbar.c:233
+#: ../src/ephy-toolbar.c:246
 msgid "Go to the next visited page"
 msgstr "भेट दिलेल्या पुढच्या पानावर जा"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:237
+#: ../src/ephy-toolbar.c:250
 msgid "Forward history"
 msgstr "पुढे इतिहास"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:263
 msgid "_Up"
 msgstr "वर(_U)"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:265
 msgid "Go up one level"
 msgstr "एक स्तर वर जा"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:269
 msgid "List of upper levels"
 msgstr "वरच्या स्तरांची यादी"
 
-#: ../src/ephy-toolbar.c:274
+#: ../src/ephy-toolbar.c:287
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "उघडण्याकरीता, किंवा वाक्यरचना शोधण्याकरीता वेब पत्ता प्रविष्ट करा"
 
-#: ../src/ephy-toolbar.c:290
+#: ../src/ephy-toolbar.c:303
 msgid "Zoom"
 msgstr "झूम"
 
-#: ../src/ephy-toolbar.c:292
+#: ../src/ephy-toolbar.c:305
 msgid "Adjust the text size"
 msgstr "पाठ आकार व्यवस्थित करा"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:317
 msgid "Go to the address entered in the address entry"
 msgstr "पत्याच्या नोंदीत प्रविष्ट केलेल्या पत्यावर जा"
 
-#: ../src/ephy-toolbar.c:313
+#: ../src/ephy-toolbar.c:326
 msgid "_Home"
 msgstr "गृह(_H)"
 
-#: ../src/ephy-toolbar.c:315
+#: ../src/ephy-toolbar.c:328
 msgid "Go to the home page"
 msgstr "गृह पृष्ठावर जा"
 
-#: ../src/ephy-toolbar.c:325
-msgid "New _Tab"
-msgstr "नविन टॅब(_T)"
-
-#: ../src/ephy-toolbar.c:327
-msgid "Open a new tab"
-msgstr "नविन टॅब उघडा"
-
-#: ../src/ephy-toolbar.c:336
-msgid "_New Window"
-msgstr "नविन खिडकी(_N)"
-
 #: ../src/ephy-toolbar.c:338
+msgid "New _Tab"
+msgstr "नवीन टॅब(_T)"
+
+#: ../src/ephy-toolbar.c:340
+msgid "Open a new tab"
+msgstr "नवीन टॅब उघडा"
+
+#: ../src/ephy-toolbar.c:349
+msgid "_New Window"
+msgstr "नवीन पटल(_N)"
+
+#: ../src/ephy-toolbar.c:351
 msgid "Open a new window"
-msgstr "निवन खिडकी उघडा"
+msgstr "निवन पटल उघडा"
 
 #: ../src/ephy-toolbar-editor.c:71
 msgctxt "toolbar style"
@@ -2560,567 +2655,567 @@ msgstr "उपकरणपट्टी बटन लेबले(_b):"
 
 #: ../src/ephy-toolbar-editor.c:268
 msgid "_Add a New Toolbar"
-msgstr "नविन उपकरणपट्टी जोडा(_A)"
+msgstr "नवीन उपकरणपट्टी जोडा(_A)"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:111
 msgid "_Bookmarks"
-msgstr "ओळखचिन्ह(_B)"
+msgstr "वाचनखूण(_B)"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:112
 msgid "_Go"
 msgstr "जा(_G)"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:113
 msgid "T_ools"
 msgstr "उपकरणे(_o)"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:114
 msgid "_Tabs"
 msgstr "टॅब्स(_T)"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:116
 msgid "_Toolbars"
-msgstr "उपकरणपट्ट्या(_T)"
+msgstr "उपकरनपट्ट्या(_T)"
 
 #. File menu
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:122
 msgid "_Open…"
-msgstr "उघडा"
+msgstr "उघडा (_O)…"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:123
 msgid "Open a file"
 msgstr "फाइल उघडा"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:125
 msgid "Save _As…"
-msgstr "संग्रहा"
+msgstr "असे साठवा (_A)…"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:126
 msgid "Save the current page"
-msgstr "चालू पान संग्रहा"
+msgstr "चालू पान साठवा"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:128
 msgid "Page Set_up"
 msgstr "पृष्ठ संयोजना (_u)"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:129
 msgid "Setup the page settings for printing"
 msgstr "छपाईकरीता पानाची संयोजना निश्चित करा"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:131
 msgid "Print Pre_view"
-msgstr "मुद्रण पूर्वदृश्य(_v)"
+msgstr "मुद्रण पूर्वदृष्य(_v)"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:132
 msgid "Print preview"
-msgstr "मुद्रण पूर्वदृश्य"
+msgstr "मुद्रण पूर्वदृष्य"
+
+#: ../src/ephy-window.c:134
+msgid "_Print…"
+msgstr "छपाई करा (_P)…"
+
+#: ../src/ephy-window.c:135
+msgid "Print the current page"
+msgstr "सध्याचे पानाची छपाई करा"
+
+#: ../src/ephy-window.c:137
+msgid "S_end Link by Email…"
+msgstr "दुवा ईमेल द्वारे पाठवा (_e)…"
 
 #: ../src/ephy-window.c:138
-msgid "_Print…"
-msgstr "छापा"
-
-#: ../src/ephy-window.c:139
-msgid "Print the current page"
-msgstr "चालू पान मुद्रित करा"
-
-#: ../src/ephy-window.c:141
-msgid "S_end Link by Email…"
-msgstr "लिंक ईमेल द्वारे पाठवा (_e)..."
-
-#: ../src/ephy-window.c:142
 msgid "Send a link of the current page"
 msgstr "चालू पानाची लिंक पाठवा"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:141
 msgid "Close this tab"
 msgstr "ही टॅब बंद करा"
 
 #. Edit menu
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:146
 msgid "_Undo"
-msgstr "क्रिया मागे घ्या(_U)"
+msgstr "पूर्ववत् करा (_U)"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:147
 msgid "Undo the last action"
 msgstr "शेवटची क्रिया मागे घ्या"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:149
 msgid "Re_do"
-msgstr "पुन्हा करा(_d)"
+msgstr "पुन्हा करा (_d)"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:150
 msgid "Redo the last undone action"
 msgstr "टाळलेली कृती पुन्हा करा"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:159
 msgid "Paste clipboard"
 msgstr "क्लिपबोर्ड चिटकवा"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:162
 msgid "Delete text"
-msgstr "पाठ नष्ट करा"
+msgstr "मजकूर नष्ट करा"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:165
 msgid "Select the entire page"
-msgstr "संपूर्ण पान निवडा"
+msgstr "संपूर्ण पान नीवडा"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:167
 msgid "_Find…"
-msgstr "शोधा"
+msgstr "शोधा (_F)…"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:168
 msgid "Find a word or phrase in the page"
 msgstr "पानात एक शब्द किंवा शब्दसंच शोधा"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:170
 msgid "Find Ne_xt"
-msgstr "पुढील शोधा(_x)"
+msgstr "पुढचे शोधा (_x)"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:171
 msgid "Find next occurrence of the word or phrase"
 msgstr "शब्द किंवा वाक्यरचनाचे पुढिल घटना शोधा"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:173
 msgid "Find Pre_vious"
 msgstr "मागील शोधा(_v)"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:174
 msgid "Find previous occurrence of the word or phrase"
 msgstr "शब्द किंवा वाक्यरचनाची पुढिल घटना शोधा"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:176
 msgid "P_ersonal Data"
 msgstr "वय्यक्तिक माहिती(_e)"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:177
 msgid "View and remove cookies and passwords"
-msgstr "किकीज आणि गुप्तशब्द पहा आणि काढा"
+msgstr "किकीज आणि पासवर्ड पहा आणि काढा"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:180
 msgid "Certificate_s"
 msgstr "प्रमाणपत्रे(_s)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:181
 msgid "Manage Certificates"
 msgstr "प्रमाणपत्रे व्यवस्थापित करा"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:184
 msgid "P_references"
-msgstr "प्राधान्यता(_r)"
+msgstr "पसंती(_r)"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:185
 msgid "Configure the web browser"
 msgstr "वेब ब्राउजर व्यूहरचित करा"
 
 #. View menu
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:190
 msgid "_Customize Toolbars…"
-msgstr "साधनपट्टी इच्छानुरूप करा (_C)..."
+msgstr "साधनपट्टी पसंतीचे करा (_C)…"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:191
 msgid "Customize toolbars"
 msgstr "उपकरणपट्ट्या स्वेच्छेनुसार करा"
 
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
 msgid "_Stop"
 msgstr "थांबा(_S)"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:194
 msgid "Stop current data transfer"
 msgstr "चालू डेटा स्थानांतरण थांबवा"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:198
 msgid "_Reload"
 msgstr "पुनःभारित करा(_R)"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:199
 msgid "Display the latest content of the current page"
 msgstr "सद्याचे पानाचे अलिकडील अनुक्रम दर्शवा"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:201
 msgid "_Larger Text"
 msgstr "मोठा पाठ(_L)"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:202
 msgid "Increase the text size"
 msgstr "पाठ आकार वाढवा"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:204
 msgid "S_maller Text"
 msgstr "लहान पाठ(_m)"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:205
 msgid "Decrease the text size"
 msgstr "पाठ आकार कमी करा"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:207
 msgid "_Normal Size"
 msgstr "सामान्य आकार(_N)"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:208
 msgid "Use the normal text size"
 msgstr "सामान्य पाठ आकार वापरा"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:210
 msgid "Text _Encoding"
 msgstr "पाठ एनकोडिंग(_E)"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:211
 msgid "Change the text encoding"
 msgstr "पाठ एनकोडिंग बदला"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:213
 msgid "_Page Source"
 msgstr "पान स्त्रोत(_P)"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:214
 msgid "View the source code of the page"
 msgstr "पानाचा स्त्रोत कोड पहा"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:216
 msgid "Page _Security Information"
 msgstr "सुरक्षा माहिती विषयक पान (_S)"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:217
 msgid "Display security information for the web page"
 msgstr "वेब पानाकरीता सुरक्षा माहिती दर्शवा"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:222
 msgid "_Add Bookmark…"
-msgstr "खूणगाठ"
+msgstr "वाचनखुण समाविष्ट करा… (_A)"
 
-#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
+#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
 msgid "Add a bookmark for the current page"
-msgstr "चालू पानासाठी खूणगाठ जोडा"
+msgstr "सध्याच्या पानासाठी वाचनखुण समाविष्ट करा"
 
-#: ../src/ephy-window.c:229
+#: ../src/ephy-window.c:225
 msgid "_Edit Bookmarks"
-msgstr "ओळखचिन्ह संपादन करा(_E)"
+msgstr "वाचनखूण संपादीत करा (_E)"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:226
 msgid "Open the bookmarks window"
-msgstr "खूणगाठ खिडकी उघडा"
+msgstr "वाचनखुण पटल उघडा"
 
 #. Go menu
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:231
 msgid "_Location…"
-msgstr "स्थान (_L)..."
+msgstr "ठिकाण (_L)…"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:232
 msgid "Go to a specified location"
 msgstr "दर्शवलेल्या ठिकाणी जा"
 
 #. History
-#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:379
+#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
 msgid "Hi_story"
-msgstr "इतिहास(_s)"
+msgstr "इतिहास (_s)"
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:235
 msgid "Open the history window"
-msgstr "इतिहास खिडकी उघडा"
+msgstr "इतिहास पटल उघडा"
 
 #. Tabs menu
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:240
 msgid "_Previous Tab"
 msgstr "मागील टॅब(_P)"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:241
 msgid "Activate previous tab"
-msgstr "मागील टॅब कार्यान्वित करा"
+msgstr "मागील टॅब कार्यक्षम करा"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:243
 msgid "_Next Tab"
 msgstr "पुढील टॅब(_N)"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:244
 msgid "Activate next tab"
-msgstr "पुढील टॅब कार्यान्वित करा"
+msgstr "पुढील टॅब कार्यक्षम करा"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:246
 msgid "Move Tab _Left"
 msgstr "टॅब डावीकडे हलवा(_L)"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:247
 msgid "Move current tab to left"
 msgstr "चाली टॅब डावीकडे हलवा"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:249
 msgid "Move Tab _Right"
 msgstr "टॅब उजवीकडे हलवा(_R)"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:250
 msgid "Move current tab to right"
 msgstr "चालू टॅब उजवीकडे हलवा"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:252
 msgid "_Detach Tab"
 msgstr "टॅब वेगळे करा (_D)"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:253
 msgid "Detach current tab"
 msgstr "वर्तामान टॅब वेगळे करा"
 
-#: ../src/ephy-window.c:263
+#: ../src/ephy-window.c:259
 msgid "Display web browser help"
 msgstr "वेब ब्राउजर मदत दाखवा"
 
 #. File Menu
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:270
 msgid "_Work Offline"
 msgstr "ऑफलाइन काम करा (_W)"
 
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:271
 msgid "Switch to offline mode"
 msgstr "ऑफनाइल पद्धतीचा वापर करा"
 
 #. View Menu
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:276
 msgid "_Hide Toolbars"
 msgstr "साधनपट्टी लपवा (_H)"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:277
 msgid "Show or hide toolbar"
 msgstr "उपकरणपट्टी दाखवा किंवा लपवा"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:279
 msgid "St_atusbar"
 msgstr "स्थितीपट्टी(_a)"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:280
 msgid "Show or hide statusbar"
 msgstr "स्थितीपट्टी दाखवा किंवा लपवा"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:282
 msgid "_Fullscreen"
 msgstr "पूर्ण स्क्रीन(_F)"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:283
 msgid "Browse at full screen"
 msgstr "पूर्ण स्क्रीनमध्ये संचार करा"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:285
 msgid "Popup _Windows"
 msgstr "पॉपअप विंडोज(_W)"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:286
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "या स्थळ पासून विनाविनंतीकृत पॉपअप चौकट दर्शवा किंवा लपवा"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:288
 msgid "Selection Caret"
 msgstr "निवड कॅरेट"
 
 #. Document
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:296
 msgid "Add Boo_kmark…"
-msgstr "ओळखचिन्ह जोडा (_k)..."
+msgstr "वाचनखूण समाविष्ट करा (_k)…"
 
 #. Framed document
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:302
 msgid "Show Only _This Frame"
 msgstr "फक्त ही चौकट दाखवा(_T)"
 
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:303
 msgid "Show only this frame in this window"
-msgstr "या खिडकीत फक्त ही चौकट दाखवा"
+msgstr "या पटलात फक्त ही चौकट दाखवा"
 
 #. Links
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:308
 msgid "_Open Link"
-msgstr "दुवा(लिंक) उघडा(_O)"
+msgstr "दुवा उघडा(_O)"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:309
 msgid "Open link in this window"
-msgstr "या खिडकीत दुवा(लिंक) उघडा"
+msgstr "या पटलात दुवा उघडा"
+
+#: ../src/ephy-window.c:311
+msgid "Open Link in New _Window"
+msgstr "दुवा नवीन पटलात उघडा(_W)"
+
+#: ../src/ephy-window.c:312
+msgid "Open link in a new window"
+msgstr "दुवा नवीन पटलात उघडा"
+
+#: ../src/ephy-window.c:314
+msgid "Open Link in New _Tab"
+msgstr "दुवा नवीन टॅबमध्ये उघडा (_T)"
 
 #: ../src/ephy-window.c:315
-msgid "Open Link in New _Window"
-msgstr "दुवा(लिंक) नविन खिडकीत उघडा(_W)"
+msgid "Open link in a new tab"
+msgstr "दुवा नवीन टॅबमध्ये उघडा"
 
-#: ../src/ephy-window.c:316
-msgid "Open link in a new window"
-msgstr "दुवा(लिंक) नविन खिडकीत उघडा"
-
-#: ../src/ephy-window.c:318
-msgid "Open Link in New _Tab"
-msgstr "दुवा(लिंक) नविन टॅबमध्ये उघडा(_T)"
+#: ../src/ephy-window.c:317
+msgid "_Download Link"
+msgstr "दुवा डाउनलोड करा (_D)"
 
 #: ../src/ephy-window.c:319
-msgid "Open link in a new tab"
-msgstr "दुवा(लिंक) नविन टॅबमध्ये उघडा"
-
-#: ../src/ephy-window.c:321
-msgid "_Download Link"
-msgstr "दुवा(लिंक) डाउनलोड करा(_D)"
-
-#: ../src/ephy-window.c:323
 msgid "_Save Link As…"
-msgstr "संग्रहा"
+msgstr "दुवा असे साठवा (_S)…"
+
+#: ../src/ephy-window.c:320
+msgid "Save link with a different name"
+msgstr "दुवा वेगळ्यानावे साठवा"
+
+#: ../src/ephy-window.c:322
+msgid "_Bookmark Link…"
+msgstr "दुव्याला वाचनखुण लावा (_B)…"
 
 #: ../src/ephy-window.c:324
-msgid "Save link with a different name"
-msgstr "संग्रहा"
-
-#: ../src/ephy-window.c:326
-msgid "_Bookmark Link…"
-msgstr "खूणगाठ"
-
-#: ../src/ephy-window.c:328
 msgid "_Copy Link Address"
-msgstr "दुवा(लिंक) पत्ता प्रतिलिपी करा(_C)"
+msgstr "दुवा पत्त्याचे प्रत बनवा (_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:330
 msgid "_Send Email…"
-msgstr "ईमेल पाठवा (_S)..."
+msgstr "ईमेल पाठवा (_S)…"
 
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:332
 msgid "_Copy Email Address"
-msgstr "प्रतिलिपी ईमेल पत्ता(_C)"
+msgstr "ईमेल पत्त्याचे प्रत बनवा (_C)"
 
 #. Images
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:337
 msgid "Open _Image"
 msgstr "प्रतिमा उघडा(_I)"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:339
 msgid "_Save Image As…"
-msgstr "संग्रहा"
+msgstr "प्रतिमा असे साठवा (_S)…"
+
+#: ../src/ephy-window.c:341
+msgid "_Use Image As Background"
+msgstr "प्रतिमा पार्श्वभूमी म्हणून वापरा (_U)"
+
+#: ../src/ephy-window.c:343
+msgid "Copy I_mage Address"
+msgstr "प्रतिमा पत्ता प्रतिलिपी करा (_I)"
 
 #: ../src/ephy-window.c:345
-msgid "_Use Image As Background"
-msgstr "प्रतिमा पार्श्वभूमी म्हणून वापरा(_U)"
+msgid "St_art Animation"
+msgstr "ऍनिमेशन सुरू करा (_a)"
 
 #: ../src/ephy-window.c:347
-msgid "Copy I_mage Address"
-msgstr "प्रतिमा पत्ता प्रतिलिपी करा(_I)"
-
-#: ../src/ephy-window.c:349
-msgid "St_art Animation"
-msgstr "ऍनिमेशन सुरू करा(_a)"
-
-#: ../src/ephy-window.c:351
 msgid "St_op Animation"
-msgstr "ऍनिमेशन थांबवा(_o)"
+msgstr "ऍनिमेशन थांबवा (_o)"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:522
 msgid "There are unsubmitted changes to form elements"
 msgstr "फॉर्म घटक करीता विनासादर केलेले बदल उपलब्ध आहे"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:526
 msgid "If you close the document anyway, you will lose that information."
 msgstr "दस्तऐवजला कसेही करून बंद केल्यास, तुम्ही माहिती गमवू शकाल."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:530
 msgid "Close _Document"
-msgstr "दस्तऐवज बंद करा(_D)"
+msgstr "दस्तऐवज बंद करा (_D)"
 
-#: ../src/ephy-window.c:1496 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
 msgid "Open"
 msgstr "उघडा"
 
-#: ../src/ephy-window.c:1498 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
 msgid "Save As"
-msgstr "असे संग्रहा"
+msgstr "असे साठवा"
 
-#: ../src/ephy-window.c:1500
+#: ../src/ephy-window.c:1493
 msgid "Print"
 msgstr "छापा"
 
-#: ../src/ephy-window.c:1504
+#: ../src/ephy-window.c:1497
 msgid "Find"
 msgstr "शोधा"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1517
+#: ../src/ephy-window.c:1510
 msgid "Larger"
 msgstr "मोठे"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1520
+#: ../src/ephy-window.c:1513
 msgid "Smaller"
 msgstr "लहान"
 
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1743
 msgid "Insecure"
 msgstr "असुरक्षित"
 
-#: ../src/ephy-window.c:1745
+#: ../src/ephy-window.c:1748
 msgid "Broken"
 msgstr "भंग"
 
-#: ../src/ephy-window.c:1757
+#: ../src/ephy-window.c:1756
 msgid "Low"
 msgstr "खाली"
 
-#: ../src/ephy-window.c:1764
+#: ../src/ephy-window.c:1763
 msgid "High"
 msgstr "वर"
 
-#: ../src/ephy-window.c:1774
+#: ../src/ephy-window.c:1773
 #, c-format
 msgid "Security level: %s"
 msgstr "सुरक्षा स्तर: %s"
 
-#: ../src/ephy-window.c:1817
+#: ../src/ephy-window.c:1816
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
-msgstr[0] "%d लपलेली पॉपअप खिडकी"
-msgstr[1] "%d लपलेली पॉपअप खिडकी"
+msgstr[0] "%d लपलेली पॉपअप पटल"
+msgstr[1] "%d लपलेली पॉपअप पटल"
 
-#: ../src/ephy-window.c:2080
+#: ../src/ephy-window.c:2081
 #, c-format
 msgid "Open image “%s”"
 msgstr "प्रतिमा “%s” उघडा"
 
-#: ../src/ephy-window.c:2085
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "डेस्कटॉप पार्श्वभूमी “%s” वापरा"
 
-#: ../src/ephy-window.c:2090
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save image “%s”"
-msgstr "प्रतिमा  “%s” संग्रहा"
+msgstr "प्रतिमा  “%s” साठवा"
 
-#: ../src/ephy-window.c:2095
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "प्रतिमा पत्ता “%s” प्रतिलिपी करा"
 
-#: ../src/ephy-window.c:2108
+#: ../src/ephy-window.c:2109
 #, c-format
 msgid "Send email to address “%s”"
-msgstr " “%s”या पत्त्यावर ईमेल पाठवा"
+msgstr " “%s” पत्त्यावर ईमेल पाठवा"
 
-#: ../src/ephy-window.c:2114
+#: ../src/ephy-window.c:2115
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "ईमेल पत्ता “%s” प्रतिलिपी करा"
 
-#: ../src/ephy-window.c:2126
+#: ../src/ephy-window.c:2127
 #, c-format
 msgid "Save link “%s”"
-msgstr "“%s” हा दुवा संग्रहा"
+msgstr "“%s” हा दुवा साठवा"
 
-#: ../src/ephy-window.c:2132
+#: ../src/ephy-window.c:2133
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” दुवा खूणागाठ करा"
 
-#: ../src/ephy-window.c:2138
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "दुवा पत्ता “%s” प्रतिलिपी करा"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>तुम्हाला खोडायचे ती व्यक्तिगत माहिती निवडा</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3129,26 +3224,26 @@ msgstr ""
 "तुम्ही भेट दिलेल्या वेब पानातील व्यक्तिगत माहिती पुसून टाकण्याच्या मार्गावर आहात. पुढे "
 "जाण्यापूर्वी, तुम्हाला काढूण टाकायची ती माहिती तपासून पहा:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "सर्व"
 
 #. Cookies
-#: ../src/pdm-dialog.c:355
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "कुकीज (_o)"
 
 #. Passwords
-#: ../src/pdm-dialog.c:367
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
-msgstr "गुप्तशब्द संचयीत करा (_p)"
+msgstr "पासवर्ड संचयीत करा (_p)"
 
 #. Cache
-#: ../src/pdm-dialog.c:391
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "तात्पुर्ते फाइल (_T)"
 
-#: ../src/pdm-dialog.c:407
+#: ../src/pdm-dialog.c:460
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3156,107 +3251,108 @@ msgstr ""
 "<small><i><b>टिप:</b> तुम्ही या कृती करीता बदल करू शकत नाही. काढूण टाकण्याकरीता "
 "वापरलेली माहिती नेहमी करीता काढूण टाकले जाईल.</i></small>"
 
-#: ../src/pdm-dialog.c:603
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "कुकी गुणधर्म"
 
-#: ../src/pdm-dialog.c:620
+#: ../src/pdm-dialog.c:669
 msgid "Content:"
 msgstr "मजकूर:"
 
-#: ../src/pdm-dialog.c:636
+#: ../src/pdm-dialog.c:685
 msgid "Path:"
 msgstr "पथ:"
 
-#: ../src/pdm-dialog.c:652
+#: ../src/pdm-dialog.c:701
 msgid "Send for:"
 msgstr "यासाठी पाठवा:"
 
-#: ../src/pdm-dialog.c:661
+#: ../src/pdm-dialog.c:710
 msgid "Encrypted connections only"
 msgstr "फक्त सांकेतिक(एनक्रिप्टेड) जोडण्या"
 
-#: ../src/pdm-dialog.c:661
+#: ../src/pdm-dialog.c:710
 msgid "Any type of connection"
 msgstr "कोणत्याही प्रकारची जोडणी"
 
-#: ../src/pdm-dialog.c:667
+#: ../src/pdm-dialog.c:716
 msgid "Expires:"
 msgstr "बाद:"
 
-#: ../src/pdm-dialog.c:678
+#. Session cookie
+#: ../src/pdm-dialog.c:728
 msgid "End of current session"
 msgstr "चालू सत्राची समाप्ती"
 
-#: ../src/pdm-dialog.c:811
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "क्षेत्र(डोमेन)"
 
-#: ../src/pdm-dialog.c:823
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "नाव"
 
-#: ../src/pdm-dialog.c:1222
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "यजमान"
 
-#: ../src/pdm-dialog.c:1234
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "उपयोक्ता नाव"
 
-#: ../src/pdm-dialog.c:1246
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
-msgstr "उपयोक्ता गुप्तशब्द"
+msgstr "उपयोक्ता पासवर्ड"
 
 #: ../src/popup-commands.c:259
 msgid "Download Link"
-msgstr "दुवा(लिंक) डाउनलोड करा"
+msgstr "दुवा डाउनलोड करा"
 
 #: ../src/popup-commands.c:267
 msgid "Save Link As"
-msgstr "दुवा(लिंक) असा संग्रहा"
+msgstr "दुवा असा साठवा"
 
 #: ../src/popup-commands.c:274
 msgid "Save Image As"
-msgstr "प्रतिमा अशी संग्रहा"
+msgstr "प्रतिमा अशी साठवा"
 
-#: ../src/ppview-toolbar.c:85
+#: ../src/ppview-toolbar.c:86
 msgid "First"
 msgstr "पहिले"
 
-#: ../src/ppview-toolbar.c:86
+#: ../src/ppview-toolbar.c:87
 msgid "Go to the first page"
 msgstr "पहिल्या पानावर जा"
 
-#: ../src/ppview-toolbar.c:89
+#: ../src/ppview-toolbar.c:90
 msgid "Last"
 msgstr "शेवटचे"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the last page"
 msgstr "शेवटच्या पानावर जा"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:94
 msgid "Previous"
 msgstr "मागील"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the previous page"
 msgstr "मागील पानावर जा"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:98
 msgid "Next"
 msgstr "पुढील"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:99
 msgid "Go to next page"
 msgstr "पुढील पानावर जा"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:102
 msgid "Close"
 msgstr "बंद करा"
 
-#: ../src/ppview-toolbar.c:102 ../src/ppview-toolbar.c:218
+#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
 msgid "Close print preview"
 msgstr "मुद्रण पुर्वदृश्य बंद करा"
 
@@ -3264,7 +3360,7 @@ msgstr "मुद्रण पुर्वदृश्य बंद करा"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:539 ../src/prefs-dialog.c:545
+#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -3273,24 +3369,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:554
+#: ../src/prefs-dialog.c:527
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "वापरकर्तानुरूप निश्चित (%s)"
 
-#: ../src/prefs-dialog.c:576
+#: ../src/prefs-dialog.c:549
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "प्रणाली भाषा (%s)"
 msgstr[1] "प्रणाली भाषा (%s)"
 
-#: ../src/prefs-dialog.c:968
+#: ../src/prefs-dialog.c:941
 msgid "Select a Directory"
 msgstr "संचयीका निवडा"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3302,7 +3398,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:777
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3314,7 +3410,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:781
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3324,27 +3420,30 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:830 ../src/window-commands.c:846
-#: ../src/window-commands.c:857
+#: ../src/window-commands.c:827 ../src/window-commands.c:843
+#: ../src/window-commands.c:854
 msgid "Contact us at:"
 msgstr "आम्हास येथे संपर्क करा:"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:830
 msgid "Contributors:"
 msgstr "अंशदाते:"
 
-#: ../src/window-commands.c:836
+#: ../src/window-commands.c:833
 msgid "Past developers:"
 msgstr "पूर्व विकासकर्ते:"
 
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:863
 #, c-format
+#| msgid ""
+#| "Lets you view web pages and find information on the internet.\n"
+#| "Powered by %s"
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by %s"
+"Powered by WebKit"
 msgstr ""
-"तुम्हाला वेब पाने पहाण्यास व महाजाळवरील माहिती शोधण्यास परवानगी देतो.\n"
-"%s द्वारे सक्षम आहे"
+"तुम्हाला वेब पाने पहाण्यास व इंटरनेटवरीलल माहिती शोधण्यास परवानगी देतो.\n"
+"WebKit द्वारे सक्षम"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3354,13 +3453,13 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:895
+#: ../src/window-commands.c:889
 msgid "translator-credits"
 msgstr ""
 "Rahul Bhalerao <b.rahul.pm@gmail.com>, 2006; संदिप शेडमाके <sandeep."
-"shedmake@gmail.com>, 2008, 2009."
+"shedmake@gmail.com>, 2008, 2009; संदिप शेडमाके <sshedmak@redhat.com>, 2009."
 
-#: ../src/window-commands.c:898
+#: ../src/window-commands.c:892
 msgid "GNOME Web Browser Website"
 msgstr "GNOME वेब ब्राउजर संकेतस्थळ"
 
