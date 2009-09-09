@@ -213,6 +213,7 @@ parse_and_decrypt_signons (const char *signons)
       start_ptr = g_strstr_len (full_url, -1, realmBracketBegin);
       start = g_utf8_pointer_to_offset (full_url, start_ptr);
       url = _g_utf8_substr (full_url, 0, start);
+      url = g_strstrip (url);
       uri = soup_uri_new (url);
       g_free (url);
 
