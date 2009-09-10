@@ -24,7 +24,6 @@
 #include "ephy-window.h"
 #include "ephy-type-builtins.h"
 #include "ephy-embed-type-builtins.h"
-#include "ephy-command-manager.h"
 #include "ephy-state.h"
 #include "ppview-toolbar.h"
 #include "window-commands.h"
@@ -1179,20 +1178,18 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	else
 	{
 		EphyEmbed *embed;
+		WebKitWebView *view;
 
 		embed = window->priv->active_embed;
 		g_return_if_fail (embed != NULL);
 
-		can_copy = ephy_command_manager_can_do_command
-				(EPHY_COMMAND_MANAGER (embed), "cmd_copy");
-		can_cut = ephy_command_manager_can_do_command
-				(EPHY_COMMAND_MANAGER (embed), "cmd_cut");
-		can_paste = ephy_command_manager_can_do_command
-				(EPHY_COMMAND_MANAGER (embed), "cmd_paste");
-		can_undo = ephy_command_manager_can_do_command
-				(EPHY_COMMAND_MANAGER (embed), "cmd_undo");
-		can_redo = ephy_command_manager_can_do_command
-				(EPHY_COMMAND_MANAGER (embed), "cmd_redo");
+		view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+		can_copy = webkit_web_view_can_copy_clipboard (view);
+		can_cut = webkit_web_view_can_cut_clipboard (view);
+		can_paste = webkit_web_view_can_paste_clipboard (view);
+		can_undo = webkit_web_view_can_undo (view);
+		can_redo = webkit_web_view_can_redo (view);
 	}
 
 	action_group = window->priv->action_group;

@@ -28,7 +28,6 @@
 #include "ephy-shell.h"
 #include "ephy-embed-persist.h"
 #include "ephy-debug.h"
-#include "ephy-command-manager.h"
 #include "window-commands.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -376,8 +375,7 @@ window_cmd_edit_undo (GtkAction *action,
 
 		if (embed)
 		{
-			ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
-							 "cmd_undo");
+			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 		}
 	}
 }
@@ -402,8 +400,7 @@ window_cmd_edit_redo (GtkAction *action,
 		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
 		if (embed)
 		{
-			ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
-							 "cmd_redo");
+			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 		}
 	}
 }
@@ -423,8 +420,7 @@ window_cmd_edit_cut (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-						 "cmd_cut");
+		webkit_web_view_cut_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 	}
 }
 
@@ -445,8 +441,7 @@ window_cmd_edit_copy (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-						 "cmd_copy");
+		webkit_web_view_copy_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 	}
 }
 
@@ -467,8 +462,7 @@ window_cmd_edit_paste (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-						 "cmd_paste");
+		webkit_web_view_paste_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 	}
 }
 
@@ -489,8 +483,11 @@ window_cmd_edit_delete (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
+		/* FIXME: TODO */
+#if 0
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
 						 "cmd_delete");
+#endif
 	}
 }
 
@@ -512,8 +509,7 @@ window_cmd_edit_select_all (GtkAction *action,
                   (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-						 "cmd_selectAll");
+		webkit_web_view_select_all (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 	}
 }
 

@@ -28,7 +28,6 @@
 #include "downloader-view.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-adblock-manager.h"
-#include "ephy-command-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
@@ -65,56 +64,7 @@ struct EphyEmbedPrivate
   guint is_setting_zoom : 1;
 };
 
-static void
-impl_manager_do_command (EphyCommandManager *manager,
-                         const char *command)
-{
-  WebKitWebView *web_view = EPHY_EMBED (manager)->priv->web_view;
-
-  if (! strcmp (command, "cmd_copy"))
-    return webkit_web_view_copy_clipboard (web_view);
-  else if (! strcmp (command, "cmd_cut"))
-    return webkit_web_view_cut_clipboard (web_view);
-  else if (! strcmp (command, "cmd_paste"))
-    return webkit_web_view_paste_clipboard (web_view);
-  else if (! strcmp (command, "cmd_selectAll"))
-    return webkit_web_view_select_all (web_view);
-  else if (! strcmp (command, "cmd_undo"))
-    return webkit_web_view_undo (web_view);
-  else if (! strcmp (command, "cmd_redo"))
-    return webkit_web_view_redo (web_view);
-}
-
-static gboolean
-impl_manager_can_do_command (EphyCommandManager *manager,
-                             const char *command)
-{
-  WebKitWebView *web_view = EPHY_EMBED (manager)->priv->web_view;
-
-  if (! strcmp (command, "cmd_copy"))
-    return webkit_web_view_can_copy_clipboard (web_view);
-  else if (! strcmp (command, "cmd_cut"))
-    return webkit_web_view_can_cut_clipboard (web_view);
-  else if (! strcmp (command, "cmd_paste"))
-    return webkit_web_view_can_paste_clipboard (web_view);
-  else if (! strcmp (command, "cmd_undo"))
-    return webkit_web_view_can_undo (web_view);
-  else if (! strcmp (command, "cmd_redo"))
-    return webkit_web_view_can_redo (web_view);
-
-  return FALSE;
-}
-
-static void
-ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
-{
-  iface->do_command = impl_manager_do_command;
-  iface->can_do_command = impl_manager_can_do_command;
-}
-
-G_DEFINE_TYPE_WITH_CODE (EphyEmbed, ephy_embed, GTK_TYPE_SCROLLED_WINDOW,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
-                                                ephy_command_manager_iface_init))
+G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_SCROLLED_WINDOW)
 
 static void
 uri_changed_cb (WebKitWebView *web_view,
