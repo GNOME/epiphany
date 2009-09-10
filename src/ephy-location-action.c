@@ -539,19 +539,22 @@ disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 	if (EPHY_IS_LOCATION_ENTRY (proxy))
 	{
 		EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
-		GtkWidget *entry;
+		GtkWidget *entry, *notebook;
 		EphyLocationActionPrivate *priv;
 
 		priv = EPHY_LOCATION_ACTION (action)->priv;
 		priv->proxy = NULL;
 
 		entry = ephy_location_entry_get_entry (lentry);
+		notebook = ephy_window_get_notebook (priv->window);
 
 		g_signal_handlers_disconnect_matched (action, G_SIGNAL_MATCH_DATA,
 						      0, 0, NULL, NULL, proxy);
 		g_signal_handlers_disconnect_matched (proxy, G_SIGNAL_MATCH_DATA,
 						      0, 0, NULL, NULL, action);
 		g_signal_handlers_disconnect_matched (entry, G_SIGNAL_MATCH_DATA,
+						      0, 0, NULL, NULL, action);
+		g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
 						      0, 0, NULL, NULL, action);
 	}
 }
