@@ -1392,6 +1392,8 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
 
       ensure_page_info (view, uri);
 
+      priv->expire_address_now = TRUE;
+
       g_object_notify (object, "embed-title");
 
       g_object_thaw_notify (object);
