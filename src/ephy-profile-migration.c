@@ -152,6 +152,7 @@ parse_and_decrypt_signons (const char *signons)
   int version;
   gchar **lines;
   int i;
+  guint length;
 
   lines = g_strsplit (signons, "\r\n", -1);
   if (!g_ascii_strncasecmp (lines[0], "#2c", 3))
@@ -175,7 +176,9 @@ parse_and_decrypt_signons (const char *signons)
    * separated by lines that only contain a dot. We find a block by
    * the separator and parse them one by one.
    */
-  while (lines[i]) {
+  length = g_strv_length (lines);
+
+  while (i < length) {
     size_t begin = i;
     size_t end = i + 1;
     const char *realmBracketBegin = " (";
@@ -268,7 +271,7 @@ parse_and_decrypt_signons (const char *signons)
       if (version >= 2) {
         if (begin < end)
           /* Skip it */ ;
-        begin ++;
+        begin++;
 
         /* Version 3 has an extra line for further use */
         if (version == 3)
