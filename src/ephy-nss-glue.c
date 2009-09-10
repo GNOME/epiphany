@@ -129,7 +129,10 @@ unpadBlock(SECItem *data, int blockSize, SECItem *result)
   PORT_Memcpy(result->data, data->data, result->len);
 
   if (padLength < 2) {
-    return SECWouldBlock;
+    /* Chromium returns an error here, but it seems to be harmless and
+       if we continue we'll be able to import the password
+       correctly */
+    /* return SECWouldBlock; */
   }
 
 loser:
