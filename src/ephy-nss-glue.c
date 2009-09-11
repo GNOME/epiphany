@@ -37,9 +37,49 @@
 #include <nss.h>
 #include <pk11pub.h>
 #include <pk11sdr.h>
+#include <glib/gi18n.h>
 
 static gboolean nss_initialized = FALSE;
 static PK11SlotInfo *db_slot = NULL;
+
+static char*
+ask_for_nss_password (PK11SlotInfo *slot,
+                      PRBool retry,
+                      void *arg)
+{
+  GtkWidget *dialog;
+  GtkWidget *entry;
+  gint result;
+  char *password = NULL;
+
+  if (retry)
+    return NULL;
+
+  dialog = gtk_message_dialog_new (NULL,
+                                   0,
+                                   GTK_MESSAGE_QUESTION,
+                                   GTK_BUTTONS_OK_CANCEL,
+                                   _("Master password needed"));
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            _("The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."));
+  entry = gtk_entry_new ();
+  gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), entry);
+  gtk_widget_show (entry);
+
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  switch (result) {
+  case GTK_RESPONSE_OK:
+    password = PL_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+    break;
+  default:
+    break;
+  }
+
+  gtk_widget_destroy (dialog);
+  return password;
+}
 
 gboolean ephy_nss_glue_init ()
 {
@@ -65,6 +105,10 @@ gboolean ephy_nss_glue_init ()
   if (!db_slot)
     return FALSE;
 
+  /* It's possibly to set a master password for NSS through the
+     certificate manager extension, so we must support that too */
+  PK11_SetPasswordFunc (ask_for_nss_password);
+
   nss_initialized = TRUE;
 
   return TRUE;
@@ -76,6 +120,8 @@ void ephy_nss_glue_close ()
     PK11_FreeSlot (db_slot);
     db_slot = NULL;
   }
+
+  PK11_SetPasswordFunc (NULL);
 
   NSS_Shutdown ();
 
