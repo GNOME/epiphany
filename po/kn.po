@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.kn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-08-12 11:48+0000\n"
-"PO-Revision-Date: 2009-08-28 12:14+0530\n"
+"POT-Creation-Date: 2009-08-31 15:12+0000\n"
+"PO-Revision-Date: 2009-09-11 16:14+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,6 @@ msgstr "ಜಾಲದಲ್ಲಿ ಹುಡುಕು"
 #. For instance in .nl these should be
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:5
-#| msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgid "http://www.google.com"
 msgstr "http://www.google.com"
 
@@ -46,7 +45,6 @@ msgstr "http://www.google.com"
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:10
 #, no-c-format
-#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
@@ -55,11 +53,16 @@ msgid "Browse the web"
 msgstr "ಜಾಲವನ್ನು ವೀಕ್ಷಿಸಿ"
 
 #: ../data/epiphany.desktop.in.in.h:2
+#| msgid "Epiphany (RDF)"
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Epiphany ಜಾಲ ವೀಕ್ಷಕ"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "ಜಾಲ ವೀಕ್ಷಕ"
 
@@ -689,7 +692,6 @@ msgid "<b>Web Content</b>"
 msgstr "<b>ಜಾಲ ವಿಷಯಗಳು</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:9
-#| msgid "<b>Web Content</b>"
 msgid "<b>Web Development</b>"
 msgstr "<b>ಜಾಲ ವಿಕಸನೆ</b>"
 
@@ -934,13 +936,11 @@ msgid "Download started"
 msgstr "ಡೌನ್‍ಲೋಡ್ ಆರಂಭಗೊಂಡಿದೆ"
 
 #: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
-#| msgid "Unknown"
 msgctxt "download status"
 msgid "Unknown"
 msgstr "ಗೊತ್ತಿರದ"
 
 #: ../embed/downloader-view.c:804
-#| msgid "File"
 msgctxt "download status"
 msgid "Failed"
 msgstr "ವಿಫಲಗೊಂಡಿದೆ"
@@ -962,23 +962,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "ಮಿಕ್ಕುಳಿದಿರುವ"
 
-#: ../embed/ephy-embed.c:412
+#: ../embed/ephy-embed.c:463
 msgid "Save"
 msgstr "ಉಳಿಸು"
 
-#: ../embed/ephy-embed.c:554
-#| msgid "Unknown"
+#: ../embed/ephy-embed.c:605
 msgctxt "file type"
 msgid "Unknown"
 msgstr "ಗೊತ್ತಿರದ"
 
-#: ../embed/ephy-embed.c:568
+#: ../embed/ephy-embed.c:619
 msgid "Download this potentially unsafe file?"
 msgstr "ಅತ್ಯಂತ ಅಸುರಕ್ಷಿತವಾದ ಈ ಕಡತವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಬೇಕೆ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:573
+#: ../embed/ephy-embed.c:624
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -991,14 +990,14 @@ msgstr ""
 "“%s” ಅನ್ನು ತೆರೆಯುವುದು ಸುರಕ್ಷಿತವಲ್ಲ ಏಕೆಂದರೆ ಇದು ನಿಮ್ಮ ದಸ್ತಾವೇಜುಗಳನ್ನು ಹಾಳುಗೆಡವಬಲ್ಲದು "
 "ಅಥವ ನಿಮ್ಮ ಗೌಪ್ಯತೆಯನ್ನು ಅತಿಕ್ರಮಿಸಬಹುದು. ಬದಲಿಗೆ ಅದನ್ನು ನೀವು ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು."
 
-#: ../embed/ephy-embed.c:581
+#: ../embed/ephy-embed.c:632
 msgid "Open this file?"
 msgstr "ಈ ಕಡತವನ್ನು ತೆರೆಯ ಬೇಕೆ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:587
+#: ../embed/ephy-embed.c:638
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1009,13 +1008,13 @@ msgstr ""
 "\n"
 "“%s” ಅನ್ನು “%s” ಬಳಸಿಕೊಂಡು ನೀವು ತೆಗೆಯಬಹುದಾಗಿದೆ ಅಥವ ಉಳಿಸಬಹುದಾಗಿದೆ."
 
-#: ../embed/ephy-embed.c:594
+#: ../embed/ephy-embed.c:645
 msgid "Download this file?"
 msgstr "ಈ ಕಡತವನ್ನು ಡೌನ್‍ಲೋಡ್ ಮಾಡಬೇಕೆ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:599
+#: ../embed/ephy-embed.c:650
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1027,16 +1026,15 @@ msgstr ""
 "“%s” ಅನ್ನು ತೆರೆಯಲು ನಿಮ್ಮಲ್ಲಿ ಯಾವುದೆ ಅಗತ್ಯ ಅನ್ವಯವಿಲ್ಲ. ಬದಲಿಗೆ ನೀವದನ್ನು ಡೌನ್‍ಲೋಡ್ "
 "ಮಾಡಬಹುದು."
 
-#: ../embed/ephy-embed.c:606
+#: ../embed/ephy-embed.c:657
 msgid "_Save As..."
 msgstr "ಹೀಗೆ ಉಳಿಸು(_S)..."
 
-#: ../embed/ephy-embed.c:698
+#: ../embed/ephy-embed.c:766
 msgid "Web Inspector"
 msgstr "ಜಾಲ ಮೇಲ್ವಿಚಾರಕ (ವೆಬ್ ಇನ್ಸ್‌ಪೆಕ್ಟರ್)"
 
 #: ../embed/ephy-embed-shell.c:242
-#| msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany ಯನ್ನು ಈಗ ಬಳಸಲಾಗುವುದಿಲ್ಲ. ಆರಂಭಿಸುವಿಕೆಯು ವಿಫಲಗೊಂಡಿದೆ."
 
@@ -1383,32 +1381,39 @@ msgstr "ಸ್ಥಳೀಯ ಕಡತಗಳು"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2132
+#: ../src/ephy-session.c:1341
 msgid "Blank page"
 msgstr "ಖಾಲಿ ಪುಟ"
 
-#: ../embed/ephy-web-view.c:1261
+#: ../embed/ephy-web-view.c:1131
+#, c-format
+#| msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "“%s” ಗೆ ಮರು ನಿರ್ದೇಶನಗೊಳ್ಳುತ್ತಿದೆ…"
 
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "“%s” ದಿಂದ ದತ್ತಾಂಶವು ವರ್ಗಾಯಿಸಲ್ಪಡುತ್ತಿದೆ…"
 
-#: ../embed/ephy-web-view.c:1265
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "“%s”ದಿಂದ ದೃಢೀಕರಣಕ್ಕಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1271 ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1440
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” ಅನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1442
 msgid "Loading…"
 msgstr "ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ"
 
@@ -1693,12 +1698,12 @@ msgstr "ಈ ಪುಟಕ್ಕೆ ಕೊಂಡಿಯನ್ನು ನಿರ್ಮ
 msgid "Clear"
 msgstr "ತೆರವುಗೊಳಿಸು"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:318
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:495
+#: ../src/bookmarks/ephy-bookmark-action.c:497
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "“%s” ಸ್ಕ್ರಿಪ್ಟನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸು"
@@ -1797,14 +1802,12 @@ msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಪ್ಡೇಟ್ ಮಾ�
 
 #. Translators: this topic contains all bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1203
-#| msgid "All"
 msgctxt "bookmarks"
 msgid "All"
 msgstr "ಎಲ್ಲಾ"
 
 #. Translators: this topic contains the most used bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1206
-#| msgid "bookmarks|Most Visited"
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "ಹೆಚ್ಚಾಗಿ ಭೇಟಿ ನೀಡಲಾದ"
@@ -1812,7 +1815,6 @@ msgstr "ಹೆಚ್ಚಾಗಿ ಭೇಟಿ ನೀಡಲಾದ"
 #. Translators: this topic contains the not categorized
 #. bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1210
-#| msgid "bookmarks|Not Categorized"
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "ವರ್ಗೀಕರಣಗೊಳ್ಳದ"
@@ -1820,7 +1822,6 @@ msgstr "ವರ್ಗೀಕರಣಗೊಳ್ಳದ"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1215
-#| msgid "bookmarks|Nearby Sites"
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "ಹತ್ತಿರದ ತಾಣಗಳನ್ನು"
@@ -1832,7 +1833,7 @@ msgstr "ಶೀರ್ಷಿಕೆಯಿಲ್ಲದ"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:78
 msgid "Epiphany (RDF)"
-msgstr "ಎಪಿಫ್ಯಾನಿ (RDF)"
+msgstr "Epiphany (RDF)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:79
 msgid "Mozilla (HTML)"
@@ -2123,7 +2124,7 @@ msgstr "Galeon/Konqueror ಬುಕ್‌ಮಾರ್ಕುಗಳು"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:761
 msgid "Epiphany bookmarks"
-msgstr "ಎಪಿಫ್ಯಾನಿ ಬುಕ್‍ಮಾರ್ಕುಗಳು"
+msgstr "Epiphany ಬುಕ್‍ಮಾರ್ಕುಗಳು"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:885
 msgid "Export Bookmarks"
@@ -2238,23 +2239,23 @@ msgstr "ಪತ್ತೆ ಹಚ್ಚು:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:445 ../src/ephy-find-toolbar.c:567
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "ಕೇಸ್ ಸಂವೇದಿ(_C)"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "ಹಿಂದಿನದನ್ನು ಹುಡುಕು"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "ಹುಡುಕು ವಾಕ್ಯದ ಹಿಂದಿನ ಇರುವಿಕೆಯನ್ನು ಪತ್ತೆ ಮಾಡು"
 
-#: ../src/ephy-find-toolbar.c:559
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "ಮುಂದಿನದನ್ನು ಹುಡುಕು"
 
-#: ../src/ephy-find-toolbar.c:562
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "ಹುಡುಕು ವಾಕ್ಯದ ಮುಂದಿನ ಇರುವಿಕೆಯನ್ನು ಪತ್ತೆ ಮಾಡು"
 
@@ -2437,11 +2438,11 @@ msgstr "GNOME ಜಾಲ ವೀಕ್ಷಕದ ಆಯ್ಕೆಗಳು"
 msgid "Close tab"
 msgstr "ಹಾಳೆಯನ್ನು ಮುಚ್ಚು"
 
-#: ../src/ephy-profile-migration.c:64
+#: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Mozilla ದಿಂದ ಕುಕಿಗಳ ಕಡತವನ್ನು ಕಾಪಿ ಮಾಡಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: ../src/ephy-profile-migration.c:119
+#: ../src/ephy-profile-migration.c:375
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "ಇತ್ತೀಚಿನ ವರ್ಗಾವಣೆ ಗುರುತನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ, ಪ್ರೊಫೈಲ್ ವರ್ಗಾವಣೆಯನ್ನು ನಿಲ್ಲಿಸಲಾಗುತ್ತಿದೆ."
 
@@ -2472,11 +2473,11 @@ msgstr "ನಿರ್ಗಮಿಸುವುದನ್ನು ರದ್ದು ಮಾ�
 msgid "_Abort Downloads"
 msgstr "ಡೌನ್‌ಲೋಡುಗಳನ್ನು ನಿಲ್ಲಿಸು(_A)"
 
-#: ../src/ephy-session.c:565
+#: ../src/ephy-session.c:571
 msgid "Recover previous browser windows and tabs?"
 msgstr "ಹಿಂದಿನ ವೀಕ್ಷಕ ವಿಂಡೋಗಳನ್ನು ಹಾಗು ಹಾಳೆಗಳನ್ನು ಮರಳಿ ಪಡೆಯಬೇಕೆ?"
 
-#: ../src/ephy-session.c:569
+#: ../src/ephy-session.c:575
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2484,17 +2485,29 @@ msgstr ""
 "ಕಳೆದ ಬಾರಿ ನೀವು Epiphany ಅನ್ನು ಚಲಾಯಿಸುತ್ತಿರವಾಗ ಅದು ಅನಿರೀಕ್ಷಿತವಾಗಿ ನಿರ್ಗಮಿಸಿದೆ "
 "ಎಂದು ತೋರುತ್ತಿದೆ. ತೆರೆಯಲಾದ ವಿಂಡೋಗಳನ್ನು ಹಾಗು ಹಾಳೆಗಳನ್ನು ನೀವು ಮರುಗಳಿಸಲಾಗಿದೆ."
 
-#: ../src/ephy-session.c:573
+#: ../src/ephy-session.c:579
 msgid "_Don't Recover"
 msgstr "ಮರಳಿ ಪಡೆಯಬೇಡ(_D)"
 
-#: ../src/ephy-session.c:575
+#: ../src/ephy-session.c:581
 msgid "_Recover"
 msgstr "ಮರಳಿ ಪಡೆ(_R)"
 
-#: ../src/ephy-session.c:577
+#: ../src/ephy-session.c:583
 msgid "Crash Recovery"
 msgstr "ಕುಸಿತದಿಂದ ಮರಳಿ ಪಡೆಯುವಿಕೆ"
+
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../src/ephy-session.c:1285
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly. This might "
+"happen again if you reload the page. If it does, please report the problem "
+"to the %s developers."
+msgstr ""
+"ಈ ವೀಕ್ಷಕವನ್ನು ಅನಿರೀಕ್ಷಿತವಾಗಿ ಮುಚ್ಚಲ್ಪಟ್ಟಾಗ ಈ ಪುಟವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿತ್ತು. ನೀವು ಈ ಪುಟವನ್ನು "
+"ಮರಳಿ ಲೋಡ್ ಮಾಡಿದಲ್ಲಿ ಇದು ಇನ್ನೊಮ್ಮೆ ಸಂಭವಿಸಬಹುದು. ಹಾಗೆ ಆದಲ್ಲಿ ದಯವಿಟ್ಟು ಈ ತೊಂದರೆಯನ್ನು "
+"%s ವಿಕಸನಗಾರರಿಗೆ ವರದಿ ಮಾಡಿ."
 
 #: ../src/ephy-shell.c:171
 msgid "Sidebar extension required"
@@ -2609,32 +2622,27 @@ msgid "Open a new window"
 msgstr "ಹೊಸ ವಿಂಡೊವನ್ನು ತೆರೆ"
 
 #: ../src/ephy-toolbar-editor.c:71
-#| msgid "Default"
 msgctxt "toolbar style"
 msgid "Default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ"
 
 #. separator row
 #: ../src/ephy-toolbar-editor.c:73
-#| msgid "Text below icons"
 msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "ಚಿಹ್ನೆಗಳ ಕೆಳಗೆ ಪಠ್ಯ"
 
 #: ../src/ephy-toolbar-editor.c:74
-#| msgid "Text beside icons"
 msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "ಚಿಹ್ನೆಗಳ ಬದಿಯಲ್ಲಿ ಪಠ್ಯ"
 
 #: ../src/ephy-toolbar-editor.c:75
-#| msgid "Icons only"
 msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "ಚಿಹ್ನೆಗಳು ಮಾತ್ರ"
 
 #: ../src/ephy-toolbar-editor.c:76
-#| msgid "Text only"
 msgctxt "toolbar style"
 msgid "Text only"
 msgstr "ಪಠ್ಯ ಮಾತ್ರ"
@@ -2944,12 +2952,10 @@ msgid "Move current tab to right"
 msgstr "ಪ್ರಸಕ್ತ ಹಾಳೆಯನ್ನು ಬಲಕ್ಕೆ ಜರುಗಿಸು"
 
 #: ../src/ephy-window.c:252
-#| msgid "_Next Tab"
 msgid "_Detach Tab"
 msgstr "ಹಾಳೆಯನ್ನು ಕಿತ್ತುಹಾಕು (_D)"
 
 #: ../src/ephy-window.c:253
-#| msgid "Save the current page"
 msgid "Detach current tab"
 msgstr "ಈಗಿನ ಪುಟವನ್ನು ಕಿತ್ತುಹಾಕಿ"
 
@@ -3360,7 +3366,6 @@ msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟವನ್ನು ಮುಚ್ಚ�
 #.
 #: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
-#| msgid "language|%s (%s)"
 msgctxt "language"
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3370,7 +3375,6 @@ msgstr "%s (%s)"
 #.
 #: ../src/prefs-dialog.c:527
 #, c-format
-#| msgid "language|User defined (%s)"
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "ಬಳಕೆದಾರ ಸೂಚಿತ (%s)"
@@ -3435,9 +3439,6 @@ msgstr "ಹಿಂದಿನ ವಿಕಸನಗಾರರು:"
 
 #: ../src/window-commands.c:863
 #, c-format
-#| msgid ""
-#| "Lets you view web pages and find information on the internet.\n"
-#| "Powered by %s"
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by WebKit"
