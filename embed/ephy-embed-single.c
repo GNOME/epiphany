@@ -21,6 +21,7 @@
 #include "config.h"
 
 #define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
+#define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 #include "ephy-embed-single.h"
 #include "ephy-embed-prefs.h"
@@ -332,6 +333,10 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   SoupSession *session;
   SoupCookieJar *jar;
   char *filename;
+
+  /* Initialise nspluginwrapper's plugins if available */
+  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
+    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
 
   ephy_embed_prefs_init ();
 
