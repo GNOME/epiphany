@@ -47,7 +47,7 @@
  *  - Add your function at the end of the 'migrators' array
  */
 
-#define PROFILE_MIGRATION_VERSION 2
+#define PROFILE_MIGRATION_VERSION 3
 
 typedef void (*EphyProfileMigrator) (void);
 
@@ -352,6 +352,9 @@ migrate_passwords ()
 
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
+  migrate_passwords,
+ /* Yes, again! Version 2 had some bugs, so we need to run
+    migrate_passwords again to possibly migrate more passwords*/
   migrate_passwords
 };
 
@@ -385,7 +388,16 @@ _ephy_profile_migrate ()
     latest = 0;
   
   for (i = latest; i < PROFILE_MIGRATION_VERSION; i++) {
-    EphyProfileMigrator m = migrators[i];
+    EphyProfileMigrator m;
+
+    /* No need to run the password migration twice in a row. It
+       appears twice in the list for the benefit of people that were
+       using the development snapshots, since an early version didn't
+       migrate all passwords correctly. */
+    if (i == 1)
+      continue;
+
+    m = migrators[i];
     m();
   }
 
