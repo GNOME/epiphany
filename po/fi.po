@@ -2,7 +2,7 @@
 # Copyright (C) 2003-2008  Free Software Foundation, Inc.
 # This file is distributed under the same license as the Epiphany package.
 # Pauli Virtanen <pauli.virtanen@hut.fi>, 2003-2005.
-# Ilkka Tuohela <hile@iki.fi>, 2005-2008.
+# Ilkka Tuohela <hile@iki.fi>, 2005-2009.
 # Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
 # Tommi Vainikainen <thv@iki.fi>, 2009.
 #
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-09-12 19:19+0300\n"
-"PO-Revision-Date: 2009-09-12 19:17+0300\n"
+"POT-Creation-Date: 2009-09-15 16:15+0300\n"
+"PO-Revision-Date: 2009-09-15 16:17+0300\n"
 "Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
@@ -942,21 +942,6 @@ msgstr "Tiedosto \"%s\" on lisätty noutojonoon."
 msgid "Download started"
 msgstr "Nouto aloitettu"
 
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
-msgctxt "download status"
-msgid "Unknown"
-msgstr "Tuntematon"
-
-#: ../embed/downloader-view.c:804
-msgctxt "download status"
-msgid "Failed"
-msgstr "Epäonnistui"
-
-#: ../embed/downloader-view.c:807
-msgctxt "download status"
-msgid "Cancelled"
-msgstr "Peruttu"
-
 #: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Tiedosto"
@@ -969,14 +954,9 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Tallenna"
-
-#: ../embed/ephy-embed.c:662
-msgctxt "file type"
-msgid "Unknown"
-msgstr "Tuntematon"
 
 #: ../embed/ephy-embed.c:676
 msgid "Download this potentially unsafe file?"
@@ -1423,6 +1403,11 @@ msgstr "Ladataan \"%s\"..."
 msgid "Loading…"
 msgstr "Ladataan..."
 
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s tiedostoa"
+
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
 msgid ""
@@ -1808,32 +1793,6 @@ msgstr "_Päivitä"
 #: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "Päivitetäänkö kirjanmerkki?"
-
-#. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1203
-msgctxt "bookmarks"
-msgid "All"
-msgstr "Kaikki"
-
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1206
-msgctxt "bookmarks"
-msgid "Most Visited"
-msgstr "Useimmin vieraillut"
-
-#. Translators: this topic contains the not categorized
-#. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1210
-msgctxt "bookmarks"
-msgid "Not Categorized"
-msgstr "Luokittelemattomat"
-
-#. Translators: this is an automatic topic containing local
-#. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1215
-msgctxt "bookmarks"
-msgid "Nearby Sites"
-msgstr "Lähiympäristön sivustot"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1450
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
@@ -2379,7 +2338,7 @@ msgstr "Sivustot"
 msgid "Date"
 msgstr "Päiväys"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "Gnomen WWW-selain"
 
@@ -2465,7 +2424,7 @@ msgstr ""
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Evästeiden kopiointi Mozillasta epäonnistui."
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Tuoreimman siirrosmerkinnän luku epäonnistui, keskeytetään profiilin siirros."
@@ -2644,32 +2603,6 @@ msgstr "Uusi _ikkuna"
 #: ../src/ephy-toolbar.c:350
 msgid "Open a new window"
 msgstr "Avaa uusi ikkuna"
-
-#: ../src/ephy-toolbar-editor.c:71
-msgctxt "toolbar style"
-msgid "Default"
-msgstr "Oletus"
-
-#. separator row
-#: ../src/ephy-toolbar-editor.c:73
-msgctxt "toolbar style"
-msgid "Text below icons"
-msgstr "Teksti kuvakkeiden alla"
-
-#: ../src/ephy-toolbar-editor.c:74
-msgctxt "toolbar style"
-msgid "Text beside icons"
-msgstr "Teksti kuvakkeiden vieressä"
-
-#: ../src/ephy-toolbar-editor.c:75
-msgctxt "toolbar style"
-msgid "Icons only"
-msgstr "Vain kuvakkeet"
-
-#: ../src/ephy-toolbar-editor.c:76
-msgctxt "toolbar style"
-msgid "Text only"
-msgstr "Vain teksti"
 
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
@@ -3139,11 +3072,11 @@ msgstr "Jos suljet asiakirjan tästä huolimatta, menetät nämä tiedot."
 msgid "Close _Document"
 msgstr "_Sulje asiakirja"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Avaa"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
@@ -3384,25 +3317,6 @@ msgstr "Sulje"
 msgid "Close print preview"
 msgstr "Sulje tulosteen esikatselu"
 
-#. Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
-#, c-format
-msgctxt "language"
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:527
-#, c-format
-msgctxt "language"
-msgid "User defined (%s)"
-msgstr "Käyttäjän määrittelemä (%s)"
-
 #: ../src/prefs-dialog.c:549
 #, c-format
 msgid "System language (%s)"
@@ -3414,7 +3328,7 @@ msgstr[1] "Järjestelmän kielet (%s)"
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3426,7 +3340,7 @@ msgstr ""
 "Free Software Foundation on ne julkaissut; joko Lisenssin version 2, tai "
 "(valinnan mukaan) minkä tahansa myöhemmän version mukaisesti."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3438,7 +3352,7 @@ msgstr ""
 "hyväksyttävästä laadusta tai soveltuvuudesta tiettyyn tarkoitukseen. Katso "
 "GPL lisenssistä lisää yksityiskohtia."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3448,20 +3362,20 @@ msgstr ""
 "kirjoita osoitteeseen Free Software Foundation Inc., 51 Franklin Street, "
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Ota yhteyttä osoitteessa:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Avustajat:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Aikaisemmat kehittäjät:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3478,7 +3392,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "Timo Jyrinki, 2008\n"
@@ -3487,9 +3401,69 @@ msgstr ""
 "\n"
 "http://gnome.fi/"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "Gnomen WWW-selaimen WWW-sivut"
+
+#~ msgctxt "download status"
+#~ msgid "Unknown"
+#~ msgstr "Tuntematon"
+
+#~ msgctxt "download status"
+#~ msgid "Failed"
+#~ msgstr "Epäonnistui"
+
+#~ msgctxt "download status"
+#~ msgid "Cancelled"
+#~ msgstr "Peruttu"
+
+#~ msgctxt "file type"
+#~ msgid "Unknown"
+#~ msgstr "Tuntematon"
+
+#~ msgctxt "bookmarks"
+#~ msgid "All"
+#~ msgstr "Kaikki"
+
+#~ msgctxt "bookmarks"
+#~ msgid "Most Visited"
+#~ msgstr "Useimmin vieraillut"
+
+#~ msgctxt "bookmarks"
+#~ msgid "Not Categorized"
+#~ msgstr "Luokittelemattomat"
+
+#~ msgctxt "bookmarks"
+#~ msgid "Nearby Sites"
+#~ msgstr "Lähiympäristön sivustot"
+
+#~ msgctxt "toolbar style"
+#~ msgid "Default"
+#~ msgstr "Oletus"
+
+#~ msgctxt "toolbar style"
+#~ msgid "Text below icons"
+#~ msgstr "Teksti kuvakkeiden alla"
+
+#~ msgctxt "toolbar style"
+#~ msgid "Text beside icons"
+#~ msgstr "Teksti kuvakkeiden vieressä"
+
+#~ msgctxt "toolbar style"
+#~ msgid "Icons only"
+#~ msgstr "Vain kuvakkeet"
+
+#~ msgctxt "toolbar style"
+#~ msgid "Text only"
+#~ msgstr "Vain teksti"
+
+#~ msgctxt "language"
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgctxt "language"
+#~ msgid "User defined (%s)"
+#~ msgstr "Käyttäjän määrittelemä (%s)"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr ""
@@ -4244,9 +4218,6 @@ msgstr "Gnomen WWW-selaimen WWW-sivut"
 #~ "Vaikka sivu on ladattu turvallisen yhteyden kautta, kirjoittamasi tiedot "
 #~ "kuitenkin palautetaan turvattoman yhteyden kautta. Kuka tahansa voi "
 #~ "helposti nähdä ne."
-
-#~ msgid "%s Files"
-#~ msgstr "%s-tiedostot"
 
 #~ msgid "Unsafe protocol."
 #~ msgstr "Turvaton yhteyskäytäntö."
