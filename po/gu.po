@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-11 09:24+0000\n"
-"PO-Revision-Date: 2009-09-11 18:12+0530\n"
+"POT-Creation-Date: 2009-09-15 02:06+0000\n"
+"PO-Revision-Date: 2009-09-15 12:42+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -989,7 +989,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "બાકી રહેલું"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
@@ -1442,6 +1442,11 @@ msgstr "“%s” લાવી રહ્યા છીએ…"
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "લાવી રહ્યા છે…"
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s ફાઇલો"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2393,7 +2398,7 @@ msgstr "સાઇટો"
 msgid "Date"
 msgstr "તારીખ"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "જીનોમ વેબ બ્રાઉઝર"
 
@@ -2464,7 +2469,6 @@ msgid "Close tab"
 msgstr "ટેબ બંધ કરો"
 
 #: ../src/ephy-nss-glue.c:62
-#| msgid "User Password"
 msgid "Master password needed"
 msgstr "મુખ્ય પાસવર્ડ જરૂરી"
 
@@ -2474,15 +2478,15 @@ msgid ""
 "password. If you want Epiphany to import them, please enter your master "
 "password below."
 msgstr ""
-"પહેલાંની આવૃત્તિ માંથી પાસવર્ડો (Gecko) મુખ્ય પાસવર્ડ સાથે તાળુ મારેલ છે. જો "
-"તેઓને આયાત કરવા માટે તમે Epiphany ને ઇચ્છતા હોય તો, મહેરબાની કરીને નીચે "
-"તમારા મુખ્ય પાસવર્ડને દાખલ કરો."
+"પહેલાંની આવૃત્તિ માંથી પાસવર્ડો (Gecko) મુખ્ય પાસવર્ડ સાથે તાળુ મારેલ છે. જો તેઓને આયાત "
+"કરવા માટે તમે Epiphany ને ઇચ્છતા હોય તો, મહેરબાની કરીને નીચે તમારા મુખ્ય પાસવર્ડને દાખલ "
+"કરો."
 
 #: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Mozilla માંથી કુકી ફાઇલને નકલ કરવામાં નિષ્ફળ."
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "તાજેતરનાં સ્થળાંતર માર્કરને વાંચવામાં નિષ્ફળ, રૂપરેખા સ્થળાંતરને કાઢી રહ્યા છે."
 
@@ -3155,11 +3159,11 @@ msgstr "જો તમે કોઈપણ રીતે દસ્તાવેજ �
 msgid "Close _Document"
 msgstr "દસ્તાવેજ બંધ કરો (_D)"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "ખોલો"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
@@ -3437,7 +3441,7 @@ msgstr[1] "સિસ્ટમની ભાષાઓ (%s)"
 msgid "Select a Directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3449,7 +3453,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3461,7 +3465,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3471,20 +3475,20 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "અમારો અંહિ સંપર્ક કરો:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "ફાળો આપનારાઓ:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "જૂના વિકાસકર્તાઓ:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3501,13 +3505,13 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "અંકિત પટેલ <ankit644@yahoo.com>\n"
 "શ્ર્વેતા કોઠારી <swkothar@redhat.com>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "જીનોમ વેબ બ્રાઉઝર વેબસાઈટ"
 
