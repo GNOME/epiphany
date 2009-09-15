@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-09-14 16:49+0200\n"
-"PO-Revision-Date: 2009-09-13 22:57+0200\n"
+"POT-Creation-Date: 2009-09-15 13:11+0200\n"
+"PO-Revision-Date: 2009-09-15 13:11+0200\n"
 "Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -986,7 +986,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Verbleibend"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Speichern"
 
@@ -1442,6 +1442,11 @@ msgstr "»%s« wird geladen …"
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "Laden …"
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s Dateien"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2407,7 +2412,7 @@ msgstr "Seiten"
 msgid "Date"
 msgstr "Datum"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "Webbrowser"
 
@@ -3175,11 +3180,11 @@ msgstr ""
 msgid "Close _Document"
 msgstr "_Dokument schließen"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Öffnen"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "Speichern unter"
 
@@ -3451,7 +3456,7 @@ msgstr[1] "Systemsprachen (%s)"
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3463,7 +3468,7 @@ msgstr ""
 "veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 2 "
 "der Lizenz oder (nach Ihrer Option) jeder späteren Version."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3475,7 +3480,7 @@ msgstr ""
 "implizierte Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN "
 "BESTIMMTEN ZWECK.  Details finden Sie in der GNU General Public License."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3486,20 +3491,20 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
 "USA."
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Mitwirkende"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Vorherige Entwickler"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3516,7 +3521,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
@@ -3525,7 +3530,7 @@ msgstr ""
 "Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Mario Blättermann <mariobl@gnome.org>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "Webseite des GNOME Browser"
 
