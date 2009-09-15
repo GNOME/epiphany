@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.ml\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-11 09:40+0000\n"
-"PO-Revision-Date: 2009-09-11 15:25+0530\n"
+"POT-Creation-Date: 2009-09-15 02:06+0000\n"
+"PO-Revision-Date: 2009-09-15 21:53+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -956,7 +956,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "ബാക്കിയുള്ളവ"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "സൂക്ഷിയ്ക്കുക"
 
@@ -1412,6 +1412,11 @@ msgstr "“%s” എടുത്തുകൊണ്ടിരിയ്ക്കു
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "എടുത്തുകൊണ്ടിരിയ്ക്കുന്നു..."
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s ഫയലുകള്‍"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2366,7 +2371,7 @@ msgstr "സൈറ്റുകള്‍"
 msgid "Date"
 msgstr "തിയ്യതി"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "ഗ്നോം വെബ് ബ്രൌസര്‍"
 
@@ -2436,7 +2441,6 @@ msgid "Close tab"
 msgstr "കിളിവാതില്‍ അടയ്ക്കുക"
 
 #: ../src/ephy-nss-glue.c:62
-#| msgid "User Password"
 msgid "Master password needed"
 msgstr "പ്രധാന അടയാളവാക്ക് ആവശ്യമാണു്"
 
@@ -2447,14 +2451,14 @@ msgid ""
 "password below."
 msgstr ""
 "മുമ്പുള്ള പതിപ്പുകളിലുള്ള (Gecko) അടയാളവാക്കുകള്‍ ഒരു പ്രധാന അടയാളവാക്കുപയോഗിച്ചു് "
-"പൂട്ടിയിരിക്കുന്നു. നിങ്ങള്‍ക്കു് എപിഫനി ഉപയോഗിച്ചു് അവ ലഭ്യമാക്കണമെങ്കില്‍, ദയവായി "
-"നിങ്ങളുടെ പ്രധാന അടയാളവാക്ക് താഴെ നല്‍കുക."
+"പൂട്ടിയിരിക്കുന്നു. നിങ്ങള്‍ക്കു് എപിഫനി ഉപയോഗിച്ചു് അവ ലഭ്യമാക്കണമെങ്കില്‍, ദയവായി നിങ്ങളുടെ "
+"പ്രധാന അടയാളവാക്ക് താഴെ നല്‍കുക."
 
 #: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "മോസിലയില്‍ നിന്നും കുക്കികളുടെ ഫയല്‍ പകര്‍ത്തുന്നതില്‍ പരാജയം."
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "ഏറ്റവും പുതിയ മൈഗ്രേഷന്‍ മാര്‍ക്കര്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം, പ്രൊഫൈല്‍ നീക്കുന്നതു് നിര്‍ത്തുന്നു."
 
@@ -3127,11 +3131,11 @@ msgstr "രചന അടയ്ക്കാന്‍ തന്നെയാണു�
 msgid "Close _Document"
 msgstr "_രചന അടയ്ക്കുക"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "തുറക്കുക"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക"
 
@@ -3401,7 +3405,7 @@ msgstr[1] "സിസ്റ്റത്തിലെ ഭാഷകള്‍ (%s)"
 msgid "Select a Directory"
 msgstr "ഒരു തട്ടു് തെരഞ്ഞെടുക്കുക"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3414,7 +3418,7 @@ msgstr ""
 "വരുത്താവുന്നതുമാണു്; ലൈസന്‍സിന്റെ ലക്കം 2 അല്ലെങ്കില്‍ (നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന) അതിനു് ശേഷമുള്ള\n"
 "ഏതെങ്കിലും ലക്കമോ ഉപയോഗിയ്ക്കാം."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3426,7 +3430,7 @@ msgstr ""
 "ചേരുന്നതാണെന്നോ പരോക്ഷമായി ഉള്‍‌ക്കൊള്ളുന്ന വാറണ്ടി പോലും ഇല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കു്  ഗ്നു ജനറല്‍ "
 "പബ്ലിക് ലൈസന്‍സ് കാണുക."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3437,20 +3441,20 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "ഞങ്ങളുമായി ബന്ധപ്പെടുക:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "സംഭാവന നല്‍കിയവര്‍:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "മുന്‍കാലത്തു് വികസിപ്പിച്ചവര്‍:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3468,7 +3472,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "എഫ്എസ്എഫ്-ഇന്ത്യ <locale@gnu.org.in>\n"
@@ -3476,7 +3480,7 @@ msgstr ""
 "പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>\n"
 "സന്തോഷ് തോട്ടിങ്ങല്‍ <santhosh00@gmail.com>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "ഗ്നോമിലെ വെബ്ബ് ബ്രൌസറിന്റെ വെബ്സൈറ്റ്"
 
