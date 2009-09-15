@@ -9,10 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2009-08-26 16:37-0300\n"
-"PO-Revision-Date: 2009-08-26 17:13-0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-09-15 02:06+0000\n"
+"PO-Revision-Date: 2009-09-15 21:35+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -57,21 +56,23 @@ msgid "Browse the web"
 msgstr "גלוש ברשת"
 
 #: ../data/epiphany.desktop.in.in.h:2
+#| msgid "Epiphany (RDF)"
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "דפדפן Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4
+#: ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "דפדפן אינטרנט"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
-msgid ""
-"A list of protocols to be considered safe in addition to the default, when "
-"disable_unsafe_protocols is enabled."
-msgstr ""
-"רשימה של פרוטוקולים שיחשבו בטוחים בנוסף לברירת המחדל, כאשר "
-"disable_unsafe_protocols מופעל."
+msgid "A list of protocols to be considered safe in addition to the default, when disable_unsafe_protocols is enabled."
+msgstr "רשימה של פרוטוקולים שיחשבו בטוחים בנוסף לברירת המחדל, כאשר disable_unsafe_protocols מופעל."
 
 #: ../data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -86,12 +87,8 @@ msgid "Disable JavaScript's control over window chrome."
 msgstr "נטרל את השליטה של JavaScript על צבע החלון."
 
 #: ../data/epiphany-lockdown.schemas.in.h:5
-msgid ""
-"Disable all historical information by disabling back and forward navigation, "
-"not allowing the history dialog and hiding the most used bookmarks list."
-msgstr ""
-"אל תאפשר כל מידע על ההיסטוריה על ידי נטרול הכפתורים אחורה וקדימה, מניעת "
-"השימוש בתיבת הדו־שיח של ההיסטוריה והסתרת רשימת הסימניות הכי שימושיות."
+msgid "Disable all historical information by disabling back and forward navigation, not allowing the history dialog and hiding the most used bookmarks list."
+msgstr "אל תאפשר כל מידע על ההיסטוריה על ידי נטרול הכפתורים אחורה וקדימה, מניעת השימוש בתיבת הדו־שיח של ההיסטוריה והסתרת רשימת הסימניות הכי שימושיות."
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable arbitrary URLs"
@@ -126,11 +123,8 @@ msgid "Disable unsafe protocols"
 msgstr "נטרל פרוטוקולים לא בטוחים"
 
 #: ../data/epiphany-lockdown.schemas.in.h:14
-msgid ""
-"Disables loading of content from unsafe protocols. Safe protocols are http "
-"and https."
-msgstr ""
-"מנטרל טעינת תוכן מפרוטוקולים לא בטוחים. הפרוטוקולים הבטוחים הם http: וhttps:."
+msgid "Disables loading of content from unsafe protocols. Safe protocols are http and https."
+msgstr "מנטרל טעינת תוכן מפרוטוקולים לא בטוחים. הפרוטוקולים הבטוחים הם http: וhttps:."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
@@ -169,10 +163,8 @@ msgid "Allow popups"
 msgstr "אפשר חלונות קופצים"
 
 #: ../data/epiphany.schemas.in.h:4
-msgid ""
-"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr ""
-"אפשר לאתרים לפתוח חלונות חדשים באמצעות JavaScript (אם JavaScript מופעל)."
+msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgstr "אפשר לאתרים לפתוח חלונות חדשים באמצעות JavaScript (אם JavaScript מופעל)."
 
 #: ../data/epiphany.schemas.in.h:5
 msgid "Always show the tab bar"
@@ -199,42 +191,8 @@ msgid "Default encoding"
 msgstr "קידוד ברירת המחדל"
 
 #: ../data/epiphany.schemas.in.h:11
-msgid ""
-"Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
-"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
-"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
-"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
-"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
-"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
-"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
-"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
-"\", \"x-viet-vps\" and \"x-windows-949\"."
-msgstr ""
-"קידוד ברירת מחדל. הערכים האפשריים הם: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
-"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
-"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
-"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
-"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
-"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
-"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
-"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
-"\", \"x-viet-vps\" ו\"x-windows-949\"."
+msgid "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+msgstr "קידוד ברירת מחדל. הערכים האפשריים הם: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" ו\"x-windows-949\"."
 
 #: ../data/epiphany.schemas.in.h:12
 msgid "Default font type"
@@ -252,7 +210,8 @@ msgstr "אפשר שימוש ב־Java"
 msgid "Enable JavaScript"
 msgstr "אפשר שימוש ב־JavaScript"
 
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+#: ../data/epiphany.schemas.in.h:16
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "Enable Web Inspector"
 msgstr "הפעלת מנתח האתרים"
 
@@ -261,22 +220,16 @@ msgid "Enable smooth scrolling"
 msgstr "Enable smooth scrolling"
 
 #: ../data/epiphany.schemas.in.h:18
-msgid ""
-"Force new window requests to be opened in tabs instead of using a new window."
-msgstr ""
-"Force new window requests to be opened in tabs instead of using a new window."
+msgid "Force new window requests to be opened in tabs instead of using a new window."
+msgstr "Force new window requests to be opened in tabs instead of using a new window."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "Force new windows to be opened in tabs"
 msgstr "Force new windows to be opened in tabs"
 
 #: ../data/epiphany.schemas.in.h:20
-msgid ""
-"Hide or show the downloads window. When hidden, a notification will be shown "
-"when new downloads are started."
-msgstr ""
-"Hide or show the downloads window. When hidden, a notification will be shown "
-"when new downloads are started."
+msgid "Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started."
+msgstr "Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started."
 
 #: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
@@ -287,24 +240,16 @@ msgid "Home page"
 msgstr "דף הבית"
 
 #: ../data/epiphany.schemas.in.h:23
-msgid ""
-"How to present animated images. Possible values are \"normal\", \"once\" and "
-"\"disabled\"."
-msgstr ""
-"How to present animated images. Possible values are \"normal\", \"once\" and "
-"\"disabled\"."
+msgid "How to present animated images. Possible values are \"normal\", \"once\" and \"disabled\"."
+msgstr "How to present animated images. Possible values are \"normal\", \"once\" and \"disabled\"."
 
 #: ../data/epiphany.schemas.in.h:24
 msgid "How to print frames"
 msgstr "How to print frames"
 
 #: ../data/epiphany.schemas.in.h:25
-msgid ""
-"How to print pages containing frames. Allowed values are \"normal\", "
-"\"separately\" and \"selected\"."
-msgstr ""
-"How to print pages containing frames. Allowed values are \"normal\", "
-"\"separately\" and \"selected\"."
+msgid "How to print pages containing frames. Allowed values are \"normal\", \"separately\" and \"selected\"."
+msgstr "How to print pages containing frames. Allowed values are \"normal\", \"separately\" and \"selected\"."
 
 #. Translators: this is the default encoding used by Epiphany for Web pages display
 #: ../data/epiphany.schemas.in.h:27
@@ -324,17 +269,12 @@ msgid "Lists the active extensions."
 msgstr "Lists the active extensions."
 
 #: ../data/epiphany.schemas.in.h:31
-msgid ""
-"Middle click to open the web page pointed to by the currently selected text"
+msgid "Middle click to open the web page pointed to by the currently selected text"
 msgstr "לחץ על הכפתור האמצעי כדי לפתוח את דף האינטרנט שאליו הטקסט הנבחר מפנה"
 
 #: ../data/epiphany.schemas.in.h:32
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr ""
-"לחיצה על הכפתור האמצעי בחלון התצוגה הראשי תפתח את דף האינטרנט שאליו הטקסט "
-"הנבחר מפנה."
+msgid "Middle clicking on the main view pane will open the web page pointed to by the currently selected text."
+msgstr "לחיצה על הכפתור האמצעי בחלון התצוגה הראשי תפתח את דף האינטרנט שאליו הטקסט הנבחר מפנה."
 
 #: ../data/epiphany.schemas.in.h:33
 msgid "Minimum font size"
@@ -357,12 +297,8 @@ msgid "Show statusbar by default"
 msgstr "הראה את שורת המצב כברירת מחדל"
 
 #: ../data/epiphany.schemas.in.h:38
-msgid ""
-"Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
-"\", \"today\"."
-msgstr ""
-"הצג את דפי ההיסטוריה שביקרו בהם \"אי פעם\", \"ביומיים האחרונים\", \"בשלושת "
-"הימים האחרונים\", \"היום\"."
+msgid "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days\", \"today\"."
+msgstr "הצג את דפי ההיסטוריה שביקרו בהם \"אי פעם\", \"ביומיים האחרונים\", \"בשלושת הימים האחרונים\", \"היום\"."
 
 #: ../data/epiphany.schemas.in.h:39
 msgid "Show the tab bar also when there is only one tab open."
@@ -385,35 +321,16 @@ msgid "The bookmark information shown in the editor view"
 msgstr "המידע על הסימנייה שמופיע בעורך"
 
 #: ../data/epiphany.schemas.in.h:44
-msgid ""
-"The bookmark information shown in the editor view. Valid values in the list "
-"are \"address\" and \"title\"."
-msgstr ""
-"המידע על הסימניות שמוצג בעורך. הערכים האפשריים ברשימה הם \"כתובת\" ו\"כותרת"
-"\"."
+msgid "The bookmark information shown in the editor view. Valid values in the list are \"address\" and \"title\"."
+msgstr "המידע על הסימניות שמוצג בעורך. הערכים האפשריים ברשימה הם \"כתובת\" ו\"כותרת\"."
 
 #: ../data/epiphany.schemas.in.h:45
 msgid "The currently selected fonts language"
 msgstr "השפה של הגופן שנבחר כעת"
 
 #: ../data/epiphany.schemas.in.h:46
-msgid ""
-"The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
-"baltic\" (baltic languages), \"x-central-euro\" (central european "
-"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el"
-"\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN"
-"\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr"
-"\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages "
-"written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
-"\" (devanagari)."
-msgstr ""
-"השפה של הגופן שנבחר כעת. הערכים האפשריים הם \"ar\" (ערבית), \"x-baltic"
-"\" (שפות באלטיות), \"x-central-euro\" (שפות מרכז אירופאיות), \"x-cyrillic"
-"\" (שפות שנכתבות באותיות קיריליות), \"el\" (יוונית), \"he\" (עברית), \"ja"
-"\" (יפנית), \"ko\" (קוריאנית), \"zh-CN\" (סינית מפושטת), \"th\" (תאילנדית), "
-"\"zh-TW\" (סינית מסורתית), \"tr\" (טורקית), \"x-unicode\" (שפות אחרות), \"x-"
-"western\" (שפות שנכתבות בכתיב לטיני), \"x-tamil\" (טאמיל) ו\"x-devanagari"
-"\" (הינדית)."
+msgid "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-baltic\" (baltic languages), \"x-central-euro\" (central european languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-devanagari\" (devanagari)."
+msgstr "השפה של הגופן שנבחר כעת. הערכים האפשריים הם \"ar\" (ערבית), \"x-baltic\" (שפות באלטיות), \"x-central-euro\" (שפות מרכז אירופאיות), \"x-cyrillic\" (שפות שנכתבות באותיות קיריליות), \"el\" (יוונית), \"he\" (עברית), \"ja\" (יפנית), \"ko\" (קוריאנית), \"zh-CN\" (סינית מפושטת), \"th\" (תאילנדית), \"zh-TW\" (סינית מסורתית), \"tr\" (טורקית), \"x-unicode\" (שפות אחרות), \"x-western\" (שפות שנכתבות בכתיב לטיני), \"x-tamil\" (טאמיל) ו\"x-devanagari\" (הינדית)."
 
 #: ../data/epiphany.schemas.in.h:47
 msgid "The downloads folder"
@@ -424,34 +341,20 @@ msgid "The page information shown in the history view"
 msgstr "המידע על הדף המוצג בהיסטוריה"
 
 #: ../data/epiphany.schemas.in.h:49
-msgid ""
-"The page information shown in the history view. Valid values in the list are "
-"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-msgstr ""
-"The page information shown in the history view. Valid values in the list are "
-"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
+msgid "The page information shown in the history view. Valid values in the list are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
+msgstr "The page information shown in the history view. Valid values in the list are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 
 #: ../data/epiphany.schemas.in.h:50
-msgid ""
-"The path of the folder where to download files to; or \"Downloads\" to use "
-"the default downloads folder, or \"Desktop\" to use the desktop folder."
-msgstr ""
-"The path of the folder where to download files to; or \"Downloads\" to use "
-"the default downloads folder, or \"Desktop\" to use the desktop folder."
+msgid "The path of the folder where to download files to; or \"Downloads\" to use the default downloads folder, or \"Desktop\" to use the desktop folder."
+msgstr "The path of the folder where to download files to; or \"Downloads\" to use the default downloads folder, or \"Desktop\" to use the desktop folder."
 
 #: ../data/epiphany.schemas.in.h:51
 msgid "Toolbar style"
 msgstr "סגנון סרגל כלים"
 
 #: ../data/epiphany.schemas.in.h:52
-msgid ""
-"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-"\"text\"."
-msgstr ""
-"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-"\"text\"."
+msgid "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and \"text\"."
+msgstr "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and \"text\"."
 
 #: ../data/epiphany.schemas.in.h:53
 msgid "Use own colors"
@@ -474,20 +377,12 @@ msgid "Visibility of the downloads window"
 msgstr "Visibility of the downloads window"
 
 #: ../data/epiphany.schemas.in.h:58
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"כאשר הדפדפן לא יכול לפתוח קבצים הוא מוריד אותם אל תיקיית ההורדות באופן "
-"אוטומטי ופותח אותם באמצעות היישום המתאים."
+msgid "When files cannot be opened by the browser they are automatically downloaded to the download folder and opened with the appropriate application."
+msgstr "כאשר הדפדפן לא יכול לפתוח קבצים הוא מוריד אותם אל תיקיית ההורדות באופן אוטומטי ופותח אותם באמצעות היישום המתאים."
 
 #: ../data/epiphany.schemas.in.h:59
-msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
-msgstr ""
-"מהיכן לקבל עוגיות. ערכים אפשריים הם \"כל מקום\", \"האתר הנוכחי\" ו\"שום מקום"
-"\"."
+msgid "Where to accept cookies from. Possible values are \"anywhere\", \"current site\" and \"nowhere\"."
+msgstr "מהיכן לקבל עוגיות. ערכים אפשריים הם \"כל מקום\", \"האתר הנוכחי\" ו\"שום מקום\"."
 
 #: ../data/epiphany.schemas.in.h:60
 msgid "Whether to print the background color"
@@ -607,7 +502,8 @@ msgid "Cookies"
 msgstr "עוגיות"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.glade.h:5
+#: ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "הורדות"
 
@@ -623,7 +519,8 @@ msgstr "מידע אישי"
 msgid "Text Encoding"
 msgstr "קידוד הטקסט"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.glade.h:9
+#: ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "השתמש בקידוד שמוגדר במסמך"
 
@@ -636,12 +533,8 @@ msgid "Sign Text"
 msgstr "חתום על הטקסט"
 
 #: ../data/glade/form-signing-dialog.glade.h:2
-msgid ""
-"To confirm that you want to sign the above text, choose a certificate to "
-"sign the text with and enter its password below."
-msgstr ""
-"על מנת לאשר שברצונך לחתום על הטקסט הנ\"ל, יש לבחור אישור שבעזרתו לחתום על "
-"הטקסט ולהכניס את סיסמתן למטה."
+msgid "To confirm that you want to sign the above text, choose a certificate to sign the text with and enter its password below."
+msgstr "על מנת לאשר שברצונך לחתום על הטקסט הנ\"ל, יש לבחור אישור שבעזרתו לחתום על הטקסט ולהכניס את סיסמתן למטה."
 
 #: ../data/glade/form-signing-dialog.glade.h:3
 msgid "_Certificate:"
@@ -717,7 +610,8 @@ msgstr "בחר _שפה:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
+#: ../lib/widgets/ephy-location-entry.c:638
+#: ../src/ephy-history-window.c:247
 #: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "_נקה"
@@ -738,7 +632,8 @@ msgstr "אפשר שימוש ב־_Java"
 msgid "Fonts & Style"
 msgstr "גופנים ועיצוב"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
+#: ../data/glade/prefs-dialog.glade.h:23
+#: ../src/prefs-dialog.c:820
 msgid "Language"
 msgstr "שפה"
 
@@ -890,9 +785,11 @@ msgid "_Resume"
 msgstr "המשך"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
-#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1740
+#: ../embed/downloader-view.c:394
+#: ../embed/downloader-view.c:547
+#: ../embed/downloader-view.c:552
+#: ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1738
 msgid "Unknown"
 msgstr "לא ידוע"
 
@@ -931,7 +828,8 @@ msgstr "הקובץ “%s” הוסף לתור ההורדות."
 msgid "Download started"
 msgstr "הורדה החלה"
 
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
+#: ../embed/downloader-view.c:801
+#: ../embed/downloader-view.c:811
 msgctxt "download status"
 msgid "Unknown"
 msgstr "לא ידוע"
@@ -946,7 +844,8 @@ msgctxt "download status"
 msgid "Cancelled"
 msgstr "בוטל"
 
-#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:870
+#: ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "קובץ"
 
@@ -958,42 +857,41 @@ msgstr "%"
 msgid "Remaining"
 msgstr "נשאר"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:443
+#: ../src/window-commands.c:333
 msgid "Save"
 msgstr "שמור"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:662
 msgctxt "file type"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:676
 msgid "Download this potentially unsafe file?"
 msgstr "להוריד את הקובץ המסוכן?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
+#: ../embed/ephy-embed.c:681
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
+"It is unsafe to open “%s” as it could potentially damage your documents or invade your privacy. You can download it instead."
 msgstr ""
 "סוג קובץ: \"%s\"‏.\n"
 "‏\n"
-"לא בטוח לפתוח את הקובץ \"%s\", הוא עלול לפגוע במסמכים שלך או לפלוש לפרטיותך."
-"אפשר לשמור אותו במקום זאת."
+"לא בטוח לפתוח את הקובץ \"%s\", הוא עלול לפגוע במסמכים שלך או לפלוש לפרטיותך.אפשר לשמור אותו במקום זאת."
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:689
 msgid "Open this file?"
 msgstr "האם לפתוח את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:695
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1004,13 +902,13 @@ msgstr ""
 "\n"
 "באפשרותך לפתוח את “%s“ בעזרת “%s“ או לשמור אותו."
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:702
 msgid "Download this file?"
 msgstr "להוריד את הקובץ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:707
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1021,11 +919,11 @@ msgstr ""
 "\n"
 "אין לך יישום שיכול לפתוח את “%s“. אפשר להוריד אותו במקום."
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:714
 msgid "_Save As..."
 msgstr "_שמור בשם..."
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:844
 msgid "Web Inspector"
 msgstr "מנתח האתרים"
 
@@ -1376,41 +1274,49 @@ msgstr "קבצים מקומיים"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
-#: ../src/ephy-session.c:1341
+#: ../embed/ephy-web-view.c:54
+#: ../embed/ephy-web-view.c:2124
+#: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "דף חלק"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1128
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.il/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 # c-format
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1319
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "מפנה אל “%s”…"
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1321
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "מעביר מידע מ־“%s”…"
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1323
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "מחכה לאישור מ־“%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1329
+#: ../embed/ephy-web-view.c:1436
 #, c-format
 msgid "Loading “%s”…"
 msgstr "טוען את “%s“…"
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "טוען…"
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+#| msgid "%s Files"
+msgid "%s/%s Files"
+msgstr "קבצי %s/%s"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -1464,7 +1370,9 @@ msgstr "Disable connection to session manager"
 msgid "Specify file containing saved configuration"
 msgstr "Specify file containing saved configuration"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
+#: ../lib/egg/eggsmclient.c:228
+#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:98
 msgid "FILE"
 msgstr "FILE"
 
@@ -1537,7 +1445,8 @@ msgstr "עמודי אינטרנט"
 msgid "Images"
 msgstr "תמונות"
 
-#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:408
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "All files"
 msgstr "כל הקבצים"
 
@@ -1575,9 +1484,7 @@ msgid "Cannot overwrite existing file “%s”"
 msgstr "לא ניתן להחליף את הקובץ “%s“"
 
 #: ../lib/ephy-gui.c:324
-msgid ""
-"A file with this name already exists and you don't have permission to "
-"overwrite it."
+msgid "A file with this name already exists and you don't have permission to overwrite it."
 msgstr "קובץ בשם זה כבר קיים ואין לך הרשאות מתאימות על מנת להחליפו."
 
 #: ../lib/ephy-gui.c:327
@@ -1593,23 +1500,27 @@ msgstr "לא ניתן להציג עזרה: %s"
 msgid "Popup Windows"
 msgstr "חלונות קופצים"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48
+#: ../src/ephy-history-window.c:1239
 msgid "History"
 msgstr "היסטוריה"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1493
 msgid "Bookmark"
 msgstr "סימניה"
 
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
+#: ../lib/ephy-stock-icons.c:50
+#: ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
+#: ../src/bookmarks/ephy-topic-action.c:443
+#: ../src/ephy-window.c:1497
 msgid "Bookmarks"
 msgstr "סימניות"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
+#: ../lib/ephy-stock-icons.c:51
+#: ../src/ephy-toolbar.c:284
 msgid "Address Entry"
 msgstr "כניסת הכתובת"
 
@@ -1841,22 +1752,26 @@ msgstr "הסר מנושא זה"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:147
+#: ../src/ephy-window.c:107
 msgid "_File"
 msgstr "_קובץ"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:148
+#: ../src/ephy-window.c:108
 msgid "_Edit"
 msgstr "_עריכה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
+#: ../src/ephy-history-window.c:149
+#: ../src/ephy-window.c:109
 msgid "_View"
 msgstr "_תצוגה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
+#: ../src/ephy-history-window.c:150
+#: ../src/ephy-window.c:114
 msgid "_Help"
 msgstr "עזר_ה"
 
@@ -1873,7 +1788,8 @@ msgstr "צור נושא חדש"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1349
-#: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
+#: ../src/ephy-history-window.c:154
 #: ../src/ephy-history-window.c:705
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -1887,7 +1803,8 @@ msgstr "פתח את הסימנייה הנבחרת בחלון חדש"
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1352
-#: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
+#: ../src/ephy-history-window.c:157
 #: ../src/ephy-history-window.c:708
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -1933,7 +1850,8 @@ msgid "Export bookmarks to a file"
 msgstr "יצא סימניות לקובץ"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
+#: ../src/ephy-history-window.c:163
+#: ../src/ephy-window.c:139
 msgid "_Close"
 msgstr "_סגור"
 
@@ -1943,29 +1861,34 @@ msgstr "סגור את חלון הסימניות"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:168
+#: ../src/ephy-window.c:151
 msgid "Cu_t"
 msgstr "_גזור"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
+#: ../src/ephy-history-window.c:169
+#: ../src/ephy-window.c:152
 msgid "Cut the selection"
 msgstr "גזור את הבחירה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1362
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:155
+#: ../src/ephy-history-window.c:171
+#: ../src/ephy-history-window.c:718
+#: ../src/ephy-window.c:154
 msgid "_Copy"
 msgstr "_העתק"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:172
+#: ../src/ephy-window.c:155
 msgid "Copy the selection"
 msgstr "העתק את הבחירה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
+#: ../src/ephy-history-window.c:174
+#: ../src/ephy-window.c:157
 msgid "_Paste"
 msgstr "ה_דבק"
 
@@ -1984,7 +1907,8 @@ msgid "Delete the selected bookmark or topic"
 msgstr "מחק את הסימנייה או הנושא הנבחר"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
+#: ../src/ephy-history-window.c:180
+#: ../src/ephy-window.c:163
 msgid "Select _All"
 msgstr "בחר ה_כל"
 
@@ -1995,7 +1919,8 @@ msgstr "בחר את כל הסימניות או הטקסט"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
+#: ../src/ephy-history-window.c:188
+#: ../src/ephy-window.c:257
 msgid "_Contents"
 msgstr "_תוכן"
 
@@ -2004,12 +1929,14 @@ msgid "Display bookmarks help"
 msgstr "הצג עזרה של הסימניות"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:191
+#: ../src/ephy-window.c:260
 msgid "_About"
 msgstr "_אודות"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:192
+#: ../src/ephy-window.c:261
 msgid "Display credits for the web browser creators"
 msgstr "הצג את שמות יוצרי הדפדפן"
 
@@ -2053,12 +1980,8 @@ msgid "Delete this topic?"
 msgstr "למחוק את נושא זה?"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:399
-msgid ""
-"Deleting this topic will cause all its bookmarks to become uncategorized, "
-"unless they also belong to other topics. The bookmarks will not be deleted."
-msgstr ""
-"מחיקת נושא זה תגרום לכל הסימניות שבו להיות ללא נושא, אלא אם הם שייכות גם "
-"לנושאים אחרים. הסימניות לא ימחקו."
+msgid "Deleting this topic will cause all its bookmarks to become uncategorized, unless they also belong to other topics. The bookmarks will not be deleted."
+msgstr "מחיקת נושא זה תגרום לכל הסימניות שבו להיות ללא נושא, אלא אם הם שייכות גם לנושאים אחרים. הסימניות לא ימחקו."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:402
 msgid "_Delete Topic"
@@ -2099,11 +2022,8 @@ msgstr "יבוא נכשל"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:683
 #, c-format
-msgid ""
-"The bookmarks from “%s” could not be imported because the file is corrupted "
-"or of an unsupported type."
-msgstr ""
-"הסימניות מ־“%s“ לא ניתנות ליבוא מכיון שהקובץ לא תקין או מסוג שאינו נתמך."
+msgid "The bookmarks from “%s” could not be imported because the file is corrupted or of an unsupported type."
+msgstr "הסימניות מ־“%s“ לא ניתנות ליבוא מכיון שהקובץ לא תקין או מסוג שאינו נתמך."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:746
 msgid "Import Bookmarks from File"
@@ -2195,7 +2115,7 @@ msgstr "קשור"
 msgid "Topic"
 msgstr "נושא"
 
-#: ../src/bookmarks/ephy-topics-entry.c:329
+#: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
 msgid "Create topic “%s”"
 msgstr "_צור את הנושא “%s“?"
@@ -2234,32 +2154,35 @@ msgstr "_חפש:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434
+#: ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "_תלוי רישיות"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "חפש את הקודם"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "חפש את ההופעה הקודמת של המילה או הביטוי"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "חפש את הבא"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "חפש את ההופעה הבאה של המילה או הביטוי"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
+#: ../src/ephy-fullscreen-popup.c:263
+#: ../src/ephy-toolbar.c:581
 msgid "Leave Fullscreen"
 msgstr "צא ממסך מלא"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
+#: ../src/ephy-go-action.c:41
+#: ../src/ephy-toolbar.c:314
 msgid "Go"
 msgstr "לך"
 
@@ -2328,9 +2251,7 @@ msgid "Clear browsing history?"
 msgstr "לנקות את היסטורית הדפדוף?"
 
 #: ../src/ephy-history-window.c:241
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
+msgid "Clearing the browsing history will cause all history links to be permanently deleted."
 msgstr "ניקוי היסטורית הדפדוף ימחק את כל הקישורים מההיסטוריה לצמיתות."
 
 #: ../src/ephy-history-window.c:256
@@ -2346,7 +2267,8 @@ msgid "Today"
 msgstr "היום"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
+#: ../src/ephy-history-window.c:1050
+#: ../src/ephy-history-window.c:1053
 #: ../src/ephy-history-window.c:1057
 #, c-format
 msgid "Last %d day"
@@ -2362,7 +2284,9 @@ msgstr "אתרים"
 msgid "Date"
 msgstr "תאריך"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:562
+#: ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "דפדפן האינטרנט של GNOME"
 
@@ -2431,11 +2355,20 @@ msgstr "GNOME Web Browser options"
 msgid "Close tab"
 msgstr "סגור לשונית"
 
+#: ../src/ephy-nss-glue.c:62
+#| msgid "User Password"
+msgid "Master password needed"
+msgstr "נדרשת סיסמת אב"
+
+#: ../src/ephy-nss-glue.c:64
+msgid "The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."
+msgstr "הסיסמאות מהגרסה הקודמת (Gecko) נעולות בסיסמת אב. אם הנך מעוניין ש־Epiphany ייבא אותם, יש להזין את סיסמת האב שלך למטה."
+
 #: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "העתקת העוגיות ממוזילה נכשלה."
 
-#: ../src/ephy-profile-migration.c:375
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "קריאת סמן ההגירה האחרון נכשלה, הגירת הפרופיל מבוטלת."
 
@@ -2451,9 +2384,7 @@ msgid "Abort pending downloads?"
 msgstr "לבטל את ההורדות שלא הסתיימו?"
 
 #: ../src/ephy-session.c:233
-msgid ""
-"There are still downloads pending. If you log out, they will be aborted and "
-"lost."
+msgid "There are still downloads pending. If you log out, they will be aborted and lost."
 msgstr "קיימות הורדות שעדיין לא הסתיימו. אם תצא עכשיו, הם יופסקו ויאבדו."
 
 #: ../src/ephy-session.c:237
@@ -2469,12 +2400,8 @@ msgid "Recover previous browser windows and tabs?"
 msgstr "לשחזר את החלונות והלשוניות מהריצה הקודמת?"
 
 #: ../src/ephy-session.c:575
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr ""
-"נראה ש־Epiphany נסגר בצורה בלתי צפויה בפעם האחרונה שהוא הורץ. יש באפשרותך "
-"לשחזר את החלונות והלשוניות שהיו פתוחים."
+msgid "Epiphany appears to have exited unexpectedly the last time it was run. You can recover the opened windows and tabs."
+msgstr "נראה ש־Epiphany נסגר בצורה בלתי צפויה בפעם האחרונה שהוא הורץ. יש באפשרותך לשחזר את החלונות והלשוניות שהיו פתוחים."
 
 #: ../src/ephy-session.c:579
 msgid "_Don't Recover"
@@ -2489,25 +2416,20 @@ msgid "Crash Recovery"
 msgstr "התאוששות מהתרסקות"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1285
+#: ../src/ephy-session.c:1286
 #, c-format
-msgid ""
-"This page was loading when the web browser closed unexpectedly. This might "
-"happen again if you reload the page. If it does, please report the problem "
-"to the %s developers."
-msgstr ""
-"עמוד זה היה בטעינה בזמן שהדפדפן נסגר באופן לא צפוי. זה עלול להתרחש שוב את "
-"תטען את הדף שוב. במידה וזה מתרחש שוב אנא דווח על התקלה למפתחי %s."
+msgid "This page was loading when the web browser closed unexpectedly. This might happen again if you reload the page. If it does, please report the problem to the %s developers."
+msgstr "עמוד זה היה בטעינה בזמן שהדפדפן נסגר באופן לא צפוי. זה עלול להתרחש שוב את תטען את הדף שוב. במידה וזה מתרחש שוב אנא דווח על התקלה למפתחי %s."
 
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar extension required"
 msgstr "דרושה הרחבה לסרגל הצד"
 
-#: ../src/ephy-shell.c:173
+#: ../src/ephy-shell.c:174
 msgid "Sidebar Extension Required"
 msgstr "דרושה הרחבה לסרגל הצד"
 
-#: ../src/ephy-shell.c:177
+#: ../src/ephy-shell.c:178
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "הקישור שנלחץ דורש שהרחבת סרגל הצד תותקן."
 
@@ -2526,88 +2448,88 @@ msgstr "מצב בחירת מקלדת, הקש F7 ליציאה"
 msgid "Switch to this tab"
 msgstr "עבור ללשונית זאת"
 
-#: ../src/ephy-toolbar.c:224
+#: ../src/ephy-toolbar.c:223
 msgid "_Back"
 msgstr "_אחורה"
 
-#: ../src/ephy-toolbar.c:226
+#: ../src/ephy-toolbar.c:225
 msgid "Go to the previous visited page"
 msgstr "עבור אל הדף הקודם"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:229
 msgid "Back history"
 msgstr "היסטוריית חזור"
 
-#: ../src/ephy-toolbar.c:244
+#: ../src/ephy-toolbar.c:243
 msgid "_Forward"
 msgstr "_קדימה"
 
-#: ../src/ephy-toolbar.c:246
+#: ../src/ephy-toolbar.c:245
 msgid "Go to the next visited page"
 msgstr "עבור אל הדף הבא"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:249
 msgid "Forward history"
 msgstr "היסטורית קדימה"
 
-#: ../src/ephy-toolbar.c:263
+#: ../src/ephy-toolbar.c:262
 msgid "_Up"
 msgstr "למעלה_"
 
-#: ../src/ephy-toolbar.c:265
+#: ../src/ephy-toolbar.c:264
 msgid "Go up one level"
 msgstr "עלה רמה אחת"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:268
 msgid "List of upper levels"
 msgstr "רשימת רמות למעלה"
 
-#: ../src/ephy-toolbar.c:287
+#: ../src/ephy-toolbar.c:286
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "הכנס כתובת לפתיחה, או ביטוי לחיפוש"
 
-#: ../src/ephy-toolbar.c:303
+#: ../src/ephy-toolbar.c:302
 msgid "Zoom"
 msgstr "זום"
 
-#: ../src/ephy-toolbar.c:305
+#: ../src/ephy-toolbar.c:304
 msgid "Adjust the text size"
 msgstr "כוון את גודל הטקסט"
 
-#: ../src/ephy-toolbar.c:317
+#: ../src/ephy-toolbar.c:316
 msgid "Go to the address entered in the address entry"
 msgstr "לך אל הכתובת שבכניסת הכתובת"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:325
 msgid "_Home"
 msgstr "דף ה_בית"
 
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:327
 msgid "Go to the home page"
 msgstr "עבור אל דף הבית"
 
-#: ../src/ephy-toolbar.c:338
+#: ../src/ephy-toolbar.c:337
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-toolbar.c:340
+#: ../src/ephy-toolbar.c:339
 msgid "Open a new tab"
 msgstr "פתח לשונית חדשה"
 
-#: ../src/ephy-toolbar.c:349
+#: ../src/ephy-toolbar.c:348
 msgid "_New Window"
 msgstr "_חלון חדש"
 
-#: ../src/ephy-toolbar.c:351
+#: ../src/ephy-toolbar.c:350
 msgid "Open a new window"
 msgstr "פתח חלון חדש"
 
@@ -2650,446 +2572,449 @@ msgstr "מראה _כפתורים בסרגל הכלים:"
 msgid "_Add a New Toolbar"
 msgstr "_הוסף סרגל כלים חדש"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "_Bookmarks"
 msgstr "_סימניות"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:111
 msgid "_Go"
 msgstr "_לך"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "T_ools"
 msgstr "_כלים"
 
-#: ../src/ephy-window.c:114
+#: ../src/ephy-window.c:113
 msgid "_Tabs"
 msgstr "לשוניו_ת"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:115
 msgid "_Toolbars"
 msgstr "_סרגלי כלים"
 
 #. File menu
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:121
 msgid "_Open…"
 msgstr "_פתח…"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:122
 msgid "Open a file"
 msgstr "פתח קובץ"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:124
 msgid "Save _As…"
 msgstr "שמור _בשם…"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:125
 msgid "Save the current page"
 msgstr "שמור את הדף הנוכחי"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Page Set_up"
 msgstr "הגדרות עמוד…"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:128
 msgid "Setup the page settings for printing"
 msgstr "קבע את הגדרות הדף להדפסה"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:130
 msgid "Print Pre_view"
 msgstr "הצג לפ_ני הדפסה"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:131
 msgid "Print preview"
 msgstr "הצג לפני הדפסה"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:133
 msgid "_Print…"
 msgstr "ה_דפס…"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:134
 msgid "Print the current page"
 msgstr "הדפס את הדף הנוכחי"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:136
 msgid "S_end Link by Email…"
 msgstr "שלח _קישור בדוא\"ל…"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:137
 msgid "Send a link of the current page"
 msgstr "שלח קישור אל הדף הנוכחי"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:140
 msgid "Close this tab"
 msgstr "סגור לשונית זאת"
 
 #. Edit menu
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "_Undo"
 msgstr "ב_טל פעולה"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:146
 msgid "Undo the last action"
 msgstr "בטל את הפעולה האחרונה"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:148
 msgid "Re_do"
 msgstr "ב_צע שוב"
 
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:149
 msgid "Redo the last undone action"
 msgstr "בצע שוב את הפעולה האחרונה שבוטלה"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:158
 msgid "Paste clipboard"
 msgstr "הדבק מהלוח"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:161
 msgid "Delete text"
 msgstr "מחק טקסט"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Select the entire page"
 msgstr "בחר את כל הדף"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Find…"
 msgstr "_חפש…"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:167
 msgid "Find a word or phrase in the page"
 msgstr "חפש מילה או ביטוי בדף"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "Find Ne_xt"
 msgstr "חפש את ה_בא"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:170
 msgid "Find next occurrence of the word or phrase"
 msgstr "חפש את ההופעה הבאה של המילה או הביטוי"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:172
 msgid "Find Pre_vious"
 msgstr "חפש את ה_קודם"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:173
 msgid "Find previous occurrence of the word or phrase"
 msgstr "חפש את ההופעה הקודמת של המילה או הביטוי"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:175
 msgid "P_ersonal Data"
 msgstr "מ_ידע אישי"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:176
 msgid "View and remove cookies and passwords"
 msgstr "הצג והסר עוגיות וסיסמאות"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "Certificate_s"
 msgstr "_אישורים"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:180
 msgid "Manage Certificates"
 msgstr "נהל אישורים"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:183
 msgid "P_references"
 msgstr "ה_עדפות"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "Configure the web browser"
 msgstr "קבע את תצורת הדפדפן"
 
 #. View menu
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:189
 msgid "_Customize Toolbars…"
 msgstr "התאם _סרגלי כלים…"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Customize toolbars"
 msgstr "התאם סרגלי כלים"
 
-#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
+#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:195
 msgid "_Stop"
 msgstr "עצו_ר"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:193
 msgid "Stop current data transfer"
 msgstr "עצור את העברת המידע הנוכחית"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:197
 msgid "_Reload"
 msgstr "_טען שוב"
 
-#: ../src/ephy-window.c:199
+#: ../src/ephy-window.c:198
 msgid "Display the latest content of the current page"
 msgstr "הצג את התוכן האחרון של הדף הנוכחי"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:200
 msgid "_Larger Text"
 msgstr "טקסט _גדול יותר"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:201
 msgid "Increase the text size"
 msgstr "הגדל את הטקסט"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:203
 msgid "S_maller Text"
 msgstr "טקסט _קטן יותר"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:204
 msgid "Decrease the text size"
 msgstr "הקטן את הטקסט"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:206
 msgid "_Normal Size"
 msgstr "_גודל רגיל"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:207
 msgid "Use the normal text size"
 msgstr "השתמש בגודל הטקסט הרגיל"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:209
 msgid "Text _Encoding"
 msgstr "ק_ידוד הטקסט"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:210
 msgid "Change the text encoding"
 msgstr "שנה את קידוד הטקסט"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:212
 msgid "_Page Source"
 msgstr "קוד מקור של ה_דף"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:213
 msgid "View the source code of the page"
 msgstr "הצג את קוד המקור של הדף"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:215
 msgid "Page _Security Information"
 msgstr "מידע _אבטחה של הדף"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:216
 msgid "Display security information for the web page"
 msgstr "הצג מידע אבטחה על דף זה"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:221
 msgid "_Add Bookmark…"
 msgstr "הוסף _סימניה…"
 
-#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
+#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:296
 msgid "Add a bookmark for the current page"
 msgstr "הוסף סימניה לדף הנוכחי"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:224
 msgid "_Edit Bookmarks"
 msgstr "_ערוך סימניות"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:225
 msgid "Open the bookmarks window"
 msgstr "פתח את חלון הסימניות"
 
 #. Go menu
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:230
 msgid "_Location…"
 msgstr "_מיקום…"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:231
 msgid "Go to a specified location"
 msgstr "עבור למיקום מסוים"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:233
+#: ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "הי_סטוריה"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:234
 msgid "Open the history window"
 msgstr "פתח את חלון ההיסטוריה"
 
 #. Tabs menu
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:239
 msgid "_Previous Tab"
 msgstr "הלשונית ה_קודמת"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:240
 msgid "Activate previous tab"
 msgstr "הפעל את הלשונית הקודמת"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:242
 msgid "_Next Tab"
 msgstr "הלשונית ה_באה"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:243
 msgid "Activate next tab"
 msgstr "הפעל את הלשונית הבאה"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:245
 msgid "Move Tab _Left"
 msgstr "הזז לשונית _שמאלה"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:246
 msgid "Move current tab to left"
 msgstr "הזז את הלשונית הנוכחית שמאלה"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:248
 msgid "Move Tab _Right"
 msgstr "הזז לשונית _ימינה"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:249
 msgid "Move current tab to right"
 msgstr "הזז את הלשונית הנוכחית ימינה"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:251
 msgid "_Detach Tab"
 msgstr "_נתק לשונית"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:252
 msgid "Detach current tab"
 msgstr "נתק את הלשונית הנוכחית"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:258
 msgid "Display web browser help"
 msgstr "הצג עזרה של הדפדפן"
 
 #. File Menu
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:269
 msgid "_Work Offline"
 msgstr "עבור _למצב לא מקוון"
 
-#: ../src/ephy-window.c:271
+#: ../src/ephy-window.c:270
 msgid "Switch to offline mode"
 msgstr "עבור למצב לא מקוון"
 
 #. View Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:275
 msgid "_Hide Toolbars"
 msgstr "_הסתר סרגלי כלים"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:276
 msgid "Show or hide toolbar"
 msgstr "הצג או הסתר את סרגל הכלים"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:278
 msgid "St_atusbar"
 msgstr "שורת _מצב"
 
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:279
 msgid "Show or hide statusbar"
 msgstr "הצג או הסתר את שורת המצב"
 
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:281
 msgid "_Fullscreen"
 msgstr "מסך מ_לא"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:282
 msgid "Browse at full screen"
 msgstr "גלוש על מסך מלא"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:284
 msgid "Popup _Windows"
 msgstr "_חלונות קופצים"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:285
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "אפשר/אל תאפשר חלונות קופצים לא מורשים מאתר זה"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:287
 msgid "Selection Caret"
 msgstr "סימן בחירה"
 
 #. Document
-#: ../src/ephy-window.c:296
+#: ../src/ephy-window.c:295
 msgid "Add Boo_kmark…"
 msgstr "_הוסף סימניה…"
 
 #. Framed document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:301
 msgid "Show Only _This Frame"
 msgstr "הצג מסגרת _זאת בלבד"
 
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:302
 msgid "Show only this frame in this window"
 msgstr "הצג מסגרת זאת בלבד בחלון זה"
 
 #. Links
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:307
 msgid "_Open Link"
 msgstr "פתח _קישור"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:308
 msgid "Open link in this window"
 msgstr "פתח קישור בח_לון זה"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:310
 msgid "Open Link in New _Window"
 msgstr "פתח קישור ב_חלון חדש"
 
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:311
 msgid "Open link in a new window"
 msgstr "פתח קישור ב_חלון חדש"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:313
 msgid "Open Link in New _Tab"
 msgstr "פתח קישור ב_לשונית חדשה"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:314
 msgid "Open link in a new tab"
 msgstr "פתח קישור ב_לשונית חדשה"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:316
 msgid "_Download Link"
 msgstr "הור_ד קישור"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:318
 msgid "_Save Link As…"
 msgstr "_שמור קישור בשם…"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:319
 msgid "Save link with a different name"
 msgstr "שמור קישור בשם שונה"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:321
 msgid "_Bookmark Link…"
 msgstr "הוסף קישור ל_סימניות…"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:323
 msgid "_Copy Link Address"
 msgstr "העתק את כתובת הקישור"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:329
 msgid "_Send Email…"
 msgstr "שלח _דוא\"ל…"
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:331
 msgid "_Copy Email Address"
 msgstr "ה_עתק כתובת דוא\"ל"
 
 #. Images
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:336
 msgid "Open _Image"
 msgstr "_פתח תמונה"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:338
 msgid "_Save Image As…"
 msgstr "שמור תמונה ב_שם…"
 
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:340
 msgid "_Use Image As Background"
 msgstr "_השתמש בתמונה כרקע"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:342
 msgid "Copy I_mage Address"
 msgstr "ה_עתק את כתובת התמונה"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:344
 msgid "St_art Animation"
 msgstr "_התחל אנימציה"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:346
 msgid "St_op Animation"
 msgstr "_עצור אנימציה"
 
@@ -3105,102 +3030,103 @@ msgstr "אם תסגור את המסמך בכל זאת, המידע הזה יאב�
 msgid "Close _Document"
 msgstr "סגור _מסמך"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
+#: ../src/ephy-window.c:1487
+#: ../src/window-commands.c:311
 msgid "Open"
 msgstr "פתח"
 
-#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "שמור כ"
 
-#: ../src/ephy-window.c:1493
+#: ../src/ephy-window.c:1491
 msgid "Print"
 msgstr "הדפס"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1495
 msgid "Find"
 msgstr "מצא"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1510
+#: ../src/ephy-window.c:1508
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1513
+#: ../src/ephy-window.c:1511
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1743
+#: ../src/ephy-window.c:1741
 msgid "Insecure"
 msgstr "לא בטוח"
 
-#: ../src/ephy-window.c:1748
+#: ../src/ephy-window.c:1746
 msgid "Broken"
 msgstr "שבור"
 
-#: ../src/ephy-window.c:1756
+#: ../src/ephy-window.c:1754
 msgid "Low"
 msgstr "נמוכה"
 
-#: ../src/ephy-window.c:1763
+#: ../src/ephy-window.c:1761
 msgid "High"
 msgstr "גבוהה"
 
-#: ../src/ephy-window.c:1773
+#: ../src/ephy-window.c:1771
 #, c-format
 msgid "Security level: %s"
 msgstr "רמת אבטחה: %s"
 
-#: ../src/ephy-window.c:1816
+#: ../src/ephy-window.c:1814
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "חלון קופץ מוסתר אחד"
 msgstr[1] "‏%d חלונות קופצים מוסתרים"
 
-#: ../src/ephy-window.c:2081
+#: ../src/ephy-window.c:2079
 #, c-format
 msgid "Open image “%s”"
 msgstr "פתח תמונה \"%s\""
 
-#: ../src/ephy-window.c:2086
+#: ../src/ephy-window.c:2084
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "השתמש כרקע שולחן העבודה \"%s\""
 
-#: ../src/ephy-window.c:2091
+#: ../src/ephy-window.c:2089
 #, c-format
 msgid "Save image “%s”"
 msgstr "שמור תמונה \"%s\""
 
-#: ../src/ephy-window.c:2096
+#: ../src/ephy-window.c:2094
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "העתק כתובת תמונה \"%s\""
 
 # ת c-format
-#: ../src/ephy-window.c:2109
+#: ../src/ephy-window.c:2107
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "שלח דוא\"ל אל \"%s\""
 
-#: ../src/ephy-window.c:2115
+#: ../src/ephy-window.c:2113
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "העתק כתובת דוא\"ל \"%s\""
 
-#: ../src/ephy-window.c:2127
+#: ../src/ephy-window.c:2125
 #, c-format
 msgid "Save link “%s”"
 msgstr "שמור קישור \"%s\""
 
-#: ../src/ephy-window.c:2133
+#: ../src/ephy-window.c:2131
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "הוסף קישור “%s“ לסימניות"
 
-#: ../src/ephy-window.c:2139
+#: ../src/ephy-window.c:2137
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "העתק את כתובת הקישור \"%s\""
@@ -3210,13 +3136,8 @@ msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>בחר את המידע האישי שברצונך לנקות</b>"
 
 #: ../src/pdm-dialog.c:372
-msgid ""
-"You are about to clear personal data that is stored about the web pages you "
-"have visited. Before proceeding, check the types of information that you "
-"want to remove:"
-msgstr ""
-"אתה עומד לנקות את המידע האישי ששמור אודות דפי הרשת שביקרת בהם. לפני שאתה "
-"ממשיך, בדוק איזה סוגי מידע ברצונך להסיר:"
+msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
+msgstr "אתה עומד לנקות את המידע האישי ששמור אודות דפי הרשת שביקרת בהם. לפני שאתה ממשיך, בדוק איזה סוגי מידע ברצונך להסיר:"
 
 #: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
@@ -3238,12 +3159,8 @@ msgid "_Temporary files"
 msgstr "קבצים _זמניים"
 
 #: ../src/pdm-dialog.c:460
-msgid ""
-"<small><i><b>Note:</b> You cannot undo this action. The data you are "
-"choosing to clear will be deleted forever.</i></small>"
-msgstr ""
-"<small><i><b>הערה:</b> לא ניתן לבטל את פעולה זו. המידע שתבחר לנקות ימחק "
-"לתמיד.</i></small>"
+msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
+msgstr "<small><i><b>הערה:</b> לא ניתן לבטל את פעולה זו. המידע שתבחר לנקות ימחק לתמיד.</i></small>"
 
 #: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
@@ -3346,7 +3263,8 @@ msgstr "עבור אל הדף הבא"
 msgid "Close"
 msgstr "סגור"
 
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
+#: ../src/ppview-toolbar.c:103
+#: ../src/ppview-toolbar.c:219
 msgid "Close print preview"
 msgstr "סגור את התצוגה לפני הדפסה"
 
@@ -3354,7 +3272,8 @@ msgstr "סגור את התצוגה לפני הדפסה"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
+#: ../src/prefs-dialog.c:512
+#: ../src/prefs-dialog.c:518
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -3380,54 +3299,33 @@ msgstr[1] "שפות מערכת (%s)"
 msgid "Select a Directory"
 msgstr "בחר ספרייה"
 
-#: ../src/window-commands.c:773
-msgid ""
-"The GNOME Web Browser is free software; you can redistribute it and/or "
-"modify it under the terms of the GNU General Public License as published by "
-"the Free Software Foundation; either version 2 of the License, or (at your "
-"option) any later version."
-msgstr ""
-"The GNOME Web Browser is free software; you can redistribute it and/or "
-"modify it under the terms of the GNU General Public License as published by "
-"the Free Software Foundation; either version 2 of the License, or (at your "
-"option) any later version."
+#: ../src/window-commands.c:907
+msgid "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
+msgstr "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 
-#: ../src/window-commands.c:777
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
-msgstr ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
+#: ../src/window-commands.c:911
+msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
+msgstr "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 
-#: ../src/window-commands.c:781
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
+#: ../src/window-commands.c:915
+msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
+msgstr "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:827 ../src/window-commands.c:843
-#: ../src/window-commands.c:854
+#: ../src/window-commands.c:961
+#: ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "צור קשר ב:"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "מפתחים בעבר:"
 
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3444,7 +3342,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "רועי קרשטיין <sf_kersteinroie@bezeqint.net>\n"
@@ -3454,13 +3352,12 @@ msgstr ""
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr "מזהה הקידוד האוטומטי. מחרות ריקה, משמעותה שהמזהה האוטומטי כבוי"
-
 #~ msgid ""
 #~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 #~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -3482,107 +3379,74 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "\"zhcn_parallel_state_machine\" (זהה אוטומטית קידודים של סינית מפושטת), "
 #~ "\"zhtw_parallel_state_machine\" (זהה אוטומטית קידודים של סינית מסורתית) ו"
 #~ "\"universal_charset_detector\" (זהה אוטומטית את רוב הקידודים)."
-
 #~ msgid "Au_todetect:"
 #~ msgstr "_זהה אוטומטית:"
-
 #~ msgid "Fonts"
 #~ msgstr "גופנים"
-
 #~ msgid "For l_anguage:"
 #~ msgstr "בעבור _שפה:"
-
 #~ msgid "_Detailed Font Settings…"
 #~ msgstr "ה_גדרות גופנים מפורטות…"
-
 #~ msgid "_Fixed width:"
 #~ msgstr "רוחב _קבוע:"
-
 #~ msgid "_Variable width:"
 #~ msgstr "רוחב _משתנה:"
-
 #~ msgid "download status|Unknown"
 #~ msgstr "לא ידוכ"
-
 #~ msgid "download status|Failed"
 #~ msgstr "הורדה נכשלה"
-
 #~ msgid "autodetectors|Off"
 #~ msgstr "כבוי"
-
 #~ msgid "automatically detect ... character encodings|Chinese"
 #~ msgstr "סינית"
-
 #~ msgid "automatically detect ... character encodings|Simplified Chinese"
 #~ msgstr "סינית מפושטת"
-
 #~ msgid "automatically detect ... character encodings|Traditional Chinese"
 #~ msgstr "סינית מסורתית"
-
 #~ msgid "automatically detect ... character encodings|East Asian"
 #~ msgstr "מזרח אסיאתי"
-
 #~ msgid "automatically detect ... character encodings|Japanese"
 #~ msgstr "יפנית"
-
 #~ msgid "automatically detect ... character encodings|Korean"
 #~ msgstr "קוריאנית"
-
 #~ msgid "automatically detect ... character encodings|Russian"
 #~ msgstr "רוסית"
-
 #~ msgid "automatically detect ... character encodings|Universal"
 #~ msgstr "בין לאומי"
-
 #~ msgid "automatically detect ... character encodings|Ukrainian"
 #~ msgstr "אוקראינית"
-
 #~ msgid "File Type:|Unknown"
 #~ msgstr "לא ידוע"
-
 #~ msgid "“%s” Protocol is not Supported"
 #~ msgstr "הפרוטוקול \"%s\" אינו נתמך"
-
 #~ msgid "“%s” protocol is not supported."
 #~ msgstr "הפרוטוקול “%s“ אינו נתמך."
-
 #~ msgid ""
 #~ "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 #~ msgstr ""
 #~ "פרוטוקולים נתמכים הם: “http“, “https“, “ftp“, “file“, “smb“ ו-“sftp“."
-
 #~ msgid "File “%s” not Found"
 #~ msgstr "הקובץ \"%s\" לא נמצא"
-
 #~ msgid "File “%s” not found."
 #~ msgstr "הקובץ “%s“ לא נמצא."
-
 #~ msgid "Check the location of the file and try again."
 #~ msgstr "בדוק את המיקום של הקובץ ונסה שוב."
-
 #~ msgid "“%s” Could not be Found"
 #~ msgstr "‏\"%s\" לא נימצא"
-
 #~ msgid "“%s” could not be found."
 #~ msgstr "“%s“ לא נימצא."
-
 #~ msgid ""
 #~ "Check that you are connected to the internet, and that the address is "
 #~ "correct."
 #~ msgstr "בדוק שאתה מחובר לאינטרנט, ושהכתובת שהוכנסה נכונה."
-
 #~ msgid "If this page used to exist, you may find an archived version:"
 #~ msgstr "אם דף זה היה פעם קיים, אתה יכול למצוא גירסא שמורה:"
-
 #~ msgid "“%s” Refused the Connection"
 #~ msgstr "“%s“ דחה את החיבור"
-
 #~ msgid "“%s” refused the connection."
 #~ msgstr "“%s“ דחה את החיבור."
-
 #~ msgid "Likely causes of the problem are"
 #~ msgstr "סיבות אפשריות לבעיה הן"
-
 #~ msgid ""
 #~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
 #~ "Services Configuration Tool in System > Control Center, or</"
@@ -3591,222 +3455,155 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "<ul><li>השירות %s לא אותחל</li>נסה להפעיל אותו בעזרת כלי הגדרת השירותים "
 #~ "באמצעות התפריט מערכת > מרכז הבקרה, או</ul><ul><li>שמספר השער %d שגוי.</"
 #~ "li></ul>"
-
 #~ msgid ""
 #~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
 #~ "wrong.</li></ul>"
 #~ msgstr "<ul><li>שרות כלשהוא לא אותחל, או שמספר השער %d שגוי.</li></il>"
-
 #~ msgid ""
 #~ "<ul><li>some service isn't started, or</li><li>you got the port number "
 #~ "wrong.</li></ul>"
 #~ msgstr "<ul><li>שרות כלשהוא לא אותחל, או שמספר השער שגוי.</li></il>"
-
 #~ msgid ""
 #~ "The server may be busy or you may have a network connection problem. Try "
 #~ "again later."
 #~ msgstr "השרת עסוק או שיש בעיה בחיבור הרשת. נסה שוב מאוחר יותר."
-
 #~ msgid "There may be an old version of the page you wanted:"
 #~ msgstr "אולי קיימת גירסא ישנה יותר של הדף המבוקש:"
-
 #~ msgid "“%s” Interrupted the Connection"
 #~ msgstr "“%s“ הפריע לחיבור"
-
 #~ msgid "“%s” interrupted the connection."
 #~ msgstr "“%s“ הפריע לחיבור."
-
 #~ msgid "“%s” is not Responding"
 #~ msgstr "“%s“ אינו מגיב"
-
 #~ msgid "“%s” is not responding."
 #~ msgstr "“%s“ אינו מגיב."
-
 #~ msgid "The connection was lost because the server took too long to respond."
 #~ msgstr "החיבור התנתק מכיון שלשרת לקח יותר מדי זמן לענות"
-
 #~ msgid "Invalid Address"
 #~ msgstr "כתובת שגויה"
-
 #~ msgid "Invalid address."
 #~ msgstr "כתובת שגויה"
-
 #~ msgid "The address you entered is not valid."
 #~ msgstr "הכתובת שהכנסת שגועה."
-
 #~ msgid "“%s” Redirected Too Many Times"
 #~ msgstr "“%s“ הופנה יותר מדי פעמים"
-
 #~ msgid "This page cannot load because of a problem with the Web site."
 #~ msgstr "לא ניתן לטעות את אתר זה עקב בעיה עם האתר."
-
 #~ msgid "The server “%s” is redirecting in a way that will never complete."
 #~ msgstr "השרת “%s“ מפנה באופן שלעולם לא יסתיים."
-
 #~ msgid "“%s” Requires an Encrypted Connection"
 #~ msgstr "“%s“ דורש חיבור מוצפן"
-
 #~ msgid "“%s” requires an encrypted connection."
 #~ msgstr "“%s“ דורש חיבור מוצפן."
-
 #~ msgid ""
 #~ "The document could not be loaded because encryption support is not "
 #~ "installed."
 #~ msgstr "לא ניתן לטעון את המסמך מכיון שהצפנה לא נתמכת או לא הותקנה."
-
 #~ msgid "“%s” Dropped the Connection"
 #~ msgstr "“%s“ ניתק את החיבור"
-
 #~ msgid "“%s” dropped the connection."
 #~ msgstr "“%s“ ניתק את החיבור."
-
 #~ msgid "The server dropped the connection before any data could be read."
 #~ msgstr "השרת ניתק את החיבור לפני שנקרא מידע כלשהו."
-
 #~ msgid "Cannot Load Document Whilst Working Offline"
 #~ msgstr "לא ניתן לטעון מסמך במצב לא מקוון."
-
 #~ msgid "Cannot load document whilst working offline."
 #~ msgstr "לא ניתן לטעון מסמך במצב לא מקוון."
-
 #~ msgid "To view this document, disable “Work Offline” and try again."
 #~ msgstr "לפייה במסמך זה, יש לעבור למצב מקוון ולנסות שוב."
-
 #~ msgid "Access Denied to Port “%d” of “%s”"
 #~ msgstr "הגישה נדחתה לשער “%d“ ב- “%s“"
-
 #~ msgid "Access denied to port “%d” of “%s”."
 #~ msgstr "הגישה נדחתה לשער “%d“ ב- “%s“"
-
 #~ msgid ""
 #~ "This address uses a network port which is normally used for purposes "
 #~ "other than Web browsing."
 #~ msgstr ""
 #~ "כתובת זו משתמשת בשער רשת שבדרך כלל משמש למטרות שונות מגלישה באינטרנט."
-
 #~ msgid "The request has been cancelled for your protection."
 #~ msgstr "ההפניה נעצרה מסיבות אבטחה."
-
 #~ msgid "Could not Connect to Proxy Server"
 #~ msgstr "לא ניתן להתחבר לשרת מתווך"
-
 #~ msgid "Could not connect to proxy server."
 #~ msgstr "לא ניתן להתחבר לשרת מתווך."
-
 #~ msgid ""
 #~ "Check your proxy server settings. If the connection still fails, there "
 #~ "may be a problem with your proxy server or your network connection."
 #~ msgstr ""
 #~ "בדוק את הגדרות השרת המתווך. אם החיבור עדיין נכשל, כנראה שיש בעיה עם השרת "
 #~ "המתווך או עם חיבור הרשת."
-
 #~ msgid "Could not Display Content"
 #~ msgstr "לא ניתן להציג את התוכן"
-
 #~ msgid "Could not display content."
 #~ msgstr "לא ניתן להציג את התוכן."
-
 #~ msgid "The page uses an unsupported or invalid form of compression."
 #~ msgstr "העמוד משתמש בכיווץ לא נתמך."
-
 #~ msgid "You may find an old version:|in the Google Cache"
 #~ msgstr "במטמון של Google"
-
 #~ msgid "You may find an old version:|in the Internet Archive"
 #~ msgstr "בארכיון האינטרנט"
-
 #~ msgid "_Abort Script"
 #~ msgstr "_בטל תסריט"
-
 #~ msgid "Don't Save"
 #~ msgstr "אל תשמור"
-
 #~ msgid "_Username:"
 #~ msgstr "_שם משתמש:"
-
 #~ msgid "Text files"
 #~ msgstr "קבצי טקסט"
-
 #~ msgid "XML files"
 #~ msgstr "קבצי XML"
-
 #~ msgid "XUL files"
 #~ msgstr "קבצי XUL"
-
 #~ msgid "Accept cookie from %s?"
 #~ msgstr "האם לקבל עוגיה מ-%s?"
-
 #~ msgid "Accept Cookie?"
 #~ msgstr "לקבל את העוגיה?"
-
 #~ msgid "The site wants to modify an existing cookie."
 #~ msgstr "האתר מעוניין לשנות עוגיה קיימת."
-
 #~ msgid "The site wants to set a cookie."
 #~ msgstr "האתר מעוניין להוסיף עוגיה."
-
 #~ msgid "The site wants to set a second cookie."
 #~ msgstr "האתר מעוניין להוסיף עוגיה שנייה."
-
 #~ msgid "You already have %d cookie from this site."
 #~ msgid_plural "You already have %d cookies from this site."
 #~ msgstr[0] "עוגייה מאתר זה כבר קיימת"
 #~ msgstr[1] "%d עוגיות מאתר זה כבר קיימות"
-
 #~ msgid "Apply this _decision to all cookies from this site"
 #~ msgstr "החל ה_חלטה זאת לכל העוגיות מאתר זה"
-
 #~ msgid "_Reject"
 #~ msgstr "_דחה"
-
 #~ msgid "_Accept"
 #~ msgstr "קבל"
-
 #~ msgid "The web site “%s” requests that you sign the following text:"
 #~ msgstr "האתר “%s“ מבקש שתחתום על הטקסט הבא:"
-
 #~ msgid "_Sign text"
 #~ msgstr "_חתום על הטקסט"
-
 #~ msgid "Options"
 #~ msgstr "אפשרויות"
-
 #~ msgid "Print this page?"
 #~ msgstr "האם להדפיס דף זה?"
-
 #~ msgid "Preparing to print"
 #~ msgstr "מתכונן להדפסה"
-
 #~ msgid "Page %d of %d"
 #~ msgstr "עמוד %d מתוך %d"
-
 #~ msgid "Cancelling print"
 #~ msgstr "מבטל הדפסה"
-
 #~ msgid "Spooling..."
 #~ msgstr "מכין..."
-
 #~ msgid "Print error"
 #~ msgstr "שגיאה בהדפסה"
-
 #~ msgid "Printing “%s”"
 #~ msgstr "מדפיס “%s“"
-
 #~ msgid "_Select Certificate"
 #~ msgstr "בחר _אישור"
-
 #~ msgid "Choose a certificate to present as identification to “%s”."
 #~ msgstr "בחר אישור שתוצג כזיהוי ל\"%s\"."
-
 #~ msgid "Select a certificate to identify yourself."
 #~ msgstr "בחר אישור שיזהה אותך."
-
 #~ msgid "Certificate _Details"
 #~ msgstr "פרטי אישור"
-
 #~ msgid "_View Certificate"
 #~ msgstr "הצג אישור"
-
 #~ msgid ""
 #~ "The site “%s” returned security information for “%s”. It is possible that "
 #~ "someone is intercepting your communication to obtain your confidential "
@@ -3814,15 +3611,12 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ msgstr ""
 #~ "האתר %s החזיר מידע אבטחה עבור \"%s\". יתכן שמישהו מצותת לתקשורת שלך כדי "
 #~ "להשיג את המידע החסוי שלך."
-
 #~ msgid ""
 #~ "You should only accept the security information if you trust “%s” and “%"
 #~ "s”."
 #~ msgstr "קבל את מידע האבטחה אך ורק אם אתה סומך על \"%s\" ועל \"%s\"."
-
 #~ msgid "Accept incorrect security information?"
 #~ msgstr "לקבל מידע אבטחה שגוי?"
-
 #~ msgid ""
 #~ "It was not possible to automatically trust “%s”. It is possible that "
 #~ "someone is intercepting your communication to obtain your confidential "
@@ -3830,144 +3624,100 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ msgstr ""
 #~ "הדפדפן שלך לא יכול באופן אוטומטי לבטוח ב\"%s\". יתכן שמישהו מצותת לתקשורת "
 #~ "שלך כדי להשיג את המידע החסוי שלך."
-
 #~ msgid ""
 #~ "You should only connect to the site if you are certain you are connected "
 #~ "to “%s”."
 #~ msgstr "התחבר לאתר אך ורק אם אתה בטוח שאתה מחובר ל\"%s\"."
-
 #~ msgid "Connect to untrusted site?"
 #~ msgstr "להתחבר לאתר לא מהימן?"
-
 #~ msgid "_Trust this security information from now on"
 #~ msgstr "ב_טח במידע אבטחה זה מעתה והלאה"
-
 #~ msgid "Co_nnect"
 #~ msgstr "ה_תחבר"
-
 #~ msgid "Accept expired security information?"
 #~ msgstr "לקבל מידע אבטחה שפג תוקפו?"
-
 #~ msgid "The security information for “%s” expired on %s."
 #~ msgstr "מידע האבטחה של \"%s\" פג ב-%s."
-
 #~ msgid "Accept not yet valid security information?"
 #~ msgstr "לקבל מידע אבטחה שעדין אינו תקף?"
-
 #~ msgid "The security information for “%s” isn't valid until %s."
 #~ msgstr "מידע האבטחה של \"%s\" לא תקף עד %s."
-
 #~ msgid "%a %d %b %Y"
 #~ msgstr "%a %d %b %Y"
-
 #~ msgid "You should ensure that your computer's time is correct."
 #~ msgstr "ודא שהתאריך במחשב שלך נכון."
-
 #~ msgid "Cannot establish connection to “%s”"
 #~ msgstr "לא ניתן להתחבר אל “%s“"
-
 #~ msgid ""
 #~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
 #~ "\n"
 #~ "Please ask your system administrator for assistance."
 #~ msgstr "יש צורך לעדכן מ-“%s“ את רשימת האישורים שנשללו."
-
 #~ msgid "Trust new Certificate Authority?"
 #~ msgstr "בטח ברשות אישורים חדשה?"
-
 #~ msgid "_Trust CA"
 #~ msgstr "_בטח ב-CA"
-
 #~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
 #~ msgstr "בטח ברשות אישורים “%s“ לזיהוי אתרים?"
-
 #~ msgid ""
 #~ "Before trusting a Certificate Authority (CA) you should verify the "
 #~ "certificate is authentic."
 #~ msgstr "לפני שתבטח ברשות אישורים (CA) ודא שהאישור אותנטי."
-
 #~ msgid "Certificate already exists."
 #~ msgstr "האישור כבר קיימת."
-
 #~ msgid "The certificate has already been imported."
 #~ msgstr "האישור כבר יובא."
-
 #~ msgid "Select Password"
 #~ msgstr "בחר סיסמה"
-
 #~ msgid "Select a password to protect this certificate"
 #~ msgstr "בחר סיסמה להגנה על אישור זה."
-
 #~ msgid "Enter the password for this certificate"
 #~ msgstr "הקלד את הסיסמה עבור אישור זה."
-
 #~ msgid "Certificate Revocation List Imported"
 #~ msgstr "רשימת האישורים שנשללו (CRL) שיובאה"
-
 #~ msgid "Certificate Revocation List (CRL) successfully imported"
 #~ msgstr "רשימת האישורים שנשללו יובאה בהצלחה"
-
 #~ msgid "Unit:"
 #~ msgstr "יחידה:"
-
 #~ msgid "Next Update:"
 #~ msgstr "עדכון הבא:"
-
 #~ msgid "Not part of certificate"
 #~ msgstr "לא חלק מאישור"
-
 #~ msgid "Certificate Properties"
 #~ msgstr "מאפייני אישור"
-
 #~ msgid "This certificate has been verified for the following uses:"
 #~ msgstr "אישור זו אומת עבור השימושים הבאים:"
-
 #~ msgid "Could not verify this certificate because it has been revoked."
 #~ msgstr "לא ניתן לאמת אישור זה כי היא נשללה."
-
 #~ msgid "Could not verify this certificate because it has expired."
 #~ msgstr "לא ניתן לאמת אישור זה כי תוקפה פג."
-
 #~ msgid "Could not verify this certificate because it is not trusted."
 #~ msgstr "לא ניתן לאמת אישור זה כי היא אינה מהימנה."
-
 #~ msgid "Could not verify this certificate because the issuer is not trusted."
 #~ msgstr "לא ניתן לאמת אישור זנ כי המנפק אינו מהימן."
-
 #~ msgid "Could not verify this certificate because the issuer is unknown."
 #~ msgstr "לא ניתן לאמת אישור זה כי המנפק לא מוכר."
-
 #~ msgid ""
 #~ "Could not verify this certificate because the CA certificate is invalid."
 #~ msgstr "לא ניתן לאמת אישור זה כי האישור של רשות האישורים לא תקפה."
-
 #~ msgid "Could not verify this certificate for unknown reasons."
 #~ msgstr "לא ניתן לאמת אישור זה מסיבות לא ידועות."
-
 #~ msgid "Change Token Password"
 #~ msgstr "החלף את הסיסמא של הסימן"
-
 #~ msgid "Choose a password for the “%s” token"
 #~ msgstr "בחר סיסמא לסימן “%s“"
-
 #~ msgid "Change the password for the “%s” token"
 #~ msgstr "החלף את הסיסמא עבור הסימן “%s“"
-
 #~ msgid "Get Token Password"
 #~ msgstr "קבל את סיסמת הסימן"
-
 #~ msgid "Please enter the password for the “%s” token"
 #~ msgstr "אנא הכנס את הסיסמא עבור הסימן “%s“"
-
 #~ msgid "Please select a token:"
 #~ msgstr "אנא בחר סימן:"
-
 #~ msgid "_Select"
 #~ msgstr "_בחר"
-
 #~ msgid "Escrow the secret key?"
 #~ msgstr "להפקיד את המפתח הסודי?"
-
 #~ msgid ""
 #~ "The certificate authority “%s” requests that you give it a copy of the "
 #~ "newly generated secret key.\n"
@@ -3983,24 +3733,18 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "והסכמתך.\n"
 #~ "\n"
 #~ "מומלץ לדחות בקשה זאת."
-
 #~ msgid "_Allow"
 #~ msgstr "_אשר"
-
 #~ msgid "Generating Private Key."
 #~ msgstr "יוצר מפתח פרטי."
-
 #~ msgid ""
 #~ "Please wait while a new private key is generated. This process could take "
 #~ "a few minutes."
 #~ msgstr "המתן ליצירת מפתח פרטי חדש. תהליך זה יכול להמשך מספר דקות."
-
 #~ msgid "Security Notice"
 #~ msgstr "הערת אבטחה"
-
 #~ msgid "This page is loaded over a secure connection"
 #~ msgstr "דף זה נטען מעל חיבור מאובטח"
-
 #~ msgid ""
 #~ "For secure pages, the address entry has a distinct color and a locked "
 #~ "padlock icon is displayed.\n"
@@ -4010,40 +3754,31 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "עבור דפים מאובטחים, לתיבת הכתובת צבע מיוחד וסמל מנעול נעול מופיע.\n"
 #~ "\n"
 #~ "סמל המנעול בסרגל התחתון גם הוא מסמל באם הדף מאובטח."
-
 #~ msgid "Security Warning"
 #~ msgstr "אזהרת אבטחה"
-
 #~ msgid "This page is loaded over a low security connection"
 #~ msgstr "דף זה נטען מעל חיבור בעל אבטחה נמוכה"
-
 #~ msgid ""
 #~ "Any information you see or enter on this page could easily be intercepted "
 #~ "by a third party."
 #~ msgstr "כל מידע שנצפה או מוכנס בדף זה יכול בקלות להקרא על ידי צד שלישי."
-
 #~ msgid "Some parts of this page are loaded over an insecure connection"
 #~ msgstr "חלקים מדף זה נטענו מעל חיבור לא מאובטח"
-
 #~ msgid ""
 #~ "Some information you see or enter will be sent over an insecure "
 #~ "connection, and could easily be intercepted by a third party."
 #~ msgstr ""
 #~ "חלק מהמידע שנצפה או מוכנס בדף זה ישלח מעל חיבור לא מאובטח, ויכול להקרא על "
 #~ "ידי צד שלישי בקלות."
-
 #~ msgid "Send this information over an insecure connection?"
 #~ msgstr "לשלוח מידע זה מעל חיבור לא מאובטח?"
-
 #~ msgid ""
 #~ "The information you have entered will be sent over an insecure "
 #~ "connection, and could easily be intercepted by a third party."
 #~ msgstr ""
 #~ "המידע שהוכנס ישלח מעל חיבור לא מאובטח, ויוכל להקרא על ידי צד שלישי בקלות."
-
 #~ msgid "_Send"
 #~ msgstr "_שלח"
-
 #~ msgid ""
 #~ "Although this page was loaded over a secure connection, the information "
 #~ "you have entered will be sent over an insecure connection, and could "
@@ -4051,250 +3786,171 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ msgstr ""
 #~ "למרות שדף זה נטען מעל חיבור מאובטח, המידע שמוכנס בו ישלח מעל חיבור לא "
 #~ "מאובטח, ויכול להקרא על ידי צד שלישי בקלות."
-
-#~ msgid "%s Files"
-#~ msgstr "הקבצים של %s"
-
 #~ msgid "Opening %s"
 #~ msgstr "פותח את %s"
-
 #~ msgid "Opening %d Item"
 #~ msgid_plural "Opening %d Items"
 #~ msgstr[0] "פותח פריט אחד"
 #~ msgstr[1] "פותח %d פריטים"
-
 #~ msgid "select fonts for|Arabic"
 #~ msgstr "ערבית"
-
 #~ msgid "select fonts for|Baltic"
 #~ msgstr "באלטית"
-
 #~ msgid "select fonts for|Central European"
 #~ msgstr "מרכז אירופאי"
-
 #~ msgid "select fonts for|Cyrillic"
 #~ msgstr "קירילי"
-
 #~ msgid "select fonts for|Devanagari"
 #~ msgstr "דבנגרי"
-
 #~ msgid "select fonts for|Greek"
 #~ msgstr "יוונית"
-
 #~ msgid "select fonts for|Hebrew"
 #~ msgstr "עברית"
-
 #~ msgid "select fonts for|Japanese"
 #~ msgstr "יפנית"
-
 #~ msgid "select fonts for|Korean"
 #~ msgstr "קוריאנית"
-
 #~ msgid "select fonts for|Simplified Chinese"
 #~ msgstr "סינית מפושטת"
-
 #~ msgid "select fonts for|Tamil"
 #~ msgstr "טמילית"
-
 #~ msgid "select fonts for|Thai"
 #~ msgstr "תאילנדית"
-
 #~ msgid "select fonts for|Traditional Chinese"
 #~ msgstr "סינית מסורתית"
-
 #~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
 #~ msgstr "סינית מסורתית (הונג קונג)"
-
 #~ msgid "select fonts for|Turkish"
 #~ msgstr "טורקית"
-
 #~ msgid "select fonts for|Armenian"
 #~ msgstr "ארמנית"
-
 #~ msgid "select fonts for|Bengali"
 #~ msgstr "בנגלי"
-
 #~ msgid "select fonts for|Ethiopic"
 #~ msgstr "אתיופית"
-
 #~ msgid "select fonts for|Georgian"
 #~ msgstr "גאורגיאנית"
-
 #~ msgid "select fonts for|Gujarati"
 #~ msgstr "גוג'אראטי"
-
 #~ msgid "select fonts for|Gurmukhi"
 #~ msgstr "גורמוקי"
-
 #~ msgid "select fonts for|Western"
 #~ msgstr "מערבי"
-
 #~ msgid "select fonts for|Other Scripts"
 #~ msgstr "שפות אחרות"
-
 #~ msgid "_Domain:"
 #~ msgstr "_מתחם:"
-
 #~ msgid "_New password:"
 #~ msgstr "סיסמה _חדשה:"
-
 #~ msgid "Con_firm password:"
 #~ msgstr "וידוא סיסמה:"
-
 #~ msgid "Password quality:"
 #~ msgstr "איכות סיסמה:"
-
 #~ msgid "Do not remember this password"
 #~ msgstr "אל תזכור סיסמה זאת"
-
 #~ msgid "_Remember password for this session"
 #~ msgstr "_זכור את הסיסמא למהלך הפעלה זאת"
-
 #~ msgid "Save password in _keyring"
 #~ msgstr "שמור סיסמא ב_טבעת המפתחות"
-
 #~ msgid "Unsafe protocol."
 #~ msgstr ".פרוטוקול לא בטוח"
-
 #~ msgid ""
 #~ "The address has not been loaded, because it refers to an unsafe protocol "
 #~ "and thereby presents a security risk to your system."
 #~ msgstr ""
 #~ "הכתובת לא נטענה מכיון שהיא מתיחסת לפרוטוקול לא בטוח ולכן מהווה סיכון "
 #~ "אבטחה למערכת."
-
 #~ msgid "No address found."
 #~ msgstr "לא נמצאה כתובת."
-
 #~ msgid "No web address could be found in this file."
 #~ msgstr "לא נמצאה כתובת אינטרנט בקובץ זה."
-
 #~ msgid "Epiphany Desktop File Plugin"
 #~ msgstr "תוסף לקבצי שולחן עבודה של Epiphany"
-
 #~ msgid ""
 #~ "This plugin handles “.desktop” and “.url” files containing web links."
 #~ msgstr "תוסף זה מטפל בקבצי “.desktop” and “.url” שמכילים קישורים לאינטרנט. "
-
 #~ msgid "bookmarks|All"
 #~ msgstr "הכל"
-
 #~ msgid "toolbar style|Default"
 #~ msgstr "ברירת מחדל"
-
 #~ msgid "_History"
 #~ msgstr "היס_טוריה"
-
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
 #~ "crashed; it could have caused the crash."
 #~ msgstr ""
 #~ "העמוד “%s“ בלשונית זאת לא סיים את טעינתו בזמן שהדפדפן התרסק; עמוד זה יכול "
 #~ "להיות הגורם להתרסקות."
-
 #~ msgid "Title a_nd Address"
 #~ msgstr "כו_תרת וכתובת"
-
 #~ msgid ""
 #~ "Hide the menubar by default. The menubar can still be accessed using F10."
 #~ msgstr "הסתר את התפריט כברירת מחדל. גישה לתפריט תתאפשר על ידי המקש F10."
-
 #~ msgid ""
 #~ "The padlock icon in the statusbar indicates whether a page is secure."
 #~ msgstr "סמל המנעול בשורת המצב מציין האם דף הוא מאובטח."
-
 #~ msgid "Quick Bookmark"
 #~ msgstr "סימניה מהירה"
-
 #~ msgid "Quick Topic"
 #~ msgstr "נושא מהיר"
-
 #~ msgid "“%s” redirected too many times."
 #~ msgstr "“%s“ הופנה יותר מדי פעמים."
-
 #~ msgid "_View Certificate..."
 #~ msgstr "הצג _אישור..."
-
 #~ msgid "_Import Bookmarks..."
 #~ msgstr "_יבא סימניות..."
-
 #~ msgid "_Export Bookmarks..."
 #~ msgstr "_יצא סימניות..."
-
 #~ msgid "_Other..."
 #~ msgstr "_אחר..."
-
 #~ msgid "URL ..."
 #~ msgstr "URL ..."
-
 #~ msgid "_Open..."
 #~ msgstr "_פתח..."
-
 #~ msgid "Save _As..."
 #~ msgstr "שמור _כ..."
-
 #~ msgid "Print Set_up..."
 #~ msgstr "ה_גדרות הדפסה..."
-
 #~ msgid "_Print..."
 #~ msgstr "ה_דפס..."
-
 #~ msgid "_Find..."
 #~ msgstr "_חפש..."
-
 #~ msgid "_Save Link As..."
 #~ msgstr "_שמור קישור כ..."
-
 #~ msgid "_Save Image As..."
 #~ msgstr "_שמור תמונה כ..."
-
 #~ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 #~ msgstr "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
-
 #~ msgid "Autowrap for find in page"
 #~ msgstr "עטוף אוטומטית בעת חיפוש בדף"
-
 #~ msgid ""
 #~ "For find in page, whether to start again at the beginning after reaching "
 #~ "the end of the page."
 #~ msgstr "לחיפוש בדף, האם להתחיל מהתחלה אחרי הגעה לסוף הדף."
-
 #~ msgid "Match case for find in page"
 #~ msgstr "התאם רשיות בעת חיפוש בדף"
-
 #~ msgid "DYNAMIC"
 #~ msgstr "דינמי"
-
 #~ msgid "<b>Colors</b>"
 #~ msgstr "<b>צבעים</b>"
-
 #~ msgid "C_olor"
 #~ msgstr "צבע"
-
 #~ msgid "_Grayscale"
 #~ msgstr "גווני אפור"
-
 #~ msgid "Please ask your system administrator for assistance."
 #~ msgstr "בקש עזרה ממנהל המערכת שלך."
-
 #~ msgid "_Back Up Certificate"
 #~ msgstr "גבה אישור_"
-
 #~ msgid "I_mport Certificate"
 #~ msgstr "יבא אישור"
-
 #~ msgid "Password required."
 #~ msgstr "דרושה סיסמה."
-
 #~ msgid "Generating PDF is not supported"
 #~ msgstr "ייצור PDF אינו נתמך"
-
 #~ msgid "_From:"
 #~ msgstr "_מאת:"
-
 #~ msgid "_To:"
 #~ msgstr "_אל:"
-
 #~ msgid "Pages"
 #~ msgstr "דפים"
 
@@ -4305,115 +3961,78 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #, fuzzy
 #~ msgid "I_con:"
 #~ msgstr "אל:"
-
 #~ msgid "Subtopics"
 #~ msgstr "תת נושאים"
-
 #~ msgid "Properties"
 #~ msgstr "מאפיינים"
-
 #~ msgid "Bookmark exists"
 #~ msgstr "סימנייה קיימת"
-
 #~ msgid "_Create New"
 #~ msgstr "צור _חדש"
-
 #~ msgid "_View Properties"
 #~ msgstr "מאפייני _תצוגה"
-
 #~ msgid "Bookmark Exists"
 #~ msgstr "סימנייה קיימת"
-
 #~ msgid "New topic for “%s”"
 #~ msgstr "נושא חדש עבור \"%s\""
-
 #~ msgid "New topic"
 #~ msgstr "נושא חדש"
-
 #~ msgid "Enter a unique name for the topic."
 #~ msgstr "הכנס שם ייחודי עבור הנושא."
-
 #~ msgid "Create"
 #~ msgstr "צור"
-
 #~ msgid "New Topic"
 #~ msgstr "נושא חדש"
-
 #~ msgid "No selected topics"
 #~ msgstr "אין נושאים נבחרים"
-
 #~ msgid "No more subtopics"
 #~ msgstr "אין תת נושאים נוספים"
-
 #~ msgid "Run in full screen mode"
 #~ msgstr "הפעל במצב מסך מלא"
-
 #~ msgid "Add a bookmark (don't open any window)"
 #~ msgstr "הוסף סימניה (אל תפתח שום חלון)"
-
 #~ msgid "T_oolbars"
 #~ msgstr "_סרגלי כלים"
-
 #~ msgid "Zoom _In"
 #~ msgstr "_הגדל"
-
 #~ msgid "Zoom _Out"
 #~ msgstr "ה_קטן"
-
 #~ msgid "H_istory"
 #~ msgstr "_היסטוריה"
-
 #~ msgid "Download Manager"
 #~ msgstr "מנהל הורדות"
-
 #~ msgid "Personal Data Manager"
 #~ msgstr "מנהל מידע אישי"
-
 #~ msgid "_Next"
 #~ msgstr "ה_בא"
-
 #~ msgid "_Previous"
 #~ msgstr "ה_קודם"
-
 #~ msgid "_Wrap around"
 #~ msgstr "ע_טוף"
-
 #~ msgid "Al_ways use the desktop theme colors"
 #~ msgstr "השתמש תמיד ב_צבעי שולחן העבודה"
-
 #~ msgid "Always use _these fonts"
 #~ msgstr "השתמש תמיד _בגופנים אלה"
-
 #~ msgid "Appearance"
 #~ msgstr "הופעה"
-
 #~ msgid "Paper"
 #~ msgstr "נייר"
-
 #~ msgid "Overwrite \"%s\"?"
 #~ msgstr "האם להחליף \"%s\"?"
-
 #~ msgid "_Overwrite"
 #~ msgstr "ה_חלף"
-
 #~ msgid "Close Tab"
 #~ msgstr "סגור לשונית"
-
 #~ msgid "Move _Left"
 #~ msgstr "הזז _שמאלה"
-
 #~ msgid "Move Ri_ght"
 #~ msgstr "הזז _ימינה"
-
 #~ msgid "_Show in bookmarks bar"
 #~ msgstr "_הראה בשורת הסימניות"
-
 #~ msgid "_Show in Bookmarks Bar"
 #~ msgstr "_הצג בשורת הסימניות"
-
 #~ msgid "Empty"
 #~ msgstr "ריק"
-
 #~ msgid ""
 #~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 #~ "use bonobo-activation-sysconf to configure the search path for bonobo "
@@ -4422,511 +4041,353 @@ msgstr "אתר הבית של דפדפן האינטרנט של GNOME"
 #~ "Bonobo לא הצליח לאתר את הקובץ GNOME_Epiphany_Automation.server. אתה יכול "
 #~ "להשתמש ב bonobo-activation-sysconf כדי להגדיר את נתיב החיפוש עבור קבצי "
 #~ "שרתי bonobo."
-
 #~ msgid ""
 #~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 #~ "attempting to register the automation server"
 #~ msgstr ""
 #~ "לא ניתן להשתמש ב Epiphany כעת, מאחר וקרתה תקלה לא צפויה ל Bonobo כשהוא "
 #~ "ניסה לרשום את שרת האוטומציה"
-
 #~ msgid ""
 #~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 #~ "attempting to locate the automation object."
 #~ msgstr ""
 #~ "לא ניתן להשתמש ב Epiphany כעת, מאחר וקרתה תקלה לא צפויה ל Bonobo כשהוא "
 #~ "ניסה לאתר את אובייקט האוטומציה."
-
 #~ msgid "Loading %s..."
 #~ msgstr "טוען את %s..."
-
 #~ msgid "Back"
 #~ msgstr "אחורה"
-
 #~ msgid "Go back"
 #~ msgstr "חזור"
-
 #~ msgid "Forward"
 #~ msgstr "קדימה"
-
 #~ msgid "Go forward"
 #~ msgstr "לך קדימה"
-
 #~ msgid "Up"
 #~ msgstr "למעלה"
-
 #~ msgid "S_end To..."
 #~ msgstr "שלח _אל..."
-
 #~ msgid "_Bookmarks Bar"
 #~ msgstr "_שורת הסימניות"
-
 #~ msgid "_Save Background As..."
 #~ msgstr "שמור רקע _כ..."
-
 #~ msgid "Save Background As"
 #~ msgstr "שמור את הרקע כ"
-
 #~ msgid "Check this out!"
 #~ msgstr "תראה את זה!"
-
 #~ msgid "Enable Java."
 #~ msgstr "אפשר שימוש בJava."
-
 #~ msgid "Enable JavaScript."
 #~ msgstr "אפשר שימוש בJavaScript."
-
 #~ msgid "Filename to print to"
 #~ msgstr "שם קובץ היעד להדפסה"
-
 #~ msgid "Filename to print to."
 #~ msgstr "שם קובץ היעד להדפסה."
-
 #~ msgid "Match case for find in page."
 #~ msgstr "התאם רשיות בעת חיפוש בדף."
-
 #~ msgid "Paper type"
 #~ msgstr "סוג נייר"
-
 #~ msgid ""
 #~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
 #~ "\"Executive\"."
 #~ msgstr ""
 #~ "סוג נייר. הערכים הנתמכים הם \"A4\", \"Letter\", \"Legal\" ו\"Executive\"."
-
 #~ msgid "Printer name"
 #~ msgstr "שם המדפסת"
-
 #~ msgid "Printer name."
 #~ msgstr "שם המדפסת."
-
 #~ msgid "Printing bottom margin"
 #~ msgstr "שולי הדפסה תחתונים"
-
 #~ msgid "Printing bottom margin (in mm)."
 #~ msgstr "שולי הדפסה תחתונים (במילימטרים)."
-
 #~ msgid "Printing left margin"
 #~ msgstr "שולי הדפסה שמאליים"
-
 #~ msgid "Printing left margin (in mm)."
 #~ msgstr "שולי הדפסה שמאליים (במילימטרים)."
-
 #~ msgid "Printing right margin"
 #~ msgstr "שולי הדפסה ימניים"
-
 #~ msgid "Printing right margin (in mm)."
 #~ msgstr "שולי הדפסה ימניים (במילימטרים)."
-
 #~ msgid "Printing top margin (in mm)."
 #~ msgstr "שולי הדפסה עליונים (במילימטרים)."
-
 #~ msgid "Show bookmarks bar by default."
 #~ msgstr "הראה את שורת הסימניות כברירת מחדל."
-
 #~ msgid "Show statusbar by default."
 #~ msgstr "הראה את שורת המצב כברירת מחדל."
-
 #~ msgid "Show toolbars by default."
 #~ msgstr "הראה סרגלי כלים כברירת מחדל."
-
 #~ msgid "The path of the folder where downloads are saved."
 #~ msgstr "הנתיב של הספרייה בה נשמרות ההורדות."
-
 #~ msgid "Whether to print the date in the footer."
 #~ msgstr "האם להדפיס את התאריך בתחתית העמוד."
-
 #~ msgid "Whether to print the page address in the header."
 #~ msgstr "האם להדפיס את כתובת הדף בראש העמוד."
-
 #~ msgid "Whether to print the page numbers (x of total) in the footer."
 #~ msgstr "האם להדפיס את מספרי העמודים (x בסך הכל) בתחתית העמוד."
-
 #~ msgid "Whether to print the page title in the header."
 #~ msgstr "האם להדפיס את כותרת הדף בראש העמוד."
-
 #~ msgid "    "
 #~ msgstr "    "
-
 #~ msgid "      "
 #~ msgstr "      "
-
 #~ msgid "*"
 #~ msgstr "*"
-
 #~ msgid "_Add..."
 #~ msgstr "הוס_ף..."
-
 #~ msgid "_Down"
 #~ msgstr "למ_טה"
-
 #~ msgid "_Remove"
 #~ msgstr "_הסר"
-
 #~ msgid "<b>Margins (in mm)</b>"
 #~ msgstr "<b>שוליים (במילימטרים)</b>"
-
 #~ msgid "<b>Orientation</b>"
 #~ msgstr "<b>כיוון</b>"
-
 #~ msgid "<b>Page Range</b>"
 #~ msgstr "<b>טווח דפים</b>"
-
 #~ msgid "<b>Print To</b>"
 #~ msgstr "<b>הדפס אל</b>"
-
 #~ msgid "<b>Size</b>"
 #~ msgstr "<b>גודל</b>"
-
 #~ msgid "A_4"
 #~ msgstr "A4"
-
 #~ msgid "E_xecutive"
 #~ msgstr "מנהלי"
-
 #~ msgid "L_egal"
 #~ msgstr "L_egal"
-
 #~ msgid "Lan_dscape"
 #~ msgstr "אופקי"
-
 #~ msgid "P_rinter:"
 #~ msgstr "מדפסת:"
-
 #~ msgid "_All pages"
 #~ msgstr "כל הדפים"
-
 #~ msgid "_Bottom:"
 #~ msgstr "תחתית:"
-
 #~ msgid "_Browse..."
 #~ msgstr "עיין..."
-
 #~ msgid "_File:"
 #~ msgstr "קובץ:"
-
 #~ msgid "_Left:"
 #~ msgstr "שמאל:"
-
 #~ msgid "_Letter"
 #~ msgstr "מכתב"
-
 #~ msgid "_Right:"
 #~ msgstr "ימין:"
-
 #~ msgid "lpr"
 #~ msgstr "lpr"
-
 #~ msgid "About %d second left"
 #~ msgid_plural "About %d seconds left"
 #~ msgstr[0] "נותרה כשניה אחת"
 #~ msgstr[1] "נותרו כ%d שניות"
-
 #~ msgid "About %d minute left"
 #~ msgid_plural "About %d minutes left"
 #~ msgstr[0] "נותרה כדקה אחת"
 #~ msgstr[1] "כ-%d דקות נותרו"
-
 #~ msgid "Off"
 #~ msgstr "מכובה"
-
 #~ msgid "Chinese"
 #~ msgstr "סינית"
-
 #~ msgid "Chinese Simplified"
 #~ msgstr "סינית מפושטת"
-
 #~ msgid "Chinese Traditional"
 #~ msgstr "סינית מסורתית"
-
 #~ msgid "East Asian"
 #~ msgstr "מזרח אסיאתית"
-
 #~ msgid "Japanese"
 #~ msgstr "יפנית"
-
 #~ msgid "Korean"
 #~ msgstr "קוריאנית"
-
 #~ msgid "Russian"
 #~ msgstr "רוסית"
-
 #~ msgid "Universal"
 #~ msgstr "אוניברסלי"
-
 #~ msgid "Ukrainian"
 #~ msgstr "אוקראינית"
-
 #~ msgid "Open the file in another application?"
 #~ msgstr "לפתוח את הקובץ בתכנית אחרת?"
-
 #~ msgid ""
 #~ "It's not possible to view this file type directly in the browser. You can "
 #~ "open it with another application or save it."
 #~ msgstr ""
 #~ "לא ניתן להציג סוג קובץ זה בדפדפן. אתה יכול לפתוח אותו באמצעות יישום אחר "
 #~ "או לשמור אותו."
-
 #~ msgid ""
 #~ "It's not possible to view this file because there is no application "
 #~ "installed that can open it. You can save it instead."
 #~ msgstr ""
 #~ "לא ניתן להציג קובץ זה כי לא מותקן יישום שיכול לפתוח אותו. אתה יכול לשמור "
 #~ "אותו במקום זאת."
-
 #~ msgid "_Don't show this message again for this site"
 #~ msgstr "אל תציג הודעה זו שוב עבור אתר זה"
-
 #~ msgid "Trust %s to identify:"
 #~ msgstr "בטח ב %s לזיהוי:"
-
 #~ msgid "_Web sites"
 #~ msgstr "אתרי אינטרנט"
-
 #~ msgid "system-language"
 #~ msgstr "he"
-
 #~ msgid "Postscript files"
 #~ msgstr "קבצי Postscript"
-
 #~ msgid ""
 #~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
 #~ "items table to remove it."
 #~ msgstr ""
 #~ "גרור פריט אל סרגלי הכלים למעלה כדי להוסיף אותו, ומסרגלי הכלים בטבלת "
 #~ "הפריטים כדי להסיר אותו."
-
 #~ msgid "Failed to find %s"
 #~ msgstr "כישלון במציאת %s"
-
 #~ msgid "A file %s already exists."
 #~ msgstr "הקובץ %s כבר קיים."
-
 #~ msgid "Arabic"
 #~ msgstr "ערבית"
-
 #~ msgid "Baltic"
 #~ msgstr "באלטית"
-
 #~ msgid "Cyrillic"
 #~ msgstr "קירילי"
-
 #~ msgid "Devanagari"
 #~ msgstr "הינדית"
-
 #~ msgid "Greek"
 #~ msgstr "יוונית"
-
 #~ msgid "Hebrew"
 #~ msgstr "עברית"
-
 #~ msgid "Tamil"
 #~ msgstr "טאמיל"
-
 #~ msgid "Thai"
 #~ msgstr "תאילנדית"
-
 #~ msgid "Turkish"
 #~ msgstr "טורקית"
-
 #~ msgid "Unicode"
 #~ msgstr "יוניקוד"
-
 #~ msgid "Western"
 #~ msgstr "מערבי"
-
 #~ msgid "Secure"
 #~ msgstr "מאובטח"
-
 #~ msgid "%d %%"
 #~ msgstr "%d %%"
-
 #~ msgid "_Open in New Window"
 #~ msgstr "פתח _בחלון חדש"
-
 #~ msgid "_Open in New Windows"
 #~ msgstr "פתח ב_חלונות חדשים"
-
 #~ msgid "C_lear History"
 #~ msgstr "_נקה את ההיסטוריה"
-
 #~ msgid "C_lear"
 #~ msgstr "_נקה"
-
 #~ msgid "Used internally by the bonobo interface"
 #~ msgstr "בשימוש פנימי של ממשק bonobo"
-
 #~ msgid "Ephy"
 #~ msgstr "Ephy"
-
 #~ msgid "You can recover the opened tabs and windows."
 #~ msgstr "שחזר את הלשוניות הפתוחות והחלונות."
-
 #~ msgid "site"
 #~ msgstr "אתר"
-
 #~ msgid "Toggle network status"
 #~ msgstr "מתג מצב רשת"
-
 #~ msgid "_Open Frame"
 #~ msgstr "_פתח מסגרת"
-
 #~ msgid "Exit Fullscreen"
 #~ msgstr "צא ממצב מסך מלא"
-
 #~ msgid "Medium"
 #~ msgstr "בינונית"
-
 #~ msgid ""
 #~ "Security level: %s\n"
 #~ "%s"
 #~ msgstr ""
 #~ "רמת אבטחה: %s\n"
 #~ "%s"
-
 #~ msgid "Download link"
 #~ msgstr "הורד קישור"
-
 #~ msgid "Afrikaans"
 #~ msgstr "אפריקאית"
-
 #~ msgid "Albanian"
 #~ msgstr "אלבנית"
-
 #~ msgid "Azerbaijani"
 #~ msgstr "אזבאיגאנית"
-
 #~ msgid "Basque"
 #~ msgstr "בסקית"
-
 #~ msgid "Breton"
 #~ msgstr "ברטון"
-
 #~ msgid "Bulgarian"
 #~ msgstr "בולגרית"
-
 #~ msgid "Byelorussian"
 #~ msgstr "בלרוסית"
-
 #~ msgid "Catalan"
 #~ msgstr "קטלנית"
-
 #~ msgid "Croatian"
 #~ msgstr "קרואטית"
-
 #~ msgid "Czech"
 #~ msgstr "צ'כית"
-
 #~ msgid "Danish"
 #~ msgstr "דנית"
-
 #~ msgid "Dutch"
 #~ msgstr "הולנדית"
-
 #~ msgid "English"
 #~ msgstr "אנגלית"
-
 #~ msgid "Esperanto"
 #~ msgstr "אספרנטו"
-
 #~ msgid "Estonian"
 #~ msgstr "אסטונית"
-
 #~ msgid "Finnish"
 #~ msgstr "פינית"
-
 #~ msgid "French"
 #~ msgstr "צרפתית"
-
 #~ msgid "German"
 #~ msgstr "גרמנית"
-
 #~ msgid "Hungarian"
 #~ msgstr "הונגרית"
-
 #~ msgid "Icelandic"
 #~ msgstr "איסלנדית"
-
 #~ msgid "Indonesian"
 #~ msgstr "אינדונזית"
-
 #~ msgid "Irish"
 #~ msgstr "אירית"
-
 #~ msgid "Italian"
 #~ msgstr "איטלקית"
-
 #~ msgid "Latvian"
 #~ msgstr "לטבית"
-
 #~ msgid "Lithuanian"
 #~ msgstr "ליטאית"
-
 #~ msgid "Macedonian"
 #~ msgstr "מקדונית"
-
 #~ msgid "Malay"
 #~ msgstr "מלזית"
-
 #~ msgid "Norwegian/Nynorsk"
 #~ msgstr "נורבגית/נירוסק"
-
 #~ msgid "Norwegian/Bokmal"
 #~ msgstr "נורבגית/בוקמל"
-
 #~ msgid "Norwegian"
 #~ msgstr "נורבגית"
-
 #~ msgid "Polish"
 #~ msgstr "פולנית"
-
 #~ msgid "Portuguese"
 #~ msgstr "פורטוגזית"
-
 #~ msgid "Portuguese of Brazil"
 #~ msgstr "פורטוגזית של ברזיל"
-
 #~ msgid "Romanian"
 #~ msgstr "רומנית"
-
 #~ msgid "Scottish"
 #~ msgstr "סקוטית"
-
 #~ msgid "Serbian"
 #~ msgstr "סרבית"
-
 #~ msgid "Slovak"
 #~ msgstr "סלובקית"
-
 #~ msgid "Slovenian"
 #~ msgstr "סלובנית"
-
 #~ msgid "Spanish"
 #~ msgstr "ספרדית"
-
 #~ msgid "Swedish"
 #~ msgstr "שוודית"
-
 #~ msgid "Vietnamese"
 #~ msgstr "ויאטנמית"
-
 #~ msgid "Walloon"
 #~ msgstr "וואלון"
-
 #~ msgid "Custom [%s]"
 #~ msgstr "מותאם אישית [%s]"
-
 #~ msgid "Home"
 #~ msgstr "תיקיית הבית"
-
 #~ msgid "Desktop"
 #~ msgstr "שולחן עבודה"
-
 #~ msgid "Go up"
 #~ msgstr "לך למעלה"
-
 #~ msgid "Favicon"
 #~ msgstr "סמך מועדף"
-
 #~ msgid "A GNOME browser based on Mozilla"
 #~ msgstr "דפדפן GNOME שמבוסס על Mozilla"
+
