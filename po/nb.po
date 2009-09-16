@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 2.27.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-09-14 00:28+0200\n"
-"PO-Revision-Date: 2009-09-14 00:28+0200\n"
+"POT-Creation-Date: 2009-09-16 13:13+0200\n"
+"PO-Revision-Date: 2009-09-16 13:14+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -962,7 +962,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Lagre"
 
@@ -1414,6 +1414,11 @@ msgstr "Laster «%s»..."
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "Laster..."
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s filer"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2370,7 +2375,7 @@ msgstr "Nettsteder"
 msgid "Date"
 msgstr "Dato"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -2448,13 +2453,13 @@ msgid ""
 "The passwords from the previous version (Gecko) are locked with a master "
 "password. If you want Epiphany to import them, please enter your master "
 "password below."
-msgstr ""
+msgstr "Passord fra tidligere versjon (Gecko) er låst med et hovedpassord. Hvis du vil at Epiphany skal importere dem må du oppgi hovedpassordet under."
 
 #: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Klarte ikke å kopiere informasjonskapsler fra Mozilla."
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Klarte ikke å lese markør for siste migrering. Avbryter migrering av profil."
@@ -3129,11 +3134,11 @@ msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "Lagre som"
 
@@ -3404,7 +3409,7 @@ msgstr[1] "Systemspråk [%s]"
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3416,7 +3421,7 @@ msgstr ""
 "Free Software Foundation; enten versjon 2 av lisenen eller (hvis du ønsker) "
 "enhver senere versjon."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3427,7 +3432,7 @@ msgstr ""
 "GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET "
 "BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3437,20 +3442,20 @@ msgstr ""
 "Nautilus. Hvis du ikke har det kan du skrive til Free Software Foundation, "
 "Inc. 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3467,10 +3472,10 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
