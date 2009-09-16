@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-14 08:07+0000\n"
-"PO-Revision-Date: 2009-09-14 10:15+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2009-09-16 14:51+0200\n"
+"PO-Revision-Date: 2009-09-16 14:51+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -942,23 +942,6 @@ msgstr "'%s' fitxategia deskargen ilarari gehitu zaio."
 msgid "Download started"
 msgstr "Deskarga hasita"
 
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
-#| msgid "Unknown"
-msgctxt "download status"
-msgid "Unknown"
-msgstr "Ezezaguna"
-
-#: ../embed/downloader-view.c:804
-#| msgid "File"
-msgctxt "download status"
-msgid "Failed"
-msgstr "Hutseginda"
-
-#: ../embed/downloader-view.c:807
-msgctxt "download status"
-msgid "Cancelled"
-msgstr "Bertan behera utzita"
-
 #: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Fitxategia"
@@ -971,15 +954,9 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Falta:"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Gorde"
-
-#: ../embed/ephy-embed.c:662
-#| msgid "Unknown"
-msgctxt "file type"
-msgid "Unknown"
-msgstr "Ezezaguna"
 
 #: ../embed/ephy-embed.c:676
 msgid "Download this potentially unsafe file?"
@@ -1425,6 +1402,11 @@ msgstr "'%s' kargatzen..."
 msgid "Loading…"
 msgstr "Kargatzen..."
 
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s fitxategi"
+
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
 msgid ""
@@ -1807,33 +1789,6 @@ msgstr "_Eguneratu"
 #: ../src/bookmarks/ephy-bookmarks.c:455
 msgid "Update Bookmark?"
 msgstr "Eguneratu laster-marka?"
-
-#. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1203
-#| msgid "All"
-msgctxt "bookmarks"
-msgid "All"
-msgstr "Denak"
-
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1206
-msgctxt "bookmarks"
-msgid "Most Visited"
-msgstr "Bisitatuenak"
-
-#. Translators: this topic contains the not categorized
-#. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1210
-msgctxt "bookmarks"
-msgid "Not Categorized"
-msgstr "Kategoriarik gabeak"
-
-#. Translators: this is an automatic topic containing local
-#. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1215
-msgctxt "bookmarks"
-msgid "Nearby Sites"
-msgstr "Inguruko guneak"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1450
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
@@ -2379,7 +2334,7 @@ msgstr "Guneak"
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "GNOMEko web arakatzailea"
 
@@ -2647,34 +2602,6 @@ msgstr "_Leiho berria"
 #: ../src/ephy-toolbar.c:350
 msgid "Open a new window"
 msgstr "Leiho berria irekitzen du"
-
-#: ../src/ephy-toolbar-editor.c:71
-#| msgid "De_fault:"
-msgctxt "toolbar style"
-msgid "Default"
-msgstr "Lehenetsia"
-
-#. separator row
-#: ../src/ephy-toolbar-editor.c:73
-msgctxt "toolbar style"
-msgid "Text below icons"
-msgstr "Textua ikonoen azpian"
-
-#: ../src/ephy-toolbar-editor.c:74
-msgctxt "toolbar style"
-msgid "Text beside icons"
-msgstr "Textua ikonoen ondoan"
-
-#: ../src/ephy-toolbar-editor.c:75
-msgctxt "toolbar style"
-msgid "Icons only"
-msgstr "Ikonoak soilik"
-
-#: ../src/ephy-toolbar-editor.c:76
-#| msgid "Text Encoding"
-msgctxt "toolbar style"
-msgid "Text only"
-msgstr "Testua soilik"
 
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
@@ -3144,11 +3071,11 @@ msgstr "Hala ere dokumentua ixten baduzu, informazio hori galdu egingo da."
 msgid "Close _Document"
 msgstr "Itxi _dokumentua"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Ireki"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "Gorde honela"
 
@@ -3389,25 +3316,6 @@ msgstr "Itxi"
 msgid "Close print preview"
 msgstr "Itxi inprimatzeko aurrebista"
 
-#. Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
-#, c-format
-msgctxt "language"
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:527
-#, c-format
-msgctxt "language"
-msgid "User defined (%s)"
-msgstr "Erabiltzaileak definituta (%s)"
-
 #: ../src/prefs-dialog.c:549
 #, c-format
 msgid "System language (%s)"
@@ -3419,7 +3327,7 @@ msgstr[1] "Sistemaren hizkuntzak (%s)"
 msgid "Select a Directory"
 msgstr "Hautatu direktorioa"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3431,7 +3339,7 @@ msgstr ""
 "bertsioan, edo (nahiago baduzu) beste berriago batean, jasotako baldintzak "
 "betez gero."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3443,7 +3351,7 @@ msgstr ""
 "MERKATURATZEKO edo HELBURU PARTIKULARRETARAKO ERABILTZEKO. Argibide gehiago "
 "nahi izanez gero, ikus GNU Lizentzia Publiko Orokorra."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3453,20 +3361,20 @@ msgstr ""
 "zenuen; hala ez bada, idatzi hona: Free SoftwareFoundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Kontaktatu gurekin:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Laguntzaileak:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Iraganeko garatzaileak:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3483,13 +3391,13 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "GNOMEko web arakatzailearen gunea"
 
