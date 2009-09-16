@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-08-26 20:30+0000\n"
-"PO-Revision-Date: 2009-08-31 17:27+0530\n"
+"POT-Creation-Date: 2009-09-15 02:06+0000\n"
+"PO-Revision-Date: 2009-09-16 11:15+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali INDIA <anubad@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -59,11 +59,16 @@ msgid "Browse the web"
 msgstr "ওয়েব ব্রাউজ করুন"
 
 #: ../data/epiphany.desktop.in.in.h:2
+#| msgid "Epiphany (RDF)"
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Epiphany  ওয়েব ব্রাউজার"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
 msgid "Web Browser"
 msgstr "ওয়েব ব্রাউজার"
 
@@ -269,7 +274,9 @@ msgstr "সহজ স্ক্রলিং সক্রিয় করুন"
 
 #: ../data/epiphany.schemas.in.h:18
 msgid "Force new window requests to be opened in tabs instead of using a new window."
-msgstr "নতুন উইন্ডো খোলার অনুরোধ করা হলে, নতুন উইন্ডোর পরিবর্তে ট্যাবের মধ্যে সেগুলি খুলতে বাধ্য করা হবে।"
+msgstr ""
+"নতুন উইন্ডো খোলার অনুরোধ করা হলে, নতুন উইন্ডোর পরিবর্তে ট্যাবের মধ্যে সেগুলি খুলতে "
+"বাধ্য করা হবে।"
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "Force new windows to be opened in tabs"
@@ -907,7 +914,7 @@ msgstr "পুনরায় আরম্ভ (_R)"
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
 #: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1738
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
@@ -976,22 +983,22 @@ msgstr "%"
 msgid "Remaining"
 msgstr "অবশিষ্ট"
 
-#: ../embed/ephy-embed.c:440
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "সংরক্ষণ"
 
-#: ../embed/ephy-embed.c:582
+#: ../embed/ephy-embed.c:662
 msgctxt "file type"
 msgid "Unknown"
 msgstr "অজানা"
 
-#: ../embed/ephy-embed.c:596
+#: ../embed/ephy-embed.c:676
 msgid "Download this potentially unsafe file?"
 msgstr "এই সম্ভাব্য অনিরাপদ ফাইলটি কি ডাউনলোড করা হবে?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:601
+#: ../embed/ephy-embed.c:681
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1005,14 +1012,14 @@ msgstr ""
 "একান্ততা (Privacy) নষ্ট করতে পারে।  খোলার পরিবর্তে ফাইলটিকে আপনি ডাউনলোড করে "
 "সংরক্ষণ করতে পারেন।"
 
-#: ../embed/ephy-embed.c:609
+#: ../embed/ephy-embed.c:689
 msgid "Open this file?"
 msgstr "ফাইলটি কি খুলবো?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:615
+#: ../embed/ephy-embed.c:695
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1023,13 +1030,13 @@ msgstr ""
 "\n"
 "আপনি “%s” ফাইলটিকে “%s” নামক অ্যাপলিকেশন ব্যবহার করে খুলতে পারেন।"
 
-#: ../embed/ephy-embed.c:622
+#: ../embed/ephy-embed.c:702
 msgid "Download this file?"
 msgstr "ফাইলটি কি ডাউনলোড করবো?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:627
+#: ../embed/ephy-embed.c:707
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1041,11 +1048,11 @@ msgstr ""
 "“%s” ফাইলটি খোলার মত কোন অ্যাপলিকেশন আপনার সিস্টেমে নেই।  তবে খোলার পরিবর্তে "
 "একে আপনি ডাউনলোড করতে পারেন।"
 
-#: ../embed/ephy-embed.c:634
+#: ../embed/ephy-embed.c:714
 msgid "_Save As..."
 msgstr "নতুন রূপে সংরক্ষণ... (_S)"
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:844
 msgid "Web Inspector"
 msgstr "Web Inspector"
 
@@ -1396,40 +1403,45 @@ msgstr "স্থানীয় ফাইল"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2119
-#: ../src/ephy-session.c:1341
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2124
+#: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "ফাঁকা পৃষ্ঠা"
 
-#: ../embed/ephy-web-view.c:1112
+#: ../embed/ephy-web-view.c:1128
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1303
+#: ../embed/ephy-web-view.c:1319
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "“%s” এর দিকে পাঠিয়ে দেওয়া হচ্ছে..."
 
-#: ../embed/ephy-web-view.c:1305
+#: ../embed/ephy-web-view.c:1321
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "“%s” থেকে তথ্য স্থানান্তর করা হচ্ছে..."
 
-#: ../embed/ephy-web-view.c:1307
+#: ../embed/ephy-web-view.c:1323
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "“%s” এর নিকট থেকে পরিচয় প্রমাণের জন্য অপেক্ষা করা হচ্ছে..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1313 ../embed/ephy-web-view.c:1421
+#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1436
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” লোড করা হচ্ছে..."
 
-#: ../embed/ephy-web-view.c:1423
+#: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "লোড করা হচ্ছে... "
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s ফাইল"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -1619,18 +1631,18 @@ msgstr "ব্রাউজ-ইতিহাস"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1493
 msgid "Bookmark"
 msgstr "বুকমার্ক"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1499
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1497
 msgid "Bookmarks"
 msgstr "বুকমার্ক"
 
 # FIXME
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:285
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
 msgid "Address Entry"
 msgstr "ঠিকানার এন্ট্রি"
 
@@ -1863,22 +1875,22 @@ msgstr "এই বিষয় থেকে সরিয়ে নিন"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
 msgid "_File"
 msgstr "ফাইল (_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
 msgid "_Edit"
 msgstr "সম্পাদনা (_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
 msgid "_View"
 msgstr "প্রদর্শন (_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
 msgid "_Help"
 msgstr "সহায়তা (_H)"
 
@@ -1955,7 +1967,7 @@ msgid "Export bookmarks to a file"
 msgstr "বুকমার্ককে ফাইলে এক্সপোর্ট করুন"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
 msgid "_Close"
 msgstr "বন্ধ করুন(_C)"
 
@@ -1965,29 +1977,29 @@ msgstr "বুকমার্ক উইন্ডোকে বন্ধ করে
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
 msgid "Cu_t"
 msgstr "কাট করুন(_t)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
 msgid "Cut the selection"
 msgstr "চিহ্নিত অংশকে কাট করুন"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1362
 #: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:154
 msgid "_Copy"
 msgstr "কপি করুন (_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
 msgid "Copy the selection"
 msgstr "চিহ্নিত অংশকে কপি করুন"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
 msgid "_Paste"
 msgstr "পেস্ট করুন (_P)"
 
@@ -2006,7 +2018,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "চিহ্নিত বুকমার্ক বা বিষয়টিকে মুছে ফেলুন"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
 msgid "Select _All"
 msgstr "সমগ্র নির্বাচন করুন (_A)"
 
@@ -2017,7 +2029,7 @@ msgstr "সকল বুকমার্ক বা টেক্সট নির�
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
 msgid "_Contents"
 msgstr "সূচী (_C)"
 
@@ -2026,12 +2038,12 @@ msgid "Display bookmarks help"
 msgstr "বুকমার্ক সংক্রান্ত সহায়িকা প্রদর্শন করা হবে"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
 msgid "_About"
 msgstr "পরিচিতি (_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
 msgid "Display credits for the web browser creators"
 msgstr "ওয়েব ব্রাউজার ডেভেলপারদের স্বীকৃতি প্রদর্শন করা হবে"
 
@@ -2218,7 +2230,7 @@ msgstr "এই সম্পর্কে"
 msgid "Topic"
 msgstr "বিষয় "
 
-#: ../src/bookmarks/ephy-topics-entry.c:329
+#: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
 msgid "Create topic “%s”"
 msgstr "বিষয় তৈরি করুন “%s”"
@@ -2258,32 +2270,32 @@ msgstr "অনুসন্ধান:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:436 ../src/ephy-find-toolbar.c:558
+#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
 msgid "_Case sensitive"
 msgstr "হরফের ছাঁদ সম্পর্কে সচেতন (_C)"
 
-#: ../src/ephy-find-toolbar.c:541
+#: ../src/ephy-find-toolbar.c:539
 msgid "Find Previous"
 msgstr "পূর্ববর্তী অনুসন্ধান করুন"
 
-#: ../src/ephy-find-toolbar.c:544
+#: ../src/ephy-find-toolbar.c:542
 msgid "Find previous occurrence of the search string"
 msgstr "শব্দ বা পংক্তির পূর্ববর্তী উপস্থিতি অনুসন্ধান করুন"
 
-#: ../src/ephy-find-toolbar.c:550
+#: ../src/ephy-find-toolbar.c:548
 msgid "Find Next"
 msgstr "পরবর্তী খুঁজে নিন"
 
-#: ../src/ephy-find-toolbar.c:553
+#: ../src/ephy-find-toolbar.c:551
 msgid "Find next occurrence of the search string"
 msgstr "নির্দিষ্ট বাক্যাংশের পরবর্তী অবস্থান খুঁজে নিন"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:582
+#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
 msgid "Leave Fullscreen"
 msgstr "পূর্ণপর্দা মোড থেকে বেরিয়ে আসুন"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:315
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
 msgid "Go"
 msgstr "এগিয়ে চলুন"
 
@@ -2386,7 +2398,7 @@ msgstr "সাইট"
 msgid "Date"
 msgstr "তারিখ "
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:873
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "GNOME ওয়েব ব্রাউজার"
 
@@ -2455,11 +2467,23 @@ msgstr "GNOME ওয়েব ব্রাউজারের বিকল্প"
 msgid "Close tab"
 msgstr "ট্যাব বন্ধ করুন"
 
+#: ../src/ephy-nss-glue.c:62
+#| msgid "User Password"
+msgid "Master password needed"
+msgstr "প্রধান পাসওয়ার্ড আবশ্যক"
+
+#: ../src/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr "পূর্ববর্তী সংস্করণের (Gecko) পাসওয়ার্ডগুলি প্রধান পাসওয়ার্ড সহযোগে লক করা হয়েছে। Epiphany দ্বারা এইগুলি ইম্পোর্ট করার জন্য অনুগ্রহ করে প্রধান পাসওয়ার্ড নীচে লিখুন।"
+
 #: ../src/ephy-profile-migration.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Mozilla থেকে কুকির ফাইল কপি করতে ব্যর্থ।"
 
-#: ../src/ephy-profile-migration.c:375
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "সাম্প্রতিকতম মাইগ্রেশন মার্কার পড়তে ব্যর্থ, প্রোফাইল মাইগ্রেশন পরিত্যাগ করা হচ্ছে।"
 
@@ -2516,7 +2540,7 @@ msgid "Crash Recovery"
 msgstr "ক্র্যাশ থেকে পুনরুদ্ধার"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1285
+#: ../src/ephy-session.c:1286
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -2527,15 +2551,15 @@ msgstr ""
 "হতে পারে। যদি হয়, তাহলে \"%s\" ডেভেলপারদের জানান।"
 
 # FIXME: Extension = ?
-#: ../src/ephy-shell.c:171
+#: ../src/ephy-shell.c:172
 msgid "Sidebar extension required"
 msgstr "সাইডবার এক্সটেনশন প্রয়োজন"
 
-#: ../src/ephy-shell.c:173
+#: ../src/ephy-shell.c:174
 msgid "Sidebar Extension Required"
 msgstr "সাইডবার এক্সটেনশন প্রয়োজন"
 
-#: ../src/ephy-shell.c:177
+#: ../src/ephy-shell.c:178
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "আপনি যে লিঙ্ক-এ ক্লিক করেছেন, তার জন্য সাইডবার এক্সটেনশন ইনস্টলকৃত অবস্থায় থাকা "
@@ -2558,93 +2582,93 @@ msgstr "কি-বোর্ড নির্বাচন মোডে প্র�
 msgid "Switch to this tab"
 msgstr "এই ট্যাব প্রদর্শন করুন"
 
-#: ../src/ephy-toolbar.c:224
+#: ../src/ephy-toolbar.c:223
 msgid "_Back"
 msgstr "পূর্ববর্তী (_B)"
 
-#: ../src/ephy-toolbar.c:226
+#: ../src/ephy-toolbar.c:225
 msgid "Go to the previous visited page"
 msgstr "ইতিপূর্বে পরিদর্শিত ওয়েব পেজটি প্রদর্শন করুন"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:229
 msgid "Back history"
 msgstr "পূর্বের ওয়েবপেজ"
 
 # FIXME
-#: ../src/ephy-toolbar.c:244
+#: ../src/ephy-toolbar.c:243
 msgid "_Forward"
 msgstr "পরবর্তী (_F)"
 
-#: ../src/ephy-toolbar.c:246
+#: ../src/ephy-toolbar.c:245
 msgid "Go to the next visited page"
 msgstr "পরবর্তী ওয়েবপেজ প্রদর্শন করুন"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:249
 msgid "Forward history"
 msgstr "পরবর্তী ওয়েবপেজ"
 
-#: ../src/ephy-toolbar.c:263
+#: ../src/ephy-toolbar.c:262
 msgid "_Up"
 msgstr "উপরে (_U)"
 
-#: ../src/ephy-toolbar.c:265
+#: ../src/ephy-toolbar.c:264
 msgid "Go up one level"
 msgstr "একধাপ উপরে চলুন"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:268
 msgid "List of upper levels"
 msgstr "উপরের লেভেল-এর তালিকা"
 
-#: ../src/ephy-toolbar.c:287
+#: ../src/ephy-toolbar.c:286
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
 "ব্রাউজারে প্রদর্শনের জন্য কোন ওয়েব ঠিকানা লিখুন, অথবা ওয়েব-এ অনুসন্ধানের জন্য কোন "
 "পঙ্‌ক্তি উল্লেখ করুন"
 
 # src/toolbar.c:328
-#: ../src/ephy-toolbar.c:303
+#: ../src/ephy-toolbar.c:302
 msgid "Zoom"
 msgstr "জুম"
 
-#: ../src/ephy-toolbar.c:305
+#: ../src/ephy-toolbar.c:304
 msgid "Adjust the text size"
 msgstr "টেক্সটের হরফের মাপ পরিবর্তন করুন"
 
-#: ../src/ephy-toolbar.c:317
+#: ../src/ephy-toolbar.c:316
 msgid "Go to the address entered in the address entry"
 msgstr "ঠিকানা এন্ট্রিতে লিখিত ঠিকানায় চলুন"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:325
 msgid "_Home"
 msgstr "হোম পেজ (_H)"
 
 # msgstr "ব্যক্তিগত ফোল্ডার (_ব)"
-#: ../src/ephy-toolbar.c:328
+#: ../src/ephy-toolbar.c:327
 msgid "Go to the home page"
 msgstr "হোম পেজে এগিয়ে চলুন"
 
-#: ../src/ephy-toolbar.c:338
+#: ../src/ephy-toolbar.c:337
 msgid "New _Tab"
 msgstr "নতুন ট্যাব (_T)"
 
-#: ../src/ephy-toolbar.c:340
+#: ../src/ephy-toolbar.c:339
 msgid "Open a new tab"
 msgstr "একটি নতুন ট্যাব-এ খুলুন"
 
-#: ../src/ephy-toolbar.c:349
+#: ../src/ephy-toolbar.c:348
 msgid "_New Window"
 msgstr "নতুন উইন্ডো (_N)"
 
-#: ../src/ephy-toolbar.c:351
+#: ../src/ephy-toolbar.c:350
 msgid "Open a new window"
 msgstr "নতুন উইন্ডোতে খুলুন"
 
@@ -2687,447 +2711,447 @@ msgstr "টুলবারের বাটনের লেবেল: (_b)"
 msgid "_Add a New Toolbar"
 msgstr "একটি নতুন টুলবার যোগ করুন (_A)"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "_Bookmarks"
 msgstr "বুকমার্ক (_B)"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:111
 msgid "_Go"
 msgstr "চলুন (_G)"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "T_ools"
 msgstr "টুল সমূহ (_o)"
 
-#: ../src/ephy-window.c:114
+#: ../src/ephy-window.c:113
 msgid "_Tabs"
 msgstr "ট্যাব (_T)"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:115
 msgid "_Toolbars"
 msgstr "টুলবার (_T)"
 
 #. File menu
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:121
 msgid "_Open…"
 msgstr "খুলুন... (_O) "
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:122
 msgid "Open a file"
 msgstr "একটি ফাইল খুলুন"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:124
 msgid "Save _As…"
 msgstr "নতুন নামে সংরক্ষণ...(_A)"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:125
 msgid "Save the current page"
 msgstr "বর্তমান ওয়েবপেজটি সংরক্ষণ করুন"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Page Set_up"
 msgstr "পৃষ্ঠার বৈশিষ্ঠ্য (_u)"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:128
 msgid "Setup the page settings for printing"
 msgstr "মুদ্রণের জন্য পৃষ্ঠার বৈশিষ্ট্য নির্ধারণ করুন"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:130
 msgid "Print Pre_view"
 msgstr "প্রাকমুদ্রণ প্রদর্শন (_v)"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:131
 msgid "Print preview"
 msgstr "প্রাকমুদ্রণ প্রদর্শন"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:133
 msgid "_Print…"
 msgstr "প্রিন্ট করুন...(_P) "
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:134
 msgid "Print the current page"
 msgstr "বর্তমান পৃষ্ঠা প্রিন্ট করুন"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:136
 msgid "S_end Link by Email…"
 msgstr "ই-মেইলের মাধ্যমে লিঙ্ক প্রেরণ করুন... (_e)"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:137
 msgid "Send a link of the current page"
 msgstr "বর্তমান ওয়েবপেজের একটি লিঙ্ক প্রেরণ করুন"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:140
 msgid "Close this tab"
 msgstr "এই ট্যাবটি বন্ধ করুন"
 
 #. Edit menu
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "_Undo"
 msgstr "পুনরায় বাতিল করুন (_U)"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:146
 msgid "Undo the last action"
 msgstr "সর্বশেষ কর্মটি বাতিল করুন"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:148
 msgid "Re_do"
 msgstr "পুনরায় করুন (_d)"
 
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:149
 msgid "Redo the last undone action"
 msgstr "বাতিল করা সর্বশেষ কর্মটি পুনরায় করুন"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:158
 msgid "Paste clipboard"
 msgstr "ক্লিপবোর্ডে পেস্ট করুন"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:161
 msgid "Delete text"
 msgstr "টেক্সট মুছে ফেলুন"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Select the entire page"
 msgstr "সমগ্র ওয়েবপেজ নির্বাচন করুন"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Find…"
 msgstr "অনুসন্ধান করুন...(_F)"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:167
 msgid "Find a word or phrase in the page"
 msgstr "পৃষ্ঠার মধ্যে কোন শব্দ বা পংক্তি খুঁজুন"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "Find Ne_xt"
 msgstr "পরবর্তী খুঁজুন (_x)"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:170
 msgid "Find next occurrence of the word or phrase"
 msgstr "এই শব্দের পরবর্তী অবস্থান খুঁজে বের করুন"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:172
 msgid "Find Pre_vious"
 msgstr "পূর্ববর্তী খুঁজুন (_v)"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:173
 msgid "Find previous occurrence of the word or phrase"
 msgstr "এই শব্দের পূর্ববর্তী অবস্থান খুঁজে বের করুন"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:175
 msgid "P_ersonal Data"
 msgstr "ব্যক্তিগত তথ্য (_e)"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:176
 msgid "View and remove cookies and passwords"
 msgstr "কুকি ও পাসওয়ার্ড প্রদর্শন করুন ও সরিয়ে ফেলুন"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "Certificate_s"
 msgstr "সার্টিফিকেট (_s)"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:180
 msgid "Manage Certificates"
 msgstr "সার্টিফিকেট পরিচালনা করুন"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:183
 msgid "P_references"
 msgstr "পছন্দ (_r)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "Configure the web browser"
 msgstr "ওয়েব ব্রাউজার কনফিগার করুন"
 
 #. View menu
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:189
 msgid "_Customize Toolbars…"
 msgstr "টুলবার স্বনির্ধারিত করুন...(_C)"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Customize toolbars"
 msgstr "টুলবার স্বনির্ধারিত করুন"
 
-#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
+#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
 msgid "_Stop"
 msgstr "বন্ধ করুন (_S)"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:193
 msgid "Stop current data transfer"
 msgstr "সক্রিয় তথ্য সংযোগ বন্ধ করুন"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:197
 msgid "_Reload"
 msgstr "পুনরায় লোড করুন (_R)"
 
-#: ../src/ephy-window.c:199
+#: ../src/ephy-window.c:198
 msgid "Display the latest content of the current page"
 msgstr "বর্তমান পেজের সর্বশেষ তথ্য প্রদর্শন করুন"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:200
 msgid "_Larger Text"
 msgstr "বড় মাপের টেক্সট (_L)"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:201
 msgid "Increase the text size"
 msgstr "টেক্সটের আকার বাড়াও"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:203
 msgid "S_maller Text"
 msgstr "ছোট মাপের টেক্সট (_m)"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:204
 msgid "Decrease the text size"
 msgstr "টেক্সটের মাপ ছোট করুন"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:206
 msgid "_Normal Size"
 msgstr "স্বাভাবিক মাপ (_N)"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:207
 msgid "Use the normal text size"
 msgstr "টেক্সট-এর স্বাভাবিক মাপ ব্যবহার করুন"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:209
 msgid "Text _Encoding"
 msgstr "টেক্সট এনকোডিং (_E)"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:210
 msgid "Change the text encoding"
 msgstr "টেক্সটের এনকোডিং পরিবর্তন করুন"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:212
 msgid "_Page Source"
 msgstr "ওয়েবপেজের সোর্স (_P)"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:213
 msgid "View the source code of the page"
 msgstr "এই ওয়েবপেজটির সোর্স-কোড প্রদর্শন করুন"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:215
 msgid "Page _Security Information"
 msgstr "পেজ-এর নিরপত্তা তথ্য (_S)"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:216
 msgid "Display security information for the web page"
 msgstr "এই পেজ-এর জন্য নিরাপত্তা তথ্য প্রদর্শন করুন"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:221
 msgid "_Add Bookmark…"
 msgstr "বুকমার্ক যোগ করুন... (_A) "
 
-#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
+#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
 msgid "Add a bookmark for the current page"
 msgstr "বর্তমান ওয়েবপেজটির জন্য একটি বুকমার্ক যোগ করুন"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:224
 msgid "_Edit Bookmarks"
 msgstr "বুকমার্ক সম্পাদনা (_E)"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:225
 msgid "Open the bookmarks window"
 msgstr "বুকমার্ক উইন্ডোকে খুলুন"
 
 #. Go menu
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:230
 msgid "_Location…"
 msgstr "অবস্থান... (_L) "
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:231
 msgid "Go to a specified location"
 msgstr "একটি নির্দিষ্ট স্থানে যান"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "পূর্ববর্তী তথ্য (_s)"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:234
 msgid "Open the history window"
 msgstr "পূর্ববর্তী তথ্যের উইন্ডো খুলুন"
 
 #. Tabs menu
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:239
 msgid "_Previous Tab"
 msgstr "পূর্ববর্তী ট্যাব (_P)"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:240
 msgid "Activate previous tab"
 msgstr "পূর্ববর্তী ট্যাবকে সক্রিয় করা হবে"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:242
 msgid "_Next Tab"
 msgstr "পরবর্তী ট্যাব (_N)"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:243
 msgid "Activate next tab"
 msgstr "পরবর্তী ট্যাব সক্রিয় করা হবে"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:245
 msgid "Move Tab _Left"
 msgstr "ট্যাব বাঁ দিকে সরিয়ে দিন (_L)"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:246
 msgid "Move current tab to left"
 msgstr "বর্তমান ট্যাব-কে বাঁ দিকে সরিয়ে দিন"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:248
 msgid "Move Tab _Right"
 msgstr "ট্যাব ডানদিকে সরিয় দিন (_R)"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:249
 msgid "Move current tab to right"
 msgstr "বর্তমান ট্যাবকে ডানদিকে সরিয়ে নিন"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:251
 msgid "_Detach Tab"
 msgstr "ট্যাব বিচ্ছিন্ন করুন (_D)"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:252
 msgid "Detach current tab"
 msgstr "বর্তমান ট্যাব বিচ্ছিন্ন করুন"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:258
 msgid "Display web browser help"
 msgstr "ওয়েব ব্রাউজার সহায়িকা প্রদর্শন করুন"
 
 #. File Menu
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:269
 msgid "_Work Offline"
 msgstr "অফলাইন ভাবে কাজ করুন (_W)"
 
-#: ../src/ephy-window.c:271
+#: ../src/ephy-window.c:270
 msgid "Switch to offline mode"
 msgstr "অফ-লাইন মোডে পরিবর্তন"
 
 #. View Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:275
 msgid "_Hide Toolbars"
 msgstr "টুল-বার আড়াল করা হবে (_H)"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:276
 msgid "Show or hide toolbar"
 msgstr "টুলবার প্রদর্শন বা আড়াল করা হবে"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:278
 msgid "St_atusbar"
 msgstr "স্ট্যাটাসবার (_t)"
 
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:279
 msgid "Show or hide statusbar"
 msgstr "স্ট্যাটাসবার প্রদর্শন বা আড়াল করা হবে"
 
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:281
 msgid "_Fullscreen"
 msgstr "সম্পূর্ণ পর্দা জুড়ে প্রদর্শন (_F)"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:282
 msgid "Browse at full screen"
 msgstr "ব্রাউজ করার সময় সম্পূর্ণ পর্দা জুড়ে প্রদর্শন করুন"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:284
 msgid "Popup _Windows"
 msgstr "পপ-আপ উইন্ডো (_W)"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:285
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "এই সাইট থেকে উদ্ভূত অযাচিত পপ-আপ উইন্ডো প্রদর্শন বা আড়াল করুন"
 
 # FIXME
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:287
 msgid "Selection Caret"
 msgstr "নির্বাচিত ক্যারেট"
 
 #. Document
-#: ../src/ephy-window.c:296
+#: ../src/ephy-window.c:295
 msgid "Add Boo_kmark…"
 msgstr "বুকমার্ক যোগ করুন... (_k) "
 
 #. Framed document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:301
 msgid "Show Only _This Frame"
 msgstr "শুধুমাত্র এই ফ্রেমটি প্রদর্শন করা হবে (_T)"
 
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:302
 msgid "Show only this frame in this window"
 msgstr "এই উইন্ডোতে শুধুমাত্র এই ফ্রেমটি প্রদর্শন করা হবে"
 
 #. Links
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:307
 msgid "_Open Link"
 msgstr "লিঙ্ক খুলুন (_O)"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:308
 msgid "Open link in this window"
 msgstr "নতুন উইন্ডোতে লিঙ্ক খুলুন"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:310
 msgid "Open Link in New _Window"
 msgstr "নতুন উইন্ডোতে লিঙ্ক খুলুন (_W)"
 
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:311
 msgid "Open link in a new window"
 msgstr "নতুন উইন্ডোতে লিঙ্ক খুলুন"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:313
 msgid "Open Link in New _Tab"
 msgstr "নতুন ট্যাব-এ লিঙ্ক খুলুন (_T)"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:314
 msgid "Open link in a new tab"
 msgstr "নতুন ট্যাব-এ লিঙ্ক খুলুন"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:316
 msgid "_Download Link"
 msgstr "লিংক ডাউনলেড করুন (_D)"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:318
 msgid "_Save Link As…"
 msgstr "লিংক এই নামে সংরক্ষণ করুন ... (_S)"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:319
 msgid "Save link with a different name"
 msgstr "লিংককে অন্য নামে সংরক্ষণ করুন"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:321
 msgid "_Bookmark Link…"
 msgstr "লিংককে বুকমার্ক তালিকায় যোগ করুন ...(_B)"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:323
 msgid "_Copy Link Address"
 msgstr "লিংক-এর অ্যাড্রেস কপি করুন (_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:329
 msgid "_Send Email…"
 msgstr "ই-মেল প্রেরণ করুন ...(_S)"
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:331
 msgid "_Copy Email Address"
 msgstr "ই-মেল ঠিকানা কপি করুন (_C)"
 
 #. Images
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:336
 msgid "Open _Image"
 msgstr "ছবি প্রদর্শন করুন (_I)"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:338
 msgid "_Save Image As…"
 msgstr "নতুন নামে ছবি সংরক্ষণ করুন...(_S)"
 
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:340
 msgid "_Use Image As Background"
 msgstr "ছবিকে পটভূমি রূপে ব্যবহার করুন (_U)"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:342
 msgid "Copy I_mage Address"
 msgstr "ছবির ঠিকানা কপি করুন (_m)"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:344
 msgid "St_art Animation"
 msgstr "অ্যানিমেশন আরম্ভ করুন (_a)"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:346
 msgid "St_op Animation"
 msgstr "অ্যানিমেশন বন্ধ করুন (_o)"
 
@@ -3143,103 +3167,103 @@ msgstr "আপনি ডকুমেন্ট বন্ধ করে দিল�
 msgid "Close _Document"
 msgstr "ডকুমেন্ট বন্ধ করুন  (_D)"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:284
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "খুলুন"
 
-#: ../src/ephy-window.c:1491 ../src/window-commands.c:310
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "নতুন নামে সংরক্ষণ"
 
-#: ../src/ephy-window.c:1493
+#: ../src/ephy-window.c:1491
 msgid "Print"
 msgstr "প্রিন্ট"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1495
 msgid "Find"
 msgstr "অনুসন্ধান"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1510
+#: ../src/ephy-window.c:1508
 msgid "Larger"
 msgstr "বড় মাপের"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1513
+#: ../src/ephy-window.c:1511
 msgid "Smaller"
 msgstr "ছোট মাপের"
 
-#: ../src/ephy-window.c:1743
+#: ../src/ephy-window.c:1741
 msgid "Insecure"
 msgstr "অসুরক্ষিত"
 
-#: ../src/ephy-window.c:1748
+#: ../src/ephy-window.c:1746
 msgid "Broken"
 msgstr "অচল"
 
-#: ../src/ephy-window.c:1756
+#: ../src/ephy-window.c:1754
 msgid "Low"
 msgstr "নিম্ন"
 
-#: ../src/ephy-window.c:1763
+#: ../src/ephy-window.c:1761
 msgid "High"
 msgstr "উচ্চ"
 
-#: ../src/ephy-window.c:1773
+#: ../src/ephy-window.c:1771
 #, c-format
 msgid "Security level: %s"
 msgstr "নিরাপত্তার মাত্রা: %s"
 
-#: ../src/ephy-window.c:1816
+#: ../src/ephy-window.c:1814
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d-টি আড়াল করা পপ-আপ উইন্ডো"
 msgstr[1] "%d-টি আড়াল করা পপ-আপ উইন্ডো"
 
-#: ../src/ephy-window.c:2081
+#: ../src/ephy-window.c:2079
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s”  ছবিটি প্রদর্শন করুন"
 
 # FIXME
-#: ../src/ephy-window.c:2086
+#: ../src/ephy-window.c:2084
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s”-কে ডেস্কটপের পটভূমি হিসেবে ব্যবহার করুন"
 
-#: ../src/ephy-window.c:2091
+#: ../src/ephy-window.c:2089
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” ছবিটি সংরক্ষণ করুন"
 
 # FIXME
-#: ../src/ephy-window.c:2096
+#: ../src/ephy-window.c:2094
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "“%s” ছবিটির ঠিকানা কপি করুন"
 
-#: ../src/ephy-window.c:2109
+#: ../src/ephy-window.c:2107
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "“%s” ঠিকানায় ই-মেইল করুন"
 
-#: ../src/ephy-window.c:2115
+#: ../src/ephy-window.c:2113
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "ই-মেইল ঠিকানা “%s” কপি করুন"
 
-#: ../src/ephy-window.c:2127
+#: ../src/ephy-window.c:2125
 #, c-format
 msgid "Save link “%s”"
 msgstr "“%s” লিঙ্ককে সংরক্ষণ করুন"
 
-#: ../src/ephy-window.c:2133
+#: ../src/ephy-window.c:2131
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” লিঙ্ক-কে বুকমার্ক তালিকায় যোগ করুন"
 
-#: ../src/ephy-window.c:2139
+#: ../src/ephy-window.c:2137
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "“%s” লিঙ্ক-এর ঠিকানা কপি করুন"
@@ -3420,7 +3444,7 @@ msgstr[1] "সিস্টেমের ভাষা (%s)"
 msgid "Select a Directory"
 msgstr "একটি ডিরেক্টরি নির্বাচন করুন"
 
-#: ../src/window-commands.c:773
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3431,7 +3455,7 @@ msgstr ""
 "GNU General Public License-র শর্তানুযায়ী এটি বিতরণ ও পরিবর্তন করা যাবে; "
 "লাইসেন্সের সংস্করণ ২ অথবা (আপনার সুবিধানুযায়ী) ঊর্ধ্বতন কোনো সংস্করণের অধীন।"
 
-#: ../src/window-commands.c:777
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3443,7 +3467,7 @@ msgstr ""
 "সাধনের জন্য অন্তর্নিহীত ওয়ারেন্টিও অনুপস্থিত। অধিক জানতে GNU General Public "
 "License পড়ুন।"
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3453,20 +3477,20 @@ msgstr ""
 "হওয়া উচিত; না থাকলে নিম্নলিখিত ঠিকানায় লিখে তা সংগ্রহ করুন Free Software "
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
-#: ../src/window-commands.c:827 ../src/window-commands.c:843
-#: ../src/window-commands.c:854
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "যোগাযোগের উপায়:"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "যাদের অবদান আছে:"
 
-#: ../src/window-commands.c:833
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "প্রাক্তন ডেভেলপারবৃন্দ:"
 
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3483,11 +3507,11 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr "Sankarshan Mukhopadhyay (sankarshan.mukhopadhyay@gmail.com)"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "GNOME ওয়েব ব্রাউজার-এর ওয়েবসাইট"
 
