@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-09-16 14:51+0200\n"
-"PO-Revision-Date: 2009-09-16 14:51+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2009-09-16 12:50+0000\n"
+"PO-Revision-Date: 2009-09-17 11:09+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -942,6 +942,23 @@ msgstr "'%s' fitxategia deskargen ilarari gehitu zaio."
 msgid "Download started"
 msgstr "Deskarga hasita"
 
+#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
+#| msgid "Unknown"
+msgctxt "download status"
+msgid "Unknown"
+msgstr "Ezezaguna"
+
+#: ../embed/downloader-view.c:804
+#| msgid "File"
+msgctxt "download status"
+msgid "Failed"
+msgstr "Hutseginda"
+
+#: ../embed/downloader-view.c:807
+msgctxt "download status"
+msgid "Cancelled"
+msgstr "Bertan behera utzita"
+
 #: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
 msgid "File"
 msgstr "Fitxategia"
@@ -957,6 +974,12 @@ msgstr "Falta:"
 #: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Gorde"
+
+#: ../embed/ephy-embed.c:662
+#| msgid "Unknown"
+msgctxt "file type"
+msgid "Unknown"
+msgstr "Ezezaguna"
 
 #: ../embed/ephy-embed.c:676
 msgid "Download this potentially unsafe file?"
@@ -1790,6 +1813,33 @@ msgstr "_Eguneratu"
 msgid "Update Bookmark?"
 msgstr "Eguneratu laster-marka?"
 
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1203
+#| msgid "All"
+msgctxt "bookmarks"
+msgid "All"
+msgstr "Denak"
+
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1206
+msgctxt "bookmarks"
+msgid "Most Visited"
+msgstr "Bisitatuenak"
+
+#. Translators: this topic contains the not categorized
+#. bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1210
+msgctxt "bookmarks"
+msgid "Not Categorized"
+msgstr "Kategoriarik gabeak"
+
+#. Translators: this is an automatic topic containing local
+#. * websites bookmarks autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1215
+msgctxt "bookmarks"
+msgid "Nearby Sites"
+msgstr "Inguruko guneak"
+
 #: ../src/bookmarks/ephy-bookmarks.c:1450
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
@@ -2603,6 +2653,34 @@ msgstr "_Leiho berria"
 msgid "Open a new window"
 msgstr "Leiho berria irekitzen du"
 
+#: ../src/ephy-toolbar-editor.c:71
+#| msgid "De_fault:"
+msgctxt "toolbar style"
+msgid "Default"
+msgstr "Lehenetsia"
+
+#. separator row
+#: ../src/ephy-toolbar-editor.c:73
+msgctxt "toolbar style"
+msgid "Text below icons"
+msgstr "Textua ikonoen azpian"
+
+#: ../src/ephy-toolbar-editor.c:74
+msgctxt "toolbar style"
+msgid "Text beside icons"
+msgstr "Textua ikonoen ondoan"
+
+#: ../src/ephy-toolbar-editor.c:75
+msgctxt "toolbar style"
+msgid "Icons only"
+msgstr "Ikonoak soilik"
+
+#: ../src/ephy-toolbar-editor.c:76
+#| msgid "Text Encoding"
+msgctxt "toolbar style"
+msgid "Text only"
+msgstr "Testua soilik"
+
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
 msgstr "Tresna-barraren editorea"
@@ -3315,6 +3393,25 @@ msgstr "Itxi"
 #: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
 msgid "Close print preview"
 msgstr "Itxi inprimatzeko aurrebista"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:527
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Erabiltzaileak definituta (%s)"
 
 #: ../src/prefs-dialog.c:549
 #, c-format
