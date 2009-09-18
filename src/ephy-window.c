@@ -2248,31 +2248,7 @@ tab_context_menu_cb (EphyWebView *view,
 	return TRUE;
 }
 
-static gboolean
-open_link_in_new (EphyWindow *window,
-		  const char *link_address,
-		  guint state,
-		  EphyEmbed *embed)
-{
-	EphyEmbed *dest;
-
-	if (!ephy_embed_utils_address_has_web_scheme (link_address)) return FALSE;
-
-	dest = ephy_link_open (EPHY_LINK (window), link_address, embed,
-			       state & GDK_SHIFT_MASK ? EPHY_LINK_NEW_WINDOW
-						      : EPHY_LINK_NEW_TAB);
-
-	if (dest)
-	{
-                ephy_web_view_copy_back_history (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)),
-                                                 EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dest)));
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
+#if 0
 static gboolean
 save_property_url (EphyEmbed *embed,
 		   EphyEmbedEvent *event,
@@ -2302,6 +2278,7 @@ save_property_url (EphyEmbed *embed,
 
 	return TRUE;
 }
+#endif
 
 typedef struct
 {
@@ -2329,27 +2306,26 @@ clipboard_text_received_cb (GtkClipboard *clipboard,
 }
 
 static gboolean
-ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
-				EphyEmbedEvent *event,
+ephy_window_dom_mouse_click_cb (WebKitWebView *view,
+				GdkEventButton *event,
 				EphyWindow *window)
 {
-	EphyEmbedEventContext context;
-	guint button, modifier;
+	guint button, modifier, context;
 	gboolean handled = TRUE;
 	gboolean with_control, with_shift, with_shift_control;
 	gboolean is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
 	gboolean middle_click_opens;
 	gboolean is_input;
+	WebKitHitTestResult *hit_test_result;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), FALSE);
+	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
+	button = event->button;
+	modifier = event->state;
+	g_object_get (hit_test_result, "context", &context, NULL);
 
-	button = ephy_embed_event_get_button (event);
-	context = ephy_embed_event_get_context (event);
-	modifier = ephy_embed_event_get_modifier (event);
-
-	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %x, modifier %x",
-	     button, context, modifier);
+	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
+	     button, context, modifier, (int)event->x, (int)event->y);
 
 	with_control = (modifier & GDK_CONTROL_MASK) == GDK_CONTROL_MASK;
 	with_shift = (modifier & GDK_SHIFT_MASK) == GDK_SHIFT_MASK;
@@ -2362,27 +2338,15 @@ ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
 		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
 		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
 
-	is_link = (context & EPHY_EMBED_CONTEXT_LINK) != 0;
-	is_image = (context & EPHY_EMBED_CONTEXT_IMAGE) != 0;
-	is_middle_clickable = !((context & EPHY_EMBED_CONTEXT_LINK)
-				|| (context & EPHY_EMBED_CONTEXT_INPUT)
-				|| (context & EPHY_EMBED_CONTEXT_EMAIL_LINK));
-	is_input = (context & EPHY_EMBED_CONTEXT_INPUT) != 0;
+	is_link = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) != 0;
+	is_image = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE) != 0;
+	is_middle_clickable = !((context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
+				|| (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE));
+	is_input = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE) != 0;
 
-	/* ctrl+click or middle click opens the link in new tab */
-	if (is_link &&
-	    ((is_left_click && (with_control || with_shift_control)) ||
-	     is_middle_click))
-	{
-		const GValue *value;
-		const char *link_address;
-
-		value = ephy_embed_event_get_property (event, "link");
-		link_address = g_value_get_string (value);
-		handled = open_link_in_new (window, link_address, modifier, embed);
-	}
+#if 0
 	/* shift+click saves the link target */
-	else if (is_link && is_left_click && with_shift)
+	if (is_link && is_left_click && with_shift)
 	{
 		handled = save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
 	}
@@ -2393,8 +2357,9 @@ ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
 	{
 		handled = save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
 	}
+#endif
 	/* middle click opens the selection url */
-	else if (is_middle_clickable && is_middle_click && middle_click_opens)
+	if (is_middle_clickable && is_middle_click && middle_click_opens)
 	{
 		/* See bug #133633 for why we do it this way */
 
@@ -2402,8 +2367,11 @@ ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
 		 * requesting the clipboard contents, and receiving them.
 		 */
 		ClipboardTextCBData *cb_data;
+		EphyEmbed *embed;
 		EphyEmbed **embed_ptr;
-		
+
+		embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
 		cb_data = g_slice_new0 (ClipboardTextCBData);
 		cb_data->embed = embed;
 		cb_data->window = window;
@@ -2853,7 +2821,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (view, "notify::progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
-		g_signal_connect_object (view, "ge_dom_mouse_click",
+		g_signal_connect_object (view, "button-press-event",
 					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 					 window, 0);
 		g_signal_connect_object (view, "notify::visibility",
