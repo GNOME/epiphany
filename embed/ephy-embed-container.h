@@ -46,46 +46,39 @@ struct _EphyEmbedContainerIface
 {
   GTypeInterface parent_iface;
 
-  gint (* add_child) (EphyEmbedContainer *container,
-                      EphyEmbed *child,
-                      gint position,
-                      gboolean set_active);
+  gint (* add_child)               (EphyEmbedContainer *container,
+                                    EphyEmbed *child,
+                                    gint position,
+                                    gboolean set_active);
 
-  void (* set_active_child) (EphyEmbedContainer *container,
-                             EphyEmbed *child);
+  void (* set_active_child)        (EphyEmbedContainer *container,
+                                    EphyEmbed *child);
 
-  void (* remove_child) (EphyEmbedContainer *container,
-                         EphyEmbed *child);
+  void (* remove_child)            (EphyEmbedContainer *container,
+                                    EphyEmbed *child);
 
   EphyEmbed * (* get_active_child) (EphyEmbedContainer *container);
 
-  GList * (* get_children) (EphyEmbedContainer *container);
+  GList * (* get_children)         (EphyEmbedContainer *container);
 
-  gboolean (* get_is_popup) (EphyEmbedContainer *container);
+  gboolean (* get_is_popup)        (EphyEmbedContainer *container);
 
   EphyWebViewChrome (* get_chrome) (EphyEmbedContainer *container);
 };
 
-GType ephy_embed_container_get_type (void);
-
-gint ephy_embed_container_add_child (EphyEmbedContainer *container,
-                                     EphyEmbed *child,
-                                     gint position,
-                                     gboolean set_active);
-
-void ephy_embed_container_set_active_child (EphyEmbedContainer *container,
-                                            EphyEmbed *child);
-
-void ephy_embed_container_remove_child (EphyEmbedContainer *container,
-                                        EphyEmbed *child);
-
-EphyEmbed *ephy_embed_container_get_active_child (EphyEmbedContainer *container);
-
-GList *ephy_embed_container_get_children (EphyEmbedContainer *container);
-
-gboolean ephy_embed_container_get_is_popup (EphyEmbedContainer *container);
-
-EphyWebViewChrome ephy_embed_container_get_chrome (EphyEmbedContainer *container);
+GType             ephy_embed_container_get_type         (void);
+gint              ephy_embed_container_add_child        (EphyEmbedContainer *container,
+                                                         EphyEmbed          *child,
+                                                         gint                position,
+                                                         gboolean            set_active);
+void              ephy_embed_container_set_active_child (EphyEmbedContainer *container,
+                                                         EphyEmbed          *child);
+void              ephy_embed_container_remove_child     (EphyEmbedContainer *container,
+                                                         EphyEmbed          *child);
+EphyEmbed *       ephy_embed_container_get_active_child (EphyEmbedContainer *container);
+GList *           ephy_embed_container_get_children     (EphyEmbedContainer *container);
+gboolean          ephy_embed_container_get_is_popup     (EphyEmbedContainer *container);
+EphyWebViewChrome ephy_embed_container_get_chrome       (EphyEmbedContainer *container);
 
 G_END_DECLS
 
