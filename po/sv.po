@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-09-11 11:25+0200\n"
-"PO-Revision-Date: 2009-09-11 11:27+0100\n"
+"POT-Creation-Date: 2009-09-19 14:47+0200\n"
+"PO-Revision-Date: 2009-09-19 14:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -856,6 +856,7 @@ msgid "Remaining"
 msgstr "Återstår"
 
 #: ../embed/ephy-embed.c:443
+#: ../src/window-commands.c:333
 msgid "Save"
 msgstr "Spara"
 
@@ -1309,6 +1310,11 @@ msgstr "Läser in \"%s\"..."
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "Läser in..."
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s filer"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2281,7 +2287,7 @@ msgstr "Datum"
 
 #: ../src/ephy-main.c:81
 #: ../src/ephy-main.c:562
-#: ../src/window-commands.c:986
+#: ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "GNOME-webbläsaren"
 
@@ -2362,7 +2368,7 @@ msgstr "Lösenorden från den tidigare versionen (Gecko) är låsta med ett huvu
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Misslyckades med att kopiera cookie-filen från Mozilla. "
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr "Misslyckades med att läsa senaste migreringsmarkeringen, avbryter profilmigreringen."
 
@@ -3025,12 +3031,11 @@ msgid "Close _Document"
 msgstr "Stäng _dokument"
 
 #: ../src/ephy-window.c:1487
-#: ../src/window-commands.c:285
+#: ../src/window-commands.c:311
 msgid "Open"
 msgstr "Öppna"
 
 #: ../src/ephy-window.c:1489
-#: ../src/window-commands.c:311
 msgid "Save As"
 msgstr "Spara som"
 
@@ -3293,33 +3298,33 @@ msgstr[1] "Systemspråk (%s)"
 msgid "Select a Directory"
 msgstr "Välj en katalog"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "GNOME-webbläsaren är fri programvara; du kan distribuera det och/eller modifiera det under villkoren i GNU General Public License, publicerad av Free Software Foundation, antingen version 2 eller (om du så vill) någon senare version."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "GNOME-webbläsaren distribueras i hopp om att den ska vara användbart, men UTAN NÅGON SOM HELST GARANTI, även utan underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR NÅGOT SPECIELLT ÄNDAMÅL. Se GNU General Public License för ytterligare information."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Du bör ha fått en kopia av GNU General Public License tillsammans med GNOME-webbläsaren. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
-#: ../src/window-commands.c:940
-#: ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961
+#: ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Kontakta oss på:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Bidragsgivare:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Tidigare utvecklare:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3336,7 +3341,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander\n"
@@ -3346,7 +3351,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "Webbplatsen för GNOME-webbläsaren"
 
