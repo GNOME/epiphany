@@ -283,6 +283,7 @@ MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 if ENABLE_INTROSPECTION
 EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-embed.h \
+	$(top_srcdir)/embed/ephy-embed-container.h \
 	$(top_srcdir)/embed/ephy-embed-event.h \
 	$(top_srcdir)/embed/ephy-embed-persist.h \
 	$(top_srcdir)/embed/ephy-embed-shell.h \
