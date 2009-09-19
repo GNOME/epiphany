@@ -688,24 +688,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-/**
- * EphyWebView::ge-context-menu:
- * @embed:
- * @event: the #EphyEmbedEvent which triggered this signal
- *
- * The ::ge_context_menu signal is emitted when a context menu is to be
- * displayed. This will usually happen when the user right-clicks on a part of
- * @embed.
- **/
-    g_signal_new ("ge_context_menu",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, context_menu),
-            g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__OBJECT,
-            G_TYPE_BOOLEAN,
-            1,
-            G_TYPE_OBJECT);
+
 /**
  * EphyWebView::ge-favicon:
  * @embed:

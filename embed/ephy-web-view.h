@@ -121,8 +121,6 @@ struct _EphyWebViewClass
   WebKitWebViewClass parent_class;
 
   /* Signals */
-  int	 (* context_menu)	(EphyWebView *view,
-                                 EphyEmbedEvent *event);
   void	 (* favicon)		(EphyWebView *view,
                                  const char *location);
   void	 (* feed_link)		(EphyWebView *view,

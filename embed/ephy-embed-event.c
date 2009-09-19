@@ -1,5 +1,7 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2009 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,87 +27,152 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-static void ephy_embed_event_base_init (gpointer g_class);
+#define EPHY_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventPrivate))
 
-GType
-ephy_embed_event_get_type (void)
+struct EphyEmbedEventPrivate
 {
-       static GType type = 0;
+  guint button;
+  guint modifier;
+  guint x;
+  guint y;
+  WebKitHitTestResult *hit_test_result;
+};
 
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEmbedEventIface),
-			ephy_embed_event_base_init,
-			NULL,
-		};
+G_DEFINE_TYPE (EphyEmbedEvent, ephy_embed_event, G_TYPE_OBJECT)
 
-		type = g_type_register_static (G_TYPE_INTERFACE,
-					       "EphyEmbedEvent",
-					       &our_info,
-					       (GTypeFlags) 0);
-	}
+static void
+dispose (GObject *object)
+{
+  EphyEmbedEventPrivate *priv = EPHY_EMBED_EVENT (object)->priv;
+  
+  if (priv->hit_test_result) {
+    g_object_unref (priv->hit_test_result);
+    priv->hit_test_result = NULL;
+  }
 
-	return type;
+  G_OBJECT_CLASS (ephy_embed_event_parent_class)->dispose (object);
 }
 
 static void
-ephy_embed_event_base_init (gpointer g_class)
+ephy_embed_event_class_init (EphyEmbedEventClass *klass)
 {
-	static gboolean initialised = FALSE;
+  GObjectClass *object_class = (GObjectClass *)klass;
 
-	initialised = TRUE;
+  object_class->dispose = dispose;
+
+  g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedEventPrivate));
 }
 
-EphyEmbedEventContext
+static void
+ephy_embed_event_init (EphyEmbedEvent *embed_event)
+{
+  embed_event->priv = EPHY_EMBED_EVENT_GET_PRIVATE (embed_event);
+}
+
+EphyEmbedEvent *
+ephy_embed_event_new (GdkEventButton *event, WebKitHitTestResult *hit_test_result)
+{
+  EphyEmbedEvent *embed_event;
+  EphyEmbedEventPrivate *priv;
+
+  embed_event = g_object_new (EPHY_TYPE_EMBED_EVENT, NULL);
+  priv = embed_event->priv;
+
+  priv->hit_test_result = g_object_ref (hit_test_result);
+  priv->button = event->button;
+  priv->modifier = event->state;
+  priv->x = event->x;
+  priv->y = event->y;
+
+  return embed_event;
+}
+
+guint
 ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_context (event);
+  EphyEmbedEventPrivate *priv;
+  guint context;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+
+  priv = event->priv;
+  g_object_get (priv->hit_test_result, "context", &context, NULL);
+  return context;
 }
 
 guint
 ephy_embed_event_get_button (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_button (event);
+  EphyEmbedEventPrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+
+  priv = event->priv;
+
+  return priv->button;
 }
 
 guint
 ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_modifier (event);
+  EphyEmbedEventPrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+
+  priv = event->priv;
+
+  return priv->modifier;
 }
 
 void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
-			     guint *x, guint *y)
+                             guint *x, guint *y)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	iface->get_coordinates (event, x, y);
+  EphyEmbedEventPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
+
+  priv = event->priv;
+
+  if (x)
+    *x = priv->x;
+
+  if (y)
+    *y = priv->y;
 }
 
-const GValue*
-ephy_embed_event_get_property	(EphyEmbedEvent *event,
-				 const char *name)
+void 
+ephy_embed_event_get_property   (EphyEmbedEvent *event,
+                                 const char *name,
+                                 GValue *value)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_property (event, name);
+  EphyEmbedEventPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
+  g_return_if_fail (name);
+
+  priv = event->priv;
+
+  /* FIXME: ugly hack! This only works for now because all properties
+     we have are strings */
+  g_value_init (value, G_TYPE_STRING);
+
+  g_object_get_property (G_OBJECT (priv->hit_test_result), name, value);
 }
 
 gboolean
-ephy_embed_event_has_property	(EphyEmbedEvent *event,
-				 const char *name)
+ephy_embed_event_has_property   (EphyEmbedEvent *event,
+                                 const char *name)
 {
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->has_property (event, name);
+  EphyEmbedEventPrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), FALSE);
+  g_return_val_if_fail (name, FALSE);
+
+  priv = event->priv;
+
+  return g_object_class_find_property (G_OBJECT_GET_CLASS (priv->hit_test_result),
+                                       name) != NULL;
+                                                           
 }
 
-gpointer
-ephy_embed_event_get_dom_event (EphyEmbedEvent *event)
-{
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_dom_event (event);
-}

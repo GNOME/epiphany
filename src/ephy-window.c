@@ -2050,30 +2050,30 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 }
 
 static char *
-get_name_from_address_value (const GValue *value)
+get_name_from_address_value (const char *path)
 {
 	char *name;
 
-	name = g_path_get_basename (g_value_get_string (value));
+	name = g_path_get_basename (path);
 
 	return name != NULL ? name : g_strdup ("");
 }
 
 static void
-update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
+update_popups_tooltips (EphyWindow *window, GdkEventButton *event, WebKitHitTestResult *hit_test_result)
 {
-	EphyEmbedEventContext context;
+	guint context;
 	GtkActionGroup *group = window->priv->popups_action_group;
-	const GValue *value;
 	GtkAction *action;
 	char *tooltip, *name;
 
-	context = ephy_embed_event_get_context (event);
+	 g_object_get (hit_test_result, "context", &context, NULL);
 
-	if (context & EPHY_EMBED_CONTEXT_IMAGE)
+	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE)
 	{
-		value = ephy_embed_event_get_property (event, "image");
-		name = get_name_from_address_value (value);
+		char *uri;
+		g_object_get (hit_test_result, "image-uri", &uri, NULL);
+		name = get_name_from_address_value (uri);
 
 		action = gtk_action_group_get_action (group, "OpenImage");
 		tooltip = g_strdup_printf (_("Open image “%s”"), name);
@@ -2091,14 +2091,15 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "CopyImageLocation");
-		tooltip = g_strdup_printf (_("Copy image address “%s”"),
-					   g_value_get_string (value));
+		tooltip = g_strdup_printf (_("Copy image address “%s”"), uri);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);		
 
+		g_free (uri);
 		g_free (name);
 	}
 
+#if 0
 	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		value = ephy_embed_event_get_property (event, "link");
@@ -2115,46 +2116,49 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 	}
+#endif
 
-	if (context & EPHY_EMBED_CONTEXT_LINK)
+	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
-		value = ephy_embed_event_get_property (event, "link");
+		char *uri;
+		g_object_get (hit_test_result, "link-uri", &uri, NULL);
 
 		action = gtk_action_group_get_action (group, "DownloadLink");
-		name = get_name_from_address_value (value);
+		name = get_name_from_address_value (uri);
 		tooltip = g_strdup_printf (_("Save link “%s”"), name);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (name);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "BookmarkLink");
-		tooltip = g_strdup_printf (_("Bookmark link “%s”"),
-					   g_value_get_string (value));
+		tooltip = g_strdup_printf (_("Bookmark link “%s”"), uri);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "CopyLinkAddress");
-		tooltip = g_strdup_printf (_("Copy link's address “%s”"),
-					   g_value_get_string (value));
+		tooltip = g_strdup_printf (_("Copy link's address “%s”"), uri);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
+		g_free (uri);
 	}
 }
 
 static void
 show_embed_popup (EphyWindow *window,
-		  EphyEmbed *embed,
-		  EphyEmbedEvent *event)
+		  WebKitWebView *view,
+		  GdkEventButton *event,
+		  WebKitHitTestResult *hit_test_result)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EphyEmbedEventContext context;
+	guint context;
 	const char *popup;
-	const GValue *value;
-	gboolean framed, can_open_in_new;
+	gboolean framed = FALSE, can_open_in_new;
 	GtkWidget *widget;
 	guint button;
+	char *uri;
+	EphyEmbedEvent *embed_event;
 
 	/* Do not show the menu in print preview mode */
 	if (priv->ppv_mode)
@@ -2162,26 +2166,32 @@ show_embed_popup (EphyWindow *window,
 		return;
 	}
 
+#if 0
 	value = ephy_embed_event_get_property (event, "framed_page");
 	framed = g_value_get_int (value);
+#endif
 
-	can_open_in_new = ephy_embed_event_has_property (event, "link-has-web-scheme");
+	g_object_get (hit_test_result, "link-uri", &uri, NULL);
+	can_open_in_new = uri && ephy_embed_utils_address_has_web_scheme (uri);
+	g_free (uri);
 
-	context = ephy_embed_event_get_context (event);
+	g_object_get (hit_test_result, "context", &context, NULL);
 
 	LOG ("show_embed_popup context %x", context);
 
+#if 0
 	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		popup = "/EphyEmailLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
-	else if (context & EPHY_EMBED_CONTEXT_LINK)
+#endif
+	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
 		popup = "/EphyLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
-	else if (context & EPHY_EMBED_CONTEXT_INPUT)
+	else if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)
 	{
 		popup = "/EphyInputPopup";
 		update_edit_actions_sensitivity (window, FALSE);
@@ -2192,7 +2202,7 @@ show_embed_popup (EphyWindow *window,
 		update_edit_actions_sensitivity (window, TRUE);
 	}
 
-	update_popups_tooltips (window, event);
+	update_popups_tooltips (window, event, hit_test_result);
 
 	widget = gtk_ui_manager_get_widget (priv->manager, popup);
 	g_return_if_fail (widget != NULL);
@@ -2207,15 +2217,17 @@ show_embed_popup (EphyWindow *window,
 
 	
 	update_popup_actions_visibility (window,
-					 context & EPHY_EMBED_CONTEXT_IMAGE,
+					 context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE,
 					 framed);
 
-	_ephy_window_set_context_event (window, event);
+	embed_event = ephy_embed_event_new (event, hit_test_result);
+	_ephy_window_set_context_event (window, embed_event);
+	g_object_unref (embed_event);
 
 	g_signal_connect (widget, "deactivate",
 			  G_CALLBACK (embed_popup_deactivate_cb), window);
 
-	button = ephy_embed_event_get_button (event);
+	button = event->button;
 
 	if (button == 0)
 	{
@@ -2230,22 +2242,6 @@ show_embed_popup (EphyWindow *window,
 				NULL, NULL, button,
 				gtk_get_current_event_time ());
 	}
-}
-
-static gboolean
-tab_context_menu_cb (EphyWebView *view,
-		     EphyEmbedEvent *event,
-		     EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
-	embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-	g_return_val_if_fail (window->priv->active_embed == embed, FALSE);
-
-	show_embed_popup (window, embed, event);
-
-	return TRUE;
 }
 
 #if 0
@@ -2321,6 +2317,14 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 
 	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
 	button = event->button;
+
+	if (event->button == 3)
+	{
+		show_embed_popup (window, view, event, hit_test_result);
+		g_object_unref (hit_test_result);
+		return TRUE;
+	}
+
 	modifier = event->state;
 	g_object_get (hit_test_result, "context", &context, NULL);
 	g_object_unref (hit_test_result);
@@ -2731,8 +2735,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 
 		g_signal_handlers_disconnect_by_func
-			(view, G_CALLBACK (tab_context_menu_cb), window);
-		g_signal_handlers_disconnect_by_func
 			(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
 
 	}
@@ -2816,9 +2818,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (view, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
-		g_signal_connect_object (view, "ge-context-menu",
-					 G_CALLBACK (tab_context_menu_cb),
-					 window, G_CONNECT_AFTER);
 		g_signal_connect_object (view, "notify::progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
