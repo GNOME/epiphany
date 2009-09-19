@@ -318,6 +318,7 @@ build_up_menu (EphyNavigationAction *action)
 	}
 
 	/* the list data has been consumed */
+	g_slist_foreach (list, (GFunc) g_free, NULL);
 	g_slist_free (list);
 
 	return GTK_WIDGET (menu);
@@ -434,6 +435,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 				up_list->data,
 				NULL,
 				ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+		g_slist_foreach (up_list, (GFunc) g_free, NULL);
 		g_slist_free (up_list);
 	}
 }

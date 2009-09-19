@@ -1660,15 +1660,30 @@ ephy_web_view_set_icon_address (EphyWebView *view,
  * @view: an #EphyWebView
  *
  * Returns whether @view can travel to a higher-level directory on the server.
- * For example, for http://www.example.com/subdir/index.html, returns %TRUE; for
- * http://www.example.com/index.html, returns %FALSE.
+ * For example, for http://www.example.com/subdir/foo.html, returns %TRUE; for
+ * http://www.example.com/, returns %FALSE.
  *
  * Return value: %TRUE if @view can browse to a higher-level directory
  **/
 gboolean
 ephy_web_view_can_go_up (EphyWebView *view)
 {
-  return FALSE;
+  SoupURI *uri;
+  gboolean result;
+
+  uri = soup_uri_new (ephy_web_view_get_address (view));
+  if (uri == NULL)
+    return FALSE;
+
+  if (strcmp (uri->scheme, "about") == 0 || strcmp (uri->scheme, "data") == 0) {
+    soup_uri_free (uri);
+    return FALSE;
+  }
+
+  result = (uri->fragment || uri->query || strlen (uri->path) > 1);
+  soup_uri_free (uri);
+
+  return result;
 }
 
 /**
@@ -2088,7 +2103,54 @@ ephy_web_view_print_preview_navigate (EphyWebView *view,
 GSList *
 ephy_web_view_get_go_up_list (EphyWebView *view)
 {
-  return NULL;
+  SoupURI *uri;
+  GSList *result = NULL;
+  char *t1, *t2;
+
+  uri = soup_uri_new (ephy_web_view_get_address (view));
+  if (uri == NULL)
+    return NULL;
+
+  if (strcmp (uri->scheme, "about") == 0 || strcmp (uri->scheme, "data") == 0) {
+    soup_uri_free (uri);
+    return NULL;
+  }
+
+  /* remove fragment, then query, then go up path */
+  if (uri->fragment) {
+    soup_uri_set_fragment (uri, NULL);
+    result = g_slist_prepend (result, soup_uri_to_string (uri, FALSE));
+  }
+
+  if (uri->query) {
+    soup_uri_set_query (uri, NULL);
+    result = g_slist_prepend (result, soup_uri_to_string (uri, FALSE));
+  }
+
+  if (uri->path[strlen(uri->path)-1] != '/') {
+    /* not a trailing slash, remove "file" part */
+    t1 = strrchr (uri->path, '/');
+    t2 = g_strndup (uri->path, t1-uri->path+1);
+    soup_uri_set_path (uri, t2);
+    g_free (t2);
+    result = g_slist_prepend (result, soup_uri_to_string (uri, FALSE));
+  }
+
+  while (strcmp(uri->path, "/") != 0) {
+    /* chop trailing / */
+    uri->path[strlen (uri->path)-1] = 0;
+    t1 = strrchr (uri->path, '/');
+    t2 = g_strndup (uri->path, t1-uri->path+1);
+    soup_uri_set_path (uri, t2);
+    g_free (t2);
+    result = g_slist_prepend (result, soup_uri_to_string (uri, FALSE));
+  }
+
+  result = g_slist_reverse (result);
+
+  soup_uri_free (uri);
+
+  return result;
 }
 
 /**
