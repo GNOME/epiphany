@@ -2323,6 +2323,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	button = event->button;
 	modifier = event->state;
 	g_object_get (hit_test_result, "context", &context, NULL);
+	g_object_unref (hit_test_result);
 
 	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
 	     button, context, modifier, (int)event->x, (int)event->y);
