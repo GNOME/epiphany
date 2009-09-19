@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 2.28\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-09-12 14:28+0100\n"
+"POT-Creation-Date: 2009-09-19 17:56+0100\n"
 "PO-Revision-Date: 2009-09-12 14:30+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -976,7 +976,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Remanescente"
 
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
 msgid "Save"
 msgstr "Gravar"
 
@@ -1430,6 +1430,11 @@ msgstr "A ler “%s”…"
 #: ../embed/ephy-web-view.c:1438
 msgid "Loading…"
 msgstr "A ler…"
+
+#: ../embed/ephy-web-view.c:2319
+#, c-format
+msgid "%s/%s Files"
+msgstr "%s/%s Ficheiros"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2387,7 +2392,7 @@ msgstr "Páginas"
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
 msgid "GNOME Web Browser"
 msgstr "Navegador Web do GNOME"
 
@@ -2474,7 +2479,7 @@ msgstr ""
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falha ao copiar os ficheiros de cookies do Mozilla."
 
-#: ../src/ephy-profile-migration.c:379
+#: ../src/ephy-profile-migration.c:382
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Falha ao ler o mais recente marcador de migração, a abortar a migração do "
@@ -3154,11 +3159,11 @@ msgstr "Se ainda assim fechar o documento, essa informação será perdida."
 msgid "Close _Document"
 msgstr "Fechar o _Documento"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1489
 msgid "Save As"
 msgstr "Gravar Como"
 
@@ -3429,7 +3434,7 @@ msgstr[1] "Idiomas do sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione um Directório"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:907
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3441,7 +3446,7 @@ msgstr ""
 "publicada pela Free Software Foundation; ou a versão 2 da Licença ou (à sua "
 "escolha) qualquer versão posterior."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:911
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3453,7 +3458,7 @@ msgstr ""
 "ou ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.  Consulte a Licença Geral Pública "
 "GNU para mais detalhes."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:915
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3464,20 +3469,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02111-1307  USA"
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:961 ../src/window-commands.c:977
+#: ../src/window-commands.c:988
 msgid "Contact us at:"
 msgstr "Contacte-nos em:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:964
 msgid "Contributors:"
 msgstr "Contribuições:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:967
 msgid "Past developers:"
 msgstr "Programadores anteriores:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:997
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3494,11 +3499,11 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1023
 msgid "translator-credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1026
 msgid "GNOME Web Browser Website"
 msgstr "Página do Navegador Web do GNOME"
 
@@ -4266,9 +4271,6 @@ msgstr "Página do Navegador Web do GNOME"
 #~ "Apesar desta página ter sido lida utilizando uma ligação segura, a "
 #~ "informação que introduziu será enviada utilizando uma ligação insegura e "
 #~ "poderá ser facilmente interceptada por terceiros."
-
-#~ msgid "%s Files"
-#~ msgstr "Ficheiros de %s"
 
 #~ msgid "Unsafe protocol."
 #~ msgstr "Protocolo inseguro."
