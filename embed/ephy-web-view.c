@@ -2306,6 +2306,7 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
   char *filename;
   char *dotpos;
   char *directory_uri;
+  char *tmp;
   char *destination_uri;
   GError *error = NULL;
 
@@ -2316,7 +2317,13 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
     *dotpos = '\0';
 
   directory_uri = g_path_get_dirname (uri);
-  destination_uri = g_strdup_printf (_("%s/%s Files"), directory_uri, filename);
+
+  /* Translators: this is the directory name to store auxilary files
+   * when saving html files.
+   */
+  tmp = g_strdup_printf (_("%s Files"), filename);
+  destination_uri = g_strdup_printf ("%s/%s", directory_uri, tmp);
+  g_free (tmp);
 
   g_free (filename);
   g_free (directory_uri);
