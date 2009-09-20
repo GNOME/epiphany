@@ -248,16 +248,16 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 	GtkNotebook *nb = GTK_NOTEBOOK (notebook);
 	GtkWidget *page;
 
-	tab_pos = gtk_notebook_get_tab_pos (GTK_NOTEBOOK (notebook));
+	tab_pos = gtk_notebook_get_tab_pos (nb);
 
-	if (GTK_NOTEBOOK (notebook)->first_tab == NULL)
+	if (gtk_notebook_get_n_pages (nb) == 0)
 	{
 		return AFTER_ALL_TABS;
 	}
 
 	/* For some reason unfullscreen + quick click can
 	   cause a wrong click event to be reported to the tab */
-	if (!is_in_notebook_window(notebook, abs_x, abs_y))
+	if (!is_in_notebook_window (notebook, abs_x, abs_y))
 	{
 		return NOT_IN_APP_WINDOWS;
 	}
