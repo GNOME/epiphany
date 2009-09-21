@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003 Marco Pesenti Gritti
@@ -261,7 +262,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 
 	if (response == GTK_RESPONSE_OK)
 	{
-		if (gtk_toggle_button_get_active 
+		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_history)))
 		{
 			EphyEmbedShell *shell;
@@ -1360,6 +1361,15 @@ pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 }
 
 static void
+pdm_dialog_fill_passwords_list_from_soupsession_dummy (PdmActionInfo *info)
+{
+	/* Do nothing, no HTTP password will be added to PDM (in private mode) because we cant delete them.
+
+	   See https://bugzilla.gnome.org/show_bug.cgi?id=591395
+	*/
+}
+
+static void
 pdm_dialog_passwords_destruct (PdmActionInfo *info)
 {
 }
@@ -1540,6 +1550,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	PdmDialogPrivate *priv;
 	PdmActionInfo *cookies, *passwords;
 	GtkWidget *window;
+	gboolean has_private_profile = ephy_has_private_profile ();
+
 
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
@@ -1588,7 +1600,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords = g_new0 (PdmActionInfo, 1);
 	passwords->construct = pdm_dialog_passwords_construct;
 	passwords->destruct = pdm_dialog_passwords_destruct;
-	passwords->fill = pdm_dialog_fill_passwords_list;
+	/* Bug 591395 : we dont show HTTP auth in private mode because we can delete or use it anyway.  */
+	passwords->fill = has_private_profile ? pdm_dialog_fill_passwords_list_from_soupsession_dummy : pdm_dialog_fill_passwords_list;
 	passwords->add = pdm_dialog_password_add;
 	passwords->remove = pdm_dialog_password_remove;
 	passwords->dialog = dialog;
