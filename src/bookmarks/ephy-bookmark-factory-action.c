@@ -57,7 +57,7 @@ activate_item_cb (GtkWidget *menuitem, GtkWidget *placeholder)
 	g_return_if_fail (model);
 	
 	children = gtk_container_get_children (GTK_CONTAINER (etoolbar));
-	pos = g_list_index (children, toolbar->parent);
+	pos = g_list_index (children, gtk_widget_get_parent (toolbar));
 	index = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (item));
 	g_list_free (children);
 	
@@ -186,7 +186,7 @@ remove_placeholder_cb (GtkMenuShell *menushell,
 	g_object_set_data (G_OBJECT (model), EGG_TOOLBARS_MODEL_DATA, NULL);
 
 	children = gtk_container_get_children (GTK_CONTAINER (etoolbar));
-	pos = g_list_index (children, toolbar->parent);
+	pos = g_list_index (children, gtk_widget_get_parent (toolbar));
 	index = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (item));
 	g_list_free (children);
 	

@@ -149,7 +149,7 @@ maybe_finish_activation_cb (EphyWindow *window,
 
 	while (widget != NULL && widget != wtoolbar)
 	{
-		widget = widget->parent;
+		widget = gtk_widget_get_parent (widget);
 	}
 
 	/* if widget == toolbar, the new focus widget is in the toolbar, so we

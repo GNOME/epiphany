@@ -437,7 +437,7 @@ request_destination_uri (WebKitWebView *web_view,
    * WebView or other widget as a parent window.
    */
   window = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
-  if (!GTK_WIDGET_TOPLEVEL (window))
+  if (!gtk_widget_is_toplevel (window))
     window = NULL;
 
   dialog = ephy_file_chooser_new (_("Save"),
@@ -647,7 +647,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
   int default_response;
 
   parent_window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
-  if (!GTK_WIDGET_TOPLEVEL (parent_window))
+  if (!gtk_widget_is_toplevel (parent_window))
     parent_window = NULL;
 
   /* FIXME: we still have no way of getting the content type from

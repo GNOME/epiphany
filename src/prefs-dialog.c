@@ -616,7 +616,8 @@ setup_add_language_dialog (PrefsDialog *pd)
 				  add_lang_props[LANGUAGE_DIALOG].id, &window,
 				  NULL);
 
-	gtk_window_group_add_window (GTK_WINDOW (parent)->group, GTK_WINDOW (window));
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (parent)),
+				     GTK_WINDOW (window));
 	gtk_window_set_modal (GTK_WINDOW (window), TRUE);
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);

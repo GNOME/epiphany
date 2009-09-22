@@ -179,19 +179,26 @@ home_action_drag_data_received_cb (GtkWidget* widget,
 				   guint time,
 				   EphyHomeAction *action)
 {
-	gchar *action_name;
+	GdkAtom       target;
+	gchar        *action_name;
+	const guchar *data;
+	gint          length;
 			
 	g_object_get (action, "name", &action_name, NULL);
 	
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
-	if (selection_data->length <= 0 || selection_data->data == NULL) return;
+	length = gtk_selection_data_get_length (selection_data);
+	data = gtk_selection_data_get_data (selection_data);
+	target = gtk_selection_data_get_target (selection_data);
 
-	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
+	if (length <= 0 || data == NULL) return;
+
+	if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
 	{
 		char **split;
 
-		split = g_strsplit ((const gchar *)selection_data->data, "\n", 2);
+		split = g_strsplit ((const gchar *) data, "\n", 2);
 		if (split != NULL && split[0] != NULL && split[0][0] != '\0')
 		{			
 			action_name_association (GTK_ACTION (action), 
@@ -199,7 +206,7 @@ home_action_drag_data_received_cb (GtkWidget* widget,
 		}
 		g_strfreev (split);
 	}
-	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
+	else if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
 		char **uris;
 		int i;
@@ -231,7 +238,8 @@ home_action_drag_data_received_cb (GtkWidget* widget,
 static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
-{      
+{
+	GtkWidget *child;
 	const gchar *action_name;
 	
 	GTK_ACTION_CLASS (ephy_home_action_parent_class)->connect_proxy (action, proxy);
@@ -240,13 +248,14 @@ connect_proxy (GtkAction *action,
 
 	if (GTK_IS_TOOL_ITEM (proxy) && (strcmp (action_name, "GoHome") != 0))
 	{
-		g_signal_connect (GTK_BIN (proxy)->child, "drag-data-received",
+		child = gtk_bin_get_child (GTK_BIN (proxy));
+		g_signal_connect (child, "drag-data-received",
 				  G_CALLBACK (home_action_drag_data_received_cb), action);
-		gtk_drag_dest_set (GTK_BIN (proxy)->child,
+		gtk_drag_dest_set (child,
 				   GTK_DEST_DEFAULT_ALL,
 				   url_drag_types, G_N_ELEMENTS (url_drag_types),
 				   GDK_ACTION_MOVE | GDK_ACTION_COPY);
-		gtk_drag_dest_add_text_targets (GTK_BIN (proxy)->child);
+		gtk_drag_dest_add_text_targets (child);
 	}
 }
 

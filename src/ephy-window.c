@@ -534,7 +534,8 @@ construct_confirm_close_dialog (EphyWindow *window)
 	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
-	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
+				     GTK_WINDOW (dialog));
 
 	return dialog;
 }
@@ -989,7 +990,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 		g_return_val_if_fail (menubar != NULL , FALSE);
 
-		if (!GTK_WIDGET_VISIBLE (menubar))
+		if (!gtk_widget_get_visible (menubar))
 		{
 			g_signal_connect (menubar, "deactivate",
 					  G_CALLBACK (menubar_deactivate_cb), window);
@@ -2594,6 +2595,9 @@ ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow
 		char *script;
 		GdkColor bg, fg;
 		GtkWidget *widget;
+		GtkAllocation allocation;
+		GtkStyle *style;
+		GtkStateType state;
 		PangoLayout *layout;
 		PangoLayoutLine *line;
 		PangoLayoutRun *run;
@@ -2603,7 +2607,8 @@ ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow
 
 		widget = GTK_WIDGET (view);
 		layout = gtk_widget_create_pango_layout (widget, link_message);
-		pango_layout_set_width (layout, PANGO_SCALE * (widget->allocation.width * 0.9));
+		gtk_widget_get_allocation (widget, &allocation);
+		pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
 		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
 
 		line = pango_layout_get_line_readonly (layout, 0);
@@ -2620,8 +2625,10 @@ ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow
 		}
 			
 		g_utf8_strncpy ((gchar *)text, pango_layout_get_text (layout), item->num_chars);
-		bg = widget->style->bg[GTK_WIDGET_STATE(widget)];
-		fg = widget->style->fg[GTK_WIDGET_STATE(widget)];
+		style = gtk_widget_get_style (widget);
+		state = gtk_widget_get_state (widget);
+		bg = style->bg[state];
+		fg = style->fg[state];
 
 		script = g_strdup_printf(add_node_string,
 					 (int) (bg.red / 65535. * 255),

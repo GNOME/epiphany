@@ -163,6 +163,7 @@ popups_manager_new_window_info (EphyEmbedContainer *container)
 {
   EphyEmbed *embed;
   EphyWebViewChrome chrome;
+  GtkAllocation allocation;
   gboolean is_popup;
   char *features;
 
@@ -172,10 +173,12 @@ popups_manager_new_window_info (EphyEmbedContainer *container)
   embed = ephy_embed_container_get_active_child (container);
   g_return_val_if_fail (embed != NULL, g_strdup (""));
 
+  gtk_widget_get_allocation (GTK_WIDGET (embed), &allocation);
+
   features = g_strdup_printf
              ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
-              GTK_WIDGET (embed)->allocation.width,
-              GTK_WIDGET (embed)->allocation.height,
+              allocation.width,
+              allocation.height,
               (chrome & EPHY_WEB_VIEW_CHROME_MENUBAR) > 0,
               (chrome & EPHY_WEB_VIEW_CHROME_STATUSBAR) > 0,
               (chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) > 0);
@@ -970,7 +973,7 @@ ge_new_window_cb (EphyWebView *view,
   g_return_if_fail (new_view != NULL);
 
   container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (GTK_WIDGET (new_view)));
-  g_return_if_fail (container != NULL || !GTK_WIDGET_TOPLEVEL (container));
+  g_return_if_fail (container != NULL || !gtk_widget_is_toplevel (GTK_WIDGET (container)));
 
   popups_manager_add_window (view, container);
 }

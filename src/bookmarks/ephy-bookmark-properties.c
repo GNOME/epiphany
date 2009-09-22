@@ -489,6 +489,7 @@ ephy_bookmark_properties_constructor (GType type,
 	EphyBookmarkProperties *properties;
 	EphyBookmarkPropertiesPrivate *priv;
 	GtkWidget *widget, *table, *label, *entry, *container;
+	GtkWidget *content_area, *action_area;
 	GtkWindow *window;
 	GtkDialog *dialog;
 	gboolean lockdown;
@@ -526,10 +527,11 @@ ephy_bookmark_properties_constructor (GType type,
 	lockdown = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
 
 	update_window_title (properties);
+	content_area = gtk_dialog_get_content_area (dialog);
 
 	gtk_dialog_set_has_separator (dialog, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
-	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
+	gtk_box_set_spacing (GTK_BOX (content_area), 2);
 
 	table = gtk_table_new (4, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -604,7 +606,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_show (widget);
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 3, 4, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	
-	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0); 
+	gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
 	
 	priv->warning = gtk_toggle_button_new ();
 	gtk_button_set_focus_on_click (GTK_BUTTON (priv->warning), FALSE);
@@ -627,11 +629,13 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_dialog_add_button (dialog,
 			       GTK_STOCK_HELP,
 			       GTK_RESPONSE_HELP);
+
+	action_area = gtk_dialog_get_action_area (dialog);
 	
-	gtk_box_pack_end (GTK_BOX (dialog->action_area), 
+	gtk_box_pack_end (GTK_BOX (action_area),
 			  priv->warning, FALSE, TRUE, 0);
-	gtk_button_box_set_child_secondary
-	  (GTK_BUTTON_BOX (dialog->action_area), priv->warning, TRUE);
+	gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area),
+					    priv->warning, TRUE);
 	
 	if (priv->creating)
 	{

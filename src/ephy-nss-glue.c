@@ -64,7 +64,8 @@ ask_for_nss_password (PK11SlotInfo *slot,
                                             _("The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."));
   entry = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), entry);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
+                     entry);
   gtk_widget_show (entry);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));

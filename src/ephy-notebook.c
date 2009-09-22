@@ -260,6 +260,7 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 	while ((page = gtk_notebook_get_nth_page (nb, page_num)))
 	{
 		GtkWidget *tab;
+		GtkAllocation allocation;
 		gint max_x, max_y;
 		gint x_root, y_root;
 
@@ -272,11 +273,12 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 			continue;
 		}
 
-		gdk_window_get_origin (GDK_WINDOW (tab->window),
+		gdk_window_get_origin (gtk_widget_get_window (tab),
 				       &x_root, &y_root);
 
-		max_x = x_root + tab->allocation.x + tab->allocation.width;
-		max_y = y_root + tab->allocation.y + tab->allocation.height;
+		gtk_widget_get_allocation (tab, &allocation);
+		max_x = x_root + allocation.x + allocation.width;
+		max_y = y_root + allocation.y + allocation.height;
 
 		if (((tab_pos == GTK_POS_TOP)
 		     || (tab_pos == GTK_POS_BOTTOM))
@@ -359,25 +361,29 @@ notebook_drag_data_received_cb (GtkWidget* widget,
 {
 	EphyWindow *window;
 	GtkWidget *notebook;
+	GdkAtom target;
+	const guchar *data;
 
-        if (selection_data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+	target = gtk_selection_data_get_target (selection_data);
+        if (target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
                 return;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL)) return;
 
-	if (selection_data->length <= 0 || selection_data->data == NULL) return;
+	data = gtk_selection_data_get_data (selection_data);
+	if (gtk_selection_data_get_length (selection_data) <= 0 || data == NULL) return;
 
 	window = EPHY_WINDOW (gtk_widget_get_toplevel (widget));
 	notebook = ephy_window_get_notebook (window);
 
-	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
+	if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
 	{
 		char **split;
 
 		/* URL_TYPE has format: url \n title */
-		split = g_strsplit ((const gchar *)selection_data->data, "\n", 2);
+		split = g_strsplit ((const gchar *) data, "\n", 2);
 		if (split != NULL && split[0] != NULL && split[0][0] != '\0')
 		{
 			ephy_link_open (EPHY_LINK (notebook), split[0], embed,
@@ -385,7 +391,7 @@ notebook_drag_data_received_cb (GtkWidget* widget,
 		}
 		g_strfreev (split);
 	}
-	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
+	else if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
 		char **uris;
 		int i;
@@ -538,7 +544,8 @@ sync_label (EphyWebView *view, GParamSpec *pspec, GtkWidget *label)
 	/* Set the tooltip on the label's parent (the tab label hbox),
 	 * so it covers all of the tab label.
 	 */
-	gtk_widget_set_tooltip_text (label->parent, title);
+	gtk_widget_set_tooltip_text (gtk_widget_get_parent (label),
+				     title);
 }
 
 static void
@@ -562,7 +569,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 
 	context = gtk_widget_get_pango_context (hbox);
 	metrics = pango_context_get_metrics (context,
-					     hbox->style->font_desc,
+					     gtk_widget_get_style (hbox)->font_desc,
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);

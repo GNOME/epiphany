@@ -463,7 +463,8 @@ drag_data_get_cb (GtkWidget          *widget,
 
 	g_return_if_fail (location != NULL);
 
-	gtk_selection_data_set (selection_data, selection_data->target, 8, (unsigned char *)location, strlen (location));
+	gtk_selection_data_set (selection_data, gtk_selection_data_get_target (selection_data),
+				8, (unsigned char *)location, strlen (location));
 }
 
 static void
@@ -593,7 +594,7 @@ connect_proxy (GtkAction *action,
 	{
 		GtkLabel *label;
 
-		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+		label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (proxy)));
 
 		gtk_label_set_use_underline (label, FALSE);
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);

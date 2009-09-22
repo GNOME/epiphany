@@ -79,7 +79,7 @@ drag_data_received_cb (GtkWidget *widget,
 	
 	topic = ephy_topic_action_get_topic (EPHY_TOPIC_ACTION (action));
 	
-	data = (char *)selection_data->data;
+	data = (char *) gtk_selection_data_get_data (selection_data);
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	
 	netscape_url = g_strsplit (data, "\n", 2);
@@ -165,7 +165,7 @@ ephy_topic_action_sync_label (GtkAction *action,
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
-		label = GTK_BIN (proxy)->child;
+		label = gtk_bin_get_child (GTK_BIN (proxy));
 	}
 	else
 	{

@@ -166,7 +166,7 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	g_return_if_fail (GTK_IS_WINDOW (window));
 
 	/* Setting the default size doesn't work when the window is already showing. */
-	g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
+	g_return_if_fail (!gtk_widget_get_visible (window));
 
 	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
 	size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION);
@@ -219,7 +219,7 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 	gboolean maximize;
 	GdkWindowState state;
 
-	state = gdk_window_get_state (GTK_WIDGET (window)->window);
+	state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (window)));
 	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
 
 	gtk_window_get_size (GTK_WINDOW(window),
@@ -242,7 +242,7 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 	gboolean maximize;
 	GdkWindowState state;
 
-	state = gdk_window_get_state (GTK_WIDGET (window)->window);
+	state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (window)));
 	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
 
 	/* Don't save the position if maximized */
@@ -278,7 +278,7 @@ window_configure_event_cb (GtkWidget *widget,
 {
 	GdkWindowState state;
 
-	state = gdk_window_get_state (widget->window);
+	state = gdk_window_get_state (gtk_widget_get_window (widget));
 
 	if (!(state & GDK_WINDOW_STATE_FULLSCREEN))
 	{

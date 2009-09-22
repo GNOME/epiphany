@@ -102,7 +102,7 @@ ephy_fullscreen_popup_update_spinner (EphyFullscreenPopup *popup)
 {
 	EphyFullscreenPopupPrivate *priv = popup->priv;
 
-	if (priv->spinning && GTK_WIDGET_VISIBLE (popup))
+	if (priv->spinning && gtk_widget_get_visible (GTK_WIDGET (popup)))
 	{
 		ephy_spinner_start (priv->spinner);
 	}
@@ -116,16 +116,19 @@ static void
 ephy_fullscreen_popup_update_position (EphyFullscreenPopup *popup)
 {
 	GtkWidget *widget = GTK_WIDGET (popup);
+	GtkRequisition requisition;
 	GdkScreen *screen;
 	GdkRectangle screen_rect;
 	int popup_width;
 
-	popup_width = widget->requisition.width;
+	gtk_widget_size_request (widget, &requisition);
+	popup_width = requisition.width;
 
 	screen = gtk_widget_get_screen (widget);
 	gdk_screen_get_monitor_geometry
 		(screen,
-		 gdk_screen_get_monitor_at_window (screen, widget->window),
+		 gdk_screen_get_monitor_at_window (screen,
+						   gtk_widget_get_window (widget)),
 		 &screen_rect);
 
 	if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)

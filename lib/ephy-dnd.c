@@ -81,7 +81,7 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
         GString *result = NULL;
 	GdkAtom target;
 
-	target = selection_data->target;
+	target = gtk_selection_data_get_target (selection_data);
 
 	if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE) ||
 	    target == gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE))
@@ -106,7 +106,7 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
 	}
 
         gtk_selection_data_set (selection_data,
-                                selection_data->target,
+                                target,
                                 8, (const guchar *) result->str, result->len);
 
 	g_string_free (result, TRUE);

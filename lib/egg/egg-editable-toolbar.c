@@ -100,7 +100,7 @@ get_dock_position (EggEditableToolbar *etoolbar,
 static int
 get_toolbar_position (EggEditableToolbar *etoolbar, GtkWidget *toolbar)
 {
-  return get_dock_position (etoolbar, toolbar->parent);
+  return get_dock_position (etoolbar, gtk_widget_get_parent (toolbar));
 }
 
 static int
@@ -176,15 +176,17 @@ drag_data_delete_cb (GtkWidget          *widget,
 		     GdkDragContext     *context,
 		     EggEditableToolbar *etoolbar)
 {
+  GtkWidget *parent;
   int pos, toolbar_pos;
 
   widget = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
   g_return_if_fail (widget != NULL);
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (etoolbar));
 
-  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (widget->parent),
+  parent = gtk_widget_get_parent (widget);
+  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (parent),
 				    GTK_TOOL_ITEM (widget));
-  toolbar_pos = get_toolbar_position (etoolbar, widget->parent);
+  toolbar_pos = get_toolbar_position (etoolbar, parent);
 
   egg_toolbars_model_remove_item (etoolbar->priv->model,
 				  toolbar_pos, pos);
@@ -260,6 +262,7 @@ drag_data_get_cb (GtkWidget          *widget,
 		  EggEditableToolbar *etoolbar)
 {
   EggToolbarsModel *model;
+  GdkAtom target;
   const char *name;
   char *data;
 
@@ -272,11 +275,12 @@ drag_data_get_cb (GtkWidget          *widget,
       name = g_object_get_data (G_OBJECT (gtk_widget_get_parent (widget)), EGG_ITEM_NAME);
       g_return_if_fail (name != NULL);
     }
-  
-  data = egg_toolbars_model_get_data (model, selection_data->target, name);
+
+  target = gtk_selection_data_get_target (selection_data);
+  data = egg_toolbars_model_get_data (model, target, name);
   if (data != NULL)
     {
-      gtk_selection_data_set (selection_data, selection_data->target, 8, (unsigned char *)data, strlen (data));
+      gtk_selection_data_set (selection_data, target, 8, (unsigned char *)data, strlen (data));
       g_free (data);
     }
 }
@@ -308,10 +312,12 @@ remove_item_cb (GtkAction          *action,
                 EggEditableToolbar *etoolbar)
 {
   GtkWidget *toolitem = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar), GTK_TYPE_TOOL_ITEM);
+  GtkWidget *parent;
   int pos, toolbar_pos;
-      
-  toolbar_pos = get_toolbar_position (etoolbar, toolitem->parent);
-  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolitem->parent), 
+
+  parent = gtk_widget_get_parent (toolitem);
+  toolbar_pos = get_toolbar_position (etoolbar, parent);
+  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (parent),
 				    GTK_TOOL_ITEM (toolitem));
 
   egg_toolbars_model_remove_item (etoolbar->priv->model,
@@ -419,8 +425,10 @@ configure_item_cursor (GtkToolItem *item,
 {
   EggEditableToolbarPrivate *priv = etoolbar->priv;
   GtkWidget *widget = GTK_WIDGET (item);
+  GdkWindow *window;
 
-  if (widget->window != NULL)
+  window = gtk_widget_get_window (widget);
+  if (window != NULL)
     {
       if (priv->edit_mode > 0)
         {
@@ -432,7 +440,7 @@ configure_item_cursor (GtkToolItem *item,
 	  
           cursor = gdk_cursor_new_for_display (gdk_screen_get_display (screen),
 					       GDK_HAND2);
-          gdk_window_set_cursor (widget->window, cursor);
+          gdk_window_set_cursor (window, cursor);
           gdk_cursor_unref (cursor);
 
           gtk_drag_source_set (widget, GDK_BUTTON1_MASK, dest_drag_types,
@@ -498,7 +506,7 @@ configure_item_cursor (GtkToolItem *item,
         }
       else
         {
-          gdk_window_set_cursor (GTK_WIDGET(item)->window, NULL);
+          gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET(item)), NULL);
         }
     }
 }
@@ -642,15 +650,17 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
    *      actually add a new item to the toolbar.
    */
 
-  GdkAtom type = selection_data->type;
-  const char *data = (char *)selection_data->data;
+  GdkAtom type = gtk_selection_data_get_data_type (selection_data);
+  const char *data = (char *) gtk_selection_data_get_data (selection_data);
   
   int ipos = -1;
+  gint selection_data_length;
   char *name = NULL;
   gboolean used = FALSE;
-  
+
+  selection_data_length = gtk_selection_data_get_length (selection_data);
   /* Find out where the drop is occuring, and the name of what is being dropped. */
-  if (selection_data->length >= 0)
+  if (selection_data_length >= 0)
     {
       ipos = gtk_toolbar_get_drop_index (toolbar, x, y);
       name = egg_toolbars_model_get_name (etoolbar->priv->model, type, data, FALSE);
@@ -679,7 +689,7 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
       etoolbar->priv->dnd_toolitem = NULL;
   
       /* If we don't have a name to use yet, try to create one. */
-      if (name == NULL && selection_data->length >= 0)
+      if (name == NULL && selection_data_length >= 0)
         {
           name = egg_toolbars_model_get_name (etoolbar->priv->model, type, data, TRUE);
         }
@@ -872,7 +882,7 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
   
   priv->visibility_id = gtk_ui_manager_new_merge_id (priv->manager);
   
-  showing = GTK_WIDGET_VISIBLE (etoolbar);
+  showing = gtk_widget_get_visible (GTK_WIDGET (etoolbar));
   
   n_toolbars = egg_toolbars_model_n_toolbars (priv->model);
   for (i = 0; i < n_toolbars; i++)
@@ -954,8 +964,8 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
       gtk_action_set_visible (GTK_ACTION (action), (egg_toolbars_model_get_flags (priv->model, i) 
 						    & EGG_TB_MODEL_NOT_REMOVABLE) == 0);
       gtk_action_set_sensitive (GTK_ACTION (action), showing);
-      gtk_toggle_action_set_active (action, GTK_WIDGET_VISIBLE
-				    (get_dock_nth (etoolbar, i)));
+      gtk_toggle_action_set_active (action,
+                                    gtk_widget_get_visible (get_dock_nth (etoolbar, i)));
       
       for (list = priv->visibility_paths; list != NULL; list = g_list_next (list))
         {
@@ -1078,7 +1088,7 @@ unparent_fixed (EggEditableToolbar *etoolbar)
   toolbar = etoolbar->priv->fixed_toolbar;
   dock = get_dock_nth (etoolbar, 0);
 
-  if (dock && toolbar->parent != NULL)
+  if (dock && (gtk_widget_get_parent (toolbar) != NULL))
     {
       gtk_container_remove (GTK_CONTAINER (dock), toolbar);
     }
@@ -1093,7 +1103,7 @@ update_fixed (EggEditableToolbar *etoolbar)
   toolbar = etoolbar->priv->fixed_toolbar;
   dock = get_dock_nth (etoolbar, 0);
 
-  if (dock && toolbar && toolbar->parent == NULL)
+  if (dock && toolbar && (gtk_widget_get_parent (toolbar) == NULL))
     {
       gtk_box_pack_end (GTK_BOX (dock), toolbar, FALSE, TRUE, 0);
 
@@ -1737,14 +1747,14 @@ fake_expose_widget (GtkWidget *widget,
   event.type = GDK_EXPOSE;
   event.window = pixmap;
   event.send_event = FALSE;
-  event.area = widget->allocation;
+  gtk_widget_get_allocation (widget, &event.area);
   event.region = NULL;
   event.count = 0;
 
-  tmp_window = widget->window;
-  widget->window = pixmap;
+  tmp_window = gtk_widget_get_window (widget);
+  gtk_widget_set_window (widget, pixmap);
   gtk_widget_send_expose (widget, (GdkEvent *) &event);
-  widget->window = tmp_window;
+  gtk_widget_set_window (widget, tmp_window);
 }
 
 /* We should probably experiment some more with this.
@@ -1759,6 +1769,7 @@ new_pixbuf_from_widget (GtkWidget *widget)
   GdkPixbuf *pixbuf;
   GtkRequisition requisition;
   GtkAllocation allocation;
+  GtkStyle *style;
   GdkPixmap *pixmap;
   GdkVisual *visual;
   gint icon_width;
@@ -1808,8 +1819,9 @@ new_pixbuf_from_widget (GtkWidget *widget)
 
   /* Draw the window */
   gtk_widget_ensure_style (window);
-  g_assert (window->style);
-  g_assert (window->style->font_desc);
+  style = gtk_widget_get_style (window);
+  g_assert (style);
+  g_assert (style->font_desc);
   
   fake_expose_widget (window, pixmap);
   fake_expose_widget (widget, pixmap);

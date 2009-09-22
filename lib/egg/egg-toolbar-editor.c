@@ -322,7 +322,8 @@ drag_data_get_cb (GtkWidget          *widget,
   target = g_object_get_data (G_OBJECT (widget), "egg-item-name");
   g_return_if_fail (target != NULL);
   
-  gtk_selection_data_set (selection_data, selection_data->target, 8,
+  gtk_selection_data_set (selection_data,
+                          gtk_selection_data_get_target (selection_data), 8,
 			  (const guchar *) target, strlen (target));
 }
 
@@ -362,7 +363,7 @@ set_drag_cursor (GtkWidget *widget)
   
   cursor = gdk_cursor_new_for_display (gdk_screen_get_display (screen),
 				       GDK_HAND2);
-  gdk_window_set_cursor (widget->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
   gdk_cursor_unref (cursor);
 }
 
@@ -631,11 +632,11 @@ update_editor_sheet (EggToolbarEditor *editor)
   g_ptr_array_free (items, TRUE);
   
   /* Delete old table. */
-  viewport = GTK_BIN (editor->priv->scrolled_window)->child;
+  viewport = gtk_bin_get_child (GTK_BIN (editor->priv->scrolled_window));
   if (viewport)
     {
       gtk_container_remove (GTK_CONTAINER (viewport),
-                            GTK_BIN (viewport)->child);
+                            gtk_bin_get_child (GTK_BIN (viewport)));
     }
   
   /* Add table to window. */

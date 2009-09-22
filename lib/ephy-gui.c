@@ -69,16 +69,18 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 	GtkTreeView *tree_view = GTK_TREE_VIEW (user_data);
 	GtkWidget *widget = GTK_WIDGET (user_data);
 	GtkRequisition req;
+	GtkAllocation allocation;
 	GdkRectangle visible;
 
 	gtk_widget_size_request (GTK_WIDGET (menu), &req);
-	gdk_window_get_origin (widget->window, x, y);
+	gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
+	gtk_widget_get_allocation (widget, &allocation);
 
-	*x += (widget->allocation.width - req.width) / 2;
+	*x += (allocation.width - req.width) / 2;
 
 	/* Add on height for the treeview title */
 	gtk_tree_view_get_visible_rect (tree_view, &visible);
-	*y += widget->allocation.height - visible.height;
+	*y += allocation.height - visible.height;
 
 	selection = gtk_tree_view_get_selection (tree_view);
 	selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -121,7 +123,9 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 	GtkWidget *container;
 	GtkRequisition req;
 	GtkRequisition menu_req;
+	GtkAllocation allocation;
 	GdkRectangle monitor;
+	GdkWindow *window;
 	int monitor_num;
 	GdkScreen *screen;
   
@@ -134,29 +138,31 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
 
 	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-	monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+	window = gtk_widget_get_window (widget);
+	monitor_num = gdk_screen_get_monitor_at_window (screen, window);
 	if (monitor_num < 0)
 		monitor_num = 0;
 	gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-	gdk_window_get_origin (widget->window, x, y);
-	if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_get_allocation (widget, &allocation);
+	gdk_window_get_origin (window, x, y);
+	if (!gtk_widget_get_has_window (widget))
 	{
-		*x += widget->allocation.x;
-		*y += widget->allocation.y;
+		*x += allocation.x;
+		*y += allocation.y;
 	}
 
 	if (gtk_widget_get_direction (container) == GTK_TEXT_DIR_LTR) 
-		*x += widget->allocation.width - req.width;
+		*x += allocation.width - req.width;
 	else 
 		*x += req.width - menu_req.width;
 
-	if ((*y + widget->allocation.height + menu_req.height) <= monitor.y + monitor.height)
-		*y += widget->allocation.height;
+	if ((*y + allocation.height + menu_req.height) <= monitor.y + monitor.height)
+		*y += allocation.height;
 	else if ((*y - menu_req.height) >= monitor.y)
 		*y -= menu_req.height;
-	else if (monitor.y + monitor.height - (*y + widget->allocation.height) > *y)
-		*y += widget->allocation.height;
+	else if (monitor.y + monitor.height - (*y + allocation.height) > *y)
+		*y += allocation.height;
 	else
 		*y -= menu_req.height;
 
@@ -186,6 +192,8 @@ ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
 	GtkToolbar *toolbar;
 	GtkRequisition req;
 	GtkRequisition menu_req;
+	GtkAllocation allocation;
+	GdkWindow *window;
 	GdkRectangle monitor;
 	int monitor_num;
 	GdkScreen *screen;
@@ -199,44 +207,46 @@ ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
 	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
 
 	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-	monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+	window = gtk_widget_get_window (widget);
+	monitor_num = gdk_screen_get_monitor_at_window (screen, window);
 	if (monitor_num < 0)
 		monitor_num = 0;
 	gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-	gdk_window_get_origin (widget->window, x, y);
-	if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_get_allocation (widget, &allocation);
+	gdk_window_get_origin (window, x, y);
+	if (!gtk_widget_get_has_window (widget))
 	{
-		*x += widget->allocation.x;
-		*y += widget->allocation.y;
+		*x += allocation.x;
+		*y += allocation.y;
 	}
 
-	if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+	if (gtk_orientable_get_orientation (GTK_ORIENTABLE (toolbar)) == GTK_ORIENTATION_HORIZONTAL)
 	{
 		if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
-			*x += widget->allocation.width - req.width;
+			*x += allocation.width - req.width;
 		else 
 			*x += req.width - menu_req.width;
 
-		if ((*y + widget->allocation.height + menu_req.height) <= monitor.y + monitor.height)
-			*y += widget->allocation.height;
+		if ((*y + allocation.height + menu_req.height) <= monitor.y + monitor.height)
+			*y += allocation.height;
 		else if ((*y - menu_req.height) >= monitor.y)
 			*y -= menu_req.height;
-		else if (monitor.y + monitor.height - (*y + widget->allocation.height) > *y)
-			*y += widget->allocation.height;
+		else if (monitor.y + monitor.height - (*y + allocation.height) > *y)
+			*y += allocation.height;
 		else
 			*y -= menu_req.height;
 	}
 	else 
 	{
 		if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
-			*x += widget->allocation.width;
+			*x += allocation.width;
 		else 
 			*x -= menu_req.width;
 
 		if (*y + menu_req.height > monitor.y + monitor.height &&
-		    *y + widget->allocation.height - monitor.y > monitor.y + monitor.height - *y)
-			*y += widget->allocation.height - menu_req.height;
+		    *y + allocation.height - monitor.y > monitor.y + monitor.height - *y)
+			*y += allocation.height - menu_req.height;
 	}
 
 	*push_in = FALSE;
@@ -247,7 +257,7 @@ ephy_gui_ensure_window_group (GtkWindow *window)
 {
 	GtkWindowGroup *group;
 
-	group = window->group;
+	group = gtk_window_get_group (window);
 	if (group == NULL)
 	{
 		group = gtk_window_group_new ();
@@ -498,7 +508,7 @@ ephy_gui_window_update_user_time (GtkWidget *window,
 	if (user_time != 0)
 	{
 		gtk_widget_realize (window);
-		gdk_x11_window_set_user_time (window->window,
+		gdk_x11_window_set_user_time (gtk_widget_get_window (window),
 					      user_time);
 	}
 
@@ -512,7 +522,7 @@ ephy_gui_message_dialog_get_content_box (GtkWidget *dialog)
 	GList *children;
 
 	/* Get the hbox which is the first child of the main vbox */
-	children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox));
+	children = gtk_container_get_children (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))));
 	g_return_val_if_fail (children != NULL, NULL);
 
 	container = GTK_WIDGET (children->data);

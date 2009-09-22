@@ -88,7 +88,7 @@ new_history_menu_item (const char *origtext,
 
 	item = gtk_image_menu_item_new_with_label (origtext);
 
-	label = GTK_LABEL (GTK_BIN (item)->child);
+	label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
 	gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 	gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
 

@@ -67,9 +67,8 @@ connect_proxy (GtkAction *action,
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		g_signal_connect (GTK_BIN (proxy)->child, "button-release-event",
-					 G_CALLBACK (button_clicked_cb), action
-					);
+		g_signal_connect (gtk_bin_get_child (GTK_BIN (proxy)), "button-release-event",
+				  G_CALLBACK (button_clicked_cb), action);
 	}
 }
 

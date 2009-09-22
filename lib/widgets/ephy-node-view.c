@@ -187,7 +187,7 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 	
 	gdk_window_get_pointer (window, NULL, &y, NULL);
 	
-	y += vadjustment->value;
+	y += gtk_adjustment_get_value (vadjustment);
 
 	gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 	
@@ -201,8 +201,8 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 		}
 	}
 
-	value = CLAMP (vadjustment->value + offset, 0.0,
-		       vadjustment->upper - vadjustment->page_size);
+	value = CLAMP (gtk_adjustment_get_value (vadjustment) + offset, 0.0,
+		       gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
 	gtk_adjustment_set_value (vadjustment, value);
 }
 
@@ -371,7 +371,8 @@ drag_data_received_cb (GtkWidget *widget,
 
 	/* x and y here are valid only on drop ! */
 
-	if (selection_data->length <= 0 || selection_data->data == NULL)
+	if ((gtk_selection_data_get_length (selection_data) <= 0) ||
+	    (gtk_selection_data_get_data (selection_data) == NULL))
 	{
 		return;
 	}	
@@ -474,23 +475,25 @@ filter_changed_cb (EphyNodeFilter *filter,
 		   EphyNodeView *view)
 {
 	GtkWidget *window;
+	GdkWindow *gdk_window;
 
 	g_return_if_fail (EPHY_IS_NODE_VIEW (view));
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (view));
+	gdk_window = gtk_widget_get_window (window);
 
-	if (window != NULL && window->window != NULL)
+	if (window != NULL && gdk_window != NULL)
 	{
 		/* nice busy cursor */
 		GdkCursor *cursor;
 
 		cursor = gdk_cursor_new (GDK_WATCH);
-		gdk_window_set_cursor (window->window, cursor);
+		gdk_window_set_cursor (gdk_window, cursor);
 		gdk_cursor_unref (cursor);
 
 		gdk_flush ();
 
-		gdk_window_set_cursor (window->window, NULL);
+		gdk_window_set_cursor (gdk_window, NULL);
 
 		/* no flush: this will cause the cursor to be reset
 		 * only when the UI is free again */

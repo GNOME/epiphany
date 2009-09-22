@@ -402,7 +402,8 @@ delete_topic_dialog_construct (GtkWindow *parent,
 	gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete Topic"), GTK_RESPONSE_ACCEPT);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-	gtk_window_group_add_window (GTK_WINDOW (parent)->group, GTK_WINDOW (dialog));
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (parent)),
+				     GTK_WINDOW (dialog));
 
 	return dialog;
 }
@@ -685,7 +686,7 @@ import_bookmarks (EphyBookmarksEditor *editor,
 			   "unsupported type."),
 			 basename);
 
-		gtk_window_group_add_window (GTK_WINDOW (editor)->group,
+		gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (editor)),
 					     GTK_WINDOW (dialog));
 
 		gtk_dialog_run (GTK_DIALOG (dialog));
@@ -922,7 +923,8 @@ cmd_bookmarks_export (GtkAction *action,
 	
 	gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), hbox);
 
-	gtk_window_group_add_window (GTK_WINDOW (editor)->group, GTK_WINDOW (dialog));
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (editor)),
+				     GTK_WINDOW (dialog));
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (export_dialog_response_cb), editor);
@@ -934,6 +936,7 @@ cmd_bookmarks_import (GtkAction *action,
 		      EphyBookmarksEditor *editor)
 {
 	GtkWidget *dialog;
+	GtkWidget *content_area;
 	GtkWidget *label;
 	GtkWidget *vbox;
 	GtkWidget *combo;
@@ -952,15 +955,17 @@ cmd_bookmarks_import (GtkAction *action,
 					      _("I_mport"),
 					      GTK_RESPONSE_OK,
 					      NULL);
+	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
+	gtk_box_set_spacing (GTK_BOX (content_area), 2);
 
 	vbox = gtk_vbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
+	gtk_box_pack_start (GTK_BOX (content_area), vbox,
 			    TRUE, TRUE, 0);
 
 	label = gtk_label_new (_("Import bookmarks from:"));

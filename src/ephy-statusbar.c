@@ -265,7 +265,7 @@ sync_visibility (GtkWidget *widget,
 		 GParamSpec *pspec,
 		 GtkWidget *separator)
 {
-	if (GTK_WIDGET_VISIBLE (widget))
+	if (gtk_widget_get_visible (widget))
 	{
 		gtk_widget_show (separator);
 	}

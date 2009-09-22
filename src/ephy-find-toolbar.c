@@ -92,7 +92,7 @@ scroll_lines (WebKitWebView *web_view,
         scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
         vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
 
-        value = vadj->value + (num_lines * vadj->step_increment);
+        value = gtk_adjustment_get_value (vadj) + (num_lines * gtk_adjustment_get_step_increment (vadj));
         gtk_adjustment_set_value (vadj, value);
 }
 
@@ -107,7 +107,7 @@ scroll_pages (WebKitWebView *web_view,
         scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
         vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
 
-        value = vadj->value + (num_pages * vadj->page_increment);
+        value = gtk_adjustment_get_value (vadj) + (num_pages * gtk_adjustment_get_page_increment (vadj));
         gtk_adjustment_set_value (vadj, value);
 }
 
@@ -195,7 +195,7 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	if (ephy_window_get_is_print_preview (priv->window)) return FALSE;
 
 	/* check for / and ' which open the find toolbar in text resp. link mode */
-	if (GTK_WIDGET_VISIBLE (widget) == FALSE)
+	if (gtk_widget_get_visible (widget) == FALSE)
 	{
 		if (event->keyval == GDK_slash)
 		{
@@ -454,7 +454,7 @@ set_focus_cb (EphyWindow *window,
 
 	while (widget != NULL && widget != wtoolbar)
 	{
-		widget = widget->parent;
+		widget = gtk_widget_get_parent (widget);
 	}
 
 	/* if widget == toolbar, the new focus widget is in the toolbar */
@@ -481,7 +481,8 @@ ephy_find_toolbar_parent_set (GtkWidget *widget,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *toplevel;
 
-	if (widget->parent != NULL && priv->set_focus_handler == 0)
+	if (gtk_widget_get_parent (widget) != NULL &&
+	    priv->set_focus_handler == 0)
 	{
 		toplevel = gtk_widget_get_toplevel (widget);
 		priv->set_focus_handler =
@@ -795,7 +796,7 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	FindAgainCBStruct *data;
 
-	if (!GTK_WIDGET_VISIBLE (widget)) {
+	if (!gtk_widget_get_visible (widget)) {
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
@@ -824,7 +825,7 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	FindAgainCBStruct *data;
 
-	if (!GTK_WIDGET_VISIBLE (widget)) {
+	if (!gtk_widget_get_visible (widget)) {
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
@@ -884,7 +885,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 {
-	if (GTK_WIDGET_VISIBLE (GTK_WIDGET (toolbar)))
+	if (gtk_widget_get_visible (GTK_WIDGET (toolbar)))
 	{
 		g_signal_emit (toolbar, signals[CLOSE], 0);
 	}

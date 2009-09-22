@@ -460,7 +460,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 			      _("<small><i><b>Note:</b> You cannot undo this action. "
 				"The data you are choosing to clear "
 				"will be deleted forever.</i></small>"));
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+	gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
 			    label, FALSE, FALSE, 0);
 	/* Need to do this or the label will wrap too early */
 	gtk_widget_set_size_request (label, 330, -1);
@@ -642,7 +642,7 @@ show_cookies_properties (PdmDialog *dialog,
 	GtkWidget *table;
 	GtkWidget *label;
 	GtkWidget *parent;
-	GtkWidget *dialog_vbox;
+	GtkWidget *content_area;
 	char *str;
 
 	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
@@ -658,7 +658,8 @@ show_cookies_properties (PdmDialog *dialog,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 14); /* 24 = 2 * 5 + 14 */
+	content_area = gtk_dialog_get_content_area (GTK_DIALOG (gdialog));
+	gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 24 = 2 * 5 + 14 */
 
 	table = gtk_table_new (2, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -740,8 +741,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
 
-	dialog_vbox = GTK_DIALOG(gdialog)->vbox;
-	gtk_box_pack_start (GTK_BOX(dialog_vbox),
+	gtk_box_pack_start (GTK_BOX (content_area),
 			    table,
 			    FALSE, FALSE, 0);
 

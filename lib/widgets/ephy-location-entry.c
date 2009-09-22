@@ -128,7 +128,7 @@ ephy_location_entry_style_set (GtkWidget *widget,
 		GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_set (widget, previous_style);
 	}
 
-	title_fg_colour = widget->style->text[GTK_STATE_INSENSITIVE];
+	title_fg_colour = gtk_widget_get_style (widget)->text[GTK_STATE_INSENSITIVE];
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 	g_object_get (settings, "gtk-theme-name", &theme, NULL);
@@ -458,7 +458,7 @@ entry_key_press_after_cb (GtkEntry *entry,
 	    (state == GDK_CONTROL_MASK ||
 	     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
 	{
-		gtk_im_context_reset (entry->im_context);
+		//gtk_im_context_reset (entry->im_context);
 
 		priv->needs_reset = TRUE;
 		g_signal_emit_by_name (entry, "activate");
@@ -519,7 +519,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 			     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
 	ephy_location_entry_set_location (entry, item, NULL);
-	gtk_im_context_reset (GTK_ENTRY (entry->priv->entry)->im_context);
+	//gtk_im_context_reset (GTK_ENTRY (entry->priv->entry)->im_context);
 	g_signal_emit_by_name (priv->entry, "activate");
 
 	g_free (item);
@@ -647,7 +647,7 @@ entry_populate_popup_cb (GtkEntry *entry,
 	 * menu, and insert this menu item before it.
 	 * It's a bit of a hack, but there seems to be no better way to do it :/
 	 */
-	children = GTK_MENU_SHELL (menu)->children;
+	children = gtk_container_get_children (GTK_CONTAINER (menu));
 	for (item = children; item != NULL && sep < 2; item = item->next, pos++)
 	{
 		if (GTK_IS_SEPARATOR_MENU_ITEM (item->data)) sep++;
@@ -703,6 +703,7 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	char *title = NULL, *address = NULL;
 	GString *text;
+	GtkStyle *style;
 	GdkDrawable *drawable;
 	PangoContext *context;
 	PangoLayout  *layout;
@@ -743,8 +744,9 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	layout = pango_layout_new (context);
 
 	context = gtk_widget_get_pango_context (widget);
+	style = gtk_widget_get_style (widget);
 	metrics = pango_context_get_metrics (context,
-					     widget->style->font_desc,
+					     style->font_desc,
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
@@ -769,13 +771,13 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 		pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
 	}
 
-	drawable = gdk_pixmap_new (widget->window,
+	drawable = gdk_pixmap_new (gtk_widget_get_window (widget),
 				   pixmap_width  + 2,
 				   pixmap_height + 2,
 				   -1);
 
 	gdk_draw_rectangle (drawable,
-			    widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+			    style->base_gc [gtk_widget_get_state (widget)],
 			    TRUE,
 			    0, 0,
 			    pixmap_width + 1,
@@ -785,7 +787,7 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	if (priv->favicon != NULL)
 	{
 		gdk_draw_pixbuf (drawable,
-				 widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				 style->fg_gc[gtk_widget_get_state (widget)],
 				 priv->favicon,
 				 0, 0, 
 				 1 + DRAG_ICON_LAYOUT_BORDER + DRAG_ICON_ICON_SPACING,
@@ -795,13 +797,13 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	}
 
 	gdk_draw_layout (drawable,
-			 widget->style->text_gc [GTK_WIDGET_STATE (widget)],
+			 style->text_gc [gtk_widget_get_state (widget)],
 			 1 + DRAG_ICON_LAYOUT_BORDER + offset_x,
 			 1 + DRAG_ICON_LAYOUT_BORDER,
 			 layout);
 
 	gdk_draw_rectangle (drawable,
-			    widget->style->black_gc,
+			    style->black_gc,
 			    FALSE,
 			    0, 0,
 			    pixmap_width + 1,
