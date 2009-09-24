@@ -1608,6 +1608,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	gdouble progress;
 	const char *uri;
 	gboolean loading;
+	gboolean switching_tab = pspec == NULL;
 
 	if (window->priv->closing) return;
 
@@ -1623,13 +1624,19 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	   for about:blank until the load is finished, so assume NULL
 	   here means we are loading about:blank. This might not be
 	   rigt :) */
-	loading = ephy_web_view_is_loading (view);
+	/* All the weird checks for progress == 1.0 and !switching_tab
+	 * are because we receive first the LOAD_FINISHED status than
+	 * the 100% progress report, so for progress == 1.0 there's no
+	 * sane way of knowing whether we are still loading or
+	 * not. See https://bugs.webkit.org/show_bug.cgi?id=28851 */
 	uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
-	if (loading && (!uri || strcmp (uri, "about:blank") == 0))
+	if (!switching_tab && (!uri || strcmp (uri, "about:blank") == 0))
 		return;
 
 	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view));
-	if (progress == 1.0 && loading)
+	loading = ephy_web_view_is_loading (view);
+
+	if (progress == 1.0 && !switching_tab)
 	{
 		window->priv->clear_progress_timeout_id =
 			g_timeout_add (500,
@@ -1640,7 +1647,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	/* Do not set progress in the entry if the load is already
 	   finished */
 	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry),
-					 loading ? progress : 0.0);
+					 loading || (progress == 1.0 && !switching_tab) ? progress : 0.0);
 }
 
 static void
