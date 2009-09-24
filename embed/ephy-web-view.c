@@ -1676,9 +1676,10 @@ ephy_web_view_can_go_up (EphyWebView *view)
  * ephy_web_view_is_loading:
  * @view: an #EphyWebView
  *
- * Returns whether the web page in @view has finished loading. A web page is
- * only finished loading after all images, styles, and other dependencies have
- * been downloaded and rendered.
+ * Returns whether the web page in @view has finished loading. A web
+ * page is only finished loading after all images, styles, and other
+ * dependencies have been downloaded and rendered, or when the load
+ * has failed for some reason.
  *
  * Return value: %TRUE if the page is still loading, %FALSE if complete
  **/
