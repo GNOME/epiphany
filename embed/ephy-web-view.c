@@ -1689,20 +1689,20 @@ ephy_web_view_is_loading (EphyWebView *view)
 
   status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
 
-  /* Workaround for webkit bug: https://bugs.webkit.org/show_bug.cgi?id=26409
-   * FIRST_VISUALLY_NON_EMPTY_LAYOUT might be emitted
-   * after LOAD_FINISHED. We just ignore any status
-   * other than WEBKIT_LOAD_PROVISIONAL once LOAD_FINISHED
-   * has been set, as WEBKIT_LOAD_PROVISIONAL probably means
-   * that webview has been reloaded.
+  /* FIRST_VISUALLY_NON_EMPTY_LAYOUT might be emitted after
+   * LOAD_FINISHED or LOAD_FAILED. We just ignore any status other
+   * than WEBKIT_LOAD_PROVISIONAL once LOAD_FINISHED or LOAD_FAILED
+   * have been set, as WEBKIT_LOAD_PROVISIONAL probably means that
+   * webview has started a new load.
    */
-  if (view->priv->load_status == WEBKIT_LOAD_FINISHED &&
+  if ((view->priv->load_status == WEBKIT_LOAD_FINISHED ||
+       view->priv->load_status == WEBKIT_LOAD_FAILED) &&
       status != WEBKIT_LOAD_PROVISIONAL)
     return FALSE;
 
   view->priv->load_status = status;
 
-  return status != WEBKIT_LOAD_FINISHED;
+  return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
 }
 
 const char *
