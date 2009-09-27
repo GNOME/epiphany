@@ -315,7 +315,7 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/src/ephy-window.h \
 	$(NULL)
 
-Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES)
+Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES) epiphany
 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
 	$(G_IR_SCANNER) -v \
 		--namespace Epiphany \
