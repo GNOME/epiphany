@@ -26,8 +26,6 @@ EXTRA_DIST = 			\
 
 DISTCLEANFILES = 		\
 	gnome-doc-utils.make	\
-	doltcompile		\
-	doltlibtool		\
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
