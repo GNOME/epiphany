@@ -26,6 +26,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-langs.h"
 
 typedef struct
 {
@@ -194,6 +195,57 @@ webkit_pref_callback_font_family (GConfClient *client,
   }
 }
 
+/* Based on Christian Persch's code from gecko backend of epiphany
+   (old transform_accept_languages_list() function) */
+static void
+webkit_pref_callback_accept_languages (GConfClient *client,
+                                       guint cnxn_id,
+                                       GConfEntry *entry,
+                                       gpointer data)
+{
+  SoupSession *session;
+  GConfValue *gcvalue;
+  GArray *array;
+  GSList *languages, *l;
+  char **langs;
+  char *langs_str;
+  char *webkit_pref;
+
+  webkit_pref = data;
+  gcvalue = gconf_entry_get_value (entry);
+  if (gcvalue == NULL ||
+      gcvalue->type != GCONF_VALUE_LIST ||
+      gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING)
+    return;
+
+  languages = gconf_value_get_list (gcvalue);
+
+  array = g_array_new (TRUE, FALSE, sizeof (char *));
+
+  for (l = languages; l != NULL; l = l->next) {
+      const char *lang = gconf_value_get_string ((GConfValue *) l->data);
+
+      if ((lang != NULL) && !g_strcmp0 (lang, "system")) {
+          ephy_langs_append_languages (array);
+        } else if (lang != NULL && lang[0] != '\0') {
+          char *str = g_ascii_strdown (lang, -1);
+          g_array_append_val (array, str);
+        }
+    }
+
+  ephy_langs_sanitise (array);
+
+  langs = (char **) g_array_free (array, FALSE);
+  langs_str = g_strjoinv (", ", langs);
+
+  /* Update Soup session */
+  session = webkit_get_default_session ();
+  g_object_set (G_OBJECT (session), webkit_pref, langs_str, NULL);
+
+  g_strfreev (langs);
+  g_free (langs_str);
+}
+
 static const PrefData webkit_pref_entries[] =
   {
     { CONF_RENDERING_FONT_MIN_SIZE,
@@ -231,7 +283,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_boolean },
     { CONF_SECURITY_ALLOW_POPUPS,
       "javascript-can-open-windows-automatically",
-      webkit_pref_callback_boolean }
+      webkit_pref_callback_boolean },
+    { CONF_RENDERING_LANGUAGE,
+      "accept-language",
+      webkit_pref_callback_accept_languages }
   };
 
 static void
