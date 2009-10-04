@@ -1018,7 +1018,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
   priv->monitor_directory = FALSE;
 
-  priv->non_search_regex = g_regex_new ("(^localhost$|"
+  priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
                                         "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
                                         "^::[0-9a-f:]*$|" /* IPv6 literals */
                                         "^[0-9a-f:]+:[0-9a-f:]*$|" /* IPv6 literals */
