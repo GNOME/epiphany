@@ -1124,9 +1124,12 @@ ephy_web_view_load_url (EphyWebView *view,
   /* If the string doesn't look like an URI, let's search it; */
   if (soup_uri == NULL &&
       priv->non_search_regex &&
-      !g_regex_match (priv->non_search_regex, url, 0, NULL))
-    effective_url = g_strdup_printf (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"), url);
-  else
+      !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
+    char *query_param = soup_form_encode ("q", url, NULL);
+    /* + 2 here is getting rid of 'q=' */
+    effective_url = g_strdup_printf (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"), query_param + 2);
+    g_free (query_param);
+  } else
     effective_url = ephy_embed_utils_normalize_address (url);
 
   webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
