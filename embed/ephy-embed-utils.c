@@ -91,6 +91,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 			  g_str_has_prefix (address, "file:") ||
 			  g_str_has_prefix (address, "data:") ||
 			  g_str_has_prefix (address, "about:") ||
+			  g_str_has_prefix (address, "javascript:") ||
 			  g_str_has_prefix (address, "gopher:"));
 
 	return has_web_scheme;
