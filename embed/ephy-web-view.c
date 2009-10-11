@@ -1132,7 +1132,10 @@ ephy_web_view_load_url (EphyWebView *view,
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
 
-  webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+  if (g_str_has_prefix (effective_url, "javascript:"))
+    webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), effective_url);
+  else
+    webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
 
   if (soup_uri)
     soup_uri_free (soup_uri);
