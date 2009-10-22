@@ -228,6 +228,9 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_user_stylesheet },
     { CONF_CARET_BROWSING_ENABLED,
       "enable-caret-browsing",
+      webkit_pref_callback_boolean },
+    { CONF_SECURITY_ALLOW_POPUPS,
+      "javascript-can-open-windows-automatically",
       webkit_pref_callback_boolean }
   };
 
