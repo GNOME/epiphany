@@ -91,6 +91,10 @@ void		   ephy_embed_shell_set_print_settings	(EphyEmbedShell *shell,
 		
 GtkPrintSettings  *ephy_embed_shell_get_print_settings	(EphyEmbedShell *shell);
 
+/* Private API */
+void	       _ephy_embed_shell_track_object		(EphyEmbedShell *shell,
+							 GObject        *object);
+
 G_END_DECLS
 
 #endif /* !EPHY_EMBED_SHELL_H */

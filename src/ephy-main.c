@@ -238,16 +238,6 @@ handle_email (GtkAboutDialog *about,
 }
 
 static void
-shell_weak_notify (gpointer data,
-                   GObject *zombie)
-{
-	if (gtk_main_level ())
-	{
-		gtk_main_quit ();
-	}
-}
-
-static void
 unref_proxy_reply_cb (DBusGProxy *proxy,
 		      GError *error,
 		      gpointer user_data)
@@ -466,6 +456,12 @@ save_accels (void)
 
         gtk_accel_map_save (filename);
         g_free (filename);
+}
+
+static void
+shell_quit_cb (EphyShell *shell, gpointer data)
+{
+	gtk_main_quit ();
 }
 
 int
@@ -767,12 +763,9 @@ main (int argc,
 
 	/* Now create the shell */
 	_ephy_shell_create_instance ();
+	g_signal_connect (ephy_shell, "quit", G_CALLBACK (shell_quit_cb), NULL);
 
 	queue_commands (user_time);
-
-	/* We'll release the initial reference on idle */
-	g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);
-	ephy_object_idle_unref (ephy_shell);
 
 #ifdef HAVE_LIBNOTIFY	
 	/* Init notifications for the download manager */
@@ -782,6 +775,8 @@ main (int argc,
 	gtk_main ();
 
 	/* Shutdown */
+	g_object_unref (ephy_shell);
+
 #ifdef HAVE_LIBNOTIFY	
 	if (notify_is_initted ())
 		notify_uninit ();

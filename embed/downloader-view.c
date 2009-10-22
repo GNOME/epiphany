@@ -74,7 +74,6 @@ struct _DownloaderViewPrivate
 	NotifyNotification *notification;
 #endif
 
-	guint idle_unref : 1;
 	guint source_id;
 	guint notification_timeout;
 };
@@ -222,8 +221,6 @@ prepare_close_cb (EphyEmbedShell *shell,
 	/* hide window already */
 	gtk_widget_hide (priv->window);
 
-	priv->idle_unref = FALSE;
-
 	/* cancel pending downloads */
 	g_hash_table_foreach_remove (priv->downloads_hash,
 				     (GHRFunc) remove_download, view);
@@ -237,14 +234,12 @@ prepare_close_cb (EphyEmbedShell *shell,
 static void
 downloader_view_init (DownloaderView *dv)
 {
-	g_object_ref (embed_shell);
-
+	_ephy_embed_shell_track_object (embed_shell, G_OBJECT (dv));
 	dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
 
 	dv->priv->downloads_hash = g_hash_table_new_full
 		(g_direct_hash, g_direct_equal, NULL,
 		 (GDestroyNotify)gtk_tree_row_reference_free);
-	dv->priv->idle_unref = TRUE;
 
 	downloader_view_build_ui (dv);
 
@@ -259,7 +254,6 @@ downloader_view_finalize (GObject *object)
 {
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
 	DownloaderViewPrivate *priv = dv->priv;
-	gboolean idle_unref = dv->priv->idle_unref;
 
 	if (priv->status_icon != NULL)
 	{
@@ -286,15 +280,6 @@ downloader_view_finalize (GObject *object)
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (downloader_view_parent_class)->finalize (object);
-
-	if (idle_unref)
-	{
-		ephy_object_idle_unref (embed_shell);
-	}
-	else
-	{
-		g_object_unref (embed_shell);
-	}
 }
 
 DownloaderView *
