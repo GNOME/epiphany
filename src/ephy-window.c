@@ -458,6 +458,7 @@ struct _EphyWindowPrivate
 	guint is_popup : 1;
 	guint present_on_insert : 1;
 	guint key_theme_is_emacs : 1;
+	guint shell_unref : 1;
 };
 
 enum
@@ -3314,6 +3315,15 @@ ephy_window_dispose (GObject *object)
 	destroy_fullscreen_popup (window);
 
 	G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
+
+	/* We need to unref the shell after chaining up to the parent
+	 * class, since our children widgets might need the shell to
+	 * be around for some cleanup operations */
+	if (window->priv->shell_unref == FALSE)
+	{
+		g_object_unref (ephy_shell);
+		window->priv->shell_unref = TRUE;
+	}
 }
 
 static void
@@ -3834,8 +3844,6 @@ ephy_window_finalize (GObject *object)
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
-
-	g_object_unref (ephy_shell);
 }
 
 /**
