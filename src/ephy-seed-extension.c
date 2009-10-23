@@ -190,6 +190,7 @@ ephy_seed_extension_constructor (GType type,
   ext->priv->obj = seed_evaluate (global_eng->context,
                                   script,
                                   NULL);
+  seed_value_protect (ext->priv->ctx, ext->priv->obj);
 
   if (seed_script_exception (script))
     g_warning ("seed_exception: %s",
