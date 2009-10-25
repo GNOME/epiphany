@@ -345,7 +345,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
  *
  * Retrieves the default #EphyEmbedShell object
  *
- * ReturnValue: the default #EphyEmbedShell
+ * Return value: the default #EphyEmbedShell
  **/
 EphyEmbedShell *
 ephy_embed_shell_get_default (void)

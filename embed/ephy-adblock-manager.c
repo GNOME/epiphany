@@ -61,7 +61,7 @@ ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
  *
  * Check if an url is to be loaded or not 
  *
- * ReturnValue: TRUE if the url is to be loaded
+ * Return value: TRUE if the url is to be loaded
  **/
 gboolean
 ephy_adblock_manager_should_load (EphyAdBlockManager *self,
@@ -135,7 +135,7 @@ ephy_adblock_manager_edit_rule (EphyAdBlockManager *self,
  *
  * Check if Epiphany has currently an active blocker
  *
- * ReturnValue: TRUE if an active blocker is running
+ * Return value: TRUE if an active blocker is running
  **/
 gboolean
 ephy_adblock_manager_has_blocker (EphyAdBlockManager *self)
