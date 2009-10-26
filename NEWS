@@ -1,3 +1,31 @@
+===============
+Epiphany 2.29.1
+===============
+
+Changes:
+
+  - Reimplement middle-click-to-open-clipboard-contents.
+  - Reimplement traditional epiphany context menu(s). (#562617)
+  - Reimplement Up arrow behavior (#595653)
+  - Make most of epiphany compile with sealed GTK+ structs (#595791)
+  - Prevent PDM from getting keyring passwords in private mode
+    (#591395)
+  - Take into account WEBKIT_LOAD_FAILED status for is_loading API.
+  - Depend on libtool 2.2 and dump dolt.
+  - Replace .glade files with .ui files natively instead of generating
+    .ui files at compile time from the .glade files. (#590387)
+  - Several fixes in the automatic search of url entry contents on
+    enter feature (#596717, #595690)
+  - Use new syntax for Seed imports (#598562)
+  - Add back support for javascript: and mailto: URIs
+  - Fix for Seed extensions preventing epiphany from shutting down
+    (#573551)
+  - Allow popups when the user asks for them (#528799)
+  - Refactor EphyShell lifetime tracking (#599348)
+  - Don't crash when detaching multiple Seed extensions (#599422)
+  - Reimplement type checking on downloads and "Open" dialog option
+    (#598167)
+
 ================
 Epiphany 2.27.92
 ================
