@@ -72,7 +72,7 @@ call_seed_func (EphyExtension *extension,
   seed_ext = EPHY_SEED_EXTENSION (extension);
   priv = seed_ext->priv;
 
-  if (priv->obj == NULL || seed_value_is_null (priv->ctx, priv->obj))
+  if (priv->obj == NULL || !seed_value_is_object (priv->ctx, priv->obj))
     return;
 
   function = seed_object_get_property (priv->ctx, priv->obj, func_name);
