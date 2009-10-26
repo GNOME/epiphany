@@ -6,3 +6,5 @@ glade_DATA = \
 	prefs-dialog.ui			\
 	print.ui
 
+EXTRA_DIST = $(glade_DATA)
+
