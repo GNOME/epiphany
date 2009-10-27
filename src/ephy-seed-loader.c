@@ -55,8 +55,7 @@ impl_get_object (EphyLoader *eloader,
 
   g_free (filename);
 
-  /* we own one ref */
-  return g_object_ref (object);
+  return object;
 }
 
 static void
