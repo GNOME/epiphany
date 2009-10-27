@@ -521,3 +521,24 @@ popup_cmd_open_image (GtkAction *action,
 	g_value_unset (&value);
 	g_free (scheme);
 }
+
+void
+popup_cmd_inspect_element (GtkAction *action, EphyWindow *window)
+{
+	EphyEmbedEvent *event;
+	EphyEmbed *embed;
+	WebKitWebInspector *inspector;
+	guint x, y;
+
+	embed = ephy_embed_container_get_active_child
+		(EPHY_EMBED_CONTAINER (window));
+
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
+
+	inspector = webkit_web_view_get_inspector
+		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+
+	ephy_embed_event_get_coords (event, &x, &y);
+	webkit_web_inspector_inspect_coordinates (inspector, (gdouble)x, (gdouble)y);
+}

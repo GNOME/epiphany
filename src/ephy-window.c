@@ -345,6 +345,10 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, NULL },
 	{ "StopImageAnimation", NULL, N_("St_op Animation"), NULL,
 	  NULL, NULL },
+
+	/* Inspector */
+	{ "InspectElement", NULL, N_("Inspect _Element"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_inspect_element) },
 };
 
 static const struct
@@ -1119,6 +1123,7 @@ update_popup_actions_visibility (EphyWindow *window,
 {
 	GtkAction *action;
 	GtkActionGroup *action_group;
+	gboolean inspector_enabled;
 
 	action_group = window->priv->popups_action_group;
 
@@ -1133,6 +1138,10 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenFrame");
 	gtk_action_set_visible (action, is_frame);
+
+	inspector_enabled = eel_gconf_get_boolean (CONF_WEB_INSPECTOR_ENABLED);
+	action = gtk_action_group_get_action (action_group, "InspectElement");
+	gtk_action_set_visible (action, inspector_enabled);
 }
 
 static void
