@@ -315,7 +315,42 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/src/ephy-window.h \
 	$(NULL)
 
-Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES) epiphany
+EPHY_GIR_C_FILES = \
+	$(top_srcdir)/embed/ephy-embed.c \
+	$(top_srcdir)/embed/ephy-embed-container.c \
+	$(top_srcdir)/embed/ephy-embed-event.c \
+	$(top_srcdir)/embed/ephy-embed-persist.c \
+	$(top_srcdir)/embed/ephy-embed-shell.c \
+	$(top_srcdir)/embed/ephy-embed-single.c \
+	$(top_srcdir)/embed/ephy-favicon-cache.c \
+	$(top_srcdir)/embed/ephy-history.c \
+	$(top_srcdir)/embed/ephy-permission-manager.c \
+	$(top_srcdir)/embed/ephy-web-view.c \
+	$(top_srcdir)/lib/ephy-dialog.c \
+	$(top_srcdir)/lib/ephy-node-db.c \
+	$(top_srcdir)/lib/ephy-node.c \
+	$(top_srcdir)/lib/ephy-state.c \
+	$(top_srcdir)/lib/egg/egg-editable-toolbar.c \
+	$(top_srcdir)/lib/egg/egg-toolbars-model.c \
+	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
+	$(top_srcdir)/lib/widgets/ephy-spinner.c \
+	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
+	$(top_srcdir)/src/ephy-extension.c \
+	$(top_srcdir)/src/ephy-extensions-manager.c \
+	$(top_srcdir)/src/ephy-find-toolbar.c \
+	$(top_srcdir)/src/ephy-link-action.c \
+	$(top_srcdir)/src/ephy-link.c \
+	$(top_srcdir)/src/ephy-location-action.c \
+	$(top_srcdir)/src/ephy-notebook.c \
+	$(top_srcdir)/src/ephy-session.c \
+	$(top_srcdir)/src/ephy-shell.c \
+	$(top_srcdir)/src/ephy-statusbar.c \
+	$(top_srcdir)/src/ephy-toolbar.c \
+	$(top_srcdir)/src/ephy-window.c \
+	$(NULL)
+
+Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES) \
+                                      $(EPHY_GIR_C_FILES) epiphany
 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
 	$(G_IR_SCANNER) -v \
 		--namespace Epiphany \
@@ -334,7 +369,8 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES) epipha
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
-		$(EPHY_GIR_H_FILES)
+		$(EPHY_GIR_H_FILES) \
+		$(EPHY_GIR_C_FILES)
 
 girdir = $(GIRDIR)
 gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
