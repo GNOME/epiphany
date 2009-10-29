@@ -2011,8 +2011,9 @@ ephy_web_view_get_js_status (EphyWebView *view)
  * @level: return value of security level
  * @description: return value of the description of the security level
  *
- * Fetches the #EphyWebViewSecurityLevel and a newly-allocated string description
- * of the security state of @view.
+ * Fetches the #EphyWebViewSecurityLevel and a string description of the
+ * security state of @view.  The description will be a newly-allocated
+ * string or %NULL.
  **/
 void
 ephy_web_view_get_security_level (EphyWebView *view,
@@ -2023,6 +2024,9 @@ ephy_web_view_get_security_level (EphyWebView *view,
 
   if (level)
     *level = view->priv->security_level;
+
+  if (description)
+    *description = NULL;
 }
 
 /**
