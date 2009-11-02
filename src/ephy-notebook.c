@@ -32,7 +32,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
-#include "ephy-spinner.h"
 #include "ephy-link.h"
 #include "ephy-debug.h"
 
@@ -515,11 +514,11 @@ sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 	{
 		gtk_widget_hide (icon);
 		gtk_widget_show (spinner);
-		ephy_spinner_start (EPHY_SPINNER (spinner));
+		gtk_spinner_start (GTK_SPINNER (spinner));
 	}
 	else
 	{
-		ephy_spinner_stop (EPHY_SPINNER (spinner));
+		gtk_spinner_stop (GTK_SPINNER (spinner));
 		gtk_widget_hide (spinner);
 		gtk_widget_show (icon);
 	}
@@ -598,8 +597,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	gtk_widget_show (hbox);
 
 	/* setup load feedback */
-	spinner = ephy_spinner_new ();
-	ephy_spinner_set_size (EPHY_SPINNER (spinner), GTK_ICON_SIZE_MENU);
+	spinner = gtk_spinner_new ();
 	gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, FALSE, 0);
 
 	/* setup site icon, empty by default */

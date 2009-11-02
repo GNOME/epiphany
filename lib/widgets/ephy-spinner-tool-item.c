@@ -24,7 +24,6 @@
 #endif
 
 #include "ephy-spinner-tool-item.h"
-#include "ephy-spinner.h"
 
 G_DEFINE_TYPE (EphySpinnerToolItem, ephy_spinner_tool_item, GTK_TYPE_TOOL_ITEM)
 
@@ -33,7 +32,7 @@ ephy_spinner_tool_item_init (EphySpinnerToolItem *item)
 {
 	GtkWidget *spinner;
 
-	spinner = ephy_spinner_new ();
+	spinner = gtk_spinner_new ();
 	gtk_container_add (GTK_CONTAINER (item), spinner);
 	gtk_widget_show (spinner);
 }
@@ -41,38 +40,38 @@ ephy_spinner_tool_item_init (EphySpinnerToolItem *item)
 static void
 ephy_spinner_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 {
-	EphySpinner *spinner;
-	GtkToolbarStyle style;
-	GtkIconSize spinner_size;
+       GtkWidget *spinner;
+       GtkToolbarStyle style;
+       gint size;
 
-	spinner = EPHY_SPINNER (gtk_bin_get_child (GTK_BIN (tool_item)));
-	g_return_if_fail (spinner);
+       spinner = gtk_bin_get_child (GTK_BIN (tool_item));
+       g_return_if_fail (spinner);
 
-	style = gtk_tool_item_get_toolbar_style (tool_item);
+       style = gtk_tool_item_get_toolbar_style (tool_item);
 
-	/* FIXME: be smarter by taking the toolbar icon size (gtk_toolbar_get_icon_size) into account! */
+       /* FIXME: be smarter by taking the toolbar icon size (gtk_toolbar_get_icon_size) into account! */
 
-	if (style == GTK_TOOLBAR_BOTH)
-	{
-		spinner_size = GTK_ICON_SIZE_DIALOG;
-	}
-	else
-	{
-		spinner_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	}
+       if (style == GTK_TOOLBAR_BOTH)
+       {
+	       size = 44;
+       }
+       else
+       {
+	       size = 20;
+       }
 
-	ephy_spinner_set_size (spinner, spinner_size);
+       gtk_widget_set_size_request (spinner, size, size);
 
-	if (GTK_TOOL_ITEM_CLASS (ephy_spinner_tool_item_parent_class)->toolbar_reconfigured)
-		GTK_TOOL_ITEM_CLASS (ephy_spinner_tool_item_parent_class)->toolbar_reconfigured (tool_item);
+       if (GTK_TOOL_ITEM_CLASS (ephy_spinner_tool_item_parent_class)->toolbar_reconfigured)
+               GTK_TOOL_ITEM_CLASS (ephy_spinner_tool_item_parent_class)->toolbar_reconfigured (tool_item);
 }
 
 static void
 ephy_spinner_tool_item_class_init (EphySpinnerToolItemClass *klass)
 {
-	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
+       GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
-	tool_item_class->toolbar_reconfigured = ephy_spinner_tool_item_toolbar_reconfigured;
+       tool_item_class->toolbar_reconfigured = ephy_spinner_tool_item_toolbar_reconfigured;
 }
 
 /*
@@ -99,17 +98,18 @@ void
 ephy_spinner_tool_item_set_spinning (EphySpinnerToolItem *item,
 				     gboolean spinning)
 {
-	EphySpinner *spinner;
+	GtkWidget *spinner;
 
-	spinner = EPHY_SPINNER (gtk_bin_get_child (GTK_BIN (item)));
+	spinner = gtk_bin_get_child (GTK_BIN (item));
 	g_return_if_fail (spinner);
 
 	if (spinning)
 	{
-		ephy_spinner_start (spinner);
+		gtk_spinner_start (GTK_SPINNER (spinner));
 	}
 	else
 	{
-		ephy_spinner_stop (spinner);
+		gtk_spinner_stop (GTK_SPINNER (spinner));
+		gtk_spinner_reset (GTK_SPINNER (spinner));
 	}
 }
