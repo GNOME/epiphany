@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-19 11:09+0000\n"
-"PO-Revision-Date: 2009-09-19 15:26+0200\n"
+"POT-Creation-Date: 2009-11-02 00:26+0000\n"
+"PO-Revision-Date: 2009-11-02 01:27+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
@@ -739,7 +739,7 @@ msgstr "Elija un _idioma:"
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
+#: ../src/pdm-dialog.c:389
 msgid "Cl_ear"
 msgstr "_Borrar"
 
@@ -913,7 +913,7 @@ msgstr "_Continuar"
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
 #: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
+#: ../src/ephy-window.c:1745
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1398,45 +1398,50 @@ msgstr "Archivos locales"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2124
+#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2189
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: ../embed/ephy-web-view.c:1128
+#. + 2 here is getting rid of 'q='
+#: ../embed/ephy-web-view.c:1130
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1319
+#: ../embed/ephy-web-view.c:1322
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redireccionando a «%s»…"
 
-#: ../embed/ephy-web-view.c:1321
+#: ../embed/ephy-web-view.c:1324
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transfiriendo datos desde «%s»…"
 
-#: ../embed/ephy-web-view.c:1323
+#: ../embed/ephy-web-view.c:1326
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorización de «%s»…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1436
+#: ../embed/ephy-web-view.c:1332 ../embed/ephy-web-view.c:1439
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:1438
+#: ../embed/ephy-web-view.c:1441
 msgid "Loading…"
 msgstr "Cargando…"
 
-#: ../embed/ephy-web-view.c:2319
+#. Translators: this is the directory name to store auxilary files
+#. * when saving html files.
+#.
+#: ../embed/ephy-web-view.c:2389
 #, c-format
-msgid "%s/%s Files"
-msgstr "%s/%s archivos"
+#| msgid "%s/%s Files"
+msgid "%s Files"
+msgstr "%s archivos"
 
 #: ../lib/eel-gconf-extensions.c:67
 #, c-format
@@ -2954,7 +2959,7 @@ msgid "Go to a specified location"
 msgstr "Ir a una dirección especificada"
 
 #. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:433
 msgid "Hi_story"
 msgstr "_Histórico"
 
@@ -3186,84 +3191,84 @@ msgstr "Más grande"
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1748
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1753
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1761
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1768
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1778
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1821
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ventana emergente oculta"
 msgstr[1] "%d ventanas emergentes ocultas"
 
-#: ../src/ephy-window.c:2079
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como tapiz del escritorio"
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2096
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:2094
+#: ../src/ephy-window.c:2101
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:2107
+#: ../src/ephy-window.c:2114
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:2113
+#: ../src/ephy-window.c:2120
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:2125
+#: ../src/ephy-window.c:2132
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:2131
+#: ../src/ephy-window.c:2138
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:2137
+#: ../src/ephy-window.c:2144
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
 
-#: ../src/pdm-dialog.c:369
+#: ../src/pdm-dialog.c:370
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Seleccione los datos personales que quiere borrar</b>"
 
-#: ../src/pdm-dialog.c:372
+#: ../src/pdm-dialog.c:373
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3273,26 +3278,26 @@ msgstr ""
 "que ha visitado. Antes de proceder, compruebe el tipo de información que "
 "quiere eliminar:"
 
-#: ../src/pdm-dialog.c:377
+#: ../src/pdm-dialog.c:378
 msgid "Clear All Personal Data"
 msgstr "Borrar todos los datos personales"
 
 #. Cookies
-#: ../src/pdm-dialog.c:408
+#: ../src/pdm-dialog.c:409
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:420
+#: ../src/pdm-dialog.c:421
 msgid "Saved _passwords"
 msgstr "Contrase_ñas guardadas"
 
 #. Cache
-#: ../src/pdm-dialog.c:444
+#: ../src/pdm-dialog.c:445
 msgid "_Temporary files"
 msgstr "Archivos _temporales"
 
-#: ../src/pdm-dialog.c:460
+#: ../src/pdm-dialog.c:461
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3300,57 +3305,57 @@ msgstr ""
 "<small><i><b>Nota:</b> No puede deshacer esta acción. Los datos que está "
 "seleccionando para borrarán se perderán para siempre.</i></small>"
 
-#: ../src/pdm-dialog.c:652
+#: ../src/pdm-dialog.c:653
 msgid "Cookie Properties"
 msgstr "Propiedades de cookies"
 
-#: ../src/pdm-dialog.c:669
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "Contenido:"
 
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
 msgstr "Ruta:"
 
 # Esto es de gestión de cookies (serrador)
-#: ../src/pdm-dialog.c:701
+#: ../src/pdm-dialog.c:702
 msgid "Send for:"
 msgstr "Enviar para:"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
 msgstr "Sólo conexiones cifradas"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
 msgstr "Cualquier tipo de conexión"
 
-#: ../src/pdm-dialog.c:716
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "Caduca:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:728
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
 msgstr "Fin de la sesión actual"
 
-#: ../src/pdm-dialog.c:861
+#: ../src/pdm-dialog.c:862
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:873
+#: ../src/pdm-dialog.c:874
 msgid "Name"
 msgstr "Nombre"
 
-#: ../src/pdm-dialog.c:1287
+#: ../src/pdm-dialog.c:1288
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1300
+#: ../src/pdm-dialog.c:1301
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: ../src/pdm-dialog.c:1313
+#: ../src/pdm-dialog.c:1314
 msgid "User Password"
 msgstr "Contraseña de usuario"
 
