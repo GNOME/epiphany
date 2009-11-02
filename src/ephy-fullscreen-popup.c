@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include "ephy-fullscreen-popup.h"
-#include "ephy-spinner.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -34,7 +33,6 @@ struct _EphyFullscreenPopupPrivate
 {
 	EphyWindow *window;
 	GtkWidget *frame;
-	EphySpinner *spinner;
 	GtkWidget *lock;
 	GtkWidget *lock_ebox;
 	GtkWidget *button;
@@ -93,23 +91,7 @@ ephy_fullscreen_popup_update_visibility (EphyFullscreenPopup *popup)
 	g_object_set (priv->button, "visible", priv->show_button,
 				    "sensitive", priv->show_button, NULL);
 	g_object_set (priv->frame, "visible", show_frame, NULL);
-	g_object_set (priv->spinner, "visible", priv->spinning, NULL);
 	g_object_set (priv->lock_ebox, "visible", priv->show_lock, NULL);
-}
-
-static void
-ephy_fullscreen_popup_update_spinner (EphyFullscreenPopup *popup)
-{
-	EphyFullscreenPopupPrivate *priv = popup->priv;
-
-	if (priv->spinning && gtk_widget_get_visible (GTK_WIDGET (popup)))
-	{
-		ephy_spinner_start (priv->spinner);
-	}
-	else
-	{
-		ephy_spinner_stop (priv->spinner);
-	}
 }
 
 static void
@@ -169,17 +151,6 @@ ephy_fullscreen_popup_set_show_leave (EphyFullscreenPopup *popup,
 
 	priv->show_button = show_button;
 	ephy_fullscreen_popup_update_visibility (popup);
-}
-
-void
-ephy_fullscreen_popup_set_spinning (EphyFullscreenPopup *popup,
-				    gboolean spinning)
-{
-	EphyFullscreenPopupPrivate *priv = popup->priv;
-
-	priv->spinning = spinning;
-	ephy_fullscreen_popup_update_visibility (popup);
-	ephy_fullscreen_popup_update_spinner (popup);
 }
 
 void
@@ -243,11 +214,6 @@ ephy_fullscreen_popup_constructor (GType type,
 	frame_hbox = gtk_hbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (priv->frame), frame_hbox);
 	gtk_widget_show (frame_hbox);
-
-	/* add spinner */
-	priv->spinner = EPHY_SPINNER (ephy_spinner_new ());
-	ephy_spinner_set_size (EPHY_SPINNER (priv->spinner), GTK_ICON_SIZE_BUTTON);
-	gtk_box_pack_start (GTK_BOX (frame_hbox), GTK_WIDGET (priv->spinner), FALSE, FALSE, 0);
 
 	/* lock */
 	priv->lock = gtk_image_new ();
@@ -321,26 +287,6 @@ ephy_fullscreen_popup_set_property (GObject *object,
 }
 
 static void
-ephy_fullscreen_popup_show (GtkWidget *widget)
-{
-	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
-
-	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->show (widget);
-
-	ephy_fullscreen_popup_update_spinner (popup);
-}
-
-static void
-ephy_fullscreen_popup_hide (GtkWidget *widget)
-{
-	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
-
-	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->hide (widget);
-
-	ephy_fullscreen_popup_update_spinner (popup);
-}
-
-static void
 ephy_fullscreen_popup_size_request (GtkWidget *widget,
 				    GtkRequisition *requisition)
 {
@@ -375,8 +321,6 @@ ephy_fullscreen_popup_class_init (EphyFullscreenPopupClass *klass)
 	object_class->get_property = ephy_fullscreen_popup_get_property;
 	object_class->set_property = ephy_fullscreen_popup_set_property;
 
-	widget_class->show = ephy_fullscreen_popup_show;
-	widget_class->hide = ephy_fullscreen_popup_hide;
 	widget_class->size_request = ephy_fullscreen_popup_size_request;
 	widget_class->realize = ephy_fullscreen_popup_realize;
 

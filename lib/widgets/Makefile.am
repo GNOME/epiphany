@@ -7,10 +7,6 @@ libephywidgets_la_SOURCES = \
 	ephy-node-view.h			\
 	ephy-search-entry.c			\
 	ephy-search-entry.h			\
-	ephy-spinner.c				\
-	ephy-spinner.h				\
-	ephy-spinner-tool-item.c		\
-	ephy-spinner-tool-item.h		\
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\

@@ -285,7 +285,6 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/lib/egg/egg-editable-toolbar.h \
 	$(top_srcdir)/lib/egg/egg-toolbars-model.h \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
-	$(top_srcdir)/lib/widgets/ephy-spinner.h \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
 	$(top_srcdir)/src/ephy-extension.h \
 	$(top_srcdir)/src/ephy-extensions-manager.h \
@@ -318,7 +317,6 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/lib/egg/egg-editable-toolbar.c \
 	$(top_srcdir)/lib/egg/egg-toolbars-model.c \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
-	$(top_srcdir)/lib/widgets/ephy-spinner.c \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
 	$(top_srcdir)/src/ephy-extension.c \
 	$(top_srcdir)/src/ephy-extensions-manager.c \

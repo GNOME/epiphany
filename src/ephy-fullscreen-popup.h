@@ -64,9 +64,6 @@ GtkWidget *ephy_fullscreen_popup_new		    (EphyWindow *window);
 void	   ephy_fullscreen_popup_set_show_leave	    (EphyFullscreenPopup *popup,
 						     gboolean show_button);
 
-void	   ephy_fullscreen_popup_set_spinning	    (EphyFullscreenPopup *popup,
-						     gboolean spinning);
-
 void	   ephy_fullscreen_popup_set_security_state (EphyFullscreenPopup *popup,
 						     gboolean show_lock,
 						     const char *stock,
