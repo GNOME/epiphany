@@ -358,6 +358,11 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 
 /* public functions */
 
+/**
+ * ephy_toolbar_get_action_group
+ *
+ * Return value: (transfer none):
+ **/
 GtkActionGroup *
 ephy_toolbar_get_action_group (EphyToolbar *toolbar)
 {

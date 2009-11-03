@@ -156,7 +156,7 @@ ephy_embed_shell_finalize (GObject *object)
  *
  * Returns the favicons cache.
  *
- * Return value: the favicons cache
+ * Return value: (transfer none): the favicons cache
  **/
 GObject *
 ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
@@ -171,6 +171,11 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->favicon_cache);
 }
 
+/**
+ * ephy_embed_shell_get_global_history:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 {
@@ -184,6 +189,11 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->global_history);
 }
 
+/**
+ * ephy_embed_shell_get_downloader_view:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 {
@@ -202,6 +212,11 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->downloader_view);
 }
 
+/**
+ * ephy_embed_shell_get_downloader_view_nocreate:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_embed_shell_get_downloader_view_nocreate (EphyEmbedShell *shell)
 {
@@ -254,6 +269,11 @@ impl_get_embed_single (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->embed_single);
 }
 
+/**
+ * ephy_embed_shell_get_embed_single:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 {
@@ -262,6 +282,11 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 	return klass->get_embed_single (shell);
 }
 
+/**
+ * ephy_embed_shell_get_encodings:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
@@ -345,7 +370,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
  *
  * Retrieves the default #EphyEmbedShell object
  *
- * Return value: the default #EphyEmbedShell
+ * Return value: (transfer none): the default #EphyEmbedShell
  **/
 EphyEmbedShell *
 ephy_embed_shell_get_default (void)
@@ -359,7 +384,7 @@ ephy_embed_shell_get_default (void)
  *
  * Returns the adblock manager.
  *
- * Return value: the adblock manager
+ * Return value: (transfer none): the adblock manager
  **/
 GObject *
 ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
@@ -404,7 +429,12 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
 	gtk_page_setup_to_file (page_setup, path, NULL);
 	g_free (path);
 }
-		
+
+/**
+ * ephy_embed_shell_get_page_setup:
+ *
+ * Return value: (transfer none):
+ **/
 GtkPageSetup *
 ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
 {
@@ -481,7 +511,12 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 	gtk_print_settings_to_file (settings, path, NULL);
 	g_free (path);
 }
-		
+
+/**
+ * ephy_embed_shell_get_print_gettings:
+ *
+ * Return value: (transfer none):
+ **/
 GtkPrintSettings *
 ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 {

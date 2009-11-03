@@ -882,7 +882,7 @@ ephy_embed_init (EphyEmbed *embed)
  * 
  * Returns the #EphyWebView wrapped by @embed.
  * 
- * Returns: an #EphyWebView
+ * Returns: (transfer none): an #EphyWebView
  **/
 EphyWebView*
 ephy_embed_get_web_view (EphyEmbed *embed)

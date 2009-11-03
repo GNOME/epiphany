@@ -359,7 +359,7 @@ ephy_shell_finalize (GObject *object)
  *
  * Retrieve the default #EphyShell object
  *
- * Return value: the default #EphyShell
+ * Return value: (transfer none): the default #EphyShell
  **/
 EphyShell *
 ephy_shell_get_default (void)
@@ -589,7 +589,7 @@ ephy_shell_new_tab (EphyShell *shell,
  *
  * Returns current session.
  *
- * Return value: the current session.
+ * Return value: (transfer none): the current session.
  **/
 GObject *
 ephy_shell_get_session (EphyShell *shell)
@@ -639,6 +639,11 @@ ephy_shell_get_lockdown (EphyShell *shell)
 	return G_OBJECT (shell->priv->session);
 }
 
+/**
+ * ephy_shell_get_bookmarks:
+ *
+ * Return value: (transfer none):
+ **/
 EphyBookmarks *
 ephy_shell_get_bookmarks (EphyShell *shell)
 {
@@ -650,6 +655,11 @@ ephy_shell_get_bookmarks (EphyShell *shell)
 	return shell->priv->bookmarks;
 }
 
+/**
+ * ephy_shell_get_toolbars_model:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 {
@@ -696,6 +706,11 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 	}
 }
 
+/**
+ * ephy_shell_get_extensions_manager:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_shell_get_extensions_manager (EphyShell *es)
 {
@@ -717,6 +732,11 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 	return G_OBJECT (es->priv->extensions_manager);
 }
 
+/**
+ * ephy_shell_get_net_monitor:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_shell_get_net_monitor (EphyShell *shell)
 {
@@ -760,6 +780,11 @@ toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 	g_object_unref (ephy_shell);
 }
 
+/**
+ * ephy_shell_get_bookmarks_editor:
+ *
+ * Return value: (transfer none):
+ **/
 GtkWidget *
 ephy_shell_get_bookmarks_editor (EphyShell *shell)
 {
@@ -780,6 +805,11 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
 	return shell->priv->bme;
 }
 
+/**
+ * ephy_shell_get_history_window:
+ *
+ * Return value: (transfer none):
+ **/
 GtkWidget *
 ephy_shell_get_history_window (EphyShell *shell)
 {
@@ -801,6 +831,11 @@ ephy_shell_get_history_window (EphyShell *shell)
 	return shell->priv->history_window;
 }
 
+/**
+ * ephy_shell_get_pdm_dialog:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_shell_get_pdm_dialog (EphyShell *shell)
 {
@@ -819,6 +854,11 @@ ephy_shell_get_pdm_dialog (EphyShell *shell)
 	return shell->priv->pdm_dialog;
 }
 
+/**
+ * ephy_shell_get_prefs_dialog:
+ *
+ * Return value: (transfer none):
+ **/
 GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {

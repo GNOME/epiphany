@@ -679,6 +679,11 @@ ephy_notebook_set_show_tabs (EphyNotebook *nb,
 	update_tabs_visibility (nb, FALSE);
 }
 
+/**
+ * ephy_notebook_get_focused_pages:
+ *
+ * Return value: (transfer none):
+ **/
 GList *
 ephy_notebook_get_focused_pages (EphyNotebook *nb)
 {

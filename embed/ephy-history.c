@@ -740,6 +740,11 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 	return host;
 }
 
+/**
+ * ephy_history_get_host:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_history_get_host (EphyHistory *eh, const char *url)
 {
@@ -875,6 +880,11 @@ impl_add_page (EphyHistory *eb,
 	return TRUE;
 }
 
+/**
+ * ephy_history_get_page:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_history_get_page (EphyHistory *eb,
 		       const char *url)
@@ -975,12 +985,22 @@ ephy_history_clear (EphyHistory *gh)
 	g_signal_emit (gh, signals[CLEARED], 0);
 }
 
+/**
+ * ephy_history_get_hosts:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_history_get_hosts (EphyHistory *eb)
 {
 	return eb->priv->hosts;
 }
 
+/**
+ * ephy_history_get_pages:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_history_get_pages (EphyHistory *eb)
 {

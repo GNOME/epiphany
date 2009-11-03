@@ -1937,30 +1937,55 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
+/**
+ * ephy_bookmarks_get_smart_bookmarks:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_smart_bookmarks (EphyBookmarks *eb)
 {
 	return eb->priv->smartbookmarks;
 }
 
+/**
+ * ephy_bookmarks_get_keywords:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_keywords (EphyBookmarks *eb)
 {
 	return eb->priv->keywords;
 }
 
+/**
+ * ephy_bookmarks_get_bookmarks:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_bookmarks (EphyBookmarks *eb)
 {
 	return eb->priv->bookmarks;
 }
 
+/**
+ * ephy_bookmarks_get_favorites:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 {
 	return eb->priv->favorites;
 }
 
+/**
+ * ephy_bookmarks_get_local:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_local (EphyBookmarks *eb)
 {
@@ -1971,12 +1996,22 @@ ephy_bookmarks_get_local (EphyBookmarks *eb)
 #endif
 }
 
+/**
+ * ephy_bookmarks_get_not_categorized:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_not_categorized (EphyBookmarks *eb)
 {
 	return eb->priv->notcategorized;
 }
 
+/**
+ * ephy_bookmarks_get_from_id:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_bookmarks_get_from_id (EphyBookmarks *eb, long id)
 {

@@ -230,7 +230,8 @@ ephy_extensions_manager_register (EphyExtensionsManager *manager,
  *
  * Returns the list of known extensions.
  *
- * Returns: a list of #EphyExtensionInfo
+ * Returns: (element-type EphyEmbed) (transfer container): a list of
+ *          #EphyExtensionInfo
  **/
 GList *
 ephy_extensions_manager_get_extensions (EphyExtensionsManager *manager)

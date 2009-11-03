@@ -1601,7 +1601,8 @@ ephy_session_load (EphySession *session,
  * ephy_session_get_windows:
  * @session: the #EphySession
  *
- * Returns: the list of open #EphyWindow:s.
+ * Returns: (element-type EphyWindow) (transfer container): the list of
+ *          open #EphyWindow:s.
  **/
 GList *
 ephy_session_get_windows (EphySession *session)
@@ -1659,7 +1660,8 @@ ephy_session_remove_window (EphySession *session,
  * need to take an action (like opening an url) on
  * a window but you dont have a target window.
  *
- * Return value: the current active non-popup browser window, or NULL of there is none.
+ * Return value: (transfer none): the current active non-popup browser
+ *               window, or NULL of there is none.
  **/
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)

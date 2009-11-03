@@ -1739,7 +1739,7 @@ ephy_web_view_get_icon_address (EphyWebView *view)
  * Returns the view's site icon as a #GdkPixbuf,
  * or %NULL if it is not available.
  *
- * Return value: a the view's site icon
+ * Return value: (transfer none): a the view's site icon
  **/
 GdkPixbuf *
 ephy_web_view_get_icon (EphyWebView *view)
@@ -2008,8 +2008,8 @@ ephy_web_view_get_js_status (EphyWebView *view)
 /**
  * ephy_web_view_get_security_level:
  * @view: an #EphyWebView
- * @level: return value of security level
- * @description: return value of the description of the security level
+ * @level: (out): return value of security level
+ * @description: (out): return value of the description of the security level
  *
  * Fetches the #EphyWebViewSecurityLevel and a string description of the
  * security state of @view.  The description will be a newly-allocated

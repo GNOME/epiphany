@@ -3884,7 +3884,7 @@ ephy_window_new_with_chrome (EphyWebViewChrome chrome,
  *
  * Returns this window's UI manager.
  *
- * Return value: an #GtkUIManager
+ * Return value: (transfer none): an #GtkUIManager
  **/
 GObject *
 ephy_window_get_ui_manager (EphyWindow *window)
@@ -3900,7 +3900,7 @@ ephy_window_get_ui_manager (EphyWindow *window)
  *
  * Returns this window's toolbar as an #EggEditableToolbar.
  *
- * Return value: an #EggEditableToolbar
+ * Return value: (transfer none): an #EggEditableToolbar
  **/
 GtkWidget *
 ephy_window_get_toolbar (EphyWindow *window)
@@ -3916,7 +3916,7 @@ ephy_window_get_toolbar (EphyWindow *window)
  *
  * Returns the #GtkNotebook used by this window.
  *
- * Return value: the @window's #GtkNotebook
+ * Return value: (transfer none): the @window's #GtkNotebook
  **/
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
@@ -3932,7 +3932,7 @@ ephy_window_get_notebook (EphyWindow *window)
  *
  * Returns the #EphyFindToolbar used by this window.
  *
- * Return value: the @window's #EphyFindToolbar
+ * Return value: (transfer none): the @window's #EphyFindToolbar
  **/
 GtkWidget *
 ephy_window_get_find_toolbar (EphyWindow *window)
@@ -3948,7 +3948,7 @@ ephy_window_get_find_toolbar (EphyWindow *window)
  *
  * Returns this window's statusbar as an #EphyStatusbar.
  *
- * Return value: This window's statusbar
+ * Return value: (transfer none): This window's statusbar
  **/
 GtkWidget *
 ephy_window_get_statusbar (EphyWindow *window)
@@ -4196,7 +4196,7 @@ ephy_window_get_is_print_preview (EphyWindow *window)
  * Returns the #EphyEmbedEvent for the current context menu.
  * Use this to get the event from the action callback.
  *
- * Return value: an #EphyEmbedEvent, or %NULL
+ * Return value: (transfer none): an #EphyEmbedEvent, or %NULL
  **/
 EphyEmbedEvent *
 ephy_window_get_context_event (EphyWindow *window)

@@ -150,7 +150,7 @@ ephy_embed_container_remove_child (EphyEmbedContainer *container,
  *
  * Returns @container's active #EphyEmbed.
  *
- * Return value: @container's active child
+ * Return value: (transfer none): @container's active child
  **/
 EphyEmbed *
 ephy_embed_container_get_active_child (EphyEmbedContainer *container)
@@ -169,7 +169,8 @@ ephy_embed_container_get_active_child (EphyEmbedContainer *container)
  *
  * Returns the list of #EphyEmbed:s in the container.
  *
- * Return value: a newly-allocated list of #EphyEmbed:s
+ * Return value: (element-type EphyEmbed) (transfer container):
+ *               a newly-allocated list of #EphyEmbed:s
  */
 GList *
 ephy_embed_container_get_children (EphyEmbedContainer *container)

@@ -1263,6 +1263,11 @@ ephy_dialog_run (EphyDialog *dialog)
 	return gtk_dialog_run (GTK_DIALOG (dialog->priv->dialog));
 }
 
+/**
+ * ephy_dialog_get_control:
+ *
+ * Return value: (transfer none):
+ **/
 GtkWidget *
 ephy_dialog_get_control (EphyDialog *dialog,
 			 const char *property_id)
@@ -1379,6 +1384,11 @@ ephy_dialog_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * ephy_dialog_get_parent:
+ *
+ * Return value: (transfer none):
+ **/
 GtkWidget *
 ephy_dialog_get_parent (EphyDialog *dialog)
 {

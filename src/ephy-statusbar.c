@@ -342,7 +342,7 @@ ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
  * ephy_statusbar_get_security_frame:
  * @statusbar: an #EphyStatusbar
  *
- * Return value: the statusbar's lock icon frame
+ * Return value: (transfer none): the statusbar's lock icon frame
  */
 GtkWidget *
 ephy_statusbar_get_security_frame (EphyStatusbar *statusbar)

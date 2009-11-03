@@ -380,6 +380,11 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 	return node;
 }
 
+/**
+ * ephy_node_get_db:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNodeDb *
 ephy_node_get_db (EphyNode *node)
 {
@@ -758,6 +763,11 @@ ephy_node_get_property_float (EphyNode *node,
 	return retval;
 }
 
+/**
+ * ephy_node_get_property_node:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_node_get_property_node (EphyNode *node,
 			     guint property_id)
@@ -1208,6 +1218,11 @@ ephy_node_reorder_children (EphyNode *node,
 	ephy_node_emit_signal (node, EPHY_NODE_CHILDREN_REORDERED, new_order);
 }
 
+/**
+ * ephy_node_get_children:
+ *
+ * Return value: (array) (element-type EphyNode) (transfer none):
+ **/
 GPtrArray *
 ephy_node_get_children (EphyNode *node)
 {
@@ -1228,6 +1243,11 @@ ephy_node_get_n_children (EphyNode *node)
 	return ret;
 }
 
+/**
+ * ephy_node_get_nth_child:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_node_get_nth_child (EphyNode *node,
 		         guint n)
@@ -1276,6 +1296,11 @@ ephy_node_get_child_index (EphyNode *node,
 	return ret;
 }
 
+/**
+ * ephy_node_get_next_child:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_node_get_next_child (EphyNode *node,
 			  EphyNode *child)
@@ -1297,6 +1322,11 @@ ephy_node_get_next_child (EphyNode *node,
 	return ret;
 }
 
+/**
+ * ephy_node_get_previous_child:
+ *
+ * Return value: (transfer none):
+ **/
 EphyNode *
 ephy_node_get_previous_child (EphyNode *node,
 			      EphyNode *child)

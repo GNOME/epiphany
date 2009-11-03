@@ -256,7 +256,8 @@ ephy_embed_persist_get_dest (EphyEmbedPersist *persist)
  *
  * Returns the #EphyEmbed from which @persist will download.
  *
- * Return value: the #EphyEmbed from which @persist will download
+ * Return value: (transfer none): the #EphyEmbed from which @persist
+ *               will download
  **/
 EphyEmbed *
 ephy_embed_persist_get_embed (EphyEmbedPersist *persist)
@@ -289,7 +290,8 @@ ephy_embed_persist_get_fc_title (EphyEmbedPersist *persist)
  * Returns the #EphyWindow which should serve as a parent for @persist's
  * filechooser.
  *
- * Return value: the #EphyWindow parent for @persist's filechooser
+ * Return value: (transfer none): the #EphyWindow parent for @persist's
+ *               filechooser
  **/
 GtkWindow *
 ephy_embed_persist_get_fc_parent (EphyEmbedPersist *persist)

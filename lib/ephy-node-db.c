@@ -197,7 +197,7 @@ ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
  *
  * Returns the #EphyNode with id @id from @db, or %NULL if no such id exists.
  *
- * Return value: an #EphyNode
+ * Return value: (transfer none): an #EphyNode
  **/
 EphyNode *
 ephy_node_db_get_node_from_id (EphyNodeDb *db, guint id)
