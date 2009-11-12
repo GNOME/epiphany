@@ -494,6 +494,9 @@ main (int argc,
 	 */
 	LIBXML_TEST_VERSION;
 
+	/* sets name to help matching with the .desktop file */
+	g_set_prgname ("epiphany");
+
 	/* If we're given -remote arguments, translate them */
 	if (argc >= 2 &&
 	    strcmp (argv[1], "-remote") == 0)
