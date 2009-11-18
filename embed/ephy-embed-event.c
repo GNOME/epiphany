@@ -141,6 +141,11 @@ ephy_embed_event_get_coords (EphyEmbedEvent *event,
     *y = priv->y;
 }
 
+/**
+ * ephy_embed_event_get_property:
+ *
+ * @value: (out):
+ */
 void 
 ephy_embed_event_get_property   (EphyEmbedEvent *event,
                                  const char *name,

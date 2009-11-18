@@ -417,7 +417,7 @@ load_homepage (EphyEmbed *embed)
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
  *
- * Return value: the created #EphyEmbed
+ * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
@@ -561,7 +561,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
  *
- * Return value: the created #EphyEmbed
+ * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
 ephy_shell_new_tab (EphyShell *shell,

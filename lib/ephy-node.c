@@ -492,6 +492,11 @@ ephy_node_set_property (EphyNode *node,
 	ephy_node_set_property_internal (node, property_id, new);
 }
 
+/**
+ * ephy_node_get_property:
+ *
+ * @value: (out):
+ */
 gboolean
 ephy_node_get_property (EphyNode *node,
 		        guint property_id,

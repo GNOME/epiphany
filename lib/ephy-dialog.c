@@ -1280,6 +1280,11 @@ ephy_dialog_get_control (EphyDialog *dialog,
 	return info->widget;
 }
 
+/**
+ * ephy_dialog_get_controls:
+ *
+ * Rename to: ephy_dialog_get_controls
+ **/
 void
 ephy_dialog_get_controls (EphyDialog *dialog,
 			  const char *property_id,
@@ -1305,6 +1310,11 @@ ephy_dialog_get_controls (EphyDialog *dialog,
 	va_end (varargs);
 }
 
+/**
+ * ephy_dialog_get_value:
+ *
+ * @value: (out):
+ */
 gboolean
 ephy_dialog_get_value (EphyDialog *dialog,
 		       const char *property_id,
