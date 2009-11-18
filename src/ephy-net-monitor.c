@@ -107,7 +107,7 @@ ephy_net_monitor_check_network (EphyNetMonitor *monitor)
 	DBusMessage *message;
 	DBusPendingCall* reply;
 
-	if (priv->bus == NULL) return;
+	g_return_if_fail (priv == NULL || priv->bus == NULL);
 
 	LOG ("EphyNetMonitor checking network");
 
@@ -199,6 +199,23 @@ ephy_net_monitor_attach_to_dbus (EphyNetMonitor *monitor)
 }
 
 static void
+ephy_net_monitor_detach_from_dbus (EphyNetMonitor *monitor)
+{
+	EphyNetMonitorPrivate *priv = monitor->priv;
+	
+	LOG ("EphyNetMonitor is trying to detach from SYSTEM bus");
+
+	if (priv->bus != NULL)
+	{
+		dbus_connection_remove_filter (priv->bus, 
+					       filter_func, 
+					       monitor);
+		priv->bus = NULL;
+	}
+}
+
+
+static void
 connect_to_system_bus_cb (EphyDbus *dbus,
 			  EphyDbusBus kind,
 			  EphyNetMonitor *monitor)
@@ -216,14 +233,12 @@ disconnect_from_system_bus_cb (EphyDbus *dbus,
 			       EphyDbusBus kind,
 			       EphyNetMonitor *monitor)
 {
-	EphyNetMonitorPrivate *priv = monitor->priv;
-
 	if (kind == EPHY_DBUS_SYSTEM)
 	{
 		LOG ("EphyNetMonitor disconnected from SYSTEM bus");
 
 		/* no bus anymore */
-		priv->bus = NULL;
+		ephy_net_monitor_detach_from_dbus (monitor);
 	}
 }
 
@@ -258,6 +273,7 @@ ephy_net_monitor_shutdown (EphyNetMonitor *monitor)
 
 	dbus = ephy_dbus_get_default ();
 			
+	ephy_net_monitor_detach_from_dbus (monitor);
 	g_signal_handlers_disconnect_by_func
 		(dbus, G_CALLBACK (connect_to_system_bus_cb), monitor);
 	g_signal_handlers_disconnect_by_func
