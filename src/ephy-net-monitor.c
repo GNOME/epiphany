@@ -107,7 +107,7 @@ ephy_net_monitor_check_network (EphyNetMonitor *monitor)
 	DBusMessage *message;
 	DBusPendingCall* reply;
 
-	g_return_if_fail (priv == NULL || priv->bus == NULL);
+	g_return_if_fail (priv != NULL || priv->bus != NULL);
 
 	LOG ("EphyNetMonitor checking network");
 
