@@ -369,22 +369,25 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 
   g_return_val_if_fail (mime_type, FALSE);
 
-  type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
+  /* Get the mime type for the page only from the main frame */
+  if (webkit_web_view_get_main_frame (web_view) == frame) {
+    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
 
-  if (!strcmp (mime_type, "text/html"))
-    type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  else if (!strcmp (mime_type, "application/xhtml+xml"))
-    type = EPHY_WEB_VIEW_DOCUMENT_XML;
-  else if (!strncmp (mime_type, "image/", 6))
-    type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+    if (!strcmp (mime_type, "text/html"))
+      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+    else if (!strcmp (mime_type, "application/xhtml+xml"))
+      type = EPHY_WEB_VIEW_DOCUMENT_XML;
+    else if (!strncmp (mime_type, "image/", 6))
+      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
 
-  /* FIXME: maybe it makes more sense to have an API to query the mime
-   * type when the load of a page starts than doing this here.
-   */
-  /* FIXME: rename ge-document-type (and all ge- signals...) to
-   * something else
-   */
-  g_signal_emit_by_name (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "ge-document-type", type);
+    /* FIXME: mayb  e it makes more sense to have an API to query the mime
+     * type when the load of a page starts than doing this here.
+     */
+    /* FIXME: rename ge-document-type (and all ge- signals...) to
+     * something else
+     */
+    g_signal_emit_by_name (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "ge-document-type", type);
+  }
 
   /* If WebKit can't handle the mime type start the download
      process */
