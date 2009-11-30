@@ -431,7 +431,7 @@ button_press_cb (GtkWidget *widget,
 {
 	if (event->button == 2)	
 	{
-		gtk_button_pressed (GTK_BUTTON (widget));
+		g_signal_emit_by_name (widget, "button-press-event");
 	}
 
 	return FALSE;
@@ -444,7 +444,7 @@ button_release_cb (GtkWidget *widget,
 {
 	if (event->button == 2)	
 	{
-		gtk_button_released (GTK_BUTTON (widget));
+		g_signal_emit_by_name (widget, "button-release-event");
 	}
 
 	return FALSE;
