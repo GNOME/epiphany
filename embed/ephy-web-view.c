@@ -1052,52 +1052,12 @@ ephy_web_view_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
 }
 
-/**
- * ephy_web_view_load_request:
- * @web_view: the #EphyWebView in which to load the request
- * @request: the #WebKitNetworkRequest to be loaded
- *
- * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
- **/
-void
-ephy_web_view_load_request (EphyWebView *web_view,
-                            WebKitNetworkRequest *request)
+static char*
+normalize_or_autosearch_url (EphyWebView *view, const char *url)
 {
-  WebKitWebFrame *main_frame;
-  const char *url;
   char *effective_url;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW(web_view));
-  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
-
-  url = webkit_network_request_get_uri (request);
-  effective_url = ephy_embed_utils_normalize_address (url);
-  webkit_network_request_set_uri (request, effective_url);
-  g_free (effective_url);
-
-  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
-  webkit_web_frame_load_request(main_frame, request);
-}
-
-/**
- * ephy_web_view_load_url:
- * @view: an #EphyWebView
- * @url: a URL
- *
- * Loads @url in @view.
- **/
-void
-ephy_web_view_load_url (EphyWebView *view,
-                        const char *url)
-{
-  EphyWebViewPrivate *priv;
   SoupURI *soup_uri = NULL;
-  char *effective_url;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (url);
-
-  priv = view->priv;
+  EphyWebViewPrivate *priv = view->priv;
 
   /* We use SoupURI as an indication of whether the value given in url
    * is not something we want to search; we only do that, though, if
@@ -1118,13 +1078,61 @@ ephy_web_view_load_url (EphyWebView *view,
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
 
+  if (soup_uri)
+    soup_uri_free (soup_uri);
+
+  return effective_url;
+}
+
+/**
+ * ephy_web_view_load_request:
+ * @web_view: the #EphyWebView in which to load the request
+ * @request: the #WebKitNetworkRequest to be loaded
+ *
+ * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
+ **/
+void
+ephy_web_view_load_request (EphyWebView *web_view,
+                            WebKitNetworkRequest *request)
+{
+  WebKitWebFrame *main_frame;
+  const char *url;
+  char *effective_url;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW(web_view));
+  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
+
+  url = webkit_network_request_get_uri (request);
+  effective_url = normalize_or_autosearch_url (web_view, url);
+  webkit_network_request_set_uri (request, effective_url);
+  g_free (effective_url);
+
+  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
+  webkit_web_frame_load_request(main_frame, request);
+}
+
+/**
+ * ephy_web_view_load_url:
+ * @view: an #EphyWebView
+ * @url: a URL
+ *
+ * Loads @url in @view.
+ **/
+void
+ephy_web_view_load_url (EphyWebView *view,
+                        const char *url)
+{
+  char *effective_url;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_return_if_fail (url);
+
+  effective_url = normalize_or_autosearch_url (view, url);
+
   if (g_str_has_prefix (effective_url, "javascript:"))
     webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), effective_url);
   else
     webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
-
-  if (soup_uri)
-    soup_uri_free (soup_uri);
 
   g_free (effective_url);
 }
