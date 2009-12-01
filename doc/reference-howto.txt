@@ -1,31 +1,28 @@
-If you want to document one of the epiphany files you can do it
-by the following steps:
+Documenting Epiphany Reference
+==============================
 
-- Add documentation headers to the .c file public functions
+Documenting Epiphany's API is fairly trivial following these instructions:
 
-For example:
+- Add documentation headers to the .c file public functions, some pointers:
+  + good examples can be found in WebKit/WebKit/gtk/ files and epiphany itself
+  + don't forget to match arg names in the .c and .h files
+  + add a SECTION comment at the beginning of the file
 
-/**
- * ephy_session_autoresume:
- * @session: a #EphySession
- *
- * Resume a crashed session when necessary (interactive)
- *
- * Return value: %TRUE if at least a window has been opened
- **/
-gboolean
-ephy_session_autoresume (EphySession *session)
+- If it's a GObject add the get_type function and include the .h in 
+  doc/reference/epiphany.types in case it's not there already
 
-I dont think gtk-doc has a syntax document, though gtk is
-a good example to look at.
+- Remove the .h from the IGNORE_HFILES section of doc/reference/Makefile.am
 
-- If it's a GObject add the get_type function and include
-the .h in doc/reference/epiphany.types.
+- Clean current docs build using:
+  + make maintainer-clean-local
 
-- Remove the .h from the IGNORE_HFILES section of
-doc/reference/Makefile.am
+- Build and commit:
+  + modified .c and .h files
+  + modified Makefile.am
+  + modified epiphany-docs.sgml
+  + modified epiphany.types
 
-- Clean current docs build using "make maintainer-clean-local"
+  Remember that the generated files shouldn't be committed.
+  Don't forget to prefix your commit with 'docs:'
 
-- Build and commit both the modified .c and the sgml generated
-in doc/reference/tmpl.
+Last updated: December 1st, 2009 by diegoe.
