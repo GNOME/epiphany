@@ -33,6 +33,15 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtk.h>
 
+/**
+ * SECTION:ephy-spinner
+ * @short_description: A spinning 'loading' widget
+ *
+ * #EphySpinner implements an animated 'loading' indicator.
+ *
+ * Note that this is to be deprecated in favour of #GtkSpinner widget.
+ */
+
 /* Spinner cache implementation */
 
 #define EPHY_TYPE_SPINNER_CACHE			(ephy_spinner_cache_get_type())
