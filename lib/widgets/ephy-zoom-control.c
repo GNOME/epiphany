@@ -24,6 +24,13 @@
 #include "ephy-zoom-control.h"
 #include "ephy-zoom.h"
 
+/**
+ * SECTION:ephy-zoom-control
+ * @short_description: A #GtkToolItem implementing a zoom control
+ *
+ * #EphyZoomControl implements the zoom control used in Epiphany's toolbar.
+ */
+
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
 
 struct _EphyZoomControlPrivate
@@ -175,6 +182,11 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 	object_class->get_property = ephy_zoom_control_get_property;
 	object_class->dispose = ephy_zoom_control_dispose;
 
+	/**
+	* EphyZoomControl:zoom:
+	*
+	* The current value of #EphyZoomControl, as a float.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
 					 g_param_spec_float ("zoom", NULL, NULL,
@@ -183,6 +195,13 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 							     1.0,
 							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyZoomControl::zoom-to-level:
+	* @control: the object on which the signal is emitted
+	* @level: new zoom level
+	*
+	* Emitted when the user changes the value of the #EphyZoomControl.
+	*/
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
 		g_signal_new ("zoom-to-level",
 			      G_TYPE_FROM_CLASS (klass),
@@ -218,7 +237,6 @@ ephy_zoom_control_dispose (GObject *o)
  * @zoom: the new value for the zoom level
  *
  * Sets the zoom level of @control.
- *
  **/
 void
 ephy_zoom_control_set_zoom_level (EphyZoomControl *control, float zoom)
@@ -238,7 +256,6 @@ ephy_zoom_control_set_zoom_level (EphyZoomControl *control, float zoom)
  * Get the current zoom level of @control.
  *
  * Returns: the zoom level as a float
- *
  **/
 float
 ephy_zoom_control_get_zoom_level (EphyZoomControl *control)
