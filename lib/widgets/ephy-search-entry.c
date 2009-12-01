@@ -23,6 +23,15 @@
 
 #include "ephy-search-entry.h"
 
+/**
+ * SECTION:ephy-search-entry
+ * @short_description: A search entry widget
+ * @see_also: #GtkEntry
+ *
+ * #EphySearchEntry implements a #GtkEntry for handling user search input.
+ * It implements a search timeout and easy cleaning.
+ */
+
 static void ephy_search_entry_class_init (EphySearchEntryClass *klass);
 static void ephy_search_entry_init (EphySearchEntry *entry);
 
@@ -49,6 +58,15 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+    /**
+	* EphySearchEntry::search:
+	* @entry: the object on which the signal is emitted
+	* @text: the text introduced by the user
+	*
+	* Emitted when the user activates the search entry after introducing
+	* text.
+	*
+	*/
 	ephy_search_entry_signals[SEARCH] =
 		g_signal_new ("search",
 			      G_OBJECT_CLASS_TYPE (object_class),

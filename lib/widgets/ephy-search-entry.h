@@ -43,7 +43,7 @@ struct _EphySearchEntryClass
 {
 	GtkEntryClass parent;
 
-	void (*search) (EphySearchEntry *view, const char *text);
+	void (*search) (EphySearchEntry *entry, const char *text);
 };
 
 struct _EphySearchEntry
