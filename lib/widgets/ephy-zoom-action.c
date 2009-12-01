@@ -26,6 +26,13 @@
 #include "ephy-zoom-control.h"
 #include "ephy-zoom.h"
 
+/**
+ * SECTION:ephy-zoom-action
+ * @short_description: A #GtkAction implementing a zoom control
+ *
+ * #EphyZoomAction implements a #GtkAction able to control the zoom level.
+ */
+
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 
 struct _EphyZoomActionPrivate
@@ -192,6 +199,11 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 	action_class->connect_proxy = connect_proxy;
 	action_class->create_menu_item = create_menu_item;
 
+	/**
+	* EphyZoomAction:zoom:
+	*
+	* The current value of #EphyZoomAction, as a float.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
 					 g_param_spec_float ("zoom", NULL, NULL,
@@ -200,6 +212,13 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 							     1.0,
 							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyZoomAction::zoom-to-level:
+	* @action: the object on which the signal is emitted
+	* @level: new zoom level
+	*
+	* Emitted when the user changes the value of the #EphyZoomAction.
+	*/
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
 		g_signal_new ("zoom-to-level",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -222,6 +241,13 @@ ephy_zoom_action_init (EphyZoomAction *action)
 	action->priv->zoom = 1.0;
 }
 
+/**
+ * ephy_zoom_action_set_zoom_level:
+ * @action: an #EphyZoomAction
+ * @zoom: the new value for the zoom level
+ *
+ * Sets the zoom level of @action.
+ **/
 void
 ephy_zoom_action_set_zoom_level (EphyZoomAction *action, float zoom)
 {
@@ -233,6 +259,14 @@ ephy_zoom_action_set_zoom_level (EphyZoomAction *action, float zoom)
 	g_object_notify (G_OBJECT (action), "zoom");
 }
 
+/**
+ * ephy_zoom_action_get_zoom_level:
+ * @action: an #EphyZoomControl
+ *
+ * Get the current zoom level of @action.
+ *
+ * Returns: the zoom level as a float
+ **/
 float
 ephy_zoom_action_get_zoom_level (EphyZoomAction *action)
 {

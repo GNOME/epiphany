@@ -53,7 +53,6 @@ IGNORE_HFILES = \
 	ephy-node-view.h \
 	ephy-tree-model-node.h \
 	ephy-tree-model-sort.h \
-	ephy-zoom-action.h \
 	downloader-view.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \
