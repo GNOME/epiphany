@@ -54,7 +54,8 @@ ephy_zoom_get_changed_zoom_level (float level, int steps)
 	return zoom_levels[CLAMP(index + steps, 0, (int) n_zoom_levels - 1)].level;
 }
 
-float	ephy_zoom_get_nearest_zoom_level (float level)
+float
+ephy_zoom_get_nearest_zoom_level (float level)
 {
 	return ephy_zoom_get_changed_zoom_level (level, 0);
 }

@@ -39,6 +39,14 @@
 
 #include <string.h>
 
+/**
+ * SECTION:ephy-location-entry
+ * @short_description: A location entry widget
+ * @see_also: #GtkEntry
+ *
+ * #EphyLocationEntry implements the location bar in the main Epiphany window.
+ */
+
 #define EPHY_LOCATION_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryPrivate))
 
 struct _EphyLocationEntryPrivate
@@ -211,6 +219,13 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
 	widget_class->style_set = ephy_location_entry_style_set;
 
+    /**
+	* EphyLocationEntry::user-changed:
+	* @entry: the object on which the signal is emitted
+	*
+	* Emitted when the user changes the contents of the internal #GtkEntry
+	*
+	*/
 	signals[USER_CHANGED] = g_signal_new (
 		"user_changed", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
@@ -221,6 +236,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		0,
 		G_TYPE_NONE);
 
+    /**
+	* EphyLocationEntry::lock-clicked:
+	* @entry: the object on which the signal is emitted
+	*
+	* Emitted when the user clicks the security icon inside the
+	* #EphyLocationEntry.
+	*
+	*/
 	signals[LOCK_CLICKED] = g_signal_new (
 		"lock-clicked",
 		EPHY_TYPE_LOCATION_ENTRY,
@@ -231,6 +254,16 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE,
 		0);
 
+    /**
+	* EphyLocationEntry::get-location:
+	* @entry: the object on which the signal is emitted
+	* Returns: the current page address as a string
+	*
+	* For drag and drop purposes, the location bar will request you the real
+	* address of where it is pointing to. The signal handler for this function
+	* should return the address of the currently loaded site.
+	*
+	*/
 	signals[GET_LOCATION] = g_signal_new (
 		"get-location", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
@@ -241,6 +274,16 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		0,
 		G_TYPE_NONE);
 
+    /**
+	* EphyLocationEntry::get-title:
+	* @entry: the object on which the signal is emitted
+	* Returns: the current page title as a string
+	*
+	* For drag and drop purposes, the location bar will request you the title
+	* of where it is pointing to. The signal handler for this function
+	* should return the title of the currently loaded site.
+	*
+	*/
 	signals[GET_TITLE] = g_signal_new (
 		"get-title", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
