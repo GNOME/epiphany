@@ -65,10 +65,10 @@ struct _EphyNodeViewPrivate
 	gboolean drag_started;
 	int drag_button;
 	int drag_x;
-        int drag_y;
+	int drag_y;
 	GtkTargetList *source_target_list;
 
-	gboolean drop_occurred;                                                                                          
+	gboolean drop_occurred;
 	gboolean have_drag_data;
 	GtkSelectionData *drag_data;
 	guint scroll_id;
@@ -505,7 +505,7 @@ filter_changed_cb (EphyNodeFilter *filter,
 
 static void
 ephy_node_view_selection_changed_cb (GtkTreeSelection *selection,
-			             EphyNodeView *view)
+				     EphyNodeView *view)
 {
 	EphyNodeViewPrivate *priv = view->priv;
 	GList *list;
@@ -526,9 +526,9 @@ ephy_node_view_selection_changed_cb (GtkTreeSelection *selection,
 
 static void
 ephy_node_view_row_activated_cb (GtkTreeView *treeview,
-			         GtkTreePath *path,
-			         GtkTreeViewColumn *column,
-			         EphyNodeView *view)
+				 GtkTreePath *path,
+				 GtkTreeViewColumn *column,
+				 EphyNodeView *view)
 {
 	GtkTreeIter iter, iter2;
 	EphyNode *node;
@@ -620,11 +620,11 @@ selection_foreach (GtkTreeModel *model,
 		   gpointer data)
 {
 	GList **list;
-                                                                                                                              
+
 	list = (GList**)data;
-                                                                                                                              
+
 	*list = g_list_prepend (*list,
-				gtk_tree_row_reference_new (model, path));              
+				gtk_tree_row_reference_new (model, path));
 }
 
 static GList *
@@ -637,21 +637,21 @@ get_selection_refs (GtkTreeView *tree_view)
 	gtk_tree_selection_selected_foreach (selection,
 					     selection_foreach,
 					     &ref_list);
-	ref_list = g_list_reverse (ref_list);                                                                                                                              
+	ref_list = g_list_reverse (ref_list);
 	return ref_list;
 }
-                                                                                                                              
+
 static void
 ref_list_free (GList *ref_list)
 {
-        g_list_foreach (ref_list, (GFunc) gtk_tree_row_reference_free, NULL);
-        g_list_free (ref_list);
+	g_list_foreach (ref_list, (GFunc) gtk_tree_row_reference_free, NULL);
+	g_list_free (ref_list);
 }
-                                                                                                                              
+
 static void
 stop_drag_check (EphyNodeView *view)
 {
-        view->priv->drag_button = 0;
+	view->priv->drag_button = 0;
 }
 
 static gboolean
@@ -662,32 +662,32 @@ button_event_modifies_selection (GdkEventButton *event)
 
 static void
 did_not_drag (EphyNodeView *view,
-              GdkEventButton *event)
+	      GdkEventButton *event)
 {
-        GtkTreeView *tree_view;
-        GtkTreeSelection *selection;
-        GtkTreePath *path;
-                                                                                                                              
-        tree_view = GTK_TREE_VIEW (view);
-        selection = gtk_tree_view_get_selection (tree_view);
-                                                                                                                              
-        if (gtk_tree_view_get_path_at_pos (tree_view, event->x, event->y,
-                                           &path, NULL, NULL, NULL))
+	GtkTreeView *tree_view;
+	GtkTreeSelection *selection;
+	GtkTreePath *path;
+
+	tree_view = GTK_TREE_VIEW (view);
+	selection = gtk_tree_view_get_selection (tree_view);
+
+	if (gtk_tree_view_get_path_at_pos (tree_view, event->x, event->y,
+					   &path, NULL, NULL, NULL))
 	{
-                if((event->button == 1 || event->button == 2) &&
-                   gtk_tree_selection_path_is_selected (selection, path) &&
-                   !button_event_modifies_selection (event))
+		if((event->button == 1 || event->button == 2) &&
+		   gtk_tree_selection_path_is_selected (selection, path) &&
+		   !button_event_modifies_selection (event))
 		{
 			if (gtk_tree_selection_get_mode (selection) == GTK_SELECTION_MULTIPLE)
 			{
-	                        gtk_tree_selection_unselect_all (selection);
+				gtk_tree_selection_unselect_all (selection);
 			}
 
-                        gtk_tree_selection_select_path (selection, path);
-                }
-                                                                                                                              
-                gtk_tree_path_free (path);
-        }                                                                                                              
+			gtk_tree_selection_select_path (selection, path);
+		}
+
+		gtk_tree_path_free (path);
+	}
 }
 
 typedef struct
@@ -728,27 +728,27 @@ can_drag_selection (EphyNodeView *view)
 
 static void
 drag_data_get_cb (GtkWidget *widget,
-                  GdkDragContext *context,
-                  GtkSelectionData *selection_data,
-                  guint info,
-                  guint time)
+		  GdkDragContext *context,
+		  GtkSelectionData *selection_data,
+		  guint info,
+		  guint time)
 {
 	GtkTreeView *tree_view;
 	GtkTreeModel *model;
 	GList *ref_list;
-                                                                                                                              
+
 	tree_view = GTK_TREE_VIEW (widget);
-                                                                                                                              
+
 	model = gtk_tree_view_get_model (tree_view);
 	g_return_if_fail (model != NULL);
-                                                                                                                              
+
 	ref_list = g_object_get_data (G_OBJECT (context), "drag-info");
-                                                                                                                              
+
 	if (ref_list == NULL)
 	{
-        	return;
+		return;
 	}
-                                                                                                                              
+
 	if (EGG_IS_TREE_MULTI_DRAG_SOURCE (model))
 	{
 		egg_tree_multi_drag_source_drag_data_get (EGG_TREE_MULTI_DRAG_SOURCE (model),
@@ -759,20 +759,20 @@ drag_data_get_cb (GtkWidget *widget,
 
 static gboolean
 button_release_cb (GtkWidget *widget,
-                   GdkEventButton *event,
-                   EphyNodeView *view)
+		   GdkEventButton *event,
+		   EphyNodeView *view)
 {
-        if (event->button == view->priv->drag_button)
+	if (event->button == view->priv->drag_button)
 	{
 		stop_drag_check (view);
 		if (!view->priv->drag_started)
 		{
-                        did_not_drag (view, event);
-                        return TRUE;
-                }
+			did_not_drag (view, event);
+			return TRUE;
+		}
 		view->priv->drag_started = FALSE;
-        }
-        return FALSE;
+	}
+	return FALSE;
 }
 
 static gboolean
@@ -780,25 +780,25 @@ motion_notify_cb (GtkWidget *widget,
 		  GdkEventMotion *event,
 		  EphyNodeView *view)
 {
-        GdkDragContext *context;
-        GList *ref_list;
-                                                                                                      
+	GdkDragContext *context;
+	GList *ref_list;
+
 	if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget)))
 	{
 		return FALSE;
-	}                                                                                                                      
-        if (view->priv->drag_button != 0)
+	}
+	if (view->priv->drag_button != 0)
 	{
 		if (gtk_drag_check_threshold (widget, view->priv->drag_x,
-                                              view->priv->drag_y, event->x,
+					      view->priv->drag_y, event->x,
 					      event->y)
 		    && can_drag_selection (view))
 		{
 			context = gtk_drag_begin
 				(widget, view->priv->source_target_list,
-                                 GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK,
-                                 view->priv->drag_button,
-                                 (GdkEvent*)event);
+				 GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK,
+				 view->priv->drag_button,
+				 (GdkEvent*)event);
 
 			stop_drag_check (view);
 			view->priv->drag_started = TRUE;
@@ -818,8 +818,8 @@ motion_notify_cb (GtkWidget *widget,
 
 static gboolean
 ephy_node_view_button_press_cb (GtkWidget *treeview,
-			        GdkEventButton *event,
-			        EphyNodeView *view)
+				GdkEventButton *event,
+				EphyNodeView *view)
 {
 	GtkTreePath *path = NULL;
 	GtkTreeSelection *selection;
@@ -850,11 +850,11 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 		}
 
 		if(!button_event_modifies_selection (event) &&
-                   event->button == 1 && path_is_selected &&
+		   event->button == 1 && path_is_selected &&
 		   gtk_tree_selection_count_selected_rows (selection) > 1)
 		{
-                        call_parent = FALSE;
-                }
+			call_parent = FALSE;
+		}
 
 		if (call_parent)
 		{
@@ -885,10 +885,10 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 			{
 				view->priv->drag_started = FALSE;
 				view->priv->drag_button = event->button;
-		                view->priv->drag_x = event->x;
-		                view->priv->drag_y = event->y;
+				view->priv->drag_x = event->x;
+				view->priv->drag_y = event->y;
 			}
-	        }
+		}
 
 		gtk_tree_path_free (path);
 	}
@@ -915,7 +915,7 @@ ephy_node_view_set_filter (EphyNodeView *view, EphyNodeFilter *filter)
 	{
 		view->priv->filter = g_object_ref (filter);
 		g_signal_connect_object (G_OBJECT (view->priv->filter),
-				         "changed", G_CALLBACK (filter_changed_cb),
+					 "changed", G_CALLBACK (filter_changed_cb),
 					 G_OBJECT (view), 0);
 	}
 
@@ -988,9 +988,9 @@ ephy_node_view_new (EphyNode *root,
 
 static void
 cell_renderer_edited (GtkCellRendererText *cell,
-                      const char *path_str,
-                      const char *new_text,
-                      EphyNodeView *view)
+		      const char *path_str,
+		      const char *new_text,
+		      EphyNodeView *view)
 {
 	GtkTreePath *path;
 	GtkTreeIter iter, iter2;
@@ -999,8 +999,8 @@ cell_renderer_edited (GtkCellRendererText *cell,
 	view->priv->edited_node = NULL;
 
 	g_object_set (G_OBJECT (view->priv->editable_renderer),
-                      "editable", FALSE,
-                      NULL);
+		      "editable", FALSE,
+		      NULL);
 
 	path = gtk_tree_path_new_from_string (path_str);
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
@@ -1020,7 +1020,7 @@ cell_renderer_edited (GtkCellRendererText *cell,
 
 static void
 renderer_editing_canceled_cb (GtkCellRendererText *cell,
-                              EphyNodeView *view)
+			      EphyNodeView *view)
 {
 	if (view->priv->remove_if_cancelled)
 	{
@@ -1032,33 +1032,33 @@ renderer_editing_canceled_cb (GtkCellRendererText *cell,
 static inline int
 compare_string_values (const GValue *a_value, const GValue *b_value)
 {
-        const char *str1, *str2;
-        int retval;
-                                                                                                                        
-        str1 = g_value_get_string (a_value);
-        str2 = g_value_get_string (b_value);                                                                                 
+	const char *str1, *str2;
+	int retval;
 
-        if (str1 == NULL)
-        {
-                retval = -1;
-        }
-        else if (str2 == NULL)
-        {
-                retval = 1;
-        }
-        else
-        {
-	        char *str_a;
-	        char *str_b;
+	str1 = g_value_get_string (a_value);
+	str2 = g_value_get_string (b_value);
 
-                str_a = g_utf8_casefold (str1, -1);
-                str_b = g_utf8_casefold (str2, -1);
-                retval = g_utf8_collate (str_a, str_b);
-                g_free (str_a);
-                g_free (str_b);
-        }
-                                                                                                              
-        return retval;
+	if (str1 == NULL)
+	{
+		retval = -1;
+	}
+	else if (str2 == NULL)
+	{
+		retval = 1;
+	}
+	else
+	{
+		char *str_a;
+		char *str_b;
+
+		str_a = g_utf8_casefold (str1, -1);
+		str_b = g_utf8_casefold (str2, -1);
+		retval = g_utf8_collate (str_a, str_b);
+		g_free (str_a);
+		g_free (str_b);
+	}
+
+	return retval;
 }
 
 static int
@@ -1203,9 +1203,9 @@ provide_text_weight (EphyNode *node, GValue *value, EphyNodeView *view)
 
 int
 ephy_node_view_add_data_column (EphyNodeView *view,
-			        GType value_type,
+				GType value_type,
 				guint prop_id,
-			        EphyTreeModelNodeValueFunc func,
+				EphyTreeModelNodeValueFunc func,
 				gpointer data)
 {
 	int column;
@@ -1247,7 +1247,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	if (icon_func)
 	{
 		icon_column = ephy_tree_model_node_add_func_column
-	                 (view->priv->nodemodel, GDK_TYPE_PIXBUF, icon_func, NULL);
+			 (view->priv->nodemodel, GDK_TYPE_PIXBUF, icon_func, NULL);
 
 		renderer = gtk_cell_renderer_pixbuf_new ();
 		gtk_tree_view_column_pack_start (gcolumn, renderer, FALSE);
@@ -1514,24 +1514,24 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 		gtk_target_list_new (types, n_types);
 
 	ephy_tree_model_sort_set_base_drag_column_id  (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-					               base_drag_column);
+						       base_drag_column);
 	ephy_tree_model_sort_set_extra_drag_column_id (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-					               extra_drag_column);
+						       extra_drag_column);
 
 	g_signal_connect_object (G_OBJECT (view),
-			         "button_release_event",
-			         G_CALLBACK (button_release_cb),
-			         view,
+				 "button_release_event",
+				 G_CALLBACK (button_release_cb),
+				 view,
 				 0);
 	g_signal_connect_object (G_OBJECT (view),
-			         "motion_notify_event",
-			         G_CALLBACK (motion_notify_cb),
-			         view,
+				 "motion_notify_event",
+				 G_CALLBACK (motion_notify_cb),
+				 view,
 				 0);
 	g_signal_connect_object (G_OBJECT (view),
-			         "drag_data_get",
-			         G_CALLBACK (drag_data_get_cb),
-			         view,
+				 "drag_data_get",
+				 G_CALLBACK (drag_data_get_cb),
+				 view,
 				 0);
 }
 
@@ -1553,18 +1553,18 @@ ephy_node_view_edit (EphyNodeView *view, gboolean remove_if_cancelled)
 	path = rows->data;
 
 	g_object_set (G_OBJECT (view->priv->editable_renderer),
-                      "editable", TRUE,
-                      NULL);
+		      "editable", TRUE,
+		      NULL);
 
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path,
-                                  view->priv->editable_column,
-                                  TRUE);
+				  view->priv->editable_column,
+				  TRUE);
 
 	view->priv->edited_node = get_node_from_path (view, path);
 	view->priv->remove_if_cancelled = remove_if_cancelled;
 
 	g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-        g_list_free (rows);
+	g_list_free (rows);
 }
 
 gboolean
@@ -1591,7 +1591,7 @@ filter_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 
 static GObject *
 ephy_node_view_constructor (GType type, guint n_construct_properties,
-                            GObjectConstructParam *construct_params)
+			    GObjectConstructParam *construct_params)
 
 {
 	GObject *object;
@@ -1600,7 +1600,7 @@ ephy_node_view_constructor (GType type, guint n_construct_properties,
 	GtkTreeSelection *selection;
 
 	object = parent_class->constructor (type, n_construct_properties,
-                                            construct_params);
+					    construct_params);
 	view = EPHY_NODE_VIEW (object);
 	priv = EPHY_NODE_VIEW_GET_PRIVATE (object);
 
@@ -1612,20 +1612,20 @@ ephy_node_view_constructor (GType type, guint n_construct_properties,
 	priv->sortmodel = ephy_tree_model_sort_new (priv->filtermodel);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->sortmodel));
 	g_signal_connect_object (object, "button_press_event",
-			         G_CALLBACK (ephy_node_view_button_press_cb),
-			         view, 0);
+				 G_CALLBACK (ephy_node_view_button_press_cb),
+				 view, 0);
 	g_signal_connect (object, "key_press_event",
 			  G_CALLBACK (ephy_node_view_key_press_cb),
 			  view);
 	g_signal_connect_object (object, "row_activated",
-			         G_CALLBACK (ephy_node_view_row_activated_cb),
-			         view, 0);
+				 G_CALLBACK (ephy_node_view_row_activated_cb),
+				 view, 0);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect_object (G_OBJECT (selection), "changed",
-			         G_CALLBACK (ephy_node_view_selection_changed_cb),
-			         view, 0);
+				 G_CALLBACK (ephy_node_view_selection_changed_cb),
+				 view, 0);
 
 	return object;
 }
