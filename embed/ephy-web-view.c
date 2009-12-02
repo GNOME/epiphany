@@ -655,7 +655,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::ge-new-window:
- * @view:
+ * @view: the #EphyWebView that received the signal
  * @new_view: the newly opened #EphyWebView
  *
  * The ::ge_new_window signal is emitted after a new window has been opened by
@@ -672,7 +672,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                   GTK_TYPE_WIDGET);
 /**
  * EphyWebView::ge-popup-blocked:
- * @view:
+ * @view: the #EphyWebView that received the signal
  * @address: The requested URL
  * @target: The requested window name, e.g. "_blank"
  * @features: The requested features: for example, "height=400,width=200"
@@ -694,7 +694,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::ge-favicon:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @address: the URL to @embed's web site's favicon
  *
  * The ::ge_favicon signal is emitted when @embed discovers that a favourite
@@ -711,7 +711,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::ge-search-link:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @type: the mime-type of the search description
  * @title: the title of the news feed
  * @address: the URL to @embed's web site's search description
@@ -733,7 +733,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::ge-feed-link:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @type: the mime-type of the news feed
  * @title: the title of the news feed
  * @address: the URL to @embed's web site's news feed
@@ -754,7 +754,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::ge-dom-mouse-click:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @event: the #EphyEmbedEvent which triggered this signal
  *
  * The ::ge_dom_mouse_click signal is emitted when the user clicks in @embed.
@@ -770,7 +770,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_OBJECT);
 /**
  * EphyWebView::ge-dom-mouse-down:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @event: the #EphyEmbedEvent which triggered this signal
  *
  * The ::ge_dom_mouse_down signal is emitted when the user depresses a mouse
@@ -787,7 +787,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_OBJECT);
 /**
  * EphyWebView::ge-modal-alert:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  *
  * The ::ge-modal-alert signal is emitted when a DOM event will open a
  * modal alert.
@@ -804,7 +804,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             0);
 /**
  * EphyWebView::ge-modal-alert-closed:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  *
  * The ::ge-modal-alert-closed signal is emitted when a modal alert put up by a
  * DOM event was closed.
@@ -820,7 +820,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::ge-document-type:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @type: the new document type
  *
  * The ::ge-document-type signal is emitted when @embed determines the type of its document.
@@ -836,7 +836,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE);
 /**
  * EphyWebView::dom-content-loaded:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  *
  * The ::dom-content-loaded signal is emitted when 
  * the document has been loaded (excluding images and other loads initiated by this document).
@@ -854,7 +854,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::search-key-press:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @event: the #GdkEventKey which triggered this signal
  *
  * The ::search-key-press signal is emitted for keypresses which
@@ -872,7 +872,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
 /**
  * EphyWebView::close-request
- * @embed:
+ * @view: the #EphyWebView that received the signal
  *
  * The ::close signal is emitted when the embed request closing.
  * Return %TRUE to prevent closing. You HAVE to process removal of the embed
@@ -888,7 +888,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             0);
 /**
  * EphyWebView::content-blocked:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @uri: blocked URI 
  *
  * The ::content-blocked signal is emitted when an url has been blocked.
@@ -904,7 +904,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::new-document-now:
- * @embed:
+ * @view: the #EphyWebView that received the signal
  * @uri: URI of the new content
  *
  * The ::new-document-now signal is emitted when a new page content
