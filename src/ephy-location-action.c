@@ -665,6 +665,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 
 	/**
 	* EphyLocationAction::lock-clicked:
+	* @action: the object which received the signal.
 	*
 	* Emitted when the user clicks on the security icon of the internal
 	* #EphyLocationEntry.

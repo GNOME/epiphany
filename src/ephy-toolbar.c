@@ -743,6 +743,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 
 	/**
 	* EphyToolbar::activation-finished:
+	* @toolbar: the object which received the signal.
 	*
 	* Emitted when the user clicks on the security icon of the internal
 	* #EphyLocationEntry.
@@ -759,6 +760,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 
 	/**
 	* EphyToolbar::exit-clicked:
+	* @toolbar: the object which received the signal.
 	*
 	* Emitted when the user clicks on the security icon of the internal
 	* #EphyLocationEntry.
@@ -776,6 +778,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 
 	/**
 	* EphyToolbar::lock-clicked:
+	* @toolbar: the object which received the signal.
 	*
 	* Emitted when the user clicks on the security icon of the internal
 	* #EphyLocationEntry.
@@ -792,6 +795,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 			 0);
 	/**
 	* EphyToolbar:window:
+	* @toolbar: the object which received the signal.
 	*
 	* Parent window of the toolbar.
 	*/
