@@ -68,6 +68,13 @@
 #include <X11/XF86keysym.h>
 #endif
 
+/**
+ * SECTION:ephy-window
+ * @short_description: Epiphany's main #GtkWindow widget
+ *
+ * #EphyWindow is Epiphany's main widget.
+ */
+
 static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_init			(EphyWindow *gs);
 static GObject *ephy_window_constructor		(GType type,
@@ -2017,7 +2024,7 @@ idle_unref_context_event (EphyWindow *window)
 	return FALSE;
 }
 
-void
+static void
 _ephy_window_set_context_event (EphyWindow *window,
 				EphyEmbedEvent *event)
 {
@@ -2037,7 +2044,7 @@ _ephy_window_set_context_event (EphyWindow *window,
 	priv->context_event = event != NULL ? g_object_ref (event) : NULL;
 }
 
-void
+static void
 _ephy_window_unset_context_event (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;

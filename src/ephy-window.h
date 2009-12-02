@@ -88,11 +88,6 @@ gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);
 
 EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
 
-void		 _ephy_window_set_context_event	  (EphyWindow *window,
-						   EphyEmbedEvent *event);
-
-void		 _ephy_window_unset_context_event (EphyWindow *window);
-
 G_END_DECLS
 
 #endif
