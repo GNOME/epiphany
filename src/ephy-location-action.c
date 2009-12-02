@@ -34,6 +34,14 @@
 #include <gtk/gtk.h>
 
 #include <string.h>
+
+/**
+ * SECTION:ephy-location-action
+ * @short_description: An #EphyLinkAction implementation
+ *
+ * #EphyLocationAction handles navigation together with #EphyLocationEntry
+ */
+
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
 
 struct _EphyLocationActionPrivate
@@ -655,6 +663,12 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	action_class->connect_proxy = connect_proxy;
 	action_class->disconnect_proxy = disconnect_proxy;
 
+	/**
+	* EphyLocationAction::lock-clicked:
+	*
+	* Emitted when the user clicks on the security icon of the internal
+	* #EphyLocationEntry.
+	*/
 	signals[LOCK_CLICKED] = g_signal_new (
 		"lock-clicked",
 		EPHY_TYPE_LOCATION_ACTION,
@@ -665,66 +679,107 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 		G_TYPE_NONE,
 		0);
 
+	/**
+	* EphyLocationAction:address:
+	*
+	* The address of the current location.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,
 					 g_param_spec_string ("address",
 							      "Address",
-							      "The address",
+							      "The address of the current location",
 							      "",
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/**
+	* EphyLocationAction:editable:
+	*
+	* Whether the location bar entry can be edited.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_EDITABLE,
 					 g_param_spec_boolean ("editable",
 							       "Editable",
-							       "Editable",
+							       "Whether the location bar entry can be edited",
 							       TRUE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:icon:
+	*
+	* The icon corresponding to the current location.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
 					 g_param_spec_object ("icon",
 							      "Icon",
-							      "The icon",
+							      "The icon corresponding to the current location",
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:lock-stock-id:
+	*
+	* Stock id of the security icon.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_LOCK_STOCK,
 					 g_param_spec_string  ("lock-stock-id",
 							       "Lock Stock ID",
-							       "Lock Stock ID",
+							       "Stock id of the security icon",
 							       NULL,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:lock-tooltip:
+	*
+	* Tooltip for the security icon.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_LOCK_TOOLTIP,
 					 g_param_spec_string  ("lock-tooltip",
 							       "Lock Tooltip",
-							       "The icon",
+							       "Tooltip for the security icon",
 							       NULL,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:secure:
+	*
+	* Whether the current page is loaded over a secure connection.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_SECURE,
 					 g_param_spec_boolean ("secure",
 							       "Secure",
-							       "Secure",
+							       "Whether the current page is loaded over a secure connection",
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:show-lock:
+	*
+	* If we should show the security icon.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_LOCK,
 					 g_param_spec_boolean ("show-lock",
 							       "Show Lock",
-							       "Show Lock",
+							       "If we should show the security icon",
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyLocationAction:window:
+	*
+	* The parent window.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
 					 g_param_spec_object ("window",
 							      "Window",
-							      "The navigation window",
+							      "The parent window",
 							      G_TYPE_OBJECT,
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));
@@ -886,6 +941,14 @@ ephy_location_action_finalize (GObject *object)
 	G_OBJECT_CLASS (ephy_location_action_parent_class)->finalize (object);
 }
 
+/**
+ * ephy_location_action_get_address:
+ * @action: an #EphyLocationAction
+ *
+ * Retrieves the currently loaded address.
+ *
+ * Returns: the current address
+ **/
 const char *
 ephy_location_action_get_address (EphyLocationAction *action)
 {
@@ -894,6 +957,14 @@ ephy_location_action_get_address (EphyLocationAction *action)
 	return action->priv->address;
 }
 
+/**
+ * ephy_location_action_set_address:
+ * @action: an #EphyLocationAction
+ * @address: the current address
+ * @typed_address: address typed by the user
+ *
+ * Sets the @address and @typed_address in @action.
+ **/
 void
 ephy_location_action_set_address (EphyLocationAction *action,
 				  const char *address,

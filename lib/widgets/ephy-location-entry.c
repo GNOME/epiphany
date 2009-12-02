@@ -1304,13 +1304,10 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 /**
  * ephy_location_entry_set_location:
  * @entry: an #EphyLocationEntry widget
- * @address: the address to be set as the current location
- * @typed_address: the address to be shown in the location entry or NULL
+ * @address: current location address
+ * @typed_address: address shown in the location entry
  *
- * Sets the current address of @entry to @address, alternatively a
- * @typed_address can be used to determine the text to be displayed in the
- * location entry.
- *
+ * Sets the current address of @entry to @address or @typed_address if given.
  **/
 void
 ephy_location_entry_set_location (EphyLocationEntry *entry,
