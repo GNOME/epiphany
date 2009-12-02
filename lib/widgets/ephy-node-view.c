@@ -31,6 +31,14 @@
 #include "ephy-marshal.h"
 #include <string.h>
 
+/**
+ * SECTION:ephy-node-view
+ * @short_description: A #GtkTreeView displaying a collection of #EphyNode elements.
+ *
+ * #EphyNodeView implements a #GtkTreeView displaying a given set of #EphyNode
+ * elements. It implements drag and dropping.
+ */
+
 static void ephy_node_view_class_init (EphyNodeViewClass *klass);
 static void ephy_node_view_init (EphyNodeView *view);
 static void ephy_node_view_finalize (GObject *object);
@@ -444,6 +452,15 @@ drag_drop_cb (GtkWidget *widget,
 	return TRUE;
 }
 
+/**
+ * ephy_node_view_enable_drag_dest:
+ * @view: the #EphyNodeView
+ * @types: types allowed as #GtkTargetEntry
+ * @n_types: count of @types
+ *
+ * Set the types of drag destination allowed by @view.
+ *
+ **/
 void
 ephy_node_view_enable_drag_dest (EphyNodeView *view,
 				 const GtkTargetEntry *types,
@@ -970,6 +987,16 @@ ephy_node_view_get_property (GObject *object,
 	}
 }
 
+/**
+ * ephy_node_view_new:
+ * @root: the root #EphyNode for the view
+ * @filter: a filter model for the view
+ *
+ * Creates a new #EphyNodeView using @filter as the model and @root as the root
+ * node.
+ *
+ * Returns: a new #EphyNodeView as a #GtkWidget
+ **/
 GtkWidget *
 ephy_node_view_new (EphyNode *root,
 		    EphyNodeFilter *filter)
@@ -1201,6 +1228,19 @@ provide_text_weight (EphyNode *node, GValue *value, EphyNodeView *view)
 	}
 }
 
+/**
+ * ephy_node_view_add_data_column:
+ * @view: an #EphyNodeView
+ * @value_type: type to be held by the column
+ * @prop_id: property corresponding to the model behind @view
+ * @func: a data function for the column or %NULL
+ * @data: optional data for @func
+ *
+ * Adds a new column to @view, taking its value from a column in the model defined
+ * by @prop_id, or from @func.
+ *
+ * Returns: the id of the new column
+ **/
 int
 ephy_node_view_add_data_column (EphyNodeView *view,
 				GType value_type,
@@ -1224,6 +1264,20 @@ ephy_node_view_add_data_column (EphyNodeView *view,
 	return column;
 }
 
+/**
+ * ephy_node_view_add_column:
+ * @view: an #EphyNodeView
+ * @title: title for the column
+ * @value_type: type to be held by the column
+ * @prop_id: numeric id corresponding to the column in the model to be shown
+ * @flags: flags for the new column
+ * @icon_func: a function providing the icon for the column
+ * @ret: location to store the created column
+ *
+ * Adds a new column, corresponding to a @prop_id of the model, to the @view.
+ *
+ * Returns: the id of the new column
+ **/
 int
 ephy_node_view_add_column (EphyNodeView *view,
 			   const char  *title,
@@ -1323,8 +1377,15 @@ ephy_node_view_add_column (EphyNodeView *view,
 	return column;
 }
 
+/**
+ * ephy_node_view_set_priority:
+ * @view: an #EphyNodeView
+ * @priority_prop_id: one of #EphyNodeViewPriority
+ *
+ * Adds a priority column to the @view with @priority_prop_id as the value.
+ **/
 void
-ephy_node_view_set_priority (EphyNodeView *view, guint priority_prop_id)
+ephy_node_view_set_priority (EphyNodeView *view, EphyNodeViewPriority priority_prop_id)
 {
 	int priority_column;
 
@@ -1337,6 +1398,15 @@ ephy_node_view_set_priority (EphyNodeView *view, guint priority_prop_id)
 	view->priv->priority_prop_id = priority_prop_id;
 }
 
+/**
+ * ephy_node_view_set_sort:
+ * @view: an #EphyNodeView
+ * @value_type: type of the value held at @prop_id by the model
+ * @prop_id: column id in the model
+ * @sort_type: the sort mode
+ *
+ * Adds a sort column to the @view corresponding to @prop_id in the model.
+ **/
 void
 ephy_node_view_set_sort (EphyNodeView *view, GType value_type, guint prop_id,
 			 GtkSortType sort_type)
@@ -1386,6 +1456,14 @@ get_selection (GtkTreeModel *model,
 	*list = g_list_prepend (*list, node);
 }
 
+/**
+ * ephy_node_view_get_selection:
+ * @view: an #EphyNodeView
+ *
+ * Returns the selected elements of @view as a #GList of #EphyNode elements.
+ *
+ * Returns: a #GList of #EphyNode elements
+ **/
 GList *
 ephy_node_view_get_selection (EphyNodeView *view)
 {
@@ -1405,6 +1483,12 @@ ephy_node_view_get_selection (EphyNodeView *view)
 	return list;
 }
 
+/**
+ * ephy_node_view_remove:
+ * @view: an #EphyNodeView
+ *
+ * Remove the currently selected nodes from @view.
+ **/
 void
 ephy_node_view_remove (EphyNodeView *view)
 {
@@ -1478,6 +1562,13 @@ ephy_node_view_remove (EphyNodeView *view)
 	}
 }
 
+/**
+ * ephy_node_view_select_node:
+ * @view: an #EphyNodeView
+ * @node: the #EphyNode in the @view to be selected
+ *
+ * Puts the selection of @view on @node.
+ **/
 void
 ephy_node_view_select_node (EphyNodeView *view,
 			    EphyNode *node)
@@ -1497,12 +1588,22 @@ ephy_node_view_select_node (EphyNodeView *view,
 					&iter);
 }
 
+/**
+ * ephy_node_view_enable_drag_source:
+ * @view: an #EphyNodeView
+ * @types: a #GtkTargetEntry for the @view
+ * @n_types: length of @types
+ * @base_drag_column_id: id of the column for ephy_tree_model_sort_set_base_drag_column_id
+ * @extra_drag_column_id: id of the column for ephy_tree_model_sort_set_extra_drag_column_id
+ *
+ * Sets @view as a drag source.
+ **/
 void
 ephy_node_view_enable_drag_source (EphyNodeView *view,
 				   const GtkTargetEntry *types,
 				   int n_types,
-				   int base_drag_column,
-				   int extra_drag_column)
+				   int base_drag_column_id,
+				   int extra_drag_column_id)
 {
 	GtkWidget *treeview;
 
@@ -1514,9 +1615,9 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 		gtk_target_list_new (types, n_types);
 
 	ephy_tree_model_sort_set_base_drag_column_id  (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-						       base_drag_column);
+						       base_drag_column_id);
 	ephy_tree_model_sort_set_extra_drag_column_id (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-						       extra_drag_column);
+						       extra_drag_column_id);
 
 	g_signal_connect_object (G_OBJECT (view),
 				 "button_release_event",
@@ -1535,6 +1636,14 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 				 0);
 }
 
+/**
+ * ephy_node_view_edit:
+ * @view: an #EphyNodeView
+ * @remove_if_cancelled: whether the edited node should be removed if editing is cancelled
+ *
+ * Edits the currently selected node in @view, the @remove_if_cancelled parameter
+ * controls if the node should be removed if editing is cancelled.
+ **/
 void
 ephy_node_view_edit (EphyNodeView *view, gboolean remove_if_cancelled)
 {
@@ -1567,6 +1676,14 @@ ephy_node_view_edit (EphyNodeView *view, gboolean remove_if_cancelled)
 	g_list_free (rows);
 }
 
+/**
+ * ephy_node_view_is_target:
+ * @view: an #EphyNodeView
+ *
+ * Tells if @view is currently focused.
+ *
+ * Returns: %TRUE if @view is focused
+ **/
 gboolean
 ephy_node_view_is_target (EphyNodeView *view)
 {
@@ -1630,6 +1747,15 @@ ephy_node_view_constructor (GType type, guint n_construct_properties,
 	return object;
 }
 
+/**
+ * ephy_node_view_add_toggle:
+ * @view: an #EphyNodeView widget
+ * @value_func: an #EphyTreeModelNodeValueFunc function to set column values
+ * @data: user_data to be passed to @value_func
+ *
+ * Append a new toggle column to @view with its value set by @value_func which can
+ * receive the optional @data parameter.
+ **/
 void
 ephy_node_view_add_toggle (EphyNodeView *view, EphyTreeModelNodeValueFunc value_func,
 			   gpointer data)
@@ -1648,6 +1774,13 @@ ephy_node_view_add_toggle (EphyNodeView *view, EphyTreeModelNodeValueFunc value_
 	gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
 }
 
+/**
+ * ephy_node_view_popup:
+ * @view: an #EphyNodeView widget
+ * @menu: a #GtkMenu to be shown
+ *
+ * Triggers the popup of @menu in @view.
+ **/
 void
 ephy_node_view_popup (EphyNodeView *view, GtkWidget *menu)
 {
@@ -1690,12 +1823,23 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 	object_class->set_property = ephy_node_view_set_property;
 	object_class->get_property = ephy_node_view_get_property;
 
+	/**
+	* EphyNodeView:root:
+	*
+	* A #gpointer to the root node of the #EphyNode elements of the view.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ROOT,
 					 g_param_spec_pointer ("root",
 							       "Root node",
 							       "Root node",
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+
+	/**
+	* EphyNodeView:filter:
+	*
+	* An #EphyNodeFilter object to use in the view.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_FILTER,
 					 g_param_spec_object ("filter",
@@ -1704,6 +1848,14 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 							      EPHY_TYPE_NODE_FILTER,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	/**
+	* EphyNodeView::node-toggled:
+	* @view: the object on which the signal is emitted
+	* @node: the target #EphyNode
+	* @checked: the new value of the toggle column
+	*
+	* Emitted when a row value is toggled, only emitted for toggle columns.
+	*/
 	ephy_node_view_signals[NODE_TOGGLED] =
 		g_signal_new ("node_toggled",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -1715,6 +1867,13 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      2,
 			      G_TYPE_POINTER,
 			      G_TYPE_BOOLEAN);
+	/**
+	* EphyNodeView::node-activated:
+	* @view: the object on which the signal is emitted
+	* @node: the activated #EphyNode
+	*
+	* Emitted when a row is activated.
+	*/
 	ephy_node_view_signals[NODE_ACTIVATED] =
 		g_signal_new ("node_activated",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -1725,6 +1884,13 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_POINTER);
+	/**
+	* EphyNodeView::node-selected:
+	* @view: the object on which the signal is emitted
+	* @node: the selected #EphyNode
+	*
+	* Emitted when a row is selected.
+	*/
 	ephy_node_view_signals[NODE_SELECTED] =
 		g_signal_new ("node_selected",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -1735,6 +1901,14 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_POINTER);
+	/**
+	* EphyNodeView::node-dropped:
+	* @view: the object on which the signal is emitted
+	* @node: the dropped #EphyNode
+	* @uris: URIs from the dragged data
+	*
+	* Emitted when an #EphyNode is dropped into the #EphyNodeView.
+	*/
 	ephy_node_view_signals[NODE_DROPPED] =
 		g_signal_new ("node_dropped",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -1746,6 +1920,14 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      2,
 			      G_TYPE_POINTER,
 			      G_TYPE_POINTER);
+
+	/**
+	* EphyNodeView::node-middle-clicked:
+	* @view: the object on which the signal is emitted
+	* @node: the clicked #EphyNode
+	*
+	* Emitted when the user middle clicks on a row of the #EphyNodeView.
+	*/
 	ephy_node_view_signals[NODE_MIDDLE_CLICKED] =
 		g_signal_new ("node_middle_clicked",
 			      G_OBJECT_CLASS_TYPE (object_class),

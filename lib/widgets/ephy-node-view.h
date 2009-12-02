@@ -34,15 +34,28 @@ G_BEGIN_DECLS
 #define EPHY_IS_NODE_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_VIEW))
 #define EPHY_NODE_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_VIEW, EphyNodeViewClass))
 
-typedef struct _EphyNodeViewPrivate EphyNodeViewPrivate;
+typedef struct _EphyNodeView		EphyNodeView;
+typedef struct _EphyNodeViewClass	EphyNodeViewClass;
+typedef struct _EphyNodeViewPrivate	EphyNodeViewPrivate;
 
-typedef struct
+struct _EphyNodeView
 {
 	GtkTreeView parent;
 
 	/*< private >*/
 	EphyNodeViewPrivate *priv;
-} EphyNodeView;
+};
+
+struct _EphyNodeViewClass
+{
+	GtkTreeViewClass parent;
+
+	void (*node_toggled)	    (EphyNodeView *view, EphyNode *node, gboolean checked);
+	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
+	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
+	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
+	void (*node_middle_clicked) (EphyNodeView *view, EphyNode *node);
+};
 
 typedef enum
 {
@@ -60,23 +73,10 @@ typedef enum
 	EPHY_NODE_VIEW_ELLIPSIZED = 1 << 4
 } EphyNodeViewFlags;
 
-typedef struct
-{
-	GtkTreeViewClass parent;
-
-	void (*node_toggled)	    (EphyNodeView *view, EphyNode *node, gboolean checked);
-	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
-	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
-	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
-	void (*node_middle_clicked) (EphyNodeView *view, EphyNode *node);
-} EphyNodeViewClass;
-
 GType      ephy_node_view_get_type	      (void);
 
 GtkWidget *ephy_node_view_new                 (EphyNode *root,
 					       EphyNodeFilter *filter);
-
-void	   ephy_node_view_enable_dnd	      (EphyNodeView *view);
 
 void	   ephy_node_view_add_toggle	      (EphyNodeView *view,
 					       EphyTreeModelNodeValueFunc value_func,
@@ -88,7 +88,7 @@ int	   ephy_node_view_add_column	      (EphyNodeView *view,
 					       guint prop_id,
 					       EphyNodeViewFlags flags,
 					       EphyTreeModelNodeValueFunc icon_func,
-					       GtkTreeViewColumn **column);
+					       GtkTreeViewColumn **ret);
 
 int	   ephy_node_view_add_data_column     (EphyNodeView *view,
 			                       GType value_type,
@@ -102,7 +102,7 @@ void	   ephy_node_view_set_sort            (EphyNodeView *view,
 					       GtkSortType sort_type);
 
 void	   ephy_node_view_set_priority        (EphyNodeView *view,
-					       guint priority_prop_id);
+					       EphyNodeViewPriority priority_prop_id);
 
 void	   ephy_node_view_remove              (EphyNodeView *view);
 
