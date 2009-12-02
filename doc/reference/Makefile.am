@@ -50,8 +50,6 @@ IGNORE_HFILES = \
 	ephy-stock-icons.h \
 	ephy-string.h \
 	ephy-zoom.h \
-	ephy-tree-model-node.h \
-	ephy-tree-model-sort.h \
 	downloader-view.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \

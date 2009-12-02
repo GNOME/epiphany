@@ -36,22 +36,24 @@ G_BEGIN_DECLS
 #define EPHY_IS_TREE_MODEL_SORT_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_SORT))
 #define EPHY_TREE_MODEL_SORT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortClass))
 
+typedef struct _EphyTreeModelSort EphyTreeModelSort;
+typedef struct _EphyTreeModelSortClass EphyTreeModelSortClass;
 typedef struct _EphyTreeModelSortPrivate EphyTreeModelSortPrivate;
 
-typedef struct
+struct _EphyTreeModelSort
 {
 	GtkTreeModelSort parent;
 
 	/*< private >*/
 	EphyTreeModelSortPrivate *priv;
-} EphyTreeModelSort;
+};
 
-typedef struct
+struct _EphyTreeModelSortClass
 {
 	GtkTreeModelSortClass parent_class;
 
 	void (*node_from_iter) (EphyTreeModelSort *model, GtkTreeIter *iter, void **node);
-} EphyTreeModelSortClass;
+};
 
 GType		ephy_tree_model_sort_get_type		      (void);
 

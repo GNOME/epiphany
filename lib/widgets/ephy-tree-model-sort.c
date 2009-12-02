@@ -29,6 +29,14 @@
 #include "ephy-marshal.h"
 #include "ephy-debug.h"
 
+/**
+ * SECTION:ephy-tree-model-sort
+ * @short_description: A #GtkTreeModelSort wrapper
+ *
+ * #EphyTreeModelSort is a simple wrapper for models, it implements some extra
+ * functionalities like drag and dropping, mostly relevant to Epiphany only.
+ */
+
 static void ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass);
 static void ephy_tree_model_sort_init (EphyTreeModelSort *ma);
 static void ephy_tree_model_sort_finalize (GObject *object);
@@ -121,6 +129,14 @@ ephy_tree_model_sort_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * ephy_tree_model_sort_new:
+ * @child_model: model to wrap
+ *
+ * Creates a new #EphyTreeModelSort around @child_model.
+ *
+ * Returns: a new #EphyTreeModelSort, as a #GtkWidget
+ **/
 GtkTreeModel*
 ephy_tree_model_sort_new (GtkTreeModel *child_model)
 {
@@ -149,6 +165,13 @@ ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source, G
 	return (EPHY_TREE_MODEL_SORT (drag_source)->priv->base_drag_column_id >= 0);
 }
 
+/**
+ * ephy_tree_model_sort_set_base_drag_column_id:
+ * @ms: an #EphyTreeModelSort
+ * @id: base drag column id
+ *
+ * Sets @id as the column for the base drag data
+ **/
 void
 ephy_tree_model_sort_set_base_drag_column_id (EphyTreeModelSort *ms,
 				              int id)
@@ -156,6 +179,13 @@ ephy_tree_model_sort_set_base_drag_column_id (EphyTreeModelSort *ms,
 	ms->priv->base_drag_column_id = id;
 }
 
+/**
+ * ephy_tree_model_sort_set_extra_drag_column_id:
+ * @ms: an #EphyTreeModelSort
+ * @id: extra drag column id
+ *
+ * Sets @id as the column for extra drag data.
+ **/
 void
 ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
 					       int id)
