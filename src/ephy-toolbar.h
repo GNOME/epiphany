@@ -76,9 +76,9 @@ void		ephy_toolbar_set_favicon		(EphyToolbar *toolbar,
 void		ephy_toolbar_set_show_leave_fullscreen	(EphyToolbar *toolbar,
 							 gboolean show);
 
-void		ephy_toolbar_activate_location		(EphyToolbar *t);
+void		ephy_toolbar_activate_location		(EphyToolbar *toolbar);
 
-const char     *ephy_toolbar_get_location		(EphyToolbar *t);
+const char     *ephy_toolbar_get_location		(EphyToolbar *toolbar);
 
 void		ephy_toolbar_set_location		(EphyToolbar *toolbar,
 							 const char *address,

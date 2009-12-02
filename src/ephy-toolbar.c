@@ -44,6 +44,13 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+/**
+ * SECTION:ephy-toolbar
+ * @short_description: Epiphany's toolbar widget
+ *
+ * #EphyToolbar is a customized #EggEditableToolbar.
+ */
+
 enum
 {
 	BACK_ACTION,
@@ -360,6 +367,9 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 
 /**
  * ephy_toolbar_get_action_group
+ * @toolbar: an #EphyToolbar widget
+ *
+ * Gets the #GtkActionGroup for @toolbar.
  *
  * Return value: (transfer none):
  **/
@@ -369,6 +379,13 @@ ephy_toolbar_get_action_group (EphyToolbar *toolbar)
    return toolbar->priv->action_group;   
 }
 
+/**
+ * ephy_toolbar_set_favicon:
+ * @toolbar: an #EphyToolbar widget
+ * @icon: a #GdkPixbuf icon
+ *
+ * Sets @icon to be the favicon of @toolbar's internal #EphyLocationEntry.
+ **/
 void
 ephy_toolbar_set_favicon (EphyToolbar *toolbar,
 			  GdkPixbuf *icon)
@@ -378,6 +395,13 @@ ephy_toolbar_set_favicon (EphyToolbar *toolbar,
 	g_object_set (priv->actions[LOCATION_ACTION], "icon", icon, NULL);
 }
 
+/**
+ * ephy_toolbar_set_show_leave_fullscreen:
+ * @toolbar: an #EphyToolbar widget
+ * @show: %TRUE to show the leave fullscreen button
+ *
+ * Tells @toolbar if it should show the leave fullscreen button or not.
+ **/
 void
 ephy_toolbar_set_show_leave_fullscreen (EphyToolbar *toolbar,
 					gboolean show)
@@ -389,6 +413,12 @@ ephy_toolbar_set_show_leave_fullscreen (EphyToolbar *toolbar,
 	ephy_toolbar_update_fixed_visibility (toolbar);
 }
 
+/**
+ * ephy_toolbar_activate_location:
+ * @toolbar: an #EphyToolbar widget
+ *
+ * Calls ephy_location_entry_activate on @toolbar's internal #EphyLocationEntry.
+ **/
 void
 ephy_toolbar_activate_location (EphyToolbar *toolbar)
 {
@@ -425,6 +455,14 @@ ephy_toolbar_activate_location (EphyToolbar *toolbar)
 	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
+/**
+ * ephy_toolbar_get_location:
+ * @toolbar: an #EphyToolbar widget
+ *
+ * Gets the current address according to @toolbar's #EphyLocationAction.
+ *
+ * Returns: current @toolbar address
+ **/
 const char *
 ephy_toolbar_get_location (EphyToolbar *toolbar)
 {
@@ -434,6 +472,15 @@ ephy_toolbar_get_location (EphyToolbar *toolbar)
 	return ephy_location_action_get_address (action);
 }
 
+/**
+ * ephy_toolbar_set_location:
+ * @toolbar: an #EphyToolbar widget
+ * @address: current @toolbar address
+ * @typed_address: address currently typed by the user
+ *
+ * Calls ephy_location_action_set_address in the internal #EphyLocationAction
+ * with @address and @typed_address.
+ **/
 void
 ephy_toolbar_set_location (EphyToolbar *toolbar,
 			   const char *address,
@@ -449,6 +496,15 @@ ephy_toolbar_set_location (EphyToolbar *toolbar,
 	priv->updating_address = FALSE;
 }
 
+/**
+ * ephy_toolbar_set_navigation_actions:
+ * @toolbar: an #EphyToolbar widget
+ * @back: %TRUE if possible to go backward
+ * @forward: %TRUE if possible to go forward
+ * @up: %TRUE if possible to go up
+ *
+ * Sets the sensivity of navigation buttons in the @toolbar.
+ **/
 void
 ephy_toolbar_set_navigation_actions (EphyToolbar *toolbar,
 				     gboolean back,
@@ -462,6 +518,15 @@ ephy_toolbar_set_navigation_actions (EphyToolbar *toolbar,
 	ephy_action_change_sensitivity_flags (priv->actions[UP_ACTION], SENS_FLAG, !up);
 }
 
+/**
+ * ephy_toolbar_set_navigation_tooltips:
+ * @toolbar: an #EphyToolbar widget
+ * @back_title: text for back button tooltip
+ * @forward_title: text for forward button tooltip
+ *
+ * Sets the titles of back and forward pages as the tooltips of its corresponding
+ * navigation buttons.
+ **/
 void
 ephy_toolbar_set_navigation_tooltips (EphyToolbar *toolbar,
 				      const char *back_title,
@@ -482,6 +547,16 @@ ephy_toolbar_set_navigation_tooltips (EphyToolbar *toolbar,
 	g_value_unset (&value);
 }
 
+/**
+ * ephy_toolbar_set_security_state:
+ * @toolbar: an #EphyToolbar widget
+ * @is_secure: %TRUE if the page is loaded over a secure connection
+ * @show_lock: %TRUE to show the lock icon in the location entry
+ * @stock_id: stock-id to be used as the lock icon
+ * @tooltip: tooltip for the lock icon
+ *
+ * Sets properties on the lock icon inside the internal #EphyLocationEntry.
+ **/
 void
 ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 				 gboolean is_secure,
@@ -502,6 +577,13 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 		      NULL);
 }
 
+/**
+ * ephy_toolbar_set_spinning:
+ * @toolbar: an #EphyToolbar widget
+ * @spinning: %TRUE to set the internal #EphySpinner as active
+ *
+ * Controls the internal #EphySpinner activity.
+ **/
 void
 ephy_toolbar_set_spinning (EphyToolbar *toolbar,
 			   gboolean spinning)
@@ -513,6 +595,14 @@ ephy_toolbar_set_spinning (EphyToolbar *toolbar,
 	ephy_toolbar_update_spinner (toolbar);
 }
 
+/**
+ * ephy_toolbar_set_zoom:
+ * @toolbar: an #EphyToolbar widget
+ * @can_zoom: %TRUE if the current #EphyWebView can zoom
+ * @zoom: new zoom level
+ *
+ * Sets the zoom level to @zoom, but only if @can_zoom is %TRUE.
+ **/
 void
 ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 		       gboolean can_zoom,
@@ -651,6 +741,12 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 	widget_class->show = ephy_toolbar_show;
 	widget_class->hide = ephy_toolbar_hide;
 
+	/**
+	* EphyToolbar::activation-finished:
+	*
+	* Emitted when the user clicks on the security icon of the internal
+	* #EphyLocationEntry.
+	*/
 	signals[ACTIVATION_FINISHED] =
 		g_signal_new ("activation-finished",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -661,6 +757,12 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 			      G_TYPE_NONE,
 			      0);
 
+	/**
+	* EphyToolbar::exit-clicked:
+	*
+	* Emitted when the user clicks on the security icon of the internal
+	* #EphyLocationEntry.
+	*/
 	signals[EXIT_CLICKED] =
 		g_signal_new
 			("exit-clicked",
@@ -672,6 +774,12 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 			 G_TYPE_NONE,
 			 0);
 
+	/**
+	* EphyToolbar::lock-clicked:
+	*
+	* Emitted when the user clicks on the security icon of the internal
+	* #EphyLocationEntry.
+	*/
 	signals[LOCK_CLICKED] =
 		g_signal_new
 			("lock-clicked",
@@ -682,7 +790,11 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 			 g_cclosure_marshal_VOID__VOID,
 			 G_TYPE_NONE,
 			 0);
-
+	/**
+	* EphyToolbar:window:
+	*
+	* Parent window of the toolbar.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
 					 g_param_spec_object ("window",
@@ -695,6 +807,14 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyToolbarPrivate));
 }
 
+/**
+ * ephy_toolbar_new:
+ * @window: parent window for the toolbar
+ *
+ * Creates a new #EphyToolbar and associates it with @window.
+ *
+ * Returns: a new #EphyToolbar
+ **/
 EphyToolbar *
 ephy_toolbar_new (EphyWindow *window)
 {

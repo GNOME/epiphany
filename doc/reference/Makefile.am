@@ -98,7 +98,6 @@ IGNORE_HFILES = \
 	popup-commands.h \
 	ppview-toolbar.h \
 	prefs-dialog.h \
-	ephy-toolbar.h \
 	ephy-fullscreen-popup.h \
 	ephy-link.h \
 	window-commands.h
