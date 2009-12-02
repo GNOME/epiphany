@@ -92,7 +92,6 @@ IGNORE_HFILES = \
 	ephy-location-action.h \
 	ephy-navigation-action.h \
 	ephy-notebook.h \
-	ephy-statusbar.h \
 	ephy-tabs-menu.h \
 	ephy-toolbars-model.h \
 	pdm-dialog.h \

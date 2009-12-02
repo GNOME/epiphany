@@ -28,6 +28,13 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>	
 
+/**
+ * SECTION:ephy-statusbar
+ * @short_description: A statusbar widget for Epiphany
+ *
+ * #EphyStatusbar is Epiphany's default statusbar for all windows.
+ */
+
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
 
@@ -60,6 +67,13 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+	/**
+	* EphyStatusbar::lock-clicked:
+	* @statusbar: the object which received the signal.
+	*
+	* This signal corresponds to the user clicking on the lock icon on the
+	* @statusbar.
+	*/
 	signals[LOCK_CLICKED] =
 		g_signal_new
 			("lock-clicked",
@@ -197,7 +211,7 @@ ephy_statusbar_new (void)
 /**
  * ephy_statusbar_set_caret_mode:
  * @statusbar: an #EphyStatusbar
- * @enabled:
+ * @enabled: %TRUE to show the caret browsing mode indicator
  * 
  * Sets the statusbar's caret browsing mode indicator.
  **/
