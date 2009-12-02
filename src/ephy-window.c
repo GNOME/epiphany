@@ -1547,12 +1547,15 @@ sync_tab_address (EphyWebView *view,
 		  EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
+	const char *address;
+	const char *typed_address;
 
 	if (priv->closing) return;
 
-	ephy_toolbar_set_location (priv->toolbar,
-				   ephy_web_view_get_address (view),
-				   ephy_web_view_get_typed_address (view));
+	address = ephy_web_view_get_address (view);
+	typed_address = ephy_web_view_get_typed_address (view);
+
+	ephy_toolbar_set_location (priv->toolbar, typed_address ? typed_address : address);
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
@@ -2922,7 +2925,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
-	ephy_toolbar_set_location (priv->toolbar, address, NULL);
+	ephy_toolbar_set_location (priv->toolbar, address);
 
 	/* don't suppress alert */
 	return FALSE;

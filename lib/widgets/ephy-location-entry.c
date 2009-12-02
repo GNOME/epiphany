@@ -561,7 +561,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 	priv->needs_reset = (state == GDK_CONTROL_MASK ||
 			     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
-	ephy_location_entry_set_location (entry, item, NULL);
+	ephy_location_entry_set_location (entry, item);
 	//gtk_im_context_reset (GTK_ENTRY (entry->priv->entry)->im_context);
 	g_signal_emit_by_name (priv->entry, "activate");
 
@@ -1304,23 +1304,19 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 /**
  * ephy_location_entry_set_location:
  * @entry: an #EphyLocationEntry widget
- * @address: current location address
- * @typed_address: address shown in the location entry
+ * @address: new location address
  *
- * Sets the current address of @entry to @address or @typed_address if given.
+ * Sets the current address of @entry to @address.
  **/
 void
 ephy_location_entry_set_location (EphyLocationEntry *entry,
-				  const char *address,
-				  const char *typed_address)
+				  const char *address)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkClipboard *clipboard;
 	const char *text;
 	char* selection = NULL;
 	int start, end;
-
-	g_return_if_fail (address != NULL);
 
 	/* Setting a new text will clear the clipboard. This makes it impossible
 	 * to copy&paste from the location entry of one tab into another tab, see
@@ -1342,11 +1338,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 		}
 	}
 
-	if (typed_address != NULL)
-	{
-		text = typed_address;
-	}
-	else if (address != NULL && strcmp (address, "about:blank") != 0)
+	if (address != NULL && strcmp (address, "about:blank") != 0)
 	{
 		text = address;
 	}
@@ -1356,7 +1348,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	}
 
 	/* First record the new hash, then update the entry text */
-	priv->hash = g_str_hash (address);
+	priv->hash = g_str_hash (text);
 
 	priv->block_update = TRUE;
 	gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
@@ -1452,7 +1444,7 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 
 	retval = g_str_hash (text) != g_str_hash (old_text);
 
-	ephy_location_entry_set_location (entry, text, NULL);
+	ephy_location_entry_set_location (entry, text);
 	g_free (url);
 
 	if (notify)

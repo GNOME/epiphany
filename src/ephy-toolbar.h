@@ -81,8 +81,7 @@ void		ephy_toolbar_activate_location		(EphyToolbar *toolbar);
 const char     *ephy_toolbar_get_location		(EphyToolbar *toolbar);
 
 void		ephy_toolbar_set_location		(EphyToolbar *toolbar,
-							 const char *address,
-							 const char *typed_address);
+							 const char *address);
 
 void		ephy_toolbar_set_navigation_actions	(EphyToolbar *toolbar,
 							 gboolean back,

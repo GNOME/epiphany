@@ -60,8 +60,7 @@ GType		ephy_location_action_get_type		(void);
 const char     *ephy_location_action_get_address	(EphyLocationAction *action);
 
 void		ephy_location_action_set_address	(EphyLocationAction *action,
-							 const char *address,
-							 const char *typed_address);
+							 const char *address);
 
 G_END_DECLS
 

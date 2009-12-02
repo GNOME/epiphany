@@ -50,7 +50,6 @@ struct _EphyLocationActionPrivate
 	GtkWidget *proxy;
 	GList *actions;
 	char *address;
-	char *typed_address;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
 	GdkPixbuf *icon;
@@ -224,7 +223,7 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 	LOG ("user_changed_cb, new address %s", address);
 
 	g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
-	ephy_location_action_set_address (action, address, NULL);
+	ephy_location_action_set_address (action, address);
 	g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
 }
 
@@ -247,8 +246,7 @@ sync_address (GtkAction *gaction,
 	LOG ("sync_address %s", action->priv->address);
 
 	g_signal_handlers_block_by_func (proxy, G_CALLBACK (user_changed_cb), action);
-	ephy_location_entry_set_location (lentry, priv->address,
-					  priv->typed_address);
+	ephy_location_entry_set_location (lentry, priv->address);
 	g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (user_changed_cb), action);
 }
 
@@ -579,7 +577,7 @@ ephy_location_action_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_ADDRESS:
-			ephy_location_action_set_address (action, g_value_get_string (value), NULL);
+			ephy_location_action_set_address (action, g_value_get_string (value));
 			break;
 		case PROP_EDITABLE:
 			priv->editable = g_value_get_boolean (value);
@@ -935,7 +933,6 @@ ephy_location_action_finalize (GObject *object)
 
 	g_list_free (priv->actions);
 	g_free (priv->address);
-	g_free (priv->typed_address);
 	g_free (priv->lock_stock_id);
 	g_free (priv->lock_tooltip);
 
@@ -961,15 +958,13 @@ ephy_location_action_get_address (EphyLocationAction *action)
 /**
  * ephy_location_action_set_address:
  * @action: an #EphyLocationAction
- * @address: the current address
- * @typed_address: address typed by the user
+ * @address: new address
  *
- * Sets the @address and @typed_address in @action.
+ * Sets @address as the address of @action.
  **/
 void
 ephy_location_action_set_address (EphyLocationAction *action,
-				  const char *address,
-				  const char *typed_address)
+				  const char *address)
 {
 	EphyLocationActionPrivate *priv;
 
@@ -981,9 +976,6 @@ ephy_location_action_set_address (EphyLocationAction *action,
 
 	g_free (priv->address);
 	priv->address = g_strdup (address);
-
-	g_free (priv->typed_address);
-	priv->typed_address = g_strdup (typed_address);
 
 	g_object_notify (G_OBJECT (action), "address");
 }

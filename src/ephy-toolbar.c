@@ -475,16 +475,13 @@ ephy_toolbar_get_location (EphyToolbar *toolbar)
 /**
  * ephy_toolbar_set_location:
  * @toolbar: an #EphyToolbar widget
- * @address: current @toolbar address
- * @typed_address: address currently typed by the user
+ * @address: new address
  *
- * Calls ephy_location_action_set_address in the internal #EphyLocationAction
- * with @address and @typed_address.
+ * Sets the internal #EphyLocationAction address to @address.
  **/
 void
 ephy_toolbar_set_location (EphyToolbar *toolbar,
-			   const char *address,
-			   const char *typed_address)
+			   const char *address)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (priv->actions[LOCATION_ACTION]);
@@ -492,7 +489,7 @@ ephy_toolbar_set_location (EphyToolbar *toolbar,
 	if (priv->updating_address) return;
 
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (action, address, typed_address);
+	ephy_location_action_set_address (action, address);
 	priv->updating_address = FALSE;
 }
 

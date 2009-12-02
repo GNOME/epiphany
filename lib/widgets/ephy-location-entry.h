@@ -76,8 +76,7 @@ void		ephy_location_entry_set_completion	(EphyLocationEntry *entry,
 							 guint favicon_col);
 
 void		ephy_location_entry_set_location	(EphyLocationEntry *entry,
-							 const char *address,
-							 const char *typed_address);
+							 const char *address);
 
 void		ephy_location_entry_set_match_func	(EphyLocationEntry *entry, 
 							 GtkEntryCompletionMatchFunc match_func,

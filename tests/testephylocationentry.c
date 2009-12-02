@@ -56,15 +56,11 @@ test_entry_set_location (void)
 
   null = ephy_location_entry_get_location (entry);
 
-  ephy_location_entry_set_location (entry, set, NULL);
+  ephy_location_entry_set_location (entry, set);
   get = ephy_location_entry_get_location (entry);
   g_assert_cmpstr (set, ==, get);
 }
 
-/*
- * FIXME: there's an already an assertion to avoid null as the arg, but we
- * should *confirm* that it indeed fails, although I'm not pretty sure it's
- * required to fail if the text is NULL.
 static void
 test_entry_set_location_null (void)
 {
@@ -74,11 +70,10 @@ test_entry_set_location_null (void)
   EphyLocationEntry *entry;
   entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-  ephy_location_entry_set_location (entry, NULL, NULL);
+  ephy_location_entry_set_location (entry, NULL);
   get = ephy_location_entry_get_location (entry);
-  g_assert_cmpstr (set, ==, get);
+  g_assert_cmpstr (set, !=, get);
 }
-*/
 
 static void
 test_entry_get_location (void)
@@ -89,7 +84,7 @@ test_entry_get_location (void)
   EphyLocationEntry *entry;
   entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-  ephy_location_entry_set_location (entry, set, NULL);
+  ephy_location_entry_set_location (entry, set);
   get = ephy_location_entry_get_location (entry);
   g_assert_cmpstr (set, ==, get);
 }
@@ -132,8 +127,8 @@ test_entry_can_redo (void)
   entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
   g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
 
-  /* Can't redo, in this point we can UNdo */
-  ephy_location_entry_set_location (entry, test, NULL);
+  /* Can't redo, in this point we can undo */
+  ephy_location_entry_set_location (entry, test);
   g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
 
   /* Reset should set redo to TRUE */
@@ -158,11 +153,9 @@ main (int argc, char *argv[])
   g_test_add_func (
     "/lib/widgets/ephy-location-entry/get_location",
     test_entry_get_location);
-  /*
   g_test_add_func (
     "/lib/widgets/ephy-location-entry/set_location_null",
     test_entry_set_location_null);
-  */
   g_test_add_func (
     "/lib/widgets/ephy-location-entry/get_location_empty",
     test_entry_get_location_empty);

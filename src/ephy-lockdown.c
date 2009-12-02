@@ -105,7 +105,7 @@ update_location_editable (EphyWindow *window,
 		if (embed != NULL)
 		{
 			address = ephy_web_view_get_location (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), TRUE);
-			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address, NULL);
+			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address);
 			ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL);
 			g_free (address);
 		}
