@@ -393,7 +393,19 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
      process */
   /* FIXME: need to use ephy_file_check_mime if auto-downloading */
   if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
-    webkit_web_policy_decision_download (decision);
+    GObject *single;
+    const char *uri;
+    gboolean handled = FALSE;
+
+    single = ephy_embed_shell_get_embed_single (embed_shell);
+    uri = webkit_network_request_get_uri (request);
+    g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
+
+    if (handled)
+      webkit_web_policy_decision_ignore (decision);
+    else
+      webkit_web_policy_decision_download (decision);
+
     return TRUE;
   }
 
