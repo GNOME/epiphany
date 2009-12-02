@@ -35,20 +35,22 @@ G_BEGIN_DECLS
 
 typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpointer user_data);
 
+typedef struct _EphyTreeModelNode EphyTreeModelNode;
+typedef struct _EphyTreeModelNodeClass EphyTreeModelNodeClass;
 typedef struct _EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
 
-typedef struct
+struct _EphyTreeModelNode
 {
 	GObject parent;
 
 	/*< private >*/
 	EphyTreeModelNodePrivate *priv;
-} EphyTreeModelNode;
+};
 
-typedef struct
+struct _EphyTreeModelNodeClass
 {
 	GObjectClass parent;
-} EphyTreeModelNodeClass;
+};
 
 GType              ephy_tree_model_node_get_type         (void);
 

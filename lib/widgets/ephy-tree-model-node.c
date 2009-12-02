@@ -28,6 +28,14 @@
 #include "ephy-node.h"
 #include "ephy-debug.h"
 
+/**
+ * SECTION:ephy-tree-model-node
+ * @short_description: a #GtkTreeModel of #EphyNode elements
+ *
+ * #EphyTreeModelNode implements a #GtkTreeModel that holds #EphyNode elements.
+ * It can be used with #EphyNodeView and #EphyTreeModelFilter.
+ */
+
 static void ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass);
 static void ephy_tree_model_node_init (EphyTreeModelNode *model);
 static void ephy_tree_model_node_finalize (GObject *object);
@@ -270,6 +278,11 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 	object_class->set_property = ephy_tree_model_node_set_property;
 	object_class->get_property = ephy_tree_model_node_get_property;
 
+	/**
+	* EphyTreeModelNode:root:
+	*
+	* The root #EphyNode of the model.
+	*/
 	g_object_class_install_property (object_class,
 					 PROP_ROOT,
 					 g_param_spec_pointer ("root",
@@ -300,6 +313,14 @@ ephy_tree_model_node_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * ephy_tree_model_node_new:
+ * @root: root #EphyNode of the model
+ *
+ * Create a new #EphyTreeModelNode object and set @root as its root node.
+ *
+ * Returns: a new #EphyTreeModelNode
+ **/
 EphyTreeModelNode *
 ephy_tree_model_node_new (EphyNode *root)
 {
@@ -314,6 +335,16 @@ ephy_tree_model_node_new (EphyNode *root)
 	return model;
 }
 
+/**
+ * ephy_tree_model_node_add_prop_column:
+ * @model: an #EphyTreeModelNode
+ * @value_type: type held by the new column
+ * @prop_id: column in @model to get the value for this column
+ *
+ * Add a new column to @model obtaining its value from @prop_id in @model.
+ *
+ * Returns: the id of the new column
+ **/
 int
 ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 				      GType value_type,
@@ -335,6 +366,17 @@ ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 	return col_id;
 }
 
+/**
+ * ephy_tree_model_node_add_func_column:
+ * @model: an #EphyTreeModelNode
+ * @value_type: type held by the new column
+ * @func: data function to be used to provide the value of the new column
+ * @user_data: optional user data for @func
+ *
+ * Adds a new column to @model with its value determined by @func.
+ *
+ * Returns: the id of the new column
+ **/
 int
 ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
 				      GType value_type,
@@ -581,6 +623,15 @@ ephy_tree_model_node_iter_parent (GtkTreeModel *tree_model,
 	return FALSE;
 }
 
+/**
+ * ephy_tree_model_node_node_from_iter:
+ * @model: an #EphyTreeModelNode
+ * @iter: iter from where to get the node
+ *
+ * Gets the #EphyNode corresponding to @iter from @model.
+ *
+ * Returns: the #EphyNode corresponding to @iter
+ **/
 EphyNode *
 ephy_tree_model_node_node_from_iter (EphyTreeModelNode *model,
 				     GtkTreeIter *iter)
@@ -588,6 +639,14 @@ ephy_tree_model_node_node_from_iter (EphyTreeModelNode *model,
 	return iter->user_data;
 }
 
+/**
+ * ephy_tree_model_node_iter_from_node:
+ * @model: an #EphyTreeModelNode
+ * @node: the #EphyNode from which we want the iter to be obtained
+ * @iter: location to return the #GtkTreeIter
+ *
+ * Gets the corresponding #GtkTreeIter for @node from @model.
+ **/
 void
 ephy_tree_model_node_iter_from_node (EphyTreeModelNode *model,
 				     EphyNode *node,
