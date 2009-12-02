@@ -1914,7 +1914,7 @@ ephy_web_view_set_visibility (EphyWebView *view,
  * into the location entry, ephy_web_view_get_location()'s returned string will
  * change.
  *
- * Return value: @view's #EphyWindow's location entry when @view is selected
+ * Return value: @view's #EphyWindow's location entry text when @view is selected
  **/
 const char *
 ephy_web_view_get_typed_address (EphyWebView *view)
