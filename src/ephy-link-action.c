@@ -34,20 +34,20 @@ G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, GTK_TYPE_ACTION,
                                                 NULL))
 
 static gboolean
-proxy_button_press_event_cb (GtkButton *button,
-			       GdkEventButton *event,
-			       EphyLinkAction *action)
+proxy_button_press_event_cb (GtkWidget *widget,
+			     GdkEventButton *event,
+			     EphyLinkAction *action)
 {
 	if (event->button == 2)
 	{
-		gtk_button_pressed(button);
+		g_signal_emit_by_name (widget, "pressed");
 	}
 
 	return FALSE;
 }
 
 static gboolean
-proxy_button_release_event_cb (GtkButton *button,
+proxy_button_release_event_cb (GtkWidget *widget,
 			       GdkEventButton *event,
 			       EphyLinkAction *action)
 {
@@ -58,7 +58,7 @@ proxy_button_release_event_cb (GtkButton *button,
 	 */
 	if (event->button == 2)
 	{
-		gtk_button_released(button);
+		g_signal_emit_by_name (widget, "released");
 	}
 
 	return FALSE;
