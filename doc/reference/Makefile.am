@@ -34,7 +34,6 @@ CFILE_GLOB=$(top_srcdir)/lib/*.c
 IGNORE_HFILES = \
 	config.h \
 	eel-gconf-extensions.h \
-	ephy-debug.h \
 	ephy-dialog.h \
 	ephy-dnd.h \
 	ephy-file-chooser.h \

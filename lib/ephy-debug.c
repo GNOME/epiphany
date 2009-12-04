@@ -30,6 +30,14 @@
 #include <stdlib.h>
 #include <glib.h>
 
+/**
+ * SECTION:ephy-debug
+ * @short_description: Epiphany debugging and profiling facilities
+ *
+ * Epiphany includes powerful profiling and debugging facilities to log and
+ * analyze modules. Refer to doc/debugging.txt for more information.
+ */
+
 static const char *ephy_debug_break = NULL;
 
 #ifndef DISABLE_PROFILING
@@ -156,6 +164,13 @@ trap_handler (const char *log_domain,
 	}
 }
 
+/**
+ * ephy_debug_init:
+ *
+ * Starts the debugging facility, see doc/debugging.txt in Epiphany's source for
+ * more information. It also starts module logging and profiling if the
+ * appropiate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
+ **/
 void
 ephy_debug_init (void)
 {
@@ -240,6 +255,13 @@ ephy_profiler_free (EphyProfiler *profiler)
 	g_free (profiler);
 }
 
+/**
+ * ephy_profiler_start:
+ * @name: name of this new profiler
+ * @module: Epiphany module to profile
+ *
+ * Starts a new profiler on @module naming it @name.
+ **/
 void
 ephy_profiler_start (const char *name, const char *module)
 {
@@ -260,6 +282,12 @@ ephy_profiler_start (const char *name, const char *module)
 	g_hash_table_insert (ephy_profilers_hash, g_strdup (name), profiler);
 }
 
+/**
+ * ephy_profiler_stop:
+ * @name: name of the profiler to stop
+ *
+ * Stops the profiler named @name.
+ **/
 void
 ephy_profiler_stop (const char *name)
 {
