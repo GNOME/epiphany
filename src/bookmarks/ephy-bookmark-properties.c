@@ -222,7 +222,7 @@ similar_deactivate_cb (GtkMenuShell *ms,
 		       GtkWidget *button)
 {
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-	g_signal_emit_by_name (button, "button-release-event");
+	gtk_button_released (GTK_BUTTON (button));
 }
 
 static void

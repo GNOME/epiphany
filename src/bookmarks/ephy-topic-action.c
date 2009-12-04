@@ -284,7 +284,7 @@ button_deactivate_cb (GtkMenuShell *ms,
 	GtkWidget *window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-	g_signal_emit_by_name (button, "button-release-event");
+	gtk_button_released (GTK_BUTTON (button));
 
 	g_object_set_data (G_OBJECT (window),
 			   "active-topic-action-button", NULL);
