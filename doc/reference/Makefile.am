@@ -34,7 +34,6 @@ CFILE_GLOB=$(top_srcdir)/lib/*.c
 IGNORE_HFILES = \
 	config.h \
 	eel-gconf-extensions.h \
-	ephy-dialog.h \
 	ephy-dnd.h \
 	ephy-file-chooser.h \
 	ephy-file-helpers.h \
@@ -45,6 +44,7 @@ IGNORE_HFILES = \
 	ephy-node-filter.h \
 	ephy-node.h \
 	ephy-prefs.h \
+	ephy-print-utils.h \
 	ephy-state.h \
 	ephy-stock-icons.h \
 	ephy-string.h \
@@ -58,6 +58,7 @@ IGNORE_HFILES = \
 	ephy-encodings.h \
 	ephy-favicon-cache.h \
 	ephy-history.h \
+	ephy-permission-manager.h \
 	find-dialog.h \
 	print-dialog.h \
 	egg-editable-toolbar.h \
@@ -92,6 +93,7 @@ IGNORE_HFILES = \
 	ephy-notebook.h \
 	ephy-tabs-menu.h \
 	ephy-toolbars-model.h \
+	ephy-shell \
 	pdm-dialog.h \
 	popup-commands.h \
 	ppview-toolbar.h \

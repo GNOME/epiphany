@@ -96,13 +96,13 @@ void		ephy_dialog_construct		(EphyDialog *dialog,
 						 const char *domain);
 
 void		ephy_dialog_add_enum		(EphyDialog *dialog,
-						 const char *id,
+						 const char *property_id,
 						 guint n_items,
 						 const char * const *items);
 
 void		ephy_dialog_set_data_column	(EphyDialog *dialog,
-						 const char *id,
-						 int col);
+						 const char *property_id,
+						 int column);
 
 void		ephy_dialog_set_size_group	(EphyDialog *dialog,
 						 const char *first_id,
@@ -126,7 +126,7 @@ GtkWidget      *ephy_dialog_get_control		(EphyDialog *dialog,
 						 const char *property_id);
 
 void		ephy_dialog_get_controls	(EphyDialog *dialog,
-						 const char *first_property_id,
+						 const char *first_id,
 						 ...);
 
 gboolean	ephy_dialog_get_value		(EphyDialog *dialog,
