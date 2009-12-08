@@ -373,14 +373,15 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
   if (webkit_web_view_get_main_frame (web_view) == frame) {
     type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
 
-    if (!strcmp (mime_type, "text/html"))
+    if (!strcmp (mime_type, "text/html") ||
+        !strcmp (mime_type, "text/plain"))
       type = EPHY_WEB_VIEW_DOCUMENT_HTML;
     else if (!strcmp (mime_type, "application/xhtml+xml"))
       type = EPHY_WEB_VIEW_DOCUMENT_XML;
     else if (!strncmp (mime_type, "image/", 6))
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
 
-    /* FIXME: mayb  e it makes more sense to have an API to query the mime
+    /* FIXME: maybe it makes more sense to have an API to query the mime
      * type when the load of a page starts than doing this here.
      */
     /* FIXME: rename ge-document-type (and all ge- signals...) to
