@@ -161,13 +161,19 @@ ephy_statusbar_init (EphyStatusbar *t)
 
 	gtk_statusbar_set_has_resize_grip (gstatusbar, TRUE);
 
+#if GTK_CHECK_VERSION (2, 19, 1)
 	priv->hbox = gtk_hbox_new (FALSE, 4);
-
+#else
+	priv->hbox = gtk_statusbar_get_message_area (gstatusbar);
+#endif
 	priv->icon_container = gtk_hbox_new (FALSE, 4);
 	gtk_box_pack_start (GTK_BOX (priv->hbox), priv->icon_container,
 			    FALSE, FALSE, 0);
 	gtk_widget_show (priv->icon_container);
 
+#if GTK_CHECK_VERSION (2, 19, 1)
+	gtk_box_reorder_child (GTK_BOX (priv->hbox), priv->icon_container, 0);
+#else
 	/* Put the label in the hbox, and substitute the hbox into the frame */
 	g_object_ref (gstatusbar->label);
 	gtk_container_remove (GTK_CONTAINER (gstatusbar->frame), gstatusbar->label);
@@ -175,6 +181,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 	g_object_unref (gstatusbar->label);
 	gtk_container_add (GTK_CONTAINER (gstatusbar->frame), priv->hbox);
 	gtk_widget_show (priv->hbox);
+#endif
 
 	/* Create security icon */
 	create_icon_frame (t,
