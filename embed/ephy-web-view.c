@@ -585,7 +585,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                    PROP_DOCUMENT_TYPE,
                                    g_param_spec_enum ("document-type",
                                                       "Document Type",
-                                                      "The view's documen type",
+                                                      "The view's document type",
                                                       EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
                                                       EPHY_WEB_VIEW_DOCUMENT_HTML,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
