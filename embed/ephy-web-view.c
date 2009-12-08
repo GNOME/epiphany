@@ -969,6 +969,7 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
                                         gpointer user_data)
 {
   EphyWebViewDocumentType type;
+  gboolean should_download;
 
   g_return_val_if_fail (mime_type, FALSE);
 
@@ -996,8 +997,35 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 
   /* If WebKit can't handle the mime type start the download
      process */
+  should_download = !webkit_web_view_can_show_mime_type (web_view, mime_type);
+
+  /* Make sure we respect the Content-Disposition header */
+  if (!should_download) {
+    WebKitNetworkResponse *response = webkit_web_frame_get_network_response (frame);
+    SoupMessage *message = NULL;
+
+    if (response) {
+      message = webkit_network_response_get_message (response);
+    }
+
+    if (message) {
+      char *disposition = NULL;
+
+      soup_message_headers_get_content_disposition (message->response_headers,
+                                                    &disposition,
+                                                    NULL);
+
+      if (disposition) {
+        should_download = g_str_equal (disposition, "attachment");
+        g_free (disposition);
+      }
+    }
+
+    g_object_unref (response);
+  }
+
   /* FIXME: need to use ephy_file_check_mime if auto-downloading */
-  if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
+  if (should_download) {
     GObject *single;
     const char *uri;
     gboolean handled = FALSE;
