@@ -819,22 +819,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             0);
 
 /**
- * EphyWebView::ge-document-type:
- * @view: the #EphyWebView that received the signal
- * @type: the new document type
- *
- * The ::ge-document-type signal is emitted when @embed determines the type of its document.
- **/
-    g_signal_new ("ge_document_type",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, document_type),
-            NULL, NULL,
-            g_cclosure_marshal_VOID__ENUM,
-            G_TYPE_NONE,
-            1,
-            EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE);
-/**
  * EphyWebView::dom-content-loaded:
  * @view: the #EphyWebView that received the signal
  *
@@ -944,18 +928,6 @@ icon_cache_changed_cb (EphyFaviconCache *cache,
 }
 
 static void
-ge_document_type_cb (EphyWebView *view,
-                     EphyWebViewDocumentType type,
-                     gpointer user_data)
-{
-  if (view->priv->document_type != type) {
-    view->priv->document_type = type;
-
-    g_object_notify (G_OBJECT (view), "document-type");
-  }
-}
-
-static void
 ge_favicon_cb (EphyWebView *view,
                const char *address,
                gpointer user_data)
@@ -988,6 +960,63 @@ ge_popup_blocked_cb (EphyWebView *view,
   popups_manager_add (view, url, name, features);
 }
 
+static gboolean
+mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
+                                        WebKitWebFrame *frame,
+                                        WebKitNetworkRequest *request,
+                                        const char *mime_type,
+                                        WebKitWebPolicyDecision *decision,
+                                        gpointer user_data)
+{
+  EphyWebViewDocumentType type;
+
+  g_return_val_if_fail (mime_type, FALSE);
+
+  /* Get the mime type for the page only from the main frame */
+  if (webkit_web_view_get_main_frame (web_view) == frame) {
+    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
+
+    if (!strcmp (mime_type, "text/html") ||
+        !strcmp (mime_type, "text/plain"))
+      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+    else if (!strcmp (mime_type, "application/xhtml+xml"))
+      type = EPHY_WEB_VIEW_DOCUMENT_XML;
+    else if (!strncmp (mime_type, "image/", 6))
+      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+
+    /* FIXME: maybe it makes more sense to have an API to query the mime
+     * type when the load of a page starts than doing this here.
+     */
+    if (EPHY_WEB_VIEW (web_view)->priv->document_type != type) {
+      EPHY_WEB_VIEW (web_view)->priv->document_type = type;
+
+      g_object_notify (G_OBJECT (web_view), "document-type");
+    }
+  }
+
+  /* If WebKit can't handle the mime type start the download
+     process */
+  /* FIXME: need to use ephy_file_check_mime if auto-downloading */
+  if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
+    GObject *single;
+    const char *uri;
+    gboolean handled = FALSE;
+
+    single = ephy_embed_shell_get_embed_single (embed_shell);
+    uri = webkit_network_request_get_uri (request);
+    g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
+
+    if (handled)
+      webkit_web_policy_decision_ignore (decision);
+    else
+      webkit_web_policy_decision_download (decision);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -1015,9 +1044,9 @@ ephy_web_view_init (EphyWebView *web_view)
                                         "^file:.*$)",
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
-  g_signal_connect_object (web_view, "ge_document_type",
-                           G_CALLBACK (ge_document_type_cb),
-                           web_view, (GConnectFlags)0);
+  g_signal_connect (web_view, "mime-type-policy-decision-requested",
+                    G_CALLBACK (mime_type_policy_decision_requested_cb),
+                    NULL);
 
   g_signal_connect_object (web_view, "ge_favicon",
                            G_CALLBACK (ge_favicon_cb),

@@ -357,62 +357,6 @@ ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
   return TRUE;
 }
 
-static gboolean
-mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
-                                        WebKitWebFrame *frame,
-                                        WebKitNetworkRequest *request,
-                                        const char *mime_type,
-                                        WebKitWebPolicyDecision *decision,
-                                        EphyEmbed *embed)
-{
-  EphyWebViewDocumentType type;
-
-  g_return_val_if_fail (mime_type, FALSE);
-
-  /* Get the mime type for the page only from the main frame */
-  if (webkit_web_view_get_main_frame (web_view) == frame) {
-    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
-
-    if (!strcmp (mime_type, "text/html") ||
-        !strcmp (mime_type, "text/plain"))
-      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-    else if (!strcmp (mime_type, "application/xhtml+xml"))
-      type = EPHY_WEB_VIEW_DOCUMENT_XML;
-    else if (!strncmp (mime_type, "image/", 6))
-      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-
-    /* FIXME: maybe it makes more sense to have an API to query the mime
-     * type when the load of a page starts than doing this here.
-     */
-    /* FIXME: rename ge-document-type (and all ge- signals...) to
-     * something else
-     */
-    g_signal_emit_by_name (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "ge-document-type", type);
-  }
-
-  /* If WebKit can't handle the mime type start the download
-     process */
-  /* FIXME: need to use ephy_file_check_mime if auto-downloading */
-  if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
-    GObject *single;
-    const char *uri;
-    gboolean handled = FALSE;
-
-    single = ephy_embed_shell_get_embed_single (embed_shell);
-    uri = webkit_network_request_get_uri (request);
-    g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
-
-    if (handled)
-      webkit_web_policy_decision_ignore (decision);
-    else
-      webkit_web_policy_decision_download (decision);
-
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
 static void
 download_requested_dialog_response_cb (GtkDialog *dialog,
                                        int response_id,
@@ -845,7 +789,6 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
-                    "signal::mime-type-policy-decision-requested", G_CALLBACK (mime_type_policy_decision_requested_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
