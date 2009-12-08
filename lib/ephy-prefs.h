@@ -45,9 +45,6 @@ G_BEGIN_DECLS
 #define CONF_DOWNLOADS_HIDDEN			"/apps/epiphany/dialogs/downloads_hidden"
 #define CONF_WARN_ON_CLOSE_UNSUBMITTED_DATA     "/apps/epiphany/dialogs/warn_on_close_unsubmitted_data"
 
-/* i18n pref */
-#define CONF_GECKO_ENABLE_PANGO			"/apps/epiphany/web/enable_pango"
-
 /* Directories */
 #define CONF_STATE_SAVE_DIR		"/apps/epiphany/directories/save"
 #define CONF_STATE_SAVE_IMAGE_DIR	"/apps/epiphany/directories/saveimage"
