@@ -36,6 +36,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
+#include "ephy-prefs.h"
 #include "ephy-marshal.h"
 #include "ephy-permission-manager.h"
 #include "ephy-favicon-cache.h"
@@ -1128,10 +1129,21 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
   if (soup_uri == NULL &&
       priv->non_search_regex &&
       !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
-    char *query_param = soup_form_encode ("q", url, NULL);
+    char *query_param, *url_search;
+
+    url_search = eel_gconf_get_string (CONF_URL_SEARCH);
+
+    if (url_search == NULL || url_search[0] == '\0') {
+      g_free (url_search);
+
+      url_search = g_strdup (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"));
+    }
+
+    query_param = soup_form_encode ("q", url, NULL);
     /* + 2 here is getting rid of 'q=' */
-    effective_url = g_strdup_printf (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"), query_param + 2);
+    effective_url = g_strdup_printf (url_search, query_param + 2);
     g_free (query_param);
+    g_free (url_search);
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
 

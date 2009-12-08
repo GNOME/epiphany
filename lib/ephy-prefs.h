@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 /* General */
 #define CONF_GENERAL_HOMEPAGE			"/apps/epiphany/general/homepage"
+#define CONF_URL_SEARCH     			"/apps/epiphany/general/url_search"
 #define CONF_ALWAYS_SHOW_TABS_BAR		"/apps/epiphany/general/always_show_tabs_bar"
 #define CONF_WINDOWS_SHOW_TOOLBARS		"/apps/epiphany/general/show_toolbars"
 #define CONF_WINDOWS_SHOW_BOOKMARKS_BAR		"/apps/epiphany/general/show_bookmarks_bar"
