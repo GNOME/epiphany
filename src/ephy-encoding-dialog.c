@@ -345,9 +345,8 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 			(EPHY_DIALOG (dialog), properties[SCROLLED_WINDOW_PROP].id);
 	gtk_container_add (GTK_CONTAINER (scroller), treeview);
 
-	child = gtk_bin_get_child (GTK_BIN (button));
-
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
+	child = gtk_bin_get_child (GTK_BIN (button));
 	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
 	g_signal_connect (button, "toggled",
 			  G_CALLBACK (automatic_toggled_cb), dialog);
