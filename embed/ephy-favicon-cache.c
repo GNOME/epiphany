@@ -445,50 +445,42 @@ ephy_favicon_cache_finalize (GObject *object)
 }
 
 static void
-favicon_download_completed_cb (EphyEmbedPersist *persist,
-			       EphyFaviconCache *cache)
+favicon_download_status_changed_cb (WebKitDownload *download,
+				    GParamSpec *spec,
+				    EphyFaviconCache *cache)
 {
-	const char *url;
+	WebKitDownloadStatus status = webkit_download_get_status (download);
+	const char* url = webkit_download_get_uri (download);
 
-	url = ephy_embed_persist_get_source (persist);
-	g_return_if_fail (url != NULL);
+	switch (status) {
+	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
+		LOG ("Favicon cache download completed for %s", url);
 
-	LOG ("Favicon cache download completed for %s", url);
+		g_hash_table_remove (cache->priv->downloads_hash, url);
 
-	g_hash_table_remove (cache->priv->downloads_hash, url);
+		g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
 
-	g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
+		g_object_unref (download);
 
-	g_object_unref (persist);
+		cache->priv->dirty = TRUE;
 
-	cache->priv->dirty = TRUE;
-}
+		break;
+	case WEBKIT_DOWNLOAD_STATUS_ERROR:
+	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
+		LOG ("Favicon cache download cancelled %s", url);
 
-static void
-favicon_download_cancelled_cb (EphyEmbedPersist *persist,
-			       EphyFaviconCache *cache)
-{
-	const char *url, *dest;
+		g_hash_table_remove (cache->priv->downloads_hash, url);
 
-	url = ephy_embed_persist_get_source (persist);
-	g_return_if_fail (url != NULL);
+		/* TODO: remove a partially downloaded file */
+		/* FIXME: re-schedule to try again after n days? */
 
-	LOG ("Favicon cache download cancelled %s", url);
+		g_object_unref (download);
 
-	g_hash_table_remove (cache->priv->downloads_hash, url);
-
-	/* remove a partially downloaded file */
-		dest = ephy_embed_persist_get_dest (persist);
-	if (g_unlink (dest) < 0)
-	{
-		LOG ("Unable to delete %s", dest);
+		cache->priv->dirty = TRUE;
+		break;
+	default:
+		break;
 	}
-
-	/* FIXME: re-schedule to try again after n days? */
-
-	g_object_unref (persist);
-
-	cache->priv->dirty = TRUE;
 }
 
 static void
@@ -496,8 +488,10 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 			     const char *favicon_url,
 			     const char *filename)
 {
-	EphyEmbedPersist *persist;
+	WebKitNetworkRequest *request;
+	WebKitDownload *download;
 	char *dest;
+	char *dest_uri;
 
 	LOG ("Download favicon: %s", favicon_url);
 
@@ -505,31 +499,25 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	g_return_if_fail (favicon_url != NULL);
 	g_return_if_fail (filename != NULL);
 
+	request = webkit_network_request_new (favicon_url);
+	download = webkit_download_new (request);
+	g_object_unref (request);
+
 	dest = g_build_filename (cache->priv->directory, filename, NULL);
+	dest_uri = g_filename_to_uri (dest, NULL, NULL);
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
-
-	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
-					       EPHY_EMBED_PERSIST_NO_CERTDIALOGS |
-					       EPHY_EMBED_PERSIST_DO_CONVERSION |
-					       EPHY_EMBED_PERSIST_NO_COOKIES
-				               );
-	ephy_embed_persist_set_max_size (persist, EPHY_FAVICON_MAX_SIZE);
-	ephy_embed_persist_set_source (persist, favicon_url);
+	webkit_download_set_destination_uri (download, dest_uri);
 
 	g_free (dest);
+	g_free (dest_uri);
 
-	g_signal_connect (G_OBJECT (persist), "completed",
-			  G_CALLBACK (favicon_download_completed_cb), cache);
-	g_signal_connect (G_OBJECT (persist), "cancelled",
-			  G_CALLBACK (favicon_download_cancelled_cb), cache);
+	g_signal_connect (G_OBJECT (download), "notify::status",
+			  G_CALLBACK (favicon_download_status_changed_cb), cache);
 
 	g_hash_table_insert (cache->priv->downloads_hash,
-			     g_strdup (favicon_url), persist);
+			     g_strdup (favicon_url), download);
 
-	ephy_embed_persist_save (persist);
+	webkit_download_start (download);
 }
 
 /**

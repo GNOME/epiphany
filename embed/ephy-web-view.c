@@ -694,14 +694,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::ge-favicon:
+ * EphyWebView::favicon:
  * @view: the #EphyWebView that received the signal
  * @address: the URL to @embed's web site's favicon
  *
  * The ::ge_favicon signal is emitted when @embed discovers that a favourite
  * icon (favicon) is available for the site it is visiting.
  **/
-    g_signal_new ("ge_favicon",
+    g_signal_new ("favicon",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
             G_STRUCT_OFFSET (EphyWebViewClass, favicon),
@@ -929,9 +929,9 @@ icon_cache_changed_cb (EphyFaviconCache *cache,
 }
 
 static void
-ge_favicon_cb (EphyWebView *view,
-               const char *address,
-               gpointer user_data)
+favicon_cb (EphyWebView *view,
+            const char *address,
+            gpointer user_data)
 {
   ephy_web_view_set_icon_address (view, address);
 }
@@ -1077,8 +1077,8 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
                     NULL);
 
-  g_signal_connect_object (web_view, "ge_favicon",
-                           G_CALLBACK (ge_favicon_cb),
+  g_signal_connect_object (web_view, "favicon",
+                           G_CALLBACK (favicon_cb),
                            web_view, (GConnectFlags)0);
 
   g_signal_connect_object (web_view, "ge_new_window",

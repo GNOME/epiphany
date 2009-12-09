@@ -772,6 +772,14 @@ load_error_cb (WebKitWebView *web_view,
 }
 
 static void
+icon_loaded_cb (WebKitWebView *web_view, const char* icon_uri, gpointer *data)
+{
+  g_signal_emit_by_name (EPHY_WEB_VIEW (web_view),
+                         "favicon",
+                         icon_uri);
+}
+
+static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
@@ -794,6 +802,7 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), embed,
                     "signal::load-error", G_CALLBACK (load_error_cb), embed,
+                    "signal::icon-loaded", G_CALLBACK (icon_loaded_cb), embed,
                     NULL);
 
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
