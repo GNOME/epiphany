@@ -197,8 +197,8 @@ webkit_construct_history_list (WebKitWebView *web_view, WebKitHistoryType hist_t
 	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
 
 	if (hist_type == WEBKIT_HISTORY_FORWARD)
-		webkit_items = webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
-											 EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+		webkit_items = g_list_reverse (webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
+													 EPHY_WEBKIT_BACK_FORWARD_LIMIT));
 	else
 		webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
 										      EPHY_WEBKIT_BACK_FORWARD_LIMIT);
