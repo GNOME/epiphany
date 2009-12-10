@@ -206,7 +206,7 @@ const char *               ephy_web_view_get_address             (EphyWebView   
 const char *               ephy_web_view_get_title_composite     (EphyWebView                     *view);
 
 /* These should be private */
-void                       ephy_web_view_set_address             (EphyWebView                     *embed,
+void                       ephy_web_view_set_address             (EphyWebView                     *view,
                                                                   const char                      *address);
 void                       ephy_web_view_update_from_net_state   (EphyWebView                     *view,
                                                                   const char                      *uri,

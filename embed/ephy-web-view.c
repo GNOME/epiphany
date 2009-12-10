@@ -49,6 +49,14 @@
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
 
+/**
+ * SECTION:ephy-web-view
+ * @short_description: Epiphany custom #WebkitWebView
+ *
+ * #EphyWebView wraps #WebkitWebView implementing custom functionality on top of
+ * it.
+ */
+
 static void     ephy_web_view_class_init   (EphyWebViewClass *klass);
 static void     ephy_web_view_init         (EphyWebView *gs);
 
@@ -361,6 +369,12 @@ disconnect_popup (EphyEmbedContainer *container,
   (container, G_CALLBACK (popups_manager_remove_window), view);
 }
 
+/**
+ * ephy_web_view_popups_manager_reset:
+ * @view: an #EphyWebView
+ *
+ * Resets the state of the popups manager in @view.
+ **/
 void
 ephy_web_view_popups_manager_reset (EphyWebView *view)
 {
@@ -1300,6 +1314,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->key_press_event = ephy_web_view_key_press_event;
 
+/**
+ * EphyWebView:address:
+ *
+ * View's current address.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_ADDRESS,
                                    g_param_spec_string ("address",
@@ -1307,6 +1326,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         "The view's address",
                                                         "",
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:typed-address:
+ *
+ * User typed address for the current view.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_TYPED_ADDRESS,
                                    g_param_spec_string ("typed-address",
@@ -1314,6 +1339,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         "The typed address",
                                                         "",
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:embed-title:
+ *
+ * Title for this embed.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_EMBED_TITLE,
                                    g_param_spec_string ("embed-title",
@@ -1322,6 +1353,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         EMPTY_PAGE,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+/**
+ * EphyWebView:security-level:
+ *
+ * One of #EphyWebViewSecurityLevel, determining view's current security level.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_SECURITY,
                                    g_param_spec_enum ("security-level",
@@ -1330,6 +1366,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                       EPHY_TYPE_WEB_VIEW_SECURITY_LEVEL,
                                                       EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:document-type:
+ *
+ * Document type determined for the view.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_DOCUMENT_TYPE,
                                    g_param_spec_enum ("document-type",
@@ -1339,6 +1381,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                       EPHY_WEB_VIEW_DOCUMENT_HTML,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+/**
+ * EphyWebView:navigation:
+ *
+ * View's navigation flags as #EphyWebViewNavigationFlags.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_NAVIGATION,
                                    g_param_spec_flags ("navigation",
@@ -1347,6 +1394,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                        EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
                                                        0,
                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:status-message:
+ *
+ * Statusbar message corresponding to this view.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_STATUS_MESSAGE,
                                    g_param_spec_string ("status-message",
@@ -1354,6 +1407,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         "The view's statusbar message",
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:link-message:
+ *
+ * ???
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_LINK_MESSAGE,
                                    g_param_spec_string ("link-message",
@@ -1361,6 +1420,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         "The view's link message",
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:icon:
+ *
+ * View's favicon set by the loaded site.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_ICON,
                                    g_param_spec_object ("icon",
@@ -1369,6 +1434,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+/**
+ * EphyWebView:hidden-popup-count:
+ *
+ * Number of hidden (blocked) popup windows.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_HIDDEN_POPUP_COUNT,
                                    g_param_spec_int ("hidden-popup-count",
@@ -1379,6 +1449,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                      0,
                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+/**
+ * EphyWebView:popups-allowed:
+ *
+ * If popup windows from this view are to be displayed.
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_POPUPS_ALLOWED,
                                    g_param_spec_boolean ("popups-allowed",
@@ -1387,6 +1462,11 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+/**
+ * EphyWebView:visibility:
+ *
+ * 
+ **/
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE,
                                    g_param_spec_boolean ("visibility",
@@ -1404,14 +1484,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * the view. For example, when a JavaScript popup window is opened.
  **/
     g_signal_new ("ge_new_window",
-                  EPHY_TYPE_WEB_VIEW,
-                  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (EphyWebViewClass, new_window),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_WIDGET);
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+            G_STRUCT_OFFSET (EphyWebViewClass, new_window),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__OBJECT,
+            G_TYPE_NONE,
+            1,
+            GTK_TYPE_WIDGET);
 /**
  * EphyWebView::ge-popup-blocked:
  * @view: the #EphyWebView that received the signal
@@ -1482,7 +1562,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * @view: the #EphyWebView that received the signal
  * @event: the #EphyEmbedEvent which triggered this signal
  *
- * The ::ge_dom_mouse_click signal is emitted when the user clicks in @embed.
+ * The ::ge_dom_mouse_click signal is emitted when the user clicks in the @view.
  **/
     g_signal_new ("ge_dom_mouse_click",
             EPHY_TYPE_WEB_VIEW,
@@ -1583,7 +1663,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * EphyWebView::close-request
  * @view: the #EphyWebView that received the signal
  *
- * The ::close signal is emitted when the embed request closing.
+ * The ::close signal is emitted when the embed requests closing.
  * Return %TRUE to prevent closing. You HAVE to process removal of the embed
  * as soon as possible after that.
  **/
@@ -1621,15 +1701,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * related changes, for example to restore the zoom level of a page
  * or to set an user style sheet.
  **/
-         g_signal_new ("new-document-now",
-           EPHY_TYPE_WEB_VIEW,
-           G_SIGNAL_RUN_FIRST,
-           G_STRUCT_OFFSET (EphyWebViewClass, new_document_now),
-           NULL, NULL,
-           g_cclosure_marshal_VOID__STRING,
-           G_TYPE_NONE,
-           1,
-           G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("new-document-now",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            G_STRUCT_OFFSET (EphyWebViewClass, new_document_now),
+            NULL, NULL,
+            g_cclosure_marshal_VOID__STRING,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
@@ -1943,28 +2023,28 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
 
 /**
  * ephy_web_view_load_request:
- * @web_view: the #EphyWebView in which to load the request
+ * @view: the #EphyWebView in which to load the request
  * @request: the #WebKitNetworkRequest to be loaded
  *
  * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
  **/
 void
-ephy_web_view_load_request (EphyWebView *web_view,
+ephy_web_view_load_request (EphyWebView *view,
                             WebKitNetworkRequest *request)
 {
   WebKitWebFrame *main_frame;
   const char *url;
   char *effective_url;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW(web_view));
+  g_return_if_fail (EPHY_IS_WEB_VIEW(view));
   g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
 
   url = webkit_network_request_get_uri (request);
-  effective_url = normalize_or_autosearch_url (web_view, url);
+  effective_url = normalize_or_autosearch_url (view, url);
   webkit_network_request_set_uri (request, effective_url);
   g_free (effective_url);
 
-  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(web_view));
+  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
   webkit_web_frame_load_request(main_frame, request);
 }
 
@@ -2044,6 +2124,14 @@ ephy_web_view_copy_back_history (EphyWebView *source,
     webkit_web_back_forward_list_add_item (dest_bflist, item);
 }
 
+/**
+ * ephy_web_view_set_address:
+ * @view: an #EphyWebView
+ * @address: address to set @view to
+ *
+ * Sets @view location to be @address. Note that this function might also set
+ * the typed-address property to %NULL.
+ */
 void
 ephy_web_view_set_address (EphyWebView *view,
                            const char *address)
@@ -2078,6 +2166,13 @@ get_title_from_address (const char *address)
     return ephy_string_get_host_name (address);
 }
 
+/**
+ * ephy_web_view_set_title:
+ * @view: an #EphyWebView
+ * @view_title: new title for @view
+ *
+ * Sets @view title to @view_title.
+ */
 void
 ephy_web_view_set_title (EphyWebView *view,
                          const char *view_title)
@@ -2236,6 +2331,14 @@ update_navigation_flags (EphyWebView *view)
   }
 }
 
+/**
+ * ephy_web_view_update_from_net_state:
+ * @view: an #EphyWebView
+ * @uri: the uri associated with @view
+ * @state: an #EphyWebViewNetState
+ *
+ * Update @view at @uri with info from @state.
+ **/
 void
 ephy_web_view_update_from_net_state (EphyWebView *view,
                                      const char *uri,
@@ -2277,6 +2380,15 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
   }
 }
 
+/**
+ * ephy_web_view_set_loading_title:
+ * @view: an #EphyWebView
+ * @title: new loading title for @view
+ * @is_address: %TRUE if @title is an address
+ *
+ * Update @view's loading title to @title, if @is_address is %TRUE it will
+ * retrieve the title of the page at @title.
+ **/
 void
 ephy_web_view_set_loading_title (EphyWebView *view,
                                  const char *title,
@@ -2452,6 +2564,14 @@ ephy_web_view_update_file_monitor (EphyWebView *view,
   g_free (url);
 }
 
+/**
+ * ephy_web_view_location_changed:
+ * @view: an #EphyWebView
+ * @location: new location for @view
+ *
+ * Sets @location as the new address for @view while preventing notify events
+ * in @view.
+ **/
 void
 ephy_web_view_location_changed (EphyWebView *view,
                                 const char *location)
@@ -2553,6 +2673,14 @@ ephy_web_view_is_loading (EphyWebView *view)
   return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
 }
 
+/**
+ * ephy_web_view_get_loading_title:
+ * @view: an #EphyWebView
+ *
+ * Returns the loading title for @view.
+ *
+ * Return value: the provisional title of @view while loading
+ **/
 const char *
 ephy_web_view_get_loading_title (EphyWebView *view)
 {
@@ -2560,7 +2688,7 @@ ephy_web_view_get_loading_title (EphyWebView *view)
 }
 
 /**
- * ephy_wew_view_get_icon:
+ * ephy_web_view_get_icon:
  * @view: an #EphyWebView
  *
  * Returns the view's site icon as a #GdkPixbuf,
@@ -2663,6 +2791,14 @@ ephy_web_view_get_visibility (EphyWebView *view)
   return view->priv->visibility;
 }
 
+/**
+ * ephy_web_view_set_link_message:
+ * @view: an #EphyWebView
+ * @link_message: new value for link-message in @view
+ *
+ * Sets the value of link-message property which tells the URL of the hovered
+ * link.
+ **/
 void
 ephy_web_view_set_link_message (EphyWebView *view,
                                 char *link_message)
@@ -2677,6 +2813,13 @@ ephy_web_view_set_link_message (EphyWebView *view,
   g_object_notify (G_OBJECT (view), "link-message");
 }
 
+/**
+ * ephy_web_view_set_security_level:
+ * @view: an #EphyWebView
+ * @level: the new #EphyWebViewSecurityLevel for @view
+ *
+ * Sets @view's security-level property to @level.
+ **/
 void
 ephy_web_view_set_security_level (EphyWebView *view,
                                   EphyWebViewSecurityLevel level)
@@ -2690,6 +2833,14 @@ ephy_web_view_set_security_level (EphyWebView *view,
   }
 }
 
+/**
+ * ephy_web_view_set_visibility:
+ * @view: an #EphyWebView
+ * @visibility: value for the visibility property of @view
+ *
+ * Sets whether the @view's toplevel is visible or not. See
+ * ephy_web_view_get_visibility().
+ **/
 void
 ephy_web_view_set_visibility (EphyWebView *view,
                               gboolean visibility)
@@ -2960,7 +3111,7 @@ ephy_web_view_get_go_up_list (EphyWebView *view)
 }
 
 /**
- * ephy_embed_utils_get_title_composite:
+ * ephy_web_view_get_title_composite:
  * @view: an #EphyView
  *
  * Returns the title of the web page loaded in @view.
@@ -3209,6 +3360,13 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
   ephy_web_view_save_sub_resource_start (subresources, destination_uri);
 }
 
+/**
+ * ephy_web_view_save:
+ * @view: an #EphyWebView
+ * @uri: location to store the saved page
+ *
+ * Saves the currently loaded page of @view to @uri.
+ **/
 void
 ephy_web_view_save (EphyWebView *view, const char *uri)
 {
