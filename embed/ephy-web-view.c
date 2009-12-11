@@ -70,7 +70,6 @@ struct _EphyWebViewPrivate {
   char *loading_title;
   char *status_message;
   char *link_message;
-  char *icon_address;
   GdkPixbuf *icon;
   gboolean expire_address_now;
 
@@ -99,7 +98,6 @@ enum {
   PROP_DOCUMENT_TYPE,
   PROP_HIDDEN_POPUP_COUNT,
   PROP_ICON,
-  PROP_ICON_ADDRESS,
   PROP_LINK_MESSAGE,
   PROP_NAVIGATION,
   PROP_POPUPS_ALLOWED,
@@ -404,9 +402,6 @@ ephy_web_view_get_property (GObject *object,
     case PROP_ICON:
       g_value_set_object (value, priv->icon);
       break;
-    case PROP_ICON_ADDRESS:
-      g_value_set_string (value, priv->icon_address);
-      break;
     case PROP_LINK_MESSAGE:
       g_value_set_string (value, priv->link_message);
       break;
@@ -438,9 +433,6 @@ ephy_web_view_set_property (GObject *object,
                             GParamSpec *pspec)
 {
   switch (prop_id) {
-    case PROP_ICON_ADDRESS:
-      ephy_web_view_set_icon_address (EPHY_WEB_VIEW (object), g_value_get_string (value));
-      break;
     case PROP_POPUPS_ALLOWED:
       ephy_web_view_set_popups_allowed (EPHY_WEB_VIEW (object), g_value_get_boolean (value));
       break;
@@ -531,7 +523,6 @@ ephy_web_view_finalize (GObject *object)
   g_free (priv->address);
   g_free (priv->typed_address);
   g_free (priv->title);
-  g_free (priv->icon_address);
   g_free (priv->status_message);
   g_free (priv->link_message);
   g_free (priv->loading_title);
@@ -621,13 +612,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON_ADDRESS,
-                                   g_param_spec_string ("icon-address",
-                                                        "Icon address",
-                                                        "The view icon's address",
-                                                        NULL,
-                                                        (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
   g_object_class_install_property (gobject_class,
                                    PROP_HIDDEN_POPUP_COUNT,
                                    g_param_spec_int ("hidden-popup-count",
@@ -894,6 +878,27 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 }
 
 static void
+_ephy_web_view_load_icon (EphyWebView *view)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  EphyEmbedShell *shell;
+  EphyFaviconCache *cache;
+  const char *icon_address;
+
+  icon_address = webkit_web_view_get_icon_uri (WEBKIT_WEB_VIEW (view));
+
+  if (icon_address == NULL || priv->icon != NULL) return;
+
+  shell = ephy_embed_shell_get_default ();
+  cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
+
+  /* ephy_favicon_cache_get returns a reference already */
+  priv->icon = ephy_favicon_cache_get (cache, icon_address);
+
+  g_object_notify (G_OBJECT (view), "icon");
+}
+
+static void
 icon_cache_changed_cb (EphyFaviconCache *cache,
                        const char *address,
                        EphyWebView *view)
@@ -902,12 +907,35 @@ icon_cache_changed_cb (EphyFaviconCache *cache,
 
   g_return_if_fail (address != NULL);
 
-  icon_address = ephy_web_view_get_icon_address (view);
+  icon_address = webkit_web_view_get_icon_uri (WEBKIT_WEB_VIEW (view));
 
   /* is this for us? */
   if (icon_address != NULL &&
       strcmp (icon_address, address) == 0) {
-    ephy_web_view_load_icon (view);
+    _ephy_web_view_load_icon (view);
+  }
+}
+
+static void
+_ephy_web_view_set_icon_address (EphyWebView *view,
+                                 const char *icon_address)
+{
+  GObject *object = G_OBJECT (view);
+  EphyWebViewPrivate *priv = view->priv;
+  EphyHistory *history;
+
+  if (priv->icon != NULL) {
+    g_object_unref (priv->icon);
+    priv->icon = NULL;
+
+    g_object_notify (object, "icon");
+  }
+
+  if (icon_address) {
+    history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+    ephy_history_set_icon (history, priv->address, icon_address);
+
+    _ephy_web_view_load_icon (view);
   }
 }
 
@@ -916,7 +944,7 @@ favicon_cb (EphyWebView *view,
             const char *address,
             gpointer user_data)
 {
-  ephy_web_view_set_icon_address (view, address);
+  _ephy_web_view_set_icon_address (view, address);
 }
 
 static void
@@ -1671,40 +1699,12 @@ ephy_web_view_location_changed (EphyWebView *view,
   }
 
   ephy_web_view_set_link_message (view, NULL);
-  ephy_web_view_set_icon_address (view, NULL);
+  _ephy_web_view_set_icon_address (view, NULL);
   update_navigation_flags (view);
 
   g_object_notify (object, "embed-title");
 
   g_object_thaw_notify (object);
-}
-
-void
-ephy_web_view_set_icon_address (EphyWebView *view,
-                                const char *address)
-{
-  GObject *object = G_OBJECT (view);
-  EphyWebViewPrivate *priv = view->priv;
-  EphyHistory *history;
-
-  g_free (priv->icon_address);
-  priv->icon_address = g_strdup (address);
-
-  if (priv->icon != NULL) {
-    g_object_unref (priv->icon);
-    priv->icon = NULL;
-
-    g_object_notify (object, "icon");
-  }
-
-  if (priv->icon_address) {
-    history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-    ephy_history_set_icon (history, priv->address, priv->icon_address);
-
-    ephy_web_view_load_icon (view);
-  }
-
-  g_object_notify (object, "icon-address");
 }
 
 /**
@@ -1776,20 +1776,6 @@ const char *
 ephy_web_view_get_loading_title (EphyWebView *view)
 {
   return view->priv->loading_title;
-}
-
-/**
- * ephy_web_view_get_icon_address:
- * @view: an #EphyWebView
- *
- * Returns a URL which points to @view's site icon.
- *
- * Return value: the URL of @view's site icon
- **/
-const char *
-ephy_web_view_get_icon_address (EphyWebView *view)
-{
-  return view->priv->icon_address;
 }
 
 /**
@@ -1908,24 +1894,6 @@ ephy_web_view_set_link_message (EphyWebView *view,
 
   g_object_notify (G_OBJECT (view), "status-message");
   g_object_notify (G_OBJECT (view), "link-message");
-}
-
-void
-ephy_web_view_load_icon (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  EphyEmbedShell *shell;
-  EphyFaviconCache *cache;
-
-  if (priv->icon_address == NULL || priv->icon != NULL) return;
-
-  shell = ephy_embed_shell_get_default ();
-  cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
-
-  /* ephy_favicon_cache_get returns a reference already */
-  priv->icon = ephy_favicon_cache_get (cache, priv->icon_address);
-
-  g_object_notify (G_OBJECT (view), "icon");
 }
 
 void

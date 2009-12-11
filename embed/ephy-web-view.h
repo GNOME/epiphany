@@ -174,8 +174,6 @@ const char *               ephy_web_view_get_link_message        (EphyWebView   
 gboolean                   ephy_web_view_get_visibility          (EphyWebView                     *view);
 void                       ephy_web_view_set_link_message        (EphyWebView                     *view,
                                                                   char                            *link_message);
-void                       ephy_web_view_load_icon               (EphyWebView                     *view);
-void                       ephy_web_view_load_icon               (EphyWebView                     *view);
 void                       ephy_web_view_set_security_level      (EphyWebView                     *view,
                                                                   EphyWebViewSecurityLevel         level);
 void                       ephy_web_view_set_visibility          (EphyWebView                     *view,
@@ -202,7 +200,6 @@ void                       ephy_web_view_print_preview_navigate  (EphyWebView   
 GSList *                   ephy_web_view_get_go_up_list          (EphyWebView                     *view);
 void                       ephy_web_view_set_title               (EphyWebView                     *view,
                                                                   const char                      *view_title);
-const char *               ephy_web_view_get_icon_address        (EphyWebView                     *view);
 const char *               ephy_web_view_get_title               (EphyWebView                     *view);
 gboolean                   ephy_web_view_can_go_up               (EphyWebView                     *view);
 const char *               ephy_web_view_get_address             (EphyWebView                     *view);
@@ -210,8 +207,6 @@ const char *               ephy_web_view_get_title_composite     (EphyWebView   
 
 /* These should be private */
 void                       ephy_web_view_set_address             (EphyWebView                     *embed,
-                                                                  const char                      *address);
-void                       ephy_web_view_set_icon_address        (EphyWebView                     *view,
                                                                   const char                      *address);
 void                       ephy_web_view_update_from_net_state   (EphyWebView                     *view,
                                                                   const char                      *uri,
