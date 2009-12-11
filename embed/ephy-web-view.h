@@ -143,8 +143,6 @@ struct _EphyWebViewClass
                                  const char *uri);
   gboolean (* modal_alert)	(EphyWebView *view);
   void	 (* modal_alert_closed) (EphyWebView *view);
-  void	 (* document_type)	(EphyWebView *view,
-                                 EphyWebViewDocumentType type);
   void	 (* new_window)		(EphyWebView *view,
                                  EphyWebView *new_view);
   gboolean (* search_key_press)	(EphyWebView *view,
