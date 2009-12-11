@@ -694,23 +694,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::favicon:
- * @view: the #EphyWebView that received the signal
- * @address: the URL to @embed's web site's favicon
- *
- * The ::ge_favicon signal is emitted when @embed discovers that a favourite
- * icon (favicon) is available for the site it is visiting.
- **/
-    g_signal_new ("favicon",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, favicon),
-            NULL, NULL,
-            g_cclosure_marshal_VOID__STRING,
-            G_TYPE_NONE,
-            1,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-/**
  * EphyWebView::ge-search-link:
  * @view: the #EphyWebView that received the signal
  * @type: the mime-type of the search description
@@ -1077,7 +1060,7 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
                     NULL);
 
-  g_signal_connect_object (web_view, "favicon",
+  g_signal_connect_object (web_view, "icon-loaded",
                            G_CALLBACK (favicon_cb),
                            web_view, (GConnectFlags)0);
 
