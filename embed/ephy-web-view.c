@@ -931,7 +931,7 @@ _ephy_web_view_set_icon_address (EphyWebView *view,
     g_object_notify (object, "icon");
   }
 
-  if (icon_address) {
+  if (icon_address && priv->address) {
     history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
     ephy_history_set_icon (history, priv->address, icon_address);
 
