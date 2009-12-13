@@ -1209,9 +1209,13 @@ ephy_web_view_load_url (EphyWebView *view,
 
   effective_url = normalize_or_autosearch_url (view, url);
 
-  if (g_str_has_prefix (effective_url, "javascript:"))
-    webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), effective_url);
-  else
+  if (g_str_has_prefix (effective_url, "javascript:")) {
+    char *decoded_url;
+    
+    decoded_url = soup_uri_decode (effective_url);
+    webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
+    g_free (decoded_url);
+  } else
     webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
 
   g_free (effective_url);
