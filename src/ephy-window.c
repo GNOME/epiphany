@@ -2862,9 +2862,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (view, "notify::progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
+		/* We run our button-press-event after the default
+		 * handler to make sure pages have a chance to perform
+		 * their own handling - for instance, have their own
+		 * context menus, or provide specific functionality
+		 * for the right mouse button */
 		g_signal_connect_object (view, "button-press-event",
 					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
-					 window, 0);
+					 window, G_CONNECT_AFTER);
 		g_signal_connect_object (view, "notify::visibility",
 					 G_CALLBACK (ephy_window_visibility_cb),
 					 window, 0);
