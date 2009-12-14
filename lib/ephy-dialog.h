@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 typedef struct _EphyDialogClass		EphyDialogClass;
 typedef struct _EphyDialog		EphyDialog;
 typedef struct _EphyDialogPrivate	EphyDialogPrivate;
+typedef struct _EphyDialogProperty	EphyDialogProperty;
 
 typedef enum
 {
@@ -49,13 +50,13 @@ typedef enum
 	PT_INVERTED	= 1 << 1
 } EphyDialogApplyType;
 
-typedef struct
+struct _EphyDialogProperty
 {
 	const char *id;
 	const char *pref;
 	EphyDialogApplyType apply_type;
 	GType data_type;
-} EphyDialogProperty;
+};
 
 struct _EphyDialogClass
 {

@@ -76,7 +76,7 @@ gboolean           ephy_file_launch_desktop_file (const char  *filename,
 gboolean           ephy_file_launch_application  (GAppInfo    *app,
                                                   GList       *files,
                                                   guint32      user_time,
-                                                  GtkWidget   *parent);
+                                                  GtkWidget   *widget);
 gboolean           ephy_file_launch_handler      (const char  *mime_type,
                                                   GFile       *file,
                                                   guint32      user_time);

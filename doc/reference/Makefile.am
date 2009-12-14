@@ -31,7 +31,6 @@ IGNORE_HFILES = \
 	eel-gconf-extensions.h \
 	ephy-dnd.h \
 	ephy-file-chooser.h \
-	ephy-file-helpers.h \
 	ephy-gui.h \
 	ephy-langs.h \
 	ephy-marshal.h \

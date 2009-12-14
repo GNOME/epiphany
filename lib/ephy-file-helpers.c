@@ -44,6 +44,14 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+/**
+ * SECTION:ephy-file-helpers
+ * @short_description: miscellaneous file related utility functions
+ *
+ * File related functions, including functions to launch, browse or move files
+ * atomically.
+ */
+
 #define EPHY_UUID		"0d82d98f-7079-401c-abff-203fcde1ece3"
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
 #define EPHY_UUID_ENVSTRING	EPHY_UUID_ENVVAR "=" EPHY_UUID
@@ -62,6 +70,13 @@ static GList *del_on_exit = NULL;
 
 GQuark ephy_file_helpers_error_quark;
 
+/**
+ * ephy_file_tmp_dir:
+ *
+ * Returns the name of the temp dir for the running Epiphany instance.
+ *
+ * Returns: the name of the temp dir, this string belongs to Epiphany.
+ **/
 const char *
 ephy_file_tmp_dir (void)
 {
@@ -90,6 +105,15 @@ ephy_file_tmp_dir (void)
 	return tmp_dir;
 }
 
+/**
+ * ephy_file_downloads_dir:
+ *
+ * Gets the basename for Epiphany's Downloads dir. This depends on the current
+ * locale. For the full path to the downloads directory see
+ * ephy_file_get_downloads_dir().
+ *
+ * Returns: a newly-allocated string containing the downloads dir basename.
+ **/
 char *
 ephy_file_downloads_dir (void)
 {
@@ -104,7 +128,7 @@ ephy_file_downloads_dir (void)
 	/* The name of the default downloads folder */
 	translated_folder = _("Downloads");
 
-	converted = g_filename_from_utf8 (translated_folder, -1, NULL, 
+	converted = g_filename_from_utf8 (translated_folder, -1, NULL,
 					  NULL, NULL);
 
 	desktop_dir = ephy_file_desktop_dir ();
@@ -116,6 +140,15 @@ ephy_file_downloads_dir (void)
 	return downloads_dir;
 }
 
+/**
+ * ephy_file_get_downloads_dir:
+ *
+ * Gets the full path to the downloads dir. This uses ephy_file_downloads_dir()
+ * internally and hence is locale dependant. Note that this can return %NULL if
+ * not even the user homedir path can be found.
+ *
+ * Returns: a newly-allocated string containing the path to the downloads dir.
+ **/
 char *
 ephy_file_get_downloads_dir (void)
 {
@@ -132,7 +165,7 @@ ephy_file_get_downloads_dir (void)
 	{
 		g_free (download_dir);
 		download_dir = ephy_file_desktop_dir ();
-	}  
+	}
 	else if (download_dir)
 	{
 		char *converted_dp;
@@ -158,6 +191,13 @@ ephy_file_get_downloads_dir (void)
 	return expanded;
 }
 
+/**
+ * ephy_file_desktop_dir:
+ *
+ * Gets the XDG desktop dir path or a default homedir/Desktop alternative.
+ *
+ * Returns: a newly-allocated string containing the desktop dir path.
+ **/
 char *
 ephy_file_desktop_dir (void)
 {
@@ -170,6 +210,17 @@ ephy_file_desktop_dir (void)
 	return g_build_filename	(g_get_home_dir (), "Desktop", NULL);
 }
 
+/**
+ * ephy_file_tmp_filename:
+ * @base: the base name of the temp file to create
+ * @extension: an optional extension for @base or %NULL
+ *
+ * Creates a temp file with mkstemp() using @base as the name with an optional
+ * @extension.
+ *
+ * Returns: a newly-allocated string containing the name of the created temp
+ * file or %NULL.
+ **/
 char *
 ephy_file_tmp_filename (const char *base,
 			const char *extension)
@@ -203,6 +254,14 @@ ephy_file_tmp_filename (const char *base,
 	return name;
 }
 
+/**
+ * ephy_file:
+ * @filename: the name of the Epiphany file requested
+ *
+ * Looks for @filename in Epiphany's directories and relevant paths.
+ *
+ * Returns: the full path to the requested file
+ **/
 const char *
 ephy_file (const char *filename)
 {
@@ -241,18 +300,45 @@ ephy_file (const char *filename)
 	return NULL;
 }
 
+/**
+ * ephy_dot_dir:
+ *
+ * Gets Epiphany's configuration directory, usually .gnome2/epiphany under
+ * user's homedir.
+ *
+ * Returns: the full path to Epiphany's configuration directory
+ **/
 const char *
 ephy_dot_dir (void)
 {
 	return dot_dir;
 }
 
+/**
+ * ephy_has_private_profile:
+ *
+ * Whether Epiphany is running with a private profile (-p command line option).
+ *
+ * Returns: %TRUE if a private profile is in use
+ **/
 gboolean
 ephy_has_private_profile (void)
 {
 	return have_private_profile;
 }
 
+/**
+ * ephy_file_helpers_init:
+ * @profile_dir: directory to use as Epiphany's profile
+ * @private_profile: %TRUE if we should use a private profile
+ * @keep_temp_dir: %TRUE to omit deleting the temp dir on exit
+ * @error: an optional #GError
+ *
+ * Initializes Epiphany file helper functions, sets @profile_dir as Epiphany's
+ * profile dir and whether the running session will be private.
+ *
+ * Returns: %FALSE if the profile dir couldn't be created or accesed
+ **/
 gboolean
 ephy_file_helpers_init (const char *profile_dir,
 			gboolean private_profile,
@@ -322,6 +408,11 @@ delete_files (GList *l)
 	}
 }
 
+/**
+ * ephy_file_helpers_shutdown:
+ *
+ * Cleans file helpers information, corresponds to ephy_file_helpers_init().
+ **/
 void
 ephy_file_helpers_shutdown (void)
 {
@@ -356,6 +447,17 @@ ephy_file_helpers_shutdown (void)
 	}
 }
 
+/**
+ * ephy_ensure_dir_exists:
+ * @dir: path to a directory
+ * @error: an optional GError to fill or %NULL
+ *
+ * Checks if @dir exists and is a directory, if it it exists and it's not a
+ * directory %FALSE is returned. If @dir doesn't exist and can't be created
+ * then %FALSE is returned.
+ *
+ * Returns: %TRUE if @dir exists and is a directory
+ **/
 gboolean
 ephy_ensure_dir_exists (const char *dir,
 		        GError **error)
@@ -418,6 +520,16 @@ ephy_find_file_recursive (const char *path,
 	}
 }
 
+/**
+ * ephy_file_find:
+ * @path: path to search for @fname
+ * @fname: filename to search for
+ * @maxdepth: maximum directory depth when searching @path
+ *
+ * Searchs for @fname in @path with a maximum depth of @maxdepth.
+ *
+ * Returns: a GSList of matches
+ **/
 GSList *
 ephy_file_find (const char *path,
 	        const char *fname,
@@ -428,6 +540,16 @@ ephy_file_find (const char *path,
 	return ret;
 }
 
+/**
+ * ephy_file_switch_temp_file:
+ * @file: destination file
+ * @file_temp: file to move to @file
+ *
+ * Moves @file_temp to @file atomically, doing a backup and restoring it if
+ * something fails.
+ *
+ * Returns: %TRUE if the switch was successful
+ **/
 gboolean
 ephy_file_switch_temp_file (GFile *file,
 			    GFile *file_temp)
@@ -447,7 +569,7 @@ ephy_file_switch_temp_file (GFile *file,
 
 	if (old_exist)
 	{
-		if (g_file_move (file, old_file, 
+		if (g_file_move (file, old_file,
 				 G_FILE_COPY_OVERWRITE,
 				 NULL, NULL, NULL, NULL) == FALSE)
 		{
@@ -492,12 +614,26 @@ failed:
 	return retval;
 }
 
+/**
+ * ephy_file_delete_on_exit:
+ * @file: a #GFile
+ *
+ * Schedules @file to be deleted when Epiphany exits. This function currently
+ * does nothing.
+ **/
 void
 ephy_file_delete_on_exit (GFile *file)
 {
 	/* does nothing now */
 }
 
+/**
+ * ephy_file_add_recent_item:
+ * @uri: an URI
+ * @mime_type: the mime type corresponding to @uri
+ *
+ * Adds @uri to the default #GtkRecentManager, with @mime_type as its type.
+ **/
 void
 ephy_file_add_recent_item (const char *uri,
 			   const char *mime_type)
@@ -568,6 +704,15 @@ load_mime_from_xml (void)
 	xmlFreeTextReader (reader);
 }
 
+/**
+ * ephy_file_check_mime:
+ * @mime_type: a mime type
+ *
+ * Checks @mime_type against our safe/unsafe database of types, returns an
+ * #EphyMimePermission.
+ *
+ * Returns: an #EphyMimePermission
+ **/
 EphyMimePermission
 ephy_file_check_mime (const char *mime_type)
 {
@@ -594,6 +739,19 @@ ephy_file_check_mime (const char *mime_type)
 	return permission;
 }
 
+/**
+ * ephy_file_launch_application:
+ * @app: the application to launch
+ * @files: files to pass to @app
+ * @user_time: user time to prevent focus stealing
+ * @widget: a relevant widget from where to get the #GdkScreen and #GdkDisplay
+ *
+ * Launches @app to open @files. If @widget is set the screen and display from
+ * it will be used to launch the application, otherwise the defaults will be
+ * used.
+ *
+ * Returns: %TRUE if g_app_info_launch() succeeded
+ **/
 gboolean
 ephy_file_launch_application (GAppInfo *app,
 			      GList *files,
@@ -611,7 +769,7 @@ ephy_file_launch_application (GAppInfo *app,
 		display = gtk_widget_get_display (widget);
 		screen = gtk_widget_get_screen (widget);
 	}
-	else 
+	else
 	{
 		display = gdk_display_get_default ();
 		screen = gdk_screen_get_default ();
@@ -628,6 +786,18 @@ ephy_file_launch_application (GAppInfo *app,
 	return res;
 }
 
+/**
+ * ephy_file_launch_desktop_file:
+ * @filename: the path to the .desktop file
+ * @parameter: path to a parameter file to pass to the application
+ * @user_time: user time to prevent focus stealing
+ * @widget: an optional widget for ephy_file_launch_application()
+ *
+ * Calls ephy_file_launch_application() for the application described by the
+ * .desktop file @filename. Can pass @parameter as optional file arguments.
+ *
+ * Returns: %TRUE if the application launch was successful
+ **/
 gboolean
 ephy_file_launch_desktop_file (const char *filename,
 			       const char *parameter,
@@ -649,6 +819,17 @@ ephy_file_launch_desktop_file (const char *filename,
 	return ret;
 }
 
+/**
+ * ephy_file_launch_handler:
+ * @mime_type: the mime type of @file or %NULL
+ * @file: a #GFile to pass as argument
+ * @user_time: user time to prevent focus stealing
+ *
+ * Launches @file with its default handler application, if @mime_type is %NULL
+ * then @file will be queried for its type.
+ *
+ * Returns: %TRUE on success
+ **/
 gboolean
 ephy_file_launch_handler (const char *mime_type,
 			  GFile *file,
@@ -703,6 +884,17 @@ ephy_file_launch_handler (const char *mime_type,
 	return ret;
 }
 
+/**
+ * ephy_file_browse_to:
+ * @file: a #GFile
+ * @user_time: user_time to prevent focus stealing
+ *
+ * Launches the default application for browsing directories, with @file's
+ * parent directory as its target. Passes @user_time to
+ * ephy_file_launch_handler() to prevent focus stealing.
+ *
+ * Returns: %TRUE if the launch succeeded
+ **/
 gboolean
 ephy_file_browse_to (GFile *file,
 		     guint32 user_time)
@@ -723,8 +915,8 @@ ephy_file_browse_to (GFile *file,
 	{
 		parent = g_file_get_parent (file);
 		/* TODO find a way to make nautilus scroll to the actual file */
-		ret = ephy_file_launch_handler ("x-directory/normal", 
-						parent, 
+		ret = ephy_file_launch_handler ("x-directory/normal",
+						parent,
 						user_time);
 	}
 	
@@ -738,7 +930,6 @@ ephy_file_browse_to (GFile *file,
  * @path: the path to remove
  *
  * Remove @path and its contents. Like calling rm -rf @path.
- *
  **/
 void
 ephy_file_delete_directory (const char *path)
@@ -752,11 +943,11 @@ ephy_file_delete_directory (const char *path)
 	
 	if (ret == TRUE)
 	{
-		LOG ("Deleted the profile dir '%s'", path);
+		LOG ("Deleted dir '%s'", path);
 	}
 	else
 	{
-		LOG ("Couldn't delete profile dir '%s'", path);
+		LOG ("Couldn't delete dir '%s'", path);
 	}
 	g_object_unref (file);
 }
@@ -766,7 +957,6 @@ ephy_file_delete_directory (const char *path)
  * @uri: URI of the file to be deleted
  *
  * Remove the given URI.
- *
  */
 void
 ephy_file_delete_uri (const char *uri)
