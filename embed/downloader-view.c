@@ -75,7 +75,6 @@ struct _DownloaderViewPrivate
 #endif
 
 	guint source_id;
-	guint notification_timeout;
 };
 
 enum
@@ -199,7 +198,7 @@ remove_download (WebKitDownload *download,
 	WebKitDownloadStatus status;
 
 	g_signal_handlers_disconnect_matched
-		(download, G_SIGNAL_MATCH_DATA ,
+		(download, G_SIGNAL_MATCH_DATA,
 		 0, 0, NULL, NULL, view);
 
 	status = webkit_download_get_status (download);
@@ -272,11 +271,6 @@ downloader_view_finalize (GObject *object)
 		priv->source_id = 0;
 	}
 	
-	if (priv->notification_timeout != 0)
-	{
-		g_source_remove (priv->notification_timeout);
-	}
-
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (downloader_view_parent_class)->finalize (object);
@@ -622,30 +616,23 @@ update_buttons_timeout_cb (DownloaderView *dv)
 }
 
 #ifdef HAVE_LIBNOTIFY
-static gboolean
-queue_show_notification (DownloaderView *dv)
-{
-	if (gtk_status_icon_is_embedded (dv->priv->status_icon))
-	{
-		notify_notification_show (dv->priv->notification, NULL);
-		dv->priv->notification_timeout = 0;
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 static void
 show_notification_window (DownloaderView *dv)
 {
 	if (gtk_status_icon_is_embedded (dv->priv->status_icon))
-		notify_notification_show (dv->priv->notification, NULL);
+	{
+		notify_notification_attach_to_status_icon
+						(dv->priv->notification,
+						 dv->priv->status_icon);
+	}
 	else
 	{
-		if (dv->priv->notification_timeout != 0)
-			g_source_remove (dv->priv->notification_timeout);
-		dv->priv->notification_timeout = g_timeout_add_seconds (1, (GSourceFunc) queue_show_notification, dv);
+		notify_notification_attach_to_status_icon
+						(dv->priv->notification,
+						 NULL);
 	}
+
+	notify_notification_show (dv->priv->notification, NULL);
 }
 #endif
 
