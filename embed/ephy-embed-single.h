@@ -100,6 +100,12 @@ gboolean        ephy_embed_single_get_network_status (EphyEmbedSingle *single);
 GSList *        ephy_embed_single_get_form_auth      (EphyEmbedSingle *single,
                                                       const char *uri);
 
+void            ephy_embed_single_add_form_auth      (EphyEmbedSingle *single,
+                                                      const char *uri,
+                                                      const char *form_username,
+                                                      const char *form_password,
+                                                      const char *username);
+
 G_END_DECLS
 
 #endif

@@ -143,7 +143,6 @@ get_attr_cb (GnomeKeyringResult result,
 {
   int i = 0;
   GnomeKeyringAttribute *attribute;
-  EphyEmbedSinglePrivate *priv = single->priv;
   char *server = NULL, *username = NULL;
 
   if (result != GNOME_KEYRING_RESULT_OK)
@@ -171,21 +170,11 @@ get_attr_cb (GnomeKeyringResult result,
      * the time */
     const char *form_username, *form_password;
     GHashTable *t;
-    GSList *l;
-    EphyEmbedSingleFormAuthData *form_data;
     SoupURI *uri = soup_uri_new (server);
     t = soup_form_decode (uri->query);
     form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
     form_password = g_hash_table_lookup (t, FORM_PASSWORD_KEY);
-
-    form_data = form_auth_data_new (form_username, form_password, username);
-    l = g_hash_table_lookup (priv->form_auth_data,
-                             uri->host);
-    l = g_slist_append (l, form_data);
-    g_hash_table_replace (priv->form_auth_data,
-                          g_strdup (uri->host),
-                          l);
-
+    ephy_embed_single_add_form_auth (single, uri->host, form_username, form_password, username);
     soup_uri_free (uri);
     g_hash_table_destroy (t);
   }
@@ -626,4 +615,44 @@ ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
   priv = single->priv;
 
   return g_hash_table_lookup (priv->form_auth_data, uri);
+}
+
+/**
+ * ephy_embed_single_add_form_auth:
+ * @single: an #EphyEmbedSingle
+ * @uri: URI of the page
+ * @form_username: name of the username input field
+ * @form_password: name of the password input field
+ * @username: username
+ * 
+ * Adds a new entry to the local cache of form auth data stored in
+ * @single.
+ * 
+ **/
+void
+ephy_embed_single_add_form_auth (EphyEmbedSingle *single,
+                                 const char *uri,
+                                 const char *form_username,
+                                 const char *form_password,
+                                 const char *username)
+{
+  EphyEmbedSingleFormAuthData *form_data;
+  EphyEmbedSinglePrivate *priv;
+  GSList *l;
+
+  g_return_if_fail (EPHY_IS_EMBED_SINGLE (single));
+  g_return_if_fail (uri);
+  g_return_if_fail (form_username);
+  g_return_if_fail (form_password);
+  g_return_if_fail (username);
+
+  priv = single->priv;
+
+  form_data = form_auth_data_new (form_username, form_password, username);
+  l = g_hash_table_lookup (priv->form_auth_data,
+                           uri);
+  l = g_slist_append (l, form_data);
+  g_hash_table_replace (priv->form_auth_data,
+                        g_strdup (uri),
+                        l);
 }
