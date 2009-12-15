@@ -20,6 +20,7 @@ NOINST_H_FILES = \
 	ephy-node-common.h			\
 	ephy-object-helpers.h			\
 	ephy-prefs.h				\
+	ephy-profile-migration.h	        \
 	ephy-print-utils.h			\
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
@@ -57,6 +58,7 @@ libephymisc_la_SOURCES = \
 	ephy-node-db.c				\
 	ephy-object-helpers.c			\
 	ephy-prefs.h				\
+	ephy-profile-migration.c	        \
 	ephy-print-utils.c			\
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\
@@ -97,6 +99,18 @@ libephymisc_la_CFLAGS += \
 libephymisc_la_LIBADD += \
 	$(SPELLCHECKER_LIBS)
 endif
+
+if ENABLE_NSS
+NOINST_H_FILES += \
+	ephy-nss-glue.h \
+	$(NULL)
+
+libephymisc_la_SOURCES += \
+	ephy-nss-glue.c
+	$(NULL)
+
+libephymisc_la_CFLAGS += $(NSS_CFLAGS)
+endif # ENABLE_NSS
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\

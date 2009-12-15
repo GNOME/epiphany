@@ -28,7 +28,6 @@ NOINST_H_FILES = \
 	ephy-location-action.h		\
 	ephy-navigation-action.h	\
 	ephy-password-info.h	\
-	ephy-profile-migration.h	\
 	ephy-tabs-menu.h		\
 	ephy-toolbars-model.h		\
 	ephy-toolbar.h			\
@@ -75,8 +74,7 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.c			\
 	ephy-navigation-action.c	\
 	ephy-notebook.c			\
-	ephy-password-info.c	\
-	ephy-profile-migration.c	\
+	ephy-password-info.c	        \
 	ephy-session.c			\
 	ephy-shell.c			\
 	ephy-statusbar.c		\
@@ -139,18 +137,6 @@ libephymain_la_SOURCES += \
 
 libephymain_la_CFLAGS += $(SEED_CFLAGS)
 endif # ENABLE_SEED
-
-if ENABLE_NSS
-NOINST_H_FILES += \
-	ephy-nss-glue.h \
-	$(NULL)
-
-libephymain_la_SOURCES += \
-	ephy-nss-glue.c
-	$(NULL)
-
-libephymain_la_CFLAGS += $(NSS_CFLAGS)
-endif # ENABLE_NSS
 
 epiphany_SOURCES = ephy-main.c
 
