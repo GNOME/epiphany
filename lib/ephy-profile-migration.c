@@ -33,6 +33,7 @@
 
 #include "ephy-profile-migration.h"
 
+#include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
@@ -425,6 +426,27 @@ store_form_password_cb (GnomeKeyringResult result,
   /* FIXME: should we do anything if the operation failed? */
 }
 
+static void
+normalize_and_prepare_uri (SoupURI *uri,
+                           const char *form_username,
+                           const char *form_password)
+{
+  /* We normalize https? schemes here so that we use passwords
+   * we stored in https sites in their http counterparts, and
+   * vice-versa. */
+  if (g_str_equal (uri->scheme, SOUP_URI_SCHEME_HTTPS))
+    soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
+
+  /* Store the form login and password names encoded in the
+   * URL. A bit of an abuse of keyring, but oh well */
+  soup_uri_set_query_from_fields (uri,
+                                  FORM_USERNAME_KEY,
+                                  form_username,
+                                  FORM_PASSWORD_KEY,
+                                  form_password,
+                                  NULL);
+}
+
 void
 _ephy_profile_store_form_auth_data (const char *uri,
                                     const char *form_username,
@@ -432,39 +454,70 @@ _ephy_profile_store_form_auth_data (const char *uri,
                                     const char *username,
                                     const char *password)
 {
-        SoupURI *fake_uri;
-        char *fake_uri_str;
-        
-        g_return_if_fail (uri);
-        g_return_if_fail (form_username);
-        g_return_if_fail (form_password);
-        g_return_if_fail (username);
-        g_return_if_fail (password);
+  SoupURI *fake_uri;
+  char *fake_uri_str;
 
-        fake_uri = soup_uri_new (uri);
-        /* Store the form login and password names encoded in the
-         * URL. A bit of an abuse of keyring, but oh well */
-        soup_uri_set_query_from_fields (fake_uri,
-                                        FORM_USERNAME_KEY,
-                                        form_username,
-                                        FORM_PASSWORD_KEY,
-                                        form_password,
-                                        NULL);
-        fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
-        gnome_keyring_set_network_password (NULL,
-                                            username,
-                                            NULL,
-                                            fake_uri_str,
-                                            NULL,
-                                            fake_uri->scheme,
-                                            NULL,
-                                            fake_uri->port,
-                                            password,
-                                            (GnomeKeyringOperationGetIntCallback)store_form_password_cb,
-                                            NULL,
-                                            NULL);
-        soup_uri_free (fake_uri);
-        g_free (fake_uri_str);
+  g_return_if_fail (uri);
+  g_return_if_fail (form_username);
+  g_return_if_fail (form_password);
+  g_return_if_fail (username);
+  g_return_if_fail (password);
+
+  fake_uri = soup_uri_new (uri);
+  normalize_and_prepare_uri (fake_uri, form_username, form_password);
+  fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
+
+  gnome_keyring_set_network_password (NULL,
+                                      username,
+                                      NULL,
+                                      fake_uri_str,
+                                      NULL,
+                                      fake_uri->scheme,
+                                      NULL,
+                                      fake_uri->port,
+                                      password,
+                                      (GnomeKeyringOperationGetIntCallback)store_form_password_cb,
+                                      NULL,
+                                      NULL);
+  soup_uri_free (fake_uri);
+  g_free (fake_uri_str);
+}
+
+GList*
+_ephy_profile_query_form_auth_data (const char *uri,
+                                    const char *form_username,
+                                    const char *form_password,
+                                    GnomeKeyringOperationGetListCallback callback,
+                                    gpointer data,
+                                    GDestroyNotify destroy_data)
+{
+  SoupURI *key;
+  char *key_str;
+  GList *results = NULL;
+
+  g_return_val_if_fail (uri, NULL);
+  g_return_val_if_fail (form_username, NULL);
+  g_return_val_if_fail (form_password, NULL);
+
+  key = soup_uri_new (uri);
+  normalize_and_prepare_uri (key, form_username, form_password);
+  key_str = soup_uri_to_string (key, FALSE);
+
+  LOG ("Querying Keyring: %s", key_str);
+  gnome_keyring_find_network_password (NULL,
+                                       NULL,
+                                       key_str,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       0,
+                                       callback,
+                                       data,
+                                       destroy_data);
+  soup_uri_free (key);
+  g_free (key_str);
+
+  return results;
 }
 
 #define PROFILE_MIGRATION_FILE ".migrated"
