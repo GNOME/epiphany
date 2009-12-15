@@ -20,6 +20,9 @@
 #ifndef EPHY_PROFILE_MIGRATION_H
 #define EPHY_PROFILE_MIGRATION_H
 
+#define FORM_USERNAME_KEY "form_username"
+#define FORM_PASSWORD_KEY "form_password"
+
 void _ephy_profile_migrate (void);
 
 void _ephy_profile_store_form_auth_data (const char *uri,

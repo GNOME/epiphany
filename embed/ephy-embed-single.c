@@ -30,6 +30,7 @@
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-permission-manager.h"
+#include "ephy-profile-migration.h"
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
 #include "ephy-certificate-manager.h"
@@ -37,12 +38,21 @@
 
 #include <webkit/webkit.h>
 #include <libsoup/soup-gnome.h>
+#include <gnome-keyring.h>
 
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
 
 struct _EphyEmbedSinglePrivate {
   guint online : 1;
+
+  GHashTable *form_auth_data;
 };
+
+typedef struct {
+  char *form_username;
+  char *form_password;
+  char *username;
+} FormAuthData;
 
 enum {
   PROP_0,
@@ -108,9 +118,146 @@ G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
 #endif
 
 static void
+form_auth_data_free (FormAuthData *data)
+{
+  g_free (data->form_username);
+  g_free (data->form_password);
+  g_free (data->username);
+
+  g_slice_free (FormAuthData, data);
+}
+
+static FormAuthData*
+form_auth_data_new (const char *form_username,
+                    const char *form_password,
+                    const char *username)
+{
+  FormAuthData *data;
+
+  data = g_slice_new (FormAuthData);
+  data->form_username = g_strdup (form_username);
+  data->form_password = g_strdup (form_password);
+  data->username = g_strdup (username);
+
+  return data;
+}
+
+static void
+get_attr_cb (GnomeKeyringResult result,
+             GnomeKeyringAttributeList *attributes,
+             EphyEmbedSingle *single)
+{
+  int i = 0;
+  GnomeKeyringAttribute *attribute;
+  EphyEmbedSinglePrivate *priv = single->priv;
+  char *server = NULL, *username = NULL;
+
+  if (result != GNOME_KEYRING_RESULT_OK)
+    return;
+
+  attribute = (GnomeKeyringAttribute*)attributes->data;
+  for (i = 0; i < attributes->len; i++) {
+    if (server && username)
+      break;
+
+    if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
+      if (g_str_equal (attribute[i].name, "server")) {
+        server = g_strdup (attribute[i].value.string);
+      } else if (g_str_equal (attribute[i].name, "user")) {
+        username = g_strdup (attribute[i].value.string);
+      }
+    }
+  }
+
+  if (server && username &&
+      g_strstr_len (server, -1, "form%5Fusername") &&
+      g_strstr_len (server, -1, "form%5Fpassword")) {
+    /* This is a stored login/password from a form, cache the form
+     * names locally so we don't need to hit the keyring daemon all
+     * the time */
+    const char *form_username, *form_password;
+    GHashTable *t;
+    GSList *l;
+    FormAuthData *form_data;
+    SoupURI *uri = soup_uri_new (server);
+    t = soup_form_decode (uri->query);
+    form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
+    form_password = g_hash_table_lookup (t, FORM_PASSWORD_KEY);
+
+    form_data = form_auth_data_new (form_username, form_password, username);
+    l = g_hash_table_lookup (priv->form_auth_data,
+                             uri->host);
+    l = g_slist_append (l, form_data);
+    g_hash_table_replace (priv->form_auth_data,
+                          g_strdup (uri->host),
+                          l);
+
+    soup_uri_free (uri);
+    g_hash_table_destroy (t);
+  }
+
+  g_free (server);
+  g_free (username);
+}
+
+static void
+store_form_data_cb (GnomeKeyringResult result, GList *l, EphyEmbedSingle *single)
+{
+  GList *p;
+
+  if (result != GNOME_KEYRING_RESULT_OK)
+    return;
+
+  for (p = l; p; p = p->next) {
+    guint key_id = GPOINTER_TO_UINT (p->data);
+    gnome_keyring_item_get_attributes (GNOME_KEYRING_DEFAULT,
+                                       key_id,
+                                       (GnomeKeyringOperationGetAttributesCallback) get_attr_cb,
+                                       single,
+                                       NULL);
+  }
+}
+
+static void
+cache_keyring_form_data (EphyEmbedSingle *single)
+{
+  gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
+                               (GnomeKeyringOperationGetListCallback)store_form_data_cb,
+                               single,
+                               NULL);
+}
+
+static void
+free_form_auth_data_list (gpointer data)
+{
+  GSList *p, *l = (GSList*)data;
+
+  for (p = l; p; p = p->next)
+    form_auth_data_free ((FormAuthData*)p->data);
+
+  g_slist_free (l);
+}
+
+static void
+remove_form_auth_data (gpointer key, gpointer value, gpointer user_data)
+{
+  if (value)
+    free_form_auth_data_list ((GSList*)value);
+}
+
+static void
 ephy_embed_single_finalize (GObject *object)
 {
+  EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
+
   ephy_embed_prefs_shutdown ();
+
+  if (priv->form_auth_data) {
+    g_hash_table_foreach (priv->form_auth_data,
+                          (GHFunc)remove_form_auth_data,
+                          NULL);
+    g_hash_table_destroy (priv->form_auth_data);
+  }
 
   G_OBJECT_CLASS (ephy_embed_single_parent_class)->finalize (object);
 }
@@ -122,6 +269,12 @@ ephy_embed_single_init (EphyEmbedSingle *single)
 
   single->priv = priv = EPHY_EMBED_SINGLE_GET_PRIVATE (single);
   priv->online = TRUE;
+
+  priv->form_auth_data = g_hash_table_new_full (g_str_hash,
+                                                g_str_equal,
+                                                g_free,
+                                                NULL);
+  cache_keyring_form_data (single);
 }
 
 static void
