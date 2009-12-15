@@ -26,6 +26,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit/webkit.h>
+#include <JavaScriptCore/JavaScript.h>
+#include <gnome-keyring.h>
 
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
@@ -39,6 +41,7 @@
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
 #include "ephy-permission-manager.h"
+#include "ephy-profile-migration.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-string.h"
@@ -501,6 +504,496 @@ ephy_web_view_dispose (GObject *object)
   ephy_web_view_file_monitor_cancel (EPHY_WEB_VIEW (object));
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
+}
+
+
+static char*
+js_value_to_string (JSContextRef js_context,
+                    JSValueRef js_value)
+{
+  gssize length;
+  char* buffer;
+  JSStringRef str;
+
+  g_return_val_if_fail (JSValueIsString (js_context, js_value), NULL);
+
+  str = JSValueToStringCopy (js_context, js_value, NULL);
+  length = JSStringGetLength (str) + 1;
+
+  buffer = g_malloc0 (length);
+  JSStringGetUTF8CString (str, buffer, length);
+  JSStringRelease (str);
+
+  return buffer;
+}
+
+static JSValueRef
+js_object_get_property (JSContextRef js_context,
+                        JSObjectRef js_object,
+                        const char *name)
+{
+  JSStringRef js_string = JSStringCreateWithUTF8CString (name);
+  JSValueRef js_value = JSObjectGetProperty (js_context, js_object, js_string, NULL);
+
+  JSStringRelease (js_string);
+
+  return js_value;
+}
+
+static JSObjectRef
+js_object_get_property_as_object (JSContextRef js_context,
+                                  JSObjectRef object,
+                                  const char *attr)
+{
+  return JSValueToObject (js_context,
+                          js_object_get_property (js_context, object, attr),
+                          NULL);
+}
+
+static char *
+js_get_element_attribute (JSContextRef js_context,
+                          JSObjectRef object,
+                          const char *attr)
+{
+  JSStringRef attrstr = JSStringCreateWithUTF8CString (attr);
+  JSObjectRef ga = js_object_get_property_as_object (js_context, object, "getAttribute");
+  JSValueRef args[1], val;
+  char *buffer = NULL;
+
+  args[0] = JSValueMakeString (js_context, attrstr);
+  val = JSObjectCallAsFunction (js_context, ga, object, 1, args, NULL);
+  JSStringRelease (attrstr);
+
+  if (JSValueIsString (js_context, val))
+    buffer = js_value_to_string (js_context, val);
+
+  return buffer;
+}
+
+static GSList*
+js_get_all_forms (JSContextRef js_context)
+{
+  JSObjectRef js_global;
+  JSObjectRef js_object;
+  JSValueRef js_form;
+  guint index = 0;
+  GSList *retval = NULL;
+
+  js_global = JSContextGetGlobalObject (js_context);
+
+  js_object = js_object_get_property_as_object (js_context, js_global, "document");
+  if (!js_object)
+    return NULL;
+
+  js_object = js_object_get_property_as_object (js_context, js_object, "forms");
+  if (!js_object)
+    return NULL;
+
+  while (TRUE) {
+    js_form = JSObjectGetPropertyAtIndex (js_context, js_object, index++, NULL);
+
+    if (JSValueIsUndefined (js_context, js_form))
+      break;
+
+    retval = g_slist_prepend (retval, (gpointer)js_form);
+  }
+
+  return retval;
+}
+
+static GSList*
+js_get_form_elements (JSContextRef js_context, JSValueRef js_form)
+{
+  JSObjectRef js_object = JSValueToObject (js_context, js_form, NULL);
+  JSStringRef js_name;
+  JSValueRef value;
+  guint num;
+  guint count;
+  GSList *retval = NULL;
+
+  js_object = js_object_get_property_as_object (js_context, js_object, "elements");
+  if (!js_object)
+    return NULL;
+
+  js_name = JSStringCreateWithUTF8CString ("length");
+  value = JSObjectGetProperty (js_context, js_object, js_name, NULL);
+  JSStringRelease (js_name);
+
+  num = (guint)JSValueToNumber (js_context, value, NULL);
+  for (count = 0; count < num; count++) {
+    value = JSObjectGetPropertyAtIndex (js_context, js_object, count, NULL);
+
+    if (!JSValueIsObject (js_context, value))
+      continue;
+
+    retval = g_slist_prepend (retval, (gpointer)value);
+  }
+
+  return retval;
+}
+
+typedef struct {
+  JSContextRef context;
+  JSObjectRef username_element;
+  JSObjectRef password_element;
+} FillData;
+
+static void
+fill_data_free (gpointer data)
+{
+  FillData *fill_data = (FillData*)data;
+
+  g_slice_free (FillData, fill_data);
+}
+
+static void
+fill_form_cb (GnomeKeyringResult retval,
+              GList *results,
+              gpointer user_data)
+{
+  JSValueRef prop_value;
+  JSStringRef prop_value_str, prop_name;
+  FillData *fill_data = (FillData*)user_data;
+  JSContextRef js_context = fill_data->context;
+  JSObjectRef username_element = fill_data->username_element;
+  JSObjectRef password_element = fill_data->password_element;
+  GnomeKeyringNetworkPasswordData* keyring_data;
+
+  if (!results) {
+    LOG ("No result");
+    return;
+  }
+
+  /* FIXME: We use only the first result, for now; We need to do
+   * something smarter here */
+  keyring_data = (GnomeKeyringNetworkPasswordData*)results->data;
+
+  if (retval != GNOME_KEYRING_RESULT_OK) {
+    LOG ("Query failed.");
+    return;
+  }
+
+  LOG ("Found: user %s pass (hidden)", keyring_data->user);
+
+  prop_name = JSStringCreateWithUTF8CString ("value");
+  prop_value_str = JSStringCreateWithUTF8CString (keyring_data->user);
+  prop_value = JSValueMakeString (js_context, prop_value_str);
+  JSObjectSetProperty (js_context, username_element, prop_name, prop_value, 0, NULL);
+
+  JSStringRelease (prop_value_str);
+
+  prop_value_str = JSStringCreateWithUTF8CString (keyring_data->password);
+  prop_value = JSValueMakeString (js_context, prop_value_str);
+  JSObjectSetProperty (js_context, password_element, prop_name, prop_value, 0, NULL);
+
+  JSStringRelease (prop_name);
+  JSStringRelease (prop_value_str);
+}
+
+static void
+find_username_and_password_elements (JSContextRef js_context,
+                                     GSList *elements,
+                                     JSObjectRef *name_element,
+                                     JSObjectRef *password_element)
+{
+  GSList *iter = elements;
+
+  for (; iter; iter = iter->next) {
+    JSObjectRef js_object;
+    char *type;
+
+    js_object = JSValueToObject (js_context, (JSValueRef)iter->data, NULL);
+
+    type = js_get_element_attribute (js_context, js_object, "type");
+    if (!type)
+      continue;
+
+    if (g_str_equal (type, "text")) {
+      /* We found more than one inputs of type text; we won't be
+       * saving here */
+      if (*name_element) {
+        *name_element = NULL;
+        break;
+      }
+
+      *name_element = js_object;
+    } else if (g_str_equal (type, "password")) {
+      if (*password_element) {
+        *password_element = NULL;
+        break;
+      }
+
+      *password_element = js_object;
+    }
+
+    g_free (type);
+  }
+}
+
+static char*
+js_get_domain_and_path (JSContextRef js_context)
+{
+  JSObjectRef js_object;
+  JSValueRef js_value;
+  char *tmp;
+  GString *result = NULL;
+
+  js_object = JSContextGetGlobalObject (js_context);
+
+  js_object = js_object_get_property_as_object (js_context, js_object, "document");
+  if (!js_object)
+    return NULL;
+
+  js_object = js_object_get_property_as_object (js_context, js_object, "location");
+  if (!js_object)
+    return NULL;
+
+  /* We got document.location; now we are going to build the string:
+   * protocol + // + host + port? + path
+   */
+
+  /* protocol */
+  js_value = js_object_get_property (js_context, js_object, "protocol");
+  if (!JSValueIsString (js_context, js_value))
+    goto js_get_domain_and_path_fail;
+
+  tmp = js_value_to_string (js_context, js_value);
+  result = g_string_new (tmp);
+  g_free (tmp);
+
+  /* // */
+  g_string_append (result, "//");
+
+  /* host */
+  js_value = js_object_get_property (js_context, js_object, "host");
+  if (!JSValueIsString (js_context, js_value))
+    goto js_get_domain_and_path_fail;
+
+  tmp = js_value_to_string (js_context, js_value);
+  g_string_append (result, tmp);
+  g_free (tmp);
+
+  /* port? */
+  js_value = js_object_get_property (js_context, js_object, "port");
+  if (!JSValueIsString (js_context, js_value))
+    goto js_get_domain_and_path_fail;
+
+  tmp = js_value_to_string (js_context, js_value);
+  if (!g_str_equal (tmp, "")) {
+    g_string_append (result, ":");
+    g_string_append (result, tmp);
+  }
+  g_free (tmp);
+
+  /* pathname */
+  js_value = js_object_get_property (js_context, js_object, "pathname");
+  if (!JSValueIsString (js_context, js_value))
+    goto js_get_domain_and_path_fail;
+
+  tmp = js_value_to_string (js_context, js_value);
+  g_string_append (result, tmp);
+  g_free (tmp);
+
+  tmp = result->str;
+  LOG ("Obtained the following from document.location: %s", tmp);
+  g_string_free (result, FALSE);
+  return tmp;
+
+ js_get_domain_and_path_fail:
+  if (result)
+    g_string_free (result, TRUE);
+
+  return NULL;
+}
+
+static JSValueRef
+form_submitted_cb (JSContextRef js_context,
+                   JSObjectRef js_function,
+                   JSObjectRef js_this,
+                   size_t argument_count,
+                   const JSValueRef js_arguments[],
+                   JSValueRef* js_exception)
+{
+  GSList *elements = js_get_form_elements (js_context, js_this);
+  JSObjectRef name_element = NULL;
+  JSObjectRef password_element = NULL;
+  JSStringRef js_string;
+  JSValueRef js_value;
+  char *name_field_name;
+  char *name_field_value;
+  char *password_field_name;
+  char *password_field_value;
+  char *uri;
+  SoupURI *soup_uri;
+
+  LOG ("Form submitted!");
+
+  find_username_and_password_elements (js_context, elements, &name_element, &password_element);
+  g_slist_free (elements);
+
+  if (!name_element || !password_element)
+    return JSValueMakeUndefined (js_context);
+
+  name_field_name = js_get_element_attribute (js_context, name_element, "name");
+  password_field_name = js_get_element_attribute (js_context, password_element, "name");
+
+  js_string = JSStringCreateWithUTF8CString ("value");
+  js_value = JSObjectGetProperty (js_context, name_element, js_string, NULL);
+
+  name_field_value = js_value_to_string (js_context, js_value);
+
+  js_value = JSObjectGetProperty (js_context, password_element, js_string, NULL);
+  JSStringRelease (js_string);
+
+  password_field_value = js_value_to_string (js_context, js_value);
+
+  uri = js_get_domain_and_path (js_context);
+  _ephy_profile_store_form_auth_data (uri,
+                                      name_field_name,
+                                      password_field_name,
+                                      name_field_value,
+                                      password_field_value);
+
+  /* Update internal caching */
+  soup_uri = soup_uri_new (uri);
+  g_free (uri);
+
+  ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)),
+                                   soup_uri->host,
+                                   name_field_name,
+                                   password_field_name,
+                                   name_field_value);
+  soup_uri_free (soup_uri);
+
+  g_free (name_field_name);
+  g_free (name_field_value);
+  g_free (password_field_name);
+  g_free (password_field_value);
+
+  return JSValueMakeUndefined (js_context);
+}
+
+static void
+hook_form (JSContextRef js_context, JSValueRef js_form, JSObjectRef js_form_submitted)
+{
+  JSObjectRef object = JSValueToObject (js_context, js_form, NULL);
+  JSObjectRef add_event_listener = js_object_get_property_as_object (js_context, object, "addEventListener");
+  JSStringRef event_name;
+  JSValueRef args[3], val;
+  JSValueRef js_exception;
+
+  event_name = JSStringCreateWithUTF8CString ("submit");
+  args[0] = JSValueMakeString (js_context, event_name);
+  JSStringRelease (event_name);
+
+  args[1] = js_form_submitted;
+  args[2] = JSValueMakeBoolean (js_context, TRUE);
+  val = JSObjectCallAsFunction (js_context, add_event_listener, object, 3, args, &js_exception);
+}
+
+static void
+pre_fill_form (JSContextRef js_context,
+               JSObjectRef js_object,
+               JSObjectRef username_element,
+               JSObjectRef password_element,
+               EphyWebView *view)
+{
+  GSList *l = NULL;
+  SoupURI *uri = NULL;
+  GSList *p = NULL;
+
+  uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+  if (uri)
+    l = ephy_embed_single_get_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)), uri->host);
+
+  for (p = l; p; p = p->next) {
+    EphyEmbedSingleFormAuthData *data = (EphyEmbedSingleFormAuthData*)p->data;
+    char *username_field_name = js_get_element_attribute (js_context, username_element, "name");
+    char *password_field_name = js_get_element_attribute (js_context, password_element, "name");
+    if (g_str_equal (username_field_name, data->form_username) &&
+        g_str_equal (password_field_name, data->form_password)) {
+      FillData *fill_data = g_slice_new (FillData);
+      char *uri_str = soup_uri_to_string (uri, FALSE);
+
+      fill_data->context = js_context;
+      fill_data->username_element = username_element;
+      fill_data->password_element = password_element;
+
+      _ephy_profile_query_form_auth_data (uri_str,
+                                          data->form_username,
+                                          data->form_password,
+                                          fill_form_cb,
+                                          fill_data,
+                                          fill_data_free);
+      g_free (uri_str);
+    }
+    g_free (username_field_name);
+    g_free (password_field_name);
+  }
+
+  soup_uri_free (uri);
+}
+
+static void
+do_hook_into_forms (JSContextRef js_context, JSObjectRef js_form_submitted, EphyWebView *web_view)
+{
+  GSList *forms = js_get_all_forms (js_context);
+
+  if (!forms) {
+    LOG ("No forms found.");
+    return;
+  }
+
+  for (; forms; forms = forms->next) {
+    JSValueRef form = (JSValueRef)forms->data;
+    GSList *elements = js_get_form_elements (js_context, form);
+    JSObjectRef name_element = NULL;
+    JSObjectRef password_element = NULL;
+
+    if (!elements) {
+      LOG ("No elements found for this form.");
+      continue;
+    }
+
+    find_username_and_password_elements (js_context, elements, &name_element, &password_element);
+    g_slist_free (elements);
+
+    /* We have a field that may be the user, and one for a password. */
+    if (name_element && password_element) {
+      LOG ("Hooking into, and pre-filling form: %s / %s",
+           js_get_element_attribute (js_context, name_element, "name"),
+           js_get_element_attribute (js_context, password_element, "name"));
+
+      hook_form (js_context, form, js_form_submitted);
+      pre_fill_form (js_context, JSValueToObject (js_context, form, NULL),
+                     name_element, password_element, web_view);
+    } else
+      LOG ("NOT hooking into form: username element: %p / password element: %p", name_element, password_element);
+  }
+
+  g_slist_free (forms);
+}
+
+static void
+_ephy_web_view_hook_into_forms (EphyWebView *web_view)
+{
+  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (web_view));
+  JSGlobalContextRef js_context;
+  JSObjectRef js_global;
+  JSStringRef js_function_name;
+  JSObjectRef js_form_submitted;
+
+  js_context = webkit_web_frame_get_global_context (web_frame);
+  js_global = JSContextGetGlobalObject (js_context);
+
+  js_function_name = JSStringCreateWithUTF8CString ("_EpiphanyInternalFormSubmitted");
+  js_form_submitted = JSObjectMakeFunctionWithCallback (js_context,
+                                                        js_function_name,
+                                                        (JSObjectCallAsFunctionCallback)form_submitted_cb);
+  JSObjectSetProperty (js_context, js_global, js_function_name, js_form_submitted, 0, NULL);
+  JSStringRelease (js_function_name);
+
+  do_hook_into_forms (js_context, js_form_submitted, EPHY_WEB_VIEW (web_view));
 }
 
 static void
@@ -1058,6 +1551,21 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 }
 
 static void
+load_status_cb (WebKitWebView *web_view,
+                GParamSpec *pspec,
+                gpointer user_data)
+{
+  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
+
+  if (status == WEBKIT_LOAD_FINISHED) {
+    if (!eel_gconf_get_boolean (CONF_PRIVACY_REMEMBER_PASSWORDS))
+      return;
+
+    _ephy_web_view_hook_into_forms (EPHY_WEB_VIEW (web_view));
+  }
+}
+
+static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
@@ -1086,6 +1594,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::load-status",
+                    G_CALLBACK (load_status_cb),
                     NULL);
 
   g_signal_connect_object (web_view, "icon-loaded",
@@ -2462,3 +2974,5 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 
   ephy_web_view_save_sub_resources (view, uri, subresources);
 }
+
+

@@ -26,6 +26,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
@@ -647,6 +648,8 @@ ephy_embed_single_add_form_auth (EphyEmbedSingle *single,
   g_return_if_fail (username);
 
   priv = single->priv;
+
+  LOG ("Appending: name field: %s / pass field: %s / username: %s / uri: %s", form_username, form_password, username, uri);
 
   form_data = form_auth_data_new (form_username, form_password, username);
   l = g_hash_table_lookup (priv->form_auth_data,
