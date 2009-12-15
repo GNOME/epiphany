@@ -41,6 +41,12 @@ typedef struct _EphyEmbedSingle   EphyEmbedSingle;
 typedef struct _EphyEmbedSingleClass    EphyEmbedSingleClass;
 typedef struct _EphyEmbedSinglePrivate  EphyEmbedSinglePrivate;
 
+typedef struct {
+  char *form_username;
+  char *form_password;
+  char *username;
+} EphyEmbedSingleFormAuthData;
+
 struct _EphyEmbedSingle {
   GObject parent;
 
@@ -90,6 +96,9 @@ void            ephy_embed_single_set_network_status (EphyEmbedSingle *single,
                                                       gboolean         online);
 
 gboolean        ephy_embed_single_get_network_status (EphyEmbedSingle *single);
+
+GSList *        ephy_embed_single_get_form_auth      (EphyEmbedSingle *single,
+                                                      const char *uri);
 
 G_END_DECLS
 

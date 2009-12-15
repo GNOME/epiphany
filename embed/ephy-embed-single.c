@@ -48,12 +48,6 @@ struct _EphyEmbedSinglePrivate {
   GHashTable *form_auth_data;
 };
 
-typedef struct {
-  char *form_username;
-  char *form_password;
-  char *username;
-} FormAuthData;
-
 enum {
   PROP_0,
   PROP_NETWORK_STATUS
@@ -118,23 +112,23 @@ G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
 #endif
 
 static void
-form_auth_data_free (FormAuthData *data)
+form_auth_data_free (EphyEmbedSingleFormAuthData *data)
 {
   g_free (data->form_username);
   g_free (data->form_password);
   g_free (data->username);
 
-  g_slice_free (FormAuthData, data);
+  g_slice_free (EphyEmbedSingleFormAuthData, data);
 }
 
-static FormAuthData*
+static EphyEmbedSingleFormAuthData*
 form_auth_data_new (const char *form_username,
                     const char *form_password,
                     const char *username)
 {
-  FormAuthData *data;
+  EphyEmbedSingleFormAuthData *data;
 
-  data = g_slice_new (FormAuthData);
+  data = g_slice_new (EphyEmbedSingleFormAuthData);
   data->form_username = g_strdup (form_username);
   data->form_password = g_strdup (form_password);
   data->username = g_strdup (username);
@@ -178,7 +172,7 @@ get_attr_cb (GnomeKeyringResult result,
     const char *form_username, *form_password;
     GHashTable *t;
     GSList *l;
-    FormAuthData *form_data;
+    EphyEmbedSingleFormAuthData *form_data;
     SoupURI *uri = soup_uri_new (server);
     t = soup_form_decode (uri->query);
     form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
@@ -233,7 +227,7 @@ free_form_auth_data_list (gpointer data)
   GSList *p, *l = (GSList*)data;
 
   for (p = l; p; p = p->next)
-    form_auth_data_free ((FormAuthData*)p->data);
+    form_auth_data_free ((EphyEmbedSingleFormAuthData*)p->data);
 
   g_slist_free (l);
 }
@@ -603,4 +597,33 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
                                const char *features)
 {
   return NULL;
+}
+
+/**
+ * ephy_embed_single_get_form_auth:
+ * @single: an #EphyEmbedSingle
+ * @uri: the URI of a web page
+ * 
+ * Gets a #GSList of all stored login/passwords, in
+ * #EphyEmbedSingleFormAuthData format, for any form in @uri, or %NULL
+ * if we have none.
+ * 
+ * The #EphyEmbedSingleFormAuthData structs and the #GSList are owned
+ * by @single and should not be freed by the user.
+ * 
+ * Returns: #GSList with the possible auto-fills for the forms in
+ * @uri, or %NULL
+ **/
+GSList *
+ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
+                                 const char *uri)
+{
+  EphyEmbedSinglePrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_SINGLE (single), NULL);
+  g_return_val_if_fail (uri, NULL);
+
+  priv = single->priv;
+
+  return g_hash_table_lookup (priv->form_auth_data, uri);
 }
