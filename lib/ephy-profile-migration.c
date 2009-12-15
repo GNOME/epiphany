@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2009 Xan López
  *
@@ -47,7 +48,7 @@
  *  - Add your function at the end of the 'migrators' array
  */
 
-#define PROFILE_MIGRATION_VERSION 3
+#define PROFILE_MIGRATION_VERSION 4
 
 typedef void (*EphyProfileMigrator) (void);
 
@@ -147,7 +148,8 @@ decrypt (const char *data)
 }
 
 static void
-parse_and_decrypt_signons (const char *signons)
+parse_and_decrypt_signons (const char *signons,
+                           gboolean handle_forms)
 {
   int version;
   gchar **lines;
@@ -248,16 +250,26 @@ parse_and_decrypt_signons (const char *signons)
     while (begin + 4 < end) {
       char *username = NULL;
       char *password = NULL;
+      char *form_username = NULL;
+      char *form_password = NULL;
       guint32 item_id;
 
       /* The username */
-      begin++; /* Skip username element */
+      if (handle_forms) {
+        form_username = g_strdup (lines[begin++]);
+      } else {
+        begin++; /* Skip username element */
+      }
       username = decrypt (lines[begin++]);
       
       /* The password */
       /* The element name has a leading '*' */
       if (lines[begin][0] == '*') {
-        begin++; /* Skip password element */
+        if (handle_forms) {
+          form_password = g_strdup (lines[begin++]);
+        } else {
+          begin++; /* Skip password element */
+        }
         password = decrypt (lines[begin++]);
       } else {
         /* Maybe the file is broken, skip to the next block */
@@ -278,7 +290,17 @@ parse_and_decrypt_signons (const char *signons)
           begin++;
       }
 
-      if (username && password)
+      if (handle_forms && username && password && 
+          !g_str_equal (form_username, "") &&
+          !g_str_equal (form_password, "*")) {
+        char *u = soup_uri_to_string (uri, FALSE);
+        _ephy_profile_store_form_auth_data (u,
+                                            form_username,
+                                            form_password,
+                                            username,
+                                            password);
+        g_free (u);
+      } else if (!handle_forms && username && password) {
         gnome_keyring_set_network_password_sync (NULL,
                                                  username,
                                                  realm,
@@ -289,8 +311,12 @@ parse_and_decrypt_signons (const char *signons)
                                                  uri->port, 
                                                  password,
                                                  &item_id);
+      }
+
       g_free (username);
       g_free (password);
+      g_free (form_username);
+      g_free (form_password);
     }
 
     soup_uri_free (uri);
@@ -331,7 +357,7 @@ migrate_passwords ()
     g_free (dest);
   }
 
-  parse_and_decrypt_signons (contents);
+  parse_and_decrypt_signons (contents, FALSE);
 
   /* Save the contents in a backup directory for future data
      extraction when we support more features */
@@ -350,13 +376,99 @@ migrate_passwords ()
 #endif
 }
 
+static void
+migrate_passwords2 ()
+{
+#ifdef ENABLE_NSS
+  char *dest, *contents;
+  gsize length;
+  GError *error = NULL;
+
+  dest = g_build_filename (ephy_dot_dir (),
+                           "gecko-passwords.txt",
+                           NULL);
+  if (!g_file_test (dest, G_FILE_TEST_EXISTS)) {
+    g_free (dest);
+    return;
+  }
+
+  if (!ephy_nss_glue_init ())
+    return;
+
+  if (!g_file_get_contents (dest, &contents, &length, &error)) {
+    g_free (dest);
+  }
+
+  parse_and_decrypt_signons (contents, TRUE);
+  g_free (contents);
+
+  ephy_nss_glue_close ();
+#endif
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
  /* Yes, again! Version 2 had some bugs, so we need to run
     migrate_passwords again to possibly migrate more passwords*/
-  migrate_passwords
+  migrate_passwords,
+  /* Very similar to migrate_passwords, but this migrates
+   * login/passwords for page forms, which we previously ignored */
+  migrate_passwords2
 };
+
+static void
+store_form_password_cb (GnomeKeyringResult result,
+                        guint32 id,
+                        gpointer data)
+{
+  /* FIXME: should we do anything if the operation failed? */
+}
+
+#define FORM_USERNAME_KEY "form_username"
+#define FORM_PASSWORD_KEY "form_password"
+
+void
+_ephy_profile_store_form_auth_data (const char *uri,
+                                    const char *form_username,
+                                    const char *form_password,
+                                    const char *username,
+                                    const char *password)
+{
+        SoupURI *fake_uri;
+        char *fake_uri_str;
+        
+        g_return_if_fail (uri);
+        g_return_if_fail (form_username);
+        g_return_if_fail (form_password);
+        g_return_if_fail (username);
+        g_return_if_fail (password);
+
+        fake_uri = soup_uri_new (uri);
+        /* Store the form login and password names encoded in the
+         * URL. A bit of an abuse of keyring, but oh well */
+        soup_uri_set_query_from_fields (fake_uri,
+                                        FORM_USERNAME_KEY,
+                                        form_username,
+                                        FORM_PASSWORD_KEY,
+                                        form_password,
+                                        NULL);
+        fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
+        gnome_keyring_set_network_password (NULL,
+                                            username,
+                                            NULL,
+                                            fake_uri_str,
+                                            NULL,
+                                            fake_uri->scheme,
+                                            NULL,
+                                            fake_uri->port,
+                                            password,
+                                            (GnomeKeyringOperationGetIntCallback)store_form_password_cb,
+                                            NULL,
+                                            NULL);
+        soup_uri_free (fake_uri);
+        g_free (fake_uri_str);
+}
 
 #define PROFILE_MIGRATION_FILE ".migrated"
 

@@ -22,4 +22,10 @@
 
 void _ephy_profile_migrate (void);
 
+void _ephy_profile_store_form_auth_data (const char *uri,
+                                         const char *form_username,
+                                         const char *form_password,
+                                         const char *username,
+                                         const char *password);
+
 #endif
