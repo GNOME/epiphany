@@ -51,8 +51,10 @@ struct EphyEmbedClass {
   GtkVBoxClass parent_class;
 };
 
-GType        ephy_embed_get_type     (void);
-EphyWebView* ephy_embed_get_web_view (EphyEmbed *embed);
+GType        ephy_embed_get_type          (void);
+EphyWebView* ephy_embed_get_web_view      (EphyEmbed *embed);
+void         ephy_embed_add_top_widget    (EphyEmbed *embed, GtkWidget *widget, gboolean destroy_on_transition);
+void         ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget);
 
 G_END_DECLS
 

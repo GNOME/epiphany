@@ -57,12 +57,14 @@ static void     ephy_embed_constructed (GObject *object);
 
 struct EphyEmbedPrivate
 {
+  GtkBox *top_widgets_vbox;
   GtkScrolledWindow *scrolled_window;
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
   char *load_failed_uri;
   guint is_setting_zoom : 1;
+  GSList *destroy_on_transition_list;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
@@ -171,6 +173,25 @@ resource_request_starting_cb (WebKitWebView *web_view,
 }
 
 static void
+ephy_embed_destroy_top_widgets (EphyEmbed *embed)
+{
+  GSList *iter;
+
+  for (iter = embed->priv->destroy_on_transition_list; iter; iter = iter->next)
+    gtk_widget_destroy (GTK_WIDGET (iter->data));
+}
+
+static void
+remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
+{
+  GSList *list;
+
+  list = embed->priv->destroy_on_transition_list;
+  list = g_slist_remove (list, widget);
+  embed->priv->destroy_on_transition_list = list;
+}
+
+static void
 load_status_changed_cb (WebKitWebView *view,
                         GParamSpec *spec,
                         EphyEmbed *embed)
@@ -183,7 +204,9 @@ load_status_changed_cb (WebKitWebView *view,
 
     uri = webkit_web_view_get_uri (view);
 
-    /* If the load failed for this URI, do nothing */
+    ephy_embed_destroy_top_widgets (embed);
+
+    /* If the load failed for this URI, do nothing else */
     if (embed->priv->load_failed_uri &&
         g_str_equal (embed->priv->load_failed_uri, uri)) {
       g_free (embed->priv->load_failed_uri);
@@ -307,8 +330,16 @@ static void
 ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
+  GSList *list;
 
   g_free (embed->priv->load_failed_uri);
+
+  list = embed->priv->destroy_on_transition_list;
+  for (; list; list = list->next) {
+    GtkWidget *widget = GTK_WIDGET (list->data);
+    g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
+  }
+  g_slist_free (embed->priv->destroy_on_transition_list);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -782,6 +813,11 @@ ephy_embed_constructed (GObject *object)
   WebKitWebInspector *inspector;
   GtkWidget *inspector_sw;
 
+  embed->priv->top_widgets_vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
+  gtk_box_pack_start (GTK_BOX (embed), GTK_WIDGET (embed->priv->top_widgets_vbox),
+                      FALSE, FALSE, 0);
+  gtk_widget_show (GTK_WIDGET (embed->priv->top_widgets_vbox));
+
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
   gtk_container_add (GTK_CONTAINER (embed), scrolled_window);
   gtk_widget_show (scrolled_window);
@@ -859,4 +895,56 @@ ephy_embed_get_web_view (EphyEmbed *embed)
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
   return EPHY_WEB_VIEW (embed->priv->web_view);
+}
+
+/**
+ * ephy_embed_add_top_widget:
+ * @embed: an #EphyEmbed
+ * @widget: a #GtkWidget
+ * @destroy_on_transition: whether the widget be automatically
+ * destroyed on page transitions
+ *
+ * Adds a #GtkWidget to the top of the embed.
+ */
+void
+ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy_on_transition)
+{
+  GSList *list;
+
+  if (destroy_on_transition) {
+    list = embed->priv->destroy_on_transition_list;
+    list = g_slist_prepend (list, widget);
+    embed->priv->destroy_on_transition_list = list;
+
+    g_signal_connect (widget, "destroy", G_CALLBACK (remove_from_destroy_list_cb), embed);
+  }
+
+  gtk_box_pack_end (embed->priv->top_widgets_vbox,
+                    GTK_WIDGET (widget), TRUE, TRUE, 0);
+}
+
+/**
+ * ephy_embed_remove_top_widget:
+ * @embed: an #EphyEmbed
+ * @widget: a #GtkWidget
+ *
+ * Removes an #GtkWidget from the top of the embed. The #GtkWidget
+ * must be have been added using ephy_embed_add_widget(), and not
+ * have been removed by other means. See gtk_container_remove() for
+ * details.
+ */
+void
+ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
+{
+  if (g_slist_find (embed->priv->destroy_on_transition_list, widget)) {
+    GSList *list;
+    g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
+
+    list = embed->priv->destroy_on_transition_list;
+    list = g_slist_remove (list, widget);
+    embed->priv->destroy_on_transition_list = list;
+  }
+
+  gtk_container_remove (GTK_CONTAINER (embed->priv->top_widgets_vbox),
+                        GTK_WIDGET (widget));
 }
