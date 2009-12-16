@@ -162,9 +162,9 @@ ephy_statusbar_init (EphyStatusbar *t)
 	gtk_statusbar_set_has_resize_grip (gstatusbar, TRUE);
 
 #if GTK_CHECK_VERSION (2, 19, 1)
-	priv->hbox = gtk_hbox_new (FALSE, 4);
-#else
 	priv->hbox = gtk_statusbar_get_message_area (gstatusbar);
+#else
+	priv->hbox = gtk_hbox_new (FALSE, 4);
 #endif
 	priv->icon_container = gtk_hbox_new (FALSE, 4);
 	gtk_box_pack_start (GTK_BOX (priv->hbox), priv->icon_container,
