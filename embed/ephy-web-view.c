@@ -854,6 +854,155 @@ js_get_domain_and_path (JSContextRef js_context)
   return NULL;
 }
 
+typedef struct {
+  EphyEmbed *embed;
+  char *uri;
+  char *name_field;
+  char *password_field;
+  char *name_value;
+  char *password_value;
+} StorePasswordData;
+
+static void
+store_password_data_free (gpointer data)
+{
+  StorePasswordData *store_data = (StorePasswordData*)data;
+
+  g_free (store_data->uri);
+  g_free (store_data->name_field);
+  g_free (store_data->name_value);
+  g_free (store_data->password_field);
+  g_free (store_data->password_value);
+
+  g_slice_free (StorePasswordData, store_data);
+}
+
+static void
+store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
+{
+  StorePasswordData *store_data = (StorePasswordData*)data;
+  char *uri = store_data->uri;
+  char *name_field_name = store_data->name_field;
+  char *name_field_value = store_data->name_value;
+  char *password_field_name = store_data->password_field;
+  char *password_field_value = store_data->password_value;
+  SoupURI *soup_uri;
+
+  if (response_id != GTK_RESPONSE_YES) {
+    LOG ("Response is %d - not saving.", response_id);
+    store_password_data_free (store_data);
+    gtk_widget_destroy (GTK_WIDGET (info_bar));
+    return;
+  }
+
+  LOG ("Response is GTK_RESPONSE_YES - saving!");
+  _ephy_profile_store_form_auth_data (uri,
+                                      name_field_name,
+                                      password_field_name,
+                                      name_field_value,
+                                      password_field_value);
+
+  /* Update internal caching */
+  soup_uri = soup_uri_new (uri);
+
+  ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)),
+                                   soup_uri->host,
+                                   name_field_name,
+                                   password_field_name,
+                                   name_field_value);
+  soup_uri_free (soup_uri);
+
+  store_password_data_free (store_data);
+  gtk_widget_destroy (GTK_WIDGET (info_bar));
+}
+
+static void
+send_no_response_cb (GtkButton *button, GtkInfoBar *info_bar)
+{
+  gtk_info_bar_response (info_bar, GTK_RESPONSE_NO);
+}
+
+static void
+send_yes_response_cb (GtkButton *button, GtkInfoBar *info_bar)
+{
+  gtk_info_bar_response (info_bar, GTK_RESPONSE_YES);
+}
+
+static void
+request_decision_on_storing (StorePasswordData *store_data)
+{
+  EphyEmbed *embed = store_data->embed;
+  GtkWidget *info_bar;
+  GtkWidget *action_area;
+  GtkWidget *button_box;
+  GtkWidget *action_button;
+  GtkWidget *content_area;
+  GtkWidget *label;
+  char *message;
+
+  LOG ("Going to show infobar about %s", store_data->uri);
+
+  info_bar = gtk_info_bar_new ();
+
+  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
+  button_box = gtk_hbutton_box_new ();
+  gtk_container_add (GTK_CONTAINER (action_area), button_box);
+
+  action_button = gtk_button_new_from_stock (GTK_STOCK_NO);
+  g_signal_connect (action_button, "clicked",
+                    G_CALLBACK (send_no_response_cb), info_bar);
+  gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
+
+  action_button = gtk_button_new_with_label (_("Store password"));
+  g_signal_connect (action_button, "clicked",
+                    G_CALLBACK (send_yes_response_cb), info_bar);
+  gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
+
+  label = gtk_label_new (NULL);
+  message = g_strdup_printf (_("<big><b>Would you like to store the password for %s?</b></big>"),
+                             store_data->uri);
+  gtk_label_set_markup (GTK_LABEL (label), message);
+  g_free (message);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), label);
+
+  gtk_widget_show_all (info_bar);
+
+  g_signal_connect (info_bar, "response", G_CALLBACK (store_password), store_data);
+
+  ephy_embed_add_top_widget (embed, info_bar, FALSE);
+}
+
+static void
+should_store_cb (GnomeKeyringResult retval,
+                 GList *results,
+                 gpointer user_data)
+{
+  StorePasswordData *store_data = (StorePasswordData*)user_data;
+  GnomeKeyringNetworkPasswordData* keyring_data;
+
+  if (!results) {
+    LOG ("No result on query; asking whether we should store.");
+    request_decision_on_storing (store_data);
+    return;
+  }
+
+  /* FIXME: We use only the first result, for now; We need to do
+   * something smarter here */
+  keyring_data = (GnomeKeyringNetworkPasswordData*)results->data;
+
+  if (g_str_equal (keyring_data->user, store_data->name_value) &&
+      g_str_equal (keyring_data->password, store_data->password_value)) {
+    LOG ("User/password already stored. Not asking about storing.");
+    store_password_data_free (store_data);
+    return;
+  }
+
+  LOG ("User/password not yet stored. Asking about storing.");
+  request_decision_on_storing (store_data);
+}
+
 static JSValueRef
 form_submitted_cb (JSContextRef js_context,
                    JSObjectRef js_function,
@@ -863,16 +1012,19 @@ form_submitted_cb (JSContextRef js_context,
                    JSValueRef* js_exception)
 {
   GSList *elements = js_get_form_elements (js_context, js_this);
+  JSObjectRef js_global = JSContextGetGlobalObject (js_context);
   JSObjectRef name_element = NULL;
   JSObjectRef password_element = NULL;
+  JSObjectRef dummy_object;
   JSStringRef js_string;
   JSValueRef js_value;
+  StorePasswordData *store_data;
   char *name_field_name;
   char *name_field_value;
   char *password_field_name;
   char *password_field_value;
   char *uri;
-  SoupURI *soup_uri;
+  WebKitWebView *web_view;
 
   LOG ("Form submitted!");
 
@@ -896,27 +1048,30 @@ form_submitted_cb (JSContextRef js_context,
   password_field_value = js_value_to_string (js_context, js_value);
 
   uri = js_get_domain_and_path (js_context);
-  _ephy_profile_store_form_auth_data (uri,
+
+  store_data = g_slice_new (StorePasswordData);
+
+  store_data->uri = uri;
+  store_data->name_field = name_field_name;
+  store_data->name_value = name_field_value;
+  store_data->password_field = password_field_name;
+  store_data->password_value = password_field_value;
+
+  /* This is required because we can only hold private data on objects
+   * created with our own classes; we need to store the WebView here
+   * because it is needed for form_submitted_cb */
+  dummy_object = js_object_get_property_as_object (js_context,
+                                                   js_global,
+                                                   "_EpiphanyInternalDummy");
+  web_view = JSObjectGetPrivate (dummy_object);
+  store_data->embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+
+  _ephy_profile_query_form_auth_data (uri,
                                       name_field_name,
                                       password_field_name,
-                                      name_field_value,
-                                      password_field_value);
-
-  /* Update internal caching */
-  soup_uri = soup_uri_new (uri);
-  g_free (uri);
-
-  ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)),
-                                   soup_uri->host,
-                                   name_field_name,
-                                   password_field_name,
-                                   name_field_value);
-  soup_uri_free (soup_uri);
-
-  g_free (name_field_name);
-  g_free (name_field_value);
-  g_free (password_field_name);
-  g_free (password_field_value);
+                                      should_store_cb,
+                                      store_data,
+                                      NULL);
 
   return JSValueMakeUndefined (js_context);
 }
@@ -986,6 +1141,11 @@ static void
 do_hook_into_forms (JSContextRef js_context, JSObjectRef js_form_submitted, EphyWebView *web_view)
 {
   GSList *forms = js_get_all_forms (js_context);
+  JSClassDefinition dummy_class_def;
+  JSClassRef dummy_class;
+  JSObjectRef dummy_object;
+  JSStringRef dummy_name;
+  JSObjectRef js_global;
 
   if (!forms) {
     LOG ("No forms found.");
@@ -1018,6 +1178,17 @@ do_hook_into_forms (JSContextRef js_context, JSObjectRef js_form_submitted, Ephy
     } else
       LOG ("NOT hooking into form: username element: %p / password element: %p", name_element, password_element);
   }
+
+  dummy_class_def = kJSClassDefinitionEmpty;
+  dummy_class_def.className = "dummy";
+  dummy_class = JSClassCreate (&dummy_class_def);
+  dummy_object = JSObjectMake (js_context, dummy_class, web_view);
+  g_assert (JSObjectGetPrivate (dummy_object) != NULL);
+
+  js_global = JSContextGetGlobalObject (js_context);
+  dummy_name = JSStringCreateWithUTF8CString ("_EpiphanyInternalDummy");
+  JSObjectSetProperty (js_context, js_global, dummy_name, dummy_object, 0, NULL);
+  JSStringRelease (dummy_name);
 
   g_slist_free (forms);
 }
