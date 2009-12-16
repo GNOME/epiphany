@@ -1650,10 +1650,10 @@ load_status_cb (WebKitWebView *web_view,
   WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
 
   if (status == WEBKIT_LOAD_FINISHED) {
-    if (!eel_gconf_get_boolean (CONF_PRIVACY_REMEMBER_PASSWORDS))
-      return;
+    if (ephy_has_private_profile () == FALSE &&
+        eel_gconf_get_boolean (CONF_PRIVACY_REMEMBER_PASSWORDS))
+      _ephy_web_view_hook_into_forms (EPHY_WEB_VIEW (web_view));
 
-    _ephy_web_view_hook_into_forms (EPHY_WEB_VIEW (web_view));
     _ephy_web_view_hook_into_links (EPHY_WEB_VIEW (web_view));
   }
 }
