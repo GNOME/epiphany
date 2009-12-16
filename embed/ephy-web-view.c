@@ -632,6 +632,54 @@ js_get_form_elements (JSContextRef js_context, JSValueRef js_form)
   return retval;
 }
 
+static GSList*
+js_get_all_links (JSContextRef js_context)
+{
+  JSObjectRef js_global;
+  JSObjectRef js_object;
+  JSObjectRef js_func;
+  JSStringRef js_str;
+  JSValueRef args[1], val;
+  guint num;
+  guint count;
+  GSList *retval = NULL;
+
+  js_global = JSContextGetGlobalObject (js_context);
+
+  js_object = js_object_get_property_as_object (js_context, js_global, "document");
+  if (!js_object)
+    return NULL;
+
+  js_func = js_object_get_property_as_object (js_context, js_object, "getElementsByTagName");
+  if (!js_object)
+    return NULL;
+
+  js_str = JSStringCreateWithUTF8CString ("link");
+  args[0] = JSValueMakeString (js_context, js_str);
+  val = JSObjectCallAsFunction (js_context, js_func, js_object, 1, args, NULL);
+  JSStringRelease (js_str);
+
+  js_object = JSValueToObject (js_context, val, NULL);
+  if (!js_object)
+    return NULL;
+
+  js_str = JSStringCreateWithUTF8CString ("length");
+  val = JSObjectGetProperty (js_context, js_object, js_str, NULL);
+  JSStringRelease (js_str);
+
+  num = (guint)JSValueToNumber (js_context, val, NULL);
+  for (count = 0; count < num; count++) {
+    val = JSObjectGetPropertyAtIndex (js_context, js_object, count, NULL);
+
+    if (!JSValueIsObject (js_context, val))
+      continue;
+
+    retval = g_slist_prepend (retval, (gpointer)val);
+  }
+
+  return retval;
+}
+
 typedef struct {
   JSContextRef context;
   JSObjectRef username_element;
@@ -994,6 +1042,50 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
   JSStringRelease (js_function_name);
 
   do_hook_into_forms (js_context, js_form_submitted, EPHY_WEB_VIEW (web_view));
+}
+
+static void
+do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
+{
+  GSList *links = js_get_all_links (js_context);
+
+  if (!links) {
+    LOG ("No links found.");
+    return;
+  }
+
+  for (; links; links = links->next) {
+    JSValueRef link = (JSValueRef)links->data;
+    JSObjectRef obj = JSValueToObject (js_context, link, NULL);
+    char *rel = js_get_element_attribute (js_context, obj, "rel");
+
+    if (g_str_equal (rel, "alternate")) {
+      char *type = js_get_element_attribute (js_context, obj, "type");
+      char *title = js_get_element_attribute (js_context, obj, "title");
+      char *address = js_get_element_attribute (js_context, obj, "href");
+
+      g_signal_emit_by_name (web_view, "ge-feed-link", type, title, address);
+
+      g_free (type);
+      g_free (title);
+      g_free (address);
+    }
+
+    g_free (rel);
+  }
+
+  g_slist_free (links);
+}
+
+static void
+_ephy_web_view_hook_into_links (EphyWebView *web_view)
+{
+  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (web_view));
+  JSGlobalContextRef js_context;
+
+  js_context = webkit_web_frame_get_global_context (web_frame);
+
+  do_hook_into_links (js_context, EPHY_WEB_VIEW (web_view));
 }
 
 static void
@@ -1562,6 +1654,7 @@ load_status_cb (WebKitWebView *web_view,
       return;
 
     _ephy_web_view_hook_into_forms (EPHY_WEB_VIEW (web_view));
+    _ephy_web_view_hook_into_links (EPHY_WEB_VIEW (web_view));
   }
 }
 
