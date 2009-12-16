@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
@@ -93,7 +94,7 @@ window_cmd_file_print_preview (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_web_view_set_print_preview_mode (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), TRUE);
+	ephy_web_view_set_print_preview_mode (ephy_embed_get_web_view (embed), TRUE);
 	_ephy_window_set_print_preview (window, TRUE);
 }
 
@@ -124,8 +125,8 @@ window_cmd_file_send_to	(GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
-	title = ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+	title = ephy_web_view_get_title (ephy_embed_get_web_view (embed));
 
 	subject = g_uri_escape_string (title, NULL, TRUE);
 	body = g_uri_escape_string (location, NULL, TRUE);
@@ -247,8 +248,8 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
-					ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)),
-					ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
+					ephy_web_view_get_address (ephy_embed_get_web_view (embed)),
+					ephy_web_view_get_title (ephy_embed_get_web_view (embed)));
 }
 
 static void
@@ -396,7 +397,7 @@ window_cmd_edit_undo (GtkAction *action,
 
 		if (embed)
 		{
-			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
 		}
 	}
 }
@@ -421,7 +422,7 @@ window_cmd_edit_redo (GtkAction *action,
 		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
 		if (embed)
 		{
-			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
 		}
 	}
 }
@@ -798,7 +799,7 @@ window_cmd_view_page_source (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 	user_time = gtk_get_current_event_time ();
 
 	if (g_str_has_prefix (address, "file://"))
@@ -826,7 +827,7 @@ window_cmd_view_page_security_info (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_web_view_show_page_certificate (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	ephy_web_view_show_page_certificate (ephy_embed_get_web_view (embed));
 }
 
 void
@@ -854,7 +855,7 @@ window_cmd_edit_personal_data (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
-	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 	
 	host = address != NULL ? ephy_string_get_host_name (address) : NULL;
 

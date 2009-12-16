@@ -285,7 +285,7 @@ build_up_menu (EphyNavigationAction *action)
     	history = EPHY_HISTORY
 		(ephy_embed_shell_get_global_history (embed_shell));
 
-	list = ephy_web_view_get_go_up_list (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	list = ephy_web_view_get_go_up_list (ephy_embed_get_web_view (embed));
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -430,7 +430,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	{
 		GSList *up_list;
 		
-		up_list = ephy_web_view_get_go_up_list (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+		up_list = ephy_web_view_get_go_up_list (ephy_embed_get_web_view (embed));
 		ephy_link_open (EPHY_LINK (action),
 				up_list->data,
 				NULL,

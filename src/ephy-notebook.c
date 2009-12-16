@@ -653,7 +653,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
 
 	/* Hook the label up to the tab properties */
-	view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed);
+	view = ephy_embed_get_web_view (embed);
 	sync_icon (view, NULL, GTK_IMAGE (icon));
 	sync_label (view, NULL, label);
 	sync_load_status (view, NULL, hbox);
@@ -811,7 +811,7 @@ ephy_notebook_remove (GtkContainer *container,
 	tab_label_icon = g_object_get_data (G_OBJECT (tab_label), "icon");
 	tab_label_label = g_object_get_data (G_OBJECT (tab_label), "label");
 
-	view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (tab_widget);
+	view = ephy_embed_get_web_view (EPHY_EMBED (tab_widget));
 
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (sync_icon), tab_label_icon);

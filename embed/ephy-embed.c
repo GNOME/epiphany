@@ -57,6 +57,7 @@ static void     ephy_embed_constructed (GObject *object);
 
 struct EphyEmbedPrivate
 {
+  GtkScrolledWindow *scrolled_window;
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
@@ -64,7 +65,7 @@ struct EphyEmbedPrivate
   guint is_setting_zoom : 1;
 };
 
-G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
 
 static void
 uri_changed_cb (WebKitWebView *web_view,
@@ -296,7 +297,7 @@ ephy_embed_grab_focus (GtkWidget *widget)
 {
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = GTK_WIDGET (ephy_embed_get_web_view (EPHY_EMBED (widget)));
 
   if (child)
     gtk_widget_grab_focus (child);
@@ -776,14 +777,18 @@ static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
+  GtkWidget *scrolled_window;
   WebKitWebView *web_view;
   WebKitWebInspector *inspector;
   GtkWidget *inspector_sw;
 
-  embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
+  scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
+  gtk_container_add (GTK_CONTAINER (embed), scrolled_window);
+  gtk_widget_show (scrolled_window);
+
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   embed->priv->web_view = web_view;
-  gtk_container_add (GTK_CONTAINER (embed), GTK_WIDGET (web_view));
+  gtk_container_add (GTK_CONTAINER (embed->priv->scrolled_window), GTK_WIDGET (web_view));
   gtk_widget_show (GTK_WIDGET (web_view));
 
   g_object_connect (web_view,
@@ -832,7 +837,11 @@ ephy_embed_constructed (GObject *object)
 static void
 ephy_embed_init (EphyEmbed *embed)
 {
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (embed),
+  embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
+
+  embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
+
+  gtk_scrolled_window_set_policy (embed->priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 }
 

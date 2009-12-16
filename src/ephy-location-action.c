@@ -333,7 +333,7 @@ get_location_cb (EphyLocationEntry *entry,
 	embed = ephy_embed_container_get_active_child 
 	  (EPHY_EMBED_CONTAINER (priv->window));
 
-	return g_strdup (ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
+	return g_strdup (ephy_web_view_get_address (ephy_embed_get_web_view (embed)));
 }
 
 static char *
@@ -345,7 +345,7 @@ get_title_cb (EphyLocationEntry *entry,
 	embed = ephy_embed_container_get_active_child 
 	  (EPHY_EMBED_CONTAINER (action->priv->window));
 
-	return g_strdup (ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)));
+	return g_strdup (ephy_web_view_get_title (ephy_embed_get_web_view (embed)));
 }
 
 static void

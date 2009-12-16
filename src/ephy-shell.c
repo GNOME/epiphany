@@ -478,8 +478,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		if (embed != NULL)
 		{
-			if (ephy_web_view_get_is_blank (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) &&
-			    ephy_web_view_is_loading (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) == FALSE)
+			if (ephy_web_view_get_is_blank (ephy_embed_get_web_view (embed)) &&
+			    ephy_web_view_is_loading (ephy_embed_get_web_view (embed)) == FALSE)
 			{
 				active_is_blank = TRUE;
 			}
@@ -496,8 +496,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	if (previous_embed != NULL)
 	{	
-                ephy_web_view_copy_back_history (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (previous_embed),
-                                                 EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+                ephy_web_view_copy_back_history (ephy_embed_get_web_view (previous_embed),
+                                                 ephy_embed_get_web_view (embed));
 	}		
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
@@ -515,13 +515,13 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "");
+		ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), "");
 		ephy_toolbar_activate_location (toolbar);
 		is_empty = load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
-                ephy_web_view_load_request (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed),
+                ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                             request);
 
 		is_empty = url_is_empty (webkit_network_request_get_uri (request));

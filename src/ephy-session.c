@@ -396,7 +396,7 @@ notebook_page_added_cb (GtkWidget *notebook,
 			guint position,
 			EphySession *session)
 {
-	g_signal_connect (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "notify::load-status",
+	g_signal_connect (ephy_embed_get_web_view (embed), "notify::load-status",
 			  G_CALLBACK (load_status_notify_cb), session);
 }
 
@@ -409,7 +409,7 @@ notebook_page_removed_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_CRASHED);
 
 	g_signal_handlers_disconnect_by_func
-		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (load_status_notify_cb),
+		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),
 		 session);
 }
 
@@ -1036,17 +1036,17 @@ write_tab (xmlTextWriterPtr writer,
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
 
-	title = ephy_web_view_get_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	title = ephy_web_view_get_title (ephy_embed_get_web_view (embed));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;
 
-	if (ephy_web_view_is_loading (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
+	if (ephy_web_view_is_loading (ephy_embed_get_web_view (embed)))
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",
@@ -1345,7 +1345,7 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 						  EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
 
 	/* show generated html and put the original URL in the navigation bar */
-	webkit_web_view_load_html_string (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
+	webkit_web_view_load_html_string (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)),
 					  html->str, 
 					  url);	
 	g_string_free (html, TRUE);

@@ -156,7 +156,7 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 						      dialog);
 	}
 
-	g_signal_connect (G_OBJECT (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)), "notify::load-status",
+	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "notify::load-status",
 			  G_CALLBACK (embed_net_stop_cb), dialog);
 	dialog->priv->embed = embed;
 
@@ -376,7 +376,7 @@ ephy_encoding_dialog_finalize (GObject *object)
 
 	if (dialog->priv->embed)
 	{
-		g_signal_handlers_disconnect_by_func (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (dialog->priv->embed),
+		g_signal_handlers_disconnect_by_func (ephy_embed_get_web_view (dialog->priv->embed),
 						      G_CALLBACK (embed_net_stop_cb),
 						      dialog);
 	}

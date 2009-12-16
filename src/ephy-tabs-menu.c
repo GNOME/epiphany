@@ -201,9 +201,9 @@ notebook_page_added_cb (EphyNotebook *notebook,
 			       "tooltip", _("Switch to this tab"),
 			       NULL);
 
-	sync_tab_title (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, action);
+	sync_tab_title (ephy_embed_get_web_view (embed), NULL, action);
 	/* make sure the action is alive when handling the signal, see bug #169833 */
-	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "notify::embed-title",
+	g_signal_connect_object (ephy_embed_get_web_view (embed), "notify::embed-title",
 				 G_CALLBACK (sync_tab_title), action, 0);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
@@ -245,7 +245,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
         free_tab_id (action);
 
 	g_signal_handlers_disconnect_by_func
-		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (sync_tab_title), action);
+		(ephy_embed_get_web_view (embed), G_CALLBACK (sync_tab_title), action);
 
 	g_signal_handlers_disconnect_by_func
 		(action, G_CALLBACK (tab_action_activate_cb), menu);

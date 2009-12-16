@@ -389,7 +389,7 @@ popup_cmd_open_frame (GtkAction *action,
 		(EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_web_view_get_location (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), FALSE);
+	location = ephy_web_view_get_location (ephy_embed_get_web_view (embed), FALSE);
 	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), location);
 
 	g_free (location);

@@ -583,7 +583,7 @@ impl_remove_child (EphyEmbedContainer *container,
 	window = EPHY_WINDOW (container);
 	priv = window->priv;
 
-	modified = ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (child));
+	modified = ephy_web_view_has_modified_forms (ephy_embed_get_web_view (child));
 	if (modified && confirm_close_with_modified_forms (window) == FALSE)
 	{
 		/* don't close the tab */
@@ -845,8 +845,8 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	/* sync status */
 	embed = window->priv->active_embed;
-	sync_tab_load_status (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, window);
-	sync_tab_security (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), NULL, window);
+	sync_tab_load_status (ephy_embed_get_web_view (embed), NULL, window);
+	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
@@ -1075,7 +1075,7 @@ ephy_window_delete_event (GtkWidget *widget,
 		EphyEmbed *embed;
 
 		embed = window->priv->active_embed;
-		ephy_web_view_set_print_preview_mode (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), FALSE);
+		ephy_web_view_set_print_preview_mode (ephy_embed_get_web_view (embed), FALSE);
 
 		_ephy_window_set_print_preview (window, FALSE);
 
@@ -1089,7 +1089,7 @@ ephy_window_delete_event (GtkWidget *widget,
 
 		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
-		if (ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)))
+		if (ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)))
 		{
 			modified = TRUE;
 			modified_embed = embed;
@@ -1944,7 +1944,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 		      "zoom-level", &zoom,
 		      NULL);
 
-	type = ephy_web_view_get_document_type (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	type = ephy_web_view_get_document_type (ephy_embed_get_web_view (embed));
 	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
 
 	if (zoom >= ZOOM_MAXIMAL)
@@ -2431,7 +2431,7 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 {
 	gboolean visibility;
 
-	visibility = ephy_web_view_get_visibility (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	visibility = ephy_web_view_get_visibility (ephy_embed_get_web_view (embed));
 
 	if (visibility)
 		gtk_widget_show (GTK_WIDGET (window));
@@ -2788,7 +2788,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		EphyWebView *view;
 
 		embed = new_embed;
-		view = EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed);
+		view = ephy_embed_get_web_view (embed);
 
 		sync_tab_security	(view, NULL, window);
 		sync_tab_document_type	(view, NULL, window);
@@ -2929,7 +2929,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_web_view_get_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed));
+	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 	ephy_toolbar_set_location (priv->toolbar, address);
 
 	/* don't suppress alert */
@@ -3098,10 +3098,10 @@ notebook_page_added_cb (EphyNotebook *notebook,
 				 G_CONNECT_SWAPPED);
 #endif
 
-	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "close-request",
+	g_signal_connect_object (ephy_embed_get_web_view (embed), "close-request",
 				 G_CALLBACK (embed_close_request_cb),
 				 window, 0);
-	g_signal_connect_object (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), "ge-modal-alert",
+	g_signal_connect_object (ephy_embed_get_web_view (embed), "ge-modal-alert",
 				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
 
 	/* Let the extensions attach themselves to the tab */
@@ -3148,9 +3148,9 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 	}
 
 	g_signal_handlers_disconnect_by_func
-		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (embed_modal_alert_cb), window);
+		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
-		(EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), G_CALLBACK (embed_close_request_cb), window);
+		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_close_request_cb), window);
 }
 
 static void
@@ -3175,7 +3175,7 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 		return;
 	}
 
-	if (!ephy_web_view_has_modified_forms (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)) ||
+	if (!ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)) ||
 	    confirm_close_with_modified_forms (window))
 	{
 		gtk_widget_destroy (GTK_WIDGET (embed));
@@ -3554,7 +3554,7 @@ allow_popups_notifier (GConfClient *client,
 		embed = EPHY_EMBED (tabs->data);
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
-		g_object_notify (G_OBJECT (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)), "popups-allowed");
+		g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
 	}
 }
 
@@ -4185,7 +4185,7 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 		allow = FALSE;
 	}
 
-	g_object_set (G_OBJECT (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed)), "popups-allowed", allow, NULL);
+	g_object_set (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed", allow, NULL);
 }
 
 /**

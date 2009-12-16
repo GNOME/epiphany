@@ -190,7 +190,7 @@ sync_user_input_cb (EphyLocationAction *action,
 	address = ephy_location_action_get_address (action);
 
 	priv->updating_address = TRUE;
-	ephy_web_view_set_typed_address (EPHY_GET_EPHY_WEB_VIEW_FROM_EMBED (embed), address);
+	ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), address);
 	priv->updating_address = FALSE;
 }
 
