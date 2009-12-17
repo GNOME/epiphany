@@ -1230,7 +1230,7 @@ do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
     JSObjectRef obj = JSValueToObject (js_context, link, NULL);
     char *rel = js_get_element_attribute (js_context, obj, "rel");
 
-    if (g_str_equal (rel, "alternate")) {
+    if (g_strcmp0 (rel, "alternate") == 0) {
       char *type = js_get_element_attribute (js_context, obj, "type");
       char *title = js_get_element_attribute (js_context, obj, "title");
       char *address = js_get_element_attribute (js_context, obj, "href");
