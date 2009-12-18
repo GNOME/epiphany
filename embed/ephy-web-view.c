@@ -513,6 +513,16 @@ ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     return key_handled;
 }
 
+static gboolean
+ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
+{
+    /* We always show the browser context menu on control-rightclick */
+    if (event->button == 3 && event->state & GDK_CONTROL_MASK)
+      return FALSE;
+
+    return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
+}
+
 static void
 ephy_web_view_dispose (GObject *object)
 {
@@ -1312,6 +1322,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   gobject_class->get_property = ephy_web_view_get_property;
   gobject_class->set_property = ephy_web_view_set_property;
 
+  widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
 
 /**
