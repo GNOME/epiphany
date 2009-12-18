@@ -563,7 +563,7 @@ define_destination_uri (WebKitDownload *download,
   return TRUE;
 }
 
-static void
+static gboolean
 perform_auto_download (WebKitDownload *download)
 {
   DownloaderView *dview;
@@ -571,13 +571,29 @@ perform_auto_download (WebKitDownload *download)
   if (!define_destination_uri (download, FALSE)) {
     webkit_download_cancel (download);
     ephy_file_delete_uri (webkit_download_get_destination_uri (download));
-    return;
+    return FALSE;
   }
 
   dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
 
   g_object_set_data (G_OBJECT(download), "download-action", GINT_TO_POINTER(DOWNLOAD_ACTION_OPEN));
   downloader_view_add_download (dview, download);
+
+  return TRUE;
+}
+
+void
+ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
+{
+  WebKitNetworkRequest *request;
+  WebKitDownload *download;
+
+  request = webkit_network_request_new (url);
+  download = webkit_download_new (request);
+  g_object_unref (request);
+
+  if (perform_auto_download (download))
+    webkit_download_start (download);
 }
 
 static void

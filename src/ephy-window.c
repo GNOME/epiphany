@@ -35,6 +35,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
@@ -2271,37 +2272,32 @@ show_embed_popup (EphyWindow *window,
 	}
 }
 
-#if 0
 static gboolean
 save_property_url (EphyEmbed *embed,
-		   EphyEmbedEvent *event,
-		   const char *property,
-		   const char *key)
+		   GdkEventButton *gdk_event,
+		   WebKitHitTestResult *hit_test_result,
+		   const char *property)
 {
 	const char *location;
-	const GValue *value;
-	EphyEmbedPersist *persist;
+	GValue value = { 0, };
+	EphyEmbedEvent *event = ephy_embed_event_new (gdk_event, hit_test_result);
+	gboolean retval;
 
-	value = ephy_embed_event_get_property (event, property);
-	location = g_value_get_string (value);
+	ephy_embed_event_get_property (event, property, &value);
+	location = g_value_get_string (&value);
 
-	if (!ephy_embed_utils_address_has_web_scheme (location)) return FALSE;
+	LOG ("Location: %s", location);
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
+	retval = ephy_embed_utils_address_has_web_scheme (location);
 
-	ephy_embed_persist_set_embed (persist, embed);
-	ephy_embed_persist_set_flags (persist, 0);
-	ephy_embed_persist_set_persist_key (persist, key);
-	ephy_embed_persist_set_source (persist, location);
+	if (retval)
+		ephy_embed_auto_download_url (embed, location);
 
-	ephy_embed_persist_save (persist);
+	g_value_unset (&value);
+	g_object_unref (event);
 
-	g_object_unref (G_OBJECT(persist));
-
-	return TRUE;
+	return retval;
 }
-#endif
 
 typedef struct
 {
@@ -2354,7 +2350,6 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 
 	modifier = event->state;
 	g_object_get (hit_test_result, "context", &context, NULL);
-	g_object_unref (hit_test_result);
 
 	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
 	     button, context, modifier, (int)event->x, (int)event->y);
@@ -2376,20 +2371,19 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				|| (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE));
 	is_input = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE) != 0;
 
-#if 0
 	/* shift+click saves the link target */
 	if (is_link && is_left_click && with_shift)
 	{
-		handled = save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
+		handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "link-uri");
 	}
 	/* shift+click saves the non-link image
 	 * Note: pressing enter to submit a form synthesizes a mouse click event
 	 */
 	else if (is_image && is_left_click && with_shift && !is_input)
 	{
-		handled = save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
+		handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "image-uri");
 	}
-#endif
+
 	/* middle click opens the selection url */
 	if (is_middle_clickable && is_middle_click && middle_click_opens)
 	{
@@ -2423,6 +2417,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 		handled = FALSE;
 	}
 
+	g_object_unref (hit_test_result);
 	return handled;
 }
 
