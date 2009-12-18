@@ -38,6 +38,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
+#include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
 #include "ephy-permission-manager.h"
