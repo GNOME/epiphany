@@ -1065,6 +1065,11 @@ form_submitted_cb (JSContextRef js_context,
 
   name_field_name = js_get_element_attribute (js_context, name_element, "name");
   password_field_name = js_get_element_attribute (js_context, password_element, "name");
+  if (!name_field_name || !password_field_name) {
+    g_free (name_field_name);
+    g_free (password_field_name);
+    return JSValueMakeUndefined (js_context);
+  }
 
   js_string = JSStringCreateWithUTF8CString ("value");
   js_value = JSObjectGetProperty (js_context, name_element, js_string, NULL);
@@ -1142,8 +1147,8 @@ pre_fill_form (JSContextRef js_context,
     EphyEmbedSingleFormAuthData *data = (EphyEmbedSingleFormAuthData*)p->data;
     char *username_field_name = js_get_element_attribute (js_context, username_element, "name");
     char *password_field_name = js_get_element_attribute (js_context, password_element, "name");
-    if (g_str_equal (username_field_name, data->form_username) &&
-        g_str_equal (password_field_name, data->form_password)) {
+    if (g_strcmp0 (username_field_name, data->form_username) == 0 &&
+        g_strcmp0 (password_field_name, data->form_password) == 0) {
       FillData *fill_data = g_slice_new (FillData);
       char *uri_str = soup_uri_to_string (uri, FALSE);
 
