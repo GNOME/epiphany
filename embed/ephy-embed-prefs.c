@@ -134,6 +134,89 @@ webkit_pref_callback_user_stylesheet (GConfClient *client,
   g_free (uri);
 }
 
+static char *
+webkit_pref_get_internal_user_agent (void)
+{
+  char *user_agent;
+  char *webkit_user_agent;
+  char *vendor_user_agent;
+  GKeyFile *branding_keyfile;
+
+  vendor_user_agent = NULL;
+  branding_keyfile = g_key_file_new ();
+
+  if (g_key_file_load_from_file (branding_keyfile, SHARE_DIR"/branding.conf",
+                                 G_KEY_FILE_NONE, NULL)) {
+    char *vendor;
+    char *vendor_sub;
+    char *vendor_comment;
+
+    vendor = g_key_file_get_string (branding_keyfile,
+                                    "User Agent", "Vendor", NULL);
+    vendor_sub = g_key_file_get_string (branding_keyfile,
+                                        "User Agent", "VendorSub", NULL);
+    vendor_comment = g_key_file_get_string (branding_keyfile,
+                                            "User Agent", "VendorComment", NULL);
+
+    if (vendor) {
+      vendor_user_agent = g_strconcat (vendor,
+                                       vendor_sub ? "/" : "",
+                                       vendor_sub ? vendor_sub : "",
+                                       vendor_comment ? " (" : "",
+                                       vendor_comment ? vendor_comment : "",
+                                       vendor_comment ? ")" : "",
+                                       NULL);
+    }
+
+    g_free (vendor);
+    g_free (vendor_sub);
+    g_free (vendor_comment);
+  }
+
+  g_key_file_free (branding_keyfile);
+
+  g_object_get (settings, "user-agent", &webkit_user_agent, NULL);
+
+  user_agent = g_strconcat (webkit_user_agent, " ",
+                            vendor_user_agent ? vendor_user_agent : "",
+                            vendor_user_agent ? " " : "",
+                            "Epiphany/"VERSION,
+                            NULL);
+
+  g_free (vendor_user_agent);
+  g_free (webkit_user_agent);
+
+  return user_agent;
+}
+
+static void
+webkit_pref_callback_user_agent (GConfClient *client,
+                                 guint cnxn_id,
+                                 GConfEntry *entry,
+                                 gpointer data)
+{
+  GConfValue *gcvalue;
+  const char *value = NULL;
+  static char *internal_user_agent = NULL;
+  char *webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_STRING) {
+      value = gconf_value_get_string (gcvalue);
+  }
+
+  if (value == NULL || value[0] == '\0') {
+    if (internal_user_agent == NULL)
+      internal_user_agent = webkit_pref_get_internal_user_agent ();
+
+    g_object_set (settings, webkit_pref, internal_user_agent, NULL);
+  } else
+    g_object_set (settings, webkit_pref, value, NULL);
+}
+
 static void
 webkit_pref_callback_font_size (GConfClient *client,
                                 guint cnxn_id,
@@ -286,7 +369,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_boolean },
     { CONF_RENDERING_LANGUAGE,
       "accept-language",
-      webkit_pref_callback_accept_languages }
+      webkit_pref_callback_accept_languages },
+    { CONF_USER_AGENT,
+      "user-agent",
+      webkit_pref_callback_user_agent }
   };
 
 static void
