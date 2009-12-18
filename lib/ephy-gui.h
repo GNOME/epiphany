@@ -64,9 +64,8 @@ gboolean	ephy_gui_is_middle_click		 (void);
 gboolean	ephy_gui_check_location_writable         (GtkWidget *parent,
 							  const char *filename);
 
-void		ephy_gui_help				 (GtkWindow *parent,
-							  const char *file_name,
-							  const char *link_id);
+void		ephy_gui_help				 (GtkWidget *parent,
+							  const char *section);
 
 void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 							  guint32 user_time);

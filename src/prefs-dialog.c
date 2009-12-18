@@ -241,7 +241,7 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 	id = CLAMP (id, 0, 3);
 
-	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
+	ephy_gui_help (window, help_preferences[id]);
 }
 
 static void

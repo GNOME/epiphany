@@ -183,7 +183,7 @@ pdm_dialog_show_help (PdmDialog *pd)
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 	g_return_if_fail (id == 0 || id == 1);
 
-	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
+	ephy_gui_help (window, help_preferences[id]);
 }
 
 typedef struct
@@ -255,8 +255,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_HELP)
 	{
 		/* Show help and return early */
-
-		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "clearing-personal-data");
+		ephy_gui_help (GTK_WIDGET (dialog), "clearing-personal-data");
 		return;
 	}
 

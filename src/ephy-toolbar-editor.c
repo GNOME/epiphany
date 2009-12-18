@@ -134,7 +134,7 @@ ephy_toolbar_editor_response (GtkDialog *dialog,
 	}
 	else if (response == GTK_RESPONSE_HELP)
 	{
-		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-edit-toolbars");
+		ephy_gui_help (GTK_WIDGET (dialog), "to-edit-toolbars");
 		return;
 	}
 

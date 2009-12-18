@@ -490,9 +490,7 @@ static void
 cmd_help_contents (GtkAction *action,
 		   EphyHistoryWindow *editor)
 {
-	ephy_gui_help (GTK_WINDOW (editor),
-		       "epiphany", 
-		       "ephy-managing-history");
+	ephy_gui_help (GTK_WIDGET (editor), "ephy-managing-history");
 }
 
 static void

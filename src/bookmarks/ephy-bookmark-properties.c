@@ -383,8 +383,7 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 	switch (response_id)
 	{
 		case GTK_RESPONSE_HELP:
-			ephy_gui_help (GTK_WINDOW (dialog),
-				       "epiphany", 
+			ephy_gui_help (GTK_WIDGET (dialog),
 				       "to-edit-bookmark-properties");
 			return;
 	 	case GTK_RESPONSE_ACCEPT:

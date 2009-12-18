@@ -355,68 +355,37 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 	return TRUE;
 }
 
-static gboolean
-open_url (GtkWindow *parent,
-          const char *uri,
-          guint32 user_time,
-          GError **error)
-{
-  GdkScreen *screen;
-
-  if (parent)
-    screen = gtk_widget_get_screen (GTK_WIDGET (parent));
-  else
-    screen = gdk_screen_get_default ();
-
-  return gtk_show_uri (screen, uri, user_time, error);
-}
-
+/**
+ * ephy_gui_help:
+ * @parent: the parent window where help is being called
+ * @section: help section to open or %NULL
+ *
+ * Displays Epiphany's help, opening the section indicated by @section.
+ *
+ * Note that @parent is used to know the #GdkScreen where to open the help
+ * window.
+ **/
 void
-ephy_gui_help (GtkWindow *parent,
-	       const char *file_name,
-               const char *link_id)
+ephy_gui_help (GtkWidget *parent,
+	       const char *section)
 {
-        GError *error = NULL;
-        const char *lang;
-        char *uri = NULL, *url;
-        guint i;
+	GError *error = NULL;
+	GdkScreen *screen;
+	char *url;
 
-        const char * const * langs = g_get_language_names ();
-        for (i = 0; langs[i]; i++) {
-                lang = langs[i];
-                if (strchr (lang, '.'))
-                        continue;
+	if (section)
+		url = g_strdup_printf ("ghelp:epiphany?%s", section);
+	else
+		url = g_strdup ("ghelp:epiphany");
 
-                uri = g_build_filename (DATADIR,
-                                        "gnome", "help", PACKAGE,
-                                        lang,
-                                        file_name,
-                                        NULL);
-                                                    
-                if (g_file_test (uri, G_FILE_TEST_EXISTS))
-                        break;
+	screen = gtk_widget_get_screen (parent);
+	gtk_show_uri (screen, url, gtk_get_current_event_time (), &error);
 
-                g_free (uri);
-                uri = NULL;
-        }
-
-        if (!uri)
-                return;
-
-        if (link_id)
-        {
-                url = g_strdup_printf ("ghelp://%s?%s", uri, link_id);
-        }
-        else
-        {
-                url = g_strdup_printf ("ghelp://%s", uri);
-        }
-
-        if (!open_url (parent, url, gtk_get_current_event_time (), &error))
-        {
+	if (error != NULL)
+	{
 		GtkWidget *dialog;
 
-		dialog = gtk_message_dialog_new (parent,
+		dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 						 GTK_DIALOG_DESTROY_WITH_PARENT,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK,
@@ -427,9 +396,9 @@ ephy_gui_help (GtkWindow *parent,
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (gtk_widget_destroy), NULL);
 		gtk_widget_show (dialog);
-        }
+	}
 
-        g_free (url);
+	g_free (url);
 }
 
 void

@@ -895,7 +895,7 @@ void
 window_cmd_help_contents (GtkAction *action,
 			 EphyWindow *window)
 {
-	ephy_gui_help (GTK_WINDOW (window), "epiphany", NULL);
+	ephy_gui_help (GTK_WIDGET (window), NULL);
 }
 
 #define ABOUT_GROUP "About"

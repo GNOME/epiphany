@@ -1114,9 +1114,7 @@ static void
 cmd_help_contents (GtkAction *action,
 		   EphyBookmarksEditor *editor)
 {
-	ephy_gui_help (GTK_WINDOW (editor), 
-		       "epiphany", 
-		       "ephy-managing-bookmarks");
+	ephy_gui_help (GTK_WINDOW (editor), "ephy-managing-bookmarks");
 }
 
 static void
