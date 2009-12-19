@@ -29,7 +29,6 @@
 #include <sys/stat.h>
 
 #include "ephy-embed-shell.h"
-#include "ephy-embed-persist.h"
 #include "ephy-file-helpers.h"
 #include "ephy-node-common.h"
 #include "ephy-node.h"
@@ -38,6 +37,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
+#include <webkit/webkit.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
@@ -60,7 +60,7 @@
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
 static void ephy_favicon_cache_init	  (EphyFaviconCache *cache);
 static void ephy_favicon_cache_finalize	  (GObject *object);
-static gboolean kill_download		  (const char*, EphyEmbedPersist*, EphyFaviconCache*);
+static gboolean kill_download		  (const char*, WebKitDownload*, EphyFaviconCache*);
 
 #define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
 
@@ -362,17 +362,17 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 
 static gboolean
 kill_download (const char *key,
-	       EphyEmbedPersist *persist,
+	       WebKitDownload *download,
 	       EphyFaviconCache *cache)
 {
 	EphyNode *icon;
 
 	/* disconnect "completed" and "cancelled" callbacks */
 	g_signal_handlers_disconnect_matched
-		(persist,G_SIGNAL_MATCH_DATA , 0, 0, NULL, NULL, cache);
+		(download,G_SIGNAL_MATCH_DATA , 0, 0, NULL, NULL, cache);
 
 	/* now cancel the download */
-	ephy_embed_persist_cancel (persist);
+	webkit_download_cancel (download);
 
 	icon = g_hash_table_lookup (cache->priv->icons_hash, key);
 	g_return_val_if_fail (EPHY_IS_NODE (icon), TRUE);
