@@ -1,4 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2008, 2009 Gustavo Noronha Silva
  *  Copyright © 2009 Igalia S.L.
@@ -975,6 +976,7 @@ request_decision_on_storing (StorePasswordData *store_data)
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
+  char *hostname;
 
   LOG ("Going to show infobar about %s", store_data->uri);
 
@@ -984,7 +986,7 @@ request_decision_on_storing (StorePasswordData *store_data)
   button_box = gtk_hbutton_box_new ();
   gtk_container_add (GTK_CONTAINER (action_area), button_box);
 
-  action_button = gtk_button_new_from_stock (GTK_STOCK_NO);
+  action_button = gtk_button_new_with_label (_("Not now"));
   g_signal_connect (action_button, "clicked",
                     G_CALLBACK (send_no_response_cb), info_bar);
   gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
@@ -995,9 +997,16 @@ request_decision_on_storing (StorePasswordData *store_data)
   gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
 
   label = gtk_label_new (NULL);
-  message = g_strdup_printf (_("<big><b>Would you like to store the password for %s?</b></big>"),
-                             store_data->uri);
+  hostname = ephy_string_get_host_name (store_data->uri);
+  /* Translators: The first %s is the username and the second one is the
+   * hostname where this is happening. Example: gnome@gmail.com and
+   * mail.google.com.
+   */
+  message = g_strdup_printf (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
+                             store_data->name_value,
+                             hostname);
   gtk_label_set_markup (GTK_LABEL (label), message);
+  g_free (hostname);
   g_free (message);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
