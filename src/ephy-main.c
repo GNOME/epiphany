@@ -203,41 +203,6 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 }
 
 static void
-handle_url (GtkAboutDialog *about,
-	    const char *link,
-	    gpointer data)
-{
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, NULL, link,
-			    EPHY_NEW_TAB_OPEN_PAGE);
-}
-
-static void
-handle_email (GtkAboutDialog *about,
-	      const char *link,
-	      gpointer data)
-{
-	char *command, *handler;
-	GAppInfo *appinfo;
-
-	if (eel_gconf_get_boolean ("/desktop/gnome/url-handlers/mailto/enabled") == FALSE)
-	{
-		return;
-	}
-	/* FIXME: better use g_app_info_get_default_for_uri_scheme () when it is
-	 * implemented.
-	 */
-	handler = eel_gconf_get_string ("/desktop/gnome/url-handlers/mailto/command");
-	command = g_strconcat (handler, "mailto:", link, NULL);
-	appinfo = g_app_info_create_from_commandline (command, NULL, 0, NULL);
-	ephy_file_launch_application (appinfo, NULL,
-				      gtk_get_current_event_time (),
-				      GTK_WIDGET (about));
-	g_free (handler);
-	g_free (command);
-}
-
-static void
 unref_proxy_reply_cb (DBusGProxy *proxy,
 		      GError *error,
 		      gpointer user_data)
@@ -756,10 +721,6 @@ main (int argc,
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	ephy_stock_icons_init ();
 	load_accels ();
-
-	/* Extensions may want these, so don't initialize in window-cmds */
-	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
-	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
 
 	/* Work-around Flash Player crash */
 	g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
