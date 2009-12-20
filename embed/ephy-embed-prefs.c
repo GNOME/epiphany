@@ -395,6 +395,7 @@ ephy_embed_prefs_init (void)
   g_object_set (settings,
                 "auto-shrink-images", FALSE,
                 "enable-default-context-menu", FALSE,
+                "enable-site-specific-quirks", TRUE,
                 NULL);
 
   /* Connections */
