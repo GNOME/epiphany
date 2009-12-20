@@ -96,6 +96,8 @@ struct _EphyWebViewPrivate {
 
   GSList *hidden_popups;
   GSList *shown_popups;
+
+  GtkWidget *password_info_bar;
 };
 
 typedef struct {
@@ -910,12 +912,16 @@ static void
 store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
 {
   StorePasswordData *store_data = (StorePasswordData*)data;
+  EphyWebView *web_view = ephy_embed_get_web_view (store_data->embed);
   char *uri = store_data->uri;
   char *name_field_name = store_data->name_field;
   char *name_field_value = store_data->name_value;
   char *password_field_name = store_data->password_field;
   char *password_field_value = store_data->password_value;
   SoupURI *soup_uri;
+
+  /* We are no longer showing a store password infobar */
+  web_view->priv->password_info_bar = NULL;
 
   if (response_id != GTK_RESPONSE_YES) {
     LOG ("Response is %d - not saving.", response_id);
@@ -961,6 +967,7 @@ static void
 request_decision_on_storing (StorePasswordData *store_data)
 {
   EphyEmbed *embed = store_data->embed;
+  EphyWebView *web_view = ephy_embed_get_web_view (embed);
   GtkWidget *info_bar;
   GtkWidget *action_area;
   GtkWidget *button_box;
@@ -1001,6 +1008,12 @@ request_decision_on_storing (StorePasswordData *store_data)
   g_signal_connect (info_bar, "response", G_CALLBACK (store_password), store_data);
 
   ephy_embed_add_top_widget (embed, info_bar, FALSE);
+
+  /* We track the info_bar, so we only ever show one */
+  if (web_view->priv->password_info_bar)
+    gtk_widget_destroy (web_view->priv->password_info_bar);
+
+  web_view->priv->password_info_bar = info_bar;
 }
 
 static void
