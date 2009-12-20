@@ -2145,8 +2145,9 @@ ephy_web_view_copy_back_history (EphyWebView *source,
      history ends up the same */
   items = g_list_reverse (items);
   for (; items; items = items->next) {
-    item = (WebKitWebHistoryItem*)items->data;
+    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)items->data);
     webkit_web_back_forward_list_add_item (dest_bflist, item);
+    g_object_unref (item);
   }
   g_list_free (items);
 
