@@ -431,6 +431,8 @@ normalize_and_prepare_uri (SoupURI *uri,
                            const char *form_username,
                            const char *form_password)
 {
+  g_return_if_fail (uri != NULL);
+
   /* We normalize https? schemes here so that we use passwords
    * we stored in https sites in their http counterparts, and
    * vice-versa. */
@@ -464,6 +466,9 @@ _ephy_profile_store_form_auth_data (const char *uri,
   g_return_if_fail (password);
 
   fake_uri = soup_uri_new (uri);
+  if (fake_uri == NULL)
+    return;
+
   normalize_and_prepare_uri (fake_uri, form_username, form_password);
   fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
 
@@ -500,6 +505,9 @@ _ephy_profile_query_form_auth_data (const char *uri,
   g_return_val_if_fail (form_password, NULL);
 
   key = soup_uri_new (uri);
+  if (key == NULL)
+    return NULL;
+
   normalize_and_prepare_uri (key, form_username, form_password);
   key_str = soup_uri_to_string (key, FALSE);
 
