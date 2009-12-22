@@ -62,7 +62,7 @@ struct EphyEmbedPrivate
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
-  char *load_failed_uri;
+  char *loading_uri;
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
 };
@@ -196,6 +196,7 @@ load_status_changed_cb (WebKitWebView *view,
                         GParamSpec *spec,
                         EphyEmbed *embed)
 {
+  EphyEmbedPrivate *priv = embed->priv;
   WebKitLoadStatus status = webkit_web_view_get_load_status (view);
 
   if (status == WEBKIT_LOAD_COMMITTED) {
@@ -206,15 +207,9 @@ load_status_changed_cb (WebKitWebView *view,
 
     ephy_embed_destroy_top_widgets (embed);
 
-    /* If the load failed for this URI, do nothing else */
-    if (embed->priv->load_failed_uri &&
-        g_str_equal (embed->priv->load_failed_uri, uri)) {
-      g_free (embed->priv->load_failed_uri);
-      embed->priv->load_failed_uri = NULL;
-
-      ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), EPHY_WEB_VIEW_STATE_IS_UNKNOWN);
-
-      return;
+    if (g_strcmp0 (uri, priv->loading_uri) != 0) {
+      g_free (priv->loading_uri);
+      priv->loading_uri = g_strdup (uri);
     }
 
     ephy_web_view_location_changed (EPHY_WEB_VIEW (view),
@@ -238,7 +233,7 @@ load_status_changed_cb (WebKitWebView *view,
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
   } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
     EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
-    const char *loading_uri = NULL;
+    char *loading_uri = NULL;
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
       WebKitWebFrame *frame;
@@ -248,7 +243,12 @@ load_status_changed_cb (WebKitWebView *view,
       frame = webkit_web_view_get_main_frame (view);
       source = webkit_web_frame_get_provisional_data_source (frame);
       request = webkit_web_data_source_get_initial_request (source);
-      loading_uri = webkit_network_request_get_uri (request);
+      loading_uri = g_strdup (webkit_network_request_get_uri (request));
+
+      /* We also store the URI we are currently loading here, because
+       * we will want to use it in WEBKIT_LOAD_FINISHED, because if a
+       * load fails we may never get to committed */
+      priv->loading_uri = g_strdup (loading_uri);
 
       estate = (EphyWebViewNetState) (estate |
                                       EPHY_WEB_VIEW_STATE_START |
@@ -258,17 +258,23 @@ load_status_changed_cb (WebKitWebView *view,
       
       g_signal_emit_by_name (EPHY_WEB_VIEW (view), "new-document-now", loading_uri);
     } else if (status == WEBKIT_LOAD_FINISHED) {
-      loading_uri = ephy_web_view_get_address (EPHY_WEB_VIEW (view));
+      loading_uri = priv->loading_uri;
+
+      /* Will be freed bellow */
+      priv->loading_uri = NULL;
 
       estate = (EphyWebViewNetState) (estate |
                                       EPHY_WEB_VIEW_STATE_STOP |
                                       EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
                                       EPHY_WEB_VIEW_STATE_IS_NETWORK);
     }
-    
+
     ephy_web_view_update_from_net_state (EPHY_WEB_VIEW (view),
                                          loading_uri,
                                          (EphyWebViewNetState)estate);
+
+    g_free (loading_uri);
+
   }
 }
 
@@ -332,7 +338,7 @@ ephy_embed_finalize (GObject *object)
   EphyEmbed *embed = EPHY_EMBED (object);
   GSList *list;
 
-  g_free (embed->priv->load_failed_uri);
+  g_free (embed->priv->loading_uri);
 
   list = embed->priv->destroy_on_transition_list;
   for (; list; list = list->next) {
@@ -863,21 +869,6 @@ download_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
-static gboolean
-load_error_cb (WebKitWebView *web_view,
-               WebKitWebFrame *frame,
-               const char *uri,
-               GError *error,
-               EphyEmbed *embed)
-{
-  /* Flag the page as error. We need the flag to check it when
-     receiving COMMITTED status, since for some reason we are getting
-     that when the load fails too */
-  embed->priv->load_failed_uri = g_strdup (uri);
-
-  return FALSE;
-}
-
 static void
 ephy_embed_constructed (GObject *object)
 {
@@ -909,7 +900,6 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), embed,
-                    "signal::load-error", G_CALLBACK (load_error_cb), embed,
                     NULL);
 
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
