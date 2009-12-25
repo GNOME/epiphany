@@ -170,7 +170,7 @@ epiphany_LDADD = \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
-if ENABLE_INTROSPECTION
+if HAVE_INTROSPECTION
 epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
 epiphany_LDADD += $(INTROSPECTION_LIBS)
 endif
@@ -266,7 +266,7 @@ CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
-if ENABLE_INTROSPECTION
+if HAVE_INTROSPECTION
 EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-embed.h \
 	$(top_srcdir)/embed/ephy-embed-container.h \
@@ -335,10 +335,10 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/src/ephy-window.c \
 	$(NULL)
 
-Epiphany-$(EPIPHANY_API_VERSION).gir: $(G_IR_SCANNER) $(EPHY_GIR_H_FILES) \
+Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILES) \
                                       $(EPHY_GIR_C_FILES) epiphany
 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
-	$(G_IR_SCANNER) -v \
+	$(INTROSPECTION_SCANNER) -v \
 		--namespace Epiphany \
 		--nsversion=$(EPIPHANY_API_VERSION) \
 		--add-include-path=. \
@@ -364,10 +364,10 @@ gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
 typelibsdir = $(GIRTYPELIBDIR)
 typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
 
-Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(G_IR_COMPILER)
-	$(AM_V_GEN) g-ir-compiler Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
 
 EXTRA_DIST += Epiphany-$(EPIPHANY_API_VERSION).gir
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
-endif # ENABLE_INTROSPECTION
+endif # HAVE_INTROSPECTION
