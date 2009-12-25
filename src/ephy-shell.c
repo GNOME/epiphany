@@ -445,7 +445,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
 	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
-	g_return_val_if_fail (in_new_window || !is_popup, NULL);
 	g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;

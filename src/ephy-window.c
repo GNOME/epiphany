@@ -2434,6 +2434,17 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 		gtk_widget_hide (GTK_WIDGET (window));
 }
 
+static void
+ephy_window_set_is_popup (EphyWindow *window,
+			  gboolean is_popup)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	priv->is_popup = is_popup;
+
+	g_object_notify (G_OBJECT (window), "is-popup");
+}
+
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
 		   gpointer user_data)
@@ -2519,7 +2530,7 @@ create_web_view_cb (WebKitWebView *web_view,
 					 NULL, NULL,
 					 flags,
 					 EPHY_WEB_VIEW_CHROME_ALL,
-					 FALSE,
+					 TRUE, /* is popup? */
 					 0);
 
 	using_new_window = parent_window == NULL;
@@ -3252,17 +3263,6 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 	}
 
 	window->priv->chrome = chrome_mask;
-}
-
-static void
-ephy_window_set_is_popup (EphyWindow *window,
-			  gboolean is_popup)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	priv->is_popup = is_popup;
-
-	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
 static void

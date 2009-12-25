@@ -1943,6 +1943,20 @@ load_status_cb (WebKitWebView *web_view,
   }
 }
 
+static gboolean
+close_web_view_cb (WebKitWebView *web_view,
+                   gpointer user_data)
+{
+  EphyEmbedContainer *window;
+  GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+  window = EPHY_EMBED_CONTAINER (widget);
+
+  if (ephy_embed_container_get_is_popup (window))
+    gtk_widget_destroy (GTK_WIDGET (window));
+
+  return TRUE;
+}
+
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -1976,6 +1990,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::load-status",
                     G_CALLBACK (load_status_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "close-web-view",
+                    G_CALLBACK (close_web_view_cb),
                     NULL);
 
   g_signal_connect_object (web_view, "icon-loaded",
