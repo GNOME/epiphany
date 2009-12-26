@@ -48,6 +48,7 @@ struct _EphyFindToolbarPrivate
 	gulong set_focus_handler;
 	guint source_id;
 	guint find_again_source_id;
+	guint find_source_id;
 	char *find_string;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
@@ -268,20 +269,40 @@ real_find (EphyFindToolbarPrivate *priv,
         return EPHY_FIND_FOUND;
 }
 
-static void
-entry_changed_cb (GtkEntry *entry,
-		  EphyFindToolbar *toolbar)
+static gboolean
+do_search (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	EphyEmbedFindResult result;
 
-	g_free (priv->find_string);
-	priv->find_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+	priv->find_source_id = 0;
 
 	ephy_find_toolbar_mark_matches (toolbar);
 
 	result = real_find (priv, TRUE);
 	set_status (toolbar, result);
+
+	return FALSE;
+}
+
+static void
+entry_changed_cb (GtkEntry *entry,
+		  EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	g_free (priv->find_string);
+	priv->find_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+
+	if (priv->find_source_id != 0) {
+		g_source_remove (priv->find_source_id);
+		priv->find_source_id = 0;
+	}
+
+	if (strlen (priv->find_string) == 0)
+                return;
+
+	priv->find_source_id = g_timeout_add (300, (GSourceFunc)do_search, toolbar);
 }
 
 static gboolean
@@ -610,6 +631,12 @@ ephy_find_toolbar_dispose (GObject *object)
 	{
 		g_source_remove (priv->find_again_source_id);
 		priv->find_again_source_id = 0;
+	}
+
+	if (priv->find_source_id != 0)
+	{
+		g_source_remove (priv->find_source_id);
+		priv->find_source_id = 0;
 	}
 
 	G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
