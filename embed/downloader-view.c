@@ -366,13 +366,17 @@ static char *
 ephy_download_get_name (WebKitDownload *download)
 {
 	const char *target;
+	char *user_destination;
 	char *result;
 
 	target = webkit_download_get_destination_uri (download);
+	user_destination = g_object_get_data (G_OBJECT (download),
+					      "user-destination-uri");
 
-	if (target)
+	if (user_destination || target)
 	{
-		result = g_path_get_basename (target);
+		result = g_path_get_basename (user_destination ?
+					      user_destination : target);
 	}
 	else
 	{
@@ -410,10 +414,18 @@ do_open_downloaded_file (DownloaderView *dv, WebKitDownload *download, gboolean 
 {
 	DownloaderViewPrivate *priv = dv->priv;
 	GdkDisplay *gdk_display;
-	const char *destination_uri = webkit_download_get_destination_uri (download);
-	GFile *downloaded_file = g_file_new_for_uri (destination_uri);
+	const char *destination_uri;
+	char *user_destination;
+	GFile *downloaded_file;
 
 	gdk_display = gtk_widget_get_display (priv->window);
+
+	destination_uri = webkit_download_get_destination_uri (download);
+	user_destination = g_object_get_data (G_OBJECT (download),
+					      "user-destination-uri");
+
+	downloaded_file = g_file_new_for_uri (user_destination ?
+					      user_destination : destination_uri);
 	if (open_location)
 	{
 		ephy_file_browse_to (downloaded_file,

@@ -398,9 +398,8 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
     DownloaderView *dview;
     char *uri;
 
-    uri = gtk_file_chooser_get_uri  (GTK_FILE_CHOOSER(dialog));
-    webkit_download_set_destination_uri (download, uri);
-    g_free (uri);
+    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    g_object_set_data (G_OBJECT (download), "user-destination-uri", uri);
 
     dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
     downloader_view_add_download (dview, download);
@@ -410,6 +409,8 @@ download_requested_dialog_response_cb (GtkDialog *dialog,
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  /* User provided us with a destination or cancelled, unfreeze. */
+  g_object_thaw_notify (G_OBJECT (download));
   g_object_unref (download);
 }
 
@@ -629,6 +630,8 @@ confirm_action_response_cb (GtkWidget *dialog,
       }
       dview = EPHY_DOWNLOADER_VIEW (ephy_embed_shell_get_downloader_view (embed_shell));
       downloader_view_add_download (dview, download);
+      /* User selected "Open", he won't be providing a destination, unfreeze. */
+      g_object_thaw_notify (G_OBJECT (download));
     }
     g_object_unref (download);
     return;
@@ -774,20 +777,63 @@ download_status_changed_cb (GObject *object,
 {
   WebKitDownload *download = WEBKIT_DOWNLOAD (object);
 
-  g_return_if_fail (webkit_download_get_status (download) == WEBKIT_DOWNLOAD_STATUS_STARTED);
+  if (webkit_download_get_status (download) == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+  {
+    GFile *destination;
+    GFile *temp;
+    char *destination_uri;
+    const char *temp_uri;
 
-  g_signal_handlers_disconnect_by_func (download,
-                                        download_status_changed_cb,
-                                        web_view);
+    temp_uri = webkit_download_get_destination_uri (download);
+    destination_uri = g_object_get_data (G_OBJECT (download),
+                                         "user-destination-uri");
 
-  /* Is auto-download enabled? */
-  if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
-    perform_auto_download (download);
-    return;
+    /* No user-destination-uri is set, hence this is an auto download and we
+     * have nothing else to do.
+     */
+    if (destination_uri == NULL) return;
+
+    temp = g_file_new_for_uri (temp_uri);
+    destination = g_file_new_for_uri (destination_uri);
+
+    ephy_file_switch_temp_file (destination, temp);
+
+    g_object_unref (destination);
+    g_object_unref (temp);
   }
+  else if (webkit_download_get_status (download) == WEBKIT_DOWNLOAD_STATUS_STARTED)
+  {
+    /* Prevent this callback from being called before the user has selected a
+     * destination. It is freed either here or in
+     * download_requested_dialog_response_cb(). Both situations are mutually
+     * exclusive.
+     *
+     * This freeze is removed either here below, in
+     * download_requested_dialog_response_cb() or confirm_action_response_cb().
+     */
+    g_object_freeze_notify (G_OBJECT (download));
 
-  g_object_ref (download); /* balanced in confirm_action_response_cb */
-  confirm_action_from_mime (web_view, download, DOWNLOAD_ACTION_DOWNLOAD);
+    if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
+      perform_auto_download (download);
+      /* User won't select a destination, unfreeze. */
+      g_object_thaw_notify (G_OBJECT (download));
+      return;
+    }
+
+    g_object_ref (download); /* balanced in confirm_action_response_cb */
+    confirm_action_from_mime (web_view, download, DOWNLOAD_ACTION_DOWNLOAD);
+  }
+}
+
+static gboolean
+download_error_cb (WebKitDownload *download,
+                   gint error_code,
+                   gint error_detail,
+                   const gchar *reason,
+                   WebKitWebView *view)
+{
+  /* FIXME: handle download errors and notify the user */
+  return FALSE;
 }
 
 static gboolean
@@ -800,9 +846,12 @@ download_requested_cb (WebKitWebView *web_view,
 
   /* Wait for the request to be sent in all cases, so that we have a
    * response which may contain a suggested filename */
-  g_signal_connect (download, "notify::status",
-                    G_CALLBACK (download_status_changed_cb),
-                    web_view);
+  g_signal_connect_object (download, "notify::status",
+                           G_CALLBACK (download_status_changed_cb),
+                           web_view, 0);
+  g_signal_connect_object (download, "error",
+                           G_CALLBACK (download_error_cb),
+                           web_view, 0);
 
   /* If we are not performing an auto-download, we will ask the user
    * where they want the file to go to; we will start downloading to a
