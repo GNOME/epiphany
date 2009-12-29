@@ -685,6 +685,14 @@ confirm_action_from_mime (WebKitWebView *web_view,
     action = DOWNLOAD_ACTION_OPEN_LOCATION;
   }
 
+  /* Sometimes downloads can have a mime_description but a NULL helper_app
+   * in that case action is never changed so DOWNLOAD_ACTION_DOWNLOAD remains
+   * as action value. This is the same response value as Save as...
+   * button, which is wrong for the Download button.
+   */
+  if (helper_app == NULL)
+    action = DOWNLOAD_ACTION_OPEN_LOCATION;
+
   action_label = (action == DOWNLOAD_ACTION_OPEN) ? GTK_STOCK_OPEN : STOCK_DOWNLOAD;
   suggested_filename = webkit_download_get_suggested_filename (download);
 
