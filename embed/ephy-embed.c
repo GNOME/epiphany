@@ -675,9 +675,8 @@ confirm_action_from_mime (WebKitWebView *web_view,
       helper_app = g_app_info_get_default_for_type (content_type, FALSE);
       mime_permission = ephy_file_check_mime (content_type);
 
-      if (helper_app) {
+      if (helper_app)
         action = DOWNLOAD_ACTION_OPEN;
-      }
     }
   }
 
