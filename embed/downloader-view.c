@@ -416,7 +416,8 @@ do_open_downloaded_file (DownloaderView *dv, WebKitDownload *download, gboolean 
 	gdk_display = gtk_widget_get_display (priv->window);
 	if (open_location)
 	{
-		ephy_file_browse_to (downloaded_file, gdk_x11_display_get_user_time (gdk_display));
+		ephy_file_browse_to (downloaded_file,
+				     gdk_x11_display_get_user_time (gdk_display));
 	}
 	else
 	{

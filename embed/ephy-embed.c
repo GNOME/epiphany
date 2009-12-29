@@ -744,7 +744,8 @@ confirm_action_from_mime (WebKitWebView *web_view,
   gtk_widget_set_can_default (button, TRUE);
   /* don't show the image! see bug #307818 */
   gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, DOWNLOAD_ACTION_DOWNLOAD);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
+                                button, DOWNLOAD_ACTION_DOWNLOAD);
 
   gtk_dialog_add_button (GTK_DIALOG (dialog),
                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -753,9 +754,9 @@ confirm_action_from_mime (WebKitWebView *web_view,
 
   gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
-  default_response = action == DOWNLOAD_ACTION_NONE
-        ? (int) GTK_RESPONSE_CANCEL
-        : (int) action;
+  default_response = (action == DOWNLOAD_ACTION_NONE) ?
+                     (int) GTK_RESPONSE_CANCEL : (int) action;
+
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), default_response);
 
   g_object_set_data (G_OBJECT (dialog), "webkit-view", web_view);
