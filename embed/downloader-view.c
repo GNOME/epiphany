@@ -592,10 +592,12 @@ download_status_changed_cb (WebKitDownload *download, GParamSpec *pspec, Downloa
                 update_download_row (dv, download);
 }
 
-static void
+static gboolean
 download_error_cb (WebKitDownload *download, gint error_code, gint error_detail, const gchar *reason, DownloaderView *dv)
 {
 	update_download_row (dv, download);
+
+	return FALSE;
 }
 
 static gboolean
