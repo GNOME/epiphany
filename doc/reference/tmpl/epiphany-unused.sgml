@@ -1,0 +1,1043 @@
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Title ##### -->
+EphySingle
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Long_Description ##### -->
+<para>
+Each #EphyWindow contains a #GtkNotebook which holds one or more #EphyTab:s.
+An #EphyTab is basically a container for an #EphyEmbed.
+</para>
+<para>
+To retrieve an #EphyTab's parent #EphyWindow, use gtk_widget_get_toplevel().
+</para>
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Short_Description ##### -->
+Represents an Epiphany tab
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Title ##### -->
+EphyTab
+
+
+<!-- ##### SECTION ./tmpl/epiphany-unused.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/mozilla-embed-event.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/mozilla-embed-event.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/mozilla-embed-event.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/mozilla-embed-event.sgml:Title ##### -->
+mozilla-embed-event
+
+
+<!-- ##### FUNCTION Detach ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### MACRO EPHY_EMBED_SINGLE_IFACE ##### -->
+<para>
+
+</para>
+
+@k: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY_GET_CLASS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### MACRO EPHY_IS_EMBED_SINGLE_IFACE ##### -->
+<para>
+
+</para>
+
+@k: 
+
+<!-- ##### MACRO EPHY_IS_ICON_ENTRY ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### MACRO EPHY_IS_ICON_ENTRY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
+<!-- ##### MACRO EPHY_SHELL_ERROR ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO EPHY_SHELL_TYPE_DEF ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO EPHY_TYPE_ICON_ENTRY ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM EmbedPersistFlags ##### -->
+<para>
+Determines how the #EphyEmbedPersist should act.
+</para>
+
+@EMBED_PERSIST_COPY_PAGE: If set, download a copy of the page being browsed by
+			  the #EphyEmbedPersist's #EphyEmbed. This should be
+			  specified with ephy_embed_persist_set_embed(). If
+			  unset, ephy_embed_persist_set_source() must have been
+			  called.
+@EMBED_PERSIST_MAINDOC: If set and %EMBED_PERSIST_COPY_PAGE is set, download the
+			#EphyEmbedPersist's #EphyEmbed's page's frameset. If
+			unset, download the currently-focused frame.
+@EMBED_PERSIST_NO_VIEW: If set, do not display this download in the download
+			manager.
+@EMBED_PERSIST_ASK_DESTINATION: If set, display a filechooser dialog. You must
+				call ephy_embed_persist_set_fc_title() and
+				ephy_embed_persist_set_fc_parent() before
+				ephy_embed_persist_save() if this is the case.
+				If unset, use the destination specified with
+				ephy_embed_persist_set_dest().
+@EMBED_PERSIST_DO_CONVERSION: 
+
+<!-- ##### ENUM EmbedPrintPreviewNavType ##### -->
+<para>
+Specifies the action to perform in ephy_embed_print_preview_navigate().
+</para>
+
+@PRINTPREVIEW_GOTO_PAGENUM: 
+@PRINTPREVIEW_PREV_PAGE: 
+@PRINTPREVIEW_NEXT_PAGE: 
+@PRINTPREVIEW_HOME: 
+@PRINTPREVIEW_END: 
+
+<!-- ##### ENUM EmbedReloadFlags ##### -->
+<para>
+
+</para>
+
+@EMBED_RELOAD_NORMAL: 
+@EMBED_RELOAD_FORCE: Bypass cache and proxy while reloading a web page
+
+<!-- ##### ENUM EmbedSecurityLevel ##### -->
+<para>
+Represents the security status of an #EphyEmbed. For example, a page with an
+invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
+</para>
+
+@STATE_IS_UNKNOWN: 
+@STATE_IS_INSECURE: 
+@STATE_IS_BROKEN: 
+@STATE_IS_SECURE_MED: 
+@STATE_IS_SECURE_LOW: 
+@STATE_IS_SECURE_HIGH: 
+
+<!-- ##### ENUM EmbedState ##### -->
+<para>
+Represents the state of an #EphyEmbed with regards to networking negotiations.
+</para>
+
+@EMBED_STATE_UNKNOWN: 
+@EMBED_STATE_START: 
+@EMBED_STATE_REDIRECTING: 
+@EMBED_STATE_TRANSFERRING: 
+@EMBED_STATE_NEGOTIATING: 
+@EMBED_STATE_STOP: 
+@EMBED_STATE_IS_REQUEST: 
+@EMBED_STATE_IS_DOCUMENT: 
+@EMBED_STATE_IS_NETWORK: 
+@EMBED_STATE_IS_WINDOW: 
+
+<!-- ##### FUNCTION EmitCookieNotification ##### -->
+<para>
+
+</para>
+
+@name: 
+@aSubject: 
+@Returns: 
+
+<!-- ##### FUNCTION EmitPermissionNotification ##### -->
+<para>
+
+</para>
+
+@name: 
+@aSubject: 
+@Returns: 
+
+<!-- ##### ENUM EphyCookieP3PPolicy ##### -->
+<para>
+
+</para>
+
+@EPHY_COOKIE_P3P_POLICY_UNKNOWN: 
+@EPHY_COOKIE_P3P_POLICY_NONE: 
+@EPHY_COOKIE_P3P_POLICY_NO_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_IMPLICIT_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_EXPLICIT_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_NO_II: 
+
+<!-- ##### ENUM EphyCookieP3PState ##### -->
+<para>
+
+</para>
+
+@EPHY_COOKIE_P3P_STATE_UNKNOWN: 
+@EPHY_COOKIE_P3P_STATE_ACCEPTED: 
+@EPHY_COOKIE_P3P_STATE_DOWNGRADED: 
+@EPHY_COOKIE_P3P_STATE_FLAGGED: 
+@EPHY_COOKIE_P3P_STATE_REJECTED: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-content-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-net-state ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbedPersist::cancelled ##### -->
+<para>
+
+</para>
+
+@ephyembedpersist: the object which received the signal.
+
+<!-- ##### SIGNAL EphyEmbedPersist::completed ##### -->
+<para>
+
+</para>
+
+@ephyembedpersist: the object which received the signal.
+
+<!-- ##### ARG EphyEmbedPersist:dest ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:embed ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:filechooser-parent ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:filechooser-title ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:flags ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:max-size ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:persist-key ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyEmbedPersist:source ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM EphyShellError ##### -->
+<para>
+
+</para>
+
+@EPHY_SHELL_ERROR_MISSING_SERVER: 
+@EPHY_SHELL_ERROR_OBJECT_REG_FAILED: 
+@EPHY_SHELL_ERROR_FACTORY_REG_FAILED: 
+
+<!-- ##### ENUM EphyShellStartupFlags ##### -->
+<para>
+
+</para>
+
+@EPHY_SHELL_STARTUP_TABS: 
+@EPHY_SHELL_STARTUP_EXISTING_WINDOW: 
+@EPHY_SHELL_STARTUP_FULLSCREEN: 
+@EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR: 
+@EPHY_SHELL_STARTUP_SESSION: 
+@EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS: 
+@EPHY_SHELL_STARTUP_ADD_BOOKMARK: 
+
+<!-- ##### STRUCT EphyTab ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:address ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:blocked-popup-count ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:document-type ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:hidden-popup-count ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:icon ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:icon-address ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:load-progress ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:load-status ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:message ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:navigation ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:popups-allowed ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:security-level ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:title ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:typed-address ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:visibility ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:visible ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:zoom ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:active-tab ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:chrome ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:is-popup ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:print-preview-mode ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION Init ##### -->
+<para>
+
+</para>
+
+@aOwner: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_activate ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_can_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_can_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_find_next ##### -->
+<para>
+
+</para>
+
+@embed: 
+@backwards: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_find_set_properties ##### -->
+<para>
+
+</para>
+
+@find: 
+@search_string: 
+@case_sensitive: 
+
+<!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_get_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_print ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_print_preview_close ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_reload ##### -->
+<para>
+
+</para>
+
+@embed: 
+@force: 
+
+<!-- ##### FUNCTION ephy_embed_set_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@zoom: 
+
+<!-- ##### FUNCTION ephy_embed_single_load_proxy_autoconf ##### -->
+<para>
+
+</para>
+
+@single: 
+@url: 
+@shell: 
+
+<!-- ##### FUNCTION ephy_embed_single_set_offline_mode ##### -->
+<para>
+
+</para>
+
+@single: 
+@offline: 
+@shell: 
+
+<!-- ##### FUNCTION ephy_embed_stop_load ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_extensions_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@type: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_extensions_manager_load_dir ##### -->
+<para>
+
+</para>
+
+@manager: 
+@path: 
+
+<!-- ##### FUNCTION ephy_extensions_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_glade_widget_new ##### -->
+<para>
+
+</para>
+
+@file: 
+@widget_name: 
+@root: 
+@data: 
+@domain: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_get_by_name ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_password_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@info: 
+
+<!-- ##### FUNCTION ephy_password_manager_list ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_password_manager_remove ##### -->
+<para>
+
+</para>
+
+@manager: 
+@info: 
+
+<!-- ##### FUNCTION ephy_permission_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+@permission: 
+
+<!-- ##### FUNCTION ephy_permission_manager_clear ##### -->
+<para>
+
+</para>
+
+@manager: 
+
+<!-- ##### FUNCTION ephy_permission_manager_list ##### -->
+<para>
+
+</para>
+
+@manager: 
+@type: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_permission_manager_remove ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+
+<!-- ##### FUNCTION ephy_permission_manager_test ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_session_autoresume ##### -->
+<para>
+
+</para>
+
+@session: 
+@user_time: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_delete_on_exit ##### -->
+<para>
+
+</para>
+
+@shell: 
+@path: 
+@gs: 
+
+<!-- ##### FUNCTION ephy_shell_error_quark ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_get_active_window ##### -->
+<para>
+
+</para>
+
+@shell: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_get_print_setup_dialog ##### -->
+<para>
+
+</para>
+
+@shell: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_startup ##### -->
+<para>
+
+</para>
+
+@shell: 
+@flags: 
+@user_time: 
+@args: 
+@string_arg: 
+@error: 
+@Returns: 
+@startup_id: 
+
+<!-- ##### FUNCTION ephy_tab_for_embed ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_embed ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_icon_address ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_link_message ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_load_percent ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_load_status ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_location ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_security_level ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_status_message ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_title ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_window ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_zoom ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_add_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+@position: 
+@jump_to: 
+
+<!-- ##### FUNCTION ephy_window_find ##### -->
+<para>
+
+</para>
+
+@window: 
+
+<!-- ##### FUNCTION ephy_window_get_active_embed ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_get_active_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_get_tabs ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_jump_to_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+
+<!-- ##### FUNCTION ephy_window_print ##### -->
+<para>
+
+</para>
+
+@window: 
+
+<!-- ##### FUNCTION ephy_window_remove_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+
+<!-- ##### FUNCTION ephy_window_set_print_preview ##### -->
+<para>
+
+</para>
+
+@window: 
+@enabled: 
+
+<!-- ##### FUNCTION mozilla_cookie_to_ephy_cookie ##### -->
+<para>
+
+</para>
+
+@cookie: 
+@Returns: 
+
+<!-- ##### FUNCTION mozilla_embed_event_new ##### -->
+<para>
+
+</para>
+
+@dom_event: 
+@Returns: 
+
+<!-- ##### FUNCTION mozilla_embed_event_set_property ##### -->
+<para>
+
+</para>
+
+@event: 
+@name: 
+@value: 
+
+<!-- ##### FUNCTION mozilla_permission_to_ephy_permission ##### -->
+<para>
+
+</para>
+
+@perm: 
+@Returns: 
+

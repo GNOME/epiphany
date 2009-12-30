@@ -1,0 +1,123 @@
+<!-- ##### SECTION Title ##### -->
+EphyNodeDb
+
+<!-- ##### SECTION Short_Description ##### -->
+Data tree
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+An #EphyNodeDb is a database for arbitrary data organized in a tree.
+</para>
+<para>
+Each database is stored along with its name in a global set of databases.
+Databases can be created using ephy_node_db_new() and retrieved using
+ephy_node_db_get_by_name().
+</para>
+<para>
+Each #EphyNode inside an #EphyNodeDb is identified by a unique node ID. By
+keeping a handle on the ID, one can use ephy_node_db_get_node_from_id() to
+retrieve its corresponding #EphyNode.
+</para>
+<para>
+#EphyNodeDb<!-- -->s can be saved to disk using ephy_node_db_write_to_xml_safe()
+and restored using ephy_node_db_load_from_file().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EphyNodeDb ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyNodeDb:immutable ##### -->
+<para>
+%TRUE if no #EphyNode<!-- -->s can be added, removed or modified from this
+#EphyNodeDb
+</para>
+
+<!-- ##### ARG EphyNodeDb:name ##### -->
+<para>
+A string identifier unique to this #EphyNodeDb
+</para>
+
+<!-- ##### FUNCTION ephy_node_db_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_node_db_load_from_file ##### -->
+<para>
+
+</para>
+
+@db: 
+@xml_file: 
+@xml_root: 
+@xml_version: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_node_db_write_to_xml_safe ##### -->
+<para>
+
+</para>
+
+@db: 
+@filename: 
+@root: 
+@version: 
+@comment: 
+@node: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_node_db_get_name ##### -->
+<para>
+
+</para>
+
+@db: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_node_db_is_immutable ##### -->
+<para>
+
+</para>
+
+@db: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_node_db_set_immutable ##### -->
+<para>
+
+</para>
+
+@db: 
+@immutable: 
+
+
+<!-- ##### FUNCTION ephy_node_db_get_node_from_id ##### -->
+<para>
+
+</para>
+
+@db: 
+@id: 
+@Returns: 
+
+
