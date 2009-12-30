@@ -9,6 +9,9 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
 # documenting functions and macros.
 DOC_SOURCE_DIR=../..
 
+# Extra options to pass to gtkdoc-scangobj. Not normally needed.
+SCANGOBJ_OPTIONS="--type-init-func=g_thread_init(NULL);g_type_init()"
+
 # Extra options to supply to gtkdoc-scan.
 SCAN_OPTIONS=
 
