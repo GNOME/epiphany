@@ -410,14 +410,6 @@ AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
 
-# ****************************
-# SVN for ChangeLog generation
-# ****************************
-
-AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
-AC_SUBST([SVN_MODULE],[epiphany])
-AC_SUBST([SVN_BRANCH],[epiphany_branch])
-
 # ************
 # Output files
 # ************
