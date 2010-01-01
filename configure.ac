@@ -222,8 +222,6 @@ if test "$found_introspection" = "yes"; then
   AC_DEFINE([ENABLE_INTROSPECTION], [1], [Define to enable introspection support])
 fi
 
-AC_SUBST([EPIPHANY_FEATURES])
-
 # ****
 # Seed
 # ****
@@ -249,8 +247,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
 
-AC_SUBST([EPIPHANY_FEATURES])
-
 # ***
 # NSS
 # ***
@@ -269,6 +265,7 @@ if test "$enable_nss" = "yes"; then
 fi
 
 AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
+
 AC_SUBST([EPIPHANY_FEATURES])
 
 # *******************
