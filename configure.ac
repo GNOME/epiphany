@@ -258,7 +258,6 @@ AC_ARG_ENABLE([nss],
 AC_MSG_RESULT([$enable_nss])
 
 if test "$enable_nss" = "yes"; then
-   EPIPHANY_FEATURES="$EPIPHANY_FEATURES nss"
    PKG_CHECK_MODULES([NSS], [nss])
 
    AC_DEFINE([ENABLE_NSS], [1], [Define to compile with NSS support])
