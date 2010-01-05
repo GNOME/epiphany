@@ -31,7 +31,6 @@ DISTCLEANFILES = 		\
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-zeroconf		\
 	--enable-gtk-doc		\
-	--disable-introspection		\
 	--disable-schemas-install	\
 	--disable-scrollkeeper
 
