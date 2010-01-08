@@ -2447,14 +2447,15 @@ ephy_window_set_is_popup (EphyWindow *window,
 
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
-		   gpointer user_data)
+		   WebKitWebView *parent_web_view)
 {
-	EphyWindow *window;
+	EphyWindow *window, *parent_view_window;
 	gboolean using_new_window;
 
-	using_new_window = GPOINTER_TO_INT (user_data);
-
 	window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
+	parent_view_window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (parent_web_view)));
+
+	using_new_window = window != parent_view_window;
 
 	if (using_new_window)
 	{
@@ -2493,6 +2494,8 @@ web_view_ready_cb (WebKitWebView *web_view,
 
 		update_chromes_actions (window);
 		sync_chromes_visibility (window);
+
+		g_signal_emit_by_name (parent_web_view, "ge-new-window", web_view);
 	}
 
 	gtk_widget_show (GTK_WIDGET (window));
@@ -2509,7 +2512,6 @@ create_web_view_cb (WebKitWebView *web_view,
 	WebKitWebView *new_web_view;
 	EphyNewTabFlags flags;
 	EphyWindow *parent_window;
-	gboolean using_new_window;
 
 	if (eel_gconf_get_boolean (CONF_INTERFACE_OPEN_NEW_WINDOWS_IN_TAB))
 	{
@@ -2533,12 +2535,10 @@ create_web_view_cb (WebKitWebView *web_view,
 					 TRUE, /* is popup? */
 					 0);
 
-	using_new_window = parent_window == NULL;
-
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	g_signal_connect (new_web_view, "web-view-ready",
 			  G_CALLBACK (web_view_ready_cb),
-			  GINT_TO_POINTER (using_new_window));
+			  web_view);
 
 	return new_web_view;
 }
