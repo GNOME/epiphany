@@ -2495,7 +2495,7 @@ web_view_ready_cb (WebKitWebView *web_view,
 		update_chromes_actions (window);
 		sync_chromes_visibility (window);
 
-		g_signal_emit_by_name (parent_web_view, "ge-new-window", web_view);
+		g_signal_emit_by_name (parent_web_view, "new-window", web_view);
 	}
 
 	gtk_widget_show (GTK_WIDGET (window));

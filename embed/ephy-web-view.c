@@ -1509,14 +1509,14 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 /**
- * EphyWebView::ge-new-window:
+ * EphyWebView::new-window:
  * @view: the #EphyWebView that received the signal
  * @new_view: the newly opened #EphyWebView
  *
- * The ::ge_new_window signal is emitted after a new window has been opened by
+ * The ::new-window signal is emitted after a new window has been opened by
  * the view. For example, when a JavaScript popup window is opened.
  **/
-    g_signal_new ("ge_new_window",
+    g_signal_new ("new-window",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET (EphyWebViewClass, new_window),
@@ -1818,9 +1818,9 @@ favicon_cb (EphyWebView *view,
 }
 
 static void
-ge_new_window_cb (EphyWebView *view,
-                  EphyWebView *new_view,
-                  gpointer user_data)
+new_window_cb (EphyWebView *view,
+               EphyWebView *new_view,
+               gpointer user_data)
 {
   EphyEmbedContainer *container;
 
@@ -2000,8 +2000,8 @@ ephy_web_view_init (EphyWebView *web_view)
                            G_CALLBACK (favicon_cb),
                            web_view, (GConnectFlags)0);
 
-  g_signal_connect_object (web_view, "ge_new_window",
-                           G_CALLBACK (ge_new_window_cb),
+  g_signal_connect_object (web_view, "new-window",
+                           G_CALLBACK (new_window_cb),
                            web_view, (GConnectFlags)0);
 
   g_signal_connect_object (web_view, "ge_popup_blocked",
