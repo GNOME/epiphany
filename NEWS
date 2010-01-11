@@ -1,4 +1,32 @@
 ===============
+Epiphany 2.29.5
+===============
+
+Changes:
+
+  - Reimplement EphyEmbedSingle::handle-content signal, useful for
+    external download managers
+  - Add a gconf key (/apps/epiphany/general/url_search) to set the
+    default search engine. (#604087)
+  - Reimplement favicon support (#601859)
+  - Do not override page specific context menus with our own (#603326)
+  - Store all form auth data in GNOME Keyring, and ask the user to
+    remember and prefill new logins/passwords with an
+    infobar. (#582267)
+  - Reimplement EphyWebView::ge-feed-link, emitted when a feed link is
+    found in the view. 
+  - Reimplement support for the 'Accept-Language' HTTP header
+    (##528893)
+  - Reimplement custom User Agent support, see commit e896b194fbff for
+    details (#580903)
+  - Reimplement support for window.close (#599009)
+  - Reimplement support for mime type safety check during downloads
+    (#605026)
+  - Reimplement EphyWebView::new-window signal, emitted when the view
+    opens a new window (like a JS window)
+  - Lots of bugfixes
+
+===============
 Epiphany 2.29.3
 ===============
 
