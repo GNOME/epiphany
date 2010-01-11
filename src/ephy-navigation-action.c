@@ -236,13 +236,20 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	{
 		GtkWidget *item;
 		WebKitWebHistoryItem *hitem;
-		const char *title, *url;
+		const char *url;
+		char *title;
 
 		hitem = (WebKitWebHistoryItem*)l->data;
 		url = webkit_web_history_item_get_uri (hitem);
-		title = webkit_web_history_item_get_title (hitem);
 
-		item = new_history_menu_item (title ? title : url, url);
+		title = g_strdup (webkit_web_history_item_get_title (hitem));
+
+		if ((title == NULL || g_strstrip (title)[0] == '\0'))
+			item = new_history_menu_item (url, url);
+		else
+			item = new_history_menu_item (title, url);
+
+		g_free (title);
 
 		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY,
 					g_object_ref (hitem), g_object_unref);
