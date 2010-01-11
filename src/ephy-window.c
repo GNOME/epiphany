@@ -1884,7 +1884,7 @@ sync_tab_popups_allowed (EphyWebView *view,
 }
 
 static void
-sync_tab_load_status (EphyWebView  *view,
+sync_tab_load_status (EphyWebView *view,
 		      GParamSpec *pspec,
 		      EphyWindow *window)
 {

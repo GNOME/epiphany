@@ -746,7 +746,6 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 		gtk_notebook_set_current_page (gnotebook, position);
 		g_object_set_data (G_OBJECT (embed), "jump_to",
 				   GINT_TO_POINTER (jump_to));
-
 	}
 
 	return position;

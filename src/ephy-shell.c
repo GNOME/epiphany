@@ -466,7 +466,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
-                /* FIXME this assumes the tab is the direct notebook child */
+		/* FIXME this assumes the tab is the direct notebook child */
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
 						  GTK_WIDGET (previous_embed)) + 1;
 	}
@@ -495,8 +495,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	if (previous_embed != NULL)
 	{	
-                ephy_web_view_copy_back_history (ephy_embed_get_web_view (previous_embed),
-                                                 ephy_embed_get_web_view (embed));
+		ephy_web_view_copy_back_history (ephy_embed_get_web_view (previous_embed),
+						 ephy_embed_get_web_view (embed));
 	}		
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
@@ -520,32 +520,32 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
-                ephy_web_view_load_request (ephy_embed_get_web_view (embed),
-                                            request);
+		ephy_web_view_load_request (ephy_embed_get_web_view (embed),
+					    request);
 
 		is_empty = url_is_empty (webkit_network_request_get_uri (request));
 	}
 
-        /* Make sure the initial focus is somewhere sensible and not, for
-         * example, on the reload button.
-         */
-        if (in_new_window || jump_to)
-        {
-                /* If the location entry is blank, focus that, except if the
-                 * page was a copy */
-                if (is_empty)
-                {
-                        /* empty page, focus location entry */
+	/* Make sure the initial focus is somewhere sensible and not, for
+	 * example, on the reload button.
+	 */
+	if (in_new_window || jump_to)
+	{
+		/* If the location entry is blank, focus that, except if the
+		 * page was a copy */
+		if (is_empty)
+		{
+			/* empty page, focus location entry */
 			toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 			ephy_toolbar_activate_location (toolbar);
-                }
-                else if (embed != NULL) 
-                {
+		}
+		else if (embed != NULL)
+		{
 			/* non-empty page, focus the page. but make sure the widget is realised first! */
 			gtk_widget_realize (GTK_WIDGET (embed));
 			gtk_widget_grab_focus (GTK_WIDGET (embed));
-                }
-        }
+		}
+	}
 
 	return embed;
 }
