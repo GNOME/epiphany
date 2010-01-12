@@ -3504,10 +3504,6 @@ ephy_window_open_link (EphyLink *link,
 		{
 			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 		}
-		if (flags & EPHY_LINK_ALLOW_FIXUP)
-		{
-			ntflags |= EPHY_NEW_TAB_ALLOW_FIXUP;
-		}
 
 		new_embed = ephy_shell_new_tab
 				(ephy_shell,

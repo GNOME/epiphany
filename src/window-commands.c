@@ -1182,7 +1182,7 @@ window_cmd_load_location (GtkAction *action,
 
 		ephy_link_open (EPHY_LINK (window), address,
 			        ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window)),
-				ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
+				ephy_link_flags_from_current_event ());
 	}
 }
 

@@ -68,8 +68,7 @@ typedef enum
 	EPHY_NEW_TAB_IN_EXISTING_WINDOW	= 1 << 11,
 
 	/* The way to load */
-	EPHY_NEW_TAB_ALLOW_FIXUP	= 1 << 12,
-	EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 13,
+	EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 12,
 	
 } EphyNewTabFlags;
 

@@ -121,13 +121,13 @@ action_name_association (GtkAction *action,
 		{
 			ephy_link_open (EPHY_LINK (action),
 					address, NULL,
-					EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO | EPHY_LINK_ALLOW_FIXUP);
+					EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
 		}
 		else
 		{
 			ephy_home_action_open (action, 
 					       address, 
-					       EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO | EPHY_LINK_ALLOW_FIXUP);
+					       EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
 		}
 	}
 	else if (strcmp (action_name, "FileNewWindow") == 0)
@@ -136,13 +136,13 @@ action_name_association (GtkAction *action,
 		{
 			ephy_link_open (EPHY_LINK (action),
 					address, NULL,
-					EPHY_LINK_NEW_WINDOW | EPHY_LINK_ALLOW_FIXUP);
+					EPHY_LINK_NEW_WINDOW);
 		}
 		else
 		{
 			ephy_home_action_open (action,
 					       address,
-					       EPHY_LINK_NEW_WINDOW | EPHY_LINK_ALLOW_FIXUP);
+					       EPHY_LINK_NEW_WINDOW);
 		}
 	}
 	else if (strcmp (action_name, "GoHome") == 0)
