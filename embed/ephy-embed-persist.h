@@ -71,13 +71,6 @@ struct _EphyEmbedPersistClass
 
 	void	 (* completed)	(EphyEmbedPersist *persist);
 	void	 (* cancelled)	(EphyEmbedPersist *persist);
-
-	/* Methods */
-
-	gboolean (* save)	(EphyEmbedPersist *persist);
-
-	void	 (* cancel)	(EphyEmbedPersist *persist);
-	char *	 (* to_string)	(EphyEmbedPersist *persist);
 };
 
 GType			 ephy_embed_persist_flags_get_type	(void);
