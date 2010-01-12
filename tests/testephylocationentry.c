@@ -3,7 +3,7 @@
  * testephylocationentry.c
  * This file is part of Epiphany
  *
- * Copyright (C) 2008 - Diego Escalante Urrelo
+ * Copyright © 2008 - Diego Escalante Urrelo
  *
  * Epiphany is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
  
 #include "config.h"
 #include "ephy-location-entry.h"
+#include <glib.h>
 #include <gtk/gtk.h>
 
 static void
