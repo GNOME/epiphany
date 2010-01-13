@@ -3345,6 +3345,7 @@ ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_ur
   WebKitWebResource *resource;
   GFile *file;
   const char *resource_uri;
+  char *resource_basename;
   char *resource_name;
   char *resource_dest_uri;
   const GString *data;
@@ -3352,11 +3353,12 @@ ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_ur
   resource = WEBKIT_WEB_RESOURCE (subresources->data);
 
   resource_uri = webkit_web_resource_get_uri (resource);
-  resource_name = g_path_get_basename (resource_uri);
+  resource_basename = g_path_get_basename (resource_uri);
 
-  resource_dest_uri = g_strdup_printf ("%s/%s",
-                                  destination_uri,
-                                  resource_name);
+  resource_name = g_uri_escape_string (resource_basename, NULL, TRUE);
+  g_free (resource_basename);
+
+  resource_dest_uri = g_strdup_printf ("%s/%s", destination_uri, resource_name);
   g_free (resource_name);
 
   file = g_file_new_for_uri (resource_dest_uri);
