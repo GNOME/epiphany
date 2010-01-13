@@ -372,7 +372,7 @@ ephy_ensure_dir_exists (const char *dir,
 	}
 
 	if (!g_file_test (dir, G_FILE_TEST_EXISTS) &&
-            mkdir (dir, 488) != 0)
+            g_mkdir_with_parents (dir, 488) != 0)
 	{
 		g_set_error (error,
 			     EPHY_FILE_HELPERS_ERROR_QUARK,
