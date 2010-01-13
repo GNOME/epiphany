@@ -3214,21 +3214,21 @@ static void
 ephy_web_view_close_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
 {
   GList *subresources;
-  char *sub_destination_uri;
+  char *destination_uri;
   GError *error = NULL;
 
   subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
                                             "ephy-web-view-save-subresources");
 
-  sub_destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
-                                                  "ephy-web-view-save-dest-uri");
+  destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
+                                              "ephy-web-view-save-dest-uri");
 
   g_output_stream_close_finish (ostream, result, &error);
   g_object_unref (ostream);
 
   if (error) {
     g_list_free (subresources);
-    g_free (sub_destination_uri);
+    g_free (destination_uri);
     g_warning ("Unable to write to file: %s", error->message);
     g_error_free (error);
     return;
@@ -3236,12 +3236,12 @@ ephy_web_view_close_cb (GOutputStream *ostream, GAsyncResult *result, GString *d
 
   if (!subresources || !subresources->next) {
     g_list_free (subresources);
-    g_free (sub_destination_uri);
+    g_free (destination_uri);
     return;
   }
 
   subresources = subresources->next;
-  ephy_web_view_save_sub_resource_start (subresources, sub_destination_uri);
+  ephy_web_view_save_sub_resource_start (subresources, destination_uri);
 }
 
 static void
@@ -3253,15 +3253,15 @@ ephy_web_view_save_write_cb (GOutputStream *ostream, GAsyncResult *result, GStri
   written = g_output_stream_write_finish (ostream, result, &error);
   if (error) {
     GList *subresources;
-    char *sub_destination_uri;
+    char *destination_uri;
 
     subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
                                              "ephy-web-view-save-subresources");
     g_list_free (subresources);
 
-    sub_destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
-                                                    "ephy-web-view-save-dest-uri");
-    g_free (sub_destination_uri);
+    destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
+                                                "ephy-web-view-save-dest-uri");
+    g_free (destination_uri);
 
     g_string_free (data, FALSE);
     g_object_unref (ostream);
@@ -3295,21 +3295,21 @@ ephy_web_view_save_replace_cb (GFile *file, GAsyncResult *result, GString *const
 {
   GFileOutputStream *ostream;
   GList *subresources;
-  char *sub_destination_uri;
+  char *destination_uri;
   GString *data;
   GError *error = NULL;
 
   subresources = (GList*)g_object_get_data (G_OBJECT (file),
                                             "ephy-web-view-save-subresources");
 
-  sub_destination_uri = (char*)g_object_get_data (G_OBJECT (file),
-                                                  "ephy-web-view-save-dest-uri");
+  destination_uri = (char*)g_object_get_data (G_OBJECT (file),
+                                              "ephy-web-view-save-dest-uri");
 
   ostream = g_file_replace_finish (file, result, &error);
   if (error) {
     g_warning ("Failed to save page: %s", error->message);
     g_list_free (subresources);
-    g_free (sub_destination_uri);
+    g_free (destination_uri);
     g_error_free (error);
     return;
   }
@@ -3329,7 +3329,7 @@ ephy_web_view_save_replace_cb (GFile *file, GAsyncResult *result, GString *const
 
     g_object_set_data (G_OBJECT (ostream),
                        "ephy-web-view-save-dest-uri",
-                       sub_destination_uri);
+                       destination_uri);
   }
 
   g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
