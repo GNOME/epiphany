@@ -3344,21 +3344,23 @@ ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_ur
 {
   WebKitWebResource *resource;
   GFile *file;
-  char *resource_uri;
+  const char *resource_uri;
   char *resource_name;
+  char *resource_dest_uri;
   const GString *data;
 
   resource = WEBKIT_WEB_RESOURCE (subresources->data);
 
-  resource_uri = (char*)webkit_web_resource_get_uri (resource);
+  resource_uri = webkit_web_resource_get_uri (resource);
   resource_name = g_path_get_basename (resource_uri);
 
-  resource_uri = g_strdup_printf ("%s/%s",
+  resource_dest_uri = g_strdup_printf ("%s/%s",
                                   destination_uri,
                                   resource_name);
+  g_free (resource_name);
 
-  file = g_file_new_for_uri (resource_uri);
-  g_free (resource_uri);
+  file = g_file_new_for_uri (resource_dest_uri);
+  g_free (resource_dest_uri);
 
   g_object_set_data (G_OBJECT (file),
                      "ephy-web-view-save-dest-uri",
@@ -3402,13 +3404,14 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
    * when saving html files.
    */
   tmp = g_strdup_printf (_("%s Files"), filename);
+  g_free (filename);
+
   destination_uri = g_strdup_printf ("%s/%s", directory_uri, tmp);
+  g_free (directory_uri);
   g_free (tmp);
 
-  g_free (filename);
-  g_free (directory_uri);
-
   file = g_file_new_for_uri (destination_uri);
+
   if (!g_file_make_directory (file, NULL, &error)) {
     if (error->code != G_IO_ERROR_EXISTS) {
       g_warning ("Could not create directory: %s", error->message);
