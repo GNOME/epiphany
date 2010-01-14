@@ -194,6 +194,7 @@ ephy_location_entry_finalize (GObject *object)
 	EphyLocationEntryPrivate *priv = entry->priv;
 	
 	g_free (priv->saved_text);
+	g_free (priv->lock_stock_id);
 
 	if (priv->favicon != NULL)
 	{
@@ -1635,7 +1636,7 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 {
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
-	entry->priv->lock_stock_id = (char*)stock_id;
+	entry->priv->lock_stock_id = g_strdup (stock_id);
 
 	if (entry->priv->show_lock)
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry->priv->entry),
