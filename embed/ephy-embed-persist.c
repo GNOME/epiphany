@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
+ *  Copyright © 2010 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,10 +23,14 @@
 #include "config.h"
 
 #include "ephy-embed-persist.h"
+#include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 enum
 {
@@ -55,6 +60,7 @@ struct _EphyEmbedPersistPrivate
 	EphyEmbedPersistFlags flags;
 	GtkWindow *fc_parent;
 	guint32 user_time;
+	WebKitDownload *download;
 };
 
 static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
@@ -123,8 +129,8 @@ ephy_embed_persist_set_fc_title (EphyEmbedPersist *persist,
  * @value: the #EphyWindow which should be the filechooser's parent
  *
  * Sets the #EphyWindow which should be @persist's filechooser's parent. The
- * filechooser will only be displayed if %EPHY_EMBED_PERSIST_ASK_DESTINATION has been
- * set with ephy_embed_persist_set_flags().
+ * filechooser will only be displayed if %EPHY_EMBED_PERSIST_ASK_DESTINATION
+ * has been set with ephy_embed_persist_set_flags().
  **/
 void
 ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
@@ -134,6 +140,7 @@ ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
 	GtkWindow **wptr;
 
 	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+	g_return_if_fail (gtk_widget_is_toplevel (GTK_WIDGET (value)));
 
 	priv = persist->priv;
 
@@ -476,6 +483,23 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 }
 
 static void
+ephy_embed_persist_dispose (GObject *object)
+{
+	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
+	EphyEmbedPersistPrivate *priv = persist->priv;
+
+	if (priv->download)
+	{
+		g_object_unref (priv->download);
+		priv->download = NULL;
+	}
+
+	LOG ("EphyEmbedPersist disposed %p", object);
+
+	G_OBJECT_CLASS (ephy_embed_persist_parent_class)->dispose (object);
+}
+
+static void
 ephy_embed_persist_finalize (GObject *object)
 {
 	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
@@ -505,6 +529,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ephy_embed_persist_finalize;
+	object_class->dispose = ephy_embed_persist_dispose;
 	object_class->set_property = ephy_embed_persist_set_property;
 	object_class->get_property = ephy_embed_persist_get_property;
 
@@ -629,7 +654,74 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 void
 ephy_embed_persist_cancel (EphyEmbedPersist *persist)
 {
-	g_object_unref (persist);
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+
+	/* webkit_download_cancel() triggers download_status_changed_cb() with
+	 * status = WEBKIT_DOWNLOAD_STATUS_CANCELLED so we don't need to emit
+	 * the signal.
+	 */
+	if (persist->priv->download)
+	{
+		webkit_download_cancel (persist->priv->download);
+	}
+	else
+	{
+		g_object_unref (persist);
+	}
+}
+
+static void
+response_cb (GtkDialog *dialog,
+	     int response_id,
+	     EphyEmbedPersist *persist)
+{
+	WebKitDownload *download;
+
+	download = persist->priv->download;
+
+	if (response_id == GTK_RESPONSE_ACCEPT)
+	{
+		char *uri;
+
+		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER(dialog));
+
+		webkit_download_set_destination_uri (download, uri);
+		webkit_download_start (download);
+
+		g_free (uri);
+	}
+	else
+	{
+		g_object_unref (persist);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+download_status_changed_cb (GObject *object,
+                            GParamSpec *pspec,
+                            EphyEmbedPersist *persist)
+{
+	EphyEmbedPersistPrivate *priv;
+	WebKitDownload *download;
+	WebKitDownloadStatus status;
+
+	priv = persist->priv;
+	download = WEBKIT_DOWNLOAD (object);
+	status = webkit_download_get_status (download);
+
+	if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+	{
+		g_signal_emit_by_name (persist, "completed");
+		g_object_unref (persist);
+	}
+	else if (status == WEBKIT_DOWNLOAD_STATUS_CANCELLED ||
+		 status == WEBKIT_DOWNLOAD_STATUS_ERROR)
+	{
+		g_signal_emit_by_name (persist, "cancelled");
+		g_object_unref (persist);
+	}
 }
 
 /**
@@ -639,7 +731,10 @@ ephy_embed_persist_cancel (EphyEmbedPersist *persist)
  * Begins saving the file specified in @persist.
  *
  * If @persist's #EphyEmbedPersistFlags include %EPHY_EMBED_PERSIST_ASK_DESTINATION, a
- * filechooser dialog will be shown first.
+ * filechooser dialog will be shown first. If this flag is not set and no
+ * destination has been set, the target will be saved to the default download
+ * directory using the suggested name, if no suggested name can be get the
+ * download will fail.
  *
  * The file will continue to download in the background until either the
  * ::completed or the ::cancelled signals are emitted by @persist.
@@ -649,8 +744,96 @@ ephy_embed_persist_cancel (EphyEmbedPersist *persist)
 gboolean
 ephy_embed_persist_save (EphyEmbedPersist *persist)
 {
+	EphyEmbedPersistPrivate *priv;
+	WebKitNetworkRequest *request;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), FALSE);
+
+	priv = persist->priv;
+	g_return_val_if_fail (priv->source != NULL, FALSE);
+
+	/* Balanced when priv->download is not needed anymore: here, in
+	 * ephy_embed_persist_cancel() and in download_status_changed_cb().
+	 */
 	g_object_ref (persist);
 
+	request = webkit_network_request_new (priv->source);
+	priv->download = webkit_download_new (request);
+	g_object_unref (request);
+
+	g_signal_connect (priv->download, "notify::status",
+			  G_CALLBACK (download_status_changed_cb),
+			  persist);
+
+	if (priv->flags & EPHY_EMBED_PERSIST_ASK_DESTINATION)
+	{
+		EphyFileChooser *dialog;
+		GtkWidget *window;
+		const char *suggested_filename;
+
+		suggested_filename = webkit_download_get_suggested_filename (priv->download);
+		window = GTK_WIDGET (priv->fc_parent);
+
+		dialog = ephy_file_chooser_new (priv->fc_title ?
+						  priv->fc_title : _("Save"),
+						window,
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						priv->persist_key,
+						EPHY_FILE_FILTER_ALL_SUPPORTED);
+
+		gtk_file_chooser_set_do_overwrite_confirmation
+				(GTK_FILE_CHOOSER (dialog), TRUE);
+		gtk_file_chooser_set_current_name
+				(GTK_FILE_CHOOSER (dialog), suggested_filename);
+
+		g_signal_connect (dialog, "response",
+				  G_CALLBACK (response_cb), persist);
+
+		gtk_widget_show (GTK_WIDGET (dialog));
+
+		return TRUE;
+	}
+	else
+	{
+		char *dest_uri;
+
+		if (priv->dest)
+		{
+			dest_uri = g_filename_to_uri (priv->dest, NULL, NULL);
+		}
+		else
+		{
+			const char *suggested_filename = NULL;
+			char *downloads_dir;
+			char *dest_filename;
+
+			suggested_filename = webkit_download_get_suggested_filename (priv->download);
+
+			if (suggested_filename == NULL)
+			{
+				g_object_unref (persist);
+				return FALSE;
+			}
+
+			downloads_dir = ephy_file_get_downloads_dir ();
+			dest_filename = g_build_filename (downloads_dir,
+							  suggested_filename,
+							  NULL);
+			g_free (downloads_dir);
+
+			priv->dest = dest_filename;
+			dest_uri = g_filename_to_uri (dest_filename, NULL, NULL);
+		}
+
+		webkit_download_set_destination_uri (priv->download, dest_uri);
+		webkit_download_start (priv->download);
+
+		g_free (dest_uri);
+
+		return TRUE;
+	}
+
+	g_object_unref (persist);
 	return FALSE;
 }
 
@@ -675,5 +858,6 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 char *
 ephy_embed_persist_to_string (EphyEmbedPersist *persist)
 {
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
 	return NULL;
 }
