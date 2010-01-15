@@ -1253,13 +1253,11 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	g_signal_connect_after (completion, "action-activated",
 				G_CALLBACK (action_activated_after_cb), entry);
 
-#if 0
 	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, FALSE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "pixbuf", favicon_col);
-#endif
 
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
