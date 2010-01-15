@@ -67,15 +67,12 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
 
-  g_test_add_func (
-    "/lib/widgets/ephy-zoom-control/new",
-    test_new);
-  g_test_add_func (
-    "/lib/widgets/ephy-zoom-control/set_zoom_level",
-    test_set_zoom_level);
-  g_test_add_func (
-    "/lib/widgets/ephy-zoom-control/get_zoom_level",
-    test_get_zoom_level);
+  g_test_add_func ("/lib/widgets/ephy-zoom-control/new",
+                   test_new);
+  g_test_add_func ("/lib/widgets/ephy-zoom-control/set_zoom_level",
+                   test_set_zoom_level);
+  g_test_add_func ("/lib/widgets/ephy-zoom-control/get_zoom_level",
+                   test_get_zoom_level);
 
   return g_test_run ();
 }

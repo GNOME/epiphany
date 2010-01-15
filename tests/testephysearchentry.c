@@ -65,12 +65,10 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
 
-  g_test_add_func (
-    "/lib/widgets/ephy-search-entry/new",
-    test_entry_new);
-  g_test_add_func (
-    "/lib/widgets/ephy-search-entry/clear",
-    test_entry_clear);
+  g_test_add_func ("/lib/widgets/ephy-search-entry/new",
+                   test_entry_new);
+  g_test_add_func ("/lib/widgets/ephy-search-entry/clear",
+                   test_entry_clear);
 
   return g_test_run ();
 }
