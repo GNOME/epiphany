@@ -5,14 +5,14 @@
 # Abdulaziz Al-Arfaj <alarfaj0@yahoo.com>, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Mohamed Magdy <alnokta@yahoo.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2009-12-27 01:27+0200\n"
-"PO-Revision-Date: 2009-12-27 01:26+0300\n"
+"POT-Creation-Date: 2010-01-16 16:08+0200\n"
+"PO-Revision-Date: 2010-01-16 15:51+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.5.0\n"
+"X-Generator: Virtaal 0.5.1\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -67,7 +67,7 @@ msgid "Epiphany Web Browser"
 msgstr "متصفّح الوِب إبِفَني"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:683
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "متصفّح وِب"
 
@@ -469,9 +469,8 @@ msgstr ""
 "\"text\"."
 
 #: ../data/epiphany.schemas.in.h:55
-#, fuzzy
 msgid "URL Search"
-msgstr "ا_بحث:"
+msgstr "بحث المسار"
 
 #: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
@@ -546,46 +545,46 @@ msgid "x-western"
 msgstr "ar"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:166
+#: ../embed/downloader-view.c:165
 msgid "_Show Downloads"
 msgstr "أ_ظهر التنزيلات"
 
-#: ../embed/downloader-view.c:308
+#: ../embed/downloader-view.c:302
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:312
+#: ../embed/downloader-view.c:306
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:356
 msgid "_Pause"
 msgstr "_قف مؤقتًا"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:356
 msgid "_Resume"
 msgstr "ا_كمل"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:379 ../embed/downloader-view.c:532
-#: ../embed/downloader-view.c:537 ../lib/ephy-time-helpers.c:279
+#: ../embed/downloader-view.c:377 ../embed/downloader-view.c:539
+#: ../embed/downloader-view.c:544 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1766
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/downloader-view.c:495
+#: ../embed/downloader-view.c:502
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "تم تنزيل الملف “%s”."
 
-#: ../embed/downloader-view.c:498
+#: ../embed/downloader-view.c:505
 msgid "Download finished"
 msgstr "تم التنزيل"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:522
+#: ../embed/downloader-view.c:529
 #, c-format
 msgid ""
 "%s\n"
@@ -594,7 +593,7 @@ msgstr ""
 "%s\n"
 "%s من %s"
 
-#: ../embed/downloader-view.c:569
+#: ../embed/downloader-view.c:576
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -605,58 +604,58 @@ msgstr[3] "%Id تنزيلات"
 msgstr[4] "%Id تنزيلاً"
 msgstr[5] "%Id تنزيل"
 
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:706
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "أُضيف الملف “%s” إلى طابور التنزيلات."
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:710
 msgid "Download started"
 msgstr "بدأ التنزيل"
 
-#: ../embed/downloader-view.c:786 ../embed/downloader-view.c:796
+#: ../embed/downloader-view.c:788 ../embed/downloader-view.c:798
 msgctxt "download status"
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/downloader-view.c:789
+#: ../embed/downloader-view.c:791
 msgctxt "download status"
 msgid "Failed"
 msgstr "فشل"
 
-#: ../embed/downloader-view.c:792
+#: ../embed/downloader-view.c:794
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "أُلغي"
 
-#: ../embed/downloader-view.c:855 ../src/bookmarks/ephy-bookmarks-editor.c:991
+#: ../embed/downloader-view.c:857 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "ملف"
 
-#: ../embed/downloader-view.c:878
+#: ../embed/downloader-view.c:880
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:889
+#: ../embed/downloader-view.c:891
 msgid "Remaining"
 msgstr "متبقّ"
 
-#: ../embed/ephy-embed.c:435 ../src/window-commands.c:334
+#: ../embed/ephy-embed.c:442 ../src/window-commands.c:334
 msgid "Save"
 msgstr "احفظ"
 
-#: ../embed/ephy-embed.c:684
+#: ../embed/ephy-embed.c:693
 msgctxt "file type"
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:712
 msgid "Download this potentially unsafe file?"
 msgstr "تنزيل هذا الملف المحتمل خطره؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:700
+#: ../embed/ephy-embed.c:717
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -669,14 +668,14 @@ msgstr ""
 "من الخطر فتح  “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
-#: ../embed/ephy-embed.c:708
+#: ../embed/ephy-embed.c:725
 msgid "Open this file?"
 msgstr "فتح الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:731
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -687,13 +686,13 @@ msgstr ""
 "\n"
 "يمكن فتح “%s” ب “%s” أو حفظه."
 
-#: ../embed/ephy-embed.c:721
+#: ../embed/ephy-embed.c:738
 msgid "Download this file?"
 msgstr "تنزيل الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:726
+#: ../embed/ephy-embed.c:743
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -704,11 +703,11 @@ msgstr ""
 "\n"
 "لا يوجد تطبيق لفتح “%s”. يمكنك حفظه."
 
-#: ../embed/ephy-embed.c:733
+#: ../embed/ephy-embed.c:750
 msgid "_Save As..."
 msgstr "ا_حفظ ك‍…"
 
-#: ../embed/ephy-embed.c:867
+#: ../embed/ephy-embed.c:915
 msgid "Web Inspector"
 msgstr "فاحِص الوِب"
 
@@ -1059,54 +1058,63 @@ msgstr "الملفات المحلية"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:67 ../embed/ephy-web-view.c:3195
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3204
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
-#: ../embed/ephy-web-view.c:992
+#: ../embed/ephy-web-view.c:989
+msgid "Not now"
+msgstr "ليس الآن"
+
+#: ../embed/ephy-web-view.c:994
 msgid "Store password"
 msgstr "خزّن كلمة السر"
 
-#: ../embed/ephy-web-view.c:998
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:1005
 #, c-format
-msgid "<big><b>Would you like to store the password for %s?</b></big>"
-msgstr "<big><b>أتري تخزين كلمة سر %s؟</b></big>"
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr "<big>أتري تخزين كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
 
-#: ../embed/ephy-web-view.c:2058
+#: ../embed/ephy-web-view.c:2067
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2327
+#: ../embed/ephy-web-view.c:2336
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "إعادة توجيه إلى “%s”…"
 
-#: ../embed/ephy-web-view.c:2329
+#: ../embed/ephy-web-view.c:2338
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "نقل البيانات من “%s”…"
 
-#: ../embed/ephy-web-view.c:2331
+#: ../embed/ephy-web-view.c:2340
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "انتظار التفويض من “%s”…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2337 ../embed/ephy-web-view.c:2461
+#: ../embed/ephy-web-view.c:2346 ../embed/ephy-web-view.c:2470
 #, c-format
 msgid "Loading “%s”…"
 msgstr "تحميل “%s”…"
 
-#: ../embed/ephy-web-view.c:2463
+#: ../embed/ephy-web-view.c:2472
 msgid "Loading…"
 msgstr "تحميل…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3395
+#: ../embed/ephy-web-view.c:3404
 #, c-format
 msgid "%s Files"
 msgstr "ملفات %s"
@@ -1415,12 +1423,12 @@ msgstr "400%"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:681 ../src/ephy-history-window.c:247
+#: ../lib/widgets/ephy-location-entry.c:682 ../src/ephy-history-window.c:247
 #: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "ا_مسح"
 
-#: ../lib/widgets/ephy-location-entry.c:969
+#: ../lib/widgets/ephy-location-entry.c:970
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إلى هذه الصفحة"
 
@@ -1969,41 +1977,41 @@ msgstr "آ_لي"
 msgid "Use the encoding specified by the document"
 msgstr "استخدم الترميز المحدد من طرف المستند"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "لا يوجد"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:159
 msgid "Wrapped"
 msgstr "انتهى"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find links:"
 msgstr "ابحث عن الوصلات:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find:"
 msgstr "ابحث:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:557
+#: ../src/ephy-find-toolbar.c:455 ../src/ephy-find-toolbar.c:578
 msgid "_Case sensitive"
 msgstr "_حسّاس لحالة الأحرف"
 
-#: ../src/ephy-find-toolbar.c:540
+#: ../src/ephy-find-toolbar.c:561
 msgid "Find Previous"
 msgstr "ابحث عن السابق"
 
-#: ../src/ephy-find-toolbar.c:543
+#: ../src/ephy-find-toolbar.c:564
 msgid "Find previous occurrence of the search string"
 msgstr "ابحث عن التواجد السابق لعبارة البحث"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:570
 msgid "Find Next"
 msgstr "ابحث عن التالي"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:573
 msgid "Find next occurrence of the search string"
 msgstr "ابحث عن التواجد التالي للعبارة"
 
@@ -2119,7 +2127,7 @@ msgstr "المواقع"
 msgid "Date"
 msgstr "التاريخ"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:561 ../src/window-commands.c:1008
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1008
 msgid "GNOME Web Browser"
 msgstr "متصفّح وِب جنوم"
 
@@ -2167,11 +2175,11 @@ msgstr "دليل"
 msgid "URL …"
 msgstr "مسار…"
 
-#: ../src/ephy-main.c:413
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "تعذّر بدأ متصفح وِب جنوم"
 
-#: ../src/ephy-main.c:416
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2180,7 +2188,7 @@ msgstr ""
 "فشل بدأ التشغيل للخطأ التالي:\n"
 "%s"
 
-#: ../src/ephy-main.c:562
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "خيارات متصفّح وِب جنوم"
 
