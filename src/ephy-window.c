@@ -2290,9 +2290,22 @@ policy_decision_required_cb (WebKitWebView *web_view,
 	state = webkit_web_navigation_action_get_modifier_state (action);
 	uri = webkit_network_request_get_uri (request);
 
-	if (g_str_has_prefix (uri, "mailto:")) {
+	if (!ephy_embed_utils_address_has_web_scheme (uri))
+	{
+		GError *error = NULL;
+		GdkScreen *screen;
+
 		webkit_web_policy_decision_ignore (decision);
-		gtk_show_uri (NULL, uri, GDK_CURRENT_TIME, NULL);
+
+		screen = gtk_widget_get_screen (GTK_WIDGET (web_view));
+		gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
+
+		if (error)
+		{
+			LOG ("failed to handle non web scheme: %s", error->message);
+			g_error_free (error);
+		}
+
 		return TRUE;
 	}
 
