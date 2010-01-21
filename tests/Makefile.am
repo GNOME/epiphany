@@ -4,34 +4,44 @@ noinst_PROGRAMS = \
 	testephyzoomcontrol
 
 INCLUDES = \
-	-I$(top_srcdir)/lib		 \
-	-I$(top_srcdir)/lib/widgets
+	-I$(top_srcdir)/embed    \
+	-I$(top_srcdir)/lib      \
+	-I$(top_srcdir)/lib/widgets \
+	-I$(top_srcdir)/src      \
+	-I$(top_srcdir)/src/bookmarks
 
 CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) \
 	$(AM_CFLAGS)
 
 LDADD = \
+	$(top_builddir)/src/libephymain.la \
+	$(top_builddir)/src/bookmarks/libephybookmarks.la \
+	$(top_builddir)/embed/libephyembed.la \
+	$(top_builddir)/lib/widgets/libephywidgets.la \
+	$(top_builddir)/lib/libephymisc.la \
+	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) 
+
+if ENABLE_NSS
+CFLAGS += \
+    $(NSS_CFLAGS)
+LDADD += \
+    $(NSS_LIBS)
+endif
+
+if ENABLE_NSS
+CFLAGS += \
+    $(SEED_CFLAGS)
+LDADD += \
+    $(SEED_LIBS)
+endif
 
 testephysearchentry_SOURCES = \
 	testephysearchentry.c
-testephysearchentry_LDADD = \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(DEPENDENCIES_LIBS) 
 
 testephylocationentry_SOURCES = \
 	testephylocationentry.c
-testephylocationentry_LDADD = \
-	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(top_builddir)/lib/egg/libegg.la \
-	$(top_builddir)/lib/libephymisc.la \
-	$(DEPENDENCIES_LIBS) 
 
 testephyzoomcontrol_SOURCES = \
 	testephyzoomcontrol.c
-testephyzoomcontrol_LDADD = \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(top_builddir)/lib/libephymisc.la \
-	$(DEPENDENCIES_LIBS)
