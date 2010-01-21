@@ -338,7 +338,7 @@ window_cmd_file_save_as (GtkAction *action,
 					EPHY_FILE_FILTER_ALL_SUPPORTED);
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);		
-	
+
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (save_response_cb), embed);
 
