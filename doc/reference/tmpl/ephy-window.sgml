@@ -2,31 +2,19 @@
 EphyWindow
 
 <!-- ##### SECTION Short_Description ##### -->
-Represents an Epiphany window.
+
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-An #EphyWindow is what the user sees when opening Epiphany. Think of each
-#EphyWindow as a giant container which holds many useful items:
+
 </para>
-<itemizedlist>
-<listitem>A toolbar, available from ephy_window_get_toolbar().</listitem>
-<listitem>An #EphyStatusbar, available from
-ephy_window_get_statusbar().</listitem>
-<listitem>A #GtkNotebook for holding #EphyTabs. Use ephy_window_get_notebook(),
-ephy_window_get_tabs() and ephy_window_get_active_tab() to reach
-them. Manipulate tabs using ephy_window_add_tab(), ephy_window_remove_tab()
-and ephy_window_jump_to_tab().</listitem>
-</itemizedlist>
-<para>
-You can also perform simple manipulations of an #EphyWindow's active #EphyEmbed.
-These are restricted to ephy_window_set_zoom() and ephy_window_load_url().
-</para>
+
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -55,7 +43,7 @@ These are restricted to ephy_window_set_zoom() and ephy_window_load_url().
 @Returns: 
 
 
-<!-- ##### FUNCTION ephy_window_get_notebook ##### -->
+<!-- ##### FUNCTION ephy_window_get_ui_manager ##### -->
 <para>
 
 </para>
@@ -73,6 +61,24 @@ These are restricted to ephy_window_set_zoom() and ephy_window_load_url().
 @Returns: 
 
 
+<!-- ##### FUNCTION ephy_window_get_notebook ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_window_get_find_toolbar ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION ephy_window_get_statusbar ##### -->
 <para>
 
@@ -80,6 +86,15 @@ These are restricted to ephy_window_set_zoom() and ephy_window_load_url().
 
 @window: 
 @Returns: 
+
+
+<!-- ##### FUNCTION ephy_window_load_url ##### -->
+<para>
+
+</para>
+
+@window: 
+@url: 
 
 
 <!-- ##### FUNCTION ephy_window_set_zoom ##### -->
@@ -99,12 +114,21 @@ These are restricted to ephy_window_set_zoom() and ephy_window_load_url().
 @window: 
 
 
-<!-- ##### FUNCTION ephy_window_load_url ##### -->
+<!-- ##### FUNCTION ephy_window_get_is_print_preview ##### -->
 <para>
 
 </para>
 
 @window: 
-@url: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_window_get_context_event ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
