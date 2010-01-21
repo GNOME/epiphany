@@ -3410,10 +3410,12 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
 
   file = g_file_new_for_uri (destination_uri);
   if (!g_file_make_directory (file, NULL, &error)) {
-    g_warning ("Could not create directory: %s", error->message);
-    g_error_free (error);
-    g_object_unref (file);
-    return;
+    if (error->code != G_IO_ERROR_EXISTS) {
+      g_warning ("Could not create directory: %s", error->message);
+      g_error_free (error);
+      g_object_unref (file);
+      return;
+    }
   }
   g_object_unref (file);
 
