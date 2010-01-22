@@ -1144,6 +1144,8 @@ void
 ephy_dialog_set_modal (EphyDialog *dialog,
 		       gboolean is_modal)
 {
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+
 	dialog->priv->modal = is_modal != FALSE;
 
 	gtk_window_set_modal (GTK_WINDOW(dialog->priv->dialog), is_modal);
@@ -1169,6 +1171,8 @@ ephy_dialog_add_enum (EphyDialog *dialog,
 	PropertyInfo *info;
 	int i = 0;
 	GList *l = NULL;
+
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
 
 	info = lookup_info (dialog, property_id);
 	g_return_if_fail (info != NULL);
@@ -1197,6 +1201,8 @@ ephy_dialog_set_data_column (EphyDialog *dialog,
 {
 	PropertyInfo *info;
 
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+
 	info = lookup_info (dialog, property_id);
 	g_return_if_fail (info != NULL);
 
@@ -1218,6 +1224,8 @@ ephy_dialog_set_pref (EphyDialog *dialog,
 		      const char *pref)
 {
 	PropertyInfo *info;
+
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
 
 	info = lookup_info (dialog, property_id);
 	g_return_if_fail (info != NULL);
@@ -1253,6 +1261,8 @@ ephy_dialog_set_size_group (EphyDialog *dialog,
 {
 	GtkSizeGroup *size_group;
 	va_list vl;
+
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
 
 	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
@@ -1309,7 +1319,11 @@ ephy_dialog_construct (EphyDialog *dialog,
 void
 ephy_dialog_show (EphyDialog *dialog)
 {
-	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
+	EphyDialogClass *klass;
+
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+
+	klass = EPHY_DIALOG_GET_CLASS (dialog);
 	klass->show (dialog);
 }
 
@@ -1334,11 +1348,13 @@ ephy_dialog_hide (EphyDialog *dialog)
  *
  * Runs gtk_dialog_run on @dialog and waits for a response.
  *
- * Returns: the user response to gtk_dialog_run
+ * Returns: the user response to gtk_dialog_run or 0 if @dialog is not valid
  **/
 int
 ephy_dialog_run (EphyDialog *dialog)
 {
+	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), 0);
+
 	ephy_dialog_show (dialog);
 
 	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (dialog->priv->parent)),
@@ -1354,12 +1370,15 @@ ephy_dialog_run (EphyDialog *dialog)
  *
  * Gets the internal widget corresponding to @property_id from @dialog.
  * Return value: (transfer none): the #GtkWidget corresponding to @property_id
+ * or %NULL
  **/
 GtkWidget *
 ephy_dialog_get_control (EphyDialog *dialog,
 			 const char *property_id)
 {
 	PropertyInfo *info;
+
+	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), NULL);
 
 	info = lookup_info (dialog, property_id);
 	g_return_val_if_fail (info != NULL, NULL);
@@ -1421,6 +1440,8 @@ ephy_dialog_get_value (EphyDialog *dialog,
 {
 	PropertyInfo *info;
 
+	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), FALSE);
+
 	info = lookup_info (dialog, property_id);
 	g_return_val_if_fail (info != NULL, FALSE);
 
@@ -1441,6 +1462,8 @@ ephy_dialog_set_value (EphyDialog *dialog,
 		       const GValue *value)
 {
 	PropertyInfo *info;
+
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
 
 	info = lookup_info (dialog, property_id);
 	g_return_if_fail (info != NULL);
@@ -1528,6 +1551,8 @@ void
 ephy_dialog_set_parent (EphyDialog *dialog,
 			GtkWidget *parent)
 {
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+
 	dialog->priv->parent = parent;
 
 	g_object_notify (G_OBJECT (dialog), "parent-window");
