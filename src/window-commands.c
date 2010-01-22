@@ -328,6 +328,14 @@ window_cmd_file_save_as (GtkAction *action,
 	EphyEmbed *embed;
 	EphyFileChooser *dialog;
 
+	/* These all are needed in order to get the suggested filename */
+	char *suggested_filename;
+	const char *mimetype;
+	EphyWebView *view;
+	WebKitWebFrame *frame;
+	WebKitWebDataSource *data_source;
+	WebKitWebResource *web_resource;
+
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
@@ -337,7 +345,28 @@ window_cmd_file_save_as (GtkAction *action,
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL_SUPPORTED);
 
-	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);		
+	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+
+	view = ephy_embed_get_web_view (embed);
+	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
+	data_source = webkit_web_frame_get_data_source (frame);
+	web_resource = webkit_web_data_source_get_main_resource (data_source);
+	mimetype = webkit_web_resource_get_mime_type (web_resource);
+
+	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
+	{
+		/* Web Title will be used as suggested filename*/
+		suggested_filename = g_strconcat(ephy_web_view_get_title (view), ".html",NULL);
+	}
+	else
+	{
+		SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
+		suggested_filename = g_path_get_basename (soup_uri->path);
+		soup_uri_free (soup_uri);
+	}
+
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
+	g_free (suggested_filename);
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (save_response_cb), embed);
