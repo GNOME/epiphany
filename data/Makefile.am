@@ -30,8 +30,7 @@ pkgconfig_DATA = epiphany-$(EPIPHANY_API_VERSION).pc
 
 xsldir = $(pkgdatadir)
 xsl_DATA = \
-	epiphany-bookmarks-html.xsl	\
-	ephy-xml2ini.xsl
+	epiphany-bookmarks-html.xsl
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services

@@ -37,15 +37,6 @@
 #include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
-#include <libxml/tree.h>
-#include <libxml/xmlreader.h>
-#include <libxml/globals.h>
-#include <libxml/tree.h>
-#include <libxml/xmlwriter.h>
-#include <libxslt/xslt.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
-
 #include <gconf/gconf-client.h>
 
 #include <gio/gio.h>
@@ -62,8 +53,6 @@
 #define RELOAD_DELAY		333 /* ms */
 #define RELOAD_SYNC_DELAY	1 /* seconds */
 
-#define ENABLE_LEGACY_FORMAT
-
 #define EPHY_EXTENSIONS_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerPrivate))
 
 struct _EphyExtensionsManagerPrivate
@@ -78,10 +67,6 @@ struct _EphyExtensionsManagerPrivate
 	guint active_extensions_notifier_id;
 	guint sync_timeout_id;
 	GHashTable *reload_hash;
-
-#ifdef ENABLE_LEGACY_FORMAT
-	xsltStylesheetPtr xml2ini_xsl;
-#endif
 };
 
 typedef struct
@@ -93,10 +78,6 @@ typedef struct
 
 	EphyLoader *loader; /* NULL if never loaded */
 	GObject *extension; /* NULL if unloaded */
-
-#ifdef ENABLE_LEGACY_FORMAT
-	guint is_legacy_format : 1;
-#endif
 } ExtensionInfo;
 
 typedef struct
@@ -109,9 +90,6 @@ typedef enum
 {
 	FORMAT_UNKNOWN,
 	FORMAT_INI
-#ifdef ENABLE_LEGACY_FORMAT
-	, FORMAT_XML
-#endif
 } ExtensionFormat;
 
 enum
@@ -355,77 +333,6 @@ ephy_extensions_manager_load_ini_file (EphyExtensionsManager *manager,
 	ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
 }
 
-#ifdef ENABLE_LEGACY_FORMAT
-
-static void
-ephy_extensions_manager_load_xml_file (EphyExtensionsManager *manager,
-				       const char *identifier,
-				       const char *path)
-{
-	EphyExtensionsManagerPrivate *priv = manager->priv;
-	ExtensionInfo *info;
-	xmlDocPtr doc, res;
-	const xmlChar *xsl_file;
-	xmlChar *output = NULL;
-	int outlen = -1, ret = -1;
-	
-	START_PROFILER ("Transforming .xml -> " DOT_INI)
-
-	doc = xmlParseFile (path);
-	if (!doc) goto out;
-
-	if (priv->xml2ini_xsl == NULL)
-	{
-		xsl_file = (const xmlChar *) ephy_file ("ephy-xml2ini.xsl");
-		if (!xsl_file) return;
-
-		priv->xml2ini_xsl = xsltParseStylesheetFile (xsl_file);
-		if (priv->xml2ini_xsl == NULL)
-		{
-			g_warning ("Couldn't parse the XSL to transform .xml extension descriptions!\n");
-			goto out;
-		}
-	}
-
-	res = xsltApplyStylesheet (priv->xml2ini_xsl, doc, NULL);
-	if (!res) goto out;
-
-	ret = xsltSaveResultToString (&output, &outlen, res, priv->xml2ini_xsl);
-
-	if (ret >= 0 && output != NULL && outlen > -1)
-	{
-		GKeyFile *keyfile;
-		GError *err = NULL;
-
-		keyfile = g_key_file_new ();
-		if (!g_key_file_load_from_data (keyfile, (char *) output, outlen,
-					        G_KEY_FILE_NONE, &err))
-		{
-			g_warning ("Could load converted key file for '%s': '%s'",
-				   identifier, err->message);
-			g_error_free (err);
-			g_key_file_free (keyfile);
-			goto out;
-		}
-
-		info = ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
-		if (info != NULL)
-		{
-			info->is_legacy_format = TRUE;
-		}
-	}
-
-	xmlFreeDoc (res);
-	xmlFreeDoc (doc);
-
-out:
-	xmlFree (output);
-
-	STOP_PROFILER ("Transforming .xml -> " DOT_INI)
-}
-
-#endif /* ENABLE_LEGACY_FORMAT */
-
 static char *
 path_to_identifier (const char *path)
 {
@@ -433,13 +340,6 @@ path_to_identifier (const char *path)
 
 	identifier = g_path_get_basename (path);
 	dot = strstr (identifier, DOT_INI);
-
-#ifdef ENABLE_LEGACY_FORMAT
-	if (!dot)
-	{
-		dot = strstr (identifier, ".xml");
-	}
-#endif
 
 	g_return_val_if_fail (dot != NULL, NULL);
 
@@ -457,12 +357,6 @@ format_from_path (const char *path)
 	{
 		format = FORMAT_INI;
 	}
-#ifdef ENABLE_LEGACY_FORMAT
-	else if (g_str_has_suffix (path, ".xml"))
-	{
-		format = FORMAT_XML;
-	}
-#endif
 
 	return format;
 }
@@ -486,19 +380,8 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				      (GCompareFunc) find_extension_info);
 	if (element != NULL)
 	{
-#ifdef ENABLE_LEGACY_FORMAT
-		ExtensionInfo *info = (ExtensionInfo *) element->data;
-
-		/* If this is the legacy format and we already have the info
-		 * read for this type from a non-legacy format file, don't
-		 * warn.
-		 */
-		if (format == FORMAT_XML && !info->is_legacy_format)
-#endif
-		{
-			g_warning ("Extension description for '%s' already read!",
-				   identifier);
-		}
+		g_warning ("Extension description for '%s' already read!",
+			   identifier);
 
 		g_free (identifier);
 		return;
@@ -509,13 +392,6 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 		ephy_extensions_manager_load_ini_file (manager, identifier,
 						       path);
 	}
-#ifdef ENABLE_LEGACY_FORMAT
-	else if (format == FORMAT_XML)
-	{
-		ephy_extensions_manager_load_xml_file (manager, identifier,
-						       path);
-	}
-#endif
 
 	g_free (identifier);
 }
@@ -1101,14 +977,6 @@ ephy_extensions_manager_dispose (GObject *object)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (object);
 	EphyExtensionsManagerPrivate *priv = manager->priv;
-
-#ifdef ENABLE_LEGACY_FORMAT
-	if (priv->xml2ini_xsl != NULL)
-	{
-		xsltFreeStylesheet (priv->xml2ini_xsl);
-		priv->xml2ini_xsl = NULL;
-	}
-#endif
 
 	if (priv->active_extensions_notifier_id != 0)
 	{
