@@ -50,7 +50,6 @@
 
 #include <gio/gio.h>
 #include <gmodule.h>
-#include <dirent.h>
 #include <string.h>
 
 #ifdef ENABLE_SEED
@@ -995,9 +994,10 @@ static void
 ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 				  const char *path)
 {
-	DIR *d;
-	struct dirent *e;
 	char *file_path;
+	GError *error = NULL;
+	GDir *dir;
+	const char *dir_elem;
 	GFile *directory;
 	GFileMonitor *monitor;
 
@@ -1005,21 +1005,28 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 
 	START_PROFILER ("Scanning directory")
 
-	d = opendir (path);
-	if (d == NULL)
+	dir = g_dir_open (path, 0, &error);
+	if (error)
 	{
+		LOG ("Failed to open extension directory %s: %s",
+		     path, error->message);
+		g_error_free (error);
 		return;
 	}
-	while ((e = readdir (d)) != NULL)
+
+	dir_elem = g_dir_read_name (dir);
+	while (dir_elem)
 	{
-		if (format_from_path (e->d_name) != FORMAT_UNKNOWN)
+		if (format_from_path (dir_elem) != FORMAT_UNKNOWN)
 		{
-			file_path = g_build_filename (path, e->d_name, NULL);
+			file_path = g_build_filename (path, dir_elem, NULL);
 			ephy_extensions_manager_load_file (manager, file_path);
 			g_free (file_path);
 		}
+
+		dir_elem = g_dir_read_name (dir);
 	}
-	closedir (d);
+	g_dir_close (dir);
 
 	directory = g_file_new_for_path (path);
 	monitor = g_file_monitor_directory (directory, 0, NULL, NULL);
