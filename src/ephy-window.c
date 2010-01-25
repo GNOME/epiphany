@@ -2532,7 +2532,7 @@ create_web_view_cb (WebKitWebView *web_view,
 					 NULL, NULL,
 					 flags,
 					 EPHY_WEB_VIEW_CHROME_ALL,
-					 TRUE, /* is popup? */
+					 FALSE, /* is popup? */
 					 0);
 
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
