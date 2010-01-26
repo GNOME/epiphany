@@ -356,6 +356,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 			  window);
 
 	ephy_embed_persist_save (persist);
+	g_object_unref (persist);
 
 	g_value_unset (&value);
 	g_free (dest);
