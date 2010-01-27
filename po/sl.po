@@ -1,15 +1,17 @@
+# Slovenian translation for epiphany
+# Copyright (C) 2005-2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 #
-# Andraz Tori <andraz.tori1@guest.arnes.si>, 2003.
+# Andraž Tori <andraz.tori1@guest.arnes.si>, 2003.
 # Matic Žgur <mr.zgur@gmail.com>, 2006 - 2007.
-# Matej Urbančič <mateju@svn.gnome.org>, 2008 - 2009.
+# Matej Urbančič <mateju@svn.gnome.org>, 2008 - 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-12-29 20:28+0000\n"
-"PO-Revision-Date: 2009-12-30 09:38+0100\n"
+"POT-Creation-Date: 2010-01-26 00:25+0000\n"
+"PO-Revision-Date: 2010-01-26 08:30+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +70,7 @@ msgstr "Spletni brskalnik Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:4
-#: ../src/ephy-main.c:683
+#: ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "Spletni brskalnik"
 
@@ -541,23 +543,23 @@ msgid "Remaining"
 msgstr "Preostalo"
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:436
-#: ../src/window-commands.c:334
+#: ../embed/ephy-embed.c:442
+#: ../src/window-commands.c:342
 msgid "Save"
 msgstr "Shrani"
 
-#: ../embed/ephy-embed.c:687
+#: ../embed/ephy-embed.c:693
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: ../embed/ephy-embed.c:706
+#: ../embed/ephy-embed.c:712
 msgid "Download this potentially unsafe file?"
 msgstr "Ali želite prejeti to morebitno nevarno datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:711
+#: ../embed/ephy-embed.c:717
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -569,14 +571,14 @@ msgstr ""
 "Datoteko “%s” je tvegano odpreti, saj obstaja možnost, da poškoduje vaše dokumente ali pa vam vdre v zasebnost. Namesto tega jo lahko shranite na disk."
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:719
+#: ../embed/ephy-embed.c:725
 msgid "Open this file?"
 msgstr "Ali želite odpreti to datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:731
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -588,13 +590,13 @@ msgstr ""
 "Datoteko “%s” lahko odprete z uporabo programa “%s” ali pa jo shranite."
 
 # G:0 K:1 O:0
-#: ../embed/ephy-embed.c:732
+#: ../embed/ephy-embed.c:738
 msgid "Download this file?"
 msgstr "Ali želite prejeti to datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:737
+#: ../embed/ephy-embed.c:743
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -606,11 +608,11 @@ msgstr ""
 "Na voljo ni nobenega programa, ki bi lahko odprl datoteko vrste “%s”. Namesto tega jo lahko shranite na disk."
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:744
+#: ../embed/ephy-embed.c:750
 msgid "_Save As..."
 msgstr "Shrani _kot ..."
 
-#: ../embed/ephy-embed.c:925
+#: ../embed/ephy-embed.c:915
 msgid "Web Inspector"
 msgstr "Spletni nadzornik"
 
@@ -1037,50 +1039,58 @@ msgstr "Krajevne datoteke"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:67
-#: ../embed/ephy-web-view.c:3195
+#: ../embed/ephy-web-view.c:68
+#: ../embed/ephy-web-view.c:3211
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: ../embed/ephy-web-view.c:992
+#: ../embed/ephy-web-view.c:989
+msgid "Not now"
+msgstr "Ne zdaj"
+
+#: ../embed/ephy-web-view.c:994
 msgid "Store password"
 msgstr "Shrani geslo"
 
-#: ../embed/ephy-web-view.c:998
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:1005
 #, c-format
-msgid "<big><b>Would you like to store the password for %s?</b></big>"
-msgstr "<big><b>Ali želite shraniti geslo za %s?</b></big>"
+msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr "<big><b>Ali želite shraniti geslo za <b>%s</b> v <b>%s</b>?</big>"
 
 # G:0 K:1 O:0
-#: ../embed/ephy-web-view.c:2058
+#: ../embed/ephy-web-view.c:2074
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.si/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2327
+#: ../embed/ephy-web-view.c:2343
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Preusmerjanje na \"%s\" ..."
 
-#: ../embed/ephy-web-view.c:2329
+#: ../embed/ephy-web-view.c:2345
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Prenašanje podatkov iz “%s” ..."
 
-#: ../embed/ephy-web-view.c:2331
+#: ../embed/ephy-web-view.c:2347
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Čakanje na overitev preko “%s” ..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2337
-#: ../embed/ephy-web-view.c:2461
+#: ../embed/ephy-web-view.c:2353
+#: ../embed/ephy-web-view.c:2477
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Nalaganje “%s” ..."
 
-#: ../embed/ephy-web-view.c:2463
+#: ../embed/ephy-web-view.c:2479
 msgid "Loading…"
 msgstr "Nalaganje ..."
 
@@ -1088,7 +1098,7 @@ msgstr "Nalaganje ..."
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3395
+#: ../embed/ephy-web-view.c:3415
 #, c-format
 msgid "%s Files"
 msgstr "%s datotek"
@@ -1230,21 +1240,21 @@ msgstr "Vse datoteke"
 
 # G:6 K:0 O:0
 #. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:105
+#: ../lib/ephy-file-helpers.c:129
 msgid "Downloads"
 msgstr "Prejeto"
 
-#: ../lib/ephy-file-helpers.c:296
+#: ../lib/ephy-file-helpers.c:382
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ni mogoče ustvariti začasne mape v “%s”."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:471
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datoteka “%s” obstaja. Odmaknite jo s poti."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:482
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ni mogoče ustvariti mape “%s”."
@@ -1413,13 +1423,13 @@ msgstr "400%"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:681
+#: ../lib/widgets/ephy-location-entry.c:682
 #: ../src/ephy-history-window.c:247
 #: ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: ../lib/widgets/ephy-location-entry.c:969
+#: ../lib/widgets/ephy-location-entry.c:970
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Povlecite in spustite ikono, da ustvarite povezavo do te strani."
 
@@ -2016,44 +2026,44 @@ msgstr "_Samodejno"
 msgid "Use the encoding specified by the document"
 msgstr "Uporabi v dokumentu določen nabor znakov"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "Ni zadetkov"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:159
 msgid "Wrapped"
 msgstr "Prelomljeno"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find links:"
 msgstr "Najdi povezave:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find:"
 msgstr "Najdi:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434
-#: ../src/ephy-find-toolbar.c:557
+#: ../src/ephy-find-toolbar.c:455
+#: ../src/ephy-find-toolbar.c:578
 msgid "_Case sensitive"
 msgstr "_Razlikovanje velikosti črk"
 
-#: ../src/ephy-find-toolbar.c:540
+#: ../src/ephy-find-toolbar.c:561
 msgid "Find Previous"
 msgstr "Najdi predhodne"
 
 # G:1 K:0 O:0
-#: ../src/ephy-find-toolbar.c:543
+#: ../src/ephy-find-toolbar.c:564
 msgid "Find previous occurrence of the search string"
 msgstr "Najdi predhodno ponovitev iskanega niza"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:570
 msgid "Find Next"
 msgstr "Najdi naslednje"
 
 # G:1 K:0 O:0
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:573
 msgid "Find next occurrence of the search string"
 msgstr "Najdi naslednjo ponovitev iskanega niza"
 
@@ -2175,8 +2185,8 @@ msgid "Date"
 msgstr "Datum"
 
 #: ../src/ephy-main.c:81
-#: ../src/ephy-main.c:561
-#: ../src/window-commands.c:1008
+#: ../src/ephy-main.c:526
+#: ../src/window-commands.c:1039
 msgid "GNOME Web Browser"
 msgstr "Spletni brskalnik za GNOME"
 
@@ -2231,11 +2241,11 @@ msgstr "DIR"
 msgid "URL …"
 msgstr "URL ..."
 
-#: ../src/ephy-main.c:413
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "Ni mogoče zagnati spletnega brskalnika za GNOME"
 
-#: ../src/ephy-main.c:416
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2244,7 +2254,7 @@ msgstr ""
 "Zagon ni uspel zaradi naslednje napake:\n"
 "%s"
 
-#: ../src/ephy-main.c:562
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "Možnosti za spletni brskalnik za GNOME"
 
@@ -3299,33 +3309,33 @@ msgstr "Jezik"
 msgid "Select a Directory"
 msgstr "Izberite mapo"
 
-#: ../src/window-commands.c:908
+#: ../src/window-commands.c:939
 msgid "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "Spletni brskalnik za GNOME je prosti program. Lahko ga razširjate in/ali spreminjate pod pogoji licence GNU General Public License kot jo je objavila organizacija Free Software Foundation; bodisi pod različico 2 ali (po vašem mnenju) katerokoli kasnejšo različico."
 
-#: ../src/window-commands.c:912
+#: ../src/window-commands.c:943
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "Spletni brskalnik za GNOME se razširja v upanju, da bo koristen, vendar BREZ ZAGOTOVILA KAKRŠNEGAKOLI JAMSTVA; tudi brez posrednega jamstva CENOVNE VREDNOSTI ali PRIMERNOSTI ZA DOLOČENO UPORABO. Za več podrobnosti si oglejte GNU General Public License."
 
-#: ../src/window-commands.c:916
+#: ../src/window-commands.c:947
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Skupaj s programom Spletni brskalnik za GNOME bi morali prejeti kopijo licence GNU General Public License. Če je niste, pišite na Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:962
-#: ../src/window-commands.c:978
-#: ../src/window-commands.c:989
+#: ../src/window-commands.c:993
+#: ../src/window-commands.c:1009
+#: ../src/window-commands.c:1020
 msgid "Contact us at:"
 msgstr "Stopite v stik:"
 
-#: ../src/window-commands.c:965
+#: ../src/window-commands.c:996
 msgid "Contributors:"
 msgstr "Sodelavci:"
 
-#: ../src/window-commands.c:968
+#: ../src/window-commands.c:999
 msgid "Past developers:"
 msgstr "Nekdanji razvijalci:"
 
-#: ../src/window-commands.c:998
+#: ../src/window-commands.c:1029
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3342,7 +3352,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1024
+#: ../src/window-commands.c:1055
 msgid "translator-credits"
 msgstr ""
 "Matic Žgur <mr.zgur@gmail.com>\n"
@@ -3350,7 +3360,7 @@ msgstr ""
 "Tilen Travnik <tilen.travnik@guest.arnes.si>\n"
 "Matej Urbančič <mateju@svn.gnome.org>"
 
-#: ../src/window-commands.c:1027
+#: ../src/window-commands.c:1058
 msgid "GNOME Web Browser Website"
 msgstr "Spletna stran spletnega brskalnika za GNOME"
 
