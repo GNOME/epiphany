@@ -97,7 +97,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		success = ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
 	else if ((type != NULL && strcmp (type, "application/x-mozilla-bookmarks") == 0) ||
-		 strcmp (type, "text/html") == 0 ||
+		 (type != NULL && strcmp (type, "text/html") == 0) ||
 	         strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_0) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_1) != NULL ||
