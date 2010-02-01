@@ -156,12 +156,12 @@ ephy_file_get_downloads_dir (void)
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
-	if (download_dir && strcmp (download_dir, "Downloads") == 0)
+	if (download_dir && strcmp (download_dir, _("Downloads")) == 0)
 	{
 		g_free (download_dir);
 		download_dir = ephy_file_downloads_dir ();
 	}
-  	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
+  	else if (download_dir && strcmp (download_dir, _("Desktop")) == 0)
 	{
 		g_free (download_dir);
 		download_dir = ephy_file_desktop_dir ();
