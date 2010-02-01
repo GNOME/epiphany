@@ -542,74 +542,80 @@ ephy_file_find (const char *path,
 
 /**
  * ephy_file_switch_temp_file:
- * @file: destination file
+ * @file_dest: destination file
  * @file_temp: file to move to @file
  *
- * Moves @file_temp to @file atomically, doing a backup and restoring it if
+ * Moves @file_temp to @file_dest atomically, doing a backup and restoring it if
  * something fails.
  *
  * Returns: %TRUE if the switch was successful
  **/
 gboolean
-ephy_file_switch_temp_file (GFile *file,
+ephy_file_switch_temp_file (GFile *file_dest,
 			    GFile *file_temp)
 {
-	char *file_path, *file_temp_path;
-	char *old_file_path;
-	gboolean old_exist;
+	char *file_dest_path, *file_temp_path;
+	char *backup_path;
+	gboolean dest_exists;
 	gboolean retval = TRUE;
-	GFile *old_file;
+	GFile *backup_file;
 
-	file_path = g_file_get_path (file);
+	file_dest_path = g_file_get_path (file_dest);
 	file_temp_path = g_file_get_path (file_temp);
-	old_file_path = g_strconcat (file_path, ".old", NULL);
 
-	old_file = g_file_new_for_path (old_file_path);
-	old_exist = g_file_test (file_path, G_FILE_TEST_EXISTS);
+	dest_exists = g_file_test (file_dest_path, G_FILE_TEST_EXISTS);
 
-	if (old_exist)
+	backup_path = g_strconcat (file_dest_path, ".old", NULL);
+	backup_file = g_file_new_for_path (backup_path);
+
+	if (dest_exists)
 	{
-		if (g_file_move (file, old_file,
+		if (g_file_move (file_dest, backup_file,
 				 G_FILE_COPY_OVERWRITE,
 				 NULL, NULL, NULL, NULL) == FALSE)
 		{
-			g_warning ("Failed to rename %s to %s", file_path, old_file_path);
+			g_warning ("Failed to backup %s to %s",
+				   file_dest_path, backup_path);
+
 			retval = FALSE;
 			goto failed;
 		}
 	}
 
-	if (g_file_move (file_temp, file,
+	if (g_file_move (file_temp, file_dest,
 			 G_FILE_COPY_OVERWRITE,
 			 NULL, NULL, NULL, NULL) == FALSE)
 	{
-		g_warning ("Failed to rename %s to %s", file_temp_path, file_path);
+		g_warning ("Failed to replace %s with %s",
+			   file_temp_path, file_dest_path);
 
-		if (g_file_move (old_file, file,
+		if (g_file_move (backup_file, file_dest,
 				 G_FILE_COPY_OVERWRITE,
 				 NULL, NULL, NULL, NULL) == FALSE)
 		{
 			g_warning ("Failed to restore %s from %s",
-				   file_path, file_temp_path);
+				   file_dest_path, file_temp_path);
 		}
+
 		retval = FALSE;
 		goto failed;
 	}
 
-	if (old_exist)
+	if (dest_exists)
 	{
-		if (g_file_delete (old_file,
+		if (g_file_delete (backup_file,
 				   NULL, NULL) == FALSE)
 		{
-			g_warning ("Failed to delete old file %s", old_file_path);
+			g_warning ("Failed to delete old file %s", backup_path);
 		}
 	}
 
 failed:
-	g_free (old_file_path);
-	g_free (file_path);
+	g_free (file_dest_path);
 	g_free (file_temp_path);
-	g_object_unref (old_file);
+
+	g_free (backup_path);
+	g_object_unref (backup_file);
 
 	return retval;
 }

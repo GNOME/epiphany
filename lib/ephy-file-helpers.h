@@ -63,7 +63,7 @@ gboolean           ephy_ensure_dir_exists        (const char  *dir,
 GSList     *       ephy_file_find                (const char  *path,
                                                   const char  *fname,
                                                   gint         maxdepth);
-gboolean           ephy_file_switch_temp_file    (GFile       *file,
+gboolean           ephy_file_switch_temp_file    (GFile       *file_dest,
                                                   GFile       *file_temp);
 void               ephy_file_delete_on_exit      (GFile       *file);
 void               ephy_file_add_recent_item     (const char  *uri,
