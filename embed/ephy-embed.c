@@ -260,7 +260,7 @@ load_status_changed_cb (WebKitWebView *view,
     } else if (status == WEBKIT_LOAD_FINISHED) {
       loading_uri = priv->loading_uri;
 
-      /* Will be freed bellow */
+      /* Will be freed below */
       priv->loading_uri = NULL;
 
       estate = (EphyWebViewNetState) (estate |
