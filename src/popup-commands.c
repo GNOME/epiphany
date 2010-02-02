@@ -263,7 +263,7 @@ popup_cmd_open_link (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	ephy_embed_event_get_property (event, "link-uri", &value);
 	location = g_value_get_string (&value);
-	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), location);
+	ephy_web_view_load_url (ephy_embed_get_web_view (embed), location);
 	g_value_unset (&value);
 }
 
@@ -391,7 +391,7 @@ popup_cmd_open_frame (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_web_view_get_location (ephy_embed_get_web_view (embed), FALSE);
-	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), location);
+	ephy_web_view_load_url (ephy_embed_get_web_view (embed), location);
 
 	g_free (location);
 }

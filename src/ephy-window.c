@@ -3604,7 +3604,7 @@ ephy_window_open_link (EphyLink *link,
 	}
 	else
 	{
-		ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), address);
+		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
 
 		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
 		{

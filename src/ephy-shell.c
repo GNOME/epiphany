@@ -397,7 +397,7 @@ load_homepage (EphyEmbed *embed)
 	}
 
 	is_empty = url_is_empty (home);
-	ephy_web_view_load_url (EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed)), home);
+	ephy_web_view_load_url (ephy_embed_get_web_view (embed), home);
 
 	g_free (home);
 

@@ -430,8 +430,11 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 
 			web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 			webkit_web_view_load_uri (web_view, forward_uri);
-		} else
-			webkit_web_view_go_forward (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+		}
+		else
+		{
+			webkit_web_view_go_forward (web_view);
+		}
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
