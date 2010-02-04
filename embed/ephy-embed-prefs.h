@@ -72,9 +72,11 @@
 
 G_BEGIN_DECLS
 
-void ephy_embed_prefs_init         (void);
-void ephy_embed_prefs_shutdown     (void);
-void ephy_embed_prefs_add_embed    (EphyEmbed *embed);
+void ephy_embed_prefs_init                  (void);
+void ephy_embed_prefs_shutdown              (void);
+void ephy_embed_prefs_add_embed             (EphyEmbed     *embed);
+void ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
+                                             const char    *gconf_policy);
 
 G_END_DECLS
 

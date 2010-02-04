@@ -23,6 +23,7 @@
 #define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
 #define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
+#include "eel-gconf-extensions.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-type-builtins.h"
@@ -470,6 +471,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   SoupSession *session;
   SoupCookieJar *jar;
   char *filename;
+  char *cookie_policy;
 
   /* Initialise nspluginwrapper's plugins if available */
   if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
@@ -483,6 +485,9 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
   jar = soup_cookie_jar_sqlite_new (filename, FALSE);
   g_free (filename);
+  cookie_policy = eel_gconf_get_string (CONF_SECURITY_COOKIES_ACCEPT);
+  ephy_embed_prefs_set_cookie_jar_policy (jar, cookie_policy);
+  g_free (cookie_policy);
 
   soup_session_add_feature (session, SOUP_SESSION_FEATURE (jar));
   g_object_unref (jar);

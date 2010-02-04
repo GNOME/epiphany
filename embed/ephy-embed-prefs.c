@@ -329,6 +329,62 @@ webkit_pref_callback_accept_languages (GConfClient *client,
   g_free (langs_str);
 }
 
+void
+ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
+                                        const char *gconf_policy)
+{
+  SoupCookieJarAcceptPolicy policy;
+
+  g_return_if_fail (SOUP_IS_COOKIE_JAR (jar));
+  g_return_if_fail (gconf_policy != NULL);
+
+  if (g_str_equal (gconf_policy, "nowhere"))
+    policy = SOUP_COOKIE_JAR_ACCEPT_NEVER;
+  else if (g_str_equal (gconf_policy, "anywhere"))
+    policy = SOUP_COOKIE_JAR_ACCEPT_ALWAYS;
+  else if (g_str_equal (gconf_policy, "current site"))
+    policy = SOUP_COOKIE_JAR_ACCEPT_NO_THIRD_PARTY;
+  else {
+    g_warn_if_reached ();
+    return;
+  }
+
+  g_object_set (G_OBJECT (jar), SOUP_COOKIE_JAR_ACCEPT_POLICY, policy, NULL);
+}
+
+static void
+webkit_pref_callback_cookie_accept_policy (GConfClient *client,
+                                           guint cnxn_id,
+                                           GConfEntry *entry,
+                                           gpointer data)
+{
+  SoupSession *session;
+  char *webkit_pref;
+  GConfValue *gcvalue;
+  const char *value = NULL;
+
+  webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_STRING) {
+      value = gconf_value_get_string (gcvalue);
+  }
+
+  if (value) {
+    SoupSessionFeature *jar;
+
+    session = webkit_get_default_session ();
+    jar = soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+    if (!jar)
+      return;
+    
+    ephy_embed_prefs_set_cookie_jar_policy (SOUP_COOKIE_JAR (jar), value);
+  }
+}
+
 static const PrefData webkit_pref_entries[] =
   {
     { CONF_RENDERING_FONT_MIN_SIZE,
@@ -372,7 +428,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_accept_languages },
     { CONF_USER_AGENT,
       "user-agent",
-      webkit_pref_callback_user_agent }
+      webkit_pref_callback_user_agent },
+    { CONF_SECURITY_COOKIES_ACCEPT,
+      "accept-policy",
+      webkit_pref_callback_cookie_accept_policy }
   };
 
 static void
