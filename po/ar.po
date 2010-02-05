@@ -9,16 +9,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
-"Report-Msgid-Bugs-To: "
-"http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2010-02-05 06:04+0200\n"
-"PO-Revision-Date: 2010-02-05 06:07+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2010-02-05 07:00+0200\n"
+"PO-Revision-Date: 2010-02-05 07:00+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Virtaal 0.5.2\n"
@@ -96,7 +96,7 @@ msgid ""
 "Disable all historical information by disabling back and forward navigation, "
 "not allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
-"عطّل كل معلومات التاريخ بتعطيل زر الخلف و منع حوار التاريخ و اخفاء قائمة "
+"عطّل كل معلومات التأريخ بتعطيل زر الخلف و منع حوار التاريخ و إخفاء قائمة "
 "العلامات المستخدمة بكثافة."
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
@@ -109,7 +109,7 @@ msgstr "عطّل تحرير علامات الموقع"
 
 #: ../data/epiphany-lockdown.schemas.in.h:8
 msgid "Disable history"
-msgstr "عطّل التاريخ"
+msgstr "عطّل التأريخ"
 
 #: ../data/epiphany-lockdown.schemas.in.h:9
 msgid "Disable the user's ability to add or edit bookmarks."
@@ -199,7 +199,7 @@ msgstr "تصفح بالمؤشّر"
 
 #: ../data/epiphany.schemas.in.h:9
 msgid "Cookie accept"
-msgstr "تقبل السكاكر"
+msgstr "تقبل الكعكة"
 
 #: ../data/epiphany.schemas.in.h:10
 msgid "Default encoding"
@@ -259,7 +259,7 @@ msgstr "فعّل جافا"
 msgid "Enable JavaScript"
 msgstr "فعّل جافاسكربت"
 
-#: ../data/epiphany.schemas.in.h:16
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "فعّل فاحِص الوب"
 
@@ -285,7 +285,7 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:21
 msgid "History pages time range"
-msgstr "المدي الوقتي لصفحات التاريخ"
+msgstr "المدي الزمني لصفحات التأريخ"
 
 #: ../data/epiphany.schemas.in.h:22
 msgid "Home page"
@@ -370,7 +370,7 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
-"اعرض صفحات التاريخ المزارة \"ever\"و \"last_two_days\"و\"last_three_days\"و "
+"اعرض صفحات التأريخ المزارة \"ever\"و \"last_two_days\"و\"last_three_days\"و "
 "\"today\"."
 
 #: ../data/epiphany.schemas.in.h:40
@@ -436,14 +436,14 @@ msgstr "مجلد ال_تنزيلات"
 
 #: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
-msgstr "معلومات الصفحة المعروضة في معرض التاريخ"
+msgstr "معلومات الصفحة المعروضة في منظور التأريخ"
 
 #: ../data/epiphany.schemas.in.h:51
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 msgstr ""
-"معلومات الصفحة المعروضة في مشهد التاريخ. القيم الممكنة في القائمة هي "
+"معلومات الصفحة المعروضة في منظور التأريخ. القيم الممكنة في القائمة هي "
 "\"ViewAddress\"، \"ViewTitle\" و \"ViewDateTime\"."
 
 #: ../data/epiphany.schemas.in.h:52
@@ -509,7 +509,7 @@ msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
-"من اين ستستقبل السكاكر. القيم الممكنة هي \"anywhere\"و \"current site\" و "
+"من أين ستقبل الكعكات. القيم الممكنة هي \"anywhere\" و \"current site\" و "
 "\"nowhere\"."
 
 #: ../data/epiphany.schemas.in.h:64
@@ -544,6 +544,351 @@ msgstr "إذا كان سيتم حفظ وإعادة ملء كلمات السر ف
 msgid "x-western"
 msgstr "ar"
 
+#: ../data/glade/certificate-dialogs.ui.h:1
+msgid "<b>Fingerprints</b>"
+msgstr "<b>البصمات</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:2
+msgid "<b>Issued By</b>"
+msgstr "<b>أصدر من طرف</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:3
+msgid "<b>Issued To</b>"
+msgstr "<b>أصدر ل‍</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:4
+msgid "<b>Validity</b>"
+msgstr "<b>الصلاحية</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:5
+msgid "Certificate _Fields"
+msgstr "_حقول الشهادة"
+
+#: ../data/glade/certificate-dialogs.ui.h:6
+msgid "Certificate _Hierarchy"
+msgstr "ت_درج الشهادات"
+
+#: ../data/glade/certificate-dialogs.ui.h:7
+msgid "Common Name:"
+msgstr "الاسم العمومي:"
+
+#: ../data/glade/certificate-dialogs.ui.h:8
+msgid "Details"
+msgstr "التفاصيل"
+
+#: ../data/glade/certificate-dialogs.ui.h:9
+msgid "Expires On:"
+msgstr "ينقضي عند:"
+
+#: ../data/glade/certificate-dialogs.ui.h:10
+msgid "Field _Value"
+msgstr "حقل ال_قيمة"
+
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
+msgid "General"
+msgstr "عام"
+
+#: ../data/glade/certificate-dialogs.ui.h:12
+msgid "Issued On:"
+msgstr "نشر عند:"
+
+#: ../data/glade/certificate-dialogs.ui.h:13
+msgid "MD5 Fingerprint:"
+msgstr "بصمة MD5:"
+
+#: ../data/glade/certificate-dialogs.ui.h:14
+msgid "Organization:"
+msgstr "المؤسسة:"
+
+#: ../data/glade/certificate-dialogs.ui.h:15
+msgid "Organizational Unit:"
+msgstr "الوحدة المؤسساتية:"
+
+#: ../data/glade/certificate-dialogs.ui.h:16
+msgid "SHA1 Fingerprint:"
+msgstr "بصمة SHA1:"
+
+#: ../data/glade/certificate-dialogs.ui.h:17
+msgid "Serial Number:"
+msgstr "الرقم التسلسلي:"
+
+#: ../data/glade/epiphany.ui.h:1
+msgid "<b>_Automatic</b>"
+msgstr "<b>ت_لقائي</b>"
+
+#: ../data/glade/epiphany.ui.h:2
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>ا_ستخدم ترميزا مغايرا:</b>"
+
+#: ../data/glade/epiphany.ui.h:3
+msgid "Clear _All..."
+msgstr "ا_مسح الكل…"
+
+#: ../data/glade/epiphany.ui.h:4
+msgid "Cookies"
+msgstr "الكعكات"
+
+#. The name of the default downloads folder
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159
+msgid "Downloads"
+msgstr "التنزيلات"
+
+#: ../data/glade/epiphany.ui.h:6
+msgid "Passwords"
+msgstr "كلمات السر"
+
+#: ../data/glade/epiphany.ui.h:7
+msgid "Personal Data"
+msgstr "البيانات الشخصية"
+
+#: ../data/glade/epiphany.ui.h:8
+msgid "Text Encoding"
+msgstr "ترميز النص"
+
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
+msgid "Use the encoding specified by the document"
+msgstr "استخدم الترميز المحدد من طرف المستند"
+
+#: ../data/glade/epiphany.ui.h:10
+msgid "_Show passwords"
+msgstr "أ_ظهر كلمات السر"
+
+#: ../data/glade/form-signing-dialog.ui.h:1
+msgid "Sign Text"
+msgstr "نص العلامة"
+
+#: ../data/glade/form-signing-dialog.ui.h:2
+msgid ""
+"To confirm that you want to sign the above text, choose a certificate to "
+"sign the text with and enter its password below."
+msgstr ""
+"للتأكد من أنك تريد أن توقُّع النص أعلاه، أختر شهادة لتوقع بها النص و قم بإدخال "
+"كلمة سرها في الأسفل."
+
+#: ../data/glade/form-signing-dialog.ui.h:3
+msgid "_Certificate:"
+msgstr "_شهادة:"
+
+#: ../data/glade/form-signing-dialog.ui.h:4
+msgid "_Password:"
+msgstr "_كلمة السر:"
+
+#: ../data/glade/form-signing-dialog.ui.h:5
+msgid "_View Certificate&#x2026;"
+msgstr "ا_عرض الشهادة&#x2026;"
+
+#: ../data/glade/prefs-dialog.ui.h:1
+msgid "<b>Cookies</b>"
+msgstr "<b>الكعكات</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:2
+msgid "<b>Downloads</b>"
+msgstr "<b>التنزيلات</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:3
+msgid "<b>Encodings</b>"
+msgstr "<b>الترميزات</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:4
+msgid "<b>Home page</b>"
+msgstr "<b>الصفحة الرئيسية</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>اللغات</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:6
+msgid "<b>Passwords</b>"
+msgstr "<b>كلمات السر</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:7
+msgid "<b>Temporary Files</b>"
+msgstr "<b>الملفات المؤقتة</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:8
+msgid "<b>Web Content</b>"
+msgstr "<b>محتوى الوِب</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:9
+msgid "<b>Web Development</b>"
+msgstr "<b>تطوير الوِب</b>"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../data/glade/prefs-dialog.ui.h:11
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<small>مثلا، من اشهارات على هذه المواقع</small>"
+
+#: ../data/glade/prefs-dialog.ui.h:12
+msgid "A_utomatically download and open files"
+msgstr "نزّل و افتح الملفات آ_ليًا"
+
+#: ../data/glade/prefs-dialog.ui.h:13
+msgid "Add Language"
+msgstr "اضِف لغة"
+
+#: ../data/glade/prefs-dialog.ui.h:14
+msgid "Allow popup _windows"
+msgstr "اسمح بالنوافذ ال_منبثقة"
+
+#: ../data/glade/prefs-dialog.ui.h:15
+msgid "Choose a l_anguage:"
+msgstr "اختر _لغة:"
+
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:682
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:388
+msgid "Cl_ear"
+msgstr "ا_مسح"
+
+#: ../data/glade/prefs-dialog.ui.h:17
+msgid "De_fault:"
+msgstr "الإ_فتراض:"
+
+#: ../data/glade/prefs-dialog.ui.h:18
+msgid "Enable Java_Script"
+msgstr "فعّل _جافاسكربت"
+
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Java"
+msgstr "فعّل _جافا"
+
+#: ../data/glade/prefs-dialog.ui.h:21
+msgid "Fonts & Style"
+msgstr "خطوط و نسق"
+
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:821
+msgid "Language"
+msgstr "اللغة"
+
+#: ../data/glade/prefs-dialog.ui.h:24
+msgid "Let web pages specify their own _fonts"
+msgstr "اترك الصفحات لتحدد _خطوطها الخاصة"
+
+#: ../data/glade/prefs-dialog.ui.h:25
+msgid "Let web pages specify their own c_olors"
+msgstr "اترك الصفحات لتحدد أ_لوانها الخاصة"
+
+#: ../data/glade/prefs-dialog.ui.h:26
+msgid "MB"
+msgstr "م ب"
+
+#: ../data/glade/prefs-dialog.ui.h:27
+msgid "Only _from sites you visit"
+msgstr "فقط _من المواقع التي تزورها"
+
+#: ../data/glade/prefs-dialog.ui.h:28
+msgid "Preferences"
+msgstr "تفضيلات"
+
+#: ../data/glade/prefs-dialog.ui.h:29
+msgid "Privacy"
+msgstr "الخصوصية"
+
+#: ../data/glade/prefs-dialog.ui.h:30
+msgid "Set to Current _Page"
+msgstr "اضبط لل_صفحة الحالية"
+
+#: ../data/glade/prefs-dialog.ui.h:31
+msgid "Set to _Blank Page"
+msgstr "اضبط كصفحة _فارغة"
+
+#: ../data/glade/prefs-dialog.ui.h:32
+msgid "Use custom _stylesheet"
+msgstr "ا_ستعمل صفحة طراز مخصصة"
+
+#: ../data/glade/prefs-dialog.ui.h:33
+msgid "Use s_mooth scrolling"
+msgstr "است_خدم التدوير المرن"
+
+#: ../data/glade/prefs-dialog.ui.h:34
+msgid "_Address:"
+msgstr "ال_مسار:"
+
+#: ../data/glade/prefs-dialog.ui.h:35
+msgid "_Always accept"
+msgstr "اقبل _دائمًا"
+
+#: ../data/glade/prefs-dialog.ui.h:36
+msgid "_Disk space:"
+msgstr "مساحة ال_قرص:"
+
+#: ../data/glade/prefs-dialog.ui.h:37
+msgid "_Download folder:"
+msgstr "مجلد ال_تنزيل:"
+
+#: ../data/glade/prefs-dialog.ui.h:38
+msgid "_Edit Stylesheet&#x2026;"
+msgstr "_حرّر صفحة الطراز&#x2026;"
+
+#: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Minimum size:"
+msgstr "الحجم الأد_نى:"
+
+#: ../data/glade/prefs-dialog.ui.h:40
+msgid "_Never accept"
+msgstr "لا تقبل _أبدا"
+
+#: ../data/glade/prefs-dialog.ui.h:41
+msgid "_Remember passwords"
+msgstr "تذ_كر كلمات السر"
+
+#: ../data/glade/print.ui.h:1
+msgid "<b>Background</b>"
+msgstr "<b>الخلفية</b>"
+
+#: ../data/glade/print.ui.h:2
+msgid "<b>Footers</b>"
+msgstr "<b>التذييلات</b>"
+
+#: ../data/glade/print.ui.h:3
+msgid "<b>Frames</b>"
+msgstr "<b>الإطارات</b>"
+
+#: ../data/glade/print.ui.h:4
+msgid "<b>Headers</b>"
+msgstr "<b>الترويسات</b>"
+
+#: ../data/glade/print.ui.h:5
+msgid "As laid out on the _screen"
+msgstr "كما تظهر على ا_لشاشة"
+
+#: ../data/glade/print.ui.h:6
+msgid "O_nly the selected frame"
+msgstr "الإطار المحدد فق_ط"
+
+#: ../data/glade/print.ui.h:7
+msgid "P_age title"
+msgstr "عنوان ال_صفحة"
+
+#: ../data/glade/print.ui.h:8
+msgid "Page _numbers"
+msgstr "أر_قام الصفحات"
+
+#: ../data/glade/print.ui.h:9
+msgid "Print background c_olors"
+msgstr "اطبع أ_لوان الخلفية"
+
+#: ../data/glade/print.ui.h:10
+msgid "Print background i_mages"
+msgstr "اطبع _صور الخلفية"
+
+#: ../data/glade/print.ui.h:11
+msgid "_Date"
+msgstr "_تاريخ اليوم"
+
+#: ../data/glade/print.ui.h:12
+msgid "_Each frame separately"
+msgstr "_كل إطار منفصلا"
+
+#: ../data/glade/print.ui.h:13
+msgid "_Page address"
+msgstr "مسار ال_صفحة"
+
 #. this opens the downloader window, or brings it to the foreground if already open
 #: ../embed/downloader-view.c:165
 msgid "_Show Downloads"
@@ -561,11 +906,11 @@ msgstr "%02u.%02u"
 
 #: ../embed/downloader-view.c:356
 msgid "_Pause"
-msgstr "_قف مؤقتًا"
+msgstr "أ_لبِث"
 
 #: ../embed/downloader-view.c:356
 msgid "_Resume"
-msgstr "ا_كمل"
+msgstr "أ_كمل"
 
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:377 ../embed/downloader-view.c:539
@@ -640,7 +985,8 @@ msgstr "%"
 msgid "Remaining"
 msgstr "متبقّ"
 
-#: ../embed/ephy-embed.c:442 ../src/window-commands.c:342
+#: ../embed/ephy-embed.c:442 ../embed/ephy-embed-persist.c:778
+#: ../src/window-commands.c:342
 msgid "Save"
 msgstr "احفظ"
 
@@ -665,7 +1011,7 @@ msgid ""
 msgstr ""
 "نوع الملف: “%s”.\n"
 "\n"
-"من الخطر فتح  “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
+"من الخطر فتح “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
 #: ../embed/ephy-embed.c:725
@@ -758,7 +1104,7 @@ msgstr "_جورجي (GEOSTD8)"
 
 #: ../embed/ephy-encodings.c:67
 msgid "Central European (_IBM-852)"
-msgstr "وسط أوروبي  (_IBM-852)"
+msgstr "وسط أوروبي (_IBM-852)"
 
 #: ../embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
@@ -766,11 +1112,11 @@ msgstr "وسط أوروبي (I_SO-8859-2)"
 
 #: ../embed/ephy-encodings.c:69
 msgid "Central European (_MacCE)"
-msgstr "وسط أوروبي  (_MacCE)"
+msgstr "وسط أوروبي (_MacCE)"
 
 #: ../embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
-msgstr "وسط أوروبي  (_Windows-1250)"
+msgstr "وسط أوروبي (_Windows-1250)"
 
 #: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_GB18030)"
@@ -1079,7 +1425,7 @@ msgstr "خزّن كلمة السر"
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>أتري تخزين كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
+msgstr "<big>أتريد تخزين كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
 
 #: ../embed/ephy-web-view.c:2074
 #, c-format
@@ -1089,27 +1435,27 @@ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 #: ../embed/ephy-web-view.c:2343
 #, c-format
 msgid "Redirecting to “%s”…"
-msgstr "إعادة توجيه إلى “%s”…"
+msgstr "يعيد التوجيه إلى “%s”…"
 
 #: ../embed/ephy-web-view.c:2345
 #, c-format
 msgid "Transferring data from “%s”…"
-msgstr "نقل البيانات من “%s”…"
+msgstr "ينقل البيانات من “%s”…"
 
 #: ../embed/ephy-web-view.c:2347
 #, c-format
 msgid "Waiting for authorization from “%s”…"
-msgstr "انتظار التفويض من “%s”…"
+msgstr "ينتظر التخويل من “%s”…"
 
 #. translators: %s here is the address of the web page
 #: ../embed/ephy-web-view.c:2353 ../embed/ephy-web-view.c:2477
 #, c-format
 msgid "Loading “%s”…"
-msgstr "تحميل “%s”…"
+msgstr "يُحمل “%s”…"
 
 #: ../embed/ephy-web-view.c:2479
 msgid "Loading…"
-msgstr "تحميل…"
+msgstr "يُحمل…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
@@ -1247,11 +1593,6 @@ msgstr "صور"
 msgid "All files"
 msgstr "كل الملفات"
 
-#. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:129 ../lib/ephy-file-helpers.c:159
-msgid "Downloads"
-msgstr "التنزيلات"
-
 #: ../lib/ephy-file-helpers.c:164
 msgid "Desktop"
 msgstr "سطح المكتب"
@@ -1328,11 +1669,11 @@ msgstr "فشلت قراءة آخر علامة ترحيل، سأجهض ترحيل
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
-msgstr "نوافذ منبثقة"
+msgstr "النوافذ المنبثقة"
 
 #: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
-msgstr "التاريخ"
+msgstr "التأريخ"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
@@ -1422,15 +1763,6 @@ msgstr "300%"
 #: ../lib/ephy-zoom.h:52
 msgid "400%"
 msgstr "400%"
-
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../lib/widgets/ephy-location-entry.c:682 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
-msgid "Cl_ear"
-msgstr "ا_مسح"
 
 #: ../lib/widgets/ephy-location-entry.c:970
 msgid "Drag and drop this icon to create a link to this page"
@@ -1977,10 +2309,6 @@ msgstr "ترميزات أخرى"
 msgid "_Automatic"
 msgstr "آ_لي"
 
-#: ../src/ephy-encoding-menu.c:338
-msgid "Use the encoding specified by the document"
-msgstr "استخدم الترميز المحدد من طرف المستند"
-
 #: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "لا يوجد"
@@ -2030,11 +2358,11 @@ msgstr "اذهب"
 
 #: ../src/ephy-history-window.c:155
 msgid "Open the selected history link in a new window"
-msgstr "افتح وصلة التاريخ المختارة في نافذة جديدة"
+msgstr "افتح وصلة التأريخ المختارة في نافذة جديدة"
 
 #: ../src/ephy-history-window.c:158
 msgid "Open the selected history link in a new tab"
-msgstr "افتح وصلة التاريخ المختارة في لسان جديد"
+msgstr "افتح وصلة التأريخ المختارة في لسان جديد"
 
 #: ../src/ephy-history-window.c:160
 msgid "Add _Bookmark…"
@@ -2042,31 +2370,31 @@ msgstr "أضِف _علامة…"
 
 #: ../src/ephy-history-window.c:161
 msgid "Bookmark the selected history link"
-msgstr "علّم وصلة التّاريخ المختارة"
+msgstr "علّم وصلة التّأريخ المختارة"
 
 #: ../src/ephy-history-window.c:164
 msgid "Close the history window"
-msgstr "أغلق نافذة التاريخ"
+msgstr "أغلق نافذة التأريخ"
 
 #: ../src/ephy-history-window.c:178
 msgid "Delete the selected history link"
-msgstr "احذف وصلة التاريخ المختارة"
+msgstr "احذف وصلة التأريخ المختارة"
 
 #: ../src/ephy-history-window.c:181
 msgid "Select all history links or text"
-msgstr "اختر جميع وصلات التاريخ أو النصوص"
+msgstr "اختر جميع وصلات أو نصوص التأريخ"
 
 #: ../src/ephy-history-window.c:183
 msgid "Clear _History"
-msgstr "امسح ال_تّاريخ"
+msgstr "امسح ال_تّأريخ"
 
 #: ../src/ephy-history-window.c:184
 msgid "Clear your browsing history"
-msgstr "امسح تاريخ تصفحك"
+msgstr "امسح تأريخ تصفحك"
 
 #: ../src/ephy-history-window.c:189
 msgid "Display history help"
-msgstr "اعرض مساعدة التاريخ"
+msgstr "اعرض مساعدة التأريخ"
 
 #: ../src/ephy-history-window.c:207
 msgid "Show the title column"
@@ -2090,17 +2418,17 @@ msgstr "أظهر عمودا اليوم و الوقت"
 
 #: ../src/ephy-history-window.c:237
 msgid "Clear browsing history?"
-msgstr "أأمسح تاريخ التصفح؟"
+msgstr "أأمسح تأريخ التصفح؟"
 
 #: ../src/ephy-history-window.c:241
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
-msgstr "مسح تاريخ التصفح سيحذف بشكل دائم جميع وصلات التاريخ."
+msgstr "مسح تأريخ التصفح سيحذف بشكل دائم جميع وصلات التأريخ."
 
 #: ../src/ephy-history-window.c:256
 msgid "Clear History"
-msgstr "امسح التاريخ"
+msgstr "امسح التأريخ"
 
 #: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
@@ -2304,7 +2632,7 @@ msgstr "اذهب إلى الصفحة المزارة سابقا"
 #.
 #: ../src/ephy-toolbar.c:236
 msgid "Back history"
-msgstr "التاريخ السابق"
+msgstr "التأريخ السابق"
 
 #: ../src/ephy-toolbar.c:250
 msgid "_Forward"
@@ -2319,7 +2647,7 @@ msgstr "اذهب إلى الصفحة المزارة تاليا"
 #.
 #: ../src/ephy-toolbar.c:256
 msgid "Forward history"
-msgstr "تاريخ الأمام"
+msgstr "التأريخ اللاحق"
 
 #: ../src/ephy-toolbar.c:269
 msgid "_Up"
@@ -2547,7 +2875,7 @@ msgstr "البيانات ال_شخصية"
 
 #: ../src/ephy-window.c:184
 msgid "View and remove cookies and passwords"
-msgstr "اعرض و احذف السكاكر و كلمات السر"
+msgstr "اعرض و احذف الكعكات و كلمات السر"
 
 #: ../src/ephy-window.c:187
 msgid "Certificate_s"
@@ -2671,7 +2999,7 @@ msgstr "ال_تاريخ"
 
 #: ../src/ephy-window.c:242
 msgid "Open the history window"
-msgstr "افتح نافذة التاريخ"
+msgstr "افتح نافذة التأريخ"
 
 #. Tabs menu
 #: ../src/ephy-window.c:247
@@ -3020,7 +3348,7 @@ msgstr ""
 
 #: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
-msgstr "خصائص السكاكر"
+msgstr "خصائص الكعكة"
 
 #: ../src/pdm-dialog.c:670
 msgid "Content:"
@@ -3153,10 +3481,6 @@ msgstr[3] "لغات النظام  (%s)"
 msgstr[4] "لغات النظام  (%s)"
 msgstr[5] "لغات النظام  (%s)"
 
-#: ../src/prefs-dialog.c:821
-msgid "Language"
-msgstr "اللغة"
-
 #: ../src/prefs-dialog.c:942
 msgid "Select a Directory"
 msgstr "اختر دليلا"
@@ -3237,243 +3561,8 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "موقع متصفح وِب جنوم"
 
-#~ msgid "<b>Fingerprints</b>"
-#~ msgstr "<b>البصمات</b>"
-
-#~ msgid "<b>Issued By</b>"
-#~ msgstr "<b>أصدر من طرف</b>"
-
-#~ msgid "<b>Issued To</b>"
-#~ msgstr "<b>أصدر ل‍</b>"
-
-#~ msgid "<b>Validity</b>"
-#~ msgstr "<b>الصلاحية</b>"
-
-#~ msgid "Certificate _Fields"
-#~ msgstr "_حقول الشهادة"
-
-#~ msgid "Certificate _Hierarchy"
-#~ msgstr "ت_درج الشهادات"
-
-#~ msgid "Common Name:"
-#~ msgstr "الاسم العمومي:"
-
-#~ msgid "Details"
-#~ msgstr "التفاصيل"
-
-#~ msgid "Expires On:"
-#~ msgstr "ينقضي عند:"
-
-#~ msgid "Field _Value"
-#~ msgstr "حقل ال_قيمة"
-
-#~ msgid "General"
-#~ msgstr "عام"
-
-#~ msgid "Issued On:"
-#~ msgstr "نشر عند:"
-
-#~ msgid "MD5 Fingerprint:"
-#~ msgstr "بصمة MD5:"
-
-#~ msgid "Organization:"
-#~ msgstr "المؤسسة:"
-
-#~ msgid "Organizational Unit:"
-#~ msgstr "الوحدة المؤسساتية:"
-
-#~ msgid "SHA1 Fingerprint:"
-#~ msgstr "بصمة SHA1:"
-
-#~ msgid "Serial Number:"
-#~ msgstr "الرقم التسلسلي:"
-
-#~ msgid "<b>_Automatic</b>"
-#~ msgstr "<b>ت_لقائي</b>"
-
-#~ msgid "<b>_Use a different encoding:</b>"
-#~ msgstr "<b>ا_ستخدم ترميزا مغايرا:</b>"
-
-#~ msgid "Clear _All..."
-#~ msgstr "ا_مسح الكل…"
-
-#~ msgid "Cookies"
-#~ msgstr "سكاكر"
-
-#~ msgid "Passwords"
-#~ msgstr "كلمات السر"
-
-#~ msgid "Personal Data"
-#~ msgstr "البيانات الشخصية"
-
-#~ msgid "Text Encoding"
-#~ msgstr "ترميز النص"
-
-#~ msgid "Sign Text"
-#~ msgstr "نص العلامة"
-
-#~ msgid ""
-#~ "To confirm that you want to sign the above text, choose a certificate to "
-#~ "sign the text with and enter its password below."
-#~ msgstr ""
-#~ "للتأكد من أنك تريد أن توقُّع النص أعلاه، أختر شهادة لتوقع بها النص و قم "
-#~ "بإدخال كلمة سرها في الأسفل."
-
-#~ msgid "_Certificate:"
-#~ msgstr "_شهادة:"
-
-#~ msgid "_Password:"
-#~ msgstr "_كلمة السر:"
-
 #~ msgid "_View Certificate…"
 #~ msgstr "ا_عرض الشهادة…"
-
-#~ msgid "<b>Cookies</b>"
-#~ msgstr "<b>سكاكر</b>"
-
-#~ msgid "<b>Downloads</b>"
-#~ msgstr "<b>التنزيلات</b>"
-
-#~ msgid "<b>Encodings</b>"
-#~ msgstr "<b>الترميزات</b>"
-
-#~ msgid "<b>Home page</b>"
-#~ msgstr "<b>الصفحة الرئيسية</b>"
-
-#~ msgid "<b>Languages</b>"
-#~ msgstr "<b>اللغات</b>"
-
-#~ msgid "<b>Passwords</b>"
-#~ msgstr "<b>كلمات السر</b>"
-
-#~ msgid "<b>Temporary Files</b>"
-#~ msgstr "<b>الملفات المؤقتة</b>"
-
-#~ msgid "<b>Web Content</b>"
-#~ msgstr "<b>محتوى الوِب</b>"
-
-#~ msgid "<b>Web Development</b>"
-#~ msgstr "<b>تطوير الوِب</b>"
-
-#~ msgid "<small>For example, not from advertisers on these sites</small>"
-#~ msgstr "<small>مثلا، من اشهارات على هذه المواقع</small>"
-
-#~ msgid "A_utomatically download and open files"
-#~ msgstr "نزّل و افتح الملفات آ_ليًا"
-
-#~ msgid "Add Language"
-#~ msgstr "اضِف لغة"
-
-#~ msgid "Allow popup _windows"
-#~ msgstr "اسمح بالنوافذ ال_منبثقة"
-
-#~ msgid "Choose a l_anguage:"
-#~ msgstr "اختر _لغة:"
-
-#~ msgid "De_fault:"
-#~ msgstr "الإ_فتراض:"
-
-#~ msgid "Enable Java_Script"
-#~ msgstr "فعّل _جافاسكربت"
-
-#~ msgid "Enable _Java"
-#~ msgstr "فعّل _جافا"
-
-#~ msgid "Fonts & Style"
-#~ msgstr "خطوط و نسق"
-
-#~ msgid "Let web pages specify their own _fonts"
-#~ msgstr "اترك الصفحات لتحدد _خطوطها الخاصة"
-
-#~ msgid "Let web pages specify their own c_olors"
-#~ msgstr "اترك الصفحات لتحدد أ_لوانها الخاصة"
-
-#~ msgid "MB"
-#~ msgstr "م ب"
-
-#~ msgid "Only _from sites you visit"
-#~ msgstr "فقط _من المواقع التي تزورها"
-
-#~ msgid "Preferences"
-#~ msgstr "تفضيلات"
-
-#~ msgid "Privacy"
-#~ msgstr "الخصوصية"
-
-#~ msgid "Set to Current _Page"
-#~ msgstr "اضبط لل_صفحة الحالية"
-
-#~ msgid "Set to _Blank Page"
-#~ msgstr "اضبط كصفحة _فارغة"
-
-#~ msgid "Use custom _stylesheet"
-#~ msgstr "ا_ستعمل مستند نسق مخصص"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "است_خدم التدوير المرن"
-
-#~ msgid "_Address:"
-#~ msgstr "ال_مسار:"
-
-#~ msgid "_Always accept"
-#~ msgstr "اقبل _دائمًا"
-
-#~ msgid "_Disk space:"
-#~ msgstr "فضاء ال_قرص:"
-
-#~ msgid "_Download folder:"
-#~ msgstr "مجلد ال_تنزيل:"
-
-#~ msgid "_Edit Stylesheet…"
-#~ msgstr "_حرّر مستند النسق…"
-
-#~ msgid "_Minimum size:"
-#~ msgstr "الحجم الأد_نى:"
-
-#~ msgid "_Never accept"
-#~ msgstr "لا تقبل _أبدا"
-
-#~ msgid "_Remember passwords"
-#~ msgstr "تذ_كر كلمات السر"
-
-#~ msgid "<b>Background</b>"
-#~ msgstr "<b>الخلفية</b>"
-
-#~ msgid "<b>Footers</b>"
-#~ msgstr "<b>التذييلات</b>"
-
-#~ msgid "<b>Frames</b>"
-#~ msgstr "<b>إطارات</b>"
-
-#~ msgid "<b>Headers</b>"
-#~ msgstr "<b>الترويسات</b>"
-
-#~ msgid "As laid out on the _screen"
-#~ msgstr "كما تظهر على ا_لشاشة"
-
-#~ msgid "O_nly the selected frame"
-#~ msgstr "فق_ط الاطار المختار"
-
-#~ msgid "P_age title"
-#~ msgstr "عنوان ال_صفحة"
-
-#~ msgid "Page _numbers"
-#~ msgstr "أر_قام الصفحات"
-
-#~ msgid "Print background c_olors"
-#~ msgstr "اطبع أ_لوان الخلفية"
-
-#~ msgid "Print background i_mages"
-#~ msgstr "اطبع _صور الخلفية"
-
-#~ msgid "_Date"
-#~ msgstr "_تاريخ اليوم"
-
-#~ msgid "_Each frame separately"
-#~ msgstr "_كل اطار منفصل"
-
-#~ msgid "_Page address"
-#~ msgstr "مسار ال_صفحة"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr "كاشف الترميز التلقائي. سلسلة فارغة تعني أن الكشف التلقائي ملغى"
@@ -3967,9 +4056,6 @@ msgstr "موقع متصفح وِب جنوم"
 
 #~ msgid "Certificate _Details"
 #~ msgstr "ت_فاصيل الشهادة"
-
-#~ msgid "_View Certificate"
-#~ msgstr "ا_عرض الشهادة"
 
 #~ msgid ""
 #~ "The site “%s” returned security information for “%s”. It is possible that "
