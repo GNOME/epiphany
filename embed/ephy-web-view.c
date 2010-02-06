@@ -810,82 +810,6 @@ find_username_and_password_elements (JSContextRef js_context,
   }
 }
 
-static char*
-js_get_domain_and_path (JSContextRef js_context)
-{
-  JSObjectRef js_object;
-  JSValueRef js_value;
-  char *tmp;
-  GString *result = NULL;
-
-  js_object = JSContextGetGlobalObject (js_context);
-
-  js_object = js_object_get_property_as_object (js_context, js_object, "document");
-  if (!js_object)
-    return NULL;
-
-  js_object = js_object_get_property_as_object (js_context, js_object, "location");
-  if (!js_object)
-    return NULL;
-
-  /* We got document.location; now we are going to build the string:
-   * protocol + // + host + port? + path
-   */
-
-  /* protocol */
-  js_value = js_object_get_property (js_context, js_object, "protocol");
-  if (!JSValueIsString (js_context, js_value))
-    goto js_get_domain_and_path_fail;
-
-  tmp = js_value_to_string (js_context, js_value);
-  result = g_string_new (tmp);
-  g_free (tmp);
-
-  /* // */
-  g_string_append (result, "//");
-
-  /* host */
-  js_value = js_object_get_property (js_context, js_object, "host");
-  if (!JSValueIsString (js_context, js_value))
-    goto js_get_domain_and_path_fail;
-
-  tmp = js_value_to_string (js_context, js_value);
-  g_string_append (result, tmp);
-  g_free (tmp);
-
-  /* port? */
-  js_value = js_object_get_property (js_context, js_object, "port");
-  if (!JSValueIsString (js_context, js_value))
-    goto js_get_domain_and_path_fail;
-
-  tmp = js_value_to_string (js_context, js_value);
-  if (!g_str_equal (tmp, "")) {
-    g_string_append (result, ":");
-    g_string_append (result, tmp);
-  }
-  g_free (tmp);
-
-  /* pathname */
-  js_value = js_object_get_property (js_context, js_object, "pathname");
-  if (!JSValueIsString (js_context, js_value))
-    goto js_get_domain_and_path_fail;
-
-  tmp = js_value_to_string (js_context, js_value);
-  g_string_append (result, tmp);
-  g_free (tmp);
-
-  tmp = result->str;
-  LOG ("Obtained the following from document.location: %s", tmp);
-  g_string_free (result, FALSE);
-  return tmp;
-
- js_get_domain_and_path_fail:
-  if (result)
-    g_string_free (result, TRUE);
-
-  return NULL;
-}
-
 typedef struct {
   EphyEmbed *embed;
   char *uri;
@@ -1074,7 +998,7 @@ form_submitted_cb (JSContextRef js_context,
   char *name_field_value;
   char *password_field_name;
   char *password_field_value;
-  char *uri;
+  SoupURI *uri;
   WebKitWebView *web_view;
 
   LOG ("Form submitted!");
@@ -1103,26 +1027,35 @@ form_submitted_cb (JSContextRef js_context,
 
   password_field_value = js_value_to_string (js_context, js_value);
 
-  uri = js_get_domain_and_path (js_context);
-
-  store_data = g_slice_new (StorePasswordData);
-
-  store_data->uri = uri;
-  store_data->name_field = name_field_name;
-  store_data->name_value = name_field_value;
-  store_data->password_field = password_field_name;
-  store_data->password_value = password_field_value;
-
-  /* This is required because we can only hold private data on objects
-   * created with our own classes; we need to store the WebView here
-   * because it is needed for form_submitted_cb */
   dummy_object = js_object_get_property_as_object (js_context,
                                                    js_global,
                                                    "_EpiphanyInternalDummy");
   web_view = JSObjectGetPrivate (dummy_object);
+
+  uri = soup_uri_new (webkit_web_view_get_uri (web_view));
+  if (!uri) {
+    g_free (name_field_name);
+    g_free (password_field_name);
+    g_free (name_field_value);
+    g_free (password_field_value);
+    return JSValueMakeUndefined (js_context);
+  }
+
+  // Ignore query string in the uri, if any
+  soup_uri_set_query (uri, NULL);
+
+  store_data = g_slice_new (StorePasswordData);
+
+  store_data->uri = soup_uri_to_string (uri, FALSE);
+  store_data->name_field = name_field_name;
+  store_data->name_value = name_field_value;
+  store_data->password_field = password_field_name;
+  store_data->password_value = password_field_value;
   store_data->embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
-  _ephy_profile_query_form_auth_data (uri,
+  soup_uri_free (uri);
+
+  _ephy_profile_query_form_auth_data (store_data->uri,
                                       name_field_name,
                                       password_field_name,
                                       should_store_cb,
@@ -1235,6 +1168,9 @@ do_hook_into_forms (JSContextRef js_context, JSObjectRef js_form_submitted, Ephy
       LOG ("NOT hooking into form: username element: %p / password element: %p", name_element, password_element);
   }
 
+  /* This is required because we can only hold private data on objects
+   * created with our own classes; we need to store the WebView here
+   * because it is needed for form_submitted_cb */
   dummy_class_def = kJSClassDefinitionEmpty;
   dummy_class_def.className = "dummy";
   dummy_class = JSClassCreate (&dummy_class_def);
