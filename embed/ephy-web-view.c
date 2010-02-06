@@ -1011,11 +1011,8 @@ form_submitted_cb (JSContextRef js_context,
 
   name_field_name = js_get_element_attribute (js_context, name_element, "name");
   password_field_name = js_get_element_attribute (js_context, password_element, "name");
-  if (!name_field_name || !password_field_name) {
-    g_free (name_field_name);
-    g_free (password_field_name);
-    return JSValueMakeUndefined (js_context);
-  }
+  if (!name_field_name || !password_field_name)
+    goto form_submitted_cb_finish;
 
   js_string = JSStringCreateWithUTF8CString ("value");
   js_value = JSObjectGetProperty (js_context, name_element, js_string, NULL);
@@ -1027,19 +1024,21 @@ form_submitted_cb (JSContextRef js_context,
 
   password_field_value = js_value_to_string (js_context, js_value);
 
+  if (!name_field_value || !password_field_value)
+    goto form_submitted_cb_finish;
+
+  if (g_str_equal (name_field_value, "") ||
+      g_str_equal (password_field_value, ""))
+    goto form_submitted_cb_finish;
+
   dummy_object = js_object_get_property_as_object (js_context,
                                                    js_global,
                                                    "_EpiphanyInternalDummy");
   web_view = JSObjectGetPrivate (dummy_object);
 
   uri = soup_uri_new (webkit_web_view_get_uri (web_view));
-  if (!uri) {
-    g_free (name_field_name);
-    g_free (password_field_name);
-    g_free (name_field_value);
-    g_free (password_field_value);
-    return JSValueMakeUndefined (js_context);
-  }
+  if (!uri)
+    goto form_submitted_cb_finish;
 
   // Ignore query string in the uri, if any
   soup_uri_set_query (uri, NULL);
@@ -1061,6 +1060,12 @@ form_submitted_cb (JSContextRef js_context,
                                       should_store_cb,
                                       store_data,
                                       NULL);
+
+form_submitted_cb_finish:
+  g_free (name_field_name);
+  g_free (password_field_name);
+  g_free (name_field_value);
+  g_free (password_field_value);
 
   return JSValueMakeUndefined (js_context);
 }
