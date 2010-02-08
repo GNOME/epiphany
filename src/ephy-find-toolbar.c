@@ -187,13 +187,9 @@ tab_search_key_press_cb (EphyEmbed *embed,
 			 GdkEventKey *event,
 			 EphyFindToolbar *toolbar)
 {
-	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *widget = (GtkWidget *) toolbar;
 
 	g_return_val_if_fail (event != NULL, FALSE);
-
-	/* don't do anything in PPV mode */
-	if (ephy_window_get_is_print_preview (priv->window)) return FALSE;
 
 	/* check for / and ' which open the find toolbar in text resp. link mode */
 	if (gtk_widget_get_visible (widget) == FALSE)

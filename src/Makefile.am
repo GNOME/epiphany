@@ -36,7 +36,6 @@ NOINST_H_FILES = \
 	pdm-dialog.h			\
 	popup-commands.h		\
 	prefs-dialog.h			\
-	ppview-toolbar.h		\
 	window-commands.h
 
 INST_H_FILES = \
@@ -86,7 +85,6 @@ libephymain_la_SOURCES = \
 	pdm-dialog.c			\
 	popup-commands.c		\
 	prefs-dialog.c			\
-	ppview-toolbar.c		\
 	window-commands.c		\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)		\

@@ -3011,46 +3011,53 @@ ephy_web_view_show_page_certificate (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_set_print_preview_mode:
+ * ephy_web_view_show_print_preview
  * @view: an #EphyWebView
- * @preview_mode: Whether the print preview mode is enabled.
  *
- * Enable and disable the print preview mode.
+ * Generates a print preview of the specified view.
+ * An external viewer is used to display the preview.
+ *
+ * Since: 2.30
  **/
 void
-ephy_web_view_set_print_preview_mode (EphyWebView *view,
-                                      gboolean preview_mode)
+ephy_web_view_show_print_preview (EphyWebView *view)
 {
-}
+  WebKitWebFrame *main_frame;
+  GtkPrintOperation *operation;
+  GError *error;
+  EphyEmbedShell *shell;
 
-/**
- * ephy_web_view_print_preview_n_pages:
- * @view: an #EphyWebView
- *
- * Returns the number of pages which would appear in @view's loaded document
- * if it were to be printed.
- *
- * Return value: the number of pages in @view's loaded document
- **/
-int
-ephy_web_view_print_preview_n_pages (EphyWebView *view)
-{
-  return 0;
-}
+  shell = ephy_embed_shell_get_default ();
+  error = NULL;
+  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
 
-/**
- * ephy_web_view_print_preview_navigate:
- * @view: an #EphyWebView
- * @type: an #EphyPrintPreviewNavType which determines where to navigate
- * @page: if @type is %EPHY_WEB_VIEW_PRINTPREVIEW_GOTO_PAGENUM, the desired page number
- *
- * Navigates @view's print preview.
- **/
-void
-ephy_web_view_print_preview_navigate (EphyWebView *view,
-                                      EphyWebViewPrintPreviewNavType type,
-                                      int page)
-{
+  operation = gtk_print_operation_new ();
+  gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup  (shell));
+
+  webkit_web_frame_print_full (main_frame, operation, GTK_PRINT_OPERATION_ACTION_PREVIEW, &error);
+  g_object_unref (operation);
+
+  if (error) {
+    GtkWidget *info_bar;
+    GtkWidget *label;
+    GtkContainer *content_area;
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+    info_bar = gtk_info_bar_new_with_buttons (GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+    label = gtk_label_new (error->message);
+    content_area = GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar)));
+    g_error_free (error);
+
+    gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_ERROR);
+    gtk_container_add (content_area, label);
+    g_signal_connect (info_bar, "response",
+                      G_CALLBACK (gtk_widget_destroy), NULL);
+
+    ephy_embed_add_top_widget (embed, info_bar, FALSE);
+    gtk_widget_show_all (info_bar);
+  }
+
+  return;
 }
 
 /**

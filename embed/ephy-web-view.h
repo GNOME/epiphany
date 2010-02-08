@@ -83,15 +83,6 @@ typedef enum
 
 typedef enum
 {
-	EPHY_WEB_VIEW_PRINTPREVIEW_GOTO_PAGENUM	= 0,
-	EPHY_WEB_VIEW_PRINTPREVIEW_PREV_PAGE	= 1,
-	EPHY_WEB_VIEW_PRINTPREVIEW_NEXT_PAGE	= 2,
-	EPHY_WEB_VIEW_PRINTPREVIEW_HOME		= 3,
-	EPHY_WEB_VIEW_PRINTPREVIEW_END		= 4
-} EphyWebViewPrintPreviewNavType;
-
-typedef enum
-{
 	EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
 	EPHY_WEB_VIEW_STATE_IS_INSECURE,
 	EPHY_WEB_VIEW_STATE_IS_BROKEN,
@@ -191,12 +182,7 @@ void                       ephy_web_view_get_security_level      (EphyWebView   
                                                                   EphyWebViewSecurityLevel        *level,
                                                                   char                           **description);
 void                       ephy_web_view_show_page_certificate   (EphyWebView                     *view);
-void                       ephy_web_view_set_print_preview_mode  (EphyWebView                     *view,
-                                                                  gboolean                         preview_mode);
-int                        ephy_web_view_print_preview_n_pages   (EphyWebView                     *view);
-void                       ephy_web_view_print_preview_navigate  (EphyWebView                     *view,
-                                                                  EphyWebViewPrintPreviewNavType   type,
-                                                                  int                              page);
+void                       ephy_web_view_show_print_preview      (EphyWebView                     *view);
 GSList *                   ephy_web_view_get_go_up_list          (EphyWebView                     *view);
 void                       ephy_web_view_set_title               (EphyWebView                     *view,
                                                                   const char                      *view_title);

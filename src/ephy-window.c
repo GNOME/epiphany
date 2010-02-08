@@ -25,7 +25,6 @@
 #include "ephy-type-builtins.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-state.h"
-#include "ppview-toolbar.h"
 #include "window-commands.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
@@ -441,7 +440,6 @@ struct _EphyWindowPrivate
 	GtkActionGroup *popups_action_group;
 	EphyEncodingMenu *enc_menu;
 	EphyTabsMenu *tabs_menu;
-	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
 	EphyFindToolbar *find_toolbar;
@@ -465,7 +463,6 @@ struct _EphyWindowPrivate
 	guint closing : 1;
 	guint has_size : 1;
 	guint fullscreen_mode : 1;
-	guint ppv_mode : 1;
 	guint should_save_chrome : 1;
 	guint is_popup : 1;
 	guint present_on_insert : 1;
@@ -477,7 +474,6 @@ enum
 	PROP_0,
 	PROP_ACTIVE_CHILD,
 	PROP_CHROME,
-	PROP_PPV_MODE,
 	PROP_SINGLE_TAB_MODE
 };
 
@@ -747,8 +743,7 @@ exit_fullscreen_clicked_cb (EphyWindow *window)
 static gboolean
 get_toolbar_visibility (EphyWindow *window)
 {
-	return ((window->priv->chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0) &&
-	       !window->priv->ppv_mode;
+	return ((window->priv->chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0);
 }			
 
 static void
@@ -761,14 +756,7 @@ get_chromes_visibility (EphyWindow *window,
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewChrome flags = priv->chrome;
 
-	if (window->priv->ppv_mode)
-	{
-		*show_menubar = *show_statusbar
-			      = *show_toolbar
-			      = *show_tabsbar
-			      = FALSE;
-	}
-	else if (window->priv->fullscreen_mode)
+	if (window->priv->fullscreen_mode)
 	{
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_menubar = *show_statusbar = FALSE;
@@ -988,8 +976,8 @@ ephy_window_key_press_event (GtkWidget *widget,
 		}
 	}
 
-	/* Don't activate menubar in ppv mode, or in lockdown mode */
-	if (priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	/* Don't activate menubar in lockdown mode */
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
 		return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 	}
@@ -1017,48 +1005,11 @@ ephy_window_key_press_event (GtkWidget *widget,
 	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 }
 
-void
-_ephy_window_set_print_preview (EphyWindow *window,
-				gboolean enabled)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAccelGroup *accel_group;
-
-	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
-
-	if (priv->ppv_mode == enabled) return;
-
-	priv->ppv_mode = enabled;
-
-	sync_chromes_visibility (window);
-
-	if (enabled)
-	{
-		g_return_if_fail (priv->ppview_toolbar == NULL);
-
-		ephy_find_toolbar_request_close (priv->find_toolbar);
-
-		priv->ppview_toolbar = ppview_toolbar_new (window);
-		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
-	}
-	else
-	{
-		g_return_if_fail (priv->ppview_toolbar != NULL);
-
-		g_object_unref (priv->ppview_toolbar);
-		priv->ppview_toolbar = NULL;
-		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-	}
-
-	g_object_notify (G_OBJECT (window), "is-print-preview");
-}
-
 static gboolean
 ephy_window_delete_event (GtkWidget *widget,
 			  GdkEventAny *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *modified_embed = NULL;
 	GList *tabs, *l;
 	gboolean modified = FALSE;
@@ -1066,22 +1017,6 @@ ephy_window_delete_event (GtkWidget *widget,
 	/* We ignore the delete_event if the disable_quit lockdown has been set
 	 */
 	if (eel_gconf_get_boolean("/apps/epiphany/lockdown/disable_quit")) return TRUE;
-
-	/* Workaround a crash when closing a window while in print preview mode. See
-	 * mozilla bug #241809. /
-	 * Go back to normal mode instead of closing, see bug #326136.
-	 */
-	if (priv->ppv_mode)
-	{
-		EphyEmbed *embed;
-
-		embed = window->priv->active_embed;
-		ephy_web_view_set_print_preview_mode (ephy_embed_get_web_view (embed), FALSE);
-
-		_ephy_window_set_print_preview (window, FALSE);
-
-		return TRUE;
-	}
 
 	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 	for (l = tabs; l != NULL; l = l->next)
@@ -2188,12 +2123,6 @@ show_embed_popup (EphyWindow *window,
 	char *uri;
 	EphyEmbedEvent *embed_event;
 
-	/* Do not show the menu in print preview mode */
-	if (priv->ppv_mode)
-	{
-		return;
-	}
-
 #if 0
 	value = ephy_embed_event_get_property (event, "framed_page");
 	framed = g_value_get_int (value);
@@ -2924,9 +2853,6 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	EphyWindowPrivate *priv = window->priv;
 	const char *address;
 
-	/* if we're in ppv mode, we cannot switch tabs, so inhibit the alert */
-	if (priv->ppv_mode) return TRUE;
-
 	/* switch the window to the tab, and bring the window to the foreground
 	 * (since the alert is modal, the user won't be able to do anything
 	 * with his current window anyway :|)
@@ -3315,12 +3241,6 @@ ephy_window_dispose (GObject *object)
 		g_object_unref (priv->tabs_menu);
 		priv->tabs_menu = NULL;
 
-		if (priv->ppview_toolbar)
-		{
-			g_object_unref (priv->ppview_toolbar);
-			priv->ppview_toolbar = NULL;
-		}
-
 		priv->action_group = NULL;
 		priv->popups_action_group = NULL;
 
@@ -3345,9 +3265,6 @@ ephy_window_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_PPV_MODE:
-			/* Read only */
-			break;
 		case PROP_ACTIVE_CHILD:
 			impl_set_active_child (EPHY_EMBED_CONTAINER (window),
 					       g_value_get_object (value));
@@ -3379,9 +3296,6 @@ ephy_window_get_property (GObject *object,
 			break;
 		case PROP_CHROME:
 			g_value_set_flags (value, window->priv->chrome);
-			break;
-		case PROP_PPV_MODE:
-			g_value_set_boolean (value, window->priv->ppv_mode);
 			break;
 		case PROP_SINGLE_TAB_MODE:
 			g_value_set_boolean (value, window->priv->is_popup);
@@ -3503,10 +3417,6 @@ ephy_window_class_init (EphyWindowClass *klass)
 					  "is-popup");
 
 	g_object_class_override_property (object_class,
-					  PROP_PPV_MODE,
-					  "is-print-preview");
-
-	g_object_class_override_property (object_class,
 					  PROP_CHROME,
 					  "chrome");
 
@@ -3564,9 +3474,6 @@ ephy_window_open_link (EphyLink *link,
 	EphyEmbed *new_embed;
 
 	g_return_val_if_fail (address != NULL, NULL);
-
-	/* don't do anything in ppv mode */
-	if (window->priv->ppv_mode) return NULL;
 
 	if (embed == NULL)
 	{
@@ -4181,22 +4088,6 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 	}
 
 	g_object_set (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed", allow, NULL);
-}
-
-/**
- * ephy_window_get_is_print_preview:
- * @window: an #EphyWindow
- *
- * Returns whether this window is in print preview mode.
- *
- * Return value: %TRUE if it is in print preview mode
- **/
-gboolean
-ephy_window_get_is_print_preview (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
-
-	return window->priv->ppv_mode;
 }
 
 /**

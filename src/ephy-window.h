@@ -63,9 +63,6 @@ EphyWindow	 *ephy_window_new		  (void);
 EphyWindow	 *ephy_window_new_with_chrome	  (EphyWebViewChrome chrome,
 						   gboolean is_popup);
 
-void		 _ephy_window_set_print_preview	  (EphyWindow *window,
-						   gboolean enabled);
-
 GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
@@ -84,7 +81,6 @@ void		  ephy_window_set_zoom		  (EphyWindow *window,
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
 
-gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);
 
 EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
 
