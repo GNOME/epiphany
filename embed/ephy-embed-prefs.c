@@ -455,7 +455,7 @@ ephy_embed_prefs_init (void)
                 "auto-shrink-images", FALSE,
                 "enable-default-context-menu", FALSE,
                 "enable-site-specific-quirks", TRUE,
-                "enable-page-cache", TRUE,
+                "enable-page-cache", FALSE,
                 NULL);
 
   /* Connections */
