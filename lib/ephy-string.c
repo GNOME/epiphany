@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <libsoup/soup.h>
 
 #define ELLIPSIS "\xe2\x80\xa6"
 
@@ -448,47 +449,18 @@ ephy_string_canonicalize_pathname (const char *cpath)
 char *
 ephy_string_get_host_name (const char *url)
 {
-	const char *start;
-	const char *p;
+	SoupURI *uri;
+	char *ret;
 	
 	if (url == NULL || g_str_has_prefix (url, "file://")) return NULL;
-	
-	start = strstr (url, "//");
-	if (start == NULL || start == '\0')
-	{
-		/* Not an URL */
-		return NULL;
-	}
-	if (strlen (start) > 2)
-	{
-		/* Go past the protocol part */
-		start = start + 2;
-	}
-	else
-	{
-		/* Not an URL again */
-		return NULL;
-	}
-	p = strchr (start, '@');
-	if (p != NULL)
-	{
-		/* We have a username:password@hostname scheme, skip it. */
-		if (strlen (p) > 1) start = ++p;
-	}
-	p = strchr (start, ':');
-	if (p != NULL)
-	{
-		/* hostname:port, skip port */
-		return g_strndup (start, (p - start));
-	}
-	p = strchr (start, '/');
-	if (p == NULL)
-	{
-		/* No more slashes in the url, we assume it's a host name */
-		return g_strdup (start);
-	}
 
-	return g_strndup (start, (p - start));
+	uri = soup_uri_new (url);
+	if (uri == NULL) return NULL;
+
+	ret = g_strdup (uri->host);
+	soup_uri_free (uri);
+
+	return ret;
 }
 
 char *
