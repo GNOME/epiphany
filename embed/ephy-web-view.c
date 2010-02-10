@@ -1046,10 +1046,10 @@ form_submitted_cb (JSContextRef js_context,
   store_data = g_slice_new (StorePasswordData);
 
   store_data->uri = soup_uri_to_string (uri, FALSE);
-  store_data->name_field = name_field_name;
-  store_data->name_value = name_field_value;
-  store_data->password_field = password_field_name;
-  store_data->password_value = password_field_value;
+  store_data->name_field = g_strdup (name_field_name);
+  store_data->name_value = g_strdup (name_field_value);
+  store_data->password_field = g_strdup (password_field_name);
+  store_data->password_value = g_strdup (password_field_value);
   store_data->embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
   soup_uri_free (uri);
