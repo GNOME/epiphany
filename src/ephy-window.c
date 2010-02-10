@@ -2260,7 +2260,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 {
 	guint button, modifier, context;
 	gboolean handled = TRUE;
-	gboolean with_control, with_shift, with_shift_control;
+	gboolean with_control, with_shift;
 	gboolean is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
 	gboolean middle_click_opens;
@@ -2285,8 +2285,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 
 	with_control = (modifier & GDK_CONTROL_MASK) == GDK_CONTROL_MASK;
 	with_shift = (modifier & GDK_SHIFT_MASK) == GDK_SHIFT_MASK;
-	with_shift_control = (modifier & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-					== (GDK_SHIFT_MASK | GDK_CONTROL_MASK);
+
 	is_left_click = (button == 1);
 	is_middle_click = (button == 2);
 
@@ -2300,17 +2299,23 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				|| (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE));
 	is_input = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE) != 0;
 
-	/* shift+click saves the link target */
-	if (is_link && is_left_click && with_shift)
+	if (is_left_click && with_shift && !with_control)
 	{
-		handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "link-uri");
-	}
-	/* shift+click saves the non-link image
-	 * Note: pressing enter to submit a form synthesizes a mouse click event
-	 */
-	else if (is_image && is_left_click && with_shift && !is_input)
-	{
-		handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "image-uri");
+		/* shift+click saves the link target */
+		if (is_link)
+		{
+			handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "link-uri");
+		}
+
+		/* Note: pressing enter to submit a form synthesizes a mouse
+		 * click event
+		 */
+		/* shift+click saves the non-link image */
+		else if (is_image && !is_input)
+		{
+			handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "image-uri");
+		}
+
 	}
 
 	/* middle click opens the selection url */
