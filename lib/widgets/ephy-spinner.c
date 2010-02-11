@@ -902,7 +902,7 @@ ephy_spinner_start (EphySpinner *spinner)
 
 	details->spinning = TRUE;
 
-	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
+	if (gtk_widget_get_mapped (GTK_WIDGET (spinner)) &&
 	    details->timer_task == 0 &&
 	    ephy_spinner_load_images (spinner))
 	{
@@ -937,7 +937,7 @@ ephy_spinner_stop (EphySpinner *spinner)
 	{
 		ephy_spinner_remove_update_callback (spinner);
 
-		//if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)))
+		//if (gtk_widget_get_mapped (GTK_WIDGET (spinner)))
 		{
 			gtk_widget_queue_draw (GTK_WIDGET (spinner));
 		}

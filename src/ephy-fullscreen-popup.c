@@ -348,7 +348,7 @@ ephy_fullscreen_popup_size_request (GtkWidget *widget,
 
 	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->size_request (widget, requisition);
 
-	if (GTK_WIDGET_REALIZED (widget))
+	if (gtk_widget_get_realized (widget))
 	{
 		ephy_fullscreen_popup_update_position (popup);
 	}

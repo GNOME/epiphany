@@ -1327,7 +1327,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	 * bug #155824. So we save the selection iff the clipboard was owned by
 	 * the location entry.
 	 */
-	if (GTK_WIDGET_REALIZED (GTK_WIDGET (priv->entry)))
+	if (gtk_widget_get_realized (GTK_WIDGET (priv->entry)))
 	{
 		clipboard = gtk_widget_get_clipboard (priv->entry,
 						      GDK_SELECTION_PRIMARY);
