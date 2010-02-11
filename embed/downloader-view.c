@@ -452,7 +452,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	WebKitDownloadStatus status;
-	gint64 total, current;
+	guint64 total, current;
 	gdouble remaining_seconds = 0.0;
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
