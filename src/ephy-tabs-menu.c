@@ -147,16 +147,11 @@ free_tab_id (GtkAction *action)
 }
 
 static void
-tab_action_activate_cb (GtkToggleAction *action,
+tab_action_activate_cb (GtkAction *action,
 			EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *priv = menu->priv;
 	EphyEmbed *embed;
-
-	if (gtk_toggle_action_get_active (action) == FALSE)
-	{
-		return;
-	}
 
 	embed = g_object_get_data (G_OBJECT (action), DATA_KEY);
 	g_return_if_fail (embed != NULL);
@@ -182,6 +177,24 @@ sync_tab_title (EphyWebView *view,
 }
 
 static void
+sync_tab_icon (EphyWebView *view,
+	       GParamSpec *pspec,
+	       GtkWidget *proxy)
+{
+	if (GTK_IS_MENU_ITEM (proxy))
+	{
+		GdkPixbuf *pixbuf;
+		GtkWidget *image;
+
+		pixbuf = ephy_web_view_get_icon (view);
+		image = gtk_image_new_from_pixbuf (pixbuf);
+		gtk_widget_show (image);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (proxy), image);
+		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (proxy), TRUE);
+	}
+}
+
+static void
 notebook_page_added_cb (EphyNotebook *notebook,
 			EphyEmbed *embed,
 			guint position,
@@ -190,16 +203,12 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
 	char verb[ACTION_VERB_FORMAT_LENGTH];
-	GSList *group;
 
 	LOG ("tab_added_cb embed=%p", embed);
 
 	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, allocate_tab_id ());
-  
-	action = g_object_new (GTK_TYPE_RADIO_ACTION,
-			       "name", verb,
-			       "tooltip", _("Switch to this tab"),
-			       NULL);
+
+	action = gtk_action_new (verb, NULL, _("Switch to this tab"), NULL);
 
 	sync_tab_title (ephy_embed_get_web_view (embed), NULL, action);
 	/* make sure the action is alive when handling the signal, see bug #169833 */
@@ -207,15 +216,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 				 G_CALLBACK (sync_tab_title), action, 0);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
-
-	group = gtk_radio_action_get_group (GTK_RADIO_ACTION (priv->anchor_action));
-	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
-
-	/* set this here too, since tab-added comes after notify::active-child */
-	if (ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window)) == embed)
-	{
-		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-	}
 
 	g_object_set_data (G_OBJECT (embed), DATA_KEY, action);
 	g_object_set_data (G_OBJECT (action), DATA_KEY, embed);
@@ -276,36 +276,22 @@ connect_proxy_cb (GtkActionGroup *action_group,
 	if (GTK_IS_MENU_ITEM (proxy))
 	{
 		GtkLabel *label;
+		EphyEmbed *embed;
+		EphyWebView *view;
 
 		label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (proxy)));
 
 		gtk_label_set_use_underline (label, FALSE);
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
+
+		embed = g_object_get_data (G_OBJECT (action), DATA_KEY);
+		view = ephy_embed_get_web_view (embed);
+
+		sync_tab_icon (view, NULL, proxy);
+		g_signal_connect_object (view, "notify::icon",
+					 G_CALLBACK (sync_tab_icon), proxy, 0);
 	}
-}
-
-static void
-sync_active_tab (EphyWindow *window,
-		 GParamSpec *pspec,
-		 EphyTabsMenu *menu)
-{
-	EphyEmbed *embed;
-	GtkAction *action;
-
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-	if (embed == NULL) return;
-
-	LOG ("active tab is embed %p", embed);
-
-	action = g_object_get_data (G_OBJECT (embed), DATA_KEY);
-	/* happens initially, since the ::active-child comes before
-	* the ::tab-added signal
-	*/
-	/* FIXME that's not true with gtk+ 2.9 anymore */
-	if (action == NULL) return;
-
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 }
 
 static void
@@ -331,9 +317,6 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu,
 
 	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
-
-	g_signal_connect (window, "notify::active-child",
-			  G_CALLBACK (sync_active_tab), menu);
 
 	notebook = ephy_window_get_notebook (window);
 	g_signal_connect_object (notebook, "page-added",
