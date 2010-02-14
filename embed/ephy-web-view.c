@@ -550,7 +550,7 @@ js_value_to_string (JSContextRef js_context,
   g_return_val_if_fail (JSValueIsString (js_context, js_value), NULL);
 
   str = JSValueToStringCopy (js_context, js_value, NULL);
-  length = JSStringGetLength (str) + 1;
+  length = JSStringGetMaximumUTF8CStringSize (str);
 
   buffer = g_malloc0 (length);
   JSStringGetUTF8CString (str, buffer, length);
