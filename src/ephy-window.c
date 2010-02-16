@@ -2323,8 +2323,9 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	{
 		/* See bug #133633 for why we do it this way */
 
-		/* We need to make sure we know if the embed is destroyed between
-		 * requesting the clipboard contents, and receiving them.
+		/* We need to make sure we know if the embed is destroyed
+		 * between requesting the clipboard contents, and receiving
+		 * them.
 		 */
 		ClipboardTextCBData *cb_data;
 		EphyEmbed *embed;

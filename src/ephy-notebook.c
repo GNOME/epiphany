@@ -309,17 +309,18 @@ button_press_cb (EphyNotebook *notebook,
 
 	if (event->type == GDK_BUTTON_PRESS &&
 	    event->button == 3 &&
-		   (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
+	    (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
 	{
 		if (tab_clicked == -1)
 		{
-			/* consume event, so that we don't pop up the context menu when
-			 * the mouse if not over a tab label
+			/* Consume event so that we don't pop up the context
+			 * menu when the mouse is not over a tab label.
 			 */
 			return TRUE;
 		}
 
-		/* switch to the page the mouse is over, but don't consume the event */
+		/* Switch to the page where the mouse is over, but don't consume the
+		 * event. */
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), tab_clicked);
 	}
 

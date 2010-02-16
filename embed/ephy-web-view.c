@@ -503,31 +503,31 @@ ephy_web_view_file_monitor_cancel (EphyWebView *view)
 static gboolean
 ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
-    EphyWebView *web_view = EPHY_WEB_VIEW (widget);
-    gboolean key_handled = FALSE;
+  EphyWebView *web_view = EPHY_WEB_VIEW (widget);
+  gboolean key_handled = FALSE;
 
-    key_handled = GTK_WIDGET_CLASS (ephy_web_view_parent_class)->key_press_event (widget, event);
+  key_handled = GTK_WIDGET_CLASS (ephy_web_view_parent_class)->key_press_event (widget, event);
 
-    if (key_handled)
-      return TRUE;
+  if (key_handled)
+    return TRUE;
 
-    g_signal_emit_by_name (web_view, "search-key-press", event, &key_handled);
+  g_signal_emit_by_name (web_view, "search-key-press", event, &key_handled);
 
-    return key_handled;
+  return key_handled;
 }
 
 static gboolean
 ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-    /* We always show the browser context menu on control-rightclick */
-    if (event->button == 3 && event->state & GDK_CONTROL_MASK)
-      return FALSE;
+  /* We always show the browser context menu on control-rightclick */
+  if (event->button == 3 && event->state & GDK_CONTROL_MASK)
+    return FALSE;
 
-    /* We use this for downloading */
-    if (event->button == 1 && event->state & GDK_SHIFT_MASK)
-      return FALSE;
+  /* We use this for downloading */
+  if (event->button == 1 && event->state & GDK_SHIFT_MASK)
+    return FALSE;
 
-    return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
+  return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
 }
 
 static void
