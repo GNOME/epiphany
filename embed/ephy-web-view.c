@@ -519,14 +519,18 @@ ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 static gboolean
 ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  /* We always show the browser context menu on control-rightclick */
-  if (event->button == 3 && event->state & GDK_CONTROL_MASK)
+  /* This are the special cases WebkitWebView doesn't handle but we have an
+   * interest in handling. */
+
+  /* We always show the browser context menu on control-rightclick. */
+  if (event->button == 3 && event->state == GDK_CONTROL_MASK)
     return FALSE;
 
-  /* We use this for downloading */
-  if (event->button == 1 && event->state & GDK_SHIFT_MASK)
+  /* We use this for downloading. */
+  if (event->button == 1 && event->state == GDK_SHIFT_MASK)
     return FALSE;
 
+  /* Let WebKitWebView handle this. */
   return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
 }
 
