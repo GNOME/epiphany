@@ -2502,11 +2502,30 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		return TRUE;
 	}
 
-	/* Open in new tab for middle click or ctrl+click */
-	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
-	    (button == 2 /* middle button */ ||
-	     (button == 1 && state == GDK_CONTROL_MASK) /* ctrl + left button */)) {
+	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED) {
 		EphyEmbed *embed;
+		EphyNewTabFlags flags;
+
+		flags = EPHY_NEW_TAB_OPEN_PAGE;
+
+		/* New tab in new window for control+shift+click */
+		if (button == 1 &&
+		    state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+		{
+			flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		}
+		/* New tab in existing window for middle click and
+		 * control+click */
+		else if (button == 2 ||
+			 (button == 1 && state == GDK_CONTROL_MASK))
+		{
+			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		}
+		/* Those were our special cases, we won't handle this */
+		else
+		{
+			return FALSE;
+		}
 
 		embed = ephy_embed_container_get_active_child
 			(EPHY_EMBED_CONTAINER (window));
@@ -2515,8 +2534,7 @@ policy_decision_required_cb (WebKitWebView *web_view,
 					 window,
 					 embed,
 					 request,
-					 EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-					 EPHY_NEW_TAB_OPEN_PAGE,
+					 flags,
 					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
 
 		return TRUE;
