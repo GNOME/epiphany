@@ -456,6 +456,7 @@ ephy_embed_prefs_init (void)
                 "enable-default-context-menu", FALSE,
                 "enable-site-specific-quirks", TRUE,
                 "enable-page-cache", TRUE,
+                "auto-resize-window", TRUE,
                 NULL);
 
   /* Connections */
