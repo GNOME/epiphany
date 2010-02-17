@@ -561,6 +561,8 @@ define_destination_uri (WebKitDownload *download,
 
   destination_uri = g_strconcat ("file://", destination_filename, NULL);
 
+  LOG ("define_destination_uri: Downloading to %s", destination_filename);
+
   webkit_download_set_destination_uri (download, destination_uri);
 
   g_free (tmp_dir);
@@ -779,7 +781,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
 static void
 download_status_changed_cb (GObject *object,
                             GParamSpec *pspec,
-                            WebKitWebView *web_view)
+                            EphyEmbed *embed)
 {
   WebKitDownload *download = WEBKIT_DOWNLOAD (object);
 
@@ -794,9 +796,11 @@ download_status_changed_cb (GObject *object,
     destination_uri = g_object_get_data (G_OBJECT (download),
                                          "user-destination-uri");
 
+    LOG ("download_status_changed_cb: finished, moving temp file %s to %s",
+         temp_uri, destination_uri);
+
     /* No user-destination-uri is set, hence this is an auto download and we
-     * have nothing else to do.
-     */
+     * have nothing else to do. */
     if (destination_uri == NULL) return;
 
     temp = g_file_new_for_uri (temp_uri);
@@ -826,8 +830,11 @@ download_status_changed_cb (GObject *object,
       return;
     }
 
-    g_object_ref (download); /* balanced in confirm_action_response_cb */
-    confirm_action_from_mime (web_view, download, DOWNLOAD_ACTION_DOWNLOAD);
+    /* Balanced in confirm_action_response_cb. */
+    g_object_ref (download);
+
+    confirm_action_from_mime (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
+                              download, DOWNLOAD_ACTION_DOWNLOAD);
   }
 }
 
@@ -836,15 +843,18 @@ download_error_cb (WebKitDownload *download,
                    gint error_code,
                    gint error_detail,
                    const gchar *reason,
-                   WebKitWebView *view)
+                   EphyEmbed *embed)
 {
-  /* FIXME: handle download errors and notify the user */
+  /* FIXME: handle download errors and notify the user. */
+  LOG ("download_error_cb: Error (%d:%d): %s", error_code, error_detail, reason);
+
   return FALSE;
 }
 
 static gboolean
 download_requested_cb (WebKitWebView *web_view,
-                       WebKitDownload *download)
+                       WebKitDownload *download,
+                       EphyEmbed *embed)
 {
   /* Is download locked down? */
   if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
@@ -852,12 +862,12 @@ download_requested_cb (WebKitWebView *web_view,
 
   /* Wait for the request to be sent in all cases, so that we have a
    * response which may contain a suggested filename */
-  g_signal_connect_object (download, "notify::status",
-                           G_CALLBACK (download_status_changed_cb),
-                           web_view, 0);
-  g_signal_connect_object (download, "error",
-                           G_CALLBACK (download_error_cb),
-                           web_view, 0);
+  g_signal_connect (download, "notify::status",
+                    G_CALLBACK (download_status_changed_cb),
+                    embed);
+  g_signal_connect (download, "error",
+                    G_CALLBACK (download_error_cb),
+                    embed);
 
   /* If we are not performing an auto-download, we will ask the user
    * where they want the file to go to; we will start downloading to a
