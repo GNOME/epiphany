@@ -998,10 +998,10 @@ form_submitted_cb (JSContextRef js_context,
   JSStringRef js_string;
   JSValueRef js_value;
   StorePasswordData *store_data;
-  char *name_field_name;
-  char *name_field_value;
-  char *password_field_name;
-  char *password_field_value;
+  char *name_field_name = NULL;
+  char *name_field_value = NULL;
+  char *password_field_name = NULL;
+  char *password_field_value = NULL;
   SoupURI *uri;
   WebKitWebView *web_view;
 
