@@ -39,6 +39,7 @@
 #endif
 
 #include <webkit/webkit.h>
+#include <glib/gi18n.h>
 #include <libsoup/soup-gnome.h>
 #include <gnome-keyring.h>
 
@@ -480,6 +481,20 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   ephy_embed_prefs_init ();
 
   session = webkit_get_default_session ();
+
+#ifdef GTLS_SYSTEM_CA_FILE
+  /* Check SSL certificates */
+
+  if (g_file_test (GTLS_SYSTEM_CA_FILE, G_FILE_TEST_EXISTS)) {
+    g_object_set (session,
+                  SOUP_SESSION_SSL_CA_FILE, GTLS_SYSTEM_CA_FILE,
+                  "ignore-ssl-cert-errors", TRUE,
+                  NULL);
+  } else {
+    g_warning (_("CA Certificates file we should use was not found, "\
+                 "all SSL sites will be considered to have a broken certificate."));
+  }
+#endif
 
   /* Store cookies in moz-compatible SQLite format */
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);

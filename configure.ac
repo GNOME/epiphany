@@ -247,6 +247,39 @@ fi
 
 AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
 
+# *********************
+# CA Certificate file
+# Stolen from GIO's TLS
+# *********************
+
+AC_MSG_CHECKING([location of system Certificate Authority list])
+AC_ARG_WITH(ca-file,
+            [AC_HELP_STRING([--with-ca-file=@<:@path@:>@],
+                            [path to system Certificate Authority list])])
+if test "$with_ca_file" = "no"; then
+    AC_MSG_RESULT([disabled])
+else
+    if test -z "$with_ca_file"; then
+        for f in /etc/pki/tls/certs/ca-bundle.crt \
+                 /etc/ssl/certs/ca-certificates.crt; do
+            if test -f "$f"; then
+                with_ca_file="$f"
+            fi
+        done
+        if test -z "$with_ca_file"; then
+            AC_MSG_ERROR([could not find. Use --with-ca-file=path to set, or --without-ca-file to disable])
+        fi
+    fi
+
+    AC_MSG_RESULT($with_ca_file)
+    if ! test -f "$with_ca_file"; then
+        AC_MSG_ERROR([No such file '$with_ca_file'. Use --with-ca-file=path to set, or --without-ca-file to disable])
+    fi
+    GTLS_SYSTEM_CA_FILE="$with_ca_file"
+
+    AC_DEFINE_UNQUOTED([GTLS_SYSTEM_CA_FILE], ["$GTLS_SYSTEM_CA_FILE"], [path to system Certificate Authority list])
+fi
+
 # ***
 # NSS
 # ***
@@ -456,5 +489,6 @@ Epiphany was configured with the following options:
  	GObject introspection      : $found_introspection
  	Seed support               : $enable_seed
  	NSS support                : $enable_nss
- 	Build tests                : $enable_tests
+	Build tests		   : $enable_tests
+	CA Certificates file	   : $GTLS_SYSTEM_CA_FILE
 "

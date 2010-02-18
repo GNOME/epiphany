@@ -220,15 +220,28 @@ load_status_changed_cb (WebKitWebView *view,
                            FALSE,
                            FALSE);
 
-    /*
-     * FIXME: as a temporary workaround while soup lacks the needed
-     * security API, determine security level based on the existence of
-     * a 'https' prefix for the URI
-     */
-    if (uri && g_str_has_prefix (uri, "https"))
-      security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-    else
+#ifdef GTLS_SYSTEM_CA_FILE
+    if (uri && g_str_has_prefix (uri, "https")) {
+      WebKitWebFrame *frame;
+      WebKitWebDataSource *source;
+      WebKitNetworkRequest *request;
+      SoupMessage *message;
+
+      frame = webkit_web_view_get_main_frame (view);
+      source = webkit_web_frame_get_data_source (frame);
+      request = webkit_web_data_source_get_request (source);
+      message = webkit_network_request_get_message (request);
+
+      if (message &&
+          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
+        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
+      else
+        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
+    } else
       security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+#else
+    security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+#endif
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
   } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
