@@ -102,12 +102,14 @@ window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {
 	EphyEmbed *embed;
+	EphyWebView *view;
 
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
+	view = ephy_embed_get_web_view (embed);
 
-	webkit_web_view_execute_script (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "print();");
+	ephy_web_view_print (view);
 }
 
 void

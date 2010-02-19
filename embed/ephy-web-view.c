@@ -3026,17 +3026,8 @@ ephy_web_view_show_page_certificate (EphyWebView *view)
 {
 }
 
-/**
- * ephy_web_view_show_print_preview
- * @view: an #EphyWebView
- *
- * Generates a print preview of the specified view.
- * An external viewer is used to display the preview.
- *
- * Since: 2.30
- **/
-void
-ephy_web_view_show_print_preview (EphyWebView *view)
+static void
+ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
 {
   WebKitWebFrame *main_frame;
   GtkPrintOperation *operation;
@@ -3050,7 +3041,7 @@ ephy_web_view_show_print_preview (EphyWebView *view)
   operation = gtk_print_operation_new ();
   gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup  (shell));
 
-  webkit_web_frame_print_full (main_frame, operation, GTK_PRINT_OPERATION_ACTION_PREVIEW, &error);
+  webkit_web_frame_print_full (main_frame, operation, action, &error);
   g_object_unref (operation);
 
   if (error) {
@@ -3072,8 +3063,35 @@ ephy_web_view_show_print_preview (EphyWebView *view)
     ephy_embed_add_top_widget (embed, info_bar, FALSE);
     gtk_widget_show_all (info_bar);
   }
+}
 
-  return;
+/**
+ * ephy_web_view_show_print_preview
+ * @view: an #EphyWebView
+ *
+ * Generates a print preview of the specified view.
+ * An external viewer is used to display the preview.
+ *
+ * Since: 2.30
+ **/
+void
+ephy_web_view_show_print_preview (EphyWebView *view)
+{
+  ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PREVIEW);
+}
+
+/**
+ * ephy_web_view_print
+ * @view: an #EphyWebView
+ *
+ * Opens a dialog to print the specified view.
+ *
+ * Since: 2.30
+ **/
+void
+ephy_web_view_print (EphyWebView *view)
+{
+  ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
 }
 
 /**
