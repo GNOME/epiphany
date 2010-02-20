@@ -431,7 +431,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_user_agent },
     { CONF_SECURITY_COOKIES_ACCEPT,
       "accept-policy",
-      webkit_pref_callback_cookie_accept_policy }
+      webkit_pref_callback_cookie_accept_policy },
+    { CONF_SECURITY_PLUGINS_ENABLED,
+      "enable-plugins",
+      webkit_pref_callback_boolean }
   };
 
 static void

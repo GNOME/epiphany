@@ -129,7 +129,7 @@ EphyDialogProperty properties [] =
 
 	/* Privacy */
 	{ "popups_allow_checkbutton",		CONF_SECURITY_ALLOW_POPUPS,	  PT_AUTOAPPLY, 0 },
-	{ "enable_java_checkbutton",		CONF_SECURITY_JAVA_ENABLED,	  PT_AUTOAPPLY, 0 },
+	{ "enable_plugins_checkbutton",		CONF_SECURITY_PLUGINS_ENABLED,	  PT_AUTOAPPLY, 0 },
 	{ "enable_javascript_checkbutton",	CONF_SECURITY_JAVASCRIPT_ENABLED, PT_AUTOAPPLY, 0 },
 	{ "cookies_radiobutton",		CONF_SECURITY_COOKIES_ACCEPT,	  PT_AUTOAPPLY, G_TYPE_STRING },
 	{ "remember_passwords_checkbutton",	CONF_PRIVACY_REMEMBER_PASSWORDS,  PT_AUTOAPPLY, 0 },
