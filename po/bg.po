@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2010-02-12 07:35+0200\n"
-"PO-Revision-Date: 2010-02-12 07:35+0200\n"
+"POT-Creation-Date: 2010-02-21 18:17+0200\n"
+"PO-Revision-Date: 2010-02-21 16:39+0200\n"
 "Last-Translator: Ivaylo Valkov <ivaylo@e-valkov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -255,12 +255,12 @@ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "Стандартен шрифт. Възможните стойности са „serif“ и „sans-serif“."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Включване на Джава"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Включване на JavaScript"
+
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Включване на приставките"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
@@ -772,8 +772,8 @@ msgid "Enable Java_Script"
 msgstr "Включване на Java_Script"
 
 #: ../data/glade/prefs-dialog.ui.h:20
-msgid "Enable _Java"
-msgstr "Включване на _Джава"
+msgid "Enable _Plugins"
+msgstr "Включване на п_риставките"
 
 #: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
@@ -1004,18 +1004,18 @@ msgstr "Остават"
 msgid "Save"
 msgstr "Запазване"
 
-#: ../embed/ephy-embed.c:693
+#: ../embed/ephy-embed.c:695
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: ../embed/ephy-embed.c:712
+#: ../embed/ephy-embed.c:714
 msgid "Download this potentially unsafe file?"
 msgstr "Да бъде ли изтеглен потенциално опасния файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:717
+#: ../embed/ephy-embed.c:719
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1028,14 +1028,14 @@ msgstr ""
 "Опасно е да отваряте „%s“, възможно е да повреди документите ви или да "
 "застраши личните ви данни. Вместо това, можете да го изтеглите."
 
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:727
 msgid "Open this file?"
 msgstr "Отваряне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:731
+#: ../embed/ephy-embed.c:733
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1046,13 +1046,13 @@ msgstr ""
 "\n"
 "Можете да отворите „%s“ чрез „%s“ или можете да го запазите."
 
-#: ../embed/ephy-embed.c:738
+#: ../embed/ephy-embed.c:740
 msgid "Download this file?"
 msgstr "Изтегляне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:743
+#: ../embed/ephy-embed.c:745
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1064,11 +1064,11 @@ msgstr ""
 "Не разполагате с програма, способна да отвори „%s“. Вместо това, можете да "
 "го изтеглите."
 
-#: ../embed/ephy-embed.c:750
+#: ../embed/ephy-embed.c:752
 msgid "_Save As..."
 msgstr "Запазване _като…"
 
-#: ../embed/ephy-embed.c:915
+#: ../embed/ephy-embed.c:925
 msgid "Web Inspector"
 msgstr "Уеб инспектор"
 
@@ -1420,16 +1420,16 @@ msgstr "Локални файлове"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3159
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3163
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: ../embed/ephy-web-view.c:913
+#: ../embed/ephy-web-view.c:917
 msgid "Not now"
 msgstr "Не сега"
 
-#: ../embed/ephy-web-view.c:918
+#: ../embed/ephy-web-view.c:922
 msgid "Store password"
 msgstr "Запазване на паролата"
 
@@ -1437,39 +1437,39 @@ msgstr "Запазване на паролата"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:929
+#: ../embed/ephy-web-view.c:933
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Искате ли да запазите паролата към <b>%s</b> за <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:2015
+#: ../embed/ephy-web-view.c:2019
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.bg/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2284
+#: ../embed/ephy-web-view.c:2288
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Пренасочване към „%s“…"
 
-#: ../embed/ephy-web-view.c:2286
+#: ../embed/ephy-web-view.c:2290
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Прехвърляне на данни от „%s“…"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2292
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Изчакване за упълномощаване от „%s“…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2294 ../embed/ephy-web-view.c:2418
+#: ../embed/ephy-web-view.c:2298 ../embed/ephy-web-view.c:2422
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Зареждане на „%s“…"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2424
 msgid "Loading…"
 msgstr "Зареждане…"
 
@@ -1479,7 +1479,7 @@ msgstr "Зареждане…"
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3363
+#: ../embed/ephy-web-view.c:3367
 #, c-format
 msgid "%s Files"
 msgstr "Файлове на %s"
@@ -2532,7 +2532,7 @@ msgstr ""
 msgid "GNOME Web Browser options"
 msgstr "Настройки на браузъра"
 
-#: ../src/ephy-notebook.c:628
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Затваряне на подпрозореца"
 
@@ -2627,7 +2627,7 @@ msgstr "Курсор"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Режим на избор с курсор. За изход — натиснете „F7“."
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Превключване към този подпрозорец"
 
