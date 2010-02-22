@@ -488,7 +488,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   if (g_file_test (GTLS_SYSTEM_CA_FILE, G_FILE_TEST_EXISTS)) {
     g_object_set (session,
                   SOUP_SESSION_SSL_CA_FILE, GTLS_SYSTEM_CA_FILE,
-                  "ignore-ssl-cert-errors", TRUE,
+                  SOUP_SESSION_SSL_STRICT, FALSE,
                   NULL);
   } else {
     g_warning (_("CA Certificates file we should use was not found, "\
