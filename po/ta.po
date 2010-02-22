@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.ta\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2010-02-17 21:33+0530\n"
-"PO-Revision-Date: 2010-02-17 21:35+0530\n"
+"POT-Creation-Date: 2010-02-22 11:55+0530\n"
+"PO-Revision-Date: 2010-02-22 11:57+0530\n"
 "Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
@@ -264,12 +264,12 @@ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "முன்னிருப்பு எழுத்துரு வகை. பொருத்தமான மதிப்புகள் \"serif\" மற்றும் \"sans-serif\""
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "ஜாவாவை செயல்படுத்தல்"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "ஜாவாஸ்கிரிப்ட் ஐ செயல்படுத்தல்"
+
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr " சொருகிகளை செயல்படுத்து"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
@@ -764,8 +764,8 @@ msgid "Enable Java_Script"
 msgstr "Java_Scriptஐ செயல்படுத்தவும்"
 
 #: ../data/glade/prefs-dialog.ui.h:20
-msgid "Enable _Java"
-msgstr "ஜாவாவை செயல்படுத்தவும் (_J)"
+msgid "Enable _Plugins"
+msgstr "_P சொருகிகள் ஐ செயல்படுத்து"
 
 #: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
@@ -996,18 +996,18 @@ msgstr "மீதமுள்ளவை"
 msgid "Save"
 msgstr "சேமி"
 
-#: ../embed/ephy-embed.c:693
+#: ../embed/ephy-embed.c:695
 msgctxt "file type"
 msgid "Unknown"
 msgstr "தெரியாத"
 
-#: ../embed/ephy-embed.c:712
+#: ../embed/ephy-embed.c:714
 msgid "Download this potentially unsafe file?"
 msgstr "அனேகமாக பாதுகாப்பு இல்லாத கோப்பை தரவிறக்கலாமா?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:717
+#: ../embed/ephy-embed.c:719
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1020,14 +1020,14 @@ msgstr ""
 " “%s” ஐ திறப்பது உங்கள் ஆவணங்களை சிதைக்கலாம் அல்லது உங்கள் அந்தரங்கத்துக்கு ஊறாகலாம். "
 "அதளால் பாதுகாப்பு இல்லாதது. அதற்கு பதிலாக அதை தரவிறக்கலாம்."
 
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:727
 msgid "Open this file?"
 msgstr "கோப்பை திறக்கவா?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:731
+#: ../embed/ephy-embed.c:733
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1038,13 +1038,13 @@ msgstr ""
 "\n"
 "“%s” ஐ “%s” ஆல் திறக்கலாம் அல்லது சேமிக்கலாம்."
 
-#: ../embed/ephy-embed.c:738
+#: ../embed/ephy-embed.c:740
 msgid "Download this file?"
 msgstr "இந்த கோப்பை தரவிறக்கவா?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:743
+#: ../embed/ephy-embed.c:745
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1055,11 +1055,11 @@ msgstr ""
 "\n"
 "“%s” ஐ திறக்க தகுந்த நிரல் உங்களிடம் இல்லை. நீங்கள் அதை தரவிறக்கலாம்."
 
-#: ../embed/ephy-embed.c:750
+#: ../embed/ephy-embed.c:752
 msgid "_Save As..."
 msgstr "(_S) இப்படி சேமி..."
 
-#: ../embed/ephy-embed.c:915
+#: ../embed/ephy-embed.c:925
 msgid "Web Inspector"
 msgstr "வலை ஆய்வாளர்"
 
@@ -2602,7 +2602,7 @@ msgstr "காரட்"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "விசைப்பலகை தேர்வு பாணியில்  F7 விசையை அழுத்தினால் வெளியேறலாம்"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "இந்த கீற்றுக்கு மாற்று"
 
@@ -3503,6 +3503,12 @@ msgstr ""
 #: ../src/window-commands.c:1057
 msgid "GNOME Web Browser Website"
 msgstr "க்னோம் வலை உலாவி இணையதளம்"
+
+#~ msgid "Enable Java"
+#~ msgstr "ஜாவாவை செயல்படுத்தல்"
+
+#~ msgid "Enable _Java"
+#~ msgstr "ஜாவாவை செயல்படுத்தவும் (_J)"
 
 #~ msgid "First"
 #~ msgstr "முதல்"
