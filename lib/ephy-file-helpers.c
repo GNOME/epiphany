@@ -207,7 +207,8 @@ ephy_file_desktop_dir (void)
 	if (xdg_desktop_dir != NULL)
 		return g_strdup (xdg_desktop_dir);
 
-	return g_build_filename	(g_get_home_dir (), "Desktop", NULL);
+	/* If we don't have XDG user dirs info, return an educated guess. */
+	return g_build_filename	(g_get_home_dir (), _("Desktop"), NULL);
 }
 
 /**

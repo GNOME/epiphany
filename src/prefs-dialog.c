@@ -906,13 +906,16 @@ download_path_changed_cb (GtkFileChooser *button)
 	desktop_dir = ephy_file_desktop_dir ();
 	g_return_if_fail (downloads_dir != NULL && desktop_dir != NULL);
 
+	/* Check if the dir matches the default downloads_dir or desktop_dir to
+	 * store the english name instead of the localized one reported by the
+	 * two ephy_file_ functions. */
 	if (strcmp (dir, downloads_dir) == 0)
 	{
-		eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, "Downloads");
+		eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, _("Downloads"));
 	}
 	else if (strcmp (dir, desktop_dir) == 0)
 	{
-		eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, "Desktop");
+		eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, _("Desktop"));
 	}
 	else
 	{
