@@ -2259,7 +2259,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				EphyWindow *window)
 {
 	guint button, modifier, context;
-	gboolean handled = TRUE;
+	gboolean handled = FALSE;
 	gboolean with_control, with_shift;
 	gboolean is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
@@ -2270,7 +2270,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
 	button = event->button;
 
-	if (event->button == 3)
+	if (button == 3)
 	{
 		show_embed_popup (window, view, event, hit_test_result);
 		g_object_unref (hit_test_result);
@@ -2315,7 +2315,6 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 		{
 			handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "image-uri");
 		}
-
 	}
 
 	/* middle click opens the selection url */
@@ -2345,11 +2344,8 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 						   GDK_SELECTION_PRIMARY),
 			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
 			 cb_data);
-	}
-	/* we didn't handle the event */
-	else
-	{
-		handled = FALSE;
+
+		handled = TRUE;
 	}
 
 	g_object_unref (hit_test_result);
