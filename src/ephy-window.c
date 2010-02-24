@@ -2521,6 +2521,15 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		{
 			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 		}
+		/* Because we connect to button-press-event *after*
+		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
+		 * a link when you shift+click it. Otherwise when you
+		 * shift+click a link to download it you would also be taken to
+		 * the link destination. */
+		else if (button == 1 && state == GDK_SHIFT_MASK)
+		{
+			return TRUE;
+		}
 		/* Those were our special cases, we won't handle this */
 		else
 		{
