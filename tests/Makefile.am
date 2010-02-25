@@ -1,4 +1,5 @@
 noinst_PROGRAMS = \
+	testephyembedpersist \
 	testephysearchentry \
 	testephylocationentry \
 	testephyzoomcontrol
@@ -36,6 +37,9 @@ CFLAGS += \
 LDADD += \
     $(SEED_LIBS)
 endif
+
+testephyembedpersist_SOURCES = \
+	testephyembedpersist.c
 
 testephysearchentry_SOURCES = \
 	testephysearchentry.c
