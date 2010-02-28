@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2010-02-22 06:28+0000\n"
-"PO-Revision-Date: 2010-02-22 08:27+0100\n"
+"POT-Creation-Date: 2010-02-28 20:28+0000\n"
+"PO-Revision-Date: 2010-02-28 21:33+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -530,6 +530,7 @@ msgstr "Piškotki"
 #: ../data/glade/epiphany.ui.h:5
 #: ../lib/ephy-file-helpers.c:129
 #: ../lib/ephy-file-helpers.c:159
+#: ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Prejeto"
 
@@ -898,24 +899,24 @@ msgid "Remaining"
 msgstr "Preostalo"
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:442
+#: ../embed/ephy-embed.c:455
 #: ../embed/ephy-embed-persist.c:778
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Shrani"
 
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Ali želite prejeti to morebitno nevarno datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:719
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -927,14 +928,14 @@ msgstr ""
 "Datoteko “%s” je tvegano odpreti, saj obstaja možnost, da poškoduje vaše dokumente ali pa vam vdre v zasebnost. Namesto tega jo lahko shranite na disk."
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Ali želite odpreti to datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:733
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -946,13 +947,13 @@ msgstr ""
 "Datoteko “%s” lahko odprete z uporabo programa “%s” ali pa jo shranite."
 
 # G:0 K:1 O:0
-#: ../embed/ephy-embed.c:740
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Ali želite prejeti to datoteko?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:745
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -964,17 +965,21 @@ msgstr ""
 "Na voljo ni nobenega programa, ki bi lahko odprl datoteko vrste “%s”. Namesto tega jo lahko shranite na disk."
 
 # G:1 K:0 O:0
-#: ../embed/ephy-embed.c:752
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "Shrani _kot ..."
 
-#: ../embed/ephy-embed.c:925
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Spletni nadzornik"
 
 #: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Programa Epiphany trenutno ni mogoče uporabljati. zagon ni uspel"
+
+#: ../embed/ephy-embed-single.c:494
+msgid "CA Certificates file we should use was not found, all SSL sites will be considered to have a broken certificate."
+msgstr "CA datoteke potrdila, ki bi morala biti uporabljena, ni mogoče najti. Vse SSL strani bodo prikazane kot strani s pokvarjenimi potrdili."
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1396,16 +1401,16 @@ msgstr "Krajevne datoteke"
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
 #: ../embed/ephy-web-view.c:68
-#: ../embed/ephy-web-view.c:3163
+#: ../embed/ephy-web-view.c:3159
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: ../embed/ephy-web-view.c:917
+#: ../embed/ephy-web-view.c:913
 msgid "Not now"
 msgstr "Ne zdaj"
 
-#: ../embed/ephy-web-view.c:922
+#: ../embed/ephy-web-view.c:918
 msgid "Store password"
 msgstr "Shrani geslo"
 
@@ -1413,40 +1418,40 @@ msgstr "Shrani geslo"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:933
+#: ../embed/ephy-web-view.c:929
 #, c-format
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big><b>Ali želite shraniti geslo za <b>%s</b> v <b>%s</b>?</big>"
 
 # G:0 K:1 O:0
-#: ../embed/ephy-web-view.c:2019
+#: ../embed/ephy-web-view.c:2015
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.si/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2284
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Preusmerjanje na \"%s\" ..."
 
-#: ../embed/ephy-web-view.c:2290
+#: ../embed/ephy-web-view.c:2286
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Prenašanje podatkov iz “%s” ..."
 
-#: ../embed/ephy-web-view.c:2292
+#: ../embed/ephy-web-view.c:2288
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Čakanje na overitev preko “%s” ..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2298
-#: ../embed/ephy-web-view.c:2422
+#: ../embed/ephy-web-view.c:2294
+#: ../embed/ephy-web-view.c:2418
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Nalaganje “%s” ..."
 
-#: ../embed/ephy-web-view.c:2424
+#: ../embed/ephy-web-view.c:2420
 msgid "Loading…"
 msgstr "Nalaganje ..."
 
@@ -1454,7 +1459,7 @@ msgstr "Nalaganje ..."
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3367
+#: ../embed/ephy-web-view.c:3363
 #, c-format
 msgid "%s Files"
 msgstr "%s datotek"
@@ -1594,21 +1599,24 @@ msgstr "Slike"
 msgid "All files"
 msgstr "Vse datoteke"
 
+#. If we don't have XDG user dirs info, return an educated guess.
 #: ../lib/ephy-file-helpers.c:164
+#: ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
 msgid "Desktop"
 msgstr "Namizje"
 
-#: ../lib/ephy-file-helpers.c:382
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ni mogoče ustvariti začasne mape v “%s”."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datoteka “%s” obstaja. Odmaknite jo s poti."
 
-#: ../lib/ephy-file-helpers.c:482
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ni mogoče ustvariti mape “%s”."
@@ -3594,7 +3602,7 @@ msgstr[1] "Sistemski jezik (%s)"
 msgstr[2] "Sistemska jezika (%s)"
 msgstr[3] "Sistemski jeziki (%s)"
 
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Izberite mapo"
 
