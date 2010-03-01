@@ -135,6 +135,7 @@ ephy_toolbar_update_fixed_visibility (EphyToolbar *toolbar)
 
 	show = priv->leave_fullscreen_visible;
 	g_object_set (priv->sep_item, "visible", show, NULL);
+	g_object_set (priv->exit_button, "visible", show, NULL);
 	g_object_set (priv->fixed_toolbar, "visible", show, NULL);
 }
 
