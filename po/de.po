@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2010-02-20 09:47+0000\n"
-"PO-Revision-Date: 2010-02-20 16:18+0100\n"
+"POT-Creation-Date: 2010-02-28 20:28+0000\n"
+"PO-Revision-Date: 2010-03-01 09:25+0100\n"
 "Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -651,7 +651,7 @@ msgstr "Cookies"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
-#: ../lib/ephy-file-helpers.c:159
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -1001,23 +1001,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Verbleibend"
 
-#: ../embed/ephy-embed.c:442 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Speichern"
 
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Die möglicherweise unsichere Datei herunterladen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:719
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1031,14 +1031,14 @@ msgstr ""
 "beschädigen oder in Ihre Privatsphäre eindringen kann. Sie können die Datei "
 "stattdessen speichern."
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Die Datei öffnen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:733
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1049,13 +1049,13 @@ msgstr ""
 "\n"
 "Sie können »%s« mit »%s« öffnen oder es abspeichern."
 
-#: ../embed/ephy-embed.c:740
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Die Datei herunterladen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:745
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1067,11 +1067,11 @@ msgstr ""
 "Keine installierte Anwendung ist in der Lage, »%s« zu öffnen. Sie können die "
 "Datei stattdessen speichern."
 
-#: ../embed/ephy-embed.c:752
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "_Speichern unter …"
 
-#: ../embed/ephy-embed.c:925
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Web-Analysierer"
 
@@ -1080,6 +1080,14 @@ msgid "Epiphany can't be used now. Initialization failed."
 msgstr ""
 "Epiphany kann im Moment nicht verwendet werden, da die Initialisierung "
 "gescheitert ist."
+
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"Die zu verwendende Zertifikatdatei wurde nicht gefunden. Daher werden die "
+"Zertifikate aller SSL-Seiten als ungültig angesehen."
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1424,16 +1432,16 @@ msgstr "Lokale Dateien"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3163
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3159
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Leere Seite"
 
-#: ../embed/ephy-web-view.c:917
+#: ../embed/ephy-web-view.c:913
 msgid "Not now"
 msgstr "Jetzt nicht"
 
-#: ../embed/ephy-web-view.c:922
+#: ../embed/ephy-web-view.c:918
 msgid "Store password"
 msgstr "Passwort speichern"
 
@@ -1441,47 +1449,47 @@ msgstr "Passwort speichern"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:933
+#: ../embed/ephy-web-view.c:929
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Wollen Sie das Passwort für <b>%s</b> in <b>%s</b> speichern?</big>"
 
-#: ../embed/ephy-web-view.c:2019
+#: ../embed/ephy-web-view.c:2015
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.de/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2284
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Umleitung zur Seite »%s« …"
 
-#: ../embed/ephy-web-view.c:2290
+#: ../embed/ephy-web-view.c:2286
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Datenübertragung von »%s« …"
 
-#: ../embed/ephy-web-view.c:2292
+#: ../embed/ephy-web-view.c:2288
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Warten auf Legitimation von »%s« …"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2298 ../embed/ephy-web-view.c:2422
+#: ../embed/ephy-web-view.c:2294 ../embed/ephy-web-view.c:2418
 #, c-format
 msgid "Loading “%s”…"
 msgstr "»%s« wird geladen …"
 
-#: ../embed/ephy-web-view.c:2424
+#: ../embed/ephy-web-view.c:2420
 msgid "Loading…"
 msgstr "Laden …"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3367
+#: ../embed/ephy-web-view.c:3363
 #, c-format
 msgid "%s Files"
 msgstr "%s-Dateien"
@@ -1616,21 +1624,23 @@ msgstr "Bilder"
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../lib/ephy-file-helpers.c:164
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
 msgid "Desktop"
 msgstr "Arbeitsfläche"
 
-#: ../lib/ephy-file-helpers.c:382
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Temporärer Ordner konnte nicht in »%s« angelegt werden."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Die Datei »%s« existiert, bitte entfernen Sie sie von dort."
 
-#: ../lib/ephy-file-helpers.c:482
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ordner »%s« konnte nicht angelegt werden."
@@ -3459,7 +3469,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Systemsprache (%s)"
 msgstr[1] "Systemsprachen (%s)"
 
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
