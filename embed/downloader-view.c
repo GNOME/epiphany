@@ -492,6 +492,8 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 		case DOWNLOAD_ACTION_OPEN_LOCATION:
 			open_downloaded_file_location (dv, download);
 			break;
+		case DOWNLOAD_ACTION_DOWNLOAD:
+			break;
 		default:
 			g_assert_not_reached ();
 			break;
