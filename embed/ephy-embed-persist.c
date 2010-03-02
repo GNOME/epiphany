@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "downloader-view.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
@@ -61,6 +62,7 @@ struct _EphyEmbedPersistPrivate
 	GtkWindow *fc_parent;
 	guint32 user_time;
 	WebKitDownload *download;
+	DownloaderView *dview;
 };
 
 static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
@@ -478,6 +480,7 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 	LOG ("EphyEmbedPersist initialising %p", persist);
 
 	persist->priv->max_size = -1;
+	persist->priv->dview = NULL;
 
 	ephy_embed_persist_set_user_time (persist, gtk_get_current_event_time ());
 }
@@ -685,6 +688,9 @@ response_cb (GtkDialog *dialog,
 
 		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER(dialog));
 
+		if (persist->priv->dview)
+			downloader_view_add_download (persist->priv->dview, download);
+
 		webkit_download_set_destination_uri (download, uri);
 		webkit_download_start (download);
 
@@ -765,6 +771,16 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 			  G_CALLBACK (download_status_changed_cb),
 			  persist);
 
+	/* Should we include downloads in DownloaderView? */
+	if (!(priv->flags & EPHY_EMBED_PERSIST_NO_VIEW))
+	{
+		priv->dview = EPHY_DOWNLOADER_VIEW
+			(ephy_embed_shell_get_downloader_view (embed_shell));
+
+		g_object_set_data (G_OBJECT (priv->download), "download-action",
+				   GINT_TO_POINTER (DOWNLOAD_ACTION_DOWNLOAD));
+	}
+
 	if (priv->flags & EPHY_EMBED_PERSIST_ASK_DESTINATION)
 	{
 		EphyFileChooser *dialog;
@@ -824,6 +840,9 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 			priv->dest = dest_filename;
 			dest_uri = g_filename_to_uri (dest_filename, NULL, NULL);
 		}
+
+		if (priv->dview)
+			downloader_view_add_download (priv->dview, priv->download);
 
 		webkit_download_set_destination_uri (priv->download, dest_uri);
 		webkit_download_start (priv->download);

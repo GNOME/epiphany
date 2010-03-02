@@ -94,6 +94,7 @@ persist_fixture_setup (PersistFixture *fixture,
 
   ephy_embed_persist_set_source (fixture->embed, uri_string);
   ephy_embed_persist_set_dest (fixture->embed, fixture->destination);
+  ephy_embed_persist_set_flags (fixture->embed, EPHY_EMBED_PERSIST_NO_VIEW);
 
   g_free (tmp_filename);
   g_free (uri_string);
