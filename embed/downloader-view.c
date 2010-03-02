@@ -499,7 +499,6 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 			break;
 		}
 
-		downloader_view_remove_download (dv, download);
 #ifdef HAVE_LIBNOTIFY
 		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 
 						name);
@@ -512,6 +511,7 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 		
 		g_free (downloaded);
 #endif
+		downloader_view_remove_download (dv, download);
 
 		return;
 	case WEBKIT_DOWNLOAD_STATUS_STARTED:
