@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 2.29.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2010-02-10 21:56+0100\n"
-"PO-Revision-Date: 2010-02-10 22:06+0100\n"
+"POT-Creation-Date: 2010-03-03 15:55+0100\n"
+"PO-Revision-Date: 2010-03-03 15:56+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -247,12 +247,12 @@ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "Forvalgt skrift. Mulige verdier er «serif» og «sans-serif»."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Aktiver Java"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Aktiver JavaScript"
+
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Aktiver tillegg"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
@@ -632,7 +632,7 @@ msgstr "Informasjonskapsler"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
-#: ../lib/ephy-file-helpers.c:159
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Nedlastinger"
 
@@ -664,7 +664,9 @@ msgstr "Signer tekst"
 msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
-msgstr "Velg et sertifikat og oppgi passordet for å bekrefte at du ønsker å signere teksten over."
+msgstr ""
+"Velg et sertifikat og oppgi passordet for å bekrefte at du ønsker å signere "
+"teksten over."
 
 #: ../data/glade/form-signing-dialog.ui.h:3
 msgid "_Certificate:"
@@ -753,8 +755,8 @@ msgid "Enable Java_Script"
 msgstr "Slå på Java_Script"
 
 #: ../data/glade/prefs-dialog.ui.h:20
-msgid "Enable _Java"
-msgstr "Slå på _Java"
+msgid "Enable _Plugins"
+msgstr "Aktiver _tillegg"
 
 #: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
@@ -981,23 +983,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: ../embed/ephy-embed.c:442 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Lagre"
 
-#: ../embed/ephy-embed.c:693
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../embed/ephy-embed.c:712
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Vil du laste ned denne potensielt utrygge filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:717
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1010,14 +1012,14 @@ msgstr ""
 "Det er utrygt å åpne «%s» da det er mulig at denne kan skade dine dokumenter "
 "eller misbruke privat informasjon. Du kan laste den ned i stedet."
 
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Åpne denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:731
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1028,13 +1030,13 @@ msgstr ""
 "\n"
 "Du kan åpne «%s» med «%s» eller lagre den."
 
-#: ../embed/ephy-embed.c:738
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Last ned denne filen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:743
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1045,17 +1047,23 @@ msgstr ""
 "\n"
 "Du har ingen programmer som kan åpne «%s». Du kan laste den ned i stedet."
 
-#: ../embed/ephy-embed.c:750
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "_Lagre som..."
 
-#: ../embed/ephy-embed.c:915
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Inspeksjon av nettsider"
 
 #: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany kan ikke brukes nå. Initiering feilet."
+
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr "CA-sertifikatfilen som skulle brukes ble ikke funnet. Alle SSL-baserte nettsteder vil fremstå som om de ikke har gyldige sertifikater."
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1589,21 +1597,23 @@ msgstr "Bilder"
 msgid "All files"
 msgstr "Alle filer"
 
-#: ../lib/ephy-file-helpers.c:164
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: ../lib/ephy-file-helpers.c:382
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunne ikke opprette midlertidig katalog i «%s»."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen «%s» eksisterer. Vennligst flytt den."
 
-#: ../lib/ephy-file-helpers.c:482
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kunne ikke opprette katalog «%s»."
@@ -2507,7 +2517,7 @@ msgstr ""
 msgid "GNOME Web Browser options"
 msgstr "Alternativer for GNOME Nettleser"
 
-#: ../src/ephy-notebook.c:628
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Lukk fane"
 
@@ -2597,7 +2607,7 @@ msgstr "Markør"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "I tastaturutvalgsmodus. Trykk F7 for å avslutte"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Lukk denne fanen"
 
@@ -3417,7 +3427,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk [%s]"
 msgstr[1] "Systemspråk [%s]"
 
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
