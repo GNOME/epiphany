@@ -124,6 +124,18 @@ static void
 show_notification_window (DownloaderView *dv);
 #endif
 
+static void
+download_progress_cb (WebKitDownload *download,
+		      GParamSpec *pspec,
+		      DownloaderView *dv);
+static void
+download_status_changed_cb (WebKitDownload *download,
+			    GParamSpec *pspec,
+			    DownloaderView *dv);
+static gboolean
+download_error_cb (WebKitDownload *download, gint error_code, gint error_detail,
+		   const gchar *reason, DownloaderView *dv);
+
 G_DEFINE_TYPE (DownloaderView, downloader_view, EPHY_TYPE_DIALOG)
 
 static void
@@ -195,13 +207,18 @@ show_status_icon (DownloaderView *dv)
 static gboolean
 remove_download (WebKitDownload *download,
 		 gpointer rowref,
-		 DownloaderView *view)
+		 DownloaderView *dv)
 {
 	WebKitDownloadStatus status;
 
-	g_signal_handlers_disconnect_matched
-		(download, G_SIGNAL_MATCH_DATA,
-		 0, 0, NULL, NULL, view);
+	g_signal_handlers_disconnect_by_func
+		(download, G_CALLBACK (download_progress_cb), dv);
+
+	g_signal_handlers_disconnect_by_func
+		(download, G_CALLBACK (download_status_changed_cb), dv);
+
+	g_signal_handlers_disconnect_by_func
+		(download, G_CALLBACK (download_error_cb), dv);
 
 	status = webkit_download_get_status (download);
 	if (status == WEBKIT_DOWNLOAD_STATUS_STARTED)
