@@ -188,6 +188,8 @@ show_status_icon (DownloaderView *dv)
 				  G_CALLBACK (show_downloader_cb), dv);
 	g_signal_connect (priv->status_icon, "popup-menu",
 			  G_CALLBACK (status_icon_popup_menu_cb), dv);
+
+	gtk_status_icon_set_visible (priv->status_icon, TRUE);
 }
 
 static gboolean
