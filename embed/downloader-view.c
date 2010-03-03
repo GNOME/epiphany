@@ -1003,9 +1003,10 @@ downloader_view_remove_download (DownloaderView *dv, WebKitDownload *download)
 	update_status_icon (dv);
 
 	/* Close the dialog if there are no more downloads */
-
 	if (!g_hash_table_size (dv->priv->downloads_hash))
 	{
+		gtk_widget_set_sensitive (dv->priv->abort_button, FALSE);
+		gtk_widget_set_sensitive (dv->priv->pause_button, FALSE);
 		g_object_unref (dv);
 	}
 }
