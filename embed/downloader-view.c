@@ -71,10 +71,6 @@ struct _DownloaderViewPrivate
 	GtkStatusIcon *status_icon;
 	gboolean ownref;
 
-#ifdef HAVE_LIBNOTIFY
-	NotifyNotification *notification;
-#endif
-
 	guint source_id;
 };
 
@@ -119,11 +115,6 @@ static gboolean
 download_dialog_delete_event_cb (GtkWidget *window,
 				 GdkEventAny *event,
 				 DownloaderView *dv);
-
-#ifdef HAVE_LIBNOTIFY
-static void
-show_notification_window (DownloaderView *dv);
-#endif
 
 static void
 download_progress_cb (WebKitDownload *download,
@@ -192,10 +183,6 @@ show_status_icon (DownloaderView *dv)
 	DownloaderViewPrivate *priv = dv->priv;
 
 	priv->status_icon = gtk_status_icon_new_from_stock (STOCK_DOWNLOAD);
-
-#ifdef HAVE_LIBNOTIFY
-	notify_notification_attach_to_status_icon (priv->notification, priv->status_icon);
-#endif
 
 	g_signal_connect_swapped (priv->status_icon, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
@@ -308,6 +295,65 @@ downloader_view_new (void)
 						   "default-height", 250,
 			 			   NULL));
 }
+
+#ifdef HAVE_LIBNOTIFY
+static void
+notification_closed_cb (NotifyNotification *notification,
+			DownloaderView *dv)
+{
+	g_object_unref (dv);
+}
+
+static gboolean
+show_notification_cb (NotifyNotification *notification)
+{
+	DownloaderView *dv;
+	GError *error = NULL;
+
+	dv = g_object_get_data (G_OBJECT (notification), "dv");
+	notify_notification_show (notification, &error);
+
+	if (error)
+	{
+		/* notification_closed_cb () will never be called. */
+		g_warning ("Error showing download notification: %s",
+			   error->message);
+		g_object_unref (dv);
+		g_error_free (error);
+	}
+
+	return FALSE;
+}
+
+static void
+show_notification (DownloaderView *dv, const char *title, const char *msg)
+{
+	NotifyNotification *notification;
+	GtkStatusIcon *status_icon;
+
+	status_icon = dv->priv->status_icon;
+
+	/* We keep the DownloaderView alive until the notification is gone. */
+	g_object_ref (dv);
+
+	notification = notify_notification_new (title, msg,
+						GTK_STOCK_INFO, NULL);
+
+	g_signal_connect_after (notification, "closed",
+				G_CALLBACK (notification_closed_cb), dv);
+	g_object_set_data (G_OBJECT (notification), "dv", dv);
+
+	notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
+	notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
+
+	notify_notification_attach_to_status_icon (notification, status_icon);
+
+	/* There are some visual glitches when the notification is shown and
+	 * the GtkStatusIcon is still not visible. To avoid that, we delay the
+	 * popup a bit. */
+	g_timeout_add (500, (GSourceFunc) show_notification_cb, notification);
+}
+#endif
 
 static char *
 format_interval (gdouble interval)
@@ -528,15 +574,8 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 		}
 
 #ifdef HAVE_LIBNOTIFY
-		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 
-						name);
-		notify_notification_update (dv->priv->notification,
-			_("Download finished"), 
-			downloaded, 
-			GTK_STOCK_INFO);
-			
-		show_notification_window (dv);
-		
+		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), name);
+		show_notification (dv, _("Download finished"), downloaded);
 		g_free (downloaded);
 #endif
 		downloader_view_remove_download (dv, download);
@@ -645,27 +684,6 @@ update_buttons_timeout_cb (DownloaderView *dv)
 	return FALSE;
 }
 
-#ifdef HAVE_LIBNOTIFY
-static void
-show_notification_window (DownloaderView *dv)
-{
-	if (gtk_status_icon_is_embedded (dv->priv->status_icon))
-	{
-		notify_notification_attach_to_status_icon
-						(dv->priv->notification,
-						 dv->priv->status_icon);
-	}
-	else
-	{
-		notify_notification_attach_to_status_icon
-						(dv->priv->notification,
-						 NULL);
-	}
-
-	notify_notification_show (dv->priv->notification, NULL);
-}
-#endif
-
 void
 downloader_view_add_download (DownloaderView *dv,
 			      WebKitDownload *download)
@@ -683,13 +701,9 @@ downloader_view_add_download (DownloaderView *dv,
 #endif
 	gboolean visible = FALSE;
 
-#ifdef HAVE_LIBNOTIFY
-	char *downloading;
-#endif
-
 	/* dv may be unrefed inside update_download_row if the file
 	 * downloaded completely while the user was choosing where to
-	 * put it, so we need to protect it
+	 * put it, so we need to protect it.
 	 */
 	g_object_ref (dv);
 	g_object_ref (download);
@@ -740,19 +754,16 @@ downloader_view_add_download (DownloaderView *dv,
 	
 	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !visible)
 	{
-
 #ifdef HAVE_LIBNOTIFY
-		char *name = ephy_download_get_name (download);
-		downloading = g_strdup_printf(_("The file “%s” has been added to the downloads queue."), 
-						name);
-		g_free (name);
-		notify_notification_update (dv->priv->notification,
-					_("Download started"), 
-					downloading, 
-					GTK_STOCK_INFO);
-		
-		show_notification_window (dv);
+		char *name;
+		char *downloading;
 
+		name = ephy_download_get_name (download);
+		downloading = g_strdup_printf(_("The file “%s” has been added to the downloads queue."), name);
+		
+		show_notification (dv, _("Download started"), downloading);
+
+		g_free (name);
 		g_free (downloading);
 #endif
 
@@ -941,13 +952,6 @@ downloader_view_build_ui (DownloaderView *dv)
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
-	
-#ifdef HAVE_LIBNOTIFY
-	priv->notification = notify_notification_new (" ", " ", GTK_STOCK_INFO, NULL);
-	notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
-	notify_notification_set_urgency (priv->notification, NOTIFY_URGENCY_LOW);
-#endif
-
 }
 
 static void
