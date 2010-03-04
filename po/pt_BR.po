@@ -13,15 +13,16 @@
 # Og Maciel <ogmaciel@gnome.org>, 2008-2009, 2009.
 # Fábio Nogueira <deb-user-ba@ubuntu.com>, 2008, 2009.
 # Carlos Jose Pereira <carlao2005@gmail.com>, 2009.
+# Gilfran Ribeiro <contato@gilfran.net>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2010-02-19 23:46-0500\n"
-"PO-Revision-Date: 2010-01-29 16:29-0300\n"
-"Last-Translator: Djavan Fagundes <djavan@comum.org>\n"
+"POT-Creation-Date: 2010-03-04 15:39-0300\n"
+"PO-Revision-Date: 2010-03-02 10:59-0300\n"
+"Last-Translator: Gilfran Ribeiro <contato@gilfran.net>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,12 +70,12 @@ msgstr "Epiphany"
 
 #: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
-msgstr "Navegador web Epiphany"
+msgstr "Navegador da web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
-msgstr "Navegador web"
+msgstr "Navegador da web"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -260,12 +261,12 @@ msgstr ""
 "Tipo de fonte padrão. Valores possíveis são \"serif\" e \"sans-serif\"."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Habilitar Java"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Habilitar JavaScript"
+
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Habilitar plug-ins"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
@@ -640,134 +641,118 @@ msgstr "<b>Usar uma _codificação diferente:</b>"
 
 #: ../data/glade/epiphany.ui.h:3
 msgid "Clear _All..."
-msgstr ""
+msgstr "Limp_ar tudo..."
 
 #: ../data/glade/epiphany.ui.h:4
-#, fuzzy
 msgid "Cookies"
-msgstr "C_ookies"
+msgstr "Cookies"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
-#: ../lib/ephy-file-helpers.c:159
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Downloads"
 
 #: ../data/glade/epiphany.ui.h:6
-#, fuzzy
 msgid "Passwords"
-msgstr "Senhas do usuário"
+msgstr "Senhas"
 
 #: ../data/glade/epiphany.ui.h:7
-#, fuzzy
 msgid "Personal Data"
-msgstr "Dados p_essoais"
+msgstr "Dados pessoais"
 
 #: ../data/glade/epiphany.ui.h:8
-#, fuzzy
 msgid "Text Encoding"
-msgstr "Codificação de te_xto"
+msgstr "Codificação de texto"
 
 #: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Usar a codificação especificada pelo documento"
 
 #: ../data/glade/epiphany.ui.h:10
-#, fuzzy
 msgid "_Show passwords"
-msgstr "Armazenar senha"
+msgstr "Mostrar _senhas"
 
 #: ../data/glade/form-signing-dialog.ui.h:1
-#, fuzzy
 msgid "Sign Text"
-msgstr "Localizar próxima"
+msgstr "Assinar texto"
 
 #: ../data/glade/form-signing-dialog.ui.h:2
 msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
 msgstr ""
+"Para confirmar que você deseja assinar o texto acima, escolha um certificado "
+"para assinar o texto e digite sua senha abaixo."
 
 #: ../data/glade/form-signing-dialog.ui.h:3
-#, fuzzy
 msgid "_Certificate:"
-msgstr "_Certificados"
+msgstr "_Certificados:"
 
 #: ../data/glade/form-signing-dialog.ui.h:4
-#, fuzzy
 msgid "_Password:"
-msgstr "Senhas do usuário"
+msgstr "_Senha:"
 
 #: ../data/glade/form-signing-dialog.ui.h:5
 msgid "_View Certificate&#x2026;"
-msgstr ""
+msgstr "_Ver Certificados&#x2026;"
 
 #: ../data/glade/prefs-dialog.ui.h:1
-#, fuzzy
 msgid "<b>Cookies</b>"
-msgstr "C_ookies"
+msgstr "<b>Cookies</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:2
-#, fuzzy
 msgid "<b>Downloads</b>"
-msgstr "Downloads"
+msgstr "<b>Downloads</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:3
-#, fuzzy
 msgid "<b>Encodings</b>"
-msgstr "Codificações"
+msgstr "<b>Codificações</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:4
-#, fuzzy
 msgid "<b>Home page</b>"
-msgstr "Página inicial"
+msgstr "<b>Página inicial</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:5
-#, fuzzy
 msgid "<b>Languages</b>"
-msgstr "Idiomas"
+msgstr "<b>Idiomas</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:6
-#, fuzzy
 msgid "<b>Passwords</b>"
-msgstr "<b>Emitido por</b>"
+msgstr "<b>Senhas</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:7
-#, fuzzy
 msgid "<b>Temporary Files</b>"
-msgstr "Arquivos _temporários"
+msgstr "<b>Arquivos temporários</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:8
 msgid "<b>Web Content</b>"
-msgstr ""
+msgstr "<b>Conteúdo da web</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Web Development</b>"
-msgstr ""
+msgstr "<b>Desenvolvimento web</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: ../data/glade/prefs-dialog.ui.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr ""
+msgstr "<small>Por exemplo, não de anunciantes nesses sites</small>"
 
 #: ../data/glade/prefs-dialog.ui.h:12
-#, fuzzy
 msgid "A_utomatically download and open files"
-msgstr "Downloads automáticos"
+msgstr "Baixar e abrir arquivos a_utomaticamente"
 
 #: ../data/glade/prefs-dialog.ui.h:13
-#, fuzzy
 msgid "Add Language"
 msgstr "Idioma"
 
 #: ../data/glade/prefs-dialog.ui.h:14
-#, fuzzy
 msgid "Allow popup _windows"
-msgstr "Aceitar janelas instantâneas"
+msgstr "Aceitar janelas _instantâneas"
 
 #: ../data/glade/prefs-dialog.ui.h:15
 msgid "Choose a l_anguage:"
-msgstr ""
+msgstr "Escolher um idiom_a:"
 
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
@@ -779,23 +764,20 @@ msgid "Cl_ear"
 msgstr "_Limpar"
 
 #: ../data/glade/prefs-dialog.ui.h:17
-#, fuzzy
 msgid "De_fault:"
-msgstr "Padrão"
+msgstr "_Padrão:"
 
 #: ../data/glade/prefs-dialog.ui.h:18
-#, fuzzy
 msgid "Enable Java_Script"
-msgstr "Habilitar JavaScript"
+msgstr "Habilitar Java_Script"
 
 #: ../data/glade/prefs-dialog.ui.h:20
-#, fuzzy
-msgid "Enable _Java"
-msgstr "Habilitar Java"
+msgid "Enable _Plugins"
+msgstr "Habilitar _plug-ins"
 
 #: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
-msgstr ""
+msgstr "Fontes e estilos"
 
 #: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:821
 msgid "Language"
@@ -803,144 +785,127 @@ msgstr "Idioma"
 
 #: ../data/glade/prefs-dialog.ui.h:24
 msgid "Let web pages specify their own _fonts"
-msgstr ""
+msgstr "Permitir que páginas da web usem _fontes próprias"
 
 #: ../data/glade/prefs-dialog.ui.h:25
 msgid "Let web pages specify their own c_olors"
-msgstr ""
+msgstr "Permitir que páginas da web usem c_ores próprias"
 
 #: ../data/glade/prefs-dialog.ui.h:26
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../data/glade/prefs-dialog.ui.h:27
 msgid "Only _from sites you visit"
-msgstr ""
+msgstr "Apenas de sites que você _visita"
 
 #: ../data/glade/prefs-dialog.ui.h:28
-#, fuzzy
 msgid "Preferences"
-msgstr "_Preferências"
+msgstr "Preferências"
 
 #: ../data/glade/prefs-dialog.ui.h:29
 msgid "Privacy"
-msgstr ""
+msgstr "Privacidade"
 
 #: ../data/glade/prefs-dialog.ui.h:30
-#, fuzzy
 msgid "Set to Current _Page"
-msgstr "Salva o arquivo atual"
+msgstr "Definir como _página atual"
 
 #: ../data/glade/prefs-dialog.ui.h:31
-#, fuzzy
 msgid "Set to _Blank Page"
-msgstr "Página em branco"
+msgstr "Definir como página em _branco"
 
 #: ../data/glade/prefs-dialog.ui.h:32
 msgid "Use custom _stylesheet"
-msgstr ""
+msgstr "Habilitar folha de e_stilos personalizada"
 
 #: ../data/glade/prefs-dialog.ui.h:33
-#, fuzzy
 msgid "Use s_mooth scrolling"
 msgstr "Habilitar rolagem suave"
 
 #: ../data/glade/prefs-dialog.ui.h:34
-#, fuzzy
 msgid "_Address:"
-msgstr "_Endereço"
+msgstr "_Endereço:"
 
 #: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Always accept"
-msgstr ""
+msgstr "Sempre _aceitar"
 
 #: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Disk space:"
-msgstr ""
+msgstr "Espaço em _disco:"
 
 #: ../data/glade/prefs-dialog.ui.h:37
-#, fuzzy
 msgid "_Download folder:"
-msgstr "A pasta de downloads"
+msgstr "Pasta de _downloads"
 
 #: ../data/glade/prefs-dialog.ui.h:38
 msgid "_Edit Stylesheet&#x2026;"
-msgstr ""
+msgstr "_Editar folha de estilos&#x2026;"
 
 #: ../data/glade/prefs-dialog.ui.h:39
-#, fuzzy
 msgid "_Minimum size:"
-msgstr "Tamanho mínimo de fonte"
+msgstr "Tamanho _mínimo:"
 
 #: ../data/glade/prefs-dialog.ui.h:40
-#, fuzzy
 msgid "_Never accept"
-msgstr "Aceitação de cookies"
+msgstr "_Nunca aceitar"
 
 #: ../data/glade/prefs-dialog.ui.h:41
-#, fuzzy
 msgid "_Remember passwords"
-msgstr "Lembrar senhas"
+msgstr "_Lembrar senhas"
 
 #: ../data/glade/print.ui.h:1
 msgid "<b>Background</b>"
-msgstr ""
+msgstr "<b>Plano de fundo</b>"
 
 #: ../data/glade/print.ui.h:2
-#, fuzzy
 msgid "<b>Footers</b>"
-msgstr "<b>Impressões digitais</b>"
+msgstr "<b>Rodapé</b>"
 
 #: ../data/glade/print.ui.h:3
-#, fuzzy
 msgid "<b>Frames</b>"
-msgstr "<b>Impressões digitais</b>"
+msgstr "<b>Quadros</b>"
 
 #: ../data/glade/print.ui.h:4
-#, fuzzy
 msgid "<b>Headers</b>"
-msgstr "<b>Validade</b>"
+msgstr "<b>Cabeçalho</b>"
 
 #: ../data/glade/print.ui.h:5
 msgid "As laid out on the _screen"
-msgstr ""
+msgstr "Como previ_sto na tela"
 
 #: ../data/glade/print.ui.h:6
-#, fuzzy
 msgid "O_nly the selected frame"
-msgstr "Abre o marcador selecionado em uma nova aba"
+msgstr "Some_nte o quadro selecionado"
 
 #: ../data/glade/print.ui.h:7
 msgid "P_age title"
-msgstr ""
+msgstr "Título da págin_a"
 
 #: ../data/glade/print.ui.h:8
 msgid "Page _numbers"
-msgstr ""
+msgstr "_Números das páginas"
 
 #: ../data/glade/print.ui.h:9
-#, fuzzy
 msgid "Print background c_olors"
-msgstr "Imprimir a cor do plano de fundo"
+msgstr "Imprimir plan_o de fundo"
 
 #: ../data/glade/print.ui.h:10
-#, fuzzy
 msgid "Print background i_mages"
-msgstr "Imprimir as imagens do plano de fundo"
+msgstr "Imprimir imagens do plano de fundo"
 
 #: ../data/glade/print.ui.h:11
-#, fuzzy
 msgid "_Date"
-msgstr "Data"
+msgstr "_Data"
 
 #: ../data/glade/print.ui.h:12
 msgid "_Each frame separately"
-msgstr ""
+msgstr "Cada quadro s_eparadamente"
 
 #: ../data/glade/print.ui.h:13
-#, fuzzy
 msgid "_Page address"
-msgstr "Copiar endereço da i_magem"
+msgstr "Endereço da _página"
 
 #. this opens the downloader window, or brings it to the foreground if already open
 #: ../embed/downloader-view.c:165
@@ -1034,23 +999,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:442 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Salvar"
 
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Baixar o arquivo potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:719
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1064,14 +1029,14 @@ msgstr ""
 "documentos ou invadir sua privacidade. Ao invés de abrir o arquivo você pode "
 "baixá-lo."
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Abrir este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:733
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1082,13 +1047,13 @@ msgstr ""
 "\n"
 "Você pode abrir \"%s\" usando \"%s\" ou salvá-lo."
 
-#: ../embed/ephy-embed.c:740
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Baixar este arquivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:745
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1100,17 +1065,25 @@ msgstr ""
 "Você não possui nenhum aplicativo capaz de abrir \"%s\". Ao invés de abrir o "
 "arquivo você pode baixá-lo."
 
-#: ../embed/ephy-embed.c:752
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "Salvar _como..."
 
-#: ../embed/ephy-embed.c:925
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Inspetor web"
 
 #: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "O Epiphany não pode ser usado agora. A inicialização falhou."
+
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"O arquivo de certificados CA que devemos usar não foi encontrado, todos os "
+"sites SSL serão considerados como se tivessem um certificado inválido."
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1455,16 +1428,16 @@ msgstr "Arquivos locais"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3163
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3159
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Página em branco"
 
-#: ../embed/ephy-web-view.c:917
+#: ../embed/ephy-web-view.c:913
 msgid "Not now"
 msgstr "Agora não"
 
-#: ../embed/ephy-web-view.c:922
+#: ../embed/ephy-web-view.c:918
 msgid "Store password"
 msgstr "Armazenar senha"
 
@@ -1472,47 +1445,47 @@ msgstr "Armazenar senha"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:933
+#: ../embed/ephy-web-view.c:929
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Você gostaria de armazenar a senha para <b>%s</b> em <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:2019
+#: ../embed/ephy-web-view.c:2015
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com.br/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2284
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redirecionando para \"%s\"..."
 
-#: ../embed/ephy-web-view.c:2290
+#: ../embed/ephy-web-view.c:2286
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transferindo dados de \"%s\"..."
 
-#: ../embed/ephy-web-view.c:2292
+#: ../embed/ephy-web-view.c:2288
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorização de \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2298 ../embed/ephy-web-view.c:2422
+#: ../embed/ephy-web-view.c:2294 ../embed/ephy-web-view.c:2418
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Carregando \"%s\"..."
 
-#: ../embed/ephy-web-view.c:2424
+#: ../embed/ephy-web-view.c:2420
 msgid "Loading…"
 msgstr "Carregando..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3367
+#: ../embed/ephy-web-view.c:3363
 #, c-format
 msgid "%s Files"
 msgstr "Arquivos de %s"
@@ -1655,21 +1628,23 @@ msgstr "Imagens"
 msgid "All files"
 msgstr "Todos os arquivos"
 
-#: ../lib/ephy-file-helpers.c:164
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
 msgid "Desktop"
-msgstr ""
+msgstr "Área de trabalho"
 
-#: ../lib/ephy-file-helpers.c:382
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Não foi possível criar um diretório temporário em \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "O arquivo \"%s\" já existe. Por favor, tire-o do caminho."
 
-#: ../lib/ephy-file-helpers.c:482
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Erro ao criar diretório \"%s\"."
@@ -3487,7 +3462,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Selecione um diretório"
 
@@ -3572,11 +3547,19 @@ msgstr ""
 "Og Maciel <ogmaciel@gnome.org>\n"
 "Taylon Silmer <taylonsilva@gmail.com>\n"
 "André Gondim <andregondim@ubuntu.com>\n"
-"Carlos Jose Pereira <carlao2005@gmail.com>"
+"Carlos Jose Pereira <carlao2005@gmail.com>\n"
+"Gilfran Ribeiro <contato@gilfran.net>"
 
 #: ../src/window-commands.c:1057
 msgid "GNOME Web Browser Website"
 msgstr "Site do Navegador web do GNOME"
+
+#~ msgid "Enable Java"
+#~ msgstr "Habilitar Java"
+
+#, fuzzy
+#~ msgid "Enable _Java"
+#~ msgstr "Habilitar Java"
 
 #~ msgid "First"
 #~ msgstr "Primeira"
