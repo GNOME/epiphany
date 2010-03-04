@@ -672,7 +672,7 @@ downloader_view_add_download (DownloaderView *dv,
 	char *mime, *icon_name;
 	int width = 16, height = 16;
 #endif
-	GValue visible = {0, };
+	gboolean visible = FALSE;
 
 #ifdef HAVE_LIBNOTIFY
 	char *downloading;
@@ -716,10 +716,9 @@ downloader_view_add_download (DownloaderView *dv,
 				 G_CALLBACK (download_error_cb), dv, 0);
 
 	/* Show it already */
-	g_value_init (&visible, G_TYPE_BOOLEAN);
-	g_object_get_property (G_OBJECT (dv->priv->window), "visible", &visible);
+	g_object_get (G_OBJECT (dv->priv->window), "visible", &visible, NULL);
 	
-	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !g_value_get_boolean (&visible))
+	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !visible)
 	{
 
 #ifdef HAVE_LIBNOTIFY
@@ -743,8 +742,6 @@ downloader_view_add_download (DownloaderView *dv,
 	{
 		ephy_dialog_show (EPHY_DIALOG (dv));
 	}
-	
-	g_value_unset (&visible);
 
 #if 0
         // FIXMEchpe port this to use GIcon when webkit gets download support
