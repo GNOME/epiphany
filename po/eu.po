@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2010-03-02 20:20+0100\n"
-"PO-Revision-Date: 2010-03-02 20:28+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2010-03-02 19:23+0000\n"
+"PO-Revision-Date: 2010-03-04 23:07+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -396,7 +396,9 @@ msgstr "Diskoko cache-aren tamaina (MB)."
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
-msgstr "Erabiltzaile-agente gisa erabiliko den katea web zerbitzarietan arakatzailea identifikatzeko."
+msgstr ""
+"Erabiltzaile-agente gisa erabiliko den katea web zerbitzarietan arakatzailea "
+"identifikatzeko."
 
 #: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
@@ -960,6 +962,23 @@ msgstr "'%s' fitxategia deskargen ilarari gehitu zaio."
 msgid "Download started"
 msgstr "Deskarga hasita"
 
+#: ../embed/downloader-view.c:788 ../embed/downloader-view.c:798
+#| msgid "Unknown"
+msgctxt "download status"
+msgid "Unknown"
+msgstr "Ezezaguna"
+
+#: ../embed/downloader-view.c:791
+#| msgid "File"
+msgctxt "download status"
+msgid "Failed"
+msgstr "Huts egin du"
+
+#: ../embed/downloader-view.c:794
+msgctxt "download status"
+msgid "Cancelled"
+msgstr "Bertan behera utzita"
+
 #: ../embed/downloader-view.c:857 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Fitxategia"
@@ -976,6 +995,12 @@ msgstr "Falta:"
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Gorde"
+
+#: ../embed/ephy-embed.c:708
+#| msgid "Unknown"
+msgctxt "file type"
+msgid "Unknown"
+msgstr "Ezezaguna"
 
 #: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
@@ -1048,8 +1073,8 @@ msgid ""
 "CA Certificates file we should use was not found, all SSL sites will be "
 "considered to have a broken certificate."
 msgstr ""
-"Ez da erabili ohi dugun ZE ziurtagirien fitxategia aurkitu, SSL gune "
-"guztiek ziurtagiriak hautsitzat daudela hartuko da."
+"Ez da erabili ohi dugun ZE ziurtagirien fitxategia aurkitu, SSL gune guztiek "
+"ziurtagiriak hautsitzat daudela hartuko da."
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1867,6 +1892,33 @@ msgstr "_Eguneratu"
 msgid "Update Bookmark?"
 msgstr "Eguneratu laster-marka?"
 
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1203
+#| msgid "All"
+msgctxt "bookmarks"
+msgid "All"
+msgstr "Denak"
+
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1206
+msgctxt "bookmarks"
+msgid "Most Visited"
+msgstr "Bisitatuenak"
+
+#. Translators: this topic contains the not categorized
+#. bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1210
+msgctxt "bookmarks"
+msgid "Not Categorized"
+msgstr "Kategoriarik gabeak"
+
+#. Translators: this is an automatic topic containing local
+#. * websites bookmarks autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1215
+msgctxt "bookmarks"
+msgid "Nearby Sites"
+msgstr "Gertuko guneak"
+
 #: ../src/bookmarks/ephy-bookmarks.c:1450
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
@@ -2656,6 +2708,34 @@ msgstr "_Leiho berria"
 msgid "Open a new window"
 msgstr "Leiho berria irekitzen du"
 
+#: ../src/ephy-toolbar-editor.c:71
+#| msgid "De_fault:"
+msgctxt "toolbar style"
+msgid "Default"
+msgstr "Lehenetsia"
+
+#. separator row
+#: ../src/ephy-toolbar-editor.c:73
+msgctxt "toolbar style"
+msgid "Text below icons"
+msgstr "Textua ikonoen azpian"
+
+#: ../src/ephy-toolbar-editor.c:74
+msgctxt "toolbar style"
+msgid "Text beside icons"
+msgstr "Textua ikonoen ondoan"
+
+#: ../src/ephy-toolbar-editor.c:75
+msgctxt "toolbar style"
+msgid "Icons only"
+msgstr "Ikonoak soilik"
+
+#: ../src/ephy-toolbar-editor.c:76
+#| msgid "Text Encoding"
+msgctxt "toolbar style"
+msgid "Text only"
+msgstr "Testua soilik"
+
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
 msgstr "Tresna-barraren editorea"
@@ -3333,6 +3413,25 @@ msgstr "Gorde esteka honela"
 #: ../src/popup-commands.c:289
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:527
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Erabiltzaileak definitua (%s)"
 
 #: ../src/prefs-dialog.c:549
 #, c-format
