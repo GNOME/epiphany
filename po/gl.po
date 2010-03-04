@@ -1,23 +1,22 @@
-# translation of epiphany-master-po-gl-47333.po to Galician
+# translation of epiphany-master-po-gl-47333.merged.po to Galician
 # Ignacio Casal Quinteiro <adorador_del_heavy@hotmail.com>, 2004.
 # Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2005, 2006.
 # Ignacio Casal Quinteiro <icq@svn.gnome.org>, 2007, 2008.
 # Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun.org>, 2009.
-# Fran Diéguez <fran.dieguez@mabishu.com>, 2009.
 # Antón Méixome <meixome@mancomun.org>, 2009.
-# Antón Méixome <meixome@certima.net>, 2009.
+# Antón Méixome <meixome@certima.net>, 2009, 2010.
+# Fran Diéguez <frandieguez@ubuntu.com>, 2009, 2010.
 # Galician translation of epiphany
 # Copyright (C) 2004 Free software foundation, Inc
 # This file is distributed under the same license as the epiphany package.
-# Fran Diéguez <frandieguez@ubuntu.com>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany-master-po-gl-47333\n"
+"Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2010-02-15 13:38+0100\n"
-"PO-Revision-Date: 2010-02-12 21:54+0100\n"
-"Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2010-03-02 19:23+0000\n"
+"PO-Revision-Date: 2010-03-03 01:16+0100\n"
+"Last-Translator: Antón Méixome <meixome@certima.net>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -260,12 +259,12 @@ msgstr ""
 "\"."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Activar Java"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Activar JavaScript"
+
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Activar engadidos"
 
 #: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
@@ -511,7 +510,7 @@ msgstr "Usar os seus propios tipos de letra en vez dos que pide a páxina."
 
 #: ../data/epiphany.schemas.in.h:60
 msgid "User agent"
-msgstr "User agent"
+msgstr "Axente de usuario"
 
 #: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
@@ -656,7 +655,7 @@ msgstr "Cookies"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
-#: ../lib/ephy-file-helpers.c:159
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -779,8 +778,8 @@ msgid "Enable Java_Script"
 msgstr "Activar Java_Script"
 
 #: ../data/glade/prefs-dialog.ui.h:20
-msgid "Enable _Java"
-msgstr "Activar _Java"
+msgid "Enable _Plugins"
+msgstr "Activar _engadidos"
 
 #: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
@@ -1006,23 +1005,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restante"
 
-#: ../embed/ephy-embed.c:442 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Gardar"
 
-#: ../embed/ephy-embed.c:693
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: ../embed/ephy-embed.c:712
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Quere descargar este ficheiro potencialmente non seguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:717
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1035,14 +1034,14 @@ msgstr ""
 "non é seguro abrir “%s” porque podería danar potencialmente os seus "
 "documentos ou invadir a súa privacidade. En vez diso pode descargalo."
 
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Quere abrir este ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:731
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1053,13 +1052,13 @@ msgstr ""
 "\n"
 "Pode abrir “%s” usando “%s” ou gardalo."
 
-#: ../embed/ephy-embed.c:738
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Quere descargar este ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:743
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1070,11 +1069,11 @@ msgstr ""
 "\n"
 "Non ten ningún aplicativo capaz de abrir “%s”. En vez diso pode descargalo."
 
-#: ../embed/ephy-embed.c:750
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "_Gardar como..."
 
-#: ../embed/ephy-embed.c:915
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Inspector Web"
 
@@ -1082,6 +1081,12 @@ msgstr "Inspector Web"
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr ""
 "Non é posíbel usar o Epiphany agora. Produciuse un fallo ao inicializar."
+
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
 
 #: ../embed/ephy-embed-utils.c:60
 #, c-format
@@ -1615,21 +1620,23 @@ msgstr "Imaxes"
 msgid "All files"
 msgstr "Todos os ficheiros"
 
-#: ../lib/ephy-file-helpers.c:164
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: ../lib/ephy-file-helpers.c:382
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Non foi posíbel crear un directorio temporal en “%s”."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "O ficheiro “%s” xa existe. Móvao para outra localización."
 
-#: ../lib/ephy-file-helpers.c:482
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Produciuse un fallo ao crear o cartafol “%s”."
@@ -2534,7 +2541,7 @@ msgstr ""
 msgid "GNOME Web Browser options"
 msgstr "Opcións do navegador web de GNOME"
 
-#: ../src/ephy-notebook.c:628
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Pechar o separador"
 
@@ -2627,7 +2634,7 @@ msgstr "Cursor"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Prema F7 para saír do modo de selección de teclado"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Cambiar a este separador"
 
@@ -3446,7 +3453,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Seleccionar un cartafol"
 
@@ -3518,38 +3525,9 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Fran Diéguez <frandieguez@ubuntu.com>, 2009, 2010;\n"
-"Antón Méixome <meixome@mancomun.org>,2009. "
+"Antón Méixome <meixome@certima.net>,2009, 2010; "
 
 #: ../src/window-commands.c:1057
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web do navegador do GNOME"
 
-#~ msgid "First"
-#~ msgstr "Primeira"
-
-#~ msgid "Go to the first page"
-#~ msgstr "Ir á primeira páxina"
-
-#~ msgid "Last"
-#~ msgstr "Última"
-
-#~ msgid "Go to the last page"
-#~ msgstr "Ir á última páxina"
-
-#~ msgid "Previous"
-#~ msgstr "Anterior"
-
-#~ msgid "Go to the previous page"
-#~ msgstr "Ir á páxina anterior"
-
-#~ msgid "Next"
-#~ msgstr "Seguinte"
-
-#~ msgid "Go to next page"
-#~ msgstr "Ir á páxina seguinte"
-
-#~ msgid "Close"
-#~ msgstr "Pechar"
-
-#~ msgid "Close print preview"
-#~ msgstr "Pechar a previsualización de impresión"
