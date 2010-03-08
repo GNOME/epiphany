@@ -583,6 +583,21 @@ js_object_get_property_as_object (JSContextRef js_context,
 }
 
 static char *
+js_get_element_property (JSContextRef js_context,
+                         JSObjectRef object,
+                         const char *prop)
+{
+  JSValueRef val;
+  char *buffer = NULL;
+
+  val = js_object_get_property (js_context, object, prop);
+  if (JSValueIsString (js_context, val))
+    buffer = js_value_to_string (js_context, val);
+
+  return buffer;
+}
+
+static char *
 js_get_element_attribute (JSContextRef js_context,
                           JSObjectRef object,
                           const char *attr)
