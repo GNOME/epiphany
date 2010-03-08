@@ -799,7 +799,8 @@ find_username_and_password_elements (JSContextRef js_context,
 
     js_object = JSValueToObject (js_context, (JSValueRef)iter->data, NULL);
 
-    type = js_get_element_attribute (js_context, js_object, "type");
+    type = js_get_element_property (js_context, js_object, "type");
+
     if (!type)
       continue;
 
