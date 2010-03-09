@@ -263,7 +263,7 @@ parse_and_decrypt_signons (const char *signons,
         begin++; /* Skip username element */
       }
       username = decrypt (lines[begin++]);
-      
+
       /* The password */
       /* The element name has a leading '*' */
       if (lines[begin][0] == '*') {
@@ -296,9 +296,10 @@ parse_and_decrypt_signons (const char *signons,
           !g_str_equal (form_username, "") &&
           !g_str_equal (form_password, "*")) {
         char *u = soup_uri_to_string (uri, FALSE);
+        /* We skip the '*' at the beginning of form_password. */
         _ephy_profile_store_form_auth_data (u,
                                             form_username,
-                                            form_password,
+                                            form_password+1,
                                             username,
                                             password);
         g_free (u);
