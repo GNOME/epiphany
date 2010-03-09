@@ -1,4 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2009 Xan López
  *
@@ -488,7 +489,7 @@ _ephy_profile_store_form_auth_data (const char *uri,
   g_free (fake_uri_str);
 }
 
-GList*
+void
 _ephy_profile_query_form_auth_data (const char *uri,
                                     const char *form_username,
                                     const char *form_password,
@@ -498,17 +499,16 @@ _ephy_profile_query_form_auth_data (const char *uri,
 {
   SoupURI *key;
   char *key_str;
-  GList *results = NULL;
 
-  g_return_val_if_fail (uri, NULL);
-  g_return_val_if_fail (form_username, NULL);
-  g_return_val_if_fail (form_password, NULL);
+  g_return_if_fail (uri);
+  g_return_if_fail (form_username);
+  g_return_if_fail (form_password);
 
   key = soup_uri_new (uri);
-  if (key == NULL)
-    return NULL;
+  g_return_if_fail (key);
 
   normalize_and_prepare_uri (key, form_username, form_password);
+
   key_str = soup_uri_to_string (key, FALSE);
 
   LOG ("Querying Keyring: %s", key_str);
@@ -524,8 +524,6 @@ _ephy_profile_query_form_auth_data (const char *uri,
                                        destroy_data);
   soup_uri_free (key);
   g_free (key_str);
-
-  return results;
 }
 
 #define PROFILE_MIGRATION_FILE ".migrated"

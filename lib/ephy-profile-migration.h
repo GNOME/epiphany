@@ -34,7 +34,7 @@ void _ephy_profile_store_form_auth_data (const char *uri,
                                          const char *username,
                                          const char *password);
 
-GList*
+void
 _ephy_profile_query_form_auth_data (const char *uri,
                                     const char *form_username,
                                     const char *form_password,
