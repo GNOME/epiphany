@@ -224,7 +224,7 @@ parse_and_decrypt_signons (const char *signons,
       g_free (url);
 
       start += strlen (realmBracketBegin);
-      end_ptr = g_strstr_len (full_url, -1, realmBracketEnd);
+      end_ptr = g_strstr_len (full_url, -1, realmBracketEnd) -1;
       end = g_utf8_pointer_to_offset (full_url, end_ptr);
       realm = _g_utf8_substr (full_url, start, end);
 
