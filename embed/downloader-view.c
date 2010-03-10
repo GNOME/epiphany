@@ -69,6 +69,7 @@ struct _DownloaderViewPrivate
 	GtkWidget *abort_button;
 
 	GtkStatusIcon *status_icon;
+	gboolean ownref;
 
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notification;
@@ -225,6 +226,7 @@ remove_download (WebKitDownload *download,
 		webkit_download_cancel (download);
 
 	g_object_unref (download);
+	g_object_unref (dv);
 	return TRUE;
 }
 
@@ -260,6 +262,8 @@ downloader_view_init (DownloaderView *dv)
 		 (GDestroyNotify)gtk_tree_row_reference_free);
 
 	downloader_view_build_ui (dv);
+
+	dv->priv->ownref = TRUE;
 
 	show_status_icon (dv);
 
@@ -706,7 +710,7 @@ downloader_view_add_download (DownloaderView *dv,
 	update_status_icon (dv);
 
 	selection = gtk_tree_view_get_selection
-		(GTK_TREE_VIEW(dv->priv->treeview));
+		(GTK_TREE_VIEW (dv->priv->treeview));
 	gtk_tree_selection_unselect_all (selection);
 	gtk_tree_selection_select_iter (selection, &iter);
 
@@ -789,9 +793,6 @@ downloader_view_add_download (DownloaderView *dv,
 #endif
 
 	dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
-
-	/* see above */
-	g_object_unref (dv);
 }
 
 static void
@@ -1038,7 +1039,12 @@ downloader_view_remove_download (DownloaderView *dv, WebKitDownload *download)
 		gtk_widget_set_sensitive (dv->priv->abort_button, FALSE);
 		gtk_widget_set_sensitive (dv->priv->pause_button, FALSE);
 		ephy_dialog_hide (EPHY_DIALOG (dv));
-		g_object_unref (dv);
+
+		if (dv->priv->ownref)
+		{
+			dv->priv->ownref = FALSE;
+			g_object_unref (dv);
+		}
 	}
 }
 
