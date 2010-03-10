@@ -717,6 +717,16 @@ downloader_view_add_download (DownloaderView *dv,
 
 	/* Show it already */
 	g_object_get (G_OBJECT (dv->priv->window), "visible", &visible, NULL);
+
+	/* In the previous update_download_row() (or handlers) the download
+	 * might have finished, if that's the case, we have nothing else to do.
+	 * A notification of the finished download will pop to inform the user
+	 * there was success. */
+	if (g_hash_table_size (dv->priv->downloads_hash) < 1)
+	{
+		ephy_dialog_hide (EPHY_DIALOG (dv));
+		return;
+	}
 	
 	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !visible)
 	{
@@ -1021,6 +1031,7 @@ downloader_view_remove_download (DownloaderView *dv, WebKitDownload *download)
 	{
 		gtk_widget_set_sensitive (dv->priv->abort_button, FALSE);
 		gtk_widget_set_sensitive (dv->priv->pause_button, FALSE);
+		ephy_dialog_hide (EPHY_DIALOG (dv));
 		g_object_unref (dv);
 	}
 }
