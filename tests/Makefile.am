@@ -2,7 +2,8 @@ noinst_PROGRAMS = \
 	testephyembedpersist \
 	testephysearchentry \
 	testephylocationentry \
-	testephyzoomcontrol
+	testephyzoomcontrol \
+	testephyembedsingle
 
 INCLUDES = \
 	-I$(top_srcdir)/embed    \
@@ -40,6 +41,9 @@ endif
 
 testephyembedpersist_SOURCES = \
 	testephyembedpersist.c
+
+testephyembedsingle_SOURCES = \
+	testephyembedsingle.c
 
 testephysearchentry_SOURCES = \
 	testephysearchentry.c
