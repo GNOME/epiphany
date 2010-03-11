@@ -482,7 +482,12 @@ update_download_row (DownloaderView *dv, WebKitDownload *download)
 #endif
 
 	row_ref = get_row_from_download (dv, download);
-	g_return_if_fail (row_ref != NULL);
+	/* In downloader_view_add_download() we call this function manually to
+	 * ensure the view has something visible in the tree view, however
+	 * signal handlers might have already removed this download from the
+	 * DV, this is that case. */
+	if (row_ref == NULL)
+		return;
 
 	/* Status special casing */
 	status = webkit_download_get_status (download);
@@ -698,7 +703,6 @@ downloader_view_add_download (DownloaderView *dv,
 			     download,
 			     row_ref);
 
-	update_download_row (dv, download);
 	update_status_icon (dv);
 
 	selection = gtk_tree_view_get_selection
@@ -714,6 +718,8 @@ downloader_view_add_download (DownloaderView *dv,
 
 	g_signal_connect_object (download, "error",
 				 G_CALLBACK (download_error_cb), dv, 0);
+
+	update_download_row (dv, download);
 
 	/* Show it already */
 	g_object_get (G_OBJECT (dv->priv->window), "visible", &visible, NULL);
