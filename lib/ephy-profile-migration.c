@@ -292,7 +292,9 @@ parse_and_decrypt_signons (const char *signons,
           begin++;
       }
 
-      if (handle_forms && username && password && 
+      if (handle_forms && !realm &&
+          username && password &&
+          !g_str_equal (username, "") &&
           !g_str_equal (form_username, "") &&
           !g_str_equal (form_password, "*")) {
         char *u = soup_uri_to_string (uri, FALSE);
@@ -303,7 +305,10 @@ parse_and_decrypt_signons (const char *signons,
                                             username,
                                             password);
         g_free (u);
-      } else if (!handle_forms && username && password) {
+      } else if (!handle_forms && realm &&
+                 username && password &&
+                 !g_str_equal (username, "") &&
+                 form_username == NULL && form_password == NULL) {
         gnome_keyring_set_network_password_sync (NULL,
                                                  username,
                                                  realm,
