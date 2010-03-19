@@ -733,6 +733,7 @@ confirm_action_from_mime (WebKitWebView *web_view,
                                                 "it could potentially damage your documents or "
                                                 "invade your privacy. You can download it instead."),
                                               mime_description, suggested_filename);
+    action_label = STOCK_DOWNLOAD;
   } else if (action == DOWNLOAD_ACTION_OPEN && helper_app) {
     dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
