@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2010-03-06 20:25+0200\n"
-"PO-Revision-Date: 2010-03-06 20:25+0200\n"
+"POT-Creation-Date: 2010-03-21 12:09+0200\n"
+"PO-Revision-Date: 2010-03-21 11:53+0200\n"
 "Last-Translator: Ivaylo Valkov <ivaylo@e-valkov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -637,7 +637,7 @@ msgstr "<b>_Автоматично</b>"
 
 #: ../data/glade/epiphany.ui.h:2
 msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_Използване на различно кодиране:</b>"
+msgstr "<b>_Различно кодиране:</b>"
 
 #: ../data/glade/epiphany.ui.h:3
 msgid "Clear _All..."
@@ -667,7 +667,7 @@ msgstr "Кодиране на текста"
 
 #: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
-msgstr "Използване на кодирането, определено от документа"
+msgstr "Кодиране според документа"
 
 #: ../data/glade/epiphany.ui.h:10
 msgid "_Show passwords"
@@ -765,7 +765,7 @@ msgstr "Из_чистване"
 
 #: ../data/glade/prefs-dialog.ui.h:17
 msgid "De_fault:"
-msgstr "По _подразбиране:"
+msgstr "_Стандартно:"
 
 #: ../data/glade/prefs-dialog.ui.h:18
 msgid "Enable Java_Script"
@@ -908,46 +908,46 @@ msgid "_Page address"
 msgstr "Адрес на с_траницата"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:165
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "_Показване на изтеглянията"
 
-#: ../embed/downloader-view.c:302
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:306
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:356
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_Пауза"
 
-#: ../embed/downloader-view.c:356
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_Продължаване"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:377 ../embed/downloader-view.c:539
-#: ../embed/downloader-view.c:544 ../lib/ephy-time-helpers.c:279
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../embed/downloader-view.c:502
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Файлът „%s“ беше изтеглен."
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "Изтеглянето приключи"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:529
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -956,50 +956,50 @@ msgstr ""
 "%s\n"
 "%s от %s"
 
-#: ../embed/downloader-view.c:576
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d изтегляне"
 msgstr[1] "%d изтегляния"
 
-#: ../embed/downloader-view.c:706
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Файлът „%s“ беше добавен към опашката за изтегляне."
 
-#: ../embed/downloader-view.c:710
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "Изтеглянето започна"
 
-#: ../embed/downloader-view.c:788 ../embed/downloader-view.c:798
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../embed/downloader-view.c:791
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "Неуспешно"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Отменено"
 
-#: ../embed/downloader-view.c:857 ../src/bookmarks/ephy-bookmarks-editor.c:991
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Файл"
 
-#: ../embed/downloader-view.c:880
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:891
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "Остават"
 
-#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:794
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Запазване"
@@ -1092,87 +1092,87 @@ msgstr "Изпращане на е-писмо до „%s“"
 
 #: ../embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
-msgstr "Арабски (_IBM-864)"
+msgstr "Арабско (_IBM-864)"
 
 #: ../embed/ephy-encodings.c:59
 msgid "Arabic (ISO-_8859-6)"
-msgstr "Арабски (ISO-_8859-6)"
+msgstr "Арабско (ISO-_8859-6)"
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_MacArabic)"
-msgstr "Арабски (_MacArabic)"
+msgstr "Арабско (_MacArabic)"
 
 #: ../embed/ephy-encodings.c:61
 msgid "Arabic (_Windows-1256)"
-msgstr "Арабски (_Windows-1256)"
+msgstr "Арабско (_Windows-1256)"
 
 #: ../embed/ephy-encodings.c:62
 msgid "Baltic (_ISO-8859-13)"
-msgstr "Балтийски (_ISO-8859-13)"
+msgstr "Балтийско (_ISO-8859-13)"
 
 #: ../embed/ephy-encodings.c:63
 msgid "Baltic (I_SO-8859-4)"
-msgstr "Балтийски (I_SO-8859-4)"
+msgstr "Балтийско (I_SO-8859-4)"
 
 #: ../embed/ephy-encodings.c:64
 msgid "Baltic (_Windows-1257)"
-msgstr "Балтийски (_Windows-1257)"
+msgstr "Балтийско (_Windows-1257)"
 
 #: ../embed/ephy-encodings.c:65
 msgid "_Armenian (ARMSCII-8)"
-msgstr "_Арменски (ARMSCII-8)"
+msgstr "_Арменско (ARMSCII-8)"
 
 #: ../embed/ephy-encodings.c:66
 msgid "_Georgian (GEOSTD8)"
-msgstr "_Грузински (GEOSTD8)"
+msgstr "_Грузинско (GEOSTD8)"
 
 #: ../embed/ephy-encodings.c:67
 msgid "Central European (_IBM-852)"
-msgstr "Централно-европейски (_IBM-852)"
+msgstr "Централноевропейско (_IBM-852)"
 
 #: ../embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
-msgstr "Централно-европейски (I_SO-8859-2)"
+msgstr "Централноевропейско (I_SO-8859-2)"
 
 #: ../embed/ephy-encodings.c:69
 msgid "Central European (_MacCE)"
-msgstr "Централно-европейски (_MacCE)"
+msgstr "Централноевропейско (_MacCE)"
 
 #: ../embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
-msgstr "Централно-европейски (_Windows-1250)"
+msgstr "Централноевропейско (_Windows-1250)"
 
 #: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_GB18030)"
-msgstr "Китайски, опростен (_GB18030)"
+msgstr "Китайско, опростено (_GB18030)"
 
 #: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (G_B2312)"
-msgstr "Китайски, опростен (G_B2312)"
+msgstr "Китайско, опростено (G_B2312)"
 
 #: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (GB_K)"
-msgstr "Китайски, опростен (GB_K)"
+msgstr "Китайско, опростено (GB_K)"
 
 #: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_HZ)"
-msgstr "Китайски, опростен (_HZ)"
+msgstr "Китайско, опростено (_HZ)"
 
 #: ../embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr "Китайски, опростен (_ISO-2022-CN)"
+msgstr "Китайско, опростено (_ISO-2022-CN)"
 
 #: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big_5)"
-msgstr "Китайски, традиционен (Big_5)"
+msgstr "Китайско, традиционно (Big_5)"
 
 #: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr "Китайски, традиционен (Big5-HK_SCS)"
+msgstr "Китайско, традиционно (Big5-HK_SCS)"
 
 #: ../embed/ephy-encodings.c:78
 msgid "Chinese Traditional (_EUC-TW)"
-msgstr "Китайски, традиционен (_EUC-TW)"
+msgstr "Китайско, традиционно (_EUC-TW)"
 
 #: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (_IBM-855)"
@@ -1196,23 +1196,23 @@ msgstr "Кирилиц_а (MacCyrillic)"
 
 #: ../embed/ephy-encodings.c:84
 msgid "Cyrillic (_Windows-1251)"
-msgstr "Кирилица/_Българска (Windows-1251)"
+msgstr "Кирилица/_българско (Windows-1251)"
 
 #: ../embed/ephy-encodings.c:85
 msgid "Cyrillic/_Russian (IBM-866)"
-msgstr "Кирилица/_Руска (IBM-866)"
+msgstr "Кирилица/_руско (IBM-866)"
 
 #: ../embed/ephy-encodings.c:86
 msgid "Greek (_ISO-8859-7)"
-msgstr "Гръцки (_ISO-8859-7)"
+msgstr "Гръцко (_ISO-8859-7)"
 
 #: ../embed/ephy-encodings.c:87
 msgid "Greek (_MacGreek)"
-msgstr "Гръцки (_MacGreek)"
+msgstr "Гръцко (_MacGreek)"
 
 #: ../embed/ephy-encodings.c:88
 msgid "Greek (_Windows-1253)"
-msgstr "Гръцки (_Windows-1253)"
+msgstr "Гръцко (_Windows-1253)"
 
 #: ../embed/ephy-encodings.c:89
 msgid "Gujarati (_MacGujarati)"
@@ -1244,95 +1244,95 @@ msgstr "Иврит (_Windows-1255)"
 
 #: ../embed/ephy-encodings.c:96
 msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr "_Визуален иврит (ISO-8859-8)"
+msgstr "_Иврит, визуален (ISO-8859-8)"
 
 #: ../embed/ephy-encodings.c:97
 msgid "Japanese (_EUC-JP)"
-msgstr "Японски (_EUC-JP)"
+msgstr "Японско (_EUC-JP)"
 
 #: ../embed/ephy-encodings.c:98
 msgid "Japanese (_ISO-2022-JP)"
-msgstr "Японски (_ISO-2022-JP)"
+msgstr "Японско (_ISO-2022-JP)"
 
 #: ../embed/ephy-encodings.c:99
 msgid "Japanese (_Shift-JIS)"
-msgstr "Японски (_Shift-JIS)"
+msgstr "Японско (_Shift-JIS)"
 
 #: ../embed/ephy-encodings.c:100
 msgid "Korean (_EUC-KR)"
-msgstr "Корейски (_EUC-KR)"
+msgstr "Корейско (_EUC-KR)"
 
 #: ../embed/ephy-encodings.c:101
 msgid "Korean (_ISO-2022-KR)"
-msgstr "Корейски (_ISO-2022-KR)"
+msgstr "Корейско (_ISO-2022-KR)"
 
 #: ../embed/ephy-encodings.c:102
 msgid "Korean (_JOHAB)"
-msgstr "Корейски (_JOHAB)"
+msgstr "Корейско (_JOHAB)"
 
 #: ../embed/ephy-encodings.c:103
 msgid "Korean (_UHC)"
-msgstr "Корейски (_UHC)"
+msgstr "Корейско (_UHC)"
 
 #: ../embed/ephy-encodings.c:104
 msgid "_Celtic (ISO-8859-14)"
-msgstr "_Келтски (ISO-8859-14)"
+msgstr "_Келтско (ISO-8859-14)"
 
 #: ../embed/ephy-encodings.c:105
 msgid "_Icelandic (MacIcelandic)"
-msgstr "_Исландски (MacIcelandic)"
+msgstr "_Исландско (MacIcelandic)"
 
 #: ../embed/ephy-encodings.c:106
 msgid "_Nordic (ISO-8859-10)"
-msgstr "_Скандинавски (ISO-8859-10)"
+msgstr "_Скандинавско (ISO-8859-10)"
 
 #: ../embed/ephy-encodings.c:107
 msgid "_Persian (MacFarsi)"
-msgstr "_Персийски (MacFarsi)"
+msgstr "_Персийско (MacFarsi)"
 
 #: ../embed/ephy-encodings.c:108
 msgid "Croatian (Mac_Croatian)"
-msgstr "Хърватски (Mac_Croatian)"
+msgstr "Хърватско (Mac_Croatian)"
 
 #: ../embed/ephy-encodings.c:109
 msgid "_Romanian (MacRomanian)"
-msgstr "_Румънски (MacRomanian)"
+msgstr "_Румънско (MacRomanian)"
 
 #: ../embed/ephy-encodings.c:110
 msgid "R_omanian (ISO-8859-16)"
-msgstr "Р_умънски (ISO-8859-16)"
+msgstr "Р_умънско (ISO-8859-16)"
 
 #: ../embed/ephy-encodings.c:111
 msgid "South _European (ISO-8859-3)"
-msgstr "Южно _европейски (ISO-8859-3)"
+msgstr "Южноевропейско (ISO-8859-3)"
 
 #: ../embed/ephy-encodings.c:112
 msgid "Thai (TIS-_620)"
-msgstr "Тай (TIS-_620)"
+msgstr "Тайско (TIS-_620)"
 
 #: ../embed/ephy-encodings.c:113
 msgid "Thai (IS_O-8859-11)"
-msgstr "Тай (IS_O-8859-11)"
+msgstr "Тайско (IS_O-8859-11)"
 
 #: ../embed/ephy-encodings.c:114
 msgid "_Thai (Windows-874)"
-msgstr "_Тай (Windows-874)"
+msgstr "_Тайско (Windows-874)"
 
 #: ../embed/ephy-encodings.c:115
 msgid "Turkish (_IBM-857)"
-msgstr "Турски (_IBM-857)"
+msgstr "Турско (_IBM-857)"
 
 #: ../embed/ephy-encodings.c:116
 msgid "Turkish (I_SO-8859-9)"
-msgstr "Турски (I_SO-8859-9)"
+msgstr "Турско (I_SO-8859-9)"
 
 #: ../embed/ephy-encodings.c:117
 msgid "Turkish (_MacTurkish)"
-msgstr "Турски (_MacTurkish)"
+msgstr "Турско (_MacTurkish)"
 
 #: ../embed/ephy-encodings.c:118
 msgid "Turkish (_Windows-1254)"
-msgstr "Турски (_Windows-1254)"
+msgstr "Турско (_Windows-1254)"
 
 #: ../embed/ephy-encodings.c:119
 msgid "Unicode (UTF-_8)"
@@ -1340,54 +1340,54 @@ msgstr "Уникод (UTF-_8)"
 
 #: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr "Кирилица/Украинска (_KOI8-U)"
+msgstr "Кирилица/украинско (_KOI8-U)"
 
 #: ../embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr "Кирилица/Украинска (Mac_Ukrainian)"
+msgstr "Кирилица/украинско (Mac_Ukrainian)"
 
 #: ../embed/ephy-encodings.c:122
 msgid "Vietnamese (_TCVN)"
-msgstr "Виетнамски (_TCVN)"
+msgstr "Виетнамско (_TCVN)"
 
 #: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (_VISCII)"
-msgstr "Виетнамски (_VISCII)"
+msgstr "Виетнамско (_VISCII)"
 
 #: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (V_PS)"
-msgstr "Виетнамски (V_PS)"
+msgstr "Виетнамско (V_PS)"
 
 #: ../embed/ephy-encodings.c:125
 msgid "Vietnamese (_Windows-1258)"
-msgstr "Виетнамски (_Windows-1258)"
+msgstr "Виетнамско (_Windows-1258)"
 
 #: ../embed/ephy-encodings.c:126
 msgid "Western (_IBM-850)"
-msgstr "Западен (_IBM-850)"
+msgstr "Западно (_IBM-850)"
 
 #: ../embed/ephy-encodings.c:127
 msgid "Western (_ISO-8859-1)"
-msgstr "Западен (_ISO-8859-1)"
+msgstr "Западно (_ISO-8859-1)"
 
 #: ../embed/ephy-encodings.c:128
 msgid "Western (IS_O-8859-15)"
-msgstr "Западен (IS_O-8859-15)"
+msgstr "Западно (IS_O-8859-15)"
 
 #: ../embed/ephy-encodings.c:129
 msgid "Western (_MacRoman)"
-msgstr "Западен (_MacRoman)"
+msgstr "Западно (_MacRoman)"
 
 #: ../embed/ephy-encodings.c:130
 msgid "Western (_Windows-1252)"
-msgstr "Западен (_Windows-1252)"
+msgstr "Западно (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
 #.
 #: ../embed/ephy-encodings.c:135
 msgid "English (_US-ASCII)"
-msgstr "Английски (_US-ASCII)"
+msgstr "Английско (_US-ASCII)"
 
 #: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-_16 BE)"
@@ -1419,7 +1419,7 @@ msgstr "Всички"
 
 #: ../embed/ephy-history.c:653
 msgid "Others"
-msgstr "Други"
+msgstr "Друго"
 
 #: ../embed/ephy-history.c:659
 msgid "Local files"
@@ -1428,16 +1428,16 @@ msgstr "Локални файлове"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3159
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3175
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: ../embed/ephy-web-view.c:913
+#: ../embed/ephy-web-view.c:929
 msgid "Not now"
 msgstr "Не сега"
 
-#: ../embed/ephy-web-view.c:918
+#: ../embed/ephy-web-view.c:934
 msgid "Store password"
 msgstr "Запазване на паролата"
 
@@ -1445,39 +1445,39 @@ msgstr "Запазване на паролата"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:929
+#: ../embed/ephy-web-view.c:945
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Искате ли да запазите паролата към <b>%s</b> за <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:2015
+#: ../embed/ephy-web-view.c:2031
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.bg/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2284
+#: ../embed/ephy-web-view.c:2300
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Пренасочване към „%s“…"
 
-#: ../embed/ephy-web-view.c:2286
+#: ../embed/ephy-web-view.c:2302
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Прехвърляне на данни от „%s“…"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2304
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Изчакване за упълномощаване от „%s“…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2294 ../embed/ephy-web-view.c:2418
+#: ../embed/ephy-web-view.c:2310 ../embed/ephy-web-view.c:2434
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Зареждане на „%s“…"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2436
 msgid "Loading…"
 msgstr "Зареждане…"
 
@@ -1487,7 +1487,7 @@ msgstr "Зареждане…"
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3363
+#: ../embed/ephy-web-view.c:3379
 #, c-format
 msgid "%s Files"
 msgstr "Файлове на %s"
@@ -1688,11 +1688,11 @@ msgstr ""
 "Паролите от предишната версия (базирана на Gecko) са заключени с главна "
 "парола. Ако искате Epiphany да ги внесе, въведете главната си парола по-долу."
 
-#: ../lib/ephy-profile-migration.c:82
+#: ../lib/ephy-profile-migration.c:83
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Неуспешно копиране на бисквитките от Mozilla."
 
-#: ../lib/ephy-profile-migration.c:552
+#: ../lib/ephy-profile-migration.c:556
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Неуспешно прочитане на последния маркер за миграция. Мигрирането на профила "
@@ -2325,7 +2325,7 @@ msgstr "Други кодирания"
 
 #: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
-msgstr "_Автоматичен"
+msgstr "_Автоматично"
 
 #: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
