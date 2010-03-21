@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the Epiphany package.
 #
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
-# Reinout van Schouwen <reinouts@gnome.org>, 2003-2009
+# Reinout van Schouwen <reinouts@gnome.org>, 2003-2010
 # Lode Vermeiren <lode@linu.cx>, 2004.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2007, 2008
 #
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-11 09:24+0000\n"
-"PO-Revision-Date: 2009-09-011 23:02+0100\n"
+"product=epiphany\n"
+"POT-Creation-Date: 2010-03-22 00:36+0100\n"
+"PO-Revision-Date: 2010-03-22 00:43+0100\n"
 "Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,6 @@ msgstr "Het web doorzoeken"
 #. For instance in .nl these should be
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:5
-#| msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgid "http://www.google.com"
 msgstr "http://www.google.nl/"
 
@@ -53,7 +52,6 @@ msgstr "http://www.google.nl/"
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:10
 #, no-c-format
-#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.nl/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
@@ -75,7 +73,7 @@ msgstr "Epiphany webbrowser"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -290,17 +288,17 @@ msgstr ""
 "Standaardlettertype-soort. Mogelijke waarden zijn \"serif\" (geschreefd) en "
 "\"sans-serif\" (schreefloos)."
 
-#: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Java inschakelen"
-
 # src/menubar.c:411
 # ui/preferences.glade.h:12
-#: ../data/epiphany.schemas.in.h:15
+#: ../data/epiphany.schemas.in.h:14
 msgid "Enable JavaScript"
 msgstr "Javascript inschakelen"
 
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Plugins inschakelen"
+
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "Web-inspector inschakelen"
 
@@ -403,17 +401,21 @@ msgstr "Voorkeurstalen, tweeletterige codes."
 msgid "Remember passwords"
 msgstr "Wachtwoorden onthouden"
 
-# ui/preferences.glade.h:176
 #: ../data/epiphany.schemas.in.h:36
+msgid "Search string for keywords entered in the URL bar."
+msgstr "Zoekreeks voor steekwoorden die in de adresbalk worden ingevoerd."
+
+# ui/preferences.glade.h:176
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show bookmarks bar by default"
 msgstr "Standaard de bladwijzerwerkbalk weergeven"
 
 # ui/preferences.glade.h:175
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "Show statusbar by default"
 msgstr "Standaard de statusbalk tonen"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -421,29 +423,37 @@ msgstr ""
 "De geschiedenis weergeven van \"ever\" (alles), \"last_two_days\" (laatste "
 "twee dagen), \"last_three_days\" (laatste drie dagen), \"today\" (vandaag)."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Tabbladen weergeven wanneer slechts 1 tabblad geopend is."
 
 # ui/preferences.glade.h:176
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "Show toolbars by default"
 msgstr "Standaard de werkbalken tonen"
 
 # ui/preferences.glade.h:59
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache"
 msgstr "Schijfbuffergrootte"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid "Size of disk cache, in MB."
 msgstr "Schijfbuffergrootte, in MB."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"Tekenreeks die gebruikt wordt als user-agent, om de browser te identificeren "
+"naar webservers."
+
+#: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
 msgstr "De getoonde bladwijzerinformatie in de editorweergave"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -451,11 +461,11 @@ msgstr ""
 "De getoonde bladwijzerinformatie in de editorweergave. Geldige waardes in de "
 "lijst zijn \"address\" (adres) en \"title\" (titel)."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The currently selected fonts language"
 msgstr "De taal van het op dit moment geselecteerde lettertype"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -478,15 +488,15 @@ msgstr ""
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid "The downloads folder"
 msgstr "De map voor downloads"
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
 msgstr "De getoonde pagina-informatie in de geschiedenisweergave"
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -494,7 +504,7 @@ msgstr ""
 "De getoonde pagina-informatie in de geschiedenisweergave. Geldige waarden in "
 "de lijst zijn \"ViewTitle\", \"ViewAddress\" en \"ViewDateTime\"."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -504,11 +514,11 @@ msgstr ""
 "de bureaubladmap te gebruiken."
 
 # src/menubar.c:150
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Toolbar style"
 msgstr "Werkbalkstijl"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -518,36 +528,46 @@ msgstr ""
 "\" (tekst en pictogrammen), \"both-horiz\" (tekst naast pictogrammen), "
 "\"icons\", en \"text\"."
 
+#: ../data/epiphany.schemas.in.h:55
+msgid "URL Search"
+msgstr "URL-zoeken"
+
 # src/menubar.c:401
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
 msgstr "Eigen kleuren gebruiken"
 
 # src/menubar.c:396
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:57
 msgid "Use own fonts"
 msgstr "Eigen lettertypen gebruiken"
 
 # src/menubar.c:402
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:58
 msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 "Eigen kleuren gebruiken in plaats van de door het document gevraagde kleuren."
 
 # src/menubar.c:397
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:59
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Eigen lettertypen gebruiken in plaats van de door het document gevraagde "
 "lettertypen."
 
+# ui/epiphany.glade.h:126
+# ui/prompts.glade.h:3
+#: ../data/epiphany.schemas.in.h:60
+msgid "User agent"
+msgstr "User-agent"
+
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
 msgstr "Zichtbaarheid van het downloadsvenster"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -555,7 +575,7 @@ msgstr ""
 "Wanneer de bestanden niet met de browser geopend kunnen worden, komen ze "
 "automatisch in de downloadmap terecht en opent de geschikte toepassing ze."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:63
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -564,32 +584,32 @@ msgstr ""
 "\" (overal vandaan), \"current site\" (huidige website) en \"nowhere"
 "\" (nooit)."
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the background color"
 msgstr "Of de achtergrondkleur afgedrukt moet worden"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the background images"
 msgstr "Of achtergrondafbeeldingen moeten worden afgedrukt"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to print the date in the footer"
 msgstr "Of de datum afgedrukt moet worden in de voettekst"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:67
 msgid "Whether to print the page address in the header"
 msgstr "Of het adres van de pagina moet worden afgedrukt in de koptekst."
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:68
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr ""
 "Of de paginanummering (x van totaal) afgedrukt moet worden in de voettekst"
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:69
 msgid "Whether to print the page title in the header"
 msgstr "Of de paginatitel afgedrukt moet worden in de koptekst"
 
-#: ../data/epiphany.schemas.in.h:66
+#: ../data/epiphany.schemas.in.h:70
 msgid "Whether to store and prefill passwords in web sites."
 msgstr ""
 "Of wachtwoorden op webpagina's dienen te worden opgeslagen en vooraf "
@@ -597,101 +617,101 @@ msgstr ""
 
 # src/mozilla_i18n.c:39
 # ui/preferences.glade.h:212
-#: ../data/epiphany.schemas.in.h:67
+#: ../data/epiphany.schemas.in.h:71
 msgid "x-western"
 msgstr "x-western"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/certificate-dialogs.glade.h:1
+#: ../data/glade/certificate-dialogs.ui.h:1
 msgid "<b>Fingerprints</b>"
 msgstr "<b>Vingerafdrukken</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/certificate-dialogs.glade.h:2
+#: ../data/glade/certificate-dialogs.ui.h:2
 msgid "<b>Issued By</b>"
 msgstr "<b>Uitgegeven door</b>"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/certificate-dialogs.glade.h:3
+#: ../data/glade/certificate-dialogs.ui.h:3
 msgid "<b>Issued To</b>"
 msgstr "<b>Uitgegeven aan</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/certificate-dialogs.glade.h:4
+#: ../data/glade/certificate-dialogs.ui.h:4
 msgid "<b>Validity</b>"
 msgstr "<b>Geldigheid</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:5
+#: ../data/glade/certificate-dialogs.ui.h:5
 msgid "Certificate _Fields"
 msgstr "Certificaat_velden"
 
-#: ../data/glade/certificate-dialogs.glade.h:6
+#: ../data/glade/certificate-dialogs.ui.h:6
 msgid "Certificate _Hierarchy"
 msgstr "Certificaat_hiërarchie"
 
-#: ../data/glade/certificate-dialogs.glade.h:7
+#: ../data/glade/certificate-dialogs.ui.h:7
 msgid "Common Name:"
 msgstr "Algemene naam:"
 
-#: ../data/glade/certificate-dialogs.glade.h:8
+#: ../data/glade/certificate-dialogs.ui.h:8
 msgid "Details"
 msgstr "Details"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/certificate-dialogs.glade.h:9
+#: ../data/glade/certificate-dialogs.ui.h:9
 msgid "Expires On:"
 msgstr "Verloopt op:"
 
-#: ../data/glade/certificate-dialogs.glade.h:10
+#: ../data/glade/certificate-dialogs.ui.h:10
 msgid "Field _Value"
 msgstr "Veld_waarde"
 
 # src/prefs.c:363
-#: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "General"
 msgstr "Algemeen"
 
-#: ../data/glade/certificate-dialogs.glade.h:12
+#: ../data/glade/certificate-dialogs.ui.h:12
 msgid "Issued On:"
 msgstr "Uitgegeven op:"
 
-#: ../data/glade/certificate-dialogs.glade.h:13
+#: ../data/glade/certificate-dialogs.ui.h:13
 msgid "MD5 Fingerprint:"
 msgstr "MD5 vingerafdruk:"
 
-#: ../data/glade/certificate-dialogs.glade.h:14
+#: ../data/glade/certificate-dialogs.ui.h:14
 msgid "Organization:"
 msgstr "Organisatie:"
 
-#: ../data/glade/certificate-dialogs.glade.h:15
+#: ../data/glade/certificate-dialogs.ui.h:15
 msgid "Organizational Unit:"
 msgstr "Organisatie-eenheid:"
 
-#: ../data/glade/certificate-dialogs.glade.h:16
+#: ../data/glade/certificate-dialogs.ui.h:16
 msgid "SHA1 Fingerprint:"
 msgstr "SHA1-vingerafdruk:"
 
-#: ../data/glade/certificate-dialogs.glade.h:17
+#: ../data/glade/certificate-dialogs.ui.h:17
 msgid "Serial Number:"
 msgstr "Serienummer:"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/epiphany.glade.h:1
+#: ../data/glade/epiphany.ui.h:1
 msgid "<b>_Automatic</b>"
 msgstr "<b>_Automatisch</b>"
 
-#: ../data/glade/epiphany.glade.h:2
+#: ../data/glade/epiphany.ui.h:2
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Andere _codering gebruiken:</b>"
 
-#: ../data/glade/epiphany.glade.h:3
+#: ../data/glade/epiphany.ui.h:3
 msgid "Clear _All..."
 msgstr "_Alles wissen…"
 
 # src/menubar.c:494
 # ui/epiphany.glade.h:143
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.ui.h:4
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -700,45 +720,46 @@ msgstr "Cookies"
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Downloads"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.ui.h:6
 msgid "Passwords"
 msgstr "Wachtwoorden"
 
 # src/persistent_data_manager.c:138
 # ui/epiphany.glade.h:94
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.ui.h:7
 msgid "Personal Data"
 msgstr "Persoonlijke informatie"
 
 # src/prefs.c:385
 # ui/epiphany.glade.h:36
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/glade/epiphany.ui.h:8
 msgid "Text Encoding"
 msgstr "Tekstcodering"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "De door het document gespecificeerde codering gebruiken"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../data/glade/epiphany.glade.h:10
+#: ../data/glade/epiphany.ui.h:10
 msgid "_Show passwords"
 msgstr "_Wachtwoorden tonen"
 
 # src/menubar.c:117
-#: ../data/glade/form-signing-dialog.glade.h:1
+#: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
 msgstr "Tekst ondertekenen"
 
 # weet iemand een betere zinsconstructie? -RvS
-#: ../data/glade/form-signing-dialog.glade.h:2
+#: ../data/glade/form-signing-dialog.ui.h:2
 msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
@@ -746,89 +767,89 @@ msgstr ""
 "Kies een certificaat om de tekst mee te ondertekenen om het ondertekenen "
 "ervan te bevestigen en voer hieronder het wachtwoord van het certificaat in."
 
-#: ../data/glade/form-signing-dialog.glade.h:3
+#: ../data/glade/form-signing-dialog.ui.h:3
 msgid "_Certificate:"
 msgstr "_Certificaat:"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../data/glade/form-signing-dialog.glade.h:4
+#: ../data/glade/form-signing-dialog.ui.h:4
 msgid "_Password:"
 msgstr "_Wachtwoord:"
 
-#: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate…"
-msgstr "_Certificaat weergeven…"
+#: ../data/glade/form-signing-dialog.ui.h:5
+msgid "_View Certificate&#x2026;"
+msgstr "_Certificaat weergeven&#x2026;"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/prefs-dialog.glade.h:1
+#: ../data/glade/prefs-dialog.ui.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Cookies</b>"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.ui.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>Downloads</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.ui.h:3
 msgid "<b>Encodings</b>"
 msgstr "<b>Coderingen</b>"
 
 # src/menubar.c:473
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.ui.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Startpagina</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/prefs-dialog.glade.h:5
+#: ../data/glade/prefs-dialog.ui.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Talen</b>"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.ui.h:6
 msgid "<b>Passwords</b>"
 msgstr "<b>Wachtwoorden</b>"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.ui.h:7
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Tijdelijke bestanden</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.ui.h:8
 msgid "<b>Web Content</b>"
 msgstr "<b>Webinhoud</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/prefs-dialog.glade.h:9
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Web Development</b>"
 msgstr "<b>Webdevelopment</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.ui.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Bijvoorbeeld niet van adverteerders op deze pagina's</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.ui.h:12
 msgid "A_utomatically download and open files"
 msgstr "Auto_matisch bestanden downloaden en openen"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.ui.h:13
 msgid "Add Language"
 msgstr "Taal toevoegen"
 
 # src/menubar.c:416
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/glade/prefs-dialog.ui.h:14
 msgid "Allow popup _windows"
 msgstr "Opduikvensters _toestaan"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Choose a l_anguage:"
 msgstr "Kies een t_aal:"
 
@@ -837,203 +858,202 @@ msgstr "Kies een t_aal:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:682
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "_Wissen"
 
 # ui/preferences.glade.h:105
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.ui.h:17
 msgid "De_fault:"
 msgstr "St_andaard:"
 
 # src/menubar.c:411
 # ui/preferences.glade.h:12
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.ui.h:18
 msgid "Enable Java_Script"
 msgstr "Ja_vascript inschakelen"
 
-#: ../data/glade/prefs-dialog.glade.h:20
-msgid "Enable _Java"
-msgstr "_Java inschakelen"
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Plugins"
+msgstr "_Plugins inschakelen"
 
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
 msgstr "Lettertypen & Stijl"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:821
 msgid "Language"
 msgstr "Taal"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.ui.h:24
 msgid "Let web pages specify their own _fonts"
 msgstr "Laat webpagina's hun eigen lettert_ypen bepalen"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.ui.h:25
 msgid "Let web pages specify their own c_olors"
 msgstr "Laat webpagina's hun eigen _kleuren bepalen"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Only _from sites you visit"
 msgstr "Alleen van webpagina's die u _bezoekt"
 
 # ui/preferences.glade.h:142
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.ui.h:29
 msgid "Privacy"
 msgstr "Privacy"
 
 # ui/preferences.glade.h:161
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.ui.h:30
 msgid "Set to Current _Page"
 msgstr "Huidige _pagina instellen"
 
 # ui/preferences.glade.h:161
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.ui.h:31
 msgid "Set to _Blank Page"
 msgstr "_Blanco pagina"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.ui.h:32
 msgid "Use custom _stylesheet"
 msgstr "Aangepast stijl_blad gebruiken"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use s_mooth scrolling"
 msgstr "_Vloeiend schuiven"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.ui.h:34
 msgid "_Address:"
 msgstr "_Adres:"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Always accept"
 msgstr "_Altijd accepteren"
 
 # ui/preferences.glade.h:253
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Disk space:"
 msgstr "_Schijfruimte:"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Download folder:"
 msgstr "_Downloadmap:"
 
-#: ../data/glade/prefs-dialog.glade.h:38
-msgid "_Edit Stylesheet…"
-msgstr "Stijlblad be_werken…"
+#: ../data/glade/prefs-dialog.ui.h:38
+msgid "_Edit Stylesheet&#x2026;"
+msgstr "Stijlblad be_werken&#x2026;"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.ui.h:39
 msgid "_Minimum size:"
 msgstr "_Minimumgrootte:"
 
 # ui/preferences.glade.h:118
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.ui.h:40
 msgid "_Never accept"
 msgstr "_Nooit accepteren"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Remember passwords"
 msgstr "Wachtwoorden _onthouden"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/print.glade.h:1
+#: ../data/glade/print.ui.h:1
 msgid "<b>Background</b>"
 msgstr "<b>Achtergrond</b>"
 
 # ui/preferences.glade.h:50
-#: ../data/glade/print.glade.h:2
+#: ../data/glade/print.ui.h:2
 msgid "<b>Footers</b>"
 msgstr "<b>Voettekst</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/print.glade.h:3
+#: ../data/glade/print.ui.h:3
 msgid "<b>Frames</b>"
 msgstr "<b>Deelvensters</b>"
 
 # src/menu_callbacks.c:1286
-#: ../data/glade/print.glade.h:4
+#: ../data/glade/print.ui.h:4
 msgid "<b>Headers</b>"
 msgstr "<b>Koptekst</b>"
 
-#: ../data/glade/print.glade.h:5
+#: ../data/glade/print.ui.h:5
 msgid "As laid out on the _screen"
 msgstr "Zoals ingedeeld op het _scherm"
 
-#: ../data/glade/print.glade.h:6
+#: ../data/glade/print.ui.h:6
 msgid "O_nly the selected frame"
 msgstr "Alleen het geselecteerde _deelvenster"
 
 # ui/epiphany.glade.h:121
-#: ../data/glade/print.glade.h:7
+#: ../data/glade/print.ui.h:7
 msgid "P_age title"
 msgstr "Pagina_titel"
 
-#: ../data/glade/print.glade.h:8
+#: ../data/glade/print.ui.h:8
 msgid "Page _numbers"
 msgstr "Paginanu_mmers"
 
 # src/menubar.c:401
-#: ../data/glade/print.glade.h:9
+#: ../data/glade/print.ui.h:9
 msgid "Print background c_olors"
 msgstr "Achtergrondkleuren afdrukken"
 
 # src/context.c:80
-#: ../data/glade/print.glade.h:10
+#: ../data/glade/print.ui.h:10
 msgid "Print background i_mages"
 msgstr "Achtergrondafbeeldingen afdrukken"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: ../data/glade/print.glade.h:11
+#: ../data/glade/print.ui.h:11
 msgid "_Date"
 msgstr "_Datum"
 
-#: ../data/glade/print.glade.h:12
+#: ../data/glade/print.ui.h:12
 msgid "_Each frame separately"
 msgstr "_Elk deelvenster apart"
 
-#: ../data/glade/print.glade.h:13
+#: ../data/glade/print.ui.h:13
 msgid "_Page address"
 msgstr "Pagina-a_dres"
 
 # ui/preferences.glade.h:157
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:167
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "_Downloadvenster tonen"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
 #  Minutes, Seconds
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
 # ui/epiphany.glade.h:93
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_Pauze"
 
 # ui/epiphany.glade.h:103
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_Doorgaan"
 
@@ -1042,13 +1062,13 @@ msgstr "_Doorgaan"
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
-#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../embed/downloader-view.c:510
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Het bestand ‘%s’ is gedownload."
@@ -1056,12 +1076,12 @@ msgstr "Het bestand ‘%s’ is gedownload."
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/downloader-view.c:513
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "Download voltooid"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:537
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -1074,14 +1094,14 @@ msgstr ""
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/downloader-view.c:584
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
 
-#: ../embed/downloader-view.c:719
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Het bestand ‘%s’ is toegevoegd aan de downloads-wachtrij."
@@ -1089,7 +1109,7 @@ msgstr "Het bestand ‘%s’ is toegevoegd aan de downloads-wachtrij."
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/downloader-view.c:723
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "Download gestart"
 
@@ -1097,7 +1117,7 @@ msgstr "Download gestart"
 # src/prefs.c:1069
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Onbekend"
@@ -1105,12 +1125,12 @@ msgstr "Onbekend"
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: ../embed/downloader-view.c:804
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "Mislukt"
 
-#: ../embed/downloader-view.c:807
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Geannuleerd"
@@ -1118,22 +1138,23 @@ msgstr "Geannuleerd"
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Bestand"
 
 # ui/epiphany.glade.h:2
-#: ../embed/downloader-view.c:893
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
 # ui/epiphany.glade.h:97
-#: ../embed/downloader-view.c:904
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "Te gaan"
 
 # src/menubar.c:63
-#: ../embed/ephy-embed.c:443
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:794
+#: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Opslaan"
 
@@ -1141,7 +1162,7 @@ msgstr "Opslaan"
 # src/prefs.c:1069
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
-#: ../embed/ephy-embed.c:662
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Onbekend"
@@ -1149,13 +1170,13 @@ msgstr "Onbekend"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Dit mogelijk onveilige bestand downloaden?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:681
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1169,14 +1190,14 @@ msgstr ""
 "beschadigen of uw privacy aantasten. U kunt het in plaats daarvan downloaden."
 
 # src/menubar.c:34
-#: ../embed/ephy-embed.c:689
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Dit bestand openen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1190,13 +1211,13 @@ msgstr ""
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/ephy-embed.c:702
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Dit bestand downloaden?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:707
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1209,20 +1230,27 @@ msgstr ""
 "plaats daarvan downloaden."
 
 # src/menubar.c:63
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "Opslaan _als…"
 
-#: ../embed/ephy-embed.c:844
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Web-inspector"
 
-#: ../embed/ephy-embed-shell.c:242
-#| msgid "Epiphany can't be used now. Mozilla initialization failed."
+#: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany kan nu niet gebruikt worden. Initialisatie mislukt."
 
-#: ../embed/ephy-embed-utils.c:61
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"CA-Certificatenbestand dat gebruikt hoort te worden is niet gevonden. Alle "
+"SSL-sites zullen beschouwd worden als hebbende een ongeldig certificaat."
+
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-mailbericht sturen naar ‘%s’"
@@ -1651,47 +1679,71 @@ msgstr "Lokale bestanden"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2124
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3175
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Blanco pagina"
 
-#: ../embed/ephy-web-view.c:1128
+#: ../embed/ephy-web-view.c:929
+msgid "Not now"
+msgstr "Niet nu"
+
+# src/menubar.c:502
+# ui/epiphany.glade.h:163
+#: ../embed/ephy-web-view.c:934
+msgid "Store password"
+msgstr "Wachtwoord opslaan"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:945
+#, c-format
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr ""
+"<big>Wilt u het wachtwoord voor <b>%s</b> in <b>%s</b> opslaan?</big>"
+
+#: ../embed/ephy-web-view.c:2031
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.nl/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 # src/mozcallbacks.c:400
-#: ../embed/ephy-web-view.c:1319
+#: ../embed/ephy-web-view.c:2300
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Doorgestuurd naar ‘%s’…"
 
 # src/mozcallbacks.c:405
-#: ../embed/ephy-web-view.c:1321
+#: ../embed/ephy-web-view.c:2302
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Gegevens overdragen vanaf ‘%s’…"
 
 # src/mozcallbacks.c:410
-#: ../embed/ephy-web-view.c:1323
+#: ../embed/ephy-web-view.c:2304
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Wachten op toestemming van ‘%s’…"
 
 # src/mozcallbacks.c:424
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1436
+#: ../embed/ephy-web-view.c:2310 ../embed/ephy-web-view.c:2434
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laden van ‘%s’…"
 
 # src/mozcallbacks.c:424
-#: ../embed/ephy-web-view.c:1438
+#: ../embed/ephy-web-view.c:2436
 msgid "Loading…"
 msgstr "Laden…"
 
-#: ../embed/ephy-web-view.c:2319
+#. Translators: this is the directory name to store auxilary files
+#. * when saving html files.
+#.
+#: ../embed/ephy-web-view.c:3379
 #, c-format
 msgid "%s Files"
 msgstr "%s (bestanden)"
@@ -1778,39 +1830,39 @@ msgstr "Sessiebeheersopties tonen"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:934
+#: ../lib/egg/egg-editable-toolbar.c:944
 #, c-format
 msgid "Show “_%s”"
 msgstr "‘_%s’ tonen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1397
+#: ../lib/egg/egg-editable-toolbar.c:1407
 msgid "_Move on Toolbar"
 msgstr "Ver_plaatsen op werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1398
+#: ../lib/egg/egg-editable-toolbar.c:1408
 msgid "Move the selected item on the toolbar"
 msgstr "Geselecteerd item op de werkbalk verplaatsen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1399
+#: ../lib/egg/egg-editable-toolbar.c:1409
 msgid "_Remove from Toolbar"
 msgstr "Ver_wijderen van werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1400
+#: ../lib/egg/egg-editable-toolbar.c:1410
 msgid "Remove the selected item from the toolbar"
 msgstr "Geselecteerd item van de werkbalk verwijderen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1401
+#: ../lib/egg/egg-editable-toolbar.c:1411
 msgid "_Delete Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1402
+#: ../lib/egg/egg-editable-toolbar.c:1412
 msgid "Remove the selected toolbar"
 msgstr "Geselecteerde werkbalk verwijderen"
 
-#: ../lib/egg/egg-toolbar-editor.c:485
+#: ../lib/egg/egg-toolbar-editor.c:486
 msgid "Separator"
 msgstr "Scheidingsteken"
 
@@ -1828,44 +1880,50 @@ msgid "Images"
 msgstr "Afbeeldingen"
 
 # src/history.c:845
-#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../lib/ephy-file-helpers.c:296
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
+msgid "Desktop"
+msgstr "Bureaublad"
+
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kan geen tijdelijke map aanmaken in ‘%s’."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Het bestand ‘%s’ bestaat. Haal het alstublieft uit de weg."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Aanmaken van de map ‘%s’ is mislukt."
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:293
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Map ‘%s’ is niet beschrijfbaar"
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:297
 msgid "You do not have permission to create files in this directory."
 msgstr "U heeft geen rechten om bestanden in deze map aan te maken."
 
-#: ../lib/ephy-gui.c:290
+#: ../lib/ephy-gui.c:300
 msgid "Directory not Writable"
 msgstr "Map is niet beschrijfbaar"
 
-#: ../lib/ephy-gui.c:320
+#: ../lib/ephy-gui.c:330
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Kan bestaand bestand ‘%s’ niet overschrijven."
 
-#: ../lib/ephy-gui.c:324
+#: ../lib/ephy-gui.c:334
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
@@ -1873,14 +1931,40 @@ msgstr ""
 "Een bestand met deze naam bestaat reeds en u heeft geen recht het te "
 "overschrijven."
 
-#: ../lib/ephy-gui.c:327
+#: ../lib/ephy-gui.c:337
 msgid "Cannot Overwrite File"
 msgstr "Kan bestand niet overschrijven"
 
-#: ../lib/ephy-gui.c:413
+#: ../lib/ephy-gui.c:392
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kan hulp niet weergeven: %s"
+
+# src/menubar.c:502
+# ui/epiphany.glade.h:163
+#: ../lib/ephy-nss-glue.c:62
+msgid "Master password needed"
+msgstr "Hoofdwachtwoord benodigd"
+
+#: ../lib/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"De wachtwoorden van de vorige versie zijn afgesloten met een "
+"hoofdwachtwoord. Wanneer u wilt dat de Epiphany-webbrowser ze importeert, "
+"voert u dan uw hoofdwachtwoord hieronder in."
+
+#: ../lib/ephy-profile-migration.c:83
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "Kopiëren van cookies-bestand van Mozilla mislukt."
+
+# Context svp!
+#: ../lib/ephy-profile-migration.c:556
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr ""
+"Lezen van laatste migratie-markering mislukt, profielmigratie afgebroken."
 
 # src/menubar.c:416
 #: ../lib/ephy-stock-icons.c:47
@@ -1891,25 +1975,25 @@ msgstr "Opduikvensters"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
 msgstr "Geschiedenis"
 
 # src/menubar.c:571
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1493
+#: ../src/ephy-window.c:1446
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1497
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:897
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1743
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1450
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:291
 msgid "Address Entry"
 msgstr "Adresingang"
 
@@ -1986,12 +2070,12 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/widgets/ephy-location-entry.c:970
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sleep dit pictogram om een verwijzing naar deze pagina te maken"
 
 # ui/preferences.glade.h:48
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:158
 msgid "Clear"
 msgstr "Wissen"
 
@@ -2000,7 +2084,7 @@ msgstr "Wissen"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:497
+#: ../src/bookmarks/ephy-bookmark-action.c:498
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Script ‘%s’ uitvoeren"
@@ -2008,7 +2092,7 @@ msgstr "Script ‘%s’ uitvoeren"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:612
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2029,26 +2113,26 @@ msgstr[1] "Samen_voegen met %d identieke bladwijzers"
 msgid "Show “%s”"
 msgstr "‘%s’ tonen"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
+#: ../src/bookmarks/ephy-bookmark-properties.c:426
 #, c-format
 msgid "“%s” Properties"
 msgstr "‘%s’-eigenschappen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmark-properties.c:551
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "Tit_el:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:567
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "A_dres:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "_Onderwerpen:"
 
 # ui/preferences.glade.h:195
-#: ../src/bookmarks/ephy-bookmark-properties.c:600
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Alle o_nderwerpen tonen"
 
@@ -2170,7 +2254,7 @@ msgstr "Verwijderen uit dit onderwerp"
 # src/menubar.c:565
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "_Bestand"
 
@@ -2178,7 +2262,7 @@ msgstr "_Bestand"
 # src/bookmarks_editor.c:1149
 # src/menubar.c:566
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "Be_werken"
 
@@ -2186,13 +2270,13 @@ msgstr "Be_werken"
 # src/bookmarks_editor.c:1150
 # src/menubar.c:567
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "Beel_d"
 
 # src/menubar.c:573
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "_Hulp"
 
@@ -2211,9 +2295,9 @@ msgstr "Nieuw onderwerp aanmaken"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
 #: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "In nieuw _venster openen"
@@ -2226,9 +2310,9 @@ msgstr "Geselecteerde bladwijzer openen in een nieuw venster"
 # src/context.c:66
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1355
 #: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "In nieuw _tabblad openen"
@@ -2288,7 +2372,7 @@ msgstr "Bladwijzers exporteren naar een bestand"
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:146
 msgid "_Close"
 msgstr "Sl_uiten"
 
@@ -2303,13 +2387,13 @@ msgstr "Bladwijzervenster sluiten"
 # src/window_callbacks.c:2880
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:158
 msgid "Cu_t"
 msgstr "K_nippen"
 
 # src/menubar.c:37
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:159
 msgid "Cut the selection"
 msgstr "Selectie knippen"
 
@@ -2317,15 +2401,15 @@ msgstr "Selectie knippen"
 # src/bookmarks_editor.c:1167
 # src/menubar.c:38
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1365
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:716
+#: ../src/ephy-window.c:161
 msgid "_Copy"
 msgstr "_Kopiëren"
 
 # src/menubar.c:38
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:162
 msgid "Copy the selection"
 msgstr "Selectie kopiëren"
 
@@ -2333,7 +2417,7 @@ msgstr "Selectie kopiëren"
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:164
 msgid "_Paste"
 msgstr "_Plakken"
 
@@ -2356,7 +2440,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Geselecteerde bladwijzer of onderwerp verwijderen"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:170
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
@@ -2367,7 +2451,7 @@ msgstr "Alle bladwijzers of tekst selecteren"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "I_nhoud"
 
@@ -2379,12 +2463,12 @@ msgstr "Hulp voor bladwijzers weergeven"
 
 # src/menubar.c:43
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "In_fo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Namen van de webbrowser-auteurs weergeven"
 
@@ -2446,19 +2530,19 @@ msgid "_Delete Topic"
 msgstr "Onderwerp _verwijderen"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:628
 msgid "Firefox"
 msgstr "Firefox"
 
 # src/menubar.c:571
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
-#: ../src/bookmarks/ephy-bookmarks-editor.c:636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:641
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla ‘%s’-profiel"
@@ -2469,24 +2553,24 @@ msgstr "Mozilla ‘%s’-profiel"
 # src/mozilla/PromptService.cpp:666
 # src/window.c:191
 # ui/epiphany.glade.h:50
-#: ../src/bookmarks/ephy-bookmarks-editor.c:645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Galeon"
 msgstr "Galeon"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:650
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:678
+#: ../src/bookmarks/ephy-bookmarks-editor.c:679
 msgid "Import failed"
 msgstr "Importeren mislukt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import Failed"
 msgstr "Importeren mislukt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2499,22 +2583,22 @@ msgstr ""
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:746
+#: ../src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Import Bookmarks from File"
 msgstr "Bladwijzers importeren uit een bestand"
 
 # src/bookmarks_editor.c:1111
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:754
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-bladwijzers"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:758
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-bladwijzers"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:761
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-bladwijzers"
 
@@ -2522,12 +2606,12 @@ msgstr "Epiphany-bladwijzers"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:885
+#: ../src/bookmarks/ephy-bookmarks-editor.c:886
 msgid "Export Bookmarks"
 msgstr "Bladwijzers exporteren"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "File f_ormat:"
 msgstr "Bestandsf_ormaat:"
 
@@ -2535,11 +2619,11 @@ msgstr "Bestandsf_ormaat:"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:946
+#: ../src/bookmarks/ephy-bookmarks-editor.c:949
 msgid "Import Bookmarks"
 msgstr "Bladwijzers importeren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:952
+#: ../src/bookmarks/ephy-bookmarks-editor.c:955
 msgid "I_mport"
 msgstr "I_mporteren"
 
@@ -2547,33 +2631,33 @@ msgstr "I_mporteren"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:966
+#: ../src/bookmarks/ephy-bookmarks-editor.c:971
 msgid "Import bookmarks from:"
 msgstr "Bladwijzers importeren uit:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/ephy-history-window.c:712
 msgid "_Copy Address"
 msgstr "Adres _kopiëren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1609
+#: ../src/ephy-history-window.c:1037
 msgid "_Search:"
 msgstr "_Zoeken:"
 
 # ui/preferences.glade.h:195
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1807
 msgid "Topics"
 msgstr "Onderwerpen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
-#: ../src/ephy-history-window.c:1362
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1877
+#: ../src/ephy-history-window.c:1360
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
-#: ../src/ephy-history-window.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1888
+#: ../src/ephy-history-window.c:1369
 msgid "Address"
 msgstr "Adres"
 
@@ -2638,56 +2722,56 @@ msgstr "Overige coderingen"
 msgid "_Automatic"
 msgstr "_Automatisch"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "Niet gevonden"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:159
 msgid "Wrapped"
 msgstr "Omgeslagen"
 
 # ui/epiphany.glade.h:149
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find links:"
 msgstr "Verwijzingen zoeken:"
 
 # ui/epiphany.glade.h:149
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find:"
 msgstr "Zoeken:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
+#: ../src/ephy-find-toolbar.c:451 ../src/ephy-find-toolbar.c:574
 msgid "_Case sensitive"
 msgstr "_Hoofdlettergevoelig"
 
 # src/menubar.c:208
-#: ../src/ephy-find-toolbar.c:539
+#: ../src/ephy-find-toolbar.c:557
 msgid "Find Previous"
 msgstr "Vorige zoeken"
 
-#: ../src/ephy-find-toolbar.c:542
+#: ../src/ephy-find-toolbar.c:560
 msgid "Find previous occurrence of the search string"
 msgstr "Zoeken naar vorige positie waar de zoekreeks voorkomt"
 
 # src/menubar.c:117
-#: ../src/ephy-find-toolbar.c:548
+#: ../src/ephy-find-toolbar.c:566
 msgid "Find Next"
 msgstr "Volgende zoeken"
 
-#: ../src/ephy-find-toolbar.c:551
+#: ../src/ephy-find-toolbar.c:569
 msgid "Find next occurrence of the search string"
 msgstr "Zoeken naar volgende positie waar de zoekreeks voorkomt"
 
 # src/menubar.c:165
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:673
 msgid "Leave Fullscreen"
 msgstr "Volledig scherm verlaten"
 
 # src/menubar.c:570
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:321
 msgid "Go"
 msgstr "Ga naar"
 
@@ -2782,17 +2866,17 @@ msgstr ""
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
 msgstr "Afgelopen 30 minuten"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "Vandaag"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
+#: ../src/ephy-history-window.c:1048 ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1055
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2800,20 +2884,20 @@ msgstr[0] "Laatste %d dag"
 msgstr[1] "Laatste %d dagen"
 
 # ui/epiphany.glade.h:109
-#: ../src/ephy-history-window.c:1299
+#: ../src/ephy-history-window.c:1297
 msgid "Sites"
 msgstr "Sites"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: ../src/ephy-history-window.c:1379
+#: ../src/ephy-history-window.c:1377
 msgid "Date"
 msgstr "Datum"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:986
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1038
 msgid "GNOME Web Browser"
 msgstr "GNOME-webbrowser"
 
@@ -2872,11 +2956,11 @@ msgstr "URL…"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:423
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "Kon GNOME-webbrowser niet opstarten"
 
-#: ../src/ephy-main.c:426
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2887,42 +2971,15 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:563
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "Opties voor GNOME-webbrowser"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-notebook.c:626
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Tabblad sluiten"
-
-# src/menubar.c:502
-# ui/epiphany.glade.h:163
-#: ../src/ephy-nss-glue.c:62
-#| msgid "User Password"
-msgid "Master password needed"
-msgstr "Hoofdwachtwoord benodigd"
-
-#: ../src/ephy-nss-glue.c:64
-msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
-msgstr ""
-"De wachtwoorden van de vorige versie zijn afgesloten met een hoofdwachtwoord. "
-"Wanneer u wilt dat de Epiphany-webbrowser ze importeert, voert u dan uw "
-"hoofdwachtwoord hieronder in."
-
-#: ../src/ephy-profile-migration.c:80
-msgid "Failed to copy cookies file from Mozilla."
-msgstr "Kopiëren van cookies-bestand van Mozilla mislukt."
-
-# Context svp!
-#: ../src/ephy-profile-migration.c:379
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr ""
-"Lezen van laatste migratie-markering mislukt, profielmigratie afgebroken."
 
 #: ../src/ephy-session.c:116
 #, c-format
@@ -3012,29 +3069,29 @@ msgstr ""
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#: ../src/ephy-statusbar.c:83
+#: ../src/ephy-statusbar.c:97
 msgid "Caret"
 msgstr "Cursor"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:90
+#: ../src/ephy-statusbar.c:104
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "In toetsenbordselectiestand drukt u op F7 om deze te verlaten"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Naar dit tabblad overschakelen"
 
 # src/menubar.c:453
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:230
 msgid "_Back"
 msgstr "_Terug"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:232
 msgid "Go to the previous visited page"
 msgstr "Ga naar de vorige bezochte pagina"
 
@@ -3045,16 +3102,16 @@ msgstr "Ga naar de vorige bezochte pagina"
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:236
 msgid "Back history"
 msgstr "Terug-geschiedenis"
 
 # src/menubar.c:458
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:250
 msgid "_Forward"
 msgstr "_Vooruit"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:252
 msgid "Go to the next visited page"
 msgstr "Ga naar de volgende bezochte pagina"
 
@@ -3065,16 +3122,16 @@ msgstr "Ga naar de volgende bezochte pagina"
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:256
 msgid "Forward history"
 msgstr "Vooruit-geschiedenis"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:269
 msgid "_Up"
 msgstr "_Omhoog"
 
 # src/bookmarks_editor.c:1056
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:271
 msgid "Go up one level"
 msgstr "Eén niveau \"omhoog\" gaan"
 
@@ -3082,54 +3139,54 @@ msgstr "Eén niveau \"omhoog\" gaan"
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:275
 msgid "List of upper levels"
 msgstr "Lijst van bovenliggende niveaus"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:293
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Geef een webadres om te openen, of een tekst om naar te zoeken"
 
 # src/menubar.c:127
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:309
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:311
 msgid "Adjust the text size"
 msgstr "Tekstgrootte aanpassen"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:323
 msgid "Go to the address entered in the address entry"
 msgstr "Ga naar het in het adresveld ingegeven adres "
 
 # src/toolbar.c:143
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:332
 msgid "_Home"
 msgstr "_Start"
 
 # ui/preferences.glade.h:172
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:334
 msgid "Go to the home page"
 msgstr "Ga naar de startpagina"
 
 # src/menubar.c:54
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:344
 msgid "New _Tab"
 msgstr "Nieuw _tabblad"
 
 # src/menubar.c:54
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:346
 msgid "Open a new tab"
 msgstr "Nieuw tabblad openen"
 
 # src/context.c:60
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:355
 msgid "_New Window"
 msgstr "_Nieuw venster"
 
 # src/context.c:60
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:357
 msgid "Open a new window"
 msgstr "Nieuw venster openen"
 
@@ -3179,300 +3236,300 @@ msgid "_Add a New Toolbar"
 msgstr "Nieuwe werkbalk _toevoegen"
 
 # src/menubar.c:571
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "Bl_adwijzers"
 
 # src/menubar.c:570
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "_Ga naar"
 
 # src/menubar.c:150
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "E_xtra"
 
 # src/menubar.c:54
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "_Tabbladen"
 
 # src/menubar.c:150
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "_Werkbalken"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
 #. File menu
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:128
 msgid "_Open…"
 msgstr "_Openen…"
 
 # src/menubar.c:34
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "Bestand openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "Opslaan _als…"
 
 # src/menubar.c:64
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "Huidige pagina opslaan"
 
 # src/toolbar.c:286
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:134
 msgid "Page Set_up"
 msgstr "Afdrukin_stellingen"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:135
 msgid "Setup the page settings for printing"
 msgstr "De pagina instellen voor afdrukken"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:137
 msgid "Print Pre_view"
 msgstr "Afdruk_voorbeeld"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:138
 msgid "Print preview"
 msgstr "Afdrukvoorbeeld"
 
 # src/toolbar.c:286
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:140
 msgid "_Print…"
 msgstr "Af_drukken…"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:141
 msgid "Print the current page"
 msgstr "Huidige pagina afdrukken"
 
 # src/menubar.c:68
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:143
 msgid "S_end Link by Email…"
 msgstr "Verwijzing ve_rsturen per e-mail…"
 
 # src/toolbar.c:131
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:144
 msgid "Send a link of the current page"
 msgstr "Verwijzing naar de huidige pagina versturen"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:147
 msgid "Close this tab"
 msgstr "Dit tabblad sluiten"
 
 # src/mozilla_i18n.c:37
 # ui/preferences.glade.h:202
 #. Edit menu
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:152
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
 # ui/epiphany.glade.h:18
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:153
 msgid "Undo the last action"
 msgstr "Laatste bewerking ongedaan maken"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:155
 msgid "Re_do"
 msgstr "Op_nieuw"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:156
 msgid "Redo the last undone action"
 msgstr "De laatst ongedaan gemaakte actie weer opnieuw uitvoeren"
 
 # src/menubar.c:39
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:165
 msgid "Paste clipboard"
 msgstr "Plakken vanuit klembord"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:168
 msgid "Delete text"
 msgstr "Tekst  _verwijderen"
 
 # src/window.c:985
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:171
 msgid "Select the entire page"
 msgstr "De hele pagina selecteren"
 
 # ui/epiphany.glade.h:149
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:173
 msgid "_Find…"
 msgstr "_Zoeken…"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:174
 msgid "Find a word or phrase in the page"
 msgstr "Zoeken naar een woord of zin in de pagina"
 
 # src/menubar.c:117
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:176
 msgid "Find Ne_xt"
 msgstr "V_olgende zoeken"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:177
 msgid "Find next occurrence of the word or phrase"
 msgstr "Volgende overeenkomende tekenreeks zoeken"
 
 # src/menubar.c:208
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:179
 msgid "Find Pre_vious"
 msgstr "Vo_rige zoeken"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:180
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Vorige overeenkomende tekenreeks zoeken"
 
 # src/persistent_data_manager.c:138
 # ui/epiphany.glade.h:94
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:182
 msgid "P_ersonal Data"
 msgstr "P_ersoonlijke informatie"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:183
 msgid "View and remove cookies and passwords"
 msgstr "Cookies en wachtwoorden bekijken en verwijderen"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:186
 msgid "Certificate_s"
 msgstr "_Certificaten"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:187
 msgid "Manage Certificates"
 msgstr "Certificaten beheren"
 
 # ui/preferences.glade.h:142
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:190
 msgid "P_references"
 msgstr "_Voorkeuren"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:191
 msgid "Configure the web browser"
 msgstr "De webbrowser instellen"
 
 #. View menu
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:196
 msgid "_Customize Toolbars…"
 msgstr "Werkbalken _bewerken…"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:197
 msgid "Customize toolbars"
 msgstr "Werkbalken bewerken"
 
 # src/menubar.c:477
-#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
+#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
 msgid "_Stop"
 msgstr "_Stoppen"
 
 # src/toolbar.c:157
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:200
 msgid "Stop current data transfer"
 msgstr "Stop de huidige dataoverdracht"
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:204
 msgid "_Reload"
 msgstr "_Herladen"
 
 # src/toolbar.c:131
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:205
 msgid "Display the latest content of the current page"
 msgstr "De nieuwste inhoud van de huidige pagina weergeven"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:207
 msgid "_Larger Text"
 msgstr "Grotere _tekst"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:208
 msgid "Increase the text size"
 msgstr "Tekst vergroten"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:210
 msgid "S_maller Text"
 msgstr "_Kleinere tekst"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:211
 msgid "Decrease the text size"
 msgstr "Tekst verkleinen"
 
 # ui/epiphany.glade.h:90
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:213
 msgid "_Normal Size"
 msgstr "_Normale grootte"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:214
 msgid "Use the normal text size"
 msgstr "Standaard tekstgrootte"
 
 # src/prefs.c:385
 # ui/epiphany.glade.h:36
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:216
 msgid "Text _Encoding"
 msgstr "Tekst_codering"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:217
 msgid "Change the text encoding"
 msgstr "Tekstcodering aanpassen"
 
 # src/menubar.c:187
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:219
 msgid "_Page Source"
 msgstr "B_ron weergeven"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:220
 msgid "View the source code of the page"
 msgstr "De broncode van de pagina bekijken"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:222
 msgid "Page _Security Information"
 msgstr "Beveiligingsin_formatie over pagina"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:223
 msgid "Display security information for the web page"
 msgstr "Beveiligingsinformatie betreffende deze webpagina weergeven"
 
 # src/menubar.c:571
 #. Bookmarks menu
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark…"
 msgstr "_Bladwijzer toevoegen…"
 
 # src/menubar.c:433
-#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "Bladwijzer toevoegen voor de huidige pagina"
 
 # src/menubar.c:571
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "Bladwijzers be_werken"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "Bladwijzervenster openen"
 
 # ui/epiphany.glade.h:85
 #. Go menu
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:237
 msgid "_Location…"
 msgstr "_Locatie…"
 
 # src/toolbar.c:170
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "Ga naar een bepaalde locatie"
 
@@ -3481,308 +3538,313 @@ msgstr "Ga naar een bepaalde locatie"
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
 #. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:240 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "_Geschiedenis"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "Geschiedenisvenster openen"
 
 # src/menubar.c:208
 #. Tabs menu
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "_Vorig tabblad"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "Vorige tabblad activeren"
 
 # ui/preferences.glade.h:272
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "V_olgend tabblad"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "Volgende tabblad activeren"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "Tabblad naar lin_ks verplaatsen"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "Huidige tabblad naar links verplaatsen"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "Tabblad naar _rechts verplaatsen"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "Huidige tabblad naar rechts verplaatsen"
 
 # ui/preferences.glade.h:272
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "Tabblad los_scheuren"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "Huidige tabblad losscheuren"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "Hulp voor webbrowser weergeven"
 
 #. File Menu
-#: ../src/ephy-window.c:269
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "Offline _werken"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "Naar offline stand schakelen"
 
 # src/menubar.c:150
 #. View Menu
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:282
 msgid "_Hide Toolbars"
 msgstr "_Werkbalken verbergen"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "Werkbalk weergeven/verbergen"
 
 # src/menubar.c:160
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "St_atusbalk"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "Statusbalk weergeven/verbergen"
 
 # src/menubar.c:165
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "_Volledig scherm"
 
 # src/main.c:111
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "Surfen met het volledige scherm"
 
 # src/menubar.c:416
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "_Opduikvensters"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Ongevraagde opduikvensters van deze pagina tonen of verbergen"
 
 # ui/preferences.glade.h:7
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "Selectie-tekstcursor"
 
 # src/menubar.c:571
 #. Document
-#: ../src/ephy-window.c:295
+#: ../src/ephy-window.c:302
 msgid "Add Boo_kmark…"
 msgstr "_Bladwijzer toevoegen…"
 
 #. Framed document
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "Alleen dit _deelvenster tonen"
 
 # src/context.c:71
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "Alleen dit deelvenster in dit venster tonen"
 
 # ui/epiphany.glade.h:91
 #. Links
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
 # src/context.c:60
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "Verwijzing openen in dit venster"
 
 # src/context.c:60
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "Verwijzing openen in _nieuw venster"
 
 # src/context.c:60
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "Verwijzing openen in nieuw venster"
 
 # src/context.c:61
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "Verwijzing openen in een nieuw _tabblad"
 
 # src/context.c:61
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "Verwijzing openen in een nieuw tabblad"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "Verwijzing _downloaden"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:325
 msgid "_Save Link As…"
 msgstr "Verwijzing opslaan _als…"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "Verwijzing opslaan onder een andere naam"
 
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link…"
 msgstr "Bl_adwijzer maken van verwijzing…"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "Verwijzing _kopiëren"
 
 # src/menubar.c:68
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:336
 msgid "_Send Email…"
 msgstr "E-mail ve_rsturen…"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "E-mailadres _kopiëren"
 
 # src/context.c:1075
 #. Images
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "_Afbeelding openen"
 
 # src/context.c:67
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:345
 msgid "_Save Image As…"
 msgstr "Afbeelding op_slaan als…"
 
 # src/context.c:68
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "Afbeelding _gebruiken als achtergrond"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "Afbeeldingsadres _kopiëren"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:351
 msgid "St_art Animation"
 msgstr "A_nimatie starten"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:353
 msgid "St_op Animation"
 msgstr "Animatie st_oppen"
 
-#: ../src/ephy-window.c:522
+#. Inspector
+#: ../src/ephy-window.c:357
+msgid "Inspect _Element"
+msgstr "_Element inspecteren"
+
+#: ../src/ephy-window.c:530
 msgid "There are unsubmitted changes to form elements"
 msgstr "Er zijn niet-verstuurde wijzigingen in delen van het formulier"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:534
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Als u het document desondanks sluit, verliest u die informatie."
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:538
 msgid "Close _Document"
 msgstr "Do_cument sluiten"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:285
+#: ../src/ephy-window.c:1440 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1489 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1442
 msgid "Save As"
 msgstr "Opslaan als"
 
 # src/toolbar.c:286
-#: ../src/ephy-window.c:1491
+#: ../src/ephy-window.c:1444
 msgid "Print"
 msgstr "Afdrukken"
 
 # src/toolbar.c:351
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1448
 msgid "Find"
 msgstr "Zoeken"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1508
+#: ../src/ephy-window.c:1461
 msgid "Larger"
 msgstr "Groter"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1511
+#: ../src/ephy-window.c:1464
 msgid "Smaller"
 msgstr "Kleiner"
 
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1704
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1709
 msgid "Broken"
 msgstr "Gebroken"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1717
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1724
 msgid "High"
 msgstr "Hoog"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1734
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
 
 # src/menubar.c:416
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1777
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3790,40 +3852,40 @@ msgstr[0] "%d verborgen opduikvenster"
 msgstr[1] "%d verborgen opduikvensters"
 
 # src/context.c:1075
-#: ../src/ephy-window.c:2079
+#: ../src/ephy-window.c:2042
 #, c-format
 msgid "Open image “%s”"
 msgstr "Afbeelding ‘%s’ openen"
 
 # src/context.c:68
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2047
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Gebruiken als werkbladachtergrond ‘%s’"
 
 # src/context.c:67
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2052
 #, c-format
 msgid "Save image “%s”"
 msgstr "Afbeelding ‘%s’ opslaan"
 
-#: ../src/ephy-window.c:2094
+#: ../src/ephy-window.c:2057
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Afbeeldingsadres ‘%s’ kopiëren"
 
-#: ../src/ephy-window.c:2107
+#: ../src/ephy-window.c:2071
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "E-mail versturen naar adres ‘%s’"
 
-#: ../src/ephy-window.c:2113
+#: ../src/ephy-window.c:2077
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-mailadres ‘%s’ kopiëren"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:2125
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save link “%s”"
 msgstr "Verwijzing ‘%s’ opslaan"
@@ -3831,12 +3893,12 @@ msgstr "Verwijzing ‘%s’ opslaan"
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: ../src/ephy-window.c:2131
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Bladwijzer maken van verwijzing ‘%s’"
 
-#: ../src/ephy-window.c:2137
+#: ../src/ephy-window.c:2102
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Verwijzing-adres ‘%s’ kopiëren"
@@ -3893,38 +3955,38 @@ msgstr ""
 msgid "Cookie Properties"
 msgstr "Cookie-eigenschappen"
 
-#: ../src/pdm-dialog.c:669
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "Inhoud:"
 
 # src/context.c:83
 # src/window_callbacks.c:1149
 # src/window_callbacks.c:2884
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
 msgstr "Pad:"
 
 # src/menubar.c:68
-#: ../src/pdm-dialog.c:701
+#: ../src/pdm-dialog.c:702
 msgid "Send for:"
 msgstr "Versturen voor:"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
 msgstr "Uitsluitend versleutelde verbindingen"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
 msgstr "Eender welk type verbinding"
 
 # ui/preferences.glade.h:50
-#: ../src/pdm-dialog.c:716
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "Verloopt:"
 
 # ui/preferences.glade.h:249
 #. Session cookie
-#: ../src/pdm-dialog.c:728
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
 msgstr "Einde van huidige sessie"
 
@@ -3958,68 +4020,19 @@ msgstr "Gebruikerswachtwoord"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../src/popup-commands.c:259
+#: ../src/popup-commands.c:274
 msgid "Download Link"
 msgstr "Verwijzing downloaden"
 
 # src/menubar.c:63
-#: ../src/popup-commands.c:267
+#: ../src/popup-commands.c:282
 msgid "Save Link As"
 msgstr "Verwijzing opslaan als"
 
 # src/context.c:67
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:289
 msgid "Save Image As"
 msgstr "Afbeelding opslaan als"
-
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "Eerste"
-
-# ui/preferences.glade.h:172
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "Ga naar de eerste pagina"
-
-# src/context.c:83
-# src/window_callbacks.c:1149
-# src/window_callbacks.c:2884
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "Laatste"
-
-# ui/preferences.glade.h:172
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "Ga naar de laatste pagina"
-
-# src/menubar.c:208
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "Vorige"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "Ga naar de vorige pagina"
-
-# ui/preferences.glade.h:272
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "Volgende"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "Ga naar de volgende pagina"
-
-# src/bookmarks_editor.c:945
-# src/menubar.c:91
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "Sluiten"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "Afdrukvoorbeeld sluiten"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
@@ -4051,11 +4064,11 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Systeemtaal (%s)"
 msgstr[1] "Systeemtalen (%s)"
 
-#: ../src/prefs-dialog.c:941
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Kies een map"
 
-#: ../src/window-commands.c:886
+#: ../src/window-commands.c:938
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4067,7 +4080,7 @@ msgstr ""
 "gepubliceerd door the Free Software Foundation; ofwel versie 2, als ook (uw "
 "eigen optie) elke latere versie."
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:942
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4079,7 +4092,7 @@ msgstr ""
 "VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN SPECIFIEK DOEL. Zie de GNU General "
 "Public License voor meer details."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:946
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4090,20 +4103,20 @@ msgstr ""
 "naar de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, "
 "Boston, MA 02110-1301, USA"
 
-#: ../src/window-commands.c:940 ../src/window-commands.c:956
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:992 ../src/window-commands.c:1008
+#: ../src/window-commands.c:1019
 msgid "Contact us at:"
 msgstr "Wij zijn te bereiken op:"
 
-#: ../src/window-commands.c:943
+#: ../src/window-commands.c:995
 msgid "Contributors:"
 msgstr "Met bijdragen van:"
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:998
 msgid "Past developers:"
 msgstr "Ex-ontwikkelaars:"
 
-#: ../src/window-commands.c:976
+#: ../src/window-commands.c:1028
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4120,7 +4133,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1002
+#: ../src/window-commands.c:1054
 msgid "translator-credits"
 msgstr ""
 "Reinout van Schouwen \n"
@@ -4133,9 +4146,57 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/window-commands.c:1005
+#: ../src/window-commands.c:1057
 msgid "GNOME Web Browser Website"
 msgstr "Webstek van de GNOME-webbrowser"
+
+#~ msgid "Enable Java"
+#~ msgstr "Java inschakelen"
+
+#~ msgid "_View Certificate…"
+#~ msgstr "_Certificaat weergeven…"
+
+#~ msgid "Enable _Java"
+#~ msgstr "_Java inschakelen"
+
+#~ msgid "First"
+#~ msgstr "Eerste"
+
+# ui/preferences.glade.h:172
+#~ msgid "Go to the first page"
+#~ msgstr "Ga naar de eerste pagina"
+
+# src/context.c:83
+# src/window_callbacks.c:1149
+# src/window_callbacks.c:2884
+#~ msgid "Last"
+#~ msgstr "Laatste"
+
+# ui/preferences.glade.h:172
+#~ msgid "Go to the last page"
+#~ msgstr "Ga naar de laatste pagina"
+
+# src/menubar.c:208
+#~ msgid "Previous"
+#~ msgstr "Vorige"
+
+#~ msgid "Go to the previous page"
+#~ msgstr "Ga naar de vorige pagina"
+
+# ui/preferences.glade.h:272
+#~ msgid "Next"
+#~ msgstr "Volgende"
+
+#~ msgid "Go to next page"
+#~ msgstr "Ga naar de volgende pagina"
+
+# src/bookmarks_editor.c:945
+# src/menubar.c:91
+#~ msgid "Close"
+#~ msgstr "Sluiten"
+
+#~ msgid "Close print preview"
+#~ msgstr "Afdrukvoorbeeld sluiten"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr ""
@@ -4688,9 +4749,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 #~ msgid "Certificate _Details"
 #~ msgstr "Certificaat-_details"
 
-#~ msgid "_View Certificate"
-#~ msgstr "_Certificaat weergeven"
-
 #~ msgid ""
 #~ "The site “%s” returned security information for “%s”. It is possible that "
 #~ "someone is intercepting your communication to obtain your confidential "
@@ -4980,7 +5038,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-
 #~ msgid "Remove _All"
 #~ msgstr "_Alle verwijderen"
 
