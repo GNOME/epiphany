@@ -522,7 +522,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 
 /**
  * ephy_favicons_cache_get:
- * @cache:
+ * @cache: an #EphyFaviconCache
  * @url: the URL of the icon to retrieve
  * 
  * Note: This will always return %NULL for non-http URLs.
@@ -795,7 +795,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 /**
  * ephy_favicons_cache_clear:
- * @cache:
+ * @cache: the #EphyFaviconCache to clear
  * 
  * Clears the favicon cache and removes any stored icon files from disk.
  */
