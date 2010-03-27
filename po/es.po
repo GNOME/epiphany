@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2010-02-28 20:28+0000\n"
-"PO-Revision-Date: 2010-02-28 22:23+0100\n"
+"POT-Creation-Date: 2010-03-25 01:45+0000\n"
+"PO-Revision-Date: 2010-03-27 10:23+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -909,46 +909,46 @@ msgid "_Page address"
 msgstr "Dirección de la _página"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:165
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "_Mostrar descargas"
 
-#: ../embed/downloader-view.c:302
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:306
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:356
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_Pausa"
 
-#: ../embed/downloader-view.c:356
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_Continuar"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:377 ../embed/downloader-view.c:539
-#: ../embed/downloader-view.c:544 ../lib/ephy-time-helpers.c:279
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/downloader-view.c:502
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Se ha descargado el archivo «%s»."
 
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "Descarga finalizada"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:529
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -957,50 +957,50 @@ msgstr ""
 "%s\n"
 "%s de %s"
 
-#: ../embed/downloader-view.c:576
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d descarga"
 msgstr[1] "%d descargas"
 
-#: ../embed/downloader-view.c:706
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Se ha añadido el archivo «%s» a la cola de descargas."
 
-#: ../embed/downloader-view.c:710
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "Descarga iniciada"
 
-#: ../embed/downloader-view.c:788 ../embed/downloader-view.c:798
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/downloader-view.c:791
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "Falló"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: ../embed/downloader-view.c:857 ../src/bookmarks/ephy-bookmarks-editor.c:991
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Archivo"
 
-#: ../embed/downloader-view.c:880
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:891
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:778
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:794
 #: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Guardar"
@@ -1428,16 +1428,16 @@ msgstr "Archivos locales"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3159
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3175
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: ../embed/ephy-web-view.c:913
+#: ../embed/ephy-web-view.c:929
 msgid "Not now"
 msgstr "Ahora no"
 
-#: ../embed/ephy-web-view.c:918
+#: ../embed/ephy-web-view.c:934
 msgid "Store password"
 msgstr "Almacenar contraseña"
 
@@ -1445,47 +1445,47 @@ msgstr "Almacenar contraseña"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:929
+#: ../embed/ephy-web-view.c:945
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>¿Quiere almacenar la contraseña para <b>%s</b> en <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:2015
+#: ../embed/ephy-web-view.c:2031
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2284
+#: ../embed/ephy-web-view.c:2300
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Redireccionando a «%s»…"
 
-#: ../embed/ephy-web-view.c:2286
+#: ../embed/ephy-web-view.c:2302
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Transfiriendo datos desde «%s»…"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2304
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Esperando autorización de «%s»…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2294 ../embed/ephy-web-view.c:2418
+#: ../embed/ephy-web-view.c:2310 ../embed/ephy-web-view.c:2434
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2436
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3363
+#: ../embed/ephy-web-view.c:3379
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
@@ -1688,11 +1688,11 @@ msgstr ""
 "contraseña maestra. Si quiere que Epiphany las importe introduzca debajo su "
 "contraseña maestra."
 
-#: ../lib/ephy-profile-migration.c:82
+#: ../lib/ephy-profile-migration.c:83
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falló al copiar el archivo de «cookies» de Mozilla."
 
-#: ../lib/ephy-profile-migration.c:552
+#: ../lib/ephy-profile-migration.c:558
 msgid "Failed to read latest migration marker, aborting profile migration."
 msgstr ""
 "Falló al leer el último marcador de migración, abortando la migración del "
@@ -2115,7 +2115,7 @@ msgstr "Mostrar ayuda de los marcadores"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
 #: ../src/ephy-history-window.c:191 ../src/ephy-window.c:267
 msgid "_About"
-msgstr "_Acerca de"
+msgstr "Acerca _de"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
 #: ../src/ephy-history-window.c:192 ../src/ephy-window.c:268
