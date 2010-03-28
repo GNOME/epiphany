@@ -1,7 +1,7 @@
 # Lithuanian translation of Epiphany.
 # Copyright (C) 2004-2007 Epiphany's Marco Pesenti Gritti
 # This file is distributed under the same license as the Epiphany package.
-# Žygimantas Beručka <zygis@gnome.org>, 2004-2009.
+# Žygimantas Beručka <zygis@gnome.org>, 2004-2009, 2010.
 # Justina Klingaitė <justina.klingaite@gmail.com>, 2005.
 # Gintautas Miliauskas <gintas@akl.lt>, 2007.
 msgid ""
@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-15 02:06+0000\n"
-"PO-Revision-Date: 2009-09-16 19:53+0300\n"
+"POT-Creation-Date: 2010-03-22 17:50+0000\n"
+"PO-Revision-Date: 2010-03-28 13:53+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
-"Language-Team: Lithuanian\n"
+"Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.4.0\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -41,7 +41,6 @@ msgstr "Ieškoti internete"
 #. For instance in .nl these should be
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:5
-#| msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgid "http://www.google.com"
 msgstr "http://www.google.lt"
 
@@ -50,7 +49,6 @@ msgstr "http://www.google.lt"
 #. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #: ../data/default-bookmarks.rdf.in.h:10
 #, no-c-format
-#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.lt/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
@@ -59,7 +57,6 @@ msgid "Browse the web"
 msgstr "Naršyti žiniatinklį"
 
 #: ../data/epiphany.desktop.in.in.h:2
-#| msgid "Epiphany (RDF)"
 msgid "Epiphany"
 msgstr "Epiphany"
 
@@ -68,7 +65,7 @@ msgid "Epiphany Web Browser"
 msgstr "Žiniatinklio naršyklė Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "Žiniatinklio naršyklė"
 
@@ -253,14 +250,14 @@ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "Numatytojo šrifto tipas. Galimos reikšmės yra „serif“ ir „sans-serif“."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Įjungti Java"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Įjungti JavaScript"
 
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Įjungti įskiepius"
+
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "Įjungti žiniatinklio inspektorių"
 
@@ -270,8 +267,7 @@ msgstr "Įjungti tolygų slinkimą"
 
 #: ../data/epiphany.schemas.in.h:18
 msgid ""
-"Force new window requests to be opened in tabs instead of using a new "
-"window."
+"Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Esant naujų langų atvėrimo užklausoms, visada atverti kortelėse, o ne "
 "languose."
@@ -361,14 +357,18 @@ msgid "Remember passwords"
 msgstr "Atsiminti slaptažodžius"
 
 #: ../data/epiphany.schemas.in.h:36
+msgid "Search string for keywords entered in the URL bar."
+msgstr "Ieškomų reikšminių žodžių, įvestų URL juostoje, seka."
+
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show bookmarks bar by default"
 msgstr "Standartiškai rodyti žymelių juostą"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "Show statusbar by default"
 msgstr "Standartiškai rodyti užduočių juostą"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -376,27 +376,35 @@ msgstr ""
 "Rodyti puslapių retrospektyvą, aplankytų „ever“, „last_two_days“, "
 "„last_three_days“, „today“."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Rodyti kortelių juostą net tada, kai atverta tik viena kortelė."
 
-#: ../data/epiphany.schemas.in.h:40
-msgid "Show toolbars by default"
-msgstr "Standartiškai rodyti įrankių juostą"
-
 #: ../data/epiphany.schemas.in.h:41
+msgid "Show toolbars by default"
+msgstr "Jei nenurodyta kitaip, rodyti įrankių juostą"
+
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache"
 msgstr "Disko talpyklos dydis"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid "Size of disk cache, in MB."
 msgstr "Disko talpyklos dydis, MB."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"Simbolių seka, kuri bus naudojama kaip naudotojo agentas nurodant naršyklės "
+"tapatybę žiniatinklio serveriams"
+
+#: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
 msgstr "Žymelių informacija rodoma redaktoriaus rodinyje"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -404,11 +412,11 @@ msgstr ""
 "Žymelių informacija rodoma redaktoriaus rodinyje. Galiojančios reikšmės "
 "sąraše yra „address“ ir „title“."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The currently selected fonts language"
 msgstr "Dabar pasirinktų šriftų kalba"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -427,15 +435,15 @@ msgstr ""
 "western“ (kalbos, kuriose rašoma lotyniškais rašmenimis), „x-tamil“ (tamilų) "
 "ir „x-devanagari“ (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid "The downloads folder"
 msgstr "Atsiųstų failų aplankas"
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
 msgstr "Puslapių informacija rodoma retrospektyvos rodinyje"
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -443,7 +451,7 @@ msgstr ""
 "Puslapio informacija rodoma retrospektyvos rodinyje. Galimos reikšmės sąraše "
 "yra: „VievTitle“, „ViewAddress“ ir „ViewDateTime“."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -451,11 +459,11 @@ msgstr ""
 "Atsiunčiamų failų kelias; „Downloads“ - naudoti numatytąjį parsiuntimo "
 "aplanką arba „Desktop“ - naudoti darbastalio aplanką."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Toolbar style"
 msgstr "Įrankinės stilius"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -465,27 +473,37 @@ msgstr ""
 "stilių), „abu“ (tekstas ir piktogramos), „both-horiz“ (tekstas šalia "
 "piktogramų), „icons“ ir „text“."
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
+#| msgid "_Search:"
+msgid "URL Search"
+msgstr "URL paieška"
+
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
 msgstr "Naudoti savas spalvas"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:57
 msgid "Use own fonts"
 msgstr "Naudoti savus šriftus"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:58
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Naudoti savas spalvas vietoje puslapyje nurodytų spalvų."
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:59
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Naudoti savus šriftus vietoje puslapyje nurodytų šriftų."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:60
+#| msgid "User Name"
+msgid "User agent"
+msgstr "Naudotojo agentas"
+
+#: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
 msgstr "Atsiuntimų lango matomumas"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -493,7 +511,7 @@ msgstr ""
 "Kai failai negali būti atverti naršyklėje, jie automatiškai parsiunčiami į "
 "parsiuntimų aplanką ir atidaromi su jiems skirta programa."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:63
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -501,154 +519,155 @@ msgstr ""
 "Iš kur priimti slapukus. Galimos reikšmės yra „anywhere“, „current site“ ir "
 "„nowhere“."
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the background color"
 msgstr "Ar spausdinti fono spalvą"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the background images"
 msgstr "Ar spausdinti fono paveikslėlius"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to print the date in the footer"
 msgstr "Ar spausdinti datą poraštėje"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:67
 msgid "Whether to print the page address in the header"
 msgstr "Ar spausdinti puslapio adresą antraštėje"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:68
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Ar spausdinti puslapių numerius (x iš viso) poraštėje"
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:69
 msgid "Whether to print the page title in the header"
 msgstr "Ar spausdinti puslapio pavadinimą antraštėje"
 
-#: ../data/epiphany.schemas.in.h:66
+#: ../data/epiphany.schemas.in.h:70
 msgid "Whether to store and prefill passwords in web sites."
 msgstr ""
 "Ar saugoti ir iš anksto užpildyti slaptažodžius žiniatinklio svetainėse."
 
-#: ../data/epiphany.schemas.in.h:67
+#: ../data/epiphany.schemas.in.h:71
 msgid "x-western"
 msgstr "x-western"
 
-#: ../data/glade/certificate-dialogs.glade.h:1
+#: ../data/glade/certificate-dialogs.ui.h:1
 msgid "<b>Fingerprints</b>"
 msgstr "<b>Kontroliniai kodai</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:2
+#: ../data/glade/certificate-dialogs.ui.h:2
 msgid "<b>Issued By</b>"
 msgstr "<b>Kas išdavė</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:3
+#: ../data/glade/certificate-dialogs.ui.h:3
 msgid "<b>Issued To</b>"
 msgstr "<b>Kam išdavė</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:4
+#: ../data/glade/certificate-dialogs.ui.h:4
 msgid "<b>Validity</b>"
 msgstr "<b>Galiojimas</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:5
+#: ../data/glade/certificate-dialogs.ui.h:5
 msgid "Certificate _Fields"
 msgstr "Liudijimų _laukai"
 
-#: ../data/glade/certificate-dialogs.glade.h:6
+#: ../data/glade/certificate-dialogs.ui.h:6
 msgid "Certificate _Hierarchy"
 msgstr "Liudijimų _hierarchija"
 
-#: ../data/glade/certificate-dialogs.glade.h:7
+#: ../data/glade/certificate-dialogs.ui.h:7
 msgid "Common Name:"
 msgstr "Bendrasis vardas:"
 
-#: ../data/glade/certificate-dialogs.glade.h:8
+#: ../data/glade/certificate-dialogs.ui.h:8
 msgid "Details"
 msgstr "Detalės"
 
-#: ../data/glade/certificate-dialogs.glade.h:9
+#: ../data/glade/certificate-dialogs.ui.h:9
 msgid "Expires On:"
 msgstr "Galioja iki:"
 
-#: ../data/glade/certificate-dialogs.glade.h:10
+#: ../data/glade/certificate-dialogs.ui.h:10
 msgid "Field _Value"
 msgstr "Laukelio _reikšmė"
 
-#: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "General"
 msgstr "Pagrindinės"
 
-#: ../data/glade/certificate-dialogs.glade.h:12
+#: ../data/glade/certificate-dialogs.ui.h:12
 msgid "Issued On:"
 msgstr "Kada išduota:"
 
-#: ../data/glade/certificate-dialogs.glade.h:13
+#: ../data/glade/certificate-dialogs.ui.h:13
 msgid "MD5 Fingerprint:"
 msgstr "MD5 antspaudas:"
 
-#: ../data/glade/certificate-dialogs.glade.h:14
+#: ../data/glade/certificate-dialogs.ui.h:14
 msgid "Organization:"
 msgstr "Organizacija:"
 
-#: ../data/glade/certificate-dialogs.glade.h:15
+#: ../data/glade/certificate-dialogs.ui.h:15
 msgid "Organizational Unit:"
 msgstr "Organizacinis vienetas:"
 
-#: ../data/glade/certificate-dialogs.glade.h:16
+#: ../data/glade/certificate-dialogs.ui.h:16
 msgid "SHA1 Fingerprint:"
 msgstr "SHA1 antspaudas:"
 
-#: ../data/glade/certificate-dialogs.glade.h:17
+#: ../data/glade/certificate-dialogs.ui.h:17
 msgid "Serial Number:"
 msgstr "Serijinis numeris:"
 
-#: ../data/glade/epiphany.glade.h:1
+#: ../data/glade/epiphany.ui.h:1
 msgid "<b>_Automatic</b>"
 msgstr "<b>_Automatiškai</b>"
 
-#: ../data/glade/epiphany.glade.h:2
+#: ../data/glade/epiphany.ui.h:2
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Na_udoti kitą koduotę:</b>"
 
-#: ../data/glade/epiphany.glade.h:3
+#: ../data/glade/epiphany.ui.h:3
 msgid "Clear _All..."
 msgstr "Išvalyti _viską..."
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.ui.h:4
 msgid "Cookies"
 msgstr "Slapukai"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "Atsiuntimai"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.ui.h:6
 msgid "Passwords"
 msgstr "Slaptažodžiai"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.ui.h:7
 msgid "Personal Data"
 msgstr "Asmeniniai duomenys"
 
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/glade/epiphany.ui.h:8
 msgid "Text Encoding"
 msgstr "Teksto koduotė"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Naudoti dokumente nurodytą koduotę"
 
-#: ../data/glade/epiphany.glade.h:10
+#: ../data/glade/epiphany.ui.h:10
 msgid "_Show passwords"
 msgstr "_Rodyti slaptažodžius"
 
-#: ../data/glade/form-signing-dialog.glade.h:1
+#: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
 msgstr "Pasirašyti tekstą"
 
-#: ../data/glade/form-signing-dialog.glade.h:2
+#: ../data/glade/form-signing-dialog.ui.h:2
 msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
@@ -657,73 +676,73 @@ msgstr ""
 "pasirinkite liudijimą, kuriuo pasirašysite tekstą ir žemiau įveskite jo "
 "slaptažodį."
 
-#: ../data/glade/form-signing-dialog.glade.h:3
+#: ../data/glade/form-signing-dialog.ui.h:3
 msgid "_Certificate:"
 msgstr "_Liudijimas:"
 
-#: ../data/glade/form-signing-dialog.glade.h:4
+#: ../data/glade/form-signing-dialog.ui.h:4
 msgid "_Password:"
 msgstr "_Slaptažodis:"
 
-#: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate…"
-msgstr "Žiūrėti _liudijimą…"
+#: ../data/glade/form-signing-dialog.ui.h:5
+#| msgid "_View Certificate"
+msgid "_View Certificate&#x2026;"
+msgstr "Žiūrėti _liudijimą&#x2026;"
 
-#: ../data/glade/prefs-dialog.glade.h:1
+#: ../data/glade/prefs-dialog.ui.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Slapukai</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.ui.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>Atsiuntimai</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.ui.h:3
 msgid "<b>Encodings</b>"
 msgstr "<b>Koduotės</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.ui.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Svetainė</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:5
+#: ../data/glade/prefs-dialog.ui.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Kalbos</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.ui.h:6
 msgid "<b>Passwords</b>"
 msgstr "<b>Slaptažodžiai</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.ui.h:7
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Laikinieji failai</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.ui.h:8
 msgid "<b>Web Content</b>"
 msgstr "<b>Žiniatinklio turinys</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
-#| msgid "<b>Web Content</b>"
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Web Development</b>"
 msgstr "<b>Žiniatinklio programavimas</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.ui.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Pavyzdžiui, ne iš reklamuotojų šiose svetainėse</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.ui.h:12
 msgid "A_utomatically download and open files"
 msgstr "A_utomatiškai atsiųsti ir atverti failus"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.ui.h:13
 msgid "Add Language"
 msgstr "Pridėti kalbą"
 
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/glade/prefs-dialog.ui.h:14
 msgid "Allow popup _windows"
 msgstr "Leisti iššokančius _langus"
 
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Choose a l_anguage:"
 msgstr "Pasirinkite k_albą:"
 
@@ -731,197 +750,197 @@ msgstr "Pasirinkite k_albą:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:682
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "Išva_lyti"
 
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.ui.h:17
 msgid "De_fault:"
 msgstr "N_umatytoji:"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.ui.h:18
 msgid "Enable Java_Script"
 msgstr "Įjungti Java_Script"
 
-#: ../data/glade/prefs-dialog.glade.h:20
-msgid "Enable _Java"
-msgstr "Įjungti _Java"
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Plugins"
+msgstr "Įjungti į_skiepius"
 
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
 msgstr "Šriftai ir stilius"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:821
 msgid "Language"
 msgstr "Kalba"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.ui.h:24
 msgid "Let web pages specify their own _fonts"
 msgstr "Leisti svetainėms nurodyti jų šri_ftus"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.ui.h:25
 msgid "Let web pages specify their own c_olors"
 msgstr "Leisti svetainėms nurodyti jų _spalvas"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Only _from sites you visit"
 msgstr "Tik iš lankomų _svetainių"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Preferences"
 msgstr "Nustatymai"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.ui.h:29
 msgid "Privacy"
 msgstr "Privatumas"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.ui.h:30
 msgid "Set to Current _Page"
 msgstr "Nustatyti į dabartinį _puslapį"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.ui.h:31
 msgid "Set to _Blank Page"
 msgstr "Nustatyti į _tuščią puslapį"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.ui.h:32
 msgid "Use custom _stylesheet"
 msgstr "Naudoti kitą _stiliaus aprašą"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use s_mooth scrolling"
 msgstr "Įjungti t_olygų slinkimą"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.ui.h:34
 msgid "_Address:"
 msgstr "_Adresas:"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Always accept"
 msgstr "_Visada priimti"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Disk space:"
 msgstr "_Vieta diske:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Download folder:"
 msgstr "_Atsiuntimo aplankas:"
 
-#: ../data/glade/prefs-dialog.glade.h:38
-msgid "_Edit Stylesheet…"
-msgstr "_Taisyti stiliaus aprašą…"
+#: ../data/glade/prefs-dialog.ui.h:38
+#| msgid "_Edit Stylesheet…"
+msgid "_Edit Stylesheet&#x2026;"
+msgstr "_Taisyti stiliaus aprašą&#x2026;"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.ui.h:39
 msgid "_Minimum size:"
 msgstr "_Minimalus dydis:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.ui.h:40
 msgid "_Never accept"
 msgstr "_Niekada nepriimti"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Remember passwords"
 msgstr "A_tsiminti slaptažodžius"
 
-#: ../data/glade/print.glade.h:1
+#: ../data/glade/print.ui.h:1
 msgid "<b>Background</b>"
 msgstr "<b>Fonas</b>"
 
-#: ../data/glade/print.glade.h:2
+#: ../data/glade/print.ui.h:2
 msgid "<b>Footers</b>"
 msgstr "<b>Poraštės</b>"
 
-#: ../data/glade/print.glade.h:3
+#: ../data/glade/print.ui.h:3
 msgid "<b>Frames</b>"
 msgstr "<b>Kadrai</b>"
 
-#: ../data/glade/print.glade.h:4
+#: ../data/glade/print.ui.h:4
 msgid "<b>Headers</b>"
 msgstr "<b>Antraštės</b>"
 
-#: ../data/glade/print.glade.h:5
+#: ../data/glade/print.ui.h:5
 msgid "As laid out on the _screen"
 msgstr "Kaip išdėstyta _ekrane"
 
-#: ../data/glade/print.glade.h:6
+#: ../data/glade/print.ui.h:6
 msgid "O_nly the selected frame"
 msgstr "_Tik pasirinktą kadrą"
 
-#: ../data/glade/print.glade.h:7
+#: ../data/glade/print.ui.h:7
 msgid "P_age title"
 msgstr "Pu_slapio antraštė"
 
-#: ../data/glade/print.glade.h:8
+#: ../data/glade/print.ui.h:8
 msgid "Page _numbers"
 msgstr "Puslapių _numeriai"
 
-#: ../data/glade/print.glade.h:9
+#: ../data/glade/print.ui.h:9
 msgid "Print background c_olors"
 msgstr "Spausdinti fono spal_vas"
 
-#: ../data/glade/print.glade.h:10
+#: ../data/glade/print.ui.h:10
 msgid "Print background i_mages"
 msgstr "Spausdinti fono _paveikslėlius"
 
-#: ../data/glade/print.glade.h:11
+#: ../data/glade/print.ui.h:11
 msgid "_Date"
 msgstr "_Data"
 
-#: ../data/glade/print.glade.h:12
+#: ../data/glade/print.ui.h:12
 msgid "_Each frame separately"
 msgstr "_Kiekvieną kadrą atskirai"
 
-#: ../data/glade/print.glade.h:13
+#: ../data/glade/print.ui.h:13
 msgid "_Page address"
 msgstr "_Puslapio adresas"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:167
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "_Rodyti atsiuntimus"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_Pauzė"
 
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_Tęsti"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
-#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../embed/downloader-view.c:510
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Failas „%s“ atsiųstas."
 
-#: ../embed/downloader-view.c:513
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "Atsiųsta"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:537
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -930,7 +949,7 @@ msgstr ""
 "%s\n"
 "%s iš %s"
 
-#: ../embed/downloader-view.c:584
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -938,61 +957,59 @@ msgstr[0] "%d parsiuntimas"
 msgstr[1] "%d parsiuntimai"
 msgstr[2] "%d parsiuntimų"
 
-#: ../embed/downloader-view.c:719
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Failas „%s“ įtrauktas į atsiuntimų eilę."
 
-#: ../embed/downloader-view.c:723
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "Pradedama siųsti"
 
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
-#| msgid "Unknown"
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Nežinoma"
 
-#: ../embed/downloader-view.c:804
-#| msgid "File"
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "Nepavyko"
 
-#: ../embed/downloader-view.c:807
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "Atšaukta"
 
-#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Failas"
 
-#: ../embed/downloader-view.c:893
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:904
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "Liko"
 
-#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
+#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:794
+#: ../src/window-commands.c:341
 msgid "Save"
 msgstr "Įrašyti"
 
-#: ../embed/ephy-embed.c:662
-#| msgid "Unknown"
+#: ../embed/ephy-embed.c:708
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:727
 msgid "Download this potentially unsafe file?"
 msgstr "Atsiųsti šį potencialiai nesaugų failą?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:681
+#: ../embed/ephy-embed.c:732
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1005,14 +1022,14 @@ msgstr ""
 "Atverti „%s“ yra nesaugu, kadangi jis gali kelti grėsmę jūsų dokumentams "
 "arba jūsų privatumui. Vietoje to galite failą atsisiųsti."
 
-#: ../embed/ephy-embed.c:689
+#: ../embed/ephy-embed.c:740
 msgid "Open this file?"
 msgstr "Atverti šį failą?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:746
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1023,13 +1040,13 @@ msgstr ""
 "\n"
 "Galite atverti „%s“ su „%s“ arba jį įrašyti."
 
-#: ../embed/ephy-embed.c:702
+#: ../embed/ephy-embed.c:753
 msgid "Download this file?"
 msgstr "Atsiųsti šį failą?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:707
+#: ../embed/ephy-embed.c:758
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1040,20 +1057,27 @@ msgstr ""
 "\n"
 "Neturite programos galinčios atverti „%s“. Vietoje to, galite ją parsisiųsti."
 
-#: ../embed/ephy-embed.c:714
+#: ../embed/ephy-embed.c:765
 msgid "_Save As..."
 msgstr "Įrašyti _kaip..."
 
-#: ../embed/ephy-embed.c:844
+#: ../embed/ephy-embed.c:938
 msgid "Web Inspector"
 msgstr "Žiniatinklio inspektorius"
 
-#: ../embed/ephy-embed-shell.c:242
-#| msgid "Epiphany can't be used now. Mozilla initialization failed."
+#: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany dabar naudoti negalima. Nepavyko inicializuoti."
 
-#: ../embed/ephy-embed-utils.c:61
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"Nepavyko rasti naudotino LĮ liudijimų failo, visos SSL svetainės bus "
+"laikomos turinčiomis sugadintą liudijimą."
+
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Išsiųsti el. laišką adresu „%s“"
@@ -1396,44 +1420,67 @@ msgstr "Vietiniai failai"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2124
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3175
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Tuščias puslapis"
 
-#: ../embed/ephy-web-view.c:1128
+#: ../embed/ephy-web-view.c:929
+#| msgid "Not found"
+msgid "Not now"
+msgstr "Ne dabar"
+
+#: ../embed/ephy-web-view.c:934
+#| msgid "_Show passwords"
+msgid "Store password"
+msgstr "Įrašyti slaptažodį"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:945
+#, c-format
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr ""
+"<big>Ar norėtumėte įrašyti <b>%s</b> slaptažodį svetainėje <b>%s</b>?</big>"
+
+#: ../embed/ephy-web-view.c:2031
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1319
+#: ../embed/ephy-web-view.c:2300
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Nukreipiama į „%s“…"
 
-#: ../embed/ephy-web-view.c:1321
+#: ../embed/ephy-web-view.c:2302
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Perduodami duomenys iš „%s“…"
 
-#: ../embed/ephy-web-view.c:1323
+#: ../embed/ephy-web-view.c:2304
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Laukiama tapatybės patvirtinimo iš „%s“…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1436
+#: ../embed/ephy-web-view.c:2310 ../embed/ephy-web-view.c:2434
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Įkeliama „%s“…"
 
-#: ../embed/ephy-web-view.c:1438
+#: ../embed/ephy-web-view.c:2436
 msgid "Loading…"
 msgstr "Įkeliama…"
 
-#: ../embed/ephy-web-view.c:2319
+#. Translators: this is the directory name to store auxilary files
+#. * when saving html files.
+#.
+#: ../embed/ephy-web-view.c:3379
 #, c-format
-#| msgid "%s Files"
 msgid "%s Files"
 msgstr "%s failai"
 
@@ -1516,36 +1563,36 @@ msgstr "Rodyti seanso valdymo parinktis"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:934
+#: ../lib/egg/egg-editable-toolbar.c:944
 #, c-format
 msgid "Show “_%s”"
 msgstr "Rodyti „_%s“"
 
-#: ../lib/egg/egg-editable-toolbar.c:1397
+#: ../lib/egg/egg-editable-toolbar.c:1407
 msgid "_Move on Toolbar"
 msgstr "_Perkelti į įrankių juostą"
 
-#: ../lib/egg/egg-editable-toolbar.c:1398
+#: ../lib/egg/egg-editable-toolbar.c:1408
 msgid "Move the selected item on the toolbar"
 msgstr "Perkelti pasirinktą elementą į įrankinę"
 
-#: ../lib/egg/egg-editable-toolbar.c:1399
+#: ../lib/egg/egg-editable-toolbar.c:1409
 msgid "_Remove from Toolbar"
 msgstr "_Pašalinti iš įrankių juostos"
 
-#: ../lib/egg/egg-editable-toolbar.c:1400
+#: ../lib/egg/egg-editable-toolbar.c:1410
 msgid "Remove the selected item from the toolbar"
 msgstr "Pašalinti pasirinktą elementą iš įrankinės"
 
-#: ../lib/egg/egg-editable-toolbar.c:1401
+#: ../lib/egg/egg-editable-toolbar.c:1411
 msgid "_Delete Toolbar"
 msgstr "_Pašalinti įrankių juostą"
 
-#: ../lib/egg/egg-editable-toolbar.c:1402
+#: ../lib/egg/egg-editable-toolbar.c:1412
 msgid "Remove the selected toolbar"
 msgstr "Pašalinti pasirinktą įrankinę"
 
-#: ../lib/egg/egg-toolbar-editor.c:485
+#: ../lib/egg/egg-toolbar-editor.c:486
 msgid "Separator"
 msgstr "Skirtukas"
 
@@ -1561,80 +1608,110 @@ msgstr "Tinklalapiai"
 msgid "Images"
 msgstr "Paveikslėliai"
 
-#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "All files"
 msgstr "Visi failai"
 
-#: ../lib/ephy-file-helpers.c:296
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
+msgid "Desktop"
+msgstr "Darbastalis"
+
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nepavyko %s sukurti laikinojo aplanko."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Failas „%s“ jau egzistuoja, patraukite jį iš kelio."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Nepavyko sukurti aplanko „%s“."
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:293
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "Aplankas „%s“ nėra rašomas"
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:297
 msgid "You do not have permission to create files in this directory."
 msgstr "Neturite leidimo kurti failus šiame aplanke."
 
-#: ../lib/ephy-gui.c:290
+#: ../lib/ephy-gui.c:300
 msgid "Directory not Writable"
 msgstr "Aplankas nėra rašomas"
 
-#: ../lib/ephy-gui.c:320
+#: ../lib/ephy-gui.c:330
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Negalima perrašyti egzistuojančio failo „%s“"
 
-#: ../lib/ephy-gui.c:324
+#: ../lib/ephy-gui.c:334
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
 "Failas tokiu pavadinimu jau egzistuoja ir neturite teisių jį perrašyti."
 
-#: ../lib/ephy-gui.c:327
+#: ../lib/ephy-gui.c:337
 msgid "Cannot Overwrite File"
 msgstr "Nepavyko perrašyti failo"
 
-#: ../lib/ephy-gui.c:413
+#: ../lib/ephy-gui.c:392
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nepavyko parodyti žinyno: %s"
+
+#: ../lib/ephy-nss-glue.c:62
+msgid "Master password needed"
+msgstr "Reikalingas pagrindinis slaptažodis"
+
+#: ../lib/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"Slaptažodžiai iš ankstesnės versijos (Gecko) yra užrakinti pagrindiniu "
+"slaptažodžiu. Jeigu pageidaujate, kad Epiphany juos importuotų, žemiau "
+"įveskite savo pagrindinį slaptažodį."
+
+#: ../lib/ephy-profile-migration.c:83
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "Nepavyko nukopijuoti slapukų failo iš Mozillos."
+
+#: ../lib/ephy-profile-migration.c:556
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr ""
+"Nepavyko perskaityti paskutiniojo migravimo žymeklio, nutraukiamas profilio "
+"migravimas."
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "Iššokantys langai"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
 msgstr "Retrospektyva"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1493
+#: ../src/ephy-window.c:1446
 msgid "Bookmark"
 msgstr "Žymelė"
 
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1497
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:897
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1743
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1450
 msgid "Bookmarks"
 msgstr "Žymelės"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:291
 msgid "Address Entry"
 msgstr "Adreso laukelis"
 
@@ -1711,13 +1788,13 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/widgets/ephy-location-entry.c:970
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Norėdami sukurti nuorodą į šį puslapį, užtempkite ir paleiskite šią "
 "piktogramą"
 
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:158
 msgid "Clear"
 msgstr "Išvalyti"
 
@@ -1726,7 +1803,7 @@ msgstr "Išvalyti"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:497
+#: ../src/bookmarks/ephy-bookmark-action.c:498
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Vykdo scenarijų „%s“"
@@ -1734,7 +1811,7 @@ msgstr "Vykdo scenarijų „%s“"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:612
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1756,24 +1833,24 @@ msgstr[2] "_Sujungti su %d identiškų žymelių"
 msgid "Show “%s”"
 msgstr "Rodyti „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
+#: ../src/bookmarks/ephy-bookmark-properties.c:426
 #, c-format
 msgid "“%s” Properties"
 msgstr "„%s“ savybės"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:551
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Antraštė:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:567
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "A_dresas:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "Tem_os:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:600
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Ro_dyti visas temas"
 
@@ -1827,14 +1904,12 @@ msgstr "Atnaujinti žymelę?"
 
 #. Translators: this topic contains all bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1203
-#| msgid "All"
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Visos"
 
 #. Translators: this topic contains the most used bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1206
-#| msgid "bookmarks|Most Visited"
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "Lankomiausios"
@@ -1842,7 +1917,6 @@ msgstr "Lankomiausios"
 #. Translators: this topic contains the not categorized
 #. bookmarks
 #: ../src/bookmarks/ephy-bookmarks.c:1210
-#| msgid "bookmarks|Not Categorized"
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Nesuskirstytos"
@@ -1850,7 +1924,6 @@ msgstr "Nesuskirstytos"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1215
-#| msgid "bookmarks|Nearby Sites"
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Netoliese esančios svetainės"
@@ -1874,22 +1947,22 @@ msgstr "Ištrinti iš šios temos"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "_Failas"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "_Keisti"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "Ro_dymas"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "_Žinynas"
 
@@ -1905,9 +1978,9 @@ msgstr "Sukurti naują temą"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
 #: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Atverti naujame _lange"
@@ -1920,9 +1993,9 @@ msgstr "Atverti pasirinktą žymelę naujame lange"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1355
 #: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Atverti naujoje _kortelėje"
@@ -1968,7 +2041,7 @@ msgid "Export bookmarks to a file"
 msgstr "Eksportuoti žymeles į failą"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:146
 msgid "_Close"
 msgstr "_Užverti"
 
@@ -1978,29 +2051,29 @@ msgstr "Užverti žymelių langą"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:158
 msgid "Cu_t"
 msgstr "Iškirp_ti"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:159
 msgid "Cut the selection"
 msgstr "Iškirpti pažymėjimą"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1365
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:716
+#: ../src/ephy-window.c:161
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:162
 msgid "Copy the selection"
 msgstr "Kopijuoti pažymėjimą"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:164
 msgid "_Paste"
 msgstr "Į_dėti"
 
@@ -2019,7 +2092,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Trinti pasirinktą žymelę arba temą"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:170
 msgid "Select _All"
 msgstr "Pažymėti _viską"
 
@@ -2030,7 +2103,7 @@ msgstr "Pažymėti visas žymeles arba tekstą"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_Turinys"
 
@@ -2039,12 +2112,12 @@ msgid "Display bookmarks help"
 msgstr "Rodyti žymelių žinyną"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Apie"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Rodyti padėkas naršyklės kūrėjams"
 
@@ -2101,39 +2174,39 @@ msgid "_Delete Topic"
 msgstr "_Trinti temą"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:628
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
-#: ../src/bookmarks/ephy-bookmarks-editor.c:636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:641
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla profilis „%s“"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:650
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:678
+#: ../src/bookmarks/ephy-bookmarks-editor.c:679
 msgid "Import failed"
 msgstr "Importuoti nepavyko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import Failed"
 msgstr "Importuoti nepavyko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2142,64 +2215,64 @@ msgstr ""
 "Žymelių iš „%s“ nepavyko importuoti, nes failas yra sugadintas arba "
 "nepalaikomo tipo."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:746
+#: ../src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Import Bookmarks from File"
 msgstr "Importuoti žymeles iš failo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:754
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:758
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:761
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "Epiphany bookmarks"
 msgstr "Epiphany žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:885
+#: ../src/bookmarks/ephy-bookmarks-editor.c:886
 msgid "Export Bookmarks"
 msgstr "Eksportuoti žymeles"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "File f_ormat:"
 msgstr "Failo f_ormatas:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:946
+#: ../src/bookmarks/ephy-bookmarks-editor.c:949
 msgid "Import Bookmarks"
 msgstr "Importuoti žymeles"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:952
+#: ../src/bookmarks/ephy-bookmarks-editor.c:955
 msgid "I_mport"
 msgstr "I_mportuoti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:966
+#: ../src/bookmarks/ephy-bookmarks-editor.c:971
 msgid "Import bookmarks from:"
 msgstr "Importuoti žymeles iš:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/ephy-history-window.c:712
 msgid "_Copy Address"
 msgstr "_Kopijuoti adresą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1609
+#: ../src/ephy-history-window.c:1037
 msgid "_Search:"
 msgstr "_Ieškoti:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1807
 msgid "Topics"
 msgstr "Temos"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
-#: ../src/ephy-history-window.c:1362
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1877
+#: ../src/ephy-history-window.c:1360
 msgid "Title"
 msgstr "Antraštė"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
-#: ../src/ephy-history-window.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1888
+#: ../src/ephy-history-window.c:1369
 msgid "Address"
 msgstr "Adresas"
 
@@ -2253,50 +2326,50 @@ msgstr "Kitos koduotės"
 msgid "_Automatic"
 msgstr "_Automatiškai"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "nerasta"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:159
 msgid "Wrapped"
 msgstr "Apvesta"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find links:"
 msgstr "Rasti nuorodas:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find:"
 msgstr "Rasti:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
+#: ../src/ephy-find-toolbar.c:451 ../src/ephy-find-toolbar.c:574
 msgid "_Case sensitive"
 msgstr "_Skirti raidžių lygį"
 
-#: ../src/ephy-find-toolbar.c:539
+#: ../src/ephy-find-toolbar.c:557
 msgid "Find Previous"
 msgstr "Rasti ankstesnį"
 
-#: ../src/ephy-find-toolbar.c:542
+#: ../src/ephy-find-toolbar.c:560
 msgid "Find previous occurrence of the search string"
 msgstr "Rasti ankstesnį žodžio arba frazės pasikartojimą"
 
-#: ../src/ephy-find-toolbar.c:548
+#: ../src/ephy-find-toolbar.c:566
 msgid "Find Next"
 msgstr "Rasti kitą"
 
-#: ../src/ephy-find-toolbar.c:551
+#: ../src/ephy-find-toolbar.c:569
 msgid "Find next occurrence of the search string"
 msgstr "Rasti kitą žodžio arba frazės pasikartojimą"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:673
 msgid "Leave Fullscreen"
 msgstr "Išjungti viso ekrano veikseną"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:321
 msgid "Go"
 msgstr "Eiti"
 
@@ -2376,17 +2449,17 @@ msgstr ""
 msgid "Clear History"
 msgstr "Išvalyti retrospektyvą"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
 msgstr "Paskutinių 30 minučių"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "Šiandienos"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
+#: ../src/ephy-history-window.c:1048 ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1055
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2394,15 +2467,15 @@ msgstr[0] "Išlieka %d dieną"
 msgstr[1] "Išlieka %d dienas"
 msgstr[2] "Išlieka %d dienų"
 
-#: ../src/ephy-history-window.c:1299
+#: ../src/ephy-history-window.c:1297
 msgid "Sites"
 msgstr "Svetainės"
 
-#: ../src/ephy-history-window.c:1379
+#: ../src/ephy-history-window.c:1377
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1038
 msgid "GNOME Web Browser"
 msgstr "GNOME žiniatinklio naršyklė"
 
@@ -2424,7 +2497,7 @@ msgstr "Importuoti žymeles iš nurodyto failo"
 
 #: ../src/ephy-main.c:98
 msgid "Load the given session file"
-msgstr "Įkelti nurodytą sesijos failą"
+msgstr "Įkelti nurodytą seanso failą"
 
 #: ../src/ephy-main.c:100
 msgid "Add a bookmark"
@@ -2450,11 +2523,11 @@ msgstr "APL"
 msgid "URL …"
 msgstr "URL…"
 
-#: ../src/ephy-main.c:423
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "Nepavyko paleisti GNOME žiniatinklio naršyklės"
 
-#: ../src/ephy-main.c:426
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2463,38 +2536,13 @@ msgstr ""
 "Nepavyko paleisti dėl šios klaidos:\n"
 "%s"
 
-#: ../src/ephy-main.c:563
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "GNOME žiniatinklio naršyklės parinktys"
 
-#: ../src/ephy-notebook.c:626
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Užverti kortelę"
-
-#: ../src/ephy-nss-glue.c:62
-#| msgid "User Password"
-msgid "Master password needed"
-msgstr "Reikalingas pagrindinis slaptažodis"
-
-#: ../src/ephy-nss-glue.c:64
-msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
-msgstr ""
-"Slaptažodžiai iš ankstesnės versijos (Gecko) yra užrakinti pagrindiniu "
-"slaptažodžiu. Jeigu pageidaujate, kad Epiphany juos importuotų, žemiau "
-"įveskite savo pagrindinį slaptažodį."
-
-#: ../src/ephy-profile-migration.c:80
-msgid "Failed to copy cookies file from Mozilla."
-msgstr "Nepavyko nukopijuoti slapukų failo iš Mozillos."
-
-#: ../src/ephy-profile-migration.c:382
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr ""
-"Nepavyko perskaityti paskutiniojo migravimo žymeklio, nutraukiamas profilio "
-"migravimas."
 
 #: ../src/ephy-session.c:116
 #, c-format
@@ -2572,134 +2620,129 @@ msgstr "Reikalingas šoninės juostos išplėtimas"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Nuorodai, kurią spustelėjote, reikia įdiegti šoninės juostos plėtinį."
 
-#: ../src/ephy-statusbar.c:83
+#: ../src/ephy-statusbar.c:97
 msgid "Caret"
 msgstr "Žymekl"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:90
+#: ../src/ephy-statusbar.c:104
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Žymėjimo klaviatūra veiksena, norėdami išeiti paspauskite F7"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Persijungti į šią kortelę"
 
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:230
 msgid "_Back"
 msgstr "_Atgal"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:232
 msgid "Go to the previous visited page"
 msgstr "Atverti anksčiau aplankytą puslapį"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:236
 msgid "Back history"
 msgstr "„Atgal“ retrospektyva"
 
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:250
 msgid "_Forward"
 msgstr "_Pirmyn"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:252
 msgid "Go to the next visited page"
 msgstr "Atverti kitą aplankytą puslapį"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:256
 msgid "Forward history"
 msgstr "„Pirmyn“ retrospektyva"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:269
 msgid "_Up"
 msgstr "_Viršun"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:271
 msgid "Go up one level"
 msgstr "Eiti vienu lygiu aukštyn"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:275
 msgid "List of upper levels"
 msgstr "Aukštesnių lygių sąrašas"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:293
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
 "Įveskite pageidaujamą atverti adresą arba norimą internete surasti frazę"
 
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:309
 msgid "Zoom"
 msgstr "Mastelis"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:311
 msgid "Adjust the text size"
 msgstr "Keisti teksto dydį"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:323
 msgid "Go to the address entered in the address entry"
 msgstr "Atverti adreso laukelyje įvestą adresą"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:332
 msgid "_Home"
 msgstr "P_radžia"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:334
 msgid "Go to the home page"
 msgstr "Atverti pradinį puslapį"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:344
 msgid "New _Tab"
 msgstr "Nauja kor_telė"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:346
 msgid "Open a new tab"
 msgstr "Atverti naują kortelę"
 
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:355
 msgid "_New Window"
 msgstr "_Naujas langas"
 
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:357
 msgid "Open a new window"
 msgstr "Atverti naują langą"
 
 #: ../src/ephy-toolbar-editor.c:71
-#| msgid "Default"
 msgctxt "toolbar style"
 msgid "Default"
 msgstr "Numatytasis"
 
 #. separator row
 #: ../src/ephy-toolbar-editor.c:73
-#| msgid "Text below icons"
 msgctxt "toolbar style"
 msgid "Text below icons"
 msgstr "Tekstas po piktogramomis"
 
 #: ../src/ephy-toolbar-editor.c:74
-#| msgid "Text beside icons"
 msgctxt "toolbar style"
 msgid "Text beside icons"
 msgstr "Tekstas šalia piktogramų"
 
 #: ../src/ephy-toolbar-editor.c:75
-#| msgid "Icons only"
 msgctxt "toolbar style"
 msgid "Icons only"
 msgstr "Tik piktogramos"
 
 #: ../src/ephy-toolbar-editor.c:76
-#| msgid "Text only"
 msgctxt "toolbar style"
 msgid "Text only"
 msgstr "Tik tekstas"
@@ -2717,509 +2760,514 @@ msgstr "Įrankinės _mygtukų užrašai:"
 msgid "_Add a New Toolbar"
 msgstr "_Pridėti naują įrankių juostą"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "Ž_ymelės"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "_Eiti"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "Įr_ankiai"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "K_ortelės"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "Įra_nkių juostos"
 
 #. File menu
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:128
 msgid "_Open…"
 msgstr "_Atverti…"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "Atverti failą"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "Įrašyti _kaip…"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "Įrašyti šį puslapį"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:134
 msgid "Page Set_up"
 msgstr "Puslapio są_ranka"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:135
 msgid "Setup the page settings for printing"
 msgstr "Nustatyti puslapio parametrus spausdinimui"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:137
 msgid "Print Pre_view"
 msgstr "Spa_udinio peržiūra"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:138
 msgid "Print preview"
 msgstr "Spaudinio peržiūra"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:140
 msgid "_Print…"
 msgstr "S_pausdinti…"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:141
 msgid "Print the current page"
 msgstr "Spausdinti šį puslapį"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:143
 msgid "S_end Link by Email…"
 msgstr "Siųsti nuorodą _el.paštu…"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:144
 msgid "Send a link of the current page"
 msgstr "Siųsti šio puslapio nuorodą"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:147
 msgid "Close this tab"
 msgstr "Užverti šią kortelę"
 
 #. Edit menu
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:152
 msgid "_Undo"
 msgstr "_Atšaukti"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:153
 msgid "Undo the last action"
 msgstr "Atšaukti paskutinįjį veiksmą"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:155
 msgid "Re_do"
 msgstr "Pa_kartoti"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:156
 msgid "Redo the last undone action"
 msgstr "Pakartoti paskutinįjį atšauktą veiksmą"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:165
 msgid "Paste clipboard"
 msgstr "Įkelti iš tarpinės atmintinės"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:168
 msgid "Delete text"
 msgstr "Ištrinti tekstą"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:171
 msgid "Select the entire page"
 msgstr "Pažymėti visą puslapį"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:173
 msgid "_Find…"
 msgstr "_Rasti…"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:174
 msgid "Find a word or phrase in the page"
 msgstr "Puslapyje rasti žodį arba frazę"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:176
 msgid "Find Ne_xt"
 msgstr "Rasti _kitą"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:177
 msgid "Find next occurrence of the word or phrase"
 msgstr "Rasti kitą žodžio arba frazės pasikartojimą"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:179
 msgid "Find Pre_vious"
 msgstr "Rasti _ankstesnį"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:180
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Rasti ankstesnį žodžio arba frazės pasikartojimą"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:182
 msgid "P_ersonal Data"
 msgstr "As_meniniai duomenys"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:183
 msgid "View and remove cookies and passwords"
 msgstr "Žiūrėti ir šalinti slapukus bei slaptažodžius"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:186
 msgid "Certificate_s"
 msgstr "_Liudijimai"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:187
 msgid "Manage Certificates"
 msgstr "Tvarkyti liudijimus"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:190
 msgid "P_references"
 msgstr "_Nustatymai"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:191
 msgid "Configure the web browser"
 msgstr "Konfigūruoti naršyklę"
 
 #. View menu
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:196
 msgid "_Customize Toolbars…"
 msgstr "_Konfigūruoti įrankių juostas…"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:197
 msgid "Customize toolbars"
 msgstr "Konfigūruoti įrankių juostas"
 
-#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
+#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
 msgid "_Stop"
 msgstr "_Stop"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:200
 msgid "Stop current data transfer"
 msgstr "Stabdyti dabartinį duomenų perdavimą"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:204
 msgid "_Reload"
 msgstr "Įk_elti iš naujo"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:205
 msgid "Display the latest content of the current page"
 msgstr "Rodyti naujausią šio puslapio turinį"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:207
 msgid "_Larger Text"
 msgstr "_Didesnis tekstas"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:208
 msgid "Increase the text size"
 msgstr "Padidinti šrifto dydį"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:210
 msgid "S_maller Text"
 msgstr "_Mažesnis tekstas"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:211
 msgid "Decrease the text size"
 msgstr "Sumažinti šrifto dydį"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:213
 msgid "_Normal Size"
 msgstr "_Normalus dydis"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:214
 msgid "Use the normal text size"
 msgstr "Naudoti normalų šrifto dydį"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:216
 msgid "Text _Encoding"
 msgstr "Teksto _koduotė"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:217
 msgid "Change the text encoding"
 msgstr "Pakeisti teksto koduotę"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:219
 msgid "_Page Source"
 msgstr "P_uslapio išeities tekstas"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:220
 msgid "View the source code of the page"
 msgstr "Žiūrėti puslapio išeities tekstą"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:222
 msgid "Page _Security Information"
 msgstr "Puslapio _saugumo informacija"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:223
 msgid "Display security information for the web page"
 msgstr "Parodyti šio puslapio saugumo informaciją"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark…"
 msgstr "_Pridėti žymelę…"
 
-#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "Pridėti šio puslapio žymelę"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "_Keisti žymeles"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "Atverti žymelių langą"
 
 #. Go menu
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:237
 msgid "_Location…"
 msgstr "Vi_eta…"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "Eiti į nurodytą vietą"
 
 #. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:240 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "Retr_ospektyva"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "Atverti retrospektyvos langą"
 
 #. Tabs menu
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "_Ankstesnė kortelė"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "Aktyvuoti ankstesnę kortelę"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "_Kita kortelė"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "Aktyvuoti kitą kortelę"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "Perkelti kortelę _kairėn"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "Perkelti šią kortelę į kairę"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "Perkelti kortelę _dešinėn"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "Perkelti šią kortelę į dešinę"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "_Atkabinti kortelę"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "Atkabinti esamą kortelę"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "Rodyti naršyklės žinyną"
 
 #. File Menu
-#: ../src/ephy-window.c:269
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "_Dirbti atsijungus"
 
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "Perjungti į atsijungimo veikseną"
 
 #. View Menu
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:282
 msgid "_Hide Toolbars"
 msgstr "_Paslėpti įrankių juostas"
 
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "Rodyti arba paslėpti įrankių juostą"
 
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "_Būsenos juosta"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "Rodyti arba paslėpti būsenos juostą"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "_Visame ekrane"
 
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "Naršyti visame ekrane"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "Iššokantys _langai"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Rodyti arba paslėpti iš šios svetainės iššokančius neprašytus langus"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "Pažymėjimo žymeklis"
 
 #. Document
-#: ../src/ephy-window.c:295
+#: ../src/ephy-window.c:302
 msgid "Add Boo_kmark…"
 msgstr "Pridėti ž_ymelę…"
 
 #. Framed document
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "Rodyti tik šį _kadrą"
 
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "Rodyti tik šį kadrą šiame lange"
 
 #. Links
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "Atverti _nuorodą"
 
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "Atverti nuorodą šiame lange"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "Atverti nuorodą naujame _lange"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "Atverti nuorodą naujame lange"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "Atverti nuorodą naujoje _kortelėje"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "Atverti nuorodą naujoje kortelėje"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "_Atsisiųsti nuorodą"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:325
 msgid "_Save Link As…"
 msgstr "Į_rašyti nuorodą kaip…"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "Įrašyti nuorodą kitu vardu"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link…"
 msgstr "Įtraukti nuorodą į ž_ymeles…"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "_Kopijuoti nuorodos adresą"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:336
 msgid "_Send Email…"
 msgstr "_Siųsti el. laišką…"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "_Kopijuoti el. pašto adresą"
 
 #. Images
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "Atverti pave_ikslėlį"
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:345
 msgid "_Save Image As…"
 msgstr "Į_rašyti paveikslėlį kaip…"
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "Na_udoti paveikslėlį kaip foną"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "Kopi_juoti paveikslėlio adresą"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:351
 msgid "St_art Animation"
 msgstr "Pr_adėti animaciją"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:353
 msgid "St_op Animation"
 msgstr "Susta_bdyti animaciją"
 
-#: ../src/ephy-window.c:522
+#. Inspector
+#: ../src/ephy-window.c:357
+msgid "Inspect _Element"
+msgstr "Tikrinti _elementą"
+
+#: ../src/ephy-window.c:530
 msgid "There are unsubmitted changes to form elements"
 msgstr "Formų elementuose yra dar nepateiktų pakeitimų."
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:534
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jeigu vis tiek uždarysite dokumentą, prarasite šią informaciją."
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:538
 msgid "Close _Document"
 msgstr "Užverti _dokumentą"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1440 ../src/window-commands.c:311
 msgid "Open"
 msgstr "Atverti"
 
-#: ../src/ephy-window.c:1489
+#: ../src/ephy-window.c:1442
 msgid "Save As"
 msgstr "Įrašyti kaip"
 
-#: ../src/ephy-window.c:1491
+#: ../src/ephy-window.c:1444
 msgid "Print"
 msgstr "Spausdinti"
 
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1448
 msgid "Find"
 msgstr "Rasti"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1508
+#: ../src/ephy-window.c:1461
 msgid "Larger"
 msgstr "Didesnis"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1511
+#: ../src/ephy-window.c:1464
 msgid "Smaller"
 msgstr "Mažesnis"
 
-#: ../src/ephy-window.c:1741
+#: ../src/ephy-window.c:1704
 msgid "Insecure"
 msgstr "Nesaugus"
 
-#: ../src/ephy-window.c:1746
+#: ../src/ephy-window.c:1709
 msgid "Broken"
 msgstr "Sugadintas"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1717
 msgid "Low"
 msgstr "Žemas"
 
-#: ../src/ephy-window.c:1761
+#: ../src/ephy-window.c:1724
 msgid "High"
 msgstr "Aukštas"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1734
 #, c-format
 msgid "Security level: %s"
 msgstr "Saugumo lygis: %s"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1777
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3227,47 +3275,47 @@ msgstr[0] "%d paslėptas iššokantis langas"
 msgstr[1] "%d paslėpti iššokantys langai"
 msgstr[2] "%d paslėptų iššokančių langų"
 
-#: ../src/ephy-window.c:2079
+#: ../src/ephy-window.c:2042
 #, c-format
 msgid "Open image “%s”"
 msgstr "Atverti paveikslėlį „%s“"
 
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2047
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Naudoti kaip darbastalio foną „%s“"
 
-#: ../src/ephy-window.c:2089
+#: ../src/ephy-window.c:2052
 #, c-format
 msgid "Save image “%s”"
 msgstr "Įrašyti paveikslėlį „%s“"
 
-#: ../src/ephy-window.c:2094
+#: ../src/ephy-window.c:2057
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopijuoti paveikslėlio adresą „%s“"
 
-#: ../src/ephy-window.c:2107
+#: ../src/ephy-window.c:2071
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Išsiųsti el. laišką adresu „%s“"
 
-#: ../src/ephy-window.c:2113
+#: ../src/ephy-window.c:2077
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopijuoti el. pašto adresą „%s“"
 
-#: ../src/ephy-window.c:2125
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save link “%s”"
 msgstr "Įrašyti nuorodą „%s“"
 
-#: ../src/ephy-window.c:2131
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Įdėti nuorodą „%s“ į žymeles"
 
-#: ../src/ephy-window.c:2137
+#: ../src/ephy-window.c:2102
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopijuoti nuorodos adresą „%s“"
@@ -3317,34 +3365,34 @@ msgstr ""
 msgid "Cookie Properties"
 msgstr "Slapuko savybės"
 
-#: ../src/pdm-dialog.c:669
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "Turinys:"
 
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
 msgstr "Kelias:"
 
-#: ../src/pdm-dialog.c:701
+#: ../src/pdm-dialog.c:702
 msgid "Send for:"
 msgstr "Siųsti kam:"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
-msgstr "Tik koduotiems susijungimams"
+msgstr "Tik koduotiems ryšiams"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
-msgstr "Bet kokiems susijungimams"
+msgstr "Bet kokiems ryšiams"
 
-#: ../src/pdm-dialog.c:716
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "Galioja iki:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:728
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
-msgstr "Šios sesijos pabaiga"
+msgstr "Šio seanso pabaiga"
 
 #: ../src/pdm-dialog.c:861
 msgid "Domain"
@@ -3366,57 +3414,17 @@ msgstr "Vartotojo vardas"
 msgid "User Password"
 msgstr "Naudotojo slaptažodis"
 
-#: ../src/popup-commands.c:259
+#: ../src/popup-commands.c:274
 msgid "Download Link"
 msgstr "Atsisiųsti nuorodą"
 
-#: ../src/popup-commands.c:267
+#: ../src/popup-commands.c:282
 msgid "Save Link As"
 msgstr "Įrašyti nuorodą kaip"
 
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:289
 msgid "Save Image As"
 msgstr "Įrašyti paveikslėlį kaip"
-
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "Pirmas"
-
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "Eiti į pirmą puslapį"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "Paskutinis"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "Eiti į paskutinį puslapį"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "Ankstesnis"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "Eiti į ankstesnį puslapį"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "Kitas"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "Eiti į kitą puslapį"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "Užverti"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "Užverti spaudinimo peržiūrą"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -3424,7 +3432,6 @@ msgstr "Užverti spaudinimo peržiūrą"
 #.
 #: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
-#| msgid "language|%s (%s)"
 msgctxt "language"
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3434,7 +3441,6 @@ msgstr "%s (%s)"
 #.
 #: ../src/prefs-dialog.c:527
 #, c-format
-#| msgid "language|User defined (%s)"
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Nurodyta naudotojo (%s)"
@@ -3447,11 +3453,11 @@ msgstr[0] "Sistemos kalba (%s)"
 msgstr[1] "Sistemos kalbos (%s)"
 msgstr[2] "Sistemos kalbų (%s)"
 
-#: ../src/prefs-dialog.c:941
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Pasirinkite aplanką"
 
-#: ../src/window-commands.c:907
+#: ../src/window-commands.c:938
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3463,7 +3469,7 @@ msgstr ""
 "sąlygomis, paskelbtomis Laisvosios Programinės Įrangos Fondo; 2-osios arba "
 "(jūsų pasirinkimu) bet kurios vėlesnės šios licencijos versijos sąlygomis."
 
-#: ../src/window-commands.c:911
+#: ../src/window-commands.c:942
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3475,7 +3481,7 @@ msgstr ""
 "TAM TIKRAM TIKSLUI garantijų. Išsamesnę informaciją rasite GNU Bendrojoje "
 "Viešojoje licencijoje."
 
-#: ../src/window-commands.c:915
+#: ../src/window-commands.c:946
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3485,24 +3491,21 @@ msgstr ""
 "žiniatinklio naršykle; jeigu negavote, rašykite Free Software Foundation, 51 "
 "Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:961 ../src/window-commands.c:977
-#: ../src/window-commands.c:988
+#: ../src/window-commands.c:992 ../src/window-commands.c:1008
+#: ../src/window-commands.c:1019
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: ../src/window-commands.c:964
+#: ../src/window-commands.c:995
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:998
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: ../src/window-commands.c:997
+#: ../src/window-commands.c:1028
 #, c-format
-#| msgid ""
-#| "Lets you view web pages and find information on the internet.\n"
-#| "Powered by %s"
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
 "Powered by WebKit"
@@ -3518,15 +3521,54 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1023
+#: ../src/window-commands.c:1054
 msgid "translator-credits"
 msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: ../src/window-commands.c:1026
+#: ../src/window-commands.c:1057
 msgid "GNOME Web Browser Website"
 msgstr "GNOME žiniatinklio naršyklės svetainė"
+
+#~ msgid "Enable Java"
+#~ msgstr "Įjungti Java"
+
+#~ msgid "_View Certificate…"
+#~ msgstr "Žiūrėti _liudijimą…"
+
+#~ msgid "Enable _Java"
+#~ msgstr "Įjungti _Java"
+
+#~ msgid "First"
+#~ msgstr "Pirmas"
+
+#~ msgid "Go to the first page"
+#~ msgstr "Eiti į pirmą puslapį"
+
+#~ msgid "Last"
+#~ msgstr "Paskutinis"
+
+#~ msgid "Go to the last page"
+#~ msgstr "Eiti į paskutinį puslapį"
+
+#~ msgid "Previous"
+#~ msgstr "Ankstesnis"
+
+#~ msgid "Go to the previous page"
+#~ msgstr "Eiti į ankstesnį puslapį"
+
+#~ msgid "Next"
+#~ msgstr "Kitas"
+
+#~ msgid "Go to next page"
+#~ msgstr "Eiti į kitą puslapį"
+
+#~ msgid "Close"
+#~ msgstr "Užverti"
+
+#~ msgid "Close print preview"
+#~ msgstr "Užverti spaudinimo peržiūrą"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr ""
@@ -4032,9 +4074,6 @@ msgstr "GNOME žiniatinklio naršyklės svetainė"
 
 #~ msgid "Certificate _Details"
 #~ msgstr "Sertifikato _detalės"
-
-#~ msgid "_View Certificate"
-#~ msgstr "Žiūrėti _sertifikatą"
 
 #~ msgid ""
 #~ "The site “%s” returned security information for “%s”. It is possible that "
