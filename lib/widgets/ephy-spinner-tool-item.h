@@ -22,7 +22,7 @@
 #ifndef EPHY_SPINNER_TOOL_ITEM_H
 #define EPHY_SPINNER_TOOL_ITEM_H
 
-#include <gtk/gtktoolitem.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
