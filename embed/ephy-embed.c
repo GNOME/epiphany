@@ -335,6 +335,13 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+ephy_embed_history_cleared_cb (EphyHistory *history,
+                               EphyEmbed *embed)
+{
+  ephy_web_view_clear_history (EPHY_WEB_VIEW (embed->priv->web_view));
+}
+
+static void
 ephy_embed_grab_focus (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -359,6 +366,10 @@ ephy_embed_finalize (GObject *object)
     g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
   }
   g_slist_free (embed->priv->destroy_on_transition_list);
+
+  g_signal_handlers_disconnect_by_func (embed->priv->history,
+                                        ephy_embed_history_cleared_cb,
+                                        embed);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -956,6 +967,10 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_prefs_add_embed (embed);
 
   embed->priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
+
+  g_signal_connect (embed->priv->history,
+                    "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
+                    embed);
 }
 
 static void

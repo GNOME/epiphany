@@ -2045,6 +2045,32 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
   return effective_url;
 }
 
+static void
+update_navigation_flags (EphyWebView *view)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  guint flags = 0;
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
+
+  if (ephy_web_view_can_go_up (view)) {
+    flags |= EPHY_WEB_VIEW_NAV_UP;
+  }
+
+  if (webkit_web_view_can_go_back (web_view)) {
+    flags |= EPHY_WEB_VIEW_NAV_BACK;
+  }
+
+  if (webkit_web_view_can_go_forward (web_view)) {
+    flags |= EPHY_WEB_VIEW_NAV_FORWARD;
+  }
+
+  if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
+    priv->nav_flags = (EphyWebViewNavigationFlags)flags;
+
+    g_object_notify (G_OBJECT (view), "navigation");
+  }
+}
+
 /**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
@@ -2147,6 +2173,36 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   item = webkit_web_back_forward_list_get_current_item (source_bflist);
   if (item)
     webkit_web_back_forward_list_add_item (dest_bflist, item);
+}
+
+/**
+ * ephy_web_view_clear_history:
+ * @view: the #EphyWebView to clear the history from
+ *
+ * Clears history of @view.
+ **/
+void
+ephy_web_view_clear_history (EphyWebView *view)
+{
+  WebKitWebBackForwardList *history_list;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
+  history_list = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
+  if (history_list != NULL) {
+    WebKitWebHistoryItem *current_item;
+
+    /* Save a ref to the first element to add it later */
+    current_item = webkit_web_back_forward_list_get_current_item (history_list);
+    g_object_ref (current_item);
+
+    /* Clear the history and add the first element once again */
+    webkit_web_back_forward_list_clear (history_list);
+    webkit_web_back_forward_list_add_item (history_list, current_item);
+    g_object_unref (current_item);
+
+    update_navigation_flags (view);
+  }
 }
 
 /**
@@ -2328,32 +2384,6 @@ update_net_state_message (EphyWebView *view, const char *uri, EphyWebViewNetStat
 
  out:
     g_free (host);
-}
-
-static void
-update_navigation_flags (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  guint flags = 0;
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
-
-  if (ephy_web_view_can_go_up (view)) {
-    flags |= EPHY_WEB_VIEW_NAV_UP;
-  }
-
-  if (webkit_web_view_can_go_back (web_view)) {
-    flags |= EPHY_WEB_VIEW_NAV_BACK;
-  }
-
-  if (webkit_web_view_can_go_forward (web_view)) {
-    flags |= EPHY_WEB_VIEW_NAV_FORWARD;
-  }
-
-  if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
-    priv->nav_flags = (EphyWebViewNavigationFlags)flags;
-
-    g_object_notify (G_OBJECT (view), "navigation");
-  }
 }
 
 /**

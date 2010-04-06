@@ -155,6 +155,7 @@ void                       ephy_web_view_load_url                (EphyWebView   
                                                                   const char                      *url);
 void                       ephy_web_view_copy_back_history       (EphyWebView                     *source,
                                                                   EphyWebView                     *dest);
+void                       ephy_web_view_clear_history           (EphyWebView                     *view);
 gboolean                   ephy_web_view_is_loading              (EphyWebView                     *view);
 const char *               ephy_web_view_get_loading_title       (EphyWebView                     *view);
 GdkPixbuf *                ephy_web_view_get_icon                (EphyWebView                     *view);
