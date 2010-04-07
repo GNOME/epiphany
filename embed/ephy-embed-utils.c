@@ -81,18 +81,23 @@ gboolean
 ephy_embed_utils_address_has_web_scheme (const char *address)
 {
 	gboolean has_web_scheme;
+	int colonpos;
 
 	if (address == NULL) return FALSE;
 
-	has_web_scheme = (g_str_has_prefix (address, "http:") ||
-			  g_str_has_prefix (address, "https:") ||
-			  g_str_has_prefix (address, "ftp:") ||
-			  g_str_has_prefix (address, "file:") ||
-			  g_str_has_prefix (address, "data:") ||
-			  g_str_has_prefix (address, "about:") ||
-			  g_str_has_prefix (address, "javascript:") ||
-			  g_str_has_prefix (address, "mailto:") ||
-			  g_str_has_prefix (address, "gopher:"));
+	colonpos = (int)((g_strstr_len (address, 11, ":")) - address);
+
+	if (colonpos < 0) return FALSE;
+
+	has_web_scheme = !(g_ascii_strncasecmp (address, "http", colonpos) &&
+			   g_ascii_strncasecmp (address, "https", colonpos) &&
+			   g_ascii_strncasecmp (address, "ftp", colonpos) &&
+			   g_ascii_strncasecmp (address, "file", colonpos) &&
+			   g_ascii_strncasecmp (address, "javascript", colonpos) &&
+			   g_ascii_strncasecmp (address, "data", colonpos) &&
+			   g_ascii_strncasecmp (address, "about", colonpos) &&
+			   g_ascii_strncasecmp (address, "gopher", colonpos) &&
+			   g_ascii_strncasecmp (address, "mailto", colonpos));
 
 	return has_web_scheme;
 }
