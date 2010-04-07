@@ -913,6 +913,7 @@ ephy_history_set_page_title (EphyHistory *gh,
 	LOG ("Set page title");
 
 	if (title == NULL || title[0] == '\0') return;
+	if (url == NULL) return;
 
 	node = ephy_history_get_page (gh, url);
 	if (node == NULL) return;
