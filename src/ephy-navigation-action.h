@@ -26,6 +26,7 @@
 #define EPHY_NAVIGATION_ACTION_H
 
 #include "ephy-link-action.h"
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 
@@ -40,17 +41,10 @@ typedef struct _EphyNavigationAction		EphyNavigationAction;
 typedef struct _EphyNavigationActionPrivate	EphyNavigationActionPrivate;
 typedef struct _EphyNavigationActionClass	EphyNavigationActionClass;
 
-typedef enum
-{
-	EPHY_NAVIGATION_DIRECTION_UP,
-	EPHY_NAVIGATION_DIRECTION_BACK,
-	EPHY_NAVIGATION_DIRECTION_FORWARD
-} EphyNavigationDirection;
-
 struct _EphyNavigationAction
 {
 	EphyLinkAction parent;
-	
+
 	/*< private >*/
 	EphyNavigationActionPrivate *priv;
 };
@@ -58,10 +52,21 @@ struct _EphyNavigationAction
 struct _EphyNavigationActionClass
 {
 	EphyLinkActionClass parent_class;
+
+        /*< virtual >*/
+        GtkWidget *(*build_dropdown_menu) (EphyNavigationAction *action);
 };
 
 GType ephy_navigation_action_get_type (void);
 
+/*< Protected >*/
+
+EphyWindow     *_ephy_navigation_action_get_window       (EphyNavigationAction *action);
+
+guint           _ephy_navigation_action_get_statusbar_context_id (EphyNavigationAction *action);
+
+GtkWidget      *_ephy_navigation_action_new_history_menu_item (const char *origtext,
+                                                               const char *address);
 G_END_DECLS
 
 #endif

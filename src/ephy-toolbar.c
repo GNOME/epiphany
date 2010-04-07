@@ -30,6 +30,8 @@
 #include "ephy-location-entry.h"
 #include "ephy-location-action.h"
 #include "ephy-navigation-action.h"
+#include "ephy-navigation-history-action.h"
+#include "ephy-navigation-up-action.h"
 #include "ephy-topic-action.h"
 #include "ephy-zoom-action.h"
 #include "ephy-spinner-tool-item.h"
@@ -226,7 +228,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 	g_object_unref (priv->action_group);
 
 	action = priv->actions[BACK_ACTION] =
-		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
+		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationBack",
 			      "label", _("_Back"),
 			      "stock_id", GTK_STOCK_GO_BACK,
@@ -236,7 +238,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			       */
 			      "arrow-tooltip", _("Back history"),
 			      "window", priv->window,
-			      "direction", EPHY_NAVIGATION_DIRECTION_BACK,
+			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
 			      "is_important", TRUE,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
@@ -246,7 +248,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 	g_object_unref (action);
 
 	action = priv->actions[FORWARD_ACTION] =
-		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
+		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationForward",
 			      "label", _("_Forward"),
 			      "stock_id", GTK_STOCK_GO_FORWARD,
@@ -256,7 +258,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			       */
 			      "arrow-tooltip", _("Forward history"),
 			      "window", priv->window,
-			      "direction", EPHY_NAVIGATION_DIRECTION_FORWARD,
+			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), toolbar);
@@ -265,7 +267,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 	g_object_unref (action);
 
 	action = priv->actions[UP_ACTION] =
-		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
+		g_object_new (EPHY_TYPE_NAVIGATION_UP_ACTION,
 			      "name", "NavigationUp",
 			      "label", _("_Up"),
 			      "stock_id", GTK_STOCK_GO_UP,
@@ -275,7 +277,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			       */
 			      "arrow-tooltip", _("List of upper levels"),
 			      "window", priv->window,
-			      "direction", EPHY_NAVIGATION_DIRECTION_UP,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), toolbar);
