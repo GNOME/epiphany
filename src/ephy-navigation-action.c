@@ -299,7 +299,7 @@ build_up_menu (EphyNavigationAction *action)
 		EphyNode *node;
 		const char *title = NULL;
 
-		url = l->data;
+		url = g_strdup (l->data);
 
 		if (url == NULL) continue;
 
