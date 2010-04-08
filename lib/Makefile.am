@@ -79,7 +79,7 @@ libephymisc_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg			\
 	-DDATADIR="\"$(datadir)\""		\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		\
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_API_VERSION)/extensions"\" 	\
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
