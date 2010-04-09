@@ -23,6 +23,7 @@
 #include "config.h"
 #include "ephy-navigation-history-action.h"
 
+#include "ephy-action-helper.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
@@ -131,6 +132,13 @@ deselect_menu_item_cb (GtkWidget *menuitem,
   nav_action = EPHY_NAVIGATION_ACTION (action);
   statusbar_cid = _ephy_navigation_action_get_statusbar_context_id (nav_action);
   gtk_statusbar_pop (GTK_STATUSBAR (statusbar), statusbar_cid);
+}
+
+static void
+ephy_history_cleared_cb (EphyHistory *history,
+                         EphyNavigationHistoryAction *action)
+{
+  ephy_action_change_sensitivity_flags (GTK_ACTION (action), SENS_FLAG, TRUE);
 }
 
 static GList*
@@ -283,6 +291,10 @@ ephy_navigation_history_action_init (EphyNavigationHistoryAction *action)
 
   history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
   action->priv->history = EPHY_HISTORY (g_object_ref (history));
+
+  g_signal_connect (action->priv->history,
+                    "cleared", G_CALLBACK (ephy_history_cleared_cb),
+                    action);
 }
 
 static void
@@ -290,6 +302,9 @@ ephy_navigation_history_action_finalize (GObject *object)
 {
   EphyNavigationHistoryAction *action = EPHY_NAVIGATION_HISTORY_ACTION (object);
 
+  g_signal_handlers_disconnect_by_func (action->priv->history,
+                                        ephy_history_cleared_cb,
+                                        action);
   g_object_unref (action->priv->history);
   action->priv->history = NULL;
 

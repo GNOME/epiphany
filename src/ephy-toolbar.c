@@ -63,11 +63,6 @@ enum
 	LAST_ACTION
 };
 
-enum
-{
-	SENS_FLAG = 1 << 0
-};
-
 #define EPHY_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
 
 struct _EphyToolbarPrivate
