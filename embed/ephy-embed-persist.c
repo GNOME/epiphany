@@ -763,7 +763,36 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 	 */
 	g_object_ref (persist);
 
-	request = webkit_network_request_new (priv->source);
+	if (priv->embed)
+	{
+		EphyWebView *web_view;
+		SoupMessage *msg;
+		gchar *referer;
+
+		/* Get the webview associated to the embed */
+		web_view = ephy_embed_get_web_view (priv->embed);
+
+		/* Create the request with a SoupMessage to allow
+		   setting the 'Referer' as got from the embed */
+		msg = soup_message_new (SOUP_METHOD_GET, priv->source);
+		request = WEBKIT_NETWORK_REQUEST (
+			g_object_new (WEBKIT_TYPE_NETWORK_REQUEST,
+				      "message", msg,
+				      NULL));
+
+		/* Add the referer to the request headers */
+		referer = ephy_web_view_get_location (web_view, FALSE);
+		soup_message_headers_append (msg->request_headers,
+					     "Referer", referer);
+		g_free (referer);
+		g_object_unref (msg);
+	}
+	else
+	{
+		/* Create a normal network request otherwise */
+		request = webkit_network_request_new (priv->source);
+	}
+
 	priv->download = webkit_download_new (request);
 	g_object_unref (request);
 

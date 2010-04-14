@@ -237,6 +237,7 @@ save_property_url (GtkAction *action,
 	ephy_embed_persist_set_persist_key
 		(persist, CONF_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
+	ephy_embed_persist_set_embed (persist, embed);
 
 	g_signal_connect (persist, "completed",
 			  G_CALLBACK (save_property_url_completed_cb), NULL);
