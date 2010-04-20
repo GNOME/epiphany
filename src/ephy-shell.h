@@ -69,6 +69,7 @@ typedef enum
 
 	/* The way to load */
 	EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 12,
+	EPHY_NEW_TAB_DONT_COPY_HISTORY  = 1 << 13,
 	
 } EphyNewTabFlags;
 

@@ -435,6 +435,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	gboolean open_page = FALSE;
 	gboolean jump_to;
 	gboolean active_is_blank = FALSE;
+	gboolean copy_history = TRUE;
 	GtkWidget *nb;
 	int position = -1;
 	gboolean is_empty = FALSE;
@@ -443,6 +444,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
+	if (flags & EPHY_NEW_TAB_DONT_COPY_HISTORY) copy_history = FALSE;
 
 	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
 	g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
@@ -493,11 +495,11 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
 	}
 
-	if (previous_embed != NULL)
-	{	
+	if (copy_history && previous_embed != NULL)
+	{
 		ephy_web_view_copy_back_history (ephy_embed_get_web_view (previous_embed),
 						 ephy_embed_get_web_view (embed));
-	}		
+	}
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
