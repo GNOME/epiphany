@@ -66,6 +66,97 @@ static void ephy_navigation_history_action_class_init (EphyNavigationHistoryActi
 G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_NAVIGATION_ACTION)
 
 static void
+set_new_back_history (EphyEmbed *source, EphyEmbed *dest, gint offset)
+{
+  WebKitWebView *source_view, *dest_view;
+  WebKitWebBackForwardList* source_list, *dest_list;
+  WebKitWebHistoryItem *item;
+  GList *items;
+  guint limit;
+  guint i;
+
+  g_return_if_fail (EPHY_IS_EMBED (source));
+  g_return_if_fail (EPHY_IS_EMBED (dest));
+
+  source_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (source);
+  dest_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dest);
+
+  source_list = webkit_web_view_get_back_forward_list (source_view);
+  dest_list = webkit_web_view_get_back_forward_list (dest_view);
+
+  if (offset >= 0) {
+    /* Copy the whole back history in this case (positive offset) */
+    ephy_web_view_copy_back_history (ephy_embed_get_web_view (source),
+                                     ephy_embed_get_web_view (dest));
+
+    items = webkit_web_back_forward_list_get_forward_list_with_limit (source_list,
+                                                                      EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+    limit = offset - 1;
+  } else {
+    items = webkit_web_back_forward_list_get_back_list_with_limit (source_list,
+                                                                   EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+    limit = g_list_length (items) + offset;
+  }
+
+  /* Add the remaining items to the BackForward list */
+  items = g_list_reverse (items);
+  for (i = 0; i < limit; i++) {
+    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)items->data);
+    webkit_web_back_forward_list_add_item (dest_list, item);
+    g_object_unref (item);
+
+    items = items->next;
+  }
+  g_list_free (items);
+}
+
+static void
+middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
+                                          EphyEmbed *embed,
+                                          WebKitWebHistoryItem *item)
+{
+  EphyEmbed *new_embed = NULL;
+  WebKitWebView *web_view;
+  WebKitWebBackForwardList *history;
+  GList *list;
+  const gchar *url;
+  guint current;
+  gint offset;
+
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  /* Save old history and item's offset from current */
+  history = webkit_web_view_get_back_forward_list (web_view);
+  if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
+    list = webkit_web_back_forward_list_get_back_list_with_limit (history,
+                                                                  EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+    current = -1;
+  } else {
+    list = webkit_web_back_forward_list_get_forward_list_with_limit (history,
+                                                                     EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+    current = g_list_length (list);
+  }
+  offset = current - g_list_index (list, item);
+
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                  embed,
+                                  NULL,
+                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+                                  EPHY_NEW_TAB_DONT_COPY_HISTORY);
+  g_return_if_fail (new_embed != NULL);
+
+  /* We manually set the back history instead of trusting
+     ephy_shell_new_tab because the logic is more complex than
+     usual, due to handling also the forward history */
+  set_new_back_history (embed, new_embed, offset);
+
+  /* Load the new URL */
+  url = webkit_web_history_item_get_original_uri (item);
+  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
+}
+
+static void
 activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 				       EphyNavigationHistoryAction *action)
 {
@@ -77,17 +168,17 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-  if (ephy_gui_is_middle_click ()) {
-    embed = ephy_link_open (EPHY_LINK (action), "about:blank", NULL,
-                            EPHY_LINK_NEW_TAB);
-    g_return_if_fail (embed != NULL);
-  }
-
-  item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem),
-						   HISTORY_ITEM_DATA_KEY);
+  item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
   g_return_if_fail (item != NULL);
 
-  webkit_web_view_go_to_back_forward_item (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), item);
+  if (ephy_gui_is_middle_click ()) {
+    middle_click_handle_on_history_menu_item (action, embed, item);
+  } else {
+    WebKitWebView *web_view;
+
+    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_go_to_back_forward_item (web_view, item);
+  }
 }
 
 static void
