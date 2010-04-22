@@ -365,6 +365,7 @@ static const char*
 parse_extension (const char *filename)
 {
   const char *compression;
+  const char *last_separator;
 
   compression = file_is_compressed (filename);
 
@@ -391,7 +392,8 @@ parse_extension (const char *filename)
   }
 
   /* no compression, just look for the last dot in the filename */
-  return g_strrstr (filename, ".");
+  last_separator = strrchr (filename, G_DIR_SEPARATOR);
+  return strrchr ((last_separator) ? last_separator : filename, '.');
 }
 
 static gboolean
