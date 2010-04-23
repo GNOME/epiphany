@@ -1247,8 +1247,21 @@ do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
       char *type = js_get_element_attribute (js_context, obj, "type");
       char *title = js_get_element_attribute (js_context, obj, "title");
       char *address = js_get_element_attribute (js_context, obj, "href");
+      SoupURI *feed_uri, *current_uri;
 
-      g_signal_emit_by_name (web_view, "ge-feed-link", type, title, address);
+      feed_uri = soup_uri_new (address);
+      if (!feed_uri) {
+        current_uri = soup_uri_new (ephy_web_view_get_address (web_view));
+        feed_uri = soup_uri_new_with_base (current_uri, address);
+        soup_uri_free (current_uri);
+      }
+
+      if (feed_uri) {
+        g_free (address);
+        address = soup_uri_to_string (feed_uri, FALSE);
+        g_signal_emit_by_name (web_view, "ge-feed-link", type, title, address);
+        soup_uri_free (feed_uri);
+      }
 
       g_free (type);
       g_free (title);
