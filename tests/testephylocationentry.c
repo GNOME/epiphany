@@ -22,6 +22,7 @@
  */
  
 #include "config.h"
+#include "ephy-debug.h"
 #include "ephy-location-entry.h"
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -141,6 +142,7 @@ int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
+  ephy_debug_init ();
 
   g_test_add_func ("/lib/widgets/ephy-location-entry/new",
                    test_entry_new);
