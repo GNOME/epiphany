@@ -62,7 +62,6 @@ struct EphyEmbedPrivate
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
-  char *loading_uri;
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
 };
@@ -196,87 +195,20 @@ load_status_changed_cb (WebKitWebView *view,
                         GParamSpec *spec,
                         EphyEmbed *embed)
 {
-  EphyEmbedPrivate *priv = embed->priv;
   WebKitLoadStatus status = webkit_web_view_get_load_status (view);
 
   if (status == WEBKIT_LOAD_COMMITTED) {
     const gchar* uri;
-    EphyWebViewSecurityLevel security_level;
 
     uri = webkit_web_view_get_uri (view);
 
     ephy_embed_destroy_top_widgets (embed);
 
-    if (g_strcmp0 (uri, priv->loading_uri) != 0) {
-      g_free (priv->loading_uri);
-      priv->loading_uri = g_strdup (uri);
-    }
-
-    ephy_web_view_location_changed (EPHY_WEB_VIEW (view),
-                                    uri);
     restore_zoom_level (embed, uri);
     ephy_history_add_page (embed->priv->history,
                            uri,
                            FALSE,
                            FALSE);
-
-#ifdef GTLS_SYSTEM_CA_FILE
-    if (uri && g_str_has_prefix (uri, "https")) {
-      WebKitWebFrame *frame;
-      WebKitWebDataSource *source;
-      WebKitNetworkRequest *request;
-      SoupMessage *message;
-
-      frame = webkit_web_view_get_main_frame (view);
-      source = webkit_web_frame_get_data_source (frame);
-      request = webkit_web_data_source_get_request (source);
-      message = webkit_network_request_get_message (request);
-
-      if (message &&
-          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
-        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-      else
-        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
-    } else
-      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-#else
-    security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-#endif
-
-    ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
-  } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
-    char *loading_uri = NULL;
-
-    if (status == WEBKIT_LOAD_PROVISIONAL) {
-      WebKitWebFrame *frame;
-      WebKitWebDataSource *source;
-      WebKitNetworkRequest *request;
-
-      frame = webkit_web_view_get_main_frame (view);
-      source = webkit_web_frame_get_provisional_data_source (frame);
-      request = webkit_web_data_source_get_initial_request (source);
-      loading_uri = g_strdup (webkit_network_request_get_uri (request));
-
-      /* We also store the URI we are currently loading here, because
-       * we will want to use it in WEBKIT_LOAD_FINISHED, because if a
-       * load fails we may never get to committed */
-      priv->loading_uri = g_strdup (loading_uri);
-      
-      g_signal_emit_by_name (EPHY_WEB_VIEW (view), "new-document-now", loading_uri);
-    } else if (status == WEBKIT_LOAD_FINISHED) {
-      loading_uri = priv->loading_uri;
-
-      /* Will be freed below */
-      priv->loading_uri = NULL;
-
-    }
-
-    ephy_web_view_update_from_net_state (EPHY_WEB_VIEW (view),
-                                         loading_uri,
-                                         status);
-
-    g_free (loading_uri);
-
   }
 }
 
@@ -346,8 +278,6 @@ ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
   GSList *list;
-
-  g_free (embed->priv->loading_uri);
 
   list = embed->priv->destroy_on_transition_list;
   for (; list; list = list->next) {

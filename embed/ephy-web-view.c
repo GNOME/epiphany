@@ -1894,19 +1894,129 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 }
 
 static void
+update_navigation_flags (EphyWebView *view)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  guint flags = 0;
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
+
+  if (ephy_web_view_can_go_up (view))
+    flags |= EPHY_WEB_VIEW_NAV_UP;
+
+  if (webkit_web_view_can_go_back (web_view))
+    flags |= EPHY_WEB_VIEW_NAV_BACK;
+
+  if (webkit_web_view_can_go_forward (web_view))
+    flags |= EPHY_WEB_VIEW_NAV_FORWARD;
+
+  if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
+    priv->nav_flags = (EphyWebViewNavigationFlags)flags;
+
+    g_object_notify (G_OBJECT (view), "navigation");
+  }
+}
+
+static void
 load_status_cb (WebKitWebView *web_view,
                 GParamSpec *pspec,
                 gpointer user_data)
 {
   WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyWebViewPrivate *priv = view->priv;
+  GObject *object = G_OBJECT (web_view);
 
-  if (status == WEBKIT_LOAD_FINISHED) {
+  g_object_freeze_notify (object);
+
+  switch (status)
+  {
+  /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
+  case WEBKIT_LOAD_PROVISIONAL:
+    {
+      const gchar *loading_uri = NULL;
+      WebKitWebFrame *frame;
+
+      WebKitWebDataSource *source;
+      WebKitNetworkRequest *request;
+
+      frame = webkit_web_view_get_main_frame (web_view);
+
+      source = webkit_web_frame_get_provisional_data_source (frame);
+      request = webkit_web_data_source_get_initial_request (source);
+      loading_uri = webkit_network_request_get_uri (request);
+
+      g_signal_emit_by_name (view, "new-document-now", loading_uri);
+
+      if ((priv->address == NULL || priv->address[0] == '\0') &&
+          priv->expire_address_now == TRUE)
+        ephy_web_view_set_address (view, loading_uri);
+
+      g_free (priv->status_message);
+      priv->status_message = g_strdup (priv->loading_title);
+      g_object_notify (object, "status-message");
+
+      ephy_web_view_set_title (view, NULL);
+      ephy_web_view_set_loading_title (view, loading_uri, TRUE);
+      priv->expire_address_now = TRUE;
+    }
+    break;
+  case WEBKIT_LOAD_COMMITTED:
+    {
+      const gchar* uri;
+      EphyWebViewSecurityLevel security_level;
+
+      uri = webkit_web_view_get_uri (web_view);
+      ephy_web_view_location_changed (view,
+                                      uri);
+
+      ephy_web_view_set_title (view, NULL);
+
+#ifdef GTLS_SYSTEM_CA_FILE
+      if (uri && g_str_has_prefix (uri, "https")) {
+        WebKitWebFrame *frame;
+        WebKitWebDataSource *source;
+        WebKitNetworkRequest *request;
+        SoupMessage *message;
+
+        frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
+        source = webkit_web_frame_get_data_source (frame);
+        request = webkit_web_data_source_get_request (source);
+        message = webkit_network_request_get_message (request);
+
+        if (message &&
+            (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
+          security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
+        else
+          security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
+      } else
+        security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+#else
+      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+#endif
+
+      ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+    }
+    break;
+  case WEBKIT_LOAD_FINISHED:
+    g_free (priv->status_message);
+    priv->status_message = NULL;
+    g_object_notify (object, "status-message");
+    ephy_web_view_set_loading_title (view, NULL, FALSE);
+
+    if (ephy_web_view_get_is_blank (view))
+      g_object_notify (object, "embed-title");
+
     if (ephy_has_private_profile () == FALSE &&
         eel_gconf_get_boolean (CONF_PRIVACY_REMEMBER_PASSWORDS))
-      _ephy_web_view_hook_into_forms (EPHY_WEB_VIEW (web_view));
+      _ephy_web_view_hook_into_forms (view);
 
-    _ephy_web_view_hook_into_links (EPHY_WEB_VIEW (web_view));
+    _ephy_web_view_hook_into_links (view);
+    break;
+  default:
+    break;
   }
+
+  g_object_thaw_notify (object);
 }
 
 static gboolean
@@ -2043,32 +2153,6 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
     soup_uri_free (soup_uri);
 
   return effective_url;
-}
-
-static void
-update_navigation_flags (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  guint flags = 0;
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
-
-  if (ephy_web_view_can_go_up (view)) {
-    flags |= EPHY_WEB_VIEW_NAV_UP;
-  }
-
-  if (webkit_web_view_can_go_back (web_view)) {
-    flags |= EPHY_WEB_VIEW_NAV_BACK;
-  }
-
-  if (webkit_web_view_can_go_forward (web_view)) {
-    flags |= EPHY_WEB_VIEW_NAV_FORWARD;
-  }
-
-  if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
-    priv->nav_flags = (EphyWebViewNavigationFlags)flags;
-
-    g_object_notify (G_OBJECT (view), "navigation");
-  }
 }
 
 /**
@@ -2321,105 +2405,6 @@ const char *
 ephy_web_view_get_title (EphyWebView *view)
 {
   return view->priv->title;
-}
-
-static void
-ensure_page_info (EphyWebView *view, const char *address)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if ((priv->address == NULL || priv->address[0] == '\0') &&
-      priv->expire_address_now == TRUE) {
-    ephy_web_view_set_address (view, address);
-  }
-
-  /* FIXME huh?? */
-  if (priv->title == NULL || priv->title[0] == '\0') {
-    ephy_web_view_set_title (view, NULL);
-  }
-}
-
-static void
-update_net_state_message (EphyWebView *view, const char *uri, WebKitLoadStatus status)
-{
-  const char *msg = NULL;
-  char *host = NULL;
-
-  if (uri != NULL)
-    host = ephy_string_get_host_name (uri);
-
-  if (host == NULL) goto out;
-
-  /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
-  if (status == WEBKIT_LOAD_PROVISIONAL)  {
-      msg = _ ("Loading “%s”…");
-    }
-
-  if (status == WEBKIT_LOAD_FINISHED) {
-    g_free (view->priv->status_message);
-    view->priv->status_message = NULL;
-    g_object_notify (G_OBJECT (view), "status-message");
-
-  } else if (msg != NULL) {
-    g_free (view->priv->status_message);
-    g_free (view->priv->loading_title);
-    view->priv->status_message = g_strdup_printf (msg, host);
-    view->priv->loading_title = g_strdup_printf (msg, host);
-    g_object_notify (G_OBJECT (view), "status-message");
-    g_object_notify (G_OBJECT (view), "embed-title");
-  }
-
- out:
-    g_free (host);
-}
-
-/**
- * ephy_web_view_update_from_net_state:
- * @view: an #EphyWebView
- * @uri: the uri associated with @view
- * @state: a #WebKitLoadStatus
- *
- * Update @view at @uri with info from @state.
- **/
-void
-ephy_web_view_update_from_net_state (EphyWebView *view,
-                                     const char *uri,
-                                     WebKitLoadStatus status)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  update_net_state_message (view, uri, status);
-
-  if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
-    if (status == WEBKIT_LOAD_PROVISIONAL)  {
-      GObject *object = G_OBJECT (view);
-
-      g_object_freeze_notify (object);
-
-      ensure_page_info (view, uri);
-
-      priv->expire_address_now = TRUE;
-
-      g_object_notify (object, "embed-title");
-
-      g_object_thaw_notify (object);
-    } else if (status == WEBKIT_LOAD_FINISHED) {
-      GObject *object = G_OBJECT (view);
-
-      g_object_freeze_notify (object);
-
-      g_free (priv->loading_title);
-      priv->loading_title = NULL;
-
-      priv->expire_address_now = TRUE;
-
-      g_object_notify (object, "embed-title");
-
-      g_object_thaw_notify (object);
-    }
-
-    update_navigation_flags (view);
-  }
 }
 
 /**
