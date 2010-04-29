@@ -54,22 +54,6 @@ typedef enum
 
 typedef enum
 {
-	EPHY_WEB_VIEW_STATE_UNKNOWN		= 0,
-	EPHY_WEB_VIEW_STATE_START		= 1 << 0,
-	EPHY_WEB_VIEW_STATE_REDIRECTING		= 1 << 1,
-	EPHY_WEB_VIEW_STATE_TRANSFERRING	= 1 << 2,
-	EPHY_WEB_VIEW_STATE_NEGOTIATING		= 1 << 3,
-	EPHY_WEB_VIEW_STATE_STOP		= 1 << 4,
-
-	EPHY_WEB_VIEW_STATE_IS_REQUEST	= 1 << 5,
-	EPHY_WEB_VIEW_STATE_IS_DOCUMENT	= 1 << 6,
-	EPHY_WEB_VIEW_STATE_IS_NETWORK	= 1 << 7,
-	EPHY_WEB_VIEW_STATE_IS_WINDOW	= 1 << 8,
-	EPHY_WEB_VIEW_STATE_RESTORING	= 1 << 9
-} EphyWebViewNetState;
-
-typedef enum
-{
 	EPHY_WEB_VIEW_CHROME_MENUBAR		= 1 << 0,
 	EPHY_WEB_VIEW_CHROME_TOOLBAR		= 1 << 1,
 	EPHY_WEB_VIEW_CHROME_STATUSBAR		= 1 << 2,
@@ -198,7 +182,7 @@ void                       ephy_web_view_set_address             (EphyWebView   
                                                                   const char                      *address);
 void                       ephy_web_view_update_from_net_state   (EphyWebView                     *view,
                                                                   const char                      *uri,
-                                                                  EphyWebViewNetState              state);
+                                                                  WebKitLoadStatus                state);
 void                       ephy_web_view_location_changed        (EphyWebView                     *view,
                                                                   const char                      *location);
 void                       ephy_web_view_set_loading_title       (EphyWebView                     *view,

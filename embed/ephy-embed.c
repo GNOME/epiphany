@@ -245,7 +245,6 @@ load_status_changed_cb (WebKitWebView *view,
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (view), security_level);
   } else if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
-    EphyWebViewNetState estate = EPHY_WEB_VIEW_STATE_UNKNOWN;
     char *loading_uri = NULL;
 
     if (status == WEBKIT_LOAD_PROVISIONAL) {
@@ -262,12 +261,6 @@ load_status_changed_cb (WebKitWebView *view,
        * we will want to use it in WEBKIT_LOAD_FINISHED, because if a
        * load fails we may never get to committed */
       priv->loading_uri = g_strdup (loading_uri);
-
-      estate = (EphyWebViewNetState) (estate |
-                                      EPHY_WEB_VIEW_STATE_START |
-                                      EPHY_WEB_VIEW_STATE_NEGOTIATING |
-                                      EPHY_WEB_VIEW_STATE_IS_REQUEST |
-                                      EPHY_WEB_VIEW_STATE_IS_NETWORK);
       
       g_signal_emit_by_name (EPHY_WEB_VIEW (view), "new-document-now", loading_uri);
     } else if (status == WEBKIT_LOAD_FINISHED) {
@@ -276,15 +269,11 @@ load_status_changed_cb (WebKitWebView *view,
       /* Will be freed below */
       priv->loading_uri = NULL;
 
-      estate = (EphyWebViewNetState) (estate |
-                                      EPHY_WEB_VIEW_STATE_STOP |
-                                      EPHY_WEB_VIEW_STATE_IS_DOCUMENT |
-                                      EPHY_WEB_VIEW_STATE_IS_NETWORK);
     }
 
     ephy_web_view_update_from_net_state (EPHY_WEB_VIEW (view),
                                          loading_uri,
-                                         (EphyWebViewNetState)estate);
+                                         status);
 
     g_free (loading_uri);
 

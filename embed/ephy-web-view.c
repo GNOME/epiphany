@@ -2340,7 +2340,7 @@ ensure_page_info (EphyWebView *view, const char *address)
 }
 
 static void
-update_net_state_message (EphyWebView *view, const char *uri, EphyWebViewNetState flags)
+update_net_state_message (EphyWebView *view, const char *uri, WebKitLoadStatus status)
 {
   const char *msg = NULL;
   char *host = NULL;
@@ -2350,25 +2350,12 @@ update_net_state_message (EphyWebView *view, const char *uri, EphyWebViewNetStat
 
   if (host == NULL) goto out;
 
-  /* IS_REQUEST and IS_NETWORK can be both set */
-  if (flags & EPHY_WEB_VIEW_STATE_IS_REQUEST) {
-    if (flags & EPHY_WEB_VIEW_STATE_REDIRECTING) {
-      msg = _ ("Redirecting to “%s”…");
-    } else if (flags & EPHY_WEB_VIEW_STATE_TRANSFERRING) {
-      msg = _ ("Transferring data from “%s”…");
-    } else if (flags & EPHY_WEB_VIEW_STATE_NEGOTIATING) {
-      msg = _ ("Waiting for authorization from “%s”…");
-    }
-  }
-
-  if (flags & EPHY_WEB_VIEW_STATE_IS_NETWORK) {
-    if (flags & EPHY_WEB_VIEW_STATE_START) {
+  /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
+  if (status == WEBKIT_LOAD_PROVISIONAL)  {
       msg = _ ("Loading “%s”…");
     }
-  }
 
-  if ((flags & EPHY_WEB_VIEW_STATE_IS_NETWORK) &&
-      (flags & EPHY_WEB_VIEW_STATE_STOP)) {
+  if (status == WEBKIT_LOAD_FINISHED) {
     g_free (view->priv->status_message);
     view->priv->status_message = NULL;
     g_object_notify (G_OBJECT (view), "status-message");
@@ -2390,21 +2377,21 @@ update_net_state_message (EphyWebView *view, const char *uri, EphyWebViewNetStat
  * ephy_web_view_update_from_net_state:
  * @view: an #EphyWebView
  * @uri: the uri associated with @view
- * @state: an #EphyWebViewNetState
+ * @state: a #WebKitLoadStatus
  *
  * Update @view at @uri with info from @state.
  **/
 void
 ephy_web_view_update_from_net_state (EphyWebView *view,
                                      const char *uri,
-                                     EphyWebViewNetState state)
+                                     WebKitLoadStatus status)
 {
   EphyWebViewPrivate *priv = view->priv;
 
-  update_net_state_message (view, uri, state);
+  update_net_state_message (view, uri, status);
 
-  if (state & EPHY_WEB_VIEW_STATE_IS_NETWORK) {
-    if (state & EPHY_WEB_VIEW_STATE_START) {
+  if (status == WEBKIT_LOAD_PROVISIONAL || status == WEBKIT_LOAD_FINISHED) {
+    if (status == WEBKIT_LOAD_PROVISIONAL)  {
       GObject *object = G_OBJECT (view);
 
       g_object_freeze_notify (object);
@@ -2416,7 +2403,7 @@ ephy_web_view_update_from_net_state (EphyWebView *view,
       g_object_notify (object, "embed-title");
 
       g_object_thaw_notify (object);
-    } else if (state & EPHY_WEB_VIEW_STATE_STOP) {
+    } else if (status == WEBKIT_LOAD_FINISHED) {
       GObject *object = G_OBJECT (view);
 
       g_object_freeze_notify (object);
