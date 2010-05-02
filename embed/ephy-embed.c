@@ -69,26 +69,6 @@ struct EphyEmbedPrivate
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
 
 static void
-uri_changed_cb (WebKitWebView *web_view,
-                GParamSpec *spec,
-                EphyEmbed *embed)
-{
-  char *uri;
-  const char *current_address;
-
-  g_object_get (web_view, "uri", &uri, NULL);
-  current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-
-  /* We need to check if we get URI notifications without going
-     through the usual load process, as this can happen when changing
-     location within a page */
-  if (g_str_equal (uri, current_address) == FALSE)
-    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
-
-  g_free (uri);
-}
-
-static void
 restore_zoom_level (EphyEmbed *embed,
                     const char *address)
 {
@@ -829,7 +809,6 @@ ephy_embed_constructed (GObject *object)
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
-                    "signal::notify::uri", G_CALLBACK (uri_changed_cb), embed,
                     NULL);
 
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

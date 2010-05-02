@@ -1324,12 +1324,33 @@ title_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+uri_changed_cb (WebKitWebView *web_view,
+                GParamSpec *spec,
+                gpointer data)
+{
+  char *uri;
+  const char *current_address;
+
+  g_object_get (web_view, "uri", &uri, NULL);
+  current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+
+  /* We need to check if we get URI notifications without going
+     through the usual load process, as this can happen when changing
+     location within a page */
+  if (g_str_equal (uri, current_address) == FALSE)
+    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
+
+  g_free (uri);
+}
+
+static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
 
   g_object_connect (web_view,
                     "signal::notify::title", G_CALLBACK (title_changed_cb), NULL,
+                    "signal::notify::uri", G_CALLBACK (uri_changed_cb), NULL,
                     NULL);
 }
 
