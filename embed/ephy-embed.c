@@ -170,15 +170,6 @@ load_status_changed_cb (WebKitWebView *view,
 }
 
 static void
-hovering_over_link_cb (WebKitWebView *web_view,
-                       char *title,
-                       char *location,
-                       EphyEmbed *embed)
-{
-  ephy_web_view_set_link_message (EPHY_WEB_VIEW (web_view), location);
-}
-
-static void
 zoom_changed_cb (WebKitWebView *web_view,
                  GParamSpec *pspec,
                  EphyEmbed  *embed)
@@ -806,7 +797,6 @@ ephy_embed_constructed (GObject *object)
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
-                    "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     NULL);

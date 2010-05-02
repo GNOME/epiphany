@@ -1344,6 +1344,15 @@ uri_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+hovering_over_link_cb (EphyWebView *web_view,
+                       char *title,
+                       char *location,
+                       gpointer data)
+{
+  ephy_web_view_set_link_message (web_view, location);
+}
+
+static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
@@ -1351,6 +1360,7 @@ ephy_web_view_constructed (GObject *object)
   g_object_connect (web_view,
                     "signal::notify::title", G_CALLBACK (title_changed_cb), NULL,
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), NULL,
+                    "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), NULL,
                     NULL);
 }
 
