@@ -1300,6 +1300,40 @@ ephy_web_view_finalize (GObject *object)
 }
 
 static void
+title_changed_cb (WebKitWebView *web_view,
+                  GParamSpec *spec,
+                  gpointer data)
+{
+  const char *uri;
+  char *title;
+  WebKitWebFrame *frame;
+  EphyHistory *history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
+
+  g_object_get (web_view, "title", &title, NULL);
+
+  ephy_web_view_set_title (EPHY_WEB_VIEW (web_view),
+                           title);
+
+  frame = webkit_web_view_get_main_frame (web_view);
+  uri = webkit_web_frame_get_uri (frame);
+  ephy_history_set_page_title (history,
+                               uri,
+                               title);
+  g_free (title);
+
+}
+
+static void
+ephy_web_view_constructed (GObject *object)
+{
+  EphyWebView *web_view = EPHY_WEB_VIEW (object);
+
+  g_object_connect (web_view,
+                    "signal::notify::title", G_CALLBACK (title_changed_cb), NULL,
+                    NULL);
+}
+
+static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1309,6 +1343,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   gobject_class->finalize = ephy_web_view_finalize;
   gobject_class->get_property = ephy_web_view_get_property;
   gobject_class->set_property = ephy_web_view_set_property;
+  gobject_class->constructed = ephy_web_view_constructed;
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;

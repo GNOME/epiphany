@@ -89,29 +89,6 @@ uri_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-title_changed_cb (WebKitWebView *web_view,
-                  GParamSpec *spec,
-                  EphyEmbed *embed)
-{
-  const char *uri;
-  char *title;
-  WebKitWebFrame *frame;
-
-  g_object_get (web_view, "title", &title, NULL);
-
-  ephy_web_view_set_title (EPHY_WEB_VIEW (web_view),
-                           title);
-
-  frame = webkit_web_view_get_main_frame (web_view);
-  uri = webkit_web_frame_get_uri (frame);
-  ephy_history_set_page_title (EPHY_EMBED (embed)->priv->history,
-                               uri,
-                               title);
-  g_free (title);
-
-}
-
-static void
 restore_zoom_level (EphyEmbed *embed,
                     const char *address)
 {
@@ -852,7 +829,6 @@ ephy_embed_constructed (GObject *object)
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
-                    "signal::notify::title", G_CALLBACK (title_changed_cb), embed,
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), embed,
                     NULL);
 
