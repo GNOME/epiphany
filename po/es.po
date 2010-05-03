@@ -5,13 +5,14 @@
 #
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2004, 2005, 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2010-03-25 01:45+0000\n"
-"PO-Revision-Date: 2010-03-27 10:23+0100\n"
+"POT-Creation-Date: 2010-05-03 11:41+0000\n"
+"PO-Revision-Date: 2010-05-03 18:59+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -759,7 +760,7 @@ msgstr "Elija un _idioma:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:682
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:680
 #: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:388
 msgid "Cl_ear"
 msgstr "_Borrar"
@@ -1000,23 +1001,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed.c:455 ../embed/ephy-embed-persist.c:794
-#: ../src/window-commands.c:341
+#: ../embed/ephy-embed.c:333 ../embed/ephy-embed-persist.c:823
+#: ../src/window-commands.c:343
 msgid "Save"
 msgstr "Guardar"
 
-#: ../embed/ephy-embed.c:708
+#: ../embed/ephy-embed.c:586
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:605
 msgid "Download this potentially unsafe file?"
 msgstr "¿Descargar este archivo potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:732
+#: ../embed/ephy-embed.c:610
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1029,14 +1030,14 @@ msgstr ""
 "No es seguro abrir «%s» ya que potencialmente podría dañar sus documentos o "
 "invadir su privacidad. En su lugar, puede descargarlo."
 
-#: ../embed/ephy-embed.c:740
+#: ../embed/ephy-embed.c:619
 msgid "Open this file?"
 msgstr "¿Abrir este archivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:746
+#: ../embed/ephy-embed.c:625
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1047,13 +1048,13 @@ msgstr ""
 "\n"
 "Puede abrir «%s» usando «%s» o guardarlo."
 
-#: ../embed/ephy-embed.c:753
+#: ../embed/ephy-embed.c:632
 msgid "Download this file?"
 msgstr "¿Descargar este archivo?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:758
+#: ../embed/ephy-embed.c:637
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1065,11 +1066,11 @@ msgstr ""
 "No tiene ninguna aplicación capaz de abrir «%s». En su lugar, puede "
 "descargarlo."
 
-#: ../embed/ephy-embed.c:765
+#: ../embed/ephy-embed.c:644
 msgid "_Save As..."
 msgstr "Guardar _como…"
 
-#: ../embed/ephy-embed.c:938
+#: ../embed/ephy-embed.c:814
 msgid "Web Inspector"
 msgstr "Inspector web"
 
@@ -1428,8 +1429,8 @@ msgstr "Archivos locales"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3175
-#: ../src/ephy-session.c:1342
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3276
+#: ../src/ephy-session.c:1418
 msgid "Blank page"
 msgstr "Página en blanco"
 
@@ -1452,40 +1453,25 @@ msgid ""
 msgstr ""
 "<big>¿Quiere almacenar la contraseña para <b>%s</b> en <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:2031
+#: ../embed/ephy-web-view.c:2222
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2300
-#, c-format
-msgid "Redirecting to “%s”…"
-msgstr "Redireccionando a «%s»…"
-
-#: ../embed/ephy-web-view.c:2302
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "Transfiriendo datos desde «%s»…"
-
-#: ../embed/ephy-web-view.c:2304
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "Esperando autorización de «%s»…"
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2310 ../embed/ephy-web-view.c:2434
+#: ../embed/ephy-web-view.c:2517
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2436
+#: ../embed/ephy-web-view.c:2519
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3379
+#: ../embed/ephy-web-view.c:3480
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
@@ -1718,7 +1704,7 @@ msgstr "Marcador"
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:291
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:288
 msgid "Address Entry"
 msgstr "Entrada de dirección"
 
@@ -1795,7 +1781,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:970
+#: ../lib/widgets/ephy-location-entry.c:968
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastre y suelte este icono para crear un enlace a esta página"
 
@@ -2365,11 +2351,11 @@ msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:673
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:670
 msgid "Leave Fullscreen"
 msgstr "Salir del modo a pantalla completa"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:321
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:318
 msgid "Go"
 msgstr "Ir"
 
@@ -2474,7 +2460,7 @@ msgstr "Sitios"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1038
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1040
 msgid "GNOME Web Browser"
 msgstr "Navegador web de GNOME"
 
@@ -2543,7 +2529,7 @@ msgstr "Opciones del navegador web de GNOME"
 msgid "Close tab"
 msgstr "Cerrar solapa"
 
-#: ../src/ephy-session.c:116
+#: ../src/ephy-session.c:118
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -2552,11 +2538,11 @@ msgstr[0] ""
 msgstr[1] ""
 "Las descargas se abortarán y se procederá a la salida en %d segundos."
 
-#: ../src/ephy-session.c:228
+#: ../src/ephy-session.c:230
 msgid "Abort pending downloads?"
 msgstr "¿Desea abortar las descargas pendientes?"
 
-#: ../src/ephy-session.c:233
+#: ../src/ephy-session.c:235
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -2564,40 +2550,31 @@ msgstr ""
 "Aún hay descargas pendientes. Si sale de la sesión, se abortarán y se "
 "perderán."
 
-#: ../src/ephy-session.c:237
+#: ../src/ephy-session.c:239
 msgid "_Cancel Logout"
 msgstr "_Cancelar salida"
 
-#: ../src/ephy-session.c:239
+#: ../src/ephy-session.c:241
 msgid "_Abort Downloads"
 msgstr "_Abortar descargas"
 
-#: ../src/ephy-session.c:571
-msgid "Recover previous browser windows and tabs?"
-msgstr "¿Quiere recuperar las ventanas y solapas anteriores?"
+#: ../src/ephy-session.c:770
+#| msgid "_Don't Recover"
+msgid "Don't recover"
+msgstr "No recuperar"
 
-#: ../src/ephy-session.c:575
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr ""
-"Epiphany parece haber salido de forma inesperada la última vez que se "
-"ejecutó. Puede recuperar las ventanas y solapas que estaban abiertas."
+#: ../src/ephy-session.c:775
+#| msgid "_Recover"
+msgid "Recover session"
+msgstr "Recuperar sesión"
 
-#: ../src/ephy-session.c:579
-msgid "_Don't Recover"
-msgstr "_No recuperar"
-
-#: ../src/ephy-session.c:581
-msgid "_Recover"
-msgstr "_Recuperar"
-
-#: ../src/ephy-session.c:583
-msgid "Crash Recovery"
-msgstr "Recuperación de cuelgue"
+#: ../src/ephy-session.c:780
+#| msgid "Recover previous browser windows and tabs?"
+msgid "Do you want to recover the previous browser windows and tabs?"
+msgstr "¿Quiere recuperar las ventanas y solapas de navegación anteriores?"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1286
+#: ../src/ephy-session.c:1362
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -2637,88 +2614,88 @@ msgstr "En el modo de selección del teclado, pulse F7 para salir"
 msgid "Switch to this tab"
 msgstr "Cambiar a esta solapa"
 
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:228
 msgid "_Back"
 msgstr "A_trás"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:230
 msgid "Go to the previous visited page"
 msgstr "Ir a la página visitada anterior"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:236
+#: ../src/ephy-toolbar.c:234
 msgid "Back history"
 msgstr "Atrás por el histórico"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:248
 msgid "_Forward"
 msgstr "A_delante"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:250
 msgid "Go to the next visited page"
 msgstr "Ir a la siguiente página visitada"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:254
 msgid "Forward history"
 msgstr "Avanzar por el histórico"
 
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:267
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../src/ephy-toolbar.c:271
+#: ../src/ephy-toolbar.c:269
 msgid "Go up one level"
 msgstr "Subir un nivel"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:273
 msgid "List of upper levels"
 msgstr "Lista de los niveles superiores"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:290
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Introduzca una dirección web para abrir, o una frase para buscar"
 
-#: ../src/ephy-toolbar.c:309
+#: ../src/ephy-toolbar.c:306
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-toolbar.c:311
+#: ../src/ephy-toolbar.c:308
 msgid "Adjust the text size"
 msgstr "Ajustar el tamaño del texto"
 
-#: ../src/ephy-toolbar.c:323
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the address entered in the address entry"
 msgstr "Ir a la dirección introducida"
 
-#: ../src/ephy-toolbar.c:332
+#: ../src/ephy-toolbar.c:329
 msgid "_Home"
 msgstr "_Inicio"
 
-#: ../src/ephy-toolbar.c:334
+#: ../src/ephy-toolbar.c:331
 msgid "Go to the home page"
 msgstr "Ir página inicial"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:341
 msgid "New _Tab"
 msgstr "_Solapa nueva"
 
-#: ../src/ephy-toolbar.c:346
+#: ../src/ephy-toolbar.c:343
 msgid "Open a new tab"
 msgstr "Abrir una solapa nueva"
 
-#: ../src/ephy-toolbar.c:355
+#: ../src/ephy-toolbar.c:352
 msgid "_New Window"
 msgstr "_Ventana nueva"
 
-#: ../src/ephy-toolbar.c:357
+#: ../src/ephy-toolbar.c:354
 msgid "Open a new window"
 msgstr "Abrir una ventana nueva"
 
@@ -3223,7 +3200,7 @@ msgstr "Si cierra el documento, perderá esa información."
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1440 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1440 ../src/window-commands.c:313
 msgid "Open"
 msgstr "Abrir"
 
@@ -3417,15 +3394,15 @@ msgstr "Nombre de usuario"
 msgid "User Password"
 msgstr "Contraseña de usuario"
 
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:275
 msgid "Download Link"
 msgstr "Descargar enlace"
 
-#: ../src/popup-commands.c:282
+#: ../src/popup-commands.c:283
 msgid "Save Link As"
 msgstr "Guardar enlace como"
 
-#: ../src/popup-commands.c:289
+#: ../src/popup-commands.c:290
 msgid "Save Image As"
 msgstr "Guardar imagen como"
 
@@ -3459,7 +3436,7 @@ msgstr[1] "Idiomas del sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione un directorio"
 
-#: ../src/window-commands.c:938
+#: ../src/window-commands.c:940
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3471,7 +3448,7 @@ msgstr ""
 "publica por la Free Software Foundation; ya sea en la versión 2 de la "
 "Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/window-commands.c:942
+#: ../src/window-commands.c:944
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3483,7 +3460,7 @@ msgstr ""
 "MERCANTILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la Licencia "
 "Pública General de GNU para más detalles."
 
-#: ../src/window-commands.c:946
+#: ../src/window-commands.c:948
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3493,20 +3470,20 @@ msgstr ""
 "con el Navegador web de GNOME; si no, escriba a la Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:992 ../src/window-commands.c:1008
-#: ../src/window-commands.c:1019
+#: ../src/window-commands.c:994 ../src/window-commands.c:1010
+#: ../src/window-commands.c:1021
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:995
+#: ../src/window-commands.c:997
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:998
+#: ../src/window-commands.c:1000
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:1028
+#: ../src/window-commands.c:1030
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3523,15 +3500,34 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1054
+#: ../src/window-commands.c:1056
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:1057
+#: ../src/window-commands.c:1059
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web del navegador de GNOME"
+
+#~ msgid "Redirecting to “%s”…"
+#~ msgstr "Redireccionando a «%s»…"
+
+#~ msgid "Transferring data from “%s”…"
+#~ msgstr "Transfiriendo datos desde «%s»…"
+
+#~ msgid "Waiting for authorization from “%s”…"
+#~ msgstr "Esperando autorización de «%s»…"
+
+#~ msgid ""
+#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
+#~ "You can recover the opened windows and tabs."
+#~ msgstr ""
+#~ "Epiphany parece haber salido de forma inesperada la última vez que se "
+#~ "ejecutó. Puede recuperar las ventanas y solapas que estaban abiertas."
+
+#~ msgid "Crash Recovery"
+#~ msgstr "Recuperación de cuelgue"
 
 #~ msgid "Enable Java"
 #~ msgstr "Activar Java"
