@@ -116,3 +116,18 @@ ephy_embed_utils_normalize_address (const char *address)
 	
 	return effective_address;
 }
+
+gboolean
+ephy_embed_utils_url_is_empty (const char *location)
+{
+	gboolean is_empty = FALSE;
+
+        if (location == NULL || location[0] == '\0' ||
+            strcmp (location, "about:blank") == 0)
+        {
+                is_empty = TRUE;
+        }
+
+        return is_empty;
+}
+

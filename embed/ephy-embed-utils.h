@@ -43,6 +43,7 @@ G_BEGIN_DECLS
 char*    ephy_embed_utils_link_message_parse     (char       *message);
 gboolean ephy_embed_utils_address_has_web_scheme (const char *address);
 char*    ephy_embed_utils_normalize_address      (const char *address);
+gboolean ephy_embed_utils_url_is_empty           (const char *location);
 
 G_END_DECLS
 

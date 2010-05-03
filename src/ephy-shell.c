@@ -368,20 +368,6 @@ ephy_shell_get_default (void)
 }
 
 static gboolean
-url_is_empty (const char *location)
-{
-	gboolean is_empty = FALSE;
-
-        if (location == NULL || location[0] == '\0' ||
-            strcmp (location, "about:blank") == 0)
-        {
-                is_empty = TRUE;
-        }
-
-        return is_empty;
-}
-
-static gboolean
 load_homepage (EphyEmbed *embed)
 {
 	char *home;
@@ -396,7 +382,7 @@ load_homepage (EphyEmbed *embed)
 		home = g_strdup ("about:blank");
 	}
 
-	is_empty = url_is_empty (home);
+	is_empty = ephy_embed_utils_url_is_empty (home);
 	ephy_web_view_load_url (ephy_embed_get_web_view (embed), home);
 
 	g_free (home);
@@ -525,7 +511,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 		ephy_web_view_load_request (ephy_embed_get_web_view (embed),
 					    request);
 
-		is_empty = url_is_empty (webkit_network_request_get_uri (request));
+		is_empty = ephy_embed_utils_url_is_empty (webkit_network_request_get_uri (request));
 	}
 
 	/* Make sure the initial focus is somewhere sensible and not, for
