@@ -1776,6 +1776,21 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             1,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+/**
+ * EphyWebView::loading-homepage
+ * @view: the #EphyWebView that received the signal
+ *
+ * The ::loading-homepage signal is emitted when the @view is about to
+ * load the homepage set by the user.
+ **/
+    g_signal_new ("loading-homepage",
+            EPHY_TYPE_WEB_VIEW,
+            G_SIGNAL_RUN_FIRST,
+            NULL, NULL, NULL,
+            g_cclosure_marshal_VOID__VOID,
+            G_TYPE_NONE,
+            0);
+
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
 
@@ -3535,23 +3550,25 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 gboolean
 ephy_web_view_load_homepage (EphyWebView *view)
 {
-	char *home;
-	gboolean is_empty;
+  char *home;
+  gboolean is_empty;
 
-	home = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
+  g_signal_emit_by_name (view, "loading-homepage");
 
-	if (home == NULL || home[0] == '\0')
-	{
-		g_free (home);
+  home = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
 
-		home = g_strdup ("about:blank");
-	}
+  if (home == NULL || home[0] == '\0')
+  {
+    g_free (home);
 
-	is_empty = ephy_embed_utils_url_is_empty (home);
-	ephy_web_view_load_url (view, home);
+    home = g_strdup ("about:blank");
+  }
 
-	g_free (home);
+  is_empty = ephy_embed_utils_url_is_empty (home);
+  ephy_web_view_load_url (view, home);
 
-	return is_empty;
+  g_free (home);
+
+  return is_empty;
 }
 
