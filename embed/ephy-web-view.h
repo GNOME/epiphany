@@ -190,6 +190,8 @@ void                       ephy_web_view_popups_manager_reset    (EphyWebView   
 void                       ephy_web_view_save                    (EphyWebView                     *view,
                                                                   const char                      *uri);
 
+gboolean                   ephy_web_view_load_homepage           (EphyWebView                     *view);
+
 G_END_DECLS
 
 #endif

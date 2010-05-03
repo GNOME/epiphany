@@ -3523,4 +3523,35 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
   ephy_web_view_save_sub_resources (view, uri, subresources);
 }
 
+/**
+ * ephy_web_view_load_homepage:
+ * @view: an #EphyWebView
+ * 
+ * Loads the homepage set by the user in @view.
+ * 
+ * Returns: %TRUE if there was a homepage set to be loaded in the user
+ * preferences, %FALSE otherwise
+ **/
+gboolean
+ephy_web_view_load_homepage (EphyWebView *view)
+{
+	char *home;
+	gboolean is_empty;
+
+	home = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
+
+	if (home == NULL || home[0] == '\0')
+	{
+		g_free (home);
+
+		home = g_strdup ("about:blank");
+	}
+
+	is_empty = ephy_embed_utils_url_is_empty (home);
+	ephy_web_view_load_url (view, home);
+
+	g_free (home);
+
+	return is_empty;
+}
 

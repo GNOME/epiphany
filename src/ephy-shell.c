@@ -367,29 +367,6 @@ ephy_shell_get_default (void)
 	return ephy_shell;
 }
 
-static gboolean
-load_homepage (EphyEmbed *embed)
-{
-	char *home;
-	gboolean is_empty;
-
-	home = eel_gconf_get_string(CONF_GENERAL_HOMEPAGE);
-
-	if (home == NULL || home[0] == '\0')
-	{
-		g_free (home);
-
-		home = g_strdup ("about:blank");
-	}
-
-	is_empty = ephy_embed_utils_url_is_empty (home);
-	ephy_web_view_load_url (ephy_embed_get_web_view (embed), home);
-
-	g_free (home);
-
-	return is_empty;
-}
-
 /**
  * ephy_shell_new_tab_full:
  * @shell: a #EphyShell
@@ -502,9 +479,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), "");
+		EphyWebView *view = ephy_embed_get_web_view (embed);
+		ephy_web_view_set_typed_address (view, "");
 		ephy_toolbar_activate_location (toolbar);
-		is_empty = load_homepage (embed);
+		is_empty = ephy_web_view_load_homepage (view);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
