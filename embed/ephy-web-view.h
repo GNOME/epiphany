@@ -129,7 +129,6 @@ struct _EphyWebViewClass
 };
 
 GType                      ephy_web_view_get_type                (void);
-GType                      ephy_web_view_net_state_get_type      (void);
 GType                      ephy_web_view_chrome_get_type         (void);
 GType                      ephy_web_view_security_level_get_type (void);
 GtkWidget *                ephy_web_view_new                     (void);
