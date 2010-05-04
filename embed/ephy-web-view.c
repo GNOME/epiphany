@@ -2095,11 +2095,43 @@ load_status_cb (WebKitWebView *web_view,
 
     _ephy_web_view_hook_into_links (view);
     break;
+  case WEBKIT_LOAD_FAILED:
+    ephy_web_view_set_link_message (view, NULL);
+    ephy_web_view_set_loading_title (view, NULL, FALSE);
+
+    g_free (priv->status_message);
+    priv->status_message = NULL;
+    g_object_notify (object, "status-message");
+
+    update_navigation_flags (view);
+    break;
   default:
     break;
   }
 
   g_object_thaw_notify (object);
+}
+
+ static gboolean
+load_error_cb (WebKitWebView *web_view,
+               WebKitWebFrame *frame,
+               gchar *uri,
+               GError *error,
+               gpointer user_data)
+{
+  if (error->code != WEBKIT_NETWORK_ERROR_CANCELLED) {
+    EphyWebView *view = EPHY_WEB_VIEW (web_view);
+    gchar *message;
+
+    message = g_strdup_printf (_("A problem occurred while loading %s"),
+                               uri);
+    ephy_web_view_set_title (view, message);
+    g_free (message);
+
+    _ephy_web_view_set_icon_address (view, NULL);
+  }
+
+  return FALSE;
 }
 
 static gboolean
@@ -2160,6 +2192,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "close-web-view",
                     G_CALLBACK (close_web_view_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "load-error",
+                    G_CALLBACK (load_error_cb),
                     NULL);
 
   g_signal_connect_object (web_view, "icon-loaded",
