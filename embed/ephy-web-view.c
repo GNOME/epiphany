@@ -2029,15 +2029,17 @@ load_status_cb (WebKitWebView *web_view,
       g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
       if ((priv->address == NULL || priv->address[0] == '\0') &&
-          priv->expire_address_now == TRUE)
+          priv->expire_address_now == TRUE) {
         ephy_web_view_set_address (view, loading_uri);
+        ephy_web_view_set_title (view, NULL);
+      }
+
+      ephy_web_view_set_loading_title (view, loading_uri, TRUE);
 
       g_free (priv->status_message);
       priv->status_message = g_strdup (priv->loading_title);
       g_object_notify (object, "status-message");
 
-      ephy_web_view_set_title (view, NULL);
-      ephy_web_view_set_loading_title (view, loading_uri, TRUE);
       priv->expire_address_now = TRUE;
     }
     break;
