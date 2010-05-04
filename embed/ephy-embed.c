@@ -162,6 +162,8 @@ load_status_changed_cb (WebKitWebView *view,
     ephy_embed_destroy_top_widgets (embed);
 
     restore_zoom_level (embed, uri);
+
+    /* FIXME: we are not identifying redirects at the moment */
     ephy_history_add_page (embed->priv->history,
                            uri,
                            FALSE,
