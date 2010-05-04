@@ -1433,9 +1433,9 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 static void 
 parse_embed (xmlNodePtr child,
 	     EphyWindow *window,
+	     gboolean is_first_window,
 	     EphySession *session)
 {
-	gboolean loaded_first = FALSE;
 	EphySessionPrivate *priv = session->priv;
 
 	while (child != NULL)
@@ -1470,7 +1470,7 @@ parse_embed (xmlNodePtr child,
 				recover_url = (char *) url;
 				
 				/* Reuse the window holding the recovery infobar instead of creating a new one */
-				if (loaded_first == FALSE && priv->resume_window != NULL)
+				if (is_first_window == TRUE && priv->resume_window != NULL)
 				{
 					EphyWebView *web_view;
 					EphyEmbed *embed;
@@ -1478,6 +1478,8 @@ parse_embed (xmlNodePtr child,
 					embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
 					web_view = ephy_embed_get_web_view (embed);
 					ephy_web_view_load_url(web_view, recover_url);
+
+					is_first_window = FALSE;
 				}
 				else
 				{
@@ -1486,8 +1488,6 @@ parse_embed (xmlNodePtr child,
 							    EPHY_NEW_TAB_OPEN_PAGE |
 							    EPHY_NEW_TAB_APPEND_LAST);
 				}
-
-				loaded_first = TRUE;
 			}
 			else if (was_loading && url != NULL &&
 				 strcmp ((const char *) url, "about:blank") != 0)
@@ -1619,6 +1619,7 @@ ephy_session_load (EphySession *session,
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
 			xmlChar *tmp;
+			EphyEmbed *active_child;
 		    
 			if (first_window_created == FALSE && priv->resume_window != NULL)
 			{
@@ -1634,7 +1635,8 @@ ephy_session_load (EphySession *session,
 			ephy_gui_window_update_user_time (widget, user_time);
 
 			/* Now add the tabs */
-			parse_embed (child->children, window, session);
+			parse_embed (child->children, window,
+				     window == EPHY_WINDOW (priv->resume_window), session);
 
 			/* Set focus to something sane */
 			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
@@ -1653,8 +1655,8 @@ ephy_session_load (EphySession *session,
 				}
 			}
 
-			gtk_widget_grab_focus (GTK_WIDGET (ephy_embed_container_get_active_child
-							   (EPHY_EMBED_CONTAINER (window))));
+			active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+			gtk_widget_grab_focus (GTK_WIDGET (active_child));
 			gtk_widget_show (widget);
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
