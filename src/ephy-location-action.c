@@ -101,7 +101,6 @@ match_func (GtkEntryCompletion *completion,
 	char *item = NULL;
 	char *url = NULL;
 	char *keywords = NULL;
-	char *extra = NULL;
 
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
@@ -113,7 +112,6 @@ match_func (GtkEntryCompletion *completion,
 			    EPHY_COMPLETION_TEXT_COL, &item,
 			    EPHY_COMPLETION_URL_COL, &url,
 			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
-			    EPHY_COMPLETION_EXTRA_COL, &extra,
 			    -1);
 	
 	if (!key)
