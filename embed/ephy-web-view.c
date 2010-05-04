@@ -1786,7 +1786,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("loading-homepage",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            NULL, NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
