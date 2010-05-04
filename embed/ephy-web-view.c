@@ -2119,8 +2119,9 @@ load_error_cb (WebKitWebView *web_view,
                GError *error,
                gpointer user_data)
 {
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+
   if (error->code != WEBKIT_NETWORK_ERROR_CANCELLED) {
-    EphyWebView *view = EPHY_WEB_VIEW (web_view);
     gchar *message;
 
     message = g_strdup_printf (_("A problem occurred while loading %s"),
@@ -2129,6 +2130,13 @@ load_error_cb (WebKitWebView *web_view,
     g_free (message);
 
     _ephy_web_view_set_icon_address (view, NULL);
+  } else {
+    const gchar* uri;
+
+    uri = webkit_web_view_get_uri (web_view);
+
+    ephy_web_view_set_typed_address (view, NULL);
+    ephy_web_view_set_address (view, uri);
   }
 
   return FALSE;
