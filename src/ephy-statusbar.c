@@ -46,8 +46,6 @@ struct _EphyStatusbarPrivate
 	GtkWidget *icon_container;
 
 	GtkWidget *caret_indicator;
-	GtkWidget *security_icon;
-	GtkWidget *security_evbox;
 	GtkWidget *popups_manager_icon;
 	GtkWidget *popups_manager_evbox;
 };
@@ -183,14 +181,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 	gtk_widget_show (priv->hbox);
 #endif
 
-	/* Create security icon */
-	create_icon_frame (t,
-			   NULL,
-			   G_CALLBACK (padlock_button_press_cb),
-			   &priv->security_evbox,
-			   &priv->security_icon);
-	gtk_widget_show (priv->security_evbox);
-
 	/* Create popup-blocked icon */
 	create_icon_frame (t,
 			   EPHY_STOCK_POPUPS,
@@ -231,27 +221,6 @@ ephy_statusbar_set_caret_mode (EphyStatusbar *statusbar,
 	enabled = enabled != FALSE;
 
 	g_object_set (priv->caret_indicator, "visible", enabled, NULL);
-}
-
-/**
- * ephy_statusbar_set_security_state:
- * @statusbar: an #EphyStatusbar
- * @stock_id: stock-id of the icon showing the security state
- * @tooltip: a string detailing the security state
- * 
- * Sets the statusbar's security icon and its tooltip.
- **/
-void
-ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
-				   const char *stock_id,
-				   const char *tooltip)
-{
-	EphyStatusbarPrivate *priv = statusbar->priv;
-
-	gtk_image_set_from_stock (GTK_IMAGE (priv->security_icon),
-				  stock_id, GTK_ICON_SIZE_MENU);
-
-	gtk_widget_set_tooltip_text (priv->security_icon, tooltip);
 }
 
 /**
@@ -357,18 +326,4 @@ ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
 
 	gtk_container_remove (GTK_CONTAINER (priv->icon_container), vsep);
 	gtk_container_remove (GTK_CONTAINER (priv->icon_container), widget);
-}
-
-/**
- * ephy_statusbar_get_security_frame:
- * @statusbar: an #EphyStatusbar
- *
- * Return value: (transfer none): the statusbar's lock icon frame
- */
-GtkWidget *
-ephy_statusbar_get_security_frame (EphyStatusbar *statusbar)
-{
-	g_return_val_if_fail (EPHY_IS_STATUSBAR (statusbar), NULL);
-
-	return statusbar->priv->security_evbox;
 }

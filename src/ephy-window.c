@@ -1741,9 +1741,6 @@ sync_tab_security (EphyWebView *view,
 		g_free (tmp);
 	}
 
-	ephy_statusbar_set_security_state (EPHY_STATUSBAR (priv->statusbar),
-					   stock_id, tooltip);
-
 	ephy_toolbar_set_security_state (priv->toolbar, is_secure,
 					 show_lock, stock_id, tooltip);
 

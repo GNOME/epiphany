@@ -61,14 +61,8 @@ GType         ephy_statusbar_get_type			(void);
 
 GtkWidget    *ephy_statusbar_new			(void);
 
-GtkWidget    *ephy_statusbar_get_security_frame		(EphyStatusbar *statusbar);
-
 void	      ephy_statusbar_set_caret_mode		(EphyStatusbar *statusbar,
 							 gboolean enabled);
-
-void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
-							 const char *stock_id,
-							 const char *tooltip);
 
 void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,
 							 gboolean hidden,
