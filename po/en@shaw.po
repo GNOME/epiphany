@@ -4,10 +4,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: metacity\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2009-11-06 19:17+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
+"POT-Creation-Date: 2010-05-12 12:47+0000\n"
+"PO-Revision-Date: 2010-05-12 18:35 -0400\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
-"Language-Team: Shavian <ubuntu-l10n-en-shaw@lists.launchpad.net>\n"
+"Language-Team: Shavian <ubuntu-l10n-en-shaw@launchpad.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,6 +30,22 @@ msgstr "𐑢𐑧𐑚 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 msgid "Search the web"
 msgstr "𐑕𐑻𐑗 𐑞 𐑢𐑧𐑚"
 
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#, fuzzy
+#: ../data/default-bookmarks.rdf.in.h:5
+msgid "http://www.google.com"
+msgstr "·𐑣·𐑑·𐑑·𐑐://·𐑢·𐑢·𐑢.google.𐑒𐑪𐑥"
+
+#. Translators you should change these links to respect your locale.
+#. For instance in .nl these should be
+#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#, no-c-format
+#: ../data/default-bookmarks.rdf.in.h:10
+msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgstr "·𐑣·𐑑·𐑑·𐑐://·𐑢·𐑢·𐑢.google.𐑒𐑪𐑥/𐑕𐑻𐑗?𐑒𐑘𐑵=%s&𐑨𐑥𐑐;ie=UTF-8&𐑨𐑥𐑐;oe=UTF-8"
+
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "𐑚𐑮𐑬𐑟 𐑞 𐑢𐑧𐑚"
@@ -42,7 +59,7 @@ msgid "Epiphany Web Browser"
 msgstr "·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:680
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼"
 
@@ -106,9 +123,38 @@ msgstr "𐑛𐑦𐑕𐑱𐑚𐑩𐑤 𐑑𐑵𐑤𐑚𐑸 𐑧𐑛𐑦𐑑𐑦�
 msgid "Disable unsafe protocols"
 msgstr "𐑛𐑦𐑕𐑱𐑚𐑩𐑤 𐑩𐑯𐑕𐑱𐑓 𐑐𐑮𐑴𐑑𐑩𐑒𐑪𐑤𐑟"
 
+#, fuzzy
+#: ../data/epiphany-lockdown.schemas.in.h:14
+msgid ""
+"Disables loading of content from unsafe protocols. Safe protocols are http "
+"and https."
+msgstr ""
+"𐑛𐑦𐑕𐑱𐑚𐑩𐑤𐑟 𐑤𐑴𐑛𐑦𐑙 𐑝 𐑒𐑪𐑯𐑑𐑧𐑯𐑑 𐑓𐑮𐑪𐑥 𐑩𐑯𐑕𐑱𐑓 𐑐𐑮𐑴𐑑𐑩𐑒𐑪𐑤𐑟. 𐑕𐑱𐑓 𐑐𐑮𐑴𐑑𐑩𐑒𐑪𐑤𐑟 𐑸 ·𐑣·𐑑·𐑑·𐑐 𐑯 "
+"https."
+
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
 msgstr "·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑒𐑨𐑯𐑪𐑑 𐑒𐑢𐑦𐑑"
+
+#, fuzzy
+#: ../data/epiphany-lockdown.schemas.in.h:16
+msgid "Hide menubar by default"
+msgstr "𐑣𐑲𐑛 menubar 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑"
+
+#, fuzzy
+#: ../data/epiphany-lockdown.schemas.in.h:17
+msgid "Hide the menubar by default."
+msgstr "𐑣𐑲𐑛 𐑞 menubar 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑."
+
+#, fuzzy
+#: ../data/epiphany-lockdown.schemas.in.h:18
+msgid "Lock in fullscreen mode"
+msgstr "𐑤𐑪𐑒 𐑦𐑯 fullscreen 𐑥𐑴𐑛"
+
+#, fuzzy
+#: ../data/epiphany-lockdown.schemas.in.h:19
+msgid "Locks Epiphany in fullscreen mode."
+msgstr "𐑤𐑪𐑒𐑕 𐑦𐑐𐑦𐑓𐑩𐑯𐑰 𐑦𐑯 fullscreen 𐑥𐑴𐑛."
 
 #: ../data/epiphany-lockdown.schemas.in.h:20
 msgid "User is not allowed to close Epiphany"
@@ -121,6 +167,11 @@ msgstr "𐑨𐑒𐑑𐑦𐑝 𐑩𐑒𐑕𐑑𐑧𐑯𐑖𐑩𐑯𐑟"
 #: ../data/epiphany.schemas.in.h:2
 msgid "Address of the user's home page."
 msgstr "𐑩𐑛𐑮𐑧𐑕 𐑝 𐑞 𐑿𐑟𐑼'𐑕 𐑣𐑴𐑥 𐑐𐑱𐑡."
+
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:3
+msgid "Allow popups"
+msgstr "𐑩𐑤𐑬 popups"
 
 #: ../data/epiphany.schemas.in.h:4
 msgid ""
@@ -136,6 +187,16 @@ msgstr "𐑷𐑤𐑢𐑱𐑟 𐑖𐑴 𐑞 𐑑𐑨𐑚 𐑚𐑸"
 msgid "Automatic downloads"
 msgstr "𐑷𐑑𐑴𐑥𐑨𐑑𐑦𐑒 𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
 
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:7
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑥𐑨𐑯𐑦𐑡 𐑪𐑓𐑤𐑲𐑯 𐑕𐑑𐑱𐑑𐑫𐑕 𐑢𐑦𐑞 NetworkManager"
+
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:8
+msgid "Browse with caret"
+msgstr "𐑚𐑮𐑬𐑟 𐑢𐑦𐑞 caret"
+
 #: ../data/epiphany.schemas.in.h:9
 msgid "Cookie accept"
 msgstr "𐑒𐑫𐑒𐑦 𐑨𐑒𐑕𐑧𐑐𐑑"
@@ -144,19 +205,67 @@ msgstr "𐑒𐑫𐑒𐑦 𐑨𐑒𐑕𐑧𐑐𐑑"
 msgid "Default encoding"
 msgstr "𐑛𐑦𐑓𐑷𐑤𐑑 𐑧𐑯𐑒𐑴𐑛𐑦𐑙"
 
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:11
+msgid ""
+"Default encoding. Accepted values are: \"armscii-8\", \"Big5\", "
+"\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
+"\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", "
+"\"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", "
+"\"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
+"\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", "
+"\"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", "
+"\"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
+"\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", "
+"\"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", "
+"\"windows-1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", "
+"\"windows-1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", "
+"\"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", "
+"\"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
+"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
+"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
+"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+"\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+msgstr ""
+"𐑛𐑦𐑓𐑷𐑤𐑑 𐑧𐑯𐑒𐑴𐑛𐑦𐑙. 𐑨𐑒𐑕𐑧𐑐𐑑𐑩𐑛 𐑝𐑨𐑤𐑿𐑟 𐑸: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", "
+"\"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", "
+"\"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", "
+"\"IBM866\", \"𐑲𐑕𐑴-2022-CN\", \"𐑲𐑕𐑴-2022-JP\", \"𐑲𐑕𐑴-2022-KR\", "
+"\"𐑲𐑕𐑴-8859-1\", \"𐑲𐑕𐑴-8859-2\", \"𐑲𐑕𐑴-8859-3\", \"𐑲𐑕𐑴-8859-4\", "
+"\"𐑲𐑕𐑴-8859-5\", \"𐑲𐑕𐑴-8859-6\", \"𐑲𐑕𐑴-8859-7\", \"𐑲𐑕𐑴-8859-8\", "
+"\"𐑲𐑕𐑴-8859-8-𐑲\", \"𐑲𐑕𐑴-8859-9\", \"𐑲𐑕𐑴-8859-10\", \"𐑲𐑕𐑴-8859-11\", "
+"\"𐑲𐑕𐑴-8859-13\", \"𐑲𐑕𐑴-8859-14\", \"𐑲𐑕𐑴-8859-15\", \"𐑲𐑕𐑴-8859-16\", "
+"\"𐑲𐑕𐑴-IR-111\", \"KOI8-𐑭𐑮\", \"KOI8-𐑘𐑵\", \"Shift_JIS\", \"𐑑𐑦𐑟-620\", "
+"\"UTF-7\", \"UTF-8\", \"VISCII\", \"𐑢𐑦𐑯𐑛𐑴𐑟-874\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1250\", "
+"\"𐑢𐑦𐑯𐑛𐑴𐑟-1251\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1252\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1253\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1254\", "
+"\"𐑢𐑦𐑯𐑛𐑴𐑟-1255\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1256\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1257\", \"𐑢𐑦𐑯𐑛𐑴𐑟-1258\", "
+"\"𐑧𐑒𐑕-euc-tw\", \"𐑧𐑒𐑕-gbk\", \"𐑧𐑒𐑕-johab\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑨𐑮𐑩𐑚𐑦𐑒\", "
+"\"𐑧𐑒𐑕-𐑥𐑨𐑒-ce\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑒𐑮𐑴𐑱𐑖𐑩𐑯\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑕𐑻𐑦𐑤𐑦𐑒\", "
+"\"𐑧𐑒𐑕-𐑥𐑨𐑒-devanagari\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑓𐑭𐑮𐑕𐑰\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑜𐑮𐑰𐑒\", "
+"\"𐑧𐑒𐑕-𐑥𐑨𐑒-gujarati\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-gurmukhi\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑣𐑰𐑚𐑮𐑵\", "
+"\"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑲𐑕𐑤𐑨𐑯𐑛𐑦𐑒\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑮𐑴𐑥𐑩𐑯\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑮𐑴𐑥𐑱𐑯𐑰𐑩𐑯\", "
+"\"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑑𐑻𐑒𐑦𐑖\", \"𐑧𐑒𐑕-𐑥𐑨𐑒-𐑘𐑵𐑒𐑮𐑱𐑯𐑰𐑩𐑯\", \"𐑧𐑒𐑕-𐑿𐑟𐑼-𐑛𐑦𐑓𐑲𐑯𐑛\", "
+"\"𐑧𐑒𐑕-𐑝𐑰𐑧𐑑-tcvn5712\", \"𐑧𐑒𐑕-𐑝𐑰𐑧𐑑-vps\" 𐑯 \"𐑧𐑒𐑕-𐑢𐑦𐑯𐑛𐑴𐑟-949\"."
+
 #: ../data/epiphany.schemas.in.h:12
 msgid "Default font type"
 msgstr "𐑛𐑦𐑓𐑷𐑤𐑑 𐑓𐑪𐑯𐑑 𐑑𐑲𐑐"
 
-#: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 ·𐑡𐑭𐑝𐑩"
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:13
+msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+msgstr "𐑛𐑦𐑓𐑷𐑤𐑑 𐑓𐑪𐑯𐑑 𐑑𐑲𐑐. 𐑐𐑪𐑕𐑩𐑚𐑩𐑤 𐑝𐑨𐑤𐑿𐑟 𐑸 \"serif\" 𐑯 \"𐑕𐑨𐑯𐑟-serif\"."
 
-#: ../data/epiphany.schemas.in.h:15
+#: ../data/epiphany.schemas.in.h:14
 msgid "Enable JavaScript"
 msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 ·𐑡𐑭𐑝𐑩𐑕𐑒𐑮𐑦𐑐𐑑"
 
-#: ../data/epiphany.schemas.in.h:16
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 𐑐𐑤𐑳𐑜𐑦𐑯𐑟"
+
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 𐑢𐑧𐑚 𐑦𐑯𐑕𐑐𐑧𐑒𐑑𐑻"
 
@@ -251,11 +360,21 @@ msgstr "𐑐𐑮𐑦𐑓𐑻𐑛 𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟, 𐑑𐑵 
 msgid "Remember passwords"
 msgstr "𐑮𐑦𐑥𐑧𐑥𐑚𐑼 𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
 
+#, fuzzy
 #: ../data/epiphany.schemas.in.h:36
+msgid "Search string for keywords entered in the URL bar."
+msgstr "𐑕𐑻𐑗 𐑕𐑑𐑮𐑦𐑙 𐑓𐑹 𐑒𐑰𐑢𐑻𐑛𐑟 𐑧𐑯𐑑𐑻𐑛 𐑦𐑯 𐑞 ·𐑿·𐑮·𐑤 𐑚𐑸."
+
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show bookmarks bar by default"
 msgstr "𐑖𐑴 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑚𐑸 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑"
 
+#, fuzzy
 #: ../data/epiphany.schemas.in.h:38
+msgid "Show statusbar by default"
+msgstr "𐑖𐑴 statusbar 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑"
+
+#: ../data/epiphany.schemas.in.h:39
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", "
 "\"last_three_days\", \"today\"."
@@ -263,27 +382,34 @@ msgstr ""
 "𐑖𐑴 𐑞 𐑣𐑦𐑕𐑑𐑼𐑦 𐑐𐑱𐑡𐑧𐑟 𐑝𐑦𐑟𐑩𐑑𐑩𐑛 \"ever\", \"last_two_days\", \"last_three_days\", "
 "\"today\"."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "𐑖𐑴 𐑞 𐑑𐑨𐑚 𐑚𐑸 𐑷𐑤𐑕𐑴 𐑢𐑧𐑯 𐑞𐑺 𐑦𐑟 𐑴𐑯𐑤𐑦 𐑢𐑳𐑯 𐑑𐑨𐑚 𐑴𐑐𐑩𐑯."
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "Show toolbars by default"
 msgstr "𐑖𐑴 𐑑𐑵𐑤𐑚𐑸𐑟 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache"
 msgstr "𐑕𐑲𐑟 𐑝 𐑛𐑦𐑕𐑒 𐑒𐑨𐑖"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid "Size of disk cache, in MB."
 msgstr "𐑕𐑲𐑟 𐑝 𐑛𐑦𐑕𐑒 𐑒𐑨𐑖, 𐑦𐑯 MB"
 
-#: ../data/epiphany.schemas.in.h:43
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:44
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr "𐑕𐑑𐑮𐑦𐑙 𐑞𐑨𐑑 𐑢𐑦𐑤 𐑚𐑰 𐑿𐑟𐑛 𐑨𐑟 𐑿𐑟𐑼 𐑱𐑡𐑩𐑯𐑑, 𐑑 𐑲𐑛𐑧𐑯𐑑𐑦𐑓𐑲 𐑞 𐑚𐑮𐑬𐑟𐑼 𐑑 𐑞 𐑢𐑧𐑚 𐑕𐑻𐑝𐑼𐑟."
+
+#: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
 msgstr "𐑞 𐑚𐑫𐑒𐑥𐑸𐑒 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑖𐑴𐑯 𐑦𐑯 𐑞 𐑧𐑛𐑦𐑑𐑹 𐑝𐑿"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -291,19 +417,47 @@ msgstr ""
 "𐑞 𐑚𐑫𐑒𐑥𐑸𐑒 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑖𐑴𐑯 𐑦𐑯 𐑞 𐑧𐑛𐑦𐑑𐑹 𐑝𐑿. 𐑝𐑨𐑤𐑦𐑛 𐑝𐑨𐑤𐑿𐑟 𐑦𐑯 𐑞 𐑤𐑦𐑕𐑑 𐑸 \"address\" 𐑯 "
 "\"title\"."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The currently selected fonts language"
 msgstr "𐑞 𐑒𐑳𐑮𐑩𐑯𐑑𐑤𐑦 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑪𐑯𐑑𐑕 𐑤𐑨𐑙𐑜𐑢𐑩𐑡"
 
-#: ../data/epiphany.schemas.in.h:47
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:48
+msgid ""
+"The currently selected fonts language. Valid values are \"ar\" (arabic), "
+"\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
+"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el\" "
+"(greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN\" "
+"(simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr\" "
+"(turkish), \"x-unicode\" (other languages), \"x-western\" (languages written "
+"in latin script), \"x-tamil\" (tamil) and \"x-devanagari\" (devanagari)."
+msgstr ""
+"𐑞 𐑒𐑳𐑮𐑩𐑯𐑑𐑤𐑦 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑪𐑯𐑑𐑕 𐑤𐑨𐑙𐑜𐑢𐑩𐑡. 𐑝𐑨𐑤𐑦𐑛 𐑝𐑨𐑤𐑿𐑟 𐑸 \"𐑭𐑮\" (𐑨𐑮𐑩𐑚𐑦𐑒), "
+"\"𐑧𐑒𐑕-𐑚𐑪𐑤𐑑𐑦𐑒\" (𐑚𐑪𐑤𐑑𐑦𐑒 𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟), \"𐑧𐑒𐑕-𐑕𐑧𐑯𐑑𐑮𐑩𐑤-𐑘𐑵𐑮𐑴\" (𐑕𐑧𐑯𐑑𐑮𐑩𐑤 𐑘𐑫𐑼𐑩𐑐𐑰𐑩𐑯 "
+"𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟), \"𐑧𐑒𐑕-𐑕𐑻𐑦𐑤𐑦𐑒\" (𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟 𐑮𐑦𐑑𐑩𐑯 𐑢𐑦𐑞 𐑕𐑻𐑦𐑤𐑦𐑒 𐑨𐑤𐑓𐑩𐑚𐑧𐑑), \"𐑧𐑤\" "
+"(𐑜𐑮𐑰𐑒), \"𐑣𐑰\" (𐑣𐑰𐑚𐑮𐑵), \"𐑘𐑭\" (𐑡𐑨𐑐𐑩𐑯𐑰𐑟), \"𐑒𐑴\" (𐑒𐑪𐑮𐑰𐑩𐑯), \"zh-CN\" "
+"(𐑕𐑦𐑥𐑐𐑤𐑩𐑓𐑲𐑛 𐑗𐑲𐑯𐑰𐑟), \"𐑔\" (𐑑𐑲), \"zh-TW\" (𐑑𐑮𐑩𐑛𐑦𐑖𐑩𐑯𐑩𐑤 𐑗𐑲𐑯𐑰𐑟), \"tr\" (𐑑𐑻𐑒𐑦𐑖), "
+"\"𐑧𐑒𐑕-·𐑿𐑯𐑦𐑒𐑴𐑛\" (𐑳𐑞𐑼 𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟), \"𐑧𐑒𐑕-𐑢𐑧𐑕𐑑𐑼𐑯\" (𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟 𐑮𐑦𐑑𐑩𐑯 𐑦𐑯 ·𐑤𐑨𐑑𐑦𐑯 "
+"𐑕𐑒𐑮𐑦𐑐𐑑), \"𐑧𐑒𐑕-𐑑𐑩𐑥𐑦𐑤\" (𐑑𐑩𐑥𐑦𐑤) 𐑯 \"𐑧𐑒𐑕-devanagari\" (devanagari)."
+
+#: ../data/epiphany.schemas.in.h:49
 msgid "The downloads folder"
 msgstr "𐑞 𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑓𐑴𐑤𐑛𐑼"
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
 msgstr "𐑞 𐑐𐑱𐑡 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑖𐑴𐑯 𐑦𐑯 𐑞 𐑣𐑦𐑕𐑑𐑼𐑦 𐑝𐑿"
 
-#: ../data/epiphany.schemas.in.h:50
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:51
+msgid ""
+"The page information shown in the history view. Valid values in the list are "
+"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
+msgstr ""
+"𐑞 𐑐𐑱𐑡 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑖𐑴𐑯 𐑦𐑯 𐑞 𐑣𐑦𐑕𐑑𐑼𐑦 𐑝𐑿. 𐑝𐑨𐑤𐑦𐑛 𐑝𐑨𐑤𐑿𐑟 𐑦𐑯 𐑞 𐑤𐑦𐑕𐑑 𐑸 \"ViewTitle\", "
+"\"ViewAddress\" 𐑯 \"ViewDateTime\"."
+
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -311,31 +465,51 @@ msgstr ""
 "𐑞 𐑐𐑭𐑔 𐑝 𐑞 𐑓𐑴𐑤𐑛𐑼 𐑢𐑺 𐑑 𐑛𐑬𐑯𐑤𐑴𐑛 𐑓𐑲𐑤𐑟 𐑑; 𐑹 \"Downloads\" 𐑑 𐑿𐑕 𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑛𐑬𐑯𐑤𐑴𐑛𐑟 "
 "𐑓𐑴𐑤𐑛𐑼, 𐑹 \"Desktop\" 𐑑 𐑿𐑕 𐑞 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑓𐑴𐑤𐑛𐑼."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Toolbar style"
 msgstr "𐑑𐑵𐑤𐑚𐑸 𐑕𐑑𐑲𐑤"
 
-#: ../data/epiphany.schemas.in.h:53
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:54
+msgid ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both\" "
+"(text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+msgstr ""
+"𐑑𐑵𐑤𐑚𐑸 𐑕𐑑𐑲𐑤. 𐑩𐑤𐑬𐑛 𐑝𐑨𐑤𐑿𐑟 𐑸 \"\" (𐑿𐑟 𐑯𐑴𐑥 𐑛𐑦𐑓𐑷𐑤𐑑 𐑕𐑑𐑲𐑤), \"𐑚𐑴𐑔\" (𐑑𐑧𐑒𐑕𐑑 𐑯 𐑲𐑒𐑪𐑯𐑟), "
+"\"𐑚𐑴𐑔-horiz\" (𐑑𐑧𐑒𐑕𐑑 𐑚𐑦𐑕𐑲𐑛𐑟 𐑲𐑒𐑪𐑯𐑟), \"𐑲𐑒𐑪𐑯𐑟\", 𐑯 \"𐑑𐑧𐑒𐑕𐑑\"."
+
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:55
+msgid "URL Search"
+msgstr "·𐑿·𐑮·𐑤 𐑕𐑻𐑗"
+
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
 msgstr "𐑿𐑟 𐑴𐑯 𐑒𐑳𐑤𐑼𐑟"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:57
 msgid "Use own fonts"
 msgstr "𐑿𐑟 𐑴𐑯 𐑓𐑪𐑯𐑑𐑕"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:58
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "𐑿𐑟 𐑿𐑼 𐑴𐑯 𐑒𐑳𐑤𐑼𐑟 𐑦𐑯𐑕𐑑𐑧𐑛 𐑝 𐑞 𐑒𐑳𐑤𐑼𐑟 𐑞 𐑐𐑱𐑡 𐑮𐑦𐑒𐑢𐑧𐑕𐑑𐑕."
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:59
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "𐑿𐑟 𐑿𐑼 𐑴𐑯 𐑓𐑪𐑯𐑑𐑕 𐑦𐑯𐑕𐑑𐑧𐑛 𐑝 𐑞 𐑓𐑪𐑯𐑑𐑕 𐑞 𐑐𐑱𐑡 𐑮𐑦𐑒𐑢𐑧𐑕𐑑𐑕."
 
-#: ../data/epiphany.schemas.in.h:57
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:60
+msgid "User agent"
+msgstr "𐑿𐑟𐑼 𐑱𐑡𐑩𐑯𐑑"
+
+#: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
 msgstr "𐑝𐑦𐑟𐑦𐑚𐑦𐑤𐑦𐑑𐑦 𐑝 𐑞 𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑢𐑦𐑯𐑛𐑴"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -343,212 +517,645 @@ msgstr ""
 "𐑢𐑧𐑯 𐑓𐑲𐑤𐑟 𐑒𐑨𐑯𐑪𐑑 𐑚𐑰 𐑴𐑐𐑩𐑯𐑛 𐑚𐑲 𐑞 𐑚𐑮𐑬𐑟𐑼 𐑞𐑱 𐑸 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑛𐑬𐑯𐑤𐑴𐑛𐑩𐑛 𐑑 𐑞 𐑛𐑬𐑯𐑤𐑴𐑛 𐑓𐑴𐑤𐑛𐑼 "
 "𐑯 𐑴𐑐𐑩𐑯𐑛 𐑢𐑦𐑞 𐑞 𐑩𐑐𐑮𐑴𐑐𐑮𐑦𐑩𐑑 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:63
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
-"𐑢𐑺 𐑑 𐑨𐑒𐑕𐑧𐑐𐑑 𐑒𐑫𐑒𐑦𐑟 𐑓𐑮𐑪𐑥. 𐑐𐑪𐑕𐑩𐑚𐑩𐑤 𐑝𐑨𐑤𐑿𐑟 𐑸 \"anywhere\", \"current site\" 𐑯 \"nowhere\"."
+"𐑢𐑺 𐑑 𐑨𐑒𐑕𐑧𐑐𐑑 𐑒𐑫𐑒𐑦𐑟 𐑓𐑮𐑪𐑥. 𐑐𐑪𐑕𐑩𐑚𐑩𐑤 𐑝𐑨𐑤𐑿𐑟 𐑸 \"anywhere\", \"current site\" 𐑯 "
+"\"nowhere\"."
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the background color"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛 𐑒𐑳𐑤𐑼"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the background images"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛 𐑦𐑥𐑦𐑡𐑩𐑟"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to print the date in the footer"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑛𐑱𐑑 𐑦𐑯 𐑞 𐑓𐑫𐑑𐑼"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:67
 msgid "Whether to print the page address in the header"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑐𐑱𐑡 𐑩𐑛𐑮𐑧𐑕 𐑦𐑯 𐑞 𐑣𐑧𐑛𐑼"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:68
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑐𐑱𐑡 𐑯𐑳𐑥𐑚𐑼𐑟 (x 𐑝 𐑑𐑴𐑑𐑩𐑤) 𐑦𐑯 𐑞 𐑓𐑫𐑑𐑼"
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:69
 msgid "Whether to print the page title in the header"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞 𐑐𐑱𐑡 𐑑𐑲𐑑𐑩𐑤 𐑦𐑯 𐑞 𐑣𐑧𐑛𐑼"
 
-#: ../data/epiphany.schemas.in.h:67
+#, fuzzy
+#: ../data/epiphany.schemas.in.h:70
+msgid "Whether to store and prefill passwords in web sites."
+msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑕𐑑𐑹 𐑯 prefill 𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑦𐑯 𐑢𐑧𐑚 𐑕𐑲𐑑𐑕."
+
+#: ../data/epiphany.schemas.in.h:71
 msgid "x-western"
 msgstr "x-western"
 
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:1
+msgid "<b>Fingerprints</b>"
+msgstr "<𐑚𐑰>𐑓𐑦𐑙𐑜𐑼𐑐𐑮𐑦𐑯𐑑𐑕</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:2
+msgid "<b>Issued By</b>"
+msgstr "<𐑚𐑰>𐑦𐑖𐑵𐑛 𐑚𐑲</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:3
+msgid "<b>Issued To</b>"
+msgstr "<𐑚𐑰>𐑦𐑖𐑵𐑛 𐑑</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:4
+msgid "<b>Validity</b>"
+msgstr "<𐑚𐑰>𐑝𐑩𐑤𐑦𐑛𐑩𐑑𐑰</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:5
+msgid "Certificate _Fields"
+msgstr "𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 _Fields"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:6
+msgid "Certificate _Hierarchy"
+msgstr "𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 _Hierarchy"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:7
+msgid "Common Name:"
+msgstr "𐑒𐑪𐑥𐑩𐑯 𐑯𐑱𐑥:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:8
+msgid "Details"
+msgstr "𐑛𐑰𐑑𐑱𐑤𐑟"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:9
+msgid "Expires On:"
+msgstr "𐑦𐑒𐑕𐑐𐑲𐑻𐑟 𐑪𐑯:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:10
+msgid "Field _Value"
+msgstr "𐑓𐑰𐑤𐑛 _Value"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
+msgid "General"
+msgstr "𐑡𐑧𐑯𐑼𐑩𐑤"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:12
+msgid "Issued On:"
+msgstr "𐑦𐑖𐑵𐑛 𐑪𐑯:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:13
+msgid "MD5 Fingerprint:"
+msgstr "MD5 𐑓𐑦𐑙𐑜𐑼𐑐𐑮𐑦𐑯𐑑:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:14
+msgid "Organization:"
+msgstr "𐑹𐑜𐑩𐑯𐑦𐑟𐑱𐑖𐑩𐑯:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:15
+msgid "Organizational Unit:"
+msgstr "𐑪𐑮𐑜𐑩𐑯𐑩𐑟𐑱𐑖𐑩𐑯𐑩𐑤 𐑿𐑯𐑦𐑑:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:16
+msgid "SHA1 Fingerprint:"
+msgstr "SHA1 𐑓𐑦𐑙𐑜𐑼𐑐𐑮𐑦𐑯𐑑:"
+
+#, fuzzy
+#: ../data/glade/certificate-dialogs.ui.h:17
+msgid "Serial Number:"
+msgstr "𐑕𐑦𐑮𐑰𐑩𐑤 𐑯𐑳𐑥𐑚𐑼:"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:1
+msgid "<b>_Automatic</b>"
+msgstr "<𐑚𐑰>_Automatic</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:2
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<𐑚𐑰>_Use 𐑩 𐑛𐑦𐑓𐑼𐑩𐑯𐑑 𐑧𐑯𐑒𐑴𐑛𐑦𐑙:</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:3
+msgid "Clear _All..."
+msgstr "𐑒𐑤𐑽 _All..."
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:4
+msgid "Cookies"
+msgstr "𐑒𐑫𐑒𐑦𐑟"
+
+#. The name of the default downloads folder
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:912
+msgid "Downloads"
+msgstr "𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:6
+msgid "Passwords"
+msgstr "𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:7
+msgid "Personal Data"
+msgstr "𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑛𐑱𐑑𐑩"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:8
+msgid "Text Encoding"
+msgstr "𐑑𐑧𐑒𐑕𐑑 𐑧𐑯𐑒𐑴𐑛𐑦𐑙"
+
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
+msgid "Use the encoding specified by the document"
+msgstr "𐑿𐑕 𐑞 𐑧𐑯𐑒𐑴𐑛𐑦𐑙 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛 𐑚𐑲 𐑞 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑"
+
+#, fuzzy
+#: ../data/glade/epiphany.ui.h:10
+msgid "_Show passwords"
+msgstr "_Show 𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
+
+#, fuzzy
+#: ../data/glade/form-signing-dialog.ui.h:1
+msgid "Sign Text"
+msgstr "𐑕𐑲𐑯 𐑑𐑧𐑒𐑕𐑑"
+
+#, fuzzy
+#: ../data/glade/form-signing-dialog.ui.h:2
+msgid ""
+"To confirm that you want to sign the above text, choose a certificate to sign "
+"the text with and enter its password below."
+msgstr ""
+"𐑑 𐑒𐑪𐑯𐑓𐑻𐑥 𐑞𐑨𐑑 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑕𐑲𐑯 𐑞 𐑩𐑚𐑳𐑝 𐑑𐑧𐑒𐑕𐑑, 𐑗𐑵𐑟 𐑩 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 𐑑 𐑕𐑲𐑯 𐑞 𐑑𐑧𐑒𐑕𐑑 𐑢𐑦𐑞 𐑯 "
+"𐑧𐑯𐑑𐑼 𐑦𐑑𐑕 𐑐𐑭𐑕𐑢𐑼𐑛 𐑚𐑩𐑤𐑴."
+
+#, fuzzy
+#: ../data/glade/form-signing-dialog.ui.h:3
+msgid "_Certificate:"
+msgstr "_Certificate:"
+
+#, fuzzy
+#: ../data/glade/form-signing-dialog.ui.h:4
+msgid "_Password:"
+msgstr "_Password:"
+
+#, fuzzy
+#: ../data/glade/form-signing-dialog.ui.h:5
+msgid "_View Certificate&#x2026;"
+msgstr "_View 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑&#x2026;"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:1
+msgid "<b>Cookies</b>"
+msgstr "<𐑚𐑰>𐑒𐑫𐑒𐑦𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:2
+msgid "<b>Downloads</b>"
+msgstr "<𐑚𐑰>𐑛𐑬𐑯𐑤𐑴𐑛𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:3
+msgid "<b>Encodings</b>"
+msgstr "<𐑚𐑰>Encodings</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:4
+msgid "<b>Home page</b>"
+msgstr "<𐑚𐑰>𐑣𐑴𐑥 𐑐𐑱𐑡</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:5
+msgid "<b>Languages</b>"
+msgstr "<𐑚𐑰>𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑩𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:6
+msgid "<b>Passwords</b>"
+msgstr "<𐑚𐑰>𐑐𐑭𐑕𐑢𐑼𐑛𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:7
+msgid "<b>Temporary Files</b>"
+msgstr "<𐑚𐑰>𐑑𐑧𐑥𐑐𐑼𐑼𐑦 𐑓𐑲𐑤𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:8
+msgid "<b>Web Content</b>"
+msgstr "<𐑚𐑰>𐑢𐑧𐑚 𐑒𐑪𐑯𐑑𐑧𐑯𐑑</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:9
+msgid "<b>Web Development</b>"
+msgstr "<𐑚𐑰>𐑢𐑧𐑚 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑥𐑩𐑯𐑑</𐑚𐑰>"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:11
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<𐑕𐑥𐑷𐑤>𐑓𐑹 𐑦𐑜𐑟𐑭𐑥𐑐𐑩𐑤, 𐑯𐑪𐑑 𐑓𐑮𐑪𐑥 𐑨𐑛𐑝𐑼𐑑𐑲𐑟𐑼𐑟 𐑪𐑯 𐑞𐑰𐑟 𐑕𐑲𐑑𐑕</𐑕𐑥𐑷𐑤>"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:12
+msgid "A_utomatically download and open files"
+msgstr "A_utomatically 𐑛𐑬𐑯𐑤𐑴𐑛 𐑯 𐑴𐑐𐑩𐑯 𐑓𐑲𐑤𐑟"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:13
+msgid "Add Language"
+msgstr "𐑨𐑛 𐑤𐑨𐑙𐑜𐑢𐑩𐑡"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:14
+msgid "Allow popup _windows"
+msgstr "𐑩𐑤𐑬 𐑐𐑪𐑐𐑳𐑐 _windows"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:15
+msgid "Choose a l_anguage:"
+msgstr "𐑗𐑵𐑟 𐑩 l_anguage:"
+
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:680
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:388
+msgid "Cl_ear"
+msgstr "𐑒𐑤_𐑽"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:17
+msgid "De_fault:"
+msgstr "De_fault:"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:18
+msgid "Enable Java_Script"
+msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 Java_Script"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Plugins"
+msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 _Plugins"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:21
+msgid "Fonts & Style"
+msgstr "𐑓𐑪𐑯𐑑𐑕 & 𐑕𐑑𐑲𐑤"
+
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:819
+msgid "Language"
+msgstr "𐑤𐑨𐑙𐑜𐑢𐑩𐑡"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:24
+msgid "Let web pages specify their own _fonts"
+msgstr "𐑤𐑧𐑑 𐑢𐑧𐑚 𐑐𐑱𐑡𐑧𐑟 𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞𐑺 𐑴𐑯 _fonts"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:25
+msgid "Let web pages specify their own c_olors"
+msgstr "𐑤𐑧𐑑 𐑢𐑧𐑚 𐑐𐑱𐑡𐑧𐑟 𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞𐑺 𐑴𐑯 c_olors"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:26
+msgid "MB"
+msgstr "·𐑥·𐑚"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:27
+msgid "Only _from sites you visit"
+msgstr "𐑴𐑯𐑤𐑦 _from 𐑕𐑲𐑑𐑕 𐑿 𐑝𐑦𐑟𐑦𐑑"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:28
+msgid "Preferences"
+msgstr "𐑐𐑮𐑧𐑓𐑼𐑩𐑯𐑕𐑩𐑟"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:29
+msgid "Privacy"
+msgstr "𐑐𐑮𐑲𐑝𐑩𐑕𐑦"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:30
+msgid "Set to Current _Page"
+msgstr "𐑕𐑧𐑑 𐑑 𐑒𐑳𐑮𐑩𐑯𐑑 _Page"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:31
+msgid "Set to _Blank Page"
+msgstr "𐑕𐑧𐑑 𐑑 _Blank 𐑐𐑱𐑡"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:32
+msgid "Use custom _stylesheet"
+msgstr "𐑿𐑟 𐑒𐑳𐑕𐑑𐑩𐑥 _stylesheet"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:33
+msgid "_Address:"
+msgstr "_Address:"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:34
+msgid "_Always accept"
+msgstr "_Always 𐑨𐑒𐑕𐑧𐑐𐑑"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:35
+msgid "_Disk space:"
+msgstr "_Disk 𐑕𐑐𐑱𐑕:"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:36
+msgid "_Download folder:"
+msgstr "_Download 𐑓𐑴𐑤𐑛𐑼:"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:37
+msgid "_Edit Stylesheet&#x2026;"
+msgstr "_Edit Stylesheet&#x2026;"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:38
+msgid "_Minimum size:"
+msgstr "_Minimum 𐑕𐑲𐑟:"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Never accept"
+msgstr "_Never 𐑨𐑒𐑕𐑧𐑐𐑑"
+
+#, fuzzy
+#: ../data/glade/prefs-dialog.ui.h:40
+msgid "_Remember passwords"
+msgstr "_Remember 𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:1
+msgid "<b>Background</b>"
+msgstr "<𐑚𐑰>𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:2
+msgid "<b>Footers</b>"
+msgstr "<𐑚𐑰>𐑓𐑫𐑑𐑼𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:3
+msgid "<b>Frames</b>"
+msgstr "<𐑚𐑰>𐑓𐑮𐑱𐑥𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:4
+msgid "<b>Headers</b>"
+msgstr "<𐑚𐑰>𐑣𐑧𐑛𐑼𐑟</𐑚𐑰>"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:5
+msgid "As laid out on the _screen"
+msgstr "𐑨𐑟 𐑤𐑱𐑛 𐑬𐑑 𐑪𐑯 𐑞 _screen"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:6
+msgid "O_nly the selected frame"
+msgstr "O_nly 𐑞 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑮𐑱𐑥"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:7
+msgid "P_age title"
+msgstr "P_age 𐑑𐑲𐑑𐑩𐑤"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:8
+msgid "Page _numbers"
+msgstr "𐑐𐑱𐑡 _numbers"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:9
+msgid "Print background c_olors"
+msgstr "𐑐𐑮𐑦𐑯𐑑 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛 c_olors"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:10
+msgid "Print background i_mages"
+msgstr "𐑐𐑮𐑦𐑯𐑑 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛 i_mages"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:11
+msgid "_Date"
+msgstr "_Date"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:12
+msgid "_Each frame separately"
+msgstr "_Each 𐑓𐑮𐑱𐑥 𐑕𐑧𐑐𐑼𐑩𐑑𐑤𐑦"
+
+#, fuzzy
+#: ../data/glade/print.ui.h:13
+msgid "_Page address"
+msgstr "_Page 𐑩𐑛𐑮𐑧𐑕"
+
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:166
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "_𐑖𐑴 𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
 
-#: ../embed/downloader-view.c:308
 #, c-format
+#: ../embed/downloader-view.c:371
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:312
 #, c-format
+#: ../embed/downloader-view.c:375
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_𐑐𐑷𐑟"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_𐑮𐑩𐑟𐑿𐑥"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:379 ../embed/downloader-view.c:532
-#: ../embed/downloader-view.c:537 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1755
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "𐑳𐑯𐑴𐑯"
 
-#: ../embed/downloader-view.c:495
 #, c-format
+#: ../embed/downloader-view.c:577
 msgid "The file “%s” has been downloaded."
 msgstr "𐑞 𐑓𐑲𐑤 “%s” 𐑣𐑨𐑟 𐑚𐑰𐑯 𐑛𐑬𐑯𐑤𐑴𐑛𐑩𐑛."
 
-#: ../embed/downloader-view.c:498
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "𐑛𐑬𐑯𐑤𐑴𐑛 𐑓𐑦𐑯𐑦𐑖𐑑"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:522
 #, c-format
-msgid ""
-"%s\n"
-"%s of %s"
-msgstr ""
-"%s\n"
-"%s 𐑝 %s"
+#: ../embed/downloader-view.c:598
+msgid "%s\n%s of %s"
+msgstr "%s\n%s 𐑝 %s"
 
-#: ../embed/downloader-view.c:569
 #, c-format
+#: ../embed/downloader-view.c:645
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d 𐑛𐑬𐑯𐑤𐑴𐑛"
 msgstr[1] "%d 𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
 
-#: ../embed/downloader-view.c:704
 #, c-format
+#: ../embed/downloader-view.c:762
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "𐑞 𐑓𐑲𐑤 “%s” 𐑣𐑨𐑟 𐑚𐑰𐑯 𐑨𐑛𐑩𐑛 𐑑 𐑞 𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑒𐑿."
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "𐑛𐑬𐑯𐑤𐑴𐑛 𐑕𐑑𐑸𐑑𐑩𐑛"
 
-#: ../embed/downloader-view.c:786 ../embed/downloader-view.c:796
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "𐑳𐑯𐑴𐑯"
 
-#: ../embed/downloader-view.c:789
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "𐑓𐑱𐑤𐑛"
 
-#: ../embed/downloader-view.c:792
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "𐑒𐑨𐑯𐑕𐑩𐑤𐑛"
 
-#: ../embed/downloader-view.c:855 ../src/bookmarks/ephy-bookmarks-editor.c:991
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "𐑓𐑲𐑤"
 
-#: ../embed/downloader-view.c:878
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:889
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "𐑮𐑦𐑥𐑱𐑯𐑦𐑙"
 
-#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
+#: ../embed/ephy-embed.c:335 ../embed/ephy-embed-persist.c:823
+#: ../src/window-commands.c:343
 msgid "Save"
 msgstr "𐑕𐑱𐑝"
 
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:590
 msgctxt "file type"
 msgid "Unknown"
 msgstr "𐑳𐑯𐑴𐑯"
 
-#: ../embed/ephy-embed.c:687
+#: ../embed/ephy-embed.c:609
 msgid "Download this potentially unsafe file?"
 msgstr "𐑛𐑬𐑯𐑤𐑴𐑛 𐑞𐑦𐑕 𐑐𐑩𐑑𐑧𐑯𐑖𐑩𐑤𐑰 𐑩𐑯𐑕𐑱𐑓 𐑓𐑲𐑤?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:692
 #, c-format
+#: ../embed/ephy-embed.c:614
 msgid ""
-"File Type: “%s”.\n"
-"\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
+"File Type: “%s”.\n\nIt is unsafe to open “%s” as it could potentially damage "
+"your documents or invade your privacy. You can download it instead."
 msgstr ""
-"𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n"
-"\n"
-"𐑦𐑑 𐑦𐑟 𐑩𐑯𐑕𐑱𐑓 𐑑 𐑴𐑐𐑩𐑯 “%s” 𐑨𐑟 𐑦𐑑 𐑒𐑫𐑛 𐑐𐑩𐑑𐑧𐑯𐑖𐑩𐑤𐑰 𐑛𐑨𐑥𐑦𐑡 𐑿𐑼 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑𐑕 𐑹 𐑦𐑯𐑝𐑱𐑛 𐑿𐑼 "
-"𐑐𐑮𐑲𐑝𐑩𐑕𐑦. 𐑿 𐑒𐑨𐑯 𐑛𐑬𐑯𐑤𐑴𐑛 𐑦𐑑 𐑦𐑯𐑕𐑑𐑧𐑛."
+"𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n\n𐑦𐑑 𐑦𐑟 𐑩𐑯𐑕𐑱𐑓 𐑑 𐑴𐑐𐑩𐑯 “%s” 𐑨𐑟 𐑦𐑑 𐑒𐑫𐑛 𐑐𐑩𐑑𐑧𐑯𐑖𐑩𐑤𐑰 𐑛𐑨𐑥𐑦𐑡 𐑿𐑼 "
+"𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑𐑕 𐑹 𐑦𐑯𐑝𐑱𐑛 𐑿𐑼 𐑐𐑮𐑲𐑝𐑩𐑕𐑦. 𐑿 𐑒𐑨𐑯 𐑛𐑬𐑯𐑤𐑴𐑛 𐑦𐑑 𐑦𐑯𐑕𐑑𐑧𐑛."
 
-#: ../embed/ephy-embed.c:700
+#: ../embed/ephy-embed.c:623
 msgid "Open this file?"
 msgstr "𐑴𐑐𐑩𐑯 𐑞𐑦𐑕 𐑓𐑲𐑤?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:706
 #, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You can open “%s” using “%s” or save it."
-msgstr ""
-"𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n"
-"\n"
-"𐑿 𐑒𐑨𐑯 𐑴𐑐𐑩𐑯 “%s” 𐑿𐑟𐑦𐑙 “%s” 𐑹 𐑕𐑱𐑝 𐑦𐑑."
+#: ../embed/ephy-embed.c:629
+msgid "File Type: “%s”.\n\nYou can open “%s” using “%s” or save it."
+msgstr "𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n\n𐑿 𐑒𐑨𐑯 𐑴𐑐𐑩𐑯 “%s” 𐑿𐑟𐑦𐑙 “%s” 𐑹 𐑕𐑱𐑝 𐑦𐑑."
 
-#: ../embed/ephy-embed.c:713
+#: ../embed/ephy-embed.c:636
 msgid "Download this file?"
 msgstr "𐑛𐑬𐑯𐑤𐑴𐑛 𐑞𐑦𐑕 𐑓𐑲𐑤?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/ephy-embed.c:718
 #, c-format
+#: ../embed/ephy-embed.c:641
 msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You have no application able to open “%s”. You can download it instead."
+"File Type: “%s”.\n\nYou have no application able to open “%s”. You can "
+"download it instead."
 msgstr ""
-"𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n"
-"\n"
-"𐑿 𐑣𐑨𐑝 𐑯𐑴 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑱𐑚𐑩𐑤 𐑑 𐑴𐑐𐑩𐑯 “%s”. 𐑿 𐑒𐑨𐑯 𐑛𐑬𐑯𐑤𐑴𐑛 𐑦𐑑 𐑦𐑯𐑕𐑑𐑧𐑛."
+"𐑓𐑲𐑤 𐑑𐑲𐑐: “%s”.\n\n𐑿 𐑣𐑨𐑝 𐑯𐑴 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑱𐑚𐑩𐑤 𐑑 𐑴𐑐𐑩𐑯 “%s”. 𐑿 𐑒𐑨𐑯 𐑛𐑬𐑯𐑤𐑴𐑛 𐑦𐑑 𐑦𐑯𐑕𐑑𐑧𐑛."
 
-#: ../embed/ephy-embed.c:725
+#: ../embed/ephy-embed.c:648
 msgid "_Save As..."
 msgstr "_𐑕𐑱𐑝 𐑨𐑟..."
 
-#: ../embed/ephy-embed.c:850
+#: ../embed/ephy-embed.c:818
 msgid "Web Inspector"
 msgstr "𐑢𐑧𐑚 𐑦𐑯𐑕𐑐𐑧𐑒𐑑𐑻"
 
-#: ../embed/ephy-embed-utils.c:61
+#, fuzzy
+#: ../embed/ephy-embed-shell.c:259
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "𐑦𐑐𐑦𐑓𐑩𐑯𐑰 𐑒𐑭𐑯𐑑 𐑚𐑰 𐑿𐑟𐑛 𐑯𐑬. Initialization 𐑓𐑱𐑤𐑛."
+
+#, fuzzy
+#: ../embed/ephy-embed-single.c:494
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"𐑒𐑩 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑𐑕 𐑓𐑲𐑤 𐑢𐑰 𐑖𐑫𐑛 𐑿𐑕 𐑢𐑪𐑟 𐑯𐑪𐑑 𐑓𐑬𐑯𐑛, 𐑷𐑤 ·𐑕·𐑕·𐑤 𐑕𐑲𐑑𐑕 𐑢𐑦𐑤 𐑚𐑰 𐑒𐑩𐑯𐑕𐑦𐑛𐑼𐑛 𐑑 "
+"𐑣𐑨𐑝 𐑩 𐑚𐑮𐑴𐑒𐑩𐑯 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑."
+
 #, c-format
+#: ../embed/ephy-embed-utils.c:60
 msgid "Send an email message to “%s”"
 msgstr "𐑕𐑧𐑯𐑛 𐑩𐑯 𐑰𐑥𐑱𐑤 𐑥𐑧𐑕𐑦𐑡 𐑑 “%s”"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:58
+msgid "Arabic (_IBM-864)"
+msgstr "𐑨𐑮𐑩𐑚𐑦𐑒 (_IBM-864)"
 
 #: ../embed/ephy-encodings.c:59
 msgid "Arabic (ISO-_8859-6)"
 msgstr "𐑸𐑩𐑚𐑦𐑒 (ISO-_8859-6)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:60
+msgid "Arabic (_MacArabic)"
+msgstr "𐑨𐑮𐑩𐑚𐑦𐑒 (_MacArabic)"
 
 #: ../embed/ephy-encodings.c:61
 msgid "Arabic (_Windows-1256)"
@@ -566,13 +1173,28 @@ msgstr "𐑚𐑪𐑤𐑑𐑦𐑒 (I_SO-8859-4)"
 msgid "Baltic (_Windows-1257)"
 msgstr "𐑚𐑪𐑤𐑑𐑦𐑒 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1257)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:65
+msgid "_Armenian (ARMSCII-8)"
+msgstr "_Armenian (ARMSCII-8)"
+
 #: ../embed/ephy-encodings.c:66
 msgid "_Georgian (GEOSTD8)"
 msgstr "_𐑡𐑪𐑮𐑡𐑩𐑯 (GEOSTD8)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:67
+msgid "Central European (_IBM-852)"
+msgstr "𐑕𐑧𐑯𐑑𐑮𐑩𐑤 𐑘𐑫𐑼𐑩𐑐𐑰𐑩𐑯 (_IBM-852)"
+
 #: ../embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
 msgstr "𐑕𐑧𐑯𐑑𐑮𐑩𐑤 𐑘𐑫𐑼𐑩𐑐𐑰𐑩𐑯 (I_SO-8859-2)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:69
+msgid "Central European (_MacCE)"
+msgstr "𐑕𐑧𐑯𐑑𐑮𐑩𐑤 𐑘𐑫𐑼𐑩𐑐𐑰𐑩𐑯 (_MacCE)"
 
 #: ../embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
@@ -590,6 +1212,16 @@ msgstr "𐑗𐑲𐑯𐑰𐑟 𐑕𐑦𐑥𐑐𐑤𐑩𐑓𐑲𐑛 (G_B2312)"
 msgid "Chinese Simplified (GB_K)"
 msgstr "𐑗𐑲𐑯𐑰𐑟 𐑕𐑦𐑥𐑐𐑤𐑩𐑓𐑲𐑛 (GB_K)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:74
+msgid "Chinese Simplified (_HZ)"
+msgstr "𐑗𐑲𐑯𐑰𐑟 𐑕𐑦𐑥𐑐𐑤𐑩𐑓𐑲𐑛 (_HZ)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:75
+msgid "Chinese Simplified (_ISO-2022-CN)"
+msgstr "𐑗𐑲𐑯𐑰𐑟 𐑕𐑦𐑥𐑐𐑤𐑩𐑓𐑲𐑛 (_ISO-2022-CN)"
+
 #: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big_5)"
 msgstr "𐑗𐑲𐑯𐑰𐑟 𐑑𐑮𐑩𐑛𐑦𐑖𐑩𐑯𐑩𐑤 (Big_5)"
@@ -598,33 +1230,83 @@ msgstr "𐑗𐑲𐑯𐑰𐑟 𐑑𐑮𐑩𐑛𐑦𐑖𐑩𐑯𐑩𐑤 (Big_5)"
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "𐑗𐑲𐑯𐑰𐑟 𐑑𐑮𐑩𐑛𐑦𐑖𐑩𐑯𐑩𐑤 (Big5-HK_SCS)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:78
+msgid "Chinese Traditional (_EUC-TW)"
+msgstr "𐑗𐑲𐑯𐑰𐑟 𐑑𐑮𐑩𐑛𐑦𐑖𐑩𐑯𐑩𐑤 (_EUC-TW)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:79
+msgid "Cyrillic (_IBM-855)"
+msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (_IBM-855)"
+
 #: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (I_SO-8859-5)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:81
+msgid "Cyrillic (IS_O-IR-111)"
+msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (IS_O-IR-111)"
 
 #: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_KOI8-R)"
 msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (_KOI8-𐑭𐑮)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:83
+msgid "Cyrillic (_MacCyrillic)"
+msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (_MacCyrillic)"
+
 #: ../embed/ephy-encodings.c:84
 msgid "Cyrillic (_Windows-1251)"
 msgstr "𐑕𐑻𐑦𐑤𐑦𐑒 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1251)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:85
+msgid "Cyrillic/_Russian (IBM-866)"
+msgstr "𐑕𐑻𐑦𐑤𐑦𐑒/_Russian (IBM-866)"
 
 #: ../embed/ephy-encodings.c:86
 msgid "Greek (_ISO-8859-7)"
 msgstr "𐑜𐑮𐑰𐑒 (_ISO-8859-7)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:87
+msgid "Greek (_MacGreek)"
+msgstr "𐑜𐑮𐑰𐑒 (_MacGreek)"
+
 #: ../embed/ephy-encodings.c:88
 msgid "Greek (_Windows-1253)"
 msgstr "𐑜𐑮𐑰𐑒 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1253)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:89
+msgid "Gujarati (_MacGujarati)"
+msgstr "Gujarati (_MacGujarati)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:90
+msgid "Gurmukhi (Mac_Gurmukhi)"
+msgstr "Gurmukhi (Mac_Gurmukhi)"
 
 #: ../embed/ephy-encodings.c:91
 msgid "Hindi (Mac_Devanagari)"
 msgstr "𐑣𐑦𐑯𐑛𐑰 (Mac_Devanagari)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:92
+msgid "Hebrew (_IBM-862)"
+msgstr "𐑣𐑰𐑚𐑮𐑵 (_IBM-862)"
+
 #: ../embed/ephy-encodings.c:93
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "𐑣𐑰𐑚𐑮𐑵 (IS_O-8859-8-𐑲)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:94
+msgid "Hebrew (_MacHebrew)"
+msgstr "𐑣𐑰𐑚𐑮𐑵 (_MacHebrew)"
 
 #: ../embed/ephy-encodings.c:95
 msgid "Hebrew (_Windows-1255)"
@@ -634,17 +1316,67 @@ msgstr "𐑣𐑰𐑚𐑮𐑵 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1255)"
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_𐑝𐑦𐑠𐑩𐑢𐑩𐑤 𐑣𐑰𐑚𐑮𐑵 (ISO-8859-8)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:97
+msgid "Japanese (_EUC-JP)"
+msgstr "𐑡𐑨𐑐𐑩𐑯𐑰𐑟 (_EUC-JP)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:98
+msgid "Japanese (_ISO-2022-JP)"
+msgstr "𐑡𐑨𐑐𐑩𐑯𐑰𐑟 (_ISO-2022-JP)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:99
+msgid "Japanese (_Shift-JIS)"
+msgstr "𐑡𐑨𐑐𐑩𐑯𐑰𐑟 (_Shift-JIS)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:100
+msgid "Korean (_EUC-KR)"
+msgstr "𐑒𐑪𐑮𐑰𐑩𐑯 (_EUC-KR)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:101
+msgid "Korean (_ISO-2022-KR)"
+msgstr "𐑒𐑪𐑮𐑰𐑩𐑯 (_ISO-2022-KR)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:102
+msgid "Korean (_JOHAB)"
+msgstr "𐑒𐑪𐑮𐑰𐑩𐑯 (_JOHAB)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:103
+msgid "Korean (_UHC)"
+msgstr "𐑒𐑪𐑮𐑰𐑩𐑯 (_UHC)"
+
 #: ../embed/ephy-encodings.c:104
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_𐑒𐑧𐑤𐑑𐑦𐑒 (ISO-8859-14)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:105
+msgid "_Icelandic (MacIcelandic)"
+msgstr "_Icelandic (MacIcelandic)"
 
 #: ../embed/ephy-encodings.c:106
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_𐑯𐑪𐑮𐑛𐑦𐑒 (ISO-8859-10)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:107
+msgid "_Persian (MacFarsi)"
+msgstr "_Persian (MacFarsi)"
+
 #: ../embed/ephy-encodings.c:108
 msgid "Croatian (Mac_Croatian)"
 msgstr "𐑒𐑮𐑴𐑱𐑖𐑩𐑯 (Mac_Croatian)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:109
+msgid "_Romanian (MacRomanian)"
+msgstr "_Romanian (MacRomanian)"
 
 #: ../embed/ephy-encodings.c:110
 msgid "R_omanian (ISO-8859-16)"
@@ -666,13 +1398,28 @@ msgstr "𐑑𐑲 (IS_O-8859-11)"
 msgid "_Thai (Windows-874)"
 msgstr "_𐑑𐑲 (·𐑢𐑦𐑯𐑛𐑴𐑟-874)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:115
+msgid "Turkish (_IBM-857)"
+msgstr "𐑑𐑻𐑒𐑦𐑖 (_IBM-857)"
+
 #: ../embed/ephy-encodings.c:116
 msgid "Turkish (I_SO-8859-9)"
 msgstr "𐑑𐑻𐑒𐑦𐑖 (I_SO-8859-9)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:117
+msgid "Turkish (_MacTurkish)"
+msgstr "𐑑𐑻𐑒𐑦𐑖 (_MacTurkish)"
+
 #: ../embed/ephy-encodings.c:118
 msgid "Turkish (_Windows-1254)"
 msgstr "𐑑𐑻𐑒𐑦𐑖 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1254)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:119
+msgid "Unicode (UTF-_8)"
+msgstr "·𐑿𐑯𐑦𐑒𐑴𐑛 (UTF-_8)"
 
 #: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
@@ -682,6 +1429,16 @@ msgstr "𐑕𐑻𐑦𐑤𐑦𐑒/𐑘𐑵𐑒𐑮𐑱𐑯𐑰𐑩𐑯 (_KOI8-�
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "𐑕𐑻𐑦𐑤𐑦𐑒/𐑘𐑵𐑒𐑮𐑱𐑯𐑰𐑩𐑯 (Mac_Ukrainian)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:122
+msgid "Vietnamese (_TCVN)"
+msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (_TCVN)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:123
+msgid "Vietnamese (_VISCII)"
+msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (_VISCII)"
+
 #: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (V_PS)"
 msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (V_PS)"
@@ -690,6 +1447,11 @@ msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (V_PS)"
 msgid "Vietnamese (_Windows-1258)"
 msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1258)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:126
+msgid "Western (_IBM-850)"
+msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (_IBM-850)"
+
 #: ../embed/ephy-encodings.c:127
 msgid "Western (_ISO-8859-1)"
 msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (_ISO-8859-1)"
@@ -697,6 +1459,11 @@ msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (_ISO-8859-1)"
 #: ../embed/ephy-encodings.c:128
 msgid "Western (IS_O-8859-15)"
 msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (IS_O-8859-15)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:129
+msgid "Western (_MacRoman)"
+msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (_MacRoman)"
 
 #: ../embed/ephy-encodings.c:130
 msgid "Western (_Windows-1252)"
@@ -709,11 +1476,31 @@ msgstr "𐑢𐑧𐑕𐑑𐑼𐑯 (_·𐑢𐑦𐑯𐑛𐑴𐑟-1252)"
 msgid "English (_US-ASCII)"
 msgstr "𐑦𐑙𐑤𐑦𐑖 (_US-ASCII)"
 
+#, fuzzy
+#: ../embed/ephy-encodings.c:136
+msgid "Unicode (UTF-_16 BE)"
+msgstr "·𐑿𐑯𐑦𐑒𐑴𐑛 (UTF-_16 𐑚𐑰)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:137
+msgid "Unicode (UTF-1_6 LE)"
+msgstr "·𐑿𐑯𐑦𐑒𐑴𐑛 (UTF-1_6 𐑤𐑩)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:138
+msgid "Unicode (UTF-_32 BE)"
+msgstr "·𐑿𐑯𐑦𐑒𐑴𐑛 (UTF-_32 𐑚𐑰)"
+
+#, fuzzy
+#: ../embed/ephy-encodings.c:139
+msgid "Unicode (UTF-3_2 LE)"
+msgstr "·𐑿𐑯𐑦𐑒𐑴𐑛 (UTF-3_2 𐑤𐑩)"
+
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:281
 #, c-format
+#: ../embed/ephy-encodings.c:281
 msgid "Unknown (%s)"
 msgstr "𐑳𐑯𐑴𐑯 (%s)"
 
@@ -732,68 +1519,98 @@ msgstr "𐑤𐑴𐑒𐑩𐑤 𐑓𐑲𐑤𐑟"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2183
-#: ../src/ephy-session.c:1342
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3322
+#: ../src/ephy-session.c:1418
 msgid "Blank page"
 msgstr "𐑚𐑤𐑨𐑙𐑒 𐑐𐑱𐑡"
 
-#: ../embed/ephy-web-view.c:1311
-#, c-format
-msgid "Redirecting to “%s”…"
-msgstr "𐑮𐑰𐑛𐑻𐑧𐑒𐑑𐑦𐑙 𐑑 “%s”…"
+#, fuzzy
+#: ../embed/ephy-web-view.c:929
+msgid "Not now"
+msgstr "𐑯𐑪𐑑 𐑯𐑬"
 
-#: ../embed/ephy-web-view.c:1313
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "𐑑𐑮𐑨𐑯𐑕𐑓𐑻𐑦𐑙 𐑛𐑱𐑑𐑩 𐑓𐑮𐑪𐑥 “%s”…"
+#, fuzzy
+#: ../embed/ephy-web-view.c:934
+msgid "Store password"
+msgstr "𐑕𐑑𐑹 𐑐𐑭𐑕𐑢𐑼𐑛"
 
-#: ../embed/ephy-web-view.c:1315
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "𐑢𐑱𐑑𐑦𐑙 𐑓𐑹 𐑷𐑔𐑼𐑦𐑟𐑱𐑖𐑩𐑯 𐑓𐑮𐑪𐑥 “%s”…"
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#, fuzzy, c-format
+#: ../embed/ephy-web-view.c:945
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr "<𐑚𐑦𐑜>𐑢𐑫𐑛 𐑿 𐑤𐑲𐑒 𐑑 𐑕𐑑𐑹 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 𐑓𐑹 <𐑚𐑰>%s</𐑚𐑰> 𐑦𐑯 <𐑚𐑰>%s</𐑚𐑰>?</𐑚𐑦𐑜>"
+
+#, fuzzy, c-format
+#: ../embed/ephy-web-view.c:2127
+msgid "A problem occurred while loading %s"
+msgstr "𐑩 𐑐𐑮𐑪𐑚𐑤𐑩𐑥 𐑪𐑒𐑻𐑛 𐑢𐑲𐑤 𐑤𐑴𐑛𐑦𐑙 %s"
+
+#, fuzzy, c-format
+#: ../embed/ephy-web-view.c:2268
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "·𐑣·𐑑·𐑑·𐑐://·𐑢·𐑢·𐑢.google.𐑒𐑪𐑥/𐑕𐑻𐑗?𐑒𐑘𐑵=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1321 ../embed/ephy-web-view.c:1428
 #, c-format
+#: ../embed/ephy-web-view.c:2563
 msgid "Loading “%s”…"
 msgstr "𐑤𐑴𐑛𐑦𐑙 “%s”…"
 
-#: ../embed/ephy-web-view.c:1430
+#: ../embed/ephy-web-view.c:2565
 msgid "Loading…"
 msgstr "𐑤𐑴𐑛𐑦𐑙…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:2383
 #, c-format
+#: ../embed/ephy-web-view.c:3526
 msgid "%s Files"
 msgstr "%s 𐑓𐑲𐑤𐑟"
 
-#: ../lib/egg/eggdesktopfile.c:165
+#, fuzzy, c-format
+#: ../lib/eel-gconf-extensions.c:67
+msgid "GConf error:\n  %s"
+msgstr "GConf 𐑻𐑼:\n  %s"
+
 #, c-format
+#: ../lib/egg/eggdesktopfile.c:165
 msgid "File is not a valid .desktop file"
 msgstr "𐑓𐑲𐑤 𐑦𐑟 𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 .desktop 𐑓𐑲𐑤"
 
-#: ../lib/egg/eggdesktopfile.c:188
 #, c-format
+#: ../lib/egg/eggdesktopfile.c:188
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑓𐑲𐑤 𐑝𐑻𐑠𐑩𐑯 '%s'"
 
-#: ../lib/egg/eggdesktopfile.c:958
 #, c-format
+#: ../lib/egg/eggdesktopfile.c:958
 msgid "Starting %s"
 msgstr "𐑕𐑑𐑸𐑑𐑦𐑙 %s"
 
-#: ../lib/egg/eggdesktopfile.c:1100
 #, c-format
+#: ../lib/egg/eggdesktopfile.c:1100
 msgid "Application does not accept documents on command line"
 msgstr "𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑛𐑳𐑟 𐑯𐑪𐑑 𐑨𐑒𐑕𐑧𐑐𐑑 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑𐑕 𐑪𐑯 𐑒𐑩𐑥𐑭𐑯𐑛 𐑤𐑲𐑯"
 
-#: ../lib/egg/eggdesktopfile.c:1168
 #, c-format
+#: ../lib/egg/eggdesktopfile.c:1168
 msgid "Unrecognized launch option: %d"
 msgstr "𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑤𐑷𐑯𐑗 𐑪𐑐𐑖𐑩𐑯: %d"
+
+#, fuzzy, c-format
+#: ../lib/egg/eggdesktopfile.c:1373
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr "𐑒𐑭𐑯𐑑 𐑐𐑭𐑕 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 URIs 𐑑 𐑩 '𐑑𐑲𐑐=𐑤𐑦𐑙𐑒' 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑧𐑯𐑑𐑮𐑦"
+
+#, fuzzy, c-format
+#: ../lib/egg/eggdesktopfile.c:1392
+msgid "Not a launchable item"
+msgstr "𐑯𐑪𐑑 𐑩 launchable 𐑲𐑑𐑩𐑥"
 
 #: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
@@ -822,6 +1639,18 @@ msgstr "𐑕𐑧𐑖𐑩𐑯 𐑥𐑨𐑯𐑩𐑡𐑥𐑩𐑯𐑑 𐑪𐑐𐑖�
 #: ../lib/egg/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "𐑖𐑴 𐑕𐑧𐑖𐑩𐑯 𐑥𐑨𐑯𐑩𐑡𐑥𐑩𐑯𐑑 𐑪𐑐𐑖𐑩𐑯𐑟"
+
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#, fuzzy, c-format
+#: ../lib/egg/egg-editable-toolbar.c:944
+msgid "Show “_%s”"
+msgstr "𐑖𐑴 “%s”"
 
 #: ../lib/egg/egg-editable-toolbar.c:1407
 msgid "_Move on Toolbar"
@@ -867,28 +1696,30 @@ msgstr "𐑦𐑥𐑦𐑡𐑩𐑟"
 msgid "All files"
 msgstr "𐑷𐑤 𐑓𐑲𐑤𐑟"
 
-#. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:105
-msgid "Downloads"
-msgstr "𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
+#. If we don't have XDG user dirs info, return an educated guess.
+#, fuzzy
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:916
+msgid "Desktop"
+msgstr "𐑛𐑧𐑕𐑒𐑑𐑪𐑐"
 
-#: ../lib/ephy-file-helpers.c:296
 #, c-format
+#: ../lib/ephy-file-helpers.c:383
 msgid "Could not create a temporary directory in “%s”."
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑒𐑮𐑦𐑱𐑑 𐑩 𐑑𐑧𐑥𐑐𐑼𐑼𐑦 𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦 𐑦𐑯 “%s”."
 
-#: ../lib/ephy-file-helpers.c:369
 #, c-format
+#: ../lib/ephy-file-helpers.c:472
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "𐑞 𐑓𐑲𐑤 “%s” 𐑧𐑒𐑟𐑦𐑕𐑑𐑕. 𐑐𐑤𐑰𐑟 𐑥𐑵𐑝 𐑦𐑑 𐑬𐑑 𐑝 𐑞 𐑢𐑱."
 
-#: ../lib/ephy-file-helpers.c:380
 #, c-format
+#: ../lib/ephy-file-helpers.c:483
 msgid "Failed to create directory “%s”."
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑒𐑮𐑦𐑱𐑑 𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦 “%s”."
 
-#: ../lib/ephy-gui.c:293
 #, c-format
+#: ../lib/ephy-gui.c:293
 msgid "Directory “%s” is not writable"
 msgstr "𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦 “%s” 𐑦𐑟 𐑯𐑪𐑑 𐑮𐑲𐑑𐑩𐑚𐑩𐑤"
 
@@ -900,8 +1731,8 @@ msgstr "𐑿 𐑛𐑵 𐑯𐑪𐑑 𐑣𐑨𐑝 𐑐𐑻𐑥𐑦𐑖𐑪𐑯 �
 msgid "Directory not Writable"
 msgstr "𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦 𐑯𐑪𐑑 𐑮𐑲𐑑𐑩𐑚𐑩𐑤"
 
-#: ../lib/ephy-gui.c:330
 #, c-format
+#: ../lib/ephy-gui.c:330
 msgid "Cannot overwrite existing file “%s”"
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑴𐑝𐑼𐑮𐑲𐑑 𐑧𐑒𐑟𐑦𐑕𐑑𐑦𐑙 𐑓𐑲𐑤 “%s”"
 
@@ -915,32 +1746,54 @@ msgstr "𐑩 𐑓𐑲𐑤 𐑢𐑦𐑞 𐑞𐑦𐑕 𐑯𐑱𐑥 𐑷𐑤𐑮�
 msgid "Cannot Overwrite File"
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑴𐑝𐑼𐑮𐑲𐑑 𐑓𐑲𐑤"
 
-#: ../lib/ephy-gui.c:423
 #, c-format
+#: ../lib/ephy-gui.c:392
 msgid "Could not display help: %s"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑛𐑩𐑕𐑐𐑤𐑱 𐑣𐑧𐑤𐑐: %s"
+
+#: ../lib/ephy-nss-glue.c:62
+msgid "Master password needed"
+msgstr "𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑯𐑰𐑛𐑩𐑛"
+
+#: ../lib/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"𐑞 𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑓𐑮𐑪𐑥 𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑝𐑻𐑠𐑩𐑯 (·𐑜𐑧𐑒𐑴) 𐑸 𐑤𐑪𐑒𐑑 𐑢𐑦𐑞 𐑩 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛. 𐑦𐑓 𐑿 𐑢𐑪𐑯𐑑 "
+"·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑑 𐑦𐑥𐑐𐑹𐑑 𐑞𐑧𐑥, 𐑐𐑤𐑰𐑟 𐑧𐑯𐑑𐑼 𐑿𐑼 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑚𐑩𐑤𐑴."
+
+#, fuzzy
+#: ../lib/ephy-profile-migration.c:83
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑒𐑪𐑐𐑦 𐑒𐑫𐑒𐑦𐑟 𐑓𐑲𐑤 𐑓𐑮𐑪𐑥 Mozilla."
+
+#: ../lib/ephy-profile-migration.c:558
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑮𐑰𐑛 𐑤𐑱𐑑𐑩𐑕𐑑 𐑥𐑲𐑜𐑮𐑱𐑖𐑩𐑯 𐑥𐑭𐑮𐑒𐑻, 𐑩𐑚𐑪𐑮𐑑𐑦𐑙 𐑐𐑮𐑴𐑓𐑲𐑤 𐑥𐑲𐑜𐑮𐑱𐑖𐑩𐑯."
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "𐑐𐑪𐑐𐑳𐑐 𐑢𐑦𐑯𐑛𐑴𐑟"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
 msgstr "𐑣𐑦𐑕𐑑𐑼𐑦"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1503
+#: ../src/ephy-window.c:1446
 msgid "Bookmark"
 msgstr "𐑚𐑫𐑒𐑥𐑸𐑒"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:897
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1745
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1507
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1743
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1450
 msgid "Bookmarks"
 msgstr "𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:288
 msgid "Address Entry"
 msgstr "𐑩𐑛𐑮𐑧𐑕 𐑧𐑯𐑑𐑮𐑦"
 
@@ -1017,64 +1870,70 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:389
-msgid "Cl_ear"
-msgstr "𐑒𐑤_𐑽"
-
-#: ../lib/widgets/ephy-location-entry.c:926
+#: ../lib/widgets/ephy-location-entry.c:968
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "𐑛𐑮𐑨𐑜 𐑯 𐑛𐑮𐑪𐑐 𐑞𐑦𐑕 𐑲𐑒𐑪𐑯 𐑑 𐑒𐑮𐑦𐑱𐑑 𐑩 𐑤𐑦𐑙𐑒 𐑑 𐑞𐑦𐑕 𐑐𐑱𐑡"
 
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:158
 msgid "Clear"
 msgstr "𐑒𐑤𐑽"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:320
 #, c-format
+#: ../src/bookmarks/ephy-bookmark-action.c:320
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:498
 #, c-format
+#: ../src/bookmarks/ephy-bookmark-action.c:498
 msgid "Executes the script “%s”"
 msgstr "𐑧𐑒𐑕𐑩𐑒𐑿𐑑𐑕 𐑞 𐑕𐑒𐑮𐑦𐑐𐑑 “%s”"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:614
 #, c-format
+#: ../src/bookmarks/ephy-bookmark-properties.c:86
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _𐑕𐑦𐑥𐑦𐑤𐑼"
 msgstr[1] "%d _𐑕𐑦𐑥𐑦𐑤𐑼"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:259
 #, c-format
+#: ../src/bookmarks/ephy-bookmark-properties.c:259
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_𐑘𐑵𐑯𐑩𐑓𐑲 𐑢𐑦𐑞 %d 𐑲𐑛𐑧𐑯𐑑𐑦𐑒𐑩𐑤 𐑚𐑫𐑒𐑥𐑸𐑒"
 msgstr[1] "_𐑘𐑵𐑯𐑩𐑓𐑲 𐑢𐑦𐑞 %d 𐑲𐑛𐑧𐑯𐑑𐑦𐑒𐑩𐑤 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 
+#, c-format
 #: ../src/bookmarks/ephy-bookmark-properties.c:279
 #: ../src/bookmarks/ephy-bookmark-properties.c:301
-#, c-format
 msgid "Show “%s”"
 msgstr "𐑖𐑴 “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
 #, c-format
+#: ../src/bookmarks/ephy-bookmark-properties.c:426
 msgid "“%s” Properties"
 msgstr "“%s” 𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:553
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_𐑑𐑲𐑑𐑩𐑤:"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
+msgid "A_ddress:"
+msgstr "A_ddress:"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
+msgid "T_opics:"
+msgstr "T_opics:"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
+msgid "Sho_w all topics"
+msgstr "Sho_w 𐑷𐑤 𐑑𐑪𐑐𐑦𐑒𐑕"
 
 #: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Entertainment"
@@ -1101,14 +1960,14 @@ msgid "Work"
 msgstr "𐑢𐑻𐑒"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
+#: ../src/bookmarks/ephy-bookmarks.c:441
 msgid "Update bookmark “%s”?"
 msgstr "𐑳𐑐𐑛𐑱𐑑 𐑚𐑫𐑒𐑥𐑸𐑒 “%s”?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:446
 #, c-format
+#: ../src/bookmarks/ephy-bookmarks.c:446
 msgid "The bookmarked page has moved to “%s”."
 msgstr "𐑞 𐑚𐑫𐑒𐑥𐑸𐑒𐑑 𐑐𐑱𐑡 𐑣𐑨𐑟 𐑥𐑵𐑝𐑛 𐑑 “%s”."
 
@@ -1150,28 +2009,44 @@ msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "𐑯𐑦𐑮𐑚𐑲 𐑕𐑲𐑑𐑕"
 
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks.c:1450
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
+msgid "Untitled"
+msgstr "Untitled"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:78
+msgid "Epiphany (RDF)"
+msgstr "𐑦𐑐𐑦𐑓𐑩𐑯𐑰 (RDF)"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:79
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (·𐑣·𐑑·𐑥·𐑤)"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:131
 msgid "Remove from this topic"
 msgstr "𐑮𐑦𐑥𐑵𐑝 𐑓𐑮𐑪𐑥 𐑞𐑦𐑕 𐑑𐑪𐑐𐑦𐑒"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "_𐑓𐑲𐑤"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "_𐑧𐑛𐑦𐑑"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "_𐑝𐑿"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "_𐑣𐑧𐑤𐑐"
 
@@ -1187,9 +2062,9 @@ msgstr "𐑒𐑮𐑦𐑱𐑑 𐑩 𐑯𐑿 𐑑𐑪𐑐𐑦𐑒"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
 #: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "𐑴𐑐𐑩𐑯 𐑦𐑯 𐑯𐑿 _𐑢𐑦𐑯𐑛𐑴"
@@ -1201,9 +2076,9 @@ msgstr "𐑴𐑐𐑩𐑯 𐑞 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑚𐑫𐑒𐑥�
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1357
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1355
 #: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "𐑴𐑐𐑩𐑯 𐑦𐑯 𐑯𐑿 _𐑑𐑨𐑚"
@@ -1248,7 +2123,7 @@ msgid "Export bookmarks to a file"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑑 𐑩 𐑓𐑲𐑤"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:146
 msgid "_Close"
 msgstr "_𐑒𐑤𐑴𐑟"
 
@@ -1258,29 +2133,29 @@ msgstr "𐑒𐑤𐑴𐑟 𐑞 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑢𐑦𐑯𐑛𐑴"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:158
 msgid "Cu_t"
 msgstr "𐑒𐑳_𐑑"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:159
 msgid "Cut the selection"
 msgstr "𐑒𐑳𐑑 𐑞 𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1365
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:716
+#: ../src/ephy-window.c:161
 msgid "_Copy"
 msgstr "_𐑒𐑪𐑐𐑦"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:162
 msgid "Copy the selection"
 msgstr "𐑒𐑪𐑐𐑦 𐑞 𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:164
 msgid "_Paste"
 msgstr "_𐑐𐑱𐑕𐑑"
 
@@ -1299,7 +2174,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "𐑛𐑦𐑤𐑰𐑑 𐑞 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑚𐑫𐑒𐑥𐑸𐑒 𐑹 𐑑𐑪𐑐𐑦𐑒"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:170
 msgid "Select _All"
 msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 _𐑷𐑤"
 
@@ -1310,7 +2185,7 @@ msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑷𐑤 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑹 𐑑
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_𐑒𐑪𐑯𐑑𐑩𐑯𐑑𐑕"
 
@@ -1319,12 +2194,12 @@ msgid "Display bookmarks help"
 msgstr "𐑛𐑩𐑕𐑐𐑤𐑱 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑣𐑧𐑤𐑐"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_𐑩𐑚𐑬𐑑"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "𐑛𐑦𐑕𐑐𐑤𐑱 𐑒𐑮𐑧𐑛𐑦𐑑𐑕 𐑓𐑹 𐑞 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑒𐑮𐑰𐑱𐑑𐑻𐑟"
 
@@ -1358,8 +2233,8 @@ msgstr "𐑖𐑴 𐑚𐑴𐑔 𐑞 𐑑𐑲𐑑𐑩𐑤 𐑯 𐑩𐑛𐑮𐑧�
 msgid "Type a topic"
 msgstr "𐑑𐑲𐑐 𐑩 𐑑𐑪𐑐𐑦𐑒"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:394
 #, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:394
 msgid "Delete topic “%s”?"
 msgstr "𐑛𐑦𐑤𐑰𐑑 𐑑𐑪𐑐𐑦𐑒 “%s”?"
 
@@ -1367,14 +2242,41 @@ msgstr "𐑛𐑦𐑤𐑰𐑑 𐑑𐑪𐑐𐑦𐑒 “%s”?"
 msgid "Delete this topic?"
 msgstr "𐑛𐑦𐑤𐑰𐑑 𐑞𐑦𐑕 𐑑𐑪𐑐𐑦𐑒?"
 
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+msgid ""
+"Deleting this topic will cause all its bookmarks to become uncategorized, "
+"unless they also belong to other topics. The bookmarks will not be deleted."
+msgstr ""
+"𐑛𐑦𐑤𐑰𐑑𐑦𐑙 𐑞𐑦𐑕 𐑑𐑪𐑐𐑦𐑒 𐑢𐑦𐑤 𐑒𐑷𐑟 𐑷𐑤 𐑦𐑑𐑕 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑑 𐑚𐑦𐑒𐑳𐑥 uncategorized, 𐑳𐑯𐑤𐑧𐑕 𐑞𐑱 𐑷𐑤𐑕𐑴 "
+"𐑚𐑦𐑤𐑪𐑙 𐑑 𐑳𐑞𐑼 𐑑𐑪𐑐𐑦𐑒𐑕. 𐑞 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑢𐑦𐑤 𐑯𐑪𐑑 𐑚𐑰 𐑛𐑦𐑤𐑰𐑑𐑩𐑛."
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:402
 msgid "_Delete Topic"
 msgstr "_𐑛𐑦𐑤𐑰𐑑 𐑑𐑪𐑐𐑦𐑒"
+
+#. FIXME: proper i18n after freeze
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+msgid "Firefox"
+msgstr "Firefox"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:633
 #: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "Firebird"
 msgstr "·𐑓𐑲𐑼𐑚𐑻𐑛"
+
+#. Translators: The %s is the name of a Mozilla profile.
+#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+msgid "Mozilla “%s” profile"
+msgstr "“%s” 𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
+msgid "Galeon"
+msgstr "Galeon"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:650
 msgid "Konqueror"
@@ -1388,8 +2290,8 @@ msgstr "𐑦𐑥𐑐𐑹𐑑 𐑓𐑱𐑤𐑛"
 msgid "Import Failed"
 msgstr "𐑦𐑥𐑐𐑹𐑑 𐑓𐑱𐑤𐑛"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 #, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
@@ -1401,6 +2303,16 @@ msgstr ""
 msgid "Import Bookmarks from File"
 msgstr "𐑦𐑥𐑐𐑹𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑓𐑮𐑪𐑥 𐑓𐑲𐑤"
 
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:754
+msgid "Firefox/Mozilla bookmarks"
+msgstr "Firefox/Mozilla 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:758
+msgid "Galeon/Konqueror bookmarks"
+msgstr "Galeon/·𐑒𐑪𐑙𐑒𐑼𐑼 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "Epiphany bookmarks"
 msgstr "·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
@@ -1409,35 +2321,46 @@ msgstr "·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 msgid "Export Bookmarks"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 
+#. Make a format selection combo & label
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
+msgid "File f_ormat:"
+msgstr "𐑓𐑲𐑤 f_ormat:"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:949
 msgid "Import Bookmarks"
 msgstr "𐑦𐑥𐑐𐑹𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
+
+#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-editor.c:955
+msgid "I_mport"
+msgstr "I_mport"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:971
 msgid "Import bookmarks from:"
 msgstr "𐑦𐑥𐑐𐑹𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑓𐑮𐑪𐑥:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1363
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/ephy-history-window.c:712
 msgid "_Copy Address"
 msgstr "_𐑒𐑪𐑐𐑦 𐑩𐑛𐑮𐑧𐑕"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1611
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1609
+#: ../src/ephy-history-window.c:1037
 msgid "_Search:"
 msgstr "_𐑕𐑻𐑗:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1809
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1807
 msgid "Topics"
 msgstr "𐑑𐑪𐑐𐑦𐑒𐑕"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1879
-#: ../src/ephy-history-window.c:1362
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1877
+#: ../src/ephy-history-window.c:1360
 msgid "Title"
 msgstr "𐑑𐑲𐑑𐑩𐑤"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1890
-#: ../src/ephy-history-window.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1888
+#: ../src/ephy-history-window.c:1369
 msgid "Address"
 msgstr "𐑩𐑛𐑮𐑧𐑕"
 
@@ -1470,62 +2393,74 @@ msgstr "𐑮𐑦𐑤𐑱𐑑𐑩𐑛"
 msgid "Topic"
 msgstr "𐑑𐑪𐑐𐑦𐑒"
 
-#: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
+#: ../src/bookmarks/ephy-topics-entry.c:330
 msgid "Create topic “%s”"
 msgstr "𐑒𐑮𐑦𐑱𐑑 𐑑𐑪𐑐𐑦𐑒 “%s”"
+
+#, fuzzy
+#: ../src/ephy-encoding-dialog.c:319
+msgid "Encodings"
+msgstr "Encodings"
 
 #: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
 msgstr "_𐑳𐑞𐑼…"
 
+#, fuzzy
+#: ../src/ephy-encoding-menu.c:331
+msgid "Other encodings"
+msgstr "𐑳𐑞𐑼 encodings"
+
 #: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
 msgstr "_𐑷𐑑𐑴𐑥𐑨𐑑𐑦𐑒"
 
-#: ../src/ephy-encoding-menu.c:338
-msgid "Use the encoding specified by the document"
-msgstr "𐑿𐑕 𐑞 𐑧𐑯𐑒𐑴𐑛𐑦𐑙 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛 𐑚𐑲 𐑞 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑"
-
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:147
 msgid "Not found"
 msgstr "𐑯𐑪𐑑 𐑓𐑬𐑯𐑛"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:159
 msgid "Wrapped"
 msgstr "𐑮𐑨𐑐𐑑"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find links:"
 msgstr "𐑓𐑲𐑯𐑛 𐑤𐑦𐑙𐑒𐑕:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:179
 msgid "Find:"
 msgstr "𐑓𐑲𐑯𐑛:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:557
+#: ../src/ephy-find-toolbar.c:451 ../src/ephy-find-toolbar.c:574
 msgid "_Case sensitive"
 msgstr "_𐑒𐑱𐑕 𐑕𐑧𐑯𐑕𐑦𐑑𐑦𐑝"
 
-#: ../src/ephy-find-toolbar.c:540
+#: ../src/ephy-find-toolbar.c:557
 msgid "Find Previous"
 msgstr "𐑓𐑲𐑯𐑛 𐑐𐑮𐑰𐑝𐑦𐑩𐑕"
 
-#: ../src/ephy-find-toolbar.c:543
+#: ../src/ephy-find-toolbar.c:560
 msgid "Find previous occurrence of the search string"
 msgstr "𐑓𐑲𐑯𐑛 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑪𐑒𐑻𐑩𐑯𐑕 𐑝 𐑞 𐑕𐑻𐑗 𐑕𐑑𐑮𐑦𐑙"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:566
 msgid "Find Next"
 msgstr "𐑓𐑲𐑯𐑛 𐑯𐑧𐑒𐑕𐑑"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:569
 msgid "Find next occurrence of the search string"
 msgstr "𐑓𐑲𐑯𐑛 𐑯𐑧𐑒𐑕𐑑 𐑪𐑒𐑻𐑩𐑯𐑕 𐑝 𐑞 𐑕𐑻𐑗 𐑕𐑑𐑮𐑦𐑙"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
+#. exit button
+#, fuzzy
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:670
+msgid "Leave Fullscreen"
+msgstr "𐑤𐑰𐑝 Fullscreen"
+
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:318
 msgid "Go"
 msgstr "𐑜𐑴"
 
@@ -1604,32 +2539,32 @@ msgstr ""
 msgid "Clear History"
 msgstr "𐑒𐑤𐑽 𐑣𐑦𐑕𐑑𐑼𐑦"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
 msgstr "𐑤𐑭𐑕𐑑 30 𐑥𐑦𐑯𐑦𐑑𐑕"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "𐑑𐑫𐑛𐑱"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
 #, c-format
+#: ../src/ephy-history-window.c:1048 ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1055
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "𐑤𐑭𐑕𐑑 %d 𐑛𐑱"
 msgstr[1] "𐑤𐑭𐑕𐑑 %d 𐑛𐑱𐑟"
 
-#: ../src/ephy-history-window.c:1299
+#: ../src/ephy-history-window.c:1297
 msgid "Sites"
 msgstr "𐑕𐑲𐑑𐑕"
 
-#: ../src/ephy-history-window.c:1379
+#: ../src/ephy-history-window.c:1377
 msgid "Date"
 msgstr "𐑛𐑱𐑑"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:558 ../src/window-commands.c:1007
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1040
 msgid "GNOME Web Browser"
 msgstr "·𐑜𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼"
 
@@ -1669,93 +2604,80 @@ msgstr "𐑕𐑑𐑸𐑑 𐑩 𐑐𐑮𐑲𐑝𐑩𐑑 𐑦𐑯𐑕𐑑𐑨𐑯�
 msgid "Profile directory to use in the private instance"
 msgstr "𐑐𐑮𐑴𐑓𐑲𐑤 𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦 𐑑 𐑿𐑕 𐑦𐑯 𐑞 𐑐𐑮𐑲𐑝𐑩𐑑 𐑦𐑯𐑕𐑑𐑨𐑯𐑕"
 
+#, fuzzy
+#: ../src/ephy-main.c:104
+msgid "DIR"
+msgstr "DIR"
+
 #: ../src/ephy-main.c:106
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:413
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑕𐑑𐑸𐑑 ·𐑜𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼"
 
-#: ../src/ephy-main.c:416
 #, c-format
-msgid ""
-"Startup failed because of the following error:\n"
-"%s"
-msgstr ""
-"𐑕𐑑𐑸𐑑𐑳𐑐 𐑓𐑱𐑤𐑛 𐑚𐑦𐑒𐑪𐑟 𐑝 𐑞 𐑓𐑪𐑤𐑴𐑦𐑙 𐑻𐑼:\n"
-"%s"
+#: ../src/ephy-main.c:381
+msgid "Startup failed because of the following error:\n%s"
+msgstr "𐑕𐑑𐑸𐑑𐑳𐑐 𐑓𐑱𐑤𐑛 𐑚𐑦𐑒𐑪𐑟 𐑝 𐑞 𐑓𐑪𐑤𐑴𐑦𐑙 𐑻𐑼:\n%s"
 
-#: ../src/ephy-main.c:559
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "·𐑜𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑪𐑐𐑖𐑩𐑯𐑟"
 
-#: ../src/ephy-notebook.c:628
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "𐑒𐑤𐑴𐑟 𐑑𐑨𐑚"
 
-#: ../src/ephy-nss-glue.c:62
-msgid "Master password needed"
-msgstr "𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑯𐑰𐑛𐑩𐑛"
+#, fuzzy, c-format
+#: ../src/ephy-session.c:118
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑢𐑦𐑤 𐑚𐑰 𐑩𐑚𐑹𐑑𐑩𐑛 𐑯 logout 𐑐𐑮𐑩𐑕𐑰𐑛 𐑦𐑯 %d 𐑕𐑧𐑒𐑩𐑯𐑛."
+msgstr[1] "𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑢𐑦𐑤 𐑚𐑰 𐑩𐑚𐑹𐑑𐑩𐑛 𐑯 logout 𐑐𐑮𐑩𐑕𐑰𐑛 𐑦𐑯 %d 𐑕𐑧𐑒𐑩𐑯𐑛𐑟."
 
-#: ../src/ephy-nss-glue.c:64
-msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
-msgstr ""
-"𐑞 𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑓𐑮𐑪𐑥 𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑝𐑻𐑠𐑩𐑯 (·𐑜𐑧𐑒𐑴) 𐑸 𐑤𐑪𐑒𐑑 𐑢𐑦𐑞 𐑩 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛. 𐑦𐑓 𐑿 𐑢𐑪𐑯𐑑 "
-"·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑑 𐑦𐑥𐑐𐑹𐑑 𐑞𐑧𐑥, 𐑐𐑤𐑰𐑟 𐑧𐑯𐑑𐑼 𐑿𐑼 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑚𐑩𐑤𐑴."
-
-#: ../src/ephy-profile-migration.c:382
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑮𐑰𐑛 𐑤𐑱𐑑𐑩𐑕𐑑 𐑥𐑲𐑜𐑮𐑱𐑖𐑩𐑯 𐑥𐑭𐑮𐑒𐑻, 𐑩𐑚𐑪𐑮𐑑𐑦𐑙 𐑐𐑮𐑴𐑓𐑲𐑤 𐑥𐑲𐑜𐑮𐑱𐑖𐑩𐑯."
-
-#: ../src/ephy-session.c:228
+#: ../src/ephy-session.c:230
 msgid "Abort pending downloads?"
 msgstr "𐑩𐑚𐑹𐑑 𐑐𐑧𐑯𐑛𐑦𐑙 𐑛𐑬𐑯𐑤𐑴𐑛𐑟?"
 
-#: ../src/ephy-session.c:233
+#: ../src/ephy-session.c:235
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr "𐑞𐑺 𐑸 𐑕𐑑𐑦𐑤 𐑛𐑬𐑯𐑤𐑴𐑛𐑟 𐑐𐑧𐑯𐑛𐑦𐑙. 𐑦𐑓 𐑿 𐑤𐑪𐑜 𐑬𐑑, 𐑞𐑱 𐑢𐑦𐑤 𐑚𐑰 𐑩𐑚𐑹𐑑𐑩𐑛 𐑯 𐑤𐑪𐑕𐑑."
 
+#, fuzzy
 #: ../src/ephy-session.c:239
+msgid "_Cancel Logout"
+msgstr "_Cancel Logout"
+
+#: ../src/ephy-session.c:241
 msgid "_Abort Downloads"
 msgstr "_𐑩𐑚𐑹𐑑 𐑛𐑬𐑯𐑤𐑴𐑛𐑟"
 
-#: ../src/ephy-session.c:571
-msgid "Recover previous browser windows and tabs?"
-msgstr "𐑮𐑧𐑒𐑳𐑝𐑼 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑚𐑮𐑬𐑟𐑼 𐑢𐑦𐑯𐑛𐑴𐑟 𐑯 𐑑𐑨𐑚𐑟?"
+#, fuzzy
+#: ../src/ephy-session.c:770
+msgid "Don't recover"
+msgstr "𐑛𐑴𐑯𐑑 𐑮𐑧𐑒𐑳𐑝𐑼"
 
-#: ../src/ephy-session.c:575
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr ""
-"·𐑦𐑐𐑦𐑓𐑩𐑯𐑦 𐑩𐑐𐑽𐑟 𐑑 𐑣𐑨𐑝 𐑧𐑜𐑟𐑦𐑑𐑩𐑛 𐑩𐑯𐑦𐑒𐑕𐑐𐑧𐑒𐑑𐑦𐑛𐑤𐑰 𐑞 𐑤𐑭𐑕𐑑 𐑑𐑲𐑥 𐑦𐑑 𐑢𐑪𐑟 𐑮𐑳𐑯. 𐑿 𐑒𐑨𐑯 𐑮𐑧𐑒𐑳𐑝𐑼 "
-"𐑞 𐑴𐑐𐑩𐑯𐑛 𐑢𐑦𐑯𐑛𐑴𐑟 𐑯 𐑑𐑨𐑚𐑟."
+#, fuzzy
+#: ../src/ephy-session.c:775
+msgid "Recover session"
+msgstr "𐑮𐑧𐑒𐑳𐑝𐑼 𐑕𐑧𐑖𐑩𐑯"
 
-#: ../src/ephy-session.c:579
-msgid "_Don't Recover"
-msgstr "_𐑛𐑴𐑯𐑑 𐑮𐑧𐑒𐑳𐑝𐑼"
-
-#: ../src/ephy-session.c:581
-msgid "_Recover"
-msgstr "_𐑮𐑧𐑒𐑳𐑝𐑼"
-
-#: ../src/ephy-session.c:583
-msgid "Crash Recovery"
-msgstr "𐑒𐑮𐑨𐑖 𐑮𐑦𐑒𐑩𐑝𐑮𐑰"
+#, fuzzy
+#: ../src/ephy-session.c:780
+msgid "Do you want to recover the previous browser windows and tabs?"
+msgstr "𐑛𐑵 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑮𐑧𐑒𐑳𐑝𐑼 𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑚𐑮𐑬𐑟𐑼 𐑢𐑦𐑯𐑛𐑴𐑟 𐑯 𐑑𐑨𐑚𐑟?"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1286
 #, c-format
+#: ../src/ephy-session.c:1362
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
-"happen again if you reload the page. If it does, please report the problem "
-"to the %s developers."
+"happen again if you reload the page. If it does, please report the problem to "
+"the %s developers."
 msgstr ""
 "𐑞𐑦𐑕 𐑐𐑱𐑡 𐑢𐑪𐑟 𐑤𐑴𐑛𐑦𐑙 𐑢𐑧𐑯 𐑞 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑒𐑤𐑴𐑟𐑛 𐑩𐑯𐑦𐑒𐑕𐑐𐑧𐑒𐑑𐑦𐑛𐑤𐑰. 𐑞𐑦𐑕 𐑥𐑲𐑑 𐑣𐑨𐑐𐑩𐑯 𐑩𐑜𐑱𐑯 𐑦𐑓 "
 "𐑿 𐑮𐑰𐑤𐑴𐑛 𐑞 𐑐𐑱𐑡. 𐑦𐑓 𐑦𐑑 𐑛𐑳𐑟, 𐑐𐑤𐑰𐑟 𐑮𐑩𐑐𐑹𐑑 𐑞 𐑐𐑮𐑪𐑚𐑤𐑩𐑥 𐑑 𐑞 %s 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼𐑟."
@@ -1772,99 +2694,104 @@ msgstr "𐑕𐑲𐑛𐑚𐑭𐑮 𐑩𐑒𐑕𐑑𐑧𐑯𐑖𐑩𐑯 𐑮𐑦�
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "𐑞 𐑤𐑦𐑙𐑒 𐑿 𐑒𐑤𐑦𐑒𐑑 𐑯𐑰𐑛𐑟 𐑞 𐑕𐑲𐑛𐑚𐑭𐑮 𐑩𐑒𐑕𐑑𐑧𐑯𐑖𐑩𐑯 𐑑 𐑚𐑰 𐑦𐑯𐑕𐑑𐑷𐑤𐑛."
 
+#, fuzzy
+#: ../src/ephy-statusbar.c:95
+msgid "Caret"
+msgstr "Caret"
+
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:90
+#: ../src/ephy-statusbar.c:102
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "𐑦𐑯 𐑒𐑰𐑚𐑪𐑮𐑛 𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯 𐑥𐑴𐑛, 𐑐𐑮𐑧𐑕 F7 𐑑 𐑧𐑜𐑟𐑦𐑑"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "𐑕𐑢𐑦𐑗 𐑑 𐑞𐑦𐑕 𐑑𐑨𐑚"
 
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:228
 msgid "_Back"
 msgstr "_𐑚𐑨𐑒"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:230
 msgid "Go to the previous visited page"
 msgstr "𐑜𐑴 𐑑 𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑝𐑦𐑟𐑩𐑑𐑩𐑛 𐑐𐑱𐑡"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:234
 msgid "Back history"
 msgstr "𐑚𐑨𐑒 𐑣𐑦𐑕𐑑𐑼𐑦"
 
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:248
 msgid "_Forward"
 msgstr "_𐑓𐑹𐑢𐑼𐑛"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:250
 msgid "Go to the next visited page"
 msgstr "𐑜𐑴 𐑑 𐑞 𐑯𐑧𐑒𐑕𐑑 𐑝𐑦𐑟𐑩𐑑𐑩𐑛 𐑐𐑱𐑡"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:254
 msgid "Forward history"
 msgstr "𐑓𐑹𐑢𐑼𐑛 𐑣𐑦𐑕𐑑𐑼𐑦"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:267
 msgid "_Up"
 msgstr "_𐑳𐑐"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:269
 msgid "Go up one level"
 msgstr "𐑜𐑴 𐑳𐑐 𐑢𐑳𐑯 𐑤𐑧𐑝𐑩𐑤"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:273
 msgid "List of upper levels"
 msgstr "𐑤𐑦𐑕𐑑 𐑝 𐑳𐑐𐑻 𐑤𐑧𐑝𐑩𐑤𐑟"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:290
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "𐑧𐑯𐑑𐑼 𐑩 𐑢𐑧𐑚 𐑩𐑛𐑮𐑧𐑕 𐑑 𐑴𐑐𐑩𐑯, 𐑹 𐑩 𐑓𐑮𐑱𐑟 𐑑 𐑕𐑻𐑗 𐑓𐑹"
 
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:306
 msgid "Zoom"
 msgstr "𐑟𐑵𐑥"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:308
 msgid "Adjust the text size"
 msgstr "𐑩𐑡𐑳𐑕𐑑 𐑞 𐑑𐑧𐑒𐑕𐑑 𐑕𐑲𐑟"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the address entered in the address entry"
 msgstr "𐑜𐑴 𐑑 𐑞 𐑩𐑛𐑮𐑧𐑕 𐑧𐑯𐑑𐑻𐑛 𐑦𐑯 𐑞 𐑩𐑛𐑮𐑧𐑕 𐑧𐑯𐑑𐑮𐑦"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:329
 msgid "_Home"
 msgstr "_𐑣𐑴𐑥"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:331
 msgid "Go to the home page"
 msgstr "𐑜𐑴 𐑑 𐑞 𐑣𐑴𐑥 𐑐𐑱𐑡"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:341
 msgid "New _Tab"
 msgstr "𐑯𐑿 _𐑑𐑨𐑚"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:343
 msgid "Open a new tab"
 msgstr "𐑴𐑐𐑩𐑯 𐑩 𐑯𐑿 𐑑𐑨𐑚"
 
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:352
 msgid "_New Window"
 msgstr "_𐑯𐑿 𐑢𐑦𐑯𐑛𐑴"
 
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:354
 msgid "Open a new window"
 msgstr "𐑴𐑐𐑩𐑯 𐑩 𐑯𐑿 𐑢𐑦𐑯𐑛𐑴"
 
@@ -1907,639 +2834,695 @@ msgstr "𐑑𐑵𐑤𐑚𐑸 _𐑚𐑳𐑑𐑩𐑯 𐑤𐑱𐑚𐑩𐑤𐑟:"
 msgid "_Add a New Toolbar"
 msgstr "_𐑨𐑛 𐑩 𐑯𐑿 𐑑𐑵𐑤𐑚𐑸"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "_𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "_𐑜𐑴"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "𐑑_𐑵𐑤𐑟"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "_𐑑𐑨𐑚𐑟"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "_𐑑𐑵𐑤𐑚𐑸𐑟"
 
 #. File menu
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:128
 msgid "_Open…"
 msgstr "_𐑴𐑐𐑩𐑯…"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "𐑴𐑐𐑩𐑯 𐑩 𐑓𐑲𐑤"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "𐑕𐑱𐑝 _𐑨𐑟…"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "𐑕𐑱𐑝 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:128
+#, fuzzy
+#: ../src/ephy-window.c:134
+msgid "Page Set_up"
+msgstr "𐑐𐑱𐑡 Set_up"
+
+#: ../src/ephy-window.c:135
 msgid "Setup the page settings for printing"
 msgstr "𐑕𐑧𐑑𐑳𐑐 𐑞 𐑐𐑱𐑡 𐑕𐑧𐑑𐑦𐑙𐑟 𐑓𐑹 𐑐𐑮𐑦𐑯𐑑𐑦𐑙"
 
-#: ../src/ephy-window.c:131
+#, fuzzy
+#: ../src/ephy-window.c:137
+msgid "Print Pre_view"
+msgstr "𐑐𐑮𐑦𐑯𐑑 Pre_view"
+
+#: ../src/ephy-window.c:138
 msgid "Print preview"
 msgstr "𐑐𐑮𐑦𐑯𐑑 𐑐𐑮𐑰𐑝𐑿"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:140
 msgid "_Print…"
 msgstr "_𐑐𐑮𐑦𐑯𐑑…"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:141
 msgid "Print the current page"
 msgstr "𐑐𐑮𐑦𐑯𐑑 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:137
+#, fuzzy
+#: ../src/ephy-window.c:143
+msgid "S_end Link by Email…"
+msgstr "S_end 𐑤𐑦𐑙𐑒 𐑚𐑲 𐑰𐑥𐑱𐑤…"
+
+#: ../src/ephy-window.c:144
 msgid "Send a link of the current page"
 msgstr "𐑕𐑧𐑯𐑛 𐑩 𐑤𐑦𐑙𐑒 𐑝 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:147
 msgid "Close this tab"
 msgstr "𐑒𐑤𐑴𐑟 𐑞𐑦𐑕 𐑑𐑨𐑚"
 
 #. Edit menu
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:152
 msgid "_Undo"
 msgstr "_𐑳𐑯𐑛𐑵"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:153
 msgid "Undo the last action"
 msgstr "𐑳𐑯𐑛𐑵 𐑞 𐑤𐑭𐑕𐑑 𐑨𐑒𐑖𐑩𐑯"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:155
 msgid "Re_do"
 msgstr "𐑮𐑰_𐑛𐑵"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:156
 msgid "Redo the last undone action"
 msgstr "𐑮𐑰𐑛𐑵 𐑞 𐑤𐑭𐑕𐑑 𐑳𐑯𐑛𐑳𐑯 𐑨𐑒𐑖𐑩𐑯"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:165
 msgid "Paste clipboard"
 msgstr "𐑐𐑱𐑕𐑑 𐑒𐑤𐑦𐑐𐑚𐑹𐑛"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:168
 msgid "Delete text"
 msgstr "𐑛𐑦𐑤𐑰𐑑 𐑑𐑧𐑒𐑕𐑑"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:171
 msgid "Select the entire page"
 msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑞 𐑧𐑯𐑑𐑲𐑼 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:173
 msgid "_Find…"
 msgstr "_𐑓𐑲𐑯𐑛…"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:174
 msgid "Find a word or phrase in the page"
 msgstr "𐑓𐑲𐑯𐑛 𐑩 𐑢𐑻𐑛 𐑹 𐑓𐑮𐑱𐑟 𐑦𐑯 𐑞 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:170
+#, fuzzy
+#: ../src/ephy-window.c:176
+msgid "Find Ne_xt"
+msgstr "𐑓𐑲𐑯𐑛 Ne_xt"
+
+#: ../src/ephy-window.c:177
 msgid "Find next occurrence of the word or phrase"
 msgstr "𐑓𐑲𐑯𐑛 𐑯𐑧𐑒𐑕𐑑 𐑪𐑒𐑻𐑩𐑯𐑕 𐑝 𐑞 𐑢𐑻𐑛 𐑹 𐑓𐑮𐑱𐑟"
 
-#: ../src/ephy-window.c:173
+#, fuzzy
+#: ../src/ephy-window.c:179
+msgid "Find Pre_vious"
+msgstr "𐑓𐑲𐑯𐑛 Pre_vious"
+
+#: ../src/ephy-window.c:180
 msgid "Find previous occurrence of the word or phrase"
 msgstr "𐑓𐑲𐑯𐑛 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑪𐑒𐑻𐑩𐑯𐑕 𐑝 𐑞 𐑢𐑻𐑛 𐑹 𐑓𐑮𐑱𐑟"
 
-#: ../src/ephy-window.c:176
+#, fuzzy
+#: ../src/ephy-window.c:182
+msgid "P_ersonal Data"
+msgstr "P_ersonal 𐑛𐑱𐑑𐑩"
+
+#: ../src/ephy-window.c:183
 msgid "View and remove cookies and passwords"
 msgstr "𐑝𐑿 𐑯 𐑮𐑦𐑥𐑵𐑝 𐑒𐑫𐑒𐑦𐑟 𐑯 𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
 
-#: ../src/ephy-window.c:180
+#, fuzzy
+#: ../src/ephy-window.c:186
+msgid "Certificate_s"
+msgstr "Certificate_s"
+
+#: ../src/ephy-window.c:187
 msgid "Manage Certificates"
 msgstr "𐑥𐑨𐑯𐑦𐑡 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑𐑕"
 
-#: ../src/ephy-window.c:184
+#, fuzzy
+#: ../src/ephy-window.c:190
+msgid "P_references"
+msgstr "P_references"
+
+#: ../src/ephy-window.c:191
 msgid "Configure the web browser"
 msgstr "𐑒𐑩𐑯𐑓𐑦𐑜𐑘𐑼 𐑞 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼"
 
 #. View menu
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:196
 msgid "_Customize Toolbars…"
 msgstr "_𐑒𐑩𐑕𐑑𐑩𐑥𐑲𐑟 𐑑𐑵𐑤𐑚𐑸𐑟…"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:197
 msgid "Customize toolbars"
 msgstr "𐑒𐑩𐑕𐑑𐑩𐑥𐑲𐑟 𐑑𐑵𐑤𐑚𐑸𐑟"
 
-#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
+#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
 msgid "_Stop"
 msgstr "_𐑕𐑑𐑪𐑐"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:200
 msgid "Stop current data transfer"
 msgstr "𐑕𐑑𐑪𐑐 𐑒𐑳𐑮𐑩𐑯𐑑 𐑛𐑱𐑑𐑩 𐑑𐑮𐑨𐑯𐑕𐑓𐑻"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:204
 msgid "_Reload"
 msgstr "_𐑮𐑰𐑤𐑴𐑛"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:205
 msgid "Display the latest content of the current page"
 msgstr "𐑛𐑩𐑕𐑐𐑤𐑱 𐑞 𐑤𐑱𐑑𐑩𐑕𐑑 𐑒𐑪𐑯𐑑𐑧𐑯𐑑 𐑝 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:207
 msgid "_Larger Text"
 msgstr "_𐑤𐑸𐑡𐑼 𐑑𐑧𐑒𐑕𐑑"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:208
 msgid "Increase the text size"
 msgstr "𐑦𐑯𐑒𐑮𐑰𐑕 𐑞 𐑑𐑧𐑒𐑕𐑑 𐑕𐑲𐑟"
 
-#: ../src/ephy-window.c:204
+#, fuzzy
+#: ../src/ephy-window.c:210
+msgid "S_maller Text"
+msgstr "S_maller 𐑑𐑧𐑒𐑕𐑑"
+
+#: ../src/ephy-window.c:211
 msgid "Decrease the text size"
 msgstr "𐑛𐑦𐑒𐑮𐑰𐑕 𐑞 𐑑𐑧𐑒𐑕𐑑 𐑕𐑲𐑟"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:213
 msgid "_Normal Size"
 msgstr "_𐑯𐑹𐑥𐑩𐑤 𐑕𐑲𐑟"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:214
 msgid "Use the normal text size"
 msgstr "𐑿𐑟 𐑞 𐑯𐑹𐑥𐑩𐑤 𐑑𐑧𐑒𐑕𐑑 𐑕𐑲𐑟"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:216
 msgid "Text _Encoding"
 msgstr "𐑑𐑧𐑒𐑕𐑑 _𐑧𐑯𐑒𐑴𐑛𐑦𐑙"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:217
 msgid "Change the text encoding"
 msgstr "𐑗𐑱𐑯𐑡 𐑞 𐑑𐑧𐑒𐑕𐑑 𐑧𐑯𐑒𐑴𐑛𐑦𐑙"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:219
 msgid "_Page Source"
 msgstr "_𐑐𐑱𐑡 𐑕𐑹𐑕"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:220
 msgid "View the source code of the page"
 msgstr "𐑝𐑿 𐑞 𐑕𐑹𐑕 𐑒𐑴𐑛 𐑝 𐑞 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:222
 msgid "Page _Security Information"
 msgstr "𐑐𐑱𐑡 _𐑕𐑦𐑒𐑘𐑫𐑼𐑦𐑑𐑦 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:223
 msgid "Display security information for the web page"
 msgstr "𐑛𐑩𐑕𐑐𐑤𐑱 𐑕𐑦𐑒𐑘𐑫𐑼𐑦𐑑𐑦 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑓𐑹 𐑞 𐑢𐑧𐑚 𐑐𐑱𐑡"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark…"
 msgstr "_𐑨𐑛 𐑚𐑫𐑒𐑥𐑸𐑒…"
 
-#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "𐑨𐑛 𐑩 𐑚𐑫𐑒𐑥𐑸𐑒 𐑓𐑹 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "_𐑧𐑛𐑦𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "𐑴𐑐𐑩𐑯 𐑞 𐑚𐑫𐑒𐑥𐑸𐑒𐑕 𐑢𐑦𐑯𐑛𐑴"
 
 #. Go menu
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:237
 msgid "_Location…"
 msgstr "_𐑤𐑴𐑒𐑱𐑖𐑩𐑯…"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "𐑜𐑴 𐑑 𐑩 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛 𐑤𐑴𐑒𐑱𐑖𐑩𐑯"
 
 #. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:433
+#: ../src/ephy-window.c:240 ../src/pdm-dialog.c:432
 msgid "Hi_story"
 msgstr "𐑣𐑦_𐑕𐑑𐑼𐑦"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "𐑴𐑐𐑩𐑯 𐑞 𐑣𐑦𐑕𐑑𐑼𐑦 𐑢𐑦𐑯𐑛𐑴"
 
 #. Tabs menu
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "_𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "𐑨𐑒𐑑𐑦𐑝𐑱𐑑 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "_𐑯𐑧𐑒𐑕𐑑 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "𐑨𐑒𐑑𐑦𐑝𐑱𐑑 𐑯𐑧𐑒𐑕𐑑 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "𐑥𐑵𐑝 𐑑𐑨𐑚 _𐑤𐑧𐑓𐑑"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "𐑥𐑵𐑝 𐑒𐑳𐑮𐑩𐑯𐑑 𐑑𐑨𐑚 𐑑 𐑤𐑧𐑓𐑑"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "𐑥𐑵𐑝 𐑑𐑨𐑚 _𐑮𐑲𐑑"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "𐑥𐑵𐑝 𐑒𐑳𐑮𐑩𐑯𐑑 𐑑𐑨𐑚 𐑑 𐑮𐑲𐑑"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "_𐑛𐑦𐑑𐑨𐑗 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "𐑛𐑦𐑑𐑨𐑗 𐑒𐑳𐑮𐑩𐑯𐑑 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "𐑛𐑩𐑕𐑐𐑤𐑱 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑣𐑧𐑤𐑐"
 
 #. File Menu
-#: ../src/ephy-window.c:269
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "_𐑢𐑻𐑒 𐑪𐑓𐑤𐑲𐑯"
 
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "𐑕𐑢𐑦𐑗 𐑑 𐑪𐑓𐑤𐑲𐑯 𐑥𐑴𐑛"
 
 #. View Menu
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:282
 msgid "_Hide Toolbars"
 msgstr "_𐑣𐑲𐑛 𐑑𐑵𐑤𐑚𐑸𐑟"
 
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "𐑖𐑴 𐑹 𐑣𐑲𐑛 𐑑𐑵𐑤𐑚𐑸"
 
-#: ../src/ephy-window.c:282
+#, fuzzy
+#: ../src/ephy-window.c:285
+msgid "St_atusbar"
+msgstr "St_atusbar"
+
+#, fuzzy
+#: ../src/ephy-window.c:286
+msgid "Show or hide statusbar"
+msgstr "𐑖𐑴 𐑹 𐑣𐑲𐑛 statusbar"
+
+#, fuzzy
+#: ../src/ephy-window.c:288
+msgid "_Fullscreen"
+msgstr "_Fullscreen"
+
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "𐑚𐑮𐑬𐑟 𐑨𐑑 𐑓𐑫𐑤 𐑕𐑒𐑮𐑰𐑯"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "𐑐𐑪𐑐𐑳𐑐 _𐑢𐑦𐑯𐑛𐑴𐑟"
 
+#, fuzzy
+#: ../src/ephy-window.c:292
+msgid "Show or hide unrequested popup windows from this site"
+msgstr "𐑖𐑴 𐑹 𐑣𐑲𐑛 unrequested 𐑐𐑪𐑐𐑳𐑐 𐑢𐑦𐑯𐑛𐑴𐑟 𐑓𐑮𐑪𐑥 𐑞𐑦𐑕 𐑕𐑲𐑑"
+
+#, fuzzy
+#: ../src/ephy-window.c:294
+msgid "Selection Caret"
+msgstr "𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯 Caret"
+
+#. Document
+#, fuzzy
+#: ../src/ephy-window.c:302
+msgid "Add Boo_kmark…"
+msgstr "𐑨𐑛 Boo_kmark…"
+
 #. Framed document
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "𐑖𐑴 𐑴𐑯𐑤𐑦 _𐑞𐑦𐑕 𐑓𐑮𐑱𐑥"
 
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "𐑖𐑴 𐑴𐑯𐑤𐑦 𐑞𐑦𐑕 𐑓𐑮𐑱𐑥 𐑦𐑯 𐑞𐑦𐑕 𐑢𐑦𐑯𐑛𐑴"
 
 #. Links
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "_𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒"
 
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒 𐑦𐑯 𐑞𐑦𐑕 𐑢𐑦𐑯𐑛𐑴"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒 𐑦𐑯 𐑯𐑿 _𐑢𐑦𐑯𐑛𐑴"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒 𐑦𐑯 𐑩 𐑯𐑿 𐑢𐑦𐑯𐑛𐑴"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒 𐑦𐑯 𐑯𐑿 _𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒 𐑦𐑯 𐑩 𐑯𐑿 𐑑𐑨𐑚"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "_𐑛𐑬𐑯𐑤𐑴𐑛 𐑤𐑦𐑙𐑒"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:325
 msgid "_Save Link As…"
 msgstr "_𐑕𐑱𐑝 𐑤𐑦𐑙𐑒 𐑨𐑟…"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "𐑕𐑱𐑝 𐑤𐑦𐑙𐑒 𐑢𐑦𐑞 𐑩 𐑛𐑦𐑓𐑼𐑩𐑯𐑑 𐑯𐑱𐑥"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link…"
 msgstr "_𐑚𐑫𐑒𐑥𐑸𐑒 𐑤𐑦𐑙𐑒…"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "_𐑒𐑪𐑐𐑦 𐑤𐑦𐑙𐑒 𐑩𐑛𐑮𐑧𐑕"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:336
 msgid "_Send Email…"
 msgstr "_𐑕𐑧𐑯𐑛 𐑰𐑥𐑱𐑤…"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "_𐑒𐑪𐑐𐑦 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕"
 
 #. Images
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "𐑴𐑐𐑩𐑯 _𐑦𐑥𐑦𐑡"
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:345
 msgid "_Save Image As…"
 msgstr "_𐑕𐑱𐑝 𐑦𐑥𐑦𐑡 𐑨𐑟…"
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "_𐑿𐑕 𐑦𐑥𐑦𐑡 𐑨𐑟 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛"
 
+#, fuzzy
+#: ../src/ephy-window.c:349
+msgid "Copy I_mage Address"
+msgstr "𐑒𐑪𐑐𐑦 I_mage 𐑩𐑛𐑮𐑧𐑕"
+
+#, fuzzy
+#: ../src/ephy-window.c:351
+msgid "St_art Animation"
+msgstr "St_art 𐑨𐑯𐑩𐑥𐑱𐑖𐑩𐑯"
+
+#, fuzzy
+#: ../src/ephy-window.c:353
+msgid "St_op Animation"
+msgstr "St_op 𐑨𐑯𐑩𐑥𐑱𐑖𐑩𐑯"
+
 #. Inspector
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:357
 msgid "Inspect _Element"
 msgstr "𐑦𐑯𐑕𐑐𐑧𐑒𐑑 _𐑧𐑤𐑩𐑥𐑩𐑯𐑑"
 
+#, fuzzy
 #: ../src/ephy-window.c:530
+msgid "There are unsubmitted changes to form elements"
+msgstr "𐑞𐑺 𐑸 unsubmitted 𐑗𐑱𐑯𐑡𐑩𐑟 𐑑 𐑓𐑹𐑥 𐑧𐑤𐑩𐑥𐑩𐑯𐑑𐑕"
+
+#: ../src/ephy-window.c:534
 msgid "If you close the document anyway, you will lose that information."
 msgstr "𐑦𐑓 𐑿 𐑒𐑤𐑴𐑟 𐑞 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 𐑧𐑯𐑦𐑢𐑱, 𐑿 𐑢𐑦𐑤 𐑤𐑵𐑟 𐑞𐑨𐑑 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯."
 
-#: ../src/ephy-window.c:534
+#: ../src/ephy-window.c:538
 msgid "Close _Document"
 msgstr "𐑒𐑤𐑴𐑟 _𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑"
 
-#: ../src/ephy-window.c:1497 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1440 ../src/window-commands.c:313
 msgid "Open"
 msgstr "𐑴𐑐𐑩𐑯"
 
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1442
 msgid "Save As"
 msgstr "𐑕𐑱𐑝 𐑨𐑟"
 
-#: ../src/ephy-window.c:1501
+#: ../src/ephy-window.c:1444
 msgid "Print"
 msgstr "𐑐𐑮𐑦𐑯𐑑"
 
-#: ../src/ephy-window.c:1505
+#: ../src/ephy-window.c:1448
 msgid "Find"
 msgstr "𐑓𐑲𐑯𐑛"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1518
+#: ../src/ephy-window.c:1461
 msgid "Larger"
 msgstr "𐑤𐑸𐑡𐑼"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1521
+#: ../src/ephy-window.c:1464
 msgid "Smaller"
 msgstr "𐑕𐑥𐑷𐑤𐑼"
 
-#: ../src/ephy-window.c:1758
+#: ../src/ephy-window.c:1704
 msgid "Insecure"
 msgstr "𐑦𐑯𐑕𐑩𐑒𐑘𐑻"
 
-#: ../src/ephy-window.c:1763
+#: ../src/ephy-window.c:1709
 msgid "Broken"
 msgstr "𐑚𐑮𐑴𐑒𐑩𐑯"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1717
 msgid "Low"
 msgstr "𐑤𐑴"
 
-#: ../src/ephy-window.c:1778
+#: ../src/ephy-window.c:1724
 msgid "High"
 msgstr "𐑣𐑲"
 
-#: ../src/ephy-window.c:1788
 #, c-format
+#: ../src/ephy-window.c:1734
 msgid "Security level: %s"
 msgstr "𐑕𐑦𐑒𐑘𐑫𐑼𐑦𐑑𐑦 𐑤𐑧𐑝𐑩𐑤: %s"
 
-#: ../src/ephy-window.c:1831
 #, c-format
+#: ../src/ephy-window.c:1774
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 𐑣𐑦𐑛𐑩𐑯 𐑐𐑪𐑐𐑳𐑐 𐑢𐑦𐑯𐑛𐑴"
 msgstr[1] "%d 𐑣𐑦𐑛𐑩𐑯 𐑐𐑪𐑐𐑳𐑐 𐑢𐑦𐑯𐑛𐑴𐑟"
 
-#: ../src/ephy-window.c:2096
 #, c-format
+#: ../src/ephy-window.c:2039
 msgid "Open image “%s”"
 msgstr "𐑴𐑐𐑩𐑯 𐑦𐑥𐑦𐑡 “%s”"
 
-#: ../src/ephy-window.c:2101
 #, c-format
+#: ../src/ephy-window.c:2044
 msgid "Use as desktop background “%s”"
 msgstr "𐑿𐑟 𐑨𐑟 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑚𐑨𐑒𐑜𐑮𐑬𐑯𐑛 “%s”"
 
-#: ../src/ephy-window.c:2106
 #, c-format
+#: ../src/ephy-window.c:2049
 msgid "Save image “%s”"
 msgstr "𐑕𐑱𐑝 𐑦𐑥𐑦𐑡 “%s”"
 
-#: ../src/ephy-window.c:2111
 #, c-format
+#: ../src/ephy-window.c:2054
 msgid "Copy image address “%s”"
 msgstr "𐑒𐑪𐑐𐑦 𐑦𐑥𐑦𐑡 𐑩𐑛𐑮𐑧𐑕 “%s”"
 
-#: ../src/ephy-window.c:2125
 #, c-format
+#: ../src/ephy-window.c:2068
 msgid "Send email to address “%s”"
 msgstr "𐑕𐑧𐑯𐑛 𐑰𐑥𐑱𐑤 𐑑 𐑩𐑛𐑮𐑧𐑕 “%s”"
 
-#: ../src/ephy-window.c:2131
 #, c-format
+#: ../src/ephy-window.c:2074
 msgid "Copy email address “%s”"
 msgstr "𐑒𐑪𐑐𐑦 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕 “%s”"
 
-#: ../src/ephy-window.c:2145
 #, c-format
+#: ../src/ephy-window.c:2088
 msgid "Save link “%s”"
 msgstr "𐑕𐑱𐑝 𐑤𐑦𐑙𐑒 “%s”"
 
-#: ../src/ephy-window.c:2151
 #, c-format
+#: ../src/ephy-window.c:2094
 msgid "Bookmark link “%s”"
 msgstr "𐑚𐑫𐑒𐑥𐑸𐑒 𐑤𐑦𐑙𐑒 “%s”"
 
-#: ../src/ephy-window.c:2156
 #, c-format
+#: ../src/ephy-window.c:2099
 msgid "Copy link's address “%s”"
 msgstr "𐑒𐑪𐑐𐑦 𐑤𐑦𐑙𐑒'𐑕 𐑩𐑛𐑮𐑧𐑕 “%s”"
 
-#: ../src/pdm-dialog.c:370
+#: ../src/pdm-dialog.c:369
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>𐑕𐑩𐑤𐑧𐑒𐑑 𐑞 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑛𐑱𐑑𐑩 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑒𐑤𐑽</b>"
 
-#: ../src/pdm-dialog.c:373
+#: ../src/pdm-dialog.c:372
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
-"have visited. Before proceeding, check the types of information that you "
-"want to remove:"
+"have visited. Before proceeding, check the types of information that you want "
+"to remove:"
 msgstr ""
 "𐑿 𐑸 𐑩𐑚𐑬𐑑 𐑑 𐑒𐑤𐑽 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑛𐑱𐑑𐑩 𐑞𐑨𐑑 𐑦𐑟 𐑕𐑑𐑹𐑛 𐑩𐑚𐑬𐑑 𐑞 𐑢𐑧𐑚 𐑐𐑱𐑡𐑧𐑟 𐑿 𐑣𐑨𐑝 𐑝𐑦𐑟𐑩𐑑𐑩𐑛. 𐑚𐑦𐑓𐑹 "
 "𐑐𐑮𐑩𐑕𐑰𐑛𐑦𐑙, 𐑗𐑧𐑒 𐑞 𐑑𐑲𐑐𐑕 𐑝 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑞𐑨𐑑 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑮𐑦𐑥𐑵𐑝:"
 
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:377
 msgid "Clear All Personal Data"
 msgstr "𐑒𐑤𐑽 𐑷𐑤 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑛𐑱𐑑𐑩"
 
 #. Cookies
-#: ../src/pdm-dialog.c:409
+#: ../src/pdm-dialog.c:408
 msgid "C_ookies"
 msgstr "𐑒_𐑫𐑒𐑦𐑟"
 
 #. Passwords
-#: ../src/pdm-dialog.c:421
+#: ../src/pdm-dialog.c:420
 msgid "Saved _passwords"
 msgstr "𐑕𐑱𐑝𐑛 _𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
 
 #. Cache
-#: ../src/pdm-dialog.c:445
+#: ../src/pdm-dialog.c:444
 msgid "_Temporary files"
 msgstr "_𐑑𐑧𐑥𐑐𐑼𐑼𐑦 𐑓𐑲𐑤𐑟"
 
-#: ../src/pdm-dialog.c:461
+#: ../src/pdm-dialog.c:460
 msgid ""
-"<small><i><b>Note:</b> You cannot undo this action. The data you are "
-"choosing to clear will be deleted forever.</i></small>"
+"<small><i><b>Note:</b> You cannot undo this action. The data you are choosing "
+"to clear will be deleted forever.</i></small>"
 msgstr ""
 "<small><i><b>𐑯𐑴𐑑:</b> 𐑿 𐑒𐑨𐑯𐑪𐑑 𐑳𐑯𐑛𐑵 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯. 𐑞 𐑛𐑱𐑑𐑩 𐑿 𐑸 𐑗𐑵𐑟𐑦𐑙 𐑑 𐑒𐑤𐑽 𐑢𐑦𐑤 𐑚𐑰 "
 "𐑛𐑦𐑤𐑰𐑑𐑩𐑛 𐑓𐑹𐑧𐑝𐑼.</i></small>"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:652
 msgid "Cookie Properties"
 msgstr "𐑒𐑫𐑒𐑦 𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
 
-#: ../src/pdm-dialog.c:671
+#: ../src/pdm-dialog.c:670
 msgid "Content:"
 msgstr "𐑒𐑪𐑯𐑑𐑧𐑯𐑑:"
 
-#: ../src/pdm-dialog.c:687
+#: ../src/pdm-dialog.c:686
 msgid "Path:"
 msgstr "𐑐𐑭𐑔:"
 
-#: ../src/pdm-dialog.c:703
+#: ../src/pdm-dialog.c:702
 msgid "Send for:"
 msgstr "𐑕𐑧𐑯𐑛 𐑓𐑹:"
 
-#: ../src/pdm-dialog.c:712
+#: ../src/pdm-dialog.c:711
 msgid "Encrypted connections only"
 msgstr "𐑦𐑯𐑒𐑮𐑦𐑐𐑑𐑩𐑛 𐑒𐑩𐑯𐑧𐑒𐑖𐑩𐑯𐑟 𐑴𐑯𐑤𐑦"
 
-#: ../src/pdm-dialog.c:712
+#: ../src/pdm-dialog.c:711
 msgid "Any type of connection"
 msgstr "𐑧𐑯𐑦 𐑑𐑲𐑐 𐑝 𐑒𐑩𐑯𐑧𐑒𐑖𐑩𐑯"
 
-#: ../src/pdm-dialog.c:718
+#: ../src/pdm-dialog.c:717
 msgid "Expires:"
 msgstr "𐑦𐑒𐑕𐑐𐑲𐑻𐑟:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:730
+#: ../src/pdm-dialog.c:729
 msgid "End of current session"
 msgstr "𐑧𐑯𐑛 𐑝 𐑒𐑳𐑮𐑩𐑯𐑑 𐑕𐑧𐑖𐑩𐑯"
 
-#: ../src/pdm-dialog.c:862
+#: ../src/pdm-dialog.c:861
 msgid "Domain"
 msgstr "𐑛𐑴𐑥𐑱𐑯"
 
-#: ../src/pdm-dialog.c:874
+#: ../src/pdm-dialog.c:873
 msgid "Name"
 msgstr "𐑯𐑱𐑥"
 
-#: ../src/pdm-dialog.c:1288
+#: ../src/pdm-dialog.c:1287
 msgid "Host"
 msgstr "𐑣𐑴𐑕𐑑"
 
-#: ../src/pdm-dialog.c:1301
+#: ../src/pdm-dialog.c:1300
 msgid "User Name"
 msgstr "𐑿𐑟𐑼 𐑯𐑱𐑥"
 
-#: ../src/pdm-dialog.c:1314
+#: ../src/pdm-dialog.c:1313
 msgid "User Password"
 msgstr "𐑿𐑟𐑼 𐑐𐑭𐑕𐑢𐑼𐑛"
 
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:275
 msgid "Download Link"
 msgstr "𐑛𐑬𐑯𐑤𐑴𐑛 𐑤𐑦𐑙𐑒"
 
-#: ../src/popup-commands.c:282
+#: ../src/popup-commands.c:283
 msgid "Save Link As"
 msgstr "𐑕𐑱𐑝 𐑤𐑦𐑙𐑒 𐑨𐑟"
 
-#: ../src/popup-commands.c:289
+#: ../src/popup-commands.c:290
 msgid "Save Image As"
 msgstr "𐑕𐑱𐑝 𐑦𐑥𐑦𐑡 𐑨𐑟"
-
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "𐑓𐑻𐑕𐑑"
-
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "𐑜𐑴 𐑑 𐑞 𐑓𐑻𐑕𐑑 𐑐𐑱𐑡"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "𐑤𐑭𐑕𐑑"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "𐑜𐑴 𐑑 𐑞 𐑤𐑭𐑕𐑑 𐑐𐑱𐑡"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "𐑐𐑮𐑰𐑝𐑦𐑩𐑕"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "𐑜𐑴 𐑑 𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑐𐑱𐑡"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "𐑯𐑧𐑒𐑕𐑑"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "𐑜𐑴 𐑑 𐑯𐑧𐑒𐑕𐑑 𐑐𐑱𐑡"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "𐑒𐑤𐑴𐑟"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "𐑒𐑤𐑴𐑟 𐑐𐑮𐑦𐑯𐑑 𐑐𐑮𐑰𐑝𐑿"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
 #, c-format
+#: ../src/prefs-dialog.c:510 ../src/prefs-dialog.c:516
 msgctxt "language"
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2547,39 +3530,47 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:527
 #, c-format
+#: ../src/prefs-dialog.c:525
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "𐑿𐑟𐑼 𐑛𐑦𐑓𐑲𐑯𐑛 (%s)"
 
-#: ../src/prefs-dialog.c:549
 #, c-format
+#: ../src/prefs-dialog.c:547
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "𐑕𐑦𐑕𐑑𐑩𐑥 𐑤𐑨𐑙𐑜𐑢𐑩𐑡 (%s)"
 msgstr[1] "𐑕𐑦𐑕𐑑𐑩𐑥 𐑤𐑨𐑙𐑜𐑢𐑩𐑡𐑧𐑟 (%s)"
 
-#: ../src/prefs-dialog.c:821
-msgid "Language"
-msgstr "𐑤𐑨𐑙𐑜𐑢𐑩𐑡"
-
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:943
 msgid "Select a Directory"
 msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑩 𐑛𐑲𐑮𐑧𐑒𐑑𐑼𐑦"
 
-#: ../src/window-commands.c:907
+#: ../src/window-commands.c:940
 msgid ""
-"The GNOME Web Browser is free software; you can redistribute it and/or "
-"modify it under the terms of the GNU General Public License as published by "
-"the Free Software Foundation; either version 2 of the License, or (at your "
-"option) any later version."
+"The GNOME Web Browser is free software; you can redistribute it and/or modify "
+"it under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) any "
+"later version."
 msgstr ""
-"𐑞 𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑦𐑟 𐑓𐑮𐑰 𐑕𐑪𐑓𐑑𐑢𐑺; 𐑿 𐑒𐑨𐑯 𐑮𐑰𐑛𐑦𐑕𐑑𐑮𐑦𐑚𐑿𐑑 𐑦𐑑 𐑯/𐑹 𐑥𐑪𐑛𐑦𐑓𐑲 𐑦𐑑 𐑳𐑯𐑛𐑼 𐑞 "
-"𐑑𐑻𐑥𐑟 𐑝 𐑞 ·𐑜𐑯𐑿 𐑡𐑧𐑯𐑼𐑩𐑤 𐑐𐑳𐑚𐑤𐑦𐑒 𐑤𐑲𐑕𐑩𐑯𐑕 𐑨𐑟 𐑐𐑳𐑚𐑤𐑦𐑖𐑑 𐑚𐑲 𐑞 𐑓𐑮𐑰 𐑕𐑪𐑓𐑑𐑢𐑺 𐑓𐑬𐑯𐑛𐑱𐑖𐑩𐑯; 𐑲𐑞𐑼 "
-"𐑝𐑻𐑠𐑩𐑯 2 𐑝 𐑞 𐑤𐑲𐑕𐑩𐑯𐑕, 𐑹 (𐑨𐑑 𐑿𐑼 𐑪𐑐𐑖𐑩𐑯) 𐑧𐑯𐑦 𐑤𐑱𐑑𐑼 𐑝𐑻𐑠𐑩𐑯."
+"𐑞 𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑦𐑟 𐑓𐑮𐑰 𐑕𐑪𐑓𐑑𐑢𐑺; 𐑿 𐑒𐑨𐑯 𐑮𐑰𐑛𐑦𐑕𐑑𐑮𐑦𐑚𐑿𐑑 𐑦𐑑 𐑯/𐑹 𐑥𐑪𐑛𐑦𐑓𐑲 𐑦𐑑 𐑳𐑯𐑛𐑼 𐑞 𐑑𐑻𐑥𐑟 "
+"𐑝 𐑞 ·𐑜𐑯𐑿 𐑡𐑧𐑯𐑼𐑩𐑤 𐑐𐑳𐑚𐑤𐑦𐑒 𐑤𐑲𐑕𐑩𐑯𐑕 𐑨𐑟 𐑐𐑳𐑚𐑤𐑦𐑖𐑑 𐑚𐑲 𐑞 𐑓𐑮𐑰 𐑕𐑪𐑓𐑑𐑢𐑺 𐑓𐑬𐑯𐑛𐑱𐑖𐑩𐑯; 𐑲𐑞𐑼 𐑝𐑻𐑠𐑩𐑯 "
+"2 𐑝 𐑞 𐑤𐑲𐑕𐑩𐑯𐑕, 𐑹 (𐑨𐑑 𐑿𐑼 𐑪𐑐𐑖𐑩𐑯) 𐑧𐑯𐑦 𐑤𐑱𐑑𐑼 𐑝𐑻𐑠𐑩𐑯."
 
-#: ../src/window-commands.c:915
+#, fuzzy
+#: ../src/window-commands.c:944
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"𐑞 𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑦𐑟 𐑛𐑦𐑕𐑑𐑮𐑦𐑚𐑿𐑑𐑩𐑛 𐑦𐑯 𐑞 𐑣𐑴𐑐 𐑞𐑨𐑑 𐑦𐑑 𐑢𐑦𐑤 𐑚𐑰 𐑿𐑕𐑓𐑩𐑤, 𐑚𐑳𐑑 𐑢𐑦𐑞𐑬𐑑 𐑧𐑯𐑦 "
+"𐑢𐑪𐑮𐑩𐑯𐑑𐑰; 𐑢𐑦𐑞𐑬𐑑 𐑰𐑝𐑩𐑯 𐑞 𐑦𐑥𐑐𐑤𐑲𐑛 𐑢𐑪𐑮𐑩𐑯𐑑𐑰 𐑝 MERCHANTABILITY 𐑹 𐑓𐑦𐑑𐑯𐑩𐑕 𐑓𐑹 𐑩 𐑐𐑼𐑑𐑦𐑒𐑿𐑤𐑼 "
+"𐑐𐑻𐑐𐑩𐑕.  𐑕𐑰 𐑞 ·𐑜𐑯𐑿 𐑡𐑧𐑯𐑼𐑩𐑤 𐑐𐑳𐑚𐑤𐑦𐑒 𐑤𐑲𐑕𐑩𐑯𐑕 𐑓𐑹 𐑥𐑹 𐑛𐑰𐑑𐑱𐑤𐑟."
+
+#: ../src/window-commands.c:948
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2589,18 +3580,25 @@ msgstr ""
 "𐑚𐑮𐑬𐑟𐑼; 𐑦𐑓 𐑯𐑪𐑑, 𐑮𐑲𐑑 𐑑 𐑞 𐑓𐑮𐑰 𐑕𐑪𐑓𐑑𐑢𐑺 𐑓𐑬𐑯𐑛𐑱𐑖𐑩𐑯, 𐑦𐑙𐑒., 51 ·𐑓𐑮𐑨𐑙𐑒𐑤𐑦𐑯 𐑕𐑑𐑮𐑰𐑑, 𐑓𐑦𐑓𐑔 "
 "𐑓𐑤𐑹, ·𐑚𐑪𐑕𐑑𐑩𐑯, 𐑥𐑶  02110-1301  𐑘𐑵𐑧𐑕𐑱"
 
-#: ../src/window-commands.c:961 ../src/window-commands.c:977
-#: ../src/window-commands.c:988
+#: ../src/window-commands.c:994 ../src/window-commands.c:1010
+#: ../src/window-commands.c:1021
 msgid "Contact us at:"
 msgstr "𐑒𐑪𐑯𐑑𐑨𐑒𐑑 𐑳𐑕 𐑨𐑑:"
 
-#: ../src/window-commands.c:964
+#: ../src/window-commands.c:997
 msgid "Contributors:"
 msgstr "𐑒𐑩𐑯𐑑𐑮𐑦𐑚𐑘𐑩𐑑𐑻𐑟:"
 
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:1000
 msgid "Past developers:"
 msgstr "𐑐𐑭𐑕𐑑 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼𐑟:"
+
+#, fuzzy, c-format
+#: ../src/window-commands.c:1030
+msgid ""
+"Lets you view web pages and find information on the internet.\nPowered by "
+"WebKit"
+msgstr "𐑤𐑧𐑑𐑕 𐑿 𐑝𐑿 𐑢𐑧𐑚 𐑐𐑱𐑡𐑧𐑟 𐑯 𐑓𐑲𐑯𐑛 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑪𐑯 𐑞 ·𐑦𐑯𐑑𐑼𐑯𐑧𐑑.\n𐑐𐑬𐑼𐑛 𐑚𐑲 WebKit"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -2610,10 +3608,11 @@ msgstr "𐑐𐑭𐑕𐑑 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼𐑟:"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1023
+#: ../src/window-commands.c:1056
 msgid "translator-credits"
 msgstr "·𐑑𐑪𐑥𐑩𐑕 ·𐑔𐑻𐑥𐑩𐑯"
 
-#: ../src/window-commands.c:1026
+#: ../src/window-commands.c:1059
 msgid "GNOME Web Browser Website"
 msgstr "·𐑜𐑯𐑴𐑥 𐑢𐑧𐑚 𐑚𐑮𐑬𐑟𐑼 𐑢𐑧𐑚𐑕𐑲𐑑"
+
