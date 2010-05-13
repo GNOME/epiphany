@@ -1193,7 +1193,44 @@ window_cmd_browse_with_caret (GtkAction *action,
 			      EphyWindow *window)
 {
 	gboolean active;
+	EphyEmbed *embed;
 
+	embed = ephy_embed_container_get_active_child 
+		(EPHY_EMBED_CONTAINER (window));
+	
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+
+	/* FIXME: perhaps a bit of a kludge; we check if there's an
+	 * active embed because we don't want to show the dialog on
+	 * startup when we sync the GtkAction with our GConf
+	 * preference */
+	if (active && embed)
+	{
+		GtkWidget *dialog;
+		int response;
+
+		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_MESSAGE_QUESTION, GTK_BUTTONS_CANCEL,
+						 _("Enable caret browsing mode?"));
+
+		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+							  _("Pressing F7 turns caret browsing on or off. This feature "
+							    "places a moveable cursor in web pages, allowing you to move "
+							    "around with your keyboard. Do you want to enable caret browsing on?"));
+		gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Enable"), GTK_RESPONSE_ACCEPT);
+		gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+		gtk_widget_destroy (dialog);
+
+		if (response == GTK_RESPONSE_CANCEL)
+		{
+			gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), FALSE);
+			return;
+		}
+	}
+
 	eel_gconf_set_boolean (CONF_CARET_BROWSING_ENABLED, active);
 }
