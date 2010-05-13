@@ -65,24 +65,6 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	/**
-	* EphyStatusbar::lock-clicked:
-	* @statusbar: the object which received the signal.
-	*
-	* This signal corresponds to the user clicking on the lock icon on the
-	* @statusbar.
-	*/
-	signals[LOCK_CLICKED] =
-		g_signal_new
-			("lock-clicked",
-			 EPHY_TYPE_STATUSBAR,
-			 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			 G_STRUCT_OFFSET (EphyStatusbarClass, lock_clicked),
-			 NULL, NULL,
-			 g_cclosure_marshal_VOID__VOID,
-			 G_TYPE_NONE,
-			 0);
-
 	g_type_class_add_private (object_class, sizeof (EphyStatusbarPrivate));
 }
 

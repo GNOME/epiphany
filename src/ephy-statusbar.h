@@ -52,9 +52,6 @@ struct _EphyStatusbar
 struct _EphyStatusbarClass
 {
         GtkStatusbarClass parent_class;
-
-	/* Signals */
-	void (* lock_clicked)	(EphyStatusbar *statusbar);
 };
 
 GType         ephy_statusbar_get_type			(void);

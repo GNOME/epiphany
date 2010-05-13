@@ -3744,8 +3744,6 @@ ephy_window_constructor (GType type,
 
 	/* Connect lock clicks */
 	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
-	g_signal_connect_swapped (priv->statusbar, "lock-clicked",
-				  G_CALLBACK (gtk_action_activate), action);
 	g_signal_connect_swapped (priv->toolbar, "lock-clicked",
 				  G_CALLBACK (gtk_action_activate), action);
 
