@@ -58,9 +58,6 @@ GType         ephy_statusbar_get_type			(void);
 
 GtkWidget    *ephy_statusbar_new			(void);
 
-void	      ephy_statusbar_set_caret_mode		(EphyStatusbar *statusbar,
-							 gboolean enabled);
-
 void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,
 							 gboolean hidden,
 							 const char *tooltip);

@@ -45,7 +45,6 @@ struct _EphyStatusbarPrivate
 	GtkWidget *hbox;
 	GtkWidget *icon_container;
 
-	GtkWidget *caret_indicator;
 	GtkWidget *popups_manager_icon;
 	GtkWidget *popups_manager_evbox;
 };
@@ -66,24 +65,6 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	g_type_class_add_private (object_class, sizeof (EphyStatusbarPrivate));
-}
-
-static void
-create_caret_indicator (EphyStatusbar *statusbar)
-{
-	EphyStatusbarPrivate *priv = statusbar->priv;
-	GtkWidget *label;
-
-	priv->caret_indicator = label = gtk_label_new (_("Caret"));
-	gtk_widget_show (label);
-
-	gtk_widget_set_tooltip_text (label,
-				     /* Translators: this is the tooltip on the "Caret" icon
-				      * in the statusbar.
-				      */
-				     _("In keyboard selection mode, press F7 to exit"));
-
-	ephy_statusbar_add_widget (statusbar, priv->caret_indicator);
 }
 
 static gboolean
@@ -170,8 +151,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 			   &priv->popups_manager_evbox,
 			   &priv->popups_manager_icon);
 	/* don't show priv->popups_manager_evbox yet */
-
-	create_caret_indicator (t);
 }
 
 /**
@@ -185,24 +164,6 @@ GtkWidget *
 ephy_statusbar_new (void)
 {
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_STATUSBAR, NULL));
-}
-
-/**
- * ephy_statusbar_set_caret_mode:
- * @statusbar: an #EphyStatusbar
- * @enabled: %TRUE to show the caret browsing mode indicator
- * 
- * Sets the statusbar's caret browsing mode indicator.
- **/
-void
-ephy_statusbar_set_caret_mode (EphyStatusbar *statusbar,
-			       gboolean enabled)
-{
-	EphyStatusbarPrivate *priv = statusbar->priv;
-
-	enabled = enabled != FALSE;
-
-	g_object_set (priv->caret_indicator, "visible", enabled, NULL);
 }
 
 /**
