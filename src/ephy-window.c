@@ -1762,27 +1762,7 @@ sync_tab_popup_windows (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
-	guint num_popups = 0;
-	char *tooltip = NULL;
-
-	g_object_get (view,
-		      "hidden-popup-count", &num_popups,
-		      NULL);
-
-	if (num_popups > 0)
-	{
-		tooltip = g_strdup_printf (ngettext ("%d hidden popup window",
-						     "%d hidden popup windows",
-						     num_popups),
-					   num_popups);
-	}
-
-	ephy_statusbar_set_popups_state
-		(EPHY_STATUSBAR (window->priv->statusbar),
-		 tooltip == NULL,
-		 tooltip);
-
-	g_free (tooltip);
+	/* FIXME: show popup count somehow */
 }
 
 static void

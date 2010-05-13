@@ -44,18 +44,7 @@ struct _EphyStatusbarPrivate
 {
 	GtkWidget *hbox;
 	GtkWidget *icon_container;
-
-	GtkWidget *popups_manager_icon;
-	GtkWidget *popups_manager_evbox;
 };
-
-enum
-{
-	LOCK_CLICKED,
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyStatusbar, ephy_statusbar, GTK_TYPE_STATUSBAR)
 
@@ -65,51 +54,6 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	g_type_class_add_private (object_class, sizeof (EphyStatusbarPrivate));
-}
-
-static gboolean
-padlock_button_press_cb (GtkWidget *ebox,
-                         GdkEventButton *event,
-			 EphyStatusbar *statusbar)
-{
-        if (event->type == GDK_BUTTON_PRESS &&
-	    event->button == 1 /* left */ &&
-	    (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
-        {
-		g_signal_emit (statusbar, signals[LOCK_CLICKED], 0);
-
-                return TRUE;
-        }
-
-        return FALSE;
-}
-
-static void
-create_icon_frame (EphyStatusbar *statusbar,
-		   const char *stock_id,
-		   GCallback button_press_cb,
-		   GtkWidget **_evbox,
-		   GtkWidget **_icon)
-{
-	GtkWidget *evbox, *icon;
-
-	evbox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window  (GTK_EVENT_BOX (evbox), FALSE);
-	if (button_press_cb)
-	{
-		gtk_widget_add_events (evbox, GDK_BUTTON_PRESS_MASK);
-		g_signal_connect (evbox, "button-press-event",
-				  G_CALLBACK (padlock_button_press_cb), statusbar);
-	}
-
-	icon = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
-	gtk_container_add (GTK_CONTAINER (evbox), icon);
-	gtk_widget_show (icon);
-
-	ephy_statusbar_add_widget (statusbar, evbox);
-
-	*_evbox = evbox;
-	*_icon = icon;
 }
 
 static void
@@ -143,14 +87,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 	gtk_container_add (GTK_CONTAINER (gstatusbar->frame), priv->hbox);
 	gtk_widget_show (priv->hbox);
 #endif
-
-	/* Create popup-blocked icon */
-	create_icon_frame (t,
-			   EPHY_STOCK_POPUPS,
-			   NULL,
-			   &priv->popups_manager_evbox,
-			   &priv->popups_manager_icon);
-	/* don't show priv->popups_manager_evbox yet */
 }
 
 /**
@@ -164,33 +100,6 @@ GtkWidget *
 ephy_statusbar_new (void)
 {
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_STATUSBAR, NULL));
-}
-
-/**
- * ephy_statusbar_set_popups_state:
- * @statusbar: an #EphyStatusbar
- * @hidden: %TRUE if popups have been hidden
- * @tooltip: a string to display as tooltip, or %NULL
- *
- * Sets the statusbar's popup-blocker icon's tooltip and visibility.
- **/
-void
-ephy_statusbar_set_popups_state (EphyStatusbar *statusbar,
-				 gboolean hidden,
-				 const char *tooltip)
-{
-	EphyStatusbarPrivate *priv = statusbar->priv;
-
-	if (hidden)
-	{
-		gtk_widget_hide (priv->popups_manager_evbox);
-	}
-	else
-	{
-		gtk_widget_set_tooltip_text (priv->popups_manager_icon, tooltip);
-
-		gtk_widget_show (priv->popups_manager_evbox);
-	}
 }
 
 static void

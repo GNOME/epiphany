@@ -58,10 +58,6 @@ GType         ephy_statusbar_get_type			(void);
 
 GtkWidget    *ephy_statusbar_new			(void);
 
-void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,
-							 gboolean hidden,
-							 const char *tooltip);
-
 void	      ephy_statusbar_add_widget			(EphyStatusbar *statusbar,
 							 GtkWidget *widget);
 
