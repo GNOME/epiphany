@@ -149,43 +149,6 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 		 NULL, NULL, flags, chromemask, is_popup, 0);
 }
 
-
-static gboolean
-ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
-			   const char *url,
-			   const char *title,
-			   EphyShell *shell)
-{
-	EphySession *session;
-	EphyWindow *window;
-	GtkWidget *dialog;
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-
-	window = ephy_session_get_active_window (session);
-
-	dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					 GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_ERROR,
-					 GTK_BUTTONS_OK,
-					 _("Sidebar extension required"));
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Sidebar Extension Required"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
-
-	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-		  _("The link you clicked needs the sidebar extension to be "
-		    "installed."));
-
-	g_signal_connect_swapped (dialog, "response", 
-				  G_CALLBACK (gtk_widget_destroy), dialog);
-
-	gtk_widget_show (dialog);
-
-	return TRUE;
-}
-
 #ifdef ENABLE_NETWORK_MANAGER
 
 static void
@@ -221,10 +184,6 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 	{
 		g_signal_connect_object (embed_single, "new-window",
 					 G_CALLBACK (ephy_shell_new_window_cb),
-					 shell, G_CONNECT_AFTER);
-
-		g_signal_connect_object (embed_single, "add-sidebar",
-					 G_CALLBACK (ephy_shell_add_sidebar_cb),
 					 shell, G_CONNECT_AFTER);
 
 		priv->embed_single_connected = TRUE;
