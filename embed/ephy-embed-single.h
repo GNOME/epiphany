@@ -68,10 +68,6 @@ struct _EphyEmbedSingleClass
                                char *mime_type,
                                char *uri);
 
-  gboolean (* add_sidebar)    (EphyEmbedSingle *single,
-                               const char *url,
-                               const char *title);
-
   gboolean (* add_search_engine) (EphyEmbedSingle *single,
                                   const char *url,
                                   const char *icon_url,

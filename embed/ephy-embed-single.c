@@ -319,26 +319,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 G_TYPE_STRING);
 
   /**
-   * EphyEmbedSingle::add-sidebar:
-   * @single:
-   * @url: The url of the sidebar to be added
-   * @title: The title of the sidebar to be added
-   *
-   * The ::add-sidebar signal is emitted when the user clicks a javascript link that
-   * requests adding a url to the sidebar.
-   **/
-  g_signal_new ("add-sidebar",
-                EPHY_TYPE_EMBED_SINGLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyEmbedSingleClass, add_sidebar),
-                g_signal_accumulator_true_handled, NULL,
-                ephy_marshal_BOOLEAN__STRING_STRING,
-                G_TYPE_BOOLEAN,
-                2,
-                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
    * EphyEmbedSingle::add-search-engine
    * @single:
    * @url: The url of the search engine definition file
