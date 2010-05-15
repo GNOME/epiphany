@@ -26,16 +26,16 @@ LDADD = \
 
 if ENABLE_NSS
 CFLAGS += \
-    $(NSS_CFLAGS)
+	$(NSS_CFLAGS)
 LDADD += \
-    $(NSS_LIBS)
+	$(NSS_LIBS)
 endif
 
-if ENABLE_NSS
+if ENABLE_SEED
 CFLAGS += \
-    $(SEED_CFLAGS)
+	$(SEED_CFLAGS)
 LDADD += \
-    $(SEED_LIBS)
+	$(SEED_LIBS)
 endif
 
 testephyembedpersist_SOURCES = \
