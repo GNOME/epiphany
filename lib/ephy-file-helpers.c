@@ -229,7 +229,7 @@ ephy_file_tmp_filename (const char *base,
 	int fd;
 	char *name = g_strdup (base);
 
-	fd = mkstemp (name);
+	fd = g_mkstemp (name);
 
 	if (fd != -1)
 	{
