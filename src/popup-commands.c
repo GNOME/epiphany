@@ -446,31 +446,34 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 static void
 save_temp_source (const char *address)
 {
-	char *tmp, *base;
 	EphyEmbedPersist *persist;
 	const char *static_temp_dir;
+	char *base, *tmp_name, *tmp_path, *dest;
+
+	if (address == NULL) return;
 
 	static_temp_dir = ephy_file_tmp_dir ();
-	if (static_temp_dir == NULL)
-	{
-		return;
-	}
+	if (static_temp_dir == NULL) return;
 
-	base = g_build_filename (static_temp_dir, "viewimageXXXXXX", NULL);
-	tmp = ephy_file_tmp_filename (base, "tmp"); /* FIXME */
+	base = g_path_get_basename (address);
+	tmp_name = g_strconcat (base, ".XXXXXX", NULL);
 	g_free (base);
-	if (tmp == NULL)
-	{
-		return;
-	}
+
+	tmp_path = g_build_filename (static_temp_dir, tmp_name, NULL);
+	g_free (tmp_name);
+
+	dest = ephy_file_tmp_filename (tmp_path, NULL);
+	g_free (tmp_path);
+
+	if (dest == NULL) return;
 
 	persist = EPHY_EMBED_PERSIST
 		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
 
 	ephy_embed_persist_set_source (persist, address);
+	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_FROM_CACHE |
 			 		       EPHY_EMBED_PERSIST_NO_VIEW);
-	ephy_embed_persist_set_dest (persist, tmp);
 
 	g_signal_connect (persist, "completed",
 			  G_CALLBACK (save_source_completed_cb), NULL);
@@ -478,7 +481,7 @@ save_temp_source (const char *address)
 	ephy_embed_persist_save (persist);
 	g_object_unref (persist);
 
-	g_free (tmp);
+	g_free (dest);
 }
 
 void
