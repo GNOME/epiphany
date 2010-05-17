@@ -795,24 +795,13 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 	g_slice_free (FindAgainCBStruct, data);
 }
 
-static EphyFindResult
-ephy_find_toolbar_find_again (EphyFindToolbar *toolbar,
-                              EphyFindDirection direction,
-                              gboolean links_only)
-{
-  EphyFindToolbarPrivate *priv = toolbar->priv;
-
-  return real_find (priv, direction);
-}
-
 static gboolean
 find_again_cb (FindAgainCBStruct *data)
 {
 	EphyFindResult result;
 	EphyFindToolbarPrivate *priv = data->toolbar->priv;
 
-	result = ephy_find_toolbar_find_again (data->toolbar, data->direction,
-					       priv->links_only);
+	result = real_find (priv, data->direction);
 
 	set_status (data->toolbar, result);
 
