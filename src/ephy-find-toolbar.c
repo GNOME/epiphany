@@ -78,6 +78,12 @@ typedef enum
 	EPHY_FIND_FOUNDWRAPPED	= 2
 } EphyEmbedFindResult;
 
+typedef enum
+{
+	EPHY_FIND_DIRECTION_NEXT,
+	EPHY_FIND_DIRECTION_PREV
+} EphyFindDirection;
+
 static guint signals[LAST_SIGNAL];
 
 /* private functions */
@@ -241,10 +247,11 @@ ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
 
 static EphyEmbedFindResult
 real_find (EphyFindToolbarPrivate *priv,
-	   gboolean forward)
+	   EphyFindDirection direction)
 {
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+        gboolean forward = (direction == EPHY_FIND_DIRECTION_NEXT);
 
         if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
                 return EPHY_FIND_NOTFOUND;
@@ -275,7 +282,7 @@ do_search (EphyFindToolbar *toolbar)
 
 	ephy_find_toolbar_mark_matches (toolbar);
 
-	result = real_find (priv, TRUE);
+	result = real_find (priv, EPHY_FIND_DIRECTION_NEXT);
 	set_status (toolbar, result);
 
 	return FALSE;
@@ -431,9 +438,10 @@ case_sensitive_toggled_cb (GtkWidget *check,
 	{
 		EphyEmbedFindResult result;
 
-		result = real_find (toolbar->priv, FALSE);
+		result = real_find (toolbar->priv, EPHY_FIND_DIRECTION_PREV);
 		if (result != EPHY_FIND_NOTFOUND)
-			result = real_find (toolbar->priv, TRUE);
+			result = real_find (toolbar->priv,
+					    EPHY_FIND_DIRECTION_NEXT);
 
 		set_status (toolbar, result);
 	}
@@ -778,7 +786,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 typedef struct
 {
 	EphyFindToolbar *toolbar;
-	gboolean next;
+	gboolean direction;
 } FindAgainCBStruct;
 
 static void
@@ -789,12 +797,12 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 
 static EphyEmbedFindResult
 ephy_find_toolbar_find_again (EphyFindToolbar *toolbar,
-                              gboolean forward,
+                              EphyFindDirection direction,
                               gboolean links_only)
 {
   EphyFindToolbarPrivate *priv = toolbar->priv;
 
-  return real_find (priv, forward);
+  return real_find (priv, direction);
 }
 
 static gboolean
@@ -803,8 +811,9 @@ find_again_cb (FindAgainCBStruct *data)
 	EphyEmbedFindResult result;
 	EphyFindToolbarPrivate *priv = data->toolbar->priv;
 
-	result = ephy_find_toolbar_find_again (data->toolbar, data->next,
-				  priv->links_only);
+	result = ephy_find_toolbar_find_again (data->toolbar, data->direction,
+					       priv->links_only);
+
 	set_status (data->toolbar, result);
 
 	priv->find_again_source_id = 0;
@@ -812,8 +821,8 @@ find_again_cb (FindAgainCBStruct *data)
 	return FALSE;
 }
 
-void
-ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
+static void
+find_again (EphyFindToolbar *toolbar, EphyFindDirection direction)
 {
 	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
@@ -824,16 +833,15 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 		gtk_widget_grab_focus (widget);
 	}
 
-	/* We need to do this here (and in find_previous) to give time to the embed
-	 * to sync with the size change due to the toolbar being shown, otherwise
-	 * the toolbar can obscure the result. See GNOME bug #415074.
+	/* We need to do this to give time to the embed to sync with the size
+	 * change due to the toolbar being shown, otherwise the toolbar can
+	 * obscure the result. See GNOME bug #415074.
 	 */
-
 	if (priv->find_again_source_id != 0) return;
 
 	data = g_slice_new0 (FindAgainCBStruct);
 	data->toolbar = toolbar;
-	data->next = TRUE;
+	data->direction = direction;
 
 	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 						      (GSourceFunc) find_again_cb,
@@ -842,27 +850,15 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 }
 
 void
+ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
+{
+	find_again (toolbar, EPHY_FIND_DIRECTION_NEXT);
+}
+
+void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
-	GtkWidget *widget = GTK_WIDGET (toolbar);
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-	FindAgainCBStruct *data;
-
-	if (!gtk_widget_get_visible (widget)) {
-		gtk_widget_show (widget);
-		gtk_widget_grab_focus (widget);
-	}
-
-	if (priv->find_again_source_id != 0) return;
-
-	data = g_slice_new0 (FindAgainCBStruct);
-	data->toolbar = toolbar;
-	data->next = FALSE;
-
-	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-						      (GSourceFunc) find_again_cb,
-						      data,
-						      (GDestroyNotify) find_again_data_destroy_cb);
+	find_again (toolbar, EPHY_FIND_DIRECTION_PREV);
 }
 
 void
