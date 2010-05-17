@@ -73,10 +73,10 @@ enum
 
 typedef enum
 {
-	EPHY_FIND_FOUND		= 0,
-	EPHY_FIND_NOTFOUND	= 1,
-	EPHY_FIND_FOUNDWRAPPED	= 2
-} EphyEmbedFindResult;
+	EPHY_FIND_RESULT_FOUND		= 0,
+	EPHY_FIND_RESULT_NOTFOUND	= 1,
+	EPHY_FIND_RESULT_FOUNDWRAPPED	= 2
+} EphyFindResult;
 
 typedef enum
 {
@@ -137,7 +137,7 @@ set_status_notfound_cb (EphyFindToolbar *toolbar)
 
 static void
 set_status (EphyFindToolbar *toolbar,
-	    EphyEmbedFindResult result)
+	    EphyFindResult result)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	char *text = NULL;
@@ -145,10 +145,10 @@ set_status (EphyFindToolbar *toolbar,
 
 	switch (result)
 	{
-		case EPHY_FIND_FOUND:
+		case EPHY_FIND_RESULT_FOUND:
 			text = NULL;
 			break;
-		case EPHY_FIND_NOTFOUND:
+		case EPHY_FIND_RESULT_NOTFOUND:
 			{
 				text = _("Not found");
 
@@ -161,7 +161,7 @@ set_status (EphyFindToolbar *toolbar,
 				priv->source_id = g_timeout_add (500, (GSourceFunc) set_status_notfound_cb, toolbar);
 			}
 			break;
-		case EPHY_FIND_FOUNDWRAPPED:
+		case EPHY_FIND_RESULT_FOUNDWRAPPED:
 			text = _("Wrapped");
 			break;
 	}
@@ -245,7 +245,7 @@ ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
         webkit_web_view_set_highlight_text_matches (web_view, TRUE);
 }
 
-static EphyEmbedFindResult
+static EphyFindResult
 real_find (EphyFindToolbarPrivate *priv,
 	   EphyFindDirection direction)
 {
@@ -254,7 +254,7 @@ real_find (EphyFindToolbarPrivate *priv,
         gboolean forward = (direction == EPHY_FIND_DIRECTION_NEXT);
 
         if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
-                return EPHY_FIND_NOTFOUND;
+                return EPHY_FIND_RESULT_NOTFOUND;
 
         if (!webkit_web_view_search_text
             (web_view, priv->find_string, case_sensitive, forward, FALSE)) {
@@ -262,21 +262,21 @@ real_find (EphyFindToolbarPrivate *priv,
                 if (!webkit_web_view_search_text
                     (web_view, priv->find_string, case_sensitive, forward, TRUE)) {
                         /* there's no result */
-                        return EPHY_FIND_NOTFOUND;
+                        return EPHY_FIND_RESULT_NOTFOUND;
                 } else {
                         /* found wrapped */
-                        return EPHY_FIND_FOUNDWRAPPED;
+                        return EPHY_FIND_RESULT_FOUNDWRAPPED;
                 }
         }
 
-        return EPHY_FIND_FOUND;
+        return EPHY_FIND_RESULT_FOUND;
 }
 
 static gboolean
 do_search (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	EphyEmbedFindResult result;
+	EphyFindResult result;
 
 	priv->find_source_id = 0;
 
@@ -436,10 +436,10 @@ case_sensitive_toggled_cb (GtkWidget *check,
 	 */
 	if (case_sensitive)
 	{
-		EphyEmbedFindResult result;
+		EphyFindResult result;
 
 		result = real_find (toolbar->priv, EPHY_FIND_DIRECTION_PREV);
-		if (result != EPHY_FIND_NOTFOUND)
+		if (result != EPHY_FIND_RESULT_NOTFOUND)
 			result = real_find (toolbar->priv,
 					    EPHY_FIND_DIRECTION_NEXT);
 
@@ -795,7 +795,7 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 	g_slice_free (FindAgainCBStruct, data);
 }
 
-static EphyEmbedFindResult
+static EphyFindResult
 ephy_find_toolbar_find_again (EphyFindToolbar *toolbar,
                               EphyFindDirection direction,
                               gboolean links_only)
@@ -808,7 +808,7 @@ ephy_find_toolbar_find_again (EphyFindToolbar *toolbar,
 static gboolean
 find_again_cb (FindAgainCBStruct *data)
 {
-	EphyEmbedFindResult result;
+	EphyFindResult result;
 	EphyFindToolbarPrivate *priv = data->toolbar->priv;
 
 	result = ephy_find_toolbar_find_again (data->toolbar, data->direction,
