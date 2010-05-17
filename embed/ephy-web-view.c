@@ -2787,7 +2787,7 @@ ephy_web_view_can_go_up (EphyWebView *view)
     return FALSE;
   }
 
-  result = (uri->fragment || uri->query || strlen (uri->path) > 1);
+  result = uri->fragment || uri->query || (uri->path && (strlen (uri->path) > 1));
   soup_uri_free (uri);
 
   return result;
