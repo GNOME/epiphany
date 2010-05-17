@@ -48,7 +48,6 @@ INST_H_FILES = \
 	ephy-notebook.h			\
 	ephy-session.h			\
 	ephy-shell.h			\
-	ephy-statusbar.h		\
 	ephy-window.h			\
 	epiphany.h			\
 	$(NULL)
@@ -80,7 +79,6 @@ libephymain_la_SOURCES = \
 	ephy-password-info.c	        	\
 	ephy-session.c				\
 	ephy-shell.c				\
-	ephy-statusbar.c			\
 	ephy-tabs-menu.c			\
 	ephy-toolbars-model.c			\
 	ephy-toolbar.c				\
@@ -298,7 +296,6 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/src/ephy-notebook.h \
 	$(top_srcdir)/src/ephy-session.h \
 	$(top_srcdir)/src/ephy-shell.h \
-	$(top_srcdir)/src/ephy-statusbar.h \
 	$(top_srcdir)/src/ephy-toolbar.h \
 	$(top_srcdir)/src/ephy-window.h \
 	$(NULL)
@@ -332,7 +329,6 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/src/ephy-notebook.c \
 	$(top_srcdir)/src/ephy-session.c \
 	$(top_srcdir)/src/ephy-shell.c \
-	$(top_srcdir)/src/ephy-statusbar.c \
 	$(top_srcdir)/src/ephy-toolbar.c \
 	$(top_srcdir)/src/ephy-window.c \
 	$(NULL)

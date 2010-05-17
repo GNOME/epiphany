@@ -151,10 +151,6 @@ update_window (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, !writable);
 
-	writable = eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR);
-	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, !writable);
-
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
 	action = gtk_action_group_get_action (action_group, "GoLocation");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);

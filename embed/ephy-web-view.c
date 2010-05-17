@@ -98,6 +98,15 @@ struct _EphyWebViewPrivate {
   GSList *hidden_popups;
   GSList *shown_popups;
 
+  GSList *messages;
+  GSList *keys;
+
+  guint seq_context_id;
+  guint seq_message_id;
+
+  char *text;
+  GdkRectangle text_rectangle;
+
   GtkWidget *password_info_bar;
 };
 
@@ -106,6 +115,12 @@ typedef struct {
   char *name;
   char *features;
 } PopupInfo;
+
+typedef struct {
+  gchar *text;
+  guint context_id;
+  guint message_id;
+} EphyWebViewStatusbarMsg;
 
 enum {
   PROP_0,
@@ -1276,6 +1291,7 @@ static void
 ephy_web_view_finalize (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+  GSList *list;
 
   if (priv->icon != NULL) {
     g_object_unref (priv->icon);
@@ -1286,6 +1302,26 @@ ephy_web_view_finalize (GObject *object)
     g_regex_unref (priv->non_search_regex);
     priv->non_search_regex = NULL;
   }
+
+  for (list = priv->messages; list; list = list->next) {
+    EphyWebViewStatusbarMsg *msg;
+
+    msg = list->data;
+    g_free (msg->text);
+    g_slice_free (EphyWebViewStatusbarMsg, msg);
+  }
+
+  g_slist_free (priv->messages);
+  priv->messages = NULL;
+
+
+  for (list = priv->keys; list; list = list->next)
+    g_free (list->data);
+
+  g_slist_free (priv->keys);
+  priv->keys = NULL;
+
+  g_free (priv->text);
 
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
 
@@ -1364,6 +1400,59 @@ ephy_web_view_constructed (GObject *object)
                     NULL);
 }
 
+static gboolean
+ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
+{
+  EphyWebViewPrivate *priv;
+
+  GTK_WIDGET_CLASS (ephy_web_view_parent_class)->expose_event (widget, event);
+
+  priv = EPHY_WEB_VIEW (widget)->priv;
+
+  if (priv->text && priv->text[0] != '\0') {
+    gint x, y, width, height;
+    guint border_width;
+    PangoLayout *layout;
+    GtkAllocation allocation;
+    GdkWindow *window;
+    GtkStyle *style;
+
+    gtk_widget_get_allocation (widget, &allocation);
+
+    layout = gtk_widget_create_pango_layout (widget, priv->text);
+    pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
+    pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+
+    pango_layout_get_pixel_size (layout, &width, &height);
+
+    border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+    x = border_width;
+    y = allocation.height - height - border_width;
+
+    window = gtk_widget_get_window (widget);
+    style = gtk_widget_get_style (widget);
+    gtk_paint_box (style, window,
+                   GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                   NULL, widget, NULL,
+                   x, allocation.height - height - border_width,
+                   width, height);
+
+    priv->text_rectangle.x = x;
+    priv->text_rectangle.y = allocation.height - height - border_width;
+    priv->text_rectangle.width = width;
+    priv->text_rectangle.height = height;
+
+    gtk_paint_layout (style, window,
+                      GTK_STATE_NORMAL, FALSE,
+                      NULL, widget, NULL,
+                      x, y, layout);
+
+    g_object_unref (layout);
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
@@ -1378,6 +1467,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
+  widget_class->expose_event = ephy_web_view_expose_event;
 
 /**
  * EphyWebView:address:
@@ -2164,6 +2254,30 @@ close_web_view_cb (WebKitWebView *web_view,
 }
 
 static void
+adj_changed_cb (GtkAdjustment *adj, EphyWebView *view)
+{
+  EphyWebViewPrivate *priv;
+  GdkWindow *window;
+
+  priv = view->priv;
+
+  window = gtk_widget_get_window (GTK_WIDGET (view));
+
+  if (view && window)
+    gdk_window_invalidate_rect (window, &priv->text_rectangle, TRUE);
+}
+
+static void
+set_scroll_adjustments_cb (EphyWebView *view, GtkAdjustment *hadj, GtkAdjustment *vadj)
+{
+  if (hadj)
+    g_signal_connect (hadj, "value-changed", G_CALLBACK (adj_changed_cb), view);
+
+  if (vadj)
+    g_signal_connect (vadj, "value-changed", G_CALLBACK (adj_changed_cb), view);
+}
+
+static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
@@ -2178,6 +2292,8 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
   priv->monitor_directory = FALSE;
+  priv->seq_context_id = 1;
+  priv->seq_message_id = 1;
 
   priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
                                         "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
@@ -2217,6 +2333,10 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect_object (web_view, "ge_popup_blocked",
                            G_CALLBACK (ge_popup_blocked_cb),
                            web_view, (GConnectFlags)0);
+
+  g_signal_connect (web_view, "set-scroll-adjustments",
+                    G_CALLBACK (set_scroll_adjustments_cb),
+                    NULL);
 
   cache = EPHY_FAVICON_CACHE
           (ephy_embed_shell_get_favicon_cache (embed_shell));
@@ -3617,4 +3737,143 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   return is_empty;
 }
+
+static void
+ephy_web_view_statusbar_update (EphyWebView *view, const char *text)
+{
+  EphyWebViewPrivate *priv;
+  GdkWindow *window;
+  GdkRectangle rect;
+
+  priv = view->priv;
+
+  if (priv->text)
+    g_free (priv->text);
+
+  priv->text = g_strdup (text);
+
+  /* FIXME: we should invalidate the union of the sizes of the
+   * rectangles of the previous and next statusbar text */
+  window = gtk_widget_get_window (GTK_WIDGET (view));
+  if (window) {
+    GtkAllocation allocation;
+
+    gtk_widget_get_allocation (GTK_WIDGET (view), &allocation);
+
+    rect = priv->text_rectangle;
+    rect.width = allocation.width;
+    if (rect.height == 0)
+      rect.height = allocation.height;
+    
+    gdk_window_invalidate_rect (window, &rect, TRUE);
+  }
+}
+
+/* Portions of the following code based on GTK+.
+ * License block as follows:
+ *
+ * GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * GtkStatusbar Copyright (C) 1998 Shawn T. Amundson
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ *
+ */
+
+guint
+ephy_web_view_statusbar_get_context_id (EphyWebView *view, const char  *context_description)
+{
+  char *string;
+  guint id;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
+  g_return_val_if_fail (context_description != NULL, 0);
+
+  /* we need to preserve namespaces on object datas */
+  string = g_strconcat ("ephy-web-view-status-bar-context:", context_description, NULL);
+
+  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (view), string));
+  if (id == 0) {
+    EphyWebViewPrivate *priv = view->priv;
+
+    id = priv->seq_context_id++;
+    g_object_set_data_full (G_OBJECT (view), string, GUINT_TO_POINTER (id), NULL);
+    priv->keys = g_slist_prepend (priv->keys, string);
+  } else
+    g_free (string);
+
+  return id;
+}
+
+guint
+ephy_web_view_statusbar_push (EphyWebView *view, guint context_id, const char *text)
+{
+  EphyWebViewPrivate *priv;
+  EphyWebViewStatusbarMsg *msg;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
+  g_return_val_if_fail (context_id != 0, 0);
+  g_return_val_if_fail (text != NULL, 0);
+
+  priv = view->priv;
+
+  msg = g_slice_new (EphyWebViewStatusbarMsg);
+  msg->text = g_strdup (text);
+  msg->context_id = context_id;
+  msg->message_id = priv->seq_message_id++;
+
+  priv->messages = g_slist_prepend (priv->messages, msg);
+
+  ephy_web_view_statusbar_update (view, text);
+
+  return msg->message_id;
+}
+
+void
+ephy_web_view_statusbar_pop (EphyWebView *view, guint context_id)
+{
+  EphyWebViewPrivate *priv;
+  EphyWebViewStatusbarMsg *msg;
+  GSList *list;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_return_if_fail (context_id != 0);
+
+  priv = view->priv;
+
+  for (list = priv->messages; list; list = list->next) {
+    EphyWebViewStatusbarMsg *msg = list->data;
+
+    if (msg->context_id == context_id) {
+      priv->messages = g_slist_remove_link (priv->messages, list);
+      g_free (msg->text);
+      g_slice_free (EphyWebViewStatusbarMsg, msg);
+      g_slist_free_1 (list);
+      break;
+    }
+  }
+
+  msg = priv->messages ? priv->messages->data : NULL;
+  ephy_web_view_statusbar_update (view, msg ? msg->text : NULL);
+}
+
+
 

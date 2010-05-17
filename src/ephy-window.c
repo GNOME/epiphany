@@ -38,7 +38,6 @@
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-statusbar.h"
 #include "egg-editable-toolbar.h"
 #include "ephy-toolbar.h"
 #include "popup-commands.h"
@@ -89,8 +88,6 @@ static EphyEmbed *ephy_window_open_link		(EphyLink *link,
 static void notebook_switch_page_cb		(GtkNotebook *notebook,
 						 GtkNotebookPage *page,
 						 guint page_num,
-						 EphyWindow *window);
-static void ephy_window_view_statusbar_cb       (GtkAction *action,
 						 EphyWindow *window);
 static void ephy_window_view_toolbar_cb         (GtkAction *action,
 						 EphyWindow *window);
@@ -282,9 +279,6 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), NULL,
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
-	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
-	  N_("Show or hide statusbar"),
-	  G_CALLBACK (ephy_window_view_statusbar_cb), TRUE },
 	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
@@ -434,7 +428,6 @@ struct _EphyWindowPrivate
 	GtkWidget *menu_dock;
 	GtkWidget *fullscreen_popup;
 	EphyToolbar *toolbar;
-	GtkWidget *statusbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
@@ -494,9 +487,17 @@ impl_add_child (EphyEmbedContainer *container,
 		gboolean jump_to)
 {
 	EphyWindow *window = EPHY_WINDOW (container);
+	EphyWebView *view;
 
 	g_return_val_if_fail (!window->priv->is_popup ||
 			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
+
+	view = ephy_embed_get_web_view (child);
+
+	window->priv->tab_message_cid = ephy_web_view_statusbar_get_context_id
+		(view, "tab_message");
+	window->priv->help_message_cid = ephy_web_view_statusbar_get_context_id
+		(view, "help_message");
 
 	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 				      child, position, jump_to);
@@ -749,7 +750,6 @@ get_toolbar_visibility (EphyWindow *window)
 static void
 get_chromes_visibility (EphyWindow *window,
 			gboolean *show_menubar,
-			gboolean *show_statusbar,
 			gboolean *show_toolbar,
 			gboolean *show_tabsbar)
 {
@@ -759,13 +759,12 @@ get_chromes_visibility (EphyWindow *window,
 	if (window->priv->fullscreen_mode)
 	{
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
-		*show_menubar = *show_statusbar = FALSE;
+		*show_menubar = FALSE;
 		*show_tabsbar = !priv->is_popup;
 	}
 	else
 	{
 		*show_menubar = (flags & EPHY_WEB_VIEW_CHROME_MENUBAR) != 0;
-		*show_statusbar = (flags & EPHY_WEB_VIEW_CHROME_STATUSBAR) != 0;
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
@@ -777,12 +776,12 @@ sync_chromes_visibility (EphyWindow *window)
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
 	GtkAction *action;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_tabsbar;
+	gboolean show_menubar, show_toolbar, show_tabsbar;
 
 	if (priv->closing) return;
 
 	get_chromes_visibility (window, &show_menubar,
-				&show_statusbar, &show_toolbar,
+				&show_toolbar,
 				&show_tabsbar);
 
 	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
@@ -790,7 +789,6 @@ sync_chromes_visibility (EphyWindow *window)
 
 	g_object_set (menubar, "visible", show_menubar, NULL);
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
-	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 
@@ -1218,6 +1216,13 @@ init_menu_updaters (EphyWindow *window)
 			  G_CALLBACK (edit_menu_hide_cb), window);
 }
 
+static EphyWebView*
+ephy_window_get_active_web_view (EphyWindow *window)
+{
+	EphyEmbed *active_embed = window->priv->active_embed;
+	return ephy_embed_get_web_view (active_embed);
+}
+
 static void
 menu_item_select_cb (GtkMenuItem *proxy,
 		     EphyWindow *window)
@@ -1231,8 +1236,8 @@ menu_item_select_cb (GtkMenuItem *proxy,
 	g_object_get (action, "tooltip", &message, NULL);
 	if (message)
 	{
-		gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
-				    window->priv->help_message_cid, message);
+		EphyWebView *view = ephy_window_get_active_web_view (window);
+		ephy_web_view_statusbar_push (view, window->priv->help_message_cid, message);
 		g_free (message);
 	}
 }
@@ -1241,8 +1246,8 @@ static void
 menu_item_deselect_cb (GtkMenuItem *proxy,
 		       EphyWindow *window)
 {
-	gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
-			   window->priv->help_message_cid);
+	EphyWebView *view = ephy_window_get_active_web_view (window);
+	ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
 }
 
 static gboolean
@@ -1264,8 +1269,8 @@ tool_item_enter_cb (GtkWidget *proxy,
 		g_object_get (action, "tooltip", &message, NULL);
 		if (message)
 		{
-			gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
-					    window->priv->help_message_cid, message);
+			EphyWebView *view = ephy_window_get_active_web_view (window);
+			ephy_web_view_statusbar_push (view, window->priv->help_message_cid, message);
 			g_free (message);
 		}
 	}
@@ -1280,8 +1285,8 @@ tool_item_leave_cb (GtkWidget *proxy,
 {
 	if (event->mode == GDK_CROSSING_NORMAL)
 	{
-		gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
-				   window->priv->help_message_cid);
+		EphyWebView *view = ephy_window_get_active_web_view (window);
+		ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
 	}
 	
 	return FALSE;
@@ -1292,8 +1297,8 @@ tool_item_drag_begin_cb (GtkWidget          *widget,
 			 GdkDragContext     *context,
 			 EphyWindow         *window)
 {
-	gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
-			   window->priv->help_message_cid);
+	EphyWebView *view = ephy_window_get_active_web_view (window);
+	ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
 }
 
 
@@ -1374,10 +1379,10 @@ update_chromes_actions (EphyWindow *window)
 {
 	GtkActionGroup *action_group = window->priv->action_group;
 	GtkAction *action;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_tabsbar;
+	gboolean show_menubar, show_toolbar, show_tabsbar;
 
 	get_chromes_visibility (window, &show_menubar,
-				&show_statusbar, &show_toolbar,
+				&show_toolbar,
 				&show_tabsbar);
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
@@ -1387,15 +1392,6 @@ update_chromes_actions (EphyWindow *window)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !show_toolbar);
 	g_signal_handlers_unblock_by_func (G_OBJECT (action),
 		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
-		 			   window);
-
-	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
-	g_signal_handlers_block_by_func (G_OBJECT (action),
-		 			 G_CALLBACK (ephy_window_view_statusbar_cb),
-		 			 window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_statusbar);
-	g_signal_handlers_unblock_by_func (G_OBJECT (action),
-		 			   G_CALLBACK (ephy_window_view_statusbar_cb),
 		 			   window);
 }
 
@@ -1608,18 +1604,17 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 static void
 sync_tab_message (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
 {
-	GtkStatusbar *s = GTK_STATUSBAR (window->priv->statusbar);
 	const char *message;
 
 	if (window->priv->closing) return;
 
 	message = ephy_web_view_get_status_message (view);
 
-	gtk_statusbar_pop (s, window->priv->tab_message_cid);
+	ephy_web_view_statusbar_pop (view, window->priv->tab_message_cid);
 
 	if (message)
 	{
-		gtk_statusbar_push (s, window->priv->tab_message_cid, message);
+		ephy_web_view_statusbar_push (view, window->priv->tab_message_cid, message);
 	}
 }
 
@@ -2369,12 +2364,11 @@ web_view_ready_cb (WebKitWebView *web_view,
 	{
 		int width, height;
 		gboolean toolbar_visible;
-		gboolean statusbar_visible;
 		gboolean menubar_visible;
 		EphyWebViewChrome chrome_mask;
 		WebKitWebWindowFeatures *features;
 
-		toolbar_visible = statusbar_visible = menubar_visible = TRUE;
+		toolbar_visible = menubar_visible = TRUE;
 		features = webkit_web_view_get_window_features (web_view);
 
 		chrome_mask = window->priv->chrome;
@@ -2383,7 +2377,6 @@ web_view_ready_cb (WebKitWebView *web_view,
 			      "width", &width,
 			      "height", &height,
 			      "toolbar-visible", &toolbar_visible,
-			      "statusbar-visible", &statusbar_visible,
 			      "menubar-visible", &menubar_visible,
 			      NULL);
 
@@ -2391,9 +2384,6 @@ web_view_ready_cb (WebKitWebView *web_view,
 
 		if (!toolbar_visible)
 			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-
-		if (!statusbar_visible)
-			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_STATUSBAR;
 
 		if (!menubar_visible)
 			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
@@ -2525,106 +2515,6 @@ policy_decision_required_cb (WebKitWebView *web_view,
 	return FALSE;
 }
 
-/* FIXME: get rid of this stuff when the DOM API lands */
-/* FIXME: would be nice to get transparent background/opaque text, but
-   not sure if I can be bothered */
-const char *add_node_string =
-	"var node = document.getElementById('epiphanyWebKitFloatingStatusBar');"\
-	"if (node) node.parentNode.removeChild(node);"\
-	"var node = document.createElement('div');"\
-	"node.id = 'epiphanyWebKitFloatingStatusBar';"\
-	"node.style.padding = '0.4em';"\
-	"node.style.zIndex = '9999';"\
-	"node.style.border = '1px solid black';"\
-	"node.style.background = 'rgb(%d,%d,%d)';"\
-	"node.style.color = 'rgb(%d,%d,%d)';"\
-	"node.style.position = 'fixed';"\
-	"node.style.left = '0';"\
-	"node.style.bottom = '0';"\
-	"node.style.opacity = 0.95;"\
-	"var text = document.createTextNode('%s');"\
-	"var body = document.getElementsByTagName('body')[0];"\
-	"node.appendChild(text);"\
-	"body.appendChild(node);";
-
-const char *remove_node_string =
-	"var node = document.getElementById('epiphanyWebKitFloatingStatusBar');"\
-	"if (node) node.parentNode.removeChild(node);";
-
-static void
-ephy_window_link_message_cb (EphyWebView *web_view, GParamSpec *spec, EphyWindow *window)
-{
-	gboolean visible;
-	const char *link_message;
-	WebKitWebView *view;
-
-	g_object_get (window->priv->statusbar, "visible", &visible, NULL);
-
-	view = WEBKIT_WEB_VIEW (web_view);
-	link_message = ephy_web_view_get_link_message (web_view);
-
-	/* If the statusbar is visible remove the test, it might get
-	   stuck otherwise */
-	if (link_message && visible == FALSE)
-	{
-		char *script;
-		GdkColor bg, fg;
-		GtkWidget *widget;
-		GtkAllocation allocation;
-		GtkStyle *style;
-		GtkStateType state;
-		PangoLayout *layout;
-		PangoLayoutLine *line;
-		PangoLayoutRun *run;
-		PangoItem *item;
-		const char *text;
-		char *freeme;
-
-		widget = GTK_WIDGET (view);
-		layout = gtk_widget_create_pango_layout (widget, link_message);
-		gtk_widget_get_allocation (widget, &allocation);
-		pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
-		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
-
-		line = pango_layout_get_line_readonly (layout, 0);
-		run = line->runs->data;
-		item = run->item;
-
-		freeme = NULL;
-		text = pango_layout_get_text (layout);
-		if (item->num_chars < g_utf8_strlen (text, -1))
-		{
-			char buffer[2048]; /* Should be enough ... */
-			g_utf8_strncpy (buffer, text, item->num_chars - 3);
-			freeme = g_strconcat (buffer, "...", NULL);
-		}
-			
-		g_utf8_strncpy ((gchar *)text, pango_layout_get_text (layout), item->num_chars);
-		style = gtk_widget_get_style (widget);
-		state = gtk_widget_get_state (widget);
-		bg = style->bg[state];
-		fg = style->fg[state];
-
-		script = g_strdup_printf(add_node_string,
-					 (int) (bg.red / 65535. * 255),
-					 (int) (bg.green / 65535. * 255),
-					 (int) (bg.blue / 65535. * 255),
-					 (int) (fg.red / 65535. * 255),
-					 (int) (fg.green / 65535. * 255),
-					 (int) (fg.blue / 65535. * 255),
-					 freeme ? freeme : text);
-		webkit_web_view_execute_script (view, script);
-		g_object_unref (layout);
-		g_free (script);
-		g_free (freeme);
-	}
-	else
-	{
-		const char *script = remove_node_string;
-		webkit_web_view_execute_script (view, script);
-	}
-}
-
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
@@ -2711,9 +2601,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (ephy_window_visibility_cb),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (ephy_window_link_message_cb),
 						      window);
 
 		g_signal_handlers_disconnect_by_func
@@ -2813,9 +2700,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, G_CONNECT_AFTER);
 		g_signal_connect_object (view, "notify::visibility",
 					 G_CALLBACK (ephy_window_visibility_cb),
-					 window, 0);
-		g_signal_connect_object (view, "notify::link-message",
-					 G_CALLBACK (ephy_window_link_message_cb),
 					 window, 0);
 
 		g_object_notify (G_OBJECT (window), "active-child");
@@ -3184,11 +3068,6 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
 	}
 
-	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
-	{
-		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_STATUSBAR;
-	}
-
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
 		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
@@ -3354,15 +3233,6 @@ ephy_window_state_event (GtkWidget *widget,
 	if (window_state_event)
 	{
 		window_state_event (widget, event);
-	}
-
-	if (event->changed_mask & (GDK_WINDOW_STATE_MAXIMIZED))
-	{
-		gboolean show;
-
-		show = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == 0;
-
-		gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (priv->statusbar), show);
 	}
 
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
@@ -3630,15 +3500,6 @@ ephy_window_constructor (GType type,
 			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
 	/* don't show the find toolbar here! */
 	
-	priv->statusbar = ephy_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (priv->main_vbox),
-			  GTK_WIDGET (priv->statusbar),
-			  FALSE, TRUE, 0);
-	priv->tab_message_cid = gtk_statusbar_get_context_id
-		(GTK_STATUSBAR (priv->statusbar), "tab_message");
-	priv->help_message_cid = gtk_statusbar_get_context_id
-		(GTK_STATUSBAR (priv->statusbar), "help_message");
-
 	/* get the toolbars model *before* getting the bookmarksbar model
 	 * (via ephy_bookmarsbar_new()), so that the toolbars model is
 	 * instantiated *before* the bookmarksbarmodel, to make forwarding
@@ -3856,22 +3717,6 @@ ephy_window_get_find_toolbar (EphyWindow *window)
        return GTK_WIDGET (window->priv->find_toolbar);
 }
 
-/**
- * ephy_window_get_statusbar:
- * @window: an #EphyWindow
- *
- * Returns this window's statusbar as an #EphyStatusbar.
- *
- * Return value: (transfer none): This window's statusbar
- **/
-GtkWidget *
-ephy_window_get_statusbar (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-	return GTK_WIDGET (window->priv->statusbar);
-}
-
 static EphyEmbed *
 real_get_active_tab (EphyWindow *window, int page_num)
 {
@@ -4025,8 +3870,6 @@ sync_prefs_with_chrome (EphyWindow *window)
 	{
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
 				       flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
-		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
-				       flags & EPHY_WEB_VIEW_CHROME_STATUSBAR);
 	}
 }
 
@@ -4045,14 +3888,6 @@ sync_chrome_with_view_toggle (GtkAction *action,
 
 	sync_chromes_visibility (window);
 	sync_prefs_with_chrome (window);
-}
-
-static void
-ephy_window_view_statusbar_cb (GtkAction *action,
-			       EphyWindow *window)
-{
-	sync_chrome_with_view_toggle (action, window,
-				      EPHY_WEB_VIEW_CHROME_STATUSBAR, FALSE);
 }
 
 static void

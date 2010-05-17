@@ -128,69 +128,74 @@ struct _EphyWebViewClass
                                  const char *uri);
 };
 
-GType                      ephy_web_view_get_type                (void);
-GType                      ephy_web_view_chrome_get_type         (void);
-GType                      ephy_web_view_security_level_get_type (void);
-GtkWidget *                ephy_web_view_new                     (void);
-void                       ephy_web_view_load_request            (EphyWebView                     *view,
-                                                                  WebKitNetworkRequest            *request);
-void                       ephy_web_view_load_url                (EphyWebView                     *view,
-                                                                  const char                      *url);
-void                       ephy_web_view_copy_back_history       (EphyWebView                     *source,
-                                                                  EphyWebView                     *dest);
-void                       ephy_web_view_clear_history           (EphyWebView                     *view);
-gboolean                   ephy_web_view_is_loading              (EphyWebView                     *view);
-const char *               ephy_web_view_get_loading_title       (EphyWebView                     *view);
-GdkPixbuf *                ephy_web_view_get_icon                (EphyWebView                     *view);
-EphyWebViewDocumentType    ephy_web_view_get_document_type       (EphyWebView                     *view);
-EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags    (EphyWebView                     *view);
-const char *               ephy_web_view_get_status_message      (EphyWebView                     *view);
-const char *               ephy_web_view_get_link_message        (EphyWebView                     *view);
-gboolean                   ephy_web_view_get_visibility          (EphyWebView                     *view);
-void                       ephy_web_view_set_link_message        (EphyWebView                     *view,
-                                                                  char                            *link_message);
-void                       ephy_web_view_set_security_level      (EphyWebView                     *view,
-                                                                  EphyWebViewSecurityLevel         level);
-void                       ephy_web_view_set_visibility          (EphyWebView                     *view,
-                                                                  gboolean                         visibility);
-const char *               ephy_web_view_get_typed_address       (EphyWebView                     *view);
-void                       ephy_web_view_set_typed_address       (EphyWebView                     *view,
-                                                                  const char                      *address);
-gboolean                   ephy_web_view_get_is_blank            (EphyWebView                     *view);
-gboolean                   ephy_web_view_has_modified_forms      (EphyWebView                     *view);
-char *                     ephy_web_view_get_location            (EphyWebView                     *view,
-                                                                  gboolean                         toplevel);
-void                       ephy_web_view_go_up                   (EphyWebView                     *view);
-char *                     ephy_web_view_get_js_status           (EphyWebView                     *view);
-void                       ephy_web_view_get_security_level      (EphyWebView                     *view,
-                                                                  EphyWebViewSecurityLevel        *level,
-                                                                  char                           **description);
-void                       ephy_web_view_show_page_certificate   (EphyWebView                     *view);
-void                       ephy_web_view_show_print_preview      (EphyWebView                     *view);
-void                       ephy_web_view_print                   (EphyWebView                     *view);
-GSList *                   ephy_web_view_get_go_up_list          (EphyWebView                     *view);
-void                       ephy_web_view_set_title               (EphyWebView                     *view,
-                                                                  const char                      *view_title);
-const char *               ephy_web_view_get_title               (EphyWebView                     *view);
-gboolean                   ephy_web_view_can_go_up               (EphyWebView                     *view);
-const char *               ephy_web_view_get_address             (EphyWebView                     *view);
-const char *               ephy_web_view_get_title_composite     (EphyWebView                     *view);
+GType                      ephy_web_view_get_type                 (void);
+GType                      ephy_web_view_chrome_get_type          (void);
+GType                      ephy_web_view_security_level_get_type  (void);
+GtkWidget *                ephy_web_view_new                      (void);
+void                       ephy_web_view_load_request             (EphyWebView               *view,
+                                                                   WebKitNetworkRequest      *request);
+void                       ephy_web_view_load_url                 (EphyWebView               *view,
+                                                                   const char                *url);
+void                       ephy_web_view_copy_back_history        (EphyWebView               *source,
+                                                                   EphyWebView               *dest);
+void                       ephy_web_view_clear_history            (EphyWebView               *view);
+gboolean                   ephy_web_view_is_loading               (EphyWebView               *view);
+const char *               ephy_web_view_get_loading_title        (EphyWebView               *view);
+GdkPixbuf *                ephy_web_view_get_icon                 (EphyWebView               *view);
+EphyWebViewDocumentType    ephy_web_view_get_document_type        (EphyWebView               *view);
+EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags     (EphyWebView               *view);
+const char *               ephy_web_view_get_status_message       (EphyWebView               *view);
+const char *               ephy_web_view_get_link_message         (EphyWebView               *view);
+gboolean                   ephy_web_view_get_visibility           (EphyWebView               *view);
+void                       ephy_web_view_set_link_message         (EphyWebView               *view,
+                                                                   char                      *link_message);
+void                       ephy_web_view_set_security_level       (EphyWebView               *view,
+                                                                   EphyWebViewSecurityLevel   level);
+void                       ephy_web_view_set_visibility           (EphyWebView               *view,
+                                                                   gboolean                   visibility);
+const char *               ephy_web_view_get_typed_address        (EphyWebView               *view);
+void                       ephy_web_view_set_typed_address        (EphyWebView               *view,
+                                                                   const char                *address);
+gboolean                   ephy_web_view_get_is_blank             (EphyWebView               *view);
+gboolean                   ephy_web_view_has_modified_forms       (EphyWebView               *view);
+char *                     ephy_web_view_get_location             (EphyWebView               *view,
+                                                                   gboolean                   toplevel);
+void                       ephy_web_view_go_up                    (EphyWebView               *view);
+char *                     ephy_web_view_get_js_status            (EphyWebView               *view);
+void                       ephy_web_view_get_security_level       (EphyWebView               *view,
+                                                                   EphyWebViewSecurityLevel  *level,
+                                                                   char                     **description);
+void                       ephy_web_view_show_page_certificate    (EphyWebView               *view);
+void                       ephy_web_view_show_print_preview       (EphyWebView               *view);
+void                       ephy_web_view_print                    (EphyWebView               *view);
+GSList *                   ephy_web_view_get_go_up_list           (EphyWebView               *view);
+void                       ephy_web_view_set_title                (EphyWebView               *view,
+                                                                   const char                *view_title);
+const char *               ephy_web_view_get_title                (EphyWebView               *view);
+gboolean                   ephy_web_view_can_go_up                (EphyWebView               *view);
+const char *               ephy_web_view_get_address              (EphyWebView               *view);
+const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
+
 
 /* These should be private */
-void                       ephy_web_view_set_address             (EphyWebView                     *view,
-                                                                  const char                      *address);
-void                       ephy_web_view_location_changed        (EphyWebView                     *view,
-                                                                  const char                      *location);
-void                       ephy_web_view_set_loading_title       (EphyWebView                     *view,
-                                                                  const char                      *title,
-                                                                  gboolean                         is_address);
-void                       ephy_web_view_popups_manager_reset    (EphyWebView                     *view);
-
-void                       ephy_web_view_save                    (EphyWebView                     *view,
-                                                                  const char                      *uri);
-
-gboolean                   ephy_web_view_load_homepage           (EphyWebView                     *view);
-
+void                       ephy_web_view_set_address              (EphyWebView               *view,
+                                                                   const char                *address);
+void                       ephy_web_view_location_changed         (EphyWebView               *view,
+                                                                   const char                *location);
+void                       ephy_web_view_set_loading_title        (EphyWebView               *view,
+                                                                   const char                *title,
+                                                                   gboolean                   is_address);
+void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
+void                       ephy_web_view_save                     (EphyWebView               *view,
+                                                                   const char                *uri);
+gboolean                   ephy_web_view_load_homepage            (EphyWebView               *view);
+void                       ephy_web_view_statusbar_pop            (EphyWebView               *view,
+                                                                   guint                      context_id);
+guint                      ephy_web_view_statusbar_push           (EphyWebView               *view,
+                                                                   guint                      context_id,
+                                                                   const char                *text);
+guint                      ephy_web_view_statusbar_get_context_id (EphyWebView               *view,
+                                                                   const char                *context_description);
 G_END_DECLS
 
 #endif
