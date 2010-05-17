@@ -360,10 +360,10 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		$(EPHY_GIR_H_FILES) \
 		$(EPHY_GIR_C_FILES)
 
-girdir = $(INTROSPECTION_GIRDIR)
+girdir = $(datadir)/gir-1.0
 gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
 
-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
 
 Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
