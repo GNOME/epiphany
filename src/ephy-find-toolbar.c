@@ -885,15 +885,6 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
 }
 
-static void
-ephy_find_toolbar_set_selection (EphyFindToolbar *toolbar,
-                                 gboolean attention)
-{
-        WebKitWebView *web_view = toolbar->priv->web_view;
-
-        webkit_web_view_set_highlight_text_matches (web_view, attention);
-}
-
 void
 ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
@@ -902,7 +893,8 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 	gtk_widget_hide (GTK_WIDGET (toolbar));
 
 	if (priv->web_view == NULL) return;
-	ephy_find_toolbar_set_selection (toolbar, FALSE);
+
+	webkit_web_view_set_highlight_text_matches (priv->web_view, FALSE);
 }
 
 void
