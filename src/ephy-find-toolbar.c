@@ -787,6 +787,7 @@ typedef struct
 {
 	EphyFindToolbar *toolbar;
 	gboolean direction;
+	gboolean highlight;
 } FindAgainCBStruct;
 
 static void
@@ -803,6 +804,11 @@ find_again_cb (FindAgainCBStruct *data)
 
 	result = real_find (priv, data->direction);
 
+	/* Highlight matches again if the toolbar was hidden when the user
+	 * requested find-again. */
+	if (result != EPHY_FIND_RESULT_NOTFOUND && data->highlight)
+		ephy_find_toolbar_mark_matches (data->toolbar);
+
 	set_status (data->toolbar, result);
 
 	priv->find_again_source_id = 0;
@@ -816,8 +822,10 @@ find_again (EphyFindToolbar *toolbar, EphyFindDirection direction)
 	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	FindAgainCBStruct *data;
+	gboolean visible;
 
-	if (!gtk_widget_get_visible (widget)) {
+	visible = gtk_widget_get_visible (widget);
+	if (!visible) {
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
@@ -831,6 +839,7 @@ find_again (EphyFindToolbar *toolbar, EphyFindDirection direction)
 	data = g_slice_new0 (FindAgainCBStruct);
 	data->toolbar = toolbar;
 	data->direction = direction;
+	data->highlight = !visible;
 
 	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 						      (GSourceFunc) find_again_cb,
