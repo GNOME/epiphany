@@ -182,50 +182,6 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 }
 
 static void
-select_menu_item_cb (GtkWidget *menuitem,
-		     EphyNavigationHistoryAction *action)
-{
-  WebKitWebHistoryItem *item;
-
-  item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem),
-						   HISTORY_ITEM_DATA_KEY);
-  if (item) {
-    const char *url;
-    EphyWindow *window;
-    EphyNavigationAction *nav_action;
-    GtkWidget *statusbar;
-    guint statusbar_cid;
-
-    url = webkit_web_history_item_get_uri (item);
-    window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
-    statusbar = ephy_window_get_statusbar (window);
-
-    /* Update status bar */
-    nav_action = EPHY_NAVIGATION_ACTION (action);
-    statusbar_cid = _ephy_navigation_action_get_statusbar_context_id (nav_action);
-    gtk_statusbar_push (GTK_STATUSBAR (statusbar), statusbar_cid, url);
-  }
-}
-
-static void
-deselect_menu_item_cb (GtkWidget *menuitem,
-		       EphyNavigationAction *action)
-{
-  GtkWidget *statusbar;
-  EphyWindow *window;
-  EphyNavigationAction *nav_action;
-  guint statusbar_cid;
-
-  window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
-  statusbar = ephy_window_get_statusbar (window);
-
-  /* Update status bar */
-  nav_action = EPHY_NAVIGATION_ACTION (action);
-  statusbar_cid = _ephy_navigation_action_get_statusbar_context_id (nav_action);
-  gtk_statusbar_pop (GTK_STATUSBAR (statusbar), statusbar_cid);
-}
-
-static void
 ephy_history_cleared_cb (EphyHistory *history,
                          EphyNavigationHistoryAction *action)
 {
@@ -304,12 +260,6 @@ build_dropdown_menu (EphyNavigationAction *nav_action)
 
     g_signal_connect (item, "activate",
                       G_CALLBACK (activate_back_or_forward_menu_item_cb),
-                      action);
-    g_signal_connect (item, "select",
-                      G_CALLBACK (select_menu_item_cb),
-                      action);
-    g_signal_connect (item, "deselect",
-                      G_CALLBACK (deselect_menu_item_cb),
                       action);
 
     gtk_menu_shell_append (menu, item);

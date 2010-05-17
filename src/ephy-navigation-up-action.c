@@ -63,45 +63,6 @@ activate_up_menu_item_cb (GtkWidget *menuitem,
 		  ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
-static void
-select_menu_item_cb (GtkWidget *menuitem,
-		     EphyNavigationUpAction *action)
-{
-  const char *url;
-  EphyWindow *window;
-  EphyNavigationAction *nav_action;
-  GtkWidget *statusbar;
-  guint statusbar_cid;
-
-  url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
-  window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
-  statusbar = ephy_window_get_statusbar (window);
-  g_return_if_fail (url != NULL);
-
-  /* Update status bar */
-  nav_action = EPHY_NAVIGATION_ACTION (action);
-  statusbar_cid = _ephy_navigation_action_get_statusbar_context_id (nav_action);
-  gtk_statusbar_push (GTK_STATUSBAR (statusbar), statusbar_cid, url);
-}
-
-static void
-deselect_menu_item_cb (GtkWidget *menuitem,
-		       EphyNavigationAction *action)
-{
-  GtkWidget *statusbar;
-  EphyWindow *window;
-  EphyNavigationAction *nav_action;
-  guint statusbar_cid;
-
-  window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
-  statusbar = ephy_window_get_statusbar (window);
-
-  /* Update status bar */
-  nav_action = EPHY_NAVIGATION_ACTION (action);
-  statusbar_cid = _ephy_navigation_action_get_statusbar_context_id (nav_action);
-  gtk_statusbar_pop (GTK_STATUSBAR (statusbar), statusbar_cid);
-}
-
 static GtkWidget *
 build_dropdown_menu (EphyNavigationAction *nav_action)
 {
@@ -142,12 +103,6 @@ build_dropdown_menu (EphyNavigationAction *nav_action)
                             (GDestroyNotify) g_free);
     g_signal_connect (item, "activate",
                       G_CALLBACK (activate_up_menu_item_cb), action);
-    g_signal_connect (item, "select",
-                      G_CALLBACK (select_menu_item_cb),
-                      action);
-    g_signal_connect (item, "deselect",
-                      G_CALLBACK (deselect_menu_item_cb),
-                      action);
 
     gtk_menu_shell_append (menu, item);
     gtk_widget_show (item);

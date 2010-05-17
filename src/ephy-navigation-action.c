@@ -136,18 +136,7 @@ ephy_navigation_action_set_property (GObject *object,
 			g_object_notify (object, "tooltip");
 			break;
 		case PROP_WINDOW:
-			{
-				GtkWidget *statusbar;
-
-				nav->priv->window = EPHY_WINDOW (g_value_get_object (value));
-
-				/* statusbar context to display current selected item */
-				statusbar = ephy_window_get_statusbar (nav->priv->window);
-
-				nav->priv->statusbar_cid = gtk_statusbar_get_context_id (
-								GTK_STATUSBAR (statusbar), 
-								"navigation_message");
-			}
+			nav->priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
 	}
 }
