@@ -1255,7 +1255,11 @@ tool_item_enter_cb (GtkWidget *proxy,
 		    GdkEventCrossing *event,
 		    EphyWindow *window)
 {
-	if (event->mode == GDK_CROSSING_NORMAL)
+	gboolean repeated;
+
+	repeated = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (proxy), "ephy-window-enter-event"));
+	
+	if (event->mode == GDK_CROSSING_NORMAL && repeated == FALSE)
 	{
 		GtkToolItem *item;
 		GtkAction *action;
@@ -1271,6 +1275,7 @@ tool_item_enter_cb (GtkWidget *proxy,
 		{
 			EphyWebView *view = ephy_window_get_active_web_view (window);
 			ephy_web_view_statusbar_push (view, window->priv->help_message_cid, message);
+			g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (TRUE));
 			g_free (message);
 		}
 	}
@@ -1287,6 +1292,7 @@ tool_item_leave_cb (GtkWidget *proxy,
 	{
 		EphyWebView *view = ephy_window_get_active_web_view (window);
 		ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
+		g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (FALSE));
 	}
 	
 	return FALSE;
