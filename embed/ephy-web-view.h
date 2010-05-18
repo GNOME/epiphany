@@ -45,6 +45,9 @@ typedef struct _EphyWebViewClass  EphyWebViewClass;
 typedef struct _EphyWebView    EphyWebView;
 typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
 
+#define TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
+#define HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
+
 typedef enum
 {
 	EPHY_WEB_VIEW_NAV_UP		= 1 << 0,

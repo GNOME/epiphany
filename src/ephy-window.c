@@ -495,9 +495,9 @@ impl_add_child (EphyEmbedContainer *container,
 	view = ephy_embed_get_web_view (child);
 
 	window->priv->tab_message_cid = ephy_web_view_statusbar_get_context_id
-		(view, "tab_message");
+		(view, TAB_MESSAGE_CONTEXT_DESCRIPTION);
 	window->priv->help_message_cid = ephy_web_view_statusbar_get_context_id
-		(view, "help_message");
+		(view, HELP_MESSAGE_CONTEXT_DESCRIPTION);
 
 	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 				      child, position, jump_to);
