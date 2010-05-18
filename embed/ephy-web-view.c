@@ -104,6 +104,8 @@ struct _EphyWebViewPrivate {
   guint seq_context_id;
   guint seq_message_id;
 
+  guint tab_message_id;
+
   char *text;
   GdkRectangle text_rectangle;
 
@@ -2278,6 +2280,23 @@ set_scroll_adjustments_cb (EphyWebView *view, GtkAdjustment *hadj, GtkAdjustment
 }
 
 static void
+status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
+{
+  const char *message;
+  EphyWebViewPrivate *priv;
+
+  message = ephy_web_view_get_status_message (view);
+
+  priv = view->priv;
+
+  ephy_web_view_statusbar_pop (view, priv->tab_message_id);
+
+  if (message)
+    ephy_web_view_statusbar_push (view, priv->tab_message_id, message);
+
+}
+
+static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
@@ -2294,6 +2313,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->monitor_directory = FALSE;
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
+  priv->tab_message_id = ephy_web_view_statusbar_get_context_id (web_view, TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
   priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
                                         "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
@@ -2336,6 +2356,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "set-scroll-adjustments",
                     G_CALLBACK (set_scroll_adjustments_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::status-message",
+                    G_CALLBACK (status_message_notify_cb),
                     NULL);
 
   cache = EPHY_FAVICON_CACHE

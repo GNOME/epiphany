@@ -1608,23 +1608,6 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 }
 
 static void
-sync_tab_message (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
-{
-	const char *message;
-
-	if (window->priv->closing) return;
-
-	message = ephy_web_view_get_status_message (view);
-
-	ephy_web_view_statusbar_pop (view, window->priv->tab_message_cid);
-
-	if (message)
-	{
-		ephy_web_view_statusbar_push (view, window->priv->tab_message_cid, message);
-	}
-}
-
-static void
 sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
@@ -2603,9 +2586,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      G_CALLBACK (sync_tab_icon),
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_message),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (ephy_window_visibility_cb),
 						      window);
 
@@ -2632,7 +2612,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		sync_tab_title		(view, NULL, window);
 		sync_tab_address	(view, NULL, window);
 		sync_tab_icon		(view, NULL, window);
-		sync_tab_message	(view, NULL, window);
 		sync_tab_popup_windows	(view, NULL, window);
 		sync_tab_popups_allowed	(view, NULL, window);
 
@@ -2677,9 +2656,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (view, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
-					 window, 0);
-		g_signal_connect_object (view, "notify::status-message",
-					 G_CALLBACK (sync_tab_message),
 					 window, 0);
 		g_signal_connect_object (view, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
