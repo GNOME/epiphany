@@ -1402,6 +1402,57 @@ ephy_web_view_constructed (GObject *object)
                     NULL);
 }
 
+static void
+_ephy_web_view_draw_statusbar(GtkWidget *widget)
+{
+  gint width, height;
+  guint border_width, statusbar_border_width;
+  PangoLayout *layout;
+  GtkAllocation allocation;
+  GdkWindow *window;
+  GtkStyle *style;
+  EphyWebViewPrivate *priv;
+
+  priv = EPHY_WEB_VIEW (widget)->priv;
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  layout = gtk_widget_create_pango_layout (widget, priv->text);
+  pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
+  pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+
+  pango_layout_get_pixel_size (layout, &width, &height);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  window = gtk_widget_get_window (widget);
+  style = gtk_widget_get_style (widget);
+
+  statusbar_border_width = 4; /* FIXME: what should we use here? */
+
+  priv->text_rectangle.x = border_width;
+  priv->text_rectangle.y = allocation.height - height - border_width - (statusbar_border_width * 2);
+  priv->text_rectangle.width = width + (statusbar_border_width * 2);
+  priv->text_rectangle.height = height + (statusbar_border_width * 2);
+
+  gtk_paint_box (style, window,
+                 GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                 NULL, widget, NULL,
+                 priv->text_rectangle.x,
+                 priv->text_rectangle.y,
+                 priv->text_rectangle.width,
+                 priv->text_rectangle.height);
+
+  gtk_paint_layout (style, window,
+                    GTK_STATE_NORMAL, FALSE,
+                    NULL, widget, NULL,
+                    priv->text_rectangle.x + statusbar_border_width,
+                    priv->text_rectangle.y + statusbar_border_width,
+                    layout);
+
+  g_object_unref (layout);
+}
+
 static gboolean
 ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
@@ -1411,51 +1462,8 @@ ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
 
   priv = EPHY_WEB_VIEW (widget)->priv;
 
-  if (priv->text && priv->text[0] != '\0') {
-    gint width, height;
-    guint border_width, statusbar_border_width;
-    PangoLayout *layout;
-    GtkAllocation allocation;
-    GdkWindow *window;
-    GtkStyle *style;
-
-    gtk_widget_get_allocation (widget, &allocation);
-
-    layout = gtk_widget_create_pango_layout (widget, priv->text);
-    pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
-    pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
-
-    pango_layout_get_pixel_size (layout, &width, &height);
-
-    border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-    window = gtk_widget_get_window (widget);
-    style = gtk_widget_get_style (widget);
-
-    statusbar_border_width = 4; /* FIXME: what should we use here? */
-
-    priv->text_rectangle.x = border_width;
-    priv->text_rectangle.y = allocation.height - height - border_width - (statusbar_border_width * 2);
-    priv->text_rectangle.width = width + (statusbar_border_width * 2);
-    priv->text_rectangle.height = height + (statusbar_border_width * 2);
-
-    gtk_paint_box (style, window,
-                   GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                   NULL, widget, NULL,
-                   priv->text_rectangle.x,
-                   priv->text_rectangle.y,
-                   priv->text_rectangle.width,
-                   priv->text_rectangle.height);
-
-    gtk_paint_layout (style, window,
-                      GTK_STATE_NORMAL, FALSE,
-                      NULL, widget, NULL,
-                      priv->text_rectangle.x + statusbar_border_width,
-                      priv->text_rectangle.y + statusbar_border_width,
-                      layout);
-
-    g_object_unref (layout);
-  }
+  if (priv->text && priv->text[0] != '\0')
+    _ephy_web_view_draw_statusbar (widget);
 
   return FALSE;
 }
