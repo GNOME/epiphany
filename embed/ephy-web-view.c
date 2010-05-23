@@ -1412,8 +1412,8 @@ ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
   priv = EPHY_WEB_VIEW (widget)->priv;
 
   if (priv->text && priv->text[0] != '\0') {
-    gint x, y, width, height;
-    guint border_width;
+    gint width, height;
+    guint border_width, statusbar_border_width;
     PangoLayout *layout;
     GtkAllocation allocation;
     GdkWindow *window;
@@ -1428,26 +1428,31 @@ ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
     pango_layout_get_pixel_size (layout, &width, &height);
 
     border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-    x = border_width;
-    y = allocation.height - height - border_width;
 
     window = gtk_widget_get_window (widget);
     style = gtk_widget_get_style (widget);
+
+    statusbar_border_width = 4; /* FIXME: what should we use here? */
+
+    priv->text_rectangle.x = border_width;
+    priv->text_rectangle.y = allocation.height - height - border_width - (statusbar_border_width * 2);
+    priv->text_rectangle.width = width + (statusbar_border_width * 2);
+    priv->text_rectangle.height = height + (statusbar_border_width * 2);
+
     gtk_paint_box (style, window,
                    GTK_STATE_NORMAL, GTK_SHADOW_IN,
                    NULL, widget, NULL,
-                   x, allocation.height - height - border_width,
-                   width, height);
-
-    priv->text_rectangle.x = x;
-    priv->text_rectangle.y = allocation.height - height - border_width;
-    priv->text_rectangle.width = width;
-    priv->text_rectangle.height = height;
+                   priv->text_rectangle.x,
+                   priv->text_rectangle.y,
+                   priv->text_rectangle.width,
+                   priv->text_rectangle.height);
 
     gtk_paint_layout (style, window,
                       GTK_STATE_NORMAL, FALSE,
                       NULL, widget, NULL,
-                      x, y, layout);
+                      priv->text_rectangle.x + statusbar_border_width,
+                      priv->text_rectangle.y + statusbar_border_width,
+                      layout);
 
     g_object_unref (layout);
   }
