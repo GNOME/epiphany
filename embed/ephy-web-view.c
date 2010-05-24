@@ -1794,24 +1794,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             0);
 
 /**
- * EphyWebView::dom-content-loaded:
- * @view: the #EphyWebView that received the signal
- *
- * The ::dom-content-loaded signal is emitted when 
- * the document has been loaded (excluding images and other loads initiated by this document).
- * That's true also for frameset and all the frames within it.
- **/
-    g_signal_new ("dom_content_loaded",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, dom_content_loaded),
-            NULL, NULL,
-            g_cclosure_marshal_VOID__POINTER,
-            G_TYPE_NONE,
-            1,
-            G_TYPE_POINTER);
-
-/**
  * EphyWebView::search-key-press:
  * @view: the #EphyWebView that received the signal
  * @event: the #GdkEventKey which triggered this signal
