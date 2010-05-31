@@ -2218,12 +2218,16 @@ load_error_cb (WebKitWebView *web_view,
 
     _ephy_web_view_set_icon_address (view, NULL);
   } else {
-    const gchar* uri;
+    EphyWebViewPrivate *priv = view->priv;
 
-    uri = webkit_web_view_get_uri (web_view);
+    if (priv->expire_address_now) {
+      const gchar* prev_uri;
 
-    ephy_web_view_set_typed_address (view, NULL);
-    ephy_web_view_set_address (view, uri);
+      prev_uri = webkit_web_view_get_uri (web_view);
+
+      ephy_web_view_set_typed_address (view, NULL);
+      ephy_web_view_set_address (view, prev_uri);
+    }
   }
 
   return FALSE;
