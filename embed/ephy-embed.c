@@ -692,6 +692,9 @@ confirm_action_from_mime (WebKitWebView *web_view,
   int default_response;
   WebKitNetworkResponse *response;
   SoupMessage *message;
+  GtkMessageType mtype;
+  char *title;
+  char *secondary;
 
   parent_window = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
   if (!gtk_widget_is_toplevel (parent_window))
@@ -734,45 +737,43 @@ confirm_action_from_mime (WebKitWebView *web_view,
   suggested_filename = webkit_download_get_suggested_filename (download);
 
   if (mime_permission != EPHY_MIME_PERMISSION_SAFE && helper_app) {
-    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-                                     _("Download this potentially unsafe file?"));
+    title = _("Download this potentially unsafe file?");
+    mtype = GTK_MESSAGE_WARNING;
+    /* translators: First %s is the file type description, second %s is the
+     * file name */
+    secondary = g_strdup_printf (_("File Type: “%s”.\n\nIt is unsafe to open "
+                                   "“%s” as it could potentially damage your "
+                                   "documents or invade your privacy. "
+                                   "You can download it instead."),
+                                 mime_description, suggested_filename);
 
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              /* translators: First %s is the file type description,
-                                                 Second %s is the file name */
-                                              _("File Type: “%s”.\n\nIt is unsafe to open “%s” as "
-                                                "it could potentially damage your documents or "
-                                                "invade your privacy. You can download it instead."),
-                                              mime_description, suggested_filename);
     action_label = STOCK_DOWNLOAD;
   } else if (action == DOWNLOAD_ACTION_OPEN && helper_app) {
-    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                                     _("Open this file?"));
-
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              /* translators: First %s is the file type description,
-                                                 Second %s is the file name,
-                                                 Third %s is the application used to open the file */
-                                              _("File Type: “%s”.\n\nYou can open “%s” using “%s” or save it."),
-                                              mime_description, suggested_filename,
-                                              g_app_info_get_name (helper_app));
+    title = _("Open this file?");
+    mtype = GTK_MESSAGE_QUESTION;
+    /* translators: First %s is the file type description, second %s is the
+     * file name, third %s is the application used to open the file */
+    secondary = g_strdup_printf (_("File Type: “%s”.\n\nYou can open “%s” "
+                                   "using “%s” or save it."),
+                                 mime_description, suggested_filename,
+                                 g_app_info_get_name (helper_app));
   } else  {
-    dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                                     _("Download this file?"));
-
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              /* translators: First %s is the file type description,
-                                                 Second %s is the file name */
-                                              _("File Type: “%s”.\n\nYou have no application able to open “%s”. "
-                                                "You can download it instead."),
-                                              mime_description, suggested_filename);
+    title = _("Download this file?");
+    mtype = GTK_MESSAGE_QUESTION;
+    /* translators: First %s is the file type description, second %s is the
+     * file name */
+    secondary = g_strdup_printf (_("File Type: “%s”.\n\nYou have no "
+                                   "application able to open “%s”. "
+                                   "You can download it instead."),
+                                 mime_description, suggested_filename);
   }
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   mtype, GTK_BUTTONS_NONE,
+                                   title);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            secondary, NULL);
 
   g_free (mime_description);
 
