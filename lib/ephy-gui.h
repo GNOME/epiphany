@@ -72,9 +72,6 @@ void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 
 GtkWidget      *ephy_gui_message_dialog_get_content_box	 (GtkWidget *dialog);
 
-void		ephy_gui_message_dialog_set_wrap_mode	 (GtkMessageDialog *dialog,
-							  PangoWrapMode wrap_mode);
-
 void		ephy_gui_connect_checkbutton_to_gconf	 (GtkWidget *widget,
 							  const char *pref);
 
