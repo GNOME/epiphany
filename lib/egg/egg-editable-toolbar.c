@@ -698,11 +698,11 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
         {
           gint tpos = get_toolbar_position (etoolbar, GTK_WIDGET (toolbar));
           egg_toolbars_model_add_item (etoolbar->priv->model, tpos, ipos, name);
-          gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
+          gtk_drag_finish (context, TRUE, gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE, time);
         }
       else
         {  
-          gtk_drag_finish (context, FALSE, context->action == GDK_ACTION_MOVE, time);
+          gtk_drag_finish (context, FALSE, gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE, time);
         }
     }
         
@@ -761,7 +761,7 @@ toolbar_drag_motion_cb (GtkToolbar         *toolbar,
                                            etoolbar->priv->dnd_toolitem, ipos);
     }
 
-  gdk_drag_status (context, context->suggested_action, time);
+  gdk_drag_status (context, gdk_drag_context_get_suggested_action (context), time);
 
   return TRUE;
 }
@@ -1814,7 +1814,7 @@ new_pixbuf_from_widget (GtkWidget *widget)
   
   /* Create a pixmap */
   visual = gtk_widget_get_visual (window);
-  pixmap = gdk_pixmap_new (NULL, icon_width, icon_height, visual->depth);
+  pixmap = gdk_pixmap_new (NULL, icon_width, icon_height, gdk_visual_get_depth (visual));
   gdk_drawable_set_colormap (GDK_DRAWABLE (pixmap), gtk_widget_get_colormap (window));
 
   /* Draw the window */
