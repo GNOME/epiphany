@@ -354,13 +354,15 @@ clear_all_dialog_checkbutton_toggled_cb (GtkToggleButton *toggle,
 static GtkWidget*
 _gtk_message_dialog_get_content_area (GtkMessageDialog *dialog)
 {
-	GtkWidget *image, *parent;
+	GtkWidget *image, *parent, *box;
 	GList *children;
 
 	image = gtk_message_dialog_get_image (dialog);
 	parent = gtk_widget_get_parent (image);
 	children = gtk_container_get_children (GTK_CONTAINER (parent));
-	return GTK_WIDGET (children->next->data);
+	box = GTK_WIDGET (children->next->data);
+	g_list_free (children);
+	return box;
 }
 
 void
