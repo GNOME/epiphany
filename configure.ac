@@ -94,7 +94,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 fi
 
 GLIB_REQUIRED=2.19.7
-GTK_REQUIRED=2.21.2
+GTK_REQUIRED=2.90.4
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
@@ -127,8 +127,8 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gmodule-2.0
 		  gthread-2.0
 		  gio-unix-2.0 >= $GLIB_REQUIRED
-		  gtk+-2.0 >= $GTK_REQUIRED
-		  gtk+-unix-print-2.0 >= $GTK_REQUIRED
+		  gtk+-3.0 >= $GTK_REQUIRED
+		  gtk+-unix-print-3.0 >= $GTK_REQUIRED
 		  ice
 		  x11
 		  sm
@@ -137,7 +137,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gconf-2.0
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  $LIBNOTIFY_PACKAGE
-		  webkit-1.0 >= $WEBKIT_GTK_REQUIRED
+		  webkit-3.0 >= $WEBKIT_GTK_REQUIRED
 		  libsoup-gnome-2.4 >= $LIBSOUP_GNOME_REQUIRED
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
 		  ])

@@ -341,9 +341,9 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		--nsversion=$(EPIPHANY_API_VERSION) \
 		--add-include-path=. \
 		--add-include-path=$(srcdir) \
-		--include=Gtk-2.0 \
+		--include=Gtk-3.0 \
 		--include=libxml2-2.0 \
-		--include=WebKit-1.0 \
+		--include=WebKit-3.0 \
 		--program=./epiphany \
 		--output $@ \
 		--pkg epiphany-$(EPIPHANY_API_VERSION) \
