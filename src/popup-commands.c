@@ -26,7 +26,6 @@
 #include "ephy-embed-persist.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-web-view.h"
