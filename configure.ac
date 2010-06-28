@@ -17,7 +17,7 @@
 
 m4_define([epiphany_version_major],[2])
 m4_define([epiphany_version_minor],[31])
-m4_define([epiphany_version_micro],[3])
+m4_define([epiphany_version_micro],[4])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 # This can be either "trunk" or "branches/gnome-x-y"
@@ -100,7 +100,7 @@ LIBXSLT_REQUIRED=1.1.7
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 LIBNOTIFY_REQUIRED=0.4
 DBUS_GLIB_REQUIRED=0.35
-WEBKIT_GTK_REQUIRED=1.3.1
+WEBKIT_GTK_REQUIRED=1.3.2
 LIBSOUP_GNOME_REQUIRED=2.29.91
 GNOME_KEYRING_REQUIRED=2.26.0
 
