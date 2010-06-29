@@ -137,7 +137,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gconf-2.0
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  $LIBNOTIFY_PACKAGE
-		  webkit-3.0 >= $WEBKIT_GTK_REQUIRED
+		  webkitgtk-3.0 >= $WEBKIT_GTK_REQUIRED
 		  libsoup-gnome-2.4 >= $LIBSOUP_GNOME_REQUIRED
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
 		  ])
