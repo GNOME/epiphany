@@ -824,7 +824,7 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 						window,
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						priv->persist_key,
-						EPHY_FILE_FILTER_ALL_SUPPORTED);
+						EPHY_FILE_FILTER_ALL);
 
 		gtk_file_chooser_set_do_overwrite_confirmation
 				(GTK_FILE_CHOOSER (dialog), TRUE);
