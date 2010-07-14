@@ -1,18 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2003-2004 THE PACKAGE'S COPYRIGHT HOLDER
+# Simplified Chinese translation.
+# Copyright (C) 2003, 2004, 2005, 2006, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 # Funda Wang <fundawang@linux.net.cn>, 2003-2006.
 # Liu Songhe <jackliu9999@263.net>, 2004.
+# Tao Wei <weitao1979@gmail.com>, 2010.
+# Aron Xu <aronxu@gnome.org>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 2.14\n"
+"Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-11-19 12:55+0000\n"
-"PO-Revision-Date: 2009-11-22 10:49+0100\n"
-"Last-Translator: Tao Wei <weitao1979@gmail.com>\n"
-"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"product=epiphany\n"
+"POT-Creation-Date: 2010-07-14 09:59+0800\n"
+"PO-Revision-Date: 2010-07-14 10:22+0800\n"
+"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -62,7 +64,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany 网络浏览器"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:683
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "网络浏览器"
 
@@ -130,7 +132,7 @@ msgstr "禁用不安全的协议"
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http "
 "and https."
-msgstr "禁止从不安全的协议中装入内容。安全的协议是指 http 和 https。"
+msgstr "禁止从不安全的协议中载入内容。安全的协议是指 http 和 https。"
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
@@ -240,23 +242,23 @@ msgstr "默认字体类型"
 
 #: ../data/epiphany.schemas.in.h:13
 msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-msgstr "默认字体类型。可能的值为 “serif” 和 “sans-serif”。"
+msgstr "默认字体类型。可能的值为“serif”和“sans-serif”。"
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "允许 Java"
+msgid "Enable JavaScript"
+msgstr "启用 JavaScript"
 
 #: ../data/epiphany.schemas.in.h:15
-msgid "Enable JavaScript"
-msgstr "允许 JavaScript"
+msgid "Enable Plugins"
+msgstr "启用插件"
 
-#: ../data/epiphany.schemas.in.h:16
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "启用网络检查器"
 
 #: ../data/epiphany.schemas.in.h:17
 msgid "Enable smooth scrolling"
-msgstr "允许平滑滚动"
+msgstr "启用平滑滚动"
 
 #: ../data/epiphany.schemas.in.h:18
 msgid ""
@@ -340,14 +342,18 @@ msgid "Remember passwords"
 msgstr "记住密码"
 
 #: ../data/epiphany.schemas.in.h:36
+msgid "Search string for keywords entered in the URL bar."
+msgstr "搜索输入到地址栏的关键词。"
+
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show bookmarks bar by default"
 msgstr "默认显示书签栏"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "Show statusbar by default"
 msgstr "默认显示状态栏"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -355,37 +361,44 @@ msgstr ""
 "显示“曾经”访问过的、“近两天”访问过的、“近三天”访问过的、“今天”访问过的历史页"
 "面。"
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "显示标签栏，即便只打开了一个标签。"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "Show toolbars by default"
 msgstr "默认显示工具栏"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache"
 msgstr "磁盘缓存的大小"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid "Size of disk cache, in MB."
 msgstr "磁盘缓存的大小，以 MB 为单位。"
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"User Agent 串，服务器可用此识别浏览器属性。"
+
+#: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
 msgstr "显示在编辑器视图中的书签信息"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
 msgstr "显示在编辑器视图里的书签信息。此列表的有效值是“地址”和“标题”。"
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The currently selected fonts language"
 msgstr "目前选中的字体语言"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -402,15 +415,15 @@ msgstr ""
 "语)，“zh-TW”(繁体中文)，“tr”(土耳其语)，“x-unicode”(其它语言)，“x-western”(以"
 "拉丁语系书写的语言)，“x-tamil”(泰米尔语)和“x-devanagari”(梵文)。"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid "The downloads folder"
 msgstr "下载文件夹"
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
 msgstr "显示在历史视图中的页面信息"
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -418,7 +431,7 @@ msgstr ""
 "显示在历史视图里的页面信息。此列表的有效值"
 "是“ViewTitle”、“ViewAddress”和“ViewDateTime”。"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -426,11 +439,11 @@ msgstr ""
 "存储下载文件的文件夹路径；“Downloads”代表使用默认下载文件夹，“Desktop”代表使"
 "用桌面文件夹。"
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Toolbar style"
 msgstr "工具栏样式"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -439,27 +452,35 @@ msgstr ""
 "工具栏样式。可供选择的值包括“”(使用 GNOME 默认样式)、“both”(文字和图"
 "标)、“both-horiz”(文字在图标旁)、“icons”和“text”。"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
+msgid "URL Search"
+msgstr "URL 搜索"
+
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
 msgstr "使用我自己的颜色"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:57
 msgid "Use own fonts"
 msgstr "使用我自己的字体"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:58
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "使用您自己的颜色而不是页面请求的颜色。"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:59
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "使用您自己的字体而不是页面请求的字体。"
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:60
+msgid "User agent"
+msgstr "User Agent"
+
+#: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
 msgstr "下载窗口的可见性"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -467,85 +488,426 @@ msgstr ""
 "如果浏览器无法打开文件，则这些文件将会被自动下载到下载文件夹，并用相应的应用"
 "程序打开。"
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:63
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
-msgstr "何时装入图像。可能的值是“总是”、“当前网站”、“从不”。"
+msgstr "何时载入图像。可能的值是“总是”、“当前网站”、“从不”。"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the background color"
 msgstr "是否打印背景颜色"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the background images"
 msgstr "是否打印背景图像"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to print the date in the footer"
 msgstr "是否在页脚打印日期"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:67
 msgid "Whether to print the page address in the header"
 msgstr "是否在页眉打印页面地址"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:68
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "是否在页脚打印页号(第 x 页共 y 页)"
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:69
 msgid "Whether to print the page title in the header"
 msgstr "是否在页眉打印页面标题"
 
-#: ../data/epiphany.schemas.in.h:66
+#: ../data/epiphany.schemas.in.h:70
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "是否存储并预填网站中的密码。"
 
-#: ../data/epiphany.schemas.in.h:67
+#: ../data/epiphany.schemas.in.h:71
 msgid "x-western"
 msgstr "zh-CN"
 
+#: ../data/glade/certificate-dialogs.ui.h:1
+msgid "<b>Fingerprints</b>"
+msgstr "<b>指纹</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:2
+msgid "<b>Issued By</b>"
+msgstr "<b>发行者</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:3
+msgid "<b>Issued To</b>"
+msgstr "<b>发行给</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:4
+msgid "<b>Validity</b>"
+msgstr "<b>有效性</b>"
+
+#: ../data/glade/certificate-dialogs.ui.h:5
+msgid "Certificate _Fields"
+msgstr "证书域(_F)"
+
+#: ../data/glade/certificate-dialogs.ui.h:6
+msgid "Certificate _Hierarchy"
+msgstr "证书层次(_H)"
+
+#: ../data/glade/certificate-dialogs.ui.h:7
+msgid "Common Name:"
+msgstr "公共名称："
+
+#: ../data/glade/certificate-dialogs.ui.h:8
+msgid "Details"
+msgstr "细节"
+
+#: ../data/glade/certificate-dialogs.ui.h:9
+msgid "Expires On:"
+msgstr "过期时间："
+
+#: ../data/glade/certificate-dialogs.ui.h:10
+msgid "Field _Value"
+msgstr "域值(_V)"
+
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
+msgid "General"
+msgstr "常规"
+
+#: ../data/glade/certificate-dialogs.ui.h:12
+msgid "Issued On:"
+msgstr "发行时间："
+
+#: ../data/glade/certificate-dialogs.ui.h:13
+msgid "MD5 Fingerprint:"
+msgstr "MD5 指纹："
+
+#: ../data/glade/certificate-dialogs.ui.h:14
+msgid "Organization:"
+msgstr "组织："
+
+#: ../data/glade/certificate-dialogs.ui.h:15
+msgid "Organizational Unit:"
+msgstr "组织单元："
+
+#: ../data/glade/certificate-dialogs.ui.h:16
+msgid "SHA1 Fingerprint:"
+msgstr "SHA1 指纹："
+
+#: ../data/glade/certificate-dialogs.ui.h:17
+msgid "Serial Number:"
+msgstr "序列号："
+
+#: ../data/glade/epiphany.ui.h:1
+msgid "<b>_Automatic</b>"
+msgstr "<b>自动(_A)</b>"
+
+#: ../data/glade/epiphany.ui.h:2
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>使用不同的编码(_U)：</b>"
+
+#: ../data/glade/epiphany.ui.h:3
+msgid "Clear _All..."
+msgstr "全部清除(_A)..."
+
+#: ../data/glade/epiphany.ui.h:4
+msgid "Cookies"
+msgstr "Cookies"
+
+#. The name of the default downloads folder
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:912
+msgid "Downloads"
+msgstr "下载"
+
+#: ../data/glade/epiphany.ui.h:6
+msgid "Passwords"
+msgstr "密码"
+
+#: ../data/glade/epiphany.ui.h:7
+msgid "Personal Data"
+msgstr "个人数据"
+
+#: ../data/glade/epiphany.ui.h:8
+msgid "Text Encoding"
+msgstr "文字编码"
+
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
+msgid "Use the encoding specified by the document"
+msgstr "使用文档指定的编码"
+
+#: ../data/glade/epiphany.ui.h:10
+msgid "_Show passwords"
+msgstr "显示密码(_S)"
+
+#: ../data/glade/form-signing-dialog.ui.h:1
+msgid "Sign Text"
+msgstr "对文本签名"
+
+#: ../data/glade/form-signing-dialog.ui.h:2
+msgid ""
+"To confirm that you want to sign the above text, choose a certificate to "
+"sign the text with and enter its password below."
+msgstr ""
+"为了确认您想要对以上文本签名，请选择要用来签名的证书，然后在下面输入该证书的"
+"密码。"
+
+#: ../data/glade/form-signing-dialog.ui.h:3
+msgid "_Certificate:"
+msgstr "证书(_C)："
+
+#: ../data/glade/form-signing-dialog.ui.h:4
+msgid "_Password:"
+msgstr "密码(_P)："
+
+#: ../data/glade/form-signing-dialog.ui.h:5
+msgid "_View Certificate…"
+msgstr "查看证书(_V)..."
+
+#: ../data/glade/prefs-dialog.ui.h:1
+msgid "<b>Cookies</b>"
+msgstr "<b>Cookies</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:2
+msgid "<b>Downloads</b>"
+msgstr "<b>下载</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:3
+msgid "<b>Encodings</b>"
+msgstr "<b>编码</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:4
+msgid "<b>Home page</b>"
+msgstr "<b>主页</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>语言</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:6
+msgid "<b>Passwords</b>"
+msgstr "<b>密码</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:7
+msgid "<b>Temporary Files</b>"
+msgstr "<b>临时文件</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:8
+msgid "<b>Web Content</b>"
+msgstr "<b>Web 内容</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:9
+msgid "<b>Web Development</b>"
+msgstr "<b>Web 开发</b>"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../data/glade/prefs-dialog.ui.h:11
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<small>比如，不接受来自这些网站的广告商的 Cookie</small>"
+
+#: ../data/glade/prefs-dialog.ui.h:12
+msgid "A_utomatically download and open files"
+msgstr "自动下载并打开文件(_U)"
+
+#: ../data/glade/prefs-dialog.ui.h:13
+msgid "Add Language"
+msgstr "添加语言"
+
+#: ../data/glade/prefs-dialog.ui.h:14
+msgid "Allow popup _windows"
+msgstr "允许弹出窗口(_W)"
+
+#: ../data/glade/prefs-dialog.ui.h:15
+msgid "Choose a l_anguage:"
+msgstr "选择语言(_A)："
+
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:680
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:402
+msgid "Cl_ear"
+msgstr "清除(_E)"
+
+#: ../data/glade/prefs-dialog.ui.h:17
+msgid "De_fault:"
+msgstr "默认(_F)："
+
+#: ../data/glade/prefs-dialog.ui.h:18
+msgid "Enable Java_Script"
+msgstr "启用 Java_Script"
+
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Plugins"
+msgstr "启用插件(_P)"
+
+#: ../data/glade/prefs-dialog.ui.h:21
+msgid "Fonts & Style"
+msgstr "字体和样式"
+
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:819
+msgid "Language"
+msgstr "语言"
+
+#: ../data/glade/prefs-dialog.ui.h:24
+msgid "Let web pages specify their own _fonts"
+msgstr "让网页指定自己的字体(_F)"
+
+#: ../data/glade/prefs-dialog.ui.h:25
+msgid "Let web pages specify their own c_olors"
+msgstr "让网页指定自己的颜色(_O)"
+
+#: ../data/glade/prefs-dialog.ui.h:26
+msgid "MB"
+msgstr "MB"
+
+#: ../data/glade/prefs-dialog.ui.h:27
+msgid "Only _from sites you visit"
+msgstr "仅来自您浏览的网站(_F)"
+
+#: ../data/glade/prefs-dialog.ui.h:28
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../data/glade/prefs-dialog.ui.h:29
+msgid "Privacy"
+msgstr "隐私"
+
+#: ../data/glade/prefs-dialog.ui.h:30
+msgid "Set to Current _Page"
+msgstr "设为当前页(_P)"
+
+#: ../data/glade/prefs-dialog.ui.h:31
+msgid "Set to _Blank Page"
+msgstr "设为空白页(_B)"
+
+#: ../data/glade/prefs-dialog.ui.h:32
+msgid "Use custom _stylesheet"
+msgstr "使用自定义样式表(_S)"
+
+#: ../data/glade/prefs-dialog.ui.h:33
+msgid "_Address:"
+msgstr "地址(_A)："
+
+#: ../data/glade/prefs-dialog.ui.h:34
+msgid "_Always accept"
+msgstr "总是接受(_A)"
+
+#: ../data/glade/prefs-dialog.ui.h:35
+msgid "_Disk space:"
+msgstr "磁盘空间(_D)："
+
+#: ../data/glade/prefs-dialog.ui.h:36
+msgid "_Download folder:"
+msgstr "下载文件夹(_D)："
+
+#: ../data/glade/prefs-dialog.ui.h:37
+msgid "_Edit Stylesheet…"
+msgstr "编辑样式表(_E)..."
+
+#: ../data/glade/prefs-dialog.ui.h:38
+msgid "_Minimum size:"
+msgstr "最小大小(_M)："
+
+#: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Never accept"
+msgstr "从不接受(_N)"
+
+#: ../data/glade/prefs-dialog.ui.h:40
+msgid "_Remember passwords"
+msgstr "记住密码(_R)"
+
+#: ../data/glade/print.ui.h:1
+msgid "<b>Background</b>"
+msgstr "<b>背景</b>"
+
+#: ../data/glade/print.ui.h:2
+msgid "<b>Footers</b>"
+msgstr "<b>页脚</b>"
+
+#: ../data/glade/print.ui.h:3
+msgid "<b>Frames</b>"
+msgstr "<b>框架</b>"
+
+#: ../data/glade/print.ui.h:4
+msgid "<b>Headers</b>"
+msgstr "<b>页眉</b>"
+
+#: ../data/glade/print.ui.h:5
+msgid "As laid out on the _screen"
+msgstr "与屏幕上显示的一样(_S)"
+
+#: ../data/glade/print.ui.h:6
+msgid "O_nly the selected frame"
+msgstr "仅选中框架(_N)"
+
+#: ../data/glade/print.ui.h:7
+msgid "P_age title"
+msgstr "页面标题(_A)"
+
+#: ../data/glade/print.ui.h:8
+msgid "Page _numbers"
+msgstr "页号(_N)"
+
+#: ../data/glade/print.ui.h:9
+msgid "Print background c_olors"
+msgstr "打印背景颜色(_O)"
+
+#: ../data/glade/print.ui.h:10
+msgid "Print background i_mages"
+msgstr "打印背景图像(_M)"
+
+#: ../data/glade/print.ui.h:11
+msgid "_Date"
+msgstr "日期(_D)"
+
+#: ../data/glade/print.ui.h:12
+msgid "_Each frame separately"
+msgstr "每个框架独立(_E)"
+
+#: ../data/glade/print.ui.h:13
+msgid "_Page address"
+msgstr "页面地址(_P)"
+
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:166
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "显示下载(_S)"
 
-#: ../embed/downloader-view.c:308
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:312
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "暂停(_P)"
 
-#: ../embed/downloader-view.c:362
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "续传(_R)"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:379 ../embed/downloader-view.c:532
-#: ../embed/downloader-view.c:537 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1755
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1685
 msgid "Unknown"
 msgstr "未知"
 
-#: ../embed/downloader-view.c:495
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "文件“%s”已下载。"
 
-#: ../embed/downloader-view.c:498
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "下载完成"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:522
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -554,64 +916,65 @@ msgstr ""
 "%s\n"
 "%s，共%s"
 
-#: ../embed/downloader-view.c:569
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d 个下载"
 
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "文件“%s”已被添加到下载队列。"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "下载开始"
 
-#: ../embed/downloader-view.c:786 ../embed/downloader-view.c:796
+#: ../embed/downloader-view.c:834 ../embed/downloader-view.c:844
 msgctxt "download status"
 msgid "Unknown"
 msgstr "未知"
 
-#: ../embed/downloader-view.c:789
+#: ../embed/downloader-view.c:837
 msgctxt "download status"
 msgid "Failed"
 msgstr "失败"
 
-#: ../embed/downloader-view.c:792
+#: ../embed/downloader-view.c:840
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "已取消"
 
-#: ../embed/downloader-view.c:855 ../src/bookmarks/ephy-bookmarks-editor.c:991
+#: ../embed/downloader-view.c:903 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "文件"
 
-#: ../embed/downloader-view.c:878
+#: ../embed/downloader-view.c:926
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:889
+#: ../embed/downloader-view.c:937
 msgid "Remaining"
 msgstr "剩余"
 
-#: ../embed/ephy-embed.c:446 ../src/window-commands.c:333
+#: ../embed/ephy-embed.c:335 ../embed/ephy-embed-persist.c:823
+#: ../src/window-commands.c:343
 msgid "Save"
 msgstr "保存"
 
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:593
 msgctxt "file type"
 msgid "Unknown"
 msgstr "未知"
 
-#: ../embed/ephy-embed.c:690
+#: ../embed/ephy-embed.c:609
 msgid "Download this potentially unsafe file?"
 msgstr "下载可能不安全的文件吗？"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:695
+#. translators: First %s is the file type description, second %s is the
+#. * file name
+#: ../embed/ephy-embed.c:613
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -623,14 +986,13 @@ msgstr ""
 "\n"
 "打开“%s”可能不安全，因为它可能损坏您的文档或暴露您的隐私。您可以下载它。"
 
-#: ../embed/ephy-embed.c:703
+#: ../embed/ephy-embed.c:621
 msgid "Open this file?"
 msgstr "打开此文件吗？"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name,
-#. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:709
+#. translators: First %s is the file type description, second %s is the
+#. * file name, third %s is the application used to open the file
+#: ../embed/ephy-embed.c:625
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -641,13 +1003,13 @@ msgstr ""
 "\n"
 "您可以使用“%3$s”打开“%2$s”或保存它。"
 
-#: ../embed/ephy-embed.c:716
+#: ../embed/ephy-embed.c:630
 msgid "Download this file?"
 msgstr "下载此文件吗？"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:721
+#. translators: First %s is the file type description, second %s is the
+#. * file name
+#: ../embed/ephy-embed.c:634
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -658,11 +1020,7 @@ msgstr ""
 "\n"
 "您没有可打开“%s”的应用程序。您可以下载它。"
 
-#: ../embed/ephy-embed.c:728
-msgid "_Save As..."
-msgstr "另存为(_S)..."
-
-#: ../embed/ephy-embed.c:853
+#: ../embed/ephy-embed.c:812
 msgid "Web Inspector"
 msgstr "网络检查器"
 
@@ -670,7 +1028,14 @@ msgstr "网络检查器"
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "现在无法使用 Epiphany。初始化失败。"
 
-#: ../embed/ephy-embed-utils.c:61
+#: ../embed/ephy-embed-single.c:474
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"CA 证书文件缺失，所有 SSL 站点将被认为证书无效。"
+
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "给“%s”发送电子邮件"
@@ -1013,46 +1378,54 @@ msgstr "本地文件"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2183
-#: ../src/ephy-session.c:1342
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3478
+#: ../src/ephy-session.c:1418
 msgid "Blank page"
 msgstr "空白页"
 
-#. + 2 here is getting rid of 'q='
-#: ../embed/ephy-web-view.c:1116
+#: ../embed/ephy-web-view.c:946
+msgid "Not now"
+msgstr "暂不"
+
+#: ../embed/ephy-web-view.c:951
+msgid "Store password"
+msgstr "保存密码"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:962
+#, c-format
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr ""
+"<big>您是否希望在 <b>%2$s</b> 中保存 <b>%1$s</b> 的密码？</big>"
+
+#: ../embed/ephy-web-view.c:2227
+#, c-format
+msgid "A problem occurred while loading %s"
+msgstr "载入 %s 时出现问题"
+
+#: ../embed/ephy-web-view.c:2424
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1311
-#, c-format
-msgid "Redirecting to “%s”…"
-msgstr "正在重定向到“%s”..."
-
-#: ../embed/ephy-web-view.c:1313
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "正在从“%s”传送数据..."
-
-#: ../embed/ephy-web-view.c:1315
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "正在等待来自“%s”的认证..."
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1321 ../embed/ephy-web-view.c:1428
+#: ../embed/ephy-web-view.c:2719
 #, c-format
 msgid "Loading “%s”…"
-msgstr "正在装入“%s”..."
+msgstr "正在载入 %s..."
 
-#: ../embed/ephy-web-view.c:1430
+#: ../embed/ephy-web-view.c:2721
 msgid "Loading…"
-msgstr "正在装入...."
+msgstr "正在载入...."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:2383
+#: ../embed/ephy-web-view.c:3682
 #, c-format
 msgid "%s Files"
 msgstr "%s 的文件"
@@ -1185,22 +1558,23 @@ msgstr "图像"
 msgid "All files"
 msgstr "全部文件"
 
-#. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:105
-msgid "Downloads"
-msgstr "下载"
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:916
+msgid "Desktop"
+msgstr "桌面"
 
-#: ../lib/ephy-file-helpers.c:296
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "无法在“%s”中创建临时目录。"
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "文件“%s”已存在，请将其移出。"
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "创建目录“%s”失败。"
@@ -1233,32 +1607,53 @@ msgstr "已经存在同名文件，但您无权覆盖它。"
 msgid "Cannot Overwrite File"
 msgstr "无法覆盖文件"
 
-#: ../lib/ephy-gui.c:423
+#: ../lib/ephy-gui.c:392
 #, c-format
 msgid "Could not display help: %s"
 msgstr "无法显示帮助：%s"
+
+#: ../lib/ephy-nss-glue.c:62
+msgid "Master password needed"
+msgstr "需要主密码"
+
+#: ../lib/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"这些来自于上一个版本(Gecko)的密码被一个主密码锁定了。如果您想 Epiphany 导入它"
+"们，请在下面输入您的主密码。"
+
+#: ../lib/ephy-profile-migration.c:83
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "从 Mozilla 复制 cookies 失败。"
+
+#: ../lib/ephy-profile-migration.c:558
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr "无法读取最新的迁移标记，中止配置文件迁移。"
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "弹出窗口"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
 msgstr "历史"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1503
+#: ../src/ephy-window.c:1448
 msgid "Bookmark"
 msgstr "书签"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:897
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1745
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1507
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1743
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1452
 msgid "Bookmarks"
 msgstr "书签"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:288
 msgid "Address Entry"
 msgstr "地址输入项"
 
@@ -1335,20 +1730,11 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:389
-msgid "Cl_ear"
-msgstr "清除(_E)"
-
-#: ../lib/widgets/ephy-location-entry.c:926
+#: ../lib/widgets/ephy-location-entry.c:968
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "拖曳此图标可创建到此页面的链接"
 
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:158
 msgid "Clear"
 msgstr "清除"
 
@@ -1357,7 +1743,7 @@ msgstr "清除"
 msgid "%s:"
 msgstr "%s："
 
-#: ../src/bookmarks/ephy-bookmark-action.c:498
+#: ../src/bookmarks/ephy-bookmark-action.c:502
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "执行脚本“%s”"
@@ -1365,7 +1751,7 @@ msgstr "执行脚本“%s”"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:614
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1383,24 +1769,24 @@ msgstr[0] "与 %d 个等价书签合并"
 msgid "Show “%s”"
 msgstr "显示“%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
+#: ../src/bookmarks/ephy-bookmark-properties.c:426
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s”属性"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:553
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:569
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "地址(_D)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:580
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "主题(_O)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:602
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "显示全部主题(_W)"
 
@@ -1497,22 +1883,22 @@ msgstr "从此主题删除"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:111
 msgid "_File"
 msgstr "文件(_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:112
 msgid "_Edit"
 msgstr "编辑(_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:113
 msgid "_View"
 msgstr "查看(_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:118
 msgid "_Help"
 msgstr "帮助(_H)"
 
@@ -1528,9 +1914,9 @@ msgstr "创建新主题"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
 #: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "在新建窗口中打开(_W)"
@@ -1541,9 +1927,9 @@ msgstr "在新窗口中打开选中书签"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1357
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1355
 #: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "在新建标签中打开(_T)"
@@ -1587,7 +1973,7 @@ msgid "Export bookmarks to a file"
 msgstr "将书签导出至文件"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:143
 msgid "_Close"
 msgstr "关闭(_C)"
 
@@ -1597,29 +1983,29 @@ msgstr "关闭书签窗口"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:155
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:156
 msgid "Cut the selection"
 msgstr "剪切选中范围"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1365
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:716
+#: ../src/ephy-window.c:158
 msgid "_Copy"
 msgstr "复制(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:159
 msgid "Copy the selection"
 msgstr "复制选中范围"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:161
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
@@ -1638,7 +2024,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "删除选中书签或主题"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:167
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -1649,7 +2035,7 @@ msgstr "选中全部书签或文字"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:261
 msgid "_Contents"
 msgstr "目录(_C)"
 
@@ -1658,12 +2044,12 @@ msgid "Display bookmarks help"
 msgstr "显示书签帮助"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:264
 msgid "_About"
 msgstr "关于(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:265
 msgid "Display credits for the web browser creators"
 msgstr "显示 Web 浏览器创建者的资料"
 
@@ -1795,27 +2181,27 @@ msgstr "导入(_M)"
 msgid "Import bookmarks from:"
 msgstr "导入书签的来源："
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1363
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/ephy-history-window.c:712
 msgid "_Copy Address"
 msgstr "复制地址(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1611
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1609
+#: ../src/ephy-history-window.c:1037
 msgid "_Search:"
 msgstr "搜索(_S)："
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1809
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1807
 msgid "Topics"
 msgstr "主题"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1879
-#: ../src/ephy-history-window.c:1362
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1877
+#: ../src/ephy-history-window.c:1360
 msgid "Title"
 msgstr "标题"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1890
-#: ../src/ephy-history-window.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1888
+#: ../src/ephy-history-window.c:1369
 msgid "Address"
 msgstr "地址"
 
@@ -1869,54 +2255,50 @@ msgstr "其它编码"
 msgid "_Automatic"
 msgstr "自动(_A)"
 
-#: ../src/ephy-encoding-menu.c:338
-msgid "Use the encoding specified by the document"
-msgstr "使用文档指定的编码"
-
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:153
 msgid "Not found"
 msgstr "未找到"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:165
 msgid "Wrapped"
 msgstr "往返"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find links:"
 msgstr "查找链接："
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find:"
 msgstr "查找："
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:557
+#: ../src/ephy-find-toolbar.c:459 ../src/ephy-find-toolbar.c:582
 msgid "_Case sensitive"
 msgstr "大小写敏感(_C)"
 
-#: ../src/ephy-find-toolbar.c:540
+#: ../src/ephy-find-toolbar.c:565
 msgid "Find Previous"
 msgstr "查找上一个"
 
-#: ../src/ephy-find-toolbar.c:543
+#: ../src/ephy-find-toolbar.c:568
 msgid "Find previous occurrence of the search string"
 msgstr "查找搜索字符串的上次出现"
 
-#: ../src/ephy-find-toolbar.c:549
+#: ../src/ephy-find-toolbar.c:574
 msgid "Find Next"
 msgstr "查找下一个"
 
-#: ../src/ephy-find-toolbar.c:552
+#: ../src/ephy-find-toolbar.c:577
 msgid "Find next occurrence of the search string"
 msgstr "查找搜索字符串的下次出现"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:586
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:670
 msgid "Leave Fullscreen"
 msgstr "离开全屏"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:318
 msgid "Go"
 msgstr "转到"
 
@@ -1994,31 +2376,31 @@ msgstr "清除浏览历史将导致所有的历史链接被永久删除。"
 msgid "Clear History"
 msgstr "清除历史"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
 msgstr "上半个小时"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "今天"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
+#: ../src/ephy-history-window.c:1048 ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1055
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "上 %d 天"
 
-#: ../src/ephy-history-window.c:1299
+#: ../src/ephy-history-window.c:1297
 msgid "Sites"
 msgstr "站点"
 
-#: ../src/ephy-history-window.c:1379
+#: ../src/ephy-history-window.c:1377
 msgid "Date"
 msgstr "日期"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:561 ../src/window-commands.c:1007
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1040
 msgid "GNOME Web Browser"
 msgstr "GNOME 网络浏览器"
 
@@ -2040,7 +2422,7 @@ msgstr "从给定文件中导入书签"
 
 #: ../src/ephy-main.c:98
 msgid "Load the given session file"
-msgstr "装入给定的会话文件"
+msgstr "载入给定的会话文件"
 
 #: ../src/ephy-main.c:100
 msgid "Add a bookmark"
@@ -2066,11 +2448,11 @@ msgstr "目录"
 msgid "URL …"
 msgstr "网址 ..."
 
-#: ../src/ephy-main.c:413
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "无法启动 GNOME 网络浏览器"
 
-#: ../src/ephy-main.c:416
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2079,83 +2461,52 @@ msgstr ""
 "启动失败，原因是下列错误：\n"
 "%s"
 
-#: ../src/ephy-main.c:562
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "GNOME 网络浏览器选项"
 
-#: ../src/ephy-notebook.c:628
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "关闭标签"
 
-#: ../src/ephy-nss-glue.c:62
-msgid "Master password needed"
-msgstr "需要主密码"
-
-#: ../src/ephy-nss-glue.c:64
-msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
-msgstr ""
-"这些来自于上一个版本(Gecko)的密码被一个主密码锁定了。如果您想 Epiphany 导入它"
-"们，请在下面输入您的主密码。"
-
-#: ../src/ephy-profile-migration.c:80
-msgid "Failed to copy cookies file from Mozilla."
-msgstr "从 Mozilla 复制 cookies 失败。"
-
-#: ../src/ephy-profile-migration.c:382
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr "无法读取最新的迁移标记，中止配置文件迁移。"
-
-#: ../src/ephy-session.c:116
+#: ../src/ephy-session.c:118
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "%d 秒后，将会中断下载并注销。"
 
-#: ../src/ephy-session.c:228
+#: ../src/ephy-session.c:230
 msgid "Abort pending downloads?"
 msgstr "中止进行中的下载吗？"
 
-#: ../src/ephy-session.c:233
+#: ../src/ephy-session.c:235
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr "目前仍有进行中的下载。如果您注销的话，这些下载将被中断，并会丢失。"
 
-#: ../src/ephy-session.c:237
+#: ../src/ephy-session.c:239
 msgid "_Cancel Logout"
 msgstr "取消注销(_C)"
 
-#: ../src/ephy-session.c:239
+#: ../src/ephy-session.c:241
 msgid "_Abort Downloads"
 msgstr "中断下载(_A)"
 
-#: ../src/ephy-session.c:571
-msgid "Recover previous browser windows and tabs?"
-msgstr "复原上个浏览器窗口和标签吗？"
+#: ../src/ephy-session.c:770
+msgid "Don't recover"
+msgstr "不恢复"
 
-#: ../src/ephy-session.c:575
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr "Epiphany 好像上次运行时非正常退出。您可以复原上次打开的窗口和标签。"
+#: ../src/ephy-session.c:775
+msgid "Recover session"
+msgstr "恢复会话"
 
-#: ../src/ephy-session.c:579
-msgid "_Don't Recover"
-msgstr "不复原(_D)"
-
-#: ../src/ephy-session.c:581
-msgid "_Recover"
-msgstr "复原(_R)"
-
-#: ../src/ephy-session.c:583
-msgid "Crash Recovery"
-msgstr "崩溃复原"
+#: ../src/ephy-session.c:780
+msgid "Do you want to recover the previous browser windows and tabs?"
+msgstr "恢复上次浏览的窗口和标签吗？"
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1286
+#: ../src/ephy-session.c:1362
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -2165,115 +2516,92 @@ msgstr ""
 "页面正在加载时浏览器意外关闭。如果您重新加载它，问题仍有可能发生。如果发生"
 "了，请向 %s 开发者报告此问题。"
 
-#: ../src/ephy-shell.c:172
-msgid "Sidebar extension required"
-msgstr "需要侧边栏扩展"
-
-#: ../src/ephy-shell.c:174
-msgid "Sidebar Extension Required"
-msgstr "需要侧边栏扩展"
-
-#: ../src/ephy-shell.c:178
-msgid "The link you clicked needs the sidebar extension to be installed."
-msgstr "您单击的链接需要安装侧边栏扩展。"
-
-#: ../src/ephy-statusbar.c:83
-msgid "Caret"
-msgstr "光标"
-
-#. Translators: this is the tooltip on the "Caret" icon
-#. * in the statusbar.
-#.
-#: ../src/ephy-statusbar.c:90
-msgid "In keyboard selection mode, press F7 to exit"
-msgstr "在键盘选择模式中，按 F7 可退出"
-
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "切换到此标签"
 
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:228
 msgid "_Back"
 msgstr "后退(_B)"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:230
 msgid "Go to the previous visited page"
 msgstr "转到上个浏览过的网页"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:234
 msgid "Back history"
 msgstr "后退历史"
 
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:248
 msgid "_Forward"
 msgstr "前进(_F)"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:250
 msgid "Go to the next visited page"
 msgstr "转到下个浏览过的网页"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:254
 msgid "Forward history"
 msgstr "前进历史"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:267
 msgid "_Up"
 msgstr "向上(_U)"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:269
 msgid "Go up one level"
 msgstr "向上一级"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:273
 msgid "List of upper levels"
 msgstr "列出上一级"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:290
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "输入要打开的网址，或者要搜索的短语"
 
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:306
 msgid "Zoom"
 msgstr "缩放"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:308
 msgid "Adjust the text size"
 msgstr "调整文本大小"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the address entered in the address entry"
 msgstr "转到在地址输入项中输入的地址"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:329
 msgid "_Home"
 msgstr "主页(_H)"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:331
 msgid "Go to the home page"
 msgstr "转到主页"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:341
 msgid "New _Tab"
 msgstr "新建标签(_T)"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:343
 msgid "Open a new tab"
 msgstr "打开新标签"
 
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:352
 msgid "_New Window"
 msgstr "新建窗口(_N)"
 
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:354
 msgid "Open a new window"
 msgstr "在新建窗口中打开"
 
@@ -2316,569 +2644,555 @@ msgstr "工具栏按钮标签(_B)："
 msgid "_Add a New Toolbar"
 msgstr "添加新工具栏(_A)"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:114
 msgid "_Bookmarks"
 msgstr "书签(_B)"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:115
 msgid "_Go"
 msgstr "转到(_G)"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:116
 msgid "T_ools"
 msgstr "工具(_O)"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:117
 msgid "_Tabs"
 msgstr "标签(_T)"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:119
 msgid "_Toolbars"
 msgstr "工具栏(_T)"
 
 #. File menu
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:125
 msgid "_Open…"
 msgstr "打开(_O)..."
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:126
 msgid "Open a file"
 msgstr "打开文件"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:128
 msgid "Save _As…"
 msgstr "另存为(_A)..."
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:129
 msgid "Save the current page"
 msgstr "保存当前页面"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:131
 msgid "Page Set_up"
 msgstr "页面设置(_U)"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:132
 msgid "Setup the page settings for printing"
 msgstr "设置打印的页面设置"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:134
 msgid "Print Pre_view"
 msgstr "打印预览(_V)"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:135
 msgid "Print preview"
 msgstr "打印预览"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:137
 msgid "_Print…"
 msgstr "打印(_P)..."
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:138
 msgid "Print the current page"
 msgstr "打印当前页面"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:140
 msgid "S_end Link by Email…"
 msgstr "用电子邮件发送链接(_E)..."
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:141
 msgid "Send a link of the current page"
 msgstr "发送当前页面的链接"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:144
 msgid "Close this tab"
 msgstr "关闭标签"
 
 #. Edit menu
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:149
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:150
 msgid "Undo the last action"
 msgstr "撤消上次操作"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:152
 msgid "Re_do"
 msgstr "重做(_D)"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:153
 msgid "Redo the last undone action"
 msgstr "重做上次撤消的操作"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:162
 msgid "Paste clipboard"
 msgstr "粘贴剪贴板"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:165
 msgid "Delete text"
 msgstr "删除文本"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:168
 msgid "Select the entire page"
 msgstr "选中整个页面"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:170
 msgid "_Find…"
 msgstr "查找(_F)..."
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:171
 msgid "Find a word or phrase in the page"
 msgstr "在页面中查找单词或短语"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:173
 msgid "Find Ne_xt"
 msgstr "查找下一个(_X)"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:174
 msgid "Find next occurrence of the word or phrase"
 msgstr "查找单词或短语的下次出现"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:176
 msgid "Find Pre_vious"
 msgstr "查找上一个(_V)"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:177
 msgid "Find previous occurrence of the word or phrase"
 msgstr "查找单词或短语的上次出现"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:179
 msgid "P_ersonal Data"
 msgstr "个人数据(_E)"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:180
 msgid "View and remove cookies and passwords"
 msgstr "查看或删除 cookies 和密码"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:183
 msgid "Certificate_s"
 msgstr "证书(_S)"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:184
 msgid "Manage Certificates"
 msgstr "管理证书"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:187
 msgid "P_references"
 msgstr "首选项(_R)"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:188
 msgid "Configure the web browser"
 msgstr "配置网络浏览器"
 
 #. View menu
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:193
 msgid "_Customize Toolbars…"
 msgstr "自定义工具栏(_C)..."
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:194
 msgid "Customize toolbars"
 msgstr "自定义工具栏"
 
-#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
+#: ../src/ephy-window.c:196 ../src/ephy-window.c:199
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:197
 msgid "Stop current data transfer"
 msgstr "停止当前数据传送"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:201
 msgid "_Reload"
-msgstr "重新装入(_R)"
+msgstr "重新载入(_R)"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:202
 msgid "Display the latest content of the current page"
 msgstr "显示当前页面的最新内容"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:204
 msgid "_Larger Text"
 msgstr "更大文字(_L)"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:205
 msgid "Increase the text size"
 msgstr "增加文字大小"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:207
 msgid "S_maller Text"
 msgstr "更小文字(_M)"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:208
 msgid "Decrease the text size"
 msgstr "减少文字大小"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:210
 msgid "_Normal Size"
 msgstr "普通大小(_N)"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:211
 msgid "Use the normal text size"
 msgstr "使用普通文字大小"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:213
 msgid "Text _Encoding"
 msgstr "文字编码(_E)"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:214
 msgid "Change the text encoding"
 msgstr "更改文字编码"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:216
 msgid "_Page Source"
 msgstr "页面源代码(_P)"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:217
 msgid "View the source code of the page"
 msgstr "查看页面的源代码"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:219
 msgid "Page _Security Information"
 msgstr "页面安全信息(_S)"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:220
 msgid "Display security information for the web page"
 msgstr "显示网页的安全信息"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:225
 msgid "_Add Bookmark…"
 msgstr "添加书签(_A)..."
 
-#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
+#: ../src/ephy-window.c:226 ../src/ephy-window.c:297
 msgid "Add a bookmark for the current page"
 msgstr "将当前页面添加为书签"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:228
 msgid "_Edit Bookmarks"
 msgstr "编辑书签(_E)"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:229
 msgid "Open the bookmarks window"
 msgstr "打开书签窗口"
 
 #. Go menu
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:234
 msgid "_Location…"
 msgstr "位置(_L)..."
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:235
 msgid "Go to a specified location"
 msgstr "转到指定位置"
 
 #. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:433
+#: ../src/ephy-window.c:237 ../src/pdm-dialog.c:452
 msgid "Hi_story"
 msgstr "历史(_S)"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:238
 msgid "Open the history window"
 msgstr "打开历史窗口"
 
 #. Tabs menu
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:243
 msgid "_Previous Tab"
 msgstr "上个标签(_P)"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:244
 msgid "Activate previous tab"
 msgstr "激活上个标签"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:246
 msgid "_Next Tab"
 msgstr "下个标签(_N)"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:247
 msgid "Activate next tab"
 msgstr "激活下个标签"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:249
 msgid "Move Tab _Left"
 msgstr "将标签左移(_L)"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:250
 msgid "Move current tab to left"
 msgstr "将当前标签向左移"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Right"
 msgstr "将标签右移(_R)"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:253
 msgid "Move current tab to right"
 msgstr "将当前标签向右移"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:255
 msgid "_Detach Tab"
 msgstr "分离标签页(_D)"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:256
 msgid "Detach current tab"
 msgstr "分离当前标签页"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:262
 msgid "Display web browser help"
 msgstr "显示网络浏览器"
 
 #. File Menu
-#: ../src/ephy-window.c:269
+#: ../src/ephy-window.c:273
 msgid "_Work Offline"
 msgstr "脱机工作(_W)"
 
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:274
 msgid "Switch to offline mode"
 msgstr "切换到脱机模式"
 
 #. View Menu
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:279
 msgid "_Hide Toolbars"
 msgstr "隐藏工具栏(_H)"
 
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:280
 msgid "Show or hide toolbar"
 msgstr "显示或隐藏工具栏"
 
-#: ../src/ephy-window.c:278
-msgid "St_atusbar"
-msgstr "状态栏(_A)"
-
-#: ../src/ephy-window.c:279
-msgid "Show or hide statusbar"
-msgstr "显示或隐藏状态栏"
-
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:282
 msgid "_Fullscreen"
 msgstr "全屏(_F)"
 
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:283
 msgid "Browse at full screen"
 msgstr "在全屏模式中浏览"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:285
 msgid "Popup _Windows"
 msgstr "弹出窗口(_W)"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:286
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "显示或隐藏此站点的未请求弹出窗口"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:288
 msgid "Selection Caret"
 msgstr "选择光标"
 
 #. Document
-#: ../src/ephy-window.c:295
+#: ../src/ephy-window.c:296
 msgid "Add Boo_kmark…"
 msgstr "添加书签(_K)..."
 
 #. Framed document
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:302
 msgid "Show Only _This Frame"
 msgstr "只显示此框架(_T)"
 
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:303
 msgid "Show only this frame in this window"
 msgstr "只在此窗口中显示此框架"
 
 #. Links
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:308
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:309
 msgid "Open link in this window"
 msgstr "在此窗口中打开链接"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:311
 msgid "Open Link in New _Window"
 msgstr "在新建窗口中打开链接(_W)"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:312
 msgid "Open link in a new window"
 msgstr "在新建窗口中打开链接"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:314
 msgid "Open Link in New _Tab"
 msgstr "在新标签中打开链接(_T)"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:315
 msgid "Open link in a new tab"
 msgstr "在新标签中打开链接"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:317
 msgid "_Download Link"
 msgstr "下载链接(_D)"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "_Save Link As…"
 msgstr "链接另存为(_S)..."
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:320
 msgid "Save link with a different name"
 msgstr "将链接以不同的名称保存"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:322
 msgid "_Bookmark Link…"
 msgstr "将链接加为书签(_B)..."
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:324
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:330
 msgid "_Send Email…"
 msgstr "发送电子邮件(_S)..."
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:332
 msgid "_Copy Email Address"
 msgstr "复制电子邮件地址(_C)"
 
 #. Images
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:337
 msgid "Open _Image"
 msgstr "打开图像(_I)"
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:339
 msgid "_Save Image As…"
 msgstr "图像另存为(_S)..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:341
 msgid "_Use Image As Background"
 msgstr "使用图像作为背景(_U)"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:343
 msgid "Copy I_mage Address"
 msgstr "复制图像地址(_M)"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:345
 msgid "St_art Animation"
 msgstr "开始动画(_A)"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:347
 msgid "St_op Animation"
 msgstr "停止动画(_O)"
 
 #. Inspector
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:351
 msgid "Inspect _Element"
 msgstr "检查元素(_E)"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:531
 msgid "There are unsubmitted changes to form elements"
 msgstr "对窗体元素而言有未提交的改变"
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:535
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。"
 
-#: ../src/ephy-window.c:534
+#: ../src/ephy-window.c:539
 msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
-#: ../src/ephy-window.c:1497 ../src/window-commands.c:311
+#: ../src/ephy-window.c:1442 ../src/window-commands.c:313
 msgid "Open"
 msgstr "打开"
 
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1444
 msgid "Save As"
 msgstr "另存为"
 
-#: ../src/ephy-window.c:1501
+#: ../src/ephy-window.c:1446
 msgid "Print"
 msgstr "打印"
 
-#: ../src/ephy-window.c:1505
+#: ../src/ephy-window.c:1450
 msgid "Find"
 msgstr "查找"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1518
+#: ../src/ephy-window.c:1463
 msgid "Larger"
 msgstr "更大"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1521
+#: ../src/ephy-window.c:1466
 msgid "Smaller"
 msgstr "更小"
 
-#: ../src/ephy-window.c:1758
+#: ../src/ephy-window.c:1688
 msgid "Insecure"
 msgstr "不安全"
 
-#: ../src/ephy-window.c:1763
+#: ../src/ephy-window.c:1693
 msgid "Broken"
 msgstr "破碎"
 
-#: ../src/ephy-window.c:1771
+#: ../src/ephy-window.c:1701
 msgid "Low"
 msgstr "低"
 
-#: ../src/ephy-window.c:1778
+#: ../src/ephy-window.c:1708
 msgid "High"
 msgstr "高"
 
-#: ../src/ephy-window.c:1788
+#: ../src/ephy-window.c:1718
 #, c-format
 msgid "Security level: %s"
 msgstr "安全级别：%s"
 
-#: ../src/ephy-window.c:1831
-#, c-format
-msgid "%d hidden popup window"
-msgid_plural "%d hidden popup windows"
-msgstr[0] "%d 个隐藏的弹出窗口"
-
-#: ../src/ephy-window.c:2096
+#: ../src/ephy-window.c:2003
 #, c-format
 msgid "Open image “%s”"
 msgstr "打开图像“%s”"
 
-#: ../src/ephy-window.c:2101
+#: ../src/ephy-window.c:2008
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "用作桌面背景“%s”"
 
-#: ../src/ephy-window.c:2106
+#: ../src/ephy-window.c:2013
 #, c-format
 msgid "Save image “%s”"
 msgstr "保存图像“%s”"
 
-#: ../src/ephy-window.c:2111
+#: ../src/ephy-window.c:2018
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "复制图像地址“%s”"
 
-#: ../src/ephy-window.c:2125
+#: ../src/ephy-window.c:2032
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "给地址“%s”发送电子邮件"
 
-#: ../src/ephy-window.c:2131
+#: ../src/ephy-window.c:2038
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "复制电子邮件地址“%s”"
 
-#: ../src/ephy-window.c:2145
+#: ../src/ephy-window.c:2052
 #, c-format
 msgid "Save link “%s”"
 msgstr "保存链接“%s”"
 
-#: ../src/ephy-window.c:2151
+#: ../src/ephy-window.c:2058
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "将链接“%s”加为书签"
 
-#: ../src/ephy-window.c:2156
+#: ../src/ephy-window.c:2063
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "复制链接地址“%s”"
 
-#: ../src/pdm-dialog.c:370
+#: ../src/pdm-dialog.c:383
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>选择您想清除的个人数据</b>"
 
-#: ../src/pdm-dialog.c:373
+#: ../src/pdm-dialog.c:386
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2887,26 +3201,26 @@ msgstr ""
 "您将要清空所储存的关于您所访问的网页的隐私数据。在开始前，请检查您想要移除的"
 "信息的类型。"
 
-#: ../src/pdm-dialog.c:378
+#: ../src/pdm-dialog.c:391
 msgid "Clear All Personal Data"
 msgstr "清除所有个人数据"
 
 #. Cookies
-#: ../src/pdm-dialog.c:409
+#: ../src/pdm-dialog.c:428
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:421
+#: ../src/pdm-dialog.c:440
 msgid "Saved _passwords"
 msgstr "保存的密码(_P)"
 
 #. Cache
-#: ../src/pdm-dialog.c:445
+#: ../src/pdm-dialog.c:464
 msgid "_Temporary files"
 msgstr "临时文件(_T)"
 
-#: ../src/pdm-dialog.c:461
+#: ../src/pdm-dialog.c:480
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2914,56 +3228,56 @@ msgstr ""
 "<small><i><b>注意：</b>您不能撤销此动作。您所选择的待清除的数据将被永久删除。"
 "</i></small>"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:672
 msgid "Cookie Properties"
 msgstr "Cookie 属性"
 
-#: ../src/pdm-dialog.c:671
+#: ../src/pdm-dialog.c:690
 msgid "Content:"
 msgstr "内容："
 
-#: ../src/pdm-dialog.c:687
+#: ../src/pdm-dialog.c:706
 msgid "Path:"
 msgstr "路径："
 
-#: ../src/pdm-dialog.c:703
+#: ../src/pdm-dialog.c:722
 msgid "Send for:"
 msgstr "发送方式："
 
-#: ../src/pdm-dialog.c:712
+#: ../src/pdm-dialog.c:731
 msgid "Encrypted connections only"
 msgstr "只对加密连接"
 
-#: ../src/pdm-dialog.c:712
+#: ../src/pdm-dialog.c:731
 msgid "Any type of connection"
 msgstr "任何类型的连接"
 
-#: ../src/pdm-dialog.c:718
+#: ../src/pdm-dialog.c:737
 msgid "Expires:"
 msgstr "过期："
 
 #. Session cookie
-#: ../src/pdm-dialog.c:730
+#: ../src/pdm-dialog.c:749
 msgid "End of current session"
 msgstr "当前会话结束"
 
-#: ../src/pdm-dialog.c:862
+#: ../src/pdm-dialog.c:881
 msgid "Domain"
 msgstr "域"
 
-#: ../src/pdm-dialog.c:874
+#: ../src/pdm-dialog.c:893
 msgid "Name"
 msgstr "名称"
 
-#: ../src/pdm-dialog.c:1288
+#: ../src/pdm-dialog.c:1307
 msgid "Host"
 msgstr "主机"
 
-#: ../src/pdm-dialog.c:1301
+#: ../src/pdm-dialog.c:1320
 msgid "User Name"
 msgstr "用户名"
 
-#: ../src/pdm-dialog.c:1314
+#: ../src/pdm-dialog.c:1333
 msgid "User Password"
 msgstr "用户密码密码"
 
@@ -2979,51 +3293,11 @@ msgstr "链接另存为"
 msgid "Save Image As"
 msgstr "图像另存为"
 
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "第一页"
-
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "转到第一页"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "最后一页"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "转到最后一页"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "上一页"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "转到上一页"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "下一页"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "转到下页"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "关闭"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "关闭打印预览"
-
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
+#: ../src/prefs-dialog.c:510 ../src/prefs-dialog.c:516
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -3032,27 +3306,23 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:527
+#: ../src/prefs-dialog.c:525
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "用户定义的(%s)"
 
-#: ../src/prefs-dialog.c:549
+#: ../src/prefs-dialog.c:547
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "系统语言(%s)"
 
-#: ../src/prefs-dialog.c:821
-msgid "Language"
-msgstr "语言"
-
-#: ../src/prefs-dialog.c:942
+#: ../src/prefs-dialog.c:943
 msgid "Select a Directory"
 msgstr "选择目录"
 
-#: ../src/window-commands.c:907
+#: ../src/window-commands.c:940
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3062,7 +3332,7 @@ msgstr ""
 "GNOME 网络浏览器是自由软件；您可以按照自由软件基金会所发表的 GNU GPL 协议自由"
 "发放和/或修改它；GPL 协议应该采用第二版或以后的任何版本。"
 
-#: ../src/window-commands.c:911
+#: ../src/window-commands.c:944
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3073,7 +3343,7 @@ msgstr ""
 "何用途使用它所造成的任何直接或间接后果都不承担任何责任。请参看 GNU GPL 协议中"
 "的细节。"
 
-#: ../src/window-commands.c:915
+#: ../src/window-commands.c:948
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3083,20 +3353,20 @@ msgstr ""
 "的话，请给自由软件基金会写信，地址是：51 Franklin Street, Fifth Floor, "
 "Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:961 ../src/window-commands.c:977
-#: ../src/window-commands.c:988
+#: ../src/window-commands.c:994 ../src/window-commands.c:1010
+#: ../src/window-commands.c:1021
 msgid "Contact us at:"
 msgstr "联系我们："
 
-#: ../src/window-commands.c:964
+#: ../src/window-commands.c:997
 msgid "Contributors:"
 msgstr "志愿者："
 
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:1000
 msgid "Past developers:"
 msgstr "先前的开发者："
 
-#: ../src/window-commands.c:997
+#: ../src/window-commands.c:1030
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3113,13 +3383,109 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1023
+#: ../src/window-commands.c:1056
 msgid "translator-credits"
-msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
+msgstr ""
+"Funda Wang <fundawang@linux.net.cn>, 2003, 2006\n"
+"Liu Songhe <jackliu9999@263.net>, 2004\n"
+"Tao Wei <weitao1979@gmail.com>, 2010\n"
+"Aron Xu <aronxu@gnome.org>, 2010"
 
-#: ../src/window-commands.c:1026
+#: ../src/window-commands.c:1059
 msgid "GNOME Web Browser Website"
 msgstr "GNOME 网络浏览器网站"
+
+#: ../src/window-commands.c:1215
+msgid "Enable caret browsing mode?"
+msgstr "启用光标导航吗？"
+
+#: ../src/window-commands.c:1218
+msgid ""
+"Pressing F7 turns caret browsing on or off. This feature places a moveable "
+"cursor in web pages, allowing you to move around with your keyboard. Do you "
+"want to enable caret browsing on?"
+msgstr ""
+"按 F7 键关闭光标导航。此特性允许您使用键盘通过光标在页面内导航。您是否要启用"
+"此特性？"
+
+#: ../src/window-commands.c:1221
+msgid "_Enable"
+msgstr "启用(_E)"
+
+#~ msgid "_Save As..."
+#~ msgstr "另存为(_S)..."
+
+#~ msgid "Redirecting to “%s”…"
+#~ msgstr "正在重定向到“%s”..."
+
+#~ msgid "Transferring data from “%s”…"
+#~ msgstr "正在从“%s”传送数据..."
+
+#~ msgid "Waiting for authorization from “%s”…"
+#~ msgstr "正在等待来自“%s”的认证..."
+
+#~ msgid ""
+#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
+#~ "You can recover the opened windows and tabs."
+#~ msgstr "Epiphany 好像上次运行时非正常退出。您可以复原上次打开的窗口和标签。"
+
+#~ msgid "Crash Recovery"
+#~ msgstr "崩溃复原"
+
+#~ msgid "Sidebar extension required"
+#~ msgstr "需要侧边栏扩展"
+
+#~ msgid "Sidebar Extension Required"
+#~ msgstr "需要侧边栏扩展"
+
+#~ msgid "The link you clicked needs the sidebar extension to be installed."
+#~ msgstr "您单击的链接需要安装侧边栏扩展。"
+
+#~ msgid "Caret"
+#~ msgstr "光标"
+
+#~ msgid "In keyboard selection mode, press F7 to exit"
+#~ msgstr "在键盘选择模式中，按 F7 可退出"
+
+#~ msgid "St_atusbar"
+#~ msgstr "状态栏(_A)"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "显示或隐藏状态栏"
+
+#~ msgid "%d hidden popup window"
+#~ msgid_plural "%d hidden popup windows"
+#~ msgstr[0] "%d 个隐藏的弹出窗口"
+
+#~ msgid "First"
+#~ msgstr "第一页"
+
+#~ msgid "Go to the first page"
+#~ msgstr "转到第一页"
+
+#~ msgid "Last"
+#~ msgstr "最后一页"
+
+#~ msgid "Go to the last page"
+#~ msgstr "转到最后一页"
+
+#~ msgid "Previous"
+#~ msgstr "上一页"
+
+#~ msgid "Go to the previous page"
+#~ msgstr "转到上一页"
+
+#~ msgid "Next"
+#~ msgstr "下一页"
+
+#~ msgid "Go to next page"
+#~ msgstr "转到下页"
+
+#~ msgid "Close"
+#~ msgstr "关闭"
+
+#~ msgid "Close print preview"
+#~ msgstr "关闭打印预览"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr "编码自动检测。空字符串意味着关闭自动检测"
@@ -3144,147 +3510,8 @@ msgstr "GNOME 网络浏览器网站"
 #~ "码)，“zhtw_parallel_state_machine”(自动检测繁体中文编码) 和 "
 #~ "“universal_charset_detector”(自动检测所有编码)。"
 
-#~ msgid "<b>Fingerprints</b>"
-#~ msgstr "<b>指纹</b>"
-
-#~ msgid "<b>Issued By</b>"
-#~ msgstr "<b>发行者</b>"
-
-#~ msgid "<b>Issued To</b>"
-#~ msgstr "<b>发行给</b>"
-
-#~ msgid "<b>Validity</b>"
-#~ msgstr "<b>有效性</b>"
-
-#~ msgid "Certificate _Fields"
-#~ msgstr "证书域(_F)"
-
-#~ msgid "Certificate _Hierarchy"
-#~ msgstr "证书层次(_H)"
-
-#~ msgid "Common Name:"
-#~ msgstr "公共名称："
-
-#~ msgid "Details"
-#~ msgstr "细节"
-
-#~ msgid "Expires On:"
-#~ msgstr "过期时间："
-
-#~ msgid "Field _Value"
-#~ msgstr "域值(_V)"
-
-#~ msgid "General"
-#~ msgstr "常规"
-
-#~ msgid "Issued On:"
-#~ msgstr "发行时间："
-
-#~ msgid "MD5 Fingerprint:"
-#~ msgstr "MD5 指纹："
-
-#~ msgid "Organization:"
-#~ msgstr "组织："
-
-#~ msgid "Organizational Unit:"
-#~ msgstr "组织单元："
-
-#~ msgid "SHA1 Fingerprint:"
-#~ msgstr "SHA1 指纹："
-
-#~ msgid "Serial Number:"
-#~ msgstr "序列号："
-
-#~ msgid "<b>_Automatic</b>"
-#~ msgstr "<b>自动(_A)</b>"
-
-#~ msgid "<b>_Use a different encoding:</b>"
-#~ msgstr "<b>使用不同的编码(_U)：</b>"
-
-#~ msgid "Clear _All..."
-#~ msgstr "全部清除(_A)..."
-
-#~ msgid "Cookies"
-#~ msgstr "Cookies"
-
-#~ msgid "Passwords"
-#~ msgstr "密码"
-
-#~ msgid "Personal Data"
-#~ msgstr "个人数据"
-
-#~ msgid "Text Encoding"
-#~ msgstr "文字编码"
-
-#~ msgid "_Show passwords"
-#~ msgstr "显示密码(_S)"
-
-#~ msgid "Sign Text"
-#~ msgstr "对文本签名"
-
-#~ msgid ""
-#~ "To confirm that you want to sign the above text, choose a certificate to "
-#~ "sign the text with and enter its password below."
-#~ msgstr ""
-#~ "为了确认您想要对以上文本签名，请选择要用来签名的证书，然后在下面输入该证书"
-#~ "的密码。"
-
-#~ msgid "_Certificate:"
-#~ msgstr "证书(_C)："
-
-#~ msgid "_Password:"
-#~ msgstr "密码(_P)："
-
-#~ msgid "_View Certificate…"
-#~ msgstr "查看证书(_V)..."
-
-#~ msgid "<b>Cookies</b>"
-#~ msgstr "<b>Cookies</b>"
-
-#~ msgid "<b>Downloads</b>"
-#~ msgstr "<b>下载</b>"
-
-#~ msgid "<b>Encodings</b>"
-#~ msgstr "<b>编码</b>"
-
-#~ msgid "<b>Home page</b>"
-#~ msgstr "<b>主页</b>"
-
-#~ msgid "<b>Languages</b>"
-#~ msgstr "<b>语言</b>"
-
-#~ msgid "<b>Passwords</b>"
-#~ msgstr "<b>密码</b>"
-
-#~ msgid "<b>Temporary Files</b>"
-#~ msgstr "<b>临时文件</b>"
-
-#~ msgid "<b>Web Content</b>"
-#~ msgstr "<b>Web 内容</b>"
-
-#~ msgid "<small>For example, not from advertisers on these sites</small>"
-#~ msgstr "<small>比如，不接受来自这些网站的广告商的 Cookie</small>"
-
-#~ msgid "A_utomatically download and open files"
-#~ msgstr "自动下载并打开文件(_U)"
-
-#~ msgid "Add Language"
-#~ msgstr "添加语言"
-
-#~ msgid "Allow popup _windows"
-#~ msgstr "允许弹出窗口(_W)"
-
 #~ msgid "Au_todetect:"
 #~ msgstr "自动检测(_T)："
-
-#~ msgid "Choose a l_anguage:"
-#~ msgstr "选择语言(_A)："
-
-#~ msgid "De_fault:"
-#~ msgstr "默认(_F)："
-
-#~ msgid "Enable Java_Script"
-#~ msgstr "允许 Java_Script"
 
 #~ msgid "Enable _Java"
 #~ msgstr "允许 _Java"
@@ -3292,113 +3519,20 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgid "Fonts"
 #~ msgstr "字体"
 
-#~ msgid "Fonts & Style"
-#~ msgstr "字体和样式"
-
 #~ msgid "For l_anguage:"
 #~ msgstr "为语言(_A)："
-
-#~ msgid "Let web pages specify their own _fonts"
-#~ msgstr "让网页指定自己的字体(_F)"
-
-#~ msgid "Let web pages specify their own c_olors"
-#~ msgstr "让网页指定自己的颜色(_O)"
-
-#~ msgid "MB"
-#~ msgstr "MB"
-
-#~ msgid "Only _from sites you visit"
-#~ msgstr "仅来自您浏览的网站(_F)"
-
-#~ msgid "Preferences"
-#~ msgstr "首选项"
-
-#~ msgid "Privacy"
-#~ msgstr "隐私"
-
-#~ msgid "Set to Current _Page"
-#~ msgstr "设为当前页(_P)"
-
-#~ msgid "Set to _Blank Page"
-#~ msgstr "设为空白页(_B)"
-
-#~ msgid "Use custom _stylesheet"
-#~ msgstr "使用自定义样式表(_S)"
 
 #~ msgid "Use s_mooth scrolling"
 #~ msgstr "使用平滑滚动(_M)"
 
-#~ msgid "_Address:"
-#~ msgstr "地址(_A)："
-
-#~ msgid "_Always accept"
-#~ msgstr "总是接受(_A)"
-
 #~ msgid "_Detailed Font Settings…"
 #~ msgstr "字体细节设置(_D)..."
-
-#~ msgid "_Disk space:"
-#~ msgstr "磁盘空间(_D)："
-
-#~ msgid "_Download folder:"
-#~ msgstr "下载文件夹(_D)："
-
-#~ msgid "_Edit Stylesheet…"
-#~ msgstr "编辑样式表(_E)..."
 
 #~ msgid "_Fixed width:"
 #~ msgstr "固定宽度(_F)："
 
-#~ msgid "_Minimum size:"
-#~ msgstr "最小大小(_M)："
-
-#~ msgid "_Never accept"
-#~ msgstr "从不接受(_N)"
-
-#~ msgid "_Remember passwords"
-#~ msgstr "记住密码(_R)"
-
 #~ msgid "_Variable width:"
 #~ msgstr "可变宽度(_V)："
-
-#~ msgid "<b>Background</b>"
-#~ msgstr "<b>背景</b>"
-
-#~ msgid "<b>Footers</b>"
-#~ msgstr "<b>页脚</b>"
-
-#~ msgid "<b>Frames</b>"
-#~ msgstr "<b>框架</b>"
-
-#~ msgid "<b>Headers</b>"
-#~ msgstr "<b>页眉</b>"
-
-#~ msgid "As laid out on the _screen"
-#~ msgstr "与屏幕上显示的一样(_S)"
-
-#~ msgid "O_nly the selected frame"
-#~ msgstr "仅选中框架(_N)"
-
-#~ msgid "P_age title"
-#~ msgstr "页面标题(_A)"
-
-#~ msgid "Page _numbers"
-#~ msgstr "页号(_N)"
-
-#~ msgid "Print background c_olors"
-#~ msgstr "打印背景颜色(_O)"
-
-#~ msgid "Print background i_mages"
-#~ msgstr "打印背景图像(_M)"
-
-#~ msgid "_Date"
-#~ msgstr "日期(_D)"
-
-#~ msgid "_Each frame separately"
-#~ msgstr "每个框架独立(_E)"
-
-#~ msgid "_Page address"
-#~ msgstr "页面地址(_P)"
 
 #~ msgid "Download completed"
 #~ msgstr "下载已完成"
@@ -3538,7 +3672,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgstr "“%s”重定向的次数太多"
 
 #~ msgid "This page cannot load because of a problem with the Web site."
-#~ msgstr "无法装入此页面，原因是网站存在问题。"
+#~ msgstr "无法载入此页面，原因是网站存在问题。"
 
 #~ msgid "The server “%s” is redirecting in a way that will never complete."
 #~ msgstr "服务器“%s”的重定向方式无法完成。"
@@ -3552,7 +3686,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgid ""
 #~ "The document could not be loaded because encryption support is not "
 #~ "installed."
-#~ msgstr "无法装入文档，因为加密支持未安装。"
+#~ msgstr "无法载入文档，因为加密支持未安装。"
 
 #~ msgid "“%s” Dropped the Connection"
 #~ msgstr "“%s”断开了连接"
@@ -3564,10 +3698,10 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgstr "在读取数据之前服务器断开了连接。"
 
 #~ msgid "Cannot Load Document Whilst Working Offline"
-#~ msgstr "无法在脱机模式中装入文档"
+#~ msgstr "无法在脱机模式中载入文档"
 
 #~ msgid "Cannot load document whilst working offline."
-#~ msgstr "无法在脱机模式中装入文档。"
+#~ msgstr "无法在脱机模式中载入文档。"
 
 #~ msgid "To view this document, disable “Work Offline” and try again."
 #~ msgstr "要查看此文档，请禁用“脱机工作”然后再试一次。"
@@ -3897,7 +4031,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgstr "安全通知"
 
 #~ msgid "This page is loaded over a secure connection"
-#~ msgstr "页面通过安全连接装入"
+#~ msgstr "页面通过安全连接载入"
 
 #~ msgid ""
 #~ "For secure pages, the address entry has a distinct color and a locked "
@@ -3913,7 +4047,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgstr "安全警告"
 
 #~ msgid "This page is loaded over a low security connection"
-#~ msgstr "此页面通过低安全连接装入"
+#~ msgstr "此页面通过低安全连接载入"
 
 #~ msgid ""
 #~ "Any information you see or enter on this page could easily be intercepted "
@@ -3921,7 +4055,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ msgstr "您在此页面看到或输入的任何信息都可能被第三方轻易截取。"
 
 #~ msgid "Some parts of this page are loaded over an insecure connection"
-#~ msgstr "此页面的某些部分是通过不安全连接装入的"
+#~ msgstr "此页面的某些部分是通过不安全连接载入的"
 
 #~ msgid ""
 #~ "Some information you see or enter will be sent over an insecure "
@@ -3945,7 +4079,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ "you have entered will be sent over an insecure connection, and could "
 #~ "easily be intercepted by a third party."
 #~ msgstr ""
-#~ "尽管此页面是通过安全连接装入的，但您输入的信息是通过不安全的连接传送的，可"
+#~ "尽管此页面是通过安全连接载入的，但您输入的信息是通过不安全的连接传送的，可"
 #~ "被第三方轻易截取。"
 
 #~ msgid "select fonts for|Arabic"
@@ -4054,7 +4188,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ "The address has not been loaded, because it refers to an unsafe protocol "
 #~ "and thereby presents a security risk to your system."
 #~ msgstr ""
-#~ "地址未装入，因为该地址引用了不安全的协议，这可能造成您系统的安全隐患。"
+#~ "地址未载入，因为该地址引用了不安全的协议，这可能造成您系统的安全隐患。"
 
 #~ msgid "No address found."
 #~ msgstr "未找到地址。"
@@ -4089,7 +4223,7 @@ msgstr "GNOME 网络浏览器网站"
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
 #~ "crashed; it could have caused the crash."
 #~ msgstr ""
-#~ "当 Web 浏览器崩溃时，此标签中的页面“%s”尚未完全装入；因此可能是该页造成了"
+#~ "当 Web 浏览器崩溃时，此标签中的页面“%s”尚未完全载入；因此可能是该页造成了"
 #~ "崩溃。"
 
 #~ msgid "Title a_nd Address"
