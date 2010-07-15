@@ -1508,7 +1508,7 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 
 static void
 sync_notebook_tab (GtkWidget *notebook,
-		   GtkNotebookPage *page,
+		   GtkWidget *page,
 		   int page_num,
 		   PdmDialog *dialog)
 {

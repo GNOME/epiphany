@@ -439,7 +439,7 @@ focus_out_event_cb (GtkWidget *entry,
 
 static void
 switch_page_cb (GtkNotebook *notebook,
-		GtkNotebookPage *page,
+		GtkWidget *page,
 		guint page_num,
 		GtkAction *action)
 {

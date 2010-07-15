@@ -329,7 +329,7 @@ button_press_cb (EphyNotebook *notebook,
 
 static void
 ephy_notebook_switch_page_cb (GtkNotebook *notebook,
-			      GtkNotebookPage *page,
+			      GtkWidget *page,
 			      guint page_num,
 			      gpointer data)
 {

@@ -86,7 +86,7 @@ static EphyEmbed *ephy_window_open_link		(EphyLink *link,
 						 EphyEmbed *embed,
 						 EphyLinkFlags flags);
 static void notebook_switch_page_cb		(GtkNotebook *notebook,
-						 GtkNotebookPage *page,
+						 GtkWidget *page,
 						 guint page_num,
 						 EphyWindow *window);
 static void ephy_window_view_toolbar_cb         (GtkAction *action,
@@ -3780,7 +3780,7 @@ ephy_window_show (GtkWidget *widget)
 
 static void
 notebook_switch_page_cb (GtkNotebook *notebook,
-			 GtkNotebookPage *page,
+			 GtkWidget *page,
 			 guint page_num,
 			 EphyWindow *window)
 {
