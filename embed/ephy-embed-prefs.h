@@ -58,12 +58,6 @@
 #define CONF_DESKTOP_FONT_VAR_NAME "/desktop/gnome/interface/font_name"
 #define CONF_DESKTOP_FONT_FIXED_NAME "/desktop/gnome/interface/monospace_font_name"
 
-/* DEPRECATED, we migrate them */
-#define CONF_RENDERING_FONT_VAR_SIZE_OLD "/apps/epiphany/web/font_var_size"
-#define CONF_RENDERING_FONT_FIXED_SIZE_OLD "/apps/epiphany/web/font_fixed_size"
-#define CONF_RENDERING_FONT_MIN_SIZE_OLD "/apps/epiphany/web/font_min_size"
-#define CONF_RENDERING_FONT_TYPE_OLD "/apps/epiphany/web/default_font_type"
-
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
 #error "Only <epiphany/epiphany.h> can be included directly."
 #endif
