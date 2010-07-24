@@ -21,9 +21,9 @@
 
 #include "ephy-net-monitor.h"
 
-#include "eel-gconf-extensions.h"
 #include "ephy-dbus.h"
 #include "ephy-debug.h"
+#include "ephy-settings.h"
 #include "ephy-prefs.h"
 
 #include <NetworkManager.h>
@@ -41,7 +41,6 @@ typedef enum
 struct _EphyNetMonitorPrivate
 {
 	DBusConnection *bus;
-	guint notify_id;
 	guint active : 1;
 	NetworkStatus status;
 };
@@ -285,31 +284,6 @@ ephy_net_monitor_shutdown (EphyNetMonitor *monitor)
 }
 
 static void
-notify_network_managed_cb (GConfClient *client,
-			   guint cnxn_id,
-			   GConfEntry *entry,
-			   EphyNetMonitor *monitor)
-{
-	EphyNetMonitorPrivate *priv = monitor->priv;
-	GConfValue *value;
-	gboolean active = TRUE;
-
-	LOG (CONF_NETWORK_MANAGED " key changed");
-
-	g_assert (entry != NULL);
-
-	value = gconf_entry_get_value (entry);
-	if (value != NULL && value->type == GCONF_VALUE_BOOL)
-	{
-		active = gconf_value_get_bool (value);
-	}
-
-	priv->active = active;
-
-	g_object_notify (G_OBJECT (monitor), "network-status");
-}
-
-static void
 ephy_net_monitor_init (EphyNetMonitor *monitor)
 {
 	EphyNetMonitorPrivate *priv;
@@ -320,12 +294,6 @@ ephy_net_monitor_init (EphyNetMonitor *monitor)
 
 	priv->status = NETWORK_UP;
 
-	priv->notify_id = eel_gconf_notification_add
-		(CONF_NETWORK_MANAGED,
-		 (GConfClientNotifyFunc) notify_network_managed_cb,
-		 monitor);
-	eel_gconf_notify (CONF_NETWORK_MANAGED);
-
 	ephy_net_monitor_startup (monitor);
 }
 
@@ -333,17 +301,10 @@ static void
 ephy_net_monitor_dispose (GObject *object)
 {
 	EphyNetMonitor *monitor = EPHY_NET_MONITOR (object);
-	EphyNetMonitorPrivate *priv = monitor->priv;
 
 	LOG ("EphyNetMonitor finalising");
 
 	ephy_net_monitor_shutdown (monitor);
-
-	if (priv->notify_id != 0)
-	{
-		eel_gconf_notification_remove (priv->notify_id);
-		priv->notify_id = 0;
-	}
 
 	G_OBJECT_CLASS (ephy_net_monitor_parent_class)->dispose (object);
 }
@@ -401,10 +362,13 @@ gboolean
 ephy_net_monitor_get_net_status	(EphyNetMonitor *monitor)
 {
 	EphyNetMonitorPrivate *priv;
+	gboolean managed;
 
 	g_return_val_if_fail (EPHY_IS_NET_MONITOR (monitor), FALSE);
 
 	priv = monitor->priv;
+	managed = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+					  EPHY_PREFS_MANAGED_NETWORK);
 
-	return !priv->active || priv->status != NETWORK_DOWN;
+	return !managed || priv->status != NETWORK_DOWN;
 }

@@ -30,8 +30,8 @@
 #include "ephy-embed-persist.h"
 #include "ephy-debug.h"
 #include "window-commands.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-dialog.h"
 #include "ephy-bookmarks-editor.h"
@@ -313,7 +313,7 @@ window_cmd_file_open (GtkAction *action,
 	dialog = ephy_file_chooser_new (_("Open"),
 					GTK_WIDGET (window),
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					CONF_STATE_OPEN_DIR,
+					EPHY_PREFS_STATE_OPEN_DIR,
 					EPHY_FILE_FILTER_ALL_SUPPORTED);
 
 	g_signal_connect (dialog, "response",
@@ -343,7 +343,7 @@ window_cmd_file_save_as (GtkAction *action,
 	dialog = ephy_file_chooser_new (_("Save"),
 					GTK_WIDGET (window),
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					CONF_STATE_SAVE_DIR,
+					EPHY_PREFS_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
@@ -396,7 +396,8 @@ window_cmd_file_close_window (GtkAction *action,
 
 	notebook = ephy_window_get_notebook (window);
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_QUIT) &&
 	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1)
 	{
 		return;
@@ -1232,5 +1233,6 @@ window_cmd_browse_with_caret (GtkAction *action,
 		}
 	}
 
-	eel_gconf_set_boolean (CONF_CARET_BROWSING_ENABLED, active);
+	g_settings_set_boolean (EPHY_SETTINGS_MAIN,
+				EPHY_PREFS_ENABLE_CARET_BROWSING, active);
 }

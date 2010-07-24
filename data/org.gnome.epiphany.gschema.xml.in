@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema path="/apps/epiphany/" id="org.gnome.Epiphany">
+		<child schema="org.gnome.Epiphany.ui" name="ui"/>
+		<child schema="org.gnome.Epiphany.web" name="web"/>
+		<child schema="org.gnome.Epiphany.state" name="state"/>
+		<child schema="org.gnome.Epiphany.lockdown" name="lockdown"/>
+		<key type="b" name="enable-caret-browsing">
+			<default>false</default>
+			<summary>Browse with caret</summary>
+		</key>
+		<key type="b" name="enable-web-inspector">
+			<default>false</default>
+			<summary>Enable Web Inspector</summary>
+		</key>
+		<key type="s" name="homepage-url">
+			<default>'http://www.google.com'</default>
+			<summary>Home page</summary>
+			<description>Address of the user's home page.</description>
+		</key>
+		<key type="s" name="keyword-search-url">
+			<default>'http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8'
+			</default>
+			<summary>URL Search</summary>
+			<description>Search string for keywords entered in the URL bar.</description>
+		</key>
+		<key type="s" name="user-agent">
+			<default>''</default>
+			<summary>User agent</summary>
+			<description>String that will be used as user agent, to identify the browser to the web servers.</description>
+		</key>
+		<key type="b" name="automatic-downloads">
+			<default>true</default>
+			<summary>Automatic downloads</summary>
+			<description>When files cannot be opened by the browser they are automatically downloaded to the download folder and opened with the appropriate application.</description>
+		</key>
+		<key type="b" name="middle-click-opens-url">
+			<default>false</default>
+			<summary>Middle click to open the web page pointed to by the currently selected text</summary>
+			<description>Middle clicking on the main view pane will open the web page pointed to by the currently selected text.</description>
+		</key>
+		<key type="b" name="new-windows-in-tabs">
+			<default>false</default>
+			<summary>Force new windows to be opened in tabs</summary>
+			<description>Force new window requests to be opened in tabs instead of using a new window.</description>
+		</key>
+		<key type="b" name="remember-passwords">
+			<default>true</default>
+			<summary>Remember passwords</summary>
+			<description>Whether to store and prefill passwords in web sites.</description>
+		</key>
+		<key type="b" name="managed-network">
+			<default>true</default>
+			<summary>Automatically manage offline status with NetworkManager</summary>
+		</key>
+		<key type="b" name="warn-on-close-unsubmitted-data">
+			<default>true</default>
+		</key>
+		<key type="b" name="enable-smooth-scrolling">
+			<default>false</default>
+			<summary>Enable smooth scrolling</summary>
+		</key>
+		<key type="as" name="enabled-extensions">
+			<default>['extensions-manager-ui' ]</default>
+			<summary>Active extensions</summary>
+			<description>Lists the active extensions.</description>
+		</key>
+	</schema>
+	<schema path="/apps/epiphany/ui/" id="org.gnome.Epiphany.ui">
+		<key type="b" name="show-toolbars">
+			<default>true</default>
+			<summary>Show toolbars by default</summary>
+		</key>
+		<key type="b" name="show-bookmarks-bar">
+			<default>false</default>
+			<summary>Show bookmarks bar by default</summary>
+		</key>
+		<key name="toolbar-style" enum="org.gnome.Epiphany.EphyPrefsUIToolbarStyle">
+			<default>'both-horiz'</default>
+			<summary>Toolbar style</summary>
+			<description>Toolbar style. Allowed values are "" (use GNOME default style), "both" (text and icons), "both-horiz" (text besides icons), "icons", and "text".</description>
+		</key>
+		<key type="b" name="always-show-tabs-bar">
+			<default>false</default>
+			<summary>Always show the tab bar</summary>
+			<description>Show the tab bar also when there is only one tab open.</description>
+		</key>
+		<key type="b" name="downloads-hidden">
+			<default>false</default>
+			<summary>Visibility of the downloads window</summary>
+			<description>Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started.</description>
+		</key>
+	</schema>
+	<schema path="/apps/epiphany/web/" id="org.gnome.Epiphany.web">
+		<key type="i" name="min-font-size">
+			<default>7</default>
+			<summary>Minimum font size</summary>
+		</key>
+		<key type="b" name="use-own-colors">
+			<default>false</default>
+			<summary>Use own colors</summary>
+			<description>Use your own colors instead of the colors the page requests.</description>
+		</key>
+		<key type="b" name="use-own-fonts">
+			<default>false</default>
+			<summary>Use own fonts</summary>
+			<description>Use your own fonts instead of the fonts the page requests.</description>
+		</key>
+		<key type="b" name="enable-user-css">
+			<default>false</default>
+			<summary>Use a custom CSS</summary>
+			<description>Use a custom CSS file to modify websites own CSS.</description>
+		</key>
+		<key type="s" name="default-encoding">
+			<default>'UTF-8'</default>
+			<summary>Default encoding</summary>
+			<description>Default encoding. Accepted values are the ones WebKitGTK+ can understand.</description>
+		</key>
+		<key type="i" name="cache-size">
+			<default>50</default>
+			<summary>Size of disk cache</summary>
+			<description>Size of disk cache, in MB.</description>
+		</key>
+		<key type="as" name="language">
+			<default>[]</default>
+			<summary>Languages</summary>
+			<description>Preferred languages, two letter codes.</description>
+		</key>
+		<key name="cookies-policy" enum="org.gnome.Epiphany.EphyPrefsWebCookiesPolicy">
+			<default>'no-third-party'</default>
+			<summary>Cookie accept</summary>
+			<description>Where to accept cookies from. Possible values are "anywhere", "current site" and "nowhere".</description>
+		</key>
+		<key type="s" name="image-animation-mode">
+			<default>'normal'</default>
+			<summary>Image animation mode</summary>
+			<description>How to present animated images. Possible values are "normal", "once" and "disabled".</description>
+		</key>
+		<key type="b" name="enable-popups">
+			<default>true</default>
+			<summary>Allow popups</summary>
+			<description>Allow sites to open new windows using JavaScript (if JavaScript is enabled).</description>
+		</key>
+		<key type="b" name="enable-plugins">
+			<default>true</default>
+			<summary>Enable Plugins</summary>
+		</key>
+		<key type="b" name="enable-javascript">
+			<default>true</default>
+			<summary>Enable JavaScript</summary>
+		</key>
+	</schema>
+	<schema path="/apps/epiphany/state/" id="org.gnome.Epiphany.state">
+		<key type="s" name="open-dir">
+			<default>'~'</default>
+		</key>
+		<key type="s" name="save-dir">
+			<default>'~'</default>
+		</key>
+		<key type="s" name="save-image-dir">
+			<default>'~'</default>
+		</key>
+		<key type="s" name="upload-dir">
+			<default>'~'</default>
+		</key>
+		<key type="s" name="download-dir">
+			<default>'Downloads'</default>
+			<summary>The downloads folder</summary>
+			<description>The path of the folder where to download files to; or "Downloads" to use the default downloads folder, or "Desktop" to use the desktop folder.</description>
+		</key>
+		<key type="as" name="recent-encodings">
+			<default>['' ]</default>
+		</key>
+		<key type="i" name="history-date-filter">
+			<default>1</default>
+			<summary>History pages time range</summary>
+		</key>
+		<key type="b" name="history-view-title">
+			<default>true</default>
+			<summary>Whether to show the title column in the history window.</summary>
+		</key>
+		<key type="b" name="history-view-address">
+			<default>true</default>
+			<summary>Whether to show the address column in the history window.</summary>
+		</key>
+		<key type="b" name="history-view-date">
+			<default>false</default>
+			<summary>Whether to show the date-time column in the history window.</summary>
+		</key>
+		<key type="b" name="bookmarks-view-title">
+			<default>true</default>
+			<summary>Whether to show the title column in the bookmarks window.</summary>
+		</key>
+		<key type="b" name="bookmarks-view-address">
+			<default>false</default>
+			<summary>Whether to show the address column in the bookmarks window.</summary>
+		</key>
+	</schema>
+	<schema path="/apps/epiphany/lockdown/" id="org.gnome.Epiphany.lockdown">
+		<key type="b" name="disable-fullscreen">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-arbitrary-url">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-bookmark-editing">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-toolbar-editing">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-history">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-save-to-disk">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-printing">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-print-setup">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-command-line">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-quit">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-javascript-chrome">
+			<default>false</default>
+		</key>
+		<key type="b" name="disable-menubar">
+			<default>false</default>
+		</key>
+	</schema>
+</schemalist>

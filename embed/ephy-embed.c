@@ -26,7 +26,6 @@
 #include "config.h"
 
 #include "downloader-view.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
@@ -40,6 +39,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
@@ -445,7 +445,7 @@ request_destination_uri (WebKitWebView *web_view,
   dialog = ephy_file_chooser_new (_("Save"),
                                   window,
                                   GTK_FILE_CHOOSER_ACTION_SAVE,
-                                  CONF_STATE_SAVE_DIR,
+                                  EPHY_PREFS_STATE_SAVE_DIR,
                                   EPHY_FILE_FILTER_ALL_SUPPORTED);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
@@ -823,7 +823,8 @@ download_status_changed_cb (GObject *object,
      */
     g_object_freeze_notify (G_OBJECT (download));
 
-    if (eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS)) {
+    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_AUTO_DOWNLOADS)) {
       perform_auto_download (download);
       /* User won't select a destination, unfreeze. */
       g_object_thaw_notify (G_OBJECT (download));
@@ -857,7 +858,8 @@ download_requested_cb (WebKitWebView *web_view,
                        EphyEmbed *embed)
 {
   /* Is download locked down? */
-  if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK))
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK))
     return FALSE;
 
   /* Wait for the request to be sent in all cases, so that we have a

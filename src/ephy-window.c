@@ -31,8 +31,8 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-shell.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-zoom.h"
@@ -412,8 +412,6 @@ static const struct
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
-#define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
-
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
@@ -446,8 +444,6 @@ struct _EphyWindowPrivate
 	guint idle_worker;
 	GtkWidget *entry;
 
-	guint browse_with_caret_notifier_id;
-	guint allow_popups_notifier_id;
 	guint clear_progress_timeout_id;
 
 	guint menubar_accel_keyval;
@@ -552,7 +548,8 @@ construct_confirm_close_dialog (EphyWindow *window)
 static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
-	if (eel_gconf_get_boolean (CONF_WARN_ON_CLOSE_UNSUBMITTED_DATA))
+	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA))
 	{
 		GtkWidget *dialog;
 		int response;
@@ -817,7 +814,9 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	priv->fullscreen_mode = TRUE;
 
-	lockdown_fs = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
+	lockdown_fs = g_settings_get_boolean
+				(EPHY_SETTINGS_LOCKDOWN,
+				 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
 	popup = ephy_fullscreen_popup_new (window);
 	ephy_fullscreen_popup_set_show_leave
@@ -975,7 +974,8 @@ ephy_window_key_press_event (GtkWidget *widget,
 	}
 
 	/* Don't activate menubar in lockdown mode */
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_MENUBAR))
 	{
 		return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 	}
@@ -1014,7 +1014,8 @@ ephy_window_delete_event (GtkWidget *widget,
 
 	/* We ignore the delete_event if the disable_quit lockdown has been set
 	 */
-	if (eel_gconf_get_boolean("/apps/epiphany/lockdown/disable_quit")) return TRUE;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_QUIT)) return TRUE;
 
 	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 	for (l = tabs; l != NULL; l = l->next)
@@ -1080,7 +1081,9 @@ update_popup_actions_visibility (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "OpenFrame");
 	gtk_action_set_visible (action, is_frame);
 
-	inspector_enabled = eel_gconf_get_boolean (CONF_WEB_INSPECTOR_ENABLED);
+	inspector_enabled = g_settings_get_boolean
+					(EPHY_SETTINGS_MAIN,
+					 EPHY_PREFS_ENABLE_WEB_INSPECTOR);
 	action = gtk_action_group_get_action (action_group, "InspectElement");
 	gtk_action_set_visible (action, inspector_enabled);
 }
@@ -2251,8 +2254,11 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	is_middle_click = (button == 2);
 
 	middle_click_opens =
-		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
-		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
+		g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+					EPHY_PREFS_MIDDLE_CLICK_OPENS_URL) &&
+		!g_settings_get_boolean
+				(EPHY_SETTINGS_LOCKDOWN,
+				 EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
 
 	is_link = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) != 0;
 	is_image = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE) != 0;
@@ -2400,7 +2406,8 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyNewTabFlags flags;
 	EphyWindow *parent_window;
 
-	if (eel_gconf_get_boolean (CONF_INTERFACE_OPEN_NEW_WINDOWS_IN_TAB))
+	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_NEW_WINDOWS_IN_TABS))
 	{
 		parent_window = window;
 		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW |
@@ -2973,7 +2980,8 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 {
 	EphyWindowPrivate *priv = window->priv;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_QUIT) &&
 	    gtk_notebook_get_n_pages (priv->notebook) == 1)
 	{
 		return;
@@ -3045,12 +3053,14 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 		window->priv->should_save_chrome = TRUE;
 	}
 
-	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
+	if (!g_settings_get_boolean (EPHY_SETTINGS_UI,
+				     EPHY_PREFS_UI_SHOW_TOOLBARS))
 	{
 		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
 	}
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_MENUBAR))
 	{
 		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
 	}
@@ -3089,11 +3099,6 @@ ephy_window_dispose (GObject *object)
 		g_signal_handlers_disconnect_by_func
 			(single, G_CALLBACK (sync_network_status), window);
 	
-		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
-		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
-		priv->browse_with_caret_notifier_id = 0;
-		priv->allow_popups_notifier_id = 0;
-
 		if (priv->idle_resize_handler != 0)
 		{
 			g_source_remove (priv->idle_resize_handler);
@@ -3282,24 +3287,8 @@ ephy_window_class_init (EphyWindowClass *klass)
 }
 
 static void
-browse_with_caret_notifier (GConfClient *client,
-			    guint cnxn_id,
-			    GConfEntry *entry,
-			    EphyWindow *window)
-{
-	GtkAction *action;
-	gboolean enabled;
-
-	enabled = eel_gconf_get_boolean (CONF_CARET_BROWSING_ENABLED);
-	action = gtk_action_group_get_action (window->priv->action_group,
-					      "BrowseWithCaret");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), enabled);
-}
-
-static void
-allow_popups_notifier (GConfClient *client,
-		       guint cnxn_id,
-		       GConfEntry *entry,
+allow_popups_notifier (GSettings *settings,
+		       char *key,
 		       EphyWindow *window)
 {
 	GList *tabs;
@@ -3539,14 +3528,17 @@ ephy_window_constructor (GType type,
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar), model);
 
 	/* other notifiers */
-	browse_with_caret_notifier (NULL, 0, NULL, window);
-	priv->browse_with_caret_notifier_id = eel_gconf_notification_add
-		(CONF_CARET_BROWSING_ENABLED,
-		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "BrowseWithCaret");
 
-	priv->allow_popups_notifier_id = eel_gconf_notification_add
-		(CONF_SECURITY_ALLOW_POPUPS,
-		 (GConfClientNotifyFunc)allow_popups_notifier, window);
+	g_settings_bind (EPHY_SETTINGS_MAIN,
+			 EPHY_PREFS_ENABLE_CARET_BROWSING,
+			 action, "active",
+			 G_SETTINGS_BIND_GET);
+
+	g_signal_connect (EPHY_SETTINGS_WEB,
+			  "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
+			  G_CALLBACK (allow_popups_notifier), window);
 
 	/* network status */
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
@@ -3850,8 +3842,9 @@ sync_prefs_with_chrome (EphyWindow *window)
 
 	if (window->priv->should_save_chrome)
 	{
-		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
-				       flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
+		g_settings_set_boolean (EPHY_SETTINGS_UI,
+					EPHY_PREFS_UI_SHOW_TOOLBARS,
+				        flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
 	}
 }
 

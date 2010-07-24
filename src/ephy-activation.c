@@ -21,10 +21,10 @@
 
 #include "ephy-activation.h"
 
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-session.h"
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
 static gboolean
@@ -86,7 +86,8 @@ ephy_activation_open_bookmarks_editor (EphyDbus *ephy_dbus,
 				       guint startup_id,
 				       GError **error)
 {
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
 	{
 		g_set_error (error,
 			     g_quark_from_static_string ("ephy-activation-error"),

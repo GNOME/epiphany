@@ -67,7 +67,7 @@ struct PdmActionInfo
 	GtkTreeView *treeview;
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
-	int remove_id;
+	const char *remove_id;
 	int data_col;
 	char *scroll_to_host;
 	gboolean filled;
@@ -115,35 +115,7 @@ enum
 
 enum
 {
-	PROP_WINDOW,
-	PROP_NOTEBOOK,
-	PROP_COOKIES_TREEVIEW,
-	PROP_COOKIES_REMOVE,
-	PROP_COOKIES_PROPERTIES,
-	PROP_PASSWORDS_TREEVIEW,
-	PROP_PASSWORDS_REMOVE,
-	PROP_PASSWORDS_SHOW
-};
-
-enum
-{
 	PDM_DIALOG_RESPONSE_CLEAR = 1
-};
-
-static const
-EphyDialogProperty properties [] =
-{
-	{ "pdm_dialog",			NULL, PT_NORMAL, 0 },
-	{ "pdm_notebook",		NULL, PT_NORMAL, 0 },
-
-	{ "cookies_treeview",		NULL, PT_NORMAL, 0 },
-	{ "cookies_remove_button",	NULL, PT_NORMAL, 0 },
-	{ "cookies_properties_button",	NULL, PT_NORMAL, 0 },
-	{ "passwords_treeview",		NULL, PT_NORMAL, 0 },
-	{ "passwords_remove_button",	NULL, PT_NORMAL, 0 },
-	{ "passwords_show_button",	NULL, PT_NORMAL, 0 },
-
-	{ NULL }
 };
 
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
@@ -174,11 +146,10 @@ pdm_dialog_show_help (PdmDialog *pd)
 		"managing-passwords"
 	};
 
-	ephy_dialog_get_controls
-		(EPHY_DIALOG (pd),
-		 properties[PROP_WINDOW].id, &window,
-		 properties[PROP_NOTEBOOK].id, &notebook,
-		 NULL);
+	ephy_dialog_get_controls (EPHY_DIALOG (pd),
+				  "pdm_dialog", &window,
+				  "pdm_notebook", &notebook,
+				  NULL);
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 	g_return_if_fail (id == 0 || id == 1);
@@ -488,7 +459,7 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
 
-	widget = ephy_dialog_get_control (d, properties[action->remove_id].id);
+	widget = ephy_dialog_get_control (d, action->remove_id);
 	gtk_widget_set_sensitive (widget, has_selection);
 
 }
@@ -616,7 +587,7 @@ setup_action (PdmActionInfo *action)
 	GtkTreeSelection *selection;
 
 	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
-					  properties[action->remove_id].id);
+					  action->remove_id);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (pdm_dialog_remove_button_clicked_cb),
 			  action);
@@ -645,8 +616,7 @@ show_cookies_properties (PdmDialog *dialog,
 	GtkWidget *content_area;
 	char *str;
 
-	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
-					  properties[PROP_WINDOW].id);
+	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog), "pdm_dialog");
 
 	gdialog = gtk_dialog_new_with_buttons
 		 (_("Cookie Properties"),
@@ -791,7 +761,7 @@ cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) == 1;
 
-	widget = ephy_dialog_get_control (d, properties[PROP_COOKIES_PROPERTIES].id);
+	widget = ephy_dialog_get_control (d, "cookies_properties_button");
 	gtk_widget_set_sensitive (widget, has_selection);
 }
 
@@ -828,8 +798,8 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	LOG ("pdm_dialog_cookies_construct");
 
 	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
-				  properties[PROP_COOKIES_TREEVIEW].id, &treeview,
-				  properties[PROP_COOKIES_PROPERTIES].id, &button,
+				  "cookies_treeview", &treeview,
+				  "cookies_properties_button", &button,
 				  NULL);
 
 	g_signal_connect (button, "clicked",
@@ -1234,8 +1204,8 @@ passwords_show_toggled_cb (GtkWidget *button,
 	GtkTreeViewColumn *column;
 	gboolean active;
 
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control (EPHY_DIALOG(dialog),
+							   "passwords_treeview"));
 	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
 
 	active = gtk_toggle_button_get_active ((GTK_TOGGLE_BUTTON (button)));
@@ -1257,8 +1227,8 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	LOG ("pdm_dialog_passwords_construct");
 
 	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
-				  properties[PROP_PASSWORDS_TREEVIEW].id, &treeview,
-				  properties[PROP_PASSWORDS_SHOW].id, &button,
+				  "passwords_treeview", &treeview,
+				  "passwords_show_button", &button,
 				  NULL);
 
 	g_signal_connect (button, "toggled",
@@ -1521,7 +1491,7 @@ pdm_dialog_response_cb (GtkDialog *widget,
 		GtkWidget *parent;
 
 		parent = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-						  properties[PROP_WINDOW].id);
+						  "pdm_dialog");
 
 		page = gtk_notebook_get_current_page (GTK_NOTEBOOK (dialog->priv->notebook));
 		if (page == 0)
@@ -1554,14 +1524,13 @@ pdm_dialog_init (PdmDialog *dialog)
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
-			       properties,
 			       ephy_file ("epiphany.ui"),
 			       "pdm_dialog",
 			       NULL);
 
 	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
-				  properties[PROP_WINDOW].id, &window,
-				  properties[PROP_NOTEBOOK].id, &priv->notebook,
+				  "pdm_dialog", &window,
+				  "pdm_notebook", &priv->notebook,
 				  NULL);
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
@@ -1576,9 +1545,9 @@ pdm_dialog_init (PdmDialog *dialog)
 	 * one set of buttons is wider than another.
 	 */
 	ephy_dialog_set_size_group (EPHY_DIALOG (dialog),
-				    properties[PROP_COOKIES_REMOVE].id,
-				    properties[PROP_COOKIES_PROPERTIES].id,
-				    properties[PROP_PASSWORDS_REMOVE].id,
+				    "cookies_remove_button",
+				    "cookies_properties_button",
+				    "passwords_remove_button",
 				    NULL);
 
 	cookies = g_new0 (PdmActionInfo, 1);
@@ -1589,7 +1558,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->remove = pdm_dialog_cookie_remove;
 	cookies->scroll_to = pdm_dialog_cookie_scroll_to;
 	cookies->dialog = dialog;
-	cookies->remove_id = PROP_COOKIES_REMOVE;
+	cookies->remove_id = "cookies_remove_button";
 	cookies->data_col = COL_COOKIES_DATA;
 	cookies->scroll_to_host = NULL;
 	cookies->filled = FALSE;
@@ -1603,7 +1572,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords->add = pdm_dialog_password_add;
 	passwords->remove = pdm_dialog_password_remove;
 	passwords->dialog = dialog;
-	passwords->remove_id = PROP_PASSWORDS_REMOVE;
+	passwords->remove_id = "passwords_remove_button";
 	passwords->data_col = COL_PASSWORDS_DATA;
 	passwords->scroll_to_host = NULL;
 	passwords->filled = FALSE;

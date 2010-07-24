@@ -20,19 +20,19 @@
 
 #include "config.h"
 
-#include "ephy-toolbar-editor.h"
+#include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-state.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
+#include "ephy-stock-icons.h"
+#include "ephy-toolbar-editor.h"
 #include "eggtypebuiltins.h"
 #include "egg-toolbars-model.h"
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-stock-icons.h"
-#include "ephy-debug.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -115,7 +115,8 @@ combo_changed_cb (GtkComboBox *combo,
 		pref = value->value_nick;
 	}
 
-	eel_gconf_set_string (CONF_INTERFACE_TOOLBAR_STYLE, pref);
+	g_settings_set_string (EPHY_SETTINGS_UI,
+			       EPHY_PREFS_UI_TOOLBAR_STYLE, pref);
 
 	g_type_class_unref (flags_class);
 }
@@ -240,7 +241,8 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_widget_show_all (hbox);
 
 	/* get active from pref */
-	pref = eel_gconf_get_string (CONF_INTERFACE_TOOLBAR_STYLE);
+	pref = g_settings_get_string (EPHY_SETTINGS_UI,
+				      EPHY_PREFS_UI_TOOLBAR_STYLE);
 	if (pref != NULL)
 	{
 		flags_class = g_type_class_ref (EGG_TYPE_TB_MODEL_FLAGS);

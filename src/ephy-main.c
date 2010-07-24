@@ -20,13 +20,13 @@
 
 #include "config.h"
 
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-object-helpers.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-dbus-client-bindings.h"
 #include "ephy-activation.h"
 #include "ephy-session.h"
@@ -438,6 +438,7 @@ main (int argc,
 	DBusGProxy *proxy;
 	GError *error = NULL;
 	guint32 user_time;
+	gboolean arbitrary_url;
 
 #ifdef ENABLE_NLS
 	/* Initialize the i18n stuff */
@@ -572,8 +573,10 @@ main (int argc,
 		exit (1);
 	}
 
-	if (arguments != NULL &&
-	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
+	arbitrary_url = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+						EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
+
+	if (arguments != NULL && arbitrary_url)
 	{
 		g_print ("URL loading is locked down\n");
 		exit (1);
@@ -718,7 +721,6 @@ main (int argc,
         if (ephy_has_private_profile () == FALSE)
           _ephy_profile_migrate ();
 
-	eel_gconf_monitor_add ("/apps/epiphany/general");
 	ephy_stock_icons_init ();
 	load_accels ();
 
@@ -745,9 +747,9 @@ main (int argc,
 	if (notify_is_initted ())
 		notify_uninit ();
 #endif
-	eel_gconf_monitor_remove ("/apps/epiphany/general");
 	save_accels ();
 	ephy_state_save ();
+	ephy_settings_shutdown ();
 	ephy_file_helpers_shutdown ();
 	xmlCleanupParser ();
 

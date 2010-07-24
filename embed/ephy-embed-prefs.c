@@ -1,4 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*  Copyright © 2008 Xan Lopez <xan@gnome.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -22,105 +23,34 @@
 #include <glib.h>
 #include <webkit/webkit.h>
 
-#include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-langs.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 
 typedef struct
 {
-  char *gconf_key;
+  char *schema;
+  char *key;
   char *webkit_pref;
-  GConfClientNotifyFunc func;
-  guint cnxn_id;
+  GCallback callback;
 } PrefData;
 
-static WebKitWebSettings *settings = NULL;
-static guint *connections = NULL;
+static WebKitWebSettings *webkit_settings = NULL;
 
 static void
-webkit_pref_callback_int (GConfClient *client,
-                          guint cnxn_id,
-                          GConfEntry *entry,
-                          gpointer data)
-{
-  GConfValue *gcvalue;
-  gint value = 0;
-  char *webkit_pref = data;
-
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_INT) {
-      value = gconf_value_get_int (gcvalue);
-      value = MAX (value, 0);
-  }
-
-  g_object_set (settings, webkit_pref, value, NULL);
-}
-
-static void
-webkit_pref_callback_boolean (GConfClient *client,
-                              guint cnxn_id,
-                              GConfEntry *entry,
-                              gpointer data)
-{
-  GConfValue *gcvalue;
-  gboolean value = FALSE;
-  char *webkit_pref = data;
-
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_BOOL) {
-      value = gconf_value_get_bool (gcvalue);
-  }
-
-  g_object_set (settings, webkit_pref, value, NULL);
-}
-
-static void
-webkit_pref_callback_string (GConfClient *client,
-                             guint cnxn_id,
-                             GConfEntry *entry,
-                             gpointer data)
-{
-  GConfValue *gcvalue;
-  const char *value = NULL;
-  char *webkit_pref = data;
-
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_STRING) {
-      value = gconf_value_get_string (gcvalue);
-  }
-
-  g_object_set (settings, webkit_pref, value, NULL);
-}
-
-static void
-webkit_pref_callback_user_stylesheet (GConfClient *client,
-                                      guint cnxn_id,
-                                      GConfEntry *entry,
+webkit_pref_callback_user_stylesheet (GSettings *settings,
+                                      char *key,
                                       gpointer data)
 {
-  GConfValue *gcvalue;
   gboolean value = FALSE;
   char *uri = NULL;
   char *webkit_pref = data;
 
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_BOOL) {
-      value = gconf_value_get_bool (gcvalue);
-  }
+  value = g_settings_get_boolean (settings, key);
 
   if (value)
     /* We need the leading file://, so use g_strconcat instead
@@ -130,7 +60,8 @@ webkit_pref_callback_user_stylesheet (GConfClient *client,
                        G_DIR_SEPARATOR_S,
                        USER_STYLESHEET_FILENAME,
                        NULL);
-  g_object_set (settings, webkit_pref, uri, NULL);
+
+  g_object_set (webkit_settings, webkit_pref, uri, NULL);
   g_free (uri);
 }
 
@@ -175,7 +106,7 @@ webkit_pref_get_internal_user_agent (void)
 
   g_key_file_free (branding_keyfile);
 
-  g_object_get (settings, "user-agent", &webkit_user_agent, NULL);
+  g_object_get (webkit_settings, "user-agent", &webkit_user_agent, NULL);
 
   user_agent = g_strconcat (webkit_user_agent, " ",
                             vendor_user_agent ? vendor_user_agent : "",
@@ -190,51 +121,37 @@ webkit_pref_get_internal_user_agent (void)
 }
 
 static void
-webkit_pref_callback_user_agent (GConfClient *client,
-                                 guint cnxn_id,
-                                 GConfEntry *entry,
+webkit_pref_callback_user_agent (GSettings *settings,
+                                 char *key,
                                  gpointer data)
 {
-  GConfValue *gcvalue;
-  const char *value = NULL;
+  char *value = NULL;
   static char *internal_user_agent = NULL;
   char *webkit_pref = data;
 
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_STRING) {
-      value = gconf_value_get_string (gcvalue);
-  }
+  value = g_settings_get_string (settings, key);
 
   if (value == NULL || value[0] == '\0') {
     if (internal_user_agent == NULL)
       internal_user_agent = webkit_pref_get_internal_user_agent ();
 
-    g_object_set (settings, webkit_pref, internal_user_agent, NULL);
+    g_object_set (webkit_settings, webkit_pref, internal_user_agent, NULL);
   } else
-    g_object_set (settings, webkit_pref, value, NULL);
+    g_object_set (webkit_settings, webkit_pref, value, NULL);
+
+  g_free (value);
 }
 
 static void
-webkit_pref_callback_font_size (GConfClient *client,
-                                guint cnxn_id,
-                                GConfEntry *entry,
+webkit_pref_callback_font_size (GSettings *settings,
+                                char *key,
                                 gpointer data)
 {
-  GConfValue *gcvalue;
   char *webkit_pref = data;
-  const char *value = NULL;
+  char *value = NULL;
   int size = 9; /* FIXME: What to use here? */
 
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_STRING) {
-      value = gconf_value_get_string (gcvalue);
-  }
+  value = g_settings_get_string (settings, key);
 
   if (value) {
     PangoFontDescription* desc;
@@ -246,26 +163,19 @@ webkit_pref_callback_font_size (GConfClient *client,
     pango_font_description_free (desc);
   }
 
-  g_object_set (settings, webkit_pref, size, NULL);
+  g_object_set (webkit_settings, webkit_pref, size, NULL);
+  g_free (value);
 }
 
 static void
-webkit_pref_callback_font_family (GConfClient *client,
-                                  guint cnxn_id,
-                                  GConfEntry *entry,
+webkit_pref_callback_font_family (GSettings *settings,
+                                  char *key,
                                   gpointer data)
 {
-  GConfValue *gcvalue;
   char *webkit_pref = data;
-  const char *value = NULL;
+  char *value = NULL;
 
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_STRING) {
-      value = gconf_value_get_string (gcvalue);
-  }
+  value = g_settings_get_string (settings, key);
 
   if (value) {
     PangoFontDescription* desc;
@@ -273,9 +183,11 @@ webkit_pref_callback_font_family (GConfClient *client,
 
     desc = pango_font_description_from_string (value);
     family = pango_font_description_get_family (desc);
-    g_object_set (settings, webkit_pref, family, NULL);
+    g_object_set (webkit_settings, webkit_pref, family, NULL);
     pango_font_description_free (desc);
   }
+
+  g_free (value);
 }
 
 /* Part of this code taken from libsoup (soup-session.c) */
@@ -324,40 +236,31 @@ build_accept_languages_header (GArray *languages)
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
 static void
-webkit_pref_callback_accept_languages (GConfClient *client,
-                                       guint cnxn_id,
-                                       GConfEntry *entry,
+webkit_pref_callback_accept_languages (GSettings *settings,
+                                       char *key,
                                        gpointer data)
 {
   SoupSession *session;
-  GConfValue *gcvalue;
   GArray *array;
-  GSList *languages, *l;
-  char **array_data;
+  char **languages;
   char *langs_str;
   char *webkit_pref;
+  int i;
 
   webkit_pref = data;
-  gcvalue = gconf_entry_get_value (entry);
-  if (gcvalue == NULL ||
-      gcvalue->type != GCONF_VALUE_LIST ||
-      gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING)
-    return;
 
-  languages = gconf_value_get_list (gcvalue);
+  languages = g_settings_get_strv (settings, key);
 
   array = g_array_new (TRUE, FALSE, sizeof (char *));
 
-  for (l = languages; l != NULL; l = l->next) {
-      const char *lang = gconf_value_get_string ((GConfValue *) l->data);
-
-      if ((lang != NULL) && !g_strcmp0 (lang, "system")) {
-          ephy_langs_append_languages (array);
-        } else if (lang != NULL && lang[0] != '\0') {
-          char *str = g_ascii_strdown (lang, -1);
-          g_array_append_val (array, str);
-        }
-    }
+  for (i = 0; languages[i]; i++) {
+      if (!g_strcmp0 (languages[i], "system")) {
+        ephy_langs_append_languages (array);
+      } else if (languages[i][0] != '\0') {
+        char *str = g_ascii_strdown (languages[i], -1);
+        g_array_append_val (array, str);
+      }
+  }
 
   ephy_langs_sanitise (array);
 
@@ -367,26 +270,24 @@ webkit_pref_callback_accept_languages (GConfClient *client,
   session = webkit_get_default_session ();
   g_object_set (G_OBJECT (session), webkit_pref, langs_str, NULL);
 
-  /* Free memory */
-  array_data = (char **) g_array_free (array, FALSE);
-  g_strfreev (array_data);
+  g_strfreev (languages);
   g_free (langs_str);
 }
 
 void
 ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
-                                        const char *gconf_policy)
+                                        const char *settings_policy)
 {
   SoupCookieJarAcceptPolicy policy;
 
   g_return_if_fail (SOUP_IS_COOKIE_JAR (jar));
-  g_return_if_fail (gconf_policy != NULL);
+  g_return_if_fail (settings_policy != NULL);
 
-  if (g_str_equal (gconf_policy, "nowhere"))
+  if (g_str_equal (settings_policy, "never"))
     policy = SOUP_COOKIE_JAR_ACCEPT_NEVER;
-  else if (g_str_equal (gconf_policy, "anywhere"))
+  else if (g_str_equal (settings_policy, "always"))
     policy = SOUP_COOKIE_JAR_ACCEPT_ALWAYS;
-  else if (g_str_equal (gconf_policy, "current site"))
+  else if (g_str_equal (settings_policy, "no-third-party"))
     policy = SOUP_COOKIE_JAR_ACCEPT_NO_THIRD_PARTY;
   else {
     g_warn_if_reached ();
@@ -397,25 +298,16 @@ ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
 }
 
 static void
-webkit_pref_callback_cookie_accept_policy (GConfClient *client,
-                                           guint cnxn_id,
-                                           GConfEntry *entry,
+webkit_pref_callback_cookie_accept_policy (GSettings *settings,
+                                           char *key,
                                            gpointer data)
 {
   SoupSession *session;
   char *webkit_pref;
-  GConfValue *gcvalue;
-  const char *value = NULL;
+  char *value = NULL;
 
   webkit_pref = data;
-
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_STRING) {
-      value = gconf_value_get_string (gcvalue);
-  }
+  value = g_settings_get_string (settings, key);
 
   if (value) {
     SoupSessionFeature *jar;
@@ -427,58 +319,48 @@ webkit_pref_callback_cookie_accept_policy (GConfClient *client,
     
     ephy_embed_prefs_set_cookie_jar_policy (SOUP_COOKIE_JAR (jar), value);
   }
+
+  g_free (value);
 }
 
 static const PrefData webkit_pref_entries[] =
   {
-    { CONF_RENDERING_FONT_MIN_SIZE,
-      "minimum-logical-font-size",
-      webkit_pref_callback_int },
-    { CONF_DESKTOP_FONT_VAR_NAME,
+    { "org.gnome.desktop.interface",
+      "font-name",
       "default-font-size",
-      webkit_pref_callback_font_size },
-    { CONF_DESKTOP_FONT_VAR_NAME,
+      G_CALLBACK (webkit_pref_callback_font_size) },
+    { "org.gnome.desktop.interface",
+      "font-name",
       "default-font-family",
-      webkit_pref_callback_font_family },
-    { CONF_DESKTOP_FONT_VAR_NAME,
+      G_CALLBACK (webkit_pref_callback_font_family) },
+    { "org.gnome.desktop.interface",
+      "font-name",
       "sans-serif-font-family",
-      webkit_pref_callback_font_family },
-    { CONF_DESKTOP_FONT_FIXED_NAME,
+      G_CALLBACK (webkit_pref_callback_font_family) },
+    { "org.gnome.desktop.interface",
+      "monospace-font-name",
       "default-monospace-font-size",
-      webkit_pref_callback_font_size },
-    { CONF_DESKTOP_FONT_FIXED_NAME,
+      G_CALLBACK (webkit_pref_callback_font_size) },
+    { "org.gnome.desktop.interface",
+      "monospace-font-name",
       "monospace-font-family",
-      webkit_pref_callback_font_family },
-    { CONF_SECURITY_JAVASCRIPT_ENABLED,
-      "enable-scripts",
-      webkit_pref_callback_boolean },
-    { CONF_LANGUAGE_DEFAULT_ENCODING,
-      "default-encoding",
-      webkit_pref_callback_string },
-    { CONF_WEB_INSPECTOR_ENABLED,
-      "enable-developer-extras",
-      webkit_pref_callback_boolean },
-    { CONF_USER_CSS_ENABLED,
+      G_CALLBACK (webkit_pref_callback_font_family) },
+    { EPHY_PREFS_WEB_SCHEMA,
+      EPHY_PREFS_WEB_ENABLE_USER_CSS,
       "user-stylesheet-uri",
-      webkit_pref_callback_user_stylesheet },
-    { CONF_CARET_BROWSING_ENABLED,
-      "enable-caret-browsing",
-      webkit_pref_callback_boolean },
-    { CONF_SECURITY_ALLOW_POPUPS,
-      "javascript-can-open-windows-automatically",
-      webkit_pref_callback_boolean },
-    { CONF_RENDERING_LANGUAGE,
+      G_CALLBACK (webkit_pref_callback_user_stylesheet) },
+    { EPHY_PREFS_WEB_SCHEMA,
+      EPHY_PREFS_WEB_LANGUAGE,
       "accept-language",
-      webkit_pref_callback_accept_languages },
-    { CONF_USER_AGENT,
+      G_CALLBACK (webkit_pref_callback_accept_languages) },
+    { EPHY_PREFS_SCHEMA,
+      EPHY_PREFS_USER_AGENT,
       "user-agent",
-      webkit_pref_callback_user_agent },
-    { CONF_SECURITY_COOKIES_ACCEPT,
+      G_CALLBACK (webkit_pref_callback_user_agent) },
+    { EPHY_PREFS_WEB_SCHEMA,
+      EPHY_PREFS_WEB_COOKIES_POLICY,
       "accept-policy",
-      webkit_pref_callback_cookie_accept_policy },
-    { CONF_SECURITY_PLUGINS_ENABLED,
-      "enable-plugins",
-      webkit_pref_callback_boolean }
+      G_CALLBACK (webkit_pref_callback_cookie_accept_policy) },
   };
 
 static void
@@ -493,12 +375,10 @@ ephy_embed_prefs_init (void)
 {
   int i;
 
-  eel_gconf_monitor_add ("/apps/epiphany/web");
-
-  settings = webkit_web_settings_new ();
+  webkit_settings = webkit_web_settings_new ();
 
   /* Hardcoded settings */
-  g_object_set (settings,
+  g_object_set (webkit_settings,
                 "auto-shrink-images", FALSE,
                 "enable-default-context-menu", FALSE,
                 "enable-site-specific-quirks", TRUE,
@@ -506,33 +386,58 @@ ephy_embed_prefs_init (void)
                 "auto-resize-window", TRUE,
                 NULL);
 
-  /* Connections */
-  connections = g_malloc (sizeof (guint) * G_N_ELEMENTS (webkit_pref_entries));
-
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
-    connections[i] = eel_gconf_notification_add (webkit_pref_entries[i].gconf_key,
-                                                 webkit_pref_entries[i].func,
-                                                 webkit_pref_entries[i].webkit_pref);
+    GSettings *settings;
+    char *key;
 
-    eel_gconf_notify (webkit_pref_entries[i].gconf_key);
+    settings = ephy_settings_get (webkit_pref_entries[i].schema);
+    key = g_strconcat ("changed::", webkit_pref_entries[i].key, NULL);
+
+    g_signal_connect (settings, key,
+                      webkit_pref_entries[i].callback,
+                      webkit_pref_entries[i].webkit_pref);
+    g_free (key);
   }
+
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_JAVASCRIPT,
+                   webkit_settings, "enable-scripts",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_MAIN,
+                   EPHY_PREFS_ENABLE_WEB_INSPECTOR,
+                   webkit_settings, "enable-developer-extras",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_MAIN,
+                   EPHY_PREFS_ENABLE_CARET_BROWSING,
+                   webkit_settings, "enable-caret-browsing",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_POPUPS,
+                   webkit_settings, "javascript-can-open-windows-automatically",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_PLUGINS,
+                   webkit_settings, "enable-plugins",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_FONT_MIN_SIZE,
+                   webkit_settings, "minimum-logical-font-size",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_DEFAULT_ENCODING,
+                   webkit_settings, "default-encoding",
+                   G_SETTINGS_BIND_GET);
 }
 
 void
 ephy_embed_prefs_shutdown (void)
 {
-  int i;
-
-  for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++)
-    eel_gconf_notification_remove (connections[i]);
-
-  g_free (connections);
-  g_object_unref (settings);
+  g_object_unref (webkit_settings);
 }
 
 void
 ephy_embed_prefs_add_embed (EphyEmbed *embed)
 {
-  ephy_embed_prefs_apply (embed, settings);
+  ephy_embed_prefs_apply (embed, webkit_settings);
 }
 

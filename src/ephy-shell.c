@@ -30,10 +30,8 @@
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-embed-container.h"
-#include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
@@ -54,6 +52,7 @@
 #include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-toolbar.h"
+#include "ephy-settings.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
@@ -124,7 +123,8 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 
 	LOG ("ephy_shell_new_window_cb tab chrome %d", chromemask);
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME))
 	{
 		chromemask = EPHY_WEB_VIEW_CHROME_ALL;
 	}
@@ -368,7 +368,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 	if (flags & EPHY_NEW_TAB_DONT_COPY_HISTORY) copy_history = FALSE;
 
-	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
+	in_new_window = in_new_window &&
+			!g_settings_get_boolean
+					(EPHY_SETTINGS_LOCKDOWN,
+					 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 	g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;

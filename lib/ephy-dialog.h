@@ -43,21 +43,6 @@ typedef struct _EphyDialog		EphyDialog;
 typedef struct _EphyDialogPrivate	EphyDialogPrivate;
 typedef struct _EphyDialogProperty	EphyDialogProperty;
 
-typedef enum
-{
-	PT_NORMAL	= 0,
-	PT_AUTOAPPLY	= 1 << 0,
-	PT_INVERTED	= 1 << 1
-} EphyDialogApplyType;
-
-struct _EphyDialogProperty
-{
-	const char *id;
-	const char *pref;
-	EphyDialogApplyType apply_type;
-	GType data_type;
-};
-
 struct _EphyDialogClass
 {
 	GObjectClass parent_class;
@@ -69,7 +54,6 @@ struct _EphyDialogClass
 
 	/* Methods */
 	void	(* construct)	(EphyDialog *dialog,
-				 const EphyDialogProperty *properties,
 				 const char *file,
 				 const char *name,
 				 const char *domain);
@@ -91,19 +75,9 @@ EphyDialog     *ephy_dialog_new			(void);
 EphyDialog     *ephy_dialog_new_with_parent	(GtkWidget *parent_window);
 
 void		ephy_dialog_construct		(EphyDialog *dialog,
-						 const EphyDialogProperty *properties,
 						 const char *file,
 						 const char *name,
 						 const char *domain);
-
-void		ephy_dialog_add_enum		(EphyDialog *dialog,
-						 const char *property_id,
-						 guint n_items,
-						 const char * const *items);
-
-void		ephy_dialog_set_data_column	(EphyDialog *dialog,
-						 const char *property_id,
-						 int column);
 
 void		ephy_dialog_set_size_group	(EphyDialog *dialog,
 						 const char *first_id,
@@ -126,18 +100,6 @@ GtkWidget      *ephy_dialog_get_control		(EphyDialog *dialog,
 void		ephy_dialog_get_controls	(EphyDialog *dialog,
 						 const char *first_id,
 						 ...);
-
-gboolean	ephy_dialog_get_value		(EphyDialog *dialog,
-						 const char *property_id,
-						 GValue *value);
-
-void		ephy_dialog_set_value		(EphyDialog *dialog,
-						 const char *property_id,
-						 const GValue *value);
-
-void		ephy_dialog_set_pref		(EphyDialog *dialog,
-						 const char *property_id,
-						 const char *pref);
 
 G_END_DECLS
 

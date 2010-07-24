@@ -1,6 +1,7 @@
-/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
-/*  Copyright © 2008 Xan Lopez <xan@gnome.org>
- *  Copyright © 2009 Igalia S.L.
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
+/*
+ *  Copyright © 2010 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,25 +19,26 @@
  *
  */
 
-#ifndef __EPHY_EMBED_PREFS_H__
-#define __EPHY_EMBED_PREFS_H__
-
-#include "ephy-embed.h"
-
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
 #error "Only <epiphany/epiphany.h> can be included directly."
 #endif
 
-#define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
+#ifndef EPHY_SETTINGS_H
+#define EPHY_SETTINGS_H
 
-G_BEGIN_DECLS
+#include <glib.h>
+#include <gio/gio.h>
 
-void ephy_embed_prefs_init                  (void);
-void ephy_embed_prefs_shutdown              (void);
-void ephy_embed_prefs_add_embed             (EphyEmbed     *embed);
-void ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
-                                             const char    *gconf_policy);
+#include "ephy-prefs.h"
 
-G_END_DECLS
+#define EPHY_SETTINGS_MAIN      ephy_settings_get (EPHY_PREFS_SCHEMA)
+#define EPHY_SETTINGS_UI        ephy_settings_get (EPHY_PREFS_UI_SCHEMA)
+#define EPHY_SETTINGS_WEB       ephy_settings_get (EPHY_PREFS_WEB_SCHEMA)
+#define EPHY_SETTINGS_LOCKDOWN  ephy_settings_get (EPHY_PREFS_LOCKDOWN_SCHEMA)
+#define EPHY_SETTINGS_STATE     ephy_settings_get (EPHY_PREFS_STATE_SCHEMA)
 
-#endif /* __EPHY_EMBED_PREFS_H__ */
+GSettings *ephy_settings_get (const char *schema);
+
+void ephy_settings_shutdown (void);
+
+#endif /* EPHY_SETTINGS_H */

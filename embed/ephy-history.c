@@ -26,8 +26,8 @@
 #include "ephy-debug.h"
 #include "ephy-node-db.h"
 #include "ephy-node-common.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 
 #include <time.h>
@@ -59,7 +59,6 @@ struct _EphyHistoryPrivate
 	GHashTable *pages_hash;
 	guint autosave_timeout;
 	guint update_hosts_idle;
-	guint disable_history_notifier_id;
 	gboolean dirty;
 	gboolean enabled;
 };
@@ -469,16 +468,6 @@ connect_page_removed_from_host (char *url,
 }
 
 static void
-disable_history_notifier (GConfClient *client,
-			  guint cnxn_id,
-			  GConfEntry *entry,
-			  EphyHistory *history)
-{
-	ephy_history_set_enabled
-		(history, !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY));
-}
-
-static void
 ephy_history_init (EphyHistory *eb)
 {
 	EphyNodeDb *db;
@@ -561,10 +550,10 @@ ephy_history_init (EphyHistory *eb)
 		       (GSourceFunc)periodic_save_cb,
 		       eb);
 
-	disable_history_notifier (NULL, 0, NULL, eb);
-	eb->priv->disable_history_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_HISTORY,
-		 (GConfClientNotifyFunc) disable_history_notifier, eb);
+	g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
+			 EPHY_PREFS_LOCKDOWN_HISTORY,
+			 eb, "enabled",
+			 G_SETTINGS_BIND_INVERT_BOOLEAN | G_SETTINGS_BIND_GET);
 }
 
 static void
@@ -588,8 +577,6 @@ ephy_history_finalize (GObject *object)
 	g_hash_table_destroy (eb->priv->hosts_hash);
 
 	g_source_remove (eb->priv->autosave_timeout);
-
-	eel_gconf_notification_remove (eb->priv->disable_history_notifier_id);
 
 	g_free (eb->priv->xml_file);
 

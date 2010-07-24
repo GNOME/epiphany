@@ -23,8 +23,8 @@
 #include "config.h"
 
 #include "ephy-notebook.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
 #include "ephy-dnd.h"
@@ -371,7 +371,8 @@ notebook_drag_data_received_cb (GtkWidget* widget,
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL)) return;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_ARBITRARY_URL)) return;
 
 	data = gtk_selection_data_get_data (selection_data);
 	if (gtk_selection_data_get_length (selection_data) <= 0 || data == NULL) return;
@@ -437,17 +438,18 @@ update_tabs_visibility (EphyNotebook *nb,
 
 	if (before_inserting) num++;
 
-	show_tabs = (eel_gconf_get_boolean (CONF_ALWAYS_SHOW_TABS_BAR) || num > 1) &&
+	show_tabs = (g_settings_get_boolean (EPHY_SETTINGS_UI,
+					     EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR)
+		     || num > 1) &&
 		    priv->show_tabs == TRUE;
 
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
 }
 
 static void
-tabs_visibility_notifier (GConfClient *client,
-			  guint cnxn_id,
-			  GConfEntry *entry,
-			  EphyNotebook *nb)
+show_tabs_changed_cb (GSettings *settings,
+		      char *key,
+		      EphyNotebook *nb)
 {
 	update_tabs_visibility (nb, FALSE);
 }
@@ -484,9 +486,9 @@ ephy_notebook_init (EphyNotebook *notebook)
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 	gtk_drag_dest_add_text_targets (widget);
 
-	priv->tabs_vis_notifier_id = eel_gconf_notification_add
-		(CONF_ALWAYS_SHOW_TABS_BAR,
-		 (GConfClientNotifyFunc)tabs_visibility_notifier, notebook);
+	g_signal_connect (EPHY_SETTINGS_UI,
+			  "changed::" EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR,
+			  G_CALLBACK (show_tabs_changed_cb), notebook);
 }
 
 static void
@@ -494,8 +496,6 @@ ephy_notebook_finalize (GObject *object)
 {
 	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
 	EphyNotebookPrivate *priv = notebook->priv;
-
-	eel_gconf_notification_remove (priv->tabs_vis_notifier_id);
 
 	g_list_free (priv->focused_pages);
 

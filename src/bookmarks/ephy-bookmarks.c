@@ -34,11 +34,10 @@
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-stock-icons.h"
-
-#include "eel-gconf-extensions.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -82,7 +81,6 @@ struct _EphyBookmarksPrivate
 	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
 	double lower_score;
-	guint disable_bookmark_editing_notifier_id;
 
 #ifdef ENABLE_ZEROCONF
 	/* Local sites */
@@ -630,14 +628,6 @@ topics_removed_cb (EphyNode *node,
 }
 
 static void
-update_bookmark_editing (EphyBookmarks *eb)
-{
-	g_object_set (G_OBJECT (eb->priv->db),
-		      "immutable", eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING),
-		      NULL);
-}
-
-static void
 fix_hierarchy_topic (EphyBookmarks *eb,
 		     EphyNode *topic)
 {
@@ -690,15 +680,6 @@ fix_hierarchy (EphyBookmarks *eb)
 			ephy_node_remove_child (eb->priv->keywords, topic);
 		}
 	}
-}
-
-static void
-disable_bookmark_editing_notifier (GConfClient *client,
-				   guint cnxn_id,
-				   GConfEntry *entry,
-				   EphyBookmarks *eb)
-{
-	update_bookmark_editing (eb);
 }
 
 static void
@@ -1339,10 +1320,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	
 	fix_hierarchy (eb);
 
-	eb->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
-		 (GConfClientNotifyFunc)disable_bookmark_editing_notifier, eb);
-	update_bookmark_editing (eb);
+	g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
+			 EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
+			 eb->priv->db, "immutable",
+			 G_SETTINGS_BIND_GET);
 
 	ephy_setup_history_notifiers (eb);
 	ephy_bookmarks_update_favorites (eb);
@@ -1353,8 +1334,6 @@ ephy_bookmarks_finalize (GObject *object)
 {
 	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
 	EphyBookmarksPrivate *priv = eb->priv;
-
-	eel_gconf_notification_remove (priv->disable_bookmark_editing_notifier_id);
 
 	if (priv->save_timeout_id != 0)
 	{

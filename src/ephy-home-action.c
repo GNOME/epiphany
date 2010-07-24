@@ -22,9 +22,9 @@
 #include "ephy-home-action.h"
 #include "ephy-link.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-gui.h"
 #include "ephy-dnd.h"
-#include "eel-gconf-extensions.h"
 
 #include <string.h>
 
@@ -162,7 +162,8 @@ ephy_home_action_activate (GtkAction *action)
 
 	g_object_get (G_OBJECT (action), "name", &action_name, NULL);
 		
-	address = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
+	address = g_settings_get_string (EPHY_SETTINGS_MAIN,
+					 EPHY_PREFS_HOMEPAGE_URL);
 
 	action_name_association (action, action_name, address, FALSE);
 

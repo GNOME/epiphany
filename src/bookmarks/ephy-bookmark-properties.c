@@ -34,8 +34,7 @@
 #include "ephy-gui.h"
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
-
-#include "eel-gconf-extensions.h"
+#include "ephy-settings.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -523,7 +522,8 @@ ephy_bookmark_properties_constructor (GType type,
 				       EPHY_STATE_WINDOW_SAVE_SIZE);
 	}
 	/* Lockdown */
-	lockdown = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
+	lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+					   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
 
 	update_window_title (properties);
 	content_area = gtk_dialog_get_content_area (dialog);

@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2010 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,54 +27,93 @@
 
 G_BEGIN_DECLS
 
-#define EPIPHANY_SCHEMA_VERSION 1
-#define CONF_SCHEMA_VERSION "/apps/epiphany/schema_version"
+typedef enum
+{
+	EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH,
+	EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH_HORIZ,
+	EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH_ICONS,
+	EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH_TEXT
+} EphyPrefsUIToolbarStyle;
 
-/* General */
-#define CONF_GENERAL_HOMEPAGE			"/apps/epiphany/general/homepage"
-#define CONF_URL_SEARCH     			"/apps/epiphany/general/url_search"
-#define CONF_ALWAYS_SHOW_TABS_BAR		"/apps/epiphany/general/always_show_tabs_bar"
-#define CONF_WINDOWS_SHOW_TOOLBARS		"/apps/epiphany/general/show_toolbars"
-#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR		"/apps/epiphany/general/show_bookmarks_bar"
-#define CONF_WINDOWS_SHOW_STATUSBAR		"/apps/epiphany/general/show_statusbar"
-#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL	"/apps/epiphany/general/middle_click_open_url"
-#define CONF_INTERFACE_TOOLBAR_STYLE		"/apps/epiphany/general/toolbar_style"
-#define CONF_INTERFACE_OPEN_NEW_WINDOWS_IN_TAB	"/apps/epiphany/general/open_new_windows_in_tab"
-#define CONF_AUTO_DOWNLOADS			"/apps/epiphany/general/automatic_downloads"
-#define CONF_DESKTOP_IS_HOME_DIR		"/apps/nautilus/preferences/desktop_is_home_dir"
-#define CONF_NETWORK_MANAGED			"/apps/epiphany/general/managed_network"
-#define CONF_DOWNLOADS_HIDDEN			"/apps/epiphany/dialogs/downloads_hidden"
-#define CONF_WARN_ON_CLOSE_UNSUBMITTED_DATA     "/apps/epiphany/dialogs/warn_on_close_unsubmitted_data"
+typedef enum
+{
+	EPHY_PREFS_WEB_COOKIES_POLICY_ALWAYS,
+	EPHY_PREFS_WEB_COOKIES_POLICY_NO_THIRD_PARTY,
+	EPHY_PREFS_WEB_COOKIES_POLICY_NEVER
+} EphyPrefsWebCookiesPolicy;
 
-/* Directories */
-#define CONF_STATE_SAVE_DIR		"/apps/epiphany/directories/save"
-#define CONF_STATE_SAVE_IMAGE_DIR	"/apps/epiphany/directories/saveimage"
-#define CONF_STATE_OPEN_DIR		"/apps/epiphany/directories/open"
-#define CONF_STATE_DOWNLOAD_DIR		"/apps/epiphany/directories/downloads_folder"
-#define CONF_STATE_UPLOAD_DIR		"/apps/epiphany/directories/upload"
+typedef enum
+{
+	EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_HALF_HOUR,
+	EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER,
+	EPHY_PREFS_STATE_HISTORY_DATE_FILTER_TODAY,
+	EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TWO_DAYS,
+	EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_THREE_DAYS
+} EphyPrefsStateHistoryDateFilter;
 
-/* Lockdown */
-#define CONF_LOCKDOWN_FULLSCREEN		"/apps/epiphany/lockdown/fullscreen"
-#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL	"/apps/epiphany/lockdown/disable_arbitrary_url"
-#define CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING  "/apps/epiphany/lockdown/disable_bookmark_editing"
-#define CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING	"/apps/epiphany/lockdown/disable_toolbar_editing"
-#define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
-#define CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK	"/desktop/gnome/lockdown/disable_save_to_disk"
-#define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
-#define CONF_LOCKDOWN_DISABLE_PRINTING		"/desktop/gnome/lockdown/disable_printing"
-#define CONF_LOCKDOWN_DISABLE_PRINT_SETUP	"/desktop/gnome/lockdown/disable_print_setup"
-#define CONF_LOCKDOWN_DISABLE_COMMAND_LINE	"/desktop/gnome/lockdown/disable_command_line"
-#define CONF_LOCKDOWN_DISABLE_QUIT		"/apps/epiphany/lockdown/disable_quit"
-#define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME	"/apps/epiphany/lockdown/disable_javascript_chrome"
+#define EPHY_PREFS_UI_SCHEMA			"org.gnome.Epiphany.ui"
+#define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR	"always-show-tabs-bar"
+#define EPHY_PREFS_UI_SHOW_TOOLBARS		"show-toolbars"
+#define EPHY_PREFS_UI_SHOW_BOOKMARKS_BAR	"show-bookmarks-bar"
+#define EPHY_PREFS_UI_TOOLBAR_STYLE		"toolbar-style"
+#define EPHY_PREFS_UI_DOWNLOADS_HIDDEN		"downloads-hidden"
 
-/* System prefs */
-#define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"
-#define CONF_DESKTOP_TOOLBAR_STYLE	"/desktop/gnome/interface/toolbar_style"
-#define CONF_DESKTOP_BG_PICTURE		"/desktop/gnome/background/picture_filename"
-#define CONF_DESKTOP_BG_TYPE		"/desktop/gnome/background/picture_options"
+#define EPHY_PREFS_STATE_SCHEMA			"org.gnome.Epiphany.state"
+#define EPHY_PREFS_STATE_SAVE_DIR		"save-dir"
+#define EPHY_PREFS_STATE_SAVE_IMAGE_DIR		"save-image-dir"
+#define EPHY_PREFS_STATE_OPEN_DIR		"open-dir"
+#define EPHY_PREFS_STATE_DOWNLOAD_DIR		"download-dir"
+#define EPHY_PREFS_STATE_UPLOAD_DIR		"upload-dir"
+#define EPHY_PREFS_STATE_RECENT_ENCODINGS	"recent-encodings"
+#define EPHY_PREFS_STATE_BOOKMARKS_VIEW_TITLE	"bookmarks-view-title"
+#define EPHY_PREFS_STATE_BOOKMARKS_VIEW_ADDRESS	"bookmarks-view-address"
+#define EPHY_PREFS_STATE_HISTORY_VIEW_TITLE	"history-view-title"
+#define EPHY_PREFS_STATE_HISTORY_VIEW_ADDRESS	"history-view-address"
+#define EPHY_PREFS_STATE_HISTORY_VIEW_DATE	"history-view-date"
+#define EPHY_PREFS_STATE_HISTORY_DATE_FILTER	"history-date-filter"
 
-/* Privacy */
-#define CONF_PRIVACY_REMEMBER_PASSWORDS "/apps/epiphany/general/remember_passwords"
+#define EPHY_PREFS_WEB_SCHEMA			"org.gnome.Epiphany.web"
+#define EPHY_PREFS_WEB_FONT_MIN_SIZE		"min-font-size"
+#define EPHY_PREFS_WEB_LANGUAGE			"language"
+#define EPHY_PREFS_WEB_USE_OWN_FONTS		"use-own-fonts"
+#define EPHY_PREFS_WEB_USE_OWN_COLORS		"use-own-colors"
+#define EPHY_PREFS_WEB_ENABLE_USER_CSS		"enable-user-css"
+#define EPHY_PREFS_WEB_ENABLE_POPUPS		"enable-popups"
+#define EPHY_PREFS_WEB_ENABLE_PLUGINS		"enable-plugins"
+#define EPHY_PREFS_WEB_ENABLE_JAVASCRIPT	"enable-javascript"
+#define EPHY_PREFS_WEB_COOKIES_POLICY		"cookies-policy"
+#define EPHY_PREFS_WEB_IMAGE_ANIMATION_MODE	"image-animation-mode"
+#define EPHY_PREFS_WEB_DEFAULT_ENCODING		"default-encoding"
+
+#define EPHY_PREFS_SCHEMA			"org.gnome.Epiphany"
+#define EPHY_PREFS_HOMEPAGE_URL			"homepage-url"
+#define EPHY_PREFS_USER_AGENT			"user-agent"
+#define EPHY_PREFS_CACHE_SIZE			"cache-size"
+#define EPHY_PREFS_NEW_WINDOWS_IN_TABS		"new-windows-in-tabs"
+#define EPHY_PREFS_AUTO_DOWNLOADS		"automatic-downloads"
+#define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA	"warn-on-close-unsubmitted-data"
+#define EPHY_PREFS_MIDDLE_CLICK_OPENS_URL	"middle-click-opens-url"
+#define EPHY_PREFS_REMEMBER_PASSWORDS		"remember-passwords"
+#define EPHY_PREFS_KEYWORD_SEARCH_URL		"keyword-search-url"
+#define EPHY_PREFS_MANAGED_NETWORK		"managed-network"
+#define EPHY_PREFS_ENABLE_SMOOTH_SCROLLING	"enable-smooth-scrolling"
+#define EPHY_PREFS_ENABLE_WEB_INSPECTOR		"enable-web-inspector"
+#define EPHY_PREFS_ENABLE_CARET_BROWSING	"enable-caret-browsing"
+#define EPHY_PREFS_ENABLED_EXTENSIONS		"enabled-extensions"
+
+#define EPHY_PREFS_LOCKDOWN_SCHEMA		"org.gnome.Epiphany.lockdown"
+#define EPHY_PREFS_LOCKDOWN_FULLSCREEN		"disable-fullscreen"
+#define EPHY_PREFS_LOCKDOWN_ARBITRARY_URL	"disable-arbitrary-url"
+#define EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING	"disable-bookmark-editing"
+#define EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING	"disable-toolbar-editing"
+#define EPHY_PREFS_LOCKDOWN_HISTORY		"disable-history"
+#define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK	"disable-save-to-disk"
+#define EPHY_PREFS_LOCKDOWN_PRINTING		"disable-printing"
+#define EPHY_PREFS_LOCKDOWN_PRINT_SETUP		"disable-print-setup"
+#define EPHY_PREFS_LOCKDOWN_COMMAND_LINE	"disable-command-line"
+#define EPHY_PREFS_LOCKDOWN_QUIT		"disable-quit"
+#define EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME	"disable-javascript-chrome"
+#define EPHY_PREFS_LOCKDOWN_MENUBAR		"disable-menubar"
 
 G_END_DECLS
 

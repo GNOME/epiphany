@@ -25,8 +25,8 @@
 #include "ephy-file-helpers.h"
 
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 
 #include <glib.h>
@@ -154,7 +154,8 @@ ephy_file_get_downloads_dir (void)
 {
 	char *download_dir, *expanded;
 
-	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
+					      EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
 	if (download_dir && strcmp (download_dir, _("Downloads")) == 0)
 	{

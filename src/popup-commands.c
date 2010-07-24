@@ -234,7 +234,7 @@ save_property_url (GtkAction *action,
 		(persist, EPHY_EMBED_PERSIST_FROM_CACHE |
 			  (ask_dest ? EPHY_EMBED_PERSIST_ASK_DESTINATION : 0));
 	ephy_embed_persist_set_persist_key
-		(persist, CONF_STATE_SAVE_DIR);
+		(persist, EPHY_PREFS_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
 	ephy_embed_persist_set_embed (persist, embed);
 

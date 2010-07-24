@@ -32,12 +32,11 @@
 
 #include "ephy-node-db.h"
 #include "ephy-shell.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "ephy-object-helpers.h"
 #include "ephy-debug.h"
-
-#include <gconf/gconf-client.h>
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 
 #include <gio/gio.h>
 #include <gmodule.h>
@@ -47,7 +46,6 @@
 #include "ephy-seed-loader.h"
 #endif
 
-#define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
 #define EE_GROUP		"Epiphany Extension"
 #define DOT_INI			".ephy-extension"
 #define RELOAD_DELAY		333 /* ms */
@@ -64,7 +62,6 @@ struct _EphyExtensionsManagerPrivate
 	GList *extensions;
 	GList *dir_monitors;
 	GList *windows;
-	guint active_extensions_notifier_id;
 	guint sync_timeout_id;
 	GHashTable *reload_hash;
 };
@@ -110,6 +107,48 @@ G_DEFINE_TYPE_WITH_CODE (EphyExtensionsManager, ephy_extensions_manager, G_TYPE_
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
 						ephy_extensions_manager_iface_init))
 
+static void
+ephy_extensions_manager_toggle_load (EphyExtensionsManager *manager,
+				     const char *identifier,
+				     gboolean status)
+{
+	char **exts;
+	GVariantBuilder builder;
+	gboolean dirty = FALSE;
+	int i;
+
+	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
+	g_return_if_fail (identifier != NULL);
+
+	if (status)
+		LOG ("Adding '%s' to extensions", identifier);
+	else
+		LOG ("Removing '%s' from extensions", identifier);
+
+	exts = g_settings_get_strv (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_ENABLED_EXTENSIONS);
+
+	g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
+	for (i = 0; exts[i]; i++)
+	{
+		if (g_strcmp0 (exts[i], identifier) == 0)
+		{
+			dirty = TRUE;
+			if (status)
+				break;
+			else
+				continue;
+		}
+
+		g_variant_builder_add (&builder, "s", exts[i]);
+	}
+
+	if (!dirty)
+		g_settings_set (EPHY_SETTINGS_MAIN,
+				EPHY_PREFS_ENABLED_EXTENSIONS,
+				"as", &builder);
+}
+
 /**
  * ephy_extensions_manager_load:
  * @manager: an #EphyExtensionsManager
@@ -121,24 +160,7 @@ void
 ephy_extensions_manager_load (EphyExtensionsManager *manager,
 			      const char *identifier)
 {
-	GSList *gconf_exts;
-
-	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
-	g_return_if_fail (identifier != NULL);
-
-	LOG ("Adding '%s' to extensions", identifier);
-
-	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
-
-	if (!g_slist_find_custom (gconf_exts, identifier, (GCompareFunc) strcmp))
-	{
-		gconf_exts = g_slist_prepend (gconf_exts, g_strdup (identifier));
-
-		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, gconf_exts);
-	}
-
-	g_slist_foreach (gconf_exts, (GFunc) g_free, NULL);
-	g_slist_free (gconf_exts);
+	ephy_extensions_manager_toggle_load (manager, identifier, TRUE);
 }
 
 /**
@@ -156,29 +178,7 @@ void
 ephy_extensions_manager_unload (EphyExtensionsManager *manager,
 				const char *identifier)
 {
-	GSList *gconf_exts;
-	GSList *l;
-
-	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
-	g_return_if_fail (identifier != NULL);
-
-	LOG ("Removing '%s' from extensions", identifier);
-
-	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
-
-	l = g_slist_find_custom (gconf_exts, identifier, (GCompareFunc) strcmp);
-
-	if (l != NULL)
-	{
-		gconf_exts = g_slist_remove_link (gconf_exts, l);
-		g_free (l->data);
-		g_slist_free_1 (l);
-
-		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, gconf_exts);
-	}
-
-	g_slist_foreach (gconf_exts, (GFunc) g_free, NULL);
-	g_slist_free (gconf_exts);
+	ephy_extensions_manager_toggle_load (manager, identifier, FALSE);
 }
 
 /**
@@ -629,50 +629,65 @@ unload_extension (EphyExtensionsManager *manager,
 static void
 sync_loaded_extensions (EphyExtensionsManager *manager)
 {
-	GConfClient *client;
-	GConfValue *value;
-	GSList *active_extensions = NULL;
+	char **extensions;
+	GVariantBuilder builder;
+	int i;
+	gboolean has_ui = FALSE;
 	GList *l;
-	gboolean active;
 	ExtensionInfo *info;
 
 	LOG ("Synching changed list of active extensions");
 
-	client = gconf_client_get_default ();
-	g_return_if_fail (client != NULL);
+	extensions = g_settings_get_strv (EPHY_SETTINGS_MAIN,
+					  EPHY_PREFS_ENABLED_EXTENSIONS);
 
-	value = gconf_client_get (client, CONF_LOADED_EXTENSIONS, NULL);
+	g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
 
-	/* make sure the extensions-manager-ui is loaded */
-	if (value == NULL ||
-	    value->type != GCONF_VALUE_LIST ||
-	    gconf_value_get_list_type (value) != GCONF_VALUE_STRING)
+	/* Make sure the extensions-manager-ui is always loaded. */
+	for (i = 0; extensions[i]; i++)
 	{
-		active_extensions = g_slist_prepend (active_extensions,
-						     g_strdup ("extensions-manager-ui"));
-		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, active_extensions);
+		if (!has_ui && g_strcmp0 (extensions[i],
+					  "extensions-manager-ui") == 0)
+			has_ui = TRUE;
+
+		g_variant_builder_add (&builder, "s", extensions[i]);
 	}
-	else
+
+	if (!has_ui)
 	{
-		active_extensions = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+		g_variant_builder_add (&builder, "s", "extensions-manager-ui");
+		g_settings_set (EPHY_SETTINGS_MAIN,
+				EPHY_PREFS_ENABLED_EXTENSIONS,
+				"as", &builder);
+
+		g_strfreev (extensions);
+		extensions = g_settings_get_strv
+					(EPHY_SETTINGS_MAIN,
+					 EPHY_PREFS_ENABLED_EXTENSIONS);
 	}
+
 
 	for (l = manager->priv->data; l != NULL; l = l->next)
 	{
 		gboolean changed;
+		gboolean active = FALSE;
+		int j;
 		
 		info = (ExtensionInfo *) l->data;
 
-		active = (g_slist_find_custom (active_extensions,
-					       info->info.identifier,
-					       (GCompareFunc) strcmp) != NULL);
+		for (j = 0; extensions[j]; j++)
+		{
+			if (!active && g_strcmp0 (extensions[j],
+						  info->info.identifier) == 0)
+				active = TRUE;
+		}
 
 		LOG ("Extension '%s' is %sactive and %sloaded",
 		     info->info.identifier,
 		     active ? "" : "not ",
 		     info->info.active ? "" : "not ");
 
-		changed = ( info->info.enabled != active );
+		changed = (info->info.enabled != active);
 
 		info->info.enabled = active;
 
@@ -699,14 +714,7 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 		}
 	}
 
-	g_slist_foreach (active_extensions, (GFunc) g_free, NULL);
-	g_slist_free (active_extensions);
-
-	if (value != NULL)
-	{
-		gconf_value_free (value);
-	}
-	g_object_unref (client);
+	g_strfreev (extensions);
 }
 
 static void
@@ -920,10 +928,9 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 }
 
 static void
-active_extensions_notifier (GConfClient *client,
-			    guint cnxn_id,
-			    GConfEntry *entry,
-			    EphyExtensionsManager *manager)
+active_extensions_cb (GSettings *settings,
+		      char *key,
+		      EphyExtensionsManager *manager)
 {
 	sync_loaded_extensions (manager);
 }
@@ -964,12 +971,12 @@ ephy_extensions_manager_startup (EphyExtensionsManager *manager)
 
 	ephy_extensions_manager_load_dir (manager, EXTENSIONS_DIR);
 
-	active_extensions_notifier (NULL, 0, NULL, manager);
-	manager->priv->active_extensions_notifier_id =
-		eel_gconf_notification_add
-			(CONF_LOADED_EXTENSIONS,
-			 (GConfClientNotifyFunc) active_extensions_notifier,
-			 manager);
+	sync_loaded_extensions (manager);
+
+	g_signal_connect (EPHY_SETTINGS_MAIN,
+			  "changed::" EPHY_PREFS_ENABLED_EXTENSIONS,
+			  G_CALLBACK (active_extensions_cb),
+			  manager);
 }
 
 static void
@@ -977,12 +984,6 @@ ephy_extensions_manager_dispose (GObject *object)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (object);
 	EphyExtensionsManagerPrivate *priv = manager->priv;
-
-	if (priv->active_extensions_notifier_id != 0)
-	{
-		eel_gconf_notification_remove (priv->active_extensions_notifier_id);
-		priv->active_extensions_notifier_id = 0;
-	}
 
 	if (priv->reload_hash != NULL)
 	{

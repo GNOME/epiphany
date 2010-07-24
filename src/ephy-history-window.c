@@ -39,12 +39,12 @@
 #include "ephy-search-entry.h"
 #include "ephy-session.h"
 #include "ephy-favicon-cache.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-node.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-gui.h"
 #include "ephy-time-helpers.h"
 
@@ -90,16 +90,11 @@ static void cmd_select_all		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
-static void cmd_view_columns		  (GtkAction *action,
-					   EphyHistoryWindow *view);
 static void search_entry_search_cb 	  (GtkWidget *entry,
 					   char *search_text,
 					   EphyHistoryWindow *editor);
 
 #define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
-
-#define CONF_HISTORY_DATE_FILTER "/apps/epiphany/dialogs/history_date_filter"
-#define CONF_HISTORY_VIEW_DETAILS "/apps/epiphany/dialogs/history_view_details"
 
 struct _EphyHistoryWindowPrivate
 {
@@ -126,21 +121,6 @@ enum
 	PROP_0,
 	PROP_HISTORY
 };
-
-enum
-{
-	TIME_LAST_HALF_HOUR,
-	TIME_TODAY,
-	TIME_LAST_TWO_DAYS,
-	TIME_LAST_THREE_DAYS,
-	TIME_EVER
-};
-
-#define TIME_LAST_HALF_HOUR_STRING "last_half_hour"
-#define TIME_EVER_STRING "ever"
-#define TIME_TODAY_STRING "today"
-#define TIME_LAST_TWO_DAYS_STRING "last_two_days"
-#define TIME_LAST_THREE_DAYS_STRING "last_three_days"
 
 static const GtkActionEntry ephy_history_ui_entries [] = {
 	/* Toplevel */
@@ -204,11 +184,11 @@ static const GtkToggleActionEntry ephy_history_toggle_entries [] =
 {
 	/* View Menu */
 	{ "ViewTitle", NULL, N_("_Title"), NULL,
-	  N_("Show the title column"), G_CALLBACK (cmd_view_columns), TRUE },
+	  N_("Show the title column"), NULL, TRUE },
 	{ "ViewAddress", NULL, N_("_Address"), NULL,
-	  N_("Show the address column"), G_CALLBACK (cmd_view_columns), TRUE },
+	  N_("Show the address column"), NULL, TRUE },
 	{ "ViewDateTime", NULL, N_("_Date and Time"), NULL,
-	  N_("Show the date and time column"), G_CALLBACK (cmd_view_columns), TRUE }
+	  N_("Show the date and time column"), NULL, TRUE }
 };
 
 static void
@@ -493,77 +473,6 @@ cmd_help_contents (GtkAction *action,
 	ephy_gui_help (GTK_WIDGET (editor), "ephy-managing-history");
 }
 
-static void
-set_column_visibility (EphyHistoryWindow *view,
-		       const char *action_name,
-		       gboolean active)
-{
-	if (strcmp (action_name, "ViewTitle") == 0)
-	{
-		gtk_tree_view_column_set_visible (view->priv->title_col, active);
-	}
-	if (strcmp (action_name, "ViewAddress") == 0)
-	{
-		gtk_tree_view_column_set_visible (view->priv->address_col, active);
-	}
-	if (strcmp (action_name, "ViewDateTime") == 0)
-	{
-		gtk_tree_view_column_set_visible (view->priv->datetime_col, active);
-	}
-}
-
-static void
-set_all_columns_visibility (EphyHistoryWindow *view,
-			    EphyHistoryWindowColumns details_value)
-{
-	GtkActionGroup *action_group;
-	GtkAction *action_title, *action_address, *action_datetime;
-
-	action_group = view->priv->action_group;
-	action_title = gtk_action_group_get_action (action_group, "ViewTitle");
-	action_address = gtk_action_group_get_action (action_group, "ViewAddress");
-	action_datetime = gtk_action_group_get_action (action_group, "ViewDateTime");
-	
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action_title), (details_value & VIEW_TITLE));
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action_address), (details_value & VIEW_ADDRESS));
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action_datetime), (details_value & VIEW_DATETIME));
-}
-
-static void
-cmd_view_columns (GtkAction *action,
-		  EphyHistoryWindow *view)
-{
-	gboolean active;
-	const char *action_name;
-	GSList *svalues = NULL;
-
-	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	action_name = gtk_action_get_name (action);
-	set_column_visibility (view, action_name, active);
-	
-	svalues = eel_gconf_get_string_list (CONF_HISTORY_VIEW_DETAILS);
-
-	if (active)
-	{
-		if (!g_slist_find_custom (svalues, (gpointer) action_name, (GCompareFunc) strcmp))
-		{
-			svalues = g_slist_append (svalues, (gpointer) action_name);
-		}
-	}
-	else
-	{
-		GSList *delete;
-		delete = g_slist_find_custom (svalues, (gpointer) action_name, (GCompareFunc) strcmp);
-		if (delete)
-		{
-			svalues = g_slist_delete_link (svalues, delete);
-		}
-	}
-
-	eel_gconf_set_string_list (CONF_HISTORY_VIEW_DETAILS, svalues);
-	g_slist_free (svalues);
-}
-
 G_DEFINE_TYPE (EphyHistoryWindow, ephy_history_window, GTK_TYPE_WINDOW)
 
 static void
@@ -719,7 +628,9 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
         delete = (pages_focus && pages_selection);
-	bookmarks_locked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
+	bookmarks_locked = g_settings_get_boolean
+				(EPHY_SETTINGS_LOCKDOWN,
+				 EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
 	bookmark_page = (pages_focus && single_page_selected) && !bookmarks_locked;
 
 	action_group = editor->priv->action_group;
@@ -853,7 +764,7 @@ add_by_date_filter (EphyHistoryWindow *editor,
 		(GTK_COMBO_BOX (editor->priv->time_combo));
 
 	/* no need to setup a new filter */
-	if (time_range == TIME_EVER) return;
+	if (time_range == EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER) return;
 
 	now = time (NULL);
 	if (localtime_r (&now, &btime) == NULL) return;
@@ -866,16 +777,18 @@ add_by_date_filter (EphyHistoryWindow *editor,
 
 	switch (time_range)
 	{
-		case TIME_LAST_HALF_HOUR:
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_HALF_HOUR:
 			cmp_time = now - 30 * 60;
 			break;
-		case TIME_LAST_THREE_DAYS:
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_TODAY:
+			cmp_time = midnight;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TWO_DAYS:
 			days++;
-			/* fall-through */
-		case TIME_LAST_TWO_DAYS:
+			cmp_time = midnight;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_THREE_DAYS:
 			days++;
-			/* fall-through */
-		case TIME_TODAY:
 			cmp_time = midnight;
 			break;
 		default:
@@ -1019,7 +932,6 @@ build_search_box (EphyHistoryWindow *editor)
 	GtkWidget *box, *label, *entry;
 	GtkWidget *combo;
 	char *str;
-	int time_range;
 
 	box = gtk_hbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
@@ -1045,42 +957,25 @@ build_search_box (EphyHistoryWindow *editor)
 
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Last 30 minutes"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Today"));
+
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
+
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 3), 3);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
-	/* keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS */
+
+	/* keep this in sync with embed/ephy-history.c's
+	 * HISTORY_PAGE_OBSOLETE_DAYS */
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 10), 10);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
 
-	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);
-	if (str && strcmp (TIME_LAST_HALF_HOUR_STRING, str) == 0)
-	{
-		time_range = TIME_LAST_HALF_HOUR;
-	}
-	if (str && strcmp (TIME_TODAY_STRING, str) == 0)
-	{
-		time_range = TIME_TODAY;
-	}
-	else if (str && strcmp (TIME_LAST_TWO_DAYS_STRING, str) == 0)
-	{
-		time_range = TIME_LAST_TWO_DAYS;
-	}
-	else if (str && strcmp (TIME_LAST_THREE_DAYS_STRING, str) == 0)
-	{
-		time_range = TIME_LAST_THREE_DAYS;
-	}
-	else
-	{
-		time_range = TIME_EVER;
-	}
-	g_free (str);
-
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo),
-				  time_range);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_DATE_FILTER,
+			 combo, "active",
+			 G_SETTINGS_BIND_DEFAULT);
 
 	editor->priv->time_combo = combo;
 
@@ -1184,40 +1079,6 @@ view_selection_changed_cb (GtkWidget *view, EphyHistoryWindow *editor)
 	ephy_history_window_update_menu (editor);
 }
 
-static EphyHistoryWindowColumns
-get_details_value (void)
-{
-	guint value = 0;
-	GSList *svalues;
-
-	svalues = eel_gconf_get_string_list (CONF_HISTORY_VIEW_DETAILS);
-	if (svalues == NULL) 
-	{
-		svalues = g_slist_append (svalues, (gpointer) "ViewAddress");
-		svalues = g_slist_append (svalues, (gpointer) "ViewTitle");
-		eel_gconf_set_string_list (CONF_HISTORY_VIEW_DETAILS, svalues);
-		return (VIEW_ADDRESS | VIEW_TITLE);
-	}
-
-	if (g_slist_find_custom (svalues, "ViewTitle", (GCompareFunc)strcmp))
-	{
-		value |= VIEW_TITLE;
-	}
-	if (g_slist_find_custom (svalues, "ViewAddress", (GCompareFunc)strcmp))
-	{
-		value |= VIEW_ADDRESS;
-	}
-	if (g_slist_find_custom (svalues, "ViewDateTime", (GCompareFunc)strcmp))
-	{
-		value |= VIEW_DATETIME;
-	}
-
-	g_slist_foreach (svalues, (GFunc) g_free, NULL);
-	g_slist_free (svalues);
-
-	return value;
-}
-
 static void
 ephy_history_window_construct (EphyHistoryWindow *editor)
 {
@@ -1229,8 +1090,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
+	GtkAction *action;
 	int url_col_id, title_col_id, datetime_col_id;
-	EphyHistoryWindowColumns details_value;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
@@ -1253,7 +1114,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
 				      G_N_ELEMENTS (ephy_history_ui_entries), editor);
 
-	details_value = get_details_value ();
 	gtk_action_group_add_toggle_actions (action_group,
 					     ephy_history_toggle_entries,
 					     G_N_ELEMENTS (ephy_history_toggle_entries),
@@ -1391,6 +1251,36 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_widget_show (pages_view);
 	editor->priv->pages_view = pages_view;
 
+	action = gtk_action_group_get_action (action_group, "ViewTitle");
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_TITLE,
+			 action, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_TITLE,
+			 editor->priv->title_col, "visible",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	action = gtk_action_group_get_action (action_group, "ViewAddress");
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_ADDRESS,
+			 action, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_ADDRESS,
+			 editor->priv->address_col, "visible",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	action = gtk_action_group_get_action (action_group, "ViewDateTime");
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_DATE,
+			 action, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_HISTORY_VIEW_DATE,
+			 editor->priv->datetime_col, "visible",
+			 G_SETTINGS_BIND_DEFAULT);
+
 	g_signal_connect (G_OBJECT (pages_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_history_window_node_activated_cb),
@@ -1420,7 +1310,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			       "history_paned",
 		               130);
 
-	set_all_columns_visibility (editor, details_value);
 	setup_filters (editor, TRUE, TRUE);
 }
 
@@ -1508,37 +1397,6 @@ ephy_history_window_init (EphyHistoryWindow *editor)
 }
 
 static void
-save_date_filter (EphyHistoryWindow *editor)
-{
-	const char *time_string = NULL;
-	int time_range;
-
-	time_range = gtk_combo_box_get_active
-		(GTK_COMBO_BOX (editor->priv->time_combo));
-
-	switch (time_range)
-	{
-		case TIME_LAST_HALF_HOUR:
-			time_string = TIME_LAST_HALF_HOUR_STRING;
-			break;
-		case TIME_EVER:
-			time_string = TIME_EVER_STRING;
-			break;
-		case TIME_TODAY:
-			time_string = TIME_TODAY_STRING;
-			break;
-		case TIME_LAST_TWO_DAYS:
-			time_string = TIME_LAST_TWO_DAYS_STRING;
-			break;
-		case TIME_LAST_THREE_DAYS:
-			time_string = TIME_LAST_THREE_DAYS_STRING;
-			break;
-	}
-
-	eel_gconf_set_string (CONF_HISTORY_DATE_FILTER, time_string);
-}
-
-static void
 ephy_history_window_dispose (GObject *object)
 {
 	EphyHistoryWindow *editor;
@@ -1555,8 +1413,6 @@ ephy_history_window_dispose (GObject *object)
 		remove_focus_monitor (editor, editor->priv->search_entry);
 
 		editor->priv->sites_view = NULL;
-
-		save_date_filter (editor);
 	}
 
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);

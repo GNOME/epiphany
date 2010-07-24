@@ -34,6 +34,7 @@
 #include "ephy-node-view.h"
 #include "ephy-window.h"
 #include "ephy-dnd.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-session.h"
 #include "ephy-file-helpers.h"
@@ -45,7 +46,6 @@
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
 #include "ephy-favicon-cache.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 #include "egg-toolbars-model.h"
 #include "ephy-prefs.h"
@@ -125,8 +125,6 @@ static void cmd_help_contents		  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 
 #define EPHY_BOOKMARKS_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditorPrivate))
-
-#define CONF_BOOKMARKS_VIEW_DETAILS "/apps/epiphany/dialogs/bookmarks_view_details"
 
 #define RESERVED_STRING N_("Remove from this topic")
 
@@ -216,22 +214,11 @@ static const GtkToggleActionEntry ephy_bookmark_toggle_entries [] = {
 	{ "ShowOnToolbar", NULL, N_("_Show on Toolbar"), NULL,
 	  N_("Show the selected bookmark on a toolbar"), 
 	  G_CALLBACK (cmd_toolbar), FALSE },
-};
-
-enum
-{
-	VIEW_TITLE,
-	VIEW_TITLE_AND_ADDRESS
-};
-
-static const GtkRadioActionEntry ephy_bookmark_radio_entries [] =
-{
 	/* View Menu */
 	{ "ViewTitle", NULL, N_("_Title"), NULL,
-	  N_("Show only the title column"), VIEW_TITLE },
-	{ "ViewTitleAddress", NULL, N_("T_itle and Address"), NULL,
-	  N_("Show both the title and address columns"),
-	  VIEW_TITLE_AND_ADDRESS } 
+	  N_("Show the title column"), NULL, TRUE },
+	{ "ViewAddress", NULL, N_("Address"), NULL,
+	  N_("Show the address column"), NULL, FALSE }
 };
 
 G_DEFINE_TYPE (EphyBookmarksEditor, ephy_bookmarks_editor, GTK_TYPE_WINDOW)
@@ -1117,50 +1104,6 @@ cmd_help_contents (GtkAction *action,
 }
 
 static void
-set_columns_visibility (EphyBookmarksEditor *editor, int value)
-{
-	switch (value)
-	{
-		case VIEW_TITLE:
-			gtk_tree_view_column_set_visible (editor->priv->title_col, TRUE);
-			gtk_tree_view_column_set_visible (editor->priv->address_col, FALSE);
-			break;
-		case VIEW_TITLE_AND_ADDRESS:
-			gtk_tree_view_column_set_visible (editor->priv->title_col, TRUE);
-			gtk_tree_view_column_set_visible (editor->priv->address_col, TRUE);
-			break;
-	}
-}
-
-static void
-cmd_view_columns (GtkAction *action,
-		  GtkRadioAction *current,
-		  EphyBookmarksEditor *editor)
-{
-	int value;
-	GSList *svalues = NULL;
-
-	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (editor));
-
-	value = gtk_radio_action_get_current_value (current);
-	set_columns_visibility (editor, value);
-
-	switch (value)
-	{
-		case VIEW_TITLE:
-			svalues = g_slist_append (svalues, (gpointer)"title");
-			break;
-		case VIEW_TITLE_AND_ADDRESS:
-			svalues = g_slist_append (svalues, (gpointer)"title");
-			svalues = g_slist_append (svalues, (gpointer)"address");
-			break;
-	}
-
-	eel_gconf_set_string_list (CONF_BOOKMARKS_VIEW_DETAILS, svalues);
-	g_slist_free (svalues);
-}
-
-static void
 ephy_bookmarks_editor_show (GtkWidget *widget)
 {
 	EphyBookmarksEditor *editor = EPHY_BOOKMARKS_EDITOR (widget);
@@ -1699,31 +1642,6 @@ provide_keyword_uri (EphyNode *node, GValue *value, gpointer data)
 	g_free (uri);
 }
 
-static int
-get_details_value (EphyBookmarksEditor *editor)
-{
-	int value;
-	GSList *svalues;
-
-	svalues = eel_gconf_get_string_list (CONF_BOOKMARKS_VIEW_DETAILS);
-
-	if (svalues &&
-	    g_slist_find_custom (svalues, "title", (GCompareFunc)strcmp) &&
-	    g_slist_find_custom (svalues, "address", (GCompareFunc)strcmp))
-	{
-		value = VIEW_TITLE_AND_ADDRESS;
-	}
-	else
-	{
-		value = VIEW_TITLE;
-	}
-
-	g_slist_foreach (svalues, (GFunc) g_free, NULL);
-	g_slist_free (svalues);
-
-	return value;
-}
-
 static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
@@ -1735,7 +1653,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	int col_id, url_col_id, title_col_id, details_value;
+	int col_id, url_col_id, title_col_id;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
@@ -1758,13 +1676,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_action_group_add_toggle_actions (action_group, ephy_bookmark_toggle_entries,
 					     G_N_ELEMENTS (ephy_bookmark_toggle_entries), editor);
 
-	details_value = get_details_value (editor);
-	gtk_action_group_add_radio_actions (action_group,
-					    ephy_bookmark_radio_entries,
-					    G_N_ELEMENTS (ephy_bookmark_radio_entries),
-					    details_value,
-					    G_CALLBACK (cmd_view_columns), 
-					    editor);
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
@@ -1901,6 +1812,27 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
+
+	action = gtk_action_group_get_action (action_group, "ViewTitle");
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_BOOKMARKS_VIEW_TITLE,
+			 action, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_BOOKMARKS_VIEW_TITLE,
+			 editor->priv->title_col, "visible",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	action = gtk_action_group_get_action (action_group, "ViewAddress");
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_BOOKMARKS_VIEW_ADDRESS,
+			 action, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (EPHY_SETTINGS_STATE,
+			 EPHY_PREFS_STATE_BOOKMARKS_VIEW_ADDRESS,
+			 editor->priv->address_col, "visible",
+			 G_SETTINGS_BIND_DEFAULT);
+
 	g_signal_connect (G_OBJECT (bm_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
@@ -1931,12 +1863,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			       "bookmarks_paned",
 			       130);
 
-	set_columns_visibility (editor, details_value);
-
 	/* Lockdown settings */
 	action = gtk_action_group_get_action (action_group, "Export");
 	gtk_action_set_sensitive (action,
-				  eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK) == FALSE);
+				  g_settings_get_boolean
+				   (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK) == FALSE);
 }
 
 void

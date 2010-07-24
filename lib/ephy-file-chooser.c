@@ -22,10 +22,10 @@
 
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-settings.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 
@@ -64,7 +64,8 @@ current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
 
 		dir = gtk_file_chooser_get_current_folder (chooser);
 
-		eel_gconf_set_path (dialog->priv->persist_key, dir);
+		g_settings_set_string (EPHY_SETTINGS_STATE,
+				       dialog->priv->persist_key, dir);
 
 		g_free (dir);
 	}
@@ -86,7 +87,10 @@ file_chooser_response_cb (GtkWidget *widget,
 
 			dir = g_path_get_dirname (filename);
                         if (dir != NULL)
-        			eel_gconf_set_path (dialog->priv->persist_key, dir);
+				g_settings_set_string
+					(EPHY_SETTINGS_STATE,
+					 dialog->priv->persist_key,
+					 dir);
 
 			g_free (dir);
 			g_free (filename);
@@ -143,7 +147,7 @@ ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 
 	dialog->priv->persist_key = g_strdup (key);
 
-	dir = eel_gconf_get_string (key);
+	dir = g_settings_get_string (EPHY_SETTINGS_STATE, key);
 	if (dir != NULL)
 	{
 		/* FIXME: Maybe we will find a better way to do this when the

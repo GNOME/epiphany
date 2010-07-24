@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include "eel-gconf-extensions.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-menu.h"
@@ -36,6 +35,7 @@
 #include "ephy-node-common.h"
 #include "ephy-link.h"
 #include "ephy-dnd.h"
+#include "ephy-embed-shell.h"
 #include "ephy-history.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -44,6 +44,7 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "egg-editable-toolbar.h"
 
 #include <string.h>
@@ -434,7 +435,9 @@ ephy_bookmarks_ui_add_bookmark (GtkWindow *parent,
 	EphyNode *bookmark;
 	GtkWidget *dialog;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+		return;
 	
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	bookmark = ephy_bookmarks_add (bookmarks, title, location);

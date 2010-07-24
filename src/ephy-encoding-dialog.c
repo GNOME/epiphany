@@ -39,25 +39,6 @@
 #include <string.h>
 #include <webkit/webkit.h>
 
-enum
-{
-	WINDOW_PROP,
-	SCROLLED_WINDOW_PROP,
-	AUTOMATIC_PROP,
-	MANUAL_PROP
-};
-
-static const
-EphyDialogProperty properties [] =
-{
-	{ "encoding_dialog",	NULL, PT_NORMAL, 0 },
-	{ "scrolled_window",	NULL, PT_NORMAL, 0 },
-	{ "automatic_button",	NULL, PT_NORMAL, 0 },
-	{ "manual_button",	NULL, PT_NORMAL, 0 },
-
-	{ NULL }
-};
-
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
 
 struct _EphyEncodingDialogPrivate
@@ -127,7 +108,8 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 		g_list_free (rows);
 	}
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  "automatic_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
 
 	dialog->priv->update_tag = FALSE;
@@ -206,7 +188,8 @@ activate_choice (EphyEncodingDialog *dialog)
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  "automatic_button");
 	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -253,7 +236,7 @@ view_node_selected_cb (EphyNodeView *view,
 
 	if (dialog->priv->update_tag) return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
 	activate_choice (dialog);
@@ -270,7 +253,7 @@ view_node_activated_cb (GtkWidget *view,
 
 	if (dialog->priv->update_tag) return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
 	activate_choice (dialog);
@@ -302,12 +285,12 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 				(EPHY_EMBED_SHELL (ephy_shell)));
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
-			       properties,
 			       ephy_file ("epiphany.ui"),
 			       "encoding_dialog",
 			       NULL);
 
-	window = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[WINDOW_PROP].id);
+	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  "encoding_dialog");
 	g_signal_connect (window, "response",
 			  G_CALLBACK (ephy_encoding_dialog_response_cb), dialog);
 
@@ -341,17 +324,18 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	gtk_widget_show (treeview);
 
-	scroller = ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), properties[SCROLLED_WINDOW_PROP].id);
+	scroller = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					    "scrolled_window");
 	gtk_container_add (GTK_CONTAINER (scroller), treeview);
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  "automatic_button");
 	child = gtk_bin_get_child (GTK_BIN (button));
 	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
 	g_signal_connect (button, "toggled",
 			  G_CALLBACK (automatic_toggled_cb), dialog);
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
 	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
 
 	dialog->priv->enc_view = treeview;

@@ -29,7 +29,6 @@
 #include <webkit/webkit.h>
 #include <gnome-keyring.h>
 
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
@@ -45,6 +44,7 @@
 #include "ephy-profile-migration.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
@@ -345,8 +345,8 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
       break;
     case EPHY_PERMISSION_DEFAULT:
     default:
-      allow = eel_gconf_get_boolean
-              (CONF_SECURITY_ALLOW_POPUPS);
+      allow = g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                      EPHY_PREFS_WEB_ENABLE_POPUPS);
       break;
   }
 
@@ -1990,7 +1990,8 @@ load_status_cb (WebKitWebView *web_view,
       g_object_notify (object, "embed-title");
 
     if (ephy_has_private_profile () == FALSE &&
-        eel_gconf_get_boolean (CONF_PRIVACY_REMEMBER_PASSWORDS))
+        g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);
 
     _ephy_web_view_hook_into_links (view);
@@ -2220,7 +2221,8 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
       !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
     char *query_param, *url_search;
 
-    url_search = eel_gconf_get_string (CONF_URL_SEARCH);
+    url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
+                                        EPHY_PREFS_KEYWORD_SEARCH_URL);
 
     if (url_search == NULL || url_search[0] == '\0') {
       g_free (url_search);
@@ -3561,7 +3563,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   g_signal_emit_by_name (view, "loading-homepage");
 
-  home = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
+  home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
 
   if (home == NULL || home[0] == '\0')
   {

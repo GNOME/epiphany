@@ -23,7 +23,7 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
+#include "ephy-settings.h"
 #include "eggtypebuiltins.h"
 #include "ephy-debug.h"
 
@@ -39,7 +39,6 @@ struct _EphyToolbarsModelPrivate
 	char *xml_file;
 	EggTbModelFlags style;
 	guint timeout;
-	guint style_notifier_id;
 };
 
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
@@ -118,7 +117,8 @@ get_toolbar_style (void)
 	EggTbModelFlags flags = 0;
 	char *pref;
 
-	pref = eel_gconf_get_string (CONF_INTERFACE_TOOLBAR_STYLE);
+	pref = g_settings_get_string (EPHY_SETTINGS_UI,
+				      EPHY_PREFS_UI_TOOLBAR_STYLE);
 	if (pref != NULL)
 	{
 		flags_class = g_type_class_ref (EGG_TYPE_TB_MODEL_FLAGS);
@@ -137,10 +137,9 @@ get_toolbar_style (void)
 }
 
 static void
-toolbar_style_notifier (GConfClient *client,
-			guint cnxn_id,
-			GConfEntry *entry,
-			EphyToolbarsModel *model)
+toolbar_style_changed_cb (GSettings *settings,
+			  char *key,
+			  EphyToolbarsModel *model)
 {
 	model->priv->style = get_toolbar_style ();
 
@@ -233,9 +232,9 @@ ephy_toolbars_model_init (EphyToolbarsModel *model)
 					   NULL);
 
 	priv->style = get_toolbar_style ();
-	priv->style_notifier_id = eel_gconf_notification_add
-		(CONF_INTERFACE_TOOLBAR_STYLE,
-		 (GConfClientNotifyFunc) toolbar_style_notifier, model);
+	g_signal_connect (EPHY_SETTINGS_UI,
+			  "changed::" EPHY_PREFS_UI_TOOLBAR_STYLE,
+			  G_CALLBACK (toolbar_style_changed_cb), model);
 	
 	g_signal_connect_after (model, "item_added",
 				G_CALLBACK (save_changes), NULL);
@@ -262,11 +261,6 @@ ephy_toolbars_model_finalize (GObject *object)
 {
 	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (object);
 	EphyToolbarsModelPrivate *priv = model->priv;
-
-	if (priv->style_notifier_id != 0)
-	{
-		eel_gconf_notification_remove (priv->style_notifier_id);
-	}
 
 	if (priv->timeout != 0)
 	{

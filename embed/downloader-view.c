@@ -28,7 +28,7 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
+#include "ephy-settings.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -72,25 +72,6 @@ struct _DownloaderViewPrivate
 	gboolean ownref;
 
 	guint source_id;
-};
-
-enum
-{
-	PROP_WINDOW,
-	PROP_TREEVIEW,
-	PROP_PAUSE_BUTTON,
-	PROP_ABORT_BUTTON,
-};
-
-static const
-EphyDialogProperty properties [] =
-{
-	{ "download_manager_dialog",	NULL, PT_NORMAL, 0 },
-	{ "clist",			NULL, PT_NORMAL, 0 },
-	{ "pause_button",		NULL, PT_NORMAL, 0 },
-	{ "abort_button",		NULL, PT_NORMAL, 0 },
-
-	{ NULL }
 };
 
 enum
@@ -146,12 +127,14 @@ show_downloader_cb (DownloaderView *dv)
 	if (!gtk_window_has_toplevel_focus (GTK_WINDOW (dv->priv->window)))
 	{
 		ephy_dialog_show (EPHY_DIALOG (dv));
-		eel_gconf_set_boolean (CONF_DOWNLOADS_HIDDEN, FALSE);
+		g_settings_set_boolean (EPHY_SETTINGS_UI,
+					EPHY_PREFS_UI_DOWNLOADS_HIDDEN, FALSE);
 	}
 	else
 	{
 		ephy_dialog_hide (EPHY_DIALOG (dv));
-		eel_gconf_set_boolean (CONF_DOWNLOADS_HIDDEN, TRUE);
+		g_settings_set_boolean (EPHY_SETTINGS_UI,
+					EPHY_PREFS_UI_DOWNLOADS_HIDDEN, TRUE);
 	}
 }
 
@@ -752,7 +735,8 @@ downloader_view_add_download (DownloaderView *dv,
 		return;
 	}
 	
-	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !visible)
+	if (g_settings_get_boolean (EPHY_SETTINGS_UI,
+				    EPHY_PREFS_UI_DOWNLOADS_HIDDEN) && !visible)
 	{
 #ifdef HAVE_LIBNOTIFY
 		char *name;
@@ -864,19 +848,17 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkTreeSelection *selection;
 
 	ephy_dialog_construct (d,
-			       properties,
 			       ephy_file ("epiphany.ui"),
 			       "download_manager_dialog",
 			       NULL);
 
 	/* lookup needed widgets */
-	ephy_dialog_get_controls
-		(d,
-		 properties[PROP_WINDOW].id, &priv->window,
-		 properties[PROP_TREEVIEW].id, &priv->treeview,
-		 properties[PROP_PAUSE_BUTTON].id, &priv->pause_button,
-		 properties[PROP_ABORT_BUTTON].id, &priv->abort_button,
-		 NULL);
+	ephy_dialog_get_controls (d,
+				  "download_manager_dialog", &priv->window,
+				  "clist", &priv->treeview,
+				  "pause_button", &priv->pause_button,
+				  "abort_button", &priv->abort_button,
+				  NULL);
 
 	g_signal_connect (priv->window, "response",
 			  G_CALLBACK (download_dialog_response_cb), dv);

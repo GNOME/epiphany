@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000, 2001, 2002, 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
+ *  Copyright © 2010 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,49 +22,25 @@
 
 #include "config.h"
 
+#include "ephy-action-helper.h"
 #include "ephy-embed-container.h"
+#include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-lockdown.h"
 #include "ephy-extension.h"
-#include "ephy-action-helper.h"
+#include "ephy-settings.h"
 #include "ephy-toolbar.h"
 #include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>
 
 #include <string.h>
 
+#define LOCKDOWN_FLAG 1 << 8
+
 static void ephy_lockdown_iface_init (EphyExtensionIface *iface);
-
-/* Make sure these don't overlap with those in ephy-window.c and ephy-toolbar.c */
-enum
-{
-	LOCKDOWN_FLAG = 1 << 31
-};
-
-static const char * const keys [] =
-{
-	CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
-	CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
-	CONF_LOCKDOWN_DISABLE_COMMAND_LINE,
-	CONF_LOCKDOWN_DISABLE_HISTORY,
-	CONF_LOCKDOWN_DISABLE_PRINTING,
-	CONF_LOCKDOWN_DISABLE_PRINT_SETUP,
-	CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
-	CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING,
-	CONF_LOCKDOWN_FULLSCREEN
-};
-
-#define EPHY_LOCKDOWN_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCKDOWN, EphyLockdownPrivate))
-
-struct _EphyLockdownPrivate
-{
-	guint notifier_id[G_N_ELEMENTS (keys)];
-	GList *windows;
-};
 
 static int
 find_name (GtkActionGroup *action_group,
@@ -86,171 +63,213 @@ find_action_group (GtkUIManager *manager,
 }
 
 static void
-update_location_editable (EphyWindow *window,
-			  GtkAction *action,
-			  gboolean editable)
+arbitrary_url_cb (GSettings *settings,
+		  char *key,
+		  EphyWindow *window)
 {
 	EphyEmbed *embed;
 	GtkWidget *toolbar;
 	char *address;
 
-	g_object_set (action, "editable", editable, NULL);
-
 	/* Restore the real web page address when disabling entry */
-	if (editable == FALSE)
+	if (g_settings_get_boolean (settings, key))
 	{
-		toolbar = ephy_window_get_toolbar (window);
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		/* embed is NULL on startup */
-		if (embed != NULL)
+		if (embed == NULL)
+			return;
+
+		toolbar = ephy_window_get_toolbar (window);
+		address = ephy_web_view_get_location (ephy_embed_get_web_view (embed), TRUE);
+		ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address);
+		ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), NULL);
+		g_free (address);
+	}
+}
+
+static void
+fullscreen_cb (GSettings *settings,
+	       char *key,
+	       EphyWindow *window)
+{
+	if (g_settings_get_boolean (settings, key))
+		gtk_window_fullscreen (GTK_WINDOW (window));
+	else
+		gtk_window_unfullscreen (GTK_WINDOW (window));
+}
+
+typedef struct {
+	char *key;
+	char *action;
+	char *prop;
+} BindAction;
+
+static const BindAction window_actions[] = {
+	{ EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrint", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrintPreview", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrintSetup", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_PRINT_SETUP, "FilePrintSetup", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_COMMAND_LINE, "FilePrintSetup", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "ViewToolbarEditor", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "GoBookmarks", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "FileSaveAs", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_HISTORY, "GoHistory", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" }
+};
+
+static const BindAction popup_actions[] = {
+	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLink", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLinkAs", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "SaveImageAs", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "OpenImage", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "BookmarkLink", "sensitive" }
+};
+
+static const BindAction special_toolbar_actions[] = {
+	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "Location", "editable" },
+	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "NavigationUp", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "visible" },
+	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "visible" },
+	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "sensitive" },
+
+	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" }
+};
+
+static const BindAction toolbar_actions[] = {
+	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "MoveToolItem", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "RemoveToolItem", "sensitive" },
+	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "RemoveToolbar", "sensitive" }
+};
+
+static gboolean
+sensitive_get_mapping (GValue *value,
+		       GVariant *variant,
+		       gpointer data)
+{
+	GtkAction *action;
+	gboolean active, before, after;
+
+	action = GTK_ACTION (data);
+	active = g_variant_get_boolean (variant);
+
+	before = gtk_action_get_sensitive (action);
+	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, active);
+	after = gtk_action_get_sensitive (action);
+
+	/* Set (GtkAction::sensitive) to the value in GSettings _only if_
+	 * the LOCKDOWN_FLAG had some real effect in the GtkAction */
+	g_value_set_boolean (value, (before != after) ? after : before);
+
+	return TRUE;
+}
+
+static void
+bind_settings_and_actions (GSettings *settings,
+			   GtkActionGroup *action_group,
+			   const BindAction *actions,
+			   int actions_n)
+{
+	int i;
+
+	for (i = 0; i < actions_n; i++)
+	{
+		GtkAction *action;
+
+		action = gtk_action_group_get_action (action_group,
+						      actions[i].action);
+
+		if (g_strcmp0 (actions[i].prop, "visible") == 0)
 		{
-			address = ephy_web_view_get_location (ephy_embed_get_web_view (embed), TRUE);
-			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address);
-			ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), NULL);
-			g_free (address);
+			g_settings_bind (settings, actions[i].key,
+					 action, actions[i].prop,
+					 G_SETTINGS_BIND_GET |
+					 G_SETTINGS_BIND_INVERT_BOOLEAN);
+		}
+		else
+		{
+			/* We need a custom get_mapping for 'sensitive'
+			 * properties, see usage of
+			 * ephy_action_change_sensitivity_flags in
+			 * ephy-window.c. */
+			g_settings_bind_with_mapping (settings, actions[i].key,
+						      action, actions[i].prop,
+						      G_SETTINGS_BIND_GET,
+						      sensitive_get_mapping,
+						      NULL,
+						      action, NULL);
 		}
 	}
 }
 
-/* NOTE: If you bring more actions under lockdown control, make sure
- * that all sensitivity updates on them are done using the helpers!
- */
 static void
-update_window (EphyWindow *window,
-	       EphyLockdown *lockdown)
+impl_attach_window (EphyExtension *extension,
+		    EphyWindow *window)
 {
 	GtkUIManager *manager;
-	GtkActionGroup *action_group, *popups_action_group;
-	GtkActionGroup *toolbar_action_group, *special_toolbar_action_group;
+	GtkActionGroup *action_group;
 	GtkAction *action;
-	gboolean disabled, fullscreen, print_setup_disabled, writable;
+	GSettings *settings;
 
-	LOG ("Updating window %p", window);
+	g_signal_connect (EPHY_SETTINGS_LOCKDOWN,
+			  "changed::" EPHY_PREFS_LOCKDOWN_FULLSCREEN,
+			  G_CALLBACK (fullscreen_cb), window);
+	g_signal_connect (EPHY_SETTINGS_LOCKDOWN,
+			  "changed::" EPHY_PREFS_LOCKDOWN_ARBITRARY_URL,
+			  G_CALLBACK (arbitrary_url_cb), window);
+
+	/* Trigger an initial state on these elements. */
+	fullscreen_cb (EPHY_SETTINGS_LOCKDOWN,
+		       EPHY_PREFS_LOCKDOWN_FULLSCREEN, window);
+	arbitrary_url_cb (EPHY_SETTINGS_LOCKDOWN,
+			  EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, window);
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+
 	action_group = find_action_group (manager, "WindowActions");
-	popups_action_group = find_action_group (manager, "PopupsActions");
-	toolbar_action_group = find_action_group (manager, "ToolbarActions");
-	special_toolbar_action_group = find_action_group (manager, "SpecialToolbarActions");
-	g_return_if_fail (action_group != NULL
-			  && popups_action_group != NULL
-			  && toolbar_action_group != NULL
-			  && special_toolbar_action_group != NULL);
+	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+				   action_group, window_actions,
+				   G_N_ELEMENTS (window_actions));
 
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
-	print_setup_disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
-			       eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
-	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled || print_setup_disabled);
-	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (action_group, "FilePrint");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-
-	writable = eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS);
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, !writable);
+	g_settings_bind_writable (EPHY_SETTINGS_UI,
+				  EPHY_PREFS_UI_SHOW_TOOLBARS,
+				  action, "sensitive", FALSE);
 
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
-	action = gtk_action_group_get_action (action_group, "GoLocation");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (special_toolbar_action_group, "Location");
-	update_location_editable (window, action, !disabled);
-	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationUp");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action_group = find_action_group (manager, "PopupsActions");
+	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+				   action_group, popup_actions,
+				   G_N_ELEMENTS (popup_actions));
 
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY);
-	action = gtk_action_group_get_action (action_group, "GoHistory");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationBack");
-	gtk_action_set_visible (action, !disabled);
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationForward");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	gtk_action_set_visible (action, !disabled);
+	action = gtk_action_group_get_action (action_group,
+					      "SetImageAsBackground");
+	settings = ephy_settings_get ("org.gnome.desktop.background");
+	g_settings_bind_writable (settings, "picture-filename",
+				  action, "sensitive", FALSE);
 
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
-	action = gtk_action_group_get_action (action_group, "GoBookmarks");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action_group = find_action_group (manager, "SpecialToolbarActions");
+	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+				   action_group, special_toolbar_actions,
+				   G_N_ELEMENTS (special_toolbar_actions));
 
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
-	action = gtk_action_group_get_action (action_group, "FileSaveAs");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "DownloadLinkAs");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "OpenImage");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	writable = eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE);
-	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled || !writable);
-
-	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING);
-	action = gtk_action_group_get_action (action_group, "ViewToolbarEditor");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "MoveToolItem");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "RemoveToolItem");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "RemoveToolbar");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-
-	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
-	action = gtk_action_group_get_action (special_toolbar_action_group, "FileNewWindow");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
-	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
-
-	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
-
-	if (fullscreen)
-	{
-		gtk_window_fullscreen (GTK_WINDOW (window));
-	}
-}
-
-static void
-notifier (GConfClient *client,
-	  guint cnxn_id,
-	  GConfEntry *entry,
-	  EphyLockdown *lockdown)
-{
-	EphyLockdownPrivate *priv = lockdown->priv;
-
-	LOG ("Key %s changed", entry->key);
-
-	g_list_foreach (priv->windows, (GFunc) update_window, lockdown);
+	action_group = find_action_group (manager, "ToolbarActions");
+	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+				   action_group, toolbar_actions,
+				   G_N_ELEMENTS (toolbar_actions));
 }
 
 static void
 ephy_lockdown_init (EphyLockdown *lockdown)
 {
-	EphyLockdownPrivate *priv;
-	guint i;
-
-	lockdown->priv = priv = EPHY_LOCKDOWN_GET_PRIVATE (lockdown);
-
 	LOG ("EphyLockdown initialising");
-
-	for (i = 0; i < G_N_ELEMENTS (keys); i++)
-	{
-		priv->notifier_id[i] =eel_gconf_notification_add
-			(keys[i], (GConfClientNotifyFunc) notifier, lockdown);
-	}
-	/* We know that no windows are open yet,
-	 * so we don't need to do notify here.
-	 */
-
-	eel_gconf_monitor_add ("/apps/epiphany/lockdown");
-	eel_gconf_monitor_add ("/desktop/gnome/lockdown");
 }
 
 G_DEFINE_TYPE_WITH_CODE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT,
@@ -258,65 +277,12 @@ G_DEFINE_TYPE_WITH_CODE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT,
 						ephy_lockdown_iface_init))
 
 static void
-ephy_lockdown_finalize (GObject *object)
-{
-	EphyLockdown *lockdown = EPHY_LOCKDOWN (object);
-	EphyLockdownPrivate *priv = lockdown->priv;
-	guint i;
-
-	LOG ("EphyLockdown finalising");
-
-	eel_gconf_monitor_remove ("/apps/epiphany/lockdown");
-	eel_gconf_monitor_remove ("/desktop/gnome/lockdown");
-
-	for (i = 0; i < G_N_ELEMENTS (keys); i++)
-	{
-		eel_gconf_notification_remove (priv->notifier_id[i]);
-	}
-
-	G_OBJECT_CLASS (ephy_lockdown_parent_class)->finalize (object);
-}
-
-static void
-impl_attach_window (EphyExtension *extension,
-		    EphyWindow *window)
-{
-	EphyLockdown *lockdown = EPHY_LOCKDOWN (extension);
-	EphyLockdownPrivate *priv = lockdown->priv;
-
-	priv->windows = g_list_prepend (priv->windows, window);
-
-	update_window (window, lockdown);
-}
-
-static void
-impl_detach_window (EphyExtension *extension,
-		    EphyWindow *window)
-{
-	EphyLockdown *lockdown = EPHY_LOCKDOWN (extension);
-	EphyLockdownPrivate *priv = lockdown->priv;
-
-	priv->windows = g_list_remove (priv->windows, window);
-
-	/* Since we know that the window closes now, we don't have to
-	 * undo anything.
-	 */
-}
-
-static void
 ephy_lockdown_iface_init (EphyExtensionIface *iface)
 {
 	iface->attach_window = impl_attach_window;
-	iface->detach_window = impl_detach_window;
 }
 
 static void
 ephy_lockdown_class_init (EphyLockdownClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ephy_lockdown_finalize;
-
-	g_type_class_add_private (object_class, sizeof (EphyLockdownPrivate));
 }
-

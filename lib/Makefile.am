@@ -8,7 +8,6 @@ header_DATA = \
 	$(INST_H_FILES)
 
 NOINST_H_FILES = \
-	eel-gconf-extensions.h			\
 	ephy-debug.h				\
 	ephy-dnd.h				\
 	ephy-file-chooser.h			\
@@ -38,10 +37,10 @@ INST_H_FILES = \
 	ephy-loader.h				\
 	ephy-node.h				\
 	ephy-node-db.h				\
+	ephy-settings.h				\
 	ephy-state.h
 
 libephymisc_la_SOURCES = \
-	eel-gconf-extensions.c			\
 	ephy-debug.c				\
 	ephy-dialog.c				\
 	ephy-dnd.c				\
@@ -60,6 +59,7 @@ libephymisc_la_SOURCES = \
 	ephy-prefs.h				\
 	ephy-profile-migration.c	        \
 	ephy-print-utils.c			\
+	ephy-settings.c				\
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\
 	ephy-state.c				\

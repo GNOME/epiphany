@@ -555,8 +555,9 @@
                             <property name="visible">True</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkRadioButton" id="cookies_radiobutton">
+                              <object class="GtkRadioButton" id="cookies_always_radiobutton">
                                 <property name="label" translatable="yes">_Always accept</property>
+                                <property name="name">always</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -570,14 +571,15 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radiobutton58">
+                              <object class="GtkRadioButton" id="cookies_no_third_party_radiobutton">
                                 <property name="label" translatable="yes">Only _from sites you visit</property>
+                                <property name="name">no-third-party</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">cookies_radiobutton</property>
+                                <property name="group">cookies_always_radiobutton</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -605,14 +607,15 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radiobutton59">
+                              <object class="GtkRadioButton" id="cookies_never_radiobutton">
                                 <property name="label" translatable="yes">_Never accept</property>
+                                <property name="name">never</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">cookies_radiobutton</property>
+                                <property name="group">cookies_always_radiobutton</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -707,7 +710,7 @@
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">_Disk space:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">disk_cache_spin</property>
+                                <property name="mnemonic_widget">disk_cache_spinbutton</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -720,7 +723,7 @@
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <object class="GtkSpinButton" id="disk_cache_spin">
+                                  <object class="GtkSpinButton" id="disk_cache_spinbutton">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="adjustment">adjustment2</property>

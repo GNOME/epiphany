@@ -32,8 +32,7 @@
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-prefs.h"
-
-#include "eel-gconf-extensions.h"
+#include "ephy-settings.h"
 
 /**
  * NSItemType: netscape bookmark item type
@@ -73,7 +72,9 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	GFile *file;
 	GFileInfo *file_info;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+		return FALSE;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	
@@ -712,7 +713,9 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	char *parsedname;
 	GList *folders = NULL;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+		return FALSE;
 
 	name = g_string_new (NULL);
 	url = g_string_new (NULL);
@@ -792,7 +795,9 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	xmlTextReaderPtr reader;
 	int ret;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+		return FALSE;
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
 	{
@@ -969,7 +974,8 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 	xmlNodePtr child;
 	xmlNodePtr root;
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
 		return FALSE;

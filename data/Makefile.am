@@ -2,16 +2,21 @@ SUBDIRS = art glade icons ui
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
-@INTLTOOL_SCHEMAS_RULE@
-@INTLTOOL_XML_RULE@
 
 desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
-schemadir = $(GCONF_SCHEMA_FILE_DIR)
-schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
-schema_DATA = $(schema_in_files:.schemas.in=.schemas)
+convertdir = $(datarootdir)/GConf/gsettings
+convert_DATA = epiphany.convert
+
+gsettings_ENUM_NAMESPACE = org.gnome.Epiphany
+gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
+
+gsettings_files = org.gnome.epiphany.gschema.xml.in
+gsettings_SCHEMAS = $(gsettings_files:.xml.in=.xml)
+@INTLTOOL_XML_NOMERGE_RULE@
+@GSETTINGS_RULES@
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
@@ -53,19 +58,9 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g" $@.tmp > $@ || rm -f $@.tmp
 	rm -f $@.tmp
 
-install-data-local: $(schema_DATA)
-if GCONF_SCHEMAS_INSTALL
-	if test -z "$(DESTDIR)" ; then \
-	for p in $^ ; do \
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $$p 2>&1 > /dev/null; \
-	done \
-	fi
-endif
-
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
 	$(service_in_files)		\
-	$(schema_in_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
 	$(mimepermission_DATA)		\
@@ -74,12 +69,14 @@ EXTRA_DIST = \
 	$(service_DATA)			\
 	$(m4data_DATA)			\
 	$(default_bookmarks_in_files)	\
+	$(gsettings_files)		\
+	$(convert_DATA)			\
 	epiphany-service.xml		\
 	check-mime.py
 
 DISTCLEANFILES = \
-	$(service_DATA)		\
-	$(schema_in_files:.schemas.in=.schemas)	\
-	$(pkgconfig_DATA)	\
-	$(desktop_DATA)		\
-	$(default_bookmarks_DATA)
+	$(service_DATA)			\
+	$(pkgconfig_DATA)		\
+	$(desktop_DATA)			\
+	$(default_bookmarks_DATA)	\
+	$(gsettings_SCHEMAS)

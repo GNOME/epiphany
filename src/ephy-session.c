@@ -32,11 +32,11 @@
 #include "ephy-embed-container.h"
 #include "ephy-extension.h"
 #include "ephy-file-helpers.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
 #include "ephy-window.h"
@@ -1667,14 +1667,18 @@ ephy_session_load (EphySession *session,
 
 			if (id && xmlStrEqual ((const xmlChar *) BOOKMARKS_EDITOR_ID, id))
 			{
-				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
+				if (!g_settings_get_boolean
+				    (EPHY_SETTINGS_LOCKDOWN,
+				     EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
 				{
 					widget = ephy_shell_get_bookmarks_editor (ephy_shell);
 				}
 			}
 			else if (id && xmlStrEqual ((const xmlChar *) HISTORY_WINDOW_ID, id))
 			{
-				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
+				if (!g_settings_get_boolean
+				    (EPHY_SETTINGS_LOCKDOWN,
+				     EPHY_PREFS_LOCKDOWN_HISTORY))
 				{
 					widget = ephy_shell_get_history_window (ephy_shell);
 				}

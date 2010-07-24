@@ -24,8 +24,9 @@
 #include "ephy-encodings.h"
 #include "ephy-node-db.h"
 #include "ephy-file-helpers.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 
 #include <glib/gi18n.h>
 #include <string.h>
@@ -146,7 +147,6 @@ enum
 	DETECTORS_NODE_ID = 5
 };
 
-#define RECENT_KEY	"/apps/epiphany/general/recent_encodings"
 #define RECENT_MAX	4
 
 static void ephy_encodings_class_init	(EphyEncodingsClass *klass);
@@ -326,7 +326,8 @@ void
 ephy_encodings_add_recent (EphyEncodings *encodings,
 			   const char *code)
 {
-	GSList *element;
+	GSList *element, *l;
+	GVariantBuilder builder;
 
 	g_return_if_fail (EPHY_IS_ENCODINGS (encodings));
 	g_return_if_fail (code != NULL);
@@ -358,8 +359,15 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
 			g_slist_remove_link (encodings->priv->recent, tail);
 	}
 
-	/* persist the list */
-	eel_gconf_set_string_list (RECENT_KEY, encodings->priv->recent);
+	g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
+	for (l = encodings->priv->recent; l; l = l->next)
+	{
+		g_variant_builder_add (&builder, "s", l->data);
+	}
+
+	g_settings_set (EPHY_SETTINGS_STATE,
+			EPHY_PREFS_STATE_RECENT_ENCODINGS,
+			"as", &builder);
 }
 
 GList *
@@ -385,8 +393,8 @@ static void
 ephy_encodings_init (EphyEncodings *encodings)
 {
 	EphyNodeDb *db;
-	GSList *list, *l;
-	guint i;
+	char **list;
+	int i;
 
 	encodings->priv = EPHY_ENCODINGS_GET_PRIVATE (encodings);
 
@@ -412,29 +420,29 @@ ephy_encodings_init (EphyEncodings *encodings)
 	}
 
 	/* get the list of recently used encodings */
-	list = eel_gconf_get_string_list (RECENT_KEY);
+	list = g_settings_get_strv (EPHY_SETTINGS_STATE,
+				    EPHY_PREFS_STATE_RECENT_ENCODINGS);
 
 	/* make sure the list has no duplicates (GtkUIManager goes
 	 * crazy otherwise), and only valid entries
 	 */
 	encodings->priv->recent = NULL;
-	for (l = list; l != NULL; l = l->next)
+	for (i = 0; list[i]; i++)
 	{
-		if (g_slist_find (encodings->priv->recent, l->data) == NULL
+		char *item;
+		item = list[i];
+
+		if (g_slist_find (encodings->priv->recent, item) == NULL
 		    && g_slist_length (encodings->priv->recent) < RECENT_MAX
-		    && ephy_encodings_get_node (encodings, l->data, FALSE) != NULL)
+		    && ephy_encodings_get_node (encodings, item, FALSE) != NULL)
 		{
 			encodings->priv->recent =
 				g_slist_prepend (encodings->priv->recent,
-						 l->data);
-		}
-		else
-		{
-			g_free (l->data);
+						 g_strdup (item));
 		}
 	}
 	encodings->priv->recent = g_slist_reverse (encodings->priv->recent);
-	g_slist_free (list);
+	g_strfreev (list);
 }
 
 EphyEncodings *
