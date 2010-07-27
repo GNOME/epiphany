@@ -600,21 +600,6 @@ js_object_get_property_as_object (JSContextRef js_context,
 }
 
 static char *
-js_get_element_property (JSContextRef js_context,
-                         JSObjectRef object,
-                         const char *prop)
-{
-  JSValueRef val;
-  char *buffer = NULL;
-
-  val = js_object_get_property (js_context, object, prop);
-  if (JSValueIsString (js_context, val))
-    buffer = js_value_to_string (js_context, val);
-
-  return buffer;
-}
-
-static char *
 js_get_element_attribute (JSContextRef js_context,
                           JSObjectRef object,
                           const char *attr)
@@ -632,68 +617,6 @@ js_get_element_attribute (JSContextRef js_context,
     buffer = js_value_to_string (js_context, val);
 
   return buffer;
-}
-
-static GSList*
-js_get_all_forms (JSContextRef js_context)
-{
-  JSObjectRef js_global;
-  JSObjectRef js_object;
-  JSValueRef js_form;
-  guint index = 0;
-  GSList *retval = NULL;
-
-  js_global = JSContextGetGlobalObject (js_context);
-
-  js_object = js_object_get_property_as_object (js_context, js_global, "document");
-  if (!js_object)
-    return NULL;
-
-  js_object = js_object_get_property_as_object (js_context, js_object, "forms");
-  if (!js_object)
-    return NULL;
-
-  while (TRUE) {
-    js_form = JSObjectGetPropertyAtIndex (js_context, js_object, index++, NULL);
-
-    if (JSValueIsUndefined (js_context, js_form))
-      break;
-
-    retval = g_slist_prepend (retval, (gpointer)js_form);
-  }
-
-  return retval;
-}
-
-static GSList*
-js_get_form_elements (JSContextRef js_context, JSValueRef js_form)
-{
-  JSObjectRef js_object = JSValueToObject (js_context, js_form, NULL);
-  JSStringRef js_name;
-  JSValueRef value;
-  guint num;
-  guint count;
-  GSList *retval = NULL;
-
-  js_object = js_object_get_property_as_object (js_context, js_object, "elements");
-  if (!js_object)
-    return NULL;
-
-  js_name = JSStringCreateWithUTF8CString ("length");
-  value = JSObjectGetProperty (js_context, js_object, js_name, NULL);
-  JSStringRelease (js_name);
-
-  num = (guint)JSValueToNumber (js_context, value, NULL);
-  for (count = 0; count < num; count++) {
-    value = JSObjectGetPropertyAtIndex (js_context, js_object, count, NULL);
-
-    if (!JSValueIsObject (js_context, value))
-      continue;
-
-    retval = g_slist_prepend (retval, (gpointer)value);
-  }
-
-  return retval;
 }
 
 static GSList*
@@ -745,15 +668,17 @@ js_get_all_links (JSContextRef js_context)
 }
 
 typedef struct {
-  JSContextRef context;
-  JSObjectRef username_element;
-  JSObjectRef password_element;
+  WebKitDOMNode *username_node;
+  WebKitDOMNode *password_node;
 } FillData;
 
 static void
 fill_data_free (gpointer data)
 {
   FillData *fill_data = (FillData*)data;
+
+  g_object_unref (fill_data->username_node);
+  g_object_unref (fill_data->password_node);
 
   g_slice_free (FillData, fill_data);
 }
@@ -763,12 +688,7 @@ fill_form_cb (GnomeKeyringResult retval,
               GList *results,
               gpointer user_data)
 {
-  JSValueRef prop_value;
-  JSStringRef prop_value_str, prop_name;
   FillData *fill_data = (FillData*)user_data;
-  JSContextRef js_context = fill_data->context;
-  JSObjectRef username_element = fill_data->username_element;
-  JSObjectRef password_element = fill_data->password_element;
   GnomeKeyringNetworkPasswordData* keyring_data;
 
   if (!results) {
@@ -787,59 +707,67 @@ fill_form_cb (GnomeKeyringResult retval,
 
   LOG ("Found: user %s pass (hidden)", keyring_data->user);
 
-  prop_name = JSStringCreateWithUTF8CString ("value");
-  prop_value_str = JSStringCreateWithUTF8CString (keyring_data->user);
-  prop_value = JSValueMakeString (js_context, prop_value_str);
-  JSObjectSetProperty (js_context, username_element, prop_name, prop_value, 0, NULL);
-
-  JSStringRelease (prop_value_str);
-
-  prop_value_str = JSStringCreateWithUTF8CString (keyring_data->password);
-  prop_value = JSValueMakeString (js_context, prop_value_str);
-  JSObjectSetProperty (js_context, password_element, prop_name, prop_value, 0, NULL);
-
-  JSStringRelease (prop_name);
-  JSStringRelease (prop_value_str);
+  g_object_set (fill_data->username_node,
+                "value", keyring_data->user, NULL);
+  g_object_set (fill_data->password_node,
+                "value", keyring_data->password, NULL);
 }
 
 static void
-find_username_and_password_elements (JSContextRef js_context,
-                                     GSList *elements,
-                                     JSObjectRef *name_element,
-                                     JSObjectRef *password_element)
+find_username_and_password_elements (WebKitDOMNode *form_node,
+                                     WebKitDOMNode **username_node,
+                                     WebKitDOMNode **password_node)
 {
-  GSList *iter = elements;
+  WebKitDOMHTMLCollection *elements;
+  WebKitDOMHTMLFormElement *form = WEBKIT_DOM_HTML_FORM_ELEMENT (form_node);
+  gulong elements_n;
+  int j;
 
-  for (; iter; iter = iter->next) {
-    JSObjectRef js_object;
-    char *type;
+  elements = webkit_dom_html_form_element_get_elements (form);
+  elements_n = webkit_dom_html_collection_get_length (elements);
 
-    js_object = JSValueToObject (js_context, (JSValueRef)iter->data, NULL);
+  if (elements_n == 0) {
+    LOG ("No elements found for this form.");
+    return;
+  }
 
-    type = js_get_element_property (js_context, js_object, "type");
+  for (j = 0; j < elements_n; j++) {
+    WebKitDOMNode *element;
 
-    if (!type)
-      continue;
+    element = webkit_dom_html_collection_item (elements, j);
 
-    if (g_str_equal (type, "text")) {
-      /* We found more than one inputs of type text; we won't be
-       * saving here */
-      if (*name_element) {
-        *name_element = NULL;
-        break;
+    if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)) {
+      char *element_type;
+
+      g_object_get (element, "type", &element_type, NULL);
+
+      if (g_str_equal ("text", element_type)) {
+        /* We found more than one inputs of type text; we won't be
+         * saving here */
+        if (*username_node) {
+          g_object_unref (*username_node);
+          *username_node = NULL;
+          g_free (element_type);
+
+          break;
+        }
+
+        *username_node = g_object_ref (element);
+      }
+      else if (g_str_equal ("password", element_type)) {
+        if (*password_node) {
+          g_object_unref (*password_node);
+          *password_node = NULL;
+          g_free (element_type);
+
+          break;
+        }
+
+        *password_node = g_object_ref (element);
       }
 
-      *name_element = js_object;
-    } else if (g_str_equal (type, "password")) {
-      if (*password_element) {
-        *password_element = NULL;
-        break;
-      }
-
-      *password_element = js_object;
+      g_free (element_type);
     }
-
-    g_free (type);
   }
 }
 
@@ -1011,143 +939,88 @@ should_store_cb (GnomeKeyringResult retval,
   request_decision_on_storing (store_data);
 }
 
-static JSValueRef
-form_submitted_cb (JSContextRef js_context,
-                   JSObjectRef js_function,
-                   JSObjectRef js_this,
-                   size_t argument_count,
-                   const JSValueRef js_arguments[],
-                   JSValueRef* js_exception)
+static gboolean
+form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
+                   WebKitDOMEvent *dom_event,
+                   EphyWebView *web_view)
 {
-  GSList *elements = js_get_form_elements (js_context, js_this);
-  JSObjectRef js_global = JSContextGetGlobalObject (js_context);
-  JSObjectRef name_element = NULL;
-  JSObjectRef password_element = NULL;
-  JSObjectRef dummy_object;
-  JSStringRef js_string;
-  JSValueRef js_value;
-  StorePasswordData *store_data;
-  char *name_field_name = NULL;
-  char *name_field_value = NULL;
-  char *password_field_name = NULL;
-  char *password_field_value = NULL;
   SoupURI *uri;
-  WebKitWebView *web_view;
+  StorePasswordData *store_data;
 
-  LOG ("Form submitted!");
+  WebKitDOMNode *username_node = NULL;
+  WebKitDOMNode *password_node = NULL;
 
-  find_username_and_password_elements (js_context, elements, &name_element, &password_element);
-  g_slist_free (elements);
-
-  if (!name_element || !password_element)
-    return JSValueMakeUndefined (js_context);
-
-  name_field_name = js_get_element_attribute (js_context, name_element, "name");
-  password_field_name = js_get_element_attribute (js_context, password_element, "name");
-  if (!name_field_name || !password_field_name)
-    goto form_submitted_cb_finish;
-
-  js_string = JSStringCreateWithUTF8CString ("value");
-  js_value = JSObjectGetProperty (js_context, name_element, js_string, NULL);
-
-  name_field_value = js_value_to_string (js_context, js_value);
-
-  js_value = JSObjectGetProperty (js_context, password_element, js_string, NULL);
-  JSStringRelease (js_string);
-
-  password_field_value = js_value_to_string (js_context, js_value);
-
-  if (!name_field_value || !password_field_value)
-    goto form_submitted_cb_finish;
-
-  if (g_str_equal (name_field_value, "") ||
-      g_str_equal (password_field_value, ""))
-    goto form_submitted_cb_finish;
-
-  dummy_object = js_object_get_property_as_object (js_context,
-                                                   js_global,
-                                                   "_EpiphanyInternalDummy");
-  web_view = JSObjectGetPrivate (dummy_object);
-
-  uri = soup_uri_new (webkit_web_view_get_uri (web_view));
+  uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
   if (!uri)
-    goto form_submitted_cb_finish;
+    return TRUE;
 
-  // Ignore query string in the uri, if any
   soup_uri_set_query (uri, NULL);
+
+  find_username_and_password_elements (WEBKIT_DOM_NODE (dom_form),
+                                       &username_node, &password_node);
 
   store_data = g_slice_new (StorePasswordData);
 
   store_data->uri = soup_uri_to_string (uri, FALSE);
-  store_data->name_field = g_strdup (name_field_name);
-  store_data->name_value = g_strdup (name_field_value);
-  store_data->password_field = g_strdup (password_field_name);
-  store_data->password_value = g_strdup (password_field_value);
   store_data->embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
-  soup_uri_free (uri);
+  g_object_get (username_node,
+                "name", &store_data->name_field,
+                "value", &store_data->name_value, NULL);
+
+  g_object_get (password_node,
+                "name", &store_data->password_field,
+                "value", &store_data->password_value, NULL);
+
+  LOG ("Form submitted! %s %s",
+       store_data->name_value,
+       store_data->password_value);
 
   _ephy_profile_query_form_auth_data (store_data->uri,
-                                      name_field_name,
-                                      password_field_name,
+                                      store_data->name_field,
+                                      store_data->password_field,
                                       should_store_cb,
                                       store_data,
                                       NULL);
 
-form_submitted_cb_finish:
-  g_free (name_field_name);
-  g_free (password_field_name);
-  g_free (name_field_value);
-  g_free (password_field_value);
+  soup_uri_free (uri);
 
-  return JSValueMakeUndefined (js_context);
+  g_object_unref (username_node);
+  g_object_unref (password_node);
+
+  return TRUE;
 }
 
 static void
-hook_form (JSContextRef js_context, JSValueRef js_form, JSObjectRef js_form_submitted)
-{
-  JSObjectRef object = JSValueToObject (js_context, js_form, NULL);
-  JSObjectRef add_event_listener = js_object_get_property_as_object (js_context, object, "addEventListener");
-  JSStringRef event_name;
-  JSValueRef args[3], val;
-  JSValueRef js_exception;
-
-  event_name = JSStringCreateWithUTF8CString ("submit");
-  args[0] = JSValueMakeString (js_context, event_name);
-  JSStringRelease (event_name);
-
-  args[1] = js_form_submitted;
-  args[2] = JSValueMakeBoolean (js_context, TRUE);
-  val = JSObjectCallAsFunction (js_context, add_event_listener, object, 3, args, &js_exception);
-}
-
-static void
-pre_fill_form (JSContextRef js_context,
-               JSObjectRef js_object,
-               JSObjectRef username_element,
-               JSObjectRef password_element,
+pre_fill_form (WebKitDOMNode *username_node,
+               WebKitDOMNode *password_node,
                EphyWebView *view)
 {
+  GSList *p = NULL;
   GSList *l = NULL;
   SoupURI *uri = NULL;
-  GSList *p = NULL;
 
   uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
   if (uri)
     l = ephy_embed_single_get_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)), uri->host);
 
   for (p = l; p; p = p->next) {
+    char *username_field_name;
+    char *password_field_name;
     EphyEmbedSingleFormAuthData *data = (EphyEmbedSingleFormAuthData*)p->data;
-    char *username_field_name = js_get_element_attribute (js_context, username_element, "name");
-    char *password_field_name = js_get_element_attribute (js_context, password_element, "name");
+
+    g_object_get (username_node,
+                  "name", &username_field_name, NULL);
+    g_object_get (password_node,
+                  "name", &password_field_name, NULL);
+
     if (g_strcmp0 (username_field_name, data->form_username) == 0 &&
         g_strcmp0 (password_field_name, data->form_password) == 0) {
       FillData *fill_data = g_slice_new (FillData);
       char *uri_str = soup_uri_to_string (uri, FALSE);
 
-      fill_data->context = js_context;
-      fill_data->username_element = username_element;
-      fill_data->password_element = password_element;
+      fill_data->username_node = g_object_ref (username_node);
+      fill_data->password_node = g_object_ref (password_node);
 
       _ephy_profile_query_form_auth_data (uri_str,
                                           data->form_username,
@@ -1165,84 +1038,43 @@ pre_fill_form (JSContextRef js_context,
 }
 
 static void
-do_hook_into_forms (JSContextRef js_context, JSObjectRef js_form_submitted, EphyWebView *web_view)
+_ephy_web_view_hook_into_forms (EphyWebView *web_view)
 {
-  GSList *forms = js_get_all_forms (js_context);
-  JSClassDefinition dummy_class_def;
-  JSClassRef dummy_class;
-  JSObjectRef dummy_object;
-  JSStringRef dummy_name;
-  JSObjectRef js_global;
+  WebKitDOMHTMLCollection *forms = NULL;
+  WebKitDOMDocument *document = NULL;
+  gulong forms_n;
+  int i;
 
-  if (!forms) {
+  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
+  forms = webkit_dom_document_get_forms (document);
+  forms_n = webkit_dom_html_collection_get_length (forms);
+
+  if (forms_n == 0) {
     LOG ("No forms found.");
     return;
   }
 
-  for (; forms; forms = forms->next) {
-    JSValueRef form = (JSValueRef)forms->data;
-    GSList *elements = js_get_form_elements (js_context, form);
-    JSObjectRef name_element = NULL;
-    JSObjectRef password_element = NULL;
+  for (i = 0; i < forms_n; i++) {
+    WebKitDOMNode *form;
+    WebKitDOMNode *username_node = NULL;
+    WebKitDOMNode *password_node = NULL;
 
-    if (!elements) {
-      LOG ("No elements found for this form.");
-      continue;
-    }
-
-    find_username_and_password_elements (js_context, elements, &name_element, &password_element);
-    g_slist_free (elements);
+    form = webkit_dom_html_collection_item (forms, i);
+    find_username_and_password_elements (form, &username_node, &password_node);
 
     /* We have a field that may be the user, and one for a password. */
-    if (name_element && password_element) {
-      LOG ("Hooking into, and pre-filling form: %s / %s",
-           js_get_element_attribute (js_context, name_element, "name"),
-           js_get_element_attribute (js_context, password_element, "name"));
+    if (username_node && password_node) {
+      LOG ("Hooking and pre-filling a form");
+      g_signal_connect (form, "submit-event",
+                        G_CALLBACK (form_submitted_cb), web_view);
 
-      hook_form (js_context, form, js_form_submitted);
-      pre_fill_form (js_context, JSValueToObject (js_context, form, NULL),
-                     name_element, password_element, web_view);
+      pre_fill_form (username_node, password_node, web_view);
+
+      g_object_unref (username_node);
+      g_object_unref (password_node);
     } else
-      LOG ("NOT hooking into form: username element: %p / password element: %p", name_element, password_element);
+      LOG ("No pre-fillable/hookable form found");
   }
-
-  /* This is required because we can only hold private data on objects
-   * created with our own classes; we need to store the WebView here
-   * because it is needed for form_submitted_cb */
-  dummy_class_def = kJSClassDefinitionEmpty;
-  dummy_class_def.className = "dummy";
-  dummy_class = JSClassCreate (&dummy_class_def);
-  dummy_object = JSObjectMake (js_context, dummy_class, web_view);
-  g_assert (JSObjectGetPrivate (dummy_object) != NULL);
-
-  js_global = JSContextGetGlobalObject (js_context);
-  dummy_name = JSStringCreateWithUTF8CString ("_EpiphanyInternalDummy");
-  JSObjectSetProperty (js_context, js_global, dummy_name, dummy_object, 0, NULL);
-  JSStringRelease (dummy_name);
-
-  g_slist_free (forms);
-}
-
-static void
-_ephy_web_view_hook_into_forms (EphyWebView *web_view)
-{
-  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (web_view));
-  JSGlobalContextRef js_context;
-  JSObjectRef js_global;
-  JSStringRef js_function_name;
-  JSObjectRef js_form_submitted;
-
-  js_context = webkit_web_frame_get_global_context (web_frame);
-  js_global = JSContextGetGlobalObject (js_context);
-
-  js_function_name = JSStringCreateWithUTF8CString ("_EpiphanyInternalFormSubmitted");
-  js_form_submitted = JSObjectMakeFunctionWithCallback (js_context,
-                                                        js_function_name,
-                                                        (JSObjectCallAsFunctionCallback)form_submitted_cb);
-  JSObjectSetProperty (js_context, js_global, js_function_name, js_form_submitted, 0, NULL);
-  JSStringRelease (js_function_name);
-
-  do_hook_into_forms (js_context, js_form_submitted, EPHY_WEB_VIEW (web_view));
 }
 
 static void
