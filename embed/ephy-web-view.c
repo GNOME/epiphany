@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit/webkit.h>
-#include <JavaScriptCore/JavaScript.h>
 #include <gnome-keyring.h>
 
 #include "eel-gconf-extensions.h"
@@ -555,118 +554,6 @@ ephy_web_view_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
 
-
-static char*
-js_value_to_string (JSContextRef js_context,
-                    JSValueRef js_value)
-{
-  gssize length;
-  char* buffer;
-  JSStringRef str;
-
-  g_return_val_if_fail (JSValueIsString (js_context, js_value), NULL);
-
-  str = JSValueToStringCopy (js_context, js_value, NULL);
-  length = JSStringGetMaximumUTF8CStringSize (str);
-
-  buffer = g_malloc0 (length);
-  JSStringGetUTF8CString (str, buffer, length);
-  JSStringRelease (str);
-
-  return buffer;
-}
-
-static JSValueRef
-js_object_get_property (JSContextRef js_context,
-                        JSObjectRef js_object,
-                        const char *name)
-{
-  JSStringRef js_string = JSStringCreateWithUTF8CString (name);
-  JSValueRef js_value = JSObjectGetProperty (js_context, js_object, js_string, NULL);
-
-  JSStringRelease (js_string);
-
-  return js_value;
-}
-
-static JSObjectRef
-js_object_get_property_as_object (JSContextRef js_context,
-                                  JSObjectRef object,
-                                  const char *attr)
-{
-  return JSValueToObject (js_context,
-                          js_object_get_property (js_context, object, attr),
-                          NULL);
-}
-
-static char *
-js_get_element_attribute (JSContextRef js_context,
-                          JSObjectRef object,
-                          const char *attr)
-{
-  JSStringRef attrstr = JSStringCreateWithUTF8CString (attr);
-  JSObjectRef ga = js_object_get_property_as_object (js_context, object, "getAttribute");
-  JSValueRef args[1], val;
-  char *buffer = NULL;
-
-  args[0] = JSValueMakeString (js_context, attrstr);
-  val = JSObjectCallAsFunction (js_context, ga, object, 1, args, NULL);
-  JSStringRelease (attrstr);
-
-  if (JSValueIsString (js_context, val))
-    buffer = js_value_to_string (js_context, val);
-
-  return buffer;
-}
-
-static GSList*
-js_get_all_links (JSContextRef js_context)
-{
-  JSObjectRef js_global;
-  JSObjectRef js_object;
-  JSObjectRef js_func;
-  JSStringRef js_str;
-  JSValueRef args[1], val;
-  guint num;
-  guint count;
-  GSList *retval = NULL;
-
-  js_global = JSContextGetGlobalObject (js_context);
-
-  js_object = js_object_get_property_as_object (js_context, js_global, "document");
-  if (!js_object)
-    return NULL;
-
-  js_func = js_object_get_property_as_object (js_context, js_object, "getElementsByTagName");
-  if (!js_object)
-    return NULL;
-
-  js_str = JSStringCreateWithUTF8CString ("link");
-  args[0] = JSValueMakeString (js_context, js_str);
-  val = JSObjectCallAsFunction (js_context, js_func, js_object, 1, args, NULL);
-  JSStringRelease (js_str);
-
-  js_object = JSValueToObject (js_context, val, NULL);
-  if (!js_object)
-    return NULL;
-
-  js_str = JSStringCreateWithUTF8CString ("length");
-  val = JSObjectGetProperty (js_context, js_object, js_str, NULL);
-  JSStringRelease (js_str);
-
-  num = (guint)JSValueToNumber (js_context, val, NULL);
-  for (count = 0; count < num; count++) {
-    val = JSObjectGetPropertyAtIndex (js_context, js_object, count, NULL);
-
-    if (!JSValueIsObject (js_context, val))
-      continue;
-
-    retval = g_slist_prepend (retval, (gpointer)val);
-  }
-
-  return retval;
-}
-
 typedef struct {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
@@ -1078,25 +965,41 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
 }
 
 static void
-do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
+_ephy_web_view_hook_into_links (EphyWebView *web_view)
 {
-  GSList *links = js_get_all_links (js_context);
+  WebKitDOMNodeList *links = NULL;
+  WebKitDOMDocument *document = NULL;
+  gulong links_n;
+  int i;
 
-  if (!links) {
+  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
+  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
+  links_n = webkit_dom_node_list_get_length (links);
+
+  if (links_n == 0) {
     LOG ("No links found.");
     return;
   }
 
-  for (; links; links = links->next) {
-    JSValueRef link = (JSValueRef)links->data;
-    JSObjectRef obj = JSValueToObject (js_context, link, NULL);
-    char *rel = js_get_element_attribute (js_context, obj, "rel");
+  for (i = 0; i < links_n; i++) {
+    WebKitDOMNode *link;
+    char *rel = NULL;
+
+    link = webkit_dom_node_list_item (links, i);
+    rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (link));
 
     if (g_strcmp0 (rel, "alternate") == 0) {
-      char *type = js_get_element_attribute (js_context, obj, "type");
-      char *title = js_get_element_attribute (js_context, obj, "title");
-      char *address = js_get_element_attribute (js_context, obj, "href");
-      SoupURI *feed_uri, *current_uri;
+      char *type = NULL;
+      char *title = NULL;
+      char *address = NULL;
+      SoupURI *feed_uri;
+      SoupURI *current_uri;
+
+      g_object_get (link,
+                    "type", &type,
+                    "title", &title,
+                    "href", &address,
+                    NULL);
 
       feed_uri = soup_uri_new (address);
       if (!feed_uri) {
@@ -1108,6 +1011,7 @@ do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
       if (feed_uri) {
         g_free (address);
         address = soup_uri_to_string (feed_uri, FALSE);
+        LOG ("Emitting ge-feed-link: %s, %s, %s", type, title, address);
         g_signal_emit_by_name (web_view, "ge-feed-link", type, title, address);
         soup_uri_free (feed_uri);
       }
@@ -1119,19 +1023,6 @@ do_hook_into_links (JSContextRef js_context, EphyWebView *web_view)
 
     g_free (rel);
   }
-
-  g_slist_free (links);
-}
-
-static void
-_ephy_web_view_hook_into_links (EphyWebView *web_view)
-{
-  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (web_view));
-  JSGlobalContextRef js_context;
-
-  js_context = webkit_web_frame_get_global_context (web_frame);
-
-  do_hook_into_links (js_context, EPHY_WEB_VIEW (web_view));
 }
 
 static void
