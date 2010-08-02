@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "ephy-gui.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
@@ -505,21 +504,4 @@ ephy_gui_message_dialog_get_content_box (GtkWidget *dialog)
 	g_list_free (children);
 
 	return container;
-}
-
-static void
-checkbutton_toggled_cb (GtkToggleButton *button,
-			const char *pref)
-{
-	eel_gconf_set_boolean (pref, gtk_toggle_button_get_active (button));
-}
-
-void
-ephy_gui_connect_checkbutton_to_gconf (GtkWidget *widget,
-				       const char *pref)
-{
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-				      eel_gconf_get_boolean (pref));
-	g_signal_connect (widget, "toggled",
-			  G_CALLBACK (checkbutton_toggled_cb), (gpointer) pref);
 }
