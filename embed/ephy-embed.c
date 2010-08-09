@@ -514,7 +514,7 @@ ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
                             EphyEmbed *embed)
 {
   if (!embed->priv->inspector_attached)
-    gtk_widget_show (embed->priv->inspector_window);
+    gtk_window_present (GTK_WINDOW (embed->priv->inspector_window));
 
   return TRUE;
 }
