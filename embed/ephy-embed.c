@@ -53,9 +53,9 @@ static void     ephy_embed_class_init       (EphyEmbedClass *klass);
 static void     ephy_embed_init             (EphyEmbed *gs);
 static void     ephy_embed_constructed      (GObject *object);
 static gboolean ephy_embed_inspect_show_cb  (WebKitWebInspector *inspector,
-                                             GtkWidget *widget);
+                                             EphyEmbed *embed);
 static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
-                                             GtkWidget *widget);
+                                             EphyEmbed *embed);
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
@@ -68,6 +68,7 @@ struct EphyEmbedPrivate
   EphyHistory *history;
   GtkWidget *inspector_window;
   GtkWidget *inspector_scrolled_window;
+  gboolean inspector_attached;
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
 };
@@ -312,6 +313,8 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
   GtkAllocation allocation;
   gtk_widget_get_allocation (GTK_WIDGET (embed->priv->scrolled_window), &allocation);
 
+  embed->priv->inspector_attached = TRUE;
+
   if (embed->priv->paned == NULL)
   {
     embed->priv->paned = GTK_PANED (gtk_vpaned_new ());
@@ -352,9 +355,10 @@ static gboolean
 ephy_embed_detach_inspector_cb (WebKitWebInspector *inspector,
                                 EphyEmbed *embed)
 {
+  embed->priv->inspector_attached = FALSE;
+
   gtk_container_remove (GTK_CONTAINER (embed),
                         GTK_WIDGET (embed->priv->paned));
-
 
   /* Main view */
   gtk_widget_reparent (GTK_WIDGET (embed->priv->scrolled_window),
@@ -376,17 +380,21 @@ ephy_embed_detach_inspector_cb (WebKitWebInspector *inspector,
 
 static gboolean
 ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
-                              GtkWidget *widget)
+                            EphyEmbed *embed)
 {
-  gtk_widget_show (widget);
+  if (!embed->priv->inspector_attached)
+    gtk_widget_show (embed->priv->inspector_window);
+
   return TRUE;
 }
 
 static gboolean
 ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
-                               GtkWidget *widget)
+                             EphyEmbed *embed)
 {
-  gtk_widget_hide (widget);
+  if (!embed->priv->inspector_attached)
+    gtk_widget_hide (embed->priv->inspector_window);
+
   return TRUE;
 }
 
@@ -922,9 +930,9 @@ ephy_embed_constructed (GObject *object)
                     "signal::inspect-web-view", G_CALLBACK (ephy_embed_inspect_web_view_cb),
                     embed->priv->inspector_scrolled_window,
                     "signal::show-window", G_CALLBACK (ephy_embed_inspect_show_cb),
-                    embed->priv->inspector_window,
+                    embed,
                     "signal::close-window", G_CALLBACK (ephy_embed_inspect_close_cb),
-                    embed->priv->inspector_window,
+                    embed,
                     "signal::attach-window", G_CALLBACK (ephy_embed_attach_inspector_cb),
                     embed,
                     "signal::detach-window", G_CALLBACK (ephy_embed_detach_inspector_cb),
