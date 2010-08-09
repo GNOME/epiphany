@@ -43,18 +43,6 @@
 #define CONF_CARET_BROWSING_ENABLED "/apps/epiphany/web/browse_with_caret"
 #define CONF_USER_AGENT "/apps/epiphany/general/user_agent"
 
-/* These are defined gnome wide now */
-#define CONF_NETWORK_PROXY_MODE "/system/proxy/mode"
-#define CONF_NETWORK_HTTP_PROXY "/system/http_proxy/host"
-#define CONF_NETWORK_SSL_PROXY "/system/proxy/secure_host"
-#define CONF_NETWORK_FTP_PROXY "/system/proxy/ftp_host"
-#define CONF_NETWORK_SOCKS_PROXY "/system/proxy/socks_host"
-#define CONF_NETWORK_HTTP_PROXY_PORT "/system/http_proxy/port"
-#define CONF_NETWORK_SSL_PROXY_PORT "/system/proxy/secure_port"
-#define CONF_NETWORK_FTP_PROXY_PORT "/system/proxy/ftp_port"
-#define CONF_NETWORK_SOCKS_PROXY_PORT "/system/proxy/socks_port"
-#define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
-#define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"
 #define CONF_DESKTOP_FONT_VAR_NAME "/desktop/gnome/interface/font_name"
 #define CONF_DESKTOP_FONT_FIXED_NAME "/desktop/gnome/interface/monospace_font_name"
 
