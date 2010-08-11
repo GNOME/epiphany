@@ -1798,6 +1798,86 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 }
 
 static void
+decide_on_geolocation_policy_request (GtkWidget *info_bar,
+                                      int response,
+                                      WebKitGeolocationPolicyDecision *decision)
+{
+  gtk_widget_destroy (info_bar);
+
+  /* Decide, and drop our ref on the decision object. */
+  if (response == GTK_RESPONSE_YES)
+  {
+    webkit_geolocation_policy_allow (decision);
+    g_object_unref (decision);
+    return;
+  }
+
+  webkit_geolocation_policy_deny (decision);
+  g_object_unref (decision);
+}
+
+static gboolean
+geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
+                                          WebKitWebFrame *web_frame,
+                                          WebKitGeolocationPolicyDecision *decision,
+                                          gpointer data)
+{
+  GtkWidget *info_bar;
+  GtkWidget *action_area;
+  GtkWidget *button_box;
+  GtkWidget *button;
+  GtkWidget *content_area;
+  GtkWidget *label;
+  char *message;
+
+  info_bar = gtk_info_bar_new ();
+
+  /* Buttons */
+  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
+
+  button_box = gtk_hbutton_box_new ();
+  gtk_container_add (GTK_CONTAINER (action_area), button_box);
+
+  /* Translators: Geolocation policy for a specific site. */
+  button = gtk_button_new_with_label (_("Deny"));
+  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (send_no_response_cb), info_bar);
+
+  /* Translators: Geolocation policy for a specific site. */
+  button = gtk_button_new_with_label (_("Allow"));
+  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (send_yes_response_cb), info_bar);
+
+  /* Label */
+  message = g_strdup_printf (_("The page at <b>%s</b> wants to know your location."),
+                             webkit_web_frame_get_uri (web_frame));
+
+  label = gtk_label_new (message);
+  g_object_set (label, "use-markup", TRUE, NULL);
+
+  g_free (message);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), label);
+
+  gtk_widget_show_all (info_bar);
+
+  g_signal_connect (info_bar, "response",
+                    G_CALLBACK (decide_on_geolocation_policy_request),
+                    decision);
+
+  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+                             info_bar, TRUE);
+
+  /* Ref the decision, to keep it alive while we decide */
+  g_object_ref (decision);
+
+  return TRUE;
+}
+
+static void
 update_navigation_flags (EphyWebView *view)
 {
   EphyWebViewPrivate *priv = view->priv;
@@ -2063,6 +2143,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "geolocation-policy-decision-requested",
+                    G_CALLBACK (geolocation_policy_decision_requested_cb),
                     NULL);
 
   g_signal_connect (web_view, "notify::load-status",
