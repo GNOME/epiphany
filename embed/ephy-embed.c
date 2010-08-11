@@ -920,7 +920,7 @@ ephy_embed_constructed (GObject *object)
   gtk_window_set_title (GTK_WINDOW (embed->priv->inspector_window),
                         _("Web Inspector"));
   gtk_window_set_default_size (GTK_WINDOW (embed->priv->inspector_window),
-                               600, 400);
+                               800, 600);
 
   g_signal_connect (embed->priv->inspector_window,
                     "delete-event", G_CALLBACK (gtk_widget_hide_on_delete),
