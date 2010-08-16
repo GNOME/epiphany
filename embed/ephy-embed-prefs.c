@@ -278,6 +278,49 @@ webkit_pref_callback_font_family (GConfClient *client,
   }
 }
 
+/* Part of this code taken from libsoup (soup-session.c) */
+static gchar *
+build_accept_languages_header (GArray *languages)
+{
+  gchar **langs = NULL;
+  gchar *langs_str = NULL;
+  gint delta;
+  gint i;
+
+  g_return_val_if_fail (languages != NULL, NULL);
+
+  /* Calculate deltas for the quality values */
+  if (languages->len < 10)
+    delta = 10;
+  else if (languages->len < 20)
+    delta = 5;
+  else
+    delta = 1;
+
+  /* Set quality values for each language */
+  langs = (gchar **) languages->data;
+  for (i = 0; langs[i] != NULL; i++) {
+    gchar *lang = (gchar *) langs[i];
+    gint quality = 100 - i * delta;
+
+    if (quality > 0 && quality < 100) {
+      gchar buf[8];
+      g_ascii_formatd (buf, 8, "%.2f", quality/100.0);
+      langs[i] = g_strdup_printf ("%s;q=%s", lang, buf);
+    } else {
+      /* Just dup the string in this case */
+      langs[i] = g_strdup (lang);
+    }
+    g_free (lang);
+  }
+
+  /* Get the result string */
+  if (languages->len > 0)
+    langs_str = g_strjoinv (", ", langs);
+
+  return langs_str;
+}
+
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
 static void
@@ -290,7 +333,7 @@ webkit_pref_callback_accept_languages (GConfClient *client,
   GConfValue *gcvalue;
   GArray *array;
   GSList *languages, *l;
-  char **langs;
+  char **array_data;
   char *langs_str;
   char *webkit_pref;
 
@@ -318,14 +361,15 @@ webkit_pref_callback_accept_languages (GConfClient *client,
 
   ephy_langs_sanitise (array);
 
-  langs = (char **) g_array_free (array, FALSE);
-  langs_str = g_strjoinv (", ", langs);
+  langs_str = build_accept_languages_header (array);
 
   /* Update Soup session */
   session = webkit_get_default_session ();
   g_object_set (G_OBJECT (session), webkit_pref, langs_str, NULL);
 
-  g_strfreev (langs);
+  /* Free memory */
+  array_data = (char **) g_array_free (array, FALSE);
+  g_strfreev (array_data);
   g_free (langs_str);
 }
 
