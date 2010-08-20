@@ -734,8 +734,8 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	g_free (title);
 }
 
-#define DRAG_ICON_LAYOUT_BORDER		2
-#define DRAG_ICON_ICON_SPACING		DRAG_ICON_LAYOUT_BORDER * 2
+#define DRAG_ICON_LAYOUT_PADDING	2
+#define DRAG_ICON_ICON_PADDING		4
 #define DRAG_ICON_MAX_WIDTH_CHARS	32
 
 static GdkPixmap *
@@ -752,8 +752,12 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	PangoFontMetrics *metrics;
 	int pixmap_height, pixmap_width;
 	int layout_width, layout_height;
-	int icon_width = 0, icon_height = 0, offset_x = 0;
+	int icon_width = 0, icon_height = 0, favicon_offset_x = 0;
 	int char_width;
+	cairo_t *cr;
+	GtkStateType state;
+
+	state = gtk_widget_get_state (widget);
 
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
 	g_signal_emit (entry, signals[GET_TITLE], 0, &title);
@@ -774,8 +778,6 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 		g_string_append (text, address);
 	}
 
-	/* Now build the pixmap */
-
 	if (priv->favicon != NULL)
 	{
 		icon_width = gdk_pixbuf_get_width (priv->favicon);
@@ -785,7 +787,6 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	context = gtk_widget_get_pango_context (widget);
 	layout = pango_layout_new (context);
 
-	context = gtk_widget_get_pango_context (widget);
 	style = gtk_widget_get_style (widget);
 	metrics = pango_context_get_metrics (context,
 					     style->font_desc,
@@ -798,64 +799,57 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	pango_layout_set_width (layout, char_width * DRAG_ICON_MAX_WIDTH_CHARS);
 	pango_layout_set_text (layout, text->str, text->len);
 
-	pango_layout_get_size (layout, &layout_width, &layout_height);
-
-	pixmap_width  = layout_width  / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
+	pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
 
 	if (priv->favicon != NULL)
 	{
-		offset_x = icon_width + 2 * DRAG_ICON_ICON_SPACING;
-		pixmap_width += offset_x;
-		pixmap_height = MAX (layout_height / PANGO_SCALE, icon_height) + DRAG_ICON_LAYOUT_BORDER * 2;
+		favicon_offset_x = icon_width + (2 * DRAG_ICON_ICON_PADDING);
 	}
-	else
-	{
-		pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
-	}
+
+	pixmap_width = layout_width + favicon_offset_x +
+			(DRAG_ICON_LAYOUT_PADDING * 2);
+	pixmap_height = MAX (layout_height, icon_height) +
+			(DRAG_ICON_LAYOUT_PADDING * 2);
 
 	drawable = gdk_pixmap_new (gtk_widget_get_window (widget),
-				   pixmap_width  + 2,
+				   pixmap_width + 2,
 				   pixmap_height + 2,
 				   -1);
+	cr = gdk_cairo_create (drawable);
 
-	gdk_draw_rectangle (drawable,
-			    style->base_gc [gtk_widget_get_state (widget)],
-			    TRUE,
-			    0, 0,
-			    pixmap_width + 1,
-			    pixmap_height + 1);
+	cairo_rectangle (cr, 1, 1, pixmap_width, pixmap_height);
+	cairo_set_line_width (cr, 1.0);
 
+	cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+	cairo_stroke_preserve (cr);
+
+	gdk_cairo_set_source_color (cr, &style->bg[state]);
+	cairo_fill (cr);
 
 	if (priv->favicon != NULL)
 	{
-		gdk_draw_pixbuf (drawable,
-				 style->fg_gc[gtk_widget_get_state (widget)],
-				 priv->favicon,
-				 0, 0, 
-				 1 + DRAG_ICON_LAYOUT_BORDER + DRAG_ICON_ICON_SPACING,
-				 1 + DRAG_ICON_LAYOUT_BORDER + (pixmap_height - icon_height) / 2,
-				 -1, -1,
-				 GDK_RGB_DITHER_NONE, 0, 0);
+		double x;
+		double y;
+
+		x = 1 + DRAG_ICON_LAYOUT_PADDING + DRAG_ICON_ICON_PADDING;
+		y = 1 + DRAG_ICON_LAYOUT_PADDING + (pixmap_height - icon_height) / 2;
+		gdk_cairo_set_source_pixbuf (cr, priv->favicon, x, y);
+		cairo_rectangle (cr, x, y, icon_width, icon_height);
+		cairo_paint (cr);
 	}
 
-	gdk_draw_layout (drawable,
-			 style->text_gc [gtk_widget_get_state (widget)],
-			 1 + DRAG_ICON_LAYOUT_BORDER + offset_x,
-			 1 + DRAG_ICON_LAYOUT_BORDER,
-			 layout);
+	cairo_move_to (cr,
+		       1 + DRAG_ICON_LAYOUT_PADDING + favicon_offset_x,
+		       1 + DRAG_ICON_LAYOUT_PADDING);
+	gdk_cairo_set_source_color (cr, &style->text[state]);
+	pango_cairo_show_layout (cr, layout);
 
-	gdk_draw_rectangle (drawable,
-			    style->black_gc,
-			    FALSE,
-			    0, 0,
-			    pixmap_width + 1,
-			    pixmap_height + 1);
-
+	cairo_destroy (cr);
 	g_object_unref (layout);
 
 	g_free (address);
 	g_free (title);
-	g_string_free (text,TRUE);
+	g_string_free (text, TRUE);
 
 	return drawable;
 }

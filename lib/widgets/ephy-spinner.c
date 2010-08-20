@@ -625,8 +625,7 @@ ephy_spinner_expose (GtkWidget *widget,
 	EphySpinnerImages *images;
 	GtkAllocation allocation;
 	GdkPixbuf *pixbuf;
-	GdkWindow *window;
-	GdkGC *gc;
+	cairo_t *cr;
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
@@ -675,15 +674,12 @@ ephy_spinner_expose (GtkWidget *widget,
 		return FALSE;
 	}
 
-	window = gtk_widget_get_window (widget);
-	gc = gdk_gc_new (window);
-	gdk_draw_pixbuf (window, gc, pixbuf,
-			 dest.x - x_offset - allocation.x,
-			 dest.y - y_offset - allocation.y,
-			 dest.x, dest.y,
-			 dest.width, dest.height,
-			 GDK_RGB_DITHER_MAX, 0, 0);
-	g_object_unref (gc);
+	cr = gdk_cairo_create (gtk_widget_get_window (widget));
+
+	gdk_cairo_set_source_pixbuf (cr, pixbuf, dest.x, dest.y);
+	cairo_paint (cr);
+
+	cairo_destroy (cr);
 
 	return FALSE;
 }
