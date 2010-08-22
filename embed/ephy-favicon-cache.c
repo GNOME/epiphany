@@ -101,7 +101,6 @@ enum
 	EPHY_NODE_FAVICON_PROP_FILENAME	 = 3,
 	EPHY_NODE_FAVICON_PROP_LAST_USED = 4,
 	EPHY_NODE_FAVICON_PROP_STATE	 = 5,
-	EPHY_NODE_FAVICON_PROP_CHECKOLD  = 6,
 	EPHY_NODE_FAVICON_PROP_CHECKED	 = 7,
 };
 
@@ -737,10 +736,6 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		ephy_node_set_property_int (icon,
 					    EPHY_NODE_FAVICON_PROP_CHECKED,
 					    (int) checklevel);
-
-		/* epiphany 1.6 compat */
-		ephy_node_set_property_boolean
-			(icon, EPHY_NODE_FAVICON_PROP_CHECKOLD, valid);
 	}
 
 	/* if it still needs the check, mime type couldn't be checked. Deny! */
