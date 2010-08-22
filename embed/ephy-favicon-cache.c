@@ -508,9 +508,15 @@ favicon_download_status_changed_cb (WebKitDownload *download,
 
 		g_hash_table_remove (cache->priv->downloads_hash, url);
 
-		/* TODO: remove a partially downloaded file */
 		/* FIXME: re-schedule to try again after n days? */
+		file = g_file_new_for_uri (destination);
+		if (g_file_query_exists (file, NULL))
+		{
+			LOG ("Deleting incomplete favicon download");
+			g_file_delete (file, NULL, NULL);
+		}
 
+		g_object_unref (file);
 		g_object_unref (download);
 
 		cache->priv->dirty = TRUE;
