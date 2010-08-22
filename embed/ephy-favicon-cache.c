@@ -688,7 +688,6 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		is_ao = strcmp (mime_type, "application/octet-stream") == 0;
 
 		g_object_unref (file_info);
-		g_object_unref (file);
 
 		/* As a special measure, we try to load an application/octet-stream file
 		 * as an ICO file, since we cannot detect a ICO file without .ico extension
@@ -730,8 +729,9 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		else
 		{
 			/* remove invalid file from cache */
-			/* gnome_vfs_unlink (pix_file); */
+			g_file_delete (file, NULL, NULL);
 		}
+		g_object_unref (file);
 
 		ephy_node_set_property_int (icon,
 					    EPHY_NODE_FAVICON_PROP_CHECKED,
