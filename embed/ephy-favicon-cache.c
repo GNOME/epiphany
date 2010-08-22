@@ -443,13 +443,33 @@ ephy_favicon_cache_finalize (GObject *object)
 	G_OBJECT_CLASS (ephy_favicon_cache_parent_class)->finalize (object);
 }
 
+static gboolean
+is_valid_mime_type (const char *mime_type)
+{
+
+	gboolean valid = FALSE;
+
+	valid = g_strcmp0 (mime_type, "image/x-ico") == 0 ||
+		g_strcmp0 (mime_type, "image/vnd.microsoft.icon") == 0 ||
+		g_strcmp0 (mime_type, "image/png") == 0 ||
+		g_strcmp0 (mime_type, "image/gif") == 0 ||
+		g_strcmp0 (mime_type, "application/octet-stream") == 0;
+
+	return valid;
+}
+
 static void
 favicon_download_status_changed_cb (WebKitDownload *download,
 				    GParamSpec *spec,
 				    EphyFaviconCache *cache)
 {
 	WebKitDownloadStatus status = webkit_download_get_status (download);
-	const char* url = webkit_download_get_uri (download);
+	const char *url = webkit_download_get_uri (download);
+	const char *destination = webkit_download_get_destination_uri (download);
+	const char *mime_type;
+	GFile *file;
+	GFileInfo *file_info;
+	gboolean valid;
 
 	switch (status) {
 	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
@@ -457,12 +477,30 @@ favicon_download_status_changed_cb (WebKitDownload *download,
 
 		g_hash_table_remove (cache->priv->downloads_hash, url);
 
-		g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
+		file = g_file_new_for_uri (destination);
+		file_info = g_file_query_info (file,
+					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+					       0, NULL, NULL);
+
+		mime_type = g_file_info_get_content_type (file_info);
+		valid = is_valid_mime_type (mime_type);
+
+		if (!valid)
+		{
+			LOG ("Deleting invalid %s type", mime_type);
+			g_file_delete (file, NULL, NULL);
+		}
+		else
+		{
+			g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
+		}
+
+		g_object_unref (file);
+		g_object_unref (file_info);
 
 		g_object_unref (download);
 
 		cache->priv->dirty = TRUE;
-
 		break;
 	case WEBKIT_DOWNLOAD_STATUS_ERROR:
 	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
@@ -681,17 +719,16 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		{
 			return NULL;
 		}
-		valid = strcmp (mime_type, "image/x-ico") == 0 ||
-			strcmp (mime_type, "image/vnd.microsoft.icon") == 0 ||
-			strcmp (mime_type, "image/png") == 0 ||
-			strcmp (mime_type, "image/gif") == 0;
-		is_ao = strcmp (mime_type, "application/octet-stream") == 0;
+
+		valid = is_valid_mime_type (mime_type);
+		is_ao = g_strcmp0 (mime_type, "application/octet-stream") == 0;
 
 		g_object_unref (file_info);
 
-		/* As a special measure, we try to load an application/octet-stream file
-		 * as an ICO file, since we cannot detect a ICO file without .ico extension
-		 * (the mime system has no magic for it).
+		/* As a special measure, we try to load an
+		 * application/octet-stream file as an ICO file, since we
+		 * cannot detect a ICO file without .ico extension (the mime
+		 * system has no magic for it).
 		 */
 		if (is_ao)
 		{
