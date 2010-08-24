@@ -1805,8 +1805,7 @@ decide_on_geolocation_policy_request (GtkWidget *info_bar,
   gtk_widget_destroy (info_bar);
 
   /* Decide, and drop our ref on the decision object. */
-  if (response == GTK_RESPONSE_YES)
-  {
+  if (response == GTK_RESPONSE_YES) {
     webkit_geolocation_policy_allow (decision);
     g_object_unref (decision);
     return;
