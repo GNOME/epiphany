@@ -835,7 +835,7 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 		y = 1 + DRAG_ICON_LAYOUT_PADDING + (pixmap_height - icon_height) / 2;
 		gdk_cairo_set_source_pixbuf (cr, priv->favicon, x, y);
 		cairo_rectangle (cr, x, y, icon_width, icon_height);
-		cairo_paint (cr);
+		cairo_fill (cr);
 	}
 
 	cairo_move_to (cr,
