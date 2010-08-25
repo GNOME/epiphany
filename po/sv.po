@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2010-08-06 13:42+0200\n"
-"PO-Revision-Date: 2010-08-06 13:44+0100\n"
+"POT-Creation-Date: 2010-08-25 23:22+0200\n"
+"PO-Revision-Date: 2010-08-25 23:23+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -861,24 +861,24 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Återstår"
 
-#: ../embed/ephy-embed.c:437
+#: ../embed/ephy-embed.c:445
 #: ../embed/ephy-embed-persist.c:823
 #: ../src/window-commands.c:343
 msgid "Save"
 msgstr "Spara"
 
-#: ../embed/ephy-embed.c:695
+#: ../embed/ephy-embed.c:703
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../embed/ephy-embed.c:711
+#: ../embed/ephy-embed.c:719
 msgid "Download this potentially unsafe file?"
 msgstr "Hämta denna möjligen osäkra fil?"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name
-#: ../embed/ephy-embed.c:715
+#: ../embed/ephy-embed.c:723
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -889,13 +889,13 @@ msgstr ""
 "\n"
 "Det är osäkert att öppna \"%s\" eftersom den möjligen kan skada dina dokument eller inkräkta på din integritet. Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:723
+#: ../embed/ephy-embed.c:731
 msgid "Open this file?"
 msgstr "Öppna denna fil?"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name, third %s is the application used to open the file
-#: ../embed/ephy-embed.c:727
+#: ../embed/ephy-embed.c:735
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -906,13 +906,13 @@ msgstr ""
 "\n"
 "Du kan öppna \"%s\" med hjälp av \"%s\" eller spara den."
 
-#: ../embed/ephy-embed.c:732
+#: ../embed/ephy-embed.c:740
 msgid "Download this file?"
 msgstr "Hämta denna fil?"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name
-#: ../embed/ephy-embed.c:736
+#: ../embed/ephy-embed.c:744
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -923,7 +923,7 @@ msgstr ""
 "\n"
 "Du har inget program som kan öppna \"%s\". Du kan hämta ner den istället."
 
-#: ../embed/ephy-embed.c:913
+#: ../embed/ephy-embed.c:921
 msgid "Web Inspector"
 msgstr "Webbinspektör"
 
@@ -1281,7 +1281,7 @@ msgstr "Lokala filer"
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
 #: ../embed/ephy-web-view.c:67
-#: ../embed/ephy-web-view.c:3201
+#: ../embed/ephy-web-view.c:3284
 #: ../src/ephy-session.c:1418
 msgid "Blank page"
 msgstr "Tom sida"
@@ -1303,30 +1303,46 @@ msgstr "Lagra lösenord"
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Vill du lagra lösenordet för <b>%s</b> på <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1950
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1841
+msgid "Deny"
+msgstr "Neka"
+
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1847
+msgid "Allow"
+msgstr "Tillåt"
+
+#. Label
+#: ../embed/ephy-web-view.c:1853
+#, c-format
+msgid "The page at <b>%s</b> wants to know your location."
+msgstr "Sidan på <b>%s</b> vill veta din geografiska plats."
+
+#: ../embed/ephy-web-view.c:2029
 #, c-format
 msgid "A problem occurred while loading %s"
 msgstr "Ett problem inträffade vid inläsning av %s"
 
-#: ../embed/ephy-web-view.c:2147
+#: ../embed/ephy-web-view.c:2230
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.se/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2442
+#: ../embed/ephy-web-view.c:2525
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Läser in \"%s\"..."
 
-#: ../embed/ephy-web-view.c:2444
+#: ../embed/ephy-web-view.c:2527
 msgid "Loading…"
 msgstr "Läser in..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3405
+#: ../embed/ephy-web-view.c:3488
 #, c-format
 msgid "%s Files"
 msgstr "Filer för %s"
@@ -1632,7 +1648,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:968
+#: ../lib/widgets/ephy-location-entry.c:962
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Drag och släpp denna ikon för att skapa en länk till denna sida"
 
@@ -3289,7 +3305,7 @@ msgstr ""
 "Dennis Persson\n"
 "\n"
 "Skicka synpunkter på översättningen till\n"
-"tp-sv@listor.tp-sv.se"
+"<tp-sv@listor.tp-sv.se>."
 
 #: ../src/window-commands.c:1059
 msgid "GNOME Web Browser Website"
