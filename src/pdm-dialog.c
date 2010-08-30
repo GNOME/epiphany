@@ -351,25 +351,13 @@ clear_all_dialog_checkbutton_toggled_cb (GtkToggleButton *toggle,
 					   data->num_checked != 0);
 }
 
-static GtkWidget*
-_gtk_message_dialog_get_content_area (GtkMessageDialog *dialog)
-{
-	GtkWidget *image, *parent;
-	GList *children;
-
-	image = gtk_message_dialog_get_image (dialog);
-	parent = gtk_widget_get_parent (image);
-	children = gtk_container_get_children (GTK_CONTAINER (parent));
-	return GTK_WIDGET (children->next->data);
-}
-
 void
 pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 				  GtkWidget *parent,
 				  PdmClearAllDialogFlags flags)
 {
 	GtkWidget *dialog, *vbox;
-	GtkWidget *check, *label, *content_area;
+	GtkWidget *check, *label;
 	PdmClearAllDialogButtons *checkbuttons;
 	GtkWidget *button, *icon;
 
@@ -405,17 +393,11 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog),
 					 GTK_RESPONSE_CANCEL);
-#if 0
 	gtk_label_set_selectable (GTK_LABEL (GTK_MESSAGE_DIALOG (dialog)->label),
 				  FALSE);
-#endif
 
 	vbox = gtk_vbox_new (FALSE, 6);
-	/* This is extremely evil, but at least we'll compile with
-	 * GSEAL enabled until #328069 is resolved. If it's WONTFIXED
-	 * we'll just do this from scratch with a normal GtkDialog */
-	content_area = _gtk_message_dialog_get_content_area (GTK_MESSAGE_DIALOG (dialog));
-	gtk_box_pack_start (GTK_BOX (content_area),
+	gtk_box_pack_start (GTK_BOX (GTK_MESSAGE_DIALOG (dialog)->label->parent),
 			    vbox, FALSE, FALSE, 0);
 
 	checkbuttons = g_slice_new0 (PdmClearAllDialogButtons);
