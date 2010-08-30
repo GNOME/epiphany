@@ -1,5 +1,13 @@
 #!/bin/sh
 
+EGGFILES="egg-editable-toolbar.c \
+       egg-toolbars-model.c \
+       egg-toolbar-editor.c \
+       egg-editable-toolbar.h \
+       egg-toolbars-model.h \
+       egg-toolbar-editor.h \
+       eggmarshalers.list"
+
 function die() {
   echo $*
   exit 1
