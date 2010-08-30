@@ -321,7 +321,7 @@ drag_motion_cb (GtkWidget *widget,
 		    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY &&
 		    ephy_node_get_is_drag_source (node))
 		{
-			action = gdk_drag_context_get_suggested_action (context);
+			action = context->suggested_action;
 		}
 	}
 	
