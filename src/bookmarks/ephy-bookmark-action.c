@@ -415,11 +415,7 @@ entry_key_press_cb (GtkEntry *entry,
 	     event->keyval == GDK_ISO_Enter) &&
 	    state == GDK_CONTROL_MASK)
 	{
-#if GTK_CHECK_VERSION (2,21,0)
-		gtk_entry_reset_im_context (entry);
-#else
 		gtk_im_context_reset (entry->im_context);
-#endif
 
 		g_signal_emit_by_name (entry, "activate");
 
