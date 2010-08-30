@@ -803,7 +803,8 @@ downloader_view_add_download (DownloaderView *dv,
 	}
 #endif
 
-	dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
+	if (dv->priv->source_id == 0)
+	    dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
 }
 
 static void
