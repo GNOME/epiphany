@@ -84,7 +84,7 @@ compare_items (gconstpointer a,
                                   "egg-collate-key");
   char *key2 = g_object_get_data (G_OBJECT (item2),
                                   "egg-collate-key");
-
+  
   return strcmp (key1, key2);
 }
 
@@ -178,14 +178,14 @@ egg_toolbar_editor_set_model (EggToolbarEditor *t,
       if (G_UNLIKELY (priv->model == model)) return;
 
       egg_toolbar_editor_disconnect_model (t);
-      g_object_unref (priv->model);
+      g_object_unref (priv->model); 
     }
 
   priv->model = g_object_ref (model);
 
   update_editor_sheet (t);
-
-  priv->sig_handlers[SIGNAL_HANDLER_ITEM_ADDED] =
+  
+  priv->sig_handlers[SIGNAL_HANDLER_ITEM_ADDED] = 
     g_signal_connect_object (model, "item_added",
 			     G_CALLBACK (item_added_or_removed_cb), t, 0);
   priv->sig_handlers[SIGNAL_HANDLER_ITEM_REMOVED] =
@@ -321,8 +321,9 @@ drag_data_get_cb (GtkWidget          *widget,
 
   target = g_object_get_data (G_OBJECT (widget), "egg-item-name");
   g_return_if_fail (target != NULL);
-
-  gtk_selection_data_set (selection_data, gtk_selection_data_get_target (selection_data), 8,
+  
+  gtk_selection_data_set (selection_data,
+                          gtk_selection_data_get_target (selection_data), 8,
 			  (const guchar *) target, strlen (target));
 }
 
@@ -357,9 +358,9 @@ set_drag_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
   GdkScreen *screen;
-
+  
   screen = gtk_widget_get_screen (widget);
-
+  
   cursor = gdk_cursor_new_for_display (gdk_screen_get_display (screen),
 				       GDK_HAND2);
   gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
@@ -476,16 +477,16 @@ editor_create_item_from_name (EggToolbarEditor *editor,
   const char *item_name;
   char *short_label;
   const char *collate_key;
-
+  
   if (strcmp (name, "_separator") == 0)
     {
       GtkWidget *icon;
-
+      
       icon = _egg_editable_toolbar_new_separator_image ();
       short_label = _("Separator");
       item_name = g_strdup (name);
       collate_key = g_utf8_collate_key (short_label, -1);
-      item = editor_create_item (editor, GTK_IMAGE (icon),
+      item = editor_create_item (editor, GTK_IMAGE (icon), 
                                  short_label, drag_action);
     }
   else
@@ -493,7 +494,7 @@ editor_create_item_from_name (EggToolbarEditor *editor,
       GtkAction *action;
       GtkWidget *icon;
       char *stock_id, *icon_name = NULL;
-
+      
       action = find_action (editor, name);
       g_return_val_if_fail (action != NULL, NULL);
 
@@ -520,12 +521,12 @@ editor_create_item_from_name (EggToolbarEditor *editor,
       g_free (stock_id);
       g_free (icon_name);
     }
-
+  
   g_object_set_data_full (G_OBJECT (item), "egg-collate-key",
                           (gpointer) collate_key, g_free);
   g_object_set_data_full (G_OBJECT (item), "egg-item-name",
                           (gpointer) item_name, g_free);
-
+  
   return item;
 }
 
@@ -537,10 +538,10 @@ append_table (GtkTable *table, GList *items, gint y, gint width)
       gint x = 0, height;
       GtkWidget *alignment;
       GtkWidget *item;
-
+  
       height = g_list_length (items) / width + 1;
       gtk_table_resize (table, height, width);
-
+      
       if (y > 0)
         {
           item = gtk_hseparator_new ();
@@ -548,10 +549,10 @@ append_table (GtkTable *table, GList *items, gint y, gint width)
           gtk_container_add (GTK_CONTAINER (alignment), item);
           gtk_widget_show (alignment);
           gtk_widget_show (item);
-
+          
           gtk_table_attach_defaults (table, alignment, 0, width, y-1, y+1);
         }
-
+      
       for (; items != NULL; items = items->next)
         {
           item = items->data;
@@ -559,7 +560,7 @@ append_table (GtkTable *table, GList *items, gint y, gint width)
           gtk_container_add (GTK_CONTAINER (alignment), item);
           gtk_widget_show (alignment);
           gtk_widget_show (item);
-
+          
           if (x >= width)
             {
               x = 0;
@@ -568,7 +569,7 @@ append_table (GtkTable *table, GList *items, gint y, gint width)
           gtk_table_attach_defaults (table, alignment, x, x+1, y, y+1);
           x++;
         }
-
+      
       y++;
     }
   return y;
@@ -584,7 +585,7 @@ update_editor_sheet (EggToolbarEditor *editor)
   GtkWidget *viewport;
 
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
-
+  
   /* Create new table. */
   table = gtk_table_new (0, 0, TRUE);
   editor->priv->table = table;
@@ -594,7 +595,7 @@ update_editor_sheet (EggToolbarEditor *editor)
   gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
 		     dest_drag_types, G_N_ELEMENTS (dest_drag_types),
                      GDK_ACTION_MOVE | GDK_ACTION_COPY);
-
+  
   /* Build two lists of items (one for copying, one for moving). */
   items = egg_toolbars_model_get_name_avail (editor->priv->model);
   while (items->len > 0)
@@ -602,10 +603,10 @@ update_editor_sheet (EggToolbarEditor *editor)
       GtkWidget *item;
       const char *name;
       gint flags;
-
+      
       name = g_ptr_array_index (items, 0);
       g_ptr_array_remove_index_fast (items, 0);
-
+      
       flags = egg_toolbars_model_get_name_flags (editor->priv->model, name);
       if ((flags & EGG_TB_MODEL_NAME_INFINITE) == 0)
         {
@@ -625,11 +626,11 @@ update_editor_sheet (EggToolbarEditor *editor)
   y = 0;
   y = append_table (GTK_TABLE (table), to_move, y, 4);
   y = append_table (GTK_TABLE (table), to_copy, y, 4);
-
+  
   g_list_free (to_move);
   g_list_free (to_copy);
   g_ptr_array_free (items, TRUE);
-
+  
   /* Delete old table. */
   viewport = gtk_bin_get_child (GTK_BIN (editor->priv->scrolled_window));
   if (viewport)
@@ -637,7 +638,7 @@ update_editor_sheet (EggToolbarEditor *editor)
       gtk_container_remove (GTK_CONTAINER (viewport),
                             gtk_bin_get_child (GTK_BIN (viewport)));
     }
-
+  
   /* Add table to window. */
   gtk_scrolled_window_add_with_viewport
     (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), table);

@@ -103,7 +103,7 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
               node = xmlNewChild (tnode, NULL, (const xmlChar*) "separator", NULL);
               continue;
             }
-
+          
           node = xmlNewChild (tnode, NULL, (const xmlChar*) "toolitem", NULL);
           xmlSetProp (node, (const xmlChar*) "name", (const xmlChar*) item->name);
 
@@ -116,13 +116,13 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
                 {
                   xmlNodePtr dnode;
                   char *tmp;
-
+                  
                   tmp = type->get_data (type, item->name);
                   if (tmp != NULL)
                     {
                       dnode = xmlNewTextChild (node, NULL, (const xmlChar*) "data", (const xmlChar*) tmp);
                       g_free (tmp);
-
+                      
                       tmp = gdk_atom_name (type->type);
                       xmlSetProp (dnode, (const xmlChar*) "type", (const xmlChar*) tmp);
                       g_free (tmp);
@@ -214,8 +214,8 @@ is_unique (EggToolbarsModel *model,
 {
   EggToolbarsItem *idata2;
   GNode *toolbar, *item;
-
-
+  
+   
   for(toolbar = g_node_first_child (model->priv->toolbars);
       toolbar != NULL; toolbar = g_node_next_sibling (toolbar))
     {
@@ -223,14 +223,14 @@ is_unique (EggToolbarsModel *model,
 	  item != NULL; item = g_node_next_sibling (item))
         {
 	  idata2 = item->data;
-
+	  
 	  if (idata != idata2 && strcmp (idata->name, idata2->name) == 0)
 	    {
 	      return FALSE;
 	    }
 	}
     }
-
+  
   return TRUE;
 }
 
@@ -291,7 +291,7 @@ toolbar_node_free (GNode *toolbar_node, EggToolbarsModel *model)
 
   g_node_children_foreach (toolbar_node, G_TRAVERSE_ALL,
     			   (GNodeForeachFunc) item_node_free, model);
-
+    
   g_free (toolbar->name);
   g_free (toolbar);
 
@@ -341,14 +341,14 @@ egg_toolbars_model_get_data (EggToolbarsModel *model,
   EggToolbarsItemType *t;
   char *data = NULL;
   GList *l;
-
+  
   if (type == GDK_NONE || type == gdk_atom_intern (EGG_TOOLBAR_ITEM_TYPE, FALSE))
     {
       g_return_val_if_fail (name != NULL, NULL);
       g_return_val_if_fail (*name != 0,   NULL);
       return strdup (name);
     }
-
+  
   for (l = model->priv->types; l != NULL; l = l->next)
     {
       t = l->data;
@@ -358,7 +358,7 @@ egg_toolbars_model_get_data (EggToolbarsModel *model,
 	  if (data != NULL) break;
         }
     }
-
+  
   return data;
 }
 
@@ -371,14 +371,14 @@ egg_toolbars_model_get_name (EggToolbarsModel *model,
   EggToolbarsItemType *t;
   char *name = NULL;
   GList *l;
-
+  
   if (type == GDK_NONE || type == gdk_atom_intern (EGG_TOOLBAR_ITEM_TYPE, FALSE))
     {
       g_return_val_if_fail (data, NULL);
       g_return_val_if_fail (*data, NULL);
       return strdup (data);
     }
-
+  
   if (create)
     {
       for (l = model->priv->types; name == NULL && l != NULL; l = l->next)
@@ -387,7 +387,7 @@ egg_toolbars_model_get_name (EggToolbarsModel *model,
           if (t->type == type && t->new_name != NULL)
             name = t->new_name (t, data);
         }
-
+      
       return name;
     }
   else
@@ -398,9 +398,9 @@ egg_toolbars_model_get_name (EggToolbarsModel *model,
           if (t->type == type && t->get_name != NULL)
             name = t->get_name (t, data);
         }
-
+      
       return name;
-    }
+    }  
 }
 
 static gboolean
@@ -471,20 +471,20 @@ parse_data_list (EggToolbarsModel *model,
         {
           xmlChar *type = xmlGetProp (child, (const xmlChar*) "type");
           xmlChar *data = xmlNodeGetContent (child);
-
+  
           if (type != NULL)
             {
               GdkAtom atom = gdk_atom_intern ((const char*) type, TRUE);
               name = egg_toolbars_model_get_name (model, atom, (const char*) data, create);
             }
-
+          
           xmlFree (type);
           xmlFree (data);
         }
-
+      
       child = child->next;
     }
-
+  
   return name;
 }
 
@@ -506,25 +506,25 @@ parse_item_list (EggToolbarsModel *model,
             {
               name = parse_data_list (model, child->children, TRUE);
             }
-
+          
           /* If that fails, try to use the name. */
           if (name == NULL)
             {
               xmlChar *type = xmlGetProp (child, (const xmlChar*) "type");
               xmlChar *data = xmlGetProp (child, (const xmlChar*) "name");
               GdkAtom  atom = type ? gdk_atom_intern ((const char*) type, TRUE) : GDK_NONE;
-
+              
               /* If an old format, try to use it. */
               name = egg_toolbars_model_get_name (model, atom, (const char*) data, FALSE);
               if (name == NULL)
                 {
                   name = egg_toolbars_model_get_name (model, atom, (const char*) data, TRUE);
                 }
-
+              
               xmlFree (type);
               xmlFree (data);
             }
-
+          
           if (name != NULL)
             {
               egg_toolbars_model_add_item (model, position, -1, name);
@@ -573,7 +573,7 @@ parse_toolbars (EggToolbarsModel *model,
 	  xmlFree (string);
 
           egg_toolbars_model_set_flags (model, position, flags);
-
+          
 	  parse_item_list (model, child->children, position);
 	}
 
@@ -612,7 +612,7 @@ parse_available_list (EggToolbarsModel *model,
 		      xmlNodePtr        child)
 {
   gint flags;
-
+  
   while (child)
     {
       if (xmlStrEqual (child->name, (const xmlChar*) "toolitem"))
@@ -730,7 +730,7 @@ egg_toolbars_model_init (EggToolbarsModel *model)
 
   model->priv->toolbars = g_node_new (NULL);
   model->priv->flags = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  egg_toolbars_model_set_name_flags (model, "_separator",
+  egg_toolbars_model_set_name_flags (model, "_separator", 
 				     EGG_TB_MODEL_NAME_KNOWN |
 				     EGG_TB_MODEL_NAME_INFINITE);
 }
@@ -839,22 +839,22 @@ egg_toolbars_model_delete_item (EggToolbarsModel *model,
   int tpos, ipos;
 
   g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
-
+  
   toolbar = g_node_first_child (model->priv->toolbars);
   tpos = 0;
-
+  
   while (toolbar != NULL)
     {
       item = g_node_first_child (toolbar);
       ipos = 0;
-
+      
       /* Don't delete toolbars that were already empty */
       if (item == NULL)
         {
 	  toolbar = g_node_next_sibling (toolbar);
 	  continue;
         }
-
+      
       while (item != NULL)
         {
 	  next = g_node_next_sibling (item);
@@ -870,10 +870,10 @@ egg_toolbars_model_delete_item (EggToolbarsModel *model,
 	    {
 	      ipos++;
 	    }
-
+	  
 	  item = next;
         }
-
+      
       next = g_node_next_sibling (toolbar);
       tdata = toolbar->data;
       if (!(tdata->flags & EGG_TB_MODEL_NOT_REMOVABLE) &&
@@ -889,7 +889,7 @@ egg_toolbars_model_delete_item (EggToolbarsModel *model,
         {
 	  tpos++;
         }
-
+      
       toolbar = next;
     }
 }
