@@ -120,9 +120,6 @@ void		ephy_dialog_set_parent		(EphyDialog *dialog,
 
 GtkWidget      *ephy_dialog_get_parent		(EphyDialog *dialog);
 
-void		ephy_dialog_set_modal		(EphyDialog *dialog,
-						 gboolean is_modal);
-
 GtkWidget      *ephy_dialog_get_control		(EphyDialog *dialog,
 						 const char *property_id);
 

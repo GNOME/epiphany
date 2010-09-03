@@ -41,7 +41,6 @@ enum
 {
 	PROP_0,
 	PROP_PARENT_WINDOW,
-	PROP_MODAL,
 	PROP_PERSIST_POSITION,
 	PROP_DEFAULT_WIDTH,
 	PROP_DEFAULT_HEIGHT
@@ -82,7 +81,6 @@ struct _EphyDialogPrivate
 	GtkWidget *parent;
 	GtkWidget *dialog;
 
-	guint modal : 1;
 	guint has_default_size : 1;
 	guint disposing : 1;
 	guint initialized : 1;
@@ -1134,24 +1132,6 @@ impl_show (EphyDialog *dialog)
 }
 
 /**
- * ephy_dialog_set_modal:
- * @dialog: an #EphyDialog
- * @is_modal: %TRUE to make @dialog modal
- *
- * Sets @dialog to be modal or not.
- **/
-void
-ephy_dialog_set_modal (EphyDialog *dialog,
-		       gboolean is_modal)
-{
-	g_return_if_fail (EPHY_IS_DIALOG (dialog));
-
-	dialog->priv->modal = is_modal != FALSE;
-
-	gtk_window_set_modal (GTK_WINDOW(dialog->priv->dialog), is_modal);
-}
-
-/**
  * ephy_dialog_add_enum:
  * @dialog: an #EphyDialog
  * @property_id: string identifier of the property to modify
@@ -1571,9 +1551,6 @@ ephy_dialog_set_property (GObject *object,
 		case PROP_PARENT_WINDOW:
 			ephy_dialog_set_parent (dialog, g_value_get_object (value));
 			break;
-		case PROP_MODAL:
-			ephy_dialog_set_modal (dialog, g_value_get_boolean (value));
-			break;
 		case PROP_PERSIST_POSITION:
 			dialog->priv->persist_position = g_value_get_boolean (value);
 			break;
@@ -1598,9 +1575,6 @@ ephy_dialog_get_property (GObject *object,
 	{
 		case PROP_PARENT_WINDOW:
 			g_value_set_object (value, dialog->priv->parent);
-			break;
-		case PROP_MODAL:
-			g_value_set_boolean (value, dialog->priv->modal);
 			break;
 		case PROP_PERSIST_POSITION:
 			g_value_set_boolean (value, dialog->priv->persist_position);
@@ -1660,19 +1634,6 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							      "Parent window",
 							      GTK_TYPE_WINDOW,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	/**
-	* EphyDialog:modal:
-	*
-	* Whether the dialog is or not modal.
-	*/
-	g_object_class_install_property (object_class,
-					 PROP_MODAL,
-					 g_param_spec_boolean ("modal",
-							       "Modal",
-							       "Modal dialog",
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
 	* EphyDialog:persist-position:
