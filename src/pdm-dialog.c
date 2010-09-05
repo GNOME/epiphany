@@ -224,27 +224,44 @@ clear_all_cookies (SoupCookieJar *jar)
 }
 
 static void
-pdm_dialog_password_remove_cb (GnomeKeyringResult result,
+get_info_full_cb (GnomeKeyringResult result,
+		  GnomeKeyringItemInfo *info,
+		  gpointer data)
+{
+	if (result != GNOME_KEYRING_RESULT_OK)
+		return;
+
+	if (gnome_keyring_item_info_get_type (info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
+		gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
+					   GPOINTER_TO_UINT (data),
+					   NULL, NULL, NULL);
+}
+
+static void
+got_network_passwords_list_cb (GnomeKeyringResult result,
+			       GList *list,
 			       gpointer data)
 {
-	GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
+	GList *l;
 
-	if (result == GNOME_KEYRING_RESULT_OK) {
-		GtkTreeIter iter;
-		GtkTreePath *path;
-		GtkTreeModel *model;
+	if (result != GNOME_KEYRING_RESULT_OK)
+		return;
 
-		if (!gtk_tree_row_reference_valid (rowref))
-			return;
+	for (l = list; l != NULL; l = l->next)
+		gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
+						  GPOINTER_TO_UINT (l->data),
+						  GNOME_KEYRING_ITEM_INFO_BASICS,
+						  (GnomeKeyringOperationGetItemInfoCallback) get_info_full_cb,
+						  l->data,
+						  NULL);
+}
 
-		path = gtk_tree_row_reference_get_path (rowref);
-		model = gtk_tree_row_reference_get_model (rowref);
-
-		if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
-			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-			gtk_tree_path_free (path);
-		}
-	}
+static void
+_ephy_pdm_delete_all_passwords ()
+{
+	gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
+				     got_network_passwords_list_cb,
+				     NULL, NULL);
 }
 
 static void
@@ -282,35 +299,15 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
 		{
-			GtkTreeIter iter;
-			PdmDialog *pdialog = EPHY_PDM_DIALOG (checkbuttons->dialog);
-			PdmActionInfo *pinfo = pdialog->priv->passwords;
-
-			gboolean valid = gtk_tree_model_get_iter_first (pinfo->model, &iter);
-
-			while (valid) {
-				GtkTreePath *path;
-				EphyPasswordInfo *info;
-				GtkTreeRowReference *row;
-
-				path = gtk_tree_model_get_path (pinfo->model, &iter);
-				row = gtk_tree_row_reference_new (pinfo->model, path);
-
-				gtk_tree_model_get (pinfo->model, &iter,
-						    COL_PASSWORDS_DATA, &info,
-						    -1);
-
-				gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
-							   info->keyring_id,
-							   (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_cb,
-							   row,
-							   (GDestroyNotify) gtk_tree_row_reference_free);
-
-				valid = gtk_tree_model_iter_next (pinfo->model, &iter);
-
-				g_slice_free (EphyPasswordInfo, info);
-				gtk_tree_path_free (path);
+			/* Clear UI if we are the PDM dialog */
+			if (EPHY_IS_PDM_DIALOG (checkbuttons->dialog))
+			{
+				PdmDialog *pdialog = EPHY_PDM_DIALOG (checkbuttons->dialog);
+				PdmActionInfo *pinfo = pdialog->priv->passwords;
+				gtk_list_store_clear (GTK_LIST_STORE (pinfo->model));
 			}
+
+			_ephy_pdm_delete_all_passwords ();
 		}
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
