@@ -528,7 +528,6 @@ ephy_bookmark_properties_constructor (GType type,
 	update_window_title (properties);
 	content_area = gtk_dialog_get_content_area (dialog);
 
-	gtk_dialog_set_has_separator (dialog, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
 	gtk_box_set_spacing (GTK_BOX (content_area), 2);
 
