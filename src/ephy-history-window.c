@@ -815,8 +815,8 @@ key_pressed_cb (EphyNodeView *view,
 {
 	switch (event->keyval)
 	{
-	case GDK_Delete:
-	case GDK_KP_Delete:
+	case GDK_KEY_Delete:
+	case GDK_KEY_KP_Delete:
 		cmd_delete (NULL, editor);
 		return TRUE;
 

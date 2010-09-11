@@ -589,7 +589,7 @@ pdm_key_pressed_cb (GtkTreeView *treeview,
 		    GdkEventKey *event,
 		    PdmActionInfo *action)
 {
-	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
+	if (event->keyval == GDK_KEY_Delete || event->keyval == GDK_KEY_KP_Delete)
 	{
 		pdm_cmd_delete_selection (action);
 

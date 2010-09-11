@@ -200,12 +200,12 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	/* check for / and ' which open the find toolbar in text resp. link mode */
 	if (gtk_widget_get_visible (widget) == FALSE)
 	{
-		if (event->keyval == GDK_slash)
+		if (event->keyval == GDK_KEY_slash)
 		{
 			ephy_find_toolbar_open (toolbar, FALSE, TRUE);
 			return TRUE;
 		}
-		else if (event->keyval == GDK_apostrophe)
+		else if (event->keyval == GDK_KEY_apostrophe)
 		{
 			ephy_find_toolbar_open (toolbar, TRUE, TRUE);
 			return TRUE;
@@ -329,23 +329,23 @@ entry_key_press_event_cb (GtkEntry *entry,
 		handled = TRUE;
 		switch (event->keyval)
 		{
-		case GDK_Up:
-		case GDK_KP_Up:
+		case GDK_KEY_Up:
+		case GDK_KEY_KP_Up:
 			scroll_lines (priv->web_view, -1);
 			break;
-		case GDK_Down:
-		case GDK_KP_Down:
+		case GDK_KEY_Down:
+		case GDK_KEY_KP_Down:
 			scroll_lines (priv->web_view, 1);
 			break;
-		case GDK_Page_Up:
-		case GDK_KP_Page_Up:
+		case GDK_KEY_Page_Up:
+		case GDK_KEY_KP_Page_Up:
 			scroll_pages (priv->web_view, -1);
 			break;
-		case GDK_Page_Down:
-		case GDK_KP_Page_Down:
+		case GDK_KEY_Page_Down:
+		case GDK_KEY_KP_Page_Down:
 			scroll_pages (priv->web_view, 1);
 			break;
-		case GDK_Escape:
+		case GDK_KEY_Escape:
 			/* Hide the toolbar when ESC is pressed */
 			ephy_find_toolbar_request_close (toolbar);
 			break;
@@ -355,16 +355,16 @@ entry_key_press_event_cb (GtkEntry *entry,
 		}
 	}
 	else if ((event->state & mask) == GDK_CONTROL_MASK &&
-		 (event->keyval == GDK_Return ||
-		  event->keyval == GDK_KP_Enter ||
-		  event->keyval == GDK_ISO_Enter))
+		 (event->keyval == GDK_KEY_Return ||
+		  event->keyval == GDK_KEY_KP_Enter ||
+		  event->keyval == GDK_KEY_ISO_Enter))
 	{
 		handled = ephy_find_toolbar_activate_link (toolbar, event->state);
 	}
 	else if ((event->state & mask) == GDK_SHIFT_MASK &&
-		 (event->keyval == GDK_Return ||
-		  event->keyval == GDK_KP_Enter ||
-		  event->keyval == GDK_ISO_Enter))
+		 (event->keyval == GDK_KEY_Return ||
+		  event->keyval == GDK_KEY_KP_Enter ||
+		  event->keyval == GDK_KEY_ISO_Enter))
 	{
 		handled = TRUE;
 		g_signal_emit (toolbar, signals[PREVIOUS], 0);

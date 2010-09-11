@@ -359,38 +359,38 @@ static const struct
 	const gchar *action;
 	gboolean fromToolbar;
 } extra_keybindings [] = {
-	{ GDK_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
-	{ GDK_R,		GDK_CONTROL_MASK |
+	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
+	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
 	/* Support all the MSIE tricks as well ;) */
-	{ GDK_F5,		0,			"ViewReload",		FALSE },
-	{ GDK_F5,		GDK_CONTROL_MASK,	"ViewReload",		FALSE },
-	{ GDK_F5,		GDK_SHIFT_MASK,		"ViewReload",		FALSE },
-	{ GDK_F5,		GDK_CONTROL_MASK |
+	{ GDK_KEY_F5,		0,			"ViewReload",		FALSE },
+	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		FALSE },
+	{ GDK_KEY_F5,		GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+	{ GDK_KEY_F5,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
-	{ GDK_KP_Add,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
-	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
-	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
-	{ GDK_KP_0,		GDK_CONTROL_MASK,	"ViewZoomNormal",	FALSE },
+	{ GDK_KEY_KP_Add,	GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
+	{ GDK_KEY_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
+	{ GDK_KEY_equal,	GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
+	{ GDK_KEY_KP_0,		GDK_CONTROL_MASK,	"ViewZoomNormal",	FALSE },
 	/* These keys are a bit strange: when pressed with no modifiers, they emit
 	 * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
 	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
 	 * They're KP_PageUp/Down again!
 	 */
-	{ GDK_KP_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
-	{ GDK_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
-	{ GDK_KP_Right,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
-	{ GDK_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
-	{ GDK_KP_Up,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
-	{ GDK_KP_8,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
-	{ GDK_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
-	{ GDK_KP_9,		GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
-	{ GDK_KP_Page_Down,	GDK_CONTROL_MASK,	"TabsNext",		FALSE },
-	{ GDK_KP_3,		GDK_CONTROL_MASK,	"TabsNext",		FALSE },
-	{ GDK_KP_Page_Up,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
-	{ GDK_KP_9,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
-	{ GDK_KP_Page_Down,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
-	{ GDK_KP_3,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
+	{ GDK_KEY_KP_Left,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KEY_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KEY_KP_Up,	GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
+	{ GDK_KEY_KP_8,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
+	{ GDK_KEY_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
+	{ GDK_KEY_KP_9,		GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
+	{ GDK_KEY_KP_Page_Down,	GDK_CONTROL_MASK,	"TabsNext",		FALSE },
+	{ GDK_KEY_KP_3,		GDK_CONTROL_MASK,	"TabsNext",		FALSE },
+	{ GDK_KEY_KP_Page_Up,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
+	{ GDK_KEY_KP_9,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
+	{ GDK_KEY_KP_Page_Down,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
+	{ GDK_KEY_KP_3,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
 	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
@@ -919,7 +919,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	 * widget), otherwise the event follows the normal handling path.
 	 */
 
-	if (event->keyval == GDK_Escape && modifier == 0)
+	if (event->keyval == GDK_KEY_Escape && modifier == 0)
 	{
 		/* Always pass Escape to both the widget, and the parent */
 		shortcircuit = TRUE;
@@ -929,9 +929,9 @@ ephy_window_key_press_event (GtkWidget *widget,
 		 (modifier == GDK_CONTROL_MASK) &&
 		 event->length > 0 &&
 		 /* But don't pass Ctrl+Enter twice */
-		 event->keyval != GDK_Return &&
-		 event->keyval != GDK_KP_Enter &&
-		 event->keyval != GDK_ISO_Enter)
+		 event->keyval != GDK_KEY_Return &&
+		 event->keyval != GDK_KEY_KP_Enter &&
+		 event->keyval != GDK_KEY_ISO_Enter)
 	{
 		/* Pass CTRL+letter characters to the widget */
 		shortcircuit = TRUE;

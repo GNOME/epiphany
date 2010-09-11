@@ -476,7 +476,7 @@ entry_key_press_cb (GtkEntry *entry,
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-	if (event->keyval == GDK_Escape && state == 0)
+	if (event->keyval == GDK_KEY_Escape && state == 0)
 	{
 		ephy_location_entry_reset_internal (lentry, TRUE);
 		/* don't return TRUE since we want to cancel the autocompletion popup too */
@@ -494,9 +494,9 @@ entry_key_press_after_cb (GtkEntry *entry,
 
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-	if ((event->keyval == GDK_Return ||
-	     event->keyval == GDK_KP_Enter ||
-	     event->keyval == GDK_ISO_Enter) &&
+	if ((event->keyval == GDK_KEY_Return ||
+	     event->keyval == GDK_KEY_KP_Enter ||
+	     event->keyval == GDK_KEY_ISO_Enter) &&
 	    (state == GDK_CONTROL_MASK ||
 	     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
 	{
@@ -508,7 +508,7 @@ entry_key_press_after_cb (GtkEntry *entry,
 		return TRUE;
 	}
 	
-	if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
+	if ((event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
 	    && state == 0)
 	{
 		/* If we are focusing the entry, with the cursor at the end of it

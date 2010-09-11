@@ -410,9 +410,9 @@ entry_key_press_cb (GtkEntry *entry,
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-	if ((event->keyval == GDK_Return ||
-	     event->keyval == GDK_KP_Enter ||
-	     event->keyval == GDK_ISO_Enter) &&
+	if ((event->keyval == GDK_KEY_Return ||
+	     event->keyval == GDK_KEY_KP_Enter ||
+	     event->keyval == GDK_KEY_ISO_Enter) &&
 	    state == GDK_CONTROL_MASK)
 	{
 #if GTK_CHECK_VERSION (2,21,0)

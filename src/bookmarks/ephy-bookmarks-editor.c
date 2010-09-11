@@ -1500,7 +1500,7 @@ key_pressed_cb (EphyNodeView *view,
 	EphyBookmarksEditorPrivate *priv = editor->priv;
 	GtkAction *action;
 
-	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
+	if (event->keyval == GDK_KEY_Delete || event->keyval == GDK_KEY_KP_Delete)
 	{
 		action = gtk_action_group_get_action (priv->action_group, "Delete");
 		if (gtk_action_get_sensitive (action))
