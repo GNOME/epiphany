@@ -641,7 +641,7 @@ main (int argc,
 	/* Get a timestamp manually if need be */
 	if (user_time == 0)
 	{
-		user_time = slowly_and_stupidly_obtain_timestamp (gdk_display);
+		user_time = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
 	}
 
 	/* sets the name to appear in the window list applet when grouping windows */
