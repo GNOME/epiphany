@@ -51,6 +51,7 @@ struct _EphyEmbedSinglePrivate {
   guint online : 1;
 
   GHashTable *form_auth_data;
+  WebKitSoupCache *cache;
 };
 
 enum {
@@ -234,6 +235,21 @@ remove_form_auth_data (gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
+ephy_embed_single_dispose (GObject *object)
+{
+  EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
+
+  if (priv->cache) {
+    webkit_soup_cache_flush (priv->cache);
+    webkit_soup_cache_dump (priv->cache);
+    g_object_unref (priv->cache);
+    priv->cache = NULL;
+  }
+
+  G_OBJECT_CLASS (ephy_embed_single_parent_class)->dispose (object);
+}
+
+static void
 ephy_embed_single_finalize (GObject *object)
 {
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
@@ -271,6 +287,7 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ephy_embed_single_finalize;
+  object_class->dispose = ephy_embed_single_dispose;
   object_class->get_property = ephy_embed_single_get_property;
   object_class->set_property = ephy_embed_single_set_property;
 
@@ -441,6 +458,15 @@ ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
 
 #endif /* ENABLE_CERTIFICATE_MANAGER */
 
+static void
+cache_size_cb (GSettings *settings,
+               char *key,
+               EphyEmbedSingle *single)
+{
+  int new_cache_size = g_settings_get_int (EPHY_SETTINGS_WEB, EPHY_PREFS_CACHE_SIZE);
+  webkit_soup_cache_set_max_size (single->priv->cache, new_cache_size);
+}
+
 /**
  * ephy_embed_single_initialize:
  * @single: the #EphyEmbedSingle
@@ -455,6 +481,8 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   SoupCookieJar *jar;
   char *filename;
   char *cookie_policy;
+  char *cache_dir;
+  EphyEmbedSinglePrivate *priv = single->priv;
 
   /* Initialise nspluginwrapper's plugins if available */
   if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
@@ -493,6 +521,21 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* Use GNOME proxy settings through libproxy */
   soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
+  /* WebKitSoupCache */
+  cache_dir = g_build_filename (g_get_user_cache_dir (), g_get_prgname (), NULL);
+  priv->cache = webkit_soup_cache_new (cache_dir, WEBKIT_SOUP_CACHE_SINGLE_USER);
+  g_free (cache_dir);
+
+  soup_session_add_feature (session, SOUP_SESSION_FEATURE (priv->cache));
+  /* Cache size in Mb: 1024 * 1024 */
+  webkit_soup_cache_set_max_size (priv->cache, g_settings_get_int (EPHY_SETTINGS_WEB, EPHY_PREFS_CACHE_SIZE) << 20);
+  webkit_soup_cache_load (priv->cache);
+
+  g_signal_connect (EPHY_SETTINGS_WEB,
+                    "changed::" EPHY_PREFS_CACHE_SIZE,
+                    G_CALLBACK (cache_size_cb),
+                    single);
+
 #ifdef SOUP_TYPE_PASSWORD_MANAGER
   /* Use GNOME keyring to store passwords. Only add the manager if we
      are not using a private session, otherwise we want any new
@@ -514,6 +557,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
+  webkit_soup_cache_clear (single->priv->cache);
 }
 
 /**
