@@ -350,6 +350,7 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		--include=WebKit-1.0 \
 		--program=./epiphany \
 		--output $@ \
+		--strip-prefix=Ephy \
 		--pkg epiphany-$(EPIPHANY_API_VERSION) \
 		-DEPIPHANY_COMPILATION \
 		-I$(top_srcdir)/embed \
