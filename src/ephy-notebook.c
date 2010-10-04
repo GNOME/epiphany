@@ -46,7 +46,7 @@
 
 #define INSANE_NUMBER_OF_URLS 20
 
-#define EPHY_NOTEBOOK_TAB_GROUP_ID (GUINT_TO_POINTER (42))
+#define EPHY_NOTEBOOK_TAB_GROUP_ID "0x42"
 
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
@@ -464,7 +464,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_notebook_set_scrollable (gnotebook, TRUE);
 	gtk_notebook_set_show_border (gnotebook, FALSE);
 	gtk_notebook_set_show_tabs (gnotebook, FALSE);
-        gtk_notebook_set_group (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
+	gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
 
 	priv->show_tabs = TRUE;
 	priv->dnd_enabled = TRUE;
