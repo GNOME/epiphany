@@ -59,7 +59,7 @@ static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
-struct EphyEmbedPrivate
+struct _EphyEmbedPrivate
 {
   GtkBox *top_widgets_vbox;
   GtkScrolledWindow *scrolled_window;

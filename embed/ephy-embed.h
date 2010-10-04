@@ -36,18 +36,18 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_CLASS(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
 #define EPHY_EMBED_GET_CLASS(o)       (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED, EphyEmbedClass))
 
-typedef struct EphyEmbedClass EphyEmbedClass;
-typedef struct EphyEmbed EphyEmbed;
-typedef struct EphyEmbedPrivate EphyEmbedPrivate;
+typedef struct _EphyEmbedClass EphyEmbedClass;
+typedef struct _EphyEmbed EphyEmbed;
+typedef struct _EphyEmbedPrivate EphyEmbedPrivate;
 
-struct EphyEmbed {
+struct _EphyEmbed {
   GtkVBox parent_instance;
 
   /*< private >*/
   EphyEmbedPrivate *priv;
 };
 
-struct EphyEmbedClass {
+struct _EphyEmbedClass {
   GtkVBoxClass parent_class;
 };
 
