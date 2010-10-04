@@ -336,8 +336,10 @@ EPHY_GIR_C_FILES = \
 Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILES) \
                                       $(EPHY_GIR_C_FILES) epiphany
 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
-	$(INTROSPECTION_SCANNER) -v \
-		--namespace Epiphany \
+	$(INTROSPECTION_SCANNER) -v --warn-all \
+		--identifier-prefix=Ephy \
+		--symbol-prefix=ephy \
+		--namespace=Epiphany \
 		--nsversion=$(EPIPHANY_API_VERSION) \
 		--add-include-path=. \
 		--add-include-path=$(srcdir) \
@@ -345,8 +347,8 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		--include=libxml2-2.0 \
 		--include=WebKit-3.0 \
 		--program=./epiphany \
-		--output $@ \
-		--pkg epiphany-$(EPIPHANY_API_VERSION) \
+		--output=$@ \
+		--pkg=epiphany-$(EPIPHANY_API_VERSION) \
 		-DEPIPHANY_COMPILATION \
 		-I$(top_srcdir)/embed \
 		-I$(top_srcdir)/lib \

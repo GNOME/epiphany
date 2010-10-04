@@ -212,7 +212,7 @@ EPIPHANY_FEATURES=
 # GObject Introspection
 # *********************
 
-GOBJECT_INTROSPECTION_CHECK([0.6.7])
+GOBJECT_INTROSPECTION_CHECK([0.9.5])
 
 if test "$found_introspection" = "yes"; then
   EPIPHANY_FEATURES="$EPIPHANY_FEATURES introspection"
