@@ -1139,13 +1139,12 @@ ephy_web_view_constructed (GObject *object)
 }
 
 static void
-_ephy_web_view_draw_statusbar(GtkWidget *widget)
+_ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
 {
   gint width, height;
   guint border_width, statusbar_border_width;
   PangoLayout *layout;
   GtkAllocation allocation;
-  GdkWindow *window;
   GtkStyle *style;
   EphyWebViewPrivate *priv;
 
@@ -1161,7 +1160,6 @@ _ephy_web_view_draw_statusbar(GtkWidget *widget)
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  window = gtk_widget_get_window (widget);
   style = gtk_widget_get_style (widget);
 
   statusbar_border_width = 4; /* FIXME: what should we use here? */
@@ -1171,17 +1169,17 @@ _ephy_web_view_draw_statusbar(GtkWidget *widget)
   priv->text_rectangle.width = width + (statusbar_border_width * 2);
   priv->text_rectangle.height = height + (statusbar_border_width * 2);
 
-  gtk_paint_box (style, window,
+  gtk_paint_box (style, cr,
                  GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                 NULL, widget, NULL,
+                 widget, NULL,
                  priv->text_rectangle.x,
                  priv->text_rectangle.y,
                  priv->text_rectangle.width,
                  priv->text_rectangle.height);
 
-  gtk_paint_layout (style, window,
+  gtk_paint_layout (style, cr,
                     GTK_STATE_NORMAL, FALSE,
-                    NULL, widget, NULL,
+                    widget, NULL,
                     priv->text_rectangle.x + statusbar_border_width,
                     priv->text_rectangle.y + statusbar_border_width,
                     layout);
@@ -1190,16 +1188,16 @@ _ephy_web_view_draw_statusbar(GtkWidget *widget)
 }
 
 static gboolean
-ephy_web_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
+ephy_web_view_draw (GtkWidget *widget, cairo_t *cr)
 {
   EphyWebViewPrivate *priv;
 
-  GTK_WIDGET_CLASS (ephy_web_view_parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (ephy_web_view_parent_class)->draw (widget, cr);
 
   priv = EPHY_WEB_VIEW (widget)->priv;
 
   if (priv->text && priv->text[0] != '\0')
-    _ephy_web_view_draw_statusbar (widget);
+    _ephy_web_view_draw_statusbar (widget, cr);
 
   return FALSE;
 }
@@ -1218,7 +1216,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
-  widget_class->expose_event = ephy_web_view_expose_event;
+  widget_class->draw = ephy_web_view_draw;
 
 /**
  * EphyWebView:address:

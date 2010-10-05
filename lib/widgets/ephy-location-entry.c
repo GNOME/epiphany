@@ -738,19 +738,19 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 #define DRAG_ICON_ICON_PADDING		4
 #define DRAG_ICON_MAX_WIDTH_CHARS	32
 
-static GdkPixmap *
-favicon_create_drag_pixmap (EphyLocationEntry *entry,
-			    GtkWidget *widget)
+static cairo_surface_t *
+favicon_create_drag_surface (EphyLocationEntry *entry,
+			     GtkWidget *widget)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	char *title = NULL, *address = NULL;
 	GString *text;
 	GtkStyle *style;
-	GdkDrawable *drawable;
+	cairo_surface_t *surface;
 	PangoContext *context;
 	PangoLayout  *layout;
 	PangoFontMetrics *metrics;
-	int pixmap_height, pixmap_width;
+	int surface_height, surface_width;
 	int layout_width, layout_height;
 	int icon_width = 0, icon_height = 0, favicon_offset_x = 0;
 	int char_width;
@@ -806,18 +806,18 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 		favicon_offset_x = icon_width + (2 * DRAG_ICON_ICON_PADDING);
 	}
 
-	pixmap_width = layout_width + favicon_offset_x +
+	surface_width = layout_width + favicon_offset_x +
 			(DRAG_ICON_LAYOUT_PADDING * 2);
-	pixmap_height = MAX (layout_height, icon_height) +
+	surface_height = MAX (layout_height, icon_height) +
 			(DRAG_ICON_LAYOUT_PADDING * 2);
 
-	drawable = gdk_pixmap_new (gtk_widget_get_window (widget),
-				   pixmap_width + 2,
-				   pixmap_height + 2,
-				   -1);
-	cr = gdk_cairo_create (drawable);
+	surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+						     CAIRO_CONTENT_COLOR,
+						     surface_width + 2,
+						     surface_height + 2);
+	cr = cairo_create (surface);
 
-	cairo_rectangle (cr, 1, 1, pixmap_width, pixmap_height);
+	cairo_rectangle (cr, 1, 1, surface_width, surface_height);
 	cairo_set_line_width (cr, 1.0);
 
 	cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
@@ -832,7 +832,7 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 		double y;
 
 		x = 1 + DRAG_ICON_LAYOUT_PADDING + DRAG_ICON_ICON_PADDING;
-		y = 1 + DRAG_ICON_LAYOUT_PADDING + (pixmap_height - icon_height) / 2;
+		y = 1 + DRAG_ICON_LAYOUT_PADDING + (surface_height - icon_height) / 2;
 		gdk_cairo_set_source_pixbuf (cr, priv->favicon, x, y);
 		cairo_rectangle (cr, x, y, icon_width, icon_height);
 		cairo_fill (cr);
@@ -851,7 +851,7 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 	g_free (title);
 	g_string_free (text, TRUE);
 
-	return drawable;
+	return surface;
 }
 
 static void
@@ -859,7 +859,7 @@ favicon_drag_begin_cb (GtkWidget *widget,
 		       GdkDragContext *context,
 		       EphyLocationEntry *lentry)
 {
-	GdkPixmap *pixmap;
+	cairo_surface_t *surface;
 	GtkEntry *entry;
 	gint index;
 
@@ -869,14 +869,12 @@ favicon_drag_begin_cb (GtkWidget *widget,
 	if (index != GTK_ENTRY_ICON_PRIMARY)
 		return;
 
-	pixmap = favicon_create_drag_pixmap (lentry, widget);
+	surface = favicon_create_drag_surface (lentry, widget);
 
-	if (pixmap != NULL)
+	if (surface != NULL)
 	{
-		gtk_drag_set_icon_pixmap (context,
-					  gdk_drawable_get_colormap (pixmap),
-					  pixmap, NULL, -2, -2);
-		g_object_unref (pixmap);
+		gtk_drag_set_icon_surface (context, surface);
+		cairo_surface_destroy (surface);
 	}
 }
 

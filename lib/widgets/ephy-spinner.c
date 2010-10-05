@@ -616,16 +616,15 @@ ephy_spinner_init (EphySpinner *spinner)
 	details->need_load = TRUE;
 }
 
-static int
-ephy_spinner_expose (GtkWidget *widget,
-		     GdkEventExpose *event)
+static gboolean
+ephy_spinner_draw (GtkWidget *widget,
+                   cairo_t *cr)
 {
 	EphySpinner *spinner = EPHY_SPINNER (widget);
 	EphySpinnerDetails *details = spinner->details;
 	EphySpinnerImages *images;
 	GtkAllocation allocation;
 	GdkPixbuf *pixbuf;
-	cairo_t *cr;
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
@@ -669,17 +668,8 @@ ephy_spinner_expose (GtkWidget *widget,
 	pix_area.width = width;
 	pix_area.height = height;
 
-	if (!gdk_rectangle_intersect (&event->area, &pix_area, &dest))
-	{
-		return FALSE;
-	}
-
-	cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
 	gdk_cairo_set_source_pixbuf (cr, pixbuf, dest.x, dest.y);
 	cairo_paint (cr);
-
-	cairo_destroy (cr);
 
 	return FALSE;
 }
@@ -876,7 +866,7 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	object_class->dispose = ephy_spinner_dispose;
 	object_class->finalize = ephy_spinner_finalize;
 
-	widget_class->expose_event = ephy_spinner_expose;
+	widget_class->draw = ephy_spinner_draw;
 	widget_class->size_request = ephy_spinner_size_request;
 	widget_class->map = ephy_spinner_map;
 	widget_class->unmap = ephy_spinner_unmap;
