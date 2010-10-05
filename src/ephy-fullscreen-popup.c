@@ -121,7 +121,7 @@ ephy_fullscreen_popup_update_position (EphyFullscreenPopup *popup)
 	GdkRectangle screen_rect;
 	int popup_width;
 
-	gtk_widget_size_request (widget, &requisition);
+	gtk_widget_get_preferred_size (widget, &requisition, NULL);
 	popup_width = requisition.width;
 
 	screen = gtk_widget_get_screen (widget);

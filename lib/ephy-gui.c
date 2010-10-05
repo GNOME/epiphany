@@ -45,7 +45,7 @@ ephy_gui_sanitise_popup_position (GtkMenu *menu,
 
 	g_return_if_fail (widget != NULL);
 
-	gtk_widget_size_request (GTK_WIDGET (menu), &req);
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 
 	monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
 	gtk_menu_set_monitor (menu, monitor_num);
@@ -71,7 +71,7 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 	GtkAllocation allocation;
 	GdkRectangle visible;
 
-	gtk_widget_size_request (GTK_WIDGET (menu), &req);
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 	gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 	gtk_widget_get_allocation (widget, &allocation);
 
@@ -133,8 +133,8 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 	container = gtk_widget_get_ancestor (widget, GTK_TYPE_CONTAINER);
 	g_return_if_fail (container != NULL);
 
-	gtk_widget_size_request (widget, &req);
-	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+	gtk_widget_get_preferred_size (widget, &req, NULL);
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &menu_req, NULL);
 
 	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
 	window = gtk_widget_get_window (widget);
@@ -202,8 +202,8 @@ ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
 	toolbar = GTK_TOOLBAR (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR));
 	g_return_if_fail (toolbar != NULL);
 
-	gtk_widget_size_request (widget, &req);
-	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+	gtk_widget_get_preferred_size (widget, &req, NULL);
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &menu_req, NULL);
 
 	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
 	window = gtk_widget_get_window (widget);
