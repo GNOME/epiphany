@@ -626,7 +626,6 @@ ephy_spinner_draw (GtkWidget *widget,
 	GtkAllocation allocation;
 	GdkPixbuf *pixbuf;
 	int x_offset, y_offset, width, height;
-	GdkRectangle pix_area, dest;
 
 	if (!gtk_widget_is_drawable (GTK_WIDGET (spinner)))
 	{
@@ -662,13 +661,7 @@ ephy_spinner_draw (GtkWidget *widget,
 	gtk_widget_get_allocation (widget, &allocation);
 	x_offset = (allocation.width - width) / 2;
 	y_offset = (allocation.height - height) / 2;
-
-	pix_area.x = x_offset + allocation.x;
-	pix_area.y = y_offset + allocation.y;
-	pix_area.width = width;
-	pix_area.height = height;
-
-	gdk_cairo_set_source_pixbuf (cr, pixbuf, dest.x, dest.y);
+	gdk_cairo_set_source_pixbuf (cr, pixbuf, x_offset, y_offset);
 	cairo_paint (cr);
 
 	return FALSE;
