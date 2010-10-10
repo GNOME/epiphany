@@ -114,8 +114,8 @@ ephy_extensions_manager_toggle_load (EphyExtensionsManager *manager,
 {
 	char **exts;
 	GVariantBuilder builder;
-	gboolean dirty = FALSE;
 	int i;
+	gboolean found = FALSE;
 
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 	g_return_if_fail (identifier != NULL);
@@ -131,24 +131,23 @@ ephy_extensions_manager_toggle_load (EphyExtensionsManager *manager,
 	g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
 	for (i = 0; exts[i]; i++)
 	{
+		/* Ignore the extension if we are removing it. */
 		if (g_strcmp0 (exts[i], identifier) == 0)
 		{
-			dirty = TRUE;
-			if (status)
-				break;
-			else
+			found = TRUE;
+			if (!status)
 				continue;
 		}
 
 		g_variant_builder_add (&builder, "s", exts[i]);
 	}
 
-	if (!dirty)
-		g_settings_set (EPHY_SETTINGS_MAIN,
-				EPHY_PREFS_ENABLED_EXTENSIONS,
-				"as", &builder);
+	if (status && !found)
+		g_variant_builder_add (&builder, "s", identifier);
 
-	g_variant_builder_end (&builder);
+	g_settings_set (EPHY_SETTINGS_MAIN,
+			EPHY_PREFS_ENABLED_EXTENSIONS,
+			"as", &builder);
 }
 
 /**
