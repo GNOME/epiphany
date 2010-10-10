@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-fullscreen-popup.h"
+#include "ephy-spinner.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -33,7 +34,7 @@ struct _EphyFullscreenPopupPrivate
 {
 	EphyWindow *window;
 	GtkWidget *frame;
-	GtkWidget *spinner;
+	EphySpinner *spinner;
 	GtkWidget *lock;
 	GtkWidget *lock_ebox;
 	GtkWidget *button;
@@ -103,12 +104,11 @@ ephy_fullscreen_popup_update_spinner (EphyFullscreenPopup *popup)
 
 	if (priv->spinning && gtk_widget_get_visible (GTK_WIDGET (popup)))
 	{
-		gtk_spinner_start (GTK_SPINNER (priv->spinner));
+		ephy_spinner_start (priv->spinner);
 	}
 	else
 	{
-		gtk_spinner_stop (GTK_SPINNER (priv->spinner));
-		gtk_spinner_reset (GTK_SPINNER (priv->spinner));
+		ephy_spinner_stop (priv->spinner);
 	}
 }
 
@@ -245,7 +245,8 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_widget_show (frame_hbox);
 
 	/* add spinner */
-	priv->spinner = gtk_spinner_new ();
+	priv->spinner = EPHY_SPINNER (ephy_spinner_new ());
+	ephy_spinner_set_size (EPHY_SPINNER (priv->spinner), GTK_ICON_SIZE_BUTTON);
 	gtk_box_pack_start (GTK_BOX (frame_hbox), GTK_WIDGET (priv->spinner), FALSE, FALSE, 0);
 
 	/* lock */
