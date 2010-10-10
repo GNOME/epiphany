@@ -1350,6 +1350,7 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_node_unref (priv->keywords);
 	ephy_node_unref (priv->favorites);
 	ephy_node_unref (priv->notcategorized);
+	ephy_node_unref (priv->smartbookmarks);
 
 	g_object_unref (priv->db);
 
