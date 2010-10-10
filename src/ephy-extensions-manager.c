@@ -147,6 +147,8 @@ ephy_extensions_manager_toggle_load (EphyExtensionsManager *manager,
 		g_settings_set (EPHY_SETTINGS_MAIN,
 				EPHY_PREFS_ENABLED_EXTENSIONS,
 				"as", &builder);
+
+	g_variant_builder_end (&builder);
 }
 
 /**
@@ -666,6 +668,7 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 					 EPHY_PREFS_ENABLED_EXTENSIONS);
 	}
 
+	g_variant_builder_end (&builder);
 
 	for (l = manager->priv->data; l != NULL; l = l->next)
 	{
