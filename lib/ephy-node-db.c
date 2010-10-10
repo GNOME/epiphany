@@ -94,12 +94,19 @@ ephy_node_db_set_property (GObject *object,
 }
 
 static void
+ephy_node_db_free_func (EphyNode *node)
+{
+    if (node)
+	    ephy_node_unref (node);
+}
+
+static void
 ephy_node_db_init (EphyNodeDb *db)
 {
 	db->priv = EPHY_NODE_DB_GET_PRIVATE (db);
 
 	/* id to node */
-	db->priv->id_to_node = g_ptr_array_new ();
+	db->priv->id_to_node = g_ptr_array_new_with_free_func ((GDestroyNotify)ephy_node_db_free_func);
 
 	/* id factory */
 	db->priv->id_factory = RESERVED_IDS;
