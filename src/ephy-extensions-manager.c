@@ -648,8 +648,7 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 	/* Make sure the extensions-manager-ui is always loaded. */
 	for (i = 0; extensions[i]; i++)
 	{
-		if (!has_ui && g_strcmp0 (extensions[i],
-					  "extensions-manager-ui") == 0)
+		if (g_strcmp0 (extensions[i], "extensions-manager-ui") == 0)
 			has_ui = TRUE;
 
 		g_variant_builder_add (&builder, "s", extensions[i]);
