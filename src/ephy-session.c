@@ -375,6 +375,7 @@ session_delete (EphySession *session,
 	file = get_session_file (filename);
 
 	g_file_delete (file, NULL, NULL);
+	g_object_unref (file);
 }
 
 static void
@@ -523,6 +524,7 @@ session_command_autoresume (EphySession *session,
 
 	saved_session_file = get_session_file (SESSION_CRASHED);
 	saved_session_file_path = g_file_get_path (saved_session_file);
+	g_object_unref (saved_session_file);
 	crashed_session = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
 	
 	g_free (saved_session_file_path);
@@ -1596,6 +1598,7 @@ ephy_session_load (EphySession *session,
 
 	save_to_file = get_session_file (filename);
 	save_to_path = g_file_get_path (save_to_file);
+	g_object_unref (save_to_file);
 
 	doc = xmlParseFile (save_to_path);
 	g_free (save_to_path);
