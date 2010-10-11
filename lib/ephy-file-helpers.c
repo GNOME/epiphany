@@ -927,7 +927,8 @@ ephy_file_browse_to (GFile *file,
 						parent,
 						user_time);
 	}
-	
+
+	g_object_unref (desktop);
 	g_free (desktop_dir);
 
 	return ret;

@@ -43,7 +43,7 @@ sanitise_string (const xmlChar *string)
 
 	/* http://www.w3.org/TR/REC-xml/#sec-well-formed :
 	   Character Range
-	   [2]     Char       ::=          #x9 | #xA | #xD | [#x20-#xD7FF] |
+	   [2]	   Char	      ::=	   #x9 | #xA | #xD | [#x20-#xD7FF] |
 	   [#xE000-#xFFFD] | [#x10000-#x10FFFF]
 	   any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
 	*/
@@ -191,7 +191,7 @@ write_rdf (EphyBookmarks *bookmarks,
 		 (xmlChar *) "http://www.gnome.org/projects/epiphany/");
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterStartElement	(writer, (xmlChar *) "items");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "items");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterStartElementNS
@@ -406,6 +406,8 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	writer = xmlNewTextWriterFilename (tmp_file_path, 0);
 	if (writer == NULL)
 	{
+		g_object_unref (file);
+		g_object_unref (tmp_file);
 		g_free (tmp_file);
 		return;
 	}
@@ -468,6 +470,8 @@ ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
 	
 	tmp_file = g_file_new_for_path (tmp_file_path);
 	ret = write_rdf (bookmarks, tmp_file, writer);
+	g_object_unref (tmp_file);
+
 	if (ret < 0) goto out;
 
 	/* Set up libxml stuff */
