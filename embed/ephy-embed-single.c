@@ -602,6 +602,8 @@ ephy_embed_single_set_network_status (EphyEmbedSingle *single,
 {
   if (status != single->priv->online)
     single->priv->online = status;
+
+  g_object_notify (G_OBJECT (single), "network-status");
 }
 
 /**
