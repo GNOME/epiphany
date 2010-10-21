@@ -952,24 +952,24 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 
-	combo = gtk_combo_box_new_text ();
+	combo = gtk_combo_box_text_new ();
 	gtk_widget_show (combo);
 
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Last 30 minutes"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Today"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Last 30 minutes"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Today"));
 
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), str);
 	g_free (str);
 
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 3), 3);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), str);
 	g_free (str);
 
 	/* keep this in sync with embed/ephy-history.c's
 	 * HISTORY_PAGE_OBSOLETE_DAYS */
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 10), 10);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), str);
 	g_free (str);
 
 	g_settings_bind (EPHY_SETTINGS_STATE,

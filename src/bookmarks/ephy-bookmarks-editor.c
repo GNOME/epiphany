@@ -889,13 +889,13 @@ cmd_bookmarks_export (GtkAction *action,
 	/* Make a format selection combo & label */
 	label = gtk_label_new_with_mnemonic (_("File f_ormat:"));
 
-	combo = gtk_combo_box_new_text ();
+	combo = gtk_combo_box_text_new ();
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
 	for (format = 0; format < G_N_ELEMENTS (export_formats); ++format)
 	{
-		gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
-					   _(export_formats[format].name));
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
+					        _(export_formats[format].name));
 	}
 
 	g_object_set_data (G_OBJECT (dialog), "format-combo", combo);

@@ -223,20 +223,20 @@ int main(int argc, char **argv)
 	g_signal_connect (widget, "toggled", G_CALLBACK (spin_toolbar_spinner_cb), item);
 	gtk_box_pack_start (GTK_BOX (vbox2), widget, FALSE, FALSE, 0);
 
-	combo = gtk_combo_box_new_text ();
+	combo = gtk_combo_box_text_new ();
 	g_signal_connect (combo, "changed", G_CALLBACK (change_toolbar_style_cb), toolbar);
 	for (i = 0; i < G_N_ELEMENTS (toolbar_styles); ++i)
 	{
-		gtk_combo_box_append_text (GTK_COMBO_BOX (combo), toolbar_styles[i]);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), toolbar_styles[i]);
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), GTK_TOOLBAR_BOTH);
 	gtk_box_pack_start (GTK_BOX (vbox2), combo, FALSE, FALSE, 0);
 
-	combo = gtk_combo_box_new_text ();
+	combo = gtk_combo_box_text_new ();
 	g_signal_connect (combo, "changed", G_CALLBACK (change_toolbar_icon_size_cb), toolbar);
 	for (i = 0; i < G_N_ELEMENTS (icon_sizes); ++i)
 	{
-		gtk_combo_box_append_text (GTK_COMBO_BOX (combo), icon_sizes[i]);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), icon_sizes[i]);
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), GTK_ICON_SIZE_INVALID);
 	gtk_box_pack_start (GTK_BOX (vbox2), combo, FALSE, FALSE, 0);

@@ -101,11 +101,11 @@ ephy_zoom_control_init (EphyZoomControl *control)
 
 	p->zoom = 1.0;
 
-	combo = p->combo = GTK_COMBO_BOX (gtk_combo_box_new_text ());
+	combo = p->combo = GTK_COMBO_BOX (gtk_combo_box_text_new ());
 
 	for (i = 0; i < n_zoom_levels; i++)
 	{
-		gtk_combo_box_append_text (combo, _(zoom_levels[i].name));
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _(zoom_levels[i].name));
 	}
 
 	p->combo = combo;
