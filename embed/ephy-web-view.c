@@ -2083,13 +2083,21 @@ adj_changed_cb (GtkAdjustment *adj, EphyWebView *view)
 }
 
 static void
-set_scroll_adjustments_cb (EphyWebView *view, GtkAdjustment *hadj, GtkAdjustment *vadj)
+hadjustment_changed_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
 {
-  if (hadj)
-    g_signal_connect (hadj, "value-changed", G_CALLBACK (adj_changed_cb), view);
+  GtkAdjustment *adj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(view));
 
-  if (vadj)
-    g_signal_connect (vadj, "value-changed", G_CALLBACK (adj_changed_cb), view);
+  if (adj)
+    g_signal_connect (adj, "value-changed", G_CALLBACK (adj_changed_cb), view);
+}
+
+static void
+vadjustment_changed_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
+{
+  GtkAdjustment *adj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(view));
+
+  if (adj)
+    g_signal_connect (adj, "value-changed", G_CALLBACK (adj_changed_cb), view);
 }
 
 static void
@@ -2171,8 +2179,12 @@ ephy_web_view_init (EphyWebView *web_view)
                            G_CALLBACK (ge_popup_blocked_cb),
                            web_view, (GConnectFlags)0);
 
-  g_signal_connect (web_view, "set-scroll-adjustments",
-                    G_CALLBACK (set_scroll_adjustments_cb),
+  g_signal_connect (web_view, "notify::hadjustment",
+                    G_CALLBACK (hadjustment_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::vadjustment",
+                    G_CALLBACK (vadjustment_changed_cb),
                     NULL);
 
   g_signal_connect (web_view, "notify::status-message",
