@@ -384,6 +384,7 @@ ephy_embed_prefs_init (void)
                 "enable-site-specific-quirks", TRUE,
                 "enable-page-cache", TRUE,
                 "auto-resize-window", TRUE,
+                "enable-developer-extras", TRUE,
                 NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
@@ -402,10 +403,6 @@ ephy_embed_prefs_init (void)
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_JAVASCRIPT,
                    webkit_settings, "enable-scripts",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_MAIN,
-                   EPHY_PREFS_ENABLE_WEB_INSPECTOR,
-                   webkit_settings, "enable-developer-extras",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_ENABLE_CARET_BROWSING,

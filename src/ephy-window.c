@@ -1065,7 +1065,6 @@ update_popup_actions_visibility (EphyWindow *window,
 {
 	GtkAction *action;
 	GtkActionGroup *action_group;
-	gboolean inspector_enabled;
 
 	action_group = window->priv->popups_action_group;
 
@@ -1080,12 +1079,6 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenFrame");
 	gtk_action_set_visible (action, is_frame);
-
-	inspector_enabled = g_settings_get_boolean
-					(EPHY_SETTINGS_MAIN,
-					 EPHY_PREFS_ENABLE_WEB_INSPECTOR);
-	action = gtk_action_group_get_action (action_group, "InspectElement");
-	gtk_action_set_visible (action, inspector_enabled);
 }
 
 static void
