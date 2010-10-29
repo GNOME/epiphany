@@ -733,20 +733,11 @@ main (int argc,
 
 	queue_commands (user_time);
 
-#ifdef HAVE_LIBNOTIFY	
-	/* Init notifications for the download manager */
-	notify_init (PACKAGE);
-#endif
-
 	gtk_main ();
 
 	/* Shutdown */
 	g_object_unref (ephy_shell);
 
-#ifdef HAVE_LIBNOTIFY	
-	if (notify_is_initted ())
-		notify_uninit ();
-#endif
 	save_accels ();
 	ephy_state_save ();
 	ephy_settings_shutdown ();
