@@ -107,10 +107,6 @@ struct _EphyWebViewClass
                                  const char *type,
                                  const char *title,
                                  const char *address);
-  gboolean (* dom_mouse_click)	(EphyWebView *view,
-                                 EphyEmbedEvent *event);
-  gboolean (* dom_mouse_down)	(EphyWebView *view,
-                                 EphyEmbedEvent *event);
   void	 (* popup_blocked)	(EphyWebView *view,
                                  const char *address,
                                  const char *target,

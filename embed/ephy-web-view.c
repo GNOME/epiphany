@@ -1462,39 +1462,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
- * EphyWebView::ge-dom-mouse-click:
- * @view: the #EphyWebView that received the signal
- * @event: the #EphyEmbedEvent which triggered this signal
- *
- * The ::ge_dom_mouse_click signal is emitted when the user clicks in the @view.
- **/
-    g_signal_new ("ge_dom_mouse_click",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_click),
-            g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__OBJECT,
-            G_TYPE_BOOLEAN,
-            1,
-            G_TYPE_OBJECT);
-/**
- * EphyWebView::ge-dom-mouse-down:
- * @view: the #EphyWebView that received the signal
- * @event: the #EphyEmbedEvent which triggered this signal
- *
- * The ::ge_dom_mouse_down signal is emitted when the user depresses a mouse
- * button.
- **/
-    g_signal_new ("ge_dom_mouse_down",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, dom_mouse_down),
-            g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__OBJECT,
-            G_TYPE_BOOLEAN,
-            1,
-            G_TYPE_OBJECT);
-/**
  * EphyWebView::ge-modal-alert:
  * @view: the #EphyWebView that received the signal
  *
