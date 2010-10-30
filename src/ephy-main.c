@@ -50,10 +50,6 @@
 #include <girepository.h>
 #endif
 
-#ifdef HAVE_LIBNOTIFY
-#include <libnotify/notify.h>
-#endif
-
 static GQuark startup_error_quark = 0;
 #define STARTUP_ERROR_QUARK	(startup_error_quark)
 
