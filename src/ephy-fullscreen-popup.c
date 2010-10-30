@@ -287,12 +287,28 @@ ephy_fullscreen_popup_set_property (GObject *object,
 }
 
 static void
-ephy_fullscreen_popup_size_request (GtkWidget *widget,
-				    GtkRequisition *requisition)
+ephy_fullscreen_popup_get_preferred_width (GtkWidget *widget,
+                                           gint *minimum,
+                                           gint *natural)
 {
 	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
 
-	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->size_request (widget, requisition);
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->get_preferred_width (widget, minimum, natural);
+
+	if (gtk_widget_get_realized (widget))
+	{
+		ephy_fullscreen_popup_update_position (popup);
+	}
+}
+
+static void
+ephy_fullscreen_popup_get_preferred_height (GtkWidget *widget,
+                                            gint *minimum,
+                                            gint *natural)
+{
+	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
+
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->get_preferred_height (widget, minimum, natural);
 
 	if (gtk_widget_get_realized (widget))
 	{
@@ -321,7 +337,8 @@ ephy_fullscreen_popup_class_init (EphyFullscreenPopupClass *klass)
 	object_class->get_property = ephy_fullscreen_popup_get_property;
 	object_class->set_property = ephy_fullscreen_popup_set_property;
 
-	widget_class->size_request = ephy_fullscreen_popup_size_request;
+	widget_class->get_preferred_width = ephy_fullscreen_popup_get_preferred_width;
+	widget_class->get_preferred_height = ephy_fullscreen_popup_get_preferred_height;
 	widget_class->realize = ephy_fullscreen_popup_realize;
 
 	signals[EXIT_CLICKED] =
