@@ -23,6 +23,7 @@ LDADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
+	$(DBUS_LIBS) \
 	$(DEPENDENCIES_LIBS) 
 
 if ENABLE_NSS
