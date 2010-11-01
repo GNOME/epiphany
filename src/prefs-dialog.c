@@ -834,42 +834,14 @@ create_language_section (EphyDialog *dialog)
 static void
 download_path_changed_cb (GtkFileChooser *button)
 {
-	char *dir, *downloads_dir, *desktop_dir;
+	char *dir;
 
-	/* FIXME: use _uri variant when we support downloading 
-	 * to gnome-vfs remote locations
-	 */
 	dir = gtk_file_chooser_get_filename (button);
 	if (dir == NULL) return;
 
-	downloads_dir = ephy_file_downloads_dir ();
-	desktop_dir = ephy_file_desktop_dir ();
-	g_return_if_fail (downloads_dir != NULL && desktop_dir != NULL);
-
-	/* Check if the dir matches the default downloads_dir or desktop_dir to
-	 * store the english name instead of the localized one reported by the
-	 * two ephy_file_ functions. */
-	if (strcmp (dir, downloads_dir) == 0)
-	{
-		g_settings_set_string (EPHY_SETTINGS_STATE,
-				       EPHY_PREFS_STATE_DOWNLOAD_DIR,
-				       _("Downloads"));
-	}
-	else if (strcmp (dir, desktop_dir) == 0)
-	{
-		g_settings_set_string (EPHY_SETTINGS_STATE,
-				       EPHY_PREFS_STATE_DOWNLOAD_DIR,
-				       _("Desktop"));
-	}
-	else
-	{
-		g_settings_set_string (EPHY_SETTINGS_STATE,
-				       EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
-	}
-
+	g_settings_set_string (EPHY_SETTINGS_STATE,
+			       EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
 	g_free (dir);
-	g_free (downloads_dir);
-	g_free (desktop_dir);
 }
 
 static void

@@ -106,41 +106,6 @@ ephy_file_tmp_dir (void)
 }
 
 /**
- * ephy_file_downloads_dir:
- *
- * Gets the basename for Epiphany's Downloads dir. This depends on the current
- * locale. For the full path to the downloads directory see
- * ephy_file_get_downloads_dir().
- *
- * Returns: a newly-allocated string containing the downloads dir basename.
- **/
-char *
-ephy_file_downloads_dir (void)
-{
-	const char *translated_folder;
-	const char *xdg_download_dir;
-	char *desktop_dir, *converted, *downloads_dir;
-
-	xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
-	if (xdg_download_dir != NULL)
-		return g_strdup (xdg_download_dir);
-
-	/* The name of the default downloads folder */
-	translated_folder = _("Downloads");
-
-	converted = g_filename_from_utf8 (translated_folder, -1, NULL,
-					  NULL, NULL);
-
-	desktop_dir = ephy_file_desktop_dir ();
-	downloads_dir = g_build_filename (desktop_dir, converted, NULL);
-
-	g_free (desktop_dir);
-	g_free (converted);
-
-	return downloads_dir;
-}
-
-/**
  * ephy_file_get_downloads_dir:
  *
  * Gets the full path to the downloads dir. This uses ephy_file_downloads_dir()
@@ -152,44 +117,16 @@ ephy_file_downloads_dir (void)
 char *
 ephy_file_get_downloads_dir (void)
 {
-	char *download_dir, *expanded;
+	char *download_dir;
 
 	download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
 					      EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-	if (download_dir && strcmp (download_dir, _("Downloads")) == 0)
-	{
-		g_free (download_dir);
-		download_dir = ephy_file_downloads_dir ();
-	}
-  	else if (download_dir && strcmp (download_dir, _("Desktop")) == 0)
-	{
-		g_free (download_dir);
-		download_dir = ephy_file_desktop_dir ();
-	}
-	else if (download_dir)
-	{
-		char *converted_dp;
-
-		converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
-		g_free (download_dir);
-		download_dir = converted_dp;
-	}
-
 	/* Emergency download destination */
-	if (download_dir == NULL)
-	{
-		const char *home_dir;
-		home_dir = g_get_home_dir ();
-		download_dir = g_strdup (home_dir != NULL ? home_dir : "/");
-	}
+	if (g_path_is_absolute (download_dir) != TRUE)
+		download_dir = ephy_file_desktop_dir ();
 
-	g_return_val_if_fail (download_dir != NULL, NULL);
-
-	expanded = ephy_string_expand_initial_tilde (download_dir);
-	g_free (download_dir);
-
-	return expanded;
+	return download_dir;
 }
 
 /**
