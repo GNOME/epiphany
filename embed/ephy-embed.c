@@ -67,6 +67,7 @@ struct _EphyEmbedPrivate
   WebKitWebView *web_view;
   EphyHistory *history;
   GtkWidget *inspector_window;
+  GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
   gboolean inspector_attached;
   guint is_setting_zoom : 1;
@@ -292,18 +293,10 @@ ephy_embed_class_init (EphyEmbedClass *klass)
 
 static WebKitWebView *
 ephy_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
-                                  WebKitWebView *web_view,
-                                  gpointer data)
+                                WebKitWebView *web_view,
+                                EphyEmbed *embed)
 {
-  GtkWidget *inspector_sw = GTK_WIDGET (data);
-  GtkWidget *inspector_web_view;
-
-  inspector_web_view = ephy_web_view_new ();
-  gtk_container_add (GTK_CONTAINER (inspector_sw), inspector_web_view);
-
-  gtk_widget_show_all (gtk_widget_get_toplevel (inspector_sw));
-
-  return WEBKIT_WEB_VIEW (inspector_web_view);
+  return WEBKIT_WEB_VIEW (embed->priv->inspector_web_view);
 }
 
 static gboolean
@@ -315,38 +308,12 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
   embed->priv->inspector_attached = TRUE;
 
-  if (embed->priv->paned == NULL)
-  {
-    embed->priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
-    g_object_ref_sink (embed->priv->paned);
-  }
-
-  /* Main view */
-  g_object_ref (embed->priv->scrolled_window);
-  gtk_container_remove (GTK_CONTAINER (embed),
-                        GTK_WIDGET (embed->priv->scrolled_window));
-  gtk_paned_pack1 (embed->priv->paned,
-                   GTK_WIDGET (embed->priv->scrolled_window),
-                   TRUE, FALSE);
-  g_object_unref (embed->priv->scrolled_window);
-
   /* Set a sane position for the mover */
   gtk_paned_set_position (embed->priv->paned, allocation.height * 0.5);
 
-  /* The inspector */
-  g_object_ref (embed->priv->inspector_scrolled_window);
-  gtk_container_remove (GTK_CONTAINER (embed->priv->inspector_window),
-                        GTK_WIDGET (embed->priv->inspector_scrolled_window));
-  gtk_paned_pack2 (embed->priv->paned,
-                   GTK_WIDGET (embed->priv->inspector_scrolled_window),
-                   FALSE, TRUE);
-  g_object_unref (embed->priv->inspector_scrolled_window);
-
-  /* Add the paned to the embed, show it, and hide the inspector window */
-  gtk_container_add (GTK_CONTAINER (embed), GTK_WIDGET (embed->priv->paned));
-  gtk_widget_show_all (GTK_WIDGET (embed->priv->paned));
-
   gtk_widget_hide (embed->priv->inspector_window);
+  gtk_widget_reparent (GTK_WIDGET (embed->priv->inspector_scrolled_window),
+                       GTK_WIDGET (embed->priv->paned));
 
   return TRUE;
 }
@@ -357,23 +324,10 @@ ephy_embed_detach_inspector_cb (WebKitWebInspector *inspector,
 {
   embed->priv->inspector_attached = FALSE;
 
-  gtk_container_remove (GTK_CONTAINER (embed),
-                        GTK_WIDGET (embed->priv->paned));
-
-  /* Main view */
-  gtk_widget_reparent (GTK_WIDGET (embed->priv->scrolled_window),
-                       GTK_WIDGET (embed));
-
-  /* The inspector */
   gtk_widget_reparent (GTK_WIDGET (embed->priv->inspector_scrolled_window),
                        GTK_WIDGET (embed->priv->inspector_window));
 
-  /* Get the view and the inspector back to their places */
-  gtk_widget_destroy (GTK_WIDGET (embed->priv->paned));
-  embed->priv->paned = NULL;
-
   gtk_widget_show_all (embed->priv->inspector_window);
-  gtk_widget_show_all (embed->priv->inspector_scrolled_window);
 
   return TRUE;
 }
@@ -382,8 +336,11 @@ static gboolean
 ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
                             EphyEmbed *embed)
 {
-  if (!embed->priv->inspector_attached)
+  if (!embed->priv->inspector_attached) {
+    gtk_widget_show_all (embed->priv->inspector_window);
     gtk_window_present (GTK_WINDOW (embed->priv->inspector_window));
+  } else
+    gtk_widget_show (embed->priv->inspector_scrolled_window);
 
   return TRUE;
 }
@@ -394,6 +351,8 @@ ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
 {
   if (!embed->priv->inspector_attached)
     gtk_widget_hide (embed->priv->inspector_window);
+  else
+    gtk_widget_hide (embed->priv->inspector_scrolled_window);
 
   return TRUE;
 }
@@ -886,22 +845,30 @@ ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
   GtkWidget *scrolled_window;
+  GtkWidget *paned;
   WebKitWebView *web_view;
   WebKitWebInspector *inspector;
 
-  embed->priv->top_widgets_vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
-  gtk_box_pack_start (GTK_BOX (embed), GTK_WIDGET (embed->priv->top_widgets_vbox),
-                      FALSE, FALSE, 0);
-  gtk_widget_show (GTK_WIDGET (embed->priv->top_widgets_vbox));
-
-  scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
-  gtk_container_add (GTK_CONTAINER (embed), scrolled_window);
-  gtk_widget_show (scrolled_window);
-
+  /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
+  scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
+  paned = GTK_WIDGET (embed->priv->paned);
+
   embed->priv->web_view = web_view;
-  gtk_container_add (GTK_CONTAINER (embed->priv->scrolled_window), GTK_WIDGET (web_view));
+
+  gtk_container_add (GTK_CONTAINER (embed->priv->scrolled_window),
+                     GTK_WIDGET (web_view));
+  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (scrolled_window),
+                   TRUE, FALSE);
+
+  gtk_box_pack_start (GTK_BOX (embed),
+                      GTK_WIDGET (embed->priv->top_widgets_vbox),
+                      FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (embed), paned);
+
+  gtk_widget_show (GTK_WIDGET (embed->priv->top_widgets_vbox));
   gtk_widget_show (GTK_WIDGET (web_view));
+  gtk_widget_show_all (paned);
 
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
@@ -910,6 +877,8 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     NULL);
 
+  /* The inspector */
+  embed->priv->inspector_web_view  = ephy_web_view_new ();
   embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   inspector = webkit_web_view_get_inspector (web_view);
 
@@ -918,6 +887,8 @@ ephy_embed_constructed (GObject *object)
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (embed->priv->inspector_window),
                      embed->priv->inspector_scrolled_window);
+  gtk_container_add (GTK_CONTAINER (embed->priv->inspector_scrolled_window),
+                     embed->priv->inspector_web_view);
 
   gtk_window_set_title (GTK_WINDOW (embed->priv->inspector_window),
                         _("Web Inspector"));
@@ -930,7 +901,7 @@ ephy_embed_constructed (GObject *object)
 
   g_object_connect (inspector,
                     "signal::inspect-web-view", G_CALLBACK (ephy_embed_inspect_web_view_cb),
-                    embed->priv->inspector_scrolled_window,
+                    embed,
                     "signal::show-window", G_CALLBACK (ephy_embed_inspect_show_cb),
                     embed,
                     "signal::close-window", G_CALLBACK (ephy_embed_inspect_close_cb),
@@ -956,7 +927,8 @@ ephy_embed_init (EphyEmbed *embed)
   embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
 
   embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
-  embed->priv->paned = NULL;
+  embed->priv->paned = GTK_PANED (gtk_vpaned_new ());
+  embed->priv->top_widgets_vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
 
   gtk_scrolled_window_set_policy (embed->priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
