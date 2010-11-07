@@ -1136,6 +1136,13 @@ ephy_web_view_constructed (GObject *object)
                     "signal::notify::uri", G_CALLBACK (uri_changed_cb), NULL,
                     "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), NULL,
                     NULL);
+
+  /* Use full content zooming by default */
+  /* FIXME: we could make this configurable through GSettings, or have
+   * different keys for text and full content zooming. AFAIK you can
+   * have both enabled at the same time in WebKit now (although our
+   * API does not reflect this atm). See r67274 in WebKit. */
+  webkit_web_view_set_full_content_zoom (WEBKIT_WEB_VIEW (object), TRUE);
 }
 
 static void
