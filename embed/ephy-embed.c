@@ -317,7 +317,7 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
   if (embed->priv->paned == NULL)
   {
-    embed->priv->paned = GTK_PANED (gtk_vpaned_new ());
+    embed->priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
     g_object_ref_sink (embed->priv->paned);
   }
 

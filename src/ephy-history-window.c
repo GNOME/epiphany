@@ -1128,7 +1128,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
-	hpaned = gtk_hpaned_new ();
+	hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
 	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);
 	gtk_box_pack_end (GTK_BOX (editor->priv->main_vbox), hpaned,
 			  TRUE, TRUE, 0);
