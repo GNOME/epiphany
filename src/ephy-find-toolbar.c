@@ -127,7 +127,7 @@ set_status_notfound_cb (EphyFindToolbar *toolbar)
 	priv = toolbar->priv;
 
 	pango_desc = pango_font_description_new ();
-	gtk_widget_modify_font (priv->status_label, pango_desc);
+	gtk_widget_override_font (priv->status_label, pango_desc);
 	pango_font_description_free (pango_desc);
 
 	priv->source_id = 0;
@@ -154,7 +154,7 @@ set_status (EphyFindToolbar *toolbar,
 
 				pango_desc = pango_font_description_new ();
 				pango_font_description_set_weight (pango_desc, PANGO_WEIGHT_BOLD);
-				gtk_widget_modify_font (priv->status_label, pango_desc);
+				gtk_widget_override_font (priv->status_label, pango_desc);
 				pango_font_description_free (pango_desc);
 
 				gtk_widget_error_bell (GTK_WIDGET (priv->window));

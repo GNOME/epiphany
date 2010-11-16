@@ -269,8 +269,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 
 		if (pixbuf == NULL && icon_location == NULL)
 		{
-			pixbuf = gtk_widget_render_icon (proxy, EPHY_STOCK_BOOKMARK,
-							 GTK_ICON_SIZE_MENU, NULL);
+			pixbuf = gtk_widget_render_icon_pixbuf (proxy, EPHY_STOCK_BOOKMARK, GTK_ICON_SIZE_MENU);
 		}
 
 		gtk_image_set_from_pixbuf (icon, pixbuf);

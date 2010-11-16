@@ -160,15 +160,6 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 	container_class->remove = ephy_notebook_remove;
 
 	notebook_class->insert_page = ephy_notebook_insert_page;
-	
-	gtk_rc_parse_string ("style \"ephy-tab-close-button-style\"\n"
-			     "{\n"
-			       "GtkWidget::focus-padding = 0\n"
-			       "GtkWidget::focus-line-width = 0\n"
-			       "xthickness = 0\n"
-			       "ythickness = 0\n"
-			     "}\n"
-			     "widget \"*.ephy-tab-close-button\" style \"ephy-tab-close-button-style\"");
 
 	signals[TAB_CLOSE_REQUEST] =
 		g_signal_new ("tab-close-request",
@@ -564,14 +555,15 @@ tab_label_style_set_cb (GtkWidget *hbox,
 {
 	PangoFontMetrics *metrics;
 	PangoContext *context;
+	GtkStyleContext *style;
 	GtkWidget *button;
 	int char_width, h, w;
 
 	context = gtk_widget_get_pango_context (hbox);
+	style = gtk_widget_get_style_context (hbox);
 	metrics = pango_context_get_metrics (context,
-					     gtk_widget_get_style (hbox)->font_desc,
+					     gtk_style_context_get_font (style, GTK_STATE_FLAG_ACTIVE),
 					     pango_context_get_language (context));
-
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
 	pango_font_metrics_unref (metrics);
 
@@ -590,6 +582,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
 	GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon;
 	EphyWebView *view;
+	GtkCssProvider *provider;
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
@@ -622,6 +615,19 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
 
 	gtk_widget_set_name (close_button, "ephy-tab-close-button");
+
+	provider = gtk_css_provider_new ();
+	gtk_css_provider_load_from_data (provider,
+					 "#ephy-tab-close-button {"
+					 " -GtkWidget-focus-padding: 0;"
+					 " -GtkWidget-focus-line-width: 0;"
+					 " margin: 0; }",
+					 -1, NULL);
+
+	gtk_style_context_add_provider (gtk_widget_get_style_context (close_button),
+					GTK_STYLE_PROVIDER (provider),
+					GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_object_unref (provider);
 
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (close_button, _("Close tab"));

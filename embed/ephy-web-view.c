@@ -1162,7 +1162,7 @@ _ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
   guint border_width, statusbar_border_width;
   PangoLayout *layout;
   GtkAllocation allocation;
-  GtkStyle *style;
+  GtkStyleContext *context;
   EphyWebViewPrivate *priv;
 
   priv = EPHY_WEB_VIEW (widget)->priv;
@@ -1177,8 +1177,6 @@ _ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  style = gtk_widget_get_style (widget);
-
   statusbar_border_width = 4; /* FIXME: what should we use here? */
 
   priv->text_rectangle.x = border_width;
@@ -1186,20 +1184,28 @@ _ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
   priv->text_rectangle.width = width + (statusbar_border_width * 2);
   priv->text_rectangle.height = height + (statusbar_border_width * 2);
 
-  gtk_paint_box (style, cr,
-                 GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                 widget, NULL,
-                 priv->text_rectangle.x,
-                 priv->text_rectangle.y,
-                 priv->text_rectangle.width,
-                 priv->text_rectangle.height);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
 
-  gtk_paint_layout (style, cr,
-                    GTK_STATE_NORMAL, FALSE,
-                    widget, NULL,
-                    priv->text_rectangle.x + statusbar_border_width,
-                    priv->text_rectangle.y + statusbar_border_width,
-                    layout);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_ACTIVE);
+  gtk_render_background (context, cr,
+                         priv->text_rectangle.x,
+                         priv->text_rectangle.y,
+                         priv->text_rectangle.width,
+                         priv->text_rectangle.height);
+  gtk_render_frame (context, cr,
+                    priv->text_rectangle.x,
+                    priv->text_rectangle.y,
+                    priv->text_rectangle.width,
+                    priv->text_rectangle.height);
+
+  gtk_style_context_set_state (context, 0);
+  gtk_render_layout (context, cr,
+                     priv->text_rectangle.x + statusbar_border_width,
+                     priv->text_rectangle.y + statusbar_border_width,
+                     layout);
+
+  gtk_style_context_restore (context);
 
   g_object_unref (layout);
 }

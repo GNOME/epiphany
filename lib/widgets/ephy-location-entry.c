@@ -54,8 +54,8 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *entry;
 	char *lock_stock_id;
 	GdkPixbuf *favicon;
-	GdkColor secure_bg_colour;
-	GdkColor secure_fg_colour;
+	GdkRGBA secure_bg_color;
+	GdkRGBA secure_fg_color;
 
 	GSList *search_terms;
 
@@ -77,7 +77,7 @@ struct _EphyLocationEntryPrivate
 	guint block_update : 1;
 	guint original_address : 1;
 	guint secure : 1;
-	guint apply_colours : 1;
+	guint apply_colors : 1;
 	guint needs_reset : 1;
 	guint show_lock : 1;
 };
@@ -89,8 +89,8 @@ static const GtkTargetEntry url_drag_types [] =
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 
-static const GdkColor fallback_bg_colour = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yellow-ish */
-static const GdkColor fallback_fg_colour = { 0, 0, 0, 0 }; /* black */
+static const GdkRGBA fallback_bg_color = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yellow-ish */
+static const GdkRGBA fallback_fg_color = { 0, 0, 0, 0 }; /* black */
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -120,23 +120,23 @@ static gint signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_TOOL_ITEM)
 
 static void
-ephy_location_entry_style_set (GtkWidget *widget,
-			       GtkStyle *previous_style)
+ephy_location_entry_style_updated (GtkWidget *widget)
 {
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkSettings *settings;
-	GdkColor *bg_colour = NULL, *fg_colour = NULL;
-	GdkColor title_fg_colour;
+
+	GtkStyleContext *style;
+	GdkRGBA *bg_color = NULL;
+	GdkRGBA *fg_color = NULL;
+
 	char *theme;
 	gboolean is_a11y_theme;
 
-	if (GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_set)
+	if (GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_updated)
 	{
-		GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_set (widget, previous_style);
+		GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_updated (widget);
 	}
-
-	title_fg_colour = gtk_widget_get_style (widget)->text[GTK_STATE_INSENSITIVE];
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 	g_object_get (settings, "gtk-theme-name", &theme, NULL);
@@ -144,32 +144,33 @@ ephy_location_entry_style_set (GtkWidget *widget,
 			strstr (theme, "LowContrast") != NULL;
 	g_free (theme);
 
-	gtk_widget_style_get (widget,
-			      "secure-fg-color", &fg_colour,
-			      "secure-bg-color", &bg_colour,
-			      NULL);
+	style = gtk_widget_get_style_context (widget);
+	gtk_style_context_get_style (style,
+				     "secure-fg-color", &fg_color,
+				     "secure-bg-color", &bg_color,
+				     NULL);
 
-	/* We only use the fallback colours when we don't have an a11y theme */
-	priv->apply_colours = !is_a11y_theme || (fg_colour != NULL && bg_colour != NULL);
+	/* We only use the fallback colors when we don't have an a11y theme */
+	priv->apply_colors = !is_a11y_theme || (fg_color != NULL && bg_color != NULL);
 
-	if (fg_colour != NULL)
+	if (fg_color != NULL)
 	{
-		priv->secure_fg_colour = *fg_colour;
-		gdk_color_free (fg_colour);
+		priv->secure_fg_color = *fg_color;
+		gdk_rgba_free (fg_color);
 	}
 	else
 	{
-		priv->secure_fg_colour = fallback_fg_colour;
+		priv->secure_fg_color = fallback_fg_color;
 	}
 
-	if (bg_colour != NULL)
+	if (bg_color != NULL)
 	{
-		priv->secure_bg_colour = *bg_colour;
-		gdk_color_free (bg_colour);
+		priv->secure_bg_color = *bg_color;
+		gdk_rgba_free (bg_color);
 	}
 	else
 	{
-		priv->secure_bg_colour = fallback_bg_colour;
+		priv->secure_bg_color = fallback_bg_color;
 	}
 
 	/* Apply the new style */
@@ -218,7 +219,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
 	object_class->finalize = ephy_location_entry_finalize;
 
-	widget_class->style_set = ephy_location_entry_style_set;
+	widget_class->style_updated = ephy_location_entry_style_updated;
 
        /**
 	* EphyLocationEntry::user-changed:
@@ -299,14 +300,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 						 g_param_spec_boxed ("secure-bg-color",
 								     "Secure background colour",
 								     "Background colour to use for secure sites",
-								     GDK_TYPE_COLOR,
+								     GDK_TYPE_RGBA,
 								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	gtk_widget_class_install_style_property (widget_class,
 						 g_param_spec_boxed ("secure-fg-color",
 								     "Secure foreground Colour",
 								     "Foreground colour to use for secure sites",
-								     GDK_TYPE_COLOR,
+								     GDK_TYPE_RGBA,
 								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
@@ -745,7 +746,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	char *title = NULL, *address = NULL;
 	GString *text;
-	GtkStyle *style;
+	GtkStyleContext *style;
 	cairo_surface_t *surface;
 	PangoContext *context;
 	PangoLayout  *layout;
@@ -755,9 +756,10 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	int icon_width = 0, icon_height = 0, favicon_offset_x = 0;
 	int char_width;
 	cairo_t *cr;
-	GtkStateType state;
+	GtkStateFlags state;
+	GdkRGBA color;
 
-	state = gtk_widget_get_state (widget);
+	state = gtk_widget_get_state_flags (widget);
 
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
 	g_signal_emit (entry, signals[GET_TITLE], 0, &title);
@@ -787,9 +789,9 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	context = gtk_widget_get_pango_context (widget);
 	layout = pango_layout_new (context);
 
-	style = gtk_widget_get_style (widget);
+	style = gtk_widget_get_style_context (priv->entry);
 	metrics = pango_context_get_metrics (context,
-					     style->font_desc,
+		                             gtk_style_context_get_font (style, GTK_STATE_FLAG_ACTIVE),
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
@@ -823,7 +825,8 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
 	cairo_stroke_preserve (cr);
 
-	gdk_cairo_set_source_color (cr, &style->bg[state]);
+	gtk_style_context_get_background_color (style, state, &color);
+	gdk_cairo_set_source_rgba (cr, &color);
 	cairo_fill (cr);
 
 	if (priv->favicon != NULL)
@@ -841,7 +844,8 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	cairo_move_to (cr,
 		       1 + DRAG_ICON_LAYOUT_PADDING + favicon_offset_x,
 		       1 + DRAG_ICON_LAYOUT_PADDING);
-	gdk_cairo_set_source_color (cr, &style->text[state]);
+	gtk_style_context_get_color (style, state, &color);
+	gdk_cairo_set_source_rgba (cr, &color);
 	pango_cairo_show_layout (cr, layout);
 
 	cairo_destroy (cr);
@@ -1061,8 +1065,8 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	char *title;
 	char *url;
 
-	GtkStyle *style;
-	GdkColor color;
+	GtkStyleContext *style;
+	GdkRGBA color;
 
 	GValue text = { 0, };
 
@@ -1078,8 +1082,9 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	{
 		ctext = g_strdup_printf ("%s\n%s", title, url);
 
-		style = gtk_widget_get_style (priv->entry);
-		color = style->text[GTK_STATE_INSENSITIVE];
+		style = gtk_widget_get_style_context (priv->entry);
+		gtk_style_context_get_color (style, GTK_STATE_FLAG_INSENSITIVE,
+					     &color);
 
 		att = pango_attr_foreground_new
 			(color.red, color.green, color.blue);
@@ -1564,18 +1569,17 @@ ephy_location_entry_set_secure (EphyLocationEntry *entry,
 
 	priv->secure = secure;
 
-	/* We have to set the colour of the GtkEntry in the EphyIconEntry */
-	if (priv->secure && priv->apply_colours)
+	/* We have to set the color of the GtkEntry in the EphyIconEntry */
+	if (priv->secure && priv->apply_colors)
 	{
-		gtk_widget_modify_text (gentry, GTK_STATE_NORMAL, &priv->secure_fg_colour);
-		gtk_widget_modify_base (gentry, GTK_STATE_NORMAL, &priv->secure_bg_colour);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_ACTIVE, &priv->secure_fg_color);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_ACTIVE, &priv->secure_bg_color);
 	}
 	else
 	{
-		gtk_widget_modify_text (gentry, GTK_STATE_NORMAL, NULL);
-		gtk_widget_modify_base (gentry, GTK_STATE_NORMAL, NULL);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_ACTIVE, NULL);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_ACTIVE, NULL);
 	}
-
 	gtk_widget_queue_draw (widget);
 }
 
