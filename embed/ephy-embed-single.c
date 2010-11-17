@@ -464,7 +464,7 @@ cache_size_cb (GSettings *settings,
                EphyEmbedSingle *single)
 {
   int new_cache_size = g_settings_get_int (EPHY_SETTINGS_WEB, EPHY_PREFS_CACHE_SIZE);
-  webkit_soup_cache_set_max_size (single->priv->cache, new_cache_size);
+  webkit_soup_cache_set_max_size (single->priv->cache, new_cache_size * 1024 * 1024 /* in bytes */);
 }
 
 /**
