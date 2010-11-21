@@ -656,6 +656,8 @@ find_username_and_password_elements (WebKitDOMNode *form_node,
       g_free (element_type);
     }
   }
+
+  g_object_unref(elements);
 }
 
 typedef struct {
@@ -938,6 +940,7 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
 
   if (forms_n == 0) {
     LOG ("No forms found.");
+    g_object_unref(forms);
     return;
   }
 
@@ -962,6 +965,8 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
     } else
       LOG ("No pre-fillable/hookable form found");
   }
+
+  g_object_unref(forms);
 }
 
 static void
@@ -978,6 +983,7 @@ _ephy_web_view_hook_into_links (EphyWebView *web_view)
 
   if (links_n == 0) {
     LOG ("No links found.");
+    g_object_unref(links);
     return;
   }
 
@@ -1023,6 +1029,8 @@ _ephy_web_view_hook_into_links (EphyWebView *web_view)
 
     g_free (rel);
   }
+
+  g_object_unref(links);
 }
 
 static void
