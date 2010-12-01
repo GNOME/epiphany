@@ -1995,35 +1995,76 @@ load_status_cb (WebKitWebView *web_view,
   g_object_thaw_notify (object);
 }
 
- static gboolean
+static void set_main_frame_load_error (EphyWebView *view,
+                                       const char *uri)
+{
+  char *message;
+
+  message = g_strdup_printf (_("A problem occurred while loading %s"),
+                                   uri);
+  ephy_web_view_set_title (view, message);
+  g_free (message);
+
+  _ephy_web_view_set_icon_address (view, NULL);
+}
+
+static gboolean
 load_error_cb (WebKitWebView *web_view,
                WebKitWebFrame *frame,
-               gchar *uri,
+               char *uri,
                GError *error,
                gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-  if (error->code != WEBKIT_NETWORK_ERROR_CANCELLED) {
-    gchar *message;
+  if (webkit_web_view_get_main_frame (web_view) != frame)
+    return FALSE;
 
-    message = g_strdup_printf (_("A problem occurred while loading %s"),
-                               uri);
-    ephy_web_view_set_title (view, message);
-    g_free (message);
+  if (error->domain == SOUP_HTTP_ERROR) {
+    set_main_frame_load_error (view, uri);
+    return FALSE;
+  }
 
-    _ephy_web_view_set_icon_address (view, NULL);
-  } else {
-    EphyWebViewPrivate *priv = view->priv;
+  g_return_val_if_fail ((error->domain == WEBKIT_NETWORK_ERROR) ||
+                        (error->domain == WEBKIT_POLICY_ERROR) ||
+                        (error->domain == WEBKIT_PLUGIN_ERROR), FALSE);
 
-    if (priv->expire_address_now) {
-      const gchar* prev_uri;
+  switch (error->code) {
+  case WEBKIT_NETWORK_ERROR_FAILED:
+  case WEBKIT_NETWORK_ERROR_TRANSPORT:
+  case WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL:
+  case WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST:
+  case WEBKIT_POLICY_ERROR_FAILED:
+  case WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE:
+  case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URL:
+  case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
+  case WEBKIT_PLUGIN_ERROR_FAILED:
+  case WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN:
+  case WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN:
+  case WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE:
+  case WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED:
+    set_main_frame_load_error (view, uri);
+    break;
+  case WEBKIT_NETWORK_ERROR_CANCELLED:
+    {
+      EphyWebViewPrivate *priv = view->priv;
 
-      prev_uri = webkit_web_view_get_uri (web_view);
+      if (priv->expire_address_now) {
+        const char* prev_uri;
 
-      ephy_web_view_set_typed_address (view, NULL);
-      ephy_web_view_set_address (view, prev_uri);
+        prev_uri = webkit_web_view_get_uri (web_view);
+
+        ephy_web_view_set_typed_address (view, NULL);
+        ephy_web_view_set_address (view, prev_uri);
+      }
     }
+    break;
+  /* In case we are downloading something or the resource is going to
+   * be showed with a plugin just let WebKit do it */
+  case WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD:
+  case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
+  default:
+    break;
   }
 
   return FALSE;
