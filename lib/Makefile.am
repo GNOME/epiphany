@@ -19,7 +19,7 @@ NOINST_H_FILES = \
 	ephy-node-common.h			\
 	ephy-object-helpers.h			\
 	ephy-prefs.h				\
-	ephy-profile-migration.h	        \
+	ephy-profile-utils.h				\
 	ephy-print-utils.h			\
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
@@ -57,7 +57,8 @@ libephymisc_la_SOURCES = \
 	ephy-node-db.c				\
 	ephy-object-helpers.c			\
 	ephy-prefs.h				\
-	ephy-profile-migration.c	        \
+	ephy-profile-utils.c			\
+	ephy-profile-utils.h			\
 	ephy-print-utils.c			\
 	ephy-settings.c				\
 	ephy-shlib-loader.c			\
@@ -100,17 +101,38 @@ libephymisc_la_LIBADD += \
 	$(SPELLCHECKER_LIBS)
 endif
 
+
+bin_PROGRAMS = ephy-profile-migrator
+ephy_profile_migrator_SOURCES = \
+	ephy-profile-migrator.c \
+	ephy-profile-utils.c \
+	ephy-profile-utils.h \
+	ephy-debug.c \
+	ephy-debug.h \
+	ephy-file-helpers.c \
+	ephy-file-helpers.h \
+	ephy-settings.c	\
+	ephy-string.c
+
+ephy_profile_migrator_CFLAGS = \
+	$(DEPENDENCIES_CFLAGS) \
+	$(NSS_CFLAGS) \
+	$(AM_CFLAGS)
+
+ephy_profile_migrator_LDADD = \
+	$(DEPENDENCIES_LIBS)
+
 if ENABLE_NSS
-NOINST_H_FILES += \
-	ephy-nss-glue.h \
-	$(NULL)
-
-libephymisc_la_SOURCES += \
-	ephy-nss-glue.c
-	$(NULL)
-
-libephymisc_la_CFLAGS += $(NSS_CFLAGS)
+ephy_profile_migrator_SOURCES += \
+	ephy-nss-glue.c \
+	ephy-nss-glue.h
+ephy_profile_migrator_LDADD += $(NSS_LIBS)
 endif # ENABLE_NSS
+
+ephy_profile_migrator_CPPFLAGS = \
+	-I$(top_builddir)/lib \
+	-DSHARE_DIR=\"$(pkgdatadir)\" \
+	$(AM_CPPFLAGS)
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\

@@ -26,13 +26,6 @@ LDADD = \
 	$(DBUS_LIBS) \
 	$(DEPENDENCIES_LIBS) 
 
-if ENABLE_NSS
-CFLAGS += \
-	$(NSS_CFLAGS)
-LDADD += \
-	$(NSS_LIBS)
-endif
-
 if ENABLE_SEED
 CFLAGS += \
 	$(SEED_CFLAGS)

@@ -32,10 +32,9 @@
 
 #include "config.h"
 
-#include "ephy-profile-migration.h"
-
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-profile-utils.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
 #endif
@@ -46,11 +45,9 @@
 
 /*
  * What to do to add new migration steps:
- *  - Bump PROFILE_MIGRATION_VERSION
+ *  - Bump EPHY_PROFILE_MIGRATION_VERSION in lib/ephy-profile-utils.h
  *  - Add your function at the end of the 'migrators' array
  */
-
-#define PROFILE_MIGRATION_VERSION 4
 
 typedef void (*EphyProfileMigrator) (void);
 
@@ -103,7 +100,7 @@ migrate_cookies ()
     g_object_unref (txt);
     g_object_unref (sqlite);
   }
-  
+
  out:
   g_free (src_sqlite);
   g_free (src_txt);
@@ -198,7 +195,7 @@ parse_and_decrypt_signons (const char *signons,
     /* A block has at least five lines */
     if (end - begin < 5)
       continue;
-    
+
     /* The first line is the site URL.
      * For HTTP authentication logins, the URL may contain http realm,
      * which will be in bracket:
@@ -299,11 +296,11 @@ parse_and_decrypt_signons (const char *signons,
           !g_str_equal (form_password, "*")) {
         char *u = soup_uri_to_string (uri, FALSE);
         /* We skip the '*' at the beginning of form_password. */
-        _ephy_profile_store_form_auth_data (u,
-                                            form_username,
-                                            form_password+1,
-                                            username,
-                                            password);
+        _ephy_profile_utils_store_form_auth_data (u,
+                                                 form_username,
+                                                 form_password+1,
+                                                 username,
+                                                 password);
         g_free (u);
       } else if (!handle_forms && realm &&
                  username && password &&
@@ -316,7 +313,7 @@ parse_and_decrypt_signons (const char *signons,
                                                  NULL,
                                                  uri->scheme,
                                                  NULL,
-                                                 uri->port, 
+                                                 uri->port,
                                                  password,
                                                  &item_id);
       }
@@ -426,145 +423,19 @@ const EphyProfileMigrator migrators[] = {
 };
 
 static void
-store_form_password_cb (GnomeKeyringResult result,
-                        guint32 id,
-                        gpointer data)
-{
-  /* FIXME: should we do anything if the operation failed? */
-}
-
-static void
-normalize_and_prepare_uri (SoupURI *uri,
-                           const char *form_username,
-                           const char *form_password)
-{
-  g_return_if_fail (uri != NULL);
-
-  /* We normalize https? schemes here so that we use passwords
-   * we stored in https sites in their http counterparts, and
-   * vice-versa. */
-  if (g_str_equal (uri->scheme, SOUP_URI_SCHEME_HTTPS))
-    soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
-
-  soup_uri_set_path (uri, NULL);
-
-  /* Store the form login and password names encoded in the
-   * URL. A bit of an abuse of keyring, but oh well */
-  soup_uri_set_query_from_fields (uri,
-                                  FORM_USERNAME_KEY,
-                                  form_username,
-                                  FORM_PASSWORD_KEY,
-                                  form_password,
-                                  NULL);
-}
-
-void
-_ephy_profile_store_form_auth_data (const char *uri,
-                                    const char *form_username,
-                                    const char *form_password,
-                                    const char *username,
-                                    const char *password)
-{
-  SoupURI *fake_uri;
-  char *fake_uri_str;
-
-  g_return_if_fail (uri);
-  g_return_if_fail (form_username);
-  g_return_if_fail (form_password);
-  g_return_if_fail (username);
-  g_return_if_fail (password);
-
-  fake_uri = soup_uri_new (uri);
-  if (fake_uri == NULL)
-    return;
-
-  normalize_and_prepare_uri (fake_uri, form_username, form_password);
-  fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
-
-  gnome_keyring_set_network_password (NULL,
-                                      username,
-                                      NULL,
-                                      fake_uri_str,
-                                      NULL,
-                                      fake_uri->scheme,
-                                      NULL,
-                                      fake_uri->port,
-                                      password,
-                                      (GnomeKeyringOperationGetIntCallback)store_form_password_cb,
-                                      NULL,
-                                      NULL);
-  soup_uri_free (fake_uri);
-  g_free (fake_uri_str);
-}
-
-void
-_ephy_profile_query_form_auth_data (const char *uri,
-                                    const char *form_username,
-                                    const char *form_password,
-                                    GnomeKeyringOperationGetListCallback callback,
-                                    gpointer data,
-                                    GDestroyNotify destroy_data)
-{
-  SoupURI *key;
-  char *key_str;
-
-  g_return_if_fail (uri);
-  g_return_if_fail (form_username);
-  g_return_if_fail (form_password);
-
-  key = soup_uri_new (uri);
-  g_return_if_fail (key);
-
-  normalize_and_prepare_uri (key, form_username, form_password);
-
-  key_str = soup_uri_to_string (key, FALSE);
-
-  LOG ("Querying Keyring: %s", key_str);
-  gnome_keyring_find_network_password (NULL,
-                                       NULL,
-                                       key_str,
-                                       NULL,
-                                       NULL,
-                                       NULL,
-                                       0,
-                                       callback,
-                                       data,
-                                       destroy_data);
-  soup_uri_free (key);
-  g_free (key_str);
-}
-
-#define PROFILE_MIGRATION_FILE ".migrated"
-
-void
-_ephy_profile_migrate ()
+ephy_migrator ()
 {
   int latest, i;
-  char *migrated_file, *contents;
 
-  /* Figure out the latest migration that occured */
-  migrated_file = g_build_filename (ephy_dot_dir (),
-                                    PROFILE_MIGRATION_FILE,
-                                    NULL);
-  if (g_file_test (migrated_file, G_FILE_TEST_EXISTS)) {
-    gsize size;
-    int result;
+  latest = ephy_profile_utils_get_migration_version ();
 
-    g_file_get_contents (migrated_file, &contents, &size, NULL);
-    result = sscanf(contents, "%d", &latest);
-    g_free (contents);
+  LOG ("Running migrators up to version %d, current migration version is %d.",
+       EPHY_PROFILE_MIGRATION_VERSION, latest);
 
-    if (result != 1) {
-      g_warning (_("Failed to read latest migration marker, aborting profile migration."));
-      g_free (migrated_file);
-      return;
-    }
-  } else
-    /* Never migrated */
-    latest = 0;
-  
-  for (i = latest; i < PROFILE_MIGRATION_VERSION; i++) {
+  for (i = latest; i < EPHY_PROFILE_MIGRATION_VERSION; i++) {
     EphyProfileMigrator m;
+
+    LOG ("Running migrator: %d of %d", i, EPHY_PROFILE_MIGRATION_VERSION);
 
     /* No need to run the password migration twice in a row. It
        appears twice in the list for the benefit of people that were
@@ -577,10 +448,23 @@ _ephy_profile_migrate ()
     m();
   }
 
-  /* Write down the latest migration */
-  contents = g_strdup_printf ("%d", PROFILE_MIGRATION_VERSION);
-  g_file_set_contents (migrated_file, contents, -1, NULL);
-  g_free (contents);
-  g_free (migrated_file);
+  if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE)
+    LOG ("Failed to store the current migration version");
 }
 
+int
+main (int argc, char *argv[])
+{
+  g_thread_init (NULL);
+
+  ephy_debug_init ();
+
+  if (!ephy_file_helpers_init (NULL, FALSE, FALSE, NULL)) {
+    LOG ("Something wrong happened with ephy_file_helpers_init()");
+    return -1;
+  }
+
+  ephy_migrator ();
+
+  return 0;
+}

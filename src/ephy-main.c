@@ -32,7 +32,7 @@
 #include "ephy-session.h"
 #include "ephy-shell.h"
 #include "ephy-prefs.h"
-#include "ephy-profile-migration.h"
+#include "ephy-profile-utils.h"
 #include "ephy-debug.h"
 #include "eggsmclient.h"
 
@@ -714,8 +714,23 @@ main (int argc,
 	}
 
 	/* Migrate profile if we are not running a private instance */
-        if (ephy_has_private_profile () == FALSE)
-          _ephy_profile_migrate ();
+	if (ephy_has_private_profile () == FALSE &&
+	    ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION)
+	{
+		GError *error = NULL;
+		char *argv[1] = { "ephy-profile-migrator" };
+		char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
+
+		g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
+			      NULL, NULL, NULL, NULL,
+			      NULL, &error);
+
+		if (error)
+		{
+			LOG ("Failed to run migrator: %s", error->message);
+			g_error_free (error);
+		}
+	}
 
 	ephy_stock_icons_init ();
 	load_accels ();

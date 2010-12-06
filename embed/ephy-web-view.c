@@ -41,7 +41,7 @@
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
 #include "ephy-permission-manager.h"
-#include "ephy-profile-migration.h"
+#include "ephy-profile-utils.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-settings.h"
@@ -706,11 +706,11 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
   }
 
   LOG ("Response is GTK_RESPONSE_YES - saving!");
-  _ephy_profile_store_form_auth_data (uri,
-                                      name_field_name,
-                                      password_field_name,
-                                      name_field_value,
-                                      password_field_value);
+  _ephy_profile_utils_store_form_auth_data (uri,
+                                            name_field_name,
+                                            password_field_name,
+                                            name_field_value,
+                                            password_field_value);
 
   /* Update internal caching */
   soup_uri = soup_uri_new (uri);
@@ -865,12 +865,12 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
        store_data->name_value,
        store_data->password_value);
 
-  _ephy_profile_query_form_auth_data (store_data->uri,
-                                      store_data->name_field,
-                                      store_data->password_field,
-                                      should_store_cb,
-                                      store_data,
-                                      NULL);
+  _ephy_profile_utils_query_form_auth_data (store_data->uri,
+                                            store_data->name_field,
+                                            store_data->password_field,
+                                            should_store_cb,
+                                            store_data,
+                                            NULL);
 
   soup_uri_free (uri);
 
@@ -911,12 +911,12 @@ pre_fill_form (WebKitDOMNode *username_node,
       fill_data->username_node = g_object_ref (username_node);
       fill_data->password_node = g_object_ref (password_node);
 
-      _ephy_profile_query_form_auth_data (uri_str,
-                                          data->form_username,
-                                          data->form_password,
-                                          fill_form_cb,
-                                          fill_data,
-                                          fill_data_free);
+      _ephy_profile_utils_query_form_auth_data (uri_str,
+                                                data->form_username,
+                                                data->form_password,
+                                                fill_form_cb,
+                                                fill_data,
+                                                fill_data_free);
       g_free (uri_str);
     }
     g_free (username_field_name);

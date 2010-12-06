@@ -179,10 +179,6 @@ if ENABLE_SEED
 epiphany_LDADD += $(SEED_LIBS)
 endif # ENABLE_SEED
 
-if ENABLE_NSS
-epiphany_LDADD += $(NSS_LIBS)
-endif # ENABLE_NSS
-
 if ENABLE_NETWORK_MANAGER
 epiphany_LDADD += \
 	$(NETWORK_MANAGER_LIBS)

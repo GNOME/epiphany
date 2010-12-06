@@ -32,7 +32,7 @@
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-permission-manager.h"
-#include "ephy-profile-migration.h"
+#include "ephy-profile-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
