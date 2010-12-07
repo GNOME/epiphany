@@ -25,6 +25,7 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkNotebook" id="prefs_notebook">
@@ -35,10 +36,12 @@
               <object class="GtkVBox" id="general_page_box">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkVBox" id="vbox152">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1238">
@@ -63,6 +66,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox154">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox138">
@@ -155,10 +159,12 @@
                 <child>
                   <object class="GtkVBox" id="ui_page_box">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
                     <child>
                       <object class="GtkVBox" id="vbox183">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label1300">
@@ -180,6 +186,7 @@
                             <child>
                               <object class="GtkVBox" id="vbox197">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkHBox" id="download_button_hbox">
@@ -255,6 +262,7 @@
               <object class="GtkVBox" id="fonts_and_colors_page_box">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkHBox" id="hbox177">
@@ -347,7 +355,7 @@
                         <property name="layout_style">end</property>
                         <child>
                           <object class="GtkButton" id="css_edit_button">
-                            <property name="label" translatable="yes">_Edit Stylesheet…</property>
+                            <property name="label" translatable="yes">_Edit Stylesheet&#x2026;</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -390,10 +398,12 @@
               <object class="GtkVBox" id="privacy_page_box">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkVBox" id="vbox185">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1292">
@@ -415,6 +425,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox186">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="popups_allow_checkbutton">
@@ -478,6 +489,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox187">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1294">
@@ -499,11 +511,11 @@
                         <child>
                           <object class="GtkVBox" id="vbox188">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="cookies_always_radiobutton">
                                 <property name="label" translatable="yes">_Always accept</property>
-                                <property name="name">always</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -519,7 +531,6 @@
                             <child>
                               <object class="GtkRadioButton" id="cookies_no_third_party_radiobutton">
                                 <property name="label" translatable="yes">Only _from sites you visit</property>
-                                <property name="name">no-third-party</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -555,7 +566,6 @@
                             <child>
                               <object class="GtkRadioButton" id="cookies_never_radiobutton">
                                 <property name="label" translatable="yes">_Never accept</property>
-                                <property name="name">never</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -586,6 +596,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox199">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1313">
@@ -629,6 +640,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox162">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1256">
@@ -756,10 +768,12 @@
               <object class="GtkVBox" id="language_page_box">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkVBox" id="vbox156">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1242">
@@ -826,6 +840,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox191">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1298">
@@ -853,6 +868,7 @@
                             <child>
                               <object class="GtkVButtonBox" id="vbuttonbox2">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <property name="layout_style">start</property>
                                 <child>
@@ -1030,11 +1046,13 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkVBox" id="vbox198">
             <property name="visible">True</property>
             <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1309">
