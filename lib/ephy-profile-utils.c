@@ -31,9 +31,9 @@
 int
 ephy_profile_utils_get_migration_version ()
 {
-  char *migrated_file, *contents;
+  char *migrated_file, *contents = NULL;
   gsize size;
-  int result;
+  int result = 0;
   int latest = 0;
 
   migrated_file = g_build_filename (ephy_dot_dir (),
@@ -42,7 +42,9 @@ ephy_profile_utils_get_migration_version ()
 
   if (g_file_test (migrated_file, G_FILE_TEST_EXISTS)) {
     g_file_get_contents (migrated_file, &contents, &size, NULL);
-    result = sscanf(contents, "%d", &latest);
+
+    if (contents != NULL)
+      result = sscanf(contents, "%d", &latest);
 
     g_free (contents);
     g_free (migrated_file);
