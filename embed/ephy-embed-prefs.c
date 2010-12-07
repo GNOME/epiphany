@@ -422,7 +422,7 @@ ephy_embed_prefs_init (void)
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_FONT_MIN_SIZE,
-                   webkit_settings, "minimum-logical-font-size",
+                   webkit_settings, "minimum-font-size",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_DEFAULT_ENCODING,
