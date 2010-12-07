@@ -1038,6 +1038,9 @@ static const PrefsDialogPreference preferences[] =
 	{ "disk_cache_spinbutton", "value",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_CACHE_SIZE,
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	{ "use_gnome_fonts_checkbutton", "active",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_GNOME_FONTS,
+	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 	{ "use_fonts_checkbutton", "active",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_OWN_FONTS,
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
@@ -1061,6 +1064,21 @@ static const PrefsDialogPreference preferences[] =
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 	{ "css_edit_button", "sensitive",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_USER_CSS,
+	  G_SETTINGS_BIND_GET, NULL, NULL },
+
+	/* Font buttons */
+	{ "custom_fonts_vbox", "sensitive",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_GNOME_FONTS,
+	  G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN, NULL, NULL },
+
+	{ "sans_fontbutton", "font-name",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_SANS_SERIF_FONT,
+	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	{ "serif_fontbutton", "font-name",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_SERIF_FONT,
+	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	{ "mono_fontbutton", "font-name",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_MONOSPACE_FONT,
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 
 	/* Has mapping */
@@ -1102,12 +1120,17 @@ prefs_dialog_init (PrefsDialog *pd)
 		settings = ephy_settings_get (pref.schema);
 		widget = ephy_dialog_get_control (dialog, pref.obj);
 
-		g_settings_bind_with_mapping (settings, pref.key,
-					      widget, pref.prop,
-					      pref.flags,
-					      pref.get_mapping,
-					      pref.set_mapping,
-					      widget, NULL);
+		if (pref.set_mapping != NULL || pref.get_mapping != NULL)
+			g_settings_bind_with_mapping (settings, pref.key,
+						      widget, pref.prop,
+						      pref.flags,
+						      pref.get_mapping,
+						      pref.set_mapping,
+						      widget, NULL);
+		else
+			g_settings_bind (settings, pref.key,
+					 widget, pref.prop,
+					 pref.flags);
 	}
 
 	ephy_dialog_get_controls (dialog,
