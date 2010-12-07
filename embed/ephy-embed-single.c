@@ -21,6 +21,7 @@
 #include "config.h"
 
 #define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
+#define LIBSOUP_USE_UNSTABLE_REQUEST_API
 #define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 #include "ephy-embed-single.h"
@@ -43,6 +44,7 @@
 #include <webkit/webkit.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup-gnome.h>
+#include <libsoup/soup-cache.h>
 #include <gnome-keyring.h>
 
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
@@ -51,7 +53,7 @@ struct _EphyEmbedSinglePrivate {
   guint online : 1;
 
   GHashTable *form_auth_data;
-  WebKitSoupCache *cache;
+  SoupCache *cache;
 };
 
 enum {
@@ -240,8 +242,8 @@ ephy_embed_single_dispose (GObject *object)
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
   if (priv->cache) {
-    webkit_soup_cache_flush (priv->cache);
-    webkit_soup_cache_dump (priv->cache);
+    soup_cache_flush (priv->cache);
+    soup_cache_dump (priv->cache);
     g_object_unref (priv->cache);
     priv->cache = NULL;
   }
@@ -463,7 +465,7 @@ cache_size_cb (GSettings *settings,
                EphyEmbedSingle *single)
 {
   int new_cache_size = g_settings_get_int (settings, key);
-  webkit_soup_cache_set_max_size (single->priv->cache, new_cache_size * 1024 * 1024 /* in bytes */);
+  soup_cache_set_max_size (single->priv->cache, new_cache_size * 1024 * 1024 /* in bytes */);
 }
 
 /**
@@ -524,13 +526,13 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 
   /* WebKitSoupCache */
   cache_dir = g_build_filename (g_get_user_cache_dir (), g_get_prgname (), NULL);
-  priv->cache = webkit_soup_cache_new (cache_dir, WEBKIT_SOUP_CACHE_SINGLE_USER);
+  priv->cache = soup_cache_new (cache_dir, SOUP_CACHE_SINGLE_USER);
   g_free (cache_dir);
 
   soup_session_add_feature (session, SOUP_SESSION_FEATURE (priv->cache));
   /* Cache size in Mb: 1024 * 1024 */
-  webkit_soup_cache_set_max_size (priv->cache, g_settings_get_int (EPHY_SETTINGS_WEB, EPHY_PREFS_CACHE_SIZE) << 20);
-  webkit_soup_cache_load (priv->cache);
+  soup_cache_set_max_size (priv->cache, g_settings_get_int (EPHY_SETTINGS_WEB, EPHY_PREFS_CACHE_SIZE) << 20);
+  soup_cache_load (priv->cache);
 
   g_signal_connect (EPHY_SETTINGS_WEB,
                     "changed::" EPHY_PREFS_CACHE_SIZE,
@@ -570,7 +572,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
-  webkit_soup_cache_clear (single->priv->cache);
+  soup_cache_clear (single->priv->cache);
 }
 
 /**
