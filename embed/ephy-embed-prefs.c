@@ -36,7 +36,7 @@ typedef struct
   char *schema;
   char *key;
   char *webkit_pref;
-  GCallback callback;
+  void (*callback) (GSettings *settings, char *key, gpointer data);
 } PrefData;
 
 static WebKitWebSettings *webkit_settings = NULL;
@@ -328,39 +328,39 @@ static const PrefData webkit_pref_entries[] =
     { "org.gnome.desktop.interface",
       "font-name",
       "default-font-size",
-      G_CALLBACK (webkit_pref_callback_font_size) },
+      webkit_pref_callback_font_size },
     { "org.gnome.desktop.interface",
       "font-name",
       "default-font-family",
-      G_CALLBACK (webkit_pref_callback_font_family) },
+      webkit_pref_callback_font_family },
     { "org.gnome.desktop.interface",
       "font-name",
       "sans-serif-font-family",
-      G_CALLBACK (webkit_pref_callback_font_family) },
+      webkit_pref_callback_font_family },
     { "org.gnome.desktop.interface",
       "monospace-font-name",
       "default-monospace-font-size",
-      G_CALLBACK (webkit_pref_callback_font_size) },
+      webkit_pref_callback_font_size },
     { "org.gnome.desktop.interface",
       "monospace-font-name",
       "monospace-font-family",
-      G_CALLBACK (webkit_pref_callback_font_family) },
+      webkit_pref_callback_font_family },
     { EPHY_PREFS_WEB_SCHEMA,
       EPHY_PREFS_WEB_ENABLE_USER_CSS,
       "user-stylesheet-uri",
-      G_CALLBACK (webkit_pref_callback_user_stylesheet) },
+      webkit_pref_callback_user_stylesheet },
     { EPHY_PREFS_WEB_SCHEMA,
       EPHY_PREFS_WEB_LANGUAGE,
       "accept-language",
-      G_CALLBACK (webkit_pref_callback_accept_languages) },
+      webkit_pref_callback_accept_languages },
     { EPHY_PREFS_SCHEMA,
       EPHY_PREFS_USER_AGENT,
       "user-agent",
-      G_CALLBACK (webkit_pref_callback_user_agent) },
+      webkit_pref_callback_user_agent },
     { EPHY_PREFS_WEB_SCHEMA,
       EPHY_PREFS_WEB_COOKIES_POLICY,
       "accept-policy",
-      G_CALLBACK (webkit_pref_callback_cookie_accept_policy) },
+      webkit_pref_callback_cookie_accept_policy },
   };
 
 static void
@@ -394,8 +394,12 @@ ephy_embed_prefs_init (void)
     settings = ephy_settings_get (webkit_pref_entries[i].schema);
     key = g_strconcat ("changed::", webkit_pref_entries[i].key, NULL);
 
+    webkit_pref_entries[i].callback (settings,
+                                     webkit_pref_entries[i].key,
+                                     webkit_pref_entries[i].webkit_pref);
+
     g_signal_connect (settings, key,
-                      webkit_pref_entries[i].callback,
+                      G_CALLBACK (webkit_pref_entries[i].callback),
                       webkit_pref_entries[i].webkit_pref);
     g_free (key);
   }
