@@ -564,14 +564,14 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 }
 
 /**
- * ephy_favicons_cache_get:
+ * ephy_favicon_cache_get:
  * @cache: an #EphyFaviconCache
  * @url: the URL of the icon to retrieve
  * 
  * Note: This will always return %NULL for non-http URLs.
  * 
- * Return value: the site icon at @url as a #GdkPixbuf, or %NULL if
- * if could not be retrieved. Unref when you don't need it anymore.
+ * Return value: (transfer full): the site icon at @url as a #GdkPixbuf, or
+ * %NULL if if could not be retrieved. Unref when you don't need it anymore.
  */
 GdkPixbuf *
 ephy_favicon_cache_get (EphyFaviconCache *cache,

@@ -44,7 +44,7 @@ ephy_permission_info_get_type (void)
  * ephy_permission_info_new:
  * @host: a host name
  * @type: an #EphyPermissionType
- * @allowed: whether @host should be allowed to do what @type specifies
+ * @permission: whether @host should be allowed to do what @type specifies
  *
  * Return value: the new #EphyPermissionInfo
  **/
@@ -278,7 +278,7 @@ ephy_permission_manager_test_permission (EphyPermissionManager *manager,
 }
 
 /**
- * ephy_permission_manager_list_permission:
+ * ephy_permission_manager_list_permissions:
  * @manager: the #EphyPermissionManager
  * @type: a string to identify the type of the permission
  * 
@@ -286,7 +286,7 @@ ephy_permission_manager_test_permission (EphyPermissionManager *manager,
  * as its own #EphyPermissionInfo. These entries must be freed using
  * ephy_permission_info_free().
  * 
- * Return value: the list of permission database entries
+ * Return value: (transfer none): the list of permission database entries
  **/
 GList *
 ephy_permission_manager_list_permissions (EphyPermissionManager *manager,

@@ -3230,8 +3230,8 @@ ephy_web_view_print (EphyWebView *view)
  * "http://www.example.com/dir/subdir/", "http://www.example.com/dir/" and
  * "http://www.example.com/".
  *
- * Return value: a list of URLs higher up in @view's web page's directory
- * hierarchy
+ * Return value: (transfer none): a list of URLs higher up in @view's web
+ * page's directory hierarchy
  **/
 GSList *
 ephy_web_view_get_go_up_list (EphyWebView *view)

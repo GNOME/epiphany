@@ -43,6 +43,18 @@ ephy_link_base_init (gpointer g_class)
 
 	if (!initialised)
 	{
+		/**
+		 * EphyLink::open-link:
+		 * @address: the address of @link
+		 * @embed: #EphyEmbed associated with @link
+		 * @flags: flags for @link
+		 *
+		 * The ::open-link signal is emitted when @link is requested to
+		 * open it's associated @address.
+		 *
+		 * Returns: (transfer none): the #EphyEmbed where @address has
+		 * been handled.
+		 **/
 		signals[OPEN_LINK] = g_signal_new
 			("open-link",
 			 EPHY_TYPE_LINK,
@@ -82,6 +94,17 @@ ephy_link_get_type (void)
 	return type;
 }
 
+/**
+ * ephy_link_open:
+ * @link: an #EphyLink object
+ * @address: the address of @link
+ * @embed: #EphyEmbed associated with @link
+ * @flags: flags for @link
+ *
+ * Triggers @link open action.
+ *
+ * Returns: (transfer none): the #EphyEmbed where @link opened.
+ */
 EphyEmbed *
 ephy_link_open (EphyLink *link,
 		const char *address,

@@ -353,12 +353,12 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 /* public functions */
 
 /**
- * ephy_toolbar_get_action_group
+ * ephy_toolbar_get_action_group:
  * @toolbar: an #EphyToolbar widget
  *
  * Gets the #GtkActionGroup for @toolbar.
  *
- * Return value: (transfer none):
+ * Return value: (transfer none): the #GtkActionGroup associated with @toolbar
  **/
 GtkActionGroup *
 ephy_toolbar_get_action_group (EphyToolbar *toolbar)

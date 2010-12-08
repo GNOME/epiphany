@@ -173,6 +173,7 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
 
 /**
  * ephy_embed_shell_get_global_history:
+ * @shell: the #EphyEmbedShell
  *
  * Return value: (transfer none):
  **/
@@ -191,6 +192,7 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 
 /**
  * ephy_embed_shell_get_downloader_view:
+ * @shell: the #EphyEmbedShell
  *
  * Return value: (transfer none):
  **/
@@ -214,6 +216,7 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 
 /**
  * ephy_embed_shell_get_downloader_view_nocreate:
+ * @shell: the #EphyEmbedShell
  *
  * Return value: (transfer none):
  **/
@@ -271,6 +274,7 @@ impl_get_embed_single (EphyEmbedShell *shell)
 
 /**
  * ephy_embed_shell_get_embed_single:
+ * @shell: the #EphyEmbedShell
  *
  * Return value: (transfer none):
  **/
@@ -284,6 +288,7 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 
 /**
  * ephy_embed_shell_get_encodings:
+ * @shell: the #EphyEmbedShell
  *
  * Return value: (transfer none):
  **/
@@ -328,7 +333,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 
 /**
  * EphyEmbed::prepare-close:
- * @shell:
+ * @shell: the #EphyEmbedShell
  * 
  * The ::prepare-close signal is emitted when epiphany is preparing to
  * quit on command from the session manager. You can use it when you need
@@ -485,6 +490,14 @@ ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
 	return priv->page_setup;
 }
 
+/**
+ * ephy_embed_shell_set_print_gettings:
+ * @shell: the #EphyEmbedShell
+ * @settings: the new #GtkPrintSettings object
+ *
+ * Sets the global #GtkPrintSettings object.
+ *
+ **/
 void
 ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 				     GtkPrintSettings *settings)
@@ -513,9 +526,12 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 }
 
 /**
- * ephy_embed_shell_get_print_gettings:
+ * ephy_embed_shell_get_print_settings:
+ * @shell: the #EphyEmbedShell
  *
- * Return value: (transfer none):
+ * Gets the global #GtkPrintSettings object.
+ *
+ * Returns: (transfer none): a #GtkPrintSettings object
  **/
 GtkPrintSettings *
 ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
@@ -534,8 +550,8 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 		priv->print_settings = gtk_print_settings_new_from_file (path, &error);
 		g_free (path);
 
-		/* Note: the gtk print settings file format is the same as our legacy one,
-		 * so no need to migrate here.
+		/* Note: the gtk print settings file format is the same as our
+		 * legacy one, so no need to migrate here.
 		 */
 
 		if (priv->print_settings == NULL)

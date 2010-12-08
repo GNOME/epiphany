@@ -142,7 +142,7 @@ ephy_embed_container_remove_child (EphyEmbedContainer *container,
 
 /**
  * ephy_embed_container_get_active_child:
- * @window: an #EphyEmbedContainer
+ * @container: an #EphyEmbedContainer
  *
  * Returns @container's active #EphyEmbed.
  *

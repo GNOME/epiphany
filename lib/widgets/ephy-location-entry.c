@@ -220,7 +220,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
 	widget_class->style_set = ephy_location_entry_style_set;
 
-    /**
+       /**
 	* EphyLocationEntry::user-changed:
 	* @entry: the object on which the signal is emitted
 	*
@@ -237,7 +237,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		0,
 		G_TYPE_NONE);
 
-    /**
+       /**
 	* EphyLocationEntry::lock-clicked:
 	* @entry: the object on which the signal is emitted
 	*
@@ -255,14 +255,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE,
 		0);
 
-    /**
+       /**
 	* EphyLocationEntry::get-location:
 	* @entry: the object on which the signal is emitted
 	* Returns: the current page address as a string
 	*
-	* For drag and drop purposes, the location bar will request you the real
-	* address of where it is pointing to. The signal handler for this function
-	* should return the address of the currently loaded site.
+	* For drag and drop purposes, the location bar will request you the
+	* real address of where it is pointing to. The signal handler for this
+	* function should return the address of the currently loaded site.
 	*
 	*/
 	signals[GET_LOCATION] = g_signal_new (
@@ -275,14 +275,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		0,
 		G_TYPE_NONE);
 
-    /**
+       /**
 	* EphyLocationEntry::get-title:
 	* @entry: the object on which the signal is emitted
 	* Returns: the current page title as a string
 	*
-	* For drag and drop purposes, the location bar will request you the title
-	* of where it is pointing to. The signal handler for this function
-	* should return the title of the currently loaded site.
+	* For drag and drop purposes, the location bar will request you the
+	* title of where it is pointing to. The signal handler for this
+	* function should return the title of the currently loaded site.
 	*
 	*/
 	signals[GET_TITLE] = g_signal_new (

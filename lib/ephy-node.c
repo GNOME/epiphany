@@ -1143,6 +1143,14 @@ ephy_node_real_get_child_index (EphyNode *node,
 	return ret;
 }
 
+/**
+ * ephy_node_sort_children:
+ * @node: an #EphyNode
+ * @compare_func: (scope call): function to compare children
+ *
+ * Sorts the children of @node using @compare_func.
+ *
+ **/
 void
 ephy_node_sort_children (EphyNode *node,
 			 GCompareFunc compare_func)
@@ -1353,6 +1361,17 @@ ephy_node_get_previous_child (EphyNode *node,
 	return ret;
 }
 
+/**
+ * ephy_node_signal_connect_object:
+ * @node: an #EphyNode
+ * @type: signal type
+ * @callback: (scope notified): the callback to connect
+ * @object: data to pass to @callback
+ *
+ * Connects a callback function to the @type signal of @node.
+ *
+ * Returns: an identifier for the connected signal
+ **/
 int
 ephy_node_signal_connect_object (EphyNode *node,
 				 EphyNodeSignalType type,
@@ -1414,6 +1433,18 @@ invalidate_matching_signal_data (gpointer key,
 	}
 }
 
+/**
+ * ephy_node_signal_disconnect_object:
+ * @node: an #EphyNode
+ * @type: signal type
+ * @callback: (scope notified): the callback to disconnect
+ * @object: data passed to @callback when it was connected
+ *
+ * Disconnects @callback from @type in @node. @callback is identified by the
+ * @object previously passed in ephy_node_signal_connect_object.
+ *
+ * Returns: the number of signal handlers removed
+ **/
 guint
 ephy_node_signal_disconnect_object (EphyNode *node,
                                     EphyNodeSignalType type,

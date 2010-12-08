@@ -293,14 +293,13 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 
   /**
    * EphyEmbedSingle::new-window:
-   * @single:
    * @parent_embed: the #EphyEmbed requesting the new window, or %NULL
    * @mask: a #EphyEmbedChrome
    *
    * The ::new_window signal is emitted when a new window needs to be opened.
    * For example, when a JavaScript popup window was opened.
    *
-   * Return a new #EphyEmbed.
+   * Returns: (transfer none): a new #EphyEmbed.
    **/
   g_signal_new ("new-window",
                 EPHY_TYPE_EMBED_SINGLE,
@@ -620,11 +619,11 @@ ephy_embed_single_get_network_status (EphyEmbedSingle *single)
  * method and arguments: <code>window.open(&quot;@address&quot;,
  * &quot;_blank&quot;, &quot;@features&quot;);</code>.
  * 
- * Returns: the new embed. This is either a #EphyEmbed, or, when @features specified
- * "chrome", a #GtkMozEmbed.
+ * Returns: (transfer none): the new embed. This is either a #EphyEmbed, or,
+ * when @features specified "chrome", a #GtkMozEmbed.
  *
- * NOTE: Use ephy_shell_new_tab() unless this handling of the @features string is
- * required.
+ * NOTE: Use ephy_shell_new_tab() unless this handling of the @features string
+ * is required.
  */
 GtkWidget *
 ephy_embed_single_open_window (EphyEmbedSingle *single,
@@ -648,8 +647,8 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
  * The #EphyEmbedSingleFormAuthData structs and the #GSList are owned
  * by @single and should not be freed by the user.
  * 
- * Returns: #GSList with the possible auto-fills for the forms in
- * @uri, or %NULL
+ * Returns: (transfer none): #GSList with the possible auto-fills for the forms
+ * in @uri, or %NULL
  **/
 GSList *
 ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
