@@ -278,8 +278,6 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/lib/ephy-node-db.h \
 	$(top_srcdir)/lib/ephy-node.h \
 	$(top_srcdir)/lib/ephy-state.h \
-	$(top_srcdir)/lib/egg/egg-editable-toolbar.h \
-	$(top_srcdir)/lib/egg/egg-toolbars-model.h \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
 	$(top_srcdir)/src/ephy-extension.h \
@@ -310,8 +308,6 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/lib/ephy-node-db.c \
 	$(top_srcdir)/lib/ephy-node.c \
 	$(top_srcdir)/lib/ephy-state.c \
-	$(top_srcdir)/lib/egg/egg-editable-toolbar.c \
-	$(top_srcdir)/lib/egg/egg-toolbars-model.c \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
 	$(top_srcdir)/src/ephy-extension.c \
@@ -327,7 +323,27 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/src/ephy-window.c \
 	$(NULL)
 
-Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILES) \
+EphyEgg-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER)
+	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
+	$(INTROSPECTION_SCANNER) -v --warn-all \
+		--identifier-prefix=Egg \
+		--symbol-prefix=egg \
+		--namespace=EphyEgg \
+		--nsversion=$(EPIPHANY_API_VERSION) \
+		--include=Gtk-3.0 \
+		--include=libxml2-2.0 \
+		--library=$(top_builddir)/lib/egg/libegg.la \
+		--pkg=gtk+-3.0 \
+		--pkg=libxml-2.0 \
+		--output=$@ \
+		`pkg-config --libs libxml-2.0 gtk+-3.0` \
+		$(top_srcdir)/lib/egg/egg-editable-toolbar.h \
+		$(top_srcdir)/lib/egg/egg-toolbars-model.h \
+		$(top_srcdir)/lib/egg/egg-editable-toolbar.c \
+		$(top_srcdir)/lib/egg/egg-toolbars-model.c \
+		$(top_builddir)/lib/egg/libegg.la
+
+Epiphany-$(EPIPHANY_API_VERSION).gir: EphyEgg-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILES) \
                                       $(EPHY_GIR_C_FILES) epiphany
 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
 	$(INTROSPECTION_SCANNER) -v --warn-all \
@@ -340,6 +356,7 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		--include=Gtk-3.0 \
 		--include=libxml2-2.0 \
 		--include=WebKit-3.0 \
+		--include-uninstalled=EphyEgg-$(EPIPHANY_API_VERSION).gir \
 		--program=./epiphany \
 		--output=$@ \
 		--pkg=epiphany-$(EPIPHANY_API_VERSION) \
@@ -353,13 +370,16 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		$(EPHY_GIR_C_FILES)
 
 girdir = $(datadir)/gir-1.0
-gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
+gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir EphyEgg-$(EPIPHANY_API_VERSION).gir
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
+typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib EphyEgg-$(EPIPHANY_API_VERSION).typelib
 
 Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
-	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir --includedir=$(srcdir) -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+
+EphyEgg-$(EPIPHANY_API_VERSION).typelib: EphyEgg-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) EphyEgg-$(EPIPHANY_API_VERSION).gir -o EphyEgg-$(EPIPHANY_API_VERSION).typelib
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
