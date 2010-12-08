@@ -45,8 +45,8 @@ typedef struct _EphyWebViewClass  EphyWebViewClass;
 typedef struct _EphyWebView    EphyWebView;
 typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
 
-#define TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
-#define HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
+#define EPHY_WEB_VIEW_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
+#define EPHY_WEB_VIEW_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
 
 typedef enum
 {

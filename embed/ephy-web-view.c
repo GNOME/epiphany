@@ -2159,7 +2159,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->monitor_directory = FALSE;
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
-  priv->tab_message_id = ephy_web_view_statusbar_get_context_id (web_view, TAB_MESSAGE_CONTEXT_DESCRIPTION);
+  priv->tab_message_id = ephy_web_view_statusbar_get_context_id (web_view, EPHY_WEB_VIEW_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
   priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
                                         "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
