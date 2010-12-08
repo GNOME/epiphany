@@ -306,7 +306,9 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
   permission = allowed ? EPHY_PERMISSION_ALLOWED
                : EPHY_PERMISSION_DENIED;
 
-  ephy_permission_manager_add_permission (manager, location, EPT_POPUP, permission);
+  ephy_permission_manager_add_permission (manager, location,
+                                          EPHY_PERMISSION_TYPE_POPUP,
+                                          permission);
 
   if (allowed) {
     popups_manager_show_all (view);
@@ -334,7 +336,7 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
   if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
 
   response = ephy_permission_manager_test_permission
-             (permission_manager, location, EPT_POPUP);
+             (permission_manager, location, EPHY_PERMISSION_TYPE_POPUP);
 
   switch (response) {
     case EPHY_PERMISSION_ALLOWED:

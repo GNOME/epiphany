@@ -39,9 +39,9 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PERMISSION_INFO		(ephy_permission_info_get_type ())
 
-#define EPT_COOKIE	"cookie"
-#define EPT_IMAGE	"image"
-#define EPT_POPUP	"popup"
+#define EPHY_PERMISSION_TYPE_COOKIE	"cookie"
+#define EPHY_PERMISSION_TYPE_IMAGE	"image"
+#define EPHY_PERMISSION_TYPE_POPUP	"popup"
 
 typedef enum
 {
