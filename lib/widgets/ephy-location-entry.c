@@ -1624,6 +1624,7 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 {
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
+	g_free (entry->priv->lock_stock_id);
 	entry->priv->lock_stock_id = g_strdup (stock_id);
 
 	if (entry->priv->show_lock)
