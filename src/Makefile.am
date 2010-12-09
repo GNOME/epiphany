@@ -376,7 +376,7 @@ typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib EphyEgg-$(EPIPHANY_API_VERSION).typelib
 
 Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
-	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir --includedir=$(srcdir) -o Epiphany-$(EPIPHANY_API_VERSION).typelib
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir --includedir=$(top_builddir)/src --includedir=$(srcdir) -o Epiphany-$(EPIPHANY_API_VERSION).typelib
 
 EphyEgg-$(EPIPHANY_API_VERSION).typelib: EphyEgg-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
 	$(AM_V_GEN) $(INTROSPECTION_COMPILER) EphyEgg-$(EPIPHANY_API_VERSION).gir -o EphyEgg-$(EPIPHANY_API_VERSION).typelib
