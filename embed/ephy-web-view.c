@@ -2077,7 +2077,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
 
       msg_title = g_strdup (_("Oops! It was impossible to load this website"));
-      msg = g_strdup_printf (_("The website at <strong>%s</strong> is probably unavailable, the precise error was:<br/><br/><em>%s</em>.<br/><br/> If this persist you might want to check your internet connection or if the website at <strong>%s</strong> is working correctly."), 
+      msg = g_strdup_printf (_("The website at <strong>%s</strong> is probably unavailable, the precise error was:<br/><br/><em>%s</em>.<br/><br/> If this persists you might want to check your internet connection or if the website at <strong>%s</strong> is working correctly."), 
                              uri, reason, hostname);
 
       button_label = g_strdup (_("Try again"));
