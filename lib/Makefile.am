@@ -89,19 +89,6 @@ libephymisc_la_CFLAGS = \
 
 libephymisc_la_LIBADD = -lm
 
-if ENABLE_SPELLCHECKER
-libephymisc_la_SOURCES += \
-	ephy-spell-check.c	\
-	ephy-spell-check.h
-
-libephymisc_la_CFLAGS += \
-	$(SPELLCHECKER_CFLAGS)
-
-libephymisc_la_LIBADD += \
-	$(SPELLCHECKER_LIBS)
-endif
-
-
 bin_PROGRAMS = ephy-profile-migrator
 ephy_profile_migrator_SOURCES = \
 	ephy-profile-migrator.c \
