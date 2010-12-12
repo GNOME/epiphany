@@ -1061,7 +1061,7 @@ static const PrefsDialogPreference preferences[] =
 	  G_SETTINGS_BIND_GET, NULL, NULL },
 
 	/* Font buttons */
-	{ "custom_fonts_vbox", "sensitive",
+	{ "custom_fonts_table", "sensitive",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_GNOME_FONTS,
 	  G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN, NULL, NULL },
 
