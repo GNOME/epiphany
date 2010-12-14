@@ -946,12 +946,24 @@ egg_toolbars_model_toolbar_nth (EggToolbarsModel *model,
   return tdata->name;
 }
 
+/**
+ * egg_toolbars_model_get_types:
+ * @model:
+ *
+ * Returns: (transfer none) (element-type EggToolbarsItemType):
+ */
 GList *
 egg_toolbars_model_get_types (EggToolbarsModel *model)
 {
   return model->priv->types;
 }
 
+/**
+ * egg_toolbars_model_set_types:
+ * @model:
+ * @types: (element-type EggToolbarsItemType):
+ *
+ */
 void
 egg_toolbars_model_set_types (EggToolbarsModel *model, GList *types)
 {
@@ -966,6 +978,12 @@ fill_avail_array (gpointer key, gpointer value, GPtrArray *array)
       g_ptr_array_add (array, key);
 }
 
+/**
+ * egg_toolbars_model_get_name_avail:
+ * @model:
+ *
+ * Returns: (element-type utf8) (transfer container):
+ */
 GPtrArray *
 egg_toolbars_model_get_name_avail (EggToolbarsModel *model)
 {

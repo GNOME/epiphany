@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 EGGFILES="egg-editable-toolbar.c \
        egg-toolbars-model.c \

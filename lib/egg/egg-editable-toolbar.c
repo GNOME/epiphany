@@ -487,8 +487,8 @@ configure_item_cursor (GtkToolItem *item,
                 }
               else if (stock_id)
                 {
-                  pixbuf = gtk_widget_render_icon (widget, stock_id,
-	                                           GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+                  pixbuf = gtk_widget_render_icon_pixbuf (widget, stock_id,
+                                                          GTK_ICON_SIZE_LARGE_TOOLBAR);
                 }
               g_free (icon_name);
               g_free (stock_id);
@@ -1428,6 +1428,12 @@ egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
   toolbar_visibility_refresh (etoolbar);
 }
 
+/**
+ * egg_editable_toolbar_get_selected:
+ * @etoolbar:
+ *
+ * Returns: (transfer none):
+ **/
 GtkWidget * egg_editable_toolbar_get_selected (EggEditableToolbar   *etoolbar)
 {
   return etoolbar->priv->selected;
@@ -1818,8 +1824,25 @@ _egg_editable_toolbar_new_separator_image (void)
   return image;
 }
 
+/**
+ * egg_editable_toolbar_get_model:
+ * @etoolbar:
+ *
+ * Returns: (transfer none):
+ **/
 EggToolbarsModel *
 egg_editable_toolbar_get_model (EggEditableToolbar *etoolbar)
 {
   return etoolbar->priv->model;
+}
+
+/**
+ * egg_editable_toolbar_get_manager:
+ *
+ * Return value: (transfer none):
+ */
+GtkUIManager *
+egg_editable_toolbar_get_manager (EggEditableToolbar *etoolbar)
+{
+  return etoolbar->priv->manager;
 }

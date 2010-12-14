@@ -380,8 +380,8 @@ event_box_realize_cb (GtkWidget *widget, GtkImage *icon)
       GdkPixbuf *pixbuf;
 
       gtk_image_get_stock (icon, &stock_id, NULL);
-      pixbuf = gtk_widget_render_icon (widget, stock_id,
-	                               GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+      pixbuf = gtk_widget_render_icon_pixbuf (widget, stock_id,
+                                              GTK_ICON_SIZE_LARGE_TOOLBAR);
       gtk_drag_source_set_icon_pixbuf (widget, pixbuf);
       g_object_unref (pixbuf);
     }
