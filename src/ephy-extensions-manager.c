@@ -665,8 +665,10 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 					(EPHY_SETTINGS_MAIN,
 					 EPHY_PREFS_ENABLED_EXTENSIONS);
 	}
-
-	g_variant_builder_end (&builder);
+	else
+	{
+		g_variant_builder_clear (&builder);
+	}
 
 	for (l = manager->priv->data; l != NULL; l = l->next)
 	{
