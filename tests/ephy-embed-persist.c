@@ -1,7 +1,7 @@
 /* vim: set sw=2 ts=2 sts=2 et: */
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- * testephyembedpersist.c
+ * ephy-embed-persist.c
  * This file is part of Epiphany
  *
  * Copyright © 2009, 2010 - Gustavo Noronha Silva

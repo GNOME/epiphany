@@ -1,9 +1,9 @@
 noinst_PROGRAMS = \
-	testephyembedpersist \
-	testephysearchentry \
-	testephylocationentry \
-	testephyzoomcontrol \
-	testephyembedsingle
+	test-ephy-embed-persist \
+	test-ephy-embed-single \
+	test-ephy-location-entry \
+	test-ephy-search-entry \
+	test-ephy-zoom-control
 
 INCLUDES = \
 	-I$(top_srcdir)/embed    \
@@ -33,17 +33,17 @@ LDADD += \
 	$(SEED_LIBS)
 endif
 
-testephyembedpersist_SOURCES = \
-	testephyembedpersist.c
+test_ephy_embed_persist_SOURCES = \
+	ephy-embed-persist.c
 
-testephyembedsingle_SOURCES = \
-	testephyembedsingle.c
+test_ephy_embed_single_SOURCES = \
+	ephy-embed-single.c
 
-testephysearchentry_SOURCES = \
-	testephysearchentry.c
+test_ephy_location_entry_SOURCES = \
+	ephy-location-entry.c
 
-testephylocationentry_SOURCES = \
-	testephylocationentry.c
+test_ephy_search_entry_SOURCES = \
+	ephy-search-entry.c
 
-testephyzoomcontrol_SOURCES = \
-	testephyzoomcontrol.c
+test_ephy_zoom_control_SOURCES = \
+	ephy-zoom-control.c
