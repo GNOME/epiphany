@@ -1029,7 +1029,7 @@ window_cmd_help_about (GtkAction *action,
 	g_key_file_free (key_file);
 
 	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
-				      "Powered by the GLORIOUS WebKitGTK+"));
+				      "Powered by WebKit"));
 
 	licence = g_strjoin ("\n\n",
 			     _(licence_part[0]),
@@ -1038,10 +1038,10 @@ window_cmd_help_about (GtkAction *action,
 			    NULL);
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
-			       "program-name", "Сети людей браузера",
+			       "program-name", _("GNOME Web Browser"),
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-			                    "Copyright © The GLORIOUS GNOME Soviet!",
+			                    "Copyright © 2003–2010 The GNOME Web Browser Developers",
 			       "artists", artists,
 			       "authors", authors,
 			       "comments", comments,
@@ -1057,7 +1057,7 @@ window_cmd_help_about (GtkAction *action,
 			       "translator-credits", _("translator-credits"),
 			       "logo-icon-name", EPHY_STOCK_EPHY,
 			       "website", "http://www.gnome.org/projects/epiphany",
-			       "website-label", _("People's GNOME Web Browser Website"),
+			       "website-label", _("GNOME Web Browser Website"),
 			       "license", licence,
 			       "wrap-license", TRUE,
 			       NULL);
