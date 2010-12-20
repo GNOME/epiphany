@@ -1,4 +1,20 @@
 ===============
+Epiphany 2.91.4
+===============
+
+Changes:
+
+  - Blacklist Flash plugin, since it will just crash in our GTK+ 3.x
+    process.
+  - Use custom (and nicer) error pages (#592667)
+  - Fix minimum font size setting, add custom setting for font sizes
+    (#636761)
+  - Separate migration code into another binary, makes the main ephy
+    binary not link with NSS (#636685)
+  - Fix errors properly, particularly do not clobber the global error
+    state for errors not happening in the main frame (#623012)
+
+===============
 Epiphany 2.91.3
 ===============
 
