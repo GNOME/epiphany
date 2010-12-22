@@ -506,7 +506,7 @@ filter_changed_cb (EphyNodeFilter *filter,
 
 		cursor = gdk_cursor_new (GDK_WATCH);
 		gdk_window_set_cursor (gdk_window, cursor);
-		gdk_cursor_unref (cursor);
+		g_object_unref (cursor);
 
 		gdk_flush ();
 
