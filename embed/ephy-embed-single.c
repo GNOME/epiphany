@@ -552,10 +552,8 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   list = webkit_web_plugin_database_get_plugins (database);
   for (p = list; p; p = p->next) {
     WebKitWebPlugin *plugin = WEBKIT_WEB_PLUGIN (p->data);
-    if (g_strcmp0 (webkit_web_plugin_get_name (plugin), "Shockwave Flash") == 0) {
+    if (g_strcmp0 (webkit_web_plugin_get_name (plugin), "Shockwave Flash") == 0)
       webkit_web_plugin_set_enabled (plugin, FALSE);
-      break;
-    }
   }
 
   webkit_web_plugin_database_plugins_list_free (list);
