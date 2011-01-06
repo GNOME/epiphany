@@ -775,7 +775,6 @@ ephy_file_launch_application (GAppInfo *app,
 	GdkScreen *screen;
 	gboolean res;
 
-	context = gdk_app_launch_context_new ();
 	if (widget)
 	{
 		display = gtk_widget_get_display (widget);
@@ -786,8 +785,8 @@ ephy_file_launch_application (GAppInfo *app,
 		display = gdk_display_get_default ();
 		screen = gdk_screen_get_default ();
 	}
-	
-	gdk_app_launch_context_set_display (context, display);
+
+	context = gdk_display_get_app_launch_context (display);
 	gdk_app_launch_context_set_screen (context, screen);
 	gdk_app_launch_context_set_timestamp (context, user_time);
 
