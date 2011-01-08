@@ -791,7 +791,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 
 	style = gtk_widget_get_style_context (priv->entry);
 	metrics = pango_context_get_metrics (context,
-		                             gtk_style_context_get_font (style, GTK_STATE_FLAG_ACTIVE),
+		                             gtk_style_context_get_font (style, GTK_STATE_FLAG_NORMAL),
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
@@ -1572,13 +1572,13 @@ ephy_location_entry_set_secure (EphyLocationEntry *entry,
 	/* We have to set the color of the GtkEntry in the EphyIconEntry */
 	if (priv->secure && priv->apply_colors)
 	{
-		gtk_widget_override_color (gentry, GTK_STATE_FLAG_ACTIVE, &priv->secure_fg_color);
-		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_ACTIVE, &priv->secure_bg_color);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_fg_color);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_bg_color);
 	}
 	else
 	{
-		gtk_widget_override_color (gentry, GTK_STATE_FLAG_ACTIVE, NULL);
-		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_ACTIVE, NULL);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
 	}
 	gtk_widget_queue_draw (widget);
 }

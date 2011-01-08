@@ -1187,7 +1187,7 @@ _ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
 
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_ACTIVE);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
   gtk_render_background (context, cr,
                          priv->text_rectangle.x,
                          priv->text_rectangle.y,
