@@ -89,8 +89,8 @@ static const GtkTargetEntry url_drag_types [] =
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 
-static const GdkRGBA fallback_bg_color = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yellow-ish */
-static const GdkRGBA fallback_fg_color = { 0, 0, 0, 0 }; /* black */
+static const GdkRGBA fallback_bg_color = { 0.97, 0.97, 0.74, 1 }; /* yellow-ish */
+static const GdkRGBA fallback_fg_color = { 0, 0, 0, 1 }; /* black */
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
