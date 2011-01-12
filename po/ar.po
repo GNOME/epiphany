@@ -5,14 +5,14 @@
 # Abdulaziz Al-Arfaj <alarfaj0@yahoo.com>, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Mohamed Magdy <alnokta@yahoo.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2010-11-20 05:58+0200\n"
-"PO-Revision-Date: 2010-11-20 05:58+0300\n"
+"POT-Creation-Date: 2011-01-12 14:22+0200\n"
+"PO-Revision-Date: 2011-01-12 14:22+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -77,11 +77,11 @@ msgstr "<b>البصمات</b>"
 
 #: ../data/glade/certificate-dialogs.ui.h:2
 msgid "<b>Issued By</b>"
-msgstr "<b>أصدر من طرف</b>"
+msgstr "<b>أصدَرَها</b>"
 
 #: ../data/glade/certificate-dialogs.ui.h:3
 msgid "<b>Issued To</b>"
-msgstr "<b>أصدر ل‍</b>"
+msgstr "<b>أُصدِرَت إلى</b>"
 
 #: ../data/glade/certificate-dialogs.ui.h:4
 msgid "<b>Validity</b>"
@@ -112,7 +112,7 @@ msgid "Field _Value"
 msgstr "حقل ال_قيمة"
 
 #: ../data/glade/certificate-dialogs.ui.h:11
-#: ../data/glade/prefs-dialog.ui.h:20
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "General"
 msgstr "عام"
 
@@ -203,8 +203,8 @@ msgid "_Password:"
 msgstr "_كلمة السر:"
 
 #: ../data/glade/form-signing-dialog.ui.h:5
-msgid "_View Certificate…"
-msgstr "ا_عرض الشهادة…"
+msgid "_View Certificate&#x2026;"
+msgstr "ا_عرض الشهادة&#x2026;"
 
 #: ../data/glade/prefs-dialog.ui.h:1
 msgid "<b>Cookies</b>"
@@ -219,43 +219,51 @@ msgid "<b>Encodings</b>"
 msgstr "<b>الترميزات</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:4
+msgid "<b>Fonts</b>"
+msgstr "<b>الخطوط</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:5
 msgid "<b>Home page</b>"
 msgstr "<b>الصفحة الرئيسية</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:5
+#: ../data/glade/prefs-dialog.ui.h:6
 msgid "<b>Languages</b>"
 msgstr "<b>اللغات</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:6
+#: ../data/glade/prefs-dialog.ui.h:7
 msgid "<b>Passwords</b>"
 msgstr "<b>كلمات السر</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:7
+#: ../data/glade/prefs-dialog.ui.h:8
+msgid "<b>Style</b>"
+msgstr "<b>الطراز</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Temporary Files</b>"
 msgstr "<b>الملفات المؤقتة</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:8
+#: ../data/glade/prefs-dialog.ui.h:10
 msgid "<b>Web Content</b>"
 msgstr "<b>محتوى الوِب</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.ui.h:10
+#: ../data/glade/prefs-dialog.ui.h:12
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>مثلا، من اشهارات على هذه المواقع</small>"
 
-#: ../data/glade/prefs-dialog.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:13
 msgid "A_utomatically download and open files"
 msgstr "نزّل و افتح الملفات آ_ليًا"
 
-#: ../data/glade/prefs-dialog.ui.h:12
+#: ../data/glade/prefs-dialog.ui.h:14
 msgid "Add Language"
 msgstr "اضِف لغة"
 
-#: ../data/glade/prefs-dialog.ui.h:13
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Allow popup _windows"
 msgstr "اسمح بالنوافذ ال_منبثقة"
 
-#: ../data/glade/prefs-dialog.ui.h:14
+#: ../data/glade/prefs-dialog.ui.h:16
 msgid "Choose a l_anguage:"
 msgstr "اختر _لغة:"
 
@@ -263,98 +271,106 @@ msgstr "اختر _لغة:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:15 ../lib/widgets/ephy-location-entry.c:680
+#: ../data/glade/prefs-dialog.ui.h:17 ../lib/widgets/ephy-location-entry.c:681
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "ا_مسح"
 
-#: ../data/glade/prefs-dialog.ui.h:16
+#: ../data/glade/prefs-dialog.ui.h:18
 msgid "De_fault:"
 msgstr "الإ_فتراض:"
 
-#: ../data/glade/prefs-dialog.ui.h:17
+#: ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Java_Script"
 msgstr "فعّل _جافاسكربت"
 
-#: ../data/glade/prefs-dialog.ui.h:18
+#: ../data/glade/prefs-dialog.ui.h:20
 msgid "Enable _plugins"
 msgstr "فعّل ال_ملحقات"
 
-#: ../data/glade/prefs-dialog.ui.h:19
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
 msgstr "الخطوط والطرز"
 
-#: ../data/glade/prefs-dialog.ui.h:21 ../src/prefs-dialog.c:773
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:773
 msgid "Language"
 msgstr "اللغة"
-
-#: ../data/glade/prefs-dialog.ui.h:22
-msgid "Let web pages specify their own _fonts"
-msgstr "اترك الصفحات لتحدد _خطوطها الخاصة"
-
-#: ../data/glade/prefs-dialog.ui.h:23
-msgid "Let web pages specify their own c_olors"
-msgstr "اترك الصفحات لتحدد أ_لوانها الخاصة"
 
 #: ../data/glade/prefs-dialog.ui.h:24
 msgid "MB"
 msgstr "م ب"
 
 #: ../data/glade/prefs-dialog.ui.h:25
+msgid "Monospace font:"
+msgstr "الخط ثابت العرض:"
+
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "Only _from sites you visit"
 msgstr "فقط _من المواقع التي تزورها"
 
-#: ../data/glade/prefs-dialog.ui.h:26
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Preferences"
 msgstr "تفضيلات"
 
-#: ../data/glade/prefs-dialog.ui.h:27
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Privacy"
 msgstr "الخصوصية"
 
-#: ../data/glade/prefs-dialog.ui.h:28
+#: ../data/glade/prefs-dialog.ui.h:29
+msgid "Sans serif font:"
+msgstr "الخط غير المذيّل:"
+
+#: ../data/glade/prefs-dialog.ui.h:30
+msgid "Serif font:"
+msgstr "الخط المُذيّل:"
+
+#: ../data/glade/prefs-dialog.ui.h:31
 msgid "Set to Current _Page"
 msgstr "اضبط لل_صفحة الحالية"
 
-#: ../data/glade/prefs-dialog.ui.h:29
+#: ../data/glade/prefs-dialog.ui.h:32
 msgid "Set to _Blank Page"
 msgstr "اضبط كصفحة _فارغة"
 
-#: ../data/glade/prefs-dialog.ui.h:30
+#: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use custom _stylesheet"
 msgstr "ا_ستعمل صفحة طراز مخصصة"
 
-#: ../data/glade/prefs-dialog.ui.h:31
+#: ../data/glade/prefs-dialog.ui.h:34
 msgid "_Address:"
 msgstr "ال_مسار:"
 
-#: ../data/glade/prefs-dialog.ui.h:32
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Always accept"
 msgstr "اقبل _دائمًا"
 
-#: ../data/glade/prefs-dialog.ui.h:33
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Disk space:"
 msgstr "مساحة ال_قرص:"
 
-#: ../data/glade/prefs-dialog.ui.h:34
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Download folder:"
 msgstr "مجلد ال_تنزيل:"
 
-#: ../data/glade/prefs-dialog.ui.h:35
-msgid "_Edit Stylesheet…"
+#: ../data/glade/prefs-dialog.ui.h:38
+msgid "_Edit Stylesheet&#x2026;"
 msgstr "_حرّر صفحة الطرز…"
 
-#: ../data/glade/prefs-dialog.ui.h:36
-msgid "_Minimum size:"
-msgstr "الحجم الأد_نى:"
+#: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Minimum font size:"
+msgstr "ال_حجم الأدنى للخط:"
 
-#: ../data/glade/prefs-dialog.ui.h:37
+#: ../data/glade/prefs-dialog.ui.h:40
 msgid "_Never accept"
 msgstr "لا تقبل _أبدا"
 
-#: ../data/glade/prefs-dialog.ui.h:38
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Remember passwords"
 msgstr "تذ_كر كلمات السر"
+
+#: ../data/glade/prefs-dialog.ui.h:42
+msgid "_Use system fonts"
+msgstr "ا_ستخدم خطوط النّظام"
 
 #: ../data/glade/print.ui.h:1
 msgid "<b>Background</b>"
@@ -474,7 +490,7 @@ msgctxt "download status"
 msgid "Cancelled"
 msgstr "أُلغي"
 
-#: ../embed/downloader-view.c:802 ../src/bookmarks/ephy-bookmarks-editor.c:977
+#: ../embed/downloader-view.c:802 ../src/bookmarks/ephy-bookmarks-editor.c:978
 msgid "File"
 msgstr "ملف"
 
@@ -486,23 +502,23 @@ msgstr "%"
 msgid "Remaining"
 msgstr "متبقّ"
 
-#: ../embed/ephy-embed.c:445 ../embed/ephy-embed-persist.c:823
+#: ../embed/ephy-embed.c:404 ../embed/ephy-embed-persist.c:823
 #: ../src/window-commands.c:343
 msgid "Save"
 msgstr "احفظ"
 
-#: ../embed/ephy-embed.c:703
+#: ../embed/ephy-embed.c:662
 msgctxt "file type"
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/ephy-embed.c:719
+#: ../embed/ephy-embed.c:678
 msgid "Download this potentially unsafe file?"
 msgstr "تنزيل هذا الملف المحتمل خطره؟"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name
-#: ../embed/ephy-embed.c:723
+#: ../embed/ephy-embed.c:682
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -515,13 +531,13 @@ msgstr ""
 "من الخطر فتح “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
-#: ../embed/ephy-embed.c:731
+#: ../embed/ephy-embed.c:690
 msgid "Open this file?"
 msgstr "فتح الملف؟"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name, third %s is the application used to open the file
-#: ../embed/ephy-embed.c:735
+#: ../embed/ephy-embed.c:694
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -532,13 +548,13 @@ msgstr ""
 "\n"
 "يمكن فتح “%s” ب “%s” أو حفظه."
 
-#: ../embed/ephy-embed.c:740
+#: ../embed/ephy-embed.c:699
 msgid "Download this file?"
 msgstr "تنزيل الملف؟"
 
 #. translators: First %s is the file type description, second %s is the
 #. * file name
-#: ../embed/ephy-embed.c:744
+#: ../embed/ephy-embed.c:703
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -549,15 +565,15 @@ msgstr ""
 "\n"
 "لا يوجد تطبيق لفتح “%s”. يمكنك حفظه."
 
-#: ../embed/ephy-embed.c:923
+#: ../embed/ephy-embed.c:894
 msgid "Web Inspector"
 msgstr "فاحِص الوِب"
 
-#: ../embed/ephy-embed-shell.c:259
+#: ../embed/ephy-embed-shell.c:262
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "لا يمكن استخدام إبِفَني الآن. فشلت البدء."
 
-#: ../embed/ephy-embed-single.c:504
+#: ../embed/ephy-embed-single.c:505
 msgid ""
 "CA Certificates file we should use was not found, all SSL sites will be "
 "considered to have a broken certificate."
@@ -908,16 +924,15 @@ msgstr "الملفات المحلية"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:67 ../embed/ephy-web-view.c:3270
-#: ../src/ephy-session.c:1420
+#: ../embed/ephy-web-view.c:67 ../embed/ephy-web-view.c:3453
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
-#: ../embed/ephy-web-view.c:761
+#: ../embed/ephy-web-view.c:765
 msgid "Not now"
 msgstr "ليس الآن"
 
-#: ../embed/ephy-web-view.c:766
+#: ../embed/ephy-web-view.c:770
 msgid "Store password"
 msgstr "خزّن كلمة السر"
 
@@ -925,52 +940,95 @@ msgstr "خزّن كلمة السر"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:777
+#: ../embed/ephy-web-view.c:781
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>أتريد تخزين كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1813
+#: ../embed/ephy-web-view.c:1829
 msgid "Deny"
 msgstr "ارفض"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1819
+#: ../embed/ephy-web-view.c:1835
 msgid "Allow"
 msgstr "اسمح"
 
 #. Label
-#: ../embed/ephy-web-view.c:1825
+#: ../embed/ephy-web-view.c:1841
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "تريد الصفحة في <b>%s</b> معرفة مكانك."
 
-#: ../embed/ephy-web-view.c:2002
-#, c-format
-msgid "A problem occurred while loading %s"
-msgstr "حدثت مشكلة أثناء تحميل %s"
+#: ../embed/ephy-web-view.c:2074
+msgid "None specified"
+msgstr "غير محدّد"
 
-#: ../embed/ephy-web-view.c:2216
+#: ../embed/ephy-web-view.c:2083 ../embed/ephy-web-view.c:2095
+#, c-format
+msgid "Oops! Error loading %s"
+msgstr "عطل أثناء تحميل %s"
+
+#: ../embed/ephy-web-view.c:2085
+msgid "Oops! It was impossible to load this website"
+msgstr "تعذّر تحميل هذا الموقع"
+
+#: ../embed/ephy-web-view.c:2086
+#, c-format
+msgid ""
+"The website at <strong>%s</strong> is probably unavailable, the precise "
+"error was:<br/><br/><em>%s</em>.<br/><br/> If this persists you might want "
+"to check your internet connection or if the website at <strong>%s</strong> "
+"is working correctly."
+msgstr ""
+"قد لا يكون الموقع <strong>%s</strong> متاحا، رسالة العطل تحديدا كانت:<br/"
+"><br/><em>%s</em>.<br/><br/> إذا استمرت هذه المشكلة فربما عليك مراجعة اتصال "
+"الإنترنت أو التأكد من أن الموقع <strong>%s</strong> يعمل جيدا."
+
+#: ../embed/ephy-web-view.c:2089
+msgid "Try again"
+msgstr "أعِد المحاولة"
+
+#: ../embed/ephy-web-view.c:2097
+msgid "Oops! This site might have caused Epiphany to close unexpectedly"
+msgstr "قد يكون هذا الموقع تسبب في انهيار إبِفني وإغلاقه"
+
+#: ../embed/ephy-web-view.c:2098
+#, c-format
+msgid ""
+"This page was loading when the web browser closed unexpectedly.<br/> This "
+"might happen again if you reload the page. If it does, please report the "
+"problem to the <strong>%s</strong> developers."
+msgstr ""
+"كان يجري تحميل هذه الصفحة عندما أغلق المتصفح فجأة<br/>، وقد يتكرر هذا إذا "
+"أعدت تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري <strong>%s</strong> عن هذه "
+"المشكلة."
+
+#: ../embed/ephy-web-view.c:2101
+msgid "Load again anyway"
+msgstr "أعِد التحميل مع هذا"
+
+#: ../embed/ephy-web-view.c:2399
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2511
+#: ../embed/ephy-web-view.c:2694
 #, c-format
 msgid "Loading “%s”…"
 msgstr "يُحمل “%s”…"
 
-#: ../embed/ephy-web-view.c:2513
+#: ../embed/ephy-web-view.c:2696
 msgid "Loading…"
 msgstr "يُحمل…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3474
+#: ../embed/ephy-web-view.c:3657
 #, c-format
 msgid "%s Files"
 msgstr "ملفات %s"
@@ -1090,7 +1148,7 @@ msgstr "صفحات وِب"
 msgid "Images"
 msgstr "صور"
 
-#: ../lib/ephy-file-chooser.c:412 ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../lib/ephy-file-chooser.c:412 ../src/bookmarks/ephy-bookmarks-editor.c:754
 msgid "All files"
 msgstr "كل الملفات"
 
@@ -1100,17 +1158,17 @@ msgstr "كل الملفات"
 msgid "Desktop"
 msgstr "سطح المكتب"
 
-#: ../lib/ephy-file-helpers.c:384
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "فشل إنشاء دليل مؤقت في“%s”."
 
-#: ../lib/ephy-file-helpers.c:473
+#: ../lib/ephy-file-helpers.c:477
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "الملف “%s” موجود. رجاء انقله بعيدا."
 
-#: ../lib/ephy-file-helpers.c:484
+#: ../lib/ephy-file-helpers.c:488
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "فشل إنشاء الدليل “%s”."
@@ -1162,13 +1220,9 @@ msgstr ""
 "كلمات السر من الإصدارة السابقة (جيكو) موصدة بكلمة سر رئيسية. إذا كنت تريد أن "
 "يستوردها إبفني، فعليك إدخال كلمة السر الرئيسية أدناه."
 
-#: ../lib/ephy-profile-migration.c:83
+#: ../lib/ephy-profile-migrator.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "فشل نسخ ملف الكعكات من موزيلا."
-
-#: ../lib/ephy-profile-migration.c:558
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr "فشلت قراءة آخر علامة ترحيل، سأجهض ترحيل الإعدادات."
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
@@ -1184,8 +1238,8 @@ msgstr "التأريخ"
 msgid "Bookmark"
 msgstr "علامة"
 
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:884
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1660
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:885
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1661
 #: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1448
 msgid "Bookmarks"
 msgstr "العلامات"
@@ -1267,7 +1321,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:960
+#: ../lib/widgets/ephy-location-entry.c:964
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إلى هذه الصفحة"
 
@@ -1275,12 +1329,12 @@ msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إل�
 msgid "Clear"
 msgstr "امسح"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:320
+#: ../src/bookmarks/ephy-bookmark-action.c:319
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:502
+#: ../src/bookmarks/ephy-bookmark-action.c:501
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "يشغل المخطوط “%s”"
@@ -1461,7 +1515,7 @@ msgstr "أنشئ موضوع جديد"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:166
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1294
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1295
 #: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:134
 #: ../src/ephy-history-window.c:612
 msgid "Open in New _Window"
@@ -1479,7 +1533,7 @@ msgstr "افتح العلامة المختارة في نافذة جديدة"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:169
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1297
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1298
 #: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:137
 #: ../src/ephy-history-window.c:615
 msgid "Open in New _Tab"
@@ -1550,7 +1604,7 @@ msgid "Cut the selection"
 msgstr "قص المختار"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1307
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1308
 #: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:625
 #: ../src/ephy-window.c:158
 msgid "_Copy"
@@ -1630,7 +1684,7 @@ msgid "Show the title column"
 msgstr "أظهر عمود عنوان الصفحة"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1798
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1799
 #: ../src/ephy-history-window.c:1229
 msgid "Address"
 msgstr "العنوان"
@@ -1644,16 +1698,16 @@ msgstr "أظهر عمود العنوان"
 msgid "Type a topic"
 msgstr "اكتب موضوعا"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:381
+#: ../src/bookmarks/ephy-bookmarks-editor.c:382
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "أأحذف الموضوع “%s”؟"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:384
+#: ../src/bookmarks/ephy-bookmarks-editor.c:385
 msgid "Delete this topic?"
 msgstr "أأحذف هذا الموضوع؟"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:386
+#: ../src/bookmarks/ephy-bookmarks-editor.c:387
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1661,102 +1715,102 @@ msgstr ""
 "حذف هذا الموضوع يؤدي إلى جعل علاماته غير مصنفة، إلا إذا كانت تنتمي إلى "
 "مواضيع أخرى. لن تُحذف العلامات."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:389
+#: ../src/bookmarks/ephy-bookmarks-editor.c:390
 msgid "_Delete Topic"
 msgstr "ا_حذف الموضوع"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
+#: ../src/bookmarks/ephy-bookmarks-editor.c:612
+#: ../src/bookmarks/ephy-bookmarks-editor.c:616
 msgid "Firefox"
 msgstr "فيَرفُكس"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:620
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:621
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
 msgid "Firebird"
 msgstr "فيَربِرد"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:630
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "طور موزيلا “%s”"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Galeon"
 msgstr "جاليون"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Konqueror"
 msgstr "كُنكَرر"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:667
 msgid "Import failed"
 msgstr "فشل الاستيراد"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:668
+#: ../src/bookmarks/ephy-bookmarks-editor.c:669
 msgid "Import Failed"
 msgstr "فشل الاستيراد"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:671
+#: ../src/bookmarks/ephy-bookmarks-editor.c:672
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr "تعذّر استيراد العلامات من “%s” لأن الملف معطوب أو النسق غير مدعوم."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:734
+#: ../src/bookmarks/ephy-bookmarks-editor.c:735
 msgid "Import Bookmarks from File"
 msgstr "استورد العلامات من ملف"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:741
+#: ../src/bookmarks/ephy-bookmarks-editor.c:742
 msgid "Firefox/Mozilla bookmarks"
 msgstr "علامات فيَرفُكس/موزيلا"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:745
+#: ../src/bookmarks/ephy-bookmarks-editor.c:746
 msgid "Galeon/Konqueror bookmarks"
 msgstr "علامات جاليون/كُنكَرر"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:750
 msgid "Epiphany bookmarks"
 msgstr "علامات إبِفَني"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:873
+#: ../src/bookmarks/ephy-bookmarks-editor.c:874
 msgid "Export Bookmarks"
 msgstr "صدّر العلامات"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:890
+#: ../src/bookmarks/ephy-bookmarks-editor.c:891
 msgid "File f_ormat:"
 msgstr "هيئة الم_لف:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:936
+#: ../src/bookmarks/ephy-bookmarks-editor.c:937
 msgid "Import Bookmarks"
 msgstr "استورد العلامات"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:941
+#: ../src/bookmarks/ephy-bookmarks-editor.c:942
 msgid "I_mport"
 msgstr "ا_ستورد"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:957
+#: ../src/bookmarks/ephy-bookmarks-editor.c:958
 msgid "Import bookmarks from:"
 msgstr "استورد العلامات من:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1303
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1304
 #: ../src/ephy-history-window.c:621
 msgid "_Copy Address"
 msgstr "ا_نسخ العنوان"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1551
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1552
 #: ../src/ephy-history-window.c:949
 msgid "_Search:"
 msgstr "ا_بحث:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1718
 msgid "Topics"
 msgstr "المواضيع"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1787
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1788
 #: ../src/ephy-history-window.c:1220
 msgid "Title"
 msgstr "الاسم"
@@ -2019,7 +2073,7 @@ msgstr ""
 msgid "GNOME Web Browser options"
 msgstr "خيارات متصفّح وِب جنوم"
 
-#: ../src/ephy-notebook.c:627
+#: ../src/ephy-notebook.c:633
 msgid "Close tab"
 msgstr "أغلق اللسان"
 
@@ -2063,17 +2117,6 @@ msgstr "استعد الجلسة"
 #: ../src/ephy-session.c:782
 msgid "Do you want to recover the previous browser windows and tabs?"
 msgstr "أتريد استعادة النوافذ و الألسنة السابقة؟"
-
-#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1364
-#, c-format
-msgid ""
-"This page was loading when the web browser closed unexpectedly. This might "
-"happen again if you reload the page. If it does, please report the problem "
-"to the %s developers."
-msgstr ""
-"كان يجري تحميل هذه الصفحة عندما أغلق المصفح فجأة، وقد يتكرر هذا إذا أعدت "
-"تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري %s عن هذه المشكلة."
 
 #: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
@@ -2979,1260 +3022,3 @@ msgstr ""
 msgid "_Enable"
 msgstr "_فعّل"
 
-#~ msgid ""
-#~ "A list of protocols to be considered safe in addition to the default, "
-#~ "when disable_unsafe_protocols is enabled."
-#~ msgstr ""
-#~ "قائمة بالبروتوكولات التي يمكن اعتبارها آمنة بالاضافة للمبدئي، عند تفعيل "
-#~ "disable_unsafe_protocols."
-
-#~ msgid "Additional safe protocols"
-#~ msgstr "بروتوكولات آمنة اضافية"
-
-#~ msgid "Disable JavaScript chrome control"
-#~ msgstr "عطّل متحكم قطع جافاسكربت"
-
-#~ msgid "Disable JavaScript's control over window chrome."
-#~ msgstr "عطّل متحكّم جافاسكربت فوق مظاهر النوافذ."
-
-#~ msgid ""
-#~ "Disable all historical information by disabling back and forward "
-#~ "navigation, not allowing the history dialog and hiding the most used "
-#~ "bookmarks list."
-#~ msgstr ""
-#~ "عطّل كل معلومات التأريخ بتعطيل زر الخلف و منع حوار التاريخ و إخفاء قائمة "
-#~ "العلامات المستخدمة بكثافة."
-
-#~ msgid "Disable arbitrary URLs"
-#~ msgstr "عطّل العناوين (URLs) الفارغة"
-
-#~ msgid "Disable bookmark editing"
-#~ msgstr "عطّل تحرير علامات الموقع"
-
-#~ msgid "Disable history"
-#~ msgstr "عطّل التأريخ"
-
-#~ msgid "Disable the user's ability to add or edit bookmarks."
-#~ msgstr "عطّل قدرة المستخدمين على إضافة وتحرير العلامات."
-
-#~ msgid "Disable the user's ability to edit toolbars."
-#~ msgstr "عطّل قدرة المستخدمين في تحرير أشرطة الأدوات."
-
-#~ msgid "Disable the user's ability to type in a URL to Epiphany."
-#~ msgstr "عطّل قدرة المستخدمين على كتابة عناوين في إبِفَني."
-
-#~ msgid "Disable toolbar editing"
-#~ msgstr "عطّل تحرير شريط الأدوات"
-
-#~ msgid "Disable unsafe protocols"
-#~ msgstr "عطّل البروتوكولات الغير آمنة"
-
-#~ msgid ""
-#~ "Disables loading of content from unsafe protocols. Safe protocols are "
-#~ "http and https."
-#~ msgstr ""
-#~ "عطّل تحميل محتويات من بروتوكولات غير آمنة. البروتوكولات الآمنة هي http و "
-#~ "https."
-
-#~ msgid "Epiphany cannot quit"
-#~ msgstr "لا يستطيع إبيفني الخروج"
-
-#~ msgid "Hide menubar by default"
-#~ msgstr "اخفِ شريط القوائم افتراضا"
-
-#~ msgid "Hide the menubar by default."
-#~ msgstr "اخفِ شريط القوائم افتراضا"
-
-#~ msgid "Lock in fullscreen mode"
-#~ msgstr "اقفل في نمط ملء الشاشة"
-
-#~ msgid "Locks Epiphany in fullscreen mode."
-#~ msgstr "اقفل إيبفني في نمط ملء الشاشة"
-
-#~ msgid "User is not allowed to close Epiphany"
-#~ msgstr "لا يسمح للمستخدم بغلق إبيفني."
-
-#~ msgid "Active extensions"
-#~ msgstr "الامتدادات النشطة"
-
-#~ msgid "Address of the user's home page."
-#~ msgstr "عنوان صفحة المستخدم الرئيسية."
-
-#~ msgid "Allow popups"
-#~ msgstr "اسمح بالنوافذ المنبثقة"
-
-#~ msgid ""
-#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
-#~ "enabled)."
-#~ msgstr ""
-#~ "اسمح للمواقع بفتح نوافذ جديدة باستعمال جافاسكربت (اذا كان جافاسكربت "
-#~ "مفعّلا)."
-
-#~ msgid "Always show the tab bar"
-#~ msgstr "أظهر شريط الألسنة دائما"
-
-#~ msgid "Automatic downloads"
-#~ msgstr "تنزيلات تلقائية"
-
-#~ msgid "Automatically manage offline status with NetworkManager"
-#~ msgstr "أدر حالة عدم الاتصال آليا مع مدير الشبكة"
-
-#~ msgid "Browse with caret"
-#~ msgstr "تصفح بالمؤشّر"
-
-#~ msgid "Cookie accept"
-#~ msgstr "تقبل الكعكة"
-
-#~ msgid "Default encoding"
-#~ msgstr "الترميز المبدئي"
-
-#~ msgid ""
-#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
-#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
-#~ msgstr ""
-#~ "قيم الترميز المبدئي المقبولة هي: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", "
-#~ "\"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312"
-#~ "\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-#~ "\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-#~ "8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-#~ "\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-"
-#~ "8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14"
-#~ "\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U"
-#~ "\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
-#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
-#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
-#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
-#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
-#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
-
-#~ msgid "Enable JavaScript"
-#~ msgstr "فعّل جافاسكربت"
-
-#~ msgid "Enable Plugins"
-#~ msgstr "فعّل الملحقات"
-
-#~ msgid "Enable Web Inspector"
-#~ msgstr "فعّل فاحِص الوب"
-
-#~ msgid "Enable smooth scrolling"
-#~ msgstr "فعّل التدوير المرن"
-
-#~ msgid ""
-#~ "Force new window requests to be opened in tabs instead of using a new "
-#~ "window."
-#~ msgstr "افرض فتح النوافذ الجديدة في ألسنة."
-
-#~ msgid "Force new windows to be opened in tabs"
-#~ msgstr "افرض فتح النوافذ الجديدة في ألسنة"
-
-#~ msgid ""
-#~ "Hide or show the downloads window. When hidden, a notification will be "
-#~ "shown when new downloads are started."
-#~ msgstr ""
-#~ "اخفِ أو أظهر نافذة التنزيلات. عند إخفائها، سيُعرض تنبيه عند بدأ تنزيلات "
-#~ "جديدة."
-
-#~ msgid "History pages time range"
-#~ msgstr "المدي الزمني لصفحات التأريخ"
-
-#~ msgid "Home page"
-#~ msgstr "الصفحة الرئيسيّة"
-
-#~ msgid ""
-#~ "How to present animated images. Possible values are \"normal\", \"once\" "
-#~ "and \"disabled\"."
-#~ msgstr ""
-#~ "كيفية تقديم الصور المتحركة. القيم الممكنة هي \"normal\", \"once\" أو "
-#~ "\"disabled\"."
-
-#~ msgid "How to print frames"
-#~ msgstr "كيف تطبع الإطارات"
-
-#~ msgid ""
-#~ "How to print pages containing frames. Allowed values are \"normal\", "
-#~ "\"separately\" and \"selected\"."
-#~ msgstr ""
-#~ "كيف تطبع الصفحات المحتوية على اطارات. القيم المسموح بها هى \"عادى\", "
-#~ "\"منفصلة\" و \"مختارة\"."
-
-#~ msgid "ISO-8859-1"
-#~ msgstr "ISO-8859-1"
-
-#~ msgid "Image animation mode"
-#~ msgstr "نمط الصور المتحركة"
-
-#~ msgid "Languages"
-#~ msgstr "لغات"
-
-#~ msgid "Lists the active extensions."
-#~ msgstr "تسرُد الامتدادات النشطة."
-
-#~ msgid ""
-#~ "Middle click to open the web page pointed to by the currently selected "
-#~ "text"
-#~ msgstr "انقر بالزر الأوسط لفتح صفحة الوِب التي يؤشر اليها النص المختار حاليا"
-
-#~ msgid ""
-#~ "Middle clicking on the main view pane will open the web page pointed to "
-#~ "by the currently selected text."
-#~ msgstr ""
-#~ "النقر بالزر الأوسط على الشباك الرئيسي سيفتح صفحة الوِب التي يؤشراليها النص "
-#~ "المختار حاليا."
-
-#~ msgid "Minimum font size"
-#~ msgstr "الحد الأدنى لحجم خط"
-
-#~ msgid "Preferred languages, two letter codes."
-#~ msgstr "اللغات المحبذة، بشفرة ذات حرفين."
-
-#~ msgid "Remember passwords"
-#~ msgstr "تذكر كلمات السر"
-
-#~ msgid "Search string for keywords entered in the URL bar."
-#~ msgstr "نص البحث للكلمات المفتاحية المدخلة في شريط المسارات"
-
-#~ msgid "Show bookmarks bar by default"
-#~ msgstr "أظهر شريط العلامات إفتراضًّا"
-
-#~ msgid "Show statusbar by default"
-#~ msgstr "أظهر شريط الحالة افتراضا"
-
-#~ msgid ""
-#~ "Show the history pages visited \"ever\", \"last_two_days\", "
-#~ "\"last_three_days\", \"today\"."
-#~ msgstr ""
-#~ "اعرض صفحات التأريخ المزارة \"ever\"و \"last_two_days\"و\"last_three_days"
-#~ "\"و \"today\"."
-
-#~ msgid "Show the tab bar also when there is only one tab open."
-#~ msgstr "اعرض شريط الألسنة حتى عند وجود لسان واحد مفتوح."
-
-#~ msgid "Show toolbars by default"
-#~ msgstr "أظهر أشرطة الأدوات إفتراضا"
-
-#~ msgid "Size of disk cache"
-#~ msgstr "حجم مخبأ القرص"
-
-#~ msgid "Size of disk cache, in MB."
-#~ msgstr "حجم مخبأ القرص، بالميجابايت."
-
-#~ msgid ""
-#~ "String that will be used as user agent, to identify the browser to the "
-#~ "web servers."
-#~ msgstr "النص الذي سيُستخدم ليعرف المتصفح إلى خواديم الوب."
-
-#~ msgid "The bookmark information shown in the editor view"
-#~ msgstr "معلومات العلامات المعروضة في معرض التحرير"
-
-#~ msgid ""
-#~ "The bookmark information shown in the editor view. Valid values in the "
-#~ "list are \"address\" and \"title\"."
-#~ msgstr ""
-#~ "معلومات العلامات المعروضة في معرض التحرير, القيم الممكنة في القائمة هي "
-#~ "\"address\" و \"title\"."
-
-#~ msgid "The currently selected fonts language"
-#~ msgstr "لغة الخطوط المختارة حاليا"
-
-#~ msgid ""
-#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
-#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
-#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
-#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
-#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
-#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
-#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
-#~ "devanagari\" (devanagari)."
-#~ msgstr ""
-#~ "لغة الخطوط المختارة حاليا. القيم الممكنة هي \"ar\" (العربية), \"x-baltic"
-#~ "\" (لغات البلطيق), \"x-central-euro\" (لغات وسط اوروبا), \"x-cyrillic"
-#~ "\" (اللغات المكتوبة بالحروف السريالية), \"el\" (الاغريقية), \"he"
-#~ "\" (العبرية), \"ja\" (اليابانية), \"ko\" (الكورية), \"zh-CN\" (صيني "
-#~ "مبسط), \"th\" (تاي), \"zh-TW\" (صيني تقليدي), \"tr\" (التركية), \"x-"
-#~ "unicode\" (لغات أخرى), \"x-western\" (لغات مكتوبة بالرموز اللاتينية),\"x-"
-#~ "tamil\" (تاميل) ، \"x-devanagari\" (ديفانجاري)."
-
-#~ msgid "The downloads folder"
-#~ msgstr "مجلد ال_تنزيلات"
-
-#~ msgid "The page information shown in the history view"
-#~ msgstr "معلومات الصفحة المعروضة في منظور التأريخ"
-
-#~ msgid ""
-#~ "The page information shown in the history view. Valid values in the list "
-#~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-#~ msgstr ""
-#~ "معلومات الصفحة المعروضة في منظور التأريخ. القيم الممكنة في القائمة هي "
-#~ "\"ViewAddress\"، \"ViewTitle\" و \"ViewDateTime\"."
-
-#~ msgid ""
-#~ "The path of the folder where to download files to; or \"Downloads\" to "
-#~ "use the default downloads folder, or \"Desktop\" to use the desktop "
-#~ "folder."
-#~ msgstr ""
-#~ "المسار إلى مجلد التنزيل، أو \"Downloads\" لاستعمال مجلد التنزيل المبدئي، "
-#~ "أو \"Desktop\" لاستعمال سطح المكتب."
-
-#~ msgid "Toolbar style"
-#~ msgstr "نسق شريط الأدوات"
-
-#~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
-#~ msgstr ""
-#~ "نسق شريط الأدوات. القيم المسموحة هي \"\" (استعمل نسق جنوم المبدئي), \"both"
-#~ "\" (أيقونة و كتابة), \"both-horiz\" (الكتابة بجانب الأيقونة), \"icons\", "
-#~ "و \"text\"."
-
-#~ msgid "URL Search"
-#~ msgstr "بحث المسار"
-
-#~ msgid "Use own colors"
-#~ msgstr "استخدم الألوان الخاصة"
-
-#~ msgid "Use own fonts"
-#~ msgstr "استخدم الخطوط الخاصة"
-
-#~ msgid "Use your own colors instead of the colors the page requests."
-#~ msgstr "استخدم ألوانك الخاصة عوضا عن الألوان التي تطلبها الصفحة."
-
-#~ msgid "Use your own fonts instead of the fonts the page requests."
-#~ msgstr "استخدم خطوطك الخاصة عوضا عن الخطوط التي تطلبها الصفحة."
-
-#~ msgid "User agent"
-#~ msgstr "عميل المستخدم"
-
-#~ msgid "Visibility of the downloads window"
-#~ msgstr "ظهور نافذة التنزيل"
-
-#~ msgid ""
-#~ "When files cannot be opened by the browser they are automatically "
-#~ "downloaded to the download folder and opened with the appropriate "
-#~ "application."
-#~ msgstr ""
-#~ "ستنزل الملفات آليا إلى مجلد التنزيل عندما لا يمكن فتحها بالمتصفح ثم تفتح "
-#~ "بالتطبيق المناسب."
-
-#~ msgid ""
-#~ "Where to accept cookies from. Possible values are \"anywhere\", \"current "
-#~ "site\" and \"nowhere\"."
-#~ msgstr ""
-#~ "من أين ستقبل الكعكات. القيم الممكنة هي \"anywhere\" و \"current site\" و "
-#~ "\"nowhere\"."
-
-#~ msgid "Whether to print the background color"
-#~ msgstr "فيما إذا سيطبع لون الخلفيّة"
-
-#~ msgid "Whether to print the background images"
-#~ msgstr "فيما إذا ستطبع صورة الخلفيّة"
-
-#~ msgid "Whether to print the date in the footer"
-#~ msgstr "ما إذا وجب طبع تاريخ اليوم في التذييل"
-
-#~ msgid "Whether to print the page address in the header"
-#~ msgstr "ما إذا يطبع مسار الصفحة في الترويسة"
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer"
-#~ msgstr "ما إذا وجب طبع أرقام الصفحات (س من الكل) في التذييل"
-
-#~ msgid "Whether to print the page title in the header"
-#~ msgstr "ما إذا يطبع عنوان الصفحة في الترويسة"
-
-#~ msgid "Whether to store and prefill passwords in web sites."
-#~ msgstr "إذا كان سيتم حفظ وإعادة ملء كلمات السر في المواقع."
-
-#~ msgid "x-western"
-#~ msgstr "ar"
-
-#~ msgid "<b>Web Development</b>"
-#~ msgstr "<b>تطوير الوِب</b>"
-
-#~ msgid "The file “%s” has been downloaded."
-#~ msgstr "تم تنزيل الملف “%s”."
-
-#~ msgid "Download finished"
-#~ msgstr "تم التنزيل"
-
-#~ msgid "The file “%s” has been added to the downloads queue."
-#~ msgstr "أُضيف الملف “%s” إلى طابور التنزيلات."
-
-#~ msgid "Download started"
-#~ msgstr "بدأ التنزيل"
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "خطأ ‪GConf‬‏:\n"
-#~ "  %s"
-
-#~ msgid "Show only the title column"
-#~ msgstr "أظهر عمود الاسم فقط"
-
-#~ msgid "T_itle and Address"
-#~ msgstr "ا_سم الموقع و عنوانه"
-
-#~ msgid "Show both the title and address columns"
-#~ msgstr "أظهر عمودا الاسم و الموقع معا"
-
-#~ msgid "Default font type"
-#~ msgstr "نوع الخط المبدئي"
-
-#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-#~ msgstr "نوع الخط المبدئي. القيم الممكنة هي \"serif\" و \"sans-serif\"."
-
-#~ msgid "_View Certificate&#x2026;"
-#~ msgstr "ا_عرض الشهادة&#x2026;"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "است_خدم التدوير المرن"
-
-#~ msgid "_Save As..."
-#~ msgstr "ا_حفظ ك‍…"
-
-#~ msgid "Redirecting to “%s”…"
-#~ msgstr "يعيد التوجيه إلى “%s”…"
-
-#~ msgid "Transferring data from “%s”…"
-#~ msgstr "ينقل البيانات من “%s”…"
-
-#~ msgid "Waiting for authorization from “%s”…"
-#~ msgstr "ينتظر التخويل من “%s”…"
-
-#~ msgid ""
-#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
-#~ "You can recover the opened windows and tabs."
-#~ msgstr ""
-#~ "يبدو أن إبِفَني خرج بصورة غير طبيعية في بعد التشغيل الأخير, يمكنك إرجاء "
-#~ "النوافذ و الألسنة المفتوحة."
-
-#~ msgid "Crash Recovery"
-#~ msgstr "استعادة الانهيار"
-
-#~ msgid "Sidebar extension required"
-#~ msgstr "مطلوب امتداد الشريط الجانبي"
-
-#~ msgid "Sidebar Extension Required"
-#~ msgstr "مطلوب امتداد الشريط الجانبي"
-
-#~ msgid "The link you clicked needs the sidebar extension to be installed."
-#~ msgstr "الوصلة التي نقرتها تحتاج لتثبيت امتداد الشريط الجانبي."
-
-#~ msgid "Caret"
-#~ msgstr "مؤشر"
-
-#~ msgid "In keyboard selection mode, press F7 to exit"
-#~ msgstr "في نسق الاختيار بلوحة المفاتيح، انقر F7 للخروج"
-
-#~ msgid "St_atusbar"
-#~ msgstr "شريط ال_حالة"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "أظهر أو اخفِ شريط الحالة"
-
-#~ msgid "%d hidden popup window"
-#~ msgid_plural "%d hidden popup windows"
-#~ msgstr[0] "لا نوافذ مُنبثقة مخفية"
-#~ msgstr[1] "نافذة مُنبثقة واحدة مخفيّة"
-#~ msgstr[2] "نافذتان مُنبثِقتان مخفيّتان"
-#~ msgstr[3] "%Id نوافذ مُنبثقة مخفية"
-#~ msgstr[4] "%Id نافذة مُنبثقة مخفيّة"
-#~ msgstr[5] "%Id نافذة مُنبثقة مخفيّة"
-
-#~ msgid "Enable _Java"
-#~ msgstr "فعّل _جافا"
-
-#~ msgid "First"
-#~ msgstr "الأولى"
-
-#~ msgid "Go to the first page"
-#~ msgstr "اذهب إلى الصفحة الأولى"
-
-#~ msgid "Last"
-#~ msgstr "الأخيرة"
-
-#~ msgid "Go to the last page"
-#~ msgstr "اذهب إلى الصفحة الأخيرة"
-
-#~ msgid "Previous"
-#~ msgstr "السابقة"
-
-#~ msgid "Go to the previous page"
-#~ msgstr "اذهب إلى الصفحة السابقة"
-
-#~ msgid "Next"
-#~ msgstr "التالية"
-
-#~ msgid "Go to next page"
-#~ msgstr "اذهب إلى الصفحة التالية"
-
-#~ msgid "Close"
-#~ msgstr "أغلق"
-
-#~ msgid "Close print preview"
-#~ msgstr "أغلق معاينة الطباعة"
-
-#~ msgid "The encoding autodetector. Empty string means autodetect is off"
-#~ msgstr "كاشف الترميز التلقائي. سلسلة فارغة تعني أن الكشف التلقائي ملغى"
-
-#~ msgid ""
-#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
-#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
-#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
-#~ "encodings)."
-#~ msgstr ""
-#~ "الكاشف التلقائي للترميز. القيم الممكنة هي \"\" (الكاشفات التلقائية متوقفة)"
-#~ "، \"cjk_parallel_state_machine\" (كشف آلي لالترميزات الشرق آسيوية)، "
-#~ "\"ja_parallel_state_machine\" (كشف آلي لترميزات اللغة اليابانية)، "
-#~ "\"ko_parallel_state_machine\" (كشف آلي لترميزات اللغة الكورية)، \"ruprob"
-#~ "\" (كشف آلي لترميزات اللغة الروسية)، \"ukprob\" (كشف آلي لترميزات اللغة "
-#~ "الاوكرانية)،\"zh_parallel_state_machine\" (كشف آلي لترميزات اللغة الصينية)"
-#~ "، \"zhcn_parallel_state_machine\" (كشف آلي لترميزات اللغة الصينية المبسطة)"
-#~ "، \"zhtw_parallel_state_machine\" (كشف آلي لترميزات اللغة الصينية "
-#~ "التقليدية) and \"universal_charset_detector\" (كشف آلي لمعظم الترميزات)."
-
-#~ msgid "Au_todetect:"
-#~ msgstr "_كشف آلي:"
-
-#~ msgid "download status|Unknown"
-#~ msgstr "مجهول"
-
-#~ msgid "download status|Failed"
-#~ msgstr "فشل"
-
-#~ msgid "autodetectors|Off"
-#~ msgstr "موقف"
-
-#~ msgid "automatically detect ... character encodings|Chinese"
-#~ msgstr "صيني"
-
-#~ msgid "automatically detect ... character encodings|Simplified Chinese"
-#~ msgstr "صيني مبسط"
-
-#~ msgid "automatically detect ... character encodings|Traditional Chinese"
-#~ msgstr "صيني تقليدي"
-
-#~ msgid "automatically detect ... character encodings|East Asian"
-#~ msgstr "شرق أسيوي"
-
-#~ msgid "automatically detect ... character encodings|Japanese"
-#~ msgstr "ياباني"
-
-#~ msgid "automatically detect ... character encodings|Korean"
-#~ msgstr "كوري"
-
-#~ msgid "automatically detect ... character encodings|Russian"
-#~ msgstr "روسي"
-
-#~ msgid "automatically detect ... character encodings|Universal"
-#~ msgstr "عالمي"
-
-#~ msgid "automatically detect ... character encodings|Ukrainian"
-#~ msgstr "أكراني"
-
-#~ msgid "Opening %s"
-#~ msgstr "يتم فتح %s"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "لا عنصر للفتح"
-#~ msgstr[1] "فتح عنصر واحد"
-#~ msgstr[2] "فتح عنصرين"
-#~ msgstr[3] "فتح %d عنصرا"
-#~ msgstr[4] "فتح %d عناصر"
-#~ msgstr[5] "فتح %d عنصر"
-
-#~ msgid "select fonts for|Arabic"
-#~ msgstr "عربي"
-
-#~ msgid "select fonts for|Baltic"
-#~ msgstr "بلطيقي"
-
-#~ msgid "select fonts for|Central European"
-#~ msgstr "وسط أوروبي"
-
-#~ msgid "select fonts for|Cyrillic"
-#~ msgstr "سريلي"
-
-#~ msgid "select fonts for|Devanagari"
-#~ msgstr "ديفينجاري"
-
-#~ msgid "select fonts for|Greek"
-#~ msgstr "يوناني"
-
-#~ msgid "select fonts for|Hebrew"
-#~ msgstr "عبري"
-
-#~ msgid "select fonts for|Japanese"
-#~ msgstr "ياباني"
-
-#~ msgid "select fonts for|Korean"
-#~ msgstr "كوري"
-
-#~ msgid "select fonts for|Simplified Chinese"
-#~ msgstr "صيني مبسّط"
-
-#~ msgid "select fonts for|Tamil"
-#~ msgstr "تاميل"
-
-#~ msgid "select fonts for|Thai"
-#~ msgstr "تايلندي"
-
-#~ msgid "select fonts for|Traditional Chinese"
-#~ msgstr "صيني تقليدي"
-
-#~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
-#~ msgstr "صيني تقليدي (هونغ كونغ)"
-
-#~ msgid "select fonts for|Turkish"
-#~ msgstr "تركي"
-
-#~ msgid "select fonts for|Armenian"
-#~ msgstr "أرمني"
-
-#~ msgid "select fonts for|Bengali"
-#~ msgstr "بنغالي"
-
-#~ msgid "select fonts for|Unified Canadian Syllabics"
-#~ msgstr "مقاطع كندية موحدة"
-
-#~ msgid "select fonts for|Ethiopic"
-#~ msgstr "إثيوبي"
-
-#~ msgid "select fonts for|Georgian"
-#~ msgstr "جورجي"
-
-#~ msgid "select fonts for|Gujarati"
-#~ msgstr "جورجاراتي"
-
-#~ msgid "select fonts for|Gurmukhi"
-#~ msgstr "جرموخي"
-
-#~ msgid "select fonts for|Khmer"
-#~ msgstr "خمير"
-
-#~ msgid "select fonts for|Malayalam"
-#~ msgstr "ماليزي"
-
-#~ msgid "select fonts for|Western"
-#~ msgstr "غربي"
-
-#~ msgid "select fonts for|Other Scripts"
-#~ msgstr "مخطوطات أخرى"
-
-#~ msgid "_Username:"
-#~ msgstr "اسم المستخدم:"
-
-#~ msgid "_Domain:"
-#~ msgstr "ال_نطاق:"
-
-#~ msgid "_New password:"
-#~ msgstr "ك_لمة السر الجديدة:"
-
-#~ msgid "Con_firm password:"
-#~ msgstr "أ_كّد كلمة السر:"
-
-#~ msgid "Password quality:"
-#~ msgstr "جودة كلمة السر:"
-
-#~ msgid "Do not remember this password"
-#~ msgstr "لا تتذكر كلمة السر هذه"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "_تذكّر كلمة السر لهذه الجلسة"
-
-#~ msgid "Save password in _keyring"
-#~ msgstr "احفظ كلمة السر في _حلقة المفاتيح"
-
-#~ msgid "Unsafe protocol."
-#~ msgstr "بروتوكول غير آمن."
-
-#~ msgid ""
-#~ "The address has not been loaded, because it refers to an unsafe protocol "
-#~ "and thereby presents a security risk to your system."
-#~ msgstr ""
-#~ "لم يتم تحميل العنوان، لأنه يشير إلى بروتوكول غير آمن وهذا يعتبر تهديدا "
-#~ "أمنيا للنظام."
-
-#~ msgid "No address found."
-#~ msgstr "لم يُعثر على أي عنوان."
-
-#~ msgid "No web address could be found in this file."
-#~ msgstr "لا يمكن إيجاد أي عنوان وِب في هذا الملف."
-
-#~ msgid "Epiphany Desktop File Plugin"
-#~ msgstr "ملحق ملف سطح المكتب لإبِفني"
-
-#~ msgid ""
-#~ "This plugin handles “.desktop” and “.url” files containing web links."
-#~ msgstr "هذا الملحق يقرأ ملفات “.desktop” و “.url” المحتوية على وصلات وِب."
-
-#~ msgid "bookmarks|All"
-#~ msgstr "الكل"
-
-#~ msgid "toolbar style|Default"
-#~ msgstr "المبدئي"
-
-#~ msgid "_History"
-#~ msgstr "ال_تاريخ"
-
-#~ msgid "Fonts"
-#~ msgstr "خطوط"
-
-#~ msgid "For l_anguage:"
-#~ msgstr "لل_لّغة:"
-
-#~ msgid "_Detailed Font Settings…"
-#~ msgstr "إعدادات خط ت_فصيليّة..."
-
-#~ msgid "_Fixed width:"
-#~ msgstr "_ثابت العرض:"
-
-#~ msgid "_Variable width:"
-#~ msgstr "عرض _متغيّر:"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "غير معروف"
-
-#~ msgid "“%s” Protocol is not Supported"
-#~ msgstr "البروتوكول “%s” غير مدعوم"
-
-#~ msgid "“%s” protocol is not supported."
-#~ msgstr "البروتوكول “%s” غير مدعوم."
-
-#~ msgid ""
-#~ "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
-#~ msgstr ""
-#~ "البروتكولات المدعومة هي “http”, “https”, “ftp”, “file”, “smb” و “sftp”."
-
-#~ msgid "File “%s” not Found"
-#~ msgstr "الملف “%s” غير موجود"
-
-#~ msgid "File “%s” not found."
-#~ msgstr "الملف “%s” غير موجود."
-
-#~ msgid "Check the location of the file and try again."
-#~ msgstr "الرجاء التأكد من مكان الملف ثم حاول مرة أخرى."
-
-#~ msgid "“%s” Could not be Found"
-#~ msgstr "تعذّر إيجاد “%s”"
-
-#~ msgid "“%s” could not be found."
-#~ msgstr "تعذّر إيجاد “%s”."
-
-#~ msgid ""
-#~ "Check that you are connected to the internet, and that the address is "
-#~ "correct."
-#~ msgstr "تحقق من اتصالك بالإنترت, وأن المسار صحيح."
-
-#~ msgid "If this page used to exist, you may find an archived version:"
-#~ msgstr "إذا كانت هذه الصفحة غير موجودة, من الممكن العثور نسخة مخبأة:"
-
-#~ msgid "“%s” Refused the Connection"
-#~ msgstr "رفض “%s” الاتصال"
-
-#~ msgid "“%s” refused the connection."
-#~ msgstr "رفض “%s” الاتصال."
-
-#~ msgid "Likely causes of the problem are"
-#~ msgstr "المسببات المحتملة لهذه المشكلة هي"
-
-#~ msgid ""
-#~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
-#~ "Services Configuration Tool in System > Control Center, or</"
-#~ "ul><ul><li>the port number %d is wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>لم يتم تشغيل الخدمة %s.</li> حاول تشغيلها من أداة إعدادات الخدمات "
-#~ "في نظام > مركز التحكم، أو </ul><ul><li>رقم المنفذ %Id خطأ.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>بعض الخدمات لم تبدأ، أو</li><li> رقم المنفذ %Id خطأ.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>you got the port number "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>بعض الخدمات لم تبدأ، أو</li><li>حصلت على رقم المنفذ خطأ.</li></ul>"
-
-#~ msgid ""
-#~ "The server may be busy or you may have a network connection problem. Try "
-#~ "again later."
-#~ msgstr "الخادوم مشغول أو ربما لديك مشكلة في الاتصال. حاول مجددا لاحقا."
-
-#~ msgid "There may be an old version of the page you wanted:"
-#~ msgstr "يمكن أن يكون هناك نسخة قديمة للصفحة التي تريد:"
-
-#~ msgid "“%s” Interrupted the Connection"
-#~ msgstr "قاطع “%s” الاتصال"
-
-#~ msgid "“%s” interrupted the connection."
-#~ msgstr "قاطع “%s” الاتصال."
-
-#~ msgid "“%s” is not Responding"
-#~ msgstr "“%s” لا يستجيب"
-
-#~ msgid "“%s” is not responding."
-#~ msgstr "“%s” لا يستجيب."
-
-#~ msgid "The connection was lost because the server took too long to respond."
-#~ msgstr "فُقِد الاتصال لأن الخادوم أخذ وقتا كبيرا للإستجابة."
-
-#~ msgid "Invalid Address"
-#~ msgstr "عنوان غير صحيح"
-
-#~ msgid "Invalid address."
-#~ msgstr "عنوان غير صحيح."
-
-#~ msgid "The address you entered is not valid."
-#~ msgstr "العنوان الذي أدخلته غير صحيح."
-
-#~ msgid "“%s” Redirected Too Many Times"
-#~ msgstr "“%s” أعاد التوجيه مرات كثيرة"
-
-#~ msgid "This page cannot load because of a problem with the Web site."
-#~ msgstr "لا يمكن تحميل الصفحة بسبب مشكلة في موقع وِب."
-
-#~ msgid "The server “%s” is redirecting in a way that will never complete."
-#~ msgstr "يقوم الخادوم %s بإعادة التوجيه بطريقة لن تكتمل أبدا."
-
-#~ msgid "“%s” Requires an Encrypted Connection"
-#~ msgstr "يتطلب “%s” اتصالا مشفرا"
-
-#~ msgid "“%s” requires an encrypted connection."
-#~ msgstr "يتطلب “%s” اتصالا مشفرا"
-
-#~ msgid ""
-#~ "The document could not be loaded because encryption support is not "
-#~ "installed."
-#~ msgstr "لا يمكن تحميل المستند لأن دعم التشفير غير مثبت."
-
-#~ msgid "“%s” Dropped the Connection"
-#~ msgstr "“%s” قطع الاتصال"
-
-#~ msgid "“%s” dropped the connection."
-#~ msgstr "“%s” قطع الاتصال."
-
-#~ msgid "The server dropped the connection before any data could be read."
-#~ msgstr "قام الخادوم بغلق الاتصال قبل قراءة أي بيانات."
-
-#~ msgid "Cannot Load Document Whilst Working Offline"
-#~ msgstr "لا يمكن عرض المستند بينما أعمل دون اتصال"
-
-#~ msgid "Cannot load document whilst working offline."
-#~ msgstr "لا يمكن عرض المستند بينما أعمل دون اتصال."
-
-#~ msgid "To view this document, disable “Work Offline” and try again."
-#~ msgstr "لعرض هذا المستند، قم بتعطيل “دون اتصال” ثم حاول مجددا."
-
-#~ msgid "Access Denied to Port “%d” of “%s”"
-#~ msgstr "منع الوصول إلى المنفذ “%Id” من  “%s” "
-
-#~ msgid "Access denied to port “%d” of “%s”."
-#~ msgstr "منع الوصول إلى المنفذ “%Id” من  “%s” ."
-
-#~ msgid ""
-#~ "This address uses a network port which is normally used for purposes "
-#~ "other than Web browsing."
-#~ msgstr "يستعمل العنوان ميناء يستعمل عادة لأغراض ليست للتصفح."
-
-#~ msgid "The request has been cancelled for your protection."
-#~ msgstr "تم الغاء الطلب لحمايتك."
-
-#~ msgid "Could not Connect to Proxy Server"
-#~ msgstr "تعذّر الاتصال بالخادوم الوسيط"
-
-#~ msgid "Could not connect to proxy server."
-#~ msgstr "تعذّر الاتصال بالخادوم الوسيط."
-
-#~ msgid ""
-#~ "Check your proxy server settings. If the connection still fails, there "
-#~ "may be a problem with your proxy server or your network connection."
-#~ msgstr ""
-#~ "تحقق من إعدادات الخادوم الوسيط. إذا استمر فشل الاتصال، يمكن أن يكون هناك "
-#~ "مشكلة في الخادوم الوسيط أو اتصال الشبكة."
-
-#~ msgid "Could not Display Content"
-#~ msgstr "لم أستطع عرض المحتويات"
-
-#~ msgid "Could not display content."
-#~ msgstr "لم أستطع عرض المحتويات."
-
-#~ msgid "The page uses an unsupported or invalid form of compression."
-#~ msgstr "تستعمل الصفحة نسق ضغط غير مدعوم."
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "في مخزن جوجل"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "في أرشيف الإنترنت"
-
-#~ msgid "_Abort Script"
-#~ msgstr "ا_جهض سكربت"
-
-#~ msgid "Don't Save"
-#~ msgstr "لا تحفظ"
-
-#~ msgid "Text files"
-#~ msgstr "ملفات نصية"
-
-#~ msgid "XML files"
-#~ msgstr "ملفات XML"
-
-#~ msgid "XUL files"
-#~ msgstr "ملفات XUL"
-
-#~ msgid "Accept cookie from %s?"
-#~ msgstr "أأقبل السكاكر من %s؟"
-
-#~ msgid "Accept Cookie?"
-#~ msgstr "أقبل السكاكر؟"
-
-#~ msgid "The site wants to modify an existing cookie."
-#~ msgstr "يريد هذا الموقع تعديل أحد السكاكر الموجودة بالفعل."
-
-#~ msgid "The site wants to set a cookie."
-#~ msgstr "يريد هذا الموقع تحديد أحد السكاكر."
-
-#~ msgid "The site wants to set a second cookie."
-#~ msgstr "يريد هذا الموقع تحديد أحد السكاكر ثانية."
-
-#~ msgid "You already have %d cookie from this site."
-#~ msgid_plural "You already have %d cookies from this site."
-#~ msgstr[0] "لا سكاكر لديك من هذا الموقع."
-#~ msgstr[1] "لديك سكّرة واحدة بالفعل من هذا الموقع."
-#~ msgstr[2] "لديك سكرتين بالفعل من هذا الموقع."
-#~ msgstr[3] "لديك %Id سكاكر بالفعل من هذا الموقع."
-#~ msgstr[4] "لديك %Id سكاكر بالفعل من هذا الموقع."
-#~ msgstr[5] "لديك %Id سكاكر بالفعل من هذا الموقع."
-
-#~ msgid "Apply this _decision to all cookies from this site"
-#~ msgstr "طبق هذا ال_قرار على كل السكاكر من هذا الموقع"
-
-#~ msgid "_Reject"
-#~ msgstr "ارفض_"
-
-#~ msgid "_Accept"
-#~ msgstr "ا_قبل"
-
-#~ msgid "The web site “%s” requests that you sign the following text:"
-#~ msgstr "موقع الوِب “%s” يطلب أن توقع النص التالى:"
-
-#~ msgid "_Sign text"
-#~ msgstr "_وقّع النص"
-
-#~ msgid "Options"
-#~ msgstr "خيارات"
-
-#~ msgid "Print this page?"
-#~ msgstr "اطبع هذه الصفحة؟"
-
-#~ msgid "Preparing to print"
-#~ msgstr "تحضير للطباعة"
-
-#~ msgid "Page %d of %d"
-#~ msgstr "الصّفحة %Id من %Id"
-
-#~ msgid "Cancelling print"
-#~ msgstr "إلغاء الطّباعة"
-
-#~ msgid "Spooling..."
-#~ msgstr "إرسال..."
-
-#~ msgid "Print error"
-#~ msgstr "خطأ طباعة"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "طباعة “%s”"
-
-#~ msgid "_Select Certificate"
-#~ msgstr "ا_نتقي الشهادة"
-
-#~ msgid "Choose a certificate to present as identification to “%s”."
-#~ msgstr "اختر شهادة لعرضها كتعريف لـ %s."
-
-#~ msgid "Select a certificate to identify yourself."
-#~ msgstr "انتقي شهادة لتعريف نفسك."
-
-#~ msgid "Certificate _Details"
-#~ msgstr "ت_فاصيل الشهادة"
-
-#~ msgid ""
-#~ "The site “%s” returned security information for “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "ارجع الموقع “%s” معلومات أمنية عن “%s”. من الممكن أن أحدا يعترض اتصالاتك "
-#~ "للحصول على معلوماتك السرية."
-
-#~ msgid ""
-#~ "You should only accept the security information if you trust “%s” and “%"
-#~ "s”."
-#~ msgstr ""
-#~ "من المفترض أن تتقبل المعلومة الأمنية فقط عند وثوقك في “%s” و في “%s”."
-
-#~ msgid "Accept incorrect security information?"
-#~ msgstr "هل نقبل المعلومة الأمنية الخاطئة؟"
-
-#~ msgid ""
-#~ "It was not possible to automatically trust “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "من غير الممكن الوثوق بـ “%s” تلقائيا. من الممكن أن أحدا يقاطع اتصالك "
-#~ "للحصول على معلوماتك السرية."
-
-#~ msgid ""
-#~ "You should only connect to the site if you are certain you are connected "
-#~ "to “%s”."
-#~ msgstr "يفترض أن تتصل بالموقع فقط اذا كنت متأكدا من متصل بـ “%s”."
-
-#~ msgid "Connect to untrusted site?"
-#~ msgstr "اتصل بالموقع الغير موثوق؟"
-
-#~ msgid "_Trust this security information from now on"
-#~ msgstr "ثِقْ _في هذه المعلومة الأمنية من الآن فصاعدا"
-
-#~ msgid "Co_nnect"
-#~ msgstr "اتّ_صل"
-
-#~ msgid "Accept expired security information?"
-#~ msgstr "هل نتقبل المعلومة الأمنية المنقضية؟"
-
-#~ msgid "The security information for “%s” expired on %s."
-#~ msgstr "انقضت المعلومة الأمنية لـ “%s” في %s."
-
-#~ msgid "Accept not yet valid security information?"
-#~ msgstr "هل نتقبل المعلومة الأمنية الغير صحيحة حتى الآن؟"
-
-#~ msgid "The security information for “%s” isn't valid until %s."
-#~ msgstr "المعلومة الأمنية لـ“%s” ليست صحيحة حتى %s."
-
-#~ msgid "%a %d %b %Y"
-#~ msgstr "%A %Od %b %Y"
-
-#~ msgid "You should ensure that your computer's time is correct."
-#~ msgstr "من المفترض أن تتأكد من صحة ساعة حاسوبك."
-
-#~ msgid "Cannot establish connection to “%s”"
-#~ msgstr "تعذّر إقامة اتصال مع %s."
-
-#~ msgid ""
-#~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
-#~ "\n"
-#~ "Please ask your system administrator for assistance."
-#~ msgstr ""
-#~ "قائمة سحب الشهادات (ق‌س‌ش) من “%s” تتطلب التحديث.\n"
-#~ "\n"
-#~ "الرجاء الاتصال بمدير نظامك للمساعدة."
-
-#~ msgid "Trust new Certificate Authority?"
-#~ msgstr "أأثق بسلطة الشهادات الجديدة؟"
-
-#~ msgid "_Trust CA"
-#~ msgstr "_ثق بـ س‌ش"
-
-#~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
-#~ msgstr "هل تريد الوثوق بسلطة الشهادات الجديدة “%s” لتعريف مواقع الوِب؟"
-
-#~ msgid ""
-#~ "Before trusting a Certificate Authority (CA) you should verify the "
-#~ "certificate is authentic."
-#~ msgstr "قبل الوثوق بسلطة الشهادات (س‌ش) يجب أن تتحقق من أن الشهادة موثقة."
-
-#~ msgid "Certificate already exists."
-#~ msgstr "الشهادة موجودة مسبقا."
-
-#~ msgid "The certificate has already been imported."
-#~ msgstr "تم استيراد الشهادة سابقا."
-
-#~ msgid "Select Password"
-#~ msgstr "اختر كلمة سر"
-
-#~ msgid "Select a password to protect this certificate"
-#~ msgstr "اختر كلمة سر لحماية هذه الشهادة"
-
-#~ msgid "Enter the password for this certificate"
-#~ msgstr "أدخل كلمة سر هذه الشهادة"
-
-#~ msgid "Certificate Revocation List Imported"
-#~ msgstr "تم استيراد قائمة سحب الشّهادات"
-
-#~ msgid "Certificate Revocation List (CRL) successfully imported"
-#~ msgstr "تم استيراد قائمة سحب الشهادات (ق‌س‌ش) بنجاح."
-
-#~ msgid "Unit:"
-#~ msgstr "الوحدة:"
-
-#~ msgid "Next Update:"
-#~ msgstr "التحديث التالي:"
-
-#~ msgid "Not part of certificate"
-#~ msgstr "ليس جزءا من الشهادة"
-
-#~ msgid "Certificate Properties"
-#~ msgstr "خصائص الشهادة"
-
-#~ msgid "This certificate has been verified for the following uses:"
-#~ msgstr "تم التحقق من هذه الشهادة للاستعمالات التالية:"
-
-#~ msgid "Could not verify this certificate because it has been revoked."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأنها سُحِبت."
-
-#~ msgid "Could not verify this certificate because it has expired."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأنها انقضت."
-
-#~ msgid "Could not verify this certificate because it is not trusted."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأنه غير موثوق بها."
-
-#~ msgid "Could not verify this certificate because the issuer is not trusted."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأن الناشر غير موثوق به."
-
-#~ msgid "Could not verify this certificate because the issuer is unknown."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأن الناشر مجهول."
-
-#~ msgid ""
-#~ "Could not verify this certificate because the CA certificate is invalid."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأن شهادة سلطة الشهادات غير سليمة."
-
-#~ msgid "Could not verify this certificate for unknown reasons."
-#~ msgstr "تعذّر التحقق من هذه الشهادة لأسباب مجهولة."
-
-#~ msgid "Change Token Password"
-#~ msgstr "غيّر كلمة السر "
-
-#~ msgid "Choose a password for the “%s” token"
-#~ msgstr "اختر كلمة سر من أجل أمارة “%s”"
-
-#~ msgid "Change the password for the “%s” token"
-#~ msgstr "غيّر كلمة سر “%s”"
-
-#~ msgid "Get Token Password"
-#~ msgstr "احصل على كلمة السر"
-
-#~ msgid "Please enter the password for the “%s” token"
-#~ msgstr "أدخل كلمة سر “%s”."
-
-#~ msgid "Please select a token:"
-#~ msgstr "من فضلك اختر رمز دال:"
-
-#~ msgid "_Select"
-#~ msgstr "ا_ختر"
-
-#~ msgid "Escrow the secret key?"
-#~ msgstr "أودع المفتاح السرى؟"
-
-#~ msgid ""
-#~ "The certificate authority “%s” requests that you give it a copy of the "
-#~ "newly generated secret key.\n"
-#~ "\n"
-#~ "This will enable the certificate authority read any communications "
-#~ "encrypted with this key without your knowledge or consent.\n"
-#~ "\n"
-#~ "It is strongly recommended not to allow it."
-#~ msgstr ""
-#~ "سلطة الشهادة “%s” تطلب أن تقدم نسخة من المفتاح السري الجديد المولد "
-#~ "حديثا .\n"
-#~ "\n"
-#~ "ذلك سوف يسمح لسلطة الشهادة بأن تقرأ أي اتصالات مُعمّاة بواسطة ذلك المفتاح "
-#~ "بدون معرفتك أو موافقتك.\n"
-#~ "\n"
-#~ "ينصح بشدة بأن لا تسمح بذلك."
-
-#~ msgid "Generating Private Key."
-#~ msgstr "يجري توليد مفتاح سري."
-
-#~ msgid ""
-#~ "Please wait while a new private key is generated. This process could take "
-#~ "a few minutes."
-#~ msgstr ""
-#~ "الرجاء الانتظار حتى يولّد مفتاح سري جديد. قد  قد تستغرق هذه العملية بعض "
-#~ "الدقائق."
-
-#~ msgid "Security Notice"
-#~ msgstr "تنبيه أمني"
-
-#~ msgid "This page is loaded over a secure connection"
-#~ msgstr "تم تحميل هذه الصفحة عبر اتصال آمن"
-
-#~ msgid ""
-#~ "For secure pages, the address entry has a distinct color and a locked "
-#~ "padlock icon is displayed.\n"
-#~ "\n"
-#~ "The padlock icon in the statusbar also indicates whether a page is secure."
-#~ msgstr ""
-#~ "في الصفحات الآمنة، مكان إدخال العنوان له لون مميز و يتم عرض أيقونة "
-#~ "الأمان. \n"
-#~ "\n"
-#~ "أيقونة الأمان في شريط الحالة توضح أيضا إذا كانت الصفحة آمنة."
-
-#~ msgid "Security Warning"
-#~ msgstr "تحذير أمني"
-
-#~ msgid "This page is loaded over a low security connection"
-#~ msgstr "تم تحميل هذه الصفحة عبر اتصال قليل الأمان"
-
-#~ msgid ""
-#~ "Any information you see or enter on this page could easily be intercepted "
-#~ "by a third party."
-#~ msgstr "أي معلومات تراها في هذه الصفحة يمكن رؤيتها من مكان آخر."
-
-#~ msgid "Some parts of this page are loaded over an insecure connection"
-#~ msgstr "تم تحميل بعض أجزاء هذه الصفحة عبر اتصال غير آمن"
-
-#~ msgid ""
-#~ "Some information you see or enter will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "بعض المعلومات التي تراها أو ترسلها عبر هذه الصفحة يتم نقلها عبر اتصال غير "
-#~ "آمن، يمكن رؤيتها بسهولة من مكان آخر."
-
-#~ msgid "Send this information over an insecure connection?"
-#~ msgstr "أأرسل هذه المعلومات عبر اتصال غير آمن؟"
-
-#~ msgid ""
-#~ "The information you have entered will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "المعلومات التي تريد أن ترسلها عبر هذه الصفحة يتم نقلها عبر اتصال غير آمن، "
-#~ "يمكن رؤيتها بسهولة من مكان آخر."
-
-#~ msgid "_Send"
-#~ msgstr "أر_سل"
-
-#~ msgid ""
-#~ "Although this page was loaded over a secure connection, the information "
-#~ "you have entered will be sent over an insecure connection, and could "
-#~ "easily be intercepted by a third party."
-#~ msgstr ""
-#~ "رغم أنه تم تحميل هذه الصفحة عبر اتصال آمن، المعلومات التي تريد أن ترسلها "
-#~ "عبر هذه الصفحة يتم نقلها عبر اتصال غير آمن، يمكن رؤيتها بسهولة من مكان "
-#~ "آخر."
