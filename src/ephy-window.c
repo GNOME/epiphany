@@ -37,6 +37,8 @@
 #include "ephy-embed-utils.h"
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
+#include "ephy-download.h"
+#include "ephy-download-widget.h"
 #include "ephy-file-helpers.h"
 #include "egg-editable-toolbar.h"
 #include "ephy-toolbar.h"
@@ -278,6 +280,9 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), NULL,
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
+	{ "ViewDownloadsBar", NULL, N_("View _downloads bar"), NULL,
+	  N_("Show the active downloads for this window"),
+	  NULL, FALSE },
 	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
@@ -442,6 +447,7 @@ struct _EphyWindowPrivate
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
 	GtkWidget *entry;
+	GtkWidget *downloads_box;
 
 	guint clear_progress_timeout_id;
 
@@ -566,6 +572,23 @@ confirm_close_with_modified_forms (EphyWindow *window)
 	}
 	
 	return TRUE;
+}
+
+static gboolean
+confirm_close_with_downloads (EphyWindow *window)
+{
+	GtkWidget *dialog;
+	int response;
+
+	dialog = construct_confirm_close_dialog (window,
+			_("There are ongoing downloads in this window"),
+			_("If you close this window, the downloads will be cancelled"),
+			_("Close window and cancel downloads"));
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	gtk_widget_destroy (dialog);
+
+	return response == GTK_RESPONSE_ACCEPT;
 }
 
 static void
@@ -1007,6 +1030,36 @@ ephy_window_key_press_event (GtkWidget *widget,
 }
 
 static gboolean
+window_has_ongoing_downloads (EphyWindow *window)
+{
+	GList *l, *downloads;
+	gboolean downloading = FALSE;
+
+	downloads = gtk_container_get_children (GTK_CONTAINER (window->priv->downloads_box));
+
+	for (l = downloads; l != NULL; l = l->next)
+	{
+		EphyDownload *download;
+		WebKitDownloadStatus status;
+
+		if (EPHY_IS_DOWNLOAD_WIDGET (l->data) != TRUE)
+			continue;
+
+		download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (l->data));
+		status = webkit_download_get_status (ephy_download_get_webkit_download (download));
+
+		if (status == WEBKIT_DOWNLOAD_STATUS_STARTED)
+		{
+			downloading = TRUE;
+			break;
+		}
+	}
+	g_list_free (downloads);
+
+	return downloading;
+}
+
+static gboolean
 ephy_window_delete_event (GtkWidget *widget,
 			  GdkEventAny *event)
 {
@@ -1048,7 +1101,14 @@ ephy_window_delete_event (GtkWidget *widget,
 			return TRUE;
 		}
 	}
-	
+
+
+	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
+	{
+		/* stop window close */
+		return TRUE;
+	}
+
 	/* See bug #114689 */
 	gtk_widget_hide (widget);
 
@@ -2967,15 +3027,22 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 {
 	EphyWindowPrivate *priv = window->priv;
 
-	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-				    EPHY_PREFS_LOCKDOWN_QUIT) &&
-	    gtk_notebook_get_n_pages (priv->notebook) == 1)
+	if (gtk_notebook_get_n_pages (priv->notebook) == 1)
 	{
-		return;
+		if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+					    EPHY_PREFS_LOCKDOWN_QUIT))
+		{
+			return;
+		}
+		if (window_has_ongoing_downloads (window) &&
+		    !confirm_close_with_downloads (window))
+		{
+			return;
+		}
 	}
 
-	if (!ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)) ||
-	    confirm_close_with_modified_forms (window))
+	if ((!ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)) ||
+	     confirm_close_with_modified_forms (window)))
 	{
 		gtk_widget_destroy (GTK_WIDGET (embed));
 	}
@@ -3056,6 +3123,88 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 }
 
 static void
+download_added_cb (EphyEmbedShell *shell,
+		   EphyDownload *download,
+		   gpointer data)
+{
+	EphyWindow *window = EPHY_WINDOW (data);
+	GtkWidget *download_window;
+	GtkWidget *widget;
+
+	download_window = ephy_download_get_window (download);
+	widget = ephy_download_get_widget (download);
+
+	if (widget == NULL &&
+	    (download_window == NULL || download_window == GTK_WIDGET (window)))
+	{
+		widget = ephy_download_widget_new (download);
+		gtk_box_pack_start (GTK_BOX (window->priv->downloads_box),
+				    widget, FALSE, FALSE, 0);
+		gtk_widget_show (widget);
+		ephy_window_set_downloads_box_visibility (window, TRUE);
+	}
+}
+
+static void
+downloads_removed_cb (GtkContainer *container,
+		      GtkWidget *widget,
+		      gpointer data)
+{
+	EphyWindow *window = EPHY_WINDOW (data);
+	GList *children = NULL;
+
+	children = gtk_container_get_children (container);
+	if (g_list_length (children) == 1)
+		ephy_window_set_downloads_box_visibility (window, FALSE);
+
+	g_list_free (children);
+}
+
+static void
+downloads_close_cb (GtkButton *button, EphyWindow *window)
+{
+	ephy_window_set_downloads_box_visibility (window, FALSE);
+}
+
+static GtkWidget *
+setup_downloads_box (EphyWindow *window)
+{
+	GtkWidget *widget;
+	GtkWidget *close_button;
+	GtkWidget *image;
+
+	widget = gtk_hbox_new (FALSE, 0);
+	close_button = gtk_button_new ();
+	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_BUTTON);
+
+	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+
+	gtk_container_add (GTK_CONTAINER (close_button), image);
+	gtk_box_pack_end (GTK_BOX (widget), close_button, FALSE, FALSE, 4);
+
+	gtk_widget_set_margin_right (widget, 20);
+
+	g_signal_connect (close_button, "clicked",
+			  G_CALLBACK (downloads_close_cb), window);
+	g_signal_connect (widget, "remove",
+			  G_CALLBACK (downloads_removed_cb), window);
+
+	gtk_widget_show_all (close_button);
+
+	return widget;
+}
+
+void
+ephy_window_set_downloads_box_visibility (EphyWindow *window,
+					  gboolean show)
+{
+	if (show)
+		gtk_widget_show (window->priv->downloads_box);
+	else
+		gtk_widget_hide (window->priv->downloads_box);
+}
+
+static void
 ephy_window_dispose (GObject *object)
 {
 	EphyWindow *window = EPHY_WINDOW (object);
@@ -3076,6 +3225,9 @@ ephy_window_dispose (GObject *object)
 		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 		ephy_extension_detach_window (manager, window);
 		ephy_bookmarks_ui_detach_window (window);
+
+		g_signal_handlers_disconnect_by_func
+			(embed_shell, download_added_cb, window);
 
 		/* Deactivate menus */
 		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
@@ -3381,6 +3533,7 @@ cancel_handler (gpointer idptr)
 	g_source_remove (id);
 }
 
+
 static void
 ephy_window_init (EphyWindow *window)
 {
@@ -3389,6 +3542,10 @@ ephy_window_init (EphyWindow *window)
 	_ephy_embed_shell_track_object (EPHY_EMBED_SHELL (ephy_shell), G_OBJECT (window));
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+
+	g_signal_connect (embed_shell,
+			 "download-added", G_CALLBACK (download_added_cb),
+			 window);
 }
 
 static GObject *
@@ -3455,8 +3612,19 @@ ephy_window_constructor (GType type,
 	priv->find_toolbar = ephy_find_toolbar_new (window);
 	g_signal_connect (priv->find_toolbar, "close",
 			  G_CALLBACK (find_toolbar_close_cb), window);
+
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
+
+	priv->downloads_box = setup_downloads_box (window);
+	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
+			    GTK_WIDGET (priv->downloads_box), FALSE, FALSE, 0);
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "ViewDownloadsBar");
+
+	g_object_bind_property (action, "active",
+				priv->downloads_box, "visible",
+				G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 	/* don't show the find toolbar here! */
 	
 	/* get the toolbars model *before* getting the bookmarksbar model
