@@ -21,12 +21,13 @@
 #include "config.h"
 
 #include "popup-commands.h"
+#include "ephy-download.h"
 #include "ephy-shell.h"
 #include "ephy-embed-container.h"
-#include "ephy-embed-persist.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-file-chooser.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-web-view.h"
 
@@ -179,28 +180,25 @@ popup_cmd_copy_link_address (GtkAction *action,
 }
 
 static void
-save_property_url_completed_cb (EphyEmbedPersist *persist)
+response_cb (GtkDialog *dialog,
+	     int response_id,
+	     EphyDownload *download)
 {
-	if (!(ephy_embed_persist_get_flags (persist) & 
-				EPHY_EMBED_PERSIST_ASK_DESTINATION))
+	if (response_id == GTK_RESPONSE_ACCEPT)
 	{
-		const char *dest;
-		GFile *dest_file;
-		guint32 user_time;
+		char *uri;
 
-		user_time = ephy_embed_persist_get_user_time (persist);
-		dest = ephy_embed_persist_get_dest (persist);
-
-		g_return_if_fail (dest != NULL);
-
-		dest_file = g_file_new_for_path (dest);
-		
-		g_return_if_fail (dest_file != NULL);
-		/* If save location is the desktop, nautilus will not open */
-		ephy_file_browse_to (dest_file, user_time);
-		
-		g_object_unref (dest_file);
+		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+		ephy_download_set_destination_uri (download, uri);
+		ephy_download_start (download);
+		g_free (uri);
 	}
+	else
+	{
+		ephy_download_cancel (download);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -213,38 +211,44 @@ save_property_url (GtkAction *action,
 	EphyEmbedEvent *event;
 	const char *location;
 	GValue value = { 0, };
-	EphyEmbedPersist *persist;
-	EphyEmbed *embed;
+	EphyDownload *download;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
 	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (&value);
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
-
-	ephy_embed_persist_set_fc_title (persist, title);
-	ephy_embed_persist_set_fc_parent (persist, GTK_WINDOW (window));
-	ephy_embed_persist_set_flags
-		(persist, EPHY_EMBED_PERSIST_FROM_CACHE |
-			  (ask_dest ? EPHY_EMBED_PERSIST_ASK_DESTINATION : 0));
-	ephy_embed_persist_set_persist_key
-		(persist, EPHY_PREFS_STATE_SAVE_DIR);
-	ephy_embed_persist_set_source (persist, location);
-	ephy_embed_persist_set_embed (persist, embed);
-
-	g_signal_connect (persist, "completed",
-			  G_CALLBACK (save_property_url_completed_cb), NULL);
-
-	ephy_embed_persist_save (persist);
-
-	g_object_unref (G_OBJECT (persist));
+	download = ephy_download_new_for_uri (location);
+	ephy_download_set_window (download, GTK_WIDGET (window));
 	g_value_unset (&value);
+
+	if (ask_dest)
+	{
+		EphyFileChooser *dialog;
+		char *base;
+
+		base = g_path_get_basename (location);
+		dialog = ephy_file_chooser_new (title, GTK_WIDGET (window),
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						EPHY_PREFS_STATE_SAVE_DIR,
+						EPHY_FILE_FILTER_ALL);
+
+		gtk_file_chooser_set_do_overwrite_confirmation
+				(GTK_FILE_CHOOSER (dialog), TRUE);
+		gtk_file_chooser_set_current_name
+				(GTK_FILE_CHOOSER (dialog), base);
+		g_signal_connect (dialog, "response",
+				  G_CALLBACK (response_cb), download);
+		gtk_widget_show (GTK_WIDGET (dialog));
+
+		g_free (base);
+	}
+	else
+	{
+		ephy_download_set_auto_destination (download);
+		ephy_download_start (download);
+	}
 }
 
 void
@@ -293,15 +297,15 @@ popup_cmd_save_image_as (GtkAction *action,
 #define GNOME_APPEARANCE_PROPERTIES  "gnome-appearance-properties.desktop"
 
 static void
-background_download_completed (EphyEmbedPersist *persist,
+background_download_completed (EphyDownload *download,
 			       GtkWidget *window)
 {
-	const char *bg;
+	char *bg;
 	guint32 user_time;
 
-	user_time = ephy_embed_persist_get_user_time (persist);
+	user_time = ephy_download_get_start_time (download);
 
-	bg = ephy_embed_persist_get_dest (persist);
+	bg = g_filename_from_uri (ephy_download_get_destination_uri (download), NULL, NULL);
 
 	/* open the Appearance Properties capplet on the Background tab */
 	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time, window))
@@ -315,8 +319,7 @@ background_download_completed (EphyEmbedPersist *persist,
 			ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time, window);
 		}
 	}
-
-	g_object_unref (persist);
+	g_free (bg);
 }
 
 void
@@ -325,43 +328,36 @@ popup_cmd_set_image_as_background (GtkAction *action,
 {
 	EphyEmbedEvent *event;
 	const char *location;
-	char *dest, *base, *base_converted;
+	char *dest_uri, *dest, *base, *base_converted;
 	GValue value = { 0, };
-	EphyEmbedPersist *persist;
-	EphyEmbed *embed;
+	EphyDownload *download;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
 	ephy_embed_event_get_property (event, "image-uri", &value);
 	location = g_value_get_string (&value);
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
+	download = ephy_download_new_for_uri (location);
+	ephy_download_set_window (download, GTK_WIDGET (window));
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
 	dest = g_build_filename (ephy_dot_dir (), base_converted, NULL);
+	dest_uri = g_filename_to_uri (dest, NULL, NULL);
 
-	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
-				     	       EPHY_EMBED_PERSIST_FROM_CACHE);
-	ephy_embed_persist_set_source (persist, location);
+	ephy_download_set_destination_uri (download, dest_uri);
 
-	g_signal_connect (persist, "completed",
-			  G_CALLBACK (background_download_completed),
-			  window);
+	g_signal_connect (download, "completed",
+			  G_CALLBACK (background_download_completed), window);
 
-	ephy_embed_persist_save (persist);
-	g_object_unref (persist);
+	ephy_download_start (download);
 
 	g_value_unset (&value);
-	g_free (dest);
 	g_free (base);
 	g_free (base_converted);
+	g_free (dest);
+	g_free (dest_uri);
 }
 
 void
@@ -425,19 +421,19 @@ image_open_uri (GFile *file,
 }
 
 static void
-save_source_completed_cb (EphyEmbedPersist *persist)
+save_source_completed_cb (EphyDownload *download)
 {
 	const char *dest;
 	const char *source;
 	guint32 user_time;
 	GFile *file;
 
-	user_time = ephy_embed_persist_get_user_time (persist);
-	dest = ephy_embed_persist_get_dest (persist);
-	source = ephy_embed_persist_get_source (persist);
+	user_time = ephy_download_get_start_time (download);
+	dest = ephy_download_get_destination_uri (download);
+	source = ephy_download_get_source_uri (download);
 	g_return_if_fail (dest != NULL);
 	
-	file = g_file_new_for_path (dest);
+	file = g_file_new_for_uri (dest);
 
 	image_open_uri (file, source, user_time);
 	g_object_unref (file);
@@ -446,9 +442,9 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 static void
 save_temp_source (const char *address)
 {
-	EphyEmbedPersist *persist;
+	EphyDownload *download;
 	const char *static_temp_dir;
-	char *base, *tmp_name, *tmp_path, *dest;
+	char *base, *tmp_name, *tmp_path, *dest, *dest_uri;
 
 	if (address == NULL) return;
 
@@ -467,21 +463,17 @@ save_temp_source (const char *address)
 
 	if (dest == NULL) return;
 
-	persist = EPHY_EMBED_PERSIST
-		(g_object_new (EPHY_TYPE_EMBED_PERSIST, NULL));
+	dest_uri = g_filename_to_uri (dest, NULL, NULL);
+	download = ephy_download_new_for_uri (address);
+	ephy_download_set_destination_uri (download, dest_uri);
 
-	ephy_embed_persist_set_source (persist, address);
-	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_FROM_CACHE |
-			 		       EPHY_EMBED_PERSIST_NO_VIEW);
-
-	g_signal_connect (persist, "completed",
+	g_signal_connect (download, "completed",
 			  G_CALLBACK (save_source_completed_cb), NULL);
 
-	ephy_embed_persist_save (persist);
-	g_object_unref (persist);
+	ephy_download_start (download);
 
 	g_free (dest);
+	g_free (dest_uri);
 }
 
 void

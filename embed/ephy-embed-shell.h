@@ -28,6 +28,8 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "ephy-download.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_SHELL		(ephy_embed_shell_get_type ())
@@ -55,6 +57,9 @@ struct _EphyEmbedShellClass
 {
 	GObjectClass parent_class;
 
+	void	  (* download_added)	(EphyEmbedShell *shell, EphyDownload *download);
+	void	  (* download_removed)	(EphyEmbedShell *shell, EphyDownload *download);
+
 	void	  (* prepare_close)	(EphyEmbedShell *shell);
 
 	/*< private >*/
@@ -68,10 +73,6 @@ EphyEmbedShell	  *ephy_embed_shell_get_default		(void);
 GObject		  *ephy_embed_shell_get_favicon_cache	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_global_history	(EphyEmbedShell *shell);
-
-GObject		  *ephy_embed_shell_get_downloader_view	(EphyEmbedShell *shell);
-
-GObject		  *ephy_embed_shell_get_downloader_view_nocreate	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
@@ -90,6 +91,13 @@ void		   ephy_embed_shell_set_print_settings	(EphyEmbedShell *shell,
 							 GtkPrintSettings *settings);
 		
 GtkPrintSettings  *ephy_embed_shell_get_print_settings	(EphyEmbedShell *shell);
+
+GList		  *ephy_embed_shell_get_downloads	(EphyEmbedShell *shell);
+
+void		   ephy_embed_shell_add_download	(EphyEmbedShell *shell,
+							 EphyDownload *download);
+void		   ephy_embed_shell_remove_download	(EphyEmbedShell *shell,
+							 EphyDownload *download);
 
 /* Private API */
 void	       _ephy_embed_shell_track_object		(EphyEmbedShell *shell,

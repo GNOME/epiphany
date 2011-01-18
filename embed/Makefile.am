@@ -8,7 +8,6 @@ header_DATA = \
 	$(INST_H_FILES)
 
 NOINST_H_FILES = \
-	downloader-view.h		\
 	ephy-embed-dialog.h		\
 	ephy-encodings.h		\
 	ephy-favicon-cache.h
@@ -16,10 +15,10 @@ NOINST_H_FILES = \
 INST_H_FILES = \
 	ephy-adblock.h			\
 	ephy-adblock-manager.h		\
+	ephy-download.h			\
 	ephy-embed.h			\
 	ephy-embed-container.h          \
 	ephy-embed-event.h		\
-	ephy-embed-persist.h		\
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
@@ -36,12 +35,11 @@ BUILT_SOURCES = \
 libephyembed_la_SOURCES = \
 	ephy-adblock.c			\
 	ephy-adblock-manager.c		\
-	downloader-view.c		\
+	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-container.c          \
 	ephy-embed-dialog.c		\
 	ephy-embed-event.c		\
-	ephy-embed-persist.c		\
 	ephy-embed-single.c		\
 	ephy-embed-shell.c		\
 	ephy-embed-utils.c              \

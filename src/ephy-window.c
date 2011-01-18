@@ -52,7 +52,6 @@
 #include "ephy-fullscreen-popup.h"
 #include "ephy-action-helper.h"
 #include "ephy-find-toolbar.h"
-#include "ephy-embed-persist.h"
 #include "ephy-location-entry.h"
 #include "ephy-web-view.h"
 

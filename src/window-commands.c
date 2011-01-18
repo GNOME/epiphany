@@ -27,7 +27,6 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-shell.h"
-#include "ephy-embed-persist.h"
 #include "ephy-debug.h"
 #include "window-commands.h"
 #include "ephy-prefs.h"

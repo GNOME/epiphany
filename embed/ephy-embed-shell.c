@@ -25,9 +25,9 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-#include "downloader-view.h"
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
+#include "ephy-download.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-encodings.h"
@@ -50,7 +50,7 @@
 struct _EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
-	DownloaderView *downloader_view;
+	GList *downloads;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
@@ -63,6 +63,8 @@ struct _EphyEmbedShellPrivate
 
 enum
 {
+	DOWNLOAD_ADDED,
+	DOWNLOAD_REMOVED,
 	PREPARE_CLOSE,
 	QUIT,
 	LAST_SIGNAL
@@ -82,17 +84,6 @@ ephy_embed_shell_dispose (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 	EphyEmbedShellPrivate *priv = shell->priv;
-
-	if (priv->downloader_view != NULL)
-	{
-		DownloaderView **downloader_view = &priv->downloader_view;
-		LOG ("Unref downloader");
-		g_object_remove_weak_pointer
-			(G_OBJECT (priv->downloader_view),
-			 (gpointer *) downloader_view);
-		g_object_unref (priv->downloader_view);
-		priv->downloader_view = NULL;
-	}
 
 	if (priv->favicon_cache != NULL)
 	{
@@ -127,6 +118,14 @@ static void
 ephy_embed_shell_finalize (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
+
+	if (shell->priv->downloads != NULL)
+	{
+		LOG ("Destroying downloads list");
+		g_list_foreach (shell->priv->downloads, (GFunc) g_object_unref, NULL);
+		g_list_free (shell->priv->downloads);
+		shell->priv->downloads = NULL;
+	}
 
 	if (shell->priv->global_history)
 	{
@@ -188,44 +187,6 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 	}
 
 	return G_OBJECT (shell->priv->global_history);
-}
-
-/**
- * ephy_embed_shell_get_downloader_view:
- * @shell: the #EphyEmbedShell
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
-{
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-	if (shell->priv->downloader_view == NULL)
-	{
-		DownloaderView **downloader_view;
-		shell->priv->downloader_view = downloader_view_new ();
-		downloader_view = &shell->priv->downloader_view;
-		g_object_add_weak_pointer
-			(G_OBJECT(shell->priv->downloader_view),
-			 (gpointer *) downloader_view);
-	}
-
-	return G_OBJECT (shell->priv->downloader_view);
-}
-
-/**
- * ephy_embed_shell_get_downloader_view_nocreate:
- * @shell: the #EphyEmbedShell
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_embed_shell_get_downloader_view_nocreate (EphyEmbedShell *shell)
-{
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-	return (GObject *) shell->priv->downloader_view;
 }
 
 static GObject *
@@ -319,6 +280,8 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
 	/* globally accessible singleton */
 	g_assert (embed_shell == NULL);
 	embed_shell = shell;
+
+	shell->priv->downloads = NULL;
 }
 
 static void
@@ -330,6 +293,40 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	object_class->finalize = ephy_embed_shell_finalize;
 
 	klass->get_embed_single = impl_get_embed_single;
+
+/**
+ * EphyEmbed::download-added:
+ * @shell: the #EphyEmbedShell
+ * @download: the #EphyDownload added
+ *
+ * Emitted when a #EphyDownload has been added to the global watch list of
+ * @shell, via ephy_embed_shell_add_download.
+ **/
+	signals[DOWNLOAD_ADDED] =
+		g_signal_new ("download-added",
+			      EPHY_TYPE_EMBED_SHELL,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedShellClass, download_added),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
+
+/**
+ * EphyEmbed::download-removed:
+ * @shell: the #EphyEmbedShell
+ * @download: the #EphyDownload being removed
+ *
+ * Emitted when a #EphyDownload has been removed from the global watch list of
+ * @shell, via ephy_embed_shell_remove_download.
+ **/
+	signals[DOWNLOAD_REMOVED] =
+		g_signal_new ("download-removed",
+			      EPHY_TYPE_EMBED_SHELL,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedShellClass, download_removed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
 
 /**
  * EphyEmbed::prepare-close:
@@ -561,6 +558,51 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 	}
 
 	return priv->print_settings;
+}
+
+/**
+ * ephy_embed_shell_get_downloads:
+ * @shell: the #EphyEmbedShell
+ *
+ * Gets the global #GList object listing active downloads.
+ *
+ * Returns: (transfer none): a #GList object
+ **/
+GList *
+ephy_embed_shell_get_downloads (EphyEmbedShell *shell)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	priv = shell->priv;
+
+	return priv->downloads;
+}
+
+void
+ephy_embed_shell_add_download (EphyEmbedShell *shell, EphyDownload *download)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+
+	priv = shell->priv;
+	priv->downloads = g_list_prepend (priv->downloads, download);
+
+	g_signal_emit_by_name (shell, "download-added", download, NULL);
+}
+
+void
+ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+
+	priv = shell->priv;
+	priv->downloads = g_list_remove (priv->downloads, download);
+
+	g_signal_emit_by_name (shell, "download-removed", download, NULL);
 }
 
 

@@ -1,5 +1,5 @@
 noinst_PROGRAMS = \
-	test-ephy-embed-persist \
+	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-location-entry \
 	test-ephy-search-entry \
@@ -33,8 +33,8 @@ LDADD += \
 	$(SEED_LIBS)
 endif
 
-test_ephy_embed_persist_SOURCES = \
-	ephy-embed-persist.c
+test_ephy_download_SOURCES = \
+	ephy-download.c
 
 test_ephy_embed_single_SOURCES = \
 	ephy-embed-single.c

@@ -48,7 +48,6 @@
 #include "ephy-extensions-manager.h"
 #include "ephy-session.h"
 #include "ephy-lockdown.h"
-#include "downloader-view.h"
 #include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-toolbar.h"

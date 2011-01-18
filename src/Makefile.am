@@ -264,10 +264,10 @@ MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 if HAVE_INTROSPECTION
 EPHY_GIR_H_FILES = \
+	$(top_srcdir)/embed/ephy-download.h \
 	$(top_srcdir)/embed/ephy-embed.h \
 	$(top_srcdir)/embed/ephy-embed-container.h \
 	$(top_srcdir)/embed/ephy-embed-event.h \
-	$(top_srcdir)/embed/ephy-embed-persist.h \
 	$(top_srcdir)/embed/ephy-embed-shell.h \
 	$(top_srcdir)/embed/ephy-embed-single.h \
 	$(top_srcdir)/embed/ephy-favicon-cache.h \
@@ -294,10 +294,10 @@ EPHY_GIR_H_FILES = \
 	$(NULL)
 
 EPHY_GIR_C_FILES = \
+	$(top_srcdir)/embed/ephy-download.c \
 	$(top_srcdir)/embed/ephy-embed.c \
 	$(top_srcdir)/embed/ephy-embed-container.c \
 	$(top_srcdir)/embed/ephy-embed-event.c \
-	$(top_srcdir)/embed/ephy-embed-persist.c \
 	$(top_srcdir)/embed/ephy-embed-shell.c \
 	$(top_srcdir)/embed/ephy-embed-single.c \
 	$(top_srcdir)/embed/ephy-favicon-cache.c \

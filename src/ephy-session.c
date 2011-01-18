@@ -167,7 +167,6 @@ confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
 	EphySessionPrivate *priv = data->session->priv;
 	EggSMClient *sm_client = data->sm_client;
 	EphyShell *shell;
-	GObject *dv;
 	gboolean will_quit;
 
 	LOG ("confirm_shutdown_dialog_weak_ref_cb response %d", data->response);
@@ -180,14 +179,6 @@ confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
 		g_object_weak_unref (G_OBJECT (shell),
 				     (GWeakNotify) confirm_shutdown_dialog_accept_cb,
 				     data);
-
-		dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ());
-		if (dv != NULL)
-		{
-			g_object_weak_unref (dv,
-					     (GWeakNotify) confirm_shutdown_dialog_accept_cb,
-					     data);
-		}
 	}
 
 	if (data->timeout_id != 0)
@@ -208,15 +199,16 @@ client_quit_requested_cb (EggSMClient *sm_client,
 			  EphySession *session)
 {
 	EphySessionPrivate *priv = session->priv;
-	GObject *dv;
 	GtkWidget *dialog, *box;
 	InteractData *data;
+	GList *downloads;
 
 	/* If we're shutting down, check if there are downloads
 	 * remaining, since they can't be restarted.
 	 */
-	if (ephy_shell_get_default () == NULL ||
-	    (dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ())) == NULL)
+
+	downloads = ephy_embed_shell_get_downloads (embed_shell);
+	if (ephy_shell_get_default () == NULL || g_list_length (downloads) == 0)
 	{
 		egg_sm_client_will_quit (sm_client, TRUE);
 		return;
@@ -268,11 +260,6 @@ client_quit_requested_cb (EggSMClient *sm_client,
 
 	/* When we're quitting, un-veto the shutdown  */
 	g_object_weak_ref (G_OBJECT (ephy_shell_get_default ()),
-			   (GWeakNotify) confirm_shutdown_dialog_accept_cb,
-			   data);
-
-	/* When the download finishes, un-veto the shutdown */
-	g_object_weak_ref (dv,
 			   (GWeakNotify) confirm_shutdown_dialog_accept_cb,
 			   data);
 
