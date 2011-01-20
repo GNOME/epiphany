@@ -848,29 +848,16 @@ gboolean
 ephy_file_browse_to (GFile *file,
 		     guint32 user_time)
 {
-	GFile *parent, *desktop;
-	char *desktop_dir;
+	GFile *parent;
 	gboolean ret;
 
-	desktop_dir = ephy_file_desktop_dir ();
-	desktop = g_file_new_for_path (desktop_dir);
-	
-	/* Don't do anything if destination is the desktop */
-	if (g_file_has_prefix (file, desktop))
-	{
-		ret = FALSE;
-	}
-	else
-	{
-		parent = g_file_get_parent (file);
-		/* TODO find a way to make nautilus scroll to the actual file */
-		ret = ephy_file_launch_handler ("x-directory/normal",
-						parent,
-						user_time);
-	}
+	parent = g_file_get_parent (file);
+	/* TODO find a way to make nautilus scroll to the actual file */
+	ret = ephy_file_launch_handler ("x-directory/normal",
+					parent,
+					user_time);
 
-	g_object_unref (desktop);
-	g_free (desktop_dir);
+	g_object_unref (parent);
 
 	return ret;
 }
