@@ -3289,6 +3289,7 @@ allow_popups_notifier (GSettings *settings,
 
 		g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
 	}
+	g_list_free (tabs);
 }
 
 static EphyEmbed *
