@@ -278,6 +278,7 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/lib/ephy-node-db.h \
 	$(top_srcdir)/lib/ephy-node.h \
 	$(top_srcdir)/lib/ephy-state.h \
+	$(top_srcdir)/lib/widgets/ephy-download-widget.h \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
 	$(top_srcdir)/src/ephy-extension.h \
@@ -308,6 +309,7 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/lib/ephy-node-db.c \
 	$(top_srcdir)/lib/ephy-node.c \
 	$(top_srcdir)/lib/ephy-state.c \
+	$(top_srcdir)/lib/widgets/ephy-download-widget.c \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
 	$(top_srcdir)/src/ephy-extension.c \
