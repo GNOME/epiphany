@@ -515,24 +515,24 @@ impl_set_active_child (EphyEmbedContainer *container,
 }
 
 static GtkWidget *
-construct_confirm_close_dialog (EphyWindow *window)
+construct_confirm_close_dialog (EphyWindow *window,
+				const char *title,
+				const char *info,
+				const char *action)
 {
 	GtkWidget *dialog;
 
-	dialog = gtk_message_dialog_new
-		(GTK_WINDOW (window),
-		 GTK_DIALOG_MODAL,
-		 GTK_MESSAGE_WARNING,
-		 GTK_BUTTONS_CANCEL,
-		 _("There are unsubmitted changes to form elements"));
+	dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_CANCEL,
+					 title);
 
 	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		 _("If you close the document anyway, "
-		   "you will lose that information."));
+		(GTK_MESSAGE_DIALOG (dialog), info);
 	
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("Close _Document"), GTK_RESPONSE_ACCEPT);
+			       action, GTK_RESPONSE_ACCEPT);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
@@ -554,7 +554,11 @@ confirm_close_with_modified_forms (EphyWindow *window)
 		GtkWidget *dialog;
 		int response;
 
-		dialog = construct_confirm_close_dialog (window);
+		dialog = construct_confirm_close_dialog (window,
+				_("There are unsubmitted changes to form elements"),
+				_("If you close the document anyway, "
+				  "you will lose that information."),
+				_("Close _Document"));
 		response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 		gtk_widget_destroy (dialog);
