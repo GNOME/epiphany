@@ -43,6 +43,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
+#include "gedit-overlay.h"
 
 #include <errno.h>
 #include <glib/gi18n.h>
@@ -72,6 +73,7 @@ struct _EphyEmbedPrivate
   gboolean inspector_attached;
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
+  GtkWidget *statusbar_label;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
@@ -840,25 +842,52 @@ download_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
+/* FIXME: it probably makes sense to move this stuff completely into
+ * EphyEmbed now, since it's not an integral part of EphyWebView
+ * anymore. */
+void
+_ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+  gtk_label_set_label (GTK_LABEL (priv->statusbar_label), label);
+
+  if (label == NULL || label[0] == '\0')
+    gtk_widget_hide (priv->statusbar_label);
+  else
+    gtk_widget_show (priv->statusbar_label);
+}
+
 static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
+  EphyEmbedPrivate *priv = embed->priv;
   GtkWidget *scrolled_window;
   GtkWidget *paned;
   WebKitWebView *web_view;
   WebKitWebInspector *inspector;
+  GtkWidget *overlay;
+  GtkWidget *frame;
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
+  overlay = gedit_overlay_new (scrolled_window);
+
+  /* statusbar is hidden by default */
+  priv->statusbar_label = gtk_label_new (NULL);
+  frame = gtk_frame_new (NULL);
+  gtk_widget_show (frame);
+  gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
+  gedit_overlay_add (GEDIT_OVERLAY (overlay), frame, GTK_ORIENTATION_HORIZONTAL, GDK_GRAVITY_SOUTH_WEST, 0, TRUE);
+
   paned = GTK_WIDGET (embed->priv->paned);
 
   embed->priv->web_view = web_view;
 
   gtk_container_add (GTK_CONTAINER (embed->priv->scrolled_window),
                      GTK_WIDGET (web_view));
-  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (scrolled_window),
+  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
                    TRUE, FALSE);
 
   gtk_box_pack_start (GTK_BOX (embed),

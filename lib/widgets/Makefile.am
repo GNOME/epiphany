@@ -14,7 +14,11 @@ libephywidgets_la_SOURCES = \
 	ephy-zoom-action.h			\
 	ephy-zoom-action.c			\
 	ephy-zoom-control.c			\
-	ephy-zoom-control.h
+	ephy-zoom-control.h			\
+	gedit-overlay.c				\
+	gedit-overlay.h				\
+	gedit-theatrics-animated-widget.c	\
+	gedit-theatrics-animated-widget.h
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\

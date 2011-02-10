@@ -1156,76 +1156,6 @@ ephy_web_view_constructed (GObject *object)
 }
 
 static void
-_ephy_web_view_draw_statusbar (GtkWidget *widget, cairo_t *cr)
-{
-  gint width, height;
-  guint border_width, statusbar_border_width;
-  PangoLayout *layout;
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-  EphyWebViewPrivate *priv;
-
-  priv = EPHY_WEB_VIEW (widget)->priv;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  layout = gtk_widget_create_pango_layout (widget, priv->text);
-  pango_layout_set_width (layout, PANGO_SCALE * (allocation.width * 0.9));
-  pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
-
-  pango_layout_get_pixel_size (layout, &width, &height);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  statusbar_border_width = 4; /* FIXME: what should we use here? */
-
-  priv->text_rectangle.x = border_width;
-  priv->text_rectangle.y = allocation.height - height - border_width - (statusbar_border_width * 2);
-  priv->text_rectangle.width = width + (statusbar_border_width * 2);
-  priv->text_rectangle.height = height + (statusbar_border_width * 2);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
-
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_render_background (context, cr,
-                         priv->text_rectangle.x,
-                         priv->text_rectangle.y,
-                         priv->text_rectangle.width,
-                         priv->text_rectangle.height);
-  gtk_render_frame (context, cr,
-                    priv->text_rectangle.x,
-                    priv->text_rectangle.y,
-                    priv->text_rectangle.width,
-                    priv->text_rectangle.height);
-
-  gtk_style_context_set_state (context, 0);
-  gtk_render_layout (context, cr,
-                     priv->text_rectangle.x + statusbar_border_width,
-                     priv->text_rectangle.y + statusbar_border_width,
-                     layout);
-
-  gtk_style_context_restore (context);
-
-  g_object_unref (layout);
-}
-
-static gboolean
-ephy_web_view_draw (GtkWidget *widget, cairo_t *cr)
-{
-  EphyWebViewPrivate *priv;
-
-  GTK_WIDGET_CLASS (ephy_web_view_parent_class)->draw (widget, cr);
-
-  priv = EPHY_WEB_VIEW (widget)->priv;
-
-  if (priv->text && priv->text[0] != '\0')
-    _ephy_web_view_draw_statusbar (widget, cr);
-
-  return FALSE;
-}
-
-static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1239,7 +1169,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
-  widget_class->draw = ephy_web_view_draw;
 
 /**
  * EphyWebView:address:
@@ -3752,32 +3681,12 @@ ephy_web_view_load_homepage (EphyWebView *view)
 static void
 ephy_web_view_statusbar_update (EphyWebView *view, const char *text)
 {
-  EphyWebViewPrivate *priv;
-  GdkWindow *window;
-  GdkRectangle rect;
+  EphyEmbed *embed;
 
-  priv = view->priv;
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-  if (priv->text)
-    g_free (priv->text);
-
-  priv->text = g_strdup (text);
-
-  /* FIXME: we should invalidate the union of the sizes of the
-   * rectangles of the previous and next statusbar text */
-  window = gtk_widget_get_window (GTK_WIDGET (view));
-  if (window) {
-    GtkAllocation allocation;
-
-    gtk_widget_get_allocation (GTK_WIDGET (view), &allocation);
-
-    rect = priv->text_rectangle;
-    rect.width = allocation.width;
-    if (rect.height == 0)
-      rect.height = allocation.height;
-    
-    gdk_window_invalidate_rect (window, &rect, TRUE);
-  }
+  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+  _ephy_embed_set_statusbar_label (embed, text);
 }
 
 /* Portions of the following code based on GTK+.
