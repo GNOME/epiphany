@@ -872,7 +872,7 @@ ephy_embed_constructed (GObject *object)
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
-  overlay = gedit_overlay_new (scrolled_window);
+  overlay = gedit_overlay_new (GTK_WIDGET (web_view));
 
   /* statusbar is hidden by default */
   priv->statusbar_label = gtk_label_new (NULL);
@@ -885,9 +885,9 @@ ephy_embed_constructed (GObject *object)
 
   embed->priv->web_view = web_view;
 
-  gtk_container_add (GTK_CONTAINER (embed->priv->scrolled_window),
-                     GTK_WIDGET (web_view));
-  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
+  gtk_container_add (GTK_CONTAINER (scrolled_window),
+                     GTK_WIDGET (overlay));
+  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (scrolled_window),
                    TRUE, FALSE);
 
   gtk_box_pack_start (GTK_BOX (embed),
