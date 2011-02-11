@@ -549,9 +549,28 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 }
 
 static void
+status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
+{
+  const char *message;
+  EphyWebViewPrivate *priv;
+
+  message = ephy_web_view_get_status_message (view);
+
+  priv = view->priv;
+
+  ephy_web_view_statusbar_pop (view, priv->tab_message_id);
+
+  if (message)
+    ephy_web_view_statusbar_push (view, priv->tab_message_id, message);
+
+}
+
+static void
 ephy_web_view_dispose (GObject *object)
 {
   ephy_web_view_file_monitor_cancel (EPHY_WEB_VIEW (object));
+
+  g_signal_handlers_disconnect_by_func (object, G_CALLBACK (status_message_notify_cb), NULL);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
@@ -2184,23 +2203,6 @@ vadjustment_changed_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
 
   if (adj)
     g_signal_connect (adj, "value-changed", G_CALLBACK (adj_changed_cb), view);
-}
-
-static void
-status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
-{
-  const char *message;
-  EphyWebViewPrivate *priv;
-
-  message = ephy_web_view_get_status_message (view);
-
-  priv = view->priv;
-
-  ephy_web_view_statusbar_pop (view, priv->tab_message_id);
-
-  if (message)
-    ephy_web_view_statusbar_push (view, priv->tab_message_id, message);
-
 }
 
 static void
