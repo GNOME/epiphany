@@ -17,11 +17,13 @@ libephywidgets_la_SOURCES = \
 	ephy-zoom-control.h			\
 	gedit-overlay.c				\
 	gedit-overlay.h				\
-	gedit-theatrics-animated-widget.c	\
-	gedit-theatrics-animated-widget.h
+	gedit-overlay-child.c			\
+	gedit-overlay-child.h			\
+	$(BUILT_SOURCES)
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/lib/egg		\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
@@ -30,3 +32,20 @@ libephywidgets_la_CPPFLAGS = \
 libephywidgets_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
 	$(AM_CFLAGS)
+
+BUILT_SOURCES = \
+	gedit-enum-types.c	\
+	gedit-enum-types.h
+
+ENUM_TYPES =			\
+	gedit-overlay-child.h
+
+gedit-enum-types.h: gedit-enum-types.h.template $(ENUM_TYPES) $(GLIB_MKENUMS)
+	$(AM_V_GEN)(cd $(srcdir) && $(GLIB_MKENUMS) --template gedit-enum-types.h.template $(ENUM_TYPES)) > $@
+
+gedit-enum-types.c: gedit-enum-types.c.template $(ENUM_TYPES) $(GLIB_MKENUMS)
+	$(AM_V_GEN)(cd $(srcdir) && $(GLIB_MKENUMS) --template gedit-enum-types.c.template $(ENUM_TYPES)) > $@
+
+EXTRA_DIST = \
+	gedit-enum-types.c.template \
+	gedit-enum-types.h.template

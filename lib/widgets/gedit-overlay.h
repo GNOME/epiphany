@@ -2,22 +2,21 @@
  * gedit-overlay.h
  * This file is part of gedit
  *
- * Copyright (C) 2010 - Ignacio Casal Quinteiro
+ * Copyright (C) 2011 - Ignacio Casal Quinteiro
  *
- * gedit is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
+ * gedit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
  * gedit is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with gedit; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, 
- * Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef __GEDIT_OVERLAY_H__
@@ -25,6 +24,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include "gedit-overlay-child.h"
 
 G_BEGIN_DECLS
 
@@ -60,12 +60,10 @@ GType		 gedit_overlay_get_type			(void) G_GNUC_CONST;
 
 GtkWidget	*gedit_overlay_new			(GtkWidget *main_widget);
 
-void		 gedit_overlay_add			(GeditOverlay *overlay,
-							 GtkWidget    *widget,
-							 GtkOrientation orientation,
-							 GdkGravity    gravity,
-							 guint	       offset,
-							 gboolean      in);
+void		 gedit_overlay_add			(GeditOverlay             *overlay,
+							 GtkWidget                *widget,
+							 GeditOverlayChildPosition position,
+							 guint                     offset);
 
 G_END_DECLS
 

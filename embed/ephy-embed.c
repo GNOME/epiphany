@@ -879,7 +879,7 @@ ephy_embed_constructed (GObject *object)
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);
   gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
-  gedit_overlay_add (GEDIT_OVERLAY (overlay), frame, GTK_ORIENTATION_HORIZONTAL, GDK_GRAVITY_SOUTH_WEST, 0, TRUE);
+  gedit_overlay_add (GEDIT_OVERLAY (overlay), frame, GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST, 0);
 
   paned = GTK_WIDGET (embed->priv->paned);
 
