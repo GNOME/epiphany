@@ -2462,7 +2462,7 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		else if (button == 2 ||
 			 (button == 1 && state == GDK_CONTROL_MASK))
 		{
-			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
 		}
 		/* Because we connect to button-press-event *after*
 		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
