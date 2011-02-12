@@ -469,14 +469,16 @@ gedit_overlay_forall (GtkContainer *overlay,
                       gpointer      callback_data)
 {
 	GeditOverlay *goverlay = GEDIT_OVERLAY (overlay);
-	GSList *l;
+	GSList *children;
 
-	for (l = goverlay->priv->children; l != NULL; l = g_slist_next (l))
-	{
-		GtkWidget *child = GTK_WIDGET (l->data);
+        children = goverlay->priv->children;
+        while (children)
+        {
+                GtkWidget *child = GTK_WIDGET (children->data);
+                children = children->next;
 
-		(* callback) (child, callback_data);
-	}
+                (* callback) (child, callback_data);
+        }
 }
 
 static GType
