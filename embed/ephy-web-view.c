@@ -3688,7 +3688,9 @@ ephy_web_view_statusbar_update (EphyWebView *view, const char *text)
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
   embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-  _ephy_embed_set_statusbar_label (embed, text);
+  /* Inspector window does not have an embed for example */
+  if (embed)
+    _ephy_embed_set_statusbar_label (embed, text);
 }
 
 /* Portions of the following code based on GTK+.
