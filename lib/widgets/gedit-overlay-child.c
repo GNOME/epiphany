@@ -28,7 +28,6 @@ struct _GeditOverlayChildPrivate
 	GtkAllocation             widget_alloc;
 	GeditOverlayChildPosition position;
 	guint                     offset;
-	gboolean                  fixed;
 };
 
 enum
@@ -36,8 +35,7 @@ enum
 	PROP_0,
 	PROP_WIDGET,
 	PROP_POSITION,
-	PROP_OFFSET,
-	PROP_FIXED
+	PROP_OFFSET
 };
 
 G_DEFINE_TYPE (GeditOverlayChild, gedit_overlay_child, GTK_TYPE_BIN)
@@ -60,9 +58,6 @@ gedit_overlay_child_get_property (GObject    *object,
 			break;
 		case PROP_OFFSET:
 			g_value_set_uint (value, child->priv->offset);
-			break;
-		case PROP_FIXED:
-			g_value_set_boolean (value, child->priv->fixed);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -89,9 +84,6 @@ gedit_overlay_child_set_property (GObject      *object,
 			break;
 		case PROP_OFFSET:
 			child->priv->offset = g_value_get_uint (value);
-			break;
-		case PROP_FIXED:
-			child->priv->fixed = g_value_get_boolean (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -252,15 +244,6 @@ gedit_overlay_child_class_init (GeditOverlayChildClass *klass)
 	                                                    G_PARAM_CONSTRUCT |
 	                                                    G_PARAM_STATIC_STRINGS));
 
-	g_object_class_install_property (object_class, PROP_FIXED,
-	                                 g_param_spec_boolean ("fixed",
-	                                                       "Fixed",
-	                                                       "Wether the Widget is in a fixed position",
-	                                                       TRUE,
-	                                                       G_PARAM_READWRITE |
-	                                                       G_PARAM_CONSTRUCT |
-	                                                       G_PARAM_STATIC_STRINGS));
-
 	g_type_class_add_private (object_class, sizeof (GeditOverlayChildPrivate));
 }
 
@@ -362,46 +345,6 @@ gedit_overlay_child_set_offset (GeditOverlayChild *child,
 		child->priv->offset = offset;
 
 		g_object_notify (G_OBJECT (child), "offset");
-	}
-}
-
-/**
- * gedit_overlay_child_get_fixed:
- * @child: a #GeditOverlayChild
- *
- * Gets wether @child is fixed in its position. If @child is not fixed the position
- * will change when for example you scroll the container.
- *
- * Returns: wether @child is fixed in its position
- */
-gboolean
-gedit_overlay_child_get_fixed (GeditOverlayChild *child)
-{
-	g_return_val_if_fail (GEDIT_IS_OVERLAY_CHILD (child), TRUE);
-
-	return child->priv->fixed;
-}
-
-/**
- * gedit_overlay_child_set_fixed:
- * @child: a #GeditOverlayChild
- * @fixed: wether @child is in a fixed position
- *
- * Sets wether @child is in a fixed position
- */
-void
-gedit_overlay_child_set_fixed (GeditOverlayChild *child,
-                               gboolean           fixed)
-{
-	g_return_if_fail (GEDIT_IS_OVERLAY_CHILD (child));
-
-	fixed = (fixed != FALSE);
-
-	if (child->priv->fixed != fixed)
-	{
-		child->priv->fixed = fixed;
-
-		g_object_notify (G_OBJECT (child), "fixed");
 	}
 }
 
