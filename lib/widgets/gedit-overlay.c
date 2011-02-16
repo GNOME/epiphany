@@ -150,24 +150,13 @@ gedit_overlay_get_preferred_width (GtkWidget *widget,
                                    gint      *natural)
 {
 	GeditOverlayPrivate *priv = GEDIT_OVERLAY (widget)->priv;
-	GtkWidget *child;
-	GSList *children;
-	gint child_min, child_nat;
 
 	*minimum = 0;
 	*natural = 0;
 
-	for (children = priv->children; children; children = children->next)
+	if (priv->main_widget)
 	{
-		child = children->data;
-
-		if (!gtk_widget_get_visible (child))
-			continue;
-
-		gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-
-		*minimum = MAX (*minimum, child_min);
-		*natural = MAX (*natural, child_nat);
+		gtk_widget_get_preferred_width (priv->main_widget, minimum, natural);
 	}
 }
 
@@ -177,24 +166,13 @@ gedit_overlay_get_preferred_height (GtkWidget *widget,
                                     gint      *natural)
 {
 	GeditOverlayPrivate *priv = GEDIT_OVERLAY (widget)->priv;
-	GtkWidget *child;
-	GSList *children;
-	gint child_min, child_nat;
 
 	*minimum = 0;
 	*natural = 0;
 
-	for (children = priv->children; children; children = children->next)
+	if (priv->main_widget)
 	{
-		child = children->data;
-
-		if (!gtk_widget_get_visible (child))
-			continue;
-
-		gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-
-		*minimum = MAX (*minimum, child_min);
-		*natural = MAX (*natural, child_nat);
+		gtk_widget_get_preferred_height (priv->main_widget, minimum, natural);
 	}
 }
 
