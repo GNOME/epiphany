@@ -230,6 +230,10 @@ gedit_overlay_size_allocate (GtkWidget     *widget,
 				alloc.x = offset;
 				alloc.y = main_alloc.height - req.height;
 				break;
+			case GEDIT_OVERLAY_CHILD_POSITION_SOUTH_EAST:
+				alloc.x = main_alloc.width - req.width - offset;
+				alloc.y = main_alloc.height - req.height;
+				break;
 			default:
 				alloc.x = 0;
 				alloc.y = 0;
@@ -304,6 +308,9 @@ overlay_add (GtkContainer *overlay,
 		{
 			child = gedit_overlay_child_new (widget);
 			gtk_widget_show (GTK_WIDGET (child));
+
+			g_signal_connect_swapped (widget, "destroy",
+			                          G_CALLBACK (gtk_widget_destroy), child);
 		}
 
 		add_toplevel_widget (GEDIT_OVERLAY (overlay), GTK_WIDGET (child));
