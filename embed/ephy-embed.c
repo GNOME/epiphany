@@ -849,12 +849,18 @@ void
 _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 {
   EphyEmbedPrivate *priv = embed->priv;
+  GtkWidget *parent;
+
   gtk_label_set_label (GTK_LABEL (priv->statusbar_label), label);
 
+  parent = gtk_widget_get_parent (priv->statusbar_label);
+  if (parent == NULL)
+    return;
+
   if (label == NULL || label[0] == '\0')
-    gtk_widget_hide (priv->statusbar_label);
+    gtk_widget_hide (parent);
   else
-    gtk_widget_show (priv->statusbar_label);
+    gtk_widget_show (parent);
 }
 
 static void
