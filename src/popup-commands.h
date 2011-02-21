@@ -21,13 +21,13 @@
 
 #include "ephy-window.h"
 
-void popup_cmd_link_in_new_window		(GtkAction *action,
+void popup_cmd_link_in_new_window	(GtkAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_link_in_new_tab		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_bookmark_link	(GtkAction *action,
+void popup_cmd_bookmark_link		(GtkAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_view_source		(GtkAction *action,
