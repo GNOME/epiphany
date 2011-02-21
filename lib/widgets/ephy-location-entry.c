@@ -36,6 +36,7 @@
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include <webkit/webkit.h>
 
 #include <string.h>
 
@@ -71,6 +72,8 @@ struct _EphyLocationEntryPrivate
 	guint favicon_col;
 
 	guint hash;
+
+	gulong dns_prefetch_handler;
 
 	guint user_changed : 1;
 	guint can_redo : 1;
@@ -1008,7 +1011,8 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->saved_text = NULL;
 	p->search_terms = NULL;
 	p->show_lock = FALSE;
-	
+	p->dns_prefetch_handler = 0;
+
 	ephy_location_entry_construct_contents (le);
 
 	gtk_tool_item_set_expand (GTK_TOOL_ITEM (le), TRUE);
@@ -1020,29 +1024,74 @@ ephy_location_entry_new (void)
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
+typedef struct {
+	SoupURI *uri;
+	EphyLocationEntry *entry;
+} PrefetchHelper;
+
+static void
+free_prefetch_helper (PrefetchHelper *helper)
+{
+	soup_uri_free (helper->uri);
+	g_object_unref (helper->entry);
+	g_slice_free (PrefetchHelper, helper);
+}
+
+static gboolean
+do_dns_prefetch (PrefetchHelper *helper)
+{
+	SoupSession *session = webkit_get_default_session ();
+
+	soup_session_prepare_for_uri (session, helper->uri);
+
+	helper->entry->priv->dns_prefetch_handler = 0;
+
+	return FALSE;
+}
+
+static void
+schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url)
+{
+	PrefetchHelper *helper;
+
+	if (entry->priv->dns_prefetch_handler)
+		g_source_remove (entry->priv->dns_prefetch_handler);
+
+	helper = g_slice_new0 (PrefetchHelper);
+	helper->entry = g_object_ref (entry);
+	helper->uri = soup_uri_new (url);
+
+	entry->priv->dns_prefetch_handler =
+		g_timeout_add_full (G_PRIORITY_DEFAULT, interval,
+				    (GSourceFunc) do_dns_prefetch, helper,
+				    (GDestroyNotify) free_prefetch_helper);
+}
+
 static gboolean
 cursor_on_match_cb  (GtkEntryCompletion *completion,
 		     GtkTreeModel *model,
 		     GtkTreeIter *iter,
 		     EphyLocationEntry *le)
 {
-	char *item = NULL;
+	char *url = NULL;
 	GtkWidget *entry;
 
 	gtk_tree_model_get (model, iter,
 			    le->priv->url_col,
-			    &item, -1);
+			    &url, -1);
 	entry = gtk_entry_completion_get_entry (completion);
 
 	/* Prevent the update so we keep the highlight from our input.
 	 * See textcell_data_func().
 	 */
 	le->priv->block_update = TRUE;
-	gtk_entry_set_text (GTK_ENTRY (entry), item);
+	gtk_entry_set_text (GTK_ENTRY (entry), url);
 	gtk_editable_set_position (GTK_EDITABLE (entry), -1);
 	le->priv->block_update = FALSE;
 
-	g_free (item);
+	schedule_dns_prefetch (le, 250, (const gchar*) url);
+
+	g_free (url);
 
 	return TRUE;
 }
