@@ -24,7 +24,8 @@
 
 struct _GeditOverlayChildPrivate
 {
-	GtkWidget                *widget;
+	GtkWidget		 *widget;
+	GBinding		 *binding;
 	GtkAllocation             widget_alloc;
 	GeditOverlayChildPosition position;
 	guint                     offset;
@@ -182,6 +183,10 @@ gedit_overlay_child_add (GtkContainer *container,
 
 	child->priv->widget = widget;
 
+	child->priv->binding = g_object_bind_property (G_OBJECT (widget), "visible",
+						       G_OBJECT (container), "visible",
+						       G_BINDING_BIDIRECTIONAL);
+
 	GTK_CONTAINER_CLASS (gedit_overlay_child_parent_class)->add (container, widget);
 }
 
@@ -192,6 +197,8 @@ gedit_overlay_child_remove (GtkContainer *container,
 	GeditOverlayChild *child = GEDIT_OVERLAY_CHILD (container);
 
 	child->priv->widget = NULL;
+
+	g_object_unref (child->priv->binding);
 
 	GTK_CONTAINER_CLASS (gedit_overlay_child_parent_class)->remove (container, widget);
 }
