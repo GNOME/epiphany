@@ -670,7 +670,7 @@
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkRadioButton" id="cookies_always_radiobutton">
+                              <object class="GtkRadioButton" id="always">
                                 <property name="label" translatable="yes">_Always accept</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -685,14 +685,14 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="cookies_no_third_party_radiobutton">
+                              <object class="GtkRadioButton" id="no-third-party">
                                 <property name="label" translatable="yes">Only _from sites you visit</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">cookies_always_radiobutton</property>
+                                <property name="group">always</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -720,14 +720,14 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="cookies_never_radiobutton">
+                              <object class="GtkRadioButton" id="never">
                                 <property name="label" translatable="yes">_Never accept</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">cookies_always_radiobutton</property>
+                                <property name="group">always</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

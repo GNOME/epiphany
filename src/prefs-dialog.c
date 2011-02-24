@@ -977,17 +977,14 @@ cookies_get_mapping (GValue *value,
 		     gpointer user_data)
 {
 	const char *setting;
-	char *name;
+	const char *name;
 
 	setting = g_variant_get_string (variant, NULL);
-
-	g_object_get (user_data, "name", &name, NULL);
+	name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
 
 	/* If the button name matches the setting, it should be active. */
 	if (g_strcmp0 (name, setting) == 0)
 		g_value_set_boolean (value, TRUE);
-
-	g_free (name);
 
 	return TRUE;
 }
@@ -998,16 +995,14 @@ cookies_set_mapping (const GValue *value,
 		     gpointer user_data)
 {
 	GVariant *variant = NULL;
-	char *name;
+	const char *name;
 
 	/* Don't act unless the button has been activated (turned ON). */
 	if (!g_value_get_boolean (value))
 		return NULL;
 
-	g_object_get (user_data, "name", &name, NULL);
+	name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
 	variant = g_variant_new_string (name);
-
-	g_free (name);
 
 	return variant;
 }
@@ -1076,13 +1071,13 @@ static const PrefsDialogPreference preferences[] =
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 
 	/* Has mapping */
-	{ "cookies_always_radiobutton", "active",
+	{ "always", "active",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
 	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
-	{ "cookies_no_third_party_radiobutton", "active",
+	{ "no-third-party", "active",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
 	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
-	{ "cookies_never_radiobutton", "active",
+	{ "never", "active",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
 	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
 };
