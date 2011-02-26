@@ -20,13 +20,11 @@
  */
 
 #include "gedit-overlay-child.h"
-#include "gedit-enum-types.h"
 
 struct _GeditOverlayChildPrivate
 {
-	GtkWidget		 *widget;
-	GBinding		 *binding;
-	GtkAllocation             widget_alloc;
+	GtkWidget                *widget;
+	GBinding                 *binding;
 	GeditOverlayChildPosition position;
 	guint                     offset;
 };
@@ -55,7 +53,7 @@ gedit_overlay_child_get_property (GObject    *object,
 			g_value_set_object (value, child->priv->widget);
 			break;
 		case PROP_POSITION:
-			g_value_set_enum (value, child->priv->position);
+			g_value_set_uint (value, child->priv->position);
 			break;
 		case PROP_OFFSET:
 			g_value_set_uint (value, child->priv->offset);
@@ -81,7 +79,7 @@ gedit_overlay_child_set_property (GObject      *object,
 			                   g_value_get_object (value));
 			break;
 		case PROP_POSITION:
-			child->priv->position = g_value_get_enum (value);
+			child->priv->position = g_value_get_uint (value);
 			break;
 		case PROP_OFFSET:
 			child->priv->offset = g_value_get_uint (value);
@@ -108,6 +106,8 @@ gedit_overlay_child_realize (GtkWidget *widget)
 	attributes.window_type = GDK_WINDOW_CHILD;
 	attributes.wclass = GDK_INPUT_OUTPUT;
 	attributes.event_mask = GDK_EXPOSURE_MASK;
+	attributes.width = 0;
+	attributes.height = 0;
 
 	window = gdk_window_new (parent_window, &attributes, 0);
 	gdk_window_set_user_data (window, widget);
@@ -122,19 +122,16 @@ gedit_overlay_child_get_preferred_width (GtkWidget *widget,
                                          gint      *natural)
 {
 	GeditOverlayChild *child = GEDIT_OVERLAY_CHILD (widget);
-	gint width;
+	gint child_min = 0, child_nat = 0;
 
 	if (child->priv->widget != NULL)
 	{
-		gint child_min, child_nat;
-
 		gtk_widget_get_preferred_width (child->priv->widget,
 		                                &child_min, &child_nat);
-		child->priv->widget_alloc.width = child_min;
 	}
 
-	width = child->priv->widget_alloc.width;
-	*minimum = *natural = width;
+	*minimum = child_min;
+	*natural = child_nat;
 }
 
 static void
@@ -143,19 +140,16 @@ gedit_overlay_child_get_preferred_height (GtkWidget *widget,
                                           gint      *natural)
 {
 	GeditOverlayChild *child = GEDIT_OVERLAY_CHILD (widget);
-	gint height;
+	gint child_min = 0, child_nat = 0;
 
 	if (child->priv->widget != NULL)
 	{
-		gint child_min, child_nat;
-
 		gtk_widget_get_preferred_height (child->priv->widget,
 		                                 &child_min, &child_nat);
-		child->priv->widget_alloc.height = child_min;
 	}
 
-	height = child->priv->widget_alloc.height;
-	*minimum = *natural = height;
+	*minimum = child_min;
+	*natural = child_nat;
 }
 
 static void
@@ -163,15 +157,18 @@ gedit_overlay_child_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
 	GeditOverlayChild *child = GEDIT_OVERLAY_CHILD (widget);
+	GtkAllocation tmp;
+
+	tmp.width = allocation->width;
+	tmp.height = allocation->height;
+	tmp.x = tmp.y = 0;
 
 	GTK_WIDGET_CLASS (gedit_overlay_child_parent_class)->size_allocate (widget, allocation);
 
-	if (child->priv->widget != NULL &&
-	    child->priv->widget_alloc.height &&
-	    child->priv->widget_alloc.width)
+	if (child->priv->widget != NULL)
 	{
 		gtk_widget_size_allocate (child->priv->widget,
-		                          &child->priv->widget_alloc);
+		                          &tmp);
 	}
 }
 
@@ -231,10 +228,10 @@ gedit_overlay_child_class_init (GeditOverlayChildClass *klass)
 	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class, PROP_POSITION,
-	                                 g_param_spec_enum ("position",
+	                                 g_param_spec_uint ("position",
 	                                                    "Position",
 	                                                    "The Widget Position",
-	                                                    GEDIT_TYPE_OVERLAY_CHILD_POSITION,
+	                                                    1, GEDIT_OVERLAY_CHILD_POSITION_STATIC,
 	                                                    GEDIT_OVERLAY_CHILD_POSITION_STATIC,
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_CONSTRUCT |
