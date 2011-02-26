@@ -18,8 +18,7 @@ libephywidgets_la_SOURCES = \
 	gedit-overlay.c				\
 	gedit-overlay.h				\
 	gedit-overlay-child.c			\
-	gedit-overlay-child.h			\
-	$(BUILT_SOURCES)
+	gedit-overlay-child.h
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
