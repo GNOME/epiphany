@@ -874,6 +874,9 @@ ephy_embed_constructed (GObject *object)
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
   GtkWidget *frame;
+  GtkCssProvider *provider;
+  GtkStyleContext *context;
+  GError *error = NULL;
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
@@ -883,7 +886,22 @@ ephy_embed_constructed (GObject *object)
   /* statusbar is hidden by default */
   priv->statusbar_label = gtk_label_new (NULL);
   frame = gtk_frame_new (NULL);
+  gtk_widget_set_name (frame, "ephy-status-frame");
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+                                   "#ephy-status-frame { border-style: solid; border-width: 1; padding: 4; }",
+                                   -1, &error);
+  if (error == NULL) {
+    context = gtk_widget_get_style_context (frame);
+    gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (provider),
+                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  } else
+    g_error_free (error);
+
+  g_object_unref (provider);
+
   gtk_widget_show (frame);
+    
   gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
   gedit_overlay_add (GEDIT_OVERLAY (overlay), frame, GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST, 0);
 
