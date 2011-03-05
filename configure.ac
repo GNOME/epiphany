@@ -58,12 +58,9 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AM_MAINTAINER_MODE([enable])
 
-AC_ENABLE_SHARED([yes])
-AC_ENABLE_STATIC([no])
-
-AC_LIBTOOL_DLOPEN
+# Initialize libtool
 LT_PREREQ(2.2)
-LT_INIT
+LT_INIT([dlopen disable-static])
 
 AC_ISC_POSIX
 AC_PROG_CC
