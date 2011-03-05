@@ -25,8 +25,6 @@ m4_define([epiphany_branch],["trunk"])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
-GNOME_COMMON_INIT
-
 AC_PREREQ([2.59])
 
 AC_CONFIG_MACRO_DIR([m4])
