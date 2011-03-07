@@ -280,7 +280,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), NULL,
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
-	{ "ViewDownloadsBar", NULL, N_("View _downloads bar"), NULL,
+	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL,
 	  N_("Show the active downloads for this window"),
 	  NULL, FALSE },
 	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
