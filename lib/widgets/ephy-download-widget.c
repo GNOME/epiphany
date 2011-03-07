@@ -252,7 +252,7 @@ download_menu_clicked_cb (GtkWidget *button,
   GtkWidget *menu;
   GtkWidget *box;
   GList *children = NULL;
-  char *basename;
+  char *basename, *name;
 
   WebKitDownload *download;
 
@@ -261,6 +261,7 @@ download_menu_clicked_cb (GtkWidget *button,
   status = webkit_download_get_status (download);
   finished = (status == WEBKIT_DOWNLOAD_STATUS_FINISHED);
   basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
+  name = g_uri_unescape_string (basename, NULL);
 
   box = gtk_widget_get_parent (button);
   children = gtk_container_get_children (GTK_CONTAINER (box));
@@ -269,10 +270,11 @@ download_menu_clicked_cb (GtkWidget *button,
 
   menu = gtk_menu_new ();
 
-  item = gtk_menu_item_new_with_label (basename);
+  item = gtk_menu_item_new_with_label (name);
   gtk_widget_set_sensitive (item, FALSE);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   g_free (basename);
+  g_free (name);
 
   item = gtk_menu_item_new_with_label (_("Cancel"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -435,7 +437,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   GtkWidget *menu;
   GtkWidget *remain;
 
-  char *dest;
+  char *dest, *basename;
   GdkPixbuf *pixbuf = NULL;
   WebKitDownload *download;
 
@@ -446,7 +448,8 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   download = ephy_download_get_webkit_download (ephy_download);
 
   pixbuf = get_icon_from_download (download);
-  dest = g_filename_display_basename (webkit_download_get_destination_uri (download));
+  basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
+  dest = g_uri_unescape_string (basename, NULL);
 
   grid = gtk_grid_new ();
 
@@ -470,6 +473,8 @@ ephy_download_widget_new (EphyDownload *ephy_download)
 
   if (pixbuf)
     g_object_unref (pixbuf);
+
+  g_free (basename);
   g_free (dest);
 
   widget->priv->button = button;
