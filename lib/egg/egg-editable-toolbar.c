@@ -991,8 +991,8 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
        * or to that specified by the primary name, if any.
        */
       if (!primary_class_set && visible &&
-          (g_strcmp0 (priv->primary_name, toolbar_name) == 0) ||
-           (priv->primary_name == NULL))
+          ((g_strcmp0 (priv->primary_name, toolbar_name) == 0) ||
+           (priv->primary_name == NULL)))
         {
           primary_class_set = TRUE;
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
