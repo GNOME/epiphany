@@ -3683,6 +3683,8 @@ ephy_window_constructor (GType type,
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar), model);
 
+	ephy_toolbar_set_show_leave_fullscreen (priv->toolbar, FALSE);
+
 	/* other notifiers */
 	action = gtk_action_group_get_action (window->priv->action_group,
 					      "BrowseWithCaret");
