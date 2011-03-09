@@ -878,12 +878,12 @@ ephy_window_unfullscreen (EphyWindow *window)
 
 	destroy_fullscreen_popup (window);
 
-	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar, FALSE);
-
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
+
+	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar, FALSE);
 
 	sync_chromes_visibility (window);
 }
