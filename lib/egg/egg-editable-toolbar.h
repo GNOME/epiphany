@@ -82,6 +82,10 @@ void                egg_editable_toolbar_set_selected    (EggEditableToolbar   *
 void              egg_editable_toolbar_add_visibility    (EggEditableToolbar   *etoolbar,
 							  const char           *path);
 
+void              egg_editable_toolbar_set_primary_class (EggEditableToolbar *etoolbar,
+                                                          gboolean            set,
+                                                          const gchar        *path);
+
 /* Private Functions */
 
 GtkWidget 	   *_egg_editable_toolbar_new_separator_image (void);

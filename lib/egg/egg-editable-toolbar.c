@@ -79,6 +79,9 @@ struct _EggEditableToolbarPrivate
   guint        dnd_pending;
   GtkToolbar  *dnd_toolbar;
   GtkToolItem *dnd_toolitem;
+
+  gboolean set_primary_class;
+  gchar *primary_name;
 };
 
 G_DEFINE_TYPE (EggEditableToolbar, egg_editable_toolbar, GTK_TYPE_VBOX);
@@ -862,6 +865,10 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
   char action_name[40];
   char *action_label;
   char *tmp;
+  gboolean primary_class_set;
+  GtkStyleContext *context;
+  const gchar *toolbar_name;
+  gboolean visible;
 
   if (priv == NULL || priv->model == NULL || priv->manager == NULL ||
       priv->visibility_paths == NULL || priv->actions == NULL)
@@ -887,9 +894,12 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
   showing = GTK_WIDGET_VISIBLE (etoolbar);
 #endif
 
+  primary_class_set = !priv->set_primary_class;
+
   n_toolbars = egg_toolbars_model_n_toolbars (priv->model);
   for (i = 0; i < n_toolbars; i++)
     {
+      toolbar_name = egg_toolbars_model_toolbar_nth (priv->model, i);
       string = g_string_sized_new (0);
       n_items = egg_toolbars_model_n_items (priv->model, i);
       for (k = 0, j = 0; j < n_items; j++)
@@ -967,13 +977,32 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
       gtk_action_set_visible (GTK_ACTION (action), (egg_toolbars_model_get_flags (priv->model, i)
 						    & EGG_TB_MODEL_NOT_REMOVABLE) == 0);
       gtk_action_set_sensitive (GTK_ACTION (action), showing);
+
 #if GTK_CHECK_VERSION(2,20,0)
-      gtk_toggle_action_set_active (action, gtk_widget_get_visible
-				    (get_dock_nth (etoolbar, i)));
+      visible = gtk_widget_get_visible (get_dock_nth (etoolbar, i));
 #else
-      gtk_toggle_action_set_active (action, GTK_WIDGET_VISIBLE
-				    (get_dock_nth (etoolbar, i)));
+      visible = GTK_WIDGET_VISIBLE (get_dock_nth (etoolbar, i));
 #endif
+
+      gtk_toggle_action_set_active (action, visible);
+      context = gtk_widget_get_style_context (get_toolbar_nth (etoolbar, i));
+
+      /* apply the primary toolbar class to the first toolbar we see,
+       * or to that specified by the primary name, if any.
+       */
+      if (!primary_class_set && visible &&
+          (g_strcmp0 (priv->primary_name, toolbar_name) == 0) ||
+           (priv->primary_name == NULL))
+        {
+          primary_class_set = TRUE;
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+        }
+      else
+        {
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+        }
+
+      gtk_widget_reset_style (get_toolbar_nth (etoolbar, i));
 
       for (list = priv->visibility_paths; list != NULL; list = g_list_next (list))
         {
@@ -1384,6 +1413,9 @@ egg_editable_toolbar_dispose (GObject *object)
 
   g_free (priv->popup_path);
   priv->popup_path = NULL;
+
+  g_free (priv->primary_name);
+  priv->primary_name = NULL;
 
   if (priv->manager != NULL)
     {
@@ -1849,4 +1881,17 @@ GtkUIManager *
 egg_editable_toolbar_get_manager (EggEditableToolbar *etoolbar)
 {
   return etoolbar->priv->manager;
+}
+
+void
+egg_editable_toolbar_set_primary_class (EggEditableToolbar *etoolbar,
+                                        gboolean set,
+                                        const gchar *name)
+{
+  etoolbar->priv->set_primary_class = set;
+
+  g_free (etoolbar->priv->primary_name);
+  etoolbar->priv->primary_name = g_strdup (name);
+
+  toolbar_visibility_refresh (etoolbar);
 }
