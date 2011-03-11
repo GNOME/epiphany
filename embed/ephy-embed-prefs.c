@@ -374,12 +374,12 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
     /* Sync with Epiphany values */
     settings = ephy_settings;
 
-    webkit_pref_callback_font_size (settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
+    webkit_pref_callback_font_size (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                     "default-font-size");
     webkit_pref_callback_font_size (settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
                                     "default-monospace-font-size");
 
-    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
+    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "default-font-family");
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
                                       "sans-serif-font-family");
@@ -418,7 +418,7 @@ static const PrefData webkit_pref_entries[] =
 
     /* Epiphany font settings */
     { EPHY_PREFS_WEB_SCHEMA,
-      EPHY_PREFS_WEB_SANS_SERIF_FONT,
+      EPHY_PREFS_WEB_SERIF_FONT,
       "default-font-size",
       webkit_pref_callback_font_size },
     { EPHY_PREFS_WEB_SCHEMA,
@@ -426,7 +426,7 @@ static const PrefData webkit_pref_entries[] =
       "default-monospace-font-size",
       webkit_pref_callback_font_size },
     { EPHY_PREFS_WEB_SCHEMA,
-      EPHY_PREFS_WEB_SANS_SERIF_FONT,
+      EPHY_PREFS_WEB_SERIF_FONT,
       "default-font-family",
       webkit_pref_callback_font_family },
     { EPHY_PREFS_WEB_SCHEMA,
