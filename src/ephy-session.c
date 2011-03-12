@@ -619,7 +619,7 @@ session_command_open_uris (EphySession *session,
 		{
 			if (priv->resume_infobar != NULL)
 			{
-				embed = ephy_shell_new_tab_full (shell, priv->resume_window,
+				embed = ephy_shell_new_tab_full (shell, EPHY_WINDOW (priv->resume_window),
 								 NULL /* parent tab */,
 								 request,
 								 EPHY_NEW_TAB_IN_EXISTING_WINDOW | page_flags,
