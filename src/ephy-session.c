@@ -544,7 +544,7 @@ session_command_autoresume (EphySession *session,
 
 	ephy_session_queue_command (session,
 				    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW_RESTORE,
-				    NULL, NULL, user_time, FALSE);
+				    NULL, NULL, user_time, TRUE);
 }
 
 static void
@@ -612,14 +612,29 @@ session_command_open_uris (EphySession *session,
 
 		/* For the first URI, if we have a valid recovery
 		 * window, reuse the already existing embed instead of
-		 * creating a new one */
+		 * creating a new one, except if we still want to
+		 * present the option to resume a crashed session, in
+		 * that case use a new tab in the same window */
 		if (i == 0 && priv->resume_window != NULL)
 		{
-			EphyWebView *web_view;
-			
-			embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
-			web_view = ephy_embed_get_web_view (embed);
-			ephy_web_view_load_url (web_view, url);
+			if (priv->resume_infobar != NULL)
+			{
+				embed = ephy_shell_new_tab_full (shell, priv->resume_window,
+								 NULL /* parent tab */,
+								 request,
+								 EPHY_NEW_TAB_IN_EXISTING_WINDOW | page_flags,
+								 EPHY_WEB_VIEW_CHROME_ALL,
+								 FALSE /* is popup? */,
+								 user_time);
+			}
+			else
+			{
+				EphyWebView *web_view;
+
+				embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
+				web_view = ephy_embed_get_web_view (embed);
+				ephy_web_view_load_url (web_view, url);
+			}
 		}
 		else
 		{
@@ -795,8 +810,7 @@ session_command_dispatch (EphySession *session)
 	}
 
 	/* Look if there's anything else to dispatch */
-	if (g_queue_is_empty (priv->queue) ||
-	    priv->resume_window != NULL)
+	if (g_queue_is_empty (priv->queue))
 	{
 		priv->queue_idle_id = 0;
 		run_again = FALSE;
