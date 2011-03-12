@@ -1620,6 +1620,7 @@ ephy_session_load (EphySession *session,
 	xmlFreeDoc (doc);
 
 	priv->dont_save = FALSE;
+	priv->resume_window = NULL;
 
 	ephy_session_save (session, SESSION_CRASHED);
 
