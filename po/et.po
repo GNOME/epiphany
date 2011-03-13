@@ -1,12 +1,12 @@
 # Epiphany eesti keele tõlge.
 # Estonian translation of Epiphany.
 #
-# Copyright (C) 2003-2006 Free Software Foundation, Inc.
-# Copyright (C) 2007-2010 The GNOME Project.
+# Copyright (C) 2003–2006 Free Software Foundation, Inc.
+# Copyright (C) 2007–2011 The GNOME Project.
 # This file is distributed under the same license as the epiphany package.
 #
-# Priit Laes <plaes plaes org>, 2003-2007, 2010.
-# Ivar Smolin <okul linux ee>, 2005-2010.
+# Priit Laes <plaes plaes org>, 2003–2007, 2010.
+# Ivar Smolin <okul linux ee>, 2005–2011.
 # Rene Pärts <rene87 hot ee>, 2010.
 #
 msgid ""
@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&component=general\n"
-"POT-Creation-Date: 2010-12-20 23:44+0000\n"
-"PO-Revision-Date: 2010-12-21 09:15+0200\n"
+"POT-Creation-Date: 2011-03-09 20:46+0000\n"
+"PO-Revision-Date: 2011-03-13 19:04+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -124,10 +124,6 @@ msgstr "_Puhasta kõik.."
 
 msgid "Cookies"
 msgstr "Küpsised"
-
-#. The name of the default downloads folder
-msgid "Downloads"
-msgstr "Allalaadimised"
 
 msgid "Passwords"
 msgstr "Paroolid"
@@ -276,9 +272,6 @@ msgstr "Allalaadimiste _kataloog:"
 msgid "_Edit Stylesheet&#x2026;"
 msgstr "R_edigeeri laaditabelit&#x2026;"
 
-msgid "_Minimum font size:"
-msgstr "_Väikseim kirjatüübi suurus:"
-
 msgid "_Never accept"
 msgstr "Pole _lubatud"
 
@@ -327,119 +320,9 @@ msgstr "_Iga raam eraldi"
 msgid "_Page address"
 msgstr "_Lehekülge aadress"
 
-#. this opens the downloader window, or brings it to the foreground if already open
-msgid "_Show Downloads"
-msgstr "_Näita allalaadimisi"
-
-#, c-format
-msgid "%u:%02u.%02u"
-msgstr "%u: %02u.%02u"
-
-#, c-format
-msgid "%02u.%02u"
-msgstr "%02u.%02u"
-
-msgid "_Pause"
-msgstr "_Paus"
-
-msgid "_Resume"
-msgstr "_Jätka"
-
-#. impossible time or broken locale settings
-msgid "Unknown"
-msgstr "Tundmatu"
-
-#. translators: first %s is filename, "%s of %s" is current/total file size
-#, c-format
-msgid ""
-"%s\n"
-"%s of %s"
-msgstr ""
-"%s\n"
-"%s %s-st"
-
-#, c-format
-msgid "%d download"
-msgid_plural "%d downloads"
-msgstr[0] "%d allalaadimine"
-msgstr[1] "%d allalaadimist"
-
-msgctxt "download status"
-msgid "Unknown"
-msgstr "Tundmatu"
-
-msgctxt "download status"
-msgid "Failed"
-msgstr "Tõrge"
-
-msgctxt "download status"
-msgid "Cancelled"
-msgstr "Tühistatud"
-
-msgid "File"
-msgstr "Fail"
-
-msgid "%"
-msgstr "%"
-
-msgid "Remaining"
-msgstr "Aega jäänud"
-
-msgid "Save"
-msgstr "Salvesta"
-
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Tundmatu"
-
-msgid "Download this potentially unsafe file?"
-msgstr "Kas laadida see potentsiaalselt ohtlik faili alla?"
-
-#. translators: First %s is the file type description, second %s is the
-#. * file name
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
-msgstr ""
-"Faili liik: „%s”.\n"
-"\n"
-"„%s” avamine ei ole turvaline ning võib põhjustada kahjustusi sinu "
-"dokumentidele või riivata sinu turvalisust. Parem oleks see fail alla "
-"laadida."
-
-msgid "Open this file?"
-msgstr "Kas avada see fail?"
-
-#. translators: First %s is the file type description, second %s is the
-#. * file name, third %s is the application used to open the file
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You can open “%s” using “%s” or save it."
-msgstr ""
-"Faili liik: „%s”.\n"
-"\n"
-"Sa saad „%s”-i avamiseks kasutada „%s”-i või selle salvestada."
-
-msgid "Download this file?"
-msgstr "Kas laadida see fail alla?"
-
-#. translators: First %s is the file type description, second %s is the
-#. * file name
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You have no application able to open “%s”. You can download it instead."
-msgstr ""
-"Faili liik: „%s”.\n"
-"\n"
-"Ühtegi rakendust „%s”-i avamiseks ei ole. Sa saad selle asemel selle alla "
-"laadida."
 
 msgid "Web Inspector"
 msgstr "Veebiinspektor"
@@ -1005,6 +888,10 @@ msgstr "%d. %b %H:%M"
 msgid "%b %d %Y"
 msgstr "%d. %b %Y"
 
+#. impossible time or broken locale settings
+msgid "Unknown"
+msgstr "Tundmatu"
+
 msgid "50%"
 msgstr "50%"
 
@@ -1031,6 +918,49 @@ msgstr "300%"
 
 msgid "400%"
 msgstr "400%"
+
+#, c-format
+msgid "%u:%02u hour left"
+msgid_plural "%u:%02u hours left"
+msgstr[0] "veel %u:%02u tundi"
+msgstr[1] "veel %u:%02u tundi"
+
+#, c-format
+msgid "%u hour left"
+msgid_plural "%u hours left"
+msgstr[0] "veel %u tund"
+msgstr[1] "veel %u tundi"
+
+#, c-format
+msgid "%u:%02u minute left"
+msgid_plural "%u:%02u minutes left"
+msgstr[0] "veel %u:%02u minutit"
+msgstr[1] "veel %u:%02u minutit"
+
+#, c-format
+msgid "%u second left"
+msgid_plural "%u seconds left"
+msgstr[0] "veel %u sekund"
+msgstr[1] "veel %u sekundit"
+
+msgid "Finished"
+msgstr "Valmis"
+
+#, c-format
+msgid "Error downloading: %s"
+msgstr "Viga allalaadimisel: %s"
+
+msgid "Cancel"
+msgstr "Tühista"
+
+msgid "Open"
+msgstr "Ava"
+
+msgid "Show in folder"
+msgstr "Näita kaustas"
+
+msgid "Starting…"
+msgstr "Käivitamine…"
 
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sellele lehele viida loomiseks lohista seda ikooni"
@@ -1366,6 +1296,9 @@ msgstr "_Impordi"
 
 msgid "Import bookmarks from:"
 msgstr "Kustkohast järjehoidjaid imporditakse:"
+
+msgid "File"
+msgstr "Fail"
 
 msgid "_Copy Address"
 msgstr "K_opeeri lehe aadress"
@@ -1956,6 +1889,12 @@ msgstr "_Peida tööriistariba"
 msgid "Show or hide toolbar"
 msgstr "Tööriistariba näitamine või peitmine"
 
+msgid "_Downloads Bar"
+msgstr "_Allalaadimiste riba"
+
+msgid "Show the active downloads for this window"
+msgstr "Selle akna allalaadimiste näidamine"
+
 msgid "_Fullscreen"
 msgstr "Täis_ekraanvaade"
 
@@ -2057,8 +1996,14 @@ msgstr ""
 msgid "Close _Document"
 msgstr "_Sulge dokument"
 
-msgid "Open"
-msgstr "Ava"
+msgid "There are ongoing downloads in this window"
+msgstr "Sellel aknal on pooleliolevaid allalaadimisi"
+
+msgid "If you close this window, the downloads will be cancelled"
+msgstr "Selle akna sulgemisega katkevad ka allalaadimised"
+
+msgid "Close window and cancel downloads"
+msgstr "Akna sulgemine ja allalaadimiste katkestamine"
 
 msgid "Save As"
 msgstr "Salvestamine kui"
@@ -2238,6 +2183,9 @@ msgstr[1] "Süsteemsed keeled (%s)"
 msgid "Select a Directory"
 msgstr "Kataloogi valimine"
 
+msgid "Save"
+msgstr "Salvesta"
+
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -2296,8 +2244,8 @@ msgstr ""
 #.
 msgid "translator-credits"
 msgstr ""
-"Priit Laes <plaes plaes org>, 2003-2007, 2010\n"
-"Ivar Smolin <okul linux ee>, 2005-2010.\n"
+"Priit Laes <plaes plaes org>, 2003–2007, 2010\n"
+"Ivar Smolin <okul linux ee>, 2005–2011.\n"
 "Rene Pärts <rene87 hot ee>, 2010."
 
 msgid "GNOME Web Browser Website"
@@ -2318,6 +2266,74 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Luba"
 
+#~ msgid "_Minimum font size:"
+#~ msgstr "_Väikseim kirjatüübi suurus:"
+
+#~ msgid "_Show Downloads"
+#~ msgstr "_Näita allalaadimisi"
+
+#~ msgid "_Pause"
+#~ msgstr "_Paus"
+
+#~ msgid "_Resume"
+#~ msgstr "_Jätka"
+
+#~ msgid "%d download"
+#~ msgid_plural "%d downloads"
+#~ msgstr[0] "%d allalaadimine"
+#~ msgstr[1] "%d allalaadimist"
+
+#~ msgctxt "download status"
+#~ msgid "Unknown"
+#~ msgstr "Tundmatu"
+
+#~ msgctxt "download status"
+#~ msgid "Failed"
+#~ msgstr "Tõrge"
+
+#~ msgid "Remaining"
+#~ msgstr "Aega jäänud"
+
+#~ msgid "Download this potentially unsafe file?"
+#~ msgstr "Kas laadida see potentsiaalselt ohtlik faili alla?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "It is unsafe to open “%s” as it could potentially damage your documents "
+#~ "or invade your privacy. You can download it instead."
+#~ msgstr ""
+#~ "Faili liik: „%s”.\n"
+#~ "\n"
+#~ "„%s” avamine ei ole turvaline ning võib põhjustada kahjustusi sinu "
+#~ "dokumentidele või riivata sinu turvalisust. Parem oleks see fail alla "
+#~ "laadida."
+
+#~ msgid "Open this file?"
+#~ msgstr "Kas avada see fail?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You can open “%s” using “%s” or save it."
+#~ msgstr ""
+#~ "Faili liik: „%s”.\n"
+#~ "\n"
+#~ "Sa saad „%s”-i avamiseks kasutada „%s”-i või selle salvestada."
+
+#~ msgid "Download this file?"
+#~ msgstr "Kas laadida see fail alla?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You have no application able to open “%s”. You can download it instead."
+#~ msgstr ""
+#~ "Faili liik: „%s”.\n"
+#~ "\n"
+#~ "Ühtegi rakendust „%s”-i avamiseks ei ole. Sa saad selle asemel selle alla "
+#~ "laadida."
+
 #~ msgid ""
 #~ "A list of protocols to be considered safe in addition to the default, "
 #~ "when disable_unsafe_protocols is enabled."
@@ -2328,12 +2344,6 @@ msgstr "_Luba"
 
 #~ msgid "Additional safe protocols"
 #~ msgstr "Täiendavad turvalised protokollid"
-
-#~ msgid "Disable JavaScript chrome control"
-#~ msgstr "JavaScript chrome juhtimise keelamine"
-
-#~ msgid "Disable JavaScript's control over window chrome."
-#~ msgstr "JavaScripti juhtimise keelamine akna chrome üle."
 
 #~ msgid ""
 #~ "Disable all historical information by disabling back and forward "
@@ -2402,13 +2412,6 @@ msgstr "_Luba"
 #~ msgid "Allow popups"
 #~ msgstr "Hüpikakende lubamine"
 
-#~ msgid ""
-#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
-#~ "enabled)."
-#~ msgstr ""
-#~ "Kui märgitud, siis on veebisaitidel lubatud JavaScripti abil uusi aknaid "
-#~ "avada (kui ka JavaScript lubatud on)."
-
 #~ msgid "Always show the tab bar"
 #~ msgstr "Kas sakiriba näidatakse alati"
 
@@ -2426,48 +2429,6 @@ msgstr "_Luba"
 
 #~ msgid "Default encoding"
 #~ msgstr "Vaikimisi kooditabel"
-
-#~ msgid ""
-#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
-#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
-#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
-#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
-#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
-#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
-#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
-#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
-#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
-#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
-#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
-#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
-#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
-#~ msgstr ""
-#~ "Vaikimisi kooditabel. Lubatud väärtused on: \"armscii-8\", \"Big5\", "
-#~ "\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", "
-#~ "\"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
-#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", "
-#~ "\"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
-#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
-#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
-#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
-#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
-#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
-#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
-#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
-#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
-
-#~ msgid "Enable JavaScript"
-#~ msgstr "JavaScript'i lubamine"
 
 #~ msgid "Enable Plugins"
 #~ msgstr "Pluginate lubamine"
@@ -2516,9 +2477,6 @@ msgstr "_Luba"
 #~ msgstr ""
 #~ "Kuidas paneelidega lehti näidatakse. Võimalikud väärtused on \"normal"
 #~ "\" (tavaline), \"separately\" (eraldi) ja \"selected\" (valik)."
-
-#~ msgid "ISO-8859-1"
-#~ msgstr "ISO-8859-15"
 
 #~ msgid "Image animation mode"
 #~ msgstr "Piltide animeerimisrežiim"
@@ -2595,25 +2553,6 @@ msgstr "_Luba"
 
 #~ msgid "The currently selected fonts language"
 #~ msgstr "Käesolevaga valitud kirjatüüpide keel"
-
-#~ msgid ""
-#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
-#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
-#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
-#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
-#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
-#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
-#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
-#~ "devanagari\" (devanagari)."
-#~ msgstr ""
-#~ "Käesolevaga valitud kirjatüüpide keel Võimalikud väärtused on \"ar"
-#~ "\" (araabia), \"x-baltic\" (balti keeled), \"x-central-euro\" (kesk-"
-#~ "euroopa keeled), \"x-cyrillic\" (kirillitsat kasutavad keeled), \"el"
-#~ "\" (kreeka), \"he\" (heebrea), \"ja\" (jaapani), \"ko\" (kore), \"zh-CN"
-#~ "\" (lihtsustatud hiina), \"th\" (tai), \"zh-TW\" (traditsiooniline "
-#~ "hiina), \"tr\" (türgi), \"x-unicode\" (muud keeled), \"x-western"
-#~ "\" (ladina tähestikku kasutavad keeled), \"x-tamil\" (tamili) and \"x-"
-#~ "devanagari\" (devanagaari)."
 
 #~ msgid "The downloads folder"
 #~ msgstr "Allalaadimiste kataloog"
@@ -2738,13 +2677,6 @@ msgstr "_Luba"
 
 #~ msgid "A problem occurred while loading %s"
 #~ msgstr "%s laadimisel tekkis probleem"
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "GConfi viga:\n"
-#~ "  %s"
 
 #~ msgid "Failed to read latest migration marker, aborting profile migration."
 #~ msgstr ""
