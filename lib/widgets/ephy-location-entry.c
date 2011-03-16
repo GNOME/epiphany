@@ -57,6 +57,8 @@ struct _EphyLocationEntryPrivate
 	GdkPixbuf *favicon;
 	GdkRGBA secure_bg_color;
 	GdkRGBA secure_fg_color;
+	GdkRGBA secure_selected_bg_color;
+	GdkRGBA secure_selected_fg_color;
 
 	GSList *search_terms;
 
@@ -132,6 +134,8 @@ ephy_location_entry_style_updated (GtkWidget *widget)
 	GtkStyleContext *style;
 	GdkRGBA *bg_color = NULL;
 	GdkRGBA *fg_color = NULL;
+	GdkRGBA *selected_bg_color = NULL;
+	GdkRGBA *selected_fg_color = NULL;
 
 	char *theme;
 	gboolean is_a11y_theme;
@@ -151,6 +155,8 @@ ephy_location_entry_style_updated (GtkWidget *widget)
 	gtk_style_context_get_style (style,
 				     "secure-fg-color", &fg_color,
 				     "secure-bg-color", &bg_color,
+				     "secure-selected-bg-color", &selected_bg_color,
+				     "secure-selected-fg-color", &selected_fg_color,
 				     NULL);
 
 	/* We only use the fallback colors when we don't have an a11y theme */
@@ -174,6 +180,24 @@ ephy_location_entry_style_updated (GtkWidget *widget)
 	else
 	{
 		priv->secure_bg_color = fallback_bg_color;
+	}
+	if (selected_bg_color != NULL)
+	{
+		priv->secure_selected_bg_color = *selected_bg_color;
+		gdk_rgba_free (selected_bg_color);
+	}
+	else
+	{
+		gtk_style_context_lookup_color (style, "selected_bg_color", &priv->secure_selected_bg_color);
+	}
+	if (selected_fg_color != NULL)
+	{
+		priv->secure_selected_fg_color = *selected_fg_color;
+		gdk_rgba_free (selected_fg_color);
+	}
+	else
+	{
+		gtk_style_context_lookup_color (style, "selected_fg_color", &priv->secure_selected_fg_color);
 	}
 
 	/* Apply the new style */
@@ -312,6 +336,18 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 								     "Foreground colour to use for secure sites",
 								     GDK_TYPE_RGBA,
 								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	gtk_widget_class_install_style_property (widget_class,
+	                                         g_param_spec_boxed ("secure-selected-bg-color",
+	                                                             "Secure selection background Colour",
+	                                                             "Background colour to use for selected text on secure sites",
+	                                                             GDK_TYPE_RGBA,
+                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	gtk_widget_class_install_style_property (widget_class,
+	                                         g_param_spec_boxed ("secure-selected-fg-color",
+                                                                     "Secure selection foreground Colour",
+                                                                     "Foreground colour to use for selected text on secure sites",
+                                                                     GDK_TYPE_RGBA,
+                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
@@ -1623,10 +1659,14 @@ ephy_location_entry_set_secure (EphyLocationEntry *entry,
 	{
 		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_fg_color);
 		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_bg_color);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_SELECTED, &priv->secure_selected_fg_color);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_SELECTED, &priv->secure_selected_bg_color);
 	}
 	else
 	{
 		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
+		gtk_widget_override_color (gentry, GTK_STATE_FLAG_SELECTED, NULL);
+		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_SELECTED, NULL);
 		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
 	}
 	gtk_widget_queue_draw (widget);
