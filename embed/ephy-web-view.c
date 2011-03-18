@@ -976,8 +976,9 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
     /* We have a field that may be the user, and one for a password. */
     if (username_node && password_node) {
       LOG ("Hooking and pre-filling a form");
-      g_signal_connect (form, "submit-event",
-                        G_CALLBACK (form_submitted_cb), web_view);
+      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "submit",
+                                                  G_CALLBACK (form_submitted_cb), false,
+                                                  web_view);
 
       pre_fill_form (username_node, password_node, web_view);
 
