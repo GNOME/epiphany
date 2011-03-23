@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema path="/apps/epiphany/" id="org.gnome.Epiphany">
+	<schema path="/org/gnome/epiphany/" id="org.gnome.Epiphany">
 		<child schema="org.gnome.Epiphany.ui" name="ui"/>
 		<child schema="org.gnome.Epiphany.web" name="web"/>
 		<child schema="org.gnome.Epiphany.state" name="state"/>
@@ -62,7 +62,7 @@
 			<description>Lists the active extensions.</description>
 		</key>
 	</schema>
-	<schema path="/apps/epiphany/ui/" id="org.gnome.Epiphany.ui">
+	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key type="b" name="show-toolbars">
 			<default>true</default>
 			<summary>Show toolbars by default</summary>
@@ -87,7 +87,7 @@
 			<description>Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started.</description>
 		</key>
 	</schema>
-	<schema path="/apps/epiphany/web/" id="org.gnome.Epiphany.web">
+	<schema path="/org/gnome/epiphany/web/" id="org.gnome.Epiphany.web">
 		<key type="i" name="min-font-size">
 			<default>0</default>
 			<summary>Minimum font size</summary>
@@ -166,7 +166,7 @@
 			<summary>Enable JavaScript</summary>
 		</key>
 	</schema>
-	<schema path="/apps/epiphany/state/" id="org.gnome.Epiphany.state">
+	<schema path="/org/gnome/epiphany/state/" id="org.gnome.Epiphany.state">
 		<key type="s" name="open-dir">
 			<default>'~'</default>
 		</key>
@@ -212,7 +212,7 @@
 			<summary>Whether to show the address column in the bookmarks window.</summary>
 		</key>
 	</schema>
-	<schema path="/apps/epiphany/lockdown/" id="org.gnome.Epiphany.lockdown">
+	<schema path="/org/gnome/epiphany/lockdown/" id="org.gnome.Epiphany.lockdown">
 		<key type="b" name="disable-fullscreen">
 			<default>false</default>
 		</key>
