@@ -103,6 +103,7 @@ typedef enum
 #define EPHY_PREFS_ENABLE_SMOOTH_SCROLLING	"enable-smooth-scrolling"
 #define EPHY_PREFS_ENABLE_CARET_BROWSING	"enable-caret-browsing"
 #define EPHY_PREFS_ENABLED_EXTENSIONS		"enabled-extensions"
+#define EPHY_PREFS_INTERNAL_VIEW_SOURCE		"internal-view-source"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA		"org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN		"disable-fullscreen"

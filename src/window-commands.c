@@ -647,6 +647,25 @@ window_cmd_view_zoom_normal (GtkAction *action,
 }
 
 static void
+view_source_embedded (const char *uri, EphyEmbed *embed)
+{
+	EphyEmbed *new_embed;
+
+	new_embed = ephy_shell_new_tab
+			(ephy_shell_get_default (),
+			 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+			 embed,
+			 NULL,
+			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
+
+	webkit_web_view_set_view_source_mode
+		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), TRUE);
+	webkit_web_view_load_uri
+		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
+}
+
+
+static void
 save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointer data)
 {
 	char *uri;
@@ -664,30 +683,21 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
 	uri = (char*)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
 
 	file = g_file_new_for_uri (uri);
+
 	if (!ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ()))
 	{
 		/* Fallback to view the source inside the browser */
 		const char *uri;
-		EphyEmbed *embed, *new_embed;
+		EphyEmbed *embed;
 
 		uri = (const char*) g_object_get_data (G_OBJECT (ostream),
 						       "ephy-original-source-uri");
 		embed = (EphyEmbed*)g_object_get_data (G_OBJECT (ostream),
 						       "ephy-save-temp-source-embed");
-
-		new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-						EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-						embed,
-						NULL,
-						EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-
-		webkit_web_view_set_view_source_mode (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed),
-						      TRUE);
-		webkit_web_view_load_uri (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed),
-					  uri);
+		view_source_embedded (uri, embed);
 	}
-
 	g_object_unref (ostream);
+
 	g_object_unref (file);
 }
 
@@ -832,6 +842,14 @@ window_cmd_view_page_source (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+
+	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_INTERNAL_VIEW_SOURCE))
+	{
+		view_source_embedded (address, embed);
+		return;
+	}
+
 	user_time = gtk_get_current_event_time ();
 
 	if (g_str_has_prefix (address, "file://"))
