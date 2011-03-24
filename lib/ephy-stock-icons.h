@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_STOCK_EPHY            "gnome-web-browser"
+#define EPHY_STOCK_EPHY            "web-browser"
 
 /* Custom Epiphany named icons */
 #define EPHY_STOCK_POPUPS          "popup-hidden"
