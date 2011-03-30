@@ -19,8 +19,9 @@ NOINST_H_FILES = \
 	ephy-node-common.h			\
 	ephy-object-helpers.h			\
 	ephy-prefs.h				\
-	ephy-profile-utils.h				\
+	ephy-profile-utils.h			\
 	ephy-print-utils.h			\
+	ephy-request-about.h			\
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
 	ephy-string.h				\
@@ -60,6 +61,7 @@ libephymisc_la_SOURCES = \
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
 	ephy-print-utils.c			\
+	ephy-request-about.c			\
 	ephy-settings.c				\
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\

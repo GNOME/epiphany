@@ -36,6 +36,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-request-about.h"
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
 #include "ephy-certificate-manager.h"
@@ -45,6 +46,7 @@
 #include <glib/gi18n.h>
 #include <libsoup/soup-gnome.h>
 #include <libsoup/soup-cache.h>
+#include <libsoup/soup-requester.h>
 #include <gnome-keyring.h>
 
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
@@ -484,6 +486,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *cookie_policy;
   char *cache_dir;
   EphyEmbedSinglePrivate *priv = single->priv;
+  SoupSessionFeature *requester;
 
   /* Initialise nspluginwrapper's plugins if available */
   if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
@@ -536,6 +539,12 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
                     "changed::" EPHY_PREFS_CACHE_SIZE,
                     G_CALLBACK (cache_size_cb),
                     single);
+
+  /* about: URIs handler */
+  requester = SOUP_SESSION_FEATURE (soup_requester_new());
+  soup_session_add_feature (session, requester);
+  soup_session_feature_add_feature (requester, EPHY_TYPE_REQUEST_ABOUT);
+  g_object_unref (requester);
 
 #ifdef SOUP_TYPE_PASSWORD_MANAGER
   /* Use GNOME keyring to store passwords. Only add the manager if we

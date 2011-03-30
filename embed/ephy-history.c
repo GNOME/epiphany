@@ -27,6 +27,7 @@
 #include "ephy-node-db.h"
 #include "ephy-node-common.h"
 #include "ephy-prefs.h"
+#include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
@@ -823,22 +824,30 @@ ephy_history_add_page (EphyHistory *eh,
 
 static gboolean
 impl_add_page (EphyHistory *eb,
-	       const char *url,
+	       const char *orig_url,
 	       gboolean redirect,
 	       gboolean toplevel)
 {
 	EphyNode *bm, *node, *host;
 	gulong flags = 0;
+	char *url;
 
 	if (eb->priv->enabled == FALSE)
 	{
 		return FALSE;
 	}
 
+	/* Do not show internal ephy-about: protocol to users */
+	if (g_str_has_prefix (orig_url, EPHY_ABOUT_SCHEME))
+		url = g_strdup_printf ("about:%s", orig_url + EPHY_ABOUT_SCHEME_LEN + 1);
+	else
+		url = g_strdup (orig_url);
+
 	node = ephy_history_get_page (eb, url);
 	if (node)
 	{
 		ephy_history_visited (eb, node);
+		g_free (url);
 		return TRUE;
 	}
 
@@ -846,6 +855,7 @@ impl_add_page (EphyHistory *eb,
 
 	ephy_node_set_property_string (bm, EPHY_NODE_PAGE_PROP_LOCATION, url);
 	ephy_node_set_property_string (bm, EPHY_NODE_PAGE_PROP_TITLE, url);
+	g_free (url);
 
 	if (redirect) flags |= REDIRECT_FLAG;
 	if (toplevel) flags |= TOPLEVEL_FLAG;

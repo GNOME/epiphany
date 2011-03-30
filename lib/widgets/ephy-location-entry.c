@@ -32,6 +32,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-request-about.h"
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
@@ -1049,6 +1050,12 @@ textcell_data_func (GtkCellLayout *cell_layout,
 
 	if (url)
 	{
+		/* Do not show internal ephy-about: protocol to users */
+		if (g_str_has_prefix (url, EPHY_ABOUT_SCHEME)) {
+			g_free (url);
+			url = g_strdup_printf ("about:%s", url + strlen (EPHY_ABOUT_SCHEME) + 1);
+		}
+
 		ctext = g_strdup_printf ("%s\n%s", title, url);
 
 		style = gtk_widget_get_style_context (priv->entry);
@@ -1278,7 +1285,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkClipboard *clipboard;
 	const char *text;
-	char* selection = NULL;
+	char *effective_text = NULL, *selection = NULL;
 	int start, end;
 
 	/* Setting a new text will clear the clipboard. This makes it impossible
@@ -1303,6 +1310,9 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 
 	if (address != NULL && strcmp (address, "about:blank") != 0)
 	{
+		if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
+			effective_text = g_strdup_printf ("about:%s",
+							  address + strlen (EPHY_ABOUT_SCHEME) + 1);
 		text = address;
 	}
 	else
@@ -1311,11 +1321,12 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	}
 
 	/* First record the new hash, then update the entry text */
-	priv->hash = g_str_hash (text);
+	priv->hash = g_str_hash (effective_text ? effective_text : text);
 
 	priv->block_update = TRUE;
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+	gtk_entry_set_text (GTK_ENTRY (priv->entry), effective_text ? effective_text : text);
 	priv->block_update = FALSE;
+	g_free (effective_text);
 
 	/* We need to call update_address_state() here, as the 'changed' signal
 	 * may not get called if the user has typed in the exact correct url */

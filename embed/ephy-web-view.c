@@ -44,6 +44,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
+#include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
@@ -2455,6 +2456,8 @@ get_title_from_address (const char *address)
 {
   if (g_str_has_prefix (address, "file://")) 
     return g_strdup (address + 7);
+  else if (!strcmp (address, EPHY_ABOUT_SCHEME":plugins"))
+    return g_strdup (_("Plugins"));
   else
     return ephy_string_get_host_name (address);
 }
@@ -2743,6 +2746,11 @@ ephy_web_view_location_changed (EphyWebView *view,
   if (location == NULL || location[0] == '\0' ||
       strcmp (location, "about:blank") == 0) {
     ephy_web_view_set_address (view, NULL);
+    ephy_web_view_set_title (view, EMPTY_PAGE);
+  } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME)) {
+    char *new_address = g_strdup_printf ("about:%s", location + EPHY_ABOUT_SCHEME_LEN + 1);
+    ephy_web_view_set_address (view, new_address);
+    g_free (new_address);
     ephy_web_view_set_title (view, EMPTY_PAGE);
   } else {
     char *view_address;
