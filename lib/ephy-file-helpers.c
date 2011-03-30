@@ -105,6 +105,19 @@ ephy_file_tmp_dir (void)
 	return tmp_dir;
 }
 
+static char *
+ephy_file_download_dir (void)
+{
+	const char *xdg_download_dir;
+
+	xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+	if (xdg_download_dir != NULL)
+		return g_strdup (xdg_download_dir);
+
+	/* If we don't have XDG user dirs info, return an educated guess. */
+	return g_build_filename	(g_get_home_dir (), _("Downloads"), NULL);
+}
+
 /**
  * ephy_file_get_downloads_dir:
  *
@@ -123,7 +136,9 @@ ephy_file_get_downloads_dir (void)
 					      EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
 	/* Emergency download destination */
-	if (g_path_is_absolute (download_dir) != TRUE)
+	if (g_str_equal (download_dir, "Downloads"))
+		download_dir = ephy_file_download_dir ();
+	else if (g_str_equal (download_dir, "Desktop") || g_path_is_absolute (download_dir) != TRUE)
 		download_dir = ephy_file_desktop_dir ();
 
 	return download_dir;
