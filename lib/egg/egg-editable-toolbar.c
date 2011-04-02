@@ -296,17 +296,18 @@ move_item_cb (GtkAction          *action,
   GtkTargetList *list = gtk_target_list_new (dest_drag_types, G_N_ELEMENTS (dest_drag_types));
 
   GdkEvent *realevent = gtk_get_current_event();
-  GdkEventMotion event;
-  event.type = GDK_MOTION_NOTIFY;
-  event.window = realevent->any.window;
-  event.send_event = FALSE;
-  event.axes = NULL;
-  event.time = gdk_event_get_time (realevent);
-  gdk_event_get_state (realevent, &event.state);
-  gdk_event_get_coords (realevent, &event.x, &event.y);
-  gdk_event_get_root_coords (realevent, &event.x_root, &event.y_root);
+  GdkEvent *event = gdk_event_new (GDK_MOTION_NOTIFY);
+  event->motion.window = g_object_ref (realevent->any.window);
+  event->motion.send_event = FALSE;
+  event->motion.axes = NULL;
+  event->motion.time = gdk_event_get_time (realevent);
+  gdk_event_set_device (event, gdk_event_get_device (realevent));
+  gdk_event_get_state (realevent, &event->motion.state);
+  gdk_event_get_coords (realevent, &event->motion.x, &event->motion.y);
+  gdk_event_get_root_coords (realevent, &event->motion.x_root, &event->motion.y_root);
 
-  gtk_drag_begin (toolitem, list, GDK_ACTION_MOVE, 1, (GdkEvent *)&event);
+  gtk_drag_begin (toolitem, list, GDK_ACTION_MOVE, 1, event);
+  gdk_event_free (event);
   gtk_target_list_unref (list);
 }
 
