@@ -483,8 +483,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *filename;
   char *cookie_policy;
   char *cache_dir;
-  WebKitWebPluginDatabase* database;
-  GSList *list, *p;
   EphyEmbedSinglePrivate *priv = single->priv;
 
   /* Initialise nspluginwrapper's plugins if available */
@@ -547,18 +545,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   if (ephy_has_private_profile () == FALSE)
     soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
 #endif
-
-  /* Disable Flash by default, since it uses GTK+2.x and we can't mix
-   * it in our GTK+3.x process */
-  database = webkit_get_web_plugin_database ();
-  list = webkit_web_plugin_database_get_plugins (database);
-  for (p = list; p; p = p->next) {
-    WebKitWebPlugin *plugin = WEBKIT_WEB_PLUGIN (p->data);
-    if (g_strcmp0 (webkit_web_plugin_get_name (plugin), "Shockwave Flash") == 0)
-      webkit_web_plugin_set_enabled (plugin, FALSE);
-  }
-
-  webkit_web_plugin_database_plugins_list_free (list);
 
   return TRUE;
 }
