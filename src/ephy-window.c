@@ -488,17 +488,14 @@ impl_add_child (EphyEmbedContainer *container,
 		gboolean jump_to)
 {
 	EphyWindow *window = EPHY_WINDOW (container);
-	EphyWebView *view;
 
 	g_return_val_if_fail (!window->priv->is_popup ||
 			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
 
-	view = ephy_embed_get_web_view (child);
-
-	window->priv->tab_message_cid = ephy_web_view_statusbar_get_context_id
-		(view, EPHY_WEB_VIEW_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
-	window->priv->help_message_cid = ephy_web_view_statusbar_get_context_id
-		(view, EPHY_WEB_VIEW_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION);
+	window->priv->tab_message_cid = ephy_embed_statusbar_get_context_id
+		(child, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
+	window->priv->help_message_cid = ephy_embed_statusbar_get_context_id
+		(child, EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION);
 
 	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 				      child, position, jump_to);
@@ -1296,7 +1293,8 @@ menu_item_select_cb (GtkMenuItem *proxy,
 	if (message)
 	{
 		EphyWebView *view = ephy_window_get_active_web_view (window);
-		ephy_web_view_statusbar_push (view, window->priv->help_message_cid, message);
+		ephy_embed_statusbar_push (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
+					   window->priv->help_message_cid, message);
 		g_free (message);
 	}
 }
@@ -1306,7 +1304,8 @@ menu_item_deselect_cb (GtkMenuItem *proxy,
 		       EphyWindow *window)
 {
 	EphyWebView *view = ephy_window_get_active_web_view (window);
-	ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
+	ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
+				  window->priv->help_message_cid);
 }
 
 static gboolean
@@ -1333,7 +1332,8 @@ tool_item_enter_cb (GtkWidget *proxy,
 		if (message)
 		{
 			EphyWebView *view = ephy_window_get_active_web_view (window);
-			ephy_web_view_statusbar_push (view, window->priv->help_message_cid, message);
+			ephy_embed_statusbar_push (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
+						   window->priv->help_message_cid, message);
 			g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (TRUE));
 			g_free (message);
 		}
@@ -1350,7 +1350,8 @@ tool_item_leave_cb (GtkWidget *proxy,
 	if (event->mode == GDK_CROSSING_NORMAL)
 	{
 		EphyWebView *view = ephy_window_get_active_web_view (window);
-		ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
+		ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
+					  window->priv->help_message_cid);
 		g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (FALSE));
 	}
 	
@@ -1363,7 +1364,8 @@ tool_item_drag_begin_cb (GtkWidget          *widget,
 			 EphyWindow         *window)
 {
 	EphyWebView *view = ephy_window_get_active_web_view (window);
-	ephy_web_view_statusbar_pop (view, window->priv->help_message_cid);
+	ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
+				  window->priv->help_message_cid);
 }
 
 

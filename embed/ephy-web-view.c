@@ -97,15 +97,6 @@ struct _EphyWebViewPrivate {
   GSList *hidden_popups;
   GSList *shown_popups;
 
-  GSList *messages;
-  GSList *keys;
-
-  guint seq_context_id;
-  guint seq_message_id;
-
-  guint tab_message_id;
-
-  char *text;
   GdkRectangle text_rectangle;
 
   GtkWidget *password_info_bar;
@@ -116,12 +107,6 @@ typedef struct {
   char *name;
   char *features;
 } PopupInfo;
-
-typedef struct {
-  gchar *text;
-  guint context_id;
-  guint message_id;
-} EphyWebViewStatusbarMsg;
 
 enum {
   PROP_0,
@@ -549,28 +534,9 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 }
 
 static void
-status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
-{
-  const char *message;
-  EphyWebViewPrivate *priv;
-
-  message = ephy_web_view_get_status_message (view);
-
-  priv = view->priv;
-
-  ephy_web_view_statusbar_pop (view, priv->tab_message_id);
-
-  if (message)
-    ephy_web_view_statusbar_push (view, priv->tab_message_id, message);
-
-}
-
-static void
 ephy_web_view_dispose (GObject *object)
 {
   ephy_web_view_file_monitor_cancel (EPHY_WEB_VIEW (object));
-
-  g_signal_handlers_disconnect_by_func (object, G_CALLBACK (status_message_notify_cb), NULL);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
@@ -1059,7 +1025,6 @@ static void
 ephy_web_view_finalize (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
-  GSList *list;
 
   if (priv->icon != NULL) {
     g_object_unref (priv->icon);
@@ -1070,26 +1035,6 @@ ephy_web_view_finalize (GObject *object)
     g_regex_unref (priv->non_search_regex);
     priv->non_search_regex = NULL;
   }
-
-  for (list = priv->messages; list; list = list->next) {
-    EphyWebViewStatusbarMsg *msg;
-
-    msg = list->data;
-    g_free (msg->text);
-    g_slice_free (EphyWebViewStatusbarMsg, msg);
-  }
-
-  g_slist_free (priv->messages);
-  priv->messages = NULL;
-
-
-  for (list = priv->keys; list; list = list->next)
-    g_free (list->data);
-
-  g_slist_free (priv->keys);
-  priv->keys = NULL;
-
-  g_free (priv->text);
 
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
 
@@ -2221,9 +2166,6 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
   priv->monitor_directory = FALSE;
-  priv->seq_context_id = 1;
-  priv->seq_message_id = 1;
-  priv->tab_message_id = ephy_web_view_statusbar_get_context_id (web_view, EPHY_WEB_VIEW_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
   priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
                                         "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
@@ -2274,10 +2216,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::vadjustment",
                     G_CALLBACK (vadjustment_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::status-message",
-                    G_CALLBACK (status_message_notify_cb),
                     NULL);
 
   cache = EPHY_FAVICON_CACHE
@@ -3680,125 +3618,4 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   return is_empty;
 }
-
-static void
-ephy_web_view_statusbar_update (EphyWebView *view, const char *text)
-{
-  EphyEmbed *embed;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-
-  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-  /* Inspector window does not have an embed for example */
-  if (embed)
-    _ephy_embed_set_statusbar_label (embed, text);
-}
-
-/* Portions of the following code based on GTK+.
- * License block as follows:
- *
- * GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * GtkStatusbar Copyright (C) 1998 Shawn T. Amundson
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- *
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- *
- */
-
-guint
-ephy_web_view_statusbar_get_context_id (EphyWebView *view, const char  *context_description)
-{
-  char *string;
-  guint id;
-
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
-  g_return_val_if_fail (context_description != NULL, 0);
-
-  /* we need to preserve namespaces on object datas */
-  string = g_strconcat ("ephy-web-view-status-bar-context:", context_description, NULL);
-
-  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (view), string));
-  if (id == 0) {
-    EphyWebViewPrivate *priv = view->priv;
-
-    id = priv->seq_context_id++;
-    g_object_set_data_full (G_OBJECT (view), string, GUINT_TO_POINTER (id), NULL);
-    priv->keys = g_slist_prepend (priv->keys, string);
-  } else
-    g_free (string);
-
-  return id;
-}
-
-guint
-ephy_web_view_statusbar_push (EphyWebView *view, guint context_id, const char *text)
-{
-  EphyWebViewPrivate *priv;
-  EphyWebViewStatusbarMsg *msg;
-
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
-  g_return_val_if_fail (context_id != 0, 0);
-  g_return_val_if_fail (text != NULL, 0);
-
-  priv = view->priv;
-
-  msg = g_slice_new (EphyWebViewStatusbarMsg);
-  msg->text = g_strdup (text);
-  msg->context_id = context_id;
-  msg->message_id = priv->seq_message_id++;
-
-  priv->messages = g_slist_prepend (priv->messages, msg);
-
-  ephy_web_view_statusbar_update (view, text);
-
-  return msg->message_id;
-}
-
-void
-ephy_web_view_statusbar_pop (EphyWebView *view, guint context_id)
-{
-  EphyWebViewPrivate *priv;
-  EphyWebViewStatusbarMsg *msg;
-  GSList *list;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (context_id != 0);
-
-  priv = view->priv;
-
-  for (list = priv->messages; list; list = list->next) {
-    EphyWebViewStatusbarMsg *msg = list->data;
-
-    if (msg->context_id == context_id) {
-      priv->messages = g_slist_remove_link (priv->messages, list);
-      g_free (msg->text);
-      g_slice_free (EphyWebViewStatusbarMsg, msg);
-      g_slist_free_1 (list);
-      break;
-    }
-  }
-
-  msg = priv->messages ? priv->messages->data : NULL;
-  ephy_web_view_statusbar_update (view, msg ? msg->text : NULL);
-}
-
-
 

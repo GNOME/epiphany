@@ -40,6 +40,9 @@ typedef struct _EphyEmbedClass EphyEmbedClass;
 typedef struct _EphyEmbed EphyEmbed;
 typedef struct _EphyEmbedPrivate EphyEmbedPrivate;
 
+#define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
+#define EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
+
 struct _EphyEmbed {
   GtkVBox parent_instance;
 
@@ -51,12 +54,24 @@ struct _EphyEmbedClass {
   GtkVBoxClass parent_class;
 };
 
-GType        ephy_embed_get_type          (void);
-EphyWebView* ephy_embed_get_web_view      (EphyEmbed *embed);
-void         ephy_embed_add_top_widget    (EphyEmbed *embed, GtkWidget *widget, gboolean destroy_on_transition);
-void         ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget);
-void         ephy_embed_auto_download_url (EphyEmbed *embed, const char *url);
-void         _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label);
+GType        ephy_embed_get_type                 (void);
+EphyWebView* ephy_embed_get_web_view             (EphyEmbed  *embed);
+void         ephy_embed_add_top_widget           (EphyEmbed  *embed,
+                                                  GtkWidget  *widget,
+                                                  gboolean    destroy_on_transition);
+void         ephy_embed_remove_top_widget        (EphyEmbed  *embed,
+                                                  GtkWidget  *widget);
+void         ephy_embed_auto_download_url        (EphyEmbed  *embed,
+                                                  const char *url);
+void         _ephy_embed_set_statusbar_label     (EphyEmbed  *embed,
+                                                  const char *label);
+void         ephy_embed_statusbar_pop            (EphyEmbed  *embed,
+                                                  guint       context_id);
+guint        ephy_embed_statusbar_push           (EphyEmbed  *embed,
+                                                  guint       context_id,
+                                                  const char *text);
+guint        ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
+                                                  const char *context_description);
 
 G_END_DECLS
 

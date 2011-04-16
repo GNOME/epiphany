@@ -59,6 +59,12 @@ static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
+typedef struct {
+  gchar *text;
+  guint context_id;
+  guint message_id;
+} EphyEmbedStatusbarMsg;
+
 struct _EphyEmbedPrivate
 {
   GtkBox *top_widgets_vbox;
@@ -73,6 +79,14 @@ struct _EphyEmbedPrivate
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
   GtkWidget *statusbar_label;
+
+  GSList *messages;
+  GSList *keys;
+
+  guint seq_context_id;
+  guint seq_message_id;
+
+  guint tab_message_id;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
@@ -275,6 +289,23 @@ ephy_embed_finalize (GObject *object)
                                         ephy_embed_history_cleared_cb,
                                         embed);
 
+  for (list = embed->priv->messages; list; list = list->next) {
+    EphyEmbedStatusbarMsg *msg;
+
+    msg = list->data;
+    g_free (msg->text);
+    g_slice_free (EphyEmbedStatusbarMsg, msg);
+  }
+
+  g_slist_free (embed->priv->messages);
+  embed->priv->messages = NULL;
+
+  for (list = embed->priv->keys; list; list = list->next)
+    g_free (list->data);
+
+  g_slist_free (embed->priv->keys);
+  embed->priv->keys = NULL;
+
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
 
@@ -390,9 +421,6 @@ download_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
-/* FIXME: it probably makes sense to move this stuff completely into
- * EphyEmbed now, since it's not an integral part of EphyWebView
- * anymore. */
 void
 _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 {
@@ -409,6 +437,22 @@ _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
     gtk_widget_hide (parent);
   else
     gtk_widget_show (parent);
+}
+
+static void
+status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
+{
+  const char *message;
+  EphyEmbedPrivate *priv;
+
+  message = ephy_web_view_get_status_message (view);
+
+  priv = embed->priv;
+
+  ephy_embed_statusbar_pop (embed, priv->tab_message_id);
+
+  if (message)
+    ephy_embed_statusbar_push (embed, priv->tab_message_id, message);
 }
 
 static void
@@ -476,6 +520,7 @@ ephy_embed_constructed (GObject *object)
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
+                    "signal::notify::status-message", G_CALLBACK (status_message_notify_cb), embed,
                     NULL);
 
   /* The inspector */
@@ -530,6 +575,9 @@ ephy_embed_init (EphyEmbed *embed)
   embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
   embed->priv->paned = GTK_PANED (gtk_vpaned_new ());
   embed->priv->top_widgets_vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
+  embed->priv->seq_context_id = 1;
+  embed->priv->seq_message_id = 1;
+  embed->priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
   gtk_scrolled_window_set_policy (embed->priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -601,4 +649,118 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
 
   gtk_container_remove (GTK_CONTAINER (embed->priv->top_widgets_vbox),
                         GTK_WIDGET (widget));
+}
+
+static void
+ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
+{
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+
+  _ephy_embed_set_statusbar_label (embed, text);
+}
+
+/* Portions of the following code based on GTK+.
+ * License block as follows:
+ *
+ * GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * GtkStatusbar Copyright (C) 1998 Shawn T. Amundson
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ *
+ */
+
+guint
+ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_description)
+{
+  char *string;
+  guint id;
+
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), 0);
+  g_return_val_if_fail (context_description != NULL, 0);
+
+  /* we need to preserve namespaces on object datas */
+  string = g_strconcat ("ephy-embed-status-bar-context:", context_description, NULL);
+
+  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (embed), string));
+  if (id == 0) {
+    EphyEmbedPrivate *priv = embed->priv;
+
+    id = priv->seq_context_id++;
+    g_object_set_data_full (G_OBJECT (embed), string, GUINT_TO_POINTER (id), NULL);
+    priv->keys = g_slist_prepend (priv->keys, string);
+  } else
+    g_free (string);
+
+  return id;
+}
+
+guint
+ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
+{
+  EphyEmbedPrivate *priv;
+  EphyEmbedStatusbarMsg *msg;
+
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), 0);
+  g_return_val_if_fail (context_id != 0, 0);
+  g_return_val_if_fail (text != NULL, 0);
+
+  priv = embed->priv;
+
+  msg = g_slice_new (EphyEmbedStatusbarMsg);
+  msg->text = g_strdup (text);
+  msg->context_id = context_id;
+  msg->message_id = priv->seq_message_id++;
+
+  priv->messages = g_slist_prepend (priv->messages, msg);
+
+  ephy_embed_statusbar_update (embed, text);
+
+  return msg->message_id;
+}
+
+void
+ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
+{
+  EphyEmbedPrivate *priv;
+  EphyEmbedStatusbarMsg *msg;
+  GSList *list;
+
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_return_if_fail (context_id != 0);
+
+  priv = embed->priv;
+
+  for (list = priv->messages; list; list = list->next) {
+    EphyEmbedStatusbarMsg *msg = list->data;
+
+    if (msg->context_id == context_id) {
+      priv->messages = g_slist_remove_link (priv->messages, list);
+      g_free (msg->text);
+      g_slice_free (EphyEmbedStatusbarMsg, msg);
+      g_slist_free_1 (list);
+      break;
+    }
+  }
+
+  msg = priv->messages ? priv->messages->data : NULL;
+  ephy_embed_statusbar_update (embed, msg ? msg->text : NULL);
 }

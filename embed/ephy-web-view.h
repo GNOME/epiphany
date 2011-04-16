@@ -45,9 +45,6 @@ typedef struct _EphyWebViewClass  EphyWebViewClass;
 typedef struct _EphyWebView    EphyWebView;
 typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
 
-#define EPHY_WEB_VIEW_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
-#define EPHY_WEB_VIEW_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
-
 typedef enum
 {
 	EPHY_WEB_VIEW_NAV_UP		= 1 << 0,
@@ -196,13 +193,7 @@ void                       ephy_web_view_popups_manager_reset     (EphyWebView  
 void                       ephy_web_view_save                     (EphyWebView               *view,
                                                                    const char                *uri);
 gboolean                   ephy_web_view_load_homepage            (EphyWebView               *view);
-void                       ephy_web_view_statusbar_pop            (EphyWebView               *view,
-                                                                   guint                      context_id);
-guint                      ephy_web_view_statusbar_push           (EphyWebView               *view,
-                                                                   guint                      context_id,
-                                                                   const char                *text);
-guint                      ephy_web_view_statusbar_get_context_id (EphyWebView               *view,
-                                                                   const char                *context_description);
+
 G_END_DECLS
 
 #endif
