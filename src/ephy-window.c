@@ -2424,18 +2424,23 @@ web_view_ready_cb (WebKitWebView *web_view,
 			      "menubar-visible", &menubar_visible,
 			      NULL);
 
-		gtk_window_set_default_size (GTK_WINDOW (window), width, height);
-
 		if (!toolbar_visible)
 			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
 
 		if (!menubar_visible)
 			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
 
-		window->priv->chrome = chrome_mask;
 
-		update_chromes_actions (window);
-		sync_chromes_visibility (window);
+		/* We will consider windows with different chrome settings popups. */
+		if (chrome_mask != window->priv->chrome) {
+			gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+
+			window->priv->is_popup = TRUE;
+			window->priv->chrome = chrome_mask;
+
+			update_chromes_actions (window);
+			sync_chromes_visibility (window);
+		}
 
 		g_signal_emit_by_name (parent_web_view, "new-window", web_view);
 	}
