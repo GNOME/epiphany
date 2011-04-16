@@ -456,6 +456,35 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
 }
 
 static void
+window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, EphyEmbed *embed)
+{
+  GtkWidget *window;
+  gboolean is_popup;
+  const char *property_name;
+  int width, height;
+
+  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+  if (!window || !gtk_widget_is_toplevel (window))
+    return;
+
+  g_object_get (window, "is-popup", &is_popup, NULL);
+  if (!is_popup)
+    return;
+
+  property_name = g_param_spec_get_name (pspec);
+
+  if (g_str_equal (property_name, "x") || g_str_equal (property_name, "y")) {
+    int x, y;
+    g_object_get (features, "x", &x, "y", &y, NULL);
+    gtk_window_move (GTK_WINDOW (window), x, y);
+    return;
+  }
+
+  g_object_get (features, "width", &width, "height", &height, NULL);
+  gtk_window_resize (GTK_WINDOW (window), width, height);
+}
+
+static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
@@ -463,6 +492,7 @@ ephy_embed_constructed (GObject *object)
   GtkWidget *scrolled_window;
   GtkWidget *paned;
   WebKitWebView *web_view;
+  WebKitWebWindowFeatures *window_features;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
   GtkWidget *frame;
@@ -521,6 +551,15 @@ ephy_embed_constructed (GObject *object)
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     "signal::notify::status-message", G_CALLBACK (status_message_notify_cb), embed,
+                    NULL);
+
+  /* Window features */
+  window_features = webkit_web_view_get_window_features (web_view);
+  g_object_connect (window_features,
+                    "signal::notify::x", G_CALLBACK (window_resize_requested), embed,
+                    "signal::notify::y", G_CALLBACK (window_resize_requested), embed,
+                    "signal::notify::width", G_CALLBACK (window_resize_requested), embed,
+                    "signal::notify::height", G_CALLBACK (window_resize_requested), embed,
                     NULL);
 
   /* The inspector */
