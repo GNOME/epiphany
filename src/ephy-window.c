@@ -3925,8 +3925,12 @@ ephy_window_show (GtkWidget *widget)
 		ephy_tab_get_size (embed, &width, &height);
 		if (width == -1 && height == -1)
 		{
+			int flags = 0;
+			if (!priv->is_popup)
+				flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+
 			ephy_state_add_window (widget, "main_window", 600, 500,
-					       TRUE, EPHY_STATE_WINDOW_SAVE_SIZE);
+					       TRUE, flags);
 		}
 
 		priv->has_size = TRUE;
