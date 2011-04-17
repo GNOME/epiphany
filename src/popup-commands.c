@@ -78,7 +78,8 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 	ephy_shell_new_tab (ephy_shell, window, embed,
 			    g_value_get_string (&value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			    EPHY_NEW_TAB_APPEND_AFTER);
 	g_value_unset (&value);
 }
 
