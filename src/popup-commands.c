@@ -222,7 +222,6 @@ save_property_url (GtkAction *action,
 
 	download = ephy_download_new_for_uri (location);
 	ephy_download_set_window (download, GTK_WIDGET (window));
-	g_value_unset (&value);
 
 	if (ask_dest)
 	{
@@ -250,6 +249,8 @@ save_property_url (GtkAction *action,
 		ephy_download_set_auto_destination (download);
 		ephy_download_start (download);
 	}
+
+	g_value_unset (&value);
 }
 
 void
