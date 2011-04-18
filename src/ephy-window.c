@@ -3488,7 +3488,7 @@ ephy_window_open_link (EphyLink *link,
 		}
 		else
 		{
-			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
 		}
 
 		new_embed = ephy_shell_new_tab
