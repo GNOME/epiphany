@@ -62,6 +62,9 @@ void		 gedit_overlay_add			(GeditOverlay             *overlay,
 							 GeditOverlayChildPosition position,
 							 guint                     offset);
 
+void             gedit_overlay_set_composited           (GeditOverlay             *overlay,
+                                                         gboolean                  enabled);
+
 G_END_DECLS
 
 #endif /* __GEDIT_OVERLAY_H__ */

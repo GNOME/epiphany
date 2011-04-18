@@ -26,6 +26,12 @@
 
 #define GEDIT_OVERLAY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GEDIT_TYPE_OVERLAY, GeditOverlayPrivate))
 
+typedef struct
+{
+	GtkWidget *child;
+	GtkWidget *original;
+} ChildContainer;
+
 struct _GeditOverlayPrivate
 {
 	GtkWidget *main_widget;
@@ -42,14 +48,62 @@ enum
 
 G_DEFINE_TYPE (GeditOverlay, gedit_overlay, GTK_TYPE_CONTAINER)
 
+static ChildContainer *
+child_container_new (GtkWidget *child,
+                     GtkWidget *original)
+{
+	ChildContainer *ret;
+
+	ret = g_slice_new (ChildContainer);
+	ret->child = child;
+	ret->original = original;
+
+	return ret;
+}
+
+static void
+child_container_free (ChildContainer *container)
+{
+	g_slice_free (ChildContainer, container);
+}
+
+static GtkWidget *
+child_container_get_child (ChildContainer *container)
+{
+	GtkWidget *child;
+
+	if (container->child != NULL)
+	{
+		child = container->child;
+	}
+	else
+	{
+		child = container->original;
+	}
+
+	return child;
+}
+
 static void
 add_toplevel_widget (GeditOverlay *overlay,
-                     GtkWidget    *child)
+                     GtkWidget    *child,
+                     GtkWidget    *original)
 {
-	gtk_widget_set_parent (child, GTK_WIDGET (overlay));
+	ChildContainer *container;
+
+	if (child != NULL)
+	{
+		gtk_widget_set_parent (child, GTK_WIDGET (overlay));
+	}
+	else
+	{
+		gtk_widget_set_parent (original, GTK_WIDGET (overlay));
+	}
+
+	container = child_container_new (child, original);
 
 	overlay->priv->children = g_slist_append (overlay->priv->children,
-	                                          child);
+	                                          container);
 }
 
 static void
@@ -83,6 +137,27 @@ gedit_overlay_get_property (GObject    *object,
 	}
 }
 
+static GtkWidget *
+wrap_child_if_needed (GtkWidget *widget)
+{
+	GtkWidget *child;
+
+	if (GEDIT_IS_OVERLAY_CHILD (widget))
+	{
+		return widget;
+	}
+
+	child = GTK_WIDGET (gedit_overlay_child_new (widget));
+	gtk_widget_show (child);
+
+	g_signal_connect_swapped (widget,
+	                          "destroy",
+	                          G_CALLBACK (gtk_widget_destroy),
+	                          child);
+
+	return child;
+}
+
 static void
 gedit_overlay_set_property (GObject      *object,
                             guint         prop_id,
@@ -95,10 +170,14 @@ gedit_overlay_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_MAIN_WIDGET:
+		{
 			priv->main_widget = g_value_get_object (value);
-			add_toplevel_widget (overlay, priv->main_widget);
-			break;
 
+			add_toplevel_widget (overlay,
+			                     NULL,
+			                     priv->main_widget);
+			break;
+		}
 		case PROP_RELATIVE_WIDGET:
 			priv->relative_widget = g_value_get_object (value);
 			break;
@@ -132,7 +211,7 @@ gedit_overlay_realize (GtkWidget *widget)
 	attributes.event_mask = gtk_widget_get_events (widget);
 	attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
 
-	attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+	attributes_mask = GDK_WA_X | GDK_WA_Y;
 
 	window = gdk_window_new (gtk_widget_get_parent_window (widget),
 	                         &attributes, attributes_mask);
@@ -203,15 +282,18 @@ gedit_overlay_size_allocate (GtkWidget     *widget,
 
 	for (l = priv->children; l != NULL; l = g_slist_next (l))
 	{
-		GtkWidget *child = GTK_WIDGET (l->data);
+		ChildContainer *container = l->data;
+		GtkWidget *child;
 		GtkRequisition req;
 		GtkAllocation alloc;
 		guint offset;
 
+		child = child_container_get_child (container);
+
 		if (child == priv->main_widget)
 			continue;
 
-		gtk_widget_get_preferred_size (child, &req, NULL);
+		gtk_widget_get_preferred_size (child, NULL, &req);
 		offset = gedit_overlay_child_get_offset (GEDIT_OVERLAY_CHILD (child));
 
 		/* FIXME: Add all the positions here */
@@ -219,7 +301,7 @@ gedit_overlay_size_allocate (GtkWidget     *widget,
 		{
 			/* The gravity is treated as position and not as a gravity */
 			case GEDIT_OVERLAY_CHILD_POSITION_NORTH_EAST:
-				alloc.x = main_alloc.width - req.width - offset;
+				alloc.x = MAX (main_alloc.x, main_alloc.width - req.width - (gint) offset);
 				alloc.y = 0;
 				break;
 			case GEDIT_OVERLAY_CHILD_POSITION_NORTH_WEST:
@@ -228,19 +310,19 @@ gedit_overlay_size_allocate (GtkWidget     *widget,
 				break;
 			case GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST:
 				alloc.x = offset;
-				alloc.y = main_alloc.height - req.height;
+				alloc.y = MAX (main_alloc.y, main_alloc.height - req.height);
 				break;
 			case GEDIT_OVERLAY_CHILD_POSITION_SOUTH_EAST:
-				alloc.x = main_alloc.width - req.width - offset;
-				alloc.y = main_alloc.height - req.height;
+				alloc.x = MAX (main_alloc.x, main_alloc.width - req.width - (gint) offset);
+				alloc.y = MAX (main_alloc.y, main_alloc.height - req.height);
 				break;
 			default:
 				alloc.x = 0;
 				alloc.y = 0;
 		}
 
-		alloc.width = req.width;
-		alloc.height = req.height;
+		alloc.width = MIN (main_alloc.width, req.width);
+		alloc.height = MIN (main_alloc.height, req.height);
 
 		gtk_widget_size_allocate (child, &alloc);
 	}
@@ -250,43 +332,20 @@ static GeditOverlayChild *
 get_overlay_child (GeditOverlay *overlay,
                    GtkWidget    *widget)
 {
-	GeditOverlayChild *overlay_child = NULL;
 	GSList *l;
 
 	for (l = overlay->priv->children; l != NULL; l = g_slist_next (l))
 	{
-		GtkWidget *child = GTK_WIDGET (l->data);
+		ChildContainer *container = l->data;
 
-		/* skip the main widget as it is not a OverlayChild */
-		if (child == overlay->priv->main_widget)
-			continue;
-
-		if (child == widget)
+		if (container->original == widget &&
+		    GEDIT_IS_OVERLAY_CHILD (container->child))
 		{
-			overlay_child = GEDIT_OVERLAY_CHILD (child);
-			break;
-		}
-		else
-		{
-			GtkWidget *in_widget;
-
-			/* let's try also with the internal widget */
-			g_object_get (child, "widget", &in_widget, NULL);
-			g_assert (in_widget != NULL);
-
-			if (in_widget == widget)
-			{
-				overlay_child = GEDIT_OVERLAY_CHILD (child);
-				g_object_unref (in_widget);
-
-				break;
-			}
-
-			g_object_unref (in_widget);
+			return GEDIT_OVERLAY_CHILD (container->child);
 		}
 	}
 
-	return overlay_child;
+	return NULL;
 }
 
 static void
@@ -300,20 +359,9 @@ overlay_add (GtkContainer *overlay,
 
 	if (child == NULL)
 	{
-		if (GEDIT_IS_OVERLAY_CHILD (widget))
-		{
-			child = GEDIT_OVERLAY_CHILD (widget);
-		}
-		else
-		{
-			child = gedit_overlay_child_new (widget);
-			gtk_widget_show (GTK_WIDGET (child));
-
-			g_signal_connect_swapped (widget, "destroy",
-			                          G_CALLBACK (gtk_widget_destroy), child);
-		}
-
-		add_toplevel_widget (GEDIT_OVERLAY (overlay), GTK_WIDGET (child));
+		add_toplevel_widget (GEDIT_OVERLAY (overlay),
+		                     wrap_child_if_needed (widget),
+		                     widget);
 	}
 }
 
@@ -326,15 +374,27 @@ gedit_overlay_remove (GtkContainer *overlay,
 
 	for (l = priv->children; l != NULL; l = g_slist_next (l))
 	{
-		GtkWidget *child = l->data;
+		ChildContainer *container = l->data;
+		GtkWidget *original = container->original;
 
-		if (child == widget)
+		if (original == widget)
 		{
 			gtk_widget_unparent (widget);
-			priv->children = g_slist_remove_link (priv->children,
+
+			if (container->child != NULL &&
+			    original != container->child)
+			{
+				g_signal_handlers_disconnect_by_func (original,
+				                                      gtk_widget_destroy,
+				                                      container->child);
+
+				gtk_widget_destroy (container->child);
+			}
+
+			child_container_free (container);
+			priv->children = g_slist_delete_link (priv->children,
 			                                      l);
 
-			g_slist_free (l);
 			break;
 		}
 	}
@@ -350,10 +410,14 @@ gedit_overlay_forall (GtkContainer *overlay,
 	GSList *children;
 
 	children = priv->children;
+
 	while (children)
 	{
-		GtkWidget *child = GTK_WIDGET (children->data);
+		ChildContainer *container = children->data;
 		children = children->next;
+		GtkWidget *child;
+
+		child = child_container_get_child (container);
 
 		(* callback) (child, callback_data);
 	}
@@ -364,7 +428,6 @@ gedit_overlay_child_type (GtkContainer *overlay)
 {
 	return GTK_TYPE_WIDGET;
 }
-
 
 static void
 gedit_overlay_class_init (GeditOverlayClass *klass)
@@ -402,7 +465,6 @@ gedit_overlay_class_init (GeditOverlayClass *klass)
 	                                                      "Widget on which the floating widgets are placed",
 	                                                      GTK_TYPE_WIDGET,
 	                                                      G_PARAM_READWRITE |
-	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (GeditOverlayPrivate));
@@ -412,6 +474,8 @@ static void
 gedit_overlay_init (GeditOverlay *overlay)
 {
 	overlay->priv = GEDIT_OVERLAY_GET_PRIVATE (overlay);
+
+	gtk_widget_set_app_paintable (GTK_WIDGET (overlay), TRUE);
 }
 
 /**
