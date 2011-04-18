@@ -92,6 +92,8 @@ static void notebook_switch_page_cb		(GtkNotebook *notebook,
 						 EphyWindow *window);
 static void ephy_window_view_toolbar_cb         (GtkAction *action,
 						 EphyWindow *window);
+static void ephy_window_view_menubar_cb         (GtkAction *action,
+						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
 static void sync_tab_load_status		(EphyWebView *view,
@@ -283,6 +285,10 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL,
 	  N_("Show the active downloads for this window"),
 	  NULL, FALSE },
+
+	{ "HideMenubar", NULL, N_("Hide Men_ubar"), NULL,
+	  NULL,
+	  G_CALLBACK (ephy_window_view_menubar_cb), FALSE },
 	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
@@ -1448,7 +1454,8 @@ update_chromes_actions (EphyWindow *window)
 	GtkAction *action;
 	gboolean show_menubar, show_toolbar, show_tabsbar;
 
-	get_chromes_visibility (window, &show_menubar,
+	get_chromes_visibility (window,
+				&show_menubar,
 				&show_toolbar,
 				&show_tabsbar);
 
@@ -1459,6 +1466,15 @@ update_chromes_actions (EphyWindow *window)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !show_toolbar);
 	g_signal_handlers_unblock_by_func (G_OBJECT (action),
 		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
+		 			   window);
+
+	action = gtk_action_group_get_action (action_group, "HideMenubar");
+	g_signal_handlers_block_by_func (G_OBJECT (action),
+		 			 G_CALLBACK (ephy_window_view_menubar_cb),
+		 			 window);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !show_menubar);
+	g_signal_handlers_unblock_by_func (G_OBJECT (action),
+		 			   G_CALLBACK (ephy_window_view_menubar_cb),
 		 			   window);
 }
 
@@ -4014,6 +4030,10 @@ sync_prefs_with_chrome (EphyWindow *window)
 		g_settings_set_boolean (EPHY_SETTINGS_UI,
 					EPHY_PREFS_UI_SHOW_TOOLBARS,
 				        flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
+
+		g_settings_set_boolean (EPHY_SETTINGS_LOCKDOWN,
+					EPHY_PREFS_LOCKDOWN_MENUBAR,
+				        !(flags & EPHY_WEB_VIEW_CHROME_MENUBAR));
 	}
 }
 
@@ -4040,6 +4060,14 @@ ephy_window_view_toolbar_cb (GtkAction *action,
 {
 	sync_chrome_with_view_toggle (action, window,
 				      EPHY_WEB_VIEW_CHROME_TOOLBAR, TRUE);
+}
+
+static void
+ephy_window_view_menubar_cb (GtkAction *action,
+			     EphyWindow *window)
+{
+	sync_chrome_with_view_toggle (action, window,
+				      EPHY_WEB_VIEW_CHROME_MENUBAR, TRUE);
 }
 
 static void
