@@ -22,7 +22,9 @@ libephywidgets_la_SOURCES = \
 	gedit-overlay.c				\
 	gedit-overlay.h				\
 	gedit-overlay-child.c			\
-	gedit-overlay-child.h
+	gedit-overlay-child.h			\
+	ephy-overlay-escaping-child.c		\
+	ephy-overlay-escaping-child.h
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\

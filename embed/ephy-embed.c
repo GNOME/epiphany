@@ -43,6 +43,7 @@
 #include "ephy-string.h"
 #include "ephy-web-view.h"
 #include "gedit-overlay.h"
+#include "ephy-overlay-escaping-child.h"
 
 #include <errno.h>
 #include <glib/gi18n.h>
@@ -495,6 +496,7 @@ ephy_embed_constructed (GObject *object)
   WebKitWebWindowFeatures *window_features;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
+  EphyOverlayEscapingChild *escaping_child;
   GtkWidget *frame;
   GtkCssProvider *provider;
   GtkStyleContext *context;
@@ -525,7 +527,10 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show (frame);
     
   gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
-  gedit_overlay_add (GEDIT_OVERLAY (overlay), frame, GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST, 0);
+  escaping_child = ephy_overlay_escaping_child_new (frame);
+  gedit_overlay_add (GEDIT_OVERLAY (overlay),
+                     GTK_WIDGET (escaping_child),
+                     GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST, 0);
 
   paned = GTK_WIDGET (embed->priv->paned);
 
