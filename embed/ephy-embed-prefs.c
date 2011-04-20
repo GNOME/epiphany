@@ -329,10 +329,8 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
                                            gpointer data)
 {
   SoupSession *session;
-  char *webkit_pref;
   char *value = NULL;
 
-  webkit_pref = data;
   value = g_settings_get_string (settings, key);
 
   if (value) {

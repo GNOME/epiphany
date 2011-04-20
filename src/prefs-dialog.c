@@ -223,7 +223,7 @@ create_node_combo (EphyDialog *dialog,
 	GtkComboBox *combo;
 	GtkCellRenderer *renderer;
 	char *code;
-	int title_col, data_col;
+	int title_col;
 
 	code = g_settings_get_string (EPHY_SETTINGS_WEB,
 				      EPHY_PREFS_WEB_DEFAULT_ENCODING);
@@ -243,8 +243,6 @@ create_node_combo (EphyDialog *dialog,
 
 	title_col = ephy_tree_model_node_add_prop_column
 			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
-	data_col = ephy_tree_model_node_add_prop_column
-			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_ENCODING);
 
 	sortmodel = ephy_tree_model_sort_new (GTK_TREE_MODEL (nodemodel));
 

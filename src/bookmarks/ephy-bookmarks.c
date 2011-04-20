@@ -119,10 +119,7 @@ static char *impl_resolve_address	(EphyBookmarks*, const char*, const char*);
 static void ephy_local_bookmarks_start_client (EphyBookmarks *bookmarks);
 #endif
 
-G_DEFINE_TYPE_WITH_CODE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT,
-			 volatile GType flags_type; /* work around gcc's optimiser */
-			 /* make sure the flags type is known */
-		      	 flags_type = EPHY_TYPE_BOOKMARK_PROPERTY;)
+G_DEFINE_TYPE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT)
 
 static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)

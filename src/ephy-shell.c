@@ -685,11 +685,8 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 static void
 toolwindow_show_cb (GtkWidget *widget, EphyShell *es)
 {
-	EphySession *session;
-
 	LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget));
 
-	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
 	g_object_ref (ephy_shell);
 }
@@ -697,11 +694,8 @@ toolwindow_show_cb (GtkWidget *widget, EphyShell *es)
 static void
 toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 {
-	EphySession *session;
-
 	LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget));
 
-	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
 	g_object_unref (ephy_shell);
 }

@@ -148,7 +148,6 @@ decide_action_from_mime (EphyDownload *ephy_download)
   SoupMessage *message;
   char *mime_description = NULL;
   GAppInfo *helper_app = NULL;
-  EphyMimePermission mime_permission = EPHY_MIME_PERMISSION_SAFE;
   EphyDownloadActionType action;
   WebKitDownload *download;
 
@@ -163,7 +162,6 @@ decide_action_from_mime (EphyDownload *ephy_download)
     if (content_type) {
       mime_description = g_content_type_get_description (content_type);
       helper_app = g_app_info_get_default_for_type (content_type, FALSE);
-      mime_permission = ephy_file_check_mime (content_type);
 
       if (helper_app)
         action = EPHY_DOWNLOAD_ACTION_OPEN;

@@ -89,7 +89,6 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
   GtkPaperSize *paper_size = NULL;
   gdouble width, height, top, bottom, left, right;
   char *name = NULL, *ppd_name = NULL, *display_name = NULL, *orientation = NULL;
-  gboolean retval = TRUE;
   GError *err = NULL;
 
   g_return_val_if_fail (key_file != NULL, NULL);
@@ -97,7 +96,6 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
   if (!g_key_file_has_group (key_file, PAGE_SETUP_GROUP) ||
       !g_key_file_has_group (key_file, PAPER_SIZE_GROUP)) {
     g_set_error (error, ERROR_QUARK, 0, "Not a valid epiphany page setup file");
-    retval = FALSE;
     goto out;
   }
 
@@ -105,7 +103,6 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
 v = g_key_file_get_double (kf, group, name, &err); \
 if (err != NULL) {\
   g_propagate_error (error, err);\
-  retval = FALSE;\
   goto out;\
 }
 
@@ -130,7 +127,6 @@ if (err != NULL) {\
   if ((ppd_name == NULL && name == NULL) || orientation == NULL)
     {
       g_set_error (error, ERROR_QUARK, 0, "Not a valid epiphany page setup file");
-      retval = FALSE;
       goto out;
     }
 

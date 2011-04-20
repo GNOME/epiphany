@@ -1605,11 +1605,7 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 				   int base_drag_column_id,
 				   int extra_drag_column_id)
 {
-	GtkWidget *treeview;
-
 	g_return_if_fail (view != NULL);
-
-	treeview = GTK_WIDGET (view);
 
 	view->priv->source_target_list =
 		gtk_target_list_new (types, n_types);

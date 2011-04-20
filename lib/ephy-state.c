@@ -103,11 +103,7 @@ ensure_states (void)
 {
 	if (states == NULL)
 	{
-		volatile GType flags_type; /* work around gcc's optimiser */
 		char *xml_file;
-
-		/* make sure the type is known when we read the db */
-		flags_type = EPHY_TYPE_STATE_WINDOW_FLAGS;
 
 		xml_file = g_build_filename (ephy_dot_dir (),
 					     EPHY_STATES_XML_FILE,

@@ -173,10 +173,8 @@ static void
 ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 {
 	GObjectClass *object_class;
-	GtkToolItemClass *tool_item_class;
 
 	object_class = (GObjectClass *)klass;
-	tool_item_class = (GtkToolItemClass *)klass;
 
 	object_class->set_property = ephy_zoom_control_set_property;
 	object_class->get_property = ephy_zoom_control_get_property;

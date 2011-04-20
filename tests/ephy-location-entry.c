@@ -50,13 +50,10 @@ static void
 test_entry_set_location (void)
 {
   const char *set = "test";
-  const char *null;
   const char *get;
 
   EphyLocationEntry *entry;
   entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
-
-  null = ephy_location_entry_get_location (entry);
 
   ephy_location_entry_set_location (entry, set);
   get = ephy_location_entry_get_location (entry);

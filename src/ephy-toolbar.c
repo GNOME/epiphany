@@ -585,9 +585,7 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 static void
 ephy_toolbar_init (EphyToolbar *toolbar)
 {
-	EphyToolbarPrivate *priv;
-
-	priv = toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
+	toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
 
 	egg_editable_toolbar_set_primary_class (EGG_EDITABLE_TOOLBAR (toolbar), TRUE, NULL);
 }
