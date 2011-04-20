@@ -244,6 +244,9 @@ create_node_combo (EphyDialog *dialog,
 	title_col = ephy_tree_model_node_add_prop_column
 			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
 
+	ephy_tree_model_node_add_prop_column
+		(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_ENCODING);
+
 	sortmodel = ephy_tree_model_sort_new (GTK_TREE_MODEL (nodemodel));
 
 	gtk_tree_sortable_set_sort_column_id
