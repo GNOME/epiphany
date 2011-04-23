@@ -298,6 +298,7 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 
   g_strfreev (languages);
   g_free (langs_str);
+  g_array_free (array, TRUE);
 }
 
 void
@@ -338,8 +339,10 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
 
     session = webkit_get_default_session ();
     jar = soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
-    if (!jar)
+    if (!jar) {
+      g_free (value);
       return;
+    }
     
     ephy_embed_prefs_set_cookie_jar_policy (SOUP_COOKIE_JAR (jar), value);
   }
