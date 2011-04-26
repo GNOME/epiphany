@@ -1,5 +1,5 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *
  * Copyright © 2011 Igalia S.L.
  *
  * This library is free software; you can redistribute it and/or
@@ -184,10 +184,15 @@ ephy_overlay_escaping_child_motion_notify_event (GtkWidget *widget,
 static void
 ephy_overlay_escaping_child_realize (GtkWidget *widget)
 {
+  GdkWindow *window;
+  GdkEventMask events;
+
   GTK_WIDGET_CLASS (ephy_overlay_escaping_child_parent_class)->realize (widget);
-  GdkWindow *window = gtk_widget_get_window (widget);
-  GdkEventMask events = gdk_window_get_events (window);
+
+  window = gtk_widget_get_window (widget);
+  events = gdk_window_get_events (window);
   events |= GDK_POINTER_MOTION_MASK;
+
   gdk_window_set_events (window, events);
 }
 
