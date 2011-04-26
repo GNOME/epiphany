@@ -486,13 +486,11 @@ query_tooltip_cb (GtkWidget *proxy,
 		  GtkTooltip *tooltip,
 		  GtkAction *action)
 {
-	EphyBookmarks *bookmarks;
 	EphyNode *node;
 	const char *title, *location;
 	char *text = NULL;
 	
 	node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 	location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 	
