@@ -139,7 +139,7 @@ ephy_link_flags_from_current_event (void)
 		}
 		else if (state == 0 || state == GDK_CONTROL_MASK)
 		{
-			flags = EPHY_LINK_NEW_TAB;
+			flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
 		}
 	}
 	else
@@ -150,7 +150,7 @@ ephy_link_flags_from_current_event (void)
 		}
 		else if (state == GDK_CONTROL_MASK)
 		{
-			flags = EPHY_LINK_NEW_TAB;
+			flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
 		}
 	}
 
