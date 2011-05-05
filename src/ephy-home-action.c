@@ -168,6 +168,7 @@ ephy_home_action_activate (GtkAction *action)
 	action_name_association (action, action_name, address, FALSE);
 
 	g_free (address);
+	g_free (action_name);
 }
 
 static void
