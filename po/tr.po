@@ -5,19 +5,21 @@
 # Erçin EKER <ercin.eker@linux.org.tr>, 2003, 2004, 2005.
 # Görkem Çetin <gorkem@kde.org>, 2004.
 # Baris Cicek <baris@teamforce.name.tr>, 2004, 2005, 2006, 2008, 2009.
+# Muhammet Kara <muhammet.k@gmail.com>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2009-09-09 23:48+0300\n"
-"PO-Revision-Date: 2009-09-09 23:48+0300\n"
-"Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
+"product=epiphany&component=general\n"
+"POT-Creation-Date: 2010-08-30 21:00+0000\n"
+"PO-Revision-Date: 2011-05-05 18:39+0300\n"
+"Last-Translator: Muhammet Kara <muhammet.k@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -63,7 +65,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany Web Tarayıcı"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:648
 msgid "Web Browser"
 msgstr "Web Tarayıcı"
 
@@ -205,40 +207,41 @@ msgstr "Öntanımlı kodlama"
 #: ../data/epiphany.schemas.in.h:11
 msgid ""
 "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
-"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
-"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
-"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
-"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
-"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
-"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
-"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
-"\", \"x-viet-vps\" and \"x-windows-949\"."
-msgstr ""
-"Öntanımlı kodlama. Kabul edilebilir değerler: \"armscii-8\", \"Big5\", "
-"\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8"
-"\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-"\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR"
-"\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-"
-"8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", "
-"\"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-"
-"8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", "
-"\"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-"\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-"
+"GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", "
+"\"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", "
+"\"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
+"\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-"
+"I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", "
+"\"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R"
+"\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII"
+"\", \"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
 "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
 "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
 "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-"
 "mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-"
 "mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-"
 "mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-"\"x-viet-tcvn5712\", \"x-viet-vps\" ve \"x-windows-949\"dur."
+"\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+msgstr ""
+"Öntanımlı kodlama. Kabul edilebilir değerler: \"armscii-8\", \"Big5\", "
+"\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", "
+"\"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+"\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+"\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+"\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+"\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+"\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+"\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+"\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+"\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
+"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
+"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
+"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-"
+"tcvn5712\", \"x-viet-vps\" ve \"x-windows-949\"dur."
 
 #: ../data/epiphany.schemas.in.h:12
 msgid "Default font type"
@@ -249,14 +252,14 @@ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "Öntanımlı yazıtipi. Geçerli değerler \"serif\" ve \"sans-serif\"."
 
 #: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Java'ya İzin Ver"
-
-#: ../data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "JavaScript'i Etkinleştir"
 
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
+#: ../data/epiphany.schemas.in.h:15
+msgid "Enable Plugins"
+msgstr "Eklentileri Etkinleştir"
+
+#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.ui.h:19
 msgid "Enable Web Inspector"
 msgstr "Web İnceleyicisini Etkinleştir"
 
@@ -352,14 +355,18 @@ msgid "Remember passwords"
 msgstr "Parolaları hatırla"
 
 #: ../data/epiphany.schemas.in.h:36
+msgid "Search string for keywords entered in the URL bar."
+msgstr "URL adres çubuğuna girilen anahtar kelimeler için arama dizgesi."
+
+#: ../data/epiphany.schemas.in.h:37
 msgid "Show bookmarks bar by default"
 msgstr "Yer imi çubuğunu öntanımlı olarak göster"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "Show statusbar by default"
 msgstr "Durum çubuğunu öntanımlı olarak göster"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -367,27 +374,35 @@ msgstr ""
 "Önceden ziyaret edilen sayfaları \"ever\", \"last_two_days\", "
 "\"last_three_days\", \"today\" filtrelerine göre göster."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Sekme çubuğunu tek sekme açık olsa bile göster."
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "Show toolbars by default"
 msgstr "Araç çubuklarını öntanımlı olarak göster"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid "Size of disk cache"
 msgstr "Sabit disk önbellek boyutu"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid "Size of disk cache, in MB."
 msgstr "Sabit disk önbellek boyutu, MB olarak."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"Tarayıcıyı web sunucularına tanıtmak için kullanıcı aracı olarak "
+"kullanılacak dizge."
+
+#: ../data/epiphany.schemas.in.h:45
 msgid "The bookmark information shown in the editor view"
 msgstr "Düzenleyici görünümünde gösterilen yer imi bilgileri"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -395,11 +410,11 @@ msgstr ""
 "Düzenleyicide gösterilen yer imi bilgileri. Liste için geçerli değerler "
 "\"address\" ve \"title\"dır."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:47
 msgid "The currently selected fonts language"
 msgstr "Güncel seçili yazıtipi dili"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:48
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -418,15 +433,15 @@ msgstr ""
 "\"x-western\" (latin alfabesi ile yazılan diller), \"x-tamil\" (tamil) ve "
 "\"x-devanagari\" (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:49
 msgid "The downloads folder"
 msgstr "İndirilen dosya klasörü"
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:50
 msgid "The page information shown in the history view"
 msgstr "Geçmiş görünümünde gösterilen sayfa bilgileri"
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
@@ -434,7 +449,7 @@ msgstr ""
 "Geçmiş görünümünde gösterilen sayfa bilgileri. Geçerli değerler sırayla "
 "\"ViewTitle\",  \"ViewAddress\" ve \"ViewDateTime\"dır."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:52
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -443,11 +458,11 @@ msgstr ""
 "klasörünü kullanmak için \"Downloads\", ya da masaüstü klasörünü kullanmak "
 "için \"Desktop\"."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:53
 msgid "Toolbar style"
 msgstr "Araç çubuğu biçemi"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:54
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -457,27 +472,37 @@ msgstr ""
 "kullan), \"both\" (yazı ve simgeler), \"both-horiz\" (simge yanında yazı), "
 "\"icons\" ve \"text\"."
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:55
+#| msgid "_Search:"
+msgid "URL Search"
+msgstr "URL Adresi Arama"
+
+#: ../data/epiphany.schemas.in.h:56
 msgid "Use own colors"
 msgstr "Kendi renklerini kullan"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:57
 msgid "Use own fonts"
 msgstr "Kendi yazıtipini kullan"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:58
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Sayfanın istediği renkler yerine kendi renklerini kullan."
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:59
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Sayfanın istediği yazıtipinin yerine kendi yazıtipini kullan."
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:60
+#| msgid "User Name"
+msgid "User agent"
+msgstr "Kullanıcı aracı"
+
+#: ../data/epiphany.schemas.in.h:61
 msgid "Visibility of the downloads window"
 msgstr "İndirilenler penceresinin görünürlüğü"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -485,7 +510,7 @@ msgstr ""
 "Dosyalar tarayıcı ile açılamadığında, otomatik olarak indirme klasörüne "
 "indirilecek ve uygun bir uygulama ile açılacaklar."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:63
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -493,153 +518,154 @@ msgstr ""
 "Çerezlerin kabul edileceği yerler. Olası değerler \"anywhere\", \"current "
 "site \" ve \"nowhere\"."
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:64
 msgid "Whether to print the background color"
 msgstr "Arka plan renginin yazdırılması"
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:65
 msgid "Whether to print the background images"
 msgstr "Arka plan resimlerinin yazdırılması"
 
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:66
 msgid "Whether to print the date in the footer"
 msgstr "Sayfa altında tarihin yazılması"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:67
 msgid "Whether to print the page address in the header"
 msgstr "Sayfa başında tarihin yazılması"
 
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:68
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Sayfa numaralarının (x / toplam) sayfa sonuna yazılması"
 
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:69
 msgid "Whether to print the page title in the header"
 msgstr "Sayfa başlığının sayfa başında yazdırılması"
 
-#: ../data/epiphany.schemas.in.h:66
+#: ../data/epiphany.schemas.in.h:70
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "Web sitelerinde parolaların saklanması ve yeniden doldurulması"
 
-#: ../data/epiphany.schemas.in.h:67
+#: ../data/epiphany.schemas.in.h:71
 msgid "x-western"
 msgstr "x-western"
 
-#: ../data/glade/certificate-dialogs.glade.h:1
+#: ../data/glade/certificate-dialogs.ui.h:1
 msgid "<b>Fingerprints</b>"
 msgstr "<b>Parmak izleri</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:2
+#: ../data/glade/certificate-dialogs.ui.h:2
 msgid "<b>Issued By</b>"
 msgstr "<b>Sertifika Sağlayıcı</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:3
+#: ../data/glade/certificate-dialogs.ui.h:3
 msgid "<b>Issued To</b>"
 msgstr "<b>Sertifika Sahibi</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:4
+#: ../data/glade/certificate-dialogs.ui.h:4
 msgid "<b>Validity</b>"
 msgstr "<b>Geçerlilik</b>"
 
-#: ../data/glade/certificate-dialogs.glade.h:5
+#: ../data/glade/certificate-dialogs.ui.h:5
 msgid "Certificate _Fields"
 msgstr "Sertifika _Alanları"
 
-#: ../data/glade/certificate-dialogs.glade.h:6
+#: ../data/glade/certificate-dialogs.ui.h:6
 msgid "Certificate _Hierarchy"
 msgstr "Sertifika _Hiyerarşisi"
 
-#: ../data/glade/certificate-dialogs.glade.h:7
+#: ../data/glade/certificate-dialogs.ui.h:7
 msgid "Common Name:"
 msgstr "Genel İsim:"
 
-#: ../data/glade/certificate-dialogs.glade.h:8
+#: ../data/glade/certificate-dialogs.ui.h:8
 msgid "Details"
 msgstr "Ayrıntılar"
 
-#: ../data/glade/certificate-dialogs.glade.h:9
+#: ../data/glade/certificate-dialogs.ui.h:9
 msgid "Expires On:"
 msgstr "Zaman Aşımı:"
 
-#: ../data/glade/certificate-dialogs.glade.h:10
+#: ../data/glade/certificate-dialogs.ui.h:10
 msgid "Field _Value"
 msgstr "Alan _Değeri"
 
-#: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/certificate-dialogs.ui.h:11
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "General"
 msgstr "Genel"
 
-#: ../data/glade/certificate-dialogs.glade.h:12
+#: ../data/glade/certificate-dialogs.ui.h:12
 msgid "Issued On:"
 msgstr "Verilme Tarihi:"
 
-#: ../data/glade/certificate-dialogs.glade.h:13
+#: ../data/glade/certificate-dialogs.ui.h:13
 msgid "MD5 Fingerprint:"
 msgstr "MD5 Parmakizi:"
 
-#: ../data/glade/certificate-dialogs.glade.h:14
+#: ../data/glade/certificate-dialogs.ui.h:14
 msgid "Organization:"
 msgstr "Kurum:"
 
-#: ../data/glade/certificate-dialogs.glade.h:15
+#: ../data/glade/certificate-dialogs.ui.h:15
 msgid "Organizational Unit:"
 msgstr "Kurum Birimi:"
 
-#: ../data/glade/certificate-dialogs.glade.h:16
+#: ../data/glade/certificate-dialogs.ui.h:16
 msgid "SHA1 Fingerprint:"
 msgstr "SHA1 Parmak izi:"
 
-#: ../data/glade/certificate-dialogs.glade.h:17
+#: ../data/glade/certificate-dialogs.ui.h:17
 msgid "Serial Number:"
 msgstr "Seri Numarası:"
 
-#: ../data/glade/epiphany.glade.h:1
+#: ../data/glade/epiphany.ui.h:1
 msgid "<b>_Automatic</b>"
 msgstr "<b>_Otomatik</b>"
 
-#: ../data/glade/epiphany.glade.h:2
+#: ../data/glade/epiphany.ui.h:2
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Farklı bir kodlama kullan:</b>"
 
-#: ../data/glade/epiphany.glade.h:3
+#: ../data/glade/epiphany.ui.h:3
 msgid "Clear _All..."
 msgstr "Tümünü _Temizle..."
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.ui.h:4
 msgid "Cookies"
 msgstr "Çerezler"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.ui.h:5 ../lib/ephy-file-helpers.c:129
+#: ../lib/ephy-file-helpers.c:159 ../src/prefs-dialog.c:914
 msgid "Downloads"
 msgstr "İndirilenler"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.ui.h:6
 msgid "Passwords"
 msgstr "Parolalar"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.ui.h:7
 msgid "Personal Data"
 msgstr "Kişisel Bilgi"
 
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/glade/epiphany.ui.h:8
 msgid "Text Encoding"
 msgstr "Metin Kodlaması"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:9 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Belgenin tanımladığı kodlamayı kullan"
 
-#: ../data/glade/epiphany.glade.h:10
+#: ../data/glade/epiphany.ui.h:10
 msgid "_Show passwords"
 msgstr "_Parolaları göster"
 
-#: ../data/glade/form-signing-dialog.glade.h:1
+#: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
 msgstr "Metni İmzala"
 
-#: ../data/glade/form-signing-dialog.glade.h:2
+#: ../data/glade/form-signing-dialog.ui.h:2
 msgid ""
 "To confirm that you want to sign the above text, choose a certificate to "
 "sign the text with and enter its password below."
@@ -647,72 +673,73 @@ msgstr ""
 "Yukarıdaki metni imzalamayı onaylamak için, metni imzalayacağınız bir "
 "sertifika seçin ve parolasını aşağıya yazın."
 
-#: ../data/glade/form-signing-dialog.glade.h:3
+#: ../data/glade/form-signing-dialog.ui.h:3
 msgid "_Certificate:"
 msgstr "_Sertifika:"
 
-#: ../data/glade/form-signing-dialog.glade.h:4
+#: ../data/glade/form-signing-dialog.ui.h:4
 msgid "_Password:"
 msgstr "_Parola:"
 
-#: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate…"
-msgstr "Sertifikayı _Göster…"
+#: ../data/glade/form-signing-dialog.ui.h:5
+#| msgid "_View Certificate"
+msgid "_View Certificate&#x2026;"
+msgstr "Sertifikayı _Göster&#x2026;"
 
-#: ../data/glade/prefs-dialog.glade.h:1
+#: ../data/glade/prefs-dialog.ui.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Çerezler</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.ui.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>İndirilenler</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.ui.h:3
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodlamalar</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.ui.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Başlangıç sayfası</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:5
+#: ../data/glade/prefs-dialog.ui.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Diller</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.ui.h:6
 msgid "<b>Passwords</b>"
 msgstr "<b>Parolalar</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.ui.h:7
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Geçici Dosyalar</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.ui.h:8
 msgid "<b>Web Content</b>"
 msgstr "<b>Web İçeriği</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Web Development</b>"
 msgstr "<b>Web Geliştirmesi</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.ui.h:11
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Örneğin, bu sitelerdeki reklam verenlerden değil</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.ui.h:12
 msgid "A_utomatically download and open files"
 msgstr "_Dosyaları indirdikten sonra kendiliğinden aç"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.ui.h:13
 msgid "Add Language"
 msgstr "Dil Ekle"
 
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/glade/prefs-dialog.ui.h:14
 msgid "Allow popup _windows"
 msgstr "Kendiliğinden beliren _pencerelere izin ver"
 
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Choose a l_anguage:"
 msgstr "Bir _dil seç:"
 
@@ -720,197 +747,197 @@ msgstr "Bir _dil seç:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
+#: ../data/glade/prefs-dialog.ui.h:16 ../lib/widgets/ephy-location-entry.c:680
+#: ../src/ephy-history-window.c:247 ../src/pdm-dialog.c:402
 msgid "Cl_ear"
 msgstr "_Temizle"
 
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.ui.h:17
 msgid "De_fault:"
 msgstr "Ö_ntanımlı:"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.ui.h:18
 msgid "Enable Java_Script"
 msgstr "Java_Script'i Etkinleştir"
 
-#: ../data/glade/prefs-dialog.glade.h:20
-msgid "Enable _Java"
-msgstr "_Java'yı Etkinleştir"
+#: ../data/glade/prefs-dialog.ui.h:20
+msgid "Enable _Plugins"
+msgstr "_Eklentileri Etkinleştir"
 
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
 msgstr "Yazıtipleri ve Biçemler"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
+#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:821
 msgid "Language"
 msgstr "Dil"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.ui.h:24
 msgid "Let web pages specify their own _fonts"
 msgstr "Web sayfalarının kendi _yazıtiplerini belirtmelerine izin ver"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.ui.h:25
 msgid "Let web pages specify their own c_olors"
 msgstr "Web sayfalarının kendi _renklerini belirtmelerine izin ver"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Only _from sites you visit"
 msgstr "Sadece _ziyaret ettiğiniz sitelerden"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.ui.h:29
 msgid "Privacy"
 msgstr "Güvenlik"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.ui.h:30
 msgid "Set to Current _Page"
 msgstr "_Geçerli Sayfaya Ayarla"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.ui.h:31
 msgid "Set to _Blank Page"
 msgstr "_Boş Sayfaya Ayarla"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.ui.h:32
 msgid "Use custom _stylesheet"
 msgstr "Özel _stylesheet kullan"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use s_mooth scrolling"
 msgstr "_Yumuşak kaydırma kullan"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.ui.h:34
 msgid "_Address:"
 msgstr "_Adres:"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Always accept"
 msgstr "_Her zaman kabul et"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Disk space:"
 msgstr "_Disk boşluğu:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Download folder:"
 msgstr "İndirme _klasörü:"
 
-#: ../data/glade/prefs-dialog.glade.h:38
-msgid "_Edit Stylesheet…"
-msgstr "Stylesheet _Düzenle…"
+#: ../data/glade/prefs-dialog.ui.h:38
+#| msgid "_Edit Stylesheet…"
+msgid "_Edit Stylesheet&#x2026;"
+msgstr "Stil Sayfası Düz_enle&#x2026;"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.ui.h:39
 msgid "_Minimum size:"
 msgstr "En _düşük boyut:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.ui.h:40
 msgid "_Never accept"
 msgstr "_Asla kabul etme"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Remember passwords"
 msgstr "_Parolaları hatırla"
 
-#: ../data/glade/print.glade.h:1
+#: ../data/glade/print.ui.h:1
 msgid "<b>Background</b>"
 msgstr "<b>Arka Plan</b>"
 
-#: ../data/glade/print.glade.h:2
+#: ../data/glade/print.ui.h:2
 msgid "<b>Footers</b>"
 msgstr "<b>Alt Bilgi</b>"
 
-#: ../data/glade/print.glade.h:3
+#: ../data/glade/print.ui.h:3
 msgid "<b>Frames</b>"
 msgstr "<b>Çerçeveler</b>"
 
-#: ../data/glade/print.glade.h:4
+#: ../data/glade/print.ui.h:4
 msgid "<b>Headers</b>"
 msgstr "<b>Başlıklar</b>"
 
-#: ../data/glade/print.glade.h:5
+#: ../data/glade/print.ui.h:5
 msgid "As laid out on the _screen"
 msgstr "_Ekranda yayıldığı gibi"
 
-#: ../data/glade/print.glade.h:6
+#: ../data/glade/print.ui.h:6
 msgid "O_nly the selected frame"
 msgstr "_Sadece seçili çerçeve"
 
-#: ../data/glade/print.glade.h:7
+#: ../data/glade/print.ui.h:7
 msgid "P_age title"
 msgstr "Say_fa başlığı"
 
-#: ../data/glade/print.glade.h:8
+#: ../data/glade/print.ui.h:8
 msgid "Page _numbers"
 msgstr "Sayfa _numaraları"
 
-#: ../data/glade/print.glade.h:9
+#: ../data/glade/print.ui.h:9
 msgid "Print background c_olors"
 msgstr "Arka plan _renklerini yazdır"
 
-#: ../data/glade/print.glade.h:10
+#: ../data/glade/print.ui.h:10
 msgid "Print background i_mages"
 msgstr "Arka plan r_esimlerini yazdır"
 
-#: ../data/glade/print.glade.h:11
+#: ../data/glade/print.ui.h:11
 msgid "_Date"
 msgstr "_Tarih"
 
-#: ../data/glade/print.glade.h:12
+#: ../data/glade/print.ui.h:12
 msgid "_Each frame separately"
 msgstr "_Her çerçeve ayrı ayrı"
 
-#: ../data/glade/print.glade.h:13
+#: ../data/glade/print.ui.h:13
 msgid "_Page address"
 msgstr "Sayfa a_dresi"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:167
+#: ../embed/downloader-view.c:169
 msgid "_Show Downloads"
 msgstr "İ_ndirilenleri Göster"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:371
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:375
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Pause"
 msgstr "_Duraklat"
 
-#: ../embed/downloader-view.c:377
+#: ../embed/downloader-view.c:425
 msgid "_Resume"
 msgstr "_Devam Et"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
-#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1741
+#: ../embed/downloader-view.c:446 ../embed/downloader-view.c:608
+#: ../embed/downloader-view.c:613 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1701
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: ../embed/downloader-view.c:510
+#: ../embed/downloader-view.c:577
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "“%s” dosyası indirildi."
 
-#: ../embed/downloader-view.c:513
+#: ../embed/downloader-view.c:578
 msgid "Download finished"
 msgstr "İndirme tamamlandı"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:537
+#: ../embed/downloader-view.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -919,64 +946,65 @@ msgstr ""
 "%s\n"
 "%s / %s"
 
-#: ../embed/downloader-view.c:584
+#: ../embed/downloader-view.c:645
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d indirme"
 
-#: ../embed/downloader-view.c:719
+#: ../embed/downloader-view.c:762
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "“%s” dosyası indirilenler sırasına eklendi."
 
-#: ../embed/downloader-view.c:723
+#: ../embed/downloader-view.c:764
 msgid "Download started"
 msgstr "İndirme başladı"
 
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
+#: ../embed/downloader-view.c:835 ../embed/downloader-view.c:845
 msgctxt "download status"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: ../embed/downloader-view.c:804
+#: ../embed/downloader-view.c:838
 msgctxt "download status"
 msgid "Failed"
 msgstr "Başarısız"
 
-#: ../embed/downloader-view.c:807
+#: ../embed/downloader-view.c:841
 msgctxt "download status"
 msgid "Cancelled"
 msgstr "İptal Oldu"
 
-#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
+#: ../embed/downloader-view.c:904 ../src/bookmarks/ephy-bookmarks-editor.c:991
 msgid "File"
 msgstr "Dosya"
 
-#: ../embed/downloader-view.c:893
+#: ../embed/downloader-view.c:927
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:904
+#: ../embed/downloader-view.c:938
 msgid "Remaining"
 msgstr "Kalan"
 
-#: ../embed/ephy-embed.c:493
+#: ../embed/ephy-embed.c:576 ../embed/ephy-embed-persist.c:823
+#: ../src/window-commands.c:343
 msgid "Save"
 msgstr "Kaydet"
 
-#: ../embed/ephy-embed.c:635
+#: ../embed/ephy-embed.c:834
 msgctxt "file type"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: ../embed/ephy-embed.c:649
+#: ../embed/ephy-embed.c:850
 msgid "Download this potentially unsafe file?"
 msgstr "Bu muhtemel güvensiz dosya indirilsin mi?"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:654
+#. translators: First %s is the file type description, second %s is the
+#. * file name
+#: ../embed/ephy-embed.c:854
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -990,14 +1018,13 @@ msgstr ""
 "bilgilerinize hakim olabileceği için güvensizdir. Bunun yerine onu "
 "kaydedebilirsiniz."
 
-#: ../embed/ephy-embed.c:662
+#: ../embed/ephy-embed.c:862
 msgid "Open this file?"
 msgstr "Bu dosya açılsın mı?"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name,
-#. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:668
+#. translators: First %s is the file type description, second %s is the
+#. * file name, third %s is the application used to open the file
+#: ../embed/ephy-embed.c:866
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1008,13 +1035,13 @@ msgstr ""
 "\n"
 "“%s” dosyasını “%s” kullanarak açabilir ya da kaydedebilirsiniz."
 
-#: ../embed/ephy-embed.c:675
+#: ../embed/ephy-embed.c:871
 msgid "Download this file?"
 msgstr "Bu dosya indirilsin mi?"
 
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:680
+#. translators: First %s is the file type description, second %s is the
+#. * file name
+#: ../embed/ephy-embed.c:875
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1026,19 +1053,23 @@ msgstr ""
 "“%s” dosyasını açmak için hiçbir uygulamanız yok. Açmak yerine dosyayı "
 "kaydedebilirsiniz."
 
-#: ../embed/ephy-embed.c:687
-msgid "_Save As..."
-msgstr "_Farklı Kaydet..."
-
-#: ../embed/ephy-embed.c:817
+#: ../embed/ephy-embed.c:1055
 msgid "Web Inspector"
 msgstr "Web İnceleyicisi"
 
-#: ../embed/ephy-embed-shell.c:242
+#: ../embed/ephy-embed-shell.c:259
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany şu anda kullanılamıyor. Başlatma başarısız oldu."
 
-#: ../embed/ephy-embed-utils.c:61
+#: ../embed/ephy-embed-single.c:474
+msgid ""
+"CA Certificates file we should use was not found, all SSL sites will be "
+"considered to have a broken certificate."
+msgstr ""
+"Kullanılması gereken CA Sertifikaları dosyası bulunamadı. Tüm SSL "
+"sitelerinin bozuk bir sertifikası olduğu kabul edilecek."
+
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "“%s” adresine e-posta iletisi gönder"
@@ -1381,41 +1412,67 @@ msgstr "Yerel dosyalar"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2122
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3218
 #: ../src/ephy-session.c:1342
 msgid "Blank page"
 msgstr "Boş sayfa"
 
-#: ../embed/ephy-web-view.c:1128
+#: ../embed/ephy-web-view.c:929
+#| msgid "Not found"
+msgid "Not now"
+msgstr "Şimdi değil"
+
+#: ../embed/ephy-web-view.c:934
+#| msgid "_Show passwords"
+msgid "Store password"
+msgstr "Parolayı kaydet"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:945
+#, c-format
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr ""
+"<big>Bu hesap için parolayı kaydetmek istiyor musunuz: <b>%s</b> <b>(%s)</b>?"
+"</big>"
+
+#: ../embed/ephy-web-view.c:2026
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com.tr/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:1319
+#: ../embed/ephy-web-view.c:2351
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "“%s” adresine yönlendiriliyor…"
 
-#: ../embed/ephy-web-view.c:1321
+#: ../embed/ephy-web-view.c:2353
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "“%s” adresinden bilgi aktarılıyor…"
 
-#: ../embed/ephy-web-view.c:1323
+#: ../embed/ephy-web-view.c:2355
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "“%s” adresinden yetkilendirme bekleniyor…"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1434
+#: ../embed/ephy-web-view.c:2361 ../embed/ephy-web-view.c:2459
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” yükleniyor…"
 
-#: ../embed/ephy-web-view.c:1436
+#: ../embed/ephy-web-view.c:2461
 msgid "Loading…"
 msgstr "Yükleniyor…"
 
+#. Translators: this is the directory name to store auxilary files
+#. * when saving html files.
+#.
+#: ../embed/ephy-web-view.c:3422
 #, c-format
 msgid "%s Files"
 msgstr "%s Dosyaları"
@@ -1499,32 +1556,32 @@ msgstr "Oturum yönetim seçeneklerini göster"
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:934
+#: ../lib/egg/egg-editable-toolbar.c:943
 #, c-format
 msgid "Show “_%s”"
 msgstr "“_%s” Göster"
 
-#: ../lib/egg/egg-editable-toolbar.c:1397
+#: ../lib/egg/egg-editable-toolbar.c:1411
 msgid "_Move on Toolbar"
 msgstr "_Araç Çubuğu Üzerinde Gezdir"
 
-#: ../lib/egg/egg-editable-toolbar.c:1398
+#: ../lib/egg/egg-editable-toolbar.c:1412
 msgid "Move the selected item on the toolbar"
 msgstr "Seçili öğeyi araç çubuğu üzerinde taşı"
 
-#: ../lib/egg/egg-editable-toolbar.c:1399
+#: ../lib/egg/egg-editable-toolbar.c:1413
 msgid "_Remove from Toolbar"
 msgstr "Araç Çubuğundan _Kaldır"
 
-#: ../lib/egg/egg-editable-toolbar.c:1400
+#: ../lib/egg/egg-editable-toolbar.c:1414
 msgid "Remove the selected item from the toolbar"
 msgstr "Seçili öğeyi araç çubuğundan sil"
 
-#: ../lib/egg/egg-editable-toolbar.c:1401
+#: ../lib/egg/egg-editable-toolbar.c:1415
 msgid "_Delete Toolbar"
 msgstr "Araç Çubuğunu _Kaldır"
 
-#: ../lib/egg/egg-editable-toolbar.c:1402
+#: ../lib/egg/egg-editable-toolbar.c:1416
 msgid "Remove the selected toolbar"
 msgstr "Seçilen araç çubuğunu sil"
 
@@ -1544,80 +1601,109 @@ msgstr "Web sayfaları"
 msgid "Images"
 msgstr "Resimler"
 
-#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "All files"
 msgstr "Tüm dosyalar"
 
-#: ../lib/ephy-file-helpers.c:296
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:164 ../lib/ephy-file-helpers.c:211
+#: ../src/prefs-dialog.c:918
+msgid "Desktop"
+msgstr "Masaüstü"
+
+#: ../lib/ephy-file-helpers.c:383
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” içerisine geçici dizin oluşturulamadı."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:472
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s” dosyası mevcut. Lütfen onu başka bir yere taşıyın."
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:483
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "“%s” dizini oluşturulurken hata oluştu."
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:292
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "“%s” dizini yazılabilir değil"
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:296
 msgid "You do not have permission to create files in this directory."
 msgstr "Bu dizin içinde dosya oluşturmaya izniniz yok."
 
-#: ../lib/ephy-gui.c:290
+#: ../lib/ephy-gui.c:299
 msgid "Directory not Writable"
 msgstr "Dizin Yazılabilir Değil"
 
-#: ../lib/ephy-gui.c:320
+#: ../lib/ephy-gui.c:329
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Mevcut olan “%s” dosyasının üzerine yazılamıyor "
 
-#: ../lib/ephy-gui.c:324
+#: ../lib/ephy-gui.c:333
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
 "Bu isimde bir dosya zaten bulunuyor ve onun üzerine yazma yetkiniz yok."
 
-#: ../lib/ephy-gui.c:327
+#: ../lib/ephy-gui.c:336
 msgid "Cannot Overwrite File"
 msgstr "Dosyanın Üzerine Yazılamıyor"
 
-#: ../lib/ephy-gui.c:413
+#: ../lib/ephy-gui.c:391
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Yardım görüntülenemiyor: %s"
+
+#: ../lib/ephy-nss-glue.c:62
+#| msgid "User Password"
+msgid "Master password needed"
+msgstr "Ana parola gerekiyor"
+
+#: ../lib/ephy-nss-glue.c:64
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"Önceki sürümden (Gecko) gelen parolalar bir ana parolayla korunur. Eğer "
+"Epiphany'nin bunları içe aktarmasını istiyorsanız, lütfen ana parolanızı "
+"aşağıya giriniz."
+
+#: ../lib/ephy-profile-migration.c:83
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "Çerezler Mozilla'dan kopyalamak başarısız oldu"
+
+#: ../lib/ephy-profile-migration.c:558
+msgid "Failed to read latest migration marker, aborting profile migration."
+msgstr "Son aktarma işareti başarısız oldu, profil taşıması iptal oldu."
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
 msgstr "Kendiliğinden Beliren Pencereler"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
+#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1237
 msgid "History"
 msgstr "Geçmiş"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1496
+#: ../src/ephy-window.c:1446
 msgid "Bookmark"
 msgstr "Yer İmi"
 
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1500
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:897
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1743
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1450
 msgid "Bookmarks"
 msgstr "Yer İmleri"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:288
 msgid "Address Entry"
 msgstr "Adres Girişi"
 
@@ -1694,11 +1780,11 @@ msgstr "%300"
 msgid "400%"
 msgstr "%400"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/widgets/ephy-location-entry.c:962
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Bu sayfaya bir bağlantı oluşturmak için simgeyi sürükleyip bırakın"
 
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:158
 msgid "Clear"
 msgstr "Temizle"
 
@@ -1707,7 +1793,7 @@ msgstr "Temizle"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:497
+#: ../src/bookmarks/ephy-bookmark-action.c:502
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "“%s” betiğini çalıştırır"
@@ -1715,7 +1801,7 @@ msgstr "“%s” betiğini çalıştırır"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:612
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1733,24 +1819,24 @@ msgstr[0] "%d Benzer Yer İmi ile _Tekleştir"
 msgid "Show “%s”"
 msgstr "“%s” Göster"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
+#: ../src/bookmarks/ephy-bookmark-properties.c:426
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” Özellikleri"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:551
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Başlık:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:567
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "_Adres:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "_Konular:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:600
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Tüm konuları _göster"
 
@@ -1847,22 +1933,22 @@ msgstr "Bu konudan sil"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:108
+#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "_Dosya"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:109
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "_Düzenle"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:110
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "_Görünüm"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:115
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "_Yardım"
 
@@ -1878,9 +1964,9 @@ msgstr "Yeni konu oluştur"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
 #: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Ye_ni Pencerede Aç"
@@ -1891,9 +1977,9 @@ msgstr "Seçili yer imini yeni pencerede aç"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1355
 #: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/ephy-history-window.c:706
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Yeni S_ekmede Aç"
@@ -1938,7 +2024,7 @@ msgid "Export bookmarks to a file"
 msgstr "Yer imlerini dosyaya aktar"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:140
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:146
 msgid "_Close"
 msgstr "_Kapat"
 
@@ -1948,29 +2034,29 @@ msgstr "Yer imi penceresini kapat"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:158
 msgid "Cu_t"
 msgstr "K_es"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:153
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:159
 msgid "Cut the selection"
 msgstr "Seçimi kes"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1365
+#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:716
+#: ../src/ephy-window.c:161
 msgid "_Copy"
 msgstr "_Kopyala"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:162
 msgid "Copy the selection"
 msgstr "Seçimi kopyala"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:158
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:164
 msgid "_Paste"
 msgstr "_Yapıştır"
 
@@ -1989,7 +2075,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Seçili yer imini veya konuyu sil"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:164
+#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:170
 msgid "Select _All"
 msgstr "Hepsini _Seç"
 
@@ -2000,7 +2086,7 @@ msgstr "Tüm yer imlerini veya metni seç"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:258
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "İç_erik"
 
@@ -2009,12 +2095,12 @@ msgid "Display bookmarks help"
 msgstr "Yer imi yardımını göster"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:261
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Hakkında"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Web tarayıcısı programcı bilgilerini göster"
 
@@ -2070,39 +2156,39 @@ msgid "_Delete Topic"
 msgstr "_Konuyu Sil"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:628
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
-#: ../src/bookmarks/ephy-bookmarks-editor.c:636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:641
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "“%s” Mozilla profili"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:650
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:678
+#: ../src/bookmarks/ephy-bookmarks-editor.c:679
 msgid "Import failed"
 msgstr "İçe aktarma başarısız"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import Failed"
 msgstr "İçe Aktarma Başarısız"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:684
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2111,64 +2197,64 @@ msgstr ""
 "“%s” dosyasından yer imleri içe aktarılamıyor çünkü dosya bozuk ya da "
 "desteklenmeyen bir türde."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:746
+#: ../src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Import Bookmarks from File"
 msgstr "Yer İmlerini Dosyadan İçe Aktar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:754
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla yer imleri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:758
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror yer imleri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:761
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "Epiphany bookmarks"
 msgstr "Epiphany yer imleri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:885
+#: ../src/bookmarks/ephy-bookmarks-editor.c:886
 msgid "Export Bookmarks"
 msgstr "Yer İmlerini Aktar"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "File f_ormat:"
 msgstr "Dosya _biçimi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:946
+#: ../src/bookmarks/ephy-bookmarks-editor.c:949
 msgid "Import Bookmarks"
 msgstr "Yer İmlerini İçe Aktar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:952
+#: ../src/bookmarks/ephy-bookmarks-editor.c:955
 msgid "I_mport"
 msgstr "İçe _Aktar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:966
+#: ../src/bookmarks/ephy-bookmarks-editor.c:971
 msgid "Import bookmarks from:"
 msgstr "Yer imlerini buradan aktar:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/ephy-history-window.c:712
 msgid "_Copy Address"
 msgstr "Adresi _Kopyala"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1609
+#: ../src/ephy-history-window.c:1037
 msgid "_Search:"
 msgstr "A_ra:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1807
 msgid "Topics"
 msgstr "Konular"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
-#: ../src/ephy-history-window.c:1362
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1877
+#: ../src/ephy-history-window.c:1360
 msgid "Title"
 msgstr "Başlık"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
-#: ../src/ephy-history-window.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1888
+#: ../src/ephy-history-window.c:1369
 msgid "Address"
 msgstr "Adres"
 
@@ -2222,50 +2308,50 @@ msgstr "Diğer kodlamalar"
 msgid "_Automatic"
 msgstr "_Otomatik"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:153
 msgid "Not found"
 msgstr "Bulunamadı"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:165
 msgid "Wrapped"
 msgstr "Katlanmış"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find links:"
 msgstr "Bağları bul:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find:"
 msgstr "Bul:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
+#: ../src/ephy-find-toolbar.c:459 ../src/ephy-find-toolbar.c:582
 msgid "_Case sensitive"
 msgstr "_Büyük küçük harf duyarlı"
 
-#: ../src/ephy-find-toolbar.c:539
+#: ../src/ephy-find-toolbar.c:565
 msgid "Find Previous"
 msgstr "Öncekini Bul"
 
-#: ../src/ephy-find-toolbar.c:542
+#: ../src/ephy-find-toolbar.c:568
 msgid "Find previous occurrence of the search string"
 msgstr "Arama dizgisinin bir önceki göründüğü yeri bul"
 
-#: ../src/ephy-find-toolbar.c:548
+#: ../src/ephy-find-toolbar.c:574
 msgid "Find Next"
 msgstr "Sonrakini Bul"
 
-#: ../src/ephy-find-toolbar.c:551
+#: ../src/ephy-find-toolbar.c:577
 msgid "Find next occurrence of the search string"
 msgstr "Arama dizgisinin bir sonraki göründüğü yeri bul"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
+#: ../src/ephy-fullscreen-popup.c:266 ../src/ephy-toolbar.c:670
 msgid "Leave Fullscreen"
 msgstr "Tam Ekrandan _Çık"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:318
 msgid "Go"
 msgstr "Git"
 
@@ -2345,31 +2431,31 @@ msgstr ""
 msgid "Clear History"
 msgstr "Geçmişi Temizle"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:1046
 msgid "Last 30 minutes"
 msgstr "Son 30 dakika"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "Bugün"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
+#: ../src/ephy-history-window.c:1048 ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1055
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Son %d gün"
 
-#: ../src/ephy-history-window.c:1299
+#: ../src/ephy-history-window.c:1297
 msgid "Sites"
 msgstr "Siteler"
 
-#: ../src/ephy-history-window.c:1379
+#: ../src/ephy-history-window.c:1377
 msgid "Date"
 msgstr "Tarih"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:990
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:526 ../src/window-commands.c:1040
 msgid "GNOME Web Browser"
 msgstr "GNOME Web Tarayıcısı"
 
@@ -2417,11 +2503,11 @@ msgstr "DİZİN"
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:423
+#: ../src/ephy-main.c:378
 msgid "Could not start GNOME Web Browser"
 msgstr "GNOME Web Tarayıcısı başlatılamadı"
 
-#: ../src/ephy-main.c:426
+#: ../src/ephy-main.c:381
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2430,21 +2516,13 @@ msgstr ""
 "Aşağıdaki hatadan dolayı başlangıç başarısız oldu:\n"
 "%s"
 
-#: ../src/ephy-main.c:563
+#: ../src/ephy-main.c:527
 msgid "GNOME Web Browser options"
 msgstr "GNOME Web Tarayıcısı seçenekleri"
 
-#: ../src/ephy-notebook.c:626
+#: ../src/ephy-notebook.c:629
 msgid "Close tab"
 msgstr "Sekmeyi kapat"
-
-#: ../src/ephy-profile-migration.c:80
-msgid "Failed to copy cookies file from Mozilla."
-msgstr "Çerezler Mozilla'dan kopyalamak başarısız oldu"
-
-#: ../src/ephy-profile-migration.c:376
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr "Son aktarma işareti başarısız oldu, profil taşıması iptal oldu."
 
 #: ../src/ephy-session.c:116
 #, c-format
@@ -2509,116 +2587,103 @@ msgstr ""
 "Bu sayfayı tekrar yüklediğinizde de olabilir. Eğer olursa, lütfen %s "
 "geliştiricilerine bir hata bildiriminde bulunun."
 
-#: ../src/ephy-shell.c:172
-msgid "Sidebar extension required"
-msgstr "Kenar çubuğu eklentisi gerekiyor"
-
-#: ../src/ephy-shell.c:174
-msgid "Sidebar Extension Required"
-msgstr "Kenar Çubuğu Eklentisi Gerekiyor"
-
-#: ../src/ephy-shell.c:178
-msgid "The link you clicked needs the sidebar extension to be installed."
-msgstr ""
-"Tıkladığınız bağlantı kenar çubuğu eklentisinin kurulu olmasını gerektiriyor."
-
-#: ../src/ephy-statusbar.c:83
+#: ../src/ephy-statusbar.c:97
 msgid "Caret"
 msgstr "İmleç"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:90
+#: ../src/ephy-statusbar.c:104
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Klavye seçim kipi içinde, çıkmak için F7'ye basın"
 
-#: ../src/ephy-tabs-menu.c:201
+#: ../src/ephy-tabs-menu.c:211
 msgid "Switch to this tab"
 msgstr "Bu sekmeye geç"
 
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:228
 msgid "_Back"
 msgstr "_Geri"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:230
 msgid "Go to the previous visited page"
 msgstr "Önceki ziyaret edilmiş sayfaya git"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:234
 msgid "Back history"
 msgstr "Geçmiş'te geri"
 
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:248
 msgid "_Forward"
 msgstr "İ_leri"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:250
 msgid "Go to the next visited page"
 msgstr "Sonraki ziyaret edilmiş sayfaya git"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:254
 msgid "Forward history"
 msgstr "Geçmiş'te ileri"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:267
 msgid "_Up"
 msgstr "_Yukarı"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:269
 msgid "Go up one level"
 msgstr "Bir üst seviyeye git"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:273
 msgid "List of upper levels"
 msgstr "Üst seviyeler"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:290
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Açmak için bir web adresi ya da arama için bir ifade girin"
 
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:306
 msgid "Zoom"
 msgstr "Yakınlaştır"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:308
 msgid "Adjust the text size"
 msgstr "Yazı boyutunu ayarla"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the address entered in the address entry"
 msgstr "Adres girişindeki adrese git"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:329
 msgid "_Home"
 msgstr "_Başlangıç"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:331
 msgid "Go to the home page"
 msgstr "Başlangıç sayfasına git"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:341
 msgid "New _Tab"
 msgstr "Yeni _Sekme"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:343
 msgid "Open a new tab"
 msgstr "Yeni bir sekme aç"
 
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:352
 msgid "_New Window"
 msgstr "Ye_ni Pencere"
 
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:354
 msgid "Open a new window"
 msgstr "Yeni bir pencere aç"
 
@@ -2661,564 +2726,569 @@ msgstr "Araç çubuğu _düğme etiketleri:"
 msgid "_Add a New Toolbar"
 msgstr "Yeni Araç Çubuğu _Ekle"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "_Yer İmleri"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "_Git"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "_Araçlar"
 
-#: ../src/ephy-window.c:114
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "_Sekmeler"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "Araç Ç_ubukları"
 
 #. File menu
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:128
 msgid "_Open…"
 msgstr "_Aç…"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "Bir dosya aç"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "_Farklı Kaydet…"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "Geçerli sayfayı kaydet"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:134
 msgid "Page Set_up"
 msgstr "Sayfa _Ayarı…"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:135
 msgid "Setup the page settings for printing"
 msgstr "Yazdırma için sayfa ayarları"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:137
 msgid "Print Pre_view"
 msgstr "Baskı Ön_izleme"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:138
 msgid "Print preview"
 msgstr "Baskı önizleme"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:140
 msgid "_Print…"
 msgstr "_Yazdır"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:141
 msgid "Print the current page"
 msgstr "Geçerli sayfayı yazdır"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:143
 msgid "S_end Link by Email…"
 msgstr "Bağlantıyı E-posta ile _Gönder…"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:144
 msgid "Send a link of the current page"
 msgstr "Geçerli sayfa bağını gönder"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:147
 msgid "Close this tab"
 msgstr "Bu sekmeyi kapat"
 
 #. Edit menu
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:152
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:153
 msgid "Undo the last action"
 msgstr "Son eylemi geri al"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:155
 msgid "Re_do"
 msgstr "_Tekrarla"
 
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:156
 msgid "Redo the last undone action"
 msgstr "Son yapılan işlemi tekrarla"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:165
 msgid "Paste clipboard"
 msgstr "Panoyu yapıştır"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:168
 msgid "Delete text"
 msgstr "Metni sil"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:171
 msgid "Select the entire page"
 msgstr "Tüm sayfayı seç"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:173
 msgid "_Find…"
 msgstr "_Bul…"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:174
 msgid "Find a word or phrase in the page"
 msgstr "Sayfada bir kelime veya ifade bul"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:176
 msgid "Find Ne_xt"
 msgstr "S_onrakini Bul"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:177
 msgid "Find next occurrence of the word or phrase"
 msgstr "Kelimenin veya ifadenin bir sonraki göründüğü yeri bul"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:179
 msgid "Find Pre_vious"
 msgstr "Ön_cekini Bul"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:180
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Kelimenin veya ifadenin bir önceki göründüğü yeri bul"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:182
 msgid "P_ersonal Data"
 msgstr "Kişise_l Bilgi"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:183
 msgid "View and remove cookies and passwords"
 msgstr "Çerezleri ve parolaları görüntüleyip sil"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:186
 msgid "Certificate_s"
 msgstr "_Sertifikalar"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:187
 msgid "Manage Certificates"
 msgstr "Sertifikaları Yönet"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:190
 msgid "P_references"
 msgstr "_Tercihler"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:191
 msgid "Configure the web browser"
 msgstr "Web tarayıcısını yapılandır"
 
 #. View menu
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:196
 msgid "_Customize Toolbars…"
 msgstr "_Araç Çubuklarını Özelleştir…"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:197
 msgid "Customize toolbars"
 msgstr "Araç çubuklarını özelleştir"
 
-#: ../src/ephy-window.c:193 ../src/ephy-window.c:196
+#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
 msgid "_Stop"
 msgstr "_Dur"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:200
 msgid "Stop current data transfer"
 msgstr "Geçerli veri aktarımını durdur"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:204
 msgid "_Reload"
 msgstr "T_ekrar Yükle"
 
-#: ../src/ephy-window.c:199
+#: ../src/ephy-window.c:205
 msgid "Display the latest content of the current page"
 msgstr "Geçerli sayfanın en son içeriğini göster"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:207
 msgid "_Larger Text"
 msgstr "Daha _Büyük Metin"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:208
 msgid "Increase the text size"
 msgstr "Yazı boyutunu büyüt"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:210
 msgid "S_maller Text"
 msgstr "Daha _Küçük Metin"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:211
 msgid "Decrease the text size"
 msgstr "Yazı boyutunu küçült"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:213
 msgid "_Normal Size"
 msgstr "_Normal Boyut"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:214
 msgid "Use the normal text size"
 msgstr "Normal yazı boyutunu kullan"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:216
 msgid "Text _Encoding"
 msgstr "Metin _Kodlaması"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:217
 msgid "Change the text encoding"
 msgstr "Metin kodlamasını değiştir"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:219
 msgid "_Page Source"
 msgstr "_Sayfa Kaynak Kodu"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:220
 msgid "View the source code of the page"
 msgstr "Sayfanın kaynak kodunu göster"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:222
 msgid "Page _Security Information"
 msgstr "Sayfa _Güvenlik Bilgisi"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:223
 msgid "Display security information for the web page"
 msgstr "Web sayfası için güvenlik bilgilerini göster"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark…"
 msgstr "_Yer İmi Ekle…"
 
-#: ../src/ephy-window.c:223 ../src/ephy-window.c:297
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "Geçerli sayfa için yer imi ekle"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "Yer İmlerini _Düzenle"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "Yer imleri penceresini aç"
 
 #. Go menu
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:237
 msgid "_Location…"
 msgstr "_Konum…"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "Belirtilen konuma git"
 
 #. History
-#: ../src/ephy-window.c:234 ../src/pdm-dialog.c:432
+#: ../src/ephy-window.c:240 ../src/pdm-dialog.c:452
 msgid "Hi_story"
 msgstr "_Geçmiş"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "Geçmiş penceresini aç"
 
 #. Tabs menu
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "Ö_nceki Sekme"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "Önceki sekmeyi etkinleştir"
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "Son_raki Sekme"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "Sonraki sekmeyi etkinleştir"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "Sekmeyi S_ola Taşı"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "Geçerli sekmeyi sola taşı"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "Sekmeyi S_ağa Taşı"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "Geçerli sekmeyi sağa taşı"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "_Sekmeyi Ayır"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "Mevcut sekmeyi ayır"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "Web tarayıcı yardımını göster"
 
 #. File Menu
-#: ../src/ephy-window.c:270
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "Çevrim _Dışı Çalış"
 
-#: ../src/ephy-window.c:271
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "Çevirim dışı kipe geç"
 
 #. View Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:282
 msgid "_Hide Toolbars"
 msgstr "Araç Çubuklarını _Gizle"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "Araç çubuğunu göster ya da gizle"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "_Durum Çubuğu"
 
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "Durum çubuğunu göster ya da gizle"
 
-#: ../src/ephy-window.c:282
+#: ../src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "_Tam Ekran"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "Tam ekranda gezin"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "_Kendiliğinden Beliren Pencereler"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Kendiliğinden beliren pencereleri bu sitede göster ya da gizle"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "Seçim İmleci"
 
 #. Document
-#: ../src/ephy-window.c:296
+#: ../src/ephy-window.c:302
 msgid "Add Boo_kmark…"
 msgstr "_Yer İmi Ekle…"
 
 #. Framed document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "Sadece Bu Ç_erçeveyi Göster"
 
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "Sadece bu çerçeveyi bu pencere içinde aç"
 
 #. Links
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "_Bağlantıyı Aç"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "Bağlantıyı bu pencerede aç"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "Bağlantıyı _Yeni Pencerede Aç"
 
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "Bağlantıyı yeni pencerede aç"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "Bağı Yeni _Sekmede Aç"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "Bağlantıyı yeni bir sekmede aç"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "Bağlantıyı İ_ndir"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:325
 msgid "_Save Link As…"
 msgstr "_Bağlantıyı Farklı Kaydet…"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "Bağlantıyı farklı bir isimle kaydet"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link…"
 msgstr "Bağlantıya _Yer İmi Ekle…"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "Bağlantı Adresini _Kopyala"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:336
 msgid "_Send Email…"
 msgstr "E-posta _Gönder…"
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "E-posta Adresini _Kopyala"
 
 #. Images
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "_Resmi Aç"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:345
 msgid "_Save Image As…"
 msgstr "_Resmi Farklı Kaydet…"
 
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "Resmi Arkaplan _Olarak Kullan"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "Res_min Adresini Kopyala"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:351
 msgid "St_art Animation"
 msgstr "Animasyonu _Başlat"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:353
 msgid "St_op Animation"
 msgstr "Animasyonu _Durdur"
 
-#: ../src/ephy-window.c:523
+#. Inspector
+#: ../src/ephy-window.c:357
+msgid "Inspect _Element"
+msgstr "Öğ_eyi İncele"
+
+#: ../src/ephy-window.c:530
 msgid "There are unsubmitted changes to form elements"
 msgstr "Form bileşenlerinde gönderilmemiş değişiklikler var"
 
-#: ../src/ephy-window.c:527
+#: ../src/ephy-window.c:534
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Eğer dosyayı kapatacak olursanız bu bilgileri kaybedeceksiniz."
 
-#: ../src/ephy-window.c:531
+#: ../src/ephy-window.c:538
 msgid "Close _Document"
 msgstr "Belgeyi _Kapat"
 
-#: ../src/ephy-window.c:1490 ../src/window-commands.c:286
+#: ../src/ephy-window.c:1440 ../src/window-commands.c:313
 msgid "Open"
 msgstr "Aç"
 
-#: ../src/ephy-window.c:1492 ../src/window-commands.c:312
+#: ../src/ephy-window.c:1442
 msgid "Save As"
 msgstr "Farklı Kaydet"
 
-#: ../src/ephy-window.c:1494
+#: ../src/ephy-window.c:1444
 msgid "Print"
 msgstr "Yazdır"
 
-#: ../src/ephy-window.c:1498
+#: ../src/ephy-window.c:1448
 msgid "Find"
 msgstr "Bul"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1511
+#: ../src/ephy-window.c:1461
 msgid "Larger"
 msgstr "Daha Büyük"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1514
+#: ../src/ephy-window.c:1464
 msgid "Smaller"
 msgstr "Daha Küçük"
 
-#: ../src/ephy-window.c:1744
+#: ../src/ephy-window.c:1704
 msgid "Insecure"
 msgstr "Emniyetsiz"
 
-#: ../src/ephy-window.c:1749
+#: ../src/ephy-window.c:1709
 msgid "Broken"
 msgstr "Kırık"
 
-#: ../src/ephy-window.c:1757
+#: ../src/ephy-window.c:1717
 msgid "Low"
 msgstr "Düşük"
 
-#: ../src/ephy-window.c:1764
+#: ../src/ephy-window.c:1724
 msgid "High"
 msgstr "Yüksek"
 
-#: ../src/ephy-window.c:1774
+#: ../src/ephy-window.c:1734
 #, c-format
 msgid "Security level: %s"
 msgstr "Güvenlik seviyesi: %s"
 
-#: ../src/ephy-window.c:1817
+#: ../src/ephy-window.c:1777
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d gizli kendiliğinden beliren pencere"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2042
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s” resmini aç"
 
-#: ../src/ephy-window.c:2087
+#: ../src/ephy-window.c:2047
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s” resmini masaüstü arka planı olarak kullan"
 
-#: ../src/ephy-window.c:2092
+#: ../src/ephy-window.c:2052
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” resmini kaydet"
 
-#: ../src/ephy-window.c:2097
+#: ../src/ephy-window.c:2057
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "“%s” resim adresini kopyala"
 
-#: ../src/ephy-window.c:2110
+#: ../src/ephy-window.c:2071
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "“%s” adresine e-posta gönder"
 
-#: ../src/ephy-window.c:2116
+#: ../src/ephy-window.c:2077
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "“%s” e-posta adresini kopyala"
 
-#: ../src/ephy-window.c:2128
+#: ../src/ephy-window.c:2091
 #, c-format
 msgid "Save link “%s”"
 msgstr "“%s” bağlantısını kaydet"
 
-#: ../src/ephy-window.c:2134
+#: ../src/ephy-window.c:2097
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” bağlantısını yer imlerine ekle"
 
-#: ../src/ephy-window.c:2140
+#: ../src/ephy-window.c:2102
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "“%s” bağlantı adresini kopyala"
 
-#: ../src/pdm-dialog.c:369
+#: ../src/pdm-dialog.c:383
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Temizlemek istediğiniz kişisel bilgileri seçin</b>"
 
-#: ../src/pdm-dialog.c:372
+#: ../src/pdm-dialog.c:386
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -3228,26 +3298,26 @@ msgstr ""
 "silmek üzeresiniz. Devam etmeden önce silmek istediğiniz bilgilerin "
 "türlerini kontrol edin:"
 
-#: ../src/pdm-dialog.c:377
+#: ../src/pdm-dialog.c:391
 msgid "Clear All Personal Data"
 msgstr "Tüm Kişisel Bilgileri Temizle"
 
 #. Cookies
-#: ../src/pdm-dialog.c:408
+#: ../src/pdm-dialog.c:428
 msgid "C_ookies"
 msgstr "Ç_erezler"
 
 #. Passwords
-#: ../src/pdm-dialog.c:420
+#: ../src/pdm-dialog.c:440
 msgid "Saved _passwords"
 msgstr "Kaydedilmiş _parolalar"
 
 #. Cache
-#: ../src/pdm-dialog.c:444
+#: ../src/pdm-dialog.c:464
 msgid "_Temporary files"
 msgstr "_Geçici dosyalar"
 
-#: ../src/pdm-dialog.c:460
+#: ../src/pdm-dialog.c:480
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -3255,110 +3325,70 @@ msgstr ""
 "<small><i><b>Not:</b> Bu eylemi geri alamazsınız. Temizlemek üzere "
 "seçtiğinizbilgiler kalıcı olarak silinecek.</i></small>"
 
-#: ../src/pdm-dialog.c:652
+#: ../src/pdm-dialog.c:672
 msgid "Cookie Properties"
 msgstr "Çerez Özellikleri"
 
-#: ../src/pdm-dialog.c:669
+#: ../src/pdm-dialog.c:690
 msgid "Content:"
 msgstr "İçerik:"
 
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:706
 msgid "Path:"
 msgstr "Yol:"
 
-#: ../src/pdm-dialog.c:701
+#: ../src/pdm-dialog.c:722
 msgid "Send for:"
 msgstr "Gönderme sebebi:"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:731
 msgid "Encrypted connections only"
 msgstr "Sadece şifrelenmiş bağlantılar"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:731
 msgid "Any type of connection"
 msgstr "Herhangi bir tür bağlantı"
 
-#: ../src/pdm-dialog.c:716
+#: ../src/pdm-dialog.c:737
 msgid "Expires:"
 msgstr "Zaman Aşımı:"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:728
+#: ../src/pdm-dialog.c:749
 msgid "End of current session"
 msgstr "Geçerli oturumun sonu"
 
-#: ../src/pdm-dialog.c:861
+#: ../src/pdm-dialog.c:881
 msgid "Domain"
 msgstr "Etki Alanı"
 
-#: ../src/pdm-dialog.c:873
+#: ../src/pdm-dialog.c:893
 msgid "Name"
 msgstr "İsim"
 
-#: ../src/pdm-dialog.c:1287
+#: ../src/pdm-dialog.c:1307
 msgid "Host"
 msgstr "Makine"
 
-#: ../src/pdm-dialog.c:1300
+#: ../src/pdm-dialog.c:1320
 msgid "User Name"
 msgstr "Kullanıcı Adı"
 
-#: ../src/pdm-dialog.c:1313
+#: ../src/pdm-dialog.c:1333
 msgid "User Password"
 msgstr "Kullanıcı Parolası"
 
-#: ../src/popup-commands.c:259
+#: ../src/popup-commands.c:274
 msgid "Download Link"
 msgstr "Bağlantıyı İndir"
 
-#: ../src/popup-commands.c:267
+#: ../src/popup-commands.c:282
 msgid "Save Link As"
 msgstr "Bağlantıyı Farklı Kaydet"
 
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:289
 msgid "Save Image As"
 msgstr "Resmi Farklı Kaydet"
-
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "İlk"
-
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "İlk sayfaya git"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "Son"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "Son sayfaya git"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "Önceki"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "Önceki sayfaya git"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "Sonraki"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "Sonraki sayfaya git"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "Kapat"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "Baskı ön izlemeyi kapat"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -3385,11 +3415,11 @@ msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Sistem dili (%s)"
 
-#: ../src/prefs-dialog.c:941
+#: ../src/prefs-dialog.c:945
 msgid "Select a Directory"
 msgstr "Bir Dizin Seçin"
 
-#: ../src/window-commands.c:890
+#: ../src/window-commands.c:940
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3401,7 +3431,7 @@ msgstr ""
 "sonraki sürümleri koşulları altında onu yeniden dağıtabilir ve/veya "
 "değiştirebilirsiniz."
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:944
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3413,7 +3443,7 @@ msgstr ""
 "SATILABİLİRLİĞİ garanti etmez. Daha fazla ayrıntı için GNU Genel Kamu "
 "Lisansını inceleyin."
 
-#: ../src/window-commands.c:898
+#: ../src/window-commands.c:948
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3423,20 +3453,20 @@ msgstr ""
 "olmalısınız; eğer almadıysanız Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA  02110-1301  USA adresine yazın"
 
-#: ../src/window-commands.c:944 ../src/window-commands.c:960
-#: ../src/window-commands.c:971
+#: ../src/window-commands.c:994 ../src/window-commands.c:1010
+#: ../src/window-commands.c:1021
 msgid "Contact us at:"
 msgstr "Bize ulaşmak için:"
 
-#: ../src/window-commands.c:947
+#: ../src/window-commands.c:997
 msgid "Contributors:"
 msgstr "Katkıda Bulunanlar:"
 
-#: ../src/window-commands.c:950
+#: ../src/window-commands.c:1000
 msgid "Past developers:"
 msgstr "Geçmişteri geliştiriciler:"
 
-#: ../src/window-commands.c:980
+#: ../src/window-commands.c:1030
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3454,15 +3484,68 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1006
+#: ../src/window-commands.c:1056
 msgid "translator-credits"
 msgstr ""
 "Barış ÇİÇEK <baris@teamforce.name.tr>\n"
 "Erçin EKER <ercin.eker@linux.org.tr>"
 
-#: ../src/window-commands.c:1009
+#: ../src/window-commands.c:1059
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Web Tarayıcısı Web Sitesi"
+
+#~ msgid "Enable Java"
+#~ msgstr "Java'ya İzin Ver"
+
+#~ msgid "_View Certificate…"
+#~ msgstr "Sertifikayı _Göster…"
+
+#~ msgid "Enable _Java"
+#~ msgstr "_Java'yı Etkinleştir"
+
+#~ msgid "_Save As..."
+#~ msgstr "_Farklı Kaydet..."
+
+#~ msgid "Sidebar extension required"
+#~ msgstr "Kenar çubuğu eklentisi gerekiyor"
+
+#~ msgid "Sidebar Extension Required"
+#~ msgstr "Kenar Çubuğu Eklentisi Gerekiyor"
+
+#~ msgid "The link you clicked needs the sidebar extension to be installed."
+#~ msgstr ""
+#~ "Tıkladığınız bağlantı kenar çubuğu eklentisinin kurulu olmasını "
+#~ "gerektiriyor."
+
+#~ msgid "First"
+#~ msgstr "İlk"
+
+#~ msgid "Go to the first page"
+#~ msgstr "İlk sayfaya git"
+
+#~ msgid "Last"
+#~ msgstr "Son"
+
+#~ msgid "Go to the last page"
+#~ msgstr "Son sayfaya git"
+
+#~ msgid "Previous"
+#~ msgstr "Önceki"
+
+#~ msgid "Go to the previous page"
+#~ msgstr "Önceki sayfaya git"
+
+#~ msgid "Next"
+#~ msgstr "Sonraki"
+
+#~ msgid "Go to next page"
+#~ msgstr "Sonraki sayfaya git"
+
+#~ msgid "Close"
+#~ msgstr "Kapat"
+
+#~ msgid "Close print preview"
+#~ msgstr "Baskı ön izlemeyi kapat"
 
 #~ msgid "The encoding autodetector. Empty string means autodetect is off"
 #~ msgstr ""
@@ -3930,9 +4013,6 @@ msgstr "GNOME Web Tarayıcısı Web Sitesi"
 #~ msgid "Certificate _Details"
 #~ msgstr "Sertifika _Detayları"
 
-#~ msgid "_View Certificate"
-#~ msgstr "Sertifikayı _Göster"
-
 #~ msgid ""
 #~ "The site “%s” returned security information for “%s”. It is possible that "
 #~ "someone is intercepting your communication to obtain your confidential "
@@ -3943,8 +4023,8 @@ msgstr "GNOME Web Tarayıcısı Web Sitesi"
 #~ "olma olasılığı bulunuyor."
 
 #~ msgid ""
-#~ "You should only accept the security information if you trust “%s” and “%"
-#~ "s”."
+#~ "You should only accept the security information if you trust “%s” and "
+#~ "“%s”."
 #~ msgstr ""
 #~ "Güvenlik bilgisini sadece “%s” ve “%s” konumlarına güveniyorsanız kabul "
 #~ "edin."
