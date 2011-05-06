@@ -744,6 +744,7 @@ egg_toolbars_model_finalize (GObject *object)
     			   (GNodeForeachFunc) toolbar_node_free, model);
   g_node_destroy (model->priv->toolbars);
   g_hash_table_destroy (model->priv->flags);
+  g_list_free (model->priv->types);
 
   G_OBJECT_CLASS (egg_toolbars_model_parent_class)->finalize (object);
 }
