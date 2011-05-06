@@ -917,6 +917,7 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 
 	directory = g_file_new_for_path (path);
 	monitor = g_file_monitor_directory (directory, 0, NULL, NULL);
+	g_object_unref (directory);
 
 	if (monitor != NULL)
 	{
