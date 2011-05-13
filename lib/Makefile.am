@@ -96,6 +96,18 @@ libephymisc_la_LIBADD = -lm
 
 bin_PROGRAMS = ephy-profile-migrator
 ephy_profile_migrator_SOURCES = \
+	sqlite/ephy-sqlite-connection.c \
+	sqlite/ephy-sqlite-connection.h \
+	sqlite/ephy-sqlite-statement.c \
+	sqlite/ephy-sqlite-statement.h \
+	sqlite/ephy-sqlite.h \
+	history/ephy-history-service.c \
+	history/ephy-history-service.h \
+	history/ephy-history-service-private.h \
+	history/ephy-history-service-urls-table.c \
+	history/ephy-history-service-visits-table.c \
+	history/ephy-history-types.c \
+	history/ephy-history-types.h \
 	ephy-profile-migrator.c \
 	ephy-profile-utils.c \
 	ephy-profile-utils.h \
@@ -123,6 +135,7 @@ endif # ENABLE_NSS
 
 ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib \
+	-I$(srcdir)/history \
 	-DSHARE_DIR=\"$(pkgdatadir)\" \
 	$(AM_CPPFLAGS)
 

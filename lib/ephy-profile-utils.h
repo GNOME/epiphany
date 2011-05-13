@@ -26,7 +26,7 @@
 #define FORM_USERNAME_KEY "form_username"
 #define FORM_PASSWORD_KEY "form_password"
 
-#define EPHY_PROFILE_MIGRATION_VERSION 4
+#define EPHY_PROFILE_MIGRATION_VERSION 5
 
 int ephy_profile_utils_get_migration_version (void);
 

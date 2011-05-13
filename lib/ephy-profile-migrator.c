@@ -34,12 +34,14 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
 #endif
 
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <gnome-keyring.h>
 #include <libsoup/soup-gnome.h>
 
@@ -394,6 +396,196 @@ migrate_passwords2 ()
 #endif
 }
 
+/* History migration */
+
+static EphyHistoryService *history_service = NULL;
+static gboolean all_done = FALSE;
+
+typedef struct {
+  char *title;
+  char *location;
+  char *current;
+  long long int visit_count;
+  long long int last_visit;
+  long long int first_visit;
+  GList *visits;
+} HistoryParseData;
+
+static void
+history_parse_start_element (GMarkupParseContext *context,
+                             const char          *element_name,
+                             const char         **attribute_names,
+                             const char         **attribute_values,
+                             gpointer             user_data,
+                             GError             **error)
+{
+  HistoryParseData *parse_data = user_data;
+
+  if (g_str_equal (element_name, "node") && parse_data) {
+    /* Starting a new node, reset all values */
+    g_free (parse_data->title);
+    parse_data->title = NULL;
+
+    g_free (parse_data->location);
+    parse_data->location = NULL;
+
+    parse_data->visit_count = 0;
+    parse_data->last_visit = 0;
+    parse_data->first_visit = 0;
+  } else if (g_str_equal (element_name, "property")) {
+    const char **name, **value;
+
+    for (name = attribute_names, value = attribute_values; *name; name++, value++) {
+      if (g_str_equal (*name, "id")) {
+        parse_data->current = g_strdup (*value);
+        break;
+      }
+    }
+  }
+}
+
+static void
+history_parse_text (GMarkupParseContext *context,
+                    const char          *text,
+                    gsize                text_len,
+                    gpointer             user_data,
+                    GError             **error)
+{
+  HistoryParseData *parse_data = user_data;
+
+  if (!parse_data || ! parse_data->current)
+    return;
+
+  if (g_str_equal (parse_data->current, "2")) {
+    /* Title */
+    parse_data->title = g_strndup (text, text_len);
+  } else if (g_str_equal (parse_data->current, "3")) {
+    /* Location */
+    parse_data->location = g_strndup (text, text_len);
+  } else if (g_str_equal (parse_data->current, "4")) {
+    /* Visit count */
+    GString *data = g_string_new_len (text, text_len);
+    sscanf(data->str, "%lld", &parse_data->visit_count);
+    g_string_free (data, TRUE);
+  } else if (g_str_equal (parse_data->current, "5")) {
+    /* Last visit */
+    GString *data = g_string_new_len (text, text_len);
+    sscanf(data->str, "%lld", &parse_data->last_visit);
+    g_string_free (data, TRUE);
+  } else if (g_str_equal (parse_data->current, "6")) {
+    /* First visit */
+    GString *data = g_string_new_len (text, text_len);
+    sscanf(data->str, "%lld", &parse_data->first_visit);
+    g_string_free (data, TRUE);
+  }
+
+  g_free (parse_data->current);
+  parse_data->current = NULL;
+}
+
+static void
+visit_cb (EphyHistoryService *service, gboolean success, gpointer result, gpointer user_data)
+{
+  all_done = TRUE;
+}
+
+static void
+history_parse_end_element (GMarkupParseContext *context,
+                           const char          *element_name,
+                           gpointer             user_data,
+                           GError             **error)
+{
+  HistoryParseData *parse_data = user_data;
+
+  if (g_str_equal (element_name, "node") && parse_data) {
+    /* Add one item to History */
+    EphyHistoryPageVisit *visit = ephy_history_page_visit_new (parse_data->location ? parse_data->location : "", parse_data->last_visit, EPHY_PAGE_VISIT_TYPED);
+    g_free (visit->url->title);
+    visit->url->title = g_strdup (parse_data->title);
+    parse_data->visits = g_list_append (parse_data->visits, visit);
+  }
+}
+
+static GMarkupParser history_parse_funcs =
+{
+  history_parse_start_element,
+  history_parse_end_element,
+  history_parse_text,
+  NULL,
+  NULL,
+};
+
+static EphyHistoryService *
+ensure_empty_history (const char* filename)
+{
+  if (g_file_test (filename, G_FILE_TEST_IS_REGULAR)) {
+    g_unlink (filename);
+  }
+
+  return ephy_history_service_new (filename);
+}
+
+static void
+migrate_history ()
+{
+  GFileInputStream *input;
+  GMarkupParseContext *context;
+  GError *error = NULL;
+  GFile *file;
+  char *filename;
+  char buffer[1024];
+  HistoryParseData parse_data;
+
+  gchar *temporary_file = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+  history_service = ensure_empty_history (temporary_file);
+  g_free (temporary_file);
+
+  memset (&parse_data, 0, sizeof (HistoryParseData));
+  parse_data.location = NULL;
+  parse_data.title = NULL;
+  parse_data.visits = NULL;
+
+  filename = g_build_filename (ephy_dot_dir (),
+                               "ephy-history.xml",
+                               NULL);
+
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  input = g_file_read (file, NULL, &error);
+  g_object_unref (file);
+
+  if (error) {
+    if (error->code != G_IO_ERROR_NOT_FOUND)
+      g_warning ("Could not load Epiphany history data, migration aborted: %s", error->message);
+
+    g_error_free (error);
+    return;
+  }
+
+  context = g_markup_parse_context_new (&history_parse_funcs, 0, &parse_data, NULL);
+  while (TRUE) {
+    gssize count = g_input_stream_read (G_INPUT_STREAM (input), buffer, sizeof (buffer), NULL, &error);
+    if (count <= 0)
+      break;
+
+    if (!g_markup_parse_context_parse (context, buffer, count, &error))
+      break;
+  }
+
+  g_markup_parse_context_free (context);
+  g_input_stream_close (G_INPUT_STREAM (input), NULL, NULL);
+  g_object_unref (input);
+
+  ephy_history_service_add_visits (history_service, parse_data.visits, (EphyHistoryJobCallback)visit_cb, NULL);
+  ephy_history_page_visit_list_free (parse_data.visits);
+
+  while (!all_done)
+    g_main_context_iteration (NULL, FALSE);
+
+  g_object_unref (history_service);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -402,7 +594,8 @@ const EphyProfileMigrator migrators[] = {
   migrate_passwords,
   /* Very similar to migrate_passwords, but this migrates
    * login/passwords for page forms, which we previously ignored */
-  migrate_passwords2
+  migrate_passwords2,
+  migrate_history
 };
 
 static void
