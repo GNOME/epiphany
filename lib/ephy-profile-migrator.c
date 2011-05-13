@@ -455,7 +455,7 @@ ephy_migrator ()
 int
 main (int argc, char *argv[])
 {
-  g_thread_init (NULL);
+  g_type_init ();
 
   ephy_debug_init ();
 
