@@ -298,18 +298,6 @@ sync_lock_tooltip (GtkAction *gaction,
 }
 
 static void
-sync_secure (GtkAction *gaction,
-	     GParamSpec *pspec,
-	     GtkWidget *proxy)
-{
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
-	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
-
-	ephy_location_entry_set_secure (entry, priv->secure);
-}
-
-static void
 sync_show_lock (GtkAction *gaction,
 		GParamSpec *pspec,
 		GtkWidget *proxy)
@@ -507,9 +495,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		sync_lock_tooltip (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::lock-tooltip",
 					 G_CALLBACK (sync_lock_tooltip), proxy, 0);
-		sync_secure (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::secure",
-					 G_CALLBACK (sync_secure), proxy, 0);
 		sync_show_lock (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::show-lock",
 					 G_CALLBACK (sync_show_lock), proxy, 0);

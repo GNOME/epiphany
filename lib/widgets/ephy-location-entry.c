@@ -55,8 +55,6 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *entry;
 	char *lock_stock_id;
 	GdkPixbuf *favicon;
-	GdkRGBA secure_bg_color;
-	GdkRGBA secure_fg_color;
 
 	GSList *search_terms;
 
@@ -79,7 +77,6 @@ struct _EphyLocationEntryPrivate
 	guint can_redo : 1;
 	guint block_update : 1;
 	guint original_address : 1;
-	guint secure : 1;
 	guint apply_colors : 1;
 	guint needs_reset : 1;
 	guint show_lock : 1;
@@ -91,9 +88,6 @@ static const GtkTargetEntry url_drag_types [] =
 	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
-
-static const GdkRGBA fallback_bg_color = { 0.97, 0.97, 0.74, 1 }; /* yellow-ish */
-static const GdkRGBA fallback_fg_color = { 0, 0, 0, 1 }; /* black */
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -121,64 +115,6 @@ enum signalsEnum
 static gint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_TOOL_ITEM)
-
-static void
-ephy_location_entry_style_updated (GtkWidget *widget)
-{
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-	EphyLocationEntryPrivate *priv = entry->priv;
-	GtkSettings *settings;
-
-	GtkStyleContext *style;
-	GdkRGBA *bg_color = NULL;
-	GdkRGBA *fg_color = NULL;
-
-	char *theme;
-	gboolean is_a11y_theme;
-
-	if (GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_updated)
-	{
-		GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_updated (widget);
-	}
-
-	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-	g_object_get (settings, "gtk-theme-name", &theme, NULL);
-	is_a11y_theme = strstr (theme, "HighContrast") != NULL ||
-			strstr (theme, "LowContrast") != NULL;
-	g_free (theme);
-
-	style = gtk_widget_get_style_context (widget);
-	gtk_style_context_get_style (style,
-				     "secure-fg-color", &fg_color,
-				     "secure-bg-color", &bg_color,
-				     NULL);
-
-	/* We only use the fallback colors when we don't have an a11y theme */
-	priv->apply_colors = !is_a11y_theme || (fg_color != NULL && bg_color != NULL);
-
-	if (fg_color != NULL)
-	{
-		priv->secure_fg_color = *fg_color;
-		gdk_rgba_free (fg_color);
-	}
-	else
-	{
-		priv->secure_fg_color = fallback_fg_color;
-	}
-
-	if (bg_color != NULL)
-	{
-		priv->secure_bg_color = *bg_color;
-		gdk_rgba_free (bg_color);
-	}
-	else
-	{
-		priv->secure_bg_color = fallback_bg_color;
-	}
-
-	/* Apply the new style */
-	ephy_location_entry_set_secure (entry, priv->secure);
-}
 
 inline static void
 free_search_terms (GSList *search_terms)
@@ -218,11 +154,8 @@ static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->finalize = ephy_location_entry_finalize;
-
-	widget_class->style_updated = ephy_location_entry_style_updated;
 
        /**
 	* EphyLocationEntry::user-changed:
@@ -298,20 +231,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);
-
-	gtk_widget_class_install_style_property (widget_class,
-						 g_param_spec_boxed ("secure-bg-color",
-								     "Secure background colour",
-								     "Background colour to use for secure sites",
-								     GDK_TYPE_RGBA,
-								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	gtk_widget_class_install_style_property (widget_class,
-						 g_param_spec_boxed ("secure-fg-color",
-								     "Secure foreground Colour",
-								     "Foreground colour to use for secure sites",
-								     GDK_TYPE_RGBA,
-								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
@@ -1595,41 +1514,6 @@ ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 	priv->favicon = pixbuf ? g_object_ref (pixbuf) : NULL;
 
 	update_favicon (entry);
-}
-
-/**
- * ephy_location_entry_set_secure:
- * @entry: an #EphyLocationEntry widget
- * @secure: whether the page is secure and thus the location bar should reflect
- * that
- *
- * Set @entry to give visual feedback if the page is @secure. If it is, the
- * location bar will have its background painted differently (yellow by
- * default).
- *
- **/
-void
-ephy_location_entry_set_secure (EphyLocationEntry *entry,
-				gboolean secure)
-{
-	EphyLocationEntryPrivate *priv = entry->priv;
-	GtkWidget *widget = GTK_WIDGET (entry);
-	GtkWidget *gentry = priv->entry;
-
-	priv->secure = secure;
-
-	/* We have to set the color of the GtkEntry in the EphyIconEntry */
-	if (priv->secure && priv->apply_colors)
-	{
-		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_fg_color);
-		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, &priv->secure_bg_color);
-	}
-	else
-	{
-		gtk_widget_override_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
-		gtk_widget_override_background_color (gentry, GTK_STATE_FLAG_NORMAL, NULL);
-	}
-	gtk_widget_queue_draw (widget);
 }
 
 /**
