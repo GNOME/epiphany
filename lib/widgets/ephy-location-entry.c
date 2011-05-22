@@ -1563,11 +1563,11 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv;
 
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
-	g_return_if_fail (stock_id);
 
 	priv = entry->priv;
 
-	g_object_unref (priv->lock_gicon);
+	if (priv->lock_gicon)
+		g_object_unref (priv->lock_gicon);
 
 	/* At the moment we basically only show two kinds of
 	 * locks. Full/green for secure sites, Broken/red for sites
@@ -1575,7 +1575,7 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 	 * their security infrastructure (broken cert, etc). For
 	 * everything else, nothing is shown.
 	 */
-	if (g_str_equal (stock_id, STOCK_LOCK_BROKEN))
+	if (!stock_id || g_str_equal (stock_id, STOCK_LOCK_BROKEN))
 		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-allow-symbolic");
 	else
 		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-prevent-symbolic");
