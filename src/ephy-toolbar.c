@@ -76,7 +76,6 @@ struct _EphyToolbarPrivate
 
 	guint updating_address : 1;
 	guint show_lock : 1;
-	guint is_secure : 1;
 	guint leave_fullscreen_visible : 1;
 	guint spinning : 1;
 };
@@ -534,7 +533,6 @@ ephy_toolbar_set_navigation_tooltips (EphyToolbar *toolbar,
 /**
  * ephy_toolbar_set_security_state:
  * @toolbar: an #EphyToolbar widget
- * @is_secure: %TRUE if the page is loaded over a secure connection
  * @show_lock: %TRUE to show the lock icon in the location entry
  * @stock_id: stock-id to be used as the lock icon
  * @tooltip: tooltip for the lock icon
@@ -543,7 +541,6 @@ ephy_toolbar_set_navigation_tooltips (EphyToolbar *toolbar,
  **/
 void
 ephy_toolbar_set_security_state (EphyToolbar *toolbar,
-				 gboolean is_secure,
 				 gboolean show_lock,
 				 const char *stock_id,
 				 const char *tooltip)
@@ -551,13 +548,11 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 	EphyToolbarPrivate *priv = toolbar->priv;
 
 	priv->show_lock = show_lock != FALSE;
-	priv->is_secure = is_secure != FALSE;
 
 	g_object_set (priv->actions[LOCATION_ACTION],
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
 		      "show-lock", priv->show_lock,
-		      "secure", is_secure,
 		      NULL);
 }
 

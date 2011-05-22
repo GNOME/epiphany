@@ -93,7 +93,6 @@ void		ephy_toolbar_set_navigation_tooltips	(EphyToolbar *toolbar,
 							 const char *forward_title);
 
 void		ephy_toolbar_set_security_state		(EphyToolbar *toolbar,
-							 gboolean is_secure,
 							 gboolean show_lock,
 							 const char *stock_id,
 							 const char *tooltip);

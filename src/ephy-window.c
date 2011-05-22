@@ -1802,8 +1802,7 @@ sync_tab_security (EphyWebView *view,
 		g_free (tmp);
 	}
 
-	ephy_toolbar_set_security_state (priv->toolbar, is_secure,
-					 show_lock, stock_id, tooltip);
+	ephy_toolbar_set_security_state (priv->toolbar, show_lock, stock_id, tooltip);
 
 	if (priv->fullscreen_popup != NULL)
 	{
