@@ -53,7 +53,7 @@
 struct _EphyLocationEntryPrivate
 {
 	GtkWidget *entry;
-	char *lock_stock_id;
+	GIcon *lock_gicon;
 	GdkPixbuf *favicon;
 
 	GSList *search_terms;
@@ -134,13 +134,17 @@ ephy_location_entry_finalize (GObject *object)
 	EphyLocationEntryPrivate *priv = entry->priv;
 	
 	g_free (priv->saved_text);
-	g_free (priv->lock_stock_id);
 
 	if (priv->favicon != NULL)
 	{
 		g_object_unref (priv->favicon);
 	}
 	
+	if (priv->lock_gicon)
+	{
+		g_object_unref (priv->lock_gicon);
+	}
+
 	if (priv->search_terms)
 	{
 		free_search_terms (priv->search_terms);
@@ -888,9 +892,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
 					GTK_ENTRY_ICON_PRIMARY,
 					TRUE);
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->entry),
-				       GTK_ENTRY_ICON_SECONDARY,
-				       STOCK_LOCK_INSECURE);
 	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
 					GTK_ENTRY_ICON_SECONDARY,
 					TRUE);
@@ -1540,9 +1541,9 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 
 	priv->show_lock = show_lock != FALSE;
 
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->entry),
 				       GTK_ENTRY_ICON_SECONDARY,
-				       show_lock ? priv->lock_stock_id : NULL);
+				       show_lock ? priv->lock_gicon : NULL);
 }
 
 /**
@@ -1559,15 +1560,30 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 				    const char *stock_id)
 
 {
+	EphyLocationEntryPrivate *priv;
+
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
+	g_return_if_fail (stock_id);
 
-	g_free (entry->priv->lock_stock_id);
-	entry->priv->lock_stock_id = g_strdup (stock_id);
+	priv = entry->priv;
 
-	if (entry->priv->show_lock)
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry->priv->entry),
+	g_object_unref (priv->lock_gicon);
+
+	/* At the moment we basically only show two kinds of
+	 * locks. Full/green for secure sites, Broken/red for sites
+	 * that are supposed to be secure but have some issues in
+	 * their security infrastructure (broken cert, etc). For
+	 * everything else, nothing is shown.
+	 */
+	if (g_str_equal (stock_id, STOCK_LOCK_BROKEN))
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-allow-symbolic");
+	else
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-prevent-symbolic");
+
+	if (priv->show_lock)
+		gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->entry),
 					       GTK_ENTRY_ICON_SECONDARY,
-					       stock_id);
+					       priv->lock_gicon);
 }
 
 /**
