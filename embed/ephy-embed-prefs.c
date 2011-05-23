@@ -393,6 +393,27 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
   }
 }
 
+static void
+webkit_pref_callback_enable_spell_checking (GSettings *settings,
+                                            char *key,
+                                            gpointer data)
+{
+  gboolean value = FALSE;
+  char **languages;
+  char *langs = NULL;
+
+  value = g_settings_get_boolean (settings, key);
+
+  if (value) {
+    languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
+    langs = g_strjoinv (",", languages);
+    g_strdelimit (langs, "-", '_');
+  }
+
+  g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
+  g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
+}
+
 static const PrefData webkit_pref_entries[] =
   {
     /* GNOME font settings */
@@ -447,6 +468,11 @@ static const PrefData webkit_pref_entries[] =
       EPHY_PREFS_WEB_USE_GNOME_FONTS,
       NULL,
       webkit_pref_callback_gnome_fonts },
+
+    { EPHY_PREFS_WEB_SCHEMA,
+      EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
+      NULL,
+      webkit_pref_callback_enable_spell_checking },
 
     { EPHY_PREFS_WEB_SCHEMA,
       EPHY_PREFS_WEB_ENABLE_USER_CSS,

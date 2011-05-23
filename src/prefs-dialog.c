@@ -1024,6 +1024,9 @@ static const PrefsDialogPreference preferences[] =
 	{ "css_edit_button", "sensitive",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_USER_CSS,
 	  G_SETTINGS_BIND_GET, NULL, NULL },
+	{ "enable_spell_checking_checkbutton", "active",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
+	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 
 	/* Font buttons */
 	{ "custom_fonts_table", "sensitive",
