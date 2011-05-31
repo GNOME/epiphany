@@ -357,6 +357,18 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	{ "StopImageAnimation", NULL, N_("St_op Animation"), NULL,
 	  NULL, NULL },
 
+	/* Spelling */
+
+	{ "ReplaceWithSpellingSuggestion0", NULL, NULL, NULL,
+	  NULL, G_CALLBACK (popup_replace_spelling), },
+	{ "ReplaceWithSpellingSuggestion1", NULL, NULL, NULL,
+	  NULL, G_CALLBACK (popup_replace_spelling), },
+	{ "ReplaceWithSpellingSuggestion2", NULL, NULL, NULL,
+	  NULL, G_CALLBACK (popup_replace_spelling), },
+	{ "ReplaceWithSpellingSuggestion3", NULL, NULL, NULL,
+	  NULL, G_CALLBACK (popup_replace_spelling), },
+
+
 	/* Inspector */
 	{ "InspectElement", NULL, N_("Inspect _Element"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_inspect_element) },
@@ -1124,13 +1136,21 @@ ephy_window_delete_event (GtkWidget *widget,
 	return FALSE;
 }
 
+#define MAX_SPELL_CHECK_GUESSES 4
+
 static void
 update_popup_actions_visibility (EphyWindow *window,
-				 gboolean is_image,
+				 WebKitWebView *view,
+				 guint context,
 				 gboolean is_frame)
 {
 	GtkAction *action;
 	GtkActionGroup *action_group;
+	gboolean is_image = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE;
+	gboolean is_editable = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE;
+	GtkWidget *separator;
+	char **guesses = NULL;
+	int i;
 
 	action_group = window->priv->popups_action_group;
 
@@ -1145,6 +1165,56 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenFrame");
 	gtk_action_set_visible (action, is_frame);
+
+	if (is_editable)
+	{
+		char *text = NULL;
+		WebKitWebFrame *frame;
+		WebKitDOMRange *range;
+
+		frame = webkit_web_view_get_focused_frame (view);
+		range = webkit_web_frame_get_range_for_word_around_caret (frame);
+		text = webkit_dom_range_get_text (range);
+
+		if (text)
+		{
+			int location, length;
+			WebKitSpellChecker *checker = webkit_get_text_checker();
+			webkit_spell_checker_check_spelling_of_string (checker, text, &location, &length);
+			if (length)
+				guesses = webkit_spell_checker_get_guesses_for_word (checker, text, NULL);
+			
+		}
+
+		g_free (text);
+	}
+
+	for (i = 0; i < MAX_SPELL_CHECK_GUESSES; i++)
+	{
+		char *action_name;
+
+		action_name = g_strdup_printf("ReplaceWithSpellingSuggestion%d", i);
+		action = gtk_action_group_get_action (action_group, action_name);
+
+		if (guesses && i <= g_strv_length (guesses)) {
+			gtk_action_set_visible (action, TRUE);
+			gtk_action_set_label (action, guesses[i]);
+		} else
+			gtk_action_set_visible (action, FALSE);
+
+		g_free (action_name);
+	}
+
+	/* The separator! There must be a better way to do this? */
+	separator = gtk_ui_manager_get_widget (window->priv->manager,
+					       "/EphyInputPopup/SpellingSeparator");
+	if (guesses)
+		gtk_widget_show (separator);
+	else
+		gtk_widget_hide (separator);
+
+	if (guesses)
+		g_strfreev (guesses);
 }
 
 static void
@@ -2199,10 +2269,10 @@ show_embed_popup (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
-
 	
 	update_popup_actions_visibility (window,
-					 context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE,
+					 view,
+					 context,
 					 framed);
 
 	embed_event = ephy_embed_event_new (event, hit_test_result);

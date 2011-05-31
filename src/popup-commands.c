@@ -479,6 +479,33 @@ save_temp_source (const char *address)
 }
 
 void
+popup_replace_spelling (GtkAction *action,
+			EphyWindow *window)
+{
+	EphyEmbed *embed;
+	WebKitWebView *view;
+	WebKitWebFrame *frame;
+	WebKitDOMDOMSelection *selection;
+	WebKitDOMDocument *document;
+	WebKitDOMDOMWindow *default_view;
+
+	embed = ephy_embed_container_get_active_child 
+		(EPHY_EMBED_CONTAINER (window));
+	g_return_if_fail (embed != NULL);
+
+	view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
+	g_return_if_fail (view != NULL);
+
+	document = webkit_web_view_get_dom_document (view);
+	default_view = webkit_dom_document_get_default_view (document);
+	selection = webkit_dom_dom_window_get_selection (default_view);
+	webkit_dom_dom_selection_modify (selection, "move", "backward", "word");
+	webkit_dom_dom_selection_modify (selection, "extend", "forward", "word");
+	frame = webkit_web_view_get_focused_frame (view);
+	webkit_web_frame_replace_selection (frame, gtk_action_get_label (action));
+}
+
+void
 popup_cmd_open_image (GtkAction *action,
 		      EphyWindow *window)
 {
