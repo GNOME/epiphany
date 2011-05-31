@@ -45,10 +45,6 @@ AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
 AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
 AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
 
-# Build ID
-BUILDID="$(TZ=UTC0 date +'%Y%m%d')"
-AC_SUBST([BUILDID])
-
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 
 # Use AM_SILENT_RULES if present
