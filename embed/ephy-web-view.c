@@ -3066,6 +3066,39 @@ ephy_web_view_set_typed_address (EphyWebView *view,
 gboolean
 ephy_web_view_has_modified_forms (EphyWebView *view)
 {
+  WebKitDOMHTMLCollection *forms = NULL;
+  WebKitDOMDocument *document = NULL;
+  gulong forms_n;
+  int i;
+
+  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
+  forms = webkit_dom_document_get_forms (document);
+  forms_n = webkit_dom_html_collection_get_length (forms);
+
+  for (i = 0; i < forms_n; i++) {
+    WebKitDOMHTMLCollection *elements;
+    WebKitDOMNode *form_element = webkit_dom_html_collection_item (forms, i);
+    gulong elements_n;
+    int j;
+
+    elements = webkit_dom_html_form_element_get_elements (WEBKIT_DOM_HTML_FORM_ELEMENT (form_element));
+    elements_n = webkit_dom_html_collection_get_length (elements);
+
+    for (j = 0; j < elements_n; j++) {
+      WebKitDOMNode *element;
+
+      element = webkit_dom_html_collection_item (elements, j);
+
+      if (WEBKIT_DOM_IS_HTML_TEXT_AREA_ELEMENT (element))
+        if (webkit_dom_html_text_area_element_is_edited (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element)))
+          return TRUE;
+
+      if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
+        if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
+          return TRUE;
+    }
+  }
+
   return FALSE;
 }
 
