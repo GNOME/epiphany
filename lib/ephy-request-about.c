@@ -95,15 +95,14 @@ ephy_request_about_send (SoupRequest          *request,
 			mime_types = webkit_web_plugin_get_mimetypes (plugin);
 			for (m = mime_types; m; m = m->next) {
 				WebKitWebPluginMIMEType *mime_type = (WebKitWebPluginMIMEType*) m->data;
-				guint extensions_len = g_strv_length (mime_type->extensions);
 				guint i;
 
 				g_string_append_printf (data_str, "<tr><td>%s</td><td>%s</td><td>",
 							mime_type->name, mime_type->description);
 
-				for (i = 0; i < extensions_len; i++)
+				for (i = 0; mime_type->extensions[i] != NULL; i++)
 					g_string_append_printf (data_str, "%s%c", mime_type->extensions[i],
-								i == (extensions_len - 1) ? ' ' : ',');
+								mime_type->extensions[i + 1] ? ',' : ' ');
 
 				g_string_append(data_str, "</td></tr>");
 			}
