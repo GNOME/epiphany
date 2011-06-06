@@ -619,9 +619,13 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	provider = gtk_css_provider_new ();
 	gtk_css_provider_load_from_data (provider,
 					 "#ephy-tab-close-button {"
+					 " -GtkButton-default-border: 0;"
+					 " -GtkButton-default-outside-border: 0;"
+					 " -GtkButton-inner-border: 0;"
 					 " -GtkWidget-focus-padding: 0;"
 					 " -GtkWidget-focus-line-width: 0;"
-					 " margin: 0; }",
+					 " margin: 0;"
+					 " padding: 0; }",
 					 -1, NULL);
 
 	gtk_style_context_add_provider (gtk_widget_get_style_context (close_button),
