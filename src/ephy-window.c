@@ -1179,7 +1179,7 @@ update_popup_actions_visibility (EphyWindow *window,
 		if (text)
 		{
 			int location, length;
-			WebKitSpellChecker *checker = webkit_get_text_checker();
+			WebKitSpellChecker *checker = (WebKitSpellChecker*)webkit_get_text_checker();
 			webkit_spell_checker_check_spelling_of_string (checker, text, &location, &length);
 			if (length)
 				guesses = webkit_spell_checker_get_guesses_for_word (checker, text, NULL);
