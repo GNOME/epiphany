@@ -58,6 +58,9 @@ char     *ephy_string_get_host_name (const char *url);
 
 char     *ephy_string_expand_initial_tilde (const char *path);
 
+char    **ephy_string_commandline_args_to_uris (char **arguments, GError **error);
+
+
 G_END_DECLS
 
 #endif

@@ -497,3 +497,74 @@ ephy_string_expand_initial_tilde (const char *path)
 			    slash_after_user_name,
 			    NULL);
 }
+
+/**
+ * ephy_string_commandline_args_to_uris:
+ * @arguments: a %NULL-terminated array of chars.
+ *
+ * Transform commandline arguments to URIs if they exist,
+ * otherwise simply transform them to UTF-8.
+ *
+ * Returns: a newly allocated array with the URIs and
+ * UTF-8 strings.
+ **/
+char **
+ephy_string_commandline_args_to_uris (char **arguments, GError **error)
+{
+	gchar **args;
+	guint i;
+
+	if (arguments == NULL)
+		return NULL;
+
+	args = g_malloc0 (sizeof (gchar *) * (g_strv_length (arguments) + 1));
+
+	for (i = 0; arguments[i] != NULL; ++i)
+	{
+		char *uri, *path;
+#ifdef PATH_MAX
+		char rpath[PATH_MAX];
+#else
+		char *rpath = NULL;
+#endif
+
+		path = realpath (arguments[i], rpath);
+		if (path != NULL)
+		{
+			uri = g_locale_to_utf8 (path, -1,
+						NULL, NULL, error);
+#ifndef PATH_MAX
+			free (path);
+#endif
+		}
+		else
+		{
+			uri = g_locale_to_utf8 (arguments[i], -1,
+						NULL, NULL, error);
+		}
+
+		if (uri != NULL)
+		{
+			/* If it's a file, use g_file_new_for_commandline_arg,
+			 * so we get the right escaping.
+			 */
+			if (path != NULL)
+			{
+				GFile *file;
+				file = g_file_new_for_commandline_arg (uri);
+				args[i] = g_file_get_uri (file);
+				g_object_unref (file);
+				g_free (uri);
+			}
+			else
+			{
+				args[i] = uri;
+			}
+		} else {
+			g_strfreev (args);
+			return NULL;
+		}
+	}
+
+	return args;
+}

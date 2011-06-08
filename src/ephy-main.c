@@ -34,6 +34,7 @@
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-debug.h"
+#include "ephy-string.h"
 #include "eggsmclient.h"
 
 #include <libxml/xmlversion.h>
@@ -578,63 +579,18 @@ main (int argc,
 		exit (1);
 	}
 
-	/* Make URIs from arguments, to support filename args */
-	if (arguments != NULL)
-	{
-		guint i;
-
-		for (i = 0; arguments[i] != NULL; ++i)
-		{
-			char *uri, *path;
-#ifdef PATH_MAX
-			char rpath[PATH_MAX];
-#else
-			char *rpath = NULL;
-#endif
-
-			path = realpath (arguments[i], rpath);
-			if (path != NULL)
-			{
-				uri = g_locale_to_utf8 (path, -1, 
-							NULL, NULL, &error);
-#ifndef PATH_MAX
-				free (path);
-#endif
-			}
-			else
-			{
-				uri = g_locale_to_utf8 (arguments[i], -1, 
-							NULL, NULL, &error);
-			}
-
-			if (uri != NULL)
-			{
-				g_free (arguments[i]);
-
-				/* If it's a file, use g_file_new_for_commandline_arg,
-				 * so we get the right escaping.
-				 */
-				if (path != NULL)
-				{
-					GFile *file;
-					file = g_file_new_for_commandline_arg (uri);
-					arguments[i] = g_file_get_uri (file);
-					g_object_unref (file);
-					g_free (uri);
-				}
-				else
-				{
-					arguments[i] = uri;
-				}
-			}
-			else
-			{
-				g_print ("Could not convert '%s' to UTF-8: %s!\n",
-					 arguments[i], error->message);
-				g_error_free (error);
-				exit (1);
-			}
+	/* convert arguments to uris or at least to utf8 */
+	if (arguments != NULL) {
+		char **args = ephy_string_commandline_args_to_uris (arguments,
+								     &error);
+		if (error) {
+			g_print ("Could not convert to UTF-8: %s!\n",
+				 error->message);
+			g_error_free (error);
+			exit (1);
 		}
+		g_strfreev (arguments);
+		arguments = args;
 	}
 
 	/* Get a timestamp manually if need be */
