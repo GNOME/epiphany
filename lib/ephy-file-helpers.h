@@ -84,6 +84,8 @@ gboolean           ephy_file_browse_to           (GFile       *file,
 void               ephy_file_delete_directory    (const char  *path);
 void               ephy_file_delete_uri          (const char  *uri);
 gboolean           ephy_has_private_profile      (void);
+void               ephy_file_load_accels (void);
+void               ephy_file_save_accels (void);
 
 G_END_DECLS
 

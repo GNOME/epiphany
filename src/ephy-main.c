@@ -383,43 +383,6 @@ show_error_message (GError **error)
 	gtk_dialog_run (GTK_DIALOG (dialog));
 }
 
-static gchar *
-get_accels_filename (void)
-{
-        const char *home;
-
-        home = g_get_home_dir();
-        if (!home)
-                return NULL;
-        return g_build_filename (home, GNOME_DOT_GNOME, "accels", PACKAGE, NULL);
-}
-
-static void
-load_accels (void)
-{
-        char *filename;
-
-        filename = get_accels_filename ();
-        if (!filename)
-                return;
-
-        gtk_accel_map_load (filename);
-        g_free (filename);
-}
-
-static void
-save_accels (void)
-{
-        char *filename;
-
-        filename = get_accels_filename ();
-        if (!filename)
-                return;
-
-        gtk_accel_map_save (filename);
-        g_free (filename);
-}
-
 static void
 shell_quit_cb (EphyShell *shell, gpointer data)
 {
@@ -689,7 +652,7 @@ main (int argc,
 	}
 
 	ephy_stock_icons_init ();
-	load_accels ();
+	ephy_file_load_accels ();
 
 	/* Work-around Flash Player crash */
 	g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
@@ -705,7 +668,7 @@ main (int argc,
 	/* Shutdown */
 	g_object_unref (ephy_shell);
 
-	save_accels ();
+	ephy_file_save_accels ();
 	ephy_state_save ();
 	ephy_settings_shutdown ();
 	ephy_file_helpers_shutdown ();

@@ -932,3 +932,40 @@ ephy_file_delete_uri (const char *uri)
 	}
 	g_object_unref (file);
 }
+
+static gchar *
+get_accels_filename (void)
+{
+        const char *home;
+
+        home = g_get_home_dir();
+        if (!home)
+                return NULL;
+        return g_build_filename (home, GNOME_DOT_GNOME, "accels", PACKAGE, NULL);
+}
+
+void
+ephy_file_load_accels (void)
+{
+        char *filename;
+
+        filename = get_accels_filename ();
+        if (!filename)
+                return;
+
+        gtk_accel_map_load (filename);
+        g_free (filename);
+}
+
+void
+ephy_file_save_accels (void)
+{
+        char *filename;
+
+        filename = get_accels_filename ();
+        if (!filename)
+                return;
+
+        gtk_accel_map_save (filename);
+        g_free (filename);
+}
