@@ -321,8 +321,18 @@ gedit_overlay_size_allocate (GtkWidget     *widget,
 				alloc.y = 0;
 		}
 
-		alloc.width = MIN (main_alloc.width, req.width);
-		alloc.height = MIN (main_alloc.height, req.height);
+		if (main_alloc.width < req.width || main_alloc.height < req.height)
+		{
+		    GdkWindow *child_window = gtk_widget_get_window (child);
+		    if (child_window)
+			gdk_window_move_resize (child_window,
+						alloc.x, alloc.y,
+						MIN (main_alloc.width, req.width),
+						MIN (main_alloc.height, req.height));
+		}
+
+		alloc.width = req.width;
+		alloc.height = req.height;
 
 		gtk_widget_size_allocate (child, &alloc);
 	}
