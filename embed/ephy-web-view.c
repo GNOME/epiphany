@@ -39,7 +39,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
-#include "ephy-marshal.h"
 #include "ephy-permission-manager.h"
 #include "ephy-profile-utils.h"
 #include "ephy-favicon-cache.h"
@@ -1329,7 +1328,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_FIRST,
             G_STRUCT_OFFSET (EphyWebViewClass, popup_blocked),
             NULL, NULL,
-            ephy_marshal_VOID__STRING_STRING_STRING,
+            g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1351,7 +1350,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_FIRST,
             G_STRUCT_OFFSET (EphyWebViewClass, search_link),
             NULL, NULL,
-            ephy_marshal_VOID__STRING_STRING_STRING,
+            g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1373,7 +1372,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_FIRST,
             G_STRUCT_OFFSET (EphyWebViewClass, feed_link),
             NULL, NULL,
-            ephy_marshal_VOID__STRING_STRING_STRING,
+            g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1393,7 +1392,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET (EphyWebViewClass, modal_alert),
             g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__VOID,
+            g_cclosure_marshal_generic,
             G_TYPE_BOOLEAN,
             0);
 /**
@@ -1425,7 +1424,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET (EphyWebViewClass, search_key_press),
             g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__BOXED,
+            g_cclosure_marshal_generic,
             G_TYPE_BOOLEAN,
             1,
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -1443,7 +1442,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET (EphyWebViewClass, close_request),
             g_signal_accumulator_true_handled, NULL,
-            ephy_marshal_BOOLEAN__VOID,
+            g_cclosure_marshal_generic,
             G_TYPE_BOOLEAN,
             0);
 /**

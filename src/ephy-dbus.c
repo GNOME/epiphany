@@ -22,7 +22,6 @@
 
 #include "ephy-dbus.h"
 #include "ephy-type-builtins.h"
-#include "ephy-marshal.h"
 #include "ephy-debug.h"
 #include "ephy-activation.h"
 #include "ephy-dbus-server-bindings.h"
@@ -408,7 +407,7 @@ ephy_dbus_class_init (EphyDbusClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyDbusClass, connected),
 			      NULL, NULL,
-			      ephy_marshal_VOID__ENUM,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_NONE,
 			      1,
 			      EPHY_TYPE_DBUS_BUS);
@@ -419,7 +418,7 @@ ephy_dbus_class_init (EphyDbusClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyDbusClass, disconnected),
 			      NULL, NULL,
-			      ephy_marshal_VOID__ENUM,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_NONE,
 			      1,
 			      EPHY_TYPE_DBUS_BUS);

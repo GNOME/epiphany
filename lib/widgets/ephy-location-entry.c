@@ -25,7 +25,6 @@
 
 #include "ephy-tree-model-node.h"
 #include "ephy-location-entry.h"
-#include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-dnd.h"
 #include "egg-editable-toolbar.h"
@@ -212,7 +211,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (EphyLocationEntryClass, get_location),
 		ephy_signal_accumulator_string, NULL,
-		ephy_marshal_STRING__VOID,
+		g_cclosure_marshal_generic,
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);
@@ -232,7 +231,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (EphyLocationEntryClass, get_title),
 		ephy_signal_accumulator_string, NULL,
-		ephy_marshal_STRING__VOID,
+		g_cclosure_marshal_generic,
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);

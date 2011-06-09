@@ -23,7 +23,6 @@
 
 #include "ephy-tabs-menu.h"
 #include "ephy-notebook.h"
-#include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"

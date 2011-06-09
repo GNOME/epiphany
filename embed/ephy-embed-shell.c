@@ -34,7 +34,6 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
-#include "ephy-marshal.h"
 
 #include "ephy-print-utils.h"
 

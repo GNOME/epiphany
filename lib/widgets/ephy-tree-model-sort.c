@@ -26,7 +26,6 @@
 #include "ephy-tree-model-sort.h"
 #include "eggtreemultidnd.h"
 #include "ephy-dnd.h"
-#include "ephy-marshal.h"
 #include "ephy-debug.h"
 
 /**

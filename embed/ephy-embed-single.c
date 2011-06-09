@@ -30,7 +30,6 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-permission-manager.h"
 #include "ephy-profile-utils.h"
@@ -310,7 +309,7 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
                 G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
                 ephy_signal_accumulator_object, ephy_embed_get_type,
-                ephy_marshal_OBJECT__OBJECT_FLAGS,
+                g_cclosure_marshal_generic,
                 GTK_TYPE_WIDGET,
                 2,
                 GTK_TYPE_WIDGET,
@@ -334,7 +333,7 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 G_SIGNAL_RUN_LAST,
                 G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
                 g_signal_accumulator_true_handled, NULL,
-                ephy_marshal_BOOLEAN__STRING_STRING,
+                g_cclosure_marshal_generic,
                 G_TYPE_BOOLEAN,
                 2,
                 G_TYPE_STRING,
@@ -355,7 +354,7 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 G_SIGNAL_RUN_LAST,
                 G_STRUCT_OFFSET (EphyEmbedSingleClass, add_search_engine),
                 g_signal_accumulator_true_handled, NULL,
-                ephy_marshal_BOOLEAN__STRING_STRING_STRING,
+                g_cclosure_marshal_generic,
                 G_TYPE_BOOLEAN,
                 3,
                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,

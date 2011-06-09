@@ -35,7 +35,6 @@
 #include "ephy-bookmark-properties.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-stock-icons.h"
 
@@ -159,7 +158,7 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyBookmarksClass, resolve_address),
 			      ephy_signal_accumulator_string, NULL,
-			      ephy_marshal_STRING__STRING_STRING,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_STRING,
 			      2,
 			      G_TYPE_STRING,

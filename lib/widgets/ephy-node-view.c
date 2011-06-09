@@ -28,7 +28,6 @@
 #include "eggtreemultidnd.h"
 #include "ephy-dnd.h"
 #include "ephy-gui.h"
-#include "ephy-marshal.h"
 #include <string.h>
 
 /**
@@ -1858,7 +1857,7 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyNodeViewClass, node_toggled),
 			      NULL, NULL,
-			      ephy_marshal_VOID__POINTER_BOOLEAN,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_NONE,
 			      2,
 			      G_TYPE_POINTER,
@@ -1911,7 +1910,7 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyNodeViewClass, node_dropped),
 			      NULL, NULL,
-			      ephy_marshal_VOID__POINTER_POINTER,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_NONE,
 			      2,
 			      G_TYPE_POINTER,

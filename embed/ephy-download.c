@@ -30,7 +30,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-file-helpers.h"
-#include "ephy-marshal.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
@@ -815,7 +814,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
                 G_SIGNAL_RUN_LAST,
                 G_STRUCT_OFFSET (EphyDownloadClass, error),
                 NULL, NULL,
-                ephy_marshal_BOOLEAN__INT_INT_STRING,
+                g_cclosure_marshal_generic,
                 G_TYPE_NONE,
                 0);
 }

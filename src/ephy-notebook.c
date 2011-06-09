@@ -25,7 +25,6 @@
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
 #include "ephy-dnd.h"
 #include "ephy-embed.h"

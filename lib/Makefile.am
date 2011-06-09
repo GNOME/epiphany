@@ -125,9 +125,7 @@ ephy_profile_migrator_CPPFLAGS = \
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\
-	ephy-lib-type-builtins.h	\
-	ephy-marshal.c			\
-	ephy-marshal.h
+	ephy-lib-type-builtins.h
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
@@ -135,21 +133,7 @@ MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
 	stamp-ephy-lib-type-builtins.c	\
-	stamp-ephy-lib-type-builtins.h	\
-	stamp-ephy-marshal.c		\
-	stamp-ephy-marshal.h
-
-ephy-marshal.c: stamp-ephy-marshal.c
-	@true
-stamp-ephy-marshal.c: ephy-marshal.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c \
-	&& echo timestamp > $(@F)
-
-ephy-marshal.h: stamp-ephy-marshal.h
-	@true
-stamp-ephy-marshal.h: ephy-marshal.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
-	&& echo timestamp > $(@F)
+	stamp-ephy-lib-type-builtins.h
 
 ephy-lib-type-builtins.c: stamp-ephy-lib-type-builtins.c Makefile
 	@true
@@ -192,6 +176,3 @@ stamp-ephy-lib-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
-
-EXTRA_DIST = 			\
-	ephy-marshal.list

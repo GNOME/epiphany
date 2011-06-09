@@ -23,7 +23,6 @@
 
 #include "ephy-embed-utils.h"
 #include "ephy-type-builtins.h"
-#include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
@@ -61,7 +60,7 @@ ephy_link_base_init (gpointer g_class)
 			 G_SIGNAL_RUN_LAST,
 			 G_STRUCT_OFFSET (EphyLinkIface, open_link),
 			 ephy_signal_accumulator_object, ephy_embed_get_type,
-			 ephy_marshal_OBJECT__STRING_OBJECT_FLAGS,
+			 g_cclosure_marshal_generic,
 			 GTK_TYPE_WIDGET /* Can't use an interface type here */,
 			 3,
 			 G_TYPE_STRING,

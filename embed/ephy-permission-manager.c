@@ -22,7 +22,6 @@
 
 #include "ephy-permission-manager.h"
 #include "ephy-embed-type-builtins.h"
-#include "ephy-marshal.h"
 #include "ephy-debug.h"
 
 GType

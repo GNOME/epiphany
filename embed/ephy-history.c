@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include "ephy-history.h"
-#include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 #include "ephy-node-db.h"
@@ -152,7 +151,7 @@ ephy_history_class_init (EphyHistoryClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyHistoryClass, add_page),
 			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__STRING_BOOLEAN_BOOLEAN,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_BOOLEAN,
 			      3,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -186,7 +185,7 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyHistoryClass, redirect),
                               NULL, NULL,
-                              ephy_marshal_VOID__STRING_STRING,
+                              g_cclosure_marshal_generic,
                               G_TYPE_NONE,
                               2,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -198,7 +197,7 @@ ephy_history_class_init (EphyHistoryClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyHistoryClass, icon_updated),
 			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_STRING,
+			      g_cclosure_marshal_generic,
 			      G_TYPE_NONE,
 			      2,
 			      G_TYPE_STRING, G_TYPE_STRING);
