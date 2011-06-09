@@ -745,7 +745,7 @@ request_decision_on_storing (StorePasswordData *store_data)
   info_bar = gtk_info_bar_new ();
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  button_box = gtk_hbutton_box_new ();
+  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (action_area), button_box);
 
   action_button = gtk_button_new_with_label (_("Not now"));
@@ -1717,7 +1717,7 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
   /* Buttons */
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
 
-  button_box = gtk_hbutton_box_new ();
+  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (action_area), button_box);
 
   /* Translators: Geolocation policy for a specific site. */

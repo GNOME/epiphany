@@ -202,7 +202,7 @@ ephy_fullscreen_popup_constructor (GType type,
 
 	gtk_window_set_resizable (window, FALSE);
 
-	hbox = gtk_hbox_new (FALSE, 2);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_container_add (GTK_CONTAINER (window), hbox);
 	gtk_widget_show (hbox);
 
@@ -211,7 +211,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (hbox), priv->frame, FALSE, FALSE, 0);
 
-	frame_hbox = gtk_hbox_new (FALSE, 2);
+	frame_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_container_add (GTK_CONTAINER (priv->frame), frame_hbox);
 	gtk_widget_show (frame_hbox);
 

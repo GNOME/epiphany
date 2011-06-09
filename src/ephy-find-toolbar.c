@@ -543,7 +543,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	alignment = gtk_alignment_new (0.0, 0.5, 1.0, 0.0);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 2, 2);
 
-	box = gtk_hbox_new (FALSE, 12);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_container_add (GTK_CONTAINER (alignment), box);
 
 	priv->label = gtk_label_new (NULL);

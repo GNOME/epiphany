@@ -47,14 +47,14 @@ typedef struct _EphyDownloadWidgetPrivate EphyDownloadWidgetPrivate;
 
 struct _EphyDownloadWidget
 {
-  GtkHBox parent;
+  GtkBox parent;
 
   EphyDownloadWidgetPrivate *priv;
 };
 
 struct _EphyDownloadWidgetClass
 {
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 };
 
 GType          ephy_download_widget_get_type      (void) G_GNUC_CONST;

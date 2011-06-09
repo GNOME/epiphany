@@ -33,7 +33,7 @@
 #include <glib/gi18n.h>
 #include <webkit/webkit.h>
 
-G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_HBOX)
+G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_BOX)
 
 #define DOWNLOAD_WIDGET_PRIVATE(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_DOWNLOAD_WIDGET, EphyDownloadWidgetPrivate))
@@ -399,6 +399,9 @@ static void
 ephy_download_widget_init (EphyDownloadWidget *self)
 {
   self->priv = DOWNLOAD_WIDGET_PRIVATE (self);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (self),
+                                  GTK_ORIENTATION_HORIZONTAL);
 }
 
 /**

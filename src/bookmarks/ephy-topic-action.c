@@ -130,7 +130,7 @@ create_tool_item (GtkAction *action)
 	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 	gtk_widget_show (arrow);
 
-	hbox = gtk_hbox_new (FALSE, 3);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (button), hbox);
 

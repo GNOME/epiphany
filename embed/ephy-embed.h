@@ -44,14 +44,14 @@ typedef struct _EphyEmbedPrivate EphyEmbedPrivate;
 #define EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
 
 struct _EphyEmbed {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   EphyEmbedPrivate *priv;
 };
 
 struct _EphyEmbedClass {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 };
 
 GType        ephy_embed_get_type                 (void);

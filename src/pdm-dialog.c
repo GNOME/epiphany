@@ -366,7 +366,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 				  FALSE);
 #endif
 
-	vbox = gtk_vbox_new (FALSE, 6);
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 	content_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
 	gtk_box_pack_start (GTK_BOX (content_area),
 			    vbox, FALSE, FALSE, 0);

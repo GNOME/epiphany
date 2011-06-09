@@ -933,7 +933,7 @@ build_search_box (EphyHistoryWindow *editor)
 	GtkWidget *combo;
 	char *str;
 
-	box = gtk_hbox_new (FALSE, 6);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
@@ -1101,7 +1101,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
 
-	editor->priv->main_vbox = gtk_vbox_new (FALSE, 0);
+	editor->priv->main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (editor->priv->main_vbox);
 	gtk_container_add (GTK_CONTAINER (editor), editor->priv->main_vbox);
 
@@ -1193,7 +1193,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
-	vbox = gtk_vbox_new (FALSE, 0);
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_paned_pack2 (GTK_PANED (hpaned), vbox, TRUE, FALSE);
 	gtk_widget_show (vbox);
 

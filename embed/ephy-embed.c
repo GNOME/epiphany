@@ -90,7 +90,7 @@ struct _EphyEmbedPrivate
   guint tab_message_id;
 };
 
-G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_VBOX)
+G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
 
 static void
 restore_zoom_level (EphyEmbed *embed,
@@ -616,9 +616,12 @@ ephy_embed_init (EphyEmbed *embed)
 {
   embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
+                                  GTK_ORIENTATION_VERTICAL);
+
   embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
-  embed->priv->paned = GTK_PANED (gtk_vpaned_new ());
-  embed->priv->top_widgets_vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
+  embed->priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
+  embed->priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   embed->priv->seq_context_id = 1;
   embed->priv->seq_message_id = 1;
   embed->priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);

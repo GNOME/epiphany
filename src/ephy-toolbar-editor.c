@@ -196,7 +196,7 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_box_set_spacing (GTK_BOX (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_box_pack_start (GTK_BOX (vbox), editor, TRUE, TRUE, 0);
 
-	hbox = gtk_hbox_new (FALSE, 12);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_box_set_spacing (GTK_BOX (editor), 18);
 	gtk_box_pack_start (GTK_BOX (editor), hbox, FALSE, FALSE, 0);
 

@@ -904,7 +904,7 @@ cmd_bookmarks_export (GtkAction *action,
 			  G_CALLBACK (export_format_combo_changed_cb), dialog);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
-	hbox = gtk_hbox_new (FALSE, 12);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0);
 	gtk_widget_show_all (hbox);
@@ -949,7 +949,7 @@ cmd_bookmarks_import (GtkAction *action,
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	gtk_box_set_spacing (GTK_BOX (content_area), 2);
 
-	vbox = gtk_vbox_new (FALSE, 6);
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_widget_show (vbox);
 	gtk_box_pack_start (GTK_BOX (content_area), vbox,
@@ -1532,7 +1532,7 @@ build_search_box (EphyBookmarksEditor *editor)
 	GtkWidget *entry;
 	char *str;
 
-	box = gtk_hbox_new (FALSE, 6);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
@@ -1664,7 +1664,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
 
-	editor->priv->main_vbox = gtk_vbox_new (FALSE, 0);
+	editor->priv->main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (editor->priv->main_vbox);
 	gtk_container_add (GTK_CONTAINER (editor), editor->priv->main_vbox);
 
@@ -1759,7 +1759,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (keyword_node_show_popup_cb),
 			  editor);
 
-	vbox = gtk_vbox_new (FALSE, 0);
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_paned_pack2 (GTK_PANED (hpaned), vbox, TRUE, TRUE);
 	gtk_widget_show (vbox);
 

@@ -84,7 +84,7 @@ struct _EggEditableToolbarPrivate
   gchar *primary_name;
 };
 
-G_DEFINE_TYPE (EggEditableToolbar, egg_editable_toolbar, GTK_TYPE_VBOX);
+G_DEFINE_TYPE (EggEditableToolbar, egg_editable_toolbar, GTK_TYPE_BOX);
 
 static int
 get_dock_position (EggEditableToolbar *etoolbar,
@@ -1031,7 +1031,7 @@ create_dock (EggEditableToolbar *etoolbar)
 {
   GtkWidget *toolbar, *hbox;
 
-  hbox = gtk_hbox_new (0, FALSE);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
@@ -1385,6 +1385,8 @@ egg_editable_toolbar_init (EggEditableToolbar *etoolbar)
 
   priv = etoolbar->priv = EGG_EDITABLE_TOOLBAR_GET_PRIVATE (etoolbar);
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (etoolbar),
+                                  GTK_ORIENTATION_VERTICAL);
   priv->save_hidden = TRUE;
 
   g_signal_connect (etoolbar, "notify::visible",
@@ -1827,7 +1829,7 @@ new_separator_pixbuf (void)
   GtkWidget *separator;
   GdkPixbuf *pixbuf;
 
-  separator = gtk_vseparator_new ();
+  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
   pixbuf = new_pixbuf_from_widget (separator);
   return pixbuf;
 }

@@ -142,7 +142,7 @@ create_tool_item (GtkAction *action)
 
 	item = GTK_ACTION_CLASS (ephy_bookmark_action_parent_class)->create_tool_item (action);
 
-	hbox = gtk_hbox_new (FALSE, 0);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (item), hbox);
 
@@ -161,7 +161,7 @@ create_tool_item (GtkAction *action)
 	g_signal_connect (entry, "button-press-event",
 			  G_CALLBACK (entry_button_press_event_cb), action);
 
-	hbox = gtk_hbox_new (FALSE, 3);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (button), hbox);
 

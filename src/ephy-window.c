@@ -1555,12 +1555,12 @@ setup_ui_manager (EphyWindow *window)
 	GtkAction *action;
 	GtkUIManager *manager;
 
-	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
+	window->priv->main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (window->priv->main_vbox);
 	gtk_container_add (GTK_CONTAINER (window),
 			   window->priv->main_vbox);
 
-	window->priv->menu_dock = gtk_vbox_new (FALSE, 0);
+	window->priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (window->priv->menu_dock);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->menu_dock),
@@ -3265,7 +3265,7 @@ setup_downloads_box (EphyWindow *window)
 	GtkWidget *close_button;
 	GtkWidget *image;
 
-	widget = gtk_hbox_new (FALSE, 0);
+	widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	close_button = gtk_button_new ();
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_BUTTON);
 
