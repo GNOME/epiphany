@@ -413,9 +413,9 @@ gedit_overlay_forall (GtkContainer *overlay,
 
 	while (children)
 	{
+		GtkWidget *child;
 		ChildContainer *container = children->data;
 		children = children->next;
-		GtkWidget *child;
 
 		child = child_container_get_child (container);
 
