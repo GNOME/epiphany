@@ -544,7 +544,7 @@ ephy_embed_constructed (GObject *object)
   gtk_box_pack_start (GTK_BOX (embed),
                       GTK_WIDGET (embed->priv->top_widgets_vbox),
                       FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (embed), paned);
+  gtk_box_pack_start (GTK_BOX (embed), paned, TRUE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (embed->priv->top_widgets_vbox));
   gtk_widget_show (GTK_WIDGET (web_view));
