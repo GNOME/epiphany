@@ -1176,7 +1176,7 @@ update_popup_actions_visibility (EphyWindow *window,
 		range = webkit_web_frame_get_range_for_word_around_caret (frame);
 		text = webkit_dom_range_get_text (range);
 
-		if (text)
+		if (text && *text != '\0')
 		{
 			int location, length;
 			WebKitSpellChecker *checker = (WebKitSpellChecker*)webkit_get_text_checker();
