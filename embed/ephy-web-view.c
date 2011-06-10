@@ -3062,6 +3062,8 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_object_notify (G_OBJECT (view), "typed-address");
 }
 
+#define MIN_INPUT_LENGTH 50
+
 /**
  * ephy_web_view_has_modified_forms:
  * @view: an #EphyWebView
@@ -3088,6 +3090,7 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
     WebKitDOMNode *form_element = webkit_dom_html_collection_item (forms, i);
     gulong elements_n;
     int j;
+    gboolean modified_input_element = FALSE;
 
     elements = webkit_dom_html_form_element_get_elements (WEBKIT_DOM_HTML_FORM_ELEMENT (form_element));
     elements_n = webkit_dom_html_collection_get_length (elements);
@@ -3102,8 +3105,26 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
           return TRUE;
 
       if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
-        if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
-          return TRUE;
+        if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element))) {
+          glong length;
+          char *text;
+
+          /* A small heuristic here. If there's only one input element
+           * modified and it does not have a lot of text the user is
+           * likely not very interested in saving this work, so do
+           * nothing (eg, google search input). */
+          if (modified_input_element)
+            return TRUE;
+
+          modified_input_element = TRUE;
+
+          text = webkit_dom_html_input_element_get_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
+          length = g_utf8_strlen (text, -1);
+          g_free (text);
+
+          if (length > MIN_INPUT_LENGTH)
+            return TRUE;
+        }
     }
   }
 
