@@ -69,14 +69,14 @@ ephy_request_about_send (SoupRequest          *request,
 	if (!about->priv->css_style)
 		read_css_style (about);
 
-	g_string_append_printf (data_str, "<head><title>%s</title>" \
-				"<style type=\"text/css\">%s</style></head><body>",
-				_("Installed plugins"),
-				about->priv->css_style);
-
 	if (!g_strcmp0 (uri->path, "plugins")) {
 		WebKitWebPluginDatabase* database = webkit_get_web_plugin_database ();
 		GSList *plugin_list, *p;
+
+		g_string_append_printf (data_str, "<head><title>%s</title>" \
+					"<style type=\"text/css\">%s</style></head><body>",
+					_("Installed plugins"),
+					about->priv->css_style);
 
 		g_string_append_printf(data_str, "<h1>%s</h1>", _("Installed plugins"));
 		plugin_list = webkit_web_plugin_database_get_plugins (database);
@@ -109,9 +109,24 @@ ephy_request_about_send (SoupRequest          *request,
 			g_string_append(data_str, "</tbody></table>");
 		}
 		webkit_web_plugin_database_plugins_list_free (plugin_list);
+		g_string_append(data_str, "</body>");
+	} else if (!g_strcmp0 (uri->path, "epiphany")) {
+		g_string_append_printf (data_str, "<head><title>Epiphany</title>" \
+					"<style type=\"text/css\">%s</style></head>" \
+					"<body style=\"background: #3369FF; color: white; font-style: italic;\">",
+					about->priv->css_style);
+
+		g_string_append (data_str, "<div id=\"ephytext\">" \
+				 "Il semble que la perfection soit atteinte non quand il n'y a plus rien à" \
+				 "ajouter, mais quand il n'y a plus rien à retrancher." \
+				 "</div>" \
+				 "<div id=\"from\">" \
+				 "<!-- Terre des Hommes, III: L'Avion, p. 60 -->" \
+				 "Antoine de Saint-Exupéry" \
+				 "</div></body>");
 	}
 
-	g_string_append(data_str, "</body></html>");
+	g_string_append(data_str, "</html>");
 	about->priv->content_length = data_str->len;
 	return g_memory_input_stream_new_from_data (g_string_free(data_str, false), about->priv->content_length, g_free);
 }
