@@ -119,9 +119,9 @@ ephy_embed_utils_normalize_address (const char *address)
 		 * handled internally by WebKit and mean "empty
 		 * document".
 		 */
-		if (!g_ascii_strcasecmp (address, "about:plugins"))
-			effective_address = g_strdup (EPHY_ABOUT_SCHEME":plugins");
-		else
+		if (g_str_has_prefix (address, "about:") && !g_str_equal (address, "about:blank")) {
+			effective_address = g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
+		} else
 			effective_address = g_strdup (address);
 	}
 
