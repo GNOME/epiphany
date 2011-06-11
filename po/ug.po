@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-04-25 22:52+0000\n"
+"POT-Creation-Date: 2011-06-10 14:49+0000\n"
 "PO-Revision-Date: 2011-04-26 10:08+0600\n"
 "Last-Translator: Sahran <sahran.ug@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -63,7 +63,7 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany توركۆرگۈ"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:647
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:566
 msgid "Web Browser"
 msgstr "توركۆرگۈ"
 
@@ -108,7 +108,7 @@ msgid "Field _Value"
 msgstr "سۆز بۆلەك قىممىتى(_V)"
 
 #: ../data/glade/certificate-dialogs.ui.h:11
-#: ../data/glade/prefs-dialog.ui.h:22
+#: ../data/glade/prefs-dialog.ui.h:23
 msgid "General"
 msgstr "ئادەتتىكى"
 
@@ -225,37 +225,41 @@ msgid "<b>Passwords</b>"
 msgstr "<b>ئىم</b>"
 
 #: ../data/glade/prefs-dialog.ui.h:8
+msgid "<b>Spell checking</b>"
+msgstr "<b>ئىملا تەكشۈرۈش</b>"
+
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "<b>Style</b>"
 msgstr "<b>ئۇسلۇب</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:9
+#: ../data/glade/prefs-dialog.ui.h:10
 msgid "<b>Temporary Files</b>"
 msgstr "<b>ۋاقىتلىق ھۆججەتلەر</b>"
 
-#: ../data/glade/prefs-dialog.ui.h:10
+#: ../data/glade/prefs-dialog.ui.h:11
 msgid "<b>Web Content</b>"
 msgstr "<b>تور مەزمۇنى</b>"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.ui.h:12
+#: ../data/glade/prefs-dialog.ui.h:13
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr ""
 "<small>مەسىلەن، بۇ تور بېكەتلەردىكى ئېلان سودىگەرلىرىنىڭ Cookie نى قوبۇل "
 "قىلمايدۇ</small>"
 
-#: ../data/glade/prefs-dialog.ui.h:13
-msgid "A_utomatically download and open files"
-msgstr "ھۆججەتلەرنى ئۆزلۈكىدىن چۈشۈرۈپ ئاچ(_U)"
-
 #: ../data/glade/prefs-dialog.ui.h:14
+msgid "A_utomatically open downloaded files"
+msgstr "چۈشۈرۈلگەن ھۆججەتلەرنى ئاپتوماتىك ئاچ(_U)"
+
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Add Language"
 msgstr "تىل قوش"
 
-#: ../data/glade/prefs-dialog.ui.h:15
+#: ../data/glade/prefs-dialog.ui.h:16
 msgid "Allow popup _windows"
 msgstr "قاڭقىش كۆزنىكىگە يول قوي(_W)"
 
-#: ../data/glade/prefs-dialog.ui.h:16
+#: ../data/glade/prefs-dialog.ui.h:17
 msgid "Choose a l_anguage:"
 msgstr "بىر تىل تاللاڭ(_A):"
 
@@ -263,100 +267,104 @@ msgstr "بىر تىل تاللاڭ(_A):"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:17 ../lib/widgets/ephy-location-entry.c:720
+#: ../data/glade/prefs-dialog.ui.h:18 ../lib/widgets/ephy-location-entry.c:608
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "تازىلا(_E)"
 
-#: ../data/glade/prefs-dialog.ui.h:18
+#: ../data/glade/prefs-dialog.ui.h:19
 msgid "De_fault:"
 msgstr "كۆڭۈلدىكى(_F):"
 
-#: ../data/glade/prefs-dialog.ui.h:19
+#: ../data/glade/prefs-dialog.ui.h:20
 msgid "Enable Java_Script"
 msgstr "Java_Script نى قوزغات"
 
-#: ../data/glade/prefs-dialog.ui.h:20
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Enable _plugins"
 msgstr "قىستۇرما قوزغات(_E)"
 
-#: ../data/glade/prefs-dialog.ui.h:21
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "Fonts & Style"
 msgstr "خەت نۇسخا ۋە ئۇسلۇب"
 
-#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:773
+#: ../data/glade/prefs-dialog.ui.h:24 ../src/prefs-dialog.c:774
 msgid "Language"
 msgstr "تىل"
 
-#: ../data/glade/prefs-dialog.ui.h:24
+#: ../data/glade/prefs-dialog.ui.h:25
 msgid "MB"
 msgstr "مېگابايت"
 
-#: ../data/glade/prefs-dialog.ui.h:25
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "Monospace font:"
 msgstr "تەڭ كەڭلىكتىكى خەت نۇسخا:"
 
-#: ../data/glade/prefs-dialog.ui.h:26
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Only _from sites you visit"
 msgstr "سىز زىيارەت قىلغان بەتتىنلا(_F)"
 
-#: ../data/glade/prefs-dialog.ui.h:27
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Preferences"
 msgstr "مايىللىق"
 
-#: ../data/glade/prefs-dialog.ui.h:28
+#: ../data/glade/prefs-dialog.ui.h:29
 msgid "Privacy"
 msgstr "شەخسىي سىر"
 
-#: ../data/glade/prefs-dialog.ui.h:29
+#: ../data/glade/prefs-dialog.ui.h:30
 msgid "Sans serif font:"
 msgstr "Sans serif خەت نۇسخا:"
 
-#: ../data/glade/prefs-dialog.ui.h:30
+#: ../data/glade/prefs-dialog.ui.h:31
 msgid "Serif font:"
 msgstr "Serif خەت نۇسخا:"
 
-#: ../data/glade/prefs-dialog.ui.h:31
+#: ../data/glade/prefs-dialog.ui.h:32
 msgid "Set to Current _Page"
 msgstr "نۆۋەتتىكى بەتكە تەڭشە(_P)"
 
-#: ../data/glade/prefs-dialog.ui.h:32
+#: ../data/glade/prefs-dialog.ui.h:33
 msgid "Set to _Blank Page"
 msgstr "بوش بەتكە تەڭشە(_B)"
 
-#: ../data/glade/prefs-dialog.ui.h:33
+#: ../data/glade/prefs-dialog.ui.h:34
 msgid "Use custom _stylesheet"
 msgstr "ئىختىيارى ئۇسلۇب جەدۋىلى ئىشلەت(_S)"
 
-#: ../data/glade/prefs-dialog.ui.h:34
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Address:"
 msgstr "ئادرېس(_A):"
 
-#: ../data/glade/prefs-dialog.ui.h:35
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Always accept"
 msgstr "ھەمىشە قوشۇل(_A)"
 
-#: ../data/glade/prefs-dialog.ui.h:36
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Disk space:"
 msgstr "دىسكا بوشلۇقى(_D):"
 
-#: ../data/glade/prefs-dialog.ui.h:37
+#: ../data/glade/prefs-dialog.ui.h:38
 msgid "_Download folder:"
 msgstr "چۈشۈرىدىغان قىسقۇچ(_D):"
 
-#: ../data/glade/prefs-dialog.ui.h:38
-msgid "_Edit Stylesheet&#x2026;"
-msgstr "ئۇسلۇب جەدۋەل تەھرىر(_E)&#x2026;"
-
 #: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Edit Stylesheet…"
+msgstr "ئۇسلۇب جەدۋەل تەھرىر(_E)…"
+
+#: ../data/glade/prefs-dialog.ui.h:40
+msgid "_Enable spell checking"
+msgstr "ئىملا تەكشۈرۈشنى ئىشلەت(_E)"
+
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Never accept"
 msgstr "ھەرگىز قوشۇلما(_N)"
 
-#: ../data/glade/prefs-dialog.ui.h:40
+#: ../data/glade/prefs-dialog.ui.h:42
 msgid "_Remember passwords"
 msgstr "ئىمنى ئەستە تۇت(_R)"
 
-#: ../data/glade/prefs-dialog.ui.h:41
+#: ../data/glade/prefs-dialog.ui.h:43
 msgid "_Use system fonts"
 msgstr "سىستېما خەت نۇسخىلىرىنى ئىشلەت(_U)"
 
@@ -412,7 +420,7 @@ msgstr "ھەر بىر كاندۇك ئايرىم ئايرىم(_E)"
 msgid "_Page address"
 msgstr "بەت مەنزىلى(_P)"
 
-#: ../embed/ephy-download.c:174
+#: ../embed/ephy-download.c:172
 msgctxt "file type"
 msgid "Unknown"
 msgstr "نامەلۇم"
@@ -425,7 +433,7 @@ msgstr "تور تەكشۈرگۈچ"
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "ھازىر Epiphany نى ئىشلەتكىلى بولمايدۇ. دەسلەپلەشتۈرەلمىدى."
 
-#: ../embed/ephy-embed-single.c:505
+#: ../embed/ephy-embed-single.c:508
 msgid ""
 "CA Certificates file we should use was not found, all SSL sites will be "
 "considered to have a broken certificate."
@@ -433,7 +441,7 @@ msgstr ""
 "CA گۇۋاھنامە ھۆججىتى تېپىلمىدى، ھەممە SSL بېكەتلەر گۇۋاھنامىسى ئىناۋەتسىز "
 "دەپ قارىلىدۇ."
 
-#: ../embed/ephy-embed-utils.c:60
+#: ../embed/ephy-embed-utils.c:61
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "«%s» غا ئېلخەت يوللا"
@@ -761,30 +769,30 @@ msgstr "يۇنىكود (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "نامەلۇم (%s)"
 
-#: ../embed/ephy-history.c:474
+#: ../embed/ephy-history.c:475
 msgid "All"
 msgstr "ھەممىسى"
 
-#: ../embed/ephy-history.c:640
+#: ../embed/ephy-history.c:641
 msgid "Others"
 msgstr "باشقىلار"
 
-#: ../embed/ephy-history.c:646
+#: ../embed/ephy-history.c:647
 msgid "Local files"
 msgstr "يەرلىك ھۆججەت"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:67 ../embed/ephy-web-view.c:3323
+#: ../embed/ephy-web-view.c:68 ../embed/ephy-web-view.c:3385
 msgid "Blank page"
 msgstr "بوش بەت"
 
-#: ../embed/ephy-web-view.c:750
+#: ../embed/ephy-web-view.c:751
 msgid "Not now"
 msgstr "ھازىرچە ياق"
 
-#: ../embed/ephy-web-view.c:755
+#: ../embed/ephy-web-view.c:756
 msgid "Store password"
 msgstr "ئىم ساقلا"
 
@@ -792,42 +800,42 @@ msgstr "ئىم ساقلا"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:766
+#: ../embed/ephy-web-view.c:767
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>سىز <b>%2$s</b> غا <b>%1$s</b>نىڭ ئىمنى ساقلامسىز؟</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1723
+#: ../embed/ephy-web-view.c:1724
 msgid "Deny"
 msgstr "رەت قىل"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1729
+#: ../embed/ephy-web-view.c:1730
 msgid "Allow"
 msgstr "يول قوي"
 
 #. Label
-#: ../embed/ephy-web-view.c:1735
+#: ../embed/ephy-web-view.c:1736
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b> دىكى بەت ئورنىڭىزنى بىلمەكچى."
 
-#: ../embed/ephy-web-view.c:1968
+#: ../embed/ephy-web-view.c:1969
 msgid "None specified"
 msgstr "بەلگىلەنمىگەن"
 
-#: ../embed/ephy-web-view.c:1977 ../embed/ephy-web-view.c:1989
+#: ../embed/ephy-web-view.c:1978 ../embed/ephy-web-view.c:1990
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "ۋاييەي! %s يۈكلەشتە خاتالىق كۆرۈلدى"
 
-#: ../embed/ephy-web-view.c:1979
+#: ../embed/ephy-web-view.c:1980
 msgid "Oops! It was impossible to load this website"
 msgstr "ۋاييەي! بۇ تور بېكەتنى يۈكلىيەلمەيدۇ"
 
-#: ../embed/ephy-web-view.c:1980
+#: ../embed/ephy-web-view.c:1981
 #, c-format
 msgid ""
 "The website at <strong>%s</strong> is probably unavailable, the precise "
@@ -838,18 +846,18 @@ msgstr ""
 "<strong>%s</strong> دىكى تور بېكەتنى ئىشلەتكىلى بولمايدۇ، ئېنىق خاتالىق "
 "ئۇچۇرى:<br/><br/><em>%s</em>.<br/><br/>ئەگەر بۇ خىل ئەھۋال داۋاملىق كۆرۈلسە، "
 "ئىنتېرنېت باغلىنىشىڭىزنى تەكشۈرۈڭ ياكى <strong>%s</strong> دىكى تور بېكەتنىڭ "
-"نورمال خىزمەت قىلىۋاتامدۇ يوق. "
+"نورمال خىزمەت قىلىۋاتامدۇ يوق."
 
-#: ../embed/ephy-web-view.c:1983
+#: ../embed/ephy-web-view.c:1984
 msgid "Try again"
 msgstr "قايتا سىنا"
 
-#: ../embed/ephy-web-view.c:1991
+#: ../embed/ephy-web-view.c:1992
 msgid "Oops! This site might have caused Epiphany to close unexpectedly"
 msgstr ""
 "ۋاييەي! بۇ تور بېكەت Epiphany تاسادىپىي يېپىلىشىنى كەلتۈرۈپ چىقىرىشى مۇمكىن"
 
-#: ../embed/ephy-web-view.c:1992
+#: ../embed/ephy-web-view.c:1993
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly.<br/> This "
@@ -860,29 +868,33 @@ msgstr ""
 "يۈكلىسىڭىز، مەسىلە يەنە كۆرۈلۈشى مۇمكىن. ئەگەر كۆرۈلسە <strong>%s</strong> "
 "ئىجادكارلىرىغا بۇ مەسىلىنى مەلۇم قىلىڭ."
 
-#: ../embed/ephy-web-view.c:1995
+#: ../embed/ephy-web-view.c:1996
 msgid "Load again anyway"
 msgstr "قايتا يۈكلەۋەر"
 
-#: ../embed/ephy-web-view.c:2269
+#: ../embed/ephy-web-view.c:2270
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
+#: ../embed/ephy-web-view.c:2460
+msgid "Plugins"
+msgstr "قىستۇرما"
+
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2564
+#: ../embed/ephy-web-view.c:2567
 #, c-format
 msgid "Loading “%s”…"
 msgstr "«%s» نى يۈكلەۋاتىدۇ…"
 
-#: ../embed/ephy-web-view.c:2566
+#: ../embed/ephy-web-view.c:2569
 msgid "Loading…"
 msgstr "يۈكلەۋاتىدۇ…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3527
+#: ../embed/ephy-web-view.c:3589
 #, c-format
 msgid "%s Files"
 msgstr "%s ھۆججەت"
@@ -930,7 +942,7 @@ msgstr "ئەڭگىمە باشقۇرغۇچقا باغلىنىشنى چەكلە"
 msgid "Specify file containing saved configuration"
 msgstr "سەپلىمە ساقلانغان ھۆججەتنى بەلگىلە"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:92 ../src/ephy-main.c:94
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:93 ../src/ephy-main.c:95
 msgid "FILE"
 msgstr "ھۆججەت"
 
@@ -962,27 +974,27 @@ msgstr "ئەڭگىمە باشقۇرغۇچ تاللانمىلىرىنى كۆرس�
 msgid "Show “_%s”"
 msgstr "«_%s» كۆرسەت"
 
-#: ../lib/egg/egg-editable-toolbar.c:1448
+#: ../lib/egg/egg-editable-toolbar.c:1450
 msgid "_Move on Toolbar"
 msgstr "قورال بالداققا يۆتكە(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1449
+#: ../lib/egg/egg-editable-toolbar.c:1451
 msgid "Move the selected item on the toolbar"
 msgstr "تاللىغان تۈرنى قورال بالداققا يۆتكەيدۇ"
 
-#: ../lib/egg/egg-editable-toolbar.c:1450
+#: ../lib/egg/egg-editable-toolbar.c:1452
 msgid "_Remove from Toolbar"
 msgstr "قورال بالداقتىن چىقىرىۋەت(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1451
+#: ../lib/egg/egg-editable-toolbar.c:1453
 msgid "Remove the selected item from the toolbar"
 msgstr "تاللىغان تۈرنى قورال بالداقتىن چىقىرىۋېتىدۇ"
 
-#: ../lib/egg/egg-editable-toolbar.c:1452
+#: ../lib/egg/egg-editable-toolbar.c:1454
 msgid "_Delete Toolbar"
 msgstr "قورال بالداقنى ئۆچۈر(_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1453
+#: ../lib/egg/egg-editable-toolbar.c:1455
 msgid "Remove the selected toolbar"
 msgstr "تاللانغان قورال بالداقنى چىقىرىۋېتىدۇ"
 
@@ -1014,7 +1026,7 @@ msgstr "چۈشۈرۈش"
 #. If we don't have XDG user dirs info, return an educated guess.
 #: ../lib/ephy-file-helpers.c:164
 msgid "Desktop"
-msgstr "ئۈستەلئۈستى"
+msgstr "ئۈستەليۈزى"
 
 #: ../lib/ephy-file-helpers.c:341
 #, c-format
@@ -1092,17 +1104,17 @@ msgstr "تارىخ"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1509
+#: ../src/ephy-window.c:1595
 msgid "Bookmark"
 msgstr "خەتكۈش"
 
 #: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:885
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1661
-#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1513
+#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1599
 msgid "Bookmarks"
-msgstr "خەتكۈشلەر"
+msgstr "خەتكۈچلەر"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:278
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:277
 msgid "Address Entry"
 msgstr "مەنزىل تۈرى"
 
@@ -1141,10 +1153,10 @@ msgstr "%b %d %I:%M %p"
 #.
 #: ../lib/ephy-time-helpers.c:269
 msgid "%b %d %Y"
-msgstr "%Y-يىلى %b-ئاينىڭ %d-كۈنى"
+msgstr "%b %d %Y"
 
 #. impossible time or broken locale settings
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1746
+#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1832
 msgid "Unknown"
 msgstr "نامەلۇم"
 
@@ -1221,7 +1233,7 @@ msgstr "چۈشۈرۈۋاتقاندا خاتالىق كۆرۈلدى: %s"
 msgid "Cancel"
 msgstr "ۋاز كەچ"
 
-#: ../lib/widgets/ephy-download-widget.c:288 ../src/ephy-window.c:1503
+#: ../lib/widgets/ephy-download-widget.c:288 ../src/ephy-window.c:1589
 #: ../src/window-commands.c:312
 msgid "Open"
 msgstr "ئاچ"
@@ -1230,11 +1242,11 @@ msgstr "ئاچ"
 msgid "Show in folder"
 msgstr "قىسقۇچتا كۆرسەت"
 
-#: ../lib/widgets/ephy-download-widget.c:464
+#: ../lib/widgets/ephy-download-widget.c:467
 msgid "Starting…"
 msgstr "باشلاۋاتىدۇ…"
 
-#: ../lib/widgets/ephy-location-entry.c:1003
+#: ../lib/widgets/ephy-location-entry.c:891
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "بۇ سىنبەلگىنى سۆرەپ بۇ بەتنىڭ ئۇلانمىسىنى قۇرغىلى بولىدۇ"
 
@@ -1247,7 +1259,7 @@ msgstr "تازىلا"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:501
+#: ../src/bookmarks/ephy-bookmark-action.c:499
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "قوليازما «%s» نى ئىجرا قىل"
@@ -1280,7 +1292,7 @@ msgstr "«%s» خاسلىق"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:550
 msgid "_Title:"
-msgstr "ماۋزۇ(_T):"
+msgstr "ماۋزۇ (_T):"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:566
 msgid "A_ddress:"
@@ -1319,56 +1331,56 @@ msgid "Work"
 msgstr "ئىش"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:439
+#: ../src/bookmarks/ephy-bookmarks.c:436
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "«%s» خەتكۈچنى يېڭىلىسۇنمۇ؟"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:444
+#: ../src/bookmarks/ephy-bookmarks.c:441
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "خەتكۈچتىكى بەت «%s» غا يۆتكەلدى."
 
-#: ../src/bookmarks/ephy-bookmarks.c:448
+#: ../src/bookmarks/ephy-bookmarks.c:445
 msgid "_Don't Update"
 msgstr "يېڭىلىما(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:450
+#: ../src/bookmarks/ephy-bookmarks.c:447
 msgid "_Update"
 msgstr "يېڭىلا(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:453
+#: ../src/bookmarks/ephy-bookmarks.c:450
 msgid "Update Bookmark?"
 msgstr "«%s» خەتكۈچنى يېڭىلىسۇنمۇ؟"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1184
+#: ../src/bookmarks/ephy-bookmarks.c:1181
 msgctxt "bookmarks"
 msgid "All"
 msgstr "ھەممىسى"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1187
+#: ../src/bookmarks/ephy-bookmarks.c:1184
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "ئەڭ كۆپ زىيارەت"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1191
+#: ../src/bookmarks/ephy-bookmarks.c:1188
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "تۈرگە ئايرىلمىغان"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1196
+#: ../src/bookmarks/ephy-bookmarks.c:1193
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "يەرلىك تور بېكەت"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1430
+#: ../src/bookmarks/ephy-bookmarks.c:1427
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "ماۋزۇسىز"
@@ -1387,22 +1399,22 @@ msgstr "بۇ باش تېمىدىن چىقىرىۋەت"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:156
-#: ../src/ephy-history-window.c:127 ../src/ephy-window.c:112
+#: ../src/ephy-history-window.c:127 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "ھۆججەت(_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:157
-#: ../src/ephy-history-window.c:128 ../src/ephy-window.c:113
+#: ../src/ephy-history-window.c:128 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "تەھرىر(_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:129 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:129 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "كۆرۈنۈش(_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "ياردەم(_H)"
 
@@ -1436,7 +1448,7 @@ msgstr "تاللانغان خەتكۈچنى يېڭى كۆزنەكتە ئاچ"
 #: ../src/ephy-history-window.c:615
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
-msgstr[0] "يېڭى بەتكۈچتە ئاچ(_T)"
+msgstr[0] "يېڭى بەتكۈچلەردە ئاچ(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Open the selected bookmark in a new tab"
@@ -1454,7 +1466,7 @@ msgstr "تاللانغان خەتكۈش ياكى باش تېما ئاتىنى ئ
 #: ../src/bookmarks/ephy-bookmarks-editor.c:174
 #: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "_Properties"
-msgstr "خاسلىقلار(_P)"
+msgstr "خاسلىق(_P)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "View or modify the properties of the selected bookmark"
@@ -1477,7 +1489,7 @@ msgid "Export bookmarks to a file"
 msgstr "خەتكۈچلەرنى ھۆججەتكە ئېكسپورت قىل"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:144
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:146
 msgid "_Close"
 msgstr "ياپ(_C)"
 
@@ -1487,29 +1499,29 @@ msgstr "خەتكۈچلەر كۆزنىكىنى ياپ"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:158
 msgid "Cu_t"
 msgstr "كەس(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:159
 msgid "Cut the selection"
 msgstr "تاللىغاننى كەس"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1308
 #: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:625
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:161
 msgid "_Copy"
 msgstr "كۆچۈر(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:160
+#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:162
 msgid "Copy the selection"
 msgstr "تاللىغاننى كۆچۈر"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:162
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:164
 msgid "_Paste"
 msgstr "چاپلا(_P)"
 
@@ -1528,7 +1540,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "تاللانغان خەتكۈش ياكى باش تېمىنى ئۆچۈر"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:168
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:170
 msgid "Select _All"
 msgstr "ھەممىنى تاللا(_A)"
 
@@ -1539,7 +1551,7 @@ msgstr "ھەممە خەتكۈش ياكى تېكىستنى تاللا"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "مەزمۇنلار(_C)"
 
@@ -1548,12 +1560,12 @@ msgid "Display bookmarks help"
 msgstr "خەتكۈش ياردەمنى كۆرسەت"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:265
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "ھەققىدە(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:266
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "توركۆرگۈ قۇرغۇچىلىرىغا بولغان تەشەككۈرلەرنى كۆرسىتىدۇ"
 
@@ -1713,7 +1725,7 @@ msgstr "باش تېما"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1788
 #: ../src/ephy-history-window.c:1220
 msgid "Title"
-msgstr "ماۋزۇ"
+msgstr "ماۋزۇ(ئاتى)"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "Show properties for this bookmark"
@@ -1804,11 +1816,11 @@ msgid "Find next occurrence of the search string"
 msgstr "كەينىدە كۆرۈنگەن تېكىستلەرنى ئىزدەيدۇ"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:620
+#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:613
 msgid "Leave Fullscreen"
 msgstr "تولۇق ئېكراندىن چېكىن"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:308
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:307
 msgid "Go"
 msgstr "يۆتكەل"
 
@@ -1903,59 +1915,59 @@ msgstr "بېكەتلەر"
 msgid "Date"
 msgstr "چېسلا"
 
-#: ../src/ephy-main.c:77 ../src/ephy-main.c:523 ../src/window-commands.c:1040
+#: ../src/ephy-main.c:78 ../src/ephy-main.c:487 ../src/window-commands.c:1058
 msgid "GNOME Web Browser"
 msgstr "GNOME توركۆرگۈ"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:87
 msgid "Open a new tab in an existing browser window"
 msgstr "مەۋجۇت توركۆرگۈ كۆزنىكىدە يېڭى بەتكۈچ ئاچ"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:89
 msgid "Open a new browser window"
 msgstr "يېڭى بىر توركۆرگۈ كۆزنىكىدە ئاچ"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:91
 msgid "Launch the bookmarks editor"
 msgstr "خەتكۈش تەھرىرلىگۈچنى قوزغات"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:93
 msgid "Import bookmarks from the given file"
 msgstr "بېرىلگەن ھۆججەتتىن خەتكۈچلەرنى ئىمپورت قىلىدۇ"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:95
 msgid "Load the given session file"
 msgstr "بېرىلگەن ئەڭگىمە ھۆججەتنى يۈكلە"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:97
 msgid "Add a bookmark"
 msgstr "خەتكۈچتىن بىرنى قوش"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:97
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:99
 msgid "Start a private instance"
 msgstr "شەخسىي ئۈلگىدىن بىرنى باشلا"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:101
 msgid "Profile directory to use in the private instance"
 msgstr "شەخسىي ئۈلگىدە ئىشلىتىدىغان سەپلىمە ھۆججەت مۇندەرىجىسى"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:101
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:103
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:374
+#: ../src/ephy-main.c:375
 msgid "Could not start GNOME Web Browser"
 msgstr "GNOME توركۆرگۈنى قوزغاتقىلى بولمىدى"
 
-#: ../src/ephy-main.c:377
+#: ../src/ephy-main.c:378
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -1964,11 +1976,11 @@ msgstr ""
 "قوزغىتالمىدى سەۋەبى تۆۋەندىكى خاتالىق:\n"
 "%s"
 
-#: ../src/ephy-main.c:524
+#: ../src/ephy-main.c:488
 msgid "GNOME Web Browser options"
 msgstr "GNOME توركۆرگۈ تاللانمىلىرى"
 
-#: ../src/ephy-notebook.c:633
+#: ../src/ephy-notebook.c:637
 msgid "Close tab"
 msgstr "بەتكۈچ ياپ"
 
@@ -2015,88 +2027,88 @@ msgstr ""
 msgid "Switch to this tab"
 msgstr "بۇ بەتكۈچكە ئالماشتۇر"
 
-#: ../src/ephy-toolbar.c:218
+#: ../src/ephy-toolbar.c:217
 msgid "_Back"
 msgstr "كەينى(_B)"
 
-#: ../src/ephy-toolbar.c:220
+#: ../src/ephy-toolbar.c:219
 msgid "Go to the previous visited page"
 msgstr "ئالدىنقى زىيارەت قىلغان بەتكە يۆتكىلىدۇ"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:224
+#: ../src/ephy-toolbar.c:223
 msgid "Back history"
 msgstr "كېيىنكى تارىخ"
 
-#: ../src/ephy-toolbar.c:238
+#: ../src/ephy-toolbar.c:237
 msgid "_Forward"
-msgstr "ئالدى(_F)"
+msgstr "جاۋاب يوللا(_F)"
 
-#: ../src/ephy-toolbar.c:240
+#: ../src/ephy-toolbar.c:239
 msgid "Go to the next visited page"
 msgstr "كېيىنكى زىيارەت قىلغان بەتكە يۆتكىلىدۇ"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:244
+#: ../src/ephy-toolbar.c:243
 msgid "Forward history"
 msgstr "ئالدىنقى تارىخ"
 
-#: ../src/ephy-toolbar.c:257
+#: ../src/ephy-toolbar.c:256
 msgid "_Up"
 msgstr "ئۈستىگە(_U)"
 
-#: ../src/ephy-toolbar.c:259
+#: ../src/ephy-toolbar.c:258
 msgid "Go up one level"
 msgstr "يۇقىرىغا بىر دەرىجە ئۆرلەيدۇ"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:263
+#: ../src/ephy-toolbar.c:262
 msgid "List of upper levels"
 msgstr "يۇقىرى دەرىجە تىزىمى"
 
-#: ../src/ephy-toolbar.c:280
+#: ../src/ephy-toolbar.c:279
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "ئاچىدىغان تور ئادرېسى ياكى ئىزدەيدىغان ئىبارىنى كىرگۈزۈڭ"
 
-#: ../src/ephy-toolbar.c:296
+#: ../src/ephy-toolbar.c:295
 msgid "Zoom"
 msgstr "كېڭەيت تارايت"
 
-#: ../src/ephy-toolbar.c:298
+#: ../src/ephy-toolbar.c:297
 msgid "Adjust the text size"
 msgstr "تېكىست چوڭلۇقىنى تەڭشەيدۇ"
 
-#: ../src/ephy-toolbar.c:310
+#: ../src/ephy-toolbar.c:309
 msgid "Go to the address entered in the address entry"
 msgstr "ئادرېس كىرگۈزۈش تۈرىدە كىرگۈزۈلگەن ئادرېسقا يۆتكىلىدۇ"
 
-#: ../src/ephy-toolbar.c:319
+#: ../src/ephy-toolbar.c:318
 msgid "_Home"
 msgstr "باش بەت(_H)"
 
-#: ../src/ephy-toolbar.c:321
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the home page"
 msgstr "باش بەتكە يۆتكىلىدۇ"
 
-#: ../src/ephy-toolbar.c:331
+#: ../src/ephy-toolbar.c:330
 msgid "New _Tab"
 msgstr "يېڭى بەتكۈچ(_T)"
 
-#: ../src/ephy-toolbar.c:333
+#: ../src/ephy-toolbar.c:332
 msgid "Open a new tab"
 msgstr "يېڭى بەتكۈچتىن بىرنى ئاچىدۇ"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:341
 msgid "_New Window"
 msgstr "يېڭى كۆزنەك(_N)"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:343
 msgid "Open a new window"
 msgstr "يېڭى كۆزنەكتىن بىرنى ئاچىدۇ"
 
@@ -2114,7 +2126,7 @@ msgstr "تېكىست سىنبەلگە ئاستىدا"
 #: ../src/ephy-toolbar-editor.c:74
 msgctxt "toolbar style"
 msgid "Text beside icons"
-msgstr "تېكىست سىنبەلگە يېنىدا"
+msgstr "تېكىست سىنبەلگىنىڭ يېنىدا كۆرسىتىلسۇن"
 
 #: ../src/ephy-toolbar-editor.c:75
 msgctxt "toolbar style"
@@ -2139,563 +2151,567 @@ msgstr "قورال بالداق توپچا ئەنى(_B):"
 msgid "_Add a New Toolbar"
 msgstr "يېڭى بىر قورال بالداق قوش(_A)"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "خەتكۈچلەر(_B)"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "يۆتكەل(_G)"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "قورال(_O)"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "بەتكۈچلەر(_T)"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "قورال بالداقلار(_T)"
 
 #. File menu
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:128
 msgid "_Open…"
-msgstr "ئاچ(_O)…"
+msgstr "ئاچ(_O)"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "ھۆججەت ئاچىدۇ"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "باشقا ئاتتا ساقلا(_A)…"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "نۆۋەتتىكى بەتنى ساقلايدۇ"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:134
 msgid "Page Set_up"
 msgstr "بەت تەڭشەك(_U)"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:135
 msgid "Setup the page settings for printing"
 msgstr "باسىدىغان بەتنىڭ تەڭشىكىنى تەڭشەيدۇ"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:137
 msgid "Print Pre_view"
 msgstr "بېسىشنى ئالدىن كۆزەت(_V)"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:138
 msgid "Print preview"
 msgstr "بېسىشنى ئالدىن كۆزىتىدۇ"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:140
 msgid "_Print…"
 msgstr "باس(_P)…"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:141
 msgid "Print the current page"
 msgstr "ھازىرقى بەتنى باسىدۇ"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:143
 msgid "S_end Link by Email…"
 msgstr "ئۇلانمىنى ئېلخەتتە يوللا(_E)…"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:144
 msgid "Send a link of the current page"
 msgstr "نۆۋەتتىكى بەتنىڭ ئۇلانمىسىنى يوللايدۇ"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:147
 msgid "Close this tab"
 msgstr "بۇ بەتكۈچنى ياپىدۇ"
 
 #. Edit menu
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:152
 msgid "_Undo"
 msgstr "يېنىۋال(_U)"
 
-#: ../src/ephy-window.c:151
-msgid "Undo the last action"
-msgstr "ئاخىرقى مەشغۇلاتتىن يېنىۋالىدۇ"
-
 #: ../src/ephy-window.c:153
+msgid "Undo the last action"
+msgstr "ئاخىرقى مەشغۇلاتتىن يېنىۋال"
+
+#: ../src/ephy-window.c:155
 msgid "Re_do"
 msgstr "تەكرارلا(_D)"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:156
 msgid "Redo the last undone action"
 msgstr "ئاخىرقى يېنىۋالغان مەشغۇلاتنى تەكرارلايدۇ"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:165
 msgid "Paste clipboard"
 msgstr "چاپلاش تاختىسىدىن چاپلايدۇ"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:168
 msgid "Delete text"
 msgstr "تېكىستنى ئۆچۈرىدۇ"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:171
 msgid "Select the entire page"
 msgstr "پۈتۈن بەتنى تاللايدۇ"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:173
 msgid "_Find…"
 msgstr "ئىزدە(_F)…"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:174
 msgid "Find a word or phrase in the page"
 msgstr "بەت ئىچىدىن سۆز ياكى ئاتالغۇنى ئىزدەيدۇ"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:176
 msgid "Find Ne_xt"
 msgstr "كېيىنكىنى ئىزدە(_X)"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:177
 msgid "Find next occurrence of the word or phrase"
 msgstr "كېيىنكى قىسىمدىكى سۆز ياكى ئاتالغۇنى ئىزدەيدۇ"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:179
 msgid "Find Pre_vious"
 msgstr "ئالدىنقىنى ئىزدە(_V)"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:180
 msgid "Find previous occurrence of the word or phrase"
 msgstr "ئالدىن قىسىمدىكى كۆرۈلگەن سۆز ياكى ئاتالغۇنى ئىزدەيدۇ"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:182
 msgid "P_ersonal Data"
 msgstr "شەخسىي سانلىق-مەلۇمات(_E)"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:183
 msgid "View and remove cookies and passwords"
 msgstr "cookies ۋە ئىم كۆرسەت ياكى چىقىرىۋېتىدۇ"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:186
 msgid "Certificate_s"
 msgstr "گۇۋاھنامىلەر(_S)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:187
 msgid "Manage Certificates"
 msgstr "گۇۋاھنامىلەرنى باشقۇرۇش"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:190
 msgid "P_references"
 msgstr "مايىللىق(_R)"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:191
 msgid "Configure the web browser"
 msgstr "توركۆرگۈ سەپلەيدۇ"
 
 #. View menu
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:196
 msgid "_Customize Toolbars…"
 msgstr "قورال بالداق ئۆزلەشتۈرۈش(_C)…"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:197
 msgid "Customize toolbars"
 msgstr "قورال بالداقلارنى ئۆزلەشتۈرىدۇ"
 
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
 msgid "_Stop"
 msgstr "توختا (&S)"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:200
 msgid "Stop current data transfer"
 msgstr "نۆۋەتتىكى سانلىق مەلۇمات يوللاشنى توختىتىدۇ"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:204
 msgid "_Reload"
 msgstr "قايتا يۈكلە(_R)"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:205
 msgid "Display the latest content of the current page"
 msgstr "نۆۋەتتىكى بەتنىڭ ئاخىرقى مەزمۇنىنى كۆرسىتىدۇ"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:207
 msgid "_Larger Text"
 msgstr "چوڭراق تېكىست(_L)"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:208
 msgid "Increase the text size"
 msgstr "تېكىستنى چوڭايتىدۇ"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:210
 msgid "S_maller Text"
 msgstr "كىچىكرەك تېكىست(_M)"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:211
 msgid "Decrease the text size"
 msgstr "تېكىستنى كىچىكلىتىدۇ"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:213
 msgid "_Normal Size"
 msgstr "ئادەتتىكى چوڭلۇقى(_N)"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:214
 msgid "Use the normal text size"
 msgstr "ئادەتتىكى چوڭلۇقتىكى تېكىستنى ئىشلىتىدۇ"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:216
 msgid "Text _Encoding"
 msgstr "تېكىست كودلىنىشى(_E)"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:217
 msgid "Change the text encoding"
 msgstr "تېكىست كودلىنىشىنى ئۆزگەرتىدۇ"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:219
 msgid "_Page Source"
 msgstr "بەتنىڭ مەنبە كودى(_P)"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:220
 msgid "View the source code of the page"
 msgstr "مەزكۇر بەتنىڭ مەنبە كودىنى كۆرسىتىدۇ"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:222
 msgid "Page _Security Information"
 msgstr "بەت بىخەتەرلىك ئۇچۇرى(_S)"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:223
 msgid "Display security information for the web page"
 msgstr "تور بەتنىڭ بىخەتەرلىك ئۇچۇرىنى كۆرسىتىدۇ"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark…"
 msgstr "خەتكۈش قوش(_A)"
 
-#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:307
 msgid "Add a bookmark for the current page"
 msgstr "نۆۋەتتىكى بەتنى خەتكۈچكە قوشىدۇ"
 
-#: ../src/ephy-window.c:229
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "خەتكۈش تەھرىر(_E)"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "خەتكۈچلەر كۆزنىكىنى ئاچىدۇ"
 
 #. Go menu
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:237
 msgid "_Location…"
 msgstr "ئورنى(_L)…"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "بەلگىلەنگەن ئورۇنغا يۆتكىلىدۇ"
 
 #. History
-#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:403
+#: ../src/ephy-window.c:240 ../src/pdm-dialog.c:403
 msgid "Hi_story"
 msgstr "تارىخ(_S)"
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "تارىخ كۆزنىكىنى ئاچىدۇ"
 
 #. Tabs menu
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "ئالدىنقى بەتكۈچ(_P)"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "ئالدىنقى بەتكۈچنى ئاكتىپلا"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "كېيىنكى بەتكۈچ(_N)"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "كېيىنكى بەتكۈچنى ئاكتىپلا"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "بەتكۈچنى سولغا يۆتكە(_L)"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "نۆۋەتتىكى بەتكۈچنى سولغا يۆتكەيدۇ"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "بەتكۈچنى ئوڭغا يۆتكە(_R)"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "نۆۋەتتىكى بەتكۈچنى ئوڭغا يۆتكەيدۇ"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "بەتكۈچنى ئايرىۋەت(_D)"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "نۆۋەتتىكى بەتكۈچنى ئايرىۋېتىدۇ"
 
-#: ../src/ephy-window.c:263
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "توركۆرگۈ ياردەمنى كۆرسىتىدۇ"
 
 #. File Menu
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "تورسىز خىزمەت(_W)"
 
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "تورسىز ھالەتكە ئالماشتۇرىدۇ"
 
 #. View Menu
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:282
 msgid "_Hide Toolbars"
 msgstr "قورال بالداقنى يوشۇر(_H)"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "قورال بالداقنى كۆرسىتىدۇ ياكى يوشۇرىدۇ"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:285
 msgid "_Downloads Bar"
 msgstr "چۈشۈرۈش بالداق(_D)"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:286
 msgid "Show the active downloads for this window"
 msgstr "بۇ كۆزنەكتىكى ئاكتىپ چۈشۈرۈشنى كۆرسەت"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:289
+msgid "Hide Men_ubar"
+msgstr "تىزىملىك بالدىقىنى يوشۇر(_U)"
+
+#: ../src/ephy-window.c:292
 msgid "_Fullscreen"
 msgstr "تولۇق ئېكران( _F)"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:293
 msgid "Browse at full screen"
 msgstr "تولۇق ئېكران ھالىتىدە كۆرىدۇ"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:295
 msgid "Popup _Windows"
 msgstr "كۆزنەكنى قاڭقىتىش(_W)"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:296
 msgid "Show or hide unrequested popup windows from this site"
 msgstr ""
 "بۇ بېكەتتىكى ئىلتىماس قىلىنمىغان قاڭقىش كۆزنىكىنى كۆرسىتىدۇ ياكى يوشۇرىدۇ"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:298
 msgid "Selection Caret"
 msgstr "نۇربەلگىسى تاللاش"
 
 #. Document
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:306
 msgid "Add Boo_kmark…"
 msgstr "خەتكۈش قوش(_K)..."
 
 #. Framed document
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:312
 msgid "Show Only _This Frame"
 msgstr "مۇشۇ كاندۇكنىلا كۆرسەت(_T)"
 
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:313
 msgid "Show only this frame in this window"
 msgstr "بۇ كاندۇكنى مۇشۇ كۆزنەكتىلا كۆرسىتىدۇ"
 
 #. Links
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:318
 msgid "_Open Link"
 msgstr "ئۇلانما ئاچ(_O)"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:319
 msgid "Open link in this window"
 msgstr "ئۇلانمىنى بۇ كۆزنەكتە ئاچىدۇ"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:321
 msgid "Open Link in New _Window"
 msgstr "ئۇلانمىنى يېڭى كۆزنەكتە ئاچ(_W)"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:322
 msgid "Open link in a new window"
 msgstr "ئۇلانمىنى يېڭى كۆزنەكتە ئاچىدۇ"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:324
 msgid "Open Link in New _Tab"
 msgstr "ئۇلانمىنى يېڭى بەتكۈچتە ئاچ(_T)"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:325
 msgid "Open link in a new tab"
 msgstr "ئۇلانمىنى يېڭى بەتكۈچتە ئاچىدۇ"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:327
 msgid "_Download Link"
 msgstr "ئۇلانمىنى چۈشۈر(_D)"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:329
 msgid "_Save Link As…"
 msgstr "ئۇلانمىنى باشقا ئاتتا ساقلا_S)…"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:330
 msgid "Save link with a different name"
 msgstr "ئۇلانمىنى باشقا ئاتتا ساقلايدۇ"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:332
 msgid "_Bookmark Link…"
 msgstr "ئۇلانمىنى خەتكۈچكە قوش(_B)…"
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:334
 msgid "_Copy Link Address"
 msgstr "ئۇلانما ئاتىنى كۆچۈر(_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:340
 msgid "_Send Email…"
 msgstr "ئېلخەت يوللا(_S)…"
 
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:342
 msgid "_Copy Email Address"
 msgstr "ئېلخەت ئادرېسىنى كۆچۈر(_C)"
 
 #. Images
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:347
 msgid "Open _Image"
 msgstr "سۈرەت ئاچ(_I)"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:349
 msgid "_Save Image As…"
 msgstr "سۈرەتنى باشقا ئاتتا ساقلا(_S)…"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:351
 msgid "_Use Image As Background"
 msgstr "سۈرەتنى تەگلىككە ئىشلەت(_U)"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:353
 msgid "Copy I_mage Address"
 msgstr "سۈرەت ئادرېسىنى كۆچۈر(_M)"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:355
 msgid "St_art Animation"
 msgstr "جانلاندۇرۇمنى باشلا(_A)"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:357
 msgid "St_op Animation"
 msgstr "جانلاندۇرۇمنى توختات(_O)"
 
 #. Inspector
-#: ../src/ephy-window.c:355
+#: ../src/ephy-window.c:373
 msgid "Inspect _Element"
 msgstr "ئېلېمېنتلارنى تەكشۈر(_E)"
 
-#: ../src/ephy-window.c:560
+#: ../src/ephy-window.c:578
 msgid "There are unsubmitted changes to form elements"
 msgstr "جەدۋەل ئېلېمېنتىغا تاپشۇرۇلمىغان ئۆزگەرتىشلەر بار"
 
-#: ../src/ephy-window.c:561
+#: ../src/ephy-window.c:579
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ئەگەر پۈتۈكنى يېپىۋەرسىڭىز، ئۇ ئۇچۇرلارنى يوقىتىسىز."
 
-#: ../src/ephy-window.c:563
+#: ../src/ephy-window.c:581
 msgid "Close _Document"
 msgstr "پۈتۈك ياپ(_D)"
 
-#: ../src/ephy-window.c:581
+#: ../src/ephy-window.c:599
 msgid "There are ongoing downloads in this window"
 msgstr "بۇ كۆزنەكتە ئىجرا قىلىنىۋاتقان چۈشۈرۈش بار"
 
-#: ../src/ephy-window.c:582
+#: ../src/ephy-window.c:600
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "ئەگەر بۇ كۆزنەكنى ياپسىڭىز، چۈشۈرۈشتىن ۋاز كېچىدۇ."
 
-#: ../src/ephy-window.c:583
+#: ../src/ephy-window.c:601
 msgid "Close window and cancel downloads"
 msgstr "كۆزنەكنى يېپىپ چۈشۈرۈشتىن ۋاز كەچ"
 
-#: ../src/ephy-window.c:1505
+#: ../src/ephy-window.c:1591
 msgid "Save As"
 msgstr "باشقا ئاتتا ساقلا"
 
-#: ../src/ephy-window.c:1507
+#: ../src/ephy-window.c:1593
 msgid "Print"
 msgstr "باس"
 
-#: ../src/ephy-window.c:1511
+#: ../src/ephy-window.c:1597
 msgid "Find"
 msgstr "ئىزدە"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1524
+#: ../src/ephy-window.c:1610
 msgid "Larger"
 msgstr "چوڭراق"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1527
+#: ../src/ephy-window.c:1613
 msgid "Smaller"
 msgstr "كىچىكرەك"
 
-#: ../src/ephy-window.c:1749
+#: ../src/ephy-window.c:1835
 msgid "Insecure"
 msgstr "خەتەرلىك"
 
-#: ../src/ephy-window.c:1754
+#: ../src/ephy-window.c:1840
 msgid "Broken"
 msgstr "بۇزۇلغان"
 
-#: ../src/ephy-window.c:1762
+#: ../src/ephy-window.c:1848
 msgid "Low"
 msgstr "تۆۋەن"
 
-#: ../src/ephy-window.c:1769
+#: ../src/ephy-window.c:1855
 msgid "High"
 msgstr "يۇقىرى"
 
-#: ../src/ephy-window.c:1779
+#: ../src/ephy-window.c:1865
 #, c-format
 msgid "Security level: %s"
 msgstr "بىخەتەرلىك دەرىجىسى: %s"
 
-#: ../src/ephy-window.c:2055
+#: ../src/ephy-window.c:2140
 #, c-format
 msgid "Open image “%s”"
 msgstr "سۈرەت «%s» نى ئاچ"
 
-#: ../src/ephy-window.c:2060
+#: ../src/ephy-window.c:2145
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "«%s» نى ئۈستەلئۈستى تەگلىكىگە ئىشلەت"
 
-#: ../src/ephy-window.c:2065
+#: ../src/ephy-window.c:2150
 #, c-format
 msgid "Save image “%s”"
 msgstr "سۈرەت «%s» نى ساقلا"
 
-#: ../src/ephy-window.c:2070
+#: ../src/ephy-window.c:2155
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "سۈرەت ئادرېسى «%s» نى كۆچۈر"
 
-#: ../src/ephy-window.c:2084
+#: ../src/ephy-window.c:2169
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "ئادرېسى «%s» غا ئېلخەت يوللا"
 
-#: ../src/ephy-window.c:2090
+#: ../src/ephy-window.c:2175
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "ئېلخەت مەنزىلى «%s» نى كۆچۈر"
 
-#: ../src/ephy-window.c:2104
+#: ../src/ephy-window.c:2189
 #, c-format
 msgid "Save link “%s”"
 msgstr "ئۇلانما «%s» نى  ساقلا"
 
-#: ../src/ephy-window.c:2110
+#: ../src/ephy-window.c:2195
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "ئۇلانما «%s» نى خەتكۈچكە قوش"
 
-#: ../src/ephy-window.c:2115
+#: ../src/ephy-window.c:2200
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "ئۇلانما ئادرېسىنى «%s» نى كۆچۈر"
@@ -2800,17 +2816,17 @@ msgstr "ئۇلانما چۈشۈرۈش"
 
 #: ../src/popup-commands.c:288
 msgid "Save Link As"
-msgstr "ئۇلانمىنى باشقا ئاتتا ساقلاش"
+msgstr "ئۇلانمىنى باشقا ئاتتا ساقلا"
 
 #: ../src/popup-commands.c:295
 msgid "Save Image As"
-msgstr "سۈرەتنى باشقا ئاتتا ساقلاش"
+msgstr "سۈرەتنى باشقا ئاتتا ساقلا"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:467 ../src/prefs-dialog.c:473
+#: ../src/prefs-dialog.c:468 ../src/prefs-dialog.c:474
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2819,19 +2835,19 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:483
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "ئىشلەتكۈچى ئېنىقلىمىسى(%s)"
 
-#: ../src/prefs-dialog.c:504
+#: ../src/prefs-dialog.c:505
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "سىستېما تىلى (%s)"
 
-#: ../src/prefs-dialog.c:862
+#: ../src/prefs-dialog.c:863
 msgid "Select a Directory"
 msgstr "مۇندەرىجە تاللاش"
 
@@ -2839,7 +2855,7 @@ msgstr "مۇندەرىجە تاللاش"
 msgid "Save"
 msgstr "ساقلا"
 
-#: ../src/window-commands.c:940
+#: ../src/window-commands.c:958
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -2851,7 +2867,7 @@ msgstr ""
 "ئۆزگەرتەلەيسىز؛ سىز شۇ ئىجازەت كېلىشىمىنىڭ ئىككىنچى نەشرى ياكى يۇقىرى "
 "نەشرىنى ئىشلەتسىڭىز بولىدۇ."
 
-#: ../src/window-commands.c:944
+#: ../src/window-commands.c:962
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2864,7 +2880,7 @@ msgstr ""
 "ئەمەس. GNU ئادەتتىكى ئاممىۋى ئىجازەت كېلىشىمىنى كۆرۈپ تېخىمۇ كۆپ تەپسىلاتقا "
 "ئېرىشىڭ."
 
-#: ../src/window-commands.c:948
+#: ../src/window-commands.c:966
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2875,20 +2891,20 @@ msgstr ""
 "بولسىڭىز ئەركىن يۇمشاق دېتال ۋەخپىسىگە خەت يېزىڭ. مەنزىل:  51 Franklin St, "
 "Fifth Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/window-commands.c:994 ../src/window-commands.c:1010
-#: ../src/window-commands.c:1021
+#: ../src/window-commands.c:1012 ../src/window-commands.c:1028
+#: ../src/window-commands.c:1039
 msgid "Contact us at:"
 msgstr "بىز بىلەن ئالاقىلىشىڭ:"
 
-#: ../src/window-commands.c:997
+#: ../src/window-commands.c:1015
 msgid "Contributors:"
 msgstr "تۆھپىكارلار:"
 
-#: ../src/window-commands.c:1000
+#: ../src/window-commands.c:1018
 msgid "Past developers:"
 msgstr "ئىلگىرىكى ئىجادكارلار:"
 
-#: ../src/window-commands.c:1030
+#: ../src/window-commands.c:1048
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -2905,21 +2921,22 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1056
+#: ../src/window-commands.c:1074
 msgid "translator-credits"
 msgstr ""
-"Gheyret Kenji <gheyret@gmail.com>\n"
-"Sahran<sahran@live.com>"
+"Launchpad Contributions:\n"
+"  Burkut https://launchpad.net/~burkut\n"
+"  Gheyret T.Kenji https://launchpad.net/~gheyretkenji"
 
-#: ../src/window-commands.c:1059
+#: ../src/window-commands.c:1077
 msgid "GNOME Web Browser Website"
 msgstr "GNOME توركۆرگۈ تورتۇراسى"
 
-#: ../src/window-commands.c:1215
+#: ../src/window-commands.c:1233
 msgid "Enable caret browsing mode?"
 msgstr "نۇربەلگە بىلەن كۆرۈش ھالىتىنى قوزغاتسۇنمۇ؟"
 
-#: ../src/window-commands.c:1218
+#: ../src/window-commands.c:1236
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2929,7 +2946,7 @@ msgstr ""
 "ئالاھىدىلىكتە تور بەتتە يۆتكىلىدىغان نۇر بەلگىدىن بىرى قويۇلۇپ كۇنۇپكا "
 "تاختىسىنى ئىشلىتىپ تېكىست تاللاشقا ئىشلىتىلىدۇ. بۇ ئالاھىدىلىكنى قوزغىتامسىز؟"
 
-#: ../src/window-commands.c:1221
+#: ../src/window-commands.c:1239
 msgid "_Enable"
 msgstr "قوزغات(_E)"
 
