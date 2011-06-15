@@ -399,7 +399,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
                                             gpointer data)
 {
   gboolean value = FALSE;
-  char **languages;
+  char **languages = NULL;
   char *langs = NULL;
 
   value = g_settings_get_boolean (settings, key);
@@ -408,10 +408,13 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
     langs = g_strjoinv (",", languages);
     g_strdelimit (langs, "-", '_');
+    g_strfreev (languages);
   }
 
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
+
+  g_free (langs);
 }
 
 static const PrefData webkit_pref_entries[] =
