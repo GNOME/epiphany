@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  * Copyright (C) 2011, Igalia S.L.
  */
@@ -22,13 +22,13 @@
 typedef struct _EphyRequestAboutPrivate EphyRequestAboutPrivate;
 
 typedef struct {
-	SoupRequest parent;
+  SoupRequest parent;
 
-	EphyRequestAboutPrivate *priv;
+  EphyRequestAboutPrivate *priv;
 } EphyRequestAbout;
 
 typedef struct {
-	SoupRequestClass parent;
+  SoupRequestClass parent;
 
 } EphyRequestAboutClass;
 
