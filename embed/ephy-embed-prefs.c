@@ -358,19 +358,13 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
   GSettings *settings;
 
   if (g_settings_get_boolean (ephy_settings, key)) {
-    settings = ephy_settings_get ("org.gnome.desktop.interface");
-
-    webkit_pref_callback_font_size (settings, "document-font-name",
-                                    "default-font-size");
-    webkit_pref_callback_font_size (settings, "monospace-font-name",
-                                    "default-monospace-font-size");
-
-    webkit_pref_callback_font_family (settings, "document-font-name",
-                                      "default-font-family");
-    webkit_pref_callback_font_family (settings, "font-name",
-                                      "sans-serif-font-family");
-    webkit_pref_callback_font_family (settings, "monospace-font-name",
-                                      "monospace-font-family");
+    g_object_set (webkit_settings,
+                  "default-font-family", "serif",
+                  "sans-serif-font-family", "sans-serif",
+                  "monospace-font-family", "monospace",
+                  "default-font-size", 12,
+                  "default-monospace-font-size", 10,
+                  NULL);
   } else {
     /* Sync with Epiphany values */
     settings = ephy_settings;
@@ -384,10 +378,8 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
                                       "default-font-family");
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
                                       "sans-serif-font-family");
-
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
                                       "monospace-font-family");
-
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "serif-font-family");
   }
@@ -419,28 +411,6 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
 
 static const PrefData webkit_pref_entries[] =
   {
-    /* GNOME font settings */
-    { "org.gnome.desktop.interface",
-      "document-font-name",
-      "default-font-size",
-      webkit_pref_callback_font_size },
-    { "org.gnome.desktop.interface",
-      "monospace-font-name",
-      "default-monospace-font-size",
-      webkit_pref_callback_font_size },
-    { "org.gnome.desktop.interface",
-      "document-font-name",
-      "default-font-family",
-      webkit_pref_callback_font_family },
-    { "org.gnome.desktop.interface",
-      "font-name",
-      "sans-serif-font-family",
-      webkit_pref_callback_font_family },
-    { "org.gnome.desktop.interface",
-      "monospace-font-name",
-      "monospace-font-family",
-      webkit_pref_callback_font_family },
-
     /* Epiphany font settings */
     { EPHY_PREFS_WEB_SCHEMA,
       EPHY_PREFS_WEB_SERIF_FONT,
