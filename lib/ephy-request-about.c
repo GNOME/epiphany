@@ -123,7 +123,7 @@ ephy_request_about_send (SoupRequest          *request,
 
     g_string_append (data_str, "<div id=\"ephytext\">" \
                      "Il semble que la perfection soit atteinte non quand il n'y a plus rien à" \
-                     "ajouter, mais quand il n'y a plus rien à retrancher." \
+                     " ajouter, mais quand il n'y a plus rien à retrancher." \
                      "</div>" \
                      "<div id=\"from\">" \
                      "<!-- Terre des Hommes, III: L'Avion, p. 60 -->" \
