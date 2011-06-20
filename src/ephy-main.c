@@ -20,19 +20,15 @@
 
 #include "config.h"
 
+#include "ephy-application.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-object-helpers.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
-#include "ephy-dbus-client-bindings.h"
-#include "ephy-activation.h"
 #include "ephy-session.h"
 #include "ephy-shell.h"
-#include "ephy-prefs.h"
-#include "ephy-profile-utils.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
 #include "eggsmclient.h"
@@ -200,169 +196,6 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 }
 
 static void
-unref_proxy_reply_cb (DBusGProxy *proxy,
-		      GError *error,
-		      gpointer user_data)
-{
-	if (error != NULL)
-	{
-		g_warning ("An error occurred while calling remote method: %s", error->message);
-		g_error_free (error);
-	}
-
-	g_object_unref (proxy);
-
-	if (gtk_main_level ())
-	{
-		gtk_main_quit ();
-	}
-}
-
-static gboolean
-open_urls (DBusGProxy *proxy,
-	   guint32 user_time,
-	   GError **error)
-{
-	static const char *empty_arguments[] = { "", NULL };
-	GString *options;
-	char **uris;
-
-	options = g_string_sized_new (64);
-
-	if (open_in_new_window)
-	{
-		g_string_append (options, "new-window,");
-	}
-	if (open_in_new_tab)
-	{
-		g_string_append (options, "new-tab,");
-	}
-
-	if (arguments == NULL)
-	{
-		uris = (char **) empty_arguments;
-	}
-	else
-	{
-		uris = (char **) arguments;
-	}
-
-	org_gnome_Epiphany_load_ur_ilist_async
-		(proxy, (const char **) uris, options->str, user_time,
-		 unref_proxy_reply_cb, NULL);
-	
-	if (arguments != NULL)
-	{
-		g_strfreev (arguments);
-		arguments = NULL;
-	}
-
-	g_string_free (options, TRUE);
-
-	return TRUE;
-}
-
-static gboolean
-call_dbus_proxy (DBusGProxy *proxy,
-		 guint32 user_time,
-		 GError **error)
-{
-	EphyShell *shell;
-	gboolean retval = TRUE;
-
-	shell = ephy_shell_get_default ();
-
-	if (open_as_bookmarks_editor)
-	{
-		org_gnome_Epiphany_open_bookmarks_editor_async
-			(proxy, user_time,
-			 unref_proxy_reply_cb, shell);
-	}
-	else if (session_filename != NULL)
-	{
-		org_gnome_Epiphany_load_session_async
-			(proxy, session_filename, user_time,
-			 unref_proxy_reply_cb, shell);
-
-		g_free (session_filename);
-		session_filename = NULL;
-	}
-	else
-	{
-		retval = open_urls (proxy, user_time, error);
-	}
-
-	/* FIXME why? */
-	dbus_g_connection_flush (ephy_dbus_get_bus (ephy_dbus_get_default (), EPHY_DBUS_SESSION));
-
-	return retval;
-}
-
-static void
-queue_commands (guint32 user_time)
-{
-	EphyShell *shell;
-	EphySession *session;
-
-	shell = ephy_shell_get_default ();
-	g_assert (shell != NULL);
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-	g_assert (session != NULL);
-
-	/* We only get here when starting a new instance, so we 
-	 * first need to autoresume!
-	 */
-	ephy_session_queue_command (session,
-				    EPHY_SESSION_CMD_RESUME_SESSION,
-				    NULL, NULL, user_time, TRUE);
-
-	if (open_as_bookmarks_editor)
-	{
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR,
-					    NULL, NULL, user_time, FALSE);
-	}
-	else if (session_filename != NULL)
-	{
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_LOAD_SESSION,
-					    session_filename, NULL,
-					    user_time, FALSE);
-
-		g_free (session_filename);
-		session_filename = NULL;
-	}
-	/* Don't queue any window openings if no extra arguments given,
-	 * since session autoresume will open one for us.
-	 */
-	else if (arguments != NULL)
-	{
-		GString *options;
-
-		options = g_string_sized_new (64);
-
-		if (open_in_new_window)
-		{
-			g_string_append (options, "new-window,");
-		}
-		if (open_in_new_tab)
-		{
-			g_string_append (options, "new-tab,external,");
-		}
-
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_OPEN_URIS,
-					    options->str,
-					    arguments,
-					    user_time, FALSE);
-
-		g_strfreev (arguments);
-		arguments = NULL;
-	}
-}
-
-static void
 show_error_message (GError **error)
 {
 	GtkWidget *dialog;
@@ -383,10 +216,19 @@ show_error_message (GError **error)
 	gtk_dialog_run (GTK_DIALOG (dialog));
 }
 
-static void
-shell_quit_cb (EphyShell *shell, gpointer data)
+static EphyStartupFlags
+get_startup_flags (void)
 {
-	gtk_main_quit ();
+	EphyStartupFlags flags = 0;
+
+	if (open_in_new_tab)
+		flags |= EPHY_STARTUP_NEW_TAB;
+	if (open_in_new_window)
+		flags |= EPHY_STARTUP_NEW_WINDOW;
+	if (open_as_bookmarks_editor)
+		flags |= EPHY_STARTUP_BOOKMARKS_EDITOR;
+
+	return flags;
 }
 
 int
@@ -395,10 +237,13 @@ main (int argc,
 {
 	GOptionContext *option_context;
 	GOptionGroup *option_group;
-	DBusGProxy *proxy;
 	GError *error = NULL;
 	guint32 user_time;
 	gboolean arbitrary_url;
+	EphyApplication *application;
+	EphyApplicationStartupContext *ctx;
+	EphyStartupFlags startup_flags;
+	int status;
 
 #ifdef ENABLE_NLS
 	/* Initialize the i18n stuff */
@@ -409,7 +254,6 @@ main (int argc,
 
 	/* Threads have to be initialised before calling ANY glib function */
 	g_thread_init (NULL);
-	dbus_g_thread_init ();
 
 	/* check libxml2 API version epiphany was compiled with against the
 	 * version we're running with.
@@ -570,85 +414,15 @@ main (int argc,
 
 	startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 
-	if (!_ephy_dbus_startup (!private_instance, &error))
-	{
-		_ephy_dbus_release ();
-
-		show_error_message (&error);
-
-		exit (1);
-	}
-
-	/* If we're remoting, no need to start up any further services,
-	 * just forward the call.
-	 */
-	if (!private_instance &&
-	    !_ephy_dbus_is_name_owner ())
-	{
-		/* Create DBUS proxy */
-		proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
-		if (proxy == NULL)
-		{
-			error = g_error_new (STARTUP_ERROR_QUARK,
-					     0,
-					     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
-
-			_ephy_dbus_release ();
-
-			show_error_message (&error);
-
-			exit (1);
-		}
-
-		if (!call_dbus_proxy (proxy, user_time, &error))
-		{
-			_ephy_dbus_release ();
-
-			show_error_message (&error);
-
-			exit (1);
-		}
-
-		/* Wait for the response */
-		gtk_main ();
-
-		_ephy_dbus_release ();
-
-		gdk_notify_startup_complete ();
-
-		exit (0);
-	}
-
-	/* We're not remoting; start our services */
+	/* Start our services */
 	if (!ephy_file_helpers_init (profile_directory,
 				     private_instance,
 				     keep_temp_directory || profile_directory,
 				     &error))
 	{
-		_ephy_dbus_release ();
-
 		show_error_message (&error);
 
 		exit (1);
-	}
-
-	/* Migrate profile if we are not running a private instance */
-	if (ephy_has_private_profile () == FALSE &&
-	    ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION)
-	{
-		GError *error = NULL;
-		char *argv[1] = { "ephy-profile-migrator" };
-		char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
-
-		g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
-			      NULL, NULL, NULL, NULL,
-			      NULL, &error);
-
-		if (error)
-		{
-			LOG ("Failed to run migrator: %s", error->message);
-			g_error_free (error);
-		}
 	}
 
 	ephy_stock_icons_init ();
@@ -659,11 +433,26 @@ main (int argc,
 
 	/* Now create the shell */
 	_ephy_shell_create_instance ();
-	g_signal_connect (ephy_shell, "quit", G_CALLBACK (shell_quit_cb), NULL);
 
-	queue_commands (user_time);
+	application = ephy_shell_get_application (ephy_shell_get_default());
+	if (private_instance) {
+		GApplicationFlags flags;
 
-	gtk_main ();
+		flags = g_application_get_flags (G_APPLICATION (application));
+		flags |= G_APPLICATION_NON_UNIQUE;
+
+		g_application_set_flags (G_APPLICATION (application), flags);
+	}
+	startup_flags = get_startup_flags ();
+	ctx = ephy_application_startup_context_new (startup_flags,
+						    bookmarks_file,
+						    session_filename,
+						    bookmark_url,
+						    arguments,
+						    user_time);
+	g_strfreev (arguments);
+	ephy_application_set_startup_context (application, ctx);
+	status = g_application_run (G_APPLICATION (application), argc, argv);
 
 	/* Shutdown */
 	g_object_unref (ephy_shell);
@@ -674,7 +463,5 @@ main (int argc,
 	ephy_file_helpers_shutdown ();
 	xmlCleanupParser ();
 
-	_ephy_dbus_release ();
-
-	return 0;
+	return status;
 }

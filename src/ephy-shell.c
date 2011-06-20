@@ -72,6 +72,7 @@ struct _EphyShellPrivate
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
+	EphyApplication *application;
 #ifdef ENABLE_NETWORK_MANAGER
 	EphyNetworkManager *nm_proxy;
 #endif
@@ -212,6 +213,8 @@ ephy_shell_init (EphyShell *shell)
 	ephy_shell = shell;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
+
+	shell->priv->application = ephy_application_new ();
 }
 
 static void
@@ -303,6 +306,13 @@ ephy_shell_dispose (GObject *object)
 		priv->nm_proxy = NULL;
 	}
 #endif /* ENABLE_NETWORK_MANAGER */
+
+	if (priv->application != NULL)
+	{
+		LOG ("Unref application");
+		g_object_unref (priv->application);
+		priv->application = NULL;
+	}
 
 	G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
@@ -803,6 +813,22 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 	}
 
 	return shell->priv->prefs_dialog;
+}
+
+/**
+ * ephy_shell_get_application:
+ * @shell: A #EphyApplication
+ *
+ * Gets the #EphyApplication for @shell
+ *
+ * Returns: (transfer none): a #EphyApplication
+ **/
+EphyApplication *
+ephy_shell_get_application (EphyShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+	return shell->priv->application;
 }
 
 void

@@ -29,6 +29,7 @@
 #include "ephy-bookmarks.h"
 #include "ephy-window.h"
 #include "ephy-embed.h"
+#include "ephy-application.h"
 
 #include <webkit/webkit.h>
 #include <glib-object.h>
@@ -125,6 +126,8 @@ GtkWidget      *ephy_shell_get_history_window		(EphyShell *shell);
 GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
+
+EphyApplication *ephy_shell_get_application             (EphyShell *shell);
 
 /* private API */
 void	       _ephy_shell_create_instance		(void);
