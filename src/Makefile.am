@@ -313,7 +313,6 @@ EphyEgg-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER)
 		--pkg=gtk+-3.0 \
 		--pkg=libxml-2.0 \
 		--output=$@ \
-		`pkg-config --libs libxml-2.0 gtk+-3.0` \
 		$(top_srcdir)/lib/egg/egg-editable-toolbar.h \
 		$(top_srcdir)/lib/egg/egg-toolbars-model.h \
 		$(top_srcdir)/lib/egg/egg-editable-toolbar.c \
