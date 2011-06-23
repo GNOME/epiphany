@@ -93,6 +93,7 @@ WEBKIT_GTK_REQUIRED=1.5.1
 LIBSOUP_GNOME_REQUIRED=2.33.1
 GNOME_KEYRING_REQUIRED=2.26.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
+NETWORK_MANAGER_REQUIRED=0.8.9997
 
 # Tests
 
@@ -120,7 +121,8 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  webkitgtk-3.0 >= $WEBKIT_GTK_REQUIRED
 		  libsoup-gnome-2.4 >= $LIBSOUP_GNOME_REQUIRED
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
-                  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
+		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
+		  NetworkManager >= $NETWORK_MANAGER_REQUIRED
 		  ])
 
 # ****
@@ -304,30 +306,8 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
-# NetworkManager
-
-AC_MSG_CHECKING([whether to enable NetworkManager support])
-AC_ARG_ENABLE([network-manager],
-	AS_HELP_STRING([--enable-network-manager],[Whether to enable automatic network status with NetworkManager (default: disabled)]),
-	[],[enable_network_manager=no])
-AC_MSG_RESULT([$enable_network_manager])
-
-if test "$enable_network_manager" != "no"; then
-	PKG_CHECK_MODULES(NETWORK_MANAGER, NetworkManager, [have_network_manager=yes],[have_network_manager=no])
-
-	if test "$enable_network_manager" = "yes" -a "$have_network_manager" = "no"; then
-		AC_MSG_ERROR([NetworkManager support requested but NetworkManager headers not found])
-	elif test "$have_network_manager" = "no"; then
-		AC_MSG_WARN([NetworkManager headers not found; disabling NetworkManager support])
-	fi
-fi
-
-if test "$enable_network_manager" = "yes"; then
-	AC_PATH_PROG([GDBUS_CODEGEN], [gdbus-codegen])
-	AC_DEFINE([ENABLE_NETWORK_MANAGER],[1],[Define for NetworkManager support])
-fi
-
-AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"])
+# GDBus codegen
+AC_PATH_PROG([GDBUS_CODEGEN], [gdbus-codegen])
 
 # ************
 # Misc defines
@@ -456,7 +436,6 @@ Epiphany was configured with the following options:
 	Extra debugging support    : $enable_debug
 
  	Zeroconf bookmarks support : $enable_zeroconf
- 	NetworkManager support     : $enable_network_manager
  	GObject introspection      : $found_introspection
  	Seed support               : $enable_seed
  	NSS support                : $enable_nss

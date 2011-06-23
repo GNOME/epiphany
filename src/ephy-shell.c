@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <NetworkManager.h>
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -56,11 +57,7 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 #include "ephy-web-view.h"
-
-#ifdef ENABLE_NETWORK_MANAGER
-#include <NetworkManager.h>
 #include "ephy-network-manager.h"
-#endif
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
@@ -73,9 +70,7 @@ struct _EphyShellPrivate
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
 	EphyApplication *application;
-#ifdef ENABLE_NETWORK_MANAGER
 	EphyNetworkManager *nm_proxy;
-#endif
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
@@ -150,8 +145,6 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 		 NULL, NULL, flags, chromemask, is_popup, 0);
 }
 
-#ifdef ENABLE_NETWORK_MANAGER
-
 static void
 ephy_shell_sync_network_status (EphyNetworkManager *nm_proxy,
 				NMState state,
@@ -168,8 +161,6 @@ ephy_shell_sync_network_status (EphyNetworkManager *nm_proxy,
 	net_status = state == NM_STATE_CONNECTED;
 	ephy_embed_single_set_network_status (single, net_status);
 }
-
-#endif /* ENABLE_NETWORK_MANAGER */
 
 static GObject*
 impl_get_embed_single (EphyEmbedShell *embed_shell)
@@ -189,13 +180,11 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 
 		priv->embed_single_connected = TRUE;
 
-#ifdef ENABLE_NETWORK_MANAGER
 		/* Now we need the net monitor */
 		ephy_shell_get_net_monitor (shell);
 		ephy_shell_sync_network_status (priv->nm_proxy,
 						ephy_network_manager_get_state (priv->nm_proxy),
 						shell);
-#endif
 	}
 	
 	return embed_single;
@@ -296,7 +285,6 @@ ephy_shell_dispose (GObject *object)
 		priv->bookmarks = NULL;
 	}
 
-#ifdef ENABLE_NETWORK_MANAGER
 	if (priv->nm_proxy != NULL)
 	{
 		LOG ("Unref net monitor");
@@ -305,7 +293,6 @@ ephy_shell_dispose (GObject *object)
 		g_object_unref (priv->nm_proxy);
 		priv->nm_proxy = NULL;
 	}
-#endif /* ENABLE_NETWORK_MANAGER */
 
 	if (priv->application != NULL)
 	{
@@ -679,7 +666,6 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 GObject *
 ephy_shell_get_net_monitor (EphyShell *shell)
 {
-#ifdef ENABLE_NETWORK_MANAGER
 	EphyShellPrivate *priv = shell->priv;
 
 	if (priv->nm_proxy == NULL)
@@ -695,9 +681,6 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 	}
 
 	return G_OBJECT (priv->nm_proxy);
-#else
-	return NULL;
-#endif /* ENABLE_NETWORK_MANAGER */
 }
 
 static void

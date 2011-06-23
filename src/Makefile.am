@@ -113,9 +113,10 @@ libephymain_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS) 	\
-	$(DBUS_CFLAGS)		\
-	$(WEBKIT_CFLAGS)	\
+	$(DEPENDENCIES_CFLAGS) 	  \
+	$(DBUS_CFLAGS)		  \
+	$(WEBKIT_CFLAGS)	  \
+	$(NETWORK_MANAGER_CFLAGS) \
 	$(AM_CFLAGS)
 
 BUILT_SOURCES =		\
@@ -123,7 +124,6 @@ BUILT_SOURCES =		\
 	ephy-dbus-client-bindings.h	\
 	ephy-dbus-server-bindings.h
 
-if ENABLE_NETWORK_MANAGER
 nodist_libephymain_la_SOURCES += \
 	ephy-network-manager.c	 \
 	ephy-network-manager.h
@@ -138,9 +138,6 @@ ephy-network-manager.c ephy-network-manager.h: $(top_srcdir)/data/ephy-network-m
 		--generate-c-code ephy-network-manager  \
 		--interface-prefix org.freedesktop. 	\
 		$<
-
-libephymain_la_CFLAGS += $(NETWORK_MANAGER_CFLAGS)
-endif
 
 if ENABLE_SEED
 NOINST_H_FILES += \
@@ -186,6 +183,7 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
+	$(NETWORK_MANAGER_LIBS) \
 	$(LIBINTL)
 
 if HAVE_INTROSPECTION
@@ -196,11 +194,6 @@ endif
 if ENABLE_SEED
 epiphany_LDADD += $(SEED_LIBS)
 endif # ENABLE_SEED
-
-if ENABLE_NETWORK_MANAGER
-epiphany_LDADD += \
-	$(NETWORK_MANAGER_LIBS)
-endif
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
