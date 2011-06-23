@@ -58,7 +58,8 @@
 #include "ephy-web-view.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
-#include "ephy-net-monitor.h"
+#include <NetworkManager.h>
+#include "ephy-network-manager.h"
 #endif
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
@@ -72,7 +73,7 @@ struct _EphyShellPrivate
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
 #ifdef ENABLE_NETWORK_MANAGER
-	EphyNetMonitor *net_monitor;
+	EphyNetworkManager *nm_proxy;
 #endif
 	GtkWidget *bme;
 	GtkWidget *history_window;
@@ -151,8 +152,8 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 #ifdef ENABLE_NETWORK_MANAGER
 
 static void
-ephy_shell_sync_network_status (EphyNetMonitor *net_monitor,
-				GParamSpec *pspec,
+ephy_shell_sync_network_status (EphyNetworkManager *nm_proxy,
+				NMState state,
 				EphyShell *shell)
 {
 	EphyShellPrivate *priv = shell->priv;
@@ -163,7 +164,7 @@ ephy_shell_sync_network_status (EphyNetMonitor *net_monitor,
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (shell)));
 
-	net_status = ephy_net_monitor_get_net_status (net_monitor);
+	net_status = state == NM_STATE_CONNECTED;
 	ephy_embed_single_set_network_status (single, net_status);
 }
 
@@ -190,7 +191,9 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 #ifdef ENABLE_NETWORK_MANAGER
 		/* Now we need the net monitor */
 		ephy_shell_get_net_monitor (shell);
-		ephy_shell_sync_network_status (priv->net_monitor, NULL, shell);
+		ephy_shell_sync_network_status (priv->nm_proxy,
+						ephy_network_manager_get_state (priv->nm_proxy),
+						shell);
 #endif
 	}
 	
@@ -291,13 +294,13 @@ ephy_shell_dispose (GObject *object)
 	}
 
 #ifdef ENABLE_NETWORK_MANAGER
-	if (priv->net_monitor != NULL)
+	if (priv->nm_proxy != NULL)
 	{
 		LOG ("Unref net monitor");
 		g_signal_handlers_disconnect_by_func
-			(priv->net_monitor, G_CALLBACK (ephy_shell_sync_network_status), shell);
-		g_object_unref (priv->net_monitor);
-		priv->net_monitor = NULL;
+			(priv->nm_proxy, G_CALLBACK (ephy_shell_sync_network_status), shell);
+		g_object_unref (priv->nm_proxy);
+		priv->nm_proxy = NULL;
 	}
 #endif /* ENABLE_NETWORK_MANAGER */
 
@@ -669,14 +672,19 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 #ifdef ENABLE_NETWORK_MANAGER
 	EphyShellPrivate *priv = shell->priv;
 
-	if (priv->net_monitor == NULL)
+	if (priv->nm_proxy == NULL)
 	{
-		priv->net_monitor = ephy_net_monitor_new ();
-		g_signal_connect (priv->net_monitor, "notify::network-status",
+		priv->nm_proxy = ephy_network_manager_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+									      G_DBUS_PROXY_FLAGS_NONE,
+									      NM_DBUS_SERVICE,
+									      NM_DBUS_PATH,
+									      NULL,
+									      NULL);
+		g_signal_connect (priv->nm_proxy, "state-changed",
 				  G_CALLBACK (ephy_shell_sync_network_status), shell);
 	}
 
-	return G_OBJECT (priv->net_monitor);
+	return G_OBJECT (priv->nm_proxy);
 #else
 	return NULL;
 #endif /* ENABLE_NETWORK_MANAGER */

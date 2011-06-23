@@ -116,10 +116,26 @@ libephymain_la_CFLAGS = \
 	$(WEBKIT_CFLAGS)	\
 	$(AM_CFLAGS)
 
+BUILT_SOURCES =		\
+	$(TYPES_SOURCE)			\
+	ephy-dbus-client-bindings.h	\
+	ephy-dbus-server-bindings.h
+
 if ENABLE_NETWORK_MANAGER
-libephymain_la_SOURCES += \
-	ephy-net-monitor.c	\
-	ephy-net-monitor.h
+nodist_libephymain_la_SOURCES += \
+	ephy-network-manager.c	 \
+	ephy-network-manager.h
+
+BUILT_SOURCES +=		\
+	ephy-network-manager.h	\
+	ephy-network-manager.c
+
+ephy-network-manager.c ephy-network-manager.h: $(top_srcdir)/data/ephy-network-manager.xml
+	$(AM_V_GEN) $(GDBUS_CODEGEN) 			\
+		--c-namespace Ephy			\
+		--generate-c-code ephy-network-manager  \
+		--interface-prefix org.freedesktop. 	\
+		$<
 
 libephymain_la_CFLAGS += $(NETWORK_MANAGER_CFLAGS)
 endif
@@ -183,12 +199,6 @@ if ENABLE_NETWORK_MANAGER
 epiphany_LDADD += \
 	$(NETWORK_MANAGER_LIBS)
 endif
-
-BUILT_SOURCES =	\
-	$(TYPES_SOURCE)			\
-	ephy-dbus-client-bindings.h	\
-	ephy-dbus-server-bindings.h
-
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\

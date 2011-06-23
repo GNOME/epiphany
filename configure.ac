@@ -323,6 +323,7 @@ if test "$enable_network_manager" != "no"; then
 fi
 
 if test "$enable_network_manager" = "yes"; then
+	AC_PATH_PROG([GDBUS_CODEGEN], [gdbus-codegen])
 	AC_DEFINE([ENABLE_NETWORK_MANAGER],[1],[Define for NetworkManager support])
 fi
 
