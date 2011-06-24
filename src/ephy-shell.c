@@ -158,7 +158,7 @@ ephy_shell_sync_network_status (EphyNetworkManager *nm_proxy,
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (shell)));
 
-	net_status = state == NM_STATE_CONNECTED;
+	net_status = state == NM_STATE_CONNECTED_GLOBAL;
 	ephy_embed_single_set_network_status (single, net_status);
 }
 
