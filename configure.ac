@@ -87,7 +87,6 @@ GLIB_REQUIRED=2.29.9
 GTK_REQUIRED=3.0.2
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
-DBUS_GLIB_REQUIRED=0.35
 WEBKIT_GTK_REQUIRED=1.5.1
 LIBSOUP_GNOME_REQUIRED=2.33.1
 GNOME_KEYRING_REQUIRED=2.26.0
@@ -120,18 +119,6 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
 		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
 		  ])
-
-# ****
-# DBUS
-# ****
-
-PKG_CHECK_MODULES([DBUS],[dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
-
-AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[no])
-
-if test "$DBUS_BINDING_TOOL" = "no"; then
-	AC_MSG_ERROR([dbus-binding-tool not found])
-fi
 
 # ******************
 # Portability checks

@@ -15,7 +15,6 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	ephy-action-helper.h			\
-	ephy-activation.h			\
 	ephy-application.h			\
 	ephy-encoding-dialog.h			\
 	ephy-encoding-menu.h			\
@@ -42,7 +41,6 @@ NOINST_H_FILES = \
 	window-commands.h
 
 INST_H_FILES = \
-	ephy-dbus.h			\
 	ephy-extension.h		\
 	ephy-extensions-manager.h	\
 	ephy-link.h			\
@@ -54,13 +52,10 @@ INST_H_FILES = \
 	$(NULL)
 
 libephymain_la_SOURCES = \
-	ephy-activation.c			\
 	ephy-action-helper.c			\
 	ephy-application.c			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
-	ephy-dbus.c				\
-	ephy-dbus.h				\
 	ephy-encoding-dialog.c			\
 	ephy-encoding-menu.c			\
 	ephy-extension.c			\
@@ -114,15 +109,12 @@ libephymain_la_CPPFLAGS = \
 
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	  \
-	$(DBUS_CFLAGS)		  \
 	$(WEBKIT_CFLAGS)	  \
 	$(NETWORK_MANAGER_CFLAGS) \
 	$(AM_CFLAGS)
 
 BUILT_SOURCES =		\
-	$(TYPES_SOURCE)			\
-	ephy-dbus-client-bindings.h	\
-	ephy-dbus-server-bindings.h
+	$(TYPES_SOURCE)
 
 nodist_libephymain_la_SOURCES += \
 	ephy-network-manager.c	 \
@@ -168,8 +160,7 @@ epiphany_CPPFLAGS = \
 
 epiphany_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
-	$(GECKO_CFLAGS) \
-	$(DBUS_CFLAGS)		\
+	$(GECKO_CFLAGS)		\
 	$(AM_CFLAGS)
 
 epiphany_LDFLAGS = -dlopen self
@@ -182,7 +173,6 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
-	$(DBUS_LIBS) \
 	$(NETWORK_MANAGER_LIBS) \
 	$(LIBINTL)
 
@@ -201,9 +191,7 @@ TYPES_SOURCE = \
 
 stamp_files = \
 	stamp-ephy-type-builtins.c	\
-	stamp-ephy-type-builtins.h	\
-	stamp-ephy-dbus-server-bindings.h	\
-	stamp-ephy-dbus-client-bindings.h
+	stamp-ephy-type-builtins.h
 
 ephy-type-builtins.c: stamp-ephy-type-builtins.c Makefile
 	@true
@@ -243,22 +231,6 @@ stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
 		$(filter-out $<,$^) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
-	&& rm -f xgen-$(@F) \
-	&& echo timestamp > $(@F)
-
-ephy-dbus-server-bindings.h: stamp-ephy-dbus-server-bindings.h
-	@true
-stamp-ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
-	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
-	&& rm -f xgen-$(@F) \
-	&& echo timestamp > $(@F)
-
-ephy-dbus-client-bindings.h: stamp-ephy-dbus-client-bindings.h
-	@true
-stamp-ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
-	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
