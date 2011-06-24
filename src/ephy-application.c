@@ -334,7 +334,10 @@ ephy_application_init (EphyApplication *application)
 static void
 ephy_application_finalize (GObject *object)
 {
-  ephy_application_free_startup_context (EPHY_APPLICATION (object));
+  EphyApplication *application = EPHY_APPLICATION (object);
+
+  if (application->priv->startup_context)
+    ephy_application_free_startup_context (application);
 
   G_OBJECT_CLASS (ephy_application_parent_class)->finalize (object);
 }
