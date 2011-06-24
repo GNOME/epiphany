@@ -17,6 +17,7 @@ NOINST_H_FILES = \
 	ephy-module.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
+	ephy-network-manager-defines.h		\
 	ephy-object-helpers.h			\
 	ephy-prefs.h				\
 	ephy-profile-utils.h			\

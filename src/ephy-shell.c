@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#include <NetworkManager.h>
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -58,6 +57,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-web-view.h"
 #include "ephy-network-manager.h"
+#include "ephy-network-manager-defines.h"
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
