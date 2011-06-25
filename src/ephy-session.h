@@ -92,7 +92,7 @@ void		 ephy_session_remove_window	(EphySession *session,
 void		 ephy_session_queue_command	(EphySession *session,
 						 EphySessionCommand op,
 						 const char *arg,
-						 char **args,
+						 const char **args,
 						 guint32 user_time,
 						 gboolean priority);
 
