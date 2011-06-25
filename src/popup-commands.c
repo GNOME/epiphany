@@ -26,6 +26,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-chooser.h"
 #include "ephy-bookmarks-ui.h"
@@ -296,32 +297,16 @@ popup_cmd_save_image_as (GtkAction *action,
 			   window, TRUE, "image-uri");
 }
 
-#define GNOME_APPEARANCE_PROPERTIES  "gnome-appearance-properties.desktop"
-
 static void
 background_download_completed (EphyDownload *download,
 			       GtkWidget *window)
 {
-	char *bg;
-	guint32 user_time;
+	const char *uri;
+	GSettings *settings;
 
-	user_time = ephy_download_get_start_time (download);
-
-	bg = g_filename_from_uri (ephy_download_get_destination_uri (download), NULL, NULL);
-
-	/* open the Appearance Properties capplet on the Background tab */
-	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time, window))
-	{
-		/* Fallback for <= 2.18 desktop: try to open the "Background Properties" capplet */
-		if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time, window))
-		{
-			/* If the above try didn't work, then we try the Fedora name.
-			 * This is a fix for #387206, but is actually a workaround for
-			 * bugzilla.redhat.com #201867 */
-			ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time, window);
-		}
-	}
-	g_free (bg);
+	uri = ephy_download_get_destination_uri (download);
+	settings = ephy_settings_get ("org.gnome.desktop.background");
+	g_settings_set_string (settings, "picture-uri", uri);
 }
 
 void
@@ -345,7 +330,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
-	dest = g_build_filename (ephy_dot_dir (), base_converted, NULL);
+	dest = g_build_filename (g_get_home_dir (), "Pictures", base_converted, NULL);
 	dest_uri = g_filename_to_uri (dest, NULL, NULL);
 
 	ephy_download_set_destination_uri (download, dest_uri);
