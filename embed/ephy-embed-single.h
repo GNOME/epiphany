@@ -67,11 +67,6 @@ struct _EphyEmbedSingleClass
   gboolean (* handle_content) (EphyEmbedSingle *shell,
                                char *mime_type,
                                char *uri);
-
-  gboolean (* add_search_engine) (EphyEmbedSingle *single,
-                                  const char *url,
-                                  const char *icon_url,
-                                  const char *title);
 };
 
 GType           ephy_embed_single_get_type           (void);
