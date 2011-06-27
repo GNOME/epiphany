@@ -377,6 +377,19 @@ popup_context_menu_cb (GtkWidget          *toolbar,
 }
 
 static gboolean
+edit_mode_button_press_event_cb (GtkWidget          *widget,
+                                 GdkEventButton     *event,
+                                 EggEditableToolbar *etoolbar)
+{
+  if (event->button == 1)
+    {
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 button_press_event_cb (GtkWidget *widget,
                        GdkEventButton *event,
                        EggEditableToolbar *etoolbar)
@@ -420,6 +433,23 @@ configure_item_sensitivity (GtkToolItem *item, EggEditableToolbar *etoolbar)
 				     (etoolbar->priv->edit_mode > 0) ||
 				     GTK_IS_SEPARATOR_TOOL_ITEM (item));
 
+}
+
+static void
+configure_item_window_drag (GtkToolItem        *item,
+                            EggEditableToolbar *etoolbar)
+{
+  if (etoolbar->priv->edit_mode > 0)
+    {
+      g_signal_connect (item, "button-press-event",
+                        G_CALLBACK (edit_mode_button_press_event_cb), NULL);
+    }
+  else
+    {
+      g_signal_handlers_disconnect_by_func (item,
+                                            G_CALLBACK (edit_mode_button_press_event_cb),
+                                            NULL);
+    }
 }
 
 static void
@@ -1215,6 +1245,7 @@ item_added_cb (EggToolbarsModel   *model,
   connect_widget_signals (GTK_WIDGET (item), etoolbar);
   configure_item_tooltip (item);
   configure_item_cursor (item, etoolbar);
+  configure_item_window_drag (item, etoolbar);
   configure_item_sensitivity (item, etoolbar);
 
   dock = get_dock_nth (etoolbar, tpos);
@@ -1546,6 +1577,7 @@ set_edit_mode (EggEditableToolbar *etoolbar,
                   item = gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), l);
 
                   configure_item_cursor (item, etoolbar);
+                  configure_item_window_drag (item, etoolbar);
                   configure_item_sensitivity (item, etoolbar);
                 }
             }
