@@ -2756,24 +2756,35 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GtkNotebook *notebook;
-	int page, n_pages;
-	gboolean not_first, not_last;
+	gboolean wrap_around;
+	int n_pages;
 
 	notebook = GTK_NOTEBOOK (priv->notebook);
-	page = gtk_notebook_get_current_page (notebook);
-	n_pages = gtk_notebook_get_n_pages (notebook);
-	not_first = page > 0;
-	not_last = page + 1 < n_pages;
-
 	action_group = priv->action_group;
-	action = gtk_action_group_get_action (action_group, "TabsPrevious");
-	gtk_action_set_sensitive (action, not_first);
-	action = gtk_action_group_get_action (action_group, "TabsNext");
-	gtk_action_set_sensitive (action, not_last);
-	action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-	gtk_action_set_sensitive (action, not_first);
-	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-	gtk_action_set_sensitive (action, not_last);
+	n_pages = gtk_notebook_get_n_pages (notebook);
+
+	g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
+		      "gtk-keynav-wrap-around", &wrap_around,
+		      NULL);
+
+	if (!wrap_around)
+	{
+		int page;
+		gboolean not_first, not_last;
+
+		page = gtk_notebook_get_current_page (notebook);
+		not_first = page > 0;
+		not_last = page + 1 < n_pages;
+
+		action = gtk_action_group_get_action (action_group, "TabsPrevious");
+		gtk_action_set_sensitive (action, not_first);
+		action = gtk_action_group_get_action (action_group, "TabsNext");
+		gtk_action_set_sensitive (action, not_last);
+		action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
+		gtk_action_set_sensitive (action, not_first);
+		action = gtk_action_group_get_action (action_group, "TabsMoveRight");
+		gtk_action_set_sensitive (action, not_last);
+	}
 
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, n_pages <= 1);
