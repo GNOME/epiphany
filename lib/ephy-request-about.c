@@ -1,8 +1,21 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- * ephy-request-about.c: about: URI request object
+ *  Copyright © 2011 Igalia S.L.
  *
- * Copyright (C) 2011, Igalia S.L.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -16,12 +29,14 @@
 
 #include "ephy-file-helpers.h"
 #include "ephy-request-about.h"
+#include "ephy-smaps.h"
 
 G_DEFINE_TYPE (EphyRequestAbout, ephy_request_about, SOUP_TYPE_REQUEST)
 
 struct _EphyRequestAboutPrivate {
   gssize content_length;
   gchar *css_style;
+  EphySMaps *smaps;
 };
 
 static void
@@ -30,12 +45,16 @@ ephy_request_about_init (EphyRequestAbout *about)
   about->priv = G_TYPE_INSTANCE_GET_PRIVATE (about, EPHY_TYPE_REQUEST_ABOUT, EphyRequestAboutPrivate);
   about->priv->content_length = 0;
   about->priv->css_style = NULL;
+  about->priv->smaps = ephy_smaps_new ();
 }
 
 static void
 ephy_request_about_finalize (GObject *obj)
 {
-  g_free (EPHY_REQUEST_ABOUT (obj)->priv->css_style);
+  EphyRequestAboutPrivate *priv = EPHY_REQUEST_ABOUT (obj)->priv;
+
+  g_object_unref (priv->smaps);
+  g_free (priv->css_style);
 
   G_OBJECT_CLASS (ephy_request_about_parent_class)->finalize (obj);
 }
@@ -114,6 +133,18 @@ ephy_request_about_send (SoupRequest          *request,
 
     webkit_web_plugin_database_plugins_list_free (plugin_list);
     g_string_append (data_str, "</body>");
+  } else if (!g_strcmp0 (uri->path, "memory")) {
+    char *memory = ephy_smaps_to_html (EPHY_REQUEST_ABOUT (request)->priv->smaps);
+
+    if (memory) {
+      g_string_append_printf (data_str, "<head><title>%s</title>"       \
+                              "<style type=\"text/css\">%s</style></head><body>",
+                              _("Memory usage"),
+                              about->priv->css_style);
+      
+      g_string_append (data_str, memory);
+      g_free (memory);
+    }
 
   } else if (!g_strcmp0 (uri->path, "epiphany")) {
     g_string_append_printf (data_str, "<head><title>Epiphany</title>" \

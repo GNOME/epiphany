@@ -25,6 +25,7 @@ NOINST_H_FILES = \
 	ephy-request-about.h			\
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
+	ephy-smaps.h				\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
 	ephy-time-helpers.h			\
@@ -66,6 +67,7 @@ libephymisc_la_SOURCES = \
 	ephy-settings.c				\
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\
+	ephy-smaps.c				\
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-stock-icons.c			\
