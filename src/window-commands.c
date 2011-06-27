@@ -1091,18 +1091,12 @@ window_cmd_tabs_next (GtkAction *action,
 		      EphyWindow *window)
 {
 	GtkNotebook *nb;
-	gint page;
+	gboolean handled;
 
 	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
 	g_return_if_fail (nb != NULL);
 
-	page = gtk_notebook_get_current_page (nb);
-	g_return_if_fail (page != -1);
-
-	if (page < gtk_notebook_get_n_pages (nb) - 1)
-	{
-		gtk_notebook_set_current_page (nb, page + 1);
-	}
+	g_signal_emit_by_name (nb, "change-current-page", 1, &handled);
 }
 
 void
@@ -1110,18 +1104,12 @@ window_cmd_tabs_previous (GtkAction *action,
 			  EphyWindow *window)
 {
 	GtkNotebook *nb;
-	gint page;
+	gboolean handled;
 
 	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
 	g_return_if_fail (nb != NULL);
 
-	page = gtk_notebook_get_current_page (nb);
-	g_return_if_fail (page != -1);
-
-	if (page > 0)
-	{
-		gtk_notebook_set_current_page (nb, page - 1);
-	}
+	g_signal_emit_by_name (nb, "change-current-page", -1, &handled);
 }
 
 void
