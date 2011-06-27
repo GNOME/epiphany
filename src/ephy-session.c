@@ -1788,7 +1788,7 @@ ephy_session_queue_command (EphySession *session,
 	cmd = g_new0 (SessionCommand, 1);
 	cmd->command = command;
 	cmd->arg = arg ? g_strdup (arg) : NULL;
-	cmd->args = args ? g_strdupv (args) : NULL;
+	cmd->args = args ? g_strdupv ((gchar **)args) : NULL;
 	cmd->user_time = user_time;
 	/* This ref is released in session_command_free */
 	g_object_ref (ephy_shell_get_default ());
