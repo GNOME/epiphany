@@ -15,7 +15,6 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	ephy-action-helper.h			\
-	ephy-application.h			\
 	ephy-encoding-dialog.h			\
 	ephy-encoding-menu.h			\
 	ephy-find-toolbar.h			\
@@ -41,6 +40,7 @@ NOINST_H_FILES = \
 	window-commands.h
 
 INST_H_FILES = \
+	ephy-application.h		\
 	ephy-extension.h		\
 	ephy-extensions-manager.h	\
 	ephy-link.h			\
