@@ -71,20 +71,20 @@ typedef struct {
   guint32 user_time;
 } EphyApplicationStartupContext;
 
-GType      ephy_application_get_type (void) G_GNUC_CONST;
+GType                          ephy_application_get_type            (void) G_GNUC_CONST;
 
-EphyApplication *ephy_application_new (void);
+EphyApplication               *ephy_application_new                 (void);
 
-void             ephy_application_set_startup_context (EphyApplication *application,
-                                                       EphyApplicationStartupContext *ctx);
+void                           ephy_application_set_startup_context (EphyApplication                *application,
+                                                                     EphyApplicationStartupContext  *ctx);
 
-EphyApplicationStartupContext *
-ephy_application_startup_context_new (EphyStartupFlags startup_flags,
-                                      char *bookmarks_filename,
-                                      char *session_filename,
-                                      char *bookmark_url,
-                                      char **arguments,
-                                      guint32 user_time);
+EphyApplicationStartupContext *ephy_application_startup_context_new (EphyStartupFlags                startup_flags,
+                                                                     char                           *bookmarks_filename,
+                                                                     char                           *session_filename,
+                                                                     char                           *bookmark_url,
+                                                                     char                          **arguments,
+                                                                     guint32                         user_time);
+
 G_END_DECLS
 
 #endif
