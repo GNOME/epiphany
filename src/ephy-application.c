@@ -402,9 +402,14 @@ ephy_application_finalize (GObject *object)
 EphyApplication *
 ephy_application_new (gboolean private_instance)
 {
+  GApplicationFlags flags = G_APPLICATION_FLAGS_NONE;
+
+  if (private_instance)
+    flags |= G_APPLICATION_NON_UNIQUE;
+
   return g_object_new (EPHY_TYPE_APPLICATION,
                        "application-id", "org.gnome.Epiphany",
-                       "flags", G_APPLICATION_FLAGS_NONE,
+                       "flags", flags,
                        "private-instance", private_instance,
                        NULL);
 }

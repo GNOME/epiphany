@@ -421,14 +421,6 @@ main (int argc,
   _ephy_shell_create_instance (application);
   g_object_unref (application);
 
-  if (private_instance) {
-    GApplicationFlags flags;
-
-    flags = g_application_get_flags (G_APPLICATION (application));
-    flags |= G_APPLICATION_NON_UNIQUE;
-
-    g_application_set_flags (G_APPLICATION (application), flags);
-  }
   startup_flags = get_startup_flags ();
   ctx = ephy_application_startup_context_new (startup_flags,
                                               bookmarks_file,
