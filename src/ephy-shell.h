@@ -130,7 +130,7 @@ GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 EphyApplication *ephy_shell_get_application             (EphyShell *shell);
 
 /* private API */
-void	       _ephy_shell_create_instance		(void);
+void	       _ephy_shell_create_instance		(EphyApplication *application);
 
 G_END_DECLS
 

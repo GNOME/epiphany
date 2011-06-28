@@ -202,8 +202,6 @@ ephy_shell_init (EphyShell *shell)
 	ephy_shell = shell;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
-
-	shell->priv->application = ephy_application_new ();
 }
 
 static void
@@ -815,7 +813,7 @@ ephy_shell_get_application (EphyShell *shell)
 }
 
 void
-_ephy_shell_create_instance (void)
+_ephy_shell_create_instance (EphyApplication *application)
 {
 	g_assert (ephy_shell == NULL);
 
@@ -823,4 +821,9 @@ _ephy_shell_create_instance (void)
 	/* FIXME weak ref */
 
 	g_assert (ephy_shell != NULL);
+
+	if (application)
+		ephy_shell->priv->application = g_object_ref (application);
+	else
+		ephy_shell->priv->application = ephy_application_new ();
 }
