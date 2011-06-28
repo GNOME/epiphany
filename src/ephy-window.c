@@ -1713,6 +1713,7 @@ sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window
 	gboolean switching_tab = pspec == NULL;
 
 	if (window->priv->closing) return;
+	if (!window->priv->entry) return;
 
 	if (window->priv->clear_progress_timeout_id)
 	{
@@ -3831,10 +3832,13 @@ ephy_window_constructor (GType type,
 	action = gtk_action_group_get_action (toolbar_action_group,
 					      "Location");
 	proxies = gtk_action_get_proxies (action);
-	proxy = GTK_WIDGET (proxies->data);
-	priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
-	gtk_window_set_application (GTK_WINDOW (window),
+	if (proxies)
+	{
+		proxy = GTK_WIDGET (proxies->data);
+		priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+		gtk_window_set_application (GTK_WINDOW (window),
 				    GTK_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())));
+	}
 	
 	return object;
 }
