@@ -417,7 +417,7 @@ main (int argc,
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Now create the shell */
-  application = ephy_application_new ();
+  application = ephy_application_new (private_instance);
   _ephy_shell_create_instance (application);
   g_object_unref (application);
 

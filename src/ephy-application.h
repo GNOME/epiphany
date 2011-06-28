@@ -73,7 +73,7 @@ typedef struct {
 
 GType                          ephy_application_get_type            (void) G_GNUC_CONST;
 
-EphyApplication               *ephy_application_new                 (void);
+EphyApplication               *ephy_application_new                 (gboolean private_instance);
 
 void                           ephy_application_set_startup_context (EphyApplication                *application,
                                                                      EphyApplicationStartupContext  *ctx);

@@ -825,5 +825,5 @@ _ephy_shell_create_instance (EphyApplication *application)
 	if (application)
 		ephy_shell->priv->application = g_object_ref (application);
 	else
-		ephy_shell->priv->application = ephy_application_new ();
+		ephy_shell->priv->application = ephy_application_new (FALSE);
 }

@@ -29,10 +29,19 @@
 
 #include <string.h>
 
+enum {
+  PROP_0,
+  PROP_PRIVATE_INSTANCE,
+  N_PROPERTIES
+};
+
+static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+
 #define EPHY_APPLICATION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_APPLICATION, EphyApplicationPrivate))
 
 struct _EphyApplicationPrivate {
   EphyApplicationStartupContext *startup_context;
+  gboolean private_instance;
 };
 
 G_DEFINE_TYPE (EphyApplication, ephy_application, GTK_TYPE_APPLICATION);
@@ -309,17 +318,65 @@ ephy_application_before_emit (GApplication *application,
 }
 
 static void
+ephy_application_set_property (GObject *object,
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+  EphyApplication *application = EPHY_APPLICATION (object);
+
+  switch (prop_id) {
+  case PROP_PRIVATE_INSTANCE:
+    application->priv->private_instance = g_value_get_boolean (value);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_application_get_property (GObject *object,
+                               guint prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
+{
+  EphyApplication *application = EPHY_APPLICATION (object);
+
+  switch (prop_id) {
+  case PROP_PRIVATE_INSTANCE:
+    g_value_set_boolean (value, application->priv->private_instance);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
 ephy_application_class_init (EphyApplicationClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS(class);
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
 
   object_class->finalize = ephy_application_finalize;
+  object_class->set_property = ephy_application_set_property;
+  object_class->get_property = ephy_application_get_property;
 
   application_class->startup = ephy_application_startup;
   application_class->activate = ephy_application_activate;
   application_class->before_emit = ephy_application_before_emit;
   application_class->add_platform_data = ephy_application_add_platform_data;
+
+  object_properties[PROP_PRIVATE_INSTANCE] =
+    g_param_spec_boolean ("private-instance",
+                          "Private instance",
+                          "Whether this Epiphany instance is private.",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
+                          G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class,
+                                     N_PROPERTIES,
+                                     object_properties);
 
   g_type_class_add_private (class, sizeof (EphyApplicationPrivate));
 }
@@ -343,11 +400,12 @@ ephy_application_finalize (GObject *object)
 }
 
 EphyApplication *
-ephy_application_new (void)
+ephy_application_new (gboolean private_instance)
 {
   return g_object_new (EPHY_TYPE_APPLICATION,
                        "application-id", "org.gnome.Epiphany",
                        "flags", G_APPLICATION_FLAGS_NONE,
+                       "private-instance", private_instance,
                        NULL);
 }
 
