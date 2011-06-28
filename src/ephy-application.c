@@ -159,7 +159,7 @@ ephy_application_startup (GApplication* application)
 {
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
-  if (ephy_has_private_profile () == FALSE &&
+  if (!ephy_application_is_private_instance (EPHY_APPLICATION (application)) &&
       ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION) {
     GError *error = NULL;
     char *argv[1] = { "ephy-profile-migrator" };
@@ -432,4 +432,18 @@ ephy_application_set_startup_context (EphyApplication *application,
     ephy_application_free_startup_context (application);
 
   application->priv->startup_context = ctx;
+}
+
+/**
+ * ephy_application_is_private_instance:
+ * @application: an #EphyApplication
+ * 
+ * Returns: whether @application is a private instance
+ **/
+gboolean
+ephy_application_is_private_instance (EphyApplication *application)
+{
+  g_return_val_if_fail (EPHY_IS_APPLICATION (application), FALSE);
+
+  return application->priv->private_instance;
 }

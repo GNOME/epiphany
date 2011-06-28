@@ -73,7 +73,7 @@ typedef struct {
 
 GType                          ephy_application_get_type            (void) G_GNUC_CONST;
 
-EphyApplication               *ephy_application_new                 (gboolean private_instance);
+EphyApplication               *ephy_application_new                 (gboolean                        private_instance);
 
 void                           ephy_application_set_startup_context (EphyApplication                *application,
                                                                      EphyApplicationStartupContext  *ctx);
@@ -84,6 +84,8 @@ EphyApplicationStartupContext *ephy_application_startup_context_new (EphyStartup
                                                                      char                           *bookmark_url,
                                                                      char                          **arguments,
                                                                      guint32                         user_time);
+
+gboolean                       ephy_application_is_private_instance (EphyApplication                *application);
 
 G_END_DECLS
 
