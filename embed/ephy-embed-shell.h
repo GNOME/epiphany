@@ -103,10 +103,6 @@ void		   ephy_embed_shell_remove_download	(EphyEmbedShell *shell,
 
 gboolean           ephy_embed_shell_is_private_instance (EphyEmbedShell *shell);
 
-/* Private API */
-void	       _ephy_embed_shell_track_object		(EphyEmbedShell *shell,
-							 GObject        *object);
-
 G_END_DECLS
 
 #endif /* !EPHY_EMBED_SHELL_H */

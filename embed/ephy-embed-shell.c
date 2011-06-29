@@ -58,7 +58,6 @@ struct _EphyEmbedShellPrivate
 	EphyAdBlockManager *adblock_manager;
 	GtkPageSetup *page_setup;
 	GtkPrintSettings *print_settings;
-	guint object_count;
 	gboolean private_instance;
 	guint single_initialised : 1;
 };
@@ -68,7 +67,6 @@ enum
 	DOWNLOAD_ADDED,
 	DOWNLOAD_REMOVED,
 	PREPARE_CLOSE,
-	QUIT,
 	LAST_SIGNAL
 };
 
@@ -406,25 +404,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
-/**
- * EphyEmbedShell::quit:
- * @shell: an #EphyEmbedShell
- * 
- * The ::quit is emitted when all windows (browser windows, popups,
- * download windows, etc) are closed and the @shell is ready to be
- * closed.
- *
- * Since: 2.30
- **/
-	signals[QUIT] =
-		g_signal_new ("quit",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
-	
 	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
 
@@ -664,25 +643,6 @@ ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
 	priv->downloads = g_list_remove (priv->downloads, download);
 
 	g_signal_emit_by_name (shell, "download-removed", download, NULL);
-}
-
-
-static void
-object_notify_cb (EphyEmbedShell *shell, GObject *object)
-{
-	shell->priv->object_count--;
-	if (shell->priv->object_count == 0)
-		g_signal_emit (shell, signals[QUIT], 0);
-}
-
-void
-_ephy_embed_shell_track_object (EphyEmbedShell *shell, GObject *object)
-{
-	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-	g_return_if_fail (G_IS_OBJECT (object));
-
-	g_object_weak_ref (object, (GWeakNotify)object_notify_cb, shell);
-	shell->priv->object_count++;
 }
 
 /**

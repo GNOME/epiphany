@@ -3641,7 +3641,7 @@ ephy_window_init (EphyWindow *window)
 {
 	LOG ("EphyWindow initialising %p", window);
 
-	_ephy_embed_shell_track_object (EPHY_EMBED_SHELL (ephy_shell), G_OBJECT (window));
+	gtk_application_add_window (GTK_APPLICATION (ephy_shell), GTK_WINDOW (window));
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
