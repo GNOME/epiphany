@@ -528,7 +528,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
      are not using a private session, otherwise we want any new
      password to expire when we exit *and* we don't want to use any
      existing password in the keyring */
-  if (ephy_has_private_profile () == FALSE)
+  if (ephy_embed_shell_is_private_instance (ephy_embed_shell_get_default ()) == FALSE)
     soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
 #endif
 

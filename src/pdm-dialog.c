@@ -1518,7 +1518,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	PdmDialogPrivate *priv;
 	PdmActionInfo *cookies, *passwords;
 	GtkWidget *window;
-	gboolean has_private_profile = ephy_has_private_profile ();
+	gboolean has_private_profile = ephy_embed_shell_is_private_instance (embed_shell);
 
 
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);

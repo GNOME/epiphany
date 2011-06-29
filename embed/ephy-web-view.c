@@ -1873,7 +1873,7 @@ load_status_cb (WebKitWebView *web_view,
     if (ephy_web_view_get_is_blank (view))
       g_object_notify (object, "embed-title");
 
-    if (ephy_has_private_profile () == FALSE &&
+    if (ephy_embed_shell_is_private_instance (embed_shell) == FALSE &&
         g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);

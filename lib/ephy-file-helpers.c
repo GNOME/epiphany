@@ -62,7 +62,6 @@
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
-static gboolean have_private_profile = FALSE;
 static gboolean keep_temp_directory = FALSE; /* for debug purposes */
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
@@ -274,19 +273,6 @@ ephy_dot_dir (void)
 }
 
 /**
- * ephy_has_private_profile:
- *
- * Whether Epiphany is running with a private profile (-p command line option).
- *
- * Returns: %TRUE if a private profile is in use
- **/
-gboolean
-ephy_has_private_profile (void)
-{
-	return have_private_profile;
-}
-
-/**
  * ephy_file_helpers_init:
  * @profile_dir: directory to use as Epiphany's profile
  * @private_profile: %TRUE if we should use a private profile
@@ -324,7 +310,6 @@ ephy_file_helpers_init (const char *profile_dir,
 				       (GDestroyNotify) g_free,
 				       (GDestroyNotify) g_free);
 
-	have_private_profile = private_profile;
 	keep_temp_directory = keep_temp_dir;
 
 	if (private_profile && profile_dir != NULL)
