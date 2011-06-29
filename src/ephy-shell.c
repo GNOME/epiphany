@@ -58,6 +58,7 @@
 #include "ephy-web-view.h"
 #include "ephy-network-manager.h"
 #include "ephy-network-manager-defines.h"
+#include "ephy-profile-utils.h"
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
@@ -69,14 +70,13 @@ struct _EphyShellPrivate
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
-	EphyApplication *application;
 	EphyNetworkManager *nm_proxy;
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
 	GObject *prefs_dialog;
 	GList *del_on_exit;
-
+	EphyShellStartupContext *startup_context;
 	guint embed_single_connected : 1;
 };
 
@@ -90,14 +90,292 @@ static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
+/**
+ * ephy_shell_startup_context_new:
+ * @bookmarks_filename: A bookmarks file to import.
+ * @session_filename: A session to restore.
+ * @bookmark_url: A URL to be added to the bookmarks.
+ * @arguments: A %NULL-terminated array of URLs and file URIs to be opened.
+ * @user_time: The user time when the EphyShell startup was invoked.
+ *
+ * Creates a new startup context. All string parameters, including
+ * @arguments, are copied.
+ *
+ * Returns: a newly allocated #EphyShellStartupContext
+ **/
+EphyShellStartupContext *
+ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
+				char *bookmarks_filename,
+				char *session_filename,
+				char *bookmark_url,
+				char **arguments,
+				guint32 user_time)
+{
+	EphyShellStartupContext *ctx = g_slice_new0 (EphyShellStartupContext);
+	
+	ctx->startup_flags = startup_flags;
+	
+	ctx->bookmarks_filename = g_strdup (bookmarks_filename);
+	ctx->session_filename = g_strdup (session_filename);
+	ctx->bookmark_url = g_strdup (bookmark_url);
+  
+	ctx->arguments = g_strdupv (arguments);
+	
+	ctx->user_time = user_time;
+  
+	return ctx;
+}
+
+static void
+queue_commands (EphyShell *shell)
+{
+	EphyShellStartupContext *ctx;
+	EphySession *session;
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+	g_assert (session != NULL);
+
+	ctx = shell->priv->startup_context;
+
+	/* We only get here when starting a new instance, so we first need
+	   to autoresume! */
+	ephy_session_queue_command (session,
+		EPHY_SESSION_CMD_RESUME_SESSION,
+		NULL, NULL, ctx->user_time, TRUE);
+
+	if (ctx->startup_flags & EPHY_STARTUP_BOOKMARKS_EDITOR)
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR,
+					    NULL, NULL, ctx->user_time, FALSE);
+	else if (ctx->session_filename != NULL)
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_LOAD_SESSION,
+					    (const char *)ctx->session_filename, NULL,
+					    ctx->user_time, FALSE);
+	else if (ctx->arguments != NULL)
+	{
+		/* Don't queue any window openings if no extra arguments given, */
+		/* since session autoresume will open one for us. */
+		GString *options;
+
+		options = g_string_sized_new (64);
+
+		if (ctx->startup_flags & EPHY_STARTUP_NEW_WINDOW)
+			g_string_append (options, "new-window,");
+
+		if (ctx->startup_flags & EPHY_STARTUP_NEW_TAB)
+			g_string_append (options, "new-tab,external,");
+
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_OPEN_URIS,
+					    (const char*)options->str,
+					    (const char **)ctx->arguments,
+					    ctx->user_time, FALSE);
+	}
+}
+
+static void
+ephy_shell_startup (GApplication* application)
+{
+  /* We're not remoting; start our services */
+  /* Migrate profile if we are not running a private instance */
+  if (!ephy_embed_shell_is_private_instance (EPHY_EMBED_SHELL (application)) &&
+      ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION)
+  {
+	  GError *error = NULL;
+	  char *argv[1] = { "ephy-profile-migrator" };
+	  char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
+	  
+	  g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
+			NULL, NULL, NULL, NULL,
+			NULL, &error);
+
+	  if (error)
+	  {
+		  LOG ("Failed to run migrator: %s", error->message);
+		  g_error_free (error);
+	 }
+  }
+}
+
+static void
+ephy_shell_activate (GApplication *application)
+{
+	/*
+	 * We get here on each new instance (remote or not). Queue the
+	 * commands.
+	 */
+	queue_commands (EPHY_SHELL (application));
+}
+
+/*
+ * We use this enumeration to conveniently fill and read from the
+ * dictionary variant that is sent from the remote to the primary
+ * instance.
+ */
+typedef enum
+{
+	CTX_STARTUP_FLAGS,
+	CTX_BOOKMARKS_FILENAME,
+	CTX_SESSION_FILENAME,
+	CTX_BOOKMARK_URL,
+	CTX_ARGUMENTS,
+	CTX_USER_TIME
+} CtxEnum;
+
+static void
+ephy_shell_add_platform_data (GApplication *application,
+			      GVariantBuilder *builder)
+{
+	EphyShell *app;
+	EphyShellStartupContext *ctx;
+	GVariantBuilder *ctx_builder;
+
+	app = EPHY_SHELL (application);
+
+	G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application,
+                                                                          builder);
+
+	if (app->priv->startup_context)
+	{
+		/*
+		 * We create an array variant that contains only the elements in
+		 * ctx that are non-NULL.
+		 */
+		ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
+		ctx = app->priv->startup_context;
+		
+		if (ctx->startup_flags)
+			g_variant_builder_add (ctx_builder, "{iv}",
+					       CTX_STARTUP_FLAGS,
+					       g_variant_new_byte (ctx->startup_flags));
+		
+		if (ctx->bookmarks_filename)
+			g_variant_builder_add (ctx_builder, "{iv}",
+					       CTX_BOOKMARKS_FILENAME,
+					       g_variant_new_string (ctx->bookmarks_filename));
+		
+		if (ctx->session_filename)
+			g_variant_builder_add (ctx_builder, "{iv}",
+					       CTX_SESSION_FILENAME,
+					       g_variant_new_string (ctx->session_filename));
+		
+		if (ctx->bookmark_url)
+			g_variant_builder_add (ctx_builder, "{iv}",
+					       CTX_BOOKMARK_URL,
+					       g_variant_new_string (ctx->bookmark_url));
+		
+		if (ctx->arguments)
+			g_variant_builder_add (ctx_builder, "{iv}",
+					       CTX_ARGUMENTS,
+					       g_variant_new_strv ((const gchar * const *)ctx->arguments, -1));
+		
+		g_variant_builder_add (ctx_builder, "{iv}",
+				       CTX_USER_TIME,
+				       g_variant_new_uint32 (ctx->user_time));
+		
+		g_variant_builder_add (builder, "{sv}",
+				       "ephy-shell-startup-context",
+				       g_variant_builder_end (ctx_builder));
+		
+		g_variant_builder_unref (ctx_builder);
+	}
+}
+
+static void
+ephy_shell_free_startup_context (EphyShell *shell)
+{
+	EphyShellStartupContext *ctx = shell->priv->startup_context;
+
+	g_assert (ctx != NULL);
+
+	g_free (ctx->bookmarks_filename);
+	g_free (ctx->session_filename);
+	g_free (ctx->bookmark_url);
+
+	g_strfreev (ctx->arguments);
+
+	g_slice_free (EphyShellStartupContext, ctx);
+
+	shell->priv->startup_context = NULL;
+}
+
+static void
+ephy_shell_before_emit (GApplication *application,
+			GVariant *platform_data)
+{
+	GVariantIter iter, ctx_iter;
+	const char *key;
+	CtxEnum ctx_key;
+	GVariant *value, *ctx_value;
+	EphyShellStartupContext *ctx = NULL;
+
+	EphyShell *shell = EPHY_SHELL (application);
+
+	g_variant_iter_init (&iter, platform_data);
+	while (g_variant_iter_loop (&iter, "{&sv}", &key, &value))
+	{
+		if (strcmp (key, "ephy-shell-startup-context") == 0)
+		{
+			ctx = g_slice_new0 (EphyShellStartupContext);
+
+			/*
+			 * Iterate over the startup context variant and fill the members
+			 * that were wired. Everything else is just NULL.
+			 */
+			g_variant_iter_init (&ctx_iter, value);
+			while (g_variant_iter_loop (&ctx_iter, "{iv}", &ctx_key, &ctx_value))
+			{
+				switch (ctx_key)
+				{
+				case CTX_STARTUP_FLAGS:
+					ctx->startup_flags = g_variant_get_byte (ctx_value);
+					break;
+				case CTX_BOOKMARKS_FILENAME:
+					ctx->bookmarks_filename = g_variant_dup_string (ctx_value, NULL);
+					break;
+				case CTX_SESSION_FILENAME:
+					ctx->session_filename = g_variant_dup_string (ctx_value, NULL);
+					break;
+				case CTX_BOOKMARK_URL:
+					ctx->bookmark_url = g_variant_dup_string (ctx_value, NULL);
+					break;
+				case CTX_ARGUMENTS:
+					ctx->arguments = g_variant_dup_strv (ctx_value, NULL);
+					break;
+				case CTX_USER_TIME:
+					ctx->user_time = g_variant_get_uint32 (ctx_value);
+					break;
+				default:
+					g_assert_not_reached ();
+					break;
+				}
+			}
+		}
+	}
+
+	if (shell->priv->startup_context)
+		ephy_shell_free_startup_context (shell);
+	shell->priv->startup_context = ctx;
+
+	G_APPLICATION_CLASS (ephy_shell_parent_class)->before_emit (application,
+								    platform_data);
+}
+
 static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 	EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
 
 	object_class->dispose = ephy_shell_dispose;
 	object_class->finalize = ephy_shell_finalize;
+
+	application_class->startup = ephy_shell_startup;
+	application_class->activate = ephy_shell_activate;
+	application_class->before_emit = ephy_shell_before_emit;
+	application_class->add_platform_data = ephy_shell_add_platform_data;
 
 	embed_shell_class->get_embed_single = impl_get_embed_single;
 
@@ -292,19 +570,17 @@ ephy_shell_dispose (GObject *object)
 		priv->nm_proxy = NULL;
 	}
 
-	if (priv->application != NULL)
-	{
-		LOG ("Unref application");
-		g_object_unref (priv->application);
-		priv->application = NULL;
-	}
-
 	G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
 
 static void
 ephy_shell_finalize (GObject *object)
 {
+	EphyShell *shell = EPHY_SHELL (object);
+
+	if (shell->priv->startup_context)
+		ephy_shell_free_startup_context (shell);
+
 	G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
 	LOG ("Ephy shell finalised");
@@ -796,34 +1072,42 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 	return shell->priv->prefs_dialog;
 }
 
-/**
- * ephy_shell_get_application:
- * @shell: A #EphyApplication
- *
- * Gets the #EphyApplication for @shell
- *
- * Returns: (transfer none): a #EphyApplication
- **/
-EphyApplication *
-ephy_shell_get_application (EphyShell *shell)
-{
-	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-	return shell->priv->application;
-}
-
 void
-_ephy_shell_create_instance (EphyApplication *application)
+_ephy_shell_create_instance (gboolean private_instance)
 {
+	GApplicationFlags flags = G_APPLICATION_FLAGS_NONE;
+
 	g_assert (ephy_shell == NULL);
 
-	ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
+	if (private_instance)
+		flags |= G_APPLICATION_NON_UNIQUE;
+
+	ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
+					       "application-id", "org.gnome.Epiphany",
+					       "flags", flags,
+					       "private-instance", private_instance,
+					       NULL));
 	/* FIXME weak ref */
-
 	g_assert (ephy_shell != NULL);
-
-	if (application)
-		ephy_shell->priv->application = g_object_ref (application);
-	else
-		ephy_shell->priv->application = ephy_application_new (FALSE);
 }
+
+/**
+ * ephy_shell_set_startup_context:
+ * @shell: A #EphyShell
+ * @ctx: (transfer full): a #EphyShellStartupContext
+ *
+ * Sets the startup context to be used during activation of a new instance.
+ * See ephy_shell_set_startup_new().
+ **/
+void
+ephy_shell_set_startup_context (EphyShell *shell,
+				EphyShellStartupContext *ctx)
+{
+	g_return_if_fail (EPHY_IS_SHELL (shell));
+
+	if (shell->priv->startup_context)
+		ephy_shell_free_startup_context (shell);
+
+	shell->priv->startup_context = ctx;
+}
+

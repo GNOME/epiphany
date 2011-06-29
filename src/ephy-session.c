@@ -816,7 +816,7 @@ session_command_dispatch (EphySession *session)
 		run_again = FALSE;
 	}
 
-	g_application_release (G_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())));
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 
 	/* This unrefs the shell! */
 	session_command_free (cmd);
@@ -1676,7 +1676,7 @@ ephy_session_add_window (EphySession *session,
 
 	session->priv->tool_windows =
 		g_list_append (session->priv->tool_windows, window);
-	gtk_application_add_window (GTK_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())), window);
+	gtk_application_add_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
 
 	ephy_session_save (session, SESSION_CRASHED);
 }
@@ -1697,7 +1697,7 @@ ephy_session_remove_window (EphySession *session,
 
 	session->priv->tool_windows =
 		g_list_remove (session->priv->tool_windows, window);
-	gtk_application_remove_window (GTK_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())), window);
+	gtk_application_remove_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
 
 	ephy_session_save (session, SESSION_CRASHED);
 }
@@ -1804,7 +1804,7 @@ ephy_session_queue_command (EphySession *session,
 
 	session_command_queue_next (session);
 
-	g_application_hold (G_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())));
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
 	if (priv->resume_window != NULL)
 	{

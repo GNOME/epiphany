@@ -1,5 +1,7 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,6 +59,7 @@ struct _EphyEmbedShellPrivate
 	GtkPageSetup *page_setup;
 	GtkPrintSettings *print_settings;
 	guint object_count;
+	gboolean private_instance;
 	guint single_initialised : 1;
 };
 
@@ -71,12 +74,21 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
+enum
+{
+	PROP_0,
+	PROP_PRIVATE_INSTANCE,
+	N_PROPERTIES
+};
+
+static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+
 static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
 static void ephy_embed_shell_init	(EphyEmbedShell *shell);
 
 EphyEmbedShell *embed_shell = NULL;
 
-G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, G_TYPE_OBJECT)
+G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
 
 static void
 ephy_embed_shell_dispose (GObject *object)
@@ -272,6 +284,42 @@ ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
 }
 
 static void
+ephy_embed_shell_set_property (GObject *object,
+			       guint prop_id,
+			       const GValue *value,
+			       GParamSpec *pspec)
+{
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+
+  switch (prop_id)
+  {
+  case PROP_PRIVATE_INSTANCE:
+	  embed_shell->priv->private_instance = g_value_get_boolean (value);
+	  break;
+  default:
+	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_embed_shell_get_property (GObject *object,
+			       guint prop_id,
+			       GValue *value,
+			       GParamSpec *pspec)
+{
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+
+  switch (prop_id)
+  {
+  case PROP_PRIVATE_INSTANCE:
+	  g_value_set_boolean (value, embed_shell->priv->private_instance);
+	  break;
+  default:
+	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
 	shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
@@ -290,8 +338,22 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 
 	object_class->dispose = ephy_embed_shell_dispose;
 	object_class->finalize = ephy_embed_shell_finalize;
+	object_class->set_property = ephy_embed_shell_set_property;
+	object_class->get_property = ephy_embed_shell_get_property;
 
 	klass->get_embed_single = impl_get_embed_single;
+
+	object_properties[PROP_PRIVATE_INSTANCE] =
+		g_param_spec_boolean ("private-instance",
+				      "Private instance",
+				      "Whether this Epiphany instance is private.",
+				      FALSE,
+				      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
+				      G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+	
+	g_object_class_install_properties (object_class,
+					   N_PROPERTIES,
+					   object_properties);
 
 /**
  * EphyEmbed::download-added:
@@ -621,4 +683,18 @@ _ephy_embed_shell_track_object (EphyEmbedShell *shell, GObject *object)
 
 	g_object_weak_ref (object, (GWeakNotify)object_notify_cb, shell);
 	shell->priv->object_count++;
+}
+
+/**
+ * ephy_embed_shell_is_private_instance:
+ * @shell: an #EphyEmbedShell
+ * 
+ * Returns: whether @shell is a private instance
+ **/
+gboolean
+ephy_embed_shell_is_private_instance (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), FALSE);
+	
+	return shell->priv->private_instance;
 }

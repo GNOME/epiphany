@@ -40,7 +40,6 @@ NOINST_H_FILES = \
 	window-commands.h
 
 INST_H_FILES = \
-	ephy-application.h		\
 	ephy-extension.h		\
 	ephy-extensions-manager.h	\
 	ephy-link.h			\
@@ -53,7 +52,6 @@ INST_H_FILES = \
 
 libephymain_la_SOURCES = \
 	ephy-action-helper.c			\
-	ephy-application.c			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-encoding-dialog.c			\
@@ -258,7 +256,6 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/lib/widgets/ephy-download-widget.h \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
-	$(top_srcdir)/src/ephy-application.h \
 	$(top_srcdir)/src/ephy-extension.h \
 	$(top_srcdir)/src/ephy-extensions-manager.h \
 	$(top_srcdir)/src/ephy-find-toolbar.h \
@@ -290,7 +287,6 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/lib/widgets/ephy-download-widget.c \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
-	$(top_srcdir)/src/ephy-application.c \
 	$(top_srcdir)/src/ephy-extension.c \
 	$(top_srcdir)/src/ephy-extensions-manager.c \
 	$(top_srcdir)/src/ephy-find-toolbar.c \

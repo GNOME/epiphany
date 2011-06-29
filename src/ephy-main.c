@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "ephy-application.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
@@ -239,8 +238,7 @@ main (int argc,
   GError *error = NULL;
   guint32 user_time;
   gboolean arbitrary_url;
-  EphyApplication *application;
-  EphyApplicationStartupContext *ctx;
+  EphyShellStartupContext *ctx;
   EphyStartupFlags startup_flags;
   int status;
 
@@ -417,20 +415,18 @@ main (int argc,
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Now create the shell */
-  application = ephy_application_new (private_instance);
-  _ephy_shell_create_instance (application);
-  g_object_unref (application);
+  _ephy_shell_create_instance (private_instance);
 
   startup_flags = get_startup_flags ();
-  ctx = ephy_application_startup_context_new (startup_flags,
-                                              bookmarks_file,
-                                              session_filename,
-                                              bookmark_url,
-                                              arguments,
-                                              user_time);
+  ctx = ephy_shell_startup_context_new (startup_flags,
+                                        bookmarks_file,
+                                        session_filename,
+                                        bookmark_url,
+                                        arguments,
+                                        user_time);
   g_strfreev (arguments);
-  ephy_application_set_startup_context (application, ctx);
-  status = g_application_run (G_APPLICATION (application), argc, argv);
+  ephy_shell_set_startup_context (ephy_shell, ctx);
+  status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
   /* Shutdown */
   g_object_unref (ephy_shell);

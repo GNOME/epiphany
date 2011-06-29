@@ -1,6 +1,9 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2006 Christian Persch
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +32,6 @@
 #include "ephy-bookmarks.h"
 #include "ephy-window.h"
 #include "ephy-embed.h"
-#include "ephy-application.h"
 
 #include <webkit/webkit.h>
 #include <glib-object.h>
@@ -73,6 +75,26 @@ typedef enum
 	EPHY_NEW_TAB_DONT_COPY_HISTORY  = 1 << 13,
 	
 } EphyNewTabFlags;
+
+typedef enum
+{
+	EPHY_STARTUP_NEW_TAB          = 1 << 0,
+	EPHY_STARTUP_NEW_WINDOW       = 1 << 1,
+	EPHY_STARTUP_BOOKMARKS_EDITOR = 1 << 2
+} EphyStartupFlags;
+
+typedef struct
+{
+	EphyStartupFlags startup_flags;
+	
+	char *bookmarks_filename;
+	char *session_filename;
+	char *bookmark_url;
+	
+	char **arguments;
+	
+	guint32 user_time;
+} EphyShellStartupContext;
 
 struct _EphyShell
 {
@@ -127,10 +149,18 @@ GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
-EphyApplication *ephy_shell_get_application             (EphyShell *shell);
+void            ephy_shell_set_startup_context          (EphyShell *shell,
+							 EphyShellStartupContext  *ctx);
+
+EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
+							 char            *bookmarks_filename,
+							 char            *session_filename,
+							 char            *bookmark_url,
+							 char           **arguments,
+							 guint32          user_time);
 
 /* private API */
-void	       _ephy_shell_create_instance		(EphyApplication *application);
+void	       _ephy_shell_create_instance		(gboolean private_instance);
 
 G_END_DECLS
 

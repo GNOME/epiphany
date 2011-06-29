@@ -3837,7 +3837,7 @@ ephy_window_constructor (GType type,
 		proxy = GTK_WIDGET (proxies->data);
 		priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
 		gtk_window_set_application (GTK_WINDOW (window),
-				    GTK_APPLICATION (ephy_shell_get_application (ephy_shell_get_default ())));
+					    GTK_APPLICATION (ephy_shell_get_default ()));
 	}
 	
 	return object;

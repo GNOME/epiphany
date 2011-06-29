@@ -1,5 +1,7 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,7 +49,7 @@ extern EphyEmbedShell *embed_shell;
 
 struct _EphyEmbedShell
 {
-	GObject parent;
+	GtkApplication parent;
 
 	/*< private >*/
 	EphyEmbedShellPrivate *priv;
@@ -55,7 +57,7 @@ struct _EphyEmbedShell
 
 struct _EphyEmbedShellClass
 {
-	GObjectClass parent_class;
+	GtkApplicationClass parent_class;
 
 	void	  (* download_added)	(EphyEmbedShell *shell, EphyDownload *download);
 	void	  (* download_removed)	(EphyEmbedShell *shell, EphyDownload *download);
@@ -98,6 +100,8 @@ void		   ephy_embed_shell_add_download	(EphyEmbedShell *shell,
 							 EphyDownload *download);
 void		   ephy_embed_shell_remove_download	(EphyEmbedShell *shell,
 							 EphyDownload *download);
+
+gboolean           ephy_embed_shell_is_private_instance (EphyEmbedShell *shell);
 
 /* Private API */
 void	       _ephy_embed_shell_track_object		(EphyEmbedShell *shell,

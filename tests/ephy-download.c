@@ -173,7 +173,7 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
   ephy_embed_prefs_init ();
-  _ephy_shell_create_instance (NULL);
+  _ephy_shell_create_instance (FALSE);
 
   if (!ephy_file_helpers_init (NULL, TRUE, FALSE, NULL)) {
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
