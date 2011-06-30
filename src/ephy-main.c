@@ -63,6 +63,7 @@ static char **arguments = NULL;
 
 /* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
+static gboolean application_mode = FALSE;
 static gboolean keep_temp_directory = FALSE;
 static char *profile_directory = NULL;
 
@@ -94,6 +95,8 @@ static const GOptionEntry option_entries[] =
     N_("Add a bookmark"), N_("URL") },
   { "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
     N_("Start a private instance"), NULL },
+  { "application-mode", 'a', 0, G_OPTION_ARG_NONE, &application_mode,
+    N_("Start the browser in application mode"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
@@ -240,6 +243,7 @@ main (int argc,
   gboolean arbitrary_url;
   EphyShellStartupContext *ctx;
   EphyStartupFlags startup_flags;
+  EphyEmbedShellMode mode;
   int status;
 
 #ifdef ENABLE_NLS
@@ -360,8 +364,13 @@ main (int argc,
     exit (1);
   }
 
-  if (profile_directory != NULL && private_instance == FALSE) {
-    g_print ("--profile can only be used in combination wit h --private-instance\n");
+  if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE) {
+    g_print ("--profile can only be used in combination wit h --private-instance or --application-mode\n");
+    exit (1);
+  }
+
+  if (application_mode && profile_directory == NULL) {
+    g_print ("--profile must be used when --application-mode is requested\n");
     exit (1);
   }
 
@@ -401,7 +410,7 @@ main (int argc,
 
   /* Start our services */
   if (!ephy_file_helpers_init (profile_directory,
-                               private_instance,
+                               private_instance || application_mode,
                                keep_temp_directory || profile_directory,
                                &error)) {
     show_error_message (&error);
@@ -415,8 +424,14 @@ main (int argc,
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Now create the shell */
-  _ephy_shell_create_instance (private_instance ?
-                               EPHY_EMBED_SHELL_MODE_PRIVATE : EPHY_EMBED_SHELL_MODE_BROWSER);
+  if (private_instance)
+    mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
+  else if (application_mode)
+    mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
+  else
+    mode = EPHY_EMBED_SHELL_MODE_BROWSER;
+
+  _ephy_shell_create_instance (mode);
 
   startup_flags = get_startup_flags ();
   ctx = ephy_shell_startup_context_new (startup_flags,

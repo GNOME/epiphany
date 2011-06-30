@@ -179,7 +179,8 @@ ephy_shell_startup (GApplication* application)
 {
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+  /* TODO: we want to migrate each WebApp profile too */
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) == EPHY_EMBED_SHELL_MODE_BROWSER &&
       ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION)
   {
 	  GError *error = NULL;
@@ -365,7 +366,7 @@ ephy_shell_before_emit (GApplication *application,
 static void
 ephy_shell_constructed (GObject *object)
 {
-	if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) == EPHY_EMBED_SHELL_MODE_PRIVATE)
+	if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER)
 	{
 		GApplicationFlags flags;
 

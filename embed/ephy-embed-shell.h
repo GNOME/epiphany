@@ -50,7 +50,8 @@ extern EphyEmbedShell *embed_shell;
 typedef enum
 {
 	EPHY_EMBED_SHELL_MODE_BROWSER,
-	EPHY_EMBED_SHELL_MODE_PRIVATE
+	EPHY_EMBED_SHELL_MODE_PRIVATE,
+	EPHY_EMBED_SHELL_MODE_APPLICATION
 } EphyEmbedShellMode;
 
 struct _EphyEmbedShell
