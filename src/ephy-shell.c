@@ -363,6 +363,22 @@ ephy_shell_before_emit (GApplication *application,
 }
 
 static void
+ephy_shell_constructed (GObject *object)
+{
+	if (ephy_embed_shell_is_private_instance (EPHY_EMBED_SHELL (object)))
+	{
+		GApplicationFlags flags;
+
+		flags = g_application_get_flags (G_APPLICATION (object));
+		flags |= G_APPLICATION_NON_UNIQUE;
+		g_application_set_flags (G_APPLICATION (object), flags);
+	}
+
+	if (G_OBJECT_CLASS (ephy_shell_parent_class)->constructed)
+		G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
+}
+
+static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -371,6 +387,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 
 	object_class->dispose = ephy_shell_dispose;
 	object_class->finalize = ephy_shell_finalize;
+	object_class->constructed = ephy_shell_constructed;
 
 	application_class->startup = ephy_shell_startup;
 	application_class->activate = ephy_shell_activate;
@@ -1073,16 +1090,10 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 void
 _ephy_shell_create_instance (gboolean private_instance)
 {
-	GApplicationFlags flags = G_APPLICATION_FLAGS_NONE;
-
 	g_assert (ephy_shell == NULL);
-
-	if (private_instance)
-		flags |= G_APPLICATION_NON_UNIQUE;
 
 	ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
 					       "application-id", "org.gnome.Epiphany",
-					       "flags", flags,
 					       "private-instance", private_instance,
 					       NULL));
 	/* FIXME weak ref */
