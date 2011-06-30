@@ -153,6 +153,7 @@ widget_progress_cb (GObject *object,
                     EphyDownloadWidget *widget)
 {
   WebKitDownload *download;
+  char *file;
   char *destination;
   gdouble time;
   char *remaining;
@@ -161,7 +162,8 @@ widget_progress_cb (GObject *object,
   char *remaining_tooltip;
 
   download = WEBKIT_DOWNLOAD (object);
-  destination = g_filename_display_basename (webkit_download_get_destination_uri (download));
+  file = g_filename_display_basename (webkit_download_get_destination_uri (download));
+  destination = g_uri_unescape_string (file, NULL);
   progress = webkit_download_get_progress (download) * 100;
 
   time = get_remaining_time (download);
@@ -177,6 +179,7 @@ widget_progress_cb (GObject *object,
   gtk_label_set_text (GTK_LABEL (widget->priv->remaining), remaining_label);
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), remaining_tooltip);
 
+  g_free (file);
   g_free (destination);
   g_free (remaining);
   g_free (remaining_label);
