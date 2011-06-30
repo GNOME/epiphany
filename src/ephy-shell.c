@@ -112,17 +112,17 @@ ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
                                 guint32 user_time)
 {
   EphyShellStartupContext *ctx = g_slice_new0 (EphyShellStartupContext);
-  
+
   ctx->startup_flags = startup_flags;
-  
+
   ctx->bookmarks_filename = g_strdup (bookmarks_filename);
   ctx->session_filename = g_strdup (session_filename);
   ctx->bookmark_url = g_strdup (bookmark_url);
-  
+
   ctx->arguments = g_strdupv (arguments);
-  
+
   ctx->user_time = user_time;
-  
+
   return ctx;
 }
 
@@ -184,7 +184,7 @@ ephy_shell_startup (GApplication* application)
     GError *error = NULL;
     char *argv[1] = { "ephy-profile-migrator" };
     char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
-    
+
     g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
                   NULL, NULL, NULL, NULL,
                   NULL, &error);
@@ -240,40 +240,40 @@ ephy_shell_add_platform_data (GApplication *application,
      */
     ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
     ctx = app->priv->startup_context;
-    
+
     if (ctx->startup_flags)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_STARTUP_FLAGS,
                              g_variant_new_byte (ctx->startup_flags));
-    
+
     if (ctx->bookmarks_filename)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_BOOKMARKS_FILENAME,
                              g_variant_new_string (ctx->bookmarks_filename));
-    
+
     if (ctx->session_filename)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_SESSION_FILENAME,
                              g_variant_new_string (ctx->session_filename));
-    
+
     if (ctx->bookmark_url)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_BOOKMARK_URL,
                              g_variant_new_string (ctx->bookmark_url));
-    
+
     if (ctx->arguments)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_ARGUMENTS,
                              g_variant_new_strv ((const gchar * const *)ctx->arguments, -1));
-    
+
     g_variant_builder_add (ctx_builder, "{iv}",
                            CTX_USER_TIME,
                            g_variant_new_uint32 (ctx->user_time));
-    
+
     g_variant_builder_add (builder, "{sv}",
                            "ephy-shell-startup-context",
                            g_variant_builder_end (ctx_builder));
-    
+
     g_variant_builder_unref (ctx_builder);
   }
 }
@@ -345,7 +345,7 @@ ephy_shell_before_emit (GApplication *application,
       }
     }
   }
-  
+
   if (shell->priv->startup_context)
     ephy_shell_free_startup_context (shell);
   shell->priv->startup_context = ctx;
@@ -359,12 +359,12 @@ ephy_shell_constructed (GObject *object)
 {
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER) {
     GApplicationFlags flags;
-    
+
     flags = g_application_get_flags (G_APPLICATION (object));
     flags |= G_APPLICATION_NON_UNIQUE;
     g_application_set_flags (G_APPLICATION (object), flags);
   }
-  
+
   if (G_OBJECT_CLASS (ephy_shell_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
 }
@@ -417,9 +417,9 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
      */
     parent = gtk_widget_get_toplevel (GTK_WIDGET (parent_embed));
   }
-  
-  /* what's a popup ? ATM, any window opened with menubar toggled on 
-   * is *not* a popup 
+
+  /* what's a popup ? ATM, any window opened with menubar toggled on
+   * is *not* a popup
    */
   is_popup = (chromemask & EPHY_WEB_VIEW_CHROME_MENUBAR) == 0;
 
@@ -469,7 +469,7 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
                                     ephy_network_manager_get_state (priv->nm_proxy),
                                     shell);
   }
-  
+
   return embed_single;
 }
 
@@ -501,7 +501,7 @@ ephy_shell_dispose (GObject *object)
     g_object_unref (priv->extensions_manager);
     priv->extensions_manager = NULL;
   }
-  
+
   if (priv->session != NULL) {
     LOG ("Unref session ma  nager");
     g_object_unref (priv->session);
@@ -519,7 +519,7 @@ ephy_shell_dispose (GObject *object)
     g_object_unref (priv->toolbars_model);
     priv->toolbars_model = NULL;
   }
-  
+
   if (priv->fs_toolbars_model != NULL) {
     LOG ("Unref fullscreen toolbars   model");
     g_object_unref (priv->fs_toolbars_model);
@@ -531,7 +531,7 @@ ephy_shell_dispose (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (priv->bme));
     priv->bme = NULL;
   }
-  
+
   if (priv->history_window != NULL) {
     LOG ("Unref History Window");
     gtk_widget_destroy (GTK_WIDGET (priv->history_window));
@@ -549,7 +549,7 @@ ephy_shell_dispose (GObject *object)
     g_object_unref (priv->prefs_dialog);
     priv->prefs_dialog = NULL;
   }
-  
+
   if (priv->bookmarks != NULL) {
     LOG ("Unref bookmarks");
     g_object_unref (priv->bookmarks);
@@ -651,7 +651,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   } else {
     window = ephy_window_new_with_chrome (chrome, is_popup);
   }
-  
+
   toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
   if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL) {
@@ -660,7 +660,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
     position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
                                       GTK_WIDGET (previous_embed)) + 1;
   }
-  
+
   if (flags & EPHY_NEW_TAB_FROM_EXTERNAL) {
     /* If the active embed is blank, us e that to open the url and jump to it */
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
@@ -676,15 +676,15 @@ ephy_shell_new_tab_full (EphyShell *shell,
     embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, NULL));
     g_assert (embed != NULL);
     gtk_widget_show (GTK_WIDGET (embed));
-      
+
     ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
   }
-  
+
   if (copy_history && previous_embed != NULL) {
     ephy_web_view_copy_back_history (ephy_embed_get_web_view (previous_embed),
                                      ephy_embed_get_web_view (embed));
   }
-  
+
   ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0) {
@@ -694,7 +694,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE) {
     gtk_window_fullscreen (GTK_WINDOW (window));
   }
-  
+
   if (flags & EPHY_NEW_TAB_HOME_PAGE ||
       flags & EPHY_NEW_TAB_NEW_PAGE) {
     EphyWebView *view = ephy_embed_get_web_view (embed);
@@ -704,7 +704,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   } else if (flags & EPHY_NEW_TAB_OPEN_PAGE) {
     ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                 request);
-    
+
     is_empty = ephy_embed_utils_url_is_empty (webkit_network_request_get_uri (request));
   }
 
@@ -724,7 +724,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
       gtk_widget_grab_focus (GTK_WIDGET (embed));
     }
   }
-  
+
   return embed;
 }
 
@@ -775,15 +775,15 @@ ephy_shell_get_session (EphyShell *shell)
 
   if (shell->priv->session == NULL) {
     EphyExtensionsManager *manager;
-    
+
     shell->priv->session = g_object_new (EPHY_TYPE_SESSION, NULL);
-    
+
     manager = EPHY_EXTENSIONS_MANAGER
       (ephy_shell_get_extensions_manager (shell));
     ephy_extensions_manager_register (manager,
                                       G_OBJECT (shell->priv->session));
   }
-  
+
   return G_OBJECT (shell->priv->session);
 }
 
@@ -802,15 +802,15 @@ ephy_shell_get_lockdown (EphyShell *shell)
 
   if (shell->priv->lockdown == NULL) {
     EphyExtensionsManager *manager;
-    
+
     shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
-    
+
     manager = EPHY_EXTENSIONS_MANAGER
       (ephy_shell_get_extensions_manager (shell));
     ephy_extensions_manager_register (manager,
                                       G_OBJECT (shell->priv->lockdown));
   }
-  
+
   return G_OBJECT (shell->priv->session);
 }
 
@@ -844,33 +844,33 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
       EggTbModelFlags flags;
       gboolean success;
       const char *xml;
-      
+
       shell->priv->fs_toolbars_model = egg_toolbars_model_new ();
       xml = ephy_file ("epiphany-fs-toolbar.xml");
       g_return_val_if_fail (xml != NULL, NULL);
-      
+
       success = egg_toolbars_model_load_toolbars
         (shell->priv->fs_toolbars_model, xml);
       g_return_val_if_fail (success, NULL);
-          
-      flags = egg_toolbars_model_get_flags 
+
+      flags = egg_toolbars_model_get_flags
         (shell->priv->fs_toolbars_model, 0);
       egg_toolbars_model_set_flags
-        (shell->priv->fs_toolbars_model, 0, 
+        (shell->priv->fs_toolbars_model, 0,
          flags | EGG_TB_MODEL_NOT_REMOVABLE);
     }
-    
+
     return G_OBJECT (shell->priv->fs_toolbars_model);
   } else {
     if (shell->priv->toolbars_model == NULL) {
       shell->priv->toolbars_model = ephy_toolbars_model_new ();
-      
+
       ephy_bookmarks_ui_attach_toolbar_model (shell->priv->toolbars_model);
-      
+
       ephy_toolbars_model_load
         (EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
     }
-    
+
     return G_OBJECT (shell->priv->toolbars_model);
   }
 }
@@ -889,9 +889,9 @@ ephy_shell_get_extensions_manager (EphyShell *es)
     /* Instantiate extensions manager */
     es->priv->extensions_manager =
       g_object_new (EPHY_TYPE_EXTENSIONS_MANAGER, NULL);
-    
+
     ephy_extensions_manager_startup (es->priv->extensions_manager);
-    
+
     /* FIXME */
     ephy_shell_get_lockdown (es);
     ephy_embed_shell_get_adblock_manager (embed_shell);
@@ -920,7 +920,7 @@ ephy_shell_get_net_monitor (EphyShell *shell)
     g_signal_connect (priv->nm_proxy, "state-changed",
                       G_CALLBACK (ephy_shell_sync_network_status), shell);
   }
-  
+
   return G_OBJECT (priv->nm_proxy);
 }
 
@@ -954,13 +954,13 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
     bookmarks = ephy_shell_get_bookmarks (ephy_shell);
     g_assert (bookmarks != NULL);
     shell->priv->bme = ephy_bookmarks_editor_new (bookmarks);
-    
-    g_signal_connect (shell->priv->bme, "show", 
+
+    g_signal_connect (shell->priv->bme, "show",
                       G_CALLBACK (toolwindow_show_cb), shell);
-    g_signal_connect (shell->priv->bme, "hide", 
+    g_signal_connect (shell->priv->bme, "hide",
                       G_CALLBACK (toolwindow_hide_cb), shell);
   }
-  
+
   return shell->priv->bme;
 }
 
@@ -979,13 +979,13 @@ ephy_shell_get_history_window (EphyShell *shell)
       (ephy_embed_shell_get_global_history (embed_shell));
     g_assert (history != NULL);
     shell->priv->history_window = ephy_history_window_new (history);
-    
+
     g_signal_connect (shell->priv->history_window, "show",
                       G_CALLBACK (toolwindow_show_cb), shell);
     g_signal_connect (shell->priv->history_window, "hide",
                       G_CALLBACK (toolwindow_hide_cb), shell);
   }
-  
+
   return shell->priv->history_window;
 }
 
@@ -999,15 +999,15 @@ ephy_shell_get_pdm_dialog (EphyShell *shell)
 {
   if (shell->priv->pdm_dialog == NULL) {
     GObject **dialog;
-    
+
     shell->priv->pdm_dialog = g_object_new (EPHY_TYPE_PDM_DIALOG, NULL);
 
     dialog = &shell->priv->pdm_dialog;
-    
+
     g_object_add_weak_pointer (shell->priv->pdm_dialog,
                                (gpointer *) dialog);
   }
-  
+
   return shell->priv->pdm_dialog;
 }
 
@@ -1021,15 +1021,15 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
   if (shell->priv->prefs_dialog == NULL) {
     GObject **dialog;
-    
+
     shell->priv->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
-    
+
     dialog  = &shell->priv->prefs_dialog;
 
     g_object_add_weak_pointer (shell->priv->prefs_dialog,
                                (gpointer *) dialog);
   }
-  
+
   return shell->priv->prefs_dialog;
 }
 
