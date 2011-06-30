@@ -415,7 +415,8 @@ main (int argc,
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Now create the shell */
-  _ephy_shell_create_instance (private_instance);
+  _ephy_shell_create_instance (private_instance ?
+                               EPHY_EMBED_SHELL_MODE_PRIVATE : EPHY_EMBED_SHELL_MODE_BROWSER);
 
   startup_flags = get_startup_flags ();
   ctx = ephy_shell_startup_context_new (startup_flags,

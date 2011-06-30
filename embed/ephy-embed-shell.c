@@ -32,6 +32,7 @@
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
@@ -58,7 +59,7 @@ struct _EphyEmbedShellPrivate
 	EphyAdBlockManager *adblock_manager;
 	GtkPageSetup *page_setup;
 	GtkPrintSettings *print_settings;
-	gboolean private_instance;
+	EphyEmbedShellMode mode;
 	guint single_initialised : 1;
 };
 
@@ -75,7 +76,7 @@ static guint signals[LAST_SIGNAL];
 enum
 {
 	PROP_0,
-	PROP_PRIVATE_INSTANCE,
+	PROP_MODE,
 	N_PROPERTIES
 };
 
@@ -291,8 +292,8 @@ ephy_embed_shell_set_property (GObject *object,
 
   switch (prop_id)
   {
-  case PROP_PRIVATE_INSTANCE:
-	  embed_shell->priv->private_instance = g_value_get_boolean (value);
+  case PROP_MODE:
+	  embed_shell->priv->mode = g_value_get_enum (value);
 	  break;
   default:
 	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -309,8 +310,8 @@ ephy_embed_shell_get_property (GObject *object,
 
   switch (prop_id)
   {
-  case PROP_PRIVATE_INSTANCE:
-	  g_value_set_boolean (value, embed_shell->priv->private_instance);
+  case PROP_MODE:
+	  g_value_set_enum (value, embed_shell->priv->mode);
 	  break;
   default:
 	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -341,13 +342,14 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 
 	klass->get_embed_single = impl_get_embed_single;
 
-	object_properties[PROP_PRIVATE_INSTANCE] =
-		g_param_spec_boolean ("private-instance",
-				      "Private instance",
-				      "Whether this Epiphany instance is private.",
-				      FALSE,
-				      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-				      G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+	object_properties[PROP_MODE] =
+		g_param_spec_enum ("mode",
+				   "Mode",
+				   "The	 global mode for this instance of Epiphany .",
+				   EPHY_TYPE_EMBED_SHELL_MODE,
+				   EPHY_EMBED_SHELL_MODE_BROWSER,
+				   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
+				   G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
 	
 	g_object_class_install_properties (object_class,
 					   N_PROPERTIES,
@@ -646,15 +648,15 @@ ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
 }
 
 /**
- * ephy_embed_shell_is_private_instance:
+ * ephy_embed_shell_get_mode:
  * @shell: an #EphyEmbedShell
  * 
- * Returns: whether @shell is a private instance
+ * Returns: the global mode of the @shell
  **/
-gboolean
-ephy_embed_shell_is_private_instance (EphyEmbedShell *shell)
+EphyEmbedShellMode
+ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), FALSE);
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_EMBED_SHELL_MODE_BROWSER);
 	
-	return shell->priv->private_instance;
+	return shell->priv->mode;
 }

@@ -47,6 +47,12 @@ typedef struct _EphyEmbedShellPrivate	EphyEmbedShellPrivate;
 
 extern EphyEmbedShell *embed_shell;
 
+typedef enum
+{
+	EPHY_EMBED_SHELL_MODE_BROWSER,
+	EPHY_EMBED_SHELL_MODE_PRIVATE
+} EphyEmbedShellMode;
+
 struct _EphyEmbedShell
 {
 	GtkApplication parent;
@@ -101,7 +107,7 @@ void		   ephy_embed_shell_add_download	(EphyEmbedShell *shell,
 void		   ephy_embed_shell_remove_download	(EphyEmbedShell *shell,
 							 EphyDownload *download);
 
-gboolean           ephy_embed_shell_is_private_instance (EphyEmbedShell *shell);
+EphyEmbedShellMode ephy_embed_shell_get_mode            (EphyEmbedShell *shell);
 
 G_END_DECLS
 

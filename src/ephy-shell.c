@@ -179,7 +179,7 @@ ephy_shell_startup (GApplication* application)
 {
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
-  if (!ephy_embed_shell_is_private_instance (EPHY_EMBED_SHELL (application)) &&
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
       ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION)
   {
 	  GError *error = NULL;
@@ -365,7 +365,7 @@ ephy_shell_before_emit (GApplication *application,
 static void
 ephy_shell_constructed (GObject *object)
 {
-	if (ephy_embed_shell_is_private_instance (EPHY_EMBED_SHELL (object)))
+	if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) == EPHY_EMBED_SHELL_MODE_PRIVATE)
 	{
 		GApplicationFlags flags;
 
@@ -1088,13 +1088,13 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 }
 
 void
-_ephy_shell_create_instance (gboolean private_instance)
+_ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
 	g_assert (ephy_shell == NULL);
 
 	ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
 					       "application-id", "org.gnome.Epiphany",
-					       "private-instance", private_instance,
+					       "mode", mode,
 					       NULL));
 	/* FIXME weak ref */
 	g_assert (ephy_shell != NULL);

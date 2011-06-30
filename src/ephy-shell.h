@@ -160,7 +160,7 @@ EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupFlags startu
 							 guint32          user_time);
 
 /* private API */
-void	       _ephy_shell_create_instance		(gboolean private_instance);
+void	       _ephy_shell_create_instance		(EphyEmbedShellMode mode);
 
 G_END_DECLS
 
