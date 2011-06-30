@@ -108,7 +108,6 @@ libephymain_la_CPPFLAGS = \
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	  \
 	$(WEBKIT_CFLAGS)	  \
-	$(NETWORK_MANAGER_CFLAGS) \
 	$(AM_CFLAGS)
 
 BUILT_SOURCES =		\
@@ -171,7 +170,6 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
-	$(NETWORK_MANAGER_LIBS) \
 	$(LIBINTL)
 
 if HAVE_INTROSPECTION
