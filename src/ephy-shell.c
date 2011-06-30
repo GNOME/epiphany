@@ -227,6 +227,8 @@ ephy_shell_add_platform_data (GApplication *application,
   EphyShell *app;
   EphyShellStartupContext *ctx;
   GVariantBuilder *ctx_builder;
+  static const char *empty_arguments[] = { "", NULL };
+  const char* const * arguments;
 
   app = EPHY_SHELL (application);
 
@@ -261,10 +263,18 @@ ephy_shell_add_platform_data (GApplication *application,
                              CTX_BOOKMARK_URL,
                              g_variant_new_string (ctx->bookmark_url));
 
+    /*
+     * If there are no URIs specified, pass an empty string, so that
+     * the primary instance opens a new window.
+     */
     if (ctx->arguments)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_ARGUMENTS,
-                             g_variant_new_strv ((const gchar * const *)ctx->arguments, -1));
+      arguments = (const gchar * const *)ctx->arguments;
+    else
+      arguments = empty_arguments;
+
+    g_variant_builder_add (ctx_builder, "{iv}",
+                           CTX_ARGUMENTS,
+                           g_variant_new_strv (arguments, -1));
 
     g_variant_builder_add (ctx_builder, "{iv}",
                            CTX_USER_TIME,
