@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-06-28 19:38+0000\n"
-"PO-Revision-Date: 2011-06-29 09:47+0100\n"
+"POT-Creation-Date: 2011-07-02 07:50+0000\n"
+"PO-Revision-Date: 2011-07-02 12:49+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr "Spletni brskalnik Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:4
-#: ../src/ephy-main.c:397
+#: ../src/ephy-main.c:404
 msgid "Web Browser"
 msgstr "Spletni brskalnik"
 
@@ -442,7 +442,7 @@ msgstr "Neznano"
 msgid "Web Inspector"
 msgstr "Spletni nadzornik"
 
-#: ../embed/ephy-embed-shell.c:222
+#: ../embed/ephy-embed-shell.c:233
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Programa Epiphany trenutno ni mogoče uporabljati. Začenjanje ni uspelo"
 
@@ -1100,26 +1100,26 @@ msgstr "Vse datoteke"
 
 # G:6 K:0 O:0
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:118
+#: ../lib/ephy-file-helpers.c:117
 msgid "Downloads"
 msgstr "Prejete datoteke"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:164
+#: ../lib/ephy-file-helpers.c:163
 msgid "Desktop"
 msgstr "Namizje"
 
-#: ../lib/ephy-file-helpers.c:341
+#: ../lib/ephy-file-helpers.c:326
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ni mogoče ustvariti začasne mape v “%s”."
 
-#: ../lib/ephy-file-helpers.c:430
+#: ../lib/ephy-file-helpers.c:415
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datoteka “%s” obstaja. Odmaknite jo s poti."
 
-#: ../lib/ephy-file-helpers.c:441
+#: ../lib/ephy-file-helpers.c:426
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ni mogoče ustvariti mape “%s”."
@@ -1272,7 +1272,7 @@ msgstr "%d. %b %Y"
 
 #. impossible time or broken locale settings
 #: ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1830
+#: ../src/ephy-window.c:1831
 msgid "Unknown"
 msgstr "Neznano"
 
@@ -2132,7 +2132,7 @@ msgid "Date"
 msgstr "Datum"
 
 #: ../src/ephy-main.c:76
-#: ../src/ephy-main.c:324
+#: ../src/ephy-main.c:326
 #: ../src/window-commands.c:1058
 msgid "GNOME Web Browser"
 msgstr "Spletni brskalnik GNOME"
@@ -2176,23 +2176,27 @@ msgid "Start a private instance"
 msgstr "Zaženi zasebno sejo"
 
 #: ../src/ephy-main.c:99
+msgid "Start the browser in application mode"
+msgstr "Zaženi brskalnik v programskem načinu"
+
+#: ../src/ephy-main.c:101
 msgid "Profile directory to use in the private instance"
 msgstr "Mapa profila, ki ga želite uporabiti v zasebni seji"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:101
 msgid "DIR"
 msgstr "DIR"
 
 # G:2 K:0 O:0
-#: ../src/ephy-main.c:101
+#: ../src/ephy-main.c:103
 msgid "URL …"
 msgstr "URL ..."
 
-#: ../src/ephy-main.c:207
+#: ../src/ephy-main.c:209
 msgid "Could not start GNOME Web Browser"
 msgstr "Ni mogoče zagnati spletnega brskalnika GNOME"
 
-#: ../src/ephy-main.c:210
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2201,7 +2205,7 @@ msgstr ""
 "Zagon ni uspel zaradi naslednje napake:\n"
 "%s"
 
-#: ../src/ephy-main.c:325
+#: ../src/ephy-main.c:327
 msgid "GNOME Web Browser options"
 msgstr "Možnosti za spletni brskalnik GNOME"
 
@@ -2955,76 +2959,76 @@ msgid "Smaller"
 msgstr "Manjša"
 
 # G:2 K:2 O:5
-#: ../src/ephy-window.c:1833
+#: ../src/ephy-window.c:1834
 msgid "Insecure"
 msgstr "Nezavarovana"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1838
+#: ../src/ephy-window.c:1839
 msgid "Broken"
 msgstr "Pokvarjena"
 
 # G:5 K:7 O:5
-#: ../src/ephy-window.c:1846
+#: ../src/ephy-window.c:1847
 msgid "Low"
 msgstr "Nizka"
 
 # G:2 K:2 O:1
-#: ../src/ephy-window.c:1853
+#: ../src/ephy-window.c:1854
 msgid "High"
 msgstr "Visoka"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1863
+#: ../src/ephy-window.c:1864
 #, c-format
 msgid "Security level: %s"
 msgstr "Raven varnosti: %s"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:2138
+#: ../src/ephy-window.c:2139
 #, c-format
 msgid "Open image “%s”"
 msgstr "Odpri sliko “%s”"
 
-#: ../src/ephy-window.c:2143
+#: ../src/ephy-window.c:2144
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Uporabi kot ozadje namizja “%s”"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:2148
+#: ../src/ephy-window.c:2149
 #, c-format
 msgid "Save image “%s”"
 msgstr "Shrani sliko “%s”"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:2153
+#: ../src/ephy-window.c:2154
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiraj naslov slike “%s”"
 
-#: ../src/ephy-window.c:2167
+#: ../src/ephy-window.c:2168
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Pošlji e-pošto na naslov “%s”"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:2173
+#: ../src/ephy-window.c:2174
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiraj e-poštni naslov “%s”"
 
-#: ../src/ephy-window.c:2187
+#: ../src/ephy-window.c:2188
 #, c-format
 msgid "Save link “%s”"
 msgstr "Shrani povezavo “%s”"
 
-#: ../src/ephy-window.c:2193
+#: ../src/ephy-window.c:2194
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Zaznamuj povezavo “%s”"
 
-#: ../src/ephy-window.c:2198
+#: ../src/ephy-window.c:2199
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiraj naslov povezave “%s”"
