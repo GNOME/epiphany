@@ -459,7 +459,6 @@ struct _EphyWindowPrivate
 	guint tab_message_cid;
 	guint help_message_cid;
 	EphyWebViewChrome chrome;
-	guint idle_resize_handler;
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
@@ -3337,12 +3336,6 @@ ephy_window_dispose (GObject *object)
 		g_signal_handlers_disconnect_by_func
 			(single, G_CALLBACK (sync_network_status), window);
 	
-		if (priv->idle_resize_handler != 0)
-		{
-			g_source_remove (priv->idle_resize_handler);
-			priv->idle_resize_handler = 0;
-		}
-
 		g_hash_table_remove_all (priv->tabs_to_remove);
 
 		g_object_unref (priv->enc_menu);
