@@ -408,6 +408,7 @@ typedef struct {
   long long int visit_count;
   long long int last_visit;
   long long int first_visit;
+  double zoom_level;
   GList *visits;
 } HistoryParseData;
 
@@ -432,6 +433,7 @@ history_parse_start_element (GMarkupParseContext *context,
     parse_data->visit_count = 0;
     parse_data->last_visit = 0;
     parse_data->first_visit = 0;
+    parse_data->zoom_level = 1.0;
   } else if (g_str_equal (element_name, "property")) {
     const char **name, **value;
 
@@ -477,6 +479,10 @@ history_parse_text (GMarkupParseContext *context,
     GString *data = g_string_new_len (text, text_len);
     sscanf(data->str, "%lld", &parse_data->first_visit);
     g_string_free (data, TRUE);
+  } else if (g_str_equal (parse_data->current, "10")) {
+    GString *data = g_string_new_len (text, text_len);
+    sscanf(data->str, "%lf", &parse_data->zoom_level);
+    g_string_free (data, TRUE);
   }
 
   g_free (parse_data->current);
@@ -502,6 +508,7 @@ history_parse_end_element (GMarkupParseContext *context,
     EphyHistoryPageVisit *visit = ephy_history_page_visit_new (parse_data->location ? parse_data->location : "", parse_data->last_visit, EPHY_PAGE_VISIT_TYPED);
     g_free (visit->url->title);
     visit->url->title = g_strdup (parse_data->title);
+    visit->url->zoom_level = parse_data->zoom_level;
     parse_data->visits = g_list_append (parse_data->visits, visit);
   }
 }
