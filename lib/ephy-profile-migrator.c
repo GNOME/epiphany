@@ -108,23 +108,6 @@ migrate_cookies ()
 }
 
 #ifdef ENABLE_NSS
-static gchar*
-_g_utf8_substr(const gchar* string, gint start, gint end)
-{
-  gchar *start_ptr, *output;
-  gsize len_in_bytes;
-  glong str_len = g_utf8_strlen (string, -1);
-
-  if (start > str_len || end > str_len)
-    return NULL;
-
-  start_ptr = g_utf8_offset_to_pointer (string, start);
-  len_in_bytes = g_utf8_offset_to_pointer (string, end) -  start_ptr + 1;
-  output = g_malloc0 (len_in_bytes + 1);
-
-  return g_utf8_strncpy (output, start_ptr, end - start + 1);
-}
-
 static char*
 decrypt (const char *data)
 {
@@ -216,7 +199,7 @@ parse_and_decrypt_signons (const char *signons,
 
       start_ptr = g_strstr_len (full_url, -1, realmBracketBegin);
       start = g_utf8_pointer_to_offset (full_url, start_ptr);
-      url = _g_utf8_substr (full_url, 0, start);
+      url = g_utf8_substring (full_url, 0, start);
       url = g_strstrip (url);
       uri = soup_uri_new (url);
       g_free (url);
@@ -224,7 +207,7 @@ parse_and_decrypt_signons (const char *signons,
       start += strlen (realmBracketBegin);
       end_ptr = g_strstr_len (full_url, -1, realmBracketEnd) -1;
       end = g_utf8_pointer_to_offset (full_url, end_ptr);
-      realm = _g_utf8_substr (full_url, start, end);
+      realm = g_utf8_substring (full_url, start, end);
 
       g_free (full_url);
     } else {
