@@ -1,4 +1,22 @@
 ==============
+Epiphany 3.1.3
+==============
+
+Changes:
+
+  - Port to GtkApplication
+  - Do not use GNOME font settings as our default, just rely on more
+    generic system config ("sans", "serif")
+  - Port to GDBus
+  - Assume NetworkManager is present. This is not a hard dependency
+    since we only require it at runtime, as we use it through dbus.
+  - Fix "Use picture as background" (#647604)
+  - Implement a basic about:memory page with memory usage data
+  - Respect gtk-keynav-wrap-around in our page-change handler
+  - Fix removal of items by DnD in toolbar editor (#647265)
+  - Many other cleanup and fixes
+
+==============
 Epiphany 3.1.2
 ==============
 
