@@ -1586,9 +1586,9 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 	 * everything else, nothing is shown.
 	 */
 	if (!stock_id || g_str_equal (stock_id, STOCK_LOCK_BROKEN))
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-allow-symbolic");
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
 	else
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("changes-prevent-symbolic");
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
 
 	if (priv->show_lock)
 		gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->entry),
