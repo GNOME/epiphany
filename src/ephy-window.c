@@ -131,6 +131,9 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as) },
+	{ "FileSaveAsApplication", GTK_STOCK_SAVE_AS, N_("Save As _Web Application…"), "<shift><control>A",
+	  N_("Save the current page as a Web Application"),
+	  G_CALLBACK (window_cmd_file_save_as_application) },
 	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Page Set_up"), NULL,
 	  N_("Setup the page settings for printing"),
 	  G_CALLBACK (window_cmd_file_print_setup) },
@@ -380,19 +383,19 @@ static const struct
 	const gchar *action;
 	gboolean fromToolbar;
 } extra_keybindings [] = {
-	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
+	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
-				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
 	/* Support all the MSIE tricks as well ;) */
-	{ GDK_KEY_F5,		0,			"ViewReload",		FALSE },
-	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		FALSE },
-	{ GDK_KEY_F5,		GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+	{ GDK_KEY_F5,		0,			"ViewReload",		 FALSE },
+	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
+	{ GDK_KEY_F5,		GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
 	{ GDK_KEY_F5,		GDK_CONTROL_MASK |
-				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
-	{ GDK_KEY_KP_Add,	GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
-	{ GDK_KEY_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
-	{ GDK_KEY_equal,	GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
-	{ GDK_KEY_KP_0,		GDK_CONTROL_MASK,	"ViewZoomNormal",	FALSE },
+				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
+	{ GDK_KEY_KP_Add,	GDK_CONTROL_MASK,	"ViewZoomIn",		 FALSE },
+	{ GDK_KEY_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		 FALSE },
+	{ GDK_KEY_equal,	GDK_CONTROL_MASK,	"ViewZoomIn",		 FALSE },
+	{ GDK_KEY_KP_0,		GDK_CONTROL_MASK,	"ViewZoomNormal",	 FALSE },
 	/* These keys are a bit strange: when pressed with no modifiers, they emit
 	 * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
 	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
@@ -804,6 +807,9 @@ get_chromes_visibility (EphyWindow *window,
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
+
+	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+		*show_menubar = FALSE;
 }
 
 static void
@@ -1586,6 +1592,8 @@ setup_ui_manager (EphyWindow *window)
 	g_object_set (action, "short_label", _("Open"), NULL);
 	action = gtk_action_group_get_action (action_group, "FileSaveAs");
 	g_object_set (action, "short_label", _("Save As"), NULL);
+	action = gtk_action_group_get_action (action_group, "FileSaveAsApplication");
+	g_object_set (action, "short_label", _("Save As Application"), NULL);
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	g_object_set (action, "short_label", _("Print"), NULL);
 	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");

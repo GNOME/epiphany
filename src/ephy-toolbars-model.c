@@ -19,13 +19,14 @@
  */
 
 #include "config.h"
-
 #include "ephy-toolbars-model.h"
+
+#include "eggtypebuiltins.h"
+#include "ephy-debug.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "eggtypebuiltins.h"
-#include "ephy-debug.h"
 
 #include <string.h>
 
@@ -213,8 +214,9 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 		}
 	}
 	
-	/* Ensure we have at least 1 toolbar */
-	if (egg_toolbars_model_n_toolbars (eggmodel) < 1)
+	/* Ensure we have at least 1 toolbar unless we are in WebApp mode. */
+	if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+            egg_toolbars_model_n_toolbars (eggmodel) < 1)
 	{
 		egg_toolbars_model_add_toolbar (eggmodel, 0, "DefaultToolbar");
 	}

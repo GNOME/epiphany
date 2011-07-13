@@ -261,9 +261,6 @@ main (int argc,
    */
   LIBXML_TEST_VERSION;
 
-  /* sets name to help matching with the .desktop file */
-  g_set_prgname ("epiphany");
-
   /* If we're given -remote arguments, translate them */
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {
     const char *opening, *closing;
@@ -400,12 +397,6 @@ main (int argc,
   if (user_time == 0)
       user_time = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
 
-  /* sets the name to appear in the window list applet when grouping windows */
-  g_set_application_name (_("Web Browser"));
-
-  /* Set default window icon */
-  gtk_window_set_default_icon_name (EPHY_STOCK_EPHY);
-
   startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 
   /* Start our services */
@@ -426,10 +417,30 @@ main (int argc,
   /* Now create the shell */
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-  else if (application_mode)
+  else if (application_mode) {
+    char *app_name;
+
     mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
-  else
+
+    app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+    if (app_name) {
+      /* Skip the 'app-' part */
+      app_name += strlen (EPHY_WEB_APP_PREFIX);
+
+      g_set_prgname (app_name);
+      g_set_application_name (app_name);
+
+      /* We need to re-set this because we have already parsed the
+       * options, which inits GTK+ and sets this as a side effect. */
+      gdk_set_program_class (app_name);
+    }
+  } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
+
+    g_set_prgname ("epiphany");
+    g_set_application_name (_("Web Browser"));
+    gtk_window_set_default_icon_name (EPHY_STOCK_EPHY);
+  }
 
   _ephy_shell_create_instance (mode);
 

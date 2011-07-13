@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2009 Collabora Ltd.
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -380,6 +381,196 @@ window_cmd_file_save_as (GtkAction *action,
 			  G_CALLBACK (save_response_cb), embed);
 
 	gtk_widget_show (GTK_WIDGET (dialog));
+}
+
+typedef struct {
+	EphyWebView *view;
+	GtkWidget *image;
+	GtkWidget *entry;
+	GtkWidget *spinner;
+	GtkWidget *box;
+	char *icon_href;
+} EphyApplicationDialogData;
+
+static void
+ephy_application_dialog_data_free (EphyApplicationDialogData *data)
+{
+	g_free (data->icon_href);
+	g_slice_free (EphyApplicationDialogData, data);
+}
+
+static void
+take_page_snapshot_and_set_image (EphyApplicationDialogData *data)
+{
+	GdkPixbuf *snapshot;
+	int x, y, w, h;
+
+	x = y = 0;
+	w = h = 128; /* GNOME hi-res icon size. */
+
+	snapshot = ephy_web_view_get_snapshot (data->view, x, y, w, h);
+
+	gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), snapshot);
+	g_object_unref (snapshot);
+}
+
+static void
+download_status_changed_cb (WebKitDownload *download,
+			    GParamSpec *spec,
+			    EphyApplicationDialogData *data)
+{
+	WebKitDownloadStatus status = webkit_download_get_status (download);
+	const char *destination;
+
+	switch (status)
+	{
+	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
+		destination = g_filename_from_uri (webkit_download_get_destination_uri (download),
+						   NULL, NULL);
+		gtk_image_set_from_file (GTK_IMAGE (data->image), destination);
+		break;
+	case WEBKIT_DOWNLOAD_STATUS_ERROR:
+	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
+		/* Something happened, default to a page snapshot. */
+		take_page_snapshot_and_set_image (data);
+		break;
+	default:
+		break;
+	}
+}
+
+static void
+download_icon_and_set_image (EphyApplicationDialogData *data)
+{
+	WebKitNetworkRequest *request;
+	WebKitDownload *download;
+	char *destination, *destination_uri, *tmp_filename;
+
+	request = webkit_network_request_new (data->icon_href);
+	download = webkit_download_new (request);
+	g_object_unref (request);
+
+	tmp_filename = ephy_file_tmp_filename ("ephy-download-XXXXXX", NULL);
+	destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
+	destination_uri = g_filename_to_uri (destination, NULL, NULL);
+	webkit_download_set_destination_uri (download, destination_uri);
+	g_free (destination);
+	g_free (destination_uri);
+	g_free (tmp_filename);
+
+	g_signal_connect (download, "notify::status",
+			  G_CALLBACK (download_status_changed_cb), data);
+
+	webkit_download_start (download);	
+}
+
+static void
+fill_default_application_image (EphyApplicationDialogData *data)
+{
+	WebKitDOMDocument *document;
+	WebKitDOMNodeList *links;
+	gulong length, i;
+
+	document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
+	links = webkit_dom_document_get_elements_by_tag_name (document, "link");
+	length = webkit_dom_node_list_get_length (links);
+
+	for (i = 0; i < length; i++)
+	{
+		char *rel;
+		WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+		rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+		/* TODO: support more than one possible icon. */
+		if (g_strcmp0 (rel, "apple-touch-icon") == 0 ||
+		    g_strcmp0 (rel, "apple-touch-icon-precomposed") == 0)
+		{
+			data->icon_href = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+			download_icon_and_set_image (data);
+			g_free (rel);
+			return;
+		}
+	}
+
+	/* If we make it here, no "apple-touch-icon" link was
+	 * found. Take a snapshot of the page. */
+	take_page_snapshot_and_set_image (data);
+}
+
+static void
+fill_default_application_title (EphyApplicationDialogData *data)
+{
+	const char *title = ephy_web_view_get_title (data->view);
+	gtk_entry_set_text (GTK_ENTRY (data->entry), title);
+}
+
+void
+window_cmd_file_save_as_application (GtkAction *action,
+				     EphyWindow *window)
+{
+	EphyEmbed *embed;
+	GtkWidget *dialog, *box, *image, *entry, *content_area;
+	EphyWebView *view;
+	gboolean response;
+	EphyApplicationDialogData *data;
+
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+	g_return_if_fail (embed != NULL);
+
+	view = EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+
+	/* Show dialog with icon, title. */
+	dialog = gtk_dialog_new_with_buttons (_("Create Web Application"),
+					      GTK_WINDOW (window),
+					      0,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      _("Create"),
+					      GTK_RESPONSE_OK,
+					      NULL);
+
+	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 14 + 2 * 5 = 24 */
+
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_container_add (GTK_CONTAINER (content_area), box);
+
+	image = gtk_image_new ();
+	gtk_widget_set_size_request (image, 128, 128);
+	gtk_container_add (GTK_CONTAINER (box), image);
+
+	entry = gtk_entry_new ();
+	gtk_box_pack_end (GTK_BOX (box), entry, FALSE, FALSE, 0);
+
+	data = g_slice_new0 (EphyApplicationDialogData);
+	data->view = view;
+	data->image = image;
+	data->entry = entry;
+
+	fill_default_application_image (data);
+	fill_default_application_title (data);
+
+	gtk_widget_show_all (dialog);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	if (response == GTK_RESPONSE_OK)
+	{
+		char *desktop_file;
+
+		/* Create Web Application, including a new profile and .desktop file. */
+		desktop_file = ephy_web_view_create_web_application (view,
+								     gtk_entry_get_text (GTK_ENTRY (data->entry)),
+								     gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+
+		/* TODO: show a notification when the app is totally
+		 * created and ready to be launched */
+		g_free (desktop_file);
+	}
+
+	ephy_application_dialog_data_free (data);
+	gtk_widget_destroy (dialog);
 }
 
 void

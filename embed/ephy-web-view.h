@@ -88,6 +88,8 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_PAGE_CRASH
 } EphyWebViewErrorPage;
 
+#define EPHY_WEB_APP_PREFIX "app-"
+
 struct _EphyWebView
 {
   WebKitWebView parent;
@@ -193,6 +195,12 @@ void                       ephy_web_view_popups_manager_reset     (EphyWebView  
 void                       ephy_web_view_save                     (EphyWebView               *view,
                                                                    const char                *uri);
 gboolean                   ephy_web_view_load_homepage            (EphyWebView               *view);
+
+char *
+ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkPixbuf *icon);
+
+GdkPixbuf *
+ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int height);
 
 G_END_DECLS
 

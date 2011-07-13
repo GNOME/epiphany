@@ -24,10 +24,12 @@
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit/webkit.h>
 #include <gnome-keyring.h>
+#include <libsoup/soup-gnome.h>
 
 #include "ephy-debug.h"
 #include "ephy-embed.h"
@@ -3684,3 +3686,204 @@ ephy_web_view_load_homepage (EphyWebView *view)
   return is_empty;
 }
 
+#define EPHY_WEB_APP_TOOLBAR "<?xml version=\"1.0\"?>" \
+                             "<toolbars version=\"1.1\">" \
+                             "  <toolbar name=\"DefaultToolbar\" hidden=\"true\" editable=\"false\">" \
+                             "    <toolitem name=\"NavigationBack\"/>" \
+                             "    <toolitem name=\"NavigationForward\"/>" \
+                             "    <toolitem name=\"ViewReload\"/>" \
+                             "    <toolitem name=\"ViewCancel\"/>" \
+                             "  </toolbar>" \
+                             "</toolbars>"
+
+#define EPHY_TOOLBARS_XML_FILE "epiphany-toolbars-3.xml"
+
+static char *
+create_desktop_file (EphyWebView *view,
+                     const char *profile_dir,
+                     const char *title,
+                     GdkPixbuf *icon)
+{
+  GKeyFile *file;
+  char *exec_string;
+  char *data;
+  char *filename, *desktop_file_path;
+  char *link_path;
+  GFile *link;
+
+  g_return_val_if_fail (profile_dir, NULL);
+
+  file = g_key_file_new ();
+  g_key_file_set_value (file, "Desktop Entry", "Name", title);
+  exec_string = g_strdup_printf ("jhbuild run epiphany --application-mode --profile=\"%s\" %s",
+                                 profile_dir,
+                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+  g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
+  g_free (exec_string);
+  g_key_file_set_value (file, "Desktop Entry", "StartupNotification", "true");
+  g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
+  g_key_file_set_value (file, "Desktop Entry", "Type", "Application");
+
+  if (icon) {
+    GOutputStream *stream;
+    char *path;
+    GFile *image;
+
+    path = g_build_filename (profile_dir, "app-icon.png", NULL);
+    image = g_file_new_for_path (path);
+
+    stream = (GOutputStream*)g_file_create (image, 0, NULL, NULL);
+    gdk_pixbuf_save_to_stream (icon, stream, "png", NULL, NULL, NULL);
+    g_key_file_set_value (file, "Desktop Entry", "Icon", path);
+
+    g_object_unref (stream);
+    g_object_unref (image);
+    g_free (path);
+  }
+
+  g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", title);
+
+  data = g_key_file_to_data (file, NULL, NULL);
+  filename = g_strconcat (title, ".desktop", NULL);
+  desktop_file_path = g_build_filename (profile_dir, filename, NULL);
+  g_key_file_free (file);
+
+  if (!g_file_set_contents (desktop_file_path, data, -1, NULL)) {
+    g_free (desktop_file_path);
+    desktop_file_path = NULL;
+  }
+
+  g_free (data);
+
+  /* Create a symlink in XDG_DATA_DIR/applications for the Shell to
+   * pick up this application. */
+  link_path = g_build_filename (g_get_user_data_dir (), "applications", filename, NULL);
+  link = g_file_new_for_path (link_path);
+  g_free (link_path);
+  g_file_make_symbolic_link (link, desktop_file_path, NULL, NULL);
+  g_object_unref (link);
+  g_free (filename);
+
+  return desktop_file_path;
+}
+
+static void
+create_cookie_jar_for_domain (EphyWebView *view, const char *directory)
+{
+  SoupSession *session;
+  GSList *cookies, *p;
+  SoupCookieJar *current_jar, *new_jar;
+  char *domain, *filename;
+  SoupURI *uri;
+
+  /* Create the new cookie jar */
+  filename = g_build_filename (directory, "cookies.sqlite", NULL);
+  new_jar = (SoupCookieJar*)soup_cookie_jar_sqlite_new (filename, FALSE);
+  g_free (filename);
+
+  /* The app domain for the current view */
+  uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+  domain = uri->host;
+
+  /* The current cookies */
+  session = webkit_get_default_session ();
+  current_jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+  cookies = soup_cookie_jar_all_cookies (current_jar);
+
+  for (p = cookies; p; p = p->next) {
+    SoupCookie *cookie = (SoupCookie*)p->data;
+
+    if (g_str_has_suffix (cookie->domain, domain))
+      soup_cookie_jar_add_cookie (new_jar, cookie);
+    else
+      soup_cookie_free (cookie);
+  }
+
+  soup_uri_free (uri);
+  g_slist_free (cookies);
+}
+
+char *
+ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkPixbuf *icon)
+{
+  char *app_dir;
+  char *profile_dir = NULL;
+  char *toolbar_path = NULL;
+  char *desktop_file_path = NULL;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+
+  /* If there's already a WebApp profile for the contents of this
+   * view, do nothing. TODO: create a method to check this and use it
+   * to ask the user if she wants to overwrite the existing WebApp. */
+  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, title, NULL);
+  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  g_free (app_dir);
+  if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR))
+    goto out;
+
+  /* Create the profile directory, populate it. */
+  if (g_mkdir (profile_dir, 488) == -1) {
+    LOG ("Failed to create directory %s", profile_dir);
+    goto out;
+  }
+
+  /* Things we need in a WebApp's profile:
+     - Toolbar layout
+     - Our own cookies file, copying the relevant cookies for the
+       app's domain.
+  */
+  toolbar_path = g_build_filename (profile_dir, EPHY_TOOLBARS_XML_FILE, NULL);
+  if (!g_file_set_contents (toolbar_path, EPHY_WEB_APP_TOOLBAR, -1, NULL))
+    goto out;
+
+  create_cookie_jar_for_domain (view, profile_dir);
+
+  /* Create the deskop file. */
+  desktop_file_path = create_desktop_file (view, profile_dir, title, icon);
+
+out:
+  if (toolbar_path)
+    g_free (toolbar_path);
+
+  if (profile_dir)
+    g_free (profile_dir);
+
+  return desktop_file_path;
+}
+
+/**
+ * ephy_web_view_get_snapshot: takes a snapshot of the requested region of a #EphyWebView
+ * @view: the #EphyWebView
+ * @x: the x coordinate of the snapshot
+ * @y: the y coordinate of the snapshot
+ * @width: the width of the snapshot
+ * @height: the height of the snapshot
+ * 
+ * Returns: (transfer full): a #GdkPixbuf with a snapshot of the requested area.
+ **/
+GdkPixbuf *
+ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int height)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkPixbuf *snapshot;
+  GtkAllocation allocation;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+
+  gtk_widget_get_allocation (GTK_WIDGET (view), &allocation);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+                                        allocation.width,
+                                        allocation.height);
+  cr = cairo_create (surface);
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
+  gtk_widget_draw (GTK_WIDGET (view), cr);
+
+  snapshot = gdk_pixbuf_get_from_surface (surface, x, y, width, height);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  return snapshot;
+}
