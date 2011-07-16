@@ -3261,6 +3261,28 @@ downloads_removed_cb (GtkContainer *container,
 static void
 downloads_close_cb (GtkButton *button, EphyWindow *window)
 {
+	GList *l, *downloads;
+
+	downloads = gtk_container_get_children (GTK_CONTAINER (window->priv->downloads_box));
+
+	for (l = downloads; l != NULL; l = l->next)
+	{
+		EphyDownload *download;
+		WebKitDownloadStatus status;
+
+		if (EPHY_IS_DOWNLOAD_WIDGET (l->data) != TRUE)
+			continue;
+
+		download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (l->data));
+		status = webkit_download_get_status (ephy_download_get_webkit_download (download));
+
+		if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+		{
+			gtk_widget_destroy (GTK_WIDGET (l->data));
+		}
+	}
+	g_list_free (downloads);
+
 	ephy_window_set_downloads_box_visibility (window, FALSE);
 }
 
