@@ -853,7 +853,7 @@ ephy_file_browse_to (GFile *file,
 
 	parent = g_file_get_parent (file);
 	/* TODO find a way to make nautilus scroll to the actual file */
-	ret = ephy_file_launch_handler ("x-directory/normal",
+	ret = ephy_file_launch_handler ("inode/directory",
 					parent,
 					user_time);
 
