@@ -848,18 +848,7 @@ gboolean
 ephy_file_browse_to (GFile *file,
 		     guint32 user_time)
 {
-	GFile *parent;
-	gboolean ret;
-
-	parent = g_file_get_parent (file);
-	/* TODO find a way to make nautilus scroll to the actual file */
-	ret = ephy_file_launch_handler ("inode/directory",
-					parent,
-					user_time);
-
-	g_object_unref (parent);
-
-	return ret;
+	return ephy_file_launch_handler ("inode/directory", file, user_time);
 }
 
 /**
