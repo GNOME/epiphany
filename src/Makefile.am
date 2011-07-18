@@ -157,7 +157,6 @@ epiphany_CPPFLAGS = \
 
 epiphany_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
-	$(GECKO_CFLAGS)		\
 	$(AM_CFLAGS)
 
 epiphany_LDFLAGS = -dlopen self
