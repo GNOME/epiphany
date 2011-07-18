@@ -365,7 +365,7 @@ main (int argc,
   }
 
   if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE) {
-    g_print ("--profile can only be used in combination wit h --private-instance or --application-mode\n");
+    g_print ("--profile can only be used in combination with --private-instance or --application-mode\n");
     exit (1);
   }
 
