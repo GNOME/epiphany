@@ -460,7 +460,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (p->window));
 
-	if (g_list_length (tabs) == 0) return;
+	if (tabs == NULL) return;
 
 	manager =  GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 	p->ui_id = gtk_ui_manager_new_merge_id (manager);

@@ -208,7 +208,7 @@ client_quit_requested_cb (EggSMClient *sm_client,
 	 */
 
 	downloads = ephy_embed_shell_get_downloads (embed_shell);
-	if (ephy_shell_get_default () == NULL || g_list_length (downloads) == 0)
+	if (ephy_shell_get_default () == NULL || downloads == NULL)
 	{
 		egg_sm_client_will_quit (sm_client, TRUE);
 		return;
