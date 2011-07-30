@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define EPHY_FILE_CHOOSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserClass))
 
 typedef struct _EphyFileChooser		EphyFileChooser;
-typedef struct _EphyFileChooserPrivate	EphyFileChooserPrivate;
 typedef struct _EphyFileChooserClass	EphyFileChooserClass;
 
 typedef enum
@@ -54,9 +53,6 @@ typedef enum
 struct _EphyFileChooser
 {
 	GtkFileChooserDialog parent;
-
-	/*< private >*/
-	EphyFileChooserPrivate *priv;
 };
 
 struct _EphyFileChooserClass
@@ -69,13 +65,7 @@ GType		 ephy_file_chooser_get_type		(void);
 EphyFileChooser	*ephy_file_chooser_new			(const char *title,
 							 GtkWidget *parent,
 							 GtkFileChooserAction action,
-							 const char *persist_key,
 							 EphyFileFilterDefault default_filter);
-
-void		 ephy_file_chooser_set_persist_key	(EphyFileChooser *dialog,
-							 const char *key);
-
-const char	*ephy_file_chooser_get_persist_key	(EphyFileChooser *dialog);
 
 GtkFileFilter	*ephy_file_chooser_add_pattern_filter	(EphyFileChooser *dialog,
 							 const char *title,

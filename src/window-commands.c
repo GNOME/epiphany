@@ -268,7 +268,6 @@ window_cmd_file_open (GtkAction *action,
 	dialog = ephy_file_chooser_new (_("Open"),
 					GTK_WIDGET (window),
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					EPHY_PREFS_STATE_OPEN_DIR,
 					EPHY_FILE_FILTER_ALL_SUPPORTED);
 
 	g_signal_connect (dialog, "response",
@@ -331,7 +330,6 @@ window_cmd_file_save_as (GtkAction *action,
 	dialog = ephy_file_chooser_new (_("Save"),
 					GTK_WIDGET (window),
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					EPHY_PREFS_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_NONE);
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);

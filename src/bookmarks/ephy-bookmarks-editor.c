@@ -616,7 +616,7 @@ import_dialog_response_cb (GtkDialog *dialog,
 			dialog = ephy_file_chooser_new (_("Import Bookmarks from File"),
 							GTK_WIDGET (editor),
 							GTK_FILE_CHOOSER_ACTION_OPEN,
-							NULL, EPHY_FILE_FILTER_NONE);
+							EPHY_FILE_FILTER_NONE);
 
 			ephy_file_chooser_add_mime_filter
 				(dialog,
@@ -755,7 +755,6 @@ cmd_bookmarks_export (GtkAction *action,
 	dialog = GTK_WIDGET (ephy_file_chooser_new (_("Export Bookmarks"),
 		GTK_WIDGET (editor),
 		GTK_FILE_CHOOSER_ACTION_SAVE,
-		NULL,
 		EPHY_FILE_FILTER_NONE));
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);

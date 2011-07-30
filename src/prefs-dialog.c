@@ -869,7 +869,7 @@ create_download_path_button (EphyDialog *dialog)
 	fc = ephy_file_chooser_new (_("Select a Directory"),
 				    parent,
 				    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-				    NULL, EPHY_FILE_FILTER_NONE);
+				    EPHY_FILE_FILTER_NONE);
 
 	/* Unset the destroy-with-parent, since gtkfilechooserbutton doesn't
 	 * expect this */

@@ -238,7 +238,6 @@ save_property_url (GtkAction *action,
 		base = g_path_get_basename (location);
 		dialog = ephy_file_chooser_new (title, GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						EPHY_PREFS_STATE_SAVE_DIR,
 						EPHY_FILE_FILTER_NONE);
 
 		gtk_file_chooser_set_do_overwrite_confirmation

@@ -31,23 +31,10 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))
-
-struct _EphyFileChooserPrivate
-{
-	char *persist_key;
-};
-
 static void ephy_file_chooser_class_init	(EphyFileChooserClass *klass);
 static void ephy_file_chooser_init		(EphyFileChooser *dialog);
 static void ephy_file_chooser_image_preview	(GtkFileChooser *file_chooser, 
 				 		 gpointer user_data);
-
-enum
-{
-	PROP_0,
-	PROP_PERSIST_KEY
-};
 
 #define PREVIEW_WIDTH 150
 #define PREVIEW_HEIGHT 150
@@ -55,52 +42,8 @@ enum
 G_DEFINE_TYPE (EphyFileChooser, ephy_file_chooser, GTK_TYPE_FILE_CHOOSER_DIALOG)
 
 static void
-current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
-{
-	if (dialog->priv->persist_key != NULL)
-	{
-		char *dir;
-
-		dir = gtk_file_chooser_get_current_folder (chooser);
-
-		g_settings_set_string (EPHY_SETTINGS_STATE,
-				       dialog->priv->persist_key, dir);
-
-		g_free (dir);
-	}
-}
-
-static void
-file_chooser_response_cb (GtkWidget *widget,
-			  gint response,
-			  EphyFileChooser *dialog)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		if (dialog->priv->persist_key != NULL)
-		{
-			char *dir, *filename;
-		    
-			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-                        if (filename == NULL) return;
-
-			dir = g_path_get_dirname (filename);
-                        if (dir != NULL)
-				g_settings_set_string
-					(EPHY_SETTINGS_STATE,
-					 dialog->priv->persist_key,
-					 dir);
-
-			g_free (dir);
-			g_free (filename);
-		}
-	}
-}
-
-static void
 ephy_file_chooser_init (EphyFileChooser *dialog)
 {
-	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
 }
 
 static GObject *
@@ -121,64 +64,6 @@ ephy_file_chooser_constructor (GType type,
 	g_free (downloads_dir);
 
 	return object;
-}
-
-static void
-ephy_file_chooser_finalize (GObject *object)
-{
-	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
-
-	g_free (dialog->priv->persist_key);
-
-	LOG ("EphyFileChooser finalised");
-
-	G_OBJECT_CLASS (ephy_file_chooser_parent_class)->finalize (object);
-}
-
-void
-ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
-{
-	char *dir, *expanded, *converted;
-
-	g_return_if_fail (key != NULL && key[0] != '\0');
-
-	dialog->priv->persist_key = g_strdup (key);
-
-	dir = g_settings_get_string (EPHY_SETTINGS_STATE, key);
-	if (dir != NULL)
-	{
-		/* FIXME: Maybe we will find a better way to do this when the
-		 * gio-filechooser will be in GTK+ */
-		converted = g_filename_from_utf8
-			(dir, -1, NULL, NULL, NULL);
-
-		if (converted != NULL)
-		{
-			expanded = ephy_string_expand_initial_tilde (converted);
-
-			gtk_file_chooser_set_current_folder
-				(GTK_FILE_CHOOSER (dialog), expanded);
-
-			g_free (expanded);
-			g_free (converted);
-		}
-
-		g_free (dir);
-	}
-
-	g_signal_connect (dialog, "current-folder-changed",
-			  G_CALLBACK (current_folder_changed_cb), dialog);
-    
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (file_chooser_response_cb), dialog);
-}
-
-const char *
-ephy_file_chooser_get_persist_key (EphyFileChooser *dialog)
-{
-	g_return_val_if_fail (EPHY_IS_FILE_CHOOSER (dialog), NULL);
-
-	return dialog->priv->persist_key;
 }
 
 GtkFileFilter *
@@ -240,56 +125,11 @@ ephy_file_chooser_add_mime_filter (EphyFileChooser *dialog,
 }
 
 static void
-ephy_file_chooser_set_property (GObject *object,
-				guint prop_id,
-				const GValue *value,
-				GParamSpec *pspec)
-{
-	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
-	
-	switch (prop_id)
-	{
-		case PROP_PERSIST_KEY:
-			ephy_file_chooser_set_persist_key (dialog, g_value_get_string (value));
-			break;
-	}
-}
-
-static void
-ephy_file_chooser_get_property (GObject *object,
-				guint prop_id,
-				GValue *value,
-				GParamSpec *pspec)
-{
-	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
-
-	switch (prop_id)
-	{
-		case PROP_PERSIST_KEY:
-			g_value_set_string (value, ephy_file_chooser_get_persist_key (dialog));
-			break;
-	}
-}
-
-static void
 ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->constructor = ephy_file_chooser_constructor;
-	object_class->finalize = ephy_file_chooser_finalize;
-	object_class->get_property = ephy_file_chooser_get_property;
-	object_class->set_property = ephy_file_chooser_set_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_PERSIST_KEY,
-					 g_param_spec_string ("persist-key",
-							      "Persist Key",
-							      "The gconf key to which to persist the selected directory",
-							      NULL,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_type_class_add_private (object_class, sizeof (EphyFileChooserPrivate));
 }
 
 static void
@@ -324,7 +164,6 @@ EphyFileChooser	*
 ephy_file_chooser_new (const char *title,
 		       GtkWidget *parent,
 		       GtkFileChooserAction action,
-		       const char *persist_key,
 		       EphyFileFilterDefault default_filter)
 {
 	EphyFileChooser *dialog;
@@ -337,17 +176,6 @@ ephy_file_chooser_new (const char *title,
 						  "title", title,
 						  "action", action,
 						  NULL));
-
-	/* NOTE: We cannot set this property on object construction time.
-	 * This is because GtkFileChooserDialog overrides the gobject
-	 * constructor; the GtkFileChooser delegate will only be set
-	 * _after_ our instance_init and construct-param setters will have
-	 * run.
-	 */
-	if (persist_key != NULL)
-	{
-		ephy_file_chooser_set_persist_key (dialog, persist_key);
-	}
 
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN	    ||
 	    action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
