@@ -2033,9 +2033,10 @@ ephy_web_view_load_error_page (EphyWebView *view,
   ephy_web_view_set_title (view, page_title);
   _ephy_web_view_set_icon_address (view, NULL);
 
-  g_string_printf (html, template, lang, lang,
+  g_string_printf (html, template,
+                   lang, lang,
+                   ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
-                   gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr",
                    uri,
                    image_data,
                    msg_title, msg, button_label);
