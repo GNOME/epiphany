@@ -7,4 +7,9 @@ xml_DATA = \
 	epiphany-toolbar.xml		\
 	epiphany-history-window-ui.xml
 
-EXTRA_DIST = $(xml_DATA)
+cssdir = $(pkgdatadir)
+css_DATA = epiphany.css
+
+EXTRA_DIST = \
+	$(xml_DATA) \
+	$(css_DATA)

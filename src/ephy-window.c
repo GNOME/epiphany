@@ -3683,6 +3683,8 @@ ephy_window_constructor (GType type,
 	guint settings_connection;
 	GSList *proxies;
 	GtkWidget *proxy;
+	GtkCssProvider *css_provider;
+	GFile *css_file;
 
 	object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
 		(type, n_construct_properties, construct_params);
@@ -3778,6 +3780,27 @@ ephy_window_constructor (GType type,
 			       GTK_UI_MANAGER_MENUITEM, FALSE);
 }
 #endif
+
+	/* Attach the CSS provider to the window */
+	css_file = g_file_new_for_path (ephy_file ("epiphany.css"));
+	css_provider = gtk_css_provider_new ();
+	gtk_css_provider_load_from_file (css_provider,
+	                                 css_file,
+	                                 &error);
+	if (error == NULL)
+	{
+		gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)),
+		                                           GTK_STYLE_PROVIDER (css_provider),
+		                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+	else
+	{
+		g_warning ("Could not attach css style: %s", error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (css_provider);
+	g_object_unref (css_file);
 
 	/* Initialize the menus */
 	priv->tabs_menu = ephy_tabs_menu_new (window);
