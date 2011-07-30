@@ -879,9 +879,6 @@ cmd_bookmarks_export (GtkAction *action,
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
-	gtk_file_chooser_set_current_folder
-		(GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
-	
 	filename = g_strdup_printf ("%s.%s", _("Bookmarks"), export_formats[0].extension);
 	gtk_file_chooser_set_current_name
 		(GTK_FILE_CHOOSER (dialog), filename);
