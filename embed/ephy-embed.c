@@ -34,7 +34,6 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
-#include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-prefs.h"
