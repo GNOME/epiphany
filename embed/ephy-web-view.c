@@ -763,9 +763,9 @@ request_decision_on_storing (StorePasswordData *store_data)
    * hostname where this is happening. Example: gnome@gmail.com and
    * mail.google.com.
    */
-  message = g_strdup_printf (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
-                             store_data->name_value,
-                             hostname);
+  message = g_markup_printf_escaped (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
+                                     store_data->name_value,
+                                     hostname);
   gtk_label_set_markup (GTK_LABEL (label), message);
   g_free (hostname);
   g_free (message);
@@ -1732,8 +1732,8 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                     G_CALLBACK (send_yes_response_cb), info_bar);
 
   /* Label */
-  message = g_strdup_printf (_("The page at <b>%s</b> wants to know your location."),
-                             webkit_web_frame_get_uri (web_frame));
+  message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
+                                     webkit_web_frame_get_uri (web_frame));
 
   label = gtk_label_new (message);
   g_object_set (label, "use-markup", TRUE, NULL);
