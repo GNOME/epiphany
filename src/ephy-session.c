@@ -782,6 +782,7 @@ session_command_dispatch (EphySession *session)
 				gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
 
 				label = gtk_label_new (_("Do you want to recover the previous browser windows and tabs?"));
+				gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 				content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
 				gtk_container_add (GTK_CONTAINER (content_area), label);
 				gtk_widget_show_all (info_bar);

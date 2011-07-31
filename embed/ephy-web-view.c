@@ -767,6 +767,7 @@ request_decision_on_storing (StorePasswordData *store_data)
                                      store_data->name_value,
                                      hostname);
   gtk_label_set_markup (GTK_LABEL (label), message);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   g_free (hostname);
   g_free (message);
 
@@ -1736,7 +1737,7 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                                      webkit_web_frame_get_uri (web_frame));
 
   label = gtk_label_new (message);
-  g_object_set (label, "use-markup", TRUE, NULL);
+  g_object_set (label, "use-markup", TRUE, "wrap", TRUE, NULL);
 
   g_free (message);
 
