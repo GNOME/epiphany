@@ -680,7 +680,7 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
   char *name_field_value = store_data->name_value;
   char *password_field_name = store_data->password_field;
   char *password_field_value = store_data->password_value;
-  SoupURI *soup_uri;
+  char *host;
 
   /* We are no longer showing a store password infobar */
   web_view->priv->password_info_bar = NULL;
@@ -700,14 +700,14 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
                                             password_field_value);
 
   /* Update internal caching */
-  soup_uri = soup_uri_new (uri);
+  host = ephy_string_get_host_name (uri);
 
   ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)),
-                                   soup_uri->host,
+                                   host,
                                    name_field_name,
                                    password_field_name,
                                    name_field_value);
-  soup_uri_free (soup_uri);
+  g_free (host);
 
   store_password_data_free (store_data);
   gtk_widget_destroy (GTK_WIDGET (info_bar));
