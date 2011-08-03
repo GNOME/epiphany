@@ -1711,6 +1711,7 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
+  char *host;
 
   info_bar = gtk_info_bar_new ();
 
@@ -1733,8 +1734,10 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                     G_CALLBACK (send_yes_response_cb), info_bar);
 
   /* Label */
+  host = ephy_string_get_host_name (webkit_web_frame_get_uri (web_frame));
   message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                     webkit_web_frame_get_uri (web_frame));
+                                     host);
+  g_free (host);
 
   label = gtk_label_new (message);
   g_object_set (label, "use-markup", TRUE, "wrap", TRUE, NULL);
