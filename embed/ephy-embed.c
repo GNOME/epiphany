@@ -37,6 +37,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-browse-history.h"
+#include "ephy-history-types.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -229,39 +230,47 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 }
 
 static void
+get_url_for_zoom_cb (gpointer service,
+                     gboolean success,
+                     gpointer result_data,
+                     gpointer user_data)
+{
+  EphyHistoryURL *url;
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+  double current_zoom;
+
+  if (success == FALSE)
+    return;
+
+  embed = EPHY_EMBED (user_data);
+  url = (EphyHistoryURL *) result_data;
+
+  g_assert (url != NULL);
+
+  web_view = embed->priv->web_view;
+
+  g_object_get (web_view, "zoom-level", &current_zoom,
+                NULL);
+
+  if (url->zoom_level != current_zoom) {
+    embed->priv->is_setting_zoom = TRUE;
+    g_object_set (web_view, "zoom-level", url->zoom_level, NULL);
+    embed->priv->is_setting_zoom = FALSE;
+  }
+
+  ephy_history_url_free (url);
+}
+
+static void
 restore_zoom_level (EphyEmbed *embed,
                     const char *address)
 {
-  EphyEmbedPrivate *priv = embed->priv;
-
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    EphyHistory *history;
-    EphyNode *host;
-    WebKitWebView *web_view;
-    GValue value = { 0, };
-    float zoom = 1.0, current_zoom;
-
-    history = EPHY_HISTORY
-              (ephy_embed_shell_get_global_history (embed_shell));
-    host = ephy_history_get_host (history, address);
-
-    if (host != NULL && ephy_node_get_property
-        (host, EPHY_NODE_HOST_PROP_ZOOM, &value)) {
-      zoom = g_value_get_float (&value);
-      g_value_unset (&value);
-    }
-
-    web_view = priv->web_view;
-
-    g_object_get (web_view, "zoom-level", &current_zoom,
-                  NULL);
-
-    if (zoom != current_zoom) {
-      priv->is_setting_zoom = TRUE;
-      g_object_set (web_view, "zoom-level", zoom, NULL);
-      priv->is_setting_zoom = FALSE;
-    }
+    ephy_browse_history_get_url (embed->priv->browse_history,
+                                 address,
+                                 (EphyHistoryJobCallback)get_url_for_zoom_cb, embed);
   }
 }
 
@@ -344,17 +353,8 @@ zoom_changed_cb (WebKitWebView *web_view,
 
   address = ephy_web_view_get_location (EPHY_WEB_VIEW (web_view), TRUE);
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    EphyHistory *history;
-    EphyNode *host;
-    history = EPHY_HISTORY
-      (ephy_embed_shell_get_global_history (embed_shell));
-    host = ephy_history_get_host (history, address);
-
-    if (host != NULL) {
-      ephy_node_set_property_float (host,
-                                    EPHY_NODE_HOST_PROP_ZOOM,
-                                    zoom);
-    }
+    ephy_browse_history_set_page_zoom_level (embed->priv->browse_history,
+                                             address, zoom);
   }
 
   g_free (address);
