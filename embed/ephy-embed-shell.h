@@ -83,6 +83,8 @@ GObject		  *ephy_embed_shell_get_favicon_cache	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_global_history	(EphyEmbedShell *shell);
 
+GObject		  *ephy_embed_shell_get_global_browse_history (EphyEmbedShell *shell);
+
 GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);

@@ -37,6 +37,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
+#include "ephy-browse-history.h"
 
 #include "ephy-print-utils.h"
 
@@ -52,6 +53,7 @@
 struct _EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
+	EphyBrowseHistory *global_browse_history;
 	GList *downloads;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
@@ -143,6 +145,12 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (shell->priv->global_history);
 	}
 
+	if (shell->priv->global_browse_history)
+	{
+		LOG ("Unref browse history");
+		g_object_unref (shell->priv->global_browse_history);
+	}
+
 	if (shell->priv->embed_single)
 	{
 		LOG ("Unref embed single");
@@ -197,6 +205,25 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 	}
 
 	return G_OBJECT (shell->priv->global_history);
+}
+
+/**
+ * ephy_embed_shell_get_global_browse_history:
+ * @shell: the #EphyEmbedShell
+ *
+ * Return value: (transfer none):
+ **/
+GObject *
+ephy_embed_shell_get_global_browse_history (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	if (shell->priv->global_browse_history == NULL)
+	{
+		shell->priv->global_browse_history = ephy_browse_history_new ();
+	}
+
+	return G_OBJECT (shell->priv->global_browse_history);
 }
 
 static GObject *
