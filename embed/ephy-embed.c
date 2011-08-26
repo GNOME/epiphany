@@ -36,6 +36,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
+#include "ephy-browse-history.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -70,6 +71,7 @@ struct _EphyEmbedPrivate
   GtkPaned *paned;
   WebKitWebView *web_view;
   EphyHistory *history;
+  EphyBrowseHistory *browse_history;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
@@ -819,6 +821,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_prefs_add_embed (embed);
 
   priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
+  priv->browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (ephy_embed_shell_get_default ()));
 
   g_signal_connect (priv->history,
                     "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
