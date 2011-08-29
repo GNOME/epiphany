@@ -45,6 +45,8 @@ typedef enum
 	EPHY_MIME_PERMISSION_UNKNOWN	= 3
 } EphyMimePermission;
 
+#define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
+
 gboolean           ephy_file_helpers_init        (const char  *profile_dir,
                                                   gboolean     private_profile,
                                                   gboolean     keep_temp_dir,
