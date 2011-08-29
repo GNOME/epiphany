@@ -58,6 +58,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <webkit/webkit.h>
+#include <libnotify/notify.h>
 
 static void
 page_setup_done_cb (GtkPageSetup *setup,
@@ -503,6 +504,20 @@ fill_default_application_title (EphyApplicationDialogData *data)
 	gtk_entry_set_text (GTK_ENTRY (data->entry), title);
 }
 
+static void
+notify_launch_cb (NotifyNotification *notification,
+		  char *action,
+		  gpointer user_data)
+{
+	char * desktop_file = user_data;
+	/* A gross hack to be able to launch epiphany from within
+	 * Epiphany. Might be a good idea to figure out a better
+	 * solution... */
+	g_unsetenv (EPHY_UUID_ENVVAR);
+	ephy_file_launch_desktop_file (desktop_file, NULL, 0, NULL);
+	g_free (desktop_file);
+}
+
 void
 window_cmd_file_save_as_application (GtkAction *action,
 				     EphyWindow *window)
@@ -558,14 +573,30 @@ window_cmd_file_save_as_application (GtkAction *action,
 	if (response == GTK_RESPONSE_OK)
 	{
 		char *desktop_file;
+		char *message;
+		NotifyNotification *notification;
 
 		/* Create Web Application, including a new profile and .desktop file. */
 		desktop_file = ephy_web_view_create_web_application (view,
 								     gtk_entry_get_text (GTK_ENTRY (data->entry)),
 								     gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
 
-		/* TODO: show a notification when the app is totally
-		 * created and ready to be launched */
+		message = g_strdup_printf (_("The application '%s' is ready to be used"),
+					   gtk_entry_get_text (GTK_ENTRY (data->entry)));
+					   
+		notification = notify_notification_new (message,
+							NULL, NULL);
+		g_free (message);
+		notify_notification_add_action (notification, "launch", _("Launch"),
+						(NotifyActionCallback)notify_launch_cb,
+						g_path_get_basename (desktop_file),
+						NULL);
+		notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+		notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
+		notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
+		notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
+		notify_notification_show (notification, NULL);
+
 		g_free (desktop_file);
 	}
 
