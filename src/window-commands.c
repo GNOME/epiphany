@@ -555,6 +555,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 	gtk_container_add (GTK_CONTAINER (box), image);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	gtk_box_pack_end (GTK_BOX (box), entry, FALSE, FALSE, 0);
 
 	data = g_slice_new0 (EphyApplicationDialogData);
