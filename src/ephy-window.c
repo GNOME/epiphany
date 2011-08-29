@@ -2627,6 +2627,10 @@ policy_decision_required_cb (WebKitWebView *web_view,
 			GError *error = NULL;
 
 			return_value = TRUE;
+			/* A gross hack to be able to launch epiphany from within
+			 * Epiphany. Might be a good idea to figure out a better
+			 * solution... */
+			g_unsetenv (EPHY_UUID_ENVVAR);
 			command_line = g_strdup_printf ("gvfs-open %s", uri);
 			g_spawn_command_line_async (command_line, &error);
 
