@@ -738,7 +738,7 @@ ephy_file_launch_application (GAppInfo *app,
 /**
  * ephy_file_launch_desktop_file:
  * @filename: the path to the .desktop file
- * @parameter: path to a parameter file to pass to the application
+ * @parameter: path to an optional parameter file to pass to the application
  * @user_time: user time to prevent focus stealing
  * @widget: an optional widget for ephy_file_launch_application()
  *
@@ -754,17 +754,21 @@ ephy_file_launch_desktop_file (const char *filename,
 			       GtkWidget *widget)
 {
 	GDesktopAppInfo *app;
-	GFile *file;
+	GFile *file = NULL;
 	GList *list = NULL;
 	gboolean ret;
 
 	app = g_desktop_app_info_new (filename);
-	file = g_file_new_for_path (parameter);
-	list = g_list_append (list, file);
+	if (parameter)
+	{
+		file = g_file_new_for_path (parameter);
+		list = g_list_append (list, file);
+	}
 	
 	ret = ephy_file_launch_application (G_APP_INFO (app), list, user_time, widget);
 	g_list_free (list);
-	g_object_unref (file);
+	if (file)
+		g_object_unref (file);
 	return ret;
 }
 
