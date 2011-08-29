@@ -361,6 +361,11 @@ main (int argc,
     exit (1);
   }
 
+  if (private_instance == TRUE && application_mode == TRUE) {
+    g_print ("Cannot use --private-instance and --application-mode at the same time\n");
+    exit (1);
+  }
+
   if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE) {
     g_print ("--profile can only be used in combination with --private-instance or --application-mode\n");
     exit (1);
