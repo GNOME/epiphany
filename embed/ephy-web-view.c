@@ -3715,7 +3715,7 @@ create_desktop_file (EphyWebView *view,
 
   file = g_key_file_new ();
   g_key_file_set_value (file, "Desktop Entry", "Name", title);
-  exec_string = g_strdup_printf ("jhbuild run epiphany --application-mode --profile=\"%s\" %s",
+  exec_string = g_strdup_printf ("epiphany --application-mode --profile=\"%s\" %s",
                                  profile_dir,
                                  webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
