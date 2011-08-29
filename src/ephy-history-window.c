@@ -1341,7 +1341,8 @@ ephy_history_window_set_parent (EphyHistoryWindow *ebe,
 }
 
 GtkWidget *
-ephy_history_window_new (EphyHistory *history)
+ephy_history_window_new (EphyHistory *history,
+                         EphyHistoryService *history_service)
 {
 	EphyHistoryWindow *editor;
 
@@ -1350,6 +1351,7 @@ ephy_history_window_new (EphyHistory *history)
 	editor = EPHY_HISTORY_WINDOW (g_object_new
 			(EPHY_TYPE_HISTORY_WINDOW,
 			 "history", history,
+			 "history-service", history_service,
 			 NULL));
 
 	ephy_history_window_construct (editor);
