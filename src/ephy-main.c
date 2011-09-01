@@ -30,6 +30,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-session.h"
 #include "ephy-shell.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
 #include "eggsmclient.h"
@@ -61,6 +62,7 @@ static char *session_filename = NULL;
 static char *bookmark_url = NULL;
 static char *bookmarks_file = NULL;
 static char **arguments = NULL;
+static char *application_to_delete = NULL;
 
 /* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
@@ -104,6 +106,8 @@ static const GOptionEntry option_entries[] =
     "", N_("URL …")},
   { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, 
     G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+  { "delete-application", 0, 0, G_OPTION_ARG_STRING | G_OPTION_FLAG_HIDDEN,
+    &application_to_delete, NULL, NULL },
   { NULL }
 };
 
@@ -359,6 +363,11 @@ main (int argc,
   g_option_context_free (option_context);
 
   /* Some argument sanity checks*/
+  if (application_to_delete != NULL && argc > 3) {
+    g_print ("Cannot pass any other parameter when using --delete-application\n");
+    exit (1);
+  }
+
   if (arguments != NULL && (session_filename != NULL || open_as_bookmarks_editor)) {
     g_print ("Cannot use --bookmarks-editor or --load-session with URL arguments  \n");
     exit (1);
@@ -414,6 +423,13 @@ main (int argc,
                                &error)) {
     show_error_message (&error);
     exit (1);
+  }
+
+  /* Delete the requested web application, if any. Must happen after
+   * ephy_file_helpers_init (). */
+  if (application_to_delete) {
+    ephy_delete_web_application (application_to_delete);
+    exit (0);
   }
 
   ephy_stock_icons_init ();

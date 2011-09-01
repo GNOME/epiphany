@@ -10,7 +10,8 @@ header_DATA = \
 NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-encodings.h		\
-	ephy-favicon-cache.h
+	ephy-favicon-cache.h		\
+	ephy-web-app-utils.h
 
 INST_H_FILES = \
 	ephy-adblock.h			\
@@ -48,6 +49,7 @@ libephyembed_la_SOURCES = \
 	ephy-history.c			\
 	ephy-permission-manager.c	\
 	ephy-embed-prefs.c		\
+	ephy-web-app-utils.c		\
 	ephy-web-view.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
