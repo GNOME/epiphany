@@ -88,8 +88,6 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_PAGE_CRASH
 } EphyWebViewErrorPage;
 
-#define EPHY_WEB_APP_PREFIX "app-"
-
 struct _EphyWebView
 {
   WebKitWebView parent;

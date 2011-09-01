@@ -28,6 +28,8 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_WEB_APP_PREFIX "app-"
+
 gboolean ephy_delete_web_application (const char *name);
 
 G_END_DECLS
