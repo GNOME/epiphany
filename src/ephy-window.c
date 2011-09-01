@@ -849,6 +849,26 @@ sync_chromes_visibility (EphyWindow *window)
 }
 
 static void
+ensure_location_entry (EphyWindow *window)
+{
+	GtkActionGroup *toolbar_action_group;
+	GtkAction *action;
+	GSList *proxies;
+	GtkWidget *proxy;
+	EphyWindowPrivate *priv = window->priv;
+
+	toolbar_action_group = ephy_toolbar_get_action_group (priv->toolbar);
+	action = gtk_action_group_get_action (toolbar_action_group,
+					      "Location");
+	proxies = gtk_action_get_proxies (action);
+	if (proxies)
+	{
+		proxy = GTK_WIDGET (proxies->data);
+		priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+	}
+}
+
+static void
 ephy_window_fullscreen (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
@@ -883,6 +903,7 @@ ephy_window_fullscreen (EphyWindow *window)
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
+	ensure_location_entry (window);
 
 	ephy_toolbar_set_show_leave_fullscreen (priv->toolbar,
 						!lockdown_fs);
@@ -901,6 +922,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
+	ensure_location_entry (window);
 
 	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar, FALSE);
 
@@ -3732,8 +3754,6 @@ ephy_window_constructor (GType type,
 	GtkActionGroup *toolbar_action_group;
 	GError *error = NULL;
 	guint settings_connection;
-	GSList *proxies;
-	GtkWidget *proxy;
 	GtkCssProvider *css_provider;
 	GFile *css_file;
 
@@ -3917,16 +3937,8 @@ ephy_window_constructor (GType type,
 
 	sync_chromes_visibility (window);
 
-	/* Cache GtkEntry inside EphyLocationEntry */
-	action = gtk_action_group_get_action (toolbar_action_group,
-					      "Location");
-	proxies = gtk_action_get_proxies (action);
-	if (proxies)
-	{
-		proxy = GTK_WIDGET (proxies->data);
-		priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
-	}
-	
+	ensure_location_entry (window);
+
 	return object;
 }
 
