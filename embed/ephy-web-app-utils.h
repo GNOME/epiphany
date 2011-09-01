@@ -32,6 +32,8 @@ G_BEGIN_DECLS
 
 gboolean ephy_delete_web_application (const char *name);
 
+char    *ephy_web_application_get_profile_directory (const char *app_name);
+
 G_END_DECLS
 
 #endif

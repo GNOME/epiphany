@@ -78,6 +78,27 @@ out:
 }
 
 /**
+ * ephy_web_application_get_directory:
+ * @app_name: the application name
+ *
+ * Gets the directory whre the profile for @app_name is meant
+ * to be stored.
+ *
+ * Returns: (transfer full): A newly allocated string.
+ **/
+char *
+ephy_web_application_get_profile_directory (const char *app_name)
+{
+  char *app_dir, *profile_dir;
+
+  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, app_name, NULL);
+  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  g_free (app_dir);
+
+  return profile_dir;
+}
+
+/**
  * ephy_delete_web_application:
  * @name: the name of the web application do delete
  * 
@@ -89,16 +110,14 @@ out:
 gboolean
 ephy_delete_web_application (const char *name)
 {
-  char *app_dir = NULL, *profile_dir = NULL;
+  char *profile_dir = NULL;
   char *desktop_file = NULL, *desktop_path = NULL;
   GFile *profile = NULL, *launcher = NULL;
   gboolean return_value = FALSE;
 
   g_return_val_if_fail (name, FALSE);
 
-  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, name, NULL);
-  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
-
+  profile_dir = ephy_web_application_get_profile_directory (name);
   /* If there's no profile dir for this app, it means it does not
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
@@ -125,7 +144,6 @@ out:
   if (profile)
     g_object_unref (profile);
   g_free (profile_dir);
-  g_free (app_dir);
 
   if (launcher)
     g_object_unref (launcher);

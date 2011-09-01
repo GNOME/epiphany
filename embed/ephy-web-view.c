@@ -3806,7 +3806,6 @@ create_cookie_jar_for_domain (EphyWebView *view, const char *directory)
 char *
 ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkPixbuf *icon)
 {
-  char *app_dir;
   char *profile_dir = NULL;
   char *toolbar_path = NULL;
   char *desktop_file_path = NULL;
@@ -3816,9 +3815,7 @@ ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkP
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. TODO: create a method to check this and use it
    * to ask the user if she wants to overwrite the existing WebApp. */
-  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, title, NULL);
-  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
-  g_free (app_dir);
+  profile_dir = ephy_web_application_get_profile_directory (title);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR))
     goto out;
 
