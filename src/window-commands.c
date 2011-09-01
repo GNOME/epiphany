@@ -519,6 +519,89 @@ notify_launch_cb (NotifyNotification *notification,
 	g_free (desktop_file);
 }
 
+static gboolean
+confirm_web_application_overwrite (GtkWindow *parent, const char *title)
+{
+  GtkResponseType response;
+  GtkWidget *dialog;
+
+  dialog = gtk_message_dialog_new (parent, 0,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_NONE,
+				   _("A web application named '%s' already exists. Do you want to replace it?"),
+				   title);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  _("Cancel"),
+			  GTK_RESPONSE_CANCEL,
+			  _("Replace"),
+			  GTK_RESPONSE_OK,
+			  NULL);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            _("An application with the same name already exists. Replacing it will "
+					      "overwrite it."));
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  gtk_widget_destroy (dialog);
+
+  return response == GTK_RESPONSE_OK;
+}
+
+static void
+dialog_save_as_application_response_cb (GtkDialog *dialog,
+					gint response,
+					EphyApplicationDialogData *data)
+{
+	char *profile_dir;
+	char *desktop_file;
+	char *message;
+	NotifyNotification *notification;
+	gboolean profile_exists;
+
+	if (response == GTK_RESPONSE_OK) {
+		profile_dir = ephy_web_application_get_profile_directory (gtk_entry_get_text (GTK_ENTRY (data->entry)));
+		profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
+		g_free (profile_dir);
+
+		if (profile_exists)
+		{
+			if (confirm_web_application_overwrite (GTK_WINDOW (dialog),
+							       gtk_entry_get_text (GTK_ENTRY (data->entry))))
+				ephy_web_application_delete (gtk_entry_get_text (GTK_ENTRY (data->entry)));
+			else
+				return;
+		}
+
+		/* Create Web Application, including a new profile and .desktop file. */
+		desktop_file = ephy_web_application_create (data->view,
+							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
+							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+		if (desktop_file)
+		{
+			message = g_strdup_printf (_("The application '%s' is ready to be used"),
+						   gtk_entry_get_text (GTK_ENTRY (data->entry)));
+
+			notification = notify_notification_new (message,
+								NULL, NULL);
+			g_free (message);
+			notify_notification_add_action (notification, "launch", _("Launch"),
+							(NotifyActionCallback)notify_launch_cb,
+							g_path_get_basename (desktop_file),
+							NULL);
+			notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+			notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
+			notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
+			notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
+			notify_notification_show (notification, NULL);
+
+			g_free (desktop_file);
+		}
+	}
+
+	ephy_application_dialog_data_free (data);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 void
 window_cmd_file_save_as_application (GtkAction *action,
 				     EphyWindow *window)
@@ -526,7 +609,6 @@ window_cmd_file_save_as_application (GtkAction *action,
 	EphyEmbed *embed;
 	GtkWidget *dialog, *box, *image, *entry, *content_area;
 	EphyWebView *view;
-	gboolean response;
 	EphyApplicationDialogData *data;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
@@ -570,40 +652,10 @@ window_cmd_file_save_as_application (GtkAction *action,
 	gtk_widget_show_all (dialog);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-	if (response == GTK_RESPONSE_OK)
-	{
-		char *desktop_file;
-		char *message;
-		NotifyNotification *notification;
-
-		/* Create Web Application, including a new profile and .desktop file. */
-		desktop_file = ephy_web_application_create (view,
-							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
-							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
-
-		message = g_strdup_printf (_("The application '%s' is ready to be used"),
-					   gtk_entry_get_text (GTK_ENTRY (data->entry)));
-					   
-		notification = notify_notification_new (message,
-							NULL, NULL);
-		g_free (message);
-		notify_notification_add_action (notification, "launch", _("Launch"),
-						(NotifyActionCallback)notify_launch_cb,
-						g_path_get_basename (desktop_file),
-						NULL);
-		notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
-		notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
-		notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
-		notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
-		notify_notification_show (notification, NULL);
-
-		g_free (desktop_file);
-	}
-
-	ephy_application_dialog_data_free (data);
-	gtk_widget_destroy (dialog);
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (dialog_save_as_application_response_cb),
+			  data);
+	gtk_widget_show_all (dialog);
 }
 
 void
