@@ -48,6 +48,7 @@
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
 
