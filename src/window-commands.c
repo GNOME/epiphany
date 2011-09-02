@@ -577,25 +577,29 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
 							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
 		if (desktop_file)
-		{
 			message = g_strdup_printf (_("The application '%s' is ready to be used"),
 						   gtk_entry_get_text (GTK_ENTRY (data->entry)));
+		else
+			message = g_strdup_printf (_("The application '%s' could not be created"),
+						   gtk_entry_get_text (GTK_ENTRY (data->entry)));
 
-			notification = notify_notification_new (message,
-								NULL, NULL);
-			g_free (message);
+		notification = notify_notification_new (message,
+							NULL, NULL);
+		g_free (message);
+
+		if (desktop_file) {
 			notify_notification_add_action (notification, "launch", _("Launch"),
 							(NotifyActionCallback)notify_launch_cb,
 							g_path_get_basename (desktop_file),
 							NULL);
 			notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
-			notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
-			notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
-			notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
-			notify_notification_show (notification, NULL);
-
 			g_free (desktop_file);
 		}
+
+		notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
+		notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
+		notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
+		notify_notification_show (notification, NULL);
 	}
 
 	ephy_application_dialog_data_free (data);
