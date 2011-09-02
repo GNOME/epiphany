@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define EPHY_WEB_APP_PREFIX "app-"
 
-gboolean ephy_delete_web_application (const char *name);
+gboolean ephy_web_application_delete (const char *name);
 
 char    *ephy_web_application_get_profile_directory (const char *app_name);
 

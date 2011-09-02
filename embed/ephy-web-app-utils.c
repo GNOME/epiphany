@@ -99,7 +99,7 @@ ephy_web_application_get_profile_directory (const char *app_name)
 }
 
 /**
- * ephy_delete_web_application:
+ * ephy_web_application_delete:
  * @name: the name of the web application do delete
  * 
  * Deletes all the data associated with a Web Application created by
@@ -108,7 +108,7 @@ ephy_web_application_get_profile_directory (const char *app_name)
  * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
  **/
 gboolean
-ephy_delete_web_application (const char *name)
+ephy_web_application_delete (const char *name)
 {
   char *profile_dir = NULL;
   char *desktop_file = NULL, *desktop_path = NULL;

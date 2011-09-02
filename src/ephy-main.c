@@ -428,7 +428,7 @@ main (int argc,
   /* Delete the requested web application, if any. Must happen after
    * ephy_file_helpers_init (). */
   if (application_to_delete) {
-    ephy_delete_web_application (application_to_delete);
+    ephy_web_application_delete (application_to_delete);
     exit (0);
   }
 
