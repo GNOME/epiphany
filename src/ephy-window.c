@@ -1180,6 +1180,18 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	action_group = window->priv->popups_action_group;
 
+	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	{
+		action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
+		gtk_action_set_visible (action, FALSE);
+		action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
+		gtk_action_set_visible (action, FALSE);
+		action = gtk_action_group_get_action (action_group, "ContextBookmarkPage");
+		gtk_action_set_visible (action, FALSE);
+		action = gtk_action_group_get_action (action_group, "BookmarkLink");
+		gtk_action_set_visible (action, FALSE);
+	}
+
 	action = gtk_action_group_get_action (action_group, "OpenImage");
 	gtk_action_set_visible (action, is_image);
 	action = gtk_action_group_get_action (action_group, "SaveImageAs");
