@@ -11,7 +11,8 @@ need to stick to in order to get your patch accepted:
 - Use char/int/double/..., not gchar/gint/gdouble/... types.
 - All implementation files must include first "config.h", followed by
   the primary header, followed by a blank line, followed by all the
-  other headers sorted alphabetically.
+  local headers sorted alphabetically, followed by a blank line,
+  followed by all the system headers sorted alphabetically.
 
 - data/kr-gnome-indent.cfg is provided as a reference config file for the
   uncrustify program to get correct indentation in new files.
