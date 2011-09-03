@@ -51,6 +51,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "pdm-dialog.h"
+#include "ephy-web-app-utils.h"
 
 #include <string.h>
 #include <glib.h>
@@ -578,9 +579,9 @@ window_cmd_file_save_as_application (GtkAction *action,
 		NotifyNotification *notification;
 
 		/* Create Web Application, including a new profile and .desktop file. */
-		desktop_file = ephy_web_view_create_web_application (view,
-								     gtk_entry_get_text (GTK_ENTRY (data->entry)),
-								     gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+		desktop_file = ephy_web_application_create (view,
+							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
+							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
 
 		message = g_strdup_printf (_("The application '%s' is ready to be used"),
 					   gtk_entry_get_text (GTK_ENTRY (data->entry)));

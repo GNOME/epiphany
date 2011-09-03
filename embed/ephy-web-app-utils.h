@@ -25,10 +25,15 @@
 #define EPHY_WEB_APP_UTILS_H
 
 #include <glib.h>
+#include <gtk/gtk.h>
+
+#include "ephy-web-view.h"
 
 G_BEGIN_DECLS
 
 #define EPHY_WEB_APP_PREFIX "app-"
+
+char    *ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *icon);
 
 gboolean ephy_web_application_delete (const char *name);
 
