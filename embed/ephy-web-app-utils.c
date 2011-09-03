@@ -20,13 +20,11 @@
  */
 
 #include "config.h"
-
 #include "ephy-web-app-utils.h"
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-web-view.h"
-
 #include <glib/gstdio.h>
 #include <libsoup/soup-gnome.h>
 
