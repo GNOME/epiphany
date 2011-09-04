@@ -1982,8 +1982,14 @@ ephy_web_view_load_error_page (EphyWebView *view,
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
       page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
 
-      msg_title = g_strdup (_("Oops! It was impossible to load this website"));
-      msg = g_strdup_printf (_("The website at <strong>%s</strong> is probably unavailable, the precise error was:<br/><br/><em>%s</em>.<br/><br/> If this persists you might want to check your internet connection or if the website at <strong>%s</strong> is working correctly."), 
+      msg_title = g_strdup (_("Oops! It was not possible to show this website"));
+      msg = g_strdup_printf (_("The website at <strong>%s</strong> seems "
+                               "to be unavailable. The precise error was: "
+                               "<br/><br/><em>%s</em>.<br/><br/>"
+                               "The website at <strong>%s</strong> could be "
+                               "temporarily switched off or moved to a new "
+                               "address. Don't forget to check that your internet "
+                               "connection is working correctly."),
                              uri, reason, hostname);
 
       button_label = g_strdup (_("Try again"));
@@ -1994,8 +2000,13 @@ ephy_web_view_load_error_page (EphyWebView *view,
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
 
-      msg_title = g_strdup (_("Oops! This site might have caused Epiphany to close unexpectedly"));
-      msg = g_strdup_printf (_("This page was loading when the web browser closed unexpectedly.<br/> This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers."),
+      msg_title = g_strdup (_("Oops! This site might have caused the web "
+                              "browser to close unexpectedly"));
+      msg = g_strdup_printf (_("This page was loading when the web browser "
+                               "closed unexpectedly.<br/>This might happen "
+                               "again if you reload the page. If it does, "
+                               "please report the problem to the "
+                               "<strong>%s</strong> developers."),
                              LSB_DISTRIBUTOR);
 
       button_label = g_strdup (_("Load again anyway"));
