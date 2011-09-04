@@ -381,8 +381,15 @@ ephy_file_helpers_shutdown (void)
 	{
 		if (!keep_temp_directory)
 		{
-			/* recursively delete the contents and the directory */
-			ephy_file_delete_directory (tmp_dir);
+			GFile *tmp_dir_file;
+			tmp_dir_file = g_file_new_for_path (tmp_dir);
+
+			/* recursively delete the contents and the
+			 * directory */
+			LOG ("shutdown: delete tmp_dir %s", tmp_dir);
+			ephy_file_delete_dir_recursively (tmp_dir_file,
+							  NULL);
+			g_object_unref (tmp_dir_file);
 		}
 
 		g_free (tmp_dir);
@@ -855,30 +862,62 @@ ephy_file_browse_to (GFile *file,
 }
 
 /**
- * ephy_file_delete_directory:
- * @path: the path to remove
+ * ephy_file_delete_dir_recursively:
+ * @directory: directory to remove
+ * @error: location to set any #GError
  *
  * Remove @path and its contents. Like calling rm -rf @path.
  **/
-void
-ephy_file_delete_directory (const char *path)
+gboolean
+ephy_file_delete_dir_recursively (GFile *directory, GError **error)
 {
-	GFile *file;
-	gboolean ret;
-	
-	file = g_file_new_for_path (path);
-	
-	ret = g_file_delete (file, NULL, NULL);
-	
-	if (ret == TRUE)
-	{
-		LOG ("Deleted dir '%s'", path);
+	GFileEnumerator *children = NULL;
+	GFileInfo *info;
+	gboolean ret = TRUE;
+
+	children = g_file_enumerate_children (directory,
+					      "standard::name,standard::type",
+					      0, NULL, error);
+	if (error)
+		goto out;
+
+	info = g_file_enumerator_next_file (children, NULL, error);
+	while (info || error) {
+		GFile *child;
+		const char *name;
+		GFileType type;
+
+		if (error)
+			goto out;
+
+		name = g_file_info_get_name (info);
+		child = g_file_get_child (directory, name);
+		type = g_file_info_get_file_type (info);
+
+		LOG ("ephy-file-delete-dir: delete child %s", name);
+		if (type == G_FILE_TYPE_DIRECTORY)
+			ret = ephy_file_delete_dir_recursively (child, error);
+		else if (type == G_FILE_TYPE_REGULAR)
+			ret =	g_file_delete (child, NULL, error);
+
+		g_object_unref (info);
+
+		if (!ret)
+			goto out;
+
+		info = g_file_enumerator_next_file (children, NULL, error);
 	}
-	else
-	{
-		LOG ("Couldn't delete dir '%s'", path);
-	}
-	g_object_unref (file);
+
+	ret = TRUE;
+
+	LOG ("ephy-file-delete-dir: delete successful");
+	g_file_delete (directory, NULL, error);
+
+out:
+	if (children)
+		g_object_unref (children);
+
+	return ret;
 }
 
 /**

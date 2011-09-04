@@ -29,57 +29,6 @@
 #include <glib/gstdio.h>
 #include <libsoup/soup-gnome.h>
 
-static gboolean
-_g_directory_delete_recursively (GFile *directory, GError **error)
-{
-  GFileEnumerator *children = NULL;
-  GFileInfo *info;
-  gboolean ret = TRUE;
-
-  children = g_file_enumerate_children (directory,
-                                        "standard::name,standard::type",
-                                        0, NULL, error);
-  if (error)
-    goto out;
-
-  info = g_file_enumerator_next_file (children, NULL, error);
-  while (info || error) {
-    GFile *child;
-    const char *name;
-    GFileType type;
-
-    if (error)
-      goto out;
-
-    name = g_file_info_get_name (info);
-    child = g_file_get_child (directory, name);
-    type = g_file_info_get_file_type (info);
-
-    if (type == G_FILE_TYPE_DIRECTORY)
-      ret = _g_directory_delete_recursively (child, error);
-    else if (type == G_FILE_TYPE_REGULAR)
-      ret =  g_file_delete (child, NULL, error);
-
-    g_object_unref (info);
-
-    if (!ret)
-      goto out;
-
-    info = g_file_enumerator_next_file (children, NULL, error);
-  }
-
-  ret = TRUE;
-
-  g_file_delete (directory, NULL, error);
-
-out:
-
-  if (children)
-    g_object_unref (children);
-
-  return ret;
-}
-
 /**
  * ephy_web_application_get_directory:
  * @app_name: the application name
@@ -129,7 +78,7 @@ ephy_web_application_delete (const char *name)
   }
 
   profile = g_file_new_for_path (profile_dir);
-  if (!_g_directory_delete_recursively (profile, NULL))
+  if (!ephy_file_delete_dir_recursively (profile, NULL))
     goto out;
   g_print ("Deleted application profile.\n");
 

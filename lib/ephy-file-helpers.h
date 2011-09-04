@@ -83,7 +83,8 @@ gboolean           ephy_file_launch_handler      (const char  *mime_type,
                                                   guint32      user_time);
 gboolean           ephy_file_browse_to           (GFile       *file,
                                                   guint32      user_time);
-void               ephy_file_delete_directory    (const char  *path);
+gboolean           ephy_file_delete_dir_recursively (GFile *file,
+                                                     GError      **error);
 void               ephy_file_delete_uri          (const char  *uri);
 void               ephy_file_load_accels (void);
 void               ephy_file_save_accels (void);
