@@ -1905,7 +1905,9 @@ load_status_cb (WebKitWebView *web_view,
 
     /* FIXME: It sucks to do this here, but it's not really possible
      * to hook the DOM actions nicely in the about: generator. */
-    if (g_str_equal (webkit_web_view_get_uri (web_view), "ephy-about:applications")) {
+    /* FIXME: it would be safer to validate this with SoupURI but
+     * 'host' is NULL for ephy-about:applications ... */
+    if (g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-about:applications")) {
       WebKitDOMDocument *document;
       WebKitDOMNodeList *buttons;
       gulong buttons_n;
