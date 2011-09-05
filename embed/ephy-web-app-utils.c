@@ -278,3 +278,66 @@ out:
   return desktop_file_path;
 }
 
+GList *
+ephy_web_application_get_application_list ()
+{
+  GFileEnumerator *children = NULL;
+  GFileInfo *info;
+  GList *applications = NULL;
+  GFile *dot_dir;
+
+  dot_dir = g_file_new_for_path (ephy_dot_dir ());
+  children = g_file_enumerate_children (dot_dir,
+                                        "standard::name",
+                                        0, NULL, NULL);
+  g_object_unref (dot_dir);
+
+  info = g_file_enumerator_next_file (children, NULL, NULL);
+  while (info) {
+    EphyWebApplication *app;
+    const char *name;
+    glong prefix_length = g_utf8_strlen (EPHY_WEB_APP_PREFIX, -1);
+
+    name = g_file_info_get_name (info);
+    if (g_str_has_prefix (name, EPHY_WEB_APP_PREFIX)) {
+      char *profile_dir;
+
+      app = g_slice_new0 (EphyWebApplication);
+      app->name = g_strdup (name + prefix_length);
+
+      profile_dir = ephy_web_application_get_profile_directory (app->name);
+      app->icon_url = g_build_filename (profile_dir, "app-icon.png", NULL);
+      g_free (profile_dir);
+
+      applications = g_list_append (applications, app);
+
+    }
+
+    g_object_unref (info);
+
+    info = g_file_enumerator_next_file (children, NULL, NULL);
+  }
+
+  g_object_unref (children);
+
+  return applications;
+}
+
+static void
+ephy_web_application_free (EphyWebApplication *app)
+{
+  g_free (app->name);
+  g_free (app->icon_url);
+  g_slice_free (EphyWebApplication, app);
+}
+
+void
+ephy_web_application_free_application_list (GList *list)
+{
+  GList *p;
+
+  for (p = list; p; p = p->next)
+    ephy_web_application_free ((EphyWebApplication*)p->data);
+
+  g_list_free (list);
+}

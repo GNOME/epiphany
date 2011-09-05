@@ -21,15 +21,16 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include "ephy-request-about.h"
+
+#include "ephy-file-helpers.h"
+#include "ephy-smaps.h"
+#include "ephy-web-app-utils.h"
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup-uri.h>
 #include <webkit/webkit.h>
-
-#include "ephy-file-helpers.h"
-#include "ephy-request-about.h"
-#include "ephy-smaps.h"
 
 G_DEFINE_TYPE (EphyRequestAbout, ephy_request_about, SOUP_TYPE_REQUEST)
 
@@ -160,6 +161,36 @@ ephy_request_about_send (SoupRequest          *request,
                      "<!-- Terre des Hommes, III: L'Avion, p. 60 -->" \
                      "Antoine de Saint-Exupéry" \
                      "</div></body>");
+  } else if (!g_strcmp0 (uri->path, "applications")) {
+    GList *applications, *p;
+
+    g_string_append_printf (data_str, "<head><title>%s</title>"   \
+                            "<style type=\"text/css\">%s</style></head>" \
+                            "<body>",
+                            _("Web Applications"),
+                            about->priv->css_style);
+
+    g_string_append_printf (data_str, "<form><table><thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead>",
+                            _("Icon"), _("Name"), _("Delete?"));
+
+    applications = ephy_web_application_get_application_list ();
+    for (p = applications; p; p = p->next) {
+      char *img_data = NULL, *img_data_base64 = NULL;
+      gsize data_length;
+      EphyWebApplication *app = (EphyWebApplication*)p->data;
+      
+      if (g_file_get_contents (app->icon_url, &img_data, &data_length, NULL))
+        img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
+      g_string_append_printf (data_str, "<tbody><tr><td><img width=64 height=64 src=\"data:image/png;base64,%s\">" \
+                              " </img></td><td>%s</td><td><input type=\"submit\" value=\"Delete\" id=\"%s\"></td></tr>",
+                              img_data_base64, app->name, app->name);
+      g_free (img_data_base64);
+      g_free (img_data);
+    }
+
+    g_string_append (data_str, "</form></table></body>");
+    
+    ephy_web_application_free_application_list (applications);
   }
 
   g_string_append (data_str, "</html>");

@@ -31,6 +31,11 @@
 
 G_BEGIN_DECLS
 
+typedef struct {
+    char *name;
+    char *icon_url;
+} EphyWebApplication;
+
 #define EPHY_WEB_APP_PREFIX "app-"
 
 char    *ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *icon);
@@ -38,6 +43,10 @@ char    *ephy_web_application_create (EphyWebView *view, const char *title, GdkP
 gboolean ephy_web_application_delete (const char *name);
 
 char    *ephy_web_application_get_profile_directory (const char *app_name);
+
+GList   *ephy_web_application_get_application_list (void);
+
+void     ephy_web_application_free_application_list (GList *list);
 
 G_END_DECLS
 

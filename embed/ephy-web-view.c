@@ -48,6 +48,7 @@
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
 
@@ -1787,6 +1788,22 @@ update_navigation_flags (EphyWebView *view)
   }
 }
 
+static gboolean
+delete_web_app_cb (WebKitDOMHTMLElement *button,
+                   WebKitDOMEvent *dom_event,
+                   EphyWebView *web_view)
+{
+  char *id = NULL;
+
+  id = webkit_dom_html_element_get_id (button);
+  if (id)
+    ephy_web_application_delete (id);
+
+  g_free (id);
+
+  return FALSE;
+}
+
 static void
 load_status_cb (WebKitWebView *web_view,
                 GParamSpec *pspec,
@@ -1885,6 +1902,29 @@ load_status_cb (WebKitWebView *web_view,
       _ephy_web_view_hook_into_forms (view);
 
     _ephy_web_view_hook_into_links (view);
+
+    /* FIXME: It sucks to do this here, but it's not really possible
+     * to hook the DOM actions nicely in the about: generator. */
+    if (g_str_equal (webkit_web_view_get_uri (web_view), "ephy-about:applications")) {
+      WebKitDOMDocument *document;
+      WebKitDOMNodeList *buttons;
+      gulong buttons_n;
+      int i;
+
+      document = webkit_web_view_get_dom_document (web_view);
+      buttons = webkit_dom_document_get_elements_by_tag_name (document, "input");
+      buttons_n = webkit_dom_node_list_get_length (buttons);
+
+      for (i = 0; i < buttons_n; i++) {
+        WebKitDOMNode *button;
+        
+        button = webkit_dom_node_list_item (buttons, i);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (button), "click",
+                                                    G_CALLBACK (delete_web_app_cb), false,
+                                                    NULL);
+      }
+    }
+
     break;
   case WEBKIT_LOAD_FAILED:
     ephy_web_view_set_link_message (view, NULL);
