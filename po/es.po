@@ -6,15 +6,16 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2004, 2005, 2006.
 # 
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011., 2011.
-# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011., 2011.
 # 
+# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011., 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-05 06:21+0000\n"
-"PO-Revision-Date: 2011-09-05 10:46Centra\n"
+"POT-Creation-Date: 2011-09-05 20:38+0000\n"
+"PO-Revision-Date: 2011-09-06 06:02+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -775,18 +776,68 @@ msgstr "Otros"
 msgid "Local files"
 msgstr "Archivos locales"
 
+#: ../embed/ephy-request-about.c:98 ../embed/ephy-request-about.c:101
+msgid "Installed plugins"
+msgstr "Complementos instalados"
+
+#: ../embed/ephy-request-about.c:113
+msgid "Enabled"
+msgstr "Activado"
+
+#: ../embed/ephy-request-about.c:113
+msgid "Yes"
+msgstr "Sí"
+
+#: ../embed/ephy-request-about.c:113
+msgid "No"
+msgstr "No"
+
+#: ../embed/ephy-request-about.c:114
+msgid "MIME type"
+msgstr "Tipo MIME"
+
+#: ../embed/ephy-request-about.c:114
+msgid "Description"
+msgstr "Descripción"
+
+#: ../embed/ephy-request-about.c:114
+msgid "Suffixes"
+msgstr "Sufijos"
+
+#: ../embed/ephy-request-about.c:143
+msgid "Memory usage"
+msgstr "Uso de la memoria"
+
+#: ../embed/ephy-request-about.c:170
+#| msgid "Create Web Application"
+msgid "Web Applications"
+msgstr "Aplicaciones web"
+
+#: ../embed/ephy-request-about.c:174
+msgid "Icon"
+msgstr "Icono"
+
+#: ../embed/ephy-request-about.c:174 ../src/pdm-dialog.c:842
+msgid "Name"
+msgstr "Nombre"
+
+#: ../embed/ephy-request-about.c:174
+#| msgid "_Delete"
+msgid "Delete?"
+msgstr "¿Eliminar?"
+
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:69 ../embed/ephy-web-view.c:3403
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3443
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: ../embed/ephy-web-view.c:752
+#: ../embed/ephy-web-view.c:753
 msgid "Not now"
 msgstr "Ahora no"
 
-#: ../embed/ephy-web-view.c:757
+#: ../embed/ephy-web-view.c:758
 msgid "Store password"
 msgstr "Almacenar contraseña"
 
@@ -794,7 +845,7 @@ msgstr "Almacenar contraseña"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:768
+#: ../embed/ephy-web-view.c:769
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
@@ -802,34 +853,34 @@ msgstr ""
 "<big>¿Quiere almacenar la contraseña para <b>%s</b> en <b>%s</b>?</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1727
+#: ../embed/ephy-web-view.c:1728
 msgid "Deny"
 msgstr "Denegar"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1733
+#: ../embed/ephy-web-view.c:1734
 msgid "Allow"
 msgstr "Permitir"
 
-#: ../embed/ephy-web-view.c:1740
+#: ../embed/ephy-web-view.c:1741
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "La página <b>%s</b> quiere saber su ubicación."
 
-#: ../embed/ephy-web-view.c:1974
+#: ../embed/ephy-web-view.c:2014
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
-#: ../embed/ephy-web-view.c:1983 ../embed/ephy-web-view.c:2001
+#: ../embed/ephy-web-view.c:2023 ../embed/ephy-web-view.c:2041
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Error al cargar %s"
 
-#: ../embed/ephy-web-view.c:1985
+#: ../embed/ephy-web-view.c:2025
 msgid "Oops! It was not possible to show this website"
 msgstr "Fue imposible cargar esta página web"
 
-#: ../embed/ephy-web-view.c:1986
+#: ../embed/ephy-web-view.c:2026
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -842,15 +893,15 @@ msgstr ""
 "necesite comprobar su conexión a Internet o si la página web en <strong>%s</"
 "strong> funciona correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:1995
+#: ../embed/ephy-web-view.c:2035
 msgid "Try again"
 msgstr "Intentarlo de nuevo"
 
-#: ../embed/ephy-web-view.c:2003
+#: ../embed/ephy-web-view.c:2043
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "El sitio puede haber causado que Epiphany se cerrase inesperadamente"
 
-#: ../embed/ephy-web-view.c:2005
+#: ../embed/ephy-web-view.c:2045
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -862,33 +913,33 @@ msgstr ""
 "sucede, informe del problema a los desarrolladores de <strong>%s</strong>.</"
 "p>"
 
-#: ../embed/ephy-web-view.c:2013
+#: ../embed/ephy-web-view.c:2053
 msgid "Load again anyway"
 msgstr "Intentarlo de nuevo de todas formas"
 
-#: ../embed/ephy-web-view.c:2288
+#: ../embed/ephy-web-view.c:2328
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2478
+#: ../embed/ephy-web-view.c:2518
 msgid "Plugins"
 msgstr "Complementos"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2585
+#: ../embed/ephy-web-view.c:2625
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2587
+#: ../embed/ephy-web-view.c:2627
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3607
+#: ../embed/ephy-web-view.c:3647
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
@@ -929,34 +980,6 @@ msgstr ""
 msgid "Not a launchable item"
 msgstr "No es un elemento lanzable"
 
-#: ../lib/egg/eggsmclient.c:225
-msgid "Disable connection to session manager"
-msgstr "Desactivar la conexión con el gestor de sesiones"
-
-#: ../lib/egg/eggsmclient.c:228
-msgid "Specify file containing saved configuration"
-msgstr "Especificar el archivo que contiene la configuración guardada"
-
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
-msgid "FILE"
-msgstr "ARCHIVO"
-
-#: ../lib/egg/eggsmclient.c:231
-msgid "Specify session management ID"
-msgstr "Especifique el ID de gestión de la sesión"
-
-#: ../lib/egg/eggsmclient.c:231
-msgid "ID"
-msgstr "ID"
-
-#: ../lib/egg/eggsmclient.c:252
-msgid "Session management options:"
-msgstr "Opciones de gestión de la sesión:"
-
-#: ../lib/egg/eggsmclient.c:253
-msgid "Show session management options"
-msgstr "Mostrar las opciones de gestión de la sesión"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -992,6 +1015,34 @@ msgstr "_Borrar barra de herramientas"
 #: ../lib/egg/egg-editable-toolbar.c:1486
 msgid "Remove the selected toolbar"
 msgstr "Quita la barra de herramientas seleccionada"
+
+#: ../lib/egg/eggsmclient.c:225
+msgid "Disable connection to session manager"
+msgstr "Desactivar la conexión con el gestor de sesiones"
+
+#: ../lib/egg/eggsmclient.c:228
+msgid "Specify file containing saved configuration"
+msgstr "Especificar el archivo que contiene la configuración guardada"
+
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
+msgid "FILE"
+msgstr "ARCHIVO"
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "Specify session management ID"
+msgstr "Especifique el ID de gestión de la sesión"
+
+#: ../lib/egg/eggsmclient.c:231
+msgid "ID"
+msgstr "ID"
+
+#: ../lib/egg/eggsmclient.c:252
+msgid "Session management options:"
+msgstr "Opciones de gestión de la sesión:"
+
+#: ../lib/egg/eggsmclient.c:253
+msgid "Show session management options"
+msgstr "Mostrar las opciones de gestión de la sesión"
 
 #: ../lib/egg/egg-toolbar-editor.c:489
 msgid "Separator"
@@ -1084,38 +1135,6 @@ msgstr ""
 #: ../lib/ephy-profile-migrator.c:80
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falló al copiar el archivo de «cookies» de Mozilla."
-
-#: ../lib/ephy-request-about.c:97 ../lib/ephy-request-about.c:100
-msgid "Installed plugins"
-msgstr "Complementos instalados"
-
-#: ../lib/ephy-request-about.c:112
-msgid "Enabled"
-msgstr "Activado"
-
-#: ../lib/ephy-request-about.c:112
-msgid "Yes"
-msgstr "Sí"
-
-#: ../lib/ephy-request-about.c:112
-msgid "No"
-msgstr "No"
-
-#: ../lib/ephy-request-about.c:113
-msgid "MIME type"
-msgstr "Tipo MIME"
-
-#: ../lib/ephy-request-about.c:113
-msgid "Description"
-msgstr "Descripción"
-
-#: ../lib/ephy-request-about.c:113
-msgid "Suffixes"
-msgstr "Sufijos"
-
-#: ../lib/ephy-request-about.c:142
-msgid "Memory usage"
-msgstr "Uso de la memoria"
 
 #: ../lib/ephy-stock-icons.c:47
 msgid "Popup Windows"
@@ -1256,7 +1275,7 @@ msgstr "Terminado"
 msgid "Error downloading: %s"
 msgstr "Error al descargar: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:279
+#: ../lib/widgets/ephy-download-widget.c:279 ../src/window-commands.c:534
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1944,7 +1963,7 @@ msgstr "Sitios"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1290
+#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1346
 msgid "GNOME Web Browser"
 msgstr "Navegador web de GNOME"
 
@@ -2843,10 +2862,6 @@ msgstr "Fin de la sesión actual"
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:842
-msgid "Name"
-msgstr "Nombre"
-
 #: ../src/pdm-dialog.c:1256
 msgid "Host"
 msgstr "Host"
@@ -2905,37 +2920,63 @@ msgstr "Seleccione un directorio"
 msgid "Save"
 msgstr "Guardar"
 
-#. Show dialog with icon, title.
-#: ../src/window-commands.c:538
-msgid "Create Web Application"
-msgstr "Crear una aplicación web"
+#: ../src/window-commands.c:531
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: ../src/window-commands.c:543
-msgid "Create"
-msgstr "Crear"
+#: ../src/window-commands.c:536
+#| msgid "Related"
+msgid "Replace"
+msgstr "Reemplazar"
 
-#: ../src/window-commands.c:586
+#: ../src/window-commands.c:540
+#| msgid ""
+#| "A file with this name already exists and you don't have permission to "
+#| "overwrite it."
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"Ya existe una aplicación con el mismo nombre. Reemplazarla la sobreescribirá."
+
+#: ../src/window-commands.c:580
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: ../src/window-commands.c:592
+#: ../src/window-commands.c:583
+#, c-format
+#| msgid "The application '%s' is ready to be used"
+msgid "The application '%s' could not be created"
+msgstr "No se pudo crear la aplicación «%s»"
+
+#: ../src/window-commands.c:591
 msgid "Launch"
 msgstr "Lanzar"
 
-#: ../src/window-commands.c:1190
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:624
+msgid "Create Web Application"
+msgstr "Crear una aplicación web"
+
+#: ../src/window-commands.c:629
+msgid "Create"
+msgstr "Crear"
+
+#: ../src/window-commands.c:1246
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 msgstr ""
-"El navegador web de GNOME es software libre, puede redistribuirlo y/o "
+"El Navegador web de GNOME es software libre, puede redistribuirlo y/o "
 "modificarlo bajo los términos de la Licencia Pública General GNU tal como se "
 "publica por la Free Software Foundation; ya sea en la versión 2 de la "
 "Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/window-commands.c:1194
+#: ../src/window-commands.c:1250
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2947,7 +2988,7 @@ msgstr ""
 "MERCANTILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la Licencia "
 "Pública General de GNU para más detalles."
 
-#: ../src/window-commands.c:1198
+#: ../src/window-commands.c:1254
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2957,20 +2998,20 @@ msgstr ""
 "con el Navegador web de GNOME; si no, escriba a la Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:1244 ../src/window-commands.c:1260
-#: ../src/window-commands.c:1271
+#: ../src/window-commands.c:1300 ../src/window-commands.c:1316
+#: ../src/window-commands.c:1327
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:1247
+#: ../src/window-commands.c:1303
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:1250
+#: ../src/window-commands.c:1306
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:1280
+#: ../src/window-commands.c:1336
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -2987,21 +3028,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1306
+#: ../src/window-commands.c:1362
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:1309
+#: ../src/window-commands.c:1365
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web del navegador de GNOME"
 
-#: ../src/window-commands.c:1453
+#: ../src/window-commands.c:1509
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1456
+#: ../src/window-commands.c:1512
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3012,7 +3053,7 @@ msgstr ""
 "permitiéndole moverse con su teclado. ¿Quiere activar el modo de navegación "
 "con cursor?"
 
-#: ../src/window-commands.c:1459
+#: ../src/window-commands.c:1515
 msgid "_Enable"
 msgstr "_Activar"
 
@@ -3245,41 +3286,41 @@ msgstr "_Activar"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 #~ msgstr ""
 #~ "Codificación predeterminada. Los valores aceptados son : \"armscii-8\", "
-#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312"
-#~ "\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
-#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
-#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3"
-#~ "\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-"
-#~ "8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11"
-#~ "\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
-#~ "\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-"
-#~ "7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-"
-#~ "1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-"
-#~ "1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw"
-#~ "\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-"
-#~ "croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", "
-#~ "\"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew"
-#~ "\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-"
-#~ "turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", "
-#~ "\"x-viet-vps\" y \"x-windows-949\"."
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
+#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
+#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
+#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
+#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
+#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
+#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
+#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
+#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
+#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
+#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
+#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
+#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
+#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" y \"x-windows-949\"."
 
 #~ msgid "Enable JavaScript"
 #~ msgstr "Activar JavaScript"
@@ -3325,7 +3366,8 @@ msgstr "_Activar"
 #~ "\"separately\" and \"selected\"."
 #~ msgstr ""
 #~ "Cómo se imprimen las páginas que contienen marcos. Los valores posibles "
-#~ "son \"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
+#~ "son \"normal\", «separately» (por separado) y \"selected"
+#~ "\" (seleccionados)."
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
@@ -3439,7 +3481,8 @@ msgstr "_Activar"
 #~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 #~ msgstr ""
 #~ "La información de la página mostrada en la vista del histórico. Los "
-#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
+#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y "
+#~ "«VerFechaHora»."
 
 #~ msgid ""
 #~ "The path of the folder where to download files to; or \"Downloads\" to "
@@ -3459,8 +3502,8 @@ msgstr "_Activar"
 #~ "\"text\"."
 #~ msgstr ""
 #~ "Estilo de la barra de herramientas. Los valores permitidos son «(usar "
-#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-horiz» (texto "
-#~ "junto a los iconos), «icons», y «text»."
+#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-"
+#~ "horiz» (texto junto a los iconos), «icons», y «text»."
 
 #~ msgid "URL Search"
 #~ msgstr "Búsqueda de URL"
