@@ -34,6 +34,8 @@ G_BEGIN_DECLS
 typedef struct {
     char *name;
     char *icon_url;
+    char *url;
+    char install_date[128];
 } EphyWebApplication;
 
 #define EPHY_WEB_APP_PREFIX "app-"

@@ -78,3 +78,43 @@
     border-top: 1px solidtransparent;
 }
 
+/* about:applications */
+
+.applications-body { 
+	font: 11pt cantarell;
+	color: #2e3436;
+	padding: 20px 20px 0 20px;
+	background-color: #f6f6f4;
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0, #eeeeec),
+		color-stop(1, #f6f6f4)
+	);
+	background-size: 100% 5em;
+	background-repeat: no-repeat;
+}
+
+.applications-body table { width: 100%; border-collapse: collapse; }
+
+.applications-body table, td { 
+	border: 1px solid #d3d7cf;
+	border-left: none; border-right: none;
+}
+
+.applications-body h1 { 
+	color: #babdb6;
+	text-shadow: 0 1px 0 white;
+	margin-bottom: 0;
+}
+
+.applications-body p { margin-bottom: 30px; }
+.applications-body td { padding: 15px 15px;}
+.applications-body td.icon { width: 64px; }
+.applications-body td.datas { width: 200px; }
+.applications-body td.input { width: 64px; }
+.applications-body td.date { width: auto; text-align: right; font-style: italic; font-size: small; }
+.applications-body .appname { font-weight: bold; }
+.applications-body .appurl, td.date { color: #babdb6; }
+.applications-body input { width: 100%; padding: 8px; }

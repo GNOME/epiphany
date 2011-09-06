@@ -166,12 +166,15 @@ ephy_request_about_send (SoupRequest          *request,
 
     g_string_append_printf (data_str, "<head><title>%s</title>"   \
                             "<style type=\"text/css\">%s</style></head>" \
-                            "<body>",
-                            _("Web Applications"),
-                            about->priv->css_style);
+                            "<body class=\"applications-body\"><h1>%s</h1>" \
+                            "<p>%s</p>",
+                            _("Applications"),
+                            about->priv->css_style,
+                            _("Applications"),
+                            _("List of installed web applications"));
 
-    g_string_append_printf (data_str, "<form><table><thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead>",
-                            _("Icon"), _("Name"), _("Delete?"));
+
+    g_string_append (data_str, "<form><table>");
 
     applications = ephy_web_application_get_application_list ();
     for (p = applications; p; p = p->next) {
@@ -181,9 +184,9 @@ ephy_request_about_send (SoupRequest          *request,
       
       if (g_file_get_contents (app->icon_url, &img_data, &data_length, NULL))
         img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
-      g_string_append_printf (data_str, "<tbody><tr><td><img width=64 height=64 src=\"data:image/png;base64,%s\">" \
-                              " </img></td><td>%s</td><td><input type=\"submit\" value=\"Delete\" id=\"%s\"></td></tr>",
-                              img_data_base64, app->name, app->name);
+      g_string_append_printf (data_str, "<tbody><tr><td class=\"icon\"><img width=64 height=64 src=\"data:image/png;base64,%s\">" \
+                              " </img></td><td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td><td class=\"input\"><input type=\"submit\" value=\"Delete\" id=\"%s\"></td><td class=\"date\">%s <br /> %s</td></tr>",
+                              img_data_base64, app->name, app->url, app->name, _("Installed on:"), app->install_date);
       g_free (img_data_base64);
       g_free (img_data);
     }
