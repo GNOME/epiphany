@@ -2077,8 +2077,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
 
   g_string_printf (html, template,
                    lang, lang,
-                   page_title,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
+                   page_title,
                    uri,
                    image_data,
                    msg_title, msg, button_label);
