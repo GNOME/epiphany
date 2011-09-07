@@ -2028,7 +2028,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       msg = g_strdup_printf (_("<p>The website at <strong>%s</strong> seems "
                                "to be unavailable. The precise error was:</p>"
                                "<p><em>%s</em></p>"
-                               "<p>The website at <strong>%s</strong> could be "
+                               "<p>It could be "
                                "temporarily switched off or moved to a new "
                                "address. Don't forget to check that your "
                                "internet connection is working correctly.</p>"),
