@@ -2032,7 +2032,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "temporarily switched off or moved to a new "
                                "address. Don't forget to check that your "
                                "internet connection is working correctly.</p>"),
-                             uri, reason, hostname);
+                             uri, reason);
 
       button_label = g_strdup (_("Try again"));
 
