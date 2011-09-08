@@ -3750,6 +3750,14 @@ ephy_window_init (EphyWindow *window)
 			 window);
 }
 
+static const char* disabled_actions_for_app_mode[] = { "FileOpen",
+                                                       "FileSaveAs",
+                                                       "FileSaveAsApplication",
+                                                       "ViewMenuBar",
+                                                       "ViewEncoding",
+                                                       "FileBookmarkPage",
+                                                       "GoBookmarks" };
+
 static GObject *
 ephy_window_constructor (GType type,
 			 guint n_construct_properties,
@@ -3768,6 +3776,8 @@ ephy_window_constructor (GType type,
 	guint settings_connection;
 	GtkCssProvider *css_provider;
 	GFile *css_file;
+	int i;
+	EphyEmbedShellMode mode;
 
 	object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
 		(type, n_construct_properties, construct_params);
@@ -3927,14 +3937,37 @@ ephy_window_constructor (GType type,
 	g_signal_connect (single, "notify::network-status",
 			  G_CALLBACK (sync_network_status), window);
 
-	/* Popup part */
+	/* Disable actions not needed for popup mode. */
 	toolbar_action_group = ephy_toolbar_get_action_group (priv->toolbar);
 	action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+					      priv->is_popup);
 
 	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+					      priv->is_popup);
 
+	/* Disabled actions not needed for application mode. */
+	mode = ephy_embed_shell_get_mode (embed_shell);
+	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	{
+		/* FileNewTab and FileNewWindow are sort of special. */
+		action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+						      TRUE);
+
+		action = gtk_action_group_get_action (toolbar_action_group, "FileNewWindow");
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+						      TRUE);
+		
+		for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++)
+		{
+			action = gtk_action_group_get_action (priv->action_group,
+							      disabled_actions_for_app_mode[i]);
+			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
+		}
+	}
+		
 	/* Connect lock clicks */
 	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
 	g_signal_connect_swapped (priv->toolbar, "lock-clicked",
