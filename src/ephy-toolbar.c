@@ -331,10 +331,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			       "stock_id", STOCK_NEW_TAB,
 			       "tooltip", _("Open a new tab"),
 			       NULL);
-
-        if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION)
-            g_signal_connect_swapped (action, "open-link",
-                                      G_CALLBACK (ephy_link_open), toolbar);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, "<control>T");
 
@@ -346,9 +344,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			       "stock_id", STOCK_NEW_WINDOW,
 			       "tooltip", _("Open a new window"),
 			       NULL);
-        if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION)
-            g_signal_connect_swapped (action, "open-link",
-                                      G_CALLBACK (ephy_link_open), toolbar);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, "<control>N");
 
