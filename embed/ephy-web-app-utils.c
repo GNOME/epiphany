@@ -52,6 +52,27 @@ get_wm_class_from_app_title (const char *title)
   return wm_class;
 }
 
+/* Gets the proper .desktop filename from a WM_CLASS string,
+   converting to the local charset when needed. */
+static char *
+desktop_filename_from_wm_class (char *wm_class)
+{
+  char *encoded;
+  char *filename = NULL;
+  GError *error = NULL;
+
+  encoded = g_filename_from_utf8 (wm_class, -1, NULL, NULL, &error);
+  if (error) {
+    g_warning ("%s", error->message);
+    g_error_free (error);
+    return NULL;
+  }
+  filename = g_strconcat (encoded, ".desktop", NULL);
+  g_free (encoded);
+
+  return filename;
+}
+
 /**
  * ephy_web_application_get_profile_directory:
  * @app_name: the application name
@@ -64,12 +85,22 @@ get_wm_class_from_app_title (const char *title)
 char *
 ephy_web_application_get_profile_directory (const char *app_name)
 {
-  char *app_dir, *wm_class, *profile_dir;
+  char *app_dir, *wm_class, *profile_dir, *encoded;
+  GError *error = NULL;
 
   wm_class = get_wm_class_from_app_title (app_name);
-  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, wm_class, NULL);
-  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  encoded = g_filename_from_utf8 (wm_class, -1, NULL, NULL, &error);
   g_free (wm_class);
+
+  if (error) {
+    g_warning ("%s", error->message);
+    g_error_free (error);
+    return NULL;
+  }
+
+  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, encoded, NULL);
+  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  g_free (encoded);
   g_free (app_dir);
 
   return profile_dir;
@@ -96,6 +127,9 @@ ephy_web_application_delete (const char *name)
   g_return_val_if_fail (name, FALSE);
 
   profile_dir = ephy_web_application_get_profile_directory (name);
+  if (!profile_dir)
+    goto out;
+
   /* If there's no profile dir for this app, it means it does not
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
@@ -109,8 +143,10 @@ ephy_web_application_delete (const char *name)
   g_print ("Deleted application profile.\n");
 
   wm_class = get_wm_class_from_app_title (name);
-  desktop_file = g_strconcat (wm_class, ".desktop", NULL);
+  desktop_file = desktop_filename_from_wm_class (wm_class);
   g_free (wm_class);
+  if (!desktop_file)
+    goto out;
   desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
   launcher = g_file_new_for_path (desktop_path);
   if (!g_file_delete (launcher, NULL, NULL))
@@ -154,13 +190,19 @@ create_desktop_file (EphyWebView *view,
   GKeyFile *file;
   char *exec_string;
   char *data;
-  char *filename, *apps_path, *desktop_file_path;
+  char *filename, *apps_path, *desktop_file_path = NULL;
   char *link_path;
   char *wm_class;
   GFile *link;
   GError *error = NULL;
 
   g_return_val_if_fail (profile_dir, NULL);
+
+  wm_class = get_wm_class_from_app_title (title);
+  filename = desktop_filename_from_wm_class (wm_class);
+
+  if (!filename)
+    goto out;
 
   file = g_key_file_new ();
   g_key_file_set_value (file, "Desktop Entry", "Name", title);
@@ -190,21 +232,15 @@ create_desktop_file (EphyWebView *view,
     g_free (path);
   }
 
-  wm_class = get_wm_class_from_app_title (title);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
-
   data = g_key_file_to_data (file, NULL, NULL);
-  filename = g_strconcat (wm_class, ".desktop", NULL);
-  g_free (wm_class);
+
   desktop_file_path = g_build_filename (profile_dir, filename, NULL);
-  g_key_file_free (file);
 
   if (!g_file_set_contents (desktop_file_path, data, -1, NULL)) {
     g_free (desktop_file_path);
     desktop_file_path = NULL;
   }
-
-  g_free (data);
 
   /* Create a symlink in XDG_DATA_DIR/applications for the Shell to
    * pick up this application. */
@@ -221,6 +257,11 @@ create_desktop_file (EphyWebView *view,
   }
   g_free (apps_path);
   g_free (filename);
+
+out:
+  g_free (wm_class);
+  g_free (data);
+  g_key_file_free (file);
 
   return desktop_file_path;
 }
