@@ -42,6 +42,7 @@ get_wm_class_from_app_title (const char *title)
 
   normal_title = g_utf8_strdown (title, -1);
   g_strdelimit (normal_title, " ", '-');
+  g_strdelimit (normal_title, G_DIR_SEPARATOR_S, '-');
   checksum = g_compute_checksum_for_string (G_CHECKSUM_SHA1, title, -1);
   wm_class = g_strconcat (EPHY_WEB_APP_DESKTOP_FILE_PREFIX, normal_title, "-", checksum, NULL);
 
