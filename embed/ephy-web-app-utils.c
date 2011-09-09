@@ -29,6 +29,28 @@
 #include <glib/gstdio.h>
 #include <libsoup/soup-gnome.h>
 
+#define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
+
+/* This is necessary because of gnome-shell's guessing of a .desktop
+   filename from WM_CLASS property. */
+static char *
+get_wm_class_from_app_title (const char *title)
+{
+  char *normal_title;
+  char *wm_class;
+  char *checksum;
+
+  normal_title = g_utf8_strdown (title, -1);
+  g_strdelimit (normal_title, " ", '-');
+  checksum = g_compute_checksum_for_string (G_CHECKSUM_SHA1, title, -1);
+  wm_class = g_strconcat (EPHY_WEB_APP_DESKTOP_FILE_PREFIX, normal_title, "-", checksum, NULL);
+
+  g_free (checksum);
+  g_free (normal_title);
+
+  return wm_class;
+}
+
 /**
  * ephy_web_application_get_directory:
  * @app_name: the application name
@@ -41,10 +63,12 @@
 char *
 ephy_web_application_get_profile_directory (const char *app_name)
 {
-  char *app_dir, *profile_dir;
+  char *app_dir, *wm_class, *profile_dir;
 
-  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, app_name, NULL);
+  wm_class = get_wm_class_from_app_title (app_name);
+  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, wm_class, NULL);
   profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  g_free (wm_class);
   g_free (app_dir);
 
   return profile_dir;
@@ -64,6 +88,7 @@ ephy_web_application_delete (const char *name)
 {
   char *profile_dir = NULL;
   char *desktop_file = NULL, *desktop_path = NULL;
+  char *wm_class;
   GFile *profile = NULL, *launcher = NULL;
   gboolean return_value = FALSE;
 
@@ -82,7 +107,9 @@ ephy_web_application_delete (const char *name)
     goto out;
   g_print ("Deleted application profile.\n");
 
-  desktop_file = g_strconcat (name, ".desktop", NULL);
+  wm_class = get_wm_class_from_app_title (name);
+  desktop_file = g_strconcat (wm_class, ".desktop", NULL);
+  g_free (wm_class);
   desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
   launcher = g_file_new_for_path (desktop_path);
   if (!g_file_delete (launcher, NULL, NULL))
@@ -128,6 +155,7 @@ create_desktop_file (EphyWebView *view,
   char *data;
   char *filename, *desktop_file_path;
   char *link_path;
+  char *wm_class;
   GFile *link;
 
   g_return_val_if_fail (profile_dir, NULL);
@@ -160,10 +188,12 @@ create_desktop_file (EphyWebView *view,
     g_free (path);
   }
 
-  g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", title);
+  wm_class = get_wm_class_from_app_title (title);
+  g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
 
   data = g_key_file_to_data (file, NULL, NULL);
-  filename = g_strconcat (title, ".desktop", NULL);
+  filename = g_strconcat (wm_class, ".desktop", NULL);
+  g_free (wm_class);
   desktop_file_path = g_build_filename (profile_dir, filename, NULL);
   g_key_file_free (file);
 
@@ -308,12 +338,11 @@ ephy_web_application_get_application_list ()
       GFileInfo *desktop_info;
 
       app = g_slice_new0 (EphyWebApplication);
-      app->name = g_strdup (name + prefix_length);
 
-      profile_dir = ephy_web_application_get_profile_directory (app->name);
+      profile_dir = g_build_filename (ephy_dot_dir (), name, NULL);
       app->icon_url = g_build_filename (profile_dir, "app-icon.png", NULL);
 
-      desktop_file = g_strconcat (app->name, ".desktop", NULL);
+      desktop_file = g_strconcat (name + prefix_length, ".desktop", NULL);
       desktop_file_path = g_build_filename (profile_dir, desktop_file, NULL);
       if (g_file_get_contents (desktop_file_path, &contents, NULL, NULL)) {
         char *exec;
@@ -323,6 +352,7 @@ ephy_web_application_get_application_list ()
 
         key = g_key_file_new ();
         g_key_file_load_from_data (key, contents, -1, 0, NULL);
+        app->name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
         exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
         strings = g_strsplit (exec, " ", -1);
 
