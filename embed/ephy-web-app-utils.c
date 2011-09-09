@@ -242,8 +242,7 @@ ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *ic
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
   /* If there's already a WebApp profile for the contents of this
-   * view, do nothing. TODO: create a method to check this and use it
-   * to ask the user if she wants to overwrite the existing WebApp. */
+   * view, do nothing. */
   profile_dir = ephy_web_application_get_profile_directory (title);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR))
     goto out;
