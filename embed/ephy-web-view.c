@@ -1908,7 +1908,8 @@ load_status_cb (WebKitWebView *web_view,
     /* FIXME: It sucks to do this here, but it's not really possible
      * to hook the DOM actions nicely in the about: generator. */
     uri = soup_uri_new (webkit_web_view_get_uri (web_view));
-    if (!g_strcmp0 (uri->scheme, "ephy-about") &&
+    if (uri &&
+        !g_strcmp0 (uri->scheme, "ephy-about") &&
         !g_strcmp0 (uri->path, "applications")) {
       WebKitDOMDocument *document;
       WebKitDOMNodeList *buttons;
@@ -1928,7 +1929,8 @@ load_status_cb (WebKitWebView *web_view,
                                                     NULL);
       }
 
-      soup_uri_free (uri);
+      if (uri)
+        soup_uri_free (uri);
     }
 
     break;
