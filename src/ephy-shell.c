@@ -134,11 +134,12 @@ queue_commands (EphyShell *shell)
 
   ctx = shell->priv->startup_context;
 
-  /* We only get here when starting a new instance, so we first need
-     to autoresume! */
-  ephy_session_queue_command (session,
-                              EPHY_SESSION_CMD_RESUME_SESSION,
-                              NULL, NULL, ctx->user_time, TRUE);
+  /* We only get here when starting a new instance, so autoresume the
+   * session unless we are in application mode. */
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION)
+    ephy_session_queue_command (session,
+                                EPHY_SESSION_CMD_RESUME_SESSION,
+                                NULL, NULL, ctx->user_time, TRUE);
 
   if (ctx->startup_flags & EPHY_STARTUP_BOOKMARKS_EDITOR)
     ephy_session_queue_command (session,
