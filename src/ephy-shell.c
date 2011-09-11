@@ -43,7 +43,6 @@
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
-#include "ephy-stock-icons.h"
 #include "ephy-toolbar.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-type-builtins.h"
@@ -52,11 +51,8 @@
 #include "pdm-dialog.h"
 #include "prefs-dialog.h"
 
-#include <dirent.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
-#include <unistd.h>
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
