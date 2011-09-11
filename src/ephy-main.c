@@ -22,28 +22,23 @@
 
 #include "config.h"
 
+#include "eggsmclient.h"
+#include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-file-helpers.h"
 #include "ephy-state.h"
-#include "ephy-debug.h"
 #include "ephy-stock-icons.h"
-#include "ephy-session.h"
-#include "ephy-shell.h"
-#include "ephy-web-app-utils.h"
-#include "ephy-debug.h"
 #include "ephy-string.h"
-#include "eggsmclient.h"
-
-#include <libxml/xmlversion.h>
-#include <libnotify/notify.h>
-
-#include <glib/gi18n.h>
-
-#include <gdk/gdkx.h>
-#include <gtk/gtk.h>
+#include "ephy-web-app-utils.h"
 
 #include <errno.h>
+#include <gdk/gdkx.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libnotify/notify.h>
+#include <libxml/xmlversion.h>
 #include <string.h>
 
 #ifdef ENABLE_INTROSPECTION
