@@ -3231,23 +3231,6 @@ ephy_web_view_go_up (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_js_status:
- * @view: an #EphyWebView
- *
- * Displays the message JavaScript is attempting to display in the statusbar.
- *
- * Note that Epiphany does not display JavaScript statusbar messages.
- *
- * Return value: a message from JavaScript meant to be displayed in the
- *     statusbar
- **/
-char *
-ephy_web_view_get_js_status (EphyWebView *view)
-{
-  return NULL;
-}
-
-/**
  * ephy_web_view_get_security_level:
  * @view: an #EphyWebView
  * @level: (out): return value of security level

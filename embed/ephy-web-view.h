@@ -160,7 +160,6 @@ gboolean                   ephy_web_view_has_modified_forms       (EphyWebView  
 char *                     ephy_web_view_get_location             (EphyWebView               *view,
                                                                    gboolean                   toplevel);
 void                       ephy_web_view_go_up                    (EphyWebView               *view);
-char *                     ephy_web_view_get_js_status            (EphyWebView               *view);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    char                     **description);
