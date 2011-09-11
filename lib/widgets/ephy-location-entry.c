@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include "ephy-tree-model-node.h"
 #include "ephy-location-entry.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-dnd.h"
