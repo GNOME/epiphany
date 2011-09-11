@@ -21,36 +21,36 @@
  */
 
 #include "config.h"
-
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <webkit/webkit.h>
-#include <gnome-keyring.h>
-#include <libsoup/soup-gnome.h>
+#include "ephy-web-view.h"
 
 #include "ephy-debug.h"
-#include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
-#include "ephy-file-helpers.h"
-#include "ephy-prefs.h"
-#include "ephy-permission-manager.h"
-#include "ephy-profile-utils.h"
+#include "ephy-embed.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-file-helpers.h"
 #include "ephy-history.h"
+#include "ephy-permission-manager.h"
+#include "ephy-prefs.h"
+#include "ephy-profile-utils.h"
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-web-view.h"
 #include "ephy-zoom.h"
+
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gnome-keyring.h>
+#include <gtk/gtk.h>
+#include <libsoup/soup-gnome.h>
+#include <string.h>
+#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-web-view
