@@ -1887,7 +1887,9 @@ load_status_cb (WebKitWebView *web_view,
       ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
     }
     break;
-  case WEBKIT_LOAD_FINISHED:
+  case WEBKIT_LOAD_FINISHED: {
+    SoupURI *uri;
+
     g_free (priv->status_message);
     priv->status_message = NULL;
     g_object_notify (object, "status-message");
@@ -1905,9 +1907,9 @@ load_status_cb (WebKitWebView *web_view,
 
     /* FIXME: It sucks to do this here, but it's not really possible
      * to hook the DOM actions nicely in the about: generator. */
-    /* FIXME: it would be safer to validate this with SoupURI but
-     * 'host' is NULL for ephy-about:applications ... */
-    if (g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-about:applications")) {
+    uri = soup_uri_new (webkit_web_view_get_uri (web_view));
+    if (!g_strcmp0 (uri->scheme, "ephy-about") &&
+        !g_strcmp0 (uri->path, "applications")) {
       WebKitDOMDocument *document;
       WebKitDOMNodeList *buttons;
       gulong buttons_n;
@@ -1925,9 +1927,12 @@ load_status_cb (WebKitWebView *web_view,
                                                     G_CALLBACK (delete_web_app_cb), false,
                                                     NULL);
       }
+
+      soup_uri_free (uri);
     }
 
     break;
+  }
   case WEBKIT_LOAD_FAILED:
     ephy_web_view_set_link_message (view, NULL);
     ephy_web_view_set_loading_title (view, NULL, FALSE);
