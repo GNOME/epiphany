@@ -21,45 +21,42 @@
  */
 
 #include "config.h"
-
-#include <string.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <dirent.h>
-#include <unistd.h>
-
 #include "ephy-shell.h"
-#include "ephy-type-builtins.h"
+
+#include "egg-toolbars-model.h"
+#include "ephy-bookmarks-editor.h"
+#include "ephy-bookmarks-import.h"
+#include "ephy-bookmarks-ui.h"
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
-#include "ephy-prefs.h"
-#include "ephy-file-helpers.h"
+#include "ephy-extensions-manager.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-web-view.h"
-#include "ephy-embed-utils.h"
-#include "ephy-window.h"
-#include "ephy-bookmarks-ui.h"
-#include "ephy-bookmarks-import.h"
-#include "ephy-bookmarks-editor.h"
+#include "ephy-file-helpers.h"
+#include "ephy-gui.h"
 #include "ephy-history-window.h"
+#include "ephy-lockdown.h"
+#include "ephy-network-manager-defines.h"
+#include "ephy-network-manager.h"
+#include "ephy-prefs.h"
+#include "ephy-profile-utils.h"
+#include "ephy-session.h"
+#include "ephy-settings.h"
+#include "ephy-stock-icons.h"
+#include "ephy-toolbar.h"
+#include "ephy-toolbars-model.h"
+#include "ephy-type-builtins.h"
+#include "ephy-web-view.h"
+#include "ephy-window.h"
 #include "pdm-dialog.h"
 #include "prefs-dialog.h"
-#include "ephy-debug.h"
-#include "ephy-extensions-manager.h"
-#include "ephy-session.h"
-#include "ephy-lockdown.h"
-#include "egg-toolbars-model.h"
-#include "ephy-toolbars-model.h"
-#include "ephy-toolbar.h"
-#include "ephy-settings.h"
-#include "ephy-prefs.h"
-#include "ephy-gui.h"
-#include "ephy-stock-icons.h"
-#include "ephy-web-view.h"
-#include "ephy-network-manager.h"
-#include "ephy-network-manager-defines.h"
-#include "ephy-profile-utils.h"
+
+#include <dirent.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <string.h>
+#include <unistd.h>
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
