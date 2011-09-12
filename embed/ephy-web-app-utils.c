@@ -53,7 +53,7 @@ get_wm_class_from_app_title (const char *title)
 }
 
 /**
- * ephy_web_application_get_directory:
+ * ephy_web_application_get_profile_directory:
  * @app_name: the application name
  *
  * Gets the directory whre the profile for @app_name is meant
