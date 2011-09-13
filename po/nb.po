@@ -8,12 +8,11 @@
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 2.91.x\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2011-09-06 21:55+0200\n"
-"PO-Revision-Date: 2011-09-06 22:01+0200\n"
-"Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
+"Project-Id-Version: epiphany 3.1.x\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2011-09-13 18:49+0200\n"
+"PO-Revision-Date: 2011-09-13 18:51+0200\n"
+"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +64,7 @@ msgstr "Epiphany"
 msgid "Epiphany Web Browser"
 msgstr "Epiphany nettleser"
 
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:465
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:460
 msgid "Web Browser"
 msgstr "Nettleser"
 
@@ -222,7 +221,7 @@ msgstr "Velg et spr_åk"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:607
+#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:606
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "Tø_m"
@@ -821,7 +820,7 @@ msgstr "Installert:"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3445
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3435
 msgid "Blank page"
 msgstr "Tom side"
 
@@ -858,71 +857,74 @@ msgstr "Tillat"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Siden på <b>%s</b> ønsker å vite din plassering."
 
-#: ../embed/ephy-web-view.c:2016
+#: ../embed/ephy-web-view.c:2023
 msgid "None specified"
 msgstr "Ingen oppgitt"
 
-#: ../embed/ephy-web-view.c:2025 ../embed/ephy-web-view.c:2043
+#: ../embed/ephy-web-view.c:2032 ../embed/ephy-web-view.c:2050
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Oops! Feil under lasting av %s"
 
-#: ../embed/ephy-web-view.c:2027
+#: ../embed/ephy-web-view.c:2034
 msgid "Oops! It was not possible to show this website"
 msgstr "Oops! Det var umulig å vise dette nettstedet"
 
-#: ../embed/ephy-web-view.c:2028
+#: ../embed/ephy-web-view.c:2035
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
-"error was:</p><p><em>%s</em></p><p>The website at <strong>%s</strong> could "
-"be temporarily switched off or moved to a new address. Don't forget to check "
-"that your internet connection is working correctly.</p>"
-msgstr "<p>Nettstedet på <strong>%s</strong> er sannsynligvis ikke tilgjengelig. Eksakt feil var:</p><p><em>%s</em></p><p>Nettstedet på <strong>%s</strong> kan være midlertidig tatt ned eller ha flyttet til en ny adresse. Ikke glem å sjekke at tilkoblingen til internett fungerer.</p>"
+"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
+"moved to a new address. Don't forget to check that your internet connection "
+"is working correctly.</p>"
+msgstr "<p>Nettstedet på <strong>%s</strong> er sannsynligvis ikke tilgjengelig. Eksakt feil var:</p><p><em>%s</em></p><p>Det kan være midlertidig tatt ned eller ha flyttet til en ny adresse. Ikke glem å sjekke at tilkoblingen til internett fungerer.</p>"
 
-#: ../embed/ephy-web-view.c:2037
+#: ../embed/ephy-web-view.c:2044
 msgid "Try again"
 msgstr "Prøv igjen"
 
-#: ../embed/ephy-web-view.c:2045
+#: ../embed/ephy-web-view.c:2052
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Oops! Nettstedet kan ha forårsaket at nettleseren avsluttet uventet"
 
-#: ../embed/ephy-web-view.c:2047
+#: ../embed/ephy-web-view.c:2054
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
 "p><p>This might happen again if you reload the page. If it does, please "
 "report the problem to the <strong>%s</strong> developers.</p>"
-msgstr "<p>Denne siden holdt på å laste når nettleseren ble lukket uventet.</p><p>Dette kan skje igjen hvis du laster siden på nytt. Vennligst rapporter problemet til utviklerene av <strong>%s</strong> hvis dette skjer.</p>"
+msgstr ""
+"<p>Denne siden holdt på å laste når nettleseren ble lukket uventet.</"
+"p><p>Dette kan skje igjen hvis du laster siden på nytt. Vennligst rapporter "
+"problemet til utviklerene av <strong>%s</strong> hvis dette skjer.</p>"
 
-#: ../embed/ephy-web-view.c:2055
+#: ../embed/ephy-web-view.c:2062
 msgid "Load again anyway"
 msgstr "Last på nytt likevel"
 
-#: ../embed/ephy-web-view.c:2330
+#: ../embed/ephy-web-view.c:2337
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2520
+#: ../embed/ephy-web-view.c:2527
 msgid "Plugins"
 msgstr "Tillegg"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2627
+#: ../embed/ephy-web-view.c:2634
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster «%s» …"
 
-#: ../embed/ephy-web-view.c:2629
+#: ../embed/ephy-web-view.c:2636
 msgid "Loading…"
 msgstr "Laster …"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3649
+#: ../embed/ephy-web-view.c:3639
 #, c-format
 msgid "%s Files"
 msgstr "%s Filer"
@@ -1006,7 +1008,7 @@ msgstr "Slå av tilkobling til økthåndterer"
 msgid "Specify file containing saved configuration"
 msgstr "Oppgi fil som inneholder lagret konfigurasjon"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:89 ../src/ephy-main.c:91
 msgid "FILE"
 msgstr "FIL"
 
@@ -1274,7 +1276,7 @@ msgstr "Vis i mappe"
 msgid "Starting…"
 msgstr "Starter …"
 
-#: ../lib/widgets/ephy-location-entry.c:890
+#: ../lib/widgets/ephy-location-entry.c:889
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Dra-og-slipp dette ikonet for å opprette en lenke til denne siden"
 
@@ -1846,7 +1848,7 @@ msgid "Find next occurrence of the search string"
 msgstr "Finn neste oppføring av søketeksten"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:620
+#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:617
 msgid "Leave Fullscreen"
 msgstr "Forlat fullskjerm"
 
@@ -1946,63 +1948,63 @@ msgstr "Nettsteder"
 msgid "Date"
 msgstr "Dato"
 
-#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1346
+#: ../src/ephy-main.c:74 ../src/ephy-main.c:325 ../src/window-commands.c:1346
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:83
 msgid "Open a new tab in an existing browser window"
 msgstr "Åpne en ny fane i et eksisterende nettleservindu"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:85
 msgid "Open a new browser window"
 msgstr "Åpne et nytt nettleservindu"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
 msgstr "Start redigering av bokmerker"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
 msgstr "Importer bokmerker fra gitt fil"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:91
 msgid "Load the given session file"
 msgstr "Last oppgitt øktfil"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "Add a bookmark"
 msgstr "Legg til bokmerke"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "URL"
 msgstr "Adresse"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:95
 msgid "Start a private instance"
 msgstr "Start en privat instans"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:97
 msgid "Start the browser in application mode"
 msgstr "Start nettleser i applikasjonsmodus"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "Profile directory to use in the private instance"
 msgstr "Profilkatalog som skal brukes i den private instansen"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "DIR"
 msgstr "KAT"
 
-#: ../src/ephy-main.c:106
+#: ../src/ephy-main.c:101
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:214
+#: ../src/ephy-main.c:209
 msgid "Could not start GNOME Web Browser"
 msgstr "Kunne ikke starte GNOME Nettleser"
 
-#: ../src/ephy-main.c:217
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2011,7 +2013,7 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:331
+#: ../src/ephy-main.c:326
 msgid "GNOME Web Browser options"
 msgstr "Alternativer for GNOME Nettleser"
 
@@ -2140,11 +2142,11 @@ msgstr "Ny _fane"
 msgid "Open a new tab"
 msgstr "Åpne en ny fane"
 
-#: ../src/ephy-toolbar.c:345
+#: ../src/ephy-toolbar.c:343
 msgid "_New Window"
 msgstr "_Nytt vindu"
 
-#: ../src/ephy-toolbar.c:347
+#: ../src/ephy-toolbar.c:345
 msgid "Open a new window"
 msgstr "Åpne et nytt vindu"
 
@@ -2916,7 +2918,9 @@ msgstr "Erstatt"
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
-msgstr "Et program med dette navnet eksisterer allerede. Hvis du erstatter den vil den bli overskrevet."
+msgstr ""
+"Et program med dette navnet eksisterer allerede. Hvis du erstatter den vil "
+"den bli overskrevet."
 
 #: ../src/window-commands.c:580
 #, c-format
