@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2011-09-05 20:38+0100\n"
-"PO-Revision-Date: 2011-09-05 23:36+0100\n"
+"POT-Creation-Date: 2011-09-14 10:08+0100\n"
+"PO-Revision-Date: 2011-09-14 10:32+0100\n"
 "Last-Translator: Abderrahim Kitouni <a.kitouni@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -69,7 +69,7 @@ msgstr "إبِفَني"
 msgid "Epiphany Web Browser"
 msgstr "متصفّح الوِب إبِفَني"
 
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:465
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:460
 msgid "Web Browser"
 msgstr "متصفّح وِب"
 
@@ -106,7 +106,6 @@ msgid "General"
 msgstr "عام"
 
 #: ../data/glade/certificate-dialogs.ui.h:9
-#| msgid "Issued On:"
 msgid "Issued By"
 msgstr "أصدَرَها"
 
@@ -115,7 +114,6 @@ msgid "Issued On:"
 msgstr "أصدرت في:"
 
 #: ../data/glade/certificate-dialogs.ui.h:11
-#| msgid "Issued On:"
 msgid "Issued To"
 msgstr "أُصدِرَت إلى"
 
@@ -140,7 +138,6 @@ msgid "Serial Number:"
 msgstr "الرقم التسلسلي:"
 
 #: ../data/glade/certificate-dialogs.ui.h:17
-#| msgid "<b>Validity</b>"
 msgid "Validity"
 msgstr "الصلاحية"
 
@@ -229,7 +226,7 @@ msgstr "اختر _لغة:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:607
+#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:606
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "ا_مسح"
@@ -264,7 +261,6 @@ msgid "Fonts & Style"
 msgstr "الخطوط والطرز"
 
 #: ../data/glade/prefs-dialog.ui.h:17
-#| msgid "<b>Home page</b>"
 msgid "Home page"
 msgstr "الصفحة الرئيسية"
 
@@ -273,7 +269,6 @@ msgid "Language"
 msgstr "اللغة"
 
 #: ../data/glade/prefs-dialog.ui.h:19
-#| msgid "Language"
 msgid "Languages"
 msgstr "اللغات"
 
@@ -314,7 +309,6 @@ msgid "Set to _Blank Page"
 msgstr "اضبط كصفحة _فارغة"
 
 #: ../data/glade/prefs-dialog.ui.h:30
-#| msgid "<b>Spell checking</b>"
 msgid "Spell checking"
 msgstr "التدقيق الإملائي"
 
@@ -323,7 +317,6 @@ msgid "Style"
 msgstr "الطرز"
 
 #: ../data/glade/prefs-dialog.ui.h:32
-#| msgid "_Temporary files"
 msgid "Temporary Files"
 msgstr "الملفات المؤقتة"
 
@@ -332,7 +325,6 @@ msgid "Use custom _stylesheet"
 msgstr "ا_ستعمل صفحة طراز مخصصة"
 
 #: ../data/glade/prefs-dialog.ui.h:34
-#| msgid "<b>Web Content</b>"
 msgid "Web Content"
 msgstr "محتوى الوِب"
 
@@ -377,22 +369,18 @@ msgid "As laid out on the _screen"
 msgstr "كما تظهر على ا_لشاشة"
 
 #: ../data/glade/print.ui.h:2
-#| msgid "<b>Background</b>"
 msgid "Background"
 msgstr "الخلفية"
 
 #: ../data/glade/print.ui.h:3
-#| msgid "<b>Footers</b>"
 msgid "Footers"
 msgstr "التذييلات"
 
 #: ../data/glade/print.ui.h:4
-#| msgid "<b>Frames</b>"
 msgid "Frames"
 msgstr "الإطارات"
 
 #: ../data/glade/print.ui.h:5
-#| msgid "<b>Headers</b>"
 msgid "Headers"
 msgstr "الترويسات"
 
@@ -821,29 +809,22 @@ msgstr "اللواحق"
 msgid "Memory usage"
 msgstr "استخدام الذاكرة"
 
-#: ../embed/ephy-request-about.c:170
-#| msgid "Create Web Application"
-msgid "Web Applications"
-msgstr "تطبيقات الوِب"
+#: ../embed/ephy-request-about.c:171 ../embed/ephy-request-about.c:173
+msgid "Applications"
+msgstr "التطبيقات"
 
 #: ../embed/ephy-request-about.c:174
-msgid "Icon"
-msgstr "أيقونة"
+msgid "List of installed web applications"
+msgstr "قائمة تطبيقات الوِب المثبّتة"
 
-#: ../embed/ephy-request-about.c:174 ../src/pdm-dialog.c:842
-msgid "Name"
-msgstr "الاسم"
-
-#: ../embed/ephy-request-about.c:174
-#, fuzzy
-#| msgid "_Delete"
-msgid "Delete?"
-msgstr "ا_حذف"
+#: ../embed/ephy-request-about.c:189
+msgid "Installed on:"
+msgstr "مثبّت في:"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3443
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3435
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
@@ -880,53 +861,41 @@ msgstr "اسمح"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "تريد الصفحة في <b>%s</b> معرفة مكانك."
 
-#: ../embed/ephy-web-view.c:2014
+#: ../embed/ephy-web-view.c:2023
 msgid "None specified"
 msgstr "غير محدّد"
 
-#: ../embed/ephy-web-view.c:2023 ../embed/ephy-web-view.c:2041
+#: ../embed/ephy-web-view.c:2032 ../embed/ephy-web-view.c:2050
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "عطل أثناء تحميل %s"
 
-#: ../embed/ephy-web-view.c:2025
-#| msgid "Oops! It was impossible to load this website"
+#: ../embed/ephy-web-view.c:2034
 msgid "Oops! It was not possible to show this website"
 msgstr "تعذّر إظهار هذا الموقع"
 
-#: ../embed/ephy-web-view.c:2026
+#: ../embed/ephy-web-view.c:2035
 #, c-format
-#| msgid ""
-#| "The website at <strong>%s</strong> is probably unavailable, the precise "
-#| "error was:<br/><br/><em>%s</em>.<br/><br/> If this persists you might "
-#| "want to check your internet connection or if the website at <strong>%s</"
-#| "strong> is working correctly."
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
-"error was:</p><p><em>%s</em></p><p>The website at <strong>%s</strong> could "
-"be temporarily switched off or moved to a new address. Don't forget to check "
-"that your internet connection is working correctly.</p>"
+"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
+"moved to a new address. Don't forget to check that your internet connection "
+"is working correctly.</p>"
 msgstr ""
 "<p>يبدو أنّ الموقع <strong>%s</strong> غير متاح. رسالة العطل تحديدا "
-"كانت:</p><p><em>%s</em></p><p> قد يكون الموقع <strong>%s</strong> اُِغلق "
-"مؤقتًا أو انتقل إلى عنوان جديد. لا تنسَ أن تتأكّد أنّ اتصال الإنترنت يعمل "
-"جيدا.</p>"
+"كانت:</p><p><em>%s</em></p><p>قد يكون الموقع اُِغلق مؤقتًا أو انتقل إلى "
+"عنوان جديد. لا تنسَ أن تتأكّد أنّ اتصال الإنترنت يعمل جيدا.</p>"
 
-#: ../embed/ephy-web-view.c:2035
+#: ../embed/ephy-web-view.c:2044
 msgid "Try again"
 msgstr "أعِد المحاولة"
 
-#: ../embed/ephy-web-view.c:2043
-#| msgid "Oops! This site might have caused Epiphany to close unexpectedly"
+#: ../embed/ephy-web-view.c:2052
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "قد يكون هذا الموقع تسبب في انهيار متصفِّح الوِب وإغلاقه"
 
-#: ../embed/ephy-web-view.c:2045
+#: ../embed/ephy-web-view.c:2054
 #, c-format
-#| msgid ""
-#| "This page was loading when the web browser closed unexpectedly.<br/> This "
-#| "might happen again if you reload the page. If it does, please report the "
-#| "problem to the <strong>%s</strong> developers."
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
 "p><p>This might happen again if you reload the page. If it does, please "
@@ -936,33 +905,33 @@ msgstr ""
 "أعدت تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري <strong>%s</strong> عن هذه "
 "المشكلة.</p>"
 
-#: ../embed/ephy-web-view.c:2053
+#: ../embed/ephy-web-view.c:2062
 msgid "Load again anyway"
 msgstr "أعِد التحميل مع هذا"
 
-#: ../embed/ephy-web-view.c:2328
+#: ../embed/ephy-web-view.c:2337
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2518
+#: ../embed/ephy-web-view.c:2527
 msgid "Plugins"
 msgstr "الملحقات"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2625
+#: ../embed/ephy-web-view.c:2634
 #, c-format
 msgid "Loading “%s”…"
 msgstr "يُحمل «%s»…"
 
-#: ../embed/ephy-web-view.c:2627
+#: ../embed/ephy-web-view.c:2636
 msgid "Loading…"
 msgstr "يُحمل…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3647
+#: ../embed/ephy-web-view.c:3639
 #, c-format
 msgid "%s Files"
 msgstr "ملفات %s"
@@ -1046,7 +1015,7 @@ msgstr "عطل الاتصال بمدير الجلسة"
 msgid "Specify file containing saved configuration"
 msgstr "حدد ملفا يحتوي الإعدادات المحفوظة"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:89 ../src/ephy-main.c:91
 msgid "FILE"
 msgstr "ملف"
 
@@ -1312,7 +1281,7 @@ msgstr "تم"
 msgid "Error downloading: %s"
 msgstr "عطل أثناء التنزيل: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:279
+#: ../lib/widgets/ephy-download-widget.c:279 ../src/window-commands.c:534
 msgid "Cancel"
 msgstr "ألغِ"
 
@@ -1329,7 +1298,7 @@ msgstr "أظهر في المجلد"
 msgid "Starting…"
 msgstr "يبدأ…"
 
-#: ../lib/widgets/ephy-location-entry.c:890
+#: ../lib/widgets/ephy-location-entry.c:889
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إلى هذه الصفحة"
 
@@ -1912,7 +1881,7 @@ msgid "Find next occurrence of the search string"
 msgstr "ابحث عن التواجد التالي للعبارة"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:620
+#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:617
 msgid "Leave Fullscreen"
 msgstr "غادر نمط ملء الشاشة"
 
@@ -2016,63 +1985,63 @@ msgstr "المواقع"
 msgid "Date"
 msgstr "التاريخ"
 
-#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1290
+#: ../src/ephy-main.c:74 ../src/ephy-main.c:325 ../src/window-commands.c:1346
 msgid "GNOME Web Browser"
 msgstr "متصفّح وِب جنوم"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:83
 msgid "Open a new tab in an existing browser window"
 msgstr "افتح لسان جديد في نافذة متصفح موجودة"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:85
 msgid "Open a new browser window"
 msgstr "افتح نافذة متصفّح جديدة"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
 msgstr "أطلق محرّر العلامات"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
 msgstr "استورد العلامات من الملف المحدّد"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:91
 msgid "Load the given session file"
 msgstr "حمّل ملف الجلسة المعطى"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "Add a bookmark"
 msgstr "أضِف علامة موقع"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "URL"
 msgstr "مسار"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:95
 msgid "Start a private instance"
 msgstr "ابدأ نموذج خاص"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:97
 msgid "Start the browser in application mode"
 msgstr "ابدأ المتصفّح في وضع التطبيق"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "Profile directory to use in the private instance"
 msgstr "الدليل المستعمل في النموذج الخاص"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "DIR"
 msgstr "دليل"
 
-#: ../src/ephy-main.c:106
+#: ../src/ephy-main.c:101
 msgid "URL …"
 msgstr "مسار …"
 
-#: ../src/ephy-main.c:214
+#: ../src/ephy-main.c:209
 msgid "Could not start GNOME Web Browser"
 msgstr "تعذّر بدأ متصفح وِب جنوم"
 
-#: ../src/ephy-main.c:217
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2081,7 +2050,7 @@ msgstr ""
 "فشل بدأ التشغيل للخطأ التالي:\n"
 "%s"
 
-#: ../src/ephy-main.c:331
+#: ../src/ephy-main.c:326
 msgid "GNOME Web Browser options"
 msgstr "خيارات متصفّح وِب جنوم"
 
@@ -2211,11 +2180,11 @@ msgstr "_لسان جديد"
 msgid "Open a new tab"
 msgstr "افتح لسان جديد"
 
-#: ../src/ephy-toolbar.c:345
+#: ../src/ephy-toolbar.c:343
 msgid "_New Window"
 msgstr "نافذة _جديدة"
 
-#: ../src/ephy-toolbar.c:347
+#: ../src/ephy-toolbar.c:345
 msgid "Open a new window"
 msgstr "افتح نافذة جديدة"
 
@@ -2911,6 +2880,10 @@ msgstr "نهاية الجلسة الحالية"
 msgid "Domain"
 msgstr "النطاق"
 
+#: ../src/pdm-dialog.c:842
+msgid "Name"
+msgstr "الاسم"
+
 #: ../src/pdm-dialog.c:1256
 msgid "Host"
 msgstr "مستضيف"
@@ -2973,25 +2946,45 @@ msgstr "اختر دليلا"
 msgid "Save"
 msgstr "احفظ"
 
-#. Show dialog with icon, title.
-#: ../src/window-commands.c:538
-msgid "Create Web Application"
-msgstr "أنشئ تطبيق وِب"
+#: ../src/window-commands.c:531
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "يوجد بالفعل تطبيق بالاسم '%s'. أترغب في استبداله؟"
 
-#: ../src/window-commands.c:543
-msgid "Create"
-msgstr "أنشئ"
+#: ../src/window-commands.c:536
+msgid "Replace"
+msgstr "استبدل"
 
-#: ../src/window-commands.c:586
+#: ../src/window-commands.c:540
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr "يوجد تطبيق بنفس الاسم. استبداله سيكتب فوقه."
+
+#: ../src/window-commands.c:580
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "التطبيق '%s' جاهز للاستخدام"
 
-#: ../src/window-commands.c:592
+#: ../src/window-commands.c:583
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "تعذّر إنشاء التطبيق '%s'"
+
+#: ../src/window-commands.c:591
 msgid "Launch"
 msgstr "أطلِق"
 
-#: ../src/window-commands.c:1190
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:624
+msgid "Create Web Application"
+msgstr "أنشئ تطبيق وِب"
+
+#: ../src/window-commands.c:629
+msgid "Create"
+msgstr "أنشئ"
+
+#: ../src/window-commands.c:1246
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3002,7 +2995,7 @@ msgstr ""
 "العمومية العامة لجنو والتي نشرتها منظمة البرمجيات الحرة؛ سواء الإصدارة 2 من "
 "الرخصة أو أي إصدارة بعدها حسب رغبتك."
 
-#: ../src/window-commands.c:1194
+#: ../src/window-commands.c:1250
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3013,7 +3006,7 @@ msgstr ""
 "حتى أي ضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك "
 "مراجعة الرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../src/window-commands.c:1198
+#: ../src/window-commands.c:1254
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3021,23 +3014,23 @@ msgid ""
 msgstr ""
 "من المفترض أن تكون قد استلمت نسخة من رخصة جنو العامة مع متصفح وِب جنوم؛ في "
 "حال عدم استلامك لذلك، يمكنك مكاتبة:\n"
-"Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
-" 02110-1301  USA."
+"Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+"02110-1301  USA."
 
-#: ../src/window-commands.c:1244 ../src/window-commands.c:1260
-#: ../src/window-commands.c:1271
+#: ../src/window-commands.c:1300 ../src/window-commands.c:1316
+#: ../src/window-commands.c:1327
 msgid "Contact us at:"
 msgstr "اتصل بنا على:"
 
-#: ../src/window-commands.c:1247
+#: ../src/window-commands.c:1303
 msgid "Contributors:"
 msgstr "المساهمون:"
 
-#: ../src/window-commands.c:1250
+#: ../src/window-commands.c:1306
 msgid "Past developers:"
 msgstr "المطورون السابقون:"
 
-#: ../src/window-commands.c:1280
+#: ../src/window-commands.c:1336
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3054,7 +3047,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1306
+#: ../src/window-commands.c:1362
 msgid "translator-credits"
 msgstr ""
 "فريق عربآيز للترجمة http://www.arabeyes.org:\n"
@@ -3064,15 +3057,15 @@ msgstr ""
 "خالد حسني\t<khaledhosny@eglug.org>\n"
 "عبد الرحيم الفاخوري <abdilra7eem@yahoo.com>"
 
-#: ../src/window-commands.c:1309
+#: ../src/window-commands.c:1365
 msgid "GNOME Web Browser Website"
 msgstr "موقع متصفح وِب جنوم"
 
-#: ../src/window-commands.c:1453
+#: ../src/window-commands.c:1509
 msgid "Enable caret browsing mode?"
 msgstr "أأفعل وضع التصفح بالمؤشر؟"
 
-#: ../src/window-commands.c:1456
+#: ../src/window-commands.c:1512
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3081,9 +3074,17 @@ msgstr ""
 "ضغط F7 يفعل أو يعطل وضع التصفح بالمؤشر. تضع هذه الخاصية مؤشرا متحركا في "
 "صفحات الوب يتيح لك التحرك بلوحة المفاتيح. أتريد تفعيل التصفح بالمؤشر؟"
 
-#: ../src/window-commands.c:1459
+#: ../src/window-commands.c:1515
 msgid "_Enable"
 msgstr "_فعّل"
+
+#~ msgid "Icon"
+#~ msgstr "أيقونة"
+
+#, fuzzy
+#~| msgid "_Delete"
+#~ msgid "Delete?"
+#~ msgstr "ا_حذف"
 
 #~ msgid "<b>Fingerprints</b>"
 #~ msgstr "<b>البصمات</b>"
