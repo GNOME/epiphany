@@ -170,6 +170,8 @@ queue_commands (EphyShell *shell)
 static void
 ephy_shell_startup (GApplication* application)
 {
+  G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
+
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
   /* TODO: we want to migrate each WebApp profile too */
