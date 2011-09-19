@@ -17,8 +17,8 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[1])
-m4_define([epiphany_version_micro],[91])
-m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro.1])
+m4_define([epiphany_version_micro],[92])
+m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 # This can be either "trunk" or "branches/gnome-x-y"
 m4_define([epiphany_branch],["trunk"])
