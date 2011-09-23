@@ -7,14 +7,16 @@
 # 새로 번역하시는 분은 본인을 아래 "translator-credits"에 추가하세요.
 #
 # - 이 프로그램의 이름인 "Epiphany"는 "에피파니"로 음역.
+# - application이 web application을 가리키는 경우 프로그램이라고
+#   번역하지 말고 '애플리케이션'이라고 음역
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-03-31 05:42+0000\n"
-"PO-Revision-Date: 2011-04-02 20:08+0900\n"
+"POT-Creation-Date: 2011-09-07 00:24+0000\n"
+"PO-Revision-Date: 2011-09-24 07:46+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -66,79 +68,77 @@ msgstr "에피파니"
 msgid "Epiphany Web Browser"
 msgstr "에피파니 웹 브라우저"
 
-#. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:647
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:465
 msgid "Web Browser"
 msgstr "웹 브라우저"
 
 #: ../data/glade/certificate-dialogs.ui.h:1
-msgid "<b>Fingerprints</b>"
-msgstr "<b>핑거프린트</b>"
-
-#: ../data/glade/certificate-dialogs.ui.h:2
-msgid "<b>Issued By</b>"
-msgstr "<b>발급자</b>"
-
-#: ../data/glade/certificate-dialogs.ui.h:3
-msgid "<b>Issued To</b>"
-msgstr "<b>발급 대상</b>"
-
-#: ../data/glade/certificate-dialogs.ui.h:4
-msgid "<b>Validity</b>"
-msgstr "<b>유효 기간</b>"
-
-#: ../data/glade/certificate-dialogs.ui.h:5
 msgid "Certificate _Fields"
 msgstr "인증서 필드(_F)"
 
-#: ../data/glade/certificate-dialogs.ui.h:6
+#: ../data/glade/certificate-dialogs.ui.h:2
 msgid "Certificate _Hierarchy"
 msgstr "인증서 계층 구조(_H)"
 
-#: ../data/glade/certificate-dialogs.ui.h:7
+#: ../data/glade/certificate-dialogs.ui.h:3
 msgid "Common Name:"
 msgstr "공통 이름:"
 
-#: ../data/glade/certificate-dialogs.ui.h:8
+#: ../data/glade/certificate-dialogs.ui.h:4
 msgid "Details"
 msgstr "자세히"
 
-#: ../data/glade/certificate-dialogs.ui.h:9
+#: ../data/glade/certificate-dialogs.ui.h:5
 msgid "Expires On:"
 msgstr "만료 날짜:"
 
-#: ../data/glade/certificate-dialogs.ui.h:10
+#: ../data/glade/certificate-dialogs.ui.h:6
 msgid "Field _Value"
 msgstr "필드 값(_V)"
 
-#: ../data/glade/certificate-dialogs.ui.h:11
-#: ../data/glade/prefs-dialog.ui.h:22
+#: ../data/glade/certificate-dialogs.ui.h:7
+msgid "Fingerprints"
+msgstr "핑거프린트"
+
+#: ../data/glade/certificate-dialogs.ui.h:8 ../data/glade/prefs-dialog.ui.h:16
 msgid "General"
 msgstr "일반"
 
-#: ../data/glade/certificate-dialogs.ui.h:12
+#: ../data/glade/certificate-dialogs.ui.h:9
+msgid "Issued By"
+msgstr "발급자"
+
+#: ../data/glade/certificate-dialogs.ui.h:10
 msgid "Issued On:"
 msgstr "발급 날짜:"
 
-#: ../data/glade/certificate-dialogs.ui.h:13
+#: ../data/glade/certificate-dialogs.ui.h:11
+msgid "Issued To"
+msgstr "발급 대상"
+
+#: ../data/glade/certificate-dialogs.ui.h:12
 msgid "MD5 Fingerprint:"
 msgstr "MD5 핑거프린트:"
 
-#: ../data/glade/certificate-dialogs.ui.h:14
+#: ../data/glade/certificate-dialogs.ui.h:13
 msgid "Organization:"
 msgstr "조직:"
 
-#: ../data/glade/certificate-dialogs.ui.h:15
+#: ../data/glade/certificate-dialogs.ui.h:14
 msgid "Organizational Unit:"
 msgstr "소속 구분:"
 
-#: ../data/glade/certificate-dialogs.ui.h:16
+#: ../data/glade/certificate-dialogs.ui.h:15
 msgid "SHA1 Fingerprint:"
 msgstr "SHA1 핑거프린트:"
 
-#: ../data/glade/certificate-dialogs.ui.h:17
+#: ../data/glade/certificate-dialogs.ui.h:16
 msgid "Serial Number:"
 msgstr "일련 번호:"
+
+#: ../data/glade/certificate-dialogs.ui.h:17
+msgid "Validity"
+msgstr "유효 기간"
 
 #: ../data/glade/epiphany.ui.h:1
 msgid "<b>_Automatic</b>"
@@ -152,11 +152,11 @@ msgstr "<b>다른 인코딩 사용(_U):</b>"
 msgid "Clear _All..."
 msgstr "모두 지우기(_A)..."
 
-#: ../data/glade/epiphany.ui.h:4
+#: ../data/glade/epiphany.ui.h:4 ../data/glade/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "쿠키"
 
-#: ../data/glade/epiphany.ui.h:5
+#: ../data/glade/epiphany.ui.h:5 ../data/glade/prefs-dialog.ui.h:23
 msgid "Passwords"
 msgstr "암호"
 
@@ -201,64 +201,24 @@ msgstr "암호(_P):"
 msgid "_View Certificate&#x2026;"
 msgstr "인증서 보기(_V)&#x2026;"
 
-#: ../data/glade/prefs-dialog.ui.h:1
-msgid "<b>Cookies</b>"
-msgstr "<b>쿠키</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:2
-msgid "<b>Downloads</b>"
-msgstr "<b>다운로드</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:3
-msgid "<b>Encodings</b>"
-msgstr "<b>인코딩</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:4
-msgid "<b>Fonts</b>"
-msgstr "<b>글꼴</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:5
-msgid "<b>Home page</b>"
-msgstr "<b>홈 페이지</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:6
-msgid "<b>Languages</b>"
-msgstr "<b>언어</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:7
-msgid "<b>Passwords</b>"
-msgstr "<b>암호</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:8
-msgid "<b>Style</b>"
-msgstr "<b>모양</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:9
-msgid "<b>Temporary Files</b>"
-msgstr "<b>임시 파일</b>"
-
-#: ../data/glade/prefs-dialog.ui.h:10
-msgid "<b>Web Content</b>"
-msgstr "<b>웹 내용</b>"
-
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.ui.h:12
+#: ../data/glade/prefs-dialog.ui.h:2
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>예를 들어, 그 사이트에 있는 광고를 금지</small>"
 
-#: ../data/glade/prefs-dialog.ui.h:13
-msgid "A_utomatically download and open files"
-msgstr "자동으로 다운로드한 다음 열기(_U)"
+#: ../data/glade/prefs-dialog.ui.h:3
+msgid "A_utomatically open downloaded files"
+msgstr "다운로드한 파일 자동으로 열기(_U)"
 
-#: ../data/glade/prefs-dialog.ui.h:14
+#: ../data/glade/prefs-dialog.ui.h:4
 msgid "Add Language"
 msgstr "언어 추가"
 
-#: ../data/glade/prefs-dialog.ui.h:15
+#: ../data/glade/prefs-dialog.ui.h:5
 msgid "Allow popup _windows"
 msgstr "팝업 창 허용(_W)"
 
-#: ../data/glade/prefs-dialog.ui.h:16
+#: ../data/glade/prefs-dialog.ui.h:6
 msgid "Choose a l_anguage:"
 msgstr "언어를 고르십시오(_A):"
 
@@ -266,122 +226,163 @@ msgstr "언어를 고르십시오(_A):"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:17 ../lib/widgets/ephy-location-entry.c:684
+#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:607
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "지우기(_E)"
 
-#: ../data/glade/prefs-dialog.ui.h:18
+#: ../data/glade/prefs-dialog.ui.h:9
 msgid "De_fault:"
 msgstr "기본값(_F):"
 
-#: ../data/glade/prefs-dialog.ui.h:19
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../data/glade/prefs-dialog.ui.h:10 ../lib/ephy-file-helpers.c:116
+msgid "Downloads"
+msgstr "다운로드"
+
+#: ../data/glade/prefs-dialog.ui.h:11
 msgid "Enable Java_Script"
 msgstr "자바스크립트 사용(_S)"
 
-#: ../data/glade/prefs-dialog.ui.h:20
+#: ../data/glade/prefs-dialog.ui.h:12
 msgid "Enable _plugins"
 msgstr "플러그인 사용(_P)"
 
-#: ../data/glade/prefs-dialog.ui.h:21
+#: ../data/glade/prefs-dialog.ui.h:13 ../src/ephy-encoding-dialog.c:302
+msgid "Encodings"
+msgstr "인코딩"
+
+#: ../data/glade/prefs-dialog.ui.h:14
+msgid "Fonts"
+msgstr "글꼴"
+
+#: ../data/glade/prefs-dialog.ui.h:15
 msgid "Fonts & Style"
 msgstr "글꼴과 모양"
 
-#: ../data/glade/prefs-dialog.ui.h:23 ../src/prefs-dialog.c:773
+#: ../data/glade/prefs-dialog.ui.h:17
+msgid "Home page"
+msgstr "홈 페이지"
+
+#: ../data/glade/prefs-dialog.ui.h:18 ../src/prefs-dialog.c:774
 msgid "Language"
 msgstr "언어"
 
-#: ../data/glade/prefs-dialog.ui.h:24
+#: ../data/glade/prefs-dialog.ui.h:19
+msgid "Languages"
+msgstr "언어"
+
+#: ../data/glade/prefs-dialog.ui.h:20
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.ui.h:25
+#: ../data/glade/prefs-dialog.ui.h:21
 msgid "Monospace font:"
 msgstr "고정폭 글꼴:"
 
-#: ../data/glade/prefs-dialog.ui.h:26
+#: ../data/glade/prefs-dialog.ui.h:22
 msgid "Only _from sites you visit"
 msgstr "방문한 사이트에서만(_F)"
 
-#: ../data/glade/prefs-dialog.ui.h:27
+#: ../data/glade/prefs-dialog.ui.h:24
 msgid "Preferences"
 msgstr "기본 설정"
 
-#: ../data/glade/prefs-dialog.ui.h:28
+#: ../data/glade/prefs-dialog.ui.h:25
 msgid "Privacy"
 msgstr "보안"
 
-#: ../data/glade/prefs-dialog.ui.h:29
+#: ../data/glade/prefs-dialog.ui.h:26
 msgid "Sans serif font:"
 msgstr "산세리프 글꼴:"
 
-#: ../data/glade/prefs-dialog.ui.h:30
+#: ../data/glade/prefs-dialog.ui.h:27
 msgid "Serif font:"
 msgstr "세리프 글꼴:"
 
-#: ../data/glade/prefs-dialog.ui.h:31
+#: ../data/glade/prefs-dialog.ui.h:28
 msgid "Set to Current _Page"
 msgstr "현재 페이지로 설정(_P)"
 
-#: ../data/glade/prefs-dialog.ui.h:32
+#: ../data/glade/prefs-dialog.ui.h:29
 msgid "Set to _Blank Page"
 msgstr "빈 페이지로 설정(_B)"
+
+#: ../data/glade/prefs-dialog.ui.h:30
+msgid "Spell checking"
+msgstr "맞춤법 검사"
+
+#: ../data/glade/prefs-dialog.ui.h:31
+msgid "Style"
+msgstr "모양"
+
+#: ../data/glade/prefs-dialog.ui.h:32
+msgid "Temporary Files"
+msgstr "임시 파일"
 
 #: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use custom _stylesheet"
 msgstr "사용자 지정 스타일 시트 사용(_S)"
 
 #: ../data/glade/prefs-dialog.ui.h:34
+msgid "Web Content"
+msgstr "웹 내용"
+
+#: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Address:"
 msgstr "주소(_A):"
 
-#: ../data/glade/prefs-dialog.ui.h:35
+#: ../data/glade/prefs-dialog.ui.h:36
 msgid "_Always accept"
 msgstr "항상 허용(_A)"
 
-#: ../data/glade/prefs-dialog.ui.h:36
+#: ../data/glade/prefs-dialog.ui.h:37
 msgid "_Disk space:"
 msgstr "디스크 공간(_D):"
 
-#: ../data/glade/prefs-dialog.ui.h:37
+#: ../data/glade/prefs-dialog.ui.h:38
 msgid "_Download folder:"
 msgstr "다운로드 폴더(_D):"
 
-#: ../data/glade/prefs-dialog.ui.h:38
-msgid "_Edit Stylesheet&#x2026;"
-msgstr "스타일시트 편집(_E)&#x2026;"
-
 #: ../data/glade/prefs-dialog.ui.h:39
+msgid "_Edit Stylesheet…"
+msgstr "스타일시트 편집(_E)…"
+
+#: ../data/glade/prefs-dialog.ui.h:40
+msgid "_Enable spell checking"
+msgstr "맞춤법 검사 사용(_E)"
+
+#: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Never accept"
 msgstr "허용하지 않음(_N)"
 
-#: ../data/glade/prefs-dialog.ui.h:40
+#: ../data/glade/prefs-dialog.ui.h:42
 msgid "_Remember passwords"
 msgstr "암호 저장(_R)"
 
-#: ../data/glade/prefs-dialog.ui.h:41
+#: ../data/glade/prefs-dialog.ui.h:43
 msgid "_Use system fonts"
 msgstr "시스템 글꼴 사용(_U)"
 
 #: ../data/glade/print.ui.h:1
-msgid "<b>Background</b>"
-msgstr "<b>배경</b>"
-
-#: ../data/glade/print.ui.h:2
-msgid "<b>Footers</b>"
-msgstr "<b>꼬리말</b>"
-
-#: ../data/glade/print.ui.h:3
-msgid "<b>Frames</b>"
-msgstr "<b>프레임</b>"
-
-#: ../data/glade/print.ui.h:4
-msgid "<b>Headers</b>"
-msgstr "<b>머리말</b>"
-
-#: ../data/glade/print.ui.h:5
 msgid "As laid out on the _screen"
 msgstr "화면에 나온 그대로(_S)"
+
+#: ../data/glade/print.ui.h:2
+msgid "Background"
+msgstr "배경"
+
+#: ../data/glade/print.ui.h:3
+msgid "Footers"
+msgstr "꼬리말"
+
+#: ../data/glade/print.ui.h:4
+msgid "Frames"
+msgstr "프레임"
+
+#: ../data/glade/print.ui.h:5
+msgid "Headers"
+msgstr "머리말"
 
 #: ../data/glade/print.ui.h:6
 msgid "O_nly the selected frame"
@@ -415,20 +416,20 @@ msgstr "각 프레임을 따로(_E)"
 msgid "_Page address"
 msgstr "페이지 주소(_P)"
 
-#: ../embed/ephy-download.c:174
+#: ../embed/ephy-download.c:171
 msgctxt "file type"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: ../embed/ephy-embed.c:495
+#: ../embed/ephy-embed.c:568
 msgid "Web Inspector"
 msgstr "Web Inspector"
 
-#: ../embed/ephy-embed-shell.c:223
+#: ../embed/ephy-embed-shell.c:233
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "에피파니를 지금 쓸 수 없습니다. 초기화가 실패했습니다."
 
-#: ../embed/ephy-embed-single.c:507
+#: ../embed/ephy-embed-single.c:485
 msgid ""
 "CA Certificates file we should use was not found, all SSL sites will be "
 "considered to have a broken certificate."
@@ -436,7 +437,7 @@ msgstr ""
 "사용해야 하는 인증 기관 인증서 파일이 없습니다. 모든 SSL 사이트의 인증서가 문"
 "제가 있다고 판단할 것입니다."
 
-#: ../embed/ephy-embed-utils.c:60
+#: ../embed/ephy-embed-utils.c:61
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "“%s”에 전자메일 메시지를 보냅니다"
@@ -776,18 +777,64 @@ msgstr "그 외"
 msgid "Local files"
 msgstr "로컬 파일"
 
+#: ../embed/ephy-request-about.c:98 ../embed/ephy-request-about.c:101
+msgid "Installed plugins"
+msgstr "설치한 플러그인"
+
+#: ../embed/ephy-request-about.c:113
+msgid "Enabled"
+msgstr "사용"
+
+#: ../embed/ephy-request-about.c:113
+msgid "Yes"
+msgstr "예"
+
+#: ../embed/ephy-request-about.c:113
+msgid "No"
+msgstr "아니요"
+
+#: ../embed/ephy-request-about.c:114
+msgid "MIME type"
+msgstr "MIME 종류"
+
+#: ../embed/ephy-request-about.c:114
+msgid "Description"
+msgstr "설명"
+
+#: ../embed/ephy-request-about.c:114
+msgid "Suffixes"
+msgstr "확장자"
+
+#: ../embed/ephy-request-about.c:143
+msgid "Memory usage"
+msgstr "메모리 사용"
+
+# 웹 애플리케이션
+#: ../embed/ephy-request-about.c:171 ../embed/ephy-request-about.c:173
+msgid "Applications"
+msgstr "애플리케이션"
+
+# 웹 애플리케이션
+#: ../embed/ephy-request-about.c:174
+msgid "List of installed web applications"
+msgstr "설치한 웹 애플리케이션 목록"
+
+#: ../embed/ephy-request-about.c:189
+msgid "Installed on:"
+msgstr "설치 날짜:"
+
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:67 ../embed/ephy-web-view.c:3385
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3445
 msgid "Blank page"
 msgstr "빈 페이지"
 
-#: ../embed/ephy-web-view.c:784
+#: ../embed/ephy-web-view.c:753
 msgid "Not now"
 msgstr "지금 하지 않음"
 
-#: ../embed/ephy-web-view.c:789
+#: ../embed/ephy-web-view.c:758
 msgid "Store password"
 msgstr "암호 저장"
 
@@ -795,96 +842,92 @@ msgstr "암호 저장"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:800
+#: ../embed/ephy-web-view.c:769
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big><b>%s</b>의 암호를 <b>%s</b>에 저장하시겠습니까?</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1778
+#: ../embed/ephy-web-view.c:1728
 msgid "Deny"
 msgstr "거절"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1734
 msgid "Allow"
 msgstr "허용"
 
-#. Label
-#: ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1741
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b>의 페이지에서 현재 위치를 알고 싶어합니다."
 
-#: ../embed/ephy-web-view.c:2023
+#: ../embed/ephy-web-view.c:2016
 msgid "None specified"
 msgstr "지정하지 않음"
 
-#: ../embed/ephy-web-view.c:2032 ../embed/ephy-web-view.c:2044
+#: ../embed/ephy-web-view.c:2025 ../embed/ephy-web-view.c:2043
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "앗! %s 읽어들이는데 오류가 발생했습니다"
 
-#: ../embed/ephy-web-view.c:2034
-msgid "Oops! It was impossible to load this website"
-msgstr "앗! 이 웹사이트를 읽어들일 수 없습니다"
+#: ../embed/ephy-web-view.c:2027
+msgid "Oops! It was not possible to show this website"
+msgstr "앗! 이 웹사이트를 표시할 수 없습니다"
 
-#: ../embed/ephy-web-view.c:2035
+#: ../embed/ephy-web-view.c:2028
 #, c-format
 msgid ""
-"The website at <strong>%s</strong> is probably unavailable, the precise "
-"error was:<br/><br/><em>%s</em>.<br/><br/> If this persists you might want "
-"to check your internet connection or if the website at <strong>%s</strong> "
-"is working correctly."
-msgstr ""
-"현재 <strong>%s</strong> 위치의 웹사이트에 접근할 수 없습니다. 정확한 오류는:"
-"<br/><br/><em>%s</em>.<br/><br/> 이 오류가 계속된다면 인터넷 연결이 올바른지 "
-"확인하거나 <strong>%s</strong> 위치의 웹사이트가 제대로 동작하고 있는지 확인"
-"하십시오."
+"<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
+"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
+"moved to a new address. Don't forget to check that your internet connection "
+"is working correctly.</p>"
+msgstr "<p>현재 <strong>%s</strong> 위치의 웹사이트에 접근할 수 없습니다. 정확한 오류는:</p><p><em>%s</em></p><p>웹 사이트가 일시적으로 중단되어 있거나 다른 주소로 옮겼을 수도 있습니다. 인터넷 연결이 올바른지 확인하십시오.</p>"
 
-#: ../embed/ephy-web-view.c:2038
+#: ../embed/ephy-web-view.c:2037
 msgid "Try again"
 msgstr "다시 시도"
 
-#: ../embed/ephy-web-view.c:2046
-msgid "Oops! This site might have caused Epiphany to close unexpectedly"
-msgstr "앗! 이 사이트 때문에 에피파니가 갑자기 닫혔습니다"
+#: ../embed/ephy-web-view.c:2045
+msgid "Oops! This site might have caused the web browser to close unexpectedly"
+msgstr "앗! 이 사이트 때문에 웹 브라우저가 갑자기 닫혔습니다"
 
 #: ../embed/ephy-web-view.c:2047
 #, c-format
 msgid ""
-"This page was loading when the web browser closed unexpectedly.<br/> This "
-"might happen again if you reload the page. If it does, please report the "
-"problem to the <strong>%s</strong> developers."
-msgstr ""
-"브라우저가 갑자기 닫혔을 경우에 이 페이지가 나타납니다.<br/> 페이지를 다시 읽"
-"어들여도 이 페이지가 다시 나타날 수도 있습니다. 그러한 경우 문제를 <strong>%"
-"s</strong> 개발자에게 알려 주십시오."
+"<p>This page was loading when the web browser closed unexpectedly.</"
+"p><p>This might happen again if you reload the page. If it does, please "
+"report the problem to the <strong>%s</strong> developers.</p>"
+msgstr "<p>브라우저가 갑자기 닫혔을 경우에 이 페이지가 나타납니다.</p><p>페이지를 다시 읽어들여도 이 페이지가 다시 나타날 수도 있습니다. 그러한 경우 문제를 <strong>%s</strong> 개발자에게 알려 주십시오.</p>"
 
-#: ../embed/ephy-web-view.c:2050
+#: ../embed/ephy-web-view.c:2055
 msgid "Load again anyway"
 msgstr "그래도 다시 읽어들이기"
 
-#: ../embed/ephy-web-view.c:2331
+#: ../embed/ephy-web-view.c:2330
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.kr/search?q=%s&ie=UTF-8&oe=UTF-8"
 
+#: ../embed/ephy-web-view.c:2520
+msgid "Plugins"
+msgstr "플러그인"
+
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2626
+#: ../embed/ephy-web-view.c:2627
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” 페이지를 읽는 중입니다…"
 
-#: ../embed/ephy-web-view.c:2628
+#: ../embed/ephy-web-view.c:2629
 msgid "Loading…"
 msgstr "읽는 중입니다…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3589
+#: ../embed/ephy-web-view.c:3649
 #, c-format
 msgid "%s Files"
 msgstr "%s 파일"
@@ -924,6 +967,42 @@ msgstr "문서 URI는 'Type=Link' desktop 항목에 넘길 수 없습니다"
 msgid "Not a launchable item"
 msgstr "실행할 수 있는 항목이 없습니다"
 
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:988
+#, c-format
+msgid "Show “_%s”"
+msgstr "“_%s” 보이기"
+
+#: ../lib/egg/egg-editable-toolbar.c:1481
+msgid "_Move on Toolbar"
+msgstr "도구 모음에서 옮기기(_M)"
+
+#: ../lib/egg/egg-editable-toolbar.c:1482
+msgid "Move the selected item on the toolbar"
+msgstr "도구 모음에서 선택한 항목을 옮깁니다"
+
+#: ../lib/egg/egg-editable-toolbar.c:1483
+msgid "_Remove from Toolbar"
+msgstr "도구 모음에서 제거(_R)"
+
+#: ../lib/egg/egg-editable-toolbar.c:1484
+msgid "Remove the selected item from the toolbar"
+msgstr "도구 모음에서 선택한 항목을 제거합니다"
+
+#: ../lib/egg/egg-editable-toolbar.c:1485
+msgid "_Delete Toolbar"
+msgstr "도구 모음 삭제(_D)"
+
+#: ../lib/egg/egg-editable-toolbar.c:1486
+msgid "Remove the selected toolbar"
+msgstr "선택한 도구 모음을 제거합니다"
+
 #: ../lib/egg/eggsmclient.c:225
 msgid "Disable connection to session manager"
 msgstr "세션 관리자에 연결하지 않습니다"
@@ -932,7 +1011,7 @@ msgstr "세션 관리자에 연결하지 않습니다"
 msgid "Specify file containing saved configuration"
 msgstr "설정을 저장할 파일을 지정합니다"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:92 ../src/ephy-main.c:94
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
 msgid "FILE"
 msgstr "<파일>"
 
@@ -951,42 +1030,6 @@ msgstr "세션 관리 옵션:"
 #: ../lib/egg/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "세션 관리 옵션을 표시합니다"
-
-#. Translaters: This string is for a toggle to display a toolbar.
-#. * The name of the toolbar is automatically computed from the widgets
-#. * on the toolbar, and is placed at the %s. Note the _ before the %s
-#. * which is used to add mnemonics. We know that this is likely to
-#. * produce duplicates, but don't worry about it. If your language
-#. * normally has a mnemonic at the start, please use the _. If not,
-#. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:957
-#, c-format
-msgid "Show “_%s”"
-msgstr "“_%s” 보이기"
-
-#: ../lib/egg/egg-editable-toolbar.c:1447
-msgid "_Move on Toolbar"
-msgstr "도구 모음에서 옮기기(_M)"
-
-#: ../lib/egg/egg-editable-toolbar.c:1448
-msgid "Move the selected item on the toolbar"
-msgstr "도구 모음에서 선택한 항목을 옮깁니다"
-
-#: ../lib/egg/egg-editable-toolbar.c:1449
-msgid "_Remove from Toolbar"
-msgstr "도구 모음에서 제거(_R)"
-
-#: ../lib/egg/egg-editable-toolbar.c:1450
-msgid "Remove the selected item from the toolbar"
-msgstr "도구 모음에서 선택한 항목을 제거합니다"
-
-#: ../lib/egg/egg-editable-toolbar.c:1451
-msgid "_Delete Toolbar"
-msgstr "도구 모음 삭제(_D)"
-
-#: ../lib/egg/egg-editable-toolbar.c:1452
-msgid "Remove the selected toolbar"
-msgstr "선택한 도구 모음을 제거합니다"
 
 #: ../lib/egg/egg-toolbar-editor.c:489
 msgid "Separator"
@@ -1008,28 +1051,23 @@ msgstr "그림"
 msgid "All files"
 msgstr "모든 파일"
 
-#. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:118
-msgid "Downloads"
-msgstr "다운로드"
-
 # XDG 폴더 이름, shared-mime-info에 있는 것처럼 "바탕화면"이라고 번역
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:164
+#: ../lib/ephy-file-helpers.c:162
 msgid "Desktop"
 msgstr "바탕화면"
 
-#: ../lib/ephy-file-helpers.c:341
+#: ../lib/ephy-file-helpers.c:325
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s”에서 임시 디렉터리를 만들 수 없습니다."
 
-#: ../lib/ephy-file-helpers.c:430
+#: ../lib/ephy-file-helpers.c:421
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s”(이)가 있습니다. 다른 곳으로 옮기십시오."
 
-#: ../lib/ephy-file-helpers.c:441
+#: ../lib/ephy-file-helpers.c:432
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "디렉터리 “%s” 만들기 실패."
@@ -1094,17 +1132,17 @@ msgstr "기록"
 
 #: ../lib/ephy-stock-icons.c:49
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1507
+#: ../src/ephy-window.c:1634
 msgid "Bookmark"
 msgstr "책갈피"
 
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:885
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1661
-#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1511
+#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
+#: ../src/bookmarks/ephy-topic-action.c:442 ../src/ephy-window.c:1638
 msgid "Bookmarks"
 msgstr "책갈피"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:278
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:277
 msgid "Address Entry"
 msgstr "주소 항목"
 
@@ -1146,7 +1184,7 @@ msgid "%b %d %Y"
 msgstr " %Y년 %b %d일"
 
 #. impossible time or broken locale settings
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1744
+#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1872
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -1219,12 +1257,12 @@ msgstr "완료"
 msgid "Error downloading: %s"
 msgstr "다운로드에 오류가 발생했습니다: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:279
+#: ../lib/widgets/ephy-download-widget.c:279 ../src/window-commands.c:534
 msgid "Cancel"
 msgstr "취소"
 
-#: ../lib/widgets/ephy-download-widget.c:288 ../src/ephy-window.c:1501
-#: ../src/window-commands.c:312
+#: ../lib/widgets/ephy-download-widget.c:288 ../src/ephy-window.c:1626
+#: ../src/window-commands.c:315
 msgid "Open"
 msgstr "열기"
 
@@ -1232,11 +1270,11 @@ msgstr "열기"
 msgid "Show in folder"
 msgstr "도구 모음에 보이기"
 
-#: ../lib/widgets/ephy-download-widget.c:464
+#: ../lib/widgets/ephy-download-widget.c:467
 msgid "Starting…"
 msgstr "시작하는 중…"
 
-#: ../lib/widgets/ephy-location-entry.c:967
+#: ../lib/widgets/ephy-location-entry.c:890
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "이 페이지의 링크를 만드려면 이 아이콘을 끌어 놓으십시오"
 
@@ -1249,7 +1287,7 @@ msgstr "지우기"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:501
+#: ../src/bookmarks/ephy-bookmark-action.c:499
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "“%s” 스크립트 실행"
@@ -1296,81 +1334,81 @@ msgstr "주제(_O):"
 msgid "Sho_w all topics"
 msgstr "모든 주제 보이기(_W)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Entertainment"
 msgstr "오락"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:96
 msgid "News"
 msgstr "새소식"
 
-#: ../src/bookmarks/ephy-bookmarks.c:98
+#: ../src/bookmarks/ephy-bookmarks.c:97
 msgid "Shopping"
 msgstr "쇼핑"
 
-#: ../src/bookmarks/ephy-bookmarks.c:99
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Sports"
 msgstr "운동"
 
-#: ../src/bookmarks/ephy-bookmarks.c:100
+#: ../src/bookmarks/ephy-bookmarks.c:99
 msgid "Travel"
 msgstr "여행"
 
-#: ../src/bookmarks/ephy-bookmarks.c:101
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Work"
 msgstr "작업"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:439
+#: ../src/bookmarks/ephy-bookmarks.c:435
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "“%s” 책갈피를 업데이트하시겠습니까?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:444
+#: ../src/bookmarks/ephy-bookmarks.c:440
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "책갈피한 페이지는 “%s” URL로 옮겨졌습니다."
 
-#: ../src/bookmarks/ephy-bookmarks.c:448
+#: ../src/bookmarks/ephy-bookmarks.c:444
 msgid "_Don't Update"
 msgstr "업데이트 안 함(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:450
+#: ../src/bookmarks/ephy-bookmarks.c:446
 msgid "_Update"
 msgstr "업데이트(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:453
+#: ../src/bookmarks/ephy-bookmarks.c:449
 msgid "Update Bookmark?"
 msgstr "책갈피를 업데이트하시겠습니까?"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1184
+#: ../src/bookmarks/ephy-bookmarks.c:1180
 msgctxt "bookmarks"
 msgid "All"
 msgstr "전체"
 
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1187
+#: ../src/bookmarks/ephy-bookmarks.c:1183
 msgctxt "bookmarks"
 msgid "Most Visited"
 msgstr "자주 방문"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1191
+#: ../src/bookmarks/ephy-bookmarks.c:1187
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "분류 없음"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1196
+#: ../src/bookmarks/ephy-bookmarks.c:1192
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "이웃 사이트"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1430
+#: ../src/bookmarks/ephy-bookmarks.c:1426
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "제목 없음"
@@ -1389,22 +1427,22 @@ msgstr "이 주제에서 지우시겠습니까?"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:156
-#: ../src/ephy-history-window.c:127 ../src/ephy-window.c:112
+#: ../src/ephy-history-window.c:127 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "파일(_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:157
-#: ../src/ephy-history-window.c:128 ../src/ephy-window.c:113
+#: ../src/ephy-history-window.c:128 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "편집(_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:129 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:129 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "보기(_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "도움말(_H)"
 
@@ -1420,7 +1458,7 @@ msgstr "새 주제를 만듭니다"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:166
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1295
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1292
 #: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:134
 #: ../src/ephy-history-window.c:612
 msgid "Open in New _Window"
@@ -1433,7 +1471,7 @@ msgstr "선택한 책갈피를 새 창에서 엽니다"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:169
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1298
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1295
 #: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:137
 #: ../src/ephy-history-window.c:615
 msgid "Open in New _Tab"
@@ -1479,7 +1517,7 @@ msgid "Export bookmarks to a file"
 msgstr "책갈피를 파일로 내보냅니다"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:144
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:149
 msgid "_Close"
 msgstr "닫기(_C)"
 
@@ -1489,29 +1527,29 @@ msgstr "책갈피 창을 닫습니다"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:156
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:161
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:157
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:162
 msgid "Cut the selection"
 msgstr "선택한 것을 잘라냅니다"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1308
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1305
 #: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:625
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:164
 msgid "_Copy"
 msgstr "복사(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:160
+#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:165
 msgid "Copy the selection"
 msgstr "선택한 것을 복사합니다"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:162
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:167
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
@@ -1530,7 +1568,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "선택한 책갈피나 주제를 삭제합니다"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:168
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:173
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
@@ -1541,7 +1579,7 @@ msgstr "모든 책갈피나 텍스트를 선택합니다"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:267
 msgid "_Contents"
 msgstr "차례(_C)"
 
@@ -1550,12 +1588,12 @@ msgid "Display bookmarks help"
 msgstr "책갈피 도움말을 보여줍니다"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:265
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:270
 msgid "_About"
 msgstr "정보(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:266
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:271
 msgid "Display credits for the web browser creators"
 msgstr "웹 브라우저를 만든 사람을 보여줍니다"
 
@@ -1579,7 +1617,7 @@ msgid "Show the title column"
 msgstr "제목 열 표시"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1799
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1796
 #: ../src/ephy-history-window.c:1229
 msgid "Address"
 msgstr "주소"
@@ -1677,41 +1715,41 @@ msgid "Export Bookmarks"
 msgstr "책갈피 내보내기"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:891
+#: ../src/bookmarks/ephy-bookmarks-editor.c:888
 msgid "File f_ormat:"
 msgstr "파일 형식(_O):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:937
+#: ../src/bookmarks/ephy-bookmarks-editor.c:934
 msgid "Import Bookmarks"
 msgstr "책갈피 가져오기"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:942
+#: ../src/bookmarks/ephy-bookmarks-editor.c:939
 msgid "I_mport"
 msgstr "가져오기(_M)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:958
+#: ../src/bookmarks/ephy-bookmarks-editor.c:955
 msgid "Import bookmarks from:"
 msgstr "책갈피 가져오기:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:978
+#: ../src/bookmarks/ephy-bookmarks-editor.c:975
 msgid "File"
 msgstr "파일"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1304
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1301
 #: ../src/ephy-history-window.c:621
 msgid "_Copy Address"
 msgstr "주소 복사(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1552
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1549
 #: ../src/ephy-history-window.c:949
 msgid "_Search:"
 msgstr "검색(_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1715
 msgid "Topics"
 msgstr "주제"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1788
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
 #: ../src/ephy-history-window.c:1220
 msgid "Title"
 msgstr "제목"
@@ -1749,10 +1787,6 @@ msgstr "주제"
 #, c-format
 msgid "Create topic “%s”"
 msgstr "“%s” 주제 만들기"
-
-#: ../src/ephy-encoding-dialog.c:302
-msgid "Encodings"
-msgstr "인코딩"
 
 #: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
@@ -1809,7 +1843,7 @@ msgstr "다음에 나타난 단어나 문장을 찾습니다"
 msgid "Leave Fullscreen"
 msgstr "전체 화면 나가기"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:308
+#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:307
 msgid "Go"
 msgstr "이동"
 
@@ -1904,59 +1938,63 @@ msgstr "사이트"
 msgid "Date"
 msgstr "날짜"
 
-#: ../src/ephy-main.c:77 ../src/ephy-main.c:523 ../src/window-commands.c:1040
+#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1346
 msgid "GNOME Web Browser"
 msgstr "그놈 웹 브라우저"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:88
 msgid "Open a new tab in an existing browser window"
 msgstr "현재의 에피파니 창에서 새 탭을 엽니다"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:90
 msgid "Open a new browser window"
 msgstr "새 창을 엽니다"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:92
 msgid "Launch the bookmarks editor"
 msgstr "책갈피 편집기를 시작합니다"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:94
 msgid "Import bookmarks from the given file"
 msgstr "주어진 파일에서 책갈피를 가져옵니다"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:96
 msgid "Load the given session file"
 msgstr "주어진 세션파일을 읽어들입니다"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:98
 msgid "Add a bookmark"
 msgstr "책갈피 추가"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:98
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:100
 msgid "Start a private instance"
 msgstr "개인 인스턴스로 시작"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:102
+msgid "Start the browser in application mode"
+msgstr "브라우저를 애플리케이션 모드로 시작"
+
+#: ../src/ephy-main.c:104
 msgid "Profile directory to use in the private instance"
 msgstr "개인 인스턴스에서 쓸 프로파일 디렉터리"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:104
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:106
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:374
+#: ../src/ephy-main.c:214
 msgid "Could not start GNOME Web Browser"
 msgstr "그놈 웹 브라우저를 시작할 수 없습니다"
 
-#: ../src/ephy-main.c:377
+#: ../src/ephy-main.c:217
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -1965,11 +2003,11 @@ msgstr ""
 "다음의 오류 때문에 시작할 수 없습니다:\n"
 "%s"
 
-#: ../src/ephy-main.c:524
+#: ../src/ephy-main.c:331
 msgid "GNOME Web Browser options"
 msgstr "그놈 웹 브라우저 옵션"
 
-#: ../src/ephy-notebook.c:633
+#: ../src/ephy-notebook.c:618
 msgid "Close tab"
 msgstr "탭을 닫습니다"
 
@@ -2009,92 +2047,92 @@ msgstr "세션 복구"
 msgid "Do you want to recover the previous browser windows and tabs?"
 msgstr "이전의 브라우저 창과 탭을 복구하시겠습니까?"
 
-#: ../src/ephy-tabs-menu.c:211
+#: ../src/ephy-tabs-menu.c:210
 msgid "Switch to this tab"
 msgstr "이 탭으로 이동"
 
-#: ../src/ephy-toolbar.c:218
+#: ../src/ephy-toolbar.c:217
 msgid "_Back"
 msgstr "뒤로(_B)"
 
-#: ../src/ephy-toolbar.c:220
+#: ../src/ephy-toolbar.c:219
 msgid "Go to the previous visited page"
 msgstr "전에 들렀던 페이지로 갑니다"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:224
+#: ../src/ephy-toolbar.c:223
 msgid "Back history"
 msgstr "기록에서 뒤로 갑니다"
 
-#: ../src/ephy-toolbar.c:238
+#: ../src/ephy-toolbar.c:237
 msgid "_Forward"
 msgstr "앞으로(_F)"
 
-#: ../src/ephy-toolbar.c:240
+#: ../src/ephy-toolbar.c:239
 msgid "Go to the next visited page"
 msgstr "다음 들렀던 페이지로 갑니다"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:244
+#: ../src/ephy-toolbar.c:243
 msgid "Forward history"
 msgstr "기록에서 앞으로 갑니다"
 
-#: ../src/ephy-toolbar.c:257
+#: ../src/ephy-toolbar.c:256
 msgid "_Up"
 msgstr "위로(_U)"
 
-#: ../src/ephy-toolbar.c:259
+#: ../src/ephy-toolbar.c:258
 msgid "Go up one level"
 msgstr "한 단계 위로 갑니다"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:263
+#: ../src/ephy-toolbar.c:262
 msgid "List of upper levels"
 msgstr "윗 단계 목록"
 
-#: ../src/ephy-toolbar.c:280
+#: ../src/ephy-toolbar.c:279
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "열어 볼 웹 주소나 웹에서 찾을 글귀를 넣으십시오"
 
-#: ../src/ephy-toolbar.c:296
+#: ../src/ephy-toolbar.c:295
 msgid "Zoom"
 msgstr "확대"
 
-#: ../src/ephy-toolbar.c:298
+#: ../src/ephy-toolbar.c:297
 msgid "Adjust the text size"
 msgstr "글자 크기를 조절합니다"
 
-#: ../src/ephy-toolbar.c:310
+#: ../src/ephy-toolbar.c:309
 msgid "Go to the address entered in the address entry"
 msgstr "주소 항목에 넣은 주소로 갑니다"
 
-#: ../src/ephy-toolbar.c:319
+#: ../src/ephy-toolbar.c:318
 msgid "_Home"
 msgstr "홈(_H)"
 
-#: ../src/ephy-toolbar.c:321
+#: ../src/ephy-toolbar.c:320
 msgid "Go to the home page"
 msgstr "홈 페이지로 갑니다"
 
-#: ../src/ephy-toolbar.c:331
+#: ../src/ephy-toolbar.c:330
 msgid "New _Tab"
 msgstr "새 탭(_T)"
 
-#: ../src/ephy-toolbar.c:333
+#: ../src/ephy-toolbar.c:332
 msgid "Open a new tab"
 msgstr "새 탭을 엽니다"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:345
 msgid "_New Window"
 msgstr "새 창(_N)"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:347
 msgid "Open a new window"
 msgstr "새 창을 엽니다"
 
@@ -2137,562 +2175,578 @@ msgstr "도구 모음 단추 레이블(_B):"
 msgid "_Add a New Toolbar"
 msgstr "도구 모음 추가(_A)"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:117
 msgid "_Bookmarks"
 msgstr "책갈피(_B)"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:118
 msgid "_Go"
 msgstr "이동(_G)"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:119
 msgid "T_ools"
 msgstr "도구(_O)"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:120
 msgid "_Tabs"
 msgstr "탭(_T)"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:122
 msgid "_Toolbars"
 msgstr "도구 모음(_T)"
 
 #. File menu
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:128
 msgid "_Open…"
 msgstr "열기(_O)…"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:129
 msgid "Open a file"
 msgstr "파일을 엽니다"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:131
 msgid "Save _As…"
 msgstr "다른 이름으로 저장(_A)…"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:132
 msgid "Save the current page"
 msgstr "현재 페이지를 저장합니다"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:134
+msgid "Save As _Web Application…"
+msgstr "웹 애플리케이션으로 저장(_W)…"
+
+#: ../src/ephy-window.c:135
+msgid "Save the current page as a Web Application"
+msgstr "현재 페이지를 웹 애플리케이션으로 저장합니다"
+
+#: ../src/ephy-window.c:137
 msgid "Page Set_up"
 msgstr "페이지 설정(_U)"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:138
 msgid "Setup the page settings for printing"
 msgstr "인쇄할 때 쓸 페이지를 설정합니다"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:140
 msgid "Print Pre_view"
 msgstr "인쇄 미리 보기(_V)"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:141
 msgid "Print preview"
 msgstr "인쇄할 내용을 미리 봅니다"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:143
 msgid "_Print…"
 msgstr "인쇄(_P)…"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:144
 msgid "Print the current page"
 msgstr "현재 페이지를 인쇄합니다"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:146
 msgid "S_end Link by Email…"
 msgstr "링크를 메일로 보내기(_E)…"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:147
 msgid "Send a link of the current page"
 msgstr "현재 페이지의 링크를 보냅니다"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:150
 msgid "Close this tab"
 msgstr "이 탭을 닫습니다"
 
 #. Edit menu
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:155
 msgid "_Undo"
 msgstr "실행 취소(_U)"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:156
 msgid "Undo the last action"
 msgstr "마지막 동작을 실행 취소합니다"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:158
 msgid "Re_do"
 msgstr "다시 실행(_D)"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:159
 msgid "Redo the last undone action"
 msgstr "마지막에 실행 취소한 동작을 다시 실행합니다"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:168
 msgid "Paste clipboard"
 msgstr "클립보드의 내용을 붙여넣습니다"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:171
 msgid "Delete text"
 msgstr "텍스트 삭제"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:174
 msgid "Select the entire page"
 msgstr "문서 전체를 선택합니다"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:176
 msgid "_Find…"
 msgstr "찾기(_F)…"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:177
 msgid "Find a word or phrase in the page"
 msgstr "웹 페이지에서 단어나 단락을 찾습니다"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:179
 msgid "Find Ne_xt"
 msgstr "다음 찾기(_X)"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:180
 msgid "Find next occurrence of the word or phrase"
 msgstr "다음에 나타난 단어나 문장을 찾습니다"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:182
 msgid "Find Pre_vious"
 msgstr "이전 찾기(_V)"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:183
 msgid "Find previous occurrence of the word or phrase"
 msgstr "이전에 나타난 단어나 문장을 찾습니다"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:185
 msgid "P_ersonal Data"
 msgstr "개인 데이터(_E)"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:186
 msgid "View and remove cookies and passwords"
 msgstr "쿠키와 암호를 보거나 제거합니다"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:189
 msgid "Certificate_s"
 msgstr "인증서(_S)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:190
 msgid "Manage Certificates"
 msgstr "인증서 관리"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:193
 msgid "P_references"
 msgstr "기본 설정(_R)"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:194
 msgid "Configure the web browser"
 msgstr "웹 브라우저를 설정합니다"
 
 #. View menu
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:199
 msgid "_Customize Toolbars…"
 msgstr "도구 모음 사용자 정의(_C)…"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:200
 msgid "Customize toolbars"
 msgstr "도구 모음을 직접 정의합니다"
 
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
 msgid "_Stop"
 msgstr "중지(_S)"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:203
 msgid "Stop current data transfer"
 msgstr "현재 자료 전송을 멈춥니다"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:207
 msgid "_Reload"
 msgstr "다시 읽기(_R)"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:208
 msgid "Display the latest content of the current page"
 msgstr "현재 페이지의 최근 내용을 보여줍니다"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:210
 msgid "_Larger Text"
 msgstr "글자 키우기(_L)"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:211
 msgid "Increase the text size"
 msgstr "글자 크기를 키웁니다"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:213
 msgid "S_maller Text"
 msgstr "글자 줄이기(_M)"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:214
 msgid "Decrease the text size"
 msgstr "글자 크기를 줄입니다"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:216
 msgid "_Normal Size"
 msgstr "보통 크기(_N)"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:217
 msgid "Use the normal text size"
 msgstr "글자 크기를 원래대로 돌립니다"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:219
 msgid "Text _Encoding"
 msgstr "텍스트 인코딩(_E)"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:220
 msgid "Change the text encoding"
 msgstr "텍스트 인코딩을 바꿉니다"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:222
 msgid "_Page Source"
 msgstr "페이지 소스(_P)"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:223
 msgid "View the source code of the page"
 msgstr "페이지의 소스코드를 보여줍니다"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:225
 msgid "Page _Security Information"
 msgstr "페이지 보안 정보(_S)"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:226
 msgid "Display security information for the web page"
 msgstr "웹 페이지의 보안 정보를 표시합니다"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:231
 msgid "_Add Bookmark…"
 msgstr "책갈피 추가(_A)…"
 
-#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
+#: ../src/ephy-window.c:232 ../src/ephy-window.c:309
 msgid "Add a bookmark for the current page"
 msgstr "현재 페이지를 책갈피를 추가합니다"
 
-#: ../src/ephy-window.c:229
+#: ../src/ephy-window.c:234
 msgid "_Edit Bookmarks"
 msgstr "책갈피 편집(_E)"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:235
 msgid "Open the bookmarks window"
 msgstr "책갈피 창을 엽니다"
 
 #. Go menu
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:240
 msgid "_Location…"
 msgstr "위치(_L)…"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:241
 msgid "Go to a specified location"
 msgstr "지정된 위치를 엽니다"
 
 #. History
-#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:403
+#: ../src/ephy-window.c:243 ../src/pdm-dialog.c:403
 msgid "Hi_story"
 msgstr "기록(_S)"
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:244
 msgid "Open the history window"
 msgstr "기록 창을 엽니다"
 
 #. Tabs menu
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:249
 msgid "_Previous Tab"
 msgstr "이전 탭(_P)"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:250
 msgid "Activate previous tab"
 msgstr "이전 탭으로 갑니다"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:252
 msgid "_Next Tab"
 msgstr "다음 탭(_N)"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:253
 msgid "Activate next tab"
 msgstr "다음 탭으로 갑니다"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Left"
 msgstr "탭 왼쪽으로 옮기기(_L)"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:256
 msgid "Move current tab to left"
 msgstr "현재 탭을 왼쪽으로 옮깁니다"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:258
 msgid "Move Tab _Right"
 msgstr "탭 오른쪽으로 옮기기(_R)"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:259
 msgid "Move current tab to right"
 msgstr "현재 탭을 오른쪽으로 옮깁니다"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:261
 msgid "_Detach Tab"
 msgstr "탭 떼어내기(_D)"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:262
 msgid "Detach current tab"
 msgstr "현재 탭을 떼어냅니다"
 
-#: ../src/ephy-window.c:263
+#: ../src/ephy-window.c:268
 msgid "Display web browser help"
 msgstr "웹 브라우저의 도움말을 보여줍니다"
 
 #. File Menu
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:279
 msgid "_Work Offline"
 msgstr "오프라인에서 작업(_W)"
 
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:280
 msgid "Switch to offline mode"
 msgstr "오프라인 모드로 바꿉니다"
 
 #. View Menu
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:285
 msgid "_Hide Toolbars"
 msgstr "도구 모음 숨기기(_H)"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:286
 msgid "Show or hide toolbar"
 msgstr "도구 모음을 보이거나 숨깁니다"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:288
 msgid "_Downloads Bar"
 msgstr "다운로드 모음(_D)"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:289
 msgid "Show the active downloads for this window"
 msgstr "이 창에서 진행 중인 다운로드를 봅니다"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:292
+msgid "Men_ubar"
+msgstr "메뉴 모음(_U)"
+
+#: ../src/ephy-window.c:294
 msgid "_Fullscreen"
 msgstr "전체 화면(_F)"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:295
 msgid "Browse at full screen"
 msgstr "전체 화면 모드로 바꿉니다"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:297
 msgid "Popup _Windows"
 msgstr "팝업 창(_W)"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:298
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "이 사이트에서 요청하지 않은 팝업 창 보이기 혹은 감추기"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:300
 msgid "Selection Caret"
 msgstr "캐릿 선택"
 
 #. Document
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:308
 msgid "Add Boo_kmark…"
 msgstr "책갈피 추가(_K)…"
 
 #. Framed document
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:314
 msgid "Show Only _This Frame"
 msgstr "이 프레임만 보이기(_T)"
 
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:315
 msgid "Show only this frame in this window"
 msgstr "이 창에서 이 프레임만 봅니다"
 
 #. Links
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:320
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:321
 msgid "Open link in this window"
 msgstr "링크를 이 창에서 엽니다"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:323
 msgid "Open Link in New _Window"
 msgstr "링크 새 창에서 열기(_W)"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:324
 msgid "Open link in a new window"
 msgstr "링크를 새 창에서 엽니다"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:326
 msgid "Open Link in New _Tab"
 msgstr "링크 새 탭에서 열기(_T)"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:327
 msgid "Open link in a new tab"
 msgstr "링크를 새 탭에서 엽니다"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:329
 msgid "_Download Link"
 msgstr "링크 다운로드(_D)"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:331
 msgid "_Save Link As…"
 msgstr "링크 다른 이름으로 저장(_S)…"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:332
 msgid "Save link with a different name"
 msgstr "링크를 다른 이름으로 저장합니다"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:334
 msgid "_Bookmark Link…"
 msgstr "링크를 책갈피에 넣기(_B)…"
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:336
 msgid "_Copy Link Address"
 msgstr "링크 주소 복사(_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:342
 msgid "_Send Email…"
 msgstr "전자메일 보내기(_S)…"
 
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:344
 msgid "_Copy Email Address"
 msgstr "전자메일 주소 복사(_C)"
 
 #. Images
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:349
 msgid "Open _Image"
 msgstr "그림 열기(_I)"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:351
 msgid "_Save Image As…"
 msgstr "그림 다른 이름으로 저장(_S)…"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:353
 msgid "_Use Image As Background"
 msgstr "배경 그림으로 사용(_U)"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:355
 msgid "Copy I_mage Address"
 msgstr "그림 주소 복사(_M)"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:357
 msgid "St_art Animation"
 msgstr "움직임 시작(_A)"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:359
 msgid "St_op Animation"
 msgstr "움직임 멈춤(_O)"
 
 #. Inspector
-#: ../src/ephy-window.c:355
+#: ../src/ephy-window.c:375
 msgid "Inspect _Element"
 msgstr "엘리먼트 넣기(_E)"
 
-#: ../src/ephy-window.c:563
+#: ../src/ephy-window.c:579
 msgid "There are unsubmitted changes to form elements"
 msgstr "바뀐 내용중에 제출하지 않은 폼이 있습니다."
 
-#: ../src/ephy-window.c:564
+#: ../src/ephy-window.c:580
 msgid "If you close the document anyway, you will lose that information."
 msgstr "지금 문서를 닫으면, 그 정보를 잃어버릴 것입니다."
 
-#: ../src/ephy-window.c:566
+#: ../src/ephy-window.c:582
 msgid "Close _Document"
 msgstr "문서 닫기(_D)"
 
-#: ../src/ephy-window.c:584
+#: ../src/ephy-window.c:600
 msgid "There are ongoing downloads in this window"
 msgstr "이 창에 진행 중인 다운로드가 있습니다"
 
-#: ../src/ephy-window.c:585
+#: ../src/ephy-window.c:601
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "이 창을 닫으면 다운로드를 취소합니다."
 
-#: ../src/ephy-window.c:586
+#: ../src/ephy-window.c:602
 msgid "Close window and cancel downloads"
 msgstr "창 닫기 및 다운로드 취소"
 
-#: ../src/ephy-window.c:1503
+#: ../src/ephy-window.c:1628
 msgid "Save As"
 msgstr "다른 이름으로 저장"
 
-#: ../src/ephy-window.c:1505
+#: ../src/ephy-window.c:1630
+msgid "Save As Application"
+msgstr "애플리케이션으로 저장"
+
+#: ../src/ephy-window.c:1632
 msgid "Print"
 msgstr "인쇄"
 
-#: ../src/ephy-window.c:1509
+#: ../src/ephy-window.c:1636
 msgid "Find"
 msgstr "찾기"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1522
+#: ../src/ephy-window.c:1649
 msgid "Larger"
 msgstr "크게"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1525
+#: ../src/ephy-window.c:1652
 msgid "Smaller"
 msgstr "작게"
 
-#: ../src/ephy-window.c:1747
+#: ../src/ephy-window.c:1875
 msgid "Insecure"
 msgstr "안전하지 않음"
 
-#: ../src/ephy-window.c:1752
+#: ../src/ephy-window.c:1880
 msgid "Broken"
 msgstr "깨짐"
 
-#: ../src/ephy-window.c:1760
+#: ../src/ephy-window.c:1888
 msgid "Low"
 msgstr "낮음"
 
-#: ../src/ephy-window.c:1767
+#: ../src/ephy-window.c:1895
 msgid "High"
 msgstr "높음"
 
-#: ../src/ephy-window.c:1777
+#: ../src/ephy-window.c:1905
 #, c-format
 msgid "Security level: %s"
 msgstr "보안 수준: %s"
 
-#: ../src/ephy-window.c:2053
+#: ../src/ephy-window.c:2180
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s” 그림을 엽니다"
 
-#: ../src/ephy-window.c:2058
+#: ../src/ephy-window.c:2185
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s” 바탕 화면 배경 그림으로 씁니다"
 
-#: ../src/ephy-window.c:2063
+#: ../src/ephy-window.c:2190
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” 그림을 저장합니다"
 
-#: ../src/ephy-window.c:2068
+#: ../src/ephy-window.c:2195
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "“%s” 그림 주소를 복사합니다"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2209
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "“%s” 주소로 전자메일을 보냅니다"
 
-#: ../src/ephy-window.c:2088
+#: ../src/ephy-window.c:2215
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "“%s” 전자메일 주소를 복사합니다"
 
-#: ../src/ephy-window.c:2102
+#: ../src/ephy-window.c:2229
 #, c-format
 msgid "Save link “%s”"
 msgstr "“%s” 링크를 저장합니다"
 
-#: ../src/ephy-window.c:2108
+#: ../src/ephy-window.c:2235
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” 링크를 책갈피에 넣습니다"
 
-#: ../src/ephy-window.c:2113
+#: ../src/ephy-window.c:2240
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "링크 주소 “%s”를 복사합니다"
@@ -2790,15 +2844,15 @@ msgstr "사용자 이름"
 msgid "User Password"
 msgstr "사용자 암호"
 
-#: ../src/popup-commands.c:278
+#: ../src/popup-commands.c:281
 msgid "Download Link"
 msgstr "링크 다운로드"
 
-#: ../src/popup-commands.c:286
+#: ../src/popup-commands.c:289
 msgid "Save Link As"
 msgstr "링크 다른 이름으로 저장"
 
-#: ../src/popup-commands.c:293
+#: ../src/popup-commands.c:296
 msgid "Save Image As"
 msgstr "그림 다른 이름으로 저장"
 
@@ -2806,7 +2860,7 @@ msgstr "그림 다른 이름으로 저장"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:467 ../src/prefs-dialog.c:473
+#: ../src/prefs-dialog.c:468 ../src/prefs-dialog.c:474
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2815,27 +2869,65 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:483
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "사용자 정의 (%s)"
 
-#: ../src/prefs-dialog.c:504
+#: ../src/prefs-dialog.c:505
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "시스템 언어 (%s)"
 
-#: ../src/prefs-dialog.c:862
+#: ../src/prefs-dialog.c:863
 msgid "Select a Directory"
 msgstr "디렉터리를 선택하십시오"
 
-#: ../src/window-commands.c:342
+#: ../src/window-commands.c:368
 msgid "Save"
 msgstr "저장"
 
-#: ../src/window-commands.c:940
+#: ../src/window-commands.c:531
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "이름이 '%s'인 웹 애플리케이션이 이미 있습니다. 덮어 쓰시겠습니까?"
+
+#: ../src/window-commands.c:536
+msgid "Replace"
+msgstr "바꾸기"
+
+#: ../src/window-commands.c:540
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr "같은 이름의 애플리케이션이 이미 있습니다. 덮어 쓰게 됩니다."
+
+#: ../src/window-commands.c:580
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr "'%s' 애플리케이션을 사용할 준비가 되었습니다"
+
+#: ../src/window-commands.c:583
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "'%s' 애플리케이션을 만들 수 없습니다"
+
+#: ../src/window-commands.c:591
+msgid "Launch"
+msgstr "시작"
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:624
+msgid "Create Web Application"
+msgstr "웹 애플리케이션 만들기"
+
+#: ../src/window-commands.c:629
+msgid "Create"
+msgstr "만들기"
+
+#: ../src/window-commands.c:1246
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -2847,7 +2939,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:944
+#: ../src/window-commands.c:1250
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2859,7 +2951,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:948
+#: ../src/window-commands.c:1254
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2869,20 +2961,20 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:994 ../src/window-commands.c:1010
-#: ../src/window-commands.c:1021
+#: ../src/window-commands.c:1300 ../src/window-commands.c:1316
+#: ../src/window-commands.c:1327
 msgid "Contact us at:"
 msgstr "연락처:"
 
-#: ../src/window-commands.c:997
+#: ../src/window-commands.c:1303
 msgid "Contributors:"
 msgstr "도움 주신 분:"
 
-#: ../src/window-commands.c:1000
+#: ../src/window-commands.c:1306
 msgid "Past developers:"
 msgstr "이전 개발자:"
 
-#: ../src/window-commands.c:1030
+#: ../src/window-commands.c:1336
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -2899,21 +2991,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1056
+#: ../src/window-commands.c:1362
 msgid "translator-credits"
 msgstr ""
 "차영호 <ganadist@gmail.com>\n"
 "류창우 <cwryu@debian.org>"
 
-#: ../src/window-commands.c:1059
+#: ../src/window-commands.c:1365
 msgid "GNOME Web Browser Website"
 msgstr "그놈 웹 브라우저 웹사이트"
 
-#: ../src/window-commands.c:1215
+#: ../src/window-commands.c:1509
 msgid "Enable caret browsing mode?"
 msgstr "캐릿 브라우징 모드를 사용하시겠습니까?"
 
-#: ../src/window-commands.c:1218
+#: ../src/window-commands.c:1512
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2923,1150 +3015,6 @@ msgstr ""
 "서 움직일 수 있는 커서를 표시하므로, 커서를 이용해 이동할 수 있습니다. 캐릿 "
 "브라우징 모드를 사용하시겠습니까?"
 
-#: ../src/window-commands.c:1221
+#: ../src/window-commands.c:1515
 msgid "_Enable"
 msgstr "사용(_E)"
-
-#~ msgid "_Minimum font size:"
-#~ msgstr "최소 글꼴 크기(_M):"
-
-#~ msgid "_Show Downloads"
-#~ msgstr "다운로드 보이기(_S)"
-
-#~ msgid "%u:%02u.%02u"
-#~ msgstr "%u:%02u.%02u"
-
-#~ msgid "%02u.%02u"
-#~ msgstr "%02u.%02u"
-
-#~ msgid "_Pause"
-#~ msgstr "일시 중지(_P)"
-
-#~ msgid "_Resume"
-#~ msgstr "계속(_R)"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "%s of %s"
-#~ msgstr ""
-#~ "%s\n"
-#~ "전송 %s, 전체 크기 %s"
-
-#~ msgid "%d download"
-#~ msgid_plural "%d downloads"
-#~ msgstr[0] "다운로드 %d개"
-
-#~ msgctxt "download status"
-#~ msgid "Unknown"
-#~ msgstr "알 수 없음"
-
-#~ msgctxt "download status"
-#~ msgid "Failed"
-#~ msgstr "실패"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Remaining"
-#~ msgstr "남은 시간"
-
-#~ msgid "Download this potentially unsafe file?"
-#~ msgstr "안전하지 않은 파일을 다운로드하시겠습니까?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "It is unsafe to open “%s” as it could potentially damage your documents "
-#~ "or invade your privacy. You can download it instead."
-#~ msgstr ""
-#~ "파일 형식: “%s”.\n"
-#~ "\n"
-#~ "“%s” 파일을 여는 것은  문서에 해를 입히고 개인 정보를 침해할 수도 있습니"
-#~ "다. 그 대신에 저장할 수 있습니다."
-
-#~ msgid "Open this file?"
-#~ msgstr "파일을 엽니까?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You can open “%s” using “%s” or save it."
-#~ msgstr ""
-#~ "파일 형식: “%s”.\n"
-#~ "\n"
-#~ "“%s”(을)를 “%s”으로 열거나 저장할 수 있습니다."
-
-#~ msgid "Download this file?"
-#~ msgstr "파일을 다운로드하시겠습니까?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You have no application able to open “%s”. You can download it instead."
-#~ msgstr ""
-#~ "파일 형식: “%s”.\n"
-#~ "\n"
-#~ "“%s”(을)를 열 수 있는 프로그램이 없습니다. 대신 다운로드할 수 있습니다."
-
-#~ msgid ""
-#~ "A list of protocols to be considered safe in addition to the default, "
-#~ "when disable_unsafe_protocols is enabled."
-#~ msgstr ""
-#~ "기본값 외에 안전하다고 생각되는 프로토콜 목록. disable_unsafe_protocol을 "
-#~ "사용하는 경우."
-
-#~ msgid "Additional safe protocols"
-#~ msgstr "기타 안전한 프로토콜"
-
-#~ msgid "Disable JavaScript chrome control"
-#~ msgstr "자바스크립트 크롬 조종 사용하지 않기"
-
-#~ msgid "Disable JavaScript's control over window chrome."
-#~ msgstr "창 크롬을 자바스크립트에서 조종하지 못하게 합니다."
-
-#~ msgid ""
-#~ "Disable all historical information by disabling back and forward "
-#~ "navigation, not allowing the history dialog and hiding the most used "
-#~ "bookmarks list."
-#~ msgstr ""
-#~ "방문 기록 정보를 사용하지 못하게 합니다. 뒤로 가기 및 앞으로 가기 단추를 "
-#~ "사용하지 못하고, 방문 기록 대화 상자를 보지 못하고, 가장 많이 방문한 책갈"
-#~ "피 목록을 감춥니다."
-
-#~ msgid "Disable arbitrary URLs"
-#~ msgstr "임의의 URL 사용하지 못하게"
-
-#~ msgid "Disable bookmark editing"
-#~ msgstr "책갈피 편집하지 못하게"
-
-#~ msgid "Disable history"
-#~ msgstr "방문 기록 사용하지 못하게"
-
-#~ msgid "Disable the user's ability to add or edit bookmarks."
-#~ msgstr "사용자가 책갈피에 추가하거나 책갈피를 편집하지 못하게 합니다."
-
-#~ msgid "Disable the user's ability to edit toolbars."
-#~ msgstr "사용자가 도구 모음을 편집하지 못하게 합니다."
-
-#~ msgid "Disable the user's ability to type in a URL to Epiphany."
-#~ msgstr "사용자가 에피파니에 URL을 직접 입력하지 못하게 합니다."
-
-#~ msgid "Disable toolbar editing"
-#~ msgstr "도구 모음 편집하지 못하게"
-
-#~ msgid "Disable unsafe protocols"
-#~ msgstr "안전하지 않은 프로토콜 사용하지 않기"
-
-#~ msgid ""
-#~ "Disables loading of content from unsafe protocols. Safe protocols are "
-#~ "http and https."
-#~ msgstr ""
-#~ "안전하지 않은 프로토콜을 통해 읽어들인 내용을 사용하지 않습니다. 안전한 프"
-#~ "로토콜은 http 및 https입니다."
-
-#~ msgid "Epiphany cannot quit"
-#~ msgstr "에피파니 끝내지 못하기"
-
-#~ msgid "Hide menubar by default"
-#~ msgstr "기본으로 메뉴 모음 감추기"
-
-#~ msgid "Hide the menubar by default."
-#~ msgstr "기본으로 메뉴 모음 감추기."
-
-#~ msgid "Lock in fullscreen mode"
-#~ msgstr "전체 화면 모드로 잠그기"
-
-#~ msgid "Locks Epiphany in fullscreen mode."
-#~ msgstr "에피파니를 전체 화면 모드로 잠궈 놓습니다."
-
-#~ msgid "User is not allowed to close Epiphany"
-#~ msgstr "사용자가 에피파니를 닫지 못하게 합니다"
-
-#~ msgid "Active extensions"
-#~ msgstr "사용중인 확장 기능"
-
-#~ msgid "Address of the user's home page."
-#~ msgstr "사용자의 홈 페이지 주소."
-
-#~ msgid "Allow popups"
-#~ msgstr "팝업 허용"
-
-#~ msgid ""
-#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
-#~ "enabled)."
-#~ msgstr ""
-#~ "(자바스크립트를 쓸 수 있다면) 자바스크립트로 새 창을 열 수 있도록 합니다."
-
-#~ msgid "Always show the tab bar"
-#~ msgstr "항상 탭 모음 표시"
-
-#~ msgid "Automatic downloads"
-#~ msgstr "자동으로 다운로드"
-
-#~ msgid "Automatically manage offline status with NetworkManager"
-#~ msgstr "NetworkManager로 자동으로 오프라인 상태를 관리하게 합니다"
-
-#~ msgid "Browse with caret"
-#~ msgstr "캐릿으로 둘러보기"
-
-#~ msgid "Cookie accept"
-#~ msgstr "쿠키 허용"
-
-#~ msgid "Default encoding"
-#~ msgstr "기본 인코딩"
-
-#~ msgid "Default font type"
-#~ msgstr "기본 글꼴 형식"
-
-#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-#~ msgstr "기본 글꼴 형식. 쓸 수 있는 값은 \"serif\", \"sans-serif\"입니다."
-
-#~ msgid "Enable JavaScript"
-#~ msgstr "자바스크립트 사용"
-
-#~ msgid "Enable Plugins"
-#~ msgstr "플러그인 사용"
-
-#~ msgid "Enable Web Inspector"
-#~ msgstr "Web Inspector 사용"
-
-#~ msgid "Enable smooth scrolling"
-#~ msgstr "부드러운 스크롤 사용"
-
-#~ msgid ""
-#~ "Force new window requests to be opened in tabs instead of using a new "
-#~ "window."
-#~ msgstr "새 창을 요청하면 새 창에 열지 않고 탭에서 엽니다."
-
-#~ msgid "Force new windows to be opened in tabs"
-#~ msgstr "새 창을 탭에서 열기"
-
-#~ msgid ""
-#~ "Hide or show the downloads window. When hidden, a notification will be "
-#~ "shown when new downloads are started."
-#~ msgstr ""
-#~ "다운로드 창을 숨기거나 보입니다. 숨기면 다운로드를 시작할 때 알림 메시지"
-#~ "를 표시합니다."
-
-#~ msgid "History pages time range"
-#~ msgstr "기록 페이지 기간"
-
-#~ msgid "Home page"
-#~ msgstr "홈 페이지"
-
-#~ msgid ""
-#~ "How to present animated images. Possible values are \"normal\", \"once\" "
-#~ "and \"disabled\"."
-#~ msgstr ""
-#~ "움직이는 그림을 보여주는 방식. 쓸 수 있는 값은 \"normal\", \"once\", "
-#~ "\"disabled\" 입니다."
-
-#~ msgid "How to print frames"
-#~ msgstr "프레임 인쇄하는 방식"
-
-#~ msgid ""
-#~ "How to print pages containing frames. Allowed values are \"normal\", "
-#~ "\"separately\" and \"selected\"."
-#~ msgstr ""
-#~ "프레임이 들어 있는 페이지를 보여주는 방식. 쓸 수 있는 값은 \"normal\", "
-#~ "\"separately\", \"selected\" 입니다."
-
-#~ msgid "ISO-8859-1"
-#~ msgstr "x-windows-949"
-
-#~ msgid "Image animation mode"
-#~ msgstr "그림 움직임 모드"
-
-#~ msgid "Languages"
-#~ msgstr "언어"
-
-#~ msgid "Lists the active extensions."
-#~ msgstr "사용 중인 확장 기능의 목록."
-
-#~ msgid ""
-#~ "Middle click to open the web page pointed to by the currently selected "
-#~ "text"
-#~ msgstr ""
-#~ "마우스 중간 단추를 누르면 현재 선택한 텍스트를 주소로 하는 웹 페이지로 가"
-#~ "기"
-
-#~ msgid ""
-#~ "Middle clicking on the main view pane will open the web page pointed to "
-#~ "by the currently selected text."
-#~ msgstr ""
-#~ "웹페이지에서 마우스 중간 단추를 누르면 현재 선택한 텍스트를 주소로 하는 "
-#~ "웹 페이지를 엽니다."
-
-#~ msgid "Preferred languages, two letter codes."
-#~ msgstr "사용할 언어, 알파벳 두 글자 코드."
-
-#~ msgid "Remember passwords"
-#~ msgstr "암호 저장"
-
-#~ msgid "Search string for keywords entered in the URL bar."
-#~ msgstr "URL 모음에 입력한 검색어를 검색합니다."
-
-#~ msgid "Show bookmarks bar by default"
-#~ msgstr "기본값으로 책갈피 모음 보이기"
-
-#~ msgid "Show statusbar by default"
-#~ msgstr "기본으로 탭에서 열기(_O)"
-
-#~ msgid ""
-#~ "Show the history pages visited \"ever\", \"last_two_days\", "
-#~ "\"last_three_days\", \"today\"."
-#~ msgstr ""
-#~ "얼마동안의 기록을 기록 페이지에 표시할 지 결정합니다. \"ever\", "
-#~ "\"last_two_days\", \"last_three_days\", \"today\"중 하나입니다."
-
-#~ msgid "Show the tab bar also when there is only one tab open."
-#~ msgstr "탭이 한 개만 열려 있을 때도 탭 모음을 표시합니다."
-
-#~ msgid "Show toolbars by default"
-#~ msgstr "기본값으로 도구 모음 보이기"
-
-#~ msgid "Size of disk cache"
-#~ msgstr "디스크 캐시 크기"
-
-#~ msgid "Size of disk cache, in MB."
-#~ msgstr "디스크 캐시 크기, MB단위."
-
-#~ msgid ""
-#~ "String that will be used as user agent, to identify the browser to the "
-#~ "web servers."
-#~ msgstr ""
-#~ "사용자 에이전트로 사용할 문자열. 이 문자열로 웹서버가 브라우저 종류를 판단"
-#~ "합니다."
-
-#~ msgid "The bookmark information shown in the editor view"
-#~ msgstr "편집기 뷰에 표시할 책갈피 정보"
-
-#~ msgid ""
-#~ "The bookmark information shown in the editor view. Valid values in the "
-#~ "list are \"address\" and \"title\"."
-#~ msgstr ""
-#~ "편집기 뷰에 표시할 책갈피 정보. 리스트에 사용 가능한 값은 \"address\"와 "
-#~ "\"title\"입니다."
-
-#~ msgid "The currently selected fonts language"
-#~ msgstr "현재 선택된 글꼴 언어"
-
-#~ msgid "The downloads folder"
-#~ msgstr "다운로드 폴더"
-
-#~ msgid "The page information shown in the history view"
-#~ msgstr "기록 뷰에 표시할 페이지 정보"
-
-#~ msgid ""
-#~ "The page information shown in the history view. Valid values in the list "
-#~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-#~ msgstr ""
-#~ "기록 뷰에 표시할 페이지 정보. 리스트에 사용 가능한 값은 \"ViewTitle\", "
-#~ "\"ViewAddress\", \"ViewDateTime\"입니다."
-
-#~ msgid ""
-#~ "The path of the folder where to download files to; or \"Downloads\" to "
-#~ "use the default downloads folder, or \"Desktop\" to use the desktop "
-#~ "folder."
-#~ msgstr ""
-#~ "다운로드한 파일을 저장할 폴더 경로; 기본 다운로드 폴더를 사용하려면 \"다운"
-#~ "로드\", 바탕 화면 폴더를 사용하려면 \"Desktop\"으로 설정하십시오."
-
-#~ msgid "Toolbar style"
-#~ msgstr "도구 모음 모양"
-
-#~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
-#~ msgstr ""
-#~ "도구 모음 모양. 사용 가능한 값은 \"\" (그놈 기본값), \"both\" (텍스트 및 "
-#~ "아이콘), \"both-horiz\" (텍스트 옆에 아이콘), \"icons\" 그리고 \"text\"입"
-#~ "니다."
-
-#~ msgid "URL Search"
-#~ msgstr "URL 검색"
-
-#~ msgid "Use own colors"
-#~ msgstr "정한 색 사용"
-
-#~ msgid "Use your own colors instead of the colors the page requests."
-#~ msgstr "웹 페이지에 지정된 색 대신 사용자가 지정한 색을 씁니다."
-
-#~ msgid "Use your own fonts instead of the fonts the page requests."
-#~ msgstr "웹 페이지에 지정된 글꼴 대신 사용자가 지정한 글꼴을 씁니다."
-
-#~ msgid "User agent"
-#~ msgstr "사용자 에이전트"
-
-#~ msgid "Visibility of the downloads window"
-#~ msgstr "다운로드 창 보기"
-
-#~ msgid ""
-#~ "When files cannot be opened by the browser they are automatically "
-#~ "downloaded to the download folder and opened with the appropriate "
-#~ "application."
-#~ msgstr ""
-#~ "파일을 브라우저에서 열지 못하는 경우에 자동으로 다운로드 폴더에 내려받고 "
-#~ "적절한 프로그램으로 그 파일을 엽니다."
-
-#~ msgid ""
-#~ "Where to accept cookies from. Possible values are \"anywhere\", \"current "
-#~ "site\" and \"nowhere\"."
-#~ msgstr ""
-#~ "쿠키를 허용할 곳을 정합니다. 쓸 수 있는 값은 \"anywhere\", \"current site"
-#~ "\" 및 \"nowhere\"입니다."
-
-#~ msgid "Whether to print the background color"
-#~ msgstr "배경 색을 인쇄할 지 여부"
-
-#~ msgid "Whether to print the background images"
-#~ msgstr "배경 그림을 인쇄할 지 여부"
-
-#~ msgid "Whether to print the date in the footer"
-#~ msgstr "꼬리말에 날짜를 인쇄할 지 정함"
-
-#~ msgid "Whether to print the page address in the header"
-#~ msgstr "머리말에 웹 페이지 주소를 인쇄할 지 정함"
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer"
-#~ msgstr "꼬리말에 쪽 수를 인쇄할 지 정함"
-
-#~ msgid "Whether to print the page title in the header"
-#~ msgstr "머리말에 쪽 제목을 인쇄할 지 정함"
-
-#~ msgid "Whether to store and prefill passwords in web sites."
-#~ msgstr "웹사이트의 암호를 기억하고 있다가 자동으로 채울 지 여부."
-
-#~ msgid "x-western"
-#~ msgstr "ko"
-
-#~ msgid "<b>Web Development</b>"
-#~ msgstr "<b>웹 개발</b>"
-
-#~ msgid "Let web pages specify their own _fonts"
-#~ msgstr "웹 페이지가 지정한 글꼴 사용(_F)"
-
-#~ msgid "Let web pages specify their own c_olors"
-#~ msgstr "웹 페이지가 지정한 색 사용(_O)"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "부드러운 스크롤 사용(_M)"
-
-#~ msgid "_Minimum size:"
-#~ msgstr "최소 크기(_M):"
-
-#~ msgid "The file “%s” has been downloaded."
-#~ msgstr "“%s” 파일을 다운로드했습니다."
-
-#~ msgid "Download finished"
-#~ msgstr "다운로드 끝"
-
-#~ msgid "The file “%s” has been added to the downloads queue."
-#~ msgstr "“%s” 파일을 다운로드 대기열에 추가했습니다."
-
-#~ msgid "Download started"
-#~ msgstr "다운로드 시작"
-
-#~ msgid "_Save As..."
-#~ msgstr "다른 이름으로 저장(_S)..."
-
-#~ msgid "Redirecting to “%s”…"
-#~ msgstr "“%s” 사이트로 다시 연결하는 중입니다…"
-
-#~ msgid "Transferring data from “%s”…"
-#~ msgstr "“%s”에서 데이터를 받는 중입니다…"
-
-#~ msgid "Waiting for authorization from “%s”…"
-#~ msgstr "“%s”에서 인증 받기를 기다리는 중입니다…"
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "GConf 오류:\n"
-#~ "  %s"
-
-#~ msgid "Failed to read latest migration marker, aborting profile migration."
-#~ msgstr ""
-#~ "최근의 옮길 시점 표시를 읽는데 실패했습니다. 프로파일 옮기기를 중지합니다."
-
-#~ msgid "Show only the title column"
-#~ msgstr "칸에 제목만 보입니다"
-
-#~ msgid "T_itle and Address"
-#~ msgstr "제목과 주소(_I)"
-
-#~ msgid "Show both the title and address columns"
-#~ msgstr "칸에 제목과 주소 모두 보입니다"
-
-#~ msgid ""
-#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
-#~ "You can recover the opened windows and tabs."
-#~ msgstr ""
-#~ "에피파니가 마지막으로 작동할 때 비정상적으로 끝난 것 같습니다. 열려 있었"
-#~ "던 창과 탭을 복구할 수 있습니다."
-
-#~ msgid "Crash Recovery"
-#~ msgstr "비정상 종료 복구"
-
-#~ msgid "Sidebar extension required"
-#~ msgstr "사이드바 확장 기능이 필요합니다"
-
-#~ msgid "Sidebar Extension Required"
-#~ msgstr "사이드바 확장 기능이 필요합니다"
-
-#~ msgid "The link you clicked needs the sidebar extension to be installed."
-#~ msgstr "클릭하신 링크는 사이드바 확장 기능을 설치하셔야 이용할 수 있습니다."
-
-#~ msgid "Caret"
-#~ msgstr "캐럿"
-
-#~ msgid "In keyboard selection mode, press F7 to exit"
-#~ msgstr "키보드 선택 모드에서 F7을 누르면 빠져나갑니다"
-
-#~ msgid "St_atusbar"
-#~ msgstr "상태 표시줄(_A)"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "상태 표시줄을 보이거나 숨깁니다"
-
-#~ msgid "%d hidden popup window"
-#~ msgid_plural "%d hidden popup windows"
-#~ msgstr[0] "감춘 팝업 창 %d개"
-
-#~ msgid "_View Certificate…"
-#~ msgstr "인증서 보기(_V)…"
-
-#~ msgid "Enable _Java"
-#~ msgstr "자바 사용(_J)"
-
-#~ msgid "First"
-#~ msgstr "처음"
-
-#~ msgid "Go to the first page"
-#~ msgstr "첫 페이지로 갑니다"
-
-#~ msgid "Last"
-#~ msgstr "마지막"
-
-#~ msgid "Go to the last page"
-#~ msgstr "마지막 페이지로 갑니다"
-
-#~ msgid "Previous"
-#~ msgstr "이전"
-
-#~ msgid "Go to the previous page"
-#~ msgstr "이전 페이지로 갑니다"
-
-#~ msgid "Next"
-#~ msgstr "다음"
-
-#~ msgid "Go to next page"
-#~ msgstr "다음 페이지로 갑니다"
-
-#~ msgid "Close"
-#~ msgstr "닫기"
-
-#~ msgid "Close print preview"
-#~ msgstr "인쇄 미리보기 닫기"
-
-#~ msgid "The encoding autodetector. Empty string means autodetect is off"
-#~ msgstr "문자셋 자동인식. 빈 문자열은 자동인식이 꺼진 것을 뜻합니다"
-
-#~ msgid "Au_todetect:"
-#~ msgstr "자동인식(_T):"
-
-#~ msgid "Fonts"
-#~ msgstr "글꼴"
-
-#~ msgid "For l_anguage:"
-#~ msgstr "사용 언어(_A):"
-
-#~ msgid "_Detailed Font Settings…"
-#~ msgstr "자세한 글꼴 설정(_D)…"
-
-#~ msgid "_Fixed width:"
-#~ msgstr "고정 폭(_F):"
-
-#~ msgid "_Variable width:"
-#~ msgstr "가변 폭(_V):"
-
-#~ msgid "Download completed"
-#~ msgstr "다운로드 완료"
-
-#~ msgid ""
-#~ "Check that you are connected to the internet, and that the address is "
-#~ "correct."
-#~ msgstr "인터넷에 연결되어 있고, 주소가 올바른지 확인하십시오."
-
-#~ msgid "If this page used to exist, you may find an archived version:"
-#~ msgstr "페이지가 없으면, 저장된 페이지를 찾게 됩니다:"
-
-#~ msgid "“%s” Refused the Connection"
-#~ msgstr "“%s” 사이트가 연결을 거부합니다"
-
-#~ msgid "“%s” refused the connection."
-#~ msgstr "“%s” 사이트가 연결을 거부합니다."
-
-#~ msgid "Likely causes of the problem are"
-#~ msgstr "문제의 원인은 다음과 같습니다"
-
-#~ msgid ""
-#~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
-#~ "Services Configuration Tool in System > Control Center, or</"
-#~ "ul><ul><li>the port number %d is wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>%s 서비스가 시작하지 않았습니다.</li>시스템의 설정도구 > 그놈 제어"
-#~ "판을 사용해서 시작</ul>하도록 하거나 <ul><li>포트 번호 %d번이 잘못되었습니"
-#~ "다.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>몇몇 서비스가 시작되지 않거나, </li><li>포트 번호 %d번이 잘못되었"
-#~ "습니다.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>you got the port number "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>몇몇 서비스가 시작되지 않거나, </li><li>잘못된 포트 번호를 얻었습"
-#~ "니다. </li></ul>"
-
-#~ msgid ""
-#~ "The server may be busy or you may have a network connection problem. Try "
-#~ "again later."
-#~ msgstr ""
-#~ "서버에 응답이 없거나 네트워크에 문제가 있는 것 같습니다. 나중에 다시 시도"
-#~ "하십시오."
-
-#~ msgid "There may be an old version of the page you wanted:"
-#~ msgstr "보려는 페이지의 이전 버전이 있는 것 같습니다:"
-
-#~ msgid "“%s” Interrupted the Connection"
-#~ msgstr "“%s” 사이트에 연결이 끊겼습니다"
-
-#~ msgid "“%s” interrupted the connection."
-#~ msgstr "“%s” 사이트에 연결이 끊겼습니다."
-
-#~ msgid "“%s” is not Responding"
-#~ msgstr "“%s” 사이트가 응답이 없습니다"
-
-#~ msgid "“%s” is not responding."
-#~ msgstr "“%s” 사이트가 응답이 없습니다."
-
-#~ msgid "The connection was lost because the server took too long to respond."
-#~ msgstr "서버의 응답 시간이 너무 오래 걸려서 연결이 끊겼습니다."
-
-#~ msgid "Invalid Address"
-#~ msgstr "잘못된 주소"
-
-#~ msgid "Invalid address."
-#~ msgstr "잘못된 주소."
-
-#~ msgid "The address you entered is not valid."
-#~ msgstr "입력한 주소가 잘못되었습니다."
-
-#~ msgid "“%s” Redirected Too Many Times"
-#~ msgstr "“%s” 사이트가 너무 많은 주소 재지정을 합니다"
-
-#~ msgid "This page cannot load because of a problem with the Web site."
-#~ msgstr "웹사이트에 문제가 있어서 페이지를 읽을 수 없습니다."
-
-#~ msgid "The server “%s” is redirecting in a way that will never complete."
-#~ msgstr "“%s”서버가 무한히 재지정되고 있습니다."
-
-#~ msgid "“%s” Requires an Encrypted Connection"
-#~ msgstr "“%s” 사이트는 암호화되어서 연결해야 합니다 "
-
-#~ msgid "“%s” requires an encrypted connection."
-#~ msgstr "“%s” 사이트는 암호화되어서 연결해야 합니다."
-
-#~ msgid ""
-#~ "The document could not be loaded because encryption support is not "
-#~ "installed."
-#~ msgstr "암호화 지원이 설치되지 않아서 문서를 읽을 수 없습니다."
-
-#~ msgid "“%s” Dropped the Connection"
-#~ msgstr "“%s” 사이트가 연결을 끊었습니다"
-
-#~ msgid "“%s” dropped the connection."
-#~ msgstr "“%s” 사이트가 연결을 끊었습니다."
-
-#~ msgid "The server dropped the connection before any data could be read."
-#~ msgstr "데이터를 읽지 전에 서버가 연결을 끊었습니다."
-
-#~ msgid "Cannot Load Document Whilst Working Offline"
-#~ msgstr "오프라인으로 동작하는 동안 문서를 읽을 수 없습니다"
-
-#~ msgid "Cannot load document whilst working offline."
-#~ msgstr "오프라인으로 동작하는 동안 문서를 읽을 수 없습니다."
-
-#~ msgid "To view this document, disable “Work Offline” and try again."
-#~ msgstr "이 문서를 보려면 “오프라인으로 동작”을 끄고 다시 시도하십시오."
-
-#~ msgid "Access Denied to Port “%d” of “%s”"
-#~ msgstr "“%2$s”(이)가 포트 “%1$d”번의 접속을 거부합니다"
-
-#~ msgid "Access denied to port “%d” of “%s”."
-#~ msgstr "“%2$s”(이)가 포트 “%1$d”번의 접속을 거부합니다."
-
-#~ msgid ""
-#~ "This address uses a network port which is normally used for purposes "
-#~ "other than Web browsing."
-#~ msgstr ""
-#~ "이 주소는 웹브라우저가 아닌 다른 목적으로 이용되는 네트워크 포트를 사용하"
-#~ "고 있습니다."
-
-#~ msgid "The request has been cancelled for your protection."
-#~ msgstr "보안을 위해서 요청을 취소합니다."
-
-#~ msgid "Could not Connect to Proxy Server"
-#~ msgstr "프록시 서버에 연결할 수 없습니다"
-
-#~ msgid "Could not connect to proxy server."
-#~ msgstr "프록시 서버에 연결할 수 없습니다."
-
-#~ msgid ""
-#~ "Check your proxy server settings. If the connection still fails, there "
-#~ "may be a problem with your proxy server or your network connection."
-#~ msgstr ""
-#~ "프록시 서버 설정을 확인 하십시오. 그래도 연결이 안되면, 프록시 서버나 네트"
-#~ "워크 연결에 문제가 있을 수 있습니다."
-
-#~ msgid "Could not Display Content"
-#~ msgstr "내용을 보여줄 수 없습니다"
-
-#~ msgid "Could not display content."
-#~ msgstr "내용을 보여줄 수 없습니다."
-
-#~ msgid "The page uses an unsupported or invalid form of compression."
-#~ msgstr "웹 페이지가 지원하지 않거나 잘못된 압축 형식을 사용하고 있습니다."
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "구글 캐시"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "인터넷 저장소"
-
-#~ msgid "_Abort Script"
-#~ msgstr "스크립트 중지(_A)"
-
-#~ msgid "Don't Save"
-#~ msgstr "저장 하지 않음"
-
-#~ msgid "_Username:"
-#~ msgstr "사용자 이름(_U):"
-
-#~ msgid "Text files"
-#~ msgstr "텍스트 파일"
-
-#~ msgid "XML files"
-#~ msgstr "XML 파일"
-
-#~ msgid "XUL files"
-#~ msgstr "XUL 파일"
-
-#~ msgid "Accept cookie from %s?"
-#~ msgstr "%s의 쿠키를 허용합니까?"
-
-#~ msgid "Accept Cookie?"
-#~ msgstr "쿠키를 허용합니까?"
-
-#~ msgid "The site wants to modify an existing cookie."
-#~ msgstr "사이트에서 쿠키를 수정하려 합니다."
-
-#~ msgid "The site wants to set a cookie."
-#~ msgstr "사이트에서 쿠키를 설정하려 합니다."
-
-#~ msgid "The site wants to set a second cookie."
-#~ msgstr "사이트에서 두번째 쿠키를 설정하려 합니다."
-
-#~ msgid "You already have %d cookie from this site."
-#~ msgid_plural "You already have %d cookies from this site."
-#~ msgstr[0] "이미 이 사이트의 쿠키 %d개를 가지고 있습니다."
-
-#~ msgid "Apply this _decision to all cookies from this site"
-#~ msgstr "이 사이트의 모든 쿠키에 이 결정 적용(_D)"
-
-#~ msgid "_Reject"
-#~ msgstr "거부(_R)"
-
-#~ msgid "_Accept"
-#~ msgstr "허용(_A)"
-
-#~ msgid "The web site “%s” requests that you sign the following text:"
-#~ msgstr "“%s” 웹사이트에서 다음 텍스트에 서명하기를 요청했습니다:"
-
-#~ msgid "_Sign text"
-#~ msgstr "텍스트 서명(_S)"
-
-#~ msgid "Options"
-#~ msgstr "옵션"
-
-#~ msgid "Print this page?"
-#~ msgstr "이 페이지를 인쇄하시겠습니까?"
-
-#~ msgid "Preparing to print"
-#~ msgstr "인쇄할 준비하는 중"
-
-#~ msgid "Page %d of %d"
-#~ msgstr "%2$d 페이지 중에 %1$d 페이지"
-
-#~ msgid "Cancelling print"
-#~ msgstr "인쇄 취소하는 중"
-
-#~ msgid "Spooling..."
-#~ msgstr "작업을 보내는 중..."
-
-#~ msgid "Print error"
-#~ msgstr "인쇄 오류"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "“%s” 인쇄하는 중"
-
-#~ msgid "_Select Certificate"
-#~ msgstr "인증서 선택(_S)"
-
-#~ msgid "Choose a certificate to present as identification to “%s”."
-#~ msgstr "“%s”에게 신원 확인으로 넘겨줄 인증서를 선택하십시오."
-
-#~ msgid "Select a certificate to identify yourself."
-#~ msgstr "자기 신원을 확인하는 데 쓸 인증서를 선택하십시오."
-
-#~ msgid "Certificate _Details"
-#~ msgstr "인증서 자세히(_D)"
-
-#~ msgid ""
-#~ "The site “%s” returned security information for “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "사이트 “%s”에서 “%s”에 대한 보안 정보를 돌려주었습니다. 누군가가 통신 중간"
-#~ "에서 비밀 정보를 가로채려 하고 있을 수도 있습니다."
-
-#~ msgid ""
-#~ "You should only accept the security information if you trust “%s” and “%"
-#~ "s”."
-#~ msgstr ""
-#~ "“%s” 및 “%s” 모두를 신뢰할 경우에만 이 보안 정보를 받아들여야 합니다."
-
-#~ msgid "Accept incorrect security information?"
-#~ msgstr "틀린 보안 정보를 받아들이시겠습니까?"
-
-#~ msgid ""
-#~ "It was not possible to automatically trust “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "“%s”에 대해 자동으로 신뢰할 수는 없습니다. 누군가가 통신 중간에서 비밀 정"
-#~ "보를 가로채려 하고 있을 수도 있습니다."
-
-#~ msgid ""
-#~ "You should only connect to the site if you are certain you are connected "
-#~ "to “%s”."
-#~ msgstr ""
-#~ "정말로 “%s” 사이트에 연결한 것을 확신할 경우에만 이 사이트에 연결해야 합니"
-#~ "다."
-
-#~ msgid "Connect to untrusted site?"
-#~ msgstr "신뢰하지 않는 사이트에 연결하시겠습니까?"
-
-#~ msgid "_Trust this security information from now on"
-#~ msgstr "지금부터 이 보안정보 신뢰함(_T)"
-
-#~ msgid "Co_nnect"
-#~ msgstr "연결(_N)"
-
-#~ msgid "Accept expired security information?"
-#~ msgstr "만료된 보안 정보를 받아들이시겠습니까?"
-
-#~ msgid "The security information for “%s” expired on %s."
-#~ msgstr "“%s”에 대한 보안 정보가 %s에 만료되었습니다."
-
-#~ msgid "Accept not yet valid security information?"
-#~ msgstr "아직 유효하지 않은 보안 정보를 받아들이시겠습니까?"
-
-#~ msgid "The security information for “%s” isn't valid until %s."
-#~ msgstr "“%s”에 대한 보안 정보가 %s까지는 유효하지 않습니다."
-
-#~ msgid "%a %d %b %Y"
-#~ msgstr "%Y년 %b %e일 (%a)"
-
-#~ msgid "You should ensure that your computer's time is correct."
-#~ msgstr "컴퓨터 시간이 맞는 지 확인하십시오."
-
-#~ msgid "Cannot establish connection to “%s”"
-#~ msgstr "“%s”에 연결할 수 없습니다"
-
-#~ msgid ""
-#~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
-#~ "\n"
-#~ "Please ask your system administrator for assistance."
-#~ msgstr ""
-#~ "인증서 취소 목록(CRL)을 “%s”에서 업데이트해야 합니다.\n"
-#~ "\n"
-#~ "도움이 필요하면 시스템 관리자에게 문의하십시오."
-
-#~ msgid "Trust new Certificate Authority?"
-#~ msgstr "새로운 인증 기관을 신뢰하시겠습니까?"
-
-#~ msgid "_Trust CA"
-#~ msgstr "인증 기관 신뢰(_T)"
-
-#~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
-#~ msgstr "새로운 인증 기관 “%s”(을)를 신뢰하시겠습니까?"
-
-#~ msgid ""
-#~ "Before trusting a Certificate Authority (CA) you should verify the "
-#~ "certificate is authentic."
-#~ msgstr "인증 기관(CA)을 신뢰하기 전에 그 인증서가 진짜인지 확인해야 합니다."
-
-#~ msgid "Certificate already exists."
-#~ msgstr "인증서가 이미 있습니다."
-
-#~ msgid "The certificate has already been imported."
-#~ msgstr "인증서를 이미 가져왔습니다."
-
-#~ msgid "Select Password"
-#~ msgstr "암호를 정하십시오"
-
-#~ msgid "Select a password to protect this certificate"
-#~ msgstr "이 인증서를 보호할 암호를 정하십시오"
-
-#~ msgid "Enter the password for this certificate"
-#~ msgstr "이 인증서에 대한 암호를 입력하십시오"
-
-#~ msgid "Certificate Revocation List Imported"
-#~ msgstr "가져온 인증서 취소 목록"
-
-#~ msgid "Certificate Revocation List (CRL) successfully imported"
-#~ msgstr "인증서 취소 목록을 성공적으로 가져왔습니다."
-
-#~ msgid "Unit:"
-#~ msgstr "소속:"
-
-#~ msgid "Next Update:"
-#~ msgstr "다음 업데이트:"
-
-#~ msgid "Not part of certificate"
-#~ msgstr "인증서에 없습니다"
-
-#~ msgid "Certificate Properties"
-#~ msgstr "인증서 속성"
-
-#~ msgid "This certificate has been verified for the following uses:"
-#~ msgstr "이 인증서는 다음 사용에 대해 확인되었습니다:"
-
-#~ msgid "Could not verify this certificate because it has been revoked."
-#~ msgstr "이 인증서는 취소되었기 때문에 확인할 수 없습니다."
-
-#~ msgid "Could not verify this certificate because it has expired."
-#~ msgstr "이 인증서는 만료되었기 때문에 확인할 수 없습니다."
-
-#~ msgid "Could not verify this certificate because it is not trusted."
-#~ msgstr "이 인증서는 신뢰하지 않는 인증서이기 때문에 확인할 수 없습니다."
-
-#~ msgid "Could not verify this certificate because the issuer is not trusted."
-#~ msgstr ""
-#~ "이 인증서는 발급자가 신뢰하지 않는 사람이기 때문에 확인할 수 없습니다."
-
-#~ msgid "Could not verify this certificate because the issuer is unknown."
-#~ msgstr "이 인증서는 발급자를 알 수 없기 때문에 확인할 수 없습니다."
-
-#~ msgid ""
-#~ "Could not verify this certificate because the CA certificate is invalid."
-#~ msgstr "이 인증서는 인증 기관의 인증서가 잘못되었기 확인할 수 없습니다."
-
-#~ msgid "Could not verify this certificate for unknown reasons."
-#~ msgstr "알 수 없는 이유로 이 인증서를 확인할 수 없습니다."
-
-#~ msgid "Change Token Password"
-#~ msgstr "토큰 암호 바꾸기"
-
-#~ msgid "Choose a password for the “%s” token"
-#~ msgstr "“%s” 토큰의 암호 선택"
-
-#~ msgid "Change the password for the “%s” token"
-#~ msgstr "“%s” 토큰의 암호 바꾸기"
-
-#~ msgid "Get Token Password"
-#~ msgstr "토큰 암호 가져오기"
-
-#~ msgid "Please enter the password for the “%s” token"
-#~ msgstr "“%s” 토큰의 암호를 입력하십시오"
-
-#~ msgid "Please select a token:"
-#~ msgstr "토큰을 선택하십시오:"
-
-#~ msgid "_Select"
-#~ msgstr "선택(_S)"
-
-#~ msgid "Escrow the secret key?"
-#~ msgstr "비밀 키를 맡기시겠습니까?"
-
-#~ msgid ""
-#~ "The certificate authority “%s” requests that you give it a copy of the "
-#~ "newly generated secret key.\n"
-#~ "\n"
-#~ "This will enable the certificate authority read any communications "
-#~ "encrypted with this key without your knowledge or consent.\n"
-#~ "\n"
-#~ "It is strongly recommended not to allow it."
-#~ msgstr ""
-#~ "인증 기관 “%s”에서 새로 만든 비밀 키의 사본을 넘겨주도록 요청했습니다.\n"
-#~ "\n"
-#~ "키를 넘겨 주면, 해당 인증 기관에서 몰래 혹은 동의 없이도 그 키를 이용해 암"
-#~ "호화한 통신 내용을 모두 읽을 수 있습니다.\n"
-#~ "\n"
-#~ "허용하지 말기를 강력히 권장합니다."
-
-#~ msgid "Generating Private Key."
-#~ msgstr "개인 키를 만드는 중입니다."
-
-#~ msgid ""
-#~ "Please wait while a new private key is generated. This process could take "
-#~ "a few minutes."
-#~ msgstr ""
-#~ "새 개인 키를 만드는 동안 기다리십시오. 이 작업은 몇 분이 걸릴 수도 있습니"
-#~ "다."
-
-#~ msgid "Security Notice"
-#~ msgstr "보안 정보 알림"
-
-#~ msgid "This page is loaded over a secure connection"
-#~ msgstr "이 페이지는 보안 연결을 통해 읽어들였습니다."
-
-#~ msgid ""
-#~ "For secure pages, the address entry has a distinct color and a locked "
-#~ "padlock icon is displayed.\n"
-#~ "\n"
-#~ "The padlock icon in the statusbar also indicates whether a page is secure."
-#~ msgstr ""
-#~ "보안 페이지에서, 주소 항목은 다른 색상으로 나타나고 자물쇠 아이콘이 나타납"
-#~ "니다.\n"
-#~ "\n"
-#~ "또한 페이지가 안전한지 표시하기 위해 상태표시줄에도 잠겨진 자물쇠 아이콘"
-#~ "이 나타납니다."
-
-#~ msgid "Security Warning"
-#~ msgstr "보안 경고"
-
-#~ msgid "This page is loaded over a low security connection"
-#~ msgstr "이 페이지는 보안이 취약한 연결을 통해 읽어들였습니다."
-
-#~ msgid ""
-#~ "Any information you see or enter on this page could easily be intercepted "
-#~ "by a third party."
-#~ msgstr ""
-#~ "이 페이지에서 보는 정보나 입력하는 정보는 다른 사람이 쉽게 가로챌 수 있습"
-#~ "니다."
-
-#~ msgid "Some parts of this page are loaded over an insecure connection"
-#~ msgstr "이 페이지의 일부는 안전하지 않은 연결을 통해 읽어들였습니다."
-
-#~ msgid ""
-#~ "Some information you see or enter will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "보거나 입력하는 정보 중에서 일부가 안전하지 않은 연결을 통해 전송되고, 다"
-#~ "른 사람이 쉽게 가로챌 수 있습니다."
-
-#~ msgid "Send this information over an insecure connection?"
-#~ msgstr "이 정보를 안전하지 않은 연결을 통해 보내시겠습니까?"
-
-#~ msgid ""
-#~ "The information you have entered will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "입력하신 정보는 안전하지 않은 연결을 통해 전송되고, 다른 사람이 쉽게 가로"
-#~ "챌 수 있습니다."
-
-#~ msgid "_Send"
-#~ msgstr "보내기(_S)"
-
-#~ msgid ""
-#~ "Although this page was loaded over a secure connection, the information "
-#~ "you have entered will be sent over an insecure connection, and could "
-#~ "easily be intercepted by a third party."
-#~ msgstr ""
-#~ "이 페이지는 안전한 연결을 통해 읽어들였지만, 입력하신 정보는 안전하지 않"
-#~ "은 연결을 통해 전송되고, 다른 사람이 쉽게 가로챌 수 있습니다."
-
-#~ msgid "_Domain:"
-#~ msgstr "도메인(_D):"
-
-#~ msgid "_New password:"
-#~ msgstr "새 암호(_N):"
-
-#~ msgid "Con_firm password:"
-#~ msgstr "암호 확인(_F):"
-
-#~ msgid "Password quality:"
-#~ msgstr "암호 품질:"
-
-#~ msgid "Do not remember this password"
-#~ msgstr "암호 기억하지 않기"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "이 세션에서 암호 기억(_R)"
-
-#~ msgid "Save password in _keyring"
-#~ msgstr "키 모음에 암호 기억(_K)"
-
-#~ msgid "Unsafe protocol."
-#~ msgstr "안전하지 않은 프로토콜."
-
-#~ msgid ""
-#~ "The address has not been loaded, because it refers to an unsafe protocol "
-#~ "and thereby presents a security risk to your system."
-#~ msgstr ""
-#~ "안전하지 않은 프로토콜을 참조하기 때문에 시스템의 보안에 위험이 생길 수 있"
-#~ "어서 주소를 읽지 않았습니다."
-
-#~ msgid "No address found."
-#~ msgstr "주소 찾을 수 없음."
-
-#~ msgid "No web address could be found in this file."
-#~ msgstr "이 파일에서 웹 주소를 찾을 수 없습니다."
-
-#~ msgid "Epiphany Desktop File Plugin"
-#~ msgstr "에피파니 바탕 화면 파일 플러그인"
-
-#~ msgid ""
-#~ "This plugin handles “.desktop” and “.url” files containing web links."
-#~ msgstr ""
-#~ "이 플러그인은 웹 링크가 들어 있는 “.desktop” 및 “.url” 파일을 처리합니다."
-
-#~ msgid "bookmarks|All"
-#~ msgstr "모두"
-
-#~ msgid "toolbar style|Default"
-#~ msgstr "기본값"
-
-#~ msgid "_History"
-#~ msgstr "기록(_H)"
-
-#~ msgid "Opening %s"
-#~ msgstr "%s을(를) 여는 중입니다"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "항목 %d개를 여는 중입니다"
-
-#~ msgid "Remove _All"
-#~ msgstr "모두 지우기(_A)"
-
-#~ msgid "Remove all passwords?"
-#~ msgstr "모든 암호를 지우시겠습니까?"
-
-#~ msgid "Do you really want to remove all stored passwords?"
-#~ msgstr "정말로 저장한 모든 암호를 지우시겠습니까?"
-
-#~ msgid "Remove all cookies?"
-#~ msgstr "모든 쿠키를 지우시겠습니까?"
-
-#~ msgid "Do you really want to remove all stored cookies?"
-#~ msgstr "정말로 저장한 모든 쿠키를 지우시겠습니까?"
