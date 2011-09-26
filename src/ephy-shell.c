@@ -470,10 +470,11 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
     priv->embed_single_connected = TRUE;
 
     /* Now we need the net monitor   */
-    ephy_shell_get_net_monitor (shell);
-    ephy_shell_sync_network_status (priv->nm_proxy,
-                                    ephy_network_manager_get_state (priv->nm_proxy),
-                                    shell);
+    if (ephy_shell_get_net_monitor (shell)) {
+        ephy_shell_sync_network_status (priv->nm_proxy,
+                                        ephy_network_manager_get_state (priv->nm_proxy),
+                                        shell);
+    }
   }
 
   return embed_single;
