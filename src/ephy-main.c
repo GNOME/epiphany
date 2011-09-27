@@ -380,6 +380,18 @@ main (int argc,
     exit (1);
   }
 
+  /* Work-around Flash Player crash */
+  g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
+
+  /* Start our services */
+  if (!ephy_file_helpers_init (profile_directory,
+                               private_instance || application_mode,
+                               keep_temp_directory || profile_directory,
+                               &error)) {
+    show_error_message (&error);
+    exit (1);
+  }
+
   arbitrary_url = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                           EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
 
@@ -408,15 +420,6 @@ main (int argc,
 
   startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 
-  /* Start our services */
-  if (!ephy_file_helpers_init (profile_directory,
-                               private_instance || application_mode,
-                               keep_temp_directory || profile_directory,
-                               &error)) {
-    show_error_message (&error);
-    exit (1);
-  }
-
   /* Delete the requested web application, if any. Must happen after
    * ephy_file_helpers_init (). */
   if (application_to_delete) {
@@ -426,9 +429,6 @@ main (int argc,
 
   ephy_stock_icons_init ();
   ephy_file_load_accels ();
-
-  /* Work-around Flash Player crash */
-  g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Now create the shell */
   if (private_instance)
