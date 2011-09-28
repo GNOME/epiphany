@@ -547,10 +547,10 @@ construct_confirm_close_dialog (EphyWindow *window,
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_WARNING,
 					 GTK_BUTTONS_CANCEL,
-					 title);
+					 "%s", title);
 
 	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog), info);
+		(GTK_MESSAGE_DIALOG (dialog), "%s", info);
 	
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       action, GTK_RESPONSE_ACCEPT);

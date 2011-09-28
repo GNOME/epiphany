@@ -74,7 +74,7 @@ read_css_style (EphyRequestAbout *about)
   GError *error = NULL;
 
   if (!g_file_get_contents (ephy_file ("about.css"), &about->priv->css_style, NULL, &error))
-    g_debug (error->message);
+    g_debug ("%s", error->message);
 }
 
 static GInputStream *
