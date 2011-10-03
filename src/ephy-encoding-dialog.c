@@ -336,6 +336,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 			  G_CALLBACK (automatic_toggled_cb), dialog);
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
+	child = gtk_bin_get_child (GTK_BIN (button));
 	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
 
 	dialog->priv->enc_view = treeview;
