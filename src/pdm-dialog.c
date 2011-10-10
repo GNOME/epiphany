@@ -604,93 +604,51 @@ setup_action (PdmActionInfo *action)
 }
 
 /* "Cookies" tab */
+static void
+cookie_dialog_response_cb (GtkDialog *widget,
+			   int response,
+			   EphyDialog *cookie_dialog)
+{
+	g_object_unref (cookie_dialog);
+}
 
 static void
 show_cookies_properties (PdmDialog *dialog,
 			 SoupCookie *info)
 {
-	GtkWidget *gdialog;
-	GtkWidget *table;
-	GtkWidget *label;
+	EphyDialog *cookie_dialog;
+	GtkWidget *cookie_widget;
 	GtkWidget *parent;
-	GtkWidget *content_area;
+	GtkWidget *content_label;
+	GtkWidget *path_label;
+	GtkWidget *send_label;
+	GtkWidget *expires_label;
 	char *str;
 
-	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog), "pdm_dialog");
+	parent = ephy_dialog_get_control (EPHY_DIALOG (dialog), "pdm_dialog");
 
-	gdialog = gtk_dialog_new_with_buttons
-		 (_("Cookie Properties"),
-		  GTK_WINDOW (parent),
-		  GTK_DIALOG_DESTROY_WITH_PARENT,
-		  GTK_STOCK_CLOSE, 0, NULL);
-	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties",
-			       -1, -1, FALSE,
-			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
-	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
-	content_area = gtk_dialog_get_content_area (GTK_DIALOG (gdialog));
-	gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 24 = 2 * 5 + 14 */
+	cookie_dialog = ephy_dialog_new_with_parent (parent);
+	ephy_dialog_construct (cookie_dialog,
+			       ephy_file ("epiphany.ui"),
+			       "cookie_properties_dialog",
+			       NULL);
 
-	table = gtk_table_new (2, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_widget_show (table);
+	ephy_dialog_get_controls (EPHY_DIALOG (cookie_dialog),
+				  "cookie_properties_dialog", &cookie_widget,
+				  "content_val_label", &content_label,
+				  "path_val_label", &path_label,
+				  "send_val_label", &send_label,
+				  "expires_val_label", &expires_label,
+				  NULL);
 
-	str = g_strconcat ("<b>", _("Content:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			  GTK_FILL, GTK_FILL, 0, 0);
+	g_signal_connect (cookie_widget, "response",
+			  G_CALLBACK (cookie_dialog_response_cb), cookie_dialog);
 
-	label = gtk_label_new (info->value);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
-
-	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	label = gtk_label_new (info->path);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
-
-	str = g_strconcat ("<b>", _("Send for:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	label = gtk_label_new (info->secure ? _("Encrypted connections only") : _("Any type of connection") );
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
-
-	str = g_strconcat ("<b>", _("Expires:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-			  GTK_FILL, GTK_FILL, 0, 0);
+	gtk_label_set_text (GTK_LABEL (content_label), info->value);
+	gtk_label_set_text (GTK_LABEL (path_label), info->path);
+	gtk_label_set_text (GTK_LABEL (send_label), info->secure ?
+			    _("Encrypted connections only") :
+			    _("Any type of connection"));
 
 	if (info->expires == NULL)
 	{
@@ -703,23 +661,10 @@ show_cookies_properties (PdmDialog *dialog,
 		time_t out = soup_date_to_time_t(info->expires);
 		str = eel_strdup_strftime ("%c", localtime_r (&out, &t));
 	}
-	label = gtk_label_new (str);
+	gtk_label_set_text (GTK_LABEL (expires_label), str);
 	g_free (str);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
 
-	gtk_box_pack_start (GTK_BOX (content_area),
-			    table,
-			    FALSE, FALSE, 0);
-
-	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-				     GTK_WINDOW (gdialog));
-
-	gtk_dialog_run (GTK_DIALOG (gdialog));
-
-	gtk_widget_destroy (gdialog);
+	ephy_dialog_run (cookie_dialog);
 }
 
 static void
@@ -1524,7 +1469,7 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
-	ephy_dialog_construct (EPHY_DIALOG(dialog),
+	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       ephy_file ("epiphany.ui"),
 			       "pdm_dialog",
 			       NULL);
