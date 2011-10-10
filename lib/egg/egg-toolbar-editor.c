@@ -62,7 +62,7 @@ struct EggToolbarEditorPrivate
   GtkUIManager *manager;
   EggToolbarsModel *model;
 
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *scrolled_window;
   GList     *actions_list;
   GList     *factory_list;
@@ -534,32 +534,32 @@ editor_create_item_from_name (EggToolbarEditor *editor,
 }
 
 static gint
-append_table (GtkTable *table, GList *items, gint y, gint width)
+append_grid (GtkGrid *grid, GList *items, gint y, gint width)
 {
   if (items != NULL)
     {
-      gint x = 0, height;
+      gint x = 0;
       GtkWidget *alignment;
       GtkWidget *item;
-
-      height = g_list_length (items) / width + 1;
-      gtk_table_resize (table, height, width);
 
       if (y > 0)
         {
           item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
           alignment = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
+          g_object_set (G_OBJECT (alignment), "expand", TRUE, NULL);
           gtk_container_add (GTK_CONTAINER (alignment), item);
           gtk_widget_show (alignment);
           gtk_widget_show (item);
 
-          gtk_table_attach_defaults (table, alignment, 0, width, y-1, y+1);
+          gtk_grid_attach (grid, alignment, 0, y, width, 1);
+          y++;
         }
 
       for (; items != NULL; items = items->next)
         {
           item = items->data;
           alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+          g_object_set (G_OBJECT (alignment), "expand", TRUE, NULL);
           gtk_container_add (GTK_CONTAINER (alignment), item);
           gtk_widget_show (alignment);
           gtk_widget_show (item);
@@ -569,7 +569,7 @@ append_table (GtkTable *table, GList *items, gint y, gint width)
               x = 0;
               y++;
             }
-          gtk_table_attach_defaults (table, alignment, x, x+1, y, y+1);
+          gtk_grid_attach (grid, alignment, x, y, 1, 1);
           x++;
         }
 
@@ -584,18 +584,18 @@ update_editor_sheet (EggToolbarEditor *editor)
   gint y;
   GPtrArray *items;
   GList *to_move = NULL, *to_copy = NULL;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *viewport;
 
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
 
-  /* Create new table. */
-  table = gtk_table_new (0, 0, TRUE);
-  editor->priv->table = table;
-  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 24);
-  gtk_widget_show (table);
-  gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
+  /* Create new grid. */
+  grid = gtk_grid_new ();
+  editor->priv->grid = grid;
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 24);
+  gtk_widget_show (grid);
+  gtk_drag_dest_set (grid, GTK_DEST_DEFAULT_ALL,
 		     dest_drag_types, G_N_ELEMENTS (dest_drag_types),
                      GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
@@ -627,14 +627,14 @@ update_editor_sheet (EggToolbarEditor *editor)
 
   /* Add them to the sheet. */
   y = 0;
-  y = append_table (GTK_TABLE (table), to_move, y, 4);
-  y = append_table (GTK_TABLE (table), to_copy, y, 4);
+  y = append_grid (GTK_GRID (grid), to_move, y, 4);
+  y = append_grid (GTK_GRID (grid), to_copy, y, 4);
 
   g_list_free (to_move);
   g_list_free (to_copy);
   g_ptr_array_free (items, TRUE);
 
-  /* Delete old table. */
+  /* Delete old grid. */
   viewport = gtk_bin_get_child (GTK_BIN (editor->priv->scrolled_window));
   if (viewport)
     {
@@ -642,9 +642,9 @@ update_editor_sheet (EggToolbarEditor *editor)
                             gtk_bin_get_child (GTK_BIN (viewport)));
     }
 
-  /* Add table to window. */
+  /* Add grid to window. */
   gtk_scrolled_window_add_with_viewport
-    (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), table);
+    (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), grid);
 
 }
 
