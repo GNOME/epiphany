@@ -140,6 +140,50 @@ ephy_download_set_property (GObject      *object,
   }
 }
 
+char *
+ephy_download_get_content_type (EphyDownload *download)
+{
+  WebKitNetworkResponse *response;
+  SoupMessage *message;
+  char *content_type = NULL;
+
+  GFile *destination;
+  GFileInfo *info;
+  GError *error = NULL;
+
+  destination = g_file_new_for_uri (download->priv->destination);
+  info = g_file_query_info (destination, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                            G_FILE_QUERY_INFO_NONE, NULL, &error);
+
+  if (error) {
+    LOG ("ephy_download_get_content_type: error getting file "
+         "content-type: %s", error->message);
+    g_error_free (error);
+
+    /* Fallback to Soup */
+    response = webkit_download_get_network_response (download->priv->download);
+    message = webkit_network_response_get_message (response);
+
+    if (message != NULL)
+       content_type = g_strdup (soup_message_headers_get_content_type (message->response_headers, NULL));
+
+    LOG ("ephy_download_get_content_type: Soup: %s", content_type);
+  } else {
+    content_type = g_strdup (g_file_info_get_content_type (info));
+    LOG ("ephy_download_get_content_type: GIO: %s", content_type);
+  }
+
+  if (info)
+    g_object_unref (info);
+
+  if (destination)
+    g_object_unref (destination);
+
+  LOG ("ephy_download_get_content_type: %s", content_type);
+
+  return content_type;
+}
+
 static EphyDownloadActionType
 decide_action_from_mime (EphyDownload *ephy_download)
 {
@@ -156,7 +200,7 @@ decide_action_from_mime (EphyDownload *ephy_download)
   message = webkit_network_response_get_message (response);
 
   if (message) {
-    const char *content_type = soup_message_headers_get_content_type (message->response_headers, NULL);
+    char *content_type = ephy_download_get_content_type (ephy_download);
 
     if (content_type) {
       mime_description = g_content_type_get_description (content_type);
@@ -164,7 +208,9 @@ decide_action_from_mime (EphyDownload *ephy_download)
 
       if (helper_app)
         action = EPHY_DOWNLOAD_ACTION_OPEN;
-     }
+
+      g_free (content_type);
+    }
   }
 
   if (mime_description == NULL) {

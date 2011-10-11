@@ -54,21 +54,17 @@ enum
 };
 
 static GdkPixbuf *
-get_icon_from_download (WebKitDownload *download)
+get_icon_from_download (EphyDownload *ephy_download)
 {
-  WebKitNetworkResponse *response;
-  SoupMessage *message;
-  const char *content_type;
-
+  char *content_type = NULL;
   GIcon *gicon;
   GtkIconInfo *icon_info;
 
-  response = webkit_download_get_network_response (download);
-  message = webkit_network_response_get_message (response);
-  content_type = soup_message_headers_get_content_type (message->response_headers, NULL);
+  content_type = ephy_download_get_content_type (ephy_download);
 
   if (content_type != NULL) {
     gicon = g_content_type_get_icon (content_type);
+    g_free (content_type);
   } else {
     gicon = g_icon_new_for_string ("package-x-generic", NULL);
   }
@@ -450,7 +446,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
                          "download", ephy_download, NULL);
   download = ephy_download_get_webkit_download (ephy_download);
 
-  pixbuf = get_icon_from_download (download);
+  pixbuf = get_icon_from_download (ephy_download);
   basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
   dest = g_uri_unescape_string (basename, NULL);
 
