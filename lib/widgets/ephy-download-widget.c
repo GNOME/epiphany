@@ -53,12 +53,11 @@ enum
   PROP_DOWNLOAD
 };
 
-static GdkPixbuf *
-get_icon_from_download (EphyDownload *ephy_download)
+static GIcon *
+get_gicon_from_download (EphyDownload *ephy_download)
 {
   char *content_type = NULL;
   GIcon *gicon;
-  GtkIconInfo *icon_info;
 
   content_type = ephy_download_get_content_type (ephy_download);
 
@@ -69,16 +68,7 @@ get_icon_from_download (EphyDownload *ephy_download)
     gicon = g_icon_new_for_string ("package-x-generic", NULL);
   }
 
-  icon_info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
-                                              gicon, 32,
-                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-
-  if (icon_info == NULL)
-    icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                            "package-x-generic", 32,
-                                            GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-
-  return gtk_icon_info_load_icon (icon_info, NULL);
+  return gicon;
 }
 
 static char *
@@ -437,7 +427,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   GtkWidget *remain;
 
   char *dest, *basename;
-  GdkPixbuf *pixbuf = NULL;
   WebKitDownload *download;
 
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (ephy_download), NULL);
@@ -446,7 +435,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
                          "download", ephy_download, NULL);
   download = ephy_download_get_webkit_download (ephy_download);
 
-  pixbuf = get_icon_from_download (ephy_download);
   basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
   dest = g_uri_unescape_string (basename, NULL);
 
@@ -455,7 +443,8 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   button = totem_glow_button_new ();
   menu = gtk_button_new ();
 
-  icon = gtk_image_new_from_pixbuf (pixbuf);
+  icon = gtk_image_new_from_gicon (get_gicon_from_download (ephy_download),
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR);
   text = gtk_label_new (dest);
   gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
@@ -469,9 +458,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   gtk_grid_attach (GTK_GRID (grid), remain, 1, 1, 1, 1);
 
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), dest);
-
-  if (pixbuf)
-    g_object_unref (pixbuf);
 
   g_free (basename);
   g_free (dest);
