@@ -45,6 +45,7 @@ struct _EphyDownloadWidgetPrivate
   GtkWidget *remaining;
   GtkWidget *button;
   GtkWidget *menu;
+  GtkWidget *icon;
 };
 
 enum
@@ -149,6 +150,11 @@ widget_progress_cb (GObject *object,
   download = WEBKIT_DOWNLOAD (object);
   destination = g_filename_display_basename (webkit_download_get_destination_uri (download));
   progress = webkit_download_get_progress (download) * 100;
+
+  if (progress % 10 == 0)
+    gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon),
+                              get_gicon_from_download (widget->priv->download),
+                              GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   time = get_remaining_time (download);
 
@@ -462,6 +468,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   g_free (basename);
   g_free (dest);
 
+  widget->priv->icon = icon;
   widget->priv->button = button;
   widget->priv->remaining = remain;
   widget->priv->menu = menu;
