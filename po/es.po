@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-11 09:33+0000\n"
-"PO-Revision-Date: 2011-09-14 16:59+0200\n"
+"POT-Creation-Date: 2011-10-11 03:30+0000\n"
+"PO-Revision-Date: 2011-10-12 17:24+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr "Epiphany"
 msgid "Epiphany Web Browser"
 msgstr "Navegador web Epiphany"
 
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:465
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:460
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -150,29 +150,55 @@ msgstr "<b>_Usar una codificación diferente:</b>"
 msgid "Clear _All..."
 msgstr "Borrar _todo…"
 
-#: ../data/glade/epiphany.ui.h:4 ../data/glade/prefs-dialog.ui.h:8
+#: ../data/glade/epiphany.ui.h:4
+msgid "Content:"
+msgstr "Contenido:"
+
+#: ../data/glade/epiphany.ui.h:5
+#| msgid "Cookie Properties"
+msgid "Cookie properties"
+msgstr "Propiedades de cookies"
+
+#: ../data/glade/epiphany.ui.h:6 ../data/glade/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "Cookies"
 
-#: ../data/glade/epiphany.ui.h:5 ../data/glade/prefs-dialog.ui.h:23
+#: ../data/glade/epiphany.ui.h:7
+msgid "Expires:"
+msgstr "Caduca:"
+
+#: ../data/glade/epiphany.ui.h:8 ../data/glade/prefs-dialog.ui.h:23
 msgid "Passwords"
 msgstr "Contraseñas"
 
-#: ../data/glade/epiphany.ui.h:6
+#: ../data/glade/epiphany.ui.h:9
+msgid "Path:"
+msgstr "Ruta:"
+
+#: ../data/glade/epiphany.ui.h:10
 msgid "Personal Data"
 msgstr "Datos personales"
 
-#: ../data/glade/epiphany.ui.h:7
+# Esto es de gestión de cookies (serrador)
+#: ../data/glade/epiphany.ui.h:11
+msgid "Send for:"
+msgstr "Enviar para:"
+
+#: ../data/glade/epiphany.ui.h:12
 msgid "Text Encoding"
 msgstr "Codificación del texto"
 
-#: ../data/glade/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:13 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Usar la codificación especificada por el documento"
 
-#: ../data/glade/epiphany.ui.h:9
+#: ../data/glade/epiphany.ui.h:14
 msgid "_Show passwords"
 msgstr "_Mostrar contraseñas"
+
+#: ../data/glade/epiphany.ui.h:15
+msgid "label"
+msgstr "etiqueta"
 
 #: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
@@ -223,7 +249,7 @@ msgstr "Elija un _idioma:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:607
+#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:606
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "_Borrar"
@@ -815,14 +841,15 @@ msgstr "Aplicaciones"
 msgid "List of installed web applications"
 msgstr "Lista de las aplicaciones web instaladas"
 
-#: ../embed/ephy-request-about.c:189
+#. Note for translators: this refers to the installation date.
+#: ../embed/ephy-request-about.c:191
 msgid "Installed on:"
 msgstr "Instalada el:"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3445
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3435
 msgid "Blank page"
 msgstr "Página en blanco"
 
@@ -860,20 +887,20 @@ msgstr "Permitir"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "La página <b>%s</b> quiere saber su ubicación."
 
-#: ../embed/ephy-web-view.c:2016
+#: ../embed/ephy-web-view.c:2023
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
-#: ../embed/ephy-web-view.c:2025 ../embed/ephy-web-view.c:2043
+#: ../embed/ephy-web-view.c:2032 ../embed/ephy-web-view.c:2050
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Error al cargar %s"
 
-#: ../embed/ephy-web-view.c:2027
+#: ../embed/ephy-web-view.c:2034
 msgid "Oops! It was not possible to show this website"
 msgstr "Fue imposible cargar esta página web"
 
-#: ../embed/ephy-web-view.c:2028
+#: ../embed/ephy-web-view.c:2035
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -886,15 +913,15 @@ msgstr ""
 "desconectado o que se haya movido a otra dirección. No se olvide de "
 "comprobar que su conexión a Internet está funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:2037
+#: ../embed/ephy-web-view.c:2044
 msgid "Try again"
 msgstr "Intentarlo de nuevo"
 
-#: ../embed/ephy-web-view.c:2045
+#: ../embed/ephy-web-view.c:2052
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "El sitio puede haber causado que Epiphany se cerrase inesperadamente"
 
-#: ../embed/ephy-web-view.c:2047
+#: ../embed/ephy-web-view.c:2054
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -906,33 +933,33 @@ msgstr ""
 "sucede, informe del problema a los desarrolladores de <strong>%s</strong>.</"
 "p>"
 
-#: ../embed/ephy-web-view.c:2055
+#: ../embed/ephy-web-view.c:2062
 msgid "Load again anyway"
 msgstr "Intentarlo de nuevo de todas formas"
 
-#: ../embed/ephy-web-view.c:2330
+#: ../embed/ephy-web-view.c:2337
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2520
+#: ../embed/ephy-web-view.c:2527
 msgid "Plugins"
 msgstr "Complementos"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2627
+#: ../embed/ephy-web-view.c:2634
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2629
+#: ../embed/ephy-web-view.c:2636
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3649
+#: ../embed/ephy-web-view.c:3639
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
@@ -1017,7 +1044,7 @@ msgstr "Desactivar la conexión con el gestor de sesiones"
 msgid "Specify file containing saved configuration"
 msgstr "Especificar el archivo que contiene la configuración guardada"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:89 ../src/ephy-main.c:91
 msgid "FILE"
 msgstr "ARCHIVO"
 
@@ -1285,7 +1312,7 @@ msgstr "Mostrar en una carpeta"
 msgid "Starting…"
 msgstr "Iniciando…"
 
-#: ../lib/widgets/ephy-location-entry.c:890
+#: ../lib/widgets/ephy-location-entry.c:889
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastre y suelte este icono para crear un enlace a esta página"
 
@@ -1306,7 +1333,7 @@ msgstr "Ejecuta el script «%s»"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:85
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1331,7 +1358,7 @@ msgstr "Mostrar «%s»"
 msgid "“%s” Properties"
 msgstr "Propiedades de «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:550
+#: ../src/bookmarks/ephy-bookmark-properties.c:549
 msgid "_Title:"
 msgstr "_Título:"
 
@@ -1339,11 +1366,11 @@ msgstr "_Título:"
 msgid "A_ddress:"
 msgstr "_Dirección:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "Te_mas:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "_Mostrar todos los temas"
 
@@ -1956,63 +1983,63 @@ msgstr "Sitios"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1346
+#: ../src/ephy-main.c:74 ../src/ephy-main.c:325 ../src/window-commands.c:1346
 msgid "GNOME Web Browser"
 msgstr "Navegador web de GNOME"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:83
 msgid "Open a new tab in an existing browser window"
 msgstr "Abre una pestaña nueva en una ventana existente del navegador"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:85
 msgid "Open a new browser window"
 msgstr "Abre una ventana nueva del navegador"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
 msgstr "Lanzar el editor de marcadores"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:91
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:95
 msgid "Start a private instance"
 msgstr "Iniciar una instancia privada"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:97
 msgid "Start the browser in application mode"
 msgstr "Iniciar el navegador en modo aplicación"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "Profile directory to use in the private instance"
 msgstr "Carpeta de perfiles que usar en la instancia privada"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:106
+#: ../src/ephy-main.c:101
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:214
+#: ../src/ephy-main.c:209
 msgid "Could not start GNOME Web Browser"
 msgstr "No se pudo iniciar el navegador web de GNOME"
 
-#: ../src/ephy-main.c:217
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2021,7 +2048,7 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:331
+#: ../src/ephy-main.c:326
 msgid "GNOME Web Browser options"
 msgstr "Opciones del navegador web de GNOME"
 
@@ -2817,57 +2844,36 @@ msgstr ""
 "<small><i><b>Nota:</b> No puede deshacer esta acción. Los datos que está "
 "seleccionando para borrarán se perderán para siempre.</i></small>"
 
-#: ../src/pdm-dialog.c:622
-msgid "Cookie Properties"
-msgstr "Propiedades de cookies"
-
-#: ../src/pdm-dialog.c:639
-msgid "Content:"
-msgstr "Contenido:"
-
-#: ../src/pdm-dialog.c:655
-msgid "Path:"
-msgstr "Ruta:"
-
-# Esto es de gestión de cookies (serrador)
-#: ../src/pdm-dialog.c:671
-msgid "Send for:"
-msgstr "Enviar para:"
-
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "Sólo conexiones cifradas"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "Cualquier tipo de conexión"
 
-#: ../src/pdm-dialog.c:686
-msgid "Expires:"
-msgstr "Caduca:"
-
 #. Session cookie
-#: ../src/pdm-dialog.c:698
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "Fin de la sesión actual"
 
-#: ../src/pdm-dialog.c:830
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:842
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "Nombre"
 
-#: ../src/pdm-dialog.c:1256
+#: ../src/pdm-dialog.c:1201
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1269
+#: ../src/pdm-dialog.c:1214
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: ../src/pdm-dialog.c:1282
+#: ../src/pdm-dialog.c:1227
 msgid "User Password"
 msgstr "Contraseña de usuario"
 
@@ -3285,41 +3291,41 @@ msgstr "_Activar"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 #~ msgstr ""
 #~ "Codificación predeterminada. Los valores aceptados son : \"armscii-8\", "
-#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312"
-#~ "\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
-#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
-#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3"
-#~ "\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-"
-#~ "8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11"
-#~ "\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
-#~ "\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-"
-#~ "7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-"
-#~ "1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-"
-#~ "1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw"
-#~ "\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-"
-#~ "croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", "
-#~ "\"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew"
-#~ "\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-"
-#~ "turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", "
-#~ "\"x-viet-vps\" y \"x-windows-949\"."
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
+#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
+#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
+#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
+#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
+#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
+#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
+#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
+#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
+#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
+#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
+#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
+#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
+#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" y \"x-windows-949\"."
 
 #~ msgid "Enable JavaScript"
 #~ msgstr "Activar JavaScript"
@@ -3365,7 +3371,8 @@ msgstr "_Activar"
 #~ "\"separately\" and \"selected\"."
 #~ msgstr ""
 #~ "Cómo se imprimen las páginas que contienen marcos. Los valores posibles "
-#~ "son \"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
+#~ "son \"normal\", «separately» (por separado) y \"selected"
+#~ "\" (seleccionados)."
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
@@ -3479,7 +3486,8 @@ msgstr "_Activar"
 #~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 #~ msgstr ""
 #~ "La información de la página mostrada en la vista del histórico. Los "
-#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
+#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y "
+#~ "«VerFechaHora»."
 
 #~ msgid ""
 #~ "The path of the folder where to download files to; or \"Downloads\" to "
@@ -3499,8 +3507,8 @@ msgstr "_Activar"
 #~ "\"text\"."
 #~ msgstr ""
 #~ "Estilo de la barra de herramientas. Los valores permitidos son «(usar "
-#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-horiz» (texto "
-#~ "junto a los iconos), «icons», y «text»."
+#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-"
+#~ "horiz» (texto junto a los iconos), «icons», y «text»."
 
 #~ msgid "URL Search"
 #~ msgstr "Búsqueda de URL"
