@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-15 21:06+0000\n"
-"PO-Revision-Date: 2011-09-11 00:28+0900\n"
+"POT-Creation-Date: 2011-10-11 03:30+0000\n"
+"PO-Revision-Date: 2011-10-10 23:53+0900\n"
 "Last-Translator: Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -31,11 +31,11 @@ msgstr "ブックマークを参照したり整理します"
 
 #: ../data/bme.desktop.in.in.h:2
 msgid "Epiphany Web Bookmarks"
-msgstr "Epiphany ウェブ・ブックマーク"
+msgstr "Epiphany ウェブブックマーク"
 
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
-msgstr "ウェブ・ブックマーク"
+msgstr "ウェブブックマーク"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -98,10 +98,8 @@ msgid "Field _Value"
 msgstr "フィールドの値(_V)"
 
 #: ../data/glade/certificate-dialogs.ui.h:7
-#, fuzzy
-#| msgid "MD5 Fingerprint:"
 msgid "Fingerprints"
-msgstr "MD5 フィンガープリント"
+msgstr "フィンガープリント"
 
 #: ../data/glade/certificate-dialogs.ui.h:8 ../data/glade/prefs-dialog.ui.h:16
 msgid "General"
@@ -161,29 +159,55 @@ msgstr "<b>違うエンコーディングを使用(_U):</b>"
 msgid "Clear _All..."
 msgstr "すべて消去(_A)…"
 
-#: ../data/glade/epiphany.ui.h:4 ../data/glade/prefs-dialog.ui.h:8
+#: ../data/glade/epiphany.ui.h:4
+msgid "Content:"
+msgstr "コンテンツ:"
+
+#: ../data/glade/epiphany.ui.h:5
+#, fuzzy
+#| msgid "Cookie Properties"
+msgid "Cookie properties"
+msgstr "クッキーのプロパティ"
+
+#: ../data/glade/epiphany.ui.h:6 ../data/glade/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "クッキー"
 
-#: ../data/glade/epiphany.ui.h:5 ../data/glade/prefs-dialog.ui.h:23
+#: ../data/glade/epiphany.ui.h:7
+msgid "Expires:"
+msgstr "有効期限:"
+
+#: ../data/glade/epiphany.ui.h:8 ../data/glade/prefs-dialog.ui.h:23
 msgid "Passwords"
 msgstr "パスワード"
 
-#: ../data/glade/epiphany.ui.h:6
+#: ../data/glade/epiphany.ui.h:9
+msgid "Path:"
+msgstr "パス名:"
+
+#: ../data/glade/epiphany.ui.h:10
 msgid "Personal Data"
 msgstr "個人データ"
 
-#: ../data/glade/epiphany.ui.h:7
+#: ../data/glade/epiphany.ui.h:11
+msgid "Send for:"
+msgstr "送信先:"
+
+#: ../data/glade/epiphany.ui.h:12
 msgid "Text Encoding"
 msgstr "テキストエンコーディング"
 
-#: ../data/glade/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:13 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "ドキュメント指定のエンコーディングを使用します"
 
-#: ../data/glade/epiphany.ui.h:9
+#: ../data/glade/epiphany.ui.h:14
 msgid "_Show passwords"
 msgstr "パスワードを表示(_S)"
+
+#: ../data/glade/epiphany.ui.h:15
+msgid "label"
+msgstr ""
 
 #: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
@@ -215,10 +239,8 @@ msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>たとえば、これらのサイト上の広告からのもの</small>"
 
 #: ../data/glade/prefs-dialog.ui.h:3
-#, fuzzy
-#| msgid "A_utomatically download and open files"
 msgid "A_utomatically open downloaded files"
-msgstr "自動的にダウンロードし、ファイルを開く(_U)"
+msgstr "ダウンロードしたファイルを自動的に開く(_U)"
 
 #: ../data/glade/prefs-dialog.ui.h:4
 msgid "Add Language"
@@ -264,7 +286,7 @@ msgstr "エンコーディング"
 
 #: ../data/glade/prefs-dialog.ui.h:14
 msgid "Fonts"
-msgstr ""
+msgstr "フォント"
 
 #: ../data/glade/prefs-dialog.ui.h:15
 msgid "Fonts & Style"
@@ -272,7 +294,7 @@ msgstr "フォントとスタイル"
 
 #: ../data/glade/prefs-dialog.ui.h:17
 msgid "Home page"
-msgstr "ホーム・ページ"
+msgstr "ホームページ"
 
 #: ../data/glade/prefs-dialog.ui.h:18 ../src/prefs-dialog.c:774
 msgid "Language"
@@ -320,29 +342,23 @@ msgstr "空のページに設定(_B)"
 
 #: ../data/glade/prefs-dialog.ui.h:30
 msgid "Spell checking"
-msgstr ""
+msgstr "スペルチェック"
 
 #: ../data/glade/prefs-dialog.ui.h:31
-#, fuzzy
-#| msgid "Title"
 msgid "Style"
-msgstr "タイトル"
+msgstr "スタイル"
 
 #: ../data/glade/prefs-dialog.ui.h:32
-#, fuzzy
-#| msgid "_Temporary files"
 msgid "Temporary Files"
-msgstr "作業ファイル(_T)"
+msgstr "一時ファイル"
 
 #: ../data/glade/prefs-dialog.ui.h:33
 msgid "Use custom _stylesheet"
 msgstr "カスタムスタイルシートを使用(_S)"
 
 #: ../data/glade/prefs-dialog.ui.h:34
-#, fuzzy
-#| msgid "<b>Web Content</b>"
 msgid "Web Content"
-msgstr "<b>ウェブのコンテンツ</b>"
+msgstr "ウェブのコンテンツ"
 
 #: ../data/glade/prefs-dialog.ui.h:35
 msgid "_Address:"
@@ -358,17 +374,15 @@ msgstr "ディスクスペース(_D)"
 
 #: ../data/glade/prefs-dialog.ui.h:38
 msgid "_Download folder:"
-msgstr "ダウンロード・フォルダー(_D):"
+msgstr "ダウンロードフォルダー(_D):"
 
 #: ../data/glade/prefs-dialog.ui.h:39
-#, fuzzy
-#| msgid "_Edit Stylesheet&#x2026;"
 msgid "_Edit Stylesheet…"
-msgstr "スタイルシートの編集(_E)&#x2026;"
+msgstr "スタイルシートの編集(_E)…"
 
 #: ../data/glade/prefs-dialog.ui.h:40
 msgid "_Enable spell checking"
-msgstr ""
+msgstr "スペルチェックを有効にする(_E)"
 
 #: ../data/glade/prefs-dialog.ui.h:41
 msgid "_Never accept"
@@ -387,28 +401,20 @@ msgid "As laid out on the _screen"
 msgstr "画面上にレイアウトされたとおり(_S)"
 
 #: ../data/glade/print.ui.h:2
-#, fuzzy
-#| msgid "<b>Background</b>"
 msgid "Background"
-msgstr "<b>背景</b>"
+msgstr "背景"
 
 #: ../data/glade/print.ui.h:3
-#, fuzzy
-#| msgid "<b>Footers</b>"
 msgid "Footers"
-msgstr "<b>フッター</b>"
+msgstr "フッター"
 
 #: ../data/glade/print.ui.h:4
-#, fuzzy
-#| msgid "<b>Frames</b>"
 msgid "Frames"
-msgstr "<b>フレーム</b>"
+msgstr "フレーム"
 
 #: ../data/glade/print.ui.h:5
-#, fuzzy
-#| msgid "<b>Headers</b>"
 msgid "Headers"
-msgstr "<b>ヘッダー</b>"
+msgstr "ヘッダー"
 
 #: ../data/glade/print.ui.h:6
 msgid "O_nly the selected frame"
@@ -1095,7 +1101,7 @@ msgstr "サポートしている全種類"
 
 #: ../lib/ephy-file-chooser.c:396
 msgid "Web pages"
-msgstr "ウェブ・ページ (Epiphany)"
+msgstr "ウェブページ (Epiphany)"
 
 #: ../lib/ephy-file-chooser.c:404
 msgid "Images"
@@ -1199,7 +1205,7 @@ msgstr "ブックマーク"
 
 #: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:277
 msgid "Address Entry"
-msgstr "アドレス・エントリ"
+msgstr "アドレスエントリ"
 
 #: ../lib/ephy-stock-icons.c:52
 msgid "_Download"
@@ -1352,7 +1358,7 @@ msgstr "\"%s\" というスクリプトを実行する"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:85
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1375,7 +1381,7 @@ msgstr "\"%s\" を表示する"
 msgid "“%s” Properties"
 msgstr "\"%s\" のプロパティ"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:550
+#: ../src/bookmarks/ephy-bookmark-properties.c:549
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
@@ -1383,11 +1389,11 @@ msgstr "タイトル(_T):"
 msgid "A_ddress:"
 msgstr "アドレス(_D):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "トピック(_O):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "すべてのトピックを表示する(_W)"
 
@@ -1564,8 +1570,7 @@ msgstr "ブックマークのインポート(_I)…"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
-"ブックマークを他のブラウザー、またはブックマーク・ファイルからインポートしま"
-"す"
+"ブックマークを他のブラウザーまたはブックマークファイルからインポートします"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "_Export Bookmarks…"
@@ -2011,7 +2016,7 @@ msgstr "新しいウィンドウを開く"
 
 #: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
-msgstr "ブックマーク・エディターを起動する"
+msgstr "ブックマークエディターを起動する"
 
 #: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
@@ -2171,7 +2176,7 @@ msgstr "文字のサイズを調節します"
 
 #: ../src/ephy-toolbar.c:309
 msgid "Go to the address entered in the address entry"
-msgstr "アドレス・エントリに入力されたアドレスに移動します"
+msgstr "アドレスエントリに入力されたアドレスに移動します"
 
 #: ../src/ephy-toolbar.c:318
 msgid "_Home"
@@ -2179,7 +2184,7 @@ msgstr "ホーム(_H)"
 
 #: ../src/ephy-toolbar.c:320
 msgid "Go to the home page"
-msgstr "ホーム・ページへ戻ります"
+msgstr "ホームページへ戻ります"
 
 #: ../src/ephy-toolbar.c:330
 msgid "New _Tab"
@@ -2225,12 +2230,12 @@ msgstr "ラベルのみ"
 
 #: ../src/ephy-toolbar-editor.c:185
 msgid "Toolbar Editor"
-msgstr "ツールバー・エディター"
+msgstr "ツールバーエディター"
 
 #. translators: translate the same as in gnome-control-center
 #: ../src/ephy-toolbar-editor.c:204
 msgid "Toolbar _button labels:"
-msgstr "ツールバー・ボタンのラベル(_B):"
+msgstr "ツールバーボタンのラベル(_B):"
 
 #: ../src/ephy-toolbar-editor.c:269
 msgid "_Add a New Toolbar"
@@ -2275,13 +2280,11 @@ msgstr "このページを保存します"
 
 #: ../src/ephy-window.c:134
 msgid "Save As _Web Application…"
-msgstr ""
+msgstr "ウェブアプリケーションとして保存(_W)…"
 
 #: ../src/ephy-window.c:135
-#, fuzzy
-#| msgid "Save the current page"
 msgid "Save the current page as a Web Application"
-msgstr "このページを保存します"
+msgstr "このページをウェブアプリケーションとして保存します"
 
 #: ../src/ephy-window.c:137
 msgid "Page Set_up"
@@ -2459,7 +2462,7 @@ msgstr "ページのソース(_P)"
 
 #: ../src/ephy-window.c:223
 msgid "View the source code of the page"
-msgstr "このページのソース・コードを表示します"
+msgstr "このページのソースコードを表示します"
 
 #: ../src/ephy-window.c:225
 msgid "Page _Security Information"
@@ -2556,7 +2559,7 @@ msgstr "オフラインで動作(_W)"
 
 #: ../src/ephy-window.c:280
 msgid "Switch to offline mode"
-msgstr "オフライン・モードに切り替えます"
+msgstr "オフラインモードに切り替えます"
 
 #. View Menu
 #: ../src/ephy-window.c:285
@@ -2569,7 +2572,7 @@ msgstr "ツールバーの表示/非表示を切り替えます"
 
 #: ../src/ephy-window.c:288
 msgid "_Downloads Bar"
-msgstr "ダウンロード・バー(_D)"
+msgstr "ダウンロードバー(_D)"
 
 #: ../src/ephy-window.c:289
 msgid "Show the active downloads for this window"
@@ -2577,7 +2580,7 @@ msgstr "このウィンドウで実行中のダウンロードを表示"
 
 #: ../src/ephy-window.c:292
 msgid "Men_ubar"
-msgstr ""
+msgstr "メニューバー(_U)"
 
 #: ../src/ephy-window.c:294
 msgid "_Fullscreen"
@@ -2666,7 +2669,7 @@ msgstr "E-メールの送信(_S)…"
 
 #: ../src/ephy-window.c:344
 msgid "_Copy Email Address"
-msgstr "メール・アドレスのコピー(_C)"
+msgstr "メールアドレスのコピー(_C)"
 
 #. Images
 #: ../src/ephy-window.c:349
@@ -2798,7 +2801,7 @@ msgstr "アドレス \"%s\" へ E-メールを送信します"
 #: ../src/ephy-window.c:2215
 #, c-format
 msgid "Copy email address “%s”"
-msgstr "E-メール・アドレス \"%s\" をコピーします"
+msgstr "E-メールアドレス \"%s\" をコピーします"
 
 #: ../src/ephy-window.c:2229
 #, c-format
@@ -2825,8 +2828,8 @@ msgid ""
 "have visited. Before proceeding, check the types of information that you "
 "want to remove:"
 msgstr ""
-"訪問したウェブ・ページに関連する個人データを消去しようとしています。その前"
-"に、削除する情報の種類を確認してください:"
+"訪問したウェブページに関連する個人データを消去しようとしています。その前に、"
+"削除する情報の種類を確認してください:"
 
 #: ../src/pdm-dialog.c:345
 msgid "Clear All Personal Data"
@@ -2845,7 +2848,7 @@ msgstr "保存したパスワード(_P)"
 #. Cache
 #: ../src/pdm-dialog.c:415
 msgid "_Temporary files"
-msgstr "作業ファイル(_T)"
+msgstr "一時ファイル(_T)"
 
 #: ../src/pdm-dialog.c:431
 msgid ""
@@ -2855,56 +2858,36 @@ msgstr ""
 "<small><i><b>注意:</b> この操作で消去したデータを元に戻すことはできません。"
 "データは完全に抹消されます。</i></small>"
 
-#: ../src/pdm-dialog.c:622
-msgid "Cookie Properties"
-msgstr "クッキーのプロパティ"
-
-#: ../src/pdm-dialog.c:639
-msgid "Content:"
-msgstr "コンテンツ:"
-
-#: ../src/pdm-dialog.c:655
-msgid "Path:"
-msgstr "パス名:"
-
-#: ../src/pdm-dialog.c:671
-msgid "Send for:"
-msgstr "送信先:"
-
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "暗号化した接続のみ"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "すべての接続"
 
-#: ../src/pdm-dialog.c:686
-msgid "Expires:"
-msgstr "有効期限:"
-
 #. Session cookie
-#: ../src/pdm-dialog.c:698
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "現在のセッションの最後"
 
-#: ../src/pdm-dialog.c:830
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "ドメイン"
 
-#: ../src/pdm-dialog.c:842
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "名称"
 
-#: ../src/pdm-dialog.c:1256
+#: ../src/pdm-dialog.c:1201
 msgid "Host"
 msgstr "ホスト"
 
-#: ../src/pdm-dialog.c:1269
+#: ../src/pdm-dialog.c:1214
 msgid "User Name"
 msgstr "ユーザー名"
 
-#: ../src/pdm-dialog.c:1282
+#: ../src/pdm-dialog.c:1227
 msgid "User Password"
 msgstr "ユーザーのパスワード"
 
@@ -2991,16 +2974,12 @@ msgstr ""
 
 #. Show dialog with icon, title.
 #: ../src/window-commands.c:624
-#, fuzzy
-#| msgid "Create a new topic"
 msgid "Create Web Application"
-msgstr "新しいトピックを作成します"
+msgstr "ウェブアプリケーションを作成"
 
 #: ../src/window-commands.c:629
-#, fuzzy
-#| msgid "Caret"
 msgid "Create"
-msgstr "[キャレット]"
+msgstr "作成"
 
 #: ../src/window-commands.c:1246
 msgid ""
@@ -3075,7 +3054,7 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "やまねひでき <henrich@debian.or.jp>\n"
 "Takayoshi OKANO <kano@na.rim.or.jp>\n"
-"Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
+"松澤 二郎 <jmatsuzawa@src.gnome.org>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp/>"
 
 #: ../src/window-commands.c:1365
@@ -3099,639 +3078,3 @@ msgstr ""
 #: ../src/window-commands.c:1515
 msgid "_Enable"
 msgstr "有効(_E)"
-
-# FIXME: Chrome だと指紋、Firefox だとフィンガープリント
-#~ msgid "<b>Fingerprints</b>"
-#~ msgstr "<b>フィンガープリント</b>"
-
-#~ msgid "<b>Issued By</b>"
-#~ msgstr "<b>発行者</b>"
-
-#~ msgid "<b>Issued To</b>"
-#~ msgstr "<b>発行先</b>"
-
-#~ msgid "<b>Cookies</b>"
-#~ msgstr "<b>クッキー</b>"
-
-#~ msgid "<b>Downloads</b>"
-#~ msgstr "<b>ダウンロード</b>"
-
-#~ msgid "<b>Encodings</b>"
-#~ msgstr "<b>エンコーディング</b>"
-
-#~ msgid "<b>Fonts</b>"
-#~ msgstr "<b>フォント</b>"
-
-#~ msgid "<b>Home page</b>"
-#~ msgstr "<b>ホーム・ページ</b>"
-
-#~ msgid "<b>Languages</b>"
-#~ msgstr "<b>言語</b>"
-
-#~ msgid "<b>Passwords</b>"
-#~ msgstr "<b>パスワード</b>"
-
-#~ msgid "<b>Style</b>"
-#~ msgstr "<b>スタイル</b>"
-
-#~ msgid "<b>Temporary Files</b>"
-#~ msgstr "<b>作業ファイル</b>"
-
-#~ msgid ""
-#~ "A list of protocols to be considered safe in addition to the default, "
-#~ "when disable_unsafe_protocols is enabled."
-#~ msgstr ""
-#~ "disable_unsafe_protocols が有効な場合に、デフォルトに追加して安全と考えら"
-#~ "れるいろいろなプロトコルのリストです。"
-
-#~ msgid "Additional safe protocols"
-#~ msgstr "安全な追加プロトコルのリスト"
-
-#~ msgid "Disable JavaScript chrome control"
-#~ msgstr "JavaScript の Chrome 制御を無効にする"
-
-#~ msgid "Disable JavaScript's control over window chrome."
-#~ msgstr "ウィンドウ Chrome を介した JavaScript の制御を無効にします。"
-
-#~ msgid ""
-#~ "Disable all historical information by disabling back and forward "
-#~ "navigation, not allowing the history dialog and hiding the most used "
-#~ "bookmarks list."
-#~ msgstr ""
-#~ "[戻る]/[進む] の操作を無効にすることで履歴情報を無効にし、履歴ダイアログを"
-#~ "利用不可にして一番利用されるブックマークの一覧を非表示にします。"
-
-#~ msgid "Disable arbitrary URLs"
-#~ msgstr "恣意的な URL を無効にするかどうか"
-
-#~ msgid "Disable bookmark editing"
-#~ msgstr "ブックマークの編集を無効にするかどうか"
-
-#~ msgid "Disable history"
-#~ msgstr "履歴を無効にするかどうか"
-
-#~ msgid "Disable the user's ability to add or edit bookmarks."
-#~ msgstr "ユーザーがブックマークを追加したり編集できないようにします。"
-
-#~ msgid "Disable the user's ability to edit toolbars."
-#~ msgstr "ユーザーがツールバーを編集できないようにします。"
-
-#~ msgid "Disable the user's ability to type in a URL to Epiphany."
-#~ msgstr "ユーザーが URL を入力できないようにします。"
-
-#~ msgid "Disable toolbar editing"
-#~ msgstr "ツールバーの編集を無効にするかどうか"
-
-#~ msgid "Disable unsafe protocols"
-#~ msgstr "安全ではないプロトコルを無効にするかどうか"
-
-#~ msgid ""
-#~ "Disables loading of content from unsafe protocols. Safe protocols are "
-#~ "http and https."
-#~ msgstr ""
-#~ "安全ではないプロトコルを介したコンテンツの読み込みを無効にします。安全なプ"
-#~ "ロトコルは 'http' と 'https' です。"
-
-#~ msgid "Epiphany cannot quit"
-#~ msgstr "Epiphany を閉じれないようにするかどうか"
-
-#~ msgid "Hide menubar by default"
-#~ msgstr "デフォルトでメニューバーを隠すかどうか"
-
-#~ msgid "Hide the menubar by default."
-#~ msgstr "デフォルトでメニューバーを隠すかどうか"
-
-#~ msgid "Lock in fullscreen mode"
-#~ msgstr "フルスクリーンモードでロックするかどうか"
-
-#~ msgid "Locks Epiphany in fullscreen mode."
-#~ msgstr "Epiphany をフルスクリーンモードにロックします。"
-
-#~ msgid "User is not allowed to close Epiphany"
-#~ msgstr "ユーザー自身で Epiphany を閉じれないようにします。"
-
-#~ msgid "Active extensions"
-#~ msgstr "アクティブ・エクステンションのリスト"
-
-#~ msgid "Address of the user's home page."
-#~ msgstr "ユーザーのホームページのアドレスです。"
-
-#~ msgid "Allow popups"
-#~ msgstr "ポップアップを許可するかどうか"
-
-#~ msgid ""
-#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
-#~ "enabled)."
-#~ msgstr ""
-#~ "(javaScript が有効の場合) JavaScript で新しいウィンドウを開くサイトを許可"
-#~ "します。"
-
-#~ msgid "Always show the tab bar"
-#~ msgstr "常にタブ・バーを表示するかどうか"
-
-#~ msgid "Automatic downloads"
-#~ msgstr "自動ダウンロードを有効にするかどうか"
-
-#~ msgid "Automatically manage offline status with NetworkManager"
-#~ msgstr "NetworkManager でオフラインの状態を自動的に管理するかどうか"
-
-#~ msgid "Browse with caret"
-#~ msgstr "キャレット・モードで閲覧するかどうか"
-
-#~ msgid "Cookie accept"
-#~ msgstr "クッキーの許可"
-
-#~ msgid "Default encoding"
-#~ msgstr "デフォルトのエンコーディング"
-
-#~ msgid ""
-#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
-#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
-#~ msgstr ""
-#~ "デフォルトのエンコーディングです。設定可能は値: \"armscii-8\", \"Big5\", "
-#~ "\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8"
-#~ "\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
-#~ "\"IBM862\", \"IBM864\", \"IBM864i\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
-#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-10\", \"ISO-8859-13"
-#~ "\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-8859-2\", "
-#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-"
-#~ "8859-6-E\", \"ISO-8859-6-I\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-"
-#~ "8-E\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-IR-111\", \"KOI8-R\", "
-#~ "\"KOI8-U\", \"Shift_JIS\", \"T.61-8bit\", \"TIS-620\", \"us-ascii\", "
-#~ "\"UTF-16BE\", \"UTF-16LE\", \"UTF-32BE\", \"UTF-32LE\", \"UTF-7\", \"UTF-8"
-#~ "\", \"VISCII\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-#~ "\"windows-1257\", \"windows-1258\", \"windows-936\", \"x-euc-tw\", \"x-gbk"
-#~ "\", \"x-imap4-modified-utf7\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce"
-#~ "\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-"
-#~ "farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-"
-#~ "hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-"
-#~ "mac-turkish\", \"x-mac-ukrainian\", \"x-u-escaped\", \"x-user-defined\", "
-#~ "\"x-viet-tcvn5712\", \"x-viet-vps \"and \"x-windows-949"
-
-#~ msgid "Default font type"
-#~ msgstr "デフォルトのフォントの種類"
-
-#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-#~ msgstr ""
-#~ "デフォルトで使用するフォントの種類です。設定可能な値: \"serif\" と \"sans-"
-#~ "serif\""
-
-#~ msgid "Enable JavaScript"
-#~ msgstr "JavaScript を使用する"
-
-#~ msgid "Enable Web Inspector"
-#~ msgstr "Web Inspector を有効にする"
-
-#~ msgid "Enable smooth scrolling"
-#~ msgstr "スムース・スクロールを有効にする"
-
-#~ msgid ""
-#~ "Force new window requests to be opened in tabs instead of using a new "
-#~ "window."
-#~ msgstr ""
-#~ "新規ウィンドウのリクエストを新しいウィンドウでは無くタブで開くようにする"
-
-#~ msgid "Force new windows to be opened in tabs"
-#~ msgstr "新しいウィンドウをタブで開くようにする"
-
-#~ msgid ""
-#~ "Hide or show the downloads window. When hidden, a notification will be "
-#~ "shown when new downloads are started."
-#~ msgstr ""
-#~ "ダウンロード・ウィンドウを表示します。ウィンドウを表示しない場合、新しいダ"
-#~ "ウンロードが始まるとメッセージが通知されます。"
-
-#~ msgid "History pages time range"
-#~ msgstr "履歴ページでの時間帯"
-
-# FIXME: 選択肢は訳せない?
-#~ msgid ""
-#~ "How to present animated images. Possible values are \"normal\", \"once\" "
-#~ "and \"disabled\"."
-#~ msgstr ""
-#~ "アニメーション画像の表示方法を指定します。設定可能な値: \"normal\"、\"once"
-#~ "\"、\"disabled\""
-
-#~ msgid "How to print frames"
-#~ msgstr "フレームの印刷方法"
-
-# FIXME: 選択肢は訳せない?
-#~ msgid ""
-#~ "How to print pages containing frames. Allowed values are \"normal\", "
-#~ "\"separately\" and \"selected\"."
-#~ msgstr ""
-#~ "フレームを持つページの印刷方法を指定します。設定可能な値: \"normal\"、"
-#~ "\"separately\"、\"selected\""
-
-#~ msgid "ISO-8859-1"
-#~ msgstr "ISO-8859-1"
-
-#~ msgid "Image animation mode"
-#~ msgstr "画像のアニメーション・モード"
-
-#~ msgid "Lists the active extensions."
-#~ msgstr "アクティブ・エクステンションのリストです。"
-
-#~ msgid ""
-#~ "Middle click to open the web page pointed to by the currently selected "
-#~ "text"
-#~ msgstr "中ボタンで現在選択中の文字が指すウェブ・ページを開くかどうか"
-
-#~ msgid ""
-#~ "Middle clicking on the main view pane will open the web page pointed to "
-#~ "by the currently selected text."
-#~ msgstr ""
-#~ "メイン表示ペインの上で、マウスの中ボタンをクリックすると、現在選択中のテキ"
-#~ "ストが指しているウェブ・ページを開きます。"
-
-#~ msgid "Minimum font size"
-#~ msgstr "最小フォントサイズ"
-
-#~ msgid "Preferred languages, two letter codes."
-#~ msgstr "表示で優先する言語で、二文字で指定します。"
-
-#~ msgid "Remember passwords"
-#~ msgstr "パスワードを保存するかどうか"
-
-#~ msgid "Search string for keywords entered in the URL bar."
-#~ msgstr "URL バーに入力されたキーワードの文字列を検索する。"
-
-#~ msgid "Show bookmarks bar by default"
-#~ msgstr "デフォルトでブックマーク・バーを表示するかどうか"
-
-#~ msgid "Show statusbar by default"
-#~ msgstr "デフォルトでステータスバー表示するかどうか"
-
-# FIXME: 選択肢は訳せない?
-#~ msgid ""
-#~ "Show the history pages visited \"ever\", \"last_two_days\", "
-#~ "\"last_three_days\", \"today\"."
-#~ msgstr ""
-#~ "履歴ページに表示する訪問先の時間帯です。設定可能な値: \"ever\"、"
-#~ "\"last_two_days\"、\"last_three_days\"、\"today\""
-
-#~ msgid "Show the tab bar also when there is only one tab open."
-#~ msgstr "タブが一つしか表示されていなくても、タブ・バーを表示します。"
-
-#~ msgid "Show toolbars by default"
-#~ msgstr "デフォルトでツールバーを表示するかどうか"
-
-#~ msgid "Size of disk cache"
-#~ msgstr "ディスク・キャッシュの大きさ"
-
-#~ msgid "Size of disk cache, in MB."
-#~ msgstr "ディスク・キャッシュの大きさです (Mバイト単位)。"
-
-#~ msgid ""
-#~ "String that will be used as user agent, to identify the browser to the "
-#~ "web servers."
-#~ msgstr ""
-#~ "ウェブサーバーでブラウザーを識別するための User-Agent として使用される文字"
-#~ "列です。"
-
-#~ msgid "The bookmark information shown in the editor view"
-#~ msgstr "編集ウィンドウの中にブックマーク情報を表示する"
-
-#~ msgid ""
-#~ "The bookmark information shown in the editor view. Valid values in the "
-#~ "list are \"address\" and \"title\"."
-#~ msgstr ""
-#~ "ブックマーク編集ウィンドウの中にブックマーク情報を表示します。設定可能な"
-#~ "値: \"address\"、\"title\""
-
-#~ msgid "The currently selected fonts language"
-#~ msgstr "現在選択しているフォントと言語"
-
-#~ msgid ""
-#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
-#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
-#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
-#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
-#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
-#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
-#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
-#~ "devanagari\" (devanagari)."
-#~ msgstr ""
-#~ "現在選択しているフォントと言語です。設定可能な値: \"ar\" (アラビア語)、"
-#~ "\"x-baltic\" (バルト系言語)、\"x-central-euro\" (中央ヨーロッパ言語)、\"x-"
-#~ "cyrillic\" (キリル文字で記述される言語)、\"el\" (ギリシア語)、\"he\" (ヘブ"
-#~ "ライ語)、\"ja\" (日本語)、\"ko\" (韓国語)、\"zh-CN\" (簡体字中国語)、\"th"
-#~ "\" (タイ語)、\"zh-TW\" (繁体字中国語)、\"tr\" (トルコ語)、\"x-unicode"
-#~ "\" (その他の言語)、\"x-western\" (ラテン文字で記述される言語)、\"x-tamil"
-#~ "\" (タミル語)、\"x-devanagari\" (デーヴァナーガリー文字)"
-
-#~ msgid "The downloads folder"
-#~ msgstr "ダウンロード・フォルダー"
-
-#~ msgid "The page information shown in the history view"
-#~ msgstr "履歴ダイアログの中に表示するページ情報の種類"
-
-#~ msgid ""
-#~ "The page information shown in the history view. Valid values in the list "
-#~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-#~ msgstr ""
-#~ "履歴ダイアログの中に表示するページ情報の種類をリストで指定します。設定可能"
-#~ "な値: \"ViewTitle\"、\"ViewAddress\"、\"ViewDateTime\""
-
-#~ msgid ""
-#~ "The path of the folder where to download files to; or \"Downloads\" to "
-#~ "use the default downloads folder, or \"Desktop\" to use the desktop "
-#~ "folder."
-#~ msgstr ""
-#~ "ダウンロードしたファイルを格納するフォルダーの実パス、またはダウンロード用"
-#~ "のデフォルト・フォルダーを示す \"Downloads\"、あるいはデスクトップのフォル"
-#~ "ダーを示す \"Desktop\" のいずれかです。"
-
-#~ msgid "Toolbar style"
-#~ msgstr "ツールバーのスタイル"
-
-#~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
-#~ msgstr ""
-#~ "ツールバーのスタイルです。設定可能な値: \"\" (GNOME デフォルトのスタイルを"
-#~ "使用する)、\"both\" (ラベルとアイコン)、\"both-horiz\" (アイコンの横にラベ"
-#~ "ル)、\"icons\"、\"text\""
-
-#~ msgid "URL Search"
-#~ msgstr "URL 検索"
-
-#~ msgid "Use own colors"
-#~ msgstr "独自の色を指定するかどうか"
-
-#~ msgid "Use your own colors instead of the colors the page requests."
-#~ msgstr ""
-#~ "ページで指定されている色ではなく、設定でカスタマイズした色を使います。"
-
-#~ msgid "Use your own fonts instead of the fonts the page requests."
-#~ msgstr ""
-#~ "ページで指定されているフォントでなく、設定でカスタマイズしたフォントを使い"
-#~ "ます。"
-
-#~ msgid "User agent"
-#~ msgstr "ユーザーエージェント"
-
-#~ msgid "Visibility of the downloads window"
-#~ msgstr "ダウンロード・ウィンドウを表示するかどうか"
-
-#~ msgid ""
-#~ "When files cannot be opened by the browser they are automatically "
-#~ "downloaded to the download folder and opened with the appropriate "
-#~ "application."
-#~ msgstr ""
-#~ "ブラウザーでファイルを開けなかった場合、ファイルをダウンロード・フォルダー"
-#~ "へ自動的にダウンロードして、適切なアプリケーションで開きます。"
-
-#~ msgid ""
-#~ "Where to accept cookies from. Possible values are \"anywhere\", \"current "
-#~ "site\" and \"nowhere\"."
-#~ msgstr ""
-#~ "クッキーを許可するサーバーの種類を指定します。設定可能な値: \"anywhere"
-#~ "\" (どこからでも)、\"current site\" (現在閲覧しているサーバーからのみ)、"
-#~ "\"nowhere\" (どこからも受けつけない)"
-
-#~ msgid "Whether to print the background color"
-#~ msgstr "背景色を印刷するかどうか"
-
-#~ msgid "Whether to print the background images"
-#~ msgstr "背景の画像を印刷するかどうか"
-
-#~ msgid "Whether to print the date in the footer"
-#~ msgstr "日付をフッターに印刷するかどうか"
-
-#~ msgid "Whether to print the page address in the header"
-#~ msgstr "ページのアドレスをヘッダーに印刷するかどうか"
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer"
-#~ msgstr "フッターにページ番号 (何ページ目/全ページ) を印刷するかどうか"
-
-#~ msgid "Whether to print the page title in the header"
-#~ msgstr "ページのタイトルをヘッダーに印刷するかどうか"
-
-#~ msgid "Whether to store and prefill passwords in web sites."
-#~ msgstr "ウェブサイトのパスワードを保存して再利用するかどうかです。"
-
-#~ msgid "x-western"
-#~ msgstr "ja"
-
-#~ msgid "<b>Web Development</b>"
-#~ msgstr "<b>ウェブ開発</b>"
-
-#~ msgid "Let web pages specify their own _fonts"
-#~ msgstr "ウェブページにフォントを指定させる(_F)"
-
-#~ msgid "Let web pages specify their own c_olors"
-#~ msgstr "ウェブページに色を指定させる(_O)"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "スムース・スクロールを使用(_M)"
-
-#~ msgid "_Minimum size:"
-#~ msgstr "最小サイズ(_M):"
-
-#~ msgid "_Show Downloads"
-#~ msgstr "ダウンロードの表示(_S)"
-
-#~ msgid "%u:%02u.%02u"
-#~ msgstr "%u:%02u:%02u"
-
-#~ msgid "%02u.%02u"
-#~ msgstr "%02u:%02u"
-
-#~ msgid "_Pause"
-#~ msgstr "中断(_P)"
-
-#~ msgid "_Resume"
-#~ msgstr "再開(_R)"
-
-#~ msgid "The file “%s” has been downloaded."
-#~ msgstr "\"%s\" というファイルをダウンロードしました。"
-
-#~ msgid "Download finished"
-#~ msgstr "ダウンロード完了"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "%s of %s"
-#~ msgstr ""
-#~ "%s\n"
-#~ "%s / %s"
-
-#~ msgid "%d download"
-#~ msgid_plural "%d downloads"
-#~ msgstr[0] "%d個ダウンロード"
-
-#~ msgid "The file “%s” has been added to the downloads queue."
-#~ msgstr "\"%s\" というファイルをダウンロード・キューに追加しました。"
-
-#~ msgid "Download started"
-#~ msgstr "ダウンロードを開始しました"
-
-#~ msgctxt "download status"
-#~ msgid "Unknown"
-#~ msgstr "不明"
-
-#~ msgctxt "download status"
-#~ msgid "Failed"
-#~ msgstr "失敗しました"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Remaining"
-#~ msgstr "残り"
-
-#~ msgid "Download this potentially unsafe file?"
-#~ msgstr "このファイルは危険な可能性があります。ダウンロードしますか?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "It is unsafe to open “%s” as it could potentially damage your documents "
-#~ "or invade your privacy. You can download it instead."
-#~ msgstr ""
-#~ "ファイルの種類: \"%s\" です。\n"
-#~ "\n"
-#~ "\"%s\" を開くのは、ドキュメントに損傷を与えたりプライバシー侵害を起こす可"
-#~ "能性があり、安全ではありません。代わりにダウンロード自体は可能です。"
-
-#~ msgid "Open this file?"
-#~ msgstr "このファイルを開きますか?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You can open “%s” using “%s” or save it."
-#~ msgstr ""
-#~ "ファイルの種類: \"%1$s\" です。\n"
-#~ "\n"
-#~ "\"%2$s\" を使って \"%3$s\" を開く、あるいはファイルの保存ができます。"
-
-#~ msgid "Download this file?"
-#~ msgstr "このファイルをダウンロードしますか?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You have no application able to open “%s”. You can download it instead."
-#~ msgstr ""
-#~ "ファイルの種類: \"%s\" です。\n"
-#~ "\n"
-#~ "\"%s\" を開くことができるアプリケーションがありません。ダウンロードは可能"
-#~ "です。"
-
-#~ msgid "Redirecting to “%s”…"
-#~ msgstr "\"%s\" にリダイレクト中…"
-
-#~ msgid "Transferring data from “%s”…"
-#~ msgstr "\"%s\" からデータの転送中…"
-
-#~ msgid "Waiting for authorization from “%s”…"
-#~ msgstr "\"%s\" からの認証待ちです…"
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "GConf エラー:\n"
-#~ "  %s"
-
-# FIXME: latest migration marker を確認したい…
-#~ msgid "Failed to read latest migration marker, aborting profile migration."
-#~ msgstr ""
-#~ "最新の移行マーカーの読み取りに失敗しました。プロファイルの移行を終了しま"
-#~ "す。"
-
-#~ msgid "Show only the title column"
-#~ msgstr "タイトルのカラムのみ表示します"
-
-#~ msgid "T_itle and Address"
-#~ msgstr "タイトルとアドレス(_I)"
-
-#~ msgid "Show both the title and address columns"
-#~ msgstr "タイトルとアドレスのカラムの両方を表示します"
-
-#~ msgid ""
-#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
-#~ "You can recover the opened windows and tabs."
-#~ msgstr ""
-#~ "Epiphany が前回の実行中に突然クラッシュして強制終了したようです。その時の"
-#~ "状態に復元することが可能です。"
-
-#~ msgid "Crash Recovery"
-#~ msgstr "Epiphany クラッシュ・リカバリ"
-
-#~ msgid "In keyboard selection mode, press F7 to exit"
-#~ msgstr "[F7] キーを押下してキャレット選択モードを切り替えます"
-
-#~ msgid "St_atusbar"
-#~ msgstr "ステータスバー(_A)"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "ステータスバーの表示/非表示を切り替えます"
-
-#~ msgid "%d hidden popup window"
-#~ msgid_plural "%d hidden popup windows"
-#~ msgstr[0] "%d個のポップアップ・ウィンドウを隠す"
-
-#~ msgid "_Save As..."
-#~ msgstr "別名で保存(_S)..."
-
-#~ msgid "Sidebar extension required"
-#~ msgstr "要サイドバー拡張プラグイン"
-
-#~ msgid "Sidebar Extension Required"
-#~ msgstr "サイドバーの拡張プラグインが必要です"
-
-#~ msgid "The link you clicked needs the sidebar extension to be installed."
-#~ msgstr ""
-#~ "クリックしたリンクを開くには、サイドバー拡張がインストールされている必要が"
-#~ "あります。"
-
-#~ msgid "First"
-#~ msgstr "先頭へ"
-
-#~ msgid "Go to the first page"
-#~ msgstr "先頭ページへ移動します"
-
-#~ msgid "Last"
-#~ msgstr "最後へ"
-
-#~ msgid "Go to the last page"
-#~ msgstr "最後のページへ移動します"
-
-#~ msgid "Previous"
-#~ msgstr "前へ"
-
-#~ msgid "Go to the previous page"
-#~ msgstr "前のページへ移動します"
-
-#~ msgid "Next"
-#~ msgstr "次へ"
-
-#~ msgid "Go to next page"
-#~ msgstr "次のページへ移動します"
-
-#~ msgid "Close"
-#~ msgstr "閉じる"
-
-#~ msgid "Close print preview"
-#~ msgstr "印刷プレビューを閉じます"
