@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-19 23:56+0000\n"
-"PO-Revision-Date: 2011-09-20 10:57+0100\n"
+"POT-Creation-Date: 2011-10-19 07:32+0000\n"
+"PO-Revision-Date: 2011-10-21 20:35+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-Language: Slovenian\n"
@@ -157,31 +157,59 @@ msgid "Clear _All..."
 msgstr "_Počisti vse ..."
 
 #: ../data/glade/epiphany.ui.h:4
+msgid "Content:"
+msgstr "Vsebina:"
+
+# G:32 K:56 O:19
+#: ../data/glade/epiphany.ui.h:5
+msgid "Cookie properties"
+msgstr "Lastnosti piškotka"
+
+#: ../data/glade/epiphany.ui.h:6
 #: ../data/glade/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "Piškotki"
 
-#: ../data/glade/epiphany.ui.h:5
+# G:1 K:0 O:0
+#: ../data/glade/epiphany.ui.h:7
+msgid "Expires:"
+msgstr "Preteče dne:"
+
+#: ../data/glade/epiphany.ui.h:8
 #: ../data/glade/prefs-dialog.ui.h:23
 msgid "Passwords"
 msgstr "Gesla"
 
-#: ../data/glade/epiphany.ui.h:6
+# G:3 K:7 O:0
+#: ../data/glade/epiphany.ui.h:9
+msgid "Path:"
+msgstr "Pot:"
+
+#: ../data/glade/epiphany.ui.h:10
 msgid "Personal Data"
 msgstr "Osebni podatki"
 
-#: ../data/glade/epiphany.ui.h:7
+# G:1 K:0 O:0
+#: ../data/glade/epiphany.ui.h:11
+msgid "Send for:"
+msgstr "Pošlji za:"
+
+#: ../data/glade/epiphany.ui.h:12
 msgid "Text Encoding"
 msgstr "Znakovno kodiranje besedila"
 
-#: ../data/glade/epiphany.ui.h:8
+#: ../data/glade/epiphany.ui.h:13
 #: ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Uporabi nabor znakov, ki je določen v dokumentu"
 
-#: ../data/glade/epiphany.ui.h:9
+#: ../data/glade/epiphany.ui.h:14
 msgid "_Show passwords"
 msgstr "_Pokaži gesla"
+
+#: ../data/glade/epiphany.ui.h:15
+msgid "label"
+msgstr "oznaka"
 
 #: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
@@ -1410,7 +1438,7 @@ msgstr "Izvedi skript “%s”"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:85
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1441,7 +1469,7 @@ msgid "“%s” Properties"
 msgstr "Lastnosti “%s”"
 
 # G:2 K:0 O:0
-#: ../src/bookmarks/ephy-bookmark-properties.c:550
+#: ../src/bookmarks/ephy-bookmark-properties.c:549
 msgid "_Title:"
 msgstr "_Naziv:"
 
@@ -1450,11 +1478,11 @@ msgid "A_ddress:"
 msgstr "_Naslov:"
 
 # G:1 K:0 O:0
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "Te_me:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Po_kaži vse teme"
 
@@ -3077,65 +3105,41 @@ msgstr "_Začasne datoteke"
 msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
 msgstr "<small><i><b>Opomba:</b>Tega dejanja ni mogoče razveljaviti. Podatki bodo trajno izbrisani.</i></small>"
 
-# G:32 K:56 O:19
-#: ../src/pdm-dialog.c:622
-msgid "Cookie Properties"
-msgstr "Lastnosti piškotka"
-
-#: ../src/pdm-dialog.c:639
-msgid "Content:"
-msgstr "Vsebina:"
-
-# G:3 K:7 O:0
-#: ../src/pdm-dialog.c:655
-msgid "Path:"
-msgstr "Pot:"
-
-# G:1 K:0 O:0
-#: ../src/pdm-dialog.c:671
-msgid "Send for:"
-msgstr "Pošlji za:"
-
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "Le šifrirane povezave"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "Katerakoli vrsta povezave"
 
-# G:1 K:0 O:0
-#: ../src/pdm-dialog.c:686
-msgid "Expires:"
-msgstr "Preteče dne:"
-
 # G:12 K:1 O:7
 #. Session cookie
-#: ../src/pdm-dialog.c:698
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "Konec trenutne seje"
 
 # G:0 K:4 O:0
-#: ../src/pdm-dialog.c:830
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "Domena"
 
 # G:0 K:1 O:0
-#: ../src/pdm-dialog.c:842
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "Ime"
 
 # G:1 K:0 O:0
-#: ../src/pdm-dialog.c:1256
+#: ../src/pdm-dialog.c:1201
 msgid "Host"
 msgstr "Gostitelj"
 
 # G:3 K:4 O:1
-#: ../src/pdm-dialog.c:1269
+#: ../src/pdm-dialog.c:1214
 msgid "User Name"
 msgstr "Uporabniško ime"
 
-#: ../src/pdm-dialog.c:1282
+#: ../src/pdm-dialog.c:1227
 msgid "User Password"
 msgstr "Uporabnikovo geslo"
 
