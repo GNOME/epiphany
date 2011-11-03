@@ -22,7 +22,6 @@
             <child>
               <object class="GtkButton" id="close_cookie_properties_button">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -226,7 +225,6 @@
             <child>
               <object class="GtkButton" id="okbutton2">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -243,7 +241,6 @@
             <child>
               <object class="GtkButton" id="encoding_help_button">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -278,7 +275,6 @@
                 <child>
                   <object class="GtkRadioButton" id="automatic_button">
                     <property name="label" translatable="yes">&lt;b&gt;_Automatic&lt;/b&gt;</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -327,7 +323,6 @@
                 <child>
                   <object class="GtkRadioButton" id="manual_button">
                     <property name="label" translatable="yes">&lt;b&gt;_Use a different encoding:&lt;/b&gt;</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -409,7 +404,6 @@
             <child>
               <object class="GtkButton" id="pdm_help_button">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -425,52 +419,13 @@
             </child>
             <child>
               <object class="GtkButton" id="removeallbutton">
-                <property name="use_action_appearance">False</property>
+                <property name="label">gtk-clear</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_action_appearance">False</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment12">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox91">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-clear</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label1249">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Clear _All...</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -481,7 +436,6 @@
             <child>
               <object class="GtkButton" id="closebutton1">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -544,7 +498,6 @@
                     <child>
                       <object class="GtkButton" id="cookies_remove_button">
                         <property name="label">gtk-remove</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -562,7 +515,6 @@
                     <child>
                       <object class="GtkButton" id="cookies_properties_button">
                         <property name="label">gtk-properties</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -637,7 +589,6 @@
                         <child>
                           <object class="GtkButton" id="passwords_remove_button">
                             <property name="label">gtk-remove</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
@@ -669,7 +620,6 @@
                 <child>
                   <object class="GtkCheckButton" id="passwords_show_button">
                     <property name="label" translatable="yes">_Show passwords</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
