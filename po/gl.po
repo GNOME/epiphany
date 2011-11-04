@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2011-09-07 02:25+0200\n"
-"PO-Revision-Date: 2011-09-07 02:30+0200\n"
+"POT-Creation-Date: 2011-11-04 13:30+0100\n"
+"PO-Revision-Date: 2011-11-04 13:31+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -70,7 +70,7 @@ msgstr "Epiphany"
 msgid "Epiphany Web Browser"
 msgstr "Navegador web Epiphany"
 
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:465
+#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:460
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -151,32 +151,52 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Usar unha codificación diferente:</b>"
 
 #: ../data/glade/epiphany.ui.h:3
-msgid "Clear _All..."
-msgstr "Limpar _todo…"
+msgid "Content:"
+msgstr "Contido:"
 
-#: ../data/glade/epiphany.ui.h:4 ../data/glade/prefs-dialog.ui.h:8
+#: ../data/glade/epiphany.ui.h:4
+msgid "Cookie properties"
+msgstr "Propiedades da cookie"
+
+#: ../data/glade/epiphany.ui.h:5 ../data/glade/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "Cookies"
 
-#: ../data/glade/epiphany.ui.h:5 ../data/glade/prefs-dialog.ui.h:23
+#: ../data/glade/epiphany.ui.h:6
+msgid "Expires:"
+msgstr "Caduca:"
+
+#: ../data/glade/epiphany.ui.h:7 ../data/glade/prefs-dialog.ui.h:23
 msgid "Passwords"
 msgstr "Contrasinais"
 
-#: ../data/glade/epiphany.ui.h:6
+#: ../data/glade/epiphany.ui.h:8
+msgid "Path:"
+msgstr "Camiño:"
+
+#: ../data/glade/epiphany.ui.h:9
 msgid "Personal Data"
 msgstr "Información persoal"
 
-#: ../data/glade/epiphany.ui.h:7
+#: ../data/glade/epiphany.ui.h:10
+msgid "Send for:"
+msgstr "Enviar a:"
+
+#: ../data/glade/epiphany.ui.h:11
 msgid "Text Encoding"
 msgstr "Codificación do texto"
 
-#: ../data/glade/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:338
+#: ../data/glade/epiphany.ui.h:12 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "Usar a codificación específicada polo documento"
 
-#: ../data/glade/epiphany.ui.h:9
+#: ../data/glade/epiphany.ui.h:13
 msgid "_Show passwords"
 msgstr "_Mostrar contrasinais"
+
+#: ../data/glade/epiphany.ui.h:14
+msgid "label"
+msgstr "etiqueta"
 
 #: ../data/glade/form-signing-dialog.ui.h:1
 msgid "Sign Text"
@@ -227,7 +247,7 @@ msgstr "Seleccione un idiom_a:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:607
+#: ../data/glade/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:606
 #: ../src/ephy-history-window.c:227 ../src/pdm-dialog.c:356
 msgid "Cl_ear"
 msgstr "Limp_ar"
@@ -819,14 +839,15 @@ msgstr "Aplicativos"
 msgid "List of installed web applications"
 msgstr "Lista dos aplicativos web instalados"
 
-#: ../embed/ephy-request-about.c:189
+#. Note for translators: this refers to the installation date.
+#: ../embed/ephy-request-about.c:191
 msgid "Installed on:"
 msgstr "Activado o:"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3445
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3435
 msgid "Blank page"
 msgstr "Páxina en branco"
 
@@ -863,20 +884,20 @@ msgstr "Permitir"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "A páxina <b>%s</b> quere saber a súa localización."
 
-#: ../embed/ephy-web-view.c:2016
+#: ../embed/ephy-web-view.c:2023
 msgid "None specified"
 msgstr "Non especificado"
 
-#: ../embed/ephy-web-view.c:2025 ../embed/ephy-web-view.c:2043
+#: ../embed/ephy-web-view.c:2032 ../embed/ephy-web-view.c:2050
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Recoiro! Produciuse un erro ao cargar %s"
 
-#: ../embed/ephy-web-view.c:2027
+#: ../embed/ephy-web-view.c:2034
 msgid "Oops! It was not possible to show this website"
 msgstr "Recoiro! Non foi posíbel mostrar esta páxina"
 
-#: ../embed/ephy-web-view.c:2028
+#: ../embed/ephy-web-view.c:2035
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -889,16 +910,16 @@ msgstr ""
 "movida a un novo enderezo. Non esqueza comprobar que a súa conexión a "
 "internet está funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:2037
+#: ../embed/ephy-web-view.c:2044
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: ../embed/ephy-web-view.c:2045
+#: ../embed/ephy-web-view.c:2052
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Recoiro! Este sitio puido causar que Epiphany se peche de forma inesperada"
 
-#: ../embed/ephy-web-view.c:2047
+#: ../embed/ephy-web-view.c:2054
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -909,33 +930,33 @@ msgstr ""
 "inesperada.<p></p>Isto podería acontecer de novo se recarga a páxina. Se é "
 "así, informe do problema aos desenvolvedores de <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2055
+#: ../embed/ephy-web-view.c:2062
 msgid "Load again anyway"
 msgstr "Cargar todo de todas formas"
 
-#: ../embed/ephy-web-view.c:2330
+#: ../embed/ephy-web-view.c:2337
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2520
+#: ../embed/ephy-web-view.c:2527
 msgid "Plugins"
 msgstr "Engadidos"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2627
+#: ../embed/ephy-web-view.c:2634
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2629
+#: ../embed/ephy-web-view.c:2636
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3649
+#: ../embed/ephy-web-view.c:3639
 #, c-format
 msgid "%s Files"
 msgstr "%s Ficheiros"
@@ -1019,7 +1040,7 @@ msgstr "Desactivar conexión ao xestor de sesións"
 msgid "Specify file containing saved configuration"
 msgstr "Especifique o ficheiro que conten a configuración gardada"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:94 ../src/ephy-main.c:96
+#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:89 ../src/ephy-main.c:91
 msgid "FILE"
 msgstr "FICHEIRO"
 
@@ -1287,7 +1308,7 @@ msgstr "Mostrar no cartafol"
 msgid "Starting…"
 msgstr "Iniciando…"
 
-#: ../lib/widgets/ephy-location-entry.c:890
+#: ../lib/widgets/ephy-location-entry.c:889
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastrar e soltar esta icona para crear unha ligazón a esta páxina"
 
@@ -1308,7 +1329,7 @@ msgstr "Executa o script «%s»"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:85
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1333,7 +1354,7 @@ msgstr "Mostrar «%s»"
 msgid "“%s” Properties"
 msgstr "«%s» propiedades"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:550
+#: ../src/bookmarks/ephy-bookmark-properties.c:549
 msgid "_Title:"
 msgstr "_Título:"
 
@@ -1341,11 +1362,11 @@ msgstr "_Título:"
 msgid "A_ddress:"
 msgstr "En_derezo:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "T_opics:"
 msgstr "Te_mas:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "Mostra_r todos os temas"
 
@@ -1857,7 +1878,7 @@ msgid "Find next occurrence of the search string"
 msgstr "Busca a seguinte aparición da cadea de busca"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:620
+#: ../src/ephy-fullscreen-popup.c:232 ../src/ephy-toolbar.c:617
 msgid "Leave Fullscreen"
 msgstr "Saír do modo de pantalla completa"
 
@@ -1959,63 +1980,63 @@ msgstr "Sitios"
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:79 ../src/ephy-main.c:330 ../src/window-commands.c:1346
+#: ../src/ephy-main.c:74 ../src/ephy-main.c:325 ../src/window-commands.c:1349
 msgid "GNOME Web Browser"
 msgstr "Navegador web do GNOME"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:83
 msgid "Open a new tab in an existing browser window"
 msgstr "Abrir unha lapela nova nunha xanela de navegador existente"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:85
 msgid "Open a new browser window"
 msgstr "Abrir unha nova xanela de navegador"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
 msgstr "Iniciar o editor de marcadores"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde o ficheiro indicado"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:91
 msgid "Load the given session file"
 msgstr "Cargar o ficheiro de sesión indicado"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "Add a bookmark"
 msgstr "Engadir un marcador"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:93
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:95
 msgid "Start a private instance"
 msgstr "Iniciar unha instancia privada"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:97
 msgid "Start the browser in application mode"
 msgstr "Iniciar o navegador en modo de aplicativo"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "Profile directory to use in the private instance"
 msgstr "Directorio de perfil para usar na instancia privada"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:99
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:106
+#: ../src/ephy-main.c:101
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:214
+#: ../src/ephy-main.c:209
 msgid "Could not start GNOME Web Browser"
 msgstr "Non foi posíbel iniciar o navegador web de GNOME"
 
-#: ../src/ephy-main.c:217
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2024,7 +2045,7 @@ msgstr ""
 "O inicio fallou polo seguinte erro:\n"
 "%s"
 
-#: ../src/ephy-main.c:331
+#: ../src/ephy-main.c:326
 msgid "GNOME Web Browser options"
 msgstr "Opcións do navegador web de GNOME"
 
@@ -2154,11 +2175,11 @@ msgstr "_Lapela nova"
 msgid "Open a new tab"
 msgstr "Abrir unha lapela nova"
 
-#: ../src/ephy-toolbar.c:345
+#: ../src/ephy-toolbar.c:343
 msgid "_New Window"
 msgstr "_Xanela nova"
 
-#: ../src/ephy-toolbar.c:347
+#: ../src/ephy-toolbar.c:345
 msgid "Open a new window"
 msgstr "Abrir unha xanela nova"
 
@@ -2818,56 +2839,36 @@ msgstr ""
 "<small><i><b>Nota:</b> Non pode desfacer esta acción. A información que está "
 "escollendo para quitar borrarase para sempre.</i></small>"
 
-#: ../src/pdm-dialog.c:622
-msgid "Cookie Properties"
-msgstr "Propiedades das cookies"
-
-#: ../src/pdm-dialog.c:639
-msgid "Content:"
-msgstr "Contido:"
-
-#: ../src/pdm-dialog.c:655
-msgid "Path:"
-msgstr "Camiño:"
-
-#: ../src/pdm-dialog.c:671
-msgid "Send for:"
-msgstr "Enviar a:"
-
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "Só conexións cifradas"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "Calquera tipo de conexión"
 
-#: ../src/pdm-dialog.c:686
-msgid "Expires:"
-msgstr "Caduca:"
-
 #. Session cookie
-#: ../src/pdm-dialog.c:698
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "Fin da sesión actual"
 
-#: ../src/pdm-dialog.c:830
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:842
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/pdm-dialog.c:1256
+#: ../src/pdm-dialog.c:1201
 msgid "Host"
 msgstr "Servidor"
 
-#: ../src/pdm-dialog.c:1269
+#: ../src/pdm-dialog.c:1214
 msgid "User Name"
 msgstr "Nome de usuario"
 
-#: ../src/pdm-dialog.c:1282
+#: ../src/pdm-dialog.c:1227
 msgid "User Password"
 msgstr "Contrasinal de usuario"
 
@@ -3008,10 +3009,10 @@ msgstr "Desenvolvedores anteriores:"
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by WebKit"
+"Powered by WebKit %d.%d.%d"
 msgstr ""
 "Permítelle ver páxinas web e buscar información na Internet.\n"
-"Baseado en WebKit"
+"Baseado en WebKit %d.%d.%d"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3021,7 +3022,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1362
+#: ../src/window-commands.c:1365
 msgid "translator-credits"
 msgstr ""
 "Fran Diéguez <frandieguez@ubuntu.com>, 2009, 2010.\n"
@@ -3033,15 +3034,15 @@ msgstr ""
 "Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2005, 2006.\n"
 "Ignacio Casal Quinteiro <adorador_del_heavy@hotmail.com>, 2004."
 
-#: ../src/window-commands.c:1365
+#: ../src/window-commands.c:1368
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web do navegador de GNOME"
 
-#: ../src/window-commands.c:1509
+#: ../src/window-commands.c:1512
 msgid "Enable caret browsing mode?"
 msgstr "Quere activar o modo de navegación co cursor?"
 
-#: ../src/window-commands.c:1512
+#: ../src/window-commands.c:1515
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3052,9 +3053,12 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: ../src/window-commands.c:1515
+#: ../src/window-commands.c:1518
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Clear _All..."
+#~ msgstr "Limpar _todo…"
 
 #~ msgid "Icon"
 #~ msgstr "Icona"
