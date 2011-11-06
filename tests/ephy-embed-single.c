@@ -97,7 +97,6 @@ main (int argc, char *argv[])
   int ret;
 
   gtk_test_init (&argc, &argv);
-  g_thread_init (NULL);
 
   ephy_debug_init ();
   ephy_embed_prefs_init ();
