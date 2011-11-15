@@ -113,21 +113,6 @@ libephymain_la_CFLAGS = \
 BUILT_SOURCES =		\
 	$(TYPES_SOURCE)
 
-nodist_libephymain_la_SOURCES += \
-	ephy-network-manager.c	 \
-	ephy-network-manager.h
-
-BUILT_SOURCES +=		\
-	ephy-network-manager.h	\
-	ephy-network-manager.c
-
-ephy-network-manager.c ephy-network-manager.h: $(top_srcdir)/data/ephy-network-manager.xml
-	$(AM_V_GEN) $(GDBUS_CODEGEN) 			\
-		--c-namespace Ephy			\
-		--generate-c-code ephy-network-manager  \
-		--interface-prefix org.freedesktop. 	\
-		$<
-
 if ENABLE_SEED
 NOINST_H_FILES += \
 	ephy-seed-extension.h \

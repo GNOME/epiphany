@@ -72,7 +72,6 @@ EXTRA_DIST = \
 	$(gsettings_files)		\
 	$(convert_DATA)			\
 	epiphany-service.xml		\
-	ephy-network-manager.xml	\
 	check-mime.py
 
 DISTCLEANFILES = \

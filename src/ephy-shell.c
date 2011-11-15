@@ -37,8 +37,6 @@
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
 #include "ephy-lockdown.h"
-#include "ephy-network-manager-defines.h"
-#include "ephy-network-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
@@ -63,7 +61,7 @@ struct _EphyShellPrivate {
   EggToolbarsModel *toolbars_model;
   EggToolbarsModel *fs_toolbars_model;
   EphyExtensionsManager *extensions_manager;
-  EphyNetworkManager *nm_proxy;
+  GNetworkMonitor *network_monitor;
   GtkWidget *bme;
   GtkWidget *history_window;
   GObject *pdm_dialog;
@@ -436,20 +434,18 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 }
 
 static void
-ephy_shell_sync_network_status (EphyNetworkManager *nm_proxy,
-                                NMState state,
+ephy_shell_sync_network_status (GNetworkMonitor *monitor,
+                                gboolean available,
                                 EphyShell *shell)
 {
   EphyShellPrivate *priv = shell->priv;
   EphyEmbedSingle *single;
-  gboolean net_status;
 
   if (!priv->embed_single_connected) return;
 
   single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (shell)));
 
-  net_status = state == NM_STATE_CONNECTED_GLOBAL;
-  ephy_embed_single_set_network_status (single, net_status);
+  ephy_embed_single_set_network_status (single, available);
 }
 
 static GObject*
@@ -471,8 +467,8 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 
     /* Now we need the net monitor   */
     if (ephy_shell_get_net_monitor (shell)) {
-        ephy_shell_sync_network_status (priv->nm_proxy,
-                                        ephy_network_manager_get_state (priv->nm_proxy),
+        ephy_shell_sync_network_status (priv->network_monitor,
+                                        g_network_monitor_get_network_available (priv->network_monitor),
                                         shell);
     }
   }
@@ -563,12 +559,12 @@ ephy_shell_dispose (GObject *object)
     priv->bookmarks = NULL;
   }
 
-  if (priv->nm_proxy != NULL) {
+  if (priv->network_monitor != NULL) {
     LOG ("Unref net monitor ");
     g_signal_handlers_disconnect_by_func
-      (priv->nm_proxy, G_CALLBACK (ephy_shell_sync_network_status), shell);
-    g_object_unref (priv->nm_proxy);
-    priv->nm_proxy = NULL;
+      (priv->network_monitor, G_CALLBACK (ephy_shell_sync_network_status), shell);
+    g_object_unref (priv->network_monitor);
+    priv->network_monitor = NULL;
   }
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
@@ -917,18 +913,13 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 {
   EphyShellPrivate *priv = shell->priv;
 
-  if (priv->nm_proxy == NULL) {
-    priv->nm_proxy = ephy_network_manager_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
-                                                                  G_DBUS_PROXY_FLAGS_NONE,
-                                                                  NM_DBUS_SERVICE,
-                                                                  NM_DBUS_PATH,
-                                                                  NULL,
-                                                                  NULL);
-    g_signal_connect (priv->nm_proxy, "state-changed",
+  if (priv->network_monitor == NULL) {
+    priv->network_monitor = g_network_monitor_get_default ();
+    g_signal_connect (priv->network_monitor, "network-changed",
                       G_CALLBACK (ephy_shell_sync_network_status), shell);
   }
 
-  return G_OBJECT (priv->nm_proxy);
+  return G_OBJECT (priv->network_monitor);
 }
 
 static void
