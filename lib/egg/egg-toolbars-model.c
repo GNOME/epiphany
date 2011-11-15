@@ -675,10 +675,6 @@ static void
 egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  volatile GType flags_type; /* work around gcc's optimiser */
-
-  /* make sure the flags type is known */
-  flags_type = EGG_TYPE_TB_MODEL_FLAGS;
 
   object_class->finalize = egg_toolbars_model_finalize;
 
