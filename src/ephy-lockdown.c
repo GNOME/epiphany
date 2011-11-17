@@ -111,8 +111,6 @@ static const BindAction window_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_PRINT_SETUP, "FilePrintSetup", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_COMMAND_LINE, "FilePrintSetup", "sensitive" },
 
-	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "ViewToolbarEditor", "sensitive" },
-
 	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "GoBookmarks", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
 
@@ -142,12 +140,6 @@ static const BindAction special_toolbar_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "sensitive" },
 
 	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" }
-};
-
-static const BindAction toolbar_actions[] = {
-	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "MoveToolItem", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "RemoveToolItem", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING, "RemoveToolbar", "sensitive" }
 };
 
 static gboolean
@@ -259,11 +251,6 @@ impl_attach_window (EphyExtension *extension,
 	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
 				   action_group, special_toolbar_actions,
 				   G_N_ELEMENTS (special_toolbar_actions));
-
-	action_group = find_action_group (manager, "ToolbarActions");
-	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-				   action_group, toolbar_actions,
-				   G_N_ELEMENTS (toolbar_actions));
 }
 
 static void

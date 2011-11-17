@@ -43,7 +43,6 @@
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
 #include "ephy-notebook.h"
-#include "ephy-toolbar-editor.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-location-entry.h"
 #include "ephy-bookmarks-ui.h"
@@ -1220,13 +1219,6 @@ window_cmd_edit_prefs (GtkAction *action,
 	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
 
 	ephy_dialog_show (dialog);
-}
-
-void
-window_cmd_edit_toolbar (GtkAction *action,
-			 EphyWindow *window)
-{
-	ephy_toolbar_editor_show (window);
 }
 
 void

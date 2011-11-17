@@ -110,7 +110,6 @@ typedef enum
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN		"disable-fullscreen"
 #define EPHY_PREFS_LOCKDOWN_ARBITRARY_URL	"disable-arbitrary-url"
 #define EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING	"disable-bookmark-editing"
-#define EPHY_PREFS_LOCKDOWN_TOOLBAR_EDITING	"disable-toolbar-editing"
 #define EPHY_PREFS_LOCKDOWN_HISTORY		"disable-history"
 #define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK	"disable-save-to-disk"
 #define EPHY_PREFS_LOCKDOWN_PRINTING		"disable-printing"
