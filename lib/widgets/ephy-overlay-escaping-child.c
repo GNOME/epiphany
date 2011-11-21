@@ -82,7 +82,9 @@ parent_motion_notify_event (GtkWidget *widget,
   gtk_widget_get_allocation (widget, &alloc);
 
   if (is_point_in_rectangle (event->x, event->y, priv->escaping_area)) {
-    gtk_widget_get_pointer (widget, &distance_x, &distance_y);
+    gdk_window_get_device_position (gtk_widget_get_window (widget),
+                                    gdk_event_get_device ((GdkEvent *) event),
+                                    &distance_x, &distance_y, NULL);
     alloc.y += priv->escaping_distance + distance_y;
   }
   else {

@@ -189,14 +189,16 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 
 /* FIXME remove when gtknotebook's func for this becomes public, bug #.... */
 static EphyNotebook *
-find_notebook_at_pointer (gint abs_x, gint abs_y)
+find_notebook_at_pointer (GdkDisplay *display, gint abs_x, gint abs_y)
 {
 	GdkWindow *win_at_pointer, *toplevel_win;
 	gpointer toplevel = NULL;
 	gint x, y;
 
-	/* FIXME multi-head */
-	win_at_pointer = gdk_window_at_pointer (&x, &y);
+	win_at_pointer = gdk_device_get_window_at_position (
+		gdk_device_manager_get_client_pointer (
+			gdk_display_get_device_manager (display)),
+		&x, &y);
 	if (win_at_pointer == NULL)
 	{
 		/* We are outside all windows containing a notebook */
@@ -224,7 +226,8 @@ is_in_notebook_window (EphyNotebook *notebook,
 {
 	EphyNotebook *nb_at_pointer;
 
-	nb_at_pointer = find_notebook_at_pointer (abs_x, abs_y);
+	nb_at_pointer = find_notebook_at_pointer (gtk_widget_get_display (GTK_WIDGET (notebook)),
+						  abs_x, abs_y);
 
 	return nb_at_pointer == notebook;
 }

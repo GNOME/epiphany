@@ -191,9 +191,13 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 	
 	window = gtk_tree_view_get_bin_window (tree_view);
 	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
-	
-	gdk_window_get_pointer (window, NULL, &y, NULL);
-	
+
+	gdk_window_get_device_position (window,
+					gdk_device_manager_get_client_pointer (
+						gdk_display_get_device_manager (
+							gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+					NULL, &y, NULL);
+
 	y += gtk_adjustment_get_value (vadjustment);
 
 	gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
