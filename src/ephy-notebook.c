@@ -416,24 +416,27 @@ notebook_drag_data_received_cb (GtkWidget* widget,
 
 /*
  * update_tabs_visibility: Hide tabs if there is only one tab
- * and the pref is not set.
+ * and the pref is not set or when in application mode.
  */
 static void
 update_tabs_visibility (EphyNotebook *nb,
 			gboolean before_inserting)
 {
 	EphyNotebookPrivate *priv = nb->priv;
+	EphyEmbedShellMode mode;
 	gboolean show_tabs;
 	guint num;
 
+	mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 	num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
 
 	if (before_inserting) num++;
 
-	show_tabs = (g_settings_get_boolean (EPHY_SETTINGS_UI,
-					     EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR)
-		     || num > 1) &&
-		    priv->show_tabs == TRUE;
+	show_tabs = mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+		(g_settings_get_boolean (EPHY_SETTINGS_UI,
+					 EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR)
+		 || num > 1) &&
+		priv->show_tabs == TRUE;
 
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
 }
