@@ -4,6 +4,7 @@ noinst_PROGRAMS = \
 	test-ephy-embed-utils \
 	test-ephy-location-entry \
 	test-ephy-search-entry \
+	test-ephy-sqlite \
 	$(NULL)
 
 # Mostly copied from Makefile.decl in glib
@@ -119,3 +120,6 @@ test_ephy_location_entry_SOURCES = \
 
 test_ephy_search_entry_SOURCES = \
 	ephy-search-entry-test.c
+
+test_ephy_sqlite_SOURCES = \
+	ephy-sqlite.c

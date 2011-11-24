@@ -24,6 +24,9 @@ NOINST_H_FILES = \
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
 	ephy-smaps.h				\
+	ephy-sqlite.h				\
+	ephy-sqlite-connection.h		\
+	ephy-sqlite-statement.h			\
 	ephy-string.h				\
 	ephy-time-helpers.h			\
 	ephy-zoom.h
@@ -64,6 +67,8 @@ libephymisc_la_SOURCES = \
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\
 	ephy-smaps.c				\
+	ephy-sqlite-connection.c		\
+	ephy-sqlite-statement.c			\
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-time-helpers.c			\
