@@ -2,6 +2,7 @@ noinst_PROGRAMS = \
 	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
+	test-ephy-history \
 	test-ephy-location-entry \
 	test-ephy-search-entry \
 	test-ephy-sqlite \
@@ -81,6 +82,7 @@ check-local: test-nonrecursive
 INCLUDES = \
 	-I$(top_srcdir)/embed    \
 	-I$(top_srcdir)/lib      \
+	-I$(top_srcdir)/lib/history \
 	-I$(top_srcdir)/lib/widgets \
 	-I$(top_srcdir)/src      \
 	-I$(top_srcdir)/src/bookmarks
@@ -94,6 +96,7 @@ LDADD = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
+	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DBUS_LIBS) \
@@ -114,6 +117,9 @@ test_ephy_embed_single_SOURCES = \
 
 test_ephy_embed_utils_SOURCES = \
 	ephy-embed-utils-test.c
+
+test_ephy_history_SOURCES = \
+	ephy-history.c
 
 test_ephy_location_entry_SOURCES = \
 	ephy-location-entry-test.c

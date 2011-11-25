@@ -147,6 +147,7 @@ epiphany_LDADD = \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
+	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
 	$(LIBINTL)

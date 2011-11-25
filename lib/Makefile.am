@@ -1,4 +1,4 @@
-SUBDIRS = widgets egg
+SUBDIRS = widgets egg history
 
 noinst_LTLIBRARIES = libephymisc.la
 

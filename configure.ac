@@ -329,6 +329,7 @@ doc/Makefile
 doc/reference/Makefile
 lib/Makefile
 lib/egg/Makefile
+lib/history/Makefile
 lib/widgets/Makefile
 embed/Makefile
 src/Makefile
