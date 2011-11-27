@@ -87,6 +87,7 @@ struct _EphyEmbedPrivate
   guint seq_message_id;
 
   guint tab_message_id;
+  guint pop_statusbar_later_source_id;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -439,6 +440,17 @@ _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
     gtk_widget_show (parent);
 }
 
+static gboolean
+pop_statusbar_later_cb (gpointer data)
+{
+  EphyEmbed *embed = EPHY_EMBED (data);
+  EphyEmbedPrivate *priv = embed->priv;
+
+  ephy_embed_statusbar_pop (embed, priv->tab_message_id);
+  priv->pop_statusbar_later_source_id = 0;
+  return FALSE;
+}
+
 static void
 status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -449,10 +461,19 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
 
   priv = embed->priv;
 
-  ephy_embed_statusbar_pop (embed, priv->tab_message_id);
+  if (message) {
+    if (priv->pop_statusbar_later_source_id) {
+      g_source_remove (priv->pop_statusbar_later_source_id);
+      priv->pop_statusbar_later_source_id = 0;
+    }
 
-  if (message)
+    ephy_embed_statusbar_pop (embed, priv->tab_message_id);
     ephy_embed_statusbar_push (embed, priv->tab_message_id, message);
+  } else {
+    /* A short timeout before hiding the statusbar ensures that while moving
+      over a series of links, the overlay widget doesn't flicker on and off. */
+    priv->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+  }
 }
 
 static void
