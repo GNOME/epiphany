@@ -1,35 +1,60 @@
+/* Global CSS for pages */
+
+h1 {
+        color: #babdb6;
+        text-shadow: 0 1px 0 white;
+        margin-bottom 0;
+}
+
+body {
+        font: 11pt cantarell;
+        color: #2e3436;
+        padding: 20px 20px 0 20px;
+        background-color: #f6f6f4;
+        background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #eeeeec),
+                color-stop(1, #f6f6f4)
+        );
+        background-size: 100% 5em;
+        background-repeat: no-repeat;
+}
+
+
 /* about:plugins */
 
 #plugin-table
 {
-    margin: 14px;
-    width: 80%;
+    margin-top: 10px;
+    width: 96%;
     text-align: left;
     border-collapse: collapse;
 }
 
 #plugin-table th
 {
-    padding: 8px;
-    background:#b9c9ff;
-    border-top: 4px solid #aabcff;
-    border-bottom: 1px solid #fff;
-    color: #039;
+    padding: 6px;
+    background: #565051;
+    border: 2px solid #565051;
+    color: #f6f6f4;
+    width: 33%;
 }
 
 #plugin-table td
 {
-    padding: 8px;
-    background: #e8edff;
-    border-bottom: 1px solid #fff;
-    color: #669;
+    padding: 4px;
+    background: #f6f6f4;
+    border-bottom: 1px solid #d3d7cf;
+    color: #2e3436;
     border-top: 1px solidtransparent;
 }
 
 #plugin-table tr:hover td
 {
-    background: #d0dafd;
-    color:#339;
+    background: #d3d7cf;
+    color: #2e3436;
 }
 
 /* about:epiphany */
@@ -50,63 +75,53 @@
 
 .memory-table caption
 {
-    margin-bottom: 0.5em;
+    font-size: 16pt;
+    font-weight: bold;
+    margin-bottom: 0.9em;
+    color: #2e3436;
+    text-shadow: 0 1px 0 white;
 }
 
 .memory-table
 {
-    margin: 14px;
+    margin: 0 12.5% 0.9em 12.5%;
     width: 75%;
+    text-align: left;
     border-collapse: collapse;
 }
 
 .memory-table th
 {
-    padding: 2px;
-    background:#b9c9ff;
-    border-top: 4px solid #aabcff;
-    border-bottom: 1px solid #fff;
-    color: #039;
+    padding: 4px;
+    background: #565051;
+    border: 2px solid #565051;
+    color: #f6f6f4;
 }
 
 .memory-table td
 {
     padding: 2px;
-    background: #e8edff;
-    border-bottom: 1px solid #fff;
-    color: #669;
+    background: #f6f6f8;
+    border-bottom: 1px solid #d3d7cf;
+    color: #2e3436;
     border-top: 1px solidtransparent;
+    width: 16%;
 }
+
+.memory-table tr:hover td
+{
+    background: #d3d7cf;
+    color: #2e3436;
+}
+
 
 /* about:applications */
-
-.applications-body { 
-	font: 11pt cantarell;
-	color: #2e3436;
-	padding: 20px 20px 0 20px;
-	background-color: #f6f6f4;
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		left bottom,
-		color-stop(0, #eeeeec),
-		color-stop(1, #f6f6f4)
-	);
-	background-size: 100% 5em;
-	background-repeat: no-repeat;
-}
 
 .applications-body table { width: 100%; border-collapse: collapse; }
 
 .applications-body table, td { 
 	border: 1px solid #d3d7cf;
 	border-left: none; border-right: none;
-}
-
-.applications-body h1 { 
-	color: #babdb6;
-	text-shadow: 0 1px 0 white;
-	margin-bottom: 0;
 }
 
 .applications-body p { margin-bottom: 30px; }

@@ -145,7 +145,8 @@ ephy_request_about_send (SoupRequest          *request,
                               "<style type=\"text/css\">%s</style></head><body>",
                               _("Memory usage"),
                               about->priv->css_style);
-      
+
+      g_string_append_printf (data_str, "<h1>%s</h1>", _("Memory usage"));
       g_string_append (data_str, memory);
       g_free (memory);
     }
