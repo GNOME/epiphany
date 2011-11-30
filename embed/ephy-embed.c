@@ -251,23 +251,28 @@ static void
 ephy_embed_dispose (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
+  EphyEmbedPrivate *priv = embed->priv;
 
-  if (embed->priv->inspector_window)
-  {
+  if (embed->priv->inspector_window) {
     WebKitWebInspector *inspector;
 
-    inspector = webkit_web_view_get_inspector (embed->priv->web_view);
+    inspector = webkit_web_view_get_inspector (priv->web_view);
 
     g_signal_handlers_disconnect_by_func (inspector,
                                           ephy_embed_inspect_show_cb,
-                                          embed->priv->inspector_window);
+                                          priv->inspector_window);
 
     g_signal_handlers_disconnect_by_func (inspector,
                                           ephy_embed_inspect_close_cb,
-                                          embed->priv->inspector_window);
+                                          priv->inspector_window);
 
-    gtk_widget_destroy (GTK_WIDGET (embed->priv->inspector_window));
-    embed->priv->inspector_window = NULL;
+    gtk_widget_destroy (GTK_WIDGET (priv->inspector_window));
+    priv->inspector_window = NULL;
+  }
+
+  if (priv->pop_statusbar_later_source_id) {
+    g_source_remove (priv->pop_statusbar_later_source_id);
+    priv->pop_statusbar_later_source_id = 0;
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
