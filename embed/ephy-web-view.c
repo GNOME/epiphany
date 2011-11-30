@@ -2040,7 +2040,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       button_label = g_strdup (_("Try again"));
 
       html_file = ephy_file ("error.html");
-      stock_icon = GTK_STOCK_DIALOG_ERROR;
+      stock_icon = "dialog-error";
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
@@ -2058,7 +2058,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       button_label = g_strdup (_("Load again anyway"));
 
       html_file = ephy_file ("recovery.html");
-      stock_icon = GTK_STOCK_DIALOG_INFO;
+      stock_icon = "dialog-information";
       break;
     default:
       return;
@@ -2071,7 +2071,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                           48,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-  image_data = get_file_content_as_base64 (gtk_icon_info_get_filename (icon_info));
+  image_data = icon_info ? get_file_content_as_base64 (gtk_icon_info_get_filename (icon_info)) : NULL;
 
   g_file_get_contents (html_file, &template, NULL, NULL);
 
@@ -2083,7 +2083,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
                    uri,
-                   image_data,
+                   image_data ? image_data : "",
                    msg_title, msg, button_label);
 
   g_free (template);
