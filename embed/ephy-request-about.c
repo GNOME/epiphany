@@ -72,9 +72,12 @@ static void
 read_css_style (EphyRequestAbout *about)
 {
   GError *error = NULL;
+  const gchar *file = ephy_file ("about.css");
 
-  if (!g_file_get_contents (ephy_file ("about.css"), &about->priv->css_style, NULL, &error))
+  if (file && !g_file_get_contents (file, &about->priv->css_style, NULL, &error)) {
     g_debug ("%s", error->message);
+    g_error_free (error);
+  }
 }
 
 static GInputStream *
