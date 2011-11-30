@@ -473,19 +473,11 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 
   session = webkit_get_default_session ();
 
-#ifdef GTLS_SYSTEM_CA_FILE
   /* Check SSL certificates */
-
-  if (g_file_test (GTLS_SYSTEM_CA_FILE, G_FILE_TEST_EXISTS)) {
-    g_object_set (session,
-                  SOUP_SESSION_SSL_CA_FILE, GTLS_SYSTEM_CA_FILE,
-                  SOUP_SESSION_SSL_STRICT, FALSE,
-                  NULL);
-  } else {
-    g_warning (_("CA Certificates file we should use was not found, "\
-                 "all SSL sites will be considered to have a broken certificate."));
-  }
-#endif
+  g_object_set (session,
+                SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
+                SOUP_SESSION_SSL_STRICT, FALSE,
+                NULL);
 
   /* Store cookies in moz-compatible SQLite format */
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);

@@ -1861,7 +1861,6 @@ load_status_cb (WebKitWebView *web_view,
 
       ephy_web_view_set_title (view, NULL);
 
-#ifdef GTLS_SYSTEM_CA_FILE
       if (uri && g_str_has_prefix (uri, "https")) {
         WebKitWebFrame *frame;
         WebKitWebDataSource *source;
@@ -1880,9 +1879,6 @@ load_status_cb (WebKitWebView *web_view,
           security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
       } else
         security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-#else
-      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-#endif
 
       ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
     }
