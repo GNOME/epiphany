@@ -154,10 +154,11 @@ create_desktop_file (EphyWebView *view,
   GKeyFile *file;
   char *exec_string;
   char *data;
-  char *filename, *desktop_file_path;
+  char *filename, *apps_path, *desktop_file_path;
   char *link_path;
   char *wm_class;
   GFile *link;
+  GError *error = NULL;
 
   g_return_val_if_fail (profile_dir, NULL);
 
@@ -207,11 +208,18 @@ create_desktop_file (EphyWebView *view,
 
   /* Create a symlink in XDG_DATA_DIR/applications for the Shell to
    * pick up this application. */
-  link_path = g_build_filename (g_get_user_data_dir (), "applications", filename, NULL);
-  link = g_file_new_for_path (link_path);
-  g_free (link_path);
-  g_file_make_symbolic_link (link, desktop_file_path, NULL, NULL);
-  g_object_unref (link);
+  apps_path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
+  if (ephy_ensure_dir_exists (apps_path, &error)) {
+    link_path = g_build_filename (apps_path, filename, NULL);
+    link = g_file_new_for_path (link_path);
+    g_free (link_path);
+    g_file_make_symbolic_link (link, desktop_file_path, NULL, NULL);
+    g_object_unref (link);
+  } else {
+    g_warning ("Error creating application symlink: %s", error->message);
+    g_error_free (error);
+  }
+  g_free (apps_path);
   g_free (filename);
 
   return desktop_file_path;
