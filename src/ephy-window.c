@@ -75,12 +75,6 @@
  * #EphyWindow is Epiphany's main widget.
  */
 
-static void ephy_window_class_init		(EphyWindowClass *klass);
-static void ephy_window_init			(EphyWindow *gs);
-static GObject *ephy_window_constructor		(GType type,
-						 guint n_construct_properties,
-						 GObjectConstructParam *construct_params);
-static void ephy_window_finalize		(GObject *object);
 static void ephy_window_show			(GtkWidget *widget);
 static EphyEmbed *ephy_window_open_link		(EphyLink *link,
 						 const char *address,
@@ -105,7 +99,6 @@ static void sync_tab_security			(EphyWebView  *view,
 static void sync_tab_zoom			(WebKitWebView *web_view,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
-
 
 static const GtkActionEntry ephy_menu_entries [] = {
 
@@ -3591,37 +3584,44 @@ ephy_window_state_event (GtkWidget *widget,
 }
 
 static void
-ephy_window_class_init (EphyWindowClass *klass)
+ephy_window_finalize (GObject *object)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	EphyWindow *window = EPHY_WINDOW (object);
+	EphyWindowPrivate *priv = window->priv;
 
-	object_class->constructor = ephy_window_constructor;
-	object_class->dispose = ephy_window_dispose;
-	object_class->finalize = ephy_window_finalize;
-	object_class->get_property = ephy_window_get_property;
-	object_class->set_property = ephy_window_set_property;
+	g_hash_table_destroy (priv->tabs_to_remove);
 
-	widget_class->show = ephy_window_show;
-	widget_class->key_press_event = ephy_window_key_press_event;
-	widget_class->focus_in_event = ephy_window_focus_in_event;
-	widget_class->focus_out_event = ephy_window_focus_out_event;
-	widget_class->window_state_event = ephy_window_state_event;
-	widget_class->delete_event = ephy_window_delete_event;
+	if (priv->clear_progress_timeout_id)
+		g_source_remove (priv->clear_progress_timeout_id);
 
-	g_object_class_override_property (object_class,
-					  PROP_ACTIVE_CHILD,
-					  "active-child");
+	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
-	g_object_class_override_property (object_class,
-					  PROP_SINGLE_TAB_MODE,
-					  "is-popup");
+	LOG ("EphyWindow finalised %p", object);
+}
 
-	g_object_class_override_property (object_class,
-					  PROP_CHROME,
-					  "chrome");
+static void
+cancel_handler (gpointer idptr)
+{
+	guint id = GPOINTER_TO_UINT (idptr);
 
-	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
+	g_source_remove (id);
+}
+
+static void
+find_toolbar_close_cb (EphyFindToolbar *toolbar,
+		       EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *embed;
+
+	if (priv->closing) return;
+
+	ephy_find_toolbar_close (priv->find_toolbar);
+
+	embed = priv->active_embed;
+	if (embed == NULL) return;
+
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 }
 
 static void
@@ -3644,110 +3644,6 @@ allow_popups_notifier (GSettings *settings,
 		g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
 	}
 	g_list_free (tabs);
-}
-
-static EphyEmbed *
-ephy_window_open_link (EphyLink *link,
-		       const char *address,
-		       EphyEmbed *embed,
-		       EphyLinkFlags flags)
-{
-	EphyWindow *window = EPHY_WINDOW (link);
-	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *new_embed;
-
-	g_return_val_if_fail (address != NULL, NULL);
-
-	if (embed == NULL)
-	{
-		embed = window->priv->active_embed;
-	}
-
-	if (flags  & (EPHY_LINK_JUMP_TO | 
-		      EPHY_LINK_NEW_TAB | 
-		      EPHY_LINK_NEW_WINDOW))
-	{
-		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
-
-		if (flags & EPHY_LINK_JUMP_TO)
-		{
-			ntflags |= EPHY_NEW_TAB_JUMP;
-		}
-		if (flags & EPHY_LINK_NEW_WINDOW ||
-		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
-		{
-			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-		}
-		else
-		{
-			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
-		}
-
-		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
-			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
-
-		new_embed = ephy_shell_new_tab
-				(ephy_shell,
-				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-				 embed, address, ntflags);
-	}
-	else
-	{
-		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
-
-		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
-		{
-			ephy_toolbar_activate_location (priv->toolbar);
-		}
-		else
-		{
-			gtk_widget_grab_focus (GTK_WIDGET (embed));
-		}
-
-		new_embed = embed;
-	}
-
-	return new_embed;
-}
-
-static void
-find_toolbar_close_cb (EphyFindToolbar *toolbar,
-		       EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *embed;
-
-	if (priv->closing) return;
-
-	ephy_find_toolbar_close (priv->find_toolbar);
-
-	embed = priv->active_embed;
-	if (embed == NULL) return;
-
-	gtk_widget_grab_focus (GTK_WIDGET (embed));
-}
-
-static void
-cancel_handler (gpointer idptr)
-{
-	guint id = GPOINTER_TO_UINT (idptr);
-
-	g_source_remove (id);
-}
-
-
-static void
-ephy_window_init (EphyWindow *window)
-{
-	LOG ("EphyWindow initialising %p", window);
-
-	gtk_application_add_window (GTK_APPLICATION (ephy_shell), GTK_WINDOW (window));
-
-	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
-
-	g_signal_connect (embed_shell,
-			 "download-added", G_CALLBACK (download_added_cb),
-			 window);
 }
 
 static const char* disabled_actions_for_app_mode[] = { "FileOpen",
@@ -3787,7 +3683,7 @@ ephy_window_constructor (GType type,
 	priv = window->priv;
 
 	priv->tabs_to_remove = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-						              NULL, cancel_handler);
+						      NULL, cancel_handler);
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
@@ -3988,19 +3884,115 @@ ephy_window_constructor (GType type,
 }
 
 static void
-ephy_window_finalize (GObject *object)
+ephy_window_class_init (EphyWindowClass *klass)
 {
-	EphyWindow *window = EPHY_WINDOW (object);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+	object_class->constructor = ephy_window_constructor;
+	object_class->dispose = ephy_window_dispose;
+	object_class->finalize = ephy_window_finalize;
+	object_class->get_property = ephy_window_get_property;
+	object_class->set_property = ephy_window_set_property;
+
+	widget_class->show = ephy_window_show;
+	widget_class->key_press_event = ephy_window_key_press_event;
+	widget_class->focus_in_event = ephy_window_focus_in_event;
+	widget_class->focus_out_event = ephy_window_focus_out_event;
+	widget_class->window_state_event = ephy_window_state_event;
+	widget_class->delete_event = ephy_window_delete_event;
+
+	g_object_class_override_property (object_class,
+					  PROP_ACTIVE_CHILD,
+					  "active-child");
+
+	g_object_class_override_property (object_class,
+					  PROP_SINGLE_TAB_MODE,
+					  "is-popup");
+
+	g_object_class_override_property (object_class,
+					  PROP_CHROME,
+					  "chrome");
+
+	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
+}
+
+static EphyEmbed *
+ephy_window_open_link (EphyLink *link,
+		       const char *address,
+		       EphyEmbed *embed,
+		       EphyLinkFlags flags)
+{
+	EphyWindow *window = EPHY_WINDOW (link);
 	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *new_embed;
 
-	g_hash_table_destroy (priv->tabs_to_remove);
+	g_return_val_if_fail (address != NULL, NULL);
 
-	if (priv->clear_progress_timeout_id)
-		g_source_remove (priv->clear_progress_timeout_id);
+	if (embed == NULL)
+	{
+		embed = window->priv->active_embed;
+	}
 
-	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
+	if (flags  & (EPHY_LINK_JUMP_TO | 
+		      EPHY_LINK_NEW_TAB | 
+		      EPHY_LINK_NEW_WINDOW))
+	{
+		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
 
-	LOG ("EphyWindow finalised %p", object);
+		if (flags & EPHY_LINK_JUMP_TO)
+		{
+			ntflags |= EPHY_NEW_TAB_JUMP;
+		}
+		if (flags & EPHY_LINK_NEW_WINDOW ||
+		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
+		{
+			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		}
+		else
+		{
+			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		}
+
+		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
+			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
+
+		new_embed = ephy_shell_new_tab
+				(ephy_shell,
+				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+				 embed, address, ntflags);
+	}
+	else
+	{
+		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
+
+		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
+		{
+			ephy_toolbar_activate_location (priv->toolbar);
+		}
+		else
+		{
+			gtk_widget_grab_focus (GTK_WIDGET (embed));
+		}
+
+		new_embed = embed;
+	}
+
+	return new_embed;
+}
+
+static void
+ephy_window_init (EphyWindow *window)
+{
+	LOG ("EphyWindow initialising %p", window);
+
+	gtk_application_add_window (GTK_APPLICATION (ephy_shell), GTK_WINDOW (window));
+
+	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+
+	g_signal_connect (embed_shell,
+			 "download-added", G_CALLBACK (download_added_cb),
+			 window);
 }
 
 /**
