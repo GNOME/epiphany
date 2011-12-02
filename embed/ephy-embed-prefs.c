@@ -485,6 +485,7 @@ ephy_embed_prefs_init (void)
                 "enable-site-specific-quirks", TRUE,
                 "enable-page-cache", TRUE,
                 "enable-developer-extras", TRUE,
+                "enable-fullscreen", TRUE,
                 NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
