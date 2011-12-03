@@ -1024,7 +1024,7 @@ prefs_dialog_init (PrefsDialog *pd)
 {
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	EphyEncodings *encodings;
-	GtkWidget *window, *curr_button, *blank_button;
+	GtkWidget *window;
 	GtkWidget *clear_cache_button;
 	GtkWidget *css_checkbox, *css_edit_button;
 	int i;
