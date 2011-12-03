@@ -3697,34 +3697,21 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
  * ephy_web_view_load_homepage:
  * @view: an #EphyWebView
  * 
- * Loads the homepage set by the user in @view.
+ * Loads the homepage, which is hardcoded to be "about:blank"
  * 
- * Returns: %TRUE if there was a homepage set to be loaded in the user
- * preferences, %FALSE otherwise
  **/
-gboolean
+void
 ephy_web_view_load_homepage (EphyWebView *view)
 {
   char *home;
-  gboolean is_empty;
 
   g_signal_emit_by_name (view, "loading-homepage");
 
-  home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+  home = g_strdup ("about:blank");
 
-  if (home == NULL || home[0] == '\0')
-  {
-    g_free (home);
-
-    home = g_strdup ("about:blank");
-  }
-
-  is_empty = ephy_embed_utils_url_is_empty (home);
-  ephy_web_view_load_url (view, home);
+  ephy_web_view_load_url (view, "about:blank");
 
   g_free (home);
-
-  return is_empty;
 }
 
 /**

@@ -91,7 +91,6 @@ typedef enum
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING		"default-encoding"
 
 #define EPHY_PREFS_SCHEMA			"org.gnome.Epiphany"
-#define EPHY_PREFS_HOMEPAGE_URL			"homepage-url"
 #define EPHY_PREFS_USER_AGENT			"user-agent"
 #define EPHY_PREFS_CACHE_SIZE			"cache-size"
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS		"new-windows-in-tabs"

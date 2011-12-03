@@ -191,7 +191,7 @@ void                       ephy_web_view_set_loading_title        (EphyWebView  
 void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
 void                       ephy_web_view_save                     (EphyWebView               *view,
                                                                    const char                *uri);
-gboolean                   ephy_web_view_load_homepage            (EphyWebView               *view);
+void                       ephy_web_view_load_homepage            (EphyWebView               *view);
 
 char *
 ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkPixbuf *icon);

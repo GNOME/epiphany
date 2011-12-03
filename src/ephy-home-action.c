@@ -158,16 +158,11 @@ static void
 ephy_home_action_activate (GtkAction *action)
 {
 	char *action_name;
-	char *address;
 
 	g_object_get (G_OBJECT (action), "name", &action_name, NULL);
 		
-	address = g_settings_get_string (EPHY_SETTINGS_MAIN,
-					 EPHY_PREFS_HOMEPAGE_URL);
+	action_name_association (action, action_name, "about:blank", FALSE);
 
-	action_name_association (action, action_name, address, FALSE);
-
-	g_free (address);
 	g_free (action_name);
 }
 

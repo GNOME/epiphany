@@ -703,7 +703,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
     EphyWebView *view = ephy_embed_get_web_view (embed);
     ephy_web_view_set_typed_address (view, "");
     ephy_toolbar_activate_location (toolbar);
-    is_empty = ephy_web_view_load_homepage (view);
+    ephy_web_view_load_homepage (view);
+    is_empty = TRUE;
   } else if (flags & EPHY_NEW_TAB_OPEN_PAGE) {
     ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                 request);
