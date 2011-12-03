@@ -21,25 +21,25 @@
  */
 
 #include "config.h"
-
 #include "prefs-dialog.h"
-#include "ephy-dialog.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
-#include "ephy-embed-container.h"
-#include "ephy-embed-shell.h"
-#include "ephy-embed-utils.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-session.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-embed-single.h"
-#include "ephy-shell.h"
-#include "ephy-gui.h"
-#include "ephy-langs.h"
-#include "ephy-encodings.h"
+
 #include "ephy-debug.h"
+#include "ephy-dialog.h"
+#include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+#include "ephy-embed-utils.h"
+#include "ephy-encodings.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
+#include "ephy-gui.h"
+#include "ephy-langs.h"
+#include "ephy-prefs.h"
+#include "ephy-session.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-tree-model-sort.h"
 #include "pdm-dialog.h"
@@ -911,39 +911,6 @@ clear_cache_button_clicked_cb (GtkWidget *button,
 					  CLEAR_ALL_CACHE);
 }
 
-static void
-homepage_current_button_clicked_cb (GtkWidget *button,
-				    EphyDialog *dialog)
-{
-	EphySession *session;
-	EphyWindow *window;
-	EphyEmbed *embed;
-	EphyWebView *view;
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
-	window = ephy_session_get_active_window (session);
-
-	/* can't do anything in this case */
-	if (window == NULL) return;
-
-	embed = ephy_embed_container_get_active_child 
-          (EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
-	view = ephy_embed_get_web_view (embed);
-
-	g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
-			       ephy_web_view_get_address (view));
-}
-
-static void
-homepage_blank_button_clicked_cb (GtkWidget *button,
-				  EphyDialog *dialog)
-{
-	g_settings_set_string (EPHY_SETTINGS_MAIN,
-			       EPHY_PREFS_HOMEPAGE_URL, "");
-}
-
 static gboolean
 cookies_get_mapping (GValue *value,
 		     GVariant *variant,
@@ -993,9 +960,6 @@ typedef struct
 
 static const PrefsDialogPreference preferences[] =
 {
-	{ "homepage_entry", "text",
-	  EPHY_PREFS_SCHEMA, EPHY_PREFS_HOMEPAGE_URL,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 	{ "automatic_downloads_checkbutton", "active",
 	  EPHY_PREFS_SCHEMA, EPHY_PREFS_AUTO_DOWNLOADS,
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
@@ -1097,8 +1061,6 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_dialog_get_controls (dialog,
 				  "prefs_dialog", &window,
-				  "homepage_current_button", &curr_button,
-				  "homepage_blank_button", &blank_button,
 				  "css_checkbox", &css_checkbox,
 				  "css_edit_button", &css_edit_button,
 				  "clear_cache_button", &clear_cache_button,
@@ -1108,21 +1070,6 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	g_signal_connect (window, "response",
 			  G_CALLBACK (prefs_dialog_response_cb), dialog);
-
-	g_signal_connect (curr_button, "clicked",
-			  G_CALLBACK (homepage_current_button_clicked_cb),
-			  dialog);
-	g_signal_connect (blank_button, "clicked",
-			  G_CALLBACK (homepage_blank_button_clicked_cb),
-			  dialog);
-
-	/* set homepage button sensitivity */
-	g_settings_bind_writable (EPHY_SETTINGS_MAIN,
-				  EPHY_PREFS_HOMEPAGE_URL,
-				  curr_button, "sensitive", FALSE);
-	g_settings_bind_writable (EPHY_SETTINGS_MAIN,
-				  EPHY_PREFS_HOMEPAGE_URL,
-				  blank_button, "sensitive", FALSE);
 
 	g_signal_connect (css_edit_button, "clicked",
 			  G_CALLBACK (css_edit_button_clicked_cb), dialog);
