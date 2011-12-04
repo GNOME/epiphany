@@ -217,10 +217,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      "label", _("_Back"),
 			      "stock_id", GTK_STOCK_GO_BACK,
 			      "tooltip", _("Go to the previous visited page"),
-			      /* this is the tooltip on the Back button's drop-down arrow, which will show
-			       * a menu with all sites you can go 'back' to
-			       */
-			      "arrow-tooltip", _("Back history"),
 			      "window", priv->window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
 			      "is_important", TRUE,
@@ -237,10 +233,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      "label", _("_Forward"),
 			      "stock_id", GTK_STOCK_GO_FORWARD,
 			      "tooltip", _("Go to the next visited page"),
-			      /* this is the tooltip on the Forward button's drop-down arrow, which will show
-			       * a menu with all sites you can go 'forward' to
-			       */
-			      "arrow-tooltip", _("Forward history"),
 			      "window", priv->window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
 			      NULL);
@@ -256,10 +248,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      "label", _("_Up"),
 			      "stock_id", GTK_STOCK_GO_UP,
 			      "tooltip", _("Go up one level"),
-			      /* this is the tooltip on the Up button's drop-down arrow, which will show
-			       * a menu with al sites you can go 'up' to
-			       */
-			      "arrow-tooltip", _("List of upper levels"),
 			      "window", priv->window,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",

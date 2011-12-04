@@ -66,209 +66,10 @@ static void ephy_navigation_history_action_class_init (EphyNavigationHistoryActi
 G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_NAVIGATION_ACTION)
 
 static void
-set_new_back_history (EphyEmbed *source, EphyEmbed *dest, gint offset)
-{
-  WebKitWebView *source_view, *dest_view;
-  WebKitWebBackForwardList* source_list, *dest_list;
-  WebKitWebHistoryItem *item;
-  GList *items;
-  guint limit;
-  guint i;
-
-  g_return_if_fail (EPHY_IS_EMBED (source));
-  g_return_if_fail (EPHY_IS_EMBED (dest));
-
-  source_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (source);
-  dest_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dest);
-
-  source_list = webkit_web_view_get_back_forward_list (source_view);
-  dest_list = webkit_web_view_get_back_forward_list (dest_view);
-
-  if (offset >= 0) {
-    /* Copy the whole back history in this case (positive offset) */
-    ephy_web_view_copy_back_history (ephy_embed_get_web_view (source),
-                                     ephy_embed_get_web_view (dest));
-
-    items = webkit_web_back_forward_list_get_forward_list_with_limit (source_list,
-                                                                      EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    limit = offset - 1;
-  } else {
-    items = webkit_web_back_forward_list_get_back_list_with_limit (source_list,
-                                                                   EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    limit = g_list_length (items) + offset;
-  }
-
-  /* Add the remaining items to the BackForward list */
-  items = g_list_reverse (items);
-  for (i = 0; i < limit; i++) {
-    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)items->data);
-    webkit_web_back_forward_list_add_item (dest_list, item);
-    g_object_unref (item);
-
-    items = items->next;
-  }
-  g_list_free (items);
-}
-
-static void
-middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
-                                          EphyEmbed *embed,
-                                          WebKitWebHistoryItem *item)
-{
-  EphyEmbed *new_embed = NULL;
-  WebKitWebView *web_view;
-  WebKitWebBackForwardList *history;
-  GList *list;
-  const gchar *url;
-  guint current;
-  gint offset;
-
-  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-
-  /* Save old history and item's offset from current */
-  history = webkit_web_view_get_back_forward_list (web_view);
-  if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
-    list = webkit_web_back_forward_list_get_back_list_with_limit (history,
-                                                                  EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    current = -1;
-  } else {
-    list = webkit_web_back_forward_list_get_forward_list_with_limit (history,
-                                                                     EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    current = g_list_length (list);
-  }
-  offset = current - g_list_index (list, item);
-
-  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-                                  embed,
-                                  NULL,
-                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-                                  EPHY_NEW_TAB_DONT_COPY_HISTORY);
-  g_return_if_fail (new_embed != NULL);
-
-  /* We manually set the back history instead of trusting
-     ephy_shell_new_tab because the logic is more complex than
-     usual, due to handling also the forward history */
-  set_new_back_history (embed, new_embed, offset);
-
-  /* Load the new URL */
-  url = webkit_web_history_item_get_original_uri (item);
-  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
-}
-
-static void
-activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
-				       EphyNavigationHistoryAction *action)
-{
-  WebKitWebHistoryItem *item;
-  EphyWindow *window;
-  EphyEmbed *embed;
-
-  window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
-
-  item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
-  g_return_if_fail (item != NULL);
-
-  if (ephy_gui_is_middle_click ()) {
-    middle_click_handle_on_history_menu_item (action, embed, item);
-  } else {
-    WebKitWebView *web_view;
-
-    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-    webkit_web_view_go_to_back_forward_item (web_view, item);
-  }
-}
-
-static void
 ephy_history_cleared_cb (EphyHistory *history,
                          EphyNavigationHistoryAction *action)
 {
   ephy_action_change_sensitivity_flags (GTK_ACTION (action), SENS_FLAG, TRUE);
-}
-
-static GList*
-webkit_construct_history_list (WebKitWebView *web_view, WebKitHistoryType hist_type)
-{
-  WebKitWebBackForwardList *web_back_forward_list;
-  GList *webkit_items;
-
-  web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
-
-  if (hist_type == WEBKIT_HISTORY_FORWARD) {
-    webkit_items =
-      g_list_reverse (webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
-                                                                                EPHY_WEBKIT_BACK_FORWARD_LIMIT));
-  } else {
-    webkit_items =
-      webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
-                                                             EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-  }
-
-  return webkit_items;
-}
-
-static GtkWidget *
-build_dropdown_menu (EphyNavigationAction *nav_action)
-{
-  EphyNavigationHistoryAction *action;
-  EphyWindow *window;
-  GtkMenuShell *menu;
-  EphyEmbed *embed;
-  GList *list, *l;
-  WebKitWebView *web_view;
-
-  action = EPHY_NAVIGATION_HISTORY_ACTION (nav_action);
-  window = _ephy_navigation_action_get_window (nav_action);
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_val_if_fail (embed != NULL, NULL);
-
-  menu = GTK_MENU_SHELL (gtk_menu_new ());
-
-  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  g_return_val_if_fail (web_view != NULL, NULL);
-
-  if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
-    list = webkit_construct_history_list (web_view,
-                                          WEBKIT_HISTORY_BACKWARD);
-  } else {
-    list = webkit_construct_history_list (web_view,
-                                          WEBKIT_HISTORY_FORWARD);
-  }
-
-  for (l = list; l != NULL; l = l->next) {
-    GtkWidget *item;
-    WebKitWebHistoryItem *hitem;
-    const char *url;
-    char *title;
-
-    hitem = (WebKitWebHistoryItem*)l->data;
-    url = webkit_web_history_item_get_uri (hitem);
-
-    title = g_strdup (webkit_web_history_item_get_title (hitem));
-
-    if ((title == NULL || g_strstrip (title)[0] == '\0'))
-      item = _ephy_navigation_action_new_history_menu_item (url, url);
-    else
-      item = _ephy_navigation_action_new_history_menu_item (title, url);
-
-    g_free (title);
-
-    g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY,
-                            g_object_ref (hitem), g_object_unref);
-
-    g_signal_connect (item, "activate",
-                      G_CALLBACK (activate_back_or_forward_menu_item_cb),
-                      action);
-
-    gtk_menu_shell_append (menu, item);
-    gtk_widget_show_all (item);
-  }
-
-  g_list_free (list);
-
-  return GTK_WIDGET (menu);
 }
 
 static void
@@ -393,15 +194,12 @@ ephy_navigation_history_action_class_init (EphyNavigationHistoryActionClass *kla
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkActionClass *action_class = GTK_ACTION_CLASS (klass);
-  EphyNavigationActionClass *nav_action_class = EPHY_NAVIGATION_ACTION_CLASS (klass);
 
   object_class->finalize = ephy_navigation_history_action_finalize;
   object_class->set_property = ephy_navigation_history_action_set_property;
   object_class->get_property = ephy_navigation_history_action_get_property;
 
   action_class->activate = action_activate;
-
-  nav_action_class->build_dropdown_menu = build_dropdown_menu;
 
   g_object_class_install_property (object_class,
 				   PROP_DIRECTION,
