@@ -36,13 +36,11 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
-#include "ephy-overlay-escaping-child.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
-#include "gedit-overlay.h"
 
 #include <errno.h>
 #include <glib/gi18n.h>
@@ -508,6 +506,22 @@ window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, E
   gtk_window_resize (GTK_WINDOW (window), width, height);
 }
 
+static gboolean
+frame_enter_notify_cb (GtkWidget *widget,
+                       GdkEventCrossing *event,
+                       gpointer user_data)
+{
+	if (gtk_widget_get_halign (widget) == GTK_ALIGN_START) {
+		gtk_widget_set_halign (widget, GTK_ALIGN_END);
+	} else {
+		gtk_widget_set_halign (widget, GTK_ALIGN_START);
+	}
+
+	gtk_widget_queue_resize (widget);
+
+  return FALSE;
+}
+
 static void
 ephy_embed_constructed (GObject *object)
 {
@@ -519,26 +533,29 @@ ephy_embed_constructed (GObject *object)
   WebKitWebWindowFeatures *window_features;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
-  EphyOverlayEscapingChild *escaping_child;
   GtkWidget *frame;
+  GtkWidget *eventbox;
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
-  overlay = gedit_overlay_new (scrolled_window, GTK_WIDGET (web_view));
+  overlay = gtk_overlay_new ();
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (scrolled_window));
 
   /* statusbar is hidden by default */
   priv->statusbar_label = gtk_label_new (NULL);
+  eventbox = gtk_event_box_new ();
   frame = gtk_frame_new (NULL);
   gtk_widget_set_name (frame, "ephy-status-frame");
+  gtk_widget_set_halign (eventbox, GTK_ALIGN_START);
+  gtk_widget_set_valign (eventbox, GTK_ALIGN_END);
+  gtk_widget_show (eventbox);
 
-  gtk_widget_show (frame);
-    
+  gtk_container_add (GTK_CONTAINER (eventbox), frame);
   gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
-  escaping_child = ephy_overlay_escaping_child_new (frame);
-  gedit_overlay_add (GEDIT_OVERLAY (overlay),
-                     GTK_WIDGET (escaping_child),
-                     GEDIT_OVERLAY_CHILD_POSITION_SOUTH_WEST, 0);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), eventbox);
+  g_signal_connect (eventbox, "enter-notify-event",
+                    G_CALLBACK (frame_enter_notify_cb), object);
 
   paned = GTK_WIDGET (embed->priv->paned);
 
