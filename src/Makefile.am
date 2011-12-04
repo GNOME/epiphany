@@ -29,7 +29,6 @@ NOINST_H_FILES = \
 	ephy-navigation-history-action.h	\
 	ephy-navigation-up-action.h		\
 	ephy-password-info.h			\
-	ephy-tabs-menu.h			\
 	ephy-toolbars-model.h			\
 	ephy-toolbar.h				\
 	languages.h				\
@@ -73,7 +72,6 @@ libephymain_la_SOURCES = \
 	ephy-password-info.c	        	\
 	ephy-session.c				\
 	ephy-shell.c				\
-	ephy-tabs-menu.c			\
 	ephy-toolbars-model.c			\
 	ephy-toolbar.c				\
 	ephy-window.c				\

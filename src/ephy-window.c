@@ -49,7 +49,6 @@
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-stock-icons.h"
-#include "ephy-tabs-menu.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
@@ -110,7 +109,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
 	{ "Go", NULL, N_("_Go") },
 	{ "Tools", NULL, N_("T_ools") },
-	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
 	{ "Toolbar", NULL, N_("_Toolbars") },
 	{ "PopupAction", NULL, "" },
@@ -376,6 +374,13 @@ static const struct
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
+	/* Tab navigation */
+	{ GDK_KEY_Page_Up,      GDK_CONTROL_MASK,       "TabsNext",              FALSE },
+	{ GDK_KEY_Page_Down,    GDK_CONTROL_MASK,       "TabsPrevious",          FALSE },
+	{ GDK_KEY_Page_Up,      GDK_CONTROL_MASK |
+	                        GDK_SHIFT_MASK,       "TabsMoveRight",           FALSE },
+	{ GDK_KEY_Page_Down,    GDK_CONTROL_MASK |
+	                        GDK_SHIFT_MASK,       "TabsMoveLeft",            FALSE },
 	/* Support all the MSIE tricks as well ;) */
 	{ GDK_KEY_F5,		0,			"ViewReload",		 FALSE },
 	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
@@ -444,7 +449,6 @@ struct _EphyWindowPrivate
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
 	EphyEncodingMenu *enc_menu;
-	EphyTabsMenu *tabs_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
 	EphyFindToolbar *find_toolbar;
@@ -2893,44 +2897,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	}
 }
 
-static void
-update_tabs_menu_sensitivity (EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group;
-	GtkAction *action;
-	GtkNotebook *notebook;
-	gboolean wrap_around;
-	int page, n_pages;
-	gboolean not_first, not_last;
-
-	notebook = GTK_NOTEBOOK (priv->notebook);
-	action_group = priv->action_group;
-	n_pages = gtk_notebook_get_n_pages (notebook);
-	page = gtk_notebook_get_current_page (notebook);
-	not_first = page > 0;
-	not_last = page + 1 < n_pages;
-
-	g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
-		      "gtk-keynav-wrap-around", &wrap_around,
-		      NULL);
-
-	if (!wrap_around)
-	{
-		action = gtk_action_group_get_action (action_group, "TabsPrevious");
-		gtk_action_set_sensitive (action, not_first);
-		action = gtk_action_group_get_action (action_group, "TabsNext");
-		gtk_action_set_sensitive (action, not_last);
-	}
-
-	action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-	gtk_action_set_sensitive (action, not_first);
-	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-	gtk_action_set_sensitive (action, not_last);
-	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, n_pages <= 1);
-}
-
 static gboolean
 embed_modal_alert_cb (EphyEmbed *embed,
 		      EphyWindow *window)
@@ -3107,8 +3073,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	priv->num_tabs++;
 
-	update_tabs_menu_sensitivity (window);
-
 #if 0
 	g_signal_connect_object (embed, "open-link",
 				 G_CALLBACK (ephy_link_open), window,
@@ -3159,24 +3123,10 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 
 	priv->num_tabs--;
 
-	if (priv->num_tabs > 0)
-	{
-		update_tabs_menu_sensitivity (window);
-	}
-
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_close_request_cb), window);
-}
-
-static void
-notebook_page_reordered_cb (EphyNotebook *notebook,
-			    EphyEmbed *embed,
-			    guint position,
-			    EphyWindow *window)
-{
-	update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -3248,8 +3198,6 @@ setup_notebook (EphyWindow *window)
 			  G_CALLBACK (notebook_page_added_cb), window);
 	g_signal_connect (notebook, "page-removed",
 			  G_CALLBACK (notebook_page_removed_cb), window);
-	g_signal_connect (notebook, "page-reordered",
-			  G_CALLBACK (notebook_page_reordered_cb), window);
 	g_signal_connect (notebook, "tab-close-request",
 			  G_CALLBACK (notebook_page_close_request_cb), window);
 
@@ -3423,9 +3371,6 @@ ephy_window_dispose (GObject *object)
 
 		g_object_unref (priv->enc_menu);
 		priv->enc_menu = NULL;
-
-		g_object_unref (priv->tabs_menu);
-		priv->tabs_menu = NULL;
 
 		priv->action_group = NULL;
 		priv->popups_action_group = NULL;
@@ -3775,7 +3720,6 @@ ephy_window_constructor (GType type,
 	g_object_unref (css_file);
 
 	/* Initialize the menus */
-	priv->tabs_menu = ephy_tabs_menu_new (window);
 	priv->enc_menu = ephy_encoding_menu_new (window);
 
 	/* Add the toolbars to the window */
@@ -4178,9 +4122,6 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 	ephy_window_set_active_tab (window, embed);
 
 	ephy_find_toolbar_set_embed (priv->find_toolbar, embed);
-
-	/* update window controls */
-	update_tabs_menu_sensitivity (window);
 }
 
 /**
