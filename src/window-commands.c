@@ -1202,14 +1202,6 @@ window_cmd_edit_personal_data (GtkAction *action,
 	g_free (host);
 }
 
-#if 0
-void
-window_cmd_edit_certificates (GtkAction *action,
-			      EphyWindow *window)
-{
-}
-#endif
-
 void
 window_cmd_edit_prefs (GtkAction *action,
 		       EphyWindow *window)

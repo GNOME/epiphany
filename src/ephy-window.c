@@ -176,11 +176,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditPersonalData", NULL, N_("P_ersonal Data"), NULL,
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data) },
-#if 0
-	{ "EditCertificates", NULL, N_("Certificate_s"), NULL,
-	  N_("Manage Certificates"),
-	  G_CALLBACK (window_cmd_edit_certificates) },
-#endif
 	{ "EditPrefs", GTK_STOCK_PREFERENCES, N_("P_references"), NULL,
 	  N_("Configure the web browser"),
 	  G_CALLBACK (window_cmd_edit_prefs) },
@@ -3687,16 +3682,6 @@ ephy_window_constructor (GType type,
 		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
 		g_error_free (error);
 	}
-#if ENABLE_CERTIFICATE_MANAGER
-{
-	guint ui_id;
-	ui_id = gtk_ui_manager_new_merge_id (priv->manager);
-	gtk_ui_manager_add_ui (priv->manager, ui_id,
-			       "/menubar/EditMenu/EditPersonalDataMenu",
-			       "EditCertificates", "EditCertificates",
-			       GTK_UI_MANAGER_MENUITEM, FALSE);
-}
-#endif
 
 	/* Attach the CSS provider to the window */
 	css_file = g_file_new_for_path (ephy_file ("epiphany.css"));

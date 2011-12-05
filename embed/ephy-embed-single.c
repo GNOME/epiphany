@@ -37,10 +37,6 @@
 #include "ephy-settings.h"
 #include "ephy-request-about.h"
 
-#ifdef ENABLE_CERTIFICATE_MANAGER
-#include "ephy-certificate-manager.h"
-#endif
-
 #include <webkit/webkit.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup-gnome.h>
@@ -65,9 +61,6 @@ enum {
 static void ephy_embed_single_init (EphyEmbedSingle *single);
 static void ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
 static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
-#ifdef ENABLE_CERTIFICATE_MANAGER
-static void ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface);
-#endif
 
 static void
 ephy_embed_single_get_property (GObject *object,
@@ -108,17 +101,9 @@ ephy_embed_single_set_property (GObject *object,
 /* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
    so we have to duplicate the whole thing */
 
-#ifdef ENABLE_CERTIFICATE_MANAGER
-G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
-                                                ephy_certificate_manager_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
-                                                ephy_permission_manager_iface_init))
-#else
 G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
                                                 ephy_permission_manager_iface_init))
-#endif
 
 static void
 form_auth_data_free (EphyEmbedSingleFormAuthData *data)
@@ -403,40 +388,6 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
   iface->test = impl_permission_manager_test;
   iface->list = impl_permission_manager_list;
 }
-
-#ifdef ENABLE_CERTIFICATE_MANAGER
-
-static gboolean
-impl_remove_certificate (EphyCertificateManager *manager,
-                         EphyX509Cert *cert)
-{
-  return TRUE;
-}
-
-#define NICK_DELIMITER PRUnichar ('\001')
-static GList *
-impl_get_certificates (EphyCertificateManager *manager,
-                       EphyX509CertType type)
-{
-  return NULL;
-}
-
-static gboolean
-impl_import (EphyCertificateManager *manager,
-             const gchar *file)
-{
-  return TRUE;
-}
-
-static void
-ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
-{
-  iface->get_certificates = impl_get_certificates;
-  iface->remove_certificate = impl_remove_certificate;
-  iface->import = impl_import;
-}
-
-#endif /* ENABLE_CERTIFICATE_MANAGER */
 
 static void
 cache_size_cb (GSettings *settings,
