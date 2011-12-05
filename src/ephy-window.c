@@ -375,12 +375,12 @@ static const struct
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
 	/* Tab navigation */
-	{ GDK_KEY_Page_Up,      GDK_CONTROL_MASK,       "TabsNext",              FALSE },
-	{ GDK_KEY_Page_Down,    GDK_CONTROL_MASK,       "TabsPrevious",          FALSE },
+	{ GDK_KEY_Page_Up,      GDK_CONTROL_MASK,       "TabsPrevious",          FALSE },
+	{ GDK_KEY_Page_Down,    GDK_CONTROL_MASK,       "TabsNext",              FALSE },
 	{ GDK_KEY_Page_Up,      GDK_CONTROL_MASK |
-	                        GDK_SHIFT_MASK,       "TabsMoveRight",           FALSE },
+	                        GDK_SHIFT_MASK,         "TabsMoveLeft",          FALSE },
 	{ GDK_KEY_Page_Down,    GDK_CONTROL_MASK |
-	                        GDK_SHIFT_MASK,       "TabsMoveLeft",            FALSE },
+	                        GDK_SHIFT_MASK,         "TabsMoveRight",         FALSE },
 	/* Support all the MSIE tricks as well ;) */
 	{ GDK_KEY_F5,		0,			"ViewReload",		 FALSE },
 	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
