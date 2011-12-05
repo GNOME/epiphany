@@ -75,6 +75,7 @@ struct _EphyEmbedPrivate
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
   GtkWidget *statusbar_label;
+  GtkWidget *progress;
 
   GSList *messages;
   GSList *keys;
@@ -523,6 +524,27 @@ frame_enter_notify_cb (GtkWidget *widget,
 }
 
 static void
+progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
+{
+  gdouble progress;
+  gboolean loading;
+
+  EphyEmbedPrivate *priv = embed->priv;
+
+  progress = webkit_web_view_get_progress (priv->web_view);
+  loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
+
+  if (progress == 1.0 || !loading)
+  {
+    gtk_widget_hide (priv->progress);
+  } else {
+    gtk_widget_show (priv->progress);
+  }
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
+                                 (loading || progress == 1.0) ? progress : 0.0);
+}
+
+static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
@@ -540,7 +562,8 @@ ephy_embed_constructed (GObject *object)
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (scrolled_window));
+  gtk_widget_set_name (overlay, "ephy-overlay");
+  gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
 
   /* statusbar is hidden by default */
   priv->statusbar_label = gtk_label_new (NULL);
@@ -557,9 +580,17 @@ ephy_embed_constructed (GObject *object)
   g_signal_connect (eventbox, "enter-notify-event",
                     G_CALLBACK (frame_enter_notify_cb), object);
 
+  embed->priv->progress = gtk_progress_bar_new ();
+  gtk_widget_set_name (embed->priv->progress, "ephy-progress-bar");
+  gtk_widget_set_halign (embed->priv->progress, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (embed->priv->progress, GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->priv->progress);
+
   paned = GTK_WIDGET (embed->priv->paned);
 
   embed->priv->web_view = web_view;
+  g_signal_connect (web_view, "notify::progress",
+                    G_CALLBACK (progress_update), object);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window),
                      GTK_WIDGET (web_view));

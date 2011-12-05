@@ -456,8 +456,6 @@ struct _EphyWindowPrivate
 	GtkWidget *entry;
 	GtkWidget *downloads_box;
 
-	guint clear_progress_timeout_id;
-
 	guint menubar_accel_keyval;
 	guint menubar_accel_modifier;
 
@@ -1710,64 +1708,6 @@ sync_tab_icon (EphyWebView *view,
 	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
 
-static gboolean
-clear_progress_cb (EphyWindow *window)
-{
-	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry), 0.0);
-	window->priv->clear_progress_timeout_id = 0;
-
-	return FALSE;
-}
-
-static void
-sync_tab_load_progress (EphyWebView *view, GParamSpec *pspec, EphyWindow *window)
-{
-	gdouble progress;
-	const char *uri;
-	gboolean loading;
-	gboolean switching_tab = pspec == NULL;
-
-	if (window->priv->closing) return;
-	if (!window->priv->entry) return;
-
-	if (window->priv->clear_progress_timeout_id)
-	{
-		g_source_remove (window->priv->clear_progress_timeout_id);
-		window->priv->clear_progress_timeout_id = 0;
-	}
-
-	/* If we are loading about:blank do not show progress, as the
-	   blink it causes is annoying. */
-	/* FIXME: for some reason webkit_web_view_get_uri returns NULL
-	   for about:blank until the load is finished, so assume NULL
-	   here means we are loading about:blank. This might not be
-	   rigt :) */
-	/* All the weird checks for progress == 1.0 and !switching_tab
-	 * are because we receive first the LOAD_FINISHED status than
-	 * the 100% progress report, so for progress == 1.0 there's no
-	 * sane way of knowing whether we are still loading or
-	 * not. See https://bugs.webkit.org/show_bug.cgi?id=28851 */
-	uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
-	if (!switching_tab && (!uri || strcmp (uri, "about:blank") == 0))
-		return;
-
-	progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (view));
-	loading = ephy_web_view_is_loading (view);
-
-	if (progress == 1.0 && !switching_tab)
-	{
-		window->priv->clear_progress_timeout_id =
-			g_timeout_add (500,
-				       (GSourceFunc)clear_progress_cb,
-				       window);
-	}
-
-	/* Do not set progress in the entry if the load is already
-	   finished */
-	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry),
-					 loading || (progress == 1.0 && !switching_tab) ? progress : 0.0);
-}
-
 static void
 sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
@@ -2772,9 +2712,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      G_CALLBACK (sync_tab_document_type),
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_load_progress),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
@@ -2810,7 +2747,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 
 		sync_tab_security	(view, NULL, window);
 		sync_tab_document_type	(view, NULL, window);
-		sync_tab_load_progress	(view, NULL, window);
 		sync_tab_load_status	(view, NULL, window);
 		sync_tab_navigation	(view, NULL, window);
 		sync_tab_title		(view, NULL, window);
@@ -2872,9 +2808,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (view, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
-					 window, 0);
-		g_signal_connect_object (view, "notify::progress",
-					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
 		/* We run our button-press-event after the default
 		 * handler to make sure pages have a chance to perform
@@ -3513,9 +3446,6 @@ ephy_window_finalize (GObject *object)
 	EphyWindowPrivate *priv = window->priv;
 
 	g_hash_table_destroy (priv->tabs_to_remove);
-
-	if (priv->clear_progress_timeout_id)
-		g_source_remove (priv->clear_progress_timeout_id);
 
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
