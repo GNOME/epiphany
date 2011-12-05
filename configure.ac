@@ -392,5 +392,4 @@ Epiphany was configured with the following options:
  	Seed support               : $enable_seed
  	NSS support                : $enable_nss
 	Build tests		   : $enable_tests
-	CA Certificates file	   : $GTLS_SYSTEM_CA_FILE
 "
