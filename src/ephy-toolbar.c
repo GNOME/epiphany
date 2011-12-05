@@ -20,26 +20,26 @@
  */
 
 #include "config.h"
+#include "ephy-toolbar.h"
 
+#include "ephy-action-helper.h"
+#include "ephy-debug.h"
+#include "ephy-dnd.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-toolbar.h"
-#include "ephy-link.h"
 #include "ephy-go-action.h"
 #include "ephy-home-action.h"
-#include "ephy-location-entry.h"
+#include "ephy-link.h"
 #include "ephy-location-action.h"
+#include "ephy-location-entry.h"
 #include "ephy-navigation-action.h"
 #include "ephy-navigation-history-action.h"
 #include "ephy-navigation-up-action.h"
-#include "ephy-topic-action.h"
-#include "ephy-zoom-action.h"
-#include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
-#include "ephy-action-helper.h"
+#include "ephy-topic-action.h"
+#include "ephy-zoom-action.h"
 #include "window-commands.h"
-#include "ephy-debug.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
