@@ -432,8 +432,6 @@ static const struct
 
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
 
-/* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
-
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
 struct _EphyWindowPrivate
