@@ -107,7 +107,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "Edit", NULL, N_("_Edit") },
 	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
-	{ "Go", NULL, N_("_Go") },
 	{ "Tools", NULL, N_("T_ools") },
 	{ "Help", NULL, N_("_Help") },
 	{ "Toolbar", NULL, N_("_Toolbars") },
