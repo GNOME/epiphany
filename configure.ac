@@ -234,9 +234,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
-# GDBus codegen
-AC_PATH_PROG([GDBUS_CODEGEN], [gdbus-codegen], AC_MSG_ERROR([gdbus-codegen is required but was not found]))
-
 # ************
 # Misc defines
 # ************
