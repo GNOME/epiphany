@@ -22,7 +22,6 @@
 #include "config.h"
 #include "ephy-window.h"
 
-#include "egg-editable-toolbar.h"
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
@@ -33,7 +32,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
-#include "ephy-embed-utils.h"
 #include "ephy-embed-utils.h"
 #include "ephy-encoding-menu.h"
 #include "ephy-extension.h"
