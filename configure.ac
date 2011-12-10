@@ -74,7 +74,7 @@ GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
-MORE_WARN_FLAGS=
+MORE_WARN_FLAGS="-Wdeclaration-after-statement"
 DEPRECATION_FLAGS=
 
 if test "$enable_maintainer_mode" = "yes"; then
@@ -134,30 +134,6 @@ AC_C_INLINE
 AC_FUNC_MKTIME
 AC_FUNC_STRTOD
 AC_TYPE_SIZE_T
-
-# Check for -Wdeclaration-after-statement (since gcc 3.4)
-
-if test "$enable_maintainer_mode" = "yes"; then
-
-	AC_LANG_PUSH([C])
-	_FLAGS="-Wdeclaration-after-statement"
-	_SAVE_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS $_FLAGS"
-
-	AC_CACHE_CHECK([for compiler $FLAGS option],
-		ac_cv_have_declaration_after_statement,
-		[AC_COMPILE_IFELSE(
-			[AC_LANG_SOURCE([[int main () { return 0; }]])],
-			[ac_cv_have_declaration_after_statement="yes"],
-			[ac_cv_have_declaration_after_statement="no"],
-			[ac_cv_have_declaration_after_statement="maybe"])])
-	
-	if test "$ac_cv_have_declaration_after_statement" = "yes"; then
-		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $_FLAGS"
-	fi
-	CFLAGS="$_SAVE_CFLAGS"
-	AC_LANG_POP([C])
-fi
 
 # ***************
 # Multimedia keys
