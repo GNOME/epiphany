@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000, 2001, 2002, 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -2563,8 +2564,8 @@ create_web_view_cb (WebKitWebView *web_view,
 	{
 		parent_window = window;
 		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			EPHY_NEW_TAB_JUMP;
-
+			EPHY_NEW_TAB_JUMP |
+			EPHY_NEW_TAB_APPEND_AFTER;
 	}
 	else
 	{
@@ -2575,7 +2576,8 @@ create_web_view_cb (WebKitWebView *web_view,
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
 					 parent_window,
-					 NULL, NULL,
+					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+					 NULL,
 					 flags,
 					 EPHY_WEB_VIEW_CHROME_ALL,
 					 FALSE, /* is popup? */
