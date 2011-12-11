@@ -500,19 +500,19 @@ ephy_shell_dispose (GObject *object)
 
   if (shell->priv->extensions_manager != NULL) {
     LOG ("Unref extension manager");
-    /* this will unload the extens  ions */
+    /* this will unload the extensions */
     g_object_unref (priv->extensions_manager);
     priv->extensions_manager = NULL;
   }
 
   if (priv->session != NULL) {
-    LOG ("Unref session ma  nager");
+    LOG ("Unref session manager");
     g_object_unref (priv->session);
     priv->session = NULL;
   }
 
   if (priv->lockdown != NULL) {
-    LOG ("Unref lockdown co ntroller");
+    LOG ("Unref lockdown controller");
     g_object_unref (priv->lockdown);
     priv->lockdown = NULL;
   }
@@ -524,13 +524,13 @@ ephy_shell_dispose (GObject *object)
   }
 
   if (priv->fs_toolbars_model != NULL) {
-    LOG ("Unref fullscreen toolbars   model");
+    LOG ("Unref fullscreen toolbars model");
     g_object_unref (priv->fs_toolbars_model);
     priv->fs_toolbars_model = NULL;
   }
 
   if (priv->bme != NULL) {
-    LOG ("Unref Bookma  rks Editor");
+    LOG ("Unref Bookmarks Editor");
     gtk_widget_destroy (GTK_WIDGET (priv->bme));
     priv->bme = NULL;
   }
