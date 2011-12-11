@@ -662,7 +662,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
     /* FIXME this assumes the tab is the  direct notebook child */
     position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
                                       GTK_WIDGET (previous_embed)) + 1;
-  }
+  } else
+    g_warning ("Requested to append new tab after parent, but 'previous_embed' was NULL");
 
   if (flags & EPHY_NEW_TAB_FROM_EXTERNAL) {
     /* If the active embed is blank, us e that to open the url and jump to it */
