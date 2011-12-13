@@ -41,7 +41,6 @@
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
-#include "ephy-toolbar.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
@@ -631,7 +630,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
   GtkWidget *nb;
   int position = -1;
   gboolean is_empty = FALSE;
-  EphyToolbar *toolbar;
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
@@ -654,8 +652,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
   } else {
     window = ephy_window_new_with_chrome (chrome, is_popup);
   }
-
-  toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
   if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL) {
     nb = ephy_window_get_notebook (window);
@@ -703,7 +699,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
       flags & EPHY_NEW_TAB_NEW_PAGE) {
     EphyWebView *view = ephy_embed_get_web_view (embed);
     ephy_web_view_set_typed_address (view, "");
-    ephy_toolbar_activate_location (toolbar);
+    ephy_window_activate_location (window);
     ephy_web_view_load_homepage (view);
     is_empty = TRUE;
   } else if (flags & EPHY_NEW_TAB_OPEN_PAGE) {
@@ -721,8 +717,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
      * page was a copy */
     if (is_empty) {
       /* empty page, focus location entry */
-      toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
-      ephy_toolbar_activate_location (toolbar);
+      ephy_window_activate_location (window);
     } else if (embed != NULL) {
       /* non-empty page, focus the page. but make sure the widget is realised first! */
       gtk_widget_realize (GTK_WIDGET (embed));

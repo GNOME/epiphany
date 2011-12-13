@@ -164,18 +164,20 @@
 	<popup name="ToolbarPopup">
 		<placeholder name="SpecificItemsGroup">
 		</placeholder>
-		<separator/>
-                <menuitem action="MoveToolItem"/>
-		<menuitem action="RemoveToolItem"/>    
-		<separator/>
-		<menuitem action="RemoveToolbar"/>
-		<separator/>
 		<placeholder name="ViewToolbarsGroup">
 		</placeholder>
 		<separator/>
 		<menuitem action="ViewMenuBar" />
 		<menuitem name="ViewDownloadsBar" action="ViewDownloadsBar"/>
 	</popup>
+
+        <toolbar name="DefaultToolbar">
+                <toolitem action="NavigationBack"/>
+                <toolitem action="NavigationForward"/>
+                <toolitem action="ViewStop"/>
+                <toolitem action="ViewReload"/>
+                <toolitem action="Location"/>
+        </toolbar>
 
 	<accelerator name="AlwaysStopAccel" action="ViewAlwaysStop"/>
 	<accelerator name="BrowseWithCaretAccel" action="BrowseWithCaret"/>

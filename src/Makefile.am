@@ -30,7 +30,6 @@ NOINST_H_FILES = \
 	ephy-navigation-up-action.h		\
 	ephy-password-info.h			\
 	ephy-toolbars-model.h			\
-	ephy-toolbar.h				\
 	languages.h				\
 	pdm-dialog.h				\
 	popup-commands.h			\
@@ -73,7 +72,6 @@ libephymain_la_SOURCES = \
 	ephy-session.c				\
 	ephy-shell.c				\
 	ephy-toolbars-model.c			\
-	ephy-toolbar.c				\
 	ephy-window.c				\
 	pdm-dialog.c				\
 	popup-commands.c			\
@@ -243,7 +241,6 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/src/ephy-notebook.h \
 	$(top_srcdir)/src/ephy-session.h \
 	$(top_srcdir)/src/ephy-shell.h \
-	$(top_srcdir)/src/ephy-toolbar.h \
 	$(top_srcdir)/src/ephy-window.h \
 	$(NULL)
 
@@ -274,7 +271,6 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/src/ephy-notebook.c \
 	$(top_srcdir)/src/ephy-session.c \
 	$(top_srcdir)/src/ephy-shell.c \
-	$(top_srcdir)/src/ephy-toolbar.c \
 	$(top_srcdir)/src/ephy-window.c \
 	$(NULL)
 

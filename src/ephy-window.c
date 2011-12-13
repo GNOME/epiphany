@@ -39,18 +39,25 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-fullscreen-popup.h"
+#include "ephy-go-action.h"
 #include "ephy-gui.h"
+#include "ephy-home-action.h"
 #include "ephy-link.h"
+#include "ephy-location-action.h"
 #include "ephy-location-entry.h"
+#include "ephy-navigation-action.h"
+#include "ephy-navigation-history-action.h"
+#include "ephy-navigation-up-action.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-stock-icons.h"
-#include "ephy-toolbar.h"
+#include "ephy-topic-action.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
+#include "ephy-zoom-action.h"
 #include "ephy-zoom.h"
 #include "popup-commands.h"
 #include "window-commands.h"
@@ -438,10 +445,11 @@ struct _EphyWindowPrivate
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
 	GtkWidget *fullscreen_popup;
-	EphyToolbar *toolbar;
+	GtkWidget *toolbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
+	GtkActionGroup *toolbar_action_group;
 	EphyEncodingMenu *enc_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
@@ -456,6 +464,8 @@ struct _EphyWindowPrivate
 	GtkWidget *entry;
 	GtkWidget *downloads_box;
 
+	guint clear_progress_timeout_id;
+	gulong set_focus_handler;
 	guint menubar_accel_keyval;
 	guint menubar_accel_modifier;
 
@@ -466,6 +476,8 @@ struct _EphyWindowPrivate
 	guint is_popup : 1;
 	guint present_on_insert : 1;
 	guint key_theme_is_emacs : 1;
+	guint updating_address : 1;
+	guint show_lock : 1;
 };
 
 enum
@@ -829,7 +841,7 @@ ensure_location_entry (EphyWindow *window)
 	GtkWidget *proxy;
 	EphyWindowPrivate *priv = window->priv;
 
-	toolbar_action_group = ephy_toolbar_get_action_group (priv->toolbar);
+	toolbar_action_group = priv->toolbar_action_group;
 	action = gtk_action_group_get_action (toolbar_action_group,
 					      "Location");
 	proxies = gtk_action_get_proxies (action);
@@ -871,15 +883,8 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_load_status (ephy_embed_get_web_view (embed), NULL, window);
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
-	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
-		 EGG_TOOLBARS_MODEL (
-		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
 	ensure_location_entry (window);
 
-	ephy_toolbar_set_show_leave_fullscreen (priv->toolbar,
-						!lockdown_fs);
-	
 	sync_chromes_visibility (window);
 }
 
@@ -890,13 +895,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 
 	destroy_fullscreen_popup (window);
 
-	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
-		 EGG_TOOLBARS_MODEL (
-		 	ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
 	ensure_location_entry (window);
-
-	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar, FALSE);
 
 	sync_chromes_visibility (window);
 }
@@ -1000,7 +999,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		{
 			GtkAction * action = gtk_action_group_get_action
 				(extra_keybindings[i].fromToolbar ? 
-					ephy_toolbar_get_action_group (priv->toolbar) :
+					priv->toolbar_action_group :
 					priv->action_group,
 				extra_keybindings[i].action);
 			if (gtk_action_is_sensitive (action))
@@ -1243,7 +1242,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		GSList *proxies;
 		GtkWidget *proxy;
 		
-		action_group = ephy_toolbar_get_action_group (window->priv->toolbar);
+		action_group = window->priv->toolbar_action_group;
 		location_action = gtk_action_group_get_action (action_group,
 							       "Location");
 		proxies = gtk_action_get_proxies (location_action);
@@ -1631,10 +1630,126 @@ setup_ui_manager (EphyWindow *window)
 	window->priv->popups_action_group = action_group;
 	g_object_unref (action_group);
 
+	action_group = gtk_action_group_new ("SpecialToolbarActions");
+	action =
+		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
+			      "name", "NavigationBack",
+			      "label", _("_Back"),
+			      "stock_id", GTK_STOCK_GO_BACK,
+			      "tooltip", _("Go to the previous visited page"),
+			      "window", window,
+			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
+			      "is_important", TRUE,
+			      NULL);
+	gtk_action_group_add_action_with_accel (action_group, action,
+						"<alt>Left");
+	g_object_unref (action);
+
+	action =
+		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
+			      "name", "NavigationForward",
+			      "label", _("_Forward"),
+			      "stock_id", GTK_STOCK_GO_FORWARD,
+			      "tooltip", _("Go to the next visited page"),
+			      "window", window,
+			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
+			      NULL);
+	gtk_action_group_add_action_with_accel (action_group, action,
+						"<alt>Right");
+	g_object_unref (action);
+
+	action =
+		g_object_new (EPHY_TYPE_NAVIGATION_UP_ACTION,
+			      "name", "NavigationUp",
+			      "label", _("_Up"),
+			      "stock_id", GTK_STOCK_GO_UP,
+			      "tooltip", _("Go up one level"),
+			      "window", window,
+			      NULL);
+	gtk_action_group_add_action_with_accel (action_group, action,
+						"<alt>Up");
+	g_object_unref (action);
+
+	/* FIXME: I'm still waiting for the exact term to 
+	 * user here from the docs team.
+	 */
+	action =
+		g_object_new (EPHY_TYPE_LOCATION_ACTION,
+			      "name", "Location",
+			      "label", _("Address Entry"),
+			      "stock_id", EPHY_STOCK_ENTRY,
+			      "tooltip", _("Enter a web address to open, or a phrase to search for"),
+			      "visible-overflown", FALSE,
+			      "window", window,
+			      NULL);
+	gtk_action_group_add_action (action_group, action);
+	g_object_unref (action);
+
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "GoHome",
+			       "label", _("_Home"),
+			       "stock_id", GTK_STOCK_HOME,
+			       "tooltip", _("Go to the home page"),
+			       "is_important", TRUE,
+			       NULL);
+	gtk_action_group_add_action_with_accel (action_group, action, "<alt>Home");
+	g_object_unref (action);
+
+	action =
+		g_object_new (EPHY_TYPE_ZOOM_ACTION,
+			      "name", "Zoom",
+			      "label", _("Zoom"),
+			      "stock_id", GTK_STOCK_ZOOM_IN,
+			      "tooltip", _("Adjust the text size"),
+			      "zoom", 1.0,
+			      NULL);
+	gtk_action_group_add_action (action_group, action);
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "FileNewTab",
+			       "label", _("New _Tab"),
+			       "stock_id", STOCK_NEW_TAB,
+			       "tooltip", _("Open a new tab"),
+			       NULL);
+	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
+
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "FileNewWindow",
+			       "label", _("_New Window"),
+			       "stock_id", STOCK_NEW_WINDOW,
+			       "tooltip", _("Open a new window"),
+			       NULL);
+	gtk_action_group_add_action_with_accel (action_group, action, "<control>N");
+	g_object_unref (action);
+
+	gtk_ui_manager_insert_action_group (manager, action_group, 0);
+	window->priv->toolbar_action_group = action_group;
+	g_object_unref (action_group);
+
 	window->priv->manager = manager;
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (manager));
+}
+
+static void
+_ephy_window_set_location (EphyWindow *window,
+			   const char *address)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyLocationAction *action;
+
+	if (priv->updating_address) return;
+
+	action = EPHY_LOCATION_ACTION (gtk_action_group_get_action (priv->toolbar_action_group,
+								    "Location"));
+	priv->updating_address = TRUE;
+	ephy_location_action_set_address (action, address);
+	priv->updating_address = FALSE;
 }
 
 static void
@@ -1651,7 +1766,7 @@ sync_tab_address (EphyWebView *view,
 	address = ephy_web_view_get_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
 
-	ephy_toolbar_set_location (priv->toolbar, typed_address ? typed_address : address);
+	_ephy_window_set_location (window, typed_address ? typed_address : address);
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
@@ -1694,6 +1809,18 @@ sync_tab_document_type (EphyWebView *view,
 }
 
 static void
+_ephy_window_action_set_favicon (EphyWindow *window,
+				 GdkPixbuf *icon)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "Location");
+	g_object_set (action, "icon", icon, NULL);
+}
+
+static void
 sync_tab_icon (EphyWebView *view,
 	       GParamSpec *pspec,
 	       EphyWindow *window)
@@ -1705,7 +1832,49 @@ sync_tab_icon (EphyWebView *view,
 
 	icon = ephy_web_view_get_icon (view);
 
-	ephy_toolbar_set_favicon (priv->toolbar, icon);
+	_ephy_window_action_set_favicon (window, icon);
+}
+
+static void
+_ephy_window_set_navigation_actions (EphyWindow *window,
+				     gboolean back,
+				     gboolean forward,
+				     gboolean up)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationBack");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !back);
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationForward");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !forward);
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationUp");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !up);
+}
+
+static void
+_ephy_window_set_navigation_tooltips (EphyWindow *window,
+				      const char *back_title,
+				      const char *forward_title)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
+	GValue value = { 0 };
+
+	g_value_init (&value, G_TYPE_STRING);
+
+	g_value_set_static_string (&value, back_title);
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "NavigationBack");
+	g_object_set_property (G_OBJECT (action),
+			       "tooltip", &value);
+
+	g_value_set_static_string (&value, forward_title);
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "NavigationForward");
+	g_object_set_property (G_OBJECT (action),
+			       "tooltip", &value);
+	g_value_unset (&value);
 }
 
 static void
@@ -1737,8 +1906,7 @@ sync_tab_navigation (EphyWebView *view,
 		forward = TRUE;
 	}
 
-	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
-					     back, forward, up);
+	_ephy_window_set_navigation_actions (window, back, forward, up);
 
 	web_view = WEBKIT_WEB_VIEW (view);
 	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
@@ -1757,9 +1925,29 @@ sync_tab_navigation (EphyWebView *view,
 		forward_title = webkit_web_history_item_get_title (item);
 	}
 
-	ephy_toolbar_set_navigation_tooltips (window->priv->toolbar,
+	_ephy_window_set_navigation_tooltips (window,
 					      back_title,
 					      forward_title);
+}
+
+static void
+_ephy_window_set_security_state (EphyWindow *window,
+				 gboolean show_lock,
+				 const char *stock_id,
+				 const char *tooltip)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
+
+	priv->show_lock = show_lock != FALSE;
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "Location");
+	g_object_set (action,
+		      "lock-stock-id", stock_id,
+		      "lock-tooltip", tooltip,
+		      "show-lock", priv->show_lock,
+		      NULL);
 }
 
 static void
@@ -1826,7 +2014,7 @@ sync_tab_security (EphyWebView *view,
 		g_free (tmp);
 	}
 
-	ephy_toolbar_set_security_state (priv->toolbar, show_lock, stock_id, tooltip);
+	_ephy_window_set_security_state (window, show_lock, stock_id, tooltip);
 
 	if (priv->fullscreen_popup != NULL)
 	{
@@ -1917,6 +2105,19 @@ sync_tab_title (EphyWebView *view,
 }
 
 static void
+_ephy_window_action_set_zoom (EphyWindow *window,
+			      gboolean can_zoom,
+			      float zoom)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
+							 "Zoom");
+
+	gtk_action_set_sensitive (action, can_zoom);
+	g_object_set (action, "zoom", can_zoom ? zoom : 1.0, NULL);
+}
+
+static void
 sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
@@ -1948,7 +2149,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 		can_zoom_normal = TRUE;
 	}
 
-	ephy_toolbar_set_zoom (window->priv->toolbar, can_zoom, zoom);
+	_ephy_window_action_set_zoom (window, can_zoom, zoom);
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
@@ -2829,7 +3030,6 @@ static gboolean
 embed_modal_alert_cb (EphyEmbed *embed,
 		      EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	const char *address;
 
 	/* switch the window to the tab, and bring the window to the foreground
@@ -2841,7 +3041,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-	ephy_toolbar_set_location (priv->toolbar, address);
+	_ephy_window_set_location (window, address);
 
 	/* don't suppress alert */
 	return FALSE;
@@ -3447,6 +3647,13 @@ ephy_window_finalize (GObject *object)
 
 	g_hash_table_destroy (priv->tabs_to_remove);
 
+	if (priv->clear_progress_timeout_id)
+		g_source_remove (priv->clear_progress_timeout_id);
+
+	if (priv->set_focus_handler != 0)
+		g_signal_handler_disconnect (window,
+					     priv->set_focus_handler);
+
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
@@ -3499,6 +3706,102 @@ allow_popups_notifier (GSettings *settings,
 	g_list_free (tabs);
 }
 
+static void
+sync_user_input_cb (EphyLocationAction *action,
+		    GParamSpec *pspec,
+		    EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *embed;
+	const char *address;
+
+	LOG ("sync_user_input_cb");
+
+	if (priv->updating_address) return;
+
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+	g_assert (EPHY_IS_EMBED (embed));
+
+	address = ephy_location_action_get_address (action);
+
+	priv->updating_address = TRUE;
+	ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), address);
+	priv->updating_address = FALSE;
+}
+
+static void
+zoom_to_level_cb (GtkAction *action,
+		  float zoom,
+		  EphyWindow *window)
+{
+	ephy_window_set_zoom (window, zoom);
+}
+
+static GtkWidget *
+setup_toolbar (EphyWindow *window)
+{
+	GtkWidget *toolbar;
+	GtkUIManager *manager;
+	GtkAction *action;
+	EphyWindowPrivate *priv = window->priv;
+
+	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+
+	toolbar = gtk_ui_manager_get_widget (manager, "/DefaultToolbar");
+
+	gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
+				     GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "NavigationBack");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "NavigationForward");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "NavigationUp");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "Location");
+	g_signal_connect (action, "notify::address",
+			  G_CALLBACK (sync_user_input_cb), window);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	/* FIXME: No one seems to be using this atm. When we need it, the
+	 * signal should be added to EphyWindow. */
+#if 0
+	g_signal_connect (action, "lock-clicked",
+			  G_CALLBACK (lock_clicked_cb), toolbar);
+#endif
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "FileNewTab");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "FileNewWindow");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "GoHome");
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "Zoom");
+	g_signal_connect (action, "zoom-to-level",
+			  G_CALLBACK (zoom_to_level_cb), window);
+
+	return toolbar;
+}
+
 static const char* disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "FileSaveAs",
                                                        "FileSaveAsApplication",
@@ -3517,7 +3820,6 @@ ephy_window_constructor (GType type,
 	EphyWindowPrivate *priv;
 	EphyExtension *manager;
 	EphyEmbedSingle *single;
-	EggToolbarsModel *model;
 	GtkSettings *settings;
 	GtkAction *action;
 	GtkActionGroup *toolbar_action_group;
@@ -3586,24 +3888,7 @@ ephy_window_constructor (GType type,
 	g_object_bind_property (action, "active",
 				priv->downloads_box, "visible",
 				G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-	/* don't show the find toolbar here! */
 	
-	/* get the toolbars model *before* getting the bookmarksbar model
-	 * (via ephy_bookmarsbar_new()), so that the toolbars model is
-	 * instantiated *before* the bookmarksbarmodel, to make forwarding
-	 * works. See bug #151267.
-	 */
-	model= EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-
-	/* create the toolbars */
-	priv->toolbar = ephy_toolbar_new (window);
-	g_signal_connect_swapped (priv->toolbar, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-	g_signal_connect_swapped (priv->toolbar, "exit-clicked",
-				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
-	g_signal_connect_swapped (priv->toolbar, "activation-finished",
-				  G_CALLBACK (sync_chromes_visibility), window);
-
 	/* now load the UI definition */
 	gtk_ui_manager_add_ui_from_file
 		(priv->manager, ephy_file ("epiphany-ui.xml"), &error);
@@ -3634,27 +3919,16 @@ ephy_window_constructor (GType type,
 	g_object_unref (css_provider);
 	g_object_unref (css_file);
 
+	/* create the toolbars */
+	priv->toolbar = setup_toolbar (window);
+
 	/* Initialize the menus */
 	priv->enc_menu = ephy_encoding_menu_new (window);
-
-	/* Add the toolbars to the window */
-	gtk_box_pack_end (GTK_BOX (priv->menu_dock),
-			  GTK_WIDGET (priv->toolbar),
-			  FALSE, FALSE, 0);
 
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
 	ephy_bookmarks_ui_attach_window (window);
-
-	/* We only set the model now after attaching the extensions, so that
-	 * extensions already have created their actions which may be on
-	 * the toolbar
-	 */
-	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (priv->toolbar), model);
-
-	ephy_toolbar_set_show_leave_fullscreen (priv->toolbar, FALSE);
 
 	/* other notifiers */
 	action = gtk_action_group_get_action (window->priv->action_group,
@@ -3676,7 +3950,7 @@ ephy_window_constructor (GType type,
 			  G_CALLBACK (sync_network_status), window);
 
 	/* Disable actions not needed for popup mode. */
-	toolbar_action_group = ephy_toolbar_get_action_group (priv->toolbar);
+	toolbar_action_group = priv->toolbar_action_group;
 	action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
 					      priv->is_popup);
@@ -3708,8 +3982,12 @@ ephy_window_constructor (GType type,
 		
 	/* Connect lock clicks */
 	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
+	/* FIXME: No one seems to be using this atm. When we need it, the
+	 * signal should be added to EphyWindow. */
+#if 0
 	g_signal_connect_swapped (priv->toolbar, "lock-clicked",
 				  G_CALLBACK (gtk_action_activate), action);
+#endif
 
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (priv->manager);
@@ -3757,6 +4035,65 @@ ephy_window_class_init (EphyWindowClass *klass)
 					  "chrome");
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
+}
+
+static void 
+maybe_finish_activation_cb (EphyWindow *window,
+			    GtkWidget *widget,
+			    GtkWidget *toolbar)
+{
+	while (widget != NULL && widget != toolbar)
+	{
+		widget = gtk_widget_get_parent (widget);
+	}
+
+	/* if widget == toolbar, the new focus widget is in the toolbar, so we
+	 * don't deactivate.
+	 */
+	if (widget != toolbar)
+	{
+		g_signal_handler_disconnect (window, window->priv->set_focus_handler);
+		window->priv->set_focus_handler = 0;
+		sync_chromes_visibility (window);
+	}
+}
+
+static void
+_ephy_window_activate_location (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
+	GSList *proxies;
+	GtkWidget *entry = NULL;
+	gboolean visible;
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "Location");
+	proxies = gtk_action_get_proxies (action);
+
+	if (proxies != NULL && EPHY_IS_LOCATION_ENTRY (proxies->data))
+	{
+		entry = GTK_WIDGET (proxies->data);
+	}
+
+	if (entry == NULL)
+	{
+		/* happens when the user has removed the location entry from
+		 * the toolbars.
+		 */
+		return;
+	}
+
+	g_object_get (G_OBJECT (priv->toolbar), "visible", &visible, NULL);
+	if (visible == FALSE)
+	{
+		gtk_widget_show (GTK_WIDGET (priv->toolbar));
+		window->priv->set_focus_handler =
+			g_signal_connect (window, "set-focus",
+					  G_CALLBACK (maybe_finish_activation_cb),
+					  priv->toolbar);
+	}
+
+	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
 static EphyEmbed *
@@ -3810,7 +4147,7 @@ ephy_window_open_link (EphyLink *link,
 
 		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
 		{
-			ephy_toolbar_activate_location (priv->toolbar);
+			_ephy_window_activate_location (window);
 		}
 		else
 		{
@@ -3890,9 +4227,9 @@ ephy_window_get_ui_manager (EphyWindow *window)
  * ephy_window_get_toolbar:
  * @window: an #EphyWindow
  *
- * Returns this window's toolbar as an #EggEditableToolbar.
+ * Returns this window's toolbar
  *
- * Return value: (transfer none): an #EggEditableToolbar
+ * Return value: (transfer none): an #EphyToolbar
  **/
 GtkWidget *
 ephy_window_get_toolbar (EphyWindow *window)
@@ -3983,7 +4320,7 @@ ephy_window_activate_location (EphyWindow *window)
 		gtk_widget_hide (window->priv->fullscreen_popup);
 	}
 
-	ephy_toolbar_activate_location (window->priv->toolbar);
+	_ephy_window_activate_location (window);
 }
 
 static void
@@ -4168,4 +4505,43 @@ ephy_window_get_context_event (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return window->priv->context_event;
+}
+
+/**
+ * ephy_window_get_location:
+ * @window: an #EphyWindow widget
+ *
+ * Gets the current address according to @window's #EphyLocationAction.
+ *
+ * Returns: current @window address
+ **/
+const char *
+ephy_window_get_location (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction * action = gtk_action_group_get_action (priv->toolbar_action_group,
+							  "Location");
+	return ephy_location_action_get_address (EPHY_LOCATION_ACTION (action));
+}
+
+/**
+ * ephy_window_set_location:
+ * @window: an #EphyWindow widget
+ * @address: new address
+ *
+ * Sets the internal #EphyLocationAction address to @address.
+ **/
+void
+ephy_window_set_location (EphyWindow *window,
+			  const char *address)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
+							 "Location");
+
+	if (priv->updating_address) return;
+
+	priv->updating_address = TRUE;
+	ephy_location_action_set_address (EPHY_LOCATION_ACTION (action), address);
+	priv->updating_address = FALSE;
 }

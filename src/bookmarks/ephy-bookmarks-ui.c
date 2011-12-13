@@ -108,6 +108,7 @@ activate_bookmarks_menu (GtkAction *action, EphyWindow *window)
 	}
 }
 
+#if 0
 static void
 activate_bookmark_properties (GtkAction *action,
 			      EggEditableToolbar *etoolbar)
@@ -177,6 +178,7 @@ selected_bookmark_action (EggEditableToolbar *etoolbar,
 	  
 	gtk_action_set_visible (action, visible);
 }
+#endif
 
 static void
 erase_bookmarks_menu (EphyWindow *window)
@@ -241,7 +243,9 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	EphyNode *topics;
 	BookmarksWindowData *data;
 	GtkUIManager *manager;
+#if 0
 	EggEditableToolbar *etoolbar;
+#endif
 	GtkActionGroup *actions;
 	GtkAction *action;
 
@@ -252,7 +256,9 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	g_return_if_fail (data == NULL);
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+#if 0
 	etoolbar = EGG_EDITABLE_TOOLBAR (ephy_window_get_toolbar (window));
+#endif
 
 	data = g_new0 (BookmarksWindowData, 1);
 	g_object_set_data_full (G_OBJECT (window), BM_WINDOW_DATA_KEY, data, g_free);
@@ -298,36 +304,42 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	/* Add popup menu actions that are specific to the bookmark widgets */
 	action = gtk_action_new ("ToolbarBookmarkProperties", _("_Properties"), 
 				 _("Show properties for this bookmark"), GTK_STOCK_PROPERTIES);
+#if 0
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_properties), 
 				 G_OBJECT (etoolbar), 0);
 	g_signal_connect_object (etoolbar, "notify::selected",
 				 G_CALLBACK (selected_bookmark_action),
 				 G_OBJECT (action), 0);
+#endif
 	gtk_action_group_add_action (actions, action);
 	g_object_unref (action);
 
 	/* FIXME ngettext */
 	action = gtk_action_new ("ToolbarBookmarkOpenInTab", _("Open in New _Tab"),
 				 _("Open this bookmark in a new tab"), STOCK_NEW_TAB);
+#if 0
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_open_tab), 
 				 G_OBJECT (etoolbar), 0);
 	g_signal_connect_object (etoolbar, "notify::selected",
 				 G_CALLBACK (selected_bookmark_action),
 				 G_OBJECT (action), 0);
+#endif
 	gtk_action_group_add_action (actions, action);
 	g_object_unref (action);
 
 	/* FIXME ngettext */
 	action = gtk_action_new ("ToolbarBookmarkOpenInWindow", _("Open in New _Window"), 
 				 _("Open this bookmark in a new window"), GTK_STOCK_NEW);
+#if 0
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_open_window),
 				 G_OBJECT (etoolbar), 0);
 	g_signal_connect_object (etoolbar, "notify::selected",
 				 G_CALLBACK (selected_bookmark_action),
 				 G_OBJECT (action), 0);
+#endif
 	gtk_action_group_add_action (actions, action);
 	g_object_unref (action);
 

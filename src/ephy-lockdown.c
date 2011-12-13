@@ -30,7 +30,6 @@
 #include "ephy-lockdown.h"
 #include "ephy-extension.h"
 #include "ephy-settings.h"
-#include "ephy-toolbar.h"
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
 
@@ -68,7 +67,6 @@ arbitrary_url_cb (GSettings *settings,
 		  EphyWindow *window)
 {
 	EphyEmbed *embed;
-	GtkWidget *toolbar;
 	char *address;
 
 	/* Restore the real web page address when disabling entry */
@@ -79,9 +77,8 @@ arbitrary_url_cb (GSettings *settings,
 		if (embed == NULL)
 			return;
 
-		toolbar = ephy_window_get_toolbar (window);
 		address = ephy_web_view_get_location (ephy_embed_get_web_view (embed), TRUE);
-		ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address);
+		ephy_window_set_location (window, address);
 		ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), NULL);
 		g_free (address);
 	}

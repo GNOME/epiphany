@@ -78,7 +78,9 @@ void		  ephy_window_set_zoom		  (EphyWindow *window,
 						   float zoom);
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
-
+const char       *ephy_window_get_location        (EphyWindow *window);
+void              ephy_window_set_location        (EphyWindow *window,
+                                                   const char *address);
 
 EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
 
