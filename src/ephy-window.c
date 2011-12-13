@@ -4224,22 +4224,6 @@ ephy_window_get_ui_manager (EphyWindow *window)
 }
 
 /**
- * ephy_window_get_toolbar:
- * @window: an #EphyWindow
- *
- * Returns this window's toolbar
- *
- * Return value: (transfer none): an #EphyToolbar
- **/
-GtkWidget *
-ephy_window_get_toolbar (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-	return GTK_WIDGET (window->priv->toolbar);
-}
-
-/**
  * ephy_window_get_notebook:
  * @window: an #EphyWindow
  *

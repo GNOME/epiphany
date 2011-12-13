@@ -887,9 +887,6 @@ void
 window_cmd_view_fullscreen (GtkAction *action,
 			    EphyWindow *window)
 {
-	/* Otherwise the other toolbar layout shows briefly while switching */
-	gtk_widget_hide (ephy_window_get_toolbar (window));
-
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
 	{
 		GtkWidget *toolbar_editor;

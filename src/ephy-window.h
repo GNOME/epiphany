@@ -65,8 +65,6 @@ EphyWindow	 *ephy_window_new_with_chrome	  (EphyWebViewChrome chrome,
 
 GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
-GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
-
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
 GtkWidget        *ephy_window_get_find_toolbar    (EphyWindow *window);
