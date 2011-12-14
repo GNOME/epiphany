@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2005 Peter Harvey
  *  Copyright © 2006 Christian Persch
@@ -19,33 +20,32 @@
  */
 
 #include "config.h"
-
-#include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
-#include "ephy-bookmarks-menu.h"
-#include "ephy-bookmark-action.h"
-#include "ephy-topic-action.h"
+
 #include "ephy-bookmark-action-group.h"
-#include "ephy-topic-action-group.h"
-#include "ephy-related-action.h"
-#include "ephy-open-tabs-action.h"
-#include "ephy-topic-factory-action.h"
+#include "ephy-bookmark-action.h"
 #include "ephy-bookmark-factory-action.h"
 #include "ephy-bookmark-properties.h"
-#include "ephy-node-common.h"
-#include "ephy-link.h"
+#include "ephy-bookmarks-menu.h"
+#include "ephy-bookmarks.h"
+#include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-embed-shell.h"
-#include "ephy-history.h"
-#include "ephy-shell.h"
-#include "ephy-string.h"
-#include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
-#include "ephy-stock-icons.h"
+#include "ephy-history.h"
+#include "ephy-link.h"
+#include "ephy-node-common.h"
+#include "ephy-open-tabs-action.h"
 #include "ephy-prefs.h"
+#include "ephy-related-action.h"
 #include "ephy-settings.h"
-#include "egg-editable-toolbar.h"
+#include "ephy-shell.h"
+#include "ephy-stock-icons.h"
+#include "ephy-string.h"
+#include "ephy-topic-action-group.h"
+#include "ephy-topic-action.h"
+#include "ephy-topic-factory-action.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -107,78 +107,6 @@ activate_bookmarks_menu (GtkAction *action, EphyWindow *window)
 		gtk_ui_manager_ensure_update (manager);
 	}
 }
-
-#if 0
-static void
-activate_bookmark_properties (GtkAction *action,
-			      EggEditableToolbar *etoolbar)
-{
-	GtkAction *baction;
-	GtkWidget *widget;
-
-	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
-					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget)) : NULL;
-	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
-
-	ephy_bookmarks_ui_show_bookmark (ephy_bookmark_action_get_bookmark
-						 (EPHY_BOOKMARK_ACTION (baction)));
-}
-
-static void
-activate_bookmark_open_tab (GtkAction *action,
-			    EggEditableToolbar *etoolbar)
-{
-	GtkAction *baction;
-	GtkWidget *widget;
-
-	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
-					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget)) : NULL;
-	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
-
-	ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (baction), widget,
-				       EPHY_LINK_NEW_TAB);
-}
-
-static void
-activate_bookmark_open_window (GtkAction *action,
-			       EggEditableToolbar *etoolbar)
-{
-	GtkAction *baction;
-	GtkWidget *widget;
-
-	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
-					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget)) : NULL;
-	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (baction));
-
-	ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (baction), widget,
-				       EPHY_LINK_NEW_WINDOW);
-}
-
-static void
-selected_bookmark_action (EggEditableToolbar *etoolbar,
-			  GParamSpec *pspec,
-			  GtkAction *action)
-{
-	GtkAction *baction;
-	GtkWidget *widget;
-	gboolean visible;
-	
-	visible = FALSE;
-	
-	if (!egg_editable_toolbar_get_edit_mode (etoolbar))
-	{
-		widget = egg_editable_toolbar_get_selected (etoolbar);
-		widget = widget ? gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) : NULL;
-		baction = widget ? gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget)) : NULL;
-		visible = EPHY_IS_BOOKMARK_ACTION (baction);
-	}
-	  
-	gtk_action_set_visible (action, visible);
-}
-#endif
 
 static void
 erase_bookmarks_menu (EphyWindow *window)
@@ -243,9 +171,6 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	EphyNode *topics;
 	BookmarksWindowData *data;
 	GtkUIManager *manager;
-#if 0
-	EggEditableToolbar *etoolbar;
-#endif
 	GtkActionGroup *actions;
 	GtkAction *action;
 
@@ -256,9 +181,6 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	g_return_if_fail (data == NULL);
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
-#if 0
-	etoolbar = EGG_EDITABLE_TOOLBAR (ephy_window_get_toolbar (window));
-#endif
 
 	data = g_new0 (BookmarksWindowData, 1);
 	g_object_set_data_full (G_OBJECT (window), BM_WINDOW_DATA_KEY, data, g_free);
@@ -282,76 +204,6 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 				 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 	g_object_unref (actions);
 	
-	/* Create and add an action group specifically foor bookmarks on the toolbar */
-	actions = gtk_action_group_new ("BookmarkToolbarActions");
-	gtk_ui_manager_insert_action_group (manager, actions, 0);	
-	g_object_unref (actions);
-
-	/* Add factory actions */
-	action = ephy_topic_factory_action_new ("AddTopicToToolbar");
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-	
-	action = ephy_bookmark_factory_action_new ("AddBookmarkToToolbar");
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-
-	/* Add the dynamic 'related topic' action */
-	action = ephy_related_action_new (EPHY_LINK (window), manager, "RelatedTopic");
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-
-	/* Add popup menu actions that are specific to the bookmark widgets */
-	action = gtk_action_new ("ToolbarBookmarkProperties", _("_Properties"), 
-				 _("Show properties for this bookmark"), GTK_STOCK_PROPERTIES);
-#if 0
-	g_signal_connect_object (action, "activate",
-				 G_CALLBACK (activate_bookmark_properties), 
-				 G_OBJECT (etoolbar), 0);
-	g_signal_connect_object (etoolbar, "notify::selected",
-				 G_CALLBACK (selected_bookmark_action),
-				 G_OBJECT (action), 0);
-#endif
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-
-	/* FIXME ngettext */
-	action = gtk_action_new ("ToolbarBookmarkOpenInTab", _("Open in New _Tab"),
-				 _("Open this bookmark in a new tab"), STOCK_NEW_TAB);
-#if 0
-	g_signal_connect_object (action, "activate",
-				 G_CALLBACK (activate_bookmark_open_tab), 
-				 G_OBJECT (etoolbar), 0);
-	g_signal_connect_object (etoolbar, "notify::selected",
-				 G_CALLBACK (selected_bookmark_action),
-				 G_OBJECT (action), 0);
-#endif
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-
-	/* FIXME ngettext */
-	action = gtk_action_new ("ToolbarBookmarkOpenInWindow", _("Open in New _Window"), 
-				 _("Open this bookmark in a new window"), GTK_STOCK_NEW);
-#if 0
-	g_signal_connect_object (action, "activate",
-				 G_CALLBACK (activate_bookmark_open_window),
-				 G_OBJECT (etoolbar), 0);
-	g_signal_connect_object (etoolbar, "notify::selected",
-				 G_CALLBACK (selected_bookmark_action),
-				 G_OBJECT (action), 0);
-#endif
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-
-	data->toolbar_menu = gtk_ui_manager_add_ui_from_string (manager,
-	   "<popup name=\"ToolbarPopup\">"
-	   "<placeholder name=\"SpecificItemsGroup\">"
-	   "<menuitem action=\"ToolbarBookmarkOpenInTab\"/>"
-	   "<menuitem action=\"ToolbarBookmarkOpenInWindow\"/>"
-	   "<menuitem action=\"ToolbarBookmarkProperties\"/>"
-	   "</placeholder>"
-	   "</popup>", -1, NULL);  
-
 	/* Add signal handlers for the bookmark database */
 	ephy_node_signal_connect_object (bookmarks, EPHY_NODE_CHILD_ADDED,
 					 (EphyNodeCallback)node_added_cb,
@@ -379,7 +231,9 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 				 G_OBJECT (window), 0);
 
 	/* Setup empty menu strings and add signal handlers to build the menus on demand */
-	if (!bookmarks_menu_string) bookmarks_menu_string = g_string_new ("");
+	if (!bookmarks_menu_string)
+            bookmarks_menu_string = g_string_new ("");
+
 	action = find_action (manager, "Bookmarks");
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmarks_menu),
@@ -398,8 +252,10 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
 	GtkAction *action;
 
 	g_return_if_fail (data != 0);
-	if (data->bookmarks_menu) gtk_ui_manager_remove_ui (manager, data->bookmarks_menu);
-	if (data->toolbar_menu) gtk_ui_manager_remove_ui (manager, data->toolbar_menu);
+
+	if (data->bookmarks_menu)
+		gtk_ui_manager_remove_ui (manager, data->bookmarks_menu);
+
 	g_object_set_data (G_OBJECT (window), BM_WINDOW_DATA_KEY, 0);
 	
 	ephy_node_signal_disconnect_object (bookmarks, EPHY_NODE_CHILD_ADDED,
@@ -508,210 +364,5 @@ ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark)
 				      gtk_get_current_event_time ());
 }
 
-/* Below this line we have functions relating to toolbar code */
-
-static EggToolbarsItemType bookmark_type;
-static EggToolbarsItemType topic_type;
-static EphyBookmarks *eb;
-
-static gboolean
-topic_has_data (EggToolbarsItemType *type,
-		const char *name)
-{
-	EphyNode *node, *topics;
-	guint node_id;
-	
-	if (sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
-
-	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (node == NULL) return FALSE;
-
-	topics = ephy_bookmarks_get_keywords (eb);
-
-	return ephy_node_has_child (topics, node);
-}
-
-static char *
-topic_get_data (EggToolbarsItemType *type,
-		const char *name)
-{
-	EphyNode *node;
-	guint node_id;
-	
-	if (sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
-
-	node = ephy_bookmarks_get_from_id (eb, node_id);
-	g_return_val_if_fail (node != NULL, NULL);
-
-	return ephy_bookmarks_get_topic_uri (eb, node);
-}
-
-static char *
-topic_get_name (EggToolbarsItemType *type,
-		const char *data)
-{
-	EphyNode *topic;
-
-	topic = ephy_bookmarks_find_keyword (eb, data, FALSE);
-	if (topic == NULL) return NULL;
-
-	return EPHY_TOPIC_ACTION_NAME_STRDUP_PRINTF (topic);
-}
-
-static gboolean
-bookmark_has_data (EggToolbarsItemType *type,
-		   const char *name)
-{
-	EphyNode *node;
-	guint node_id;
-
-	if (sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
-
-	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (node == NULL) return FALSE;
-
-	return (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION) != NULL);
-}
-
-static char *
-bookmark_get_data (EggToolbarsItemType *type,
-		   const char *name)
-{
-	EphyNode *node;
-	guint node_id;
-
-	if (sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
-
-	node = ephy_bookmarks_get_from_id (eb, node_id);
-	g_return_val_if_fail (node != NULL, NULL);
-
-	return g_strdup (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION));
-}
-
-static char *
-bookmark_get_name (EggToolbarsItemType *type,
-		   const char *data)
-{
-	EphyNode *node;
-	gchar **netscape_url;
-
-	netscape_url = g_strsplit (data, "\n", 2);
-	if (netscape_url == NULL || netscape_url[0] == '\0')
-	{
-		g_strfreev (netscape_url);
-
-		return NULL;
-	}
-
-	node = ephy_bookmarks_find_bookmark (eb, netscape_url[0]);
-	g_strfreev (netscape_url);
-
-	if (node == NULL) return NULL;
-
-	return EPHY_BOOKMARK_ACTION_NAME_STRDUP_PRINTF (node);
-}
-
-static char *
-bookmark_new_name (EggToolbarsItemType *type,
-		   const char *data)
-{
-	EphyNode *node;
-	gchar **netscape_url;
-
-	netscape_url = g_strsplit (data, "\n", 2);
-	if (netscape_url == NULL || netscape_url[0] == '\0' || g_strv_length (netscape_url) < 2)
-	{
-		g_strfreev (netscape_url);
-
-		return NULL;
-	}
-
-	node = ephy_bookmarks_add (eb, netscape_url[1], netscape_url[0]);
-	g_strfreev (netscape_url);
-
-	return EPHY_BOOKMARK_ACTION_NAME_STRDUP_PRINTF (node);
-}
-
-static void
-toolbar_node_removed_cb (EphyNode *parent,
-			 EphyNode *child,
-			 guint index,
-			 EggToolbarsModel *model)
-{
-	char name[EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE];
-	
-	switch (ephy_node_get_id (parent))
-	{
-		case BOOKMARKS_NODE_ID:
-			EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
-			break;
-		case KEYWORDS_NODE_ID:
-			EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
-			break;
-	 	default:
-			return;
-	}
-
-	egg_toolbars_model_delete_item (model, name);
-}
-
-void
-ephy_bookmarks_ui_attach_toolbar_model (EggToolbarsModel *model)
-{
-	EphyNode *bookmarks;
-	EphyNode *topics;
-	GList *types;
-
-	eb = ephy_shell_get_bookmarks (ephy_shell);        
-	bookmarks = ephy_bookmarks_get_bookmarks (eb);
-	topics = ephy_bookmarks_get_keywords (eb);
-	types = egg_toolbars_model_get_types (model);
-
-	topic_type.type = gdk_atom_intern (EPHY_DND_TOPIC_TYPE, TRUE);
-	topic_type.has_data = topic_has_data;
-	topic_type.get_data = topic_get_data;
-	topic_type.new_name = NULL;
-	topic_type.get_name = topic_get_name;
-
-	bookmark_type.type = gdk_atom_intern (EPHY_DND_URL_TYPE, TRUE);
-	bookmark_type.has_data = bookmark_has_data;
-	bookmark_type.get_data = bookmark_get_data;
-	bookmark_type.new_name = bookmark_new_name;
-	bookmark_type.get_name = bookmark_get_name;
-
-	types = g_list_prepend (types, &bookmark_type);
-	types = g_list_prepend (types, &topic_type);
-	egg_toolbars_model_set_types (model, types);
-
-	ephy_node_signal_connect_object (bookmarks, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)toolbar_node_removed_cb,
-					 G_OBJECT (model));
-	ephy_node_signal_connect_object (topics, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)toolbar_node_removed_cb,
-					 G_OBJECT (model));
-
-	egg_toolbars_model_set_name_flags (model, "AddTopicToToolbar", 
-					   EGG_TB_MODEL_NAME_KNOWN |
-					   EGG_TB_MODEL_NAME_INFINITE);
-	egg_toolbars_model_set_name_flags (model, "AddBookmarkToToolbar", 
-					   EGG_TB_MODEL_NAME_KNOWN |
-					   EGG_TB_MODEL_NAME_INFINITE);
-	egg_toolbars_model_set_name_flags (model, "RelatedTopic", 
-					   EGG_TB_MODEL_NAME_KNOWN);
-}
 
 
-void
-ephy_bookmarks_ui_detach_toolbar_model (EggToolbarsModel *model)
-{
-	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell);        
-	EphyNode *bookmarks = ephy_bookmarks_get_bookmarks (eb);
-	EphyNode *topics = ephy_bookmarks_get_keywords (eb);
-	
-	ephy_node_signal_disconnect_object (bookmarks, EPHY_NODE_CHILD_REMOVED,
-					    (EphyNodeCallback)toolbar_node_removed_cb,
-					    G_OBJECT (model));
-	ephy_node_signal_disconnect_object (topics, EPHY_NODE_CHILD_REMOVED,
-					    (EphyNodeCallback)toolbar_node_removed_cb,
-					    G_OBJECT (model));
-}

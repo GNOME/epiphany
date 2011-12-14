@@ -26,7 +26,6 @@
 #include "egg-toolbars-model.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
-#include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-single.h"
@@ -864,8 +863,6 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
   } else {
     if (shell->priv->toolbars_model == NULL) {
       shell->priv->toolbars_model = ephy_toolbars_model_new ();
-
-      ephy_bookmarks_ui_attach_toolbar_model (shell->priv->toolbars_model);
 
       ephy_toolbars_model_load
         (EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));

@@ -56,10 +56,6 @@ void	ephy_bookmarks_ui_attach_window		(EphyWindow *window);
 
 void	ephy_bookmarks_ui_detach_window		(EphyWindow *window);
 
-void	ephy_bookmarks_ui_attach_toolbar_model	(EggToolbarsModel *model);
-
-void	ephy_bookmarks_ui_detach_toolbar_model	(EggToolbarsModel *model);
-
 void	ephy_bookmarks_ui_add_bookmark		(GtkWindow *parent,
 						 const char *location,
 						 const char *title);

@@ -18,37 +18,36 @@
  */
 
 #include "config.h"
-
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib/gi18n.h>
-#include <string.h>
-
 #include "ephy-bookmarks-editor.h"
-#include "ephy-bookmarks-import.h"
-#include "ephy-bookmarks-export.h"
-#include "ephy-bookmarks-ui.h"
+
 #include "ephy-bookmark-action.h"
-#include "ephy-topic-action.h"
+#include "ephy-bookmarks-export.h"
+#include "ephy-bookmarks-import.h"
+#include "ephy-bookmarks-ui.h"
+#include "ephy-debug.h"
+#include "ephy-dnd.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
+#include "ephy-gui.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
-#include "ephy-window.h"
-#include "ephy-dnd.h"
+#include "ephy-prefs.h"
+#include "ephy-search-entry.h"
+#include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-session.h"
-#include "ephy-file-helpers.h"
-#include "ephy-file-chooser.h"
-#include "popup-commands.h"
 #include "ephy-state.h"
-#include "window-commands.h"
-#include "ephy-gui.h"
 #include "ephy-stock-icons.h"
-#include "ephy-search-entry.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-debug.h"
-#include "egg-toolbars-model.h"
-#include "ephy-prefs.h"
+#include "ephy-topic-action.h"
+#include "ephy-window.h"
+#include "popup-commands.h"
+#include "window-commands.h"
+
+#include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <string.h>
 
 static const GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -96,8 +95,6 @@ static void ephy_bookmarks_editor_update_menu  (EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_tabs    (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (GtkAction *action,
-					   EphyBookmarksEditor *editor);
-static void cmd_toolbar			  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_delete			  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
@@ -211,9 +208,6 @@ static const GtkActionEntry ephy_bookmark_popup_entries [] = {
 };
 
 static const GtkToggleActionEntry ephy_bookmark_toggle_entries [] = {
-	{ "ShowOnToolbar", NULL, N_("_Show on Toolbar"), NULL,
-	  N_("Show the selected bookmark on a toolbar"), 
-	  G_CALLBACK (cmd_toolbar), FALSE },
 	/* View Menu */
 	{ "ViewTitle", NULL, N_("_Title"), NULL,
 	  N_("Show the title column"), NULL, TRUE },
@@ -394,118 +388,6 @@ delete_topic_dialog_construct (GtkWindow *parent,
 				     GTK_WINDOW (dialog));
 
 	return dialog;
-}
-
-static gint
-get_bookmarks_bar (EggToolbarsModel *model)
-{
-	gint tpos;
-	const char *tname;
-	
-	for (tpos = 0; tpos < egg_toolbars_model_n_toolbars (model); tpos++)
-	{
-		tname = egg_toolbars_model_toolbar_nth (model, tpos);
-
-		if (tname != NULL &&
-		    strcmp (tname, "BookmarksBar") == 0)
-			break;
-	}
-	
-	if (tpos == egg_toolbars_model_n_toolbars (model))
-	{		
-		tpos = egg_toolbars_model_add_toolbar (model, -1, "BookmarksBar");
-	}
-	
-	return tpos;
-}
-
-static void
-cmd_toolbar (GtkAction *action,
-	     EphyBookmarksEditor *editor)
-{
-	EggToolbarsModel *model;
-	EphyNode *node;
-	gboolean show;
-	gint flags, tpos = 0;
-	GList *selection;
-	GList *l;
-	
-	model = EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell_get_default (), FALSE));
-		
-	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
-	{
-		char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
-
-		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
-		
-		node = selection->data;
-
-		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
-
-		flags = egg_toolbars_model_get_name_flags (model, name);
-		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
-		
-		if (show)
-		{
-			tpos = get_bookmarks_bar (model);
-		}
-
-		for (l = selection; l; l = l->next)
-		{
-			node = l->data;
-
-			EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
-
-			flags = egg_toolbars_model_get_name_flags (model, name);
-			if(show && ((flags & EGG_TB_MODEL_NAME_USED) == 0))
-			{
-				egg_toolbars_model_add_item (model, tpos, -1, name);
-			}
-			else if(!show && ((flags & EGG_TB_MODEL_NAME_USED) != 0))
-			{
-				egg_toolbars_model_delete_item (model, name);
-			}
-		}
-
-		g_list_free (selection);
-	}
-	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
-	{
-		char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
-
-		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
-	  
-		node = selection->data;
-
-		EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
-
-		flags = egg_toolbars_model_get_name_flags (model, name);
-		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
-
-		if (show)
-		{
-			tpos = get_bookmarks_bar (model);
-		}
-
-		for (l = selection; l; l = l->next)
-		{
-			node = l->data;
-
-			EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
-
-			flags = egg_toolbars_model_get_name_flags (model, name);
-			if(show && ((flags & EGG_TB_MODEL_NAME_USED) == 0))
-			{
-				egg_toolbars_model_add_item (model, tpos, -1, name);
-			}
-			else if(!show && ((flags & EGG_TB_MODEL_NAME_USED) != 0))
-			{
-				egg_toolbars_model_delete_item (model, name);
-			}
-		}
-
-		g_list_free (selection);
-	}
 }
 
 static void
@@ -1202,10 +1084,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_normal = FALSE;
 	gboolean cut, copy, paste, select_all;
 	gboolean mutable = TRUE;
-	gboolean showtoolbar = FALSE;
-	gboolean ontoolbar = FALSE;
 
-	EggToolbarsModel *model;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GList *selected;
@@ -1214,9 +1093,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 	LOG ("Update menu sensitivity");
 
-	model = EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model 
-				    (ephy_shell_get_default(), FALSE));
-	
 	bmk_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->bm_view));
 	key_focus = ephy_node_view_is_target
@@ -1265,9 +1141,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 		EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
 
-		ontoolbar = ((egg_toolbars_model_get_name_flags (model, name)
-			      & EGG_TB_MODEL_NAME_USED) != 0);
-
 		g_list_free (selected);
 	}
 
@@ -1282,9 +1155,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		mutable = !ephy_node_get_property_boolean (node, EPHY_NODE_BMK_PROP_IMMUTABLE);
 		
 		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
-
-		ontoolbar = ((egg_toolbars_model_get_name_flags (model, name)
-			      & EGG_TB_MODEL_NAME_USED) != 0);
 
 		g_list_free (selected);
 	}
@@ -1312,8 +1182,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	delete = (bmk_focus && bmk_selection && mutable) ||
 		 (key_selection && key_focus && key_normal);
 	properties = bmk_focus && single_bmk_selected && mutable;
-	showtoolbar = (bmk_focus && bmk_selection) ||
-	              (key_focus && key_selection);
 
 	action_group = editor->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "OpenInWindow");
@@ -1337,11 +1205,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gtk_action_set_sensitive (action, paste);
 	action = gtk_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
-	action = gtk_action_group_get_action (action_group, "ShowOnToolbar");
-	gtk_action_set_sensitive (action, showtoolbar);
-	g_signal_handlers_block_by_func (action, cmd_toolbar, editor);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), ontoolbar);
-	g_signal_handlers_unblock_by_func (action, cmd_toolbar, editor);
 }
 
 static gboolean
