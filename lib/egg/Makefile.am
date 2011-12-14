@@ -5,9 +5,6 @@ EGGSOURCES = \
         eggdesktopfile.c \
         eggsmclient.c \
 	eggsmclient-xsmp.c \
-	egg-editable-toolbar.c \
-	egg-toolbars-model.c \
-	egg-toolbar-editor.c \
         $(NULL)
 
 EGGHEADERS = \
@@ -15,9 +12,6 @@ EGGHEADERS = \
         eggdesktopfile.h \
         eggsmclient.h \
         eggsmclient-private.h \
-	egg-editable-toolbar.h \
-	egg-toolbars-model.h \
-	egg-toolbar-editor.h \
         $(NULL)
 
 noinst_HEADERS = \

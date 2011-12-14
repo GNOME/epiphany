@@ -24,9 +24,8 @@
 #ifndef EPHY_BOOKMARKS_UI_H
 #define EPHY_BOOKMARKS_UI_H
 
-#include "egg-toolbars-model.h"
-#include "ephy-node.h"
 #include "ephy-window.h"
+#include "ephy-node.h"
 
 #include <gtk/gtk.h>
 

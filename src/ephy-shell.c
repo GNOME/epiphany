@@ -23,7 +23,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#include "egg-toolbars-model.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
@@ -40,7 +39,6 @@
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
-#include "ephy-toolbars-model.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
@@ -56,8 +54,6 @@ struct _EphyShellPrivate {
   EphySession *session;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
-  EggToolbarsModel *toolbars_model;
-  EggToolbarsModel *fs_toolbars_model;
   EphyExtensionsManager *extensions_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *bme;
@@ -515,18 +511,6 @@ ephy_shell_dispose (GObject *object)
     priv->lockdown = NULL;
   }
 
-  if (priv->toolbars_model != NULL) {
-    LOG ("Unref toolbars model");
-    g_object_unref (priv->toolbars_model);
-    priv->toolbars_model = NULL;
-  }
-
-  if (priv->fs_toolbars_model != NULL) {
-    LOG ("Unref fullscreen toolbars model");
-    g_object_unref (priv->fs_toolbars_model);
-    priv->fs_toolbars_model = NULL;
-  }
-
   if (priv->bme != NULL) {
     LOG ("Unref Bookmarks Editor");
     gtk_widget_destroy (GTK_WIDGET (priv->bme));
@@ -826,50 +810,6 @@ ephy_shell_get_bookmarks (EphyShell *shell)
   }
 
   return shell->priv->bookmarks;
-}
-
-/**
- * ephy_shell_get_toolbars_model:
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
-{
-  LOG ("ephy_shell_get_toolbars_model fs=%d", fullscreen);
-
-  if (fullscreen) {
-    if (shell->priv->fs_toolbars_model == NULL) {
-      EggTbModelFlags flags;
-      gboolean success;
-      const char *xml;
-
-      shell->priv->fs_toolbars_model = egg_toolbars_model_new ();
-      xml = ephy_file ("epiphany-fs-toolbar.xml");
-      g_return_val_if_fail (xml != NULL, NULL);
-
-      success = egg_toolbars_model_load_toolbars
-        (shell->priv->fs_toolbars_model, xml);
-      g_return_val_if_fail (success, NULL);
-
-      flags = egg_toolbars_model_get_flags
-        (shell->priv->fs_toolbars_model, 0);
-      egg_toolbars_model_set_flags
-        (shell->priv->fs_toolbars_model, 0,
-         flags | EGG_TB_MODEL_NOT_REMOVABLE);
-    }
-
-    return G_OBJECT (shell->priv->fs_toolbars_model);
-  } else {
-    if (shell->priv->toolbars_model == NULL) {
-      shell->priv->toolbars_model = ephy_toolbars_model_new ();
-
-      ephy_toolbars_model_load
-        (EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
-    }
-
-    return G_OBJECT (shell->priv->toolbars_model);
-  }
 }
 
 /**

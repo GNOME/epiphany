@@ -130,9 +130,6 @@ GObject        *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarks  *ephy_shell_get_bookmarks                (EphyShell *shell);
 
-GObject        *ephy_shell_get_toolbars_model           (EphyShell *shell,
-                                                         gboolean fullscreen);
-
 GObject        *ephy_shell_get_extensions_manager       (EphyShell *shell);
 
 GtkWidget      *ephy_shell_get_bookmarks_editor         (EphyShell *shell);

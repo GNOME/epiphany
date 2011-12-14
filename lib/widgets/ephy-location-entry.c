@@ -26,7 +26,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-dnd.h"
-#include "egg-editable-toolbar.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
@@ -512,33 +511,12 @@ action_activated_after_cb (GtkEntryCompletion *completion,
 }
 
 static gboolean
-toolbar_is_editable (GtkWidget *widget)
-{
-	GtkWidget *etoolbar;
-
-	etoolbar = gtk_widget_get_ancestor (widget, EGG_TYPE_EDITABLE_TOOLBAR);
-
-	if (etoolbar)
-	{
-		return egg_editable_toolbar_get_edit_mode
-			(EGG_EDITABLE_TOOLBAR (etoolbar));
-	}
-
-	return FALSE;
-}
-
-static gboolean
 entry_drag_motion_cb (GtkWidget        *widget,
 		      GdkDragContext   *context,
 		      gint              x,
 		      gint              y,
 		      guint             time)
 {
-	if (toolbar_is_editable (widget))
-	{
-		g_signal_stop_emission_by_name (widget, "drag_motion");
-	}
-
 	return FALSE;
 }
 
@@ -549,11 +527,6 @@ entry_drag_drop_cb (GtkWidget          *widget,
 		    gint                y,
 		    guint               time)
 {
-	if (toolbar_is_editable (widget))
-	{
-		g_signal_stop_emission_by_name (widget, "drag_drop");
-	}
-
 	return FALSE;
 }
 
