@@ -21,43 +21,43 @@
  */
 
 #include "config.h"
+#include "window-commands.h"
 
-#include "ephy-embed.h"
+#include "ephy-bookmarks-editor.h"
+#include "ephy-bookmarks-ui.h"
+#include "ephy-debug.h"
+#include "ephy-dialog.h"
 #include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
-#include "ephy-shell.h"
-#include "ephy-debug.h"
-#include "window-commands.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-dialog.h"
-#include "ephy-bookmarks-editor.h"
-#include "ephy-history-window.h"
+#include "ephy-embed.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
-#include "ephy-state.h"
-#include "ephy-gui.h"
-#include "ephy-zoom.h"
-#include "ephy-notebook.h"
 #include "ephy-find-toolbar.h"
-#include "ephy-location-entry.h"
-#include "ephy-bookmarks-ui.h"
+#include "ephy-gui.h"
+#include "ephy-history-window.h"
 #include "ephy-link.h"
+#include "ephy-location-entry.h"
+#include "ephy-notebook.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-state.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
-#include "pdm-dialog.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-zoom.h"
+#include "pdm-dialog.h"
 
-#include <string.h>
-#include <glib.h>
 #include <gio/gio.h>
-#include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gi18n.h>
-#include <webkit/webkit.h>
+#include <gtk/gtk.h>
 #include <libnotify/notify.h>
+#include <string.h>
+#include <webkit/webkit.h>
 
 static void
 page_setup_done_cb (GtkPageSetup *setup,
