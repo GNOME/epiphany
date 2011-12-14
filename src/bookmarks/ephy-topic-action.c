@@ -333,7 +333,6 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->connect_proxy = connect_proxy;
 
 	object_class->set_property = ephy_topic_action_set_property;
