@@ -21,18 +21,18 @@
  */
 
 #include "config.h"
-
 #include "ephy-notebook.h"
+
+#include "ephy-debug.h"
+#include "ephy-dnd.h"
+#include "ephy-embed-utils.h"
+#include "ephy-embed.h"
+#include "ephy-file-helpers.h"
+#include "ephy-link.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-file-helpers.h"
-#include "ephy-dnd.h"
-#include "ephy-embed.h"
-#include "ephy-embed-utils.h"
-#include "ephy-window.h"
 #include "ephy-shell.h"
-#include "ephy-link.h"
-#include "ephy-debug.h"
+#include "ephy-window.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
