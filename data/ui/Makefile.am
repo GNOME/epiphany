@@ -19,4 +19,4 @@ glade_DATA = \
 EXTRA_DIST = \
 	$(xml_DATA) \
 	$(css_DATA) \
-	$(glade_data)
+	$(glade_DATA)
