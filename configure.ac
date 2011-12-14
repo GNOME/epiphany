@@ -324,7 +324,6 @@ data/Makefile
 data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/bme.desktop.in
-data/glade/Makefile
 data/icons/Makefile
 data/art/Makefile
 data/pages/Makefile

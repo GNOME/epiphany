@@ -1,4 +1,4 @@
-SUBDIRS = art glade icons pages ui
+SUBDIRS = art icons pages ui
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@

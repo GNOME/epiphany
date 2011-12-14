@@ -8,6 +8,15 @@ xml_DATA = \
 cssdir = $(pkgdatadir)
 css_DATA = epiphany.css
 
+gladedir = $(pkgdatadir)/glade
+glade_DATA = \
+	certificate-dialogs.ui		\
+	epiphany.ui			\
+	form-signing-dialog.ui		\
+	prefs-dialog.ui			\
+	print.ui
+
 EXTRA_DIST = \
 	$(xml_DATA) \
-	$(css_DATA)
+	$(css_DATA) \
+	$(glade_data)
