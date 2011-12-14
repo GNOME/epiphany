@@ -35,6 +35,7 @@
 #include "ephy-history-window.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
+#include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
@@ -1116,6 +1117,12 @@ write_tab (xmlTextWriterPtr writer,
 	if (ret < 0) return ret;
 
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+	/* Do not store ephy-about: URIs, they are not valid for
+	 * loading. */
+	if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
+	{
+		address = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
+	}
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
