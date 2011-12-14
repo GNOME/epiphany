@@ -20,16 +20,15 @@
  */
 
 #include "config.h"
-
 #include "ephy-session.h"
 
 #include "eggdesktopfile.h"
 #include "eggsmclient.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-debug.h"
-#include "ephy-embed.h"
-#include "ephy-embed-utils.h"
 #include "ephy-embed-container.h"
+#include "ephy-embed-utils.h"
+#include "ephy-embed.h"
 #include "ephy-extension.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
@@ -41,15 +40,13 @@
 #include "ephy-stock-icons.h"
 #include "ephy-window.h"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
-
-#include <errno.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct
 {
