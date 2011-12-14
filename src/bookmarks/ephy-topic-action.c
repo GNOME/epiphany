@@ -36,14 +36,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static const GtkTargetEntry dest_drag_types[] = {
-	{ EPHY_DND_URL_TYPE, 0, 0},
-};
-
-#define TOOLITEM_WIDTH_CHARS	24
-#define MENUITEM_WIDTH_CHARS	32
-#define LABEL_WIDTH_CHARS       32
-
 #define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
 
 struct _EphyTopicActionPrivate
@@ -63,89 +55,6 @@ enum
 G_DEFINE_TYPE (EphyTopicAction, ephy_topic_action, GTK_TYPE_ACTION)
 
 static void
-drag_data_received_cb (GtkWidget *widget,
-		       GdkDragContext *context,
-		       gint x,
-		       gint y,
-		       GtkSelectionData *selection_data,
-		       guint info,
-		       guint time,
-		       GtkAction *action)
-{  
-	const char *data;
-	EphyBookmarks *bookmarks;
-	EphyNode *bookmark, *topic;
-	gchar **netscape_url;
-	
-	topic = ephy_topic_action_get_topic (EPHY_TOPIC_ACTION (action));
-	
-	data = (char *) gtk_selection_data_get_data (selection_data);
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	
-	netscape_url = g_strsplit (data, "\n", 2);
-	if (!netscape_url || !netscape_url[0])
-	{
-		g_strfreev (netscape_url);
-		gtk_drag_finish (context, FALSE, FALSE, time);
-		return;
-	}
-
-	bookmark = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[0]);
-	if (bookmark == NULL)
-	{
-		bookmark = ephy_bookmarks_add (bookmarks, netscape_url[1], netscape_url[0]);
-	}
-
-	g_strfreev (netscape_url);
-	
-	if (bookmark != NULL)
-	{
-		ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);
-		gtk_drag_finish (context, TRUE, FALSE, time);
-	}
-	else
-	{
-		gtk_drag_finish (context, FALSE, FALSE, time);
-	}
-}
-
-static GtkWidget *
-create_tool_item (GtkAction *action)
-{
-	GtkWidget *item;
-	GtkWidget *button;
-	GtkWidget *arrow;
-	GtkWidget *hbox;
-	GtkWidget *label;
-
-	item = GTK_ACTION_CLASS (ephy_topic_action_parent_class)->create_tool_item (action);
-
-	button = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
-	gtk_widget_show (button);
-	gtk_container_add (GTK_CONTAINER (item), button);
-	g_object_set_data (G_OBJECT (item), "button", button);
-
-	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-	gtk_widget_show (arrow);
-
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (button), hbox);
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_label_set_max_width_chars (GTK_LABEL (label), TOOLITEM_WIDTH_CHARS);
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "label", label);
-
-	return item;
-}
-
-static void
 ephy_topic_action_sync_label (GtkAction *action,
 			      GParamSpec *pspec,
 			      GtkWidget *proxy)
@@ -159,11 +68,7 @@ ephy_topic_action_sync_label (GtkAction *action,
 
 	label_text = g_value_get_string (&value);
 
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		label = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label"));
-	}
-	else if (GTK_IS_MENU_ITEM (proxy))
+	if (GTK_IS_MENU_ITEM (proxy))
 	{
 		label = gtk_bin_get_child (GTK_BIN (proxy));
 	}
@@ -278,115 +183,6 @@ menu_init_cb (GtkWidget *menuitem,
 }
 
 static void
-button_deactivate_cb (GtkMenuShell *ms,
-		      GtkWidget *button)
-{
-	GtkWidget *window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-
-	g_object_set_data (G_OBJECT (window),
-			   "active-topic-action-button", NULL);
-
-	/*
-		Currently, GObject leaks connection IDs created with
-		g_signal_connect_object ()
-		See glib bug #118536
-	*/
-	g_signal_handlers_disconnect_by_func(ms, button_deactivate_cb, button);
-}
-
-static void
-button_toggled_cb (GtkWidget *button,
-		   EphyTopicAction *action)
-{
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-	{
-		GtkWidget *popup;
-		GtkWidget *window;
-
-		window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
-
-		g_object_set_data (G_OBJECT (window),
-				   "active-topic-action-button",
-				   button);
-
-		popup = get_popup (action);
-
-		g_signal_connect_object (popup, "deactivate",
-					 G_CALLBACK (button_deactivate_cb), button, 0);
-
-		/* FIXME: ephy_gui_menu_position_menu_on_toolbar? */
-		gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
-				ephy_gui_menu_position_under_widget,
-				button, 1, gtk_get_current_event_time ());
-	}
-}
-
-static gboolean
-button_release_cb (GtkWidget *button,
-                   GdkEventButton *event,
-		   EphyTopicAction *action)
-{
-	if (event->button == 1)
-	{
-		gtk_toggle_button_set_active
-			(GTK_TOGGLE_BUTTON (button), FALSE);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-button_press_cb (GtkWidget *button,
-		 GdkEventButton *event,
-		 EphyTopicAction *action)
-{
-	if (event->button == 1)
-	{
-		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-		{
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-static gboolean
-button_enter_cb (GtkWidget *button,
-		 GdkEventCrossing *event,
-		 EphyTopicAction *action)
-{
-	GtkWidget *window;
-	GtkWidget *active_button;
-
-	window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
-	active_button = g_object_get_data (G_OBJECT (window),
-					   "active-topic-action-button");
-
-	if (active_button &&
-	    active_button != button &&
-	    GTK_IS_TOGGLE_BUTTON (active_button) &&
-	    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (active_button)))
-	{
-		EphyTopicAction *active_action;
-		GtkWidget *ancestor;
-
-		ancestor = gtk_widget_get_ancestor (active_button, GTK_TYPE_TOOL_ITEM);
-		active_action = (EphyTopicAction*)gtk_activatable_get_related_action (GTK_ACTIVATABLE (ancestor));
-
-		erase_popup (active_action);
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (active_button), FALSE);
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-	}
-
-	return FALSE;
-}
-
-static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {
@@ -396,28 +192,7 @@ connect_proxy (GtkAction *action,
 	g_signal_connect_object (action, "notify::label",
 				 G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
 
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		GtkWidget *button;
-
-		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
-
-		g_signal_connect (button, "toggled",
-				  G_CALLBACK (button_toggled_cb), action);
-		g_signal_connect (button, "button-press-event",
-				  G_CALLBACK (button_press_cb), action);
-		g_signal_connect (button, "button-release-event",
-				  G_CALLBACK (button_release_cb), action);
-		g_signal_connect (button, "enter-notify-event",
-				  G_CALLBACK (button_enter_cb), action);
-		/* FIXME: what about keyboard (toggled by Space) ? */
-
-		g_signal_connect (button, "drag-data-received",
-				  G_CALLBACK (drag_data_received_cb), action);
-		gtk_drag_dest_set (button, GTK_DEST_DEFAULT_ALL, dest_drag_types,
-				   G_N_ELEMENTS (dest_drag_types), GDK_ACTION_COPY);
-	}
-	else if (GTK_IS_MENU_ITEM (proxy))
+	if (GTK_IS_MENU_ITEM (proxy))
 	{
 		g_signal_connect (proxy, "map",
 				  G_CALLBACK (menu_init_cb), action);
@@ -559,7 +334,6 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
-	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
 	object_class->set_property = ephy_topic_action_set_property;
