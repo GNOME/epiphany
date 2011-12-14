@@ -37,7 +37,6 @@
 #include "ephy-node-common.h"
 #include "ephy-open-tabs-action.h"
 #include "ephy-prefs.h"
-#include "ephy-related-action.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
