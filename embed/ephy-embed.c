@@ -512,11 +512,10 @@ frame_enter_notify_cb (GtkWidget *widget,
                        GdkEventCrossing *event,
                        gpointer user_data)
 {
-	if (gtk_widget_get_halign (widget) == GTK_ALIGN_START) {
+	if (gtk_widget_get_halign (widget) == GTK_ALIGN_START)
 		gtk_widget_set_halign (widget, GTK_ALIGN_END);
-	} else {
+  else
 		gtk_widget_set_halign (widget, GTK_ALIGN_START);
-	}
 
 	gtk_widget_queue_resize (widget);
 
@@ -535,11 +534,10 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
 
   if (progress == 1.0 || !loading)
-  {
     gtk_widget_hide (priv->progress);
-  } else {
+  else
     gtk_widget_show (priv->progress);
-  }
+
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
