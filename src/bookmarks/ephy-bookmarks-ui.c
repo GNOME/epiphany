@@ -24,7 +24,6 @@
 
 #include "ephy-bookmark-action-group.h"
 #include "ephy-bookmark-action.h"
-#include "ephy-bookmark-factory-action.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-menu.h"
 #include "ephy-bookmarks.h"
@@ -45,7 +44,6 @@
 #include "ephy-string.h"
 #include "ephy-topic-action-group.h"
 #include "ephy-topic-action.h"
-#include "ephy-topic-factory-action.h"
 
 #include <string.h>
 #include <glib/gi18n.h>

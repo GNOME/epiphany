@@ -19,8 +19,6 @@ NOINST_H_FILES =		 	\
 	ephy-topic-action.h		\
 	ephy-related-action.h		\
 	ephy-open-tabs-action.h		\
-	ephy-topic-factory-action.h	\
-	ephy-bookmark-factory-action.h	\
 	ephy-topic-action-group.h	\
 	ephy-bookmark-action-group.h	\
 	ephy-topics-entry.h  		\
@@ -39,8 +37,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-topic-action.c		\
 	ephy-related-action.c		\
 	ephy-open-tabs-action.c		\
-	ephy-topic-factory-action.c	\
-	ephy-bookmark-factory-action.c	\
 	ephy-topic-action-group.c	\
 	ephy-bookmark-action-group.c	\
 	ephy-topics-entry.c  		\
