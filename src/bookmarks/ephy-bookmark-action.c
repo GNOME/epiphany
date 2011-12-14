@@ -36,13 +36,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static const GtkTargetEntry drag_types[] = {
-  {EPHY_DND_URL_TYPE, 0, 0},
-};
-
 /* FIXME tweak this, or make it configurable? (bug 148093) */
-#define ENTRY_WIDTH_CHARS	12
-#define TOOLITEM_WIDTH_CHARS	20
 #define LABEL_WIDTH_CHARS       32
 
 #define EPHY_BOOKMARK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionPrivate))
@@ -72,138 +66,6 @@ typedef struct
 } ClipboardCtx;
 
 G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
-
-static void
-clipboard_text_received_cb (GtkClipboard *clipboard,
-			    const char *text,
-			    ClipboardCtx *ctx)
-{
-	if (ctx->weak_ptr != NULL && text != NULL)
-	{
-		/* This is to avoid middle-clicking on a non-empty smart bookmark
-		 * triggering another search.
-		 */
-		if (strcmp (text, gtk_entry_get_text (GTK_ENTRY (ctx->entry))) != 0)
-		{
-			gtk_entry_set_text (GTK_ENTRY (ctx->entry), text);
-		}
-	}
-
-	if (ctx->weak_ptr != NULL)
-	{
-		GObject **object = &(ctx->weak_ptr);
-		g_object_remove_weak_pointer (G_OBJECT (ctx->weak_ptr), 
-					      (gpointer *)object);
-	}
-
-	g_slice_free (ClipboardCtx, ctx);
-}
-
-static gboolean
-entry_button_press_event_cb (GtkWidget *entry,
-			     GdkEventButton *event,
-			     GtkAction *action)
-{
-	if (event->button == 2) /* middle click */
-	{
-		ClipboardCtx *ctx;
-		GObject **object;
-
-		ctx = g_slice_new (ClipboardCtx);
-		ctx->flags = EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO;
-		ctx->entry = entry;
-
-		/* We need to make sure we know if the action is destroyed between
-		 * requesting the clipboard contents, and receiving them.
-	 	 */
-
-		ctx->weak_ptr = G_OBJECT (action);
-		object = &(ctx->weak_ptr);
-		g_object_add_weak_pointer (ctx->weak_ptr, (gpointer *)object);
-
-		gtk_clipboard_request_text
-			(gtk_widget_get_clipboard (entry, GDK_SELECTION_PRIMARY),
-			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
-			 ctx);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static GtkWidget *
-create_tool_item (GtkAction *action)
-{
-	GtkWidget *item, *button, *hbox, *label, *icon, *entry;
-
-	LOG ("Creating tool item for action %p", action);
-
-	item = GTK_ACTION_CLASS (ephy_bookmark_action_parent_class)->create_tool_item (action);
-
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (item), hbox);
-
-	button = gtk_button_new ();
-	gtk_widget_add_events (GTK_WIDGET (button), GDK_BUTTON1_MOTION_MASK);
-	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
-	gtk_widget_show (button);
-	gtk_container_add (GTK_CONTAINER (hbox), button);
-	g_object_set_data (G_OBJECT (item), "button", button);
-
-	entry = gtk_entry_new ();
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), ENTRY_WIDTH_CHARS);
-	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "entry", entry);
-	g_signal_connect (entry, "button-press-event",
-			  G_CALLBACK (entry_button_press_event_cb), action);
-
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (button), hbox);
-
-	icon = gtk_image_new ();
-	gtk_widget_show (icon);
-	gtk_box_pack_start (GTK_BOX (hbox), icon, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "icon", icon);
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_label_set_max_width_chars (GTK_LABEL (label), TOOLITEM_WIDTH_CHARS);
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "label", label);
-
-	return item;
-}
-
-static void
-ephy_bookmark_action_sync_smart_url (GtkAction *gaction,
-				     GParamSpec *pspec,
-				     GtkWidget *proxy)
-{
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
-		EphyBookmarkActionPrivate *priv = action->priv;
-		gboolean is_smart_url = priv->smart_url;
-		gboolean has_icon = ephy_node_get_property_string
-		  (priv->node, EPHY_NODE_BMK_PROP_ICON) != NULL;
-		GtkWidget *entry, *icon;
-		guint width;
-
-		width = is_smart_url ? ephy_bookmarks_get_smart_bookmark_width (priv->node) : 0;
-
-		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
-		icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
-
-		g_object_set (entry, "visible", is_smart_url, NULL);
-		g_object_set (icon, "visible", !is_smart_url || has_icon, NULL);
-		gtk_entry_set_width_chars (GTK_ENTRY (entry),
-					   width > 0 ? width : ENTRY_WIDTH_CHARS);
-	}
-}
 
 static void
 favicon_cache_changed_cb (EphyFaviconCache *cache,
@@ -258,21 +120,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 		}
 	}
 
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		GtkImage *icon;
-
-		icon = GTK_IMAGE (g_object_get_data (G_OBJECT (proxy), "icon"));
-		g_return_if_fail (icon != NULL);
-
-		if (pixbuf == NULL && icon_location == NULL)
-		{
-			pixbuf = gtk_widget_render_icon_pixbuf (proxy, EPHY_STOCK_BOOKMARK, GTK_ICON_SIZE_MENU);
-		}
-
-		gtk_image_set_from_pixbuf (icon, pixbuf);
-	}
-	else if (GTK_IS_MENU_ITEM (proxy) && pixbuf)
+	if (GTK_IS_MENU_ITEM (proxy) && pixbuf)
 	{
 		GtkWidget *image;
 
@@ -288,41 +136,6 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 	if (pixbuf)
 	{
 		g_object_unref (pixbuf);
-	}
-}
-
-static void
-ephy_bookmark_action_sync_label (GtkAction *gaction,
-				 GParamSpec *pspec,
-				 GtkWidget *proxy)
-{
-	EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
-
-	g_return_if_fail (EPHY_IS_NODE (action->priv->node));
-
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		GtkWidget *label = NULL;
-		const char *title;
-		char *label_text;
-
-		label = g_object_get_data (G_OBJECT (proxy), "label");
-		g_return_if_fail (label != NULL);
-
-		title = ephy_node_get_property_string
-			(action->priv->node, EPHY_NODE_BMK_PROP_TITLE);
-
-		if (action->priv->smart_url)
-		{
-			label_text = g_strdup_printf (_("%s:"), title);
-	
-			gtk_label_set_label (GTK_LABEL (label), label_text);
-			g_free (label_text);
-		}
-		else
-		{
-			gtk_label_set_label (GTK_LABEL (label), title);
-		}
 	}
 }
 
@@ -381,172 +194,29 @@ static void
 activate_cb (GtkWidget *widget,
 	     EphyBookmarkAction *action)
 {
-	gboolean control = FALSE;
-	GdkEvent *event;
+       gboolean control = FALSE;
+       GdkEvent *event;
 
-	event = gtk_get_current_event ();
-	if (event)
-	{
-		if (event->type == GDK_KEY_PRESS ||
-		    event->type == GDK_KEY_RELEASE)
-		{
-			control = (event->key.state & gtk_accelerator_get_default_mod_mask ()) == GDK_CONTROL_MASK;
-		}
-			
-		gdk_event_free (event);
-	}
+       event = gtk_get_current_event ();
+       if (event)
+       {
+	       if (event->type == GDK_KEY_PRESS ||
+		   event->type == GDK_KEY_RELEASE)
+	       {
+		       control = (event->key.state & gtk_accelerator_get_default_mod_mask ()) == GDK_CONTROL_MASK;
+	       }
 
-	ephy_bookmark_action_activate
-	  (action, widget, (control || ephy_gui_is_middle_click ()) ? EPHY_LINK_NEW_TAB : 0);
-}
+	       gdk_event_free (event);
+       }
 
-static gboolean
-entry_key_press_cb (GtkEntry *entry,
-		    GdkEventKey *event,
-		    EphyBookmarkAction *action)
-{
-	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-
-	if ((event->keyval == GDK_KEY_Return ||
-	     event->keyval == GDK_KEY_KP_Enter ||
-	     event->keyval == GDK_KEY_ISO_Enter) &&
-	    state == GDK_CONTROL_MASK)
-	{
-#if GTK_CHECK_VERSION (2,21,0)
-		gtk_entry_reset_im_context (entry);
-#else
-		gtk_im_context_reset (entry->im_context);
-#endif
-
-		g_signal_emit_by_name (entry, "activate");
-
-		return TRUE;
-	}
-	return FALSE;
-}
-
-static gboolean
-button_press_cb (GtkWidget *widget,
-		 GdkEventButton *event,
-		 EphyBookmarkAction *action)
-{
-	if (event->button == 2)	
-	{
-		gtk_button_pressed (GTK_BUTTON (widget));
-	}
-
-	return FALSE;
-}
-
-static gboolean
-button_release_cb (GtkWidget *widget,
-		   GdkEventButton *event,
-		   EphyBookmarkAction *action)
-{
-	if (event->button == 2)	
-	{
-		gtk_button_released (GTK_BUTTON (widget));
-	}
-
-	return FALSE;
-}
-
-static void
-drag_data_get_cb (GtkWidget          *widget,
-		  GdkDragContext     *context,
-		  GtkSelectionData   *selection_data,
-		  guint               info,
-		  guint32             time,
-		  GtkAction          *action)
-{
-	EphyNode *node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
-	const char *location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-
-	g_return_if_fail (location != NULL);
-
-	gtk_selection_data_set (selection_data, gtk_selection_data_get_target (selection_data),
-				8, (unsigned char *)location, strlen (location));
-}
-
-static void
-toolbar_reconfigured_cb (GtkToolItem *toolitem,
-			 GtkAction *action)
-{
-	ephy_bookmark_action_sync_icon (action, NULL, GTK_WIDGET (toolitem));
-}
-
-
-static gboolean
-query_tooltip_cb (GtkWidget *proxy,
-		  gint x,
-    		  gint y,
-		  gboolean keyboard_mode,
-		  GtkTooltip *tooltip,
-		  GtkAction *action)
-{
-	EphyNode *node;
-	const char *title, *location;
-	char *text = NULL;
-	
-	node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
-	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
-	location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-	
-	if (g_str_has_prefix (location, "javascript:"))
-	{
-		text = g_strdup_printf (_("Executes the script “%s”"), title);
-	}
-	else
-	{
-		if (strstr (location, "%s") != NULL)
-		{
-			char *scheme;
-			char *host_name;
-			
-			scheme = g_uri_parse_scheme (location);
-			host_name = ephy_string_get_host_name (location);
-		
-			if (title[0] == '\0')
-			{
-				text = g_markup_printf_escaped ("%s://%s",
-								scheme,
-								host_name);
-			}
-			else
-			{
-				text = g_markup_printf_escaped ("%s\n%s://%s",
-								title,
-								scheme,
-								host_name);
-			}
-			
-			g_free (scheme);
-			g_free (host_name);
-		}
-		if (text == NULL)
-		{
-			if (title[0] == '\0')
-			{
-				text = g_markup_printf_escaped ("%s", location);
-			}
-			else
-			{
-				text = g_markup_printf_escaped ("%s\n%s", title, location);
-			}
-		}
-	}
-	gtk_tooltip_set_markup (tooltip, text);
-	g_free (text);
-	
-	return TRUE;
+       ephy_bookmark_action_activate
+	 (action, widget, (control || ephy_gui_is_middle_click ()) ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {
-	GtkWidget *button, *entry;
-
 	LOG ("Connecting action %p to proxy %p", action, proxy);
 
 	GTK_ACTION_CLASS (ephy_bookmark_action_parent_class)->connect_proxy (action, proxy);
@@ -555,41 +225,7 @@ connect_proxy (GtkAction *action,
 	g_signal_connect_object (action, "notify::icon",
 				 G_CALLBACK (ephy_bookmark_action_sync_icon), proxy, 0);
 
-	ephy_bookmark_action_sync_smart_url (action, NULL, proxy);
-	g_signal_connect_object (action, "notify::smarturl",
-				 G_CALLBACK (ephy_bookmark_action_sync_smart_url), proxy, 0);
-
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		ephy_bookmark_action_sync_label (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::label",
-					 G_CALLBACK (ephy_bookmark_action_sync_label), proxy, 0);
-		
-		g_signal_connect (proxy, "toolbar-reconfigured",
-				  G_CALLBACK (toolbar_reconfigured_cb), action);
-
-		/* FIXME: maybe make the tooltip cover only the button, not also the entry (if there is one?) */
-		gtk_widget_set_has_tooltip (proxy, TRUE);
-		g_signal_connect (proxy, "query-tooltip",
-				  G_CALLBACK (query_tooltip_cb), action);
-
-		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
-		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
-		g_signal_connect (button, "button-press-event",
-				  G_CALLBACK (button_press_cb), action);
-		g_signal_connect (button, "button-release-event",
-				  G_CALLBACK (button_release_cb), action);
-
-		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
-		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
-		g_signal_connect (entry, "key-press-event", G_CALLBACK (entry_key_press_cb), action);
-
-		g_signal_connect (button, "drag-data-get",
-				  G_CALLBACK (drag_data_get_cb), action);
-		gtk_drag_source_set (button, GDK_BUTTON1_MASK, drag_types,
-				     G_N_ELEMENTS (drag_types), GDK_ACTION_COPY);
-	}
-	else if (GTK_IS_MENU_ITEM (proxy))
+	if (GTK_IS_MENU_ITEM (proxy))
 	{
 		GtkLabel *label;
 
@@ -753,8 +389,6 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
-	action_class->create_tool_item = create_tool_item;
 	action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
 	action_class->connect_proxy = connect_proxy;
 
