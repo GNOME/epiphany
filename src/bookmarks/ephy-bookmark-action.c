@@ -20,22 +20,20 @@
  */
 
 #include "config.h"
-
-#include "egg-editable-toolbar.h"
 #include "ephy-bookmark-action.h"
+
 #include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks.h"
-#include "ephy-stock-icons.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-shell.h"
-#include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-gui.h"
+#include "ephy-shell.h"
+#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
 #include <string.h>
 
 static const GtkTargetEntry drag_types[] = {
