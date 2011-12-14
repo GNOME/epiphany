@@ -20,27 +20,26 @@
  */
 
 #include "config.h"
-
 #include "ephy-link-action.h"
-#include "ephy-link.h"
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-link.h"
 
 #include <gtk/gtk.h>
 
 G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, GTK_TYPE_ACTION,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-                                                NULL))
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						NULL))
 
 static gboolean
 proxy_button_press_event_cb (GtkButton *button,
-			       GdkEventButton *event,
-			       EphyLinkAction *action)
+			     GdkEventButton *event,
+			     EphyLinkAction *action)
 {
 	if (event->button == 2)
 	{
-		gtk_button_pressed(button);
+		gtk_button_pressed (button);
 	}
 
 	return FALSE;
@@ -58,7 +57,7 @@ proxy_button_release_event_cb (GtkButton *button,
 	 */
 	if (event->button == 2)
 	{
-		gtk_button_released(button);
+		gtk_button_released (button);
 	}
 
 	return FALSE;
@@ -156,7 +155,7 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 static void
 ephy_link_action_init (EphyLinkAction *action)
 {
-        /* Empty, needed for G_DEFINE_TYPE macro */
+	/* Empty, needed for G_DEFINE_TYPE macro */
 }
 
 static void
@@ -171,18 +170,18 @@ ephy_link_action_class_init (EphyLinkActionClass *class)
 static void
 ephy_link_action_group_class_init (EphyLinkActionGroupClass *klass)
 {
-        /* Empty, needed for G_DEFINE_TYPE macro */
+	/* Empty, needed for G_DEFINE_TYPE macro */
 }
 
 static void
 ephy_link_action_group_init (EphyLinkActionGroup *action_group)
 {
-        /* Empty, needed for G_DEFINE_TYPE macro */
+	/* Empty, needed for G_DEFINE_TYPE macro */
 }
 
 G_DEFINE_TYPE_WITH_CODE (EphyLinkActionGroup, ephy_link_action_group, GTK_TYPE_ACTION_GROUP,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-                                                NULL))
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						NULL))
 
 EphyLinkActionGroup *
 ephy_link_action_group_new (const char * name)
