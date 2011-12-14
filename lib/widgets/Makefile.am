@@ -16,9 +16,7 @@ libephywidgets_la_SOURCES = \
 	totem-glow-button.c			\
 	totem-glow-button.h			\
 	ephy-zoom-action.h			\
-	ephy-zoom-action.c			\
-	ephy-zoom-control.c			\
-	ephy-zoom-control.h
+	ephy-zoom-action.c
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\

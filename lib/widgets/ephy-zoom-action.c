@@ -19,12 +19,11 @@
  */
 
 #include "config.h"
+#include "ephy-zoom-action.h"
+
+#include "ephy-zoom.h"
 
 #include <glib/gi18n.h>
-
-#include "ephy-zoom-action.h"
-#include "ephy-zoom-control.h"
-#include "ephy-zoom.h"
 
 /**
  * SECTION:ephy-zoom-action
@@ -59,41 +58,6 @@ enum
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EphyZoomAction, ephy_zoom_action, GTK_TYPE_ACTION)
-
-static void
-zoom_to_level_cb (EphyZoomControl *control,
-		  float zoom,
-		  EphyZoomAction *action)
-{
-	g_signal_emit (action, signals[ZOOM_TO_LEVEL_SIGNAL], 0, zoom);
-}
-
-static void
-sync_zoom_cb (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
-{
-	EphyZoomAction *zoom_action = EPHY_ZOOM_ACTION (action);
-
-	g_object_set (G_OBJECT (proxy), "zoom", zoom_action->priv->zoom, NULL);
-}
-
-static void
-connect_proxy (GtkAction *action, GtkWidget *proxy)
-{
-	if (EPHY_IS_ZOOM_CONTROL (proxy))
-	{
-		/* Ensure the sync is done when the item is added to
-		   the toolbar */
-		sync_zoom_cb (action, NULL, proxy);
-
-		g_signal_connect_object (action, "notify::zoom",
-					 G_CALLBACK (sync_zoom_cb), proxy, 0);
-	
-		g_signal_connect (proxy, "zoom_to_level",
-				  G_CALLBACK (zoom_to_level_cb), action);
-	}
-
-	GTK_ACTION_CLASS (ephy_zoom_action_parent_class)->connect_proxy (action, proxy);
-}
 
 static void
 proxy_menu_activate_cb (GtkMenuItem *menu_item, EphyZoomAction *action)
@@ -195,8 +159,6 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 	object_class->set_property = ephy_zoom_action_set_property;
 	object_class->get_property = ephy_zoom_action_get_property;
 
-	action_class->toolbar_item_type = EPHY_TYPE_ZOOM_CONTROL;
-	action_class->connect_proxy = connect_proxy;
 	action_class->create_menu_item = create_menu_item;
 
 	/**

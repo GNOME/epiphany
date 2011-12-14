@@ -2,8 +2,7 @@ noinst_PROGRAMS = \
 	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-location-entry \
-	test-ephy-search-entry \
-	test-ephy-zoom-control
+	test-ephy-search-entry
 
 INCLUDES = \
 	-I$(top_srcdir)/embed    \
@@ -44,6 +43,3 @@ test_ephy_location_entry_SOURCES = \
 
 test_ephy_search_entry_SOURCES = \
 	ephy-search-entry.c
-
-test_ephy_zoom_control_SOURCES = \
-	ephy-zoom-control.c
