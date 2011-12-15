@@ -25,6 +25,7 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-combined-stop-reload-action.h"
 #include "ephy-debug.h"
 #include "ephy-download-widget.h"
 #include "ephy-download.h"
@@ -1726,6 +1727,14 @@ setup_ui_manager (EphyWindow *window)
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>N");
 	g_object_unref (action);
 
+	action = g_object_new (EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION,
+			       "name", "ViewCombinedStopReload",
+			       "loading", FALSE,
+			       "window", window,
+			       NULL);
+	gtk_action_group_add_action (action_group, action);
+	g_object_unref (action);
+
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->toolbar_action_group = action_group;
 	g_object_unref (action_group);
@@ -2089,6 +2098,11 @@ sync_tab_load_status (EphyWebView *view,
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "ViewCombinedStopReload");
+	ephy_combined_stop_reload_action_set_loading (EPHY_COMBINED_STOP_RELOAD_ACTION (action),
+						      loading);
 }
 
 static void
