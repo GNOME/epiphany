@@ -436,9 +436,10 @@ _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
   if (parent == NULL)
     return;
 
-  if (label == NULL || label[0] == '\0')
+  if (label == NULL || label[0] == '\0') {
     gtk_widget_hide (parent);
-  else
+    gtk_widget_set_halign (gtk_widget_get_parent (parent), GTK_ALIGN_START);
+  } else
     gtk_widget_show (parent);
 }
 
