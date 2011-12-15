@@ -1924,10 +1924,10 @@ load_status_cb (WebKitWebView *web_view,
                                                     G_CALLBACK (delete_web_app_cb), false,
                                                     NULL);
       }
-
-      if (uri)
-        soup_uri_free (uri);
     }
+
+    if (uri)
+      soup_uri_free (uri);
 
     break;
   }
