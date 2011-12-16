@@ -85,6 +85,8 @@ struct _EphyEmbedPrivate
 
   guint tab_message_id;
   guint pop_statusbar_later_source_id;
+
+  guint clear_progress_source_id;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -309,6 +311,9 @@ ephy_embed_finalize (GObject *object)
   g_slist_free (embed->priv->keys);
   embed->priv->keys = NULL;
 
+  if (embed->priv->clear_progress_source_id)
+    g_source_remove (embed->priv->clear_progress_source_id);
+
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
 
@@ -523,6 +528,15 @@ frame_enter_notify_cb (GtkWidget *widget,
   return FALSE;
 }
 
+static gboolean
+clear_progress_cb (EphyEmbed *embed)
+{
+  gtk_widget_hide (embed->priv->progress);
+  embed->priv->clear_progress_source_id = 0;
+
+  return FALSE;
+}
+
 static void
 progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -531,11 +545,18 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 
   EphyEmbedPrivate *priv = embed->priv;
 
+  if (priv->clear_progress_source_id) {
+    g_source_remove (priv->clear_progress_source_id);
+    priv->clear_progress_source_id = 0;
+  }
+
   progress = webkit_web_view_get_progress (priv->web_view);
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
 
   if (progress == 1.0 || !loading)
-    gtk_widget_hide (priv->progress);
+    priv->clear_progress_source_id = g_timeout_add (500,
+                                                    (GSourceFunc) clear_progress_cb,
+                                                    embed);
   else
     gtk_widget_show (priv->progress);
 
