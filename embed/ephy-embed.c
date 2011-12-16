@@ -542,6 +542,7 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
   gdouble progress;
   gboolean loading;
+  const char *uri;
 
   EphyEmbedPrivate *priv = embed->priv;
 
@@ -549,6 +550,10 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
     g_source_remove (priv->clear_progress_source_id);
     priv->clear_progress_source_id = 0;
   }
+
+  uri = webkit_web_view_get_uri (priv->web_view);
+  if (!uri || strcmp (uri, "about:blank") == 0)
+    return;
 
   progress = webkit_web_view_get_progress (priv->web_view);
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
