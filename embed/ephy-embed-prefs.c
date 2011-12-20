@@ -19,17 +19,17 @@
  */
 
 #include <config.h>
-
-#include <glib.h>
-#include <webkit/webkit.h>
-
 #include "ephy-embed-prefs.h"
+
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+
+#include <glib.h>
+#include <webkit/webkit.h>
 
 typedef struct
 {
