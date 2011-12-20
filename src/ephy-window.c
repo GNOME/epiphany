@@ -1636,11 +1636,10 @@ setup_ui_manager (EphyWindow *window)
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationBack",
 			      "label", _("_Back"),
-			      "stock_id", GTK_STOCK_GO_BACK,
+			      "icon-name", "go-previous-symbolic",
 			      "tooltip", _("Go to the previous visited page"),
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
-			      "is_important", TRUE,
 			      NULL);
 	gtk_action_group_add_action_with_accel (action_group, action,
 						"<alt>Left");
@@ -1650,7 +1649,7 @@ setup_ui_manager (EphyWindow *window)
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationForward",
 			      "label", _("_Forward"),
-			      "stock_id", GTK_STOCK_GO_FORWARD,
+			      "icon-name", "go-next-symbolic",
 			      "tooltip", _("Go to the next visited page"),
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,

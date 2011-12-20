@@ -40,10 +40,10 @@ struct _EphyCombinedStopReloadActionPrivate
 };
 
 GtkActionEntry combined_stop_reload_action_entries [] = {
-  { NULL, GTK_STOCK_STOP, N_("Stop"), NULL,
+  { NULL, "process-stop-symbolic", N_("Stop"), NULL,
     N_("Stop current data transfer"),
     G_CALLBACK (window_cmd_view_stop) },
-  { NULL, GTK_STOCK_REFRESH, N_("_Reload"), NULL,
+  { NULL, "view-refresh-symbolic", N_("_Reload"), NULL,
     N_("Display the latest content of the current page"),
     G_CALLBACK (window_cmd_view_reload) }
 };
@@ -73,7 +73,7 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
 
   g_object_set (action,
                 "label", combined_stop_reload_action_entries[action_enum].label,
-                "stock-id", combined_stop_reload_action_entries[action_enum].stock_id,
+                "icon-name", combined_stop_reload_action_entries[action_enum].stock_id,
                 "tooltip", combined_stop_reload_action_entries[action_enum].tooltip,
                 NULL);
 
