@@ -20,13 +20,12 @@
  */
 
 #include "config.h"
-
 #include "ephy-combined-stop-reload-action.h"
+
 #include "ephy-window.h"
 #include "window-commands.h"
 
 #include <glib/gi18n.h>
-
 
 G_DEFINE_TYPE (EphyCombinedStopReloadAction, ephy_combined_stop_reload_action, GTK_TYPE_ACTION)
 
