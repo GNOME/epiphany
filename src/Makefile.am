@@ -28,7 +28,6 @@ NOINST_H_FILES = \
 	ephy-location-action.h			\
 	ephy-navigation-action.h		\
 	ephy-navigation-history-action.h	\
-	ephy-navigation-up-action.h		\
 	ephy-password-info.h			\
 	languages.h				\
 	pdm-dialog.h				\
@@ -67,7 +66,6 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.c				\
 	ephy-navigation-action.c		\
 	ephy-navigation-history-action.c	\
-	ephy-navigation-up-action.c		\
 	ephy-notebook.c				\
 	ephy-password-info.c	        	\
 	ephy-session.c				\

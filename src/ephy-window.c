@@ -48,7 +48,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-navigation-action.h"
 #include "ephy-navigation-history-action.h"
-#include "ephy-navigation-up-action.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -404,8 +403,6 @@ static const struct
 	{ GDK_KEY_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
 	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
-	{ GDK_KEY_KP_Up,	GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
-	{ GDK_KEY_KP_8,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
 	{ GDK_KEY_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
 	{ GDK_KEY_KP_9,		GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
 	{ GDK_KEY_KP_Page_Down,	GDK_CONTROL_MASK,	"TabsNext",		FALSE },
@@ -1658,18 +1655,6 @@ setup_ui_manager (EphyWindow *window)
 						"<alt>Right");
 	g_object_unref (action);
 
-	action =
-		g_object_new (EPHY_TYPE_NAVIGATION_UP_ACTION,
-			      "name", "NavigationUp",
-			      "label", _("_Up"),
-			      "stock_id", GTK_STOCK_GO_UP,
-			      "tooltip", _("Go up one level"),
-			      "window", window,
-			      NULL);
-	gtk_action_group_add_action_with_accel (action_group, action,
-						"<alt>Up");
-	g_object_unref (action);
-
 	/* FIXME: I'm still waiting for the exact term to 
 	 * user here from the docs team.
 	 */
@@ -1856,8 +1841,6 @@ _ephy_window_set_navigation_actions (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !back);
 	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationForward");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !forward);
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationUp");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !up);
 }
 
 static void
@@ -3772,11 +3755,6 @@ setup_toolbar (EphyWindow *window)
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationForward");
-	g_signal_connect_swapped (action, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "NavigationUp");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 

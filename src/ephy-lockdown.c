@@ -129,7 +129,6 @@ static const BindAction popup_actions[] = {
 
 static const BindAction special_toolbar_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "Location", "editable" },
-	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "NavigationUp", "sensitive" },
 
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "visible" },
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "sensitive" },
