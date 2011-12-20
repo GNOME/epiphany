@@ -89,8 +89,6 @@ static void notebook_switch_page_cb		(GtkNotebook *notebook,
 						 GtkWidget *page,
 						 guint page_num,
 						 EphyWindow *window);
-static void ephy_window_view_toolbar_cb         (GtkAction *action,
-						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
 static void sync_tab_load_status		(EphyWebView *view,
@@ -268,9 +266,6 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 
 	/* View Menu */
 
-	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), NULL,
-	  N_("Show or hide toolbar"),
-	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
 	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL,
 	  N_("Show the active downloads for this window"),
 	  NULL, FALSE },
@@ -1521,28 +1516,6 @@ connect_proxy_cb (GtkUIManager *manager,
 }
 
 static void
-update_chromes_actions (EphyWindow *window)
-{
-	GtkActionGroup *action_group = window->priv->action_group;
-	GtkAction *action;
-	gboolean show_menubar, show_toolbar, show_tabsbar;
-
-	get_chromes_visibility (window,
-				&show_menubar,
-				&show_toolbar,
-				&show_tabsbar);
-
-	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	g_signal_handlers_block_by_func (G_OBJECT (action),
-		 			 G_CALLBACK (ephy_window_view_toolbar_cb),
-		 			 window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !show_toolbar);
-	g_signal_handlers_unblock_by_func (G_OBJECT (action),
-		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
-		 			   window);
-}
-
-static void
 setup_ui_manager (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
@@ -2662,7 +2635,6 @@ web_view_ready_cb (WebKitWebView *web_view,
 			window->priv->is_popup = TRUE;
 			window->priv->chrome = chrome_mask;
 
-			update_chromes_actions (window);
 			sync_chromes_visibility (window);
 		}
 
@@ -3972,8 +3944,6 @@ ephy_window_constructor (GType type,
 
 	init_menu_updaters (window);
 
-	update_chromes_actions (window);
-
 	sync_chromes_visibility (window);
 
 	ensure_location_entry (window);
@@ -4376,48 +4346,6 @@ ephy_window_set_zoom (EphyWindow *window,
 	{
 		g_object_set (G_OBJECT (web_view), "zoom-level", zoom, NULL);
 	}
-}
-
-static void
-sync_prefs_with_chrome (EphyWindow *window)
-{
-	EphyWebViewChrome flags = window->priv->chrome;
-
-	if (window->priv->should_save_chrome)
-	{
-		g_settings_set_boolean (EPHY_SETTINGS_UI,
-					EPHY_PREFS_UI_SHOW_TOOLBARS,
-				        flags & EPHY_WEB_VIEW_CHROME_TOOLBAR);
-
-		g_settings_set_boolean (EPHY_SETTINGS_LOCKDOWN,
-					EPHY_PREFS_LOCKDOWN_MENUBAR,
-				        !(flags & EPHY_WEB_VIEW_CHROME_MENUBAR));
-	}
-}
-
-static void
-sync_chrome_with_view_toggle (GtkAction *action,
-			      EphyWindow *window,
-			      EphyWebViewChrome chrome_flag,
-			      gboolean invert)
-{
-	gboolean active;
-
-	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	window->priv->chrome = (active != invert) ?
-	  				window->priv->chrome | chrome_flag :
-	  				window->priv->chrome & (~chrome_flag);
-
-	sync_chromes_visibility (window);
-	sync_prefs_with_chrome (window);
-}
-
-static void
-ephy_window_view_toolbar_cb (GtkAction *action,
-			     EphyWindow *window)
-{
-	sync_chrome_with_view_toggle (action, window,
-				      EPHY_WEB_VIEW_CHROME_TOOLBAR, TRUE);
 }
 
 static void

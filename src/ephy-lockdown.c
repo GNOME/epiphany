@@ -227,11 +227,6 @@ impl_attach_window (EphyExtension *extension,
 				   action_group, window_actions,
 				   G_N_ELEMENTS (window_actions));
 
-	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	g_settings_bind_writable (EPHY_SETTINGS_UI,
-				  EPHY_PREFS_UI_SHOW_TOOLBARS,
-				  action, "sensitive", FALSE);
-
 	action_group = find_action_group (manager, "PopupsActions");
 	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
 				   action_group, popup_actions,
