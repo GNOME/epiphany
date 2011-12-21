@@ -20,19 +20,18 @@
  */
 
 #include "config.h"
+#include "ephy-location-action.h"
 
+#include "ephy-completion-model.h"
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-location-action.h"
+#include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
-#include "ephy-completion-model.h"
-#include "ephy-link.h"
-#include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-
 #include <string.h>
 
 /**
