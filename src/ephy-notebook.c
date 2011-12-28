@@ -675,19 +675,6 @@ ephy_notebook_set_show_tabs (EphyNotebook *nb,
 	update_tabs_visibility (nb, FALSE);
 }
 
-/**
- * ephy_notebook_get_focused_pages:
- *
- * Return value: (transfer none):
- **/
-GList *
-ephy_notebook_get_focused_pages (EphyNotebook *nb)
-{
-	g_return_val_if_fail (EPHY_IS_NOTEBOOK (nb), NULL);
-
-	return nb->priv->focused_pages;
-}
-
 static int
 ephy_notebook_insert_page (GtkNotebook *gnotebook,
 			   GtkWidget *tab_widget,
