@@ -64,8 +64,9 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
                                               gboolean loading)
 {
   EphyCombinedStopReloadActionEnum action_enum;
+  EphyCombinedStopReloadActionPrivate *priv = action->priv;
 
-  if (action->priv->loading == loading)
+  if (priv->loading == loading && priv->action_handler_id)
     return;
 
   action_enum = loading ?
@@ -77,14 +78,14 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
                 "tooltip", combined_stop_reload_action_entries[action_enum].tooltip,
                 NULL);
 
-  if (action->priv->action_handler_id)
-    g_signal_handler_disconnect (action, action->priv->action_handler_id);
+  if (priv->action_handler_id)
+    g_signal_handler_disconnect (action, priv->action_handler_id);
 
-  action->priv->action_handler_id = g_signal_connect (action, "activate",
-                                                      combined_stop_reload_action_entries[action_enum].callback,
-                                                      action->priv->window);
+  priv->action_handler_id = g_signal_connect (action, "activate",
+                                              combined_stop_reload_action_entries[action_enum].callback,
+                                              priv->window);
 
-  action->priv->loading = loading;
+  priv->loading = loading;
 }
 
 static void
