@@ -64,7 +64,11 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
                                               gboolean loading)
 {
   EphyCombinedStopReloadActionEnum action_enum;
-  EphyCombinedStopReloadActionPrivate *priv = action->priv;
+  EphyCombinedStopReloadActionPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_COMBINED_STOP_RELOAD_ACTION (action));
+
+  priv = action->priv;
 
   if (priv->loading == loading && priv->action_handler_id)
     return;
