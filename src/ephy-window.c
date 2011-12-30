@@ -498,11 +498,6 @@ impl_add_child (EphyEmbedContainer *container,
 	g_return_val_if_fail (!window->priv->is_popup ||
 			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
 
-	window->priv->tab_message_cid = ephy_embed_statusbar_get_context_id
-		(child, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
-	window->priv->help_message_cid = ephy_embed_statusbar_get_context_id
-		(child, EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION);
-
 	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 				      child, position, jump_to);
 }
@@ -3151,11 +3146,16 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	EphyWindowPrivate *priv = window->priv;
 	EphyExtension *manager;
 
-	LOG ("page-added   notebook %p embed %p position %u\n", notebook, embed, position);
+	LOG ("page-added notebook %p embed %p position %u\n", notebook, embed, position);
 
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	priv->num_tabs++;
+
+	priv->tab_message_cid = ephy_embed_statusbar_get_context_id
+		(embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
+	priv->help_message_cid = ephy_embed_statusbar_get_context_id
+		(embed, EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION);
 
 #if 0
 	g_signal_connect_object (embed, "open-link",
