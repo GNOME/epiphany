@@ -70,9 +70,6 @@ void		ephy_gui_help				 (GtkWidget *parent,
 void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 							  guint32 user_time);
 
-void		ephy_gui_connect_checkbutton_to_gconf	 (GtkWidget *widget,
-							  const char *pref);
-
 G_END_DECLS
 
 #endif
