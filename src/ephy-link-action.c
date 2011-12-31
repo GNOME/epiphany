@@ -78,20 +78,6 @@ get_event_widget (GtkWidget *proxy)
 		/* Menu items already forward middle clicks */
 		widget = NULL;
 	}
-	else if (GTK_IS_MENU_TOOL_BUTTON (proxy))
-	{
-		/*
-		 * The menu tool button's button is the first child
-		 * of the child hbox.
-		 */
-		GtkContainer *container;
-		GList *children;
-	  
-		container = GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (proxy)));
-		children = gtk_container_get_children (container);
-		widget = GTK_WIDGET (children->data);
-		g_list_free (children);
-	}
 	else if (GTK_IS_TOOL_BUTTON (proxy))
 	{
 		/* The tool button's button is the direct child */
@@ -117,7 +103,7 @@ ephy_link_action_connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	LOG ("Connect link action proxy");
 
-	widget = get_event_widget(proxy);
+	widget = get_event_widget (proxy);
 	if (widget)
 	{
 		g_signal_connect (widget, "button-press-event",
@@ -138,7 +124,7 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	LOG ("Disconnect link action proxy");
 
-	widget = get_event_widget(proxy);
+	widget = get_event_widget (proxy);
 	if (widget)
 	{
 		g_signal_handlers_disconnect_by_func (widget,
