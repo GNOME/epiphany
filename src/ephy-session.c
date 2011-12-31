@@ -252,7 +252,7 @@ client_quit_requested_cb (EggSMClient *sm_client,
 	gtk_label_set_line_wrap (GTK_LABEL (data->label), TRUE);
 	confirm_shutdown_dialog_update_timeout_label (data);
 
-	box = ephy_gui_message_dialog_get_content_box (dialog);
+	box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 	gtk_box_pack_end (GTK_BOX (box), data->label, FALSE, FALSE, 0);
 	gtk_widget_show (data->label);
 
