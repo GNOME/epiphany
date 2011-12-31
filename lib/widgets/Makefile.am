@@ -5,6 +5,10 @@ libephywidgets_la_SOURCES = \
 	ephy-download-widget.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
+	ephy-middle-clickable-button.c		\
+	ephy-middle-clickable-button.h		\
+	ephy-middle-clickable-tool-button.c	\
+	ephy-middle-clickable-tool-button.h	\
 	ephy-node-view.c			\
 	ephy-node-view.h			\
 	ephy-search-entry.c			\

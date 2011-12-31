@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 
 typedef struct _EphyLinkAction			EphyLinkAction;
 typedef struct _EphyLinkActionClass		EphyLinkActionClass;
+typedef struct _EphyLinkActionPrivate		EphyLinkActionPrivate;
 
 typedef struct _EphyLinkActionGroup		EphyLinkActionGroup;
 typedef struct _EphyLinkActionGroupClass	EphyLinkActionGroupClass;
@@ -51,6 +52,8 @@ typedef struct _EphyLinkActionGroupClass	EphyLinkActionGroupClass;
 struct _EphyLinkAction
 {
 	GtkAction parent_instance;
+
+	EphyLinkActionPrivate *priv;
 };
 
 struct _EphyLinkActionClass
@@ -68,7 +71,8 @@ struct _EphyLinkActionGroupClass
 	GtkActionGroupClass parent_class;
 };
 
-GType ephy_link_action_get_type	(void);
+GType ephy_link_action_get_type	  (void);
+guint ephy_link_action_get_button (EphyLinkAction *action);
 
 GType ephy_link_action_group_get_type (void);
 

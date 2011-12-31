@@ -24,6 +24,7 @@
 #include "config.h"
 #include "ephy-navigation-action.h"
 
+#include "ephy-middle-clickable-tool-button.h"
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
@@ -93,7 +94,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 	object_class->set_property = ephy_navigation_action_set_property;
 	object_class->get_property = ephy_navigation_action_get_property;
 
-	action_class->toolbar_item_type = GTK_TYPE_TOOL_BUTTON;
+	action_class->toolbar_item_type = EPHY_TYPE_MIDDLE_CLICKABLE_TOOL_BUTTON;
 
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,

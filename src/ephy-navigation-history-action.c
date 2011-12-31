@@ -87,8 +87,13 @@ action_activate (GtkAction *action)
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
+  /* We use ephy_link_action_get_button on top of
+   * ephy_gui_is_middle_click because of the hacks we have to do to
+   * fake middle clicks on tool buttons. Read the documentation of
+   * ephy_link_action_get_button for more details. */
   if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
-    if (ephy_gui_is_middle_click ()) {
+    if (ephy_gui_is_middle_click () ||
+        ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
       embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
@@ -98,7 +103,8 @@ action_activate (GtkAction *action)
     }
     webkit_web_view_go_back (web_view);
   } else if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
-    if (ephy_gui_is_middle_click ()) {
+    if (ephy_gui_is_middle_click () ||
+        ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
       const char *forward_uri;
       WebKitWebHistoryItem *forward_item;
       WebKitWebBackForwardList *history;

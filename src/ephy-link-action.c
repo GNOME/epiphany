@@ -32,33 +32,19 @@ G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, GTK_TYPE_ACTION,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
 						NULL))
 
+#define EPHY_LINK_ACTION_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LINK_ACTION, EphyLinkActionPrivate))
+
+struct _EphyLinkActionPrivate
+{
+	guint button;
+};
+
 static gboolean
 proxy_button_press_event_cb (GtkButton *button,
 			     GdkEventButton *event,
 			     EphyLinkAction *action)
 {
-	if (event->button == 2)
-	{
-		gtk_button_pressed (button);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-proxy_button_release_event_cb (GtkButton *button,
-			       GdkEventButton *event,
-			       EphyLinkAction *action)
-{
-	/*
-	 * We do not use ephy_gui_is_middle_click() here because
-	 * that also catches ctrl + left_click which already
-	 * triggers an activate event for all proxies.
-	 */
-	if (event->button == 2)
-	{
-		gtk_button_released (button);
-	}
+	action->priv->button = event->button;
 
 	return FALSE;
 }
@@ -109,9 +95,6 @@ ephy_link_action_connect_proxy (GtkAction *action, GtkWidget *proxy)
 		g_signal_connect (widget, "button-press-event",
 				  G_CALLBACK (proxy_button_press_event_cb),
 				  action);
-		g_signal_connect (widget, "button-release-event",
-				  G_CALLBACK (proxy_button_release_event_cb),
-				  action);
 	}
 
 	GTK_ACTION_CLASS (ephy_link_action_parent_class)->connect_proxy (action, proxy);
@@ -130,9 +113,6 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 		g_signal_handlers_disconnect_by_func (widget,
 						      G_CALLBACK (proxy_button_press_event_cb),
 						      action);
-		g_signal_handlers_disconnect_by_func (widget,
-						      G_CALLBACK (proxy_button_release_event_cb),
-						      action);
 	}
 
 	GTK_ACTION_CLASS (ephy_link_action_parent_class)->disconnect_proxy (action, proxy);
@@ -141,7 +121,7 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 static void
 ephy_link_action_init (EphyLinkAction *action)
 {
-	/* Empty, needed for G_DEFINE_TYPE macro */
+	action->priv = EPHY_LINK_ACTION_GET_PRIVATE (action);
 }
 
 static void
@@ -151,6 +131,31 @@ ephy_link_action_class_init (EphyLinkActionClass *class)
 
 	action_class->connect_proxy = ephy_link_action_connect_proxy;
 	action_class->disconnect_proxy = ephy_link_action_disconnect_proxy;
+
+	g_type_class_add_private (G_OBJECT_CLASS (class), sizeof (EphyLinkActionPrivate));
+}
+
+/**
+ * ephy_link_action_get_button:
+ * @action: an #EphyLinkAction
+ * 
+ * This method stores the mouse button number that last activated, or
+ * is activating, the @action. This is useful because #GtkButton's
+ * cannot be clicked with a middle click by default, so inside
+ * Epiphany we fake this by forwarding a left click (button 1) event
+ * instead of a middle click (button 2) to the button. That makes the
+ * EphyGUI methods like ephy_gui_is_middle_click not work here, so we
+ * need to ask the @action directly about the button that activated
+ * it.
+ * 
+ * Returns: the button number that last activated (or is activating) the @action
+ **/
+guint
+ephy_link_action_get_button (EphyLinkAction *action)
+{
+	g_return_val_if_fail (EPHY_IS_LINK_ACTION (action), 0);
+
+	return action->priv->button;
 }
 
 static void
