@@ -18,18 +18,16 @@
  */
 
 #include "config.h"
-
 #include "ephy-gui.h"
-#include "ephy-stock-icons.h"
+
 #include "ephy-debug.h"
+#include "ephy-stock-icons.h"
 
 #include <ctype.h>
-#include <string.h>
-#include <glib/gi18n.h>
-#include <gdk/gdk.h>
 #include <gdk/gdkx.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
+#include <string.h>
 #include <unistd.h>
 
 void
