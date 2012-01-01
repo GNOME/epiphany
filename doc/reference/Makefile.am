@@ -81,7 +81,6 @@ IGNORE_HFILES = \
 	ephy-extension.h \
 	ephy-favicon-action.h \
 	ephy-favorites-menu.h \
-	ephy-go-action.h \
 	ephy-history-window.h \
 	ephy-navigation-action.h \
 	ephy-notebook.h \

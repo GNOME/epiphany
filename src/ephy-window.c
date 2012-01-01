@@ -40,7 +40,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-fullscreen-popup.h"
-#include "ephy-go-action.h"
 #include "ephy-gui.h"
 #include "ephy-home-action.h"
 #include "ephy-link.h"
