@@ -38,17 +38,10 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-#define HISTORY_ITEM_DATA_KEY "HistoryItem"
-
 #define EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE(object)		\
   (G_TYPE_INSTANCE_GET_PRIVATE ((object),				\
 				EPHY_TYPE_NAVIGATION_HISTORY_ACTION,	\
 				EphyNavigationHistoryActionPrivate))
-
-typedef enum {
-  WEBKIT_HISTORY_BACKWARD,
-  WEBKIT_HISTORY_FORWARD
-} WebKitHistoryType;
 
 struct _EphyNavigationHistoryActionPrivate {
   EphyNavigationHistoryDirection direction;
