@@ -21,6 +21,7 @@ NOINST_H_FILES = \
 	ephy-find-toolbar.h			\
 	ephy-fullscreen-popup.h			\
 	ephy-history-window.h			\
+	ephy-home-action.h			\
 	ephy-link-action.h			\
 	ephy-lockdown.h				\
 	ephy-location-action.h			\
@@ -55,6 +56,7 @@ libephymain_la_SOURCES = \
 	ephy-extensions-manager.c		\
 	ephy-find-toolbar.c			\
 	ephy-fullscreen-popup.c			\
+	ephy-home-action.c			\
 	ephy-history-window.c			\
 	ephy-link.c				\
 	ephy-link-action.c			\

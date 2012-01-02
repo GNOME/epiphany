@@ -41,6 +41,7 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-fullscreen-popup.h"
 #include "ephy-gui.h"
+#include "ephy-home-action.h"
 #include "ephy-link.h"
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
