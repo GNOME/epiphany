@@ -407,14 +407,12 @@ static const struct
 	{ XF86XK_Forward,	0,			"NavigationForward",	TRUE  },
 	{ XF86XK_Go,	 	0,			"GoLocation",		FALSE },
 	{ XF86XK_History, 	0,			"GoHistory",		FALSE },
-	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
 	{ XF86XK_OpenURL, 	0,			"GoLocation",		FALSE },
 	{ XF86XK_AddFavorite, 	0,			"FileBookmarkPage",	FALSE },
 	{ XF86XK_Refresh, 	0,			"ViewReload",		FALSE },
 	{ XF86XK_Reload,	0, 			"ViewReload",		FALSE },
 	{ XF86XK_Search,	0,			"EditFind",		FALSE },
 	{ XF86XK_Send,	 	0,			"FileSendTo",		FALSE },
-	{ XF86XK_Start,		0,			"GoHome",		TRUE  },
 	{ XF86XK_Stop,		0,			"ViewStop",		FALSE },
 	{ XF86XK_ZoomIn,	0, 			"ViewZoomIn",		FALSE },
 	{ XF86XK_ZoomOut,	0, 			"ViewZoomOut",		FALSE }
@@ -1623,17 +1621,6 @@ setup_ui_manager (EphyWindow *window)
 			      "window", window,
 			      NULL);
 	gtk_action_group_add_action (action_group, action);
-	g_object_unref (action);
-
-
-	action = g_object_new (EPHY_TYPE_HOME_ACTION,
-			       "name", "GoHome",
-			       "label", _("_Home"),
-			       "stock_id", GTK_STOCK_HOME,
-			       "tooltip", _("Go to the home page"),
-			       "is_important", TRUE,
-			       NULL);
-	gtk_action_group_add_action_with_accel (action_group, action, "<alt>Home");
 	g_object_unref (action);
 
 	action =
@@ -3736,11 +3723,6 @@ setup_toolbar (EphyWindow *window)
 				  G_CALLBACK (ephy_link_open), window);
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "FileNewWindow");
-	g_signal_connect_swapped (action, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "GoHome");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
