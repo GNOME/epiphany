@@ -145,13 +145,6 @@ action_name_association (GtkAction *action,
 					       EPHY_LINK_NEW_WINDOW);
 		}
 	}
-	else if (strcmp (action_name, "GoHome") == 0)
-	{
-		ephy_link_open (EPHY_LINK (action),
-				address != NULL && address[0] != '\0' ? address : "about:blank",
-				NULL,
-				ephy_link_flags_from_current_event ());
-	}
 }	
 
 static void
