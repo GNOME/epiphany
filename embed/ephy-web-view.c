@@ -750,12 +750,12 @@ request_decision_on_storing (StorePasswordData *store_data)
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (action_area), button_box);
 
-  action_button = gtk_button_new_with_label (_("Not now"));
+  action_button = gtk_button_new_with_mnemonic (_("_Not now"));
   g_signal_connect (action_button, "clicked",
                     G_CALLBACK (send_no_response_cb), info_bar);
   gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
 
-  action_button = gtk_button_new_with_label (_("Store password"));
+  action_button = gtk_button_new_with_mnemonic (_("_Store password"));
   g_signal_connect (action_button, "clicked",
                     G_CALLBACK (send_yes_response_cb), info_bar);
   gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);

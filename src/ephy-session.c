@@ -769,12 +769,12 @@ session_command_dispatch (EphySession *session)
 				button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 				gtk_container_add (GTK_CONTAINER (action_area), button_box);
 
-				action_button = gtk_button_new_with_label (_("Don't recover"));
+				action_button = gtk_button_new_with_mnemonic (_("_Don't recover"));
 				g_signal_connect (action_button, "clicked",
 						  G_CALLBACK (send_no_response_cb), info_bar);
 				gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
 
-				action_button = gtk_button_new_with_label (_("Recover session"));
+				action_button = gtk_button_new_with_mnemonic (_("_Recover session"));
 				g_signal_connect (action_button, "clicked",
 						  G_CALLBACK (send_yes_response_cb), info_bar);
 				gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
