@@ -120,6 +120,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
 		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
 		  libnotify >= $LIBNOTIFY_REQUIRED
+		  sqlite3
 		  ])
 
 # ******************
