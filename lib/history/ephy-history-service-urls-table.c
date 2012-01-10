@@ -248,9 +248,9 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 
   statement_str = g_string_new (base_statement);
 
-  if (query->from >= 0)
+  if (query->from > 0)
     statement_str = g_string_append (statement_str, "visits.visit_time >= ? AND ");
-  if (query->to >= 0)
+  if (query->to > 0)
     statement_str = g_string_append (statement_str, "visits.visit_time <= ? AND ");
 
   for (substring = query->substring_list; substring != NULL; substring = substring->next)
@@ -269,7 +269,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
     return NULL;
   }
 
-  if (query->from >= 0) {
+  if (query->from > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
       g_error ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
@@ -277,7 +277,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
       return NULL;
     }
   }
-  if (query->to >= 0) {
+  if (query->to > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
       g_error ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
