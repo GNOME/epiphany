@@ -258,6 +258,16 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 
   statement_str = g_string_append (statement_str, "1 ");
 
+  switch (query->sort_type) {
+  case EPHY_HISTORY_SORT_MV:
+    statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count DESC ");
+    break;
+  case EPHY_HISTORY_SORT_LV:
+    statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count ");
+  default:
+    g_warning ("We don't support this sorting method yet.");
+  }
+
   if (query->limit) {
     statement_str = g_string_append (statement_str, "LIMIT ? ");
   }
