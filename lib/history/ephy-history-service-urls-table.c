@@ -256,7 +256,11 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   for (substring = query->substring_list; substring != NULL; substring = substring->next)
     statement_str = g_string_append (statement_str, "(urls.url LIKE ? OR urls.title LIKE ?) AND ");
 
-  statement_str = g_string_append (statement_str, "1");
+  statement_str = g_string_append (statement_str, "1 ");
+
+  if (query->limit) {
+    statement_str = g_string_append (statement_str, "LIMIT ? ");
+  }
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
 						       statement_str->str, &error);
@@ -303,6 +307,14 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
     }
     g_free (string);
   }
+
+  if (query->limit)
+    if (ephy_sqlite_statement_bind_int (statement, i++, query->limit, &error) == FALSE) {
+      g_error ("Could not build urls table query statement: %s", error->message);
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
+    }
 
   while (ephy_sqlite_statement_step (statement, &error))
     urls = g_list_prepend (urls, create_url_from_statement (statement));
