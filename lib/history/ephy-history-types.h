@@ -42,6 +42,14 @@ typedef enum {
   EPHY_HISTORY_URL_ZOOM_LEVEL
 } EphyHistoryURLProperty;
 
+typedef enum {
+  EPHY_HISTORY_SORT_NONE = 0,
+  EPHY_HISTORY_SORT_MRV, /* Most recently visited first. */
+  EPHY_HISTORY_SORT_LRV, /* Least recently visited first. */
+  EPHY_HISTORY_SORT_MV,  /* Most visited first. */
+  EPHY_HISTORY_SORT_LV   /* Least visited first. */
+} EphyHistorySortType;
+
 typedef struct
 {
   int id;
@@ -76,6 +84,7 @@ typedef struct _EphyHistoryQuery
   gint64 to;
   guint limit;
   GList* substring_list;
+  EphyHistorySortType sort_type;
 } EphyHistoryQuery;
 
 EphyHistoryPageVisit *          ephy_history_page_visit_new (const char *url, gint64 visit_time, EphyHistoryPageVisitType visit_type);

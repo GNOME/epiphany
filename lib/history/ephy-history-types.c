@@ -209,6 +209,7 @@ ephy_history_query_copy (EphyHistoryQuery *query)
   copy->from = query->from;
   copy->to = query->to;
   copy->limit = query->limit;
+  copy->sort_type = query->sort_type;
 
   for (iter = query->substring_list; iter != NULL; iter = iter->next) {
     copy->substring_list = g_list_prepend (copy->substring_list, g_strdup (iter->data));
