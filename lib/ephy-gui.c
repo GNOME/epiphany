@@ -292,7 +292,11 @@ ephy_gui_help (GtkWidget *parent,
 	else
 		url = g_strdup ("ghelp:epiphany");
 
-	screen = gtk_widget_get_screen (parent);
+	if (parent)
+	    screen = gtk_widget_get_screen (parent);
+	else
+	    screen = gdk_screen_get_default ();
+
 	gtk_show_uri (screen, url, gtk_get_current_event_time (), &error);
 
 	if (error != NULL)

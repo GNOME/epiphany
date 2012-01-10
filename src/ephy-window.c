@@ -109,7 +109,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
 	{ "Tools", NULL, N_("T_ools") },
-	{ "Help", NULL, N_("_Help") },
 	{ "Toolbar", NULL, N_("_Toolbars") },
 	{ "PopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
@@ -173,12 +172,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G",
 	  N_("Find previous occurrence of the word or phrase"),
 	  G_CALLBACK (window_cmd_edit_find_prev) },
-	{ "EditPersonalData", NULL, N_("P_ersonal Data"), NULL,
-	  N_("View and remove cookies and passwords"),
-	  G_CALLBACK (window_cmd_edit_personal_data) },
-	{ "EditPrefs", GTK_STOCK_PREFERENCES, N_("P_references"), NULL,
-	  N_("Configure the web browser"),
-	  G_CALLBACK (window_cmd_edit_prefs) },
 
 	/* View menu */
 
@@ -214,18 +207,12 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark…"), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
-	{ "GoBookmarks", EPHY_STOCK_BOOKMARKS, N_("_Edit Bookmarks"), "<control>B",
-	  N_("Open the bookmarks window"),
-	  G_CALLBACK (window_cmd_go_bookmarks) },
 
 	/* Go menu */
 
 	{ "GoLocation", NULL, N_("_Location…"), "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location) },
-	{ "GoHistory", EPHY_STOCK_HISTORY, N_("Hi_story"), "<control>H",
-	  N_("Open the history window"),
-	  G_CALLBACK (window_cmd_go_history) },
 
 	/* Tabs menu */
 
@@ -244,15 +231,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
         { "TabsDetach", NULL, N_("_Detach Tab"), NULL,
           N_("Detach current tab"),
           G_CALLBACK (window_cmd_tabs_detach) },
-
-	/* Help menu */
-
-	{"HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
-	 N_("Display web browser help"),
-	 G_CALLBACK (window_cmd_help_contents) },
-	{ "HelpAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
-	  N_("Display credits for the web browser creators"),
-	  G_CALLBACK (window_cmd_help_about) },
 };
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
@@ -373,7 +351,6 @@ static const struct
 	                        GDK_SHIFT_MASK,         "TabsMoveRight",         FALSE },
 	/* Go */
 	{ GDK_KEY_l,            GDK_CONTROL_MASK,       "GoLocation",            FALSE },
-	{ GDK_KEY_h,            GDK_CONTROL_MASK,       "GoHistory",             FALSE },
 	/* Support all the MSIE tricks as well ;) */
 	{ GDK_KEY_F5,		0,			"ViewReload",		 FALSE },
 	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
@@ -403,10 +380,8 @@ static const struct
 	{ GDK_KEY_KP_3,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
-	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
 	{ XF86XK_Forward,	0,			"NavigationForward",	TRUE  },
 	{ XF86XK_Go,	 	0,			"GoLocation",		FALSE },
-	{ XF86XK_History, 	0,			"GoHistory",		FALSE },
 	{ XF86XK_OpenURL, 	0,			"GoLocation",		FALSE },
 	{ XF86XK_AddFavorite, 	0,			"FileBookmarkPage",	FALSE },
 	{ XF86XK_Refresh, 	0,			"ViewReload",		FALSE },
@@ -655,7 +630,7 @@ ephy_window_link_iface_init (EphyLinkIface *iface)
 	iface->open_link = ephy_window_open_link;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_WINDOW,
+G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_APPLICATION_WINDOW,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
 						ephy_window_link_iface_init)
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
@@ -1560,12 +1535,8 @@ setup_ui_manager (EphyWindow *window)
 	g_object_set (action, "short_label", _("Bookmark"), NULL);
 	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "short_label", _("Find"), NULL);
-	action = gtk_action_group_get_action (action_group, "GoBookmarks");
-	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
 	action = gtk_action_group_get_action (action_group, "EditFind");
-	g_object_set (action, "is_important", TRUE, NULL);
-	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "is_important", TRUE, NULL);
 
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
@@ -1646,15 +1617,6 @@ setup_ui_manager (EphyWindow *window)
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
 
-	g_object_unref (action);
-
-	action = g_object_new (EPHY_TYPE_HOME_ACTION,
-			       "name", "FileNewWindow",
-			       "label", _("_New Window"),
-			       "stock_id", STOCK_NEW_WINDOW,
-			       "tooltip", _("Open a new window"),
-			       NULL);
-	gtk_action_group_add_action_with_accel (action_group, action, "<control>N");
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION,
@@ -3725,10 +3687,6 @@ setup_toolbar (EphyWindow *window)
 					      "FileNewTab");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "FileNewWindow");
-	g_signal_connect_swapped (action, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "Zoom");
@@ -3742,8 +3700,7 @@ static const char* disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "FileSaveAs",
                                                        "FileSaveAsApplication",
                                                        "ViewEncoding",
-                                                       "FileBookmarkPage",
-                                                       "GoBookmarks" };
+                                                       "FileBookmarkPage" };
 
 static GObject *
 ephy_window_constructor (GType type,
@@ -3903,10 +3860,6 @@ ephy_window_constructor (GType type,
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
 						      TRUE);
 
-		action = gtk_action_group_get_action (toolbar_action_group, "FileNewWindow");
-		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
-						      TRUE);
-		
 		for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++)
 		{
 			action = gtk_action_group_get_action (priv->action_group,

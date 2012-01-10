@@ -34,6 +34,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
+#include "ephy-home-action.h"
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
@@ -44,6 +45,7 @@
 #include "ephy-window.h"
 #include "pdm-dialog.h"
 #include "prefs-dialog.h"
+#include "window-commands.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -160,6 +162,111 @@ queue_commands (EphyShell *shell)
 }
 
 static void
+new_window (GSimpleAction *action,
+            GVariant *parameter,
+            gpointer user_data)
+{
+  ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
+                      EPHY_NEW_TAB_IN_NEW_WINDOW);
+}
+
+static void
+show_bookmarks (GSimpleAction *action,
+                GVariant *parameter,
+                gpointer user_data)
+{
+  GtkWidget *bwindow;
+
+  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
+  gtk_window_present (GTK_WINDOW (bwindow));
+}
+
+static void
+show_history (GSimpleAction *action,
+              GVariant *parameter,
+              gpointer user_data)
+{
+  GtkWidget *hwindow;
+
+  hwindow = ephy_shell_get_history_window (ephy_shell);
+  gtk_window_present (GTK_WINDOW (hwindow));
+}
+
+static void
+show_preferences (GSimpleAction *action,
+                  GVariant *parameter,
+                  gpointer user_data)
+{
+  EphyDialog *dialog;
+
+  dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
+
+  ephy_dialog_show (dialog);
+}
+
+static void
+show_pdm (GSimpleAction *action,
+          GVariant *parameter,
+          gpointer user_data)
+{
+  PdmDialog *dialog;
+
+  dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
+  /* FIXME?: pdm_dialog_open is supposed to scroll to the host passed
+   * as second parameters in the cookies tab. Honestly I think this
+   * has been broken for a while. In any case it's probably not
+   * relevant here, although we could get the host of the last active
+   * ephy window, I guess. */
+  pdm_dialog_open (dialog, NULL);
+}
+
+static void
+show_about (GSimpleAction *action,
+            GVariant *parameter,
+            gpointer user_data)
+{
+  window_cmd_help_about (NULL, NULL);
+}
+
+static void
+show_help (GSimpleAction *action,
+           GVariant *parameter,
+           gpointer user_data)
+{
+  ephy_gui_help (NULL, NULL);
+}
+
+static void
+quit_application (GSimpleAction *action,
+                  GVariant *parameter,
+                  gpointer user_data)
+{
+  GList *list, *next;
+  GtkWindow *win;
+
+  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
+  while (list) {
+    win = list->data;
+    next = list->next;
+
+    gtk_widget_destroy (GTK_WIDGET (win));
+
+    list = next;
+  }
+}
+
+static GActionEntry app_entries[] = {
+  { "new", new_window, NULL, NULL, NULL },
+  { "bookmarks", show_bookmarks, NULL, NULL, NULL },
+  { "history", show_history, NULL, NULL, NULL },
+  { "preferences", show_preferences, NULL, NULL, NULL },
+  { "pdm", show_pdm, NULL, NULL, NULL },
+  { "help", show_help, NULL, NULL, NULL },
+  { "about", show_about, NULL, NULL, NULL },
+  { "quit", quit_application, NULL, NULL, NULL },
+};
+
+static void
 ephy_shell_startup (GApplication* application)
 {
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
@@ -167,20 +274,35 @@ ephy_shell_startup (GApplication* application)
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
   /* TODO: we want to migrate each WebApp profile too */
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) == EPHY_EMBED_SHELL_MODE_BROWSER &&
-      ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION) {
-    GError *error = NULL;
-    char *argv[1] = { "ephy-profile-migrator" };
-    char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) == EPHY_EMBED_SHELL_MODE_BROWSER) {
+    GtkBuilder *builder;
 
-    g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
-                  NULL, NULL, NULL, NULL,
-                  NULL, &error);
+    if (ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION) {
+      GError *error = NULL;
+      char *argv[1] = { "ephy-profile-migrator" };
+      char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
-    if (error) {
-      LOG ("Failed to run migrator: %s", error->message);
-      g_error_free (error);
+      g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
+                    NULL, NULL, NULL, NULL,
+                    NULL, &error);
+
+      if (error) {
+        LOG ("Failed to run migrator: %s", error->message);
+        g_error_free (error);
+      }
     }
+
+    g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                     app_entries, G_N_ELEMENTS (app_entries),
+                                     application);
+
+    builder = gtk_builder_new ();
+    gtk_builder_add_from_file (builder,
+                               ephy_file ("epiphany-application-menu.ui"),
+                               NULL);
+    gtk_application_set_app_menu (GTK_APPLICATION (application),
+                                  G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+    g_object_unref (builder);
   }
 }
 

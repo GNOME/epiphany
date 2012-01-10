@@ -45,9 +45,6 @@ void window_cmd_new		(GtkAction *action,
 void window_cmd_file_bookmark_page(GtkAction *action,
 				  EphyWindow *window);
 
-void window_cmd_go_bookmarks	(GtkAction *action,
-				 EphyWindow *window);
-
 void window_cmd_file_open	(GtkAction *action,
 				 EphyWindow *window);
 
@@ -120,19 +117,7 @@ void window_cmd_view_page_source(GtkAction *action,
 void window_cmd_view_page_security_info (GtkAction *action,
 					 EphyWindow *window);
 
-void window_cmd_go_history	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_edit_personal_data (GtkAction *action,
-				    EphyWindow *window);
-
-void window_cmd_edit_prefs      (GtkAction *action,
-				 EphyWindow *window);
-
 void window_cmd_edit_toolbar	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_help_contents (GtkAction *action,
 				 EphyWindow *window);
 
 void window_cmd_help_about      (GtkAction *action,

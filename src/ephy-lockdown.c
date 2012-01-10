@@ -108,12 +108,10 @@ static const BindAction window_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_PRINT_SETUP, "FilePrintSetup", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_COMMAND_LINE, "FilePrintSetup", "sensitive" },
 
-	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "GoBookmarks", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
 
 	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "FileSaveAs", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_HISTORY, "GoHistory", "sensitive" },
 
 	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" }
@@ -134,8 +132,6 @@ static const BindAction special_toolbar_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "visible" },
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "sensitive" },
-
-	{ EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" }
 };
 
 static gboolean

@@ -227,18 +227,6 @@ window_cmd_view_reload (GtkAction *action,
 }
 
 void
-window_cmd_go_bookmarks (GtkAction *action,
-			 EphyWindow *window)
-{
-	GtkWidget *bwindow;
-
-	bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
-	ephy_bookmarks_editor_set_parent (EPHY_BOOKMARKS_EDITOR (bwindow),
-			                  GTK_WIDGET (window));
-	gtk_window_present (GTK_WINDOW (bwindow));
-}
-
-void
 window_cmd_file_bookmark_page (GtkAction *action,
 			       EphyWindow *window)
 {
@@ -1163,59 +1151,6 @@ window_cmd_view_page_security_info (GtkAction *action,
 	ephy_web_view_show_page_certificate (ephy_embed_get_web_view (embed));
 }
 
-void
-window_cmd_go_history (GtkAction *action,
-		       EphyWindow *window)
-{
-	GtkWidget *hwindow;
-
-	hwindow = ephy_shell_get_history_window (ephy_shell);
-	ephy_history_window_set_parent (EPHY_HISTORY_WINDOW (hwindow),
-					GTK_WIDGET (window));
-	gtk_window_present (GTK_WINDOW (hwindow));
-}
-
-void
-window_cmd_edit_personal_data (GtkAction *action,
-		               EphyWindow *window)
-{
-	PdmDialog *dialog;
-	EphyEmbed *embed;
-	const char *address;
-	char *host;
-
-	embed = ephy_embed_container_get_active_child 
-          (EPHY_EMBED_CONTAINER (window));
-	if (embed == NULL) return;
-
-	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-	
-	host = address != NULL ? ephy_string_get_host_name (address) : NULL;
-
-	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
-	pdm_dialog_open (dialog, host);
-
-	g_free (host);
-}
-
-void
-window_cmd_edit_prefs (GtkAction *action,
-		       EphyWindow *window)
-{
-	EphyDialog *dialog;
-
-	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
-
-	ephy_dialog_show (dialog);
-}
-
-void
-window_cmd_help_contents (GtkAction *action,
-			 EphyWindow *window)
-{
-	ephy_gui_help (GTK_WIDGET (window), NULL);
-}
-
 #define ABOUT_GROUP "About"
 
 void
@@ -1325,7 +1260,7 @@ window_cmd_help_about (GtkAction *action,
 			     _(licence_part[2]),
 			    NULL);
 
-	gtk_show_about_dialog (GTK_WINDOW (window),
+	gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
 			       "program-name", _("GNOME Web Browser"),
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"

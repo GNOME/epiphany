@@ -45,7 +45,7 @@ typedef struct _EphyWindowPrivate	EphyWindowPrivate;
 
 struct _EphyWindow
 {
-	GtkWindow parent;
+	GtkApplicationWindow parent;
 
 	/*< private >*/
 	EphyWindowPrivate *priv;
@@ -53,7 +53,7 @@ struct _EphyWindow
 
 struct _EphyWindowClass
 {
-	GtkWindowClass parent_class;
+	GtkApplicationWindowClass parent_class;
 };
 
 GType		  ephy_window_get_type		  (void);

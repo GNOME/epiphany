@@ -2,7 +2,6 @@
 	<menubar>
 		<menu name="FileMenu" action="File">  
 			<menuitem name="FileNewTabMenu" action="FileNewTab"/>
-			<menuitem name="FileNewWindowMenu" action="FileNewWindow"/>
 			<menuitem name="FileOpenMenu" action="FileOpen"/>
 			<separator name="FileSep1"/>	
 			<menuitem name="FileSaveAsMenu" action="FileSaveAs"/>
@@ -30,9 +29,6 @@
 			<menuitem name="EditFindMenu" action="EditFind"/>
 			<menuitem name="EditFindNextMenu" action="EditFindNext"/> 
 			<menuitem name="EditFindPrevMenu" action="EditFindPrev"/>
-			<separator name="EditSep3"/>
-			<menuitem name="EditPersonalDataMenu" action="EditPersonalData"/>
-			<menuitem name="EditPrefsMenu" action="EditPrefs"/> 
 		</menu>
 
 		<menu name="ViewMenu" action="View">
@@ -57,16 +53,10 @@
 
 		<menu name="BookmarksMenu" action="Bookmarks">
 			<menuitem name="BookmarksAddBookmarkMenu" action="FileBookmarkPage"/>
-			<menuitem name="BookmarksEditMenu" action="GoBookmarks"/>
 			<separator name="BookmarksSep1"/>
 		</menu>
 
 		<menu name="ToolsMenu" action="Tools"/>
-
-		<menu name="HelpMenu" action="Help">
-			<menuitem name="HelpContentsMenu" action="HelpContents"/>
-			<menuitem name="HelpAboutMenu" action="HelpAbout"/>
-		</menu>
 	</menubar>
 
 	<popup name="EphyInputPopup" action="PopupAction">
