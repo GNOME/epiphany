@@ -371,6 +371,8 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
   /* A NULL return here means that the URL does not yet exist in the database */
   if (NULL == ephy_history_service_get_url_row (self, visit->url->url, visit->url)) {
     visit->url->last_visit_time = visit->visit_time;
+    visit->url->visit_count = 1;
+
     ephy_history_service_add_url_row (self, visit->url);
 
     if (visit->url->id == -1) {
