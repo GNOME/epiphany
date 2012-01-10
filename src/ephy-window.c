@@ -788,7 +788,11 @@ get_chromes_visibility (EphyWindow *window,
 	}
 
 	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	{
 		*show_menubar = FALSE;
+		*show_toolbar = FALSE;
+		*show_tabsbar = FALSE;
+	}
 }
 
 static void
@@ -3850,7 +3854,7 @@ ephy_window_constructor (GType type,
 	g_object_unref (css_provider);
 	g_object_unref (css_file);
 
-	/* create the toolbars */
+	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
 
 	/* Initialize the menus */
