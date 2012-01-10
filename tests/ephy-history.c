@@ -305,6 +305,76 @@ test_get_url_not_existent (void)
   test_get_url_helper (FALSE);
 }
 
+static void
+verify_complex_url_query (EphyHistoryService *service,
+                          gboolean success,
+                          gpointer result_data,
+                          gpointer user_data)
+{
+  EphyHistoryURL *url, *baseline;
+  GList *urls = (GList*) result_data;
+
+  /* Only one result expected. */
+  g_assert_cmpint (g_list_length (urls), ==, 1);
+
+  url = (EphyHistoryURL *) urls->data;
+  baseline = (EphyHistoryURL *) user_data;
+
+  g_assert_cmpstr (url->url, ==, baseline->url);
+  g_assert_cmpuint (url->visit_count, ==, baseline->visit_count);
+
+  g_object_unref (service);
+
+  gtk_main_quit();
+}
+
+static void
+perform_complex_url_query (EphyHistoryService *service,
+                           gboolean success,
+                           gpointer result_data,
+                           gpointer user_data)
+{
+  EphyHistoryQuery *query;
+  EphyHistoryURL *url;
+
+  g_assert (success == TRUE);
+
+  /* Get the most visited site that contains 'k'. */
+  query = ephy_history_query_new ();
+  query->substring_list = g_list_prepend (query->substring_list, "k");
+  query->limit = 1;
+  query->sort_type = EPHY_HISTORY_SORT_MV;
+
+  /* The expected result. */
+  url = ephy_history_url_new ("http://www.wikipedia.org",
+                              "Wikipedia",
+                              30, 30, 0, 1);
+
+  ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
+}
+
+static void
+test_complex_url_query (void)
+{
+  gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
+  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  GList *visits = NULL;
+  int i;
+
+  for (i = 0; i < 10; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.gnome.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 30; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.wikipedia.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 20; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.freedesktop.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 5; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.musicbrainz.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+
+  ephy_history_service_add_visits (service, visits, perform_complex_url_query, NULL);
+
+  gtk_main ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -319,6 +389,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/history/test_set_url_title_url_not_existent", test_set_url_title_url_not_existent);
   g_test_add_func ("/embed/history/test_get_url", test_get_url);
   g_test_add_func ("/embed/history/test_get_url_not_existent", test_get_url_not_existent);
+  g_test_add_func ("/embed/history/test_complex_url_query", test_complex_url_query);
 
   return g_test_run ();
 }
