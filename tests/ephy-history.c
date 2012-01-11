@@ -305,6 +305,26 @@ test_get_url_not_existent (void)
   test_get_url_helper (FALSE);
 }
 
+static GList *
+create_visits_for_complex_tests (void)
+{
+  int i;
+  GList *visits = NULL;
+
+  for (i = 0; i < 10; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.gnome.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 30; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.wikipedia.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 20; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.freedesktop.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 5; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.musicbrainz.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  for (i = 0; i < 2; i++)
+    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.webkitgtk.org", 1000 * i, EPHY_PAGE_VISIT_TYPED));
+
+  return visits;
+}
+
 static void
 verify_complex_url_query (EphyHistoryService *service,
                           gboolean success,
@@ -358,19 +378,51 @@ test_complex_url_query (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
   EphyHistoryService *service = ensure_empty_history(temporary_file);
-  GList *visits = NULL;
-  int i;
+  GList *visits;
 
-  for (i = 0; i < 10; i++)
-    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.gnome.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
-  for (i = 0; i < 30; i++)
-    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.wikipedia.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
-  for (i = 0; i < 20; i++)
-    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.freedesktop.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
-  for (i = 0; i < 5; i++)
-    visits = g_list_append (visits, ephy_history_page_visit_new ("http://www.musicbrainz.org", 10 * i, EPHY_PAGE_VISIT_TYPED));
+  visits = create_visits_for_complex_tests ();
 
   ephy_history_service_add_visits (service, visits, perform_complex_url_query, NULL);
+
+  gtk_main ();
+}
+
+static void
+perform_complex_url_query_with_time_range (EphyHistoryService *service,
+                                           gboolean success,
+                                           gpointer result_data,
+                                           gpointer user_data)
+{
+  EphyHistoryQuery *query;
+  EphyHistoryURL *url;
+
+  g_assert (success == TRUE);
+
+  /* Get the most visited site that contains 'k' that was visited since timestamp 500. */
+  query = ephy_history_query_new ();
+  query->substring_list = g_list_prepend (query->substring_list, "k");
+  query->limit = 1;
+  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->from = 500;
+
+  /* The expected result. */
+  url = ephy_history_url_new ("http://www.webkitgtk.org",
+                              "WebKitGTK+",
+                              2, 2, 0, 1);
+
+  ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
+}
+
+static void
+test_complex_url_query_with_time_range (void)
+{
+  gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
+  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  GList *visits;
+
+  visits = create_visits_for_complex_tests ();
+
+  ephy_history_service_add_visits (service, visits, perform_complex_url_query_with_time_range, NULL);
 
   gtk_main ();
 }
@@ -390,6 +442,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/history/test_get_url", test_get_url);
   g_test_add_func ("/embed/history/test_get_url_not_existent", test_get_url_not_existent);
   g_test_add_func ("/embed/history/test_complex_url_query", test_complex_url_query);
+  g_test_add_func ("/embed/history/test_complex_url_query_with_time_range", test_complex_url_query_with_time_range);
 
   return g_test_run ();
 }
