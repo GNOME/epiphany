@@ -397,8 +397,6 @@ static const struct
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
-#define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
-
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
@@ -429,8 +427,6 @@ struct _EphyWindowPrivate
 
 	guint clear_progress_timeout_id;
 	gulong set_focus_handler;
-	guint menubar_accel_keyval;
-	guint menubar_accel_modifier;
 
 	guint closing : 1;
 	guint has_size : 1;
@@ -653,38 +649,17 @@ settings_change_notify (GtkSettings *settings,
 			EphyWindow  *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	char *key_theme_name, *menubar_accel_accel;
+	char *key_theme_name;
 
 	g_object_get (settings,
 		      "gtk-key-theme-name", &key_theme_name,
-		      "gtk-menu-bar-accel", &menubar_accel_accel,
 		      NULL);
-
-	g_return_if_fail (menubar_accel_accel != NULL);
-
-	if (menubar_accel_accel != NULL && menubar_accel_accel[0] != '\0')
-	{
-		gtk_accelerator_parse (menubar_accel_accel,
-				       &priv->menubar_accel_keyval,
-				       &priv->menubar_accel_modifier);
-		if (priv->menubar_accel_keyval == 0)
-		{
-			g_warning ("Failed to parse menu bar accelerator '%s'\n",
-				   menubar_accel_accel);
-		}
-	}
-	else
-	{
-		priv->menubar_accel_keyval = 0;
-		priv->menubar_accel_modifier = 0;
-	}
 
 	priv->key_theme_is_emacs =
 		key_theme_name &&
 		g_ascii_strcasecmp (key_theme_name, "Emacs") == 0;
 
 	g_free (key_theme_name);
-	g_free (menubar_accel_accel);
 }
 
 static void
@@ -744,7 +719,6 @@ get_toolbar_visibility (EphyWindow *window)
 
 static void
 get_chromes_visibility (EphyWindow *window,
-			gboolean *show_menubar,
 			gboolean *show_toolbar,
 			gboolean *show_tabsbar)
 {
@@ -754,19 +728,16 @@ get_chromes_visibility (EphyWindow *window,
 	if (window->priv->fullscreen_mode)
 	{
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
-		*show_menubar = FALSE;
 		*show_tabsbar = !priv->is_popup;
 	}
 	else
 	{
-		*show_menubar = (flags & EPHY_WEB_VIEW_CHROME_MENUBAR) != 0;
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
 
 	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		*show_menubar = FALSE;
 		*show_toolbar = FALSE;
 		*show_tabsbar = FALSE;
 	}
@@ -776,11 +747,11 @@ static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	gboolean show_menubar, show_toolbar, show_tabsbar;
+	gboolean show_toolbar, show_tabsbar;
 
 	if (priv->closing) return;
 
-	get_chromes_visibility (window, &show_menubar,
+	get_chromes_visibility (window,
 				&show_toolbar,
 				&show_tabsbar);
 
@@ -954,13 +925,6 @@ ephy_window_key_press_event (GtkWidget *widget,
 			}
 			break;
 		}
-	}
-
-	/* Don't activate menubar in lockdown mode */
-	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-				    EPHY_PREFS_LOCKDOWN_MENUBAR))
-	{
-		return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 	}
 
 	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
@@ -2524,11 +2488,10 @@ web_view_ready_cb (WebKitWebView *web_view,
 	{
 		int width, height;
 		gboolean toolbar_visible;
-		gboolean menubar_visible;
 		EphyWebViewChrome chrome_mask;
 		WebKitWebWindowFeatures *features;
 
-		toolbar_visible = menubar_visible = TRUE;
+		toolbar_visible = TRUE;
 		features = webkit_web_view_get_window_features (web_view);
 
 		chrome_mask = window->priv->chrome;
@@ -2537,15 +2500,10 @@ web_view_ready_cb (WebKitWebView *web_view,
 			      "width", &width,
 			      "height", &height,
 			      "toolbar-visible", &toolbar_visible,
-			      "menubar-visible", &menubar_visible,
 			      NULL);
 
 		if (!toolbar_visible)
 			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-
-		if (!menubar_visible)
-			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
-
 
 		/* We will consider windows with different chrome settings popups. */
 		if (chrome_mask != window->priv->chrome) {
@@ -3226,12 +3184,6 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 				     EPHY_PREFS_UI_SHOW_TOOLBARS))
 	{
 		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-	}
-
-	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-				    EPHY_PREFS_LOCKDOWN_MENUBAR))
-	{
-		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_MENUBAR;
 	}
 
 	window->priv->chrome = chrome_mask;
