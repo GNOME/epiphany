@@ -51,7 +51,7 @@ struct _EphyEncodingMenuPrivate
 	EphyEncodingDialog *dialog;
 };
 
-#define ENCODING_PLACEHOLDER_PATH	"/menubar/ViewMenu/ViewEncodingMenu/ViewEncodingPlaceholder"
+#define ENCODING_PLACEHOLDER_PATH	"/ui/PagePopup/ViewEncodingMenu/ViewEncodingPlaceholder"
 
 static void	ephy_encoding_menu_class_init	  (EphyEncodingMenuClass *klass);
 static void	ephy_encoding_menu_init		  (EphyEncodingMenu *menu);
@@ -387,7 +387,7 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	g_object_unref (action_group);
 
 	action = gtk_ui_manager_get_action (menu->priv->manager,
-					    "/menubar/ViewMenu");
+					    "/ui/PagePopup/ViewEncodingMenu");
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (update_encoding_menu_cb),
 				 menu, 0);

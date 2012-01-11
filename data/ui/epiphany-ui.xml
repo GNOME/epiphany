@@ -1,64 +1,4 @@
 <ui>
-	<menubar>
-		<menu name="FileMenu" action="File">  
-			<menuitem name="FileNewTabMenu" action="FileNewTab"/>
-			<menuitem name="FileOpenMenu" action="FileOpen"/>
-			<separator name="FileSep1"/>	
-			<menuitem name="FileSaveAsMenu" action="FileSaveAs"/>
-			<menuitem name="FileSaveAsApplicationMenu" action="FileSaveAsApplication"/>
-			<separator name="FileSep2"/>
-			<menuitem name="FilePrintSetupMenu" action="FilePrintSetup"/>
-			<menuitem name="FilePrintPreviewMenu" action="FilePrintPreview"/>
-			<menuitem name="FilePrintMenu" action="FilePrint"/>
-			<menuitem name="FileSendToMenu" action="FileSendTo"/>
-			<separator name="FileSep3"/>
-			<menuitem name="FileWorkOfflineItem" action="FileWorkOffline"/>
-			<menuitem name="FileCloseWindowMenu" action="FileCloseTab"/>
-		</menu>
-
-		<menu name="EditMenu" action="Edit">
-			<menuitem name="EditUndoMenu" action="EditUndo"/>
-			<menuitem name="EditRedoMenu" action="EditRedo"/>
-			<separator name="EditSep0"/>
-			<menuitem name="EditCutMenu" action="EditCut"/>
-			<menuitem name="EditCopyMenu" action="EditCopy"/>
-			<menuitem name="EditPasteMenu" action="EditPaste"/>
-			<separator name="EditSep1"/> 
-			<menuitem name="EditSelectAllMenu" action="EditSelectAll"/>
-			<separator name="EditSep2"/>
-			<menuitem name="EditFindMenu" action="EditFind"/>
-			<menuitem name="EditFindNextMenu" action="EditFindNext"/> 
-			<menuitem name="EditFindPrevMenu" action="EditFindPrev"/>
-		</menu>
-
-		<menu name="ViewMenu" action="View">
-			<menuitem name="ViewDownloadsBar" action="ViewDownloadsBar"/>
-			<separator name="ViewSep1"/>
-			<menuitem name="ViewPopupsMenu" action="ViewPopupWindows"/>
-			<menuitem name="ViewFullscreenMenu" action="ViewFullscreen"/>
-			<separator name="ViewSep2"/>
-			<menuitem name="ViewZoomInMenu" action="ViewZoomIn"/>
-			<menuitem name="ViewZoomOutMenu" action="ViewZoomOut"/>
-			<menuitem name="ViewZoomNormalMenu" action="ViewZoomNormal"/>
-			<separator name="ViewSep3"/>
-			<menu name="ViewEncodingMenu" action="ViewEncoding">
-				<placeholder name="ViewEncodingPlaceholder"/>
-			</menu>
-			<menuitem name="ViewPageSourceMenu" action="ViewPageSource"/>
-			<menuitem action="ViewPageSecurityInfo"/>
-			<separator name="ViewSep4"/>
-			<menuitem name="ViewStopMenu" action="ViewStop"/> 
-			<menuitem name="ViewReloadMenu" action="ViewReload"/>
-		</menu>
-
-		<menu name="BookmarksMenu" action="Bookmarks">
-			<menuitem name="BookmarksAddBookmarkMenu" action="FileBookmarkPage"/>
-			<separator name="BookmarksSep1"/>
-		</menu>
-
-		<menu name="ToolsMenu" action="Tools"/>
-	</menubar>
-
 	<popup name="EphyInputPopup" action="PopupAction">
 		<menuitem name="SpellingSuggestion0" action="ReplaceWithSpellingSuggestion0"/>
 		<menuitem name="SpellingSuggestion1" action="ReplaceWithSpellingSuggestion1"/>
@@ -146,7 +86,41 @@
                 <toolitem action="NavigationForward"/>
                 <toolitem action="ViewCombinedStopReload"/>
                 <toolitem action="Location"/>
+                <toolitem action="PageMenu"/>
         </toolbar>
+
+	<popup name="PagePopup" action="PagePopupAction">
+                <menuitem name="FileNewTabMenu" action="FileNewTab"/>
+                <menuitem name="FileOpenMenu" action="FileOpen"/>
+                <separator name="FileSep1"/>	
+                <menuitem name="FileSaveAsMenu" action="FileSaveAs"/>
+                <menuitem name="FileSaveAsApplicationMenu" action="FileSaveAsApplication"/>
+                <separator name="FileSep2"/>
+                <menuitem name="EditCutMenu" action="EditCut"/>
+                <menuitem name="EditCopyMenu" action="EditCopy"/>
+                <menuitem name="EditPasteMenu" action="EditPaste"/>
+                <separator name="EditSep3"/> 
+                <menuitem name="FilePrintSetupMenu" action="FilePrintSetup"/>
+                <menuitem name="FilePrintPreviewMenu" action="FilePrintPreview"/>
+                <menuitem name="FilePrintMenu" action="FilePrint"/>
+                <menuitem name="FileSendToMenu" action="FileSendTo"/>
+                <separator name="FileSep4"/>
+                <menuitem name="EditFindMenu" action="EditFind"/>
+                <menuitem name="EditFindNextMenu" action="EditFindNext"/> 
+                <menuitem name="EditFindPrevMenu" action="EditFindPrev"/>
+                <separator name="FileSep5"/>
+		<menu name="BookmarksMenu" action="Bookmarks">
+			<menuitem name="BookmarksAddBookmarkMenu" action="FileBookmarkPage"/>
+			<separator name="BookmarksSep1"/>
+		</menu>
+                <separator name="FileSep6"/>
+                <menu name="ViewEncodingMenu" action="ViewEncoding">
+                  <placeholder name="ViewEncodingPlaceholder"/>
+                </menu>
+                <menuitem name="ViewPageSourceMenu" action="ViewPageSource"/>
+                <separator name="FileSep7"/>
+                <menuitem name="FileCloseWindowMenu" action="FileCloseTab"/>
+	</popup>
 
 	<accelerator name="AlwaysStopAccel" action="ViewAlwaysStop"/>
 	<accelerator name="BrowseWithCaretAccel" action="BrowseWithCaret"/>

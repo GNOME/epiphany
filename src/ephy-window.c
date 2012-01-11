@@ -48,6 +48,7 @@
 #include "ephy-navigation-action.h"
 #include "ephy-navigation-history-action.h"
 #include "ephy-notebook.h"
+#include "ephy-page-menu-action.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -111,6 +112,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "Tools", NULL, N_("T_ools") },
 	{ "Toolbar", NULL, N_("_Toolbars") },
 	{ "PopupAction", NULL, "" },
+	{ "PagePopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
 
 	/* File menu */
@@ -774,7 +776,6 @@ static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *menubar;
 	gboolean show_menubar, show_toolbar, show_tabsbar;
 
 	if (priv->closing) return;
@@ -783,10 +784,6 @@ sync_chromes_visibility (EphyWindow *window)
 				&show_toolbar,
 				&show_tabsbar);
 
-	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
-	g_assert (menubar != NULL);
-
-	g_object_set (menubar, "visible", show_menubar, NULL);
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
@@ -860,18 +857,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 	sync_chromes_visibility (window);
 }
 
-static void
-menubar_deactivate_cb (GtkWidget *menubar,
-		       EphyWindow *window)
-{
-	g_signal_handlers_disconnect_by_func
-		(menubar, G_CALLBACK (menubar_deactivate_cb), window);
-
-	gtk_menu_shell_deselect (GTK_MENU_SHELL (menubar));
-
-	sync_chromes_visibility (window);
-}
-
 static gboolean 
 scroll_event_cb (GtkWidget *widget,
 		 GdkEventScroll *event,
@@ -896,7 +881,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *menubar, *focus_widget;
+	GtkWidget *focus_widget;
 	gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
 	guint i;
@@ -976,26 +961,6 @@ ephy_window_key_press_event (GtkWidget *widget,
 				    EPHY_PREFS_LOCKDOWN_MENUBAR))
 	{
 		return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
-	}
-
-	/* Show and activate the menubar, if it isn't visible */
-	if (priv->menubar_accel_keyval != 0 &&
-	    event->keyval == priv->menubar_accel_keyval &&
-            modifier == priv->menubar_accel_modifier)
-	{
-		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
-		g_return_val_if_fail (menubar != NULL , FALSE);
-
-		if (!gtk_widget_get_visible (menubar))
-		{
-			g_signal_connect (menubar, "deactivate",
-					  G_CALLBACK (menubar_deactivate_cb), window);
-
-			gtk_widget_show (menubar);
-			gtk_menu_shell_select_first (GTK_MENU_SHELL (menubar), FALSE);
-
-			return TRUE;
-		}
 	}
 
 	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
@@ -1290,31 +1255,30 @@ enable_edit_actions_sensitivity (EphyWindow *window)
 
 static void
 edit_menu_show_cb (GtkWidget *menu,
-		   EphyWindow *window)
+                  EphyWindow *window)
 {
-	update_edit_actions_sensitivity (window, FALSE);
+       update_edit_actions_sensitivity (window, FALSE);
 }
 
 static void
 edit_menu_hide_cb (GtkWidget *menu,
-		   EphyWindow *window)
+                  EphyWindow *window)
 {
-	enable_edit_actions_sensitivity (window);
+       enable_edit_actions_sensitivity (window);
 }
 
 static void
 init_menu_updaters (EphyWindow *window)
 {
-	GtkWidget *edit_menu_item, *edit_menu;
+       GtkWidget *edit_menu;
 
-	edit_menu_item = gtk_ui_manager_get_widget
-		(window->priv->manager, "/menubar/EditMenu");
-	edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (edit_menu_item));
+       edit_menu = gtk_ui_manager_get_widget
+               (window->priv->manager, "/ui/PagePopup");
 
-	g_signal_connect (edit_menu, "show",
-			  G_CALLBACK (edit_menu_show_cb), window);
-	g_signal_connect (edit_menu, "hide",
-			  G_CALLBACK (edit_menu_hide_cb), window);
+       g_signal_connect (edit_menu, "show",
+                         G_CALLBACK (edit_menu_show_cb), window);
+       g_signal_connect (edit_menu, "hide",
+                         G_CALLBACK (edit_menu_hide_cb), window);
 }
 
 static EphyWebView*
@@ -1625,6 +1589,14 @@ setup_ui_manager (EphyWindow *window)
 			       "window", window,
 			       NULL);
 	gtk_action_group_add_action (action_group, action);
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_PAGE_MENU_ACTION,
+			       "name", "PageMenu",
+			       "icon-name", "send-to-symbolic",
+			       "window", window,
+			       NULL);
+	gtk_action_group_add_action_with_accel (action_group, action, "<alt>E");
 	g_object_unref (action);
 
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
