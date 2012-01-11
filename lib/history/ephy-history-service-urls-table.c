@@ -238,8 +238,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
       "urls.zoom_level, "
       "urls.host "
     "FROM "
-      "urls JOIN visits ON visits.url = urls.id "
-    "WHERE ";
+      "urls ";
 
   int i = 0;
 
@@ -248,10 +247,15 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 
   statement_str = g_string_new (base_statement);
 
-  if (query->from > 0)
-    statement_str = g_string_append (statement_str, "visits.visit_time >= ? AND ");
-  if (query->to > 0)
-    statement_str = g_string_append (statement_str, "visits.visit_time <= ? AND ");
+  if (query->from > 0 || query->to > 0) {
+    statement_str = g_string_append (statement_str, "JOIN visits ON visits.url = urls.id WHERE ");
+    if (query->from > 0)
+      statement_str = g_string_append (statement_str, "visits.visit_time >= ? AND ");
+    if (query->to > 0)
+      statement_str = g_string_append (statement_str, "visits.visit_time <= ? AND ");
+  } else {
+    statement_str = g_string_append (statement_str, "WHERE ");
+  }
 
   for (substring = query->substring_list; substring != NULL; substring = substring->next)
     statement_str = g_string_append (statement_str, "(urls.url LIKE ? OR urls.title LIKE ?) AND ");
