@@ -725,21 +725,15 @@ get_chromes_visibility (EphyWindow *window,
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewChrome flags = priv->chrome;
 
-	if (window->priv->fullscreen_mode)
+	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
-		*show_tabsbar = !priv->is_popup;
+		*show_toolbar = FALSE;
+		*show_tabsbar = FALSE;
 	}
 	else
 	{
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
-	}
-
-	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-	{
-		*show_toolbar = FALSE;
-		*show_tabsbar = FALSE;
 	}
 }
 
