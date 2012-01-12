@@ -341,6 +341,10 @@ static const struct
 	const gchar *action;
 	gboolean fromToolbar;
 } extra_keybindings [] = {
+	/* FIXME: PageMenu should have its accel without being in the
+	 * extra keybindings, but does not seem to work for some
+	 * reason. */
+	{ GDK_KEY_e,		GDK_MOD1_MASK,	        "PageMenu",		 TRUE },
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
