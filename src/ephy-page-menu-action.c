@@ -62,6 +62,9 @@ ephy_page_menu_action_activate (GtkAction *action)
     GtkUIManager *manager;
     GSList *list;
     GtkWidget *button;
+    GdkEvent *event;
+    guint activate_button = 1;
+    guint32 activate_time = 0;
 
     window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
     manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
@@ -71,9 +74,17 @@ ephy_page_menu_action_activate (GtkAction *action)
     if (GTK_IS_TOOL_BUTTON (list->data))
         button = GTK_WIDGET (list->data);
 
+    event = gtk_get_current_event ();
+    if (event && event->type == GDK_BUTTON_PRESS) {
+      activate_button = event->button.button;
+      activate_time = event->button.time;
+
+      gdk_event_free (event);
+    }
+
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     (GtkMenuPositionFunc)menu_position_func, button,
-                    1, 0);
+                    activate_button, activate_time);
 }
 
 static void
