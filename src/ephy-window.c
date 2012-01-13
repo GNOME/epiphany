@@ -342,6 +342,8 @@ static const struct
 	 * extra keybindings, but does not seem to work for some
 	 * reason. */
 	{ GDK_KEY_e,		GDK_MOD1_MASK,	        "PageMenu",		 TRUE },
+	/* FIXME: this is not in any menu for now, so add it here. */
+	{ GDK_KEY_F11,          0,                      "ViewFullscreen",        FALSE },
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
