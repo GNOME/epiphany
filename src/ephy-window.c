@@ -200,9 +200,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
-        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information"), NULL,
-          N_("Display security information for the web page"),
-          G_CALLBACK (window_cmd_view_page_security_info) },
 
 	/* Bookmarks menu */
 
@@ -784,7 +781,6 @@ ephy_window_fullscreen (EphyWindow *window)
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *popup;
 	EphyEmbed *embed;
-	GtkAction *action;
 	gboolean lockdown_fs;
 
 	priv->fullscreen_mode = TRUE;
@@ -799,10 +795,6 @@ ephy_window_fullscreen (EphyWindow *window)
 	priv->fullscreen_popup = popup;
 	g_signal_connect_swapped (popup, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
-
-	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
-	g_signal_connect_swapped (popup, "lock-clicked",
-				  G_CALLBACK (gtk_action_activate), action);
 
 	/* sync status */
 	embed = window->priv->active_embed;
@@ -1794,8 +1786,7 @@ sync_tab_security (EphyWebView *view,
 	char *state = NULL;
 	char *tooltip;
 	const char *stock_id = STOCK_LOCK_INSECURE;
-	gboolean show_lock = FALSE, is_secure = FALSE;
-	GtkAction *action;
+	gboolean show_lock = FALSE;
 
 	if (priv->closing) return;
 
@@ -1830,7 +1821,6 @@ sync_tab_security (EphyWebView *view,
 			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
 			show_lock = TRUE;
-			is_secure = TRUE;
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1855,9 +1845,6 @@ sync_tab_security (EphyWebView *view,
 			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
 			 show_lock, stock_id, tooltip);
 	}
-
-	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
-	gtk_action_set_sensitive (action, is_secure);
 
 	g_free (tooltip);
 }
@@ -3599,12 +3586,6 @@ setup_toolbar (EphyWindow *window)
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
-	/* FIXME: No one seems to be using this atm. When we need it, the
-	 * signal should be added to EphyWindow. */
-#if 0
-	g_signal_connect (action, "lock-clicked",
-			  G_CALLBACK (lock_clicked_cb), toolbar);
-#endif
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "FileNewTab");
 	g_signal_connect_swapped (action, "open-link",
@@ -3790,15 +3771,6 @@ ephy_window_constructor (GType type,
 		}
 	}
 		
-	/* Connect lock clicks */
-	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
-	/* FIXME: No one seems to be using this atm. When we need it, the
-	 * signal should be added to EphyWindow. */
-#if 0
-	g_signal_connect_swapped (priv->toolbar, "lock-clicked",
-				  G_CALLBACK (gtk_action_activate), action);
-#endif
-
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (priv->manager);
 
