@@ -3568,9 +3568,6 @@ setup_toolbar (EphyWindow *window)
 
 	toolbar = gtk_ui_manager_get_widget (manager, "/DefaultToolbar");
 
-	gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
-				     GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
-
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationBack");
 	g_signal_connect_swapped (action, "open-link",
