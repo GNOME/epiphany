@@ -1158,7 +1158,7 @@ window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
 	const char *licence_part[] = {
-		N_("The GNOME Web Browser is free software; you can redistribute it and/or modify "
+		N_("Web is free software; you can redistribute it and/or modify "
 		   "it under the terms of the GNU General Public License as published by "
 		   "the Free Software Foundation; either version 2 of the License, or "
 		   "(at your option) any later version."),
@@ -1261,10 +1261,10 @@ window_cmd_help_about (GtkAction *action,
 			    NULL);
 
 	gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
-			       "program-name", _("GNOME Web Browser"),
+			       "program-name", _("Web"),
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-			                    "Copyright © 2003–2011 The GNOME Web Browser Developers",
+			                    "Copyright © 2003–2011 The Web Developers",
 			       "artists", artists,
 			       "authors", authors,
 			       "comments", comments,
@@ -1280,7 +1280,7 @@ window_cmd_help_about (GtkAction *action,
 			       "translator-credits", _("translator-credits"),
 			       "logo-icon-name", EPHY_STOCK_EPHY,
 			       "website", "http://www.gnome.org/projects/epiphany",
-			       "website-label", _("GNOME Web Browser Website"),
+			       "website-label", _("Web Website"),
 			       "license", licence,
 			       "wrap-license", TRUE,
 			       NULL);
