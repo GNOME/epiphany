@@ -1484,6 +1484,7 @@ setup_ui_manager (EphyWindow *window)
 	action =
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationBack",
+			      "label", _("Back"),
 			      "icon-name", "go-previous-symbolic",
 			      "tooltip", _("Go to the previous visited page"),
 			      "window", window,
@@ -1496,6 +1497,7 @@ setup_ui_manager (EphyWindow *window)
 	action =
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationForward",
+			      "label", _("Forward"),
 			      "icon-name", "go-next-symbolic",
 			      "tooltip", _("Go to the next visited page"),
 			      "window", window,

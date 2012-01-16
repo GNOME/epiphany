@@ -100,6 +100,7 @@ ephy_toolbar_constructed (GObject *object)
   action = gtk_action_group_get_action (action_group, "NavigationBack");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
                                       action);
+  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
 
   /* Forward */
@@ -110,6 +111,7 @@ ephy_toolbar_constructed (GObject *object)
   action = gtk_action_group_get_action (action_group, "NavigationForward");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
                                       action);
+  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
