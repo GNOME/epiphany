@@ -620,7 +620,8 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 
 	gtk_widget_set_name (close_button, "ephy-tab-close-button");
 
-	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_icon_name ("window-close-symbolic",
+					      GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (close_button, _("Close tab"));
 	g_signal_connect (close_button, "clicked",
 			  G_CALLBACK (close_button_clicked_cb), embed);
