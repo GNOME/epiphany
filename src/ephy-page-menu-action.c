@@ -70,7 +70,7 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, GtkAction *action)
     if (!button) {
       GSList *l = gtk_action_get_proxies (action);
       if (GTK_IS_BUTTON (l->data))
-        button = GTK_BUTTON (l->data);
+        button = GTK_WIDGET (l->data);
     }
 
     g_return_if_fail (GTK_IS_BUTTON (button));
