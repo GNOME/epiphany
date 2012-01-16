@@ -41,6 +41,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
+#include "nautilus-floating-bar.h"
 
 #include <errno.h>
 #include <glib/gi18n.h>
@@ -433,7 +434,6 @@ void
 _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 {
   EphyEmbedPrivate *priv = embed->priv;
-  GtkWidget *parent;
 
   nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
 
@@ -561,8 +561,6 @@ ephy_embed_constructed (GObject *object)
   WebKitWebWindowFeatures *window_features;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
-  GtkWidget *frame;
-  GtkWidget *eventbox;
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());

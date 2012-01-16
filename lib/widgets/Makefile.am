@@ -15,10 +15,12 @@ libephywidgets_la_SOURCES = \
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
 	ephy-tree-model-sort.h			\
-	totem-glow-button.c			\
-	totem-glow-button.h			\
 	ephy-zoom-action.h			\
-	ephy-zoom-action.c
+	ephy-zoom-action.c			\
+	nautilus-floating-bar.c			\
+	nautilus-floating-bar.h			\
+	totem-glow-button.c			\
+	totem-glow-button.h
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
