@@ -343,8 +343,12 @@ static const struct
 	 * extra keybindings, but does not seem to work for some
 	 * reason. */
 	{ GDK_KEY_e,		GDK_MOD1_MASK,	        "PageMenu",		 TRUE },
-	/* FIXME: this is not in any menu for now, so add it here. */
+	/* FIXME: these are not in any menu for now, so add them here. */
 	{ GDK_KEY_F11,          0,                      "ViewFullscreen",        FALSE },
+	{ GDK_KEY_plus,         GDK_CONTROL_MASK,       "ViewZoomIn",            FALSE },
+	{ GDK_KEY_minus,        GDK_CONTROL_MASK,       "ViewZoomOut",           FALSE },
+	{ GDK_KEY_0,            GDK_CONTROL_MASK,       "ViewZoomNormal",        FALSE },
+
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
