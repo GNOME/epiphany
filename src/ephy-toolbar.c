@@ -159,6 +159,7 @@ ephy_toolbar_constructed (GObject *object)
   /* Page Menu */
   tool_item = gtk_tool_item_new ();
   tool_button = gtk_button_new ();
+  gtk_widget_set_name (GTK_WIDGET (tool_button), "ephy-page-menu-button");
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
