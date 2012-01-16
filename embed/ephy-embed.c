@@ -74,7 +74,7 @@ struct _EphyEmbedPrivate
   gboolean inspector_attached;
   guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
-  GtkWidget *statusbar_label;
+  GtkWidget *floating_bar;
   GtkWidget *progress;
 
   GSList *messages;
@@ -435,17 +435,13 @@ _ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
   EphyEmbedPrivate *priv = embed->priv;
   GtkWidget *parent;
 
-  gtk_label_set_label (GTK_LABEL (priv->statusbar_label), label);
-
-  parent = gtk_widget_get_parent (priv->statusbar_label);
-  if (parent == NULL)
-    return;
+  nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
 
   if (label == NULL || label[0] == '\0') {
-    gtk_widget_hide (parent);
-    gtk_widget_set_halign (gtk_widget_get_parent (parent), GTK_ALIGN_START);
+    gtk_widget_hide (priv->floating_bar);
+    gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
   } else
-    gtk_widget_show (parent);
+    gtk_widget_show (priv->floating_bar);
 }
 
 static gboolean
@@ -514,21 +510,6 @@ window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, E
 }
 
 static gboolean
-frame_enter_notify_cb (GtkWidget *widget,
-                       GdkEventCrossing *event,
-                       gpointer user_data)
-{
-	if (gtk_widget_get_halign (widget) == GTK_ALIGN_START)
-		gtk_widget_set_halign (widget, GTK_ALIGN_END);
-  else
-		gtk_widget_set_halign (widget, GTK_ALIGN_START);
-
-	gtk_widget_queue_resize (widget);
-
-  return FALSE;
-}
-
-static gboolean
 clear_progress_cb (EphyEmbed *embed)
 {
   gtk_widget_hide (embed->priv->progress);
@@ -591,19 +572,11 @@ ephy_embed_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
 
   /* statusbar is hidden by default */
-  priv->statusbar_label = gtk_label_new (NULL);
-  eventbox = gtk_event_box_new ();
-  frame = gtk_frame_new (NULL);
-  gtk_widget_set_name (frame, "ephy-status-frame");
-  gtk_widget_set_halign (eventbox, GTK_ALIGN_START);
-  gtk_widget_set_valign (eventbox, GTK_ALIGN_END);
-  gtk_widget_show (eventbox);
+  priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
+  gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
 
-  gtk_container_add (GTK_CONTAINER (eventbox), frame);
-  gtk_container_add (GTK_CONTAINER (frame), priv->statusbar_label);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), eventbox);
-  g_signal_connect (eventbox, "enter-notify-event",
-                    G_CALLBACK (frame_enter_notify_cb), object);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->floating_bar);
 
   embed->priv->progress = gtk_progress_bar_new ();
   gtk_widget_set_name (embed->priv->progress, "ephy-progress-bar");

@@ -31,6 +31,7 @@ NOINST_H_FILES = \
 	ephy-toolbar.h				\
 	ephy-window-action.h			\
 	languages.h				\
+	nautilus-floating-bar.h			\
 	pdm-dialog.h				\
 	popup-commands.h			\
 	prefs-dialog.h				\
@@ -73,6 +74,7 @@ libephymain_la_SOURCES = \
 	ephy-toolbar.c				\
 	ephy-window.c				\
 	ephy-window-action.c			\
+	nautilus-floating-bar.c			\
 	pdm-dialog.c				\
 	popup-commands.c			\
 	prefs-dialog.c				\
