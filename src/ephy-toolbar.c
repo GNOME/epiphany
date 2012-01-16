@@ -72,20 +72,14 @@ ephy_toolbar_get_property (GObject *object,
   }
 }
 
-static gboolean
-create_menu_proxy_cb (GtkToolItem *item, gpointer user_data)
-{
-  return TRUE;
-}
-
 static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkToolItem *tool_button, *back_forward, *location_stop_reload;
-  GtkWidget *box, *location, *toolbar;
+  GtkToolItem *back_forward, *location_stop_reload, *tool_item;
+  GtkWidget *tool_button, *box, *location, *toolbar;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
@@ -96,7 +90,10 @@ ephy_toolbar_constructed (GObject *object)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Back */
-  tool_button = gtk_tool_button_new (NULL, NULL);
+  tool_button = gtk_button_new ();
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
   action_group = ephy_window_get_toolbar_action_group (priv->window);
   action = gtk_action_group_get_action (action_group, "NavigationBack");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
@@ -104,7 +101,10 @@ ephy_toolbar_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
 
   /* Forward */
-  tool_button = gtk_tool_button_new (NULL, NULL);
+  tool_button = gtk_button_new ();
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "NavigationForward");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
                                       action);
@@ -131,7 +131,10 @@ ephy_toolbar_constructed (GObject *object)
                       TRUE, TRUE, 0);
 
   /* Reload/Stop */
-  tool_button = gtk_tool_button_new (NULL, NULL);
+  tool_button = gtk_button_new ();
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
                                       action);
@@ -148,15 +151,17 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
 
   /* Page Menu */
-  tool_button = gtk_tool_button_new (NULL, NULL);
+  tool_item = gtk_tool_item_new ();
+  tool_button = gtk_button_new ();
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "PageMenu");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
                                       action);
-  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_button));
-  /* FIXME: why is this needed?! GTK+ wants to create an overflow menu
-   * for this, no idea why. Connect to the signal to cancel it. */
-  g_signal_connect (tool_button, "create-menu-proxy",
-                    G_CALLBACK (create_menu_proxy_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (tool_item), tool_button);
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_item));
+  gtk_widget_show_all (GTK_WIDGET (tool_item));
 }
 
 static void

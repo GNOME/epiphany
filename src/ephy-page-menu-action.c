@@ -28,7 +28,7 @@ menu_position_func (GtkMenu           *menu,
                     int               *x,
                     int               *y,
                     gboolean          *push_in,
-                    GtkToolButton     *button)
+                    GtkButton         *button)
 {
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (button);
@@ -71,10 +71,10 @@ ephy_page_menu_action_activate (GtkAction *action)
     menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
 
     list = gtk_action_get_proxies (action);
-    if (GTK_IS_TOOL_BUTTON (list->data))
+    if (GTK_IS_BUTTON (list->data))
         button = GTK_WIDGET (list->data);
 
-    g_return_if_fail (GTK_IS_TOOL_BUTTON (button));
+    g_return_if_fail (GTK_IS_BUTTON (button));
 
     event = gtk_get_current_event ();
     if (event && event->type == GDK_BUTTON_PRESS) {
