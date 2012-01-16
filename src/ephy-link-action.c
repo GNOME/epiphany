@@ -25,10 +25,11 @@
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-link.h"
+#include "ephy-window-action.h"
 
 #include <gtk/gtk.h>
 
-G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, GTK_TYPE_ACTION,
+G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, EPHY_TYPE_WINDOW_ACTION,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
 						NULL))
 

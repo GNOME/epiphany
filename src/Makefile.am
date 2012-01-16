@@ -25,11 +25,11 @@ NOINST_H_FILES = \
 	ephy-link-action.h			\
 	ephy-lockdown.h				\
 	ephy-location-action.h			\
-	ephy-navigation-action.h		\
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
 	ephy-password-info.h			\
 	ephy-toolbar.h				\
+	ephy-window-action.h			\
 	languages.h				\
 	pdm-dialog.h				\
 	popup-commands.h			\
@@ -64,7 +64,6 @@ libephymain_la_SOURCES = \
 	ephy-link-action.c			\
 	ephy-location-action.c			\
 	ephy-lockdown.c				\
-	ephy-navigation-action.c		\
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
 	ephy-page-menu-action.c			\
@@ -73,6 +72,7 @@ libephymain_la_SOURCES = \
 	ephy-shell.c				\
 	ephy-toolbar.c				\
 	ephy-window.c				\
+	ephy-window-action.c			\
 	pdm-dialog.c				\
 	popup-commands.c			\
 	prefs-dialog.c				\

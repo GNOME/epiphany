@@ -26,7 +26,7 @@
 #ifndef EPHY_NAVIGATION_HISTORY_ACTION_H
 #define EPHY_NAVIGATION_HISTORY_ACTION_H
 
-#include "ephy-navigation-action.h"
+#include "ephy-link-action.h"
 
 G_BEGIN_DECLS
 
@@ -49,7 +49,7 @@ typedef struct _EphyNavigationHistoryActionClass	EphyNavigationHistoryActionClas
 
 struct _EphyNavigationHistoryAction
 {
-  EphyNavigationAction parent;
+  EphyLinkAction parent;
 
   /*< private >*/
   EphyNavigationHistoryActionPrivate *priv;
@@ -57,7 +57,7 @@ struct _EphyNavigationHistoryAction
 
 struct _EphyNavigationHistoryActionClass
 {
-  EphyNavigationActionClass parent_class;
+  EphyLinkActionClass parent_class;
 };
 
 GType ephy_navigation_history_action_get_type (void);

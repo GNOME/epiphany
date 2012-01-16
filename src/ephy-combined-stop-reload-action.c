@@ -22,12 +22,12 @@
 #include "config.h"
 #include "ephy-combined-stop-reload-action.h"
 
-#include "ephy-window.h"
+#include "ephy-window-action.h"
 #include "window-commands.h"
 
 #include <glib/gi18n.h>
 
-G_DEFINE_TYPE (EphyCombinedStopReloadAction, ephy_combined_stop_reload_action, GTK_TYPE_ACTION)
+G_DEFINE_TYPE (EphyCombinedStopReloadAction, ephy_combined_stop_reload_action, EPHY_TYPE_WINDOW_ACTION)
 
 #define COMBINED_STOP_RELOAD_ACTION_PRIVATE(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION, EphyCombinedStopReloadActionPrivate))
@@ -35,7 +35,6 @@ G_DEFINE_TYPE (EphyCombinedStopReloadAction, ephy_combined_stop_reload_action, G
 struct _EphyCombinedStopReloadActionPrivate
 {
   gboolean loading;
-  EphyWindow *window;
   gulong action_handler_id;
 };
 
@@ -55,8 +54,7 @@ typedef enum {
 
 enum {
   PROP_0,
-  PROP_LOADING,
-  PROP_WINDOW
+  PROP_LOADING
 };
 
 void
@@ -86,7 +84,7 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
 
   priv->action_handler_id = g_signal_connect (action, "activate",
                                               combined_stop_reload_action_entries[action_enum].callback,
-                                              priv->window);
+                                              ephy_window_action_get_window (EPHY_WINDOW_ACTION (action)));
 
   priv->loading = loading;
 }
@@ -103,9 +101,6 @@ ephy_combined_stop_reload_action_get_property (GObject    *object,
     {
     case PROP_LOADING:
       g_value_set_boolean (value, action->priv->loading);
-      break;
-    case PROP_WINDOW:
-      g_value_set_object (value, action->priv->window);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -125,9 +120,6 @@ ephy_combined_stop_reload_action_set_property (GObject      *object,
   case PROP_LOADING:
     ephy_combined_stop_reload_action_set_loading (action,
                                       g_value_get_boolean (value));
-    break;
-  case PROP_WINDOW:
-    action->priv->window = EPHY_WINDOW (g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -149,13 +141,6 @@ ephy_combined_stop_reload_action_class_init (EphyCombinedStopReloadActionClass *
                                    g_param_spec_boolean ("loading", NULL, NULL,
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class,
-                                   PROP_WINDOW,
-                                   g_param_spec_object ("window", NULL, NULL,
-                                                        EPHY_TYPE_WINDOW,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
 }
 
 static void

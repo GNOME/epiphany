@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-toolbar.h"
 
+#include "ephy-middle-clickable-button.h"
+
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_TOOLBAR)
 
 #define EPHY_TOOLBAR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
@@ -90,7 +92,7 @@ ephy_toolbar_constructed (GObject *object)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Back */
-  tool_button = gtk_button_new ();
+  tool_button = ephy_middle_clickable_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
@@ -101,7 +103,7 @@ ephy_toolbar_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
 
   /* Forward */
-  tool_button = gtk_button_new ();
+  tool_button = ephy_middle_clickable_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());

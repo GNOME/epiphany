@@ -24,6 +24,8 @@
 #ifndef EPHY_LINK_ACTION_H
 #define EPHY_LINK_ACTION_H
 
+#include "ephy-window-action.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -51,14 +53,14 @@ typedef struct _EphyLinkActionGroupClass	EphyLinkActionGroupClass;
 
 struct _EphyLinkAction
 {
-	GtkAction parent_instance;
+	EphyWindowAction parent_instance;
 
 	EphyLinkActionPrivate *priv;
 };
 
 struct _EphyLinkActionClass
 {
-	GtkActionClass parent_class;
+	EphyWindowActionClass parent_class;
 };
 
 struct _EphyLinkActionGroup

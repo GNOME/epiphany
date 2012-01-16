@@ -56,7 +56,7 @@ enum {
 static void ephy_navigation_history_action_init       (EphyNavigationHistoryAction *action);
 static void ephy_navigation_history_action_class_init (EphyNavigationHistoryActionClass *klass);
 
-G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_NAVIGATION_ACTION)
+G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_LINK_ACTION)
 
 static void
 ephy_history_cleared_cb (EphyHistory *history,
@@ -74,7 +74,7 @@ action_activate (GtkAction *action)
   WebKitWebView *web_view;
 
   history_action = EPHY_NAVIGATION_HISTORY_ACTION (action);
-  window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
+  window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 

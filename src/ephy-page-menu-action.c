@@ -21,7 +21,7 @@
 #include "config.h"
 #include "ephy-page-menu-action.h"
 
-G_DEFINE_TYPE (EphyPageMenuAction, ephy_page_menu_action, EPHY_TYPE_NAVIGATION_ACTION);
+G_DEFINE_TYPE (EphyPageMenuAction, ephy_page_menu_action, EPHY_TYPE_WINDOW_ACTION);
 
 static void
 menu_position_func (GtkMenu           *menu,
@@ -66,7 +66,7 @@ ephy_page_menu_action_activate (GtkAction *action)
     guint activate_button = 1;
     guint32 activate_time = 0;
 
-    window = _ephy_navigation_action_get_window (EPHY_NAVIGATION_ACTION (action));
+    window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
     manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
     menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
 

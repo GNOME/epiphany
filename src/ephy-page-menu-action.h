@@ -21,7 +21,7 @@
 #ifndef __EPHY_PAGE_MENU_ACTION_H__
 #define __EPHY_PAGE_MENU_ACTION_H__
 
-#include "ephy-navigation-action.h"
+#include "ephy-window-action.h"
 
 #include <gtk/gtk.h>
 
@@ -38,11 +38,11 @@ typedef struct _EphyPageMenuAction      EphyPageMenuAction;
 typedef struct _EphyPageMenuActionClass EphyPageMenuActionClass;
 
 struct _EphyPageMenuActionClass {
-    EphyNavigationActionClass parent_class;
+    EphyWindowActionClass parent_class;
 };
 
 struct _EphyPageMenuAction {
-    EphyNavigationAction parent_instance;
+    EphyWindowAction parent_instance;
 };
 
 GType ephy_page_menu_action_get_type (void) G_GNUC_CONST;
