@@ -55,6 +55,7 @@
 #include "ephy-state.h"
 #include "ephy-stock-icons.h"
 #include "ephy-topic-action.h"
+#include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom-action.h"
@@ -1480,7 +1481,6 @@ setup_ui_manager (EphyWindow *window)
 	action =
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationBack",
-			      "label", _("_Back"),
 			      "icon-name", "go-previous-symbolic",
 			      "tooltip", _("Go to the previous visited page"),
 			      "window", window,
@@ -1493,7 +1493,6 @@ setup_ui_manager (EphyWindow *window)
 	action =
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationForward",
-			      "label", _("_Forward"),
 			      "icon-name", "go-next-symbolic",
 			      "tooltip", _("Go to the next visited page"),
 			      "window", window,
@@ -3560,13 +3559,12 @@ static GtkWidget *
 setup_toolbar (EphyWindow *window)
 {
 	GtkWidget *toolbar;
-	GtkUIManager *manager;
 	GtkAction *action;
 	EphyWindowPrivate *priv = window->priv;
 
-	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
-
-	toolbar = gtk_ui_manager_get_widget (manager, "/DefaultToolbar");
+	toolbar = ephy_toolbar_new (window);
+	gtk_box_pack_start (GTK_BOX (priv->menu_dock),
+			    toolbar, FALSE, FALSE, 0);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationBack");
@@ -3657,7 +3655,14 @@ ephy_window_constructor (GType type,
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);
 
+	/* Create the notebook. */
+	/* FIXME: the notebook needs to exist before the toolbar,
+	 * because EphyLocationEntry uses it... */
 	priv->notebook = setup_notebook (window);
+
+	/* Setup the toolbar. */
+	priv->toolbar = setup_toolbar (window);
+
 	g_signal_connect_swapped (priv->notebook, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
@@ -3713,9 +3718,6 @@ ephy_window_constructor (GType type,
 	g_object_unref (css_provider);
 	g_object_unref (css_file);
 
-	/* Setup the toolbar. */
-	priv->toolbar = setup_toolbar (window);
-
 	/* Initialize the menus */
 	priv->enc_menu = ephy_encoding_menu_new (window);
 
@@ -3769,7 +3771,7 @@ ephy_window_constructor (GType type,
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 		}
 	}
-		
+
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (priv->manager);
 
@@ -4258,4 +4260,12 @@ ephy_window_set_location (EphyWindow *window,
 	priv->updating_address = TRUE;
 	ephy_location_action_set_address (EPHY_LOCATION_ACTION (action), address);
 	priv->updating_address = FALSE;
+}
+
+GtkActionGroup *
+ephy_window_get_toolbar_action_group (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return window->priv->toolbar_action_group;
 }

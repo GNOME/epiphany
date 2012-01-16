@@ -77,7 +77,6 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
     EPHY_COMBINED_STOP_RELOAD_ACTION_STOP : EPHY_COMBINED_STOP_RELOAD_ACTION_REFRESH;
 
   g_object_set (action,
-                "label", combined_stop_reload_action_entries[action_enum].label,
                 "icon-name", combined_stop_reload_action_entries[action_enum].stock_id,
                 "tooltip", combined_stop_reload_action_entries[action_enum].tooltip,
                 NULL);

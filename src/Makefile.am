@@ -29,6 +29,7 @@ NOINST_H_FILES = \
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
 	ephy-password-info.h			\
+	ephy-toolbar.h				\
 	languages.h				\
 	pdm-dialog.h				\
 	popup-commands.h			\
@@ -70,6 +71,7 @@ libephymain_la_SOURCES = \
 	ephy-password-info.c	        	\
 	ephy-session.c				\
 	ephy-shell.c				\
+	ephy-toolbar.c				\
 	ephy-window.c				\
 	pdm-dialog.c				\
 	popup-commands.c			\
