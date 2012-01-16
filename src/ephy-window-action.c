@@ -88,7 +88,7 @@ ephy_window_action_class_init (EphyWindowActionClass *class)
                                      PROP_WINDOW,
                                      g_param_spec_object ("window", NULL, NULL,
                                                           G_TYPE_OBJECT,
-                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
     
     g_type_class_add_private (object_class, sizeof (EphyWindowActionPrivate));
 }

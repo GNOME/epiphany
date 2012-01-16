@@ -34,15 +34,18 @@ G_BEGIN_DECLS
 #define EPHY_IS_PAGE_MENU_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_PAGE_MENU_ACTION))
 #define EPHY_PAGE_MENU_ACTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_PAGE_MENU_ACTION, EphyPageMenuActionClass))
 
-typedef struct _EphyPageMenuAction      EphyPageMenuAction;
-typedef struct _EphyPageMenuActionClass EphyPageMenuActionClass;
+typedef struct _EphyPageMenuAction        EphyPageMenuAction;
+typedef struct _EphyPageMenuActionClass   EphyPageMenuActionClass;
+typedef struct _EphyPageMenuActionPrivate EphyPageMenuActionPrivate;
 
 struct _EphyPageMenuActionClass {
-    EphyWindowActionClass parent_class;
+  EphyWindowActionClass parent_class;
 };
 
 struct _EphyPageMenuAction {
-    EphyWindowAction parent_instance;
+  EphyWindowAction parent_instance;
+
+  EphyPageMenuActionPrivate *priv;
 };
 
 GType ephy_page_menu_action_get_type (void) G_GNUC_CONST;

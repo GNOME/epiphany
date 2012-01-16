@@ -23,6 +23,12 @@
 
 G_DEFINE_TYPE (EphyPageMenuAction, ephy_page_menu_action, EPHY_TYPE_WINDOW_ACTION);
 
+#define EPHY_PAGE_MENU_ACTION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_PAGE_MENU_ACTION, EphyPageMenuActionPrivate))
+
+struct _EphyPageMenuActionPrivate {
+  GtkWidget *menu;
+};
+
 static void
 menu_position_func (GtkMenu           *menu,
                     int               *x,
@@ -55,40 +61,60 @@ menu_position_func (GtkMenu           *menu,
 }
 
 static void
-button_press_cb (GtkWidget *button, GdkEventButton *event, GtkAction *action)
+visible_cb (GtkWidget *menu, GParamSpec *pspec, gpointer user_data)
 {
-    GtkWidget *menu;
-    EphyWindow *window;
-    GtkUIManager *manager;
-    guint event_button = 1;
-    guint32 event_time = 0;
+  if (gtk_widget_get_visible (menu))
+    gtk_style_context_add_class (gtk_widget_get_style_context (menu),
+                                 "active-menu");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (menu),
+                                    "active-menu");
+}
 
+static void
+button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *action)
+{
+  GtkWidget *menu;
+  EphyWindow *window;
+  GtkUIManager *manager;
+  guint event_button = 1;
+  guint32 event_time = 0;
+
+  if (!action->priv->menu) {
     window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
     manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
     menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
 
-    if (!button) {
-      GSList *l = gtk_action_get_proxies (action);
-      if (GTK_IS_BUTTON (l->data))
-        button = GTK_WIDGET (l->data);
-    }
+    g_signal_connect (menu, "notify::visible",
+                      G_CALLBACK (visible_cb), NULL);
 
-    g_return_if_fail (GTK_IS_BUTTON (button));
+    action->priv->menu = menu;
+  }
+    
 
-    if (event) {
-      event_button = event->button;
-      event_time = event->time;
-    }
+  if (!button) {
+    GSList *l = gtk_action_get_proxies (GTK_ACTION (action));
+    if (GTK_IS_BUTTON (l->data))
+      button = GTK_WIDGET (l->data);
+  }
 
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    (GtkMenuPositionFunc)menu_position_func, button,
-                    event_button, event_time);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  if (event) {
+    event_button = event->button;
+    event_time = event->time;
+  }
+
+  gtk_menu_popup (GTK_MENU (action->priv->menu),
+                  NULL, NULL,
+                  (GtkMenuPositionFunc)menu_position_func, button,
+                  event_button, event_time);
 }
 
 static void
 ephy_page_menu_action_activate (GtkAction *action)
 {
-  button_press_cb (NULL, NULL, action);
+  button_press_cb (NULL, NULL, EPHY_PAGE_MENU_ACTION (action));
 }
 
 static void
@@ -115,14 +141,17 @@ ephy_page_menu_action_disconnect_proxy (GtkAction *action,
 static void
 ephy_page_menu_action_class_init (EphyPageMenuActionClass *klass)
 {
-    GtkActionClass *action_class = GTK_ACTION_CLASS (klass);
+  GtkActionClass *action_class = GTK_ACTION_CLASS (klass);
 
-    action_class->activate = ephy_page_menu_action_activate;
-    action_class->connect_proxy = ephy_page_menu_action_connect_proxy;
-    action_class->disconnect_proxy = ephy_page_menu_action_disconnect_proxy;
+  action_class->activate = ephy_page_menu_action_activate;
+  action_class->connect_proxy = ephy_page_menu_action_connect_proxy;
+  action_class->disconnect_proxy = ephy_page_menu_action_disconnect_proxy;
+
+  g_type_class_add_private (klass, sizeof (EphyPageMenuActionPrivate));
 }
 
 static void
 ephy_page_menu_action_init (EphyPageMenuAction *self)
 {
+  self->priv = EPHY_PAGE_MENU_ACTION_GET_PRIVATE (self);
 }
