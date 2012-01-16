@@ -22,7 +22,6 @@
 #include "config.h"
 #include "ephy-combined-stop-reload-action.h"
 
-#include "ephy-window-action.h"
 #include "window-commands.h"
 
 #include <glib/gi18n.h>

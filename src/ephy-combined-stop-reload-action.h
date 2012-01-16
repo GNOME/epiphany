@@ -22,8 +22,9 @@
 #ifndef _EPHY_COMBINED_STOP_RELOAD_ACTION_H
 #define _EPHY_COMBINED_STOP_RELOAD_ACTION_H
 
-#include <glib-object.h>
 #include <gtk/gtk.h>
+
+#include "ephy-window-action.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +41,7 @@ typedef struct _EphyCombinedStopReloadActionPrivate EphyCombinedStopReloadAction
 
 struct _EphyCombinedStopReloadAction
 {
-  GtkAction parent;
+  EphyWindowAction parent;
 
   /*< private >*/
   EphyCombinedStopReloadActionPrivate *priv;
@@ -48,13 +49,13 @@ struct _EphyCombinedStopReloadAction
 
 struct _EphyCombinedStopReloadActionClass
 {
-  GtkActionClass parent_class;
+  EphyWindowActionClass parent_class;
 };
 
 GType ephy_combined_stop_reload_action_get_type (void) G_GNUC_CONST;
 
 void ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *action,
-				       gboolean loading);
+                                                   gboolean loading);
 
 G_END_DECLS
 
