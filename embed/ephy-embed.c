@@ -573,6 +573,7 @@ ephy_embed_constructed (GObject *object)
   priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
   gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
+  gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->floating_bar);
 
