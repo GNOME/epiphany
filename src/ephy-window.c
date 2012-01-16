@@ -45,7 +45,6 @@
 #include "ephy-link.h"
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
-#include "ephy-navigation-action.h"
 #include "ephy-navigation-history-action.h"
 #include "ephy-notebook.h"
 #include "ephy-page-menu-action.h"
