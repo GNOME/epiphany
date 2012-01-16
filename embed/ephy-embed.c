@@ -566,6 +566,9 @@ ephy_embed_constructed (GObject *object)
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
   overlay = gtk_overlay_new ();
+  gtk_widget_add_events (overlay, 
+                         GDK_ENTER_NOTIFY_MASK |
+                         GDK_LEAVE_NOTIFY_MASK);
   gtk_widget_set_name (overlay, "ephy-overlay");
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
 
