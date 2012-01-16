@@ -55,38 +55,61 @@ menu_position_func (GtkMenu           *menu,
 }
 
 static void
-ephy_page_menu_action_activate (GtkAction *action)
+button_press_cb (GtkWidget *button, GdkEventButton *event, GtkAction *action)
 {
     GtkWidget *menu;
     EphyWindow *window;
     GtkUIManager *manager;
-    GSList *list;
-    GtkWidget *button;
-    GdkEvent *event;
-    guint activate_button = 1;
-    guint32 activate_time = 0;
+    guint event_button = 1;
+    guint32 event_time = 0;
 
     window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
     manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
     menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
 
-    list = gtk_action_get_proxies (action);
-    if (GTK_IS_BUTTON (list->data))
-        button = GTK_WIDGET (list->data);
+    if (!button) {
+      GSList *l = gtk_action_get_proxies (action);
+      if (GTK_IS_BUTTON (l->data))
+        button = GTK_BUTTON (l->data);
+    }
 
     g_return_if_fail (GTK_IS_BUTTON (button));
 
-    event = gtk_get_current_event ();
-    if (event && event->type == GDK_BUTTON_PRESS) {
-      activate_button = event->button.button;
-      activate_time = event->button.time;
-
-      gdk_event_free (event);
+    if (event) {
+      event_button = event->button;
+      event_time = event->time;
     }
 
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     (GtkMenuPositionFunc)menu_position_func, button,
-                    activate_button, activate_time);
+                    event_button, event_time);
+}
+
+static void
+ephy_page_menu_action_activate (GtkAction *action)
+{
+  button_press_cb (NULL, NULL, action);
+}
+
+static void
+ephy_page_menu_action_connect_proxy (GtkAction *action,
+                                     GtkWidget *proxy)
+{
+  if (GTK_IS_BUTTON (proxy))
+    g_signal_connect (proxy, "button-press-event",
+                      G_CALLBACK (button_press_cb), action);
+
+  GTK_ACTION_CLASS (ephy_page_menu_action_parent_class)->connect_proxy (action, proxy);
+}
+
+static void
+ephy_page_menu_action_disconnect_proxy (GtkAction *action,
+                                        GtkWidget *proxy)
+{
+  if (GTK_IS_BUTTON (proxy))
+    g_signal_handlers_disconnect_by_func (proxy, G_CALLBACK (button_press_cb), action);
+
+  GTK_ACTION_CLASS (ephy_page_menu_action_parent_class)->disconnect_proxy (action, proxy);
 }
 
 static void
@@ -95,6 +118,8 @@ ephy_page_menu_action_class_init (EphyPageMenuActionClass *klass)
     GtkActionClass *action_class = GTK_ACTION_CLASS (klass);
 
     action_class->activate = ephy_page_menu_action_activate;
+    action_class->connect_proxy = ephy_page_menu_action_connect_proxy;
+    action_class->disconnect_proxy = ephy_page_menu_action_disconnect_proxy;
 }
 
 static void
