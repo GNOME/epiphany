@@ -129,6 +129,8 @@ ephy_toolbar_constructed (GObject *object)
   location = gtk_action_create_tool_item (action);
   gtk_box_pack_start (GTK_BOX (box), location,
                       TRUE, TRUE, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box),
+                               "location-entry");
 
   /* Reload/Stop */
   tool_button = gtk_button_new ();
