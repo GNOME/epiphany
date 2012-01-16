@@ -95,6 +95,7 @@ action_activate (GtkAction *action)
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
     }
     webkit_web_view_go_back (web_view);
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
   } else if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
     if (ephy_gui_is_middle_click () ||
         ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
@@ -119,6 +120,7 @@ action_activate (GtkAction *action)
       webkit_web_view_load_uri (web_view, forward_uri);
     } else {
       webkit_web_view_go_forward (web_view);
+      gtk_widget_grab_focus (GTK_WIDGET (embed));
     }
   }
 }
