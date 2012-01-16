@@ -61,13 +61,13 @@ menu_position_func (GtkMenu           *menu,
 }
 
 static void
-visible_cb (GtkWidget *menu, GParamSpec *pspec, gpointer user_data)
+visible_cb (GtkWidget *menu, GParamSpec *pspec, GtkWidget *button)
 {
   if (gtk_widget_get_visible (menu))
-    gtk_style_context_add_class (gtk_widget_get_style_context (menu),
+    gtk_style_context_add_class (gtk_widget_get_style_context (button),
                                  "active-menu");
   else
-    gtk_style_context_remove_class (gtk_widget_get_style_context (menu),
+    gtk_style_context_remove_class (gtk_widget_get_style_context (button),
                                     "active-menu");
 }
 
@@ -80,17 +80,6 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
   guint event_button = 1;
   guint32 event_time = 0;
 
-  if (!action->priv->menu) {
-    window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
-    manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
-    menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
-
-    g_signal_connect (menu, "notify::visible",
-                      G_CALLBACK (visible_cb), NULL);
-
-    action->priv->menu = g_object_ref (menu);
-  }
-
   if (!button) {
     GSList *l = gtk_action_get_proxies (GTK_ACTION (action));
     if (GTK_IS_BUTTON (l->data))
@@ -98,6 +87,17 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
   }
 
   g_return_if_fail (GTK_IS_BUTTON (button));
+
+  if (!action->priv->menu) {
+    window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
+    manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+    menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
+
+    g_signal_connect (menu, "notify::visible",
+                      G_CALLBACK (visible_cb), button);
+
+    action->priv->menu = g_object_ref (menu);
+  }
 
   if (event) {
     event_button = event->button;
