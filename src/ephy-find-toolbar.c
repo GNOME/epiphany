@@ -20,16 +20,16 @@
  */
 
 #include "config.h"
-
-#include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
-#include "ephy-debug.h"
 
-#include <webkit/webkit.h>
+#include "ephy-debug.h"
+#include "ephy-embed-utils.h"
+
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#include <webkit/webkit.h>
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
