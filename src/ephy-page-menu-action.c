@@ -27,6 +27,7 @@ G_DEFINE_TYPE (EphyPageMenuAction, ephy_page_menu_action, EPHY_TYPE_WINDOW_ACTIO
 
 struct _EphyPageMenuActionPrivate {
   GtkWidget *menu;
+  GtkWidget *button;
 };
 
 static void
@@ -101,6 +102,7 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
                       G_CALLBACK (visible_cb), button);
 
     action->priv->menu = g_object_ref (menu);
+    action->priv->button = g_object_ref (button);
   }
 
   if (event) {
@@ -146,17 +148,11 @@ ephy_page_menu_action_dispose (GObject *object)
 {
   EphyPageMenuActionPrivate *priv = EPHY_PAGE_MENU_ACTION (object)->priv;
 
-  if (priv->menu) {
-    GtkWidget *button = NULL;
-    GSList *l = gtk_action_get_proxies (GTK_ACTION (object));
-
-    if (GTK_IS_BUTTON (l->data))
-      button = GTK_WIDGET (l->data);
-
-    g_signal_handlers_disconnect_by_func (priv->menu, G_CALLBACK (visible_cb), button);
-  }
+  if (priv->menu)
+    g_signal_handlers_disconnect_by_func (priv->menu, G_CALLBACK (visible_cb), priv->button);
 
   g_clear_object (&priv->menu);
+  g_clear_object (&priv->button);
 
   G_OBJECT_CLASS (ephy_page_menu_action_parent_class)->dispose (object);
 }
