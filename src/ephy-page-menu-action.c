@@ -41,6 +41,10 @@ menu_position_func (GtkMenu           *menu,
   GtkRequisition menu_req;
   GtkTextDirection direction;
   GdkWindow *window;
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menu));
+  gtk_window_set_type_hint (GTK_WINDOW (toplevel), GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU);
 
   gtk_widget_get_preferred_size (GTK_WIDGET (menu),
                                  &menu_req, NULL);
