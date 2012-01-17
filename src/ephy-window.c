@@ -348,7 +348,7 @@ static const struct
 	{ GDK_KEY_minus,        GDK_CONTROL_MASK,       "ViewZoomOut",           FALSE },
 	{ GDK_KEY_0,            GDK_CONTROL_MASK,       "ViewZoomNormal",        FALSE },
 	{ GDK_KEY_g,            GDK_CONTROL_MASK,       "EditFindNext",          FALSE },
-	{ GDK_KEY_g,            GDK_CONTROL_MASK |
+	{ GDK_KEY_G,            GDK_CONTROL_MASK |
 	                        GDK_SHIFT_MASK,         "EditFindPrev",          FALSE },
 
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
