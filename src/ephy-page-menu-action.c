@@ -146,6 +146,16 @@ ephy_page_menu_action_dispose (GObject *object)
 {
   EphyPageMenuActionPrivate *priv = EPHY_PAGE_MENU_ACTION (object)->priv;
 
+  if (priv->menu) {
+    GtkWidget *button = NULL;
+    GSList *l = gtk_action_get_proxies (GTK_ACTION (object));
+
+    if (GTK_IS_BUTTON (l->data))
+      button = GTK_WIDGET (l->data);
+
+    g_signal_handlers_disconnect_by_func (priv->menu, G_CALLBACK (visible_cb), button);
+  }
+
   g_clear_object (&priv->menu);
 
   G_OBJECT_CLASS (ephy_page_menu_action_parent_class)->dispose (object);
