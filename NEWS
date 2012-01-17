@@ -1,8 +1,29 @@
 ==============
+Epiphany 3.3.4
+==============
+
+Changes:
+
+  - Merge the stop/reload button with the location entry (#667176)
+  - Merge the back and forward buttons in a single button group (#666604)
+  - Use the Shell globalmenu for application actions when available
+  - Drop the menubar in favor of a supermenu a-la Chrome (#665479)
+  - Make sure to hide all chrome in application mode (#667634)
+  - Add mnemonics for password and recovery inforbars (#667238)
+  - Enable latest HTML5 fullscreen support (#665341)
+  - Make g_setenv calls early during startup to avoid threading race
+    conditions (#659145)
+  - Stop using gtk_button_{press,release} to fake middle clicks in the
+    toolbar buttons (#628364)
+  - Try to be smarter about the content type of downloads (#662059)
+  - Lots of other small fixes and cleanups
+
+==============
 Epiphany 3.3.3
 ==============
 
 Changes:
+
   - Combine the stop/reload buttons (#657655)
   - Drop bookmarks/topics bar
   - Properly save about: URIs in session (#664483)
