@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-01-14 20:13+0000\n"
-"PO-Revision-Date: 2012-01-15 19:21+0100\n"
+"POT-Creation-Date: 2012-01-16 20:49+0000\n"
+"PO-Revision-Date: 2012-01-17 12:51+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1095,7 +1095,7 @@ msgstr "Ventanas emergentes"
 msgid "History"
 msgstr "Histórico"
 
-#: ../lib/ephy-stock-icons.c:49 ../src/ephy-window.c:1455
+#: ../lib/ephy-stock-icons.c:49 ../src/ephy-window.c:1459
 msgid "Bookmark"
 msgstr "Marcador"
 
@@ -1105,7 +1105,7 @@ msgstr "Marcador"
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-window.c:1512
+#: ../lib/ephy-stock-icons.c:51 ../src/ephy-window.c:1516
 msgid "Address Entry"
 msgstr "Entrada de dirección"
 
@@ -1147,7 +1147,7 @@ msgid "%b %d %Y"
 msgstr "%d %b %Y"
 
 #. impossible time or broken locale settings
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1800
+#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1804
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1228,7 +1228,7 @@ msgstr "Error al descargar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1447
+#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1451
 #: ../src/window-commands.c:301
 msgid "Open"
 msgstr "Abrir"
@@ -1714,19 +1714,19 @@ msgstr "Abre los marcadores de este tema en pestañas nuevas"
 msgid "Create topic “%s”"
 msgstr "Crear tema «%s»"
 
-#: ../src/ephy-combined-stop-reload-action.c:43
+#: ../src/ephy-combined-stop-reload-action.c:42
 msgid "Stop"
 msgstr "Detener"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:181
+#: ../src/ephy-combined-stop-reload-action.c:43 ../src/ephy-window.c:181
 msgid "Stop current data transfer"
 msgstr "Detener la transferencia de datos actual"
 
-#: ../src/ephy-combined-stop-reload-action.c:46 ../src/ephy-window.c:185
+#: ../src/ephy-combined-stop-reload-action.c:45 ../src/ephy-window.c:185
 msgid "_Reload"
 msgstr "Re_cargar"
 
-#: ../src/ephy-combined-stop-reload-action.c:47 ../src/ephy-window.c:186
+#: ../src/ephy-combined-stop-reload-action.c:46 ../src/ephy-window.c:186
 msgid "Display the latest content of the current page"
 msgstr "Mostrar el último contenido de la página actual"
 
@@ -2362,154 +2362,156 @@ msgstr "_Detener animación"
 msgid "Inspect _Element"
 msgstr "Inspeccionar _elemento"
 
-#: ../src/ephy-window.c:534
+#: ../src/ephy-window.c:538
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:535
+#: ../src/ephy-window.c:539
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:537
+#: ../src/ephy-window.c:541
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:555
+#: ../src/ephy-window.c:559
 msgid "There are ongoing downloads in this window"
 msgstr "Hay descargas en curso en esta ventana"
 
-#: ../src/ephy-window.c:556
+#: ../src/ephy-window.c:560
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Si cierra esta ventana, se cancelarán las descargas"
 
-#: ../src/ephy-window.c:557
+#: ../src/ephy-window.c:561
 msgid "Close window and cancel downloads"
 msgstr "Cerrar la ventana y cancelar las descargas"
 
-#: ../src/ephy-window.c:1449
+#: ../src/ephy-window.c:1453
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1451
+#: ../src/ephy-window.c:1455
 msgid "Save As Application"
 msgstr "Guardar como aplicación"
 
-#: ../src/ephy-window.c:1453
+#: ../src/ephy-window.c:1457
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1457
+#: ../src/ephy-window.c:1461
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1466
+#: ../src/ephy-window.c:1470
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1469
+#: ../src/ephy-window.c:1473
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1483
-msgid "_Back"
-msgstr "A_trás"
+#: ../src/ephy-window.c:1487
+#| msgid "_Back"
+msgid "Back"
+msgstr "Atrás"
 
-#: ../src/ephy-window.c:1485
+#: ../src/ephy-window.c:1489
 msgid "Go to the previous visited page"
 msgstr "Ir a la página visitada anterior"
 
-#: ../src/ephy-window.c:1496
-msgid "_Forward"
-msgstr "A_delante"
+#: ../src/ephy-window.c:1500
+#| msgid "_Forward"
+msgid "Forward"
+msgstr "Adelante"
 
-#: ../src/ephy-window.c:1498
+#: ../src/ephy-window.c:1502
 msgid "Go to the next visited page"
 msgstr "Ir a la siguiente página visitada"
 
-#: ../src/ephy-window.c:1514
+#: ../src/ephy-window.c:1518
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Introduzca una dirección web para abrir, o una frase para buscar"
 
-#: ../src/ephy-window.c:1524
+#: ../src/ephy-window.c:1528
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-window.c:1526
+#: ../src/ephy-window.c:1530
 msgid "Adjust the text size"
 msgstr "Ajustar el tamaño del texto"
 
-#: ../src/ephy-window.c:1534
+#: ../src/ephy-window.c:1538
 msgid "New _Tab"
 msgstr "Pe_staña nueva"
 
-#: ../src/ephy-window.c:1536
+#: ../src/ephy-window.c:1540
 msgid "Open a new tab"
 msgstr "Abrir una pestaña nueva"
 
-#: ../src/ephy-window.c:1803
+#: ../src/ephy-window.c:1807
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1808
+#: ../src/ephy-window.c:1812
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1816
+#: ../src/ephy-window.c:1820
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1823
+#: ../src/ephy-window.c:1827
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1832
+#: ../src/ephy-window.c:1836
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:2122
+#: ../src/ephy-window.c:2126
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:2127
+#: ../src/ephy-window.c:2131
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como fondo del escritorio"
 
-#: ../src/ephy-window.c:2132
+#: ../src/ephy-window.c:2136
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:2137
+#: ../src/ephy-window.c:2141
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:2151
+#: ../src/ephy-window.c:2155
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:2157
+#: ../src/ephy-window.c:2161
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:2171
+#: ../src/ephy-window.c:2175
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:2177
+#: ../src/ephy-window.c:2181
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:2182
+#: ../src/ephy-window.c:2186
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
@@ -2679,11 +2681,6 @@ msgid "Create"
 msgstr "Crear"
 
 #: ../src/window-commands.c:1161
-#| msgid ""
-#| "The GNOME Web Browser is free software; you can redistribute it and/or "
-#| "modify it under the terms of the GNU General Public License as published "
-#| "by the Free Software Foundation; either version 2 of the License, or (at "
-#| "your option) any later version."
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2755,7 +2752,6 @@ msgstr ""
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
 #: ../src/window-commands.c:1283
-#| msgid "GNOME Web Browser Website"
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
@@ -3212,41 +3208,41 @@ msgstr "_Activar"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
-#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
-#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
-#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
-#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
-#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
-#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
-#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
-#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
-#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
-#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
-#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
+#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
+#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
+#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
+#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
+#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
+#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
+#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
+#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
+#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
+#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
+#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
+#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
+#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
+#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
+#~ "and \"x-windows-949\"."
 #~ msgstr ""
 #~ "Codificación predeterminada. Los valores aceptados son : \"armscii-8\", "
-#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
-#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
-#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
-#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
-#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
-#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
-#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
-#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
-#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
-#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
-#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
-#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" y \"x-windows-949\"."
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312"
+#~ "\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
+#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
+#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3"
+#~ "\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-"
+#~ "8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11"
+#~ "\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
+#~ "\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-"
+#~ "7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-"
+#~ "1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-"
+#~ "1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw"
+#~ "\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-"
+#~ "croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", "
+#~ "\"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew"
+#~ "\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-"
+#~ "turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", "
+#~ "\"x-viet-vps\" y \"x-windows-949\"."
 
 #~ msgid "Enable JavaScript"
 #~ msgstr "Activar JavaScript"
@@ -3292,8 +3288,7 @@ msgstr "_Activar"
 #~ "\"separately\" and \"selected\"."
 #~ msgstr ""
 #~ "Cómo se imprimen las páginas que contienen marcos. Los valores posibles "
-#~ "son \"normal\", «separately» (por separado) y \"selected"
-#~ "\" (seleccionados)."
+#~ "son \"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
@@ -3407,8 +3402,7 @@ msgstr "_Activar"
 #~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 #~ msgstr ""
 #~ "La información de la página mostrada en la vista del histórico. Los "
-#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y "
-#~ "«VerFechaHora»."
+#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
 
 #~ msgid ""
 #~ "The path of the folder where to download files to; or \"Downloads\" to "
@@ -3428,8 +3422,8 @@ msgstr "_Activar"
 #~ "\"text\"."
 #~ msgstr ""
 #~ "Estilo de la barra de herramientas. Los valores permitidos son «(usar "
-#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-"
-#~ "horiz» (texto junto a los iconos), «icons», y «text»."
+#~ "estilo predefinido de GNOME)» «both» (texto e iconos), «both-horiz» (texto "
+#~ "junto a los iconos), «icons», y «text»."
 
 #~ msgid "URL Search"
 #~ msgstr "Búsqueda de URL"
