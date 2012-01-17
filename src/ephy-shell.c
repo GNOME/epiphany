@@ -225,7 +225,13 @@ show_about (GSimpleAction *action,
             GVariant *parameter,
             gpointer user_data)
 {
-  window_cmd_help_about (NULL, NULL);
+  EphySession *session;
+  EphyWindow *window;
+
+  session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+  window = ephy_session_get_active_window (session);
+
+  window_cmd_help_about (NULL, GTK_WIDGET (window));
 }
 
 static void
