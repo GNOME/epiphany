@@ -87,6 +87,11 @@ ephy_toolbar_constructed (GObject *object)
 
   toolbar = GTK_WIDGET (object);
 
+  /* Set the MENUBAR style class so it's possible to drag the app
+   * using the toolbar. */
+  gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
+                               GTK_STYLE_CLASS_MENUBAR);
+
   /* Back and Forward */
   back_forward = gtk_tool_item_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
