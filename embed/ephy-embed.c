@@ -255,7 +255,7 @@ ephy_embed_dispose (GObject *object)
   EphyEmbed *embed = EPHY_EMBED (object);
   EphyEmbedPrivate *priv = embed->priv;
 
-  if (embed->priv->inspector_window) {
+  if (priv->inspector_window) {
     WebKitWebInspector *inspector;
 
     inspector = webkit_web_view_get_inspector (priv->web_view);
@@ -280,7 +280,7 @@ ephy_embed_dispose (GObject *object)
   /* Do not listen to status message notifications anymore, if we try
    * to update the statusbar after dispose we might crash. */
   if (priv->status_handler_id) {
-    g_signal_handler_disconnect (priv->web_view, embed->priv->status_handler_id);
+    g_signal_handler_disconnect (priv->web_view, priv->status_handler_id);
     priv->status_handler_id = 0;
   }
 
@@ -291,20 +291,21 @@ static void
 ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
+  EphyEmbedPrivate *priv = embed->priv;
   GSList *list;
 
-  list = embed->priv->destroy_on_transition_list;
+  list = priv->destroy_on_transition_list;
   for (; list; list = list->next) {
     GtkWidget *widget = GTK_WIDGET (list->data);
     g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
   }
-  g_slist_free (embed->priv->destroy_on_transition_list);
+  g_slist_free (priv->destroy_on_transition_list);
 
-  g_signal_handlers_disconnect_by_func (embed->priv->history,
+  g_signal_handlers_disconnect_by_func (priv->history,
                                         ephy_embed_history_cleared_cb,
                                         embed);
 
-  for (list = embed->priv->messages; list; list = list->next) {
+  for (list = priv->messages; list; list = list->next) {
     EphyEmbedStatusbarMsg *msg;
 
     msg = list->data;
@@ -312,17 +313,17 @@ ephy_embed_finalize (GObject *object)
     g_slice_free (EphyEmbedStatusbarMsg, msg);
   }
 
-  g_slist_free (embed->priv->messages);
-  embed->priv->messages = NULL;
+  g_slist_free (priv->messages);
+  priv->messages = NULL;
 
-  for (list = embed->priv->keys; list; list = list->next)
+  for (list = priv->keys; list; list = list->next)
     g_free (list->data);
 
-  g_slist_free (embed->priv->keys);
-  embed->priv->keys = NULL;
+  g_slist_free (priv->keys);
+  priv->keys = NULL;
 
-  if (embed->priv->clear_progress_source_id)
-    g_source_remove (embed->priv->clear_progress_source_id);
+  if (priv->clear_progress_source_id)
+    g_source_remove (priv->clear_progress_source_id);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -573,7 +574,7 @@ ephy_embed_constructed (GObject *object)
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
-  scrolled_window = GTK_WIDGET (embed->priv->scrolled_window);
+  scrolled_window = GTK_WIDGET (priv->scrolled_window);
   overlay = gtk_overlay_new ();
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
@@ -589,15 +590,15 @@ ephy_embed_constructed (GObject *object)
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->floating_bar);
 
-  embed->priv->progress = gtk_progress_bar_new ();
-  gtk_widget_set_name (embed->priv->progress, "ephy-progress-bar");
-  gtk_widget_set_halign (embed->priv->progress, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (embed->priv->progress, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->priv->progress);
+  priv->progress = gtk_progress_bar_new ();
+  gtk_widget_set_name (priv->progress, "ephy-progress-bar");
+  gtk_widget_set_halign (priv->progress, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (priv->progress, GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->progress);
 
-  paned = GTK_WIDGET (embed->priv->paned);
+  paned = GTK_WIDGET (priv->paned);
 
-  embed->priv->web_view = web_view;
+  priv->web_view = web_view;
   g_signal_connect (web_view, "notify::progress",
                     G_CALLBACK (progress_update), object);
 
@@ -607,11 +608,11 @@ ephy_embed_constructed (GObject *object)
                    TRUE, FALSE);
 
   gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (embed->priv->top_widgets_vbox),
+                      GTK_WIDGET (priv->top_widgets_vbox),
                       FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (embed), paned, TRUE, TRUE, 0);
 
-  gtk_widget_show (GTK_WIDGET (embed->priv->top_widgets_vbox));
+  gtk_widget_show (GTK_WIDGET (priv->top_widgets_vbox));
   gtk_widget_show (GTK_WIDGET (web_view));
   gtk_widget_show_all (paned);
 
@@ -622,9 +623,9 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     NULL);
 
-  embed->priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
-                                                     G_CALLBACK (status_message_notify_cb),
-                                                     embed);
+  priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
+                                              G_CALLBACK (status_message_notify_cb),
+                                              embed);
 
   /* Window features */
   window_features = webkit_web_view_get_window_features (web_view);
@@ -636,24 +637,24 @@ ephy_embed_constructed (GObject *object)
                     NULL);
 
   /* The inspector */
-  embed->priv->inspector_web_view  = ephy_web_view_new ();
-  embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  priv->inspector_web_view  = ephy_web_view_new ();
+  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   inspector = webkit_web_view_get_inspector (web_view);
 
-  embed->priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (embed->priv->inspector_scrolled_window),
+  priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->inspector_scrolled_window),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (embed->priv->inspector_window),
-                     embed->priv->inspector_scrolled_window);
-  gtk_container_add (GTK_CONTAINER (embed->priv->inspector_scrolled_window),
-                     embed->priv->inspector_web_view);
+  gtk_container_add (GTK_CONTAINER (priv->inspector_window),
+                     priv->inspector_scrolled_window);
+  gtk_container_add (GTK_CONTAINER (priv->inspector_scrolled_window),
+                     priv->inspector_web_view);
 
-  gtk_window_set_title (GTK_WINDOW (embed->priv->inspector_window),
+  gtk_window_set_title (GTK_WINDOW (priv->inspector_window),
                         _("Web Inspector"));
-  gtk_window_set_default_size (GTK_WINDOW (embed->priv->inspector_window),
+  gtk_window_set_default_size (GTK_WINDOW (priv->inspector_window),
                                800, 600);
 
-  g_signal_connect (embed->priv->inspector_window,
+  g_signal_connect (priv->inspector_window,
                     "delete-event", G_CALLBACK (gtk_widget_hide_on_delete),
                     NULL);
 
@@ -672,9 +673,9 @@ ephy_embed_constructed (GObject *object)
 
   ephy_embed_prefs_add_embed (embed);
 
-  embed->priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
+  priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
 
-  g_signal_connect (embed->priv->history,
+  g_signal_connect (priv->history,
                     "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
                     embed);
 }
