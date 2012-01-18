@@ -3277,10 +3277,10 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
   main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
 
   operation = gtk_print_operation_new ();
-  gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup  (shell));
+  gtk_print_operation_set_embed_page_setup (operation, TRUE);
+  gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
 
   webkit_web_frame_print_full (main_frame, operation, action, &error);
-  g_object_unref (operation);
 
   if (error) {
     GtkWidget *info_bar;
@@ -3300,7 +3300,10 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
 
     ephy_embed_add_top_widget (embed, info_bar, FALSE);
     gtk_widget_show_all (info_bar);
-  }
+  } else
+    ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
+
+  g_object_unref (operation);
 }
 
 /**

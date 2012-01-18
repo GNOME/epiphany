@@ -54,9 +54,6 @@ void window_cmd_file_save_as    (GtkAction *action,
 void window_cmd_file_save_as_application (GtkAction *action,
                                           EphyWindow *window);
 
-void window_cmd_file_print_setup (GtkAction *action,
-				  EphyWindow *window);
-
 void window_cmd_file_print	(GtkAction *action,
 				 EphyWindow *window);
 

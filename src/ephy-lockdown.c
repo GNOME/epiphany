@@ -103,9 +103,6 @@ typedef struct {
 
 static const BindAction window_actions[] = {
 	{ EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrint", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrintSetup", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_PRINT_SETUP, "FilePrintSetup", "sensitive" },
-	{ EPHY_PREFS_LOCKDOWN_COMMAND_LINE, "FilePrintSetup", "sensitive" },
 
 	{ EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
 

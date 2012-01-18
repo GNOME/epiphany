@@ -59,31 +59,6 @@
 #include <string.h>
 #include <webkit/webkit.h>
 
-static void
-page_setup_done_cb (GtkPageSetup *setup,
-		    EphyEmbedShell *shell)
-{
-	if (setup != NULL)
-	{
-		ephy_embed_shell_set_page_setup (shell, setup);
-	}
-}
-
-void
-window_cmd_file_print_setup (GtkAction *action,
-			     EphyWindow *window)
-{
-	EphyEmbedShell *shell;
-
-	shell = ephy_embed_shell_get_default ();
-	gtk_print_run_page_setup_dialog_async
-		(GTK_WINDOW (window),
-		 ephy_embed_shell_get_page_setup (shell),
-		 ephy_embed_shell_get_print_settings (shell),
-		 (GtkPageSetupDoneFunc) page_setup_done_cb,
-		 shell);
-}
-
 void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
