@@ -43,7 +43,7 @@ test_entry_get_entry (void)
   EphyLocationEntry *entry;
   entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-  g_assert (GTK_IS_ENTRY (ephy_location_entry_get_entry (entry)));
+  g_assert (GTK_IS_ENTRY (entry));
 }
 
 static void
@@ -113,7 +113,7 @@ test_entry_can_undo (void)
   /* Use gtk_* function or otherwise user_changed won't be correctly handled
    * internally by the location entry (see editable_changed_cb and
    * block_update) */
-  gtk_entry_set_text (GTK_ENTRY (ephy_location_entry_get_entry (entry)), test);
+  gtk_entry_set_text (GTK_ENTRY (entry), test);
   g_assert_cmpint (ephy_location_entry_get_can_undo (entry), ==, TRUE);
 }
 

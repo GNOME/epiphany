@@ -57,6 +57,8 @@ GType      ephy_toolbar_get_type (void) G_GNUC_CONST;
 
 GtkWidget *ephy_toolbar_new      (EphyWindow *window);
 
+GtkWidget *ephy_toolbar_get_location_entry (EphyToolbar *toolbar);
+
 G_END_DECLS
 
 #endif /* EPHY_TOOLBAR_H */

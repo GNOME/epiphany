@@ -36,7 +36,8 @@ enum {
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 struct _EphyToolbarPrivate {
-    EphyWindow *window;
+  EphyWindow *window;
+  GtkWidget *entry;
 };
 
 static void
@@ -136,6 +137,7 @@ ephy_toolbar_constructed (GObject *object)
   /* Location */
   action = gtk_action_group_get_action (action_group, "Location");
   location = gtk_action_create_tool_item (action);
+  priv->entry = location;
   gtk_box_pack_start (GTK_BOX (box), location,
                       TRUE, TRUE, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
@@ -156,7 +158,7 @@ ephy_toolbar_constructed (GObject *object)
                            GTK_WIDGET (location_stop_reload),
                            "expand", TRUE,
                            NULL);
-                           
+  
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (location_stop_reload));
   gtk_widget_set_margin_right (GTK_WIDGET (location_stop_reload), 12);
   gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
@@ -213,4 +215,10 @@ ephy_toolbar_new (EphyWindow *window)
     return GTK_WIDGET (g_object_new (EPHY_TYPE_TOOLBAR,
                                      "window", window,
                                      NULL));
+}
+
+GtkWidget *
+ephy_toolbar_get_location_entry (EphyToolbar *toolbar)
+{
+  return toolbar->priv->entry;
 }

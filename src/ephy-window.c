@@ -426,7 +426,6 @@ struct _EphyWindowPrivate
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
-	GtkWidget *entry;
 	GtkWidget *downloads_box;
 
 	guint clear_progress_timeout_id;
@@ -759,26 +758,6 @@ sync_chromes_visibility (EphyWindow *window)
 }
 
 static void
-ensure_location_entry (EphyWindow *window)
-{
-	GtkActionGroup *toolbar_action_group;
-	GtkAction *action;
-	GSList *proxies;
-	GtkWidget *proxy;
-	EphyWindowPrivate *priv = window->priv;
-
-	toolbar_action_group = priv->toolbar_action_group;
-	action = gtk_action_group_get_action (toolbar_action_group,
-					      "Location");
-	proxies = gtk_action_get_proxies (action);
-	if (proxies)
-	{
-		proxy = GTK_WIDGET (proxies->data);
-		priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
-	}
-}
-
-static void
 ephy_window_fullscreen (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
@@ -804,8 +783,6 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_load_status (ephy_embed_get_web_view (embed), NULL, window);
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
-	ensure_location_entry (window);
-
 	sync_chromes_visibility (window);
 }
 
@@ -815,8 +792,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 	window->priv->fullscreen_mode = FALSE;
 
 	destroy_fullscreen_popup (window);
-
-	ensure_location_entry (window);
 
 	sync_chromes_visibility (window);
 }
@@ -1118,17 +1093,10 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 
 	if (GTK_IS_EDITABLE (widget))
 	{
+		GtkWidget *entry;
 		gboolean has_selection;
-		GtkActionGroup *action_group;
-		GtkAction *location_action;
-		GSList *proxies;
-		GtkWidget *proxy;
-		
-		action_group = window->priv->toolbar_action_group;
-		location_action = gtk_action_group_get_action (action_group,
-							       "Location");
-		proxies = gtk_action_get_proxies (location_action);
-		proxy = GTK_WIDGET (proxies->data);
+
+		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->priv->toolbar));
 		
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (widget), NULL, NULL);
@@ -1136,18 +1104,8 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		can_copy = has_selection;
 		can_cut = has_selection;
 		can_paste = TRUE;
-		if (proxy != NULL &&
-		    EPHY_IS_LOCATION_ENTRY (proxy) &&
-		    widget == ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy)))
-		{
-			can_undo = ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (proxy));
-			can_redo = ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (proxy));
-		}
-		else
-		{
-			can_undo = FALSE;
-			can_redo = FALSE;
-		}
+		can_undo = ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (entry));
+		can_redo = ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (entry));
 	}
 	else
 	{
@@ -3779,8 +3737,6 @@ ephy_window_constructor (GType type,
 
 	sync_chromes_visibility (window);
 
-	ensure_location_entry (window);
-
 	return object;
 }
 
@@ -3843,26 +3799,10 @@ static void
 _ephy_window_activate_location (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
-	GSList *proxies;
-	GtkWidget *entry = NULL;
+	GtkWidget *entry;
 	gboolean visible;
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "Location");
-	proxies = gtk_action_get_proxies (action);
-
-	if (proxies != NULL && EPHY_IS_LOCATION_ENTRY (proxies->data))
-	{
-		entry = GTK_WIDGET (proxies->data);
-	}
-
-	if (entry == NULL)
-	{
-		/* happens when the user has removed the location entry from
-		 * the toolbars.
-		 */
-		return;
-	}
+	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
 
 	g_object_get (G_OBJECT (priv->toolbar), "visible", &visible, NULL);
 	if (visible == FALSE)

@@ -43,7 +43,7 @@ typedef struct _EphyLocationEntryPrivate	EphyLocationEntryPrivate;
 
 struct _EphyLocationEntryClass
 {
-	GtkToolItemClass parent_class;
+	GtkEntryClass parent_class;
 
 	/* Signals */
 	void   (* user_changed)	(EphyLocationEntry *entry);
@@ -55,7 +55,7 @@ struct _EphyLocationEntryClass
 
 struct _EphyLocationEntry
 {
-	GtkToolItem parent_object;
+	GtkEntry parent_object;
 
 	/*< private >*/
 	EphyLocationEntryPrivate *priv;
@@ -96,8 +96,6 @@ gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
 void		ephy_location_entry_undo_reset		(EphyLocationEntry *entry);
 
 void		ephy_location_entry_activate		(EphyLocationEntry *entry);
-
-GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);
 
 void		ephy_location_entry_set_favicon		(EphyLocationEntry *entry,
 							 GdkPixbuf *pixbuf);

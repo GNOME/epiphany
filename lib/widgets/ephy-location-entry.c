@@ -50,7 +50,6 @@
 
 struct _EphyLocationEntryPrivate
 {
-	GtkWidget *entry;
 	GIcon *lock_gicon;
 	GdkPixbuf *favicon;
 
@@ -112,7 +111,7 @@ enum signalsEnum
 };
 static gint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_TOOL_ITEM)
+G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY)
 
 inline static void
 free_search_terms (GSList *search_terms)
@@ -243,7 +242,7 @@ update_address_state (EphyLocationEntry *entry)
 	EphyLocationEntryPrivate *priv = entry->priv;
 	const char *text;
 
-	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	text = gtk_entry_get_text (GTK_ENTRY (entry));
 	priv->original_address = text != NULL &&
 				 g_str_hash (text) == priv->hash;
 }
@@ -252,7 +251,7 @@ static void
 update_favicon (EphyLocationEntry *lentry)
 {
 	EphyLocationEntryPrivate *priv = lentry->priv;
-	GtkEntry *entry = GTK_ENTRY (priv->entry);
+	GtkEntry *entry = GTK_ENTRY (lentry);
 
 	/* Only show the favicon if the entry's text is the
 	 * address of the current page.
@@ -486,8 +485,8 @@ match_selected_cb (GtkEntryCompletion *completion,
 			     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
 	ephy_location_entry_set_location (entry, item);
-	//gtk_im_context_reset (GTK_ENTRY (entry->priv->entry)->im_context);
-	g_signal_emit_by_name (priv->entry, "activate");
+	//gtk_im_context_reset (GTK_ENTRY (entry)->im_context);
+	g_signal_emit_by_name (entry, "activate");
 
 	g_free (item);
 
@@ -537,7 +536,7 @@ entry_clear_activate_cb (GtkMenuItem *item,
 	EphyLocationEntryPrivate *priv = entry->priv;
 
 	priv->block_update = TRUE;
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+	gtk_entry_set_text (GTK_ENTRY (entry), "");
 	priv->block_update = FALSE;
 	priv->user_changed = TRUE;
 }
@@ -580,7 +579,7 @@ entry_populate_popup_cb (GtkEntry *entry,
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (clear_menuitem), image);
 	g_signal_connect (clear_menuitem , "activate",
 			  G_CALLBACK (entry_clear_activate_cb), lentry);
-	is_editable = gtk_editable_get_editable (GTK_EDITABLE (priv->entry));
+	is_editable = gtk_editable_get_editable (GTK_EDITABLE (entry));
 	gtk_widget_set_sensitive (clear_menuitem, is_editable);
 	gtk_widget_show (clear_menuitem);
 
@@ -687,7 +686,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	context = gtk_widget_get_pango_context (widget);
 	layout = pango_layout_new (context);
 
-	style = gtk_widget_get_style_context (priv->entry);
+	style = gtk_widget_get_style_context (GTK_WIDGET (entry));
 	metrics = pango_context_get_metrics (context,
 		                             gtk_style_context_get_font (style, GTK_STATE_FLAG_NORMAL),
 					     pango_context_get_language (context));
@@ -840,35 +839,32 @@ icon_button_press_event_cb (GtkWidget *entry,
 static void
 ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 {
-	EphyLocationEntryPrivate *priv = lentry->priv;
+	GtkWidget *entry = GTK_WIDGET (lentry);
 	GtkTargetList *targetlist;
 
 	LOG ("EphyLocationEntry constructing contents %p", lentry);
 
-	priv->entry = gtk_entry_new ();
-	gtk_container_add (GTK_CONTAINER (lentry), priv->entry);
-
 	/* Favicon */
 	targetlist = gtk_target_list_new (url_drag_types,
 					  G_N_ELEMENTS (url_drag_types));
-	gtk_entry_set_icon_drag_source (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
 					GTK_ENTRY_ICON_PRIMARY,
 					targetlist,
 					GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
 	gtk_target_list_unref (targetlist);
 
-	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_PRIMARY,
 					 _("Drag and drop this icon to create a link to this page"));
 
-	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 					GTK_ENTRY_ICON_PRIMARY,
 					TRUE);
-	gtk_entry_set_icon_activatable (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 					GTK_ENTRY_ICON_SECONDARY,
 					TRUE);
 
-	g_object_connect (priv->entry,
+	g_object_connect (entry,
 			  "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
 			  "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
 			  "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
@@ -878,14 +874,12 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 			  "signal::drag-data-get", G_CALLBACK (favicon_drag_data_get_cb), lentry,
 			  NULL);
 			  
-	g_signal_connect_after (priv->entry, "key-press-event",
+	g_signal_connect_after (entry, "key-press-event",
 				G_CALLBACK (entry_key_press_after_cb), lentry);
-	g_signal_connect_after (priv->entry, "activate",
+	g_signal_connect_after (entry, "activate",
 				G_CALLBACK (entry_activate_after_cb), lentry);
-	g_signal_connect_after (priv->entry, "drag-begin",
+	g_signal_connect_after (entry, "drag-begin",
 				G_CALLBACK (favicon_drag_begin_cb), lentry);
-
-	gtk_widget_show (priv->entry);
 }
 
 static void
@@ -906,8 +900,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->dns_prefetch_handler = 0;
 
 	ephy_location_entry_construct_contents (le);
-
-	gtk_tool_item_set_expand (GTK_TOOL_ITEM (le), TRUE);
 }
 
 GtkWidget *
@@ -995,6 +987,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 			GtkTreeIter *iter,
 			gpointer data)
 {
+	GtkWidget *entry;
 	EphyLocationEntryPrivate *priv;
 	PangoAttrList *list;
 	PangoAttribute *att;
@@ -1011,6 +1004,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 
 	GValue text = { 0, };
 
+	entry = GTK_WIDGET (data);
 	priv = EPHY_LOCATION_ENTRY (data)->priv;
 	gtk_tree_model_get (tree_model, iter,
 			priv->text_col, &title,
@@ -1029,7 +1023,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 
 		ctext = g_strdup_printf ("%s\n%s", title, url);
 
-		style = gtk_widget_get_style_context (priv->entry);
+		style = gtk_widget_get_style_context (entry);
 		gtk_style_context_get_color (style, GTK_STATE_FLAG_INSENSITIVE,
 					     &color);
 
@@ -1131,10 +1125,9 @@ ephy_location_entry_set_match_func (EphyLocationEntry *entry,
 				gpointer user_data,
 				GDestroyNotify notify)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkEntryCompletion *completion;
 	
-	completion = gtk_entry_get_completion (GTK_ENTRY (priv->entry));
+	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 	gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
 }
 
@@ -1167,7 +1160,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				    guint extra_col,
 				    guint favicon_col)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
 	GtkCellRenderer *cell;
@@ -1238,7 +1230,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	g_signal_connect (completion, "cursor-on-match",
 			  G_CALLBACK (cursor_on_match_cb), entry);
 
-	gtk_entry_set_completion (GTK_ENTRY (priv->entry), completion);
+	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
 	g_object_unref (completion);
 }
 
@@ -1253,6 +1245,7 @@ void
 ephy_location_entry_set_location (EphyLocationEntry *entry,
 				  const char *address)
 {
+	GtkWidget *widget = GTK_WIDGET (entry);
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkClipboard *clipboard;
 	const char *text;
@@ -1264,17 +1257,17 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	 * bug #155824. So we save the selection iff the clipboard was owned by
 	 * the location entry.
 	 */
-	if (gtk_widget_get_realized (GTK_WIDGET (priv->entry)))
+	if (gtk_widget_get_realized (widget))
 	{
-		clipboard = gtk_widget_get_clipboard (priv->entry,
+		clipboard = gtk_widget_get_clipboard (widget,
 						      GDK_SELECTION_PRIMARY);
 		g_return_if_fail (clipboard != NULL);
 
-		if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (priv->entry) &&
-		    gtk_editable_get_selection_bounds (GTK_EDITABLE (priv->entry),
+		if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (widget) &&
+		    gtk_editable_get_selection_bounds (GTK_EDITABLE (widget),
 	     					       &start, &end))
 		{
-			selection = gtk_editable_get_chars (GTK_EDITABLE (priv->entry),
+			selection = gtk_editable_get_chars (GTK_EDITABLE (widget),
 							    start, end);
 		}
 	}
@@ -1295,7 +1288,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	priv->hash = g_str_hash (effective_text ? effective_text : text);
 
 	priv->block_update = TRUE;
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), effective_text ? effective_text : text);
+	gtk_entry_set_text (GTK_ENTRY (widget), effective_text ? effective_text : text);
 	priv->block_update = FALSE;
 	g_free (effective_text);
 
@@ -1364,9 +1357,7 @@ ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
 const char *
 ephy_location_entry_get_location (EphyLocationEntry *entry)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	return gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	return gtk_entry_get_text (GTK_ENTRY (entry));
 }
 
 static gboolean
@@ -1380,7 +1371,7 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
 	text = url != NULL ? url : "";
-	old_text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	old_text = gtk_entry_get_text (GTK_ENTRY (entry));
 	old_text = old_text != NULL ? old_text : "";
 
 	g_free (priv->saved_text);
@@ -1414,7 +1405,7 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), priv->saved_text);
+	gtk_entry_set_text (GTK_ENTRY (entry), priv->saved_text);
 	priv->can_redo = FALSE;
 	priv->user_changed = TRUE;
 }
@@ -1447,32 +1438,14 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 void
 ephy_location_entry_activate (EphyLocationEntry *entry)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
-	GtkWidget *toplevel;
+	GtkWidget *toplevel, *widget = GTK_WIDGET (entry);
 
-	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
+	toplevel = gtk_widget_get_toplevel (widget);
 
-	gtk_editable_select_region (GTK_EDITABLE (priv->entry),
+	gtk_editable_select_region (GTK_EDITABLE (entry),
 				    0, -1);
 	gtk_window_set_focus (GTK_WINDOW (toplevel),
-			      priv->entry);
-}
-
-/**
- * ephy_location_entry_get_entry:
- * @entry: an #EphyLocationEntry widget
- *
- * Retrieve the internal #GtkEntry of the #EphyIconEntry inside @entry.
- *
- * Return value: a pointer to the internal #GtkEntry of @entry
- *
- **/
-GtkWidget *
-ephy_location_entry_get_entry (EphyLocationEntry *entry)
-{
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	return priv->entry;
+			      widget);
 }
 
 /**
@@ -1523,7 +1496,7 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 
 	priv->show_lock = show_lock != FALSE;
 
-	gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 				       GTK_ENTRY_ICON_SECONDARY,
 				       show_lock ? priv->lock_gicon : NULL);
 }
@@ -1563,7 +1536,7 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
 
 	if (priv->show_lock)
-		gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->entry),
+		gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 					       GTK_ENTRY_ICON_SECONDARY,
 					       priv->lock_gicon);
 }
@@ -1580,9 +1553,7 @@ void
 ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 				      const char *tooltip)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (priv->entry),
+	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_SECONDARY,
 					 tooltip);
 }
