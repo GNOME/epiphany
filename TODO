@@ -1,16 +1,23 @@
-- Check that filtering is not done more than one time on bookmarks dialogs init
+Some TODO items, in no particular order:
 
-- Annotate "if (type == 0)" in *_get_type() with G_UNLIKELY
+- Use g_clear_object in dispose/finalize
+- Get rid of object references in dispose, not finalize
+- Move all the old code to the new coding style 
+- embed/ does not make much sense anymore as a name. Rename to
+  something else, perhaps core/? webview/?
+- Use GtkBuilder instead of declaring the UIs with C
+- We practically don't test any part of Epiphany, change that (how do
+  you test UI code? There's like 3 or 4 frameworks for this, pick one?
+  What does Chrome do?)
+- Do we want extensions that can mess with the internals? Or only
+  jetpack-like stuff
+- Come up with a C migration plan
+  http://wingolog.org/archives/2011/10/13/whats-your-c-migration-plan
 
+Old (double check they still apply):
 
-Stuff to port to new glib/gtk+ APIs:
-
-- port egg-toolbar-editor to GtkIconView as soon as it supports DND (bug #150270)
-- port to new gtk+ uri-list DND APIs
-- port Downloads directory button in prefs to GtkFileChooserButton
+- Port to new gtk+ uri-list DND APIs
+- Port Downloads directory button in prefs to GtkFileChooserButton
   (but wait for bugs #154388, #154390, #154392, #154394)
-- port to confirm-overwrite signal of GtkFileChooser
-- use g_intern_static_string for static type name registrations
-  and g_object_set_data
-- use gtk_widget_get_action in toolbar code instead of g_object_get_data (., "gtk-action")
-- use GtkNotebook DND
+- Port to confirm-overwrite signal of GtkFileChooser
+- Use GtkNotebook DnD
