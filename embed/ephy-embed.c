@@ -88,6 +88,8 @@ struct _EphyEmbedPrivate
   guint pop_statusbar_later_source_id;
 
   guint clear_progress_source_id;
+
+  gulong status_handler_id;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -273,6 +275,13 @@ ephy_embed_dispose (GObject *object)
   if (priv->pop_statusbar_later_source_id) {
     g_source_remove (priv->pop_statusbar_later_source_id);
     priv->pop_statusbar_later_source_id = 0;
+  }
+
+  /* Do not listen to status message notifications anymore, if we try
+   * to update the statusbar after dispose we might crash. */
+  if (priv->status_handler_id) {
+    g_signal_handler_disconnect (priv->web_view, embed->priv->status_handler_id);
+    priv->status_handler_id = 0;
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
@@ -611,8 +620,11 @@ ephy_embed_constructed (GObject *object)
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
-                    "signal::notify::status-message", G_CALLBACK (status_message_notify_cb), embed,
                     NULL);
+
+  embed->priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
+                                                     G_CALLBACK (status_message_notify_cb),
+                                                     embed);
 
   /* Window features */
   window_features = webkit_web_view_get_window_features (web_view);
