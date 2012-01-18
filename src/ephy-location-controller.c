@@ -20,7 +20,7 @@
  */
 
 #include "config.h"
-#include "ephy-location-action.h"
+#include "ephy-location-controller.h"
 
 #include "ephy-completion-model.h"
 #include "ephy-debug.h"
@@ -35,15 +35,15 @@
 #include <string.h>
 
 /**
- * SECTION:ephy-location-action
- * @short_description: An #EphyLinkAction implementation
+ * SECTION:ephy-location-controller
+ * @short_description: An #EphyLink implementation
  *
- * #EphyLocationAction handles navigation together with #EphyLocationEntry
+ * #EphyLocationController handles navigation together with #EphyLocationEntry
  */
 
-#define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
+#define EPHY_LOCATION_CONTROLLER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_CONTROLLER, EphyLocationControllerPrivate))
 
-struct _EphyLocationActionPrivate
+struct _EphyLocationControllerPrivate
 {
 	EphyWindow *window;
 	EphyLocationEntry *location_entry;
@@ -60,12 +60,12 @@ struct _EphyLocationActionPrivate
 	gboolean sync_address_is_blocked;
 };
 
-static void ephy_location_action_init	    (EphyLocationAction *action);
-static void ephy_location_action_class_init (EphyLocationActionClass *class);
-static void ephy_location_action_finalize   (GObject *object);
+static void ephy_location_controller_init	    (EphyLocationController *controller);
+static void ephy_location_controller_class_init (EphyLocationControllerClass *class);
+static void ephy_location_controller_finalize   (GObject *object);
 static void user_changed_cb		    (GtkWidget *proxy,
-					     EphyLocationAction *action);
-static void sync_address		    (EphyLocationAction *action,
+					     EphyLocationController *controller);
+static void sync_address		    (EphyLocationController *controller,
 					     GParamSpec *pspec,
 					     GtkWidget *proxy);
 
@@ -89,7 +89,7 @@ enum
 };
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationAction, ephy_location_action, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
 						NULL))
 
@@ -149,7 +149,7 @@ match_func (GtkEntryCompletion *completion,
 static void
 action_activated_cb (GtkEntryCompletion *completion,
 		     gint index,
-		     EphyLocationAction *action)
+		     EphyLocationController *controller)
 {
 	GtkWidget *entry;
 	char *content;
@@ -162,17 +162,17 @@ action_activated_cb (GtkEntryCompletion *completion,
 		const char *smart_url;
 		char *url;
 
-		node = (EphyNode *)g_list_nth_data (action->priv->actions, index);
+		node = (EphyNode *)g_list_nth_data (controller->priv->actions, index);
 		smart_url = ephy_node_get_property_string
 			(node, EPHY_NODE_BMK_PROP_LOCATION);
 		g_return_if_fail (smart_url != NULL);
 
 		url = ephy_bookmarks_resolve_address
-			(action->priv->bookmarks, smart_url, content);
+			(controller->priv->bookmarks, smart_url, content);
 		g_free (content);
 		if (url == NULL) return;
 
-		ephy_link_open (EPHY_LINK (action), url, NULL,
+		ephy_link_open (EPHY_LINK (controller), url, NULL,
 				ephy_link_flags_from_current_event ());
 
 		g_free (url);
@@ -181,19 +181,19 @@ action_activated_cb (GtkEntryCompletion *completion,
 
 static void
 entry_activate_cb (GtkEntry *entry,
-		   EphyLocationAction *action)
+		   EphyLocationController *controller)
 {
 	EphyBookmarks *bookmarks;
 	const char *content;
 	char *address;
-	EphyLocationActionPrivate *priv;
+	EphyLocationControllerPrivate *priv;
 
-	priv = action->priv;
+	priv = controller->priv;
 
 	if (priv->sync_address_is_blocked)
 	{
 		priv->sync_address_is_blocked = FALSE;
-		g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), entry);
+		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
 	}	
 
 	content = gtk_entry_get_text (entry);
@@ -204,14 +204,14 @@ entry_activate_cb (GtkEntry *entry,
 	address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
 	g_return_if_fail (address != NULL);
 
-	ephy_link_open (EPHY_LINK (action), g_strstrip (address), NULL, 
+	ephy_link_open (EPHY_LINK (controller), g_strstrip (address), NULL, 
 			ephy_link_flags_from_current_event ());
 
 	g_free (address);
 }
 
 static void
-user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
+user_changed_cb (GtkWidget *proxy, EphyLocationController *controller)
 {
 	const char *address;
 
@@ -219,82 +219,82 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 
 	LOG ("user_changed_cb, new address %s", address);
 
-	g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
-	ephy_location_action_set_address (action, address);
-	g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
+	g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), proxy);
+	ephy_location_controller_set_address (controller, address);
+	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), proxy);
 }
 
 static void
 lock_clicked_cb (GtkWidget *proxy,
-		 EphyLocationAction *action)
+		 EphyLocationController *controller)
 {
-	g_signal_emit (action, signals[LOCK_CLICKED], 0);
+	g_signal_emit (controller, signals[LOCK_CLICKED], 0);
 }
 
 static void
-sync_address (EphyLocationAction *action,
+sync_address (EphyLocationController *controller,
 	      GParamSpec *pspec,
 	      GtkWidget *widget)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (widget);
 
-	LOG ("sync_address %s", action->priv->address);
+	LOG ("sync_address %s", controller->priv->address);
 
-	g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), action);
+	g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 	ephy_location_entry_set_location (lentry, priv->address);
-	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), action);
+	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
 static void
-sync_editable (EphyLocationAction *action,
+sync_editable (EphyLocationController *controller,
 	       GParamSpec *pspec,
 	       GtkWidget *widget)
 {
 	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (widget);
 
-	gtk_editable_set_editable (GTK_EDITABLE (lentry), action->priv->editable);
+	gtk_editable_set_editable (GTK_EDITABLE (lentry), controller->priv->editable);
 }
 
 static void
-sync_icon (EphyLocationAction *action,
+sync_icon (EphyLocationController *controller,
 	   GParamSpec *pspec,
 	   GtkWidget *widget)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_favicon (entry, priv->icon);
 }
 
 static void
-sync_lock_stock_id (EphyLocationAction *action,
+sync_lock_stock_id (EphyLocationController *controller,
 		    GParamSpec *pspec,
 		    GtkWidget *widget)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_lock_stock (entry, priv->lock_stock_id);
 }
 
 static void
-sync_lock_tooltip (EphyLocationAction *action,
+sync_lock_tooltip (EphyLocationController *controller,
 		   GParamSpec *pspec,
 		   GtkWidget *widget)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_lock_tooltip (entry, priv->lock_tooltip);
 }
 
 static void
-sync_show_lock (EphyLocationAction *action,
+sync_show_lock (EphyLocationController *controller,
 		GParamSpec *pspec,
 		GtkWidget *widget)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_show_lock (entry, priv->show_lock);
@@ -302,9 +302,9 @@ sync_show_lock (EphyLocationAction *action,
 
 static char *
 get_location_cb (EphyLocationEntry *entry,
-		EphyLocationAction *action)
+		EphyLocationController *controller)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyEmbed *embed;
 	
 	embed = ephy_embed_container_get_active_child 
@@ -315,18 +315,18 @@ get_location_cb (EphyLocationEntry *entry,
 
 static char *
 get_title_cb (EphyLocationEntry *entry,
-	      EphyLocationAction *action)
+	      EphyLocationController *controller)
 {
 	EphyEmbed *embed;
 
 	embed = ephy_embed_container_get_active_child 
-	  (EPHY_EMBED_CONTAINER (action->priv->window));
+	  (EPHY_EMBED_CONTAINER (controller->priv->window));
 
 	return g_strdup (ephy_web_view_get_title (ephy_embed_get_web_view (embed)));
 }
 
 static void
-remove_completion_actions (EphyLocationAction *action,
+remove_completion_actions (EphyLocationController *controller,
 			   EphyLocationEntry *lentry)
 {
 	GtkEntryCompletion *completion;
@@ -334,17 +334,17 @@ remove_completion_actions (EphyLocationAction *action,
 
 	completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
 
-	for (l = action->priv->actions; l != NULL; l = l->next)
+	for (l = controller->priv->actions; l != NULL; l = l->next)
 	{
 		gtk_entry_completion_delete_action (completion, 0);
 	}
 
 	g_signal_handlers_disconnect_by_func
-			(completion, G_CALLBACK (action_activated_cb), action);
+			(completion, G_CALLBACK (action_activated_cb), controller);
 }
 
 static void
-add_completion_actions (EphyLocationAction *action,
+add_completion_actions (EphyLocationController *controller,
 			EphyLocationEntry *lentry)
 {
 	GtkEntryCompletion *completion;
@@ -352,33 +352,33 @@ add_completion_actions (EphyLocationAction *action,
 
 	completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
 
-	for (l = action->priv->actions; l != NULL; l = l->next)
+	for (l = controller->priv->actions; l != NULL; l = l->next)
 	{
 		EphyNode *bmk = l->data;
 		const char *title;
 		int index;
 
-		index = g_list_position (action->priv->actions, l);
+		index = g_list_position (controller->priv->actions, l);
 		title = ephy_node_get_property_string
 			(bmk, EPHY_NODE_BMK_PROP_TITLE);
 		gtk_entry_completion_insert_action_text (completion, index, (char*)title);
 	}
 
 	g_signal_connect (completion, "action_activated",
-			  G_CALLBACK (action_activated_cb), action);
+			  G_CALLBACK (action_activated_cb), controller);
 }
 
 static gboolean
 focus_in_event_cb (GtkWidget *entry,
 		   GdkEventFocus *event,
-		   EphyLocationAction *action)
+		   EphyLocationController *controller)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	if (!priv->sync_address_is_blocked)
 	{		
 		priv->sync_address_is_blocked = TRUE;
-		g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), entry);
+		g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), entry);
 	}
 	
 	return FALSE;
@@ -387,14 +387,14 @@ focus_in_event_cb (GtkWidget *entry,
 static gboolean
 focus_out_event_cb (GtkWidget *entry,
 		    GdkEventFocus *event,
-		    EphyLocationAction *action)
+		    EphyLocationController *controller)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	if (priv->sync_address_is_blocked)
 	{
 		priv->sync_address_is_blocked = FALSE;
-		g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), entry);
+		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
 	}
 	
 	return FALSE;
@@ -404,32 +404,32 @@ static void
 switch_page_cb (GtkNotebook *notebook,
 		GtkWidget *page,
 		guint page_num,
-		EphyLocationAction *action)
+		EphyLocationController *controller)
 {
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	if (priv->sync_address_is_blocked == TRUE)
 	{
 		priv->sync_address_is_blocked = FALSE;
-		g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), priv->proxy);
+		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), priv->proxy);
 	}
 }
 
 static void
-ephy_location_action_constructed (GObject *object)
+ephy_location_controller_constructed (GObject *object)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
+	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyCompletionModel *model;
 	GtkWidget *notebook, *widget;
 
-	G_OBJECT_CLASS (ephy_location_action_parent_class)->constructed (object);
+	G_OBJECT_CLASS (ephy_location_controller_parent_class)->constructed (object);
 
 	notebook = ephy_window_get_notebook (priv->window);
 	widget = GTK_WIDGET (priv->location_entry);
 
 	g_signal_connect (notebook, "switch-page",
-			  G_CALLBACK (switch_page_cb), action);
+			  G_CALLBACK (switch_page_cb), controller);
 
 	model = ephy_completion_model_new ();
 	ephy_location_entry_set_completion (priv->location_entry,
@@ -448,57 +448,57 @@ ephy_location_action_constructed (GObject *object)
 					    priv->location_entry,
 					    NULL);
 
-	add_completion_actions (action, priv->location_entry);
+	add_completion_actions (controller, priv->location_entry);
 
-	sync_address (action, NULL, widget);
-	g_signal_connect_object (action, "notify::address",
+	sync_address (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::address",
 				 G_CALLBACK (sync_address), widget, 0);
-	sync_editable (action, NULL, widget);
-	g_signal_connect_object (action, "notify::editable",
+	sync_editable (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::editable",
 				 G_CALLBACK (sync_editable), widget, 0);
-	sync_icon (action, NULL, widget);
-	g_signal_connect_object (action, "notify::icon",
+	sync_icon (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::icon",
 				 G_CALLBACK (sync_icon), widget, 0);
-	sync_lock_stock_id (action, NULL, widget);
-	g_signal_connect_object (action, "notify::lock-stock-id",
+	sync_lock_stock_id (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::lock-stock-id",
 				 G_CALLBACK (sync_lock_stock_id), widget, 0);
-	sync_lock_tooltip (action, NULL, widget);
-	g_signal_connect_object (action, "notify::lock-tooltip",
+	sync_lock_tooltip (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::lock-tooltip",
 				 G_CALLBACK (sync_lock_tooltip), widget, 0);
-	sync_show_lock (action, NULL, widget);
-	g_signal_connect_object (action, "notify::show-lock",
+	sync_show_lock (controller, NULL, widget);
+	g_signal_connect_object (controller, "notify::show-lock",
 				 G_CALLBACK (sync_show_lock), widget, 0);
 
 	g_signal_connect_object (widget, "activate",
 				 G_CALLBACK (entry_activate_cb),
-				 action, 0);
+				 controller, 0);
 	g_signal_connect_object (widget, "user-changed",
-				 G_CALLBACK (user_changed_cb), action, 0);
+				 G_CALLBACK (user_changed_cb), controller, 0);
 	g_signal_connect_object (widget, "lock-clicked",
-				 G_CALLBACK (lock_clicked_cb), action, 0);
+				 G_CALLBACK (lock_clicked_cb), controller, 0);
 	g_signal_connect_object (widget, "get-location",
-				 G_CALLBACK (get_location_cb), action, 0);
+				 G_CALLBACK (get_location_cb), controller, 0);
 	g_signal_connect_object (widget, "get-title",
-				 G_CALLBACK (get_title_cb), action, 0);
+				 G_CALLBACK (get_title_cb), controller, 0);
 	g_signal_connect_object (widget, "focus-in-event",
-				 G_CALLBACK (focus_in_event_cb), action, 0);
+				 G_CALLBACK (focus_in_event_cb), controller, 0);
 	g_signal_connect_object (widget, "focus-out-event",
-				 G_CALLBACK (focus_out_event_cb), action, 0);
+				 G_CALLBACK (focus_out_event_cb), controller, 0);
 }
 
 static void
-ephy_location_action_set_property (GObject *object,
-				   guint prop_id,
-				   const GValue *value,
-				   GParamSpec *pspec)
+ephy_location_controller_set_property (GObject *object,
+				       guint prop_id,
+				       const GValue *value,
+				       GParamSpec *pspec)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	switch (prop_id)
 	{
 		case PROP_ADDRESS:
-			ephy_location_action_set_address (action, g_value_get_string (value));
+			ephy_location_controller_set_address (controller, g_value_get_string (value));
 			break;
 		case PROP_EDITABLE:
 			priv->editable = g_value_get_boolean (value);
@@ -531,18 +531,18 @@ ephy_location_action_set_property (GObject *object,
 }
 
 static void
-ephy_location_action_get_property (GObject *object,
-				   guint prop_id,
-				   GValue *value,
-				   GParamSpec *pspec)
+ephy_location_controller_get_property (GObject *object,
+				       guint prop_id,
+				       GValue *value,
+				       GParamSpec *pspec)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	switch (prop_id)
 	{
 		case PROP_ADDRESS:
-			g_value_set_string (value, ephy_location_action_get_address (action));
+			g_value_set_string (value, ephy_location_controller_get_address (controller));
 			break;
 		case PROP_EDITABLE:
 			g_value_set_boolean (value, priv->editable);
@@ -567,10 +567,10 @@ ephy_location_action_get_property (GObject *object,
 }
 
 static void
-ephy_location_action_dispose (GObject *object)
+ephy_location_controller_dispose (GObject *object)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
+	EphyLocationControllerPrivate *priv = controller->priv;
 	GtkWidget *notebook;
 
 	notebook = ephy_window_get_notebook (priv->window);
@@ -580,47 +580,47 @@ ephy_location_action_dispose (GObject *object)
 		return;
 	}
 
-	g_signal_handlers_disconnect_matched (action, G_SIGNAL_MATCH_DATA,
+	g_signal_handlers_disconnect_matched (controller, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, priv->location_entry);
 	g_signal_handlers_disconnect_matched (priv->location_entry, G_SIGNAL_MATCH_DATA,
-					      0, 0, NULL, NULL, action);
+					      0, 0, NULL, NULL, controller);
 	g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
-					      0, 0, NULL, NULL, action);
+					      0, 0, NULL, NULL, controller);
 	priv->location_entry = NULL;
 
-	G_OBJECT_CLASS (ephy_location_action_parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_location_controller_parent_class)->dispose (object);
 }
 
 static void
-ephy_location_action_class_init (EphyLocationActionClass *class)
+ephy_location_controller_class_init (EphyLocationControllerClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-	object_class->finalize = ephy_location_action_finalize;
-	object_class->dispose = ephy_location_action_dispose;
-	object_class->constructed = ephy_location_action_constructed;
-	object_class->get_property = ephy_location_action_get_property;
-	object_class->set_property = ephy_location_action_set_property;
+	object_class->finalize = ephy_location_controller_finalize;
+	object_class->dispose = ephy_location_controller_dispose;
+	object_class->constructed = ephy_location_controller_constructed;
+	object_class->get_property = ephy_location_controller_get_property;
+	object_class->set_property = ephy_location_controller_set_property;
 
 	/**
-	* EphyLocationAction::lock-clicked:
-	* @action: the object which received the signal.
+	* EphyLocationController::lock-clicked:
+	* @controller: the object which received the signal.
 	*
 	* Emitted when the user clicks on the security icon of the internal
 	* #EphyLocationEntry.
 	*/
 	signals[LOCK_CLICKED] = g_signal_new (
 		"lock-clicked",
-		EPHY_TYPE_LOCATION_ACTION,
+		EPHY_TYPE_LOCATION_CONTROLLER,
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (EphyLocationActionClass, lock_clicked),
+		G_STRUCT_OFFSET (EphyLocationControllerClass, lock_clicked),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE,
 		0);
 
 	/**
-	* EphyLocationAction:address:
+	* EphyLocationController:address:
 	*
 	* The address of the current location.
 	*/
@@ -633,7 +633,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:editable:
+	* EphyLocationController:editable:
 	*
 	* Whether the location bar entry can be edited.
 	*/
@@ -646,7 +646,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:icon:
+	* EphyLocationController:icon:
 	*
 	* The icon corresponding to the current location.
 	*/
@@ -659,7 +659,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:lock-stock-id:
+	* EphyLocationController:lock-stock-id:
 	*
 	* Stock id of the security icon.
 	*/
@@ -672,7 +672,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:lock-tooltip:
+	* EphyLocationController:lock-tooltip:
 	*
 	* Tooltip for the security icon.
 	*/
@@ -685,7 +685,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:show-lock:
+	* EphyLocationController:show-lock:
 	*
 	* If we should show the security icon.
 	*/
@@ -698,7 +698,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationAction:window:
+	* EphyLocationController:window:
 	*
 	* The parent window.
 	*/
@@ -712,7 +712,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	/**
-	* EphyLocationAction:location-entry:
+	* EphyLocationController:location-entry:
 	*
 	* The controlled location entry.
 	*/
@@ -725,7 +725,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));
 
-	g_type_class_add_private (object_class, sizeof (EphyLocationActionPrivate));
+	g_type_class_add_private (object_class, sizeof (EphyLocationControllerPrivate));
 }
 
 static int
@@ -763,30 +763,30 @@ compare_actions (gconstpointer a,
 }
 
 static void
-init_actions_list (EphyLocationAction *action)
+init_actions_list (EphyLocationController *controller)
 {
 	GPtrArray *children;
 	int i;
 
-	children = ephy_node_get_children (action->priv->smart_bmks);
+	children = ephy_node_get_children (controller->priv->smart_bmks);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
 
 		kid = g_ptr_array_index (children, i);
 
-		action->priv->actions = g_list_prepend
-			(action->priv->actions, kid);
+		controller->priv->actions = g_list_prepend
+			(controller->priv->actions, kid);
 	}
 
-	action->priv->actions =
-		g_list_sort (action->priv->actions, (GCompareFunc) compare_actions);
+	controller->priv->actions =
+		g_list_sort (controller->priv->actions, (GCompareFunc) compare_actions);
 }
 
 static void
-update_actions_list (EphyLocationAction *la)
+update_actions_list (EphyLocationController *la)
 {
-	EphyLocationActionPrivate *priv = la->priv;
+	EphyLocationControllerPrivate *priv = la->priv;
 
 	remove_completion_actions (la, priv->location_entry);
 
@@ -801,63 +801,63 @@ static void
 actions_child_removed_cb (EphyNode *node,
 			  EphyNode *child,
 			  guint old_index,
-			  EphyLocationAction *action)
+			  EphyLocationController *controller)
 {
-	update_actions_list (action);
+	update_actions_list (controller);
 }
 
 static void
 actions_child_added_cb (EphyNode *node,
 			EphyNode *child,
-			EphyLocationAction *action)
+			EphyLocationController *controller)
 {
-	update_actions_list (action);
+	update_actions_list (controller);
 }
 
 static void
 actions_child_changed_cb (EphyNode *node,
 			  EphyNode *child,
 			  guint property_id,
-			  EphyLocationAction *action)
+			  EphyLocationController *controller)
 {
-	update_actions_list (action);
+	update_actions_list (controller);
 }
 
 static void
-ephy_location_action_init (EphyLocationAction *action)
+ephy_location_controller_init (EphyLocationController *controller)
 {
-	EphyLocationActionPrivate *priv;
+	EphyLocationControllerPrivate *priv;
 
-	priv = action->priv = EPHY_LOCATION_ACTION_GET_PRIVATE (action);
+	priv = controller->priv = EPHY_LOCATION_CONTROLLER_GET_PRIVATE (controller);
 
 	priv->address = g_strdup ("");
 	priv->editable = TRUE;
 	priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
-		(action->priv->bookmarks);
+		(controller->priv->bookmarks);
 	priv->sync_address_is_blocked = FALSE;
 
-	init_actions_list (action);
+	init_actions_list (controller);
 	
 	ephy_node_signal_connect_object (priv->smart_bmks,
 					 EPHY_NODE_CHILD_ADDED,
 					 (EphyNodeCallback)actions_child_added_cb,
-					 G_OBJECT (action));
+					 G_OBJECT (controller));
 	ephy_node_signal_connect_object (priv->smart_bmks,
 					 EPHY_NODE_CHILD_REMOVED,
 					 (EphyNodeCallback)actions_child_removed_cb,
-					 G_OBJECT (action));
+					 G_OBJECT (controller));
 	ephy_node_signal_connect_object (priv->smart_bmks,
 					 EPHY_NODE_CHILD_CHANGED,
 					 (EphyNodeCallback)actions_child_changed_cb,
-					 G_OBJECT (action));
+					 G_OBJECT (controller));
 }
 
 static void
-ephy_location_action_finalize (GObject *object)
+ephy_location_controller_finalize (GObject *object)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
-	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
+	EphyLocationControllerPrivate *priv = controller->priv;
 
 	if (priv->icon != NULL)
 	{
@@ -869,46 +869,46 @@ ephy_location_action_finalize (GObject *object)
 	g_free (priv->lock_stock_id);
 	g_free (priv->lock_tooltip);
 
-	G_OBJECT_CLASS (ephy_location_action_parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);
 }
 
 /**
- * ephy_location_action_get_address:
- * @action: an #EphyLocationAction
+ * ephy_location_controller_get_address:
+ * @controller: an #EphyLocationController
  *
  * Retrieves the currently loaded address.
  *
  * Returns: the current address
  **/
 const char *
-ephy_location_action_get_address (EphyLocationAction *action)
+ephy_location_controller_get_address (EphyLocationController *controller)
 {
-	g_return_val_if_fail (EPHY_IS_LOCATION_ACTION (action), "");
+	g_return_val_if_fail (EPHY_IS_LOCATION_CONTROLLER (controller), "");
 
-	return action->priv->address;
+	return controller->priv->address;
 }
 
 /**
- * ephy_location_action_set_address:
- * @action: an #EphyLocationAction
+ * ephy_location_controller_set_address:
+ * @controller: an #EphyLocationController
  * @address: new address
  *
- * Sets @address as the address of @action.
+ * Sets @address as the address of @controller.
  **/
 void
-ephy_location_action_set_address (EphyLocationAction *action,
-				  const char *address)
+ephy_location_controller_set_address (EphyLocationController *controller,
+				      const char *address)
 {
-	EphyLocationActionPrivate *priv;
+	EphyLocationControllerPrivate *priv;
 
-	g_return_if_fail (EPHY_IS_LOCATION_ACTION (action));
+	g_return_if_fail (EPHY_IS_LOCATION_CONTROLLER (controller));
 
-	priv = action->priv;
+	priv = controller->priv;
 
 	LOG ("set_address %s", address);
 
 	g_free (priv->address);
 	priv->address = g_strdup (address);
 
-	g_object_notify (G_OBJECT (action), "address");
+	g_object_notify (G_OBJECT (controller), "address");
 }

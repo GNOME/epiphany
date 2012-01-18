@@ -189,11 +189,11 @@ bind_settings_and_actions (GSettings *settings,
 }
 
 static void
-bind_location_action (GSettings *settings,
-		      EphyLocationAction *action)
+bind_location_controller (GSettings *settings,
+			  EphyLocationController *controller)
 {
 	g_settings_bind (settings, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL,
-			 action, "editable",
+			 controller, "editable",
 			 G_SETTINGS_BIND_GET |
 			 G_SETTINGS_BIND_INVERT_BOOLEAN);
 }
@@ -206,7 +206,7 @@ impl_attach_window (EphyExtension *extension,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GSettings *settings;
-	EphyLocationAction *location_action;
+	EphyLocationController *location_controller;
 
 	g_signal_connect (EPHY_SETTINGS_LOCKDOWN,
 			  "changed::" EPHY_PREFS_LOCKDOWN_FULLSCREEN,
@@ -244,8 +244,8 @@ impl_attach_window (EphyExtension *extension,
 				   action_group, special_toolbar_actions,
 				   G_N_ELEMENTS (special_toolbar_actions));
 
-	location_action = ephy_window_get_location_action (window);
-	bind_location_action (EPHY_SETTINGS_LOCKDOWN, location_action);
+	location_controller = ephy_window_get_location_controller (window);
+	bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
 }
 
 static void

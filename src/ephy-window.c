@@ -43,7 +43,6 @@
 #include "ephy-gui.h"
 #include "ephy-home-action.h"
 #include "ephy-link.h"
-#include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-navigation-history-action.h"
 #include "ephy-notebook.h"
@@ -428,7 +427,7 @@ struct _EphyWindowPrivate
 	guint idle_worker;
 	GtkWidget *downloads_box;
 
-	EphyLocationAction *location_action;
+	EphyLocationController *location_controller;
 
 	guint clear_progress_timeout_id;
 	gulong set_focus_handler;
@@ -1520,7 +1519,7 @@ _ephy_window_set_location (EphyWindow *window,
 	if (priv->updating_address) return;
 
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (priv->location_action, address);
+	ephy_location_controller_set_address (priv->location_controller, address);
 	priv->updating_address = FALSE;
 }
 
@@ -1586,7 +1585,7 @@ _ephy_window_action_set_favicon (EphyWindow *window,
 {
 	EphyWindowPrivate *priv = window->priv;
 
-	g_object_set (priv->location_action, "icon", icon, NULL);
+	g_object_set (priv->location_controller, "icon", icon, NULL);
 }
 
 static void
@@ -1707,7 +1706,7 @@ _ephy_window_set_security_state (EphyWindow *window,
 
 	priv->show_lock = show_lock != FALSE;
 
-	g_object_set (priv->location_action,
+	g_object_set (priv->location_controller,
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
 		      "show-lock", priv->show_lock,
@@ -3461,7 +3460,7 @@ allow_popups_notifier (GSettings *settings,
 }
 
 static void
-sync_user_input_cb (EphyLocationAction *action,
+sync_user_input_cb (EphyLocationController *action,
 		    GParamSpec *pspec,
 		    EphyWindow *window)
 {
@@ -3476,7 +3475,7 @@ sync_user_input_cb (EphyLocationAction *action,
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_assert (EPHY_IS_EMBED (embed));
 
-	address = ephy_location_action_get_address (action);
+	address = ephy_location_controller_get_address (action);
 
 	priv->updating_address = TRUE;
 	ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), address);
@@ -3591,14 +3590,14 @@ ephy_window_constructor (GType type,
 
 	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
-	priv->location_action =
-		g_object_new (EPHY_TYPE_LOCATION_ACTION,
+	priv->location_controller =
+		g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
 			      "window", window,
 			      "location-entry", ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar)),
 			      NULL);
-	g_signal_connect (priv->location_action, "notify::address",
+	g_signal_connect (priv->location_controller, "notify::address",
 			  G_CALLBACK (sync_user_input_cb), window);
-	g_signal_connect_swapped (priv->location_action, "open-link",
+	g_signal_connect_swapped (priv->location_controller, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
 	g_signal_connect_swapped (priv->notebook, "open-link",
@@ -4150,7 +4149,7 @@ ephy_window_get_context_event (EphyWindow *window)
  * ephy_window_get_location:
  * @window: an #EphyWindow widget
  *
- * Gets the current address according to @window's #EphyLocationAction.
+ * Gets the current address according to @window's #EphyLocationController.
  *
  * Returns: current @window address
  **/
@@ -4158,7 +4157,7 @@ const char *
 ephy_window_get_location (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	return ephy_location_action_get_address (priv->location_action);
+	return ephy_location_controller_get_address (priv->location_controller);
 }
 
 /**
@@ -4166,7 +4165,7 @@ ephy_window_get_location (EphyWindow *window)
  * @window: an #EphyWindow widget
  * @address: new address
  *
- * Sets the internal #EphyLocationAction address to @address.
+ * Sets the internal #EphyLocationController address to @address.
  **/
 void
 ephy_window_set_location (EphyWindow *window,
@@ -4177,7 +4176,7 @@ ephy_window_set_location (EphyWindow *window,
 	if (priv->updating_address) return;
 
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (priv->location_action, address);
+	ephy_location_controller_set_address (priv->location_controller, address);
 	priv->updating_address = FALSE;
 }
 
@@ -4198,10 +4197,10 @@ ephy_window_get_toolbar_action_group (EphyWindow *window)
 	return window->priv->toolbar_action_group;
 }
 
-EphyLocationAction *
-ephy_window_get_location_action (EphyWindow *window)
+EphyLocationController *
+ephy_window_get_location_controller (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return window->priv->location_action;
+	return window->priv->location_controller;
 }

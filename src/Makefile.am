@@ -24,7 +24,7 @@ NOINST_H_FILES = \
 	ephy-home-action.h			\
 	ephy-link-action.h			\
 	ephy-lockdown.h				\
-	ephy-location-action.h			\
+	ephy-location-controller.h		\
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
 	ephy-password-info.h			\
@@ -62,7 +62,7 @@ libephymain_la_SOURCES = \
 	ephy-history-window.c			\
 	ephy-link.c				\
 	ephy-link-action.c			\
-	ephy-location-action.c			\
+	ephy-location-controller.c		\
 	ephy-lockdown.c				\
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
@@ -237,7 +237,7 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/src/ephy-find-toolbar.h \
 	$(top_srcdir)/src/ephy-link-action.h \
 	$(top_srcdir)/src/ephy-link.h \
-	$(top_srcdir)/src/ephy-location-action.h \
+	$(top_srcdir)/src/ephy-location-controller.h \
 	$(top_srcdir)/src/ephy-notebook.h \
 	$(top_srcdir)/src/ephy-session.h \
 	$(top_srcdir)/src/ephy-shell.h \
@@ -267,7 +267,7 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/src/ephy-find-toolbar.c \
 	$(top_srcdir)/src/ephy-link-action.c \
 	$(top_srcdir)/src/ephy-link.c \
-	$(top_srcdir)/src/ephy-location-action.c \
+	$(top_srcdir)/src/ephy-location-controller.c \
 	$(top_srcdir)/src/ephy-notebook.c \
 	$(top_srcdir)/src/ephy-session.c \
 	$(top_srcdir)/src/ephy-shell.c \
