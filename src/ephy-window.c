@@ -3951,6 +3951,9 @@ ephy_window_init (EphyWindow *window)
 	g_signal_connect (embed_shell,
 			 "download-added", G_CALLBACK (download_added_cb),
 			 window);
+
+	gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window),
+						     TRUE);
 }
 
 /**
