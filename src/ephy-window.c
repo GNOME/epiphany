@@ -129,9 +129,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Page Set_up"), NULL,
 	  N_("Setup the page settings for printing"),
 	  G_CALLBACK (window_cmd_file_print_setup) },
-	{ "FilePrintPreview", GTK_STOCK_PRINT_PREVIEW, N_("Print Pre_view"),"<control><shift>P",
-	  N_("Print preview"),
-	  G_CALLBACK (window_cmd_file_print_preview) },
 	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print…"), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
@@ -1914,8 +1911,6 @@ sync_tab_load_status (EphyWebView *view,
 	gtk_action_set_sensitive (action, loading);
 
 	/* disable print while loading, see bug #116344 */
-	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 

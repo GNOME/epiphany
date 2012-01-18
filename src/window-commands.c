@@ -85,19 +85,6 @@ window_cmd_file_print_setup (GtkAction *action,
 }
 
 void
-window_cmd_file_print_preview (GtkAction *action,
-			       EphyWindow *window)
-{
-	EphyEmbed *embed;
-	EphyWebView *view;
-
-	embed = ephy_embed_container_get_active_child 
-	  (EPHY_EMBED_CONTAINER (window));
-	view = ephy_embed_get_web_view (embed);
-	ephy_web_view_show_print_preview (view);
-}
-
-void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {

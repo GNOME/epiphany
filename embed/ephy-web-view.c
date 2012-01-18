@@ -3304,21 +3304,6 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
 }
 
 /**
- * ephy_web_view_show_print_preview
- * @view: an #EphyWebView
- *
- * Generates a print preview of the specified view.
- * An external viewer is used to display the preview.
- *
- * Since: 2.30
- **/
-void
-ephy_web_view_show_print_preview (EphyWebView *view)
-{
-  ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PREVIEW);
-}
-
-/**
  * ephy_web_view_print
  * @view: an #EphyWebView
  *
