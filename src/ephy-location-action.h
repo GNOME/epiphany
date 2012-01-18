@@ -24,7 +24,7 @@
 #ifndef EPHY_LOCATION_ACTION_H
 #define EPHY_LOCATION_ACTION_H
 
-#include "ephy-link-action.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -41,7 +41,7 @@ typedef struct _EphyLocationActionClass		EphyLocationActionClass;
 
 struct _EphyLocationAction
 {
-	EphyLinkAction parent;
+	GObject parent;
 
 	/*< private >*/
 	EphyLocationActionPrivate *priv;
@@ -49,7 +49,7 @@ struct _EphyLocationAction
 
 struct _EphyLocationActionClass
 {
-	EphyLinkActionClass parent_class;
+	GObjectClass parent_class;
 
 	/* Signals */
 	void (* lock_clicked)	(EphyLocationAction *action);

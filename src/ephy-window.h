@@ -25,6 +25,7 @@
 #define EPHY_WINDOW_H
 
 #include "ephy-embed.h"
+#include "ephy-location-action.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -86,6 +87,7 @@ void		  ephy_window_set_downloads_box_visibility (EphyWindow *window,
 							    gboolean show);
 
 GtkActionGroup   *ephy_window_get_toolbar_action_group (EphyWindow *window);
+EphyLocationAction *ephy_window_get_location_action (EphyWindow *window);
 
 G_END_DECLS
 

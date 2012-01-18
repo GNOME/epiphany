@@ -122,8 +122,6 @@ static const BindAction popup_actions[] = {
 };
 
 static const BindAction special_toolbar_actions[] = {
-	{ EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "Location", "editable" },
-
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "visible" },
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "sensitive" },
 	{ EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "visible" },
@@ -191,6 +189,16 @@ bind_settings_and_actions (GSettings *settings,
 }
 
 static void
+bind_location_action (GSettings *settings,
+		      EphyLocationAction *action)
+{
+	g_settings_bind (settings, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL,
+			 action, "editable",
+			 G_SETTINGS_BIND_GET |
+			 G_SETTINGS_BIND_INVERT_BOOLEAN);
+}
+
+static void
 impl_attach_window (EphyExtension *extension,
 		    EphyWindow *window)
 {
@@ -198,6 +206,7 @@ impl_attach_window (EphyExtension *extension,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GSettings *settings;
+	EphyLocationAction *location_action;
 
 	g_signal_connect (EPHY_SETTINGS_LOCKDOWN,
 			  "changed::" EPHY_PREFS_LOCKDOWN_FULLSCREEN,
@@ -234,6 +243,9 @@ impl_attach_window (EphyExtension *extension,
 	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
 				   action_group, special_toolbar_actions,
 				   G_N_ELEMENTS (special_toolbar_actions));
+
+	location_action = ephy_window_get_location_action (window);
+	bind_location_action (EPHY_SETTINGS_LOCKDOWN, location_action);
 }
 
 static void

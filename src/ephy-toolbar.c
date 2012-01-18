@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-toolbar.h"
 
+#include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_TOOLBAR)
@@ -135,9 +136,7 @@ ephy_toolbar_constructed (GObject *object)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Location */
-  action = gtk_action_group_get_action (action_group, "Location");
-  location = gtk_action_create_tool_item (action);
-  priv->entry = location;
+  priv->entry = location = ephy_location_entry_new ();
   gtk_box_pack_start (GTK_BOX (box), location,
                       TRUE, TRUE, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),

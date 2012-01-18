@@ -46,6 +46,7 @@
 struct _EphyLocationActionPrivate
 {
 	EphyWindow *window;
+	EphyLocationEntry *location_entry;
 	GtkWidget *proxy;
 	GList *actions;
 	char *address;
@@ -64,7 +65,7 @@ static void ephy_location_action_class_init (EphyLocationActionClass *class);
 static void ephy_location_action_finalize   (GObject *object);
 static void user_changed_cb		    (GtkWidget *proxy,
 					     EphyLocationAction *action);
-static void sync_address		    (GtkAction *action,
+static void sync_address		    (EphyLocationAction *action,
 					     GParamSpec *pspec,
 					     GtkWidget *proxy);
 
@@ -77,7 +78,8 @@ enum
 	PROP_LOCK_STOCK,
 	PROP_LOCK_TOOLTIP,
 	PROP_SHOW_LOCK,
-	PROP_WINDOW
+	PROP_WINDOW,
+	PROP_LOCATION_ENTRY
 };
 
 enum
@@ -87,13 +89,15 @@ enum
 };
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyLocationAction, ephy_location_action, EPHY_TYPE_LINK_ACTION)
+G_DEFINE_TYPE_WITH_CODE (EphyLocationAction, ephy_location_action, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						NULL))
 
 static gboolean
 match_func (GtkEntryCompletion *completion,
-		const char *key,
-		GtkTreeIter *iter,
-		gpointer data)
+	    const char *key,
+	    GtkTreeIter *iter,
+	    gpointer data)
 {
 	char *item = NULL;
 	char *url = NULL;
@@ -177,14 +181,14 @@ action_activated_cb (GtkEntryCompletion *completion,
 
 static void
 entry_activate_cb (GtkEntry *entry,
-		   GtkAction *action)
+		   EphyLocationAction *action)
 {
 	EphyBookmarks *bookmarks;
 	const char *content;
 	char *address;
 	EphyLocationActionPrivate *priv;
 
-	priv = EPHY_LOCATION_ACTION (action)->priv;
+	priv = action->priv;
 
 	if (priv->sync_address_is_blocked)
 	{
@@ -228,76 +232,70 @@ lock_clicked_cb (GtkWidget *proxy,
 }
 
 static void
-sync_address (GtkAction *gaction,
+sync_address (EphyLocationAction *action,
 	      GParamSpec *pspec,
-	      GtkWidget *proxy)
+	      GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (widget);
 
 	LOG ("sync_address %s", action->priv->address);
 
-	g_signal_handlers_block_by_func (proxy, G_CALLBACK (user_changed_cb), action);
+	g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), action);
 	ephy_location_entry_set_location (lentry, priv->address);
-	g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (user_changed_cb), action);
+	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), action);
 }
 
 static void
-sync_editable (GtkAction *gaction,
+sync_editable (EphyLocationAction *action,
 	       GParamSpec *pspec,
-	       GtkWidget *proxy)
+	       GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
-	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (widget);
 
 	gtk_editable_set_editable (GTK_EDITABLE (lentry), action->priv->editable);
 }
 
 static void
-sync_icon (GtkAction *gaction,
+sync_icon (EphyLocationAction *action,
 	   GParamSpec *pspec,
-	   GtkWidget *proxy)
+	   GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_favicon (entry, priv->icon);
 }
 
 static void
-sync_lock_stock_id (GtkAction *gaction,
+sync_lock_stock_id (EphyLocationAction *action,
 		    GParamSpec *pspec,
-		    GtkWidget *proxy)
+		    GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_lock_stock (entry, priv->lock_stock_id);
 }
 
 static void
-sync_lock_tooltip (GtkAction *gaction,
+sync_lock_tooltip (EphyLocationAction *action,
 		   GParamSpec *pspec,
-		   GtkWidget *proxy)
+		   GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_lock_tooltip (entry, priv->lock_tooltip);
 }
 
 static void
-sync_show_lock (GtkAction *gaction,
+sync_show_lock (EphyLocationAction *action,
 		GParamSpec *pspec,
-		GtkWidget *proxy)
+		GtkWidget *widget)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
 	ephy_location_entry_set_show_lock (entry, priv->show_lock);
 }
@@ -328,11 +326,9 @@ get_title_cb (EphyLocationEntry *entry,
 }
 
 static void
-remove_completion_actions (GtkAction *gaction,
-			   GtkWidget *proxy)
+remove_completion_actions (EphyLocationAction *action,
+			   EphyLocationEntry *lentry)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
-	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 	GtkEntryCompletion *completion;
 	GList *l;
 
@@ -348,11 +344,9 @@ remove_completion_actions (GtkAction *gaction,
 }
 
 static void
-add_completion_actions (GtkAction *gaction,
-			GtkWidget *proxy)
+add_completion_actions (EphyLocationAction *action,
+			EphyLocationEntry *lentry)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
-	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 	GtkEntryCompletion *completion;
 	GList *l;
 
@@ -377,11 +371,10 @@ add_completion_actions (GtkAction *gaction,
 static gboolean
 focus_in_event_cb (GtkWidget *entry,
 		   GdkEventFocus *event,
-		   GtkAction *action)
+		   EphyLocationAction *action)
 {
-	EphyLocationActionPrivate *priv;
+	EphyLocationActionPrivate *priv = action->priv;
 
-	priv = EPHY_LOCATION_ACTION (action)->priv;
 	if (!priv->sync_address_is_blocked)
 	{		
 		priv->sync_address_is_blocked = TRUE;
@@ -394,11 +387,9 @@ focus_in_event_cb (GtkWidget *entry,
 static gboolean
 focus_out_event_cb (GtkWidget *entry,
 		    GdkEventFocus *event,
-		    GtkAction *action)
+		    EphyLocationAction *action)
 {
-	EphyLocationActionPrivate *priv;
-
-	priv = EPHY_LOCATION_ACTION (action)->priv;
+	EphyLocationActionPrivate *priv = action->priv;
 
 	if (priv->sync_address_is_blocked)
 	{
@@ -413,11 +404,9 @@ static void
 switch_page_cb (GtkNotebook *notebook,
 		GtkWidget *page,
 		guint page_num,
-		GtkAction *action)
+		EphyLocationAction *action)
 {
-	EphyLocationActionPrivate *priv;
-
-	priv = EPHY_LOCATION_ACTION (action)->priv;
+	EphyLocationActionPrivate *priv = action->priv;
 
 	if (priv->sync_address_is_blocked == TRUE)
 	{
@@ -427,102 +416,74 @@ switch_page_cb (GtkNotebook *notebook,
 }
 
 static void
-connect_proxy (GtkAction *action, GtkWidget *proxy)
+ephy_location_action_constructed (GObject *object)
 {
-	if (EPHY_IS_LOCATION_ENTRY (proxy))
-	{
-		EphyCompletionModel *model;
-		GtkWidget *notebook;
-		EphyLocationActionPrivate *priv;
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyCompletionModel *model;
+	GtkWidget *notebook, *widget;
 
-		priv = EPHY_LOCATION_ACTION (action)->priv;
-		priv->proxy = proxy;
+	G_OBJECT_CLASS (ephy_location_action_parent_class)->constructed (object);
 
-		notebook = ephy_window_get_notebook (priv->window);
+	notebook = ephy_window_get_notebook (priv->window);
+	widget = GTK_WIDGET (priv->location_entry);
 
-		g_signal_connect (notebook, "switch-page",
-				  G_CALLBACK (switch_page_cb), action);
+	g_signal_connect (notebook, "switch-page",
+			  G_CALLBACK (switch_page_cb), action);
 
-		model = ephy_completion_model_new ();
-		ephy_location_entry_set_completion (EPHY_LOCATION_ENTRY (proxy),
-						    GTK_TREE_MODEL (model),
-						    EPHY_COMPLETION_TEXT_COL,
-						    EPHY_COMPLETION_ACTION_COL,
-						    EPHY_COMPLETION_KEYWORDS_COL,
-						    EPHY_COMPLETION_RELEVANCE_COL,
-						    EPHY_COMPLETION_URL_COL,
-						    EPHY_COMPLETION_EXTRA_COL,
-						    EPHY_COMPLETION_FAVICON_COL);
-		g_object_unref (model);
+	model = ephy_completion_model_new ();
+	ephy_location_entry_set_completion (priv->location_entry,
+					    GTK_TREE_MODEL (model),
+					    EPHY_COMPLETION_TEXT_COL,
+					    EPHY_COMPLETION_ACTION_COL,
+					    EPHY_COMPLETION_KEYWORDS_COL,
+					    EPHY_COMPLETION_RELEVANCE_COL,
+					    EPHY_COMPLETION_URL_COL,
+					    EPHY_COMPLETION_EXTRA_COL,
+					    EPHY_COMPLETION_FAVICON_COL);
+	g_object_unref (model);
 		
-		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy), 
-						    match_func, 
-						    proxy,
-						    NULL);
+	ephy_location_entry_set_match_func (priv->location_entry, 
+					    match_func, 
+					    priv->location_entry,
+					    NULL);
 
-		add_completion_actions (action, proxy);
+	add_completion_actions (action, priv->location_entry);
 
-		sync_address (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::address",
-					 G_CALLBACK (sync_address), proxy, 0);
-		sync_editable (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::editable",
-					 G_CALLBACK (sync_editable), proxy, 0);
-		sync_icon (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::icon",
-					 G_CALLBACK (sync_icon), proxy, 0);
-		sync_lock_stock_id (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::lock-stock-id",
-					 G_CALLBACK (sync_lock_stock_id), proxy, 0);
-		sync_lock_tooltip (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::lock-tooltip",
-					 G_CALLBACK (sync_lock_tooltip), proxy, 0);
-		sync_show_lock (action, NULL, proxy);
-		g_signal_connect_object (action, "notify::show-lock",
-					 G_CALLBACK (sync_show_lock), proxy, 0);
+	sync_address (action, NULL, widget);
+	g_signal_connect_object (action, "notify::address",
+				 G_CALLBACK (sync_address), widget, 0);
+	sync_editable (action, NULL, widget);
+	g_signal_connect_object (action, "notify::editable",
+				 G_CALLBACK (sync_editable), widget, 0);
+	sync_icon (action, NULL, widget);
+	g_signal_connect_object (action, "notify::icon",
+				 G_CALLBACK (sync_icon), widget, 0);
+	sync_lock_stock_id (action, NULL, widget);
+	g_signal_connect_object (action, "notify::lock-stock-id",
+				 G_CALLBACK (sync_lock_stock_id), widget, 0);
+	sync_lock_tooltip (action, NULL, widget);
+	g_signal_connect_object (action, "notify::lock-tooltip",
+				 G_CALLBACK (sync_lock_tooltip), widget, 0);
+	sync_show_lock (action, NULL, widget);
+	g_signal_connect_object (action, "notify::show-lock",
+				 G_CALLBACK (sync_show_lock), widget, 0);
 
-		g_signal_connect_object (proxy, "activate",
-					 G_CALLBACK (entry_activate_cb),
-					 action, 0);
-		g_signal_connect_object (proxy, "user-changed",
-					 G_CALLBACK (user_changed_cb), action, 0);
-		g_signal_connect_object (proxy, "lock-clicked",
-					 G_CALLBACK (lock_clicked_cb), action, 0);
-		g_signal_connect_object (proxy, "get-location",
-					 G_CALLBACK (get_location_cb), action, 0);
-		g_signal_connect_object (proxy, "get-title",
-					 G_CALLBACK (get_title_cb), action, 0);
-		g_signal_connect_object (proxy, "focus-in-event",
-					 G_CALLBACK (focus_in_event_cb), action, 0);
-		g_signal_connect_object (proxy, "focus-out-event",
-					 G_CALLBACK (focus_out_event_cb), action, 0);
-	}
-
-	GTK_ACTION_CLASS (ephy_location_action_parent_class)->connect_proxy (action, proxy);
-}
-
-static void
-disconnect_proxy (GtkAction *action, GtkWidget *proxy)
-{
-	GTK_ACTION_CLASS (ephy_location_action_parent_class)->disconnect_proxy (action, proxy);
-
-	if (EPHY_IS_LOCATION_ENTRY (proxy))
-	{
-		GtkWidget *notebook;
-		EphyLocationActionPrivate *priv;
-
-		priv = EPHY_LOCATION_ACTION (action)->priv;
-		priv->proxy = NULL;
-
-		notebook = ephy_window_get_notebook (priv->window);
-
-		g_signal_handlers_disconnect_matched (action, G_SIGNAL_MATCH_DATA,
-						      0, 0, NULL, NULL, proxy);
-		g_signal_handlers_disconnect_matched (proxy, G_SIGNAL_MATCH_DATA,
-						      0, 0, NULL, NULL, action);
-		g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
-						      0, 0, NULL, NULL, action);
-	}
+	g_signal_connect_object (widget, "activate",
+				 G_CALLBACK (entry_activate_cb),
+				 action, 0);
+	g_signal_connect_object (widget, "user-changed",
+				 G_CALLBACK (user_changed_cb), action, 0);
+	g_signal_connect_object (widget, "lock-clicked",
+				 G_CALLBACK (lock_clicked_cb), action, 0);
+	g_signal_connect_object (widget, "get-location",
+				 G_CALLBACK (get_location_cb), action, 0);
+	g_signal_connect_object (widget, "get-title",
+				 G_CALLBACK (get_title_cb), action, 0);
+	g_signal_connect_object (widget, "focus-in-event",
+				 G_CALLBACK (focus_in_event_cb), action, 0);
+	g_signal_connect_object (widget, "focus-out-event",
+				 G_CALLBACK (focus_out_event_cb), action, 0);
 }
 
 static void
@@ -563,6 +524,9 @@ ephy_location_action_set_property (GObject *object,
 		case PROP_WINDOW:
 			priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
+		case PROP_LOCATION_ENTRY:
+			priv->location_entry = EPHY_LOCATION_ENTRY (g_value_get_object (value));
+			break;
 	}
 }
 
@@ -596,24 +560,47 @@ ephy_location_action_get_property (GObject *object,
 			g_value_set_boolean (value, priv->show_lock);
 			break;
 		case PROP_WINDOW:
+		case PROP_LOCATION_ENTRY:
 			/* not readable */
 			break;
 	}
 }
 
 static void
+ephy_location_action_dispose (GObject *object)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
+	EphyLocationActionPrivate *priv = action->priv;
+	GtkWidget *notebook;
+
+	notebook = ephy_window_get_notebook (priv->window);
+
+	if (notebook == NULL ||
+	    priv->location_entry == NULL) {
+		return;
+	}
+
+	g_signal_handlers_disconnect_matched (action, G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, priv->location_entry);
+	g_signal_handlers_disconnect_matched (priv->location_entry, G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, action);
+	g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, action);
+	priv->location_entry = NULL;
+
+	G_OBJECT_CLASS (ephy_location_action_parent_class)->dispose (object);
+}
+
+static void
 ephy_location_action_class_init (EphyLocationActionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
-	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	object_class->finalize = ephy_location_action_finalize;
+	object_class->dispose = ephy_location_action_dispose;
+	object_class->constructed = ephy_location_action_constructed;
 	object_class->get_property = ephy_location_action_get_property;
 	object_class->set_property = ephy_location_action_set_property;
-
-	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
-	action_class->connect_proxy = connect_proxy;
-	action_class->disconnect_proxy = disconnect_proxy;
 
 	/**
 	* EphyLocationAction::lock-clicked:
@@ -724,6 +711,20 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));
 
+	/**
+	* EphyLocationAction:location-entry:
+	*
+	* The controlled location entry.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_LOCATION_ENTRY,
+					 g_param_spec_object ("location-entry",
+							      "Location entry",
+							      "The controlled location entry",
+							      G_TYPE_OBJECT,
+							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
+							      G_PARAM_CONSTRUCT_ONLY));
+
 	g_type_class_add_private (object_class, sizeof (EphyLocationActionPrivate));
 }
 
@@ -785,24 +786,15 @@ init_actions_list (EphyLocationAction *action)
 static void
 update_actions_list (EphyLocationAction *la)
 {
-	GSList *l;
-	GtkAction *action = GTK_ACTION (la);
+	EphyLocationActionPrivate *priv = la->priv;
 
-	l = gtk_action_get_proxies (action);
-	for (; l != NULL; l = l->next)
-	{
-		remove_completion_actions (action, GTK_WIDGET (l->data));
-	}
+	remove_completion_actions (la, priv->location_entry);
 
 	g_list_free (la->priv->actions);
 	la->priv->actions = NULL;
 	init_actions_list (la);
 
-	l = gtk_action_get_proxies (action);
-	for (; l != NULL; l = l->next)
-	{
-		add_completion_actions (action, l->data);
-	}
+	add_completion_actions (la, priv->location_entry);
 }
 
 static void

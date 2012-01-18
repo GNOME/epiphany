@@ -428,6 +428,8 @@ struct _EphyWindowPrivate
 	guint idle_worker;
 	GtkWidget *downloads_box;
 
+	EphyLocationAction *location_action;
+
 	guint clear_progress_timeout_id;
 	gulong set_focus_handler;
 
@@ -1462,21 +1464,6 @@ setup_ui_manager (EphyWindow *window)
 						"<alt>Right");
 	g_object_unref (action);
 
-	/* FIXME: I'm still waiting for the exact term to 
-	 * user here from the docs team.
-	 */
-	action =
-		g_object_new (EPHY_TYPE_LOCATION_ACTION,
-			      "name", "Location",
-			      "label", _("Address Entry"),
-			      "stock_id", EPHY_STOCK_ENTRY,
-			      "tooltip", _("Enter a web address to open, or a phrase to search for"),
-			      "visible-overflown", FALSE,
-			      "window", window,
-			      NULL);
-	gtk_action_group_add_action (action_group, action);
-	g_object_unref (action);
-
 	action =
 		g_object_new (EPHY_TYPE_ZOOM_ACTION,
 			      "name", "Zoom",
@@ -1529,14 +1516,11 @@ _ephy_window_set_location (EphyWindow *window,
 			   const char *address)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyLocationAction *action;
 
 	if (priv->updating_address) return;
 
-	action = EPHY_LOCATION_ACTION (gtk_action_group_get_action (priv->toolbar_action_group,
-								    "Location"));
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (action, address);
+	ephy_location_action_set_address (priv->location_action, address);
 	priv->updating_address = FALSE;
 }
 
@@ -1601,11 +1585,8 @@ _ephy_window_action_set_favicon (EphyWindow *window,
 				 GdkPixbuf *icon)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "Location");
-	g_object_set (action, "icon", icon, NULL);
+	g_object_set (priv->location_action, "icon", icon, NULL);
 }
 
 static void
@@ -1723,13 +1704,10 @@ _ephy_window_set_security_state (EphyWindow *window,
 				 const char *tooltip)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
 
 	priv->show_lock = show_lock != FALSE;
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "Location");
-	g_object_set (action,
+	g_object_set (priv->location_action,
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
 		      "show-lock", priv->show_lock,
@@ -3535,13 +3513,6 @@ setup_toolbar (EphyWindow *window)
 				  G_CALLBACK (ephy_link_open), window);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "Location");
-	g_signal_connect (action, "notify::address",
-			  G_CALLBACK (sync_user_input_cb), window);
-	g_signal_connect_swapped (action, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "FileNewTab");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
@@ -3620,6 +3591,15 @@ ephy_window_constructor (GType type,
 
 	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
+	priv->location_action =
+		g_object_new (EPHY_TYPE_LOCATION_ACTION,
+			      "window", window,
+			      "location-entry", ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar)),
+			      NULL);
+	g_signal_connect (priv->location_action, "notify::address",
+			  G_CALLBACK (sync_user_input_cb), window);
+	g_signal_connect_swapped (priv->location_action, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 
 	g_signal_connect_swapped (priv->notebook, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
@@ -4178,9 +4158,7 @@ const char *
 ephy_window_get_location (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction * action = gtk_action_group_get_action (priv->toolbar_action_group,
-							  "Location");
-	return ephy_location_action_get_address (EPHY_LOCATION_ACTION (action));
+	return ephy_location_action_get_address (priv->location_action);
 }
 
 /**
@@ -4195,13 +4173,11 @@ ephy_window_set_location (EphyWindow *window,
 			  const char *address)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
-							 "Location");
 
 	if (priv->updating_address) return;
 
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (EPHY_LOCATION_ACTION (action), address);
+	ephy_location_action_set_address (priv->location_action, address);
 	priv->updating_address = FALSE;
 }
 
@@ -4220,4 +4196,12 @@ ephy_window_get_toolbar_action_group (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return window->priv->toolbar_action_group;
+}
+
+EphyLocationAction *
+ephy_window_get_location_action (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return window->priv->location_action;
 }
