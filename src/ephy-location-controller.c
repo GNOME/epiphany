@@ -62,11 +62,11 @@ struct _EphyLocationControllerPrivate
 static void ephy_location_controller_init	    (EphyLocationController *controller);
 static void ephy_location_controller_class_init (EphyLocationControllerClass *class);
 static void ephy_location_controller_finalize   (GObject *object);
-static void user_changed_cb		    (GtkWidget *proxy,
+static void user_changed_cb		    (GtkWidget *widget,
 					     EphyLocationController *controller);
 static void sync_address		    (EphyLocationController *controller,
 					     GParamSpec *pspec,
-					     GtkWidget *proxy);
+					     GtkWidget *widget);
 
 enum
 {
@@ -210,21 +210,21 @@ entry_activate_cb (GtkEntry *entry,
 }
 
 static void
-user_changed_cb (GtkWidget *proxy, EphyLocationController *controller)
+user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 {
 	const char *address;
 
-	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (proxy));
+	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (widget));
 
 	LOG ("user_changed_cb, new address %s", address);
 
-	g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), proxy);
+	g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), widget);
 	ephy_location_controller_set_address (controller, address);
-	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), proxy);
+	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), widget);
 }
 
 static void
-lock_clicked_cb (GtkWidget *proxy,
+lock_clicked_cb (GtkWidget *widget,
 		 EphyLocationController *controller)
 {
 	g_signal_emit (controller, signals[LOCK_CLICKED], 0);
