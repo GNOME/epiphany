@@ -90,6 +90,7 @@ struct _EphyEmbedPrivate
   guint clear_progress_source_id;
 
   gulong status_handler_id;
+  gulong progress_update_handler_id;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -277,11 +278,21 @@ ephy_embed_dispose (GObject *object)
     priv->pop_statusbar_later_source_id = 0;
   }
 
+  if (priv->clear_progress_source_id) {
+    g_source_remove (priv->clear_progress_source_id);
+    priv->clear_progress_source_id = 0;
+  }
+
   /* Do not listen to status message notifications anymore, if we try
    * to update the statusbar after dispose we might crash. */
   if (priv->status_handler_id) {
     g_signal_handler_disconnect (priv->web_view, priv->status_handler_id);
     priv->status_handler_id = 0;
+  }
+
+  if (priv->progress_update_handler_id) {
+    g_signal_handler_disconnect (priv->web_view, priv->progress_update_handler_id);
+    priv->progress_update_handler_id = 0;
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
@@ -321,9 +332,6 @@ ephy_embed_finalize (GObject *object)
 
   g_slist_free (priv->keys);
   priv->keys = NULL;
-
-  if (priv->clear_progress_source_id)
-    g_source_remove (priv->clear_progress_source_id);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -551,7 +559,7 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 
   if (progress == 1.0 || !loading)
     priv->clear_progress_source_id = g_timeout_add (500,
-                                                    (GSourceFunc) clear_progress_cb,
+                                                    (GSourceFunc)clear_progress_cb,
                                                     embed);
   else
     gtk_widget_show (priv->progress);
@@ -599,8 +607,8 @@ ephy_embed_constructed (GObject *object)
   paned = GTK_WIDGET (priv->paned);
 
   priv->web_view = web_view;
-  g_signal_connect (web_view, "notify::progress",
-                    G_CALLBACK (progress_update), object);
+  priv->progress_update_handler_id =  g_signal_connect (web_view, "notify::progress",
+                                                        G_CALLBACK (progress_update), object);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window),
                      GTK_WIDGET (web_view));
