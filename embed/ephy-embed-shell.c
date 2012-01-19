@@ -608,7 +608,7 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
  *
  * Gets the global #GList object listing active downloads.
  *
- * Returns: (transfer none): a #GList object
+ * Returns: (transfer none) (element-type EphyDownload): a #GList object
  **/
 GList *
 ephy_embed_shell_get_downloads (EphyEmbedShell *shell)
