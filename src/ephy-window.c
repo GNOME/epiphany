@@ -4265,6 +4265,15 @@ ephy_window_set_location (EphyWindow *window,
 	priv->updating_address = FALSE;
 }
 
+/**
+ * ephy_window_get_toolbar_action_group:
+ * @window: an #EphyWindow
+ * 
+ * Returns the toolbar #GtkActionGroup for this @window
+ * 
+ * Returns: (transfer none): the #GtkActionGroup for this @window's
+ * toolbar actions
+ **/
 GtkActionGroup *
 ephy_window_get_toolbar_action_group (EphyWindow *window)
 {
