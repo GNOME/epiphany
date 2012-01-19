@@ -47,7 +47,6 @@ struct _EphyLocationControllerPrivate
 {
 	EphyWindow *window;
 	EphyLocationEntry *location_entry;
-	GtkWidget *proxy;
 	GList *actions;
 	char *address;
 	EphyNode *smart_bmks;
@@ -411,7 +410,7 @@ switch_page_cb (GtkNotebook *notebook,
 	if (priv->sync_address_is_blocked == TRUE)
 	{
 		priv->sync_address_is_blocked = FALSE;
-		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), priv->proxy);
+		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), priv->location_entry);
 	}
 }
 
