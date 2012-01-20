@@ -79,11 +79,6 @@ const char       *ephy_window_get_location        (EphyWindow *window);
 void              ephy_window_set_location        (EphyWindow *window,
                                                    const char *address);
 
-EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
-
-void		  ephy_window_set_downloads_box_visibility (EphyWindow *window,
-							    gboolean show);
-
 G_END_DECLS
 
 #endif

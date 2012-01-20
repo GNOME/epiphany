@@ -19,22 +19,23 @@
  */
 
 #include "config.h"
-
 #include "popup-commands.h"
+
+#include "ephy-bookmarks-ui.h"
 #include "ephy-download.h"
-#include "ephy-shell.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
-#include "ephy-file-helpers.h"
 #include "ephy-file-chooser.h"
-#include "ephy-bookmarks-ui.h"
+#include "ephy-file-helpers.h"
+#include "ephy-prefs.h"
+#include "ephy-private.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
 #include "ephy-web-view.h"
 
-#include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <string.h>
 #include <webkit/webkit.h>
 
 void

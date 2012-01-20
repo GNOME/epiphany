@@ -3112,6 +3112,16 @@ ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 }
 
 static void
+ephy_window_set_downloads_box_visibility (EphyWindow *window,
+					  gboolean show)
+{
+	if (show)
+		gtk_widget_show (window->priv->downloads_box);
+	else
+		gtk_widget_hide (window->priv->downloads_box);
+}
+
+static void
 download_added_cb (EphyEmbedShell *shell,
 		   EphyDownload *download,
 		   gpointer data)
@@ -3203,16 +3213,6 @@ setup_downloads_box (EphyWindow *window)
 	gtk_widget_show_all (close_button);
 
 	return widget;
-}
-
-void
-ephy_window_set_downloads_box_visibility (EphyWindow *window,
-					  gboolean show)
-{
-	if (show)
-		gtk_widget_show (window->priv->downloads_box);
-	else
-		gtk_widget_hide (window->priv->downloads_box);
 }
 
 static void
