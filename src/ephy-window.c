@@ -741,15 +741,6 @@ destroy_fullscreen_popup (EphyWindow *window)
 }
 
 static void
-add_widget (GtkUIManager *manager,
-	    GtkWidget *widget,
-	    EphyWindow *window)
-{
-	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
-			    widget, FALSE, FALSE, 0);
-}
-
-static void
 exit_fullscreen_clicked_cb (EphyWindow *window)
 {
 	GtkAction *action;
@@ -1644,7 +1635,6 @@ setup_ui_manager (EphyWindow *window)
 			       "tooltip", _("Open a new tab"),
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
-
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION,
@@ -1668,7 +1658,6 @@ setup_ui_manager (EphyWindow *window)
 	g_object_unref (action_group);
 
 	window->priv->manager = manager;
-	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (manager));
 }
