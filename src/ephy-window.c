@@ -65,7 +65,6 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
 #include <webkit/webkit.h>
 
 #ifdef HAVE_X11_XF86KEYSYM_H
@@ -657,7 +656,7 @@ ephy_window_open_link (EphyLink *link,
 	{
 		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
 
-		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
+		if (address == NULL || address[0] == '\0' || g_str_equal (address, "about:blank"))
 		{
 			ephy_window_activate_location (window);
 		}
