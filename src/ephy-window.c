@@ -81,15 +81,6 @@
 
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
-static void sync_tab_load_status		(EphyWebView *view,
-						 GParamSpec *pspec,
-						 EphyWindow *window);
-static void sync_tab_security			(EphyWebView  *view,
-						 GParamSpec *pspec,
-						 EphyWindow *window);
-static void sync_tab_zoom			(WebKitWebView *web_view,
-						 GParamSpec *pspec,
-						 EphyWindow *window);
 
 static const GtkActionEntry ephy_menu_entries [] = {
 
@@ -811,6 +802,124 @@ sync_chromes_visibility (EphyWindow *window)
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
+}
+
+static void
+sync_tab_load_status (EphyWebView *view,
+		      GParamSpec *pspec,
+		      EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group = priv->action_group;
+	GtkAction *action;
+	gboolean loading;
+
+	if (window->priv->closing) return;
+
+	loading = ephy_web_view_is_loading (view);
+
+	action = gtk_action_group_get_action (action_group, "ViewStop");
+	gtk_action_set_sensitive (action, loading);
+
+	/* disable print while loading, see bug #116344 */
+	action = gtk_action_group_get_action (action_group, "FilePrint");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
+
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "ViewCombinedStopReload");
+	ephy_combined_stop_reload_action_set_loading (EPHY_COMBINED_STOP_RELOAD_ACTION (action),
+						      loading);
+}
+
+static void
+_ephy_window_set_security_state (EphyWindow *window,
+				 gboolean show_lock,
+				 const char *stock_id,
+				 const char *tooltip)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	priv->show_lock = show_lock != FALSE;
+
+	g_object_set (priv->location_controller,
+		      "lock-stock-id", stock_id,
+		      "lock-tooltip", tooltip,
+		      "show-lock", priv->show_lock,
+		      NULL);
+}
+
+static void
+sync_tab_security (EphyWebView *view,
+		   GParamSpec *pspec,
+		   EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyWebViewSecurityLevel level;
+	char *description = NULL;
+	char *state = NULL;
+	char *tooltip;
+	const char *stock_id = STOCK_LOCK_INSECURE;
+	gboolean show_lock = FALSE;
+
+	if (priv->closing) return;
+
+	ephy_web_view_get_security_level (view, &level, &description);
+
+	switch (level)
+	{
+		case EPHY_WEB_VIEW_STATE_IS_UNKNOWN:
+			state = _("Unknown");
+			break;
+		case EPHY_WEB_VIEW_STATE_IS_INSECURE:
+			state = _("Insecure");
+			g_free (description);
+			description = NULL;
+			break;
+		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
+			state = _("Broken");
+			stock_id = STOCK_LOCK_BROKEN;
+                        show_lock = TRUE;
+                        g_free (description);
+                        description = NULL;
+                        break;
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_MED:
+			state = _("Low");
+			/* We deliberately don't show the 'secure' icon
+			 * for low & medium secure sites; see bug #151709.
+			 */
+			stock_id = STOCK_LOCK_INSECURE;
+			break;
+		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
+			state = _("High");
+			stock_id = STOCK_LOCK_SECURE;
+			show_lock = TRUE;
+			break;
+		default:
+			g_assert_not_reached ();
+			break;
+	}
+
+	tooltip = g_strdup_printf (_("Security level: %s"), state);
+	if (description != NULL)
+	{
+		char *tmp = tooltip;
+
+		tooltip = g_strconcat (tmp, "\n", description, NULL);
+		g_free (description);
+		g_free (tmp);
+	}
+
+	_ephy_window_set_security_state (window, show_lock, stock_id, tooltip);
+
+	if (priv->fullscreen_popup != NULL)
+	{
+		ephy_fullscreen_popup_set_security_state
+			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
+			 show_lock, stock_id, tooltip);
+	}
+
+	g_free (tooltip);
 }
 
 static void
@@ -1584,6 +1693,62 @@ sync_tab_address (EphyWebView *view,
 }
 
 static void
+_ephy_window_action_set_zoom (EphyWindow *window,
+			      gboolean can_zoom,
+			      float zoom)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
+							 "Zoom");
+
+	gtk_action_set_sensitive (action, can_zoom);
+	g_object_set (action, "zoom", can_zoom ? zoom : 1.0, NULL);
+}
+
+static void
+sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
+{
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	EphyWebViewDocumentType type;
+	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
+	float zoom;
+	EphyEmbed *embed = window->priv->active_embed;
+
+	if (window->priv->closing) return;
+
+	g_object_get (web_view,
+		      "zoom-level", &zoom,
+		      NULL);
+
+	type = ephy_web_view_get_document_type (ephy_embed_get_web_view (embed));
+	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
+
+	if (zoom >= ZOOM_MAXIMAL)
+	{
+		can_zoom_in = FALSE;
+	}
+	if (zoom <= ZOOM_MINIMAL)
+	{
+		can_zoom_out = FALSE;
+	}
+	if (zoom != 1.0)
+	{
+		can_zoom_normal = TRUE;
+	}
+
+	_ephy_window_action_set_zoom (window, can_zoom, zoom);
+
+	action_group = window->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
+	gtk_action_set_sensitive (action, can_zoom_in && can_zoom);
+	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
+	gtk_action_set_sensitive (action, can_zoom_out && can_zoom);
+	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
+	gtk_action_set_sensitive (action, can_zoom_normal && can_zoom);
+}
+
+static void
 sync_tab_document_type (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
@@ -1739,97 +1904,6 @@ sync_tab_navigation (EphyWebView *view,
 }
 
 static void
-_ephy_window_set_security_state (EphyWindow *window,
-				 gboolean show_lock,
-				 const char *stock_id,
-				 const char *tooltip)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	priv->show_lock = show_lock != FALSE;
-
-	g_object_set (priv->location_controller,
-		      "lock-stock-id", stock_id,
-		      "lock-tooltip", tooltip,
-		      "show-lock", priv->show_lock,
-		      NULL);
-}
-
-static void
-sync_tab_security (EphyWebView *view,
-		   GParamSpec *pspec,
-		   EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyWebViewSecurityLevel level;
-	char *description = NULL;
-	char *state = NULL;
-	char *tooltip;
-	const char *stock_id = STOCK_LOCK_INSECURE;
-	gboolean show_lock = FALSE;
-
-	if (priv->closing) return;
-
-	ephy_web_view_get_security_level (view, &level, &description);
-
-	switch (level)
-	{
-		case EPHY_WEB_VIEW_STATE_IS_UNKNOWN:
-			state = _("Unknown");
-			break;
-		case EPHY_WEB_VIEW_STATE_IS_INSECURE:
-			state = _("Insecure");
-			g_free (description);
-			description = NULL;
-			break;
-		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
-			state = _("Broken");
-			stock_id = STOCK_LOCK_BROKEN;
-                        show_lock = TRUE;
-                        g_free (description);
-                        description = NULL;
-                        break;
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_MED:
-			state = _("Low");
-			/* We deliberately don't show the 'secure' icon
-			 * for low & medium secure sites; see bug #151709.
-			 */
-			stock_id = STOCK_LOCK_INSECURE;
-			break;
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
-			state = _("High");
-			stock_id = STOCK_LOCK_SECURE;
-			show_lock = TRUE;
-			break;
-		default:
-			g_assert_not_reached ();
-			break;
-	}
-
-	tooltip = g_strdup_printf (_("Security level: %s"), state);
-	if (description != NULL)
-	{
-		char *tmp = tooltip;
-
-		tooltip = g_strconcat (tmp, "\n", description, NULL);
-		g_free (description);
-		g_free (tmp);
-	}
-
-	_ephy_window_set_security_state (window, show_lock, stock_id, tooltip);
-
-	if (priv->fullscreen_popup != NULL)
-	{
-		ephy_fullscreen_popup_set_security_state
-			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
-			 show_lock, stock_id, tooltip);
-	}
-
-	g_free (tooltip);
-}
-
-static void
 sync_tab_popup_windows (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
@@ -1868,33 +1942,6 @@ sync_tab_popups_allowed (EphyWebView *view,
 }
 
 static void
-sync_tab_load_status (EphyWebView *view,
-		      GParamSpec *pspec,
-		      EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group = priv->action_group;
-	GtkAction *action;
-	gboolean loading;
-
-	if (window->priv->closing) return;
-
-	loading = ephy_web_view_is_loading (view);
-
-	action = gtk_action_group_get_action (action_group, "ViewStop");
-	gtk_action_set_sensitive (action, loading);
-
-	/* disable print while loading, see bug #116344 */
-	action = gtk_action_group_get_action (action_group, "FilePrint");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "ViewCombinedStopReload");
-	ephy_combined_stop_reload_action_set_loading (EPHY_COMBINED_STOP_RELOAD_ACTION (action),
-						      loading);
-}
-
-static void
 sync_tab_title (EphyWebView *view,
 		GParamSpec *pspec,
 		EphyWindow *window)
@@ -1905,62 +1952,6 @@ sync_tab_title (EphyWebView *view,
 
 	gtk_window_set_title (GTK_WINDOW(window),
 			      ephy_web_view_get_title_composite (view));
-}
-
-static void
-_ephy_window_action_set_zoom (EphyWindow *window,
-			      gboolean can_zoom,
-			      float zoom)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
-							 "Zoom");
-
-	gtk_action_set_sensitive (action, can_zoom);
-	g_object_set (action, "zoom", can_zoom ? zoom : 1.0, NULL);
-}
-
-static void
-sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
-{
-	GtkActionGroup *action_group;
-	GtkAction *action;
-	EphyWebViewDocumentType type;
-	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
-	float zoom;
-	EphyEmbed *embed = window->priv->active_embed;
-
-	if (window->priv->closing) return;
-
-	g_object_get (web_view,
-		      "zoom-level", &zoom,
-		      NULL);
-
-	type = ephy_web_view_get_document_type (ephy_embed_get_web_view (embed));
-	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
-
-	if (zoom >= ZOOM_MAXIMAL)
-	{
-		can_zoom_in = FALSE;
-	}
-	if (zoom <= ZOOM_MINIMAL)
-	{
-		can_zoom_out = FALSE;
-	}
-	if (zoom != 1.0)
-	{
-		can_zoom_normal = TRUE;
-	}
-
-	_ephy_window_action_set_zoom (window, can_zoom, zoom);
-
-	action_group = window->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-	gtk_action_set_sensitive (action, can_zoom_in && can_zoom);
-	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-	gtk_action_set_sensitive (action, can_zoom_out && can_zoom);
-	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
-	gtk_action_set_sensitive (action, can_zoom_normal && can_zoom);
 }
 
 static void
