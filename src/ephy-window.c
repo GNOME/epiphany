@@ -53,7 +53,6 @@
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-stock-icons.h"
-#include "ephy-topic-action.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
