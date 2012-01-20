@@ -80,15 +80,6 @@
  * #EphyWindow is Epiphany's main widget.
  */
 
-static void ephy_window_show			(GtkWidget *widget);
-static EphyEmbed *ephy_window_open_link		(EphyLink *link,
-						 const char *address,
-						 EphyEmbed *embed,
-						 EphyLinkFlags flags);
-static void notebook_switch_page_cb		(GtkNotebook *notebook,
-						 GtkWidget *page,
-						 guint page_num,
-						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
 static void sync_tab_load_status		(EphyWebView *view,
@@ -625,6 +616,70 @@ ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
 	iface->get_children = impl_get_children;
 	iface->get_is_popup = impl_get_is_popup;
 	iface->get_chrome = impl_get_chrome;
+}
+
+static EphyEmbed *
+ephy_window_open_link (EphyLink *link,
+		       const char *address,
+		       EphyEmbed *embed,
+		       EphyLinkFlags flags)
+{
+	EphyWindow *window = EPHY_WINDOW (link);
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *new_embed;
+
+	g_return_val_if_fail (address != NULL, NULL);
+
+	if (embed == NULL)
+	{
+		embed = window->priv->active_embed;
+	}
+
+	if (flags  & (EPHY_LINK_JUMP_TO | 
+		      EPHY_LINK_NEW_TAB | 
+		      EPHY_LINK_NEW_WINDOW))
+	{
+		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
+
+		if (flags & EPHY_LINK_JUMP_TO)
+		{
+			ntflags |= EPHY_NEW_TAB_JUMP;
+		}
+		if (flags & EPHY_LINK_NEW_WINDOW ||
+		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
+		{
+			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		}
+		else
+		{
+			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		}
+
+		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
+			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
+
+		new_embed = ephy_shell_new_tab
+				(ephy_shell,
+				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+				 embed, address, ntflags);
+	}
+	else
+	{
+		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
+
+		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
+		{
+			ephy_window_activate_location (window);
+		}
+		else
+		{
+			gtk_widget_grab_focus (GTK_WIDGET (embed));
+		}
+
+		new_embed = embed;
+	}
+
+	return new_embed;
 }
 
 static void
@@ -3050,6 +3105,45 @@ notebook_create_window_cb (GtkNotebook *notebook,
   return ephy_window_get_notebook (new_window);
 }
 
+static EphyEmbed *
+real_get_active_tab (EphyWindow *window, int page_num)
+{
+	GtkWidget *embed;
+
+	if (page_num == -1)
+	{
+		page_num = gtk_notebook_get_current_page (window->priv->notebook);
+	}
+
+	embed = gtk_notebook_get_nth_page (window->priv->notebook, page_num);
+
+	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+	return EPHY_EMBED (embed);
+}
+
+static void
+notebook_switch_page_cb (GtkNotebook *notebook,
+			 GtkWidget *page,
+			 guint page_num,
+			 EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *embed;
+
+	LOG ("switch-page notebook %p position %u\n", notebook, page_num);
+
+	if (priv->closing) return;
+
+	/* get the new tab */
+	embed = real_get_active_tab (window, page_num);
+
+	/* update new tab */
+	ephy_window_set_active_tab (window, embed);
+
+	ephy_find_toolbar_set_embed (priv->find_toolbar, embed);
+}
+
 static GtkNotebook *
 setup_notebook (EphyWindow *window)
 {
@@ -3708,6 +3802,37 @@ ephy_window_constructor (GType type,
 }
 
 static void
+ephy_window_show (GtkWidget *widget)
+{
+	EphyWindow *window = EPHY_WINDOW(widget);
+	EphyWindowPrivate *priv = window->priv;
+
+	if (!priv->has_size)
+	{
+		EphyEmbed *embed;
+		int width, height;
+
+		embed = priv->active_embed;
+		g_return_if_fail (EPHY_IS_EMBED (embed));
+
+		ephy_tab_get_size (embed, &width, &height);
+		if (width == -1 && height == -1)
+		{
+			int flags = 0;
+			if (!priv->is_popup)
+				flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+
+			ephy_state_add_window (widget, "main_window", 600, 500,
+					       TRUE, flags);
+		}
+
+		priv->has_size = TRUE;
+	}
+
+	GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
+}
+
+static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -3782,70 +3907,6 @@ _ephy_window_activate_location (EphyWindow *window)
 	}
 
 	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
-}
-
-static EphyEmbed *
-ephy_window_open_link (EphyLink *link,
-		       const char *address,
-		       EphyEmbed *embed,
-		       EphyLinkFlags flags)
-{
-	EphyWindow *window = EPHY_WINDOW (link);
-	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *new_embed;
-
-	g_return_val_if_fail (address != NULL, NULL);
-
-	if (embed == NULL)
-	{
-		embed = window->priv->active_embed;
-	}
-
-	if (flags  & (EPHY_LINK_JUMP_TO | 
-		      EPHY_LINK_NEW_TAB | 
-		      EPHY_LINK_NEW_WINDOW))
-	{
-		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
-
-		if (flags & EPHY_LINK_JUMP_TO)
-		{
-			ntflags |= EPHY_NEW_TAB_JUMP;
-		}
-		if (flags & EPHY_LINK_NEW_WINDOW ||
-		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
-		{
-			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-		}
-		else
-		{
-			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
-		}
-
-		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
-			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
-
-		new_embed = ephy_shell_new_tab
-				(ephy_shell,
-				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-				 embed, address, ntflags);
-	}
-	else
-	{
-		ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
-
-		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
-		{
-			_ephy_window_activate_location (window);
-		}
-		else
-		{
-			gtk_widget_grab_focus (GTK_WIDGET (embed));
-		}
-
-		new_embed = embed;
-	}
-
-	return new_embed;
 }
 
 static void
@@ -3947,22 +4008,6 @@ ephy_window_get_find_toolbar (EphyWindow *window)
        return GTK_WIDGET (window->priv->find_toolbar);
 }
 
-static EphyEmbed *
-real_get_active_tab (EphyWindow *window, int page_num)
-{
-	GtkWidget *embed;
-
-	if (page_num == -1)
-	{
-		page_num = gtk_notebook_get_current_page (window->priv->notebook);
-	}
-	embed = gtk_notebook_get_nth_page (window->priv->notebook, page_num);
-
-	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
-
-	return EPHY_EMBED (embed);
-}
-
 /**
  * ephy_window_load_url:
  * @window: a #EphyWindow
@@ -3997,59 +4042,6 @@ ephy_window_activate_location (EphyWindow *window)
 	}
 
 	_ephy_window_activate_location (window);
-}
-
-static void
-ephy_window_show (GtkWidget *widget)
-{
-	EphyWindow *window = EPHY_WINDOW(widget);
-	EphyWindowPrivate *priv = window->priv;
-
-	if (!priv->has_size)
-	{
-		EphyEmbed *embed;
-		int width, height;
-
-		embed = priv->active_embed;
-		g_return_if_fail (EPHY_IS_EMBED (embed));
-
-		ephy_tab_get_size (embed, &width, &height);
-		if (width == -1 && height == -1)
-		{
-			int flags = 0;
-			if (!priv->is_popup)
-				flags = EPHY_STATE_WINDOW_SAVE_SIZE;
-
-			ephy_state_add_window (widget, "main_window", 600, 500,
-					       TRUE, flags);
-		}
-
-		priv->has_size = TRUE;
-	}
-
-	GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
-}
-
-static void
-notebook_switch_page_cb (GtkNotebook *notebook,
-			 GtkWidget *page,
-			 guint page_num,
-			 EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *embed;
-
-	LOG ("switch-page notebook %p position %u\n", notebook, page_num);
-
-	if (priv->closing) return;
-
-	/* get the new tab */
-	embed = real_get_active_tab (window, page_num);
-
-	/* update new tab */
-	ephy_window_set_active_tab (window, embed);
-
-	ephy_find_toolbar_set_embed (priv->find_toolbar, embed);
 }
 
 /**
