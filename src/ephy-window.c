@@ -1512,19 +1512,6 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-_ephy_window_set_location (EphyWindow *window,
-			   const char *address)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->updating_address) return;
-
-	priv->updating_address = TRUE;
-	ephy_location_controller_set_address (priv->location_controller, address);
-	priv->updating_address = FALSE;
-}
-
-static void
 sync_tab_address (EphyWebView *view,
 	          GParamSpec *pspec,
 		  EphyWindow *window)
@@ -1538,7 +1525,7 @@ sync_tab_address (EphyWebView *view,
 	address = ephy_web_view_get_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
 
-	_ephy_window_set_location (window, typed_address ? typed_address : address);
+	ephy_window_set_location (window, typed_address ? typed_address : address);
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
@@ -2796,7 +2783,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-	_ephy_window_set_location (window, address);
+	ephy_window_set_location (window, address);
 
 	/* don't suppress alert */
 	return FALSE;
