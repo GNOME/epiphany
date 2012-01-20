@@ -10,12 +10,9 @@ css_DATA = epiphany.css
 
 gladedir = $(pkgdatadir)/glade
 glade_DATA = \
-	certificate-dialogs.ui		\
 	epiphany.ui			\
 	epiphany-application-menu.ui	\
-	form-signing-dialog.ui		\
-	prefs-dialog.ui			\
-	print.ui
+	prefs-dialog.ui
 
 EXTRA_DIST = \
 	$(xml_DATA) \
