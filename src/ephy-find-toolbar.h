@@ -27,6 +27,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-embed.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS

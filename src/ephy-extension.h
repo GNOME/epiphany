@@ -25,6 +25,7 @@
 #ifndef EPHY_EXTENSION_H
 #define EPHY_EXTENSION_H
 
+#include "ephy-embed.h"
 #include "ephy-window.h"
 
 #include <glib-object.h>
