@@ -1891,7 +1891,7 @@ load_status_cb (WebKitWebView *web_view,
     g_object_notify (object, "status-message");
     ephy_web_view_set_loading_title (view, NULL, FALSE);
 
-    if (ephy_web_view_get_is_blank (view))
+    if (priv->is_blank)
       g_object_notify (object, "embed-title");
 
     if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
@@ -3343,16 +3343,15 @@ ephy_web_view_get_title_composite (EphyWebView *view)
 {
   const char *title = "";
   const char *loading_title;
-  gboolean is_loading, is_blank;
+  gboolean is_loading;
 
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
   is_loading = ephy_web_view_is_loading (view);
-  is_blank = ephy_web_view_get_is_blank (view);
   loading_title = ephy_web_view_get_loading_title (view);
   title = ephy_web_view_get_title (view);
 
-  if (is_blank)
+  if (view->priv->is_blank)
   {
     if (is_loading)
       title = loading_title;
