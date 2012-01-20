@@ -48,6 +48,7 @@
 #include "ephy-notebook.h"
 #include "ephy-page-menu-action.h"
 #include "ephy-prefs.h"
+#include "ephy-private.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"

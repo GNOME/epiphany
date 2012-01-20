@@ -28,6 +28,7 @@ NOINST_H_FILES = \
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
 	ephy-password-info.h			\
+	ephy-private.h				\
 	ephy-toolbar.h				\
 	ephy-window-action.h			\
 	languages.h				\

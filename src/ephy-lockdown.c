@@ -21,20 +21,20 @@
  */
 
 #include "config.h"
+#include "ephy-lockdown.h"
 
 #include "ephy-action-helper.h"
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-web-view.h"
-#include "ephy-lockdown.h"
 #include "ephy-extension.h"
-#include "ephy-settings.h"
 #include "ephy-prefs.h"
-#include "ephy-debug.h"
+#include "ephy-private.h"
+#include "ephy-settings.h"
+#include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
-
 #include <string.h>
 
 #define LOCKDOWN_FLAG 1 << 8

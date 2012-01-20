@@ -23,6 +23,7 @@
 
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
+#include "ephy-private.h"
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_TOOLBAR)
 

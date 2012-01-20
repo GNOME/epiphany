@@ -84,10 +84,6 @@ EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
 void		  ephy_window_set_downloads_box_visibility (EphyWindow *window,
 							    gboolean show);
 
-GtkActionGroup   *ephy_window_get_toolbar_action_group (EphyWindow *window);
-
-EphyLocationController *ephy_window_get_location_controller (EphyWindow *window);
-
 G_END_DECLS
 
 #endif
