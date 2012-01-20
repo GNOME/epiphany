@@ -27,8 +27,6 @@
 #include "ephy-embed.h"
 #include "ephy-location-controller.h"
 
-#include <glib-object.h>
-#include <glib.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
