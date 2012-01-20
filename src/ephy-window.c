@@ -4197,6 +4197,14 @@ ephy_window_get_toolbar_action_group (EphyWindow *window)
 	return window->priv->toolbar_action_group;
 }
 
+/**
+ * ephy_window_get_location_controller:
+ * @window: an #EphyWindow
+ * 
+ * Returns the @window #EphyLocationController
+ * 
+ * Returns: (transfer none): the @window #EphyLocationController
+ **/
 EphyLocationController *
 ephy_window_get_location_controller (EphyWindow *window)
 {
