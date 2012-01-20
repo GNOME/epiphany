@@ -3946,12 +3946,12 @@ ephy_window_new_with_chrome (EphyWebViewChrome chrome,
  *
  * Return value: (transfer none): an #GtkUIManager
  **/
-GObject *
+GtkUIManager *
 ephy_window_get_ui_manager (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return G_OBJECT (window->priv->manager);
+	return window->priv->manager;
 }
 
 /**

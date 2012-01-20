@@ -62,7 +62,7 @@ EphyWindow	 *ephy_window_new		  (void);
 EphyWindow	 *ephy_window_new_with_chrome	  (EphyWebViewChrome chrome,
 						   gboolean is_popup);
 
-GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
+GtkUIManager	 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 

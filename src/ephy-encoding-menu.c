@@ -21,19 +21,19 @@
  */
 
 #include "config.h"
-
 #include "ephy-encoding-menu.h"
-#include "ephy-encoding-dialog.h"
-#include "ephy-encodings.h"
-#include "ephy-embed.h"
+
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
+#include "ephy-embed.h"
+#include "ephy-encoding-dialog.h"
+#include "ephy-encodings.h"
 #include "ephy-shell.h"
-#include "ephy-debug.h"
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <string.h>
 #include <webkit/webkit.h>
 
@@ -351,7 +351,7 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	menu->priv->window = window;
-	menu->priv->manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+	menu->priv->manager = ephy_window_get_ui_manager (window);
 
 	action_group = gtk_action_group_new ("EncodingActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);

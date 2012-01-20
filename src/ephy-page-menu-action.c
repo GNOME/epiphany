@@ -95,7 +95,7 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
 
   if (!action->priv->menu) {
     window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
-    manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+    manager = ephy_window_get_ui_manager (window);
     menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
 
     g_signal_connect (menu, "notify::visible",

@@ -87,7 +87,7 @@ activate_bookmarks_menu (GtkAction *action, EphyWindow *window)
 	BookmarksWindowData *data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
 	if (data && !data->bookmarks_menu)
 	{
-		GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+		GtkUIManager *manager = ephy_window_get_ui_manager (window);
 		gtk_ui_manager_ensure_update (manager);
 
 		if (!bookmarks_menu_string->len)
@@ -111,7 +111,7 @@ erase_bookmarks_menu (EphyWindow *window)
 	BookmarksWindowData *data;
 	GtkUIManager *manager;
 
-	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+	manager = ephy_window_get_ui_manager (window);
 	data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
 
 	if (data != NULL && data->bookmarks_menu != 0)
@@ -177,7 +177,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
 	g_return_if_fail (data == NULL);
 
-	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+	manager = ephy_window_get_ui_manager (window);
 
 	data = g_new0 (BookmarksWindowData, 1);
 	g_object_set_data_full (G_OBJECT (window), BM_WINDOW_DATA_KEY, data, g_free);
@@ -245,7 +245,7 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
 	EphyNode *topics = ephy_bookmarks_get_keywords (eb);
 
 	BookmarksWindowData *data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
-	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+	GtkUIManager *manager = ephy_window_get_ui_manager (window);
 	GtkAction *action;
 
 	g_return_if_fail (data != 0);
