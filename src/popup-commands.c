@@ -164,15 +164,6 @@ popup_cmd_copy_link_address (GtkAction *action,
 
 	context = ephy_embed_event_get_context (event);
 
-#if 0
-	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
-	{
-		value = ephy_embed_event_get_property (event, "email");
-		address = g_value_get_string (&value);
-		popup_cmd_copy_to_clipboard (window, address);
-	}
-#endif
-
 	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
 		ephy_embed_event_get_property (event, "link-uri", &value);

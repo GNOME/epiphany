@@ -265,14 +265,6 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
-	/* Email links. */
-
-	/* This is on the context menu on a mailto: link and opens the mail program */
-	{ "SendEmail", STOCK_NEW_MAIL, N_("_Send Email…"),
-	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
-	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
-
 	/* Images. */
 
 	{ "OpenImage", NULL, N_("Open _Image"), NULL,
@@ -2090,25 +2082,6 @@ update_popups_tooltips (EphyWindow *window, GdkEventButton *event, WebKitHitTest
 		g_free (name);
 	}
 
-#if 0
-	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
-	{
-		value = ephy_embed_event_get_property (event, "link");
-
-		action = gtk_action_group_get_action (group, "SendEmail");
-		tooltip = g_strdup_printf (_("Send email to address “%s”"),
-					   g_value_get_string (value));
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "CopyEmailAddress");
-		tooltip = g_strdup_printf (_("Copy email address “%s”"),
-					   g_value_get_string (value));
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-	}
-#endif
-
 	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
 		char *uri;
@@ -2164,13 +2137,6 @@ show_embed_popup (EphyWindow *window,
 
 	LOG ("show_embed_popup context %x", context);
 
-#if 0
-	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
-	{
-		popup = "/EphyEmailLinkPopup";
-		update_edit_actions_sensitivity (window, TRUE);
-	}
-#endif
 	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
 		popup = "/EphyLinkPopup";
