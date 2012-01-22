@@ -150,11 +150,25 @@ ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_desc
 }
 
 static void
+ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+
+  nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
+
+  if (label == NULL || label[0] == '\0') {
+    gtk_widget_hide (priv->floating_bar);
+    gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+  } else
+    gtk_widget_show (priv->floating_bar);
+}
+
+static void
 ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
 {
   g_return_if_fail (EPHY_IS_EMBED (embed));
 
-  _ephy_embed_set_statusbar_label (embed, text);
+  ephy_embed_set_statusbar_label (embed, text);
 }
 
 static guint
@@ -562,20 +576,6 @@ download_requested_cb (WebKitWebView *web_view,
   ephy_download_set_auto_destination (ed);
 
   return TRUE;
-}
-
-void
-_ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
-{
-  EphyEmbedPrivate *priv = embed->priv;
-
-  nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
-
-  if (label == NULL || label[0] == '\0') {
-    gtk_widget_hide (priv->floating_bar);
-    gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
-  } else
-    gtk_widget_show (priv->floating_bar);
 }
 
 static gboolean

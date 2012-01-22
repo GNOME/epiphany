@@ -63,8 +63,6 @@ void         ephy_embed_remove_top_widget        (EphyEmbed  *embed,
                                                   GtkWidget  *widget);
 void         ephy_embed_auto_download_url        (EphyEmbed  *embed,
                                                   const char *url);
-void         _ephy_embed_set_statusbar_label     (EphyEmbed  *embed,
-                                                  const char *label);
 G_END_DECLS
 
 #endif
