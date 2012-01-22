@@ -391,7 +391,6 @@ struct _EphyWindowPrivate
 	EphyEmbed *active_embed;
 	EphyFindToolbar *find_toolbar;
 	guint num_tabs;
-	guint tab_message_cid;
 	EphyWebViewChrome chrome;
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
@@ -2759,9 +2758,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	priv->num_tabs++;
-
-	priv->tab_message_cid = ephy_embed_statusbar_get_context_id
-		(embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 #if 0
 	g_signal_connect_object (embed, "open-link",
 				 G_CALLBACK (ephy_link_open), window,
