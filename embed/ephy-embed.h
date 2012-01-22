@@ -22,10 +22,9 @@
 #ifndef EPHY_EMBED_H
 #define EPHY_EMBED_H
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
 #include "ephy-web-view.h"
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
