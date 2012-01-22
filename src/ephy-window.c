@@ -392,7 +392,6 @@ struct _EphyWindowPrivate
 	EphyFindToolbar *find_toolbar;
 	guint num_tabs;
 	guint tab_message_cid;
-	guint help_message_cid;
 	EphyWebViewChrome chrome;
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
@@ -1342,132 +1341,6 @@ init_menu_updaters (EphyWindow *window)
                          G_CALLBACK (edit_menu_hide_cb), window);
 }
 
-static EphyWebView*
-ephy_window_get_active_web_view (EphyWindow *window)
-{
-	EphyEmbed *active_embed = window->priv->active_embed;
-	return ephy_embed_get_web_view (active_embed);
-}
-
-static gboolean
-tool_item_enter_cb (GtkWidget *proxy,
-		    GdkEventCrossing *event,
-		    EphyWindow *window)
-{
-	gboolean repeated;
-
-	repeated = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (proxy), "ephy-window-enter-event"));
-	
-	if (event->mode == GDK_CROSSING_NORMAL && repeated == FALSE)
-	{
-		GtkToolItem *item;
-		GtkAction *action;
-		char *message;
-    
-		item = GTK_TOOL_ITEM (gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOL_ITEM));
-		
-		action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (item));
-		g_return_val_if_fail (action != NULL, FALSE);
-		
-		g_object_get (action, "tooltip", &message, NULL);
-		if (message)
-		{
-			EphyWebView *view = ephy_window_get_active_web_view (window);
-			ephy_embed_statusbar_push (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
-						   window->priv->help_message_cid, message);
-			g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (TRUE));
-			g_free (message);
-		}
-	}
-	
-	return FALSE;
-}
-
-static gboolean
-tool_item_leave_cb (GtkWidget *proxy,
-		    GdkEventCrossing *event,
-		    EphyWindow *window)
-{
-	if (event->mode == GDK_CROSSING_NORMAL)
-	{
-		EphyWebView *view = ephy_window_get_active_web_view (window);
-		ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
-					  window->priv->help_message_cid);
-		g_object_set_data (G_OBJECT (proxy), "ephy-window-enter-event", GINT_TO_POINTER (FALSE));
-	}
-	
-	return FALSE;
-}
-
-static void
-tool_item_drag_begin_cb (GtkWidget          *widget,
-			 GdkDragContext     *context,
-			 EphyWindow         *window)
-{
-	EphyWebView *view = ephy_window_get_active_web_view (window);
-	ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
-				  window->priv->help_message_cid);
-}
-
-
-static void
-connect_tool_item (GtkWidget *proxy, EphyWindow *window)
-{
-	if (GTK_IS_CONTAINER (proxy))
-	{
-		gtk_container_foreach (GTK_CONTAINER (proxy),
-				       (GtkCallback) connect_tool_item,
-				       (gpointer) window);
-	}
-
-	g_signal_connect (proxy, "drag_begin",
-			  G_CALLBACK (tool_item_drag_begin_cb), window);
-	g_signal_connect (proxy, "enter-notify-event",
-			  G_CALLBACK (tool_item_enter_cb), window);
-	g_signal_connect (proxy, "leave-notify-event",
-			  G_CALLBACK (tool_item_leave_cb), window);
-}
-
-static void
-disconnect_tool_item (GtkWidget *proxy, EphyWindow *window)
-{
-	if (GTK_IS_CONTAINER (proxy))
-	{
-		gtk_container_foreach (GTK_CONTAINER (proxy),
-				       (GtkCallback) disconnect_tool_item,
-				       (gpointer) window);
-	}
-
-	g_signal_handlers_disconnect_by_func
-	  (proxy, G_CALLBACK (tool_item_enter_cb), window);
-	g_signal_handlers_disconnect_by_func
-	  (proxy, G_CALLBACK (tool_item_leave_cb), window);
-}
-
-static void
-disconnect_proxy_cb (GtkUIManager *manager,
-		     GtkAction *action,
-		     GtkWidget *proxy,
-		     EphyWindow *window)
-{
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		disconnect_tool_item (proxy, window);
-	}
-}
-
-static void
-connect_proxy_cb (GtkUIManager *manager,
-		  GtkAction *action,
-		  GtkWidget *proxy,
-		  EphyWindow *window)
-{
-	if (GTK_IS_TOOL_ITEM (proxy))
-	{
-		connect_tool_item (proxy, window);
-	}
-}
-
 static void
 setup_ui_manager (EphyWindow *window)
 {
@@ -1481,11 +1354,6 @@ setup_ui_manager (EphyWindow *window)
 			   window->priv->main_vbox);
 
 	manager = gtk_ui_manager_new ();
-
-	g_signal_connect (manager, "connect_proxy",
-			  G_CALLBACK (connect_proxy_cb), window);
-	g_signal_connect (manager, "disconnect_proxy",
-			  G_CALLBACK (disconnect_proxy_cb), window);
 
 	action_group = gtk_action_group_new ("WindowActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
@@ -2894,9 +2762,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	priv->tab_message_cid = ephy_embed_statusbar_get_context_id
 		(embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
-	priv->help_message_cid = ephy_embed_statusbar_get_context_id
-		(embed, EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION);
-
 #if 0
 	g_signal_connect_object (embed, "open-link",
 				 G_CALLBACK (ephy_link_open), window,
