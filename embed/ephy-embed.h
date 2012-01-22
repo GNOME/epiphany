@@ -41,7 +41,6 @@ typedef struct _EphyEmbed EphyEmbed;
 typedef struct _EphyEmbedPrivate EphyEmbedPrivate;
 
 #define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
-#define EPHY_EMBED_STATUSBAR_HELP_MESSAGE_CONTEXT_DESCRIPTION "help_message"
 
 struct _EphyEmbed {
   GtkBox parent_instance;
