@@ -1349,35 +1349,6 @@ ephy_window_get_active_web_view (EphyWindow *window)
 	return ephy_embed_get_web_view (active_embed);
 }
 
-static void
-menu_item_select_cb (GtkMenuItem *proxy,
-		     EphyWindow *window)
-{
-	GtkAction *action;
-	char *message;
-
-	action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
-	g_return_if_fail (action != NULL);
-	
-	g_object_get (action, "tooltip", &message, NULL);
-	if (message)
-	{
-		EphyWebView *view = ephy_window_get_active_web_view (window);
-		ephy_embed_statusbar_push (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
-					   window->priv->help_message_cid, message);
-		g_free (message);
-	}
-}
-
-static void
-menu_item_deselect_cb (GtkMenuItem *proxy,
-		       EphyWindow *window)
-{
-	EphyWebView *view = ephy_window_get_active_web_view (window);
-	ephy_embed_statusbar_pop (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view),
-				  window->priv->help_message_cid);
-}
-
 static gboolean
 tool_item_enter_cb (GtkWidget *proxy,
 		    GdkEventCrossing *event,
@@ -1479,14 +1450,7 @@ disconnect_proxy_cb (GtkUIManager *manager,
 		     GtkWidget *proxy,
 		     EphyWindow *window)
 {
-	if (GTK_IS_MENU_ITEM (proxy))
-	{
-		g_signal_handlers_disconnect_by_func
-			(proxy, G_CALLBACK (menu_item_select_cb), window);
-		g_signal_handlers_disconnect_by_func
-			(proxy, G_CALLBACK (menu_item_deselect_cb), window);
-	}
-	else if (GTK_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		disconnect_tool_item (proxy, window);
 	}
@@ -1498,14 +1462,7 @@ connect_proxy_cb (GtkUIManager *manager,
 		  GtkWidget *proxy,
 		  EphyWindow *window)
 {
-	if (GTK_IS_MENU_ITEM (proxy))
-	{
-		g_signal_connect (proxy, "select",
-				  G_CALLBACK (menu_item_select_cb), window);
-		g_signal_connect (proxy, "deselect",
-				  G_CALLBACK (menu_item_deselect_cb), window);
-	}
-	else if (GTK_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		connect_tool_item (proxy, window);
 	}
