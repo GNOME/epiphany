@@ -388,7 +388,6 @@ static const struct
 struct _EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
-	GtkWidget *menu_dock;
 	GtkWidget *fullscreen_popup;
 	GtkWidget *toolbar;
 	GtkUIManager *manager;
@@ -1531,12 +1530,6 @@ setup_ui_manager (EphyWindow *window)
 	gtk_widget_show (window->priv->main_vbox);
 	gtk_container_add (GTK_CONTAINER (window),
 			   window->priv->main_vbox);
-
-	window->priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	gtk_widget_show (window->priv->menu_dock);
-	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
-			    GTK_WIDGET (window->priv->menu_dock),
-			    FALSE, TRUE, 0);
 
 	manager = gtk_ui_manager_new ();
 
@@ -3558,7 +3551,7 @@ setup_toolbar (EphyWindow *window)
 	EphyWindowPrivate *priv = window->priv;
 
 	toolbar = ephy_toolbar_new (window);
-	gtk_box_pack_start (GTK_BOX (priv->menu_dock),
+	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    toolbar, FALSE, FALSE, 0);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
