@@ -56,6 +56,8 @@ static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
+#define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
+
 typedef struct {
   gchar *text;
   guint context_id;
