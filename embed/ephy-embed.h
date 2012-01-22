@@ -65,14 +65,6 @@ void         ephy_embed_auto_download_url        (EphyEmbed  *embed,
                                                   const char *url);
 void         _ephy_embed_set_statusbar_label     (EphyEmbed  *embed,
                                                   const char *label);
-void         ephy_embed_statusbar_pop            (EphyEmbed  *embed,
-                                                  guint       context_id);
-guint        ephy_embed_statusbar_push           (EphyEmbed  *embed,
-                                                  guint       context_id,
-                                                  const char *text);
-guint        ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
-                                                  const char *context_description);
-
 G_END_DECLS
 
 #endif
