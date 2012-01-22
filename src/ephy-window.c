@@ -420,7 +420,8 @@ enum
 	SENS_FLAG_CONTEXT	= 1 << 1,
 	SENS_FLAG_DOCUMENT	= 1 << 2,
 	SENS_FLAG_LOADING	= 1 << 3,
-	SENS_FLAG_NAVIGATION	= 1 << 4
+	SENS_FLAG_NAVIGATION	= 1 << 4,
+	SENS_FLAG_IS_BLANK	= 1 << 5
 };
 
 static gint
@@ -1689,6 +1690,95 @@ sync_tab_navigation (EphyWebView *view,
 }
 
 static void
+sync_tab_is_blank (EphyWebView *view,
+		   GParamSpec *pspec,
+		   EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	gboolean is_blank = TRUE;
+
+	if (window->priv->closing) return;
+
+	is_blank = ephy_web_view_get_is_blank (view);
+	action_group = priv->action_group;
+
+	/* Page menu */
+	action = gtk_action_group_get_action (action_group,
+					      "FileSaveAs");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "FileSaveAsApplication");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "FilePrint");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "FileSendTo");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "FileBookmarkPage");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "EditFind");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "EditFind");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "ViewEncoding");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "ViewZoomIn");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "ViewZoomOut");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "ViewPageSource");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	/* Page context popup */
+	action = gtk_action_group_get_action (priv->popups_action_group,
+					      "ContextBookmarkPage");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (priv->popups_action_group,
+					      "InspectElement");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	/* Toolbar */
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "ViewCombinedStopReload");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+}
+
+static void
 sync_tab_popup_windows (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
@@ -2469,6 +2559,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
+						      G_CALLBACK (sync_tab_is_blank),
+						      window);
+		g_signal_handlers_disconnect_by_func (view,
 						      G_CALLBACK (sync_tab_navigation),
 						      window);
 		g_signal_handlers_disconnect_by_func (view,
@@ -2562,6 +2655,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (view, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
+					 window, 0);
+		g_signal_connect_object (view, "notify::is-blank",
+					 G_CALLBACK (sync_tab_is_blank),
 					 window, 0);
 		/* We run our button-press-event after the default
 		 * handler to make sure pages have a chance to perform

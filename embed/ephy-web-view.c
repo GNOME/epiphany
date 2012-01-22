@@ -125,6 +125,7 @@ enum {
   PROP_EMBED_TITLE,
   PROP_TYPED_ADDRESS,
   PROP_VISIBLE,
+  PROP_IS_BLANK,
 };
 
 #define EPHY_WEB_VIEW_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WEB_VIEW, EphyWebViewPrivate))
@@ -448,6 +449,9 @@ ephy_web_view_get_property (GObject *object,
     case PROP_VISIBLE:
       g_value_set_boolean (value, priv->visibility);
       break;
+    case PROP_IS_BLANK:
+      g_value_set_boolean (value, priv->is_blank);
+      break;
     default:
       break;
   }
@@ -477,6 +481,7 @@ ephy_web_view_set_property (GObject *object,
     case PROP_STATUS_MESSAGE:
     case PROP_EMBED_TITLE:
     case PROP_VISIBLE:
+    case PROP_IS_BLANK:
       /* read only */
       break;
     default:
@@ -1297,6 +1302,19 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                    g_param_spec_boolean ("visibility",
                                                          "Visibility",
                                                          "The view's visibility",
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+/**
+ * EphyWebView:is-blank:
+ *
+ * Whether the view is showing the blank address.
+ **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_IS_BLANK,
+                                   g_param_spec_boolean ("is-blank",
+                                                         "Is blank",
+                                                         "If the EphyWebView is blank",
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -2489,6 +2507,25 @@ ephy_web_view_clear_history (EphyWebView *view)
 }
 
 /**
+ * ephy_web_view_set_is_blank:
+ * @view: an #EphyWebView
+ * @is_blank: if @view is the blank page
+ *
+ * Sets whether the  @view's address is "blank".
+ **/
+static void
+_ephy_web_view_set_is_blank (EphyWebView *view,
+                             gboolean is_blank)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (priv->is_blank != is_blank) {
+    priv->is_blank = is_blank;
+    g_object_notify (G_OBJECT (view), "is-blank");
+  }
+}
+
+/**
  * ephy_web_view_set_address:
  * @view: an #EphyWebView
  * @address: address to set @view to
@@ -2502,12 +2539,14 @@ ephy_web_view_set_address (EphyWebView *view,
 {
   EphyWebViewPrivate *priv = view->priv;
   GObject *object = G_OBJECT (view);
+  gboolean is_blank;
 
   g_free (priv->address);
   priv->address = g_strdup (address);
 
-  priv->is_blank = address == NULL ||
-                   strcmp (address, "about:blank") == 0;
+  is_blank = address == NULL ||
+             strcmp (address, "about:blank") == 0;
+  _ephy_web_view_set_is_blank (view, is_blank);
 
   if (ephy_web_view_is_loading (view) &&
       priv->expire_address_now == TRUE &&
@@ -2554,7 +2593,7 @@ ephy_web_view_set_title (EphyWebView *view,
     if (title == NULL || title[0] == '\0') {
       g_free (title);
       title = g_strdup (EMPTY_PAGE);
-      priv->is_blank = TRUE;
+      _ephy_web_view_set_is_blank (view, TRUE);
     }
   } else if (priv->is_blank) {
     g_free (title);
