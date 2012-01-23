@@ -102,16 +102,17 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
 
   if (url == NULL) {
     url = ephy_history_url_new (NULL, NULL, 0, 0, 0, 1.0);
-  } else {
-    if (url->url)
-      g_free (url->url);
-    if (url->title)
-      g_free (url->title);
   }
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
-  url->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1)),
-  url->title = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 2)),
+
+  /* Only get the URL and page title if we don't know it yet, as the version in the
+     history could be outdated. */
+  if (url->url == NULL)
+    url->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1));
+  if (url->title == NULL)
+    url->title = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 2));
+
   url->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3),
   url->typed_count = ephy_sqlite_statement_get_column_as_int (statement, 4),
   url->last_visit_time = ephy_sqlite_statement_get_column_as_int (statement, 5);
