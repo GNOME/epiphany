@@ -23,6 +23,20 @@
 
 #define SENSITIVITY_KEY	"EphyAction::Sensitivity"
 
+/**
+ * ephy_action_change_sensitivity_flags:
+ * @action: a #GtkAction object
+ * @flags: arbitrary combination of bit flags, defined by the user
+ * @set: %TRUE if @flags should be added to @action
+ *
+ * This helper function provides an extra layer on top of #GtkAction to
+ * manage its sensitivity. It uses bit @flags defined by the user, like
+ * in ephy-window.c, SENS_FLAG_*.
+ *
+ * Effectively, the @action won't be sensitive until it has no flags
+ * set. This means you can stack @flags for different events or
+ * conditions at the same time.
+ */
 void 
 ephy_action_change_sensitivity_flags (GtkAction *action,
 				      guint flags,
