@@ -354,23 +354,6 @@ popup_cmd_copy_image_location (GtkAction *action,
 	g_value_unset (&value);
 }
 
-void
-popup_cmd_open_frame (GtkAction *action,
-		      EphyWindow *window)
-{
-	char *location;
-	EphyEmbed *embed;
-
-	embed = ephy_embed_container_get_active_child 
-		(EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
-	location = ephy_web_view_get_location (ephy_embed_get_web_view (embed), FALSE);
-	ephy_web_view_load_url (ephy_embed_get_web_view (embed), location);
-
-	g_free (location);
-}
-
 /* Opens an image URI using its associated handler. Or, if that
  * doesn't work, fallback to open the URI in a new browser window.
  */

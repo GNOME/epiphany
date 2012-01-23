@@ -54,9 +54,6 @@ void popup_cmd_set_image_as_background  (GtkAction *action,
 void popup_cmd_copy_image_location	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_frame		(GtkAction *action,
-					 EphyWindow *window);
-
 void popup_cmd_open_image		(GtkAction *action,
 					 EphyWindow *window);
 

@@ -238,12 +238,6 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 	
-	/* Framed document. */
-
-	{ "OpenFrame", NULL, N_("Show Only _This Frame"), NULL,
-	  N_("Show only this frame in this window"),
-	  G_CALLBACK (popup_cmd_open_frame) },
-
 	/* Links. */
 
 	{ "OpenLink", GTK_STOCK_JUMP_TO, N_("_Open Link"), NULL,
@@ -1139,8 +1133,7 @@ ephy_window_delete_event (GtkWidget *widget,
 static void
 update_popup_actions_visibility (EphyWindow *window,
 				 WebKitWebView *view,
-				 guint context,
-				 gboolean is_frame)
+				 guint context)
 {
 	GtkAction *action;
 	GtkActionGroup *action_group;
@@ -1172,9 +1165,6 @@ update_popup_actions_visibility (EphyWindow *window,
 	gtk_action_set_visible (action, is_image);
 	action = gtk_action_group_get_action (action_group, "CopyImageLocation");
 	gtk_action_set_visible (action, is_image);
-
-	action = gtk_action_group_get_action (action_group, "OpenFrame");
-	gtk_action_set_visible (action, is_frame);
 
 	if (is_editable)
 	{
@@ -1942,16 +1932,11 @@ show_embed_popup (EphyWindow *window,
 	GtkAction *action;
 	guint context;
 	const char *popup;
-	gboolean framed = FALSE, can_open_in_new;
+	gboolean can_open_in_new;
 	GtkWidget *widget;
 	guint button;
 	char *uri;
 	EphyEmbedEvent *embed_event;
-
-#if 0
-	value = ephy_embed_event_get_property (event, "framed_page");
-	framed = g_value_get_int (value);
-#endif
 
 	g_object_get (hit_test_result, "link-uri", &uri, NULL);
 	can_open_in_new = uri && ephy_embed_utils_address_has_web_scheme (uri);
@@ -1992,8 +1977,7 @@ show_embed_popup (EphyWindow *window,
 	
 	update_popup_actions_visibility (window,
 					 view,
-					 context,
-					 framed);
+					 context);
 
 	embed_event = ephy_embed_event_new (event, hit_test_result);
 	_ephy_window_set_context_event (window, embed_event);
