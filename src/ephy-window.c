@@ -398,7 +398,6 @@ struct _EphyWindowPrivate
 	guint closing : 1;
 	guint has_size : 1;
 	guint fullscreen_mode : 1;
-	guint should_save_chrome : 1;
 	guint is_popup : 1;
 	guint present_on_insert : 1;
 	guint key_theme_is_emacs : 1;
@@ -2915,11 +2914,6 @@ static void
 ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 {
 	EphyWebViewChrome chrome_mask = mask;
-
-	if (mask == EPHY_WEB_VIEW_CHROME_ALL)
-	{
-		window->priv->should_save_chrome = TRUE;
-	}
 
 	if (!g_settings_get_boolean (EPHY_SETTINGS_UI,
 				     EPHY_PREFS_UI_SHOW_TOOLBARS))
