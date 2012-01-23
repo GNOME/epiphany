@@ -2595,6 +2595,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		sync_tab_security	(view, NULL, window);
 		sync_tab_document_type	(view, NULL, window);
 		sync_tab_load_status	(view, NULL, window);
+		sync_tab_is_blank	(view, NULL, window);
 		sync_tab_navigation	(view, NULL, window);
 		sync_tab_title		(view, NULL, window);
 		sync_tab_address	(view, NULL, window);
