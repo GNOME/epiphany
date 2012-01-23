@@ -71,7 +71,7 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_print ("%s %s\n", _("GNOME Web Browser"), VERSION);
+  g_print ("%s %s\n", _("Web"), VERSION);
 
   exit (EXIT_SUCCESS);
   return FALSE;
@@ -206,7 +206,7 @@ show_error_message (GError **error)
                                    GTK_DIALOG_MODAL,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_CLOSE,
-                                   _("Could not start GNOME Web Browser"));
+                                   _("Could not start Web"));
   gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG (dialog),
      _("Startup failed because of the following error:\n%s"),
@@ -319,8 +319,8 @@ main (int argc,
 
   option_context = g_option_context_new ("");
   option_group = g_option_group_new ("epiphany",
-                                     N_("GNOME Web Browser"),
-                                     N_("GNOME Web Browser options"),
+                                     N_("Web"),
+                                     N_("Web options"),
                                      NULL, NULL);
 
   g_option_group_set_translation_domain (option_group, GETTEXT_PACKAGE);
@@ -454,7 +454,7 @@ main (int argc,
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
 
     g_set_prgname ("epiphany");
-    g_set_application_name (_("Web Browser"));
+    g_set_application_name (_("Web"));
     gtk_window_set_default_icon_name (EPHY_STOCK_EPHY);
   }
 
