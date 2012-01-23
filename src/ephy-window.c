@@ -393,7 +393,6 @@ struct _EphyWindowPrivate
 
 	EphyLocationController *location_controller;
 
-	guint clear_progress_timeout_id;
 	gulong set_focus_handler;
 
 	guint closing : 1;
@@ -3220,9 +3219,6 @@ ephy_window_finalize (GObject *object)
 	EphyWindowPrivate *priv = window->priv;
 
 	g_hash_table_destroy (priv->tabs_to_remove);
-
-	if (priv->clear_progress_timeout_id)
-		g_source_remove (priv->clear_progress_timeout_id);
 
 	if (priv->set_focus_handler != 0)
 		g_signal_handler_disconnect (window,
