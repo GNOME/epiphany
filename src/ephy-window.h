@@ -24,7 +24,6 @@
 #ifndef EPHY_WINDOW_H
 #define EPHY_WINDOW_H
 
-#include "ephy-location-controller.h"
 #include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
