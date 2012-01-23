@@ -2303,23 +2303,28 @@ ephy_web_view_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
 }
 
+/**
+ * normalize_or_autosearch_url
+ * @view: an #EphyWebView
+ * @url: url to process
+ *
+ * Returns a normalized representation of @url, or an autosearch string
+ * for it if it has no scheme.
+ *
+ * Returns: the normalized @url or autosearch string
+ */
 static char*
 normalize_or_autosearch_url (EphyWebView *view, const char *url)
 {
   char *effective_url;
-  SoupURI *soup_uri = NULL;
+  char *scheme;
   EphyWebViewPrivate *priv = view->priv;
 
-  /* We use SoupURI as an indication of whether the value given in url
-   * is not something we want to search; we only do that, though, if
-   * the address has a web scheme, because SoupURI will consider any
-   * string: as a valid scheme, and we will end up prepending http://
-   * to it */
-  if (ephy_embed_utils_address_has_web_scheme (url))
-    soup_uri = soup_uri_new (url);
+  scheme = g_uri_parse_scheme (url);
 
   /* If the string doesn't look like an URI, let's search it; */
-  if (soup_uri == NULL &&
+  if (!ephy_embed_utils_address_has_web_scheme (url) &&
+      scheme == NULL &&
       priv->non_search_regex &&
       !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
     char *query_param, *url_search;
@@ -2338,11 +2343,13 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
     effective_url = g_strdup_printf (url_search, query_param + 2);
     g_free (query_param);
     g_free (url_search);
+  } else if (scheme != NULL) {
+    effective_url = g_strdup (url);
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
 
-  if (soup_uri)
-    soup_uri_free (soup_uri);
+  if (scheme)
+    g_free (scheme);
 
   return effective_url;
 }
