@@ -107,13 +107,23 @@ char*
 ephy_embed_utils_normalize_address (const char *address)
 {
 	char *effective_address = NULL;
-	char *scheme = NULL;
+	SoupURI *uri;
 
 	g_return_val_if_fail (address, NULL);
 
-	scheme = g_uri_parse_scheme (address);
+	uri = soup_uri_new (address);
 
-	if (scheme == NULL)
+	/* FIXME: if we are here we passed through the "should we
+	 * auto-search this?" regex in EphyWebView, so we should be a
+	 * valid-ish URL. Auto-prepend http:// to anything that is not
+	 * one according to soup, because it probably will be
+	 * something like "google.com". Special case localhost(:port),
+	 * because SoupURI, correctly, thinks it is a URI with scheme
+	 * being localhost and, optionally, path being the
+	 * port. Ideally we should check if we have a handler for the
+	 * scheme, and since we'll fail for localhost, we'd fallback
+	 * to loading it as a domain. */
+	if (!uri || (uri && !g_strcmp0 (uri->scheme, "localhost")))
 		effective_address = g_strconcat ("http://", address, NULL);
 	else {
 		/* Convert about: schemes to ephy-about: in order to
@@ -128,7 +138,8 @@ ephy_embed_utils_normalize_address (const char *address)
 			effective_address = g_strdup (address);
 	}
 
-	g_free (scheme);
+	if (uri)
+		soup_uri_free (uri);
 
 	return effective_address;
 }
