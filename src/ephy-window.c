@@ -85,12 +85,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
 
-	{ "File", NULL, N_("_File") },
-	{ "Edit", NULL, N_("_Edit") },
-	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
-	{ "Tools", NULL, N_("T_ools") },
-	{ "Toolbar", NULL, N_("_Toolbars") },
 	{ "PopupAction", NULL, "" },
 	{ "PagePopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
