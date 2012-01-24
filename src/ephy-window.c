@@ -92,112 +92,81 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File actions. */
 
-	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open…"), "<control>O",
-	  N_("Open a file"),
+	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open…"), "<control>O", NULL,
 	  G_CALLBACK (window_cmd_file_open) },
-	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S",
-	  N_("Save the current page"),
+	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S", NULL,
 	  G_CALLBACK (window_cmd_file_save_as) },
-	{ "FileSaveAsApplication", GTK_STOCK_SAVE_AS, N_("Save As _Web Application…"), "<shift><control>A",
-	  N_("Save the current page as a Web Application"),
+	{ "FileSaveAsApplication", GTK_STOCK_SAVE_AS, N_("Save As _Web Application…"), "<shift><control>A", NULL,
 	  G_CALLBACK (window_cmd_file_save_as_application) },
-	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print…"), "<control>P",
-	  N_("Print the current page"),
+	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print…"), "<control>P", NULL,
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email…"), NULL,
-	  N_("Send a link of the current page"),
+	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email…"), NULL, NULL,
 	  G_CALLBACK (window_cmd_file_send_to) },
-	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
-	  N_("Close this tab"),
+	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W", NULL,
 	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit actions. */
 
-	{ "EditUndo", GTK_STOCK_UNDO, N_("_Undo"), "<control>Z",
-	  N_("Undo the last action"),
+	{ "EditUndo", GTK_STOCK_UNDO, N_("_Undo"), "<control>Z", NULL,
 	  G_CALLBACK (window_cmd_edit_undo) },
-	{ "EditRedo", GTK_STOCK_REDO, N_("Re_do"), "<shift><control>Z",
-	  N_("Redo the last undone action"),
+	{ "EditRedo", GTK_STOCK_REDO, N_("Re_do"), "<shift><control>Z", NULL,
 	  G_CALLBACK (window_cmd_edit_redo) },
-	{ "EditCut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X",
-	  N_("Cut the selection"),
+	{ "EditCut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X", NULL,
 	  G_CALLBACK (window_cmd_edit_cut) },
-	{ "EditCopy", GTK_STOCK_COPY, N_("_Copy"), "<control>C",
-	  N_("Copy the selection"),
+	{ "EditCopy", GTK_STOCK_COPY, N_("_Copy"), "<control>C", NULL,
 	  G_CALLBACK (window_cmd_edit_copy) },
-	{ "EditPaste", GTK_STOCK_PASTE, N_("_Paste"), "<control>V",
-	  N_("Paste clipboard"),
+	{ "EditPaste", GTK_STOCK_PASTE, N_("_Paste"), "<control>V", NULL,
 	  G_CALLBACK (window_cmd_edit_paste) },
-	{ "EditDelete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete text"),
+	{ "EditDelete", GTK_STOCK_DELETE, NULL, NULL, NULL,
 	  G_CALLBACK (window_cmd_edit_delete) },
-	{ "EditSelectAll", GTK_STOCK_SELECT_ALL, N_("Select _All"), "<control>A",
-	  N_("Select the entire page"),
+	{ "EditSelectAll", GTK_STOCK_SELECT_ALL, N_("Select _All"), "<control>A", NULL,
 	  G_CALLBACK (window_cmd_edit_select_all) },
-	{ "EditFind", GTK_STOCK_FIND, N_("_Find…"), "<control>F",
-	  N_("Find a word or phrase in the page"),
+	{ "EditFind", GTK_STOCK_FIND, N_("_Find…"), "<control>F", NULL,
 	  G_CALLBACK (window_cmd_edit_find) },
-	{ "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G",
-	  N_("Find next occurrence of the word or phrase"),
+	{ "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G", NULL,
 	  G_CALLBACK (window_cmd_edit_find_next) },
-	{ "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G",
-	  N_("Find previous occurrence of the word or phrase"),
+	{ "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G", NULL,
 	  G_CALLBACK (window_cmd_edit_find_prev) },
 
 	/* View actions. */
 
-	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
-	  N_("Stop current data transfer"),
+	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape", NULL,
 	  G_CALLBACK (window_cmd_view_stop) },
 	{ "ViewAlwaysStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
 	  NULL, G_CALLBACK (window_cmd_view_stop) },
-	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R",
-	  N_("Display the latest content of the current page"),
+	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R", NULL,
 	  G_CALLBACK (window_cmd_view_reload) },
-	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("_Larger Text"), "<control>plus",
-	  N_("Increase the text size"),
+	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("_Larger Text"), "<control>plus", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_in) },
-	{ "ViewZoomOut", GTK_STOCK_ZOOM_OUT, N_("S_maller Text"), "<control>minus",
-	  N_("Decrease the text size"),
+	{ "ViewZoomOut", GTK_STOCK_ZOOM_OUT, N_("S_maller Text"), "<control>minus", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_out) },
-	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), "<control>0",
-	  N_("Use the normal text size"),
+	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), "<control>0", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
-	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL,
-	  N_("Change the text encoding"),
-	  NULL },
-	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U",
-	  N_("View the source code of the page"),
+	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL, NULL },
+	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
 	  G_CALLBACK (window_cmd_view_page_source) },
 
 	/* Bookmarks actions. */
 
-	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark…"), "<control>D",
-	  N_("Add a bookmark for the current page"),
+	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark…"), "<control>D", NULL,
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
 	/* Go actions. */
 
-	{ "GoLocation", NULL, N_("_Location…"), "<control>L",
-	  N_("Go to a specified location"),
+	{ "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
 	  G_CALLBACK (window_cmd_go_location) },
 
 	/* Tabs actions. */
 
-	{ "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up",
-	  N_("Activate previous tab"),
+	{ "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up", NULL,
 	  G_CALLBACK (window_cmd_tabs_previous) },
-	{ "TabsNext", NULL, N_("_Next Tab"), "<control>Page_Down",
-	  N_("Activate next tab"),
+	{ "TabsNext", NULL, N_("_Next Tab"), "<control>Page_Down", NULL,
 	  G_CALLBACK (window_cmd_tabs_next) },
-	{ "TabsMoveLeft", NULL, N_("Move Tab _Left"), "<shift><control>Page_Up",
-	  N_("Move current tab to left"),
+	{ "TabsMoveLeft", NULL, N_("Move Tab _Left"), "<shift><control>Page_Up", NULL,
 	  G_CALLBACK (window_cmd_tabs_move_left) },
-	{ "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down",
-	  N_("Move current tab to right"),
+	{ "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down", NULL,
 	  G_CALLBACK (window_cmd_tabs_move_right) },
-        { "TabsDetach", NULL, N_("_Detach Tab"), NULL,
-          N_("Detach current tab"),
+        { "TabsDetach", NULL, N_("_Detach Tab"), NULL, NULL,
           G_CALLBACK (window_cmd_tabs_detach) },
 };
 
@@ -205,49 +174,39 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
 	/* File actions. */
 
-	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL,
-	  N_("Switch to offline mode"),
+	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL, NULL,
 	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
 
 	/* View actions. */
 
-	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL,
-	  N_("Show the active downloads for this window"),
+	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL, NULL,
 	  NULL, FALSE },
 
-	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
-	  N_("Browse at full screen"),
+	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11", NULL,
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
-	{ "ViewPopupWindows", EPHY_STOCK_POPUPS, N_("Popup _Windows"), NULL,
-	  N_("Show or hide unrequested popup windows from this site"),
+	{ "ViewPopupWindows", EPHY_STOCK_POPUPS, N_("Popup _Windows"), NULL, NULL,
 	  G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
-	{ "BrowseWithCaret", NULL, N_("Selection Caret"), "F7",
-	  "",
+	{ "BrowseWithCaret", NULL, N_("Selection Caret"), "F7", NULL,
 	  G_CALLBACK (window_cmd_browse_with_caret), FALSE }
 };
 
 static const GtkActionEntry ephy_popups_entries [] = {
         /* Document. */
 
-	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark…"), "<control>D",
-	  N_("Add a bookmark for the current page"),
+	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark…"), "<control>D", NULL,
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 	
 	/* Links. */
 
-	{ "OpenLink", GTK_STOCK_JUMP_TO, N_("_Open Link"), NULL,
-	  N_("Open link in this window"),
+	{ "OpenLink", GTK_STOCK_JUMP_TO, N_("_Open Link"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_open_link) },
-	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL,
-	  N_("Open link in a new window"),
+	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_window) },
-	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL,
-	  N_("Open link in a new tab"),
+	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", NULL, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
-	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As…"), NULL,
-	  N_("Save link with a different name"),
+	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As…"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_download_link_as) },
 	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link…"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
@@ -1389,7 +1348,6 @@ setup_ui_manager (EphyWindow *window)
 			      "name", "NavigationBack",
 			      "label", _("Back"),
 			      "icon-name", "go-previous-symbolic",
-			      "tooltip", _("Go to the previous visited page"),
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
 			      NULL);
@@ -1402,7 +1360,6 @@ setup_ui_manager (EphyWindow *window)
 			      "name", "NavigationForward",
 			      "label", _("Forward"),
 			      "icon-name", "go-next-symbolic",
-			      "tooltip", _("Go to the next visited page"),
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
 			      NULL);
@@ -1415,7 +1372,6 @@ setup_ui_manager (EphyWindow *window)
 			      "name", "Zoom",
 			      "label", _("Zoom"),
 			      "stock_id", GTK_STOCK_ZOOM_IN,
-			      "tooltip", _("Adjust the text size"),
 			      "zoom", 1.0,
 			      NULL);
 	gtk_action_group_add_action (action_group, action);
@@ -1425,7 +1381,6 @@ setup_ui_manager (EphyWindow *window)
 			       "name", "FileNewTab",
 			       "label", _("New _Tab"),
 			       "stock_id", STOCK_NEW_TAB,
-			       "tooltip", _("Open a new tab"),
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
 	g_object_unref (action);
@@ -1607,41 +1562,12 @@ _ephy_window_set_navigation_actions (EphyWindow *window,
 }
 
 static void
-_ephy_window_set_navigation_tooltips (EphyWindow *window,
-				      const char *back_title,
-				      const char *forward_title)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
-	GValue value = { 0 };
-
-	g_value_init (&value, G_TYPE_STRING);
-
-	g_value_set_static_string (&value, back_title);
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "NavigationBack");
-	g_object_set_property (G_OBJECT (action),
-			       "tooltip", &value);
-
-	g_value_set_static_string (&value, forward_title);
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "NavigationForward");
-	g_object_set_property (G_OBJECT (action),
-			       "tooltip", &value);
-	g_value_unset (&value);
-}
-
-static void
 sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
 	EphyWebViewNavigationFlags flags;
-	WebKitWebHistoryItem *item;
-	WebKitWebView *web_view;
-	WebKitWebBackForwardList *web_back_forward_list;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
-	const char *back_title = NULL, *forward_title = NULL;
 
 	if (window->priv->closing) return;
 
@@ -1661,27 +1587,6 @@ sync_tab_navigation (EphyWebView *view,
 	}
 
 	_ephy_window_set_navigation_actions (window, back, forward, up);
-
-	web_view = WEBKIT_WEB_VIEW (view);
-	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
-
-	item = webkit_web_back_forward_list_get_back_item (web_back_forward_list);
-
-	if (item)
-	{
-		back_title = webkit_web_history_item_get_title (item);
-	}
-
-	item = webkit_web_back_forward_list_get_forward_item (web_back_forward_list);
-
-	if (item)
-	{
-		forward_title = webkit_web_history_item_get_title (item);
-	}
-
-	_ephy_window_set_navigation_tooltips (window,
-					      back_title,
-					      forward_title);
 }
 
 static void
@@ -1929,81 +1834,6 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 	_ephy_window_unset_context_event (window);
 }
 
-static char *
-get_name_from_address_value (const char *path)
-{
-	char *name;
-
-	name = g_path_get_basename (path);
-
-	return name != NULL ? name : g_strdup ("");
-}
-
-static void
-update_popups_tooltips (EphyWindow *window, GdkEventButton *event, WebKitHitTestResult *hit_test_result)
-{
-	guint context;
-	GtkActionGroup *group = window->priv->popups_action_group;
-	GtkAction *action;
-	char *tooltip, *name;
-
-	 g_object_get (hit_test_result, "context", &context, NULL);
-
-	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE)
-	{
-		char *uri;
-		g_object_get (hit_test_result, "image-uri", &uri, NULL);
-		name = get_name_from_address_value (uri);
-
-		action = gtk_action_group_get_action (group, "OpenImage");
-		tooltip = g_strdup_printf (_("Open image “%s”"), name);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "SetImageAsBackground");
-		tooltip = g_strdup_printf (_("Use as desktop background “%s”"), name);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "SaveImageAs");
-		tooltip = g_strdup_printf (_("Save image “%s”"), name);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "CopyImageLocation");
-		tooltip = g_strdup_printf (_("Copy image address “%s”"), uri);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);		
-
-		g_free (uri);
-		g_free (name);
-	}
-
-	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
-	{
-		char *uri;
-		g_object_get (hit_test_result, "link-uri", &uri, NULL);
-
-		action = gtk_action_group_get_action (group, "DownloadLink");
-		name = get_name_from_address_value (uri);
-		tooltip = g_strdup_printf (_("Save link “%s”"), name);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (name);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "BookmarkLink");
-		tooltip = g_strdup_printf (_("Bookmark link “%s”"), uri);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-
-		action = gtk_action_group_get_action (group, "CopyLinkAddress");
-		tooltip = g_strdup_printf (_("Copy link's address “%s”"), uri);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (tooltip);
-		g_free (uri);
-	}
-}
-
 static void
 show_embed_popup (EphyWindow *window,
 		  WebKitWebView *view,
@@ -2044,8 +1874,6 @@ show_embed_popup (EphyWindow *window,
 		popup = "/EphyDocumentPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
-
-	update_popups_tooltips (window, event, hit_test_result);
 
 	widget = gtk_ui_manager_get_widget (priv->manager, popup);
 	g_return_if_fail (widget != NULL);
