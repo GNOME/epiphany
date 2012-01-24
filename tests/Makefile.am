@@ -12,6 +12,7 @@ noinst_PROGRAMS = \
 	test-ephy-search-entry \
 	test-ephy-session \
 	test-ephy-shell \
+	test-ephy-snapshot-service \
 	test-ephy-sqlite \
 	test-ephy-string \
 	test-ephy-web-app-utils \
@@ -151,6 +152,9 @@ test_ephy_shell_SOURCES = \
 	$(top_builddir)/src/epiphany-resources.c \
 	$(top_builddir)/src/epiphany-resources.h \
 	ephy-shell-test.c
+
+test_ephy_snapshot_service_SOURCES = \
+	ephy-snapshot-service-test.c
 
 test_ephy_sqlite_SOURCES = \
 	ephy-sqlite-test.c
