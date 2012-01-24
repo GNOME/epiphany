@@ -536,12 +536,6 @@ sync_label (EphyWebView *view, GParamSpec *pspec, GtkWidget *label)
 	title = ephy_web_view_get_title (view);
 
 	gtk_label_set_text (GTK_LABEL (label), title);
-
-	/* Set the tooltip on the label's parent (the tab label hbox),
-	 * so it covers all of the tab label.
-	 */
-	gtk_widget_set_tooltip_text (gtk_widget_get_parent (label),
-				     title);
 }
 
 static void
