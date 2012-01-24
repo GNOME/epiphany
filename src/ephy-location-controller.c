@@ -53,7 +53,6 @@ struct _EphyLocationControllerPrivate
 	EphyBookmarks *bookmarks;
 	GdkPixbuf *icon;
 	char *lock_stock_id;
-	char *lock_tooltip;
 	guint editable : 1;
 	guint show_lock : 1;
 	gboolean sync_address_is_blocked;
@@ -75,7 +74,6 @@ enum
 	PROP_EDITABLE,
 	PROP_ICON,
 	PROP_LOCK_STOCK,
-	PROP_LOCK_TOOLTIP,
 	PROP_SHOW_LOCK,
 	PROP_WINDOW,
 	PROP_LOCATION_ENTRY
@@ -278,17 +276,6 @@ sync_lock_stock_id (EphyLocationController *controller,
 }
 
 static void
-sync_lock_tooltip (EphyLocationController *controller,
-		   GParamSpec *pspec,
-		   GtkWidget *widget)
-{
-	EphyLocationControllerPrivate *priv = controller->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-	ephy_location_entry_set_lock_tooltip (entry, priv->lock_tooltip);
-}
-
-static void
 sync_show_lock (EphyLocationController *controller,
 		GParamSpec *pspec,
 		GtkWidget *widget)
@@ -461,9 +448,6 @@ ephy_location_controller_constructed (GObject *object)
 	sync_lock_stock_id (controller, NULL, widget);
 	g_signal_connect_object (controller, "notify::lock-stock-id",
 				 G_CALLBACK (sync_lock_stock_id), widget, 0);
-	sync_lock_tooltip (controller, NULL, widget);
-	g_signal_connect_object (controller, "notify::lock-tooltip",
-				 G_CALLBACK (sync_lock_tooltip), widget, 0);
 	sync_show_lock (controller, NULL, widget);
 	g_signal_connect_object (controller, "notify::show-lock",
 				 G_CALLBACK (sync_show_lock), widget, 0);
@@ -513,10 +497,6 @@ ephy_location_controller_set_property (GObject *object,
 			g_free (priv->lock_stock_id);
 			priv->lock_stock_id = g_value_dup_string (value);
 			break;
-		case PROP_LOCK_TOOLTIP:
-			g_free (priv->lock_tooltip);
-			priv->lock_tooltip = g_value_dup_string (value);
-			break;
 		case PROP_SHOW_LOCK:
 			priv->show_lock = g_value_get_boolean (value);
 			break;
@@ -551,9 +531,6 @@ ephy_location_controller_get_property (GObject *object,
 			break;
 		case PROP_LOCK_STOCK:
 			g_value_set_string (value, priv->lock_stock_id);
-			break;
-		case PROP_LOCK_TOOLTIP:
-			g_value_set_string (value, priv->lock_tooltip);
 			break;
 		case PROP_SHOW_LOCK:
 			g_value_set_boolean (value, priv->show_lock);
@@ -667,19 +644,6 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 					 g_param_spec_string  ("lock-stock-id",
 							       "Lock Stock ID",
 							       "Stock id of the security icon",
-							       NULL,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	/**
-	* EphyLocationController:lock-tooltip:
-	*
-	* Tooltip for the security icon.
-	*/
-	g_object_class_install_property (object_class,
-					 PROP_LOCK_TOOLTIP,
-					 g_param_spec_string  ("lock-tooltip",
-							       "Lock Tooltip",
-							       "Tooltip for the security icon",
 							       NULL,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -866,7 +830,6 @@ ephy_location_controller_finalize (GObject *object)
 	g_list_free (priv->actions);
 	g_free (priv->address);
 	g_free (priv->lock_stock_id);
-	g_free (priv->lock_tooltip);
 
 	G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);
 }
