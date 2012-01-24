@@ -97,6 +97,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 			   g_ascii_strncasecmp (address, "javascript", colonpos) &&
 			   g_ascii_strncasecmp (address, "data", colonpos) &&
 			   g_ascii_strncasecmp (address, "about", colonpos) &&
+			   g_ascii_strncasecmp (address, "ephy-about", colonpos) &&
 			   g_ascii_strncasecmp (address, "gopher", colonpos));
 
 	return has_web_scheme;
