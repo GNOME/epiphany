@@ -2730,6 +2730,13 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 	{
 		gtk_widget_destroy (GTK_WIDGET (embed));
 	}
+
+	/* If that was the last tab, destroy the window. */
+	if (gtk_notebook_get_n_pages (priv->notebook) == 0)
+	{
+		gtk_widget_destroy (GTK_WIDGET (window));
+	}
+
 }
 
 static GtkWidget *

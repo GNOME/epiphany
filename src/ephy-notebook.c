@@ -800,10 +800,4 @@ ephy_notebook_remove (GtkContainer *container,
 	GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
 	update_tabs_visibility (notebook, FALSE);
-
-	/* if that was the last tab, destroy the window */
-	if (gtk_notebook_get_n_pages (gnotebook) == 0)
-	{
-		gtk_widget_destroy (gtk_widget_get_toplevel (GTK_WIDGET (notebook)));
-	}
 }
