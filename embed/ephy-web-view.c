@@ -3670,15 +3670,9 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 void
 ephy_web_view_load_homepage (EphyWebView *view)
 {
-  char *home;
-
   g_signal_emit_by_name (view, "loading-homepage");
 
-  home = g_strdup ("about:blank");
-
   ephy_web_view_load_url (view, "about:blank");
-
-  g_free (home);
 }
 
 /**
