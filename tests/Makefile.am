@@ -1,6 +1,7 @@
 noinst_PROGRAMS = \
 	test-ephy-download \
 	test-ephy-embed-single \
+	test-ephy-embed-utils \
 	test-ephy-location-entry \
 	test-ephy-search-entry
 
@@ -108,6 +109,9 @@ test_ephy_download_SOURCES = \
 
 test_ephy_embed_single_SOURCES = \
 	ephy-embed-single.c
+
+test_ephy_embed_utils_SOURCES = \
+	ephy-embed-utils.c
 
 test_ephy_location_entry_SOURCES = \
 	ephy-location-entry.c
