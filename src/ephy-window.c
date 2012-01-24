@@ -760,8 +760,7 @@ sync_tab_load_status (EphyWebView *view,
 static void
 _ephy_window_set_security_state (EphyWindow *window,
 				 gboolean show_lock,
-				 const char *stock_id,
-				 const char *tooltip)
+				 const char *stock_id)
 {
 	EphyWindowPrivate *priv = window->priv;
 
@@ -769,7 +768,6 @@ _ephy_window_set_security_state (EphyWindow *window,
 
 	g_object_set (priv->location_controller,
 		      "lock-stock-id", stock_id,
-		      "lock-tooltip", tooltip,
 		      "show-lock", priv->show_lock,
 		      NULL);
 }
@@ -782,8 +780,6 @@ sync_tab_security (EphyWebView *view,
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewSecurityLevel level;
 	char *description = NULL;
-	char *state = NULL;
-	char *tooltip;
 	const char *stock_id = STOCK_LOCK_INSECURE;
 	gboolean show_lock = FALSE;
 
@@ -794,30 +790,21 @@ sync_tab_security (EphyWebView *view,
 	switch (level)
 	{
 		case EPHY_WEB_VIEW_STATE_IS_UNKNOWN:
-			state = _("Unknown");
-			break;
 		case EPHY_WEB_VIEW_STATE_IS_INSECURE:
-			state = _("Insecure");
-			g_free (description);
-			description = NULL;
+			/* Nothing to do. */
 			break;
 		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
-			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
                         show_lock = TRUE;
-                        g_free (description);
-                        description = NULL;
                         break;
 		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
 		case EPHY_WEB_VIEW_STATE_IS_SECURE_MED:
-			state = _("Low");
 			/* We deliberately don't show the 'secure' icon
 			 * for low & medium secure sites; see bug #151709.
 			 */
 			stock_id = STOCK_LOCK_INSECURE;
 			break;
 		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
-			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
 			show_lock = TRUE;
 			break;
@@ -826,26 +813,14 @@ sync_tab_security (EphyWebView *view,
 			break;
 	}
 
-	tooltip = g_strdup_printf (_("Security level: %s"), state);
-	if (description != NULL)
-	{
-		char *tmp = tooltip;
-
-		tooltip = g_strconcat (tmp, "\n", description, NULL);
-		g_free (description);
-		g_free (tmp);
-	}
-
-	_ephy_window_set_security_state (window, show_lock, stock_id, tooltip);
+	_ephy_window_set_security_state (window, show_lock, stock_id);
 
 	if (priv->fullscreen_popup != NULL)
 	{
 		ephy_fullscreen_popup_set_security_state
 			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
-			 show_lock, stock_id, tooltip);
+			 show_lock, stock_id, NULL);
 	}
-
-	g_free (tooltip);
 }
 
 static void
