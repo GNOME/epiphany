@@ -29,6 +29,18 @@ libephywidgets_la_SOURCES = \
 	ephy-urls-view.h			\
 	ephy-zoom-action.h			\
 	ephy-zoom-action.c			\
+	gd-main-icon-view.c			\
+	gd-main-icon-view.h			\
+	gd-main-list-view.c			\
+	gd-main-list-view.h			\
+	gd-main-view-generic.c			\
+	gd-main-view-generic.h			\
+	gd-main-view.c				\
+	gd-main-view.h				\
+	gd-toggle-pixbuf-renderer.c		\
+	gd-toggle-pixbuf-renderer.h		\
+	gd-two-lines-renderer.c			\
+	gd-two-lines-renderer.h			\
 	nautilus-floating-bar.c			\
 	nautilus-floating-bar.h			\
 	totem-glow-button.c			\
