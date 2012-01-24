@@ -107,10 +107,13 @@ char*
 ephy_embed_utils_normalize_address (const char *address)
 {
 	char *effective_address = NULL;
+	char *scheme = NULL;
 
 	g_return_val_if_fail (address, NULL);
 
-	if (ephy_embed_utils_address_has_web_scheme (address) == FALSE)
+	scheme = g_uri_parse_scheme (address);
+
+	if (scheme == NULL)
 		effective_address = g_strconcat ("http://", address, NULL);
 	else {
 		/* Convert about: schemes to ephy-about: in order to
@@ -124,6 +127,8 @@ ephy_embed_utils_normalize_address (const char *address)
 		} else
 			effective_address = g_strdup (address);
 	}
+
+	g_free (scheme);
 
 	return effective_address;
 }

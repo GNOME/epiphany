@@ -2361,8 +2361,6 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
     effective_url = g_strdup_printf (url_search, query_param + 2);
     g_free (query_param);
     g_free (url_search);
-  } else if (scheme != NULL) {
-    effective_url = g_strdup (url);
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
 
