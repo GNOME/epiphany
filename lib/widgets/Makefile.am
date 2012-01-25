@@ -79,6 +79,8 @@ libephywidgets_la_SOURCES = \
 	ephy-middle-clickable-button.h		\
 	ephy-node-view.c			\
 	ephy-node-view.h			\
+	ephy-overview-store.c			\
+	ephy-overview-store.h			\
 	ephy-removable-pixbuf-renderer.c	\
 	ephy-removable-pixbuf-renderer.h	\
 	ephy-search-entry.c			\
