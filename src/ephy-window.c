@@ -92,36 +92,36 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File actions. */
 
-	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open…"), "<control>O", NULL,
+	{ "FileOpen", NULL, N_("_Open…"), "<control>O", NULL,
 	  G_CALLBACK (window_cmd_file_open) },
-	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S", NULL,
+	{ "FileSaveAs", NULL, N_("Save _As…"), "<shift><control>S", NULL,
 	  G_CALLBACK (window_cmd_file_save_as) },
-	{ "FileSaveAsApplication", GTK_STOCK_SAVE_AS, N_("Save As _Web Application…"), "<shift><control>A", NULL,
+	{ "FileSaveAsApplication", NULL, N_("Save As _Web Application…"), "<shift><control>A", NULL,
 	  G_CALLBACK (window_cmd_file_save_as_application) },
-	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print…"), "<control>P", NULL,
+	{ "FilePrint", NULL, N_("_Print…"), "<control>P", NULL,
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email…"), NULL, NULL,
+	{ "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
 	  G_CALLBACK (window_cmd_file_send_to) },
-	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W", NULL,
+	{ "FileCloseTab", NULL, N_("_Close"), "<control>W", NULL,
 	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit actions. */
 
-	{ "EditUndo", GTK_STOCK_UNDO, N_("_Undo"), "<control>Z", NULL,
+	{ "EditUndo", NULL, N_("_Undo"), "<control>Z", NULL,
 	  G_CALLBACK (window_cmd_edit_undo) },
-	{ "EditRedo", GTK_STOCK_REDO, N_("Re_do"), "<shift><control>Z", NULL,
+	{ "EditRedo", NULL, N_("Re_do"), "<shift><control>Z", NULL,
 	  G_CALLBACK (window_cmd_edit_redo) },
-	{ "EditCut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X", NULL,
+	{ "EditCut", NULL, N_("Cu_t"), "<control>X", NULL,
 	  G_CALLBACK (window_cmd_edit_cut) },
-	{ "EditCopy", GTK_STOCK_COPY, N_("_Copy"), "<control>C", NULL,
+	{ "EditCopy", NULL, N_("_Copy"), "<control>C", NULL,
 	  G_CALLBACK (window_cmd_edit_copy) },
-	{ "EditPaste", GTK_STOCK_PASTE, N_("_Paste"), "<control>V", NULL,
+	{ "EditPaste", NULL, N_("_Paste"), "<control>V", NULL,
 	  G_CALLBACK (window_cmd_edit_paste) },
-	{ "EditDelete", GTK_STOCK_DELETE, NULL, NULL, NULL,
+	{ "EditDelete", NULL, NULL, NULL, NULL,
 	  G_CALLBACK (window_cmd_edit_delete) },
-	{ "EditSelectAll", GTK_STOCK_SELECT_ALL, N_("Select _All"), "<control>A", NULL,
+	{ "EditSelectAll", NULL, N_("Select _All"), "<control>A", NULL,
 	  G_CALLBACK (window_cmd_edit_select_all) },
-	{ "EditFind", GTK_STOCK_FIND, N_("_Find…"), "<control>F", NULL,
+	{ "EditFind", NULL, N_("_Find…"), "<control>F", NULL,
 	  G_CALLBACK (window_cmd_edit_find) },
 	{ "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G", NULL,
 	  G_CALLBACK (window_cmd_edit_find_next) },
@@ -130,17 +130,17 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* View actions. */
 
-	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape", NULL,
+	{ "ViewStop", NULL, N_("_Stop"), "Escape", NULL,
 	  G_CALLBACK (window_cmd_view_stop) },
-	{ "ViewAlwaysStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
+	{ "ViewAlwaysStop", NULL, N_("_Stop"), "Escape",
 	  NULL, G_CALLBACK (window_cmd_view_stop) },
-	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R", NULL,
+	{ "ViewReload", NULL, N_("_Reload"), "<control>R", NULL,
 	  G_CALLBACK (window_cmd_view_reload) },
-	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("_Larger Text"), "<control>plus", NULL,
+	{ "ViewZoomIn", NULL, N_("_Larger Text"), "<control>plus", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_in) },
-	{ "ViewZoomOut", GTK_STOCK_ZOOM_OUT, N_("S_maller Text"), "<control>minus", NULL,
+	{ "ViewZoomOut", NULL, N_("S_maller Text"), "<control>minus", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_out) },
-	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), "<control>0", NULL,
+	{ "ViewZoomNormal", NULL, N_("_Normal Size"), "<control>0", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
 	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL, NULL },
 	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
@@ -148,7 +148,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Bookmarks actions. */
 
-	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark…"), "<control>D", NULL,
+	{ "FileBookmarkPage", NULL, N_("_Add Bookmark…"), "<control>D", NULL,
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
 	/* Go actions. */
@@ -182,9 +182,9 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL, NULL,
 	  NULL, FALSE },
 
-	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11", NULL,
+	{ "ViewFullscreen", NULL, N_("_Fullscreen"), "F11", NULL,
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
-	{ "ViewPopupWindows", EPHY_STOCK_POPUPS, N_("Popup _Windows"), NULL, NULL,
+	{ "ViewPopupWindows", NULL, N_("Popup _Windows"), NULL, NULL,
 	  G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
 	{ "BrowseWithCaret", NULL, N_("Selection Caret"), "F7", NULL,
 	  G_CALLBACK (window_cmd_browse_with_caret), FALSE }
@@ -193,12 +193,12 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 static const GtkActionEntry ephy_popups_entries [] = {
         /* Document. */
 
-	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark…"), "<control>D", NULL,
+	{ "ContextBookmarkPage", NULL, N_("Add Boo_kmark…"), "<control>D", NULL,
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 	
 	/* Links. */
 
-	{ "OpenLink", GTK_STOCK_JUMP_TO, N_("_Open Link"), NULL, NULL,
+	{ "OpenLink", NULL, N_("_Open Link"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_open_link) },
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_window) },
@@ -206,9 +206,9 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", NULL, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
-	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As…"), NULL, NULL,
+	{ "DownloadLinkAs", NULL, N_("_Save Link As…"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_download_link_as) },
-	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link…"),
+	{ "BookmarkLink", NULL, N_("_Bookmark Link…"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
