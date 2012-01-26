@@ -14,22 +14,10 @@ private_icons = \
 	hicolor_places_16x16_bookmark-web.png \
 	hicolor_places_22x22_bookmark-web.png \
 	hicolor_places_24x24_bookmark-web.png \
-	hicolor_status_16x16_lock-broken.png \
-	hicolor_status_16x16_lock-insecure.png \
-	hicolor_status_16x16_lock-secure-checked.png \
-	hicolor_status_16x16_lock-secure.png \
 	hicolor_status_16x16_popup-hidden.png \
 	hicolor_status_22x22_popup-hidden.png \
-	hicolor_status_24x24_lock-broken.png \
-	hicolor_status_24x24_lock-insecure.png \
-	hicolor_status_24x24_lock-secure-checked.png \
-	hicolor_status_24x24_lock-secure.png \
 	hicolor_status_24x24_popup-hidden.png \
 	hicolor_status_32x32_popup-hidden.png \
-	hicolor_status_48x48_lock-broken.png \
-	hicolor_status_48x48_lock-insecure.png \
-	hicolor_status_48x48_lock-secure-checked.png \
-	hicolor_status_48x48_lock-secure.png \
 	hicolor_status_scalable_popup-hidden.svg \
 	$(NULL)
 

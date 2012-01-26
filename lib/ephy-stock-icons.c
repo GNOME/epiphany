@@ -44,10 +44,7 @@ ephy_stock_icons_init (void)
 		{ EPHY_STOCK_POPUPS,	N_("Popup Windows"),	0, 0, NULL },
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARK,  N_("Bookmark"),         0, 0, NULL },
-		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
-		{ STOCK_LOCK_INSECURE },
-		{ STOCK_LOCK_SECURE },
-		{ STOCK_LOCK_BROKEN }
+		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL }
 	};
 
 	factory = gtk_icon_factory_new ();

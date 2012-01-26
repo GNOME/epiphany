@@ -33,9 +33,6 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_HISTORY         "history-view"
 #define EPHY_STOCK_BOOKMARK        "bookmark-web"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
-#define STOCK_LOCK_INSECURE        "lock-insecure"
-#define STOCK_LOCK_SECURE          "lock-secure"
-#define STOCK_LOCK_BROKEN          "lock-broken"
 
 /* Named icons defined in fd.o Icon Naming Spec */
 #define STOCK_NEW_TAB              "tab-new"

@@ -61,6 +61,10 @@ struct _EphyLocationEntry
 	EphyLocationEntryPrivate *priv;
 };
 
+#define STOCK_LOCK_INSECURE        "lock-insecure"
+#define STOCK_LOCK_SECURE          "lock-secure"
+#define STOCK_LOCK_BROKEN          "lock-broken"
+
 GType		ephy_location_entry_get_type		(void);
 
 GtkWidget      *ephy_location_entry_new			(void);
