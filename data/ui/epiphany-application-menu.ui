@@ -1,24 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <interface>
-  <menu id='app-menu'>
+  <menu id="app-menu">
     <section>
-      <item label='_New Window' action='app.new' accel='<Primary>n' />
+      <item>
+        <attribute name="label" translatable="yes">_New Window</attribute>
+        <attribute name="action">app.new</attribute>
+        <attribute name="accel">&lt;Primary&gt;n</attribute>
+      </item>
     </section>
     <section>
-      <item label='_Bookmarks' action='app.bookmarks' accel='<Primary>b' />
-      <item label='_History' action='app.history' accel='<Primary>h' />
+      <item>
+        <attribute name="label" translatable="yes">_Bookmarks</attribute>
+        <attribute name="action">app.bookmarks</attribute>
+        <attribute name="accel">&lt;Primary&gt;b</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_History</attribute>
+        <attribute name="action">app.history</attribute>
+        <attribute name="accel">&lt;Primary&gt;h</attribute>
+      </item>
     </section>
     <section>
-      <item label='Preferences' action='app.preferences' />
-      <item label='Personal Data' action='app.pdm' />
+      <item>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Personal Data</attribute>
+        <attribute name="action">app.pdm</attribute>
+      </item>
     </section>
     <section>
-      <item label='_Help' action='app.help' accel='<Primary>h' />
-      <item label='_About' action='app.about' accel='<Primary>a' />
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">&lt;Primary&gt;h</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About</attribute>
+        <attribute name="action">app.about</attribute>
+        <attribute name="accel">&lt;Primary&gt;a</attribute>
+      </item>
     </section>
-    <section>      
-      <item label='_Quit' action='app.quit' accel='<Primary>q' />
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+        <attribute name="accel">&lt;Primary&gt;q</attribute>
+      </item>
     </section>
   </menu>
 </interface>
-
