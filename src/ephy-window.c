@@ -1346,7 +1346,6 @@ setup_ui_manager (EphyWindow *window)
 		g_object_new (EPHY_TYPE_ZOOM_ACTION,
 			      "name", "Zoom",
 			      "label", _("Zoom"),
-			      "stock_id", GTK_STOCK_ZOOM_IN,
 			      "zoom", 1.0,
 			      NULL);
 	gtk_action_group_add_action (action_group, action);
@@ -1355,7 +1354,6 @@ setup_ui_manager (EphyWindow *window)
 	action = g_object_new (EPHY_TYPE_HOME_ACTION,
 			       "name", "FileNewTab",
 			       "label", _("New _Tab"),
-			       "stock_id", STOCK_NEW_TAB,
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
 	g_object_unref (action);
