@@ -136,7 +136,6 @@ test_ephy_download_new (Fixture *fixture, gconstpointer data)
   g_assert (EPHY_IS_DOWNLOAD (fixture->download));
 }
 
-#if 0
 static void
 test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
 {
@@ -151,6 +150,11 @@ test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
   g_signal_connect (G_OBJECT (download), "completed",
                     G_CALLBACK (completed_cb), fixture);
 
+  ephy_download_start (download);
+
+  g_object_unref (fixture->download);
+  fixture->download = download;
+
   g_main_loop_run (fixture->loop);
 }
 
@@ -160,9 +164,9 @@ test_ephy_download_start (Fixture *fixture, gconstpointer data)
   g_signal_connect (G_OBJECT (fixture->download), "completed",
                     G_CALLBACK (completed_cb), fixture);
 
+  ephy_download_start (fixture->download);
   g_main_loop_run (fixture->loop);
 }
-#endif
 
 int
 main (int argc, char *argv[])
@@ -192,14 +196,12 @@ main (int argc, char *argv[])
   g_test_add ("/embed/ephy-download/new",
               Fixture, NULL, fixture_setup,
               test_ephy_download_new, fixture_teardown);
-#if 0
   g_test_add ("/embed/ephy-download/new_for_uri",
               Fixture, NULL, fixture_setup,
               test_ephy_download_new_for_uri, fixture_teardown);
   g_test_add ("/embed/ephy-download/start",
               Fixture, NULL, fixture_setup,
               test_ephy_download_start, fixture_teardown);
-#endif
 
   ret = g_test_run ();
 
