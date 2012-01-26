@@ -33,19 +33,14 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_HISTORY         "history-view"
 #define EPHY_STOCK_BOOKMARK        "bookmark-web"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
-#define EPHY_STOCK_ENTRY           "location-entry"
 #define STOCK_LOCK_INSECURE        "lock-insecure"
 #define STOCK_LOCK_SECURE          "lock-secure"
 #define STOCK_LOCK_BROKEN          "lock-broken"
 
 /* Named icons defined in fd.o Icon Naming Spec */
 #define STOCK_NEW_TAB              "tab-new"
-#define STOCK_NEW_WINDOW           "window-new"
 #define STOCK_SEND_MAIL            "mail-forward"
-#define STOCK_NEW_MAIL             "mail-message-new"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
-#define STOCK_PRINT_SETUP          "document-page-setup"
-#define STOCK_DOWNLOAD             "emblem-downloads"
 
 void ephy_stock_icons_init (void);
 

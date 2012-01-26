@@ -35,11 +35,8 @@ ephy_stock_icons_init (void)
 	const char *icon_theme_items[] =
 	{
 		STOCK_NEW_TAB,
-		STOCK_NEW_WINDOW,
 		STOCK_SEND_MAIL,
-		STOCK_NEW_MAIL,
 		STOCK_ADD_BOOKMARK,
-		STOCK_PRINT_SETUP,
 	};
 
 	static const GtkStockItem items[] =
@@ -48,8 +45,6 @@ ephy_stock_icons_init (void)
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARK,  N_("Bookmark"),         0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
-		{ EPHY_STOCK_ENTRY,	N_("Address Entry"),	0, 0, NULL },
-		{ STOCK_DOWNLOAD,	N_("_Download"),	0, 0, NULL },
 		{ STOCK_LOCK_INSECURE },
 		{ STOCK_LOCK_SECURE },
 		{ STOCK_LOCK_BROKEN }

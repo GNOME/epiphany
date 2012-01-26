@@ -3,20 +3,14 @@ NULL =
 private_icons = \
 	hicolor_actions_16x16_bookmark-view.png \
 	hicolor_actions_16x16_history-view.png \
-	hicolor_actions_16x16_location-entry.png \
 	hicolor_actions_22x22_bookmark-view.png \
 	hicolor_actions_22x22_history-view.png \
-	hicolor_actions_22x22_location-entry.png \
 	hicolor_actions_24x24_bookmark-view.png \
 	hicolor_actions_24x24_history-view.png \
-	hicolor_actions_24x24_location-entry.png \
 	hicolor_actions_32x32_bookmark-view.png \
 	hicolor_actions_32x32_history-view.png \
-	hicolor_actions_32x32_location-entry.png \
-	hicolor_actions_32x32_location-entry.svg \
 	hicolor_actions_scalable_bookmark-view.svg \
 	hicolor_actions_scalable_history-view.svg \
-	hicolor_actions_scalable_location-entry.svg \
 	hicolor_places_16x16_bookmark-web.png \
 	hicolor_places_22x22_bookmark-web.png \
 	hicolor_places_24x24_bookmark-web.png \
