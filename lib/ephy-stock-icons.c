@@ -32,16 +32,8 @@ ephy_stock_icons_init (void)
 	GtkIconSource *icon_source;
 	int i;
 
-	const char *icon_theme_items[] =
-	{
-		STOCK_NEW_TAB,
-		STOCK_SEND_MAIL,
-		STOCK_ADD_BOOKMARK,
-	};
-
 	static const GtkStockItem items[] =
 	{
-		{ EPHY_STOCK_POPUPS,	N_("Popup Windows"),	0, 0, NULL },
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARK,  N_("Bookmark"),         0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL }
@@ -63,19 +55,6 @@ ephy_stock_icons_init (void)
 	}
 
 	gtk_stock_add_static (items, G_N_ELEMENTS (items));
-
-	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
-	{
-		icon_source = gtk_icon_source_new ();
-		gtk_icon_source_set_icon_name (icon_source, icon_theme_items[i]);
-
-		icon_set = gtk_icon_set_new ();
-		gtk_icon_set_add_source (icon_set, icon_source);
-		gtk_icon_source_free (icon_source);
-
-		gtk_icon_factory_add (factory, icon_theme_items[i], icon_set);
-		gtk_icon_set_unref (icon_set);
-	}
 
 	gtk_icon_factory_add_default (factory);
 	g_object_unref (factory);
