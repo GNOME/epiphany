@@ -1582,7 +1582,12 @@ sync_tab_is_blank (EphyWebView *view,
 					      SENS_FLAG_IS_BLANK, is_blank);
 
 	action = gtk_action_group_get_action (action_group,
-					      "EditFind");
+					      "EditFindNext");
+	ephy_action_change_sensitivity_flags (action,
+					      SENS_FLAG_IS_BLANK, is_blank);
+
+	action = gtk_action_group_get_action (action_group,
+					      "EditFindPrev");
 	ephy_action_change_sensitivity_flags (action,
 					      SENS_FLAG_IS_BLANK, is_blank);
 
