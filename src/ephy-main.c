@@ -410,7 +410,8 @@ main (int argc,
       exit (1);
     }
     g_strfreev (arguments);
-    arguments = args;  }
+    arguments = args;
+  }
 
   /* Get a timestamp manually if need be */
   if (user_time == 0)
