@@ -323,8 +323,6 @@ Makefile
 data/Makefile
 data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
-data/bme.desktop.in
-data/art/Makefile
 data/pages/Makefile
 data/ui/Makefile
 doc/Makefile

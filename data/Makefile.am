@@ -1,9 +1,9 @@
-SUBDIRS = art pages ui
+SUBDIRS = pages ui
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
 
-desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
+desktop_in_files = epiphany.desktop.in.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
