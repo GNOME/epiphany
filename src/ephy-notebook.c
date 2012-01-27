@@ -54,7 +54,6 @@ struct _EphyNotebookPrivate
 	guint tabs_vis_notifier_id;
 
 	guint show_tabs : 1;
-	guint dnd_enabled : 1;
 };
 
 static void ephy_notebook_init		 (EphyNotebook *notebook);
@@ -78,7 +77,6 @@ static const GtkTargetEntry url_drag_types [] =
 enum
 {
 	PROP_0,
-	PROP_DND_ENABLED,
 	PROP_SHOW_TABS
 };
 
@@ -94,18 +92,6 @@ G_DEFINE_TYPE_WITH_CODE (EphyNotebook, ephy_notebook, GTK_TYPE_NOTEBOOK,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
 						NULL))
 
-void
-ephy_notebook_set_dnd_enabled (EphyNotebook *notebook,
-			       gboolean enabled)
-{
-	EphyNotebookPrivate *priv = notebook->priv;
-
-	priv->dnd_enabled = enabled;
-	/* FIXME abort any DNDs in progress */
-
-	g_object_notify (G_OBJECT (notebook), "dnd-enabled");
-}
-
 static void
 ephy_notebook_get_property (GObject *object,
 			    guint prop_id,
@@ -117,9 +103,6 @@ ephy_notebook_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_DND_ENABLED:
-			g_value_set_boolean (value, priv->dnd_enabled);
-			break;
 		case PROP_SHOW_TABS:
 			g_value_set_boolean (value, priv->show_tabs);
 			break;
@@ -136,9 +119,6 @@ ephy_notebook_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_DND_ENABLED:
-			ephy_notebook_set_dnd_enabled (notebook, g_value_get_boolean (value));
-			break;
 		case PROP_SHOW_TABS:
 			ephy_notebook_set_show_tabs (notebook, g_value_get_boolean (value));
 			break;
@@ -170,12 +150,6 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      GTK_TYPE_WIDGET /* Can't use an interface type here */);
-
-	g_object_class_install_property (object_class,
-					 PROP_DND_ENABLED,
-					 g_param_spec_boolean ("dnd-enabled", NULL, NULL,
-							       TRUE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_TABS,
@@ -464,7 +438,6 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
 
 	priv->show_tabs = TRUE;
-	priv->dnd_enabled = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",
 			  (GCallback)button_press_cb, NULL);

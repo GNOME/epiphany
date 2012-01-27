@@ -3327,7 +3327,6 @@ ephy_window_constructor (GType type,
 			    GTK_WIDGET (priv->notebook),
 			    TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (priv->notebook));
-	ephy_notebook_set_dnd_enabled (EPHY_NOTEBOOK (priv->notebook), !priv->is_popup);
 
 	priv->find_toolbar = ephy_find_toolbar_new (window);
 	g_signal_connect (priv->find_toolbar, "close",
