@@ -39,7 +39,6 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-topic-action-group.h"
 #include "ephy-topic-action.h"

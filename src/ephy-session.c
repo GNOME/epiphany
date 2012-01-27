@@ -38,7 +38,6 @@
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-stock-icons.h"
 #include "ephy-window.h"
 
 #include <errno.h>
@@ -231,7 +230,6 @@ client_quit_requested_cb (EggSMClient *sm_client,
 			       _("_Abort Downloads"), GTK_RESPONSE_ACCEPT);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), "");
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 

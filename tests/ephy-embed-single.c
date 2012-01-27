@@ -28,7 +28,6 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
-#include "ephy-stock-icons.h"
 #include <gtk/gtk.h>
 
 static void

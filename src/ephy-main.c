@@ -29,7 +29,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 
@@ -411,8 +410,7 @@ main (int argc,
       exit (1);
     }
     g_strfreev (arguments);
-    arguments = args;
-  }
+    arguments = args;  }
 
   /* Get a timestamp manually if need be */
   if (user_time == 0)
@@ -454,7 +452,6 @@ main (int argc,
 
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
-    gtk_window_set_default_icon_name (EPHY_STOCK_EPHY);
   }
 
   _ephy_shell_create_instance (mode);

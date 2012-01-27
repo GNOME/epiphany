@@ -30,7 +30,6 @@
 #include "ephy-gui.h"
 #include "ephy-state.h"
 #include "ephy-string.h"
-#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-time-helpers.h"
 #include "ephy-embed-single.h"
@@ -1480,8 +1479,6 @@ pdm_dialog_init (PdmDialog *dialog)
 				  NULL);
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
-
-	gtk_window_set_icon_name (GTK_WINDOW (window), EPHY_STOCK_EPHY);
 
 	g_signal_connect (window, "response",
 			  G_CALLBACK (pdm_dialog_response_cb), dialog);

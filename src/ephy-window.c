@@ -52,7 +52,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
-#include "ephy-stock-icons.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
@@ -431,8 +430,6 @@ construct_confirm_close_dialog (EphyWindow *window,
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
-
 	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
 				     GTK_WINDOW (dialog));
 

@@ -29,7 +29,6 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-gui.h"
 #include "ephy-shell.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 
 #include <glib/gi18n.h>

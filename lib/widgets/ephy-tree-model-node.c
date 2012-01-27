@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include "ephy-tree-model-node.h"
-#include "ephy-stock-icons.h"
 #include "ephy-node.h"
 #include "ephy-debug.h"
 

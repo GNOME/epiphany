@@ -38,7 +38,6 @@
 #include "ephy-history.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
 #include "nautilus-floating-bar.h"

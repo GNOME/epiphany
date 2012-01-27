@@ -26,7 +26,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-dnd.h"
-#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-request-about.h"

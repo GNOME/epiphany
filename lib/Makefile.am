@@ -25,7 +25,6 @@ NOINST_H_FILES = \
 	ephy-signal-accumulator.h		\
 	ephy-smaps.h				\
 	ephy-string.h				\
-	ephy-stock-icons.h			\
 	ephy-time-helpers.h			\
 	ephy-zoom.h
 

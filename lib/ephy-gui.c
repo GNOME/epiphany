@@ -21,7 +21,6 @@
 #include "ephy-gui.h"
 
 #include "ephy-debug.h"
-#include "ephy-stock-icons.h"
 
 #include <ctype.h>
 #include <gdk/gdkx.h>
@@ -212,7 +211,6 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 					  "create files in this directory."));
 
 			gtk_window_set_title (GTK_WINDOW (dialog), _("Directory not Writable"));
-			gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 			if (parent != NULL)
 			{
@@ -249,7 +247,6 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 				  "you don't have permission to overwrite it."));
 
 		gtk_window_set_title (GTK_WINDOW (dialog), _("Cannot Overwrite File"));
-		gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 		if (parent != NULL)
 		{

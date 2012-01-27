@@ -36,7 +36,6 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-signal-accumulator.h"
-#include "ephy-stock-icons.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -447,7 +446,6 @@ redirect_cb (EphyHistory *history,
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Update Bookmark?"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	g_object_set_data_full (G_OBJECT (dialog), UPDATE_URI_DATA_KEY,
 				g_strdup (to_uri), (GDestroyNotify) g_free);

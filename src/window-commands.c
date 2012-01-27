@@ -46,7 +46,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
@@ -1241,7 +1240,7 @@ window_cmd_help_about (GtkAction *action,
 			        * line seperated by newlines (\n).
 			        */
 			       "translator-credits", _("translator-credits"),
-			       "logo-icon-name", EPHY_STOCK_EPHY,
+			       "logo-icon-name", "web-browser",
 			       "website", "http://www.gnome.org/projects/epiphany",
 			       "website-label", _("Web Website"),
 			       "license", licence,

@@ -26,7 +26,6 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-settings.h"
-#include "ephy-stock-icons.h"
 #include "ephy-string.h"
 
 #include <gtk/gtk.h>
@@ -120,8 +119,6 @@ ephy_file_chooser_constructor (GType type,
 	gtk_file_chooser_add_shortcut_folder
 		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
 	g_free (downloads_dir);
-
-	gtk_window_set_icon_name (GTK_WINDOW (object), EPHY_STOCK_EPHY);
 
 	return object;
 }

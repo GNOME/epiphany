@@ -33,9 +33,7 @@
 #include "window-commands.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
-#include "ephy-stock-icons.h"
 #include "ephy-gui.h"
-#include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
 #include "ephy-session.h"
 #include "ephy-favicon-cache.h"
@@ -234,7 +232,6 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear History"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (confirmation_dialog_response_cb),
