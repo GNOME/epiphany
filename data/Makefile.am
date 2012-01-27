@@ -1,4 +1,4 @@
-SUBDIRS = art icons pages ui
+SUBDIRS = art pages ui
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@

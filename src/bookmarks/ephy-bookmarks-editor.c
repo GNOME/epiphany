@@ -38,7 +38,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
-#include "ephy-stock-icons.h"
 #include "ephy-topic-action.h"
 #include "ephy-window.h"
 #include "popup-commands.h"
@@ -1519,7 +1518,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
-	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_BOOKMARKS);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);

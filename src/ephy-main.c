@@ -427,7 +427,6 @@ main (int argc,
     exit (0);
   }
 
-  ephy_stock_icons_init ();
   ephy_file_load_accels ();
 
   /* Now create the shell */

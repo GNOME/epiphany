@@ -67,7 +67,6 @@ libephymisc_la_SOURCES = \
 	ephy-smaps.c				\
 	ephy-state.c				\
 	ephy-string.c				\
-	ephy-stock-icons.c			\
 	ephy-time-helpers.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
