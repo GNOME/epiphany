@@ -333,6 +333,7 @@ struct _EphyWindowPrivate
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
 	GtkActionGroup *toolbar_action_group;
+	GtkActionGroup *tab_accels_action_group;
 	EphyEncodingMenu *enc_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
@@ -1312,6 +1313,12 @@ setup_ui_manager (EphyWindow *window)
 				      G_N_ELEMENTS (ephy_popups_entries), window);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->popups_action_group = action_group;
+	g_object_unref (action_group);
+
+	/* Tab accels */
+	action_group = gtk_action_group_new ("TabAccelsActions");
+	gtk_ui_manager_insert_action_group (manager, action_group, 0);
+	window->priv->tab_accels_action_group = action_group;
 	g_object_unref (action_group);
 
 	action_group = gtk_action_group_new ("SpecialToolbarActions");
@@ -2494,6 +2501,77 @@ embed_close_request_cb (EphyEmbed *embed,
 	return TRUE;
 }
 
+static void
+tab_accels_item_activate (GtkAction *action,
+			  EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	const char *name;
+	int tab_number;
+
+	name = gtk_action_get_name (action);
+	tab_number = atoi (name + strlen ("TabAccel"));
+
+	gtk_notebook_set_current_page (priv->notebook, tab_number);
+}
+
+static void
+tab_accels_update (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	int pages, i = 0;
+	GList *actions, *l;
+
+	actions = gtk_action_group_list_actions (priv->tab_accels_action_group);
+	pages = gtk_notebook_get_n_pages (priv->notebook);
+	for (l = actions; l != NULL; l = l->next)
+	{
+		GtkAction *action = GTK_ACTION (l->data);
+
+		gtk_action_set_sensitive (action, (i < pages));
+
+		i++;
+	}
+	g_list_free (actions);
+}
+
+#define TAB_ACCELS_N 10
+
+static void
+setup_tab_accels (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	guint id;
+	int i;
+
+	id = gtk_ui_manager_new_merge_id (priv->manager);
+
+	for (i = 0; i < TAB_ACCELS_N; i++)
+	{
+		GtkAction *action;
+		char *name;
+		char *accel;
+
+		name = g_strdup_printf ("TabAccel%d", i);
+		accel = g_strdup_printf ("<alt>%d", (i + 1) % TAB_ACCELS_N);
+		action = gtk_action_new (name, NULL, NULL, NULL);
+
+		gtk_action_group_add_action_with_accel (priv->tab_accels_action_group,
+							action, accel);
+
+		g_signal_connect (action, "activate",
+				  G_CALLBACK (tab_accels_item_activate), window);
+		gtk_ui_manager_add_ui (priv->manager, id, "/",
+				       name, name,
+				       GTK_UI_MANAGER_ACCELERATOR,
+				       FALSE);
+
+		g_object_unref (action);
+		g_free (accel);
+		g_free (name);
+	}
+}
+
 static gboolean
 show_notebook_popup_menu (GtkNotebook *notebook,
 			  EphyWindow *window,
@@ -2599,6 +2677,8 @@ notebook_page_added_cb (EphyNotebook *notebook,
                 priv->present_on_insert = FALSE;
                 g_idle_add ((GSourceFunc) present_on_idle_cb, g_object_ref (window));
         }
+
+	tab_accels_update (window);
 }
 
 static void
@@ -2632,6 +2712,8 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_close_request_cb), window);
+
+	tab_accels_update (window);
 }
 
 static void
@@ -2914,6 +2996,7 @@ ephy_window_dispose (GObject *object)
 
 		priv->action_group = NULL;
 		priv->popups_action_group = NULL;
+		priv->tab_accels_action_group = NULL;
 
 		g_object_unref (priv->manager);
 		priv->manager = NULL;
@@ -3238,6 +3321,7 @@ ephy_window_constructor (GType type,
 
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);
+	setup_tab_accels (window);
 
 	/* Create the notebook. */
 	/* FIXME: the notebook needs to exist before the toolbar,
