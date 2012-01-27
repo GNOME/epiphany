@@ -1517,46 +1517,22 @@ sync_tab_icon (EphyWebView *view,
 }
 
 static void
-_ephy_window_set_navigation_actions (EphyWindow *window,
-				     gboolean back,
-				     gboolean forward,
-				     gboolean up)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationBack");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !back);
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationForward");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG, !forward);
-}
-
-static void
 sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
 	EphyWebViewNavigationFlags flags;
-	gboolean up = FALSE, back = FALSE, forward = FALSE;
+	GtkAction *action;
+	EphyWindowPrivate *priv = window->priv;
 
 	if (window->priv->closing) return;
 
 	flags = ephy_web_view_get_navigation_flags (view);
 
-	if (flags & EPHY_WEB_VIEW_NAV_UP)
-	{
-		up = TRUE;
-	}
-	if (flags & EPHY_WEB_VIEW_NAV_BACK)
-	{
-		back = TRUE;
-	}
-	if (flags & EPHY_WEB_VIEW_NAV_FORWARD)
-	{
-		forward = TRUE;
-	}
-
-	_ephy_window_set_navigation_actions (window, back, forward, up);
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationBack");
+	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_BACK);
+	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationForward");
+	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_FORWARD);
 }
 
 static void
