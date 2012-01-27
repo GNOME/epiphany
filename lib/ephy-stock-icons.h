@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_EPHY            "web-browser"
 
 /* Custom Epiphany named icons */
-#define EPHY_STOCK_HISTORY         "history-view"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
  
 void ephy_stock_icons_init (void);

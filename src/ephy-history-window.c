@@ -1096,7 +1096,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
-	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_HISTORY);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);

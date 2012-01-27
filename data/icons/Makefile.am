@@ -2,22 +2,14 @@ NULL =
 
 private_icons = \
 	hicolor_actions_16x16_bookmark-view.png \
-	hicolor_actions_16x16_history-view.png \
 	hicolor_actions_22x22_bookmark-view.png \
-	hicolor_actions_22x22_history-view.png \
 	hicolor_actions_24x24_bookmark-view.png \
-	hicolor_actions_24x24_history-view.png \
 	hicolor_actions_32x32_bookmark-view.png \
-	hicolor_actions_32x32_history-view.png \
 	hicolor_actions_scalable_bookmark-view.svg \
-	hicolor_actions_scalable_history-view.svg \
 	$(NULL)
 
 noinst_DATA = \
-	hicolor_actions_16x16_history-view.svg \
-	hicolor_actions_22x22_history-view.svg \
 	hicolor_actions_32x32_bookmark-view.svg \
-	hicolor_actions_32x32_history-view.svg \
 	hicolor_actions_16x16_bookmark-view.xcf \
 	hicolor_actions_22x22_bookmark-view.xcf \
 	$(NULL)
