@@ -1099,7 +1099,7 @@ extracell_data_func (GtkCellLayout *cell_layout,
 
 	if (is_bookmark)
 		g_object_set (cell,
-			      "stock-id", EPHY_STOCK_BOOKMARK,
+			      "icon-name", "user-bookmarks-symbolic",
 			      NULL);
 
 	g_value_init (&visible, G_TYPE_BOOLEAN);

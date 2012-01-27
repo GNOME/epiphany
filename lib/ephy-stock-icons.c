@@ -35,7 +35,6 @@ ephy_stock_icons_init (void)
 	static const GtkStockItem items[] =
 	{
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
-		{ EPHY_STOCK_BOOKMARK,  N_("Bookmark"),         0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL }
 	};
 

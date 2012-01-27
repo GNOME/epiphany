@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 
 /* Custom Epiphany named icons */
 #define EPHY_STOCK_HISTORY         "history-view"
-#define EPHY_STOCK_BOOKMARK        "bookmark-web"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
  
 void ephy_stock_icons_init (void);

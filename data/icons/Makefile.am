@@ -11,9 +11,6 @@ private_icons = \
 	hicolor_actions_32x32_history-view.png \
 	hicolor_actions_scalable_bookmark-view.svg \
 	hicolor_actions_scalable_history-view.svg \
-	hicolor_places_16x16_bookmark-web.png \
-	hicolor_places_22x22_bookmark-web.png \
-	hicolor_places_24x24_bookmark-web.png \
 	$(NULL)
 
 noinst_DATA = \
@@ -23,8 +20,6 @@ noinst_DATA = \
 	hicolor_actions_32x32_history-view.svg \
 	hicolor_actions_16x16_bookmark-view.xcf \
 	hicolor_actions_22x22_bookmark-view.xcf \
-	hicolor_places_16x16_bookmark-web.svg \
-	hicolor_places_22x22_bookmark-web.svg \
 	$(NULL)
 
 EXTRA_DIST = \
