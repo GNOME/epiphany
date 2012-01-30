@@ -34,7 +34,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-#define HTML_STRING "testing-embed-persist"
+#define HTML_STRING "testing-ephy-download"
 SoupURI *base_uri;
 
 static char *
