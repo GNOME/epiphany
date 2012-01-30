@@ -1544,6 +1544,12 @@ sync_tab_is_blank (EphyWebView *view,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	gboolean is_blank = TRUE;
+	int i;
+	const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
+					       "FileSendTo", "FileBookmarkPage", "EditFind",
+					       "EditFindPrev", "EditFindNext", "ViewEncoding",
+					       "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
+					       NULL };
 
 	if (window->priv->closing) return;
 
@@ -1551,65 +1557,13 @@ sync_tab_is_blank (EphyWebView *view,
 	action_group = priv->action_group;
 
 	/* Page menu */
-	action = gtk_action_group_get_action (action_group,
-					      "FileSaveAs");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "FileSaveAsApplication");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "FilePrint");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "FileSendTo");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "FileBookmarkPage");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "EditFind");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "EditFindNext");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "EditFindPrev");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "ViewEncoding");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "ViewZoomIn");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "ViewZoomOut");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
-
-	action = gtk_action_group_get_action (action_group,
-					      "ViewPageSource");
-	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
+	for (i = 0; action_group_actions[i] != NULL; i++)
+	{
+		action = gtk_action_group_get_action (action_group,
+						      action_group_actions[i]);
+		ephy_action_change_sensitivity_flags (action,
+						      SENS_FLAG_IS_BLANK, is_blank);
+	}
 
 	/* Page context popup */
 	action = gtk_action_group_get_action (priv->popups_action_group,
