@@ -529,6 +529,10 @@ ephy_embed_prefs_init (void)
                    EPHY_PREFS_WEB_DEFAULT_ENCODING,
                    webkit_settings, "default-encoding",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_WEBGL,
+                   webkit_settings, "enable-webgl",
+                   G_SETTINGS_BIND_GET);
 }
 
 void
