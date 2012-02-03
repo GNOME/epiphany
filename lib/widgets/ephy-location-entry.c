@@ -889,13 +889,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 					 GTK_ENTRY_ICON_PRIMARY,
 					 _("Drag and drop this icon to create a link to this page"));
 
-	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
-					GTK_ENTRY_ICON_PRIMARY,
-					TRUE);
-	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
-					GTK_ENTRY_ICON_SECONDARY,
-					TRUE);
-
 	g_object_connect (entry,
 			  "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
 			  "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
