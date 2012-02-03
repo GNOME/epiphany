@@ -433,10 +433,13 @@ main (int argc,
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
   else if (application_mode) {
     char *app_name;
+    char *app_icon;
 
     mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
 
     app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+    app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
+
     if (app_name) {
       /* Skip the 'app-' part */
       app_name += strlen (EPHY_WEB_APP_PREFIX);
@@ -444,15 +447,21 @@ main (int argc,
       g_set_prgname (app_name);
       g_set_application_name (app_name);
 
+      gtk_window_set_default_icon_from_file (app_icon, NULL);
+
       /* We need to re-set this because we have already parsed the
        * options, which inits GTK+ and sets this as a side effect. */
       gdk_set_program_class (app_name);
     }
+
+    g_free (app_icon);
   } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
 
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
+
+    gtk_window_set_default_icon_name ("web-browser");
   }
 
   _ephy_shell_create_instance (mode);
