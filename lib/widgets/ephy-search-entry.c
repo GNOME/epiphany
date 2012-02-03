@@ -145,11 +145,15 @@ search_entry_clear_cb (GtkWidget *entry,
 static void
 ephy_search_entry_init (EphySearchEntry *entry)
 {
-	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
+	gboolean ltr;
 
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				       GTK_ENTRY_ICON_SECONDARY,
-				       GTK_STOCK_CLEAR);
+	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
+	ltr = gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR;
+
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+					   GTK_ENTRY_ICON_SECONDARY,
+					   ltr ? "edit-clear-symbolic" :
+					         "edit-clear-rtl-symbolic");
 	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 					GTK_ENTRY_ICON_SECONDARY,
 					TRUE);
