@@ -220,7 +220,7 @@ create_desktop_file (EphyWebView *view,
     char *path;
     GFile *image;
 
-    path = g_build_filename (profile_dir, "app-icon.png", NULL);
+    path = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
     image = g_file_new_for_path (path);
 
     stream = (GOutputStream*)g_file_create (image, 0, NULL, NULL);
@@ -390,7 +390,7 @@ ephy_web_application_get_application_list ()
       app = g_slice_new0 (EphyWebApplication);
 
       profile_dir = g_build_filename (ephy_dot_dir (), name, NULL);
-      app->icon_url = g_build_filename (profile_dir, "app-icon.png", NULL);
+      app->icon_url = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
 
       desktop_file = g_strconcat (name + prefix_length, ".desktop", NULL);
       desktop_file_path = g_build_filename (profile_dir, desktop_file, NULL);
