@@ -17,8 +17,8 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[3])
-m4_define([epiphany_version_micro],[4])
-m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro.1])
+m4_define([epiphany_version_micro],[5])
+m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 # This can be either "trunk" or "branches/gnome-x-y"
 m4_define([epiphany_branch],["trunk"])
@@ -84,7 +84,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 fi
 
 GLIB_REQUIRED=2.31.2
-GTK_REQUIRED=3.3.11
+GTK_REQUIRED=3.3.14
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 WEBKIT_GTK_REQUIRED=1.7.3
