@@ -105,16 +105,16 @@ LDADD += \
 endif
 
 test_ephy_download_SOURCES = \
-	ephy-download.c
+	ephy-download-test.c
 
 test_ephy_embed_single_SOURCES = \
-	ephy-embed-single.c
+	ephy-embed-single-test.c
 
 test_ephy_embed_utils_SOURCES = \
-	ephy-embed-utils.c
+	ephy-embed-utils-test.c
 
 test_ephy_location_entry_SOURCES = \
-	ephy-location-entry.c
+	ephy-location-entry-test.c
 
 test_ephy_search_entry_SOURCES = \
-	ephy-search-entry.c
+	ephy-search-entry-test.c

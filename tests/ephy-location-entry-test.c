@@ -1,6 +1,6 @@
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
- * ephy-location-entry.c
+ * ephy-location-entry-test.c
  * This file is part of Epiphany
  *
  * Copyright © 2008 - Diego Escalante Urrelo
