@@ -19,14 +19,14 @@
  */
 
 #include "config.h"
-
-#include <string.h>
-
 #include "ephy-completion-model.h"
+
 #include "ephy-favicon-cache.h"
+#include "ephy-history.h"
 #include "ephy-node.h"
 #include "ephy-shell.h"
-#include "ephy-history.h"
+
+#include <string.h>
 
 static void ephy_completion_model_class_init (EphyCompletionModelClass *klass);
 static void ephy_completion_model_init (EphyCompletionModel *model);
