@@ -483,24 +483,11 @@ impl_remove_child (EphyEmbedContainer *container,
 		   EphyEmbed *child)
 {
 	EphyWindow *window;
-	EphyWindowPrivate *priv;
-	GtkNotebook *notebook;
-	gboolean modified;
-	int position;
 
 	window = EPHY_WINDOW (container);
-	priv = window->priv;
-
-	modified = ephy_web_view_has_modified_forms (ephy_embed_get_web_view (child));
-	if (modified && confirm_close_with_modified_forms (window) == FALSE)
-	{
-		/* don't close the tab */
-		return;
-	}
-
-	notebook = GTK_NOTEBOOK (priv->notebook);
-	position = gtk_notebook_page_num (notebook, GTK_WIDGET (child));
-	gtk_notebook_remove_page (notebook, position);
+	g_signal_emit_by_name (window->priv->notebook,
+			       "tab-close-request",
+			       child, window);
 }
 
 static EphyEmbed *
