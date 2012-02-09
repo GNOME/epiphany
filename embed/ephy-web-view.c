@@ -2167,19 +2167,15 @@ static gboolean
 close_web_view_cb (WebKitWebView *web_view,
                    gpointer user_data)
 {
-  EphyEmbedContainer *window;
-  GList *children;
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
 
-  window = EPHY_EMBED_CONTAINER (widget);
-  children = ephy_embed_container_get_children (window);
+  LOG ("close web view");
 
-  if (g_list_length (children) == 1)
-    gtk_widget_destroy (GTK_WIDGET (window));
+  if (EPHY_IS_EMBED_CONTAINER (widget))
+    ephy_embed_container_remove_child (EPHY_EMBED_CONTAINER (widget),
+                                       EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
   else
-    ephy_embed_container_remove_child (window, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
-
-  g_list_free (children);
+    gtk_widget_destroy (widget);
 
   return TRUE;
 }
