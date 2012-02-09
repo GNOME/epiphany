@@ -2186,8 +2186,8 @@ close_web_view_cb (WebKitWebView *web_view,
   EphyEmbedContainer *window;
   GList *children;
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
-  window = EPHY_EMBED_CONTAINER (widget);
 
+  window = EPHY_EMBED_CONTAINER (widget);
   children = ephy_embed_container_get_children (window);
 
   if (g_list_length (children) == 1)
