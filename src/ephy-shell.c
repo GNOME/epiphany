@@ -167,7 +167,7 @@ new_window (GSimpleAction *action,
             gpointer user_data)
 {
   ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
-                      EPHY_NEW_TAB_IN_NEW_WINDOW);
+                      EPHY_NEW_TAB_IN_NEW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
 }
 
 static void
