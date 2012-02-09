@@ -121,7 +121,6 @@ struct _EphyWebViewClass
                                  EphyWebView *new_view);
   gboolean (* search_key_press)	(EphyWebView *view,
                                  GdkEventKey *event);
-  gboolean (* close_request)	(EphyWebView *view);
 
   void	 (* new_document_now)	(EphyWebView *view,
                                  const char *uri);

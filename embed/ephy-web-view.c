@@ -1452,22 +1452,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::close-request
- * @view: the #EphyWebView that received the signal
- *
- * The ::close signal is emitted when the embed requests closing.
- * Return %TRUE to prevent closing. You HAVE to process removal of the embed
- * as soon as possible after that.
- **/
-    g_signal_new ("close-request",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, close_request),
-            g_signal_accumulator_true_handled, NULL,
-            g_cclosure_marshal_generic,
-            G_TYPE_BOOLEAN,
-            0);
-/**
  * EphyWebView::content-blocked:
  * @view: the #EphyWebView that received the signal
  * @uri: blocked URI 
