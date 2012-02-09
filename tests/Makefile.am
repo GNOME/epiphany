@@ -3,7 +3,8 @@ noinst_PROGRAMS = \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
 	test-ephy-location-entry \
-	test-ephy-search-entry
+	test-ephy-search-entry \
+	$(NULL)
 
 # Mostly copied from Makefile.decl in glib
 GTESTER = gtester
