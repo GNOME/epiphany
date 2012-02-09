@@ -275,19 +275,21 @@ static GActionEntry app_entries[] = {
 static void
 ephy_shell_startup (GApplication* application)
 {
+  EphyEmbedShellMode mode;
+
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
   /* Migrate profile if we are not running a private instance */
   /* TODO: we want to migrate each WebApp profile too */
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application)) == EPHY_EMBED_SHELL_MODE_BROWSER) {
-    GtkBuilder *builder;
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
 
+  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER) {
     if (ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION) {
       GError *error = NULL;
       char *argv[1] = { "ephy-profile-migrator" };
       char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
-
+        
       g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
                     NULL, NULL, NULL, NULL,
                     NULL, &error);
@@ -297,6 +299,10 @@ ephy_shell_startup (GApplication* application)
         g_error_free (error);
       }
     }
+  }
+
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    GtkBuilder *builder;
 
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
