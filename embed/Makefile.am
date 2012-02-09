@@ -9,6 +9,7 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
+	ephy-embed-private.h		\
 	ephy-encodings.h		\
 	ephy-favicon-cache.h		\
 	ephy-request-about.h		\

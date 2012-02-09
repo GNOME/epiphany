@@ -26,6 +26,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
@@ -2248,15 +2249,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
   priv->monitor_directory = FALSE;
 
-  priv->non_search_regex = g_regex_new ("(^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|"
-                                        "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|"
-                                        "^::[0-9a-f:]*$|" /* IPv6 literals */
-                                        "^[0-9a-f:]+:[0-9a-f:]*$|" /* IPv6 literals */
-                                        "^[^\\.[:space:]]+\\.[^\\.[:space:]]+.*$|" /* foo.bar... */
-                                        "^https?://[^/\\.[:space:]]+.*$|"
-                                        "^about:.*$|"
-                                        "^data:.*$|"
-                                        "^file:.*$)",
+  priv->non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
