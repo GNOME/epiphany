@@ -384,7 +384,6 @@ ephy_web_application_get_application_list ()
       GDate *date;
       char *desktop_file, *desktop_file_path;
       char *contents;
-      GFile *file;
       GFileInfo *desktop_info;
 
       app = g_slice_new0 (EphyWebApplication);
@@ -399,6 +398,7 @@ ephy_web_application_get_application_list ()
         char **strings;
         GKeyFile *key;
         int i;
+        GFile *file;
 
         key = g_key_file_new ();
         g_key_file_load_from_data (key, contents, -1, 0, NULL);
@@ -412,27 +412,28 @@ ephy_web_application_get_application_list ()
         g_strfreev (strings);
         g_free (exec);
         g_key_file_free (key);
+
+        file = g_file_new_for_path (desktop_file_path);
+
+        /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
+        desktop_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
+        created = g_file_info_get_attribute_uint64 (desktop_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+        date = g_date_new ();
+        g_date_set_time_t (date, (time_t)created);
+        g_date_strftime (app->install_date, 127, "%x", date);
+
+        g_date_free (date);
+        g_object_unref (file);
+        g_object_unref (desktop_info);
+
+        applications = g_list_append (applications, app);
       }
 
       g_free (contents);
       g_free (desktop_file);
       g_free (profile_dir);
-
-      file = g_file_new_for_path (desktop_file_path);
       g_free (desktop_file_path);
-
-      /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
-      desktop_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-      created = g_file_info_get_attribute_uint64 (desktop_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
-      date = g_date_new ();
-      g_date_set_time_t (date, (time_t)created);
-      g_date_strftime (app->install_date, 127, "%x", date);
-      g_date_free (date);
-      g_object_unref (file);
-      g_object_unref (desktop_info);
-
-      applications = g_list_append (applications, app);
-
     }
 
     g_object_unref (info);
