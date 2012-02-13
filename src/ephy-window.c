@@ -88,6 +88,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "PopupAction", NULL, "" },
 	{ "PagePopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
+	{ "Extensions", NULL, N_("_Extensions") },
 
 	/* File actions. */
 
