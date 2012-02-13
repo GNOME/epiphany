@@ -92,7 +92,7 @@ activate_bookmarks_menu (GtkAction *action, EphyWindow *window)
 		if (!bookmarks_menu_string->len)
 		{
 			g_string_append (bookmarks_menu_string,
-					 "<ui><popup name=\"PagePopup\" action=\"PopupAction\"><menu name=\"BookmarksMenu\" action=\"Bookmarks\">");
+					 "<ui><popup name=\"PagePopup\" action=\"PagePopupAction\"><menu name=\"BookmarksMenu\" action=\"Bookmarks\">");
 			ephy_bookmarks_menu_build (bookmarks_menu_string, 0);
 			g_string_append (bookmarks_menu_string, "</menu></popup></ui>");
 		}
