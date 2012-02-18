@@ -576,7 +576,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 					      0,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_CANCEL,
-					      _("Create"),
+					      _("C_reate"),
 					      GTK_RESPONSE_OK,
 					      NULL);
 
