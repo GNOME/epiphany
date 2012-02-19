@@ -187,9 +187,9 @@ create_desktop_file (EphyWebView *view,
                      const char *title,
                      GdkPixbuf *icon)
 {
-  GKeyFile *file;
+  GKeyFile *file = NULL;
   char *exec_string;
-  char *data;
+  char *data = NULL;
   char *filename, *apps_path, *desktop_file_path = NULL;
   char *link_path;
   char *wm_class;
