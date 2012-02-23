@@ -72,9 +72,6 @@ static const SchemeTest tests_no_scheme[] = {
 static const NormalizeTest tests_normalize[] = {
   { "append_http_to_domain", "gnome.org", "http://gnome.org" },
   { "append_http_to_www", "www.gnome.org", "http://www.gnome.org" },
-#if 0
-  { "append_http_to_domain_port", "gnome.org:80", "http://gnome.org:80" },
-#endif
   { "append_http_to_hostname", "gnome", "http://gnome" },
   { "append_http_to_hostname_with_port", "localhost:8080", "http://localhost:8080" },
   { "append_http_to_ip_address", "192.168.0.1", "http://192.168.0.1" },
