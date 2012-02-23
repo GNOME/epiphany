@@ -2105,8 +2105,6 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		GError *error = NULL;
 		GdkScreen *screen;
 
-		webkit_web_policy_decision_ignore (decision);
-
 		screen = gtk_widget_get_screen (GTK_WIDGET (web_view));
 		gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
 
@@ -2114,7 +2112,11 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		{
 			LOG ("failed to handle non web scheme: %s", error->message);
 			g_error_free (error);
+
+			return FALSE;
 		}
+
+		webkit_web_policy_decision_ignore (decision);
 
 		return TRUE;
 	}
