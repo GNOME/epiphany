@@ -247,18 +247,7 @@ quit_application (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
-  GList *list, *next;
-  GtkWindow *win;
-
-  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
-  while (list) {
-    win = list->data;
-    next = list->next;
-
-    gtk_widget_destroy (GTK_WIDGET (win));
-
-    list = next;
-  }
+  g_application_quit (g_application_get_default ());
 }
 
 static GActionEntry app_entries[] = {
