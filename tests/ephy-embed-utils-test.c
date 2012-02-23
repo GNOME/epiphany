@@ -142,8 +142,8 @@ main (int argc, char *argv[])
     test_name = g_strconcat ("/embed/ephy-embed-utils/normalize_",
                              test.name, NULL);
 
-    g_test_add_data_func (test_name, &test,
-                          (GTestDataFunc) test_normalize_address);
+    g_test_add_data_func (test_name, tests_normalize + i,
+                          (GTestDataFunc)test_normalize_address);
 
     g_free (test_name);
   }
