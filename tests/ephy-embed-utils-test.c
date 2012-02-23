@@ -56,6 +56,8 @@ static const SchemeTest tests_no_scheme[] = {
   { "mailto", "mailto:rupert@gnome.org" },
   { "hostname", "localhost" },
   { "hostname_with_port", "localhost:8080" },
+  { "ip_address", "192.168.0.1" },
+  { "ip_address_with_port", "192.168.0.1:8080" },
   { "http_no_double_colon", "http//www.gnome.org/" },
 #if 0
   { "double_colon_first", ":var a=b;" },
@@ -75,6 +77,8 @@ static const NormalizeTest tests_normalize[] = {
 #endif
   { "append_http_to_hostname", "gnome", "http://gnome" },
   { "append_http_to_hostname_with_port", "localhost:8080", "http://localhost:8080" },
+  { "append_http_to_ip_address", "192.168.0.1", "http://192.168.0.1" },
+  { "append_http_to_ip_address_with_port", "192.168.0.1:8080", "http://192.168.0.1:8080" },
   { "convert_about_to_ephy_about", "about:epiphany", "ephy-about:epiphany" },
   { "untouched_http", "http://gnome.org", "http://gnome.org" },
 };
