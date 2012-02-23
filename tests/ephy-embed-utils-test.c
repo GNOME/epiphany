@@ -70,7 +70,9 @@ static const SchemeTest tests_no_scheme[] = {
 static const NormalizeTest tests_normalize[] = {
   { "append_http_to_domain", "gnome.org", "http://gnome.org" },
   { "append_http_to_www", "www.gnome.org", "http://www.gnome.org" },
+#if 0
   { "append_http_to_domain_port", "gnome.org:80", "http://gnome.org:80" },
+#endif
   { "append_http_to_hostname", "gnome", "http://gnome" },
   { "append_http_to_hostname_with_port", "localhost:8080", "http://localhost:8080" },
   { "convert_about_to_ephy_about", "about:epiphany", "ephy-about:epiphany" },
