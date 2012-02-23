@@ -2377,6 +2377,46 @@ ephy_web_view_load_request (EphyWebView *view,
   webkit_web_frame_load_request(main_frame, request);
 }
 
+typedef struct {
+  EphyWebView *view;
+  char *original_uri;
+} HEADAttemptData;
+
+static void
+effective_url_head_cb (SoupSession *session,
+                       SoupMessage *message,
+                       gpointer user_data)
+{
+  HEADAttemptData *data = (HEADAttemptData*)user_data;
+
+  EphyWebView *view = data->view;
+
+  if (message->status_code == SOUP_STATUS_OK) {
+    char *uri = soup_uri_to_string (soup_message_get_uri (message), FALSE);
+
+    webkit_web_view_open (WEBKIT_WEB_VIEW (view), uri);
+
+    g_free (uri);
+  } else {
+    GError *error = NULL;
+    GdkScreen *screen;
+
+    screen = gtk_widget_get_screen (GTK_WIDGET (view));
+    gtk_show_uri (screen, data->original_uri, GDK_CURRENT_TIME, &error);
+
+    if (error) {
+      LOG ("failed to handle non web scheme: %s", error->message);
+      g_error_free (error);
+
+      /* Load the original URI to trigger an error in the view. */
+      webkit_web_view_open (WEBKIT_WEB_VIEW (view), data->original_uri);
+    }
+  }
+
+  g_free (data->original_uri);
+  g_slice_free (HEADAttemptData, data);
+}
+
 /**
  * ephy_web_view_load_url:
  * @view: an #EphyWebView
@@ -2395,7 +2435,42 @@ ephy_web_view_load_url (EphyWebView *view,
 
   effective_url = normalize_or_autosearch_url (view, url);
 
-  if (g_str_has_prefix (effective_url, "javascript:")) {
+  /* After normalization there are still some cases that are
+   * impossible to tell apart. One example is <URI>:<PORT> and <NON
+   * WEB SCHEME>:<DATA>. To fix this, let's do a HEAD request to the
+   * effective URI prefxed with http://; if we get OK Status the URI
+   * exists, and we'll go ahead, otherwise we'll try to launch a
+   * proper handler through gtk_show_uri. We only do this in
+   * ephy_web_view_load_url, since this case is only relevant for URIs
+   * typed in the location entry, which uses this method to do the
+   * load. */
+  if (!ephy_embed_utils_address_has_web_scheme (effective_url)) {
+    SoupMessage *message;
+    SoupSession *session;
+    char *temp_url;
+    HEADAttemptData *data;
+
+    temp_url = g_strconcat ("http://", effective_url, NULL);
+
+    session = webkit_get_default_session ();
+    message = soup_message_new (SOUP_METHOD_HEAD,
+                                temp_url);
+
+    if (message) {
+      data = g_slice_new (HEADAttemptData);
+      data->view = view;
+      data->original_uri = g_strdup (effective_url);
+      soup_session_queue_message (session, message,
+                                  effective_url_head_cb, data);
+    } else {
+      /* If we cannot even create a message fallback to the effective
+       * url, the gtk_show_uri code will make another attempt in
+       * EphyWindow's policy code. */
+      webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+    }
+
+    g_free (temp_url);
+  } else if (g_str_has_prefix (effective_url, "javascript:")) {
     char *decoded_url;
     
     decoded_url = soup_uri_decode (effective_url);
