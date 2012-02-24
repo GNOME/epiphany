@@ -99,7 +99,7 @@ normalize_and_prepare_uri (SoupURI *uri,
   if (g_str_equal (uri->scheme, SOUP_URI_SCHEME_HTTPS))
     soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
 
-  soup_uri_set_path (uri, NULL);
+  soup_uri_set_path (uri, "/");
 
   /* Store the form login and password names encoded in the
    * URL. A bit of an abuse of keyring, but oh well */
