@@ -786,7 +786,7 @@ request_decision_on_storing (StorePasswordData *store_data)
 
   g_signal_connect (info_bar, "response", G_CALLBACK (store_password), store_data);
 
-  ephy_embed_add_top_widget (embed, info_bar, TRUE);
+  ephy_embed_add_top_widget (embed, info_bar, FALSE);
 
   /* We track the info_bar, so we only ever show one */
   if (web_view->priv->password_info_bar)
