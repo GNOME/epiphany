@@ -96,7 +96,7 @@ normalize_and_prepare_uri (SoupURI *uri,
   /* We normalize https? schemes here so that we use passwords
    * we stored in https sites in their http counterparts, and
    * vice-versa. */
-  if (g_str_equal (uri->scheme, SOUP_URI_SCHEME_HTTPS))
+  if (uri->scheme == SOUP_URI_SCHEME_HTTPS)
     soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
 
   soup_uri_set_path (uri, "/");
