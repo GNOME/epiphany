@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-07 09:30+0000\n"
-"PO-Revision-Date: 2012-02-12 12:26+0300\n"
+"POT-Creation-Date: 2012-02-12 11:55+0000\n"
+"PO-Revision-Date: 2012-02-25 13:09+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,10 +44,10 @@ msgstr "http://www.google.ru/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 #: ../data/epiphany.desktop.in.in.h:1
 #: ../src/ephy-main.c:73
 #: ../src/ephy-main.c:321
-#: ../src/ephy-main.c:455
-#: ../src/window-commands.c:1226
+#: ../src/ephy-main.c:462
+#: ../src/window-commands.c:1228
 msgid "Web"
-msgstr ""
+msgstr "Веб-браузер"
 
 #: ../data/epiphany.desktop.in.in.h:2
 msgid "Web Browser"
@@ -128,7 +128,6 @@ msgid "_Bookmarks"
 msgstr "_Закладки"
 
 #: ../data/ui/epiphany-application-menu.ui.h:3
-#| msgid "History"
 msgid "_History"
 msgstr "_Журнал"
 
@@ -150,7 +149,6 @@ msgid "_About"
 msgstr "_О программе"
 
 #: ../data/ui/epiphany-application-menu.ui.h:8
-#| msgid "_Edit"
 msgid "_Quit"
 msgstr "_Закончить"
 
@@ -1076,7 +1074,7 @@ msgid "Cancel"
 msgstr "Отменить"
 
 #: ../lib/widgets/ephy-download-widget.c:280
-#: ../src/ephy-window.c:1286
+#: ../src/ephy-window.c:1273
 #: ../src/window-commands.c:263
 msgid "Open"
 msgstr "Открыть"
@@ -1093,7 +1091,7 @@ msgstr "Запуск…"
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Перетащите этот значок, чтобы создать ссылку на эту страницу"
 
-#: ../lib/widgets/ephy-search-entry.c:158
+#: ../lib/widgets/ephy-search-entry.c:162
 msgid "Clear"
 msgstr "Очистить"
 
@@ -1779,10 +1777,9 @@ msgid "URL …"
 msgstr "URL …"
 
 #: ../src/ephy-main.c:208
-#, fuzzy
 #| msgid "Could not start GNOME Web Browser"
 msgid "Could not start Web"
-msgstr "Не удалось запустить веб-браузер GNOME"
+msgstr "Не удалось запустить веб-браузер"
 
 #: ../src/ephy-main.c:211
 #, c-format
@@ -1794,10 +1791,9 @@ msgstr ""
 "%s"
 
 #: ../src/ephy-main.c:322
-#, fuzzy
 #| msgid "Web Content"
 msgid "Web options"
-msgstr "Содержимое страницы"
+msgstr "Параметры веб-браузера"
 
 #: ../src/ephy-notebook.c:592
 msgid "Close tab"
@@ -2048,51 +2044,49 @@ msgstr "Если вы закроете это окно, загрузки буд�
 msgid "Close window and cancel downloads"
 msgstr "Закрыть окно и отменить загрузки"
 
-#: ../src/ephy-window.c:1288
+#: ../src/ephy-window.c:1275
 msgid "Save As"
 msgstr "Сохранить как"
 
-#: ../src/ephy-window.c:1290
+#: ../src/ephy-window.c:1277
 msgid "Save As Application"
 msgstr "Сохранить как приложение"
 
-#: ../src/ephy-window.c:1292
+#: ../src/ephy-window.c:1279
 msgid "Print"
 msgstr "Печать"
 
-#: ../src/ephy-window.c:1294
+#: ../src/ephy-window.c:1281
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: ../src/ephy-window.c:1296
+#: ../src/ephy-window.c:1283
 msgid "Find"
 msgstr "Найти"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1305
+#: ../src/ephy-window.c:1292
 msgid "Larger"
 msgstr "Увеличить"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1308
+#: ../src/ephy-window.c:1295
 msgid "Smaller"
 msgstr "Уменьшить"
 
-#: ../src/ephy-window.c:1328
-#| msgid "_Back"
+#: ../src/ephy-window.c:1315
 msgid "Back"
 msgstr "Назад"
 
-#: ../src/ephy-window.c:1340
-#| msgid "_Forward"
+#: ../src/ephy-window.c:1327
 msgid "Forward"
 msgstr "Вперёд"
 
-#: ../src/ephy-window.c:1352
+#: ../src/ephy-window.c:1339
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: ../src/ephy-window.c:1360
+#: ../src/ephy-window.c:1347
 msgid "New _Tab"
 msgstr "Создать _вкладку"
 
@@ -2226,62 +2220,61 @@ msgstr "Заменить"
 msgid "An application with the same name already exists. Replacing it will overwrite it."
 msgstr "Приложение с таким именем уже существует. Его замена приведёт к перезаписи приложения."
 
-#: ../src/window-commands.c:528
+#: ../src/window-commands.c:530
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Приложение «%s» готово к использованию"
 
-#: ../src/window-commands.c:531
+#: ../src/window-commands.c:533
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Не удалось создать приложение «%s»"
 
-#: ../src/window-commands.c:539
+#: ../src/window-commands.c:541
 msgid "Launch"
 msgstr "Запустить"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:572
+#: ../src/window-commands.c:574
 msgid "Create Web Application"
 msgstr "Создать веб-приложение"
 
-#: ../src/window-commands.c:577
+#: ../src/window-commands.c:579
 msgid "Create"
 msgstr "Создать"
 
-#: ../src/window-commands.c:1123
-#, fuzzy
+#: ../src/window-commands.c:1125
 #| msgid ""
 #| "The GNOME Web Browser is free software; you can redistribute it and/or "
 #| "modify it under the terms of the GNU General Public License as published "
 #| "by the Free Software Foundation; either version 2 of the License, or (at "
 #| "your option) any later version."
 msgid "Web is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
-msgstr "Веб-браузер GNOME это свободное программное обеспечение. Вы можете распространять или изменять его при условиях соответствия GNU General Public License опубликованной организацией Free Software Foundation; либо версии 2 лицензии, либо (на ваше усмотрение) любой более поздней версии. "
+msgstr "Веб-браузер GNOME — это свободное программное обеспечение. Вы можете распространять или изменять его на условиях лицензии GNU General Public License, опубликованной организацией Free Software Foundation, либо 2 версии лицензии, либо (на ваше усмотрение) любой более поздней версии. "
 
-#: ../src/window-commands.c:1127
+#: ../src/window-commands.c:1129
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "Веб-браузер GNOME распространяется в надежде на то, что приложение будет полезно, но БЕЗ ВСЯКИХ ГАРАНТИЙ; не гарантируется даже ПРИГОДНОСТЬ или СООТВЕТСТВИЕ ЛЮБЫМ ТРЕБОВАНИЯМ. Для дальнейшей информации ознакомьтесь с GNU General Public License."
 
-#: ../src/window-commands.c:1131
+#: ../src/window-commands.c:1133
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Вы должны получить копию GNU General Public License вместе с веб-браузером GNOME. Если это не так, напишите об этом Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:1177
-#: ../src/window-commands.c:1193
-#: ../src/window-commands.c:1204
+#: ../src/window-commands.c:1179
+#: ../src/window-commands.c:1195
+#: ../src/window-commands.c:1206
 msgid "Contact us at:"
 msgstr "Свяжитесь с нами:"
 
-#: ../src/window-commands.c:1180
+#: ../src/window-commands.c:1182
 msgid "Contributors:"
 msgstr "Помощники:"
 
-#: ../src/window-commands.c:1183
+#: ../src/window-commands.c:1185
 msgid "Past developers:"
 msgstr "Предыдущие разработчики:"
 
-#: ../src/window-commands.c:1213
+#: ../src/window-commands.c:1215
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -2298,7 +2291,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1242
+#: ../src/window-commands.c:1244
 msgid "translator-credits"
 msgstr ""
 "Valek Filippov <frob@df.ru>, 2000-2002.\n"
@@ -2308,21 +2301,20 @@ msgstr ""
 "Yuri Kozlov <yuray@komyakino.ru>, 2010.\n"
 "Stas Solovey <whats_up@tut.by>, 2011."
 
-#: ../src/window-commands.c:1245
-#, fuzzy
+#: ../src/window-commands.c:1247
 #| msgid "GNOME Web Browser Website"
 msgid "Web Website"
-msgstr "Веб-сайт"
+msgstr "Сайт веб-браузера"
 
-#: ../src/window-commands.c:1387
+#: ../src/window-commands.c:1389
 msgid "Enable caret browsing mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: ../src/window-commands.c:1390
+#: ../src/window-commands.c:1392
 msgid "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, allowing you to move around with your keyboard. Do you want to enable caret browsing on?"
 msgstr "Нажатие клавиши F7 управляет включением клавишной навигации. Эта возможность помещает на страницу курсор, позволяющий перемещаться по странице с помощью клавиатуры. Хотите включить клавишную навигацию?"
 
-#: ../src/window-commands.c:1393
+#: ../src/window-commands.c:1395
 msgid "_Enable"
 msgstr "_Включить"
 
