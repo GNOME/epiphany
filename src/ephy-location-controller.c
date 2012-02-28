@@ -96,51 +96,8 @@ match_func (GtkEntryCompletion *completion,
 	    GtkTreeIter *iter,
 	    gpointer data)
 {
-	char *item = NULL;
-	char *url = NULL;
-	char *keywords = NULL;
-
-	gboolean ret = FALSE;
-	GtkTreeModel *model;
-	GSList *search_terms;
-
-	model = gtk_entry_completion_get_model (completion);
-
-	gtk_tree_model_get (model, iter,
-			    EPHY_COMPLETION_TEXT_COL, &item,
-			    EPHY_COMPLETION_URL_COL, &url,
-			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
-			    -1);
-	
-	if (!key)
-		return FALSE;
-	
-	search_terms = ephy_location_entry_get_search_terms (data);
-
-	if (search_terms)
-	{
-		GSList *iter;
-		GRegex *current = NULL;
-
-		ret = TRUE;
-		for (iter = search_terms; iter != NULL; iter = iter->next)
-		{
-			current = (GRegex*) iter->data;
-			if ((!g_regex_match (current, item, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-			    (!g_regex_match (current, url, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-			    (!g_regex_match (current, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)))
-			{
-				ret = FALSE;
-				break;
-			}
-		}
-	}
-
-	g_free (item);
-	g_free (url);
-	g_free (keywords);
-
-	return ret;
+	/* We want every row in the model to show up. */
+	return TRUE;
 }
 
 static void
@@ -211,6 +168,8 @@ static void
 user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 {
 	const char *address;
+	GtkTreeModel *model;
+	GtkEntryCompletion *completion;
 
 	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (widget));
 
@@ -218,6 +177,12 @@ user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 
 	g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), widget);
 	ephy_location_controller_set_address (controller, address);
+
+	completion = gtk_entry_get_completion (GTK_ENTRY (widget));
+	model = gtk_entry_completion_get_model (completion);
+
+	ephy_completion_model_update_for_string (EPHY_COMPLETION_MODEL (model), address,
+						 NULL, NULL);
 	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), widget);
 }
 
@@ -428,7 +393,7 @@ ephy_location_controller_constructed (GObject *object)
 					    EPHY_COMPLETION_EXTRA_COL,
 					    EPHY_COMPLETION_FAVICON_COL);
 	g_object_unref (model);
-		
+
 	ephy_location_entry_set_match_func (priv->location_entry, 
 					    match_func, 
 					    priv->location_entry,

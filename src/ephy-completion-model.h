@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2003 Marco Pesenti Gritti <marco@gnome.org>
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 #ifndef EPHY_COMPLETION_MODEL_H
 #define EPHY_COMPLETION_MODEL_H
+
+#include "ephy-history-service.h"
 
 #include <gtk/gtk.h>
 
@@ -51,7 +53,7 @@ typedef enum
 
 typedef struct
 {
-	GObject parent;
+	GtkListStore parent;
 
 	/*< private >*/
 	EphyCompletionModelPrivate *priv;
@@ -59,13 +61,17 @@ typedef struct
 
 typedef struct
 {
-	GObjectClass parent;
+	GtkListStoreClass parent;
 } EphyCompletionModelClass;
 
-GType                ephy_completion_model_get_type	(void);
+GType                ephy_completion_model_get_type	     (void);
 
-EphyCompletionModel *ephy_completion_model_new		(void);
+EphyCompletionModel *ephy_completion_model_new		     (void);
 
+void                 ephy_completion_model_update_for_string (EphyCompletionModel *model,
+                                                              const char *string,
+                                                              EphyHistoryJobCallback callback,
+                                                              gpointer data);
 G_END_DECLS
 
 #endif /* EPHY_COMPLETION_MODEL_H */

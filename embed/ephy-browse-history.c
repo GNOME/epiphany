@@ -181,6 +181,7 @@ ephy_browse_history_get_url (EphyBrowseHistory *history,
 void
 ephy_browse_history_find_urls (EphyBrowseHistory *history,
                                gint64 from, gint64 to,
+                               guint limit,
                                GList *substring_list,
                                EphyHistoryJobCallback callback,
                                gpointer user_data)
@@ -193,6 +194,10 @@ ephy_browse_history_find_urls (EphyBrowseHistory *history,
   query->from = from;
   query->to = to;
   query->substring_list = substring_list;
+  query->sort_type = EPHY_HISTORY_SORT_MV;
+
+  if (limit != 0)
+    query->limit = limit;
 
   ephy_history_service_query_urls (history->priv->history_service,
                                    query, callback, user_data);

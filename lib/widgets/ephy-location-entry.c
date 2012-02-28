@@ -51,6 +51,8 @@ struct _EphyLocationEntryPrivate
 {
 	GIcon *lock_gicon;
 	GdkPixbuf *favicon;
+	GtkTreeModel *model;
+	GtkEntryCompletion *completion;
 
 	GSList *search_terms;
 
@@ -112,17 +114,6 @@ static gint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY)
 
-inline static void
-free_search_terms (GSList *search_terms)
-{
-	GSList *iter;
-	
-	for (iter = search_terms; iter != NULL; iter = iter->next)
-		g_regex_unref ((GRegex*)iter->data);
-	
-	g_slist_free (search_terms);
-}
-
 static void
 ephy_location_entry_finalize (GObject *object)
 {
@@ -139,12 +130,6 @@ ephy_location_entry_finalize (GObject *object)
 	if (priv->lock_gicon)
 	{
 		g_object_unref (priv->lock_gicon);
-	}
-
-	if (priv->search_terms)
-	{
-		free_search_terms (priv->search_terms);
-		priv->search_terms = NULL;
 	}
 
 	G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
@@ -278,8 +263,6 @@ editable_changed_cb (GtkEditable *editable,
 		     EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	const char *text;
-	char *pattern;
 
 	update_address_state (entry);
 
@@ -291,104 +274,6 @@ editable_changed_cb (GtkEditable *editable,
 		priv->can_redo = FALSE;
 	}	
 	
-	if (priv->search_terms)
-	{
-		free_search_terms (priv->search_terms);
-		priv->search_terms = NULL;
-	}
-
-	text = gtk_entry_get_text (GTK_ENTRY (editable));
-
-	/*
-	 * user is specifying a regular expression, so we will
-	 * have only one search term
-	 */
-	if (g_str_has_prefix (text, "re:"))
-	{
-		GRegex *regex;
-		pattern = g_strdup (text+3);
-		regex = g_regex_new (pattern,
-				     G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-				     G_REGEX_MATCH_NOTEMPTY, NULL);
-		priv->search_terms = g_slist_append (priv->search_terms, regex);
-		g_free (pattern);
-	}
-	else
-	{
-		const char *current;
-		const char *ptr;
-		char *tmp;
-		char *term;
-		GRegex *term_regex;
-		GRegex *quote_regex;
-		gint count;
-		gboolean inside_quotes = FALSE;
-
-		quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
-					   G_REGEX_MATCH_NOTEMPTY, NULL);
-		
-		/*
-		 * This code loops through the string using pointer arythmetics.
-		 * Although the string we are handling may contain UTF-8 chars
-		 * this works because only ASCII chars affect what is actually
-		 * copied from the string as a search term.
-		 */
-		for (count = 0, current = ptr = text; ptr[0] != '\0'; ptr++, count++)
-		{
-			/*
-			 * If we found a double quote character; we will 
-			 * consume bytes up until the next quote, or
-			 * end of line;
-			 */
-			if (ptr[0] == '"')
-				inside_quotes = !inside_quotes;
-
-			/*
-			 * If we found a space, and we are not looking for a
-			 * closing double quote, or if the next char is the
-			 * end of the string, append what we have already as
-			 * a search term.
-			 */
-			if (((ptr[0] == ' ') && (!inside_quotes)) || ptr[1] == '\0')
-			{
-				/*
-				 * We special-case the end of the line because
-				 * we would otherwise not copy the last character
-				 * of the search string, since the for loop will
-				 * stop before that.
-				 */
-				if (ptr[1] == '\0')
-					count++;
-				
-				/*
-				 * remove quotes, and quote any regex-sensitive
-				 * characters
-				 */
-				tmp = g_regex_escape_string (current, count);
-				term = g_regex_replace (quote_regex, tmp, -1, 0,
-							"", G_REGEX_MATCH_NOTEMPTY, NULL);
-				g_strstrip (term);
-				g_free (tmp);
-
-				/* we don't want empty search terms */
-				if (term[0] != '\0')
-				{
-					term_regex = g_regex_new (term,
-								  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-								  G_REGEX_MATCH_NOTEMPTY, NULL);
-					priv->search_terms = g_slist_append (priv->search_terms, term_regex);
-				}
-				g_free (term);
-
-				 /* count will be incremented by the for loop */
-				count = -1;
-				current = ptr + 1;
-			}
-		}
-
-		g_regex_unref (quote_regex);
-	}
-
 	g_signal_emit (entry, signals[USER_CHANGED], 0);
 }
 
@@ -894,7 +779,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->user_changed = FALSE;
 	p->block_update = FALSE;
 	p->saved_text = NULL;
-	p->search_terms = NULL;
 	p->show_lock = FALSE;
 	p->dns_prefetch_handler = 0;
 
@@ -981,18 +865,15 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 
 static void
 textcell_data_func (GtkCellLayout *cell_layout,
-			GtkCellRenderer *cell,
-			GtkTreeModel *tree_model,
-			GtkTreeIter *iter,
-			gpointer data)
+		    GtkCellRenderer *cell,
+		    GtkTreeModel *tree_model,
+		    GtkTreeIter *iter,
+		    gpointer data)
 {
 	GtkWidget *entry;
 	EphyLocationEntryPrivate *priv;
 	PangoAttrList *list;
 	PangoAttribute *att;
-	GMatchInfo *match;
-
-	int start, end;
 
 	char *ctext;
 	char *title;
@@ -1037,38 +918,6 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	{
 		ctext = title;
 	}
-
-	if (priv->search_terms)
-	{
-		GSList *iter;
-		GRegex *regex;
-
-		for (iter = priv->search_terms; iter != NULL; iter = iter->next)
-		{
-			regex = (GRegex*) iter->data;
-			g_regex_match (regex, ctext, G_REGEX_MATCH_NOTEMPTY, &match);
-
-			while (g_match_info_matches (match))
-			{
-				g_match_info_fetch_pos (match, 0, &start, &end);
-
-				att = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-				att->start_index = start;
-				att->end_index = end;
-
-				pango_attr_list_insert (list, att);
-				g_match_info_next (match, NULL);
-			}
-
-			g_match_info_free (match);
-			match = NULL;
-		}
-
-	}
-
-	g_object_set (cell,
-		      "attributes", list,
-		      NULL);
 
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_take_string (&text, ctext);
@@ -1159,28 +1008,20 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				    guint extra_col,
 				    guint favicon_col)
 {
-	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
 	GtkCellRenderer *cell;
+	EphyLocationEntryPrivate *priv = entry->priv;
 
-	entry->priv->text_col = text_col;
-	entry->priv->action_col = action_col;
-	entry->priv->keywords_col = keywords_col;
-	entry->priv->relevance_col = relevance_col;
-	entry->priv->url_col = url_col;
-	entry->priv->extra_col = extra_col;
-	entry->priv->favicon_col = favicon_col;
-
-	sort_model = gtk_tree_model_sort_new_with_model (model);
-
-	gtk_tree_sortable_set_sort_column_id 
-			(GTK_TREE_SORTABLE (sort_model),
-			 entry->priv->relevance_col,
-			 GTK_SORT_DESCENDING);
+	priv->text_col = text_col;
+	priv->action_col = action_col;
+	priv->keywords_col = keywords_col;
+	priv->relevance_col = relevance_col;
+	priv->url_col = url_col;
+	priv->extra_col = extra_col;
+	priv->favicon_col = favicon_col;
 
 	completion = gtk_entry_completion_new ();
-	gtk_entry_completion_set_model (completion, sort_model);
-	g_object_unref (sort_model);
+	gtk_entry_completion_set_model (completion, model);
 	g_signal_connect (completion, "match-selected",
 			  G_CALLBACK (match_selected_cb), entry);
 	g_signal_connect_after (completion, "action-activated",
@@ -1213,9 +1054,9 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
 
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					cell, textcell_data_func,
-					entry,
-					NULL);
+					    cell, textcell_data_func,
+					    entry,
+					    NULL);
 
 	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
@@ -1230,6 +1071,8 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 			  G_CALLBACK (cursor_on_match_cb), entry);
 
 	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+
+	priv->completion = completion;
 	g_object_unref (completion);
 }
 

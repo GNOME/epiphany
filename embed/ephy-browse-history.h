@@ -93,6 +93,7 @@ void              ephy_browse_history_get_url (EphyBrowseHistory *history,
 
 void             ephy_browse_history_find_urls (EphyBrowseHistory *history,
                                                 gint64 from, gint64 to,
+                                                guint limit,
                                                 GList *substring_list,
                                                 EphyHistoryJobCallback callback,
                                                 gpointer user_data);

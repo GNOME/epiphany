@@ -1,6 +1,6 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* 
- *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,636 +21,484 @@
 #include "config.h"
 #include "ephy-completion-model.h"
 
+#include "ephy-browse-history.h"
+#include "ephy-embed-shell.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
-#include "ephy-node.h"
 #include "ephy-shell.h"
+#include "ephy-tree-model-node.h"
 
 #include <string.h>
 
-static void ephy_completion_model_class_init (EphyCompletionModelClass *klass);
-static void ephy_completion_model_init (EphyCompletionModel *model);
-static void ephy_completion_model_tree_model_init (GtkTreeModelIface *iface);
+G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
 #define EPHY_COMPLETION_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelPrivate))
 
-struct _EphyCompletionModelPrivate
-{
-	EphyHistory *history_service;
-	EphyBookmarks *bookmarks_service;
-	EphyFaviconCache *favicon_cache;
+struct _EphyCompletionModelPrivate {
+  EphyBrowseHistory *browse_history;
+  EphyHistory *legacy_history_service;
+  EphyFaviconCache *favicon_cache;
 
-	EphyNode *history;
-	EphyNode *bookmarks;
-	int stamp;
+  EphyNode *bookmarks;
+  GSList *search_terms;
 };
 
-enum
+static void
+ephy_completion_model_constructed (GObject *object)
 {
-	HISTORY_GROUP,
-	BOOKMARKS_GROUP
-};
+  GType types[N_COL] = { G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                         G_TYPE_INT, G_TYPE_STRING, G_TYPE_BOOLEAN,
+                         GDK_TYPE_PIXBUF };
 
-G_DEFINE_TYPE_WITH_CODE (EphyCompletionModel, ephy_completion_model, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
-						ephy_completion_model_tree_model_init))
+  gtk_list_store_set_column_types (GTK_LIST_STORE (object),
+                                   N_COL,
+                                   types);
+}
+
+static void
+free_search_terms (GSList *search_terms)
+{
+  GSList *iter;
+  
+  for (iter = search_terms; iter != NULL; iter = iter->next)
+    g_regex_unref ((GRegex*)iter->data);
+  
+  g_slist_free (search_terms);
+}
+
+static void
+ephy_completion_model_finalize (GObject *object)
+{
+  EphyCompletionModelPrivate *priv = EPHY_COMPLETION_MODEL (object)->priv;
+
+  if (priv->search_terms) {
+    free_search_terms (priv->search_terms);
+    priv->search_terms = NULL;
+  }
+
+  G_OBJECT_CLASS (ephy_completion_model_parent_class)->finalize (object);
+}
 
 static void
 ephy_completion_model_class_init (EphyCompletionModelClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
-}
+  object_class->constructed = ephy_completion_model_constructed;
+  object_class->finalize = ephy_completion_model_finalize;
 
-static GtkTreePath *
-get_path_real (EphyCompletionModel *model,
-	       EphyNode *root,
-	       EphyNode *child)
-{
-	GtkTreePath *retval;
-	int index;
-
-	retval = gtk_tree_path_new ();
-	index = ephy_node_get_child_index (root, child);
-
-	if (root == model->priv->bookmarks)
-	{
-		index += ephy_node_get_n_children (model->priv->history);
-	}
-
-	gtk_tree_path_append_index (retval, index);
-
-	return retval;
-}
-
-static void
-node_iter_from_node (EphyCompletionModel *model,
-		     EphyNode *root,
-		     EphyNode *child,
-		     GtkTreeIter *iter)
-{
-	iter->stamp = model->priv->stamp;
-	iter->user_data = child;
-	iter->user_data2 = root;
-}
-
-static EphyNode *
-get_index_root (EphyCompletionModel *model, int *index)
-{
-	int children;
-
-	children = ephy_node_get_n_children (model->priv->history);
-
-	if (*index >= children)
-	{
-		*index = *index - children;
-
-		if (*index < ephy_node_get_n_children (model->priv->bookmarks))
-		{
-			return model->priv->bookmarks;
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-	else
-	{
-		return model->priv->history;
-	}
-}
-
-static void
-root_child_removed_cb (EphyNode *node,
-		       EphyNode *child,
-		       guint old_index,
-		       EphyCompletionModel *model)
-{
-	GtkTreePath *path;
-	guint index;
-
-	path = gtk_tree_path_new ();
-
-	index = old_index;
-	if (node == model->priv->bookmarks)
-	{
-		index += ephy_node_get_n_children (model->priv->history);
-	}
-	gtk_tree_path_append_index (path, index);
-
-	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-	gtk_tree_path_free (path);
-}
-
-static void
-root_child_added_cb (EphyNode *node,
-		     EphyNode *child,
-		     EphyCompletionModel *model)
-{
-	GtkTreePath *path;
-	GtkTreeIter iter;
-
-	node_iter_from_node (model, node, child, &iter);
-
-	path = get_path_real (model, node, child);
-	gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-	gtk_tree_path_free (path);
-}
-
-static void
-root_child_changed_cb (EphyNode *node,
-		       EphyNode *child,
-		       guint property_id,
-		       EphyCompletionModel *model)
-{
-	GtkTreePath *path;
-	GtkTreeIter iter;
-
-	node_iter_from_node (model, node, child, &iter);
-
-	path = get_path_real (model, node, child);
-	gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-	gtk_tree_path_free (path);
-}
-
-static void
-connect_signals (EphyCompletionModel *model, EphyNode *root)
-{
-	ephy_node_signal_connect_object (root,
-			                 EPHY_NODE_CHILD_ADDED,
-			                 (EphyNodeCallback)root_child_added_cb,
-			                 G_OBJECT (model));
-	ephy_node_signal_connect_object (root,
-			                 EPHY_NODE_CHILD_REMOVED,
-			                 (EphyNodeCallback)root_child_removed_cb,
-			                 G_OBJECT (model));
-	ephy_node_signal_connect_object (root,
-			                 EPHY_NODE_CHILD_CHANGED,
-			                 (EphyNodeCallback)root_child_changed_cb,
-			                 G_OBJECT (model));
+  g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }
 
 static void
 ephy_completion_model_init (EphyCompletionModel *model)
 {
-	model->priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
-	model->priv->stamp = g_random_int ();
+  EphyCompletionModelPrivate *priv;
+  EphyBookmarks *bookmarks_service;
 
-	model->priv->history_service = EPHY_HISTORY (
-					ephy_embed_shell_get_global_history (
-					embed_shell));
-	model->priv->history = ephy_history_get_pages (
-				model->priv->history_service);
-	connect_signals (model, model->priv->history);
+  model->priv = priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 
-	model->priv->bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
-	model->priv->bookmarks = ephy_bookmarks_get_bookmarks (
-				  model->priv->bookmarks_service);
-	connect_signals (model, model->priv->bookmarks);
+  priv->browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (embed_shell));
+  priv->legacy_history_service = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+  priv->favicon_cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (embed_shell));
 
-	model->priv->favicon_cache = EPHY_FAVICON_CACHE (
-					ephy_embed_shell_get_favicon_cache (
-					EPHY_EMBED_SHELL (ephy_shell)));
-}
-
-EphyCompletionModel *
-ephy_completion_model_new (void)
-{
-	EphyCompletionModel *model;
-
-	model = EPHY_COMPLETION_MODEL (g_object_new (EPHY_TYPE_COMPLETION_MODEL,
-						    NULL));
-
-	g_return_val_if_fail (model->priv != NULL, NULL);
-
-	return model;
-}
-
-static int
-ephy_completion_model_get_n_columns (GtkTreeModel *tree_model)
-{
-	return N_COL;
-}
-
-static GType
-ephy_completion_model_get_column_type (GtkTreeModel *tree_model,
-			               int index)
-{
-	GType type = 0;
-
-	switch (index)
-	{
-		case EPHY_COMPLETION_TEXT_COL:
-		case EPHY_COMPLETION_ACTION_COL:
-		case EPHY_COMPLETION_KEYWORDS_COL:
-			type =  G_TYPE_STRING;
-			break;
-		case EPHY_COMPLETION_EXTRA_COL:
-			type = G_TYPE_BOOLEAN;
-			break;
-		case EPHY_COMPLETION_FAVICON_COL:
-			type = GDK_TYPE_PIXBUF;
-			break;
-		case EPHY_COMPLETION_RELEVANCE_COL:
-			type = G_TYPE_INT;
-			break;
-	}
-
-	return type;
-}
-
-static void
-init_text_col (GValue *value, EphyNode *node, int group)
-{
-	const char *text;
-
-	switch (group)
-	{
-		case BOOKMARKS_GROUP:
-		case HISTORY_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_TITLE);
-			break;
-
-		default:
-			text = "";
-	}
-	
-	g_value_set_string (value, text);
-}
-
-static void
-init_action_col (GValue *value, EphyNode *node)
-{
-	const char *text;
-
-	text = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_LOCATION);
-	
-	g_value_set_string (value, text);
-}
-
-static void
-init_keywords_col (GValue *value, EphyNode *node, int group)
-{
-	const char *text = NULL;
-
-	switch (group)
-	{
-		case BOOKMARKS_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_KEYWORDS);
-			break;
-	}
-
-	if (text == NULL)
-	{
-		text = "";
-	}
-	
-	g_value_set_string (value, text);
-}
-static void
-init_favicon_col (EphyCompletionModel *model, GValue *value, 
-		  EphyNode *node, int group)
-{
-	const char *icon_location;
-	GdkPixbuf *pixbuf = NULL;
-	const char *url;
-
-	switch (group)
-	{
-		case BOOKMARKS_GROUP:
-			icon_location = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_ICON);
-			break;
-		case HISTORY_GROUP:
-			url = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_LOCATION);
-			icon_location = ephy_history_get_icon (
-					model->priv->history_service, url);
-			break;
-		default:
-			icon_location = NULL;
-	}
-	
-	if (icon_location)
-	{
-		pixbuf = ephy_favicon_cache_get (
-				model->priv->favicon_cache, icon_location);
-	}
-
-	g_value_take_object (value, pixbuf);
+  bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
+  priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks_service);
 }
 
 static gboolean
 is_base_address (const char *address)
 {
-        if (address == NULL)
-                return FALSE;
+  if (address == NULL)
+    return FALSE;
 
-        /* a base address is <scheme>://<host>/
-         * Neither scheme nor host contain a slash, so we can use slashes
-         * figure out if it's a base address.
-         *
-         * Note: previous code was using a GRegExp to do the same thing. 
-         * While regexps are much nicer to read, they're also a lot
-         * slower.
-         */
-        address = strchr (address, '/');
-        if (address == NULL ||
-            address[1] != '/')
-                return FALSE;
+  /* A base address is <scheme>://<host>/
+   * Neither scheme nor host contain a slash, so we can use slashes
+   * figure out if it's a base address.
+   *
+   * Note: previous code was using a GRegExp to do the same thing. 
+   * While regexps are much nicer to read, they're also a lot
+   * slower.
+   */
+  address = strchr (address, '/');
+  if (address == NULL ||
+      address[1] != '/')
+    return FALSE;
 
-        address += 2;
-        address = strchr (address, '/');
-        if (address == NULL ||
-            address[1] != 0)
-                return FALSE;
+  address += 2;
+  address = strchr (address, '/');
+  if (address == NULL ||
+      address[1] != 0)
+    return FALSE;
 
-        return TRUE;
-}
-
-static void
-init_relevance_col (GValue *value, EphyNode *node, int group)
-{
-	int relevance = 0;
-
-	/* We have three ordered groups: history's base
-	   addresses, bookmarks, deep history addresses */
-
-	if (group == BOOKMARKS_GROUP)
-	{
-		relevance = 1 << 5;
-	}
-	else if (group == HISTORY_GROUP)
-	{
-		const char *address;
-		int visits;
-	
-		visits = ephy_node_get_property_int
-			(node, EPHY_NODE_PAGE_PROP_VISITS);
-		address = ephy_node_get_property_string
-			(node, EPHY_NODE_PAGE_PROP_LOCATION);
-
-		visits = MIN (visits, (1 << 5) - 1);
-
-		if (is_base_address (address))
-		{
-			relevance = visits << 10;
-		}
-		else
-		{
-			relevance = visits;
-		}
-	}
-	
-	g_value_set_int (value, relevance);
-}
-
-static void
-init_url_col (GValue *value, EphyNode *node)
-{
-        const char *url = NULL;
-
-	url = ephy_node_get_property_string
-	  (node, EPHY_NODE_PAGE_PROP_LOCATION);
-	
-	g_value_set_string (value, url);
-}
-
-static void
-ephy_completion_model_get_value (GtkTreeModel *tree_model,
-			         GtkTreeIter *iter,
-			         int column,
-			         GValue *value)
-{
-	int group;
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *node;
-
-	g_return_if_fail (EPHY_IS_COMPLETION_MODEL (tree_model));
-	g_return_if_fail (iter != NULL);
-	g_return_if_fail (iter->stamp == model->priv->stamp);
-
-	node = iter->user_data;
-	group = (iter->user_data2 == model->priv->history) ?
-		HISTORY_GROUP : BOOKMARKS_GROUP;
-
-	switch (column)
-	{
-		case EPHY_COMPLETION_EXTRA_COL:
-			g_value_init (value, G_TYPE_BOOLEAN);
-			g_value_set_boolean (value, (group == BOOKMARKS_GROUP));
-			break;
-		case EPHY_COMPLETION_TEXT_COL:
-			g_value_init (value, G_TYPE_STRING);
-			init_text_col (value, node, group);
-			break;
-		case EPHY_COMPLETION_FAVICON_COL:
-			g_value_init (value, GDK_TYPE_PIXBUF);
-			init_favicon_col (model, value, node, group);
- 			break;
-		case EPHY_COMPLETION_ACTION_COL:
-			g_value_init (value, G_TYPE_STRING);
-			init_action_col (value, node);
-			break;
-		case EPHY_COMPLETION_KEYWORDS_COL:
-			g_value_init (value, G_TYPE_STRING);
-			init_keywords_col (value, node, group);
-			break;
-		case EPHY_COMPLETION_RELEVANCE_COL:
-			g_value_init (value, G_TYPE_INT);
-			init_relevance_col (value, node, group);
-			break;
-                case EPHY_COMPLETION_URL_COL:
-                        g_value_init (value, G_TYPE_STRING);
-                        init_url_col (value, node);
-                        break;
-	}
-}
-
-static GtkTreeModelFlags
-ephy_completion_model_get_flags (GtkTreeModel *tree_model)
-{
-	return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
-}
-
-static gboolean
-ephy_completion_model_get_iter (GtkTreeModel *tree_model,
-			        GtkTreeIter *iter,
-			        GtkTreePath *path)
-{
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *root, *child;
-	int i;
-
-	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (model), FALSE);
-	g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
-
-	i = gtk_tree_path_get_indices (path)[0];
-
-	root = get_index_root (model, &i);
-	if (root == NULL) return FALSE;
-
-	child = ephy_node_get_nth_child (root, i);
-	g_return_val_if_fail (child != NULL, FALSE);
-
-	node_iter_from_node (model, root, child, iter);
-
-	return TRUE;
-}
-
-static GtkTreePath *
-ephy_completion_model_get_path (GtkTreeModel *tree_model,
-			        GtkTreeIter *iter)
-{
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-
-	g_return_val_if_fail (iter != NULL, NULL);
-	g_return_val_if_fail (iter->user_data != NULL, NULL);
-	g_return_val_if_fail (iter->user_data2 != NULL, NULL);
-	g_return_val_if_fail (iter->stamp == model->priv->stamp, NULL);
-
-	return get_path_real (model, iter->user_data2, iter->user_data);
-}
-
-static gboolean
-ephy_completion_model_iter_next (GtkTreeModel *tree_model,
-			         GtkTreeIter *iter)
-{
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *node, *next, *root;
-
-	g_return_val_if_fail (iter != NULL, FALSE);
-	g_return_val_if_fail (iter->user_data != NULL, FALSE);
-	g_return_val_if_fail (iter->user_data2 != NULL, FALSE);
-	g_return_val_if_fail (iter->stamp == model->priv->stamp, FALSE);
-
-	node = iter->user_data;
-	root = iter->user_data2;
-
-	next = ephy_node_get_next_child (root, node);
-
-	if (next == NULL && root == model->priv->history)
-	{
-		root = model->priv->bookmarks;
-		next = ephy_node_get_nth_child (model->priv->bookmarks, 0);
-	}
-
-	if (next == NULL) return FALSE;
-
-	node_iter_from_node (model, root, next, iter);
-	
-	return TRUE;
-}
-
-static gboolean
-ephy_completion_model_iter_children (GtkTreeModel *tree_model,
-			             GtkTreeIter *iter,
-			             GtkTreeIter *parent)
-{
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *root, *first_node;
-
-	if (parent != NULL)
-	{
-		return FALSE;
-	}
-
-	root = model->priv->history;
-	first_node = ephy_node_get_nth_child (root, 0);
-
-	if (first_node == NULL)
-	{
-		root = model->priv->bookmarks;
-		first_node = ephy_node_get_nth_child (root, 0);
-	}
-
-	if (first_node == NULL)
-	{
-		return FALSE;
-	}
-
-	node_iter_from_node (model, root, first_node, iter);
-
-	return TRUE;
-}
-
-static gboolean
-ephy_completion_model_iter_has_child (GtkTreeModel *tree_model,
-			             GtkTreeIter *iter)
-{
-	return FALSE;
+  return TRUE;
 }
 
 static int
-ephy_completion_model_iter_n_children (GtkTreeModel *tree_model,
-			               GtkTreeIter *iter)
+get_relevance (const char *location,
+               int visit_count,
+               gboolean is_bookmark)
 {
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
+  /* FIXME: use frecency. */
+  int relevance = 0;
 
-	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (tree_model), -1);
+  /* We have three ordered groups: history's base addresses,
+     bookmarks, deep history addresses. */
+  if (is_bookmark)
+    relevance = 1 << 5;
+  else {
+    visit_count = MIN (visit_count, (1 << 5) - 1);
 
-	if (iter == NULL)
-	{
-		return ephy_node_get_n_children (model->priv->history) +
-		       ephy_node_get_n_children (model->priv->bookmarks);
-	}
-
-	g_return_val_if_fail (model->priv->stamp == iter->stamp, -1);
-
-	return 0;
+    if (is_base_address (location))
+      relevance = visit_count << 10;
+    else
+      relevance = visit_count;
+  }
+  
+  return relevance;
 }
 
-static gboolean
-ephy_completion_model_iter_nth_child (GtkTreeModel *tree_model,
-			              GtkTreeIter *iter,
-			              GtkTreeIter *parent,
-			              int n)
+typedef struct {
+  char *title;
+  char *location;
+  char *keywords;
+  int relevance;
+  gboolean is_bookmark;
+} PotentialRow;
+
+static void
+set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
 {
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *node, *root;
+  const char *favicon_location = ephy_history_get_icon (model->priv->legacy_history_service,
+                                                        row->location);
 
-	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (tree_model), FALSE);
-
-	if (parent != NULL)
-	{
-		return FALSE;
-	}
-
-	root = get_index_root (model, &n);
-	node = ephy_node_get_nth_child (root, n);
-
-	if (node == NULL) return FALSE;
-
-	node_iter_from_node (model, root, node, iter);
-
-	return TRUE;
-}
-
-static gboolean
-ephy_completion_model_iter_parent (GtkTreeModel *tree_model,
-			           GtkTreeIter *iter,
-			           GtkTreeIter *child)
-{
-	return FALSE;
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (model), NULL, position,
+                                     EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
+                                     EPHY_COMPLETION_URL_COL, row->location,
+                                     EPHY_COMPLETION_ACTION_COL, row->location,
+                                     EPHY_COMPLETION_KEYWORDS_COL, row->keywords ? row->keywords : "",
+                                     EPHY_COMPLETION_EXTRA_COL, row->is_bookmark,
+                                     EPHY_COMPLETION_FAVICON_COL, ephy_favicon_cache_get (model->priv->favicon_cache,
+                                                                                          favicon_location),
+                                     EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
+                                     -1);
 }
 
 static void
-ephy_completion_model_tree_model_init (GtkTreeModelIface *iface)
+replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
 {
-	iface->get_flags       = ephy_completion_model_get_flags;
-	iface->get_iter        = ephy_completion_model_get_iter;
-	iface->get_path        = ephy_completion_model_get_path;
-	iface->iter_next       = ephy_completion_model_iter_next;
-	iface->iter_children   = ephy_completion_model_iter_children;
-	iface->iter_has_child  = ephy_completion_model_iter_has_child;
-	iface->iter_n_children = ephy_completion_model_iter_n_children;
-	iface->iter_nth_child  = ephy_completion_model_iter_nth_child;
-	iface->iter_parent     = ephy_completion_model_iter_parent;
-	iface->get_n_columns   = ephy_completion_model_get_n_columns;
-	iface->get_column_type = ephy_completion_model_get_column_type;
-	iface->get_value       = ephy_completion_model_get_value;
+  /* This is by far the simplest way of doing, and yet it gives
+   * basically the same result than the other methods... */
+  int i;
+
+  gtk_list_store_clear (GTK_LIST_STORE (model));
+
+  for (i = 0; new_rows != NULL; i++) {
+    PotentialRow *row = (PotentialRow*)new_rows->data;
+    
+    set_row_in_model (model, i, row);
+    new_rows = new_rows->next;
+  }
+}
+
+static gboolean
+should_add_bookmark_to_model (EphyCompletionModel *model,
+                              const char *search_string,
+                              const char *title,
+                              const char *location,
+                              const char *keywords)
+{
+  gboolean ret = TRUE;
+  EphyCompletionModelPrivate *priv = model->priv;
+
+  if (priv->search_terms) {
+    GSList *iter;
+    GRegex *current = NULL;
+
+    for (iter = priv->search_terms; iter != NULL; iter = iter->next) {
+      current = (GRegex*) iter->data;
+      if ((!g_regex_match (current, title, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
+          (!g_regex_match (current, location, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
+          (!g_regex_match (current, keywords, G_REGEX_MATCH_NOTEMPTY, NULL))) {
+        ret = FALSE;
+        break;
+      }
+    }
+  }
+
+  return ret;
+}
+
+typedef struct {
+  EphyCompletionModel *model;
+  char *search_string;
+  EphyHistoryJobCallback callback;
+  gpointer user_data;
+} FindURLsData;
+
+static int
+find_url (gconstpointer a,
+          gconstpointer b)
+{
+  return g_strcmp0 (((PotentialRow*)a)->location,
+                    ((char *)b));
+}
+
+static PotentialRow *
+potential_row_new (const char *title, const char *location,
+                   const char *keywords, int visit_count,
+                   gboolean is_bookmark)
+{
+  PotentialRow *row = g_slice_new0 (PotentialRow);
+
+  row->title = g_strdup (title);
+  row->location = g_strdup (location);
+  row->keywords = g_strdup (keywords);
+  row->relevance = get_relevance (location, visit_count, is_bookmark);
+  row->is_bookmark = is_bookmark;
+
+  return row;
+}
+
+static void
+free_potential_row (PotentialRow *row)
+{
+  g_free (row->title);
+  g_free (row->location);
+  g_free (row->keywords);
+  
+  g_slice_free (PotentialRow, row);
+}
+
+static GSList *
+add_to_potential_rows (GSList *rows,
+                       const char *title,
+                       const char *location,
+                       const char *keywords,
+                       int visit_count,
+                       gboolean is_bookmark,
+                       gboolean search_for_duplicates)
+{
+  gboolean found = FALSE;
+  PotentialRow *row = potential_row_new (title, location, keywords, visit_count, is_bookmark);
+
+  if (search_for_duplicates) {
+    GSList *p;
+
+    p = g_slist_find_custom (rows, location, find_url);
+    if (p) {
+      PotentialRow *match = (PotentialRow*)p->data;
+      if (row->relevance > match->relevance)
+        match->relevance = row->relevance;
+      
+      found = TRUE;
+      free_potential_row (row);
+    }
+  }
+
+  if (!found)
+    rows = g_slist_prepend (rows, row);
+
+  return rows;
+}
+
+static int
+sort_by_relevance (gconstpointer a, gconstpointer b)
+{
+  PotentialRow *r1 = (PotentialRow*)a;
+  PotentialRow *r2 = (PotentialRow*)b;
+
+  if (r1->relevance < r2->relevance)
+    return 1;
+  else if (r1->relevance > r2->relevance)
+    return -1;
+  else
+    return 0;
+}
+
+static void
+query_completed_cb (EphyHistoryService *service,
+                    gboolean success,
+                    gpointer result_data,
+                    FindURLsData *user_data)
+{
+  EphyCompletionModel *model = user_data->model;
+  EphyCompletionModelPrivate *priv = model->priv;
+  GList *p, *urls;
+  GPtrArray *children;
+  GSList *list = NULL;
+  int i;
+
+  /* Bookmarks */
+  children = ephy_node_get_children (priv->bookmarks);
+
+  /* FIXME: perhaps this could be done in a service thread? There
+   * should never be a ton of bookmarks, but seems a bit cleaner and
+   * consistent with what we do for the history. */
+  for (i = 0; i < children->len; i++) {
+    EphyNode *kid;
+    const char *keywords, *location, *title;
+
+    kid = g_ptr_array_index (children, i);
+    location = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_LOCATION);
+    title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
+    keywords = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_KEYWORDS);
+
+    if (should_add_bookmark_to_model (model, user_data->search_string,
+                                      title, location, keywords))
+      list = add_to_potential_rows (list, title, location, keywords, 0, TRUE, FALSE);
+  }
+
+  /* History */
+  urls = (GList*)result_data;
+
+  for (p = urls; p != NULL; p = p->next) {
+    EphyHistoryURL *url = (EphyHistoryURL*)p->data;
+
+    list = add_to_potential_rows (list, url->title, url->url, NULL, url->visit_count, FALSE, TRUE);
+  }
+
+  /* Sort the rows by relevance. */
+  list = g_slist_sort (list, sort_by_relevance);
+
+  /* Now that we have all the rows we want to insert, replace the rows
+   * in the current model one by one, sorted by relevance. */
+  replace_rows_in_model (model, list);
+
+  /* Notify */
+  if (user_data->callback)
+    user_data->callback (service, success, result_data, user_data->user_data);
+
+  g_free (user_data->search_string);
+  g_slice_free (FindURLsData, user_data);
+
+  g_slist_free_full (list, (GDestroyNotify)free_potential_row);
+}
+
+static void
+update_search_terms (EphyCompletionModel *model,
+                     const char *text)
+{
+  const char *current;
+  const char *ptr;
+  char *tmp;
+  char *term;
+  GRegex *term_regex;
+  GRegex *quote_regex;
+  gint count;
+  gboolean inside_quotes = FALSE;
+  EphyCompletionModelPrivate *priv = model->priv;
+
+  if (priv->search_terms) {
+    free_search_terms (priv->search_terms);
+    priv->search_terms = NULL;
+  }
+
+  quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
+                             G_REGEX_MATCH_NOTEMPTY, NULL);
+    
+  /*
+   * This code loops through the string using pointer arythmetics.
+   * Although the string we are handling may contain UTF-8 chars
+   * this works because only ASCII chars affect what is actually
+   * copied from the string as a search term.
+   */
+  for (count = 0, current = ptr = text; ptr[0] != '\0'; ptr++, count++) {
+    /*
+     * If we found a double quote character; we will 
+     * consume bytes up until the next quote, or
+     * end of line;
+     */
+    if (ptr[0] == '"')
+      inside_quotes = !inside_quotes;
+
+    /*
+     * If we found a space, and we are not looking for a
+     * closing double quote, or if the next char is the
+     * end of the string, append what we have already as
+     * a search term.
+     */
+    if (((ptr[0] == ' ') && (!inside_quotes)) || ptr[1] == '\0') {
+      /*
+       * We special-case the end of the line because
+       * we would otherwise not copy the last character
+       * of the search string, since the for loop will
+       * stop before that.
+       */
+      if (ptr[1] == '\0')
+        count++;
+        
+      /*
+       * remove quotes, and quote any regex-sensitive
+       * characters
+       */
+      tmp = g_regex_escape_string (current, count);
+      term = g_regex_replace (quote_regex, tmp, -1, 0,
+                              "", G_REGEX_MATCH_NOTEMPTY, NULL);
+      g_strstrip (term);
+      g_free (tmp);
+
+      /* we don't want empty search terms */
+      if (term[0] != '\0') {
+        term_regex = g_regex_new (term,
+                                  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                  G_REGEX_MATCH_NOTEMPTY, NULL);
+        priv->search_terms = g_slist_append (priv->search_terms, term_regex);
+      }
+      g_free (term);
+
+      /* count will be incremented by the for loop */
+      count = -1;
+      current = ptr + 1;
+    }
+  }
+
+  g_regex_unref (quote_regex);
+}
+
+#define MAX_COMPLETION_HISTORY_URLS 8
+
+void
+ephy_completion_model_update_for_string (EphyCompletionModel *model,
+                                         const char *search_string,
+                                         EphyHistoryJobCallback callback,
+                                         gpointer data)
+{
+  EphyCompletionModelPrivate *priv;
+  char **strings;
+  int i;
+  GList *query = NULL;
+  FindURLsData *user_data;
+
+  g_return_if_fail (EPHY_IS_COMPLETION_MODEL (model));
+  g_return_if_fail (search_string != NULL);
+
+  priv = model->priv;
+
+  /* Split the search string. */
+  strings = g_strsplit (search_string, " ", -1);
+  for (i = 0; strings[i]; i++)
+    query = g_list_append (query, g_strdup (strings[i]));
+  g_strfreev (strings);
+
+  update_search_terms (model, search_string);
+
+  user_data = g_slice_new (FindURLsData);
+  user_data->model = model;
+  user_data->search_string = g_strdup (search_string);
+  user_data->callback = callback;
+  user_data->user_data = data;
+
+  ephy_browse_history_find_urls (priv->browse_history,
+                                 0, 0,
+                                 MAX_COMPLETION_HISTORY_URLS,
+                                 query,
+                                 (EphyHistoryJobCallback)query_completed_cb,
+                                 user_data);
+}
+
+EphyCompletionModel *
+ephy_completion_model_new (void)
+{
+  return g_object_new (EPHY_TYPE_COMPLETION_MODEL, NULL);
 }
