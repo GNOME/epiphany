@@ -97,6 +97,7 @@ static void search_entry_search_cb 	  (GtkWidget *entry,
 struct _EphyHistoryWindowPrivate
 {
 	EphyHistory *history;
+	EphyHistoryService *history_service;
 	GtkWidget *sites_view;
 	GtkWidget *pages_view;
 	EphyNodeFilter *pages_filter;
@@ -117,7 +118,8 @@ struct _EphyHistoryWindowPrivate
 enum
 {
 	PROP_0,
-	PROP_HISTORY
+	PROP_HISTORY,
+	PROP_HISTORY_SERVICE,
 };
 
 static const GtkActionEntry ephy_history_ui_entries [] = {
@@ -502,6 +504,13 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 							      "Global history",
 							      "Global History",
 							      EPHY_TYPE_HISTORY,
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_HISTORY_SERVICE,
+					 g_param_spec_object ("history-service",
+							      "History service",
+							      "History Service",
+							      EPHY_TYPE_HISTORY_SERVICE,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyHistoryWindowPrivate));
@@ -1361,6 +1370,9 @@ ephy_history_window_set_property (GObject *object,
 	case PROP_HISTORY:
 		editor->priv->history = g_value_get_object (value);
 		break;
+        case PROP_HISTORY_SERVICE:
+          editor->priv->history_service = g_value_get_object (value);
+          break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1379,6 +1391,9 @@ ephy_history_window_get_property (GObject *object,
 	{
 	case PROP_HISTORY:
 		g_value_set_object (value, editor->priv->history);
+		break;
+        case PROP_HISTORY_SERVICE:
+		g_value_set_object (value, editor->priv->history_service);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
