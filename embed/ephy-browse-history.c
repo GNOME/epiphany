@@ -142,12 +142,10 @@ ephy_browse_history_set_page_title (EphyBrowseHistory *history,
   g_return_if_fail (EPHY_IS_BROWSE_HISTORY (history));
   g_return_if_fail (url != NULL);
 
-  ephy_history_service_set_url_property (history->priv->history_service,
-                                         url,
-                                         EPHY_HISTORY_URL_TITLE,
-                                         g_variant_new_maybe (G_VARIANT_TYPE_STRING,
-                                                              title ? g_variant_new_string (title) : NULL),
-                                         NULL, NULL);
+  ephy_history_service_set_url_title (history->priv->history_service,
+                                      url,
+                                      title,
+                                      NULL, NULL);
 }
 
 void

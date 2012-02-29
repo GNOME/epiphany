@@ -29,7 +29,6 @@ typedef enum {
   /* WRITE */
   SET_URL_TITLE,
   SET_URL_ZOOM_LEVEL,
-  SET_URL_PROPERTY, /* We only need this SET_ ? */
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
@@ -636,69 +635,6 @@ ephy_history_service_get_host_for_url (EphyHistoryService *self,
 }
 
 static gboolean
-ephy_history_service_execute_set_url_property (EphyHistoryService *self,
-                                               GVariant *variant,
-                                               gpointer *result)
-{
-  GVariant *value, *mvalue;
-  gchar *url_string;
-  EphyHistoryURL *url;
-  EphyHistoryURLProperty property;
-
-  g_variant_get (variant, "(s(iv))", &url_string, &property, &value);
-
-  url = ephy_history_url_new (url_string, NULL, 0, 0, 0);
-  g_free (url_string);
-
-  if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
-    g_variant_unref (value);
-    ephy_history_url_free (url);
-
-    return FALSE;
-  }
-
-  switch (property) {
-  case EPHY_HISTORY_URL_TITLE:
-    if (url->title)
-      g_free (url->title);
-    mvalue = g_variant_get_maybe (value);
-    if (mvalue) {
-      url->title = g_variant_dup_string (mvalue, NULL);
-      g_variant_unref (mvalue);
-    } else {
-      url->title = NULL;
-    }
-    break;
-  default:
-    g_assert_not_reached();
-  }
-  g_variant_unref (value);
-
-  ephy_history_service_update_url_row (self, url);
-  ephy_history_service_schedule_commit (self);
-
-  return TRUE;
-}
-
-void
-ephy_history_service_set_url_property (EphyHistoryService *self,
-                                       const char *url,
-                                       EphyHistoryURLProperty property,
-                                       GVariant *value,
-                                       EphyHistoryJobCallback callback,
-                                       gpointer user_data)
-{
-  GVariant *variant = g_variant_new ("(s(iv))", url, property, value);
-
-  EphyHistoryServiceMessage *message =
-    ephy_history_service_message_new (self, SET_URL_PROPERTY,
-                                      variant, (GDestroyNotify)g_variant_unref,
-                                      callback, user_data);
-
-  ephy_history_service_send_message (self, message);
-}
-
-static gboolean
 ephy_history_service_execute_delete_urls (EphyHistoryService *self,
                                           GList *urls,
                                           gpointer *result)
@@ -744,7 +680,6 @@ ephy_history_service_quit (EphyHistoryService *self,
 static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_title,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_zoom_level,
-  (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_property,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,
