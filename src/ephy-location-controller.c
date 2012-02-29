@@ -165,6 +165,18 @@ entry_activate_cb (GtkEntry *entry,
 }
 
 static void
+update_done_cb (EphyHistoryService *service,
+		gboolean success,
+		gpointer result_data,
+		gpointer user_data)
+{
+	/* FIXME: this hack is needed for the completion entry popup
+	 * to resize smoothly. See:
+	 * https://bugzilla.gnome.org/show_bug.cgi?id=671074 */
+	gtk_entry_completion_complete (GTK_ENTRY_COMPLETION (user_data));
+}
+
+static void
 user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 {
 	const char *address;
@@ -182,7 +194,7 @@ user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 	model = gtk_entry_completion_get_model (completion);
 
 	ephy_completion_model_update_for_string (EPHY_COMPLETION_MODEL (model), address,
-						 NULL, NULL);
+						 update_done_cb, completion);
 	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), widget);
 }
 
