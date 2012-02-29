@@ -40,7 +40,6 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
     "url LONGVARCAR,"
     "title LONGVARCAR,"
     "visit_count INTEGER DEFAULT 0 NOT NULL,"
-    "favicon_id INTEGER DEFAULT 0 NOT NULL,"
     "zoom_level REAL DEFAULT 1.0)", &error);
 
   if (error) {
