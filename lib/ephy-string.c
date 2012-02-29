@@ -533,6 +533,7 @@ ephy_string_commandline_args_to_uris (char **arguments, GError **error)
 				return NULL;
 			}
 		}
+		g_object_unref (file);
 	}
 
 	return args;
