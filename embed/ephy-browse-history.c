@@ -1,8 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
- *  Copyright © 2002, 2003 Marco Pesenti Gritti
- *  Copyright © 2011 Igalia S.L.
+ *  Copyright © 2011, 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,66 +20,27 @@
  */
 
 #include "config.h"
-
-#include "ephy-history-service.h"
-#include "ephy-history-types.h"
-#include "ephy-request-about.h"
-#include "ephy-file-helpers.h"
 #include "ephy-browse-history.h"
+
+#include "ephy-file-helpers.h"
+#include "ephy-request-about.h"
 
 G_DEFINE_TYPE (EphyBrowseHistory, ephy_browse_history, G_TYPE_OBJECT)
 
-#define EPHY_BROWSE_HISTORY_PRIVATE(o) \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_BROWSE_HISTORY, EphyBrowseHistoryPrivate))
+#define EPHY_BROWSE_HISTORY_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_BROWSE_HISTORY, EphyBrowseHistoryPrivate))
 
-struct _EphyBrowseHistoryPrivate
-{
+struct _EphyBrowseHistoryPrivate {
   EphyHistoryService *history_service;
 };
-
-
-static void
-ephy_browse_history_get_property (GObject    *object,
-                                  guint       property_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
-{
-  switch (property_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
-}
-
-static void
-ephy_browse_history_set_property (GObject      *object,
-                                  guint         property_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
-{
-  switch (property_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
-}
 
 static void
 ephy_browse_history_dispose (GObject *object)
 {
-  G_OBJECT_CLASS (ephy_browse_history_parent_class)->dispose (object);
-}
-
-static void
-ephy_browse_history_finalize (GObject *object)
-{
   EphyBrowseHistory *history = EPHY_BROWSE_HISTORY (object);
 
-  if (history->priv->history_service) {
-    g_object_unref (history->priv->history_service);
-  }
+  g_clear_object (&history->priv->history_service);
 
-  G_OBJECT_CLASS (ephy_browse_history_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_browse_history_parent_class)->dispose (object);
 }
 
 static void
@@ -90,10 +50,7 @@ ephy_browse_history_class_init (EphyBrowseHistoryClass *klass)
 
   g_type_class_add_private (klass, sizeof (EphyBrowseHistoryPrivate));
 
-  object_class->get_property = ephy_browse_history_get_property;
-  object_class->set_property = ephy_browse_history_set_property;
   object_class->dispose = ephy_browse_history_dispose;
-  object_class->finalize = ephy_browse_history_finalize;
 }
 
 static void
