@@ -39,7 +39,6 @@ typedef enum {
 
 typedef enum {
   EPHY_HISTORY_URL_TITLE,
-  EPHY_HISTORY_URL_ZOOM_LEVEL
 } EphyHistoryURLProperty;
 
 typedef enum {
@@ -56,6 +55,7 @@ typedef struct
   char* url;
   char* title;
   int visit_count;
+  double zoom_level;
 } EphyHistoryHost;
 
 typedef struct _EphyHistoryURL
@@ -66,7 +66,6 @@ typedef struct _EphyHistoryURL
   int visit_count;
   int typed_count;
   int last_visit_time;
-  double zoom_level;
   EphyHistoryHost *host;
 } EphyHistoryURL;
 
@@ -95,11 +94,11 @@ void                            ephy_history_page_visit_free (EphyHistoryPageVis
 GList *                         ephy_history_page_visit_list_copy (GList* original);
 void                            ephy_history_page_visit_list_free (GList* list);
 
-EphyHistoryHost *               ephy_history_host_new (const char *url, const char *title, int visit_count);
+EphyHistoryHost *               ephy_history_host_new (const char *url, const char *title, int visit_count, double zoom_level);
 EphyHistoryHost *               ephy_history_host_copy (EphyHistoryHost *original);
 void                            ephy_history_host_free (EphyHistoryHost *host);
 
-EphyHistoryURL *                ephy_history_url_new (const char *url, const char* title, int visit_count, int typed_count, int last_visit_time, double zoom_level);
+EphyHistoryURL *                ephy_history_url_new (const char *url, const char* title, int visit_count, int typed_count, int last_visit_time);
 EphyHistoryURL *                ephy_history_url_copy (EphyHistoryURL *url);
 void                            ephy_history_url_free (EphyHistoryURL *url);
 

@@ -467,21 +467,22 @@ history_parse_text (GMarkupParseContext *context,
   } else if (g_str_equal (parse_data->current, "4")) {
     /* Visit count */
     GString *data = g_string_new_len (text, text_len);
-    sscanf(data->str, "%lld", &parse_data->visit_count);
+    sscanf (data->str, "%lld", &parse_data->visit_count);
     g_string_free (data, TRUE);
   } else if (g_str_equal (parse_data->current, "5")) {
     /* Last visit */
     GString *data = g_string_new_len (text, text_len);
-    sscanf(data->str, "%lld", &parse_data->last_visit);
+    sscanf (data->str, "%lld", &parse_data->last_visit);
     g_string_free (data, TRUE);
   } else if (g_str_equal (parse_data->current, "6")) {
     /* First visit */
     GString *data = g_string_new_len (text, text_len);
-    sscanf(data->str, "%lld", &parse_data->first_visit);
+    sscanf (data->str, "%lld", &parse_data->first_visit);
     g_string_free (data, TRUE);
   } else if (g_str_equal (parse_data->current, "10")) {
+    /* Zoom level. */
     GString *data = g_string_new_len (text, text_len);
-    sscanf(data->str, "%lf", &parse_data->zoom_level);
+    sscanf (data->str, "%lf", &parse_data->zoom_level);
     g_string_free (data, TRUE);
   }
 
@@ -505,10 +506,21 @@ history_parse_end_element (GMarkupParseContext *context,
 
   if (g_str_equal (element_name, "node") && parse_data) {
     /* Add one item to History */
-    EphyHistoryPageVisit *visit = ephy_history_page_visit_new (parse_data->location ? parse_data->location : "", parse_data->last_visit, EPHY_PAGE_VISIT_TYPED);
+    EphyHistoryPageVisit *visit = ephy_history_page_visit_new (parse_data->location ? parse_data->location : "",
+                                                               parse_data->last_visit, EPHY_PAGE_VISIT_TYPED);
     g_free (visit->url->title);
     visit->url->title = g_strdup (parse_data->title);
-    visit->url->zoom_level = parse_data->zoom_level;
+
+    if (parse_data->zoom_level) {
+      /* Zoom levels are only stored per host in the old history, so
+       * creating a new host here is OK. */
+      if (!visit->url->host)
+        visit->url->host = ephy_history_host_new (parse_data->location, parse_data->title,
+                                                  parse_data->visit_count, parse_data->zoom_level);
+      else
+        visit->url->host->zoom_level = parse_data->zoom_level;
+    }
+
     parse_data->visits = g_list_append (parse_data->visits, visit);
   }
 }

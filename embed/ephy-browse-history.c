@@ -158,11 +158,10 @@ ephy_browse_history_set_page_zoom_level (EphyBrowseHistory *history,
   g_return_if_fail (EPHY_IS_BROWSE_HISTORY (history));
   g_return_if_fail (url != NULL);
 
-  ephy_history_service_set_url_property (history->priv->history_service,
-                                         url,
-                                         EPHY_HISTORY_URL_ZOOM_LEVEL,
-                                         g_variant_new_double (zoom_level),
-                                         NULL, NULL);
+  ephy_history_service_set_url_zoom_level (history->priv->history_service,
+                                           url,
+                                           zoom_level,
+                                           NULL, NULL);
 }
 
 void
@@ -213,4 +212,16 @@ ephy_browse_history_delete_urls (EphyBrowseHistory *history,
 
   ephy_history_service_delete_urls (history->priv->history_service,
                                     urls, callback, user_data);
+}
+
+void
+ephy_browse_history_get_host_for_url (EphyBrowseHistory *history,
+                                      const char *url,
+                                      EphyHistoryJobCallback callback,
+                                      gpointer user_data)
+{
+  g_return_if_fail (EPHY_IS_BROWSE_HISTORY (history));
+
+  ephy_history_service_get_host_for_url (history->priv->history_service,
+                                         url, callback, user_data);
 }

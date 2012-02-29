@@ -40,7 +40,8 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
     "url LONGVARCAR,"
     "title LONGVARCAR,"
     "visit_count INTEGER DEFAULT 0 NOT NULL,"
-    "favicon_id INTEGER DEFAULT 0 NOT NULL)", &error);
+    "favicon_id INTEGER DEFAULT 0 NOT NULL,"
+    "zoom_level REAL DEFAULT 1.0)", &error);
 
   if (error) {
     g_error("Could not create hosts table: %s", error->message);
@@ -62,8 +63,8 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
   g_assert (priv->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
-    "INSERT INTO hosts (url, title, visit_count) "
-    "VALUES (?, ?, ?)", &error);
+    "INSERT INTO hosts (url, title, visit_count, zoom_level) "
+    "VALUES (?, ?, ?, ?)", &error);
 
   if (error) {
     g_error ("Could not build hosts table addition statement: %s", error->message);
@@ -73,7 +74,8 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
 
   if (ephy_sqlite_statement_bind_string (statement, 0, host->url, &error) == FALSE ||
       ephy_sqlite_statement_bind_string (statement, 1, host->title, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE) {
+      ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE ||
+      ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE) {
     g_error ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
     return;
@@ -102,7 +104,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
   g_assert (priv->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
-    "UPDATE hosts SET url=?, title=?, visit_count=?"
+    "UPDATE hosts SET url=?, title=?, visit_count=?, zoom_level=?"
     "WHERE id=?", &error);
   if (error) {
     g_error ("Could not build hosts table modification statement: %s", error->message);
@@ -113,7 +115,8 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
   if (ephy_sqlite_statement_bind_string (statement, 0, host->url, &error) == FALSE ||
       ephy_sqlite_statement_bind_string (statement, 1, host->title, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 3, host->id, &error) == FALSE) {
+      ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int (statement, 4, host->id, &error) == FALSE) {
     g_error ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
     return;
@@ -144,11 +147,11 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
 
   if (host != NULL && host->id != -1) {
     statement = ephy_sqlite_connection_create_statement (priv->history_database,
-        "SELECT id, url, title, visit_count FROM hosts "
+        "SELECT id, url, title, visit_count, zoom_level FROM hosts "
         "WHERE id=?", &error);
   } else {
     statement = ephy_sqlite_connection_create_statement (priv->history_database,
-        "SELECT id, url, title, visit_count FROM hosts "
+        "SELECT id, url, title, visit_count, zoom_level FROM hosts "
         "WHERE url=?", &error);
   }
 
@@ -176,7 +179,7 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   }
 
   if (host == NULL) {
-    host = ephy_history_host_new (NULL, NULL, 0);
+    host = ephy_history_host_new (NULL, NULL, 0, 1.0);
   } else {
     if (host->url)
       g_free (host->url);
@@ -185,9 +188,10 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   }
 
   host->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
-  host->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1)),
-  host->title = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 2)),
-  host->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3),
+  host->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1));
+  host->title = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 2));
+  host->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3);
+  host->zoom_level = ephy_sqlite_statement_get_column_as_double (statement, 4);
 
   g_object_unref (statement);
   return host;
@@ -199,7 +203,8 @@ create_host_from_statement (EphySQLiteStatement *statement)
   EphyHistoryHost *host =
     ephy_history_host_new (ephy_sqlite_statement_get_column_as_string (statement, 1),
                            ephy_sqlite_statement_get_column_as_string (statement, 2),
-                           ephy_sqlite_statement_get_column_as_int (statement, 3));
+                           ephy_sqlite_statement_get_column_as_int (statement, 3),
+                           ephy_sqlite_statement_get_column_as_double (statement, 4));
   host->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
 
   return host;
@@ -217,7 +222,7 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
   g_assert (priv->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
-      "SELECT id, url, title, visit_count FROM hosts", &error);
+      "SELECT id, url, title, visit_count, zoom_level FROM hosts", &error);
 
   if (error) {
     g_error ("Could not build hosts query statement: %s", error->message);
@@ -305,7 +310,7 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
   }
 
   if (host == NULL) {
-    host = ephy_history_host_new (host_locations->data, hostname, 0);
+    host = ephy_history_host_new (host_locations->data, hostname, 0, 1.0);
     ephy_history_service_add_host_row (self, host);
   }
 

@@ -368,7 +368,7 @@ perform_complex_url_query (EphyHistoryService *service,
   /* The expected result. */
   url = ephy_history_url_new ("http://www.wikipedia.org",
                               "Wikipedia",
-                              30, 30, 0, 1);
+                              30, 30, 0);
 
   ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
 }
@@ -408,7 +408,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
   /* The expected result. */
   url = ephy_history_url_new ("http://www.webkitgtk.org",
                               "WebKitGTK+",
-                              2, 2, 0, 1);
+                              2, 2, 0);
 
   ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
 }

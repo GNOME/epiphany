@@ -36,7 +36,7 @@ ephy_history_page_visit_new_with_url (EphyHistoryURL *url, gint64 visit_time, Ep
 EphyHistoryPageVisit *
 ephy_history_page_visit_new (const char *url, gint64 visit_time, EphyHistoryPageVisitType visit_type)
 {
-  return ephy_history_page_visit_new_with_url (ephy_history_url_new (url, "", 0, 0, 0, 1.0),
+  return ephy_history_page_visit_new_with_url (ephy_history_url_new (url, "", 0, 0, 0),
                                                visit_time, visit_type);
 }
 
@@ -78,7 +78,7 @@ ephy_history_page_visit_list_free (GList *list)
 }
 
 EphyHistoryHost *
-ephy_history_host_new (const char *url, const char *title, int visit_count)
+ephy_history_host_new (const char *url, const char *title, int visit_count, double zoom_level)
 {
   EphyHistoryHost *host = g_slice_alloc0 (sizeof (EphyHistoryHost));
 
@@ -86,6 +86,7 @@ ephy_history_host_new (const char *url, const char *title, int visit_count)
   host->url = g_strdup (url);
   host->title = g_strdup (title);
   host->visit_count = visit_count;
+  host->zoom_level = zoom_level;
 
   return host;
 }
@@ -100,7 +101,8 @@ ephy_history_host_copy (EphyHistoryHost *original)
 
   host = ephy_history_host_new (original->url,
                                 original->title,
-                                original->visit_count);
+                                original->visit_count,
+                                original->zoom_level);
   host->id = original->id;
 
   return host;
@@ -119,7 +121,7 @@ ephy_history_host_free (EphyHistoryHost *host)
 }
 
 EphyHistoryURL *
-ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, int last_visit_time, double zoom_level)
+ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, int last_visit_time)
 {
   EphyHistoryURL *history_url = g_slice_alloc0 (sizeof (EphyHistoryURL));
   history_url->id = -1;
@@ -128,7 +130,6 @@ ephy_history_url_new (const char *url, const char *title, int visit_count, int t
   history_url->visit_count = visit_count;
   history_url->typed_count = typed_count;
   history_url->last_visit_time = last_visit_time;
-  history_url->zoom_level = zoom_level;
   history_url->host = NULL;
   return history_url;
 }
@@ -144,8 +145,7 @@ ephy_history_url_copy (EphyHistoryURL *url)
                                url->title,
                                url->visit_count,
                                url->typed_count,
-                               url->last_visit_time,
-                               url->zoom_level);
+                               url->last_visit_time);
   copy->id = url->id;
   copy->host = ephy_history_host_copy (url->host);
   return copy;

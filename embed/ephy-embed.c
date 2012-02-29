@@ -230,12 +230,12 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 }
 
 static void
-get_url_for_zoom_cb (gpointer service,
+get_host_for_url_cb (gpointer service,
                      gboolean success,
                      gpointer result_data,
                      gpointer user_data)
 {
-  EphyHistoryURL *url;
+  EphyHistoryHost *host;
   EphyEmbed *embed;
   WebKitWebView *web_view;
   double current_zoom;
@@ -244,22 +244,21 @@ get_url_for_zoom_cb (gpointer service,
     return;
 
   embed = EPHY_EMBED (user_data);
-  url = (EphyHistoryURL *) result_data;
-
-  g_assert (url != NULL);
+  host = (EphyHistoryHost *)result_data;
 
   web_view = embed->priv->web_view;
 
-  g_object_get (web_view, "zoom-level", &current_zoom,
+  g_object_get (web_view,
+                "zoom-level", &current_zoom,
                 NULL);
 
-  if (url->zoom_level != current_zoom) {
+  if (host->zoom_level != current_zoom) {
     embed->priv->is_setting_zoom = TRUE;
-    g_object_set (web_view, "zoom-level", url->zoom_level, NULL);
+    g_object_set (web_view, "zoom-level", host->zoom_level, NULL);
     embed->priv->is_setting_zoom = FALSE;
   }
 
-  ephy_history_url_free (url);
+  ephy_history_host_free (host);
 }
 
 static void
@@ -268,9 +267,9 @@ restore_zoom_level (EphyEmbed *embed,
 {
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_browse_history_get_url (embed->priv->browse_history,
-                                 address,
-                                 (EphyHistoryJobCallback)get_url_for_zoom_cb, embed);
+    ephy_browse_history_get_host_for_url (embed->priv->browse_history,
+                                          address,
+                                          (EphyHistoryJobCallback)get_host_for_url_cb, embed);
   }
 }
 

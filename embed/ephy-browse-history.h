@@ -103,6 +103,11 @@ void             ephy_browse_history_delete_urls (EphyBrowseHistory *history,
                                                   EphyHistoryJobCallback callback,
                                                   gpointer user_data);
 
+void             ephy_browse_history_get_host_for_url (EphyBrowseHistory *history,
+                                                       const char *url,
+                                                       EphyHistoryJobCallback callback,
+                                                       gpointer user_data);
+
 G_END_DECLS
 
 #endif /* _EPHY_BROWSE_HISTORY_H */

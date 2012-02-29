@@ -37,6 +37,7 @@ typedef enum {
   QUIT,
   /* READ */
   GET_URL,
+  GET_HOST_FOR_URL,
   QUERY_URLS,
   QUERY_VISITS,
 } EphyHistoryServiceMessageType;
@@ -531,7 +532,7 @@ ephy_history_service_set_url_title (EphyHistoryService *self,
                                     EphyHistoryJobCallback callback,
                                     gpointer user_data)
 {
-  EphyHistoryURL *url = ephy_history_url_new (orig_url, title, 0, 0, 0, 1.0);
+  EphyHistoryURL *url = ephy_history_url_new (orig_url, title, 0, 0, 0);
 
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, SET_URL_TITLE,
@@ -542,35 +543,40 @@ ephy_history_service_set_url_title (EphyHistoryService *self,
 
 static gboolean
 ephy_history_service_execute_set_url_zoom_level (EphyHistoryService *self,
-                                                 EphyHistoryURL *url,
+                                                 GVariant *variant,
                                                  gpointer *result)
 {
-  double zoom_level = url->zoom_level;
+  char *url_string;
+  double zoom_level;
+  EphyHistoryHost *host;
 
-  if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
-    /* The URL is not yet in the database, so we can't update it.. */
-    return FALSE;
-  } else {
-    url->zoom_level = zoom_level;
-    ephy_history_service_update_url_row (self, url);
-    ephy_history_service_schedule_commit (self);
-    return TRUE;
-  }
+  g_variant_get (variant, "(sd)", &url_string, &zoom_level);
+
+  host = ephy_history_service_get_host_row_from_url (self, url_string);
+  g_free (url_string);
+
+  g_return_val_if_fail (host != NULL, FALSE);
+
+  host->zoom_level = zoom_level;
+  ephy_history_service_update_host_row (self, host);
+  ephy_history_service_schedule_commit (self);
+
+  return TRUE;
 }
 
 void
 ephy_history_service_set_url_zoom_level (EphyHistoryService *self,
-                                         const char *orig_url,
+                                         const char *url,
                                          const double zoom_level,
                                          EphyHistoryJobCallback callback,
                                          gpointer user_data)
 {
-  EphyHistoryURL *url = ephy_history_url_new (orig_url, NULL, 0, 0, 0, zoom_level);
+  EphyHistoryServiceMessage *message;
+  GVariant *variant = g_variant_new ("(sd)", url, zoom_level);
 
-  EphyHistoryServiceMessage *message =
-    ephy_history_service_message_new (self, SET_URL_ZOOM_LEVEL,
-                                      url, (GDestroyNotify) ephy_history_url_free,
-                                      callback, user_data);
+  message = ephy_history_service_message_new (self, SET_URL_ZOOM_LEVEL,
+                                              variant, (GDestroyNotify)g_variant_unref,
+                                              callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -602,6 +608,34 @@ ephy_history_service_get_url (EphyHistoryService *self,
 }
 
 static gboolean
+ephy_history_service_execute_get_host_for_url (EphyHistoryService *self,
+                                               const gchar *url,
+                                               gpointer *result)
+{
+  EphyHistoryHost *host;
+
+  host = ephy_history_service_get_host_row_from_url (self, url);
+  g_return_val_if_fail (host != NULL, FALSE);
+
+  *result = host;
+
+  return host != NULL;
+}
+
+void
+ephy_history_service_get_host_for_url (EphyHistoryService *self,
+                                       const char *url,
+                                       EphyHistoryJobCallback callback,
+                                       gpointer user_data)
+{
+  EphyHistoryServiceMessage *message =
+    ephy_history_service_message_new (self, GET_HOST_FOR_URL,
+                                      g_strdup (url), g_free,
+                                      callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+static gboolean
 ephy_history_service_execute_set_url_property (EphyHistoryService *self,
                                                GVariant *variant,
                                                gpointer *result)
@@ -613,7 +647,7 @@ ephy_history_service_execute_set_url_property (EphyHistoryService *self,
 
   g_variant_get (variant, "(s(iv))", &url_string, &property, &value);
 
-  url = ephy_history_url_new (url_string, NULL, 0, 0, 0, 1.0);
+  url = ephy_history_url_new (url_string, NULL, 0, 0, 0);
   g_free (url_string);
 
   if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
@@ -634,9 +668,6 @@ ephy_history_service_execute_set_url_property (EphyHistoryService *self,
     } else {
       url->title = NULL;
     }
-    break;
-  case EPHY_HISTORY_URL_ZOOM_LEVEL:
-    url->zoom_level = g_variant_get_double (value);
     break;
   default:
     g_assert_not_reached();
@@ -719,6 +750,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,
   (EphyHistoryServiceMethod)ephy_history_service_execute_quit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_url,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_get_host_for_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_urls,
   (EphyHistoryServiceMethod)ephy_history_service_execute_find_visits
 };

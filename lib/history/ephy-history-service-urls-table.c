@@ -40,8 +40,7 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
     "title LONGVARCAR,"
     "visit_count INTEGER DEFAULT 0 NOT NULL,"
     "typed_count INTEGER DEFAULT 0 NOT NULL,"
-    "last_visit_time INTEGER,"
-    "zoom_level REAL DEFAULT 1.0)", &error);
+    "last_visit_time INTEGER)", &error);
 
   if (error) {
     g_error("Could not create urls table: %s", error->message);
@@ -69,11 +68,11 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
 
   if (url != NULL && url->id != -1) {
     statement = ephy_sqlite_connection_create_statement (priv->history_database,
-      "SELECT id, url, title, visit_count, typed_count, last_visit_time, zoom_level FROM urls "
+      "SELECT id, url, title, visit_count, typed_count, last_visit_time FROM urls "
       "WHERE id=?", &error);
   } else {
     statement = ephy_sqlite_connection_create_statement (priv->history_database,
-      "SELECT id, url, title, visit_count, typed_count, last_visit_time, zoom_level FROM urls "
+      "SELECT id, url, title, visit_count, typed_count, last_visit_time FROM urls "
       "WHERE url=?", &error);
   }
 
@@ -101,7 +100,7 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   }
 
   if (url == NULL) {
-    url = ephy_history_url_new (NULL, NULL, 0, 0, 0, 1.0);
+    url = ephy_history_url_new (NULL, NULL, 0, 0, 0);
   }
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
@@ -116,7 +115,6 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   url->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3),
   url->typed_count = ephy_sqlite_statement_get_column_as_int (statement, 4),
   url->last_visit_time = ephy_sqlite_statement_get_column_as_int (statement, 5);
-  url->zoom_level = ephy_sqlite_statement_get_column_as_double (statement, 6);
 
   g_object_unref (statement);
   return url;
@@ -133,8 +131,8 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
   g_assert (priv->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
-    "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, zoom_level, host) "
-    " VALUES (?, ?, ?, ?, ?, ?, ?)", &error);
+    "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, host) "
+    " VALUES (?, ?, ?, ?, ?, ?)", &error);
   if (error) {
     g_error ("Could not build urls table addition statement: %s", error->message);
     g_error_free (error);
@@ -146,8 +144,7 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
       ephy_sqlite_statement_bind_int (statement, 2, url->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 3, url->typed_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 4, url->last_visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_double (statement, 5, url->zoom_level, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 6, url->host->id, &error) == FALSE) {
+      ephy_sqlite_statement_bind_int (statement, 5, url->host->id, &error) == FALSE) {
     g_error ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
     return;
@@ -175,7 +172,7 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
   g_assert (priv->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (priv->history_database,
-    "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, zoom_level=? "
+    "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=? "
     "WHERE id=?", &error);
   if (error) {
     g_error ("Could not build urls table modification statement: %s", error->message);
@@ -187,8 +184,7 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
       ephy_sqlite_statement_bind_int (statement, 1, url->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, url->typed_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 3, url->last_visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_double (statement, 4, url->zoom_level, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 5, url->id, &error) == FALSE) {
+      ephy_sqlite_statement_bind_int (statement, 4, url->id, &error) == FALSE) {
     g_error ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
     return;
@@ -209,11 +205,10 @@ create_url_from_statement (EphySQLiteStatement *statement)
                                               ephy_sqlite_statement_get_column_as_string (statement, 2),
                                               ephy_sqlite_statement_get_column_as_int (statement, 3),
                                               ephy_sqlite_statement_get_column_as_int (statement, 4),
-                                              ephy_sqlite_statement_get_column_as_int (statement, 5),
-                                              ephy_sqlite_statement_get_column_as_int (statement, 6));
+                                              ephy_sqlite_statement_get_column_as_int (statement, 5));
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
-  url->host = ephy_history_host_new (NULL, NULL, 0);
+  url->host = ephy_history_host_new (NULL, NULL, 0, 1.0);
   url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 7);
 
   return url;
@@ -236,7 +231,6 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
       "urls.visit_count, "
       "urls.typed_count, "
       "urls.last_visit_time, "
-      "urls.zoom_level, "
       "urls.host "
     "FROM "
       "urls ";
