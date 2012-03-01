@@ -379,6 +379,11 @@ main (int argc,
     exit (1);
   }
 
+  if (application_mode && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
+      g_print ("--profile must be an existing directory when --application-mode is requested\n");
+      exit (1);
+  }
+
   /* Work-around Flash Player crash */
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
