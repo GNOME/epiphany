@@ -209,7 +209,7 @@ create_url_from_statement (EphySQLiteStatement *statement)
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
   url->host = ephy_history_host_new (NULL, NULL, 0, 1.0);
-  url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 7);
+  url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 6);
 
   return url;
 }
