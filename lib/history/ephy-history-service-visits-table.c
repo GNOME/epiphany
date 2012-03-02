@@ -206,7 +206,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   visits = g_list_reverse (visits);
 
   if (error) {
-    g_error ("Could not execute urls table query statement: %s", error->message);
+    g_error ("Could not execute visits table query statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     ephy_history_page_visit_list_free (visits);
