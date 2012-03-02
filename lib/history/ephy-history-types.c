@@ -36,7 +36,7 @@ ephy_history_page_visit_new_with_url (EphyHistoryURL *url, gint64 visit_time, Ep
 EphyHistoryPageVisit *
 ephy_history_page_visit_new (const char *url, gint64 visit_time, EphyHistoryPageVisitType visit_type)
 {
-  return ephy_history_page_visit_new_with_url (ephy_history_url_new (url, "", 0, 0, 0),
+  return ephy_history_page_visit_new_with_url (ephy_history_url_new (url, url, 0, 0, 0),
                                                visit_time, visit_type);
 }
 
