@@ -84,7 +84,7 @@ ephy_browse_history_add_page (EphyBrowseHistory *history,
     url = g_strdup (orig_url);
 
   visit = ephy_history_page_visit_new (url,
-                                       time(NULL),
+                                       time (NULL),
                                        EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (history->priv->history_service,
                                   visit, NULL, NULL);
