@@ -252,6 +252,9 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
     statement_str = g_string_append (statement_str, "WHERE ");
   }
 
+  if (query->host > 0)
+    statement_str = g_string_append (statement_str, "urls.host = ? AND ");
+
   for (substring = query->substring_list; substring != NULL; substring = substring->next)
     statement_str = g_string_append (statement_str, "(urls.url LIKE ? OR urls.title LIKE ?) AND ");
 
@@ -292,6 +295,14 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   }
   if (query->to > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
+      g_error ("Could not build urls table query statement: %s", error->message);
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
+    }
+  }
+  if (query->host > 0) {
+    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error) == FALSE) {
       g_error ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);

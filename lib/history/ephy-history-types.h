@@ -85,6 +85,7 @@ typedef struct _EphyHistoryQuery
   gint64 to;
   guint limit;
   GList* substring_list;
+  gint host;
   EphyHistorySortType sort_type;
 } EphyHistoryQuery;
 
