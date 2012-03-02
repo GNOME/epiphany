@@ -1068,13 +1068,19 @@ title_changed_cb (WebKitWebView *web_view,
   WebKitWebFrame *frame;
   EphyBrowseHistory *browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (ephy_embed_shell_get_default ()));
 
+  frame = webkit_web_view_get_main_frame (web_view);
+  uri = webkit_web_frame_get_uri (frame);
+
   g_object_get (web_view, "title", &title, NULL);
+
+  /* Fallback to the URI as title if it's NULL. */
+  if (title == NULL || g_str_equal (title, "")) {
+    g_free (title);
+    title = g_strdup (uri);
+  }
 
   ephy_web_view_set_title (EPHY_WEB_VIEW (web_view),
                            title);
-
-  frame = webkit_web_view_get_main_frame (web_view);
-  uri = webkit_web_frame_get_uri (frame);
   ephy_browse_history_set_page_title (browse_history, uri, title);
   g_free (title);
 
