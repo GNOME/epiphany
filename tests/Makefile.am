@@ -119,7 +119,7 @@ test_ephy_embed_utils_SOURCES = \
 	ephy-embed-utils-test.c
 
 test_ephy_history_SOURCES = \
-	ephy-history.c
+	ephy-history-test.c
 
 test_ephy_location_entry_SOURCES = \
 	ephy-location-entry-test.c
@@ -128,4 +128,4 @@ test_ephy_search_entry_SOURCES = \
 	ephy-search-entry-test.c
 
 test_ephy_sqlite_SOURCES = \
-	ephy-sqlite.c
+	ephy-sqlite-test.c
