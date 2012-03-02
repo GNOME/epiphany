@@ -32,6 +32,7 @@ typedef enum {
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
+  CLEAR,
   /* QUIT */
   QUIT,
   /* READ */
@@ -285,6 +286,23 @@ ephy_history_service_close_database_connections (EphyHistoryService *self)
   ephy_sqlite_connection_close (priv->history_database);
   g_object_unref (priv->history_database);
   priv->history_database = NULL;
+}
+
+static void
+ephy_history_service_clear_all (EphyHistoryService *self)
+{
+  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+  GError *error = NULL;
+
+  if (NULL == priv->history_database)
+    return;
+
+  ephy_sqlite_connection_execute (priv->history_database,
+                                  "DELETE FROM hosts;", &error);
+  if (error) {
+    g_error ("Couldn't clear history database: %s", error->message);
+    g_error_free(error);
+  }
 }
 
 static gboolean
@@ -688,6 +706,18 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
   return TRUE;
 }
 
+static gboolean
+ephy_history_service_execute_clear (EphyHistoryService *self,
+                                    gpointer pointer,
+                                    gpointer *result)
+{
+
+  ephy_history_service_clear_all (self);
+  ephy_history_service_schedule_commit (self);
+
+  return TRUE;
+}
+
 void
 ephy_history_service_delete_urls (EphyHistoryService *self,
                                   GList *urls,
@@ -697,6 +727,18 @@ ephy_history_service_delete_urls (EphyHistoryService *self,
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, DELETE_URLS, 
                                       ephy_history_url_list_copy (urls), (GDestroyNotify)ephy_history_url_list_free,
+                                      callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+void
+ephy_history_service_clear (EphyHistoryService *self,
+                            EphyHistoryJobCallback callback,
+                            gpointer user_data)
+{
+  EphyHistoryServiceMessage *message =
+    ephy_history_service_message_new (self, CLEAR,
+                                      NULL, NULL,
                                       callback, user_data);
   ephy_history_service_send_message (self, message);
 }
@@ -719,6 +761,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_clear,
   (EphyHistoryServiceMethod)ephy_history_service_execute_quit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_host_for_url,
