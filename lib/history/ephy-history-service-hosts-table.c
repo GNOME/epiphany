@@ -298,7 +298,7 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
 {
   GList *host_locations, *l;
   char *hostname;
-  EphyHistoryHost *host;
+  EphyHistoryHost *host = NULL;
 
   host_locations = get_hostname_and_locations (url, &hostname);
 
