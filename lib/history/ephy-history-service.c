@@ -40,6 +40,13 @@ typedef enum {
   QUERY_URLS,
   QUERY_VISITS,
 } EphyHistoryServiceMessageType;
+
+enum {
+  VISIT_URL,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
   
 typedef struct _EphyHistoryServiceMessage {
   EphyHistoryService *service;
@@ -111,13 +118,42 @@ ephy_history_service_finalize (GObject *self)
   G_OBJECT_CLASS (ephy_history_service_parent_class)->finalize (self);
 }
 
+static gboolean
+impl_visit_url (EphyHistoryService *self, const char *url)
+{
+  EphyHistoryPageVisit *visit;
+
+  visit = ephy_history_page_visit_new (url,
+                                       time (NULL),
+                                       EPHY_PAGE_VISIT_TYPED);
+  ephy_history_service_add_visit (self,
+                                  visit, NULL, NULL);
+  ephy_history_page_visit_free (visit);
+
+  return TRUE;
+}
+
 static void
 ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
   gobject_class->finalize = ephy_history_service_finalize;
   gobject_class->get_property = ephy_history_service_get_property;
   gobject_class->set_property = ephy_history_service_set_property;
+
+  klass->visit_url = impl_visit_url;
+
+	signals[VISIT_URL] =
+		g_signal_new ("visit-url",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (EphyHistoryServiceClass, visit_url),
+                  g_signal_accumulator_true_handled, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_object_class_install_property (gobject_class,
                                    PROP_HISTORY_FILENAME,
@@ -741,15 +777,10 @@ void
 ephy_history_service_visit_url (EphyHistoryService *self,
                                 const char *url)
 {
-  EphyHistoryPageVisit *visit;
+  gboolean result;
 
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (url != NULL);
 
-  visit = ephy_history_page_visit_new (url,
-                                       time (NULL),
-                                       EPHY_PAGE_VISIT_TYPED);
-  ephy_history_service_add_visit (self,
-                                  visit, NULL, NULL);
-  ephy_history_page_visit_free (visit);
+  g_signal_emit (self, signals[VISIT_URL], 0, url, &result);
 }

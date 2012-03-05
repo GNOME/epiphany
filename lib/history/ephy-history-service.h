@@ -48,7 +48,11 @@ struct _EphyHistoryService {
 };
 
 struct _EphyHistoryServiceClass {
-    GObjectClass parent_class;
+  GObjectClass parent_class;
+
+  /* Signals */
+  gboolean (* visit_url)   (EphyHistoryService *self,
+                            const char *url);
 };
 
 GType                    ephy_history_service_get_type                (void);
