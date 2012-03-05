@@ -216,9 +216,9 @@ should_add_bookmark_to_model (EphyCompletionModel *model,
 
     for (iter = priv->search_terms; iter != NULL; iter = iter->next) {
       current = (GRegex*) iter->data;
-      if ((!g_regex_match (current, title, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, location, G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, keywords, G_REGEX_MATCH_NOTEMPTY, NULL))) {
+      if (((title && !g_regex_match (current, title, G_REGEX_MATCH_NOTEMPTY, NULL))) &&
+          ((location && !g_regex_match (current, location, G_REGEX_MATCH_NOTEMPTY, NULL))) &&
+          ((keywords && !g_regex_match (current, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)))) {
         ret = FALSE;
         break;
       }
