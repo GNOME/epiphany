@@ -4,7 +4,7 @@
  * ephy-sqlite-statement.c
  * This file is part of Epiphany
  *
- * Copyright © 2010 Igalia S.L.
+ * Copyright © 2010, 2011, 2012 Igalia S.L.
  *
  * Epiphany is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,8 @@
  */
 
 #include "config.h"
-
 #include "ephy-history-service.h"
-#include <glib.h>
+
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
@@ -83,7 +82,7 @@ static void
 test_create_history_entry (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (service, visit, page_vist_created, NULL);
@@ -156,7 +155,7 @@ static void
 test_create_history_entries (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   GList *visits = create_test_page_visit_list ();
 
@@ -205,7 +204,7 @@ static void
 test_set_url_title_helper (gboolean test_results)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (service, visit, set_url_title_visit_created, GINT_TO_POINTER (test_results));
@@ -239,7 +238,7 @@ static void
 test_set_url_title_url_not_existent (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
 
   ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", set_url_title_url_not_existent, NULL);
@@ -281,7 +280,7 @@ static void
 test_get_url_helper (gboolean add_entry)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
 
   if (add_entry == TRUE) {
@@ -378,7 +377,7 @@ static void
 test_complex_url_query (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
@@ -418,7 +417,7 @@ static void
 test_complex_url_query_with_time_range (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history(temporary_file);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
