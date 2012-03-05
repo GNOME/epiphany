@@ -26,7 +26,6 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-shell.h"
-#include "ephy-tree-model-node.h"
 
 #include <string.h>
 
