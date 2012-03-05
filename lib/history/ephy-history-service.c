@@ -44,6 +44,7 @@ typedef enum {
 
 enum {
   VISIT_URL,
+  CLEARED,
   LAST_SIGNAL
 };
 
@@ -155,6 +156,15 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  signals[CLEARED] =
+    g_signal_new ("cleared",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   g_object_class_install_property (gobject_class,
                                    PROP_HISTORY_FILENAME,
@@ -408,6 +418,10 @@ ephy_history_service_execute_job_callback (gpointer data)
 
   g_assert (message->callback);
   message->callback (message->service, message->success, message->result, message->user_data);
+
+  if (message->type == CLEAR)
+    g_signal_emit (message->service, signals[CLEARED], 0);
+    
   ephy_history_service_message_free (message);
 
   return FALSE;

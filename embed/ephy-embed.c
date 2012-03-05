@@ -371,7 +371,7 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-ephy_embed_history_cleared_cb (EphyHistory *history,
+ephy_embed_history_cleared_cb (EphyHistoryService *history_service,
                                EphyEmbed *embed)
 {
   ephy_web_view_clear_history (EPHY_WEB_VIEW (embed->priv->web_view));
@@ -450,7 +450,7 @@ ephy_embed_finalize (GObject *object)
   }
   g_slist_free (priv->destroy_on_transition_list);
 
-  g_signal_handlers_disconnect_by_func (priv->history,
+  g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_embed_history_cleared_cb,
                                         embed);
 
@@ -828,7 +828,7 @@ ephy_embed_constructed (GObject *object)
   priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
-  g_signal_connect (priv->history,
+  g_signal_connect (priv->history_service,
                     "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
                     embed);
 }
