@@ -36,9 +36,10 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
-#include "ephy-browse-history.h"
+#include "ephy-history-service.h"
 #include "ephy-history-types.h"
 #include "ephy-prefs.h"
+#include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
@@ -72,7 +73,7 @@ struct _EphyEmbedPrivate
   GtkPaned *paned;
   WebKitWebView *web_view;
   EphyHistory *history;
-  EphyBrowseHistory *browse_history;
+  EphyHistoryService *history_service;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
@@ -267,9 +268,9 @@ restore_zoom_level (EphyEmbed *embed,
 {
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_browse_history_get_host_for_url (embed->priv->browse_history,
-                                          address,
-                                          (EphyHistoryJobCallback)get_host_for_url_cb, embed);
+    ephy_history_service_get_host_for_url (embed->priv->history_service,
+                                           address,
+                                           (EphyHistoryJobCallback)get_host_for_url_cb, embed);
   }
 }
 
@@ -324,13 +325,22 @@ load_status_changed_cb (WebKitWebView *view,
 
   if (status == WEBKIT_LOAD_COMMITTED) {
     const gchar* uri;
+    char *history_uri;
 
     uri = webkit_web_view_get_uri (view);
 
     ephy_embed_destroy_top_widgets (embed);
 
     restore_zoom_level (embed, uri);
-    ephy_browse_history_add_page (embed->priv->browse_history, uri);
+
+    /* TODO: move the normaliztion down to the history service? */
+    if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+      history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+    else
+      history_uri = g_strdup (uri);
+
+    ephy_history_service_add_page (embed->priv->history_service, history_uri);
+    g_free (history_uri);
   }
 }
 
@@ -352,8 +362,9 @@ zoom_changed_cb (WebKitWebView *web_view,
 
   address = ephy_web_view_get_location (EPHY_WEB_VIEW (web_view), TRUE);
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_browse_history_set_page_zoom_level (embed->priv->browse_history,
-                                             address, zoom);
+    ephy_history_service_set_url_zoom_level (embed->priv->history_service,
+                                             address, zoom,
+                                             NULL, NULL);
   }
 
   g_free (address);
@@ -815,7 +826,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_prefs_add_embed (embed);
 
   priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
-  priv->browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (ephy_embed_shell_get_default ()));
+  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
   g_signal_connect (priv->history,
                     "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),

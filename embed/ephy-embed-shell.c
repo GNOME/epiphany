@@ -37,8 +37,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
-#include "ephy-browse-history.h"
-
+#include "ephy-history-service.h"
 #include "ephy-print-utils.h"
 
 #define PAGE_SETUP_FILENAME	"page-setup-gtk.ini"
@@ -53,7 +52,7 @@
 struct _EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
-	EphyBrowseHistory *global_browse_history;
+	EphyHistoryService *global_history_service;
 	GList *downloads;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
@@ -145,10 +144,10 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (shell->priv->global_history);
 	}
 
-	if (shell->priv->global_browse_history)
+	if (shell->priv->global_history_service)
 	{
-		LOG ("Unref browse history");
-		g_object_unref (shell->priv->global_browse_history);
+		LOG ("Unref history service");
+		g_object_unref (shell->priv->global_history_service);
 	}
 
 	if (shell->priv->embed_single)
@@ -208,22 +207,27 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 }
 
 /**
- * ephy_embed_shell_get_global_browse_history:
+ * ephy_embed_shell_get_global_history_service:
  * @shell: the #EphyEmbedShell
  *
- * Return value: (transfer none):
+ * Return value: (transfer none): the global #EphyHistoryService
  **/
 GObject *
-ephy_embed_shell_get_global_browse_history (EphyEmbedShell *shell)
+ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 {
 	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->global_browse_history == NULL)
+	if (shell->priv->global_history_service == NULL)
 	{
-		shell->priv->global_browse_history = ephy_browse_history_new ();
+		char *filename;
+
+		filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+		shell->priv->global_history_service = ephy_history_service_new (filename);
+		g_free (filename);
+		g_return_val_if_fail (shell->priv->global_history_service, NULL);
 	}
 
-	return G_OBJECT (shell->priv->global_browse_history);
+	return G_OBJECT (shell->priv->global_history_service);
 }
 
 static GObject *

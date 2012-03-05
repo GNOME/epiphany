@@ -24,7 +24,6 @@
 #include "ephy-web-view.h"
 
 #include "ephy-debug.h"
-#include "ephy-browse-history.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -35,6 +34,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
+#include "ephy-history-service.h"
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
@@ -1066,7 +1066,7 @@ title_changed_cb (WebKitWebView *web_view,
   const char *uri;
   char *title;
   WebKitWebFrame *frame;
-  EphyBrowseHistory *browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (ephy_embed_shell_get_default ()));
+  EphyHistoryService *history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
   frame = webkit_web_view_get_main_frame (web_view);
   uri = webkit_web_frame_get_uri (frame);
@@ -1081,7 +1081,7 @@ title_changed_cb (WebKitWebView *web_view,
 
   ephy_web_view_set_title (EPHY_WEB_VIEW (web_view),
                            title);
-  ephy_browse_history_set_page_title (browse_history, uri, title);
+  ephy_history_service_set_url_title (history, uri, title, NULL, NULL);
   g_free (title);
 
 }

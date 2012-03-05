@@ -709,3 +709,44 @@ ephy_history_service_process_message (EphyHistoryService *self,
 
   return;
 }
+
+/* Public API. */
+
+void
+ephy_history_service_find_urls (EphyHistoryService *self,
+                                gint64 from, gint64 to,
+                                guint limit,
+                                GList *substring_list,
+                                EphyHistoryJobCallback callback,
+                                gpointer user_data)
+{
+  EphyHistoryQuery *query;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+
+  query = ephy_history_query_new ();
+  query->from = from;
+  query->to = to;
+  query->substring_list = substring_list;
+  query->sort_type = EPHY_HISTORY_SORT_MV;
+
+  if (limit != 0)
+    query->limit = limit;
+
+  ephy_history_service_query_urls (self,
+                                   query, callback, user_data);
+}
+
+void
+ephy_history_service_add_page (EphyHistoryService *self,
+                               const char *url)
+{
+  EphyHistoryPageVisit *visit;
+
+  visit = ephy_history_page_visit_new (url,
+                                       time (NULL),
+                                       EPHY_PAGE_VISIT_TYPED);
+  ephy_history_service_add_visit (self,
+                                  visit, NULL, NULL);
+  ephy_history_page_visit_free (visit);
+}

@@ -21,10 +21,10 @@
 #include "config.h"
 #include "ephy-completion-model.h"
 
-#include "ephy-browse-history.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
+#include "ephy-history-service.h"
 #include "ephy-shell.h"
 
 #include <string.h>
@@ -34,7 +34,7 @@ G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 #define EPHY_COMPLETION_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelPrivate))
 
 struct _EphyCompletionModelPrivate {
-  EphyBrowseHistory *browse_history;
+  EphyHistoryService *history_service;
   EphyHistory *legacy_history_service;
   EphyFaviconCache *favicon_cache;
 
@@ -97,7 +97,7 @@ ephy_completion_model_init (EphyCompletionModel *model)
 
   model->priv = priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 
-  priv->browse_history = EPHY_BROWSE_HISTORY (ephy_embed_shell_get_global_browse_history (embed_shell));
+  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
   priv->legacy_history_service = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
   priv->favicon_cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (embed_shell));
 
@@ -488,12 +488,12 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
   user_data->callback = callback;
   user_data->user_data = data;
 
-  ephy_browse_history_find_urls (priv->browse_history,
-                                 0, 0,
-                                 MAX_COMPLETION_HISTORY_URLS,
-                                 query,
-                                 (EphyHistoryJobCallback)query_completed_cb,
-                                 user_data);
+  ephy_history_service_find_urls (priv->history_service,
+                                  0, 0,
+                                  MAX_COMPLETION_HISTORY_URLS,
+                                  query,
+                                  (EphyHistoryJobCallback)query_completed_cb,
+                                  user_data);
 }
 
 EphyCompletionModel *
