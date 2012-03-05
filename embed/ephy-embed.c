@@ -339,7 +339,7 @@ load_status_changed_cb (WebKitWebView *view,
     else
       history_uri = g_strdup (uri);
 
-    ephy_history_service_add_page (embed->priv->history_service, history_uri);
+    ephy_history_service_visit_url (embed->priv->history_service, history_uri);
     g_free (history_uri);
   }
 }

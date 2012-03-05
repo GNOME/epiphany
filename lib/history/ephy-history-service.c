@@ -738,10 +738,13 @@ ephy_history_service_find_urls (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_add_page (EphyHistoryService *self,
-                               const char *url)
+ephy_history_service_visit_url (EphyHistoryService *self,
+                                const char *url)
 {
   EphyHistoryPageVisit *visit;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+  g_return_if_fail (url != NULL);
 
   visit = ephy_history_page_visit_new (url,
                                        time (NULL),
