@@ -428,6 +428,54 @@ test_complex_url_query_with_time_range (void)
   gtk_main ();
 }
 
+static void
+verify_query_after_clear (EphyHistoryService *service,
+                          gboolean success,
+                          gpointer result_data,
+                          gpointer user_data)
+{
+  GList *urls = (GList*)result_data;
+
+  /* No results expected. */
+  g_assert_cmpint (g_list_length (urls), ==, 0);
+
+  g_object_unref (service);
+
+  gtk_main_quit();
+}
+
+static void
+perform_query_after_clear (EphyHistoryService *service,
+                           gboolean success,
+                           gpointer result_data,
+                           gpointer user_data)
+{
+  EphyHistoryQuery *query;
+
+  g_assert (success == TRUE);
+
+  /* Get 10 random sites, the query should fail. */
+  query = ephy_history_query_new ();
+  query->substring_list = g_list_prepend (query->substring_list, "gnome");
+  query->limit = 10;
+  query->sort_type = EPHY_HISTORY_SORT_MV;
+
+  ephy_history_service_query_urls (service, query, verify_query_after_clear, NULL);
+}
+
+static void
+test_clear ()
+{
+  gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
+  GList *visits = create_test_page_visit_list ();
+
+  ephy_history_service_add_visits (service, visits, NULL, NULL);
+  ephy_history_service_clear (service, perform_query_after_clear, NULL);
+
+  gtk_main ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -444,6 +492,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/history/test_get_url_not_existent", test_get_url_not_existent);
   g_test_add_func ("/embed/history/test_complex_url_query", test_complex_url_query);
   g_test_add_func ("/embed/history/test_complex_url_query_with_time_range", test_complex_url_query_with_time_range);
+  g_test_add_func ("/embed/history/test_clear", test_clear);
 
   return g_test_run ();
 }
