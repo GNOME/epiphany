@@ -511,14 +511,12 @@ history_parse_end_element (GMarkupParseContext *context,
     g_free (visit->url->title);
     visit->url->title = g_strdup (parse_data->title);
 
-    if (parse_data->zoom_level) {
+    if (parse_data->zoom_level != 1.0) {
       /* Zoom levels are only stored per host in the old history, so
        * creating a new host here is OK. */
-      if (!visit->url->host)
-        visit->url->host = ephy_history_host_new (parse_data->location, parse_data->title,
-                                                  parse_data->visit_count, parse_data->zoom_level);
-      else
-        visit->url->host->zoom_level = parse_data->zoom_level;
+      g_assert (!visit->url->host);
+      visit->url->host = ephy_history_host_new (parse_data->location, parse_data->title,
+                                                parse_data->visit_count, parse_data->zoom_level);
     }
 
     parse_data->visits = g_list_append (parse_data->visits, visit);
