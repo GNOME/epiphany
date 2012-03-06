@@ -488,7 +488,7 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 	history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
 	/* FIXME: do we want an enable/disable API for the new history? */
 
-	g_signal_connect (history, "cleared",
+	g_signal_connect (history_service, "cleared",
 			  G_CALLBACK (history_cleared_cb), eb);
 
 	g_signal_connect (history, "visited",
