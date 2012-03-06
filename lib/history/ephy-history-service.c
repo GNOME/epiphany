@@ -134,7 +134,7 @@ impl_visit_url (EphyHistoryService *self, const char *url)
                                   visit, NULL, NULL);
   ephy_history_page_visit_free (visit);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
