@@ -34,7 +34,7 @@
 #include "ephy-time-helpers.h"
 #include "ephy-embed-single.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-history.h"
+#include "ephy-history-service.h"
 #include "ephy-password-info.h"
 
 #include <gtk/gtk.h>
@@ -252,11 +252,11 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_history)))
 		{
 			EphyEmbedShell *shell;
-			EphyHistory *history;
+			EphyHistoryService *history;
 
 			shell = ephy_embed_shell_get_default ();
-			history = EPHY_HISTORY (ephy_embed_shell_get_global_history (shell));
-			ephy_history_clear (history);
+			history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell));
+			ephy_history_service_clear (history, NULL, NULL);
 		}
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))
