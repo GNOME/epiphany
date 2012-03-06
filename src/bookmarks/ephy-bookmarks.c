@@ -20,26 +20,26 @@
  */
 
 #include "config.h"
-
 #include "ephy-bookmarks.h"
-#include "ephy-bookmarks-type-builtins.h"
-#include "ephy-file-helpers.h"
-#include "ephy-embed-shell.h"
-#include "ephy-shell.h"
-#include "ephy-history.h"
-#include "ephy-debug.h"
-#include "ephy-tree-model-node.h"
-#include "ephy-node-common.h"
+
+#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
-#include "ephy-bookmark-properties.h"
+#include "ephy-bookmarks-type-builtins.h"
+#include "ephy-debug.h"
+#include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
+#include "ephy-history.h"
+#include "ephy-node-common.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-tree-model-node.h"
 
-#include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #ifdef ENABLE_ZEROCONF
 #include <avahi-common/error.h>
