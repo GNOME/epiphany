@@ -30,6 +30,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
+#include "ephy-history-service.h"
 #include "ephy-node-common.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -371,7 +372,7 @@ clear_favorites (EphyBookmarks *bookmarks)
 }
 
 static void
-history_cleared_cb (EphyHistory *history,
+history_cleared_cb (EphyHistoryService *history,
 		    EphyBookmarks *bookmarks)
 {
 	clear_favorites (bookmarks);
@@ -475,6 +476,7 @@ static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
 	EphyHistory *history;
+	EphyHistoryService *history_service;
 
 	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
@@ -483,10 +485,14 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 		clear_favorites (eb);
 	}
 
-	g_signal_connect (history, "visited",
-			  G_CALLBACK (history_site_visited_cb), eb);
+	history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+	/* FIXME: do we want an enable/disable API for the new history? */
+
 	g_signal_connect (history, "cleared",
 			  G_CALLBACK (history_cleared_cb), eb);
+
+	g_signal_connect (history, "visited",
+			  G_CALLBACK (history_site_visited_cb), eb);
 	g_signal_connect (history, "redirect",
 			  G_CALLBACK (redirect_cb), eb);
 	g_signal_connect (history, "icon-updated",
