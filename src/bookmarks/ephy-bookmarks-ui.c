@@ -32,7 +32,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
-#include "ephy-history.h"
 #include "ephy-link.h"
 #include "ephy-node-common.h"
 #include "ephy-open-tabs-action.h"
