@@ -53,7 +53,6 @@
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
 #define BOOKMARKS_SAVE_DELAY 3 /* seconds */
-#define MAX_FAVORITES_NUM 10
 #define UPDATE_URI_DATA_KEY "updated-uri"
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
@@ -75,7 +74,6 @@ struct _EphyBookmarksPrivate
 	EphyNodeDb *db;
 	EphyNode *bookmarks;
 	EphyNode *keywords;
-	EphyNode *favorites;
 	EphyNode *notcategorized;
 	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
@@ -174,7 +172,6 @@ save_filter (EphyNode *node,
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 
 	return node != priv->bookmarks &&
-	       node != priv->favorites &&
 	       node != priv->notcategorized &&
 #ifdef ENABLE_ZEROCONF
 	       node != priv->local;
@@ -249,133 +246,6 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 					    bookmarks);
 		}
 	}
-}
-
-static double
-get_history_item_score (EphyHistory *eh, const char *page)
-{
-	return ephy_history_get_page_visits (eh, page);
-}
-
-static EphyNode *
-compute_lower_fav (EphyNode *favorites, double *score)
-{
-	GPtrArray *children;
-	int i;
-	EphyHistory *history;
-	EphyNode *result = NULL;
-
-	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-
-	*score = DBL_MAX;
-	children = ephy_node_get_children (favorites);
-	for (i = 0; i < children->len; i++)
-	{
-		const char *url;
-		EphyNode *child;
-		double item_score;
-
-		child = g_ptr_array_index (children, i);
-		url = ephy_node_get_property_string
-			(child, EPHY_NODE_BMK_PROP_LOCATION);
-		item_score = get_history_item_score (history, url);
-		if (*score > item_score)
-		{
-			*score = item_score;
-			result = child;
-		}
-	}
-
-	if (result == NULL) *score = 0;
-
-	return result;
-}
-
-static void
-ephy_bookmarks_update_favorites (EphyBookmarks *eb)
-{
-	eb->priv->lower_fav = compute_lower_fav (eb->priv->favorites,
-						 &eb->priv->lower_score);
-}
-
-static gboolean
-add_to_favorites (EphyBookmarks *bookmarks,
-		  EphyNode *node,
-		  EphyHistory *history)
-{
-	EphyBookmarksPrivate *priv = bookmarks->priv;
-	const char *url;
-	gboolean full_menu;
-	double score;
-
-	if (ephy_node_db_is_immutable (priv->db)) return FALSE;
-	if (ephy_node_has_child (priv->favorites, node)) return FALSE;
-
-	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-	score = get_history_item_score (history, url);
-	full_menu = ephy_node_get_n_children (priv->favorites)
-		    >= MAX_FAVORITES_NUM;
-	if (full_menu && score < priv->lower_score) return FALSE;
-
-	if (priv->lower_fav && full_menu)
-	{
-		ephy_node_remove_child (priv->favorites,
-					priv->lower_fav);
-	}
-
-	ephy_node_add_child (priv->favorites, node);
-	ephy_bookmarks_update_favorites (bookmarks);
-
-	return TRUE;
-}
-
-static void
-history_site_visited_cb (EphyHistory *history,
-			 const char *url,
-			 EphyBookmarks *bookmarks)
-{
-	EphyNode *node;
-
-	node = ephy_bookmarks_find_bookmark (bookmarks, url);
-	if (node == NULL) return;
-
-	add_to_favorites (bookmarks, node, history);
-}
-
-static void
-clear_favorites (EphyBookmarks *bookmarks)
-{
-	EphyNode *node;
-	GPtrArray *children;
-	int i;
-	gboolean was_immutable;
-
-	/* clear the favourites */
-
-	was_immutable = ephy_node_db_is_immutable (bookmarks->priv->db);
-	ephy_node_db_set_immutable (bookmarks->priv->db, FALSE);
-
-	node = bookmarks->priv->favorites;
-	children = ephy_node_get_children (node);
-	for (i = (int) children->len - 1; i >= 0; i--)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_remove_child (node, kid);
-	}
-
-	ephy_node_db_set_immutable (bookmarks->priv->db, was_immutable);
-
-	ephy_bookmarks_update_favorites (bookmarks);
-}
-
-static void
-history_cleared_cb (EphyHistoryService *history,
-		    EphyBookmarks *bookmarks)
-{
-	clear_favorites (bookmarks);
 }
 
 static void
@@ -476,23 +346,9 @@ static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
 	EphyHistory *history;
-	EphyHistoryService *history_service;
 
 	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
-	if (ephy_history_is_enabled (history) == FALSE)
-	{
-		clear_favorites (eb);
-	}
-
-	history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
-	/* FIXME: do we want an enable/disable API for the new history? */
-
-	g_signal_connect (history_service, "cleared",
-			  G_CALLBACK (history_cleared_cb), eb);
-
-	g_signal_connect (history, "visited",
-			  G_CALLBACK (history_site_visited_cb), eb);
 	g_signal_connect (history, "redirect",
 			  G_CALLBACK (redirect_cb), eb);
 	g_signal_connect (history, "icon-updated",
@@ -518,7 +374,6 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 		kid = g_ptr_array_index (children, i);
 
 		if (kid != eb->priv->notcategorized && 
-		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
 #ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
@@ -586,7 +441,6 @@ bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
 		kid = g_ptr_array_index (children, i);
 
 		if (kid != eb->priv->notcategorized && 
-		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
 #ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
@@ -1183,9 +1037,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Translators: this topic contains all bookmarks */
 	const char *bk_all = C_("bookmarks", "All");
 
-	/* Translators: this topic contains the most used bookmarks */
-	const char *bk_most_visited = C_("bookmarks", "Most Visited");
-
 	/* Translators: this topic contains the not categorized
 	   bookmarks */
 	const char *bk_not_categorized = C_("bookmarks", "Not Categorized");
@@ -1236,19 +1087,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	ephy_node_add_child (eb->priv->keywords,
 			     eb->priv->bookmarks);
-
-	/* Favorites */
-	eb->priv->favorites = ephy_node_new_with_id (db, FAVORITES_NODE_ID);
-	
-	
-	ephy_node_set_property_string (eb->priv->favorites,
-				       EPHY_NODE_KEYWORD_PROP_NAME,
-				       bk_most_visited);
-	
-	ephy_node_set_property_int (eb->priv->favorites,
-				    EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				    EPHY_NODE_SPECIAL_PRIORITY);
-	ephy_node_add_child (eb->priv->keywords, eb->priv->favorites);
 
 	/* Not categorized */
 	eb->priv->notcategorized = ephy_node_new_with_id (db, BMKS_NOTCATEGORIZED_NODE_ID);
@@ -1326,7 +1164,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			 G_SETTINGS_BIND_GET);
 
 	ephy_setup_history_notifiers (eb);
-	ephy_bookmarks_update_favorites (eb);
 }
 
 static void
@@ -1348,7 +1185,6 @@ ephy_bookmarks_finalize (GObject *object)
 
 	ephy_node_unref (priv->bookmarks);
 	ephy_node_unref (priv->keywords);
-	ephy_node_unref (priv->favorites);
 	ephy_node_unref (priv->notcategorized);
 	ephy_node_unref (priv->smartbookmarks);
 
@@ -1779,10 +1615,6 @@ ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
 	{
 		uri = g_strdup ("topic://Special/NotCategorized");
 	}
-	else if (ephy_bookmarks_get_favorites (eb) == node)
-	{
-		uri = g_strdup ("topic://Special/Favorites");
-	}
 #ifdef ENABLE_ZEROCONF
 	else if (ephy_bookmarks_get_local (eb) == node)
 	{
@@ -1830,10 +1662,6 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	else if (strcmp (name, "topic://Special/NotCategorized") == 0)
 	{
 		return ephy_bookmarks_get_not_categorized (eb);
-	}
-	else if (strcmp (name, "topic://Special/Favorites") == 0)
-	{
-		return ephy_bookmarks_get_favorites (eb);
 	}
 #ifdef ENABLE_ZEROCONF
 	else if (strcmp (name, "topic://Special/Local") == 0)
@@ -1948,17 +1776,6 @@ EphyNode *
 ephy_bookmarks_get_bookmarks (EphyBookmarks *eb)
 {
 	return eb->priv->bookmarks;
-}
-
-/**
- * ephy_bookmarks_get_favorites:
- *
- * Return value: (transfer none):
- **/
-EphyNode *
-ephy_bookmarks_get_favorites (EphyBookmarks *eb)
-{
-	return eb->priv->favorites;
 }
 
 /**

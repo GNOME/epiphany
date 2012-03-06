@@ -141,10 +141,6 @@ void		  ephy_bookmarks_unset_keyword		(EphyBookmarks *eb,
 char		 *ephy_bookmarks_get_topic_uri		(EphyBookmarks *eb,
 							 EphyNode *node);
 
-/* Favorites */
-
-EphyNode	 *ephy_bookmarks_get_favorites		(EphyBookmarks *eb);
-
 /* Root */
 
 EphyNode	 *ephy_bookmarks_get_keywords		(EphyBookmarks *eb);
