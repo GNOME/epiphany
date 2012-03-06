@@ -432,7 +432,7 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
 {
   if (visit->url->host == NULL)
     visit->url->host = ephy_history_service_get_host_row_from_url (self, visit->url->url);
-  else if (visit->url->host->id == -1 && visit->url->host->zoom_level != 1.0) {
+  else if (visit->url->host->id == -1) {
     /* This will happen when we migrate the old history to the new
      * format. We need to store a zoom level for a not-yet-created
      * host, so we'll end up here. Ugly, but it works. */
