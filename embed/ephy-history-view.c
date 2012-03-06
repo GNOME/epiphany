@@ -96,13 +96,17 @@ ephy_history_view_init (EphyHistoryView *self)
   GtkTreeSelection *selection;
 
   column = gtk_tree_view_column_new_with_attributes (_("Title"),
-                                                     gtk_cell_renderer_text_new (),
+                                                     g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
+                                                                   "ellipsize-set", TRUE,
+                                                                   "ellipsize", PANGO_ELLIPSIZE_END, NULL),
                                                      "text", EPHY_HISTORY_STORE_COLUMN_TITLE,
                                                      NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
 
   column = gtk_tree_view_column_new_with_attributes (_("Address"),
-                                                     gtk_cell_renderer_text_new (),
+                                                     g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
+                                                                   "ellipsize-set", TRUE,
+                                                                   "ellipsize", PANGO_ELLIPSIZE_END, NULL),
                                                      "text", EPHY_HISTORY_STORE_COLUMN_ADDRESS,
                                                      NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
