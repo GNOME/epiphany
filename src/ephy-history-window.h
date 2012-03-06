@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-node-view.h"
 #include "ephy-history.h"
 #include "ephy-history-service.h"
 
@@ -56,7 +55,7 @@ typedef struct
 
 GType		     ephy_history_window_get_type (void);
 
-GtkWidget	    *ephy_history_window_new        (EphyHistory *history, EphyHistoryService *history_service);
+GtkWidget	    *ephy_history_window_new        (EphyHistoryService *history_service);
 
 void		     ephy_history_window_set_parent (EphyHistoryWindow *ehw,
 						     GtkWidget *window);

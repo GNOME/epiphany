@@ -1,6 +1,8 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti <mpeseng@tin.it>
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2012 Igalia S.L
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +29,10 @@
 
 #include "ephy-window.h"
 #include "ephy-history-window.h"
+#include "ephy-urls-view.h"
+#include "ephy-urls-store.h"
+#include "ephy-hosts-view.h"
+#include "ephy-hosts-store.h"
 #include "ephy-shell.h"
 #include "ephy-dnd.h"
 #include "ephy-state.h"
@@ -37,9 +43,6 @@
 #include "ephy-search-entry.h"
 #include "ephy-session.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-node.h"
-#include "ephy-node-common.h"
-#include "ephy-node-view.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -91,17 +94,18 @@ static void cmd_help_contents		  (GtkAction *action,
 static void search_entry_search_cb 	  (GtkWidget *entry,
 					   char *search_text,
 					   EphyHistoryWindow *editor);
+static void
+filter_now (EphyHistoryWindow *editor, gboolean hosts, gboolean pages);
 
 #define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
 
 struct _EphyHistoryWindowPrivate
 {
-	EphyHistory *history;
 	EphyHistoryService *history_service;
-	GtkWidget *sites_view;
+	GtkWidget *hosts_view;
 	GtkWidget *pages_view;
-	EphyNodeFilter *pages_filter;
-	EphyNodeFilter *sites_filter;
+	EphyURLsStore *urls_store;
+	EphyHostsStore *hosts_store;
 	GtkWidget *time_combo;
 	GtkWidget *search_entry;
 	GtkWidget *main_vbox;
@@ -109,7 +113,6 @@ struct _EphyHistoryWindowPrivate
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GtkWidget *confirmation_dialog;
-	EphyNode *selected_site;
 	GtkTreeViewColumn *title_col;
 	GtkTreeViewColumn *address_col;
 	GtkTreeViewColumn *datetime_col;
@@ -118,7 +121,6 @@ struct _EphyHistoryWindowPrivate
 enum
 {
 	PROP_0,
-	PROP_HISTORY,
 	PROP_HISTORY_SERVICE,
 };
 
@@ -200,7 +202,9 @@ confirmation_dialog_response_cb (GtkWidget *dialog,
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		ephy_history_clear (editor->priv->history);
+		ephy_history_service_clear (editor->priv->history_service,
+					    NULL, NULL);
+		filter_now (editor, TRUE, TRUE);
 	}
 }
 
@@ -240,6 +244,27 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 			  editor);
 
 	return dialog;
+}
+
+static EphyHistoryHost *
+get_selected_host (EphyHistoryWindow *editor)
+{
+	GtkTreeSelection *selection;
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	GtkTreeModel *model;
+	EphyHistoryHost *host = NULL;
+
+	EphyHistoryWindowPrivate *priv = editor->priv;
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->hosts_view));
+	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+		path = gtk_tree_model_get_path (model, &iter);
+		host = ephy_hosts_store_get_host_from_path (priv->hosts_store,
+							    path);
+		gtk_tree_path_free (path);
+	}
+	return host;
 }
 
 static void
@@ -295,21 +320,16 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 	GList *l;
 
 	window = EPHY_WINDOW (get_target_window (editor));
-	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+	selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = l->data;
-		const char *location;
-
-		location = ephy_node_get_property_string (node,
-						EPHY_NODE_PAGE_PROP_LOCATION);
-
-		ephy_shell_new_tab (ephy_shell, window, NULL, location,
+		EphyHistoryURL *url = l->data;
+		ephy_shell_new_tab (ephy_shell, window, NULL, url->url,
 			EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
 
-	g_list_free (selection);
+	g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
 }
 
 static void
@@ -321,22 +341,17 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 	GList *l;
 
 	window = EPHY_WINDOW (get_target_window (editor));
-	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+	selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = l->data;
-		const char *location;
-
-		location = ephy_node_get_property_string (node,
-						EPHY_NODE_PAGE_PROP_LOCATION);
-
-		ephy_shell_new_tab (ephy_shell, window, NULL, location,
+		EphyHistoryURL *url = l->data;
+		ephy_shell_new_tab (ephy_shell, window, NULL, url->url,
 				    EPHY_NEW_TAB_OPEN_PAGE |
 				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
 
-	g_list_free (selection);
+	g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
 }
 
 static void
@@ -362,21 +377,19 @@ cmd_copy (GtkAction *action,
 		gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
 	}
 
-	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
+	else if (gtk_widget_is_focus (editor->priv->pages_view))
 	{
 		GList *selection;
 
-		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+		selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
 
 		if (g_list_length (selection) == 1)
 		{
-			const char *tmp;
-			EphyNode *node = selection->data;
-			tmp = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
-			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
+			EphyHistoryURL *url = selection->data;
+			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), url->url, -1);
 		}
 
-		g_list_free (selection);
+		g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
 	}
 }
 
@@ -403,7 +416,7 @@ cmd_select_all (GtkAction *action,
 	{
 		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 	}
-	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (pages_view)))
+	else if (gtk_widget_is_focus (pages_view))
 	{
 		GtkTreeSelection *sel;
 
@@ -413,31 +426,52 @@ cmd_select_all (GtkAction *action,
 }
 
 static void
+on_browse_history_deleted_cb (gpointer service,
+			      gboolean success,
+			      gpointer result_data,
+			      gpointer user_data)
+{
+	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (user_data);
+
+	if (success != TRUE)
+		return;
+
+	filter_now (editor, FALSE, TRUE);
+}
+
+static void
+on_host_deleted_cb (gpointer service,
+		    gboolean success,
+		    gpointer result_data,
+		    gpointer user_data)
+{
+	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (user_data);
+
+	if (success != TRUE)
+		return;
+
+	filter_now (editor, TRUE, TRUE);
+}
+
+static void
 cmd_delete (GtkAction *action,
             EphyHistoryWindow *editor)
 {
-	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
+	if (gtk_widget_is_focus (editor->priv->pages_view))
 	{
-		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->pages_view));
-	}
-	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->sites_view)))
-	{
-		EphyNodePriority priority;
 		GList *selected;
-		EphyNode *node;
-
-		selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->sites_view));
-		node = selected->data;
-		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-
-		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
-
-		if (priority == EPHY_NODE_NORMAL_PRIORITY)
-		{
-			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->sites_view));
+		selected = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
+		ephy_history_service_delete_urls (editor->priv->history_service, selected,
+						  (EphyHistoryJobCallback)on_browse_history_deleted_cb, editor);
+	} else if (gtk_widget_is_focus (editor->priv->hosts_view)) {
+		EphyHistoryHost *host = get_selected_host (editor);
+		if (host) {
+			ephy_history_service_delete_host (editor->priv->history_service,
+							  host,
+							  (EphyHistoryJobCallback)on_host_deleted_cb,
+							  editor);
+			ephy_history_host_free (host);
 		}
-		
-		g_list_free (selected);
 	}
 }
 
@@ -447,22 +481,18 @@ cmd_bookmark_link (GtkAction *action,
 {
         GList *selection;
 
-        selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+        selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
 
 	if (g_list_length (selection) == 1)
 	{
-		const char *location;
-		const char *title;
-		EphyNode *node;
+		EphyHistoryURL *url;
 
-		node = selection->data;
-		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
-		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
+		url = selection->data;
 
-		ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (editor), location, title);
+		ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (editor), url->url, url->title);
 	}
 
-	g_list_free (selection);
+	g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
 }
 
 static void
@@ -499,13 +529,6 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	widget_class->show = ephy_history_window_show;
 
 	g_object_class_install_property (object_class,
-					 PROP_HISTORY,
-					 g_param_spec_object ("history",
-							      "Global history",
-							      "Global History",
-							      EPHY_TYPE_HISTORY,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
 					 PROP_HISTORY_SERVICE,
 					 g_param_spec_object ("history-service",
 							      "History service",
@@ -520,9 +543,6 @@ static void
 ephy_history_window_finalize (GObject *object)
 {
 	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
-
-	g_object_unref (G_OBJECT (editor->priv->pages_filter));
-	g_object_unref (G_OBJECT (editor->priv->sites_filter));
 
 	g_object_unref (editor->priv->action_group);
 	g_object_unref (editor->priv->ui_merge);
@@ -539,20 +559,23 @@ ephy_history_window_finalize (GObject *object)
 }
 
 static void
-ephy_history_window_node_activated_cb (GtkWidget *view,
-				         EphyNode *node,
-					 EphyHistoryWindow *editor)
+ephy_history_window_row_activated_cb (GtkTreeView *view,
+				      GtkTreePath *path,
+				      GtkTreeViewColumn *col,
+				      EphyHistoryWindow *editor)
 {
-	const char *location;
+	EphyHistoryURL *url;
 
-	location = ephy_node_get_property_string
-		(node, EPHY_NODE_PAGE_PROP_LOCATION);
-	g_return_if_fail (location != NULL);
+	url = ephy_urls_store_get_url_from_path (EPHY_URLS_STORE (gtk_tree_view_get_model (view)),
+                                                 path);
+	g_return_if_fail (url != NULL);
 
-	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
+	ephy_shell_new_tab (ephy_shell, NULL, NULL, url->url,
 			    EPHY_NEW_TAB_OPEN_PAGE);
+	ephy_history_url_free (url);
 }
 
+#if 0
 static void
 ephy_history_window_node_middle_clicked_cb (GtkWidget *view,
 					    EphyNode *node,
@@ -571,6 +594,7 @@ ephy_history_window_node_middle_clicked_cb (GtkWidget *view,
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 }
+#endif
 
 static void
 ephy_history_window_update_menu (EphyHistoryWindow *editor)
@@ -586,8 +610,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	char *open_in_window_label, *open_in_tab_label, *copy_label;
 	GtkWidget *focus_widget;
 
-	pages_focus = ephy_node_view_is_target
-		(EPHY_NODE_VIEW (editor->priv->pages_view));
+	pages_focus = gtk_widget_is_focus (editor->priv->pages_view);
 	num_pages_selected = gtk_tree_selection_count_selected_rows
 		 (gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->pages_view)));
 	pages_selection = num_pages_selected > 0;
@@ -666,6 +689,7 @@ static void
 entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyHistoryWindow *editor)
 {
 	ephy_history_window_update_menu (editor);
+	filter_now (editor, FALSE, TRUE);
 }
 
 static void
@@ -682,7 +706,7 @@ add_entry_monitor (EphyHistoryWindow *editor, GtkWidget *entry)
 }
 
 static gboolean
-view_focus_cb (EphyNodeView *view,
+view_focus_cb (GtkWidget *view,
                GdkEventFocus *event,
                EphyHistoryWindow *editor)
 {
@@ -720,13 +744,13 @@ ephy_history_window_show_popup_cb (GtkWidget *view,
 
 	widget = gtk_ui_manager_get_widget (editor->priv->ui_merge,
 					    "/EphyHistoryWindowPopup");
-	ephy_node_view_popup (EPHY_NODE_VIEW (view), widget);
+	ephy_history_view_popup (EPHY_HISTORY_VIEW (view), widget);
 
 	return TRUE;
 }
 
 static gboolean
-key_pressed_cb (EphyNodeView *view,
+key_pressed_cb (GtkWidget *view,
 		GdkEventKey *event,
 		EphyHistoryWindow *editor)
 {
@@ -745,191 +769,15 @@ key_pressed_cb (EphyNodeView *view,
 }
 
 static void
-add_by_site_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level)
-{
-	if (editor->priv->selected_site == NULL) return;
-
-	ephy_node_filter_add_expression
-		(filter, ephy_node_filter_expression_new
-				(EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,
-				 editor->priv->selected_site),
-		 level);
-}
-
-static void
-add_by_date_filter (EphyHistoryWindow *editor,
-		    EphyNodeFilter *filter,
-		    int level,
-		    EphyNode *equals)
-{
-	time_t now, midnight, cmp_time = 0;
-	struct tm btime;
-	int time_range, days = 0;
-
-	time_range = gtk_combo_box_get_active
-		(GTK_COMBO_BOX (editor->priv->time_combo));
-
-	/* no need to setup a new filter */
-	if (time_range == EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER) return;
-
-	now = time (NULL);
-	if (localtime_r (&now, &btime) == NULL) return;
-
-	/* get start of day */
-	btime.tm_sec = 0;
-	btime.tm_min = 0;
-	btime.tm_hour = 0;
-	midnight = mktime (&btime);
-
-	switch (time_range)
-	{
-		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_HALF_HOUR:
-			cmp_time = now - 30 * 60;
-			break;
-		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_TODAY:
-			cmp_time = midnight;
-			break;
-		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TWO_DAYS:
-			days++;
-			cmp_time = midnight;
-			break;
-		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_THREE_DAYS:
-			days++;
-			cmp_time = midnight;
-			break;
-		default:
-			g_return_if_reached ();
-			break;
-	}
-
-	while (--days >= 0)
-	{
-		/* subtract 1 day */
-		cmp_time -= 43200;
-		localtime_r (&cmp_time, &btime);
-		btime.tm_sec = 0;
-		btime.tm_min = 0;
-		btime.tm_hour = 0;
-		cmp_time = mktime (&btime);
-	}
-
-	ephy_node_filter_add_expression
-		(filter, ephy_node_filter_expression_new
-				(EPHY_NODE_FILTER_EXPRESSION_INT_PROP_BIGGER_THAN,
-				 EPHY_NODE_PAGE_PROP_LAST_VISIT, cmp_time),
-		 level);
-
-	if (equals == NULL) return;
-
-	ephy_node_filter_add_expression
-		(filter, ephy_node_filter_expression_new
-				(EPHY_NODE_FILTER_EXPRESSION_EQUALS, equals),
-		 0);
-}
-
-static void
-add_by_word_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level)
-{
-	const char *search_text;
-
-	search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
-	if (search_text == NULL) return;
-
-	ephy_node_filter_add_expression
-		(filter, ephy_node_filter_expression_new
-				(EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
-				 EPHY_NODE_PAGE_PROP_TITLE, search_text),
-		 level);
-
-	ephy_node_filter_add_expression
-		(filter, ephy_node_filter_expression_new
-				(EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
-				 EPHY_NODE_PAGE_PROP_LOCATION, search_text),
-		 level);
-}
-
-static void
-setup_filters (EphyHistoryWindow *editor,
-	       gboolean pages, gboolean sites)
-{
-	LOG ("Setup filters for pages %d and sites %d", pages, sites);
-
-	if (pages)
-	{
-		ephy_node_filter_empty (editor->priv->pages_filter);
-
-		add_by_date_filter (editor, editor->priv->pages_filter, 0, NULL);
-		add_by_word_filter (editor, editor->priv->pages_filter, 1);
-		add_by_site_filter (editor, editor->priv->pages_filter, 2);
-
-		ephy_node_filter_done_changing (editor->priv->pages_filter);
-	}
-
-	if (sites)
-	{
-		ephy_node_filter_empty (editor->priv->sites_filter);
-
-		add_by_date_filter (editor, editor->priv->sites_filter, 0,
-				    ephy_history_get_pages (editor->priv->history));
-
-		ephy_node_filter_done_changing (editor->priv->sites_filter);
-	}
-}
-
-static void
-site_node_selected_cb (EphyNodeView *view,
-		       EphyNode *node,
-		       EphyHistoryWindow *editor)
-{
-	EphyNode *pages;
-
-	if (editor->priv->selected_site == node) return;
-
-	editor->priv->selected_site = node;
-
-	if (node == NULL)
-	{
-		pages = ephy_history_get_pages (editor->priv->history);
-		ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->sites_view), pages);
-	}
-	else
-	{
-		g_signal_handlers_block_by_func (EPHY_SEARCH_ENTRY (editor->priv->search_entry),
-						 G_CALLBACK (search_entry_search_cb),
-						 editor);
-		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
-		g_signal_handlers_unblock_by_func (EPHY_SEARCH_ENTRY (editor->priv->search_entry),
-						   G_CALLBACK (search_entry_search_cb),
-						   editor);
-		setup_filters (editor, TRUE, FALSE);
-	}
-}
-
-static void
 search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *editor)
 {
-	EphyNode *all;
-
-	g_signal_handlers_block_by_func
-		(G_OBJECT (editor->priv->sites_view),
-		 G_CALLBACK (site_node_selected_cb),
-		 editor);
-	all = ephy_history_get_pages (editor->priv->history);
-	editor->priv->selected_site = all;
-	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->sites_view),
-				    all);
-	g_signal_handlers_unblock_by_func
-		(G_OBJECT (editor->priv->sites_view),
-		 G_CALLBACK (site_node_selected_cb),
-		 editor);
-
-	setup_filters (editor, TRUE, FALSE);
+	filter_now (editor, FALSE, TRUE);
 }
 
 static void
 time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 {
-	setup_filters (editor, TRUE, TRUE);
+  filter_now (editor, FALSE, TRUE);
 }
 
 static GtkWidget *
@@ -1018,6 +866,7 @@ delete_event_cb (EphyHistoryWindow *editor)
 	return TRUE;
 }
 
+#if 0
 static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
@@ -1040,6 +889,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	g_value_init (value, GDK_TYPE_PIXBUF);
 	g_value_take_object (value, pixbuf);
 }
+#endif
 
 static void
 convert_cell_data_func (GtkTreeViewColumn *column,
@@ -1083,6 +933,161 @@ static void
 view_selection_changed_cb (GtkWidget *view, EphyHistoryWindow *editor)
 {
 	ephy_history_window_update_menu (editor);
+	filter_now (editor, FALSE, TRUE);
+}
+
+static void
+setup_time_filters (EphyHistoryWindow *editor,
+		    gint64 *from, gint64 *to)
+{
+	time_t now, midnight, cmp_time = 0;
+	struct tm btime;
+	int time_range, days = 0;
+
+	time_range = gtk_combo_box_get_active
+		(GTK_COMBO_BOX (editor->priv->time_combo));
+
+	*from = *to = -1;
+
+	/* no need to setup a new filter */
+	if (time_range == EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER) return;
+
+	now = time (NULL);
+	if (localtime_r (&now, &btime) == NULL) return;
+
+	/* get start of day */
+	btime.tm_sec = 0;
+	btime.tm_min = 0;
+	btime.tm_hour = 0;
+	midnight = mktime (&btime);
+
+	switch (time_range)
+	{
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_HALF_HOUR:
+			cmp_time = now - 30 * 60;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_TODAY:
+			cmp_time = midnight;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TWO_DAYS:
+			days++;
+			cmp_time = midnight;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_THREE_DAYS:
+			days++;
+			cmp_time = midnight;
+			break;
+		default:
+			g_return_if_reached ();
+			break;
+	}
+
+	while (--days >= 0)
+	{
+		/* subtract 1 day */
+		cmp_time -= 43200;
+		localtime_r (&cmp_time, &btime);
+		btime.tm_sec = 0;
+		btime.tm_min = 0;
+		btime.tm_hour = 0;
+		cmp_time = mktime (&btime);
+	}
+
+	*from = cmp_time;
+}
+
+static GList *
+substrings_filter (EphyHistoryWindow *editor)
+{
+  const char *search_text;
+  char **tokens, **p;
+  GList *substrings = NULL;
+
+  search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
+  tokens = p = g_strsplit (search_text, " ", -1);
+
+  while (*p) {
+    substrings = g_list_prepend (substrings, *p++);
+  };
+  substrings = g_list_reverse (substrings);
+  g_free (tokens);
+
+  return substrings;
+}
+
+static void
+on_get_hosts_cb (gpointer service,
+		 gboolean success,
+		 gpointer result_data,
+		 gpointer user_data)
+{
+  EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
+  GList *hosts;
+
+  if (success != TRUE)
+    goto out;
+
+  hosts = (GList *) result_data;
+  gtk_list_store_clear (GTK_LIST_STORE (window->priv->hosts_store));
+  ephy_hosts_store_add_hosts (window->priv->hosts_store, hosts);
+
+out:
+  g_list_free_full (hosts, (GDestroyNotify)ephy_history_host_free);
+}
+
+static void
+on_find_urls_cb (gpointer service,
+		 gboolean success,
+		 gpointer result_data,
+		 gpointer user_data)
+{
+  EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
+  GList *urls;
+
+  if (success != TRUE)
+    return;
+
+  urls = (GList *)result_data;
+  gtk_list_store_clear (GTK_LIST_STORE (window->priv->urls_store));
+  ephy_urls_store_add_urls (window->priv->urls_store, urls);
+  g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
+}
+
+static void
+filter_now (EphyHistoryWindow *editor,
+            gboolean hosts,
+            gboolean pages)
+{
+	gint64 from, to;
+	EphyHistoryHost *host;
+	GList *substrings;
+
+	setup_time_filters (editor, &from, &to);
+	substrings = substrings_filter (editor);
+
+	if (hosts) {
+		ephy_history_service_get_hosts (editor->priv->history_service,
+						(EphyHistoryJobCallback) on_get_hosts_cb, editor);
+	}
+	if (pages) {
+		host = get_selected_host (editor);
+		ephy_history_service_find_urls (editor->priv->history_service,
+						from, to,
+						0, host ? host->id : 0,
+						substrings,
+						(EphyHistoryJobCallback)on_find_urls_cb, editor);
+		ephy_history_host_free (host);
+	}
+}
+
+static gboolean
+on_visit_url_cb (EphyHistoryService *service,
+		 gchar *url,
+		 EphyHistoryWindow *editor)
+{
+	filter_now (editor, TRUE, TRUE);
+
+	return FALSE;
 }
 
 static void
@@ -1091,13 +1096,13 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkTreeViewColumn *col;
 	GtkTreeSelection *selection;
 	GtkWidget *vbox, *hpaned;
-	GtkWidget *pages_view, *sites_view;
+	GtkWidget *pages_view, *hosts_view;
 	GtkWidget *scrolled_window;
-	EphyNode *node;
+	EphyURLsStore *urls_store;
+	EphyHostsStore *hosts_store;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	int url_col_id, title_col_id, datetime_col_id;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
@@ -1139,10 +1144,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			  TRUE, TRUE, 0);
 	gtk_widget_show (hpaned);
 
-	g_assert (editor->priv->history);
-
 	/* Sites View */
-	node = ephy_history_get_hosts (editor->priv->history);
 	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 					"hadjustment", NULL,
 					"vadjustment", NULL,
@@ -1152,44 +1154,17 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					NULL);
 	gtk_paned_pack1 (GTK_PANED (hpaned), scrolled_window, TRUE, FALSE);
 	gtk_widget_show (scrolled_window);
-	editor->priv->sites_filter = ephy_node_filter_new ();
-	sites_view = ephy_node_view_new (node, editor->priv->sites_filter);
-	add_focus_monitor (editor, sites_view);
-	url_col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (sites_view),
-					             G_TYPE_STRING,
-					             EPHY_NODE_PAGE_PROP_LOCATION,
-						     NULL, NULL);
-	title_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (sites_view), _("Sites"),
-						  G_TYPE_STRING,
-						  EPHY_NODE_PAGE_PROP_TITLE,
-						  EPHY_NODE_VIEW_SEARCHABLE |
-						  EPHY_NODE_VIEW_SHOW_PRIORITY,
-						  provide_favicon,
-						  NULL);
-	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (sites_view),
-					   page_drag_types,
-				           G_N_ELEMENTS (page_drag_types),
-					   url_col_id,
-					   title_col_id);
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sites_view));
+	hosts_store = ephy_hosts_store_new ();
+	hosts_view = ephy_hosts_view_new ();
+	gtk_tree_view_set_model (GTK_TREE_VIEW (hosts_view),
+				 GTK_TREE_MODEL (hosts_store));
+	add_focus_monitor (editor, hosts_view);
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (hosts_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-	ephy_node_view_set_priority (EPHY_NODE_VIEW (sites_view),
-				     EPHY_NODE_PAGE_PROP_PRIORITY);
-	ephy_node_view_set_sort (EPHY_NODE_VIEW (sites_view), G_TYPE_STRING,
-				 EPHY_NODE_PAGE_PROP_TITLE,
-				 GTK_SORT_ASCENDING);
-	gtk_container_add (GTK_CONTAINER (scrolled_window), sites_view);
-	gtk_widget_show (sites_view);
-	editor->priv->sites_view = sites_view;
-	editor->priv->selected_site = ephy_history_get_pages (editor->priv->history);
-	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
-				    editor->priv->selected_site);
-
-	g_signal_connect (G_OBJECT (sites_view),
-			  "node_selected",
-			  G_CALLBACK (site_node_selected_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (sites_view),
+	gtk_container_add (GTK_CONTAINER (scrolled_window), hosts_view);
+	gtk_widget_show (hosts_view);
+	editor->priv->hosts_view = hosts_view;
+	g_signal_connect (G_OBJECT (hosts_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
 			  editor);
@@ -1216,45 +1191,34 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					NULL);
 	gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 	gtk_widget_show (scrolled_window);
-	node = ephy_history_get_pages (editor->priv->history);
-	editor->priv->pages_filter = ephy_node_filter_new ();
-	pages_view = ephy_node_view_new (node, editor->priv->pages_filter);
+	editor->priv->pages_view = pages_view = ephy_urls_view_new ();
+	urls_store = ephy_urls_store_new ();
+	gtk_tree_view_set_model (GTK_TREE_VIEW (pages_view), GTK_TREE_MODEL (urls_store));
 	add_focus_monitor (editor, pages_view);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pages_view));
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (pages_view), TRUE);
-	title_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Title"),
-				                  G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
-				                  EPHY_NODE_VIEW_SORTABLE |
-					          EPHY_NODE_VIEW_SEARCHABLE |
-						  EPHY_NODE_VIEW_ELLIPSIZED, NULL, &col);
+
+	/* These three blocks should most likely go into
+	   EphyHistoryView. */
+	col = gtk_tree_view_get_column (GTK_TREE_VIEW (pages_view), 0);
 	gtk_tree_view_column_set_min_width (col, 300);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->title_col = col;
-	
-	url_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
-				                G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
-				                EPHY_NODE_VIEW_SORTABLE |
-						EPHY_NODE_VIEW_ELLIPSIZED, NULL, &col);
+
+	col = gtk_tree_view_get_column (GTK_TREE_VIEW (pages_view), 1);
 	gtk_tree_view_column_set_min_width (col, 300);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->address_col = col;
 
-	datetime_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Date"),
-						     G_TYPE_INT, EPHY_NODE_PAGE_PROP_LAST_VISIT,
-						     EPHY_NODE_VIEW_SORTABLE, NULL, &col);
+	col = gtk_tree_view_get_column (GTK_TREE_VIEW (pages_view), 2);
 	editor->priv->datetime_col = col;
-	parse_time_into_date (editor->priv->datetime_col, datetime_col_id);
+	parse_time_into_date (editor->priv->datetime_col, 2);
 
-	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (pages_view),
-					   page_drag_types,
-				           G_N_ELEMENTS (page_drag_types),
-					   url_col_id, title_col_id);
-	ephy_node_view_set_sort (EPHY_NODE_VIEW (pages_view), G_TYPE_INT,
-				 EPHY_NODE_PAGE_PROP_LAST_VISIT,
-				 GTK_SORT_DESCENDING);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), pages_view);
 	gtk_widget_show (pages_view);
 	editor->priv->pages_view = pages_view;
+	editor->priv->urls_store = urls_store;
+	editor->priv->hosts_store = hosts_store;
 
 	action = gtk_action_group_get_action (action_group, "ViewTitle");
 	g_settings_bind (EPHY_SETTINGS_STATE,
@@ -1287,12 +1251,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			 G_SETTINGS_BIND_DEFAULT);
 
 	g_signal_connect (G_OBJECT (pages_view),
-			  "node_activated",
-			  G_CALLBACK (ephy_history_window_node_activated_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (pages_view),
-			  "node-middle-clicked",
-			  G_CALLBACK (ephy_history_window_node_middle_clicked_cb),
+			  "row-activated",
+			  G_CALLBACK (ephy_history_window_row_activated_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (pages_view),
 			  "popup_menu",
@@ -1301,10 +1261,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (pages_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (selection),
-			  "changed",
-			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
 	ephy_state_add_window (GTK_WIDGET (editor),
@@ -1315,7 +1271,11 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			       "history_paned",
 		               130);
 
-	setup_filters (editor, TRUE, TRUE);
+	filter_now (editor, TRUE, TRUE);
+
+	g_signal_connect_after (editor->priv->history_service,
+				"visit-url", G_CALLBACK (on_visit_url_cb),
+				editor);
 }
 
 void
@@ -1341,16 +1301,14 @@ ephy_history_window_set_parent (EphyHistoryWindow *ebe,
 }
 
 GtkWidget *
-ephy_history_window_new (EphyHistory *history,
-                         EphyHistoryService *history_service)
+ephy_history_window_new (EphyHistoryService *history_service)
 {
 	EphyHistoryWindow *editor;
 
-	g_assert (history != NULL);
+	g_assert (history_service != NULL);
 
 	editor = EPHY_HISTORY_WINDOW (g_object_new
 			(EPHY_TYPE_HISTORY_WINDOW,
-			 "history", history,
 			 "history-service", history_service,
 			 NULL));
 
@@ -1369,9 +1327,6 @@ ephy_history_window_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-	case PROP_HISTORY:
-		editor->priv->history = g_value_get_object (value);
-		break;
         case PROP_HISTORY_SERVICE:
           editor->priv->history_service = g_value_get_object (value);
           break;
@@ -1391,9 +1346,6 @@ ephy_history_window_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-	case PROP_HISTORY:
-		g_value_set_object (value, editor->priv->history);
-		break;
         case PROP_HISTORY_SERVICE:
 		g_value_set_object (value, editor->priv->history_service);
 		break;
@@ -1419,13 +1371,13 @@ ephy_history_window_dispose (GObject *object)
 
 	editor = EPHY_HISTORY_WINDOW (object);
 
-	if (editor->priv->sites_view != NULL)
+	if (editor->priv->hosts_view != NULL)
 	{
 		remove_focus_monitor (editor, editor->priv->pages_view);
-		remove_focus_monitor (editor, editor->priv->sites_view);
+		remove_focus_monitor (editor, editor->priv->hosts_view);
 		remove_focus_monitor (editor, editor->priv->search_entry);
 
-		editor->priv->sites_view = NULL;
+		editor->priv->hosts_view = NULL;
 	}
 
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
