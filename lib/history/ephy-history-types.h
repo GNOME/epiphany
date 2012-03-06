@@ -21,6 +21,8 @@
 #ifndef EPHY_HISTORY_TYPES_H
 #define EPHY_HISTORY_TYPES_H
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 /*
