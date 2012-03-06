@@ -20,10 +20,7 @@
  */
 
 #include "config.h"
-
 #include "ephy-hosts-store.h"
-
-#include <gtk/gtk.h>
 
 G_DEFINE_TYPE (EphyHostsStore, ephy_hosts_store, GTK_TYPE_LIST_STORE)
 

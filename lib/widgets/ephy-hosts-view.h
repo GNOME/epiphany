@@ -22,6 +22,8 @@
 #ifndef _EPHY_HOSTS_VIEW_H
 #define _EPHY_HOSTS_VIEW_H
 
+#include "ephy-history-view.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -39,18 +41,16 @@ typedef struct _EphyHostsViewPrivate EphyHostsViewPrivate;
 
 struct _EphyHostsView
 {
-  GtkTreeView parent;
+  EphyHistoryView parent;
 };
 
 struct _EphyHostsViewClass
 {
-  GtkTreeViewClass parent_class;
+  EphyHistoryViewClass parent_class;
 };
 
 GType      ephy_hosts_view_get_type      (void) G_GNUC_CONST;
 GtkWidget *ephy_hosts_view_new           (void);
-void       ephy_hosts_view_popup         (EphyHostsView *view, GtkWidget *menu);
-GList *    ephy_hosts_view_get_selection (EphyHostsView *view);
 
 G_END_DECLS
 

@@ -20,43 +20,39 @@
  */
 
 #include "config.h"
-
-#include "ephy-history-store.h"
-
-#include "ephy-history-types.h"
+#include "ephy-urls-store.h"
 
 #include <gtk/gtk.h>
 
-G_DEFINE_TYPE (EphyHistoryStore, ephy_history_store, GTK_TYPE_LIST_STORE)
+G_DEFINE_TYPE (EphyURLsStore, ephy_urls_store, GTK_TYPE_LIST_STORE)
 
 static void
-ephy_history_store_class_init (EphyHistoryStoreClass *klass)
+ephy_urls_store_class_init (EphyURLsStoreClass *klass)
 {
 }
 
 static void
-ephy_history_store_init (EphyHistoryStore *self)
+ephy_urls_store_init (EphyURLsStore *self)
 {
-  GType types[EPHY_HISTORY_STORE_N_COLUMNS];
+  GType types[EPHY_URLS_STORE_N_COLUMNS];
 
-  types[EPHY_HISTORY_STORE_COLUMN_TITLE]   = G_TYPE_STRING;
-  types[EPHY_HISTORY_STORE_COLUMN_ADDRESS] = G_TYPE_STRING;
-  types[EPHY_HISTORY_STORE_COLUMN_DATE]    = G_TYPE_INT;
+  types[EPHY_URLS_STORE_COLUMN_TITLE]   = G_TYPE_STRING;
+  types[EPHY_URLS_STORE_COLUMN_ADDRESS] = G_TYPE_STRING;
+  types[EPHY_URLS_STORE_COLUMN_DATE]    = G_TYPE_INT;
 
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
-                                   EPHY_HISTORY_STORE_N_COLUMNS,
+                                   EPHY_URLS_STORE_N_COLUMNS,
                                    types);
 }
 
-EphyHistoryStore *
-ephy_history_store_new (void)
+EphyURLsStore *
+ephy_urls_store_new (void)
 {
-  return g_object_new (EPHY_TYPE_HISTORY_STORE,
-                       NULL);
+  return g_object_new (EPHY_TYPE_URLS_STORE, NULL);
 }
 
 void
-ephy_history_store_add_urls (EphyHistoryStore *store,
+ephy_urls_store_add_urls (EphyURLsStore *store,
                              GList *urls)
 {
   EphyHistoryURL *url;
@@ -66,25 +62,25 @@ ephy_history_store_add_urls (EphyHistoryStore *store,
     url = (EphyHistoryURL *)iter->data;
     gtk_list_store_insert_with_values (GTK_LIST_STORE (store),
                                        NULL, G_MAXINT,
-                                       EPHY_HISTORY_STORE_COLUMN_TITLE, url->title,
-                                       EPHY_HISTORY_STORE_COLUMN_ADDRESS, url->url,
-                                       EPHY_HISTORY_STORE_COLUMN_DATE, url->last_visit_time,
+                                       EPHY_URLS_STORE_COLUMN_TITLE, url->title,
+                                       EPHY_URLS_STORE_COLUMN_ADDRESS, url->url,
+                                       EPHY_URLS_STORE_COLUMN_DATE, url->last_visit_time,
                                        -1);
   }
 }
 
 void
-ephy_history_store_add_url (EphyHistoryStore *store, EphyHistoryURL *url)
+ephy_urls_store_add_url (EphyURLsStore *store, EphyHistoryURL *url)
 {
   GList *urls = NULL;
   urls = g_list_append (urls, url);
-  ephy_history_store_add_urls (store, urls);
+  ephy_urls_store_add_urls (store, urls);
   g_list_free (urls);
 }
 
 EphyHistoryURL *
-ephy_history_store_get_url_from_path (EphyHistoryStore *store,
-				      GtkTreePath *path)
+ephy_urls_store_get_url_from_path (EphyURLsStore *store,
+                                   GtkTreePath *path)
 {
   GtkTreeIter iter;
 
@@ -92,8 +88,8 @@ ephy_history_store_get_url_from_path (EphyHistoryStore *store,
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-                      EPHY_HISTORY_STORE_COLUMN_TITLE, &url->title,
-                      EPHY_HISTORY_STORE_COLUMN_ADDRESS, &url->url,
+                      EPHY_URLS_STORE_COLUMN_TITLE, &url->title,
+                      EPHY_URLS_STORE_COLUMN_ADDRESS, &url->url,
                       -1);
   return url;
 }

@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
- *  Copyright © 2011, 2012 Igalia S.L.
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,21 +20,15 @@
  */
 
 #include "config.h"
-
 #include "ephy-history-view.h"
 
 #include "ephy-gui.h"
-#include "ephy-history-store.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 G_DEFINE_TYPE (EphyHistoryView, ephy_history_view, GTK_TYPE_TREE_VIEW)
 
-static void
-ephy_history_view_class_init (EphyHistoryViewClass *klass)
-{
-}
 
 static gboolean
 button_event_modifies_selection (GdkEventButton *event)
@@ -51,9 +45,8 @@ ephy_history_view_button_press_cb (GtkWidget *treeview,
   GtkTreePath *path = NULL;
   gboolean path_is_selected, call_parent = TRUE;
 
-  if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview))) {
+  if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview)))
     return GTK_WIDGET_CLASS (ephy_history_view_parent_class)->button_press_event (treeview, event);
-  }
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
   if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
@@ -86,36 +79,18 @@ ephy_history_view_button_press_cb (GtkWidget *treeview,
   } else
     gtk_tree_selection_unselect_all (selection);
 
-  return TRUE;
+  return FALSE;
+}
+
+static void
+ephy_history_view_class_init (EphyHistoryViewClass *klass)
+{
 }
 
 static void
 ephy_history_view_init (EphyHistoryView *self)
 {
-  GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
-
-  column = gtk_tree_view_column_new_with_attributes (_("Title"),
-                                                     g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
-                                                                   "ellipsize-set", TRUE,
-                                                                   "ellipsize", PANGO_ELLIPSIZE_END, NULL),
-                                                     "text", EPHY_HISTORY_STORE_COLUMN_TITLE,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
-
-  column = gtk_tree_view_column_new_with_attributes (_("Address"),
-                                                     g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
-                                                                   "ellipsize-set", TRUE,
-                                                                   "ellipsize", PANGO_ELLIPSIZE_END, NULL),
-                                                     "text", EPHY_HISTORY_STORE_COLUMN_ADDRESS,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
-
-  column = gtk_tree_view_column_new_with_attributes (_("Date"),
-                                                     gtk_cell_renderer_text_new (),
-                                                     "text", EPHY_HISTORY_STORE_COLUMN_DATE,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -125,18 +100,15 @@ ephy_history_view_init (EphyHistoryView *self)
                            self, 0);
 }
 
-GtkWidget *
-ephy_history_view_new (void)
-{
-  return g_object_new (EPHY_TYPE_HISTORY_VIEW, NULL);
-}
-
 void
 ephy_history_view_popup (EphyHistoryView *view, GtkWidget *menu)
 {
   GdkEvent *event;
 
+  g_return_if_fail (EPHY_IS_HISTORY_VIEW (view));
+
   event = gtk_get_current_event ();
+
   if (event) {
     if (event->type == GDK_KEY_PRESS) {
       GdkEventKey *key = (GdkEventKey *) event;
@@ -151,32 +123,9 @@ ephy_history_view_popup (EphyHistoryView *view, GtkWidget *menu)
       gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL,
                       NULL, button->button, button->time);
     }
+
     gdk_event_free (event);
   }
 }
 
-static void
-get_selection (GtkTreeModel *model,
-               GtkTreePath *path,
-               GtkTreeIter *iter,
-               gpointer *data)
-{
-  EphyHistoryURL *url;
 
-  url = ephy_history_store_get_url_from_path (EPHY_HISTORY_STORE (model), path);
-  *data = g_list_prepend (*data, url);
-}
-
-GList *
-ephy_history_view_get_selection (EphyHistoryView *view)
-{
-  GtkTreeSelection *selection;
-  GList *list = NULL;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-  gtk_tree_selection_selected_foreach (selection,
-                                       (GtkTreeSelectionForeachFunc) get_selection,
-                                       &list);
-
-  return g_list_reverse (list);
-}
