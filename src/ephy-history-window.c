@@ -969,11 +969,15 @@ setup_time_filters (EphyHistoryWindow *editor,
 			cmp_time = midnight;
 			break;
 		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TWO_DAYS:
-			days++;
+			days = 1;
 			cmp_time = midnight;
 			break;
 		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_THREE_DAYS:
-			days++;
+			days = 2;
+			cmp_time = midnight;
+			break;
+		case EPHY_PREFS_STATE_HISTORY_DATE_FILTER_LAST_TEN_DAYS:
+			days = 9;
 			cmp_time = midnight;
 			break;
 		default:
