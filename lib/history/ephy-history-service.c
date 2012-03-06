@@ -40,6 +40,7 @@ typedef enum {
   GET_HOST_FOR_URL,
   QUERY_URLS,
   QUERY_VISITS,
+  GET_HOSTS
 } EphyHistoryServiceMessageType;
 
 enum {
@@ -518,6 +519,18 @@ ephy_history_service_execute_find_visits (EphyHistoryService *self, EphyHistoryQ
   return TRUE;
 }
 
+static gboolean
+ephy_history_service_execute_get_hosts (EphyHistoryService *self,
+                                        gpointer pointer, gpointer *results)
+{
+  GList *hosts;
+
+  hosts = ephy_history_service_get_all_hosts (self);
+  *results = hosts;
+
+  return hosts != NULL;
+}
+
 void
 ephy_history_service_add_visit (EphyHistoryService *self, EphyHistoryPageVisit *visit, EphyHistoryJobCallback callback, gpointer user_data)
 {
@@ -578,6 +591,19 @@ ephy_history_service_query_urls (EphyHistoryService *self, EphyHistoryQuery *que
 
   message = ephy_history_service_message_new (self, QUERY_URLS,
                                               ephy_history_query_copy (query), (GDestroyNotify) ephy_history_query_free, callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+void
+ephy_history_service_get_hosts (EphyHistoryService *self,
+                                EphyHistoryJobCallback callback,
+                                gpointer user_data)
+{
+  EphyHistoryServiceMessage *message;
+
+  message = ephy_history_service_message_new (self, GET_HOSTS,
+                                              NULL, NULL,
+                                              callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -789,7 +815,8 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_host_for_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_urls,
-  (EphyHistoryServiceMethod)ephy_history_service_execute_find_visits
+  (EphyHistoryServiceMethod)ephy_history_service_execute_find_visits,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_get_hosts
 };
 
 static void
