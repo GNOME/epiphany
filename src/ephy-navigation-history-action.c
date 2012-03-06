@@ -29,7 +29,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-gui.h"
-#include "ephy-history.h"
+#include "ephy-history-service.h"
 #include "ephy-link.h"
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
@@ -45,7 +45,7 @@
 
 struct _EphyNavigationHistoryActionPrivate {
   EphyNavigationHistoryDirection direction;
-  EphyHistory *history;
+  EphyHistoryService *history;
 };
 
 enum {
@@ -59,7 +59,7 @@ static void ephy_navigation_history_action_class_init (EphyNavigationHistoryActi
 G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_LINK_ACTION)
 
 static void
-ephy_history_cleared_cb (EphyHistory *history,
+ephy_history_cleared_cb (EphyHistoryService *history,
                          EphyNavigationHistoryAction *action)
 {
   ephy_action_change_sensitivity_flags (GTK_ACTION (action), SENS_FLAG, TRUE);
@@ -128,12 +128,9 @@ action_activate (GtkAction *action)
 static void
 ephy_navigation_history_action_init (EphyNavigationHistoryAction *action)
 {
-  EphyHistory *history;
-
   action->priv = EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE (action);
 
-  history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-  action->priv->history = EPHY_HISTORY (g_object_ref (history));
+  action->priv->history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
 
   g_signal_connect (action->priv->history,
                     "cleared", G_CALLBACK (ephy_history_cleared_cb),
@@ -148,8 +145,6 @@ ephy_navigation_history_action_finalize (GObject *object)
   g_signal_handlers_disconnect_by_func (action->priv->history,
                                         ephy_history_cleared_cb,
                                         action);
-  g_object_unref (action->priv->history);
-  action->priv->history = NULL;
 
   G_OBJECT_CLASS (ephy_navigation_history_action_parent_class)->finalize (object);
 }
