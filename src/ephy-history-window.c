@@ -21,33 +21,32 @@
  */
 
 #include "config.h"
+#include "ephy-history-window.h"
+
+#include "ephy-bookmarks-ui.h"
+#include "ephy-debug.h"
+#include "ephy-dnd.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-file-helpers.h"
+#include "ephy-gui.h"
+#include "ephy-hosts-store.h"
+#include "ephy-hosts-view.h"
+#include "ephy-prefs.h"
+#include "ephy-search-entry.h"
+#include "ephy-session.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-state.h"
+#include "ephy-time-helpers.h"
+#include "ephy-urls-store.h"
+#include "ephy-urls-view.h"
+#include "ephy-window.h"
+#include "window-commands.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <time.h>
-
-#include "ephy-window.h"
-#include "ephy-history-window.h"
-#include "ephy-urls-view.h"
-#include "ephy-urls-store.h"
-#include "ephy-hosts-view.h"
-#include "ephy-hosts-store.h"
-#include "ephy-shell.h"
-#include "ephy-dnd.h"
-#include "ephy-state.h"
-#include "window-commands.h"
-#include "ephy-file-helpers.h"
-#include "ephy-debug.h"
-#include "ephy-gui.h"
-#include "ephy-search-entry.h"
-#include "ephy-session.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-bookmarks-ui.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
-#include "ephy-gui.h"
-#include "ephy-time-helpers.h"
 
 static const GtkTargetEntry page_drag_types [] =
 {
