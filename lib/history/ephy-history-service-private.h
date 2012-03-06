@@ -51,5 +51,6 @@ void                     ephy_history_service_update_host_row         (EphyHisto
 EphyHistoryHost *        ephy_history_service_get_host_row            (EphyHistoryService *self, const gchar *url_string, EphyHistoryHost *host);
 GList *                  ephy_history_service_get_all_hosts           (EphyHistoryService *self);
 EphyHistoryHost *        ephy_history_service_get_host_row_from_url   (EphyHistoryService *self, const gchar *url);
+void                     ephy_history_service_delete_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 
 #endif /* EPHY_HISTORY_SERVICE_PRIVATE_H */

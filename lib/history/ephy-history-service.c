@@ -32,6 +32,7 @@ typedef enum {
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
+  DELETE_HOST,
   CLEAR,
   /* QUIT */
   QUIT,
@@ -756,6 +757,18 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
 }
 
 static gboolean
+ephy_history_service_execute_delete_host (EphyHistoryService *self,
+                                          EphyHistoryHost *host,
+                                          EphyHistoryJobCallback callback,
+                                          gpointer user_data)
+{
+  ephy_history_service_delete_host_row (self, host);
+  ephy_history_service_schedule_commit (self);
+
+  return TRUE;
+}
+
+static gboolean
 ephy_history_service_execute_clear (EphyHistoryService *self,
                                     gpointer pointer,
                                     gpointer *result)
@@ -776,6 +789,19 @@ ephy_history_service_delete_urls (EphyHistoryService *self,
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, DELETE_URLS, 
                                       ephy_history_url_list_copy (urls), (GDestroyNotify)ephy_history_url_list_free,
+                                      callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+void
+ephy_history_service_delete_host (EphyHistoryService *self,
+                                  EphyHistoryHost *host,
+                                  EphyHistoryJobCallback callback,
+                                  gpointer user_data)
+{
+  EphyHistoryServiceMessage *message =
+    ephy_history_service_message_new (self, DELETE_HOST,
+                                      ephy_history_host_copy (host), (GDestroyNotify)ephy_history_host_free,
                                       callback, user_data);
   ephy_history_service_send_message (self, message);
 }
@@ -810,6 +836,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_delete_host,
   (EphyHistoryServiceMethod)ephy_history_service_execute_clear,
   (EphyHistoryServiceMethod)ephy_history_service_execute_quit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_url,

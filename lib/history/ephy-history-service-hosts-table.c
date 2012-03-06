@@ -318,3 +318,53 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
 
   return host;
 }
+
+void
+ephy_history_service_delete_host_row (EphyHistoryService *self,
+                                      EphyHistoryHost *host)
+{
+  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+  EphySQLiteStatement *statement = NULL;
+  gchar *sql_statement;
+  GError *error = NULL;
+
+  g_assert (priv->history_thread == g_thread_self ());
+  g_assert (priv->history_database != NULL);
+
+  g_assert (host->id != -1 || host->url);
+
+  if (host->id != -1)
+    sql_statement = g_strdup ("DELETE FROM hosts WHERE id=?");
+  else
+    sql_statement = g_strdup ("DELETE FROM hosts WHERE url=?");
+
+  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+                                                       sql_statement, &error);
+  g_free (sql_statement);
+
+  if (error) {
+    g_error ("Could not build urls table query statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
+  }
+
+  if (host->id != -1)
+    ephy_sqlite_statement_bind_int (statement, 0, host->id, &error);
+  else
+    ephy_sqlite_statement_bind_string (statement, 0, host->url, &error);
+
+  if (error) {
+    g_error ("Could not build hosts table query statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error) {
+    g_error ("Could not modify host in hosts table: %s", error->message);
+    g_error_free (error);
+  }
+  g_object_unref (statement);
+}
