@@ -778,7 +778,7 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 static void
 time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 {
-	filter_now (editor, FALSE, TRUE);
+	filter_now (editor, TRUE, TRUE);
 }
 
 static GtkWidget *
@@ -1078,7 +1078,8 @@ filter_now (EphyHistoryWindow *editor,
 
 	if (hosts)
 	{
-		ephy_history_service_get_hosts (editor->priv->history_service,
+		ephy_history_service_find_hosts (editor->priv->history_service,
+						 from, to,
 						(EphyHistoryJobCallback) on_get_hosts_cb, editor);
 	}
 
