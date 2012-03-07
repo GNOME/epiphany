@@ -50,6 +50,7 @@ void                     ephy_history_service_add_host_row            (EphyHisto
 void                     ephy_history_service_update_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 EphyHistoryHost *        ephy_history_service_get_host_row            (EphyHistoryService *self, const gchar *url_string, EphyHistoryHost *host);
 GList *                  ephy_history_service_get_all_hosts           (EphyHistoryService *self);
+GList*                   ephy_history_service_find_host_rows          (EphyHistoryService *self, EphyHistoryQuery *query);
 EphyHistoryHost *        ephy_history_service_get_host_row_from_url   (EphyHistoryService *self, const gchar *url);
 void                     ephy_history_service_delete_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 void                     ephy_history_service_delete_orphan_hosts     (EphyHistoryService *self);

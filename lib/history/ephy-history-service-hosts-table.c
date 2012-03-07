@@ -243,6 +243,107 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
   return hosts;
 }
 
+GList*
+ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery *query)
+{
+  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+  EphySQLiteStatement *statement = NULL;
+  GList *substring;
+  GString *statement_str;
+  GList *hosts = NULL;
+  GError *error = NULL;
+  const char *base_statement = ""
+    "SELECT "
+      "DISTINCT hosts.id, "
+      "hosts.url, "
+      "hosts.title, "
+      "hosts.visit_count, "
+      "hosts.zoom_level "
+    "FROM "
+      "hosts ";
+
+  int i = 0;
+
+  g_assert (priv->history_thread == g_thread_self ());
+  g_assert (priv->history_database != NULL);
+
+  statement_str = g_string_new (base_statement);
+
+  /* In either of these cases we need to at least join with the urls table. */
+  if (query->substring_list || query->from > 0 || query->to > 0)
+    statement_str = g_string_append (statement_str,  "JOIN urls on hosts.id = urls.host ");
+
+  /* In these cases, we additionally need to join with the visits table. */
+  if (query->from > 0 || query->to > 0) {
+    statement_str = g_string_append (statement_str, "JOIN visits on urls.id = visits.url WHERE ");
+    if (query->from > 0)
+      statement_str = g_string_append (statement_str, "visits.visit_time >= ? AND ");
+    if (query->to > 0)
+      statement_str = g_string_append (statement_str, "visits.visit_time <= ? AND ");
+  } else {
+    statement_str = g_string_append (statement_str, "WHERE ");
+  }
+
+  for (substring = query->substring_list; substring != NULL; substring = substring->next)
+    statement_str = g_string_append (statement_str, "(hosts.url LIKE ? OR hosts.title LIKE ? OR "
+                                     "urls.url LIKE ? OR urls.title LIKE ?) AND ");
+
+  statement_str = g_string_append (statement_str, "1 ");
+
+  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+						       statement_str->str, &error);
+  g_string_free (statement_str, TRUE);
+
+  if (error) {
+    g_error ("Could not build hosts table query statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return NULL;
+  }
+  if (query->from > 0) {
+    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
+      g_error ("Could not build hosts table query statement: %s", error->message);
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
+    }
+  }
+  if (query->to > 0) {
+    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
+      g_error ("Could not build hosts table query statement: %s", error->message);
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
+    }
+  }
+  for (substring = query->substring_list; substring != NULL; substring = substring->next) {
+    int j = 4;
+    char *string = g_strdup_printf ("%%%s%%", (char*)substring->data);
+    while (j--)
+      if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
+        g_error ("Could not build hosts table query statement: %s", error->message);
+        g_error_free (error);
+        g_object_unref (statement);
+        g_free (string);
+        return NULL;
+      }
+    g_free (string);
+  }
+
+  while (ephy_sqlite_statement_step (statement, &error))
+    hosts = g_list_prepend (hosts, create_host_from_statement (statement));
+
+  hosts = g_list_reverse (hosts);
+
+  if (error) {
+    g_error ("Could not execute hosts table query statement: %s", error->message);
+    g_error_free (error);
+  }
+  g_object_unref (statement);
+
+  return hosts;
+}
+
 /* Inspired from ephy-history.c */
 static GList *
 get_hostname_and_locations (const gchar *url, gchar **hostname)

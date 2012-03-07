@@ -41,7 +41,8 @@ typedef enum {
   GET_HOST_FOR_URL,
   QUERY_URLS,
   QUERY_VISITS,
-  GET_HOSTS
+  GET_HOSTS,
+  QUERY_HOSTS
 } EphyHistoryServiceMessageType;
 
 enum {
@@ -532,6 +533,18 @@ ephy_history_service_execute_get_hosts (EphyHistoryService *self,
   return TRUE;
 }
 
+static gboolean
+ephy_history_service_execute_query_hosts (EphyHistoryService *self,
+                                          EphyHistoryQuery *query, gpointer *results)
+{
+  GList *hosts;
+
+  hosts = ephy_history_service_find_host_rows (self, query);
+  *results = hosts;
+
+  return TRUE;
+}
+
 void
 ephy_history_service_add_visit (EphyHistoryService *self, EphyHistoryPageVisit *visit, EphyHistoryJobCallback callback, gpointer user_data)
 {
@@ -624,6 +637,23 @@ ephy_history_service_get_hosts (EphyHistoryService *self,
 
   message = ephy_history_service_message_new (self, GET_HOSTS,
                                               NULL, NULL,
+                                              callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+void
+ephy_history_service_query_hosts (EphyHistoryService *self,
+                                  EphyHistoryQuery *query,
+                                  EphyHistoryJobCallback callback,
+                                  gpointer user_data)
+{
+  EphyHistoryServiceMessage *message;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+
+  message = ephy_history_service_message_new (self, QUERY_HOSTS,
+                                              ephy_history_query_copy (query),
+                                              (GDestroyNotify) ephy_history_query_free,
                                               callback, user_data);
   ephy_history_service_send_message (self, message);
 }
@@ -888,7 +918,8 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_host_for_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_urls,
   (EphyHistoryServiceMethod)ephy_history_service_execute_find_visits,
-  (EphyHistoryServiceMethod)ephy_history_service_execute_get_hosts
+  (EphyHistoryServiceMethod)ephy_history_service_execute_get_hosts,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_query_hosts
 };
 
 static void
@@ -949,4 +980,23 @@ ephy_history_service_visit_url (EphyHistoryService *self,
   g_return_if_fail (url != NULL);
 
   g_signal_emit (self, signals[VISIT_URL], 0, url, &result);
+}
+
+void
+ephy_history_service_find_hosts (EphyHistoryService *self,
+                                 gint64 from, gint64 to,
+                                 EphyHistoryJobCallback callback,
+                                 gpointer user_data)
+{
+  EphyHistoryQuery *query;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+
+  query = ephy_history_query_new ();
+
+  query->from = from;
+  query->to = to;
+
+  ephy_history_service_query_hosts (self,
+                                    query, callback, user_data);
 }
