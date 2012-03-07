@@ -436,7 +436,7 @@ on_browse_history_deleted_cb (gpointer service,
 	if (success != TRUE)
 		return;
 
-	filter_now (editor, FALSE, TRUE);
+	filter_now (editor, TRUE, TRUE);
 }
 
 static void
@@ -1029,15 +1029,21 @@ on_get_hosts_cb (gpointer service,
 		 gpointer user_data)
 {
 	EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
+	EphyHistoryHost *selected_host;
 	GList *hosts;
 
 	if (success != TRUE)
 		goto out;
 
 	hosts = (GList *) result_data;
+	selected_host = get_selected_host (window);
 	gtk_list_store_clear (GTK_LIST_STORE (window->priv->hosts_store));
 	ephy_hosts_store_add_hosts (window->priv->hosts_store, hosts);
-	
+	if (selected_host) {
+		ephy_hosts_view_select_host (EPHY_HOSTS_VIEW (window->priv->hosts_view),
+					     selected_host);
+		ephy_history_host_free (selected_host);
+	}
 out:
 	g_list_free_full (hosts, (GDestroyNotify)ephy_history_host_free);
 }
