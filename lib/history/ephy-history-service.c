@@ -529,7 +529,7 @@ ephy_history_service_execute_get_hosts (EphyHistoryService *self,
   hosts = ephy_history_service_get_all_hosts (self);
   *results = hosts;
 
-  return hosts != NULL;
+  return TRUE;
 }
 
 void
