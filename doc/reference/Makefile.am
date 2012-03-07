@@ -115,6 +115,7 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 		-I$(top_builddir)/embed \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
+		-I$(top_srcdir)/lib/history \
 		-I$(top_builddir)/lib/egg \
 		$(DEPENDENCIES_CFLAGS) \
 		$(DBUS_CFLAGS) \
@@ -125,6 +126,7 @@ GTKDOC_LIBS = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
+	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
         $(DEPENDENCIES_LIBS) \
