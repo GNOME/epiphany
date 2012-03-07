@@ -42,6 +42,9 @@ ephy_hosts_store_init (EphyHostsStore *self)
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
                                    EPHY_HOSTS_STORE_N_COLUMNS,
                                    types);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (self),
+                                        EPHY_HOSTS_STORE_COLUMN_ADDRESS,
+                                        GTK_SORT_ASCENDING);
 }
 
 EphyHostsStore *
