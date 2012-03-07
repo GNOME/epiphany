@@ -53,3 +53,35 @@ ephy_hosts_view_new (void)
   return g_object_new (EPHY_TYPE_HOSTS_VIEW, NULL);
 }
 
+gboolean
+ephy_hosts_view_select_host (EphyHostsView *view,
+                             EphyHistoryHost *host)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint id;
+  gboolean found = FALSE;
+
+  g_return_val_if_fail (EPHY_IS_HOSTS_VIEW (view), FALSE);
+  g_return_val_if_fail (host != NULL, FALSE);
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+
+  gtk_tree_model_get_iter_first (model, &iter);
+  do {
+    gtk_tree_model_get (model, &iter,
+                        EPHY_HOSTS_STORE_COLUMN_ID, &id,
+                        -1);
+    if (id == host->id) {
+      found = TRUE;
+      break;
+    }
+  } while (gtk_tree_model_iter_next (model, &iter));
+
+  if (found) {
+    gtk_tree_selection_select_iter (
+      gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), &iter);
+  }
+
+  return found;
+}

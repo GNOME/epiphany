@@ -22,6 +22,7 @@
 #ifndef _EPHY_HOSTS_VIEW_H
 #define _EPHY_HOSTS_VIEW_H
 
+#include "ephy-history-types.h"
 #include "ephy-history-view.h"
 
 #include <gtk/gtk.h>
@@ -51,6 +52,7 @@ struct _EphyHostsViewClass
 
 GType      ephy_hosts_view_get_type      (void) G_GNUC_CONST;
 GtkWidget *ephy_hosts_view_new           (void);
+gboolean   ephy_hosts_view_select_host   (EphyHostsView *view, EphyHistoryHost *host);
 
 G_END_DECLS
 
