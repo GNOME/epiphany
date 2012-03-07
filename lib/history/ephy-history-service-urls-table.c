@@ -61,10 +61,10 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   g_assert (priv->history_thread == g_thread_self ());
   g_assert (priv->history_database != NULL);
 
-  if (url_string == NULL && url != NULL) {
+  if (url_string == NULL && url != NULL)
     url_string = url->url;
-  }
-  g_assert (url_string || url->id != -1);
+
+  g_return_val_if_fail (url_string || url->id != -1, NULL);
 
   if (url != NULL && url->id != -1) {
     statement = ephy_sqlite_connection_create_statement (priv->history_database,
@@ -364,7 +364,7 @@ ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
   g_assert (priv->history_thread == g_thread_self ());
   g_assert (priv->history_database != NULL);
 
-  g_assert (url->id != -1 || url->url);
+  g_return_if_fail (url->id != -1 || url->url);
 
   if (url->id != -1)
     sql_statement = g_strdup ("DELETE FROM urls WHERE id=?");
