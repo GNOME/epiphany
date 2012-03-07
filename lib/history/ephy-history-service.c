@@ -788,6 +788,7 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
     ephy_history_service_delete_url (self, url);
   }
 
+  ephy_history_service_delete_orphan_hosts (self);
   ephy_history_service_schedule_commit (self);
 
   return TRUE;

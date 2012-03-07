@@ -368,3 +368,28 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   }
   g_object_unref (statement);
 }
+
+void
+ephy_history_service_delete_orphan_hosts (EphyHistoryService *self)
+{
+  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+  GError *error = NULL;
+
+  g_assert (priv->history_thread == g_thread_self ());
+  g_assert (priv->history_database != NULL);
+
+  /* Where a JOIN would give us all hosts with urls associated, a LEFT
+     JOIN also gives us those hosts for which there are no urls.  By
+     means of urls.host == NULL we filter out anything else and
+     retrieve only the ids of the hosts without associated urls. Then,
+     we delete all these rows from the hosts table. */
+  ephy_sqlite_connection_execute (priv->history_database,
+                                  "DELETE FROM hosts WHERE hosts.id IN "
+                                  "  (SELECT hosts.id FROM hosts LEFT JOIN urls "
+                                  "    ON hosts.id = urls.host WHERE urls.host is NULL);",
+                                  &error);
+  if (error) {
+    g_error ("Couldn't remove orphan hosts from database: %s", error->message);
+    g_error_free (error);
+  }
+}
