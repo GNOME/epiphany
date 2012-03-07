@@ -21,8 +21,8 @@
 #include "config.h"
 #include "ephy-completion-model.h"
 
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-history-service.h"
 #include "ephy-shell.h"
@@ -36,7 +36,6 @@ G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 struct _EphyCompletionModelPrivate {
   EphyHistoryService *history_service;
   EphyHistory *legacy_history_service;
-  EphyFaviconCache *favicon_cache;
 
   EphyNode *bookmarks;
   GSList *search_terms;
@@ -99,7 +98,6 @@ ephy_completion_model_init (EphyCompletionModel *model)
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
   priv->legacy_history_service = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-  priv->favicon_cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (embed_shell));
 
   bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
   priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks_service);
@@ -165,22 +163,69 @@ typedef struct {
   gboolean is_bookmark;
 } PotentialRow;
 
+typedef struct {
+  GtkListStore *model;
+  GtkTreeRowReference *row_reference;
+} IconLoadData;
+
+
+static void
+icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+  GtkTreeIter iter;
+  IconLoadData *data = (IconLoadData *) user_data;
+  GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (webkit_get_favicon_database (), result, NULL);
+
+  if (favicon) {
+    /* The completion model might have changed its contents */
+    if (gtk_tree_row_reference_valid (data->row_reference)) {
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->model), &iter,
+                               gtk_tree_row_reference_get_path (data->row_reference));
+      gtk_list_store_set (data->model, &iter, EPHY_COMPLETION_FAVICON_COL, favicon, -1);
+    }
+  }
+
+  g_object_unref (data->model);
+  gtk_tree_row_reference_free (data->row_reference);
+  g_slice_free (IconLoadData, data);
+}
+
 static void
 set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
 {
-  const char *favicon_location = ephy_history_get_icon (model->priv->legacy_history_service,
-                                                        row->location);
+  GtkTreeIter iter;
+  GdkPixbuf *favicon;
+  GtkTreePath *path;
+  IconLoadData *data;
+  WebKitFaviconDatabase* database = webkit_get_favicon_database ();
 
-  gtk_list_store_insert_with_values (GTK_LIST_STORE (model), NULL, position,
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
                                      EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
                                      EPHY_COMPLETION_URL_COL, row->location,
                                      EPHY_COMPLETION_ACTION_COL, row->location,
                                      EPHY_COMPLETION_KEYWORDS_COL, row->keywords ? row->keywords : "",
                                      EPHY_COMPLETION_EXTRA_COL, row->is_bookmark,
-                                     EPHY_COMPLETION_FAVICON_COL, ephy_favicon_cache_get (model->priv->favicon_cache,
-                                                                                          favicon_location),
                                      EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
                                      -1);
+
+  /* We try first with the try_get_favicon_pixbuf() because if the icon
+     is in the DB it's faster than the async version. */
+  favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, row->location,
+                                                            FAVICON_SIZE, FAVICON_SIZE);
+  if (favicon) {
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter, EPHY_COMPLETION_FAVICON_COL, favicon, -1);
+    return;
+  }
+
+  data = g_slice_new (IconLoadData);
+  data->model = GTK_LIST_STORE (g_object_ref(model));
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
+  data->row_reference = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), path);
+  gtk_tree_path_free (path);
+
+  webkit_favicon_database_get_favicon_pixbuf (webkit_get_favicon_database (), row->location,
+                                              FAVICON_SIZE, FAVICON_SIZE, NULL,
+                                              icon_loaded_cb, data);
 }
 
 static void

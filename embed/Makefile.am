@@ -11,7 +11,6 @@ NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-private.h		\
 	ephy-encodings.h		\
-	ephy-favicon-cache.h		\
 	ephy-request-about.h		\
 	ephy-web-app-utils.h
 
@@ -47,7 +46,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-shell.c		\
 	ephy-embed-utils.c              \
 	ephy-encodings.c		\
-	ephy-favicon-cache.c		\
 	ephy-history.c			\
 	ephy-permission-manager.c	\
 	ephy-request-about.c		\

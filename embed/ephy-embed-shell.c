@@ -34,7 +34,6 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-history-service.h"
@@ -54,7 +53,6 @@ struct _EphyEmbedShellPrivate
 	EphyHistory *global_history;
 	EphyHistoryService *global_history_service;
 	GList *downloads;
-	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
 	EphyAdBlockManager *adblock_manager;
@@ -95,13 +93,6 @@ ephy_embed_shell_dispose (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 	EphyEmbedShellPrivate *priv = shell->priv;
-
-	if (priv->favicon_cache != NULL)
-	{
-		LOG ("Unref favicon cache");
-		g_object_unref (priv->favicon_cache);
-		priv->favicon_cache = NULL;
-	}
 
 	if (priv->encodings != NULL)
 	{
@@ -164,27 +155,6 @@ ephy_embed_shell_finalize (GObject *object)
 	}
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
-}
-
-/**
- * ephy_embed_shell_get_favicon_cache:
- * @shell: the #EphyEmbedShell
- *
- * Returns the favicons cache.
- *
- * Return value: (transfer none): the favicons cache
- **/
-GObject *
-ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
-{
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-	if (shell->priv->favicon_cache == NULL)
-	{
-		shell->priv->favicon_cache = ephy_favicon_cache_new ();
-	}
-
-	return G_OBJECT (shell->priv->favicon_cache);
 }
 
 /**

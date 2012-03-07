@@ -28,6 +28,7 @@
 #endif
 
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
+#define FAVICON_SIZE 16
 
 G_BEGIN_DECLS
 

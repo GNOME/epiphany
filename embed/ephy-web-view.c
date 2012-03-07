@@ -32,7 +32,6 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-history-service.h"
@@ -1593,39 +1592,16 @@ static void
 _ephy_web_view_load_icon (EphyWebView *view)
 {
   EphyWebViewPrivate *priv = view->priv;
-  EphyEmbedShell *shell;
-  EphyFaviconCache *cache;
-  const char *icon_address;
+  const char* uri;
 
-  icon_address = webkit_web_view_get_icon_uri (WEBKIT_WEB_VIEW (view));
+  if (priv->icon != NULL)
+    return;
 
-  if (icon_address == NULL || priv->icon != NULL) return;
-
-  shell = ephy_embed_shell_get_default ();
-  cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
-
-  /* ephy_favicon_cache_get returns a reference already */
-  priv->icon = ephy_favicon_cache_get (cache, icon_address);
+  uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+  priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (), uri,
+                                                               FAVICON_SIZE, FAVICON_SIZE);
 
   g_object_notify (G_OBJECT (view), "icon");
-}
-
-static void
-icon_cache_changed_cb (EphyFaviconCache *cache,
-                       const char *address,
-                       EphyWebView *view)
-{
-  const char *icon_address;
-
-  g_return_if_fail (address != NULL);
-
-  icon_address = webkit_web_view_get_icon_uri (WEBKIT_WEB_VIEW (view));
-
-  /* is this for us? */
-  if (icon_address != NULL &&
-      strcmp (icon_address, address) == 0) {
-    _ephy_web_view_load_icon (view);
-  }
 }
 
 static void
@@ -2337,7 +2313,6 @@ static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
-  EphyFaviconCache *cache;
 
   priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
 
@@ -2407,11 +2382,6 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
 
-  cache = EPHY_FAVICON_CACHE
-          (ephy_embed_shell_get_favicon_cache (embed_shell));
-  g_signal_connect_object (G_OBJECT (cache), "changed",
-                           G_CALLBACK (icon_cache_changed_cb),
-                           web_view, (GConnectFlags)0);
 }
 
 /**

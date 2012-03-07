@@ -33,7 +33,6 @@
 #include "ephy-debug.h"
 #include "ephy-time-helpers.h"
 #include "ephy-embed-single.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-history-service.h"
 #include "ephy-password-info.h"
 
@@ -284,7 +283,6 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 		{
 			EphyEmbedShell *shell;
 			EphyEmbedSingle *single;
-			EphyFaviconCache *cache;
 
 			shell = ephy_embed_shell_get_default ();
 
@@ -292,8 +290,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 
 			ephy_embed_single_clear_cache (single);
 
-			cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
-			ephy_favicon_cache_clear (cache);
+			webkit_favicon_database_clear (webkit_get_favicon_database ());
 		}
 	}
 	gtk_widget_destroy (GTK_WIDGET (dialog));

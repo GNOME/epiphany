@@ -26,7 +26,7 @@
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
-#include "ephy-favicon-cache.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
@@ -1461,26 +1461,42 @@ node_dropped_cb (EphyNodeView *view,
 }
 
 static void
+icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GValue *value)
+{
+    GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
+    if (!favicon)
+      return;
+
+    g_value_take_object (value, favicon);
+}
+
+static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
-	EphyFaviconCache *cache;
-	const char *icon_location;
-	GdkPixbuf *pixbuf = NULL;
+	const char *page_location;
+	GdkPixbuf *favicon = NULL;
 
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
-	icon_location = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_ICON);
+	page_location = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_LOCATION);
 
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None");
+	LOG ("Get favicon for %s", page_location ? page_location : "None");
 
-	if (icon_location)
-	{
-		pixbuf = ephy_favicon_cache_get (cache, icon_location);
-	}
+	if (page_location)
+        {
+		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
+
+		/* Try with the sync version first as this method will be frequently called. */
+                favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
+									  FAVICON_SIZE, FAVICON_SIZE);
+
+		if (!favicon && webkit_favicon_database_get_favicon_uri (database, page_location))
+		  webkit_favicon_database_get_favicon_pixbuf (database, page_location,
+							      FAVICON_SIZE, FAVICON_SIZE, NULL,
+							      (GAsyncReadyCallback) icon_loaded_cb, value);
+        }
 
 	g_value_init (value, GDK_TYPE_PIXBUF);
-	g_value_take_object (value, pixbuf);
+	g_value_take_object (value, favicon);
 }
 
 static void

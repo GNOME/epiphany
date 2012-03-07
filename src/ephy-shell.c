@@ -30,7 +30,6 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-extensions-manager.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"

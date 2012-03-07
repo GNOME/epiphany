@@ -26,7 +26,7 @@
 #include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
-#include "ephy-favicon-cache.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -67,20 +67,22 @@ typedef struct
 G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
 
 static void
-favicon_cache_changed_cb (EphyFaviconCache *cache,
-			  const char *icon_address,
-			  EphyBookmarkAction *action)
+favicon_loaded_cb (WebKitFaviconDatabase *database,
+		   const char *page_address,
+		   EphyBookmarkAction *action)
 {
 	const char *icon;
+	char *icon_address;
 
 	g_return_if_fail (action->priv->node != NULL);
 
 	icon = ephy_node_get_property_string (action->priv->node,
 					      EPHY_NODE_BMK_PROP_ICON);
-	
-	if (icon != NULL && strcmp (icon, icon_address) == 0)
+	icon_address = webkit_favicon_database_get_favicon_uri (database, page_address);
+
+	if (g_strcmp0 (icon, icon_address) == 0)
 	{
-		g_signal_handler_disconnect (cache, action->priv->cache_handler);
+		g_signal_handler_disconnect (database, action->priv->cache_handler);
 		action->priv->cache_handler = 0;
 
 		g_object_notify (G_OBJECT (action), "icon");
@@ -93,28 +95,27 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 				GtkWidget *proxy)
 {
 	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
-	const char *icon_location;
-	EphyFaviconCache *cache;
+	const char *page_location;
+	WebKitFaviconDatabase *database;
 	GdkPixbuf *pixbuf = NULL;
 
 	g_return_if_fail (bma->priv->node != NULL);
 
-	icon_location = ephy_node_get_property_string (bma->priv->node,
-						       EPHY_NODE_BMK_PROP_ICON);
+	page_location = ephy_node_get_property_string (bma->priv->node,
+						       EPHY_NODE_BMK_PROP_LOCATION);
 
-	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
-		(ephy_embed_shell_get_default ()));
-
-	if (icon_location && *icon_location)
+	database = webkit_get_favicon_database ();
+	if (page_location && *page_location)
 	{
-		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+		pixbuf = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
+									 FAVICON_SIZE, FAVICON_SIZE);
 
 		if (pixbuf == NULL && bma->priv->cache_handler == 0)
 		{
 			bma->priv->cache_handler =
 				g_signal_connect_object
-					(cache, "changed",
-					 G_CALLBACK (favicon_cache_changed_cb),
+					(database, "icon-loaded",
+					 G_CALLBACK (favicon_loaded_cb),
 					 action, 0);
 		}
 	}
@@ -370,14 +371,11 @@ ephy_bookmark_action_dispose (GObject *object)
 {
 	EphyBookmarkAction *action = (EphyBookmarkAction *) object;
 	EphyBookmarkActionPrivate *priv = action->priv;
-	GObject *cache;
 
 	if (priv->cache_handler != 0)
 	{
-		cache = ephy_embed_shell_get_favicon_cache
-				(ephy_embed_shell_get_default ());
-
-		g_signal_handler_disconnect (cache, priv->cache_handler);
+		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
+		g_signal_handler_disconnect (database, priv->cache_handler);
 		priv->cache_handler = 0;
 	}
 

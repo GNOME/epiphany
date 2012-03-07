@@ -350,6 +350,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *filename;
   char *cookie_policy;
   char *cache_dir;
+  char *favicon_db_path;
   EphyEmbedSinglePrivate *priv = single->priv;
   SoupSessionFeature *requester;
 
@@ -411,6 +412,11 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE)
     soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
 #endif
+
+  /* Initialize the favicon cache. */
+  favicon_db_path = g_build_filename (g_get_user_data_dir (), g_get_prgname (), NULL);
+  webkit_favicon_database_set_path (webkit_get_favicon_database (), favicon_db_path);
+  g_free (favicon_db_path);
 
   return TRUE;
 }
