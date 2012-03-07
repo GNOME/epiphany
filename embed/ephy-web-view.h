@@ -124,6 +124,8 @@ struct _EphyWebViewClass
 
   void	 (* new_document_now)	(EphyWebView *view,
                                  const char *uri);
+
+  void   (* loading_homepage)   (EphyWebView *view);
 };
 
 GType                      ephy_web_view_get_type                 (void);
@@ -190,11 +192,15 @@ void                       ephy_web_view_save                     (EphyWebView  
                                                                    const char                *uri);
 void                       ephy_web_view_load_homepage            (EphyWebView               *view);
 
-char *
-ephy_web_view_create_web_application (EphyWebView *view, const char *title, GdkPixbuf *icon);
-
-GdkPixbuf *
-ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int height);
+char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
+                                                                   const char                *title,
+                                                                   GdkPixbuf                 *icon);
+GdkPixbuf *                ephy_web_view_get_snapshot             (EphyWebView               *view,
+                                                                   int                        x,
+                                                                   int                        y,
+                                                                   int                        width,
+                                                                   int                        height);
+gboolean                   ephy_web_view_is_loading_homepage      (EphyWebView               *view);
 
 G_END_DECLS
 

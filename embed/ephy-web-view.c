@@ -79,6 +79,7 @@ struct _EphyWebViewPrivate {
   /* Flags */
   guint is_blank : 1;
   guint visibility : 1;
+  guint loading_homepage : 1;
 
   char *address;
   char *typed_address;
@@ -1137,6 +1138,12 @@ ephy_web_view_constructed (GObject *object)
 }
 
 static void
+impl_loading_homepage (EphyWebView *view)
+{
+  view->priv->loading_homepage = TRUE;
+}
+
+static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1150,6 +1157,8 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
+
+  klass->loading_homepage = impl_loading_homepage;
 
 /**
  * EphyWebView:address:
@@ -1502,12 +1511,13 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * load the homepage set by the user.
  **/
     g_signal_new ("loading-homepage",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL,
-            g_cclosure_marshal_VOID__VOID,
-            G_TYPE_NONE,
-            0);
+                  EPHY_TYPE_WEB_VIEW,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (EphyWebViewClass, loading_homepage),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
@@ -1894,6 +1904,8 @@ load_status_cb (WebKitWebView *web_view,
     break;
   case WEBKIT_LOAD_FINISHED: {
     SoupURI *uri;
+
+    priv->loading_homepage = FALSE;
 
     g_free (priv->status_message);
     priv->status_message = NULL;
@@ -3769,4 +3781,12 @@ ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int heig
   cairo_surface_destroy (surface);
 
   return snapshot;
+}
+
+gboolean
+ephy_web_view_is_loading_homepage (EphyWebView *view)
+{
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
+
+  return view->priv->loading_homepage;
 }
