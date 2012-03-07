@@ -249,91 +249,6 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 }
 
 static void
-update_bookmark_response_cb (GtkWidget *dialog,
-			     int response,
-			     EphyNode *bookmark)
-{
-	GValue value = { 0, };
-	char *to_uri;
-
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		to_uri = (char *) g_object_steal_data (G_OBJECT (dialog),
-						       UPDATE_URI_DATA_KEY);
-		
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, to_uri);
-		ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
-					&value);
-		g_value_unset (&value);
-	}
-
-	gtk_widget_destroy (dialog);
-}
-
-static void
-update_bookmark_destroy_cb (EphyNode *zombie,
-			    GtkWidget *dialog)
-{
-	gtk_widget_destroy (dialog);
-}
-
-static void
-redirect_cb (EphyHistory *history,
-	      const char *from_uri,
-	      const char *to_uri,
-	      EphyBookmarks *eb)
-{
-	EphyNode *bookmark;
-	GtkWidget *dialog;
-	const char *title;
-
-	bookmark = ephy_bookmarks_find_bookmark (eb, from_uri);
-
-	/* FIXME check if there's another update-bookmark dialog up
-	 * for from_uri' -> from_uri and update it accordingly
-	 */
-	if (bookmark == NULL) return;
-
-	title = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_TITLE);
-
-	dialog = gtk_message_dialog_new
-			(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_NONE,
-				/* translators: the %s is the title of the bookmark */
-				_("Update bookmark “%s”?"),
-				title);
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		/* translators: the %s is a URL */
-		_("The bookmarked page has moved to “%s”."),
-		to_uri);
-
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-				_("_Don't Update"), GTK_RESPONSE_REJECT);
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-				_("_Update"), GTK_RESPONSE_ACCEPT);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Update Bookmark?"));
-
-	g_object_set_data_full (G_OBJECT (dialog), UPDATE_URI_DATA_KEY,
-				g_strdup (to_uri), (GDestroyNotify) g_free);
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (update_bookmark_response_cb), bookmark);
-	ephy_node_signal_connect_object (bookmark,
-					 EPHY_NODE_DESTROY,
-					 (EphyNodeCallback) update_bookmark_destroy_cb,
-					 G_OBJECT (dialog));
-
-	/* this dialogue is unexpected */
-	gtk_window_set_focus_on_map (GTK_WINDOW (dialog), FALSE);
-
-	gtk_window_present (GTK_WINDOW (dialog));
-}
-
-static void
 icon_updated_cb (EphyHistory *history,
 		 const char *address,
 		 const char *icon,
@@ -349,8 +264,6 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 
 	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
-	g_signal_connect (history, "redirect",
-			  G_CALLBACK (redirect_cb), eb);
 	g_signal_connect (history, "icon-updated",
 			  G_CALLBACK (icon_updated_cb), eb);
 }
