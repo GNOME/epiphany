@@ -63,6 +63,7 @@ void               ephy_hosts_store_add_hosts          (EphyHostsStore *store, G
 void               ephy_hosts_store_add_host           (EphyHostsStore *store, EphyHistoryHost *host);
 void               ephy_hosts_store_add_visits         (EphyHostsStore *store, GList *visits);
 EphyHistoryHost*   ephy_hosts_store_get_host_from_path (EphyHostsStore *store, GtkTreePath *path);
+void               ephy_hosts_store_clear              (EphyHostsStore *store);
 
 G_END_DECLS
 

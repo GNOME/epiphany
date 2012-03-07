@@ -20,7 +20,10 @@
  */
 
 #include "config.h"
+
 #include "ephy-hosts-store.h"
+
+#include <glib/gi18n.h>
 
 G_DEFINE_TYPE (EphyHostsStore, ephy_hosts_store, GTK_TYPE_LIST_STORE)
 
@@ -98,4 +101,14 @@ ephy_hosts_store_get_host_from_path (EphyHostsStore *store,
                       EPHY_HOSTS_STORE_COLUMN_VISIT_COUNT, &host->visit_count,
                       -1);
   return host;
+}
+
+void
+ephy_hosts_store_clear (EphyHostsStore *store)
+{
+  gtk_list_store_clear (GTK_LIST_STORE (store));
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (store), NULL, 0,
+                                     EPHY_HOSTS_STORE_COLUMN_ID, 0,
+                                     EPHY_HOSTS_STORE_COLUMN_TITLE, _("All sites"),
+                                     -1);
 }
