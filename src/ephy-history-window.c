@@ -825,7 +825,7 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), str);
 	g_free (str);
 
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Ever"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("All history"));
 
 	g_settings_bind (EPHY_SETTINGS_STATE,
 			 EPHY_PREFS_STATE_HISTORY_DATE_FILTER,
