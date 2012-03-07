@@ -50,34 +50,34 @@
 
 static const GtkTargetEntry page_drag_types [] =
 {
-        { EPHY_DND_URL_TYPE,        0, 0 },
-        { EPHY_DND_URI_LIST_TYPE,   0, 1 },
-        { EPHY_DND_TEXT_TYPE,       0, 2 }
+	{ EPHY_DND_URL_TYPE,	    0, 0 },
+	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
+	{ EPHY_DND_TEXT_TYPE,	    0, 2 }
 };
 
 static void ephy_history_window_class_init (EphyHistoryWindowClass *klass);
 static void ephy_history_window_init (EphyHistoryWindow *editor);
 static void ephy_history_window_finalize (GObject *object);
 static void ephy_history_window_set_property (GObject *object,
-		                              guint prop_id,
-		                              const GValue *value,
-		                              GParamSpec *pspec);
+					      guint prop_id,
+					      const GValue *value,
+					      GParamSpec *pspec);
 static void ephy_history_window_get_property (GObject *object,
 					      guint prop_id,
 					      GValue *value,
 					      GParamSpec *pspec);
-static void ephy_history_window_dispose      (GObject *object);
+static void ephy_history_window_dispose	     (GObject *object);
 
-static void cmd_open_bookmarks_in_tabs    (GtkAction *action,
+static void cmd_open_bookmarks_in_tabs	  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_open_bookmarks_in_browser (GtkAction *action,
 					   EphyHistoryWindow *editor);
-static void cmd_delete                    (GtkAction *action,
-                                           EphyHistoryWindow *editor);
-static void cmd_bookmark_link             (GtkAction *action,
-                                           EphyHistoryWindow *editor);
+static void cmd_delete			  (GtkAction *action,
+					   EphyHistoryWindow *editor);
+static void cmd_bookmark_link		  (GtkAction *action,
+					   EphyHistoryWindow *editor);
 static void cmd_clear			  (GtkAction *action,
-				           EphyHistoryWindow *editor);
+					   EphyHistoryWindow *editor);
 static void cmd_close			  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_cut			  (GtkAction *action,
@@ -90,7 +90,7 @@ static void cmd_select_all		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
-static void search_entry_search_cb 	  (GtkWidget *entry,
+static void search_entry_search_cb	  (GtkWidget *entry,
 					   char *search_text,
 					   EphyHistoryWindow *editor);
 static void
@@ -454,7 +454,7 @@ on_host_deleted_cb (gpointer service,
 
 static void
 cmd_delete (GtkAction *action,
-            EphyHistoryWindow *editor)
+	    EphyHistoryWindow *editor)
 {
 	if (gtk_widget_is_focus (editor->priv->pages_view))
 	{
@@ -476,11 +476,11 @@ cmd_delete (GtkAction *action,
 
 static void
 cmd_bookmark_link (GtkAction *action,
-                   EphyHistoryWindow *editor)
+		   EphyHistoryWindow *editor)
 {
-        GList *selection;
+	GList *selection;
 
-        selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
+	selection = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
 
 	if (g_list_length (selection) == 1)
 	{
@@ -550,8 +550,8 @@ ephy_history_window_finalize (GObject *object)
 	{
 		GtkWidget **window = &editor->priv->window;
 		g_object_remove_weak_pointer
-                        (G_OBJECT(editor->priv->window),
-                         (gpointer *)window);
+			(G_OBJECT(editor->priv->window),
+			 (gpointer *)window);
 	}
 
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->finalize (object);
@@ -566,7 +566,7 @@ ephy_history_window_row_activated_cb (GtkTreeView *view,
 	EphyHistoryURL *url;
 
 	url = ephy_urls_store_get_url_from_path (EPHY_URLS_STORE (gtk_tree_view_get_model (view)),
-                                                 path);
+						 path);
 	g_return_if_fail (url != NULL);
 
 	ephy_shell_new_tab (ephy_shell, NULL, NULL, url->url,
@@ -655,7 +655,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
-        delete = (pages_focus && pages_selection);
+	delete = (pages_focus && pages_selection);
 	bookmarks_locked = g_settings_get_boolean
 				(EPHY_SETTINGS_LOCKDOWN,
 				 EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
@@ -694,20 +694,20 @@ entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyHistoryWin
 static void
 add_entry_monitor (EphyHistoryWindow *editor, GtkWidget *entry)
 {
-        g_signal_connect (G_OBJECT (entry),
-                          "notify::selection-bound",
-                          G_CALLBACK (entry_selection_changed_cb),
-                          editor);
-        g_signal_connect (G_OBJECT (entry),
-                          "notify::cursor-position",
-                          G_CALLBACK (entry_selection_changed_cb),
-                          editor);
+	g_signal_connect (G_OBJECT (entry),
+			  "notify::selection-bound",
+			  G_CALLBACK (entry_selection_changed_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (entry),
+			  "notify::cursor-position",
+			  G_CALLBACK (entry_selection_changed_cb),
+			  editor);
 }
 
 static gboolean
 view_focus_cb (GtkWidget *view,
-               GdkEventFocus *event,
-               EphyHistoryWindow *editor)
+	       GdkEventFocus *event,
+	       EphyHistoryWindow *editor)
 {
        ephy_history_window_update_menu (editor);
 
@@ -718,21 +718,21 @@ static void
 add_focus_monitor (EphyHistoryWindow *editor, GtkWidget *widget)
 {
        g_signal_connect (G_OBJECT (widget),
-                         "focus_in_event",
-                         G_CALLBACK (view_focus_cb),
-                         editor);
+			 "focus_in_event",
+			 G_CALLBACK (view_focus_cb),
+			 editor);
        g_signal_connect (G_OBJECT (widget),
-                         "focus_out_event",
-                         G_CALLBACK (view_focus_cb),
-                         editor);
+			 "focus_out_event",
+			 G_CALLBACK (view_focus_cb),
+			 editor);
 }
 
 static void
 remove_focus_monitor (EphyHistoryWindow *editor, GtkWidget *widget)
 {
        g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
-                                             G_CALLBACK (view_focus_cb),
-                                             editor);
+					     G_CALLBACK (view_focus_cb),
+					     editor);
 }
 
 static gboolean
@@ -776,7 +776,7 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 static void
 time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 {
-  filter_now (editor, FALSE, TRUE);
+	filter_now (editor, FALSE, TRUE);
 }
 
 static GtkWidget *
@@ -1004,20 +1004,20 @@ setup_time_filters (EphyHistoryWindow *editor,
 static GList *
 substrings_filter (EphyHistoryWindow *editor)
 {
-  const char *search_text;
-  char **tokens, **p;
-  GList *substrings = NULL;
+	const char *search_text;
+	char **tokens, **p;
+	GList *substrings = NULL;
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
-  tokens = p = g_strsplit (search_text, " ", -1);
+	search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
+	tokens = p = g_strsplit (search_text, " ", -1);
 
-  while (*p) {
-    substrings = g_list_prepend (substrings, *p++);
-  };
-  substrings = g_list_reverse (substrings);
-  g_free (tokens);
+	while (*p) {
+		substrings = g_list_prepend (substrings, *p++);
+	};
+	substrings = g_list_reverse (substrings);
+	g_free (tokens);
 
-  return substrings;
+	return substrings;
 }
 
 static void
@@ -1026,18 +1026,18 @@ on_get_hosts_cb (gpointer service,
 		 gpointer result_data,
 		 gpointer user_data)
 {
-  EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
-  GList *hosts;
+	EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
+	GList *hosts;
 
-  if (success != TRUE)
-    goto out;
+	if (success != TRUE)
+		goto out;
 
-  hosts = (GList *) result_data;
-  gtk_list_store_clear (GTK_LIST_STORE (window->priv->hosts_store));
-  ephy_hosts_store_add_hosts (window->priv->hosts_store, hosts);
-
+	hosts = (GList *) result_data;
+	gtk_list_store_clear (GTK_LIST_STORE (window->priv->hosts_store));
+	ephy_hosts_store_add_hosts (window->priv->hosts_store, hosts);
+	
 out:
-  g_list_free_full (hosts, (GDestroyNotify)ephy_history_host_free);
+	g_list_free_full (hosts, (GDestroyNotify)ephy_history_host_free);
 }
 
 static void
@@ -1046,22 +1046,22 @@ on_find_urls_cb (gpointer service,
 		 gpointer result_data,
 		 gpointer user_data)
 {
-  EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
-  GList *urls;
+	EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
+	GList *urls;
+	
+	if (success != TRUE)
+		return;
 
-  if (success != TRUE)
-    return;
-
-  urls = (GList *)result_data;
-  gtk_list_store_clear (GTK_LIST_STORE (window->priv->urls_store));
-  ephy_urls_store_add_urls (window->priv->urls_store, urls);
-  g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
+	urls = (GList *)result_data;
+	gtk_list_store_clear (GTK_LIST_STORE (window->priv->urls_store));
+	ephy_urls_store_add_urls (window->priv->urls_store, urls);
+	g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
 }
 
 static void
 filter_now (EphyHistoryWindow *editor,
-            gboolean hosts,
-            gboolean pages)
+	    gboolean hosts,
+	    gboolean pages)
 {
 	gint64 from, to;
 	EphyHistoryHost *host;
@@ -1070,11 +1070,14 @@ filter_now (EphyHistoryWindow *editor,
 	setup_time_filters (editor, &from, &to);
 	substrings = substrings_filter (editor);
 
-	if (hosts) {
+	if (hosts)
+	{
 		ephy_history_service_get_hosts (editor->priv->history_service,
 						(EphyHistoryJobCallback) on_get_hosts_cb, editor);
 	}
-	if (pages) {
+
+	if (pages)
+	{
 		host = get_selected_host (editor);
 		ephy_history_service_find_urls (editor->priv->history_service,
 						from, to,
@@ -1137,8 +1140,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
-				         ephy_file ("epiphany-history-window-ui.xml"),
-				         NULL);
+					 ephy_file ("epiphany-history-window-ui.xml"),
+					 NULL);
 	gtk_ui_manager_ensure_update (ui_merge);
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
@@ -1270,11 +1273,11 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 
 	ephy_state_add_window (GTK_WIDGET (editor),
 			       "history_window",
-		               450, 400, FALSE,
+			       450, 400, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "history_paned",
-		               130);
+			       130);
 
 	filter_now (editor, TRUE, TRUE);
 
@@ -1292,15 +1295,15 @@ ephy_history_window_set_parent (EphyHistoryWindow *ebe,
 	{
 		widget = &ebe->priv->window;
 		g_object_remove_weak_pointer
-                        (G_OBJECT(ebe->priv->window),
-                         (gpointer *)widget);
+			(G_OBJECT(ebe->priv->window),
+			 (gpointer *)widget);
 	}
 
 	ebe->priv->window = window;
 	widget = &ebe->priv->window;
 
 	g_object_add_weak_pointer
-                        (G_OBJECT(ebe->priv->window),
+			(G_OBJECT(ebe->priv->window),
 			(gpointer *)widget);
 
 }
@@ -1323,17 +1326,17 @@ ephy_history_window_new (EphyHistoryService *history_service)
 
 static void
 ephy_history_window_set_property (GObject *object,
-		                  guint prop_id,
-		                  const GValue *value,
-		                  GParamSpec *pspec)
+				  guint prop_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
 {
 	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	switch (prop_id)
 	{
-        case PROP_HISTORY_SERVICE:
-          editor->priv->history_service = g_value_get_object (value);
-          break;
+	case PROP_HISTORY_SERVICE:
+		editor->priv->history_service = g_value_get_object (value);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1342,15 +1345,15 @@ ephy_history_window_set_property (GObject *object,
 
 static void
 ephy_history_window_get_property (GObject *object,
-		                  guint prop_id,
-		                  GValue *value,
-		                  GParamSpec *pspec)
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *pspec)
 {
 	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	switch (prop_id)
 	{
-        case PROP_HISTORY_SERVICE:
+	case PROP_HISTORY_SERVICE:
 		g_value_set_object (value, editor->priv->history_service);
 		break;
 	default:
