@@ -75,8 +75,7 @@ ephy_history_view_button_press (GtkWidget *treeview,
       g_signal_emit_by_name (treeview, "popup_menu", &retval);
     }
     gtk_tree_path_free (path);
-  } else
-    gtk_tree_selection_unselect_all (selection);
+  }
 
   return FALSE;
 }
