@@ -55,6 +55,7 @@ static const GtkTargetEntry page_drag_types [] =
 	{ EPHY_DND_TEXT_TYPE,	    0, 2 }
 };
 
+static void ephy_history_window_constructed (GObject *object);
 static void ephy_history_window_class_init (EphyHistoryWindowClass *klass);
 static void ephy_history_window_init (EphyHistoryWindow *editor);
 static void ephy_history_window_finalize (GObject *object);
@@ -524,6 +525,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	object_class->set_property = ephy_history_window_set_property;
 	object_class->get_property = ephy_history_window_get_property;
 	object_class->dispose  = ephy_history_window_dispose;
+	object_class->constructed = ephy_history_window_constructed;
 
 	widget_class->show = ephy_history_window_show;
 
@@ -1099,7 +1101,7 @@ on_visit_url_cb (EphyHistoryService *service,
 }
 
 static void
-ephy_history_window_construct (EphyHistoryWindow *editor)
+ephy_history_window_constructed (GObject *object)
 {
 	GtkTreeViewColumn *col;
 	GtkTreeSelection *selection;
@@ -1111,6 +1113,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GtkAction *action;
+	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
@@ -1284,6 +1287,9 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect_after (editor->priv->history_service,
 				"visit-url", G_CALLBACK (on_visit_url_cb),
 				editor);
+
+	if (G_OBJECT_CLASS (ephy_history_window_parent_class)->constructed)
+		G_OBJECT_CLASS (ephy_history_window_parent_class)->constructed (object);
 }
 
 void
@@ -1318,8 +1324,6 @@ ephy_history_window_new (EphyHistoryService *history_service)
 	editor = g_object_new (EPHY_TYPE_HISTORY_WINDOW,
 			       "history-service", history_service,
 			       NULL);
-
-	ephy_history_window_construct (editor);
 
 	return GTK_WIDGET (editor);
 }
