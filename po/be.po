@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-04 21:58+0000\n"
-"PO-Revision-Date: 2012-03-05 12:41+0300\n"
+"POT-Creation-Date: 2012-03-07 17:10+0000\n"
+"PO-Revision-Date: 2012-03-07 23:28+0300\n"
 "Last-Translator: Kasia Bondarava <kasia.bondarava@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -55,6 +55,43 @@ msgstr "Сеціўны аглядальнік Epiphany"
 msgid "Browse the web"
 msgstr "Агляд сеціва"
 
+#: ../data/ui/epiphany-application-menu.ui.h:1
+msgid "_New Window"
+msgstr "_Новае акно"
+
+#. Toplevel
+#: ../data/ui/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:87
+msgid "_Bookmarks"
+msgstr "_Закладкі"
+
+#: ../data/ui/epiphany-application-menu.ui.h:3
+msgid "_History"
+msgstr "_Гісторыя"
+
+#: ../data/ui/epiphany-application-menu.ui.h:4 ../data/ui/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "Настройкі"
+
+#: ../data/ui/epiphany-application-menu.ui.h:5 ../data/ui/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "Асабістыя даныя"
+
+#: ../data/ui/epiphany-application-menu.ui.h:6
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/ephy-history-window.c:132
+msgid "_Help"
+msgstr "_Дапамога"
+
+#: ../data/ui/epiphany-application-menu.ui.h:7
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:173
+msgid "_About"
+msgstr "_Аб праграме"
+
+#: ../data/ui/epiphany-application-menu.ui.h:8
+msgid "_Quit"
+msgstr "_Выйсці"
+
 #: ../data/ui/epiphany.ui.h:1
 msgid "Cookie properties"
 msgstr "Уласцівасці квітка"
@@ -91,10 +128,6 @@ msgstr "Ужыць кадаванне дакумента"
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Ужыць іншае кадаванне:</b>"
 
-#: ../data/ui/epiphany.ui.h:10 ../data/ui/epiphany-application-menu.ui.h:5
-msgid "Personal Data"
-msgstr "Асабістыя даныя"
-
 #: ../data/ui/epiphany.ui.h:11 ../data/ui/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Квіткі"
@@ -106,39 +139,6 @@ msgstr "_Паказаць паролі"
 #: ../data/ui/epiphany.ui.h:13 ../data/ui/prefs-dialog.ui.h:27
 msgid "Passwords"
 msgstr "Паролі"
-
-#: ../data/ui/epiphany-application-menu.ui.h:1
-msgid "_New Window"
-msgstr "_Новае акно"
-
-#. Toplevel
-#: ../data/ui/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:87
-msgid "_Bookmarks"
-msgstr "_Закладкі"
-
-#: ../data/ui/epiphany-application-menu.ui.h:3
-msgid "_History"
-msgstr "_Гісторыя"
-
-#: ../data/ui/epiphany-application-menu.ui.h:4 ../data/ui/prefs-dialog.ui.h:3
-msgid "Preferences"
-msgstr "Настройкі"
-
-#: ../data/ui/epiphany-application-menu.ui.h:6
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:128
-msgid "_Help"
-msgstr "_Дапамога"
-
-#: ../data/ui/epiphany-application-menu.ui.h:7
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:169
-msgid "_About"
-msgstr "_Аб праграме"
-
-#: ../data/ui/epiphany-application-menu.ui.h:8
-msgid "_Quit"
-msgstr "_Выйсці"
 
 #: ../data/ui/prefs-dialog.ui.h:1
 msgid "Add Language"
@@ -254,8 +254,8 @@ msgstr "Мб"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/ui/prefs-dialog.ui.h:32 ../lib/widgets/ephy-location-entry.c:577
-#: ../src/ephy-history-window.c:225 ../src/pdm-dialog.c:355
+#: ../data/ui/prefs-dialog.ui.h:32 ../lib/widgets/ephy-location-entry.c:462
+#: ../src/ephy-history-window.c:231 ../src/pdm-dialog.c:355
 msgid "Cl_ear"
 msgstr "Ач_ысціць"
 
@@ -292,11 +292,11 @@ msgctxt "file type"
 msgid "Unknown"
 msgstr "Невядомы"
 
-#: ../embed/ephy-embed.c:798
+#: ../embed/ephy-embed.c:803
 msgid "Web Inspector"
 msgstr "Сеціўны інспектар"
 
-#: ../embed/ephy-embed-shell.c:233
+#: ../embed/ephy-embed-shell.c:264
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Карыстацца Epiphany цяпер немагчыма. Памылка ініцыяцыі."
 
@@ -633,10 +633,12 @@ msgid "All"
 msgstr "Усе"
 
 #: ../embed/ephy-history.c:640
+#: ../lib/history/ephy-history-service-hosts-table.c:259
 msgid "Others"
 msgstr "Іншыя"
 
 #: ../embed/ephy-history.c:646
+#: ../lib/history/ephy-history-service-hosts-table.c:263
 msgid "Local files"
 msgstr "Мясцовыя файлы"
 
@@ -688,15 +690,15 @@ msgstr "Усталявана:"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3451
+#: ../embed/ephy-web-view.c:71 ../embed/ephy-web-view.c:3458
 msgid "Blank page"
 msgstr "Пустая старонка"
 
-#: ../embed/ephy-web-view.c:758
+#: ../embed/ephy-web-view.c:759
 msgid "_Not now"
 msgstr "_Не зараз"
 
-#: ../embed/ephy-web-view.c:763
+#: ../embed/ephy-web-view.c:764
 msgid "_Store password"
 msgstr "_Захаваць пароль"
 
@@ -704,41 +706,41 @@ msgstr "_Захаваць пароль"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:774
+#: ../embed/ephy-web-view.c:775
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Ці захаваць пароль для <b>%s</b> у <b>%s</b>?</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1730
+#: ../embed/ephy-web-view.c:1737
 msgid "Deny"
 msgstr "Забараніць"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1736
+#: ../embed/ephy-web-view.c:1743
 msgid "Allow"
 msgstr "Дазволіць"
 
-#: ../embed/ephy-web-view.c:1743
+#: ../embed/ephy-web-view.c:1750
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Старонка <b>%s</b> хоча ведаць ваша месцазнаходжанне."
 
-#: ../embed/ephy-web-view.c:2021
+#: ../embed/ephy-web-view.c:2028
 msgid "None specified"
 msgstr "Не вызначана"
 
-#: ../embed/ephy-web-view.c:2030 ../embed/ephy-web-view.c:2048
+#: ../embed/ephy-web-view.c:2037 ../embed/ephy-web-view.c:2055
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Памылка загрузкі %s"
 
-#: ../embed/ephy-web-view.c:2032
+#: ../embed/ephy-web-view.c:2039
 msgid "Oops! It was not possible to show this website"
 msgstr "Не ўдалося паказаць гэту сеціўную пляцоўку"
 
-#: ../embed/ephy-web-view.c:2033
+#: ../embed/ephy-web-view.c:2040
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -751,16 +753,16 @@ msgstr ""
 "перанесена на новы адрас. Абавязкова праверце, ці злучэнне з Інтэрнэтам "
 "працуе беспамылкова.</p>"
 
-#: ../embed/ephy-web-view.c:2042
+#: ../embed/ephy-web-view.c:2049
 msgid "Try again"
 msgstr "Паўтарыць спробу"
 
-#: ../embed/ephy-web-view.c:2050
+#: ../embed/ephy-web-view.c:2057
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Магчыма, гэта пляцоўка выклікала нечаканае закрыццё сеціўнага аглядальніка"
 
-#: ../embed/ephy-web-view.c:2052
+#: ../embed/ephy-web-view.c:2059
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -771,33 +773,33 @@ msgstr ""
 "p><p>Калі вы перазагрузіце старонку, гэта можа паўтарыцца. У такім выпадку "
 "дашліце рапарт пра праблему распрацоўшчыкам <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2060
+#: ../embed/ephy-web-view.c:2067
 msgid "Load again anyway"
 msgstr "Усё роўна загрузіць яшчэ раз"
 
-#: ../embed/ephy-web-view.c:2336
+#: ../embed/ephy-web-view.c:2343
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2622
+#: ../embed/ephy-web-view.c:2629
 msgid "Plugins"
 msgstr "Плугіны"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2729
+#: ../embed/ephy-web-view.c:2736
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Загрузка \"%s\"..."
 
-#: ../embed/ephy-web-view.c:2731
+#: ../embed/ephy-web-view.c:2738
 msgid "Loading…"
 msgstr "Загрузка..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3655
+#: ../embed/ephy-web-view.c:3662
 #, c-format
 msgid "%s Files"
 msgstr "Файлы %s"
@@ -949,7 +951,7 @@ msgstr ""
 "Паролі з папярэдняй версіі (Gecko) заблакіраваныя галоўным паролем. Калі вы "
 "хочаце імпартаваць іх у Epiphany, увядзіце ніжэй ваш галоўны пароль."
 
-#: ../lib/ephy-profile-migrator.c:80
+#: ../lib/ephy-profile-migrator.c:82
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Не ўдалося скапіраваць файл квіткоў з Mozilla."
 
@@ -1085,13 +1087,32 @@ msgstr "Паказаць у папцы"
 msgid "Starting…"
 msgstr "Запуск..."
 
-#: ../lib/widgets/ephy-location-entry.c:857
+#: ../lib/widgets/ephy-hosts-view.c:43
+msgid "Sites"
+msgstr "Пляцоўкі"
+
+#: ../lib/widgets/ephy-location-entry.c:742
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Перацягнуць і кінуць значок, каб стварыць спасылку на гэту старонку"
 
 #: ../lib/widgets/ephy-search-entry.c:162
 msgid "Clear"
 msgstr "Ачысціць"
+
+#: ../lib/widgets/ephy-urls-view.c:43
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1646
+msgid "Title"
+msgstr "Загаловак"
+
+#: ../lib/widgets/ephy-urls-view.c:51
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1657
+msgid "Address"
+msgstr "Адрас"
+
+#: ../lib/widgets/ephy-urls-view.c:59
+msgid "Date"
+msgstr "Дата"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -1139,81 +1160,51 @@ msgstr "Т_эмы:"
 msgid "Sho_w all topics"
 msgstr "Пак_азаць усе тэмы"
 
-#: ../src/bookmarks/ephy-bookmarks.c:94
+#: ../src/bookmarks/ephy-bookmarks.c:93
 msgid "Entertainment"
 msgstr "Забава"
 
-#: ../src/bookmarks/ephy-bookmarks.c:95
+#: ../src/bookmarks/ephy-bookmarks.c:94
 msgid "News"
 msgstr "Навіны"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Shopping"
 msgstr "Пакупкі"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:96
 msgid "Sports"
 msgstr "Спорт"
 
-#: ../src/bookmarks/ephy-bookmarks.c:98
+#: ../src/bookmarks/ephy-bookmarks.c:97
 msgid "Travel"
 msgstr "Падарожжы"
 
-#: ../src/bookmarks/ephy-bookmarks.c:99
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Work"
 msgstr "Праца"
 
-#. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:434
-#, c-format
-msgid "Update bookmark “%s”?"
-msgstr "Абнавіць закладку \"%s\"?"
-
-#. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:439
-#, c-format
-msgid "The bookmarked page has moved to “%s”."
-msgstr "Закладзеная старонка перамешчана ў \"%s\"."
-
-#: ../src/bookmarks/ephy-bookmarks.c:443
-msgid "_Don't Update"
-msgstr "_Не абнаўляць"
-
-#: ../src/bookmarks/ephy-bookmarks.c:445
-msgid "_Update"
-msgstr "_Абнавіць"
-
-#: ../src/bookmarks/ephy-bookmarks.c:448
-msgid "Update Bookmark?"
-msgstr "Абнавіць закладку?"
-
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1178
+#: ../src/bookmarks/ephy-bookmarks.c:951
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Усе"
 
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1181
-msgctxt "bookmarks"
-msgid "Most Visited"
-msgstr "Найбольш папулярныя"
-
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1185
+#: ../src/bookmarks/ephy-bookmarks.c:955
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Без катэгорыі"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1190
+#: ../src/bookmarks/ephy-bookmarks.c:960
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Блізкія пляцоўкі"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1424
+#: ../src/bookmarks/ephy-bookmarks.c:1179
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "Без назвы"
@@ -1232,17 +1223,17 @@ msgstr "Выдаліць з гэтай тэмы"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:125
+#: ../src/ephy-history-window.c:129
 msgid "_File"
 msgstr "_Файл"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:126
+#: ../src/ephy-history-window.c:130
 msgid "_Edit"
 msgstr "_Праўка"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:127
+#: ../src/ephy-history-window.c:131
 msgid "_View"
 msgstr "_Від"
 
@@ -1258,7 +1249,7 @@ msgstr "Стварыць новую тэму"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:132 ../src/ephy-history-window.c:609
+#: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:642
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Адкрыць у новым _акне"
@@ -1271,7 +1262,7 @@ msgstr "Адкрыць абраную закладку ў новым акне"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1164
-#: ../src/ephy-history-window.c:135 ../src/ephy-history-window.c:612
+#: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:645
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Адкрыць у _новай картцы"
@@ -1315,7 +1306,7 @@ msgid "Export bookmarks to a file"
 msgstr "Экспартаваць закладкі ў файл"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:141 ../src/ephy-window.c:105
+#: ../src/ephy-history-window.c:145 ../src/ephy-window.c:105
 msgid "_Close"
 msgstr "_Закрыць"
 
@@ -1325,39 +1316,39 @@ msgstr "Закрыць акно закладак"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:146 ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
 msgid "Cu_t"
 msgstr "В_ыразаць"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:147
+#: ../src/ephy-history-window.c:151
 msgid "Cut the selection"
 msgstr "Выразаць вылучанае"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1174
-#: ../src/ephy-history-window.c:149 ../src/ephy-history-window.c:622
+#: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:655
 #: ../src/ephy-window.c:116
 msgid "_Copy"
 msgstr "_Скапіраваць"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:150
+#: ../src/ephy-history-window.c:154
 msgid "Copy the selection"
 msgstr "Скапіраваць вылучанае"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:118
+#: ../src/ephy-history-window.c:156 ../src/ephy-window.c:118
 msgid "_Paste"
 msgstr "_Уставіць"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:153
+#: ../src/ephy-history-window.c:157
 msgid "Paste the clipboard"
 msgstr "Уставіць з буфера абмену"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:155
+#: ../src/ephy-history-window.c:159
 msgid "_Delete"
 msgstr "_Выдаліць"
 
@@ -1366,7 +1357,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Выдаліць абраную закладку або тэму"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:158 ../src/ephy-window.c:122
+#: ../src/ephy-history-window.c:162 ../src/ephy-window.c:122
 msgid "Select _All"
 msgstr "Вылучыць у_сё"
 
@@ -1376,7 +1367,7 @@ msgstr "Вылучыць усе закладкі або тэкст"
 
 #. Help Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:170
 msgid "_Contents"
 msgstr "_Змест"
 
@@ -1385,29 +1376,23 @@ msgid "Display bookmarks help"
 msgstr "Паказаць даведку пра закладкі"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:174
 msgid "Display credits for the web browser creators"
 msgstr "Паказаць падзякі стваральнікам сеціўнага аглядальніка"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:184
+#: ../src/ephy-history-window.c:188
 msgid "_Title"
 msgstr "_Загаловак"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:189
 msgid "Show the title column"
 msgstr "Паказаць слупок загалоўка"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1657
-#: ../src/ephy-history-window.c:1225
-msgid "Address"
-msgstr "Адрас"
-
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:187
+#: ../src/ephy-history-window.c:191
 msgid "Show the address column"
 msgstr "Паказаць слупок адрасу"
 
@@ -1527,23 +1512,18 @@ msgid "File"
 msgstr "Файл"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1170
-#: ../src/ephy-history-window.c:618
+#: ../src/ephy-history-window.c:651
 msgid "_Copy Address"
 msgstr "_Скапіраваць адрас"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1411
-#: ../src/ephy-history-window.c:946
+#: ../src/ephy-history-window.c:804
 msgid "_Search:"
 msgstr "_Пошук:"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1576
 msgid "Topics"
 msgstr "Тэмы"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1646
-#: ../src/ephy-history-window.c:1216
-msgid "Title"
-msgstr "Загаловак"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
@@ -1630,85 +1610,85 @@ msgstr "Знайсці наступнае супадзенне з шуканым
 msgid "Leave Fullscreen"
 msgstr "Выйсці з поўнаэкраннага рэжыму"
 
-#: ../src/ephy-history-window.c:133
+#: ../src/ephy-history-window.c:137
 msgid "Open the selected history link in a new window"
 msgstr "Адкрыць абраную спасылку гісторыі ў новым акне"
 
-#: ../src/ephy-history-window.c:136
+#: ../src/ephy-history-window.c:140
 msgid "Open the selected history link in a new tab"
 msgstr "Адкрыць абраную спасылку гісторыі ў новай картцы"
 
-#: ../src/ephy-history-window.c:138
+#: ../src/ephy-history-window.c:142
 msgid "Add _Bookmark…"
 msgstr "Дадаць _закладку..."
 
-#: ../src/ephy-history-window.c:139
+#: ../src/ephy-history-window.c:143
 msgid "Bookmark the selected history link"
 msgstr "Зрабіць закладку на абраную спасылку гісторыі"
 
-#: ../src/ephy-history-window.c:142
+#: ../src/ephy-history-window.c:146
 msgid "Close the history window"
 msgstr "Закрыць акно гісторыі"
 
-#: ../src/ephy-history-window.c:156
+#: ../src/ephy-history-window.c:160
 msgid "Delete the selected history link"
 msgstr "Выдаліць абраную спасылку гісторыі"
 
-#: ../src/ephy-history-window.c:159
+#: ../src/ephy-history-window.c:163
 msgid "Select all history links or text"
 msgstr "Вылучыць усе спасылкі гісторыі ці тэкст"
 
-#: ../src/ephy-history-window.c:161
+#: ../src/ephy-history-window.c:165
 msgid "Clear _History"
 msgstr "Ачысціць _гісторыю"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:166
 msgid "Clear your browsing history"
 msgstr "Ачысціць гісторыю праглядаў"
 
-#: ../src/ephy-history-window.c:167
+#: ../src/ephy-history-window.c:171
 msgid "Display history help"
 msgstr "Паказаць дапамогу на тэму гісторыі"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:190
 msgid "_Address"
 msgstr "_Адрас"
 
-#: ../src/ephy-history-window.c:188
+#: ../src/ephy-history-window.c:192
 msgid "_Date and Time"
 msgstr "_Дата і час"
 
-#: ../src/ephy-history-window.c:189
+#: ../src/ephy-history-window.c:193
 msgid "Show the date and time column"
 msgstr "Паказаць слупок даты і часу"
 
-#: ../src/ephy-history-window.c:215
+#: ../src/ephy-history-window.c:221
 msgid "Clear browsing history?"
 msgstr "Ачысціць гісторыю праглядаў?"
 
-#: ../src/ephy-history-window.c:219
+#: ../src/ephy-history-window.c:225
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 "Ачыстка гісторыі праглядаў незваротна выдаліць усе спасылкі з гісторыі."
 
-#: ../src/ephy-history-window.c:234
+#: ../src/ephy-history-window.c:240
 msgid "Clear History"
 msgstr "Ачысціць гісторыю"
 
-#: ../src/ephy-history-window.c:955
+#: ../src/ephy-history-window.c:813
 msgid "Last 30 minutes"
 msgstr "Апошнія 30 хвілін"
 
-#: ../src/ephy-history-window.c:956
+#: ../src/ephy-history-window.c:814
 msgid "Today"
 msgstr "Сёння"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:958 ../src/ephy-history-window.c:962
-#: ../src/ephy-history-window.c:968
+#: ../src/ephy-history-window.c:816 ../src/ephy-history-window.c:820
+#: ../src/ephy-history-window.c:826
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -1716,17 +1696,13 @@ msgstr[0] "Апошні %d дзень"
 msgstr[1] "Апошнія %d дні"
 msgstr[2] "Апошнія %d дзён"
 
-#: ../src/ephy-history-window.c:1095
+#: ../src/ephy-history-window.c:830
+msgid "All history"
+msgstr "Уся гісторыя"
+
+#: ../src/ephy-history-window.c:1126
 msgid "History"
 msgstr "Гісторыя"
-
-#: ../src/ephy-history-window.c:1153
-msgid "Sites"
-msgstr "Пляцоўкі"
-
-#: ../src/ephy-history-window.c:1233
-msgid "Date"
-msgstr "Дата"
 
 #: ../src/ephy-main.c:82
 msgid "Open a new tab in an existing browser window"
