@@ -1074,14 +1074,16 @@ title_changed_cb (WebKitWebView *web_view,
   g_object_get (web_view, "title", &title, NULL);
 
   /* Fallback to the URI as title if it's NULL. */
-  if (title == NULL || g_str_equal (title, "")) {
+  if ((title == NULL || g_str_equal (title, "")) && uri != NULL) {
     g_free (title);
     title = g_strdup (uri);
   }
 
-  ephy_web_view_set_title (EPHY_WEB_VIEW (web_view),
-                           title);
-  ephy_history_service_set_url_title (history, uri, title, NULL, NULL);
+  ephy_web_view_set_title (EPHY_WEB_VIEW (web_view), title);
+
+  if (uri && title)
+    ephy_history_service_set_url_title (history, uri, title, NULL, NULL);
+
   g_free (title);
 
 }
