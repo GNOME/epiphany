@@ -1039,11 +1039,9 @@ on_get_hosts_cb (gpointer service,
 	selected_host = get_selected_host (window);
 	ephy_hosts_store_clear (EPHY_HOSTS_STORE (window->priv->hosts_store));
 	ephy_hosts_store_add_hosts (window->priv->hosts_store, hosts);
-	if (selected_host) {
-		ephy_hosts_view_select_host (EPHY_HOSTS_VIEW (window->priv->hosts_view),
-					     selected_host);
-		ephy_history_host_free (selected_host);
-	}
+	ephy_hosts_view_select_host (EPHY_HOSTS_VIEW (window->priv->hosts_view),
+				     selected_host);
+	ephy_history_host_free (selected_host);
 out:
 	g_list_free_full (hosts, (GDestroyNotify)ephy_history_host_free);
 }
