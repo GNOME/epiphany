@@ -1310,12 +1310,11 @@ ephy_history_window_new (EphyHistoryService *history_service)
 {
 	EphyHistoryWindow *editor;
 
-	g_assert (history_service != NULL);
+	g_return_val_if_fail (history_service != NULL, NULL);
 
-	editor = EPHY_HISTORY_WINDOW (g_object_new
-			(EPHY_TYPE_HISTORY_WINDOW,
-			 "history-service", history_service,
-			 NULL));
+	editor = g_object_new (EPHY_TYPE_HISTORY_WINDOW,
+			       "history-service", history_service,
+			       NULL);
 
 	ephy_history_window_construct (editor);
 
@@ -1369,12 +1368,7 @@ ephy_history_window_init (EphyHistoryWindow *editor)
 static void
 ephy_history_window_dispose (GObject *object)
 {
-	EphyHistoryWindow *editor;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_HISTORY_WINDOW (object));
-
-	editor = EPHY_HISTORY_WINDOW (object);
+	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	if (editor->priv->hosts_view != NULL)
 	{
