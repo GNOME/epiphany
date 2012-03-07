@@ -37,9 +37,8 @@ button_event_modifies_selection (GdkEventButton *event)
 }
 
 static gboolean
-ephy_history_view_button_press_cb (GtkWidget *treeview,
-                                   GdkEventButton *event,
-                                   EphyHistoryView *view)
+ephy_history_view_button_press (GtkWidget *treeview,
+                                GdkEventButton *event)
 {
   GtkTreeSelection *selection;
   GtkTreePath *path = NULL;
@@ -73,7 +72,7 @@ ephy_history_view_button_press_cb (GtkWidget *treeview,
     if (event->button == 3) {
       gboolean retval;
 
-      g_signal_emit_by_name (view, "popup_menu", &retval);
+      g_signal_emit_by_name (treeview, "popup_menu", &retval);
     }
     gtk_tree_path_free (path);
   } else
@@ -85,6 +84,9 @@ ephy_history_view_button_press_cb (GtkWidget *treeview,
 static void
 ephy_history_view_class_init (EphyHistoryViewClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->button_press_event = ephy_history_view_button_press;
 }
 
 static void
@@ -94,10 +96,6 @@ ephy_history_view_init (EphyHistoryView *self)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-
-  g_signal_connect_object (self, "button_press_event",
-                           G_CALLBACK (ephy_history_view_button_press_cb),
-                           self, 0);
 }
 
 void
