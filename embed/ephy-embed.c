@@ -331,6 +331,9 @@ load_status_changed_cb (WebKitWebView *view,
 
     restore_zoom_level (embed, uri);
 
+    if (ephy_web_view_is_loading_homepage (EPHY_WEB_VIEW (view)))
+      return;
+
     /* TODO: move the normaliztion down to the history service? */
     if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
       history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
