@@ -106,7 +106,7 @@ action_name_association (GtkAction *action,
 	{
 		ephy_home_action_open (action, 
 				       address, 
-				       EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+				       EPHY_LINK_JUMP_TO | EPHY_LINK_HOME_PAGE);
 	}
 }	
 
