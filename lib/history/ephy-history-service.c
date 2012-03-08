@@ -968,6 +968,7 @@ ephy_history_service_find_urls (EphyHistoryService *self,
 
   ephy_history_service_query_urls (self,
                                    query, callback, user_data);
+  ephy_history_query_free (query);
 }
 
 void
@@ -999,4 +1000,5 @@ ephy_history_service_find_hosts (EphyHistoryService *self,
 
   ephy_history_service_query_hosts (self,
                                     query, callback, user_data);
+  ephy_history_query_free (query);
 }

@@ -390,6 +390,8 @@ get_hostname_and_locations (const gchar *url, gchar **hostname)
       host_locations = g_list_append (host_locations, location);
     }
   }
+  g_free (scheme);
+
   return host_locations;
 }
 
