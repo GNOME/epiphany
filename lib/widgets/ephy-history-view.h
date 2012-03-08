@@ -40,10 +40,15 @@ typedef struct _EphyHistoryViewPrivate     EphyHistoryViewPrivate;
 
 struct _EphyHistoryView {
   GtkTreeView parent;
+
+  /*< private >*/
+  EphyHistoryViewPrivate *priv;
 };
 
 struct _EphyHistoryViewClass {
   GtkTreeViewClass parent_class;
+
+  void (* row_middle_clicked) (EphyHistoryView *view, GtkTreePath *path);
 };
 
 GType       ephy_history_view_get_type      (void) G_GNUC_CONST;
