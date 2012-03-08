@@ -91,7 +91,7 @@ ephy_hosts_store_get_host_from_path (EphyHostsStore *store,
 {
   GtkTreeIter iter;
 
-  EphyHistoryHost *host = ephy_history_host_new ("", "", 0, 1.0);
+  EphyHistoryHost *host = ephy_history_host_new (NULL, NULL, 0, 1.0);
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,

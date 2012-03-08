@@ -84,7 +84,7 @@ ephy_urls_store_get_url_from_path (EphyURLsStore *store,
 {
   GtkTreeIter iter;
 
-  EphyHistoryURL *url = ephy_history_url_new ("", "", 0, 0, 0);
+  EphyHistoryURL *url = ephy_history_url_new (NULL, NULL, 0, 0, 0);
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
