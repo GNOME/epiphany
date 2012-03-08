@@ -10,11 +10,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 3.3.5\n"
+"Project-Id-Version: epiphany 3.3.91\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2012-02-18 08:33+0800\n"
-"PO-Revision-Date: 2012-02-18 08:33+0800\n"
+"POT-Creation-Date: 2012-03-08 15:57+0800\n"
+"PO-Revision-Date: 2012-03-08 15:57+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: \n"
@@ -136,8 +136,8 @@ msgstr "選擇語言(_A)："
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/ui/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:577
-#: ../src/ephy-history-window.c:225 ../src/pdm-dialog.c:355
+#: ../data/ui/prefs-dialog.ui.h:7 ../lib/widgets/ephy-location-entry.c:462
+#: ../src/ephy-history-window.c:231 ../src/pdm-dialog.c:355
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
@@ -267,11 +267,11 @@ msgctxt "file type"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../embed/ephy-embed.c:778
+#: ../embed/ephy-embed.c:806
 msgid "Web Inspector"
 msgstr "網頁檢查器"
 
-#: ../embed/ephy-embed-shell.c:233
+#: ../embed/ephy-embed-shell.c:264
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany 目前無法使用。初始化程序失敗。"
 
@@ -609,10 +609,12 @@ msgid "All"
 msgstr "全部"
 
 #: ../embed/ephy-history.c:640
+#: ../lib/history/ephy-history-service-hosts-table.c:360
 msgid "Others"
 msgstr "其它"
 
 #: ../embed/ephy-history.c:646
+#: ../lib/history/ephy-history-service-hosts-table.c:364
 msgid "Local files"
 msgstr "本機檔案"
 
@@ -664,15 +666,15 @@ msgstr "安裝於："
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3396
+#: ../embed/ephy-web-view.c:71 ../embed/ephy-web-view.c:3470
 msgid "Blank page"
 msgstr "空白頁面"
 
-#: ../embed/ephy-web-view.c:758
+#: ../embed/ephy-web-view.c:760
 msgid "_Not now"
 msgstr "現在不要(_N)"
 
-#: ../embed/ephy-web-view.c:763
+#: ../embed/ephy-web-view.c:765
 msgid "_Store password"
 msgstr "儲存密碼(_S)"
 
@@ -680,41 +682,41 @@ msgstr "儲存密碼(_S)"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:774
+#: ../embed/ephy-web-view.c:776
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>是否要儲存 <b>%s</b> 在 <b>%s</b> 的密碼？</big>"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1746
+#: ../embed/ephy-web-view.c:1747
 msgid "Deny"
 msgstr "禁止"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1752
+#: ../embed/ephy-web-view.c:1753
 msgid "Allow"
 msgstr "允許"
 
-#: ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1760
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "在 <b>%s</b> 的網頁想要知道你的位置。"
 
-#: ../embed/ephy-web-view.c:2037
+#: ../embed/ephy-web-view.c:2040
 msgid "None specified"
 msgstr "沒有指定"
 
-#: ../embed/ephy-web-view.c:2046 ../embed/ephy-web-view.c:2064
+#: ../embed/ephy-web-view.c:2049 ../embed/ephy-web-view.c:2067
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "噢！載入 %s 時發生錯誤"
 
-#: ../embed/ephy-web-view.c:2048
+#: ../embed/ephy-web-view.c:2051
 msgid "Oops! It was not possible to show this website"
 msgstr "噢！無法顯示這個網站"
 
-#: ../embed/ephy-web-view.c:2049
+#: ../embed/ephy-web-view.c:2052
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -723,15 +725,15 @@ msgid ""
 "is working correctly.</p>"
 msgstr "<p>網站 <strong>%s</strong> 可能無法使用，準確來說錯誤為：</p><p><em>%s</em></p><p>它可能被暫時關閉或移動到新的位址。不要忘了檢查互聯網連線是否正常運作。</p>"
 
-#: ../embed/ephy-web-view.c:2058
+#: ../embed/ephy-web-view.c:2061
 msgid "Try again"
 msgstr "再試一次"
 
-#: ../embed/ephy-web-view.c:2066
+#: ../embed/ephy-web-view.c:2069
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "噢！這個網站可能已造成網頁瀏覽器未預期的關閉"
 
-#: ../embed/ephy-web-view.c:2068
+#: ../embed/ephy-web-view.c:2071
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -739,33 +741,33 @@ msgid ""
 "report the problem to the <strong>%s</strong> developers.</p>"
 msgstr "<p>這個網頁尚在讀取但瀏覽器已異常關閉了。</p><p>如果你重新載入該頁面仍然可能再度發生這個狀況。如果真的這樣，請將問題匯報給 <strong>%s</strong> 開發隊伍。</p>"
 
-#: ../embed/ephy-web-view.c:2076
+#: ../embed/ephy-web-view.c:2079
 msgid "Load again anyway"
 msgstr "强制再次載入"
 
-#: ../embed/ephy-web-view.c:2356
+#: ../embed/ephy-web-view.c:2355
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com.tw/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../embed/ephy-web-view.c:2567
+#: ../embed/ephy-web-view.c:2641
 msgid "Plugins"
 msgstr "外掛程式"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2674
+#: ../embed/ephy-web-view.c:2748
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在載入“%s”…"
 
-#: ../embed/ephy-web-view.c:2676
+#: ../embed/ephy-web-view.c:2750
 msgid "Loading…"
 msgstr "載入中…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3600
+#: ../embed/ephy-web-view.c:3674
 #, c-format
 msgid "%s Files"
 msgstr "%s 個檔案"
@@ -913,7 +915,7 @@ msgid ""
 "password below."
 msgstr "在前一版本 (Gecko) 中所儲存的密碼都使用主控密碼鎖定了。如果你想要 Epiphany 匯入它們，請在下面輸入你的主控密碼。"
 
-#: ../lib/ephy-profile-migrator.c:80
+#: ../lib/ephy-profile-migrator.c:82
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "從 Mozilla 複製 cookies 檔案失敗。"
 
@@ -1028,7 +1030,7 @@ msgstr "下載時發生錯誤：%s"
 msgid "Cancel"
 msgstr "取消"
 
-#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1273
+#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1276
 #: ../src/window-commands.c:263
 msgid "Open"
 msgstr "開啟"
@@ -1041,13 +1043,36 @@ msgstr "在資料夾顯示"
 msgid "Starting…"
 msgstr "正在開始…"
 
-#: ../lib/widgets/ephy-location-entry.c:857
+#: ../lib/widgets/ephy-hosts-store.c:112
+msgid "All sites"
+msgstr "所有網站"
+
+#: ../lib/widgets/ephy-hosts-view.c:43
+msgid "Sites"
+msgstr "網站"
+
+#: ../lib/widgets/ephy-location-entry.c:742
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "拖放這個圖示來建立連至該網頁的連結"
 
 #: ../lib/widgets/ephy-search-entry.c:162
 msgid "Clear"
 msgstr "清除"
+
+#: ../lib/widgets/ephy-urls-view.c:43
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1646
+msgid "Title"
+msgstr "標題"
+
+#: ../lib/widgets/ephy-urls-view.c:51
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1657
+msgid "Address"
+msgstr "地址"
+
+#: ../lib/widgets/ephy-urls-view.c:59
+msgid "Date"
+msgstr "日期"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -1091,81 +1116,51 @@ msgstr "主題(_O)："
 msgid "Sho_w all topics"
 msgstr "顯示所有主題(_W)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:94
+#: ../src/bookmarks/ephy-bookmarks.c:93
 msgid "Entertainment"
 msgstr "娛樂"
 
-#: ../src/bookmarks/ephy-bookmarks.c:95
+#: ../src/bookmarks/ephy-bookmarks.c:94
 msgid "News"
 msgstr "新聞"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Shopping"
 msgstr "購物"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:96
 msgid "Sports"
 msgstr "運動"
 
-#: ../src/bookmarks/ephy-bookmarks.c:98
+#: ../src/bookmarks/ephy-bookmarks.c:97
 msgid "Travel"
 msgstr "旅遊"
 
-#: ../src/bookmarks/ephy-bookmarks.c:99
+#: ../src/bookmarks/ephy-bookmarks.c:98
 msgid "Work"
 msgstr "工作"
 
-#. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:434
-#, c-format
-msgid "Update bookmark “%s”?"
-msgstr "更新書籤“%s”？"
-
-#. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:439
-#, c-format
-msgid "The bookmarked page has moved to “%s”."
-msgstr "書籤中的網頁已移至“%s”。"
-
-#: ../src/bookmarks/ephy-bookmarks.c:443
-msgid "_Don't Update"
-msgstr "不要更新(_D)"
-
-#: ../src/bookmarks/ephy-bookmarks.c:445
-msgid "_Update"
-msgstr "更新(_U)"
-
-#: ../src/bookmarks/ephy-bookmarks.c:448
-msgid "Update Bookmark?"
-msgstr "更新書籤？"
-
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1178
+#: ../src/bookmarks/ephy-bookmarks.c:951
 msgctxt "bookmarks"
 msgid "All"
 msgstr "全部"
 
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1181
-msgctxt "bookmarks"
-msgid "Most Visited"
-msgstr "最常瀏覽"
-
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1185
+#: ../src/bookmarks/ephy-bookmarks.c:955
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "未分類"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1190
+#: ../src/bookmarks/ephy-bookmarks.c:960
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "本地網站"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1424
+#: ../src/bookmarks/ephy-bookmarks.c:1179
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "未命名"
@@ -1184,22 +1179,22 @@ msgstr "從本主題中刪除"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:125
+#: ../src/ephy-history-window.c:129
 msgid "_File"
 msgstr "檔案(_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:126
+#: ../src/ephy-history-window.c:130
 msgid "_Edit"
 msgstr "編輯(_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:127
+#: ../src/ephy-history-window.c:131
 msgid "_View"
 msgstr "顯示(_V)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:128
+#: ../src/ephy-history-window.c:132
 msgid "_Help"
 msgstr "求助(_H)"
 
@@ -1215,7 +1210,7 @@ msgstr "建立新的主題"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:132 ../src/ephy-history-window.c:609
+#: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:642
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "在新的視窗中開啟(_W)"
@@ -1226,7 +1221,7 @@ msgstr "在新的視窗中開啟已選的書籤"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1164
-#: ../src/ephy-history-window.c:135 ../src/ephy-history-window.c:612
+#: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:645
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "在新的分頁中開啟(_T)"
@@ -1268,7 +1263,7 @@ msgid "Export bookmarks to a file"
 msgstr "將書籤匯出到檔案"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:141 ../src/ephy-window.c:104
+#: ../src/ephy-history-window.c:145 ../src/ephy-window.c:105
 msgid "_Close"
 msgstr "關閉(_C)"
 
@@ -1278,39 +1273,39 @@ msgstr "關閉書籤視窗"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:146 ../src/ephy-window.c:113
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:147
+#: ../src/ephy-history-window.c:151
 msgid "Cut the selection"
 msgstr "剪下選定的內容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1174
-#: ../src/ephy-history-window.c:149 ../src/ephy-history-window.c:622
-#: ../src/ephy-window.c:115
+#: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:655
+#: ../src/ephy-window.c:116
 msgid "_Copy"
 msgstr "複製(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:150
+#: ../src/ephy-history-window.c:154
 msgid "Copy the selection"
 msgstr "複製選定的內容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:117
+#: ../src/ephy-history-window.c:156 ../src/ephy-window.c:118
 msgid "_Paste"
 msgstr "貼上(_P)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:153
+#: ../src/ephy-history-window.c:157
 msgid "Paste the clipboard"
 msgstr "貼上剪貼簿中的內容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:155
+#: ../src/ephy-history-window.c:159
 msgid "_Delete"
 msgstr "刪除(_D)"
 
@@ -1319,7 +1314,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "刪除已選的書籤或主題"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:158 ../src/ephy-window.c:121
+#: ../src/ephy-history-window.c:162 ../src/ephy-window.c:122
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
@@ -1329,7 +1324,7 @@ msgstr "選取所有書籤或文字"
 
 #. Help Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:170
 msgid "_Contents"
 msgstr "內容(_C)"
 
@@ -1338,34 +1333,28 @@ msgid "Display bookmarks help"
 msgstr "顯示書籤說明文件"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:169
+#: ../src/ephy-history-window.c:173
 msgid "_About"
 msgstr "關於(_A)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:174
 msgid "Display credits for the web browser creators"
 msgstr "鳴謝所有這個網頁瀏覽器的創作者"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:184
+#: ../src/ephy-history-window.c:188
 msgid "_Title"
 msgstr "標題(_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:189
 msgid "Show the title column"
 msgstr "顯示標題欄位"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1657
-#: ../src/ephy-history-window.c:1225
-msgid "Address"
-msgstr "地址"
-
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:187
+#: ../src/ephy-history-window.c:191
 msgid "Show the address column"
 msgstr "顯示位址欄位"
 
@@ -1480,23 +1469,18 @@ msgid "File"
 msgstr "檔案"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1170
-#: ../src/ephy-history-window.c:618
+#: ../src/ephy-history-window.c:651
 msgid "_Copy Address"
 msgstr "複製位址(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1411
-#: ../src/ephy-history-window.c:946
+#: ../src/ephy-history-window.c:804
 msgid "_Search:"
 msgstr "搜尋(_S)："
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1576
 msgid "Topics"
 msgstr "主題"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1646
-#: ../src/ephy-history-window.c:1216
-msgid "Title"
-msgstr "標題"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
@@ -1520,7 +1504,7 @@ msgstr "停止"
 msgid "Stop current data transfer"
 msgstr "停止傳送目前的資料"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:136
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:137
 msgid "_Reload"
 msgstr "重新載入(_R)"
 
@@ -1583,100 +1567,96 @@ msgstr "尋找下一個出現搜尋字串的地方"
 msgid "Leave Fullscreen"
 msgstr "離開全螢幕"
 
-#: ../src/ephy-history-window.c:133
+#: ../src/ephy-history-window.c:137
 msgid "Open the selected history link in a new window"
 msgstr "在新的視窗中開啟已選的瀏覽記錄連結"
 
-#: ../src/ephy-history-window.c:136
+#: ../src/ephy-history-window.c:140
 msgid "Open the selected history link in a new tab"
 msgstr "在新的分頁中開啟已選的瀏覽記錄連結"
 
-#: ../src/ephy-history-window.c:138
+#: ../src/ephy-history-window.c:142
 msgid "Add _Bookmark…"
 msgstr "加入書籤(_B)…"
 
-#: ../src/ephy-history-window.c:139
+#: ../src/ephy-history-window.c:143
 msgid "Bookmark the selected history link"
 msgstr "將已選的瀏覽記錄連結加入至書籤"
 
-#: ../src/ephy-history-window.c:142
+#: ../src/ephy-history-window.c:146
 msgid "Close the history window"
 msgstr "關閉瀏覽記錄視窗"
 
-#: ../src/ephy-history-window.c:156
+#: ../src/ephy-history-window.c:160
 msgid "Delete the selected history link"
 msgstr "刪除已選的瀏覽記錄連結"
 
-#: ../src/ephy-history-window.c:159
+#: ../src/ephy-history-window.c:163
 msgid "Select all history links or text"
 msgstr "選取所有瀏覽記錄連結或文字"
 
-#: ../src/ephy-history-window.c:161
+#: ../src/ephy-history-window.c:165
 msgid "Clear _History"
 msgstr "清除瀏覽記錄(_H)"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:166
 msgid "Clear your browsing history"
 msgstr "清除瀏覽記錄"
 
-#: ../src/ephy-history-window.c:167
+#: ../src/ephy-history-window.c:171
 msgid "Display history help"
 msgstr "顯示瀏覽記錄說明文件"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:190
 msgid "_Address"
 msgstr "位址(_A)"
 
-#: ../src/ephy-history-window.c:188
+#: ../src/ephy-history-window.c:192
 msgid "_Date and Time"
 msgstr "日期和時刻(_D)"
 
-#: ../src/ephy-history-window.c:189
+#: ../src/ephy-history-window.c:193
 msgid "Show the date and time column"
 msgstr "顯示日期及時刻欄位"
 
-#: ../src/ephy-history-window.c:215
+#: ../src/ephy-history-window.c:221
 msgid "Clear browsing history?"
 msgstr "是否清除瀏覽記錄？"
 
-#: ../src/ephy-history-window.c:219
+#: ../src/ephy-history-window.c:225
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "清除瀏覽記錄將會使所有瀏覽記錄永遠被刪除。"
 
-#: ../src/ephy-history-window.c:234
+#: ../src/ephy-history-window.c:240
 msgid "Clear History"
 msgstr "清除瀏覽記錄"
 
-#: ../src/ephy-history-window.c:955
+#: ../src/ephy-history-window.c:813
 msgid "Last 30 minutes"
 msgstr "前 30 分鐘"
 
-#: ../src/ephy-history-window.c:956
+#: ../src/ephy-history-window.c:814
 msgid "Today"
 msgstr "今日"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:958 ../src/ephy-history-window.c:962
-#: ../src/ephy-history-window.c:968
+#: ../src/ephy-history-window.c:816 ../src/ephy-history-window.c:820
+#: ../src/ephy-history-window.c:826
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "最近 %d 日"
 
-#: ../src/ephy-history-window.c:1095
+#: ../src/ephy-history-window.c:830
+msgid "All history"
+msgstr "所有瀏覽記錄"
+
+#: ../src/ephy-history-window.c:1125
 msgid "History"
 msgstr "瀏覽記錄"
-
-#: ../src/ephy-history-window.c:1153
-msgid "Sites"
-msgstr "網站"
-
-#: ../src/ephy-history-window.c:1233
-msgid "Date"
-msgstr "日期"
 
 #: ../src/ephy-main.c:82
 msgid "Open a new tab in an existing browser window"
@@ -1788,257 +1768,261 @@ msgstr "是否要回復先前的瀏覽器視窗及分頁？"
 msgid "_Bookmarks"
 msgstr "書籤(_B)"
 
+#: ../src/ephy-window.c:91
+msgid "_Extensions"
+msgstr "擴充功能(_E)"
+
 #. File actions.
-#: ../src/ephy-window.c:94
+#: ../src/ephy-window.c:95
 msgid "_Open…"
 msgstr "開啟(_O)…"
 
-#: ../src/ephy-window.c:96
+#: ../src/ephy-window.c:97
 msgid "Save _As…"
 msgstr "另存新檔(_A)…"
 
-#: ../src/ephy-window.c:98
+#: ../src/ephy-window.c:99
 msgid "Save As _Web Application…"
 msgstr "儲存為網頁應用程式(_W)…"
 
-#: ../src/ephy-window.c:100
+#: ../src/ephy-window.c:101
 msgid "_Print…"
 msgstr "打印(_P)…"
 
-#: ../src/ephy-window.c:102
+#: ../src/ephy-window.c:103
 msgid "S_end Link by Email…"
 msgstr "以電郵傳送連結(_E)…"
 
 #. Edit actions.
-#: ../src/ephy-window.c:109
+#: ../src/ephy-window.c:110
 msgid "_Undo"
 msgstr "復原(_U)"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:112
 msgid "Re_do"
 msgstr "取消復原(_D)"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:124
 msgid "_Find…"
 msgstr "尋找(_F)…"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:126
 msgid "Find Ne_xt"
 msgstr "找下一個(_X)"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:128
 msgid "Find Pre_vious"
 msgstr "找上一個(_V)"
 
 #. View actions.
-#: ../src/ephy-window.c:132 ../src/ephy-window.c:134
+#: ../src/ephy-window.c:133 ../src/ephy-window.c:135
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:139
 msgid "_Larger Text"
 msgstr "放大字型(_L)"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:141
 msgid "S_maller Text"
 msgstr "縮小字型(_M)"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:143
 msgid "_Normal Size"
 msgstr "正常大小(_N)"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:145
 msgid "Text _Encoding"
 msgstr "字符編碼(_E)"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:146
 msgid "_Page Source"
 msgstr "網頁原始內容(_P)"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:151
 msgid "_Add Bookmark…"
 msgstr "加入書籤(_A)…"
 
 #. Go actions.
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:156
 msgid "_Location…"
 msgstr "位置(_L)…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:161
 msgid "_Previous Tab"
 msgstr "上一個分頁(_P)"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:163
 msgid "_Next Tab"
 msgstr "下一個分頁(_N)"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:165
 msgid "Move Tab _Left"
 msgstr "分頁向左移(_L)"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:167
 msgid "Move Tab _Right"
 msgstr "分頁向右移(_R)"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:169
 msgid "_Detach Tab"
 msgstr "分離分頁(_D)"
 
 #. File actions.
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:177
 msgid "_Work Offline"
 msgstr "離線模式(_W)"
 
 #. View actions.
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:182
 msgid "_Downloads Bar"
 msgstr "下載列(_D)"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:185
 msgid "_Fullscreen"
 msgstr "全螢幕(_F)"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "Popup _Windows"
 msgstr "彈出式視窗(_W)"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:189
 msgid "Selection Caret"
 msgstr "選擇游標"
 
 #. Document.
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:196
 msgid "Add Boo_kmark…"
 msgstr "加入書籤(_K)…"
 
 #. Links.
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:201
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:203
 msgid "Open Link in New _Window"
 msgstr "在新的視窗中開啟連結(_W)"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:205
 msgid "Open Link in New _Tab"
 msgstr "在新的分頁中開啟連結(_T)"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:207
 msgid "_Download Link"
 msgstr "下載連結(_D)"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "_Save Link As…"
 msgstr "另存連結(_S)…"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:211
 msgid "_Bookmark Link…"
 msgstr "將連結加入書籤(_B)…"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:213
 msgid "_Copy Link Address"
 msgstr "複製連結地址(_C)"
 
 #. Images.
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "Open _Image"
 msgstr "開啟圖片(_I)"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:220
 msgid "_Save Image As…"
 msgstr "另存圖片(_S)…"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:222
 msgid "_Use Image As Background"
 msgstr "使用圖片作為桌面背景(_U)"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "Copy I_mage Address"
 msgstr "複製圖片地址(_M)"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:226
 msgid "St_art Animation"
 msgstr "動畫開始(_A)"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:228
 msgid "St_op Animation"
 msgstr "動畫停止(_O)"
 
 #. Inspector.
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:244
 msgid "Inspect _Element"
 msgstr "檢查元素(_E)"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:449
 msgid "There are unsubmitted changes to form elements"
 msgstr "對表單的元素而言沒有經確認的改變"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:450
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果你無論無何要關閉此文件，你將會失去未儲存的資訊。"
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:452
 msgid "Close _Document"
 msgstr "關閉文件(_D)"
 
-#: ../src/ephy-window.c:471
+#: ../src/ephy-window.c:470
 msgid "There are ongoing downloads in this window"
 msgstr "這個視窗還有進行中的下載"
 
-#: ../src/ephy-window.c:472
+#: ../src/ephy-window.c:471
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "如果你關閉這個視窗，這個下載也會被取消"
 
-#: ../src/ephy-window.c:473
+#: ../src/ephy-window.c:472
 msgid "Close window and cancel downloads"
 msgstr "關閉視窗並取消下載"
 
-#: ../src/ephy-window.c:1275
+#: ../src/ephy-window.c:1278
 msgid "Save As"
 msgstr "另存新檔"
 
-#: ../src/ephy-window.c:1277
+#: ../src/ephy-window.c:1280
 msgid "Save As Application"
 msgstr "儲存為應用程式"
 
-#: ../src/ephy-window.c:1279
+#: ../src/ephy-window.c:1282
 msgid "Print"
 msgstr "列印"
 
-#: ../src/ephy-window.c:1281
+#: ../src/ephy-window.c:1284
 msgid "Bookmark"
 msgstr "加入書籤"
 
-#: ../src/ephy-window.c:1283
+#: ../src/ephy-window.c:1286
 msgid "Find"
 msgstr "尋找"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1292
+#: ../src/ephy-window.c:1295
 msgid "Larger"
 msgstr "放大"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1295
+#: ../src/ephy-window.c:1298
 msgid "Smaller"
 msgstr "縮小"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1318
 msgid "Back"
 msgstr "上一頁"
 
-#: ../src/ephy-window.c:1327
+#: ../src/ephy-window.c:1330
 msgid "Forward"
 msgstr "下一頁"
 
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1342
 msgid "Zoom"
 msgstr "縮放"
 
-#: ../src/ephy-window.c:1347
+#: ../src/ephy-window.c:1350
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
@@ -2196,8 +2180,8 @@ msgid "Create Web Application"
 msgstr "建立網頁應用程式"
 
 #: ../src/window-commands.c:579
-msgid "Create"
-msgstr "建立"
+msgid "C_reate"
+msgstr "建立(_R)"
 
 #: ../src/window-commands.c:1125
 msgid ""
@@ -2282,15 +2266,30 @@ msgstr "按下 F7 會開啟或關閉鍵盤瀏覽。這個功能會在網頁中�
 msgid "_Enable"
 msgstr "啟用(_E)"
 
-#~| msgid "Open in New _Window"
-#~| msgid_plural "Open in New _Windows"
 #~ msgid "_New Window"
 #~ msgstr "新視窗(_N)"
 
-#~| msgid "History"
 #~ msgid "_History"
 #~ msgstr "瀏覽記錄(_H)"
 
-#~| msgid "_Edit"
 #~ msgid "_Quit"
 #~ msgstr "結束(_Q)"
+
+#~ msgid "Update bookmark “%s”?"
+#~ msgstr "更新書籤“%s”？"
+
+#~ msgid "The bookmarked page has moved to “%s”."
+#~ msgstr "書籤中的網頁已移至“%s”。"
+
+#~ msgid "_Don't Update"
+#~ msgstr "不要更新(_D)"
+
+#~ msgid "_Update"
+#~ msgstr "更新(_U)"
+
+#~ msgid "Update Bookmark?"
+#~ msgstr "更新書籤？"
+
+#~ msgctxt "bookmarks"
+#~ msgid "Most Visited"
+#~ msgstr "最常瀏覽"
