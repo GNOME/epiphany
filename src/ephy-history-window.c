@@ -1030,7 +1030,7 @@ on_get_hosts_cb (gpointer service,
 {
 	EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (user_data);
 	EphyHistoryHost *selected_host;
-	GList *hosts;
+	GList *hosts = NULL;
 
 	if (success != TRUE)
 		goto out;
