@@ -266,6 +266,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
     break;
   case EPHY_HISTORY_SORT_LV:
     statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count ");
+    break;
   default:
     g_warning ("We don't support this sorting method yet.");
   }
