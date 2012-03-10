@@ -103,6 +103,13 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 	return has_web_scheme;
 }
 
+gboolean
+ephy_embed_utils_address_is_existing_absolute_filename (const char *address)
+{
+	return g_path_is_absolute (address) &&
+	       g_file_test (address, G_FILE_TEST_EXISTS);
+}
+
 char*
 ephy_embed_utils_normalize_address (const char *address)
 {
@@ -110,6 +117,9 @@ ephy_embed_utils_normalize_address (const char *address)
 	SoupURI *uri;
 
 	g_return_val_if_fail (address, NULL);
+
+	if (ephy_embed_utils_address_is_existing_absolute_filename (address))
+		return g_strconcat ("file://", address, NULL);
 
 	uri = soup_uri_new (address);
 
@@ -123,7 +133,7 @@ ephy_embed_utils_normalize_address (const char *address)
 	 * being the port. Ideally we should check if we have a
 	 * handler for the scheme, and since we'll fail for localhost
 	 * and IP, we'd fallback to loading it as a domain. */
-	if (!uri || 
+	if (!uri ||
 	    (uri && !g_strcmp0 (uri->scheme, "localhost")) ||
 	    (uri && g_hostname_is_ip_address (uri->scheme)))
 		effective_address = g_strconcat ("http://", address, NULL);

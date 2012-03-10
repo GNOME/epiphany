@@ -2417,6 +2417,7 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
   /* If the string doesn't look like an URI, let's search it; */
   if (!ephy_embed_utils_address_has_web_scheme (url) &&
       scheme == NULL &&
+      !ephy_embed_utils_address_is_existing_absolute_filename (url) &&
       priv->non_search_regex &&
       !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
     char *query_param, *url_search;

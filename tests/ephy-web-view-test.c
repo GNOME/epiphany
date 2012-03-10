@@ -174,6 +174,8 @@ static const RegexTest test_non_search_regex[] = {
   /* Searches */
   { "localhost localdomain:8080/home/", FALSE },
 
+  /* Relative paths should be searched */
+  { "./", FALSE },
 
   { "localhost", TRUE },
   { "localhost.localdomain", TRUE },

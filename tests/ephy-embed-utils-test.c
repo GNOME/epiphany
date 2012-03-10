@@ -70,6 +70,7 @@ static const SchemeTest tests_no_scheme[] = {
 };
 
 static const NormalizeTest tests_normalize[] = {
+  { "append_file_to_path", "/etc/passwd", "file:///etc/passwd" },
   { "append_http_to_domain", "gnome.org", "http://gnome.org" },
   { "append_http_to_www", "www.gnome.org", "http://www.gnome.org" },
   { "append_http_to_hostname", "gnome", "http://gnome" },
