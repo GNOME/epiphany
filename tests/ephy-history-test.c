@@ -85,7 +85,7 @@ test_create_history_entry (void)
   EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
-  ephy_history_service_add_visit (service, visit, page_vist_created, NULL);
+  ephy_history_service_add_visit (service, visit, NULL, page_vist_created, NULL);
   ephy_history_page_visit_free (visit);
   g_free (temporary_file);
 
@@ -148,7 +148,7 @@ verify_create_history_entry (EphyHistoryService *service, gboolean success, gpoi
   g_assert (result_data == NULL);
   g_assert_cmpint (42, ==, GPOINTER_TO_INT(user_data)); 
   g_assert (success);
-  ephy_history_service_find_visits_in_time (service, 0, 8, verify_create_history_entry_cb, NULL);
+  ephy_history_service_find_visits_in_time (service, 0, 8, NULL, verify_create_history_entry_cb, NULL);
 }
 
 static void
@@ -160,7 +160,7 @@ test_create_history_entries (void)
   GList *visits = create_test_page_visit_list ();
 
   /* We use 42 here just to verify that user_data is passed properly to the callback */
-  ephy_history_service_add_visits (service, visits, verify_create_history_entry, GINT_TO_POINTER(42));
+  ephy_history_service_add_visits (service, visits, NULL, verify_create_history_entry, GINT_TO_POINTER(42));
   ephy_history_page_visit_list_free (visits);
   g_free (temporary_file);
 
@@ -191,13 +191,13 @@ set_url_title (EphyHistoryService *service, gboolean success, gpointer result_da
     g_object_unref (service);
     gtk_main_quit ();
   } else
-    ephy_history_service_get_url (service, "http://www.gnome.org", get_url, NULL);
+    ephy_history_service_get_url (service, "http://www.gnome.org", NULL, get_url, NULL);
 }
 
 static void
 set_url_title_visit_created (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", set_url_title, user_data);
+  ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", NULL, set_url_title, user_data);
 }
 
 static void
@@ -207,7 +207,7 @@ test_set_url_title_helper (gboolean test_results)
   EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
-  ephy_history_service_add_visit (service, visit, set_url_title_visit_created, GINT_TO_POINTER (test_results));
+  ephy_history_service_add_visit (service, visit, NULL, set_url_title_visit_created, GINT_TO_POINTER (test_results));
   ephy_history_page_visit_free (visit);
   g_free (temporary_file);
 
@@ -241,7 +241,7 @@ test_set_url_title_url_not_existent (void)
   EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
 
-  ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", set_url_title_url_not_existent, NULL);
+  ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", NULL, set_url_title_url_not_existent, NULL);
 
   gtk_main();
 }
@@ -273,7 +273,7 @@ test_get_url_visit_added (EphyHistoryService *service, gboolean success, gpointe
 {
   g_assert (success == TRUE);
 
-  ephy_history_service_get_url (service, "http://www.gnome.org", test_get_url_done, user_data);
+  ephy_history_service_get_url (service, "http://www.gnome.org", NULL, test_get_url_done, user_data);
 }
 
 static void
@@ -285,10 +285,10 @@ test_get_url_helper (gboolean add_entry)
 
   if (add_entry == TRUE) {
     EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
-    ephy_history_service_add_visit (service, visit, test_get_url_visit_added, GINT_TO_POINTER (add_entry));
+    ephy_history_service_add_visit (service, visit, NULL, test_get_url_visit_added, GINT_TO_POINTER (add_entry));
     ephy_history_page_visit_free (visit);
   } else
-    ephy_history_service_get_url (service, "http://www.gnome.org", test_get_url_done, GINT_TO_POINTER (add_entry));
+    ephy_history_service_get_url (service, "http://www.gnome.org", NULL, test_get_url_done, GINT_TO_POINTER (add_entry));
 
   gtk_main();
 }
@@ -370,7 +370,7 @@ perform_complex_url_query (EphyHistoryService *service,
                               "Wikipedia",
                               30, 30, 0);
 
-  ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
+  ephy_history_service_query_urls (service, query, NULL, verify_complex_url_query, url);
 }
 
 static void
@@ -382,7 +382,7 @@ test_complex_url_query (void)
 
   visits = create_visits_for_complex_tests ();
 
-  ephy_history_service_add_visits (service, visits, perform_complex_url_query, NULL);
+  ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query, NULL);
 
   gtk_main ();
 }
@@ -410,7 +410,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
                               "WebKitGTK+",
                               2, 2, 0);
 
-  ephy_history_service_query_urls (service, query, verify_complex_url_query, url);
+  ephy_history_service_query_urls (service, query, NULL, verify_complex_url_query, url);
 }
 
 static void
@@ -422,7 +422,7 @@ test_complex_url_query_with_time_range (void)
 
   visits = create_visits_for_complex_tests ();
 
-  ephy_history_service_add_visits (service, visits, perform_complex_url_query_with_time_range, NULL);
+  ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query_with_time_range, NULL);
 
   gtk_main ();
 }
@@ -459,7 +459,7 @@ perform_query_after_clear (EphyHistoryService *service,
   query->limit = 10;
   query->sort_type = EPHY_HISTORY_SORT_MV;
 
-  ephy_history_service_query_urls (service, query, verify_query_after_clear, NULL);
+  ephy_history_service_query_urls (service, query, NULL, verify_query_after_clear, NULL);
 }
 
 static void
@@ -469,8 +469,8 @@ test_clear ()
   EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits = create_test_page_visit_list ();
 
-  ephy_history_service_add_visits (service, visits, NULL, NULL);
-  ephy_history_service_clear (service, perform_query_after_clear, NULL);
+  ephy_history_service_add_visits (service, visits, NULL, NULL, NULL);
+  ephy_history_service_clear (service, NULL, perform_query_after_clear, NULL);
 
   gtk_main ();
 }

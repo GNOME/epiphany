@@ -203,7 +203,7 @@ confirmation_dialog_response_cb (GtkWidget *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		ephy_history_service_clear (editor->priv->history_service,
-					    NULL, NULL);
+					    NULL, NULL, NULL);
 		filter_now (editor, TRUE, TRUE);
 	}
 }
@@ -461,13 +461,13 @@ cmd_delete (GtkAction *action,
 	{
 		GList *selected;
 		selected = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
-		ephy_history_service_delete_urls (editor->priv->history_service, selected,
+		ephy_history_service_delete_urls (editor->priv->history_service, selected, NULL,
 						  (EphyHistoryJobCallback)on_browse_history_deleted_cb, editor);
 	} else if (gtk_widget_is_focus (editor->priv->hosts_view)) {
 		EphyHistoryHost *host = get_selected_host (editor);
 		if (host) {
 			ephy_history_service_delete_host (editor->priv->history_service,
-							  host,
+							  host, NULL,
 							  (EphyHistoryJobCallback)on_host_deleted_cb,
 							  editor);
 			ephy_history_host_free (host);
@@ -1076,7 +1076,7 @@ filter_now (EphyHistoryWindow *editor,
 	if (hosts)
 	{
 		ephy_history_service_find_hosts (editor->priv->history_service,
-						 from, to,
+						 from, to, NULL,
 						(EphyHistoryJobCallback) on_get_hosts_cb, editor);
 	}
 
@@ -1086,7 +1086,7 @@ filter_now (EphyHistoryWindow *editor,
 		ephy_history_service_find_urls (editor->priv->history_service,
 						from, to,
 						0, host ? host->id : 0,
-						substrings,
+						substrings, NULL,
 						(EphyHistoryJobCallback)on_find_urls_cb, editor);
 		ephy_history_host_free (host);
 	}

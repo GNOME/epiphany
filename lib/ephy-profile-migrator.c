@@ -594,7 +594,7 @@ migrate_history ()
   g_input_stream_close (G_INPUT_STREAM (input), NULL, NULL);
   g_object_unref (input);
 
-  ephy_history_service_add_visits (history_service, parse_data.visits, (EphyHistoryJobCallback)visit_cb, NULL);
+  ephy_history_service_add_visits (history_service, parse_data.visits, NULL, (EphyHistoryJobCallback)visit_cb, NULL);
   ephy_history_page_visit_list_free (parse_data.visits);
 
   while (!all_done)

@@ -256,7 +256,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 
 			shell = ephy_embed_shell_get_default ();
 			history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell));
-			ephy_history_service_clear (history, NULL, NULL);
+			ephy_history_service_clear (history, NULL, NULL, NULL);
 		}
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))

@@ -60,6 +60,7 @@ typedef struct _EphyHistoryServiceMessage {
   gboolean success;
   gpointer result;
   gpointer user_data;
+  GCancellable *cancellable;
   GDestroyNotify method_argument_cleanup;
   EphyHistoryJobCallback callback;
 } EphyHistoryServiceMessage;
@@ -132,7 +133,7 @@ impl_visit_url (EphyHistoryService *self, const char *url)
                                        time (NULL),
                                        EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (self,
-                                  visit, NULL, NULL);
+                                  visit, NULL, NULL, NULL);
   ephy_history_page_visit_free (visit);
 
   return FALSE;
@@ -390,6 +391,7 @@ ephy_history_service_message_new (EphyHistoryService *service,
                                   EphyHistoryServiceMessageType type,
                                   gpointer method_argument,
                                   GDestroyNotify method_argument_cleanup,
+                                  GCancellable *cancellable,
                                   EphyHistoryJobCallback callback,
                                   gpointer user_data)
 {
@@ -399,6 +401,7 @@ ephy_history_service_message_new (EphyHistoryService *service,
   message->type = type;
   message->method_argument = method_argument;
   message->method_argument_cleanup = method_argument_cleanup;
+  message->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
   message->callback = callback;
   message->user_data = user_data;
 
@@ -411,6 +414,9 @@ ephy_history_service_message_free (EphyHistoryServiceMessage *message)
   if (message->method_argument_cleanup)
     message->method_argument_cleanup (message->method_argument);
 
+  if (message->cancellable)
+    g_object_unref (message->cancellable);
+
   g_slice_free1 (sizeof (EphyHistoryServiceMessage), message);
 }
 
@@ -420,6 +426,11 @@ ephy_history_service_execute_job_callback (gpointer data)
   EphyHistoryServiceMessage *message = (EphyHistoryServiceMessage*) data;
 
   g_assert (message->callback);
+
+  if (g_cancellable_is_cancelled (message->cancellable)) {
+    ephy_history_service_message_free (message);
+    return FALSE;
+  }
   message->callback (message->service, message->success, message->result, message->user_data);
 
   if (message->type == CLEAR)
@@ -546,7 +557,7 @@ ephy_history_service_execute_query_hosts (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_add_visit (EphyHistoryService *self, EphyHistoryPageVisit *visit, EphyHistoryJobCallback callback, gpointer user_data)
+ephy_history_service_add_visit (EphyHistoryService *self, EphyHistoryPageVisit *visit, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data)
 {
   EphyHistoryServiceMessage *message;
 
@@ -556,12 +567,12 @@ ephy_history_service_add_visit (EphyHistoryService *self, EphyHistoryPageVisit *
   message = ephy_history_service_message_new (self, ADD_VISIT,
                                               ephy_history_page_visit_copy (visit),
                                               (GDestroyNotify) ephy_history_page_visit_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
 void
-ephy_history_service_add_visits (EphyHistoryService *self, GList *visits, EphyHistoryJobCallback callback, gpointer user_data)
+ephy_history_service_add_visits (EphyHistoryService *self, GList *visits, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data)
 {
   EphyHistoryServiceMessage *message;
 
@@ -571,12 +582,12 @@ ephy_history_service_add_visits (EphyHistoryService *self, GList *visits, EphyHi
   message = ephy_history_service_message_new (self, ADD_VISITS,
                                               ephy_history_page_visit_list_copy (visits),
                                               (GDestroyNotify) ephy_history_page_visit_list_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
 void
-ephy_history_service_find_visits_in_time (EphyHistoryService *self, gint64 from, gint64 to, EphyHistoryJobCallback callback, gpointer user_data)
+ephy_history_service_find_visits_in_time (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data)
 {
   EphyHistoryQuery *query;
 
@@ -586,12 +597,12 @@ ephy_history_service_find_visits_in_time (EphyHistoryService *self, gint64 from,
   query->from = from;
   query->to = to;
 
-  ephy_history_service_query_visits (self, query, callback, user_data);
+  ephy_history_service_query_visits (self, query, cancellable, callback, user_data);
   ephy_history_query_free (query);
 }
 
 void
-ephy_history_service_query_visits (EphyHistoryService *self, EphyHistoryQuery *query, EphyHistoryJobCallback callback, gpointer user_data)
+ephy_history_service_query_visits (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data)
 {
   EphyHistoryServiceMessage *message;
 
@@ -599,7 +610,7 @@ ephy_history_service_query_visits (EphyHistoryService *self, EphyHistoryQuery *q
   g_return_if_fail (query != NULL);
 
   message = ephy_history_service_message_new (self, QUERY_VISITS,
-                                              ephy_history_query_copy (query), (GDestroyNotify) ephy_history_query_free, callback, user_data);
+                                              ephy_history_query_copy (query), (GDestroyNotify) ephy_history_query_free, cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -614,7 +625,7 @@ ephy_history_service_execute_query_urls (EphyHistoryService *self, EphyHistoryQu
 }
 
 void
-ephy_history_service_query_urls (EphyHistoryService *self, EphyHistoryQuery *query, EphyHistoryJobCallback callback, gpointer user_data)
+ephy_history_service_query_urls (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data)
 {
   EphyHistoryServiceMessage *message;
 
@@ -622,12 +633,14 @@ ephy_history_service_query_urls (EphyHistoryService *self, EphyHistoryQuery *que
   g_return_if_fail (query != NULL);
 
   message = ephy_history_service_message_new (self, QUERY_URLS,
-                                              ephy_history_query_copy (query), (GDestroyNotify) ephy_history_query_free, callback, user_data);
+                                              ephy_history_query_copy (query), (GDestroyNotify) ephy_history_query_free,
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
 void
 ephy_history_service_get_hosts (EphyHistoryService *self,
+                                GCancellable *cancellable,
                                 EphyHistoryJobCallback callback,
                                 gpointer user_data)
 {
@@ -636,7 +649,7 @@ ephy_history_service_get_hosts (EphyHistoryService *self,
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
 
   message = ephy_history_service_message_new (self, GET_HOSTS,
-                                              NULL, NULL,
+                                              NULL, NULL, cancellable,
                                               callback, user_data);
   ephy_history_service_send_message (self, message);
 }
@@ -644,6 +657,7 @@ ephy_history_service_get_hosts (EphyHistoryService *self,
 void
 ephy_history_service_query_hosts (EphyHistoryService *self,
                                   EphyHistoryQuery *query,
+                                  GCancellable *cancellable,
                                   EphyHistoryJobCallback callback,
                                   gpointer user_data)
 {
@@ -654,7 +668,7 @@ ephy_history_service_query_hosts (EphyHistoryService *self,
   message = ephy_history_service_message_new (self, QUERY_HOSTS,
                                               ephy_history_query_copy (query),
                                               (GDestroyNotify) ephy_history_query_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -682,6 +696,7 @@ void
 ephy_history_service_set_url_title (EphyHistoryService *self,
                                     const char *orig_url,
                                     const char *title,
+                                    GCancellable *cancellable,
                                     EphyHistoryJobCallback callback,
                                     gpointer user_data)
 {
@@ -694,7 +709,7 @@ ephy_history_service_set_url_title (EphyHistoryService *self,
   url = ephy_history_url_new (orig_url, title, 0, 0, 0);
   message = ephy_history_service_message_new (self, SET_URL_TITLE,
                                               url, (GDestroyNotify) ephy_history_url_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -725,6 +740,7 @@ void
 ephy_history_service_set_url_zoom_level (EphyHistoryService *self,
                                          const char *url,
                                          const double zoom_level,
+                                         GCancellable *cancellable,
                                          EphyHistoryJobCallback callback,
                                          gpointer user_data)
 {
@@ -738,7 +754,7 @@ ephy_history_service_set_url_zoom_level (EphyHistoryService *self,
 
   message = ephy_history_service_message_new (self, SET_URL_ZOOM_LEVEL,
                                               variant, (GDestroyNotify)g_variant_unref,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -759,6 +775,7 @@ ephy_history_service_execute_get_url (EphyHistoryService *self,
 void
 ephy_history_service_get_url (EphyHistoryService *self,
                               const char *url,
+                              GCancellable *cancellable,
                               EphyHistoryJobCallback callback,
                               gpointer user_data)
 {
@@ -769,7 +786,7 @@ ephy_history_service_get_url (EphyHistoryService *self,
 
   message =  ephy_history_service_message_new (self, GET_URL,
                                                g_strdup (url), g_free,
-                                               callback, user_data);
+                                               cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -791,6 +808,7 @@ ephy_history_service_execute_get_host_for_url (EphyHistoryService *self,
 void
 ephy_history_service_get_host_for_url (EphyHistoryService *self,
                                        const char *url,
+                                       GCancellable *cancellable,
                                        EphyHistoryJobCallback callback,
                                        gpointer user_data)
 {
@@ -801,7 +819,7 @@ ephy_history_service_get_host_for_url (EphyHistoryService *self,
 
   message = ephy_history_service_message_new (self, GET_HOST_FOR_URL,
                                               g_strdup (url), g_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -851,6 +869,7 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
 void
 ephy_history_service_delete_urls (EphyHistoryService *self,
                                   GList *urls,
+                                  GCancellable *cancellable,
                                   EphyHistoryJobCallback callback,
                                   gpointer user_data)
 {
@@ -861,25 +880,27 @@ ephy_history_service_delete_urls (EphyHistoryService *self,
 
   message = ephy_history_service_message_new (self, DELETE_URLS, 
                                               ephy_history_url_list_copy (urls), (GDestroyNotify)ephy_history_url_list_free,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
 void
 ephy_history_service_delete_host (EphyHistoryService *self,
                                   EphyHistoryHost *host,
+                                  GCancellable *cancellable,
                                   EphyHistoryJobCallback callback,
                                   gpointer user_data)
 {
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, DELETE_HOST,
                                       ephy_history_host_copy (host), (GDestroyNotify)ephy_history_host_free,
-                                      callback, user_data);
+                                      cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
 void
 ephy_history_service_clear (EphyHistoryService *self,
+                            GCancellable *cancellable,
                             EphyHistoryJobCallback callback,
                             gpointer user_data)
 {
@@ -889,7 +910,7 @@ ephy_history_service_clear (EphyHistoryService *self,
 
   message = ephy_history_service_message_new (self, CLEAR,
                                               NULL, NULL,
-                                              callback, user_data);
+                                              cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
 }
 
@@ -900,7 +921,7 @@ ephy_history_service_quit (EphyHistoryService *self,
 {
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, QUIT, 
-                                      NULL, NULL,
+                                      NULL, NULL, NULL,
                                       callback, user_data);
   ephy_history_service_send_message (self, message);
 }
@@ -922,6 +943,12 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_hosts
 };
 
+static gboolean
+ephy_history_service_message_is_write (EphyHistoryServiceMessage *message)
+{
+  return message->type < QUIT;
+}
+
 static void
 ephy_history_service_process_message (EphyHistoryService *self,
                                       EphyHistoryServiceMessage *message)
@@ -929,6 +956,12 @@ ephy_history_service_process_message (EphyHistoryService *self,
   EphyHistoryServiceMethod method;
 
   g_assert (self->priv->history_thread == g_thread_self ());
+
+  if (g_cancellable_is_cancelled (message->cancellable) &&
+      !ephy_history_service_message_is_write (message)) {
+    ephy_history_service_message_free (message);
+    return;
+  }
 
   method = methods[message->type];
   message->result = NULL;
@@ -949,6 +982,7 @@ ephy_history_service_find_urls (EphyHistoryService *self,
                                 gint64 from, gint64 to,
                                 guint limit, gint host,
                                 GList *substring_list,
+                                GCancellable *cancellable,
                                 EphyHistoryJobCallback callback,
                                 gpointer user_data)
 {
@@ -967,7 +1001,8 @@ ephy_history_service_find_urls (EphyHistoryService *self,
     query->limit = limit;
 
   ephy_history_service_query_urls (self,
-                                   query, callback, user_data);
+                                   query, cancellable,
+                                   callback, user_data);
   ephy_history_query_free (query);
 }
 
@@ -986,6 +1021,7 @@ ephy_history_service_visit_url (EphyHistoryService *self,
 void
 ephy_history_service_find_hosts (EphyHistoryService *self,
                                  gint64 from, gint64 to,
+                                 GCancellable *cancellable,
                                  EphyHistoryJobCallback callback,
                                  gpointer user_data)
 {
@@ -998,7 +1034,7 @@ ephy_history_service_find_hosts (EphyHistoryService *self,
   query->from = from;
   query->to = to;
 
-  ephy_history_service_query_hosts (self,
-                                    query, callback, user_data);
+  ephy_history_service_query_hosts (self, query,
+                                    cancellable, callback, user_data);
   ephy_history_query_free (query);
 }

@@ -1084,7 +1084,7 @@ title_changed_cb (WebKitWebView *web_view,
   ephy_web_view_set_title (EPHY_WEB_VIEW (web_view), title);
 
   if (uri && title)
-    ephy_history_service_set_url_title (history, uri, title, NULL, NULL);
+    ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
 
   g_free (title);
 

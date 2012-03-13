@@ -491,7 +491,7 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
   ephy_history_service_find_urls (priv->history_service,
                                   0, 0,
                                   MAX_COMPLETION_HISTORY_URLS, 0,
-                                  query,
+                                  query, NULL,
                                   (EphyHistoryJobCallback)query_completed_cb,
                                   user_data);
 }

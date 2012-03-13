@@ -22,6 +22,7 @@
 #define EPHY_HISTORY_SERVICE_H
 
 #include <glib-object.h>
+#include <gio/gio.h>
 #include "ephy-history-types.h"
 
 G_BEGIN_DECLS
@@ -58,23 +59,23 @@ struct _EphyHistoryServiceClass {
 GType                    ephy_history_service_get_type                (void);
 EphyHistoryService *     ephy_history_service_new                     (const char *history_filename);
 
-void                     ephy_history_service_add_visit               (EphyHistoryService *self, EphyHistoryPageVisit *visit, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_add_visits              (EphyHistoryService *self, GList *visits, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_find_visits_in_time     (EphyHistoryService *self, gint64 from, gint64 to, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_query_visits            (EphyHistoryService *self, EphyHistoryQuery *query, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_query_urls              (EphyHistoryService *self, EphyHistoryQuery *query, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_set_url_title           (EphyHistoryService *self, const char *url, const char *title, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_set_url_zoom_level      (EphyHistoryService *self, const char *url, const double zoom_level, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_get_host_for_url        (EphyHistoryService *self, const char *url, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_get_hosts               (EphyHistoryService *self, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_query_hosts             (EphyHistoryService *self, EphyHistoryQuery *query, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_delete_host             (EphyHistoryService *self, EphyHistoryHost *host, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_get_url                 (EphyHistoryService *self, const char *url, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_delete_urls             (EphyHistoryService *self, GList *urls, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_find_urls               (EphyHistoryService *self, gint64 from, gint64 to, guint limit, gint host, GList *substring_list, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_add_visit               (EphyHistoryService *self, EphyHistoryPageVisit *visit, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_add_visits              (EphyHistoryService *self, GList *visits, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_find_visits_in_time     (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_query_visits            (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_query_urls              (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_set_url_title           (EphyHistoryService *self, const char *url, const char *title, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_set_url_zoom_level      (EphyHistoryService *self, const char *url, const double zoom_level, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_get_host_for_url        (EphyHistoryService *self, const char *url, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_get_hosts               (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_query_hosts             (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_delete_host             (EphyHistoryService *self, EphyHistoryHost *host, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_get_url                 (EphyHistoryService *self, const char *url, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_delete_urls             (EphyHistoryService *self, GList *urls, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_find_urls               (EphyHistoryService *self, gint64 from, gint64 to, guint limit, gint host, GList *substring_list, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *orig_url);
-void                     ephy_history_service_clear                   (EphyHistoryService *self, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_clear                   (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 
 G_END_DECLS
 

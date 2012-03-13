@@ -267,7 +267,7 @@ restore_zoom_level (EphyEmbed *embed,
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
     ephy_history_service_get_host_for_url (embed->priv->history_service,
-                                           address,
+                                           address, NULL,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, embed);
   }
 }
@@ -365,7 +365,7 @@ zoom_changed_cb (WebKitWebView *web_view,
   if (ephy_embed_utils_address_has_web_scheme (address)) {
     ephy_history_service_set_url_zoom_level (embed->priv->history_service,
                                              address, zoom,
-                                             NULL, NULL);
+                                             NULL, NULL, NULL);
   }
 
   g_free (address);
