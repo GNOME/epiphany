@@ -103,8 +103,6 @@ struct _EphyWebViewPrivate {
   GSList *hidden_popups;
   GSList *shown_popups;
 
-  GdkRectangle text_rectangle;
-
   GtkWidget *password_info_bar;
 };
 
@@ -2200,39 +2198,6 @@ close_web_view_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
-
-static void
-adj_changed_cb (GtkAdjustment *adj, EphyWebView *view)
-{
-  EphyWebViewPrivate *priv;
-  GdkWindow *window;
-
-  priv = view->priv;
-
-  window = gtk_widget_get_window (GTK_WIDGET (view));
-
-  if (view && window)
-    gdk_window_invalidate_rect (window, &priv->text_rectangle, TRUE);
-}
-
-static void
-hadjustment_changed_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
-{
-  GtkAdjustment *adj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(view));
-
-  if (adj)
-    g_signal_connect (adj, "value-changed", G_CALLBACK (adj_changed_cb), view);
-}
-
-static void
-vadjustment_changed_cb (EphyWebView *view, GParamSpec *pspec, gpointer data)
-{
-  GtkAdjustment *adj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(view));
-
-  if (adj)
-    g_signal_connect (adj, "value-changed", G_CALLBACK (adj_changed_cb), view);
-}
-
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -2283,14 +2248,6 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect_object (web_view, "ge_popup_blocked",
                            G_CALLBACK (ge_popup_blocked_cb),
                            web_view, (GConnectFlags)0);
-
-  g_signal_connect (web_view, "notify::hadjustment",
-                    G_CALLBACK (hadjustment_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::vadjustment",
-                    G_CALLBACK (vadjustment_changed_cb),
-                    NULL);
 
   cache = EPHY_FAVICON_CACHE
           (ephy_embed_shell_get_favicon_cache (embed_shell));
