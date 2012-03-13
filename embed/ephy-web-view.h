@@ -1,5 +1,8 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2008 Gustavo Noronha Silva
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +18,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
@@ -47,40 +49,40 @@ typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
 
 typedef enum
 {
-	EPHY_WEB_VIEW_NAV_UP		= 1 << 0,
-	EPHY_WEB_VIEW_NAV_BACK		= 1 << 1,
-	EPHY_WEB_VIEW_NAV_FORWARD	= 1 << 2
+  EPHY_WEB_VIEW_NAV_UP    = 1 << 0,
+  EPHY_WEB_VIEW_NAV_BACK    = 1 << 1,
+  EPHY_WEB_VIEW_NAV_FORWARD = 1 << 2
 } EphyWebViewNavigationFlags;
 
 typedef enum
 {
-	EPHY_WEB_VIEW_CHROME_MENUBAR		= 1 << 0,
-	EPHY_WEB_VIEW_CHROME_TOOLBAR		= 1 << 1,
-	EPHY_WEB_VIEW_CHROME_STATUSBAR		= 1 << 2,
-	EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR	= 1 << 3
+  EPHY_WEB_VIEW_CHROME_MENUBAR    = 1 << 0,
+  EPHY_WEB_VIEW_CHROME_TOOLBAR    = 1 << 1,
+  EPHY_WEB_VIEW_CHROME_STATUSBAR    = 1 << 2,
+  EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR = 1 << 3
 } EphyWebViewChrome;
 
-#define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_MENUBAR |	\
-			       EPHY_WEB_VIEW_CHROME_TOOLBAR |	\
-			       EPHY_WEB_VIEW_CHROME_STATUSBAR |	\
-			       EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR)
+#define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_MENUBAR |  \
+             EPHY_WEB_VIEW_CHROME_TOOLBAR | \
+             EPHY_WEB_VIEW_CHROME_STATUSBAR | \
+             EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR)
 
 typedef enum
 {
-	EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
-	EPHY_WEB_VIEW_STATE_IS_INSECURE,
-	EPHY_WEB_VIEW_STATE_IS_BROKEN,
-	EPHY_WEB_VIEW_STATE_IS_SECURE_LOW,
-	EPHY_WEB_VIEW_STATE_IS_SECURE_MED,
-	EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH
+  EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
+  EPHY_WEB_VIEW_STATE_IS_INSECURE,
+  EPHY_WEB_VIEW_STATE_IS_BROKEN,
+  EPHY_WEB_VIEW_STATE_IS_SECURE_LOW,
+  EPHY_WEB_VIEW_STATE_IS_SECURE_MED,
+  EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH
 } EphyWebViewSecurityLevel;
 
 typedef enum
 {
-	EPHY_WEB_VIEW_DOCUMENT_HTML,
-	EPHY_WEB_VIEW_DOCUMENT_XML,
-	EPHY_WEB_VIEW_DOCUMENT_IMAGE,
-	EPHY_WEB_VIEW_DOCUMENT_OTHER
+  EPHY_WEB_VIEW_DOCUMENT_HTML,
+  EPHY_WEB_VIEW_DOCUMENT_XML,
+  EPHY_WEB_VIEW_DOCUMENT_IMAGE,
+  EPHY_WEB_VIEW_DOCUMENT_OTHER
 } EphyWebViewDocumentType;
 
 typedef enum {
@@ -101,28 +103,28 @@ struct _EphyWebViewClass
   WebKitWebViewClass parent_class;
 
   /* Signals */
-  void	 (* feed_link)		(EphyWebView *view,
+  void   (* feed_link)    (EphyWebView *view,
                                  const char *type,
                                  const char *title,
                                  const char *address);
-  void	 (* search_link)	(EphyWebView *view,
+  void   (* search_link)  (EphyWebView *view,
                                  const char *type,
                                  const char *title,
                                  const char *address);
-  void	 (* popup_blocked)	(EphyWebView *view,
+  void   (* popup_blocked)  (EphyWebView *view,
                                  const char *address,
                                  const char *target,
                                  const char *features);
-  void	 (* content_blocked)	(EphyWebView *view,
+  void   (* content_blocked)  (EphyWebView *view,
                                  const char *uri);
-  gboolean (* modal_alert)	(EphyWebView *view);
-  void	 (* modal_alert_closed) (EphyWebView *view);
-  void	 (* new_window)		(EphyWebView *view,
+  gboolean (* modal_alert)  (EphyWebView *view);
+  void   (* modal_alert_closed) (EphyWebView *view);
+  void   (* new_window)   (EphyWebView *view,
                                  EphyWebView *new_view);
-  gboolean (* search_key_press)	(EphyWebView *view,
+  gboolean (* search_key_press) (EphyWebView *view,
                                  GdkEventKey *event);
 
-  void	 (* new_document_now)	(EphyWebView *view,
+  void   (* new_document_now) (EphyWebView *view,
                                  const char *uri);
 
   void   (* loading_homepage)   (EphyWebView *view);
@@ -173,7 +175,7 @@ gboolean                   ephy_web_view_can_go_up                (EphyWebView  
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
 
-void                       ephy_web_view_load_error_page          (EphyWebView		     *view,
+void                       ephy_web_view_load_error_page          (EphyWebView     *view,
                                                                    const char		     *uri,
                                                                    EphyWebViewErrorPage	      page,
                                                                    GError		     *error);
