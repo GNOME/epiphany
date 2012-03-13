@@ -59,9 +59,9 @@ typedef enum
 } EphyWebViewChrome;
 
 #define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_MENUBAR |  \
-             EPHY_WEB_VIEW_CHROME_TOOLBAR | \
-             EPHY_WEB_VIEW_CHROME_STATUSBAR | \
-             EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR)
+                                  EPHY_WEB_VIEW_CHROME_TOOLBAR |  \
+                                  EPHY_WEB_VIEW_CHROME_STATUSBAR |  \
+                                  EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR)
 
 typedef enum
 {
@@ -99,30 +99,28 @@ struct _EphyWebViewClass
   WebKitWebViewClass parent_class;
 
   /* Signals */
-  void   (* feed_link)    (EphyWebView *view,
+  void   (* feed_link)          (EphyWebView *view,
                                  const char *type,
                                  const char *title,
                                  const char *address);
-  void   (* search_link)  (EphyWebView *view,
+  void   (* search_link)        (EphyWebView *view,
                                  const char *type,
                                  const char *title,
                                  const char *address);
-  void   (* popup_blocked)  (EphyWebView *view,
+  void   (* popup_blocked)      (EphyWebView *view,
                                  const char *address,
                                  const char *target,
                                  const char *features);
-  void   (* content_blocked)  (EphyWebView *view,
+  void   (* content_blocked)    (EphyWebView *view,
                                  const char *uri);
-  gboolean (* modal_alert)  (EphyWebView *view);
+  gboolean (* modal_alert)      (EphyWebView *view);
   void   (* modal_alert_closed) (EphyWebView *view);
-  void   (* new_window)   (EphyWebView *view,
+  void   (* new_window)         (EphyWebView *view,
                                  EphyWebView *new_view);
   gboolean (* search_key_press) (EphyWebView *view,
                                  GdkEventKey *event);
-
-  void   (* new_document_now) (EphyWebView *view,
+  void   (* new_document_now)   (EphyWebView *view,
                                  const char *uri);
-
   void   (* loading_homepage)   (EphyWebView *view);
 };
 
@@ -171,12 +169,10 @@ gboolean                   ephy_web_view_can_go_up                (EphyWebView  
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
 
-void                       ephy_web_view_load_error_page          (EphyWebView     *view,
-                                                                   const char		     *uri,
-                                                                   EphyWebViewErrorPage	      page,
-                                                                   GError		     *error);
-
-
+void                       ephy_web_view_load_error_page          (EphyWebView               *view,
+                                                                   const char                *uri,
+                                                                   EphyWebViewErrorPage       page,
+                                                                   GError                    *error);
 /* These should be private */
 void                       ephy_web_view_set_address              (EphyWebView               *view,
                                                                    const char                *address);
