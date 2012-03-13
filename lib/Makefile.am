@@ -95,29 +95,9 @@ libephymisc_la_CFLAGS = \
 libephymisc_la_LIBADD = -lm
 
 bin_PROGRAMS = ephy-profile-migrator
+
 ephy_profile_migrator_SOURCES = \
-	ephy-sqlite-connection.c \
-	ephy-sqlite-connection.h \
-	ephy-sqlite-statement.c \
-	ephy-sqlite-statement.h \
-	ephy-sqlite.h \
-	history/ephy-history-service.c \
-	history/ephy-history-service.h \
-	history/ephy-history-service-private.h \
-	history/ephy-history-service-hosts-table.c \
-	history/ephy-history-service-urls-table.c \
-	history/ephy-history-service-visits-table.c \
-	history/ephy-history-types.c \
-	history/ephy-history-types.h \
-	ephy-profile-migrator.c \
-	ephy-profile-utils.c \
-	ephy-profile-utils.h \
-	ephy-debug.c \
-	ephy-debug.h \
-	ephy-file-helpers.c \
-	ephy-file-helpers.h \
-	ephy-settings.c	\
-	ephy-string.c
+	ephy-profile-migrator.c
 
 ephy_profile_migrator_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) \
@@ -125,6 +105,8 @@ ephy_profile_migrator_CFLAGS = \
 	$(AM_CFLAGS)
 
 ephy_profile_migrator_LDADD = \
+	$(top_builddir)/lib/history/libephyhistory.la \
+	libephymisc.la \
 	$(DEPENDENCIES_LIBS)
 
 if ENABLE_NSS
