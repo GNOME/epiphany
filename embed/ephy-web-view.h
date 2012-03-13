@@ -27,12 +27,8 @@
 #ifndef EPHY_WEB_VIEW_H
 #define EPHY_WEB_VIEW_H
 
-#include <glib-object.h>
-#include <glib.h>
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
-
-#include "ephy-embed-event.h"
 
 G_BEGIN_DECLS
 
