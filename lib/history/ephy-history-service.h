@@ -53,7 +53,8 @@ struct _EphyHistoryServiceClass {
 
   /* Signals */
   gboolean (* visit_url)   (EphyHistoryService *self,
-                            const char *url);
+                            const char *url,
+                            EphyHistoryPageVisitType visit_type);
 };
 
 GType                    ephy_history_service_get_type                (void);
@@ -73,7 +74,7 @@ void                     ephy_history_service_delete_host             (EphyHisto
 void                     ephy_history_service_get_url                 (EphyHistoryService *self, const char *url, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_delete_urls             (EphyHistoryService *self, GList *urls, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_find_urls               (EphyHistoryService *self, gint64 from, gint64 to, guint limit, gint host, GList *substring_list, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *orig_url);
+void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *orig_url, EphyHistoryPageVisitType visit_type);
 void                     ephy_history_service_clear                   (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 

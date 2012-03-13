@@ -27,6 +27,7 @@
 
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
+#include "ephy-embed-private.h"
 #include "ephy-location-controller.h"
 #include "ephy-window.h"
 

@@ -31,6 +31,7 @@
 #include "ephy-download.h"
 #include "ephy-embed-event.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
@@ -316,32 +317,39 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 }
 
 static void
-load_status_changed_cb (WebKitWebView *view,
+load_status_changed_cb (WebKitWebView *web_view,
                         GParamSpec *spec,
                         EphyEmbed *embed)
 {
-  WebKitLoadStatus status = webkit_web_view_get_load_status (view);
+  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
 
   if (status == WEBKIT_LOAD_COMMITTED) {
     const gchar* uri;
     char *history_uri;
+    EphyHistoryPageVisitType visit_type;
+    EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-    uri = webkit_web_view_get_uri (view);
+    uri = webkit_web_view_get_uri (web_view);
 
     ephy_embed_destroy_top_widgets (embed);
 
     restore_zoom_level (embed, uri);
 
-    if (ephy_web_view_is_loading_homepage (EPHY_WEB_VIEW (view)))
+    if (ephy_web_view_is_loading_homepage (view))
       return;
 
-    /* TODO: move the normaliztion down to the history service? */
+    /* TODO: move the normalization down to the history service? */
     if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
       history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
     else
       history_uri = g_strdup (uri);
 
-    ephy_history_service_visit_url (embed->priv->history_service, history_uri);
+    visit_type = ephy_web_view_get_visit_type (view);
+
+    ephy_history_service_visit_url (embed->priv->history_service,
+                                    history_uri,
+                                    visit_type);
+
     g_free (history_uri);
   }
 }

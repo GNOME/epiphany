@@ -22,8 +22,13 @@
 #error "Only <epiphany/epiphany.h> can be included directly."
 #endif
 
+#include "ephy-history-types.h"
+#include "ephy-web-view.h"
+
 #ifndef EPHY_EMBED_PRIVATE_H
 #define EPHY_EMBED_PRIVATE_H
+
+G_BEGIN_DECLS
 
 /* EphyWebView */
 
@@ -39,6 +44,12 @@
                                         "^file:.*$" \
                                         ")"
 
+void                     ephy_web_view_set_visit_type (EphyWebView *view, 
+                                                       EphyHistoryPageVisitType visit_type);
+
+EphyHistoryPageVisitType ephy_web_view_get_visit_type (EphyWebView *view);
+
+G_END_DECLS
 
 #endif
 

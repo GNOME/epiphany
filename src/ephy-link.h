@@ -47,7 +47,9 @@ typedef enum
 	EPHY_LINK_NEW_TAB	       = 1 << 1,
 	EPHY_LINK_JUMP_TO	       = 1 << 2,
 	EPHY_LINK_NEW_TAB_APPEND_AFTER = 1 << 3,
-	EPHY_LINK_HOME_PAGE	       = 1 << 4
+	EPHY_LINK_HOME_PAGE	       = 1 << 4,
+	EPHY_LINK_TYPED		       = 1 << 5,
+	EPHY_LINK_BOOKMARK	       = 1 << 6
 } EphyLinkFlags;
 
 struct _EphyLinkIface

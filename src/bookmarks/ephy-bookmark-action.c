@@ -183,6 +183,8 @@ ephy_bookmark_action_activate (EphyBookmarkAction *action,
 	}
 	g_return_if_fail (address != NULL);
 
+	flags |= EPHY_LINK_BOOKMARK;
+
 	ephy_link_open (EPHY_LINK (action), address, NULL, flags);
 
 	g_free (address);

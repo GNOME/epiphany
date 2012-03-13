@@ -30,6 +30,7 @@ G_BEGIN_DECLS
  * src/chrome/common/page_transition_types.h in the Chromium source code.
  */
 typedef enum {
+  EPHY_PAGE_VISIT_NONE,
   EPHY_PAGE_VISIT_LINK,
   EPHY_PAGE_VISIT_TYPED,
   EPHY_PAGE_VISIT_MANUAL_SUBFRAME,
@@ -37,6 +38,8 @@ typedef enum {
   EPHY_PAGE_VISIT_STARTUP,
   EPHY_PAGE_VISIT_FORM_SUBMISSION,
   EPHY_PAGE_VISIT_FORM_RELOAD,
+  EPHY_PAGE_VISIT_BOOKMARK,
+  EPHY_PAGE_VISIT_HOMEPAGE
 } EphyHistoryPageVisitType;
 
 typedef enum {

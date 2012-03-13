@@ -104,6 +104,8 @@ struct _EphyWebViewPrivate {
   GSList *shown_popups;
 
   GtkWidget *password_info_bar;
+
+  EphyHistoryPageVisitType visit_type;
 };
 
 typedef struct {
@@ -1949,6 +1951,9 @@ load_status_cb (WebKitWebView *web_view,
     if (uri)
       soup_uri_free (uri);
 
+    /* Reset visit type. */
+    priv->visit_type = EPHY_PAGE_VISIT_NONE;
+
     break;
   }
   case WEBKIT_LOAD_FAILED:
@@ -3694,6 +3699,8 @@ ephy_web_view_load_homepage (EphyWebView *view)
 {
   g_signal_emit_by_name (view, "loading-homepage");
 
+  ephy_web_view_set_visit_type (view,
+                                EPHY_PAGE_VISIT_HOMEPAGE);
   ephy_web_view_load_url (view, "about:blank");
 }
 
@@ -3739,4 +3746,34 @@ ephy_web_view_is_loading_homepage (EphyWebView *view)
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
 
   return view->priv->loading_homepage;
+}
+
+/**
+ * ephy_web_view_get_visit_type:
+ * @view: an #EphyWebView
+ * 
+ * Returns: the @view #EphyWebViewVisitType
+ **/
+EphyHistoryPageVisitType
+ephy_web_view_get_visit_type (EphyWebView *view)
+{
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
+
+  return view->priv->visit_type;
+}
+
+/**
+ * ephy_web_view_set_visit_type:
+ * @view: an #EphyWebView
+ * @visit_type: an #EphyHistoryPageVisitType
+ * 
+ * Sets the @visit_type for @view, so that the URI can be
+ * properly weighted in the history backend.
+ **/
+void
+ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_type)
+{
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
+  view->priv->visit_type = visit_type;
 }

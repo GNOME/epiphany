@@ -544,6 +544,13 @@ ephy_window_open_link (EphyLink *link,
 		embed = window->priv->active_embed;
 	}
 
+	if (flags & EPHY_LINK_BOOKMARK)
+		ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
+					      EPHY_PAGE_VISIT_BOOKMARK);
+	else if (flags & EPHY_LINK_TYPED)
+		ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
+					      EPHY_PAGE_VISIT_TYPED);
+		
 	if (flags  & (EPHY_LINK_JUMP_TO | 
 		      EPHY_LINK_NEW_TAB | 
 		      EPHY_LINK_NEW_WINDOW |
@@ -2174,6 +2181,9 @@ policy_decision_required_cb (WebKitWebView *web_view,
 		EphyNewTabFlags flags;
 
 		flags = EPHY_NEW_TAB_OPEN_PAGE;
+
+		ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
+					      EPHY_PAGE_VISIT_LINK);
 
 		/* New tab in new window for control+shift+click */
 		if (button == 1 &&

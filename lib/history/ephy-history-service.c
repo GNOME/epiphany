@@ -21,6 +21,7 @@
 
 #include "ephy-history-service-private.h"
 #include "ephy-history-types.h"
+#include "ephy-history-type-builtins.h"
 #include "ephy-sqlite-connection.h"
 
 typedef gboolean (*EphyHistoryServiceMethod)                              (EphyHistoryService *self, gpointer data, gpointer *result);
@@ -125,13 +126,13 @@ ephy_history_service_finalize (GObject *self)
 }
 
 static gboolean
-impl_visit_url (EphyHistoryService *self, const char *url)
+impl_visit_url (EphyHistoryService *self, const char *url, EphyHistoryPageVisitType visit_type)
 {
   EphyHistoryPageVisit *visit;
 
   visit = ephy_history_page_visit_new (url,
                                        time (NULL),
-                                       EPHY_PAGE_VISIT_TYPED);
+                                       visit_type);
   ephy_history_service_add_visit (self,
                                   visit, NULL, NULL, NULL);
   ephy_history_page_visit_free (visit);
@@ -158,8 +159,9 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   g_signal_accumulator_true_handled, NULL,
                   g_cclosure_marshal_generic,
                   G_TYPE_BOOLEAN,
-                  1,
-                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  2,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  EPHY_TYPE_HISTORY_PAGE_VISIT_TYPE);
 
   signals[CLEARED] =
     g_signal_new ("cleared",
@@ -1008,14 +1010,15 @@ ephy_history_service_find_urls (EphyHistoryService *self,
 
 void
 ephy_history_service_visit_url (EphyHistoryService *self,
-                                const char *url)
+                                const char *url,
+                                EphyHistoryPageVisitType visit_type)
 {
   gboolean result;
 
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (url != NULL);
 
-  g_signal_emit (self, signals[VISIT_URL], 0, url, &result);
+  g_signal_emit (self, signals[VISIT_URL], 0, url, visit_type, &result);
 }
 
 void

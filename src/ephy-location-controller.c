@@ -127,7 +127,7 @@ action_activated_cb (GtkEntryCompletion *completion,
 		if (url == NULL) return;
 
 		ephy_link_open (EPHY_LINK (controller), url, NULL,
-				ephy_link_flags_from_current_event ());
+				ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
 
 		g_free (url);
 	}
@@ -159,7 +159,7 @@ entry_activate_cb (GtkEntry *entry,
 	g_return_if_fail (address != NULL);
 
 	ephy_link_open (EPHY_LINK (controller), g_strstrip (address), NULL, 
-			ephy_link_flags_from_current_event ());
+			ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
 
 	g_free (address);
 }
