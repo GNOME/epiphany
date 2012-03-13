@@ -72,6 +72,7 @@ struct _EphyEmbedPrivate
   GtkPaned *paned;
   WebKitWebView *web_view;
   EphyHistoryService *history_service;
+  GCancellable *history_service_cancellable;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
@@ -267,7 +268,7 @@ restore_zoom_level (EphyEmbed *embed,
   /* restore zoom level */
   if (ephy_embed_utils_address_has_web_scheme (address)) {
     ephy_history_service_get_host_for_url (embed->priv->history_service,
-                                           address, NULL,
+                                           address, embed->priv->history_service_cancellable,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, embed);
   }
 }
@@ -432,6 +433,11 @@ ephy_embed_dispose (GObject *object)
   if (priv->progress_update_handler_id) {
     g_signal_handler_disconnect (priv->web_view, priv->progress_update_handler_id);
     priv->progress_update_handler_id = 0;
+  }
+
+  if (priv->history_service_cancellable) {
+    g_cancellable_cancel (priv->history_service_cancellable);
+    g_clear_object (&priv->history_service_cancellable);
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
@@ -827,6 +833,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_prefs_add_embed (embed);
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  priv->history_service_cancellable = g_cancellable_new ();
 
   g_signal_connect (priv->history_service,
                     "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
