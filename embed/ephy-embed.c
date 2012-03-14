@@ -37,7 +37,6 @@
 #include "nautilus-floating-bar.h"
 
 #include <glib/gi18n.h>
-#include <string.h>
 #include <webkit/webkit.h>
 
 static void     ephy_embed_constructed      (GObject *object);
@@ -587,7 +586,7 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   }
 
   uri = webkit_web_view_get_uri (priv->web_view);
-  if (!uri || strcmp (uri, "about:blank") == 0)
+  if (!uri || g_str_equal (uri, "about:blank"))
     return;
 
   progress = webkit_web_view_get_progress (priv->web_view);
