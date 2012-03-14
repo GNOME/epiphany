@@ -101,6 +101,7 @@ filter_now (EphyHistoryWindow *editor, gboolean hosts, gboolean pages);
 struct _EphyHistoryWindowPrivate
 {
 	EphyHistoryService *history_service;
+	GCancellable *cancellable;
 	GtkWidget *hosts_view;
 	GtkWidget *pages_view;
 	EphyURLsStore *urls_store;
@@ -460,13 +461,13 @@ cmd_delete (GtkAction *action,
 	{
 		GList *selected;
 		selected = ephy_urls_view_get_selection (EPHY_URLS_VIEW (editor->priv->pages_view));
-		ephy_history_service_delete_urls (editor->priv->history_service, selected, NULL,
+		ephy_history_service_delete_urls (editor->priv->history_service, selected, editor->priv->cancellable,
 						  (EphyHistoryJobCallback)on_browse_history_deleted_cb, editor);
 	} else if (gtk_widget_is_focus (editor->priv->hosts_view)) {
 		EphyHistoryHost *host = get_selected_host (editor);
 		if (host) {
 			ephy_history_service_delete_host (editor->priv->history_service,
-							  host, NULL,
+							  host, editor->priv->cancellable,
 							  (EphyHistoryJobCallback)on_host_deleted_cb,
 							  editor);
 			ephy_history_host_free (host);
@@ -1076,7 +1077,7 @@ filter_now (EphyHistoryWindow *editor,
 	if (hosts)
 	{
 		ephy_history_service_find_hosts (editor->priv->history_service,
-						 from, to, NULL,
+						 from, to, editor->priv->cancellable,
 						(EphyHistoryJobCallback) on_get_hosts_cb, editor);
 	}
 
@@ -1086,7 +1087,7 @@ filter_now (EphyHistoryWindow *editor,
 		ephy_history_service_find_urls (editor->priv->history_service,
 						from, to,
 						0, host ? host->id : 0,
-						substrings, NULL,
+						substrings, editor->priv->cancellable,
 						(EphyHistoryJobCallback)on_find_urls_cb, editor);
 		ephy_history_host_free (host);
 	}
@@ -1288,6 +1289,7 @@ ephy_history_window_constructed (GObject *object)
 			       "history_paned",
 			       130);
 
+	editor->priv->cancellable = g_cancellable_new ();
 	filter_now (editor, TRUE, TRUE);
 
 	g_signal_connect_after (editor->priv->history_service,
@@ -1390,6 +1392,12 @@ ephy_history_window_dispose (GObject *object)
 		remove_focus_monitor (editor, editor->priv->search_entry);
 
 		editor->priv->hosts_view = NULL;
+	}
+
+	if (editor->priv->cancellable)
+	{
+		g_cancellable_cancel (editor->priv->cancellable);
+		g_clear_object (&editor->priv->cancellable);
 	}
 
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
