@@ -46,55 +46,12 @@
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
 
 struct _EphyEmbedSinglePrivate {
-  guint online : 1;
-
   GHashTable *form_auth_data;
   SoupCache *cache;
 };
 
-enum {
-  PROP_0,
-  PROP_NETWORK_STATUS
-};
-
 static void ephy_embed_single_init (EphyEmbedSingle *single);
 static void ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
-
-static void
-ephy_embed_single_get_property (GObject *object,
-                                guint prop_id,
-                                GValue *value,
-                                GParamSpec *pspec)
-{
-  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
-
-  switch (prop_id) {
-  case PROP_NETWORK_STATUS:
-    g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
-  }
-}
-
-static void
-ephy_embed_single_set_property (GObject *object,
-                                guint prop_id,
-                                const GValue *value,
-                                GParamSpec *pspec)
-{
-  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
-
-  switch (prop_id) {
-  case PROP_NETWORK_STATUS:
-    ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
-  }
-}
 
 G_DEFINE_TYPE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT)
 
@@ -253,7 +210,6 @@ ephy_embed_single_init (EphyEmbedSingle *single)
   EphyEmbedSinglePrivate *priv;
 
   single->priv = priv = EPHY_EMBED_SINGLE_GET_PRIVATE (single);
-  priv->online = TRUE;
 
   priv->form_auth_data = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
@@ -269,8 +225,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 
   object_class->finalize = ephy_embed_single_finalize;
   object_class->dispose = ephy_embed_single_dispose;
-  object_class->get_property = ephy_embed_single_get_property;
-  object_class->set_property = ephy_embed_single_set_property;
 
   /**
    * EphyEmbedSingle::new-window:
@@ -316,20 +270,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 2,
                 G_TYPE_STRING,
                 G_TYPE_STRING);
-
-  /**
-   * EphyEmbedSingle::network-status:
-   * 
-   * Whether the network is on-line.
-   */
-  g_object_class_install_property
-    (object_class,
-     PROP_NETWORK_STATUS,
-     g_param_spec_boolean ("network-status",
-                           "network-status",
-                           "network-status",
-                           FALSE,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
 }
@@ -452,37 +392,6 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
 {
-}
-
-/**
- * ephy_embed_single_get_nework_status:
- * @single: the #EphyEmbedSingle
- * @offline: %TRUE if the network is on-line
- * 
- * Sets the state of the network connection.
- **/
-void
-ephy_embed_single_set_network_status (EphyEmbedSingle *single,
-                                      gboolean status)
-{
-  if (status != single->priv->online)
-    single->priv->online = status;
-
-  g_object_notify (G_OBJECT (single), "network-status");
-}
-
-/**
- * ephy_embed_single_get_network_status:
- * @single: the #EphyEmbedSingle
- * 
- * Gets the state of the network connection.
- * 
- * Returns: %TRUE iff the network is on-line.
- **/
-gboolean
-ephy_embed_single_get_network_status (EphyEmbedSingle *single)
-{
-  return single->priv->online;
 }
 
 /**

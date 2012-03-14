@@ -83,11 +83,6 @@ void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
 
 void            ephy_embed_single_clear_auth_cache   (EphyEmbedSingle *single);
 
-void            ephy_embed_single_set_network_status (EphyEmbedSingle *single,
-                                                      gboolean         online);
-
-gboolean        ephy_embed_single_get_network_status (EphyEmbedSingle *single);
-
 GSList *        ephy_embed_single_get_form_auth      (EphyEmbedSingle *single,
                                                       const char *uri);
 

@@ -51,21 +51,6 @@ test_embed_single_get_from_shell ()
 }
 
 static void
-test_embed_single_network_status ()
-{
-  EphyEmbedSingle *single;
-
-  single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-  g_assert (EPHY_IS_EMBED_SINGLE (single));
-
-  /* Defaults to TRUE */
-  g_assert (ephy_embed_single_get_network_status (single));
-
-  ephy_embed_single_set_network_status (single, FALSE);
-  g_assert (ephy_embed_single_get_network_status (single) == FALSE);
-}
-
-static void
 test_embed_single_form_auth ()
 {
   EphyEmbedSingle *single;
@@ -110,8 +95,6 @@ main (int argc, char *argv[])
                    test_embed_single_new);
   g_test_add_func ("/embed/ephy-embed-single/get_from_shell",
                    test_embed_single_get_from_shell);
-  g_test_add_func ("/embed/ephy-embed-single/network_status",
-                   test_embed_single_network_status);
   g_test_add_func ("/embed/ephy-embed-single/form_auth",
                    test_embed_single_form_auth);
 
