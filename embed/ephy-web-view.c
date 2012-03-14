@@ -1936,12 +1936,14 @@ load_status_cb (WebKitWebView *web_view,
       const gchar* uri;
       EphyWebViewSecurityLevel security_level;
 
+      /* Title and location. */
       uri = webkit_web_view_get_uri (web_view);
       ephy_web_view_location_changed (view,
                                       uri);
 
       ephy_web_view_set_title (view, NULL);
 
+      /* Security status. */
       if (uri && g_str_has_prefix (uri, "https")) {
         WebKitWebFrame *frame;
         WebKitWebDataSource *source;
@@ -1963,7 +1965,25 @@ load_status_cb (WebKitWebView *web_view,
 
       ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
 
+      /* Zoom level. */
       restore_zoom_level (view, uri);
+
+      /* History. */
+      if (!ephy_web_view_is_loading_homepage (view)) {
+        char *history_uri = NULL;
+
+        /* TODO: move the normalization down to the history service? */
+        if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+          history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+        else
+          history_uri = g_strdup (uri);
+        
+        ephy_history_service_visit_url (priv->history_service,
+                                        history_uri,
+                                        priv->visit_type);
+        
+        g_free (history_uri);
+      }
     }
     break;
   case WEBKIT_LOAD_FINISHED: {

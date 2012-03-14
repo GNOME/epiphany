@@ -277,33 +277,8 @@ load_status_changed_cb (WebKitWebView *web_view,
 {
   WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
 
-  if (status == WEBKIT_LOAD_COMMITTED) {
-    const gchar* uri;
-    char *history_uri;
-    EphyHistoryPageVisitType visit_type;
-    EphyWebView *view = EPHY_WEB_VIEW (web_view);
-
-    uri = webkit_web_view_get_uri (web_view);
-
+  if (status == WEBKIT_LOAD_COMMITTED)
     ephy_embed_destroy_top_widgets (embed);
-
-    if (ephy_web_view_is_loading_homepage (view))
-      return;
-
-    /* TODO: move the normalization down to the history service? */
-    if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
-      history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-    else
-      history_uri = g_strdup (uri);
-
-    visit_type = ephy_web_view_get_visit_type (view);
-
-    ephy_history_service_visit_url (embed->priv->history_service,
-                                    history_uri,
-                                    visit_type);
-
-    g_free (history_uri);
-  }
 }
 
 static void
