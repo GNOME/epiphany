@@ -36,8 +36,6 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
-#include "ephy-history-service.h"
-#include "ephy-history-types.h"
 #include "ephy-prefs.h"
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
@@ -72,7 +70,6 @@ struct _EphyEmbedPrivate
   GtkScrolledWindow *scrolled_window;
   GtkPaned *paned;
   WebKitWebView *web_view;
-  EphyHistoryService *history_service;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
@@ -723,8 +720,6 @@ ephy_embed_constructed (GObject *object)
                     NULL);
 
   ephy_embed_prefs_add_embed (embed);
-
-  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 }
 
 static void
