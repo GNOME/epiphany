@@ -381,13 +381,6 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-ephy_embed_history_cleared_cb (EphyHistoryService *history_service,
-                               EphyEmbed *embed)
-{
-  ephy_web_view_clear_history (EPHY_WEB_VIEW (embed->priv->web_view));
-}
-
-static void
 ephy_embed_grab_focus (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -464,10 +457,6 @@ ephy_embed_finalize (GObject *object)
     g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
   }
   g_slist_free (priv->destroy_on_transition_list);
-
-  g_signal_handlers_disconnect_by_func (priv->history_service,
-                                        ephy_embed_history_cleared_cb,
-                                        embed);
 
   for (list = priv->messages; list; list = list->next) {
     EphyEmbedStatusbarMsg *msg;
@@ -842,10 +831,6 @@ ephy_embed_constructed (GObject *object)
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
   priv->history_service_cancellable = g_cancellable_new ();
-
-  g_signal_connect (priv->history_service,
-                    "cleared", G_CALLBACK (ephy_embed_history_cleared_cb),
-                    embed);
 }
 
 static void

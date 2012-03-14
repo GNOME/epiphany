@@ -1035,9 +1035,20 @@ _ephy_web_view_hook_into_links (EphyWebView *web_view)
 }
 
 static void
+ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
+                                  EphyWebView *view)
+{
+  ephy_web_view_clear_history (view);
+}
+
+static void
 ephy_web_view_finalize (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+
+  g_signal_handlers_disconnect_by_func (priv->history_service,
+                                        ephy_web_view_history_cleared_cb,
+                                        EPHY_WEB_VIEW (object));
 
   if (priv->icon != NULL) {
     g_object_unref (priv->icon);
@@ -2224,6 +2235,10 @@ ephy_web_view_init (EphyWebView *web_view)
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+
+  g_signal_connect (priv->history_service,
+                    "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
+                    web_view);
 
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
