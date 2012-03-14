@@ -29,21 +29,13 @@
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
 #include "ephy-download.h"
-#include "ephy-embed-event.h"
 #include "ephy-embed-prefs.h"
-#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
-#include "ephy-embed-utils.h"
-#include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
-#include "ephy-request-about.h"
 #include "ephy-settings.h"
-#include "ephy-string.h"
 #include "ephy-web-view.h"
 #include "nautilus-floating-bar.h"
 
-#include <errno.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <webkit/webkit.h>
