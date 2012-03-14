@@ -503,7 +503,7 @@ ephy_web_view_file_monitor_cancel (EphyWebView *view)
 
   if (priv->monitor != NULL) {
     LOG ("Cancelling file monitor");
-    
+
     g_file_monitor_cancel (G_FILE_MONITOR (priv->monitor));
     priv->monitor = NULL;
   }
@@ -1334,7 +1334,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 /**
  * EphyWebView:visibility:
  *
- * 
+ *
  **/
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE,
@@ -1493,7 +1493,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 /**
  * EphyWebView::content-blocked:
  * @view: the #EphyWebView that received the signal
- * @uri: blocked URI 
+ * @uri: blocked URI
  *
  * The ::content-blocked signal is emitted when an url has been blocked.
  **/
@@ -1897,30 +1897,28 @@ load_status_cb (WebKitWebView *web_view,
 
   g_object_freeze_notify (object);
 
-  switch (status)
-  {
+  switch (status) {
   /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
-  case WEBKIT_LOAD_PROVISIONAL:
-    {
-      const gchar *loading_uri = NULL;
-      WebKitWebFrame *frame;
+  case WEBKIT_LOAD_PROVISIONAL: {
+    const gchar *loading_uri = NULL;
+    WebKitWebFrame *frame;
 
-      WebKitWebDataSource *source;
-      WebKitNetworkRequest *request;
+    WebKitWebDataSource *source;
+    WebKitNetworkRequest *request;
 
-      frame = webkit_web_view_get_main_frame (web_view);
+    frame = webkit_web_view_get_main_frame (web_view);
 
-      source = webkit_web_frame_get_provisional_data_source (frame);
-      request = webkit_web_data_source_get_initial_request (source);
-      loading_uri = webkit_network_request_get_uri (request);
+    source = webkit_web_frame_get_provisional_data_source (frame);
+    request = webkit_web_data_source_get_initial_request (source);
+    loading_uri = webkit_network_request_get_uri (request);
 
-      g_signal_emit_by_name (view, "new-document-now", loading_uri);
+    g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
-      if ((priv->address == NULL || priv->address[0] == '\0') &&
-          priv->expire_address_now == TRUE) {
-        ephy_web_view_set_address (view, loading_uri);
-        ephy_web_view_set_title (view, NULL);
-      }
+    if ((priv->address == NULL || priv->address[0] == '\0') &&
+        priv->expire_address_now == TRUE) {
+      ephy_web_view_set_address (view, loading_uri);
+      ephy_web_view_set_title (view, NULL);
+    }
 
       ephy_web_view_set_loading_title (view, loading_uri, TRUE);
 
@@ -1929,63 +1927,62 @@ load_status_cb (WebKitWebView *web_view,
       g_object_notify (object, "status-message");
 
       priv->expire_address_now = TRUE;
-    }
-    break;
-  case WEBKIT_LOAD_COMMITTED:
-    {
-      const gchar* uri;
-      EphyWebViewSecurityLevel security_level;
+      break;
+  }
+  case WEBKIT_LOAD_COMMITTED: {
+    const gchar* uri;
+    EphyWebViewSecurityLevel security_level;
 
-      /* Title and location. */
-      uri = webkit_web_view_get_uri (web_view);
-      ephy_web_view_location_changed (view,
-                                      uri);
+    /* Title and location. */
+    uri = webkit_web_view_get_uri (web_view);
+    ephy_web_view_location_changed (view,
+                                    uri);
 
-      ephy_web_view_set_title (view, NULL);
+    ephy_web_view_set_title (view, NULL);
 
-      /* Security status. */
-      if (uri && g_str_has_prefix (uri, "https")) {
-        WebKitWebFrame *frame;
-        WebKitWebDataSource *source;
-        WebKitNetworkRequest *request;
-        SoupMessage *message;
+    /* Security status. */
+    if (uri && g_str_has_prefix (uri, "https")) {
+      WebKitWebFrame *frame;
+      WebKitWebDataSource *source;
+      WebKitNetworkRequest *request;
+      SoupMessage *message;
 
-        frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-        source = webkit_web_frame_get_data_source (frame);
-        request = webkit_web_data_source_get_request (source);
-        message = webkit_network_request_get_message (request);
+      frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
+      source = webkit_web_frame_get_data_source (frame);
+      request = webkit_web_data_source_get_request (source);
+      message = webkit_network_request_get_message (request);
 
-        if (message &&
-            (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
-          security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-        else
-          security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
-      } else
-        security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+      if (message &&
+          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
+        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
+      else
+        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
+    } else
+      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
-      ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+    ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
 
-      /* Zoom level. */
-      restore_zoom_level (view, uri);
+    /* Zoom level. */
+    restore_zoom_level (view, uri);
 
-      /* History. */
-      if (!ephy_web_view_is_loading_homepage (view)) {
-        char *history_uri = NULL;
+    /* History. */
+    if (!ephy_web_view_is_loading_homepage (view)) {
+      char *history_uri = NULL;
 
-        /* TODO: move the normalization down to the history service? */
-        if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+      /* TODO: move the normalization down to the history service? */
+      if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
           history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-        else
-          history_uri = g_strdup (uri);
-        
-        ephy_history_service_visit_url (priv->history_service,
-                                        history_uri,
-                                        priv->visit_type);
-        
-        g_free (history_uri);
-      }
+      else
+        history_uri = g_strdup (uri);
+
+      ephy_history_service_visit_url (priv->history_service,
+                                      history_uri,
+                                      priv->visit_type);
+
+      g_free (history_uri);
     }
     break;
+  }
   case WEBKIT_LOAD_FINISHED: {
     SoupURI *uri;
 
@@ -2023,7 +2020,7 @@ load_status_cb (WebKitWebView *web_view,
 
       for (i = 0; i < buttons_n; i++) {
         WebKitDOMNode *button;
-        
+
         button = webkit_dom_node_list_item (buttons, i);
         webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (button), "click",
                                                     G_CALLBACK (delete_web_app_cb), false,
@@ -2566,7 +2563,7 @@ ephy_web_view_load_url (EphyWebView *view,
     g_free (temp_url);
   } else if (g_str_has_prefix (effective_url, "javascript:")) {
     char *decoded_url;
-    
+
     decoded_url = soup_uri_decode (effective_url);
     webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
     g_free (decoded_url);
@@ -2710,7 +2707,7 @@ ephy_web_view_set_address (EphyWebView *view,
 static char*
 get_title_from_address (const char *address)
 {
-  if (g_str_has_prefix (address, "file://")) 
+  if (g_str_has_prefix (address, "file://"))
     return g_strdup (address + 7);
   else if (!strcmp (address, EPHY_ABOUT_SCHEME":plugins"))
     return g_strdup (_("Plugins"));
@@ -3297,7 +3294,7 @@ ephy_web_view_get_typed_address (EphyWebView *view)
  * ephy_web_view_set_typed_address:
  * @view: an #EphyWebView
  * @address: the new typed address, or %NULL to clear it
- * 
+ *
  * Sets the text that @view's #EphyWindow will display in its location toolbar
  * entry when @view is selected.
  **/
@@ -3518,7 +3515,7 @@ ephy_web_view_print (EphyWebView *view)
  * @view: an #EphyView
  *
  * Returns the title of the web page loaded in @view.
- * 
+ *
  * This differs from #ephy_web_view_get_title in that this function
  * will return a special title while the page is still loading.
  *
@@ -3810,9 +3807,9 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 /**
  * ephy_web_view_load_homepage:
  * @view: an #EphyWebView
- * 
+ *
  * Loads the homepage, which is hardcoded to be "about:blank"
- * 
+ *
  **/
 void
 ephy_web_view_load_homepage (EphyWebView *view)
@@ -3831,7 +3828,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
  * @y: the y coordinate of the snapshot
  * @width: the width of the snapshot
  * @height: the height of the snapshot
- * 
+ *
  * Returns: (transfer full): a #GdkPixbuf with a snapshot of the requested area.
  **/
 GdkPixbuf *
@@ -3871,7 +3868,7 @@ ephy_web_view_is_loading_homepage (EphyWebView *view)
 /**
  * ephy_web_view_get_visit_type:
  * @view: an #EphyWebView
- * 
+ *
  * Returns: the @view #EphyWebViewVisitType
  **/
 EphyHistoryPageVisitType
@@ -3886,7 +3883,7 @@ ephy_web_view_get_visit_type (EphyWebView *view)
  * ephy_web_view_set_visit_type:
  * @view: an #EphyWebView
  * @visit_type: an #EphyHistoryPageVisitType
- * 
+ *
  * Sets the @visit_type for @view, so that the URI can be
  * properly weighted in the history backend.
  **/
