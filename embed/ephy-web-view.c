@@ -2045,6 +2045,9 @@ load_status_cb (WebKitWebView *web_view,
     g_object_notify (object, "status-message");
 
     update_navigation_flags (view);
+
+    /* Reset visit type. */
+    priv->visit_type = EPHY_PAGE_VISIT_NONE;
     break;
   default:
     break;
