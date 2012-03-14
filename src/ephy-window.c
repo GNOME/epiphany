@@ -1647,7 +1647,8 @@ sync_network_status (EphyEmbedSingle *single,
 	GtkAction *action;
 	gboolean is_online;
 
-	is_online = ephy_embed_single_get_network_status (single);
+	GNetworkMonitor *monitor = G_NETWORK_MONITOR (ephy_shell_get_net_monitor (ephy_shell));
+	is_online = g_network_monitor_get_network_available (monitor);
 
 	action = gtk_action_group_get_action (priv->action_group,
 					      "FileWorkOffline");

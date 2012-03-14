@@ -550,21 +550,6 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
      NULL, NULL, flags, chromemask, is_popup, 0);
 }
 
-static void
-ephy_shell_sync_network_status (GNetworkMonitor *monitor,
-                                gboolean available,
-                                EphyShell *shell)
-{
-  EphyShellPrivate *priv = shell->priv;
-  EphyEmbedSingle *single;
-
-  if (!priv->embed_single_connected) return;
-
-  single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (shell)));
-
-  ephy_embed_single_set_network_status (single, available);
-}
-
 static GObject*
 impl_get_embed_single (EphyEmbedShell *embed_shell)
 {
@@ -581,13 +566,6 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
                              shell, G_CONNECT_AFTER);
 
     priv->embed_single_connected = TRUE;
-
-    /* Now we need the net monitor   */
-    if (ephy_shell_get_net_monitor (shell)) {
-        ephy_shell_sync_network_status (priv->network_monitor,
-                                        g_network_monitor_get_network_available (priv->network_monitor),
-                                        shell);
-    }
   }
 
   return embed_single;
@@ -666,8 +644,6 @@ ephy_shell_dispose (GObject *object)
 
   if (priv->network_monitor != NULL) {
     LOG ("Unref net monitor ");
-    g_signal_handlers_disconnect_by_func
-      (priv->network_monitor, G_CALLBACK (ephy_shell_sync_network_status), shell);
     g_object_unref (priv->network_monitor);
     priv->network_monitor = NULL;
   }
@@ -972,11 +948,8 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 {
   EphyShellPrivate *priv = shell->priv;
 
-  if (priv->network_monitor == NULL) {
+  if (priv->network_monitor == NULL)
     priv->network_monitor = g_network_monitor_get_default ();
-    g_signal_connect (priv->network_monitor, "network-changed",
-                      G_CALLBACK (ephy_shell_sync_network_status), shell);
-  }
 
   return G_OBJECT (priv->network_monitor);
 }
