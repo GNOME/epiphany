@@ -81,6 +81,7 @@ struct _EphyWebViewPrivate {
   guint is_blank : 1;
   guint visibility : 1;
   guint loading_homepage : 1;
+  guint is_setting_zoom : 1;
 
   char *address;
   char *typed_address;
@@ -106,6 +107,8 @@ struct _EphyWebViewPrivate {
   GtkWidget *password_info_bar;
 
   EphyHistoryService *history_service;
+  GCancellable *history_service_cancellable;
+
   EphyHistoryPageVisitType visit_type;
 };
 
@@ -548,7 +551,14 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 static void
 ephy_web_view_dispose (GObject *object)
 {
+  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+
   ephy_web_view_file_monitor_cancel (EPHY_WEB_VIEW (object));
+
+  if (priv->history_service_cancellable) {
+    g_cancellable_cancel (priv->history_service_cancellable);
+    g_clear_object (&priv->history_service_cancellable);
+  }
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
@@ -1837,6 +1847,45 @@ delete_web_app_cb (WebKitDOMHTMLElement *button,
 }
 
 static void
+get_host_for_url_cb (gpointer service,
+                     gboolean success,
+                     gpointer result_data,
+                     gpointer user_data)
+{
+  EphyHistoryHost *host;
+  EphyWebView *view;
+  double current_zoom;
+
+  if (success == FALSE)
+    return;
+
+  view = EPHY_WEB_VIEW (user_data);
+  host = (EphyHistoryHost *)result_data;
+
+  g_object_get (view,
+                "zoom-level", &current_zoom,
+                NULL);
+
+  if (host->zoom_level != current_zoom) {
+    view->priv->is_setting_zoom = TRUE;
+    g_object_set (view, "zoom-level", host->zoom_level, NULL);
+    view->priv->is_setting_zoom = FALSE;
+  }
+
+  ephy_history_host_free (host);
+}
+
+static void
+restore_zoom_level (EphyWebView *view,
+                    const char *address)
+{
+  if (ephy_embed_utils_address_has_web_scheme (address))
+    ephy_history_service_get_host_for_url (view->priv->history_service,
+                                           address, view->priv->history_service_cancellable,
+                                           (EphyHistoryJobCallback)get_host_for_url_cb, view);
+}
+
+static void
 load_status_cb (WebKitWebView *web_view,
                 GParamSpec *pspec,
                 gpointer user_data)
@@ -1913,6 +1962,8 @@ load_status_cb (WebKitWebView *web_view,
         security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
       ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+
+      restore_zoom_level (view, uri);
     }
     break;
   case WEBKIT_LOAD_FINISHED: {
@@ -2216,6 +2267,32 @@ close_web_view_cb (WebKitWebView *web_view,
 }
 
 static void
+zoom_changed_cb (WebKitWebView *web_view,
+                 GParamSpec *pspec,
+                 gpointer user_data)
+{
+  char *address;
+  float zoom;
+  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
+
+  g_object_get (web_view,
+                "zoom-level", &zoom,
+                NULL);
+
+  if (priv->is_setting_zoom)
+    return;
+
+  address = ephy_web_view_get_location (EPHY_WEB_VIEW (web_view), TRUE);
+  if (ephy_embed_utils_address_has_web_scheme (address)) {
+    ephy_history_service_set_url_zoom_level (priv->history_service,
+                                             address, zoom,
+                                             NULL, NULL, NULL);
+  }
+
+  g_free (address);
+}
+
+static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
@@ -2235,6 +2312,7 @@ ephy_web_view_init (EphyWebView *web_view)
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  priv->history_service_cancellable = g_cancellable_new ();
 
   g_signal_connect (priv->history_service,
                     "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
@@ -2258,6 +2336,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "load-error",
                     G_CALLBACK (load_error_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::zoom-level",
+                    G_CALLBACK (zoom_changed_cb),
                     NULL);
 
   g_signal_connect_object (web_view, "icon-loaded",

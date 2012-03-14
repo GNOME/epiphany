@@ -73,12 +73,10 @@ struct _EphyEmbedPrivate
   GtkPaned *paned;
   WebKitWebView *web_view;
   EphyHistoryService *history_service;
-  GCancellable *history_service_cancellable;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
   gboolean inspector_attached;
-  guint is_setting_zoom : 1;
   GSList *destroy_on_transition_list;
   GtkWidget *floating_bar;
   GtkWidget *progress;
@@ -231,50 +229,6 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 }
 
 static void
-get_host_for_url_cb (gpointer service,
-                     gboolean success,
-                     gpointer result_data,
-                     gpointer user_data)
-{
-  EphyHistoryHost *host;
-  EphyEmbed *embed;
-  WebKitWebView *web_view;
-  double current_zoom;
-
-  if (success == FALSE)
-    return;
-
-  embed = EPHY_EMBED (user_data);
-  host = (EphyHistoryHost *)result_data;
-
-  web_view = embed->priv->web_view;
-
-  g_object_get (web_view,
-                "zoom-level", &current_zoom,
-                NULL);
-
-  if (host->zoom_level != current_zoom) {
-    embed->priv->is_setting_zoom = TRUE;
-    g_object_set (web_view, "zoom-level", host->zoom_level, NULL);
-    embed->priv->is_setting_zoom = FALSE;
-  }
-
-  ephy_history_host_free (host);
-}
-
-static void
-restore_zoom_level (EphyEmbed *embed,
-                    const char *address)
-{
-  /* restore zoom level */
-  if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_history_service_get_host_for_url (embed->priv->history_service,
-                                           address, embed->priv->history_service_cancellable,
-                                           (EphyHistoryJobCallback)get_host_for_url_cb, embed);
-  }
-}
-
-static void
 resource_request_starting_cb (WebKitWebView *web_view,
                               WebKitWebFrame *web_frame,
                               WebKitWebResource *web_resource,
@@ -333,8 +287,6 @@ load_status_changed_cb (WebKitWebView *web_view,
 
     ephy_embed_destroy_top_widgets (embed);
 
-    restore_zoom_level (embed, uri);
-
     if (ephy_web_view_is_loading_homepage (view))
       return;
 
@@ -352,32 +304,6 @@ load_status_changed_cb (WebKitWebView *web_view,
 
     g_free (history_uri);
   }
-}
-
-static void
-zoom_changed_cb (WebKitWebView *web_view,
-                 GParamSpec *pspec,
-                 EphyEmbed  *embed)
-{
-  char *address;
-  float zoom;
-
-  g_object_get (web_view,
-                "zoom-level", &zoom,
-                NULL);
-
-  if (EPHY_EMBED (embed)->priv->is_setting_zoom) {
-    return;
-  }
-
-  address = ephy_web_view_get_location (EPHY_WEB_VIEW (web_view), TRUE);
-  if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_history_service_set_url_zoom_level (embed->priv->history_service,
-                                             address, zoom,
-                                             NULL, NULL, NULL);
-  }
-
-  g_free (address);
 }
 
 static void
@@ -434,11 +360,6 @@ ephy_embed_dispose (GObject *object)
   if (priv->progress_update_handler_id) {
     g_signal_handler_disconnect (priv->web_view, priv->progress_update_handler_id);
     priv->progress_update_handler_id = 0;
-  }
-
-  if (priv->history_service_cancellable) {
-    g_cancellable_cancel (priv->history_service_cancellable);
-    g_clear_object (&priv->history_service_cancellable);
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
@@ -779,7 +700,6 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
-                    "signal::notify::zoom-level", G_CALLBACK (zoom_changed_cb), embed,
                     NULL);
 
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
@@ -830,7 +750,6 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_prefs_add_embed (embed);
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
-  priv->history_service_cancellable = g_cancellable_new ();
 }
 
 static void
