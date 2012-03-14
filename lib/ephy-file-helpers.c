@@ -223,14 +223,15 @@ ephy_file (const char *filename)
 	static const char * const paths[] =
 	{
 #ifdef GNOME_ENABLE_DEBUG
-		SHARE_UNINSTALLED_DIR "/",
-		SHARE_UNINSTALLED_DIR "/glade/",
-		SHARE_UNINSTALLED_DIR "/ui/",
-		SHARE_UNINSTALLED_DIR "/art/",
-		SHARE_UNINSTALLED_DIR "/pages/",
+		TOP_SRC_DATADIR "/",
+		TOP_SRC_DATADIR "/glade/",
+		TOP_SRC_DATADIR "/ui/",
+		TOP_SRC_DATADIR "/art/",
+		TOP_SRC_DATADIR "/pages/",
 #endif
 		SHARE_DIR "/",
 		SHARE_DIR "/glade/",
+		SHARE_DIR "/ui/",
 		SHARE_DIR "/art/",
 		SHARE_DIR "/pages/"
 	};

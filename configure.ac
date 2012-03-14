@@ -235,13 +235,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
-# ************
-# Misc defines
-# ************
-
-# uninstalled share dir to search data
-AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
-
 # *******************************
 # Add warning flags
 # *******************************
