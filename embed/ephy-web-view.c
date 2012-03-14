@@ -105,6 +105,7 @@ struct _EphyWebViewPrivate {
 
   GtkWidget *password_info_bar;
 
+  EphyHistoryService *history_service;
   EphyHistoryPageVisitType visit_type;
 };
 
@@ -2221,6 +2222,8 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv->non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+
+  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
 
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
