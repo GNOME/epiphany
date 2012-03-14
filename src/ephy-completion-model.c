@@ -34,6 +34,7 @@ G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
 struct _EphyCompletionModelPrivate {
   EphyHistoryService *history_service;
+  GCancellable *cancellable;
 
   EphyNode *bookmarks;
   GSList *search_terms;
@@ -70,6 +71,11 @@ ephy_completion_model_finalize (GObject *object)
   if (priv->search_terms) {
     free_search_terms (priv->search_terms);
     priv->search_terms = NULL;
+  }
+
+  if (priv->cancellable) {
+    g_cancellable_cancel (priv->cancellable);
+    g_clear_object (&priv->cancellable);
   }
 
   G_OBJECT_CLASS (ephy_completion_model_parent_class)->finalize (object);
@@ -418,6 +424,7 @@ query_completed_cb (EphyHistoryService *service,
   g_slice_free (FindURLsData, user_data);
   g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
   g_slist_free_full (list, (GDestroyNotify)free_potential_row);
+  g_clear_object (&priv->cancellable);
 }
 
 static void
@@ -534,10 +541,16 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
   user_data->callback = callback;
   user_data->user_data = data;
 
+  if (priv->cancellable) {
+    g_cancellable_cancel (priv->cancellable);
+    g_object_unref (priv->cancellable);
+  }
+  priv->cancellable = g_cancellable_new ();
+
   ephy_history_service_find_urls (priv->history_service,
                                   0, 0,
                                   MAX_COMPLETION_HISTORY_URLS, 0,
-                                  query, NULL,
+                                  query, priv->cancellable,
                                   (EphyHistoryJobCallback)query_completed_cb,
                                   user_data);
 }
