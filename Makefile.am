@@ -29,6 +29,7 @@ DISTCLEANFILES = 		\
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-debug			\
 	--enable-zeroconf		\
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
