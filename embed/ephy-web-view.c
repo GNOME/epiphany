@@ -1126,6 +1126,17 @@ ephy_web_view_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
 
+static char*
+get_title_from_address (const char *address)
+{
+  if (g_str_has_prefix (address, "file://"))
+    return g_strdup (address + 7);
+  else if (!strcmp (address, EPHY_ABOUT_SCHEME":plugins"))
+    return g_strdup (_("Plugins"));
+  else
+    return ephy_string_get_host_name (address);
+}
+
 static void
 title_changed_cb (WebKitWebView *web_view,
                   GParamSpec *spec,
@@ -1141,13 +1152,10 @@ title_changed_cb (WebKitWebView *web_view,
 
   g_object_get (web_view, "title", &title, NULL);
 
-  /* Fallback to the URI as title if it's NULL. */
-  if ((title == NULL || g_str_equal (title, "")) && uri != NULL) {
-    g_free (title);
-    title = g_strdup (uri);
-  }
-
   ephy_web_view_set_title (EPHY_WEB_VIEW (web_view), title);
+  
+  if (!title && uri)
+    title = get_title_from_address (uri);
 
   if (uri && title)
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
@@ -2697,17 +2705,6 @@ ephy_web_view_set_address (EphyWebView *view,
   }
 
   g_object_notify (object, "address");
-}
-
-static char*
-get_title_from_address (const char *address)
-{
-  if (g_str_has_prefix (address, "file://"))
-    return g_strdup (address + 7);
-  else if (!strcmp (address, EPHY_ABOUT_SCHEME":plugins"))
-    return g_strdup (_("Plugins"));
-  else
-    return ephy_string_get_host_name (address);
 }
 
 /**
