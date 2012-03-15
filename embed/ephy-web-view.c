@@ -1051,9 +1051,6 @@ update_navigation_flags (EphyWebView *view)
   guint flags = 0;
   WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
 
-  if (ephy_web_view_can_go_up (view))
-    flags |= EPHY_WEB_VIEW_NAV_UP;
-
   if (webkit_web_view_can_go_back (web_view))
     flags |= EPHY_WEB_VIEW_NAV_BACK;
 
@@ -3023,37 +3020,6 @@ ephy_web_view_location_changed (EphyWebView *view,
 }
 
 /**
- * ephy_web_view_can_go_up:
- * @view: an #EphyWebView
- *
- * Returns whether @view can travel to a higher-level directory on the server.
- * For example, for http://www.example.com/subdir/foo.html, returns %TRUE; for
- * http://www.example.com/, returns %FALSE.
- *
- * Return value: %TRUE if @view can browse to a higher-level directory
- **/
-gboolean
-ephy_web_view_can_go_up (EphyWebView *view)
-{
-  SoupURI *uri;
-  gboolean result;
-
-  uri = soup_uri_new (ephy_web_view_get_address (view));
-  if (uri == NULL)
-    return FALSE;
-
-  if (strcmp (uri->scheme, "about") == 0 || strcmp (uri->scheme, "data") == 0) {
-    soup_uri_free (uri);
-    return FALSE;
-  }
-
-  result = uri->fragment || uri->query || (uri->path && (strlen (uri->path) > 1));
-  soup_uri_free (uri);
-
-  return result;
-}
-
-/**
  * ephy_web_view_is_loading:
  * @view: an #EphyWebView
  *
@@ -3403,17 +3369,6 @@ ephy_web_view_get_location (EphyWebView *view,
   /* FIXME: follow the toplevel parameter */
   WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
   return g_strdup (webkit_web_frame_get_uri (web_frame));
-}
-
-/**
- * ephy_web_view_go_up:
- * @view: an #EphyWebView
- *
- * Moves @view one level up in its web page's directory hierarchy.
- **/
-void
-ephy_web_view_go_up (EphyWebView *view)
-{
 }
 
 /**

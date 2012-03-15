@@ -45,9 +45,8 @@ typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
 
 typedef enum
 {
-  EPHY_WEB_VIEW_NAV_UP    = 1 << 0,
-  EPHY_WEB_VIEW_NAV_BACK    = 1 << 1,
-  EPHY_WEB_VIEW_NAV_FORWARD = 1 << 2
+  EPHY_WEB_VIEW_NAV_BACK    = 1 << 0,
+  EPHY_WEB_VIEW_NAV_FORWARD = 1 << 1
 } EphyWebViewNavigationFlags;
 
 typedef enum
@@ -155,7 +154,6 @@ gboolean                   ephy_web_view_get_is_blank             (EphyWebView  
 gboolean                   ephy_web_view_has_modified_forms       (EphyWebView               *view);
 char *                     ephy_web_view_get_location             (EphyWebView               *view,
                                                                    gboolean                   toplevel);
-void                       ephy_web_view_go_up                    (EphyWebView               *view);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    char                     **description);
@@ -164,7 +162,6 @@ void                       ephy_web_view_print                    (EphyWebView  
 void                       ephy_web_view_set_title                (EphyWebView               *view,
                                                                    const char                *view_title);
 const char *               ephy_web_view_get_title                (EphyWebView               *view);
-gboolean                   ephy_web_view_can_go_up                (EphyWebView               *view);
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
 
