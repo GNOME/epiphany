@@ -3809,7 +3809,7 @@ ephy_web_view_is_loading_homepage (EphyWebView *view)
 EphyHistoryPageVisitType
 ephy_web_view_get_visit_type (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), 0);
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), EPHY_PAGE_VISIT_NONE);
 
   return view->priv->visit_type;
 }
