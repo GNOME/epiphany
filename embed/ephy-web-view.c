@@ -1196,14 +1196,6 @@ hovering_over_link_cb (EphyWebView *web_view,
 static void
 ephy_web_view_constructed (GObject *object)
 {
-  EphyWebView *web_view = EPHY_WEB_VIEW (object);
-
-  g_object_connect (web_view,
-                    "signal::notify::title", G_CALLBACK (title_changed_cb), NULL,
-                    "signal::notify::uri", G_CALLBACK (uri_changed_cb), NULL,
-                    "signal::hovering-over-link", G_CALLBACK (hovering_over_link_cb), NULL,
-                    NULL);
-
   /* Use full content zooming by default */
   /* FIXME: we could make this configurable through GSettings, or have
    * different keys for text and full content zooming. AFAIK you can
@@ -2389,6 +2381,18 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::zoom-level",
                     G_CALLBACK (zoom_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::title",
+                    G_CALLBACK (title_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::uri",
+                    G_CALLBACK (uri_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "hovering-over-link",
+                    G_CALLBACK (hovering_over_link_cb),
                     NULL);
 
   g_signal_connect_object (web_view, "icon-loaded",
