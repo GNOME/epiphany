@@ -1145,7 +1145,7 @@ title_changed_cb (WebKitWebView *web_view,
   const char *uri;
   char *title;
   WebKitWebFrame *frame;
-  EphyHistoryService *history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  EphyHistoryService *history = EPHY_WEB_VIEW (web_view)->priv->history_service;
 
   frame = webkit_web_view_get_main_frame (web_view);
   uri = webkit_web_frame_get_uri (frame);
