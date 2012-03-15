@@ -20,9 +20,6 @@ m4_define([epiphany_version_minor],[3])
 m4_define([epiphany_version_micro],[91])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
-# This can be either "trunk" or "branches/gnome-x-y"
-m4_define([epiphany_branch],["trunk"])
-
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 AC_PREREQ([2.59])
