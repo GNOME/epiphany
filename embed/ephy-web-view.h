@@ -157,7 +157,6 @@ char *                     ephy_web_view_get_location             (EphyWebView  
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    char                     **description);
-void                       ephy_web_view_show_page_certificate    (EphyWebView               *view);
 void                       ephy_web_view_print                    (EphyWebView               *view);
 void                       ephy_web_view_set_title                (EphyWebView               *view,
                                                                    const char                *view_title);

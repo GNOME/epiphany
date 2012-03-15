@@ -1105,19 +1105,6 @@ window_cmd_view_page_source (GtkAction *action,
 	}
 }
 
-void
-window_cmd_view_page_security_info (GtkAction *action,
-				    EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_embed_container_get_active_child 
-          (EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
-
-	ephy_web_view_show_page_certificate (ephy_embed_get_web_view (embed));
-}
-
 #define ABOUT_GROUP "About"
 
 void

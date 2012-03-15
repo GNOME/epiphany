@@ -3389,18 +3389,6 @@ ephy_web_view_get_security_level (EphyWebView *view,
     *description = NULL;
 }
 
-/**
- * ephy_web_view_show_page_certificate:
- * @view: an #EphyWebView
- *
- * Shows a dialogue displaying the certificate of the currently loaded page
- * of @view, if it was loaded over a secure connection; else does nothing.
- **/
-void
-ephy_web_view_show_page_certificate (EphyWebView *view)
-{
-}
-
 static void
 ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
 {
