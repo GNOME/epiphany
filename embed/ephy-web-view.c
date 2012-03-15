@@ -2657,13 +2657,6 @@ ephy_web_view_copy_back_history (EphyWebView *source,
     webkit_web_back_forward_list_add_item (dest_bflist, item);
 }
 
-/**
- * ephy_web_view_set_is_blank:
- * @view: an #EphyWebView
- * @is_blank: if @view is the blank page
- *
- * Sets whether the  @view's address is "blank".
- **/
 static void
 _ephy_web_view_set_is_blank (EphyWebView *view,
                              gboolean is_blank)
