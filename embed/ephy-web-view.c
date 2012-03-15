@@ -2395,17 +2395,17 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (hovering_over_link_cb),
                     NULL);
 
-  g_signal_connect_object (web_view, "icon-loaded",
-                           G_CALLBACK (favicon_cb),
-                           web_view, (GConnectFlags)0);
+  g_signal_connect (web_view, "icon-loaded",
+                    G_CALLBACK (favicon_cb),
+                    NULL);
 
-  g_signal_connect_object (web_view, "new-window",
-                           G_CALLBACK (new_window_cb),
-                           web_view, (GConnectFlags)0);
+  g_signal_connect (web_view, "new-window",
+                    G_CALLBACK (new_window_cb),
+                    NULL);
 
-  g_signal_connect_object (web_view, "ge_popup_blocked",
-                           G_CALLBACK (ge_popup_blocked_cb),
-                           web_view, (GConnectFlags)0);
+  g_signal_connect (web_view, "ge_popup_blocked",
+                    G_CALLBACK (ge_popup_blocked_cb),
+                    NULL);
 
   cache = EPHY_FAVICON_CACHE
           (ephy_embed_shell_get_favicon_cache (embed_shell));
