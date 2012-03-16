@@ -56,20 +56,21 @@ struct EphyEmbedEventClass {
 };
 
 
-GType           ephy_embed_event_get_type     (void);
-EphyEmbedEvent *ephy_embed_event_new          (GdkEventButton      *event,
-                                               WebKitHitTestResult *hit_test_result);
-guint           ephy_embed_event_get_context  (EphyEmbedEvent      *event);
-guint           ephy_embed_event_get_button   (EphyEmbedEvent      *event);
-guint           ephy_embed_event_get_modifier (EphyEmbedEvent      *event);
-void            ephy_embed_event_get_coords   (EphyEmbedEvent      *event,
-                                               guint               *x,
-                                               guint               *y);
-void            ephy_embed_event_get_property (EphyEmbedEvent      *event,
-                                               const char          *name,
-                                               GValue              *value);
-gboolean        ephy_embed_event_has_property (EphyEmbedEvent      *event,
-                                               const char          *name);
+GType                ephy_embed_event_get_type            (void);
+EphyEmbedEvent *     ephy_embed_event_new                 (GdkEventButton      *event,
+                                                           WebKitHitTestResult *hit_test_result);
+guint                ephy_embed_event_get_context         (EphyEmbedEvent      *event);
+guint                ephy_embed_event_get_button          (EphyEmbedEvent      *event);
+guint                ephy_embed_event_get_modifier        (EphyEmbedEvent      *event);
+void                 ephy_embed_event_get_coords          (EphyEmbedEvent      *event,
+                                                           guint               *x,
+                                                           guint               *y);
+void                 ephy_embed_event_get_property        (EphyEmbedEvent      *event,
+                                                           const char          *name,
+                                                           GValue              *value);
+gboolean             ephy_embed_event_has_property        (EphyEmbedEvent      *event,
+                                                           const char          *name);
+WebKitHitTestResult *ephy_embed_event_get_hit_test_result (EphyEmbedEvent      *event);
 
 G_END_DECLS
 

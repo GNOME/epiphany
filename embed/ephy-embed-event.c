@@ -181,3 +181,10 @@ ephy_embed_event_has_property   (EphyEmbedEvent *event,
                                                            
 }
 
+WebKitHitTestResult *
+ephy_embed_event_get_hit_test_result (EphyEmbedEvent *event)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), NULL);
+  
+  return event->priv->hit_test_result;
+}

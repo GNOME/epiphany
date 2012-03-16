@@ -90,37 +90,51 @@ popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyEmbedEvent *event;
-	GValue link_title = { 0, };
-	GValue link_rel = { 0, };
-	GValue link = { 0, };
-	GValue link_is_smart = { 0, };
-	GValue linktext = { 0, };
-	const char *title;
-	const char *location;
-	const char *rel;
-	gboolean is_smart;
+	char *title;
+	char *location;
+	guint context;
+	WebKitHitTestResult *result;
+	WebKitDOMNode *node, *first_child;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	/* FIXME: this is pretty much broken */
-	ephy_embed_event_get_property (event, "link_is_smart", &link_is_smart);
-	ephy_embed_event_get_property (event, "link-uri", &link);
-	ephy_embed_event_get_property (event, "link_title", &link_title);
-	ephy_embed_event_get_property (event, "link_rel", &link_rel);
-	ephy_embed_event_get_property (event, "linktext", &linktext);
+	result = ephy_embed_event_get_hit_test_result (event);
+	g_object_get (result, "context", &context, NULL);
+	g_object_get (result, "inner-node", &node, NULL);
 
-	location = g_value_get_string (&link);
-	g_return_if_fail (location);
+	if (context != WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
+	{
+		node = WEBKIT_DOM_NODE (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (node)));
+		if (WEBKIT_DOM_IS_HTML_ANCHOR_ELEMENT (node))
+			location = webkit_dom_html_anchor_element_get_href (WEBKIT_DOM_HTML_ANCHOR_ELEMENT (node));
+	}
+	else
+	{
+		g_object_get (result, "link-uri", &location, NULL);
+	}
 
-	rel = g_value_get_string (&link_rel);
-	is_smart = g_value_get_int (&link_is_smart);
+	if (!node || !location)
+		return;
 
-	title = g_value_get_string (&link_title);
-
+	title = webkit_dom_html_element_get_title (WEBKIT_DOM_HTML_ELEMENT (node));
+	
 	if (title == NULL || title[0] == '\0')
 	{
-		title = g_value_get_string (&linktext);
+		title = webkit_dom_html_anchor_element_get_text (WEBKIT_DOM_HTML_ANCHOR_ELEMENT (node));
+	}
+
+	/* Sometimes boorkmaklets are presented as images inside a
+	 * link, try that. */
+	if (title == NULL || title[0] == '\0')
+	{
+		first_child = webkit_dom_node_get_first_child (WEBKIT_DOM_NODE (node));
+		if (first_child && WEBKIT_DOM_IS_HTML_IMAGE_ELEMENT (first_child))
+		{
+			title = webkit_dom_html_image_element_get_alt (WEBKIT_DOM_HTML_IMAGE_ELEMENT (first_child));
+			if (title == NULL || title[0] == '\0')
+				title = webkit_dom_html_image_element_get_name (WEBKIT_DOM_HTML_IMAGE_ELEMENT (first_child));
+		}
 	}
 
 	if (title == NULL || title[0] == '\0')
@@ -128,17 +142,9 @@ popup_cmd_bookmark_link (GtkAction *action,
 		title = location;
 	}
 	
-	if (is_smart)
-	{
-		location = rel;
-	}
-
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
-	g_value_unset (&link);
-	g_value_unset (&link_rel);
-	g_value_unset (&linktext);
-	g_value_unset (&link_title);
-	g_value_unset (&link_is_smart);
+	g_free (title);
+	g_free (location);
 }
 
 static void
