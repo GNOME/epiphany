@@ -1095,6 +1095,7 @@ filter_now (EphyHistoryWindow *editor,
 static gboolean
 on_visit_url_cb (EphyHistoryService *service,
 		 gchar *url,
+		 EphyHistoryPageVisitType visit_type,
 		 EphyHistoryWindow *editor)
 {
 	filter_now (editor, TRUE, TRUE);
