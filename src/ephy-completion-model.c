@@ -170,15 +170,18 @@ static void
 icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
 {
   GtkTreeIter iter;
+  GtkTreePath *path;
   IconLoadData *data = (IconLoadData *) user_data;
   GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (webkit_get_favicon_database (), result, NULL);
 
   if (favicon) {
     /* The completion model might have changed its contents */
     if (gtk_tree_row_reference_valid (data->row_reference)) {
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->model), &iter,
-                               gtk_tree_row_reference_get_path (data->row_reference));
+      path = gtk_tree_row_reference_get_path (data->row_reference);
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->model), &iter, path);
       gtk_list_store_set (data->model, &iter, EPHY_COMPLETION_FAVICON_COL, favicon, -1);
+      g_object_unref (favicon);
+      gtk_tree_path_free (path);
     }
   }
 
@@ -211,6 +214,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
                                                             FAVICON_SIZE, FAVICON_SIZE);
   if (favicon) {
     gtk_list_store_set (GTK_LIST_STORE (model), &iter, EPHY_COMPLETION_FAVICON_COL, favicon, -1);
+    g_object_unref (favicon);
     return;
   }
 
