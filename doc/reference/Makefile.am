@@ -50,8 +50,6 @@ IGNORE_HFILES = \
 	ephy-embed-prefs.h \
 	ephy-embed-shell.h \
 	ephy-encodings.h \
-	ephy-favicon-cache.h \
-	ephy-history.h \
 	ephy-permission-manager.h \
 	find-dialog.h \
 	print-dialog.h \
