@@ -35,7 +35,6 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
-#include "ephy-history.h"
 #include "ephy-history-service.h"
 #include "ephy-print-utils.h"
 
@@ -50,7 +49,6 @@
 
 struct _EphyEmbedShellPrivate
 {
-	EphyHistory *global_history;
 	EphyHistoryService *global_history_service;
 	GList *downloads;
 	EphyEmbedSingle *embed_single;
@@ -129,12 +127,6 @@ ephy_embed_shell_finalize (GObject *object)
 		shell->priv->downloads = NULL;
 	}
 
-	if (shell->priv->global_history)
-	{
-		LOG ("Unref history");
-		g_object_unref (shell->priv->global_history);
-	}
-
 	if (shell->priv->global_history_service)
 	{
 		LOG ("Unref history service");
@@ -155,25 +147,6 @@ ephy_embed_shell_finalize (GObject *object)
 	}
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
-}
-
-/**
- * ephy_embed_shell_get_global_history:
- * @shell: the #EphyEmbedShell
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
-{
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-	if (shell->priv->global_history == NULL)
-	{
-		shell->priv->global_history = ephy_history_new ();
-	}
-
-	return G_OBJECT (shell->priv->global_history);
 }
 
 /**

@@ -33,7 +33,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
-#include "ephy-history.h"
 #include "ephy-history-service.h"
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
@@ -1610,7 +1609,6 @@ _ephy_web_view_set_icon_address (EphyWebView *view,
 {
   GObject *object = G_OBJECT (view);
   EphyWebViewPrivate *priv = view->priv;
-  EphyHistory *history;
 
   if (priv->icon != NULL) {
     g_object_unref (priv->icon);
@@ -1619,12 +1617,8 @@ _ephy_web_view_set_icon_address (EphyWebView *view,
     g_object_notify (object, "icon");
   }
 
-  if (icon_address && priv->address) {
-    history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-    ephy_history_set_icon (history, priv->address, icon_address);
-
+  if (icon_address && priv->address)
     _ephy_web_view_load_icon (view);
-  }
 }
 
 static void

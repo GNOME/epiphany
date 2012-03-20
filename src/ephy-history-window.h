@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-history.h"
 #include "ephy-history-service.h"
 
 G_BEGIN_DECLS

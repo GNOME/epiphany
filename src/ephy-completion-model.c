@@ -23,7 +23,6 @@
 
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
-#include "ephy-history.h"
 #include "ephy-history-service.h"
 #include "ephy-shell.h"
 
@@ -35,7 +34,6 @@ G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
 struct _EphyCompletionModelPrivate {
   EphyHistoryService *history_service;
-  EphyHistory *legacy_history_service;
 
   EphyNode *bookmarks;
   GSList *search_terms;
@@ -97,7 +95,6 @@ ephy_completion_model_init (EphyCompletionModel *model)
   model->priv = priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
-  priv->legacy_history_service = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
   bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
   priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks_service);
