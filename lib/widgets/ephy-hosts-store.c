@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-prefs.h"
 #include "ephy-hosts-store.h"
 
 #include <glib/gi18n.h>
@@ -41,6 +42,7 @@ ephy_hosts_store_init (EphyHostsStore *self)
   types[EPHY_HOSTS_STORE_COLUMN_TITLE]       = G_TYPE_STRING;
   types[EPHY_HOSTS_STORE_COLUMN_ADDRESS]     = G_TYPE_STRING;
   types[EPHY_HOSTS_STORE_COLUMN_VISIT_COUNT] = G_TYPE_INT;
+  types[EPHY_HOSTS_STORE_COLUMN_FAVICON]     = GDK_TYPE_PIXBUF;
 
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
                                    EPHY_HOSTS_STORE_N_COLUMNS,
@@ -57,22 +59,74 @@ ephy_hosts_store_new (void)
                        NULL);
 }
 
+typedef struct {
+  GtkListStore *model;
+  GtkTreeRowReference *row_reference;
+} IconLoadData;
+
+static void
+icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  IconLoadData *data = (IconLoadData *) user_data;
+  GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (webkit_get_favicon_database (),
+                                                                          result, NULL);
+
+  if (favicon) {
+    /* The completion model might have changed its contents */
+    if (gtk_tree_row_reference_valid (data->row_reference)) {
+      path = gtk_tree_row_reference_get_path (data->row_reference);
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->model), &iter, path);
+      gtk_tree_path_free (path);
+      gtk_list_store_set (data->model, &iter,
+                          EPHY_HOSTS_STORE_COLUMN_FAVICON, favicon, -1);
+    }
+    g_object_unref (favicon);
+  }
+
+  g_object_unref (data->model);
+  gtk_tree_row_reference_free (data->row_reference);
+  g_slice_free (IconLoadData, data);
+}
+
 void
 ephy_hosts_store_add_hosts (EphyHostsStore *store,
                             GList *hosts)
 {
   EphyHistoryHost *host;
+  GtkTreeIter treeiter;
+  GtkTreePath *path;
   GList *iter;
+  GdkPixbuf *favicon;
+  IconLoadData *data;
+  WebKitFaviconDatabase *database = webkit_get_favicon_database ();
 
   for (iter = hosts; iter != NULL; iter = iter->next) {
     host = (EphyHistoryHost *)iter->data;
+    favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, host->url,
+                                                              FAVICON_SIZE, FAVICON_SIZE);
     gtk_list_store_insert_with_values (GTK_LIST_STORE (store),
-                                       NULL, -1,
+                                       &treeiter, -1,
                                        EPHY_HOSTS_STORE_COLUMN_ID, host->id,
                                        EPHY_HOSTS_STORE_COLUMN_TITLE, host->title,
                                        EPHY_HOSTS_STORE_COLUMN_ADDRESS, host->url,
                                        EPHY_HOSTS_STORE_COLUMN_VISIT_COUNT, host->visit_count,
+                                       EPHY_HOSTS_STORE_COLUMN_FAVICON, favicon,
                                        -1);
+    if (favicon)
+      g_object_unref (favicon);
+    else {
+      data = g_slice_new (IconLoadData);
+      data->model = GTK_LIST_STORE (g_object_ref (store));
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &treeiter);
+      data->row_reference = gtk_tree_row_reference_new (GTK_TREE_MODEL (store), path);
+      gtk_tree_path_free (path);
+
+      webkit_favicon_database_get_favicon_pixbuf (database, host->url,
+                                                  FAVICON_SIZE, FAVICON_SIZE, NULL,
+                                                  icon_loaded_cb, data);
+    }
   }
 }
 

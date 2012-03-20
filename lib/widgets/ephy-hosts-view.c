@@ -22,6 +22,7 @@
 #include "config.h"
 #include "ephy-hosts-view.h"
 
+#include "ephy-embed-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-hosts-store.h"
 
@@ -38,12 +39,25 @@ ephy_hosts_view_class_init (EphyHostsViewClass *klass)
 static void
 ephy_hosts_view_init (EphyHostsView *self)
 {
+  GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
 
-  column = gtk_tree_view_column_new_with_attributes (_("Sites"),
-                                                     gtk_cell_renderer_text_new (),
-                                                     "text", EPHY_HOSTS_STORE_COLUMN_TITLE,
-                                                     NULL);
+  column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
+                         "title", _("Sites"),
+                         NULL);
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+                                       "pixbuf", EPHY_HOSTS_STORE_COLUMN_FAVICON,
+                                       NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+                                       "text", EPHY_HOSTS_STORE_COLUMN_TITLE,
+                                       NULL);
+
   gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
 }
 
