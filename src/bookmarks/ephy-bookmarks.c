@@ -29,7 +29,6 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-history.h"
 #include "ephy-history-service.h"
 #include "ephy-node-common.h"
 #include "ephy-prefs.h"
@@ -249,22 +248,23 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 }
 
 static void
-icon_updated_cb (EphyHistory *history,
+icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 		 const char *address,
-		 const char *icon,
 		 EphyBookmarks *eb)
 {
+	const char *icon;
+
+	icon = webkit_favicon_database_get_favicon_uri (favicon_database, address);
 	ephy_bookmarks_set_icon (eb, address, icon);
 }
 
 static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
-	EphyHistory *history;
-
-	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-
-	g_signal_connect (history, "icon-updated",
+	WebKitFaviconDatabase *favicon_database;
+	
+	favicon_database = webkit_get_favicon_database ();
+	g_signal_connect (favicon_database, "icon-loaded",
 			  G_CALLBACK (icon_updated_cb), eb);
 }
 
@@ -1164,8 +1164,8 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 		    const char *title,
 		    const char *url)
 {
-	EphyHistory *history;
 	EphyNode *bm;
+	WebKitFaviconDatabase *favicon_database;
 
 	bm = ephy_node_new (eb->priv->db);
 
@@ -1180,10 +1180,11 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	}
 	ephy_node_set_property_string (bm, EPHY_NODE_BMK_PROP_TITLE, title);
 
-	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-	if (history != NULL)
+
+	favicon_database = webkit_get_favicon_database ();
+	if (favicon_database != NULL)
 	{
-		const char *icon = ephy_history_get_icon (history, url);
+		const char *icon = webkit_favicon_database_get_favicon_uri (favicon_database, url);
 		if (icon != NULL)
 		{
 			ephy_node_set_property_string
