@@ -224,7 +224,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   data->row_reference = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), path);
   gtk_tree_path_free (path);
 
-  webkit_favicon_database_get_favicon_pixbuf (webkit_get_favicon_database (), row->location,
+  webkit_favicon_database_get_favicon_pixbuf (database, row->location,
                                               FAVICON_SIZE, FAVICON_SIZE, NULL,
                                               icon_loaded_cb, data);
 }
