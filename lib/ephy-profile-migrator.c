@@ -594,11 +594,13 @@ migrate_history ()
   g_input_stream_close (G_INPUT_STREAM (input), NULL, NULL);
   g_object_unref (input);
 
-  ephy_history_service_add_visits (history_service, parse_data.visits, NULL, (EphyHistoryJobCallback)visit_cb, NULL);
-  ephy_history_page_visit_list_free (parse_data.visits);
+  if (parse_data.visits) {
+    ephy_history_service_add_visits (history_service, parse_data.visits, NULL, (EphyHistoryJobCallback)visit_cb, NULL);
+    ephy_history_page_visit_list_free (parse_data.visits);
 
-  while (!all_done)
-    g_main_context_iteration (NULL, FALSE);
+    while (!all_done)
+      g_main_context_iteration (NULL, FALSE);
+  }
 
   g_object_unref (history_service);
 }
