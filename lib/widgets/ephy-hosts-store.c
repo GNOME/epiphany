@@ -29,8 +29,69 @@
 G_DEFINE_TYPE (EphyHostsStore, ephy_hosts_store, GTK_TYPE_LIST_STORE)
 
 static void
+icon_loaded_cb (WebKitFaviconDatabase *database,
+                const char *address,
+                GtkTreeModel *model)
+{
+  GtkTreeIter iter;
+  GdkPixbuf *favicon;
+  int cmp;
+  char *host_address;
+  gboolean done, valid;
+  SoupURI *uri;
+
+  valid = gtk_tree_model_get_iter_first (model, &iter);
+
+  /* If the address has a path, this icon is not for a host, so it can
+     be skipped. */
+  uri = soup_uri_new (address);
+  done = strcmp (soup_uri_get_path (uri), "/") != 0;
+  soup_uri_free (uri);
+
+  while (valid && !done) {
+    gtk_tree_model_get (model, &iter,
+                        EPHY_HOSTS_STORE_COLUMN_ADDRESS, &host_address, -1);
+    cmp = g_strcmp0 (host_address, address);
+    g_free (host_address);
+
+    if (cmp == 0) {
+      favicon = webkit_favicon_database_try_get_favicon_pixbuf (database,
+                                                                address,
+                                                                FAVICON_SIZE,
+                                                                FAVICON_SIZE);
+      if (favicon) {
+        gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                            EPHY_HOSTS_STORE_COLUMN_FAVICON, favicon,
+                            -1);
+        g_object_unref (favicon);
+      }
+    }
+    valid = gtk_tree_model_iter_next (model, &iter);
+
+    /* Since the list is sorted alphanumerically, if the result of the
+       comparison is > 0, there is no point in searching any
+       further. */
+    done = cmp >= 0;
+  }
+}
+
+static void
+ephy_hosts_store_finalize (GObject *object)
+{
+  EphyHostsStore *store = EPHY_HOSTS_STORE (object);
+
+  g_signal_handlers_disconnect_by_func (webkit_get_favicon_database (),
+                                        icon_loaded_cb, store);
+
+  G_OBJECT_CLASS (ephy_hosts_store_parent_class)->finalize (object);
+}
+
+static void
 ephy_hosts_store_class_init (EphyHostsStoreClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ephy_hosts_store_finalize;
 }
 
 static void
@@ -50,6 +111,9 @@ ephy_hosts_store_init (EphyHostsStore *self)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (self),
                                         EPHY_HOSTS_STORE_COLUMN_ADDRESS,
                                         GTK_SORT_ASCENDING);
+
+  g_signal_connect (webkit_get_favicon_database (), "icon-loaded",
+                    G_CALLBACK (icon_loaded_cb), self);
 }
 
 EphyHostsStore *
@@ -65,7 +129,7 @@ typedef struct {
 } IconLoadData;
 
 static void
-icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
+async_get_favicon_cb (GObject *source, GAsyncResult *result, gpointer user_data)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
@@ -125,7 +189,7 @@ ephy_hosts_store_add_hosts (EphyHostsStore *store,
 
       webkit_favicon_database_get_favicon_pixbuf (database, host->url,
                                                   FAVICON_SIZE, FAVICON_SIZE, NULL,
-                                                  icon_loaded_cb, data);
+                                                  async_get_favicon_cb, data);
     }
   }
 }
