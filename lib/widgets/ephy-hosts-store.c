@@ -107,7 +107,7 @@ ephy_hosts_store_add_hosts (EphyHostsStore *store,
     favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, host->url,
                                                               FAVICON_SIZE, FAVICON_SIZE);
     gtk_list_store_insert_with_values (GTK_LIST_STORE (store),
-                                       &treeiter, -1,
+                                       &treeiter, G_MAXINT,
                                        EPHY_HOSTS_STORE_COLUMN_ID, host->id,
                                        EPHY_HOSTS_STORE_COLUMN_TITLE, host->title,
                                        EPHY_HOSTS_STORE_COLUMN_ADDRESS, host->url,
