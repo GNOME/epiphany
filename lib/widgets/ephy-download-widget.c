@@ -390,10 +390,14 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
 static void
 ephy_download_widget_init (EphyDownloadWidget *self)
 {
+  GtkStyleContext *context;
+
   self->priv = DOWNLOAD_WIDGET_PRIVATE (self);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self),
                                   GTK_ORIENTATION_HORIZONTAL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 }
 
 /**
