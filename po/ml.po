@@ -3,34 +3,23 @@
 # Copyright (C) 2003-2008 epiphany'S COPYRIGHT HOLDER.
 # FSF-India <locale@gnu.org.in>, 2003.
 # Ani Peter <apeter@redhat.com>, 2006, 2009.
-# Praveen|പ്രവീണ്‍ A|എ <pravi.a@gmail.com>, 2007, 2008.
+# Praveen|പ്രവീണ്‍ A|എ <pravi.a@gmail.com>, 2007, 2008, 2012.
 # Reviewed by Santhosh Thottingal <santhosh00@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.ml\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&component=general\n"
-"POT-Creation-Date: 2009-09-15 02:06+0000\n"
-"PO-Revision-Date: 2009-09-15 21:53+0530\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2012-03-24 16:39+0530\n"
+"PO-Revision-Date: 2012-03-24 17:18+0530\n"
+"Last-Translator: Praveen Arimbrathodiyil <pravi.a@gmail.com>\n"
+"Language-Team:  <discuss@lists.smc.org.in>\n"
+"Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Malayalam\n"
-
-#: ../data/bme.desktop.in.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ കാണുകയും അടുക്കി വയ്ക്കുകയും ചെയ്യുക"
-
-#: ../data/bme.desktop.in.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "എപ്പിഫാനിയുടെ വെബ്ബിലെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
-
-#: ../data/bme.desktop.in.in.h:3
-msgid "Web Bookmarks"
-msgstr "വെബ്ബിലെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -56,657 +45,94 @@ msgid "Browse the web"
 msgstr "വെബ്ബില്‍ പരതുക"
 
 #: ../data/epiphany.desktop.in.in.h:2
-msgid "Epiphany"
-msgstr "എപ്പിഫാനി "
-
-#: ../data/epiphany.desktop.in.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "എപ്പിഫാനി വെബ്ബ് ബ്രൌസ‌ര്‍"
 
-#. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:4 ../src/ephy-main.c:684
+#: ../data/epiphany.desktop.in.in.h:3
+#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:321
+#: ../src/ephy-main.c:467
+#: ../src/window-commands.c:1218
+msgid "Web"
+msgstr "വെബ്"
+
+#: ../data/epiphany.desktop.in.in.h:4
 msgid "Web Browser"
 msgstr "വെബ്ബ് ബ്രൌസര്‍"
 
-#: ../data/epiphany-lockdown.schemas.in.h:1
-msgid ""
-"A list of protocols to be considered safe in addition to the default, when "
-"disable_unsafe_protocols is enabled."
-msgstr ""
-"ഡിസേബിള്‍_അണ്‍സേഫ്_പ്രോട്ടോകോള്‍സ് (disable_unsafe_protocols) പ്രാവര്‍ത്തികമാകുമ്പോള്‍ സഹജമായതു് "
-"കൂടാതെ സുരക്ഷിതമെന്നു് കണക്കാക്കുന്ന കീഴ്വഴക്കങ്ങളുടെ പട്ടിക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:2
-msgid "Additional safe protocols"
-msgstr "കൂടുതല്‍ സുരക്ഷിതമായ കീഴ്വഴക്കങ്ങള്‍"
-
-#: ../data/epiphany-lockdown.schemas.in.h:3
-msgid "Disable JavaScript chrome control"
-msgstr "ജാവാസ്ക്രിപ്റ്റിന്റെ ക്രോം നിയന്ത്രണം തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:4
-msgid "Disable JavaScript's control over window chrome."
-msgstr "ജാലക ക്രോമിനു മുകളിലുള്ള ജാവാസ്ക്രിപ്റ്റിന്റെ നിയന്ത്രണം തടയുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:5
-msgid ""
-"Disable all historical information by disabling back and forward navigation, "
-"not allowing the history dialog and hiding the most used bookmarks list."
-msgstr ""
-"പിന്നോട്ടും മുന്നോട്ടുമുള്ള പോക്ക് തടഞ്ഞും, ചരിത്ര ഡയലോഗ് അനുവദിയ്ക്കാതെയും, ഏറ്റവുമധികമുപയോഗിച്ച "
-"ഓര്‍മ്മക്കുറിപ്പുകളുടെ പട്ടിക ഒളിപ്പിച്ചും ചരിത്രപരമായ വിവരങ്ങളെല്ലാം തടയുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:6
-msgid "Disable arbitrary URLs"
-msgstr "സ്വന്തം ഇഷ്ടം പോലുള്ള യുആര്‍എലുകള്‍ തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:7
-msgid "Disable bookmark editing"
-msgstr "ഓര്‍മ്മക്കുറിപ്പു് അടുക്കിവയ്ക്കുന്നതു് തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:8
-msgid "Disable history"
-msgstr "ചരിത്രമുപയോഗിയ്ക്കുന്നതു് തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:9
-msgid "Disable the user's ability to add or edit bookmarks."
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചേര്‍ക്കാനോ മാറ്റാനോ ഉള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:10
-msgid "Disable the user's ability to edit toolbars."
-msgstr "പണിയായുധനിര ചിട്ടപ്പെടുത്തുന്നതിനുള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:11
-msgid "Disable the user's ability to type in a URL to Epiphany."
-msgstr "എപ്പിഫാനിയില്‍ ഒരു യുആര്‍എല്‍ നല്‍കുന്നതിനുള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:12
-msgid "Disable toolbar editing"
-msgstr "പണിയായുധനിര ചിട്ടപ്പെടുത്തുന്നതു് തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:13
-msgid "Disable unsafe protocols"
-msgstr "സുരക്ഷിതമല്ലാത്ത കീഴ്വഴക്കങ്ങള്‍ തടയുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:14
-msgid ""
-"Disables loading of content from unsafe protocols. Safe protocols are http "
-"and https."
-msgstr ""
-"സുരക്ഷിതമല്ലാത്ത കീഴ്വഴക്കങ്ങളിലൂടെ ഉള്ളടക്കങ്ങളെടുക്കുന്നതു് തടയുന്നു. സുരക്ഷിത കീഴ്വഴക്കങ്ങളാണു് http "
-"യും https ഉം."
-
-#: ../data/epiphany-lockdown.schemas.in.h:15
-msgid "Epiphany cannot quit"
-msgstr "എപ്പിഫാനിയില്‍ നിന്നു് പുറത്തു് കടക്കാന്‍ സാധ്യമല്ല"
-
-#: ../data/epiphany-lockdown.schemas.in.h:16
-msgid "Hide menubar by default"
-msgstr "സഹജമായി മെനുബാര്‍ ഒളിപ്പിയ്ക്കുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:17
-msgid "Hide the menubar by default."
-msgstr "സഹജമായി മെനുപ്പട്ട ഒളിപ്പിയ്ക്കുക."
-
-#: ../data/epiphany-lockdown.schemas.in.h:18
-msgid "Lock in fullscreen mode"
-msgstr "സ്ക്രീനിന്റെ മുഴുവന്‍ വലിപ്പത്തില്‍ പൂട്ടുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:19
-msgid "Locks Epiphany in fullscreen mode."
-msgstr "സ്ക്രീനിന്റെ മുഴുവന്‍ വലിപ്പത്തില്‍ എപ്പിഫാനി പൂട്ടുക"
-
-#: ../data/epiphany-lockdown.schemas.in.h:20
-msgid "User is not allowed to close Epiphany"
-msgstr "ഉയോക്താവ് എപ്പിഫാനി അടയ്ക്കാന്‍ അനുവദിയ്ക്കപ്പെട്ടിട്ടില്ല"
-
-#: ../data/epiphany.schemas.in.h:1
-msgid "Active extensions"
-msgstr "സജീവമായ എക്സ്റ്റന്‍ഷനുകള്‍"
-
-#: ../data/epiphany.schemas.in.h:2
-msgid "Address of the user's home page."
-msgstr "ഉപയോക്താവിന്റെ പൂമുഖത്തിന്റെ വിലാസം."
-
-#: ../data/epiphany.schemas.in.h:3
-msgid "Allow popups"
-msgstr "പൊങ്ങിവരുന്നവ അനുവദിക്കുക"
-
-#: ../data/epiphany.schemas.in.h:4
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr "(ജാവാസ്ക്രിപ്റ്റ് അനുവദിച്ചിട്ടുണ്ടെങ്കില്‍) പുതിയ ജാലകങ്ങള്‍ തുറക്കാന്‍ സൈറ്റുകളെ അനുവദിക്കുക "
-
-#: ../data/epiphany.schemas.in.h:5
-msgid "Always show the tab bar"
-msgstr "കിളിവാതിലിന്റെ പട്ട എപ്പോഴും കാണിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:6
-msgid "Automatic downloads"
-msgstr "സ്വയം ഡൌണ്‍ലോഡ് ചെയ്യുക"
-
-#: ../data/epiphany.schemas.in.h:7
-msgid "Automatically manage offline status with NetworkManager"
-msgstr "ശൃംഖല നടത്തിപ്പുകാരനെയുപയോഗിച്ചു് ഓഫ്‌ലൈന്‍ അവസ്ഥ സ്വയം കൈകാര്യം ചെയ്യുക"
-
-#: ../data/epiphany.schemas.in.h:8
-msgid "Browse with caret"
-msgstr "കാരറ്റ് ഉപയോഗിച്ചു് ബ്രൌസ് ചെയ്യുക"
-
-#: ../data/epiphany.schemas.in.h:9
-msgid "Cookie accept"
-msgstr "കുക്കി സ്വീകരിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:10
-msgid "Default encoding"
-msgstr "എപ്പോഴും ഉപയോഗിയ്ക്കേണ്ട എന്‍കോഡിങ്ങ്"
-
-#: ../data/epiphany.schemas.in.h:11
-msgid ""
-"Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
-"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
-"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
-"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
-"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
-"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
-"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
-"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
-"\", \"x-viet-vps\" and \"x-windows-949\"."
-msgstr ""
-"സഹജമായ എന്‍കോഡിങ്ങ്. സ്വീകാര്യമായ വിലകള്‍: armscii-8, Big5, Big5-HKSCS, EUC-JP, EUC-"
-"KR, gb18030, GB2312, geostd8, HZ-GB-2312, IBM850, IBM852, IBM855, IBM857, "
-"IBM862, IBM864, IBM864i, IBM866, ISO-2022-CN, ISO-2022-JP, ISO-2022-KR, ISO-"
-"8859-1, ISO-8859-10, ISO-8859-13, ISO-8859-14, ISO-8859-15, ISO-8859-16, ISO-"
-"8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-6-E, ISO-"
-"8859-6-I, ISO-8859-7, ISO-8859-8, ISO-8859-8-E, ISO-8859-8-I, ISO-8859-9, "
-"ISO-IR-111, KOI8-R, KOI8-U, Shift_JIS, T.61-8bit, TIS-620, us-ascii, UTF-"
-"16BE, UTF-16LE, UTF-32BE, UTF-32LE, UTF-7, UTF-8, VISCII, windows-1250, "
-"windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, "
-"windows-1256, windows-1257, windows-1258, windows-936, x-euc-tw, x-gbk, x-"
-"imap4-modified-utf7, x-johab, x-mac-arabic, x-mac-ce, x-mac-croatian, x-mac-"
-"cyrillic, x-mac-devanagari, x-mac-farsi, x-mac-greek, x-mac-gujarati, x-mac-"
-"gurmukhi, x-mac-hebrew, x-mac-icelandic, x-mac-roman, x-mac-romanian, x-mac-"
-"turkish, x-mac-ukrainian, x-u-escaped, x-user-defined, x-viet-tcvn5712, x-"
-"viet-vps and x-windows-949."
-
-#: ../data/epiphany.schemas.in.h:12
-msgid "Default font type"
-msgstr "അക്ഷരരൂപത്തിന്റെ സഹജമായ തരം"
-
-#: ../data/epiphany.schemas.in.h:13
-msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-msgstr "അക്ഷരരൂപത്തിന്റെ സഹജമായ തരം. സാധ്യമായ വിലകള്‍ \"സെറിഫ്\", \"സാന്‍സ്-സെറിഫ്\" എന്നിവയാണു്."
-
-#: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "ജാവാ പ്രാവര്‍ത്തികമാക്കുക"
-
-#: ../data/epiphany.schemas.in.h:15
-msgid "Enable JavaScript"
-msgstr "ജാവാസ്ക്രിപ്റ്റ് പ്രാവര്‍ത്തികമാക്കുക"
-
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:19
-msgid "Enable Web Inspector"
-msgstr "വെബ് ഇന്‍സ്പെക്ടറിനെ സജ്ജമാക്കുക"
-
-#: ../data/epiphany.schemas.in.h:17
-msgid "Enable smooth scrolling"
-msgstr "മൃദുലമായ നിരക്കല്‍ പ്രാവര്‍ത്തികമാക്കുക"
-
-#: ../data/epiphany.schemas.in.h:18
-msgid "Force new window requests to be opened in tabs instead of using a new window."
-msgstr "ഒരു പുതിയ ജാലകത്തിനു് പകരം പുതിയ ജാലകത്തിനുള്ള ആവശ്യം പല ടാബുകളായി നിര്‍ബന്ധിച്ചു് തുറക്കുന്നു."
-
-#: ../data/epiphany.schemas.in.h:19
-msgid "Force new windows to be opened in tabs"
-msgstr "പുതിയ ജാലകങ്ങള്‍ പല ടാബുകളായി നിര്‍ബന്ധിച്ചു് തുറക്കുന്നു"
-
-#: ../data/epiphany.schemas.in.h:20
-msgid ""
-"Hide or show the downloads window. When hidden, a notification will be shown "
-"when new downloads are started."
-msgstr ""
-"ഡൌണ്‍ലോഡുകളുടെ ജാലകം കാണിയ്ക്കുകയോ ഒളിപ്പിയ്ക്കുകയോ ചെയ്യുക. ഒളിപ്പിച്ചിരിയ്ക്കുമ്പോള്‍, പുതിയ "
-"ഡൌണ്‍ലോഡുകള്‍ തുടങ്ങുമ്പോള്‍ ഒരു അറിയിപ്പു് കാണിയ്ക്കുന്നതായിരിയ്ക്കും."
-
-#: ../data/epiphany.schemas.in.h:21
-msgid "History pages time range"
-msgstr "ചരിത്ര താളുകളുടെ സമയ പരിധി"
-
-#: ../data/epiphany.schemas.in.h:22
-msgid "Home page"
-msgstr "പൂമുഖം"
-
-#: ../data/epiphany.schemas.in.h:23
-msgid ""
-"How to present animated images. Possible values are \"normal\", \"once\" and "
-"\"disabled\"."
-msgstr ""
-"അനിമേറ്റ് ചെയ്ത ചിത്രങ്ങളെങ്ങനെയാണു് കാണിയ്ക്കേണ്ടതു്. സാധ്യമായ വിലകള്‍ \"സാധാരണ\", \"ഒരിയ്ക്കല്‍"
-"\", \"പ്രാവര്‍ത്തികമാക്കാതെ\" എന്നിവയാണു്."
-
-#: ../data/epiphany.schemas.in.h:24
-msgid "How to print frames"
-msgstr "ചട്ടക്കൂടുകള്‍ എങ്ങനെ അച്ചടിയ്ക്കണം"
-
-#: ../data/epiphany.schemas.in.h:25
-msgid ""
-"How to print pages containing frames. Allowed values are \"normal\", "
-"\"separately\" and \"selected\"."
-msgstr ""
-"ചട്ടക്കൂടുകളുള്ള താളുകള്‍ എങ്ങനെയാണച്ചടിയ്ക്കേണ്ടതു്. അനുവദിച്ച വിലകള്‍ \"സാധാരണ\", \"വെവ്വേറെ\", "
-"\"തെരഞ്ഞെടുത്തവ\" എന്നിവയാണു്."
-
-#. Translators: this is the default encoding used by Epiphany for Web pages display
-#: ../data/epiphany.schemas.in.h:27
-msgid "ISO-8859-1"
-msgstr "ISO-8859-1"
-
-#: ../data/epiphany.schemas.in.h:28
-msgid "Image animation mode"
-msgstr "ചിത്രത്തിന്റെ അനിമേഷന്‍ രീതി"
-
-#: ../data/epiphany.schemas.in.h:29
-msgid "Languages"
-msgstr "ഭാഷകള്‍"
-
-#: ../data/epiphany.schemas.in.h:30
-msgid "Lists the active extensions."
-msgstr "സജീവ എക്സ്റ്റന്‍ഷനുകളെ കാണിയ്ക്കുക."
-
-#: ../data/epiphany.schemas.in.h:31
-msgid "Middle click to open the web page pointed to by the currently selected text"
-msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്ത പദാവലി സൂചിപ്പിയ്ക്കുന്ന വെബ്ബ് താള്‍ തുറക്കുവാന്‍ നടുവിലെ ബട്ടണ്‍ ഞെക്കുക"
-
-#: ../data/epiphany.schemas.in.h:32
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr ""
-"പ്രധാന ദര്‍ശന പാളിയില്‍ നടുവിലെ ബട്ടണ്‍ ഞെക്കിയാല്‍ ഇപ്പോള്‍ തെരഞ്ഞെടുത്ത പദാവലി സൂചിപ്പിയ്ക്കുന്ന "
-"താള്‍ തുറക്കപ്പെടും."
-
-#: ../data/epiphany.schemas.in.h:33
-msgid "Minimum font size"
-msgstr "അക്ഷരരൂപത്തിന്റെ ഏറ്റവും ചെറിയ വലിപ്പം"
-
-#: ../data/epiphany.schemas.in.h:34
-msgid "Preferred languages, two letter codes."
-msgstr "ഇഷ്ടപ്പെട്ട ഭാഷകള്‍, രണ്ടക്ഷര കോഡുകള്‍."
-
-#: ../data/epiphany.schemas.in.h:35
-msgid "Remember passwords"
-msgstr "അടയാളവാക്കുകള്‍ ഓര്‍ത്തിരിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:36
-msgid "Show bookmarks bar by default"
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകളുടെ പട്ട എപ്പോഴും കാണിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:37
-msgid "Show statusbar by default"
-msgstr "അവസ്ഥാപട്ട എപ്പോഴും കാണിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:38
-msgid ""
-"Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
-"\", \"today\"."
-msgstr ""
-"\"എന്നെങ്കിലും\", \"രണ്ടു ദിവസങ്ങള്‍ക്കുള്ളില്‍\", \"മൂന്നു് ദിവസങ്ങള്‍ക്കുള്ളില്‍\", \"ഇന്നു്\" "
-"സന്ദര്‍ശിച്ച ചരിത്രത്തിലെ താളുകള്‍ കാണിയ്ക്കുക."
-
-#: ../data/epiphany.schemas.in.h:39
-msgid "Show the tab bar also when there is only one tab open."
-msgstr "ഒരു കിളിവാതില്‍ മാത്രം തുറന്നിരിയ്ക്കുമ്പോഴും കിളിവാതിലിന്റെ പട്ട കാണിയ്ക്കുക."
-
-#: ../data/epiphany.schemas.in.h:40
-msgid "Show toolbars by default"
-msgstr "പണിയായുധനിര സഹജമായി കാണിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:41
-msgid "Size of disk cache"
-msgstr "ഡിസ്ക് കാഷിന്റെ വലിപ്പം"
-
-#: ../data/epiphany.schemas.in.h:42
-msgid "Size of disk cache, in MB."
-msgstr "ഡിസ്ക് കാഷിന്റെ വലിപ്പം, എംബി."
-
-#: ../data/epiphany.schemas.in.h:43
-msgid "The bookmark information shown in the editor view"
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചിട്ടപ്പെടുത്തുമ്പോള്‍ കാണിയ്ക്കേണ്ട വിവരം"
-
-#: ../data/epiphany.schemas.in.h:44
-msgid ""
-"The bookmark information shown in the editor view. Valid values in the list "
-"are \"address\" and \"title\"."
-msgstr ""
-"ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചിട്ടപ്പെടുത്തുമ്പോള്‍ കാണിയ്ക്കേണ്ട വിവരം. പട്ടികയിലെ സാധുവായ വിലകള്‍ \"വിലാസം"
-"\", \"തലക്കെട്ടു്\" എന്നിവയാണു്."
-
-#: ../data/epiphany.schemas.in.h:45
-msgid "The currently selected fonts language"
-msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിട്ടുള്ള അക്ഷരരൂപങ്ങളുടെ ഭാഷ"
-
-#: ../data/epiphany.schemas.in.h:46
-msgid ""
-"The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
-"baltic\" (baltic languages), \"x-central-euro\" (central european "
-"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el"
-"\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN"
-"\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr"
-"\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages "
-"written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
-"\" (devanagari)."
-msgstr ""
-"ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിട്ടുള്ള അക്ഷരരൂപങ്ങളുടെ ഭാഷ. സാധുവായ വിലകള്‍ \"ar\" (അറബിക്), \"x-baltic"
-"\" (ബാള്‍ട്ടിക് ഭാഷകള്‍), \"x-central-euro\" (മദ്ധ്യ യൂറോപ്യന്‍ ഭാഷകള്‍), \"x-cyrillic"
-"\" (സിറിലിക് അക്ഷരങ്ങളുപയോഗിച്ചെഴുതുന്ന ഭാഷകള്‍), \"el\" (ഗ്രീക്ക്), \"he\" (ഹീബ്രൂ), \"ja"
-"\" (ജാപ്പനീസ്), \"ko\" (കൊറിയന്‍), \"zh-CN\" (ലളിതമായ ചൈനീസ്), \"th\" (തായി), "
-"\"zh-TW\" (പരമ്പരാഗത ചൈനീസ്), \"tr\" (തുര്‍ക്കിഷ്), \"x-unicode\" (മറ്റു ഭാഷകള്‍), \"x-"
-"western\" (ലാറ്റിന്‍ ലിപിയുപയോഗിച്ചു് എഴുതുന്ന ഭാഷകള്‍), \"x-tamil\" (തമിഴ്) and \"x-"
-"devanagari\" (ദേവനാഗരി)."
-
-#: ../data/epiphany.schemas.in.h:47
-msgid "The downloads folder"
-msgstr "ഡൌണ്‍ലോഡുകളുടെ അറ"
-
-#: ../data/epiphany.schemas.in.h:48
-msgid "The page information shown in the history view"
-msgstr "ചരിത്രം കാണിയ്ക്കുമ്പോള്‍ വേണ്ട താളിന്റെ വിവരങ്ങള്‍"
-
-#: ../data/epiphany.schemas.in.h:49
-msgid ""
-"The page information shown in the history view. Valid values in the list are "
-"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-msgstr ""
-"ചരിത്രം കാണിയ്ക്കുമ്പോള്‍ വേണ്ട താളിന്റെ വിവരങ്ങള്‍. പട്ടികയിലെ സാധുവായ വിലകള്‍ \"തലക്കെട്ടു്കാണുക"
-"\", \"വിലാസംകാണുക\", \"സമയവുംതിയ്യതിയുംകാണുക\" എന്നിവയാണു്."
-
-#: ../data/epiphany.schemas.in.h:50
-msgid ""
-"The path of the folder where to download files to; or \"Downloads\" to use "
-"the default downloads folder, or \"Desktop\" to use the desktop folder."
-msgstr ""
-"ഫയലുകള്‍ ഡൌണ്‍ലോഡ് ചെയ്യേണ്ട അറയിലേയ്ക്കുള്ള വഴി; അല്ലെങ്കില്‍  സഹജമായ ഡൌണ്‍ലോഡുകളുടെ "
-"അറയുപയോഗിയ്ക്കാന്‍ \"ഡൌണ്‍ലോഡുകള്‍\", അല്ലെങ്കില്‍ പണിയിടത്തിന്റെ അറയുപയോഗിയ്ക്കാന്‍ \"പണിയിടം\" "
-"എന്നോ തെരഞ്ഞെടുക്കുക."
-
-#: ../data/epiphany.schemas.in.h:51
-msgid "Toolbar style"
-msgstr "പണിയായുധനിരയുടെ ശൈലി"
-
-#: ../data/epiphany.schemas.in.h:52
-msgid ""
-"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-"\"text\"."
-msgstr ""
-"പണിയായുധനിരയുടെ ശൈലി. അനുവദിച്ച വിലകള്‍ \"(ഗ്നോമിന്റെ സഹജമായ ശൈലിയുപയോഗിയ്ക്കുക)\", "
-"\"രണ്ടും\" (പദാവലിയും ചിഹ്നങ്ങളും), \"രണ്ടും-വിലങ്ങനെ\" (പദാവലി ചിഹ്നങ്ങള്‍ക്കരികെ), "
-"\"പദാവലി\" എന്നിവയാണു്."
-
-#: ../data/epiphany.schemas.in.h:53
-msgid "Use own colors"
-msgstr "സ്വന്തം നിറങ്ങള്‍ ഉപയോഗിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:54
-msgid "Use own fonts"
-msgstr "സ്വന്തം അക്ഷരരൂപങ്ങള്‍ ഉപയോഗിയ്ക്കുക"
-
-#: ../data/epiphany.schemas.in.h:55
-msgid "Use your own colors instead of the colors the page requests."
-msgstr "താള്‍ പറയുന്ന നിറങ്ങള്‍ക്കു് പകരം സ്വന്തം നിറങ്ങള്‍ ഉപയോഗിയ്ക്കുക."
-
-#: ../data/epiphany.schemas.in.h:56
-msgid "Use your own fonts instead of the fonts the page requests."
-msgstr "താള്‍ പറയപന്ന അക്ഷരരൂപങ്ങള്‍ക്കു് പകരം സ്വന്തം അക്ഷരരൂപങ്ങള്‍ ഉപയോഗിയ്ക്കുക."
-
-#: ../data/epiphany.schemas.in.h:57
-msgid "Visibility of the downloads window"
-msgstr "ഡൌണ്‍ലോഡുകളുടെ ജാലകത്തിന്റെ കാഴ്ചാവസ്ഥ"
-
-#: ../data/epiphany.schemas.in.h:58
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"ഫയലുകള്‍ ബ്രൌസറിനു് തുറക്കാന്‍ പറ്റാത്ത അവസരങ്ങളില്‍ അവ സ്വയം ഡൌണ്‍ലോഡ് അറയിലേയ്ക്ക് ഡൌണ്‍ലോഡ് "
-"ചെയ്യുകയും യോജിച്ച പ്രയോഗമുപയോഗിച്ചു് തുറക്കുന്നതുമായിരിയ്ക്കും."
-
-#: ../data/epiphany.schemas.in.h:59
-msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
-msgstr ""
-"കുക്കികള്‍ എവിടെ നിന്നും സ്വീകരിയ്ക്കാമെന്നു്. സാദ്ധ്യമായ മൂല്യങ്ങള്‍ \"എല്ലായിടത്തു നിന്നും\","
-"\"നിലവിലുളള സൈറ്റില്‍ നിന്നു് മാത്രം\" \"ഒരിടത്തുനിന്നും വേണ്ട\""
-
-#: ../data/epiphany.schemas.in.h:60
-msgid "Whether to print the background color"
-msgstr "പശ്ചാത്തല നിറം അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:61
-msgid "Whether to print the background images"
-msgstr "പശ്ചാത്തല ചിത്രങ്ങള്‍ അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:62
-msgid "Whether to print the date in the footer"
-msgstr "പാദകുറിപ്പില്‍ തിയ്യതി അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:63
-msgid "Whether to print the page address in the header"
-msgstr "തലക്കുറിപ്പില്‍ താളിന്റെ വിലാസം അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:64
-msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr "പാദക്കുറിപ്പില്‍ താളിന്റെ സംഖ്യകള്‍ (മുഴുവനിലെ x) അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:65
-msgid "Whether to print the page title in the header"
-msgstr "തലക്കുറിപ്പില്‍ താളിന്റെ തലക്കെട്ടു് അച്ചടിയ്ക്കണമോ എന്നു്"
-
-#: ../data/epiphany.schemas.in.h:66
-msgid "Whether to store and prefill passwords in web sites."
-msgstr "അടയാളവാക്കുകള്‍ സൂക്ഷിയ്ക്കുകയും വെബ് സൈറ്റുകളില്‍ നേരത്തേ പൂരിപ്പിയ്ക്കുകയും വേണമോ എന്നു്."
-
-#: ../data/epiphany.schemas.in.h:67
-msgid "x-western"
-msgstr "എക്സ്-പാശ്ചാത്യന്‍"
-
-#: ../data/glade/certificate-dialogs.glade.h:1
-msgid "<b>Fingerprints</b>"
-msgstr "<b>വിരലടയാളങ്ങള്‍</b>"
-
-#: ../data/glade/certificate-dialogs.glade.h:2
-msgid "<b>Issued By</b>"
-msgstr "<b>ആരാണു് നല്‍കിയതു്</b>"
-
-#: ../data/glade/certificate-dialogs.glade.h:3
-msgid "<b>Issued To</b>"
-msgstr "<b>ആര്‍ക്ക് നല്‍കി</b>"
-
-#: ../data/glade/certificate-dialogs.glade.h:4
-msgid "<b>Validity</b>"
-msgstr "<b>കാലാവധി</b>"
-
-#: ../data/glade/certificate-dialogs.glade.h:5
-msgid "Certificate _Fields"
-msgstr "സാക്ഷ്യപത്രത്തിന്റെ _കളങ്ങള്‍"
-
-#: ../data/glade/certificate-dialogs.glade.h:6
-msgid "Certificate _Hierarchy"
-msgstr "സാക്ഷ്യപത്രത്തിന്റെ _ഹൈറാര്‍കി"
-
-#: ../data/glade/certificate-dialogs.glade.h:7
-msgid "Common Name:"
-msgstr "സാധാരണ പേരു്:"
-
-#: ../data/glade/certificate-dialogs.glade.h:8
-msgid "Details"
-msgstr "വിശദവിവരങ്ങള്‍"
-
-#: ../data/glade/certificate-dialogs.glade.h:9
-msgid "Expires On:"
-msgstr "കാലാവധി തീരുന്നതു്:"
-
-#: ../data/glade/certificate-dialogs.glade.h:10
-msgid "Field _Value"
-msgstr "കളത്തിലെ _വില"
-
-#: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:22
-msgid "General"
-msgstr "സാര്‍വത്രികമായ"
-
-#: ../data/glade/certificate-dialogs.glade.h:12
-msgid "Issued On:"
-msgstr "നല്‍കിയതു്:"
-
-#: ../data/glade/certificate-dialogs.glade.h:13
-msgid "MD5 Fingerprint:"
-msgstr "എംഡി5 വിരളടയാളം:"
-
-#: ../data/glade/certificate-dialogs.glade.h:14
-msgid "Organization:"
-msgstr "സംഘടന:"
-
-#: ../data/glade/certificate-dialogs.glade.h:15
-msgid "Organizational Unit:"
-msgstr "സംഘടനയുടെ വിഭാഗം:"
-
-#: ../data/glade/certificate-dialogs.glade.h:16
-msgid "SHA1 Fingerprint:"
-msgstr "എസ്എച്ച്എ1 വിരളടയാളം:"
-
-#: ../data/glade/certificate-dialogs.glade.h:17
-msgid "Serial Number:"
-msgstr "ക്രമ നമ്പര്‍:"
-
-#: ../data/glade/epiphany.glade.h:1
+#: ../data/ui/epiphany.ui.h:1
 msgid "<b>_Automatic</b>"
 msgstr "<b>_സ്വയം</b>"
 
-#: ../data/glade/epiphany.glade.h:2
+#: ../data/ui/epiphany.ui.h:2
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>വ്യത്യസ്തമായൊരു _എന്‍കോഡിങ്ങുപയോഗിയ്ക്കുക:</b>"
 
-#: ../data/glade/epiphany.glade.h:3
-msgid "Clear _All..."
-msgstr "_എല്ലാം വെടിപ്പാക്കുക..."
+#: ../data/ui/epiphany.ui.h:3
+msgid "Content:"
+msgstr "ഉള്ളടക്കം:"
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/ui/epiphany.ui.h:4
+msgid "Cookie properties"
+msgstr "കുക്കിയുടെ ഗുണഗണങ്ങള്‍"
+
+#: ../data/ui/epiphany.ui.h:5
+#: ../data/ui/prefs-dialog.ui.h:8
 msgid "Cookies"
 msgstr "കുക്കികള്‍"
 
-#. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:105
-msgid "Downloads"
-msgstr "ഡൌണ്‍ലോഡുകള്‍"
+#: ../data/ui/epiphany.ui.h:6
+msgid "Expires:"
+msgstr "കാലാവധി തീരുന്നതു്:"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/ui/epiphany.ui.h:7
+#: ../data/ui/prefs-dialog.ui.h:22
 msgid "Passwords"
 msgstr "അടയാളവാക്കുകള്‍"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/ui/epiphany.ui.h:8
+msgid "Path:"
+msgstr "വഴി:"
+
+#: ../data/ui/epiphany.ui.h:9
 msgid "Personal Data"
 msgstr "വ്യക്തി വിവരങ്ങള്‍"
 
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/ui/epiphany.ui.h:10
+msgid "Send for:"
+msgstr "എങ്ങോട്ടാണയയ്ക്കേണ്ടതു്:"
+
+#: ../data/ui/epiphany.ui.h:11
 msgid "Text Encoding"
 msgstr "പദാവലിയുടെ എന്‍കോഡിങ്ങ്"
 
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:338
+#: ../data/ui/epiphany.ui.h:12
+#: ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "രചനയില്‍ പറഞ്ഞിട്ടുള്ള എന്‍കോഡിങ്ങുപയോഗിയ്ക്കുക"
 
-#: ../data/glade/epiphany.glade.h:10
+#: ../data/ui/epiphany.ui.h:13
 msgid "_Show passwords"
 msgstr "അടയാളവാക്കുകള്‍ _കാണിയ്ക്കുക"
 
-#: ../data/glade/form-signing-dialog.glade.h:1
-msgid "Sign Text"
-msgstr "പദാവലിയില്‍ ഒപ്പു് വയ്ക്കുക"
-
-#: ../data/glade/form-signing-dialog.glade.h:2
-msgid ""
-"To confirm that you want to sign the above text, choose a certificate to "
-"sign the text with and enter its password below."
-msgstr ""
-"മുകളിലെ പദാവലിയില്‍ ഒപ്പിടണമെന്നുറപ്പിയ്ക്കാന്‍ ഒപ്പിടാനുള്ള സാക്ഷ്യപത്രം തെരഞ്ഞെടുക്കുകയും അതിനു്റെ "
-"അടയാളവാക്കു് താഴെ നല്‍കുകയും ചെയ്യുക."
-
-#: ../data/glade/form-signing-dialog.glade.h:3
-msgid "_Certificate:"
-msgstr "_സാക്ഷ്യപത്രം:"
-
-#: ../data/glade/form-signing-dialog.glade.h:4
-msgid "_Password:"
-msgstr "_അടയാളവാക്കു്:"
-
-#: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate…"
-msgstr "സാക്ഷ്യപത്രം _കാണുക..."
-
-#: ../data/glade/prefs-dialog.glade.h:1
-msgid "<b>Cookies</b>"
-msgstr "<b>കുക്കികള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:2
-msgid "<b>Downloads</b>"
-msgstr "<b>ഡൌണ്‍ലോഡുകള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:3
-msgid "<b>Encodings</b>"
-msgstr "<b>എന്‍കോഡിങ്ങുകള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:4
-msgid "<b>Home page</b>"
-msgstr "<b>പൂമുഖം</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>ഭാഷകള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:6
-msgid "<b>Passwords</b>"
-msgstr "<b>അടയാളവാക്കുകള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:7
-msgid "<b>Temporary Files</b>"
-msgstr "<b>താത്കാലിക ഫയലുകള്‍</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:8
-msgid "<b>Web Content</b>"
-msgstr "<b>വെബ്ബിലെ ഉള്ളടക്കം</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:9
-msgid "<b>Web Development</b>"
-msgstr "<b>വെബ് ഡവലപ്മെന്റ്</b>"
-
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/ui/prefs-dialog.ui.h:2
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>ഉദാഹരണത്തിനു്, ഈ സൈറ്റുകളില്‍ പരസ്യം കൊടുത്തവരില്‍ നിന്നുമല്ല</small>"
 
-#: ../data/glade/prefs-dialog.glade.h:12
-msgid "A_utomatically download and open files"
-msgstr "തുറന്ന ഫയലുകള്‍ _സ്വയം ഡൌണ്‍ലോഡ് ചെയ്യുക"
+#: ../data/ui/prefs-dialog.ui.h:3
+msgid "A_utomatically open downloaded files"
+msgstr "ഡൌണ്‍ലോഡ് ചെയ്ത ഫയലുകള്‍ _സ്വയം  തുറക്കുക "
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/ui/prefs-dialog.ui.h:4
 msgid "Add Language"
 msgstr "ഭാഷ കൂട്ടിച്ചേര്‍ക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/ui/prefs-dialog.ui.h:5
 msgid "Allow popup _windows"
 msgstr "പൊങ്ങിവരുന്ന ജാലകങ്ങള്‍ അനുവദിയ്ക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/ui/prefs-dialog.ui.h:6
 msgid "Choose a l_anguage:"
 msgstr "ഭാഷ _തെരഞ്ഞെടുക്കുക:"
 
@@ -714,320 +140,147 @@ msgstr "ഭാഷ _തെരഞ്ഞെടുക്കുക:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:638 ../src/ephy-history-window.c:247
-#: ../src/pdm-dialog.c:388
+#: ../data/ui/prefs-dialog.ui.h:7
+#: ../lib/widgets/ephy-location-entry.c:462
+#: ../src/ephy-history-window.c:230
+#: ../src/pdm-dialog.c:352
 msgid "Cl_ear"
 msgstr "_കളയുക"
 
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/ui/prefs-dialog.ui.h:9
 msgid "De_fault:"
 msgstr "_സഹജമായതു്:"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../data/ui/prefs-dialog.ui.h:10
+#: ../lib/ephy-file-helpers.c:116
+msgid "Downloads"
+msgstr "ഡൌണ്‍ലോഡുകള്‍"
+
+#: ../data/ui/prefs-dialog.ui.h:11
 msgid "Enable Java_Script"
 msgstr "ജാവാ_സ്ക്രിപ്റ്റ് അനുവദിക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:20
-msgid "Enable _Java"
-msgstr "_ജാവാ അനുവദിക്കുക"
+#: ../data/ui/prefs-dialog.ui.h:12
+msgid "Enable _plugins"
+msgstr "_സംയോജകങ്ങള്‍ പ്രാവര്‍ത്തികമാക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/ui/prefs-dialog.ui.h:13
+#: ../src/ephy-encoding-dialog.c:302
+msgid "Encodings"
+msgstr "എന്‍കോഡിങ്ങുകള്‍"
+
+#: ../data/ui/prefs-dialog.ui.h:14
+msgid "Fonts"
+msgstr "അക്ഷരസഞ്ചയങ്ങള്‍"
+
+#: ../data/ui/prefs-dialog.ui.h:15
 msgid "Fonts & Style"
 msgstr "അക്ഷരരൂപങ്ങളും ശൈലികളും"
 
-#: ../data/glade/prefs-dialog.glade.h:23 ../src/prefs-dialog.c:820
+#: ../data/ui/prefs-dialog.ui.h:16
+msgid "General"
+msgstr "സാര്‍വത്രികമായ"
+
+#: ../data/ui/prefs-dialog.ui.h:17
+#: ../src/prefs-dialog.c:773
 msgid "Language"
 msgstr "ഭാഷ"
 
-#: ../data/glade/prefs-dialog.glade.h:24
-msgid "Let web pages specify their own _fonts"
-msgstr "സ്വന്തം _അക്ഷരരൂപങ്ങള്‍ സൂചിപ്പിയ്ക്കാന്‍ വെബ് താളുകളെ അനുവദിയ്ക്കുക"
+#: ../data/ui/prefs-dialog.ui.h:18
+msgid "Languages"
+msgstr "ഭാഷകള്‍"
 
-#: ../data/glade/prefs-dialog.glade.h:25
-msgid "Let web pages specify their own c_olors"
-msgstr "സ്വന്തം _നിറങ്ങള്‍ സൂചിപ്പിയ്ക്കാന്‍ വെബ് താളുകളെ അനുവദിയ്ക്കുക"
-
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/ui/prefs-dialog.ui.h:19
 msgid "MB"
 msgstr "എംബി"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/ui/prefs-dialog.ui.h:20
+msgid "Monospace font:"
+msgstr "മോണോസ്പെയിസ് അക്ഷരരൂപം:"
+
+#: ../data/ui/prefs-dialog.ui.h:21
 msgid "Only _from sites you visit"
 msgstr "നിങ്ങള്‍ സന്ദര്‍ശിയ്ക്കുന്ന സൈറ്റു_കളില്‍ നിന്നും മാത്രം"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/ui/prefs-dialog.ui.h:23
 msgid "Preferences"
 msgstr "മുന്‍ഗണനകള്‍"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/ui/prefs-dialog.ui.h:24
 msgid "Privacy"
 msgstr "സ്വകാര്യത"
 
-#: ../data/glade/prefs-dialog.glade.h:30
-msgid "Set to Current _Page"
-msgstr "ഇപ്പോഴത്തെ _താളിലേയ്ക്കു് സജ്ജീകരിയ്ക്കുക"
+#: ../data/ui/prefs-dialog.ui.h:25
+msgid "Sans serif font:"
+msgstr "സാന്‍സ് സെരീഫ് അക്ഷരരൂപം:"
 
-#: ../data/glade/prefs-dialog.glade.h:31
-msgid "Set to _Blank Page"
-msgstr "_ശൂന്യമായ താളിലേയ്ക്കു് സജ്ജീകരിയ്ക്കുക"
+#: ../data/ui/prefs-dialog.ui.h:26
+msgid "Serif font:"
+msgstr "സെരീഫ് അക്ഷരരൂപം:"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/ui/prefs-dialog.ui.h:27
+msgid "Spell checking"
+msgstr "അക്ഷരത്തെറ്റു് പരിശോധന"
+
+#: ../data/ui/prefs-dialog.ui.h:28
+msgid "Style"
+msgstr "ശൈലി"
+
+#: ../data/ui/prefs-dialog.ui.h:29
+msgid "Temporary Files"
+msgstr "താത്കാലിക ഫയലുകള്‍"
+
+#: ../data/ui/prefs-dialog.ui.h:30
 msgid "Use custom _stylesheet"
 msgstr "സ്വന്തം _സ്റ്റൈല്‍ഷീറ്റുപയോഗിയ്ക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:33
-msgid "Use s_mooth scrolling"
-msgstr "_മൃദുലമായ നിരക്കമുപയോഗിയ്ക്കുക"
+#: ../data/ui/prefs-dialog.ui.h:31
+msgid "Web Content"
+msgstr "വെബ്ബിലെ ഉള്ളടക്കം"
 
-#: ../data/glade/prefs-dialog.glade.h:34
-msgid "_Address:"
-msgstr "_വിലാസം:"
-
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/ui/prefs-dialog.ui.h:32
 msgid "_Always accept"
 msgstr "_എല്ലായ്പോഴും സ്വീകരിയ്ക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/ui/prefs-dialog.ui.h:33
 msgid "_Disk space:"
 msgstr "_ഡിസ്കിലുളള സ്ഥലം:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/ui/prefs-dialog.ui.h:34
 msgid "_Download folder:"
 msgstr "_ഡൌണ്‍ലോഡിനുപയോഗിയ്ക്കേണ്ട അറ:"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/ui/prefs-dialog.ui.h:35
 msgid "_Edit Stylesheet…"
 msgstr "സ്റ്റൈല്‍ഷീറ്റ് _ചിട്ടപ്പെടുത്തുക..."
 
-#: ../data/glade/prefs-dialog.glade.h:39
-msgid "_Minimum size:"
-msgstr "ഏറ്റവും _ചെറിയ വലിപ്പം:"
+#: ../data/ui/prefs-dialog.ui.h:36
+msgid "_Enable spell checking"
+msgstr "അക്ഷരത്തെറ്റു് പരിശോധന _പ്രാവര്‍ത്തികമാക്കുക"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/ui/prefs-dialog.ui.h:37
 msgid "_Never accept"
 msgstr "_ഒരിക്കലും സ്വീകരിയ്ക്കരുതു്"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/ui/prefs-dialog.ui.h:38
 msgid "_Remember passwords"
 msgstr "അടയാളവാക്കുകള്‍ _ഓര്‍ക്കുക"
 
-#: ../data/glade/print.glade.h:1
-msgid "<b>Background</b>"
-msgstr "<b>പശ്ചാത്തലം</b>"
+#: ../data/ui/prefs-dialog.ui.h:39
+msgid "_Use system fonts"
+msgstr "സിസ്റ്റത്തിലുള്ള അക്ഷരസഞ്ചയങ്ങള്‍ _ഉപയോഗിക്കുക"
 
-#: ../data/glade/print.glade.h:2
-msgid "<b>Footers</b>"
-msgstr "<b>പാദക്കുറിപ്പു്</b>"
-
-#: ../data/glade/print.glade.h:3
-msgid "<b>Frames</b>"
-msgstr "<b>ചട്ടക്കൂടുകള്‍</b>"
-
-#: ../data/glade/print.glade.h:4
-msgid "<b>Headers</b>"
-msgstr "<b>തലക്കുറിപ്പു്</b>"
-
-#: ../data/glade/print.glade.h:5
-msgid "As laid out on the _screen"
-msgstr "_സ്ക്രീനില്‍ കാണുന്നതു് പോലെ"
-
-#: ../data/glade/print.glade.h:6
-msgid "O_nly the selected frame"
-msgstr "തെരഞ്ഞെടുത്ത ചട്ടക്കൂടു് _മാത്രം"
-
-#: ../data/glade/print.glade.h:7
-msgid "P_age title"
-msgstr "താ_ളിന്റെ തലക്കെട്ടു്"
-
-#: ../data/glade/print.glade.h:8
-msgid "Page _numbers"
-msgstr "താളിന്റെ _സംഖ്യകള്‍"
-
-#: ../data/glade/print.glade.h:9
-msgid "Print background c_olors"
-msgstr "പശ്ചാത്തല _നിറങ്ങള്‍ അച്ചടിയ്ക്കുക"
-
-#: ../data/glade/print.glade.h:10
-msgid "Print background i_mages"
-msgstr "പശ്ചാത്തല _ചിത്രങ്ങള്‍ അച്ചടിയ്ക്കുക"
-
-#: ../data/glade/print.glade.h:11
-msgid "_Date"
-msgstr "_തിയ്യതി"
-
-#: ../data/glade/print.glade.h:12
-msgid "_Each frame separately"
-msgstr "_ഓരോ ചട്ടക്കൂടും വേറിട്ടു്"
-
-#: ../data/glade/print.glade.h:13
-msgid "_Page address"
-msgstr "താളിന്റെ _വിലാസം"
-
-#. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:167
-msgid "_Show Downloads"
-msgstr "ഡൌണ്‍ലോഡുകള്‍ _കാണിയ്ക്കുക"
-
-#: ../embed/downloader-view.c:323
-#, c-format
-msgid "%u:%02u.%02u"
-msgstr "%u:%02u.%02u"
-
-#: ../embed/downloader-view.c:327
-#, c-format
-msgid "%02u.%02u"
-msgstr "%02u.%02u"
-
-#: ../embed/downloader-view.c:377
-msgid "_Pause"
-msgstr "ചെറിയ _ഇടവേള"
-
-#: ../embed/downloader-view.c:377
-msgid "_Resume"
-msgstr "_തുടരുക"
-
-#. impossible time or broken locale settings
-#: ../embed/downloader-view.c:394 ../embed/downloader-view.c:547
-#: ../embed/downloader-view.c:552 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1738
-msgid "Unknown"
-msgstr "അറിയാത്തതു്"
-
-#: ../embed/downloader-view.c:510
-#, c-format
-msgid "The file “%s” has been downloaded."
-msgstr "%s എന്ന ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്തിരിയ്ക്കുന്നു."
-
-#: ../embed/downloader-view.c:513
-msgid "Download finished"
-msgstr "ഡൌണ്‍ലോഡ് തീര്‍ന്നിരിയ്ക്കുന്നു"
-
-#. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:537
-#, c-format
-msgid ""
-"%s\n"
-"%s of %s"
-msgstr ""
-"%1$s\n"
-"%3$s യില്‍ %2$s"
-
-#: ../embed/downloader-view.c:584
-#, c-format
-msgid "%d download"
-msgid_plural "%d downloads"
-msgstr[0] "%d ഡൌണ്‍ലോഡ്"
-msgstr[1] "%d ഡൌണ്‍ലോഡുകള്‍"
-
-#: ../embed/downloader-view.c:719
-#, c-format
-msgid "The file “%s” has been added to the downloads queue."
-msgstr "%s എന്ന ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്യാനുള്ള വരിയില്‍ ചേര്‍ത്തിട്ടുണ്ടു്."
-
-#: ../embed/downloader-view.c:723
-msgid "Download started"
-msgstr "ഡൌണ്‍ലോഡ് തുടങ്ങി"
-
-#: ../embed/downloader-view.c:801 ../embed/downloader-view.c:811
-msgctxt "download status"
-msgid "Unknown"
-msgstr "അപരിചിതം"
-
-#: ../embed/downloader-view.c:804
-msgctxt "download status"
-msgid "Failed"
-msgstr "പരാജയപ്പെട്ടു"
-
-#: ../embed/downloader-view.c:807
-msgctxt "download status"
-msgid "Cancelled"
-msgstr "റദ്ദാക്കിയിരിക്കുന്നു"
-
-#: ../embed/downloader-view.c:870 ../src/bookmarks/ephy-bookmarks-editor.c:986
-msgid "File"
-msgstr "ഫയല്‍"
-
-#: ../embed/downloader-view.c:893
-msgid "%"
-msgstr "%"
-
-#: ../embed/downloader-view.c:904
-msgid "Remaining"
-msgstr "ബാക്കിയുള്ളവ"
-
-#: ../embed/ephy-embed.c:443 ../src/window-commands.c:333
-msgid "Save"
-msgstr "സൂക്ഷിയ്ക്കുക"
-
-#: ../embed/ephy-embed.c:662
+#: ../embed/ephy-download.c:217
 msgctxt "file type"
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: ../embed/ephy-embed.c:676
-msgid "Download this potentially unsafe file?"
-msgstr "സുരക്ഷിതമല്ലാത്ത ഫയല്‍ ഡൌണ്‍ലോട് ചെയ്യണമോ?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:681
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
-msgstr ""
-"ഏതു് തരം ഫയല്‍: “%s”.\n"
-"\n"
-"നിങ്ങളുടെ സ്വകാര്യതയ്ക്ക് തടസ്സമാകുകയോ അല്ലെങ്കില്‍ നിങ്ങളുടെ രേഖകള്‍ നഷ്ടപ്പെടുകയോ "
-"സാധ്യതയുള്ളതിനാല്‍ “%s” തുറക്കുന്നതു് സുരക്ഷിതമല്ല. വേണമെങ്കില്‍ നിങ്ങള്‍ക്ക് ഡൌണ്‍ലോട് ചെയ്യാം."
-
-#: ../embed/ephy-embed.c:689
-msgid "Open this file?"
-msgstr "ഈ ഫയല്‍ തുറക്കണമോ?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name,
-#. Third %s is the application used to open the file
-#: ../embed/ephy-embed.c:695
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You can open “%s” using “%s” or save it."
-msgstr ""
-"ഏതു് തരം ഫയല്‍: “%s”.\n"
-"\n"
-"നിങ്ങള്‍ “%s”, “%s” ഉപയോഗിച്ചു് തുറക്കുകയോ അതു് സൂക്ഷിക്കുകയോ ചെയ്യാം."
-
-#: ../embed/ephy-embed.c:702
-msgid "Download this file?"
-msgstr "ഈ ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്യണമോ?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/ephy-embed.c:707
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You have no application able to open “%s”. You can download it instead."
-msgstr ""
-"ഏതു് തരം ഫയല്‍: “%s”.\n"
-"\n"
-"നിങ്ങള്‍ക്ക് “%s” തുറക്കുവാന്‍ സാധിക്കുന്ന പ്രയോഗം ലഭ്യമല്ല. പകരം നിങ്ങള്‍ക്കതു് ഡൌണ്‍ലോട് ചെയ്യാം."
-
-#: ../embed/ephy-embed.c:714
-msgid "_Save As..."
-msgstr "_പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക..."
-
-#: ../embed/ephy-embed.c:844
+#: ../embed/ephy-embed.c:692
 msgid "Web Inspector"
 msgstr "വെബ് ഇന്‍സ്പെക്ടര്‍"
 
-#: ../embed/ephy-embed-shell.c:242
+#: ../embed/ephy-embed-shell.c:207
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "എപ്പിഫാനി ഇിപ്പോഴുപയോഗിയ്ക്കാന്‍ പറ്റില്ല. തുക്കം‍ പരാജയപ്പെട്ടു."
 
@@ -1036,318 +289,318 @@ msgstr "എപ്പിഫാനി ഇിപ്പോഴുപയോഗിയ�
 msgid "Send an email message to “%s”"
 msgstr "\"%s\" ലേയ്ക്ക് ഒരു ഇമെയില്‍ സന്ദേശം അയയ്ക്കുക"
 
-#: ../embed/ephy-encodings.c:58
+#: ../embed/ephy-encodings.c:59
 msgid "Arabic (_IBM-864)"
 msgstr "അറബിക് (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:59
+#: ../embed/ephy-encodings.c:60
 msgid "Arabic (ISO-_8859-6)"
 msgstr "അറബിക് (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:60
+#: ../embed/ephy-encodings.c:61
 msgid "Arabic (_MacArabic)"
 msgstr "അറബിക് (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:62
 msgid "Arabic (_Windows-1256)"
 msgstr "അറബിക് (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:63
 msgid "Baltic (_ISO-8859-13)"
 msgstr "ബാള്‍ട്ടിക് (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:64
 msgid "Baltic (I_SO-8859-4)"
 msgstr "ബാള്‍ട്ടിക് (_ISO-8859-4)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:65
 msgid "Baltic (_Windows-1257)"
 msgstr "ബാള്‍ട്ടിക് (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:66
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_അര്‍മീനിയന്‍ (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:67
 msgid "_Georgian (GEOSTD8)"
 msgstr "_ജോര്‍ജിയന്‍ (GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:68
 msgid "Central European (_IBM-852)"
 msgstr "മദ്ധ്യ യൂറോപ്യന്‍ (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:69
 msgid "Central European (I_SO-8859-2)"
 msgstr "മദ്ധ്യ യൂറോപ്യന്‍ (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:70
 msgid "Central European (_MacCE)"
 msgstr "മദ്ധ്യ യൂറോപ്യന്‍ (_MacCE)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:71
 msgid "Central European (_Windows-1250)"
 msgstr "മദ്ധ്യ യൂറോപ്യന്‍ (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (_GB18030)"
 msgstr "ലളിതമായ ചൈനീസ്  (_GB18030)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (G_B2312)"
 msgstr "ലളിതമായ ചൈനീസ്  (G_B2312)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (GB_K)"
 msgstr "ലളിതമായ ചൈനീസ്  (GB_K)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_HZ)"
 msgstr "ലളിതമായ ചൈനീസ്  (_HZ)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:76
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "ലളിതമായ ചൈനീസ്  (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big_5)"
 msgstr "പരമ്പരാഗത ചൈനീസ്  (Big_5)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:78
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "പരമ്പരാഗത ചൈനീസ്  (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:79
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "പരമ്പരാഗത ചൈനീസ്  (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (_IBM-855)"
 msgstr "സിറിലിക്ക് (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "സിറിലിക്ക് (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "സിറിലിക്ക് (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:83
 msgid "Cyrillic (_KOI8-R)"
 msgstr "സിറിലിക്ക് (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:84
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "സിറിലിക്ക് (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:85
 msgid "Cyrillic (_Windows-1251)"
 msgstr "സിറിലിക്ക് (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:86
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "സിറിലിക്/റഷ്യന്‍ _R (IBM-866)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:87
 msgid "Greek (_ISO-8859-7)"
 msgstr "ഗ്രീക്ക് (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:88
 msgid "Greek (_MacGreek)"
 msgstr "ഗ്രീക്ക് (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:89
 msgid "Greek (_Windows-1253)"
 msgstr "ഗ്രീക്ക് (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:90
 msgid "Gujarati (_MacGujarati)"
 msgstr "ഗുജറാത്തി (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:91
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "ഗുര്‍മുഖി (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:92
 msgid "Hindi (Mac_Devanagari)"
 msgstr "ഹിന്ദി (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:93
 msgid "Hebrew (_IBM-862)"
 msgstr "ഹീബ്രൂ (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:94
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "ഹീബ്രൂ (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:95
 msgid "Hebrew (_MacHebrew)"
 msgstr "ഹീബ്രൂ (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:96
 msgid "Hebrew (_Windows-1255)"
 msgstr "ഹീബ്രൂ (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:97
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_വിഷ്വല്‍ ഹീബ്രൂ (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:98
 msgid "Japanese (_EUC-JP)"
 msgstr "ജാപ്പനീസ് (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:99
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "ജാപ്പനീസ് (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:100
 msgid "Japanese (_Shift-JIS)"
 msgstr "ജാപ്പനീസ് (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:101
 msgid "Korean (_EUC-KR)"
 msgstr "കൊറിയന്‍ (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:102
 msgid "Korean (_ISO-2022-KR)"
 msgstr "കൊറിയന്‍ (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:103
 msgid "Korean (_JOHAB)"
 msgstr "കൊറിയന്‍ (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:104
 msgid "Korean (_UHC)"
 msgstr "കൊറിയന്‍ (_UHC)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:105
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_സെല്‍ടിക്ക് (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:106
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_ഐസ്‌ലാന്‍ഡിക്ക് (MacIcelandic)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:107
 msgid "_Nordic (ISO-8859-10)"
 msgstr "നോര്‍ഡിക്ക് _N (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:108
 msgid "_Persian (MacFarsi)"
 msgstr "_പേര്‍ഷ്യന്‍ (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:109
 msgid "Croatian (Mac_Croatian)"
 msgstr "ക്രൊയേഷ്യന്‍ Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:110
 msgid "_Romanian (MacRomanian)"
 msgstr "_റൊമാനിയന്‍ (MacRomanian)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:111
 msgid "R_omanian (ISO-8859-16)"
 msgstr "റൊ_മാനിയന്‍ (ISO-8859-16)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:112
 msgid "South _European (ISO-8859-3)"
 msgstr "തെക്കേ യൂറോപ്യന്‍ _E (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:113
 msgid "Thai (TIS-_620)"
 msgstr "തായി (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:114
 msgid "Thai (IS_O-8859-11)"
 msgstr "തായി (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:115
 msgid "_Thai (Windows-874)"
 msgstr "_തായി (Windows-874)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:116
 msgid "Turkish (_IBM-857)"
 msgstr "തുര്‍ക്കിഷ് (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:117
 msgid "Turkish (I_SO-8859-9)"
 msgstr "തുര്‍ക്കിഷ് (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:118
 msgid "Turkish (_MacTurkish)"
 msgstr "തുര്‍ക്കിഷ് (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:119
 msgid "Turkish (_Windows-1254)"
 msgstr "തുര്‍ക്കിഷ് (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:120
 msgid "Unicode (UTF-_8)"
 msgstr "യുണികോഡ് (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "സിറിലിക്ക്/യുക്രേനിയന്‍ (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:122
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "സിറിലിക്ക്/യുക്രേനിയന്‍ (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (_TCVN)"
 msgstr "വിയറ്റ്നാമീസ് (_TCVN)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (_VISCII)"
 msgstr "വിയറ്റ്നാമീസ് (_VISCII)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:125
 msgid "Vietnamese (V_PS)"
 msgstr "വിയറ്റ്നാമീസ് (V_PS)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:126
 msgid "Vietnamese (_Windows-1258)"
 msgstr "വിയറ്റ്നാമീസ് (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:127
 msgid "Western (_IBM-850)"
 msgstr "പാശ്ചാത്യം (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:128
 msgid "Western (_ISO-8859-1)"
 msgstr "പാശ്ചാത്യം (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:129
 msgid "Western (IS_O-8859-15)"
 msgstr "പാശ്ചാത്യം (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:130
 msgid "Western (_MacRoman)"
 msgstr "പാശ്ചാത്യം (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:131
 msgid "Western (_Windows-1252)"
 msgstr "പാശ്ചാത്യം (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
 #.
-#: ../embed/ephy-encodings.c:135
+#: ../embed/ephy-encodings.c:136
 msgid "English (_US-ASCII)"
 msgstr "ഇഗ്ലീഷ് (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:136
+#: ../embed/ephy-encodings.c:137
 msgid "Unicode (UTF-_16 BE)"
 msgstr "യൂണികോഡ് (UTF-_16 BE)"
 
-#: ../embed/ephy-encodings.c:137
+#: ../embed/ephy-encodings.c:138
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "യൂണികോഡ് (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:139
 msgid "Unicode (UTF-_32 BE)"
 msgstr "യൂണികോഡ് (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:140
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "യൂണികോഡ് (UTF-3_2 LE)"
 
@@ -1359,73 +612,157 @@ msgstr "യൂണികോഡ് (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "അറിയാത്ത (%s)"
 
-#: ../embed/ephy-history.c:485
-msgid "All"
-msgstr "എല്ലാം"
+#: ../embed/ephy-request-about.c:101
+#: ../embed/ephy-request-about.c:104
+msgid "Installed plugins"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത സംയോജകങ്ങള്‍"
 
-#: ../embed/ephy-history.c:653
-msgid "Others"
-msgstr "മറ്റുള്ളവ"
+#: ../embed/ephy-request-about.c:116
+msgid "Enabled"
+msgstr "പ്രവര്‍ത്തന സജ്ജമാക്കിയിരിക്കുന്നു"
 
-#: ../embed/ephy-history.c:659
-msgid "Local files"
-msgstr "പ്രാദേശിക ഫയലുകള്‍"
+#: ../embed/ephy-request-about.c:116
+msgid "Yes"
+msgstr "ഉവ്വു്"
+
+#: ../embed/ephy-request-about.c:116
+msgid "No"
+msgstr "ഇല്ല"
+
+#: ../embed/ephy-request-about.c:117
+msgid "MIME type"
+msgstr "മൈം തരം"
+
+#: ../embed/ephy-request-about.c:117
+msgid "Description"
+msgstr "വിവരണം"
+
+#: ../embed/ephy-request-about.c:117
+msgid "Suffixes"
+msgstr "അവസാനം ചേര്‍ക്കുന്നവ"
+
+#: ../embed/ephy-request-about.c:146
+#: ../embed/ephy-request-about.c:149
+msgid "Memory usage"
+msgstr "മെമ്മറി ഉപയോഗം"
+
+#: ../embed/ephy-request-about.c:175
+#: ../embed/ephy-request-about.c:177
+msgid "Applications"
+msgstr "പ്രയോഗങ്ങള്‍"
+
+#: ../embed/ephy-request-about.c:178
+msgid "List of installed web applications"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത വെബ് _പ്രയോഗങ്ങളുടെ പട്ടിക"
+
+#. Note for translators: this refers to the installation date.
+#: ../embed/ephy-request-about.c:195
+msgid "Installed on:"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തതു്:"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:54 ../embed/ephy-web-view.c:2124
-#: ../src/ephy-session.c:1342
+#: ../embed/ephy-web-view.c:70
+#: ../embed/ephy-web-view.c:3441
 msgid "Blank page"
 msgstr "ശൂന്യമായ താള്‍"
 
-#: ../embed/ephy-web-view.c:1128
+#: ../embed/ephy-web-view.c:770
+msgid "_Not now"
+msgstr "ഇപ്പോള്‍ _വേണ്ട"
+
+#: ../embed/ephy-web-view.c:775
+msgid "_Store password"
+msgstr "അടയാളവാക്കു് _സൂക്ഷിയ്ക്കുക"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:786
+#, c-format
+msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgstr "<big><b>%2$s</b> ലെ <b>%1$s</b> നുള്ള അടയാളവാക്കു് സൂക്ഷിയ്ക്കാന്‍ നിങ്ങളാഗ്രഹിയ്ക്കുന്നോ?</big>"
+
+#: ../embed/ephy-web-view.c:1133
+msgid "Plugins"
+msgstr "സംയോജകങ്ങള്‍‌"
+
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1784
+msgid "Deny"
+msgstr "നിഷേധിക്കുക"
+
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1790
+msgid "Allow"
+msgstr "അനുവാദിയ്ക്കുക"
+
+#: ../embed/ephy-web-view.c:1797
+#, c-format
+msgid "The page at <b>%s</b> wants to know your location."
+msgstr "<b>%s</b> ലെ താളിനു് നിങ്ങളുടെ സ്ഥലം അറിയണമെന്നു്."
+
+#: ../embed/ephy-web-view.c:2118
+msgid "None specified"
+msgstr "ഒന്നും പറഞ്ഞിട്ടില്ല"
+
+#: ../embed/ephy-web-view.c:2127
+#: ../embed/ephy-web-view.c:2145
+#, c-format
+msgid "Oops! Error loading %s"
+msgstr "അയ്യോ! %s ലോഡ് ചെയ്യുന്നതില്‍ പിശക്"
+
+#: ../embed/ephy-web-view.c:2129
+msgid "Oops! It was not possible to show this website"
+msgstr "അയ്യോ! ഈ വെബ്സൈറ്റ് കാണിയ്ക്കാന്‍ സാധിച്ചില്ല"
+
+#: ../embed/ephy-web-view.c:2130
+#, c-format
+msgid "<p>The website at <strong>%s</strong> seems to be unavailable. The precise error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or moved to a new address. Don't forget to check that your internet connection is working correctly.</p>"
+msgstr "<p><strong>%s</strong> ലെ വെബ്സൈറ്റ് കിട്ടുന്നില്ലെന്നു് തോന്നുന്നു. പ്രശ്നം ഇതാണു്:</p><p><em>%s</em></p><p> ചിലപ്പോഴിതു് താത്കാലികമായി നിര്‍ത്തിയിട്ടതോ അല്ലെങ്കില്‍ മറ്റൊരു വിലാസത്തിലേയ്ക്കു് മാറിയതോ ആകാം. നിങ്ങളുടെ ഇന്റര്‍നെറ്റ് കണക്ഷന്‍ ശരിയ്ക്കും പ്രവര്‍ത്തിയ്ക്കുന്നുണ്ടോ എന്നു പരിശോദിയ്ക്കാന്‍ മറക്കേണ്ട.</p>"
+
+#: ../embed/ephy-web-view.c:2139
+msgid "Try again"
+msgstr "വീണ്ടും ശ്രമിയ്ക്കുക"
+
+#: ../embed/ephy-web-view.c:2147
+msgid "Oops! This site might have caused the web browser to close unexpectedly"
+msgstr "അയ്യോ! ഈ സൈറ്റ് കാരണമായിരിയ്ക്കാം ചിലപ്പോള്‍ വെബ് ബ്രൌസര്‍ പ്രതീക്ഷിയ്ക്കാതെ നിന്നുപോയതു്"
+
+#: ../embed/ephy-web-view.c:2149
+#, c-format
+msgid "<p>This page was loading when the web browser closed unexpectedly.</p><p>This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers.</p>"
+msgstr "<p>വെബ് ബ്രൌസര്‍ അപ്രതീക്ഷിതമായി നിന്നുപോയപ്പോള്‍ ഈ താള്‍ ലഭ്യമാക്കുകയായിരുന്നു. </p><p>ഈ താള്‍ വീണ്ടും ലഭ്യമാക്കിയാല്‍ ഇങ്ങനെ ഇനിയും സംഭവിച്ചേയ്ക്കാം. അങ്ങനെയെങ്കില്‍, ദയവായി ഈ പ്രശ്നം <strong>%s</strong> രചയിതാക്കളെ അറിയിക്കുക.</p>"
+
+#: ../embed/ephy-web-view.c:2157
+msgid "Load again anyway"
+msgstr "എന്തായാലും വീണ്ടും എടുക്കുക"
+
+#: ../embed/ephy-web-view.c:2428
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.in/search?q=%s&ie=UTF-8&oe=UTF-8&hl=ml"
 
 # c-format
-#: ../embed/ephy-web-view.c:1319
-#, c-format
-msgid "Redirecting to “%s”…"
-msgstr "“%s” ലേയ്ക്ക് തിരിച്ചുവിടുന്നു..."
-
-# c-format
-#: ../embed/ephy-web-view.c:1321
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "“%s” ല്‍ നിന്നും ഡാറ്റ മാറ്റിക്കൊണ്ടിരിയ്ക്കുന്നു..."
-
-# c-format
-#: ../embed/ephy-web-view.c:1323
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "“%s” ല്‍ നിന്നുളള അനുമതിയ്ക്കായി കാത്തിരിയ്ക്കുന്നു..."
-
-# c-format
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1329 ../embed/ephy-web-view.c:1436
+#: ../embed/ephy-web-view.c:2773
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” എടുത്തുകൊണ്ടിരിയ്ക്കുന്നു..."
 
-#: ../embed/ephy-web-view.c:1438
+#: ../embed/ephy-web-view.c:2775
 msgid "Loading…"
 msgstr "എടുത്തുകൊണ്ടിരിയ്ക്കുന്നു..."
 
-#: ../embed/ephy-web-view.c:2319
+#. Translators: this is the directory name to store auxilary files
+#. * when saving html files.
+#.
+#: ../embed/ephy-web-view.c:3645
 #, c-format
 msgid "%s Files"
 msgstr "%s ഫയലുകള്‍"
-
-#: ../lib/eel-gconf-extensions.c:67
-#, c-format
-msgid ""
-"GConf error:\n"
-"  %s"
-msgstr ""
-"ജികോണ്‍ഫില്‍ തെറ്റു്:\n"
-"  %s"
 
 #: ../lib/egg/eggdesktopfile.c:165
 #, c-format
@@ -1470,7 +807,9 @@ msgstr "സെഷന്‍ മാനേജറിലേക്കുള്ള ക�
 msgid "Specify file containing saved configuration"
 msgstr "സൂക്ഷിച്ചിട്ടുള്ള ക്രമീകരണമടങ്ങുന്ന ഫയല്‍ നല്‍കുക"
 
-#: ../lib/egg/eggsmclient.c:228 ../src/ephy-main.c:96 ../src/ephy-main.c:98
+#: ../lib/egg/eggsmclient.c:228
+#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:90
 msgid "FILE"
 msgstr "FILE"
 
@@ -1490,137 +829,85 @@ msgstr "സെഷന്‍ മാനേജ്മെന്റ് ഐച്ഛി�
 msgid "Show session management options"
 msgstr "സെഷന്‍ മാനേജ്മെന്റ് ഐച്ഛികങ്ങള്‍ കാണിക്കുക"
 
-#. Translaters: This string is for a toggle to display a toolbar.
-#. * The name of the toolbar is automatically computed from the widgets
-#. * on the toolbar, and is placed at the %s. Note the _ before the %s
-#. * which is used to add mnemonics. We know that this is likely to
-#. * produce duplicates, but don't worry about it. If your language
-#. * normally has a mnemonic at the start, please use the _. If not,
-#. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:934
-#, c-format
-msgid "Show “_%s”"
-msgstr "“_%s” കാണിയ്ക്കുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1397
-msgid "_Move on Toolbar"
-msgstr "പണിയായുധനിരയിലേയ്ക്ക് _നീക്കുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1398
-msgid "Move the selected item on the toolbar"
-msgstr "പണിയായുധനിരയിലുള്ള തെരഞ്ഞെടുത്ത വസ്തു നീക്കുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1399
-msgid "_Remove from Toolbar"
-msgstr "പണിയായുധനിരയില്‍ നിന്നും നീക്കം _ചെയ്യുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1400
-msgid "Remove the selected item from the toolbar"
-msgstr "തെരഞ്ഞെടുത്ത വസ്തു പണിയായുധനിരയില്‍ നിന്നും നീക്കം ചെയ്യുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1401
-msgid "_Delete Toolbar"
-msgstr "പണിയായുധനിര _എടുത്തുകളയുക"
-
-#: ../lib/egg/egg-editable-toolbar.c:1402
-msgid "Remove the selected toolbar"
-msgstr "തെരഞ്ഞെടുത്ത പണിയായുധനിര നീക്കം ചെയ്യുക"
-
-#: ../lib/egg/egg-toolbar-editor.c:485
-msgid "Separator"
-msgstr "വിടവടയാളം"
-
-#: ../lib/ephy-file-chooser.c:381
+#: ../lib/ephy-file-chooser.c:382
 msgid "All supported types"
 msgstr "എല്ലാ പിന്തുണയ്ക്കുന്ന തരങ്ങളും"
 
-#: ../lib/ephy-file-chooser.c:392
+#: ../lib/ephy-file-chooser.c:393
 msgid "Web pages"
 msgstr "വെബ് താളുകള്‍"
 
-#: ../lib/ephy-file-chooser.c:400
+#: ../lib/ephy-file-chooser.c:401
 msgid "Images"
 msgstr "ചിത്രങ്ങള്‍"
 
-#: ../lib/ephy-file-chooser.c:408 ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../lib/ephy-file-chooser.c:409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "All files"
 msgstr "എല്ലാ ഫയലുകളും"
 
-#: ../lib/ephy-file-helpers.c:296
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:162
+msgid "Desktop"
+msgstr "Desktop"
+
+#: ../lib/ephy-file-helpers.c:326
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” ല്‍ താത്ക്കാലിക തട്ടു് ഉണ്ടാക്കുവാന്‍ സാധിച്ചില്ല."
 
-#: ../lib/ephy-file-helpers.c:369
+#: ../lib/ephy-file-helpers.c:422
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s” എന്ന ഫയല്‍ നിലവിലുണ്ടു്. ദയവായി അതു് വഴിയില്‍ നിന്നും മാറ്റുക"
 
-#: ../lib/ephy-file-helpers.c:380
+#: ../lib/ephy-file-helpers.c:433
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "“%s” എന്ന തട്ടു്  ഉണ്ടാക്കുന്നതില്‍ പരാജയം."
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:206
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "“%s” എന്ന തട്ടു് എഴുതാവുന്നതല്ല"
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:210
 msgid "You do not have permission to create files in this directory."
 msgstr "ഈ തട്ടില്‍ ഫയലുകള്‍ സൃഷ്ടിയ്ക്കാന്‍ നിങ്ങള്‍ക്കനുമതിയില്ല."
 
-#: ../lib/ephy-gui.c:290
+#: ../lib/ephy-gui.c:213
 msgid "Directory not Writable"
 msgstr "തട്ടു് എഴുതാവുന്നതല്ല"
 
-#: ../lib/ephy-gui.c:320
+#: ../lib/ephy-gui.c:242
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "“%s” എന്ന നേരത്തെയുള്ള ഫയല്‍ മാറ്റിയെഴുതാന്‍ സാധ്യമല്ല"
 
-#: ../lib/ephy-gui.c:324
-msgid ""
-"A file with this name already exists and you don't have permission to "
-"overwrite it."
+#: ../lib/ephy-gui.c:246
+msgid "A file with this name already exists and you don't have permission to overwrite it."
 msgstr "നിങ്ങള്‍ക്കു് മാറ്റിയെഴുതാന്‍ അനുമതിയില്ലാത്ത ഈ പേരിലുള്ളൊരു ഫയല്‍ നേരത്തെ തന്നെയുണ്ടു്"
 
-#: ../lib/ephy-gui.c:327
+#: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
 msgstr "ഫയല്‍ മാറ്റിയെഴുതാന്‍ സാധ്യമല്ല"
 
-#: ../lib/ephy-gui.c:413
+#: ../lib/ephy-gui.c:307
 #, c-format
 msgid "Could not display help: %s"
 msgstr "%s ന്റെ സഹായഗ്രന്ഥം തുറക്കാനാവുന്നില്ല"
 
-#: ../lib/ephy-stock-icons.c:47
-msgid "Popup Windows"
-msgstr "പൊങ്ങിവരുന്ന ജാലകങ്ങള്‍"
+#: ../lib/ephy-nss-glue.c:62
+msgid "Master password needed"
+msgstr "പ്രധാന അടയാളവാക്ക് ആവശ്യമാണു്"
 
-#: ../lib/ephy-stock-icons.c:48 ../src/ephy-history-window.c:1239
-msgid "History"
-msgstr "ചരിത്രം"
+#: ../lib/ephy-nss-glue.c:64
+msgid "The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."
+msgstr "മുമ്പുള്ള പതിപ്പുകളിലുള്ള (Gecko) അടയാളവാക്കുകള്‍ ഒരു പ്രധാന അടയാളവാക്കുപയോഗിച്ചു് പൂട്ടിയിരിക്കുന്നു. നിങ്ങള്‍ക്കു് എപിഫനി ഉപയോഗിച്ചു് അവ ലഭ്യമാക്കണമെങ്കില്‍, ദയവായി നിങ്ങളുടെ പ്രധാന അടയാളവാക്ക് താഴെ നല്‍കുക."
 
-#: ../lib/ephy-stock-icons.c:49
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:300
-#: ../src/ephy-window.c:1493
-msgid "Bookmark"
-msgstr "ഓര്‍മ്മക്കുറിപ്പു്"
-
-#: ../lib/ephy-stock-icons.c:50 ../src/bookmarks/ephy-bookmarks-editor.c:896
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1740
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1497
-msgid "Bookmarks"
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍"
-
-#: ../lib/ephy-stock-icons.c:51 ../src/ephy-toolbar.c:284
-msgid "Address Entry"
-msgstr "വിലാസം"
-
-#: ../lib/ephy-stock-icons.c:52
-msgid "_Download"
-msgstr "_ഡൌണ്‍ലോഡ് ചെയ്യുക"
+#: ../lib/ephy-profile-migrator.c:82
+msgid "Failed to copy cookies file from Mozilla."
+msgstr "മോസിലയില്‍ നിന്നും കുക്കികളുടെ ഫയല്‍ പകര്‍ത്തുന്നതില്‍ പരാജയം."
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1654,6 +941,11 @@ msgstr "%b %d %I:%M %p"
 #: ../lib/ephy-time-helpers.c:269
 msgid "%b %d %Y"
 msgstr "%b %d %Y"
+
+#. impossible time or broken locale settings
+#: ../lib/ephy-time-helpers.c:279
+msgid "Unknown"
+msgstr "അറിയാത്തതു്"
 
 #: ../lib/ephy-zoom.h:44
 msgid "50%"
@@ -1691,499 +983,515 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/history/ephy-history-service-hosts-table.c:360
+msgid "Others"
+msgstr "മറ്റുള്ളവ"
+
+#: ../lib/history/ephy-history-service-hosts-table.c:364
+msgid "Local files"
+msgstr "പ്രാദേശിക ഫയലുകള്‍"
+
+#: ../lib/widgets/ephy-download-widget.c:88
+#, c-format
+msgid "%u:%02u hour left"
+msgid_plural "%u:%02u hours left"
+msgstr[0] "%u:%02u മണിക്കൂര്‍ ബാക്കി"
+msgstr[1] "%u:%02u മണിക്കൂറുകള്‍ ബാക്കി"
+
+#: ../lib/widgets/ephy-download-widget.c:90
+#, c-format
+msgid "%u hour left"
+msgid_plural "%u hours left"
+msgstr[0] "%u മണിക്കൂര്‍ ബാക്കി"
+msgstr[1] "%u മണിക്കൂറുകള്‍ ബാക്കി"
+
+#: ../lib/widgets/ephy-download-widget.c:93
+#, c-format
+msgid "%u:%02u minute left"
+msgid_plural "%u:%02u minutes left"
+msgstr[0] "%u:%02u മിനിറ്റ് ബാക്കി"
+msgstr[1] "%u:%02u മിനിറ്റുകള്‍ ബാക്കി"
+
+#: ../lib/widgets/ephy-download-widget.c:95
+#, c-format
+msgid "%u second left"
+msgid_plural "%u seconds left"
+msgstr[0] "%u സെക്കന്റ് ബാക്കി"
+msgstr[1] "%u സെക്കന്റുകള്‍ ബാക്കി"
+
+#: ../lib/widgets/ephy-download-widget.c:164
+msgid "Finished"
+msgstr "പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
+
+#: ../lib/widgets/ephy-download-widget.c:203
+#, c-format
+msgid "Error downloading: %s"
+msgstr "ഡൌണ്‍ലോഡ് ചെയ്യുന്നതില്‍ പിഴവ്: %s"
+
+#: ../lib/widgets/ephy-download-widget.c:271
+#: ../src/window-commands.c:482
+msgid "Cancel"
+msgstr "റദ്ദാക്കുക"
+
+#: ../lib/widgets/ephy-download-widget.c:280
+#: ../src/ephy-window.c:1283
+#: ../src/window-commands.c:263
+msgid "Open"
+msgstr "തുറക്കുക"
+
+#: ../lib/widgets/ephy-download-widget.c:286
+msgid "Show in folder"
+msgstr "അറയില്‍ കാണിയ്ക്കുക"
+
+#: ../lib/widgets/ephy-download-widget.c:458
+msgid "Starting…"
+msgstr "ആരംഭിക്കുന്നു..."
+
+#: ../lib/widgets/ephy-hosts-store.c:166
+msgid "All sites"
+msgstr "എല്ലാ സൈറ്റുകളും"
+
+#: ../lib/widgets/ephy-hosts-view.c:46
+msgid "Sites"
+msgstr "സൈറ്റുകള്‍"
+
+#: ../lib/widgets/ephy-location-entry.c:742
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ഈ താളിലേയ്ക്കൊരു കണ്ണി സൃഷ്ടിയ്ക്കാനായി ഈ ചിഹ്നം വലിച്ചു കൊണ്ടിടുക"
 
-#: ../lib/widgets/ephy-search-entry.c:140
+#: ../lib/widgets/ephy-search-entry.c:162
 msgid "Clear"
 msgstr "കളയുക"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:320
-#, c-format
-msgid "%s:"
-msgstr "%s:"
+#: ../lib/widgets/ephy-urls-view.c:43
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1662
+msgid "Title"
+msgstr "തലക്കെട്ടു്"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:497
-#, c-format
-msgid "Executes the script “%s”"
-msgstr "“%s” എന്ന സ്ക്രിപ്റ്റ് പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
+#: ../lib/widgets/ephy-urls-view.c:51
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
+msgid "Address"
+msgstr "വിലാസം"
+
+#: ../lib/widgets/ephy-urls-view.c:59
+msgid "Date"
+msgstr "തിയ്യതി"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:86
-#: ../src/bookmarks/ephy-bookmark-properties.c:612
+#: ../src/bookmarks/ephy-bookmark-properties.c:84
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _സാമ്യമുള്ള"
 msgstr[1] "%d _സാമ്യമുള്ള"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:259
+#: ../src/bookmarks/ephy-bookmark-properties.c:256
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "%d  എന്ന ഒരു പോലുള്ള ഓര്‍മ്മക്കുറിപ്പുമായി _യോജിപ്പിയ്ക്കുക"
 msgstr[1] "%d  എന്ന ഒരു പോലുള്ള ഓര്‍മ്മക്കുറിപ്പുകളുമായി _യോജിപ്പിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:279
-#: ../src/bookmarks/ephy-bookmark-properties.c:301
+#: ../src/bookmarks/ephy-bookmark-properties.c:276
+#: ../src/bookmarks/ephy-bookmark-properties.c:298
 #, c-format
 msgid "Show “%s”"
 msgstr "“%s” കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:427
+#: ../src/bookmarks/ephy-bookmark-properties.c:423
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” വിശേഷതകള്‍"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:551
+#: ../src/bookmarks/ephy-bookmark-properties.c:547
 msgid "_Title:"
 msgstr "_തലക്കെട്ടു്:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:567
+#: ../src/bookmarks/ephy-bookmark-properties.c:564
 msgid "A_ddress:"
 msgstr "_വിലാസം:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:576
 msgid "T_opics:"
 msgstr "_വിഷയങ്ങള്‍:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:600
+#: ../src/bookmarks/ephy-bookmark-properties.c:599
 msgid "Sho_w all topics"
 msgstr "എല്ലാ വിഷയങ്ങളും _കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks.c:98
+#: ../src/bookmarks/ephy-bookmarks.c:92
 msgid "Entertainment"
 msgstr "വിനോദം"
 
-#: ../src/bookmarks/ephy-bookmarks.c:99
+#: ../src/bookmarks/ephy-bookmarks.c:93
 msgid "News"
 msgstr "വാര്‍ത്തകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks.c:100
+#: ../src/bookmarks/ephy-bookmarks.c:94
 msgid "Shopping"
 msgstr "കച്ചവടം"
 
-#: ../src/bookmarks/ephy-bookmarks.c:101
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Sports"
 msgstr "കായികം"
 
-#: ../src/bookmarks/ephy-bookmarks.c:102
+#: ../src/bookmarks/ephy-bookmarks.c:96
 msgid "Travel"
 msgstr "യാത്ര"
 
-#: ../src/bookmarks/ephy-bookmarks.c:103
+#: ../src/bookmarks/ephy-bookmarks.c:97
 msgid "Work"
 msgstr "ജോലി"
 
-#. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:441
-#, c-format
-msgid "Update bookmark “%s”?"
-msgstr "“%s” എന്ന ഓര്‍മ്മക്കുറിപ്പു് പുതുക്കണോ?"
-
-#. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:446
-#, c-format
-msgid "The bookmarked page has moved to “%s”."
-msgstr "ഓര്‍മ്മക്കുറിപ്പിലെ താള്‍  “%s” ലേയ്ക്ക് മാറ്റിയിരിയ്ക്കുന്നു."
-
-#: ../src/bookmarks/ephy-bookmarks.c:450
-msgid "_Don't Update"
-msgstr "_പുതുക്കേണ്ട"
-
-#: ../src/bookmarks/ephy-bookmarks.c:452
-msgid "_Update"
-msgstr "_പുതുക്കുക"
-
-#: ../src/bookmarks/ephy-bookmarks.c:455
-msgid "Update Bookmark?"
-msgstr "ഓര്‍മ്മക്കുറിപ്പു് പുതുക്കണമോ?"
-
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1203
+#: ../src/bookmarks/ephy-bookmarks.c:951
 msgctxt "bookmarks"
 msgid "All"
 msgstr "എല്ലാം"
 
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1206
-msgctxt "bookmarks"
-msgid "Most Visited"
-msgstr "ഏറ്റവും കൂടുതല്‍ സന്ദര്‍ശിച്ചിട്ടുളള"
-
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1210
+#: ../src/bookmarks/ephy-bookmarks.c:955
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "തരംതിരിച്ചിട്ടില്ലാത്ത"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1215
+#: ../src/bookmarks/ephy-bookmarks.c:960
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "അടുത്തുള്ള സൈറ്റുകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1450
-#: ../src/bookmarks/ephy-bookmarks-import.c:270
+#: ../src/bookmarks/ephy-bookmarks.c:1179
+#: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "തലക്കെട്ടില്ലാത്ത"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:78
+#: ../src/bookmarks/ephy-bookmarks-editor.c:76
 msgid "Epiphany (RDF)"
 msgstr "എപ്പിഫാനി (ആര്‍ഡിഎഫ്)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:79
+#: ../src/bookmarks/ephy-bookmarks-editor.c:77
 msgid "Mozilla (HTML)"
 msgstr "മോസില്ല (എച്ച്ടിഎംഎല്‍)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:131
+#: ../src/bookmarks/ephy-bookmarks-editor.c:125
 msgid "Remove from this topic"
 msgstr "ഈ വിഷയത്തില്‍ നിന്നും നീക്കുക"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/ephy-history-window.c:147 ../src/ephy-window.c:107
+#: ../src/bookmarks/ephy-bookmarks-editor.c:152
+#: ../src/ephy-history-window.c:128
 msgid "_File"
 msgstr "_ശേഖരം"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:108
+#: ../src/bookmarks/ephy-bookmarks-editor.c:153
+#: ../src/ephy-history-window.c:129
 msgid "_Edit"
 msgstr "_ചിട്ട"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:109
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/ephy-history-window.c:130
 msgid "_View"
 msgstr "_കാഴ്ച"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/ephy-history-window.c:131
 msgid "_Help"
 msgstr "_സഹായം"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "_New Topic"
 msgstr "_പുതിയ വിഷയം"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
 msgid "Create a new topic"
 msgstr "പുതിയ വിഷയം സൃഷ്ടിക്കുക"
 
-#. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1349
-#: ../src/bookmarks/ephy-bookmarks-ui.c:322 ../src/ephy-history-window.c:154
-#: ../src/ephy-history-window.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
+#: ../src/ephy-history-window.c:135
+#: ../src/ephy-history-window.c:638
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "പുതിയ _ജാലകത്തില്‍‍ തുറക്കുക"
 msgstr[1] "പുതിയ _ജാലകങ്ങളില്‍ തുറക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:163
 msgid "Open the selected bookmark in a new window"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പു് പുതിയ ജാലകത്തില്‍‍ തുറക്കുക"
 
-#. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1352
-#: ../src/bookmarks/ephy-bookmarks-ui.c:310 ../src/ephy-history-window.c:157
-#: ../src/ephy-history-window.c:708
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
+#: ../src/ephy-history-window.c:138
+#: ../src/ephy-history-window.c:641
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "പുതിയ _കിളിവാതിലില്‍ തുറക്കുക"
 msgstr[1] "പുതിയ _കിളിവാതിലുകളില്‍ തുറക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Open the selected bookmark in a new tab"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പു് പുതിയ കിളിവാതിലില്‍ തുറക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "_Rename…"
 msgstr "പേരു് _മാറ്റുക..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Rename the selected bookmark or topic"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പിന്റേയോ വിഷയത്തിന്റേയോ പേരു് മാറ്റുക"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
-#: ../src/bookmarks/ephy-bookmarks-ui.c:298
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "_Properties"
 msgstr "_വിശേഷതകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "View or modify the properties of the selected bookmark"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പിന്റെ വിശേഷതകള്‍ കാണുകയോ മാറ്റുകയോ ചെയ്യുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "_Import Bookmarks…"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകളെ_ടുക്കുക..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "മറ്റൊരു ബ്രൌസറില്‍ നിന്നോ ഓര്‍മ്മക്കുറിപ്പുകളുടെ ഫയലില്‍ നിന്നോ ഓര്‍മ്മക്കുറിപ്പുകളെടുക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "_Export Bookmarks…"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ _മാറ്റി വയ്ക്കുക…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "Export bookmarks to a file"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ഒരു ഫയലിലേക്ക് മാറ്റി വയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:139
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/ephy-history-window.c:144
+#: ../src/ephy-window.c:105
 msgid "_Close"
 msgstr "_അടയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Close the bookmarks window"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകളുടെ ജാലകം അടയ്ക്കുക"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:168 ../src/ephy-window.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/ephy-history-window.c:149
+#: ../src/ephy-window.c:114
 msgid "Cu_t"
 msgstr "മു_റിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/ephy-history-window.c:150
 msgid "Cut the selection"
 msgstr "തെരഞ്ഞെടുത്തവ മുറിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1362
-#: ../src/ephy-history-window.c:171 ../src/ephy-history-window.c:718
-#: ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1174
+#: ../src/ephy-history-window.c:152
+#: ../src/ephy-history-window.c:651
+#: ../src/ephy-window.c:116
 msgid "_Copy"
 msgstr "_പകര്‍ത്തുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/ephy-history-window.c:153
 msgid "Copy the selection"
 msgstr "തെരഞ്ഞെടുത്തവ പകര്‍ത്തുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/ephy-history-window.c:155
+#: ../src/ephy-window.c:118
 msgid "_Paste"
 msgstr "_ഒട്ടിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
-#: ../src/ephy-history-window.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/ephy-history-window.c:156
 msgid "Paste the clipboard"
 msgstr "ക്ലിപ്ബോര്‍ഡിലുള്ളതൊട്ടിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/ephy-history-window.c:158
 msgid "_Delete"
 msgstr "_നീക്കം ചെയ്യുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Delete the selected bookmark or topic"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പോ വിഷയമോ നീക്കം ചെയ്യുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:180 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/ephy-history-window.c:161
+#: ../src/ephy-window.c:122
 msgid "Select _All"
 msgstr "_എല്ലാം തെരഞ്ഞെടുക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "Select all bookmarks or text"
 msgstr "എല്ലാ ഓര്‍മ്മക്കുറിപ്പുകളോ പദാവലികളോ തെരഞ്ഞെടുക്കുക"
 
 #. Help Menu
-#. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:257
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/ephy-history-window.c:169
 msgid "_Contents"
 msgstr "_ഉള്ളടക്കം"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "Display bookmarks help"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകളെക്കുറിച്ചുള്ള സഹായം കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:260
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:172
 msgid "_About"
 msgstr "_സംബന്ധിച്ചു്"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:261
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/ephy-history-window.c:173
 msgid "Display credits for the web browser creators"
 msgstr "ബ്രൌസ‌ര്‍ രചിയിതാക്കളുടെ വിവരങ്ങള്‍ കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-msgid "_Show on Toolbar"
-msgstr "പണിയായുധനിരയില്‍ _കാണിയ്ക്കുക"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-msgid "Show the selected bookmark on a toolbar"
-msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പു് ഒരു പണിയായുധനിരയില്‍ കാണിയ്ക്കുക"
-
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
-#: ../src/ephy-history-window.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:187
 msgid "_Title"
 msgstr "_തലക്കെട്ടു്"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-msgid "Show only the title column"
-msgstr "തലക്കെട്ടു് നിര മാത്രം കാണിയ്ക്കുക"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:188
+msgid "Show the title column"
+msgstr "തലക്കെട്ടു് കളം കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-msgid "T_itle and Address"
-msgstr "ത_ലക്കെട്ടും മേല്‍വിലാസവും"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:190
+msgid "Show the address column"
+msgstr "വിലാസത്തിന്റെ കളം കാണിയ്ക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
-msgid "Show both the title and address columns"
-msgstr "തലക്കെട്ടും മേല്‍വിലാസവും കാണിയ്ക്കുക"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:276
+#: ../src/bookmarks/ephy-bookmarks-editor.c:256
 msgid "Type a topic"
 msgstr "ഒരു വിഷയം നല്‍കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:394
+#: ../src/bookmarks/ephy-bookmarks-editor.c:375
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "“%s” എന്ന വിഷയം നീക്കം ചെയ്യണോ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:397
+#: ../src/bookmarks/ephy-bookmarks-editor.c:378
 msgid "Delete this topic?"
 msgstr "ഈ വിഷയം നീക്കം ചെയ്യണോ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
-msgid ""
-"Deleting this topic will cause all its bookmarks to become uncategorized, "
-"unless they also belong to other topics. The bookmarks will not be deleted."
-msgstr ""
-"ഈ വിഷയം നീക്കം ചെയ്യുന്നത് ഇതിലെ ഓര്‍മ്മക്കുറിപ്പുകളെല്ലാം മറ്റു വിഷയങ്ങളില്‍ കൂടി "
-"ഉള്‍‌പ്പെടാത്തവയാണെങ്കില്‍ തരം തിരിയ്ക്കാത്തവയാകാന്‍ കാരണമാകും. ഓര്‍മ്മക്കുറിപ്പുകള്‍ നീക്കം "
-"ചെയ്യപ്പെടുകയില്ല."
+#: ../src/bookmarks/ephy-bookmarks-editor.c:380
+msgid "Deleting this topic will cause all its bookmarks to become uncategorized, unless they also belong to other topics. The bookmarks will not be deleted."
+msgstr "ഈ വിഷയം നീക്കം ചെയ്യുന്നത് ഇതിലെ ഓര്‍മ്മക്കുറിപ്പുകളെല്ലാം മറ്റു വിഷയങ്ങളില്‍ കൂടി ഉള്‍‌പ്പെടാത്തവയാണെങ്കില്‍ തരം തിരിയ്ക്കാത്തവയാകാന്‍ കാരണമാകും. ഓര്‍മ്മക്കുറിപ്പുകള്‍ നീക്കം ചെയ്യപ്പെടുകയില്ല."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:402
+#: ../src/bookmarks/ephy-bookmarks-editor.c:383
 msgid "_Delete Topic"
 msgstr "വിഷയം _നീക്കം ചെയ്യുക"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:493
+#: ../src/bookmarks/ephy-bookmarks-editor.c:497
 msgid "Firefox"
 msgstr "ഫയര്‍ഫോക്സ്"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
-#: ../src/bookmarks/ephy-bookmarks-editor.c:636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:502
+#: ../src/bookmarks/ephy-bookmarks-editor.c:506
 msgid "Firebird"
 msgstr "ഫയര്‍ബേര്‍ഡ്"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:641
+#: ../src/bookmarks/ephy-bookmarks-editor.c:511
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "മോസില്ലയുടെ “%s” പ്രൊഫൈല്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:515
 msgid "Galeon"
 msgstr "ഗാലിയോണ്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:519
 msgid "Konqueror"
 msgstr "കോണ്‍ക്വറര്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:678
+#: ../src/bookmarks/ephy-bookmarks-editor.c:548
 msgid "Import failed"
 msgstr "എടുക്കുന്നതു് പരാജയപ്പെട്ടു"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:550
 msgid "Import Failed"
 msgstr "എടുക്കുന്നതു് പരാജയപ്പെട്ടു"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:553
 #, c-format
-msgid ""
-"The bookmarks from “%s” could not be imported because the file is corrupted "
-"or of an unsupported type."
-msgstr ""
-"“%s” യില്‍ നിന്നുള്ള ഓര്‍മ്മക്കുറിപ്പുകള്‍ കറപ്റ്റഡായതോ പിന്തുണയ്ക്കാത്ത തരത്തിലുള്ളതോ ആയതിനാല്‍ "
-"എടുക്കാന്‍ സാധിച്ചില്ല."
+msgid "The bookmarks from “%s” could not be imported because the file is corrupted or of an unsupported type."
+msgstr "“%s” യില്‍ നിന്നുള്ള ഓര്‍മ്മക്കുറിപ്പുകള്‍ കറപ്റ്റഡായതോ പിന്തുണയ്ക്കാത്ത തരത്തിലുള്ളതോ ആയതിനാല്‍ എടുക്കാന്‍ സാധിച്ചില്ല."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:746
+#: ../src/bookmarks/ephy-bookmarks-editor.c:616
 msgid "Import Bookmarks from File"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ഫയലില്‍ നിന്നും എടുക്കുക:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:623
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ഫയര്‍ഫോക്സ്/മോസില്ലയുടെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ഗാലിയോണ്‍/കോണ്‍ക്വററിന്റെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:761
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Epiphany bookmarks"
 msgstr "എപ്പിഫാനിയുടെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:885
+#: ../src/bookmarks/ephy-bookmarks-editor.c:755
 msgid "Export Bookmarks"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ മാറ്റി വയ്ക്കുക:"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1536
+#: ../src/bookmarks/ephy-topic-action.c:217
+msgid "Bookmarks"
+msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍"
+
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:769
 msgid "File f_ormat:"
 msgstr "ഫയല്‍ _ഫോര്‍മാറ്റ്:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:946
+#: ../src/bookmarks/ephy-bookmarks-editor.c:815
 msgid "Import Bookmarks"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ എടുക്കുക:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:952
+#: ../src/bookmarks/ephy-bookmarks-editor.c:820
 msgid "I_mport"
 msgstr "_എടുക്കുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:966
+#: ../src/bookmarks/ephy-bookmarks-editor.c:836
 msgid "Import bookmarks from:"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ എടുക്കുക:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/ephy-history-window.c:714
+#: ../src/bookmarks/ephy-bookmarks-editor.c:856
+msgid "File"
+msgstr "ഫയല്‍"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1170
+#: ../src/ephy-history-window.c:647
 msgid "_Copy Address"
 msgstr "വിലാസം _പകര്‍ത്തുക"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1606
-#: ../src/ephy-history-window.c:1039
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1411
+#: ../src/ephy-history-window.c:800
 msgid "_Search:"
 msgstr "_തെരയുക:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1592
 msgid "Topics"
 msgstr "വിഷയങ്ങള്‍"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1874
-#: ../src/ephy-history-window.c:1362
-msgid "Title"
-msgstr "തലക്കെട്ടു്"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1885
-#: ../src/ephy-history-window.c:1371
-msgid "Address"
-msgstr "വിലാസം"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:299
-msgid "Show properties for this bookmark"
-msgstr "ഈ ഓര്‍മ്മക്കുറിപ്പിന്റെ വിശേഷതകള്‍ കാണിയ്ക്കുക"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:311
-msgid "Open this bookmark in a new tab"
-msgstr "ഈ ഓര്‍മ്മക്കുറിപ്പു് പുതിയ കിളിവാതിലില്‍ തുറക്കുക"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:323
-msgid "Open this bookmark in a new window"
-msgstr "ഈ ഓര്‍മ്മക്കുറിപ്പു് പുതിയ ജാലകത്തില്‍‍ തുറക്കുക"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
@@ -2194,22 +1502,27 @@ msgstr "പുതിയ കിളിവാതിലുകളില്‍ തു�
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "ഈ വിഷയത്തിലെ ഓര്‍മ്മക്കുറിപ്പുകള്‍ പുതിയ കിളിവാതിലുകളില്‍ തുറക്കുക"
 
-#: ../src/bookmarks/ephy-related-action.c:152
-msgid "Related"
-msgstr "ബന്ധമുളള"
-
-#: ../src/bookmarks/ephy-topic-factory-action.c:299
-msgid "Topic"
-msgstr "വിഷയം"
-
 #: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
 msgid "Create topic “%s”"
 msgstr "“%s” എന്ന വിഷയമുണ്ടാക്കുക"
 
-#: ../src/ephy-encoding-dialog.c:319
-msgid "Encodings"
-msgstr "എന്‍കോഡിങ്ങുകള്‍"
+#: ../src/ephy-combined-stop-reload-action.c:41
+msgid "Stop"
+msgstr "നിര്‍ത്തുക"
+
+#: ../src/ephy-combined-stop-reload-action.c:42
+msgid "Stop current data transfer"
+msgstr "ഈ ഡാറ്റാകൈമാറ്റം നിര്‍ത്തുക"
+
+#: ../src/ephy-combined-stop-reload-action.c:44
+#: ../src/ephy-window.c:137
+msgid "_Reload"
+msgstr "_പുതുക്കുക"
+
+#: ../src/ephy-combined-stop-reload-action.c:45
+msgid "Display the latest content of the current page"
+msgstr "ഈ താളിലുള്ള ഏറ്റവും പുതിയ ഉള്ളടക്കങ്ങള്‍ പ്രദ‌ര്‌ശിപ്പിക്കുക"
 
 #: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
@@ -2223,207 +1536,194 @@ msgstr "മറ്റ് എന്‍കോഡിങ്ങുകള്‍"
 msgid "_Automatic"
 msgstr "_സ്വയം"
 
-#: ../src/ephy-find-toolbar.c:146
+#: ../src/ephy-find-toolbar.c:153
 msgid "Not found"
 msgstr "കണ്ടില്ല"
 
-#: ../src/ephy-find-toolbar.c:158
+#: ../src/ephy-find-toolbar.c:165
 msgid "Wrapped"
 msgstr "ഒതുക്കിയത്"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find links:"
 msgstr "കണ്ണികള്‍ കണ്ടുപിടിയ്ക്കുക:"
 
-#: ../src/ephy-find-toolbar.c:178
+#: ../src/ephy-find-toolbar.c:185
 msgid "Find:"
 msgstr "കണ്ടുപിടിയ്ക്കുക:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:434 ../src/ephy-find-toolbar.c:556
+#: ../src/ephy-find-toolbar.c:459
+#: ../src/ephy-find-toolbar.c:582
 msgid "_Case sensitive"
 msgstr "_വലിയക്ഷരചെറിയക്ഷര വ്യത്യാസമുള്ളതു്"
 
-#: ../src/ephy-find-toolbar.c:539
+#: ../src/ephy-find-toolbar.c:565
 msgid "Find Previous"
 msgstr "മുമ്പുളളതു് കണ്ടുപിടിയ്ക്കുക"
 
-#: ../src/ephy-find-toolbar.c:542
+#: ../src/ephy-find-toolbar.c:568
 msgid "Find previous occurrence of the search string"
 msgstr "തിരയുന്ന സ്ടിങ് മുമ്പെവിടെയെന്നു് കണ്ടുപിടിയ്ക്കുക"
 
-#: ../src/ephy-find-toolbar.c:548
+#: ../src/ephy-find-toolbar.c:574
 msgid "Find Next"
 msgstr "അടുത്തതു് കണ്ടുപിടിയ്ക്കുക"
 
-#: ../src/ephy-find-toolbar.c:551
+#: ../src/ephy-find-toolbar.c:577
 msgid "Find next occurrence of the search string"
 msgstr "തിരയുന്ന സ്ടിങ് അടുത്തതെവിടെയെന്നു് കണ്ടുപിടിയ്ക്കുക"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:263 ../src/ephy-toolbar.c:581
+#: ../src/ephy-fullscreen-popup.c:232
 msgid "Leave Fullscreen"
 msgstr "സ്ക്രീനിന്റെ പരാമാവധി വലിപ്പത്തില്‍ നിന്നും മാറുക"
 
-#: ../src/ephy-go-action.c:41 ../src/ephy-toolbar.c:314
-msgid "Go"
-msgstr "പോകുക"
-
-#: ../src/ephy-history-window.c:155
+#: ../src/ephy-history-window.c:136
 msgid "Open the selected history link in a new window"
 msgstr "ചരിത്രത്തിലെ തെരഞ്ഞെടുത്ത കണ്ണി പുതിയ ജാലകത്തില്‍ തുറക്കുക"
 
-#: ../src/ephy-history-window.c:158
+#: ../src/ephy-history-window.c:139
 msgid "Open the selected history link in a new tab"
 msgstr "ചരിത്രത്തിലെ തെരഞ്ഞെടുത്ത കണ്ണി പുതിയ കിളിവാതിലില്‍ തുറക്കുക"
 
-#: ../src/ephy-history-window.c:160
+#: ../src/ephy-history-window.c:141
 msgid "Add _Bookmark…"
 msgstr "_ഓര്‍മ്മക്കുറിപ്പു് കൂട്ടിച്ചേര്‍ക്കുക..."
 
-#: ../src/ephy-history-window.c:161
+#: ../src/ephy-history-window.c:142
 msgid "Bookmark the selected history link"
 msgstr "ചരിത്രത്തിലെ തെരഞ്ഞെടുത്ത കണ്ണി ഓര്‍മ്മക്കുറിപ്പാക്കുക"
 
-#: ../src/ephy-history-window.c:164
+#: ../src/ephy-history-window.c:145
 msgid "Close the history window"
 msgstr "ചരിത്രത്തിന്റെ ജാലകം അടയ്ക്കുക"
 
-#: ../src/ephy-history-window.c:178
+#: ../src/ephy-history-window.c:159
 msgid "Delete the selected history link"
 msgstr "ചരിത്രത്തിലെ തെരഞ്ഞെടുത്ത കണ്ണി നീക്കം ചെയ്യുക"
 
-#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:162
 msgid "Select all history links or text"
 msgstr "ചരിത്രത്തിലെ എല്ലാ കണ്ണികളോ പദാവലികളോ തെരഞ്ഞെടുക്കുക"
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:164
 msgid "Clear _History"
 msgstr "_ചരിത്രം കളയുക"
 
-#: ../src/ephy-history-window.c:184
+#: ../src/ephy-history-window.c:165
 msgid "Clear your browsing history"
 msgstr "താങ്കളുടെ ബ്രൌസിങ്ങിന്റെ ചരിത്രം കളയുക"
 
-#: ../src/ephy-history-window.c:189
+#: ../src/ephy-history-window.c:170
 msgid "Display history help"
 msgstr "ചരിത്രത്തെക്കുറിച്ചുള്ള സഹായം കാണിയ്ക്കുക"
 
-#: ../src/ephy-history-window.c:207
-msgid "Show the title column"
-msgstr "തലക്കെട്ടു് കളം കാണിയ്ക്കുക"
-
-#: ../src/ephy-history-window.c:208
+#: ../src/ephy-history-window.c:189
 msgid "_Address"
 msgstr "_മേല്‍വിലാസം"
 
-#: ../src/ephy-history-window.c:209
-msgid "Show the address column"
-msgstr "വിലാസത്തിന്റെ കളം കാണിയ്ക്കുക"
-
-#: ../src/ephy-history-window.c:210
+#: ../src/ephy-history-window.c:191
 msgid "_Date and Time"
 msgstr "_തിയ്യതിയും സമയവും"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:192
 msgid "Show the date and time column"
 msgstr "തിയ്യതിയും സമയവും എന്ന കളം കാണിയ്ക്കുക"
 
-#: ../src/ephy-history-window.c:237
+#: ../src/ephy-history-window.c:220
 msgid "Clear browsing history?"
 msgstr "ബ്രൌസിങ്ങിന്റെ ചരിത്രം കളയണോ?"
 
-#: ../src/ephy-history-window.c:241
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr ""
-"ബ്രൌസ് ചെയ്തതിന്റെ ചരിത്രം കളയുന്ന പക്ഷം എല്ലാ ചരിത്രത്തിലെ കണ്ണികളും എന്നെന്നെക്കുമായി നീക്കം "
-"ചെയ്യുന്നതായിരിയ്ക്കും."
+#: ../src/ephy-history-window.c:224
+msgid "Clearing the browsing history will cause all history links to be permanently deleted."
+msgstr "ബ്രൌസ് ചെയ്തതിന്റെ ചരിത്രം കളയുന്ന പക്ഷം എല്ലാ ചരിത്രത്തിലെ കണ്ണികളും എന്നെന്നെക്കുമായി നീക്കം ചെയ്യുന്നതായിരിയ്ക്കും."
 
-#: ../src/ephy-history-window.c:256
+#: ../src/ephy-history-window.c:239
 msgid "Clear History"
 msgstr "ചരിത്രം കളയുക"
 
-#: ../src/ephy-history-window.c:1048
+#: ../src/ephy-history-window.c:809
 msgid "Last 30 minutes"
 msgstr "കഴിഞ്ഞ 30 മിനിറ്റുകള്‍"
 
-#: ../src/ephy-history-window.c:1049
+#: ../src/ephy-history-window.c:810
 msgid "Today"
 msgstr "ഇന്നു്"
 
-#. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1050 ../src/ephy-history-window.c:1053
-#: ../src/ephy-history-window.c:1057
+#. keep this in sync with embed/ephy-history.c's
+#. * HISTORY_PAGE_OBSOLETE_DAYS
+#: ../src/ephy-history-window.c:812
+#: ../src/ephy-history-window.c:816
+#: ../src/ephy-history-window.c:822
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "കഴിഞ്ഞ %d ദിവസം"
 msgstr[1] "കഴിഞ്ഞ %d ദിവസങ്ങള്‍"
 
-#: ../src/ephy-history-window.c:1299
-msgid "Sites"
-msgstr "സൈറ്റുകള്‍"
+#: ../src/ephy-history-window.c:826
+msgid "All history"
+msgstr "എല്ലാ നാള്‍വഴിയും"
 
-#: ../src/ephy-history-window.c:1379
-msgid "Date"
-msgstr "തിയ്യതി"
+#: ../src/ephy-history-window.c:1123
+msgid "History"
+msgstr "ചരിത്രം"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:562 ../src/window-commands.c:1007
-msgid "GNOME Web Browser"
-msgstr "ഗ്നോം വെബ് ബ്രൌസര്‍"
-
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:82
 msgid "Open a new tab in an existing browser window"
 msgstr "നിലവിലുളള ബ്രൌസര്‍ ജാലകത്തില്‍ ഒരു പുതിയ കിളിവാതില്‍ തുറക്കുക"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:84
 msgid "Open a new browser window"
 msgstr "ഒരു പുതിയ ബ്രൌസര്‍ ജാലകം തുറക്കുക"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:86
 msgid "Launch the bookmarks editor"
 msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ അടുക്കി വയ്ക്കാനുള്ള സഹായി തുടങ്ങുക"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:88
 msgid "Import bookmarks from the given file"
 msgstr "തന്നിരിക്കുന്ന ഫയലില്‍ നിന്നും ഓര്‍മ്മക്കുറിപ്പുകള്‍ എടുക്കുക"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:90
 msgid "Load the given session file"
 msgstr "തന്നിരിക്കുന്ന സെഷന്‍ ഫയല്‍ എടുക്കുക"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:92
 msgid "Add a bookmark"
 msgstr "ഒരു ഓര്‍മ്മക്കുറിപ്പു് കൂട്ടിച്ചേര്‍ക്കുക"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:92
 msgid "URL"
 msgstr "യുആര്‍എല്‍"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:94
 msgid "Start a private instance"
 msgstr "സ്വകാര്യ ഇന്‍സ്റ്റന്‍സ് തുടങ്ങുക"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:96
+msgid "Start the browser in application mode"
+msgstr "പ്രയോഗ ദശയില്‍ ബ്രൌസര്‍ ആരംഭിക്കുക"
+
+#: ../src/ephy-main.c:98
 msgid "Profile directory to use in the private instance"
 msgstr "സ്വകാര്യ ഇന്‍സ്റ്റന്‍സിലുപയോഗിയ്ക്കേണ്ട പ്രൊഫൈല്‍ തട്ടു്"
 
-#: ../src/ephy-main.c:104
+#: ../src/ephy-main.c:98
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:106
+#: ../src/ephy-main.c:100
 msgid "URL …"
 msgstr "യുആര്‍എല്‍ ..."
 
-#: ../src/ephy-main.c:423
-msgid "Could not start GNOME Web Browser"
-msgstr "ഗ്നോം വെബ് ബ്രൌസര്‍ തുടങ്ങാന്‍ സാധിച്ചില്ല"
+#: ../src/ephy-main.c:208
+msgid "Could not start Web"
+msgstr "വെബ് തുടങ്ങാന്‍ സാധിച്ചില്ല"
 
-#: ../src/ephy-main.c:426
+#: ../src/ephy-main.c:211
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2432,954 +1732,400 @@ msgstr ""
 "താഴെ കൊടുത്തിരിയ്ക്കുന്ന തെറ്റു് മൂലം തുടങ്ങുന്നതു് പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: ../src/ephy-main.c:563
-msgid "GNOME Web Browser options"
-msgstr "ഗ്നോം വെബ് ബ്രൌസര്‍ ഐച്ഛികങ്ങള്‍"
+#: ../src/ephy-main.c:322
+msgid "Web options"
+msgstr "വെബ് ഐച്ഛികങ്ങള്‍"
 
-#: ../src/ephy-notebook.c:626
+#: ../src/ephy-notebook.c:592
 msgid "Close tab"
 msgstr "കിളിവാതില്‍ അടയ്ക്കുക"
 
-#: ../src/ephy-nss-glue.c:62
-msgid "Master password needed"
-msgstr "പ്രധാന അടയാളവാക്ക് ആവശ്യമാണു്"
-
-#: ../src/ephy-nss-glue.c:64
-msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
-msgstr ""
-"മുമ്പുള്ള പതിപ്പുകളിലുള്ള (Gecko) അടയാളവാക്കുകള്‍ ഒരു പ്രധാന അടയാളവാക്കുപയോഗിച്ചു് "
-"പൂട്ടിയിരിക്കുന്നു. നിങ്ങള്‍ക്കു് എപിഫനി ഉപയോഗിച്ചു് അവ ലഭ്യമാക്കണമെങ്കില്‍, ദയവായി നിങ്ങളുടെ "
-"പ്രധാന അടയാളവാക്ക് താഴെ നല്‍കുക."
-
-#: ../src/ephy-profile-migration.c:80
-msgid "Failed to copy cookies file from Mozilla."
-msgstr "മോസിലയില്‍ നിന്നും കുക്കികളുടെ ഫയല്‍ പകര്‍ത്തുന്നതില്‍ പരാജയം."
-
-#: ../src/ephy-profile-migration.c:382
-msgid "Failed to read latest migration marker, aborting profile migration."
-msgstr "ഏറ്റവും പുതിയ മൈഗ്രേഷന്‍ മാര്‍ക്കര്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം, പ്രൊഫൈല്‍ നീക്കുന്നതു് നിര്‍ത്തുന്നു."
-
-#: ../src/ephy-session.c:116
+#: ../src/ephy-session.c:115
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "ഡൌണ്‍ലോഡുകള്‍ നിര്‍ത്തി പുറത്തിറങ്ങുന്നത് %d സെക്കന്റില്‍ തുടങ്ങുന്നതായിരിയ്ക്കും."
 msgstr[1] "ഡൌണ്‍ലോഡുകള്‍ നിര്‍ത്തി പുറത്തിറങ്ങുന്നത് %d സെക്കന്റുകളില്‍ തുടങ്ങുന്നതായിരിയ്ക്കും."
 
-#: ../src/ephy-session.c:228
+#: ../src/ephy-session.c:219
 msgid "Abort pending downloads?"
 msgstr "ഇനിയും ഡൌണ്‍ലോഡ് ചെയ്യാനുളളവ നിര്‍ത്തണമോ?"
 
-#: ../src/ephy-session.c:233
-msgid ""
-"There are still downloads pending. If you log out, they will be aborted and "
-"lost."
-msgstr ""
-"ഇനിയും പൂര്‍ത്തിയാകാത്ത ഡൌണ്‍ലോഡുകളുണ്ട്. പുറത്തിറങ്ങുകയാണെങ്കില്‍ അവ നിര്‍ത്തുന്നതും "
-"നഷ്ടപ്പെടുന്നതുമായിരിയ്ക്കും."
+#: ../src/ephy-session.c:224
+msgid "There are still downloads pending. If you log out, they will be aborted and lost."
+msgstr "ഇനിയും പൂര്‍ത്തിയാകാത്ത ഡൌണ്‍ലോഡുകളുണ്ട്. പുറത്തിറങ്ങുകയാണെങ്കില്‍ അവ നിര്‍ത്തുന്നതും നഷ്ടപ്പെടുന്നതുമായിരിയ്ക്കും."
 
-#: ../src/ephy-session.c:237
+#: ../src/ephy-session.c:228
 msgid "_Cancel Logout"
 msgstr "പുറത്തിറങ്ങുന്നത് _റദ്ദാക്കുക"
 
-#: ../src/ephy-session.c:239
+#: ../src/ephy-session.c:230
 msgid "_Abort Downloads"
 msgstr "ഡൌണ്‍ലോഡുകള്‍ _നിര്‍ത്തുക"
 
-#: ../src/ephy-session.c:571
-msgid "Recover previous browser windows and tabs?"
-msgstr "മുമ്പത്തെ ബ്രൌസര്‍ ജാലകങ്ങളും കിളിവാതിലുകളും വീണ്ടെടുക്കണോ?"
-
-#: ../src/ephy-session.c:575
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr ""
-"ഇതിനു് മുമ്പേ പ്രവര്‍ത്തിച്ചുകൊണ്ടിരിയ്ക്കുമ്പോള്‍ അപ്രതീക്ഷിതമായാണ് എപ്പിഫാനി അവസാനിച്ചതെന്ന് "
-"തോന്നുന്നു. നിങ്ങള്‍ക്കു് തുറന്നിരുന്ന ജാലകങ്ങളും കിളിവാതിലുകളും വീണ്ടെടുക്കാവുന്നതാണു്."
-
-#: ../src/ephy-session.c:579
-msgid "_Don't Recover"
+#: ../src/ephy-session.c:770
+msgid "_Don't recover"
 msgstr "_വീണ്ടെടുക്കേണ്ട"
 
-#: ../src/ephy-session.c:581
-msgid "_Recover"
-msgstr "വീണ്ടെടുക്കു_ക"
+#: ../src/ephy-session.c:775
+msgid "_Recover session"
+msgstr "പ്രവര്‍ത്തനവേള _വീണ്ടെടുക്കുക"
 
-#: ../src/ephy-session.c:583
-msgid "Crash Recovery"
-msgstr "തക‌ര്‍ച്ചയില്‍ നിന്നും വീണ്ടെടുക്കല്‍"
+#: ../src/ephy-session.c:780
+msgid "Do you want to recover the previous browser windows and tabs?"
+msgstr "മുമ്പത്തെ ബ്രൌസര്‍ ജാലകങ്ങളും കിളിവാതിലുകളും വീണ്ടെടുക്കണോ?"
 
-#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../src/ephy-session.c:1286
-#, c-format
-msgid ""
-"This page was loading when the web browser closed unexpectedly. This might "
-"happen again if you reload the page. If it does, please report the problem "
-"to the %s developers."
-msgstr ""
-"വെബ് ബ്രൌസര്‍ അപ്രതീക്ഷിതമായി അടച്ചുപൂട്ടിയപ്പോള്‍ ഈ താള്‍ ലഭ്യമാക്കുകയായിരുന്നു. ഈ താള്‍ വീണ്ടും "
-"ലഭ്യമാക്കിയാല്‍ ഇങ്ങനെ ഇനിയും സംഭവിക്കാം. അങ്ങനെയെങ്കില്‍, ദയവായി ഈ പ്രശ്നം %s ഡവലപ്പര്‍സിനെ "
-"അറിയിക്കുക."
-
-#: ../src/ephy-shell.c:172
-msgid "Sidebar extension required"
-msgstr "സൈഡ്ബാര്‍ എക്സ്റ്റന്‍ഷന്‍ ആവശ്യമുണ്ടു്"
-
-#: ../src/ephy-shell.c:174
-msgid "Sidebar Extension Required"
-msgstr "സൈഡ്ബാര്‍ എക്സ്റ്റന്‍ഷന്‍ ആവശ്യമുണ്ടു്"
-
-#: ../src/ephy-shell.c:178
-msgid "The link you clicked needs the sidebar extension to be installed."
-msgstr "നിങ്ങള്‍ ക്ലിക്ക് ചെയ്ത കണ്ണിയ്ക്ക് സൈഡ്ബാര്‍ എക്സ്റ്റന്‍ഷന്‍ ഇന്‍സ്റ്റാള്‍ ചെയ്തിരിയ്ക്കേണ്ടതാവശ്യമാണു്."
-
-#: ../src/ephy-statusbar.c:83
-msgid "Caret"
-msgstr "Caret"
-
-#. Translators: this is the tooltip on the "Caret" icon
-#. * in the statusbar.
-#.
-#: ../src/ephy-statusbar.c:90
-msgid "In keyboard selection mode, press F7 to exit"
-msgstr "കീബോര്‍ഡ് തെരഞ്ഞെടുക്കാനുള്ള മോഡില്‍ നിന്നും പുറത്തു് കടക്കാനായി F7 അമര്‍ത്തുക"
-
-#: ../src/ephy-tabs-menu.c:201
-msgid "Switch to this tab"
-msgstr "ഈ കിളിവാതിലിലേയ്ക്ക് മാറുക"
-
-#: ../src/ephy-toolbar.c:223
-msgid "_Back"
-msgstr "_പുറകോട്ടു്"
-
-#: ../src/ephy-toolbar.c:225
-msgid "Go to the previous visited page"
-msgstr "അവസാനം സന്ദ‌ര്‍ശിച്ച താളിലേയ്ക്കു് പോകുക"
-
-#. this is the tooltip on the Back button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'back' to
-#.
-#: ../src/ephy-toolbar.c:229
-msgid "Back history"
-msgstr "പുറകോട്ട് പോകാവുന്നതിന്റെ ചരിത്രം"
-
-#: ../src/ephy-toolbar.c:243
-msgid "_Forward"
-msgstr "_മുന്നോട്ടു്"
-
-#: ../src/ephy-toolbar.c:245
-msgid "Go to the next visited page"
-msgstr "സന്ദ‌ര്‍ശിച്ച അടുത്ത താളിലേയ്ക്കു് പോകുക"
-
-#. this is the tooltip on the Forward button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'forward' to
-#.
-#: ../src/ephy-toolbar.c:249
-msgid "Forward history"
-msgstr "മുന്നോട്ട് പോകാവുന്നതിന്റെ ചരിത്രം"
-
-#: ../src/ephy-toolbar.c:262
-msgid "_Up"
-msgstr "_മുകളിലേയ്ക്ക്"
-
-#: ../src/ephy-toolbar.c:264
-msgid "Go up one level"
-msgstr "ഒരു തലം മുകളിലേക്ക്"
-
-#. this is the tooltip on the Up button's drop-down arrow, which will show
-#. * a menu with al sites you can go 'up' to
-#.
-#: ../src/ephy-toolbar.c:268
-msgid "List of upper levels"
-msgstr "മുകളിലുളളവയുടെ പട്ടിക"
-
-#: ../src/ephy-toolbar.c:286
-msgid "Enter a web address to open, or a phrase to search for"
-msgstr "തുറക്കാനായൊരു വെബ് വിലാസമോ, തിരയാലായൊരു വാചകമോ നല്‍കുക"
-
-#: ../src/ephy-toolbar.c:302
-msgid "Zoom"
-msgstr "വലുതാക്കുക"
-
-#: ../src/ephy-toolbar.c:304
-msgid "Adjust the text size"
-msgstr "പദാവലിയുടെ വലിപ്പം മാറ്റുക"
-
-#: ../src/ephy-toolbar.c:316
-msgid "Go to the address entered in the address entry"
-msgstr "വിലാസവരിയില്‍ നല്‍കിയിട്ടുള്ള വിലാസത്തിലേയ്ക്ക് പോകുക"
-
-#: ../src/ephy-toolbar.c:325
-msgid "_Home"
-msgstr "_പൂമുഖം"
-
-#: ../src/ephy-toolbar.c:327
-msgid "Go to the home page"
-msgstr "പൂമുഖത്തിലേയ്ക്ക് പോകുക"
-
-#: ../src/ephy-toolbar.c:337
-msgid "New _Tab"
-msgstr "പുതിയൊരു _കിളിവാതില്‍"
-
-#: ../src/ephy-toolbar.c:339
-msgid "Open a new tab"
-msgstr "പുതിയൊരു കിളിവാതില്‍ തുറക്കുക"
-
-#: ../src/ephy-toolbar.c:348
-msgid "_New Window"
-msgstr "_പുതിയ ജാലകം"
-
-#: ../src/ephy-toolbar.c:350
-msgid "Open a new window"
-msgstr "പുതിയൊരു ജാലകം തുറക്കുക"
-
-#: ../src/ephy-toolbar-editor.c:71
-msgctxt "toolbar style"
-msgid "Default"
-msgstr "സഹജമായതു്"
-
-#. separator row
-#: ../src/ephy-toolbar-editor.c:73
-msgctxt "toolbar style"
-msgid "Text below icons"
-msgstr "ചിഹ്നങ്ങള്‍ക്കു് താഴെയുള്ള പദാവലി"
-
-#: ../src/ephy-toolbar-editor.c:74
-msgctxt "toolbar style"
-msgid "Text beside icons"
-msgstr "ചിഹ്നങ്ങള്‍ക്കു് അരികിലുള്ള പദാവലി"
-
-#: ../src/ephy-toolbar-editor.c:75
-msgctxt "toolbar style"
-msgid "Icons only"
-msgstr "ചിഹ്നങ്ങള്‍ മാത്രം"
-
-#: ../src/ephy-toolbar-editor.c:76
-msgctxt "toolbar style"
-msgid "Text only"
-msgstr "പദാവലി മാത്രം"
-
-#: ../src/ephy-toolbar-editor.c:185
-msgid "Toolbar Editor"
-msgstr "പണിയായുധനിര സംശോധകന്‍"
-
-#. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:204
-msgid "Toolbar _button labels:"
-msgstr "പണിയായുധനിരയിലെ _ബട്ടണുകളുടെ പേരുകള്‍:"
-
-#: ../src/ephy-toolbar-editor.c:268
-msgid "_Add a New Toolbar"
-msgstr "പുതിയൊരു പണിയായുധനിര _കൂട്ടിച്ചേര്‍ക്കുക"
-
-#: ../src/ephy-window.c:110
+#. Toplevel
+#: ../src/ephy-window.c:87
 msgid "_Bookmarks"
 msgstr "_ഓര്‍മ്മക്കുറിപ്പുകള്‍"
 
-#: ../src/ephy-window.c:111
-msgid "_Go"
-msgstr "_പോകുക"
+#: ../src/ephy-window.c:91
+msgid "_Extensions"
+msgstr "_എക്സറ്റന്‍ഷനുകള്‍"
 
-#: ../src/ephy-window.c:112
-msgid "T_ools"
-msgstr "_പണിയായുധങ്ങള്‍"
-
-#: ../src/ephy-window.c:113
-msgid "_Tabs"
-msgstr "_കിളിവാതിലുകള്‍‌"
-
-#: ../src/ephy-window.c:115
-msgid "_Toolbars"
-msgstr "_പണിയായുധനിരകള്‍"
-
-#. File menu
-#: ../src/ephy-window.c:121
+#. File actions.
+#: ../src/ephy-window.c:95
 msgid "_Open…"
 msgstr "_തുറക്കുക..."
 
-#: ../src/ephy-window.c:122
-msgid "Open a file"
-msgstr "ഒരു ഫയല്‍ തുറക്കുക"
-
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:97
 msgid "Save _As…"
 msgstr "പേരു് _മാറ്റി സൂക്ഷിയ്ക്കുക..."
 
-#: ../src/ephy-window.c:125
-msgid "Save the current page"
-msgstr "ഈ താള്‍ സൂക്ഷിയ്ക്കുക"
+#: ../src/ephy-window.c:99
+msgid "Save As _Web Application…"
+msgstr "_വെബ് പ്രയോഗമായി സൂക്ഷിക്കുക..."
 
-#: ../src/ephy-window.c:127
-msgid "Page Set_up"
-msgstr "താളിന്റെ _സജ്ജീകരണം"
-
-#: ../src/ephy-window.c:128
-msgid "Setup the page settings for printing"
-msgstr "അച്ചടിയ്ക്കുന്നതിനായി താളിന്റെ സജ്ജീകരണങ്ങള്‍ ഒരുക്കുക"
-
-#: ../src/ephy-window.c:130
-msgid "Print Pre_view"
-msgstr "അച്ചടിയ്ക്കുന്നതിന് മുമ്പ് _കണ്ടുനോക്കുക"
-
-#: ../src/ephy-window.c:131
-msgid "Print preview"
-msgstr "അച്ചടിയ്ക്കുന്നതിന് മുമ്പ് കണ്ടുനോക്കുക"
-
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:101
 msgid "_Print…"
 msgstr "_അച്ചടിയ്ക്കുക..."
 
-#: ../src/ephy-window.c:134
-msgid "Print the current page"
-msgstr "ഈ താള്‍ അച്ചടിയ്ക്കുക"
-
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:103
 msgid "S_end Link by Email…"
 msgstr "ഇമെയിലുപയോഗിച്ചു് കണ്ണി _അയയ്ക്കുക..."
 
-#: ../src/ephy-window.c:137
-msgid "Send a link of the current page"
-msgstr "ഈ താളിന്റെ കണ്ണി അയയ്ക്കുക"
-
-#: ../src/ephy-window.c:140
-msgid "Close this tab"
-msgstr "ഈ കിളിവാതില്‍ അടയ്ക്കുക"
-
-#. Edit menu
-#: ../src/ephy-window.c:145
+#. Edit actions.
+#: ../src/ephy-window.c:110
 msgid "_Undo"
 msgstr "_വേണ്ട"
 
-#: ../src/ephy-window.c:146
-msgid "Undo the last action"
-msgstr "ഏറ്റവും ഒടുവില്‍ ചെയ്ത പ്രവര്‍ത്തി വേണ്ടെന്നു് വയ്ക്കുക"
-
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:112
 msgid "Re_do"
 msgstr "_വീണ്ടും"
 
-#: ../src/ephy-window.c:149
-msgid "Redo the last undone action"
-msgstr "തൊട്ടുമുമ്പ് വേണ്ടെന്ന് വച്ച നടപടി വീണ്ടും ചെയ്യുക"
-
-#: ../src/ephy-window.c:158
-msgid "Paste clipboard"
-msgstr "കുറപ്പലകയില്‍ നിന്നും ഒട്ടിയ്ക്കുക"
-
-#: ../src/ephy-window.c:161
-msgid "Delete text"
-msgstr "പദാവലി നീക്കം ചെയ്യുക"
-
-#: ../src/ephy-window.c:164
-msgid "Select the entire page"
-msgstr "മുഴുവന്‍ താളും തെരഞ്ഞെടുക്കുക"
-
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:124
 msgid "_Find…"
 msgstr "_കണ്ടുപിടിയ്ക്കുക..."
 
-#: ../src/ephy-window.c:167
-msgid "Find a word or phrase in the page"
-msgstr "താളിലൊരു വാക്കോ വാചകമോ കണ്ടുപിടിയ്ക്കുക"
-
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:126
 msgid "Find Ne_xt"
 msgstr "_അടുത്തതു് കണ്ടുപിടിയ്ക്കുക"
 
-#: ../src/ephy-window.c:170
-msgid "Find next occurrence of the word or phrase"
-msgstr "വാക്കോ വാചകമോ ഇതിനു് ശേഷം എവിടെയാണു് വരുന്നതെന്നു് കണ്ടുപിടിയ്ക്കുക"
-
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:128
 msgid "Find Pre_vious"
 msgstr "_മുമ്പത്തേതു് കണ്ടുപിടിയ്ക്കുക"
 
-#: ../src/ephy-window.c:173
-msgid "Find previous occurrence of the word or phrase"
-msgstr "വാക്കോ വാചകമോ ഇതിനു് മുമ്പ് എവിടെയാണു് വന്നതെന്നു് കണ്ടുപിടിയ്ക്കുക"
-
-#: ../src/ephy-window.c:175
-msgid "P_ersonal Data"
-msgstr "_വ്യക്തിപരമായ ഡാറ്റ"
-
-#: ../src/ephy-window.c:176
-msgid "View and remove cookies and passwords"
-msgstr "കുക്കികളും അടയാളവാക്കുകളും കാണുകയും നീക്കുകയും ചെയ്യുക"
-
-#: ../src/ephy-window.c:179
-msgid "Certificate_s"
-msgstr "_സാക്ഷ്യപത്രങ്ങള്‍"
-
-#: ../src/ephy-window.c:180
-msgid "Manage Certificates"
-msgstr "സാക്ഷ്യപത്രങ്ങള്‍ കൈകാര്യം ചെയ്യുക"
-
-#: ../src/ephy-window.c:183
-msgid "P_references"
-msgstr "_മുന്‍ഗണനകള്‍"
-
-#: ../src/ephy-window.c:184
-msgid "Configure the web browser"
-msgstr "വെബ്ബ് ബ്രൌസ‌ര്‍ ക്രമീകരിയ്ക്കുക"
-
-#. View menu
-#: ../src/ephy-window.c:189
-msgid "_Customize Toolbars…"
-msgstr "പണിയായുധനിരകള്‍ _ഇഷ്ടപ്പെട്ട രീതിയിലാക്കുക..."
-
-#: ../src/ephy-window.c:190
-msgid "Customize toolbars"
-msgstr "പണിയായുധനിരകള്‍ ഇഷ്ടപ്പെട്ട രീതിയിലാക്കുക"
-
-#: ../src/ephy-window.c:192 ../src/ephy-window.c:195
+#. View actions.
+#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:135
 msgid "_Stop"
 msgstr "_നിര്‍ത്തുക"
 
-#: ../src/ephy-window.c:193
-msgid "Stop current data transfer"
-msgstr "ഈ ഡാറ്റാകൈമാറ്റം നിര്‍ത്തുക"
-
-#: ../src/ephy-window.c:197
-msgid "_Reload"
-msgstr "_പുതുക്കുക"
-
-#: ../src/ephy-window.c:198
-msgid "Display the latest content of the current page"
-msgstr "ഈ താളിലുള്ള ഏറ്റവും പുതിയ ഉള്ളടക്കങ്ങള്‍ പ്രദ‌ര്‌ശിപ്പിക്കുക"
-
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:139
 msgid "_Larger Text"
 msgstr "_കൂടിയ വലിപ്പമുള്ള പദാവലി"
 
-#: ../src/ephy-window.c:201
-msgid "Increase the text size"
-msgstr "പദാവലിയുടെ വലിപ്പം കൂട്ടുക"
-
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:141
 msgid "S_maller Text"
 msgstr "_ചെറിയ പദാവലി"
 
-#: ../src/ephy-window.c:204
-msgid "Decrease the text size"
-msgstr "പദാവലിയുടെ വലിപ്പം കുറയ്ക്കുക"
-
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:143
 msgid "_Normal Size"
 msgstr "_സാധാരണ വലിപ്പം"
 
-#: ../src/ephy-window.c:207
-msgid "Use the normal text size"
-msgstr "പദാവലിയുടെ സാധാരണ വലിപ്പമുപയോഗിയ്ക്കുക"
-
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:145
 msgid "Text _Encoding"
 msgstr "പദാവലിയുടെ _എന്‍കോഡിങ്ങ്"
 
-#: ../src/ephy-window.c:210
-msgid "Change the text encoding"
-msgstr "എന്‍കോഡിങ്ങ് മാറ്റുക"
-
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:146
 msgid "_Page Source"
 msgstr "_താളിന്റെ സ്രോതസ്സ്"
 
-#: ../src/ephy-window.c:213
-msgid "View the source code of the page"
-msgstr "താളിന്റെ കോഡ് സ്രോതസ്സ് കാണുക"
-
-#: ../src/ephy-window.c:215
-msgid "Page _Security Information"
-msgstr "താളിന്റെ സു_രക്ഷാ വിവരങ്ങള്‍"
-
-#: ../src/ephy-window.c:216
-msgid "Display security information for the web page"
-msgstr "വെബ് താളിന്റെ സുരക്ഷാ വിവരങ്ങള്‍ പ്രദര്‍ശിപ്പിയ്ക്കുക"
-
-#. Bookmarks menu
-#: ../src/ephy-window.c:221
+#. Bookmarks actions.
+#: ../src/ephy-window.c:151
 msgid "_Add Bookmark…"
 msgstr "ഓര്‍മ്മക്കുറിപ്പില്‍ _ചേര്‍ക്കുക..."
 
-#: ../src/ephy-window.c:222 ../src/ephy-window.c:296
-msgid "Add a bookmark for the current page"
-msgstr "ഈ താള്‍ ഓര്‍മ്മക്കുറിപ്പില്‍ ചേര്‍ക്കുക"
-
-#: ../src/ephy-window.c:224
-msgid "_Edit Bookmarks"
-msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ _ചിട്ടപ്പെടുത്തുക"
-
-#: ../src/ephy-window.c:225
-msgid "Open the bookmarks window"
-msgstr "ഓര്‍മ്മക്കുറിപ്പു് ജാലകങ്ങള്‍ തുറക്കുക"
-
-#. Go menu
-#: ../src/ephy-window.c:230
+#. Go actions.
+#: ../src/ephy-window.c:156
 msgid "_Location…"
 msgstr "_സ്ഥാനം..."
 
-#: ../src/ephy-window.c:231
-msgid "Go to a specified location"
-msgstr "പറയുന്ന സ്ഥാനത്തേയ്ക്കു് പോകുക"
-
-#. History
-#: ../src/ephy-window.c:233 ../src/pdm-dialog.c:432
-msgid "Hi_story"
-msgstr "ചരിത്രം _S"
-
-#: ../src/ephy-window.c:234
-msgid "Open the history window"
-msgstr "ചരിത്ര ജാലകം തുറക്കുക"
-
-#. Tabs menu
-#: ../src/ephy-window.c:239
+#. Tabs actions.
+#: ../src/ephy-window.c:161
 msgid "_Previous Tab"
 msgstr "_മുന്‍ കിളിവാതില്‍"
 
-#: ../src/ephy-window.c:240
-msgid "Activate previous tab"
-msgstr "മുന്‍ കിളിവാതില്‍ സജീവമാക്കുക"
-
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:163
 msgid "_Next Tab"
 msgstr "_അടുത്ത കിളിവാതില്‍"
 
-#: ../src/ephy-window.c:243
-msgid "Activate next tab"
-msgstr "അടുത്ത കിളിവാതില്‍ സജീവമാക്കുക"
-
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:165
 msgid "Move Tab _Left"
 msgstr "കിളിവാതില്‍ _ഇടത്തേയ്ക്കു് മാറ്റുക"
 
-#: ../src/ephy-window.c:246
-msgid "Move current tab to left"
-msgstr "ഈ കിളിവാതില്‍ ഇടത്തേയ്ക്കു് മാറ്റുക"
-
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:167
 msgid "Move Tab _Right"
 msgstr "കിളിവാതില്‍ _വലത്തോട്ടു് മാറ്റുക"
 
-#: ../src/ephy-window.c:249
-msgid "Move current tab to right"
-msgstr " ഈ കിളിവാതില്‍ വലത്തോട്ടു് മാറ്റുക"
-
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:169
 msgid "_Detach Tab"
 msgstr "കിളിവാതില്‍ _പുറത്തെടുക്കുക"
 
-#: ../src/ephy-window.c:252
-msgid "Detach current tab"
-msgstr "ഈ കിളിവാതില്‍ പുറത്തെടുക്കുക"
-
-#: ../src/ephy-window.c:258
-msgid "Display web browser help"
-msgstr "വെബ്ബ് ബ്രൌസ‌റിന്റെ സഹായം കാണിയ്ക്കുക"
-
-#. File Menu
-#: ../src/ephy-window.c:269
+#. File actions.
+#: ../src/ephy-window.c:177
 msgid "_Work Offline"
 msgstr "ബന്ധപ്പെടാതെ _ജോലി ചെയ്യുക"
 
-#: ../src/ephy-window.c:270
-msgid "Switch to offline mode"
-msgstr "ബന്ധപ്പെടാത്ത രീതിയിലേയ്ക്ക് മാറുക"
+#. View actions.
+#: ../src/ephy-window.c:182
+msgid "_Downloads Bar"
+msgstr "_ഡൌണ്‍ലോഡുകളുടെ പട്ട"
 
-#. View Menu
-#: ../src/ephy-window.c:275
-msgid "_Hide Toolbars"
-msgstr "പണിയായുധനിരകള്‍ _ഒളിപ്പിയ്ക്കുക"
-
-#: ../src/ephy-window.c:276
-msgid "Show or hide toolbar"
-msgstr "പണിയായുധനിര കാണിയ്ക്കുകയോ ഒളിപ്പിയ്ക്കുകയോ ചെയ്യുക"
-
-#: ../src/ephy-window.c:278
-msgid "St_atusbar"
-msgstr "_അവസ്ഥാപ്പട്ട"
-
-#: ../src/ephy-window.c:279
-msgid "Show or hide statusbar"
-msgstr "അവസ്ഥാപട്ട കാണിയ്ക്കുകയോ ഒളിപ്പിയ്ക്കുകയോ ചെയ്യുക"
-
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:185
 msgid "_Fullscreen"
 msgstr "_മുഴുവന്‍ തിരശ്ശീലയും"
 
-#: ../src/ephy-window.c:282
-msgid "Browse at full screen"
-msgstr "മുഴുവന്‍ തിരശ്ശീലയുമുപയോഗിച്ചു് ബ്രൌസ് ചെയ്യുക"
-
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:187
 msgid "Popup _Windows"
 msgstr "പൊങ്ങിവരുന്ന _ജാലകങ്ങള്‍"
 
-#: ../src/ephy-window.c:285
-msgid "Show or hide unrequested popup windows from this site"
-msgstr "ഈ സൈറ്റില്‍ നിന്നുമുള്ള ആവശ്യപ്പെടാതെ പൊങ്ങിവരുന്ന ജാലകങ്ങള്‍ കാണിയ്ക്കുകയോ ഒളിപ്പിയ്ക്കുകയോ ചെയ്യുക"
-
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:189
 msgid "Selection Caret"
 msgstr "കാരറ്റ് തെരഞ്ഞെടുക്കുക"
 
-#. Document
-#: ../src/ephy-window.c:295
+#. Document.
+#: ../src/ephy-window.c:196
 msgid "Add Boo_kmark…"
 msgstr "ഓര്‍മ്മക്കുറിപ്പു് _കൂട്ടിച്ചേര്‍ക്കുക..."
 
-#. Framed document
-#: ../src/ephy-window.c:301
-msgid "Show Only _This Frame"
-msgstr "_ഈ ചട്ടക്കൂടു് മാത്രം കാണിയ്ക്കുക"
-
-#: ../src/ephy-window.c:302
-msgid "Show only this frame in this window"
-msgstr "ഈ ജാലകത്തില്‍‍ ഈ ചട്ടക്കൂടു് മാത്രം കാണിയ്ക്കുക"
-
-#. Links
-#: ../src/ephy-window.c:307
+#. Links.
+#: ../src/ephy-window.c:201
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക"
 
-#: ../src/ephy-window.c:308
-msgid "Open link in this window"
-msgstr "കണ്ണി ഈ ജാലകത്തില്‍‍ തന്നെ തുറക്കുക"
-
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:203
 msgid "Open Link in New _Window"
 msgstr "കണ്ണി പുതിയ _ജാലകത്തില്‍ തുറക്കുക"
 
-#: ../src/ephy-window.c:311
-msgid "Open link in a new window"
-msgstr "കണ്ണി പുതിയ ജാലകത്തില്‍‍ തുറക്കുക"
-
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:205
 msgid "Open Link in New _Tab"
 msgstr "കണ്ണി പുതിയ _കിളിവാതിലില്‍ തുറക്കുക"
 
-#: ../src/ephy-window.c:314
-msgid "Open link in a new tab"
-msgstr "കണ്ണി പുതിയ കിളിവാതിലില്‍ തുറക്കുക"
-
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:207
 msgid "_Download Link"
 msgstr "കണ്ണി _ഡൌണ്‍ലോഡ് ചെയ്യുക"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:209
 msgid "_Save Link As…"
 msgstr "കണ്ണിയുടെ പേരു് _മാറ്റി സൂക്ഷിയ്ക്കുക..."
 
-#: ../src/ephy-window.c:319
-msgid "Save link with a different name"
-msgstr "കണ്ണിയെ മറ്റൊരു പേരില്‍ സൂക്ഷിയ്ക്കുക"
-
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:211
 msgid "_Bookmark Link…"
 msgstr "കണ്ണിയെ ഓര്‍മ്മക്കുറിപ്പില്‍ ചേര്‍ക്കുക _B..."
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:213
 msgid "_Copy Link Address"
 msgstr "കണ്ണിയുടെ വിലാസം _പകര്‍ത്തുക"
 
-#. Email links
-#. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
-msgid "_Send Email…"
-msgstr "ഇമെയില്‍ _അയയ്ക്കുക..."
-
-#: ../src/ephy-window.c:331
-msgid "_Copy Email Address"
-msgstr "ഇമെയില്‍ വിലാസം _പകര്‍ത്തുക"
-
-#. Images
-#: ../src/ephy-window.c:336
+#. Images.
+#: ../src/ephy-window.c:218
 msgid "Open _Image"
 msgstr "_ചിത്രം തുറക്കുക"
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:220
 msgid "_Save Image As…"
 msgstr "ചിത്രത്തിന്റെ പേരു് _മാറ്റി സൂക്ഷിയ്ക്കുക..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:222
 msgid "_Use Image As Background"
 msgstr "ചിത്രം പശ്ചാതലമായി _ഉപയോഗിയ്ക്കുക"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:224
 msgid "Copy I_mage Address"
 msgstr "ചി_ത്രത്തിന്റെ വിലാസം പകര്‍ത്തുക"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:226
 msgid "St_art Animation"
 msgstr "അനിമേഷന്‍ തു_ടങ്ങുക"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:228
 msgid "St_op Animation"
 msgstr "അനിമേഷന്‍ _നിര്‍ത്തുക"
 
-#: ../src/ephy-window.c:522
+#. Inspector.
+#: ../src/ephy-window.c:244
+msgid "Inspect _Element"
+msgstr "_മൂലകം സൂഷ്മമായി പരിശോദിയ്ക്കുക"
+
+#: ../src/ephy-window.c:449
 msgid "There are unsubmitted changes to form elements"
 msgstr "പത്രികയിലെ മൂലകങ്ങളില്‍ സമര്‍പ്പിയ്ക്കാത്ത മാറ്റങ്ങളുണ്ടു്"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:450
 msgid "If you close the document anyway, you will lose that information."
 msgstr "രചന അടയ്ക്കാന്‍ തന്നെയാണു് ഭാവമെങ്കില്‍ നിങ്ങള്‍ക്കു് ആ വിവരം നഷ്ടപ്പെടും."
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:452
 msgid "Close _Document"
 msgstr "_രചന അടയ്ക്കുക"
 
-#: ../src/ephy-window.c:1487 ../src/window-commands.c:311
-msgid "Open"
-msgstr "തുറക്കുക"
+#: ../src/ephy-window.c:470
+msgid "There are ongoing downloads in this window"
+msgstr "ഈ ജാലകത്തില്‍ ഇപ്പോഴും ഡൌണ്‍ലോഡുകളുണ്ടു്"
 
-#: ../src/ephy-window.c:1489
+#: ../src/ephy-window.c:471
+msgid "If you close this window, the downloads will be cancelled"
+msgstr "ഈ ജാലകം അടച്ചാല്‍ ഡൌണ്‍ലോഡുകള്‍ റദ്ദാക്കുന്നതായിരിയ്ക്കും"
+
+#: ../src/ephy-window.c:472
+msgid "Close window and cancel downloads"
+msgstr "ഡൌണ്‍ലോഡുകള്‍ റദ്ദാക്കി ജാലകം അടയ്ക്കുക"
+
+#: ../src/ephy-window.c:1285
 msgid "Save As"
 msgstr "പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക"
 
-#: ../src/ephy-window.c:1491
+#: ../src/ephy-window.c:1287
+msgid "Save As Application"
+msgstr "പ്രയോഗമായി സൂക്ഷിക്കുക"
+
+#: ../src/ephy-window.c:1289
 msgid "Print"
 msgstr "അച്ചടിയ്ക്കുക"
 
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1291
+msgid "Bookmark"
+msgstr "ഓര്‍മ്മക്കുറിപ്പു്"
+
+#: ../src/ephy-window.c:1293
 msgid "Find"
 msgstr "തെരയുക"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1508
+#: ../src/ephy-window.c:1302
 msgid "Larger"
 msgstr "വലിയത്"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1511
+#: ../src/ephy-window.c:1305
 msgid "Smaller"
 msgstr "ചെറിയത്"
 
-#: ../src/ephy-window.c:1741
-msgid "Insecure"
-msgstr "സുരക്ഷിതമല്ലാത്തത്"
+#: ../src/ephy-window.c:1325
+msgid "Back"
+msgstr "പുറകോട്ട്"
 
-#: ../src/ephy-window.c:1746
-msgid "Broken"
-msgstr "പൊട്ടിയത്"
+#: ../src/ephy-window.c:1337
+msgid "Forward"
+msgstr "മുന്നോട്ട്"
 
-#: ../src/ephy-window.c:1754
-msgid "Low"
-msgstr "കുറഞ്ഞ"
+#: ../src/ephy-window.c:1349
+msgid "Zoom"
+msgstr "വലുതാക്കുക"
 
-#: ../src/ephy-window.c:1761
-msgid "High"
-msgstr "ഉയര്‍ന്ന"
+#: ../src/ephy-window.c:1357
+msgid "New _Tab"
+msgstr "പുതിയൊരു _കിളിവാതില്‍"
 
-#: ../src/ephy-window.c:1771
-#, c-format
-msgid "Security level: %s"
-msgstr "സുരക്ഷാതലം: %s"
-
-#: ../src/ephy-window.c:1814
-#, c-format
-msgid "%d hidden popup window"
-msgid_plural "%d hidden popup windows"
-msgstr[0] "%d  അദൃശ്യമായ പൊങ്ങിവരുന്ന ജാലകം "
-msgstr[1] "%d  അദൃശ്യമായ പൊങ്ങിവരുന്ന ജാലകങ്ങള്‍"
-
-#: ../src/ephy-window.c:2079
-#, c-format
-msgid "Open image “%s”"
-msgstr "“%s” എന്ന ചിത്രം തുറക്കുക"
-
-#: ../src/ephy-window.c:2084
-#, c-format
-msgid "Use as desktop background “%s”"
-msgstr "“%s” പണിയിടത്തിലെ പശ്ചാത്തലമായുപയോഗിയ്ക്കുക"
-
-#: ../src/ephy-window.c:2089
-#, c-format
-msgid "Save image “%s”"
-msgstr "“%s” എന്ന ചിത്രം സൂക്ഷിയ്ക്കുക"
-
-#: ../src/ephy-window.c:2094
-#, c-format
-msgid "Copy image address “%s”"
-msgstr "“%s” എന്ന ചിത്രത്തിന്റെ വിലാസം പകര്‍ത്തുക"
-
-#: ../src/ephy-window.c:2107
-#, c-format
-msgid "Send email to address “%s”"
-msgstr "“%s” എന്ന വിലാസത്തിലേയ്ക്ക് ഇമെയില്‍ അയയ്ക്കുക"
-
-#: ../src/ephy-window.c:2113
-#, c-format
-msgid "Copy email address “%s”"
-msgstr "“%s” എന്ന ഇമെയില്‍ വിലാസം പകര്‍ത്തുക"
-
-#: ../src/ephy-window.c:2125
-#, c-format
-msgid "Save link “%s”"
-msgstr "“%s” എന്ന  കണ്ണി സൂക്ഷിയ്ക്കുക"
-
-#: ../src/ephy-window.c:2131
-#, c-format
-msgid "Bookmark link “%s”"
-msgstr "“%s” എന്ന കണ്ണി ഓര്‍മ്മക്കുറിപ്പില്‍ ചേര്‍ക്കുക"
-
-#: ../src/ephy-window.c:2137
-#, c-format
-msgid "Copy link's address “%s”"
-msgstr "“%s” എന്ന കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
-
-#: ../src/pdm-dialog.c:369
+#: ../src/pdm-dialog.c:333
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>നിങ്ങള്‍ കളയാനാഗ്രഹിയ്ക്കുന്ന സ്വകാര്യ ഡാറ്റ തെരഞ്ഞെടുക്കുക</b>"
 
-#: ../src/pdm-dialog.c:372
-msgid ""
-"You are about to clear personal data that is stored about the web pages you "
-"have visited. Before proceeding, check the types of information that you "
-"want to remove:"
-msgstr ""
-"നിങ്ങള്‍ സന്ദര്‍ശിച്ച വെബിലെ താളുകളെക്കുറിച്ചു് ശേഖരിച്ചിട്ടുള്ള സ്വകാര്യ ഡാറ്റ നിങ്ങള്‍ കളയുവാന്‍ "
-"പോകുകയാണു്. മുമ്പോട്ടു് പോകുന്നതിനു് മുമ്പു്, നീക്കം ചെയ്യേണ്ടതു് ഏതു് തരം വിവരമാണെന്നു് തെരഞ്ഞെടുക്കുക:"
+#: ../src/pdm-dialog.c:336
+msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
+msgstr "നിങ്ങള്‍ സന്ദര്‍ശിച്ച വെബിലെ താളുകളെക്കുറിച്ചു് ശേഖരിച്ചിട്ടുള്ള സ്വകാര്യ ഡാറ്റ നിങ്ങള്‍ കളയുവാന്‍ പോകുകയാണു്. മുമ്പോട്ടു് പോകുന്നതിനു് മുമ്പു്, നീക്കം ചെയ്യേണ്ടതു് ഏതു് തരം വിവരമാണെന്നു് തെരഞ്ഞെടുക്കുക:"
 
-#: ../src/pdm-dialog.c:377
+#: ../src/pdm-dialog.c:341
 msgid "Clear All Personal Data"
 msgstr "എല്ലാ സ്വകാര്യ ഡാറ്റയും കളയുക"
 
 #. Cookies
-#: ../src/pdm-dialog.c:408
+#: ../src/pdm-dialog.c:375
 msgid "C_ookies"
 msgstr "_കുക്കികള്‍"
 
 #. Passwords
-#: ../src/pdm-dialog.c:420
+#: ../src/pdm-dialog.c:387
 msgid "Saved _passwords"
 msgstr "സൂക്ഷിച്ചുവച്ച _അടയാളവാക്കുകള്‍"
 
+#. History
+#: ../src/pdm-dialog.c:399
+msgid "Hi_story"
+msgstr "ചരിത്രം _S"
+
 #. Cache
-#: ../src/pdm-dialog.c:444
+#: ../src/pdm-dialog.c:411
 msgid "_Temporary files"
 msgstr "_താല്കാലിക ഫയലുകള്‍"
 
-#: ../src/pdm-dialog.c:460
-msgid ""
-"<small><i><b>Note:</b> You cannot undo this action. The data you are "
-"choosing to clear will be deleted forever.</i></small>"
-msgstr ""
-"<small><i><b>കുറിപ്പു്:</b> നിങ്ങള്‍ക്കു് പിന്നീടിതു് വേണ്ടെന്നു് വയ്ക്കാന്‍ സാധ്യമല്ല. കളയാനായി "
-"നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന ഡാറ്റ എന്നെന്നേയ്ക്കുമായി നീക്കം ചെയ്യുന്നതായിരിയ്ക്കും.</i></small>"
+#: ../src/pdm-dialog.c:427
+msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
+msgstr "<small><i><b>കുറിപ്പു്:</b> നിങ്ങള്‍ക്കു് പിന്നീടിതു് വേണ്ടെന്നു് വയ്ക്കാന്‍ സാധ്യമല്ല. കളയാനായി നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന ഡാറ്റ എന്നെന്നേയ്ക്കുമായി നീക്കം ചെയ്യുന്നതായിരിയ്ക്കും.</i></small>"
 
-#: ../src/pdm-dialog.c:652
-msgid "Cookie Properties"
-msgstr "കുക്കിയുടെ ഗുണഗണങ്ങള്‍"
-
-#: ../src/pdm-dialog.c:669
-msgid "Content:"
-msgstr "ഉള്ളടക്കം:"
-
-#: ../src/pdm-dialog.c:685
-msgid "Path:"
-msgstr "വഴി:"
-
-#: ../src/pdm-dialog.c:701
-msgid "Send for:"
-msgstr "എങ്ങോട്ടാണയയ്ക്കേണ്ടതു്:"
-
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:646
 msgid "Encrypted connections only"
 msgstr "എന്‍ക്രിപ്റ്റ് ചെയ്ത ബന്ധങ്ങള്‍ മാത്രം"
 
-#: ../src/pdm-dialog.c:710
+#: ../src/pdm-dialog.c:647
 msgid "Any type of connection"
 msgstr "ഏത് തരം ബന്ധവും"
 
-#: ../src/pdm-dialog.c:716
-msgid "Expires:"
-msgstr "കാലാവധി തീരുന്നതു്:"
-
 #. Session cookie
-#: ../src/pdm-dialog.c:728
+#: ../src/pdm-dialog.c:652
 msgid "End of current session"
 msgstr "ഇപ്പോഴത്തെ സെഷന്റെ അവസാനം"
 
-#: ../src/pdm-dialog.c:861
+#: ../src/pdm-dialog.c:771
 msgid "Domain"
 msgstr "ഡൊമൈന്‍"
 
-#: ../src/pdm-dialog.c:873
+#: ../src/pdm-dialog.c:783
 msgid "Name"
 msgstr "പേരു്"
 
-#: ../src/pdm-dialog.c:1287
+#: ../src/pdm-dialog.c:1197
 msgid "Host"
 msgstr "ഹോസ്റ്റ്"
 
-#: ../src/pdm-dialog.c:1300
+#: ../src/pdm-dialog.c:1210
 msgid "User Name"
 msgstr "ഉപയാക്താവിന്റെ പേരു്"
 
-#: ../src/pdm-dialog.c:1313
+#: ../src/pdm-dialog.c:1223
 msgid "User Password"
 msgstr "ഉപയോക്താവിന്റെ അടയാളവാക്കു്"
 
-#: ../src/popup-commands.c:259
+#: ../src/popup-commands.c:279
 msgid "Download Link"
 msgstr "കണ്ണി ഡൌണ്‍ലോഡ് ചെയ്യുക"
 
-#: ../src/popup-commands.c:267
+#: ../src/popup-commands.c:287
 msgid "Save Link As"
 msgstr "കണ്ണി പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക"
 
-#: ../src/popup-commands.c:274
+#: ../src/popup-commands.c:294
 msgid "Save Image As"
 msgstr "ചിത്രത്തിന്റെ പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക"
-
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "ആദ്യത്തെ"
-
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "ആദ്യ താളിലേയ്ക്കു് പോകുക"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "അവസാനം"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "അവസാന താളിലേയ്ക്കു് പോകുക"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "പിന്നോട്ട്"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "പിന്നിലെ താളിലേയ്ക്കു് പോകുക"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "അടുത്തതു്"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "അടുത്ത താളിലേയ്ക്കു് പോകുക"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "അടയ്ക്കുക"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "അച്ചടി കണ്ടു നോക്കിയത് അടയ്ക്കുക"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:512 ../src/prefs-dialog.c:518
+#: ../src/prefs-dialog.c:467
+#: ../src/prefs-dialog.c:473
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -3388,81 +2134,108 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:527
+#: ../src/prefs-dialog.c:482
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "ഉപയോക്താവ് നിശ്ചയിച്ചത് (%s)"
 
-#: ../src/prefs-dialog.c:549
+#: ../src/prefs-dialog.c:504
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "സിസ്റ്റത്തിലെ ഭാഷ (%s)"
 msgstr[1] "സിസ്റ്റത്തിലെ ഭാഷകള്‍ (%s)"
 
-#: ../src/prefs-dialog.c:941
+#: ../src/prefs-dialog.c:862
 msgid "Select a Directory"
 msgstr "ഒരു തട്ടു് തെരഞ്ഞെടുക്കുക"
 
-#: ../src/window-commands.c:907
-msgid ""
-"The GNOME Web Browser is free software; you can redistribute it and/or "
-"modify it under the terms of the GNU General Public License as published by "
-"the Free Software Foundation; either version 2 of the License, or (at your "
-"option) any later version."
-msgstr ""
-"ഗ്നോം വെബ് ബ്രൌസര്‍ ഒരു സ്വതന്ത്ര സോഫ്റ്റ്‌വെയര്‍ ആണു്; സ്വതന്ത്ര സോഫ്റ്റ്‌വെയര്‍ ഫൌണ്ടേഷന്‍ "
-"പ്രസിദ്ധീകരിച്ച\n"
-"ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സ് അനുസരിച്ചു് നിങ്ങള്‍ക്കിതു്  വീണ്ടും വിതരണം ചെയ്യാവുന്നതും മാറ്റങ്ങള്‍\n"
-"വരുത്താവുന്നതുമാണു്; ലൈസന്‍സിന്റെ ലക്കം 2 അല്ലെങ്കില്‍ (നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന) അതിനു് ശേഷമുള്ള\n"
-"ഏതെങ്കിലും ലക്കമോ ഉപയോഗിയ്ക്കാം."
+#: ../src/window-commands.c:316
+msgid "Save"
+msgstr "സൂക്ഷിയ്ക്കുക"
 
-#: ../src/window-commands.c:911
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
+#: ../src/window-commands.c:479
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "'%s' എന്നു പേരുള്ളൊരു വെബ് പ്രയോഗം നിലവിലുണ്ടു്. അതിനു് പകരം ഇതാക്കണോ?"
+
+#: ../src/window-commands.c:484
+msgid "Replace"
+msgstr "മാറ്റി എഴുതുക"
+
+#: ../src/window-commands.c:488
+msgid "An application with the same name already exists. Replacing it will overwrite it."
+msgstr "ഇതേ പേരില്‍ വേറൊരു പ്രയോഗം നിലവിലുണ്ടു്. മാറ്റിയെഴുതിയാല്‍ മുമ്പത്തേതു് ഗോപി."
+
+#: ../src/window-commands.c:530
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr "'%s' പ്രയോഗം ഉപയോഗിയ്ക്കാന്‍ തയ്യാര്‍"
+
+#: ../src/window-commands.c:533
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "'%s' എന്ന പ്രയോഗം ഉണ്ടാക്കാനായില്ല"
+
+#: ../src/window-commands.c:541
+msgid "Launch"
+msgstr "തുടങ്ങുക"
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:574
+msgid "Create Web Application"
+msgstr "വെബ് പ്രയോഗം നിര്‍മ്മിയ്ക്കുക"
+
+#: ../src/window-commands.c:579
+msgid "C_reate"
+msgstr "_നിര്‍മ്മിക്കുക"
+
+#: ../src/window-commands.c:1115
+msgid "Web is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
+msgstr ""
+"വെബ് ഒരു സ്വതന്ത്ര സോഫ്റ്റ്‌വെയര്‍ ആണു്; സ്വതന്ത്ര സോഫ്റ്റ്‌വെയര്‍ ഫൌണ്ടേഷന്‍ പ്രസിദ്ധീകരിച്ച\n"
+"ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സ് അനുസരിച്ചു് നിങ്ങള്‍ക്കിതു്  വീണ്ടും വിതരണം ചെയ്യാവുന്നതും മാറ്റങ്ങള്‍\n"
+"വരുത്താവുന്നതുമാണു്; ലൈസന്‍സിന്റെ പതിപ്പു് 2 അല്ലെങ്കില്‍ (നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന) അതിനു് ശേഷമുള്ള\n"
+"ഏതെങ്കിലും പതിപ്പോ ഉപയോഗിയ്ക്കാം."
+
+#: ../src/window-commands.c:1119
+msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
 "ഗ്നോം വെബ് ബ്രൌസര്‍ നിങ്ങള്‍ക്കു് പ്രയോജനപ്പെടും എന്ന പ്രതീക്ഷയില്‍ വിതരണം ചെയ്യുന്നതാണു്,\n"
 "പക്ഷേ, ഇതിനു് ഒരു വാറണ്ടിയും ലഭ്യമല്ല; വ്യാപാരയോഗ്യതയോ ഒരു പ്രത്യേക കാര്യത്തിനു്\n"
-"ചേരുന്നതാണെന്നോ പരോക്ഷമായി ഉള്‍‌ക്കൊള്ളുന്ന വാറണ്ടി പോലും ഇല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കു്  ഗ്നു ജനറല്‍ "
-"പബ്ലിക് ലൈസന്‍സ് കാണുക."
+"ചേരുന്നതാണെന്നോ പരോക്ഷമായി ഉള്‍‌ക്കൊള്ളുന്ന വാറണ്ടി പോലും ഇല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കു്  ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സ് കാണുക."
 
-#: ../src/window-commands.c:915
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
+#: ../src/window-commands.c:1123
+msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
 "നിങ്ങള്‍ക്കു് ഈ പ്രോഗ്രാമിനൊപ്പം ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സിന്റെ ഒരു പകര്‍പ്പു് \n"
 "ലഭിച്ചിട്ടുണ്ടായിരിയ്ക്കണം; ഇല്ലെങ്കില്‍, ഈ വിലാസത്തിലേയ്ക്കെഴുതുക: Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../src/window-commands.c:961 ../src/window-commands.c:977
-#: ../src/window-commands.c:988
+#: ../src/window-commands.c:1169
+#: ../src/window-commands.c:1185
+#: ../src/window-commands.c:1196
 msgid "Contact us at:"
 msgstr "ഞങ്ങളുമായി ബന്ധപ്പെടുക:"
 
-#: ../src/window-commands.c:964
+#: ../src/window-commands.c:1172
 msgid "Contributors:"
 msgstr "സംഭാവന നല്‍കിയവര്‍:"
 
-#: ../src/window-commands.c:967
+#: ../src/window-commands.c:1175
 msgid "Past developers:"
 msgstr "മുന്‍കാലത്തു് വികസിപ്പിച്ചവര്‍:"
 
-#: ../src/window-commands.c:997
+#: ../src/window-commands.c:1205
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
-"Powered by WebKit"
+"Powered by WebKit %d.%d.%d"
 msgstr ""
-"നിങ്ങളെ വെബ് താളുകള്‍ കാണുന്നതിനും ഇന്റര്‍നെറ്റില്‍ വിവരങ്ങള്‍ കണ്ടുപിടിയ്ക്കുന്നതിനും "
-"കഴിവുള്ളതാക്കുന്നു.\n"
-"വെബ്ക്കിറ്റ് നിയന്ത്രിതം"
+"നിങ്ങളെ വെബ് താളുകള്‍ കാണുന്നതിനും ഇന്റര്‍നെറ്റില്‍ വിവരങ്ങള്‍ കണ്ടുപിടിയ്ക്കുന്നതിനും കഴിവുള്ളതാക്കുന്നു.\n"
+"വെബ്ക്കിറ്റ് %d.%d.%d ഈ ബ്രൌസറിന്റെ ഐശ്വര്യം"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3472,7 +2245,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1023
+#: ../src/window-commands.c:1234
 msgid "translator-credits"
 msgstr ""
 "എഫ്എസ്എഫ്-ഇന്ത്യ <locale@gnu.org.in>\n"
@@ -3480,7 +2253,653 @@ msgstr ""
 "പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>\n"
 "സന്തോഷ് തോട്ടിങ്ങല്‍ <santhosh00@gmail.com>"
 
-#: ../src/window-commands.c:1026
-msgid "GNOME Web Browser Website"
-msgstr "ഗ്നോമിലെ വെബ്ബ് ബ്രൌസറിന്റെ വെബ്സൈറ്റ്"
+#: ../src/window-commands.c:1237
+msgid "Web Website"
+msgstr "വെബ്ബ് വെബ്സൈറ്റ്"
 
+#: ../src/window-commands.c:1379
+msgid "Enable caret browsing mode?"
+msgstr "കാരെറ്റ് ബ്രൌസിങ്ങ് മോഡ് പ്രവര്‍ത്തന സജ്ജമാക്കണോ?"
+
+#: ../src/window-commands.c:1382
+msgid "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, allowing you to move around with your keyboard. Do you want to enable caret browsing on?"
+msgstr "F7 അമര്‍ത്തിയാല്‍ കാരെറ്റ് ബ്രൌസിങ്ങ് ദശ തുടങ്ങുകയോ നിര്‍ത്തുകയോ ചെയ്യാം. നീക്കാവുന്ന ഒരു സൂചിക വെബ് താളുകളില്‍ വയ്ക്കുകയും കീബോര്‍ഡ് ഉപയോഗിച്ചു് നീങ്ങാന്‍ അനുവദിയ്ക്കുകയും ചെയ്യും എന്നതാണിതിന്റെ ഗുണം. കാരെറ്റ് ബ്രൌസിങ്ങ് തുടങ്ങണോ?"
+
+#: ../src/window-commands.c:1385
+msgid "_Enable"
+msgstr "_സജ്ജമാക്കുക"
+
+#~ msgid "Browse and organize your bookmarks"
+#~ msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ കാണുകയും അടുക്കി വയ്ക്കുകയും ചെയ്യുക"
+
+#~ msgid "Epiphany Web Bookmarks"
+#~ msgstr "എപ്പിഫാനിയുടെ വെബ്ബിലെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
+
+#~ msgid "Web Bookmarks"
+#~ msgstr "വെബ്ബിലെ ഓര്‍മ്മക്കുറിപ്പുകള്‍"
+
+#~ msgid "Epiphany"
+#~ msgstr "എപ്പിഫാനി "
+
+#~ msgid ""
+#~ "A list of protocols to be considered safe in addition to the default, "
+#~ "when disable_unsafe_protocols is enabled."
+#~ msgstr ""
+#~ "ഡിസേബിള്‍_അണ്‍സേഫ്_പ്രോട്ടോകോള്‍സ് (disable_unsafe_protocols) പ്രാവര്‍ത്തികമാകുമ്പോള്‍ "
+#~ "സഹജമായതു് കൂടാതെ സുരക്ഷിതമെന്നു് കണക്കാക്കുന്ന കീഴ്വഴക്കങ്ങളുടെ പട്ടിക."
+
+#~ msgid "Additional safe protocols"
+#~ msgstr "കൂടുതല്‍ സുരക്ഷിതമായ കീഴ്വഴക്കങ്ങള്‍"
+
+#~ msgid "Disable JavaScript chrome control"
+#~ msgstr "ജാവാസ്ക്രിപ്റ്റിന്റെ ക്രോം നിയന്ത്രണം തടയുക"
+
+#~ msgid "Disable JavaScript's control over window chrome."
+#~ msgstr "ജാലക ക്രോമിനു മുകളിലുള്ള ജാവാസ്ക്രിപ്റ്റിന്റെ നിയന്ത്രണം തടയുക."
+
+#~ msgid ""
+#~ "Disable all historical information by disabling back and forward "
+#~ "navigation, not allowing the history dialog and hiding the most used "
+#~ "bookmarks list."
+#~ msgstr ""
+#~ "പിന്നോട്ടും മുന്നോട്ടുമുള്ള പോക്ക് തടഞ്ഞും, ചരിത്ര ഡയലോഗ് അനുവദിയ്ക്കാതെയും, "
+#~ "ഏറ്റവുമധികമുപയോഗിച്ച ഓര്‍മ്മക്കുറിപ്പുകളുടെ പട്ടിക ഒളിപ്പിച്ചും ചരിത്രപരമായ വിവരങ്ങളെല്ലാം "
+#~ "തടയുക."
+
+#~ msgid "Disable arbitrary URLs"
+#~ msgstr "സ്വന്തം ഇഷ്ടം പോലുള്ള യുആര്‍എലുകള്‍ തടയുക"
+
+#~ msgid "Disable bookmark editing"
+#~ msgstr "ഓര്‍മ്മക്കുറിപ്പു് അടുക്കിവയ്ക്കുന്നതു് തടയുക"
+
+#~ msgid "Disable history"
+#~ msgstr "ചരിത്രമുപയോഗിയ്ക്കുന്നതു് തടയുക"
+
+#~ msgid "Disable the user's ability to add or edit bookmarks."
+#~ msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചേര്‍ക്കാനോ മാറ്റാനോ ഉള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
+
+#~ msgid "Disable the user's ability to edit toolbars."
+#~ msgstr "പണിയായുധനിര ചിട്ടപ്പെടുത്തുന്നതിനുള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
+
+#~ msgid "Disable the user's ability to type in a URL to Epiphany."
+#~ msgstr "എപ്പിഫാനിയില്‍ ഒരു യുആര്‍എല്‍ നല്‍കുന്നതിനുള്ള ഉപയോക്താവിന്റെ കഴിവു് തടയുക."
+
+#~ msgid "Disable toolbar editing"
+#~ msgstr "പണിയായുധനിര ചിട്ടപ്പെടുത്തുന്നതു് തടയുക"
+
+#~ msgid "Disable unsafe protocols"
+#~ msgstr "സുരക്ഷിതമല്ലാത്ത കീഴ്വഴക്കങ്ങള്‍ തടയുക"
+
+#~ msgid ""
+#~ "Disables loading of content from unsafe protocols. Safe protocols are "
+#~ "http and https."
+#~ msgstr ""
+#~ "സുരക്ഷിതമല്ലാത്ത കീഴ്വഴക്കങ്ങളിലൂടെ ഉള്ളടക്കങ്ങളെടുക്കുന്നതു് തടയുന്നു. സുരക്ഷിത കീഴ്വഴക്കങ്ങളാണു് "
+#~ "http യും https ഉം."
+
+#~ msgid "Epiphany cannot quit"
+#~ msgstr "എപ്പിഫാനിയില്‍ നിന്നു് പുറത്തു് കടക്കാന്‍ സാധ്യമല്ല"
+
+#~ msgid "Hide menubar by default"
+#~ msgstr "സഹജമായി മെനുബാര്‍ ഒളിപ്പിയ്ക്കുക"
+
+#~ msgid "Hide the menubar by default."
+#~ msgstr "സഹജമായി മെനുപ്പട്ട ഒളിപ്പിയ്ക്കുക."
+
+#~ msgid "Lock in fullscreen mode"
+#~ msgstr "സ്ക്രീനിന്റെ മുഴുവന്‍ വലിപ്പത്തില്‍ പൂട്ടുക"
+
+#~ msgid "Locks Epiphany in fullscreen mode."
+#~ msgstr "സ്ക്രീനിന്റെ മുഴുവന്‍ വലിപ്പത്തില്‍ എപ്പിഫാനി പൂട്ടുക"
+
+#~ msgid "User is not allowed to close Epiphany"
+#~ msgstr "ഉയോക്താവ് എപ്പിഫാനി അടയ്ക്കാന്‍ അനുവദിയ്ക്കപ്പെട്ടിട്ടില്ല"
+
+#~ msgid "Address of the user's home page."
+#~ msgstr "ഉപയോക്താവിന്റെ പൂമുഖത്തിന്റെ വിലാസം."
+
+#~ msgid "Allow popups"
+#~ msgstr "പൊങ്ങിവരുന്നവ അനുവദിക്കുക"
+
+#~ msgid ""
+#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
+#~ "enabled)."
+#~ msgstr ""
+#~ "(ജാവാസ്ക്രിപ്റ്റ് അനുവദിച്ചിട്ടുണ്ടെങ്കില്‍) പുതിയ ജാലകങ്ങള്‍ തുറക്കാന്‍ സൈറ്റുകളെ അനുവദിക്കുക "
+
+#~ msgid "Always show the tab bar"
+#~ msgstr "കിളിവാതിലിന്റെ പട്ട എപ്പോഴും കാണിയ്ക്കുക"
+
+#~ msgid "Automatic downloads"
+#~ msgstr "സ്വയം ഡൌണ്‍ലോഡ് ചെയ്യുക"
+
+#~ msgid "Automatically manage offline status with NetworkManager"
+#~ msgstr "ശൃംഖല നടത്തിപ്പുകാരനെയുപയോഗിച്ചു് ഓഫ്‌ലൈന്‍ അവസ്ഥ സ്വയം കൈകാര്യം ചെയ്യുക"
+
+#~ msgid "Browse with caret"
+#~ msgstr "കാരറ്റ് ഉപയോഗിച്ചു് ബ്രൌസ് ചെയ്യുക"
+
+#~ msgid "Cookie accept"
+#~ msgstr "കുക്കി സ്വീകരിയ്ക്കുക"
+
+#~ msgid "Default encoding"
+#~ msgstr "എപ്പോഴും ഉപയോഗിയ്ക്കേണ്ട എന്‍കോഡിങ്ങ്"
+
+#~ msgid ""
+#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
+#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+#~ msgstr ""
+#~ "സഹജമായ എന്‍കോഡിങ്ങ്. സ്വീകാര്യമായ വിലകള്‍: armscii-8, Big5, Big5-HKSCS, EUC-JP, "
+#~ "EUC-KR, gb18030, GB2312, geostd8, HZ-GB-2312, IBM850, IBM852, IBM855, "
+#~ "IBM857, IBM862, IBM864, IBM864i, IBM866, ISO-2022-CN, ISO-2022-JP, "
+#~ "ISO-2022-KR, ISO-8859-1, ISO-8859-10, ISO-8859-13, ISO-8859-14, "
+#~ "ISO-8859-15, ISO-8859-16, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, "
+#~ "ISO-8859-6, ISO-8859-6-E, ISO-8859-6-I, ISO-8859-7, ISO-8859-8, "
+#~ "ISO-8859-8-E, ISO-8859-8-I, ISO-8859-9, ISO-IR-111, KOI8-R, KOI8-U, "
+#~ "Shift_JIS, T.61-8bit, TIS-620, us-ascii, UTF-16BE, UTF-16LE, UTF-32BE, "
+#~ "UTF-32LE, UTF-7, UTF-8, VISCII, windows-1250, windows-1251, windows-1252, "
+#~ "windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, "
+#~ "windows-1258, windows-936, x-euc-tw, x-gbk, x-imap4-modified-utf7, x-"
+#~ "johab, x-mac-arabic, x-mac-ce, x-mac-croatian, x-mac-cyrillic, x-mac-"
+#~ "devanagari, x-mac-farsi, x-mac-greek, x-mac-gujarati, x-mac-gurmukhi, x-"
+#~ "mac-hebrew, x-mac-icelandic, x-mac-roman, x-mac-romanian, x-mac-turkish, "
+#~ "x-mac-ukrainian, x-u-escaped, x-user-defined, x-viet-tcvn5712, x-viet-vps "
+#~ "and x-windows-949."
+
+#~ msgid "Default font type"
+#~ msgstr "അക്ഷരരൂപത്തിന്റെ സഹജമായ തരം"
+
+#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+#~ msgstr ""
+#~ "അക്ഷരരൂപത്തിന്റെ സഹജമായ തരം. സാധ്യമായ വിലകള്‍ \"സെറിഫ്\", \"സാന്‍സ്-സെറിഫ്\" എന്നിവയാണു്."
+
+#~ msgid "Enable JavaScript"
+#~ msgstr "ജാവാസ്ക്രിപ്റ്റ് പ്രാവര്‍ത്തികമാക്കുക"
+
+#~ msgid "Enable Web Inspector"
+#~ msgstr "വെബ് ഇന്‍സ്പെക്ടറിനെ സജ്ജമാക്കുക"
+
+#~ msgid "Enable smooth scrolling"
+#~ msgstr "മൃദുലമായ നിരക്കല്‍ പ്രാവര്‍ത്തികമാക്കുക"
+
+#~ msgid ""
+#~ "Force new window requests to be opened in tabs instead of using a new "
+#~ "window."
+#~ msgstr ""
+#~ "ഒരു പുതിയ ജാലകത്തിനു് പകരം പുതിയ ജാലകത്തിനുള്ള ആവശ്യം പല ടാബുകളായി നിര്‍ബന്ധിച്ചു് തുറക്കുന്നു."
+
+#~ msgid "Force new windows to be opened in tabs"
+#~ msgstr "പുതിയ ജാലകങ്ങള്‍ പല ടാബുകളായി നിര്‍ബന്ധിച്ചു് തുറക്കുന്നു"
+
+#~ msgid ""
+#~ "Hide or show the downloads window. When hidden, a notification will be "
+#~ "shown when new downloads are started."
+#~ msgstr ""
+#~ "ഡൌണ്‍ലോഡുകളുടെ ജാലകം കാണിയ്ക്കുകയോ ഒളിപ്പിയ്ക്കുകയോ ചെയ്യുക. ഒളിപ്പിച്ചിരിയ്ക്കുമ്പോള്‍, പുതിയ "
+#~ "ഡൌണ്‍ലോഡുകള്‍ തുടങ്ങുമ്പോള്‍ ഒരു അറിയിപ്പു് കാണിയ്ക്കുന്നതായിരിയ്ക്കും."
+
+#~ msgid "History pages time range"
+#~ msgstr "ചരിത്ര താളുകളുടെ സമയ പരിധി"
+
+#~ msgid "Home page"
+#~ msgstr "പൂമുഖം"
+
+#~ msgid ""
+#~ "How to present animated images. Possible values are \"normal\", \"once\" "
+#~ "and \"disabled\"."
+#~ msgstr ""
+#~ "അനിമേറ്റ് ചെയ്ത ചിത്രങ്ങളെങ്ങനെയാണു് കാണിയ്ക്കേണ്ടതു്. സാധ്യമായ വിലകള്‍ \"സാധാരണ\", "
+#~ "\"ഒരിയ്ക്കല്‍\", \"പ്രാവര്‍ത്തികമാക്കാതെ\" എന്നിവയാണു്."
+
+#~ msgid "How to print frames"
+#~ msgstr "ചട്ടക്കൂടുകള്‍ എങ്ങനെ അച്ചടിയ്ക്കണം"
+
+#~ msgid ""
+#~ "How to print pages containing frames. Allowed values are \"normal\", "
+#~ "\"separately\" and \"selected\"."
+#~ msgstr ""
+#~ "ചട്ടക്കൂടുകളുള്ള താളുകള്‍ എങ്ങനെയാണച്ചടിയ്ക്കേണ്ടതു്. അനുവദിച്ച വിലകള്‍ \"സാധാരണ\", \"വെവ്വേറെ"
+#~ "\", \"തെരഞ്ഞെടുത്തവ\" എന്നിവയാണു്."
+
+#~ msgid "ISO-8859-1"
+#~ msgstr "ISO-8859-1"
+
+#~ msgid "Image animation mode"
+#~ msgstr "ചിത്രത്തിന്റെ അനിമേഷന്‍ രീതി"
+
+#~ msgid "Lists the active extensions."
+#~ msgstr "സജീവ എക്സ്റ്റന്‍ഷനുകളെ കാണിയ്ക്കുക."
+
+#~ msgid ""
+#~ "Middle click to open the web page pointed to by the currently selected "
+#~ "text"
+#~ msgstr ""
+#~ "ഇപ്പോള്‍ തെരഞ്ഞെടുത്ത പദാവലി സൂചിപ്പിയ്ക്കുന്ന വെബ്ബ് താള്‍ തുറക്കുവാന്‍ നടുവിലെ ബട്ടണ്‍ ഞെക്കുക"
+
+#~ msgid ""
+#~ "Middle clicking on the main view pane will open the web page pointed to "
+#~ "by the currently selected text."
+#~ msgstr ""
+#~ "പ്രധാന ദര്‍ശന പാളിയില്‍ നടുവിലെ ബട്ടണ്‍ ഞെക്കിയാല്‍ ഇപ്പോള്‍ തെരഞ്ഞെടുത്ത പദാവലി "
+#~ "സൂചിപ്പിയ്ക്കുന്ന താള്‍ തുറക്കപ്പെടും."
+
+#~ msgid "Minimum font size"
+#~ msgstr "അക്ഷരരൂപത്തിന്റെ ഏറ്റവും ചെറിയ വലിപ്പം"
+
+#~ msgid "Preferred languages, two letter codes."
+#~ msgstr "ഇഷ്ടപ്പെട്ട ഭാഷകള്‍, രണ്ടക്ഷര കോഡുകള്‍."
+
+#~ msgid "Remember passwords"
+#~ msgstr "അടയാളവാക്കുകള്‍ ഓര്‍ത്തിരിയ്ക്കുക"
+
+#~ msgid "Show bookmarks bar by default"
+#~ msgstr "ഓര്‍മ്മക്കുറിപ്പുകളുടെ പട്ട എപ്പോഴും കാണിയ്ക്കുക"
+
+#~ msgid "Show statusbar by default"
+#~ msgstr "അവസ്ഥാപട്ട എപ്പോഴും കാണിയ്ക്കുക"
+
+#~ msgid ""
+#~ "Show the history pages visited \"ever\", \"last_two_days\", "
+#~ "\"last_three_days\", \"today\"."
+#~ msgstr ""
+#~ "\"എന്നെങ്കിലും\", \"രണ്ടു ദിവസങ്ങള്‍ക്കുള്ളില്‍\", \"മൂന്നു് ദിവസങ്ങള്‍ക്കുള്ളില്‍\", \"ഇന്നു്\" "
+#~ "സന്ദര്‍ശിച്ച ചരിത്രത്തിലെ താളുകള്‍ കാണിയ്ക്കുക."
+
+#~ msgid "Show the tab bar also when there is only one tab open."
+#~ msgstr "ഒരു കിളിവാതില്‍ മാത്രം തുറന്നിരിയ്ക്കുമ്പോഴും കിളിവാതിലിന്റെ പട്ട കാണിയ്ക്കുക."
+
+#~ msgid "Show toolbars by default"
+#~ msgstr "പണിയായുധനിര സഹജമായി കാണിയ്ക്കുക"
+
+#~ msgid "Size of disk cache"
+#~ msgstr "ഡിസ്ക് കാഷിന്റെ വലിപ്പം"
+
+#~ msgid "Size of disk cache, in MB."
+#~ msgstr "ഡിസ്ക് കാഷിന്റെ വലിപ്പം, എംബി."
+
+#~ msgid "The bookmark information shown in the editor view"
+#~ msgstr "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചിട്ടപ്പെടുത്തുമ്പോള്‍ കാണിയ്ക്കേണ്ട വിവരം"
+
+#~ msgid ""
+#~ "The bookmark information shown in the editor view. Valid values in the "
+#~ "list are \"address\" and \"title\"."
+#~ msgstr ""
+#~ "ഓര്‍മ്മക്കുറിപ്പുകള്‍ ചിട്ടപ്പെടുത്തുമ്പോള്‍ കാണിയ്ക്കേണ്ട വിവരം. പട്ടികയിലെ സാധുവായ വിലകള്‍ "
+#~ "\"വിലാസം\", \"തലക്കെട്ടു്\" എന്നിവയാണു്."
+
+#~ msgid "The currently selected fonts language"
+#~ msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിട്ടുള്ള അക്ഷരരൂപങ്ങളുടെ ഭാഷ"
+
+#~ msgid ""
+#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
+#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
+#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
+#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
+#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
+#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
+#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
+#~ "devanagari\" (devanagari)."
+#~ msgstr ""
+#~ "ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിട്ടുള്ള അക്ഷരരൂപങ്ങളുടെ ഭാഷ. സാധുവായ വിലകള്‍ \"ar\" (അറബിക്), \"x-"
+#~ "baltic\" (ബാള്‍ട്ടിക് ഭാഷകള്‍), \"x-central-euro\" (മദ്ധ്യ യൂറോപ്യന്‍ ഭാഷകള്‍), \"x-"
+#~ "cyrillic\" (സിറിലിക് അക്ഷരങ്ങളുപയോഗിച്ചെഴുതുന്ന ഭാഷകള്‍), \"el\" (ഗ്രീക്ക്), \"he"
+#~ "\" (ഹീബ്രൂ), \"ja\" (ജാപ്പനീസ്), \"ko\" (കൊറിയന്‍), \"zh-CN\" (ലളിതമായ ചൈനീസ്), "
+#~ "\"th\" (തായി), \"zh-TW\" (പരമ്പരാഗത ചൈനീസ്), \"tr\" (തുര്‍ക്കിഷ്), \"x-unicode"
+#~ "\" (മറ്റു ഭാഷകള്‍), \"x-western\" (ലാറ്റിന്‍ ലിപിയുപയോഗിച്ചു് എഴുതുന്ന ഭാഷകള്‍), \"x-tamil"
+#~ "\" (തമിഴ്) and \"x-devanagari\" (ദേവനാഗരി)."
+
+#~ msgid "The downloads folder"
+#~ msgstr "ഡൌണ്‍ലോഡുകളുടെ അറ"
+
+#~ msgid "The page information shown in the history view"
+#~ msgstr "ചരിത്രം കാണിയ്ക്കുമ്പോള്‍ വേണ്ട താളിന്റെ വിവരങ്ങള്‍"
+
+#~ msgid ""
+#~ "The page information shown in the history view. Valid values in the list "
+#~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
+#~ msgstr ""
+#~ "ചരിത്രം കാണിയ്ക്കുമ്പോള്‍ വേണ്ട താളിന്റെ വിവരങ്ങള്‍. പട്ടികയിലെ സാധുവായ വിലകള്‍ "
+#~ "\"തലക്കെട്ടു്കാണുക\", \"വിലാസംകാണുക\", \"സമയവുംതിയ്യതിയുംകാണുക\" എന്നിവയാണു്."
+
+#~ msgid ""
+#~ "The path of the folder where to download files to; or \"Downloads\" to "
+#~ "use the default downloads folder, or \"Desktop\" to use the desktop "
+#~ "folder."
+#~ msgstr ""
+#~ "ഫയലുകള്‍ ഡൌണ്‍ലോഡ് ചെയ്യേണ്ട അറയിലേയ്ക്കുള്ള വഴി; അല്ലെങ്കില്‍  സഹജമായ ഡൌണ്‍ലോഡുകളുടെ "
+#~ "അറയുപയോഗിയ്ക്കാന്‍ \"ഡൌണ്‍ലോഡുകള്‍\", അല്ലെങ്കില്‍ പണിയിടത്തിന്റെ അറയുപയോഗിയ്ക്കാന്‍ \"പണിയിടം"
+#~ "\" എന്നോ തെരഞ്ഞെടുക്കുക."
+
+#~ msgid "Toolbar style"
+#~ msgstr "പണിയായുധനിരയുടെ ശൈലി"
+
+#~ msgid ""
+#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+#~ "\"text\"."
+#~ msgstr ""
+#~ "പണിയായുധനിരയുടെ ശൈലി. അനുവദിച്ച വിലകള്‍ \"(ഗ്നോമിന്റെ സഹജമായ ശൈലിയുപയോഗിയ്ക്കുക)\", "
+#~ "\"രണ്ടും\" (പദാവലിയും ചിഹ്നങ്ങളും), \"രണ്ടും-വിലങ്ങനെ\" (പദാവലി ചിഹ്നങ്ങള്‍ക്കരികെ), "
+#~ "\"പദാവലി\" എന്നിവയാണു്."
+
+#~ msgid "Use own colors"
+#~ msgstr "സ്വന്തം നിറങ്ങള്‍ ഉപയോഗിയ്ക്കുക"
+
+#~ msgid "Use your own colors instead of the colors the page requests."
+#~ msgstr "താള്‍ പറയുന്ന നിറങ്ങള്‍ക്കു് പകരം സ്വന്തം നിറങ്ങള്‍ ഉപയോഗിയ്ക്കുക."
+
+#~ msgid "Use your own fonts instead of the fonts the page requests."
+#~ msgstr "താള്‍ പറയപന്ന അക്ഷരരൂപങ്ങള്‍ക്കു് പകരം സ്വന്തം അക്ഷരരൂപങ്ങള്‍ ഉപയോഗിയ്ക്കുക."
+
+#~ msgid "Visibility of the downloads window"
+#~ msgstr "ഡൌണ്‍ലോഡുകളുടെ ജാലകത്തിന്റെ കാഴ്ചാവസ്ഥ"
+
+#~ msgid ""
+#~ "When files cannot be opened by the browser they are automatically "
+#~ "downloaded to the download folder and opened with the appropriate "
+#~ "application."
+#~ msgstr ""
+#~ "ഫയലുകള്‍ ബ്രൌസറിനു് തുറക്കാന്‍ പറ്റാത്ത അവസരങ്ങളില്‍ അവ സ്വയം ഡൌണ്‍ലോഡ് അറയിലേയ്ക്ക് ഡൌണ്‍ലോഡ് "
+#~ "ചെയ്യുകയും യോജിച്ച പ്രയോഗമുപയോഗിച്ചു് തുറക്കുന്നതുമായിരിയ്ക്കും."
+
+#~ msgid ""
+#~ "Where to accept cookies from. Possible values are \"anywhere\", \"current "
+#~ "site\" and \"nowhere\"."
+#~ msgstr ""
+#~ "കുക്കികള്‍ എവിടെ നിന്നും സ്വീകരിയ്ക്കാമെന്നു്. സാദ്ധ്യമായ മൂല്യങ്ങള്‍ \"എല്ലായിടത്തു നിന്നും\","
+#~ "\"നിലവിലുളള സൈറ്റില്‍ നിന്നു് മാത്രം\" \"ഒരിടത്തുനിന്നും വേണ്ട\""
+
+#~ msgid "Whether to print the background color"
+#~ msgstr "പശ്ചാത്തല നിറം അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to print the background images"
+#~ msgstr "പശ്ചാത്തല ചിത്രങ്ങള്‍ അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to print the date in the footer"
+#~ msgstr "പാദകുറിപ്പില്‍ തിയ്യതി അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to print the page address in the header"
+#~ msgstr "തലക്കുറിപ്പില്‍ താളിന്റെ വിലാസം അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to print the page numbers (x of total) in the footer"
+#~ msgstr "പാദക്കുറിപ്പില്‍ താളിന്റെ സംഖ്യകള്‍ (മുഴുവനിലെ x) അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to print the page title in the header"
+#~ msgstr "തലക്കുറിപ്പില്‍ താളിന്റെ തലക്കെട്ടു് അച്ചടിയ്ക്കണമോ എന്നു്"
+
+#~ msgid "Whether to store and prefill passwords in web sites."
+#~ msgstr "അടയാളവാക്കുകള്‍ സൂക്ഷിയ്ക്കുകയും വെബ് സൈറ്റുകളില്‍ നേരത്തേ പൂരിപ്പിയ്ക്കുകയും വേണമോ എന്നു്."
+
+#~ msgid "x-western"
+#~ msgstr "എക്സ്-പാശ്ചാത്യന്‍"
+
+#~ msgid "<b>Fingerprints</b>"
+#~ msgstr "<b>വിരലടയാളങ്ങള്‍</b>"
+
+#~ msgid "<b>Issued By</b>"
+#~ msgstr "<b>ആരാണു് നല്‍കിയതു്</b>"
+
+#~ msgid "<b>Issued To</b>"
+#~ msgstr "<b>ആര്‍ക്ക് നല്‍കി</b>"
+
+#~ msgid "<b>Validity</b>"
+#~ msgstr "<b>കാലാവധി</b>"
+
+#~ msgid "Certificate _Fields"
+#~ msgstr "സാക്ഷ്യപത്രത്തിന്റെ _കളങ്ങള്‍"
+
+#~ msgid "Certificate _Hierarchy"
+#~ msgstr "സാക്ഷ്യപത്രത്തിന്റെ _ഹൈറാര്‍കി"
+
+#~ msgid "Common Name:"
+#~ msgstr "സാധാരണ പേരു്:"
+
+#~ msgid "Details"
+#~ msgstr "വിശദവിവരങ്ങള്‍"
+
+#~ msgid "Expires On:"
+#~ msgstr "കാലാവധി തീരുന്നതു്:"
+
+#~ msgid "Field _Value"
+#~ msgstr "കളത്തിലെ _വില"
+
+#~ msgid "Issued On:"
+#~ msgstr "നല്‍കിയതു്:"
+
+#~ msgid "MD5 Fingerprint:"
+#~ msgstr "എംഡി5 വിരളടയാളം:"
+
+#~ msgid "Organization:"
+#~ msgstr "സംഘടന:"
+
+#~ msgid "Organizational Unit:"
+#~ msgstr "സംഘടനയുടെ വിഭാഗം:"
+
+#~ msgid "SHA1 Fingerprint:"
+#~ msgstr "എസ്എച്ച്എ1 വിരളടയാളം:"
+
+#~ msgid "Serial Number:"
+#~ msgstr "ക്രമ നമ്പര്‍:"
+
+#~ msgid "Clear _All..."
+#~ msgstr "_എല്ലാം വെടിപ്പാക്കുക..."
+
+#~ msgid "Sign Text"
+#~ msgstr "പദാവലിയില്‍ ഒപ്പു് വയ്ക്കുക"
+
+#~ msgid ""
+#~ "To confirm that you want to sign the above text, choose a certificate to "
+#~ "sign the text with and enter its password below."
+#~ msgstr ""
+#~ "മുകളിലെ പദാവലിയില്‍ ഒപ്പിടണമെന്നുറപ്പിയ്ക്കാന്‍ ഒപ്പിടാനുള്ള സാക്ഷ്യപത്രം തെരഞ്ഞെടുക്കുകയും "
+#~ "അതിനു്റെ അടയാളവാക്കു് താഴെ നല്‍കുകയും ചെയ്യുക."
+
+#~ msgid "_Certificate:"
+#~ msgstr "_സാക്ഷ്യപത്രം:"
+
+#~ msgid "_Password:"
+#~ msgstr "_അടയാളവാക്കു്:"
+
+#~ msgid "_View Certificate…"
+#~ msgstr "സാക്ഷ്യപത്രം _കാണുക..."
+
+#~ msgid "<b>Cookies</b>"
+#~ msgstr "<b>കുക്കികള്‍</b>"
+
+#~ msgid "<b>Downloads</b>"
+#~ msgstr "<b>ഡൌണ്‍ലോഡുകള്‍</b>"
+
+#~ msgid "<b>Encodings</b>"
+#~ msgstr "<b>എന്‍കോഡിങ്ങുകള്‍</b>"
+
+#~ msgid "<b>Home page</b>"
+#~ msgstr "<b>പൂമുഖം</b>"
+
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>ഭാഷകള്‍</b>"
+
+#~ msgid "<b>Passwords</b>"
+#~ msgstr "<b>അടയാളവാക്കുകള്‍</b>"
+
+#~ msgid "<b>Temporary Files</b>"
+#~ msgstr "<b>താത്കാലിക ഫയലുകള്‍</b>"
+
+#~ msgid "<b>Web Development</b>"
+#~ msgstr "<b>വെബ് ഡവലപ്മെന്റ്</b>"
+
+#~ msgid "Enable _Java"
+#~ msgstr "_ജാവാ അനുവദിക്കുക"
+
+#~ msgid "Let web pages specify their own _fonts"
+#~ msgstr "സ്വന്തം _അക്ഷരരൂപങ്ങള്‍ സൂചിപ്പിയ്ക്കാന്‍ വെബ് താളുകളെ അനുവദിയ്ക്കുക"
+
+#~ msgid "Let web pages specify their own c_olors"
+#~ msgstr "സ്വന്തം _നിറങ്ങള്‍ സൂചിപ്പിയ്ക്കാന്‍ വെബ് താളുകളെ അനുവദിയ്ക്കുക"
+
+#~ msgid "Set to Current _Page"
+#~ msgstr "ഇപ്പോഴത്തെ _താളിലേയ്ക്കു് സജ്ജീകരിയ്ക്കുക"
+
+#~ msgid "Set to _Blank Page"
+#~ msgstr "_ശൂന്യമായ താളിലേയ്ക്കു് സജ്ജീകരിയ്ക്കുക"
+
+#~ msgid "Use s_mooth scrolling"
+#~ msgstr "_മൃദുലമായ നിരക്കമുപയോഗിയ്ക്കുക"
+
+#~ msgid "_Address:"
+#~ msgstr "_വിലാസം:"
+
+#~ msgid "_Minimum size:"
+#~ msgstr "ഏറ്റവും _ചെറിയ വലിപ്പം:"
+
+#~ msgid "<b>Background</b>"
+#~ msgstr "<b>പശ്ചാത്തലം</b>"
+
+#~ msgid "<b>Footers</b>"
+#~ msgstr "<b>പാദക്കുറിപ്പു്</b>"
+
+#~ msgid "<b>Frames</b>"
+#~ msgstr "<b>ചട്ടക്കൂടുകള്‍</b>"
+
+#~ msgid "<b>Headers</b>"
+#~ msgstr "<b>തലക്കുറിപ്പു്</b>"
+
+#~ msgid "As laid out on the _screen"
+#~ msgstr "_സ്ക്രീനില്‍ കാണുന്നതു് പോലെ"
+
+#~ msgid "O_nly the selected frame"
+#~ msgstr "തെരഞ്ഞെടുത്ത ചട്ടക്കൂടു് _മാത്രം"
+
+#~ msgid "P_age title"
+#~ msgstr "താ_ളിന്റെ തലക്കെട്ടു്"
+
+#~ msgid "Page _numbers"
+#~ msgstr "താളിന്റെ _സംഖ്യകള്‍"
+
+#~ msgid "Print background c_olors"
+#~ msgstr "പശ്ചാത്തല _നിറങ്ങള്‍ അച്ചടിയ്ക്കുക"
+
+#~ msgid "Print background i_mages"
+#~ msgstr "പശ്ചാത്തല _ചിത്രങ്ങള്‍ അച്ചടിയ്ക്കുക"
+
+#~ msgid "_Date"
+#~ msgstr "_തിയ്യതി"
+
+#~ msgid "_Each frame separately"
+#~ msgstr "_ഓരോ ചട്ടക്കൂടും വേറിട്ടു്"
+
+#~ msgid "_Page address"
+#~ msgstr "താളിന്റെ _വിലാസം"
+
+#~ msgid "_Show Downloads"
+#~ msgstr "ഡൌണ്‍ലോഡുകള്‍ _കാണിയ്ക്കുക"
+
+#~ msgid "%u:%02u.%02u"
+#~ msgstr "%u:%02u.%02u"
+
+#~ msgid "%02u.%02u"
+#~ msgstr "%02u.%02u"
+
+#~ msgid "_Pause"
+#~ msgstr "ചെറിയ _ഇടവേള"
+
+#~ msgid "_Resume"
+#~ msgstr "_തുടരുക"
+
+#~ msgid "The file “%s” has been downloaded."
+#~ msgstr "%s എന്ന ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്തിരിയ്ക്കുന്നു."
+
+#~ msgid "Download finished"
+#~ msgstr "ഡൌണ്‍ലോഡ് തീര്‍ന്നിരിയ്ക്കുന്നു"
+
+#~ msgid ""
+#~ "%s\n"
+#~ "%s of %s"
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%3$s യില്‍ %2$s"
+
+#~ msgid "%d download"
+
+#~ msgid_plural "%d downloads"
+#~ msgstr[0] "%d ഡൌണ്‍ലോഡ്"
+#~ msgstr[1] "%d ഡൌണ്‍ലോഡുകള്‍"
+
+#~ msgid "The file “%s” has been added to the downloads queue."
+#~ msgstr "%s എന്ന ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്യാനുള്ള വരിയില്‍ ചേര്‍ത്തിട്ടുണ്ടു്."
+
+#~ msgid "Download started"
+#~ msgstr "ഡൌണ്‍ലോഡ് തുടങ്ങി"
+#~ msgctxt "download status"
+
+#~ msgid "Unknown"
+#~ msgstr "അപരിചിതം"
+#~ msgctxt "download status"
+
+#~ msgid "Failed"
+#~ msgstr "പരാജയപ്പെട്ടു"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Remaining"
+#~ msgstr "ബാക്കിയുള്ളവ"
+
+#~ msgid "Download this potentially unsafe file?"
+#~ msgstr "സുരക്ഷിതമല്ലാത്ത ഫയല്‍ ഡൌണ്‍ലോട് ചെയ്യണമോ?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "It is unsafe to open “%s” as it could potentially damage your documents "
+#~ "or invade your privacy. You can download it instead."
+#~ msgstr ""
+#~ "ഏതു് തരം ഫയല്‍: “%s”.\n"
+#~ "\n"
+#~ "നിങ്ങളുടെ സ്വകാര്യതയ്ക്ക് തടസ്സമാകുകയോ അല്ലെങ്കില്‍ നിങ്ങളുടെ രേഖകള്‍ നഷ്ടപ്പെടുകയോ "
+#~ "സാധ്യതയുള്ളതിനാല്‍ “%s” തുറക്കുന്നതു് സുരക്ഷിതമല്ല. വേണമെങ്കില്‍ നിങ്ങള്‍ക്ക് ഡൌണ്‍ലോട് ചെയ്യാം."
+
+#~ msgid "Open this file?"
+#~ msgstr "ഈ ഫയല്‍ തുറക്കണമോ?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You can open “%s” using “%s” or save it."
+#~ msgstr ""
+#~ "ഏതു് തരം ഫയല്‍: “%s”.\n"
+#~ "\n"
+#~ "നിങ്ങള്‍ “%s”, “%s” ഉപയോഗിച്ചു് തുറക്കുകയോ അതു് സൂക്ഷിക്കുകയോ ചെയ്യാം."
+
+#~ msgid "Download this file?"
+#~ msgstr "ഈ ഫയല്‍ ഡൌണ്‍ലോഡ് ചെയ്യണമോ?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You have no application able to open “%s”. You can download it instead."
+#~ msgstr ""
+#~ "ഏതു് തരം ഫയല്‍: “%s”.\n"
+#~ "\n"
+#~ "നിങ്ങള്‍ക്ക് “%s” തുറക്കുവാന്‍ സാധിക്കുന്ന പ്രയോഗം ലഭ്യമല്ല. പകരം നിങ്ങള്‍ക്കതു് ഡൌണ്‍ലോട് ചെയ്യാം."
+
+#~ msgid "_Save As..."
+#~ msgstr "_പേരു് മാറ്റി സൂക്ഷിയ്ക്കുക..."
+
+#~ msgid "All"
+#~ msgstr "എല്ലാം"
