@@ -5,7 +5,7 @@
 # Abdulaziz Al-Arfaj <alarfaj0@yahoo.com>, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Mohamed Magdy <alnokta@yahoo.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
 # Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2011.
 # Abderrahim Kitouni <a.kitouni@gmail.com>, 2011, 2012.
 msgid ""
@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2012-03-23 22:38+0100\n"
-"PO-Revision-Date: 2012-03-23 22:49+0100\n"
-"Last-Translator: Abderrahim Kitouni <a.kitouni@gmail.com>\n"
+"POT-Creation-Date: 2012-03-27 00:47+0200\n"
+"PO-Revision-Date: 2012-03-27 01:08+0200\n"
+"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Virtaal 0.7.0\n"
 "X-Project-Style: gnome\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
@@ -69,7 +69,7 @@ msgstr "نافذة _جديدة"
 #. Toplevel
 #: ../data/ui/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:87
 msgid "_Bookmarks"
-msgstr "_علامات"
+msgstr "ال_علامات"
 
 #: ../data/ui/epiphany-application-menu.ui.h:3
 msgid "_History"
@@ -77,7 +77,7 @@ msgstr "ال_تأريخ"
 
 #: ../data/ui/epiphany-application-menu.ui.h:4 ../data/ui/prefs-dialog.ui.h:3
 msgid "Preferences"
-msgstr "تفضيلات"
+msgstr "التفضيلات"
 
 #: ../data/ui/epiphany-application-menu.ui.h:5 ../data/ui/epiphany.ui.h:10
 msgid "Personal Data"
@@ -117,7 +117,7 @@ msgstr "أرسل إلى:"
 
 #: ../data/ui/epiphany.ui.h:5
 msgid "Expires:"
-msgstr "ينقضي:"
+msgstr "ينقضي في:"
 
 #: ../data/ui/epiphany.ui.h:6
 msgid "Text Encoding"
@@ -129,7 +129,7 @@ msgstr "<b>ت_لقائي</b>"
 
 #: ../data/ui/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
-msgstr "استخدم الترميز المحدد من طرف المستند"
+msgstr "استخدم الترميز المحدد في المستند"
 
 #: ../data/ui/epiphany.ui.h:9
 msgid "<b>_Use a different encoding:</b>"
@@ -166,7 +166,7 @@ msgstr "مجلد ال_تنزيل:"
 
 #: ../data/ui/prefs-dialog.ui.h:6
 msgid "A_utomatically open downloaded files"
-msgstr "ا_فتح الملفّات المنزّلة آليًّا"
+msgstr "ا_فتح الملفّات المنزّلة تلقائيا"
 
 #: ../data/ui/prefs-dialog.ui.h:7
 msgid "General"
@@ -194,7 +194,7 @@ msgstr "الخط ثابت العرض:"
 
 #: ../data/ui/prefs-dialog.ui.h:13
 msgid "Style"
-msgstr "الطرز"
+msgstr "الطراز"
 
 #: ../data/ui/prefs-dialog.ui.h:14
 msgid "Use custom _stylesheet"
@@ -202,7 +202,7 @@ msgstr "ا_ستعمل صفحة طراز مخصصة"
 
 #: ../data/ui/prefs-dialog.ui.h:15
 msgid "_Edit Stylesheet…"
-msgstr "_حرّر صفحة النسق…"
+msgstr "_حرّر صفحة الطراز…"
 
 #: ../data/ui/prefs-dialog.ui.h:16
 msgid "Fonts & Style"
@@ -235,7 +235,7 @@ msgstr "فقط _من المواقع التي تزورها"
 #. Refers to "Only from sites you visit" option under Cookies.
 #: ../data/ui/prefs-dialog.ui.h:25
 msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>مثلا، من اشهارات على هذه المواقع</small>"
+msgstr "<small>مثلا، ليس من المعلنين على هذه المواقع</small>"
 
 #: ../data/ui/prefs-dialog.ui.h:26
 msgid "_Never accept"
@@ -255,7 +255,7 @@ msgstr "مساحة ال_قرص:"
 
 #: ../data/ui/prefs-dialog.ui.h:31
 msgid "MB"
-msgstr "ميجابايت"
+msgstr "م.ب"
 
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
@@ -305,12 +305,12 @@ msgstr "فاحِص الوِب"
 
 #: ../embed/ephy-embed-shell.c:207
 msgid "Epiphany can't be used now. Initialization failed."
-msgstr "لا يمكن استخدام إبِفَني الآن. فشلت البدء."
+msgstr "لا يمكن استخدام إبِفَني الآن. فشل البدء."
 
 #: ../embed/ephy-embed-utils.c:61
 #, c-format
 msgid "Send an email message to “%s”"
-msgstr "أرسل بريد للعنوان “%s”"
+msgstr "أرسل بريدًا للعنوان ”%s“"
 
 #: ../embed/ephy-encodings.c:59
 msgid "Arabic (_IBM-864)"
@@ -657,7 +657,7 @@ msgstr "نوع MIME"
 
 #: ../embed/ephy-request-about.c:117
 msgid "Description"
-msgstr "وَصف"
+msgstr "الوَصف"
 
 #: ../embed/ephy-request-about.c:117
 msgid "Suffixes"
@@ -678,7 +678,7 @@ msgstr "قائمة تطبيقات الوِب المثبّتة"
 #. Note for translators: this refers to the installation date.
 #: ../embed/ephy-request-about.c:195
 msgid "Installed on:"
-msgstr "مثبّت في:"
+msgstr "ثُبّت في:"
 
 #. characters
 #. ms
@@ -693,7 +693,7 @@ msgstr "_ليس الآن"
 
 #: ../embed/ephy-web-view.c:775
 msgid "_Store password"
-msgstr "_خزّن كلمة السر"
+msgstr "ا_حفظ كلمة السر"
 
 #. Translators: The first %s is the username and the second one is the
 #. * hostname where this is happening. Example: gnome@gmail.com and
@@ -703,7 +703,7 @@ msgstr "_خزّن كلمة السر"
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>أتريد تخزين كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
+msgstr "<big>أتريد حفظ كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
 
 #: ../embed/ephy-web-view.c:1133
 msgid "Plugins"
@@ -745,9 +745,9 @@ msgid ""
 "moved to a new address. Don't forget to check that your internet connection "
 "is working correctly.</p>"
 msgstr ""
-"<p>يبدو أنّ الموقع <strong>%s</strong> غير متاح. رسالة العطل تحديدا كانت:</"
-"p><p><em>%s</em></p><p>قد يكون الموقع اُِغلق مؤقتًا أو انتقل إلى عنوان جديد. لا "
-"تنسَ أن تتأكّد أنّ اتصال الإنترنت يعمل جيدا.</p>"
+"<p>يبدو أنّ الموقع <strong>%s</strong> غير متاح. رسالة العطل تحديدا "
+"كانت:</p><p><em>%s</em></p><p>قد يكون الموقع أُغلق مؤقتًا أو انتقل إلى عنوان "
+"جديد. لا تنسَ أن تتأكّد أنّ اتصال الإنترنت يعمل جيدا.</p>"
 
 #: ../embed/ephy-web-view.c:2139
 msgid "Try again"
@@ -764,9 +764,9 @@ msgid ""
 "p><p>This might happen again if you reload the page. If it does, please "
 "report the problem to the <strong>%s</strong> developers.</p>"
 msgstr ""
-"<p>كان يجري تحميل هذه الصفحة عندما أغلق المتصفح فجأة.</p><p>قد يتكرر هذا إذا "
-"أعدت تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري <strong>%s</strong> عن هذه "
-"المشكلة.</p>"
+"<p>كان يجري تحميل هذه الصفحة عندما أُغلق المتصفح فجأة.</p><p>قد يتكرر هذا "
+"إذا أعدت تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري <strong>%s</strong> عن "
+"هذه المشكلة.</p>"
 
 #: ../embed/ephy-web-view.c:2157
 msgid "Load again anyway"
@@ -781,7 +781,7 @@ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 #: ../embed/ephy-web-view.c:2773
 #, c-format
 msgid "Loading “%s”…"
-msgstr "يُحمل «%s»…"
+msgstr "يُحمل ”%s“…"
 
 #: ../embed/ephy-web-view.c:2775
 msgid "Loading…"
@@ -813,7 +813,7 @@ msgstr "يبدأ %s"
 #: ../lib/egg/eggdesktopfile.c:1100
 #, c-format
 msgid "Application does not accept documents on command line"
-msgstr "التطبيق لا يقبل مستندات في سطر الأوامر"
+msgstr "لا يقبل التطبيق المستندات عبر سطر الأوامر"
 
 #: ../lib/egg/eggdesktopfile.c:1168
 #, c-format
@@ -882,22 +882,22 @@ msgstr "سطح المكتب"
 #: ../lib/ephy-file-helpers.c:326
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
-msgstr "فشل إنشاء دليل مؤقت في“%s”."
+msgstr "فشل إنشاء دليل مؤقت في ”%s“."
 
 #: ../lib/ephy-file-helpers.c:422
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
-msgstr "الملف «%s» موجود. رجاء انقله بعيدا."
+msgstr "الملف ”%s“ موجود. رجاء انقله بعيدا."
 
 #: ../lib/ephy-file-helpers.c:433
 #, c-format
 msgid "Failed to create directory “%s”."
-msgstr "فشل إنشاء الدليل “%s”."
+msgstr "فشل إنشاء الدليل ”%s“."
 
 #: ../lib/ephy-gui.c:206
 #, c-format
 msgid "Directory “%s” is not writable"
-msgstr "لا يمكن الكتابة على الدليل «%s»"
+msgstr "لا يمكن الكتابة في الدليل ”%s“"
 
 #: ../lib/ephy-gui.c:210
 msgid "You do not have permission to create files in this directory."
@@ -905,19 +905,18 @@ msgstr "لا تملك التصاريح الكافية لإنشاء ملفات ف
 
 #: ../lib/ephy-gui.c:213
 msgid "Directory not Writable"
-msgstr "لا يمكن الكتابة على الدليل"
+msgstr "لا يمكن الكتابة في الدليل"
 
 #: ../lib/ephy-gui.c:242
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
-msgstr "لا يمكن الكتابة فوق الملف «%s» الموجود مسبقا"
+msgstr "لا يمكن الكتابة فوق الملف ”%s“ الموجود مسبقا"
 
 #: ../lib/ephy-gui.c:246
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
-msgstr ""
-"هناك ملف موجود مسبقا بنفس الاسم، لا تملك التصاريح اللازمة للكتابة فوقه."
+msgstr "هناك ملف موجود مسبقا بنفس الاسم، لا تملك التصاريح اللازمة للكتابة فوقه."
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
@@ -1042,10 +1041,10 @@ msgstr[5] "بقي %u:%02u ساعة"
 #, c-format
 msgid "%u hour left"
 msgid_plural "%u hours left"
-msgstr[0] "بقي %u ساعة"
-msgstr[1] "بقي %u ساعة"
-msgstr[2] "بقي %u ساعة"
-msgstr[3] "بقي %u ساعة"
+msgstr[0] "بقي أقل من ساعة"
+msgstr[1] "بقي ساعة"
+msgstr[2] "بقي ساعتين"
+msgstr[3] "بقي %u ساعات"
 msgstr[4] "بقي %u ساعة"
 msgstr[5] "بقي %u ساعة"
 
@@ -1093,7 +1092,7 @@ msgstr "افتح"
 msgid "Show in folder"
 msgstr "أظهر في المجلد"
 
-#: ../lib/widgets/ephy-download-widget.c:458
+#: ../lib/widgets/ephy-download-widget.c:462
 msgid "Starting…"
 msgstr "يبدأ…"
 
@@ -1157,12 +1156,12 @@ msgstr[5] "_وحّد مع %Id علامة متطابقة"
 #: ../src/bookmarks/ephy-bookmark-properties.c:298
 #, c-format
 msgid "Show “%s”"
-msgstr "اعرض “%s”"
+msgstr "اعرض ”%s“"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:423
 #, c-format
 msgid "“%s” Properties"
-msgstr "خصائص «%s»"
+msgstr "خصائص ”%s“"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:547
 msgid "_Title:"
@@ -1264,7 +1263,7 @@ msgstr "_موضوع جديد"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:160
 msgid "Create a new topic"
-msgstr "أنشئ موضوع جديد"
+msgstr "أنشئ موضوعا جديدا"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
@@ -1349,7 +1348,7 @@ msgstr "_قص"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
 #: ../src/ephy-history-window.c:150
 msgid "Cut the selection"
-msgstr "قص المختار"
+msgstr "قص التحديد"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1174
@@ -1361,7 +1360,7 @@ msgstr "ا_نسخ"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
 #: ../src/ephy-history-window.c:153
 msgid "Copy the selection"
-msgstr "انسخ المختار"
+msgstr "انسخ التحديد"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
 #: ../src/ephy-history-window.c:155 ../src/ephy-window.c:118
@@ -1371,7 +1370,7 @@ msgstr "ا_لصق"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
 #: ../src/ephy-history-window.c:156
 msgid "Paste the clipboard"
-msgstr "الصق الحافظة"
+msgstr "الصق محتوى الحافظة"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/ephy-history-window.c:158
@@ -1415,7 +1414,7 @@ msgstr "ال_تسمية"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
 #: ../src/ephy-history-window.c:188
 msgid "Show the title column"
-msgstr "أظهر عمود عنوان الصفحة"
+msgstr "أظهر عمود تسمية الصفحة"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
 #: ../src/ephy-history-window.c:190
@@ -1429,7 +1428,7 @@ msgstr "اكتب موضوعا"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:375
 #, c-format
 msgid "Delete topic “%s”?"
-msgstr "أأحذف الموضوع “%s”؟"
+msgstr "أأحذف الموضوع ”%s“؟"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:378
 msgid "Delete this topic?"
@@ -1462,7 +1461,7 @@ msgstr "فيَربِرد"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:511
 #, c-format
 msgid "Mozilla “%s” profile"
-msgstr "طور موزيلا «%s»"
+msgstr "لاحة موزيلا ”%s“"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:515
 msgid "Galeon"
@@ -1485,7 +1484,7 @@ msgstr "فشل الاستيراد"
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
-msgstr "تعذّر استيراد العلامات من « %s » لأن الملف معطوب أو النسق غير مدعوم."
+msgstr "تعذّر استيراد العلامات من ”%s“ لأن الملف معطوب أو النسق غير مدعوم."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:616
 msgid "Import Bookmarks from File"
@@ -1560,11 +1559,11 @@ msgstr "افتح العلامات المختارة في ألسنة جديدة"
 #: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
 msgid "Create topic “%s”"
-msgstr "أنشئ الموضوع “%s”"
+msgstr "أنشئ الموضوع ”%s“"
 
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
-msgstr "قف"
+msgstr "أوقف"
 
 #: ../src/ephy-combined-stop-reload-action.c:42
 msgid "Stop current data transfer"
@@ -1717,9 +1716,9 @@ msgid_plural "Last %d days"
 msgstr[0] "اليوم"
 msgstr[1] "آخر يوم"
 msgstr[2] "اليومين الأخيرين"
-msgstr[3] "الأيّام الـ %Id الأخيرة"
-msgstr[4] "الأيّام الـ %Id الأخيرة"
-msgstr[5] "الأيّام الـ %Id الأخيرة"
+msgstr[3] "آخر %Id أيّام"
+msgstr[4] "آخر %Id يوما"
+msgstr[5] "آخر %Id يوم"
 
 #: ../src/ephy-history-window.c:826
 msgid "All history"
@@ -1739,7 +1738,7 @@ msgstr "افتح نافذة متصفّح جديدة"
 
 #: ../src/ephy-main.c:86
 msgid "Launch the bookmarks editor"
-msgstr "أطلق محرّر العلامات"
+msgstr "افتح محرّر العلامات"
 
 #: ../src/ephy-main.c:88
 msgid "Import bookmarks from the given file"
@@ -1759,15 +1758,15 @@ msgstr "مسار"
 
 #: ../src/ephy-main.c:94
 msgid "Start a private instance"
-msgstr "ابدأ نموذج خاص"
+msgstr "ابدأ سيرورة خاصة"
 
 #: ../src/ephy-main.c:96
 msgid "Start the browser in application mode"
-msgstr "ابدأ المتصفّح في وضع التطبيق"
+msgstr "ابدأ المتصفّح في طور التطبيق"
 
 #: ../src/ephy-main.c:98
 msgid "Profile directory to use in the private instance"
-msgstr "الدليل المستعمل في النموذج الخاص"
+msgstr "الدليل المستعمل للاحة السيرورة الخاص"
 
 #: ../src/ephy-main.c:98
 msgid "DIR"
@@ -1803,11 +1802,11 @@ msgstr "أغلق اللسان"
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "التنزيلات ستُلغى وسيتبعها خروج حالا."
-msgstr[1] "التنزيلات ستُلغى وسيتبعها خروج في ثانية واحدة."
-msgstr[2] "التنزيلات ستُلغى وسيتبعها خروج في ثانيتين."
-msgstr[3] "التنزيلات ستُلغى وسيتبعها خروج في %Id ثوانٍ."
-msgstr[4] "التنزيلات ستُلغى وسيتبعها خروج في %Id ثانية."
-msgstr[5] "التنزيلات ستُلغى وسيتبعها خروج في %Id ثانية."
+msgstr[1] "التنزيلات ستُلغى وسيتبعها خروج خلال ثانية واحدة."
+msgstr[2] "التنزيلات ستُلغى وسيتبعها خروج خلال ثانيتين."
+msgstr[3] "التنزيلات ستُلغى وسيتبعها خروج خلال %Id ثوانٍ."
+msgstr[4] "التنزيلات ستُلغى وسيتبعها خروج خلال %Id ثانية."
+msgstr[5] "التنزيلات ستُلغى وسيتبعها خروج خلال %Id ثانية."
 
 #: ../src/ephy-session.c:219
 msgid "Abort pending downloads?"
@@ -1888,7 +1887,7 @@ msgstr "ابحث عن ال_سابق"
 #. View actions.
 #: ../src/ephy-window.c:133 ../src/ephy-window.c:135
 msgid "_Stop"
-msgstr "_قف"
+msgstr "أو_قف"
 
 #: ../src/ephy-window.c:139
 msgid "_Larger Text"
@@ -2107,8 +2106,8 @@ msgid ""
 "have visited. Before proceeding, check the types of information that you "
 "want to remove:"
 msgstr ""
-"أنت على وشك محو بيانات شخصية حول الصفحات التي قمت بزيارتها. قبل المواصلة، "
-"تحقق من أنواع المعلومات التي تريد حذفها:"
+"أنت على وشك محو بيانات شخصية حول الصفحات التي زرتها. قبل المواصلة، تحقق من "
+"أنواع المعلومات التي تريد حذفها:"
 
 #: ../src/pdm-dialog.c:341
 msgid "Clear All Personal Data"
@@ -2117,7 +2116,7 @@ msgstr "امْحُ كل المعلومات الشخصية"
 #. Cookies
 #: ../src/pdm-dialog.c:375
 msgid "C_ookies"
-msgstr "س_كاكر"
+msgstr "ال_كعكات"
 
 #. Passwords
 #: ../src/pdm-dialog.c:387
@@ -2127,7 +2126,7 @@ msgstr "_كلمات السر المحفوظة"
 #. History
 #: ../src/pdm-dialog.c:399
 msgid "Hi_story"
-msgstr "ال_تاريخ"
+msgstr "ال_تأريخ"
 
 #. Cache
 #: ../src/pdm-dialog.c:411
@@ -2165,7 +2164,7 @@ msgstr "الاسم"
 
 #: ../src/pdm-dialog.c:1197
 msgid "Host"
-msgstr "مستضيف"
+msgstr "المستضيف"
 
 #: ../src/pdm-dialog.c:1210
 msgid "User Name"
@@ -2195,7 +2194,7 @@ msgstr "احفظ الصورة ك‍"
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
-msgstr "%s (%s)"
+msgstr "‏%s ‏(%s)"
 
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
@@ -2204,7 +2203,7 @@ msgstr "%s (%s)"
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
-msgstr "محددة من قبل المستخدم (%s)"
+msgstr "حددها المستخدم (%s)"
 
 #: ../src/prefs-dialog.c:504
 #, c-format
