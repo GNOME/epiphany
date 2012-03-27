@@ -188,7 +188,6 @@ ephy_history_service_init (EphyHistoryService *self)
 {
   self->priv = EPHY_HISTORY_SERVICE_GET_PRIVATE (self);
 
-  self->priv->active = TRUE;
   self->priv->history_thread = g_thread_new ("EphyHistoryService", (GThreadFunc) run_history_service_thread, self);
   self->priv->queue = g_async_queue_new ();
 }
