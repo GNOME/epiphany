@@ -13,9 +13,7 @@ convert_DATA = epiphany.convert
 gsettings_ENUM_NAMESPACE = org.gnome.Epiphany
 gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 
-gsettings_files = org.gnome.epiphany.gschema.xml.in
-gsettings_SCHEMAS = $(gsettings_files:.xml.in=.xml)
-@INTLTOOL_XML_NOMERGE_RULE@
+gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 @GSETTINGS_RULES@
 
 aboutdir = $(pkgdatadir)
@@ -69,7 +67,7 @@ EXTRA_DIST = \
 	$(service_DATA)			\
 	$(m4data_DATA)			\
 	$(default_bookmarks_in_files)	\
-	$(gsettings_files)		\
+	$(gsettings_SCHEMAS)		\
 	$(convert_DATA)			\
 	epiphany-service.xml		\
 	check-mime.py
@@ -78,5 +76,4 @@ DISTCLEANFILES = \
 	$(service_DATA)			\
 	$(pkgconfig_DATA)		\
 	$(desktop_DATA)			\
-	$(default_bookmarks_DATA)	\
-	$(gsettings_SCHEMAS)
+	$(default_bookmarks_DATA)
