@@ -1059,6 +1059,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 					    NULL);
 
 	cell = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (cell, "follow-state", TRUE, NULL);
 	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
 				  cell, FALSE);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
