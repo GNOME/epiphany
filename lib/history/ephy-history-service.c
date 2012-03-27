@@ -357,7 +357,7 @@ ephy_history_service_execute_quit (EphyHistoryService *self, gpointer data, gpoi
 static gpointer
 run_history_service_thread (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+  EphyHistoryServicePrivate *priv = self->priv;
   EphyHistoryServiceMessage *message;
 
   g_assert (priv->history_thread == g_thread_self ());
