@@ -1033,12 +1033,66 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "pixbuf", favicon_col);
 
+	/* Pixel-perfect aligment with the location entry favicon
+	 * (16x16). Consider that this /might/ depend on the theme.
+	 *
+	 * The GtkEntryCompletion can not be themed so we work-around
+	 * that with padding and fixed sizes.
+	 * For the first cell, this is:
+	 *
+	 * ___+++++iiiiiiiiiiiiiiii++__ttt...bbb++++++__
+	 *
+	 * _ = widget spacing, can not be handled (3 px)
+	 * + = padding (5 px) (ICON_PADDING_LEFT)
+	 * i = the icon (16 px) (ICON_CONTENT_WIDTH)
+	 * + = padding (2 px) (ICON_PADDING_RIGHT) (cut by the fixed_size)
+	 * _ = spacing between cells, can not be handled (2 px)
+	 * t = the text (expands)
+	 * b = bookmark icon (16 px)
+	 * + = padding (6 px) (BKMK_PADDING_RIGHT)
+	 * _ = widget spacing, can not be handled (2 px)
+	 *
+	 * Each character is a pixel.
+	 *
+	 * The text cell and the bookmark icon cell are much more
+	 * flexible in its aligment, because they do not have to align
+	 * with anything in the entry.
+	 */
+
+#define ROW_PADDING_VERT 2
+
+#define ICON_PADDING_LEFT 5
+#define ICON_CONTENT_WIDTH 16
+#define ICON_PADDING_RIGHT 2
+
+#define ICON_CONTENT_HEIGHT 16
+
+#define TEXT_PADDING_LEFT 0
+
+#define BKMK_PADDING_RIGHT 6
+
+	gtk_cell_renderer_set_padding
+		(cell, ICON_PADDING_LEFT, ROW_PADDING_VERT);
+	gtk_cell_renderer_set_fixed_size
+		(cell,
+		 (ICON_PADDING_LEFT + ICON_CONTENT_WIDTH + ICON_PADDING_RIGHT),
+		 ICON_CONTENT_HEIGHT);
+	gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
+
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
+
+	/* Pixel-perfect aligment with the text in the location entry.
+	 * See above.
+	 */
+	gtk_cell_renderer_set_padding
+		(cell, TEXT_PADDING_LEFT, ROW_PADDING_VERT);
+	gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
+
         /*
          * As the width of the entry completion is known in advance 
          * (as big as the entry you are completing on), we can set 
@@ -1063,6 +1117,11 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 					    cell, extracell_data_func,
 					    entry,
 					    NULL);
+
+	/* Pixel-perfect aligment. This just keeps the same margin from
+	 * the border than the favicon on the other side. See above. */
+	gtk_cell_renderer_set_padding
+		(cell, BKMK_PADDING_RIGHT, ROW_PADDING_VERT);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
