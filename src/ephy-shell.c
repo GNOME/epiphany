@@ -297,9 +297,9 @@ ephy_shell_startup (GApplication* application)
                                      application);
 
     builder = gtk_builder_new ();
-    gtk_builder_add_from_file (builder,
-                               ephy_file ("epiphany-application-menu.ui"),
-                               NULL);
+    gtk_builder_add_from_resource (builder,
+                                   "/org/gnome/epiphany/epiphany-application-menu.ui",
+                                   NULL);
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
     g_object_unref (builder);

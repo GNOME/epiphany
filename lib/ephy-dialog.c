@@ -140,7 +140,7 @@ dialog_destroy_cb (GtkWidget *widget, EphyDialog *dialog)
 
 static void
 impl_construct (EphyDialog *dialog,
-		const char *file,
+		const char *resource,
 		const char *name,
 		const char *domain)
 {
@@ -150,10 +150,10 @@ impl_construct (EphyDialog *dialog,
 
 	builder = gtk_builder_new ();
 	gtk_builder_set_translation_domain (builder, domain);
-	gtk_builder_add_from_file (builder, file, &error);
+	gtk_builder_add_from_resource (builder, resource, &error);
 	if (error)
 	{
-		g_warning ("Unable to load UI file %s: %s", file, error->message);
+		g_warning ("Unable to load UI resource %s: %s", resource, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -234,7 +234,7 @@ ephy_dialog_set_size_group (EphyDialog *dialog,
 /**
  * ephy_dialog_construct:
  * @dialog: an #EphyDialog
- * @file: the path to a #GtkBuilder file
+ * @resource: the path to the UI resource
  * @name: name of the widget to use for @dialog, found in @file
  * @domain: translation domain to set for @dialog
  *
@@ -243,12 +243,12 @@ ephy_dialog_set_size_group (EphyDialog *dialog,
  **/
 void
 ephy_dialog_construct (EphyDialog *dialog,
-		       const char *file,
+		       const char *resource,
 		       const char *name,
 		       const char *domain)
 {
 	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
-	klass->construct (dialog, file, name, domain);
+	klass->construct (dialog, resource, name, domain);
 }
 
 /**

@@ -3183,6 +3183,30 @@ static const char* disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "ViewEncoding",
                                                        "FileBookmarkPage" };
 
+static gboolean
+_gtk_css_provider_load_from_resource (GtkCssProvider* provider,
+				      const char *resource_path,
+				      GError **error)
+{
+	GBytes *data;
+	gboolean res;
+	
+	g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), FALSE);
+	g_return_val_if_fail (resource_path != NULL, FALSE);
+
+	data = g_resources_lookup_data (resource_path, 0, error);
+	if (data == NULL)
+		return FALSE;
+
+	res = gtk_css_provider_load_from_data (provider,
+					       g_bytes_get_data (data, NULL),
+					       g_bytes_get_size (data),
+					       error);
+	g_bytes_unref (data);
+	
+	return res;
+}
+
 static GObject *
 ephy_window_constructor (GType type,
 			 guint n_construct_properties,
@@ -3199,7 +3223,6 @@ ephy_window_constructor (GType type,
 	GError *error = NULL;
 	guint settings_connection;
 	GtkCssProvider *css_provider;
-	GFile *css_file;
 	int i;
 	EphyEmbedShellMode mode;
 
@@ -3275,21 +3298,22 @@ ephy_window_constructor (GType type,
 				priv->downloads_box, "visible",
 				G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 	
-	/* now load the UI definition */
-	gtk_ui_manager_add_ui_from_file
-		(priv->manager, ephy_file ("epiphany-ui.xml"), &error);
+	/* Now load the UI definition. */
+	gtk_ui_manager_add_ui_from_resource (priv->manager,
+					     "/org/gnome/epiphany/epiphany-ui.xml",
+					     &error);
 	if (error != NULL)
 	{
 		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
 		g_error_free (error);
+		error = NULL;
 	}
 
-	/* Attach the CSS provider to the window */
-	css_file = g_file_new_for_path (ephy_file ("epiphany.css"));
+	/* Attach the CSS provider to the window. */
 	css_provider = gtk_css_provider_new ();
-	gtk_css_provider_load_from_file (css_provider,
-	                                 css_file,
-	                                 &error);
+	_gtk_css_provider_load_from_resource (css_provider,
+					      "/org/gnome/epiphany/epiphany.css",
+					      &error);
 	if (error == NULL)
 	{
 		gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)),
@@ -3303,7 +3327,6 @@ ephy_window_constructor (GType type,
 	}
 
 	g_object_unref (css_provider);
-	g_object_unref (css_file);
 
 	/* Initialize the menus */
 	priv->enc_menu = ephy_encoding_menu_new (window);

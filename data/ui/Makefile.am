@@ -1,19 +1,13 @@
-xmldir = $(pkgdatadir)
-xml_DATA = \
+UI_FILES = \
 	epiphany-bookmark-editor-ui.xml	\
 	epiphany-ui.xml			\
-	epiphany-history-window-ui.xml
-
-cssdir = $(pkgdatadir)
-css_DATA = epiphany.css
-
-gladedir = $(pkgdatadir)/glade
-glade_DATA = \
+	epiphany-history-window-ui.xml  \
 	epiphany.ui			\
 	epiphany-application-menu.ui	\
-	prefs-dialog.ui
+	prefs-dialog.ui			\
+	epiphany.css                    \
+	$(NULL)
 
 EXTRA_DIST = \
-	$(xml_DATA) \
-	$(css_DATA) \
-	$(glade_DATA)
+	$(UI_FILES) \
+	$(NULL)

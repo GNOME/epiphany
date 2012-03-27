@@ -625,7 +625,7 @@ show_cookies_properties (PdmDialog *dialog,
 
 	cookie_dialog = ephy_dialog_new_with_parent (parent);
 	ephy_dialog_construct (cookie_dialog,
-			       ephy_file ("epiphany.ui"),
+			       "/org/gnome/epiphany/epiphany.ui",
 			       "cookie_properties_dialog",
 			       NULL);
 
@@ -1466,7 +1466,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
-			       ephy_file ("epiphany.ui"),
+			       "/org/gnome/epiphany/epiphany.ui",
 			       "pdm_dialog",
 			       NULL);
 

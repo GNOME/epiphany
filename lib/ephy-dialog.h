@@ -54,7 +54,7 @@ struct _EphyDialogClass
 
 	/* Methods */
 	void	(* construct)	(EphyDialog *dialog,
-				 const char *file,
+				 const char *resource,
 				 const char *name,
 				 const char *domain);
 	void	(* show)	(EphyDialog *dialog);
@@ -75,7 +75,7 @@ EphyDialog     *ephy_dialog_new			(void);
 EphyDialog     *ephy_dialog_new_with_parent	(GtkWidget *parent_window);
 
 void		ephy_dialog_construct		(EphyDialog *dialog,
-						 const char *file,
+						 const char *resource,
 						 const char *name,
 						 const char *domain);
 

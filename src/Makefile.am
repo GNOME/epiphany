@@ -6,7 +6,9 @@ noinst_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
 
-EXTRA_DIST =
+EXTRA_DIST = \
+	epiphany.gresource.xml \
+	$(NULL)
 
 headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
 header_DATA = \
@@ -106,8 +108,21 @@ libephymain_la_CFLAGS = \
 	$(WEBKIT_CFLAGS)	  \
 	$(AM_CFLAGS)
 
-BUILT_SOURCES =		\
-	$(TYPES_SOURCE)
+epiphany-resources.c: epiphany.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data/ui --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+
+epiphany-resources.h: epiphany.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data/ui --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+
+EPIPHANY_RESOURCES = \
+	epiphany-resources.c \
+	epiphany-resources.h \
+	$(NULL)
+
+BUILT_SOURCES = \
+	$(EPIPHANY_RESOURCES) \
+	$(TYPES_SOURCE)       \
+	$(NULL)
 
 if ENABLE_SEED
 NOINST_H_FILES += \
@@ -123,7 +138,9 @@ libephymain_la_SOURCES += \
 libephymain_la_CFLAGS += $(SEED_CFLAGS)
 endif # ENABLE_SEED
 
-epiphany_SOURCES = ephy-main.c
+epiphany_SOURCES = ephy-main.c \
+	$(EPIPHANY_RESOURCES)  \
+	$(NULL)
 
 epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib		\

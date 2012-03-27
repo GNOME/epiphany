@@ -538,7 +538,7 @@ setup_add_language_dialog (PrefsDialog *pd)
 					     NULL));
 
 	ephy_dialog_construct (dialog, 
-			       ephy_file ("prefs-dialog.ui"),
+			       "/org/gnome/epiphany/prefs-dialog.ui",
 			       "add_language_dialog",
 			       NULL);
 
@@ -1031,7 +1031,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
 
 	ephy_dialog_construct (dialog,
-			       ephy_file ("prefs-dialog.ui"),
+			       "/org/gnome/epiphany/prefs-dialog.ui",
 			       "prefs_dialog",
 			       NULL);
 

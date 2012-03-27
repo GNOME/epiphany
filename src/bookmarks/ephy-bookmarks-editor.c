@@ -1553,9 +1553,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
-	gtk_ui_manager_add_ui_from_file (ui_merge,
-					 ephy_file ("epiphany-bookmark-editor-ui.xml"),
-					 NULL);
+	gtk_ui_manager_add_ui_from_resource (ui_merge,
+                                             "/org/gnome/epiphany/epiphany-bookmark-editor-ui.xml",
+                                             NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (editor), 
 				    gtk_ui_manager_get_accel_group (ui_merge));
 	gtk_ui_manager_ensure_update (ui_merge);

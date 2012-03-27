@@ -1145,9 +1145,9 @@ ephy_history_window_constructed (GObject *object)
 
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
-	gtk_ui_manager_add_ui_from_file (ui_merge,
-					 ephy_file ("epiphany-history-window-ui.xml"),
-					 NULL);
+	gtk_ui_manager_add_ui_from_resource (ui_merge,
+					     "/org/gnome/epiphany/epiphany-history-window-ui.xml",
+					     NULL);
 	gtk_ui_manager_ensure_update (ui_merge);
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
