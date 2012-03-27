@@ -27,8 +27,6 @@ struct _EphyHistoryServicePrivate {
   EphySQLiteConnection *history_database;
   GThread *history_thread;
   GAsyncQueue *queue;
-  GMutex history_thread_mutex;
-  gboolean active;
   gboolean scheduled_to_quit;
   gboolean scheduled_to_commit;
 };
