@@ -85,10 +85,15 @@ ephy_toolbar_constructed (GObject *object)
   GtkAction *action;
   GtkToolItem *back_forward, *location_stop_reload, *tool_item;
   GtkWidget *tool_button, *box, *location, *toolbar;
+  GtkSizeGroup *size;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
   toolbar = GTK_WIDGET (object);
+
+  /* Create a GtkSizeGroup to sync the height of the location entry, and
+   * the stop/reload button. */
+  size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   /* Set the MENUBAR style class so it's possible to drag the app
    * using the toolbar. */
@@ -160,6 +165,11 @@ ephy_toolbar_constructed (GObject *object)
                            NULL);
   
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (location_stop_reload));
+
+  gtk_size_group_add_widget (size, tool_button);
+  gtk_size_group_add_widget (size, location);
+  g_object_unref (size);
+
   gtk_widget_set_margin_right (GTK_WIDGET (location_stop_reload), 12);
   gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
 
