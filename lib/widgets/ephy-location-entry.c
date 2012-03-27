@@ -908,9 +908,8 @@ textcell_data_func (GtkCellLayout *cell_layout,
 					     &color);
 
 		att = pango_attr_foreground_new
-			(color.red, color.green, color.blue);
+		   (color.red * 65535, color.green * 65535, color.blue * 65535);
 		att->start_index = strlen (title)+1;
-
 		pango_attr_list_insert (list, att);
 	        g_free (title);
 	}
@@ -918,6 +917,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	{
 		ctext = title;
 	}
+	g_object_set (cell, "attributes", list, NULL);
 
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_take_string (&text, ctext);
