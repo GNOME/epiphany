@@ -1034,10 +1034,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				       cell, "pixbuf", favicon_col);
 
 	cell = gtk_cell_renderer_text_new ();
-	g_object_set (cell,
-		      "ellipsize", PANGO_ELLIPSIZE_END,
-		      "ellipsize-set", TRUE,
-		      NULL);
+	g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
