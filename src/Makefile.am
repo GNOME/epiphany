@@ -8,6 +8,7 @@ bin_PROGRAMS = epiphany
 
 EXTRA_DIST = \
 	epiphany.gresource.xml \
+	$(UI_FILES)            \
 	$(NULL)
 
 headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
@@ -108,11 +109,21 @@ libephymain_la_CFLAGS = \
 	$(WEBKIT_CFLAGS)	  \
 	$(AM_CFLAGS)
 
-epiphany-resources.c: epiphany.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data/ui --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+UI_FILES = \
+	epiphany-bookmark-editor-ui.xml	\
+	epiphany-history-window-ui.xml  \
+	epiphany-ui.xml			\
+	epiphany.ui			\
+	epiphany-application-menu.ui	\
+	prefs-dialog.ui			\
+	epiphany.css                    \
+	$(NULL)
 
-epiphany-resources.h: epiphany.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data/ui --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+epiphany-resources.c: epiphany.gresource.xml $(UI_FILES)
+	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+
+epiphany-resources.h: epiphany.gresource.xml $(UI_FILES)
+	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \
 	epiphany-resources.c \
