@@ -535,7 +535,6 @@ static void
 ephy_session_dispose (GObject *object)
 {
 	EphySession *session = EPHY_SESSION (object);
-	EphySessionPrivate *priv = session->priv;
 
 	LOG ("EphySession disposing");
 
