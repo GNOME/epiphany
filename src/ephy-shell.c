@@ -246,6 +246,7 @@ quit_application (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
+  ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell)));
   g_application_quit (g_application_get_default ());
 }
 
