@@ -73,7 +73,7 @@ struct _EphySessionPrivate
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
 #define HISTORY_WINDOW_ID	"HistoryWindow"
-#define SESSION_CRASHED		"type:session_crashed"
+#define SESSION_STATE		"type:session_state"
 
 static void ephy_session_class_init	(EphySessionClass *klass);
 static void ephy_session_iface_init	(EphyExtensionIface *iface);
@@ -103,10 +103,10 @@ get_session_file (const char *filename)
 		return NULL;
 	}
 
-	if (strcmp (filename, SESSION_CRASHED) == 0)
+	if (strcmp (filename, SESSION_STATE) == 0)
 	{
 		path = g_build_filename (ephy_dot_dir (),
-					 "session_crashed.xml",
+					 "session_state.xml",
 					 NULL);
 	}
 	else
@@ -144,7 +144,7 @@ load_status_notify_cb (EphyWebView *view,
 	if (status == WEBKIT_LOAD_PROVISIONAL ||
 	    status == WEBKIT_LOAD_COMMITTED || 
 	    status == WEBKIT_LOAD_FINISHED)
-		ephy_session_save (session, SESSION_CRASHED);
+		ephy_session_save (session, SESSION_STATE);
 }
 
 static void
@@ -163,7 +163,7 @@ notebook_page_removed_cb (GtkWidget *notebook,
 			  guint position,
 			  EphySession *session)
 {
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),
@@ -176,7 +176,7 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 			    guint position,
 			    EphySession *session)
 {
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 }
 
 static gboolean
@@ -236,7 +236,7 @@ session_command_autoresume (EphySession *session,
 
 	LOG ("ephy_session_autoresume");
 
-	saved_session_file = get_session_file (SESSION_CRASHED);
+	saved_session_file = get_session_file (SESSION_STATE);
 	saved_session_file_path = g_file_get_path (saved_session_file);
 	g_object_unref (saved_session_file);
 	crashed_session = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
@@ -264,7 +264,7 @@ session_command_autoresume (EphySession *session,
 
 	ephy_session_queue_command (session,
 				    EPHY_SESSION_CMD_LOAD_SESSION,
-				    SESSION_CRASHED, NULL, user_time, TRUE);
+				    SESSION_STATE, NULL, user_time, TRUE);
 }
 
 static void
@@ -471,7 +471,7 @@ impl_attach_window (EphyExtension *extension,
 	LOG ("impl_attach_window");
 
 	session->priv->windows = g_list_append (session->priv->windows, window);
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 
 	g_signal_connect (window, "focus-in-event",
 			  G_CALLBACK (window_focus_in_event_cb), session);
@@ -510,7 +510,7 @@ impl_detach_window (EphyExtension *extension,
 	LOG ("impl_detach_window");
 
 	session->priv->windows = g_list_remove (session->priv->windows, window);
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 
 	/* NOTE: since the window will be destroyed anyway, we don't need to
 	 * disconnect our signal handlers from its components.
@@ -1217,7 +1217,7 @@ ephy_session_load (EphySession *session,
 	priv->dont_save = FALSE;
 	priv->resume_window = NULL;
 
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 
 	g_object_unref (ephy_shell_get_default ());
 
@@ -1257,7 +1257,7 @@ ephy_session_add_window (EphySession *session,
 		g_list_append (session->priv->tool_windows, window);
 	gtk_application_add_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
 
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 }
 
 /**
@@ -1278,7 +1278,7 @@ ephy_session_remove_window (EphySession *session,
 		g_list_remove (session->priv->tool_windows, window);
 	gtk_application_remove_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
 
-	ephy_session_save (session, SESSION_CRASHED);
+	ephy_session_save (session, SESSION_STATE);
 }
 
 /**
