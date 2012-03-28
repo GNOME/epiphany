@@ -24,10 +24,10 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-web-view.h"
 
 #include <glib/gstdio.h>
 #include <libsoup/soup-gnome.h>
+#include <webkit/webkit.h>
 
 #define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
 

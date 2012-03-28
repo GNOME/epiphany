@@ -27,8 +27,6 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "ephy-web-view.h"
-
 G_BEGIN_DECLS
 
 typedef struct {
