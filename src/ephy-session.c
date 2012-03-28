@@ -69,7 +69,6 @@ struct _EphySessionPrivate
 	GtkWidget *quit_interact_dialog;
 
 	guint dont_save : 1;
-	guint quit_while_resuming : 1;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -540,14 +539,6 @@ ephy_session_dispose (GObject *object)
 
 	LOG ("EphySession disposing");
 
-	/* Only remove the crashed session if we're not shutting down while
-	 * the session resume dialogue was still shown!
-	*/
-	if (priv->quit_while_resuming == FALSE)
-	{
-		session_delete (session, SESSION_CRASHED);
-	}
-
 	session_command_queue_clear (session);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
@@ -651,8 +642,6 @@ ephy_session_close (EphySession *session)
 	g_object_ref (ephy_shell_get_default ());
 
 	priv->dont_save = TRUE;
-	/* need to set this up here while the dialogue hasn't been killed yet */
-	priv->quit_while_resuming = priv->resume_window != NULL;	
 
 	/* Clear command queue */
 	session_command_queue_clear (session);
