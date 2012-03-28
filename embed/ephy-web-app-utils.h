@@ -39,11 +39,11 @@ typedef struct {
 #define EPHY_WEB_APP_PREFIX "app-"
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
-char    *ephy_web_application_create (const char *address, const char *title, GdkPixbuf *icon);
+char    *ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon);
 
 gboolean ephy_web_application_delete (const char *name);
 
-char    *ephy_web_application_get_profile_directory (const char *app_name);
+char    *ephy_web_application_get_profile_directory (const char *name);
 
 GList   *ephy_web_application_get_application_list (void);
 

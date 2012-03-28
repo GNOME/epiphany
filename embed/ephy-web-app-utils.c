@@ -75,20 +75,20 @@ desktop_filename_from_wm_class (char *wm_class)
 
 /**
  * ephy_web_application_get_profile_directory:
- * @app_name: the application name
+ * @name: the application name
  *
- * Gets the directory whre the profile for @app_name is meant
+ * Gets the directory whre the profile for @name is meant
  * to be stored.
  *
  * Returns: (transfer full): A newly allocated string.
  **/
 char *
-ephy_web_application_get_profile_directory (const char *app_name)
+ephy_web_application_get_profile_directory (const char *name)
 {
   char *app_dir, *wm_class, *profile_dir, *encoded;
   GError *error = NULL;
 
-  wm_class = get_wm_class_from_app_title (app_name);
+  wm_class = get_wm_class_from_app_title (name);
   encoded = g_filename_from_utf8 (wm_class, -1, NULL, NULL, &error);
   g_free (wm_class);
 
@@ -305,7 +305,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 /**
  * ephy_web_application_create:
  * @address: the address of the new web application
- * @title: the title for the new web application
+ * @name: the name for the new web application
  * @icon: the icon for the new web application
  * 
  * Creates a new Web Application from the provided address.
@@ -313,7 +313,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
 char *
-ephy_web_application_create (const char *address, const char *title, GdkPixbuf *icon)
+ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon)
 {
   char *profile_dir = NULL;
   char *toolbar_path = NULL;
@@ -321,7 +321,7 @@ ephy_web_application_create (const char *address, const char *title, GdkPixbuf *
 
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
-  profile_dir = ephy_web_application_get_profile_directory (title);
+  profile_dir = ephy_web_application_get_profile_directory (name);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR))
     goto out;
 
@@ -343,7 +343,7 @@ ephy_web_application_create (const char *address, const char *title, GdkPixbuf *
   create_cookie_jar_for_domain (address, profile_dir);
 
   /* Create the deskop file. */
-  desktop_file_path = create_desktop_file (address, profile_dir, title, icon);
+  desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
 
 out:
   if (toolbar_path)
