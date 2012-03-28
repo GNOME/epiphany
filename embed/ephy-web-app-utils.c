@@ -463,3 +463,22 @@ ephy_web_application_free_application_list (GList *list)
 
   g_list_free (list);
 }
+
+/**
+ * ephy_web_application_exists:
+ * @name: the potential name of the web application
+ *
+ * Returns: whether an application with @name exists.
+ **/
+gboolean
+ephy_web_application_exists (const char *name)
+{
+  char *profile_dir;
+  gboolean profile_exists;
+
+  profile_dir = ephy_web_application_get_profile_directory (name);
+  profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
+  g_free (profile_dir);
+
+  return profile_exists;
+}

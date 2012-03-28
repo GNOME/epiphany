@@ -501,21 +501,14 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 					EphyApplicationDialogData *data)
 {
 	const char *app_name;
-	char *profile_dir;
 	char *desktop_file;
 	char *message;
 	NotifyNotification *notification;
-	gboolean profile_exists;
 
 	if (response == GTK_RESPONSE_OK) {
 		app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
-		profile_dir = ephy_web_application_get_profile_directory (app_name);
-		if (!profile_dir)
-			return;
-		profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
-		g_free (profile_dir);
 
-		if (profile_exists)
+		if (ephy_web_application_exists (app_name))
 		{
 			if (confirm_web_application_overwrite (GTK_WINDOW (dialog), app_name))
 				ephy_web_application_delete (app_name);

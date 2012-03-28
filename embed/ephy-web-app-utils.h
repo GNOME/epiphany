@@ -51,6 +51,8 @@ GList   *ephy_web_application_get_application_list (void);
 
 void     ephy_web_application_free_application_list (GList *list);
 
+gboolean ephy_web_application_exists (const char *name);
+
 G_END_DECLS
 
 #endif
