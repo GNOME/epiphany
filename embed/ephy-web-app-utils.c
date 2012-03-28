@@ -77,8 +77,7 @@ desktop_filename_from_wm_class (char *wm_class)
  * ephy_web_application_get_profile_directory:
  * @name: the application name
  *
- * Gets the directory whre the profile for @name is meant
- * to be stored.
+ * Gets the directory where the profile for @name is meant to be stored.
  *
  * Returns: (transfer full): A newly allocated string.
  **/
@@ -308,7 +307,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
  * @name: the name for the new web application
  * @icon: the icon for the new web application
  * 
- * Creates a new Web Application from the provided address.
+ * Creates a new Web Application for @address.
  * 
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
@@ -355,6 +354,15 @@ out:
   return desktop_file_path;
 }
 
+/**
+ * ephy_web_application_get_application_list:
+ *
+ * Gets a list of the currently installed web applications.
+ * Free the returned GList with
+ * ephy_web_application_free_application_list.
+ *
+ * Returns: (transfer-full): a #GList of #EphyWebApplication objects
+ **/
 GList *
 ephy_web_application_get_application_list ()
 {
@@ -453,6 +461,12 @@ ephy_web_application_free (EphyWebApplication *app)
   g_slice_free (EphyWebApplication, app);
 }
 
+/**
+ * ephy_web_application_free_application_list:
+ * @list: an #EphyWebApplication GList
+ *
+ * Frees a @list as given by ephy_web_application_get_application_list.
+ **/
 void
 ephy_web_application_free_application_list (GList *list)
 {
