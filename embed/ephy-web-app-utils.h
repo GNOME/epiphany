@@ -41,7 +41,7 @@ typedef struct {
 #define EPHY_WEB_APP_PREFIX "app-"
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
-char    *ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *icon);
+char    *ephy_web_application_create (const char *address, const char *title, GdkPixbuf *icon);
 
 gboolean ephy_web_application_delete (const char *name);
 

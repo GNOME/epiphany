@@ -523,7 +523,7 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 		}
 
 		/* Create Web Application, including a new profile and .desktop file. */
-		desktop_file = ephy_web_application_create (data->view,
+		desktop_file = ephy_web_application_create (webkit_web_view_get_uri (data->view),
 							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
 							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
 		if (desktop_file)

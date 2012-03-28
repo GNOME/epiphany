@@ -182,7 +182,7 @@ out:
 #define EPHY_TOOLBARS_XML_FILE "epiphany-toolbars-3.xml"
 
 static char *
-create_desktop_file (EphyWebView *view,
+create_desktop_file (const char *address,
                      const char *profile_dir,
                      const char *title,
                      GdkPixbuf *icon)
@@ -208,7 +208,7 @@ create_desktop_file (EphyWebView *view,
   g_key_file_set_value (file, "Desktop Entry", "Name", title);
   exec_string = g_strdup_printf ("epiphany --application-mode --profile=\"%s\" %s",
                                  profile_dir,
-                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+                                 address);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_free (exec_string);
   g_key_file_set_value (file, "Desktop Entry", "StartupNotification", "true");
@@ -267,7 +267,7 @@ out:
 }
 
 static void
-create_cookie_jar_for_domain (EphyWebView *view, const char *directory)
+create_cookie_jar_for_domain (const char *address, const char *directory)
 {
   SoupSession *session;
   GSList *cookies, *p;
@@ -281,7 +281,7 @@ create_cookie_jar_for_domain (EphyWebView *view, const char *directory)
   g_free (filename);
 
   /* The app domain for the current view */
-  uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+  uri = soup_uri_new (address);
   domain = uri->host;
 
   /* The current cookies */
@@ -304,22 +304,20 @@ create_cookie_jar_for_domain (EphyWebView *view, const char *directory)
 
 /**
  * ephy_web_application_create:
- * @view: an #EphyWebView
+ * @address: the address of the new web application
  * @title: the title for the new web application
  * @icon: the icon for the new web application
  * 
- * Creates a new Web Application from the currently loaded URI in the @view.
+ * Creates a new Web Application from the provided address.
  * 
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
 char *
-ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *icon)
+ephy_web_application_create (const char *address, const char *title, GdkPixbuf *icon)
 {
   char *profile_dir = NULL;
   char *toolbar_path = NULL;
   char *desktop_file_path = NULL;
-
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
@@ -342,10 +340,10 @@ ephy_web_application_create (EphyWebView *view, const char *title, GdkPixbuf *ic
   if (!g_file_set_contents (toolbar_path, EPHY_WEB_APP_TOOLBAR, -1, NULL))
     goto out;
 
-  create_cookie_jar_for_domain (view, profile_dir);
+  create_cookie_jar_for_domain (address, profile_dir);
 
   /* Create the deskop file. */
-  desktop_file_path = create_desktop_file (view, profile_dir, title, icon);
+  desktop_file_path = create_desktop_file (address, profile_dir, title, icon);
 
 out:
   if (toolbar_path)
