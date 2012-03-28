@@ -3,15 +3,11 @@ NULL =
 EGGSOURCES = \
 	eggtreemultidnd.c \
         eggdesktopfile.c \
-        eggsmclient.c \
-	eggsmclient-xsmp.c \
         $(NULL)
 
 EGGHEADERS = \
 	eggtreemultidnd.h \
         eggdesktopfile.h \
-        eggsmclient.h \
-        eggsmclient-private.h \
         $(NULL)
 
 noinst_HEADERS = \

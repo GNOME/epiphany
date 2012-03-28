@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "eggsmclient.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-session.h"
@@ -333,7 +332,6 @@ main (int argc,
 #endif
 
   g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
-  g_option_context_add_group (option_context, egg_sm_client_get_option_group ());
 
 #ifdef GNOME_ENABLE_DEBUG
   option_group = g_option_group_new ("debug",

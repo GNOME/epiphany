@@ -23,7 +23,6 @@
 #include "ephy-session.h"
 
 #include "eggdesktopfile.h"
-#include "eggsmclient.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -93,231 +92,6 @@ enum
 G_DEFINE_TYPE_WITH_CODE (EphySession, ephy_session, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
 						ephy_session_iface_init))
-
-/* Gnome session client */
-
-typedef struct
-{
-	EphySession *session;
-	EggSMClient *sm_client;
-	GtkWidget *dialog;
-	GtkWidget *label;
-	guint timeout_id;
-	guint ticks;
-	int response;
-} InteractData;
-
-static void
-confirm_shutdown_dialog_update_timeout_label (InteractData *data)
-{
-	char *text;
-
-	text = g_strdup_printf (ngettext ("Downloads will be aborted and logout proceed in %d second.",
-					  "Downloads will be aborted and logout proceed in %d seconds.",
-					  data->ticks),
-				data->ticks);
-
-	gtk_label_set_text (GTK_LABEL (data->label), text);
-	g_free (text);
-}
-		
-static gboolean
-confirm_shutdown_dialog_tick_cb (InteractData *data)
-{
-	if (data->ticks > 0)
-	{
-		--data->ticks;
-		confirm_shutdown_dialog_update_timeout_label (data);
-		return TRUE;
-	}
-
-	data->timeout_id = 0;
-	gtk_dialog_response (GTK_DIALOG (data->dialog),
-			     GTK_RESPONSE_ACCEPT);
-	return FALSE;
-}
-
-static void
-confirm_shutdown_dialog_response_cb (GtkWidget *dialog,
-				     int response,
-				     InteractData *data)
-{
-	LOG ("confirm_shutdown_dialog_response_cb response %d", response);
-
-	data->response = response;
-
-	gtk_widget_destroy (dialog);
-}
-
-static void
-confirm_shutdown_dialog_accept_cb (InteractData *data,
-				   GObject *zombie)
-{
-	gtk_dialog_response (GTK_DIALOG (data->dialog),
-			     GTK_RESPONSE_ACCEPT);
-}
-
-static void
-confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
-				     GObject *zombie)
-{
-	EphySessionPrivate *priv = data->session->priv;
-	EggSMClient *sm_client = data->sm_client;
-	EphyShell *shell;
-	gboolean will_quit;
-
-	LOG ("confirm_shutdown_dialog_weak_ref_cb response %d", data->response);
-
-	priv->quit_interact_dialog = NULL;
-
-	shell = ephy_shell_get_default ();
-	if (shell != NULL)
-	{
-		g_object_weak_unref (G_OBJECT (shell),
-				     (GWeakNotify) confirm_shutdown_dialog_accept_cb,
-				     data);
-	}
-
-	if (data->timeout_id != 0)
-	{
-		g_source_remove (data->timeout_id);
-	}
-
-	will_quit = data->response == GTK_RESPONSE_ACCEPT;
-
-	g_free (data);
-
-	egg_sm_client_will_quit (sm_client, will_quit);
-	g_object_unref (sm_client);
-}
-
-static void
-client_quit_requested_cb (EggSMClient *sm_client,
-			  EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-	GtkWidget *dialog, *box;
-	InteractData *data;
-	GList *downloads;
-
-	/* If we're shutting down, check if there are downloads
-	 * remaining, since they can't be restarted.
-	 */
-
-	downloads = ephy_embed_shell_get_downloads (embed_shell);
-	if (ephy_shell_get_default () == NULL || downloads == NULL)
-	{
-		egg_sm_client_will_quit (sm_client, TRUE);
-		return;
-	}
-
-	dialog = gtk_message_dialog_new
-		(NULL,
-		 GTK_DIALOG_MODAL,
-		 GTK_MESSAGE_WARNING,
-		 GTK_BUTTONS_NONE,
-		 _("Abort pending downloads?"));
-	priv->quit_interact_dialog = dialog;
-
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		 _("There are still downloads pending. If you log out, "
-		   "they will be aborted and lost."));
-
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Cancel Logout"), GTK_RESPONSE_REJECT);
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Abort Downloads"), GTK_RESPONSE_ACCEPT);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), "");
-	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
-
-	data = g_new (InteractData, 1);
-	data->sm_client = g_object_ref (sm_client);
-	data->session = session;
-	data->dialog = dialog;
-	data->response = GTK_RESPONSE_REJECT;
-
-	/* This isn't very exact, but it's good enough here */
-	data->timeout_id = g_timeout_add_seconds (1,
-					  (GSourceFunc) confirm_shutdown_dialog_tick_cb,
-					  data);
-	data->ticks = 60;
-
-	/* Add timeout label */
-	data->label = gtk_label_new (NULL);
-	gtk_label_set_line_wrap (GTK_LABEL (data->label), TRUE);
-	confirm_shutdown_dialog_update_timeout_label (data);
-
-	box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-	gtk_box_pack_end (GTK_BOX (box), data->label, FALSE, FALSE, 0);
-	gtk_widget_show (data->label);
-
-	/* When we're quitting, un-veto the shutdown  */
-	g_object_weak_ref (G_OBJECT (ephy_shell_get_default ()),
-			   (GWeakNotify) confirm_shutdown_dialog_accept_cb,
-			   data);
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (confirm_shutdown_dialog_response_cb), data);
-	g_object_weak_ref (G_OBJECT (dialog),
-			   (GWeakNotify) confirm_shutdown_dialog_weak_ref_cb,
-			   data);
-
-	gtk_window_present (GTK_WINDOW (dialog));
-}
-
-static void
-client_quit_cancelled_cb (EggSMClient *sm_client,
-			  EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	if (priv->quit_interact_dialog)
-	{
-		gtk_dialog_response (GTK_DIALOG (priv->quit_interact_dialog),
-				     GTK_RESPONSE_DELETE_EVENT);
-	}
-}
-
-static void
-client_quit_cb (EggSMClient *sm_client,
-		EphySession *session)
-{
-	LOG ("quit-cb");
-
-	ephy_session_close (session);
-}
-
-static void
-client_save_state_cb (EggSMClient *sm_client,
-		      GKeyFile *keyfile,
-		      EphySession *session)
-{
-	char *argv[] = { NULL, "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-f", NULL };
-	char *tmp, *save_to;
-
-	LOG ("save_yourself_cb");
-
-	tmp = g_build_filename (ephy_dot_dir (),
-				"session_gnome-XXXXXX",
-				NULL);
-	save_to = ephy_file_tmp_filename (tmp, "xml");
-	g_free (tmp);
-
-	argv[0] = g_get_prgname ();
-	argv[2] = save_to;
-	egg_sm_client_set_restart_command (sm_client, 3, (const char **) argv);
-
-	discard_argv[2] = save_to;
-	egg_sm_client_set_discard_command (sm_client, 3, (const char **) discard_argv);
-
-	ephy_session_save (session, save_to);
-
-	g_free (save_to);
-}
 
 /* Helper functions */
 
@@ -921,23 +695,12 @@ static void
 ephy_session_init (EphySession *session)
 {
 	EphySessionPrivate *priv;
-	EggSMClient *sm_client;
 
 	LOG ("EphySession initialising");
 
 	priv = session->priv = EPHY_SESSION_GET_PRIVATE (session);
 
 	priv->queue = g_queue_new ();
-
-	sm_client = egg_sm_client_get ();
-	g_signal_connect (sm_client, "save-state",
-			  G_CALLBACK (client_save_state_cb), session);
-	g_signal_connect (sm_client, "quit-requested",
-			  G_CALLBACK (client_quit_requested_cb), session);
-	g_signal_connect (sm_client, "quit-cancelled",
-			  G_CALLBACK (client_quit_cancelled_cb), session);
-	g_signal_connect (sm_client, "quit",
-			  G_CALLBACK (client_quit_cb), session);
 }
 
 static void
@@ -945,7 +708,6 @@ ephy_session_dispose (GObject *object)
 {
 	EphySession *session = EPHY_SESSION (object);
 	EphySessionPrivate *priv = session->priv;
-	EggSMClient *sm_client;
 
 	LOG ("EphySession disposing");
 
@@ -958,10 +720,6 @@ ephy_session_dispose (GObject *object)
 	}
 
 	session_command_queue_clear (session);
-
-	sm_client = egg_sm_client_get ();
-	g_signal_handlers_disconnect_matched (sm_client, G_SIGNAL_MATCH_DATA,
-					      0, 0, NULL, NULL, session);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
 }
