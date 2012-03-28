@@ -500,6 +500,7 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 					gint response,
 					EphyApplicationDialogData *data)
 {
+	const char *app_name;
 	char *profile_dir;
 	char *desktop_file;
 	char *message;
@@ -507,7 +508,8 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 	gboolean profile_exists;
 
 	if (response == GTK_RESPONSE_OK) {
-		profile_dir = ephy_web_application_get_profile_directory (gtk_entry_get_text (GTK_ENTRY (data->entry)));
+		app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+		profile_dir = ephy_web_application_get_profile_directory (app_name);
 		if (!profile_dir)
 			return;
 		profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
@@ -515,23 +517,22 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 
 		if (profile_exists)
 		{
-			if (confirm_web_application_overwrite (GTK_WINDOW (dialog),
-							       gtk_entry_get_text (GTK_ENTRY (data->entry))))
-				ephy_web_application_delete (gtk_entry_get_text (GTK_ENTRY (data->entry)));
+			if (confirm_web_application_overwrite (GTK_WINDOW (dialog), app_name))
+				ephy_web_application_delete (app_name);
 			else
 				return;
 		}
 
 		/* Create Web Application, including a new profile and .desktop file. */
 		desktop_file = ephy_web_application_create (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
-							    gtk_entry_get_text (GTK_ENTRY (data->entry)),
+							    app_name,
 							    gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
 		if (desktop_file)
 			message = g_strdup_printf (_("The application '%s' is ready to be used"),
-						   gtk_entry_get_text (GTK_ENTRY (data->entry)));
+						   app_name);
 		else
 			message = g_strdup_printf (_("The application '%s' could not be created"),
-						   gtk_entry_get_text (GTK_ENTRY (data->entry)));
+						   app_name);
 
 		notification = notify_notification_new (message,
 							NULL, NULL);
