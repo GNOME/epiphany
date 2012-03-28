@@ -61,7 +61,6 @@ struct _EphySessionPrivate
 {
 	GList *windows;
 	GList *tool_windows;
-	GtkWidget *resume_infobar;
 	GtkWidget *resume_window;
 
 	GQueue *queue;
@@ -71,7 +70,6 @@ struct _EphySessionPrivate
 
 	guint dont_save : 1;
 	guint quit_while_resuming : 1;
-	guint loading_homepage : 1;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -229,46 +227,6 @@ session_command_find (const SessionCommand *cmd,
 }
 
 static void
-resume_infobar_response_cb (GtkWidget *info_bar,
-			    int response,
-			    EphySession *session)
-{
-	guint32 user_time;
-	EphySessionPrivate *priv = session->priv;
-
-	LOG ("resume_infobar_response_cb response:%d", response);
-
-	gtk_widget_hide (info_bar);
-
-	user_time = gtk_get_current_event_time ();
-
-	priv->dont_save = FALSE;
-
-	gtk_widget_destroy (info_bar);
-	priv->resume_infobar = NULL;
-
-	if (response == GTK_RESPONSE_YES)
-	{
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_LOAD_SESSION,
-					    SESSION_CRASHED, NULL,
-					    user_time, TRUE);
-	}
-}
-
-static void
-resume_infobar_weak_ref_cb (EphySession *session,
-			    GObject *zombie)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	LOG ("resume_window_infobar_weak_ref_cb");
-
-	priv->dont_save = FALSE;
-	session_command_queue_next (session);
-}
-
-static void
 session_command_autoresume (EphySession *session,
 			    guint32 user_time)
 {
@@ -290,13 +248,6 @@ session_command_autoresume (EphySession *session,
 	    priv->windows != NULL ||
 	    priv->tool_windows != NULL)
 	{
-		/* FIXME can this happen? */
-		if (priv->resume_infobar != NULL)
-		{
-			gtk_widget_hide (priv->resume_infobar);
-			gtk_widget_destroy (priv->resume_infobar);
-		}
-
 		ephy_session_queue_command (session,
 					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
 					    NULL, NULL, user_time, FALSE);
@@ -313,8 +264,8 @@ session_command_autoresume (EphySession *session,
 	}
 
 	ephy_session_queue_command (session,
-				    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW_RESTORE,
-				    NULL, NULL, user_time, TRUE);
+				    EPHY_SESSION_CMD_LOAD_SESSION,
+				    SESSION_CRASHED, NULL, user_time, TRUE);
 }
 
 static void
@@ -387,24 +338,11 @@ session_command_open_uris (EphySession *session,
 		 * that case use a new tab in the same window */
 		if (i == 0 && priv->resume_window != NULL)
 		{
-			if (priv->resume_infobar != NULL)
-			{
-				embed = ephy_shell_new_tab_full (shell, EPHY_WINDOW (priv->resume_window),
-								 NULL /* parent tab */,
-								 request,
-								 EPHY_NEW_TAB_IN_EXISTING_WINDOW | page_flags,
-								 EPHY_WEB_VIEW_CHROME_ALL,
-								 FALSE /* is popup? */,
-								 user_time);
-			}
-			else
-			{
-				EphyWebView *web_view;
-
-				embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
-				web_view = ephy_embed_get_web_view (embed);
-				ephy_web_view_load_url (web_view, url);
-			}
+			EphyWebView *web_view;
+			
+			embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
+			web_view = ephy_embed_get_web_view (embed);
+			ephy_web_view_load_url (web_view, url);
 		}
 		else
 		{
@@ -424,46 +362,6 @@ session_command_open_uris (EphySession *session,
 	}
 
 	g_object_unref (shell);
-}
-
-static void
-send_no_response_cb (GtkButton *button, GtkInfoBar *info_bar)
-{
-	gtk_info_bar_response (info_bar, GTK_RESPONSE_NO);
-}
-
-static void
-send_yes_response_cb (GtkButton *button, GtkInfoBar *info_bar)
-{
-	gtk_info_bar_response (info_bar, GTK_RESPONSE_YES);
-}
-
-static void
-loading_homepage_cb (EphyWebView *view, EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	priv->loading_homepage = TRUE;
-}
-
-static void
-new_document_now_cb (EphyWebView *view, const char *uri, EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	if (priv->loading_homepage)
-	{
-		priv->loading_homepage = FALSE;
-		return;
-	}
-
-	if (priv->resume_infobar) 
-	{
-		EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-		ephy_embed_remove_top_widget (embed, priv->resume_infobar);
-		priv->resume_infobar = NULL;
-		priv->resume_window = NULL;
-	}
 }
 
 static gboolean
@@ -507,74 +405,6 @@ session_command_dispatch (EphySession *session)
 							 cmd->user_time);
 			}
 			break;
-		case EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW_RESTORE:
-			/* FIXME: maybe just check for normal windows? */
-			if (priv->windows == NULL &&
-			    priv->tool_windows == NULL)
-			{
-				GtkWidget *info_bar;
-				GtkWidget *action_area;
-				GtkWidget *button_box;
-				GtkWidget *action_button;
-				GtkWidget *content_area;
-				GtkWidget *label;
-				EphyEmbed *embed;
-				EphyWebView *view;
-
-				session->priv->dont_save = TRUE;
-
-				embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-								 NULL /* window */, NULL /* tab */,
-								 NULL /* Networ	kRequest */,
-								 EPHY_NEW_TAB_IN_NEW_WINDOW |
-								 EPHY_NEW_TAB_HOME_PAGE,
-								 EPHY_WEB_VIEW_CHROME_ALL,
-								 FALSE /* is popup? */,
-								 cmd->user_time);
-
-				info_bar = gtk_info_bar_new ();
-
-				session->priv->resume_infobar = info_bar;
-				session->priv->resume_window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-
-				action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-				button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-				gtk_container_add (GTK_CONTAINER (action_area), button_box);
-
-				action_button = gtk_button_new_with_mnemonic (_("_Don't recover"));
-				g_signal_connect (action_button, "clicked",
-						  G_CALLBACK (send_no_response_cb), info_bar);
-				gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
-
-				action_button = gtk_button_new_with_mnemonic (_("_Recover session"));
-				g_signal_connect (action_button, "clicked",
-						  G_CALLBACK (send_yes_response_cb), info_bar);
-				gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
-
-				label = gtk_label_new (_("Do you want to recover the previous browser windows and tabs?"));
-				gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-				content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-				gtk_container_add (GTK_CONTAINER (content_area), label);
-				gtk_widget_show_all (info_bar);
-
-				g_signal_connect (info_bar, "response",
-						  G_CALLBACK (resume_infobar_response_cb), session);
-
-				g_object_weak_ref (G_OBJECT (info_bar),
-						   (GWeakNotify) resume_infobar_weak_ref_cb,
-						   session);
-				
-				ephy_embed_add_top_widget (embed, info_bar, FALSE);
-
-				view = ephy_embed_get_web_view (embed);
-
-				g_signal_connect (view, "loading-homepage",
-						  G_CALLBACK (loading_homepage_cb), session);
-
-				g_signal_connect (view, "new-document-now",
-						  G_CALLBACK (new_document_now_cb), session);
-			}
-			break;
 		default:
 			g_assert_not_reached ();
 			break;
@@ -603,7 +433,6 @@ session_command_queue_next (EphySession *session)
 	LOG ("queue_next");
 
 	if (!g_queue_is_empty (priv->queue) &&
-	    priv->resume_infobar == NULL &&
 	    priv->queue_idle_id == 0)
 	{
 		priv->queue_idle_id =
