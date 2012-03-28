@@ -1267,7 +1267,7 @@ restore_geometry (GtkWindow *window,
 	}
 }
 
-/*
+/**
  * ephy_session_load:
  * @session: a #EphySession
  * @filename: the path of the source file
