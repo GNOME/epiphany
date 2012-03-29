@@ -315,7 +315,6 @@ data/Makefile
 data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/pages/Makefile
-data/ui/Makefile
 doc/Makefile
 doc/reference/Makefile
 lib/Makefile
