@@ -211,7 +211,7 @@ session_command_free (SessionCommand *cmd)
 		g_strfreev (cmd->args);
 	}
 
-	g_free (cmd);
+	g_slice_free (SessionCommand, cmd);
 
 	g_object_unref (ephy_shell_get_default ());
 }
@@ -1362,8 +1362,7 @@ ephy_session_queue_command (EphySession *session,
 		}
 	}
 
-	/* FIXME: use g_slice_new */
-	cmd = g_new0 (SessionCommand, 1);
+	cmd = g_slice_new0 (SessionCommand);
 	cmd->command = command;
 	cmd->arg = arg ? g_strdup (arg) : NULL;
 	cmd->args = args ? g_strdupv ((gchar **)args) : NULL;
