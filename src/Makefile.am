@@ -120,10 +120,10 @@ UI_FILES = \
 	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(UI_FILES)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 epiphany-resources.h: epiphany.gresource.xml $(UI_FILES)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \
 	epiphany-resources.c \
