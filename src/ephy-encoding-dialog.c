@@ -20,23 +20,22 @@
  */
 
 #include "config.h"
-
 #include "ephy-encoding-dialog.h"
-#include "ephy-encodings.h"
-#include "ephy-embed.h"
+
+#include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
+#include "ephy-embed.h"
+#include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
-#include "ephy-shell.h"
-#include "ephy-node.h"
-#include "ephy-node-view.h"
-#include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-node-view.h"
+#include "ephy-node.h"
+#include "ephy-shell.h"
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <string.h>
+#include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
