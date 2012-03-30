@@ -49,6 +49,7 @@
 #include "ephy-page-menu-action.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
+#include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
@@ -994,8 +995,10 @@ ephy_window_delete_event (GtkWidget *widget,
 			  GdkEventAny *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
+	EphySession *session;
 	EphyEmbed *modified_embed = NULL;
-	GList *tabs, *l;
+	GList *tabs, *l, *windows;
+	guint number_windows;
 	gboolean modified = FALSE;
 
 	/* We ignore the delete_event if the disable_quit lockdown has been set
@@ -1036,6 +1039,18 @@ ephy_window_delete_event (GtkWidget *widget,
 	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
 	{
 		/* stop window close */
+		return TRUE;
+	}
+
+	/* If this is the last window, save its state in the session. */
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+	windows = ephy_session_get_windows (session);
+	number_windows = g_list_length (windows);
+	g_list_free (windows);
+
+	if (number_windows == 1)
+	{
+		ephy_session_close (session);
 		return TRUE;
 	}
 
