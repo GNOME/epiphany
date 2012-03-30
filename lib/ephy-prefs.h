@@ -117,7 +117,6 @@ typedef enum
 #define EPHY_PREFS_LOCKDOWN_COMMAND_LINE	"disable-command-line"
 #define EPHY_PREFS_LOCKDOWN_QUIT		"disable-quit"
 #define EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME	"disable-javascript-chrome"
-#define EPHY_PREFS_LOCKDOWN_MENUBAR		"disable-menubar"
 
 G_END_DECLS
 
