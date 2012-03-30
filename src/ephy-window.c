@@ -726,6 +726,19 @@ sync_chromes_visibility (EphyWindow *window)
 }
 
 static void
+set_toolbar_visibility (EphyWindow *window, gboolean show_toolbar)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	if (show_toolbar)
+		priv->chrome |= EPHY_WEB_VIEW_CHROME_TOOLBAR;
+	else
+		priv->chrome &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
+
+	sync_chromes_visibility (window);
+}
+
+static void
 sync_tab_load_status (EphyWebView *view,
 		      GParamSpec *pspec,
 		      EphyWindow *window)
@@ -3113,6 +3126,19 @@ allow_popups_notifier (GSettings *settings,
 }
 
 static void
+show_toolbars_setting_cb (GSettings *settings,
+			  char *key,
+			  EphyWindow *window)
+{
+	gboolean show_toolbars;
+
+	show_toolbars = g_settings_get_boolean (EPHY_SETTINGS_UI,
+						EPHY_PREFS_UI_SHOW_TOOLBARS);
+
+	set_toolbar_visibility (window, show_toolbars);
+}
+
+static void
 sync_user_input_cb (EphyLocationController *action,
 		    GParamSpec *pspec,
 		    EphyWindow *window)
@@ -3325,6 +3351,10 @@ ephy_window_constructor (GType type,
 	g_signal_connect (EPHY_SETTINGS_WEB,
 			  "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
 			  G_CALLBACK (allow_popups_notifier), window);
+
+	g_signal_connect (EPHY_SETTINGS_UI,
+			  "changed::" EPHY_PREFS_UI_SHOW_TOOLBARS,
+			  G_CALLBACK (show_toolbars_setting_cb), window);
 
 	/* network status */
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
