@@ -20,11 +20,11 @@
  */
 
 #include "config.h"
-
 #include "ephy-encodings.h"
-#include "ephy-node-db.h"
-#include "ephy-file-helpers.h"
+
 #include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-node-db.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
