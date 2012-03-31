@@ -57,24 +57,6 @@ ephy_sqlite_statement_set_property (GObject *object, guint property_id, const GV
 }
 
 static void
-ephy_sqlite_statement_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
-{
-  EphySQLiteStatement *self = EPHY_SQLITE_STATEMENT (object);
-
-  switch (property_id) {
-    case PROP_PREPARED_STATEMENT:
-      g_value_set_pointer (value, self->priv->prepared_statement);
-      break;
-    case PROP_CONNECTION:
-      g_value_set_object (value, self->priv->connection);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-  }
-}
-
-static void
 ephy_sqlite_statement_finalize (GObject *self)
 {
   EphySQLiteStatementPrivate *priv = EPHY_SQLITE_STATEMENT (self)->priv;
@@ -97,7 +79,6 @@ ephy_sqlite_statement_class_init (EphySQLiteStatementClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gobject_class->finalize = ephy_sqlite_statement_finalize;
-  gobject_class->get_property = ephy_sqlite_statement_get_property;
   gobject_class->set_property = ephy_sqlite_statement_set_property;
   g_type_class_add_private (gobject_class, sizeof (EphySQLiteStatementPrivate));
 
