@@ -196,8 +196,6 @@ ephy_embed_single_finalize (GObject *object)
 {
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
-  ephy_embed_prefs_shutdown ();
-
   if (priv->form_auth_data) {
     g_hash_table_foreach (priv->form_auth_data,
                           (GHFunc)remove_form_auth_data,
@@ -357,8 +355,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* Initialise nspluginwrapper's plugins if available */
   if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
     g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
-
-  ephy_embed_prefs_init ();
 
   session = webkit_get_default_session ();
 

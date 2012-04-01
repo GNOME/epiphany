@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -467,6 +468,7 @@ main (int argc,
     gtk_window_set_default_icon_name ("web-browser");
   }
 
+  ephy_embed_prefs_init ();
   _ephy_shell_create_instance (mode);
 
   startup_flags = get_startup_flags ();
@@ -488,6 +490,7 @@ main (int argc,
 
   ephy_file_save_accels ();
   ephy_state_save ();
+  ephy_embed_prefs_shutdown ();
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
   xmlCleanupParser ();
