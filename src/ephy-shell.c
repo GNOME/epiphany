@@ -581,8 +581,8 @@ ephy_shell_init (EphyShell *shell)
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
   ephy_shell = shell;
-  g_object_add_weak_pointer (G_OBJECT(ephy_shell),
-                             (gpointer *)ptr);
+  g_object_add_weak_pointer (G_OBJECT (ephy_shell),
+                             (gpointer *) ptr);
 }
 
 static void
