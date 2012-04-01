@@ -139,23 +139,8 @@ test_ephy_download_new (Fixture *fixture, gconstpointer data)
 static void
 test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
 {
-  EphyDownload *download;
-
-  download = ephy_download_new_for_uri (fixture->source);
-
-  g_assert (EPHY_IS_DOWNLOAD (download));
-
-  g_assert_cmpstr (fixture->source, ==, ephy_download_get_source_uri (download));
-
-  g_signal_connect (G_OBJECT (download), "completed",
-                    G_CALLBACK (completed_cb), fixture);
-
-  ephy_download_start (download);
-
-  g_object_unref (fixture->download);
-  fixture->download = download;
-
-  g_main_loop_run (fixture->loop);
+  g_assert_cmpstr (fixture->source, ==,
+                   ephy_download_get_source_uri (fixture->download));
 }
 
 static void
