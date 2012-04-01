@@ -11,6 +11,7 @@ noinst_PROGRAMS = \
 	test-ephy-search-entry \
 	test-ephy-session \
 	test-ephy-sqlite \
+	test-ephy-web-app-utils \
 	test-ephy-web-view \
 	$(NULL)
 
@@ -149,6 +150,9 @@ test_ephy_session_SOURCES = \
 
 test_ephy_sqlite_SOURCES = \
 	ephy-sqlite-test.c
+
+test_ephy_web_app_utils_SOURCES = \
+	ephy-web-app-utils-test.c
 
 test_ephy_web_view_SOURCES = \
 	ephy-web-view-test.c
