@@ -222,7 +222,7 @@ create_desktop_file (const char *address,
     path = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
     image = g_file_new_for_path (path);
 
-    stream = (GOutputStream*)g_file_create (image, 0, NULL, NULL);
+    stream = (GOutputStream *) g_file_create (image, 0, NULL, NULL);
     gdk_pixbuf_save_to_stream (icon, stream, "png", NULL, NULL, NULL);
     g_key_file_set_value (file, "Desktop Entry", "Icon", path);
 
@@ -276,7 +276,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   /* Create the new cookie jar */
   filename = g_build_filename (directory, "cookies.sqlite", NULL);
-  new_jar = (SoupCookieJar*)soup_cookie_jar_sqlite_new (filename, FALSE);
+  new_jar = (SoupCookieJar *) soup_cookie_jar_sqlite_new (filename, TRUE);
   g_free (filename);
 
   /* The app domain for the current view */
@@ -285,11 +285,11 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   /* The current cookies */
   session = webkit_get_default_session ();
-  current_jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+  current_jar = (SoupCookieJar *) soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
   cookies = soup_cookie_jar_all_cookies (current_jar);
 
   for (p = cookies; p; p = p->next) {
-    SoupCookie *cookie = (SoupCookie*)p->data;
+    SoupCookie *cookie = (SoupCookie *) p->data;
 
     if (g_str_has_suffix (cookie->domain, domain))
       soup_cookie_jar_add_cookie (new_jar, cookie);
@@ -473,7 +473,7 @@ ephy_web_application_free_application_list (GList *list)
   GList *p;
 
   for (p = list; p; p = p->next)
-    ephy_web_application_free ((EphyWebApplication*)p->data);
+    ephy_web_application_free ((EphyWebApplication *) p->data);
 
   g_list_free (list);
 }
