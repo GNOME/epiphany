@@ -274,6 +274,14 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
   /* The current cookies */
   session = webkit_get_default_session ();
   current_jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+
+  /* WebKit might not have a cookie jar yet, if it has not needed one
+   * and none has been set by Epiphany. */
+  if (current_jar == NULL) {
+    soup_uri_free (uri);
+    return;
+  }
+
   cookies = soup_cookie_jar_all_cookies (current_jar);
 
   for (p = cookies; p; p = p->next) {
