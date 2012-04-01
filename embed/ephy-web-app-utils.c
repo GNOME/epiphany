@@ -132,14 +132,14 @@ ephy_web_application_delete (const char *name)
   /* If there's no profile dir for this app, it means it does not
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
-    g_print ("No application with name '%s' is installed.\n", name);
+    g_warning ("No application with name '%s' is installed.\n", name);
     goto out;
   }
 
   profile = g_file_new_for_path (profile_dir);
   if (!ephy_file_delete_dir_recursively (profile, NULL))
     goto out;
-  g_print ("Deleted application profile.\n");
+  LOG ("Deleted application profile.\n");
 
   wm_class = get_wm_class_from_app_title (name);
   desktop_file = desktop_filename_from_wm_class (wm_class);
@@ -150,7 +150,7 @@ ephy_web_application_delete (const char *name)
   launcher = g_file_new_for_path (desktop_path);
   if (!g_file_delete (launcher, NULL, NULL))
     goto out;
-  g_print ("Deleted application launcher.\n");
+  LOG ("Deleted application launcher.\n");
 
   return_value = TRUE;
 
