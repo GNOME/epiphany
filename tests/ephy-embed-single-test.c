@@ -100,6 +100,7 @@ main (int argc, char *argv[])
 
   ret = g_test_run ();
 
+  g_object_unref (ephy_shell);
   ephy_file_helpers_shutdown ();
 
   return ret;
