@@ -67,8 +67,6 @@ GSList     *       ephy_file_find                (const char  *path,
 gboolean           ephy_file_switch_temp_file    (GFile       *file_dest,
                                                   GFile       *file_temp);
 void               ephy_file_delete_on_exit      (GFile       *file);
-void               ephy_file_add_recent_item     (const char  *uri,
-                                                  const char  *mime_type);
 EphyMimePermission ephy_file_check_mime          (const char  *mime_type);
 gboolean           ephy_file_launch_desktop_file (const char  *filename,
                                                   const char  *parameter,

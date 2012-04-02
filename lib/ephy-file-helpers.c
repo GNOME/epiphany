@@ -584,24 +584,6 @@ ephy_file_delete_on_exit (GFile *file)
 	/* does nothing now */
 }
 
-/**
- * ephy_file_add_recent_item:
- * @uri: an URI
- * @mime_type: the mime type corresponding to @uri
- *
- * Adds @uri to the default #GtkRecentManager, with @mime_type as its type.
- **/
-void
-ephy_file_add_recent_item (const char *uri,
-			   const char *mime_type)
-{	
-	GtkRecentManager *manager = gtk_recent_manager_get_default ();
-
-	g_return_if_fail (mime_type != NULL && uri != NULL);
-
-	gtk_recent_manager_add_item (manager, uri);
-}
-
 static void
 load_mime_from_xml (void)
 {
