@@ -901,7 +901,7 @@ ephy_file_delete_dir_recursively (GFile *directory, GError **error)
 		if (type == G_FILE_TYPE_DIRECTORY)
 			ret = ephy_file_delete_dir_recursively (child, error);
 		else if (type == G_FILE_TYPE_REGULAR)
-			ret =	g_file_delete (child, NULL, error);
+			ret = g_file_delete (child, NULL, error);
 
 		g_object_unref (info);
 
