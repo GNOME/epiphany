@@ -858,12 +858,12 @@ ephy_file_delete_dir_recursively (GFile *directory, GError **error)
 {
 	GFileEnumerator *children = NULL;
 	GFileInfo *info;
-	gboolean ret = TRUE;
+	gboolean ret = FALSE;
 
 	children = g_file_enumerate_children (directory,
 					      "standard::name,standard::type",
 					      0, NULL, error);
-	if (error)
+	if (children == NULL || error)
 		goto out;
 
 	info = g_file_enumerator_next_file (children, NULL, error);
