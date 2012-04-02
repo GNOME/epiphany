@@ -119,9 +119,16 @@ ephy_file_download_dir (void)
 /**
  * ephy_file_get_downloads_dir:
  *
- * Gets the full path to the downloads dir. This uses ephy_file_downloads_dir()
- * internally and hence is locale dependant. Note that this can return %NULL if
- * not even the user homedir path can be found.
+ * Returns a proper downloads destination by checking the
+ * EPHY_PREFS_STATE_DOWNLOAD_DIR GSettings key and following this logic:
+ *
+ *  - An absolute path: considered user-set, use this value directly.
+ *
+ *  - "Desktop" keyword in GSettings: the directory returned by
+ *    ephy_file_desktop_dir().
+ *
+ *  - "Downloads" keyword in GSettings, or any other value: the XDG
+ *  downloads directory, or ~/Downloads.
  *
  * Returns: a newly-allocated string containing the path to the downloads dir.
  **/
@@ -133,11 +140,11 @@ ephy_file_get_downloads_dir (void)
 	download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
 					      EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-	/* Emergency download destination */
-	if (g_str_equal (download_dir, "Downloads"))
-		download_dir = ephy_file_download_dir ();
-	else if (g_str_equal (download_dir, "Desktop") || g_path_is_absolute (download_dir) != TRUE)
+	if (g_str_equal (download_dir, "Desktop"))
 		download_dir = ephy_file_desktop_dir ();
+	if (g_str_equal (download_dir, "Downloads") ||
+	    g_path_is_absolute (download_dir) != TRUE)
+		download_dir = ephy_file_download_dir ();
 
 	return download_dir;
 }
