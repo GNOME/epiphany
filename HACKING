@@ -29,6 +29,11 @@ need to stick to in order to get your patch accepted:
 - data/kr-gnome-indent.cfg is provided as a reference config file for the
   uncrustify program to get correct indentation in new files.
 
+- There's no space between a type cast and the variable name.
+
+  Right: (int*)foo
+  Wrong: (int*) foo
+
 See ChangeLog.README for Git checkin rules.
 See doc/debugging.txt for some tips and tricks for debugging.
 
