@@ -393,6 +393,8 @@ ephy_file_helpers_shutdown (void)
 		g_free (tmp_dir);
 		tmp_dir = NULL;
 	}
+
+	g_unsetenv (EPHY_UUID_ENVVAR);
 }
 
 /**
