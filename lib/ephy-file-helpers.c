@@ -868,6 +868,8 @@ ephy_file_browse_to (GFile *file,
  * @error: location to set any #GError
  *
  * Remove @path and its contents. Like calling rm -rf @path.
+ *
+ * Returns: %TRUE if delete succeeded
  **/
 gboolean
 ephy_file_delete_dir_recursively (GFile *directory, GError **error)
