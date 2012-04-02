@@ -582,7 +582,7 @@ ephy_shell_init (EphyShell *shell)
   g_assert (ephy_shell == NULL);
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
-                             (gpointer *) ptr);
+                             (gpointer *)ptr);
 }
 
 static void
@@ -1034,7 +1034,7 @@ ephy_shell_get_pdm_dialog (EphyShell *shell)
     dialog = &shell->priv->pdm_dialog;
 
     g_object_add_weak_pointer (shell->priv->pdm_dialog,
-                               (gpointer *) dialog);
+                               (gpointer *)dialog);
   }
 
   return shell->priv->pdm_dialog;
@@ -1056,7 +1056,7 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
     dialog  = &shell->priv->prefs_dialog;
 
     g_object_add_weak_pointer (shell->priv->prefs_dialog,
-                               (gpointer *) dialog);
+                               (gpointer *)dialog);
   }
 
   return shell->priv->prefs_dialog;
