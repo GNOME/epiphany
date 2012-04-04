@@ -67,6 +67,8 @@ libephywidgets_la_SOURCES = \
 	ephy-certificate-dialog.h		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
+	ephy-frecent-store.c			\
+	ephy-frecent-store.h			\
 	ephy-history-view.c			\
 	ephy-history-view.h			\
 	ephy-hosts-store.c			\
