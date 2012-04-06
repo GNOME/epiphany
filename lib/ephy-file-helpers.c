@@ -164,14 +164,17 @@ ephy_file_desktop_dir (void)
 
 /**
  * ephy_file_tmp_filename:
- * @base: the base name of the temp file to create
+ * @base: the base name of the temp file to create, containing "XXXXXX"
  * @extension: an optional extension for @base or %NULL
  *
- * Creates a temp file with mkstemp() using @base as the name with an optional
- * @extension.
+ * Gets a usable temp filename with g_mkstemp() using @base as the name
+ * with an optional @extension. @base should contain "XXXXXX" in it.
  *
- * Returns: a newly-allocated string containing the name of the created temp
- * file or %NULL.
+ * Notice that this does not create the file. It only gets a valid
+ * filename.
+ *
+ * Returns: a newly-allocated string containing the name of the temp
+ * file name or %NULL.
  **/
 char *
 ephy_file_tmp_filename (const char *base,
