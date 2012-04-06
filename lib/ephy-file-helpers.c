@@ -504,6 +504,7 @@ ephy_file_switch_temp_file (GFile *file_dest,
 	gboolean dest_exists;
 	gboolean retval = TRUE;
 	GFile *backup_file;
+	GError *error = NULL;
 
 	file_dest_path = g_file_get_path (file_dest);
 	file_temp_path = g_file_get_path (file_temp);
@@ -517,10 +518,17 @@ ephy_file_switch_temp_file (GFile *file_dest,
 	{
 		if (g_file_move (file_dest, backup_file,
 				 G_FILE_COPY_OVERWRITE,
-				 NULL, NULL, NULL, NULL) == FALSE)
+				 NULL, NULL, NULL, &error) == FALSE)
 		{
-			g_warning ("Failed to backup %s to %s",
-				   file_dest_path, backup_path);
+			g_warning ("Failed to backup %s to %s: %s",
+				   file_dest_path, backup_path,
+				   error ? error->message : "No error set");
+
+			if (error)
+			{
+				g_error_free (error);
+				error = NULL;
+			}
 
 			retval = FALSE;
 			goto failed;
@@ -529,17 +537,31 @@ ephy_file_switch_temp_file (GFile *file_dest,
 
 	if (g_file_move (file_temp, file_dest,
 			 G_FILE_COPY_OVERWRITE,
-			 NULL, NULL, NULL, NULL) == FALSE)
+			 NULL, NULL, NULL, &error) == FALSE)
 	{
-		g_warning ("Failed to replace %s with %s",
-			   file_temp_path, file_dest_path);
+		g_warning ("Failed to replace %s with %s: %s",
+			   file_temp_path, file_dest_path,
+			   error ? error->message : "No error set");
+
+		if (error)
+		{
+			g_error_free (error);
+			error = NULL;
+		}
 
 		if (g_file_move (backup_file, file_dest,
 				 G_FILE_COPY_OVERWRITE,
-				 NULL, NULL, NULL, NULL) == FALSE)
+				 NULL, NULL, NULL, &error) == FALSE)
 		{
-			g_warning ("Failed to restore %s from %s",
-				   file_dest_path, file_temp_path);
+			g_warning ("Failed to restore %s from %s: %s",
+				   file_dest_path, file_temp_path,
+				   error ? error->message : "No error set");
+
+			if (error)
+			{
+				g_error_free (error);
+				error = NULL;
+			}
 		}
 
 		retval = FALSE;
@@ -548,10 +570,17 @@ ephy_file_switch_temp_file (GFile *file_dest,
 
 	if (dest_exists)
 	{
-		if (g_file_delete (backup_file,
-				   NULL, NULL) == FALSE)
+		if (g_file_delete (backup_file, NULL, &error) == FALSE)
 		{
-			g_warning ("Failed to delete old file %s", backup_path);
+			g_warning ("Failed to delete old file %s: %s",
+				   backup_path,
+				   error ? error->message : "No error set");
+
+			if (error)
+			{
+				g_error_free (error);
+				error = NULL;
+			}
 		}
 	}
 
