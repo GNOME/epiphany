@@ -10,6 +10,7 @@ noinst_PROGRAMS = \
 	test-ephy-migration \
 	test-ephy-search-entry \
 	test-ephy-session \
+	test-ephy-shell \
 	test-ephy-sqlite \
 	test-ephy-web-app-utils \
 	test-ephy-web-view \
@@ -147,6 +148,11 @@ test_ephy_session_SOURCES = \
 	ephy-session-test.c \
 	$(top_builddir)/src/epiphany-resources.c \
 	$(top_builddir)/src/epiphany-resources.h
+
+test_ephy_shell_SOURCES = \
+	$(top_builddir)/src/epiphany-resources.c \
+	$(top_builddir)/src/epiphany-resources.h \
+	ephy-shell-test.c
 
 test_ephy_sqlite_SOURCES = \
 	ephy-sqlite-test.c
