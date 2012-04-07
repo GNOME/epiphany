@@ -514,10 +514,9 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
     parent = gtk_widget_get_toplevel (GTK_WIDGET (parent_embed));
   }
 
-  /* what's a popup ? ATM, any window opened with menubar toggled on
-   * is *not* a popup
+  /* Any window opened with a toolbar is *not* a popup.
    */
-  is_popup = (chromemask & EPHY_WEB_VIEW_CHROME_MENUBAR) == 0;
+  is_popup = (chromemask & EPHY_WEB_VIEW_CHROME_TOOLBAR) == 0;
 
   return ephy_shell_new_tab_full
     (shell,

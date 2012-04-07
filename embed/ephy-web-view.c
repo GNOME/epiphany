@@ -202,11 +202,9 @@ popups_manager_new_window_info (EphyEmbedContainer *container)
   gtk_widget_get_allocation (GTK_WIDGET (embed), &allocation);
 
   features = g_strdup_printf
-             ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
+             ("width=%d,height=%d,toolbar=%d",
               allocation.width,
               allocation.height,
-              (chrome & EPHY_WEB_VIEW_CHROME_MENUBAR) > 0,
-              (chrome & EPHY_WEB_VIEW_CHROME_STATUSBAR) > 0,
               (chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) > 0);
 
   return features;

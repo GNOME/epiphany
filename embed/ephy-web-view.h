@@ -51,16 +51,10 @@ typedef enum
 
 typedef enum
 {
-  EPHY_WEB_VIEW_CHROME_MENUBAR    = 1 << 0,
-  EPHY_WEB_VIEW_CHROME_TOOLBAR    = 1 << 1,
-  EPHY_WEB_VIEW_CHROME_STATUSBAR    = 1 << 2,
-  EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR = 1 << 3
+  EPHY_WEB_VIEW_CHROME_TOOLBAR    = 1 << 0,
 } EphyWebViewChrome;
 
-#define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_MENUBAR |  \
-                                  EPHY_WEB_VIEW_CHROME_TOOLBAR |  \
-                                  EPHY_WEB_VIEW_CHROME_STATUSBAR |  \
-                                  EPHY_WEB_VIEW_CHROME_BOOKMARKSBAR)
+#define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_TOOLBAR)
 
 typedef enum
 {
