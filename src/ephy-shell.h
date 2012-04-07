@@ -51,6 +51,31 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
 
 extern EphyShell *ephy_shell;
 
+/**
+ * EphyNewTabFlags:
+ * @EPHY_NEW_TAB_HOME_PAGE: loads the home page in the new tab.
+ * @EPHY_NEW_TAB_NEW_PAGE: legacy synonym for @EPHY_NEW_TAB_HOME_PAGE.
+ * @EPHY_NEW_TAB_OPEN_PAGE: opens the provided network-request.
+ * @EPHY_NEW_TAB_FULLSCREEN_MODE: calls gtk_window_fullscreen on the
+ *        parent window of the new tab.
+ * @EPHY_NEW_TAB_DONT_SHOW_WINDOW: do not show the window where the new
+ *        tab is attached.
+ * @EPHY_NEW_TAB_APPEND_LAST: appends the new tab at the end of the
+ *        notebook.
+ * @EPHY_NEW_TAB_APPEND_AFTER: appends the new tab right after the
+ *        current one in the notebook.
+ * @EPHY_NEW_TAB_JUMP: jumps to the new tab immediately.
+ * @EPHY_NEW_TAB_IN_NEW_WINDOW: creates the new tab in a new window.
+ * @EPHY_NEW_TAB_IN_EXISTING_WINDOW: creates the new tab in the current
+ *        active window, if there is none, creates a window.
+ * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
+ *        active tab if it is currently not loading anything and is
+ *        blank.
+ * @EPHY_NEW_TAB_DONT_COPY_HISTORY: do not copy the back-forward history
+ *        from the current active tab to the new one.
+ *
+ * Controls how new tabs/windows are created and handled.
+ */
 typedef enum {
   /* Page types */
   EPHY_NEW_TAB_HOME_PAGE    = 1 << 0,
@@ -65,6 +90,8 @@ typedef enum {
   EPHY_NEW_TAB_APPEND_LAST  = 1 << 7,
   EPHY_NEW_TAB_APPEND_AFTER = 1 << 8,
   EPHY_NEW_TAB_JUMP   = 1 << 9,
+
+  /* Where */
   EPHY_NEW_TAB_IN_NEW_WINDOW  = 1 << 10,
   EPHY_NEW_TAB_IN_EXISTING_WINDOW = 1 << 11,
 
