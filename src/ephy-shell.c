@@ -502,9 +502,8 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
   LOG ("ephy_shell_new_window_cb tab chrome %d", chromemask);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME)) {
+                              EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME))
     chromemask = EPHY_WEB_VIEW_CHROME_ALL;
-  }
 
   if (parent_embed != NULL) {
     /* this will either be a EphyWindow, or the embed itself
@@ -703,11 +702,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
   LOG ("Opening new tab parent-window %p parent-embed %p in-new-window:%s jump-to:%s",
        parent_window, previous_embed, in_new_window ? "t" : "f", jump_to ? "t" : "f");
 
-  if (!in_new_window && parent_window != NULL) {
+  if (!in_new_window && parent_window != NULL)
     window = parent_window;
-  } else {
+  else
     window = ephy_window_new_with_chrome (chrome, is_popup);
-  }
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
     if (previous_embed) {
