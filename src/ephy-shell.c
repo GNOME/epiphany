@@ -691,13 +691,12 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
   if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
   if (flags & EPHY_NEW_TAB_DONT_COPY_HISTORY) copy_history = FALSE;
+  if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
 
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
   in_new_window = in_new_window && !fullscreen_lockdown;
   g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
-
-  jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
   LOG ("Opening new tab parent-window %p parent-embed %p in-new-window:%s jump-to:%s",
        parent_window, previous_embed, in_new_window ? "t" : "f", jump_to ? "t" : "f");
