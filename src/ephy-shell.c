@@ -677,6 +677,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 {
   EphyWindow *window;
   EphyEmbed *embed = NULL;
+  gboolean fullscreen_lockdown = FALSE;
   gboolean in_new_window = TRUE;
   gboolean open_page = FALSE;
   gboolean jump_to;
@@ -691,10 +692,9 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
   if (flags & EPHY_NEW_TAB_DONT_COPY_HISTORY) copy_history = FALSE;
 
-  in_new_window = in_new_window &&
-    !g_settings_get_boolean
-    (EPHY_SETTINGS_LOCKDOWN,
-     EPHY_PREFS_LOCKDOWN_FULLSCREEN);
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                                                EPHY_PREFS_LOCKDOWN_FULLSCREEN);
+  in_new_window = in_new_window && !fullscreen_lockdown;
   g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
 
   jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
