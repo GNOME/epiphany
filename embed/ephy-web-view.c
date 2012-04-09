@@ -635,7 +635,7 @@ find_username_and_password_elements (WebKitDOMNode *form_node,
 
       g_object_get (element, "type", &element_type, NULL);
 
-      if (g_str_equal ("text", element_type)) {
+      if (g_str_equal ("text", element_type) || g_str_equal ("email", element_type)) {
         /* We found more than one inputs of type text; we won't be
          * saving here */
         if (*username_node) {
