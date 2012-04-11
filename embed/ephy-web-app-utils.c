@@ -211,7 +211,7 @@ create_desktop_file (EphyWebView *view,
                                  webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_free (exec_string);
-  g_key_file_set_value (file, "Desktop Entry", "StartupNotification", "true");
+  g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
   g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
   g_key_file_set_value (file, "Desktop Entry", "Type", "Application");
 
