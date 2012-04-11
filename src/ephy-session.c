@@ -66,8 +66,6 @@ struct _EphySessionPrivate
 	GQueue *queue;
 	guint queue_idle_id;
 
-	GtkWidget *quit_interact_dialog;
-
 	guint dont_save : 1;
 };
 
