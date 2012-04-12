@@ -231,6 +231,7 @@ session_command_autoresume (EphySession *session,
 	GFile *saved_session_file;
 	char *saved_session_file_path;
 	gboolean crashed_session;
+	EphyPrefsRestoreSessionPolicy policy;
 
 	LOG ("ephy_session_autoresume");
 
@@ -241,10 +242,20 @@ session_command_autoresume (EphySession *session,
 	
 	g_free (saved_session_file_path);
 
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
+				      EPHY_PREFS_RESTORE_SESSION_POLICY);
+
 	if (crashed_session == FALSE ||
+	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER ||
 	    priv->windows != NULL ||
 	    priv->tool_windows != NULL)
 	{
+		/* If we are auto-resuming, and we never want to
+		 * restore the session, clobber the session state
+		 * file. */
+		if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
+			session_delete (session, SESSION_STATE);
+
 		ephy_session_queue_command (session,
 					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
 					    NULL, NULL, user_time, FALSE);
@@ -614,67 +625,26 @@ ephy_session_class_init (EphySessionClass *class)
 
 /* Implementation */
 
-static void
-close_dialog (GtkWidget *widget)
-{
-	if (GTK_IS_DIALOG (widget))
-	{
-		/* don't destroy them, someone might have a ref on them */
-		gtk_dialog_response (GTK_DIALOG (widget),
-				     GTK_RESPONSE_DELETE_EVENT);
-	}
-}
-
 void
 ephy_session_close (EphySession *session)
 {
-	EphySessionPrivate *priv = session->priv;
-	GList *windows;
+	EphyPrefsRestoreSessionPolicy policy;
 
 	LOG ("ephy_session_close");
 
-	/* we have to ref the shell or else we may get finalised between
-	 * destroying the windows and destroying the tool windows
-	 */
-	g_object_ref (ephy_shell_get_default ());
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
+				      EPHY_PREFS_RESTORE_SESSION_POLICY);
+	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS)
+	{
+		EphySessionPrivate *priv = session->priv;
 
-	priv->dont_save = TRUE;
+		priv->dont_save = TRUE;
 
-	/* Clear command queue */
-	session_command_queue_clear (session);
+		session_command_queue_clear (session);
 
-	ephy_embed_shell_prepare_close (embed_shell);
+		ephy_embed_shell_prepare_close (embed_shell);
 
-	/* there may still be windows open, like dialogues posed from
-	* web pages, etc. Try to kill them, but be sure NOT to destroy
-	* the gtkmozembed offscreen window!
-	* Here, we just check if it's a dialogue and close it if it is one.
-	*/
-	windows = gtk_window_list_toplevels ();
-	g_list_foreach (windows, (GFunc) close_dialog, NULL);
-	g_list_free (windows);
-
-	windows	= ephy_session_get_windows (session);
-	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
-	g_list_free (windows);
-
-	windows = g_list_copy (session->priv->tool_windows);
-	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
-	g_list_free (windows);	
-
-	ephy_embed_shell_prepare_close (embed_shell);
-
-	/* Just to be really sure, do it again: */
-	windows = gtk_window_list_toplevels ();
-	g_list_foreach (windows, (GFunc) close_dialog, NULL);
-	g_list_free (windows);
-
-	session->priv->dont_save = FALSE;
-
-	/* Clear command queue */
-	session_command_queue_clear (session);
-
-	g_object_unref (ephy_shell_get_default ());
+	}
 }
 
 static int

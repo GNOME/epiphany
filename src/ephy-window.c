@@ -1064,7 +1064,6 @@ ephy_window_delete_event (GtkWidget *widget,
 	if (number_windows == 1)
 	{
 		ephy_session_close (session);
-		return TRUE;
 	}
 
 	/* See bug #114689 */
