@@ -1,4 +1,4 @@
-SUBDIRS = lib embed src data po help doc
+SUBDIRS = lib embed src data po doc
 
 if ENABLE_TESTS
 SUBDIRS += tests
@@ -10,7 +10,6 @@ NULL =
 
 EXTRA_DIST = 			\
 	autogen.sh		\
-	gnome-doc-utils.make	\
 	COPYING.README		\
 	HACKING			\
 	MAINTAINERS		\
@@ -21,11 +20,6 @@ EXTRA_DIST = 			\
 	ChangeLog-20061106	\
 	ChangeLog-20070912	\
 	po/ChangeLog.pre-2-23	\
-	help/ChangeLog.pre-2-23	\
-	$(NULL)
-
-DISTCLEANFILES = 		\
-	gnome-doc-utils.make	\
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \

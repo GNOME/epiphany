@@ -234,14 +234,6 @@ show_about (GSimpleAction *action,
 }
 
 static void
-show_help (GSimpleAction *action,
-           GVariant *parameter,
-           gpointer user_data)
-{
-  ephy_gui_help (NULL, NULL);
-}
-
-static void
 quit_application (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
@@ -259,7 +251,6 @@ static GActionEntry app_entries[] = {
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "pdm", show_pdm, NULL, NULL, NULL },
-  { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
 };
