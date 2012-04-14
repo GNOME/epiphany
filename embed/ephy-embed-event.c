@@ -181,6 +181,12 @@ ephy_embed_event_has_property   (EphyEmbedEvent *event,
                                                            
 }
 
+/**
+ * ephy_embed_event_get_hit_test_result:
+ * @event: an #EphyEmbedEvent
+ * 
+ * Returns: (transfer none): returns the #WebKitHitTestResult associated with @event
+ **/
 WebKitHitTestResult *
 ephy_embed_event_get_hit_test_result (EphyEmbedEvent *event)
 {
