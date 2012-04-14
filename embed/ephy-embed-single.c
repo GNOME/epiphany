@@ -488,7 +488,7 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
  * The #EphyEmbedSingleFormAuthData structs and the #GSList are owned
  * by @single and should not be freed by the user.
  * 
- * Returns: (transfer none): #GSList with the possible auto-fills for the forms
+ * Returns: (transfer none) (element-type EphyEmbedSingleFormAuthData): #GSList with the possible auto-fills for the forms
  * in @uri, or %NULL
  **/
 GSList *

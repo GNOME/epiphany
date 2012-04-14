@@ -494,8 +494,8 @@ ephy_node_set_property (EphyNode *node,
 
 /**
  * ephy_node_get_property:
- *
- * @value: (out):
+ * @property_id: the identifier for the property
+ * @value: (out): the variable to hold the value
  */
 gboolean
 ephy_node_get_property (EphyNode *node,
