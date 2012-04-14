@@ -130,7 +130,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 	if (initialised == FALSE)
 	{
 	/**
-	 * EphyPermissionManager::permission-added
+	 * EphyPermissionManager::permission-added:
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
@@ -148,7 +148,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
-	 * EphyPermissionManager::permission-changed
+	 * EphyPermissionManager::permission-changed:
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
@@ -166,7 +166,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
-	 * EphyPermissionManager::permission-deleted
+	 * EphyPermissionManager::permission-deleted:
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
@@ -184,7 +184,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
-	 * EphyPermissionManager::permissions-cleared
+	 * EphyPermissionManager::permissions-cleared:
 	 * @manager: the #EphyPermissionManager
 	 *
 	 * The permissions-cleared signal is emitted when the permissions
@@ -285,7 +285,7 @@ ephy_permission_manager_test_permission (EphyPermissionManager *manager,
  * as its own #EphyPermissionInfo. These entries must be freed using
  * ephy_permission_info_free().
  * 
- * Return value: (transfer none): the list of permission database entries
+ * Return value: (transfer none) (element-type EphyPermissionInfo): the list of permission database entries
  **/
 GList *
 ephy_permission_manager_list_permissions (EphyPermissionManager *manager,
