@@ -140,19 +140,6 @@ GObject        *ephy_shell_get_pdm_dialog               (EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
-void            ephy_shell_set_startup_context          (EphyShell *shell,
-                                                         EphyShellStartupContext  *ctx);
-
-EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
-                                                         char            *bookmarks_filename,
-                                                         char            *session_filename,
-                                                         char            *bookmark_url,
-                                                         char           **arguments,
-                                                         guint32          user_time);
-
-/* private API */
-void           _ephy_shell_create_instance              (EphyEmbedShellMode mode);
-
 G_END_DECLS
 
 #endif

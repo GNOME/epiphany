@@ -36,6 +36,7 @@
 #include "ephy-home-action.h"
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
+#include "ephy-private.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"

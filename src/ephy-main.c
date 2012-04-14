@@ -25,6 +25,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-private.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"

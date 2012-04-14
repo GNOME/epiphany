@@ -29,22 +29,38 @@
 #include "ephy-embed-event.h"
 #include "ephy-embed-private.h"
 #include "ephy-location-controller.h"
+#include "ephy-shell.h"
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
 
 /* EphyWindow */
 
-GtkActionGroup         *ephy_window_get_toolbar_action_group (EphyWindow *window);
+GtkActionGroup          *ephy_window_get_toolbar_action_group (EphyWindow               *window);
 
-EphyLocationController *ephy_window_get_location_controller  (EphyWindow *window);
+EphyLocationController  *ephy_window_get_location_controller  (EphyWindow               *window);
 
-EphyEmbedEvent         *ephy_window_get_context_event        (EphyWindow *window);
+EphyEmbedEvent          *ephy_window_get_context_event        (EphyWindow               *window);
 
-GtkWidget              *ephy_window_get_find_toolbar         (EphyWindow *window);
+GtkWidget               *ephy_window_get_find_toolbar         (EphyWindow               *window);
 
-void                    ephy_window_set_location             (EphyWindow *window,
-                                                              const char *address);
+void                     ephy_window_set_location             (EphyWindow               *window,
+                                                               const char               *address);
+
+
+/* EphyShell */
+
+void                     ephy_shell_set_startup_context       (EphyShell                *shell,
+                                                               EphyShellStartupContext  *ctx);
+
+EphyShellStartupContext *ephy_shell_startup_context_new       (EphyStartupFlags          startup_flags,
+                                                               char                     *bookmarks_filename,
+                                                               char                     *session_filename,
+                                                               char                     *bookmark_url,
+                                                               char                    **arguments,
+                                                               guint32                   user_time);
+
+void                     _ephy_shell_create_instance          (EphyEmbedShellMode        mode);
 
 #endif
 
