@@ -1569,7 +1569,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::loading-homepage
+ * EphyWebView::loading-homepage:
  * @view: the #EphyWebView that received the signal
  *
  * The ::loading-homepage signal is emitted when the @view is about to
@@ -2392,11 +2392,7 @@ ephy_web_view_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
 }
 
-/**
- * normalize_or_autosearch_url
- * @view: an #EphyWebView
- * @url: url to process
- *
+/*
  * Returns a normalized representation of @url, or an autosearch string
  * for it if it has no scheme.
  *
@@ -3396,7 +3392,7 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
 }
 
 /**
- * ephy_web_view_print
+ * ephy_web_view_print:
  * @view: an #EphyWebView
  *
  * Opens a dialog to print the specified view.
@@ -3721,12 +3717,14 @@ ephy_web_view_load_homepage (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_snapshot: takes a snapshot of the requested region of a #EphyWebView
+ * ephy_web_view_get_snapshot:
  * @view: the #EphyWebView
  * @x: the x coordinate of the snapshot
  * @y: the y coordinate of the snapshot
  * @width: the width of the snapshot
  * @height: the height of the snapshot
+ *
+ * Takes a snapshot of the requested region of a #EphyWebView.
  *
  * Returns: (transfer full): a #GdkPixbuf with a snapshot of the requested area.
  **/
