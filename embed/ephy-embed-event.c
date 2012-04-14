@@ -143,8 +143,8 @@ ephy_embed_event_get_coords (EphyEmbedEvent *event,
 
 /**
  * ephy_embed_event_get_property:
- *
- * @value: (out):
+ * @name: the name of the property
+ * @value: (out): a variable to hold its value
  */
 void 
 ephy_embed_event_get_property   (EphyEmbedEvent *event,
