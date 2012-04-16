@@ -1244,26 +1244,24 @@ void
 window_cmd_tabs_next (GtkAction *action,
 		      EphyWindow *window)
 {
-	GtkNotebook *nb;
-	gboolean handled;
+	GtkWidget *nb;
 
-	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	nb = ephy_window_get_notebook (window);
 	g_return_if_fail (nb != NULL);
 
-	g_signal_emit_by_name (nb, "change-current-page", 1, &handled);
+	ephy_notebook_next_page (EPHY_NOTEBOOK (nb));
 }
 
 void
 window_cmd_tabs_previous (GtkAction *action,
 			  EphyWindow *window)
 {
-	GtkNotebook *nb;
-	gboolean handled;
+	GtkWidget *nb;
 
-	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	nb = ephy_window_get_notebook (window);
 	g_return_if_fail (nb != NULL);
 
-	g_signal_emit_by_name (nb, "change-current-page", -1, &handled);
+	ephy_notebook_prev_page (EPHY_NOTEBOOK (nb));
 }
 
 void

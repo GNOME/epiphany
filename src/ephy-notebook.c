@@ -396,7 +396,6 @@ static void
 update_tabs_visibility (EphyNotebook *nb,
 			gboolean before_inserting)
 {
-	EphyNotebookPrivate *priv = nb->priv;
 	EphyEmbedShellMode mode;
 	gboolean show_tabs;
 	guint num;
@@ -776,4 +775,67 @@ ephy_notebook_remove (GtkContainer *container,
 	GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
 	update_tabs_visibility (notebook, FALSE);
+}
+
+/**
+ * ephy_notebook_next_page:
+ * @notebook: an #EphyNotebook
+ * 
+ * Advances to the next page in the @notebook. Note that unlike
+ * gtk_notebook_next_page() this method will wrap around if
+ * #GtkSettings:gtk-keynav-wrap-around is set.
+ **/
+void
+ephy_notebook_next_page (EphyNotebook *notebook)
+{
+	gint current_page, n_pages;
+
+	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
+
+	current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+	n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+	if (current_page < n_pages - 1)
+		gtk_notebook_next_page (GTK_NOTEBOOK (notebook));
+	else {
+		gboolean  wrap_around;
+		
+		g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
+			      "gtk-keynav-wrap-around", &wrap_around,
+			      NULL);
+		
+		if (wrap_around)
+			gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), 0);
+	}
+}
+
+/**
+ * ephy_notebook_prev_page:
+ * @notebook: an #EphyNotebook
+ *
+ * Advances to the previous page in the @notebook. Note that unlike
+ * gtk_notebook_next_page() this method will wrap around if
+ * #GtkSettings:gtk-keynav-wrap-around is set.
+ **/
+void
+ephy_notebook_prev_page (EphyNotebook *notebook)
+{
+	gint current_page;
+
+	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
+
+	current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+	if (current_page > 0)
+		gtk_notebook_prev_page (GTK_NOTEBOOK (notebook));
+	else {
+		gboolean  wrap_around;
+		
+		g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
+			      "gtk-keynav-wrap-around", &wrap_around,
+			      NULL);
+		
+		if (wrap_around)
+			gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), -1);
+	}
 }

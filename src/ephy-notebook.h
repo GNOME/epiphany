@@ -71,6 +71,10 @@ int		ephy_notebook_add_tab		(EphyNotebook *nb,
 void		ephy_notebook_set_show_tabs	(EphyNotebook *nb,
 						 gboolean show_tabs);
 
+void            ephy_notebook_next_page         (EphyNotebook *notebook);
+
+void            ephy_notebook_prev_page         (EphyNotebook *notebook);
+
 G_END_DECLS
 
 #endif /* EPHY_NOTEBOOK_H */
