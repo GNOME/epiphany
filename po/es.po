@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-04-06 17:19+0000\n"
-"PO-Revision-Date: 2012-04-08 13:11+0200\n"
+"POT-Creation-Date: 2012-04-16 13:54+0000\n"
+"PO-Revision-Date: 2012-04-16 16:19+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,8 +42,8 @@ msgstr "http://www.google.es"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:72
-#: ../src/ephy-main.c:320 ../src/ephy-main.c:465 ../src/window-commands.c:1212
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:74
+#: ../src/ephy-main.c:322 ../src/ephy-main.c:467 ../src/window-commands.c:1212
 msgid "Web"
 msgstr "Web"
 
@@ -142,7 +142,6 @@ msgid "Enable smooth scrolling"
 msgstr "Activar desplazamiento suave"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:16
-#| msgid "Lists the active extensions."
 msgid "Active extensions"
 msgstr "Activar extensiones"
 
@@ -155,14 +154,30 @@ msgid "Don't use an external application to view page source."
 msgstr "No usar una aplicación externa para ver el código fuente de la página."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:19
+msgid "Whether to automatically restore the last session"
+msgstr "Indica si se debe restaurar automáticamente la última sesión"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
+msgid ""
+"Defines how the session will be restored during startup. Allowed values are "
+"'always' (the previous state of the application is always restored), "
+"'crashed' (the session is only restored if the application crashes) and "
+"'never' (the homepage is always shown)."
+msgstr ""
+"Define cómo se restaurará la sesión durante el inicio. Los valores "
+"permitidos son «always» (siempre se restaura el estado anterior de la "
+"aplicación), «crashed» (solo se restaura la sesión si falló la aplicación) y "
+"«never» (siempre se muestra la página de inicio)."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid "Show toolbars by default"
 msgstr "Mostrar barras de herramientas de forma predeterminada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Toolbar style"
 msgstr "Estilo de barra de herramientas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -172,20 +187,23 @@ msgstr ""
 "predefinido de GNOME)» «both» (texto e iconos), «both-horiz» (texto junto a "
 "los iconos), «icons», y «text»."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
-msgid "Always show the tab bar"
-msgstr "Mostrar siempre la barra de pestañas"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
-msgid "Show the tab bar also when there is only one tab open."
-msgstr ""
-"Mostrar la barra de pestañas también cuando sólo hay una pestaña abierta."
-
 #: ../data/org.gnome.epiphany.gschema.xml.h:24
+msgid "[Deprecated]"
+msgstr "[Obsoleto]"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
+msgid ""
+"[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
+"instead."
+msgstr ""
+"[Obsoleto] Esta configuración está obsoleta, use «tabs-bar-visibility-policy» "
+"en su lugar."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "Visibility of the downloads window"
 msgstr "Visibilidad de la ventana de descargas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -193,26 +211,38 @@ msgstr ""
 "Mostrar u ocultar la ventana de descargas. Cuando está oculta, se mostrará "
 "una notificación al iniciarse nuevas descargas."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
-#| msgid "_Minimum font size:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
+msgid "The visibility policy for the tabs bar."
+msgstr "La política de visibilidad para la barra de pestañas."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
+msgid ""
+"Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
+"bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
+"two or more tabs) and 'never' (the tabs bar is never shown)."
+msgstr ""
+"Controla cuándo se muestra la barra de pestañas. Los valores posibles son "
+"«always» (la barra de pestañas se muestra siempre), «more-than-one» (la barra "
+"de pestañas se muestra solo si hay dos o más pestañas) y «never» (no es "
+"muestra nunca)."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Minimum font size"
 msgstr "Tamaño mínimo de la tipografía"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
-#| msgid "_Use system fonts"
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Use GNOME fonts"
 msgstr "Usar tipografías de GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid "Use GNOME desktop wide font configuration."
 msgstr "Usar la configuración global de tipografías de GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
-#| msgid "Sans serif font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom sans-serif font"
 msgstr "Tipografía Sans Serif personalizada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -220,12 +250,11 @@ msgstr ""
 "El valor que usar para sobreescribir la tipografía Sans Serif del escritorio "
 "cuando «use-gnome-fonts» es cierto."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
-#| msgid "Sans serif font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "Custom serif font"
 msgstr "Tipografía Serif personalizada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -233,12 +262,11 @@ msgstr ""
 "El valor que usar para sobreescribir la tipografía Serif del escritorio "
 "cuando «use-gnome-fonts» es cierto."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
-#| msgid "Monospace font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Custom monospace font"
 msgstr "Tipografía monoespaciada personalizada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -246,72 +274,71 @@ msgstr ""
 "El valor que usar para sobreescribir la tipografía monoespaciada del "
 "escritorio cuando «use-gnome-fonts» es cierto."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own colors"
 msgstr "Usar sus propios colores"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Use sus propios colores en vez de los que la página pide."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
-#| msgid "Use own colors"
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use own fonts"
 msgstr "Usar sus propias tipografías"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Use sus propias tipografías en vez de las que la página pida."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Use a custom CSS"
 msgstr "Usar CSS personalizado"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Usar un archivo CSS personalizado para el CSS de las páginas web."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
-#| msgid "_Enable spell checking"
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Enable spell checking"
 msgstr "Activar corrección ortográfica"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid "Spell check any text typed in editable areas."
 msgstr "Comprobar la ortografía de cualquier texto escrito en áreas editables."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Default encoding"
 msgstr "Codificación predeterminada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Codificación predeterminada. Los valores aceptados son los que WebKitGTK+ "
 "puede entender."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Size of disk cache"
 msgstr "Tamaño de la caché de disco"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Size of disk cache, in MB."
 msgstr "Tamaño de la caché de disco, en MiB."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47 ../src/prefs-dialog.ui.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Preferred languages, two letter codes."
 msgstr "Idiomas preferidos, código de dos letras."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Cookie accept"
 msgstr "Aceptar cookies"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -320,11 +347,11 @@ msgstr ""
 "\" (cualquier sitio), \"current site\" (sitio actual) y \"nowhere\" (ningún "
 "sitio)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Image animation mode"
 msgstr "Modo de animación de imágenes"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -332,40 +359,38 @@ msgstr ""
 "Cómo se presentan las imágenes animadas. Los valores posibles son \"normal"
 "\", \"once\" (una vez) y \"disabled\" (desactivado)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Allow popups"
 msgstr "Permitir ventanas emergentes"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permite a los sitios abrir ventanas nuevas usando JavaScript (si JavaScript "
 "está activado)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
-#| msgid "Enable _plugins"
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Enable Plugins"
 msgstr "Activar complementos"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Enable JavaScript"
 msgstr "Activar JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
-#| msgid "Enabled"
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Enable WebGL"
 msgstr "Activar WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Indica si se debe activar el soporte para contextos WebGL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "The downloads folder"
 msgstr "La carpeta de descargas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -374,36 +399,31 @@ msgstr ""
 "para usar la carpeta de descargas predeterminada, o \"Desktop\" para usar la "
 "carpeta del escritorio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "History pages time range"
 msgstr "Rango de tiempo de búsqueda por el histórico"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
-#| msgid "Whether to print the page title in the header"
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Whether to show the title column in the history window."
 msgstr ""
 "Indica si debe mostrar la columna de título en la ventana del histórico."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
-#| msgid "Whether to print the page address in the header"
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Whether to show the address column in the history window."
 msgstr ""
 "Indica si debe mostrar la columna de direcciones en la ventana del histórico."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
-#| msgid "Whether to print the date in the footer"
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Whether to show the date-time column in the history window."
 msgstr ""
 "Indica si debe mostrar la columna de fecha/hora en la ventana del histórico."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
-#| msgid "Whether to print the page title in the header"
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Whether to show the title column in the bookmarks window."
 msgstr ""
 "Indica si debe mostrar la columna de título en la ventana de marcadores."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
-#| msgid "Whether to print the page address in the header"
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Indica si debe mostrar la columna de direcciones en la ventana de marcadores."
@@ -797,7 +817,7 @@ msgstr "Instalada el:"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3441
+#: ../embed/ephy-web-view.c:70 ../embed/ephy-web-view.c:3437
 msgid "Blank page"
 msgstr "Página en blanco"
 
@@ -889,25 +909,25 @@ msgstr ""
 msgid "Load again anyway"
 msgstr "Intentarlo de nuevo de todas formas"
 
-#: ../embed/ephy-web-view.c:2428
+#: ../embed/ephy-web-view.c:2424
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2773
+#: ../embed/ephy-web-view.c:2769
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2775
+#: ../embed/ephy-web-view.c:2771
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3645
+#: ../embed/ephy-web-view.c:3641
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
@@ -965,7 +985,7 @@ msgid "All files"
 msgstr "Todos los archivos"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:116 ../src/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:116 ../src/resources/prefs-dialog.ui.h:4
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -974,17 +994,17 @@ msgstr "Descargas"
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: ../lib/ephy-file-helpers.c:326
+#: ../lib/ephy-file-helpers.c:320
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "No se pudo crear la carpeta temporal en: «%s»."
 
-#: ../lib/ephy-file-helpers.c:422
+#: ../lib/ephy-file-helpers.c:416
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "el archivo «%s» ya existe. Muévalo fuera de la ruta."
 
-#: ../lib/ephy-file-helpers.c:433
+#: ../lib/ephy-file-helpers.c:427
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Falló al crear la carpeta «%s»."
@@ -1037,7 +1057,7 @@ msgstr ""
 "contraseña maestra. Si quiere que Epiphany las importe introduzca debajo su "
 "contraseña maestra."
 
-#: ../lib/ephy-profile-migrator.c:82
+#: ../lib/ephy-profile-migrator.c:83
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falló al copiar el archivo de «cookies» de Mozilla."
 
@@ -1164,7 +1184,7 @@ msgstr "Error al descargar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1311
+#: ../lib/widgets/ephy-download-widget.c:280 ../src/ephy-window.c:1310
 #: ../src/window-commands.c:263
 msgid "Open"
 msgstr "Abrir"
@@ -1189,8 +1209,9 @@ msgstr "Sitios"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:462 ../src/ephy-history-window.c:230
-#: ../src/pdm-dialog.c:352 ../src/prefs-dialog.ui.h:32
+#: ../lib/widgets/ephy-location-entry.c:462
+#: ../src/resources/prefs-dialog.ui.h:32 ../src/ephy-history-window.c:230
+#: ../src/pdm-dialog.c:352
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
@@ -1339,7 +1360,7 @@ msgid "_View"
 msgstr "_Ver"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:131 ../src/epiphany-application-menu.ui.h:6
+#: ../src/ephy-history-window.c:131
 msgid "_Help"
 msgstr "Ay_uda"
 
@@ -1480,7 +1501,8 @@ msgid "Display bookmarks help"
 msgstr "Mostrar ayuda de los marcadores"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:172 ../src/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/ephy-history-window.c:172
 msgid "_About"
 msgstr "Acerca _de"
 
@@ -1648,6 +1670,212 @@ msgstr "Abre los marcadores de este tema en pestañas nuevas"
 msgid "Create topic “%s”"
 msgstr "Crear tema «%s»"
 
+#: ../src/resources/epiphany-application-menu.ui.h:1
+msgid "_New Window"
+msgstr "_Ventana nueva"
+
+#. Toplevel
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:88
+msgid "_Bookmarks"
+msgstr "_Marcadores"
+
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "_History"
+msgstr "_Histórico"
+
+#: ../src/resources/epiphany-application-menu.ui.h:4
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "Datos personales"
+
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Quit"
+msgstr "_Salir"
+
+#: ../src/resources/epiphany.ui.h:1
+msgid "Cookie properties"
+msgstr "Propiedades de cookies"
+
+#: ../src/resources/epiphany.ui.h:2
+msgid "Content:"
+msgstr "Contenido:"
+
+#: ../src/resources/epiphany.ui.h:3
+msgid "Path:"
+msgstr "Ruta:"
+
+# Esto es de gestión de cookies (serrador)
+#: ../src/resources/epiphany.ui.h:4
+msgid "Send for:"
+msgstr "Enviar para:"
+
+#: ../src/resources/epiphany.ui.h:5
+msgid "Expires:"
+msgstr "Caduca:"
+
+#: ../src/resources/epiphany.ui.h:6
+msgid "Text Encoding"
+msgstr "Codificación del texto"
+
+#: ../src/resources/epiphany.ui.h:7
+msgid "<b>_Automatic</b>"
+msgstr "<b>_Automática</b>"
+
+#: ../src/resources/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:338
+msgid "Use the encoding specified by the document"
+msgstr "Usar la codificación especificada por el documento"
+
+#: ../src/resources/epiphany.ui.h:9
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>_Usar una codificación diferente:</b>"
+
+#: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "Cookies"
+
+#: ../src/resources/epiphany.ui.h:12
+msgid "_Show passwords"
+msgstr "_Mostrar contraseñas"
+
+#: ../src/resources/epiphany.ui.h:13 ../src/resources/prefs-dialog.ui.h:27
+msgid "Passwords"
+msgstr "Contraseñas"
+
+#: ../src/resources/prefs-dialog.ui.h:1
+msgid "Add Language"
+msgstr "Añadir idioma"
+
+#: ../src/resources/prefs-dialog.ui.h:2
+msgid "Choose a l_anguage:"
+msgstr "Elija un _idioma:"
+
+#: ../src/resources/prefs-dialog.ui.h:5
+msgid "_Download folder:"
+msgstr "Carpeta de de_scarga:"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "A_utomatically open downloaded files"
+msgstr "Abrir _automáticamente los archivos descargados"
+
+#: ../src/resources/prefs-dialog.ui.h:7
+msgid "General"
+msgstr "General"
+
+#: ../src/resources/prefs-dialog.ui.h:8
+msgid "Fonts"
+msgstr "Tipografías"
+
+#: ../src/resources/prefs-dialog.ui.h:9
+msgid "_Use system fonts"
+msgstr "_Usar tipografías del sistema"
+
+#: ../src/resources/prefs-dialog.ui.h:10
+msgid "Sans serif font:"
+msgstr "Tipografía Sans Serif:"
+
+# Esto es de gestión de cookies (serrador)
+#: ../src/resources/prefs-dialog.ui.h:11
+msgid "Serif font:"
+msgstr "Tipografía Serif:"
+
+#: ../src/resources/prefs-dialog.ui.h:12
+msgid "Monospace font:"
+msgstr "Tipografía monoespaciada:"
+
+#: ../src/resources/prefs-dialog.ui.h:13
+msgid "Style"
+msgstr "Estilo"
+
+#: ../src/resources/prefs-dialog.ui.h:14
+msgid "Use custom _stylesheet"
+msgstr "Usar hoja de _estilos personalizada"
+
+#: ../src/resources/prefs-dialog.ui.h:15
+msgid "_Edit Stylesheet…"
+msgstr "Editar _hoja de estilos…"
+
+#: ../src/resources/prefs-dialog.ui.h:16
+msgid "Fonts & Style"
+msgstr "Tipografías y estilo"
+
+#: ../src/resources/prefs-dialog.ui.h:17
+msgid "Web Content"
+msgstr "Contenido web"
+
+#: ../src/resources/prefs-dialog.ui.h:18
+msgid "Allow popup _windows"
+msgstr "Permitir ventanas e_mergentes"
+
+#: ../src/resources/prefs-dialog.ui.h:19
+msgid "Enable _plugins"
+msgstr "Activar co_mplementos"
+
+#: ../src/resources/prefs-dialog.ui.h:20
+msgid "Enable Java_Script"
+msgstr "Activar Java_Script"
+
+#: ../src/resources/prefs-dialog.ui.h:22
+msgid "_Always accept"
+msgstr "_Aceptar siempre"
+
+#: ../src/resources/prefs-dialog.ui.h:23
+msgid "Only _from sites you visit"
+msgstr "Sólo desde los sitios que _visita"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../src/resources/prefs-dialog.ui.h:25
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<small>Por ejemplo, no de publicidad de estos sitios</small>"
+
+#: ../src/resources/prefs-dialog.ui.h:26
+msgid "_Never accept"
+msgstr "_Nunca aceptar"
+
+#: ../src/resources/prefs-dialog.ui.h:28
+msgid "_Remember passwords"
+msgstr "_Recordar la contraseñas"
+
+#: ../src/resources/prefs-dialog.ui.h:29
+msgid "Temporary Files"
+msgstr "Archivos temporales"
+
+#: ../src/resources/prefs-dialog.ui.h:30
+msgid "_Disk space:"
+msgstr "Espacio en el _disco:"
+
+#: ../src/resources/prefs-dialog.ui.h:31
+msgid "MB"
+msgstr "MiB"
+
+#: ../src/resources/prefs-dialog.ui.h:33
+msgid "Privacy"
+msgstr "Privacidad"
+
+#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-encoding-dialog.c:301
+msgid "Encodings"
+msgstr "Codificaciones"
+
+#: ../src/resources/prefs-dialog.ui.h:35
+msgid "De_fault:"
+msgstr "Pre_determinada:"
+
+#: ../src/resources/prefs-dialog.ui.h:37
+msgid "Spell checking"
+msgstr "Corrección ortográfica"
+
+#: ../src/resources/prefs-dialog.ui.h:38
+msgid "_Enable spell checking"
+msgstr "_Activar corrección ortográfica"
+
+#: ../src/resources/prefs-dialog.ui.h:39 ../src/prefs-dialog.c:773
+msgid "Language"
+msgstr "Idioma"
+
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
 msgstr "Detener"
@@ -1664,10 +1892,6 @@ msgstr "Re_cargar"
 msgid "Display the latest content of the current page"
 msgstr "Mostrar el último contenido de la página actual"
 
-#: ../src/ephy-encoding-dialog.c:301 ../src/prefs-dialog.ui.h:34
-msgid "Encodings"
-msgstr "Codificaciones"
-
 #: ../src/ephy-encoding-menu.c:330
 msgid "_Other…"
 msgstr "_Otros…"
@@ -1679,10 +1903,6 @@ msgstr "Otras codificaciones"
 #: ../src/ephy-encoding-menu.c:337
 msgid "_Automatic"
 msgstr "_Automático"
-
-#: ../src/ephy-encoding-menu.c:338 ../src/epiphany.ui.h:8
-msgid "Use the encoding specified by the document"
-msgstr "Usar la codificación especificada por el documento"
 
 #: ../src/ephy-find-toolbar.c:153
 msgid "Not found"
@@ -1821,63 +2041,63 @@ msgstr "Todo el histórico"
 msgid "History"
 msgstr "Histórico"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:83
 msgid "Open a new tab in an existing browser window"
 msgstr "Abre una pestaña nueva en una ventana existente del navegador"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:85
 msgid "Open a new browser window"
 msgstr "Abre una ventana nueva del navegador"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:87
 msgid "Launch the bookmarks editor"
 msgstr "Lanzar el editor de marcadores"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:89
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:87 ../src/ephy-main.c:89
+#: ../src/ephy-main.c:89 ../src/ephy-main.c:91
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:91
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:93
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:93
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:95
 msgid "Start a private instance"
 msgstr "Iniciar una instancia privada"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:97
 msgid "Start the browser in application mode"
 msgstr "Iniciar el navegador en modo aplicación"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:99
 msgid "Profile directory to use in the private instance"
 msgstr "Carpeta de perfiles que usar en la instancia privada"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:99
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:101
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:207
+#: ../src/ephy-main.c:209
 msgid "Could not start Web"
 msgstr "No se pudo iniciar Web"
 
-#: ../src/ephy-main.c:210
+#: ../src/ephy-main.c:212
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -1886,18 +2106,13 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:321
+#: ../src/ephy-main.c:323
 msgid "Web options"
 msgstr "Opciones de Web"
 
-#: ../src/ephy-notebook.c:592
+#: ../src/ephy-notebook.c:597
 msgid "Close tab"
 msgstr "Cerrar pestaña"
-
-#. Toplevel
-#: ../src/ephy-window.c:88 ../src/epiphany-application-menu.ui.h:2
-msgid "_Bookmarks"
-msgstr "_Marcadores"
 
 #: ../src/ephy-window.c:92
 msgid "_Extensions"
@@ -2112,116 +2327,51 @@ msgstr "Si cierra esta ventana, se cancelarán las descargas"
 msgid "Close window and cancel downloads"
 msgstr "Cerrar la ventana y cancelar las descargas"
 
-#: ../src/ephy-window.c:1313
+#: ../src/ephy-window.c:1312
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1314
 msgid "Save As Application"
 msgstr "Guardar como aplicación"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1316
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1319
+#: ../src/ephy-window.c:1318
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1320
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1330
+#: ../src/ephy-window.c:1329
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1333
+#: ../src/ephy-window.c:1332
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1353
+#: ../src/ephy-window.c:1352
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/ephy-window.c:1365
+#: ../src/ephy-window.c:1364
 msgid "Forward"
 msgstr "Adelante"
 
-#: ../src/ephy-window.c:1377
+#: ../src/ephy-window.c:1376
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-window.c:1385
+#: ../src/ephy-window.c:1384
 msgid "New _Tab"
 msgstr "Pe_staña nueva"
-
-#: ../src/epiphany-application-menu.ui.h:1
-msgid "_New Window"
-msgstr "_Ventana nueva"
-
-#: ../src/epiphany-application-menu.ui.h:3
-msgid "_History"
-msgstr "_Histórico"
-
-#: ../src/epiphany-application-menu.ui.h:4 ../src/prefs-dialog.ui.h:3
-msgid "Preferences"
-msgstr "Preferencias"
-
-#: ../src/epiphany-application-menu.ui.h:5 ../src/epiphany.ui.h:10
-msgid "Personal Data"
-msgstr "Datos personales"
-
-#: ../src/epiphany-application-menu.ui.h:8
-msgid "_Quit"
-msgstr "_Salir"
-
-#: ../src/epiphany.ui.h:1
-msgid "Cookie properties"
-msgstr "Propiedades de cookies"
-
-#: ../src/epiphany.ui.h:2
-msgid "Content:"
-msgstr "Contenido:"
-
-#: ../src/epiphany.ui.h:3
-msgid "Path:"
-msgstr "Ruta:"
-
-# Esto es de gestión de cookies (serrador)
-#: ../src/epiphany.ui.h:4
-msgid "Send for:"
-msgstr "Enviar para:"
-
-#: ../src/epiphany.ui.h:5
-msgid "Expires:"
-msgstr "Caduca:"
-
-#: ../src/epiphany.ui.h:6
-msgid "Text Encoding"
-msgstr "Codificación del texto"
-
-#: ../src/epiphany.ui.h:7
-msgid "<b>_Automatic</b>"
-msgstr "<b>_Automática</b>"
-
-#: ../src/epiphany.ui.h:9
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_Usar una codificación diferente:</b>"
-
-#: ../src/epiphany.ui.h:11 ../src/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "Cookies"
-
-#: ../src/epiphany.ui.h:12
-msgid "_Show passwords"
-msgstr "_Mostrar contraseñas"
-
-#: ../src/epiphany.ui.h:13 ../src/prefs-dialog.ui.h:27
-msgid "Passwords"
-msgstr "Contraseñas"
 
 #: ../src/pdm-dialog.c:333
 msgid "<b>Select the personal data you want to clear</b>"
@@ -2340,135 +2490,9 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: ../src/prefs-dialog.c:773 ../src/prefs-dialog.ui.h:39
-msgid "Language"
-msgstr "Idioma"
-
 #: ../src/prefs-dialog.c:862
 msgid "Select a Directory"
 msgstr "Seleccione una carpeta"
-
-#: ../src/prefs-dialog.ui.h:1
-msgid "Add Language"
-msgstr "Añadir idioma"
-
-#: ../src/prefs-dialog.ui.h:2
-msgid "Choose a l_anguage:"
-msgstr "Elija un _idioma:"
-
-#: ../src/prefs-dialog.ui.h:5
-msgid "_Download folder:"
-msgstr "Carpeta de de_scarga:"
-
-#: ../src/prefs-dialog.ui.h:6
-msgid "A_utomatically open downloaded files"
-msgstr "Abrir _automáticamente los archivos descargados"
-
-#: ../src/prefs-dialog.ui.h:7
-msgid "General"
-msgstr "General"
-
-#: ../src/prefs-dialog.ui.h:8
-msgid "Fonts"
-msgstr "Tipografías"
-
-#: ../src/prefs-dialog.ui.h:9
-msgid "_Use system fonts"
-msgstr "_Usar tipografías del sistema"
-
-#: ../src/prefs-dialog.ui.h:10
-msgid "Sans serif font:"
-msgstr "Tipografía Sans Serif:"
-
-# Esto es de gestión de cookies (serrador)
-#: ../src/prefs-dialog.ui.h:11
-msgid "Serif font:"
-msgstr "Tipografía Serif:"
-
-#: ../src/prefs-dialog.ui.h:12
-msgid "Monospace font:"
-msgstr "Tipografía monoespaciada:"
-
-#: ../src/prefs-dialog.ui.h:13
-msgid "Style"
-msgstr "Estilo"
-
-#: ../src/prefs-dialog.ui.h:14
-msgid "Use custom _stylesheet"
-msgstr "Usar hoja de _estilos personalizada"
-
-#: ../src/prefs-dialog.ui.h:15
-msgid "_Edit Stylesheet…"
-msgstr "Editar _hoja de estilos…"
-
-#: ../src/prefs-dialog.ui.h:16
-msgid "Fonts & Style"
-msgstr "Tipografías y estilo"
-
-#: ../src/prefs-dialog.ui.h:17
-msgid "Web Content"
-msgstr "Contenido web"
-
-#: ../src/prefs-dialog.ui.h:18
-msgid "Allow popup _windows"
-msgstr "Permitir ventanas e_mergentes"
-
-#: ../src/prefs-dialog.ui.h:19
-msgid "Enable _plugins"
-msgstr "Activar co_mplementos"
-
-#: ../src/prefs-dialog.ui.h:20
-msgid "Enable Java_Script"
-msgstr "Activar Java_Script"
-
-#: ../src/prefs-dialog.ui.h:22
-msgid "_Always accept"
-msgstr "_Aceptar siempre"
-
-#: ../src/prefs-dialog.ui.h:23
-msgid "Only _from sites you visit"
-msgstr "Sólo desde los sitios que _visita"
-
-#. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/prefs-dialog.ui.h:25
-msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>Por ejemplo, no de publicidad de estos sitios</small>"
-
-#: ../src/prefs-dialog.ui.h:26
-msgid "_Never accept"
-msgstr "_Nunca aceptar"
-
-#: ../src/prefs-dialog.ui.h:28
-msgid "_Remember passwords"
-msgstr "_Recordar la contraseñas"
-
-#: ../src/prefs-dialog.ui.h:29
-msgid "Temporary Files"
-msgstr "Archivos temporales"
-
-#: ../src/prefs-dialog.ui.h:30
-msgid "_Disk space:"
-msgstr "Espacio en el _disco:"
-
-#: ../src/prefs-dialog.ui.h:31
-msgid "MB"
-msgstr "MiB"
-
-#: ../src/prefs-dialog.ui.h:33
-msgid "Privacy"
-msgstr "Privacidad"
-
-#: ../src/prefs-dialog.ui.h:35
-msgid "De_fault:"
-msgstr "Pre_determinada:"
-
-#: ../src/prefs-dialog.ui.h:37
-msgid "Spell checking"
-msgstr "Corrección ortográfica"
-
-#: ../src/prefs-dialog.ui.h:38
-msgid "_Enable spell checking"
-msgstr "_Activar corrección ortográfica"
 
 #: ../src/window-commands.c:316
 msgid "Save"
@@ -2588,11 +2612,11 @@ msgstr ""
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1373
+#: ../src/window-commands.c:1371
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1376
+#: ../src/window-commands.c:1374
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2603,9 +2627,16 @@ msgstr ""
 "permitiéndole moverse con su teclado. ¿Quiere activar el modo de navegación "
 "con cursor?"
 
-#: ../src/window-commands.c:1379
+#: ../src/window-commands.c:1377
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Always show the tab bar"
+#~ msgstr "Mostrar siempre la barra de pestañas"
+
+#~ msgid "Show the tab bar also when there is only one tab open."
+#~ msgstr ""
+#~ "Mostrar la barra de pestañas también cuando sólo hay una pestaña abierta."
 
 #~ msgid "All"
 #~ msgstr "Todo"
@@ -3399,41 +3430,41 @@ msgstr "_Activar"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
-#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
-#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
-#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
-#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
-#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
-#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
-#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
-#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
-#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
-#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
-#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
+#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
+#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
+#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
+#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
+#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
+#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
+#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
+#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
+#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
+#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
+#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
+#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
+#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
+#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
+#~ "and \"x-windows-949\"."
 #~ msgstr ""
 #~ "Codificación predeterminada. Los valores aceptados son : \"armscii-8\", "
-#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
-#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
-#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
-#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
-#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
-#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
-#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
-#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
-#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
-#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
-#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
-#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" y \"x-windows-949\"."
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312"
+#~ "\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
+#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
+#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3"
+#~ "\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-"
+#~ "8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11"
+#~ "\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
+#~ "\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-"
+#~ "7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-"
+#~ "1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-"
+#~ "1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw"
+#~ "\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-"
+#~ "croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", "
+#~ "\"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew"
+#~ "\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-"
+#~ "turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", "
+#~ "\"x-viet-vps\" y \"x-windows-949\"."
 
 #~ msgid "Enable Web Inspector"
 #~ msgstr "Activar el inspector web"
@@ -3446,8 +3477,7 @@ msgstr "_Activar"
 #~ "\"separately\" and \"selected\"."
 #~ msgstr ""
 #~ "Cómo se imprimen las páginas que contienen marcos. Los valores posibles "
-#~ "son \"normal\", «separately» (por separado) y \"selected"
-#~ "\" (seleccionados)."
+#~ "son \"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
@@ -3507,8 +3537,7 @@ msgstr "_Activar"
 #~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 #~ msgstr ""
 #~ "La información de la página mostrada en la vista del histórico. Los "
-#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y "
-#~ "«VerFechaHora»."
+#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
 
 #~ msgid "Whether to print the background color"
 #~ msgstr "Indica si debe imprimir el color del fondo"
