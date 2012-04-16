@@ -45,6 +45,12 @@ typedef enum
 
 typedef enum
 {
+  EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS,
+  EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE
+} EphyPrefsUITabsBarVisibilityPolicy;
+
+typedef enum
+{
   EPHY_PREFS_WEB_COOKIES_POLICY_ALWAYS,
   EPHY_PREFS_WEB_COOKIES_POLICY_NO_THIRD_PARTY,
   EPHY_PREFS_WEB_COOKIES_POLICY_NEVER
@@ -60,11 +66,12 @@ typedef enum
   EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER,
 } EphyPrefsStateHistoryDateFilter;
 
-#define EPHY_PREFS_UI_SCHEMA               "org.gnome.Epiphany.ui"
-#define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR "always-show-tabs-bar"
-#define EPHY_PREFS_UI_SHOW_TOOLBARS        "show-toolbars"
-#define EPHY_PREFS_UI_TOOLBAR_STYLE        "toolbar-style"
-#define EPHY_PREFS_UI_DOWNLOADS_HIDDEN     "downloads-hidden"
+#define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
+#define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR       "always-show-tabs-bar"
+#define EPHY_PREFS_UI_SHOW_TOOLBARS              "show-toolbars"
+#define EPHY_PREFS_UI_TOOLBAR_STYLE              "toolbar-style"
+#define EPHY_PREFS_UI_DOWNLOADS_HIDDEN           "downloads-hidden"
+#define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
 
 #define EPHY_PREFS_STATE_SCHEMA                 "org.gnome.Epiphany.state"
 #define EPHY_PREFS_STATE_SAVE_DIR               "save-dir"

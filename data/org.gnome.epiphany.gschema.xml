@@ -77,13 +77,18 @@
 		</key>
 		<key type="b" name="always-show-tabs-bar">
 			<default>false</default>
-			<summary>Always show the tab bar</summary>
-			<description>Show the tab bar also when there is only one tab open.</description>
+			<summary>[Deprecated]</summary>
+			<description>[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' instead.</description>
 		</key>
 		<key type="b" name="downloads-hidden">
 			<default>false</default>
 			<summary>Visibility of the downloads window</summary>
 			<description>Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started.</description>
+		</key>
+		<key name="tabs-bar-visibility-policy" enum="org.gnome.Epiphany.EphyPrefsUITabsBarVisibilityPolicy">
+			<default>'more-than-one'</default>
+			<summary>The visibility policy for the tabs  bar.</summary>
+			<description>Controls when the tabs bar is shown. Possible values are 'always' (the tabs bar is always shown) and 'more-than-one' (the tabs bar is only shown if there's two or more tabs).</description>
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/web/" id="org.gnome.Epiphany.web">

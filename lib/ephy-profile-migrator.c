@@ -36,6 +36,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
+#include "ephy-settings.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
 #endif
@@ -605,6 +606,20 @@ migrate_history ()
   g_object_unref (history_service);
 }
 
+static void
+migrate_tabs_visibility ()
+{
+  gboolean always_show_tabs;
+
+  always_show_tabs = g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                             EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR);
+
+  if (always_show_tabs)
+    g_settings_set_enum (EPHY_SETTINGS_UI,
+                         EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
+                         EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -614,7 +629,8 @@ const EphyProfileMigrator migrators[] = {
   /* Very similar to migrate_passwords, but this migrates
    * login/passwords for page forms, which we previously ignored */
   migrate_passwords2,
-  migrate_history
+  migrate_history,
+  migrate_tabs_visibility
 };
 
 static void
