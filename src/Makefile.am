@@ -110,20 +110,20 @@ libephymain_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 UI_FILES = \
-	epiphany-bookmark-editor-ui.xml	\
-	epiphany-history-window-ui.xml  \
-	epiphany-ui.xml			\
-	epiphany.ui			\
-	epiphany-application-menu.ui	\
-	prefs-dialog.ui			\
-	epiphany.css                    \
+	resources/epiphany-bookmark-editor-ui.xml \
+	resources/epiphany-history-window-ui.xml  \
+	resources/epiphany-ui.xml		  \
+	resources/epiphany.ui			  \
+	resources/epiphany-application-menu.ui	  \
+	resources/prefs-dialog.ui		  \
+	resources/epiphany.css                    \
 	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(UI_FILES)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 epiphany-resources.h: epiphany.gresource.xml $(UI_FILES)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \
 	epiphany-resources.c \
