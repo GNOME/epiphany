@@ -397,7 +397,7 @@ update_tabs_visibility (EphyNotebook *nb,
 			gboolean before_inserting)
 {
 	EphyEmbedShellMode mode;
-	gboolean show_tabs;
+	gboolean show_tabs = FALSE;
 	guint num;
 	EphyPrefsUITabsBarVisibilityPolicy policy;
 
@@ -409,11 +409,11 @@ update_tabs_visibility (EphyNotebook *nb,
 	policy = g_settings_get_enum (EPHY_SETTINGS_UI,
 				      EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
-	show_tabs = mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
-		(policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS
-		 || num > 1) &&
-		priv->show_tabs == TRUE;
-
+	if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+	    ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
+	     policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
+		show_tabs = TRUE;
+	    
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
 }
 
