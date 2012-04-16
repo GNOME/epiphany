@@ -467,6 +467,9 @@ ephy_notebook_finalize (GObject *object)
 	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
 	EphyNotebookPrivate *priv = notebook->priv;
 
+	g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
+					      show_tabs_changed_cb,
+					      notebook);
 	g_list_free (priv->focused_pages);
 
 	G_OBJECT_CLASS (ephy_notebook_parent_class)->finalize (object);
