@@ -2896,8 +2896,6 @@ setup_downloads_box (EphyWindow *window)
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_box_pack_end (GTK_BOX (widget), close_button, FALSE, FALSE, 4);
 
-	gtk_widget_set_margin_right (widget, 20);
-
 	g_signal_connect (close_button, "clicked",
 			  G_CALLBACK (downloads_close_cb), window);
 	g_signal_connect (widget, "remove",
