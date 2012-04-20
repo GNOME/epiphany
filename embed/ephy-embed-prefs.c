@@ -386,6 +386,24 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
 }
 
 static void
+replace_system_language_with_concrete_language_string (char **languages)
+{
+  int i;
+
+  for (i = 0; i < g_strv_length (languages); i++) {
+    if (g_str_equal (languages[i], "system")) {
+      char **sys_langs;
+
+      g_free (languages[i]);
+      sys_langs = ephy_langs_get_languages ();
+      languages[i] = g_strjoinv (", ", sys_langs);
+
+      g_strfreev (sys_langs);
+    }
+  }
+}
+
+static void
 webkit_pref_callback_enable_spell_checking (GSettings *settings,
                                             char *key,
                                             gpointer data)
@@ -398,6 +416,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
 
   if (value) {
     languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
+    replace_system_language_with_concrete_language_string (languages);
     langs = g_strjoinv (",", languages);
     g_strdelimit (langs, "-", '_');
     g_strfreev (languages);
