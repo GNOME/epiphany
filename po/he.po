@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2012-03-24 19:16+0200\n"
-"PO-Revision-Date: 2012-03-24 19:17+0200\n"
+"POT-Creation-Date: 2012-04-22 11:23+0300\n"
+"PO-Revision-Date: 2012-04-22 11:23+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "Language: he\n"
@@ -41,14 +41,6 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.co.il/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
-msgid "Browse the web"
-msgstr "גלישה ברשת"
-
-#: ../data/epiphany.desktop.in.in.h:2
-msgid "Epiphany Web Browser"
-msgstr "דפדפן Epiphany"
-
-#: ../data/epiphany.desktop.in.in.h:3
 #: ../src/ephy-main.c:73
 #: ../src/ephy-main.c:321
 #: ../src/ephy-main.c:467
@@ -56,220 +48,260 @@ msgstr "דפדפן Epiphany"
 msgid "Web"
 msgstr "דפדפן"
 
-#: ../data/epiphany.desktop.in.in.h:4
+#: ../data/epiphany.desktop.in.in.h:2
 msgid "Web Browser"
 msgstr "דפדפן אינטרנט"
 
-#: ../data/ui/epiphany.ui.h:1
-msgid "<b>_Automatic</b>"
-msgstr "<b>_אוטומטי</b>"
+#: ../data/epiphany.desktop.in.in.h:3
+msgid "Epiphany Web Browser"
+msgstr "דפדפן Epiphany"
 
-#: ../data/ui/epiphany.ui.h:2
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_שימוש בקידוד אחר:</b>"
+#: ../data/epiphany.desktop.in.in.h:4
+msgid "Browse the web"
+msgstr "גלישה ברשת"
 
-#: ../data/ui/epiphany.ui.h:3
-msgid "Content:"
-msgstr "תוכן:"
+#: ../data/ui/epiphany-application-menu.ui.h:1
+msgid "_New Window"
+msgstr "_חלון חדש"
 
-#: ../data/ui/epiphany.ui.h:4
-msgid "Cookie properties"
-msgstr "מאפייני העוגייה"
+#. Toplevel
+#: ../data/ui/epiphany-application-menu.ui.h:2
+#: ../src/ephy-window.c:87
+msgid "_Bookmarks"
+msgstr "_סימניות"
 
-#: ../data/ui/epiphany.ui.h:5
-#: ../data/ui/prefs-dialog.ui.h:8
-msgid "Cookies"
-msgstr "עוגיות"
+#: ../data/ui/epiphany-application-menu.ui.h:3
+msgid "_History"
+msgstr "היס_טוריה"
 
-#: ../data/ui/epiphany.ui.h:6
-msgid "Expires:"
-msgstr "תאריך תפוגה:"
+#: ../data/ui/epiphany-application-menu.ui.h:4
+#: ../data/ui/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "העדפות"
 
-#: ../data/ui/epiphany.ui.h:7
-#: ../data/ui/prefs-dialog.ui.h:22
-msgid "Passwords"
-msgstr "ססמאות"
-
-#: ../data/ui/epiphany.ui.h:8
-msgid "Path:"
-msgstr "נתיב:"
-
-#: ../data/ui/epiphany.ui.h:9
+#: ../data/ui/epiphany-application-menu.ui.h:5
+#: ../data/ui/epiphany.ui.h:10
 msgid "Personal Data"
 msgstr "מידע אישי"
 
-#: ../data/ui/epiphany.ui.h:10
+#: ../data/ui/epiphany-application-menu.ui.h:6
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/ephy-history-window.c:131
+msgid "_Help"
+msgstr "ע_זרה"
+
+#: ../data/ui/epiphany-application-menu.ui.h:7
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:172
+msgid "_About"
+msgstr "על _אודות"
+
+#: ../data/ui/epiphany-application-menu.ui.h:8
+msgid "_Quit"
+msgstr "י_ציאה"
+
+#: ../data/ui/epiphany.ui.h:1
+msgid "Cookie properties"
+msgstr "מאפייני העוגייה"
+
+#: ../data/ui/epiphany.ui.h:2
+msgid "Content:"
+msgstr "תוכן:"
+
+#: ../data/ui/epiphany.ui.h:3
+msgid "Path:"
+msgstr "נתיב:"
+
+#: ../data/ui/epiphany.ui.h:4
 msgid "Send for:"
 msgstr "שליחה ל:"
 
-#: ../data/ui/epiphany.ui.h:11
+#: ../data/ui/epiphany.ui.h:5
+msgid "Expires:"
+msgstr "תאריך תפוגה:"
+
+#: ../data/ui/epiphany.ui.h:6
 msgid "Text Encoding"
 msgstr "קידוד הטקסט"
 
-#: ../data/ui/epiphany.ui.h:12
+#: ../data/ui/epiphany.ui.h:7
+msgid "<b>_Automatic</b>"
+msgstr "<b>_אוטומטי</b>"
+
+#: ../data/ui/epiphany.ui.h:8
 #: ../src/ephy-encoding-menu.c:338
 msgid "Use the encoding specified by the document"
 msgstr "שימוש בקידוד המוגדר במסמך"
 
-#: ../data/ui/epiphany.ui.h:13
+#: ../data/ui/epiphany.ui.h:9
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>_שימוש בקידוד אחר:</b>"
+
+#: ../data/ui/epiphany.ui.h:11
+#: ../data/ui/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "עוגיות"
+
+#: ../data/ui/epiphany.ui.h:12
 msgid "_Show passwords"
 msgstr "הצגת סס_מאות"
 
-#. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/ui/prefs-dialog.ui.h:2
-msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>לדוגמה, לא ממפרסמים באתרים אלו</small>"
+#: ../data/ui/epiphany.ui.h:13
+#: ../data/ui/prefs-dialog.ui.h:27
+msgid "Passwords"
+msgstr "ססמאות"
 
-#: ../data/ui/prefs-dialog.ui.h:3
-msgid "A_utomatically open downloaded files"
-msgstr "פתיחת קבצים שהתקבלו _אוטומטית"
-
-#: ../data/ui/prefs-dialog.ui.h:4
+#: ../data/ui/prefs-dialog.ui.h:1
 msgid "Add Language"
 msgstr "הוספת שפה"
 
-#: ../data/ui/prefs-dialog.ui.h:5
-msgid "Allow popup _windows"
-msgstr "אפשור _חלונות קופצים"
-
-#: ../data/ui/prefs-dialog.ui.h:6
+#: ../data/ui/prefs-dialog.ui.h:2
 msgid "Choose a l_anguage:"
 msgstr "בחירת _שפה:"
 
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../data/ui/prefs-dialog.ui.h:7
-#: ../lib/widgets/ephy-location-entry.c:462
-#: ../src/ephy-history-window.c:230
-#: ../src/pdm-dialog.c:352
-msgid "Cl_ear"
-msgstr "_ניקוי"
-
-#: ../data/ui/prefs-dialog.ui.h:9
-msgid "De_fault:"
-msgstr "ב_ררת מחדל:"
-
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../data/ui/prefs-dialog.ui.h:10
+#: ../data/ui/prefs-dialog.ui.h:4
 #: ../lib/ephy-file-helpers.c:116
 msgid "Downloads"
 msgstr "הורדות"
 
-#: ../data/ui/prefs-dialog.ui.h:11
-msgid "Enable Java_Script"
-msgstr "מתן האפשרות לשימוש ב־Java_Script"
+#: ../data/ui/prefs-dialog.ui.h:5
+msgid "_Download folder:"
+msgstr "תיקיית _הורדות:"
 
-#: ../data/ui/prefs-dialog.ui.h:12
-msgid "Enable _plugins"
-msgstr "ה_פעלת תוספים"
+#: ../data/ui/prefs-dialog.ui.h:6
+msgid "A_utomatically open downloaded files"
+msgstr "פתיחת קבצים שהתקבלו _אוטומטית"
 
-#: ../data/ui/prefs-dialog.ui.h:13
-#: ../src/ephy-encoding-dialog.c:302
-msgid "Encodings"
-msgstr "קידודים"
-
-#: ../data/ui/prefs-dialog.ui.h:14
-msgid "Fonts"
-msgstr "גופנים"
-
-#: ../data/ui/prefs-dialog.ui.h:15
-msgid "Fonts & Style"
-msgstr "גופנים ועיצוב"
-
-#: ../data/ui/prefs-dialog.ui.h:16
+#: ../data/ui/prefs-dialog.ui.h:7
 msgid "General"
 msgstr "כללי"
 
-#: ../data/ui/prefs-dialog.ui.h:17
-#: ../src/prefs-dialog.c:773
-msgid "Language"
-msgstr "שפה"
+#: ../data/ui/prefs-dialog.ui.h:8
+msgid "Fonts"
+msgstr "גופנים"
 
-#: ../data/ui/prefs-dialog.ui.h:18
-msgid "Languages"
-msgstr "שפות"
+#: ../data/ui/prefs-dialog.ui.h:9
+msgid "_Use system fonts"
+msgstr "שימוש בגופני המ_ערכת"
 
-#: ../data/ui/prefs-dialog.ui.h:19
-msgid "MB"
-msgstr "מגה־בתים"
-
-#: ../data/ui/prefs-dialog.ui.h:20
-msgid "Monospace font:"
-msgstr "גופן ברוחב אחיד:"
-
-#: ../data/ui/prefs-dialog.ui.h:21
-msgid "Only _from sites you visit"
-msgstr "רק מאתרים הנמצאים ב_שימושך"
-
-#: ../data/ui/prefs-dialog.ui.h:23
-msgid "Preferences"
-msgstr "העדפות"
-
-#: ../data/ui/prefs-dialog.ui.h:24
-msgid "Privacy"
-msgstr "פרטיות"
-
-#: ../data/ui/prefs-dialog.ui.h:25
+#: ../data/ui/prefs-dialog.ui.h:10
 msgid "Sans serif font:"
 msgstr "גופן ללא עיטורים:"
 
-#: ../data/ui/prefs-dialog.ui.h:26
+#: ../data/ui/prefs-dialog.ui.h:11
 msgid "Serif font:"
 msgstr "גופן מעוטר:"
 
-#: ../data/ui/prefs-dialog.ui.h:27
-msgid "Spell checking"
-msgstr "בדיקת איות"
+#: ../data/ui/prefs-dialog.ui.h:12
+msgid "Monospace font:"
+msgstr "גופן ברוחב אחיד:"
 
-#: ../data/ui/prefs-dialog.ui.h:28
+#: ../data/ui/prefs-dialog.ui.h:13
 msgid "Style"
 msgstr "סגנון"
+
+#: ../data/ui/prefs-dialog.ui.h:14
+msgid "Use custom _stylesheet"
+msgstr "שימוש בגיליון סגנון מותאם אישית"
+
+#: ../data/ui/prefs-dialog.ui.h:15
+msgid "_Edit Stylesheet…"
+msgstr "_עריכת גיליון הסגנון…"
+
+#: ../data/ui/prefs-dialog.ui.h:16
+msgid "Fonts & Style"
+msgstr "גופנים ועיצוב"
+
+#: ../data/ui/prefs-dialog.ui.h:17
+msgid "Web Content"
+msgstr "תוכן מקוון"
+
+#: ../data/ui/prefs-dialog.ui.h:18
+msgid "Allow popup _windows"
+msgstr "אפשור _חלונות קופצים"
+
+#: ../data/ui/prefs-dialog.ui.h:19
+msgid "Enable _plugins"
+msgstr "ה_פעלת תוספים"
+
+#: ../data/ui/prefs-dialog.ui.h:20
+msgid "Enable Java_Script"
+msgstr "מתן האפשרות לשימוש ב־Java_Script"
+
+#: ../data/ui/prefs-dialog.ui.h:22
+msgid "_Always accept"
+msgstr "_תמיד לקבל"
+
+#: ../data/ui/prefs-dialog.ui.h:23
+msgid "Only _from sites you visit"
+msgstr "רק מאתרים הנמצאים ב_שימושך"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../data/ui/prefs-dialog.ui.h:25
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<small>לדוגמה, לא ממפרסמים באתרים אלו</small>"
+
+#: ../data/ui/prefs-dialog.ui.h:26
+msgid "_Never accept"
+msgstr "_לא לקבל אף פעם"
+
+#: ../data/ui/prefs-dialog.ui.h:28
+msgid "_Remember passwords"
+msgstr "שמירת ה_ססמאות."
 
 #: ../data/ui/prefs-dialog.ui.h:29
 msgid "Temporary Files"
 msgstr "קבצים זמניים"
 
 #: ../data/ui/prefs-dialog.ui.h:30
-msgid "Use custom _stylesheet"
-msgstr "שימוש בגיליון סגנון מותאם אישית"
-
-#: ../data/ui/prefs-dialog.ui.h:31
-msgid "Web Content"
-msgstr "תוכן מקוון"
-
-#: ../data/ui/prefs-dialog.ui.h:32
-msgid "_Always accept"
-msgstr "_תמיד לקבל"
-
-#: ../data/ui/prefs-dialog.ui.h:33
 msgid "_Disk space:"
 msgstr "מקום ב_כונן:"
 
+#: ../data/ui/prefs-dialog.ui.h:31
+msgid "MB"
+msgstr "מגה־בתים"
+
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../data/ui/prefs-dialog.ui.h:32
+#: ../lib/widgets/ephy-location-entry.c:462
+#: ../src/ephy-history-window.c:230
+#: ../src/pdm-dialog.c:352
+msgid "Cl_ear"
+msgstr "_ניקוי"
+
+#: ../data/ui/prefs-dialog.ui.h:33
+msgid "Privacy"
+msgstr "פרטיות"
+
 #: ../data/ui/prefs-dialog.ui.h:34
-msgid "_Download folder:"
-msgstr "תיקיית _הורדות:"
+#: ../src/ephy-encoding-dialog.c:302
+msgid "Encodings"
+msgstr "קידודים"
 
 #: ../data/ui/prefs-dialog.ui.h:35
-msgid "_Edit Stylesheet…"
-msgstr "_עריכת גיליון הסגנון…"
+msgid "De_fault:"
+msgstr "ב_ררת מחדל:"
 
 #: ../data/ui/prefs-dialog.ui.h:36
+msgid "Languages"
+msgstr "שפות"
+
+#: ../data/ui/prefs-dialog.ui.h:37
+msgid "Spell checking"
+msgstr "בדיקת איות"
+
+#: ../data/ui/prefs-dialog.ui.h:38
 msgid "_Enable spell checking"
 msgstr "ה_פעלת בדיקת האיות"
 
-#: ../data/ui/prefs-dialog.ui.h:37
-msgid "_Never accept"
-msgstr "_לא לקבל אף פעם"
-
-#: ../data/ui/prefs-dialog.ui.h:38
-msgid "_Remember passwords"
-msgstr "שמירת ה_ססמאות."
-
 #: ../data/ui/prefs-dialog.ui.h:39
-msgid "_Use system fonts"
-msgstr "שימוש בגופני המ_ערכת"
+#: ../src/prefs-dialog.c:773
+msgid "Language"
+msgstr "שפה"
 
 #: ../embed/ephy-download.c:217
 msgctxt "file type"
@@ -1033,7 +1065,7 @@ msgid "Cancel"
 msgstr "ביטול"
 
 #: ../lib/widgets/ephy-download-widget.c:280
-#: ../src/ephy-window.c:1283
+#: ../src/ephy-window.c:1296
 #: ../src/window-commands.c:263
 msgid "Open"
 msgstr "פתיחה"
@@ -1046,7 +1078,7 @@ msgstr "הצגה בתיקייה"
 msgid "Starting…"
 msgstr "הפעלה…"
 
-#: ../lib/widgets/ephy-hosts-store.c:166
+#: ../lib/widgets/ephy-hosts-store.c:230
 msgid "All sites"
 msgstr "כל האתרים"
 
@@ -1198,11 +1230,6 @@ msgstr "_עריכה"
 msgid "_View"
 msgstr "ת_צוגה"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:131
-msgid "_Help"
-msgstr "ע_זרה"
-
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "_New Topic"
@@ -1345,11 +1372,6 @@ msgstr "_תוכן"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "Display bookmarks help"
 msgstr "הצגת העזרה של הסימניות"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:172
-msgid "_About"
-msgstr "על _אודות"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
 #: ../src/ephy-history-window.c:173
@@ -1774,11 +1796,6 @@ msgstr "שחזור ה_פעלה"
 msgid "Do you want to recover the previous browser windows and tabs?"
 msgstr "האם לשחזר את החלונות והלשוניות מהפעלת הדפדפן הקודמת?"
 
-#. Toplevel
-#: ../src/ephy-window.c:87
-msgid "_Bookmarks"
-msgstr "_סימניות"
-
 #: ../src/ephy-window.c:91
 msgid "_Extensions"
 msgstr "ה_רחבות"
@@ -1992,49 +2009,49 @@ msgstr "אם חלון זה ייסגר על ידיך, ההורדות יבוטלו
 msgid "Close window and cancel downloads"
 msgstr "סגירת החלון וביטול ההורדות"
 
-#: ../src/ephy-window.c:1285
+#: ../src/ephy-window.c:1298
 msgid "Save As"
 msgstr "שמירה בשם"
 
-#: ../src/ephy-window.c:1287
+#: ../src/ephy-window.c:1300
 msgid "Save As Application"
 msgstr "שמירה כיישום"
 
-#: ../src/ephy-window.c:1289
+#: ../src/ephy-window.c:1302
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1304
 msgid "Bookmark"
 msgstr "סימנייה"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1306
 msgid "Find"
 msgstr "חיפוש"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1302
+#: ../src/ephy-window.c:1315
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1305
+#: ../src/ephy-window.c:1318
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1325
+#: ../src/ephy-window.c:1338
 msgid "Back"
 msgstr "אחורה"
 
-#: ../src/ephy-window.c:1337
+#: ../src/ephy-window.c:1350
 msgid "Forward"
 msgstr "קדימה"
 
-#: ../src/ephy-window.c:1349
+#: ../src/ephy-window.c:1362
 msgid "Zoom"
 msgstr "תקריב"
 
-#: ../src/ephy-window.c:1357
+#: ../src/ephy-window.c:1370
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
@@ -2600,9 +2617,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Open a new tab"
 #~ msgstr "פתיחת לשונית חדשה"
-
-#~ msgid "_New Window"
-#~ msgstr "_חלון חדש"
 
 #~ msgid "Open a new window"
 #~ msgstr "פתיחת חלון חדש"
@@ -3736,8 +3750,6 @@ msgstr "ה_פעלה"
 #~ msgstr "הכל"
 #~ msgid "toolbar style|Default"
 #~ msgstr "ברירת מחדל"
-#~ msgid "_History"
-#~ msgstr "היס_טוריה"
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
 #~ "crashed; it could have caused the crash."
