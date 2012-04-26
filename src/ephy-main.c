@@ -431,8 +431,6 @@ main (int argc,
     exit (0);
   }
 
-  ephy_file_load_accels ();
-
   /* Now create the shell */
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
@@ -489,7 +487,6 @@ main (int argc,
   if (notify_is_initted ())
     notify_uninit ();
 
-  ephy_file_save_accels ();
   ephy_state_save ();
   ephy_embed_prefs_shutdown ();
   ephy_settings_shutdown ();

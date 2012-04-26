@@ -84,8 +84,6 @@ gboolean           ephy_file_browse_to           (GFile       *file,
 gboolean           ephy_file_delete_dir_recursively (GFile *file,
                                                      GError      **error);
 void               ephy_file_delete_uri          (const char  *uri);
-void               ephy_file_load_accels (void);
-void               ephy_file_save_accels (void);
 
 G_END_DECLS
 
