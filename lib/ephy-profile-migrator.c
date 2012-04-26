@@ -41,10 +41,13 @@
 #include "ephy-nss-glue.h"
 #endif
 
+#include <fcntl.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gnome-keyring.h>
 #include <libsoup/soup-gnome.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /*
  * What to do to add new migration steps:
@@ -620,6 +623,62 @@ migrate_tabs_visibility ()
                          EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS);
 }
 
+static void
+migrate_profile (const char *old_dir,
+                 const char *new_dir)
+{
+  char *parent_dir;
+  char *updated;
+  const char *message;
+
+  if (g_file_test (new_dir, G_FILE_TEST_EXISTS) ||
+      !g_file_test (old_dir, G_FILE_TEST_IS_DIR))
+    return;
+
+  /* Test if we already attempted to migrate first. */
+  updated = g_build_filename (old_dir, "DEPRECATED-DIRECTORY", NULL);
+  message = _("Epiphany 3.6 deprecated this directory and tried migrating "
+              "this configuration to ~/.config/epiphany");
+
+  parent_dir = g_path_get_dirname (new_dir);
+  if (g_mkdir_with_parents (parent_dir, 0700) == 0) {
+    int fd, res;
+
+    /* rename() works fine if the destination directory is empty. */
+    res = g_rename (old_dir, new_dir);
+    if (res == -1 && !g_file_test (updated, G_FILE_TEST_EXISTS)) {
+      fd = g_creat (updated, 0600);
+      if (fd != -1) {
+        res = write (fd, message, strlen (message));
+        close (fd);
+      }
+    }
+  }
+
+  g_free (parent_dir);
+  g_free (updated);
+}
+
+static void
+migrate_profile_gnome2_to_xdg ()
+{
+  char *old_dir;
+  char *new_dir;
+
+  old_dir = g_build_filename (g_get_home_dir (),
+                              ".gnome2",
+                              "epiphany",
+                              NULL);
+  new_dir = g_build_filename (g_get_user_config_dir (),
+                              "epiphany",
+                              NULL);
+
+  migrate_profile (old_dir, new_dir);
+
+  g_free (new_dir);
+  g_free (old_dir);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -642,6 +701,10 @@ ephy_migrator ()
 
   LOG ("Running migrators up to version %d, current migration version is %d.",
        EPHY_PROFILE_MIGRATION_VERSION, latest);
+
+  /* Always try to migrate the data from the old profile dir at the
+   * very beginning. */
+  migrate_profile_gnome2_to_xdg ();
 
   for (i = latest; i < EPHY_PROFILE_MIGRATION_VERSION; i++) {
     EphyProfileMigrator m;

@@ -278,7 +278,7 @@ ephy_dot_dir (void)
  * Initializes Epiphany file helper functions, sets @profile_dir as Epiphany's
  * profile dir and whether the running session will be private.
  *
- * Returns: %FALSE if the profile dir couldn't be created or accesed
+ * Returns: %FALSE if the profile dir couldn't be created or accessed
  **/
 gboolean
 ephy_file_helpers_init (const char *profile_dir,
@@ -331,8 +331,7 @@ ephy_file_helpers_init (const char *profile_dir,
 	}
 	else
 	{
-		dot_dir = g_build_filename (g_get_home_dir (),
-					    GNOME_DOT_GNOME,
+		dot_dir = g_build_filename (g_get_user_config_dir (),
 					    "epiphany",
 					    NULL);
 	}
