@@ -68,6 +68,8 @@ double                   ephy_sqlite_statement_get_column_as_double  (EphySQLite
 const char*              ephy_sqlite_statement_get_column_as_string  (EphySQLiteStatement *statement, int column);
 const void*              ephy_sqlite_statement_get_column_as_blob    (EphySQLiteStatement *statement, int column);
 
+char*                    ephy_sqlite_create_match_pattern (const char *match_string);
+
 G_END_DECLS
 
 #endif /* EPHY_SQLITE_STATEMENT_H */

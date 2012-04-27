@@ -267,3 +267,15 @@ ephy_sqlite_statement_get_column_as_blob (EphySQLiteStatement *self, int column)
 {
   return sqlite3_column_blob (self->priv->prepared_statement, column);
 }
+
+char *
+ephy_sqlite_create_match_pattern (const char *match_string)
+{
+  char *string, *pattern;
+
+  string = g_strndup (match_string, EPHY_SQLITE_LIMIT_LIKE_PATTERN_LENGTH - 2);
+  pattern = g_strdup_printf ("%%%s%%", string);
+  g_free (string);
+
+  return pattern;
+}
