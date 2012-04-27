@@ -29,6 +29,8 @@ typedef enum {
   EPHY_SQLITE_COLUMN_TYPE_BLOB
 } EphySQLiteColumnType;
 
+#define EPHY_SQLITE_LIMIT_LIKE_PATTERN_LENGTH 50000
+
 G_END_DECLS
 
 #endif /* EPHY_SQLITE_H */

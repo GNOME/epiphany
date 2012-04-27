@@ -318,7 +318,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
   }
   for (substring = query->substring_list; substring != NULL; substring = substring->next) {
     int j = 4;
-    char *string = g_strdup_printf ("%%%s%%", (char*)substring->data);
+    char *string = ephy_sqlite_create_match_pattern ((char*)substring->data);
     while (j--)
       if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
         g_error ("Could not build hosts table query statement: %s", error->message);
