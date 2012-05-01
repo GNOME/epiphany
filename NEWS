@@ -1,3 +1,30 @@
+==============
+Epiphany 3.5.1
+==============
+
+Changes:
+
+  - Use the linked style class for the download bar (#672712)
+  - Use glib resources for the UI and CSS files
+  - Default to always restoring the last session on startup,
+    regardless of how epiphany was closed.
+    To go back to the old behavior (only restore the session when
+    epiphany crashes), or to choose the new option of never restoring
+    the old session, you can set
+    org.gnome.Epiphany.restore-session-policy. (#673453, #673122)
+  - Use intltool 0.50 (#672932)
+  - Improvements in the url entry layout (#672927)
+  - Fix stop/reload button misalignment when using custom font size
+    (#668135)
+  - New org.gnome.Epiphany.ui.tabs-visibility-policy setting. It's now
+    possible to always hide tabs.
+  - Consider email-type entries when doing login/password autocomplete
+    (#666326)
+  - Prioritize smart bookmarks URIs over normal URIs when exporting
+    bookmarks (#534565)
+  - Restore right-click/long press menus in back/forward buttons
+    (#671609)
+
 ===============
 Epiphany 3.3.92
 ===============
