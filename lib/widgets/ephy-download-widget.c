@@ -31,7 +31,11 @@
 #include "totem-glow-button.h"
 
 #include <glib/gi18n.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_BOX)
 
@@ -99,6 +103,10 @@ format_interval (gdouble interval)
 static gdouble
 get_remaining_time (WebKitDownload *download)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+  return -1.0;
+#else
   gint64 total, cur;
   gdouble elapsed_time;
   gdouble remaining_time;
@@ -115,12 +123,16 @@ get_remaining_time (WebKitDownload *download)
   remaining_time = per_byte_time * (total - cur);
 
   return remaining_time;
+#endif
 }
 
 static void
 download_clicked_cb (GtkButton *button,
                      EphyDownloadWidget *widget)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+#else
   WebKitDownloadStatus status;
   EphyDownload *download;
 
@@ -132,8 +144,12 @@ download_clicked_cb (GtkButton *button,
 
   if (ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO))
     gtk_widget_destroy (GTK_WIDGET (widget));
+#endif
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Downloads */
+#else
 static void
 update_download_icon (EphyDownloadWidget *widget)
 {
@@ -257,6 +273,7 @@ widget_error_cb (WebKitDownload *download,
 
   return FALSE;
 }
+#endif
 
 static void
 open_activate_cb (GtkMenuItem *item, EphyDownloadWidget *widget)
@@ -284,6 +301,9 @@ download_menu_clicked_cb (GtkWidget *button,
                           GdkEventButton *event,
                           EphyDownloadWidget *widget)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+#else
   WebKitDownloadStatus status;
   gboolean finished;
   GtkWidget *item;
@@ -340,6 +360,7 @@ download_menu_clicked_cb (GtkWidget *button,
   gtk_menu_attach_to_widget (GTK_MENU (menu), button, NULL);
   gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
                   event->button, event->time);
+#endif
 }
 
 static void
@@ -394,9 +415,13 @@ ephy_download_widget_dispose (GObject *object)
   if (widget->priv->download != NULL) {
     download = ephy_download_get_webkit_download (widget->priv->download);
 
+#ifdef HAVE_WEBKIT2
+    /* TODO: Downloads */
+#else
     g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
     g_signal_handlers_disconnect_by_func (download, widget_status_cb, widget);
     g_signal_handlers_disconnect_by_func (download, widget_error_cb, widget);
+#endif
 
     g_object_unref (widget->priv->download);
     widget->priv->download = NULL;
@@ -492,7 +517,12 @@ ephy_download_widget_new (EphyDownload *ephy_download)
                          "download", ephy_download, NULL);
   download = ephy_download_get_webkit_download (ephy_download);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+  basename = g_strdup ("");
+#else
   basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
+#endif
   dest = g_uri_unescape_string (basename, NULL);
 
   grid = gtk_grid_new ();
@@ -526,12 +556,16 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   widget->priv->remaining = remain;
   widget->priv->menu = menu;
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+#else
   g_signal_connect (download, "notify::progress",
                     G_CALLBACK (widget_progress_cb), widget);
   g_signal_connect (download, "notify::status",
                     G_CALLBACK (widget_status_cb), widget);
   g_signal_connect (download, "error",
                     G_CALLBACK (widget_error_cb), widget);
+#endif
 
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
   gtk_button_set_relief (GTK_BUTTON (menu), GTK_RELIEF_NORMAL);

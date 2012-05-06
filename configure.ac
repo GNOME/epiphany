@@ -90,6 +90,18 @@ GNOME_KEYRING_REQUIRED=2.26.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
 LIBNOTIFY_REQUIRED=0.5.1
 
+AC_ARG_WITH(webkit2,
+        [AC_HELP_STRING([--with-webkit2], [build with WebKit2 [default=no]])],
+        [],[with_webkit2=no])
+
+if test "x$with_webkit2" != xno; then
+   WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
+   AC_DEFINE([HAVE_WEBKIT2],[1],[Define if building with WebKit2])
+else
+   WEBKIT_GTK_PC_NAME=webkitgtk-3.0
+fi
+AM_CONDITIONAL(WITH_WEBKIT2, test "x$with_webkit2" != xno)
+
 # Tests
 
 AC_MSG_CHECKING([whether to build tests])
@@ -112,7 +124,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  sm
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
-		  webkitgtk-3.0 >= $WEBKIT_GTK_REQUIRED
+		  $WEBKIT_GTK_PC_NAME >= $WEBKIT_GTK_REQUIRED
 		  libsoup-gnome-2.4 >= $LIBSOUP_GNOME_REQUIRED
 		  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
 		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
@@ -147,9 +159,13 @@ EPIPHANY_FEATURES=
 
 GOBJECT_INTROSPECTION_CHECK([0.9.5])
 
-if test "$found_introspection" = "yes"; then
-  EPIPHANY_FEATURES="$EPIPHANY_FEATURES introspection"
-  AC_DEFINE([ENABLE_INTROSPECTION], [1], [Define to enable introspection support])
+if test "$with_webkit2" = "no"; then
+   if test "$found_introspection" = "yes"; then
+      EPIPHANY_FEATURES="$EPIPHANY_FEATURES introspection"
+      AC_DEFINE([ENABLE_INTROSPECTION], [1], [Define to enable introspection support])
+   fi
+else
+   found_introspection=no
 fi
 
 # ****
@@ -350,4 +366,5 @@ Epiphany was configured with the following options:
  	Seed support               : $enable_seed
  	NSS support                : $enable_nss
 	Build tests		   : $enable_tests
+	WebKit2                    : $with_webkit2
 "

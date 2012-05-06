@@ -30,7 +30,11 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup-uri.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 G_DEFINE_TYPE (EphyRequestAbout, ephy_request_about, SOUP_TYPE_REQUEST)
 
@@ -93,6 +97,9 @@ ephy_request_about_send (SoupRequest          *request,
     read_css_style (about);
 
   if (!g_strcmp0 (uri->path, "plugins")) {
+#ifdef HAVE_WEBKIT2
+    /* TODO: SoupRequest and Plugins */
+#else
     WebKitWebPluginDatabase* database = webkit_get_web_plugin_database ();
     GSList *plugin_list, *p;
 
@@ -136,6 +143,7 @@ ephy_request_about_send (SoupRequest          *request,
     }
 
     webkit_web_plugin_database_plugins_list_free (plugin_list);
+#endif
     g_string_append (data_str, "</body>");
   } else if (!g_strcmp0 (uri->path, "memory")) {
     char *memory = ephy_smaps_to_html (EPHY_REQUEST_ABOUT (request)->priv->smaps);

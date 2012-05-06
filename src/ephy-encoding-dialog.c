@@ -36,7 +36,11 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
 
@@ -75,6 +79,10 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+#ifdef HAVE_WEBKIT2
+	encoding = webkit_web_view_get_custom_charset (view);
+	if (encoding == NULL) return;
+#else
 	encoding = webkit_web_view_get_custom_encoding (view);
 	if (encoding == NULL)
 	{
@@ -82,6 +90,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 		if (encoding == NULL) return;
 		is_automatic = TRUE;
 	}
+#endif
 
 	node = ephy_encodings_get_node (dialog->priv->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (node));
@@ -195,7 +204,11 @@ activate_choice (EphyEncodingDialog *dialog)
 
 	if (is_automatic)
 	{
+#ifdef HAVE_WEBKIT2
+		webkit_web_view_set_custom_charset (view, NULL);
+#else
 		webkit_web_view_set_custom_encoding (view, NULL);
+#endif
 	}
 	else if (dialog->priv->selected_node != NULL)
 	{
@@ -204,7 +217,11 @@ activate_choice (EphyEncodingDialog *dialog)
 		code = ephy_node_get_property_string (dialog->priv->selected_node,
 						      EPHY_NODE_ENCODING_PROP_ENCODING);
 
+#ifdef HAVE_WEBKIT2
+		webkit_web_view_set_custom_charset (view, code);
+#else
 		webkit_web_view_set_custom_encoding (view, code);
+#endif
 
 		ephy_encodings_add_recent (dialog->priv->encodings, code);
 	}

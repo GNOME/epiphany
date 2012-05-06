@@ -27,7 +27,11 @@
 
 #include <glib/gstdio.h>
 #include <libsoup/soup-gnome.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
 
@@ -256,6 +260,9 @@ out:
 static void
 create_cookie_jar_for_domain (const char *address, const char *directory)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Cookies */
+#else
   SoupSession *session;
   GSList *cookies, *p;
   SoupCookieJar *current_jar, *new_jar;
@@ -295,6 +302,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   soup_uri_free (uri);
   g_slist_free (cookies);
+#endif
 }
 
 /**

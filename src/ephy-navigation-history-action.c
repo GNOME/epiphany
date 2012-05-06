@@ -38,7 +38,11 @@
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #define EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE(object)		\
   (G_TYPE_INSTANCE_GET_PRIVATE ((object),				\
@@ -112,6 +116,9 @@ action_activate (GtkAction *action)
     if (ephy_gui_is_middle_click () ||
         ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
       const char *forward_uri;
+#ifdef HAVE_WEBKIT2
+      /* TODO: History */
+#else
       WebKitWebHistoryItem *forward_item;
       WebKitWebBackForwardList *history;
 
@@ -130,6 +137,7 @@ action_activate (GtkAction *action)
 
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
       webkit_web_view_load_uri (web_view, forward_uri);
+#endif
     } else {
       webkit_web_view_go_forward (web_view);
       gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -225,6 +233,9 @@ item_leave_notify_event_cb (GtkWidget *widget,
   return FALSE;
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: favicons */
+#else
 static void
 icon_loaded_cb (GObject *source,
                 GAsyncResult *result,
@@ -246,6 +257,7 @@ icon_loaded_cb (GObject *source,
     g_object_unref (favicon);
   }
 }
+#endif
 
 static GtkWidget *
 new_history_menu_item (EphyWebView *view,
@@ -254,8 +266,12 @@ new_history_menu_item (EphyWebView *view,
 {
   GtkWidget *item;
   GtkLabel *label;
+#ifdef HAVE_WEBKIT2
+  /* TODO: favicons */
+#else
   WebKitFaviconDatabase* database;
   GdkPixbuf *favicon;
+#endif
 
   g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
 
@@ -264,7 +280,9 @@ new_history_menu_item (EphyWebView *view,
   label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
   gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: favicons */
+#else
   database = webkit_get_favicon_database ();
   favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, address,
                                                             FAVICON_SIZE, FAVICON_SIZE);
@@ -283,6 +301,7 @@ new_history_menu_item (EphyWebView *view,
                                                 (GAsyncReadyCallback) icon_loaded_cb,
                                                 GTK_IMAGE_MENU_ITEM (item));
   }
+#endif
 
   g_object_set_data (G_OBJECT (item), "link-message", g_strdup (address));
 
@@ -301,6 +320,9 @@ set_new_back_history (EphyEmbed *source,
                       EphyEmbed *dest,
                       gint offset)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitBackForwardList */
+#else
   WebKitWebView *source_view, *dest_view;
   WebKitWebBackForwardList* source_list, *dest_list;
   WebKitWebHistoryItem *item;
@@ -338,8 +360,12 @@ set_new_back_history (EphyEmbed *source,
     items = items->next;
   }
   g_list_free (items);
+#endif
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitBackForwardList */
+#else
 static void
 middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
                                           EphyEmbed *embed,
@@ -385,11 +411,15 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
   url = webkit_web_history_item_get_original_uri (item);
   ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
 }
+#endif
 
 static void
 activate_menu_item_cb (GtkWidget *menuitem,
                        EphyNavigationHistoryAction *action)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitBackForwardList */
+#else
   WebKitWebHistoryItem *item;
   EphyWindow *window;
   EphyEmbed *embed;
@@ -409,12 +439,17 @@ activate_menu_item_cb (GtkWidget *menuitem,
     web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
     webkit_web_view_go_to_back_forward_item (web_view, item);
   }
+#endif
 }
 static GList*
 webkit_construct_history_list (WebKitWebView *web_view,
                                WebKitHistoryType hist_type,
                                int limit)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitBackForwardList */
+  return NULL;
+#else
   WebKitWebBackForwardList *web_back_forward_list;
   GList *webkit_items;
 
@@ -428,6 +463,7 @@ webkit_construct_history_list (WebKitWebView *web_view,
                                                                           limit);
 
   return webkit_items;
+#endif
 }
 
 static GtkWidget *
@@ -453,7 +489,9 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
   else
     list = webkit_construct_history_list (web_view,
                                           WEBKIT_HISTORY_FORWARD, 10);
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitBackForwardList */
+#else
   for (l = list; l != NULL; l = l->next) {
     GtkWidget *item;
     WebKitWebHistoryItem *hitem;
@@ -481,6 +519,7 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
     gtk_menu_shell_append (menu, item);
     gtk_widget_show_all (item);
   }
+#endif
 
   g_list_free (list);
 

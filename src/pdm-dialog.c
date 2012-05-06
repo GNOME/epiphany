@@ -39,7 +39,11 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 #include <gnome-keyring.h>
 #include <gnome-keyring-memory.h>
 
@@ -168,10 +172,15 @@ typedef struct
 static SoupCookieJar*
 get_cookie_jar ()
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Cookies */
+	return soup_cookie_jar_new ();
+#else
 	SoupSession* session;
 
 	session = webkit_get_default_session ();
 	return (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+#endif
 }
 
 static void
@@ -290,7 +299,11 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 
 			ephy_embed_single_clear_cache (single);
 
+#ifdef HAVE_WEBKIT2
+			/* TODO: Favicons */
+#else
 			webkit_favicon_database_clear (webkit_get_favicon_database ());
+#endif
 		}
 	}
 	gtk_widget_destroy (GTK_WIDGET (dialog));

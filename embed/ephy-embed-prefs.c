@@ -29,7 +29,11 @@
 #include "ephy-settings.h"
 
 #include <glib.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 typedef struct
 {
@@ -39,7 +43,11 @@ typedef struct
   void (*callback) (GSettings *settings, char *key, gpointer data);
 } PrefData;
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitSettings */
+#else
 static WebKitWebSettings *webkit_settings = NULL;
+#endif
 
 static void
 webkit_pref_callback_user_stylesheet (GSettings *settings,
@@ -60,8 +68,11 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
                        G_DIR_SEPARATOR_S,
                        USER_STYLESHEET_FILENAME,
                        NULL);
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   g_object_set (webkit_settings, webkit_pref, uri, NULL);
+#endif
   g_free (uri);
 }
 
@@ -106,6 +117,10 @@ webkit_pref_get_internal_user_agent (void)
 
   g_key_file_free (branding_keyfile);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: User agent */
+  return g_strup ("");
+#else
   g_object_get (webkit_settings, "user-agent", &webkit_user_agent, NULL);
 
   user_agent = g_strconcat (webkit_user_agent, " ",
@@ -118,6 +133,7 @@ webkit_pref_get_internal_user_agent (void)
   g_free (webkit_user_agent);
 
   return user_agent;
+#endif
 }
 
 static void
@@ -125,6 +141,9 @@ webkit_pref_callback_user_agent (GSettings *settings,
                                  char *key,
                                  gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: User agent */
+#else
   char *value = NULL;
   static char *internal_user_agent = NULL;
   char *webkit_pref = data;
@@ -140,6 +159,7 @@ webkit_pref_callback_user_agent (GSettings *settings,
     g_object_set (webkit_settings, webkit_pref, value, NULL);
 
   g_free (value);
+#endif
 }
 
 static void
@@ -175,8 +195,11 @@ webkit_pref_callback_font_size (GSettings *settings,
       size /= PANGO_SCALE;
     pango_font_description_free (desc);
   }
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   g_object_set (webkit_settings, webkit_pref, size, NULL);
+#endif
   g_free (value);
 }
 
@@ -209,7 +232,11 @@ webkit_pref_callback_font_family (GSettings *settings,
 
     desc = pango_font_description_from_string (value);
     family = pango_font_description_get_family (desc);
+#ifdef HAVE_WEBKIT2
+    /* TODO: WEbKitSettings */
+#else
     g_object_set (webkit_settings, webkit_pref, family, NULL);
+#endif
     pango_font_description_free (desc);
   }
 
@@ -266,6 +293,9 @@ webkit_pref_callback_accept_languages (GSettings *settings,
                                        char *key,
                                        gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Languages */
+#else
   SoupSession *session;
   GArray *array;
   char **languages;
@@ -299,6 +329,7 @@ webkit_pref_callback_accept_languages (GSettings *settings,
   g_strfreev (languages);
   g_free (langs_str);
   g_array_free (array, TRUE);
+#endif
 }
 
 void
@@ -329,6 +360,9 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
                                            char *key,
                                            gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Cookies */
+#else
   SoupSession *session;
   char *value = NULL;
 
@@ -348,6 +382,7 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
   }
 
   g_free (value);
+#endif
 }
 
 static void
@@ -355,6 +390,9 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
                                   char *key,
                                   gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   GSettings *settings;
 
   if (g_settings_get_boolean (ephy_settings, key)) {
@@ -383,6 +421,7 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "serif-font-family");
   }
+#endif
 }
 
 static void
@@ -422,8 +461,12 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     g_strfreev (languages);
   }
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
+#endif
 
   g_free (langs);
 }
@@ -484,18 +527,24 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_cookie_accept_policy },
   };
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitSettings */
+#else
 static void
 ephy_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
 {
   webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
 }
+#endif
 
 void
 ephy_embed_prefs_init (void)
 {
   int i;
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   webkit_settings = webkit_web_settings_new ();
 
   /* Hardcoded settings */
@@ -552,17 +601,26 @@ ephy_embed_prefs_init (void)
                    EPHY_PREFS_WEB_ENABLE_WEBGL,
                    webkit_settings, "enable-webgl",
                    G_SETTINGS_BIND_GET);
+#endif
 }
 
 void
 ephy_embed_prefs_shutdown (void)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   g_object_unref (webkit_settings);
+#endif
 }
 
 void
 ephy_embed_prefs_add_embed (EphyEmbed *embed)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitSettings */
+#else
   ephy_embed_prefs_apply (embed, webkit_settings);
+#endif
 }
 

@@ -35,7 +35,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #define EPHY_ENCODING_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_MENU, EphyEncodingMenuPrivate))
 
@@ -134,6 +138,10 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->window));
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+#ifdef HAVE_WEBKIT2
+	encoding = webkit_web_view_get_custom_charset (view);
+	if (encoding == NULL) goto build_menu;
+#else
 	encoding = webkit_web_view_get_custom_encoding (view);
 	if (encoding == NULL)
 	{
@@ -141,6 +149,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 		if (encoding == NULL) goto build_menu;
 		is_automatic = TRUE;
 	}
+#endif
 
 	enc_node = ephy_encodings_get_node (p->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (enc_node));
@@ -249,7 +258,11 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (menu->priv->window));
 
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+#ifdef HAVE_WEBKIT2
+	webkit_web_view_set_custom_charset (view, encoding);
+#else
 	webkit_web_view_set_custom_encoding (view, encoding);
+#endif
 
 	ephy_encodings_add_recent (menu->priv->encodings, encoding);
 }
@@ -322,7 +335,11 @@ ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 
 	/* setting NULL will clear the forced encoding */
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+#ifdef HAVE_WEBKIT2
+	webkit_web_view_set_custom_charset (view, NULL);
+#else
 	webkit_web_view_set_custom_encoding (view, NULL);
+#endif
 }
 
 static const GtkActionEntry menu_entries [] =

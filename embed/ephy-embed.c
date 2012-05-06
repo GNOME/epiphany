@@ -37,13 +37,21 @@
 #include "nautilus-floating-bar.h"
 
 #include <glib/gi18n.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 static void     ephy_embed_constructed      (GObject *object);
+#ifdef HAVE_WEBKIT2
+/* TODO: Inspector */
+#else
 static gboolean ephy_embed_inspect_show_cb  (WebKitWebInspector *inspector,
                                              EphyEmbed *embed);
 static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
                                              EphyEmbed *embed);
+#endif
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
@@ -58,7 +66,9 @@ typedef struct {
 struct _EphyEmbedPrivate
 {
   GtkBox *top_widgets_vbox;
+#ifndef HAVE_WEBKIT2
   GtkScrolledWindow *scrolled_window;
+#endif
   GtkPaned *paned;
   WebKitWebView *web_view;
   GtkWidget *inspector_window;
@@ -220,6 +230,9 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
   ephy_embed_statusbar_update (embed, msg ? msg->text : NULL);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitWebResource::send-request */
+#else
 static void
 resource_request_starting_cb (WebKitWebView *web_view,
                               WebKitWebFrame *web_frame,
@@ -242,6 +255,7 @@ resource_request_starting_cb (WebKitWebView *web_view,
     webkit_network_request_set_uri (request, "about:blank");
   }
 }
+#endif
 
 static void
 ephy_embed_destroy_top_widgets (EphyEmbed *embed)
@@ -262,6 +276,9 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
   embed->priv->destroy_on_transition_list = list;
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Loader */
+#else
 static void
 load_status_changed_cb (WebKitWebView *web_view,
                         GParamSpec *spec,
@@ -272,6 +289,7 @@ load_status_changed_cb (WebKitWebView *web_view,
   if (status == WEBKIT_LOAD_COMMITTED)
     ephy_embed_destroy_top_widgets (embed);
 }
+#endif
 
 static void
 ephy_embed_grab_focus (GtkWidget *widget)
@@ -323,6 +341,9 @@ ephy_embed_dispose (GObject *object)
   EphyEmbedPrivate *priv = embed->priv;
 
   if (priv->inspector_window) {
+#ifdef HAVE_WEBKIT2
+    /* TODO: Inspector */
+#else
     WebKitWebInspector *inspector;
 
     inspector = webkit_web_view_get_inspector (priv->web_view);
@@ -334,6 +355,7 @@ ephy_embed_dispose (GObject *object)
     g_signal_handlers_disconnect_by_func (inspector,
                                           ephy_embed_inspect_close_cb,
                                           priv->inspector_window);
+#endif
 
     gtk_widget_destroy (GTK_WIDGET (priv->inspector_window));
     priv->inspector_window = NULL;
@@ -419,6 +441,9 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Inspector */
+#else
 static WebKitWebView *
 ephy_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
                                 WebKitWebView *web_view,
@@ -507,6 +532,7 @@ ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
 
   return TRUE;
 }
+#endif
 
 void
 ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
@@ -518,6 +544,9 @@ ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
   ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Downloads */
+#else
 static gboolean
 download_requested_cb (WebKitWebView *web_view,
                        WebKitDownload *download,
@@ -539,6 +568,7 @@ download_requested_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
+#endif
 
 static void
 ephy_embed_set_fullscreen_message (EphyEmbed *embed,
@@ -610,6 +640,9 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
   }
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitWindowProperties */
+#else
 static void
 window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -638,6 +671,7 @@ window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, E
   g_object_get (features, "width", &width, "height", &height, NULL);
   gtk_window_resize (GTK_WINDOW (window), width, height);
 }
+#endif
 
 static gboolean
 clear_progress_cb (EphyEmbed *embed)
@@ -648,6 +682,9 @@ clear_progress_cb (EphyEmbed *embed)
   return FALSE;
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Load progress */
+#else
 static void
 progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -679,22 +716,29 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
+#endif
 
 static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
   EphyEmbedPrivate *priv = embed->priv;
+#ifndef HAVE_WEBKIT2
   GtkWidget *scrolled_window;
+#endif
   GtkWidget *paned;
   WebKitWebView *web_view;
+#ifndef HAVE_WEBKIT2
   WebKitWebWindowFeatures *window_features;
   WebKitWebInspector *inspector;
+#endif
   GtkWidget *overlay;
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
+#ifndef HAVE_WEBKIT2
   scrolled_window = GTK_WIDGET (priv->scrolled_window);
+#endif
   overlay = gtk_overlay_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (overlay),
                                GTK_STYLE_CLASS_OSD);
@@ -702,7 +746,11 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
+#ifdef HAVE_WEBKIT2
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (web_view));
+#else
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
+#endif
 
   /* Floating message popup for fullscreen mode. */
   priv->fullscreen_message_label = gtk_label_new (NULL);
@@ -729,11 +777,17 @@ ephy_embed_constructed (GObject *object)
   paned = GTK_WIDGET (priv->paned);
 
   priv->web_view = web_view;
+#ifdef HAVE_WEBKIT2
+  /* TODO: Load progress */
+#else
   priv->progress_update_handler_id =  g_signal_connect (web_view, "notify::progress",
                                                         G_CALLBACK (progress_update), object);
+#endif
 
+#ifndef HAVE_WEBKIT2
   gtk_container_add (GTK_CONTAINER (scrolled_window),
                      GTK_WIDGET (web_view));
+#endif
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
                    TRUE, FALSE);
 
@@ -746,6 +800,9 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show (GTK_WIDGET (web_view));
   gtk_widget_show_all (paned);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Loader, WebKitWebResource::send-request, Downloads */
+#else
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
@@ -753,11 +810,19 @@ ephy_embed_constructed (GObject *object)
                     "signal::entering-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leaving-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: status message? */
+#else
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
                                               G_CALLBACK (status_message_notify_cb),
                                               embed);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitWindowProperties */
+#else
   /* Window features */
   window_features = webkit_web_view_get_window_features (web_view);
   g_object_connect (window_features,
@@ -766,9 +831,13 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::width", G_CALLBACK (window_resize_requested), embed,
                     "signal::notify::height", G_CALLBACK (window_resize_requested), embed,
                     NULL);
+#endif
 
   /* The inspector */
   priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+#ifdef HAVE_WEBKIT2
+  /* TODO: Inspector */
+#else
   inspector = webkit_web_view_get_inspector (web_view);
 
   priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -798,6 +867,7 @@ ephy_embed_constructed (GObject *object)
                     "signal::detach-window", G_CALLBACK (ephy_embed_detach_inspector_cb),
                     embed,
                     NULL);
+#endif
 
   ephy_embed_prefs_add_embed (embed);
 }
@@ -810,15 +880,19 @@ ephy_embed_init (EphyEmbed *embed)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
                                   GTK_ORIENTATION_VERTICAL);
 
+#ifndef HAVE_WEBKIT2
   embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
+#endif
   embed->priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
   embed->priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   embed->priv->seq_context_id = 1;
   embed->priv->seq_message_id = 1;
   embed->priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
+#ifndef HAVE_WEBKIT2
   gtk_scrolled_window_set_policy (embed->priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+#endif
 }
 
 /**

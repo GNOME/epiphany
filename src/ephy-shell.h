@@ -32,7 +32,11 @@
 #include "ephy-window.h"
 #include "ephy-embed.h"
 
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 #include <glib-object.h>
 #include <glib.h>
 
@@ -145,7 +149,11 @@ EphyEmbed      *ephy_shell_new_tab                      (EphyShell *shell,
 EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
                                                          EphyWindow *parent_window,
                                                          EphyEmbed *previous_embed,
+#ifdef HAVE_WEBKIT2
+                                                         WebKitURIRequest *request,
+#else
                                                          WebKitNetworkRequest *request,
+#endif
                                                          EphyNewTabFlags flags,
                                                          EphyWebViewChrome chrome,
                                                          gboolean is_popup,

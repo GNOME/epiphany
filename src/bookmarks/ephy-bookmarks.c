@@ -247,6 +247,9 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 	}
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 static void
 icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 		 const char *address,
@@ -258,15 +261,20 @@ icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 	ephy_bookmarks_set_icon (eb, address, icon);
 	g_free (icon);
 }
+#endif
 
 static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Favicons */
+#else
 	WebKitFaviconDatabase *favicon_database;
 	
 	favicon_database = webkit_get_favicon_database ();
 	g_signal_connect (favicon_database, "icon-loaded",
 			  G_CALLBACK (icon_updated_cb), eb);
+#endif
 }
 
 static void
@@ -1166,7 +1174,11 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 		    const char *url)
 {
 	EphyNode *bm;
+#ifdef HAVE_WEBKIT2
+	/* TODO: Favicons */
+#else
 	WebKitFaviconDatabase *favicon_database;
+#endif
 
 	bm = ephy_node_new (eb->priv->db);
 
@@ -1181,7 +1193,9 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	}
 	ephy_node_set_property_string (bm, EPHY_NODE_BMK_PROP_TITLE, title);
 
-
+#ifdef HAVE_WEBKIT2
+	/* TODO: Favicons */
+#else
 	favicon_database = webkit_get_favicon_database ();
 	if (favicon_database != NULL)
 	{
@@ -1193,6 +1207,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 			g_free (icon);
 		}
 	}
+#endif
 
 	update_has_smart_address (eb, bm, url);
 	update_bookmark_keywords (eb, bm);

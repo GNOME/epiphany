@@ -1458,6 +1458,9 @@ node_dropped_cb (EphyNodeView *view,
 	}
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 static gboolean
 webkit_favicon_database_has_favicon (WebKitFaviconDatabase *database, const char *page_uri)
 {
@@ -1480,10 +1483,14 @@ icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GValue *v
 
     g_value_take_object (value, favicon);
 }
+#endif
 
 static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
+#ifdef HAVE_WEBKIT2
+        /* TODO: Favicons */
+#else
 	const char *page_location;
 	GdkPixbuf *favicon = NULL;
 
@@ -1508,6 +1515,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 
 	g_value_init (value, GDK_TYPE_PIXBUF);
 	g_value_take_object (value, favicon);
+#endif
 }
 
 static void

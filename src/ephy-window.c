@@ -65,7 +65,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #ifdef HAVE_X11_XF86KEYSYM_H
 #include <X11/XF86keysym.h>
@@ -944,6 +948,9 @@ window_has_ongoing_downloads (EphyWindow *window)
 
 	for (l = downloads; l != NULL; l = l->next)
 	{
+#ifdef HAVE_WEBKIT2
+		/* TODO: Downloads */
+#else
 		EphyDownload *download;
 		WebKitDownloadStatus status;
 
@@ -958,6 +965,7 @@ window_has_ongoing_downloads (EphyWindow *window)
 			downloading = TRUE;
 			break;
 		}
+#endif
 	}
 	g_list_free (downloads);
 
@@ -1046,6 +1054,9 @@ update_popup_actions_visibility (EphyWindow *window,
 				 WebKitWebView *view,
 				 guint context)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: ContextMenu */
+#else
 	GtkAction *action;
 	GtkActionGroup *action_group;
 	gboolean is_image = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE;
@@ -1126,6 +1137,7 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	if (guesses)
 		g_strfreev (guesses);
+#endif
 }
 
 static void
@@ -1154,6 +1166,9 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	}
 	else
 	{
+#ifdef HAVE_WEBKIT2
+		/* TODO: Editor */
+#else
 		EphyEmbed *embed;
 		WebKitWebView *view;
 
@@ -1167,6 +1182,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		can_paste = webkit_web_view_can_paste_clipboard (view);
 		can_undo = webkit_web_view_can_undo (view);
 		can_redo = webkit_web_view_can_redo (view);
+#endif
 	}
 
 	action_group = window->priv->action_group;
@@ -1742,6 +1758,9 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 	_ephy_window_unset_context_event (window);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Context Menu */
+#else
 static void
 show_embed_popup (EphyWindow *window,
 		  WebKitWebView *view,
@@ -1821,6 +1840,7 @@ show_embed_popup (EphyWindow *window,
 				gtk_get_current_event_time ());
 	}
 }
+#endif
 
 static gboolean
 save_property_url (EphyEmbed *embed,
@@ -1879,6 +1899,10 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				GdkEventButton *event,
 				EphyWindow *window)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Context Menu */
+	return FALSE;
+#else
 	guint button, modifier, context;
 	gboolean handled = FALSE;
 	gboolean with_control, with_shift;
@@ -1974,6 +1998,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 
 	g_object_unref (hit_test_result);
 	return handled;
+#endif
 }
 
 static void
@@ -2000,6 +2025,9 @@ ephy_window_set_is_popup (EphyWindow *window,
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: New WebView */
+#else
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
 		   WebKitWebView *parent_web_view)
@@ -2092,7 +2120,11 @@ create_web_view_cb (WebKitWebView *web_view,
 
 	return new_web_view;
 }
+#endif
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Policy client */
+#else
 static gboolean
 policy_decision_required_cb (WebKitWebView *web_view,
 			     WebKitWebFrame *web_frame,
@@ -2227,6 +2259,7 @@ policy_decision_required_cb (WebKitWebView *web_view,
 
 	return FALSE;
 }
+#endif
 
 static void
 ephy_window_connect_active_embed (EphyWindow *window)
@@ -2266,15 +2299,23 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (web_view, "scroll-event",
 				 G_CALLBACK (scroll_event_cb),
 				 window, 0);
+#ifdef HAVE_WEBKIT2
+	/* TODO: New WebView */
+#else
 	g_signal_connect_object (web_view, "create-web-view",
 				 G_CALLBACK (create_web_view_cb),
 				 window, 0);
+#endif
+#ifdef HAVE_WEBKIT2
+	/* TODO: Policy Client */
+#else
 	g_signal_connect_object (web_view, "navigation-policy-decision-requested",
 				 G_CALLBACK (policy_decision_required_cb),
 				 window, 0);
 	g_signal_connect_object (web_view, "new-window-policy-decision-requested",
 				 G_CALLBACK (policy_decision_required_cb),
 				 window, 0);
+#endif
 
 	g_signal_connect_object (view, "notify::hidden-popup-count",
 				 G_CALLBACK (sync_tab_popup_windows),
@@ -2341,9 +2382,16 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (scroll_event_cb),
 					      window);
+#ifdef HAVE_WEBKIT2
+	/* TODO: New WebView */
+#else
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (create_web_view_cb),
 					      window);
+#endif
+#ifdef HAVE_WEBKIT2
+	/* TODO: Policy client */
+#else
 	sid = g_signal_lookup ("navigation-policy-decision-requested",
 			       WEBKIT_TYPE_WEB_VIEW);
 	g_signal_handlers_disconnect_matched (web_view,
@@ -2362,6 +2410,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      0, NULL,
 					      G_CALLBACK (policy_decision_required_cb),
 					      NULL);
+#endif
 
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (sync_tab_popup_windows),
@@ -2847,6 +2896,9 @@ downloads_close_cb (GtkButton *button, EphyWindow *window)
 	for (l = downloads; l != NULL; l = l->next)
 	{
 		EphyDownload *download;
+#ifdef HAVE_WEBKIT2
+		/* TODO: Downloads */
+#else
 		WebKitDownloadStatus status;
 
 		if (EPHY_IS_DOWNLOAD_WIDGET (l->data) != TRUE)
@@ -2859,6 +2911,7 @@ downloads_close_cb (GtkButton *button, EphyWindow *window)
 		{
 			gtk_widget_destroy (GTK_WIDGET (l->data));
 		}
+#endif
 	}
 	g_list_free (downloads);
 

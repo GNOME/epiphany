@@ -63,6 +63,9 @@ server_callback (SoupServer *server,
   soup_message_body_complete (msg->response_body);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: loader */
+#else
 static void
 notify_load_status_cb (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
 {
@@ -86,6 +89,7 @@ notify_load_status_cb (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
   g_free (expected_url);
   g_main_loop_quit (loop);
 }
+#endif
 
 typedef struct {
   const char *url;
@@ -157,8 +161,12 @@ test_ephy_web_view_load_url ()
 
     g_test_message ("[%s] \t-> %s", test.url, test.expected_url);
 
+#ifdef HAVE_WEBKIT2
+    /* TODO: loader */
+#else
     g_signal_connect (view, "notify::load-status",
                       G_CALLBACK (notify_load_status_cb), loop);
+#endif
 
     g_main_loop_run (loop);
     g_main_loop_unref (loop);

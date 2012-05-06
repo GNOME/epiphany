@@ -284,6 +284,9 @@ test_ephy_shell_tab_no_history ()
   EphyEmbed *embed2;
   EphyEmbed *embed3;
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: BackForwardList */
+#else
   WebKitWebBackForwardList *bflist;
   WebKitWebHistoryItem *item;
 
@@ -312,6 +315,7 @@ test_ephy_shell_tab_no_history ()
   g_assert_cmpint (webkit_web_back_forward_list_get_back_length (bflist), ==, 0);
 
   gtk_widget_destroy (window);
+#endif
 }
 
 int

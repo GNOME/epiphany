@@ -28,6 +28,9 @@
 
 G_DEFINE_TYPE (EphyHostsStore, ephy_hosts_store, GTK_TYPE_LIST_STORE)
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 static void
 icon_loaded_cb (WebKitFaviconDatabase *database,
                 const char *address,
@@ -74,14 +77,19 @@ icon_loaded_cb (WebKitFaviconDatabase *database,
     done = cmp >= 0;
   }
 }
+#endif
 
 static void
 ephy_hosts_store_finalize (GObject *object)
 {
   EphyHostsStore *store = EPHY_HOSTS_STORE (object);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   g_signal_handlers_disconnect_by_func (webkit_get_favicon_database (),
                                         icon_loaded_cb, store);
+#endif
 
   G_OBJECT_CLASS (ephy_hosts_store_parent_class)->finalize (object);
 }
@@ -112,8 +120,12 @@ ephy_hosts_store_init (EphyHostsStore *self)
                                         EPHY_HOSTS_STORE_COLUMN_ADDRESS,
                                         GTK_SORT_ASCENDING);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   g_signal_connect (webkit_get_favicon_database (), "icon-loaded",
                     G_CALLBACK (icon_loaded_cb), self);
+#endif
 }
 
 EphyHostsStore *
@@ -123,6 +135,9 @@ ephy_hosts_store_new (void)
                        NULL);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 typedef struct {
   GtkListStore *model;
   GtkTreeRowReference *row_reference;
@@ -153,6 +168,7 @@ async_get_favicon_cb (GObject *source, GAsyncResult *result, gpointer user_data)
   gtk_tree_row_reference_free (data->row_reference);
   g_slice_free (IconLoadData, data);
 }
+#endif
 
 void
 ephy_hosts_store_add_hosts (EphyHostsStore *store,
@@ -162,22 +178,37 @@ ephy_hosts_store_add_hosts (EphyHostsStore *store,
   GtkTreeIter treeiter;
   GtkTreePath *path;
   GList *iter;
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   GdkPixbuf *favicon;
   IconLoadData *data;
   WebKitFaviconDatabase *database = webkit_get_favicon_database ();
+#endif
 
   for (iter = hosts; iter != NULL; iter = iter->next) {
     host = (EphyHistoryHost *)iter->data;
+#ifdef HAVE_WEBKIT2
+    /* TODO: Favicons */
+#else
     favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, host->url,
                                                               FAVICON_SIZE, FAVICON_SIZE);
+#endif
     gtk_list_store_insert_with_values (GTK_LIST_STORE (store),
                                        &treeiter, G_MAXINT,
                                        EPHY_HOSTS_STORE_COLUMN_ID, host->id,
                                        EPHY_HOSTS_STORE_COLUMN_TITLE, host->title,
                                        EPHY_HOSTS_STORE_COLUMN_ADDRESS, host->url,
                                        EPHY_HOSTS_STORE_COLUMN_VISIT_COUNT, host->visit_count,
+#ifdef HAVE_WEBKIT2
+                                       /* TODO: Favicons */
+#else
                                        EPHY_HOSTS_STORE_COLUMN_FAVICON, favicon,
+#endif
                                        -1);
+#ifdef HAVE_WEBKIT2
+    /* TODO: Favicons */
+#else
     if (favicon)
       g_object_unref (favicon);
     else {
@@ -191,6 +222,7 @@ ephy_hosts_store_add_hosts (EphyHostsStore *store,
                                                   FAVICON_SIZE, FAVICON_SIZE, NULL,
                                                   async_get_favicon_cb, data);
     }
+#endif
   }
 }
 

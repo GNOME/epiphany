@@ -36,7 +36,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 void
 popup_cmd_link_in_new_window (GtkAction *action,
@@ -89,6 +93,9 @@ void
 popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Context Menu */
+#else
 	EphyEmbedEvent *event;
 	char *title;
 	char *location = NULL;
@@ -145,6 +152,7 @@ popup_cmd_bookmark_link (GtkAction *action,
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
 	g_free (title);
 	g_free (location);
+#endif
 }
 
 static void
@@ -448,6 +456,9 @@ void
 popup_replace_spelling (GtkAction *action,
 			EphyWindow *window)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Context Menu, Spellchecker */
+#else
 	EphyEmbed *embed;
 	WebKitWebView *view;
 	WebKitWebFrame *frame;
@@ -469,6 +480,7 @@ popup_replace_spelling (GtkAction *action,
 	webkit_dom_dom_selection_modify (selection, "extend", "forward", "word");
 	frame = webkit_web_view_get_focused_frame (view);
 	webkit_web_frame_replace_selection (frame, gtk_action_get_label (action));
+#endif
 }
 
 void
@@ -516,6 +528,9 @@ popup_cmd_open_image (GtkAction *action,
 void
 popup_cmd_inspect_element (GtkAction *action, EphyWindow *window)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Context Menu, Inspector */
+#else
 	EphyEmbedEvent *event;
 	EphyEmbed *embed;
 	WebKitWebInspector *inspector;
@@ -532,4 +547,5 @@ popup_cmd_inspect_element (GtkAction *action, EphyWindow *window)
 
 	ephy_embed_event_get_coords (event, &x, &y);
 	webkit_web_inspector_inspect_coordinates (inspector, (gdouble)x, (gdouble)y);
+#endif
 }

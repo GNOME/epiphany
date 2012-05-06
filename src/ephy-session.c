@@ -128,6 +128,9 @@ session_delete (EphySession *session,
 	g_object_unref (file);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Loader */
+#else
 static void
 load_status_notify_cb (EphyWebView *view,
 		       GParamSpec *pspec,
@@ -142,6 +145,7 @@ load_status_notify_cb (EphyWebView *view,
 	    status == WEBKIT_LOAD_FINISHED)
 		ephy_session_save (session, SESSION_STATE);
 }
+#endif
 
 static void
 notebook_page_added_cb (GtkWidget *notebook,
@@ -149,8 +153,12 @@ notebook_page_added_cb (GtkWidget *notebook,
 			guint position,
 			EphySession *session)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Loader */
+#else
 	g_signal_connect (ephy_embed_get_web_view (embed), "notify::load-status",
 			  G_CALLBACK (load_status_notify_cb), session);
+#endif
 }
 
 static void
@@ -161,9 +169,13 @@ notebook_page_removed_cb (GtkWidget *notebook,
 {
 	ephy_session_save (session, SESSION_STATE);
 
+#ifdef HAVE_WEBKIT2
+	/* TODO: Loader */
+#else
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),
 		 session);
+#endif
 }
 
 static void
@@ -325,7 +337,11 @@ session_command_open_uris (EphySession *session,
 	{
 		const char *url = uris[i];
 		EphyNewTabFlags page_flags;
+#ifdef HAVE_WEBKIT2
+		WebKitURIRequest *request = NULL;
+#else
 		WebKitNetworkRequest *request = NULL;
+#endif
 
 		if (url[0] == '\0')
 		{
@@ -334,7 +350,11 @@ session_command_open_uris (EphySession *session,
 		else
 		{
 			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+#ifdef HAVE_WEBKIT2
+			request = webkit_uri_request_new (url);
+#else
 			request = webkit_network_request_new (url);
+#endif
 		}
 
 		/* For the first URI, if we have a valid recovery

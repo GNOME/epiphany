@@ -57,7 +57,11 @@
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 #include <string.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 void
 window_cmd_file_print (GtkAction *action,
@@ -275,6 +279,10 @@ window_cmd_file_open (GtkAction *action,
 static char *
 get_suggested_filename (EphyWebView *view)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Resources */
+	return g_strdup ("WebPage");
+#else
 	char *suggested_filename;
 	const char *mimetype;
 	WebKitWebFrame *frame;
@@ -299,6 +307,7 @@ get_suggested_filename (EphyWebView *view)
 	}
 
 	return suggested_filename;
+#endif
 }
 
 void
@@ -364,6 +373,9 @@ take_page_snapshot_and_set_image (EphyApplicationDialogData *data)
 	g_object_unref (snapshot);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Downloads */
+#else
 static void
 download_status_changed_cb (WebKitDownload *download,
 			    GParamSpec *spec,
@@ -389,10 +401,14 @@ download_status_changed_cb (WebKitDownload *download,
 		break;
 	}
 }
+#endif
 
 static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Downloads */
+#else
 	WebKitNetworkRequest *request;
 	WebKitDownload *download;
 	char *destination, *destination_uri, *tmp_filename;
@@ -412,12 +428,16 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 	g_signal_connect (download, "notify::status",
 			  G_CALLBACK (download_status_changed_cb), data);
 
-	webkit_download_start (download);	
+	webkit_download_start (download);
+#endif
 }
 
 static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: DOM Bindindgs */
+#else
 	WebKitDOMDocument *document;
 	WebKitDOMNodeList *links;
 	gulong length, i;
@@ -441,7 +461,7 @@ fill_default_application_image (EphyApplicationDialogData *data)
 			return;
 		}
 	}
-
+#endif
 	/* If we make it here, no "apple-touch-icon" link was
 	 * found. Take a snapshot of the page. */
 	take_page_snapshot_and_set_image (data);
@@ -665,7 +685,11 @@ window_cmd_edit_undo (GtkAction *action,
 
 		if (embed)
 		{
+#ifdef HAVE_WEBKIT2
+			/* TODO: Editor */
+#else
 			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
+#endif
 		}
 	}
 }
@@ -690,7 +714,11 @@ window_cmd_edit_redo (GtkAction *action,
 		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
 		if (embed)
 		{
+#ifdef HAVE_WEBKIT2
+			/* TODO: Editor */
+#else
 			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
+#endif
 		}
 	}
 }
@@ -710,7 +738,11 @@ window_cmd_edit_cut (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
+#ifdef HAVE_WEBKIT2
+		/* TODO: Editor */
+#else
 		webkit_web_view_cut_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+#endif
 	}
 }
 
@@ -730,8 +762,11 @@ window_cmd_edit_copy (GtkAction *action,
 
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
-
+#ifdef HAVE_WEBKIT2
+		/* TODO: Editor */
+#else
 		webkit_web_view_copy_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+#endif
 	}
 }
 
@@ -752,7 +787,11 @@ window_cmd_edit_paste (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
+#ifdef HAVE_WEBKIT2
+		/* TODO: Editor */
+#else
 		webkit_web_view_paste_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+#endif
 	}
 }
 
@@ -799,7 +838,11 @@ window_cmd_edit_select_all (GtkAction *action,
                   (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
+#ifdef HAVE_WEBKIT2
+		/* TODO: Editor */
+#else
 		webkit_web_view_select_all (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+#endif
 	}
 }
 
@@ -875,11 +918,14 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 			 embed,
 			 NULL,
 			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-
+#ifdef HAVE_WEBKIT2
+	/* TODO: View Source */
+#else
 	webkit_web_view_set_view_source_mode
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), TRUE);
 	webkit_web_view_load_uri
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
+#endif
 }
 
 
@@ -960,6 +1006,9 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 				     data);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Resources */
+#else
 static void
 save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed)
 {
@@ -1013,6 +1062,7 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 				     (GAsyncReadyCallback)save_temp_source_write_cb,
 				     data);
 }
+#endif
 
 static void
 save_temp_source (EphyEmbed *embed,
@@ -1037,11 +1087,15 @@ save_temp_source (EphyEmbed *embed,
 	}
 
 	file = g_file_new_for_path (tmp);
+#ifdef HAVE_WEBKIT2
+	/* TODO: Resources */
+#else
 	g_file_replace_async (file, NULL, FALSE,
 			      G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
 			      G_PRIORITY_DEFAULT, NULL,
 			      (GAsyncReadyCallback)save_temp_source_replace_cb,
 			      embed);
+#endif
 
 	g_object_unref (file);
 	g_free (tmp);
@@ -1182,11 +1236,15 @@ window_cmd_help_about (GtkAction *action,
 
 	g_key_file_free (key_file);
 
+#ifdef HAVE_WEBKIT2
+	/* TODO: WebKit Version */
+#else
 	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
 	                              "Powered by WebKit %d.%d.%d"),
 	                            webkit_major_version (),
 	                            webkit_minor_version (),
 	                            webkit_micro_version ());
+#endif
 
 	licence = g_strjoin ("\n\n",
 			     _(licence_part[0]),

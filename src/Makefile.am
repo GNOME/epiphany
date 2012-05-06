@@ -101,6 +101,10 @@ libephymain_la_CPPFLAGS = \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS)
 
+if WITH_WEBKIT2
+libephymain_la_CPPFLAGS += -DHAVE_WEBKIT2
+endif
+
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	  \
 	$(WEBKIT_CFLAGS)	  \
@@ -179,9 +183,11 @@ epiphany_LDADD = \
 	$(DEPENDENCIES_LIBS) \
 	$(LIBINTL)
 
+if !WITH_WEBKIT2
 if HAVE_INTROSPECTION
 epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
 epiphany_LDADD += $(INTROSPECTION_LIBS)
+endif
 endif
 
 if ENABLE_SEED
@@ -242,6 +248,7 @@ CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
+if !WITH_WEBKIT2
 if HAVE_INTROSPECTION
 EPHY_GIR_H_FILES = \
 	$(top_srcdir)/embed/ephy-download.h \
@@ -336,3 +343,4 @@ Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
 endif # HAVE_INTROSPECTION
+endif # !WITH_WEBKIT2

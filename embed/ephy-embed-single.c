@@ -37,7 +37,11 @@
 #include "ephy-settings.h"
 #include "ephy-request-about.h"
 
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 #include <glib/gi18n.h>
 #include <libsoup/soup-gnome.h>
 #include <libsoup/soup-cache.h>
@@ -343,6 +347,9 @@ cache_size_cb (GSettings *settings,
 gboolean
 ephy_embed_single_initialize (EphyEmbedSingle *single)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Network features */
+#else
   SoupSession *session;
   SoupCookieJar *jar;
   char *filename;
@@ -413,7 +420,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   favicon_db_path = g_build_filename (g_get_user_data_dir (), g_get_prgname (), NULL);
   webkit_favicon_database_set_path (webkit_get_favicon_database (), favicon_db_path);
   g_free (favicon_db_path);
-
+#endif
   return TRUE;
 }
 

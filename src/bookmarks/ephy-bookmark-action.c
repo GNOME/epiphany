@@ -66,6 +66,9 @@ typedef struct
 
 G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 static void
 favicon_loaded_cb (WebKitFaviconDatabase *database,
 		   const char *page_address,
@@ -90,12 +93,16 @@ favicon_loaded_cb (WebKitFaviconDatabase *database,
 
 	g_free (icon_address);
 }
+#endif
 
 static void
 ephy_bookmark_action_sync_icon (GtkAction *action,
 				GParamSpec *pspec,
 				GtkWidget *proxy)
 {
+#ifdef HAVE_WEBKIT2
+        /* TODO: Favicons */
+#else
 	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
 	const char *page_location;
 	WebKitFaviconDatabase *database;
@@ -139,6 +146,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 	{
 		g_object_unref (pixbuf);
 	}
+#endif
 }
 
 void
@@ -376,9 +384,13 @@ ephy_bookmark_action_dispose (GObject *object)
 
 	if (priv->cache_handler != 0)
 	{
+#ifdef HAVE_WEBKIT2
+                /* TODO: Favicons */
+#else
 		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
 		g_signal_handler_disconnect (database, priv->cache_handler);
 		priv->cache_handler = 0;
+#endif
 	}
 
 	G_OBJECT_CLASS (ephy_bookmark_action_parent_class)->dispose (object);

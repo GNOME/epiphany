@@ -72,7 +72,11 @@ struct _EphyWebViewPrivate {
   EphyWebViewSecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
+#ifdef HAVE_WEBKIT2
+  /* TODO: Loader */
+#else
   WebKitLoadStatus load_status;
+#endif
 
   /* Flags */
   guint is_blank : 1;
@@ -560,6 +564,9 @@ ephy_web_view_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: DOM bindings */
+#else
 typedef struct {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
@@ -665,6 +672,7 @@ find_username_and_password_elements (WebKitDOMNode *form_node,
 
   g_object_unref(elements);
 }
+#endif
 
 typedef struct {
   EphyEmbed *embed;
@@ -835,6 +843,9 @@ should_store_cb (GnomeKeyringResult retval,
   request_decision_on_storing (store_data);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: DOM bindings */
+#else
 static gboolean
 form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
                    WebKitDOMEvent *dom_event,
@@ -1040,6 +1051,7 @@ _ephy_web_view_hook_into_links (EphyWebView *web_view)
 
   g_object_unref(links);
 }
+#endif
 
 static void
 update_navigation_flags (EphyWebView *view)
@@ -1064,6 +1076,9 @@ update_navigation_flags (EphyWebView *view)
 static void
 ephy_web_view_clear_history (EphyWebView *view)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: History */
+#else
   WebKitWebBackForwardList *history_list;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
@@ -1083,6 +1098,7 @@ ephy_web_view_clear_history (EphyWebView *view)
 
     update_navigation_flags (view);
   }
+#endif
 }
 
 static void
@@ -1141,11 +1157,15 @@ title_changed_cb (WebKitWebView *web_view,
 {
   const char *uri;
   char *title;
-  WebKitWebFrame *frame;
   EphyHistoryService *history = EPHY_WEB_VIEW (web_view)->priv->history_service;
+#ifndef HAVE_WEBKIT2
+  WebKitWebFrame *frame;
 
   frame = webkit_web_view_get_main_frame (web_view);
   uri = webkit_web_frame_get_uri (frame);
+#else
+  uri = webkit_web_view_get_uri (web_view);
+#endif
 
   g_object_get (web_view, "title", &title, NULL);
 
@@ -1181,6 +1201,9 @@ uri_changed_cb (WebKitWebView *web_view,
   g_free (uri);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Mouse target changed */
+#else
 static void
 hovering_over_link_cb (EphyWebView *web_view,
                        char *title,
@@ -1189,6 +1212,7 @@ hovering_over_link_cb (EphyWebView *web_view,
 {
   ephy_web_view_set_link_message (web_view, location);
 }
+#endif
 
 static void
 ephy_web_view_constructed (GObject *object)
@@ -1201,7 +1225,10 @@ ephy_web_view_constructed (GObject *object)
    * different keys for text and full content zooming. AFAIK you can
    * have both enabled at the same time in WebKit now (although our
    * API does not reflect this atm). See r67274 in WebKit. */
+#ifndef HAVE_WEBKIT2
+  /* This is the default behaviour in WebKit2 */
   webkit_web_view_set_full_content_zoom (WEBKIT_WEB_VIEW (object), TRUE);
+#endif
 }
 
 static void
@@ -1589,6 +1616,9 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 static void
 _ephy_web_view_load_icon (EphyWebView *view)
 {
@@ -1630,6 +1660,7 @@ favicon_cb (EphyWebView *view,
 {
   _ephy_web_view_set_icon_address (view, address);
 }
+#endif
 
 static void
 new_window_cb (EphyWebView *view,
@@ -1656,6 +1687,9 @@ ge_popup_blocked_cb (EphyWebView *view,
   popups_manager_add (view, url, name, features);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Policy Client */
+#else
 static gboolean
 mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
                                         WebKitWebFrame *frame,
@@ -1740,7 +1774,11 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 
   return FALSE;
 }
+#endif
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Geolocation */
+#else
 static void
 decide_on_geolocation_policy_request (GtkWidget *info_bar,
                                       int response,
@@ -1822,7 +1860,11 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
+#endif
 
+#ifdef HAVE_WEBKIT2
+/* TODO: DOM Bindings */
+#else
 static gboolean
 delete_web_app_cb (WebKitDOMHTMLElement *button,
                    WebKitDOMEvent *dom_event,
@@ -1838,6 +1880,7 @@ delete_web_app_cb (WebKitDOMHTMLElement *button,
 
   return FALSE;
 }
+#endif
 
 static void
 get_host_for_url_cb (gpointer service,
@@ -1876,6 +1919,9 @@ restore_zoom_level (EphyWebView *view,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Loader */
+#else
 static void
 load_status_cb (WebKitWebView *web_view,
                 GParamSpec *pspec,
@@ -2046,6 +2092,7 @@ load_status_cb (WebKitWebView *web_view,
 
   g_object_thaw_notify (object);
 }
+#endif
 
 /**
  * ephy_web_view_load_error_page:
@@ -2144,7 +2191,11 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_file_get_contents (html_file, &template, NULL, NULL);
 
   ephy_web_view_set_title (view, page_title);
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   _ephy_web_view_set_icon_address (view, NULL);
+#endif
 
   g_string_printf (html, template,
                    lang, lang,
@@ -2162,11 +2213,18 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (button_label);
   g_free (image_data);
 
+#ifdef HAVE_WEBKIT2
+  webkit_web_view_load_html (WEBKIT_WEB_VIEW (view), html->str, uri);
+#else
   webkit_web_view_load_string (WEBKIT_WEB_VIEW (view),
                                html->str, "text/html", "utf8", uri);
+#endif
   g_string_free (html, TRUE);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Load error */
+#else
 static gboolean
 load_error_cb (WebKitWebView *web_view,
                WebKitWebFrame *frame,
@@ -2228,7 +2286,11 @@ load_error_cb (WebKitWebView *web_view,
 
   return FALSE;
 }
+#endif
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitWebView::close */
+#else
 static gboolean
 close_web_view_cb (WebKitWebView *web_view,
                    gpointer user_data)
@@ -2245,6 +2307,7 @@ close_web_view_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
+#endif
 
 static void
 zoom_changed_cb (WebKitWebView *web_view,
@@ -2270,6 +2333,9 @@ zoom_changed_cb (WebKitWebView *web_view,
   g_free (address);
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: WebKitWebResource::send-request */
+#else
 static void
 add_do_not_track_header_cb (WebKitWebView *view, WebKitWebFrame *frame,
                             WebKitWebResource *resource, WebKitNetworkRequest *request,
@@ -2306,6 +2372,7 @@ do_not_track_setting_changed_cb (GSettings *settings,
     priv->do_not_track_handler = 0;
   }
 }
+#endif
 
 static void
 ephy_web_view_init (EphyWebView *web_view)
@@ -2316,7 +2383,9 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv->expire_address_now = TRUE;
   priv->is_blank = TRUE;
+#ifndef HAVE_WEBKIT2
   priv->load_status = WEBKIT_LOAD_PROVISIONAL;
+#endif
   priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
@@ -2332,25 +2401,45 @@ ephy_web_view_init (EphyWebView *web_view)
                     "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
                     web_view);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Policy Client */
+#else
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Geolocation */
+#else
   g_signal_connect (web_view, "geolocation-policy-decision-requested",
                     G_CALLBACK (geolocation_policy_decision_requested_cb),
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Loader */
+#else
   g_signal_connect (web_view, "notify::load-status",
                     G_CALLBACK (load_status_cb),
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitWebView::close */
+#else
   g_signal_connect (web_view, "close-web-view",
                     G_CALLBACK (close_web_view_cb),
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Load errors */
+#else
   g_signal_connect (web_view, "load-error",
                     G_CALLBACK (load_error_cb),
                     NULL);
+#endif
 
   g_signal_connect (web_view, "notify::zoom-level",
                     G_CALLBACK (zoom_changed_cb),
@@ -2364,13 +2453,21 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (uri_changed_cb),
                     NULL);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Mouse target changed */
+#else
   g_signal_connect (web_view, "hovering-over-link",
                     G_CALLBACK (hovering_over_link_cb),
                     NULL);
+#endif
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   g_signal_connect (web_view, "icon-loaded",
                     G_CALLBACK (favicon_cb),
                     NULL);
+#endif
 
   g_signal_connect (web_view, "new-window",
                     G_CALLBACK (new_window_cb),
@@ -2379,7 +2476,9 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect (web_view, "ge_popup_blocked",
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
-
+#ifdef HAVE_WEBKIT2
+  /* TODO: WebKitWebResource::send-request */
+#else
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
     priv->do_not_track_handler = g_signal_connect (web_view, "resource-request-starting",
                                                    G_CALLBACK (add_do_not_track_header_cb), NULL);
@@ -2387,6 +2486,7 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect (EPHY_SETTINGS_WEB,
                     "changed::" EPHY_PREFS_WEB_DO_NOT_TRACK,
                     G_CALLBACK (do_not_track_setting_changed_cb), web_view);
+#endif
 }
 
 /**
@@ -2456,15 +2556,33 @@ normalize_or_autosearch_url (EphyWebView *view, const char *url)
  *
  * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
  **/
+#ifdef HAVE_WEBKIT2
+void
+ephy_web_view_load_request (EphyWebView *view,
+                            WebKitURIRequest *request)
+#else
 void
 ephy_web_view_load_request (EphyWebView *view,
                             WebKitNetworkRequest *request)
+#endif
 {
+#ifndef HAVE_WEBKIT2
   WebKitWebFrame *main_frame;
+#endif
   const char *url;
   char *effective_url;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW(view));
+#ifdef HAVE_WEBKIT2
+  g_return_if_fail (WEBKIT_IS_URI_REQUEST(request));
+
+  url = webkit_uri_request_get_uri (request);
+  effective_url = normalize_or_autosearch_url (view, url);
+
+  // TODO: webkit_uri_request_set_uri?
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW(view), effective_url);
+  g_free (effective_url);
+#else
   g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
 
   url = webkit_network_request_get_uri (request);
@@ -2474,6 +2592,7 @@ ephy_web_view_load_request (EphyWebView *view,
 
   main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
   webkit_web_frame_load_request(main_frame, request);
+#endif
 }
 
 typedef struct {
@@ -2544,6 +2663,9 @@ ephy_web_view_load_url (EphyWebView *view,
    * typed in the location entry, which uses this method to do the
    * load. */
   if (!ephy_embed_utils_address_has_web_scheme (effective_url)) {
+#ifdef HAVE_WEBKIT2
+    /* TODO: Network features */
+#else
     SoupMessage *message;
     SoupSession *session;
     char *temp_url;
@@ -2569,12 +2691,17 @@ ephy_web_view_load_url (EphyWebView *view,
     }
 
     g_free (temp_url);
+#endif
   } else if (g_str_has_prefix (effective_url, "javascript:")) {
+#ifdef HAVE_WEBKIT2
+    /* TODO: Run JavaScript */
+#else
     char *decoded_url;
 
     decoded_url = soup_uri_decode (effective_url);
     webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
     g_free (decoded_url);
+#endif
   } else
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
 
@@ -2596,6 +2723,9 @@ void
 ephy_web_view_copy_back_history (EphyWebView *source,
                                  EphyWebView *dest)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: BackForwardList */
+#else
   WebKitWebView *source_view, *dest_view;
   WebKitWebBackForwardList* source_bflist, *dest_bflist;
   WebKitWebHistoryItem *item;
@@ -2626,6 +2756,7 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   item = webkit_web_back_forward_list_get_current_item (source_bflist);
   if (item)
     webkit_web_back_forward_list_add_item (dest_bflist, item);
+#endif
 }
 
 static void
@@ -2976,7 +3107,12 @@ ephy_web_view_location_changed (EphyWebView *view,
   }
 
   ephy_web_view_set_link_message (view, NULL);
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   _ephy_web_view_set_icon_address (view, NULL);
+#endif
+
   update_navigation_flags (view);
 
   g_object_notify (object, "embed-title");
@@ -2998,6 +3134,10 @@ ephy_web_view_location_changed (EphyWebView *view,
 gboolean
 ephy_web_view_is_loading (EphyWebView *view)
 {
+#ifdef HAVE_WEBKIT2
+  /* Loader */
+  return FALSE;
+#else
   WebKitLoadStatus status;
 
   status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
@@ -3016,6 +3156,7 @@ ephy_web_view_is_loading (EphyWebView *view)
   view->priv->load_status = status;
 
   return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
+#endif
 }
 
 /**
@@ -3258,6 +3399,9 @@ ephy_web_view_set_typed_address (EphyWebView *view,
 gboolean
 ephy_web_view_has_modified_forms (EphyWebView *view)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: DOM Bindings */
+#else
   WebKitDOMHTMLCollection *forms = NULL;
   WebKitDOMDocument *document = NULL;
   gulong forms_n;
@@ -3309,7 +3453,7 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
         }
     }
   }
-
+#endif
   return FALSE;
 }
 
@@ -3332,8 +3476,12 @@ ephy_web_view_get_location (EphyWebView *view,
                             gboolean toplevel)
 {
   /* FIXME: follow the toplevel parameter */
+#ifdef HAVE_WEBKIT2
+  return g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+#else
   WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
   return g_strdup (webkit_web_frame_get_uri (web_frame));
+#endif
 }
 
 /**
@@ -3363,6 +3511,9 @@ ephy_web_view_get_security_level (EphyWebView *view,
 static void
 ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: Printing */
+#else
   WebKitWebFrame *main_frame;
   GtkPrintOperation *operation;
   GError *error;
@@ -3400,6 +3551,7 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
     ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
 
   g_object_unref (operation);
+#endif
 }
 
 /**
@@ -3451,6 +3603,9 @@ ephy_web_view_get_title_composite (EphyWebView *view)
   return title != NULL ? title : "";
 }
 
+#ifdef HAVE_WEBKIT2
+/* TODO: webkit_web_view_save() */
+#else
 static void
 ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri);
 
@@ -3671,7 +3826,7 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
   /* Now, let's start saving sub resources */
   ephy_web_view_save_sub_resource_start (subresources, destination_uri);
 }
-
+#endif
 /**
  * ephy_web_view_save:
  * @view: an #EphyWebView
@@ -3682,6 +3837,9 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
 void
 ephy_web_view_save (EphyWebView *view, const char *uri)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: webkit_web_view_save() */
+#else
   WebKitWebFrame *frame;
   WebKitWebDataSource *data_source;
   GList *subresources;
@@ -3708,6 +3866,7 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
     return;
 
   ephy_web_view_save_sub_resources (view, uri, subresources);
+#endif
 }
 
 /**

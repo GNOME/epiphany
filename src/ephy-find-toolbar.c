@@ -29,7 +29,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
@@ -92,6 +96,9 @@ static void
 scroll_lines (WebKitWebView *web_view,
               int num_lines)
 {
+#ifdef HAVE_WEBKIT2
+        /* TODO: Scroll API? */
+#else
         GtkScrolledWindow *scrolled_window;
         GtkAdjustment *vadj;
         gdouble value;
@@ -101,12 +108,16 @@ scroll_lines (WebKitWebView *web_view,
 
         value = gtk_adjustment_get_value (vadj) + (num_lines * gtk_adjustment_get_step_increment (vadj));
         gtk_adjustment_set_value (vadj, value);
+#endif
 }
 
 static void
 scroll_pages (WebKitWebView *web_view,
               int num_pages)
 {
+#ifdef HAVE_WEBKIT2
+        /* TODO: Scroll API */
+#else
         GtkScrolledWindow *scrolled_window;
         GtkAdjustment *vadj;
         gdouble value;
@@ -116,6 +127,7 @@ scroll_pages (WebKitWebView *web_view,
 
         value = gtk_adjustment_get_value (vadj) + (num_pages * gtk_adjustment_get_page_increment (vadj));
         gtk_adjustment_set_value (vadj, value);
+#endif
 }
 
 static gboolean
@@ -230,6 +242,9 @@ find_prev_cb (EphyFindToolbar *toolbar)
 static void
 ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
 {
+#ifdef HAVE_WEBKIT2
+        /* TODO: Find */
+#else
         EphyFindToolbarPrivate *priv = toolbar->priv;
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive;
@@ -243,6 +258,7 @@ ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
                                                    case_sensitive,
                                                    0);
         webkit_web_view_set_highlight_text_matches (web_view, TRUE);
+#endif
 }
 
 static EphyFindResult
@@ -256,6 +272,10 @@ real_find (EphyFindToolbarPrivate *priv,
         if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
                 return EPHY_FIND_RESULT_NOTFOUND;
 
+#ifdef HAVE_WEBKIT2
+        /* TODO: Find */
+        return EPHY_FIND_RESULT_NOTFOUND;
+#else
         if (!webkit_web_view_search_text
             (web_view, priv->find_string, case_sensitive, forward, FALSE)) {
                 /* not found, try to wrap */
@@ -270,6 +290,7 @@ real_find (EphyFindToolbarPrivate *priv,
         }
 
         return EPHY_FIND_RESULT_FOUND;
+#endif
 }
 
 static gboolean
@@ -887,8 +908,11 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 	gtk_widget_hide (GTK_WIDGET (toolbar));
 
 	if (priv->web_view == NULL) return;
-
+#ifdef HAVE_WEBKIT2
+        /* TODO: Find */
+#else
 	webkit_web_view_set_highlight_text_matches (priv->web_view, FALSE);
+#endif
 }
 
 void

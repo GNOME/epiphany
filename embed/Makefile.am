@@ -62,6 +62,10 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets     \
 	$(AM_CPPFLAGS)
 
+if WITH_WEBKIT2
+libephyembed_la_CPPFLAGS += -DHAVE_WEBKIT2
+endif
+
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(DEPENDENCIES_CFLAGS) 	\

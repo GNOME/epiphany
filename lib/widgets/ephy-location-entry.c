@@ -940,9 +940,13 @@ free_prefetch_helper (PrefetchHelper *helper)
 static gboolean
 do_dns_prefetch (PrefetchHelper *helper)
 {
+#ifdef HAVE_WEBKIT2
+	/* TODO: Network Features */
+#else
 	SoupSession *session = webkit_get_default_session ();
 
 	soup_session_prepare_for_uri (session, helper->uri);
+#endif
 
 	helper->entry->priv->dns_prefetch_handler = 0;
 

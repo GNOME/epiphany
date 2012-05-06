@@ -166,6 +166,9 @@ typedef struct {
   gboolean is_bookmark;
 } PotentialRow;
 
+#ifdef HAVE_WEBKIT2
+/* TODO: Favicons */
+#else
 typedef struct {
   GtkListStore *model;
   GtkTreeRowReference *row_reference;
@@ -195,6 +198,7 @@ icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
   gtk_tree_row_reference_free (data->row_reference);
   g_slice_free (IconLoadData, data);
 }
+#endif
 
 static void
 set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
@@ -202,8 +206,12 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   GtkTreeIter iter;
   GdkPixbuf *favicon;
   GtkTreePath *path;
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   IconLoadData *data;
   WebKitFaviconDatabase* database = webkit_get_favicon_database ();
+#endif
 
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
                                      EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
@@ -214,6 +222,9 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
                                      EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
                                      -1);
 
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
   /* We try first with the try_get_favicon_pixbuf() because if the icon
      is in the DB it's faster than the async version. */
   favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, row->location,
@@ -233,6 +244,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   webkit_favicon_database_get_favicon_pixbuf (database, row->location,
                                               FAVICON_SIZE, FAVICON_SIZE, NULL,
                                               icon_loaded_cb, data);
+#endif
 }
 
 static void

@@ -669,7 +669,11 @@ EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
                          EphyWindow *parent_window,
                          EphyEmbed *previous_embed,
+#ifdef HAVE_WEBKIT2
+                         WebKitURIRequest *request,
+#else
                          WebKitNetworkRequest *request,
+#endif
                          EphyNewTabFlags flags,
                          EphyWebViewChrome chrome,
                          gboolean is_popup,
@@ -761,7 +765,11 @@ ephy_shell_new_tab_full (EphyShell *shell,
     ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                 request);
 
+#ifdef HAVE_WEBKIT2
+    is_empty = ephy_embed_utils_url_is_empty (webkit_uri_request_get_uri (request));
+#else
     is_empty = ephy_embed_utils_url_is_empty (webkit_network_request_get_uri (request));
+#endif
   }
 
   /* Make sure the initial focus is somewhere sensible and not, for
@@ -804,7 +812,11 @@ ephy_shell_new_tab (EphyShell *shell,
                     EphyNewTabFlags flags)
 {
   EphyEmbed *embed;
+#ifdef HAVE_WEBKIT2
+  WebKitURIRequest *request = url ? webkit_uri_request_new (url) : NULL;
+#else
   WebKitNetworkRequest *request = url ? webkit_network_request_new (url) : NULL;
+#endif
 
   embed = ephy_shell_new_tab_full (shell, parent_window,
                                    previous_embed, request, flags,
