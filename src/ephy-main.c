@@ -26,6 +26,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-private.h"
+#include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -245,6 +246,7 @@ main (int argc,
   EphyStartupFlags startup_flags;
   EphyEmbedShellMode mode;
   int status;
+  EphyFileHelpersFlags flags;
 
 #ifdef ENABLE_NLS
   /* Initialize the i18n stuff */
@@ -392,9 +394,14 @@ main (int argc,
     ephy_profile_utils_do_migration ();
 
   /* Start our services */
-  if (!ephy_file_helpers_init (profile_directory,
-                               private_instance || application_mode,
-                               keep_temp_directory || profile_directory,
+  flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
+
+  if (private_instance || application_mode)
+    flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
+  if (keep_temp_directory || profile_directory)
+    flags |= EPHY_FILE_HELPERS_KEEP_TEMP_DIR;
+
+  if (!ephy_file_helpers_init (profile_directory, flags,
                                &error)) {
     show_error_message (&error);
     exit (1);

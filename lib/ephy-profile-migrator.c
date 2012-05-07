@@ -670,7 +670,7 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
 
-  if (!ephy_file_helpers_init (NULL, FALSE, FALSE, NULL)) {
+  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_NONE, NULL)) {
     LOG ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }

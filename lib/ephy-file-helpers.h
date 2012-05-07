@@ -45,11 +45,18 @@ typedef enum
 	EPHY_MIME_PERMISSION_UNKNOWN	= 3
 } EphyMimePermission;
 
+typedef enum
+{
+	EPHY_FILE_HELPERS_NONE		   = 0,
+	EPHY_FILE_HELPERS_KEEP_TEMP_DIR	   = 1 << 1,
+	EPHY_FILE_HELPERS_PRIVATE_PROFILE  = 1 << 2,
+	EPHY_FILE_HELPERS_ENSURE_EXISTS	   = 1 << 3,
+} EphyFileHelpersFlags;
+
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
 
 gboolean           ephy_file_helpers_init        (const char  *profile_dir,
-                                                  gboolean     private_profile,
-                                                  gboolean     keep_temp_dir,
+                                                  EphyFileHelpersFlags flags,
                                                   GError     **error);
 const char *       ephy_file                     (const char  *filename);
 const char *       ephy_dot_dir                  (void);

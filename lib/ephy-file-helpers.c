@@ -272,8 +272,7 @@ ephy_dot_dir (void)
 /**
  * ephy_file_helpers_init:
  * @profile_dir: directory to use as Epiphany's profile
- * @private_profile: %TRUE if we should use a private profile
- * @keep_temp_dir: %TRUE to omit deleting the temp dir on exit
+ * @flags: the %EphyFileHelpersFlags for this session
  * @error: an optional #GError
  *
  * Initializes Epiphany file helper functions, sets @profile_dir as Epiphany's
@@ -283,11 +282,11 @@ ephy_dot_dir (void)
  **/
 gboolean
 ephy_file_helpers_init (const char *profile_dir,
-			gboolean private_profile,
-			gboolean keep_temp_dir,
+			EphyFileHelpersFlags flags,
 			GError **error)
 {
 	const char *uuid;
+	gboolean private_profile;
 
 	/* See if we've been calling ourself, and abort if we have */
 	uuid = g_getenv (EPHY_UUID_ENVVAR);
@@ -307,7 +306,8 @@ ephy_file_helpers_init (const char *profile_dir,
 				       (GDestroyNotify) g_free,
 				       (GDestroyNotify) g_free);
 
-	keep_temp_directory = keep_temp_dir;
+	keep_temp_directory = flags & EPHY_FILE_HELPERS_KEEP_TEMP_DIR;
+	private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
 
 	if (private_profile && profile_dir != NULL)
 	{
@@ -336,8 +336,11 @@ ephy_file_helpers_init (const char *profile_dir,
 					    "epiphany",
 					    NULL);
 	}
-	
-	return ephy_ensure_dir_exists (ephy_dot_dir (), error);
+
+	if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
+		return ephy_ensure_dir_exists (ephy_dot_dir (), error);
+	else
+		return TRUE;
 }
 
 static void
