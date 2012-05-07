@@ -387,6 +387,10 @@ main (int argc,
   /* Work-around Flash Player crash */
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
+  /* TODO: we want to migrate each WebApp profile too. */
+  if (!private_instance && !application_mode)
+    ephy_profile_utils_do_migration ();
+
   /* Start our services */
   if (!ephy_file_helpers_init (profile_directory,
                                private_instance || application_mode,

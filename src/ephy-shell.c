@@ -37,7 +37,6 @@
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
-#include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-type-builtins.h"
@@ -264,26 +263,7 @@ ephy_shell_startup (GApplication* application)
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
-  /* Migrate profile if we are not running a private instance */
-  /* TODO: we want to migrate each WebApp profile too */
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
-
-  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER) {
-    if (ephy_profile_utils_get_migration_version () < EPHY_PROFILE_MIGRATION_VERSION) {
-      GError *error = NULL;
-      char *argv[1] = { "ephy-profile-migrator" };
-      char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
-        
-      g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
-                    NULL, NULL, NULL, NULL,
-                    NULL, &error);
-
-      if (error) {
-        LOG ("Failed to run migrator: %s", error->message);
-        g_error_free (error);
-      }
-    }
-  }
 
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     GtkBuilder *builder;
