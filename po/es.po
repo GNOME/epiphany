@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-04-16 14:41+0000\n"
-"PO-Revision-Date: 2012-04-16 16:19+0200\n"
+"POT-Creation-Date: 2012-05-07 18:35+0000\n"
+"PO-Revision-Date: 2012-05-08 10:24+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,8 +42,8 @@ msgstr "http://www.google.es"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:74
-#: ../src/ephy-main.c:322 ../src/ephy-main.c:467 ../src/window-commands.c:1212
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1212
 msgid "Web"
 msgstr "Web"
 
@@ -994,17 +994,17 @@ msgstr "Descargas"
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: ../lib/ephy-file-helpers.c:320
+#: ../lib/ephy-file-helpers.c:323
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "No se pudo crear la carpeta temporal en: «%s»."
 
-#: ../lib/ephy-file-helpers.c:416
+#: ../lib/ephy-file-helpers.c:423
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "el archivo «%s» ya existe. Muévalo fuera de la ruta."
 
-#: ../lib/ephy-file-helpers.c:427
+#: ../lib/ephy-file-helpers.c:434
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Falló al crear la carpeta «%s»."
@@ -1057,9 +1057,17 @@ msgstr ""
 "contraseña maestra. Si quiere que Epiphany las importe introduzca debajo su "
 "contraseña maestra."
 
-#: ../lib/ephy-profile-migrator.c:83
+#: ../lib/ephy-profile-migrator.c:86
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Falló al copiar el archivo de «cookies» de Mozilla."
+
+#: ../lib/ephy-profile-migrator.c:640
+msgid ""
+"Epiphany 3.6 deprecated this directory and tried migrating this "
+"configuration to ~/.config/epiphany"
+msgstr ""
+"Epiphany 3.6 marcó como obsoleta esta carpeta y migró su configuración a ~/."
+"config/epiphany"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -2041,63 +2049,63 @@ msgstr "Todo el histórico"
 msgid "History"
 msgstr "Histórico"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:84
 msgid "Open a new tab in an existing browser window"
 msgstr "Abre una pestaña nueva en una ventana existente del navegador"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:86
 msgid "Open a new browser window"
 msgstr "Abre una ventana nueva del navegador"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:88
 msgid "Launch the bookmarks editor"
 msgstr "Lanzar el editor de marcadores"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:90
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:89 ../src/ephy-main.c:91
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr "Iniciar una instancia privada"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:98
 msgid "Start the browser in application mode"
 msgstr "Iniciar el navegador en modo aplicación"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:100
 msgid "Profile directory to use in the private instance"
 msgstr "Carpeta de perfiles que usar en la instancia privada"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:100
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:101
+#: ../src/ephy-main.c:102
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:209
+#: ../src/ephy-main.c:210
 msgid "Could not start Web"
 msgstr "No se pudo iniciar Web"
 
-#: ../src/ephy-main.c:212
+#: ../src/ephy-main.c:213
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2106,7 +2114,7 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:323
+#: ../src/ephy-main.c:325
 msgid "Web options"
 msgstr "Opciones de Web"
 
