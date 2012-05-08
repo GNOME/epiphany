@@ -697,14 +697,14 @@ ephy_migrator ()
 {
   int latest, i;
 
+  /* Always try to migrate the data from the old profile dir at the
+   * very beginning. */
+  migrate_profile_gnome2_to_xdg ();
+
   latest = ephy_profile_utils_get_migration_version ();
 
   LOG ("Running migrators up to version %d, current migration version is %d.",
        EPHY_PROFILE_MIGRATION_VERSION, latest);
-
-  /* Always try to migrate the data from the old profile dir at the
-   * very beginning. */
-  migrate_profile_gnome2_to_xdg ();
 
   for (i = latest; i < EPHY_PROFILE_MIGRATION_VERSION; i++) {
     EphyProfileMigrator m;
