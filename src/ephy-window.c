@@ -2262,10 +2262,182 @@ policy_decision_required_cb (WebKitWebView *web_view,
 }
 
 static void
+ephy_window_connect_active_embed (EphyWindow *window)
+{
+	EphyEmbed *embed;
+	WebKitWebView *web_view;
+	EphyWebView *view;
+
+	g_return_if_fail (window->priv->active_embed != NULL);
+
+	embed = window->priv->active_embed;
+	view = ephy_embed_get_web_view (embed);
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+	sync_tab_security	(view, NULL, window);
+	sync_tab_document_type	(view, NULL, window);
+	sync_tab_load_status	(view, NULL, window);
+	sync_tab_is_blank	(view, NULL, window);
+	sync_tab_navigation	(view, NULL, window);
+	sync_tab_title		(view, NULL, window);
+	sync_tab_address	(view, NULL, window);
+	sync_tab_icon		(view, NULL, window);
+	sync_tab_popup_windows	(view, NULL, window);
+	sync_tab_popups_allowed	(view, NULL, window);
+
+	sync_tab_zoom		(web_view, NULL, window);
+
+	g_signal_connect_object (web_view, "notify::zoom-level",
+				 G_CALLBACK (sync_tab_zoom),
+				 window, 0);
+	/* FIXME: we should set our own handler for
+	   scroll-event, but right now it's pointless because
+	   GtkScrolledWindow will eat all the events, even
+	   those with modifier keys we want to catch to zoom
+	   in and out. See bug #562630
+	*/
+	g_signal_connect_object (web_view, "scroll-event",
+				 G_CALLBACK (scroll_event_cb),
+				 window, 0);
+	g_signal_connect_object (web_view, "create-web-view",
+				 G_CALLBACK (create_web_view_cb),
+				 window, 0);
+	g_signal_connect_object (web_view, "navigation-policy-decision-requested",
+				 G_CALLBACK (policy_decision_required_cb),
+				 window, 0);
+	g_signal_connect_object (web_view, "new-window-policy-decision-requested",
+				 G_CALLBACK (policy_decision_required_cb),
+				 window, 0);
+
+	g_signal_connect_object (view, "notify::hidden-popup-count",
+				 G_CALLBACK (sync_tab_popup_windows),
+				 window, 0);
+	g_signal_connect_object (view, "notify::popups-allowed",
+				 G_CALLBACK (sync_tab_popups_allowed),
+				 window, 0);
+	g_signal_connect_object (view, "notify::embed-title",
+				 G_CALLBACK (sync_tab_title),
+				 window, 0);
+	g_signal_connect_object (view, "notify::address",
+				 G_CALLBACK (sync_tab_address),
+				 window, 0);
+	g_signal_connect_object (view, "notify::icon",
+				 G_CALLBACK (sync_tab_icon),
+				 window, 0);
+	g_signal_connect_object (view, "notify::security-level",
+				 G_CALLBACK (sync_tab_security),
+				 window, 0);
+	g_signal_connect_object (view, "notify::document-type",
+				 G_CALLBACK (sync_tab_document_type),
+				 window, 0);
+	g_signal_connect_object (view, "notify::load-status",
+				 G_CALLBACK (sync_tab_load_status),
+				 window, 0);
+	g_signal_connect_object (view, "notify::navigation",
+				 G_CALLBACK (sync_tab_navigation),
+				 window, 0);
+	g_signal_connect_object (view, "notify::is-blank",
+				 G_CALLBACK (sync_tab_is_blank),
+				 window, 0);
+	/* We run our button-press-event after the default
+	 * handler to make sure pages have a chance to perform
+	 * their own handling - for instance, have their own
+	 * context menus, or provide specific functionality
+	 * for the right mouse button */
+	g_signal_connect_object (view, "button-press-event",
+				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
+				 window, G_CONNECT_AFTER);
+	g_signal_connect_object (view, "notify::visibility",
+				 G_CALLBACK (ephy_window_visibility_cb),
+				 window, 0);
+
+	g_object_notify (G_OBJECT (window), "active-child");
+}
+
+static void
+ephy_window_disconnect_active_embed (EphyWindow *window)
+{
+	EphyEmbed *embed;
+	WebKitWebView *web_view;
+	EphyWebView *view;
+	guint sid;
+
+	g_return_if_fail (window->priv->active_embed != NULL);
+
+	embed = window->priv->active_embed;
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	view = EPHY_WEB_VIEW (web_view);
+
+	g_signal_handlers_disconnect_by_func (web_view,
+					      G_CALLBACK (sync_tab_zoom),
+					      window);
+	g_signal_handlers_disconnect_by_func (web_view,
+					      G_CALLBACK (scroll_event_cb),
+					      window);
+	g_signal_handlers_disconnect_by_func (web_view,
+					      G_CALLBACK (create_web_view_cb),
+					      window);
+	sid = g_signal_lookup ("navigation-policy-decision-requested",
+			       WEBKIT_TYPE_WEB_VIEW);
+	g_signal_handlers_disconnect_matched (web_view,
+					      G_SIGNAL_MATCH_ID |
+					      G_SIGNAL_MATCH_FUNC,
+					      sid,
+					      0, NULL,
+					      G_CALLBACK (policy_decision_required_cb),
+					      NULL);
+	sid = g_signal_lookup ("new-window-policy-decision-requested",
+			       WEBKIT_TYPE_WEB_VIEW);
+	g_signal_handlers_disconnect_matched (web_view,
+					      G_SIGNAL_MATCH_ID |
+					      G_SIGNAL_MATCH_FUNC,
+					      sid,
+					      0, NULL,
+					      G_CALLBACK (policy_decision_required_cb),
+					      NULL);
+
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_popup_windows),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_popups_allowed),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_security),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_document_type),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_load_status),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_is_blank),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_navigation),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_title),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_address),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_tab_icon),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (ephy_window_visibility_cb),
+					      window);
+
+	g_signal_handlers_disconnect_by_func
+		(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
+}
+
+static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
 	EphyEmbed *old_embed;
-	EphyEmbed *embed;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)) == GTK_WIDGET (window));
@@ -2275,174 +2447,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	if (old_embed == new_embed) return;
 
 	if (old_embed != NULL)
-	{
-		WebKitWebView *web_view;
-		EphyWebView *view;
-		guint sid;
-
-		embed = old_embed;
-		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-		view = EPHY_WEB_VIEW (web_view);
-
-		g_signal_handlers_disconnect_by_func (web_view,
-						      G_CALLBACK (sync_tab_zoom),
-						      window);
-		g_signal_handlers_disconnect_by_func (web_view,
-						      G_CALLBACK (scroll_event_cb),
-						      window);
-		g_signal_handlers_disconnect_by_func (web_view,
-						      G_CALLBACK (create_web_view_cb),
-						      window);
-		sid = g_signal_lookup ("navigation-policy-decision-requested",
-				       WEBKIT_TYPE_WEB_VIEW);
-		g_signal_handlers_disconnect_matched (web_view,
-						      G_SIGNAL_MATCH_ID |
-						      G_SIGNAL_MATCH_FUNC,
-						      sid,
-						      0, NULL,
-						      G_CALLBACK (policy_decision_required_cb),
-						      NULL);
-		sid = g_signal_lookup ("new-window-policy-decision-requested",
-				       WEBKIT_TYPE_WEB_VIEW);
-		g_signal_handlers_disconnect_matched (web_view,
-						      G_SIGNAL_MATCH_ID |
-						      G_SIGNAL_MATCH_FUNC,
-						      sid,
-						      0, NULL,
-						      G_CALLBACK (policy_decision_required_cb),
-						      NULL);
-
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_popup_windows),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_popups_allowed),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_security),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_document_type),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_load_status),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_is_blank),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_navigation),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_title),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_address),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (sync_tab_icon),
-						      window);
-		g_signal_handlers_disconnect_by_func (view,
-						      G_CALLBACK (ephy_window_visibility_cb),
-						      window);
-
-		g_signal_handlers_disconnect_by_func
-			(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
-
-	}
+		ephy_window_disconnect_active_embed (window);
 
 	window->priv->active_embed = new_embed;
 
 	if (new_embed != NULL)
-	{
-		WebKitWebView *web_view;
-		EphyWebView *view;
-
-		embed = new_embed;
-		view = ephy_embed_get_web_view (embed);
-
-		sync_tab_security	(view, NULL, window);
-		sync_tab_document_type	(view, NULL, window);
-		sync_tab_load_status	(view, NULL, window);
-		sync_tab_is_blank	(view, NULL, window);
-		sync_tab_navigation	(view, NULL, window);
-		sync_tab_title		(view, NULL, window);
-		sync_tab_address	(view, NULL, window);
-		sync_tab_icon		(view, NULL, window);
-		sync_tab_popup_windows	(view, NULL, window);
-		sync_tab_popups_allowed	(view, NULL, window);
-
-		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-		view = EPHY_WEB_VIEW (web_view);
-
-		sync_tab_zoom		(web_view, NULL, window);
-
-		g_signal_connect_object (web_view, "notify::zoom-level",
-					 G_CALLBACK (sync_tab_zoom),
-					 window, 0);
-		/* FIXME: we should set our own handler for
-		   scroll-event, but right now it's pointless because
-		   GtkScrolledWindow will eat all the events, even
-		   those with modifier keys we want to catch to zoom
-		   in and out. See bug #562630
-		*/
-		g_signal_connect_object (web_view, "scroll-event",
-					 G_CALLBACK (scroll_event_cb),
-					 window, 0);
-		g_signal_connect_object (web_view, "create-web-view",
-					 G_CALLBACK (create_web_view_cb),
-					 window, 0);
-		g_signal_connect_object (web_view, "navigation-policy-decision-requested",
-					 G_CALLBACK (policy_decision_required_cb),
-					 window, 0);
-		g_signal_connect_object (web_view, "new-window-policy-decision-requested",
-					 G_CALLBACK (policy_decision_required_cb),
-					 window, 0);
-
-		g_signal_connect_object (view, "notify::hidden-popup-count",
-					 G_CALLBACK (sync_tab_popup_windows),
-					 window, 0);
-		g_signal_connect_object (view, "notify::popups-allowed",
-					 G_CALLBACK (sync_tab_popups_allowed),
-					 window, 0);
-		g_signal_connect_object (view, "notify::embed-title",
-					 G_CALLBACK (sync_tab_title),
-					 window, 0);
-		g_signal_connect_object (view, "notify::address",
-					 G_CALLBACK (sync_tab_address),
-					 window, 0);
-		g_signal_connect_object (view, "notify::icon",
-					 G_CALLBACK (sync_tab_icon),
-					 window, 0);
-		g_signal_connect_object (view, "notify::security-level",
-					 G_CALLBACK (sync_tab_security),
-					 window, 0);
-		g_signal_connect_object (view, "notify::document-type",
-					 G_CALLBACK (sync_tab_document_type),
-					 window, 0);
-		g_signal_connect_object (view, "notify::load-status",
-					 G_CALLBACK (sync_tab_load_status),
-					 window, 0);
-		g_signal_connect_object (view, "notify::navigation",
-					 G_CALLBACK (sync_tab_navigation),
-					 window, 0);
-		g_signal_connect_object (view, "notify::is-blank",
-					 G_CALLBACK (sync_tab_is_blank),
-					 window, 0);
-		/* We run our button-press-event after the default
-		 * handler to make sure pages have a chance to perform
-		 * their own handling - for instance, have their own
-		 * context menus, or provide specific functionality
-		 * for the right mouse button */
-		g_signal_connect_object (view, "button-press-event",
-					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
-					 window, G_CONNECT_AFTER);
-		g_signal_connect_object (view, "notify::visibility",
-					 G_CALLBACK (ephy_window_visibility_cb),
-					 window, 0);
-
-		g_object_notify (G_OBJECT (window), "active-child");
-	}
+		ephy_window_connect_active_embed (window);
 }
 
 static gboolean
