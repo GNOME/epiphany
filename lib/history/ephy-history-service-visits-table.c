@@ -182,7 +182,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
     }
   }
   for (substring = query->substring_list; substring != NULL; substring = substring->next) {
-    char *string = ephy_sqlite_create_match_pattern ((char*)substring->data);
+    char *string = ephy_sqlite_create_match_pattern (substring->data);
     if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
       g_error ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
