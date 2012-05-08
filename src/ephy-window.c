@@ -1548,22 +1548,26 @@ sync_tab_icon (EphyWebView *view,
 }
 
 static void
+_ephy_window_set_navigation_flags (EphyWindow *window,
+				   EphyWebViewNavigationFlags flags)
+{
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (window->priv->toolbar_action_group, "NavigationBack");
+	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_BACK);
+	action = gtk_action_group_get_action (window->priv->toolbar_action_group, "NavigationForward");
+	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_FORWARD);
+}
+
+static void
 sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
-	EphyWebViewNavigationFlags flags;
-	GtkAction *action;
-	EphyWindowPrivate *priv = window->priv;
-
 	if (window->priv->closing) return;
 
-	flags = ephy_web_view_get_navigation_flags (view);
-
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationBack");
-	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_BACK);
-	action = gtk_action_group_get_action (priv->toolbar_action_group, "NavigationForward");
-	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_FORWARD);
+	_ephy_window_set_navigation_flags (window,
+					   ephy_web_view_get_navigation_flags (view));
 }
 
 static void
