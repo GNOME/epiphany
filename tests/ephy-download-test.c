@@ -166,7 +166,9 @@ main (int argc, char *argv[])
   ephy_embed_prefs_init ();
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_PRIVATE);
 
-  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL)) {
+  if (!ephy_file_helpers_init (NULL,
+                               EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_ENSURE_EXISTS,
+                               NULL)) {
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }
