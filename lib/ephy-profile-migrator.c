@@ -536,16 +536,6 @@ static GMarkupParser history_parse_funcs =
   NULL,
 };
 
-static EphyHistoryService *
-ensure_empty_history (const char* filename)
-{
-  if (g_file_test (filename, G_FILE_TEST_IS_REGULAR)) {
-    g_unlink (filename);
-  }
-
-  return ephy_history_service_new (filename);
-}
-
 static void
 migrate_history ()
 {
@@ -558,7 +548,15 @@ migrate_history ()
   HistoryParseData parse_data;
 
   gchar *temporary_file = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
-  history_service = ensure_empty_history (temporary_file);
+  /* Do nothing if the history file already exists. Safer than wiping
+   * it out. */
+  if (g_file_test (temporary_file, G_FILE_TEST_EXISTS)) {
+    g_warning ("Did not migrate Epiphany's history, the ephy-history.db file already exists");
+    g_free (temporary_file);
+    return;
+  }
+
+  history_service = ephy_history_service_new (temporary_file);
   g_free (temporary_file);
 
   memset (&parse_data, 0, sizeof (HistoryParseData));
