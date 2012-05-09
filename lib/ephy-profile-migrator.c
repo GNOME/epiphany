@@ -37,6 +37,7 @@
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
+#include "ephy-web-app-utils.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
 #endif
@@ -677,6 +678,89 @@ migrate_profile_gnome2_to_xdg ()
   g_free (old_dir);
 }
 
+static char *
+fix_desktop_file_and_return_new_location (const char *dir)
+{
+  GRegex * regex;
+  char *result, *old_profile_dir, *replacement, *contents, *new_contents;
+  gsize length;
+
+  old_profile_dir = g_build_filename (g_get_home_dir (),
+                                      ".gnome2",
+                                      NULL);
+  replacement = g_build_filename (g_get_user_config_dir (),
+                                  NULL);
+  regex = g_regex_new (old_profile_dir, 0, 0, NULL);
+
+  /* We want to modify both the link destination and the contents of
+   * the .desktop file itself. */
+  result = g_regex_replace (regex, dir, -1,
+                            0, replacement, 0, NULL);
+  g_file_get_contents (result, &contents, &length, NULL);
+  new_contents = g_regex_replace (regex, contents, -1, 0,
+                                  replacement, 0, NULL);
+  g_file_set_contents (result, new_contents, length, NULL);
+
+  g_free (contents);
+  g_free (new_contents);
+  g_free (old_profile_dir);
+  g_free (replacement);
+
+  g_regex_unref (regex);
+
+  return result;
+}
+
+static void
+migrate_web_app_links ()
+{
+  GList *apps, *p;
+
+  apps = ephy_web_application_get_application_list ();
+  for (p = apps; p; p = p->next) {
+    char *desktop_file, *app_link;
+    EphyWebApplication *app = (EphyWebApplication*)p->data;
+
+    desktop_file = app->desktop_file;
+
+    /* Update the link in applications. */
+    app_link = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
+    if (g_file_test (app_link, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_SYMLINK)) {
+        /* Change the link to point to the new profile dir. */
+        GFileInfo *info;
+        const char *target;
+        GFile *file = g_file_new_for_path (app_link);
+        
+        info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
+                                  0, NULL, NULL);
+        if (info) {
+          char *new_target;
+
+          target = g_file_info_get_symlink_target (info);
+          new_target = fix_desktop_file_and_return_new_location (target);
+
+          /* FIXME: Updating the file info and setting it again should
+           * work, but it does not? Just delete and create the link
+           * again. */
+          g_file_delete (file, 0, 0);
+          g_object_unref (file);
+
+          file = g_file_new_for_path (app_link);
+          g_file_make_symbolic_link (file, new_target, NULL, NULL);
+
+          g_object_unref (info);
+          g_free (new_target);
+        }
+
+        g_object_unref (file);
+    }
+
+    g_free (app_link);
+  }
+
+  ephy_web_application_free_application_list (apps);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -687,7 +771,8 @@ const EphyProfileMigrator migrators[] = {
    * login/passwords for page forms, which we previously ignored */
   migrate_passwords2,
   migrate_history,
-  migrate_tabs_visibility
+  migrate_tabs_visibility,
+  migrate_web_app_links
 };
 
 static void
