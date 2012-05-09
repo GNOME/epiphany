@@ -11,8 +11,7 @@ NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-private.h		\
 	ephy-encodings.h		\
-	ephy-request-about.h		\
-	ephy-web-app-utils.h
+	ephy-request-about.h
 
 INST_H_FILES = \
 	ephy-adblock.h			\
@@ -48,7 +47,6 @@ libephyembed_la_SOURCES = \
 	ephy-permission-manager.c	\
 	ephy-request-about.c		\
 	ephy-embed-prefs.c		\
-	ephy-web-app-utils.c		\
 	ephy-web-view.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)

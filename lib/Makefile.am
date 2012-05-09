@@ -29,6 +29,7 @@ NOINST_H_FILES = \
 	ephy-sqlite-statement.h			\
 	ephy-string.h				\
 	ephy-time-helpers.h			\
+	ephy-web-app-utils.h			\
 	ephy-zoom.h
 
 TYPES_H_FILES = \
@@ -72,6 +73,7 @@ libephymisc_la_SOURCES = \
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-time-helpers.c			\
+	ephy-web-app-utils.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)
