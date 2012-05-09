@@ -3568,9 +3568,9 @@ ephy_window_init (EphyWindow *window)
 EphyWindow *
 ephy_window_new (void)
 {
-	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW,
-					  "application", GTK_APPLICATION (ephy_shell),
-					  NULL));
+	return g_object_new (EPHY_TYPE_WINDOW,
+			     "application", GTK_APPLICATION (ephy_shell),
+			     NULL);
 }
 
 /**
@@ -3586,11 +3586,11 @@ EphyWindow *
 ephy_window_new_with_chrome (EphyWebViewChrome chrome,
 			     gboolean is_popup)
 {
-	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW,
-					  "chrome", chrome,
-					  "is-popup", is_popup,
-					  "application", GTK_APPLICATION (ephy_shell),
-					  NULL));
+	return g_object_new (EPHY_TYPE_WINDOW,
+			     "chrome", chrome,
+			     "is-popup", is_popup,
+			     "application", GTK_APPLICATION (ephy_shell),
+			     NULL);
 }
 
 /**
