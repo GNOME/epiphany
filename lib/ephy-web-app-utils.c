@@ -303,7 +303,6 @@ char *
 ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon)
 {
   char *profile_dir = NULL;
-  char *toolbar_path = NULL;
   char *desktop_file_path = NULL;
 
   /* If there's already a WebApp profile for the contents of this
@@ -328,9 +327,6 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
   desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
 
 out:
-  if (toolbar_path)
-    g_free (toolbar_path);
-
   if (profile_dir)
     g_free (profile_dir);
 
