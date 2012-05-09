@@ -187,19 +187,22 @@ _ephy_profile_utils_query_form_auth_data (const char *uri,
   g_free (key_str);
 }
 
-void
+gboolean
 ephy_profile_utils_do_migration ()
 {
+  gboolean ret;
   GError *error = NULL;
   char *argv[1] = { "ephy-profile-migrator" };
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
-  g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
-                NULL, NULL, NULL, NULL,
-                NULL, &error);
+  ret = g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
+                      NULL, NULL, NULL, NULL,
+                      NULL, &error);
     
   if (error) {
     LOG ("Failed to run migrator: %s", error->message);
     g_error_free (error);
   }
+
+  return ret;
 }

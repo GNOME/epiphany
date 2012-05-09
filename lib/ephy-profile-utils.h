@@ -32,7 +32,7 @@ int ephy_profile_utils_get_migration_version (void);
 
 gboolean ephy_profile_utils_set_migration_version (int version);
 
-void ephy_profile_utils_do_migration (void);
+gboolean ephy_profile_utils_do_migration (void);
 
 void _ephy_profile_utils_store_form_auth_data (const char *uri,
                                                const char *form_username,
