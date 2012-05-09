@@ -4,6 +4,7 @@ noinst_PROGRAMS = \
 	test-ephy-embed-utils \
 	test-ephy-history \
 	test-ephy-location-entry \
+	test-ephy-migration \
 	test-ephy-search-entry \
 	test-ephy-sqlite \
 	test-ephy-web-view \
@@ -124,6 +125,9 @@ test_ephy_history_SOURCES = \
 
 test_ephy_location_entry_SOURCES = \
 	ephy-location-entry-test.c
+
+test_ephy_migration_SOURCES = \
+	ephy-migration-test.c
 
 test_ephy_search_entry_SOURCES = \
 	ephy-search-entry-test.c
