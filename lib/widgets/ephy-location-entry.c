@@ -78,6 +78,7 @@ struct _EphyLocationEntryPrivate
 	guint apply_colors : 1;
 	guint needs_reset : 1;
 	guint show_lock : 1;
+	guint show_favicon : 1;
 };
 
 static const GtkTargetEntry url_drag_types [] =
@@ -108,7 +109,8 @@ enum
 	PROP_LOCATION,
 	PROP_FAVICON,
 	PROP_LOCK_STOCK,
-	PROP_SHOW_LOCK
+	PROP_SHOW_LOCK,
+	PROP_SHOW_FAVICON
 };
 
 enum signalsEnum
@@ -148,6 +150,10 @@ ephy_location_entry_set_property (GObject *object,
 	case PROP_SHOW_LOCK:
 		ephy_location_entry_set_show_lock (entry,
 						   g_value_get_boolean (value));
+		break;
+	case PROP_SHOW_FAVICON:
+		ephy_location_entry_set_show_favicon (entry,
+						      g_value_get_boolean (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
@@ -254,6 +260,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 							       FALSE,
 							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_FAVICON,
+					 g_param_spec_boolean ("show-favicon",
+							       "Show Favicon",
+							       "Whether to show the favicon",
+							       TRUE,
+							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
        /**
 	* EphyLocationEntry::user-changed:
 	* @entry: the object on which the signal is emitted
@@ -352,13 +366,13 @@ update_favicon (EphyLocationEntry *lentry)
 	/* Only show the favicon if the entry's text is the
 	 * address of the current page.
 	 */
-	if (priv->favicon != NULL && priv->original_address)
+	if (priv->show_favicon && priv->favicon != NULL && priv->original_address)
 	{
 		gtk_entry_set_icon_from_pixbuf (entry,
 						GTK_ENTRY_ICON_PRIMARY,
 						priv->favicon);
 	}
-	else
+	else if (priv->show_favicon)
 	{
 		/* Here we could consider using fallback favicon that matches
 		 * the page MIME type, though text/html should be good enough
@@ -367,6 +381,12 @@ update_favicon (EphyLocationEntry *lentry)
 		gtk_entry_set_icon_from_icon_name (entry,
 						   GTK_ENTRY_ICON_PRIMARY,
 						   "text-html");
+	}
+	else
+	{
+		gtk_entry_set_icon_from_icon_name (entry,
+						   GTK_ENTRY_ICON_PRIMARY,
+						   NULL);
 	}
 }
 
@@ -892,6 +912,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->block_update = FALSE;
 	p->saved_text = NULL;
 	p->show_lock = FALSE;
+	p->show_favicon = TRUE;
 	p->dns_prefetch_handler = 0;
 
 	ephy_location_entry_construct_contents (le);
@@ -1479,6 +1500,21 @@ ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 	}
 
 	priv->favicon = pixbuf ? g_object_ref (pixbuf) : NULL;
+
+	update_favicon (entry);
+}
+
+void
+ephy_location_entry_set_show_favicon (EphyLocationEntry *entry,
+				      gboolean show_favicon)
+{
+	EphyLocationEntryPrivate *priv;
+
+	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
+
+	priv = entry->priv;
+
+	priv->show_favicon = show_favicon != FALSE;
 
 	update_favicon (entry);
 }
