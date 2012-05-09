@@ -50,6 +50,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+static int do_step_n = -1;
+
 /*
  * What to do to add new migration steps:
  *  - Bump EPHY_PROFILE_MIGRATION_VERSION in lib/ephy-profile-utils.h
@@ -775,14 +777,26 @@ const EphyProfileMigrator migrators[] = {
   migrate_web_app_links
 };
 
-static void
+static gboolean
 ephy_migrator ()
 {
   int latest, i;
+  EphyProfileMigrator m;
 
   /* Always try to migrate the data from the old profile dir at the
    * very beginning. */
   migrate_profile_gnome2_to_xdg ();
+
+  if (do_step_n != -1) {
+    if (do_step_n >= EPHY_PROFILE_MIGRATION_VERSION)
+      return FALSE;
+
+    LOG ("Running only migrator: %d", do_step_n);
+    m = migrators[do_step_n];
+    m();
+
+    return TRUE;
+  }
 
   latest = ephy_profile_utils_get_migration_version ();
 
@@ -790,8 +804,6 @@ ephy_migrator ()
        EPHY_PROFILE_MIGRATION_VERSION, latest);
 
   for (i = latest; i < EPHY_PROFILE_MIGRATION_VERSION; i++) {
-    EphyProfileMigrator m;
-
     LOG ("Running migrator: %d of %d", i, EPHY_PROFILE_MIGRATION_VERSION);
 
     /* No need to run the password migration twice in a row. It
@@ -805,14 +817,50 @@ ephy_migrator ()
     m();
   }
 
-  if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE)
+  if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE) {
     LOG ("Failed to store the current migration version");
+    return FALSE;
+  }
+
+  return TRUE;
 }
+
+static const GOptionEntry option_entries[] =
+{
+  { "do-step", 'd', 0, G_OPTION_ARG_INT, &do_step_n,
+    N_("Executes only the n-th migration step"), NULL },
+  { NULL }
+};
 
 int
 main (int argc, char *argv[])
 {
+  GOptionContext *option_context;
+  GOptionGroup *option_group;
+  GError *error = NULL;
+
   g_type_init ();
+
+  option_group = g_option_group_new ("ephy-profile-migrator",
+                                     N_("Epiphany profile migrator"),
+                                     N_("Epiphany profile migrator options"),
+                                     NULL, NULL);
+
+  g_option_group_set_translation_domain (option_group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (option_group, option_entries);
+
+  option_context = g_option_context_new ("");
+  g_option_context_set_main_group (option_context, option_group);
+
+  if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
+    g_print ("Failed to parse arguments: %s\n", error->message);
+    g_error_free (error);
+    g_option_context_free (option_context);
+
+    return 1;
+  }
+        
+  g_option_context_free (option_context);
 
   ephy_debug_init ();
 
@@ -821,7 +869,5 @@ main (int argc, char *argv[])
     return -1;
   }
 
-  ephy_migrator ();
-
-  return 0;
+  return ephy_migrator () ? 0 : 1;
 }
