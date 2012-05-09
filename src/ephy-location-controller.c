@@ -54,6 +54,7 @@ struct _EphyLocationControllerPrivate
 	GdkPixbuf *icon;
 	char *lock_stock_id;
 	guint editable : 1;
+	guint show_icon : 1;
 	guint show_lock : 1;
 	gboolean sync_address_is_blocked;
 };
@@ -73,6 +74,7 @@ enum
 	PROP_ADDRESS,
 	PROP_EDITABLE,
 	PROP_ICON,
+	PROP_SHOW_ICON,
 	PROP_LOCK_STOCK,
 	PROP_SHOW_LOCK,
 	PROP_WINDOW,
@@ -381,6 +383,10 @@ ephy_location_controller_constructed (GObject *object)
 				priv->location_entry, "favicon",
 				G_BINDING_SYNC_CREATE);
 
+	g_object_bind_property (controller, "show-icon",
+				priv->location_entry, "show-favicon",
+				G_BINDING_SYNC_CREATE);
+
 	g_object_bind_property (controller, "lock-stock-id",
 				priv->location_entry, "lock-stock-id",
 				G_BINDING_SYNC_CREATE);
@@ -429,6 +435,9 @@ ephy_location_controller_set_property (GObject *object,
 				g_object_unref (priv->icon);
 			}
 			priv->icon = GDK_PIXBUF (g_value_dup_object (value));
+			break;
+		case PROP_SHOW_ICON:
+			priv->show_icon = g_value_get_boolean (value);
 			break;
 		case PROP_LOCK_STOCK:
 			g_free (priv->lock_stock_id);
@@ -570,6 +579,19 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 							      "The icon corresponding to the current location",
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/**
+	* EphyLocationController:show-icon:
+	*
+	* If we should show the page icon.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_ICON,
+					 g_param_spec_boolean ("show-icon",
+							       "Show Icon",
+							       "Whether to show the favicon",
+							       TRUE,
+							       G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
 	* EphyLocationController:lock-stock-id:
