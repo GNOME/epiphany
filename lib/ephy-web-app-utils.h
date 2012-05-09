@@ -33,6 +33,7 @@ typedef struct {
     char *name;
     char *icon_url;
     char *url;
+    char *desktop_file;
     char install_date[128];
 } EphyWebApplication;
 

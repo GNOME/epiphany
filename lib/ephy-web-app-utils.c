@@ -399,6 +399,8 @@ ephy_web_application_get_application_list ()
 
       desktop_file = g_strconcat (name + prefix_length, ".desktop", NULL);
       desktop_file_path = g_build_filename (profile_dir, desktop_file, NULL);
+      app->desktop_file = g_strdup (desktop_file);
+
       if (g_file_get_contents (desktop_file_path, &contents, NULL, NULL)) {
         char *exec;
         char **strings;
@@ -458,6 +460,7 @@ ephy_web_application_free (EphyWebApplication *app)
   g_free (app->name);
   g_free (app->icon_url);
   g_free (app->url);
+  g_free (app->desktop_file);
   g_slice_free (EphyWebApplication, app);
 }
 
