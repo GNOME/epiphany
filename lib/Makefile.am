@@ -82,12 +82,13 @@ nodist_libephymisc_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephymisc_la_CPPFLAGS = \
-	-I$(top_builddir)/lib			\
-	-I$(top_builddir)/lib/egg		\
-	-I$(top_srcdir)/lib/egg			\
-	-DDATADIR="\"$(datadir)\""		\
-	-DSHARE_DIR=\"$(pkgdatadir)\" 		\
-	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"          \
+	-I$(top_builddir)/lib			 \
+	-I$(top_builddir)/lib/egg		 \
+	-I$(top_srcdir)/lib/egg			 \
+	-DDATADIR="\"$(datadir)\""		 \
+	-DSHARE_DIR=\"$(pkgdatadir)\" 		 \
+	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\" \
+	-DTOP_BUILD_DIR=\"$(top_builddir)\"      \
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_API_VERSION)/extensions"\" 	\
 	$(AM_CPPFLAGS)
 

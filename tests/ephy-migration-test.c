@@ -36,8 +36,17 @@ test_do_migration_simple (void)
 {
     gboolean ret;
 
-    ret = ephy_profile_utils_do_migration ();
+    ret = ephy_profile_utils_do_migration (-1, TRUE);
     g_assert (ret);
+}
+
+static void
+test_do_migration_invalid (void)
+{
+    gboolean ret;
+
+    ret = ephy_profile_utils_do_migration (EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
+    g_assert (ret == FALSE);
 }
 
 int
@@ -57,6 +66,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/lib/ephy-profile-utils/do_migration_simple",
                    test_do_migration_simple);
+  g_test_add_func ("/lib/ephy-profile-utils/do_migration_invalid",
+                   test_do_migration_invalid);
 
   return g_test_run ();
 }

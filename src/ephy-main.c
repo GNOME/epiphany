@@ -391,7 +391,7 @@ main (int argc,
 
   /* TODO: we want to migrate each WebApp profile too. */
   if (!private_instance && !application_mode)
-    ephy_profile_utils_do_migration ();
+    ephy_profile_utils_do_migration (-1, FALSE);
 
   /* Start our services */
   flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
