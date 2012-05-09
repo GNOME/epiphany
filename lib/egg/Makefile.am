@@ -12,7 +12,7 @@ EGGHEADERS = \
 
 noinst_HEADERS = \
 	$(EGGHEADERS) \
-	eggmarshalers.h
+	$(NULL)
 
 noinst_LTLIBRARIES = libegg.la
 
@@ -27,7 +27,6 @@ libegg_la_CPPFLAGS = \
 	-I$(top_builddir)/lib/egg		\
 	-DCURSOR_DIR=\"$(pkgdatadir)/art\"	\
         -DG_LOG_DOMAIN=\""Egg"\"		\
-	-DEGG_SM_CLIENT_BACKEND_XSMP=1		\
 	$(AM_CPPFLAGS)
 
 libegg_la_CFLAGS = \
@@ -37,28 +36,12 @@ libegg_la_CFLAGS = \
 libegg_la_LIBADD =
 
 BUILT_SOURCES = \
-	eggmarshalers.c \
-	eggmarshalers.h \
 	eggtypebuiltins.c \
 	eggtypebuiltins.h
 
 stamp_files = \
-	stamp-eggmarshalers.c \
-	stamp-eggmarshalers.h \
 	stamp-eggtypebuiltins.c \
 	stamp-eggtypebuiltins.h
-
-eggmarshalers.h: stamp-eggmarshalers.h
-	@true
-stamp-eggmarshalers.h: eggmarshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h \
-	&& echo timestamp > $(@F)
-
-eggmarshalers.c: stamp-eggmarshalers.c
-	@true
-stamp-eggmarshalers.c: eggmarshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c \
-	&& echo timestamp > $(@F)
 
 eggtypebuiltins.c: stamp-eggtypebuiltins.c Makefile
 	@true
@@ -106,7 +89,7 @@ EGGFILES=$(EGGSOURCES) $(EGGHEADERS)
 EGGDIR=$(srcdir)/../../../libegg/libegg
 
 regenerate-built-sources:
-	EGGFILES="$(EGGFILES) eggmarshalers.list" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
+	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)"
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
