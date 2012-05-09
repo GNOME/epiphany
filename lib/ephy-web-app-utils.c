@@ -168,18 +168,6 @@ out:
   return return_value;
 }
 
-#define EPHY_WEB_APP_TOOLBAR "<?xml version=\"1.0\"?>" \
-                             "<toolbars version=\"1.1\">" \
-                             "  <toolbar name=\"DefaultToolbar\" hidden=\"true\" editable=\"false\">" \
-                             "    <toolitem name=\"NavigationBack\"/>" \
-                             "    <toolitem name=\"NavigationForward\"/>" \
-                             "    <toolitem name=\"ViewReload\"/>" \
-                             "    <toolitem name=\"ViewCancel\"/>" \
-                             "  </toolbar>" \
-                             "</toolbars>"
-
-#define EPHY_TOOLBARS_XML_FILE "epiphany-toolbars-3.xml"
-
 static char *
 create_desktop_file (const char *address,
                      const char *profile_dir,
@@ -331,14 +319,9 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
   }
 
   /* Things we need in a WebApp's profile:
-     - Toolbar layout
      - Our own cookies file, copying the relevant cookies for the
        app's domain.
   */
-  toolbar_path = g_build_filename (profile_dir, EPHY_TOOLBARS_XML_FILE, NULL);
-  if (!g_file_set_contents (toolbar_path, EPHY_WEB_APP_TOOLBAR, -1, NULL))
-    goto out;
-
   create_cookie_jar_for_domain (address, profile_dir);
 
   /* Create the deskop file. */
