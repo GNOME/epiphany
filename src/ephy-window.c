@@ -1571,14 +1571,13 @@ sync_tab_navigation (EphyWebView *view,
 }
 
 static void
-sync_tab_is_blank (EphyWebView *view,
-		   GParamSpec *pspec,
-		   EphyWindow *window)
+_ephy_window_set_default_actions_sensitive (EphyWindow *window,
+					    guint flags,
+					    gboolean set)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	gboolean is_blank = TRUE;
 	int i;
 	const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
 					       "FileSendTo", "FileBookmarkPage", "EditFind",
@@ -1586,9 +1585,6 @@ sync_tab_is_blank (EphyWebView *view,
 					       "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
 					       NULL };
 
-	if (window->priv->closing) return;
-
-	is_blank = ephy_web_view_get_is_blank (view);
 	action_group = priv->action_group;
 
 	/* Page menu */
@@ -1597,25 +1593,37 @@ sync_tab_is_blank (EphyWebView *view,
 		action = gtk_action_group_get_action (action_group,
 						      action_group_actions[i]);
 		ephy_action_change_sensitivity_flags (action,
-						      SENS_FLAG_IS_BLANK, is_blank);
+						      flags, set);
 	}
 
 	/* Page context popup */
 	action = gtk_action_group_get_action (priv->popups_action_group,
 					      "ContextBookmarkPage");
 	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
+					      flags, set);
 
 	action = gtk_action_group_get_action (priv->popups_action_group,
 					      "InspectElement");
 	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
+					      flags, set);
 
 	/* Toolbar */
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "ViewCombinedStopReload");
 	ephy_action_change_sensitivity_flags (action,
-					      SENS_FLAG_IS_BLANK, is_blank);
+					      flags, set);
+}
+
+static void
+sync_tab_is_blank (EphyWebView *view,
+		   GParamSpec *pspec,
+		   EphyWindow *window)
+{
+	if (window->priv->closing) return;
+
+	_ephy_window_set_default_actions_sensitive (window,
+						    SENS_FLAG_IS_BLANK,
+						    ephy_web_view_get_is_blank (view));
 }
 
 static void
