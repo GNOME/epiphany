@@ -194,7 +194,7 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
   GError *error = NULL;
   char *index = NULL, *path = NULL;
   int status;
-  char *argv[3] = { "ephy_profile_migrator" };
+  char *argv[3] = { "ephy-profile-migrator" };
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
   if (test_to_run != -1) {
