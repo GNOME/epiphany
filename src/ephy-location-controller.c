@@ -220,49 +220,6 @@ sync_address (EphyLocationController *controller,
 	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
-static void
-sync_editable (EphyLocationController *controller,
-	       GParamSpec *pspec,
-	       GtkWidget *widget)
-{
-	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (widget);
-
-	gtk_editable_set_editable (GTK_EDITABLE (lentry), controller->priv->editable);
-}
-
-static void
-sync_icon (EphyLocationController *controller,
-	   GParamSpec *pspec,
-	   GtkWidget *widget)
-{
-	EphyLocationControllerPrivate *priv = controller->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-	ephy_location_entry_set_favicon (entry, priv->icon);
-}
-
-static void
-sync_lock_stock_id (EphyLocationController *controller,
-		    GParamSpec *pspec,
-		    GtkWidget *widget)
-{
-	EphyLocationControllerPrivate *priv = controller->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-	ephy_location_entry_set_lock_stock (entry, priv->lock_stock_id);
-}
-
-static void
-sync_show_lock (EphyLocationController *controller,
-		GParamSpec *pspec,
-		GtkWidget *widget)
-{
-	EphyLocationControllerPrivate *priv = controller->priv;
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-	ephy_location_entry_set_show_lock (entry, priv->show_lock);
-}
-
 static char *
 get_location_cb (EphyLocationEntry *entry,
 		EphyLocationController *controller)
@@ -416,18 +373,21 @@ ephy_location_controller_constructed (GObject *object)
 	sync_address (controller, NULL, widget);
 	g_signal_connect_object (controller, "notify::address",
 				 G_CALLBACK (sync_address), widget, 0);
-	sync_editable (controller, NULL, widget);
-	g_signal_connect_object (controller, "notify::editable",
-				 G_CALLBACK (sync_editable), widget, 0);
-	sync_icon (controller, NULL, widget);
-	g_signal_connect_object (controller, "notify::icon",
-				 G_CALLBACK (sync_icon), widget, 0);
-	sync_lock_stock_id (controller, NULL, widget);
-	g_signal_connect_object (controller, "notify::lock-stock-id",
-				 G_CALLBACK (sync_lock_stock_id), widget, 0);
-	sync_show_lock (controller, NULL, widget);
-	g_signal_connect_object (controller, "notify::show-lock",
-				 G_CALLBACK (sync_show_lock), widget, 0);
+	g_object_bind_property (controller, "editable",
+				priv->location_entry, "editable",
+				G_BINDING_SYNC_CREATE);
+
+	g_object_bind_property (controller, "icon",
+				priv->location_entry, "favicon",
+				G_BINDING_SYNC_CREATE);
+
+	g_object_bind_property (controller, "lock-stock-id",
+				priv->location_entry, "lock-stock-id",
+				G_BINDING_SYNC_CREATE);
+
+	g_object_bind_property (controller, "show-lock",
+				priv->location_entry, "show-lock",
+				G_BINDING_SYNC_CREATE);
 
 	g_signal_connect_object (widget, "activate",
 				 G_CALLBACK (entry_activate_cb),
