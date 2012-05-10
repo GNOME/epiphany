@@ -443,6 +443,8 @@ ephy_location_controller_set_property (GObject *object,
 		case PROP_LOCATION_ENTRY:
 			priv->location_entry = EPHY_LOCATION_ENTRY (g_value_get_object (value));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	}
 }
 
@@ -472,10 +474,8 @@ ephy_location_controller_get_property (GObject *object,
 		case PROP_SHOW_LOCK:
 			g_value_set_boolean (value, priv->show_lock);
 			break;
-		case PROP_WINDOW:
-		case PROP_LOCATION_ENTRY:
-			/* not readable */
-			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	}
 }
 
