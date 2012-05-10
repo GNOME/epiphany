@@ -90,7 +90,6 @@ nodist_libephymain_la_SOURCES = \
 
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
-	-I$(top_builddir)/lib/egg	\
 	-I$(top_builddir)/embed		\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\

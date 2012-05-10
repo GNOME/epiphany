@@ -21,7 +21,6 @@ libegg_la_SOURCES = \
 	$(EGGHEADERS)
 
 libegg_la_CPPFLAGS = \
-	-I$(top_builddir)/lib/egg		\
 	-DG_LOG_DOMAIN=\""Egg"\"		\
 	$(AM_CPPFLAGS)
 

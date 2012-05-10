@@ -53,14 +53,6 @@ IGNORE_HFILES = \
 	ephy-permission-manager.h \
 	find-dialog.h \
 	print-dialog.h \
-	egg-editable-toolbar.h \
-	eggintl.h \
-	eggmarshalers.h \
-	eggstatusicon.h \
-	egg-toolbar-editor.h \
-	egg-toolbars-model.h \
-	eggtrayicon.h \
-	eggtraymanager.h \
 	eggtreemultidnd.h \
 	ephy-bookmark-action.h \
 	ephy-bookmark-properties.h \
@@ -114,7 +106,6 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_srcdir)/lib/history \
-		-I$(top_builddir)/lib/egg \
 		$(DEPENDENCIES_CFLAGS) \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)

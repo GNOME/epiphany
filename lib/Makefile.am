@@ -83,7 +83,6 @@ nodist_libephymisc_la_SOURCES = \
 
 libephymisc_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			 \
-	-I$(top_builddir)/lib/egg		 \
 	-I$(top_srcdir)/lib/egg			 \
 	-DDATADIR="\"$(datadir)\""		 \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		 \
