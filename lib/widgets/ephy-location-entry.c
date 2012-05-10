@@ -102,6 +102,15 @@ static void extracell_data_func (GtkCellLayout *cell_layout,
 				 GtkTreeIter *iter,
 				 gpointer data);
 
+enum
+{
+	PROP_0,
+	PROP_LOCATION,
+	PROP_FAVICON,
+	PROP_LOCK_STOCK,
+	PROP_SHOW_LOCK
+};
+
 enum signalsEnum
 {
 	USER_CHANGED,
@@ -113,6 +122,55 @@ enum signalsEnum
 static gint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY)
+
+static void
+ephy_location_entry_set_property (GObject *object,
+				  guint prop_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
+	switch (prop_id)
+	{
+	case PROP_LOCATION:
+		ephy_location_entry_set_location (entry,
+						  g_value_get_string (value));
+		break;
+	case PROP_FAVICON:
+		ephy_location_entry_set_favicon (entry,
+						 g_value_get_object (value));
+		break;
+	case PROP_LOCK_STOCK:
+		ephy_location_entry_set_lock_stock (entry,
+						    g_value_get_string (value));
+		break;
+	case PROP_SHOW_LOCK:
+		ephy_location_entry_set_show_lock (entry,
+						   g_value_get_boolean (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
+	}
+}
+
+static void
+ephy_location_entry_get_property (GObject *object,
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *pspec)
+{
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
+	switch (prop_id)
+	{
+	case PROP_LOCATION:
+		g_value_set_string (value, ephy_location_entry_get_location (entry));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
+	}
+}
 
 static void
 ephy_location_entry_finalize (GObject *object)
@@ -140,7 +198,61 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+	object_class->get_property = ephy_location_entry_get_property;
+	object_class->set_property = ephy_location_entry_set_property;
 	object_class->finalize = ephy_location_entry_finalize;
+
+	/**
+	* EphyLocationEntry:location:
+	*
+	* The current location.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_LOCATION,
+					 g_param_spec_string ("location",
+							      "Location",
+							      "The current location",
+							      "",
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/**
+	* EphyLocationEntry:favicon:
+	*
+	* The icon corresponding to the current location.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_FAVICON,
+					 g_param_spec_object ("favicon",
+							      "Favicon",
+							      "The icon corresponding to the current location",
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/**
+	* EphyLocationEntry:lock-stock-id:
+	*
+	* Stock id of the security icon.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_LOCK_STOCK,
+					 g_param_spec_string  ("lock-stock-id",
+							       "Lock Stock ID",
+							       "Stock id of the security icon",
+							       NULL,
+							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/**
+	* EphyLocationEntry:show-lock:
+	*
+	* If we should show the security icon.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_LOCK,
+					 g_param_spec_boolean ("show-lock",
+							       "Show Lock",
+							       "If we should show the security icon",
+							       FALSE,
+							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
        /**
 	* EphyLocationEntry::user-changed:
