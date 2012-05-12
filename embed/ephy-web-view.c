@@ -292,15 +292,15 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
   EphyPermissionManager *manager;
   EphyPermission permission;
 
-  location = ephy_web_view_get_location (view, TRUE);
-  g_return_if_fail (location != NULL);
-
   manager = EPHY_PERMISSION_MANAGER
             (ephy_embed_shell_get_embed_single (embed_shell));
   g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
 
   permission = allowed ? EPHY_PERMISSION_ALLOWED
                : EPHY_PERMISSION_DENIED;
+
+  location = ephy_web_view_get_location (view, TRUE);
+  g_return_if_fail (location != NULL);
 
   ephy_permission_manager_add_permission (manager, location,
                                           EPHY_PERMISSION_TYPE_POPUP,
