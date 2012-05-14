@@ -781,7 +781,6 @@ ephy_node_get_property_node (EphyNode *node,
 	EphyNode *retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (property_id >= 0, NULL);
 
 	if (property_id >= node->properties->len) {
 		return NULL;
@@ -1268,7 +1267,6 @@ ephy_node_get_nth_child (EphyNode *node,
 	EphyNode *ret;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (n >= 0, NULL);
 
 	if (n < node->children->len) {
 		ret = g_ptr_array_index (node->children, n);
