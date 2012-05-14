@@ -712,19 +712,19 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	GString *name, *url;
 	char *parsedname;
 	GList *folders = NULL;
+	gboolean retval = TRUE;
 
 	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
 		return FALSE;
 
-	name = g_string_new (NULL);
-	url = g_string_new (NULL);
-
-
 	if (!(bf = fopen (filename, "r"))) {
 		g_warning ("Failed to open file: %s\n", filename);
 		return FALSE;
 	}
+
+	name = g_string_new (NULL);
+	url = g_string_new (NULL);
 
 	while (!feof (bf)) {
 		EphyNode *node;
@@ -753,9 +753,12 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			if (node == NULL)
 			{
 				node = ephy_bookmarks_find_bookmark (bookmarks, url->str);
+				if (node == NULL) {
+					g_warning ("%s: `node' is NULL", G_STRFUNC);
+					retval = FALSE;
+					goto out;
+				}
 			}
-
-			g_return_val_if_fail (node != NULL, FALSE);
 
 			if (folders != NULL)
 			{
@@ -781,11 +784,12 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			break;
 		}
 	}
+out:
 	fclose (bf);
 	g_string_free (name, TRUE);
 	g_string_free (url, TRUE);
 
-	return TRUE;
+	return retval;
 }
 
 gboolean
