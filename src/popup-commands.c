@@ -91,7 +91,7 @@ popup_cmd_bookmark_link (GtkAction *action,
 {
 	EphyEmbedEvent *event;
 	char *title;
-	char *location;
+	char *location = NULL;
 	guint context;
 	WebKitHitTestResult *result;
 	WebKitDOMNode *node, *first_child;
