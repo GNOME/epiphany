@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany 3.5.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2012-04-30 14:31+0200\n"
-"PO-Revision-Date: 2012-04-18 20:09+0200\n"
+"POT-Creation-Date: 2012-05-15 16:20+0200\n"
+"PO-Revision-Date: 2012-05-15 16:21+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -40,8 +40,8 @@ msgstr "http://www.google.no/"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.no/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:74
-#: ../src/ephy-main.c:322 ../src/ephy-main.c:467 ../src/window-commands.c:1212
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1212
 msgid "Web"
 msgstr "Internett"
 
@@ -943,12 +943,12 @@ msgstr "Skrivebord"
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunne ikke opprette midlertidig katalog i «%s»."
 
-#: ../lib/ephy-file-helpers.c:421
+#: ../lib/ephy-file-helpers.c:423
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen «%s» eksisterer. Vennligst flytt den."
 
-#: ../lib/ephy-file-helpers.c:432
+#: ../lib/ephy-file-helpers.c:434
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kunne ikke opprette katalog «%s»."
@@ -1001,9 +1001,27 @@ msgstr ""
 "Passord fra tidligere versjon (Gecko) er låst med et hovedpassord. Hvis du "
 "vil at Epiphany skal importere dem må du oppgi hovedpassordet under."
 
-#: ../lib/ephy-profile-migrator.c:83
+#: ../lib/ephy-profile-migrator.c:89
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Klarte ikke å kopiere informasjonskapsler fra Mozilla."
+
+#: ../lib/ephy-profile-migrator.c:641
+msgid ""
+"Epiphany 3.6 deprecated this directory and tried migrating this "
+"configuration to ~/.config/epiphany"
+msgstr ""
+
+#: ../lib/ephy-profile-migrator.c:831
+msgid "Executes only the n-th migration step"
+msgstr "Kjører kun n'te migreringssteg"
+
+#: ../lib/ephy-profile-migrator.c:845
+msgid "Epiphany profile migrator"
+msgstr "Epiphany profilmigrering"
+
+#: ../lib/ephy-profile-migrator.c:846
+msgid "Epiphany profile migrator options"
+msgstr "Alternativer for profilmigrering for Epiphany"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1985,63 +2003,63 @@ msgstr "All historikk"
 msgid "History"
 msgstr "Historie"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:84
 msgid "Open a new tab in an existing browser window"
 msgstr "Åpne en ny fane i et eksisterende nettleservindu"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:86
 msgid "Open a new browser window"
 msgstr "Åpne et nytt nettleservindu"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:88
 msgid "Launch the bookmarks editor"
 msgstr "Start redigering av bokmerker"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:90
 msgid "Import bookmarks from the given file"
 msgstr "Importer bokmerker fra gitt fil"
 
-#: ../src/ephy-main.c:89 ../src/ephy-main.c:91
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
 msgid "FILE"
 msgstr "FIL"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "Last oppgitt øktfil"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "Legg til bokmerke"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "Adresse"
 
-#: ../src/ephy-main.c:95
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr "Start en privat instans"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:98
 msgid "Start the browser in application mode"
 msgstr "Start nettleser i applikasjonsmodus"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:100
 msgid "Profile directory to use in the private instance"
 msgstr "Profilkatalog som skal brukes i den private instansen"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:100
 msgid "DIR"
 msgstr "KAT"
 
-#: ../src/ephy-main.c:101
+#: ../src/ephy-main.c:102
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:209
+#: ../src/ephy-main.c:210
 msgid "Could not start Web"
 msgstr "Kunne ikke starte Nettleser"
 
-#: ../src/ephy-main.c:212
+#: ../src/ephy-main.c:213
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2050,7 +2068,7 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:323
+#: ../src/ephy-main.c:325
 msgid "Web options"
 msgstr "Alternativer for Nettleser"
 
