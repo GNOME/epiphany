@@ -187,14 +187,16 @@ _ephy_profile_utils_query_form_auth_data (const char *uri,
   g_free (key_str);
 }
 
+#define EPHY_PROFILE_MIGRATOR "ephy-profile-migrator"
+
 gboolean
 ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
 {
   gboolean ret;
   GError *error = NULL;
-  char *index = NULL, *path = NULL;
+  char *index = NULL;
   int status;
-  char *argv[3] = { "ephy-profile-migrator" };
+  char *argv[3] = { EPHY_PROFILE_MIGRATOR };
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
   if (test_to_run != -1) {
@@ -207,15 +209,12 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
     argv[1] = NULL;
   }
 
-  if (debug) {
-    path = g_strdup_printf ("%s/lib/ephy-profile-migrator", TOP_BUILD_DIR);
-    argv[0] = path;
-  }
+  if (debug)
+    argv[0] = TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
 
   ret = g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
                       &status, &error);
-  g_free (path);
   g_free (index);
     
   if (error) {
