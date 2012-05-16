@@ -210,7 +210,7 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
   }
 
   if (debug)
-    argv[0] = TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
+    argv[0] = ABS_TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
 
   ret = g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
