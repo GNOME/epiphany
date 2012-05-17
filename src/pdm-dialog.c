@@ -1271,6 +1271,33 @@ passwords_show_toggled_cb (GtkWidget *button,
 	gtk_tree_view_column_set_visible (column, active);
 }
 
+static gboolean
+password_search_equal (GtkTreeModel *model,
+		       int column,
+		       const gchar *key,
+		       GtkTreeIter *iter,
+		       gpointer search_data)
+{
+	char *host, *user;
+	gboolean retval;
+
+	/* Note that this is function has to return FALSE for a *match* ! */
+
+	gtk_tree_model_get (model, iter, COL_PASSWORDS_HOST, &host, -1);
+	retval = strstr (host, key) == NULL;
+	g_free (host);
+	if (retval == FALSE)
+		return retval;
+
+	gtk_tree_model_get (model, iter, COL_PASSWORDS_USER, &user, -1);
+	retval = strstr (user, key) == NULL;
+	g_free (user);
+
+	return retval;
+}
+
+
+
 static void
 pdm_dialog_passwords_construct (PdmActionInfo *info)
 {
@@ -1352,6 +1379,11 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+
+	/* Setup basic type ahead filtering */
+	gtk_tree_view_set_search_equal_func (treeview,
+					     (GtkTreeViewSearchEqualFunc) password_search_equal,
+					     dialog, NULL);
 
 	info->treeview = treeview;
 	setup_action (info);
