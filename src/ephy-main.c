@@ -411,7 +411,7 @@ main (int argc,
                                           EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
 
   if (arguments != NULL && arbitrary_url) {
-    g_print ("URL loading is locked dow n\n");
+    g_print ("URL loading is locked down.\n");
     exit (1);
   }
 
