@@ -108,6 +108,8 @@ struct _EphyWebViewPrivate {
   GCancellable *history_service_cancellable;
 
   EphyHistoryPageVisitType visit_type;
+
+  gulong do_not_track_handler;
 };
 
 typedef struct {
@@ -2304,6 +2306,43 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+add_do_not_track_header_cb (WebKitWebView *view, WebKitWebFrame *frame,
+                            WebKitWebResource *resource, WebKitNetworkRequest *request,
+                            WebKitNetworkResponse *response, gpointer user_data)
+{
+  SoupMessage *message;
+
+  message = webkit_network_request_get_message (request);
+
+  if (!message)
+    return;
+
+  /* Do Not Track header. '1' means 'opt-out'. See:
+   * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
+  soup_message_headers_append (message->request_headers, "DNT", "1");
+}
+
+static void
+do_not_track_setting_changed_cb (GSettings *settings,
+                                 char *key,
+                                 EphyWebView *view)
+{
+  gboolean do_not_track;
+  EphyWebViewPrivate *priv = view->priv;
+
+  do_not_track = g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                         EPHY_PREFS_WEB_DO_NOT_TRACK);
+
+  if (do_not_track && !priv->do_not_track_handler)
+    priv->do_not_track_handler = g_signal_connect (view, "resource-request-starting",
+                                                   G_CALLBACK (add_do_not_track_header_cb), NULL);
+  else {
+    g_signal_handlers_disconnect_by_func (view, add_do_not_track_header_cb, NULL);
+    priv->do_not_track_handler = 0;
+  }
+}
+
+static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv;
@@ -2376,6 +2415,13 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
 
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
+    priv->do_not_track_handler = g_signal_connect (web_view, "resource-request-starting",
+                                                   G_CALLBACK (add_do_not_track_header_cb), NULL);
+
+  g_signal_connect (EPHY_SETTINGS_WEB,
+                    "changed::" EPHY_PREFS_WEB_DO_NOT_TRACK,
+                    G_CALLBACK (do_not_track_setting_changed_cb), web_view);
 }
 
 /**
