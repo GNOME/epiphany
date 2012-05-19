@@ -965,6 +965,9 @@ static const PrefsDialogPreference preferences[] =
 	{ "remember_passwords_checkbutton", "active",
 	  EPHY_PREFS_SCHEMA, EPHY_PREFS_REMEMBER_PASSWORDS,
 	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	{ "do_not_track_checkbutton", "active",
+	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_DO_NOT_TRACK,
+	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
 
 	{ "disk_cache_spinbutton", "value",
 	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_CACHE_SIZE,
