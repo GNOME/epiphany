@@ -327,6 +327,7 @@ src/bookmarks/Makefile
 src/epiphany.h
 po/Makefile.in
 tests/Makefile
+tests/data/Makefile
 ],
 [],
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])

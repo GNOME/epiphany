@@ -1,3 +1,5 @@
+SUBDIRS = data
+
 noinst_PROGRAMS = \
 	test-ephy-download \
 	test-ephy-embed-single \
