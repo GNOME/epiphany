@@ -25,10 +25,24 @@
 typedef GdMainViewGenericIface GdMainViewGenericInterface;
 G_DEFINE_INTERFACE (GdMainViewGeneric, gd_main_view_generic, GTK_TYPE_WIDGET)
 
+enum {
+  DELETE_ITEM_CLICKED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void
 gd_main_view_generic_default_init (GdMainViewGenericInterface *iface)
 {
-  /* nothing */
+  signals[DELETE_ITEM_CLICKED] =
+    g_signal_new ("delete-item-clicked",
+                  GD_TYPE_MAIN_VIEW_GENERIC,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 }
 
 /**
@@ -152,4 +166,11 @@ _gd_main_view_generic_dnd_common (GtkTreeModel *model,
 
   gtk_selection_data_set_uris (data, uris);
   g_strfreev (uris);
+}
+
+void
+_gd_main_view_generic_item_delete_clicked (GdMainViewGeneric *self,
+					   const gchar *path)
+{
+  g_signal_emit (self, signals[DELETE_ITEM_CLICKED], 0, path);
 }

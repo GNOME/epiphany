@@ -91,6 +91,8 @@ void _gd_main_view_generic_dnd_common (GtkTreeModel *model,
                                        gboolean selection_mode,
                                        GtkTreePath *path,
                                        GtkSelectionData *data);
+void _gd_main_view_generic_item_delete_clicked (GdMainViewGeneric *self,
+						const gchar *path);
 
 G_END_DECLS
 
