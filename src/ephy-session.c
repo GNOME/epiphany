@@ -959,7 +959,7 @@ parse_embed (xmlNodePtr child,
 
 					embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
 					web_view = ephy_embed_get_web_view (embed);
-					ephy_web_view_load_url(web_view, recover_url);
+					ephy_web_view_load_url (web_view, recover_url);
 
 					is_first_window = FALSE;
 				}
