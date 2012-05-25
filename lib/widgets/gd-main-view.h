@@ -77,6 +77,9 @@ struct _GdMainView {
 
 struct _GdMainViewClass {
   GtkScrolledWindowClass parent_class;
+
+  gboolean (* item_deleted) (GdMainView *self,
+			     const gchar *path);
 };
 
 GType gd_main_view_get_type (void) G_GNUC_CONST;
@@ -97,6 +100,8 @@ void gd_main_view_set_model (GdMainView *self,
                              GtkTreeModel *model);
 
 GtkWidget * gd_main_view_get_generic_view (GdMainView *self);
+
+void        gd_main_view_item_deleted (GdMainView *self, const gchar *path);
 
 G_END_DECLS
 
