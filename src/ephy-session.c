@@ -915,10 +915,12 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 static void 
 parse_embed (xmlNodePtr child,
 	     EphyWindow *window,
-	     gboolean is_first_window,
 	     EphySession *session)
 {
 	EphySessionPrivate *priv = session->priv;
+	gboolean is_first_window;
+
+	is_first_window = window == EPHY_WINDOW (priv->resume_window);
 
 	while (child != NULL)
 	{
@@ -950,12 +952,12 @@ parse_embed (xmlNodePtr child,
 				recover_url = (char *) url;
 				
 				/* Reuse the window holding the recovery infobar instead of creating a new one. */
-				if (is_first_window == TRUE && priv->resume_window != NULL)
+				if (is_first_window == TRUE && window != NULL)
 				{
 					EphyWebView *web_view;
 					EphyEmbed *embed;
 
-					embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
+					embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 					web_view = ephy_embed_get_web_view (embed);
 					ephy_web_view_load_url (web_view, recover_url);
 
@@ -1115,8 +1117,7 @@ ephy_session_load (EphySession *session,
 			ephy_gui_window_update_user_time (widget, user_time);
 
 			/* Now add the tabs */
-			parse_embed (child->children, window,
-				     window == EPHY_WINDOW (priv->resume_window), session);
+			parse_embed (child->children, window, session);
 
 			/* Set focus to something sane */
 			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
