@@ -22,7 +22,6 @@
 #include "config.h"
 #include "ephy-session.h"
 
-#include "eggdesktopfile.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -32,7 +31,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
-#include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
