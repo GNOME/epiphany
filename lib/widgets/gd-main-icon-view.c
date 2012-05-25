@@ -19,6 +19,7 @@
  *
  */
 
+#include "ephy-removable-pixbuf-renderer.h"
 #include "gd-main-icon-view.h"
 #include "gd-main-view.h"
 #include "gd-main-view-generic.h"
@@ -77,6 +78,14 @@ gd_main_icon_view_drag_data_get (GtkWidget *widget,
 }
 
 static void
+on_cell_delete_clicked (EphyRemovablePixbufRenderer *cell,
+			const gchar *path,
+			GdMainIconView *self)
+{
+  _gd_main_view_generic_item_delete_clicked (GD_MAIN_VIEW_GENERIC (self), path);
+}
+
+static void
 gd_main_icon_view_constructed (GObject *obj)
 {
   GdMainIconView *self = GD_MAIN_ICON_VIEW (obj);
@@ -96,11 +105,14 @@ gd_main_icon_view_constructed (GObject *obj)
                 "margin", VIEW_MARGIN,
                 NULL);
 
-  self->priv->pixbuf_cell = cell = gd_toggle_pixbuf_renderer_new ();
+  self->priv->pixbuf_cell = cell = ephy_removable_pixbuf_renderer_new ();
   g_object_set (cell,
                 "xalign", 0.5,
                 "yalign", 0.5,
                 NULL);
+  g_signal_connect (cell, "delete-clicked",
+		    G_CALLBACK (on_cell_delete_clicked),
+		    obj);
 
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self), cell, FALSE);
   gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self), cell,
