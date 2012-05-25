@@ -930,7 +930,8 @@ parse_embed (xmlNodePtr child,
 
 			g_return_if_fail (window != NULL);
 
-			/* Check if that tab wasn't fully loaded yet when the session crashed */
+			/* Check if that tab wasn't fully loaded yet
+			 * when the session crashed. */
 			attr = xmlGetProp (child, (const xmlChar *) "loading");
 			was_loading = attr != NULL &&
 				      xmlStrEqual (attr, (const xmlChar *) "true");
@@ -940,18 +941,15 @@ parse_embed (xmlNodePtr child,
 			if (url == NULL) 
 				continue;
 
-			/* in the case that crash happens before we receive the URL from the server,
-			   this will open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
-
-			   Otherwise, if the web was fully loaded, it is reloaded again.
-			
-			*/
+			/* In the case that crash happens before we receive the URL from the server, this will
+			   open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
+			   Otherwise, if the web was fully loaded, it is reloaded again. */
 			if (!was_loading ||
 			    strcmp ((const char *) url, "about:blank") == 0)
 			{
 				recover_url = (char *) url;
 				
-				/* Reuse the window holding the recovery infobar instead of creating a new one */
+				/* Reuse the window holding the recovery infobar instead of creating a new one. */
 				if (is_first_window == TRUE && priv->resume_window != NULL)
 				{
 					EphyWebView *web_view;
@@ -974,10 +972,9 @@ parse_embed (xmlNodePtr child,
 			else if (was_loading && url != NULL &&
 				 strcmp ((const char *) url, "about:blank") != 0)
 			{
-				/* shows a message to the user that warns that this page was
+				/* Shows a message to the user that warns that this page was
 				   loading during crash and make Epiphany crash again,
-				   in this case we know the URL */
-
+				   in this case we know the URL. */
 				xmlChar* title = xmlGetProp (child, (const xmlChar *) "title");
 			
 				confirm_before_recover (window, (char*) url, (char*) title);
