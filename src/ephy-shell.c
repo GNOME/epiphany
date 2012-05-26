@@ -721,7 +721,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   }
 
   if (flags & EPHY_NEW_TAB_FROM_EXTERNAL) {
-    /* If the active embed is blank, us e that to open the url and jump to it */
+    /* If the active embed is blank, use that to open the url and jump to it */
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
     if (embed != NULL) {
       if (ephy_web_view_get_is_blank (ephy_embed_get_web_view (embed)) &&
