@@ -140,6 +140,16 @@ ephy_download_set_property (GObject      *object,
   }
 }
 
+/**
+ * ephy_download_get_content_type:
+ * @download: an #EphyDownload
+ *
+ * Gets content-type information for @download. If the file is already
+ * present on the filesystem and readable, uses GIO to get the
+ * content-type. Otherwise it uses WebKit and Soup.
+ *
+ * Returns: content-type for @download, must be freed with g_free()
+ **/
 char *
 ephy_download_get_content_type (EphyDownload *download)
 {
