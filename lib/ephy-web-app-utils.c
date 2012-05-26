@@ -316,8 +316,10 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
   profile_dir = ephy_web_application_get_profile_directory (name);
-  if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR))
+  if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
+    LOG ("Profile directory %s already exists", profile_dir);
     goto out;
+  }
 
   /* Create the profile directory, populate it. */
   if (g_mkdir (profile_dir, 488) == -1) {
