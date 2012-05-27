@@ -269,7 +269,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
   if (error) {
     g_object_unref (priv->history_database);
     priv->history_database = NULL;
-    g_error ("Could not open history database: %s", error->message);
+    g_error ("Could not open history database at %s: %s", priv->history_filename, error->message);
     g_error_free (error);
     return FALSE;
   }
