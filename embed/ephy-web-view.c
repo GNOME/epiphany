@@ -1196,6 +1196,9 @@ hovering_over_link_cb (EphyWebView *web_view,
 static void
 ephy_web_view_constructed (GObject *object)
 {
+  if (G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed)
+    G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
+
   /* Use full content zooming by default */
   /* FIXME: we could make this configurable through GSettings, or have
    * different keys for text and full content zooming. AFAIK you can
