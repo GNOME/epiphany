@@ -970,3 +970,54 @@ ephy_file_delete_uri (const char *uri)
 	}
 	g_object_unref (file);
 }
+
+/**
+ * ephy_file_create_data_uri_for_filename:
+ * @filename: the filename of a local path
+ * @mime_type: the MIME type of the filename, or %NULL
+ *
+ * Create a data uri using the contents of @filename.
+ * If @mime_type is %NULL, the %G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE
+ * attribute of @filename will be used.
+ *
+ * Returns: a new allocated string containg the data uri, or %NULL if the
+ *   data uri could not be created
+ */
+char *ephy_file_create_data_uri_for_filename (const char *filename,
+					      const char *mime_type)
+{
+	gchar *data;
+	gsize data_length;
+	gchar *base64;
+	gchar *uri = NULL;
+	GFileInfo *file_info = NULL;
+
+	g_return_val_if_fail (filename != NULL, NULL);
+
+	if (!g_file_get_contents (filename, &data, &data_length, NULL))
+		return NULL;
+
+	base64 = g_base64_encode ((const guchar *)data, data_length);
+	g_free (data);
+
+	if (!mime_type) {
+		GFile *file;
+
+		file = g_file_new_for_path (filename);
+		file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+					       G_FILE_QUERY_INFO_NONE, NULL, NULL);
+		if (file_info)
+			mime_type = g_file_info_get_content_type (file_info);
+
+		g_object_unref (file);
+	}
+
+	if (mime_type)
+		uri = g_strdup_printf ("data:%s;charset=utf8;base64,%s", mime_type, base64);
+	g_free(base64);
+
+	if (file_info)
+		g_object_unref (file_info);
+
+	return uri;
+}

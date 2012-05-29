@@ -2052,37 +2052,6 @@ load_status_cb (WebKitWebView *web_view,
   g_object_thaw_notify (object);
 }
 
-static char *
-get_file_content_as_base64 (const char *path)
-{
-  GFile *file;
-  GFileInfo *file_info;
-  const char *image_type;
-  char *image_raw;
-  gsize len;
-  char *image_data;
-  char *image64;
-
-  file = g_file_new_for_path (path);
-  file_info = g_file_query_info (file,
-                                 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                 G_FILE_QUERY_INFO_NONE,
-                                 NULL, NULL);
-  image_type = g_file_info_get_content_type (file_info);
-
-  g_file_get_contents (path, &image_raw, &len, NULL);
-  image_data = g_base64_encode ((guchar *) image_raw, len);
-  image64 = g_strdup_printf ("data:%s;base64,%s", image_type, image_data);
-
-  g_free (image_raw);
-  g_free (image_data);
-
-  g_object_unref (file);
-  g_object_unref (file_info);
-
-  return image64;
-}
-
 /**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
@@ -2175,7 +2144,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                           48,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-  image_data = icon_info ? get_file_content_as_base64 (gtk_icon_info_get_filename (icon_info)) : NULL;
+  image_data = icon_info ? ephy_file_create_data_uri_for_filename (gtk_icon_info_get_filename (icon_info), NULL) : NULL;
 
   g_file_get_contents (html_file, &template, NULL, NULL);
 
