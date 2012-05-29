@@ -1690,7 +1690,63 @@ ge_popup_blocked_cb (EphyWebView *view,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Policy Client */
+static gboolean
+decide_policy_cb (WebKitWebView *web_view,
+                  WebKitPolicyDecision *decision,
+                  WebKitPolicyDecisionType decision_type,
+                  gpointer user_data)
+{
+  WebKitResponsePolicyDecision *response_decision;
+  WebKitURIResponse *response;
+  EphyWebViewDocumentType type;
+  const gchar *mime_type;
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
+    return FALSE;
+
+  response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
+  response = webkit_response_policy_decision_get_response (response_decision);
+  mime_type = webkit_uri_response_get_mime_type (response);
+
+  type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
+  if (!strcmp (mime_type, "text/html") || !strcmp (mime_type, "text/plain"))
+    type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+  else if (!strcmp (mime_type, "application/xhtml+xml"))
+    type = EPHY_WEB_VIEW_DOCUMENT_XML;
+  else if (!strncmp (mime_type, "image/", 6))
+    type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+
+  /* FIXME: maybe it makes more sense to have an API to query the mime
+   * type when the load of a page starts than doing this here.
+   */
+  if (EPHY_WEB_VIEW (web_view)->priv->document_type != type) {
+    EPHY_WEB_VIEW (web_view)->priv->document_type = type;
+
+    g_object_notify (G_OBJECT (web_view), "document-type");
+  }
+
+  /* TODO: Check also Content-Disposition header before emitting
+   * handle-content signal. We need API for that in WebKit2.
+   */
+  if (!webkit_web_view_can_show_mime_type (web_view, mime_type)) {
+    GObject *single;
+    WebKitURIRequest *request;
+    const char *uri;
+    gboolean handled = FALSE;
+
+    single = ephy_embed_shell_get_embed_single (embed_shell);
+    request = webkit_response_policy_decision_get_request (response_decision);
+    g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
+
+    if (handled) {
+      webkit_policy_decision_ignore (decision);
+
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
 #else
 static gboolean
 mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
@@ -2578,7 +2634,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     web_view);
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Policy Client */
+  g_signal_connect (web_view, "decide-policy",
+                    G_CALLBACK (decide_policy_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "mime-type-policy-decision-requested",
                     G_CALLBACK (mime_type_policy_decision_requested_cb),

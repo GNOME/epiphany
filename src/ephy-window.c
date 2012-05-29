@@ -2123,7 +2123,149 @@ create_web_view_cb (WebKitWebView *web_view,
 #endif
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Policy client */
+static gboolean
+decide_policy_cb (WebKitWebView *web_view,
+		  WebKitPolicyDecision *decision,
+		  WebKitPolicyDecisionType decision_type,
+		  EphyWindow *window)
+{
+	WebKitNavigationPolicyDecision *navigation_decision;
+	WebKitNavigationType navigation_type;
+	WebKitURIRequest *request;
+	gint button;
+	gint state;
+	const char *uri;
+	EphyEmbed *embed;
+	EphyNewTabFlags flags;
+
+	if (decision_type == WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
+		return FALSE;
+
+	navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+	request = webkit_navigation_policy_decision_get_request (navigation_decision);
+	uri = webkit_uri_request_get_uri (request);
+
+	if (!ephy_embed_utils_address_has_web_scheme (uri))
+	{
+		GError *error = NULL;
+		GdkScreen *screen;
+
+		screen = gtk_widget_get_screen (GTK_WIDGET (web_view));
+		gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
+
+		if (error)
+		{
+			LOG ("failed to handle non web scheme: %s", error->message);
+			g_error_free (error);
+
+			return FALSE;
+		}
+
+		webkit_policy_decision_ignore (decision);
+
+		return TRUE;
+	}
+
+	navigation_type = webkit_navigation_policy_decision_get_navigation_type (navigation_decision);
+
+	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED &&
+	    ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	{
+		/* The only thing we allow here is to either navigate
+		 * in the same window and tab to the current domain,
+		 * or launch a new (non app mode) epiphany instance
+		 * for all the other cases. */
+		gboolean return_value;
+		SoupURI *soup_uri = soup_uri_new (uri);
+		SoupURI *current_soup_uri = soup_uri_new (webkit_web_view_get_uri (web_view));
+
+		if (g_str_equal (soup_uri->host, current_soup_uri->host))
+		{
+			return_value = FALSE;
+		}
+		else
+		{
+			char *command_line;
+			GError *error = NULL;
+
+			return_value = TRUE;
+			/* A gross hack to be able to launch epiphany from within
+			 * Epiphany. Might be a good idea to figure out a better
+			 * solution... */
+			g_unsetenv (EPHY_UUID_ENVVAR);
+			command_line = g_strdup_printf ("gvfs-open %s", uri);
+			g_spawn_command_line_async (command_line, &error);
+
+			if (error)
+			{
+				g_debug ("Error opening %s: %s", uri, error->message);
+				g_error_free (error);
+			}
+
+			g_free (command_line);
+
+			webkit_policy_decision_ignore (decision);
+		}
+
+		soup_uri_free (soup_uri);
+		soup_uri_free (current_soup_uri);
+
+		return return_value;
+	}
+
+	if (navigation_type != WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
+		return FALSE;
+
+
+	button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
+	state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
+	flags = EPHY_NEW_TAB_OPEN_PAGE;
+
+	ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
+				      EPHY_PAGE_VISIT_LINK);
+
+	/* New tab in new window for control+shift+click */
+	if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+	{
+		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+	}
+	/* New tab in existing window for middle click and
+	 * control+click */
+	else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK))
+	{
+		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
+	}
+	/* Because we connect to button-press-event *after*
+	 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
+	 * a link when you shift+click it. Otherwise when you
+	 * shift+click a link to download it you would also be taken to
+	 * the link destination. */
+	else if (button == 1 && state == GDK_SHIFT_MASK)
+	{
+		webkit_policy_decision_ignore (decision);
+
+		return TRUE;
+	}
+	/* Those were our special cases, we won't handle this */
+	else
+	{
+		return FALSE;
+	}
+
+	embed = ephy_embed_container_get_active_child
+		(EPHY_EMBED_CONTAINER (window));
+
+	ephy_shell_new_tab_full (ephy_shell_get_default (),
+				 window,
+				 embed,
+				 request,
+				 flags,
+				 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
+
+	webkit_policy_decision_ignore (decision);
+
+	return TRUE;
+}
 #else
 static gboolean
 policy_decision_required_cb (WebKitWebView *web_view,
@@ -2307,7 +2449,9 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 window, 0);
 #endif
 #ifdef HAVE_WEBKIT2
-	/* TODO: Policy Client */
+	g_signal_connect_object (web_view, "decide-policy",
+				 G_CALLBACK (decide_policy_cb),
+				 window, 0);
 #else
 	g_signal_connect_object (web_view, "navigation-policy-decision-requested",
 				 G_CALLBACK (policy_decision_required_cb),
@@ -2390,7 +2534,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      window);
 #endif
 #ifdef HAVE_WEBKIT2
-	/* TODO: Policy client */
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (decide_policy_cb),
+					      window);
 #else
 	sid = g_signal_lookup ("navigation-policy-decision-requested",
 			       WEBKIT_TYPE_WEB_VIEW);
