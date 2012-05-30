@@ -2953,15 +2953,15 @@ ephy_web_view_load_url (EphyWebView *view,
     g_free (temp_url);
 #endif
   } else if (g_str_has_prefix (effective_url, "javascript:")) {
-#ifdef HAVE_WEBKIT2
-    /* TODO: Run JavaScript */
-#else
     char *decoded_url;
 
     decoded_url = soup_uri_decode (effective_url);
+#ifdef HAVE_WEBKIT2
+    webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view), decoded_url, NULL, NULL, NULL);
+#else
     webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
-    g_free (decoded_url);
 #endif
+    g_free (decoded_url);
   } else
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
 
