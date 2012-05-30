@@ -648,7 +648,27 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: WebKitWindowProperties */
+static void
+window_geometry_changed (WebKitWindowProperties *properties, GParamSpec *pspec, EphyEmbed *embed)
+{
+  GtkWidget *window;
+  gboolean is_popup;
+  GdkRectangle geometry;
+
+  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+  if (!window || !gtk_widget_is_toplevel (window))
+    return;
+
+  g_object_get (window, "is-popup", &is_popup, NULL);
+  if (!is_popup)
+    return;
+
+  webkit_window_properties_get_geometry (properties, &geometry);
+  if (geometry.x >= 0 && geometry.y >= 0)
+    gtk_window_move (GTK_WINDOW (window), geometry.x, geometry.y);
+  if (geometry.width > 0 && geometry.height > 0)
+    gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
+}
 #else
 static void
 window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, EphyEmbed *embed)
@@ -735,8 +755,13 @@ ephy_embed_constructed (GObject *object)
 #endif
   GtkWidget *paned;
   WebKitWebView *web_view;
-#ifndef HAVE_WEBKIT2
+#ifdef HAVE_WEBKIT2
+  WebKitWindowProperties *window_properties;
+#else
   WebKitWebWindowFeatures *window_features;
+#endif
+#ifndef HAVE_WEBKIT2
+  /* TODO: Inspector */
   WebKitWebInspector *inspector;
 #endif
   GtkWidget *overlay;
@@ -832,7 +857,11 @@ ephy_embed_constructed (GObject *object)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitWindowProperties */
+  /* Window properties */
+  window_properties = webkit_web_view_get_window_properties (web_view);
+  g_signal_connect (window_properties, "notify::geometry",
+                    G_CALLBACK (window_geometry_changed),
+                    embed);
 #else
   /* Window features */
   window_features = webkit_web_view_get_window_features (web_view);

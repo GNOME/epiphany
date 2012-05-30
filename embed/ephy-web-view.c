@@ -2521,11 +2521,15 @@ load_error_cb (WebKitWebView *web_view,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: WebKitWebView::close */
+static void
+close_web_view_cb (WebKitWebView *web_view,
+                   gpointer user_data)
+
 #else
 static gboolean
 close_web_view_cb (WebKitWebView *web_view,
                    gpointer user_data)
+#endif
 {
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
 
@@ -2537,9 +2541,11 @@ close_web_view_cb (WebKitWebView *web_view,
   else
     gtk_widget_destroy (widget);
 
+#ifndef HAVE_WEBKIT2
   return TRUE;
-}
 #endif
+}
+
 
 static void
 zoom_changed_cb (WebKitWebView *web_view,
@@ -2662,7 +2668,9 @@ ephy_web_view_init (EphyWebView *web_view)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitWebView::close */
+  g_signal_connect (web_view, "close",
+                    G_CALLBACK (close_web_view_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "close-web-view",
                     G_CALLBACK (close_web_view_cb),

@@ -2026,8 +2026,71 @@ ephy_window_set_is_popup (EphyWindow *window,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: New WebView */
+static void
+ephy_window_configure_for_view (EphyWindow *window,
+				WebKitWebView *web_view)
+{
+	WebKitWindowProperties *properties;
+	EphyWebViewChrome chrome_mask;
+
+	properties = webkit_web_view_get_window_properties (web_view);
+
+	chrome_mask = window->priv->chrome;
+	if (!webkit_window_properties_get_toolbar_visible (properties))
+		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
+
+	/* We will consider windows with different chrome settings popups. */
+	if (chrome_mask != window->priv->chrome) {
+		GdkRectangle geometry;
+
+		webkit_window_properties_get_geometry (properties, &geometry);
+		gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
+
+		if (!webkit_window_properties_get_resizable (properties))
+			gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+
+		window->priv->is_popup = TRUE;
+		window->priv->chrome = chrome_mask;
+
+		sync_chromes_visibility (window);
+	}
+}
 #else
+static void
+ephy_window_configure_for_view (EphyWindow *window,
+				WebKitWebView *web_view)
+{
+	int width, height;
+	gboolean toolbar_visible;
+	EphyWebViewChrome chrome_mask;
+	WebKitWebWindowFeatures *features;
+
+	toolbar_visible = TRUE;
+	features = webkit_web_view_get_window_features (web_view);
+
+	chrome_mask = window->priv->chrome;
+
+	g_object_get (features,
+		      "width", &width,
+		      "height", &height,
+		      "toolbar-visible", &toolbar_visible,
+		      NULL);
+
+	if (!toolbar_visible)
+		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
+
+	/* We will consider windows with different chrome settings popups. */
+	if (chrome_mask != window->priv->chrome) {
+		gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+
+		window->priv->is_popup = TRUE;
+		window->priv->chrome = chrome_mask;
+
+		sync_chromes_visibility (window);
+	}
+}
+#endif
+
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
 		   WebKitWebView *parent_web_view)
@@ -2042,35 +2105,7 @@ web_view_ready_cb (WebKitWebView *web_view,
 
 	if (using_new_window)
 	{
-		int width, height;
-		gboolean toolbar_visible;
-		EphyWebViewChrome chrome_mask;
-		WebKitWebWindowFeatures *features;
-
-		toolbar_visible = TRUE;
-		features = webkit_web_view_get_window_features (web_view);
-
-		chrome_mask = window->priv->chrome;
-
-		g_object_get (features,
-			      "width", &width,
-			      "height", &height,
-			      "toolbar-visible", &toolbar_visible,
-			      NULL);
-
-		if (!toolbar_visible)
-			chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-
-		/* We will consider windows with different chrome settings popups. */
-		if (chrome_mask != window->priv->chrome) {
-			gtk_window_set_default_size (GTK_WINDOW (window), width, height);
-
-			window->priv->is_popup = TRUE;
-			window->priv->chrome = chrome_mask;
-
-			sync_chromes_visibility (window);
-		}
-
+		ephy_window_configure_for_view (window, web_view);
 		g_signal_emit_by_name (parent_web_view, "new-window", web_view);
 	}
 
@@ -2079,10 +2114,16 @@ web_view_ready_cb (WebKitWebView *web_view,
 	return TRUE;
 }
 
-static WebKitWebView*
+#ifdef HAVE_WEBKIT2
+static WebKitWebView *
+create_web_view_cb (WebKitWebView *web_view,
+		    EphyWindow *window)
+#else
+static WebKitWebView *
 create_web_view_cb (WebKitWebView *web_view,
 		    WebKitWebFrame *frame,
 		    EphyWindow *window)
+#endif
 {
 	EphyEmbed *embed;
 	WebKitWebView *new_web_view;
@@ -2114,13 +2155,18 @@ create_web_view_cb (WebKitWebView *web_view,
 					 0);
 
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+#ifdef HAVE_WEBKIT2
+	g_signal_connect (new_web_view, "ready-to-show",
+			  G_CALLBACK (web_view_ready_cb),
+			  web_view);
+#else
 	g_signal_connect (new_web_view, "web-view-ready",
 			  G_CALLBACK (web_view_ready_cb),
 			  web_view);
+#endif
 
 	return new_web_view;
 }
-#endif
 
 #ifdef HAVE_WEBKIT2
 static gboolean
@@ -2442,7 +2488,9 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 G_CALLBACK (scroll_event_cb),
 				 window, 0);
 #ifdef HAVE_WEBKIT2
-	/* TODO: New WebView */
+	g_signal_connect_object (web_view, "create",
+				 G_CALLBACK (create_web_view_cb),
+				 window, 0);
 #else
 	g_signal_connect_object (web_view, "create-web-view",
 				 G_CALLBACK (create_web_view_cb),
@@ -2526,13 +2574,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (scroll_event_cb),
 					      window);
-#ifdef HAVE_WEBKIT2
-	/* TODO: New WebView */
-#else
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (create_web_view_cb),
 					      window);
-#endif
 #ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (decide_policy_cb),
