@@ -29,6 +29,7 @@
 #include "ephy-settings.h"
 
 #include <glib.h>
+#include <math.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
@@ -44,8 +45,12 @@ typedef struct
 } PrefData;
 
 #ifdef HAVE_WEBKIT2
-/* TODO: WebKitSettings */
+#define ENABLE_SCRIPTS_SETTING "enable-javascript"
+#define DEFAULT_ENCODING_SETTING "default-charset"
+static WebKitSettings *webkit_settings = NULL;
 #else
+#define ENABLE_SCRIPTS_SETTING "enable-scripts"
+#define DEFAULT_ENCODING_SETTING "default-encoding"
 static WebKitWebSettings *webkit_settings = NULL;
 #endif
 
@@ -69,7 +74,7 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
                        USER_STYLESHEET_FILENAME,
                        NULL);
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
+  /* TODO: user-stylesheet-uri setting */
 #else
   g_object_set (webkit_settings, webkit_pref, uri, NULL);
 #endif
@@ -119,7 +124,7 @@ webkit_pref_get_internal_user_agent (void)
 
 #ifdef HAVE_WEBKIT2
   /* TODO: User agent */
-  return g_strup ("");
+  return g_strdup ("");
 #else
   g_object_get (webkit_settings, "user-agent", &webkit_user_agent, NULL);
 
@@ -162,6 +167,48 @@ webkit_pref_callback_user_agent (GSettings *settings,
 #endif
 }
 
+#ifdef HAVE_WEBKIT2
+/* This doesn't contain WebKit2 specific API, but it's only used inside
+ * HAVE_WEBKIT2 blocks, so it gives a compile warning when building
+ * with WebKit1.
+ */
+static gdouble
+get_screen_dpi (GdkScreen *screen)
+{
+  gdouble dpi;
+  gdouble dp, di;
+
+  dpi = gdk_screen_get_resolution (screen);
+  if (dpi != -1)
+    return dpi;
+
+  dp = hypot (gdk_screen_get_width (screen), gdk_screen_get_height (screen));
+  di = hypot (gdk_screen_get_width_mm (screen), gdk_screen_get_height_mm (screen)) / 25.4;
+
+  return dp / di;
+}
+#endif
+
+static guint
+normalize_font_size (gdouble font_size)
+{
+#ifdef HAVE_WEBKIT2
+  /* WebKit2 uses font sizes in pixels. */
+  GdkScreen *screen;
+  gdouble dpi;
+
+  /* FIXME: We should use the view screen instead of the detault one
+   * but we don't have access to the view here.
+   */
+  screen = gdk_screen_get_default ();
+  dpi = screen ? get_screen_dpi (screen) : 96;
+
+  return font_size / 72.0 * dpi;
+#else
+  return font_size;
+#endif
+}
+
 static void
 webkit_pref_callback_font_size (GSettings *settings,
                                 char *key,
@@ -195,11 +242,8 @@ webkit_pref_callback_font_size (GSettings *settings,
       size /= PANGO_SCALE;
     pango_font_description_free (desc);
   }
-#ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
-#else
-  g_object_set (webkit_settings, webkit_pref, size, NULL);
-#endif
+
+  g_object_set (webkit_settings, webkit_pref, normalize_font_size (size), NULL);
   g_free (value);
 }
 
@@ -232,11 +276,7 @@ webkit_pref_callback_font_family (GSettings *settings,
 
     desc = pango_font_description_from_string (value);
     family = pango_font_description_get_family (desc);
-#ifdef HAVE_WEBKIT2
-    /* TODO: WEbKitSettings */
-#else
     g_object_set (webkit_settings, webkit_pref, family, NULL);
-#endif
     pango_font_description_free (desc);
   }
 
@@ -390,9 +430,6 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
                                   char *key,
                                   gpointer data)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
-#else
   GSettings *settings;
 
   if (g_settings_get_boolean (ephy_settings, key)) {
@@ -400,8 +437,8 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
                   "default-font-family", "serif",
                   "sans-serif-font-family", "sans-serif",
                   "monospace-font-family", "monospace",
-                  "default-font-size", 12,
-                  "default-monospace-font-size", 10,
+                  "default-font-size", normalize_font_size (12),
+                  "default-monospace-font-size", normalize_font_size (10),
                   NULL);
   } else {
     /* Sync with Epiphany values */
@@ -421,7 +458,6 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "serif-font-family");
   }
-#endif
 }
 
 static void
@@ -462,7 +498,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
   }
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
+  /* TODO: Spell checking */
 #else
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
@@ -528,22 +564,26 @@ static const PrefData webkit_pref_entries[] =
   };
 
 #ifdef HAVE_WEBKIT2
-/* TODO: WebKitSettings */
+static void
+ephy_embed_prefs_apply (EphyEmbed *embed, WebKitSettings *settings)
 #else
 static void
 ephy_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
+#endif
 {
   webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
 }
-#endif
 
 void
 ephy_embed_prefs_init (void)
 {
   int i;
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
+  /* TODO: site-specific-quirks and page-cache settings */
+  webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
+                                                       "enable-fullscreen", TRUE,
+                                                       NULL);
 #else
   webkit_settings = webkit_web_settings_new ();
 
@@ -555,6 +595,7 @@ ephy_embed_prefs_init (void)
                 "enable-developer-extras", TRUE,
                 "enable-fullscreen", TRUE,
                 NULL);
+#endif
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
     GSettings *settings;
@@ -575,7 +616,7 @@ ephy_embed_prefs_init (void)
 
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_JAVASCRIPT,
-                   webkit_settings, "enable-scripts",
+                   webkit_settings, ENABLE_SCRIPTS_SETTING,
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_ENABLE_CARET_BROWSING,
@@ -595,32 +636,23 @@ ephy_embed_prefs_init (void)
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_DEFAULT_ENCODING,
-                   webkit_settings, "default-encoding",
+                   webkit_settings, DEFAULT_ENCODING_SETTING,
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_WEBGL,
                    webkit_settings, "enable-webgl",
                    G_SETTINGS_BIND_GET);
-#endif
 }
 
 void
 ephy_embed_prefs_shutdown (void)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
-#else
   g_object_unref (webkit_settings);
-#endif
 }
 
 void
 ephy_embed_prefs_add_embed (EphyEmbed *embed)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: WebKitSettings */
-#else
   ephy_embed_prefs_apply (embed, webkit_settings);
-#endif
 }
 
