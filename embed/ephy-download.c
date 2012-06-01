@@ -674,6 +674,10 @@ ephy_download_do_download_action (EphyDownload *download,
         LOG ("ephy_download_do_download_action: none");
         ret = TRUE;
         break;
+      case EPHY_DOWNLOAD_ACTION_DO_NOTHING:
+        LOG ("ephy_download_do_download_action: nothing");
+        ret = TRUE;
+        break;
       default:
         LOG ("ephy_download_do_download_action: unhandled action");
         ret = FALSE;
@@ -916,10 +920,11 @@ download_status_changed_cb (GObject *object,
   if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED) {
     g_signal_emit_by_name (download, "completed");
 
-    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS)) {
+    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
+        priv->action == EPHY_DOWNLOAD_ACTION_NONE) {
       ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
     } else {
-      ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_NONE);
+      ephy_download_do_download_action (download, priv->action);
     }
 
     ephy_embed_shell_remove_download (embed_shell, download);
