@@ -135,6 +135,17 @@ download_clicked_cb (GtkButton *button,
 }
 
 static void
+update_download_icon (EphyDownloadWidget *widget)
+{
+  GIcon *new_icon;
+
+  new_icon = get_gicon_from_download (widget->priv->download);
+  gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon), new_icon,
+                            GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_object_unref (new_icon);
+}
+
+static void
 widget_progress_cb (GObject *object,
                     GParamSpec *pspec,
                     EphyDownloadWidget *widget)
@@ -152,9 +163,7 @@ widget_progress_cb (GObject *object,
   progress = webkit_download_get_progress (download) * 100;
 
   if (progress % 10 == 0)
-    gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon),
-                              get_gicon_from_download (widget->priv->download),
-                              GTK_ICON_SIZE_LARGE_TOOLBAR);
+    update_download_icon (widget);
 
   time = get_remaining_time (download);
 
@@ -438,6 +447,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
 
   char *dest, *basename;
   WebKitDownload *download;
+  GIcon *gicon;
 
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (ephy_download), NULL);
 
@@ -453,8 +463,10 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   button = totem_glow_button_new ();
   menu = gtk_button_new ();
 
-  icon = gtk_image_new_from_gicon (get_gicon_from_download (ephy_download),
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gicon = get_gicon_from_download (ephy_download);
+  icon = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_object_unref (gicon);
+
   text = gtk_label_new (dest);
   gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
