@@ -194,47 +194,34 @@ ephy_download_get_content_type (EphyDownload *download)
   return content_type;
 }
 
+
+/* Helper function to decide what EphyDownloadActionType should be the
+ * default for the download. This implies that you want something to
+ * happen, this function will never return EPHY_DOWNLOAD_ACTION_NONE.
+ */
 static EphyDownloadActionType
 decide_action_from_mime (EphyDownload *ephy_download)
 {
-  WebKitNetworkResponse *response;
-  SoupMessage *message;
-  char *mime_description = NULL;
+  char *content_type;
   GAppInfo *helper_app = NULL;
   EphyDownloadActionType action;
-  WebKitDownload *download;
 
-  download = ephy_download_get_webkit_download (ephy_download);
+  content_type = ephy_download_get_content_type (ephy_download);
+  if (content_type) {
+    helper_app = g_app_info_get_default_for_type (content_type, FALSE);
+    if (helper_app)
+      action = EPHY_DOWNLOAD_ACTION_OPEN;
 
-  response = webkit_download_get_network_response (download);
-  message = webkit_network_response_get_message (response);
-
-  if (message) {
-    char *content_type = ephy_download_get_content_type (ephy_download);
-
-    if (content_type) {
-      mime_description = g_content_type_get_description (content_type);
-      helper_app = g_app_info_get_default_for_type (content_type, FALSE);
-
-      if (helper_app)
-        action = EPHY_DOWNLOAD_ACTION_OPEN;
-
-      g_free (content_type);
-    }
+    g_free (content_type);
   }
 
-  if (mime_description == NULL) {
-    mime_description = g_strdup (C_("file type", "Unknown"));
-    action = EPHY_DOWNLOAD_ACTION_BROWSE_TO;
-  }
-
-  /* Sometimes downloads can have a mime_description but a NULL helper_app
-   * in that case action is never changed so DOWNLOAD_ACTION_DOWNLOAD remains
-   * as action value. This is the same response value as Save as...
-   * button, which is wrong for the Download button.
+  /* Downloads that have no content_type, or no helper_app, are
+   * considered unsafe/unable to open. Default them to BROWSE_TO.
    */
   if (helper_app == NULL)
     action = EPHY_DOWNLOAD_ACTION_BROWSE_TO;
+  else
+    g_object_unref (helper_app);
 
   return action;
 }
