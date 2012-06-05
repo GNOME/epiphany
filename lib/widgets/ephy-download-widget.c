@@ -149,42 +149,74 @@ update_download_icon (EphyDownloadWidget *widget)
 }
 
 static void
+update_download_label_and_tooltip (EphyDownloadWidget *widget,
+                                   const char *download_label)
+{
+  WebKitDownload *download;
+  char *remaining_tooltip;
+  char *destination;
+
+  download = ephy_download_get_webkit_download (widget->priv->download);
+  destination = g_filename_display_basename (webkit_download_get_destination_uri (download));
+
+  remaining_tooltip = g_markup_printf_escaped ("%s\n%s", destination, download_label);
+  g_free (destination);
+
+  gtk_label_set_text (GTK_LABEL (widget->priv->remaining), download_label);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (widget), remaining_tooltip);
+  g_free (remaining_tooltip);
+}
+
+static gboolean
+download_content_length_is_known (WebKitDownload *download)
+{
+  WebKitNetworkResponse *response;
+  SoupMessage* message;
+
+  response = webkit_download_get_network_response (download);
+  message = webkit_network_response_get_message (response);
+  return soup_message_headers_get_content_length (message->response_headers) > 0;
+}
+
+static void
 widget_progress_cb (GObject *object,
                     GParamSpec *pspec,
                     EphyDownloadWidget *widget)
 {
   WebKitDownload *download;
-  char *destination;
-  gdouble time;
-  char *remaining;
   int progress;
-  char *remaining_label;
-  char *remaining_tooltip;
+  char *download_label = NULL;
 
   download = WEBKIT_DOWNLOAD (object);
-  destination = g_filename_display_basename (webkit_download_get_destination_uri (download));
   progress = webkit_download_get_progress (download) * 100;
 
   if (progress % 10 == 0)
     update_download_icon (widget);
 
-  time = get_remaining_time (download);
+  if (download_content_length_is_known (download)) {
+    gdouble time;
 
-  if (time > 0)
-    remaining = format_interval (time);
-  else
-    remaining = g_strdup (_("Finished"));
+    time = get_remaining_time (download);
+    if (time > 0) {
+      char *remaining;
 
-  remaining_label = g_strdup_printf ("%d%% (%s)", progress, remaining);
-  remaining_tooltip = g_markup_printf_escaped ("%s\n%s", destination, remaining_label);
+      remaining = format_interval (time);
+      download_label = g_strdup_printf ("%d%% (%s)", progress, remaining);
+      g_free (remaining);
+    }
+  } else {
+    gint64 current_size;
 
-  gtk_label_set_text (GTK_LABEL (widget->priv->remaining), remaining_label);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (widget), remaining_tooltip);
+    /* Unknown content length, show received bytes instead. */
+    current_size = webkit_download_get_current_size (download);
+    if (current_size > 0)
+      download_label = g_format_size (current_size);
+  }
 
-  g_free (destination);
-  g_free (remaining);
-  g_free (remaining_label);
-  g_free (remaining_tooltip);
+  if (download_label) {
+    update_download_label_and_tooltip (widget, download_label);
+    g_free (download_label);
+  }
 }
 
 static void
@@ -196,8 +228,10 @@ widget_status_cb (GObject *object,
 
   status = webkit_download_get_status (WEBKIT_DOWNLOAD (object));
 
-  if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+  if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED) {
+    update_download_label_and_tooltip (widget, _("Finished"));
     totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
+  }
 }
 
 static gboolean
