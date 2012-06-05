@@ -137,11 +137,14 @@ download_clicked_cb (GtkButton *button,
 static void
 update_download_icon (EphyDownloadWidget *widget)
 {
-  GIcon *new_icon;
+  GIcon *new_icon, *old_icon;
 
   new_icon = get_gicon_from_download (widget->priv->download);
-  gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon), new_icon,
-                            GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_image_get_gicon (GTK_IMAGE (widget->priv->icon), &old_icon, NULL);
+  if (!g_icon_equal (new_icon, old_icon)) {
+    gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon), new_icon,
+                              GTK_ICON_SIZE_LARGE_TOOLBAR);
+  }
   g_object_unref (new_icon);
 }
 
