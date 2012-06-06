@@ -1847,7 +1847,25 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 #endif
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Geolocation */
+static void
+decide_on_geolocation_policy_request (GtkWidget *info_bar,
+                                      int response,
+                                      WebKitPermissionRequest *request)
+{
+  gtk_widget_destroy (info_bar);
+
+  switch (response) {
+  case GTK_RESPONSE_YES:
+    webkit_permission_request_allow (request);
+    break;
+  default:
+    webkit_permission_request_deny (request);
+    break;
+  }
+
+  gtk_widget_destroy (info_bar);
+  g_object_unref (request);
+}
 #else
 static void
 decide_on_geolocation_policy_request (GtkWidget *info_bar,
@@ -1866,12 +1884,19 @@ decide_on_geolocation_policy_request (GtkWidget *info_bar,
   webkit_geolocation_policy_deny (decision);
   g_object_unref (decision);
 }
+#endif
 
+#ifdef HAVE_WEBKIT2
+static gboolean
+permission_request_cb (WebKitWebView           *web_view,
+                       WebKitPermissionRequest *decision)
+#else
 static gboolean
 geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                                           WebKitWebFrame *web_frame,
                                           WebKitGeolocationPolicyDecision *decision,
                                           gpointer data)
+#endif
 {
   GtkWidget *info_bar;
   GtkWidget *action_area;
@@ -1881,6 +1906,11 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
   GtkWidget *label;
   char *message;
   char *host;
+
+#ifdef HAVE_WEBKIT2
+  if (!WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
+    return FALSE;
+#endif
 
   info_bar = gtk_info_bar_new ();
 
@@ -1903,7 +1933,11 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                     G_CALLBACK (send_yes_response_cb), info_bar);
 
   /* Label */
+#ifdef HAVE_WEBKIT2
+  host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
+#else
   host = ephy_string_get_host_name (webkit_web_frame_get_uri (web_frame));
+#endif
   message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
                                      host);
   g_free (host);
@@ -1918,19 +1952,16 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
 
   gtk_widget_show_all (info_bar);
 
+  /* Ref the decision, to keep it alive while we decide */
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_geolocation_policy_request),
-                    decision);
+                    g_object_ref (decision));
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, TRUE);
 
-  /* Ref the decision, to keep it alive while we decide */
-  g_object_ref (decision);
-
   return TRUE;
 }
-#endif
 
 #ifdef HAVE_WEBKIT2
 /* TODO: DOM Bindings */
@@ -2662,7 +2693,9 @@ ephy_web_view_init (EphyWebView *web_view)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Geolocation */
+  g_signal_connect (web_view, "permission-request",
+                    G_CALLBACK (permission_request_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "geolocation-policy-decision-requested",
                     G_CALLBACK (geolocation_policy_decision_requested_cb),
