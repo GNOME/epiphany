@@ -416,7 +416,7 @@ query_completed_cb (EphyHistoryService *service,
 
   g_free (user_data->search_string);
   g_slice_free (FindURLsData, user_data);
-
+  g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
   g_slist_free_full (list, (GDestroyNotify)free_potential_row);
 }
 
