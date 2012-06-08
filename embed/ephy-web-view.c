@@ -2070,15 +2070,15 @@ get_file_content_as_base64 (const char *path)
                                  NULL, NULL);
   image_type = g_file_info_get_content_type (file_info);
 
-  g_object_unref (file);
-  g_object_unref (file_info);
-
   g_file_get_contents (path, &image_raw, &len, NULL);
   image_data = g_base64_encode ((guchar *) image_raw, len);
   image64 = g_strdup_printf ("data:%s;base64,%s", image_type, image_data);
 
   g_free (image_raw);
   g_free (image_data);
+
+  g_object_unref (file);
+  g_object_unref (file_info);
 
   return image64;
 }
