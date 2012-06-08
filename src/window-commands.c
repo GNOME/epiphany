@@ -56,6 +56,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
+#include <libsoup/soup.h>
 #include <string.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
@@ -279,20 +280,26 @@ window_cmd_file_open (GtkAction *action,
 static char *
 get_suggested_filename (EphyWebView *view)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Resources */
-	return g_strdup ("WebPage");
-#else
 	char *suggested_filename;
 	const char *mimetype;
+#ifdef HAVE_WEBKIT2
+	WebKitURIResponse *response;
+#else
 	WebKitWebFrame *frame;
 	WebKitWebDataSource *data_source;
+#endif
 	WebKitWebResource *web_resource;
 
+#ifdef HAVE_WEBKIT2
+	web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
+	response = webkit_web_resource_get_response (web_resource);
+	mimetype = webkit_uri_response_get_mime_type (response);
+#else
 	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
 	data_source = webkit_web_frame_get_data_source (frame);
 	web_resource = webkit_web_data_source_get_main_resource (data_source);
 	mimetype = webkit_web_resource_get_mime_type (web_resource);
+#endif
 
 	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
 	{
@@ -307,7 +314,6 @@ get_suggested_filename (EphyWebView *view)
 	}
 
 	return suggested_filename;
-#endif
 }
 
 void
@@ -1007,16 +1013,46 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Resources */
-#else
+static void
+get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GOutputStream *ostream)
+{
+	guchar *data;
+	gsize data_length;
+	GString *data_str;
+	GError *error = NULL;
+
+	data = webkit_web_resource_get_data_finish (resource, result, &data_length, &error);
+	if (error) {
+		g_warning ("Unable to get main resource data: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	/* We create a new GString here because we need to make sure
+	 * we keep writing in case of partial writes */
+	data_str = g_string_new_len ((gchar *)data, data_length);
+	g_free (data);
+
+	g_output_stream_write_async (ostream,
+				     data_str->str, data_str->len,
+				     G_PRIORITY_DEFAULT, NULL,
+				     (GAsyncReadyCallback)save_temp_source_write_cb,
+				     data_str);
+}
+#endif
+
 static void
 save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed)
 {
 	EphyWebView *view;
+#ifdef HAVE_WEBKIT2
+	WebKitWebResource *resource;
+#else
 	WebKitWebFrame *frame;
 	WebKitWebDataSource *data_source;
 	GString *const_data;
 	GString *data;
+#endif
 	GFileOutputStream *ostream;
 	GError *error = NULL;
 
@@ -1045,6 +1081,12 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 				g_object_ref (embed),
 				g_object_unref);
 
+#ifdef HAVE_WEBKIT2
+	resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
+	webkit_web_resource_get_data (resource, NULL,
+				      (GAsyncReadyCallback)get_main_resource_data_cb,
+				      ostream);
+#else
 	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
 	data_source = webkit_web_frame_get_data_source (frame);
 	const_data = webkit_web_data_source_get_data (data_source);
@@ -1061,8 +1103,8 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 				     G_PRIORITY_DEFAULT, NULL,
 				     (GAsyncReadyCallback)save_temp_source_write_cb,
 				     data);
-}
 #endif
+}
 
 static void
 save_temp_source (EphyEmbed *embed,
@@ -1087,15 +1129,11 @@ save_temp_source (EphyEmbed *embed,
 	}
 
 	file = g_file_new_for_path (tmp);
-#ifdef HAVE_WEBKIT2
-	/* TODO: Resources */
-#else
 	g_file_replace_async (file, NULL, FALSE,
 			      G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
 			      G_PRIORITY_DEFAULT, NULL,
 			      (GAsyncReadyCallback)save_temp_source_replace_cb,
 			      embed);
-#endif
 
 	g_object_unref (file);
 	g_free (tmp);
@@ -1115,12 +1153,16 @@ window_cmd_view_page_source (GtkAction *action,
 
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
+#ifdef HAVE_WEBKIT2
+	/* TODO: View Source */
+#else
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_INTERNAL_VIEW_SOURCE))
 	{
 		view_source_embedded (address, embed);
 		return;
 	}
+#endif
 
 	user_time = gtk_get_current_event_time ();
 
