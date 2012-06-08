@@ -405,8 +405,20 @@ gboolean
 ephy_embed_single_initialize (EphyEmbedSingle *single)
 {
 #ifdef HAVE_WEBKIT2
+  WebKitWebContext *web_context;
+  char *cookie_policy;
+
   /* TODO: Network features */
-  webkit_web_context_register_uri_scheme (webkit_web_context_get_default (),
+
+  web_context = webkit_web_context_get_default ();
+
+  cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
+                                         EPHY_PREFS_WEB_COOKIES_POLICY);
+  ephy_embed_prefs_set_cookie_accept_policy (webkit_web_context_get_cookie_manager (web_context),
+                                             cookie_policy);
+  g_free (cookie_policy);
+
+  webkit_web_context_register_uri_scheme (web_context,
                                           EPHY_ABOUT_SCHEME,
                                           about_request_cb,
                                           NULL);

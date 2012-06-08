@@ -372,6 +372,28 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 #endif
 }
 
+
+#ifdef HAVE_WEBKIT2
+void
+ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
+                                           const char *settings_policy)
+{
+  WebKitCookieAcceptPolicy policy;
+
+  if (g_str_equal (settings_policy, "never"))
+    policy = WEBKIT_COOKIE_POLICY_ACCEPT_NEVER;
+  else if (g_str_equal (settings_policy, "always"))
+    policy = WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS;
+  else if (g_str_equal (settings_policy, "no-third-party"))
+    policy = WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY;
+  else {
+    g_warn_if_reached ();
+    return;
+  }
+
+  webkit_cookie_manager_set_accept_policy (cookie_manager, policy);
+}
+#else
 void
 ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
                                         const char *settings_policy)
@@ -394,6 +416,7 @@ ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
 
   g_object_set (G_OBJECT (jar), SOUP_COOKIE_JAR_ACCEPT_POLICY, policy, NULL);
 }
+#endif
 
 static void
 webkit_pref_callback_cookie_accept_policy (GSettings *settings,
@@ -401,7 +424,16 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
                                            gpointer data)
 {
 #ifdef HAVE_WEBKIT2
-  /* TODO: Cookies */
+  WebKitCookieManager *cookie_manager;
+  char *value;
+
+  value = g_settings_get_string (settings, key);
+  if (!value)
+    return;
+
+  cookie_manager = webkit_web_context_get_cookie_manager (webkit_web_context_get_default ());
+  ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, value);
+  g_free (value);
 #else
   SoupSession *session;
   char *value = NULL;

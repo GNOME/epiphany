@@ -169,19 +169,25 @@ typedef struct
 	guint num_checked;
 } PdmClearAllDialogButtons;
 
+#ifdef HAVE_WEBKIT2
+static WebKitCookieManager *
+get_cookie_manager ()
+{
+	WebKitWebContext *web_context;
+
+	web_context = webkit_web_context_get_default ();
+	return webkit_web_context_get_cookie_manager (web_context);
+}
+#else
 static SoupCookieJar*
 get_cookie_jar ()
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Cookies */
-	return soup_cookie_jar_new ();
-#else
 	SoupSession* session;
 
 	session = webkit_get_default_session ();
 	return (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
-#endif
 }
+#endif
 
 static void
 clear_all_dialog_release_cb (PdmClearAllDialogButtons *data)
@@ -189,6 +195,7 @@ clear_all_dialog_release_cb (PdmClearAllDialogButtons *data)
 	g_slice_free (PdmClearAllDialogButtons, data);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 clear_all_cookies (SoupCookieJar *jar)
 {
@@ -200,6 +207,7 @@ clear_all_cookies (SoupCookieJar *jar)
 
 	soup_cookies_free (l);
 }
+#endif
 
 static void
 get_info_full_cb (GnomeKeyringResult result,
@@ -269,10 +277,17 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))
 		{
+#ifdef HAVE_WEBKIT2
+			WebKitCookieManager *cookie_manager;
+
+			cookie_manager = get_cookie_manager ();
+			webkit_cookie_manager_delete_all_cookies (cookie_manager);
+#else
 			SoupCookieJar *jar;
 
 			jar = get_cookie_jar ();
 			clear_all_cookies (jar);
+#endif
 		}
 		if (gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
@@ -532,7 +547,11 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 		path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
 		gtk_tree_model_get_iter (model, &iter, path);
 		gtk_tree_model_get_value (model, &iter, action->data_col, &val);
+#ifdef HAVE_WEBKIT2
+		action->remove (action, g_value_get_string (&val));
+#else
 		action->remove (action, g_value_get_boxed (&val));
+#endif
 		g_value_unset (&val);
 
 		/* for cookies we delete from callback, for passwords right here */
@@ -772,10 +791,13 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 
 	info->model = GTK_TREE_MODEL (liststore);
 	g_object_unref (liststore);
-
+#ifdef HAVE_WEBKIT2
+	/* Cookies properties are not available in WebKit2 */
+#else
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK(cookies_treeview_selection_changed_cb),
 			  dialog);
+#endif
 
 	renderer = gtk_cell_renderer_text_new ();
 
@@ -815,6 +837,21 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	setup_action (info);
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+cookie_changed_cb (WebKitCookieManager *cookie_manager,
+		   PdmDialog *dialog)
+{
+	PdmActionInfo *info;
+
+	info = dialog->priv->cookies;
+
+	g_signal_handlers_disconnect_by_func (cookie_manager, cookie_changed_cb, dialog);
+	gtk_list_store_clear (GTK_LIST_STORE (info->model));
+	info->filled = FALSE;
+	info->fill (info);
+}
+#else
 static gboolean
 cookie_to_iter (GtkTreeModel *model,
 		const SoupCookie *cookie,
@@ -882,6 +919,7 @@ cookie_changed_cb (SoupCookieJar *jar,
 		info->add (info, (gpointer) soup_cookie_copy ((SoupCookie*)new_cookie));
 	}
 }
+#endif
 
 static gboolean
 cookie_host_to_iter (GtkTreeModel *model,
@@ -971,9 +1009,57 @@ compare_cookie_host_keys (GtkTreeModel *model,
 	return retval;
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+get_domains_with_cookies_cb (WebKitCookieManager *cookie_manager,
+			     GAsyncResult *result,
+			     PdmActionInfo *info)
+{
+	gchar** domains;
+	guint i;
+
+	domains = webkit_cookie_manager_get_domains_with_cookies_finish (cookie_manager, result, NULL);
+	if (!domains)
+		return;
+
+	for (i = 0; domains[i]; i++)
+	{
+		info->add (info, domains[i]);
+	}
+
+	/* The array items have been consumed, so we need only to free the array. */
+	g_free (domains);
+
+	/* Now turn on sorting */
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (info->model),
+					 COL_COOKIES_HOST_KEY,
+					 (GtkTreeIterCompareFunc) compare_cookie_host_keys,
+					 NULL, NULL);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
+					      COL_COOKIES_HOST_KEY,
+					      GTK_SORT_ASCENDING);
+
+	g_signal_connect (cookie_manager, "changed",
+			  G_CALLBACK (cookie_changed_cb), info->dialog);
+
+	info->filled = TRUE;
+	info->scroll_to (info);
+}
+#endif
+
 static void
 pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 {
+#ifdef HAVE_WEBKIT2
+	WebKitCookieManager *cookie_manager;
+
+	g_assert (info->filled == FALSE);
+
+	cookie_manager = get_cookie_manager ();
+	webkit_cookie_manager_get_domains_with_cookies (cookie_manager, NULL,
+							(GAsyncReadyCallback) get_domains_with_cookies_cb,
+							info);
+#else
 	SoupCookieJar *jar;
 	GSList *list, *l;
 
@@ -1005,6 +1091,7 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 			  G_CALLBACK (cookie_changed_cb), info->dialog);
 
 	info->scroll_to (info);
+#endif
 }
 
 static void
@@ -1018,7 +1105,11 @@ static void
 pdm_dialog_cookie_add (PdmActionInfo *info,
 		       gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+	char *domain = (char *) data;
+#else
 	SoupCookie *cookie = (SoupCookie *) data;
+#endif
 	GtkListStore *store;
 	GtkTreeIter iter;
 	int column[4] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_NAME, COL_COOKIES_DATA };
@@ -1037,10 +1128,15 @@ pdm_dialog_cookie_add (PdmActionInfo *info,
 	g_value_init (&value[2], G_TYPE_STRING);
 	g_value_init (&value[3], SOUP_TYPE_COOKIE);
 
+#ifdef HAVE_WEBKIT2
+	g_value_set_static_string (&value[0], domain);
+	g_value_take_string (&value[1], ephy_string_collate_key_for_domain (domain, -1));
+#else
 	g_value_set_static_string (&value[0], cookie->domain);
 	g_value_take_string (&value[1], ephy_string_collate_key_for_domain (cookie->domain, -1));
 	g_value_set_static_string (&value[2], cookie->name);
 	g_value_take_boxed (&value[3], cookie);
+#endif
 
 	gtk_list_store_insert_with_valuesv (store, &iter, -1,
 					    column, value,
@@ -1056,9 +1152,17 @@ static void
 pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+	const char *domain = (const char *) data;
+
+	webkit_cookie_manager_delete_cookies_for_domain (get_cookie_manager (),
+							 domain);
+
+#else
 	SoupCookie *cookie = (SoupCookie *) data;
 
 	soup_cookie_jar_delete_cookie (get_cookie_jar(), cookie);
+#endif
 }
 
 static void
@@ -1512,7 +1616,11 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->scroll_to = pdm_dialog_cookie_scroll_to;
 	cookies->dialog = dialog;
 	cookies->remove_id = "cookies_remove_button";
+#ifdef HAVE_WEBKIT2
+	cookies->data_col = COL_COOKIES_HOST;
+#else
 	cookies->data_col = COL_COOKIES_DATA;
+#endif
 	cookies->scroll_to_host = NULL;
 	cookies->filled = FALSE;
 	cookies->delete_row_on_remove = FALSE;
@@ -1553,7 +1661,11 @@ pdm_dialog_finalize (GObject *object)
 	g_signal_handlers_disconnect_matched
 		(single, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, object);
 
+#ifdef HAVE_WEBKIT2
+	g_signal_handlers_disconnect_by_func (get_cookie_manager (), cookie_changed_cb, object);
+#else
 	g_signal_handlers_disconnect_by_func (get_cookie_jar (), cookie_changed_cb, object);
+#endif
 
 	dialog->priv->cookies->destruct (dialog->priv->cookies);
 	dialog->priv->passwords->destruct (dialog->priv->passwords);
