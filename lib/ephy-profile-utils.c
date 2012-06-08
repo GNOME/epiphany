@@ -47,11 +47,12 @@ ephy_profile_utils_get_migration_version ()
       result = sscanf(contents, "%d", &latest);
 
     g_free (contents);
-    g_free (migrated_file);
 
     if (result != 1)
       latest = 0;
   }
+
+  g_free (migrated_file);
 
   return latest;
 }
