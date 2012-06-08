@@ -87,6 +87,8 @@ favicon_loaded_cb (WebKitFaviconDatabase *database,
 
 		g_object_notify (G_OBJECT (action), "icon");
 	}
+
+	g_free (icon_address);
 }
 
 static void
