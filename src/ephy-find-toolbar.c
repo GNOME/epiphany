@@ -41,6 +41,9 @@ struct _EphyFindToolbarPrivate
 {
 	EphyWindow *window;
 	WebKitWebView *web_view;
+#ifdef HAVE_WEBKIT2
+        WebKitFindController *controller;
+#endif
 	GtkWidget *entry;
 	GtkWidget *label;
 	GtkToolItem *next;
@@ -239,12 +242,10 @@ find_prev_cb (EphyFindToolbar *toolbar)
 	g_signal_emit (toolbar, signals[PREVIOUS], 0);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
 {
-#ifdef HAVE_WEBKIT2
-        /* TODO: Find */
-#else
         EphyFindToolbarPrivate *priv = toolbar->priv;
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive;
@@ -258,9 +259,28 @@ ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
                                                    case_sensitive,
                                                    0);
         webkit_web_view_set_highlight_text_matches (web_view, TRUE);
+}
 #endif
+
+#ifdef HAVE_WEBKIT2
+static void
+real_find (EphyFindToolbarPrivate *priv,
+           EphyFindDirection direction)
+{
+        WebKitFindOptions options = WEBKIT_FIND_OPTIONS_NONE;
+
+        if (!g_strcmp0 (priv->find_string, ""))
+                return;
+
+        if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive)))
+                options |= WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
+        if (direction == EPHY_FIND_DIRECTION_PREV)
+                options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
+
+        webkit_find_controller_search (priv->controller, priv->find_string, options, G_MAXUINT);
 }
 
+#else
 static EphyFindResult
 real_find (EphyFindToolbarPrivate *priv,
 	   EphyFindDirection direction)
@@ -272,10 +292,6 @@ real_find (EphyFindToolbarPrivate *priv,
         if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
                 return EPHY_FIND_RESULT_NOTFOUND;
 
-#ifdef HAVE_WEBKIT2
-        /* TODO: Find */
-        return EPHY_FIND_RESULT_NOTFOUND;
-#else
         if (!webkit_web_view_search_text
             (web_view, priv->find_string, case_sensitive, forward, FALSE)) {
                 /* not found, try to wrap */
@@ -290,24 +306,63 @@ real_find (EphyFindToolbarPrivate *priv,
         }
 
         return EPHY_FIND_RESULT_FOUND;
-#endif
 }
+#endif
 
 static gboolean
 do_search (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
+#ifndef HAVE_WEBKIT2
 	EphyFindResult result;
+#endif
 
 	priv->find_source_id = 0;
 
+#ifdef HAVE_WEBKIT2
+        real_find (priv, EPHY_FIND_DIRECTION_NEXT);
+#else
 	ephy_find_toolbar_mark_matches (toolbar);
 
 	result = real_find (priv, EPHY_FIND_DIRECTION_NEXT);
 	set_status (toolbar, result);
+#endif
 
 	return FALSE;
 }
+
+#ifdef HAVE_WEBKIT2
+static void
+found_text_cb (WebKitFindController *controller,
+               guint n_matches,
+               EphyFindToolbar *toolbar)
+{
+        WebKitFindOptions options;
+        EphyFindResult result;
+
+        options = webkit_find_controller_get_options (controller);
+        /* FIXME: it's not possible to remove the wrap flag, so the status is now always wrapped. */
+        result = options & WEBKIT_FIND_OPTIONS_WRAP_AROUND ? EPHY_FIND_RESULT_FOUNDWRAPPED : EPHY_FIND_RESULT_FOUND;
+        set_status (toolbar, result);
+}
+
+static void
+failed_to_find_text_cb (WebKitFindController *controller,
+                        EphyFindToolbar *toolbar)
+{
+        EphyFindToolbarPrivate *priv = toolbar->priv;
+        WebKitFindOptions options;
+
+        options = webkit_find_controller_get_options (controller);
+        if (options & WEBKIT_FIND_OPTIONS_WRAP_AROUND) {
+                set_status (toolbar, EPHY_FIND_RESULT_NOTFOUND);
+                return;
+        }
+
+        options |= WEBKIT_FIND_OPTIONS_WRAP_AROUND;
+        webkit_find_controller_search (controller, priv->find_string, options, G_MAXUINT);
+}
+#endif
 
 static void
 entry_changed_cb (GtkEntry *entry,
@@ -446,6 +501,10 @@ case_sensitive_toggled_cb (GtkWidget *check,
 			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
 	}
 
+#ifdef HAVE_WEBKIT2
+        do_search (toolbar);
+#else
+
 	ephy_find_toolbar_mark_matches (toolbar);
 
 	/*
@@ -466,6 +525,7 @@ case_sensitive_toggled_cb (GtkWidget *check,
 
 		set_status (toolbar, result);
 	}
+#endif
 }
 
 static gboolean
@@ -788,6 +848,12 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 
 	if (priv->web_view != NULL)
 	{
+#ifdef HAVE_WEBKIT2
+                g_signal_handlers_disconnect_matched (priv->controller,
+                                                      G_SIGNAL_MATCH_DATA,
+                                                      0, 0, NULL, NULL, toolbar);
+#endif
+
                 g_signal_handlers_disconnect_matched (EPHY_WEB_VIEW (web_view),
                                                       G_SIGNAL_MATCH_DATA,
                                                       0, 0, NULL, NULL, toolbar);
@@ -796,6 +862,16 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	priv->web_view = web_view;
 	if (web_view != NULL)
 	{
+#ifdef HAVE_WEBKIT2
+                priv->controller = webkit_web_view_get_find_controller (web_view);
+                g_signal_connect_object (priv->controller, "found-text",
+                                         G_CALLBACK (found_text_cb),
+                                         toolbar, 0);
+                g_signal_connect_object (priv->controller, "failed-to-find-text",
+                                         G_CALLBACK (failed_to_find_text_cb),
+                                         toolbar, 0);
+#endif
+
 		clear_status (toolbar);
 
 		g_signal_connect_object (EPHY_WEB_VIEW (web_view), "search-key-press",
@@ -804,6 +880,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	}
 }
 
+#ifndef HAVE_WEBKIT2
 typedef struct
 {
 	EphyFindToolbar *toolbar;
@@ -867,17 +944,26 @@ find_again (EphyFindToolbar *toolbar, EphyFindDirection direction)
 						      data,
 						      (GDestroyNotify) find_again_data_destroy_cb);
 }
+#endif
 
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
+#ifdef HAVE_WEBKIT2
+        webkit_find_controller_search_next (toolbar->priv->controller);
+#else
 	find_again (toolbar, EPHY_FIND_DIRECTION_NEXT);
+#endif
 }
 
 void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
+#ifdef HAVE_WEBKIT2
+        webkit_find_controller_search_previous (toolbar->priv->controller);
+#else
 	find_again (toolbar, EPHY_FIND_DIRECTION_PREV);
+#endif
 }
 
 void
@@ -909,7 +995,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	if (priv->web_view == NULL) return;
 #ifdef HAVE_WEBKIT2
-        /* TODO: Find */
+        webkit_find_controller_search_finish (toolbar->priv->controller);
 #else
 	webkit_web_view_set_highlight_text_matches (priv->web_view, FALSE);
 #endif
