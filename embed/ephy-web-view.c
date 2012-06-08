@@ -2637,7 +2637,7 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   WebKitWebView *source_view, *dest_view;
   WebKitWebBackForwardList* source_bflist, *dest_bflist;
   WebKitWebHistoryItem *item;
-  GList *items;
+  GList *items, *i;
 
   g_return_if_fail(EPHY_IS_WEB_VIEW(source));
   g_return_if_fail(EPHY_IS_WEB_VIEW(dest));
@@ -2652,8 +2652,8 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   /* We want to add the items in the reverse order here, so the
      history ends up the same */
   items = g_list_reverse (items);
-  for (; items; items = items->next) {
-    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)items->data);
+  for (i = items; i; i = i->next) {
+    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)i->data);
     webkit_web_back_forward_list_add_item (dest_bflist, item);
     g_object_unref (item);
   }
