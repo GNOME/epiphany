@@ -252,10 +252,11 @@ icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 		 const char *address,
 		 EphyBookmarks *eb)
 {
-	const char *icon;
+	char *icon;
 
 	icon = webkit_favicon_database_get_favicon_uri (favicon_database, address);
 	ephy_bookmarks_set_icon (eb, address, icon);
+	g_free (icon);
 }
 
 static void
@@ -1184,11 +1185,12 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	favicon_database = webkit_get_favicon_database ();
 	if (favicon_database != NULL)
 	{
-		const char *icon = webkit_favicon_database_get_favicon_uri (favicon_database, url);
+		char *icon = webkit_favicon_database_get_favicon_uri (favicon_database, url);
 		if (icon != NULL)
 		{
 			ephy_node_set_property_string
 				(bm, EPHY_NODE_BMK_PROP_ICON, icon);
+			g_free (icon);
 		}
 	}
 
