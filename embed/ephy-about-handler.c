@@ -51,12 +51,64 @@ read_css_style ()
   }
 }
 
+void
+_ephy_about_handler_handle_plugins (GString *data_str, GList *plugin_list)
+{
+#ifdef HAVE_WEBKIT2
+  GList *p;
+
+  read_css_style ();
+
+  g_string_append_printf (data_str, "<head><title>%s</title>"           \
+                          "<style type=\"text/css\">%s</style></head><body>",
+                          _("Installed plugins"),
+                          css_style);
+
+  g_string_append_printf (data_str, "<h1>%s</h1>", _("Installed plugins"));
+
+  for (p = plugin_list; p; p = p->next) {
+    WebKitPlugin *plugin = WEBKIT_PLUGIN (p->data);
+    GList *m, *mime_types;
+
+    /* TODO: Enable/disable plugins in WebKit2 */
+    g_string_append_printf (data_str, "<h2>%s</h2>%s<br>%s: <b>%s</b>"  \
+                            "<table id=\"plugin-table\">"               \
+                            "  <thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>",
+                            webkit_plugin_get_name (plugin),
+                            webkit_plugin_get_description (plugin),
+                            _("Enabled"), /*webkit_plugin_get_enabled (plugin)*/ TRUE ? _("Yes") : _("No"),
+                            _("MIME type"), _("Description"), _("Suffixes"));
+
+    mime_types = webkit_plugin_get_mime_info_list (plugin);
+
+    for (m = mime_types; m; m = m->next) {
+      WebKitMimeInfo *mime_info = (WebKitMimeInfo *) m->data;
+      const gchar * const *extensions;
+      guint i;
+
+      g_string_append_printf (data_str, "<tr><td>%s</td><td>%s</td><td>",
+                              webkit_mime_info_get_mime_type (mime_info),
+                              webkit_mime_info_get_description (mime_info));
+
+      extensions = webkit_mime_info_get_extensions (mime_info);
+      for (i = 0; extensions && extensions[i] != NULL; i++)
+        g_string_append_printf (data_str, "%s%c", extensions[i],
+                                extensions[i + 1] ? ',' : ' ');
+
+      g_string_append (data_str, "</td></tr>");
+    }
+
+    g_string_append (data_str, "</tbody></table>");
+  }
+
+  g_string_append (data_str, "</body>");
+#endif
+}
+
 static void
 ephy_about_handler_handle_plugins (GString *data_str)
 {
-#ifdef HAVE_WEBKIT2
-    /* TODO: Plugins */
-#else
+#ifndef HAVE_WEBKIT2
   WebKitWebPluginDatabase* database = webkit_get_web_plugin_database ();
   GSList *plugin_list, *p;
 

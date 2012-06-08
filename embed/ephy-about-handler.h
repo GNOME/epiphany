@@ -13,4 +13,7 @@
 
 GString *ephy_about_handler_handle (const char *about);
 
+void _ephy_about_handler_handle_plugins (GString *data_str,
+                                         GList   *plugin_list);
+
 #endif /* EPHY_ABOUT_HANDLER_H */

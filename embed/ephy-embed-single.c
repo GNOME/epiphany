@@ -340,18 +340,57 @@ cache_size_cb (GSettings *settings,
 
 #ifdef HAVE_WEBKIT2
 static void
+complete_about_request_for_contents (WebKitURISchemeRequest *request,
+                                     gchar *data,
+                                     gsize data_length)
+{
+  GInputStream *stream;
+
+  stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+  webkit_uri_scheme_request_finish (request, stream, data_length, "text/html");
+  g_object_unref (stream);
+}
+
+static void
+get_plugins_cb (WebKitWebContext *web_context,
+                GAsyncResult *result,
+                WebKitURISchemeRequest *request)
+{
+  GList *plugins;
+  GString *data_str;
+  gsize data_length;
+
+  data_str = g_string_new("<html>");
+  plugins = webkit_web_context_get_plugins_finish (web_context, result, NULL);
+  _ephy_about_handler_handle_plugins (data_str, plugins);
+  g_string_append (data_str, "</html>");
+
+  data_length = data_str->len;
+  complete_about_request_for_contents (request, g_string_free (data_str, FALSE), data_length);
+  g_object_unref (request);
+}
+
+static void
 about_request_cb (WebKitURISchemeRequest *request,
                   gpointer user_data)
 {
-  GString *contents;
-  GInputStream *stream;
-  gint stream_length;
+  const gchar *path;
 
-  contents = ephy_about_handler_handle (webkit_uri_scheme_request_get_path (request));
-  stream_length = contents->len;
-  stream = g_memory_input_stream_new_from_data (g_string_free (contents, FALSE), stream_length, g_free);
-  webkit_uri_scheme_request_finish (request, stream, stream_length, "text/html");
-  g_object_unref (stream);
+  path = webkit_uri_scheme_request_get_path (request);
+  if (!g_strcmp0 (path, "plugins")) {
+    /* Plugins API is async in WebKit2 */
+    webkit_web_context_get_plugins (webkit_web_context_get_default (),
+                                    NULL,
+                                    (GAsyncReadyCallback) get_plugins_cb,
+                                    g_object_ref (request));
+  } else {
+    GString *contents;
+    gsize data_length;
+
+    contents = ephy_about_handler_handle (path);
+    data_length = contents->len;
+    complete_about_request_for_contents (request, g_string_free (contents, FALSE), data_length);
+  }
 }
 #endif
 
