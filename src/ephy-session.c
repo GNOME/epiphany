@@ -650,6 +650,7 @@ write_tab (xmlTextWriterPtr writer,
 	   EphyEmbed *embed)
 {
 	const char *address, *title;
+	char *new_address = NULL;
 	int ret;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
@@ -660,10 +661,11 @@ write_tab (xmlTextWriterPtr writer,
 	 * loading. */
 	if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
 	{
-		address = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
+		new_address = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
 	}
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
-					   (const xmlChar *) address);
+					   (const xmlChar *) (new_address ? new_address : address));
+	g_free (new_address);
 	if (ret < 0) return ret;
 
 	title = ephy_web_view_get_title (ephy_embed_get_web_view (embed));
