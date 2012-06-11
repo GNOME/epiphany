@@ -339,6 +339,7 @@ struct _EphyWindowPrivate
 	EphyEmbed *active_embed;
 	EphyFindToolbar *find_toolbar;
 	EphyWebViewChrome chrome;
+	EphyWebViewChrome pre_fullscreen_chrome;
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
 	GtkWidget *downloads_box;
@@ -677,7 +678,7 @@ get_chromes_visibility (EphyWindow *window,
 	else
 	{
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
-		*show_tabsbar = !priv->is_popup;
+		*show_tabsbar = !(priv->is_popup || priv->fullscreen_mode);
 	}
 
 	*show_downloads_box = (flags & EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX);
@@ -808,6 +809,8 @@ ephy_window_fullscreen (EphyWindow *window)
 	EphyEmbed *embed;
 
 	priv->fullscreen_mode = TRUE;
+	priv->pre_fullscreen_chrome = priv->chrome;
+	priv->chrome = 0;
 
 	/* sync status */
 	embed = window->priv->active_embed;
@@ -821,6 +824,7 @@ static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->fullscreen_mode = FALSE;
+	window->priv->chrome = window->priv->pre_fullscreen_chrome;
 
 	sync_chromes_visibility (window);
 }
