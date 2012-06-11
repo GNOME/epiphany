@@ -1139,9 +1139,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		key_normal = (priority == EPHY_NODE_NORMAL_PRIORITY);
 
 		EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
-
-		g_list_free (selected);
 	}
+	g_list_free (selected);
 
 	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 	if (bmk_focus && selected)
@@ -1154,9 +1153,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		mutable = !ephy_node_get_property_boolean (node, EPHY_NODE_BMK_PROP_IMMUTABLE);
 		
 		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
-
-		g_list_free (selected);
 	}
+	g_list_free (selected);
 
 	open_in_window_label = ngettext ("Open in New _Window",
 					 "Open in New _Windows",
