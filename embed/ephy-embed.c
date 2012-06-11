@@ -780,7 +780,7 @@ ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy
  * @widget: a #GtkWidget
  *
  * Removes an #GtkWidget from the top of the embed. The #GtkWidget
- * must be have been added using ephy_embed_add_widget(), and not
+ * must have been added using ephy_embed_add_top_widget(), and not
  * have been removed by other means. See gtk_container_remove() for
  * details.
  */
