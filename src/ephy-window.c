@@ -3045,12 +3045,10 @@ ephy_window_state_event (GtkWidget *widget,
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	EphyWindowPrivate *priv = window->priv;
-	gboolean (* window_state_event) (GtkWidget *, GdkEventWindowState *);
 
-	window_state_event = GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event;
-	if (window_state_event)
+	if (GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event)
 	{
-		window_state_event (widget, event);
+		GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event (widget, event);
 	}
 
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
