@@ -1460,6 +1460,19 @@ node_dropped_cb (EphyNodeView *view,
 	}
 }
 
+static gboolean
+webkit_favicon_database_has_favicon (WebKitFaviconDatabase *database, const char *page_uri)
+{
+    gboolean result;
+    char *uri;
+
+    uri = webkit_favicon_database_get_favicon_uri (database, page_uri);
+    result = (uri != NULL);
+    g_free (uri);
+
+    return result;
+}
+
 static void
 icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GValue *value)
 {
@@ -1489,7 +1502,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
                 favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
 									  FAVICON_SIZE, FAVICON_SIZE);
 
-		if (!favicon && webkit_favicon_database_get_favicon_uri (database, page_location))
+		if (!favicon && webkit_favicon_database_has_favicon (database, page_location))
 		  webkit_favicon_database_get_favicon_pixbuf (database, page_location,
 							      FAVICON_SIZE, FAVICON_SIZE, NULL,
 							      (GAsyncReadyCallback) icon_loaded_cb, value);
