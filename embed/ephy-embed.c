@@ -68,6 +68,8 @@ struct _EphyEmbedPrivate
   GSList *destroy_on_transition_list;
   GtkWidget *floating_bar;
   GtkWidget *progress;
+  GtkWidget *fullscreen_message_label;
+  char *fullscreen_string;
 
   GSList *messages;
   GSList *keys;
@@ -77,6 +79,8 @@ struct _EphyEmbedPrivate
 
   guint tab_message_id;
   guint pop_statusbar_later_source_id;
+
+  guint fullscreen_message_id;
 
   guint clear_progress_source_id;
 
@@ -280,6 +284,38 @@ ephy_embed_grab_focus (GtkWidget *widget)
     gtk_widget_grab_focus (child);
 }
 
+
+static gboolean
+fullscreen_message_label_hide (EphyEmbed *embed)
+{
+  if (embed->priv->fullscreen_message_id) {
+    gtk_widget_hide (embed->priv->fullscreen_message_label);
+    g_source_remove (embed->priv->fullscreen_message_id);
+    embed->priv->fullscreen_message_id = 0;
+  }
+
+  return FALSE;
+}
+
+void
+ephy_embed_entering_fullscreen (EphyEmbed *embed)
+{
+  gtk_widget_show (embed->priv->fullscreen_message_label);
+
+  if (embed->priv->fullscreen_message_id)
+    g_source_remove (embed->priv->fullscreen_message_id);
+
+  embed->priv->fullscreen_message_id = g_timeout_add_seconds (5,
+                                                              (GSourceFunc)fullscreen_message_label_hide,
+                                                              embed);
+}
+
+void
+ephy_embed_leaving_fullscreen (EphyEmbed *embed)
+{
+  fullscreen_message_label_hide (embed);
+}
+
 static void
 ephy_embed_dispose (GObject *object)
 {
@@ -325,6 +361,11 @@ ephy_embed_dispose (GObject *object)
     priv->progress_update_handler_id = 0;
   }
 
+  if (priv->fullscreen_message_id) {
+    g_source_remove (priv->fullscreen_message_id);
+    priv->fullscreen_message_id = 0;
+  }
+
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
 }
 
@@ -358,6 +399,8 @@ ephy_embed_finalize (GObject *object)
 
   g_slist_free (priv->keys);
   priv->keys = NULL;
+
+  g_free (embed->priv->fullscreen_string);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -497,6 +540,40 @@ download_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
+static void
+ephy_embed_set_fullscreen_message (EphyEmbed *embed,
+                                   gboolean is_html5_fullscreen)
+{
+  char *message;
+
+  if (G_UNLIKELY (embed->priv->fullscreen_string == NULL))
+    embed->priv->fullscreen_string = g_strdup (_("Press %s to exit fullscreen"));
+
+  /* Translators: 'ESC' and 'F11' are keyboard keys. */
+  message = g_strdup_printf (embed->priv->fullscreen_string, is_html5_fullscreen ? _("ESC") : _("F11"));
+  gtk_label_set_text (GTK_LABEL (embed->priv->fullscreen_message_label),
+                      message);
+  g_free (message);
+}
+
+static gboolean
+entering_fullscreen_cb (WebKitWebView *web_view,
+                        GObject *element,
+                        EphyEmbed *embed)
+{
+  ephy_embed_set_fullscreen_message (embed, TRUE);
+  return FALSE;
+}
+
+static gboolean
+leaving_fullscreen_cb (WebKitWebView *web_view,
+                       GObject *element,
+                       EphyEmbed *embed)
+{
+  ephy_embed_set_fullscreen_message (embed, FALSE);
+  return FALSE;
+}
+
 static gboolean
 pop_statusbar_later_cb (gpointer data)
 {
@@ -621,10 +698,20 @@ ephy_embed_constructed (GObject *object)
   overlay = gtk_overlay_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (overlay),
                                GTK_STYLE_CLASS_OSD);
+
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
+
+  /* Floating message popup for fullscreen mode. */
+  priv->fullscreen_message_label = gtk_label_new (NULL);
+  gtk_widget_set_name (priv->fullscreen_message_label, "fullscreen-popup");
+  gtk_widget_set_halign (priv->fullscreen_message_label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (priv->fullscreen_message_label, GTK_ALIGN_CENTER);
+  gtk_widget_set_no_show_all (priv->fullscreen_message_label, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->fullscreen_message_label);
+  ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
   priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
@@ -663,6 +750,8 @@ ephy_embed_constructed (GObject *object)
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
                     "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
+                    "signal::entering-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
+                    "signal::leaving-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
 
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",

@@ -818,6 +818,7 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	sync_chromes_visibility (window);
+	ephy_embed_entering_fullscreen (embed);
 }
 
 static void
@@ -827,6 +828,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 	window->priv->chrome = window->priv->pre_fullscreen_chrome;
 
 	sync_chromes_visibility (window);
+	ephy_embed_leaving_fullscreen (window->priv->active_embed);
 }
 
 static gboolean 
