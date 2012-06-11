@@ -663,7 +663,8 @@ settings_changed_cb (GtkSettings *settings)
 static void
 get_chromes_visibility (EphyWindow *window,
 			gboolean *show_toolbar,
-			gboolean *show_tabsbar)
+			gboolean *show_tabsbar,
+			gboolean *show_downloads_box)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewChrome flags = priv->chrome;
@@ -678,23 +679,27 @@ get_chromes_visibility (EphyWindow *window,
 		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
+
+	*show_downloads_box = (flags & EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX);
 }
 
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	gboolean show_toolbar, show_tabsbar;
+	gboolean show_toolbar, show_tabsbar, show_downloads_box;
 
 	if (priv->closing) return;
 
 	get_chromes_visibility (window,
 				&show_toolbar,
-				&show_tabsbar);
+				&show_tabsbar,
+				&show_downloads_box);
 
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
 
 	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
+	gtk_widget_set_visible (priv->downloads_box, show_downloads_box);
 }
 
 static void
@@ -2779,10 +2784,14 @@ static void
 ephy_window_set_downloads_box_visibility (EphyWindow *window,
 					  gboolean show)
 {
-	if (show)
+
+	if (show) {
 		gtk_widget_show (window->priv->downloads_box);
-	else
+		window->priv->chrome |= EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX;
+	} else {
 		gtk_widget_hide (window->priv->downloads_box);
+		window->priv->chrome &= ~EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX;
+	}
 }
 
 static void

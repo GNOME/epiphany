@@ -52,6 +52,7 @@ typedef enum
 typedef enum
 {
   EPHY_WEB_VIEW_CHROME_TOOLBAR    = 1 << 0,
+  EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX = 1 << 1
 } EphyWebViewChrome;
 
 #define EPHY_WEB_VIEW_CHROME_ALL (EPHY_WEB_VIEW_CHROME_TOOLBAR)
