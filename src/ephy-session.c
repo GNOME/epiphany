@@ -1052,37 +1052,41 @@ restore_geometry (GtkWindow *window,
 }
 
 /**
- * ephy_session_load:
- * @session: a #EphySession
- * @filename: the path of the source file
- * @user_time: a user_time, or 0
- *
- * Load a session from disk, restoring the windows and their state
- *
- * Return value: TRUE if at least a window has been opened
+ * ephy_session_load_from_string:
+ * @session: an #EphySession
+ * @session_data: a string with the session data to load
+ * @length: the length of @session_data, or -1 to assume %NULL terminated
+ * @user_time: a user time, or 0
+ * 
+ * Loads the session described in @session_data, restoring windows and
+ * their state.
+ * 
+ * Returns: TRUE if at least a window has been opened
  **/
 gboolean
-ephy_session_load (EphySession *session,
-		   const char *filename,
-		   guint32 user_time)
+ephy_session_load_from_string (EphySession *session,
+			       const char *session_data,
+			       gssize length,
+			       guint32 user_time)
 {
-	EphySessionPrivate *priv = session->priv;
+	EphySessionPrivate *priv;
 	xmlDocPtr doc;
 	xmlNodePtr child;
 	EphyWindow *window;
 	GtkWidget *widget = NULL;
-	GFile *save_to_file;
-	char *save_to_path;
 	gboolean first_window_created = FALSE;
+	
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (session_data, FALSE);
 
-	LOG ("ephy_sesion_load %s", filename);
+	priv = session->priv;
 
-	save_to_file = get_session_file (filename);
-	save_to_path = g_file_get_path (save_to_file);
-	g_object_unref (save_to_file);
+	/* If length is -1 assume the data is a NULL-terminated, UTF-8
+	 * encoded string. */
+	if (length == -1)
+		length = g_utf8_strlen (session_data, -1);
 
-	doc = xmlParseFile (save_to_path);
-	g_free (save_to_path);
+	doc = xmlParseMemory (session_data, (int)length);
 
 	if (doc == NULL)
 	{
@@ -1187,6 +1191,54 @@ ephy_session_load (EphySession *session,
 	g_object_unref (ephy_shell_get_default ());
 
 	return (priv->windows != NULL || priv->tool_windows != NULL);
+}
+
+/**
+ * ephy_session_load:
+ * @session: a #EphySession
+ * @filename: the path of the source file
+ * @user_time: a user_time, or 0
+ *
+ * Load a session from disk, restoring the windows and their state
+ *
+ * Return value: TRUE if at least a window has been opened
+ **/
+gboolean
+ephy_session_load (EphySession *session,
+		   const char *filename,
+		   guint32 user_time)
+{
+	GFile *save_to_file;
+	char *save_to_path;
+	gboolean ret_value;
+	char *contents;
+	gsize length;
+	GError *error = NULL;
+
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (filename, FALSE);
+
+	LOG ("ephy_sesion_load %s", filename);
+
+	save_to_file = get_session_file (filename);
+	save_to_path = g_file_get_path (save_to_file);
+	g_object_unref (save_to_file);
+
+	if (!g_file_get_contents (save_to_path, &contents, &length, &error))
+	{
+		LOG ("Could not load session, error reading session file: %s", error->message);
+		g_error_free (error);
+		g_free (save_to_path);
+
+		return FALSE;
+	}
+
+	ret_value = ephy_session_load_from_string (session, contents, length, user_time);
+
+	g_free (contents);
+	g_free (save_to_path);
+
+	return ret_value;
 }
 
 /**

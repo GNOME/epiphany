@@ -79,6 +79,11 @@ gboolean	 ephy_session_load		(EphySession *session,
 						 const char *filename,
 						 guint32 user_time);
 
+gboolean	 ephy_session_load_from_string	(EphySession *session,
+						 const char *session_data,
+						 gssize length,
+						 guint32 user_time);
+
 void		 ephy_session_close		(EphySession *session);
 
 GList		*ephy_session_get_windows	(EphySession *session);
