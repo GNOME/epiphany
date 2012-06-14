@@ -14,7 +14,6 @@ EXTRA_DIST = 			\
 	HACKING			\
 	MAINTAINERS		\
 	ChangeLog		\
-	po/ChangeLog.pre-2-23	\
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
