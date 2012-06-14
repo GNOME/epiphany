@@ -370,14 +370,15 @@ download_status_changed_cb (WebKitDownload *download,
 			    EphyApplicationDialogData *data)
 {
 	WebKitDownloadStatus status = webkit_download_get_status (download);
-	const char *destination;
+	char *filename;
 
 	switch (status)
 	{
 	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
-		destination = g_filename_from_uri (webkit_download_get_destination_uri (download),
+		filename = g_filename_from_uri (webkit_download_get_destination_uri (download),
 						   NULL, NULL);
-		gtk_image_set_from_file (GTK_IMAGE (data->image), destination);
+		gtk_image_set_from_file (GTK_IMAGE (data->image), filename);
+		g_free (filename);
 		break;
 	case WEBKIT_DOWNLOAD_STATUS_ERROR:
 	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
