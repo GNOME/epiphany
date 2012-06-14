@@ -39,7 +39,6 @@
 #include "ephy-extension.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
-#include "ephy-fullscreen-popup.h"
 #include "ephy-gui.h"
 #include "ephy-home-action.h"
 #include "ephy-link.h"
@@ -329,7 +328,6 @@ static const struct
 struct _EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
-	GtkWidget *fullscreen_popup;
 	GtkWidget *toolbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
@@ -663,33 +661,6 @@ settings_changed_cb (GtkSettings *settings)
 }
 
 static void
-destroy_fullscreen_popup (EphyWindow *window)
-{
-	if (window->priv->fullscreen_popup != NULL)
-	{
-		gtk_widget_destroy (window->priv->fullscreen_popup);
-		window->priv->fullscreen_popup = NULL;
-	}
-}
-
-static void
-exit_fullscreen_clicked_cb (EphyWindow *window)
-{
-	GtkAction *action;
-
-	action = gtk_action_group_get_action (window->priv->action_group, "ViewFullscreen");
-	g_return_if_fail (action != NULL);
-
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), FALSE);
-}
-
-static gboolean
-get_toolbar_visibility (EphyWindow *window)
-{
-	return ((window->priv->chrome & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0);
-}			
-
-static void
 get_chromes_visibility (EphyWindow *window,
 			gboolean *show_toolbar,
 			gboolean *show_tabsbar)
@@ -823,35 +794,15 @@ sync_tab_security (EphyWebView *view,
 	}
 
 	_ephy_window_set_security_state (window, show_lock, stock_id);
-
-	if (priv->fullscreen_popup != NULL)
-	{
-		ephy_fullscreen_popup_set_security_state
-			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
-			 show_lock, stock_id, NULL);
-	}
 }
 
 static void
 ephy_window_fullscreen (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *popup;
 	EphyEmbed *embed;
-	gboolean lockdown_fs;
 
 	priv->fullscreen_mode = TRUE;
-
-	lockdown_fs = g_settings_get_boolean
-				(EPHY_SETTINGS_LOCKDOWN,
-				 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
-
-	popup = ephy_fullscreen_popup_new (window);
-	ephy_fullscreen_popup_set_show_leave
-		(EPHY_FULLSCREEN_POPUP (popup), !lockdown_fs);
-	priv->fullscreen_popup = popup;
-	g_signal_connect_swapped (popup, "exit-clicked",
-				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
 
 	/* sync status */
 	embed = window->priv->active_embed;
@@ -865,8 +816,6 @@ static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->fullscreen_mode = FALSE;
-
-	destroy_fullscreen_popup (window);
 
 	sync_chromes_visibility (window);
 }
@@ -2975,8 +2924,6 @@ ephy_window_dispose (GObject *object)
 		_ephy_window_set_context_event (window, NULL);
 	}
 
-	destroy_fullscreen_popup (window);
-
 	G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
 }
 
@@ -3029,36 +2976,6 @@ ephy_window_get_property (GObject *object,
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
 			break;
 	}
-}
-
-static gboolean
-ephy_window_focus_in_event (GtkWidget *widget,
-			    GdkEventFocus *event)
-{
-	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->fullscreen_popup && !get_toolbar_visibility (window))
-	{
-		gtk_widget_show (priv->fullscreen_popup);
-	}
-
-	return GTK_WIDGET_CLASS (ephy_window_parent_class)->focus_in_event (widget, event);
-}
-
-static gboolean
-ephy_window_focus_out_event (GtkWidget *widget,
-			     GdkEventFocus *event)
-{
-	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->fullscreen_popup)
-	{
-		gtk_widget_hide (priv->fullscreen_popup);
-	}
-
-	return GTK_WIDGET_CLASS (ephy_window_parent_class)->focus_out_event (widget, event);
 }
 
 static gboolean
@@ -3499,8 +3416,6 @@ ephy_window_class_init (EphyWindowClass *klass)
 
 	widget_class->show = ephy_window_show;
 	widget_class->key_press_event = ephy_window_key_press_event;
-	widget_class->focus_in_event = ephy_window_focus_in_event;
-	widget_class->focus_out_event = ephy_window_focus_out_event;
 	widget_class->window_state_event = ephy_window_state_event;
 	widget_class->delete_event = ephy_window_delete_event;
 
@@ -3689,11 +3604,6 @@ ephy_window_load_url (EphyWindow *window,
 void
 ephy_window_activate_location (EphyWindow *window)
 {
-	if (window->priv->fullscreen_popup)
-	{
-		gtk_widget_hide (window->priv->fullscreen_popup);
-	}
-
 	_ephy_window_activate_location (window);
 }
 
