@@ -773,7 +773,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
     if (is_empty) {
       /* empty page, focus location entry */
       ephy_window_activate_location (window);
-    } else if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 && embed != NULL) {
+    } else if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 && embed != NULL &&
+               ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
       /* non-empty page, focus the page. but make sure the widget is realised first! */
       gtk_widget_realize (GTK_WIDGET (embed));
       gtk_widget_grab_focus (GTK_WIDGET (embed));
