@@ -980,6 +980,7 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 
 	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 				    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+		return FALSE;
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
 		return FALSE;
