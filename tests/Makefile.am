@@ -9,6 +9,7 @@ noinst_PROGRAMS = \
 	test-ephy-location-entry \
 	test-ephy-migration \
 	test-ephy-search-entry \
+	test-ephy-session \
 	test-ephy-sqlite \
 	test-ephy-web-view \
 	$(NULL)
@@ -140,6 +141,11 @@ test_ephy_migration_SOURCES = \
 
 test_ephy_search_entry_SOURCES = \
 	ephy-search-entry-test.c
+
+test_ephy_session_SOURCES = \
+	ephy-session-test.c \
+	$(top_builddir)/src/epiphany-resources.c \
+	$(top_builddir)/src/epiphany-resources.h
 
 test_ephy_sqlite_SOURCES = \
 	ephy-sqlite-test.c
