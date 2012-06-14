@@ -1142,9 +1142,12 @@ ephy_session_load_from_string (EphySession *session,
 				}
 			}
 
-			active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-			gtk_widget_grab_focus (GTK_WIDGET (active_child));
-			gtk_widget_show (widget);
+			if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST)
+			{
+				active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+				gtk_widget_grab_focus (GTK_WIDGET (active_child));
+				gtk_widget_show (widget);
+			}
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
 		{
