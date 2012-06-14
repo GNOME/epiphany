@@ -14,11 +14,6 @@ EXTRA_DIST = 			\
 	HACKING			\
 	MAINTAINERS		\
 	ChangeLog		\
-	ChangeLog-20030925	\
-	ChangeLog-20040912	\
-	ChangeLog-20050828	\
-	ChangeLog-20061106	\
-	ChangeLog-20070912	\
 	po/ChangeLog.pre-2-23	\
 	$(NULL)
 
