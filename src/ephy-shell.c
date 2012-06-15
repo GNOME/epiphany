@@ -680,7 +680,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean fullscreen_lockdown = FALSE;
   gboolean in_new_window = TRUE;
   gboolean open_page = FALSE;
-  gboolean jump_to;
+  gboolean jump_to = FALSE;
   gboolean active_is_blank = FALSE;
   gboolean copy_history = TRUE;
   GtkWidget *nb;
