@@ -65,6 +65,51 @@ test_ephy_session_load ()
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
     g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:memory");
+
+    /* FIXME: Destroy the window. I think ideally we'd like something
+     * like 'ephy_session_clear ()' to reset everything to its initial
+     * state here. That or allow EphyShell to be created more than
+     * once and do it once per test. */
+    gtk_widget_destroy (GTK_WIDGET (l->data));
+}
+
+const char *session_data_many_windows = 
+"<?xml version=\"1.0\"?>"
+"<session>"
+	 "<window x=\"100\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-7da420dd\">"
+	 	 "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
+	 "</window>"
+	 "<window x=\"73\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-1261c786\">"
+	 	 "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
+	 "</window>"
+"</session>";
+
+static void
+test_ephy_session_load_many_windows ()
+{
+    EphySession *session;
+    gboolean ret;
+    GList *l, *p;
+    EphyEmbed *embed;
+    EphyWebView *view;
+
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    g_assert (session);
+
+    ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
+    g_assert (ret);
+
+    l = ephy_session_get_windows (session);
+    g_assert (l);
+    g_assert_cmpint (g_list_length (l), ==, 2);
+
+    for (p = l; p; p = p->next) {
+      embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->data));
+      g_assert (embed);
+      view = ephy_embed_get_web_view (embed);
+      g_assert (view);
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
+    }
 }
 
 int
@@ -85,14 +130,18 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  g_assert (ephy_shell);
 
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
 
+  g_test_add_func ("/src/ephy-session/load-many-windows",
+                   test_ephy_session_load_many_windows);
+
   ret = g_test_run ();
 
-  g_object_unref (ephy_shell);
   ephy_file_helpers_shutdown ();
+  g_object_unref (ephy_shell);
 
   return ret;
 }
