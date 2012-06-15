@@ -683,9 +683,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean jump_to = FALSE;
   gboolean active_is_blank = FALSE;
   gboolean copy_history = TRUE;
-  GtkWidget *nb;
-  int position = -1;
   gboolean is_empty = FALSE;
+  int position = -1;
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
@@ -708,7 +707,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
     if (previous_embed) {
-      nb = ephy_window_get_notebook (window);
+      GtkWidget *nb = ephy_window_get_notebook (window);
       /* FIXME this assumes the tab is the  direct notebook child */
       position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
                                         GTK_WIDGET (previous_embed)) + 1;
