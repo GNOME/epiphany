@@ -723,7 +723,7 @@ sync_chromes_visibility (EphyWindow *window)
 
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
 
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
+	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 }
 
 static void

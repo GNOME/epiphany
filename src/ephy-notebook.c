@@ -53,7 +53,7 @@ struct _EphyNotebookPrivate
 	GList *focused_pages;
 	guint tabs_vis_notifier_id;
 
-	guint show_tabs : 1;
+	guint tabs_allowed : 1;
 };
 
 static void ephy_notebook_init		 (EphyNotebook *notebook);
@@ -77,7 +77,7 @@ static const GtkTargetEntry url_drag_types [] =
 enum
 {
 	PROP_0,
-	PROP_SHOW_TABS
+	PROP_TABS_ALLOWED
 };
 
 enum
@@ -103,8 +103,8 @@ ephy_notebook_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_SHOW_TABS:
-			g_value_set_boolean (value, priv->show_tabs);
+		case PROP_TABS_ALLOWED:
+			g_value_set_boolean (value, priv->tabs_allowed);
 			break;
 	}
 }
@@ -119,8 +119,8 @@ ephy_notebook_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_SHOW_TABS:
-			ephy_notebook_set_show_tabs (notebook, g_value_get_boolean (value));
+		case PROP_TABS_ALLOWED:
+			ephy_notebook_set_tabs_allowed (notebook, g_value_get_boolean (value));
 			break;
 	}
 }
@@ -152,8 +152,8 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      GTK_TYPE_WIDGET /* Can't use an interface type here */);
 
 	g_object_class_install_property (object_class,
-					 PROP_SHOW_TABS,
-					 g_param_spec_boolean ("show-tabs", NULL, NULL,
+					 PROP_TABS_ALLOWED,
+					 g_param_spec_boolean ("tabs-allowed", NULL, NULL,
 							       TRUE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -413,8 +413,9 @@ update_tabs_visibility (EphyNotebook *nb,
 	    ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
 	     policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
 		show_tabs = TRUE;
-	    
-	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
+
+	/* Only show the tabs when the "tabs-allowed" property is TRUE. */
+	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), nb->priv->tabs_allowed && show_tabs);
 }
 
 static void
@@ -439,7 +440,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_notebook_set_show_tabs (gnotebook, FALSE);
 	gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
 
-	priv->show_tabs = TRUE;
+	priv->tabs_allowed = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",
 			  (GCallback)button_press_cb, NULL);
@@ -638,14 +639,16 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 }
 
 void
-ephy_notebook_set_show_tabs (EphyNotebook *nb,
-			     gboolean show_tabs)
+ephy_notebook_set_tabs_allowed (EphyNotebook *nb,
+				gboolean tabs_allowed)
 {
 	EphyNotebookPrivate *priv = nb->priv;
 
-	priv->show_tabs = show_tabs != FALSE;
+	priv->tabs_allowed = tabs_allowed != FALSE;
 
 	update_tabs_visibility (nb, FALSE);
+
+	g_object_notify (G_OBJECT (nb), "tabs-allowed");
 }
 
 static int
