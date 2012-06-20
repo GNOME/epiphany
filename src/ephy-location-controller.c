@@ -477,6 +477,9 @@ ephy_location_controller_get_property (GObject *object,
 		case PROP_ICON:
 			g_value_set_object (value, priv->icon);
 			break;
+		case PROP_SHOW_ICON:
+			g_value_set_boolean (value, priv->show_icon);
+			break;
 		case PROP_LOCK_STOCK:
 			g_value_set_string (value, priv->lock_stock_id);
 			break;
