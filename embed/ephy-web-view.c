@@ -83,6 +83,7 @@ struct _EphyWebViewPrivate {
   guint visibility : 1;
   guint loading_homepage : 1;
   guint is_setting_zoom : 1;
+  guint load_failed : 1;
 
   char *address;
   char *typed_address;
@@ -1943,6 +1944,7 @@ load_status_cb (WebKitWebView *web_view,
     WebKitWebDataSource *source;
     WebKitNetworkRequest *request;
 
+    priv->load_failed = FALSE;
     frame = webkit_web_view_get_main_frame (web_view);
 
     source = webkit_web_frame_get_provisional_data_source (frame);
@@ -2074,6 +2076,7 @@ load_status_cb (WebKitWebView *web_view,
     break;
   }
   case WEBKIT_LOAD_FAILED:
+    priv->load_failed = TRUE;
     ephy_web_view_set_link_message (view, NULL);
     ephy_web_view_set_loading_title (view, NULL, FALSE);
 
@@ -3157,6 +3160,21 @@ ephy_web_view_is_loading (EphyWebView *view)
 
   return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
 #endif
+}
+
+/**
+ * ephy_web_view_load_failed:
+ * @view: an #EphyWebView
+ *
+ * Returns whether the web page in @view has failed to load.
+ *
+ * Return value: %TRUE if the page failed to load, %FALSE if it's loading
+ * or load finished successfully
+ **/
+gboolean
+ephy_web_view_load_failed (EphyWebView *view)
+{
+  return view->priv->load_failed;
 }
 
 /**
