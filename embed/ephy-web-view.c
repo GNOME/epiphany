@@ -1855,13 +1855,11 @@ get_host_for_url_cb (gpointer service,
   view = EPHY_WEB_VIEW (user_data);
   host = (EphyHistoryHost *)result_data;
 
-  g_object_get (view,
-                "zoom-level", &current_zoom,
-                NULL);
+  current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
   if (host->zoom_level != current_zoom) {
     view->priv->is_setting_zoom = TRUE;
-    g_object_set (view, "zoom-level", host->zoom_level, NULL);
+    webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), host->zoom_level);
     view->priv->is_setting_zoom = FALSE;
   }
 
@@ -2254,12 +2252,10 @@ zoom_changed_cb (WebKitWebView *web_view,
                  gpointer user_data)
 {
   char *address;
-  float zoom;
+  double zoom;
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
 
-  g_object_get (web_view,
-                "zoom-level", &zoom,
-                NULL);
+  zoom = webkit_web_view_get_zoom_level (web_view);
 
   if (priv->is_setting_zoom)
     return;

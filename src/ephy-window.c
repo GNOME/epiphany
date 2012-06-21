@@ -1410,14 +1410,12 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 	GtkAction *action;
 	EphyWebViewDocumentType type;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
-	float zoom;
+	double zoom;
 	EphyEmbed *embed = window->priv->active_embed;
 
 	if (window->priv->closing) return;
 
-	g_object_get (web_view,
-		      "zoom-level", &zoom,
-		      NULL);
+	zoom = webkit_web_view_get_zoom_level (web_view);
 
 	type = ephy_web_view_get_document_type (ephy_embed_get_web_view (embed));
 	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
@@ -3636,7 +3634,7 @@ ephy_window_set_zoom (EphyWindow *window,
 		      float zoom)
 {
 	EphyEmbed *embed;
-	float current_zoom = 1.0;
+	double current_zoom = 1.0;
 	WebKitWebView *web_view;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
@@ -3646,7 +3644,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-	g_object_get (web_view, "zoom-level", &current_zoom, NULL);
+	current_zoom = webkit_web_view_get_zoom_level (web_view);
 
 	if (zoom == ZOOM_IN)
 	{
@@ -3659,7 +3657,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	if (zoom != current_zoom)
 	{
-		g_object_set (G_OBJECT (web_view), "zoom-level", zoom, NULL);
+		webkit_web_view_set_zoom_level (web_view, zoom);
 	}
 }
 
