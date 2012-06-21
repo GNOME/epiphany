@@ -50,7 +50,6 @@
 #include <gtk/gtk.h>
 #include <libsoup/soup-gnome.h>
 #include <string.h>
-#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-web-view

@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <glib/gi18n.h>
+#include <libsoup/soup.h>
 
 #include "ephy-string.h"
 #include "ephy-embed-utils.h"

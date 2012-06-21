@@ -31,8 +31,6 @@
 
 #include "ephy-web-view.h"
 
-#include <webkit/webkit.h>
-
 G_BEGIN_DECLS
 
 #define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)))

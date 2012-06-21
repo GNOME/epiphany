@@ -33,6 +33,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <libsoup/soup.h>
 #include <string.h>
 
 #define HTML_STRING "testing-ephy-download"

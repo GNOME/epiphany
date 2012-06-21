@@ -64,6 +64,7 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libsoup/soup.h>
 #include <webkit/webkit.h>
 
 #ifdef HAVE_X11_XF86KEYSYM_H
