@@ -64,7 +64,26 @@ server_callback (SoupServer *server,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: loader */
+static void
+load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
+{
+  char *expected_url;
+  const char *loaded_url;
+
+  if (load_event != WEBKIT_LOAD_FINISHED)
+    return;
+
+  expected_url = g_object_get_data (G_OBJECT (view), "test.expected_url");
+  g_assert (expected_url != NULL);
+
+  loaded_url = webkit_web_view_get_uri (view);
+  g_assert_cmpstr (loaded_url, ==, expected_url);
+
+  g_signal_handlers_disconnect_by_func (view, load_changed_cb, loop);
+
+  g_free (expected_url);
+  g_main_loop_quit (loop);
+}
 #else
 static void
 notify_load_status_cb (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
@@ -162,7 +181,8 @@ test_ephy_web_view_load_url ()
     g_test_message ("[%s] \t-> %s", test.url, test.expected_url);
 
 #ifdef HAVE_WEBKIT2
-    /* TODO: loader */
+    g_signal_connect (view, "load-changed",
+                      G_CALLBACK (load_changed_cb), loop);
 #else
     g_signal_connect (view, "notify::load-status",
                       G_CALLBACK (notify_load_status_cb), loop);

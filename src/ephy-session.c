@@ -129,7 +129,14 @@ session_delete (EphySession *session,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Loader */
+static void
+load_changed_cb (WebKitWebView *view,
+		 WebKitLoadEvent load_event,
+		 EphySession *session)
+{
+	if (!ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
+		ephy_session_save (session, SESSION_STATE);
+}
 #else
 static void
 load_status_notify_cb (EphyWebView *view,
@@ -154,7 +161,8 @@ notebook_page_added_cb (GtkWidget *notebook,
 			EphySession *session)
 {
 #ifdef HAVE_WEBKIT2
-	/* TODO: Loader */
+	g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
+			  G_CALLBACK (load_changed_cb), session);
 #else
 	g_signal_connect (ephy_embed_get_web_view (embed), "notify::load-status",
 			  G_CALLBACK (load_status_notify_cb), session);
@@ -170,7 +178,9 @@ notebook_page_removed_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_STATE);
 
 #ifdef HAVE_WEBKIT2
-	/* TODO: Loader */
+	g_signal_handlers_disconnect_by_func
+		(ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
+		 session);
 #else
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),

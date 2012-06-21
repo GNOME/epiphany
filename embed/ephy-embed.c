@@ -277,7 +277,14 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Loader */
+static void
+load_changed_cb (WebKitWebView *web_view,
+                 WebKitLoadEvent load_event,
+                 EphyEmbed *embed)
+{
+  if (load_event == WEBKIT_LOAD_COMMITTED)
+    ephy_embed_destroy_top_widgets (embed);
+}
 #else
 static void
 load_status_changed_cb (WebKitWebView *web_view,
@@ -682,9 +689,6 @@ clear_progress_cb (EphyEmbed *embed)
   return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: Load progress */
-#else
 static void
 progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -703,7 +707,11 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   if (!uri || g_str_equal (uri, "about:blank"))
     return;
 
+#ifdef HAVE_WEBKIT2
+  progress = webkit_web_view_get_estimated_load_progress (priv->web_view);
+#else
   progress = webkit_web_view_get_progress (priv->web_view);
+#endif
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
 
   if (progress == 1.0 || !loading)
@@ -716,7 +724,6 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
-#endif
 
 static void
 ephy_embed_constructed (GObject *object)
@@ -778,7 +785,8 @@ ephy_embed_constructed (GObject *object)
 
   priv->web_view = web_view;
 #ifdef HAVE_WEBKIT2
-  /* TODO: Load progress */
+  priv->progress_update_handler_id = g_signal_connect (web_view, "notify::estimated-load-progress",
+                                                       G_CALLBACK (progress_update), object);
 #else
   priv->progress_update_handler_id =  g_signal_connect (web_view, "notify::progress",
                                                         G_CALLBACK (progress_update), object);
@@ -801,7 +809,10 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show_all (paned);
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Loader, WebKitWebResource::send-request, Downloads */
+  /* TODO: WebKitWebResource::send-request, Downloads */
+  g_signal_connect (web_view, "load-changed",
+                    G_CALLBACK (load_changed_cb),
+                    embed);
 #else
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,

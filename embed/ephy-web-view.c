@@ -72,9 +72,7 @@ struct _EphyWebViewPrivate {
   EphyWebViewSecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
-#ifdef HAVE_WEBKIT2
-  /* TODO: Loader */
-#else
+#ifndef HAVE_WEBKIT2
   WebKitLoadStatus load_status;
 #endif
 
@@ -83,6 +81,9 @@ struct _EphyWebViewPrivate {
   guint visibility : 1;
   guint loading_homepage : 1;
   guint is_setting_zoom : 1;
+#ifdef HAVE_WEBKIT2
+  guint is_loading : 1;
+#endif
   guint load_failed : 1;
 
   char *address;
@@ -1921,7 +1922,164 @@ restore_zoom_level (EphyWebView *view,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Loader */
+static void
+load_changed_cb (WebKitWebView *web_view,
+                 WebKitLoadEvent load_event,
+                 gpointer user_data)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyWebViewPrivate *priv = view->priv;
+  GObject *object = G_OBJECT (web_view);
+
+  g_object_freeze_notify (object);
+
+  switch (load_event) {
+  case WEBKIT_LOAD_STARTED: {
+    const gchar *loading_uri = NULL;
+
+    priv->is_loading = TRUE;
+    priv->load_failed = FALSE;
+
+    loading_uri = webkit_web_view_get_uri (web_view);
+    g_signal_emit_by_name (view, "new-document-now", loading_uri);
+
+    if ((priv->address == NULL || priv->address[0] == '\0') &&
+        priv->expire_address_now == TRUE) {
+      ephy_web_view_set_address (view, loading_uri);
+      ephy_web_view_set_title (view, NULL);
+    }
+
+    ephy_web_view_set_loading_title (view, loading_uri, TRUE);
+
+    g_free (priv->status_message);
+    priv->status_message = g_strdup (priv->loading_title);
+    g_object_notify (object, "status-message");
+
+    priv->expire_address_now = TRUE;
+    break;
+  }
+  case WEBKIT_LOAD_REDIRECTED:
+    /* TODO: Update the loading uri */
+    break;
+  case WEBKIT_LOAD_COMMITTED: {
+    const gchar* uri;
+    EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+
+    /* Title and location. */
+    uri = webkit_web_view_get_uri (web_view);
+    ephy_web_view_location_changed (view, uri);
+
+    ephy_web_view_set_title (view, NULL);
+
+    /* Security status. */
+    if (uri && g_str_has_prefix (uri, "https")) {
+#if 0
+      /* TODO: security */
+      WebKitWebFrame *frame;
+      WebKitWebDataSource *source;
+      WebKitNetworkRequest *request;
+      SoupMessage *message;
+
+      frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
+      source = webkit_web_frame_get_data_source (frame);
+      request = webkit_web_data_source_get_request (source);
+      message = webkit_network_request_get_message (request);
+
+      if (message &&
+          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
+        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
+      else
+        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
+#endif
+    }
+
+    ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+
+    /* Zoom level. */
+    restore_zoom_level (view, uri);
+
+    /* History. */
+    if (!ephy_web_view_is_loading_homepage (view)) {
+      char *history_uri = NULL;
+
+      /* TODO: move the normalization down to the history service? */
+      if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+          history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+      else
+        history_uri = g_strdup (uri);
+
+      ephy_history_service_visit_url (priv->history_service,
+                                      history_uri,
+                                      priv->visit_type);
+
+      g_free (history_uri);
+    }
+    break;
+  }
+  case WEBKIT_LOAD_FINISHED: {
+    SoupURI *uri;
+
+    priv->is_loading = FALSE;
+    priv->loading_homepage = FALSE;
+
+    g_free (priv->status_message);
+    priv->status_message = NULL;
+    g_object_notify (object, "status-message");
+    ephy_web_view_set_loading_title (view, NULL, FALSE);
+
+    if (priv->is_blank)
+      g_object_notify (object, "embed-title");
+
+#if 0
+    /* TODO: DOM bindings */
+    if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+        g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_REMEMBER_PASSWORDS))
+      _ephy_web_view_hook_into_forms (view);
+
+    _ephy_web_view_hook_into_links (view);
+#endif
+
+    /* FIXME: It sucks to do this here, but it's not really possible
+     * to hook the DOM actions nicely in the about: generator. */
+    uri = soup_uri_new (webkit_web_view_get_uri (web_view));
+    if (uri &&
+        !g_strcmp0 (uri->scheme, "ephy-about") &&
+        !g_strcmp0 (uri->path, "applications")) {
+#if 0
+      /* TODO: DOM bindings */
+      WebKitDOMDocument *document;
+      WebKitDOMNodeList *buttons;
+      gulong buttons_n;
+      int i;
+
+      document = webkit_web_view_get_dom_document (web_view);
+      buttons = webkit_dom_document_get_elements_by_tag_name (document, "input");
+      buttons_n = webkit_dom_node_list_get_length (buttons);
+
+      for (i = 0; i < buttons_n; i++) {
+        WebKitDOMNode *button;
+
+        button = webkit_dom_node_list_item (buttons, i);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (button), "click",
+                                                    G_CALLBACK (delete_web_app_cb), false,
+                                                    NULL);
+      }
+#endif
+    }
+
+    if (uri)
+      soup_uri_free (uri);
+
+    /* Reset visit type. */
+    priv->visit_type = EPHY_PAGE_VISIT_NONE;
+
+    break;
+  }
+  }
+
+  g_object_thaw_notify (object);
+}
 #else
 static void
 load_status_cb (WebKitWebView *web_view,
@@ -2217,7 +2375,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (image_data);
 
 #ifdef HAVE_WEBKIT2
-  webkit_web_view_load_html (WEBKIT_WEB_VIEW (view), html->str, uri);
+  webkit_web_view_replace_content (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
 #else
   webkit_web_view_load_string (WEBKIT_WEB_VIEW (view),
                                html->str, "text/html", "utf8", uri);
@@ -2226,7 +2384,12 @@ ephy_web_view_load_error_page (EphyWebView *view,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Load error */
+static gboolean
+load_failed_cb (WebKitWebView *web_view,
+                WebKitLoadEvent load_event,
+                const gchar *uri,
+                GError *error,
+                gpointer user_data)
 #else
 static gboolean
 load_error_cb (WebKitWebView *web_view,
@@ -2234,11 +2397,18 @@ load_error_cb (WebKitWebView *web_view,
                char *uri,
                GError *error,
                gpointer user_data)
+#endif
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
+#ifdef HAVE_WEBKIT2
+  view->priv->load_failed = TRUE;
+  ephy_web_view_set_link_message (view, NULL);
+  update_navigation_flags (view);
+#else
   if (webkit_web_view_get_main_frame (web_view) != frame)
     return FALSE;
+#endif
 
   if (error->domain == SOUP_HTTP_ERROR) {
     ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
@@ -2256,7 +2426,11 @@ load_error_cb (WebKitWebView *web_view,
   case WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST:
   case WEBKIT_POLICY_ERROR_FAILED:
   case WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE:
+#ifdef HAVE_WEBKIT2
+  case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI:
+#else
   case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URL:
+#endif
   case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
   case WEBKIT_PLUGIN_ERROR_FAILED:
   case WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN:
@@ -2289,7 +2463,6 @@ load_error_cb (WebKitWebView *web_view,
 
   return FALSE;
 }
-#endif
 
 #ifdef HAVE_WEBKIT2
 /* TODO: WebKitWebView::close */
@@ -2421,7 +2594,9 @@ ephy_web_view_init (EphyWebView *web_view)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Loader */
+  g_signal_connect (web_view, "load-changed",
+                    G_CALLBACK (load_changed_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "notify::load-status",
                     G_CALLBACK (load_status_cb),
@@ -2437,7 +2612,9 @@ ephy_web_view_init (EphyWebView *web_view)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Load errors */
+  g_signal_connect (web_view, "load-failed",
+                    G_CALLBACK (load_failed_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "load-error",
                     G_CALLBACK (load_error_cb),
@@ -3138,8 +3315,7 @@ gboolean
 ephy_web_view_is_loading (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
-  /* Loader */
-  return FALSE;
+  return view->priv->is_loading;
 #else
   WebKitLoadStatus status;
 
