@@ -2493,7 +2493,7 @@ effective_url_head_cb (SoupSession *session,
   if (message->status_code == SOUP_STATUS_OK) {
     char *uri = soup_uri_to_string (soup_message_get_uri (message), FALSE);
 
-    webkit_web_view_open (WEBKIT_WEB_VIEW (view), uri);
+    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), uri);
 
     g_free (uri);
   } else {
@@ -2508,7 +2508,7 @@ effective_url_head_cb (SoupSession *session,
       g_error_free (error);
 
       /* Load the original URI to trigger an error in the view. */
-      webkit_web_view_open (WEBKIT_WEB_VIEW (view), data->original_uri);
+      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), data->original_uri);
     }
   }
 
@@ -2565,7 +2565,7 @@ ephy_web_view_load_url (EphyWebView *view,
       /* If we cannot even create a message fallback to the effective
        * url, the gtk_show_uri code will make another attempt in
        * EphyWindow's policy code. */
-      webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
     }
 
     g_free (temp_url);
@@ -2576,7 +2576,7 @@ ephy_web_view_load_url (EphyWebView *view,
     webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
     g_free (decoded_url);
   } else
-    webkit_web_view_open (WEBKIT_WEB_VIEW (view), effective_url);
+    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
 
   g_free (effective_url);
 }
