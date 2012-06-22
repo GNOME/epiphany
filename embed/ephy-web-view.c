@@ -1204,7 +1204,19 @@ uri_changed_cb (WebKitWebView *web_view,
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Mouse target changed */
+static void
+mouse_target_changed_cb (EphyWebView *web_view,
+                         WebKitHitTestResult *hit_test_result,
+                         guint modifiers,
+                         gpointer data)
+{
+  const char *message = NULL;
+
+  if (webkit_hit_test_result_context_is_link (hit_test_result))
+    message = webkit_hit_test_result_get_link_uri (hit_test_result);
+
+  ephy_web_view_set_link_message (web_view, message);
+}
 #else
 static void
 hovering_over_link_cb (EphyWebView *web_view,
@@ -2700,7 +2712,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     NULL);
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Mouse target changed */
+  g_signal_connect (web_view, "mouse-target-changed",
+                    G_CALLBACK (mouse_target_changed_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "hovering-over-link",
                     G_CALLBACK (hovering_over_link_cb),

@@ -848,14 +848,9 @@ ephy_embed_constructed (GObject *object)
                     NULL);
 #endif
 
-#ifdef HAVE_WEBKIT2
-  /* TODO: status message? */
-#else
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
                                               G_CALLBACK (status_message_notify_cb),
                                               embed);
-#endif
-
 #ifdef HAVE_WEBKIT2
   /* Window properties */
   window_properties = webkit_web_view_get_window_properties (web_view);
