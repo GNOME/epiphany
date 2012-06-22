@@ -1141,11 +1141,19 @@ update_popup_actions_visibility (EphyWindow *window,
 }
 
 static void
+update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
+{
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (window->priv->action_group, action_name);
+	gtk_action_set_sensitive (action, sensitive);
+	gtk_action_set_visible (action, !hide || sensitive);
+}
+
+static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-	GtkActionGroup *action_group;
-	GtkAction *action;
 	gboolean can_copy, can_cut, can_undo, can_redo, can_paste;
 
 	if (GTK_IS_EDITABLE (widget))
@@ -1185,23 +1193,11 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 #endif
 	}
 
-	action_group = window->priv->action_group;
-
-	action = gtk_action_group_get_action (action_group, "EditCopy");
-	gtk_action_set_sensitive (action, can_copy);
-	gtk_action_set_visible (action, !hide || can_copy);
-	action = gtk_action_group_get_action (action_group, "EditCut");
-	gtk_action_set_sensitive (action, can_cut);
-	gtk_action_set_visible (action, !hide || can_cut);
-	action = gtk_action_group_get_action (action_group, "EditPaste");
-	gtk_action_set_sensitive (action, can_paste);
-	gtk_action_set_visible (action,  !hide || can_paste);
-	action = gtk_action_group_get_action (action_group, "EditUndo");
-	gtk_action_set_sensitive (action, can_undo);
-	gtk_action_set_visible (action,  !hide || can_undo);
-	action = gtk_action_group_get_action (action_group, "EditRedo");
-	gtk_action_set_sensitive (action, can_redo);
-	gtk_action_set_visible (action, !hide || can_redo);
+	update_edit_action_sensitivity (window, "EditCopy", can_copy, hide);
+	update_edit_action_sensitivity (window, "EditCut", can_cut, hide);
+	update_edit_action_sensitivity (window, "EditPaste", can_paste, hide);
+	update_edit_action_sensitivity (window, "EditUndo", can_undo, hide);
+	update_edit_action_sensitivity (window, "EditRedo", can_redo, hide);
 }
 
 static void
