@@ -36,6 +36,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-request-about.h"
+#include "ephy-about-handler.h"
 
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
@@ -337,6 +338,23 @@ cache_size_cb (GSettings *settings,
   soup_cache_set_max_size (single->priv->cache, new_cache_size * 1024 * 1024 /* in bytes */);
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+about_request_cb (WebKitURISchemeRequest *request,
+                  gpointer user_data)
+{
+  GString *contents;
+  GInputStream *stream;
+  gint stream_length;
+
+  contents = ephy_about_handler_handle (webkit_uri_scheme_request_get_path (request));
+  stream_length = contents->len;
+  stream = g_memory_input_stream_new_from_data (g_string_free (contents, FALSE), stream_length, g_free);
+  webkit_uri_scheme_request_finish (request, stream, stream_length, "text/html");
+  g_object_unref (stream);
+}
+#endif
+
 /**
  * ephy_embed_single_initialize:
  * @single: the #EphyEmbedSingle
@@ -349,6 +367,10 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 {
 #ifdef HAVE_WEBKIT2
   /* TODO: Network features */
+  webkit_web_context_register_uri_scheme (webkit_web_context_get_default (),
+                                          EPHY_ABOUT_SCHEME,
+                                          about_request_cb,
+                                          NULL);
 #else
   SoupSession *session;
   SoupCookieJar *jar;
