@@ -1150,6 +1150,58 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
 	gtk_action_set_visible (action, !hide || sensitive);
 }
 
+#ifdef HAVE_WEBKIT2
+typedef struct
+{
+	EphyWindow *window;
+	const gchar *action_name;
+	gboolean hide;
+} CanEditCommandAsyncData;
+
+static CanEditCommandAsyncData *
+can_edit_command_async_data_new (EphyWindow *window, const gchar *action_name, gboolean hide)
+{
+	CanEditCommandAsyncData *data;
+
+	data = g_slice_new (CanEditCommandAsyncData);
+	data->window = g_object_ref (window);
+	data->action_name = action_name;
+	data->hide = hide;
+
+	return data;
+}
+
+static void
+can_edit_command_async_data_free (CanEditCommandAsyncData *data)
+{
+	if (G_UNLIKELY (!data))
+		return;
+
+	g_object_unref (data->window);
+	g_slice_free (CanEditCommandAsyncData, data);
+}
+
+static void
+can_edit_command_callback (GObject *object, GAsyncResult *result, CanEditCommandAsyncData *data)
+{
+	gboolean sensitive;
+	GError *error = NULL;
+
+	sensitive = webkit_web_view_can_execute_editing_command_finish (WEBKIT_WEB_VIEW (object), result, &error);
+	if (!error)
+	{
+		update_edit_action_sensitivity (data->window, data->action_name, sensitive, data->hide);
+
+	}
+	else
+	{
+		g_error_free (error);
+	}
+
+	can_edit_command_async_data_free (data);
+}
+#endif
+
 static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 {
@@ -1174,17 +1226,40 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	}
 	else
 	{
-#ifdef HAVE_WEBKIT2
-		/* TODO: Editor */
-#else
 		EphyEmbed *embed;
 		WebKitWebView *view;
+#ifdef HAVE_WEBKIT2
+		CanEditCommandAsyncData *data;
+#endif
 
 		embed = window->priv->active_embed;
 		g_return_if_fail (embed != NULL);
 
 		view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
+#ifdef HAVE_WEBKIT2
+		data = can_edit_command_async_data_new (window, "EditCopy", hide);
+		webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_COPY, NULL,
+							     (GAsyncReadyCallback)can_edit_command_callback,
+							     data);
+		data = can_edit_command_async_data_new (window, "EditCut", hide);
+		webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_CUT, NULL,
+							     (GAsyncReadyCallback)can_edit_command_callback,
+							     data);
+		data = can_edit_command_async_data_new (window, "EditPaste", hide);
+		webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_PASTE, NULL,
+							     (GAsyncReadyCallback)can_edit_command_callback,
+							     data);
+		data = can_edit_command_async_data_new (window, "EditUndo", hide);
+		webkit_web_view_can_execute_editing_command (view, "Undo", NULL,
+							     (GAsyncReadyCallback)can_edit_command_callback,
+							     data);
+		data = can_edit_command_async_data_new (window, "EditRedo", hide);
+		webkit_web_view_can_execute_editing_command (view, "Redo", NULL,
+							     (GAsyncReadyCallback)can_edit_command_callback,
+							     data);
+		return;
+#else
 		can_copy = webkit_web_view_can_copy_clipboard (view);
 		can_cut = webkit_web_view_can_cut_clipboard (view);
 		can_paste = webkit_web_view_can_paste_clipboard (view);

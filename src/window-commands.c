@@ -686,7 +686,7 @@ window_cmd_edit_undo (GtkAction *action,
 		if (embed)
 		{
 #ifdef HAVE_WEBKIT2
-			/* TODO: Editor */
+			webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Undo");
 #else
 			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
 #endif
@@ -715,7 +715,7 @@ window_cmd_edit_redo (GtkAction *action,
 		if (embed)
 		{
 #ifdef HAVE_WEBKIT2
-			/* TODO: Editor */
+			webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Redo");
 #else
 			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
 #endif
@@ -739,7 +739,7 @@ window_cmd_edit_cut (GtkAction *action,
 		g_return_if_fail (embed != NULL);
 
 #ifdef HAVE_WEBKIT2
-		/* TODO: Editor */
+		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
 #else
 		webkit_web_view_cut_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 #endif
@@ -763,7 +763,7 @@ window_cmd_edit_copy (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 #ifdef HAVE_WEBKIT2
-		/* TODO: Editor */
+		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
 #else
 		webkit_web_view_copy_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 #endif
@@ -788,7 +788,7 @@ window_cmd_edit_paste (GtkAction *action,
 		g_return_if_fail (embed != NULL);
 
 #ifdef HAVE_WEBKIT2
-		/* TODO: Editor */
+		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
 #else
 		webkit_web_view_paste_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 #endif
@@ -839,7 +839,7 @@ window_cmd_edit_select_all (GtkAction *action,
 		g_return_if_fail (embed != NULL);
 
 #ifdef HAVE_WEBKIT2
-		/* TODO: Editor */
+		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
 #else
 		webkit_web_view_select_all (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 #endif
