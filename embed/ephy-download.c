@@ -281,20 +281,13 @@ parse_extension (const char *filename)
 }
 
 static char *
-define_destination_uri (EphyDownload *download)
+define_destination_uri (EphyDownload *download, const char *suggested_filename)
 {
   char *dest_dir;
   char *dest_name;
   char *destination_filename;
   char *destination_uri;
-  const char *suggested_filename;
 
-#ifdef HAVE_WEBKIT2
-  /* TODO: Downloads */
-  suggested_filename = NULL;
-#else
-  suggested_filename = webkit_download_get_suggested_filename (download->priv->download);
-#endif
   dest_dir = ephy_file_get_downloads_dir ();
 
   /* Make sure the download directory exists */
@@ -395,14 +388,19 @@ ephy_download_set_destination_uri (EphyDownload *download,
 void
 ephy_download_set_auto_destination (EphyDownload *download)
 {
+#ifdef HAVE_WEBKIT2
+  /* In WebKit2 priv->destination == NULL means auto_destination */
+#else
   char *dest;
 
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
 
-  dest = define_destination_uri (download);
+  dest = define_destination_uri (download,
+                                 webkit_download_get_suggested_filename (download->priv->download));
   ephy_download_set_destination_uri (download, dest);
 
   g_free (dest);
+#endif
 }
 
 /**
