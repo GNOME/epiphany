@@ -968,39 +968,6 @@ ephy_download_new (void)
   return g_object_new (EPHY_TYPE_DOWNLOAD, NULL);
 }
 
-static EphyDownload *
-_ephy_download_new (WebKitDownload *webkit_download, const char *uri)
-{
-  EphyDownload *ephy_download;
-  ephy_download = ephy_download_new ();
-
-#ifdef HAVE_WEBKIT2
-  /* TODO: Downloads */
-#else
-  if (webkit_download == NULL) {
-    WebKitNetworkRequest *request;
-
-    request = webkit_network_request_new (uri);
-    webkit_download = webkit_download_new (request);
-
-    g_return_val_if_fail (webkit_download != NULL, NULL);
-    g_object_unref (request);
-  }
-
-  g_signal_connect (webkit_download, "notify::status",
-                    G_CALLBACK (download_status_changed_cb),
-                    ephy_download);
-  g_signal_connect (webkit_download, "error",
-                    G_CALLBACK (download_error_cb),
-                    ephy_download);
-
-  ephy_download->priv->download = g_object_ref (webkit_download);
-  ephy_download->priv->source = g_strdup (webkit_download_get_uri (webkit_download));
-#endif
-
-  return ephy_download;
-}
-
 /**
  * ephy_download_new_for_download:
  * @download: a #WebKitDownload to wrap
@@ -1012,9 +979,24 @@ _ephy_download_new (WebKitDownload *webkit_download, const char *uri)
 EphyDownload *
 ephy_download_new_for_download (WebKitDownload *download)
 {
-  g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
+  EphyDownload *ephy_download;
+  ephy_download = ephy_download_new ();
 
-  return _ephy_download_new (download, NULL);
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+#else
+  g_signal_connect (download, "notify::status",
+                    G_CALLBACK (download_status_changed_cb),
+                    ephy_download);
+  g_signal_connect (download, "error",
+                    G_CALLBACK (download_error_cb),
+                    ephy_download);
+
+  ephy_download->priv->download = g_object_ref (download);
+  ephy_download->priv->source = g_strdup (webkit_download_get_uri (download));
+#endif
+
+  return ephy_download;
 }
 
 /**
@@ -1028,7 +1010,25 @@ ephy_download_new_for_download (WebKitDownload *download)
 EphyDownload *
 ephy_download_new_for_uri (const char *uri)
 {
+  EphyDownload *ephy_download;
+  WebKitDownload *download;
+#ifdef HAVE_WEBKIT2
+  /* TODO: Downloads */
+  download = NULL;
+#else
+  WebKitNetworkRequest *request;
+
   g_return_val_if_fail (uri != NULL, NULL);
 
-  return _ephy_download_new (NULL, uri);
+  request = webkit_network_request_new (uri);
+  download = webkit_download_new (request);
+
+  g_return_val_if_fail (download != NULL, NULL);
+  g_object_unref (request);
+#endif
+
+  ephy_download = ephy_download_new_for_download (download);
+  g_object_unref (download);
+
+  return ephy_download;
 }
