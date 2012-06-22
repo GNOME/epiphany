@@ -3783,6 +3783,27 @@ ephy_web_view_get_security_level (EphyWebView *view,
 }
 
 static void
+ephy_web_view_print_failed (EphyWebView *view, GError *error)
+{
+  GtkWidget *info_bar;
+  GtkWidget *label;
+  GtkContainer *content_area;
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+  info_bar = gtk_info_bar_new_with_buttons (GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+  label = gtk_label_new (error->message);
+  content_area = GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar)));
+
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_ERROR);
+  gtk_container_add (content_area, label);
+  g_signal_connect (info_bar, "response",
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+
+  ephy_embed_add_top_widget (embed, info_bar, FALSE);
+  gtk_widget_show_all (info_bar);
+}
+
+static void
 ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
 {
 #ifdef HAVE_WEBKIT2
@@ -3804,23 +3825,8 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
   webkit_web_frame_print_full (main_frame, operation, action, &error);
 
   if (error) {
-    GtkWidget *info_bar;
-    GtkWidget *label;
-    GtkContainer *content_area;
-    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-
-    info_bar = gtk_info_bar_new_with_buttons (GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
-    label = gtk_label_new (error->message);
-    content_area = GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar)));
+    ephy_web_view_print_failed (view, error);
     g_error_free (error);
-
-    gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_ERROR);
-    gtk_container_add (content_area, label);
-    g_signal_connect (info_bar, "response",
-                      G_CALLBACK (gtk_widget_destroy), NULL);
-
-    ephy_embed_add_top_widget (embed, info_bar, FALSE);
-    gtk_widget_show_all (info_bar);
   } else
     ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
 
