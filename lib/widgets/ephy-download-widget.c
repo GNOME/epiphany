@@ -79,6 +79,30 @@ get_gicon_from_download (EphyDownload *ephy_download)
 }
 
 static char *
+get_destination_basename_from_download (EphyDownload *ephy_download)
+{
+  WebKitDownload *download;
+  const char *dest;
+  char *basename;
+  char *unescaped;
+
+  download = ephy_download_get_webkit_download (ephy_download);
+#ifdef HAVE_WEBKIT2
+  dest = NULL;
+#else
+  dest = webkit_download_get_destination_uri (download);
+#endif
+  if (!dest)
+    return NULL;
+
+  basename = g_filename_display_basename (dest);
+  unescaped = g_uri_unescape_string (basename, NULL);
+  g_free (basename);
+
+  return unescaped;
+}
+
+static char *
 format_interval (gdouble interval)
 {
    int hours, mins, secs;
@@ -515,7 +539,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   GtkWidget *menu;
   GtkWidget *remain;
 
-  char *dest, *basename;
+  char *dest;
   WebKitDownload *download;
   GIcon *gicon;
 
@@ -524,14 +548,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   widget = g_object_new (EPHY_TYPE_DOWNLOAD_WIDGET,
                          "download", ephy_download, NULL);
   download = ephy_download_get_webkit_download (ephy_download);
-
-#ifdef HAVE_WEBKIT2
-  /* TODO: Downloads */
-  basename = g_strdup ("");
-#else
-  basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
-#endif
-  dest = g_uri_unescape_string (basename, NULL);
 
   grid = gtk_grid_new ();
 
@@ -542,6 +558,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   icon = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
   g_object_unref (gicon);
 
+  dest = get_destination_basename_from_download (ephy_download);
   text = gtk_label_new (dest);
   gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
@@ -555,8 +572,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   gtk_grid_attach (GTK_GRID (grid), remain, 1, 1, 1, 1);
 
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), dest);
-
-  g_free (basename);
   g_free (dest);
 
   widget->priv->icon = icon;
