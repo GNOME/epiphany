@@ -948,24 +948,14 @@ window_has_ongoing_downloads (EphyWindow *window)
 
 	for (l = downloads; l != NULL; l = l->next)
 	{
-#ifdef HAVE_WEBKIT2
-		/* TODO: Downloads */
-#else
-		EphyDownload *download;
-		WebKitDownloadStatus status;
-
 		if (EPHY_IS_DOWNLOAD_WIDGET (l->data) != TRUE)
 			continue;
 
-		download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (l->data));
-		status = webkit_download_get_status (ephy_download_get_webkit_download (download));
-
-		if (status == WEBKIT_DOWNLOAD_STATUS_STARTED)
+		if (!ephy_download_widget_download_is_finished (EPHY_DOWNLOAD_WIDGET (l->data)))
 		{
 			downloading = TRUE;
 			break;
 		}
-#endif
 	}
 	g_list_free (downloads);
 
@@ -3156,23 +3146,13 @@ downloads_close_cb (GtkButton *button, EphyWindow *window)
 
 	for (l = downloads; l != NULL; l = l->next)
 	{
-		EphyDownload *download;
-#ifdef HAVE_WEBKIT2
-		/* TODO: Downloads */
-#else
-		WebKitDownloadStatus status;
-
 		if (EPHY_IS_DOWNLOAD_WIDGET (l->data) != TRUE)
 			continue;
 
-		download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (l->data));
-		status = webkit_download_get_status (ephy_download_get_webkit_download (download));
-
-		if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED)
+		if (ephy_download_widget_download_is_finished (EPHY_DOWNLOAD_WIDGET (l->data)))
 		{
 			gtk_widget_destroy (GTK_WIDGET (l->data));
 		}
-#endif
 	}
 	g_list_free (downloads);
 

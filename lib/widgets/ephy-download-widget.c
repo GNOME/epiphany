@@ -50,6 +50,8 @@ struct _EphyDownloadWidgetPrivate
   GtkWidget *button;
   GtkWidget *menu;
   GtkWidget *icon;
+
+  gboolean finished;
 };
 
 enum
@@ -130,21 +132,14 @@ static void
 download_clicked_cb (GtkButton *button,
                      EphyDownloadWidget *widget)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: Downloads */
-#else
-  WebKitDownloadStatus status;
   EphyDownload *download;
 
-  download = widget->priv->download;
-  status = webkit_download_get_status (ephy_download_get_webkit_download (download));
-
-  if (status != WEBKIT_DOWNLOAD_STATUS_FINISHED)
+  if (!widget->priv->finished)
     return;
 
+  download = widget->priv->download;
   if (ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO))
     gtk_widget_destroy (GTK_WIDGET (widget));
-#endif
 }
 
 #ifdef HAVE_WEBKIT2
@@ -244,10 +239,12 @@ widget_status_cb (GObject *object,
 
   status = webkit_download_get_status (WEBKIT_DOWNLOAD (object));
 
-  if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED) {
-    update_download_label_and_tooltip (widget, _("Finished"));
-    totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
-  }
+  if (status != WEBKIT_DOWNLOAD_STATUS_FINISHED)
+    return;
+
+  widget->priv->finished = TRUE;
+  update_download_label_and_tooltip (widget, _("Finished"));
+  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
 }
 
 static gboolean
@@ -304,8 +301,6 @@ download_menu_clicked_cb (GtkWidget *button,
 #ifdef HAVE_WEBKIT2
   /* TODO: Downloads */
 #else
-  WebKitDownloadStatus status;
-  gboolean finished;
   GtkWidget *item;
   GtkWidget *menu;
   GtkWidget *box;
@@ -316,8 +311,6 @@ download_menu_clicked_cb (GtkWidget *button,
 
   download = ephy_download_get_webkit_download (widget->priv->download);
 
-  status = webkit_download_get_status (download);
-  finished = (status == WEBKIT_DOWNLOAD_STATUS_FINISHED);
   basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
   name = g_uri_unescape_string (basename, NULL);
 
@@ -336,7 +329,7 @@ download_menu_clicked_cb (GtkWidget *button,
 
   item = gtk_menu_item_new_with_label (_("Cancel"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, !finished);
+  gtk_widget_set_sensitive (item, !widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (cancel_activate_cb), widget);
 
@@ -345,13 +338,13 @@ download_menu_clicked_cb (GtkWidget *button,
 
   item = gtk_menu_item_new_with_label (_("Open"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, finished);
+  gtk_widget_set_sensitive (item, widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (open_activate_cb), widget);
 
   item = gtk_menu_item_new_with_label (_("Show in folder"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, finished);
+  gtk_widget_set_sensitive (item, widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (folder_activate_cb), widget);
 
@@ -484,6 +477,21 @@ ephy_download_widget_get_download (EphyDownloadWidget *widget)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget), NULL);
   return widget->priv->download;
+}
+
+/**
+ * ephy_download_widget_download_is_finished:
+ * @widget: an #EphyDownloadWidget
+ *
+ * Whether the download finished
+ *
+ * Returns: %TRUE if download operation finished or %FALSE otherwise
+ **/
+gboolean
+ephy_download_widget_download_is_finished (EphyDownloadWidget *widget)
+{
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget), FALSE);
+  return widget->priv->finished;
 }
 
 /**
