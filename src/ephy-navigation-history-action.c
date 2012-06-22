@@ -441,8 +441,9 @@ activate_menu_item_cb (GtkWidget *menuitem,
   }
 #endif
 }
-static GList*
-webkit_construct_history_list (WebKitWebView *web_view,
+
+static GList *
+construct_webkit_history_list (WebKitWebView *web_view,
                                WebKitHistoryType hist_type,
                                int limit)
 {
@@ -484,10 +485,10 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
   if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK)
-    list = webkit_construct_history_list (web_view,
+    list = construct_webkit_history_list (web_view,
                                           WEBKIT_HISTORY_BACKWARD, 10);
   else
-    list = webkit_construct_history_list (web_view,
+    list = construct_webkit_history_list (web_view,
                                           WEBKIT_HISTORY_FORWARD, 10);
 #ifdef HAVE_WEBKIT2
   /* TODO: WebKitBackForwardList */
