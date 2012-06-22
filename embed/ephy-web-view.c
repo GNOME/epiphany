@@ -3547,7 +3547,7 @@ ephy_web_view_get_visibility (EphyWebView *view)
  **/
 void
 ephy_web_view_set_link_message (EphyWebView *view,
-                                char *link_message)
+                                const char *link_message)
 {
   EphyWebViewPrivate *priv = view->priv;
 

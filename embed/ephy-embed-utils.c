@@ -32,8 +32,8 @@
 #include "ephy-embed-utils.h"
 #include "ephy-request-about.h"
 
-char*
-ephy_embed_utils_link_message_parse (char *message)
+char *
+ephy_embed_utils_link_message_parse (const char *message)
 {
 	
 	char *status_message;
