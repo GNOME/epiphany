@@ -3803,12 +3803,10 @@ ephy_web_view_print_failed (EphyWebView *view, GError *error)
   gtk_widget_show_all (info_bar);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: Printing */
-#else
   WebKitWebFrame *main_frame;
   GtkPrintOperation *operation;
   GError *error;
@@ -3831,8 +3829,27 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
     ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
 
   g_object_unref (operation);
-#endif
 }
+#endif
+
+#ifdef HAVE_WEBKIT2
+static void
+print_operation_finished_cb (WebKitPrintOperation *operation,
+                             EphyWebView *view)
+{
+  ephy_embed_shell_set_page_setup (ephy_embed_shell_get_default (),
+                                   webkit_print_operation_get_page_setup (operation));
+}
+
+static void
+print_operation_failed_cb (WebKitPrintOperation *operation,
+                           GError *error,
+                           EphyWebView *view)
+{
+  g_signal_handlers_disconnect_by_func (operation, print_operation_finished_cb, view);
+  ephy_web_view_print_failed (view, error);
+}
+#endif
 
 /**
  * ephy_web_view_print:
@@ -3845,7 +3862,25 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
 void
 ephy_web_view_print (EphyWebView *view)
 {
+#ifdef HAVE_WEBKIT2
+  WebKitPrintOperation *operation;
+  EphyEmbedShell *shell;
+
+  shell = ephy_embed_shell_get_default ();
+
+  operation = webkit_print_operation_new (WEBKIT_WEB_VIEW (view));
+  g_signal_connect (operation, "finished",
+                    G_CALLBACK (print_operation_finished_cb),
+                    view);
+  g_signal_connect (operation, "failed",
+                    G_CALLBACK (print_operation_failed_cb),
+                    view);
+  webkit_print_operation_set_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
+  webkit_print_operation_run_dialog (operation, NULL);
+  g_object_unref (operation);
+#else
   ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
+#endif
 }
 
 /**
