@@ -224,8 +224,7 @@ item_enter_notify_event_cb (GtkWidget *widget,
   char *text;
 
   text = g_object_get_data (G_OBJECT (widget), "link-message");
-  ephy_web_view_set_link_message (view, g_strdup (text));
-  g_object_set_data (G_OBJECT (widget), "link-message", text);
+  ephy_web_view_set_link_message (view, text);
 
   return FALSE;
 }
@@ -309,7 +308,7 @@ new_history_menu_item (EphyWebView *view,
   }
 #endif
 
-  g_object_set_data (G_OBJECT (item), "link-message", g_strdup (address));
+  g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify) g_free);
 
   g_signal_connect (item, "enter-notify-event",
                     G_CALLBACK (item_enter_notify_event_cb), view);
