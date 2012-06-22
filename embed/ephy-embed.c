@@ -551,9 +551,7 @@ ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
   ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: Downloads */
-#else
+#ifndef HAVE_WEBKIT2
 static gboolean
 download_requested_cb (WebKitWebView *web_view,
                        WebKitDownload *download,

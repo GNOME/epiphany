@@ -380,7 +380,26 @@ take_page_snapshot_and_set_image (EphyApplicationDialogData *data)
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Downloads */
+static void
+download_finished_cb (WebKitDownload *download,
+		      EphyApplicationDialogData *data)
+{
+	char *filename;
+
+	filename = g_filename_from_uri (webkit_download_get_destination (download), NULL, NULL);
+	gtk_image_set_from_file (GTK_IMAGE (data->image), filename);
+	g_free (filename);
+}
+
+static void
+download_failed_cb (WebKitDownload *download,
+		    GError *error,
+		    EphyApplicationDialogData *data)
+{
+	g_signal_handlers_disconnect_by_func (download, download_finished_cb, data);
+	/* Something happened, default to a page snapshot. */
+	take_page_snapshot_and_set_image (data);
+}
 #else
 static void
 download_status_changed_cb (WebKitDownload *download,
@@ -412,25 +431,39 @@ download_status_changed_cb (WebKitDownload *download,
 static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Downloads */
-#else
+#ifndef HAVE_WEBKIT2
 	WebKitNetworkRequest *request;
+#endif
 	WebKitDownload *download;
 	char *destination, *destination_uri, *tmp_filename;
 
+#ifdef HAVE_WEBKIT2
+	download = webkit_web_context_download_uri (webkit_web_context_get_default (),
+						    data->icon_href);
+#else
 	request = webkit_network_request_new (data->icon_href);
 	download = webkit_download_new (request);
 	g_object_unref (request);
+#endif
 
 	tmp_filename = ephy_file_tmp_filename ("ephy-download-XXXXXX", NULL);
 	destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
 	destination_uri = g_filename_to_uri (destination, NULL, NULL);
+#ifdef HAVE_WEBKIT2
+	webkit_download_set_destination (download, destination_uri);
+#else
 	webkit_download_set_destination_uri (download, destination_uri);
+#endif
 	g_free (destination);
 	g_free (destination_uri);
 	g_free (tmp_filename);
 
+#ifdef HAVE_WEBKIT2
+	g_signal_connect (download, "finished",
+			  G_CALLBACK (download_finished_cb), data);
+	g_signal_connect (download, "failed",
+			  G_CALLBACK (download_failed_cb), data);
+#else
 	g_signal_connect (download, "notify::status",
 			  G_CALLBACK (download_status_changed_cb), data);
 

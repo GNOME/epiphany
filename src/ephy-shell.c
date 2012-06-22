@@ -544,6 +544,31 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
   return embed_single;
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+download_started_cb (WebKitWebContext *web_context,
+                     WebKitDownload *download,
+                     EphyShell *shell)
+{
+  EphyDownload *ed;
+  EphySession *session;
+  EphyWindow *window;
+
+  /* Is download locked down? */
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
+    webkit_download_cancel (download);
+    return;
+  }
+
+  session = EPHY_SESSION (ephy_shell_get_session (shell));
+  window = ephy_session_get_active_window (session);
+
+  ed = ephy_download_new_for_download (download);
+  ephy_download_set_window (ed, GTK_WIDGET (window));
+}
+#endif
+
 static void
 ephy_shell_init (EphyShell *shell)
 {
@@ -556,6 +581,12 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+#ifdef HAVE_WEBKIT2
+  g_signal_connect (webkit_web_context_get_default (), "download-started",
+                    G_CALLBACK (download_started_cb),
+                    shell);
+#endif
 }
 
 static void
