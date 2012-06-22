@@ -37,7 +37,7 @@
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
-#include "ephy-request-about.h"
+#include "ephy-about-handler.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"

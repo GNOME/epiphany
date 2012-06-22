@@ -16,9 +16,6 @@
 #define EPHY_IS_REQUEST_ABOUT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_REQUEST_ABOUT))
 #define EPHY_REQUEST_ABOUT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_REQUEST_ABOUT, EphyRequestAboutClass))
 
-#define EPHY_ABOUT_SCHEME "ephy-about"
-#define EPHY_ABOUT_SCHEME_LEN 10
-
 typedef struct _EphyRequestAboutPrivate EphyRequestAboutPrivate;
 
 typedef struct {

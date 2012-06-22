@@ -30,7 +30,7 @@
 
 #include "ephy-string.h"
 #include "ephy-embed-utils.h"
-#include "ephy-request-about.h"
+#include "ephy-about-handler.h"
 
 char *
 ephy_embed_utils_link_message_parse (const char *message)

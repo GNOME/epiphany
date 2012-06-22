@@ -32,7 +32,7 @@
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
 #include "ephy-prefs.h"
-#include "ephy-request-about.h"
+#include "ephy-about-handler.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"

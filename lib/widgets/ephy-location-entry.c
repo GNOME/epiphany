@@ -28,7 +28,7 @@
 #include "ephy-dnd.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
-#include "ephy-request-about.h"
+#include "ephy-about-handler.h"
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
