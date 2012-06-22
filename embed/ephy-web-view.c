@@ -1079,7 +1079,7 @@ static void
 ephy_web_view_clear_history (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
-  /* TODO: History */
+  /* TODO: WebKitBackForwardList is read-only in WebKit2 */
 #else
   WebKitWebBackForwardList *history_list;
 
