@@ -1188,6 +1188,9 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec *spec,
                 gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: update adress when clicking anchor links. */
+#else
   char *uri;
   const char *current_address;
 
@@ -1201,6 +1204,7 @@ uri_changed_cb (WebKitWebView *web_view,
     ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
 
   g_free (uri);
+#endif
 }
 
 #ifdef HAVE_WEBKIT2
