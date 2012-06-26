@@ -593,7 +593,9 @@ ephy_embed_set_fullscreen_message (EphyEmbed *embed,
 
 static gboolean
 entering_fullscreen_cb (WebKitWebView *web_view,
+#ifndef HAVE_WEBKIT2
                         GObject *element,
+#endif
                         EphyEmbed *embed)
 {
   ephy_embed_set_fullscreen_message (embed, TRUE);
@@ -602,7 +604,9 @@ entering_fullscreen_cb (WebKitWebView *web_view,
 
 static gboolean
 leaving_fullscreen_cb (WebKitWebView *web_view,
+#ifndef HAVE_WEBKIT2
                        GObject *element,
+#endif
                        EphyEmbed *embed)
 {
   ephy_embed_set_fullscreen_message (embed, FALSE);
@@ -833,9 +837,11 @@ ephy_embed_constructed (GObject *object)
 
 #ifdef HAVE_WEBKIT2
   /* TODO: WebKitWebResource::send-request, Downloads */
-  g_signal_connect (web_view, "load-changed",
-                    G_CALLBACK (load_changed_cb),
-                    embed);
+  g_object_connect (web_view,
+                    "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
+                    "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
+                    "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
+                    NULL);
 #else
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
