@@ -764,7 +764,8 @@ ephy_notebook_remove (GtkContainer *container,
 	int position, curr;
 	EphyWebView *view;
 
-	g_assert (EPHY_IS_EMBED (tab_widget));
+	if (!EPHY_IS_EMBED (tab_widget))
+		return;
 
 	/* Remove the page from the focused pages list */
 	priv->focused_pages =  g_list_remove (priv->focused_pages, tab_widget);
