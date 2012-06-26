@@ -1711,7 +1711,7 @@ decide_policy_cb (WebKitWebView *web_view,
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
   EphyWebViewDocumentType type;
-  const gchar *mime_type;
+  const char *mime_type;
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
@@ -2034,7 +2034,7 @@ load_changed_cb (WebKitWebView *web_view,
 
   switch (load_event) {
   case WEBKIT_LOAD_STARTED: {
-    const gchar *loading_uri = NULL;
+    const char *loading_uri = NULL;
 
     priv->is_loading = TRUE;
     priv->load_failed = FALSE;
@@ -2061,7 +2061,7 @@ load_changed_cb (WebKitWebView *web_view,
     /* TODO: Update the loading uri */
     break;
   case WEBKIT_LOAD_COMMITTED: {
-    const gchar* uri;
+    const char* uri;
     EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
     /* Title and location. */
@@ -2195,7 +2195,7 @@ load_status_cb (WebKitWebView *web_view,
   switch (status) {
   /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
   case WEBKIT_LOAD_PROVISIONAL: {
-    const gchar *loading_uri = NULL;
+    const char *loading_uri = NULL;
     WebKitWebFrame *frame;
 
     WebKitWebDataSource *source;
@@ -2216,17 +2216,17 @@ load_status_cb (WebKitWebView *web_view,
       ephy_web_view_set_title (view, NULL);
     }
 
-      ephy_web_view_set_loading_title (view, loading_uri, TRUE);
-
-      g_free (priv->status_message);
-      priv->status_message = g_strdup (priv->loading_title);
-      g_object_notify (object, "status-message");
-
-      priv->expire_address_now = TRUE;
-      break;
+    ephy_web_view_set_loading_title (view, loading_uri, TRUE);
+    
+    g_free (priv->status_message);
+    priv->status_message = g_strdup (priv->loading_title);
+    g_object_notify (object, "status-message");
+    
+    priv->expire_address_now = TRUE;
+    break;
   }
   case WEBKIT_LOAD_COMMITTED: {
-    const gchar* uri;
+    const char* uri;
     EphyWebViewSecurityLevel security_level;
 
     /* Title and location. */
@@ -2486,7 +2486,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
 static gboolean
 load_failed_cb (WebKitWebView *web_view,
                 WebKitLoadEvent load_event,
-                const gchar *uri,
+                const char *uri,
                 GError *error,
                 gpointer user_data)
 #else
@@ -3294,12 +3294,12 @@ ephy_web_view_file_monitor_cb (GFileMonitor *monitor,
 
 static void
 ephy_web_view_update_file_monitor (EphyWebView *view,
-                                   const gchar *address)
+                                   const char *address)
 {
   EphyWebViewPrivate *priv = view->priv;
   gboolean local;
-  gchar *anchor;
-  gchar *url;
+  char *anchor;
+  char *url;
   GFile *file;
   GFileType file_type;
   GFileInfo *file_info;
