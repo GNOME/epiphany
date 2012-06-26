@@ -1,4 +1,29 @@
 ==============
+Epiphany 3.5.3
+==============
+
+Changes:
+
+  - Initial WebKit2 support!
+
+    This is still in the early stages of development, but the basic
+    functionality is already in place. It is under heavy development,
+    and the goal is to deliver a Beta quality version for 3.6. You can
+    follow the WebKit2 metabug:
+    https://bugzilla.gnome.org/show_bug.cgi?id=678610, and enable the
+    WebKit2 port passing "--with-webkit2" to 'configure' (disabled by
+    default).
+
+  - Improve fullscreen UI, and add support for HTML5 fullscreen
+    (#676905)
+  - Add support for 'Do Not Track', http://donottrack.us/
+  - Migrate profile directory to the XDG config directory
+    (~/.gnome2/epiphany -> ~/.config/epiphany) (#522810)
+  - Add new unit tests for EphyShell, EphySession,
+    EphyProfileMigrator, EphyWebAppUtils, ...
+  - Lots and lots of cleanups and other minor fixes.
+
+==============
 Epiphany 3.5.1
 ==============
 
