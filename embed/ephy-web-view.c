@@ -59,9 +59,6 @@
  * it.
  */
 
-static void     ephy_web_view_class_init   (EphyWebViewClass *klass);
-static void     ephy_web_view_init         (EphyWebView *gs);
-
 #define MAX_HIDDEN_POPUPS       5
 #define MAX_TITLE_LENGTH        512 /* characters */
 #define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
