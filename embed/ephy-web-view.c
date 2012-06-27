@@ -1162,14 +1162,16 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec *spec,
                 gpointer data)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: update adress when clicking anchor links. */
-#else
   char *uri;
   const char *current_address;
 
   g_object_get (web_view, "uri", &uri, NULL);
   current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+
+#ifdef HAVE_WEBKIT2
+  if (!EPHY_WEB_VIEW (web_view)->priv->is_loading)
+    return;
+#endif
 
   /* We need to check if we get URI notifications without going
      through the usual load process, as this can happen when changing
@@ -1178,7 +1180,6 @@ uri_changed_cb (WebKitWebView *web_view,
     ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
 
   g_free (uri);
-#endif
 }
 
 #ifdef HAVE_WEBKIT2
