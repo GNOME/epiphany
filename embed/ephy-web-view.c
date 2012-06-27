@@ -23,6 +23,7 @@
 #include "config.h"
 #include "ephy-web-view.h"
 
+#include "ephy-about-handler.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -38,7 +39,6 @@
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
-#include "ephy-about-handler.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
@@ -50,7 +50,6 @@
 #include <gnome-keyring.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup-gnome.h>
-#include <string.h>
 
 /**
  * SECTION:ephy-web-view
