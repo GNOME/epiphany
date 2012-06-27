@@ -12,6 +12,7 @@ NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-private.h		\
 	ephy-encodings.h		\
+	ephy-file-monitor.h		\
 	ephy-request-about.h
 
 INST_H_FILES = \
@@ -46,6 +47,7 @@ libephyembed_la_SOURCES = \
 	ephy-embed-shell.c		\
 	ephy-embed-utils.c              \
 	ephy-encodings.c		\
+	ephy-file-monitor.c		\
 	ephy-permission-manager.c	\
 	ephy-request-about.c		\
 	ephy-embed-prefs.c		\

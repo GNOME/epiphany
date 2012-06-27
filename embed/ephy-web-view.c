@@ -33,6 +33,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
+#include "ephy-file-monitor.h"
 #include "ephy-history-service.h"
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
@@ -64,8 +65,6 @@ static void     ephy_web_view_init         (EphyWebView *gs);
 
 #define MAX_HIDDEN_POPUPS       5
 #define MAX_TITLE_LENGTH        512 /* characters */
-#define RELOAD_DELAY            250 /* ms */
-#define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 #define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
 
 struct _EphyWebViewPrivate {
@@ -95,11 +94,8 @@ struct _EphyWebViewPrivate {
   GdkPixbuf *icon;
   gboolean expire_address_now;
 
-  /* File watch */
-  GFileMonitor *monitor;
-  gboolean monitor_directory;
-  guint reload_scheduled_id;
-  guint reload_delay_ticks;
+  /* Local file watch. */
+  EphyFileMonitor *file_monitor;
 
   /* Regex to figure out if we're dealing with a wanna-be URI */
   GRegex *non_search_regex;
@@ -499,28 +495,6 @@ ephy_web_view_set_property (GObject *object,
   }
 }
 
-static void
-ephy_web_view_file_monitor_cancel (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->monitor != NULL) {
-    LOG ("Cancelling file monitor");
-
-    g_file_monitor_cancel (G_FILE_MONITOR (priv->monitor));
-    priv->monitor = NULL;
-  }
-
-  if (priv->reload_scheduled_id != 0) {
-    LOG ("Cancelling scheduled reload");
-
-    g_source_remove (priv->reload_scheduled_id);
-    priv->reload_scheduled_id = 0;
-  }
-
-  priv->reload_delay_ticks = 0;
-}
-
 static gboolean
 ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
@@ -556,7 +530,7 @@ ephy_web_view_dispose (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
 
-  ephy_web_view_file_monitor_cancel (EPHY_WEB_VIEW (object));
+  g_clear_object (&priv->file_monitor);
 
   if (priv->history_service_cancellable) {
     g_cancellable_cancel (priv->history_service_cancellable);
@@ -2674,7 +2648,8 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-  priv->monitor_directory = FALSE;
+
+  priv->file_monitor = ephy_file_monitor_new (web_view);
 
   priv->non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
@@ -3213,156 +3188,6 @@ ephy_web_view_set_loading_title (EphyWebView *view,
   g_free (freeme);
 }
 
-static gboolean
-ephy_web_view_file_monitor_reload_cb (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->reload_delay_ticks > 0) {
-    priv->reload_delay_ticks--;
-
-    /* Run again */
-    return TRUE;
-  }
-
-  if (ephy_web_view_is_loading (view)) {
-    /* Wait a bit to reload if we're still loading! */
-    priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
-
-    /* Run again */
-    return TRUE;
-  }
-
-  priv->reload_scheduled_id = 0;
-
-  LOG ("Reloading file '%s'", ephy_web_view_get_address (view));
-  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
-
-  /* don't run again */
-  return FALSE;
-}
-
-static void
-ephy_web_view_file_monitor_cb (GFileMonitor *monitor,
-                               GFile *file,
-                               GFile *other_file,
-                               GFileMonitorEvent event_type,
-                               EphyWebView *view)
-{
-  gboolean should_reload;
-  EphyWebViewPrivate *priv = view->priv;
-
-  switch (event_type) {
-    /* These events will always trigger a reload: */
-    case G_FILE_MONITOR_EVENT_CHANGED:
-    case G_FILE_MONITOR_EVENT_CREATED:
-      should_reload = TRUE;
-      break;
-
-    /* These events will only trigger a reload for directories: */
-    case G_FILE_MONITOR_EVENT_DELETED:
-    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-      should_reload = priv->monitor_directory;
-      break;
-
-    /* These events don't trigger a reload: */
-    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
-    case G_FILE_MONITOR_EVENT_UNMOUNTED:
-    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-    default:
-      should_reload = FALSE;
-      break;
-  }
-
-  if (should_reload) {
-    /* We make a lot of assumptions here, but basically we know
-     * that we just have to reload, by construction.
-     * Delay the reload a little bit so we don't endlessly
-     * reload while a file is written.
-     */
-    if (priv->reload_delay_ticks == 0) {
-      priv->reload_delay_ticks = 1;
-    } else {
-      /* Exponential backoff */
-      priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
-                                      RELOAD_DELAY_MAX_TICKS);
-    }
-
-    if (priv->reload_scheduled_id == 0) {
-      priv->reload_scheduled_id =
-        g_timeout_add (RELOAD_DELAY,
-                       (GSourceFunc)ephy_web_view_file_monitor_reload_cb, view);
-    }
-  }
-}
-
-static void
-ephy_web_view_update_file_monitor (EphyWebView *view,
-                                   const char *address)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  gboolean local;
-  char *anchor;
-  char *url;
-  GFile *file;
-  GFileType file_type;
-  GFileInfo *file_info;
-  GFileMonitor *monitor = NULL;
-
-  if (priv->monitor != NULL &&
-      priv->address != NULL && address != NULL &&
-      strcmp (priv->address, address) == 0) {
-    /* same address, no change needed */
-    return;
-  }
-
-  ephy_web_view_file_monitor_cancel (view);
-
-  local = g_str_has_prefix (address, "file://");
-  if (local == FALSE) return;
-
-  /* strip off anchors */
-  anchor = strchr (address, '#');
-  if (anchor != NULL) {
-    url = g_strndup (address, anchor - address);
-  } else {
-    url = g_strdup (address);
-  }
-
-  file = g_file_new_for_uri (url);
-  file_info = g_file_query_info (file,
-                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                 0, NULL, NULL);
-  if (file_info == NULL) {
-    g_object_unref (file);
-    g_free (url);
-    return;
-  }
-
-  file_type = g_file_info_get_file_type (file_info);
-  g_object_unref (file_info);
-
-  if (file_type == G_FILE_TYPE_DIRECTORY) {
-    monitor = g_file_monitor_directory (file, 0, NULL, NULL);
-    g_signal_connect (monitor, "changed",
-                      G_CALLBACK (ephy_web_view_file_monitor_cb),
-                      view);
-    priv->monitor_directory = TRUE;
-    LOG ("Installed monitor for directory '%s'", url);
-  }
-  else if (file_type == G_FILE_TYPE_REGULAR) {
-    monitor = g_file_monitor_file (file, 0, NULL, NULL);
-    g_signal_connect (monitor, "changed",
-                      G_CALLBACK (ephy_web_view_file_monitor_cb),
-                      view);
-    priv->monitor_directory = FALSE;
-    LOG ("Installed monitor for file '%s'", url);
-  }
-  priv->monitor = monitor;
-  g_object_unref (file);
-  g_free (url);
-}
-
 /**
  * ephy_web_view_location_changed:
  * @view: an #EphyWebView
@@ -3376,11 +3201,12 @@ ephy_web_view_location_changed (EphyWebView *view,
                                 const char *location)
 {
   GObject *object = G_OBJECT (view);
+  EphyWebViewPrivate *priv = view->priv;
 
   g_object_freeze_notify (object);
 
-  /* do this up here so we still have the old address around */
-  ephy_web_view_update_file_monitor (view, location);
+  /* Do this up here so we still have the old address around. */
+  ephy_file_monitor_update_location (priv->file_monitor, location);
 
   /* Do not expose about:blank to the user, an empty address
      bar will do better */
