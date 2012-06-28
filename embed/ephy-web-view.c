@@ -1117,6 +1117,46 @@ get_title_from_address (const char *address)
 }
 
 static void
+_ephy_web_view_set_is_blank (EphyWebView *view,
+                             gboolean is_blank)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (priv->is_blank != is_blank) {
+    priv->is_blank = is_blank;
+    g_object_notify (G_OBJECT (view), "is-blank");
+  }
+}
+
+static void
+ephy_web_view_set_title (EphyWebView *view,
+                         const char *view_title)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  char *title = g_strdup (view_title);
+
+  if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0')) {
+    g_free (title);
+    title = get_title_from_address (priv->address);
+
+    /* Fallback */
+    if (title == NULL || title[0] == '\0') {
+      g_free (title);
+      title = g_strdup (EMPTY_PAGE);
+      _ephy_web_view_set_is_blank (view, TRUE);
+    }
+  } else if (priv->is_blank) {
+    g_free (title);
+    title = g_strdup (EMPTY_PAGE);
+  }
+
+  g_free (priv->title);
+  priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
+
+  g_object_notify (G_OBJECT (view), "embed-title");
+}
+
+static void
 title_changed_cb (WebKitWebView *web_view,
                   GParamSpec *spec,
                   gpointer data)
@@ -1145,18 +1185,6 @@ title_changed_cb (WebKitWebView *web_view,
 
   g_free (title);
 
-}
-
-static void
-_ephy_web_view_set_is_blank (EphyWebView *view,
-                             gboolean is_blank)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->is_blank != is_blank) {
-    priv->is_blank = is_blank;
-    g_object_notify (G_OBJECT (view), "is-blank");
-  }
 }
 
 /**
@@ -3084,41 +3112,6 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   if (item)
     webkit_web_back_forward_list_add_item (dest_bflist, item);
 #endif
-}
-
-/**
- * ephy_web_view_set_title:
- * @view: an #EphyWebView
- * @view_title: new title for @view
- *
- * Sets @view title to @view_title.
- */
-void
-ephy_web_view_set_title (EphyWebView *view,
-                         const char *view_title)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  char *title = g_strdup (view_title);
-
-  if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0')) {
-    g_free (title);
-    title = get_title_from_address (priv->address);
-
-    /* Fallback */
-    if (title == NULL || title[0] == '\0') {
-      g_free (title);
-      title = g_strdup (EMPTY_PAGE);
-      _ephy_web_view_set_is_blank (view, TRUE);
-    }
-  } else if (priv->is_blank) {
-    g_free (title);
-    title = g_strdup (EMPTY_PAGE);
-  }
-
-  g_free (priv->title);
-  priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
-
-  g_object_notify (G_OBJECT (view), "embed-title");
 }
 
 /**

@@ -160,8 +160,6 @@ void                       ephy_web_view_get_security_level       (EphyWebView  
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    char                     **description);
 void                       ephy_web_view_print                    (EphyWebView               *view);
-void                       ephy_web_view_set_title                (EphyWebView               *view,
-                                                                   const char                *view_title);
 const char *               ephy_web_view_get_title                (EphyWebView               *view);
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
