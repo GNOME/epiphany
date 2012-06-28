@@ -1234,7 +1234,7 @@ window_cmd_help_about (GtkAction *action,
 		   "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA")
 	};
 
-	char *licence, *comments;
+	char *licence = NULL, *comments = NULL;
 	GKeyFile *key_file;
 	GError *error = NULL;
 	char **list, **authors, **contributors, **past_authors, **artists, **documenters;
