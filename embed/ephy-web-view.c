@@ -88,7 +88,6 @@ struct _EphyWebViewPrivate {
   char *status_message;
   char *link_message;
   GdkPixbuf *icon;
-  gboolean expire_address_now;
 
   /* Local file watch. */
   EphyFileMonitor *file_monitor;
@@ -2019,8 +2018,7 @@ load_changed_cb (WebKitWebView *web_view,
     loading_uri = webkit_web_view_get_uri (web_view);
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
-    if ((priv->address == NULL || priv->address[0] == '\0') &&
-        priv->expire_address_now == TRUE) {
+    if (priv->address == NULL || priv->address[0] == '\0') {
       ephy_web_view_set_address (view, loading_uri);
       ephy_web_view_set_title (view, NULL);
     }
@@ -2031,7 +2029,6 @@ load_changed_cb (WebKitWebView *web_view,
     priv->status_message = g_strdup (priv->loading_title);
     g_object_notify (object, "status-message");
 
-    priv->expire_address_now = TRUE;
     break;
   }
   case WEBKIT_LOAD_REDIRECTED:
@@ -2187,8 +2184,7 @@ load_status_cb (WebKitWebView *web_view,
 
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
-    if ((priv->address == NULL || priv->address[0] == '\0') &&
-        priv->expire_address_now == TRUE) {
+    if (priv->address == NULL || priv->address[0] == '\0') {
       ephy_web_view_set_address (view, loading_uri);
       ephy_web_view_set_title (view, NULL);
     }
@@ -2199,7 +2195,6 @@ load_status_cb (WebKitWebView *web_view,
     priv->status_message = g_strdup (priv->loading_title);
     g_object_notify (object, "status-message");
     
-    priv->expire_address_now = TRUE;
     break;
   }
   case WEBKIT_LOAD_COMMITTED: {
@@ -2519,12 +2514,10 @@ load_error_cb (WebKitWebView *web_view,
     {
       EphyWebViewPrivate *priv = view->priv;
 
-      if (priv->expire_address_now) {
+      if (!priv->typed_address) {
         const char* prev_uri;
 
         prev_uri = webkit_web_view_get_uri (web_view);
-
-        ephy_web_view_set_typed_address (view, NULL);
         ephy_web_view_set_address (view, prev_uri);
       }
     }
@@ -2639,7 +2632,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
 
-  priv->expire_address_now = TRUE;
   priv->is_blank = TRUE;
 #ifndef HAVE_WEBKIT2
   priv->load_status = WEBKIT_LOAD_PROVISIONAL;
@@ -3066,7 +3058,6 @@ ephy_web_view_set_address (EphyWebView *view,
   _ephy_web_view_set_is_blank (view, is_blank);
 
   if (ephy_web_view_is_loading (view) &&
-      priv->expire_address_now == TRUE &&
       priv->typed_address != NULL) {
     g_free (priv->typed_address);
     priv->typed_address = NULL;
@@ -3480,15 +3471,23 @@ ephy_web_view_set_visibility (EphyWebView *view,
  * ephy_web_view_get_typed_address:
  * @view: an #EphyWebView
  *
- * Returns the text that @view's #EphyWindow will display in its location toolbar
- * entry when @view is selected.
+ * Returns the text that the user introduced in the @view's
+ * #EphyWindow location entry, if any.
  *
  * This is not guaranteed to be the same as @view's location,
- * available through ephy_web_view_get_location(). As the user types a new address
- * into the location entry, ephy_web_view_get_location()'s returned string will
- * change.
+ * available through ephy_web_view_get_location(). As the user types a
+ * new address into the location entry,
+ * ephy_web_view_get_typed_address()'s returned string will
+ * change. When the load starts, ephy_web_view_get_typed_address()
+ * will return %NULL, and ephy_web_view_get_location() will return the
+ * new page being loaded. Note that the typed_address can be changed
+ * again while a load is in progress (in case the user starts to type
+ * again in the location entry); in that case
+ * ephy_web_view_get_typed_address() will be again non-%NULL, and the
+ * contents of the entry will not be overwritten.
  *
- * Return value: @view's #EphyWindow's location entry text when @view is selected
+ * Return value: @view's #EphyWindow's location entry text when @view
+ * is selected.
  **/
 const char *
 ephy_web_view_get_typed_address (EphyWebView *view)
@@ -3512,11 +3511,6 @@ ephy_web_view_set_typed_address (EphyWebView *view,
 
   g_free (priv->typed_address);
   priv->typed_address = g_strdup (address);
-  /* If the page is loading prevent the typed address from going away,
-     since Epiphany will try to overwrite the typed address with the
-     confirmed full URL when passing through, for example, the
-     COMMITTED state. */
-  priv->expire_address_now = !ephy_web_view_is_loading (view);
 
   g_object_notify (G_OBJECT (view), "typed-address");
 }
