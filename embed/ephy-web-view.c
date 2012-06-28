@@ -3502,7 +3502,11 @@ void
 ephy_web_view_set_typed_address (EphyWebView *view,
                                  const char *address)
 {
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (view)->priv;
+  EphyWebViewPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
+  priv = EPHY_WEB_VIEW (view)->priv;
 
   g_free (priv->typed_address);
   priv->typed_address = g_strdup (address);
