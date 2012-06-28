@@ -3487,6 +3487,8 @@ ephy_web_view_set_visibility (EphyWebView *view,
 const char *
 ephy_web_view_get_typed_address (EphyWebView *view)
 {
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+
   return view->priv->typed_address;
 }
 
