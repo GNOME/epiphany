@@ -3198,12 +3198,9 @@ ephy_web_view_location_changed (EphyWebView *view,
     g_free (new_address);
     ephy_web_view_set_title (view, EMPTY_PAGE);
   } else {
-    const char *view_address;
-
-    /* we do this to get rid of an eventual password in the URL */
-    view_address = ephy_web_view_get_address (view);
-    ephy_web_view_set_address (view, view_address);
-    ephy_web_view_set_loading_title (view, view_address, TRUE);
+    /* We do this to get rid of an eventual password in the URL. */
+    ephy_web_view_set_address (view, location);
+    ephy_web_view_set_loading_title (view, location, TRUE);
   }
 
   ephy_web_view_set_link_message (view, NULL);
