@@ -522,6 +522,8 @@ ephy_web_view_dispose (GObject *object)
 
   g_clear_object (&priv->file_monitor);
 
+  g_clear_object (&priv->icon);
+
   if (priv->history_service_cancellable) {
     g_cancellable_cancel (priv->history_service_cancellable);
     g_clear_object (&priv->history_service_cancellable);
@@ -1082,11 +1084,6 @@ ephy_web_view_finalize (GObject *object)
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
-
-  if (priv->icon != NULL) {
-    g_object_unref (priv->icon);
-    priv->icon = NULL;
-  }
 
   if (priv->non_search_regex != NULL) {
     g_regex_unref (priv->non_search_regex);
