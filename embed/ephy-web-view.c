@@ -2050,7 +2050,6 @@ ephy_web_view_location_changed (EphyWebView *view,
     char *new_address = g_strdup_printf ("about:%s", location + EPHY_ABOUT_SCHEME_LEN + 1);
     ephy_web_view_set_address (view, new_address);
     g_free (new_address);
-    ephy_web_view_set_title (view, EMPTY_PAGE);
   } else {
     /* We do this to get rid of an eventual password in the URL. */
     ephy_web_view_set_address (view, location);
@@ -2093,10 +2092,8 @@ load_changed_cb (WebKitWebView *web_view,
     loading_uri = webkit_web_view_get_uri (web_view);
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
-    if (priv->address == NULL || priv->address[0] == '\0') {
+    if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
-      ephy_web_view_set_title (view, NULL);
-    }
 
     ephy_web_view_set_loading_title (view, loading_uri, TRUE);
 
@@ -2116,8 +2113,6 @@ load_changed_cb (WebKitWebView *web_view,
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
-
-    ephy_web_view_set_title (view, NULL);
 
     /* Security status. */
     if (uri && g_str_has_prefix (uri, "https")) {
@@ -2259,10 +2254,8 @@ load_status_cb (WebKitWebView *web_view,
 
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
-    if (priv->address == NULL || priv->address[0] == '\0') {
+    if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
-      ephy_web_view_set_title (view, NULL);
-    }
 
     ephy_web_view_set_loading_title (view, loading_uri, TRUE);
     
@@ -2280,8 +2273,6 @@ load_status_cb (WebKitWebView *web_view,
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view,
                                     uri);
-
-    ephy_web_view_set_title (view, NULL);
 
     /* Security status. */
     if (uri && g_str_has_prefix (uri, "https")) {
