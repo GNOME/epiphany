@@ -173,8 +173,6 @@ void                       ephy_web_view_load_error_page          (EphyWebView  
 /* These should be private */
 void                       ephy_web_view_set_address              (EphyWebView               *view,
                                                                    const char                *address);
-void                       ephy_web_view_location_changed         (EphyWebView               *view,
-                                                                   const char                *location);
 void                       ephy_web_view_set_loading_title        (EphyWebView               *view,
                                                                    const char                *title,
                                                                    gboolean                   is_address);

@@ -1991,6 +1991,49 @@ restore_zoom_level (EphyWebView *view,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
+static void
+ephy_web_view_location_changed (EphyWebView *view,
+                                const char *location)
+{
+  GObject *object = G_OBJECT (view);
+  EphyWebViewPrivate *priv = view->priv;
+
+  g_object_freeze_notify (object);
+
+  /* Do this up here so we still have the old address around. */
+  ephy_file_monitor_update_location (priv->file_monitor, location);
+
+  /* Do not expose about:blank to the user, an empty address
+     bar will do better */
+  if (location == NULL || location[0] == '\0' ||
+      strcmp (location, "about:blank") == 0) {
+    ephy_web_view_set_address (view, NULL);
+    ephy_web_view_set_title (view, EMPTY_PAGE);
+  } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME)) {
+    char *new_address = g_strdup_printf ("about:%s", location + EPHY_ABOUT_SCHEME_LEN + 1);
+    ephy_web_view_set_address (view, new_address);
+    g_free (new_address);
+    ephy_web_view_set_title (view, EMPTY_PAGE);
+  } else {
+    /* We do this to get rid of an eventual password in the URL. */
+    ephy_web_view_set_address (view, location);
+    ephy_web_view_set_loading_title (view, location, TRUE);
+  }
+
+  ephy_web_view_set_link_message (view, NULL);
+#ifdef HAVE_WEBKIT2
+  /* TODO: Favicons */
+#else
+  _ephy_web_view_set_icon_address (view, NULL);
+#endif
+
+  update_navigation_flags (view);
+
+  g_object_notify (object, "embed-title");
+
+  g_object_thaw_notify (object);
+}
+
 #ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *web_view,
@@ -3164,57 +3207,6 @@ ephy_web_view_set_loading_title (EphyWebView *view,
   }
 
   g_free (freeme);
-}
-
-/**
- * ephy_web_view_location_changed:
- * @view: an #EphyWebView
- * @location: new location for @view
- *
- * Sets @location as the new address for @view while preventing notify events
- * in @view.
- **/
-void
-ephy_web_view_location_changed (EphyWebView *view,
-                                const char *location)
-{
-  GObject *object = G_OBJECT (view);
-  EphyWebViewPrivate *priv = view->priv;
-
-  g_object_freeze_notify (object);
-
-  /* Do this up here so we still have the old address around. */
-  ephy_file_monitor_update_location (priv->file_monitor, location);
-
-  /* Do not expose about:blank to the user, an empty address
-     bar will do better */
-  if (location == NULL || location[0] == '\0' ||
-      strcmp (location, "about:blank") == 0) {
-    ephy_web_view_set_address (view, NULL);
-    ephy_web_view_set_title (view, EMPTY_PAGE);
-  } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME)) {
-    char *new_address = g_strdup_printf ("about:%s", location + EPHY_ABOUT_SCHEME_LEN + 1);
-    ephy_web_view_set_address (view, new_address);
-    g_free (new_address);
-    ephy_web_view_set_title (view, EMPTY_PAGE);
-  } else {
-    /* We do this to get rid of an eventual password in the URL. */
-    ephy_web_view_set_address (view, location);
-    ephy_web_view_set_loading_title (view, location, TRUE);
-  }
-
-  ephy_web_view_set_link_message (view, NULL);
-#ifdef HAVE_WEBKIT2
-  /* TODO: Favicons */
-#else
-  _ephy_web_view_set_icon_address (view, NULL);
-#endif
-
-  update_navigation_flags (view);
-
-  g_object_notify (object, "embed-title");
-
-  g_object_thaw_notify (object);
 }
 
 /**
