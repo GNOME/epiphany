@@ -1148,6 +1148,43 @@ title_changed_cb (WebKitWebView *web_view,
 }
 
 static void
+_ephy_web_view_set_is_blank (EphyWebView *view,
+                             gboolean is_blank)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (priv->is_blank != is_blank) {
+    priv->is_blank = is_blank;
+    g_object_notify (G_OBJECT (view), "is-blank");
+  }
+}
+
+/**
+ * Sets the view location to be address. Note that this function might
+ * also set the typed-address property to %NULL.
+ */
+static void
+ephy_web_view_set_address (EphyWebView *view,
+                           const char *address)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  GObject *object = G_OBJECT (view);
+  gboolean is_blank;
+
+  g_free (priv->address);
+  priv->address = g_strdup (address);
+
+  is_blank = address == NULL ||
+             strcmp (address, "about:blank") == 0;
+  _ephy_web_view_set_is_blank (view, is_blank);
+
+  if (ephy_web_view_is_loading (view) && priv->typed_address != NULL)
+    ephy_web_view_set_typed_address (view, NULL);
+
+  g_object_notify (object, "address");
+}
+
+static void
 uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec *spec,
                 gpointer data)
@@ -3056,47 +3093,6 @@ ephy_web_view_copy_back_history (EphyWebView *source,
   if (item)
     webkit_web_back_forward_list_add_item (dest_bflist, item);
 #endif
-}
-
-static void
-_ephy_web_view_set_is_blank (EphyWebView *view,
-                             gboolean is_blank)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->is_blank != is_blank) {
-    priv->is_blank = is_blank;
-    g_object_notify (G_OBJECT (view), "is-blank");
-  }
-}
-
-/**
- * ephy_web_view_set_address:
- * @view: an #EphyWebView
- * @address: address to set @view to
- *
- * Sets @view location to be @address. Note that this function might also set
- * the typed-address property to %NULL.
- */
-void
-ephy_web_view_set_address (EphyWebView *view,
-                           const char *address)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  GObject *object = G_OBJECT (view);
-  gboolean is_blank;
-
-  g_free (priv->address);
-  priv->address = g_strdup (address);
-
-  is_blank = address == NULL ||
-             strcmp (address, "about:blank") == 0;
-  _ephy_web_view_set_is_blank (view, is_blank);
-
-  if (ephy_web_view_is_loading (view) && priv->typed_address != NULL)
-    ephy_web_view_set_typed_address (view, NULL);
-
-  g_object_notify (object, "address");
 }
 
 /**
