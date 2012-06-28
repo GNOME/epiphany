@@ -170,26 +170,6 @@ void                       ephy_web_view_load_error_page          (EphyWebView  
                                                                    const char                *uri,
                                                                    EphyWebViewErrorPage       page,
                                                                    GError                    *error);
-/* These should be private */
-void                       ephy_web_view_set_address              (EphyWebView               *view,
-                                                                   const char                *address);
-void                       ephy_web_view_set_loading_title        (EphyWebView               *view,
-                                                                   const char                *title,
-                                                                   gboolean                   is_address);
-void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
-void                       ephy_web_view_save                     (EphyWebView               *view,
-                                                                   const char                *uri);
-void                       ephy_web_view_load_homepage            (EphyWebView               *view);
-
-char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
-                                                                   const char                *title,
-                                                                   GdkPixbuf                 *icon);
-GdkPixbuf *                ephy_web_view_get_snapshot             (EphyWebView               *view,
-                                                                   int                        x,
-                                                                   int                        y,
-                                                                   int                        width,
-                                                                   int                        height);
-gboolean                   ephy_web_view_is_loading_homepage      (EphyWebView               *view);
 
 G_END_DECLS
 
