@@ -67,7 +67,7 @@ arbitrary_url_cb (GSettings *settings,
 		  EphyWindow *window)
 {
 	EphyEmbed *embed;
-	char *address;
+	const char *address;
 
 	/* Restore the real web page address when disabling entry */
 	if (g_settings_get_boolean (settings, key))
@@ -77,10 +77,9 @@ arbitrary_url_cb (GSettings *settings,
 		if (embed == NULL)
 			return;
 
-		address = ephy_web_view_get_location (ephy_embed_get_web_view (embed), TRUE);
+		address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 		ephy_window_set_location (window, address);
 		ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), NULL);
-		g_free (address);
 	}
 }
 

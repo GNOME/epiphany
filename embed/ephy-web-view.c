@@ -248,13 +248,13 @@ popups_manager_hide (EphyEmbedContainer *container,
                      EphyWebView *parent_view)
 {
   EphyEmbed *embed;
-  char *location;
+  const char *location;
   char *features;
 
   embed = ephy_embed_container_get_active_child (container);
   g_return_if_fail (EPHY_IS_EMBED (embed));
 
-  location = ephy_web_view_get_location (ephy_embed_get_web_view (embed), TRUE);
+  location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
   if (location == NULL) return;
 
   features = popups_manager_new_window_info (container);
@@ -263,7 +263,6 @@ popups_manager_hide (EphyEmbedContainer *container,
 
   gtk_widget_destroy (GTK_WIDGET (container));
 
-  g_free (location);
   g_free (features);
 }
 
@@ -282,7 +281,7 @@ static void
 ephy_web_view_set_popups_allowed (EphyWebView *view,
                                   gboolean allowed)
 {
-  char *location;
+  const char *location;
   EphyPermissionManager *manager;
   EphyPermission permission;
 
@@ -293,7 +292,7 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
   permission = allowed ? EPHY_PERMISSION_ALLOWED
                : EPHY_PERMISSION_DENIED;
 
-  location = ephy_web_view_get_location (view, TRUE);
+  location = ephy_web_view_get_address (view);
   g_return_if_fail (location != NULL);
 
   ephy_permission_manager_add_permission (manager, location,
@@ -305,8 +304,6 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
   } else {
     popups_manager_hide_all (view);
   }
-
-  g_free (location);
 }
 
 static gboolean
@@ -314,7 +311,7 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
 {
   EphyPermissionManager *permission_manager;
   EphyPermission response;
-  char *location;
+  const char *location;
   gboolean allow;
 
   permission_manager = EPHY_PERMISSION_MANAGER
@@ -322,7 +319,7 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
   g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
                         FALSE);
 
-  location = ephy_web_view_get_location (view, TRUE);
+  location = ephy_web_view_get_address (view);
   if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
 
   response = ephy_permission_manager_test_permission
@@ -341,8 +338,6 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
                                       EPHY_PREFS_WEB_ENABLE_POPUPS);
       break;
   }
-
-  g_free (location);
 
   LOG ("ephy_web_view_get_popups_allowed: view %p, allowed: %d", view, allow);
 
@@ -2565,7 +2560,7 @@ zoom_changed_cb (WebKitWebView *web_view,
                  GParamSpec *pspec,
                  gpointer user_data)
 {
-  char *address;
+  const char *address;
   double zoom;
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
 
@@ -2574,14 +2569,12 @@ zoom_changed_cb (WebKitWebView *web_view,
   if (priv->is_setting_zoom)
     return;
 
-  address = ephy_web_view_get_location (EPHY_WEB_VIEW (web_view), TRUE);
+  address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
   if (ephy_embed_utils_address_has_web_scheme (address)) {
     ephy_history_service_set_url_zoom_level (priv->history_service,
                                              address, zoom,
                                              NULL, NULL, NULL);
   }
-
-  g_free (address);
 }
 
 #ifdef HAVE_WEBKIT2
@@ -3205,13 +3198,12 @@ ephy_web_view_location_changed (EphyWebView *view,
     g_free (new_address);
     ephy_web_view_set_title (view, EMPTY_PAGE);
   } else {
-    char *view_address;
+    const char *view_address;
 
     /* we do this to get rid of an eventual password in the URL */
-    view_address = ephy_web_view_get_location (view, TRUE);
+    view_address = ephy_web_view_get_address (view);
     ephy_web_view_set_address (view, view_address);
     ephy_web_view_set_loading_title (view, view_address, TRUE);
-    g_free (view_address);
   }
 
   ephy_web_view_set_link_message (view, NULL);
@@ -3470,11 +3462,11 @@ ephy_web_view_set_visibility (EphyWebView *view,
  * #EphyWindow location entry, if any.
  *
  * This is not guaranteed to be the same as @view's location,
- * available through ephy_web_view_get_location(). As the user types a
+ * available through ephy_web_view_get_address(). As the user types a
  * new address into the location entry,
  * ephy_web_view_get_typed_address()'s returned string will
  * change. When the load starts, ephy_web_view_get_typed_address()
- * will return %NULL, and ephy_web_view_get_location() will return the
+ * will return %NULL, and ephy_web_view_get_address() will return the
  * new page being loaded. Note that the typed_address can be changed
  * again while a load is in progress (in case the user starts to type
  * again in the location entry); in that case
@@ -3586,33 +3578,6 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
   }
 #endif
   return FALSE;
-}
-
-/**
- * ephy_web_view_get_location:
- * @view: an #EphyWebView
- * @toplevel: %FALSE to return the location of the focused frame only
- *
- * Returns the URL of the web page displayed in @view.
- *
- * If the web page contains frames, @toplevel will determine which location to
- * retrieve. If @toplevel is %TRUE, the return value will be the location of the
- * frameset document. If @toplevel is %FALSE, the return value will be the
- * location of the currently-focused frame.
- *
- * Return value: the URL of the web page displayed in @view
- **/
-char *
-ephy_web_view_get_location (EphyWebView *view,
-                            gboolean toplevel)
-{
-  /* FIXME: follow the toplevel parameter */
-#ifdef HAVE_WEBKIT2
-  return g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
-#else
-  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
-  return g_strdup (webkit_web_frame_get_uri (web_frame));
-#endif
 }
 
 /**

@@ -156,8 +156,6 @@ void                       ephy_web_view_set_typed_address        (EphyWebView  
                                                                    const char                *address);
 gboolean                   ephy_web_view_get_is_blank             (EphyWebView               *view);
 gboolean                   ephy_web_view_has_modified_forms       (EphyWebView               *view);
-char *                     ephy_web_view_get_location             (EphyWebView               *view,
-                                                                   gboolean                   toplevel);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    char                     **description);
