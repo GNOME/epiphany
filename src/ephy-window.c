@@ -2095,28 +2095,52 @@ show_embed_popup (EphyWindow *window,
 #endif
 
 static gboolean
-save_property_url (EphyEmbed *embed,
-		   GdkEventButton *gdk_event,
-		   WebKitHitTestResult *hit_test_result,
-		   const char *property)
+save_target_uri (EphyWindow *window,
+		 WebKitWebView *view,
+		 GdkEventButton *event,
+		 WebKitHitTestResult *hit_test_result)
 {
-	const char *location;
-	GValue value = { 0, };
-	EphyEmbedEvent *event = ephy_embed_event_new (gdk_event, hit_test_result);
-	gboolean retval;
+	guint context;
+	char *location = NULL;
+	gboolean retval = FALSE;
 
-	ephy_embed_event_get_property (event, property, &value);
-	location = g_value_get_string (&value);
+	if ((event->state & GDK_SHIFT_MASK) != GDK_SHIFT_MASK)
+	{
+		return FALSE;
+	}
 
-	LOG ("Location: %s", location);
+	g_object_get (hit_test_result, "context", &context, NULL);
 
-	retval = ephy_embed_utils_address_has_web_scheme (location);
+	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
+	     event->button, context, event->state, (int)event->x, (int)event->y);
 
-	if (retval)
-		ephy_embed_auto_download_url (embed, location);
+	/* shift+click saves the link target */
+	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
+	{
+		g_object_get (G_OBJECT (hit_test_result), "link-uri", &location, NULL);
+	}
+	/* Note: pressing enter to submit a form synthesizes a mouse
+	 * click event
+	 */
+	/* shift+click saves the non-link image */
+	else if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE &&
+		 !(context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE))
+	{
+		g_object_get (G_OBJECT (hit_test_result), "image-uri", &location, NULL);
+	}
 
-	g_value_unset (&value);
-	g_object_unref (event);
+	if (!location)
+	{
+		LOG ("Location: %s", location);
+
+		retval = ephy_embed_utils_address_has_web_scheme (location);
+		if (retval)
+		{
+			ephy_embed_auto_download_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), location);
+		}
+
+		g_free (location);
+	}
 
 	return retval;
 }
@@ -2147,6 +2171,56 @@ clipboard_text_received_cb (GtkClipboard *clipboard,
 }
 
 static gboolean
+open_selected_url (EphyWindow *window,
+		   WebKitWebView *view,
+		   GdkEventButton *event,
+		   WebKitHitTestResult *hit_test_result)
+{
+	guint context;
+	ClipboardTextCBData *cb_data;
+	EphyEmbed *embed;
+	EphyEmbed **embed_ptr;
+
+	if (!g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_MIDDLE_CLICK_OPENS_URL) ||
+	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL))
+	{
+		return FALSE;
+	}
+
+	g_object_get (hit_test_result, "context", &context, NULL);
+
+	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
+	     event->button, context, event->state, (int)event->x, (int)event->y);
+
+	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK ||
+	    context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)
+	{
+		return FALSE;
+	}
+
+	/* See bug #133633 for why we do it this way */
+
+	/* We need to make sure we know if the embed is destroyed
+	 * between requesting the clipboard contents, and receiving
+	 * them.
+	 */
+	embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+	cb_data = g_slice_new0 (ClipboardTextCBData);
+	cb_data->embed = embed;
+	cb_data->window = window;
+	embed_ptr = &cb_data->embed;
+
+	g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *) embed_ptr);
+
+	gtk_clipboard_request_text (gtk_widget_get_clipboard (GTK_WIDGET (embed),
+							      GDK_SELECTION_PRIMARY),
+				    (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
+				    cb_data);
+	return TRUE;
+}
+
+static gboolean
 ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				GdkEventButton *event,
 				EphyWindow *window)
@@ -2155,100 +2229,29 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	/* TODO: Button press actions */
 	return FALSE;
 #else
-	guint button, modifier, context;
-	gboolean handled = FALSE;
-	gboolean with_control, with_shift;
-	gboolean is_left_click, is_middle_click;
-	gboolean is_link, is_image, is_middle_clickable;
-	gboolean middle_click_opens;
-	gboolean is_input;
 	WebKitHitTestResult *hit_test_result;
+	gboolean handled = FALSE;
 
 	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
-	button = event->button;
 
-	if (button == 3)
+	switch (event->button)
 	{
-		show_embed_popup (window, view, event, hit_test_result);
-		g_object_unref (hit_test_result);
-		return TRUE;
-	}
-
-	modifier = event->state;
-	g_object_get (hit_test_result, "context", &context, NULL);
-
-	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
-	     button, context, modifier, (int)event->x, (int)event->y);
-
-	with_control = (modifier & GDK_CONTROL_MASK) == GDK_CONTROL_MASK;
-	with_shift = (modifier & GDK_SHIFT_MASK) == GDK_SHIFT_MASK;
-
-	is_left_click = (button == 1);
-	is_middle_click = (button == 2);
-
-	middle_click_opens =
-		g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-					EPHY_PREFS_MIDDLE_CLICK_OPENS_URL) &&
-		!g_settings_get_boolean
-				(EPHY_SETTINGS_LOCKDOWN,
-				 EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
-
-	is_link = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) != 0;
-	is_image = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE) != 0;
-	is_middle_clickable = !((context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
-				|| (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE));
-	is_input = (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE) != 0;
-
-	if (is_left_click && with_shift && !with_control)
-	{
-		/* shift+click saves the link target */
-		if (is_link)
-		{
-			handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "link-uri");
-		}
-
-		/* Note: pressing enter to submit a form synthesizes a mouse
-		 * click event
-		 */
-		/* shift+click saves the non-link image */
-		else if (is_image && !is_input)
-		{
-			handled = save_property_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), event, hit_test_result, "image-uri");
-		}
-	}
-
-	/* middle click opens the selection url */
-	if (is_middle_clickable && is_middle_click && middle_click_opens)
-	{
-		/* See bug #133633 for why we do it this way */
-
-		/* We need to make sure we know if the embed is destroyed
-		 * between requesting the clipboard contents, and receiving
-		 * them.
-		 */
-		ClipboardTextCBData *cb_data;
-		EphyEmbed *embed;
-		EphyEmbed **embed_ptr;
-
-		embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-
-		cb_data = g_slice_new0 (ClipboardTextCBData);
-		cb_data->embed = embed;
-		cb_data->window = window;
-		embed_ptr = &cb_data->embed;
-		
-		g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *) embed_ptr);
-
-		gtk_clipboard_request_text
-			(gtk_widget_get_clipboard (GTK_WIDGET (embed),
-						   GDK_SELECTION_PRIMARY),
-			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
-			 cb_data);
-
-		handled = TRUE;
+	        case GDK_BUTTON_PRIMARY:
+			handled = save_target_uri (window, view, event, hit_test_result);
+			break;
+	        case GDK_BUTTON_MIDDLE:
+			handled = open_selected_url (window, view, event, hit_test_result);
+			break;
+	        case GDK_BUTTON_SECONDARY:
+			show_embed_popup (window, view, event, hit_test_result);
+			handled = TRUE;
+			break;
+	        default:
+			break;
 	}
 
 	g_object_unref (hit_test_result);
+
 	return handled;
 #endif
 }
