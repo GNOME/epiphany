@@ -363,6 +363,7 @@ struct _EphyWindowPrivate
 	EphyWebViewChrome chrome;
 	EphyWebViewChrome pre_fullscreen_chrome;
 	EphyEmbedEvent *context_event;
+	WebKitHitTestResult *hit_test_result;
 	guint idle_worker;
 	GtkWidget *downloads_box;
 
@@ -2225,14 +2226,14 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				GdkEventButton *event,
 				EphyWindow *window)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Button press actions */
-	return FALSE;
-#else
 	WebKitHitTestResult *hit_test_result;
 	gboolean handled = FALSE;
 
+#ifdef HAVE_WEBKIT2
+	hit_test_result = g_object_ref (window->priv->hit_test_result);
+#else
 	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
+#endif
 
 	switch (event->button)
 	{
@@ -2242,10 +2243,12 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	        case GDK_BUTTON_MIDDLE:
 			handled = open_selected_url (window, view, event, hit_test_result);
 			break;
+#ifndef HAVE_WEBKIT2
 	        case GDK_BUTTON_SECONDARY:
 			show_embed_popup (window, view, event, hit_test_result);
 			handled = TRUE;
 			break;
+#endif
 	        default:
 			break;
 	}
@@ -2253,8 +2256,22 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	g_object_unref (hit_test_result);
 
 	return handled;
-#endif
 }
+
+#ifdef HAVE_WEBKIT2
+static void
+ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
+				     WebKitHitTestResult *hit_test_result,
+				     guint modifiers,
+				     EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	if (priv->hit_test_result)
+		g_object_unref (hit_test_result);
+	priv->hit_test_result = g_object_ref (hit_test_result);
+}
+#endif
 
 static void
 ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
@@ -2814,6 +2831,17 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "notify::is-blank",
 				 G_CALLBACK (sync_tab_is_blank),
 				 window, 0);
+#ifdef HAVE_WEBKIT2
+	g_signal_connect_object (view, "button-press-event",
+				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
+				 window, 0);
+	g_signal_connect_object (view, "context-menu",
+				 G_CALLBACK (populate_context_menu),
+				 window, 0);
+	g_signal_connect_object (view, "mouse-target-changed",
+				 G_CALLBACK (ephy_window_mouse_target_changed_cb),
+				 window, 0);
+#else
 	/* We run our button-press-event after the default
 	 * handler to make sure pages have a chance to perform
 	 * their own handling - for instance, have their own
@@ -2822,10 +2850,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "button-press-event",
 				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 				 window, G_CONNECT_AFTER);
-#ifdef HAVE_WEBKIT2
-	g_signal_connect_object (view, "context-menu",
-				 G_CALLBACK (populate_context_menu),
-				 window, 0);
 #endif
 	g_signal_connect_object (view, "notify::visibility",
 				 G_CALLBACK (ephy_window_visibility_cb),
@@ -2940,6 +2964,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 #ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (populate_context_menu),
+					      window);
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (ephy_window_mouse_target_changed_cb),
 					      window);
 #endif
 }
@@ -3458,6 +3485,8 @@ ephy_window_dispose (GObject *object)
 		priv->manager = NULL;
 
 		_ephy_window_set_context_event (window, NULL);
+
+		g_clear_object (&priv->hit_test_result);
 	}
 
 	G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
