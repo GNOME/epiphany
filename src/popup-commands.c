@@ -214,20 +214,40 @@ popup_cmd_copy_link_address (GtkAction *action,
 }
 
 static void
+save_property_url_to_destination (EphyWindow *window,
+				  const char *location,
+				  const char *destination)
+{
+	EphyDownload *download;
+
+	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
+
+	if (destination)
+		ephy_download_set_destination_uri (download, destination);
+	else
+		ephy_download_set_auto_destination (download);
+
+	ephy_download_start (download);
+}
+
+static void
 response_cb (GtkDialog *dialog,
 	     int response_id,
-	     EphyDownload *download)
+	     char *location)
 {
 	if (response_id == GTK_RESPONSE_ACCEPT)
 	{
 		char *uri;
+		GtkWindow *window;
+
+		window = gtk_window_get_transient_for (GTK_WINDOW (dialog));
 
 		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-		ephy_download_set_destination_uri (download, uri);
-		ephy_download_start (download);
+		save_property_url_to_destination (EPHY_WINDOW (window), location, uri);
 		g_free (uri);
 	}
 
+	g_free (location);
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
@@ -241,15 +261,12 @@ save_property_url (GtkAction *action,
 	EphyEmbedEvent *event;
 	const char *location;
 	GValue value = { 0, };
-	EphyDownload *download;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
 	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (&value);
-
-	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
 
 	if (ask_dest)
 	{
@@ -266,18 +283,15 @@ save_property_url (GtkAction *action,
 		gtk_file_chooser_set_current_name
 				(GTK_FILE_CHOOSER (dialog), base);
 		g_signal_connect (dialog, "response",
-				  G_CALLBACK (response_cb), download);
+				  G_CALLBACK (response_cb), g_strdup (location));
 		gtk_widget_show (GTK_WIDGET (dialog));
 
 		g_free (base);
 	}
 	else
 	{
-		ephy_download_set_auto_destination (download);
-		ephy_download_start (download);
+		save_property_url_to_destination (window, location, NULL);
 	}
-
-	g_value_unset (&value);
 }
 
 void
