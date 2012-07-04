@@ -1044,6 +1044,22 @@ ephy_window_delete_event (GtkWidget *widget,
 #define MAX_SPELL_CHECK_GUESSES 4
 
 static void
+update_link_actions_sensitivity (EphyWindow *window,
+				 gboolean link_has_web_scheme)
+{
+	GtkAction *action;
+	GtkActionGroup *action_group;
+
+	action_group = window->priv->popups_action_group;
+
+	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
+	gtk_action_set_sensitive (action, link_has_web_scheme);
+
+	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !link_has_web_scheme);
+}
+
+static void
 update_popup_actions_visibility (EphyWindow *window,
 				 WebKitWebView *view,
 				 guint context)
@@ -1833,8 +1849,6 @@ show_embed_popup (EphyWindow *window,
 		  WebKitHitTestResult *hit_test_result)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group;
-	GtkAction *action;
 	guint context;
 	const char *popup;
 	gboolean can_open_in_new;
@@ -1870,14 +1884,7 @@ show_embed_popup (EphyWindow *window,
 	widget = gtk_ui_manager_get_widget (priv->manager, popup);
 	g_return_if_fail (widget != NULL);
 
-	action_group = window->priv->popups_action_group;
-
-	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
-	gtk_action_set_sensitive (action, can_open_in_new);
-
-	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
-	
+	update_link_actions_sensitivity (window, can_open_in_new);
 	update_popup_actions_visibility (window,
 					 view,
 					 context);
