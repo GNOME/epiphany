@@ -1312,7 +1312,11 @@ window_cmd_help_about (GtkAction *action,
 	g_key_file_free (key_file);
 
 #ifdef HAVE_WEBKIT2
-	/* TODO: WebKit Version */
+	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
+				      "Powered by WebKit %d.%d.%d"),
+				    webkit_get_major_version (),
+				    webkit_get_minor_version (),
+				    webkit_get_micro_version ());
 #else
 	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
 	                              "Powered by WebKit %d.%d.%d"),
