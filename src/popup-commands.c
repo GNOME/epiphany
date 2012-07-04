@@ -94,7 +94,27 @@ popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
 #ifdef HAVE_WEBKIT2
-	/* TODO: Context Menu */
+	EphyEmbedEvent *event;
+	WebKitHitTestResult *result;
+	const char *title;
+	const char *location;
+
+	event = ephy_window_get_context_event (window);
+
+	result = ephy_embed_event_get_hit_test_result (event);
+	if (!webkit_hit_test_result_context_is_link (result))
+	{
+		return;
+	}
+
+	location = webkit_hit_test_result_get_link_uri (result);
+	title = webkit_hit_test_result_get_link_title (result);
+	if (!title)
+	{
+		title = webkit_hit_test_result_get_link_label (result);
+	}
+
+	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
 #else
 	EphyEmbedEvent *event;
 	char *title;
@@ -524,9 +544,7 @@ popup_cmd_open_image (GtkAction *action,
 void
 popup_cmd_inspect_element (GtkAction *action, EphyWindow *window)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Context Menu, Inspector */
-#else
+#ifndef HAVE_WEBKIT2
 	EphyEmbedEvent *event;
 	EphyEmbed *embed;
 	WebKitWebInspector *inspector;

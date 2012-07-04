@@ -1016,14 +1016,12 @@ update_link_actions_sensitivity (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !link_has_web_scheme);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 update_popup_actions_visibility (EphyWindow *window,
 				 WebKitWebView *view,
 				 guint context)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: ContextMenu */
-#else
 	GtkAction *action;
 	GtkActionGroup *action_group;
 	gboolean is_image = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE;
@@ -1104,8 +1102,8 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	if (guesses)
 		g_strfreev (guesses);
-#endif
 }
+#endif
 
 static void
 update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
@@ -1737,6 +1735,7 @@ sync_network_status (EphyEmbedSingle *single,
 		(action, G_CALLBACK (window_cmd_file_work_offline), window);	
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 		      gpointer user_data)
@@ -1755,6 +1754,7 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 
 	*push_in = TRUE;
 }
+#endif
 
 static gboolean
 idle_unref_context_event (EphyWindow *window)
@@ -1808,6 +1808,21 @@ _ephy_window_unset_context_event (EphyWindow *window)
 	}
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+context_menu_dismissed_cb (WebKitWebView *webView,
+			   EphyWindow *window)
+{
+	LOG ("Deactivating popup menu");
+
+	enable_edit_actions_sensitivity (window);
+
+	g_signal_handlers_disconnect_by_func
+		(webView, G_CALLBACK (context_menu_dismissed_cb), window);
+
+	_ephy_window_unset_context_event (window);
+}
+#else
 static void
 embed_popup_deactivate_cb (GtkWidget *popup,
 			   EphyWindow *window)
@@ -1821,9 +1836,191 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 
 	_ephy_window_unset_context_event (window);
 }
+#endif
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Context Menu */
+static void
+add_action_to_context_menu (WebKitContextMenu *context_menu,
+			    GtkActionGroup *action_group,
+			    const char *action_name)
+{
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (action_group, action_name);
+	webkit_context_menu_append (context_menu, webkit_context_menu_item_new (action));
+}
+
+/* FIXME: Add webkit_context_menu_find() ? */
+static WebKitContextMenuItem *
+find_item_in_context_menu (WebKitContextMenu *context_menu,
+			   WebKitContextMenuAction action)
+{
+	GList *items, *iter;
+
+	items = webkit_context_menu_get_items (context_menu);
+	for (iter = items; iter; iter = g_list_next (iter))
+	{
+		WebKitContextMenuItem *item = (WebKitContextMenuItem *)iter->data;
+
+		if (webkit_context_menu_item_get_stock_action (item) == action)
+			return g_object_ref (item);
+	}
+
+	return NULL;
+}
+
+static gboolean
+populate_context_menu (WebKitWebView *web_view,
+		       WebKitContextMenu *context_menu,
+		       GdkEvent *event,
+		       WebKitHitTestResult *hit_test_result,
+		       EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	WebKitContextMenuItem *input_methods_item;
+	WebKitContextMenuItem *unicode_item;
+	EphyEmbedEvent *embed_event;
+	gboolean is_document = FALSE;
+	gboolean app_mode;
+
+	input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
+	unicode_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_UNICODE);
+
+	webkit_context_menu_remove_all (context_menu);
+
+	embed_event = ephy_embed_event_new ((GdkEventButton *)event, hit_test_result);
+	_ephy_window_set_context_event (window, embed_event);
+	g_object_unref (embed_event);
+
+	app_mode = ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION;
+
+	update_edit_actions_sensitivity (window, FALSE);
+
+	if (webkit_hit_test_result_context_is_link (hit_test_result))
+	{
+		const char *uri;
+		gboolean link_has_web_scheme;
+
+		uri = webkit_hit_test_result_get_link_uri (hit_test_result);
+		link_has_web_scheme = ephy_embed_utils_address_has_web_scheme (uri);
+
+		update_edit_actions_sensitivity (window, TRUE);
+		update_link_actions_sensitivity (window, link_has_web_scheme);
+
+		if (!app_mode)
+		{
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "OpenLink");
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "OpenLinkInNewTab");
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "OpenLinkInNewWindow");
+			webkit_context_menu_append (context_menu,
+						    webkit_context_menu_item_new_separator ());
+		}
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditCopy");
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "DownloadLink");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "DownloadLinkAs");
+		if (!app_mode)
+		{
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "BookmarkLink");
+		}
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "CopyLinkAddress");
+	}
+	else if (webkit_hit_test_result_context_is_editable (hit_test_result))
+	{
+		update_edit_actions_sensitivity (window, FALSE);
+
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditCut");
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditCopy");
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditPaste");
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditSelectAll");
+		if (input_methods_item || unicode_item)
+			webkit_context_menu_append (context_menu,
+						    webkit_context_menu_item_new_separator ());
+		if (input_methods_item)
+		{
+			webkit_context_menu_append (context_menu, input_methods_item);
+			g_object_unref (input_methods_item);
+		}
+
+		if (unicode_item)
+		{
+			webkit_context_menu_append (context_menu, unicode_item);
+			g_object_unref (unicode_item);
+		}
+	}
+	else
+	{
+		is_document = TRUE;
+
+		update_edit_actions_sensitivity (window, TRUE);
+
+		add_action_to_context_menu (context_menu,
+					    priv->toolbar_action_group, "NavigationBack");
+		add_action_to_context_menu (context_menu,
+					    priv->toolbar_action_group, "NavigationForward");
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "ViewReload");
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditCopy");
+		if (!app_mode)
+		{
+			webkit_context_menu_append (context_menu,
+						    webkit_context_menu_item_new_separator ());
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "ContextBookmarkPage");
+		}
+	}
+
+	if (webkit_hit_test_result_context_is_image (hit_test_result))
+	{
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "OpenImage");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "SaveImageAs");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "SetImageAsBackground");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "CopyImageLocation");
+	}
+
+	if (is_document)
+	{
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "FileSendTo");
+	}
+
+	webkit_context_menu_append (context_menu,
+				    webkit_context_menu_item_new_separator ());
+	webkit_context_menu_append (context_menu,
+				    webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
+
+	g_signal_connect (web_view, "context-menu-dismissed",
+			  G_CALLBACK (context_menu_dismissed_cb),
+			  window);
+
+	return FALSE;
+}
 #else
 static void
 show_embed_popup (EphyWindow *window,
@@ -1955,7 +2152,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				EphyWindow *window)
 {
 #ifdef HAVE_WEBKIT2
-	/* TODO: Context Menu */
+	/* TODO: Button press actions */
 	return FALSE;
 #else
 	guint button, modifier, context;
@@ -2622,6 +2819,11 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "button-press-event",
 				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 				 window, G_CONNECT_AFTER);
+#ifdef HAVE_WEBKIT2
+	g_signal_connect_object (view, "context-menu",
+				 G_CALLBACK (populate_context_menu),
+				 window, 0);
+#endif
 	g_signal_connect_object (view, "notify::visibility",
 				 G_CALLBACK (ephy_window_visibility_cb),
 				 window, 0);
@@ -2732,6 +2934,11 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
+#ifdef HAVE_WEBKIT2
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (populate_context_menu),
+					      window);
+#endif
 }
 
 static void
