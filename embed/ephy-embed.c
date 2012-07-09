@@ -44,9 +44,7 @@
 #endif
 
 static void     ephy_embed_constructed      (GObject *object);
-#ifdef HAVE_WEBKIT2
-/* TODO: Inspector */
-#else
+#ifndef HAVE_WEBKIT2
 static gboolean ephy_embed_inspect_show_cb  (WebKitWebInspector *inspector,
                                              EphyEmbed *embed);
 static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
@@ -68,13 +66,13 @@ struct _EphyEmbedPrivate
   GtkBox *top_widgets_vbox;
 #ifndef HAVE_WEBKIT2
   GtkScrolledWindow *scrolled_window;
-#endif
-  GtkPaned *paned;
-  WebKitWebView *web_view;
   GtkWidget *inspector_window;
   GtkWidget *inspector_web_view;
   GtkWidget *inspector_scrolled_window;
   gboolean inspector_attached;
+#endif
+  GtkPaned *paned;
+  WebKitWebView *web_view;
   GSList *destroy_on_transition_list;
   GtkWidget *floating_bar;
   GtkWidget *progress;
@@ -347,10 +345,8 @@ ephy_embed_dispose (GObject *object)
   EphyEmbed *embed = EPHY_EMBED (object);
   EphyEmbedPrivate *priv = embed->priv;
 
+#ifndef HAVE_WEBKIT2
   if (priv->inspector_window) {
-#ifdef HAVE_WEBKIT2
-    /* TODO: Inspector */
-#else
     WebKitWebInspector *inspector;
 
     inspector = webkit_web_view_get_inspector (priv->web_view);
@@ -362,11 +358,11 @@ ephy_embed_dispose (GObject *object)
     g_signal_handlers_disconnect_by_func (inspector,
                                           ephy_embed_inspect_close_cb,
                                           priv->inspector_window);
-#endif
 
     gtk_widget_destroy (GTK_WIDGET (priv->inspector_window));
     priv->inspector_window = NULL;
   }
+#endif
 
   if (priv->pop_statusbar_later_source_id) {
     g_source_remove (priv->pop_statusbar_later_source_id);
@@ -449,7 +445,23 @@ ephy_embed_class_init (EphyEmbedClass *klass)
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: Inspector */
+static gboolean
+ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
+                                EphyEmbed *embed)
+{
+  GtkWidget *inspector_view = GTK_WIDGET (webkit_web_inspector_get_web_view (inspector));
+  int inspected_view_height;
+  guint attached_height;
+
+  inspected_view_height = gtk_widget_get_allocated_height (GTK_WIDGET (embed->priv->web_view));
+  attached_height = webkit_web_inspector_get_attached_height (inspector);
+  gtk_paned_set_position (embed->priv->paned, inspected_view_height - attached_height);
+
+  gtk_paned_add2 (embed->priv->paned, inspector_view);
+  gtk_widget_show (inspector_view);
+
+  return TRUE;
+}
 #else
 static WebKitWebView *
 ephy_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
@@ -762,10 +774,7 @@ ephy_embed_constructed (GObject *object)
 #else
   WebKitWebWindowFeatures *window_features;
 #endif
-#ifndef HAVE_WEBKIT2
-  /* TODO: Inspector */
   WebKitWebInspector *inspector;
-#endif
   GtkWidget *overlay;
 
   /* Skeleton */
@@ -873,12 +882,14 @@ ephy_embed_constructed (GObject *object)
 #endif
 
   /* The inspector */
-  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-#ifdef HAVE_WEBKIT2
-  /* TODO: Inspector */
-#else
   inspector = webkit_web_view_get_inspector (web_view);
 
+#ifdef HAVE_WEBKIT2
+  g_signal_connect (inspector, "attach",
+                    G_CALLBACK (ephy_embed_attach_inspector_cb),
+                    embed);
+#else
+  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->inspector_scrolled_window),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
