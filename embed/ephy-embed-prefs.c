@@ -612,7 +612,6 @@ ephy_embed_prefs_init (void)
 {
   int i;
 #ifdef HAVE_WEBKIT2
-  /* TODO: page-cache settings */
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,
                                                        "enable-site-specific-quirks", TRUE,
