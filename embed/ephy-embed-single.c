@@ -53,7 +53,9 @@
 
 struct _EphyEmbedSinglePrivate {
   GHashTable *form_auth_data;
+#ifndef HAVE_WEBKIT2
   SoupCache *cache;
+#endif
 };
 
 static void ephy_embed_single_init (EphyEmbedSingle *single);
@@ -186,12 +188,14 @@ ephy_embed_single_dispose (GObject *object)
 {
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
+#ifndef HAVE_WEBKIT2
   if (priv->cache) {
     soup_cache_flush (priv->cache);
     soup_cache_dump (priv->cache);
     g_object_unref (priv->cache);
     priv->cache = NULL;
   }
+#endif
 
   G_OBJECT_CLASS (ephy_embed_single_parent_class)->dispose (object);
 }
@@ -329,6 +333,7 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
   iface->list = impl_permission_manager_list;
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 cache_size_cb (GSettings *settings,
                char *key,
@@ -337,6 +342,7 @@ cache_size_cb (GSettings *settings,
   int new_cache_size = g_settings_get_int (settings, key);
   soup_cache_set_max_size (single->priv->cache, new_cache_size * 1024 * 1024 /* in bytes */);
 }
+#endif
 
 #ifdef HAVE_WEBKIT2
 static void
@@ -515,7 +521,11 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
+#ifdef HAVE_WEBKIT2
+  webkit_web_context_clear_cache (webkit_web_context_get_default ());
+#else
   soup_cache_clear (single->priv->cache);
+#endif
 }
 
 /**
