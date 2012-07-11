@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-smaps.h"
 
+#include <errno.h>
 #include <gio/gio.h>
 #include <stdio.h>
 #include <string.h>
@@ -56,6 +57,32 @@ typedef struct {
   guint private_clean;
   guint private_dirty;
 } PermEntry;
+
+typedef enum {
+  EPHY_PROCESS_EPIPHANY,
+  EPHY_PROCESS_WEB,
+  EPHY_PROCESS_PLUGIN,
+
+  EPHY_PROCESS_OTHER
+} EphyProcess;
+
+#ifdef HAVE_WEBKIT2
+static const char *get_ephy_process_name (EphyProcess process)
+{
+  switch (process) {
+  case EPHY_PROCESS_EPIPHANY:
+    return "Browser";
+  case EPHY_PROCESS_WEB:
+    return "Web Process";
+  case EPHY_PROCESS_PLUGIN:
+    return "Plugin Process";
+  case EPHY_PROCESS_OTHER:
+    g_assert_not_reached ();
+  }
+
+  return NULL;
+}
+#endif
 
 static void vma_free (VMA_t* vma)
 {
@@ -162,18 +189,22 @@ static void print_vma_table (GString *str, GHashTable *hash, const char *caption
   g_string_append (str, "</table>");
 }
 
-char* ephy_smaps_to_html (EphySMaps *smaps)
+static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, EphyProcess process)
 {
   GFileInputStream *stream;
   GDataInputStream *data_stream;
-  GFile *file = g_file_new_for_path ("/proc/self/smaps");
+  char *path;
+  GFile *file;
   char *line;
-  GString *str;
   GError *error = NULL;
   VMA_t *vma = NULL;
   GHashTable *anon_hash, *mapped_hash;
   GSList *vma_entries = NULL, *p;
   EphySMapsPrivate *priv = smaps->priv;
+
+  path = g_strdup_printf ("/proc/%u/smaps", pid);
+  file = g_file_new_for_path (path);
+  g_free (path);
 
   stream = g_file_read (file, NULL, &error);
   g_object_unref (file);
@@ -181,13 +212,11 @@ char* ephy_smaps_to_html (EphySMaps *smaps)
   if (error && error->code == G_IO_ERROR_NOT_FOUND ) {
     /* This is not GNU/Linux, do nothing. */
     g_error_free (error);
-    return NULL;
+    return;
   }
 
   data_stream = g_data_input_stream_new (G_INPUT_STREAM (stream));
   g_object_unref (stream);
-
-  str = g_string_new ("");
 
   while ((line = g_data_input_stream_read_line (data_stream, NULL, NULL, NULL))) {
     GMatchInfo *match_info = NULL;
@@ -277,20 +306,158 @@ char* ephy_smaps_to_html (EphySMaps *smaps)
 
   g_slist_free (vma_entries);
 
-  /* Create the page. */
-  g_string_append (str, "<body>");
+#ifdef HAVE_WEBKIT2
+  g_string_append_printf (str, "<h2>%s</h2>", get_ephy_process_name (process));
+#endif
 
   /* Anon table. */
   print_vma_table (str, anon_hash, "Anonymous memory");
 
   /* Mapped table. */
   print_vma_table (str, mapped_hash, "Mapped memory");
-  
-  g_string_append (str, "</body>");
 
   /* Done. */
   g_hash_table_unref (anon_hash);
   g_hash_table_unref (mapped_hash);
+}
+
+#ifdef HAVE_WEBKIT2
+static pid_t get_pid_from_proc_name (const char *name)
+{
+  guint i;
+  char *end_ptr = NULL;
+  guint64 pid;
+
+  for (i = 0; name[i]; i++) {
+    if (!g_ascii_isdigit (name[i]))
+      return 0;
+  }
+
+  errno = 0;
+  pid = g_ascii_strtoll (name, &end_ptr, 10);
+  if (errno || end_ptr == name)
+    return 0;
+
+  return pid;
+}
+
+static pid_t get_parent_pid (pid_t pid)
+{
+  char *path;
+  char *data;
+  gsize data_length = 0;
+  char *p;
+  char *end_ptr = NULL;
+  pid_t ppid;
+
+  path = g_strdup_printf ("/proc/%u/stat", pid);
+  if (!g_file_get_contents (path, &data, &data_length, NULL)) {
+    g_free (path);
+
+    return 0;
+  }
+  g_free (path);
+
+  p = strstr (data, ")");
+  if (!p) {
+    g_free (data);
+
+    return 0;
+  }
+
+  /* Skip whitespace + state + whitespace. */
+  p += 3;
+  errno = 0;
+  ppid = g_ascii_strtoll (p, &end_ptr, 10);
+  if (errno || end_ptr == p) {
+    g_free (data);
+
+    return 0;
+  }
+  g_free (data);
+
+  return ppid;
+}
+
+static EphyProcess get_ephy_process (pid_t pid)
+{
+  char *path;
+  char *data;
+  gsize data_length = 0;
+  char *p;
+  char *name;
+  EphyProcess process = EPHY_PROCESS_OTHER;
+
+  path = g_strdup_printf ("/proc/%u/cmdline", pid);
+  if (!g_file_get_contents (path, &data, &data_length, NULL)) {
+    g_free (path);
+
+    return process;
+  }
+  g_free (path);
+
+  p = strstr (data, " ");
+  if (p)
+    *p = '\0';
+
+  name = g_path_get_basename (data);
+  if (g_strcmp0 (name, "WebKitWebProcess") == 0)
+    process = EPHY_PROCESS_WEB;
+  else if (g_strcmp0 (name, "WebKitPluginProcess") == 0)
+    process = EPHY_PROCESS_PLUGIN;
+
+  g_free (data);
+  g_free (name);
+
+  return process;
+}
+
+static void ephy_smaps_pid_children_to_html (EphySMaps *smaps, GString *str, pid_t parent_pid)
+{
+  GDir *proc;
+  const char *name;
+
+  proc = g_dir_open ("/proc/", 0, NULL);
+  if (!proc)
+    return;
+
+  while ((name = g_dir_read_name (proc))) {
+    pid_t pid, ppid;
+    EphyProcess process;
+
+    if (g_str_equal (name, "self"))
+      continue;
+
+    pid = get_pid_from_proc_name (name);
+    if (pid == 0 || pid == parent_pid)
+      continue;
+
+    ppid = get_parent_pid (pid);
+    if (ppid != parent_pid)
+      continue;
+
+    process = get_ephy_process (pid);
+    if (process != EPHY_PROCESS_OTHER)
+      ephy_smaps_pid_to_html (smaps, str, pid, process);
+  }
+  g_dir_close (proc);
+}
+#endif
+
+char* ephy_smaps_to_html (EphySMaps *smaps)
+{
+  GString *str = g_string_new ("");
+  pid_t pid = getpid ();
+
+  g_string_append (str, "<body>");
+
+  ephy_smaps_pid_to_html (smaps, str, pid, EPHY_PROCESS_EPIPHANY);
+
+#ifdef HAVE_WEBKIT2
+  ephy_smaps_pid_children_to_html (smaps, str, pid);
+#endif
+
+  g_string_append (str, "</body>");
 
   return g_string_free (str, FALSE);
 }
