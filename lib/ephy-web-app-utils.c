@@ -294,7 +294,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
   for (p = cookies; p; p = p->next) {
     SoupCookie *cookie = (SoupCookie*)p->data;
 
-    if (g_str_has_suffix (cookie->domain, domain))
+    if (soup_cookie_domain_matches (cookie, domain))
       soup_cookie_jar_add_cookie (new_jar, cookie);
     else
       soup_cookie_free (cookie);
