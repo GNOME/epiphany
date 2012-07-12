@@ -257,13 +257,39 @@ out:
   return desktop_file_path;
 }
 
+#ifdef HAVE_WEBKIT2
+static SoupCookieJar *get_current_cookie_jar ()
+{
+  char *filename;
+  SoupCookieJar *jar;
+
+  /* FIXME: There's no API in WebKit2 to get all cookies, so we create a
+   * temp read-only jar for the current cookies to read from it.
+   * It would be better to have an API in WebKit to get the cookies instead.
+   */
+  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+  jar = (SoupCookieJar*)soup_cookie_jar_sqlite_new (filename, TRUE);
+  g_free (filename);
+
+  return jar;
+}
+#else
+static SoupCookieJar *get_current_cookie_jar ()
+{
+  SoupSession *session = webkit_get_default_session ();
+  SoupCookieJar *jar;
+
+  jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
+
+  /* WebKit might not have a cookie jar yet, if it has not needed one
+   * and none has been set by Epiphany. */
+  return jar ? g_object_ref (jar) : NULL;
+}
+#endif
+
 static void
 create_cookie_jar_for_domain (const char *address, const char *directory)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: Cookies */
-#else
-  SoupSession *session;
   GSList *cookies, *p;
   SoupCookieJar *current_jar, *new_jar;
   char *domain, *filename;
@@ -279,12 +305,8 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
   domain = uri->host;
 
   /* The current cookies */
-  session = webkit_get_default_session ();
-  current_jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
-
-  /* WebKit might not have a cookie jar yet, if it has not needed one
-   * and none has been set by Epiphany. */
-  if (current_jar == NULL) {
+  current_jar = get_current_cookie_jar ();
+  if (!current_jar) {
     soup_uri_free (uri);
     return;
   }
@@ -302,7 +324,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   soup_uri_free (uri);
   g_slist_free (cookies);
-#endif
+  g_object_unref (current_jar);
   g_object_unref (new_jar);
 }
 

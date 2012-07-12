@@ -406,18 +406,27 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 {
 #ifdef HAVE_WEBKIT2
   WebKitWebContext *web_context;
+  WebKitCookieManager *cookie_manager;
+  char *filename;
   char *cookie_policy;
 
-  /* TODO: Network features */
+  /* TODO: SoupCache, SSL, favicons */
 
   web_context = webkit_web_context_get_default ();
 
+  /* Store cookies in moz-compatible SQLite format */
+  cookie_manager = webkit_web_context_get_cookie_manager (web_context);
+  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+  webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
+                                                WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
+  g_free (filename);
+
   cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
-  ephy_embed_prefs_set_cookie_accept_policy (webkit_web_context_get_cookie_manager (web_context),
-                                             cookie_policy);
+  ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
 
+  /* about: URIs handler */
   webkit_web_context_register_uri_scheme (web_context,
                                           EPHY_ABOUT_SCHEME,
                                           about_request_cb,
