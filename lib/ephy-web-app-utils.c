@@ -303,6 +303,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
   soup_uri_free (uri);
   g_slist_free (cookies);
 #endif
+  g_object_unref (new_jar);
 }
 
 /**
