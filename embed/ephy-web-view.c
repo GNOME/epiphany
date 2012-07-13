@@ -2141,24 +2141,18 @@ load_changed_cb (WebKitWebView *web_view,
 
     /* Security status. */
     if (uri && g_str_has_prefix (uri, "https")) {
-#if 0
-      /* TODO: security */
-      WebKitWebFrame *frame;
-      WebKitWebDataSource *source;
-      WebKitNetworkRequest *request;
-      SoupMessage *message;
+      WebKitWebResource *resource;
+      WebKitURIResponse *response;
+      GTlsCertificateFlags tls_errors = 0;
+      gboolean has_certificate;
 
-      frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-      source = webkit_web_frame_get_data_source (frame);
-      request = webkit_web_data_source_get_request (source);
-      message = webkit_network_request_get_message (request);
-
-      if (message &&
-          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
+      resource = webkit_web_view_get_main_resource (web_view);
+      response = webkit_web_resource_get_response (resource);
+      has_certificate = webkit_uri_response_get_https_status (response, NULL, &tls_errors);
+      if (has_certificate && tls_errors == 0)
         security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
       else
         security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
-#endif
     }
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
