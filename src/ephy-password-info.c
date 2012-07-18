@@ -17,11 +17,9 @@
  *
  */
 #include "config.h"
-
 #include "ephy-password-info.h"
 
 #include <gnome-keyring-memory.h>
-
 
 static EphyPasswordInfo*
 password_info_copy (EphyPasswordInfo *info)
@@ -40,19 +38,8 @@ password_info_free (EphyPasswordInfo *info)
   g_slice_free (EphyPasswordInfo, info);
 }
 
-GType
-ephy_password_info_get_type (void)
-{
-  static volatile gsize type_volatile = 0;
-  if (g_once_init_enter (&type_volatile)) {
-    GType type = g_boxed_type_register_static(
-            g_intern_static_string ("EphyTypePasswordInfo"),
-        (GBoxedCopyFunc) password_info_copy,
-        (GBoxedFreeFunc) password_info_free);
-    g_once_init_leave (&type_volatile, type);
-  }
-  return type_volatile;
-}
+G_DEFINE_BOXED_TYPE (EphyPasswordInfo, ephy_password_info,
+                     password_info_copy, password_info_free)
 
 EphyPasswordInfo
 *ephy_password_info_new (guint32 key_id)

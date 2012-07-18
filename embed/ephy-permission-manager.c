@@ -19,25 +19,13 @@
  */
 
 #include "config.h"
-
 #include "ephy-permission-manager.h"
+
 #include "ephy-embed-type-builtins.h"
 #include "ephy-debug.h"
 
-GType
-ephy_permission_info_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		type = g_boxed_type_register_static ("EphyPermissionInfo",
-						     (GBoxedCopyFunc) ephy_permission_info_copy,
-						     (GBoxedFreeFunc) ephy_permission_info_free);
-	}
-
-	return type;
-}
+G_DEFINE_BOXED_TYPE (EphyPermissionInfo, ephy_permission_info,
+		     ephy_permission_info_copy, ephy_permission_info_free)
 
 /**
  * ephy_permission_info_new:
