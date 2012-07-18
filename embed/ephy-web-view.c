@@ -1186,7 +1186,7 @@ title_changed_cb (WebKitWebView *web_view,
 
 /**
  * Sets the view location to be address. Note that this function might
- * also set the typed-address property to %NULL.
+ * also set the typed-address property to NULL.
  */
 static void
 ephy_web_view_set_address (EphyWebView *view,
