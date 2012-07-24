@@ -515,6 +515,9 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
                                             char *key,
                                             gpointer data)
 {
+#ifdef HAVE_WEBKIT2
+  WebKitWebContext *web_context = NULL;
+#endif
   gboolean value = FALSE;
   char **languages = NULL;
   char *langs = NULL;
@@ -530,7 +533,9 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
   }
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Spell checking */
+  web_context = webkit_web_context_get_default ();
+  webkit_web_context_set_spell_checking_enabled (web_context, value);
+  webkit_web_context_set_spell_checking_languages (web_context, langs);
 #else
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
