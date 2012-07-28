@@ -26,7 +26,6 @@
 #define EPHY_EXTENSIONS_MANAGER_H
 
 #include "ephy-extension.h"
-#include "ephy-node.h"
 
 #include <glib.h>
 #include <glib-object.h>

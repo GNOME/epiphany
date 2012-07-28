@@ -22,21 +22,17 @@
  */
 
 #include "config.h"
-
 #include "ephy-extensions-manager.h"
 
-#include "ephy-loader.h"
-#include "ephy-shlib-loader.h"
-
-#include "ephy-embed-container.h"
-
-#include "ephy-node-db.h"
-#include "ephy-shell.h"
-#include "ephy-file-helpers.h"
-#include "ephy-object-helpers.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
+#include "ephy-file-helpers.h"
+#include "ephy-loader.h"
+#include "ephy-object-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-shlib-loader.h"
 
 #include <gio/gio.h>
 #include <gmodule.h>
