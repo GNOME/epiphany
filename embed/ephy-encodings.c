@@ -144,13 +144,9 @@ enum
 {
 	ALL_NODE_ID = 2,
 	ENCODINGS_NODE_ID = 3,
-	DETECTORS_NODE_ID = 5
 };
 
 #define RECENT_MAX	4
-
-static void ephy_encodings_class_init	(EphyEncodingsClass *klass);
-static void ephy_encodings_init		(EphyEncodings *ma);
 
 G_DEFINE_TYPE (EphyEncodings, ephy_encodings, G_TYPE_OBJECT)
 
