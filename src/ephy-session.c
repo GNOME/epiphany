@@ -1120,6 +1120,12 @@ ephy_session_load_from_string (EphySession *session,
 
 	if (doc == NULL)
 	{
+		/* If the session fails to load for whatever reason,
+		 * delete the file and open an empty window. */
+		session_delete (session, SESSION_STATE);
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+					    NULL, NULL, user_time, FALSE);
 		return FALSE;
 	}
 

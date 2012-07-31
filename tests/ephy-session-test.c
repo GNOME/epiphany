@@ -73,6 +73,48 @@ test_ephy_session_load ()
     gtk_widget_destroy (GTK_WIDGET (l->data));
 }
 
+const char *session_data_empty = 
+"";
+
+static void
+test_ephy_session_load_empty_session ()
+{
+    EphySession *session;
+    gboolean ret;
+    GList *l;
+    EphyEmbed *embed;
+    EphyWebView *view;
+
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    g_assert (session);
+
+    ret = ephy_session_load_from_string (session, session_data_empty, -1, 0);
+    g_assert (ret == FALSE);
+
+    /* Loading the session should have failed, but we should still get
+     * the default empty window. Got to spin the mainloop though,
+     * since the fallback is done by queueing another session
+     * command. */
+    while (g_main_context_pending (NULL))
+      g_main_context_iteration (NULL, FALSE);
+
+    l = ephy_session_get_windows (session);
+    g_assert (l);
+    g_assert_cmpint (g_list_length (l), ==, 1);
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
+    g_assert (embed);
+    view = ephy_embed_get_web_view (embed);
+    g_assert (view);
+    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:blank");
+
+    /* FIXME: Destroy the window. I think ideally we'd like something
+     * like 'ephy_session_clear ()' to reset everything to its initial
+     * state here. That or allow EphyShell to be created more than
+     * once and do it once per test. */
+    gtk_widget_destroy (GTK_WIDGET (l->data));
+}
+
 const char *session_data_many_windows = 
 "<?xml version=\"1.0\"?>"
 "<session>"
@@ -134,6 +176,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
+
+  g_test_add_func ("/src/ephy-session/load-empty-session",
+                   test_ephy_session_load_empty_session);
 
   g_test_add_func ("/src/ephy-session/load-many-windows",
                    test_ephy_session_load_many_windows);
