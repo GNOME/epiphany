@@ -30,7 +30,6 @@
 #include <glib.h>
 
 #include "ephy-encoding.h"
-#include "ephy-node.h"
 
 G_BEGIN_DECLS
 
@@ -44,15 +43,6 @@ G_BEGIN_DECLS
 typedef struct _EphyEncodings        EphyEncodings;
 typedef struct _EphyEncodingsPrivate EphyEncodingsPrivate;
 typedef struct _EphyEncodingsClass   EphyEncodingsClass;
-
-enum
-{
-  EPHY_NODE_ENCODING_PROP_TITLE = 1,
-  EPHY_NODE_ENCODING_PROP_TITLE_ELIDED = 2,
-  EPHY_NODE_ENCODING_PROP_COLLATION_KEY = 3,
-  EPHY_NODE_ENCODING_PROP_ENCODING = 4,
-  EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS = 5,
-};
 
 struct _EphyEncodings
 {
