@@ -31,8 +31,8 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-print-utils.h"
-#include <glib.h>
 
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
