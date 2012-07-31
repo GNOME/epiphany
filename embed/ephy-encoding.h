@@ -79,8 +79,7 @@ typedef enum
   LG_VIETNAMESE   = 1 << 20,
   LG_WESTERN    = 1 << 21,
   LG_ALL      = 0x3fffff,
-}
-  EphyLanguageGroup;
+} EphyLanguageGroup;
 
 GType          ephy_encoding_get_type             (void);
 EphyEncoding * ephy_encoding_new                  (const char *encoding,
