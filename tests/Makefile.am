@@ -4,6 +4,7 @@ noinst_PROGRAMS = \
 	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
+	test-ephy-encodings \
 	test-ephy-file-helpers \
 	test-ephy-history \
 	test-ephy-location-entry \
@@ -125,6 +126,9 @@ test_ephy_embed_single_SOURCES = \
 
 test_ephy_embed_utils_SOURCES = \
 	ephy-embed-utils-test.c
+
+test_ephy_encodings_SOURCES = \
+	ephy-encodings-test.c
 
 test_ephy_file_helpers_SOURCES = \
 	ephy-file-helpers-test.c
