@@ -33,6 +33,24 @@
 #define NUM_ENCODINGS 78
 
 static void
+test_ephy_encodings_create ()
+{
+  EphyEncoding *encoding;
+
+  encoding = ephy_encoding_new ("UTF-8", "Unicode (UTF-8)",
+                                "0xDEADBEEF", "0xDEADBEEF",
+                                LG_UNICODE);
+  g_assert (encoding);
+  g_assert_cmpstr (ephy_encoding_get_encoding (encoding), ==, "UTF-8");
+  g_assert_cmpstr (ephy_encoding_get_title (encoding), ==, "Unicode (UTF-8)");
+  g_assert_cmpstr (ephy_encoding_get_title_elided (encoding), ==, "0xDEADBEEF");
+  g_assert_cmpstr (ephy_encoding_get_collation_key (encoding), ==, "0xDEADBEEF");
+  g_assert_cmpint (ephy_encoding_get_language_groups (encoding), ==, LG_UNICODE);
+
+  g_object_unref (encoding);
+}
+
+static void
 test_ephy_encodings_get ()
 {
   EphyEncodings *encodings;
@@ -73,6 +91,9 @@ main (int argc, char *argv[])
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
   g_assert (ephy_shell);
+
+  g_test_add_func ("/src/ephy-encodings/create",
+                   test_ephy_encodings_create);
 
   g_test_add_func ("/src/ephy-encodings/get",
                    test_ephy_encodings_get);
