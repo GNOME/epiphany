@@ -20,23 +20,23 @@
  */
 
 #include <config.h>
-
-#include <glib.h>
-
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
+#include "ephy-embed-shell.h"
 
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
 #include "ephy-download.h"
-#include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-print-utils.h"
+#include <glib.h>
+
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <stdlib.h>
 
 #define PAGE_SETUP_FILENAME	"page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME	"print-settings.ini"
