@@ -28,7 +28,6 @@
 #include "ephy-settings.h"
 
 #include <glib/gi18n.h>
-#include <string.h>
 
 #define EPHY_ENCODINGS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODINGS, EphyEncodingsPrivate))
 
@@ -180,32 +179,6 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
   g_type_class_add_private (object_class, sizeof (EphyEncodingsPrivate));
 }
 
-/* Copied from egg-toolbar-editor.c */
-static char *
-elide_underscores (const char *original)
-{
-  char *q, *result;
-  const char *p;
-  gboolean last_underscore;
-
-  q = result = g_malloc (strlen (original) + 1);
-  last_underscore = FALSE;
-
-  for (p = original; *p; p++) {
-    if (!last_underscore && *p == '_') {
-      last_underscore = TRUE;
-    }
-    else {
-      last_underscore = FALSE;
-      *q++ = *p;
-    }
-  }
-
-  *q = '\0';
-
-  return result;
-}
-
 static EphyEncoding *
 add_encoding (EphyEncodings *encodings,
               const char *title,
@@ -213,24 +186,13 @@ add_encoding (EphyEncodings *encodings,
               EphyLanguageGroup groups)
 {
   EphyEncoding *encoding;
-  char *elided, *collate_key, *normalised;
 
   /* Create node. */
-  elided = elide_underscores (title);
-  normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
-  collate_key = g_utf8_collate_key (normalised, -1);
-
-  encoding = ephy_encoding_new (code, title,
-                                normalised, collate_key,
-                                groups);
+  encoding = ephy_encoding_new (code, title, groups);
   /* Add it. */
   g_hash_table_insert (encodings->priv->hash, g_strdup (code), encoding);
 
   g_signal_emit_by_name (encodings, "encoding-added", encoding);
-
-  g_free (collate_key);
-  g_free (normalised);
-  g_free (elided);
 
   return encoding;
 }

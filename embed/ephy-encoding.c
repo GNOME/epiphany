@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-encoding.h"
 
+#include <string.h>
+
 G_DEFINE_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
 
 #define EPHY_ENCODING_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING, EphyEncodingPrivate))
@@ -86,6 +88,32 @@ ephy_encoding_get_property (GObject *object,
   }
 }
 
+/* Copied from egg-toolbar-editor.c */
+static char *
+elide_underscores (const char *original)
+{
+  char *q, *result;
+  const char *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+
+  for (p = original; *p; p++) {
+    if (!last_underscore && *p == '_') {
+      last_underscore = TRUE;
+    }
+    else {
+      last_underscore = FALSE;
+      *q++ = *p;
+    }
+  }
+
+  *q = '\0';
+
+  return result;
+}
+
 static void
 ephy_encoding_set_property (GObject *object,
                             guint prop_id,
@@ -95,10 +123,27 @@ ephy_encoding_set_property (GObject *object,
   EphyEncodingPrivate *priv = EPHY_ENCODING (object)->priv;
 
   switch (prop_id) {
-  case PROP_TITLE:
+  case PROP_TITLE: {
+    char *elided, *collate_key, *normalised;
+
     g_free (priv->title);
     priv->title = g_strdup (g_value_get_string (value));
+
+    elided = elide_underscores (priv->title);
+    normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
+    collate_key = g_utf8_collate_key (normalised, -1);
+
+    g_object_set (object,
+                  "title-elided", elided,
+                  "collation-key", collate_key,
+                  NULL);
+
+    g_free (collate_key);
+    g_free (normalised);
+    g_free (elided);
+
     break;
+  } 
   case PROP_TITLE_ELIDED:
     g_free (priv->title_elided);
     priv->title_elided = g_strdup (g_value_get_string (value));
@@ -220,14 +265,11 @@ ephy_encoding_get_language_groups (EphyEncoding *encoding)
 
 EphyEncoding *
 ephy_encoding_new (const char *encoding, const char *title,
-                   const char *title_elided, const char *collation_key,
                    int language_groups)
 {
   return g_object_new (EPHY_TYPE_ENCODING,
                        "encoding", encoding,
                        "title", title,
-                       "title-elided", title_elided,
-                       "collation-key", collation_key,
                        "language-groups", language_groups,
                        NULL);
 }

@@ -84,8 +84,6 @@ typedef enum
 GType          ephy_encoding_get_type             (void);
 EphyEncoding * ephy_encoding_new                  (const char *encoding,
                                                    const char *title,
-                                                   const char *title_elided,
-                                                   const char *collation_key,
                                                    int language_groups);
 const char    * ephy_encoding_get_title           (EphyEncoding *encoding);
 const char    * ephy_encoding_get_title_elided    (EphyEncoding *encoding);
