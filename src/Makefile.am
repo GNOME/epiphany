@@ -95,8 +95,8 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_API_VERSION)/extensions"\" 	\
-	-DLOADER_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/loaders"\"		\
+	-DEXTENSIONS_DIR=\""$(pkglibdir)/$(EPIPHANY_API_VERSION)/extensions"\" 	\
+	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS)

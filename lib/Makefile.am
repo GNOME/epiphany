@@ -88,7 +88,7 @@ libephymisc_la_CPPFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		    \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"    \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\" \
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_API_VERSION)/extensions"\" 	\
+	-DEXTENSIONS_DIR=\""$(pkglibdir)/$(EPIPHANY_API_VERSION)/extensions"\" 	\
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
