@@ -150,7 +150,19 @@ impl_construct (EphyDialog *dialog,
 
 	builder = gtk_builder_new ();
 	gtk_builder_set_translation_domain (builder, domain);
-	gtk_builder_add_from_resource (builder, resource, &error);
+
+	/* Hack to support extensions that use EphyDialog with files and
+	 * not GResource objects. This is far simpler than creating a
+	 * GResource binary for every extension. */
+	if (g_file_test (resource, G_FILE_TEST_EXISTS))
+	{
+		gtk_builder_add_from_file (builder, resource, &error);
+	}
+	else
+	{
+		gtk_builder_add_from_resource (builder, resource, &error);
+	}
+
 	if (error)
 	{
 		g_warning ("Unable to load UI resource %s: %s", resource, error->message);
