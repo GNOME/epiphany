@@ -1,5 +1,7 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2012 Igalia S.L.
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,56 +34,50 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ENCODINGS		(ephy_encodings_get_type ())
-#define EPHY_ENCODINGS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ENCODINGS, EphyEncodings))
-#define EPHY_ENCODINGS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
-#define EPHY_IS_ENCODINGS(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ENCODINGS))
-#define EPHY_IS_ENCODINGS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODINGS))
-#define EPHY_ENCODINGS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
+#define EPHY_TYPE_ENCODINGS         (ephy_encodings_get_type ())
+#define EPHY_ENCODINGS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ENCODINGS, EphyEncodings))
+#define EPHY_ENCODINGS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
+#define EPHY_IS_ENCODINGS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ENCODINGS))
+#define EPHY_IS_ENCODINGS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODINGS))
+#define EPHY_ENCODINGS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
 
-typedef struct _EphyEncodings		EphyEncodings;
-typedef struct _EphyEncodingsPrivate	EphyEncodingsPrivate;
-typedef struct _EphyEncodingsClass	EphyEncodingsClass;
+typedef struct _EphyEncodings        EphyEncodings;
+typedef struct _EphyEncodingsPrivate EphyEncodingsPrivate;
+typedef struct _EphyEncodingsClass   EphyEncodingsClass;
 
 enum
 {
-	EPHY_NODE_ENCODING_PROP_TITLE = 1,
-	EPHY_NODE_ENCODING_PROP_TITLE_ELIDED = 2,
-	EPHY_NODE_ENCODING_PROP_COLLATION_KEY = 3,
-	EPHY_NODE_ENCODING_PROP_ENCODING = 4,
-	EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS = 5,
+  EPHY_NODE_ENCODING_PROP_TITLE = 1,
+  EPHY_NODE_ENCODING_PROP_TITLE_ELIDED = 2,
+  EPHY_NODE_ENCODING_PROP_COLLATION_KEY = 3,
+  EPHY_NODE_ENCODING_PROP_ENCODING = 4,
+  EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS = 5,
 };
 
 struct _EphyEncodings
 {
-	GObject parent;
+  GObject parent;
 
-	/*< private >*/
-	EphyEncodingsPrivate *priv;
+  /*< private >*/
+  EphyEncodingsPrivate *priv;
 };
 
 struct _EphyEncodingsClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
-GType		 ephy_encodings_get_type        (void);
-
-EphyEncodings	*ephy_encodings_new             (void);
-
-EphyEncoding	*ephy_encodings_get_encoding	(EphyEncodings *encodings,
-						 const char *code,
-						 gboolean add_if_not_found);
-
-GList		*ephy_encodings_get_encodings	(EphyEncodings *encodings,
-						 EphyLanguageGroup group_mask);
-
-GList   	*ephy_encodings_get_all		(EphyEncodings *encodings);
-
-void		 ephy_encodings_add_recent	(EphyEncodings *encodings,
-						 const char *code);
-
-GList		*ephy_encodings_get_recent	(EphyEncodings *encodings);
+GType          ephy_encodings_get_type      (void);
+EphyEncodings *ephy_encodings_new           (void);
+EphyEncoding  *ephy_encodings_get_encoding  (EphyEncodings     *encodings,
+                                             const char        *code,
+                                             gboolean           add_if_not_found);
+GList         *ephy_encodings_get_encodings (EphyEncodings     *encodings,
+                                             EphyLanguageGroup  group_mask);
+GList         *ephy_encodings_get_all       (EphyEncodings     *encodings);
+void           ephy_encodings_add_recent    (EphyEncodings     *encodings,
+                                             const char        *code);
+GList         *ephy_encodings_get_recent    (EphyEncodings     *encodings);
 
 G_END_DECLS
 
