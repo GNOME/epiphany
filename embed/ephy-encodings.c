@@ -23,8 +23,6 @@
 #include "ephy-encodings.h"
 
 #include "ephy-debug.h"
-#include "ephy-file-helpers.h"
-#include "ephy-node-db.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
@@ -35,9 +33,6 @@
 
 struct _EphyEncodingsPrivate
 {
-	EphyNodeDb *db;
-	EphyNode *root;
-	EphyNode *encodings;
 	GHashTable *hash;
 	GSList *recent;
 };
@@ -140,12 +135,6 @@ encoding_entries [] =
 	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0 },
 };
 
-enum
-{
-	ALL_NODE_ID = 2,
-	ENCODINGS_NODE_ID = 3,
-};
-
 #define RECENT_MAX	4
 
 G_DEFINE_TYPE (EphyEncodings, ephy_encodings, G_TYPE_OBJECT)
@@ -157,13 +146,8 @@ ephy_encodings_finalize (GObject *object)
 
 	g_hash_table_destroy (encodings->priv->hash);
 
-	ephy_node_unref (encodings->priv->encodings);
-	ephy_node_unref (encodings->priv->root);
-
-	g_slist_foreach (encodings->priv->recent, (GFunc) g_free, NULL);
+	g_slist_foreach (encodings->priv->recent, (GFunc)g_free, NULL);
 	g_slist_free (encodings->priv->recent);
-
-	g_object_unref (encodings->priv->db);
 
 	LOG ("EphyEncodings finalised");
 
@@ -176,6 +160,20 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ephy_encodings_finalize;
+
+	/**
+	 * EphyEncodings::encoding-added:
+	 *
+	 * The ::encoding-added signal is emitted when @encodings receives a new encoding.
+	 **/
+	g_signal_new ("encoding-added",
+		      G_OBJECT_CLASS_TYPE (object_class),
+		      G_SIGNAL_RUN_LAST,
+		      0,
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__OBJECT,
+		      G_TYPE_NONE,
+		      1, G_TYPE_OBJECT);
 
 	g_type_class_add_private (object_class, sizeof (EphyEncodingsPrivate));
 }
@@ -209,77 +207,80 @@ elide_underscores (const char *original)
 	return result;
 }
 
-static EphyNode *
+static EphyEncoding *
 add_encoding (EphyEncodings *encodings,
 	      const char *title,
 	      const char *code,
 	      EphyLanguageGroup groups)
 {
-	EphyNode *node;
-	char *elided, *normalised;
-	GValue value = { 0, };
+	EphyEncoding *encoding;
+	char *elided, *collate_key, *normalised;
 
-	node = ephy_node_new (encodings->priv->db);
-
-	ephy_node_set_property_string (node, EPHY_NODE_ENCODING_PROP_TITLE,
-				       title);
-
+	/* Create node. */
 	elided = elide_underscores (title);
 	normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
+	collate_key = g_utf8_collate_key (normalised, -1);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_take_string (&value, g_utf8_collate_key (normalised, -1));
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_COLLATION_KEY, &value);
-	g_value_unset (&value);
+	encoding = ephy_encoding_new (code, title,
+				      normalised, collate_key,
+				      groups);
+	/* Add it. */
+	g_hash_table_insert (encodings->priv->hash, g_strdup (code), encoding);
 
+	g_signal_emit_by_name (encodings, "encoding-added", encoding);
+
+	g_free (collate_key);
 	g_free (normalised);
+	g_free (elided);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_take_string (&value, elided);
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED, &value);
-	g_value_unset (&value);
-
-	ephy_node_set_property_string (node, EPHY_NODE_ENCODING_PROP_ENCODING,
-				       code);
-
-	ephy_node_set_property_int (node,
-				    EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS,
-				    groups);
-				    
-	/* now insert the node in our structure */
-	ephy_node_add_child (encodings->priv->root, node);
-	g_hash_table_insert (encodings->priv->hash, g_strdup (code), node);
-
-        ephy_node_add_child (encodings->priv->encodings, node);
-
-	return node;
+	return encoding;
 }
 
-EphyNode *
-ephy_encodings_get_node (EphyEncodings *encodings,
-			 const char *code,
-			 gboolean add_if_not_found)
+EphyEncoding *
+ephy_encodings_get_encoding (EphyEncodings *encodings,
+			     const char *code,
+			     gboolean add_if_not_found)
 {
-	EphyNode *node;
+	EphyEncoding *encoding;
 
 	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-	node = g_hash_table_lookup (encodings->priv->hash, code);
+	encoding = g_hash_table_lookup (encodings->priv->hash, code);
 
 	/* if it doesn't exist, add a node for it */
-	if (!EPHY_IS_NODE (node) && add_if_not_found)
+	if (!EPHY_IS_ENCODING (encoding) && add_if_not_found)
 	{
 		char *title;
 
-		/* translators: this is the title that an unknown encoding will
+		/* Translators: this is the title that an unknown encoding will
 		 * be displayed as.
 		 */
 		title = g_strdup_printf (_("Unknown (%s)"), code);
-		node = add_encoding (encodings, title, code, 0);
+		encoding = add_encoding (encodings, title, code, 0);
 		g_free (title);
 	}
 
-	return node;
+	return encoding;
+}
+
+typedef struct {
+	GList *list;
+	EphyLanguageGroup group_mask;
+} GetEncodingsData;
+
+static void
+get_encodings_foreach (gpointer key,
+		       gpointer value,
+		       gpointer user_data)
+{
+	GetEncodingsData *data = (GetEncodingsData*)user_data;
+	EphyLanguageGroup group;
+	
+	group = ephy_encoding_get_language_groups (EPHY_ENCODING (value));
+	if ((group & data->group_mask) != 0)
+	{
+		data->list = g_list_prepend (data->list, value);
+	}
 }
 
 GList *
@@ -287,35 +288,36 @@ ephy_encodings_get_encodings (EphyEncodings *encodings,
 			      EphyLanguageGroup group_mask)
 {
 	GList *list = NULL;
-	GPtrArray *children;
-	int i, n_items;
+	GetEncodingsData data;
 
-	children = ephy_node_get_children (encodings->priv->encodings);
-	n_items = children->len;
-	for (i = 0; i < n_items; i++)
-	{
-		EphyNode *kid;
-		EphyLanguageGroup group;
-															     
-		kid = g_ptr_array_index (children, i);
-		group = ephy_node_get_property_int
-			(kid, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS);
-															      
-		if ((group & group_mask) != 0)
-		{
-			list = g_list_prepend (list, kid);
-		}
-	}
+	data.list = list;
+	data.group_mask = group_mask;
+
+	g_hash_table_foreach (encodings->priv->hash, (GHFunc)get_encodings_foreach, &data);
 
 	return list;
 }
 
-EphyNode *
+static void
+get_all_encodings (gpointer key,
+		   gpointer value,
+		   gpointer user_data)
+{
+	GList **l = (GList**)user_data;
+
+	*l = g_list_prepend (*l, value);
+}
+
+GList *
 ephy_encodings_get_all (EphyEncodings *encodings)
 {
+	GList *l = NULL;
+
 	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-	return encodings->priv->encodings;
+	g_hash_table_foreach (encodings->priv->hash, (GHFunc)get_all_encodings, &l);
+
+	return l;
 }
 
 void
@@ -324,39 +326,41 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
 {
 	GSList *element, *l;
 	GVariantBuilder builder;
+	EphyEncodingsPrivate *priv = encodings->priv;
 
 	g_return_if_fail (EPHY_IS_ENCODINGS (encodings));
 	g_return_if_fail (code != NULL);
 	
-	if (ephy_encodings_get_node (encodings, code, FALSE) == NULL) return;
+	if (ephy_encodings_get_encoding (encodings, code, FALSE) == NULL)
+		return;
 
-	/* keep the list elements unique */
-	element = g_slist_find_custom (encodings->priv->recent, code,
-				       (GCompareFunc) strcmp);
+	/* Keep the list elements unique. */
+	element = g_slist_find_custom (priv->recent, code,
+				       (GCompareFunc)strcmp);
 	if (element != NULL)
 	{
 		g_free (element->data);
-		encodings->priv->recent =
-			g_slist_remove_link (encodings->priv->recent, element);
+		priv->recent =
+			g_slist_remove_link (priv->recent, element);
 	}
 
-	/* add the new code upfront */
-	encodings->priv->recent =
-		g_slist_prepend (encodings->priv->recent, g_strdup (code));
+	/* Add the new code upfront. */
+	priv->recent =
+		g_slist_prepend (priv->recent, g_strdup (code));
 
-	/* truncate the list if necessary; it's at most 1 element too much */
-	if (g_slist_length (encodings->priv->recent) > RECENT_MAX)
+	/* Truncate the list if necessary; it's at most 1 element too much. */
+	if (g_slist_length (priv->recent) > RECENT_MAX)
 	{
 		GSList *tail;
 
-		tail = g_slist_last (encodings->priv->recent);
+		tail = g_slist_last (priv->recent);
 		g_free (tail->data);
-		encodings->priv->recent =
-			g_slist_remove_link (encodings->priv->recent, tail);
+		priv->recent =
+			g_slist_remove_link (priv->recent, tail);
 	}
 
 	g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
-	for (l = encodings->priv->recent; l; l = l->next)
+	for (l = priv->recent; l; l = l->next)
 	{
 		g_variant_builder_add (&builder, "s", l->data);
 	}
@@ -372,14 +376,16 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
 	GSList *l;
 	GList *list = NULL;
 
+	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
+
 	for (l = encodings->priv->recent; l != NULL; l = l->next)
 	{
-		EphyNode *node;
+		EphyEncoding *encoding;
 
-		node = ephy_encodings_get_node (encodings, (char *) l->data, FALSE);
-		g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+		encoding = ephy_encodings_get_encoding (encodings, (char *)l->data, FALSE);
+		g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
 
-		list = g_list_prepend (list, node);
+		list = g_list_prepend (list, encoding);
 	}
 
 	return list;
@@ -388,7 +394,6 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
 static void
 ephy_encodings_init (EphyEncodings *encodings)
 {
-	EphyNodeDb *db;
 	char **list;
 	int i;
 
@@ -396,17 +401,11 @@ ephy_encodings_init (EphyEncodings *encodings)
 
 	LOG ("EphyEncodings initialising");
 
-	db = ephy_node_db_new ("EncodingsDB");
-	encodings->priv->db = db;
-
 	encodings->priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-						       (GDestroyNotify) g_free,
-						       NULL);
+						       (GDestroyNotify)g_free,
+						       (GDestroyNotify)g_object_unref);
 
-	encodings->priv->root = ephy_node_new_with_id (db, ALL_NODE_ID);
-	encodings->priv->encodings = ephy_node_new_with_id (db, ENCODINGS_NODE_ID);
-
-	/* now fill the db */
+	/* Fill the db. */
 	for (i = 0; i < G_N_ELEMENTS (encoding_entries); i++)
 	{
 		add_encoding (encodings,
@@ -415,12 +414,12 @@ ephy_encodings_init (EphyEncodings *encodings)
 			      encoding_entries[i].groups);
 	}
 
-	/* get the list of recently used encodings */
+	/* Get the list of recently used encodings. */
 	list = g_settings_get_strv (EPHY_SETTINGS_STATE,
 				    EPHY_PREFS_STATE_RECENT_ENCODINGS);
 
-	/* make sure the list has no duplicates (GtkUIManager goes
-	 * crazy otherwise), and only valid entries
+	/* Make sure the list has no duplicates (GtkUIManager goes
+	 * crazy otherwise), and only valid entries.
 	 */
 	encodings->priv->recent = NULL;
 	for (i = 0; list[i]; i++)
@@ -430,7 +429,7 @@ ephy_encodings_init (EphyEncodings *encodings)
 
 		if (g_slist_find (encodings->priv->recent, item) == NULL
 		    && g_slist_length (encodings->priv->recent) < RECENT_MAX
-		    && ephy_encodings_get_node (encodings, item, FALSE) != NULL)
+		    && ephy_encodings_get_encoding (encodings, item, FALSE) != NULL)
 		{
 			encodings->priv->recent =
 				g_slist_prepend (encodings->priv->recent,

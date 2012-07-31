@@ -39,8 +39,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-tree-model-node.h"
-#include "ephy-tree-model-sort.h"
 #include "pdm-dialog.h"
 
 #include <glib/gi18n.h>
@@ -73,6 +71,12 @@ struct PrefsDialogPrivate
 	GtkWidget *lang_down_button;
 	GHashTable *iso_639_table;
 	GHashTable *iso_3166_table;
+};
+
+enum {
+	COL_TITLE_ELIDED,
+	COL_ENCODING,
+	NUM_COLS
 };
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, EPHY_TYPE_DIALOG)
@@ -214,19 +218,17 @@ combo_set_mapping (const GValue *value,
 static void
 create_node_combo (EphyDialog *dialog,
 		   EphyEncodings *encodings,
-		   EphyNode *node,
 		   const char *default_value)
 {
-	EphyTreeModelNode *nodemodel;
-	GtkTreeModel *sortmodel;
 	GtkComboBox *combo;
 	GtkCellRenderer *renderer;
+	GtkListStore *store;
+	GList *all_encodings, *p;
 	char *code;
-	int title_col;
 
 	code = g_settings_get_string (EPHY_SETTINGS_WEB,
 				      EPHY_PREFS_WEB_DEFAULT_ENCODING);
-	if (code == NULL || ephy_encodings_get_node (encodings, code, FALSE) == NULL)
+	if (code == NULL || ephy_encodings_get_encoding (encodings, code, FALSE) == NULL)
 	{
 		/* safe default */
 		g_settings_set_string (EPHY_SETTINGS_WEB,
@@ -238,26 +240,34 @@ create_node_combo (EphyDialog *dialog,
 	combo = GTK_COMBO_BOX (ephy_dialog_get_control (dialog,
 							"default_encoding_combo"));
 
-	nodemodel = ephy_tree_model_node_new (node);
+	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
+	all_encodings = ephy_encodings_get_all (encodings);
+	for (p = all_encodings; p; p = p->next) 
+	{
+		GtkTreeIter iter;
+		EphyEncoding *encoding = EPHY_ENCODING (p->data);
+		
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    COL_TITLE_ELIDED, 
+				    ephy_encoding_get_title_elided (encoding),
+				    -1);
+		gtk_list_store_set (store, &iter,
+				    COL_ENCODING, 
+				    ephy_encoding_get_encoding (encoding),
+				    -1);
+	}
+	g_list_free (all_encodings);
 
-	title_col = ephy_tree_model_node_add_prop_column
-			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), COL_TITLE_ELIDED,
+					      GTK_SORT_ASCENDING);
+	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
 
-	ephy_tree_model_node_add_prop_column
-		(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_ENCODING);
-
-	sortmodel = ephy_tree_model_sort_new (GTK_TREE_MODEL (nodemodel));
-
-	gtk_tree_sortable_set_sort_column_id
-		(GTK_TREE_SORTABLE (sortmodel), title_col, GTK_SORT_ASCENDING);
-
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (sortmodel));
-
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                        "text", title_col,
-                                        NULL);
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+					"text", COL_TITLE_ELIDED,
+					NULL);
 
 	g_settings_bind_with_mapping (EPHY_SETTINGS_WEB,
 				      EPHY_PREFS_WEB_DEFAULT_ENCODING,
@@ -267,9 +277,6 @@ create_node_combo (EphyDialog *dialog,
 				      combo_set_mapping,
 				      combo,
 				      NULL);
-
-	g_object_unref (nodemodel);
-	g_object_unref (sortmodel);
 }
 
 static void
@@ -1082,8 +1089,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 					(EPHY_EMBED_SHELL (ephy_shell)));
 
-	create_node_combo (dialog, encodings,
-			   ephy_encodings_get_all (encodings), "ISO-8859-1");
+	create_node_combo (dialog, encodings, "ISO-8859-1");
 
 	create_language_section	(dialog);
 

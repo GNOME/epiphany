@@ -27,6 +27,7 @@
 #include <glib-object.h>
 #include <glib.h>
 
+#include "ephy-encoding.h"
 #include "ephy-node.h"
 
 G_BEGIN_DECLS
@@ -41,34 +42,6 @@ G_BEGIN_DECLS
 typedef struct _EphyEncodings		EphyEncodings;
 typedef struct _EphyEncodingsPrivate	EphyEncodingsPrivate;
 typedef struct _EphyEncodingsClass	EphyEncodingsClass;
-
-typedef enum
-{
-	LG_NONE			= 0,
-	LG_ARABIC		= 1 << 0,
-	LG_BALTIC		= 1 << 1,
-	LG_CAUCASIAN		= 1 << 2,
-	LG_C_EUROPEAN		= 1 << 3,
-	LG_CHINESE_TRAD		= 1 << 4,
-	LG_CHINESE_SIMP		= 1 << 5,
-	LG_CYRILLIC		= 1 << 6,
-	LG_GREEK		= 1 << 7,
-	LG_HEBREW		= 1 << 8,
-	LG_INDIAN		= 1 << 9,
-	LG_JAPANESE		= 1 << 10,
-	LG_KOREAN		= 1 << 12,
-	LG_NORDIC		= 1 << 13,
-	LG_PERSIAN		= 1 << 14,
-	LG_SE_EUROPEAN		= 1 << 15,
-	LG_THAI			= 1 << 16,
-	LG_TURKISH		= 1 << 17,
-	LG_UKRAINIAN		= 1 << 18,
-	LG_UNICODE		= 1 << 19,
-	LG_VIETNAMESE		= 1 << 20,
-	LG_WESTERN		= 1 << 21,
-	LG_ALL			= 0x3fffff,
-}
-EphyLanguageGroup;
 
 enum
 {
@@ -96,14 +69,14 @@ GType		 ephy_encodings_get_type        (void);
 
 EphyEncodings	*ephy_encodings_new             (void);
 
-EphyNode	*ephy_encodings_get_node	(EphyEncodings *encodings,
+EphyEncoding	*ephy_encodings_get_encoding	(EphyEncodings *encodings,
 						 const char *code,
 						 gboolean add_if_not_found);
 
 GList		*ephy_encodings_get_encodings	(EphyEncodings *encodings,
 						 EphyLanguageGroup group_mask);
 
-EphyNode	*ephy_encodings_get_all		(EphyEncodings *encodings);
+GList   	*ephy_encodings_get_all		(EphyEncodings *encodings);
 
 void		 ephy_encodings_add_recent	(EphyEncodings *encodings,
 						 const char *code);

@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,8 +31,6 @@
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
-#include "ephy-node-view.h"
-#include "ephy-node.h"
 #include "ephy-shell.h"
 
 #include <glib/gi18n.h>
@@ -50,21 +49,59 @@ struct _EphyEncodingDialogPrivate
 	EphyWindow *window;
 	EphyEmbed *embed;
 	GtkWidget *enc_view;
-	EphyNodeFilter *filter;
-	EphyNode *selected_node;
 	gboolean update_tag;
+	char *selected_encoding;
 };
 
-static void	ephy_encoding_dialog_class_init		(EphyEncodingDialogClass *klass);
-static void	ephy_encoding_dialog_init		(EphyEncodingDialog *ge);
-
+enum {
+	COL_TITLE_ELIDED,
+	COL_ENCODING,
+	NUM_COLS
+};
+	
 G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY_TYPE_EMBED_DIALOG)
+
+static void
+select_encoding_row (GtkTreeView *view, EphyEncoding *encoding)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	gboolean valid_iter = FALSE;
+	const char *target_encoding;
+
+	model = gtk_tree_view_get_model (view);
+	valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+
+	target_encoding = ephy_encoding_get_encoding (encoding);
+
+	while (valid_iter)
+	{
+		char *encoding_string = NULL;
+
+		gtk_tree_model_get (model, &iter,
+				    COL_ENCODING, &encoding_string, -1);
+
+		if (g_str_equal (encoding_string,
+				 target_encoding))
+		{
+			GtkTreeSelection *selection;
+
+			selection = gtk_tree_view_get_selection (view);
+			gtk_tree_selection_select_iter (selection, &iter);
+			g_free (encoding_string);
+
+			return;
+		}
+
+		g_free (encoding_string);
+		valid_iter = gtk_tree_model_iter_next (model, &iter);
+	}
+}
 
 static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
 	EphyEmbed *embed;
-	EphyNode *node;
         GtkTreeSelection *selection;
         GtkTreeModel *model;
         GList *rows;
@@ -72,6 +109,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	const char *encoding;
 	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
+	EphyEncoding *node;
 
 	dialog->priv->update_tag = TRUE;
 
@@ -92,12 +130,11 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	}
 #endif
 
-	node = ephy_encodings_get_node (dialog->priv->encodings, encoding, TRUE);
-	g_assert (EPHY_IS_NODE (node));
+	node = ephy_encodings_get_encoding (dialog->priv->encodings, encoding, TRUE);
+	g_assert (EPHY_IS_ENCODING (node));
 
-	/* select the current encoding in the list view */
-	ephy_node_view_select_node (EPHY_NODE_VIEW (dialog->priv->enc_view),
-				    node);
+	/* Select the current encoding in the list view. */
+	select_encoding_row (GTK_TREE_VIEW (dialog->priv->enc_view), node);
 
 	/* scroll the view so the active encoding is visible */
         selection = gtk_tree_view_get_selection
@@ -210,12 +247,11 @@ activate_choice (EphyEncodingDialog *dialog)
 		webkit_web_view_set_custom_encoding (view, NULL);
 #endif
 	}
-	else if (dialog->priv->selected_node != NULL)
+	else if (dialog->priv->selected_encoding != NULL)
 	{
 		const char *code;
 
-		code = ephy_node_get_property_string (dialog->priv->selected_node,
-						      EPHY_NODE_ENCODING_PROP_ENCODING);
+		code = dialog->priv->selected_encoding;
 
 #ifdef HAVE_WEBKIT2
 		webkit_web_view_set_custom_charset (view, code);
@@ -242,15 +278,28 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 }
 
 static void
-view_node_selected_cb (EphyNodeView *view,
-		       EphyNode *node,
-		       EphyEncodingDialog *dialog)
+view_row_selected_cb (GtkTreeSelection *selection,
+		      EphyEncodingDialog *dialog)
 {
 	GtkWidget *button;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	EphyEncodingDialogPrivate *priv = dialog->priv;
 
-	dialog->priv->selected_node = node;
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		char *encoding;
 
-	if (dialog->priv->update_tag) return;
+		gtk_tree_model_get (model, &iter,
+				    COL_ENCODING, &encoding,
+				    -1);
+
+		g_free (priv->selected_encoding);
+		priv->selected_encoding = encoding;
+	}
+
+	if (dialog->priv->update_tag) 
+		return;
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -259,15 +308,29 @@ view_node_selected_cb (EphyNodeView *view,
 }
 
 static void
-view_node_activated_cb (GtkWidget *view,
-			EphyNode *node,
-			EphyEncodingDialog *dialog)
+view_row_activated_cb (GtkTreeView *treeview,
+		       GtkTreePath *path,
+		       GtkTreeViewColumn *column,
+		       EphyEncodingDialog *dialog)
 {
 	GtkWidget *button;
+	GtkTreeIter iter;
+	char *encoding;
+	GtkTreeModel *model;
+	EphyEncodingDialogPrivate *priv = dialog->priv;
 
-	dialog->priv->selected_node = node;
+	model = gtk_tree_view_get_model (treeview);
 
-	if (dialog->priv->update_tag) return;
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get (model, &iter,
+			    COL_ENCODING, &encoding,
+			    -1);
+
+	g_free (priv->selected_encoding);
+	priv->selected_encoding = encoding;
+
+	if (dialog->priv->update_tag) 
+		return;
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -292,7 +355,10 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
 	GtkWidget *treeview, *scroller, *button, *window, *child;
 	GtkTreeSelection *selection;
-	EphyNode *node;
+	GList *encodings, *p;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
 
 	dialog->priv = EPHY_ENCODING_DIALOG_GET_PRIVATE (dialog);
 
@@ -310,32 +376,47 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	g_signal_connect (window, "response",
 			  G_CALLBACK (ephy_encoding_dialog_response_cb), dialog);
 
-	dialog->priv->filter = ephy_node_filter_new ();
+	encodings = ephy_encodings_get_all (dialog->priv->encodings);
+	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
+	for (p = encodings; p; p = p->next) 
+	{
+		EphyEncoding *encoding = EPHY_ENCODING (p->data);
 
-	node = ephy_encodings_get_all (dialog->priv->encodings);
-	treeview = ephy_node_view_new (node, dialog->priv->filter);
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    COL_TITLE_ELIDED, 
+				    ephy_encoding_get_title_elided (encoding),
+				    -1);
+		gtk_list_store_set (store, &iter,
+				    COL_ENCODING, 
+				    ephy_encoding_get_encoding (encoding),
+				    -1);
+	}
+	g_list_free (encodings);
 
-	ephy_node_view_add_column (EPHY_NODE_VIEW (treeview), _("Encodings"),
-				   G_TYPE_STRING,
-				   EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
-				   EPHY_NODE_VIEW_SEARCHABLE,
-				   NULL, NULL);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), COL_TITLE_ELIDED,
+					      GTK_SORT_ASCENDING);
 
-	ephy_node_view_set_sort (EPHY_NODE_VIEW (treeview), G_TYPE_STRING,
-				 EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
-				 GTK_SORT_ASCENDING);
+	treeview = gtk_tree_view_new ();
+	renderer = gtk_cell_renderer_text_new ();
+
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
+						     -1,
+						     _("Encodings"),
+						     renderer,
+						     "text", COL_TITLE_ELIDED,
+						     NULL);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (treeview), GTK_TREE_MODEL (store));
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(treeview), FALSE);
 
-	g_signal_connect (G_OBJECT (treeview),
-			  "node_selected",
-			  G_CALLBACK (view_node_selected_cb),
+	g_signal_connect (selection, "changed",
+			  G_CALLBACK (view_row_selected_cb),
 			  dialog);
-	g_signal_connect (G_OBJECT (treeview),
-			  "node_activated",
-			  G_CALLBACK (view_node_activated_cb),
+	g_signal_connect (treeview, "row-activated",
+			  G_CALLBACK (view_row_activated_cb),
 			  dialog);
 
 	gtk_widget_show (treeview);
@@ -382,7 +463,7 @@ ephy_encoding_dialog_finalize (GObject *object)
 						      dialog);
 	}
 
-	g_object_unref (dialog->priv->filter);
+	g_free (dialog->priv->selected_encoding);
 
 	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->finalize (object);
 }
