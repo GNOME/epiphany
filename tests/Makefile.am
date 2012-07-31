@@ -111,13 +111,6 @@ LDADD = \
 	$(DBUS_LIBS) \
 	$(DEPENDENCIES_LIBS) 
 
-if ENABLE_SEED
-CFLAGS += \
-	$(SEED_CFLAGS)
-LDADD += \
-	$(SEED_LIBS)
-endif
-
 test_ephy_download_SOURCES = \
 	ephy-download-test.c
 

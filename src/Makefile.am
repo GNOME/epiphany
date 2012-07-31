@@ -136,20 +136,6 @@ BUILT_SOURCES = \
 	$(TYPES_SOURCE)       \
 	$(NULL)
 
-if ENABLE_SEED
-NOINST_H_FILES += \
-	ephy-seed-extension.h \
-	ephy-seed-loader.h \
-	$(NULL)
-
-libephymain_la_SOURCES += \
-	ephy-seed-loader.c \
-	ephy-seed-extension.c \
-	$(NULL)
-
-libephymain_la_CFLAGS += $(SEED_CFLAGS)
-endif # ENABLE_SEED
-
 epiphany_SOURCES = ephy-main.c \
 	$(EPIPHANY_RESOURCES)  \
 	$(NULL)
@@ -189,10 +175,6 @@ epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
 epiphany_LDADD += $(INTROSPECTION_LIBS)
 endif
 endif
-
-if ENABLE_SEED
-epiphany_LDADD += $(SEED_LIBS)
-endif # ENABLE_SEED
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\

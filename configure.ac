@@ -168,31 +168,6 @@ else
    found_introspection=no
 fi
 
-# ****
-# Seed
-# ****
-
-AC_MSG_CHECKING([whether Seed support is requested])
-AC_ARG_ENABLE([seed],
-  [AS_HELP_STRING([--enable-seed],[Enable Seed support (default: disabled)])],
-  [],[enable_seed=no])
-AC_MSG_RESULT([$enable_seed])
-
-if test "$enable_seed" = "yes" -a "$found_introspection" != "yes"; then
-  AC_MSG_ERROR([GObject introspection support must be enabled for Seed])
-fi
-
-if test "$enable_seed" = "yes"; then
-  EPIPHANY_FEATURES="$EPIPHANY_FEATURES seed"
-
-  SEED_REQUIRED=2.27.91
-  PKG_CHECK_MODULES([SEED],[seed >= $SEED_REQUIRED])
-
-  AC_DEFINE([ENABLE_SEED],[1],[Define to compile with Seed support])
-fi
-
-AM_CONDITIONAL([ENABLE_SEED],[test "$enable_seed" = "yes"])
-
 # ***
 # NSS
 # ***
@@ -363,7 +338,6 @@ Epiphany was configured with the following options:
 
  	Zeroconf bookmarks support : $enable_zeroconf
  	GObject introspection      : $found_introspection
- 	Seed support               : $enable_seed
  	NSS support                : $enable_nss
 	Build tests		   : $enable_tests
 	WebKit2                    : $with_webkit2
