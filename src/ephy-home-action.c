@@ -21,10 +21,7 @@
 #include "config.h"
 #include "ephy-home-action.h"
 
-#include "ephy-gui.h"
 #include "ephy-link.h"
-
-#include <gtk/gtk.h>
 
 G_DEFINE_TYPE (EphyHomeAction, ephy_home_action, EPHY_TYPE_LINK_ACTION)
 
