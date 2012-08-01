@@ -26,75 +26,17 @@
 
 #include <gtk/gtk.h>
 
-typedef struct
-{
-	GObject *weak_ptr;
-	EphyLinkFlags flags;
-} ClipboardCtx;
-
 G_DEFINE_TYPE (EphyHomeAction, ephy_home_action, EPHY_TYPE_LINK_ACTION)
-
-static void
-clipboard_text_received_cb (GtkClipboard *clipboard,
-			    const char *text,
-			    ClipboardCtx *ctx)
-{
-	if (ctx->weak_ptr != NULL && text != NULL)
-	{
-		ephy_link_open (EPHY_LINK (ctx->weak_ptr), text, NULL, ctx->flags);
-	}
-
-	if (ctx->weak_ptr != NULL)
-	{
-		GObject **object = &(ctx->weak_ptr);
-		g_object_remove_weak_pointer (G_OBJECT (ctx->weak_ptr), 
-					      (gpointer *)object);
-	}
-
-	g_free (ctx);
-}
-
-static void
-ephy_home_action_with_clipboard (GtkAction *action,
-				 EphyLinkFlags flags)
-{
-	ClipboardCtx *ctx;
-	GObject **object;
-
-	ctx = g_new (ClipboardCtx, 1);
-	ctx->flags = flags;
-
-	/* We need to make sure we know if the action is destroyed between
-	 * requesting the clipboard contents, and receiving them.
-	 */
-	ctx->weak_ptr = G_OBJECT (action);
-	object = &(ctx->weak_ptr);
-	g_object_add_weak_pointer (ctx->weak_ptr, (gpointer *)object);
-
-	gtk_clipboard_request_text
-		(gtk_clipboard_get_for_display (gdk_display_get_default(), 
-					        GDK_SELECTION_PRIMARY),
-		 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
-		 ctx);
-
-}
 
 static void
 ephy_home_action_open (GtkAction *action, 
 		       const char *address, 
 		       EphyLinkFlags flags)
 {
-	if (ephy_gui_is_middle_click ())
-	{
-		ephy_home_action_with_clipboard (action, flags);
-	}
-	else /* Left button */
-	{
-		ephy_link_open (EPHY_LINK (action),
-				address != NULL && address[0] != '\0' ? address : "about:blank",
-				NULL,
-				flags);
-	}
+	ephy_link_open (EPHY_LINK (action),
+			address != NULL && address[0] != '\0' ? address : "about:blank",
+			NULL,
+			flags);
 }
 
 static void
