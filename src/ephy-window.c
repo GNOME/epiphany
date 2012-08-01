@@ -581,7 +581,11 @@ ephy_window_open_link (EphyLink *link,
 			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
 
 		if (flags & EPHY_LINK_HOME_PAGE)
+		{
 			ntflags |= EPHY_NEW_TAB_HOME_PAGE;
+			if (flags & EPHY_LINK_NEW_TAB)
+				ntflags |= EPHY_NEW_TAB_DONT_COPY_HISTORY;
+		}
 
 		new_embed = ephy_shell_new_tab
 				(ephy_shell,
