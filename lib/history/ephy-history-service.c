@@ -382,7 +382,6 @@ run_history_service_thread (EphyHistoryService *self)
   } while (!ephy_history_service_is_scheduled_to_quit (self));
 
   ephy_history_service_close_database_connections (self);
-  ephy_history_service_execute_quit (self, NULL, NULL);
 
   return NULL;
 }
