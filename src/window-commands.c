@@ -307,9 +307,8 @@ get_suggested_filename (EphyWebView *view)
 	}
 	else
 	{
-		SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
-		suggested_filename = g_path_get_basename (soup_uri->path);
-		soup_uri_free (soup_uri);
+		WebKitNetworkResponse *response = webkit_web_frame_get_network_response (frame);
+		suggested_filename = g_strdup (webkit_network_response_get_suggested_filename (response));
 	}
 
 	return suggested_filename;
