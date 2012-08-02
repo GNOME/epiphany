@@ -279,7 +279,7 @@ window_cmd_file_open (GtkAction *action,
 static char *
 get_suggested_filename (EphyWebView *view)
 {
-	char *suggested_filename;
+	char *suggested_filename = NULL;
 	const char *mimetype;
 #ifdef HAVE_WEBKIT2
 	WebKitURIResponse *response;
@@ -307,8 +307,21 @@ get_suggested_filename (EphyWebView *view)
 	}
 	else
 	{
-		WebKitNetworkResponse *response = webkit_web_frame_get_network_response (frame);
+		WebKitNetworkResponse *response;
+
+#ifdef HAVE_WEBKIT2
+		/* TODO: suggested filename */
+#else
+		response = webkit_web_frame_get_network_response (frame);
 		suggested_filename = g_strdup (webkit_network_response_get_suggested_filename (response));
+#endif
+
+		if (!suggested_filename)
+		{
+			SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
+			suggested_filename = g_path_get_basename (soup_uri->path);
+			soup_uri_free (soup_uri);
+		}
 	}
 
 	return suggested_filename;
