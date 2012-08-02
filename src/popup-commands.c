@@ -201,10 +201,6 @@ response_cb (GtkDialog *dialog,
 		ephy_download_start (download);
 		g_free (uri);
 	}
-	else
-	{
-		ephy_download_cancel (download);
-	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
