@@ -709,26 +709,12 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
 }
 
 static void
-send_no_response_cb (GtkButton *button, GtkInfoBar *info_bar)
-{
-  gtk_info_bar_response (info_bar, GTK_RESPONSE_NO);
-}
-
-static void
-send_yes_response_cb (GtkButton *button, GtkInfoBar *info_bar)
-{
-  gtk_info_bar_response (info_bar, GTK_RESPONSE_YES);
-}
-
-static void
 request_decision_on_storing (StorePasswordData *store_data)
 {
   EphyEmbed *embed = store_data->embed;
   EphyWebView *web_view = ephy_embed_get_web_view (embed);
   GtkWidget *info_bar;
   GtkWidget *action_area;
-  GtkWidget *button_box;
-  GtkWidget *action_button;
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
@@ -736,21 +722,13 @@ request_decision_on_storing (StorePasswordData *store_data)
 
   LOG ("Going to show infobar about %s", store_data->uri);
 
-  info_bar = gtk_info_bar_new ();
+  info_bar = gtk_info_bar_new_with_buttons (_("Not now"), GTK_RESPONSE_NO,
+                                            _("Store password"), GTK_RESPONSE_YES,
+                                            NULL);
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (action_area), button_box);
-
-  action_button = gtk_button_new_with_mnemonic (_("_Not now"));
-  g_signal_connect (action_button, "clicked",
-                    G_CALLBACK (send_no_response_cb), info_bar);
-  gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
-
-  action_button = gtk_button_new_with_mnemonic (_("_Store password"));
-  g_signal_connect (action_button, "clicked",
-                    G_CALLBACK (send_yes_response_cb), info_bar);
-  gtk_box_pack_start (GTK_BOX (button_box), action_button, FALSE, FALSE, 0);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
+                                  GTK_ORIENTATION_HORIZONTAL);
 
   label = gtk_label_new (NULL);
   hostname = ephy_string_get_host_name (store_data->uri);
@@ -1933,8 +1911,6 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
 {
   GtkWidget *info_bar;
   GtkWidget *action_area;
-  GtkWidget *button_box;
-  GtkWidget *button;
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
@@ -1945,25 +1921,14 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
     return FALSE;
 #endif
 
-  info_bar = gtk_info_bar_new ();
+  info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
+                                            _("Allow"), GTK_RESPONSE_YES,
+                                            NULL);
 
-  /* Buttons */
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-
-  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (action_area), button_box);
-
   /* Translators: Geolocation policy for a specific site. */
-  button = gtk_button_new_with_label (_("Deny"));
-  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (send_no_response_cb), info_bar);
-
-  /* Translators: Geolocation policy for a specific site. */
-  button = gtk_button_new_with_label (_("Allow"));
-  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (send_yes_response_cb), info_bar);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
+                                  GTK_ORIENTATION_HORIZONTAL);
 
   /* Label */
 #ifdef HAVE_WEBKIT2
