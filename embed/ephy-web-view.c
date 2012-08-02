@@ -1940,8 +1940,9 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                                      host);
   g_free (host);
 
-  label = gtk_label_new (message);
-  g_object_set (label, "use-markup", TRUE, "wrap", TRUE, NULL);
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), message);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
   g_free (message);
 
