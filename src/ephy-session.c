@@ -22,6 +22,7 @@
 #include "config.h"
 #include "ephy-session.h"
 
+#include "ephy-about-handler.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -32,7 +33,6 @@
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
 #include "ephy-prefs.h"
-#include "ephy-about-handler.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
@@ -71,10 +71,7 @@ struct _EphySessionPrivate
 #define HISTORY_WINDOW_ID	"HistoryWindow"
 #define SESSION_STATE		"type:session_state"
 
-static void ephy_session_class_init	(EphySessionClass *klass);
 static void ephy_session_iface_init	(EphyExtensionIface *iface);
-static void ephy_session_init		(EphySession *session);
-static void session_command_queue_next	(EphySession *session);
 
 enum
 {
