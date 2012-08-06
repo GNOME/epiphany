@@ -32,10 +32,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-06-21 16:25+0000\n"
-"PO-Revision-Date: 2012-06-22 23:32+0200\n"
+"POT-Creation-Date: 2012-08-03 08:55+0000\n"
+"PO-Revision-Date: 2012-08-06 20:08+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -66,7 +67,7 @@ msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 #: ../src/ephy-main.c:75
 #: ../src/ephy-main.c:324
 #: ../src/ephy-main.c:476
-#: ../src/window-commands.c:1256
+#: ../src/window-commands.c:1345
 msgid "Web"
 msgstr "Ιστός"
 
@@ -332,60 +333,127 @@ msgid "Whether to enable support for WebGL contexts."
 msgstr "Αν θα ενεργοποιηθεί η υποστήριξη για WebGL περιβάλλοντα."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
+#| msgid "Enable WebGL"
+msgid "Enable WebAudio"
+msgstr "Ενεργοποίηση WebAudio"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#| msgid "Whether to enable support for WebGL contexts."
+msgid "Whether to enable support for WebAudio."
+msgstr "Αν θα ενεργοποιηθεί η υποστήριξη για WebAudio."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Do Not Track"
 msgstr "Do Not Track"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Whether to tell websites that we do not wish to be tracked. Please note that web pages are not forced to follow this setting."
 msgstr "Αν θα πει στις ιστοσελίδες ότι δεν θέλουμε να παρακολουθούμαστε. Παρακαλώ σημειώστε ότι οι ιστοσελίδες δεν είναι αναγκασμένες να ακολουθήσουν αυτήν τη ρύθμιση."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
 msgstr "Φάκελος ληφθέντων αρχείων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "The path of the folder where to download files to; or \"Downloads\" to use the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr "Η διαδρομή για τον φάκελο που θα αποθηκεύονται τα αρχεία που έχουν ληφθεί ή ο προεπιλεγμένος φάκελος \"Λήψεις αρχείων\", ή ο φάκελος \"Desktop\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
 msgstr "Εύρος ώρας ιστορικού σελίδων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη τίτλων στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη διευθύνσεων στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη ημερομηνίας-ώρας στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Αν θα εμφανίζεται η στήλη τίτλων στο παράθυρο των σελιδοδεικτών."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Αν θα εμφανίζεται η στήλη διευθύνσεων στο παράθυρο των σελιδοδεικτών."
 
-#: ../embed/ephy-embed.c:580
+#: ../embed/ephy-about-handler.c:64
+#: ../embed/ephy-about-handler.c:67
+#: ../embed/ephy-about-handler.c:117
+#: ../embed/ephy-about-handler.c:120
+msgid "Installed plugins"
+msgstr "Εγκατεστημένα πρόσθετα"
+
+#: ../embed/ephy-about-handler.c:79
+#: ../embed/ephy-about-handler.c:132
+msgid "Enabled"
+msgstr "Ενεργοποιημένο"
+
+#. webkit_plugin_get_enabled (plugin)
+#: ../embed/ephy-about-handler.c:79
+#: ../embed/ephy-about-handler.c:132
+msgid "Yes"
+msgstr "Ναι"
+
+#: ../embed/ephy-about-handler.c:79
+#: ../embed/ephy-about-handler.c:132
+msgid "No"
+msgstr "Όχι"
+
+#: ../embed/ephy-about-handler.c:80
+#: ../embed/ephy-about-handler.c:133
+msgid "MIME type"
+msgstr "Τύπος MIME"
+
+#: ../embed/ephy-about-handler.c:80
+#: ../embed/ephy-about-handler.c:133
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: ../embed/ephy-about-handler.c:80
+#: ../embed/ephy-about-handler.c:133
+msgid "Suffixes"
+msgstr "Καταλήξεις"
+
+#: ../embed/ephy-about-handler.c:172
+#: ../embed/ephy-about-handler.c:175
+msgid "Memory usage"
+msgstr "Χρήση μνήμης"
+
+#: ../embed/ephy-about-handler.c:208
+#: ../embed/ephy-about-handler.c:210
+msgid "Applications"
+msgstr "Εφαρμογές"
+
+#: ../embed/ephy-about-handler.c:211
+msgid "List of installed web applications"
+msgstr "Εμφάνιση λίστας διαδικτυακών εφαρμογών"
+
+#. Note for translators: this refers to the installation date.
+#: ../embed/ephy-about-handler.c:227
+msgid "Installed on:"
+msgstr "Εγκαταστάθηκε:"
+
+#: ../embed/ephy-embed.c:597
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Πιέστε το πλήκτρο %s για να βγείτε από την πλήρη οθόνη"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:583
+#: ../embed/ephy-embed.c:600
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:583
+#: ../embed/ephy-embed.c:600
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:850
+#: ../embed/ephy-embed.c:900
 msgid "Web Inspector"
 msgstr "Έλεγχος δικτύου"
 
@@ -393,481 +461,432 @@ msgstr "Έλεγχος δικτύου"
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Το Epiphany δε μπορεί να χρησιμοποιηθεί αυτή τη στιγμή. Αποτυχία αρχικοποίησης."
 
-#: ../embed/ephy-embed-utils.c:62
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Αποστολή email στη διεύθυνση  “%s”"
 
-#: ../embed/ephy-encodings.c:59
+#: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "Αραβική (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:60
+#: ../embed/ephy-encodings.c:55
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Αραβική (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:56
 msgid "Arabic (_MacArabic)"
 msgstr "Αραβική (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:57
 msgid "Arabic (_Windows-1256)"
 msgstr "Αραβική (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:58
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Βαλτικής (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:59
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Βαλτικής (I_SO-8859-4)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:60
 msgid "Baltic (_Windows-1257)"
 msgstr "Βαλτικής (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:61
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Αρμενική (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:62
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Γεωργιανή (GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:63
 msgid "Central European (_IBM-852)"
 msgstr "Κεντρικής Ευρώπης (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:64
 msgid "Central European (I_SO-8859-2)"
 msgstr "Κεντρικής Ευρώπης (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:65
 msgid "Central European (_MacCE)"
 msgstr "Κεντρικής Ευρώπης (_MacCE)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:66
 msgid "Central European (_Windows-1250)"
 msgstr "Κεντρικής Ευρώπης (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:67
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Απλοποιημένη Κινέζικη (_GB18030)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:68
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Απλοποιημένη Κινέζικη (G_B2312)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:69
 msgid "Chinese Simplified (GB_K)"
 msgstr "Απλοποιημένη Κινέζικη (GB_K)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:70
 msgid "Chinese Simplified (_HZ)"
 msgstr "Απλοποιημένη Κινέζικη (_HZ)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Απλοποιημένη Κινέζικη (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Traditional (Big_5)"
 msgstr "Παραδοσιακή Κινέζικη (Big_5)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Παραδοσιακή Κινέζικη (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Παραδοσιακή Κινέζικη (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:75
 msgid "Cyrillic (_IBM-855)"
 msgstr "Κυριλλική (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:76
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Κυριλλική (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:77
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Κυριλλική (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:78
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Κυριλλική (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Κυριλλική (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Κυριλλική (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Cyrillic/_Russian (IBM-866)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:82
 msgid "Greek (_ISO-8859-7)"
 msgstr "Ελληνική (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:83
 msgid "Greek (_MacGreek)"
 msgstr "Ελληνική (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:84
 msgid "Greek (_Windows-1253)"
 msgstr "Ελληνική (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:85
 msgid "Gujarati (_MacGujarati)"
 msgstr "Gujarati (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:86
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Gurmukhi (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:87
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Νεοϊνδική (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:88
 msgid "Hebrew (_IBM-862)"
 msgstr "Εβραϊκή (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:89
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Εβραϊκή (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:90
 msgid "Hebrew (_MacHebrew)"
 msgstr "Εβραϊκή (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:91
 msgid "Hebrew (_Windows-1255)"
 msgstr "Εβραϊκή (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:92
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Οπτική Εβραϊκή (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:93
 msgid "Japanese (_EUC-JP)"
 msgstr "Ιαπωνέζικη (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:94
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Ιαπωνέζικη (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:95
 msgid "Japanese (_Shift-JIS)"
 msgstr "Ιαπωνέζικη (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:96
 msgid "Korean (_EUC-KR)"
 msgstr "Κορεάτικη (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:97
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Κορεάτικη (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:98
 msgid "Korean (_JOHAB)"
 msgstr "Κορεάτικη (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:99
 msgid "Korean (_UHC)"
 msgstr "Κορεάτικη (_UHC)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:100
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Κελτική (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:101
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Ισλανδική (MacIcelandic)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:102
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Σκανδιναβική (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:103
 msgid "_Persian (MacFarsi)"
 msgstr "_Περσική (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:104
 msgid "Croatian (Mac_Croatian)"
 msgstr "Κροατική (Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:105
 msgid "_Romanian (MacRomanian)"
 msgstr "_Ρουμάνικη (MacRomanian)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:106
 msgid "R_omanian (ISO-8859-16)"
 msgstr "Ρ_ουμάνικη (ISO-8859-16)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:107
 msgid "South _European (ISO-8859-3)"
 msgstr "Νότιας _Ευρώπης (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:108
 msgid "Thai (TIS-_620)"
 msgstr "Ταϊλανδέζικη (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:109
 msgid "Thai (IS_O-8859-11)"
 msgstr "Ταϊλανδέζικη (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:110
 msgid "_Thai (Windows-874)"
 msgstr "_Ταϊλανδέζικη (Windows-874)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:111
 msgid "Turkish (_IBM-857)"
 msgstr "Τουρκική (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:112
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Τουρκική (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:113
 msgid "Turkish (_MacTurkish)"
 msgstr "Τουρκική (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:114
 msgid "Turkish (_Windows-1254)"
 msgstr "Τουρκική (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:115
 msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:116
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Κυριλλική/Ουκρανική (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:117
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Κυριλλική/Ουκρανική (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:118
 msgid "Vietnamese (_TCVN)"
 msgstr "Βιετναμέζικη (_TCVN)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:119
 msgid "Vietnamese (_VISCII)"
 msgstr "Βιετναμέζικη (_VISCII)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:120
 msgid "Vietnamese (V_PS)"
 msgstr "Βιετναμέζικη (V_PS)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:121
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Βιετναμέζικη (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:122
 msgid "Western (_IBM-850)"
 msgstr "Δυτική (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:123
 msgid "Western (_ISO-8859-1)"
 msgstr "Δυτική  (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:124
 msgid "Western (IS_O-8859-15)"
 msgstr "Δυτική (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:125
 msgid "Western (_MacRoman)"
 msgstr "Δυτική (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_Windows-1252)"
 msgstr "Δυτική (_Windows-1252)"
 
-#. the following encodings are so rarely used that we don't want to pollute the "related"
-#. * part of the encodings menu with them, so we set the language group to 0 here
+#. The following encodings are so rarely used that we don't want to
+#. * pollute the "related" part of the encodings menu with them, so we
+#. * set the language group to 0 here.
 #.
-#: ../embed/ephy-encodings.c:136
+#: ../embed/ephy-encodings.c:132
 msgid "English (_US-ASCII)"
 msgstr "Αγγλική (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:137
+#: ../embed/ephy-encodings.c:133
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16 ΒΕ)"
 
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:134
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:135
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
 
-#. translators: this is the title that an unknown encoding will
+#. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:281
+#: ../embed/ephy-encodings.c:218
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Άγνωστο (%s)"
 
-#: ../embed/ephy-request-about.c:108
-#: ../embed/ephy-request-about.c:111
-msgid "Installed plugins"
-msgstr "Εγκατεστημένα πρόσθετα"
-
-#: ../embed/ephy-request-about.c:123
-msgid "Enabled"
-msgstr "Ενεργοποιημένο"
-
-#: ../embed/ephy-request-about.c:123
-msgid "Yes"
-msgstr "Ναι"
-
-#: ../embed/ephy-request-about.c:123
-msgid "No"
-msgstr "Όχι"
-
-#: ../embed/ephy-request-about.c:124
-msgid "MIME type"
-msgstr "Τύπος MIME"
-
-#: ../embed/ephy-request-about.c:124
-msgid "Description"
-msgstr "Περιγραφή"
-
-#: ../embed/ephy-request-about.c:124
-msgid "Suffixes"
-msgstr "Καταλήξεις"
-
-#: ../embed/ephy-request-about.c:154
-#: ../embed/ephy-request-about.c:157
-msgid "Memory usage"
-msgstr "Χρήση μνήμης"
-
-#: ../embed/ephy-request-about.c:183
-#: ../embed/ephy-request-about.c:185
-msgid "Applications"
-msgstr "Εφαρμογές"
-
-#: ../embed/ephy-request-about.c:186
-msgid "List of installed web applications"
-msgstr "Εμφάνιση λίστας διαδικτυακών εφαρμογών"
-
-#. Note for translators: this refers to the installation date.
-#: ../embed/ephy-request-about.c:202
-msgid "Installed on:"
-msgstr "Εγκαταστάθηκε:"
-
 #. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:69
-#: ../embed/ephy-web-view.c:3600
+#: ../embed/ephy-web-view.c:64
+#: ../embed/ephy-web-view.c:3663
 msgid "Blank page"
 msgstr "Κενή σελίδα"
 
-#: ../embed/ephy-web-view.c:777
-msgid "_Not now"
-msgstr "_Όχι τώρα"
+#: ../embed/ephy-web-view.c:725
+#| msgid "_Not now"
+msgid "Not now"
+msgstr "Όχι τώρα"
 
-#: ../embed/ephy-web-view.c:782
-msgid "_Store password"
-msgstr "_Αποθήκευση συνθηματικού"
+#: ../embed/ephy-web-view.c:726
+#| msgid "_Store password"
+msgid "Store password"
+msgstr "Αποθήκευση κωδικού"
 
 #. Translators: The first %s is the username and the second one is the
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:793
+#: ../embed/ephy-web-view.c:739
 #, c-format
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>Θα θέλατε να αποθηκεύσετε το συνθηματικό για το <b>%s</b> στο <b>%s</b>;</big>"
+msgstr "<big>Θα θέλατε να αποθηκεύσετε τον κωδικό πρόσβασης για το <b>%s</b> στο <b>%s</b>;</big>"
 
-#: ../embed/ephy-web-view.c:1148
+#: ../embed/ephy-web-view.c:1089
 msgid "Plugins"
 msgstr "Πρόσθετα"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1824
+#: ../embed/ephy-web-view.c:1924
 msgid "Deny"
 msgstr "Να μην επιτρέπεται"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1830
+#: ../embed/ephy-web-view.c:1925
 msgid "Allow"
 msgstr "Να επιτρέπεται"
 
-#: ../embed/ephy-web-view.c:1837
+#: ../embed/ephy-web-view.c:1939
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Η σελίδα σε <b>%s</b> επιθυμεί να γνωρίζει την τοποθεσία σας."
 
-#: ../embed/ephy-web-view.c:2134
+#: ../embed/ephy-web-view.c:2417
 msgid "None specified"
 msgstr "Απροσδιόριστο"
 
-#: ../embed/ephy-web-view.c:2143
-#: ../embed/ephy-web-view.c:2161
+#: ../embed/ephy-web-view.c:2426
+#: ../embed/ephy-web-view.c:2444
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Ουπς! Σφάλμα φόρτωσης του %s"
 
-#: ../embed/ephy-web-view.c:2145
+#: ../embed/ephy-web-view.c:2428
 msgid "Oops! It was not possible to show this website"
 msgstr "Ουπς! δεν ήταν δυνατό να φορτωθεί αυτή η ιστοσελίδα"
 
-#: ../embed/ephy-web-view.c:2146
+#: ../embed/ephy-web-view.c:2429
 #, c-format
 msgid "<p>The website at <strong>%s</strong> seems to be unavailable. The precise error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or moved to a new address. Don't forget to check that your internet connection is working correctly.</p>"
 msgstr "<p>Η ιστοσελίδα στο <strong>%s</strong> κατά πάσα πιθανότητα δεν είναι διαθέσιμη, το ακριβές σφάλμα ήταν:</p><p><em>%s</em></p><p>.Θα μπορούσε να είναι απενεργοποιημένη ή να έχει μετακινηθεί σε νέα διεύθυνση. Μην ξεχάσετε να ελέγξετε την σύνδεσης σας στο διαδίκτυο ότι λειτουργεί σωστά.</p>"
 
-#: ../embed/ephy-web-view.c:2155
+#: ../embed/ephy-web-view.c:2438
 msgid "Try again"
 msgstr "Προσπαθήστε ξανά"
 
-#: ../embed/ephy-web-view.c:2163
+#: ../embed/ephy-web-view.c:2446
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Ουπς! Αυτή η ιστοσελίδα μπορεί να προκαλέσει τον αναπάντεχο τερματισμό του περιηγητή"
 
-#: ../embed/ephy-web-view.c:2165
+#: ../embed/ephy-web-view.c:2448
 #, c-format
 msgid "<p>This page was loading when the web browser closed unexpectedly.</p><p>This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers.</p>"
 msgstr "<p>Αυτή η σελίδα φορτωνόταν όταν ο περιηγητής ιστοσελίδων έκλεισε απρόσμενα.</p><p>Αυτό το πρόβλημα μπορεί να συμβεί ξανά αν φορτώσετε πάλι την σελίδα. Αν αυτό συνεχίζεται, παρακαλούμε ενημερώστε τους προγραμματιστες του <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2173
+#: ../embed/ephy-web-view.c:2456
 msgid "Load again anyway"
 msgstr "Να γίνει φόρτωση ούτως ή άλλος"
 
-#: ../embed/ephy-web-view.c:2535
+#: ../embed/ephy-web-view.c:2847
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2911
+#: ../embed/ephy-web-view.c:3141
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Γίνεται φόρτωση “%s”..."
 
-#: ../embed/ephy-web-view.c:2913
+#: ../embed/ephy-web-view.c:3143
 msgid "Loading…"
 msgstr "Γίνεται φόρτωση..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3807
+#: ../embed/ephy-web-view.c:3870
 #, c-format
 msgid "%s Files"
 msgstr "%s Αρχεία"
@@ -907,19 +926,19 @@ msgstr "Δεν ήταν δυνατή η είσοδος των διαδρομών
 msgid "Not a launchable item"
 msgstr "Δεν αποτελεί καθορισμένο στοιχείο"
 
-#: ../lib/ephy-file-chooser.c:382
+#: ../lib/ephy-file-chooser.c:210
 msgid "All supported types"
 msgstr "Όλοι οι υποστηριζόμενοι τύποι"
 
-#: ../lib/ephy-file-chooser.c:393
+#: ../lib/ephy-file-chooser.c:221
 msgid "Web pages"
 msgstr "Ιστοσελίδες"
 
-#: ../lib/ephy-file-chooser.c:401
+#: ../lib/ephy-file-chooser.c:229
 msgid "Images"
 msgstr "Εικόνες"
 
-#: ../lib/ephy-file-chooser.c:409
+#: ../lib/ephy-file-chooser.c:237
 #: ../src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "All files"
 msgstr "Όλα τα αρχεία"
@@ -983,11 +1002,11 @@ msgstr "Αδύνατη ή προβολή βοήθειας: %s"
 
 #: ../lib/ephy-nss-glue.c:62
 msgid "Master password needed"
-msgstr "Χρειάζεται το κύριο συνθηματικό"
+msgstr "Χρειάζεται ο κύριος κωδικός"
 
 #: ../lib/ephy-nss-glue.c:64
 msgid "The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."
-msgstr "Τα συνθηματικά από την προηγούμενη έκδοση (Gecko) είναι κλειδωμένα με ένα κύριο συνθηματικό. Αν θέλετε τον Epiphany να τα εισάγει, παρακαλούμε εισάγετε τον κύριο κωδικό σας πιο κάτω."
+msgstr "Οι κωδικοί από την προηγούμενη έκδοση (Gecko) είναι κλειδωμένα με ένα κύριο κωδικό. Αν θέλετε τον Epiphany να τα εισάγει, παρακαλούμε εισάγετε τον κύριο κωδικό σας πιο κάτω."
 
 #: ../lib/ephy-profile-migrator.c:89
 msgid "Failed to copy cookies file from Mozilla."
@@ -1091,59 +1110,61 @@ msgstr "Άλλοι"
 msgid "Local files"
 msgstr "Τοπικά αρχεία"
 
-#: ../lib/widgets/ephy-download-widget.c:92
+#: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
 msgid "%u:%02u hour left"
 msgid_plural "%u:%02u hours left"
 msgstr[0] " Απέμεινε %u:%02u ώρα"
 msgstr[1] "Απέμειναν %u:%02u ώρες"
 
-#: ../lib/widgets/ephy-download-widget.c:94
+#: ../lib/widgets/ephy-download-widget.c:121
 #, c-format
 msgid "%u hour left"
 msgid_plural "%u hours left"
 msgstr[0] "Επέμεινε %u ώρα"
 msgstr[1] "Επέμειναν %u ώρες"
 
-#: ../lib/widgets/ephy-download-widget.c:97
+#: ../lib/widgets/ephy-download-widget.c:124
 #, c-format
 msgid "%u:%02u minute left"
 msgid_plural "%u:%02u minutes left"
 msgstr[0] "Επέμεινε %u:%02u λεπτό"
 msgstr[1] "Απέμειναν %u:%02u λεπτά"
 
-#: ../lib/widgets/ephy-download-widget.c:99
+#: ../lib/widgets/ephy-download-widget.c:126
 #, c-format
 msgid "%u second left"
 msgid_plural "%u seconds left"
 msgstr[0] "Απέμεινε %u δευτερόλεπτο"
 msgstr[1] "Απέμειναν %u δευτερόλεπτα"
 
-#: ../lib/widgets/ephy-download-widget.c:248
+#: ../lib/widgets/ephy-download-widget.c:296
+#: ../lib/widgets/ephy-download-widget.c:313
 msgid "Finished"
 msgstr "Ολοκληρώθηκε"
 
-#: ../lib/widgets/ephy-download-widget.c:265
+#: ../lib/widgets/ephy-download-widget.c:328
+#: ../lib/widgets/ephy-download-widget.c:346
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Σφάλμα κατά την μεταφόρτωση: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:337
-#: ../src/window-commands.c:503
+#: ../lib/widgets/ephy-download-widget.c:414
+#: ../src/window-commands.c:552
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: ../lib/widgets/ephy-download-widget.c:346
-#: ../src/ephy-window.c:1287
-#: ../src/window-commands.c:267
+#: ../lib/widgets/ephy-download-widget.c:423
+#: ../src/ephy-window.c:1352
+#: ../src/window-commands.c:268
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: ../lib/widgets/ephy-download-widget.c:352
+#: ../lib/widgets/ephy-download-widget.c:429
 msgid "Show in folder"
 msgstr "Προβολή στον φάκελο"
 
-#: ../lib/widgets/ephy-download-widget.c:541
+#: ../lib/widgets/ephy-download-widget.c:628
 msgid "Starting…"
 msgstr "Εκκίνηση..."
 
@@ -1162,7 +1183,7 @@ msgstr "Τοποθεσίες"
 #: ../lib/widgets/ephy-location-entry.c:594
 #: ../src/resources/prefs-dialog.ui.h:34
 #: ../src/ephy-history-window.c:231
-#: ../src/pdm-dialog.c:365
+#: ../src/pdm-dialog.c:380
 msgid "Cl_ear"
 msgstr "Ε_κκαθάριση"
 
@@ -1175,13 +1196,13 @@ msgid "Clear"
 msgstr "Εκκαθάριση"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1680
 msgid "Title"
 msgstr "Τίτλος"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1692
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1691
 msgid "Address"
 msgstr "Διεύθυνση"
 
@@ -1326,7 +1347,7 @@ msgstr "Δημιουργία νέου θέματος"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
 #: ../src/ephy-history-window.c:136
 #: ../src/ephy-history-window.c:639
 msgid "Open in New _Window"
@@ -1339,7 +1360,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Άνοιγμα του επιλεγμένου σελιδοδείκτη σε νέο παράθυρο"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
 #: ../src/ephy-history-window.c:139
 #: ../src/ephy-history-window.c:642
 msgid "Open in New _Tab"
@@ -1406,7 +1427,7 @@ msgid "Cut the selection"
 msgstr "Αποκοπή της επιλογής"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1171
 #: ../src/ephy-history-window.c:153
 #: ../src/ephy-history-window.c:652
 #: ../src/ephy-window.c:121
@@ -1564,44 +1585,44 @@ msgstr "Σελιδοδείκτες Epiphany"
 msgid "Export Bookmarks"
 msgstr "Εξαγωγή σελιδοδεικτών"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "File f_ormat:"
 msgstr "_Μορφή αρχείου:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:815
+#: ../src/bookmarks/ephy-bookmarks-editor.c:814
 msgid "Import Bookmarks"
 msgstr "Εισαγωγή σελιδοδεικτών"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:820
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
 msgid "I_mport"
 msgstr "_Εισαγωγή"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:836
+#: ../src/bookmarks/ephy-bookmarks-editor.c:835
 msgid "Import bookmarks from:"
 msgstr "Εισαγωγή σελιδοδεικτών από:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:856
+#: ../src/bookmarks/ephy-bookmarks-editor.c:855
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
 #: ../src/ephy-history-window.c:648
 msgid "_Copy Address"
 msgstr "_Αντιγραφή διεύθυνσης"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1408
 #: ../src/ephy-history-window.c:801
 msgid "_Search:"
 msgstr "_Αναζήτηση:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1610
 msgid "Topics"
 msgstr "Θέματα"
 
@@ -1676,7 +1697,7 @@ msgid "<b>_Automatic</b>"
 msgstr "<b>_Αυτόματη</b>"
 
 #: ../src/resources/epiphany.ui.h:8
-#: ../src/ephy-encoding-menu.c:355
+#: ../src/ephy-encoding-menu.c:349
 msgid "Use the encoding specified by the document"
 msgstr "Χρήση της κωδικοποίησης που καθορίζεται από το έγγραφο"
 
@@ -1816,7 +1837,7 @@ msgid "Privacy"
 msgstr "Απόρρητο"
 
 #: ../src/resources/prefs-dialog.ui.h:36
-#: ../src/ephy-encoding-dialog.c:318
+#: ../src/ephy-encoding-dialog.c:405
 msgid "Encodings"
 msgstr "Κωδικοποιήσεις"
 
@@ -1833,7 +1854,7 @@ msgid "_Enable spell checking"
 msgstr "Ενεργοποίηση ορθογραφικού ελέγχου"
 
 #: ../src/resources/prefs-dialog.ui.h:41
-#: ../src/prefs-dialog.c:773
+#: ../src/prefs-dialog.c:780
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -1854,54 +1875,54 @@ msgstr "Α_νανέωση"
 msgid "Display the latest content of the current page"
 msgstr "Εμφάνιση των πιο πρόσφατων περιεχομένων της τρέχουσας σελίδας"
 
-#: ../src/ephy-encoding-menu.c:347
+#: ../src/ephy-encoding-menu.c:341
 msgid "_Other…"
 msgstr "Άλ_λες..."
 
-#: ../src/ephy-encoding-menu.c:348
+#: ../src/ephy-encoding-menu.c:342
 msgid "Other encodings"
 msgstr "Άλλες κωδικοποίησεις"
 
-#: ../src/ephy-encoding-menu.c:354
+#: ../src/ephy-encoding-menu.c:348
 msgid "_Automatic"
 msgstr "_Αυτόματη"
 
-#: ../src/ephy-find-toolbar.c:165
+#: ../src/ephy-find-toolbar.c:168
 msgid "Not found"
 msgstr "Δε βρέθηκε"
 
-#: ../src/ephy-find-toolbar.c:177
+#: ../src/ephy-find-toolbar.c:180
 msgid "Wrapped"
 msgstr "Με αναδίπλωση"
 
-#: ../src/ephy-find-toolbar.c:197
+#: ../src/ephy-find-toolbar.c:200
 msgid "Find links:"
 msgstr "Εύρεση δεσμών:"
 
-#: ../src/ephy-find-toolbar.c:197
+#: ../src/ephy-find-toolbar.c:200
 msgid "Find:"
 msgstr "Εύρεση:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:480
-#: ../src/ephy-find-toolbar.c:603
+#: ../src/ephy-find-toolbar.c:540
+#: ../src/ephy-find-toolbar.c:663
 msgid "_Case sensitive"
 msgstr "Διάκριση πεζών από κεφαλαία"
 
-#: ../src/ephy-find-toolbar.c:586
+#: ../src/ephy-find-toolbar.c:646
 msgid "Find Previous"
 msgstr "Εύρεση προηγουμένου"
 
-#: ../src/ephy-find-toolbar.c:589
+#: ../src/ephy-find-toolbar.c:649
 msgid "Find previous occurrence of the search string"
 msgstr "Εύρεση προηγούμενης εμφάνισης της ζητούμενης λέξης ή φράσης"
 
-#: ../src/ephy-find-toolbar.c:595
+#: ../src/ephy-find-toolbar.c:655
 msgid "Find Next"
 msgstr "Εύρεση επομένου"
 
-#: ../src/ephy-find-toolbar.c:598
+#: ../src/ephy-find-toolbar.c:658
 msgid "Find next occurrence of the search string"
 msgstr "Εύρεση επόμενης εμφάνισης της ζητούμενης λέξης ή φράσης"
 
@@ -2066,7 +2087,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Επιλογές Ιστού"
 
-#: ../src/ephy-notebook.c:598
+#: ../src/ephy-notebook.c:606
 msgid "Close tab"
 msgstr "Κλείσιμο καρτέλας"
 
@@ -2283,130 +2304,130 @@ msgstr "Αν κλείσετε αυτό το παράθυρο, θα ακυρωθ�
 msgid "Close window and cancel downloads"
 msgstr "Κλείσιμο του παραθύρου και ακύρωση των μεταφορτώσεων"
 
-#: ../src/ephy-window.c:1289
+#: ../src/ephy-window.c:1354
 msgid "Save As"
 msgstr "Αποθήκευση ως"
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1356
 msgid "Save As Application"
 msgstr "Αποθήκευση ως εφαρμογή"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1358
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../src/ephy-window.c:1295
+#: ../src/ephy-window.c:1360
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: ../src/ephy-window.c:1297
+#: ../src/ephy-window.c:1362
 msgid "Find"
 msgstr "Εύρεση"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1371
 msgid "Larger"
 msgstr "Μεγαλύτερα"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1374
 msgid "Smaller"
 msgstr "Μικρότερα"
 
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1394
 msgid "Back"
 msgstr "Πίσω"
 
-#: ../src/ephy-window.c:1341
+#: ../src/ephy-window.c:1406
 msgid "Forward"
 msgstr "Προώθηση"
 
-#: ../src/ephy-window.c:1353
+#: ../src/ephy-window.c:1418
 msgid "Zoom"
 msgstr "Μεγέθυνση"
 
-#: ../src/ephy-window.c:1361
+#: ../src/ephy-window.c:1426
 msgid "New _Tab"
 msgstr "Νέα _καρτέλα"
 
-#: ../src/pdm-dialog.c:346
+#: ../src/pdm-dialog.c:361
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Επιλέξτε τα προσωπικά δεδομένα που θέλετε να διαγραφούν</b>"
 
-#: ../src/pdm-dialog.c:349
+#: ../src/pdm-dialog.c:364
 msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
 msgstr "Είστε έτοιμοι να εκκαθαρίσετε προσωπικά δεδομένα που έχουν αποθηκευθεί από ιστοσελίδες που επισκεφθήκατε. Πριν προχωρήσετε, ελέγξτε τους τύπους πληροφοριών που θέλετε να διαγράψετε."
 
-#: ../src/pdm-dialog.c:354
+#: ../src/pdm-dialog.c:369
 msgid "Clear All Personal Data"
 msgstr "Διαγραφή όλων των προσωπικών δεδομένων"
 
 #. Cookies
-#: ../src/pdm-dialog.c:388
+#: ../src/pdm-dialog.c:403
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:400
+#: ../src/pdm-dialog.c:415
 msgid "Saved _passwords"
 msgstr "Αποθηκευμένοι κωδικοί"
 
 #. History
-#: ../src/pdm-dialog.c:412
+#: ../src/pdm-dialog.c:427
 msgid "Hi_story"
 msgstr "_Ιστορικό"
 
 #. Cache
-#: ../src/pdm-dialog.c:424
+#: ../src/pdm-dialog.c:439
 msgid "_Temporary files"
 msgstr "_Προσωρινά αρχεία"
 
-#: ../src/pdm-dialog.c:440
+#: ../src/pdm-dialog.c:455
 msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
 msgstr "<small><i><b>Σημείωση:</b> Δεν μπορείτε να αναιρέσετε αυτήν την ενέργεια. Τα δεδομένα που επιλέγετε να εκκαθαρίσετε θα διαγραφούν οριστικά</i></small>"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:678
 msgid "Encrypted connections only"
 msgstr "Μόνο κρυπτογραφημένες συνδέσεις"
 
-#: ../src/pdm-dialog.c:660
+#: ../src/pdm-dialog.c:679
 msgid "Any type of connection"
 msgstr "Κάθε τύπος σύνδεσης"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:665
+#: ../src/pdm-dialog.c:684
 msgid "End of current session"
 msgstr "Τέλος της τρέχουσας συνεδρίας"
 
-#: ../src/pdm-dialog.c:784
+#: ../src/pdm-dialog.c:806
 msgid "Domain"
 msgstr "Τομέας"
 
-#: ../src/pdm-dialog.c:796
+#: ../src/pdm-dialog.c:818
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/pdm-dialog.c:1210
+#: ../src/pdm-dialog.c:1314
 msgid "Host"
 msgstr "Σύστημα"
 
-#: ../src/pdm-dialog.c:1223
+#: ../src/pdm-dialog.c:1327
 msgid "User Name"
 msgstr "Όνομα Χρήστη"
 
-#: ../src/pdm-dialog.c:1236
+#: ../src/pdm-dialog.c:1340
 msgid "User Password"
 msgstr "Κωδικός χρήστη"
 
-#: ../src/popup-commands.c:287
+#: ../src/popup-commands.c:282
 msgid "Download Link"
 msgstr "Λήψη δεσμού"
 
-#: ../src/popup-commands.c:295
+#: ../src/popup-commands.c:290
 msgid "Save Link As"
 msgstr "Αποθήκευση δεσμού ως"
 
-#: ../src/popup-commands.c:302
+#: ../src/popup-commands.c:297
 msgid "Save Image As"
 msgstr "Αποθήκευση εικόνας ως"
 
@@ -2414,8 +2435,8 @@ msgstr "Αποθήκευση εικόνας ως"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:467
-#: ../src/prefs-dialog.c:473
+#: ../src/prefs-dialog.c:474
+#: ../src/prefs-dialog.c:480
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2424,97 +2445,98 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:489
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Καθορισμένη από το χρήστη (%s)"
 
-#: ../src/prefs-dialog.c:504
+#: ../src/prefs-dialog.c:511
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Γλώσσα συστήματος (%s)"
 msgstr[1] "Γλώσσες συστήματος (%s)"
 
-#: ../src/prefs-dialog.c:862
+#: ../src/prefs-dialog.c:869
 msgid "Select a Directory"
 msgstr "Επιλογή ενός καταλόγου"
 
-#: ../src/window-commands.c:325
+#: ../src/window-commands.c:342
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: ../src/window-commands.c:500
+#: ../src/window-commands.c:549
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Υπάρχει ήδη μια εφαρμογή ιστού με όνομα '%s' . Θέλετε να την αντικαταστήσετε;"
 
-#: ../src/window-commands.c:505
+#: ../src/window-commands.c:554
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ../src/window-commands.c:509
+#: ../src/window-commands.c:558
 msgid "An application with the same name already exists. Replacing it will overwrite it."
 msgstr "Μια εφαρμογή με το ίδιο όνομα υπάρχει ήδη και θα αντικατασταθεί."
 
-#: ../src/window-commands.c:545
+#: ../src/window-commands.c:594
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Η εφαρμογή '%s' είναι έτοιμη να χρησιμοποιηθεί"
 
-#: ../src/window-commands.c:548
+#: ../src/window-commands.c:597
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Η εφαρμογή '%s' δεν μπόρεσε να δημιουργηθεί"
 
-#: ../src/window-commands.c:556
+#: ../src/window-commands.c:605
 msgid "Launch"
 msgstr "Εκκίνηση"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:589
+#: ../src/window-commands.c:638
 msgid "Create Web Application"
 msgstr "Δημιουργία εφαρμογής ιστού"
 
-#: ../src/window-commands.c:594
+#: ../src/window-commands.c:643
 msgid "C_reate"
 msgstr "Δ_ημιουργία"
 
-#: ../src/window-commands.c:1149
+#: ../src/window-commands.c:1234
 msgid "Web is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "Ο Ιστός είναι ελεύθερο λογισμικό. Μπορείτε να το αναδιανέμετε ή/και να το τροποποιείτε μέσω των όρων της GNU General Public License όπως αυτή δημοσιεύτηκε από το Free Software Foundation, έκδοση 2 , ή  (προαιρετικά) οποιαδήποτε νεότερη  έκδοση."
 
-#: ../src/window-commands.c:1153
+#: ../src/window-commands.c:1238
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "Ο περιηγητής του GNOME διανέμεται με την ελπίδα οτι θα είναι χρήσιμος αλλά ΧΩΡΙΣ ΚΑΜΜΙΑ ΑΠΟΛΥΤΩΣ ΕΓΓΥΗΣΗ για συγκεκριμένο σκοπό. Δείτε για περισσότερες λεπτομέρειες την GNU General Public License ."
 
-#: ../src/window-commands.c:1157
+#: ../src/window-commands.c:1242
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Θα πρέπει να έχετε λάβει ένα αντίγραφο της GNU General Public License μαζί με τον περιηγητή. Αν όχι γράψτε στο Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:1203
-#: ../src/window-commands.c:1219
-#: ../src/window-commands.c:1230
+#: ../src/window-commands.c:1288
+#: ../src/window-commands.c:1304
+#: ../src/window-commands.c:1315
 msgid "Contact us at:"
 msgstr "Επικοινωνήστε μαζί μας στο:"
 
-#: ../src/window-commands.c:1206
+#: ../src/window-commands.c:1291
 msgid "Contributors:"
 msgstr "Συντελεστές:"
 
-#: ../src/window-commands.c:1209
+#: ../src/window-commands.c:1294
 msgid "Past developers:"
 msgstr "Παλιοί συντελεστές:"
 
-#: ../src/window-commands.c:1242
+#: ../src/window-commands.c:1325
+#: ../src/window-commands.c:1331
 #, c-format
 msgid ""
-"Lets you view web pages and find information on the internet.\n"
+"A simple, clean, beautiful view of the web.\n"
 "Powered by WebKit %d.%d.%d"
 msgstr ""
-"Προβολή ιστοσελίδων και εύρεση πληροφοριών στο διαδίκτυο.\n"
-"Powered by Webkit %d.%d.%d"
+"Μια απλή, καθαρή, και όμορφη θέα στο διαδίκτυο.\n"
+"Με τη δύναμη του WebKit %d.%d.%d"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -2524,27 +2546,34 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1272
+#: ../src/window-commands.c:1361
 msgid "translator-credits"
 msgstr ""
 "Κώστας Παπαδήμας <pkst@gnome.org>\n"
 "Νίκος Χαρωνιτάκης <nikosx@gmail.com>"
 
-#: ../src/window-commands.c:1275
+#: ../src/window-commands.c:1364
 msgid "Web Website"
 msgstr "Αρχική σελίδα του Ιστού"
 
-#: ../src/window-commands.c:1415
+#: ../src/window-commands.c:1504
 msgid "Enable caret browsing mode?"
 msgstr "Ενεργοποίηση της περιήγησης με δρομέα;"
 
-#: ../src/window-commands.c:1418
+#: ../src/window-commands.c:1507
 msgid "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, allowing you to move around with your keyboard. Do you want to enable caret browsing on?"
 msgstr "Πατώντας το F7 ενεργοποιείται ή απενεργοποιείται η περιήγηση με δρομέα. Αυτό το χαρακτηριστικό τοποθετεί ένα μετακινούμενο δρομέα στις ιστοσελίδες, και επιτρέπει να μετακινήστε σε αυτές με το πληκτρολόγιό σας. Θέλετε να την ενεργοποιήσετε τώρα;"
 
-#: ../src/window-commands.c:1421
+#: ../src/window-commands.c:1510
 msgid "_Enable"
 msgstr "Ε_νεργοποίηση"
+
+#~ msgid ""
+#~ "Lets you view web pages and find information on the internet.\n"
+#~ "Powered by WebKit %d.%d.%d"
+#~ msgstr ""
+#~ "Προβολή ιστοσελίδων και εύρεση πληροφοριών στο διαδίκτυο.\n"
+#~ "Powered by Webkit %d.%d.%d"
 
 #~ msgid "Leave Fullscreen"
 #~ msgstr "Έξοδος από πλήρη οθόνη"
@@ -3232,41 +3261,41 @@ msgstr "Ε_νεργοποίηση"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 #~ msgstr ""
-#~ "Προεπιλεγμένη κωδικοποίηση. Αποδεκτές τιμές είναι: \"armscii-8\", \"Big5"
-#~ "\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", "
-#~ "\"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857"
-#~ "\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
-#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-"
-#~ "8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", "
-#~ "\"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-"
-#~ "8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111"
-#~ "\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8"
-#~ "\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
+#~ "Προεπιλεγμένη κωδικοποίηση. Αποδεκτές τιμές είναι: \"armscii-8\", "
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
+#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
+#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
+#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
+#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
+#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
+#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
+#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
+#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
+#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
+#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
+#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
+#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
+#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 
 #~ msgid "Enable Web Inspector"
 #~ msgstr "Ενεργοποίηση ελέγχου δικτύου"
