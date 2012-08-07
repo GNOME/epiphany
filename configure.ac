@@ -17,7 +17,7 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[4])
-m4_define([epiphany_version_micro],[2])
+m4_define([epiphany_version_micro],[3])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
@@ -84,7 +84,7 @@ GLIB_REQUIRED=2.31.2
 GTK_REQUIRED=3.3.14
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
-WEBKIT_GTK_REQUIRED=1.7.92
+WEBKIT_GTK_REQUIRED=1.8.2
 LIBSOUP_GNOME_REQUIRED=2.37.1
 GNOME_KEYRING_REQUIRED=2.26.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
