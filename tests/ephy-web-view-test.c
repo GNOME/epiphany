@@ -288,7 +288,9 @@ static struct {
   { "127.0.0.1", "http://127.0.0.1" },
   { "http://127.0.0.1", "http://127.0.0.1" },
   { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" },
-  { "planet.gnome.org", "http://planet.gnome.org" }
+  { "planet.gnome.org", "http://planet.gnome.org" },
+  { "search separated words please", "http://www.google.com/search?q=search+separated+words+please&ie=UTF-8&oe=UTF-8" },
+  { "\"a quoted string should be searched\"", "http://www.google.com/search?q=%22a+quoted+string+should+be+searched%22&ie=UTF-8&oe=UTF-8" }
 };
 
 static void
