@@ -1,4 +1,25 @@
 ==============
+Epiphany 3.5.5
+==============
+
+Changes:
+
+  - Rewrite EphyEncoding(s) so that it does not use EphyNode
+    anymore. Add tests for their APIs. (#680735)
+  - Remove Seed support for extensions. Seed is unmaintained and there
+    are no useful extensions written in it. Hopefully this will change
+    in the future, but for now drop this code.
+  - Make the browser recover from broken session state files (#680590)
+  - Stop setting 'persist-key' in our filechooser (#655508)
+  - Do not copy history from parent tab when doing Ctrl+T (#651918)
+  - Suggest the right name in 'Save As' more often, using the
+    information available in the Content-Disposition
+    headers. (#674291)
+  - Add a 'enable-webaudio' setting, false by default.
+  - Port disk cache, inspector and spell-checking to WebKit2.
+  - Many other bugfixes and cleanups.
+
+==============
 Epiphany 3.5.4
 ==============
 
