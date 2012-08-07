@@ -22,20 +22,19 @@
  */
 
 #include "config.h"
-
 #include "ephy-location-entry.h"
-#include "ephy-signal-accumulator.h"
-#include "ephy-dnd.h"
-#include "ephy-debug.h"
-#include "ephy-gui.h"
+
 #include "ephy-about-handler.h"
+#include "ephy-debug.h"
+#include "ephy-dnd.h"
+#include "ephy-gui.h"
+#include "ephy-signal-accumulator.h"
 
-#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <webkit/webkit.h>
-
 #include <string.h>
+#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-location-entry
@@ -88,8 +87,6 @@ static const GtkTargetEntry url_drag_types [] =
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 
-static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
-static void ephy_location_entry_init (EphyLocationEntry *le);
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
 static void textcell_data_func (GtkCellLayout *cell_layout,
