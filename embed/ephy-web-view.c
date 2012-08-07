@@ -94,6 +94,7 @@ struct _EphyWebViewPrivate {
 
   /* Regex to figure out if we're dealing with a wanna-be URI */
   GRegex *non_search_regex;
+  GRegex *domain_regex;
 
   GSList *hidden_popups;
   GSList *shown_popups;
@@ -1063,9 +1064,14 @@ ephy_web_view_finalize (GObject *object)
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
 
-  if (priv->non_search_regex != NULL) {
+  if (priv->non_search_regex) {
     g_regex_unref (priv->non_search_regex);
     priv->non_search_regex = NULL;
+  }
+
+  if (priv->domain_regex) {
+    g_regex_unref (priv->domain_regex);
+    priv->domain_regex = NULL;
   }
 
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
@@ -2694,6 +2700,9 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
                                         G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
+  priv->domain_regex = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
+                                    G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
   priv->history_service_cancellable = g_cancellable_new ();
 
@@ -2815,6 +2824,25 @@ ephy_web_view_new (void)
   return g_object_new (EPHY_TYPE_WEB_VIEW, NULL);
 }
 
+static gboolean
+is_public_domain (EphyWebView *view, const char *url)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (g_regex_match (priv->domain_regex, url, 0, NULL)) {
+    if (g_str_equal (url, "localhost"))
+      return TRUE;
+
+    url = g_strstr_len (url, -1, ".");
+    if (!url || *url == '\0')
+      return FALSE;
+
+    return soup_tld_domain_is_public_suffix (url);
+  }
+
+  return FALSE;
+}
+
 /**
  * ephy_web_view_normalize_or_autosearch_url:
  * @view: an %EphyWebView
@@ -2842,7 +2870,8 @@ ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
       scheme == NULL &&
       !ephy_embed_utils_address_is_existing_absolute_filename (url) &&
       priv->non_search_regex &&
-      !g_regex_match (priv->non_search_regex, url, 0, NULL)) {
+      !g_regex_match (priv->non_search_regex, url, 0, NULL) &&
+      !is_public_domain (view, url)) {
     char *query_param, *url_search;
 
     url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,

@@ -33,16 +33,17 @@ G_BEGIN_DECLS
 /* EphyWebView */
 
 #define EPHY_WEB_VIEW_NON_SEARCH_REGEX  "(" \
-                                        "^localhost(\\.[^[:space:]]+)?(:\\d+)?(/.*)?$|" \
-                                        "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|" \
+                                        "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9](:[0-9]+)?.*$|" \
                                         "^::[0-9a-f:]*$|" \
                                         "^[0-9a-f:]+:[0-9a-f:]*$|" \
-                                        "^[^\\.[:space:]]+\\.[^\\.[:space:]]+.*$|" \
                                         "^https?://[^/\\.[:space:]]+.*$|" \
                                         "^about:.*$|" \
                                         "^data:.*$|" \
                                         "^file:.*$" \
                                         ")"
+
+#define EPHY_WEB_VIEW_DOMAIN_REGEX "^localhost(\\.[^[:space:]]+)?(:\\d+)?(:[0-9]+)?(/.*)?$|" \
+                                   "^[^\\.[:space:]]+\\.[^\\.[:space:]]+.*$|"
 
 void                       ephy_web_view_set_visit_type           (EphyWebView *view, 
                                                                    EphyHistoryPageVisitType visit_type);

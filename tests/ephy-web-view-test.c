@@ -235,19 +235,27 @@ static const RegexTest test_non_search_regex[] = {
 static void
 test_ephy_web_view_non_search_regex ()
 {
-  GRegex *regex;
+  GRegex *regex_non_search, *regex_domain;
   GError *error = NULL;
   int i;
 
-  regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
-                       0, G_REGEX_MATCH_NOTEMPTY, &error);
+  regex_non_search = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
+                                  0, G_REGEX_MATCH_NOTEMPTY, &error);
 
   if (error) {
     g_test_message ("Regex failed: %s", error->message);
     g_error_free (error);
   }
+  g_assert (regex_non_search);
 
-  g_assert (regex != NULL);
+  regex_domain = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
+                              0, G_REGEX_MATCH_NOTEMPTY, &error);
+
+  if (error) {
+    g_test_message ("Regex failed: %s", error->message);
+    g_error_free (error);
+  }
+  g_assert (regex_domain);
 
   for (i = 0; i < G_N_ELEMENTS (test_non_search_regex); i++) {
     RegexTest test;
@@ -258,10 +266,12 @@ test_ephy_web_view_non_search_regex ()
                     test.match ? "NO SEARCH" : "SEARCH",
                     test.url);
 
-    g_assert (g_regex_match (regex, test.url, 0, NULL) == test.match);
+    g_assert (g_regex_match (regex_non_search, test.url, 0, NULL) == test.match ||
+              g_regex_match (regex_domain, test.url, 0, NULL) == test.match);
   }
 
-  g_regex_unref (regex);
+  g_regex_unref (regex_non_search);
+  g_regex_unref (regex_domain);
 }
 
 /* FIXME: we hardcode the google search for now, since it's the
@@ -274,7 +284,7 @@ static struct {
   { "http://google.com", "http://google.com" },
   { "search", "http://www.google.com/search?q=search&ie=UTF-8&oe=UTF-8" },
   { "search.me", "http://search.me" },
-  { "lala.lala", "http://lala.lala" }, /* FIXME: should autosearch. */
+  { "lala.lala", "http://www.google.com/search?q=lala%2Elala&ie=UTF-8&oe=UTF-8" },
   { "127.0.0.1", "http://127.0.0.1" },
   { "http://127.0.0.1", "http://127.0.0.1" },
   { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" }
