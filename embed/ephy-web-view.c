@@ -2920,26 +2920,26 @@ ephy_web_view_load_request (EphyWebView *view,
   const char *url;
   char *effective_url;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW(view));
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 #ifdef HAVE_WEBKIT2
-  g_return_if_fail (WEBKIT_IS_URI_REQUEST(request));
+  g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
 
   url = webkit_uri_request_get_uri (request);
   effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
 
   // TODO: webkit_uri_request_set_uri?
-  webkit_web_view_load_uri (WEBKIT_WEB_VIEW(view), effective_url);
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
   g_free (effective_url);
 #else
-  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
+  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST (request));
 
   url = webkit_network_request_get_uri (request);
   effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
   webkit_network_request_set_uri (request, effective_url);
   g_free (effective_url);
 
-  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-  webkit_web_frame_load_request(main_frame, request);
+  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
+  webkit_web_frame_load_request (main_frame, request);
 #endif
 }
 
