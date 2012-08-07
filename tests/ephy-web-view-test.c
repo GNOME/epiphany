@@ -264,6 +264,44 @@ test_ephy_web_view_non_search_regex ()
   g_regex_unref (regex);
 }
 
+/* FIXME: we hardcode the google search for now, since it's the
+ * default. */
+static struct {
+  char *url;
+  char *expected;
+} normalize_or_autosearch[] = {
+  { "google.com", "http://google.com" },
+  { "http://google.com", "http://google.com" },
+  { "search", "http://www.google.com/search?q=search&ie=UTF-8&oe=UTF-8" },
+  { "search.me", "http://search.me" },
+  { "lala.lala", "http://lala.lala" }, /* FIXME: should autosearch. */
+  { "127.0.0.1", "http://127.0.0.1" },
+  { "http://127.0.0.1", "http://127.0.0.1" },
+  { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" }
+};
+
+static void
+test_ephy_web_view_normalize_or_autosearch ()
+{
+  int i;
+  EphyWebView *view;
+  
+  view = EPHY_WEB_VIEW (ephy_web_view_new ());
+
+  for (i = 0; i < G_N_ELEMENTS (normalize_or_autosearch); i++) {
+    char *url, *result;
+
+    url = normalize_or_autosearch[i].url;
+
+    result = ephy_web_view_normalize_or_autosearch_url (view, url);
+    g_assert_cmpstr (result, ==, normalize_or_autosearch[i].expected);
+
+    g_free (result);
+  }
+
+  g_object_unref (g_object_ref_sink (view));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -290,6 +328,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/embed/ephy-web-view/non_search_regex",
                    test_ephy_web_view_non_search_regex);
+
+  g_test_add_func ("/embed/ephy-web-view/normalize_or_autosearch",
+                   test_ephy_web_view_normalize_or_autosearch);
 
   g_test_add_func ("/embed/ephy-web-view/load_url",
                    test_ephy_web_view_load_url);

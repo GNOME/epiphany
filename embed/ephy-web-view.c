@@ -2815,18 +2815,25 @@ ephy_web_view_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
 }
 
-/*
- * Returns a normalized representation of @url, or an autosearch string
- * for it if it has no scheme.
- *
- * Returns: the normalized @url or autosearch string
- */
-static char*
-normalize_or_autosearch_url (EphyWebView *view, const char *url)
+/**
+ * ephy_web_view_normalize_or_autosearch_url:
+ * @view: an %EphyWebView
+ * @url: a URI
+ * 
+ * Returns a normalized representation of @url, or an autosearch
+ * string for it when necessary.
+ * 
+ * Returns: the normalized @url or autosearch string.
+ **/
+char*
+ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
 {
   char *effective_url;
   char *scheme;
   EphyWebViewPrivate *priv = view->priv;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+  g_return_val_if_fail (url, NULL);
 
   scheme = g_uri_parse_scheme (url);
 
@@ -2889,7 +2896,7 @@ ephy_web_view_load_request (EphyWebView *view,
   g_return_if_fail (WEBKIT_IS_URI_REQUEST(request));
 
   url = webkit_uri_request_get_uri (request);
-  effective_url = normalize_or_autosearch_url (view, url);
+  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
 
   // TODO: webkit_uri_request_set_uri?
   webkit_web_view_load_uri (WEBKIT_WEB_VIEW(view), effective_url);
@@ -2898,7 +2905,7 @@ ephy_web_view_load_request (EphyWebView *view,
   g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST(request));
 
   url = webkit_network_request_get_uri (request);
-  effective_url = normalize_or_autosearch_url (view, url);
+  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
   webkit_network_request_set_uri (request, effective_url);
   g_free (effective_url);
 
@@ -2963,7 +2970,7 @@ ephy_web_view_load_url (EphyWebView *view,
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (url);
 
-  effective_url = normalize_or_autosearch_url (view, url);
+  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
 
   /* After normalization there are still some cases that are
    * impossible to tell apart. One example is <URI>:<PORT> and <NON

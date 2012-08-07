@@ -65,6 +65,9 @@ GdkPixbuf *                ephy_web_view_get_snapshot             (EphyWebView  
                                                                    int                        height);
 gboolean                   ephy_web_view_is_loading_homepage      (EphyWebView               *view);
 
+char*                      ephy_web_view_normalize_or_autosearch_url (EphyWebView            *view,
+                                                                      const char             *url);
+
 G_END_DECLS
 
 #endif
