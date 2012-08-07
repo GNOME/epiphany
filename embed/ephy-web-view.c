@@ -2812,7 +2812,7 @@ ephy_web_view_init (EphyWebView *web_view)
 GtkWidget *
 ephy_web_view_new (void)
 {
-  return GTK_WIDGET (g_object_new (EPHY_TYPE_WEB_VIEW, NULL));
+  return g_object_new (EPHY_TYPE_WEB_VIEW, NULL);
 }
 
 /**
