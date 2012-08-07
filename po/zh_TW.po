@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany 3.3.91\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2012-07-17 14:54+0800\n"
-"PO-Revision-Date: 2012-07-16 21:25+0800\n"
+"POT-Creation-Date: 2012-08-07 15:06+0800\n"
+"PO-Revision-Date: 2012-08-07 14:03+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: \n"
@@ -43,7 +43,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com.tw/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1335
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1345
 msgid "Web"
 msgstr "網頁"
 
@@ -354,21 +354,29 @@ msgid "Whether to enable support for WebGL contexts."
 msgstr "是否啟用支援 WebGL 內容。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
+msgid "Enable WebAudio"
+msgstr "啟用 WebAudio"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
+msgid "Whether to enable support for WebAudio."
+msgstr "是否啟用支援 WebAudio。"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Do Not Track"
 msgstr "不要追蹤"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
 msgstr ""
 "是否告訴網站我們不希望被追蹤。請注意網站頁面並不會被強制要求聽從這個設定值。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
 msgstr "下載資料夾"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -376,27 +384,27 @@ msgstr ""
 "放置下載的檔案的資料夾路徑；或是「Downloads」代表預設的下載目錄，或"
 "「Desktop」使用桌面資料夾。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
 msgstr "歷史紀錄時間範圍"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
 msgstr "是否在歷史紀錄視窗顯示標題欄。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
 msgstr "是否在歷史紀錄視窗顯示位址欄。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
 msgstr "是否在歷史紀錄視窗顯示日期-時刻欄。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "是否在書籤視窗顯示標題欄。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "是否在書籤視窗顯示位址欄。"
 
@@ -447,21 +455,21 @@ msgstr "已安裝的網頁應用程式清單"
 msgid "Installed on:"
 msgstr "安裝於："
 
-#: ../embed/ephy-embed.c:585
+#: ../embed/ephy-embed.c:597
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "按下 %s 離開全螢幕"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:588
+#: ../embed/ephy-embed.c:600
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:588
+#: ../embed/ephy-embed.c:600
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:889
+#: ../embed/ephy-embed.c:900
 msgid "Web Inspector"
 msgstr "網頁檢查器"
 
@@ -469,391 +477,390 @@ msgstr "網頁檢查器"
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany 目前無法使用。初始化程序失敗。"
 
-#: ../embed/ephy-embed-utils.c:62
+#: ../embed/ephy-embed-utils.c:60
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "傳送電子郵件至位址“%s”"
 
-#: ../embed/ephy-encodings.c:59
+#: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "阿拉伯語 (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:60
+#: ../embed/ephy-encodings.c:55
 msgid "Arabic (ISO-_8859-6)"
 msgstr "阿拉伯語 (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:56
 msgid "Arabic (_MacArabic)"
 msgstr "阿拉伯語 (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:57
 msgid "Arabic (_Windows-1256)"
 msgstr "阿拉伯語 (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:58
 msgid "Baltic (_ISO-8859-13)"
 msgstr "波羅的海語系 (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:59
 msgid "Baltic (I_SO-8859-4)"
 msgstr "波羅的海語系 (I_SO-8859-4)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:60
 msgid "Baltic (_Windows-1257)"
 msgstr "波羅的海語系 (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:61
 msgid "_Armenian (ARMSCII-8)"
 msgstr "亞美尼亞語 (_ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:62
 msgid "_Georgian (GEOSTD8)"
 msgstr "喬治亞語 (_GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:63
 msgid "Central European (_IBM-852)"
 msgstr "中歐語系 (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:64
 msgid "Central European (I_SO-8859-2)"
 msgstr "中歐語系 (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:65
 msgid "Central European (_MacCE)"
 msgstr "中歐語系 (_MacCE)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:66
 msgid "Central European (_Windows-1250)"
 msgstr "中歐語系 (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:67
 msgid "Chinese Simplified (_GB18030)"
 msgstr "簡體中文 (_GB 18030)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:68
 msgid "Chinese Simplified (G_B2312)"
 msgstr "簡體中文 (G_B2312)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:69
 msgid "Chinese Simplified (GB_K)"
 msgstr "簡體中文 (GB_K)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:70
 msgid "Chinese Simplified (_HZ)"
 msgstr "簡體中文 (_HZ)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "簡體中文 (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Traditional (Big_5)"
 msgstr "正體中文 (Big_5)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "正體中文 (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "正體中文 (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:75
 msgid "Cyrillic (_IBM-855)"
 msgstr "斯拉夫語系 (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:76
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "斯拉夫語系 (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:77
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "斯拉夫語系 (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:78
 msgid "Cyrillic (_KOI8-R)"
 msgstr "斯拉夫語系 (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "斯拉夫語系 (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (_Windows-1251)"
 msgstr "斯拉夫語系 (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "斯拉夫語系/俄語 (IBM-866)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:82
 msgid "Greek (_ISO-8859-7)"
 msgstr "希臘語 (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:83
 msgid "Greek (_MacGreek)"
 msgstr "希臘語 (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:84
 msgid "Greek (_Windows-1253)"
 msgstr "希臘語 (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:85
 msgid "Gujarati (_MacGujarati)"
 msgstr "古吉拉特語 (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:86
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "果魯穆其語 (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:87
 msgid "Hindi (Mac_Devanagari)"
 msgstr "北印度語 (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:88
 msgid "Hebrew (_IBM-862)"
 msgstr "希伯來語 (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:89
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "希伯來語 (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:90
 msgid "Hebrew (_MacHebrew)"
 msgstr "希伯來語 (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:91
 msgid "Hebrew (_Windows-1255)"
 msgstr "希伯來語 (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:92
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "希伯來語[左至右] (_ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:93
 msgid "Japanese (_EUC-JP)"
 msgstr "日語 (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:94
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "日語 (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:95
 msgid "Japanese (_Shift-JIS)"
 msgstr "日語 (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:96
 msgid "Korean (_EUC-KR)"
 msgstr "韓語 (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:97
 msgid "Korean (_ISO-2022-KR)"
 msgstr "韓語 (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:98
 msgid "Korean (_JOHAB)"
 msgstr "韓語 (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:99
 msgid "Korean (_UHC)"
 msgstr "韓語 (_UHC)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:100
 msgid "_Celtic (ISO-8859-14)"
 msgstr "塞爾特語系 (_ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:101
 msgid "_Icelandic (MacIcelandic)"
 msgstr "冰島語 (Mac_Icelandic)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:102
 msgid "_Nordic (ISO-8859-10)"
 msgstr "北歐語系 (_ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:103
 msgid "_Persian (MacFarsi)"
 msgstr "波斯語 (Mac_Farsi)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:104
 msgid "Croatian (Mac_Croatian)"
 msgstr "克羅埃西亞語 (Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:105
 msgid "_Romanian (MacRomanian)"
 msgstr "羅馬尼亞語 (Mac_Romanian)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:106
 msgid "R_omanian (ISO-8859-16)"
 msgstr "羅馬尼亞語 (IS_O-8859-16)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:107
 msgid "South _European (ISO-8859-3)"
 msgstr "南歐語系 (ISO-8859-_3)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:108
 msgid "Thai (TIS-_620)"
 msgstr "泰語 (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:109
 msgid "Thai (IS_O-8859-11)"
 msgstr "泰語 (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:110
 msgid "_Thai (Windows-874)"
 msgstr "泰語 (Windows-_874)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:111
 msgid "Turkish (_IBM-857)"
 msgstr "土耳其語 (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:112
 msgid "Turkish (I_SO-8859-9)"
 msgstr "土耳其語 (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:113
 msgid "Turkish (_MacTurkish)"
 msgstr "土耳其語 (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:114
 msgid "Turkish (_Windows-1254)"
 msgstr "土耳其語 (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:115
 msgid "Unicode (UTF-_8)"
 msgstr "萬國碼 (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:116
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "斯拉夫語系/烏克蘭語 (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:117
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "斯拉夫語系/烏克蘭語 (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:118
 msgid "Vietnamese (_TCVN)"
 msgstr "越南語 (_TCVN)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:119
 msgid "Vietnamese (_VISCII)"
 msgstr "越南語 (_VISCII)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:120
 msgid "Vietnamese (V_PS)"
 msgstr "越南語 (V_PS)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:121
 msgid "Vietnamese (_Windows-1258)"
 msgstr "越南語 (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:122
 msgid "Western (_IBM-850)"
 msgstr "西歐語系 (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:123
 msgid "Western (_ISO-8859-1)"
 msgstr "西歐語系 (I_SO-8859-1)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:124
 msgid "Western (IS_O-8859-15)"
 msgstr "西歐語系 (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:125
 msgid "Western (_MacRoman)"
 msgstr "西歐語系 (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_Windows-1252)"
 msgstr "西歐語系 (_Windows-1252)"
 
-#. the following encodings are so rarely used that we don't want to pollute the "related"
-#. * part of the encodings menu with them, so we set the language group to 0 here
+#. The following encodings are so rarely used that we don't want to
+#. * pollute the "related" part of the encodings menu with them, so we
+#. * set the language group to 0 here.
 #.
-#: ../embed/ephy-encodings.c:136
+#: ../embed/ephy-encodings.c:132
 msgid "English (_US-ASCII)"
 msgstr "英語 (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:137
+#: ../embed/ephy-encodings.c:133
 msgid "Unicode (UTF-_16 BE)"
 msgstr "萬國碼 (UTF-1_6BE)"
 
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:134
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "萬國碼 (UTF-1_6BE)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:135
 msgid "Unicode (UTF-_32 BE)"
 msgstr "萬國碼 (UTF-3_2BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "萬國碼 (UTF-3_2BE)"
 
 # c-format
-#. translators: this is the title that an unknown encoding will
+#. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:281
+#: ../embed/ephy-encodings.c:218
 #, c-format
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:3697
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:3663
 msgid "Blank page"
 msgstr "空白頁面"
 
-#: ../embed/ephy-web-view.c:745
-msgid "_Not now"
-msgstr "現在不要(_N)"
+#: ../embed/ephy-web-view.c:725
+msgid "Not now"
+msgstr "現在不要"
 
-#: ../embed/ephy-web-view.c:750
-msgid "_Store password"
-msgstr "儲存密碼(_S)"
+#: ../embed/ephy-web-view.c:726
+msgid "Store password"
+msgstr "儲存密碼"
 
 #. Translators: The first %s is the username and the second one is the
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:761
+#: ../embed/ephy-web-view.c:739
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>是否要儲存 <b>%s</b> 在 <b>%s</b> 的密碼？</big>"
 
-#: ../embed/ephy-web-view.c:1111
+#: ../embed/ephy-web-view.c:1089
 msgid "Plugins"
 msgstr "外掛程式"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1957
+#: ../embed/ephy-web-view.c:1924
 msgid "Deny"
 msgstr "禁止"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1963
+#: ../embed/ephy-web-view.c:1925
 msgid "Allow"
 msgstr "允許"
 
-#: ../embed/ephy-web-view.c:1974
+#: ../embed/ephy-web-view.c:1939
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "在 <b>%s</b> 的網頁想要知道您的位置。"
 
-#: ../embed/ephy-web-view.c:2451
+#: ../embed/ephy-web-view.c:2417
 msgid "None specified"
 msgstr "沒有指定"
 
-#: ../embed/ephy-web-view.c:2460 ../embed/ephy-web-view.c:2478
+#: ../embed/ephy-web-view.c:2426 ../embed/ephy-web-view.c:2444
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "噢！載入 %s 時發生錯誤"
 
-#: ../embed/ephy-web-view.c:2462
+#: ../embed/ephy-web-view.c:2428
 msgid "Oops! It was not possible to show this website"
 msgstr "噢！無法顯示這個網站"
 
-#: ../embed/ephy-web-view.c:2463
+#: ../embed/ephy-web-view.c:2429
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -865,15 +872,15 @@ msgstr ""
 "em></p><p>它可能被暫時關閉或移動到新的位址。不要忘了檢查網際網路連線是否正常"
 "運作。</p>"
 
-#: ../embed/ephy-web-view.c:2472
+#: ../embed/ephy-web-view.c:2438
 msgid "Try again"
 msgstr "再試一次"
 
-#: ../embed/ephy-web-view.c:2480
+#: ../embed/ephy-web-view.c:2446
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "噢！這個網站可能已造成網頁瀏覽器未預期的關閉"
 
-#: ../embed/ephy-web-view.c:2482
+#: ../embed/ephy-web-view.c:2448
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -884,29 +891,29 @@ msgstr ""
 "再度發生這個狀況。如果真的這樣，請將問題回報給 <strong>%s</strong> 開發團隊。"
 "</p>"
 
-#: ../embed/ephy-web-view.c:2490
+#: ../embed/ephy-web-view.c:2456
 msgid "Load again anyway"
 msgstr "强制再次載入"
 
-#: ../embed/ephy-web-view.c:2881
+#: ../embed/ephy-web-view.c:2847
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com.tw/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3175
+#: ../embed/ephy-web-view.c:3141
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在載入“%s”…"
 
-#: ../embed/ephy-web-view.c:3177
+#: ../embed/ephy-web-view.c:3143
 msgid "Loading…"
 msgstr "載入中…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3904
+#: ../embed/ephy-web-view.c:3870
 #, c-format
 msgid "%s Files"
 msgstr "%s 個檔案"
@@ -946,19 +953,19 @@ msgstr "不能傳送文件 URI 至「Type=Link」桌面項目"
 msgid "Not a launchable item"
 msgstr "不是可以啟動的項目"
 
-#: ../lib/ephy-file-chooser.c:382
+#: ../lib/ephy-file-chooser.c:210
 msgid "All supported types"
 msgstr "所有支援的類型"
 
-#: ../lib/ephy-file-chooser.c:393
+#: ../lib/ephy-file-chooser.c:221
 msgid "Web pages"
 msgstr "網頁"
 
-#: ../lib/ephy-file-chooser.c:401
+#: ../lib/ephy-file-chooser.c:229
 msgid "Images"
 msgstr "圖形檔"
 
-#: ../lib/ephy-file-chooser.c:409 ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../lib/ephy-file-chooser.c:237 ../src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "All files"
 msgstr "所有檔案"
 
@@ -1172,11 +1179,11 @@ msgstr "已完成"
 msgid "Error downloading: %s"
 msgstr "下載時發生錯誤：%s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:542
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:552
 msgid "Cancel"
 msgstr "取消"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1348
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1352
 #: ../src/window-commands.c:268
 msgid "Open"
 msgstr "開啟"
@@ -1216,13 +1223,13 @@ msgid "Clear"
 msgstr "清除"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1680
 msgid "Title"
 msgstr "標題"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1692
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1691
 msgid "Address"
 msgstr "地址"
 
@@ -1365,7 +1372,7 @@ msgstr "建立新的主題"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
 #: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:639
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -1376,7 +1383,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "在新的視窗中開啟已選的書籤"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
 #: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:642
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -1439,7 +1446,7 @@ msgid "Cut the selection"
 msgstr "剪下選定的內容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1171
 #: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:652
 #: ../src/ephy-window.c:121
 msgid "_Copy"
@@ -1600,44 +1607,44 @@ msgstr "Epiphany 書籤"
 msgid "Export Bookmarks"
 msgstr "匯出書籤"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "書籤"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "File f_ormat:"
 msgstr "檔案格式(_O)："
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:815
+#: ../src/bookmarks/ephy-bookmarks-editor.c:814
 msgid "Import Bookmarks"
 msgstr "匯入書籤"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:820
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
 msgid "I_mport"
 msgstr "匯入(_M)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:836
+#: ../src/bookmarks/ephy-bookmarks-editor.c:835
 msgid "Import bookmarks from:"
 msgstr "匯入書籤的來源："
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:856
+#: ../src/bookmarks/ephy-bookmarks-editor.c:855
 msgid "File"
 msgstr "檔案"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
 #: ../src/ephy-history-window.c:648
 msgid "_Copy Address"
 msgstr "複製位址(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1408
 #: ../src/ephy-history-window.c:801
 msgid "_Search:"
 msgstr "搜尋(_S)："
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1610
 msgid "Topics"
 msgstr "主題"
 
@@ -1710,7 +1717,7 @@ msgstr "字元編碼"
 msgid "<b>_Automatic</b>"
 msgstr "<b>自動(_A)：</b>"
 
-#: ../src/resources/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:355
+#: ../src/resources/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:349
 msgid "Use the encoding specified by the document"
 msgstr "使用文件指定的編碼方式"
 
@@ -1847,7 +1854,7 @@ msgstr "MB"
 msgid "Privacy"
 msgstr "隱私"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:318
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
 msgid "Encodings"
 msgstr "編碼"
 
@@ -1863,7 +1870,7 @@ msgstr "拼字檢查"
 msgid "_Enable spell checking"
 msgstr "啟用拼字檢查(_E)"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:773
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
 msgid "Language"
 msgstr "語言"
 
@@ -1883,15 +1890,15 @@ msgstr "重新載入(_R)"
 msgid "Display the latest content of the current page"
 msgstr "顯示本頁的最新內容"
 
-#: ../src/ephy-encoding-menu.c:347
+#: ../src/ephy-encoding-menu.c:341
 msgid "_Other…"
 msgstr "其它(_O)…"
 
-#: ../src/ephy-encoding-menu.c:348
+#: ../src/ephy-encoding-menu.c:342
 msgid "Other encodings"
 msgstr "其他字元編碼方式"
 
-#: ../src/ephy-encoding-menu.c:354
+#: ../src/ephy-encoding-menu.c:348
 msgid "_Automatic"
 msgstr "自動(_A)"
 
@@ -2309,49 +2316,49 @@ msgstr "如果您關閉這個視窗，這個下載也會被取消"
 msgid "Close window and cancel downloads"
 msgstr "關閉視窗並取消下載"
 
-#: ../src/ephy-window.c:1350
+#: ../src/ephy-window.c:1354
 msgid "Save As"
 msgstr "另存新檔"
 
-#: ../src/ephy-window.c:1352
+#: ../src/ephy-window.c:1356
 msgid "Save As Application"
 msgstr "儲存為應用程式"
 
-#: ../src/ephy-window.c:1354
+#: ../src/ephy-window.c:1358
 msgid "Print"
 msgstr "列印"
 
-#: ../src/ephy-window.c:1356
+#: ../src/ephy-window.c:1360
 msgid "Bookmark"
 msgstr "加入書籤"
 
-#: ../src/ephy-window.c:1358
+#: ../src/ephy-window.c:1362
 msgid "Find"
 msgstr "尋找"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1367
+#: ../src/ephy-window.c:1371
 msgid "Larger"
 msgstr "放大"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1374
 msgid "Smaller"
 msgstr "縮小"
 
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1394
 msgid "Back"
 msgstr "上一頁"
 
-#: ../src/ephy-window.c:1402
+#: ../src/ephy-window.c:1406
 msgid "Forward"
 msgstr "下一頁"
 
-#: ../src/ephy-window.c:1414
+#: ../src/ephy-window.c:1418
 msgid "Zoom"
 msgstr "縮放"
 
-#: ../src/ephy-window.c:1422
+#: ../src/ephy-window.c:1426
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
@@ -2433,15 +2440,15 @@ msgstr "使用者名稱"
 msgid "User Password"
 msgstr "使用者密碼"
 
-#: ../src/popup-commands.c:287
+#: ../src/popup-commands.c:282
 msgid "Download Link"
 msgstr "下載連結"
 
-#: ../src/popup-commands.c:295
+#: ../src/popup-commands.c:290
 msgid "Save Link As"
 msgstr "另存連結(_A)…"
 
-#: ../src/popup-commands.c:302
+#: ../src/popup-commands.c:297
 msgid "Save Image As"
 msgstr "另存圖片"
 
@@ -2449,7 +2456,7 @@ msgstr "另存圖片"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:467 ../src/prefs-dialog.c:473
+#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2458,65 +2465,65 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:489
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "使用者定義 (%s)"
 
-#: ../src/prefs-dialog.c:504
+#: ../src/prefs-dialog.c:511
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "系統語言 (%s)"
 
-#: ../src/prefs-dialog.c:862
+#: ../src/prefs-dialog.c:869
 msgid "Select a Directory"
 msgstr "選擇一個目錄"
 
-#: ../src/window-commands.c:331
+#: ../src/window-commands.c:342
 msgid "Save"
 msgstr "儲存"
 
-#: ../src/window-commands.c:539
+#: ../src/window-commands.c:549
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "已存在名為「%s」的網頁應用程式。您想要取代它嗎？"
 
-#: ../src/window-commands.c:544
+#: ../src/window-commands.c:554
 msgid "Replace"
 msgstr "取代"
 
-#: ../src/window-commands.c:548
+#: ../src/window-commands.c:558
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "以此為名的應用程式已經存在。取代它會將它覆蓋。"
 
-#: ../src/window-commands.c:584
+#: ../src/window-commands.c:594
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "應用程式「%s」已經準備好可以使用"
 
-#: ../src/window-commands.c:587
+#: ../src/window-commands.c:597
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "無法建立應用程式「%s」"
 
-#: ../src/window-commands.c:595
+#: ../src/window-commands.c:605
 msgid "Launch"
 msgstr "執行"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:628
+#: ../src/window-commands.c:638
 msgid "Create Web Application"
 msgstr "建立網頁應用程式"
 
-#: ../src/window-commands.c:633
+#: ../src/window-commands.c:643
 msgid "C_reate"
 msgstr "建立(_R)"
 
-#: ../src/window-commands.c:1224
+#: ../src/window-commands.c:1234
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2527,7 +2534,7 @@ msgstr ""
 "權條款規定，就本程式再為散布與／或修改；無論您依據的是本授權的第二版或（您自"
 "行選擇的）任一日後發行的版本。"
 
-#: ../src/window-commands.c:1228
+#: ../src/window-commands.c:1238
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2537,7 +2544,7 @@ msgstr ""
 "GNOME 網頁瀏覽器係基於使用目的而加以散布，然而不負任何擔保責任；亦無對適售性"
 "或特定目的適用性所為的默示性擔保。詳情請參照 GNU 通用公共授權。"
 
-#: ../src/window-commands.c:1232
+#: ../src/window-commands.c:1242
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2546,27 +2553,27 @@ msgstr ""
 "您應已收到附隨於本程式的 GNU 通用公共授權的副本；如無，請寫信至自由軟體基金"
 "會：51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
-#: ../src/window-commands.c:1278 ../src/window-commands.c:1294
-#: ../src/window-commands.c:1305
+#: ../src/window-commands.c:1288 ../src/window-commands.c:1304
+#: ../src/window-commands.c:1315
 msgid "Contact us at:"
 msgstr "聯絡我們於："
 
-#: ../src/window-commands.c:1281
+#: ../src/window-commands.c:1291
 msgid "Contributors:"
 msgstr "貢獻者："
 
-#: ../src/window-commands.c:1284
+#: ../src/window-commands.c:1294
 msgid "Past developers:"
 msgstr "前度開發人員："
 
-#: ../src/window-commands.c:1315 ../src/window-commands.c:1321
+#: ../src/window-commands.c:1325 ../src/window-commands.c:1331
 #, c-format
 msgid ""
-"Lets you view web pages and find information on the internet.\n"
+"A simple, clean, beautiful view of the web.\n"
 "Powered by WebKit %d.%d.%d"
 msgstr ""
-"讓您在網際網路上瀏覽網頁及尋找資訊。\n"
-"基於 WebKit %d.%d.%d"
+"簡單、乾淨、美麗的網頁面貌。\n"
+"使用 WebKit %d.%d.%d"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -2576,7 +2583,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1351
+#: ../src/window-commands.c:1361
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電子郵件給\n"
@@ -2587,15 +2594,15 @@ msgstr ""
 "Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004\n"
 "Abel Cheung <maddog@linux.org.hk>, 2003"
 
-#: ../src/window-commands.c:1354
+#: ../src/window-commands.c:1364
 msgid "Web Website"
 msgstr "網頁網站"
 
-#: ../src/window-commands.c:1494
+#: ../src/window-commands.c:1504
 msgid "Enable caret browsing mode?"
 msgstr "是否啟用鍵盤瀏覽？"
 
-#: ../src/window-commands.c:1497
+#: ../src/window-commands.c:1507
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2604,9 +2611,16 @@ msgstr ""
 "按下 F7 會開啟或關閉鍵盤瀏覽。這個功能會在網頁中放置一個可移動的游標，讓您可"
 "以使用鍵盤隨處移動。您是否要啟用鍵盤瀏覽？"
 
-#: ../src/window-commands.c:1500
+#: ../src/window-commands.c:1510
 msgid "_Enable"
 msgstr "啟用(_E)"
+
+#~ msgid ""
+#~ "Lets you view web pages and find information on the internet.\n"
+#~ "Powered by WebKit %d.%d.%d"
+#~ msgstr ""
+#~ "讓您在網際網路上瀏覽網頁及尋找資訊。\n"
+#~ "基於 WebKit %d.%d.%d"
 
 #~ msgctxt "file type"
 #~ msgid "Unknown"
