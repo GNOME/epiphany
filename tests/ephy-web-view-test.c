@@ -287,7 +287,8 @@ static struct {
   { "lala.lala", "http://www.google.com/search?q=lala%2Elala&ie=UTF-8&oe=UTF-8" },
   { "127.0.0.1", "http://127.0.0.1" },
   { "http://127.0.0.1", "http://127.0.0.1" },
-  { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" }
+  { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" },
+  { "planet.gnome.org", "http://planet.gnome.org" }
 };
 
 static void

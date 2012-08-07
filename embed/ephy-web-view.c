@@ -2833,7 +2833,7 @@ is_public_domain (EphyWebView *view, const char *url)
     if (g_str_equal (url, "localhost"))
       return TRUE;
 
-    url = g_strstr_len (url, -1, ".");
+    url = g_strrstr (url, ".");
     if (!url || *url == '\0')
       return FALSE;
 
