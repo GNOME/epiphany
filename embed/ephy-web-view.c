@@ -107,6 +107,10 @@ struct _EphyWebViewPrivate {
   EphyHistoryPageVisitType visit_type;
 
   gulong do_not_track_handler;
+
+  /* TLS information. */
+  GTlsCertificate *certificate;
+  GTlsCertificateFlags tls_errors;
 };
 
 typedef struct {
@@ -529,6 +533,8 @@ ephy_web_view_dispose (GObject *object)
     g_cancellable_cancel (priv->history_service_cancellable);
     g_clear_object (&priv->history_service_cancellable);
   }
+
+  g_clear_object(&priv->certificate);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
@@ -2106,25 +2112,20 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_COMMITTED: {
     const char* uri;
     EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+    WebKitWebResource *resource;
+    WebKitURIResponse *response;
 
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
 
     /* Security status. */
-    if (uri && g_str_has_prefix (uri, "https")) {
-      WebKitWebResource *resource;
-      WebKitURIResponse *response;
-      GTlsCertificateFlags tls_errors = 0;
-      gboolean has_certificate;
-
-      resource = webkit_web_view_get_main_resource (web_view);
-      response = webkit_web_resource_get_response (resource);
-      has_certificate = webkit_uri_response_get_https_status (response, NULL, &tls_errors);
-      if (has_certificate && tls_errors == 0)
-        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-      else
-        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
+    resource = webkit_web_view_get_main_resource (web_view);
+    response = webkit_web_resource_get_response (resource);
+    g_clear_object (&priv->certificate);
+    if (webkit_uri_response_get_https_status (response, &priv->certificate, &priv->tls_errors)) {
+      security_level = priv->tls_errors == 0 ?
+        EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
     }
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
@@ -2258,7 +2259,10 @@ load_status_cb (WebKitWebView *web_view,
   }
   case WEBKIT_LOAD_COMMITTED: {
     const char* uri;
-    EphyWebViewSecurityLevel security_level;
+    EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+    WebKitWebFrame *frame;
+    WebKitNetworkResponse *response;
+    SoupMessage *message;
 
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
@@ -2266,24 +2270,16 @@ load_status_cb (WebKitWebView *web_view,
                                     uri);
 
     /* Security status. */
-    if (uri && g_str_has_prefix (uri, "https")) {
-      WebKitWebFrame *frame;
-      WebKitWebDataSource *source;
-      WebKitNetworkRequest *request;
-      SoupMessage *message;
+    frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
+    response = webkit_web_frame_get_network_response (frame);
+    message = webkit_network_response_get_message (response);
 
-      frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-      source = webkit_web_frame_get_data_source (frame);
-      request = webkit_web_data_source_get_request (source);
-      message = webkit_network_request_get_message (request);
-
-      if (message &&
-          (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED))
-        security_level = EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH;
-      else
-        security_level = EPHY_WEB_VIEW_STATE_IS_BROKEN;
-    } else
-      security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+    g_clear_object (&priv->certificate);
+    if (message && soup_message_get_https_status (message, &priv->certificate, &priv->tls_errors)) {
+      g_object_ref (priv->certificate);
+      security_level = priv->tls_errors == 0 ?
+        EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
+    }
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
 
@@ -3546,24 +3542,29 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
  * ephy_web_view_get_security_level:
  * @view: an #EphyWebView
  * @level: (out): return value of security level
- * @description: (out): return value of the description of the security level
+ * @certificate: (out) (transfer none): return value of TLS certificate
+ * @errors: (out): return value of TLS errors
  *
- * Fetches the #EphyWebViewSecurityLevel and a string description of the
- * security state of @view.  The description will be a newly-allocated
- * string or %NULL.
+ * Fetches the #EphyWebViewSecurityLevel and a #GTlsCertificate associated
+ * with @view and a #GTlsCertificateFlags showing what problems, if any,
+ * have been found with that certificate.
  **/
 void
 ephy_web_view_get_security_level (EphyWebView *view,
                                   EphyWebViewSecurityLevel *level,
-                                  char **description)
+                                  GTlsCertificate **certificate,
+                                  GTlsCertificateFlags *errors)
 {
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
   if (level)
     *level = view->priv->security_level;
 
-  if (description)
-    *description = NULL;
+  if (certificate)
+    *certificate = view->priv->certificate;
+
+  if (errors)
+    *errors = view->priv->tls_errors;
 }
 
 static void

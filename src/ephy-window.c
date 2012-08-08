@@ -774,13 +774,12 @@ sync_tab_security (EphyWebView *view,
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewSecurityLevel level;
-	char *description = NULL;
 	const char *stock_id = STOCK_LOCK_INSECURE;
 	gboolean show_lock = FALSE;
 
 	if (priv->closing) return;
 
-	ephy_web_view_get_security_level (view, &level, &description);
+	ephy_web_view_get_security_level (view, &level, NULL, NULL);
 
 	switch (level)
 	{
