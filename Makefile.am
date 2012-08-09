@@ -18,10 +18,7 @@ EXTRA_DIST = 			\
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-debug			\
-	--enable-zeroconf		\
-	--enable-gtk-doc		\
-	--disable-schemas-install	\
-	--disable-scrollkeeper
+	--enable-gtk-doc
 
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
