@@ -417,7 +417,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *cookie_policy;
 
   /* TODO: SoupCache, SSL, favicons */
-
   web_context = webkit_web_context_get_default ();
 
   /* Store cookies in moz-compatible SQLite format */
@@ -446,6 +445,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *favicon_db_path;
   EphyEmbedSinglePrivate *priv = single->priv;
   SoupSessionFeature *requester;
+  EphyEmbedShellMode mode;
 
   /* Initialise nspluginwrapper's plugins if available */
   if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
@@ -474,8 +474,12 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* Use GNOME proxy settings through libproxy */
   soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
   /* WebKitSoupCache */
-  cache_dir = g_build_filename (g_get_user_cache_dir (), g_get_prgname (), NULL);
+  cache_dir = g_build_filename (mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
+                                ephy_dot_dir () : g_get_user_cache_dir (),
+                                g_get_prgname (), NULL);
   priv->cache = soup_cache_new (cache_dir, SOUP_CACHE_SINGLE_USER);
   g_free (cache_dir);
 
@@ -500,7 +504,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
      are not using a private session, otherwise we want any new
      password to expire when we exit *and* we don't want to use any
      existing password in the keyring */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE)
+  if (mode != EPHY_EMBED_SHELL_MODE_PRIVATE)
     soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
 #endif
 
