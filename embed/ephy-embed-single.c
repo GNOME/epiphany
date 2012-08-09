@@ -19,37 +19,38 @@
  */
 
 #include "config.h"
+#include "ephy-embed-single.h"
 
 #define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
 #define LIBSOUP_USE_UNSTABLE_REQUEST_API
-#define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
-#include "ephy-embed-single.h"
-#include "ephy-embed-shell.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-embed-type-builtins.h"
-#include "ephy-debug.h"
-#include "ephy-file-helpers.h"
-#include "ephy-signal-accumulator.h"
-#include "ephy-permission-manager.h"
-#include "ephy-profile-utils.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
-#include "ephy-request-about.h"
 #include "ephy-about-handler.h"
+#include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-type-builtins.h"
+#include "ephy-file-helpers.h"
+#include "ephy-permission-manager.h"
+#include "ephy-prefs.h"
+#include "ephy-profile-utils.h"
+#include "ephy-request-about.h"
+#include "ephy-settings.h"
+#include "ephy-signal-accumulator.h"
 
+#include <glib/gi18n.h>
+#include <gnome-keyring.h>
+#include <libsoup/soup-cache.h>
+#include <libsoup/soup-gnome.h>
+#include <libsoup/soup-requester.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
 #include <webkit/webkit.h>
 #endif
-#include <glib/gi18n.h>
-#include <libsoup/soup-gnome.h>
-#include <libsoup/soup-cache.h>
-#include <libsoup/soup-requester.h>
-#include <gnome-keyring.h>
 
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
+
+#define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 struct _EphyEmbedSinglePrivate {
   GHashTable *form_auth_data;
@@ -58,8 +59,6 @@ struct _EphyEmbedSinglePrivate {
 #endif
 };
 
-static void ephy_embed_single_init (EphyEmbedSingle *single);
-static void ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
 static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
@@ -109,11 +108,10 @@ get_attr_cb (GnomeKeyringResult result,
       break;
 
     if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
-      if (g_str_equal (attribute[i].name, "server")) {
+      if (g_str_equal (attribute[i].name, "server"))
         server = g_strdup (attribute[i].value.string);
-      } else if (g_str_equal (attribute[i].name, "user")) {
+      else if (g_str_equal (attribute[i].name, "user"))
         username = g_strdup (attribute[i].value.string);
-      }
     }
   }
 
