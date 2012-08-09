@@ -37,17 +37,14 @@
 #include "ephy-signal-accumulator.h"
 #include "ephy-tree-model-node.h"
 
+#include <avahi-common/error.h>
+#include <avahi-gobject/ga-client.h>
+#include <avahi-gobject/ga-enums.h>
+#include <avahi-gobject/ga-service-browser.h>
+#include <avahi-gobject/ga-service-resolver.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
-
-#ifdef ENABLE_ZEROCONF
-#include <avahi-common/error.h>
-#include <avahi-gobject/ga-service-browser.h>
-#include <avahi-gobject/ga-service-resolver.h>
-#include <avahi-gobject/ga-client.h>
-#include <avahi-gobject/ga-enums.h>
-#endif /* ENABLE_ZEROCONF */
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
@@ -78,13 +75,11 @@ struct _EphyBookmarksPrivate
 	EphyNode *lower_fav;
 	double lower_score;
 
-#ifdef ENABLE_ZEROCONF
 	/* Local sites */
 	EphyNode *local;
 	GaClient *ga_client;
 	GaServiceBrowser *browse_handles[G_N_ELEMENTS (zeroconf_protos)];
 	GHashTable *resolve_handles;
-#endif
 };
 
 static const char *default_topics [] =
@@ -111,9 +106,7 @@ static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
 static void ephy_bookmarks_init		(EphyBookmarks *tab);
 static void ephy_bookmarks_finalize	(GObject *object);
 static char *impl_resolve_address	(EphyBookmarks*, const char*, const char*);
-#ifdef ENABLE_ZEROCONF
 static void ephy_local_bookmarks_start_client (EphyBookmarks *bookmarks);
-#endif
 
 G_DEFINE_TYPE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT)
 
@@ -172,14 +165,9 @@ save_filter (EphyNode *node,
 
 	return node != priv->bookmarks &&
 	       node != priv->notcategorized &&
-#ifdef ENABLE_ZEROCONF
 	       node != priv->local;
-#else
-	       TRUE;
-#endif
 }
 
-#ifdef ENABLE_ZEROCONF
 static gboolean
 save_filter_local (EphyNode *node,
 		   EphyBookmarks *bookmarks)
@@ -188,7 +176,6 @@ save_filter_local (EphyNode *node,
 
 	return !ephy_node_has_child (priv->local, node);
 }
-#endif
 
 static void
 ephy_bookmarks_save (EphyBookmarks *eb)
@@ -203,11 +190,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 		 (xmlChar *) EPHY_BOOKMARKS_XML_VERSION,
 		 (xmlChar *) "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
 		 eb->priv->keywords, (EphyNodeFilterFunc) save_filter, eb,
-#ifdef ENABLE_ZEROCONF
 		 eb->priv->bookmarks, (EphyNodeFilterFunc) save_filter_local, eb,
-#else
-		 eb->priv->bookmarks, NULL, eb,
-#endif
 		 NULL);
 
 	/* Export bookmarks in rdf */
@@ -297,9 +280,7 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->bookmarks &&
-#ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
-#endif
 		    ephy_node_has_child (kid, bookmark))
 		{
 			const char *topic;
@@ -364,9 +345,7 @@ bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
 
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->bookmarks &&
-#ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
-#endif
 		    ephy_node_has_child (kid, bookmark))
 		{
 			return TRUE;
@@ -490,8 +469,6 @@ backup_file (const char *original_filename, const char *extension)
 	g_free (template);
 	g_free (backup_filename);
 }
-
-#ifdef ENABLE_ZEROCONF
 
 /* C&P adapted from gnome-vfs-dns-sd.c */
 static GHashTable *
@@ -949,8 +926,6 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 	}
 }
 
-#endif /* ENABLE_ZEROCONF */
-
 static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
@@ -963,11 +938,9 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	   bookmarks */
 	const char *bk_not_categorized = C_("bookmarks", "Not Categorized");
 	
-#ifdef ENABLE_ZEROCONF
 	/* Translators: this is an automatic topic containing local
 	 * websites bookmarks autodiscovered with zeroconf. */
 	const char *bk_local_sites = C_("bookmarks", "Nearby Sites");
-#endif
 
 	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);
 
@@ -1024,7 +997,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
-#ifdef ENABLE_ZEROCONF
 	/* Local Websites */
 	eb->priv->local = ephy_node_new_with_id (db, BMKS_LOCAL_NODE_ID);
 
@@ -1041,7 +1013,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	
 	ephy_node_add_child (eb->priv->keywords, eb->priv->local);
 	ephy_local_bookmarks_init (eb);
-#endif /* ENABLE_ZEROCONF */
 
 	/* Smart bookmarks */
 	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
@@ -1101,9 +1072,7 @@ ephy_bookmarks_finalize (GObject *object)
 
 	ephy_bookmarks_save (eb);
 
-#ifdef ENABLE_ZEROCONF
 	ephy_local_bookmarks_stop (eb);
-#endif
 
 	ephy_node_unref (priv->bookmarks);
 	ephy_node_unref (priv->keywords);
@@ -1546,13 +1515,11 @@ ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
 	{
 		uri = g_strdup ("topic://Special/NotCategorized");
 	}
-#ifdef ENABLE_ZEROCONF
 	else if (ephy_bookmarks_get_local (eb) == node)
 	{
 		/* Note: do not change to "Nearby" because of existing custom toolbars */
 		uri = g_strdup ("topic://Special/Local");
 	}
-#endif
 	else
 	{
 		const char *name;
@@ -1594,12 +1561,10 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	{
 		return ephy_bookmarks_get_not_categorized (eb);
 	}
-#ifdef ENABLE_ZEROCONF
 	else if (strcmp (name, "topic://Special/Local") == 0)
 	{
 		return ephy_bookmarks_get_local (eb);
 	}
-#endif
 	else if (g_str_has_prefix (name, "topic://"))
 	{
 		topic_name += strlen ("topic://");
@@ -1717,11 +1682,7 @@ ephy_bookmarks_get_bookmarks (EphyBookmarks *eb)
 EphyNode *
 ephy_bookmarks_get_local (EphyBookmarks *eb)
 {
-#ifdef ENABLE_ZEROCONF
 	return eb->priv->local;
-#else
-	return NULL;
-#endif
 }
 
 /**

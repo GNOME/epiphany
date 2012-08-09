@@ -115,13 +115,6 @@ libephybookmarks_la_CFLAGS = \
 
 libephybookmarks_la_LIBADD =
 
-if ENABLE_ZEROCONF
-libephybookmarks_la_CFLAGS += \
-        $(AVAHI_CFLAGS)
-libephybookmarks_la_LIBADD += \
-	$(AVAHI_LIBS)
-endif
-
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

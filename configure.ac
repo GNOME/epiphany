@@ -90,6 +90,7 @@ GNOME_KEYRING_REQUIRED=2.26.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
 LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
+AVAHI_REQUIRED=0.6.22
 
 AC_ARG_WITH(webkit2,
         [AC_HELP_STRING([--with-webkit2], [build with WebKit2 [default=no]])],
@@ -131,7 +132,9 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
 		  libnotify >= $LIBNOTIFY_REQUIRED
 		  sqlite3
-                  gcr-3 >= $GCR_REQUIRED
+		  gcr-3 >= $GCR_REQUIRED
+		  avahi-gobject >= $AVAHI_REQUIRED
+		  avahi-client >= $AVAHI_REQUIRED
 		  ])
 
 # ******************
@@ -189,41 +192,6 @@ fi
 AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
-
-# *******************
-# Additional features
-# *******************
-
-# Zeroconf bookmarks sites
-
-AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
-AC_ARG_ENABLE([zeroconf],
-	AS_HELP_STRING([--disable-zeroconf],[Whether to enable zeroconf bookmarks support (default: autodetect)]),
-	[], [enable_zeroconf=auto])
-AC_MSG_RESULT([$enable_zeroconf])
-
-if test "$enable_zeroconf" != "no"; then
-	AVAHI_REQUIRED=0.6.22
-
-	PKG_CHECK_MODULES(AVAHI,
-                         [avahi-gobject >= $AVAHI_REQUIRED
-                          avahi-client >= $AVAHI_REQUIRED]
-                         ,[have_avahi=yes],[have_avahi=no])
-
-        if test "$enable_zeroconf" = "yes" -a "$have_avahi" = "no"; then
-                AC_MSG_ERROR([zeroconf support was requested but avahi not found])
-        elif test "$have_avahi" = "yes"; then
-                enable_zeroconf=yes
-        else
-                enable_zeroconf=no
-        fi
-fi
-
-if test "$enable_zeroconf" = "yes"; then
-	AC_DEFINE([ENABLE_ZEROCONF],[1],[Define to enable zeroconf bookmarks support])
-fi
-
-AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
 # *******************************
 # Add warning flags
@@ -337,7 +305,6 @@ Epiphany was configured with the following options:
 	Prefix                     : $prefix
 	Extra debugging support    : $enable_debug
 
- 	Zeroconf bookmarks support : $enable_zeroconf
  	GObject introspection      : $found_introspection
  	NSS support                : $enable_nss
 	Build tests		   : $enable_tests
