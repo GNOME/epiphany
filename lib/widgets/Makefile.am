@@ -1,6 +1,8 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
+	ephy-certificate-dialog.c		\
+	ephy-certificate-dialog.h		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
 	ephy-history-view.c			\

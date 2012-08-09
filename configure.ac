@@ -89,6 +89,7 @@ LIBSOUP_GNOME_REQUIRED=2.39.6
 GNOME_KEYRING_REQUIRED=2.26.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
 LIBNOTIFY_REQUIRED=0.5.1
+GCR_REQUIRED=3.5.5
 
 AC_ARG_WITH(webkit2,
         [AC_HELP_STRING([--with-webkit2], [build with WebKit2 [default=no]])],
@@ -130,6 +131,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
 		  libnotify >= $LIBNOTIFY_REQUIRED
 		  sqlite3
+                  gcr-3 >= $GCR_REQUIRED
 		  ])
 
 # ******************

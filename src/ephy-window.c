@@ -25,6 +25,7 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-certificate-dialog.h"
 #include "ephy-combined-stop-reload-action.h"
 #include "ephy-debug.h"
 #include "ephy-download-widget.h"
@@ -3429,6 +3430,30 @@ zoom_to_level_cb (GtkAction *action,
 	ephy_window_set_zoom (window, zoom);
 }
 
+static void
+lock_clicked_cb (EphyLocationController *controller,
+		 EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyWebView *view;
+	GTlsCertificate *certificate;
+	GTlsCertificateFlags tls_errors;
+	GtkWidget *certificate_dialog;
+
+	view = ephy_embed_get_web_view (priv->active_embed);
+	ephy_web_view_get_security_level (view, NULL, &certificate, &tls_errors);
+
+	certificate_dialog = ephy_certificate_dialog_new (GTK_WINDOW (window),
+							  ephy_location_controller_get_address (controller),
+							  certificate,
+							  tls_errors);
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (certificate_dialog), TRUE);
+	g_signal_connect (certificate_dialog, "response",
+			  G_CALLBACK (gtk_widget_destroy),
+			  NULL);
+	gtk_widget_show (certificate_dialog);
+}
+
 static GtkWidget *
 setup_toolbar (EphyWindow *window)
 {
@@ -3559,6 +3584,8 @@ ephy_window_constructor (GType type,
 			  G_CALLBACK (sync_user_input_cb), window);
 	g_signal_connect_swapped (priv->location_controller, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
+	g_signal_connect (priv->location_controller, "lock-clicked",
+			  G_CALLBACK (lock_clicked_cb), window);
 
 	g_signal_connect_swapped (priv->notebook, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
