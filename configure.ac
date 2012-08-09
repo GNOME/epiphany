@@ -293,7 +293,6 @@ AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 # API Documentation
 # *****************
 
-GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
 
 # ************
