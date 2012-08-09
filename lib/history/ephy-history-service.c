@@ -49,6 +49,7 @@ typedef enum {
 enum {
   VISIT_URL,
   CLEARED,
+  URL_TITLE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -171,6 +172,17 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  signals[URL_TITLE_CHANGED] =
+    g_signal_new ("url-title-changed",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_object_class_install_property (gobject_class,
                                    PROP_HISTORY_FILENAME,
@@ -690,6 +702,7 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
     url->title = title;
     ephy_history_service_update_url_row (self, url);
     ephy_history_service_schedule_commit (self);
+    g_signal_emit (self, signals[URL_TITLE_CHANGED], 0, url->url, url->title);
     return TRUE;
   }
 }
