@@ -51,6 +51,7 @@ enum {
   CLEARED,
   URL_TITLE_CHANGED,
   URL_DELETED,
+  HOST_DELETED,
   LAST_SIGNAL
 };
 
@@ -187,6 +188,16 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 
   signals[URL_DELETED] =
     g_signal_new ("url-deleted",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  signals[HOST_DELETED] =
+    g_signal_new ("host-deleted",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
@@ -877,6 +888,7 @@ ephy_history_service_execute_delete_host (EphyHistoryService *self,
 {
   ephy_history_service_delete_host_row (self, host);
   ephy_history_service_schedule_commit (self);
+  g_signal_emit (self, signals[HOST_DELETED], 0, host->url);
 
   return TRUE;
 }
