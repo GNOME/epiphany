@@ -50,6 +50,7 @@ enum {
   VISIT_URL,
   CLEARED,
   URL_TITLE_CHANGED,
+  URL_DELETED,
   LAST_SIGNAL
 };
 
@@ -182,6 +183,16 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  signals[URL_DELETED] =
+    g_signal_new ("url-deleted",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_object_class_install_property (gobject_class,
@@ -849,6 +860,7 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
   for (l = urls; l != NULL; l = l->next) {
     url = l->data;
     ephy_history_service_delete_url (self, url);
+    g_signal_emit (self, signals[URL_DELETED], 0, url->url);
   }
 
   ephy_history_service_delete_orphan_hosts (self);
