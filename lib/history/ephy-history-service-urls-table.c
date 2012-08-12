@@ -40,7 +40,9 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
     "title LONGVARCAR,"
     "visit_count INTEGER DEFAULT 0 NOT NULL,"
     "typed_count INTEGER DEFAULT 0 NOT NULL,"
-    "last_visit_time INTEGER)", &error);
+    "last_visit_time INTEGER,"
+    "thumbnail_update_time INTEGER DEFAULT 0,"
+    "hidden_from_overview INTEGER DEFAULT 0)", &error);
 
   if (error) {
     g_error("Could not create urls table: %s", error->message);
