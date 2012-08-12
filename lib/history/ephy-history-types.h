@@ -71,6 +71,7 @@ typedef struct _EphyHistoryURL
   int visit_count;
   int typed_count;
   int last_visit_time;
+  gboolean hidden;
   EphyHistoryHost *host;
 } EphyHistoryURL;
 
@@ -88,6 +89,7 @@ typedef struct _EphyHistoryQuery
   gint64 to;
   guint limit;
   GList* substring_list;
+  gboolean ignore_hidden;
   gint host;
   EphyHistorySortType sort_type;
 } EphyHistoryQuery;

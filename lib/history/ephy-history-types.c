@@ -147,6 +147,7 @@ ephy_history_url_copy (EphyHistoryURL *url)
                                url->typed_count,
                                url->last_visit_time);
   copy->id = url->id;
+  copy->hidden = url->hidden;
   copy->host = ephy_history_host_copy (url->host);
   return copy;
 }
@@ -210,6 +211,7 @@ ephy_history_query_copy (EphyHistoryQuery *query)
   copy->to = query->to;
   copy->limit = query->limit;
   copy->sort_type = query->sort_type;
+  copy->ignore_hidden = query->ignore_hidden;
   copy->host = query->host;
 
   for (iter = query->substring_list; iter != NULL; iter = iter->next) {
