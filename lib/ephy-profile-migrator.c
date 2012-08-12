@@ -37,6 +37,7 @@
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
+#include "ephy-sqlite-connection.h"
 #include "ephy-web-app-utils.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
@@ -769,6 +770,49 @@ migrate_web_app_links ()
   ephy_web_application_free_application_list (apps);
 }
 
+static void
+migrate_new_urls_table ()
+{
+  EphySQLiteConnection *history_database;
+  char *filename;
+  GError *error = NULL;
+
+  filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+  history_database = ephy_sqlite_connection_new ();
+  ephy_sqlite_connection_open (history_database, filename, &error);
+
+  if (error) {
+    g_warning ("Failed to open history database: %s\n", error->message);
+    g_error_free (error);
+    g_free (filename);
+    return;
+  }
+
+  ephy_sqlite_connection_execute (history_database,
+                                  "ALTER TABLE urls "
+                                  "ADD COLUMN thumbnail_update_time INTEGER DEFAULT 0",
+                                  &error);
+  if (error) {
+    g_warning ("Failed to add new column to table in history backend: %s\n",
+               error->message);
+    g_error_free (error);
+    error = NULL;
+  }
+  ephy_sqlite_connection_execute (history_database,
+                                  "ALTER TABLE urls "
+                                  "ADD COLUMN hidden_from_overview INTEGER DEFAULT 0",
+                                  &error);
+  if (error) {
+    g_warning ("Failed to add new column to table in history backend: %s\n",
+               error->message);
+    g_error_free (error);
+    error = NULL;
+  }
+
+  g_object_unref (history_database);
+  g_free (filename);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -780,7 +824,8 @@ const EphyProfileMigrator migrators[] = {
   migrate_passwords2,
   migrate_history,
   migrate_tabs_visibility,
-  migrate_web_app_links
+  migrate_web_app_links,
+  migrate_new_urls_table,
 };
 
 static gboolean
