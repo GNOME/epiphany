@@ -30,6 +30,7 @@ typedef enum {
   /* WRITE */
   SET_URL_TITLE,
   SET_URL_ZOOM_LEVEL,
+  SET_URL_HIDDEN,
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
@@ -796,6 +797,49 @@ ephy_history_service_set_url_zoom_level (EphyHistoryService *self,
 }
 
 static gboolean
+ephy_history_service_execute_set_url_hidden (EphyHistoryService *self,
+                                             EphyHistoryURL *url,
+                                             gpointer *result)
+{
+  gboolean hidden;
+
+  hidden = url->hidden;
+
+  if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
+    /* The URL is not yet in the database, so we can't update it.. */
+    return FALSE;
+  } else {
+    url->hidden = hidden;
+    ephy_history_service_update_url_row (self, url);
+    ephy_history_service_schedule_commit (self);
+    return TRUE;
+  }
+}
+
+void
+ephy_history_service_set_url_hidden (EphyHistoryService *self,
+                                     const char *orig_url,
+                                     gboolean hidden,
+                                     GCancellable *cancellable,
+                                     EphyHistoryJobCallback callback,
+                                     gpointer user_data)
+{
+  EphyHistoryServiceMessage *message;
+  EphyHistoryURL *url;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+  g_return_if_fail (orig_url != NULL);
+
+  url = ephy_history_url_new (orig_url, NULL, 0, 0, 0);
+  url->hidden = hidden;
+
+  message = ephy_history_service_message_new (self, SET_URL_HIDDEN,
+                                              url, (GDestroyNotify)ephy_history_url_free,
+                                              cancellable, callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+static gboolean
 ephy_history_service_execute_get_url (EphyHistoryService *self,
                                       const gchar *orig_url,
                                       gpointer *result)
@@ -968,6 +1012,7 @@ ephy_history_service_quit (EphyHistoryService *self,
 static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_title,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_zoom_level,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_hidden,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,
