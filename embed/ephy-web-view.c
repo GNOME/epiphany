@@ -2501,8 +2501,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
 #ifdef HAVE_WEBKIT2
   webkit_web_view_replace_content (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
 #else
-  webkit_web_view_load_string (WEBKIT_WEB_VIEW (view),
-                               html->str, "text/html", "utf8", uri);
+  webkit_web_frame_load_alternate_string (webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view)),
+                                          html->str, uri, uri);
 #endif
   g_string_free (html, TRUE);
 }

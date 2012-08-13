@@ -315,6 +315,76 @@ test_ephy_web_view_normalize_or_autosearch ()
   g_object_unref (g_object_ref_sink (view));
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+quit_main_loop_when_load_finished (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
+{
+  if (load_event != WEBKIT_LOAD_FINISHED)
+    return;
+
+  g_main_loop_quit (loop);
+  g_signal_handlers_disconnect_by_func (view, quit_main_loop_when_load_finished, NULL);
+}
+#else
+static void
+quit_main_loop_when_load_finished (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
+{
+  WebKitLoadStatus status;
+
+  status = webkit_web_view_get_load_status (view);
+
+  if (status != WEBKIT_LOAD_FINISHED)
+    return;
+
+  g_main_loop_quit (loop);
+  g_signal_handlers_disconnect_by_func (view, quit_main_loop_when_load_finished, loop);
+
+}
+#endif
+
+static void
+test_ephy_web_view_provisional_load_failure_updates_back_forward_list ()
+{
+    GMainLoop *loop;
+    EphyWebView *view;
+    const char *bad_url;
+
+    view = EPHY_WEB_VIEW (ephy_web_view_new ());
+    loop = g_main_loop_new (NULL, FALSE);
+    bad_url = "http://localhost:2984375932/";
+
+    ephy_web_view_load_url (view, bad_url);
+
+#ifdef HAVE_WEBKIT2
+    g_signal_connect (view, "load-changed",
+                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+#else
+    g_signal_connect (view, "notify::load-status",
+                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+#endif
+
+    g_main_loop_run (loop);
+    g_main_loop_unref (loop);
+
+#ifdef HAVE_WEBKIT2
+    g_assert (webkit_back_forward_list_get_current_item (
+      webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
+
+    g_assert_cmpstr (bad_url, ==, webkit_back_forward_list_item_get_uri (
+      webkit_back_forward_list_get_current_item (
+        webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
+#else
+    g_assert (webkit_web_back_forward_list_get_current_item (
+      webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
+
+    g_assert_cmpstr (bad_url, ==, webkit_web_history_item_get_uri (
+      webkit_web_back_forward_list_get_current_item (
+        webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
+#endif
+
+    g_object_unref (g_object_ref_sink (view));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -347,6 +417,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/embed/ephy-web-view/load_url",
                    test_ephy_web_view_load_url);
+
+  g_test_add_func ("/embed/ephy-web-view/provisional_load_failure_updates_back_forward_list",
+                   test_ephy_web_view_provisional_load_failure_updates_back_forward_list);
 
   ret = g_test_run ();
 
