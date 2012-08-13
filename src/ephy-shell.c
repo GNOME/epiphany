@@ -131,10 +131,8 @@ queue_commands (EphyShell *shell)
                                 NULL, NULL, ctx->user_time, TRUE);
 
   if (ctx->session_filename != NULL)
-    ephy_session_queue_command (session,
-                                EPHY_SESSION_CMD_LOAD_SESSION,
-                                (const char *)ctx->session_filename, NULL,
-                                ctx->user_time, FALSE);
+    ephy_session_load (session, (const char *)ctx->session_filename,
+                       ctx->user_time, NULL, NULL, NULL);
   else if (ctx->arguments != NULL) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */

@@ -239,9 +239,7 @@ session_command_autoresume (EphySession *session,
 					    NULL, NULL, user_time, FALSE);
 	}
 	else if (ephy_shell_get_n_windows (shell) == 0)
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_LOAD_SESSION,
-					    SESSION_STATE, NULL, user_time, TRUE);
+		ephy_session_load (session, SESSION_STATE, user_time, NULL, NULL, NULL);
 }
 
 static void
@@ -349,9 +347,6 @@ session_command_dispatch (EphySession *session)
 	{
 		case EPHY_SESSION_CMD_RESUME_SESSION:
 			session_command_autoresume (session, cmd->user_time);
-			break;
-		case EPHY_SESSION_CMD_LOAD_SESSION:
-			ephy_session_load (session, cmd->arg, cmd->user_time, NULL, NULL, NULL);
 			break;
 		case EPHY_SESSION_CMD_OPEN_URIS:
 			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
@@ -1374,9 +1369,7 @@ ephy_session_queue_command (EphySession *session,
 		{
 			cmd = (SessionCommand *) element->data;
 
-			if ((command == EPHY_SESSION_CMD_LOAD_SESSION &&
-			     strcmp (cmd->arg, arg) == 0) ||
-			    command == EPHY_SESSION_CMD_RESUME_SESSION)
+			if (command == EPHY_SESSION_CMD_RESUME_SESSION)
 			{
 				cmd->user_time = user_time;
 				g_queue_remove (priv->queue, cmd);
