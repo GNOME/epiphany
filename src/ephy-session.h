@@ -46,9 +46,7 @@ typedef struct _EphySessionClass	EphySessionClass;
 typedef enum
 {
 	EPHY_SESSION_CMD_OPEN_URIS,
-	EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW_RESTORE,
 	EPHY_SESSION_CMD_LAST
-	
 } EphySessionCommand;
 
 struct _EphySession
