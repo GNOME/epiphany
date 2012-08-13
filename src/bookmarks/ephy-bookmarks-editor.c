@@ -291,11 +291,7 @@ get_target_window (EphyBookmarksEditor *editor)
 	}
 	else
 	{
-		EphySession *session;
-
-		session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-
-		return GTK_WIDGET (ephy_session_get_active_window (session));
+                return GTK_WIDGET (ephy_shell_get_active_window (ephy_shell));
 	}
 }
 

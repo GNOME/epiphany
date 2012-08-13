@@ -56,7 +56,7 @@ test_ephy_session_load ()
     ret = ephy_session_load_from_string (session, session_data, -1, 0);
     g_assert (ret);
 
-    l = ephy_session_get_windows (session);
+    l = ephy_shell_get_windows (ephy_shell);
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -98,7 +98,7 @@ test_ephy_session_load_empty_session ()
     while (g_main_context_pending (NULL))
       g_main_context_iteration (NULL, FALSE);
 
-    l = ephy_session_get_windows (session);
+    l = ephy_shell_get_windows (ephy_shell);
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -141,7 +141,7 @@ test_ephy_session_load_many_windows ()
     ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
     g_assert (ret);
 
-    l = ephy_session_get_windows (session);
+    l = ephy_shell_get_windows (ephy_shell);
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 

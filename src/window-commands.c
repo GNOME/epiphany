@@ -722,7 +722,7 @@ void
 window_cmd_file_quit (GtkAction *action,
 		      EphyWindow *window)
 {
-	if (ephy_session_close_all_windows (EPHY_SESSION (ephy_shell_get_session (ephy_shell))))
+	if (ephy_shell_close_all_windows (ephy_shell))
 		g_application_quit (g_application_get_default ());
 }
 

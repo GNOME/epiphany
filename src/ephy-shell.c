@@ -54,6 +54,7 @@
 
 struct _EphyShellPrivate {
   EphySession *session;
+  GList *windows;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
   EphyExtensionsManager *extensions_manager;
@@ -206,11 +207,9 @@ show_about (GSimpleAction *action,
             GVariant *parameter,
             gpointer user_data)
 {
-  EphySession *session;
   EphyWindow *window;
 
-  session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-  window = ephy_session_get_active_window (session);
+  window = ephy_shell_get_active_window (ephy_shell);
 
   window_cmd_help_about (NULL, GTK_WIDGET (window));
 }
@@ -428,6 +427,50 @@ ephy_shell_before_emit (GApplication *application,
                                                               platform_data);
 }
 
+static gboolean
+window_focus_in_event_cb (EphyWindow *window,
+                          GdkEventFocus *event,
+                          EphyShell *shell)
+{
+  LOG ("focus-in-event for window %p", window);
+
+  g_return_val_if_fail (g_list_find (shell->priv->windows, window) != NULL, FALSE);
+
+  /* move the active window to the front of the list */
+  shell->priv->windows = g_list_remove (shell->priv->windows, window);
+  shell->priv->windows = g_list_prepend (shell->priv->windows, window);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+ephy_shell_window_added (GtkApplication *application,
+                         GtkWindow *window)
+{
+  EphyShell *shell = EPHY_SHELL (application);
+
+  if (EPHY_IS_WINDOW (window)) {
+    shell->priv->windows = g_list_append (shell->priv->windows, window);
+    g_signal_connect (window, "focus-in-event",
+                      G_CALLBACK (window_focus_in_event_cb),
+                      shell);
+  }
+
+  GTK_APPLICATION_CLASS (ephy_shell_parent_class)->window_added (application, window);
+}
+
+static void
+ephy_shell_window_removed (GtkApplication *application,
+                           GtkWindow *window)
+{
+  EphyShell *shell = EPHY_SHELL (application);
+
+  if (EPHY_IS_WINDOW (window))
+    shell->priv->windows = g_list_remove (shell->priv->windows, window);
+
+  GTK_APPLICATION_CLASS (ephy_shell_parent_class)->window_removed (application, window);
+}
+
 static void
 ephy_shell_constructed (GObject *object)
 {
@@ -448,6 +491,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
+  GtkApplicationClass *gtk_application_class = GTK_APPLICATION_CLASS (klass);
   EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
 
   object_class->dispose = ephy_shell_dispose;
@@ -458,6 +502,9 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
+
+  gtk_application_class->window_added = ephy_shell_window_added;
+  gtk_application_class->window_removed = ephy_shell_window_removed;
 
   embed_shell_class->get_embed_single = impl_get_embed_single;
 
@@ -529,7 +576,6 @@ download_started_cb (WebKitWebContext *web_context,
                      EphyShell *shell)
 {
   EphyDownload *ed;
-  EphySession *session;
   EphyWindow *window;
 
   /* Is download locked down? */
@@ -539,8 +585,7 @@ download_started_cb (WebKitWebContext *web_context,
     return;
   }
 
-  session = EPHY_SESSION (ephy_shell_get_session (shell));
-  window = ephy_session_get_active_window (session);
+  window = ephy_shell_get_active_window (shell);
 
   ed = ephy_download_new_for_download (download);
   ephy_download_set_window (ed, GTK_WIDGET (window));
@@ -585,6 +630,12 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&priv->prefs_dialog);
   g_clear_object (&priv->bookmarks);
   g_clear_object (&priv->network_monitor);
+
+  if (priv->windows != NULL) {
+    LOG ("Free browser window list");
+    g_list_free (priv->windows);
+    priv->windows = NULL;
+  }
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
@@ -810,16 +861,8 @@ ephy_shell_get_session (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (shell->priv->session == NULL) {
-    EphyExtensionsManager *manager;
-
+  if (shell->priv->session == NULL)
     shell->priv->session = g_object_new (EPHY_TYPE_SESSION, NULL);
-
-    manager = EPHY_EXTENSIONS_MANAGER
-      (ephy_shell_get_extensions_manager (shell));
-    ephy_extensions_manager_register (manager,
-                                      G_OBJECT (shell->priv->session));
-  }
 
   return G_OBJECT (shell->priv->session);
 }
@@ -1012,4 +1055,62 @@ ephy_shell_set_startup_context (EphyShell *shell,
     ephy_shell_free_startup_context (shell);
 
   shell->priv->startup_context = ctx;
+}
+
+GList *
+ephy_shell_get_windows (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  return g_list_copy (shell->priv->windows);
+}
+
+guint
+ephy_shell_get_n_windows (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), 0);
+
+  return g_list_length (shell->priv->windows);
+}
+
+EphyWindow *
+ephy_shell_get_active_window (EphyShell *shell)
+{
+  GList *l;
+
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  for (l = shell->priv->windows; l != NULL; l = l->next) {
+    EphyEmbedContainer *window = EPHY_EMBED_CONTAINER (l->data);
+
+    if (!ephy_embed_container_get_is_popup (window))
+      return EPHY_WINDOW (window);
+  }
+
+  return NULL;
+}
+
+gboolean
+ephy_shell_close_all_windows (EphyShell *shell)
+{
+  GList *windows;
+  gboolean retval = TRUE;
+
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), FALSE);
+
+  ephy_session_close (EPHY_SESSION (ephy_shell_get_session (shell)));
+
+  windows = shell->priv->windows;
+  while (windows) {
+    EphyWindow *window = EPHY_WINDOW (windows->data);
+
+    windows = windows->next;
+
+    if (ephy_window_close (window))
+      gtk_widget_destroy (GTK_WIDGET (window));
+    else
+      retval = FALSE;
+  }
+
+  return retval;
 }

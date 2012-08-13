@@ -4183,10 +4183,8 @@ ephy_window_get_location_controller (EphyWindow *window)
 gboolean
 ephy_window_close (EphyWindow *window)
 {
-	EphySession *session;
 	EphyEmbed *modified_embed = NULL;
-	GList *tabs, *l, *windows;
-	guint number_windows;
+	GList *tabs, *l;
 	gboolean modified = FALSE;
 
 	/* We ignore the delete_event if the disable_quit lockdown has been set
@@ -4231,14 +4229,9 @@ ephy_window_close (EphyWindow *window)
 	}
 
 	/* If this is the last window, save its state in the session. */
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	windows = ephy_session_get_windows (session);
-	number_windows = g_list_length (windows);
-	g_list_free (windows);
-
-	if (number_windows == 1)
+	if (ephy_shell_get_n_windows (ephy_shell) == 1)
 	{
-		ephy_session_close (session);
+		ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell)));
 	}
 
 	/* See bug #114689 */

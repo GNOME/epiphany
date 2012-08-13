@@ -56,7 +56,6 @@ typedef struct
 
 struct _EphySessionPrivate
 {
-	GList *windows;
 	GtkWidget *resume_window;
 
 	GQueue *queue;
@@ -67,17 +66,7 @@ struct _EphySessionPrivate
 
 #define SESSION_STATE		"type:session_state"
 
-static void ephy_session_iface_init	(EphyExtensionIface *iface);
-
-enum
-{
-	PROP_0,
-	PROP_ACTIVE_WINDOW
-};
-
-G_DEFINE_TYPE_WITH_CODE (EphySession, ephy_session, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
-						ephy_session_iface_init))
+G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
 /* Helper functions */
 
@@ -190,25 +179,6 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_STATE);
 }
 
-static gboolean
-window_focus_in_event_cb (EphyWindow *window,
-			  GdkEventFocus *event,
-			  EphySession *session)
-{
-	LOG ("focus-in-event for window %p", window);
-
-	g_return_val_if_fail (g_list_find (session->priv->windows, window) != NULL, FALSE);
-
-	/* move the active window to the front of the list */
-	session->priv->windows = g_list_remove (session->priv->windows, window);
-	session->priv->windows = g_list_prepend (session->priv->windows, window);
-
-	g_object_notify (G_OBJECT (session), "active-window");
-
-	/* propagate event */
-	return FALSE;
-}
-
 /* Queue worker */
 
 static void
@@ -245,6 +215,7 @@ session_command_autoresume (EphySession *session,
 	char *saved_session_file_path;
 	gboolean crashed_session;
 	EphyPrefsRestoreSessionPolicy policy;
+	EphyShell *shell;
 
 	LOG ("ephy_session_autoresume");
 
@@ -258,9 +229,11 @@ session_command_autoresume (EphySession *session,
 	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
 				      EPHY_PREFS_RESTORE_SESSION_POLICY);
 
+	shell = ephy_shell_get_default ();
+
 	if (crashed_session == FALSE ||
 	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER ||
-	    priv->windows != NULL)
+	    ephy_shell_get_n_windows (shell) > 0)
 	{
 		/* If we are auto-resuming, and we never want to
 		 * restore the session, clobber the session state
@@ -319,7 +292,7 @@ session_command_open_uris (EphySession *session,
 
 	g_object_ref (shell);
 
-	window = ephy_session_get_active_window (session);
+	window = ephy_shell_get_active_window (shell);
 
 	new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 						      EPHY_PREFS_NEW_WINDOWS_IN_TABS);
@@ -403,6 +376,7 @@ session_command_dispatch (EphySession *session)
 {
 	EphySessionPrivate *priv = session->priv;
 	SessionCommand *cmd;
+	EphyShell *shell = ephy_shell_get_default ();
 	gboolean run_again = TRUE;
 
 	cmd = g_queue_pop_head (priv->queue);
@@ -426,9 +400,9 @@ session_command_dispatch (EphySession *session)
 			break;
 		case EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW:
 			/* FIXME: maybe just check for normal windows? */
-			if (priv->windows == NULL)
+			if (ephy_shell_get_n_windows (shell) == 0)
 			{
-				ephy_shell_new_tab_full (ephy_shell_get_default (),
+				ephy_shell_new_tab_full (shell,
 							 NULL /* window */, NULL /* tab */,
 							 NULL /* NetworkRequest */,
 							 EPHY_NEW_TAB_IN_NEW_WINDOW |
@@ -493,24 +467,22 @@ session_command_queue_clear (EphySession *session)
 	}
 }
 
-/* EphyExtensionIface implementation */
-
 static void
-impl_attach_window (EphyExtension *extension,
-		    EphyWindow *window)
+window_added_cb (GtkApplication *application,
+		 GtkWindow *window,
+		 EphySession *session)
 {
-	EphySession *session = EPHY_SESSION (extension);
 	GtkWidget *notebook;
+	EphyWindow *ephy_window;
 
-	LOG ("impl_attach_window");
-
-	session->priv->windows = g_list_append (session->priv->windows, window);
 	ephy_session_save (session, SESSION_STATE);
 
-	g_signal_connect (window, "focus-in-event",
-			  G_CALLBACK (window_focus_in_event_cb), session);
+	if (!EPHY_IS_WINDOW (window))
+		return;
 
-	notebook = ephy_window_get_notebook (window);
+	ephy_window = EPHY_WINDOW (window);
+
+	notebook = ephy_window_get_notebook (ephy_window);
 	g_signal_connect (notebook, "page-added",
 			  G_CALLBACK (notebook_page_added_cb), session);
 	g_signal_connect (notebook, "page-removed",
@@ -522,7 +494,7 @@ impl_attach_window (EphyExtension *extension,
 	 * place the window on the right workspace
 	 */
 
-	if (gtk_window_get_role (GTK_WINDOW (window)) == NULL)
+	if (gtk_window_get_role (window) == NULL)
 	{
 		/* I guess rand() is unique enough, otherwise we could use
 		 * time + pid or something
@@ -530,20 +502,16 @@ impl_attach_window (EphyExtension *extension,
 		char *role;
 
 		role = g_strdup_printf ("epiphany-window-%x", rand());
-		gtk_window_set_role (GTK_WINDOW (window), role);
+		gtk_window_set_role (window, role);
 		g_free (role);
 	}
 }
 
 static void
-impl_detach_window (EphyExtension *extension,
-		    EphyWindow *window)
+window_removed_cb (GtkApplication *application,
+		   GtkWindow *window,
+		   EphySession *session)
 {
-	EphySession *session = EPHY_SESSION (extension);
-
-	LOG ("impl_detach_window");
-
-	session->priv->windows = g_list_remove (session->priv->windows, window);
 	ephy_session_save (session, SESSION_STATE);
 
 	/* NOTE: since the window will be destroyed anyway, we don't need to
@@ -557,12 +525,19 @@ static void
 ephy_session_init (EphySession *session)
 {
 	EphySessionPrivate *priv;
+	EphyShell *shell;
 
 	LOG ("EphySession initialising");
 
 	priv = session->priv = EPHY_SESSION_GET_PRIVATE (session);
 
 	priv->queue = g_queue_new ();
+
+	shell = ephy_shell_get_default ();
+	g_signal_connect (shell, "window-added",
+			  G_CALLBACK (window_added_cb), session);
+	g_signal_connect (shell, "window-removed",
+			  G_CALLBACK (window_removed_cb), session);
 }
 
 static void
@@ -578,71 +553,11 @@ ephy_session_dispose (GObject *object)
 }
 
 static void
-ephy_session_finalize (GObject *object)
-{
-	EphySession *session = EPHY_SESSION (object);
-
-	LOG ("EphySession finalising");
-
-	/* FIXME: those should be NULL already!? */
-	g_list_free (session->priv->windows);
-
-	G_OBJECT_CLASS (ephy_session_parent_class)->finalize (object);
-}
-
-static void
-ephy_session_iface_init (EphyExtensionIface *iface)
-{
-	iface->attach_window = impl_attach_window;
-	iface->detach_window = impl_detach_window;
-}
-
-static void
-ephy_session_set_property (GObject *object,
-			   guint prop_id,
-			   const GValue *value,
-			   GParamSpec *pspec)
-{
-	/* no writeable properties */
-	g_return_if_reached ();
-}
-
-static void
-ephy_session_get_property (GObject *object,
-			   guint prop_id,
-			   GValue *value,
-			   GParamSpec *pspec)
-{
-	EphySession *session = EPHY_SESSION (object);
-
-	switch (prop_id)
-	{
-		case PROP_ACTIVE_WINDOW:
-			g_value_set_object (value, ephy_session_get_active_window (session));
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-	}
-}
-
-static void
 ephy_session_class_init (EphySessionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->dispose = ephy_session_dispose;
-	object_class->finalize = ephy_session_finalize;
-	object_class->get_property = ephy_session_get_property;
-	object_class->set_property = ephy_session_set_property;
-
-	g_object_class_install_property
-		(object_class,
-		 PROP_ACTIVE_WINDOW,
-		 g_param_spec_object ("active-window",
-				      "Active Window",
-				      "The active window",
-				      EPHY_TYPE_WINDOW,
-				      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
@@ -803,8 +718,10 @@ ephy_session_save (EphySession *session,
 		   const char *filename)
 {
 	EphySessionPrivate *priv;
+	EphyShell *shell;
 	xmlTextWriterPtr writer;
 	GList *w;
+	GList *windows;
 	GFile *save_to_file, *tmp_file;
 	char *tmp_file_path, *save_to_file_path;
 	int ret;
@@ -820,7 +737,9 @@ ephy_session_save (EphySession *session,
 
 	LOG ("ephy_sesion_save %s", filename);
 
-	if (priv->windows == NULL)
+	shell = ephy_shell_get_default ();
+
+	if (ephy_shell_get_n_windows (shell) == 0)
 	{
 		session_delete (session, filename);
 		return TRUE;
@@ -856,11 +775,13 @@ ephy_session_save (EphySession *session,
 	ret = xmlTextWriterStartElement (writer, (const xmlChar *) "session");
 	if (ret < 0) goto out;
 
-	/* iterate through all the windows */	
-	for (w = session->priv->windows; w != NULL && ret >= 0; w = w->next)
+	/* iterate through all the windows */
+	windows = ephy_shell_get_windows (shell);
+	for (w = windows; w != NULL && ret >= 0; w = w->next)
 	{
 		ret = write_ephy_window (writer, EPHY_WINDOW (w->data));
 	}
+	g_list_free (windows);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterEndElement (writer); /* session */
@@ -1037,12 +958,14 @@ ephy_session_load_from_string (EphySession *session,
 			       guint32 user_time)
 {
 	EphySessionPrivate *priv;
+	EphyShell *shell;
 	xmlDocPtr doc;
 	xmlNodePtr child;
 	EphyWindow *window;
 	GtkWidget *widget = NULL;
 	gboolean first_window_created = FALSE;
-	
+	gboolean retval;
+
 	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
 	g_return_val_if_fail (session_data, FALSE);
 
@@ -1066,7 +989,7 @@ ephy_session_load_from_string (EphySession *session,
 		return FALSE;
 	}
 
-	g_object_ref (ephy_shell_get_default ());
+	shell = g_object_ref (ephy_shell_get_default ());
 
 	priv->dont_save = TRUE;
 
@@ -1133,9 +1056,11 @@ ephy_session_load_from_string (EphySession *session,
 
 	ephy_session_save (session, SESSION_STATE);
 
-	g_object_unref (ephy_shell_get_default ());
+	retval = ephy_shell_get_n_windows (shell) > 0;
 
-	return priv->windows != NULL;
+	g_object_unref (shell);
+
+	return retval;
 }
 
 /**
@@ -1184,92 +1109,6 @@ ephy_session_load (EphySession *session,
 	g_free (save_to_path);
 
 	return ret_value;
-}
-
-/**
- * ephy_session_get_windows:
- * @session: the #EphySession
- *
- * Returns: (element-type EphyWindow) (transfer container): the list of
- *          open #EphyWindow:s.
- **/
-GList *
-ephy_session_get_windows (EphySession *session)
-{
-	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
-
-	return g_list_copy (session->priv->windows);
-}
-
-/**
- * ephy_session_get_active_window:
- * @session: a #EphySession
- *
- * Get the current active browser window. Use it when you
- * need to take an action (like opening an url) on
- * a window but you dont have a target window.
- *
- * Return value: (transfer none): the current active non-popup browser
- *               window, or NULL of there is none.
- **/
-EphyWindow *
-ephy_session_get_active_window (EphySession *session)
-{
-	EphyWindow *window = NULL;
-	EphyEmbedContainer *w;
-	GList *l;
-
-	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
-
-	for (l = session->priv->windows; l != NULL; l = l->next)
-	{
-		w = EPHY_EMBED_CONTAINER (l->data);
-
-		if (ephy_embed_container_get_is_popup (w) == FALSE)
-		{
-			window = EPHY_WINDOW (w);
-			break;
-		}
-	}
-
-	return window;
-}
-
-/**
- * ephy_session_close_all_windows:
- * @session: a #EphySession
- *
- * Try to close all browser windows. A window might refuse to
- * close if there are ongoing download operations or unsubmitted
- * modifed forms.
- *
- * Returns: %TRUE if all windows were closed, or %FALSE otherwise
- **/
-gboolean
-ephy_session_close_all_windows (EphySession *session)
-{
-	GList *l;
-	gboolean retval = TRUE;
-
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-
-	ephy_session_close (session);
-
-	for (l = session->priv->windows; l != NULL; l = l->next)
-	{
-		EphyWindow *window = EPHY_WINDOW (l->data);
-
-		if (ephy_window_close (window))
-		{
-			gtk_widget_destroy (GTK_WIDGET (window));
-		}
-		else
-		{
-			retval = FALSE;
-		}
-	}
-
-	return retval;
 }
 
 /**
