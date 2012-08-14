@@ -27,6 +27,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
 #include "ephy-file-helpers.h"
+#include "ephy-history-service.h"
 #include "ephy-private.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
@@ -385,6 +386,51 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list ()
     g_object_unref (g_object_ref_sink (view));
 }
 
+static gboolean
+visit_url_cb (EphyHistoryService *service,
+              const char *url,
+              EphyHistoryPageVisit visit_type,
+              gpointer user_data)
+{
+    /* We are only loading an error page, this code should never be
+     * reached. */
+    g_assert_not_reached ();
+
+    return FALSE;
+}
+
+static void
+test_ephy_web_view_error_pages_not_stored_in_history ()
+{
+    GMainLoop *loop;
+    EphyWebView *view;
+    const char *bad_url;
+    EphyHistoryService *history_service;
+
+    view = EPHY_WEB_VIEW (ephy_web_view_new ());
+    loop = g_main_loop_new (NULL, FALSE);
+    bad_url = "http://localhost:2984375932/";
+
+    history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+    g_assert (history_service);
+    g_signal_connect (history_service, "visit-url",
+                      G_CALLBACK (visit_url_cb), NULL);
+    
+    ephy_web_view_load_url (view, bad_url);
+
+#ifdef HAVE_WEBKIT2
+    g_signal_connect (view, "load-changed",
+                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+#else
+    g_signal_connect (view, "notify::load-status",
+                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+#endif
+    g_main_loop_run (loop);
+    g_main_loop_unref (loop);
+
+    g_object_unref (g_object_ref_sink (view));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -420,6 +466,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/embed/ephy-web-view/provisional_load_failure_updates_back_forward_list",
                    test_ephy_web_view_provisional_load_failure_updates_back_forward_list);
+
+  g_test_add_func ("/embed/ephy-web-view/error-pages-not-stored-in-history",
+                   test_ephy_web_view_error_pages_not_stored_in_history);
 
   ret = g_test_run ();
 

@@ -80,6 +80,7 @@ struct _EphyWebViewPrivate {
   guint is_loading : 1;
 #endif
   guint load_failed : 1;
+  guint history_frozen : 1;
 
   char *address;
   char *typed_address;
@@ -2073,6 +2074,24 @@ ephy_web_view_location_changed (EphyWebView *view,
   g_object_thaw_notify (object);
 }
 
+static void
+ephy_web_view_freeze_history (EphyWebView *view)
+{
+  view->priv->history_frozen = TRUE;
+}
+
+static void
+ephy_web_view_thaw_history (EphyWebView *view)
+{
+  view->priv->history_frozen = FALSE;
+}
+
+static gboolean
+ephy_web_view_is_history_frozen (EphyWebView *view)
+{
+  return view->priv->history_frozen;
+}
+
 #ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *web_view,
@@ -2287,7 +2306,8 @@ load_status_cb (WebKitWebView *web_view,
     restore_zoom_level (view, uri);
 
     /* History. */
-    if (!ephy_web_view_is_loading_homepage (view)) {
+    if (!ephy_web_view_is_loading_homepage (view) &&
+        !ephy_web_view_is_history_frozen (view)) {
       char *history_uri = NULL;
 
       /* TODO: move the normalization down to the history service? */
@@ -2302,6 +2322,8 @@ load_status_cb (WebKitWebView *web_view,
 
       g_free (history_uri);
     }
+
+    ephy_web_view_thaw_history (view);
     break;
   }
   case WEBKIT_LOAD_FINISHED: {
@@ -2501,6 +2523,14 @@ ephy_web_view_load_error_page (EphyWebView *view,
 #ifdef HAVE_WEBKIT2
   webkit_web_view_replace_content (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
 #else
+  /* Make our history backend ignore the next page load, since it will be an error page.
+   *
+   * FIXME: at this point error pages in WebKit2 do not trigger load
+   * events, so this is only needed for WebKit1. This might (probably
+   * will?) change soon, so keep an eye on WebKit2 and change this
+   * accordingly.
+   */
+  ephy_web_view_freeze_history (view);
   webkit_web_frame_load_alternate_string (webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view)),
                                           html->str, uri, uri);
 #endif
