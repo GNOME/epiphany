@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
- *  Copyright © 2009 Igalia S.L.
+ *  Copyright © 2009-2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,7 @@
  */
 
 #include "config.h"
-
 #include "ephy-embed-event.h"
-#include "ephy-embed-type-builtins.h"
-
-#include <glib.h>
-#include <gtk/gtk.h>
 
 #define EPHY_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventPrivate))
 
@@ -44,11 +39,8 @@ static void
 dispose (GObject *object)
 {
   EphyEmbedEventPrivate *priv = EPHY_EMBED_EVENT (object)->priv;
-  
-  if (priv->hit_test_result) {
-    g_object_unref (priv->hit_test_result);
-    priv->hit_test_result = NULL;
-  }
+
+  g_clear_object (&priv->hit_test_result);
 
   G_OBJECT_CLASS (ephy_embed_event_parent_class)->dispose (object);
 }
