@@ -2853,20 +2853,35 @@ ephy_web_view_new (void)
 static gboolean
 is_public_domain (EphyWebView *view, const char *url)
 {
+  SoupURI *soup_uri;
+  gboolean retval = FALSE;
+  const char *host = NULL;
   EphyWebViewPrivate *priv = view->priv;
 
-  if (g_regex_match (priv->domain_regex, url, 0, NULL)) {
-    if (g_str_equal (url, "localhost"))
-      return TRUE;
+  soup_uri = soup_uri_new (url);
+  if (!soup_uri) {
+    char *effective_url = g_strconcat ("http://", url, NULL);
+    soup_uri = soup_uri_new (effective_url);
+    g_free (effective_url);
+  }
+  g_return_val_if_fail (soup_uri, FALSE);
 
-    url = g_strrstr (url, ".");
-    if (!url || *url == '\0')
-      return FALSE;
+  host = soup_uri->host;
 
-    return soup_tld_domain_is_public_suffix (url);
+  if (g_regex_match (priv->domain_regex, host, 0, NULL)) {
+    if (g_str_equal (host, "localhost"))
+      retval = TRUE;
+    else {
+      host = g_strrstr (host, ".");
+
+      if (host && *host != '\0')
+        retval = soup_tld_domain_is_public_suffix (host);
+    }
   }
 
-  return FALSE;
+  soup_uri_free (soup_uri);
+
+  return retval;
 }
 
 /**

@@ -283,6 +283,7 @@ static struct {
 } normalize_or_autosearch[] = {
   { "google.com", "http://google.com" },
   { "http://google.com", "http://google.com" },
+  { "http://google.com/this/is/a/path", "http://google.com/this/is/a/path" },
   { "search", "http://www.google.com/search?q=search&ie=UTF-8&oe=UTF-8" },
   { "search.me", "http://search.me" },
   { "lala.lala", "http://www.google.com/search?q=lala%2Elala&ie=UTF-8&oe=UTF-8" },
