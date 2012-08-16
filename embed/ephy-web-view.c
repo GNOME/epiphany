@@ -3749,7 +3749,56 @@ ephy_web_view_get_title_composite (EphyWebView *view)
 }
 
 #ifdef HAVE_WEBKIT2
-/* TODO: webkit_web_view_save() */
+static void
+web_resource_get_data_cb (WebKitWebResource *resource,
+                          GAsyncResult *result,
+                          GOutputStream *output_stream)
+{
+  guchar *data;
+  gsize data_length;
+  GInputStream *input_stream;
+  GError *error = NULL;
+
+  data = webkit_web_resource_get_data_finish (resource, result, &data_length, &error);
+  if (!data) {
+    g_printerr ("Failed to save page: %s", error->message);
+    g_error_free (error);
+    g_object_unref (output_stream);
+
+    return;
+  }
+
+  input_stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+  g_output_stream_splice_async (output_stream, input_stream,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL, NULL, NULL);
+  g_object_unref (input_stream);
+  g_object_unref (output_stream);
+}
+
+static void
+ephy_web_view_save_main_resource_cb (GFile *file,
+                                     GAsyncResult *result,
+                                     WebKitWebView *view)
+{
+  GFileOutputStream *output_stream;
+  WebKitWebResource *resource;
+  GError *error = NULL;
+
+  output_stream = g_file_replace_finish (file, result, &error);
+  if (!output_stream) {
+    g_printerr ("Failed to save page: %s", error->message);
+    g_error_free (error);
+
+    return;
+  }
+
+  resource = webkit_web_view_get_main_resource (view);
+  webkit_web_resource_get_data (resource, NULL,
+                                (GAsyncReadyCallback)web_resource_get_data_cb,
+                                output_stream);
+}
 #else
 static void
 ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri);
@@ -3972,6 +4021,7 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
   ephy_web_view_save_sub_resource_start (subresources, destination_uri);
 }
 #endif
+
 /**
  * ephy_web_view_save:
  * @view: an #EphyWebView
@@ -3982,15 +4032,28 @@ ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *sub
 void
 ephy_web_view_save (EphyWebView *view, const char *uri)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: webkit_web_view_save() */
-#else
+  GFile *file;
+#ifndef HAVE_WEBKIT2
   WebKitWebFrame *frame;
   WebKitWebDataSource *data_source;
   GList *subresources;
   const GString *data;
-  GFile *file;
+#endif
 
+  file = g_file_new_for_uri (uri);
+
+#ifdef HAVE_WEBKIT2
+  if (g_str_has_suffix (uri, ".mhtml"))
+    webkit_web_view_save_to_file (WEBKIT_WEB_VIEW (view), file, WEBKIT_SAVE_MODE_MHTML,
+                                  NULL, NULL, NULL);
+  else
+    g_file_replace_async (file, NULL, FALSE,
+                          G_FILE_CREATE_REPLACE_DESTINATION | G_FILE_CREATE_PRIVATE,
+                          G_PRIORITY_DEFAULT, NULL,
+                          (GAsyncReadyCallback)ephy_web_view_save_main_resource_cb,
+                          view);
+  g_object_unref (file);
+#else
   /* Save main resource */
   frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
   data_source = webkit_web_frame_get_data_source (frame);

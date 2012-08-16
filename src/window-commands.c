@@ -302,8 +302,12 @@ get_suggested_filename (EphyWebView *view)
 
 	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
 	{
-		/* Web Title will be used as suggested filename*/
+		/* Web Title will be used as suggested filename */
+#ifdef HAVE_WEBKIT2
+		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".mhtml", NULL);
+#else
 		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".html", NULL);
+#endif
 	}
 	else
 	{
