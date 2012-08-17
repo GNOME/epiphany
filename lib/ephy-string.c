@@ -455,6 +455,15 @@ ephy_string_get_host_name (const char *url)
 	if (url == NULL || g_str_has_prefix (url, "file://")) return NULL;
 
 	uri = soup_uri_new (url);
+	/* If uri is NULL it's very possible that we just got
+	 * something without a scheme, let's try to prepend
+	 * 'http://' */
+	if (uri == NULL)
+	{
+	    char *effective_url = g_strconcat ("http://", url, NULL);
+	    uri = soup_uri_new (effective_url);
+	    g_free (effective_url);
+	}
 	if (uri == NULL) return NULL;
 
 	ret = g_strdup (uri->host);
