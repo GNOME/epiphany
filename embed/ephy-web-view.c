@@ -2328,6 +2328,8 @@ load_status_cb (WebKitWebView *web_view,
   }
   case WEBKIT_LOAD_FINISHED: {
     SoupURI *uri;
+    EphyOverviewStore *store;
+    GtkTreeIter iter;
 
     priv->loading_homepage = FALSE;
 
@@ -2376,6 +2378,13 @@ load_status_cb (WebKitWebView *web_view,
 
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
+
+    store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
+    if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
+        ephy_overview_store_needs_snapshot (store, &iter))
+      ephy_overview_store_set_snapshot (store, &iter,
+                                        webkit_web_view_get_snapshot (web_view));
+
 
     break;
   }
