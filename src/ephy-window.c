@@ -2119,6 +2119,14 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 }
 
 static void
+overview_open_link_cb (EphyOverview *overview,
+		       const char *url,
+		       EphyWindow *window)
+{
+	ephy_link_open (EPHY_LINK (window), url, NULL, 0);
+}
+
+static void
 ephy_window_set_is_popup (EphyWindow *window,
 			  gboolean is_popup)
 {
@@ -2559,6 +2567,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	EphyEmbed *embed;
 	WebKitWebView *web_view;
 	EphyWebView *view;
+	EphyOverview *overview;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
 
@@ -2655,6 +2664,11 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 G_CALLBACK (ephy_window_visibility_cb),
 				 window, 0);
 
+	overview = ephy_embed_get_overview (embed);
+	g_signal_connect_object (overview, "open-link",
+				 G_CALLBACK (overview_open_link_cb),
+				 window, 0);
+
 	g_object_notify (G_OBJECT (window), "active-child");
 }
 
@@ -2664,6 +2678,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	EphyEmbed *embed;
 	WebKitWebView *web_view;
 	EphyWebView *view;
+	EphyOverview *overview;
 	guint sid;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
@@ -2738,6 +2753,11 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      window);
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (ephy_window_visibility_cb),
+					      window);
+
+	overview = ephy_embed_get_overview (embed);
+	g_signal_handlers_disconnect_by_func (overview,
+					      G_CALLBACK (overview_open_link_cb),
 					      window);
 
 	g_signal_handlers_disconnect_by_func
