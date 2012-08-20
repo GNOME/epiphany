@@ -18,11 +18,14 @@
  *
  */
 
-#include "config.h"
-#include "ephy-embed-single.h"
-
+/* These defines need to go at the top because config.h or ephy-embed-single.h
+ * may include soup.
+ */
 #define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
 #define LIBSOUP_USE_UNSTABLE_REQUEST_API
+
+#include "config.h"
+#include "ephy-embed-single.h"
 
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
