@@ -497,7 +497,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   soup_session_feature_add_feature (requester, EPHY_TYPE_REQUEST_ABOUT);
   g_object_unref (requester);
 
-#ifdef SOUP_TYPE_PASSWORD_MANAGER
+#ifdef SOUP_TYPE_PASSWORD_MANAGER_GNOME
   /* Use GNOME keyring to store passwords. Only add the manager if we
      are not using a private session, otherwise we want any new
      password to expire when we exit *and* we don't want to use any
