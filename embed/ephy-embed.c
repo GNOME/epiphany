@@ -79,6 +79,8 @@ struct _EphyEmbedPrivate
   GtkWidget *fullscreen_message_label;
   char *fullscreen_string;
 
+  GtkWidget *overview;
+  guint overview_mode : 1;
   GSList *messages;
   GSList *keys;
 
@@ -94,6 +96,12 @@ struct _EphyEmbedPrivate
 
   gulong status_handler_id;
   gulong progress_update_handler_id;
+};
+
+enum
+{
+  PROP_0,
+  PROP_OVERVIEW_MODE,
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -431,6 +439,44 @@ ephy_embed_finalize (GObject *object)
 }
 
 static void
+ephy_embed_set_property (GObject *object,
+                         guint prop_id,
+                         const GValue *value,
+                         GParamSpec *pspec)
+{
+  EphyEmbed *embed = EPHY_EMBED (object);
+
+  switch (prop_id)
+  {
+  case PROP_OVERVIEW_MODE:
+    ephy_embed_set_overview_mode (embed, g_value_get_boolean (value));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
+  }
+}
+
+static void
+ephy_embed_get_property (GObject *object,
+                         guint prop_id,
+                         GValue *value,
+                         GParamSpec *pspec)
+{
+  EphyEmbed *embed = EPHY_EMBED (object);
+
+  switch (prop_id)
+  {
+  case PROP_OVERVIEW_MODE:
+    g_value_set_boolean (value, ephy_embed_get_overview_mode (embed));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
+  }
+}
+
+static void
 ephy_embed_class_init (EphyEmbedClass *klass)
 {
   GObjectClass *object_class = (GObjectClass *)klass;
@@ -439,7 +485,17 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   object_class->constructed = ephy_embed_constructed;
   object_class->finalize = ephy_embed_finalize;
   object_class->dispose = ephy_embed_dispose;
+  object_class->set_property = ephy_embed_set_property;
+  object_class->get_property = ephy_embed_get_property;
   widget_class->grab_focus = ephy_embed_grab_focus;
+
+  g_object_class_install_property (object_class,
+                                   PROP_OVERVIEW_MODE,
+                                   g_param_spec_boolean ("overview-mode",
+                                                         "Overview mode",
+                                                         "Whether the embed is showing the overview",
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
@@ -919,6 +975,22 @@ ephy_embed_constructed (GObject *object)
                     NULL);
 #endif
 
+  /* The overview */
+  priv->overview = ephy_overview_new ();
+  gtk_box_pack_start (GTK_BOX (embed),
+                      GTK_WIDGET (priv->overview),
+                      TRUE, TRUE, 0);
+  g_object_bind_property (embed, "overview-mode",
+                          priv->overview, "visible",
+                          G_BINDING_SYNC_CREATE
+                          | G_BINDING_BIDIRECTIONAL);
+
+  g_object_bind_property (embed, "overview-mode",
+                          paned, "visible",
+                          G_BINDING_SYNC_CREATE
+                          | G_BINDING_INVERT_BOOLEAN
+                          | G_BINDING_BIDIRECTIONAL);
+
   ephy_embed_prefs_add_embed (embed);
 }
 
@@ -1011,4 +1083,45 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
 
   gtk_container_remove (GTK_CONTAINER (embed->priv->top_widgets_vbox),
                         GTK_WIDGET (widget));
+}
+
+void
+ephy_embed_set_overview_mode (EphyEmbed *embed, gboolean overview_mode)
+{
+  EphyEmbedPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+
+  priv = embed->priv;
+
+  if (priv->overview_mode == overview_mode)
+    return;
+
+  priv->overview_mode = overview_mode;
+
+  g_object_notify (G_OBJECT (embed), "overview-mode");
+}
+
+gboolean
+ephy_embed_get_overview_mode (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+  return embed->priv->overview_mode;
+}
+
+/**
+ * ephy_embed_get_overview:
+ * @embed: a #EphyEmbed
+ *
+ * Gets the #EphyOverview in this @embed
+ *
+ * Returns: (transfer none): the overview widget
+ **/
+EphyOverview *
+ephy_embed_get_overview (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+  return EPHY_OVERVIEW (embed->priv->overview);
 }
