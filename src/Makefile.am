@@ -146,6 +146,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
+	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
@@ -246,6 +247,7 @@ EPHY_GIR_H_FILES = \
 	$(top_srcdir)/lib/ephy-node.h \
 	$(top_srcdir)/lib/ephy-state.h \
 	$(top_srcdir)/lib/widgets/ephy-download-widget.h \
+	$(top_srcdir)/lib/widgets/ephy-frecent-store.h \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
 	$(top_srcdir)/src/ephy-extension.h \
@@ -274,6 +276,7 @@ EPHY_GIR_C_FILES = \
 	$(top_srcdir)/lib/ephy-node.c \
 	$(top_srcdir)/lib/ephy-state.c \
 	$(top_srcdir)/lib/widgets/ephy-download-widget.c \
+	$(top_srcdir)/lib/widgets/ephy-frecent-store.c \
 	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
 	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
 	$(top_srcdir)/src/ephy-extension.c \
@@ -308,6 +311,7 @@ Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILE
 		-I$(top_srcdir)/embed \
 		-I$(top_srcdir)/lib \
 		-I$(top_srcdir)/lib/egg \
+		-I$(top_srcdir)/lib/widgets \
 		-I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
 		$(EPHY_GIR_H_FILES) \

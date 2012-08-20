@@ -57,6 +57,7 @@ struct _EphyEmbedShellPrivate
 	GtkPageSetup *page_setup;
 	GtkPrintSettings *print_settings;
 	EphyEmbedShellMode mode;
+	EphyFrecentStore *frecent_store;
 	guint single_initialised : 1;
 };
 
@@ -110,6 +111,9 @@ ephy_embed_shell_dispose (GObject *object)
 		g_object_unref (priv->print_settings);
 		priv->print_settings = NULL;
 	}
+
+	if (priv->frecent_store != NULL)
+		g_clear_object (&priv->frecent_store);
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -171,6 +175,33 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 	}
 
 	return G_OBJECT (shell->priv->global_history_service);
+}
+
+/**
+ * ephy_embed_shell_get_frecent_store:
+ * @shell: a #EphyEmbedShell
+ *
+ * Gets the #EphyFrecentStore in the shell. This can be used
+ * by EphyOverview implementors.
+ *
+ * Returns: (transfer none): a #EphyFrecentStore
+ **/
+EphyFrecentStore *
+ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	if (shell->priv->frecent_store == NULL)
+	{
+		shell->priv->frecent_store = ephy_frecent_store_new ();
+		g_object_set (shell->priv->frecent_store,
+			      "history-service",
+			      ephy_embed_shell_get_global_history_service (shell),
+			      "history-length", 10,
+			      NULL);
+	}
+
+	return shell->priv->frecent_store;
 }
 
 static GObject *

@@ -31,6 +31,7 @@
 #include <gtk/gtk.h>
 
 #include "ephy-download.h"
+#include "ephy-frecent-store.h"
 
 G_BEGIN_DECLS
 
@@ -81,6 +82,8 @@ GType		   ephy_embed_shell_get_type		(void);
 EphyEmbedShell	  *ephy_embed_shell_get_default		(void);
 
 GObject		  *ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell);
+
+EphyFrecentStore  *ephy_embed_shell_get_frecent_store   (EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
