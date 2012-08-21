@@ -436,7 +436,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   webkit_web_context_register_uri_scheme (web_context,
                                           EPHY_ABOUT_SCHEME,
                                           about_request_cb,
-                                          NULL);
+                                          NULL, NULL);
 #else
   SoupSession *session;
   SoupCookieJar *jar;
