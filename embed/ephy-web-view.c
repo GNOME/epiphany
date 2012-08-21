@@ -2154,7 +2154,8 @@ load_changed_cb (WebKitWebView *web_view,
     restore_zoom_level (view, uri);
 
     /* History. */
-    if (!ephy_web_view_is_loading_homepage (view)) {
+    if (!ephy_web_view_is_loading_homepage (view) &&
+        !ephy_web_view_is_history_frozen (view)) {
       char *history_uri = NULL;
 
       /* TODO: move the normalization down to the history service? */
@@ -2169,6 +2170,9 @@ load_changed_cb (WebKitWebView *web_view,
 
       g_free (history_uri);
     }
+
+    ephy_web_view_thaw_history (view);
+
     break;
   }
   case WEBKIT_LOAD_FINISHED: {
@@ -2521,17 +2525,11 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (button_label);
   g_free (image_data);
 
-#ifdef HAVE_WEBKIT2
-  webkit_web_view_replace_content (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
-#else
-  /* Make our history backend ignore the next page load, since it will be an error page.
-   *
-   * FIXME: at this point error pages in WebKit2 do not trigger load
-   * events, so this is only needed for WebKit1. This might (probably
-   * will?) change soon, so keep an eye on WebKit2 and change this
-   * accordingly.
-   */
+  /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
+#ifdef HAVE_WEBKIT2
+  webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
+#else
   webkit_web_frame_load_alternate_string (webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view)),
                                           html->str, uri, uri);
 #endif
