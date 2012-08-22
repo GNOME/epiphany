@@ -31,6 +31,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-print-utils.h"
+#include "ephy-snapshot-service.h"
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -177,6 +178,29 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->global_history_service);
 }
 
+static GdkPixbuf *
+ephy_embed_shell_get_icon (const char *icon_name)
+{
+  GError *error = NULL;
+  GtkIconTheme *icon_theme;
+  GdkPixbuf *pixbuf;
+
+  icon_theme = gtk_icon_theme_get_default ();
+
+  pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                     icon_name,
+                                     EPHY_THUMBNAIL_WIDTH,
+                                     0,
+                                     &error);
+
+  if (!pixbuf) {
+    g_warning ("Couldn't load icon: %s", error->message);
+    g_error_free (error);
+  }
+
+  return pixbuf;
+}
+
 /**
  * ephy_embed_shell_get_frecent_store:
  * @shell: a #EphyEmbedShell
@@ -189,16 +213,21 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 EphyFrecentStore *
 ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
 {
+	GdkPixbuf *default_icon;
+
 	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
 	if (shell->priv->frecent_store == NULL)
 	{
 		shell->priv->frecent_store = ephy_frecent_store_new ();
+		default_icon = ephy_embed_shell_get_icon ("text-html");
 		g_object_set (shell->priv->frecent_store,
 			      "history-service",
 			      ephy_embed_shell_get_global_history_service (shell),
 			      "history-length", 10,
+			      "default-icon", default_icon,
 			      NULL);
+		g_object_unref (default_icon);
 	}
 
 	return shell->priv->frecent_store;
