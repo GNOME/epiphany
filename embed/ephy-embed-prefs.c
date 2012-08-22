@@ -492,22 +492,30 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
   }
 }
 
-static void
-replace_system_language_with_concrete_language_string (char **languages)
+static char **
+normalize_languages (char **languages)
 {
   int i;
+  GPtrArray *langs;
 
-  for (i = 0; i < g_strv_length (languages); i++) {
+  langs = g_ptr_array_new ();
+
+  for (i = 0; languages && languages[i]; i++) {
     if (g_str_equal (languages[i], "system")) {
-      char **sys_langs;
+      char **sys_langs = ephy_langs_get_languages ();
+      int j;
 
-      g_free (languages[i]);
-      sys_langs = ephy_langs_get_languages ();
-      languages[i] = g_strjoinv (", ", sys_langs);
+      for (j = 0; sys_langs && sys_langs[j]; j++)
+        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
 
       g_strfreev (sys_langs);
-    }
+    } else
+      g_ptr_array_add (langs, g_strdelimit (g_strdup (languages[i]), "-", '_'));
   }
+
+  g_ptr_array_add (langs, NULL);
+
+  return (char **)g_ptr_array_free (langs, FALSE);
 }
 
 static void
@@ -525,23 +533,27 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
   value = g_settings_get_boolean (settings, key);
 
   if (value) {
+    char **normalized;
+
     languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
-    replace_system_language_with_concrete_language_string (languages);
-    langs = g_strjoinv (",", languages);
-    g_strdelimit (langs, "-", '_');
+    normalized = normalize_languages (languages);
     g_strfreev (languages);
+
+    languages = normalized;
+    langs = g_strjoinv (",", languages);
   }
 
 #ifdef HAVE_WEBKIT2
   web_context = webkit_web_context_get_default ();
   webkit_web_context_set_spell_checking_enabled (web_context, value);
-  webkit_web_context_set_spell_checking_languages (web_context, langs);
+  webkit_web_context_set_spell_checking_languages (web_context, languages);
 #else
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
 #endif
 
   g_free (langs);
+  g_strfreev (languages);
 }
 
 static const PrefData webkit_pref_entries[] =
