@@ -4078,7 +4078,7 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
  * ephy_web_view_load_homepage:
  * @view: an #EphyWebView
  *
- * Loads the homepage, which is hardcoded to be "about:blank"
+ * Loads the homepage, which is hardcoded to be "about:overview"
  *
  **/
 void
@@ -4088,7 +4088,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   ephy_web_view_set_visit_type (view,
                                 EPHY_PAGE_VISIT_HOMEPAGE);
-  ephy_web_view_load_url (view, "about:blank");
+  ephy_web_view_load_url (view, "about:overview");
 }
 
 /**

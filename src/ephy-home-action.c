@@ -56,7 +56,7 @@ ephy_home_action_activate (GtkAction *action)
 
 	g_object_get (G_OBJECT (action), "name", &action_name, NULL);
 		
-	action_name_association (action, action_name, "about:blank");
+	action_name_association (action, action_name, "about:overview");
 
 	g_free (action_name);
 }

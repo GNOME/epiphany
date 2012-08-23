@@ -298,9 +298,13 @@ load_status_changed_cb (WebKitWebView *web_view,
                         EphyEmbed *embed)
 {
   WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
+  const char *address;
 
-  if (status == WEBKIT_LOAD_COMMITTED)
+  if (status == WEBKIT_LOAD_COMMITTED) {
     ephy_embed_destroy_top_widgets (embed);
+    address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+    ephy_embed_set_overview_mode (embed, strcmp (address, "about:overview") == 0);
+  }
 }
 #endif
 
