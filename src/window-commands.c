@@ -312,7 +312,7 @@ get_suggested_filename (EphyWebView *view)
 	else
 	{
 #ifdef HAVE_WEBKIT2
-		/* TODO: suggested filename */
+		suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
 #else
 		WebKitNetworkResponse *response;
 
