@@ -283,6 +283,7 @@ webkit_pref_callback_font_family (GSettings *settings,
   g_free (value);
 }
 
+#ifndef HAVE_WEBKIT2
 /* Part of this code taken from libsoup (soup-session.c) */
 static gchar *
 build_accept_languages_header (GArray *languages)
@@ -325,6 +326,7 @@ build_accept_languages_header (GArray *languages)
 
   return langs_str;
 }
+#endif
 
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
@@ -333,17 +335,14 @@ webkit_pref_callback_accept_languages (GSettings *settings,
                                        char *key,
                                        gpointer data)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: Languages */
-#else
+#ifndef HAVE_WEBKIT2
   SoupSession *session;
+  char *webkit_pref = data;
+  char *langs_str;
+#endif
   GArray *array;
   char **languages;
-  char *langs_str;
-  char *webkit_pref;
   int i;
-
-  webkit_pref = data;
 
   languages = g_settings_get_strv (settings, key);
 
@@ -360,16 +359,21 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 
   ephy_langs_sanitise (array);
 
+#ifdef HAVE_WEBKIT2
+  webkit_web_context_set_preferred_languages (webkit_web_context_get_default (),
+                                              (const char * const *)array->data);
+#else
   langs_str = build_accept_languages_header (array);
 
   /* Update Soup session */
   session = webkit_get_default_session ();
   g_object_set (G_OBJECT (session), webkit_pref, langs_str, NULL);
 
-  g_strfreev (languages);
   g_free (langs_str);
-  g_array_free (array, TRUE);
 #endif
+
+  g_strfreev (languages);
+  g_array_free (array, TRUE);
 }
 
 
