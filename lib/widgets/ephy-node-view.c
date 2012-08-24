@@ -1809,6 +1809,25 @@ ephy_node_view_popup (EphyNodeView *view, GtkWidget *menu)
 	}
 }
 
+gboolean
+ephy_node_view_get_iter_for_node (EphyNodeView *view,
+				  GtkTreeIter *iter,
+				  EphyNode *node)
+{
+	GtkTreeIter node_iter, filter_iter;
+
+	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel), node, &node_iter);
+	if (!gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
+							       &filter_iter, &node_iter))
+		return FALSE;
+
+	if (!gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
+							     iter, &filter_iter))
+		return FALSE;
+
+	return TRUE;
+}
+
 static void
 ephy_node_view_class_init (EphyNodeViewClass *klass)
 {

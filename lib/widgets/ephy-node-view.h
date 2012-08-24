@@ -129,6 +129,10 @@ gboolean   ephy_node_view_is_target	      (EphyNodeView *view);
 void	   ephy_node_view_popup		      (EphyNodeView *view,
 					       GtkWidget *menu);
 
+gboolean   ephy_node_view_get_iter_for_node   (EphyNodeView *view,
+					       GtkTreeIter *iter,
+					       EphyNode *node);
+
 G_END_DECLS
 
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
