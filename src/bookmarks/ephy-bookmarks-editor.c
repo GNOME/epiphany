@@ -1474,13 +1474,25 @@ webkit_favicon_database_has_favicon (WebKitFaviconDatabase *database, const char
 }
 
 static void
-icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GValue *value)
+icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GtkTreeRowReference *reference)
 {
     GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
-    if (!favicon)
-      return;
 
-    g_value_take_object (value, favicon);
+    if (favicon && gtk_tree_row_reference_valid (reference)) {
+	    GtkTreeModel *model = gtk_tree_row_reference_get_model (reference);
+	    GtkTreePath *path = gtk_tree_row_reference_get_path (reference);
+	    GtkTreeIter iter;
+
+	    /* Force repaint. */
+	    if (gtk_tree_model_get_iter (model, &iter, path))
+		    gtk_tree_model_row_changed (model, path, &iter);
+
+	    gtk_tree_path_free (path);
+    }
+
+    gtk_tree_row_reference_free (reference);
+    if (favicon)
+	    g_object_unref (favicon);
 }
 #endif
 
@@ -1506,10 +1518,24 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
                 favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
 									  FAVICON_SIZE, FAVICON_SIZE);
 
-		if (!favicon && webkit_favicon_database_has_favicon (database, page_location))
-		  webkit_favicon_database_get_favicon_pixbuf (database, page_location,
-							      FAVICON_SIZE, FAVICON_SIZE, NULL,
-							      (GAsyncReadyCallback) icon_loaded_cb, value);
+		if (!favicon && webkit_favicon_database_has_favicon (database, page_location)) {
+			GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (user_data));
+			GtkTreeIter iter;
+
+			if (ephy_node_view_get_iter_for_node (EPHY_NODE_VIEW (user_data), &iter, node)) {
+				GtkTreeRowReference *reference;
+				GtkTreePath *path;
+
+				path = gtk_tree_model_get_path (model, &iter);
+				reference = gtk_tree_row_reference_new (model, path);
+				gtk_tree_path_free (path);
+
+				webkit_favicon_database_get_favicon_pixbuf (database, page_location,
+									    FAVICON_SIZE, FAVICON_SIZE, NULL,
+									    (GAsyncReadyCallback) icon_loaded_cb,
+									    reference);
+			}
+		}
         }
 
 	g_value_init (value, GDK_TYPE_PIXBUF);

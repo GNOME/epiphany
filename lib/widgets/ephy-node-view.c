@@ -1304,7 +1304,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	if (icon_func)
 	{
 		icon_column = ephy_tree_model_node_add_func_column
-			 (view->priv->nodemodel, GDK_TYPE_PIXBUF, icon_func, NULL);
+			 (view->priv->nodemodel, GDK_TYPE_PIXBUF, icon_func, view);
 
 		renderer = gtk_cell_renderer_pixbuf_new ();
 		gtk_tree_view_column_pack_start (gcolumn, renderer, FALSE);
