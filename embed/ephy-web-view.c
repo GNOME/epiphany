@@ -2044,10 +2044,7 @@ ephy_web_view_location_changed (EphyWebView *view,
   /* Do this up here so we still have the old address around. */
   ephy_file_monitor_update_location (priv->file_monitor, location);
 
-  /* Do not expose about:blank to the user, an empty address
-     bar will do better */
-  if (location == NULL || location[0] == '\0' ||
-      strcmp (location, "about:blank") == 0) {
+  if (location == NULL || location[0] == '\0') {
     ephy_web_view_set_address (view, NULL);
     ephy_web_view_set_title (view, EMPTY_PAGE);
   } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME)) {
