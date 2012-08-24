@@ -1305,7 +1305,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 		}
 	}
 
-	if (address != NULL && strcmp (address, "about:blank") != 0)
+	if (address != NULL)
 	{
 		if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
 			effective_text = g_strdup_printf ("about:%s",

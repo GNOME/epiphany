@@ -1469,6 +1469,35 @@ setup_ui_manager (EphyWindow *window)
 				    gtk_ui_manager_get_accel_group (manager));
 }
 
+/* This is the list of addresses that should never be shown in the
+ * window's location entry. */
+static const char * do_not_show_address[] = {
+	"about:blank",
+	NULL
+};
+
+static char *
+calculate_location (const char *typed_address, const char *address)
+{
+	int i;
+	const char *location;
+
+	/* If there's a typed address, use that over address. Never
+	 * show URIs in the 'do_not_show_address' array. */
+	location = typed_address ? typed_address : address;
+	
+	for (i = 0; do_not_show_address[i]; i++)
+	{
+		if (g_str_equal (location, do_not_show_address[i]))
+		{
+			location = NULL;
+			break;
+		}
+	}
+
+	return g_strdup (location);
+}
+
 static void
 sync_tab_address (EphyWebView *view,
 	          GParamSpec *pspec,
@@ -1477,13 +1506,16 @@ sync_tab_address (EphyWebView *view,
 	EphyWindowPrivate *priv = window->priv;
 	const char *address;
 	const char *typed_address;
+	char *location;
 
 	if (priv->closing) return;
 
 	address = ephy_web_view_get_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
 
-	ephy_window_set_location (window, typed_address ? typed_address : address);
+	location = calculate_location (typed_address, address);
+	ephy_window_set_location (window, location);
+	g_free (location);
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
