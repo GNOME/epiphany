@@ -2066,8 +2066,6 @@ ephy_web_view_location_changed (EphyWebView *view,
 
   update_navigation_flags (view);
 
-  g_object_notify (object, "embed-title");
-
   g_object_thaw_notify (object);
 }
 
