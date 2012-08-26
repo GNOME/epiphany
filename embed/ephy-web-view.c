@@ -1208,9 +1208,6 @@ uri_changed_cb (WebKitWebView *web_view,
   char *uri;
   const char *current_address;
 
-  g_object_get (web_view, "uri", &uri, NULL);
-  current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-
 #ifdef HAVE_WEBKIT2
   if (!EPHY_WEB_VIEW (web_view)->priv->is_loading)
     return;
@@ -1219,6 +1216,9 @@ uri_changed_cb (WebKitWebView *web_view,
   /* We need to check if we get URI notifications without going
      through the usual load process, as this can happen when changing
      location within a page */
+  current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+  g_object_get (web_view, "uri", &uri, NULL);
+
   if (g_str_equal (uri, current_address) == FALSE)
     ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
 
