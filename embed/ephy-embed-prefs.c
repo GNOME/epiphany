@@ -294,7 +294,7 @@ build_accept_languages_header (GArray *languages)
 
   g_return_val_if_fail (languages != NULL, NULL);
 
-  /* Calculate deltas for the quality values */
+  /* Calculate deltas for the quality values. */
   if (languages->len < 10)
     delta = 10;
   else if (languages->len < 20)
@@ -302,18 +302,18 @@ build_accept_languages_header (GArray *languages)
   else
     delta = 1;
 
-  /* Set quality values for each language */
-  langs = (gchar **) languages->data;
+  /* Set quality values for each language. */
+  langs = (gchar **)languages->data;
   for (i = 0; langs[i] != NULL; i++) {
-    gchar *lang = (gchar *) langs[i];
+    gchar *lang = (gchar *)langs[i];
     gint quality = 100 - i * delta;
 
     if (quality > 0 && quality < 100) {
       gchar buf[8];
-      g_ascii_formatd (buf, 8, "%.2f", quality/100.0);
+      g_ascii_formatd (buf, 8, "%.2f", quality / 100.0);
       langs[i] = g_strdup_printf ("%s;q=%s", lang, buf);
     } else {
-      /* Just dup the string in this case */
+      /* Just dup the string in this case. */
       langs[i] = g_strdup (lang);
     }
     g_free (lang);
