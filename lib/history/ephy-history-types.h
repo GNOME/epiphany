@@ -71,6 +71,7 @@ typedef struct _EphyHistoryURL
   int visit_count;
   int typed_count;
   int last_visit_time;
+  int thumbnail_time;
   gboolean hidden;
   EphyHistoryHost *host;
 } EphyHistoryURL;
