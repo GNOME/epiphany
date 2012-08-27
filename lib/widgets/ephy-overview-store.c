@@ -23,6 +23,9 @@
 #include "ephy-overview-store.h"
 #include "ephy-snapshot-service.h"
 
+/* Update thumbnails after one week. */
+#define THUMBNAIL_UPDATE_THRESHOLD (60 * 60 * 24 * 7)
+
 #define EPHY_OVERVIEW_STORE_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_OVERVIEW_STORE, EphyOverviewStorePrivate))
 
 struct _EphyOverviewStorePrivate
@@ -138,6 +141,7 @@ typedef struct {
   char *url;
   WebKitWebView *webview;
   GCancellable *cancellable;
+  time_t timestamp;
 } PeekContext;
 
 static void
@@ -288,22 +292,21 @@ ephy_overview_store_set_snapshot_internal (EphyOverviewStore *store,
   g_object_unref (framed);
 }
 
+typedef struct {
+  EphyHistoryURL *url;
+  EphyHistoryService *history_service;
+} ThumbnailTimeContext;
+
 static void
-history_service_get_url_for_saving (EphyHistoryService *service,
-                                    gboolean success,
-                                    EphyHistoryURL *url,
-                                    GdkPixbuf *pixbuf)
+on_snapshot_saved_cb (EphySnapshotService *service,
+                      GAsyncResult *res,
+                      ThumbnailTimeContext *ctx)
 {
-  EphySnapshotService *snapshot_service;
-  int timestamp;
-
-  snapshot_service = ephy_snapshot_service_get_default ();
-  timestamp = success ? (url->visit_count / 5) : 0;
-
-  ephy_snapshot_service_save_snapshot_async (snapshot_service,
-                                             pixbuf, url->url, timestamp,
-                                             NULL, NULL, NULL);
-  g_object_unref (pixbuf);
+  ephy_history_service_set_url_thumbnail_time (ctx->history_service,
+                                               ctx->url->url, ctx->url->thumbnail_time,
+                                               NULL, NULL, NULL);
+  ephy_history_url_free (ctx->url);
+  g_slice_free (ThumbnailTimeContext, ctx);
 }
 
 void
@@ -313,15 +316,28 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
 {
   GdkPixbuf *pixbuf;
   char *url;
+  ThumbnailTimeContext *ctx;
+  EphySnapshotService *snapshot_service;
 
   pixbuf = ephy_snapshot_service_crop_snapshot (snapshot);
   ephy_overview_store_set_snapshot_internal (store, iter, pixbuf);
   gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
                       EPHY_OVERVIEW_STORE_URI, &url,
                       -1);
-  ephy_history_service_get_url (store->priv->history_service, url,
-                                NULL, (EphyHistoryJobCallback) history_service_get_url_for_saving,
-                                pixbuf);
+
+  ctx = g_slice_new (ThumbnailTimeContext);
+  ctx->url = ephy_history_url_new (url, NULL, 0, 0, 0);
+  ctx->url->thumbnail_time = time (NULL);
+  ctx->history_service = store->priv->history_service;
+  g_free (url);
+
+  snapshot_service = ephy_snapshot_service_get_default ();
+  ephy_snapshot_service_save_snapshot_async (snapshot_service,
+                                             pixbuf, ctx->url->url, ctx->url->thumbnail_time,
+                                             NULL,
+                                             (GAsyncReadyCallback) on_snapshot_saved_cb,
+                                             ctx);
+  g_object_unref (pixbuf);
 }
 
 static void
@@ -372,13 +388,8 @@ history_service_url_cb (gpointer service,
 
   snapshot_service = ephy_snapshot_service_get_default ();
 
-  /* This is a bit of an abuse of the semantics of the mtime
-   paramenter. Since the thumbnailing backend only takes the exact
-   mtime of the thumbnailed file, we will use the visit count to
-   generate a fake timestamp that will be increased every fifth
-   visit. This way, we'll update the thumbnail every other fifth
-   visit. */
-  timestamp = success ? (url->visit_count / 5) : 0;
+  timestamp = (ctx->timestamp - url->thumbnail_time) > THUMBNAIL_UPDATE_THRESHOLD ?
+    ctx->timestamp : url->thumbnail_time;
 
   ephy_snapshot_service_get_snapshot_async (snapshot_service,
                                             ctx->webview, ctx->url, timestamp, ctx->cancellable,
@@ -428,6 +439,7 @@ ephy_overview_store_peek_snapshot (EphyOverviewStore *self,
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (self), iter);
   ctx->ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (self), path);
   ctx->url = url;
+  ctx->timestamp = time (NULL);
   ctx->webview = webview ? g_object_ref (webview) : NULL;
   ctx->cancellable = cancellable;
   ephy_history_service_get_url (self->priv->history_service,
