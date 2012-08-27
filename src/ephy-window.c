@@ -1473,6 +1473,7 @@ setup_ui_manager (EphyWindow *window)
  * window's location entry. */
 static const char * do_not_show_address[] = {
 	"about:blank",
+	"ephy-about:overview",
 	NULL
 };
 
