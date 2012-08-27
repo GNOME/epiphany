@@ -79,7 +79,7 @@ ephy_overview_constructed (GObject *object)
 {
   EphyOverviewStore *store;
   EphyOverview *self = EPHY_OVERVIEW (object);
-  GtkWidget *widget;
+  GtkWidget *iconview;
 
   if (G_OBJECT_CLASS (ephy_overview_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_overview_parent_class)->constructed (object);
@@ -87,10 +87,16 @@ ephy_overview_constructed (GObject *object)
   self->priv->frecent_view = GTK_WIDGET (gd_main_view_new (GD_MAIN_VIEW_ICON));
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self->priv->frecent_view),
                                        GTK_SHADOW_NONE);
-  widget = gtk_bin_get_child (GTK_BIN (self->priv->frecent_view));
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_icon_view_set_columns (GTK_ICON_VIEW (widget), 5);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (self->priv->frecent_view),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  iconview = gtk_bin_get_child (GTK_BIN (self->priv->frecent_view));
+  gtk_icon_view_set_columns (GTK_ICON_VIEW (iconview), 5);
+  g_object_set (self->priv->frecent_view,
+                "halign", GTK_ALIGN_FILL,
+                "valign", GTK_ALIGN_FILL, NULL);
+  g_object_set (iconview,
+                "halign", GTK_ALIGN_CENTER,
+                "valign", GTK_ALIGN_CENTER, NULL);
 
   g_signal_connect (self->priv->frecent_view, "item-activated",
                     G_CALLBACK (main_view_item_activated), object);
@@ -102,8 +108,6 @@ ephy_overview_constructed (GObject *object)
                           GTK_TREE_MODEL (store));
   gtk_grid_attach (GTK_GRID (self), self->priv->frecent_view,
                    0, 0, 1, 1);
-  gtk_widget_set_vexpand (self->priv->frecent_view, TRUE);
-  gtk_widget_set_size_request (self->priv->frecent_view, -1, 320);
 
   gtk_widget_show_all (GTK_WIDGET (self));
 }
