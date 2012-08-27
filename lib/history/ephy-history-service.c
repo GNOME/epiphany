@@ -31,6 +31,7 @@ typedef enum {
   SET_URL_TITLE,
   SET_URL_ZOOM_LEVEL,
   SET_URL_HIDDEN,
+  SET_URL_THUMBNAIL_TIME,
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
@@ -840,6 +841,47 @@ ephy_history_service_set_url_hidden (EphyHistoryService *self,
 }
 
 static gboolean
+ephy_history_service_execute_set_url_thumbnail_time (EphyHistoryService *self,
+                                                     EphyHistoryURL *url,
+                                                     gpointer *result)
+{
+  int thumbnail_time;
+
+  thumbnail_time = url->thumbnail_time;
+
+  if (NULL == ephy_history_service_get_url_row (self, NULL, url))
+    return FALSE;
+  else {
+    url->thumbnail_time = thumbnail_time;
+    ephy_history_service_update_url_row (self, url);
+    ephy_history_service_schedule_commit (self);
+    return TRUE;
+  }
+}
+
+void
+ephy_history_service_set_url_thumbnail_time (EphyHistoryService *self,
+                                             const char *orig_url,
+                                             int thumbnail_time,
+                                             GCancellable *cancellable,
+                                             EphyHistoryJobCallback callback,
+                                             gpointer user_data)
+{
+  EphyHistoryURL *url;
+  EphyHistoryServiceMessage *message;
+
+  g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
+  g_return_if_fail (orig_url != NULL);
+
+  url = ephy_history_url_new (orig_url, NULL, 0, 0, 0);
+  url->thumbnail_time = thumbnail_time;
+  message = ephy_history_service_message_new (self, SET_URL_THUMBNAIL_TIME,
+                                              url, (GDestroyNotify) ephy_history_url_free,
+                                              cancellable, callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+static gboolean
 ephy_history_service_execute_get_url (EphyHistoryService *self,
                                       const gchar *orig_url,
                                       gpointer *result)
@@ -1013,6 +1055,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_title,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_zoom_level,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_hidden,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_thumbnail_time,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,

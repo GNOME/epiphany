@@ -67,6 +67,7 @@ void                     ephy_history_service_query_visits            (EphyHisto
 void                     ephy_history_service_query_urls              (EphyHistoryService *self, EphyHistoryQuery *query, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_set_url_title           (EphyHistoryService *self, const char *url, const char *title, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_set_url_hidden          (EphyHistoryService *self, const char *url, gboolean hidden, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_set_url_thumbnail_time  (EphyHistoryService *self, const char *orig_url, int thumbnail_time, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_set_url_zoom_level      (EphyHistoryService *self, const char *url, const double zoom_level, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_get_host_for_url        (EphyHistoryService *self, const char *url, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_get_hosts               (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
