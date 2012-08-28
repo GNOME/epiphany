@@ -559,8 +559,7 @@ ephy_window_open_link (EphyLink *link,
 		
 	if (flags  & (EPHY_LINK_JUMP_TO | 
 		      EPHY_LINK_NEW_TAB | 
-		      EPHY_LINK_NEW_WINDOW |
-		      EPHY_LINK_HOME_PAGE))
+		      EPHY_LINK_NEW_WINDOW))
 	{
 		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
 
