@@ -2120,6 +2120,16 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 }
 
 static void
+sync_embed_is_overview (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
+{
+	if (window->priv->closing) return;
+
+	_ephy_window_set_default_actions_sensitive (window,
+						    SENS_FLAG_IS_BLANK,
+						    ephy_embed_get_overview_mode (embed));;
+}
+
+static void
 overview_open_link_cb (EphyOverview *overview,
 		       const char *url,
 		       EphyWindow *window)
@@ -2586,6 +2596,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	sync_tab_icon		(view, NULL, window);
 	sync_tab_popup_windows	(view, NULL, window);
 	sync_tab_popups_allowed	(view, NULL, window);
+	sync_embed_is_overview  (embed, NULL, window);
 
 	sync_tab_zoom		(web_view, NULL, window);
 
@@ -2663,6 +2674,10 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 window, G_CONNECT_AFTER);
 	g_signal_connect_object (view, "notify::visibility",
 				 G_CALLBACK (ephy_window_visibility_cb),
+				 window, 0);
+
+	g_signal_connect_object (embed, "notify::overview-mode",
+				 G_CALLBACK (sync_embed_is_overview),
 				 window, 0);
 
 	overview = ephy_embed_get_overview (embed);
@@ -2754,6 +2769,10 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      window);
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (ephy_window_visibility_cb),
+					      window);
+
+	g_signal_handlers_disconnect_by_func (view,
+					      G_CALLBACK (sync_embed_is_overview),
 					      window);
 
 	overview = ephy_embed_get_overview (embed);
