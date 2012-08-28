@@ -41,12 +41,12 @@ action_name_association (GtkAction *action,
 			 char *action_name,
 			 char *address)
 {
+	EphyLinkFlags flags = EPHY_LINK_HOME_PAGE;
+
 	if (g_str_equal (action_name, "FileNewTab"))
-	{
-		ephy_home_action_open (action, 
-				       address, 
-				       EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO | EPHY_LINK_HOME_PAGE);
-	}
+		flags |= EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO;
+
+	ephy_home_action_open (action, address, flags);
 }	
 
 static void
