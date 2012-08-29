@@ -37,6 +37,7 @@
 #include "ephy-type-builtins.h"
 #include "ephy-window.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
@@ -540,6 +541,10 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
 
     title = g_strdup (webkit_web_history_item_get_title (hitem));
 #endif
+    /* The overview is not actually a webpage, so we need to hardcode
+     * this here. */
+    if (g_strcmp0 (uri, "ephy-about:overview") == 0)
+      title = g_strdup (_("Most Visited"));
 
     if (title == NULL || g_strstrip (title)[0] == '\0')
       item = new_history_menu_item (EPHY_WEB_VIEW (web_view), uri, uri);
