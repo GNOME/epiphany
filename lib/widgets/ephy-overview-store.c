@@ -360,7 +360,6 @@ on_snapshot_retrieved_cb (GObject *object,
                                                         res, &error);
 
   if (error) {
-    g_warning ("Error retrieving snapshot: %s\n", error->message);
     g_error_free (error);
     error = NULL;
   } else {
