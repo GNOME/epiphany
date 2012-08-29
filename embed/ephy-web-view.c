@@ -36,6 +36,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
 #include "ephy-history-service.h"
+#include "ephy-overview.h"
 #include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
@@ -1102,7 +1103,7 @@ get_title_from_address (const char *address)
     return g_strdup (_("Plugins"));
   else if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
            !strcmp (address, "about:overview"))
-    return g_strdup (_("Most visited"));
+    return g_strdup (EPHY_OVERVIEW_TITLE);
   else
     return ephy_string_get_host_name (address);
 }

@@ -50,6 +50,8 @@ struct _EphyOverviewClass {
 
 };
 
+#define EPHY_OVERVIEW_TITLE _("Most Visited")
+
 GType       ephy_overview_get_type      (void) G_GNUC_CONST;
 GtkWidget * ephy_overview_new           (void);
 
