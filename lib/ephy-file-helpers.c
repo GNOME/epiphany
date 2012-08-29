@@ -21,29 +21,25 @@
  */
 
 #include "config.h"
-
 #include "ephy-file-helpers.h"
 
-#include "ephy-prefs.h"
 #include "ephy-debug.h"
+#include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
+#include <gdk/gdk.h>
+#include <gio/gdesktopappinfo.h>
+#include <gio/gio.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gio/gio.h>
-#include <gio/gdesktopappinfo.h>
-#include <gdk/gdk.h>
-#include <libxml/xmlreader.h>
-
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
-
-#include <string.h>
+#include <libxml/xmlreader.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 /**
  * SECTION:ephy-file-helpers
