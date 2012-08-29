@@ -1000,8 +1000,7 @@ parse_embed (xmlNodePtr child,
 							    EPHY_NEW_TAB_APPEND_LAST);
 				}
 			}
-			else if (was_loading && url != NULL &&
-				 strcmp ((const char *) url, "about:blank") != 0)
+			else if (was_loading && url != NULL)
 			{
 				/* Shows a message to the user that warns that this page was
 				   loading during crash and make Epiphany crash again,
