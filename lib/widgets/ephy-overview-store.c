@@ -129,6 +129,7 @@ ephy_overview_store_init (EphyOverviewStore *self)
   types[EPHY_OVERVIEW_STORE_LAST_VISIT] = G_TYPE_LONG;
   types[EPHY_OVERVIEW_STORE_SELECTED] = G_TYPE_BOOLEAN;
   types[EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE] = G_TYPE_CANCELLABLE;
+  types[EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME] = G_TYPE_LONG;
 
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
                                    EPHY_OVERVIEW_STORE_NCOLS, types);
@@ -281,13 +282,15 @@ overview_add_frame (GdkPixbuf *pixbuf) {
 static void
 ephy_overview_store_set_snapshot_internal (EphyOverviewStore *store,
                                            GtkTreeIter *iter,
-                                           GdkPixbuf *snapshot)
+                                           GdkPixbuf *snapshot,
+                                           int mtime)
 {
   GdkPixbuf *framed;
 
   framed = overview_add_frame (snapshot);
   gtk_list_store_set (GTK_LIST_STORE (store), iter,
                       EPHY_OVERVIEW_STORE_SNAPSHOT, framed,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, mtime,
                       -1);
   g_object_unref (framed);
 }
@@ -318,16 +321,18 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
   char *url;
   ThumbnailTimeContext *ctx;
   EphySnapshotService *snapshot_service;
+  int mtime;
 
+  mtime = time (NULL);
   pixbuf = ephy_snapshot_service_crop_snapshot (snapshot);
-  ephy_overview_store_set_snapshot_internal (store, iter, pixbuf);
+  ephy_overview_store_set_snapshot_internal (store, iter, pixbuf, mtime);
   gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
                       EPHY_OVERVIEW_STORE_URI, &url,
                       -1);
 
   ctx = g_slice_new (ThumbnailTimeContext);
   ctx->url = ephy_history_url_new (url, NULL, 0, 0, 0);
-  ctx->url->thumbnail_time = time (NULL);
+  ctx->url->thumbnail_time = mtime;
   ctx->history_service = store->priv->history_service;
   g_free (url);
 
@@ -365,7 +370,7 @@ on_snapshot_retrieved_cb (GObject *object,
     gtk_tree_path_free (path);
     if (snapshot) {
       ephy_overview_store_set_snapshot_internal (EPHY_OVERVIEW_STORE (model),
-                                                 &iter, snapshot);
+                                                 &iter, snapshot, ctx->timestamp);
       g_object_unref (snapshot);
 
     }
@@ -384,15 +389,13 @@ history_service_url_cb (gpointer service,
                         PeekContext *ctx)
 {
   EphySnapshotService *snapshot_service;
-  int timestamp;
 
   snapshot_service = ephy_snapshot_service_get_default ();
 
-  timestamp = (ctx->timestamp - url->thumbnail_time) > THUMBNAIL_UPDATE_THRESHOLD ?
-    ctx->timestamp : url->thumbnail_time;
+  ctx->timestamp = url->thumbnail_time;
 
   ephy_snapshot_service_get_snapshot_async (snapshot_service,
-                                            ctx->webview, ctx->url, timestamp, ctx->cancellable,
+                                            ctx->webview, ctx->url, ctx->timestamp, ctx->cancellable,
                                             (GAsyncReadyCallback) on_snapshot_retrieved_cb,
                                             ctx);
   ephy_history_url_free (url);
@@ -421,6 +424,7 @@ ephy_overview_store_peek_snapshot (EphyOverviewStore *self,
   gtk_list_store_set (GTK_LIST_STORE (self), iter,
                       EPHY_OVERVIEW_STORE_SNAPSHOT,
                       self->priv->default_icon,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, 0,
                       -1);
 
   if (url == NULL || g_strcmp0 (url, "about:blank") == 0) {
@@ -439,7 +443,6 @@ ephy_overview_store_peek_snapshot (EphyOverviewStore *self,
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (self), iter);
   ctx->ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (self), path);
   ctx->url = url;
-  ctx->timestamp = time (NULL);
   ctx->webview = webview ? g_object_ref (webview) : NULL;
   ctx->cancellable = cancellable;
   ephy_history_service_get_url (self->priv->history_service,
@@ -498,18 +501,22 @@ ephy_overview_store_needs_snapshot (EphyOverviewStore *store,
   GdkPixbuf *icon;
   GCancellable *cancellable;
   gboolean needs_snapshot;
+  int mtime, current_mtime;
 
   g_return_val_if_fail (EPHY_IS_OVERVIEW_STORE (store), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  current_mtime = time (NULL);
   gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
                       EPHY_OVERVIEW_STORE_SNAPSHOT, &icon,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, &mtime,
                       EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE, &cancellable,
                       -1);
 
   /* If the thumbnail is the default icon and there is no cancellable
      in the row, then this row needs a snapshot. */
-  needs_snapshot = (icon == store->priv->default_icon && cancellable == NULL);
+  needs_snapshot = (icon == store->priv->default_icon && cancellable == NULL) ||
+    current_mtime - mtime > THUMBNAIL_UPDATE_THRESHOLD;
 
   if (icon)
     g_object_unref (icon);
