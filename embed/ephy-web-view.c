@@ -2396,7 +2396,7 @@ load_status_cb (WebKitWebView *web_view,
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
-    g_idle_add ((GSourceFunc) web_view_check_snapshot, web_view);
+    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc) web_view_check_snapshot, web_view, NULL);
 
     break;
   }
