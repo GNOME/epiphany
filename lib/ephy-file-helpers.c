@@ -26,6 +26,7 @@
 
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
+#include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
@@ -429,18 +430,30 @@ ephy_ensure_dir_exists (const char *dir,
 			     0,
 			     _("The file “%s” exists. Please move it out of the way."),
 			     dir);
+
 		return FALSE;
 	}
 
-	if (!g_file_test (dir, G_FILE_TEST_EXISTS) &&
-            g_mkdir_with_parents (dir, 488) != 0)
+	if (!g_file_test (dir, G_FILE_TEST_EXISTS))
 	{
-		g_set_error (error,
-			     EPHY_FILE_HELPERS_ERROR_QUARK,
-			     0,
-			     _("Failed to create directory “%s”."),
-			     dir);
-		return FALSE;
+		if (g_mkdir_with_parents (dir, 488) == 0)
+		{
+			/* We need to set the .migrated file to the
+			 * current profile migration version,
+			 * otherwise the next time the browser runs
+			 * things might go awry. */
+			ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION);
+		}
+		else
+		{
+			g_set_error (error,
+				     EPHY_FILE_HELPERS_ERROR_QUARK,
+				     0,
+				     _("Failed to create directory “%s”."),
+				     dir);
+
+			return FALSE;
+		}
 	}
 
 	return TRUE;
