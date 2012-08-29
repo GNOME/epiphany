@@ -106,6 +106,8 @@ struct _EphyWebViewPrivate {
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
 
+  guint snapshot_idle_id;
+
   EphyHistoryPageVisitType visit_type;
 
   gulong do_not_track_handler;
@@ -534,6 +536,11 @@ ephy_web_view_dispose (GObject *object)
   if (priv->history_service_cancellable) {
     g_cancellable_cancel (priv->history_service_cancellable);
     g_clear_object (&priv->history_service_cancellable);
+  }
+
+  if (priv->snapshot_idle_id) {
+    g_source_remove (priv->snapshot_idle_id);
+    priv->snapshot_idle_id = 0;
   }
 
   g_clear_object(&priv->certificate);
@@ -2396,6 +2403,8 @@ load_status_cb (WebKitWebView *web_view,
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
     if (!ephy_web_view_is_history_frozen (view)) {
+      if (priv->snapshot_idle_id)
+        g_source_remove (priv->snapshot_idle_id);
       priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc) web_view_check_snapshot, web_view, NULL);
     }
 
