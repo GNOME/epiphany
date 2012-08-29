@@ -2342,7 +2342,6 @@ load_status_cb (WebKitWebView *web_view,
       g_free (history_uri);
     }
 
-    ephy_web_view_thaw_history (view);
     break;
   }
   case WEBKIT_LOAD_FINISHED: {
@@ -2396,8 +2395,11 @@ load_status_cb (WebKitWebView *web_view,
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
-    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc) web_view_check_snapshot, web_view, NULL);
+    if (!ephy_web_view_is_history_frozen (view)) {
+      priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc) web_view_check_snapshot, web_view, NULL);
+    }
 
+    ephy_web_view_thaw_history (view);
     break;
   }
   case WEBKIT_LOAD_FAILED:
