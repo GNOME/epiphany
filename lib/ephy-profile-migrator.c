@@ -60,6 +60,12 @@ static int do_step_n = -1;
 
 typedef void (*EphyProfileMigrator) (void);
 
+static gboolean
+profile_dir_exists ()
+{
+  return g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
+}
+
 static void
 migrate_cookies ()
 {
@@ -786,6 +792,12 @@ ephy_migrator ()
   /* Always try to migrate the data from the old profile dir at the
    * very beginning. */
   migrate_profile_gnome2_to_xdg ();
+
+  /* If after this point there's no profile dir, there's no point in
+   * running anything because Epiphany has never run in this sytem, so
+   * exit here. */
+  if (!profile_dir_exists ())
+    return TRUE;
 
   if (do_step_n != -1) {
     if (do_step_n >= EPHY_PROFILE_MIGRATION_VERSION)
