@@ -1000,7 +1000,7 @@ parse_embed (xmlNodePtr child,
 							    EPHY_NEW_TAB_APPEND_LAST);
 				}
 			}
-			else if (was_loading && url != NULL)
+			else if (was_loading)
 			{
 				/* Shows a message to the user that warns that this page was
 				   loading during crash and make Epiphany crash again,
