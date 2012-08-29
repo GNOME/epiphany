@@ -974,7 +974,8 @@ parse_embed (xmlNodePtr child,
 			   open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
 			   Otherwise, if the web was fully loaded, it is reloaded again. */
 			if (!was_loading ||
-			    strcmp ((const char *) url, "about:blank") == 0)
+			    strcmp ((const char *) url, "about:blank") == 0 ||
+			    strcmp ((const char *) url, "about:overview") == 0)
 			{
 				recover_url = (char *) url;
 				
