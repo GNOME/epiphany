@@ -57,8 +57,8 @@ struct _EphySnapshotServiceClass
 };
 
 /* Values taken from the Web mockups. */
-#define EPHY_THUMBNAIL_WIDTH 172
-#define EPHY_THUMBNAIL_HEIGHT 172
+#define EPHY_THUMBNAIL_WIDTH 180
+#define EPHY_THUMBNAIL_HEIGHT 135
 
 typedef void (* EphySnapshotServiceCallback) (GdkPixbuf *snapshot,
                                               gpointer user_data);
