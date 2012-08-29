@@ -345,6 +345,19 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
   g_object_unref (pixbuf);
 }
 
+
+static void
+ephy_overview_store_set_default_icon_internal (EphyOverviewStore *store,
+                                               GtkTreeIter *iter,
+                                               GdkPixbuf *default_icon)
+{
+  gtk_list_store_set (GTK_LIST_STORE (store), iter,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT,
+                      default_icon,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, 0,
+                      -1);
+}
+
 static void
 on_snapshot_retrieved_cb (GObject *object,
                           GAsyncResult *res,
@@ -420,11 +433,8 @@ ephy_overview_store_peek_snapshot (EphyOverviewStore *self,
     g_object_unref (cancellable);
   }
 
-  gtk_list_store_set (GTK_LIST_STORE (self), iter,
-                      EPHY_OVERVIEW_STORE_SNAPSHOT,
-                      self->priv->default_icon,
-                      EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, 0,
-                      -1);
+  ephy_overview_store_set_default_icon_internal (self, iter,
+                                                 self->priv->default_icon);
 
   if (url == NULL || g_strcmp0 (url, "about:blank") == 0) {
     gtk_list_store_set (GTK_LIST_STORE (self), iter,
@@ -466,9 +476,8 @@ set_default_icon_helper (GtkTreeModel *model,
                       -1);
   if (current_pixbuf == priv->default_icon ||
       current_pixbuf == NULL)
-    gtk_list_store_set (GTK_LIST_STORE (model), iter,
-                        EPHY_OVERVIEW_STORE_SNAPSHOT, new_default_icon,
-                        -1);
+    ephy_overview_store_set_default_icon_internal (EPHY_OVERVIEW_STORE (model), iter,
+                                                   new_default_icon);
   g_object_unref (current_pixbuf);
 
   return FALSE;
