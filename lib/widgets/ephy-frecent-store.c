@@ -341,15 +341,34 @@ ephy_frecent_store_new (void)
 }
 
 static void
+animated_remove_cb (EphyOverviewStore *store,
+                    GtkTreeIter *iter,
+                    gboolean valid,
+                    EphyHistoryService *service)
+{
+  ephy_frecent_store_fetch_urls (EPHY_FRECENT_STORE (store), service);
+}
+
+static void
 set_url_hidden_cb (EphyHistoryService *service,
                    gboolean success,
                    gpointer result_data,
-                   EphyFrecentStore *store)
+                   GtkTreeRowReference *ref)
 {
+  EphyOverviewStore *store;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
   if (!success)
     return;
 
-  ephy_frecent_store_fetch_urls (store, service);
+  store = EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ref));
+  path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+  ephy_overview_store_animated_remove (store, ref,
+                                       (EphyOverviewStoreAnimRemoveFunc)animated_remove_cb,
+                                       service);
 }
 
 void
@@ -357,20 +376,27 @@ ephy_frecent_store_set_hidden (EphyFrecentStore *store,
                                GtkTreeIter *iter)
 {
   EphyHistoryService *service;
+  GtkTreeRowReference *ref;
+  GtkTreePath *path;
   char *uri;
-
+  GtkTreeModel *model;
   g_return_if_fail (EPHY_IS_FRECENT_STORE (store));
   g_return_if_fail (iter != NULL);
 
-  gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+  model = GTK_TREE_MODEL (store);
+  gtk_tree_model_get (model, iter,
                       EPHY_OVERVIEW_STORE_URI, &uri,
                       -1);
   g_object_get (store, "history-service", &service, NULL);
 
+  path = gtk_tree_model_get_path (model, iter);
+  ref = gtk_tree_row_reference_new (model, path);
+  gtk_tree_path_free (path);
+
   ephy_history_service_set_url_hidden (service,
                                        uri, TRUE, NULL,
                                        (EphyHistoryJobCallback) set_url_hidden_cb,
-                                       store);
+                                       ref);
   g_free (uri);
   g_object_unref (service);
 }

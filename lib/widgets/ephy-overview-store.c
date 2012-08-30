@@ -507,6 +507,76 @@ ephy_overview_store_remove (EphyOverviewStore *store,
   return gtk_list_store_remove (GTK_LIST_STORE (store), iter);
 }
 
+typedef struct {
+  GtkTreeRowReference *ref;
+  EphyOverviewStoreAnimRemoveFunc callback;
+  gpointer user_data;
+} AnimRemoveContext;
+
+static gboolean
+animated_remove_func (AnimRemoveContext *ctx)
+{
+  GtkTreeRowReference *ref;
+  EphyOverviewStore *store;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GdkPixbuf *orig_pixbuf, *new_pixbuf;
+  int width, height;
+  gboolean valid;
+
+  ref = ctx->ref;
+  store = EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ref));
+  path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT, &orig_pixbuf, -1);
+
+  width = gdk_pixbuf_get_width (orig_pixbuf);
+  height = gdk_pixbuf_get_height (orig_pixbuf);
+
+  if (width > 10) {
+    new_pixbuf = gdk_pixbuf_scale_simple (orig_pixbuf,
+                                          width * 0.80,
+                                          height * 0.80,
+                                          GDK_INTERP_TILES);
+    g_object_unref (orig_pixbuf);
+    gtk_list_store_set (GTK_LIST_STORE (store), &iter,
+                        EPHY_OVERVIEW_STORE_SNAPSHOT, new_pixbuf,
+                        -1);
+    g_object_unref (new_pixbuf);
+
+    return TRUE;
+  }
+
+  g_object_unref (orig_pixbuf);
+  valid = ephy_overview_store_remove (store, &iter);
+
+  if (ctx->callback)
+    ctx->callback (store, &iter, valid, ctx->user_data);
+
+  gtk_tree_row_reference_free (ref);
+  g_slice_free (AnimRemoveContext, ctx);
+
+  return FALSE;
+}
+
+void
+ephy_overview_store_animated_remove (EphyOverviewStore *store,
+                                     GtkTreeRowReference *ref,
+                                     EphyOverviewStoreAnimRemoveFunc callback,
+                                     gpointer user_data)
+{
+  AnimRemoveContext *ctx = g_slice_new0 (AnimRemoveContext);
+
+  ctx->ref = ref;
+  ctx->callback = callback;
+  ctx->user_data = user_data;
+
+  g_timeout_add (40, (GSourceFunc) animated_remove_func, ctx);
+}
+
 gboolean
 ephy_overview_store_find_url (EphyOverviewStore *store,
                               const char *url,

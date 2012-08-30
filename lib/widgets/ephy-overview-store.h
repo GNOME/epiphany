@@ -85,6 +85,18 @@ gboolean ephy_overview_store_needs_snapshot       (EphyOverviewStore *store,
 gboolean ephy_overview_store_remove               (EphyOverviewStore *store,
                                                    GtkTreeIter       *iter);
 
+
+typedef  void (* EphyOverviewStoreAnimRemoveFunc) (EphyOverviewStore *store,
+                                                   GtkTreeIter *iter,
+                                                   gboolean valid,
+                                                   gpointer user_data);
+
+void     ephy_overview_store_animated_remove      (EphyOverviewStore *store,
+                                                   GtkTreeRowReference *ref,
+                                                   EphyOverviewStoreAnimRemoveFunc func,
+                                                   gpointer user_data);
+
+
 gboolean ephy_overview_store_find_url             (EphyOverviewStore *store,
                                                    const char        *url,
                                                    GtkTreeIter       *iter);
