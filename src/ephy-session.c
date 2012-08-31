@@ -38,13 +38,10 @@
 #include "ephy-string.h"
 #include "ephy-window.h"
 
-#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
-#include <stdlib.h>
-#include <string.h>
 
 typedef struct
 {
