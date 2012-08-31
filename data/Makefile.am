@@ -56,6 +56,11 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g" $@.tmp > $@ || rm -f $@.tmp
 	rm -f $@.tmp
 
+iconsdir = $(pkgdatadir)/icons
+dist_icons_DATA =         \
+    missing-thumbnail.png \
+    thumbnail-frame.png
+
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
 	$(service_in_files)		\
