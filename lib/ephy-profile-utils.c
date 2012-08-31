@@ -196,19 +196,21 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
 {
   gboolean ret;
   GError *error = NULL;
-  char *index = NULL;
+  char *index = NULL, *version = NULL;
   int status;
-  char *argv[3] = { EPHY_PROFILE_MIGRATOR };
+  char *argv[5] = { EPHY_PROFILE_MIGRATOR, "-v" };
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
+
+  argv[2] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
 
   if (test_to_run != -1) {
     index = g_strdup_printf ("%d", test_to_run);
 
-    argv[1] = "-d";
-    argv[2] = index;
-    argv[3] = NULL;
+    argv[3] = "-d";
+    argv[4] = index;
+    argv[5] = NULL;
   } else {
-    argv[1] = NULL;
+    argv[3] = NULL;
   }
 
   if (debug)
@@ -218,6 +220,7 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
                       NULL, NULL, NULL, NULL,
                       &status, &error);
   g_free (index);
+  g_free (version);
     
   if (error) {
     LOG ("Failed to run migrator: %s", error->message);
