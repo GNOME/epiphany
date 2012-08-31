@@ -52,6 +52,7 @@
 #include <sys/types.h>
 
 static int do_step_n = -1;
+static int version = -1;
 
 /*
  * What to do to add new migration steps:
@@ -886,6 +887,8 @@ static const GOptionEntry option_entries[] =
 {
   { "do-step", 'd', 0, G_OPTION_ARG_INT, &do_step_n,
     N_("Executes only the n-th migration step"), NULL },
+  { "version", 'v', 0, G_OPTION_ARG_INT, &version,
+    N_("Specifies the required version for the migrator"), NULL },
   { NULL }
 };
 
@@ -918,6 +921,12 @@ main (int argc, char *argv[])
   }
         
   g_option_context_free (option_context);
+
+  if (version != -1 && version != EPHY_PROFILE_MIGRATION_VERSION) {
+    g_print ("Version mismatch, version %d requested but our version is %d\n", version, EPHY_PROFILE_MIGRATION_VERSION);
+    
+    return 1;
+  }
 
   ephy_debug_init ();
 
