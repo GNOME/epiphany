@@ -76,6 +76,7 @@ on_find_urls_cb (EphyHistoryService *service,
                             -1);
         peek_snapshot = TRUE;
       }
+      g_free (old_url);
 
       if (ephy_overview_store_needs_snapshot (EPHY_OVERVIEW_STORE (store), &treeiter))
         peek_snapshot = TRUE;
