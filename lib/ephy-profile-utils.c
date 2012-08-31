@@ -20,10 +20,11 @@
  */
 
 #include "config.h"
+#include "ephy-profile-utils.h"
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-profile-utils.h"
+
 #include <libsoup/soup.h>
 
 #define PROFILE_MIGRATION_FILE ".migrated"
