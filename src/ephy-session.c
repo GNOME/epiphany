@@ -35,6 +35,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-string.h"
 #include "ephy-window.h"
 
 #include <errno.h>
@@ -1017,49 +1018,27 @@ parse_embed (xmlNodePtr child,
 	}
 }
 
-static gboolean
-int_from_string (const char *string,
-		 int *retval)
-{
-	char *tail = NULL;
-	long int val;
-	gboolean success = FALSE;
-
-	if (string == NULL) return FALSE;
-
-	errno = 0;
-	val = strtol (string, &tail, 0);
-
-	if (errno == 0 && tail != NULL && tail[0] == '\0')
-	{
-		*retval = (int) val;
-		success = TRUE;
-	}
-
-	return success;
-}
-
 static void
 restore_geometry (GtkWindow *window,
 		  xmlNodePtr node)
 {
 	xmlChar *tmp;
-	int x = 0, y = 0, width = -1, height = -1;
+	gulong x = 0, y = 0, width = 0, height = 0;
 	gboolean success = TRUE;
 
 	g_return_if_fail (window != NULL);
 
 	tmp = xmlGetProp (node, (xmlChar *) "x");
-	success &= int_from_string ((char *) tmp, &x);
+	success &= ephy_string_to_int ((char *) tmp, &x);
 	xmlFree (tmp);
 	tmp = xmlGetProp (node, (xmlChar *) "y");
-	success &= int_from_string ((char *) tmp, &y);
+	success &= ephy_string_to_int ((char *) tmp, &y);
 	xmlFree (tmp);
 	tmp = xmlGetProp (node, (xmlChar *) "width");
-	success &= int_from_string ((char *) tmp, &width);
+	success &= ephy_string_to_int ((char *) tmp, &width);
 	xmlFree (tmp);
 	tmp = xmlGetProp (node, (xmlChar *) "height");
-	success &= int_from_string ((char *) tmp, &height);
+	success &= ephy_string_to_int ((char *) tmp, &height);
 	xmlFree (tmp);
 
 	if (success)
@@ -1073,7 +1052,6 @@ restore_geometry (GtkWindow *window,
 
 		gtk_window_move (window, x, y);
 		gtk_window_set_default_size (window, width, height);
-		
 	}
 }
 
@@ -1162,9 +1140,9 @@ ephy_session_load_from_string (EphySession *session,
 			if (tmp != NULL)
 			{
 				gboolean success;
-				int active_tab;
+				gulong active_tab;
 
-				success = int_from_string ((char *) tmp, &active_tab);
+				success = ephy_string_to_int ((char *) tmp, &active_tab);
 				xmlFree (tmp);
 				if (success)
 				{
