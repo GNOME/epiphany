@@ -246,15 +246,7 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 		max_x = x_root + allocation.x + allocation.width;
 		max_y = y_root + allocation.y + allocation.height;
 
-		if (((tab_pos == GTK_POS_TOP)
-		     || (tab_pos == GTK_POS_BOTTOM))
-		    &&(abs_x<=max_x))
-		{
-			return page_num;
-		}
-		else if (((tab_pos == GTK_POS_LEFT)
-			  || (tab_pos == GTK_POS_RIGHT))
-			 && (abs_y<=max_y))
+		if (abs_y <= max_y && abs_x <= max_x)
 		{
 			return page_num;
 		}
