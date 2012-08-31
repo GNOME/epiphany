@@ -76,6 +76,9 @@ void     ephy_overview_store_peek_snapshot        (EphyOverviewStore *self,
 void     ephy_overview_store_set_default_icon     (EphyOverviewStore *store,
                                                    GdkPixbuf         *default_icon);
 
+void     ephy_overview_store_set_icon_frame       (EphyOverviewStore *store,
+                                                   GdkPixbuf *icon_frame);
+
 gboolean ephy_overview_store_needs_snapshot       (EphyOverviewStore *store,
                                                    GtkTreeIter       *iter);
 

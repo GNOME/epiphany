@@ -32,6 +32,7 @@ struct _EphyOverviewStorePrivate
 {
   EphyHistoryService *history_service;
   GdkPixbuf *default_icon;
+  GdkPixbuf *icon_frame;
 };
 
 enum
@@ -39,6 +40,7 @@ enum
   PROP_0,
   PROP_HISTORY_SERVICE,
   PROP_DEFAULT_ICON,
+  PROP_ICON_FRAME,
 };
 
 G_DEFINE_TYPE (EphyOverviewStore, ephy_overview_store, GTK_TYPE_LIST_STORE)
@@ -60,6 +62,10 @@ ephy_overview_store_set_property (GObject *object,
   case PROP_DEFAULT_ICON:
     ephy_overview_store_set_default_icon (store,
                                           g_value_get_object (value));
+    break;
+  case PROP_ICON_FRAME:
+    ephy_overview_store_set_icon_frame (store,
+                                        g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -83,6 +89,9 @@ ephy_overview_store_get_property (GObject *object,
   case PROP_DEFAULT_ICON:
     g_value_set_object (value, store->priv->default_icon);
     break;
+  case PROP_ICON_FRAME:
+    g_value_set_object (value, store->priv->icon_frame);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -98,6 +107,8 @@ ephy_overview_store_dispose (GObject *object)
     g_clear_object (&priv->history_service);
   if (priv->default_icon)
     g_clear_object (&priv->default_icon);
+  if (priv->icon_frame)
+    g_clear_object (&priv->icon_frame);
 
   G_OBJECT_CLASS (ephy_overview_store_parent_class)->dispose (object);
 }
@@ -124,6 +135,14 @@ ephy_overview_store_class_init (EphyOverviewStoreClass *klass)
                                    g_param_spec_object ("default-icon",
                                                         "Default icon",
                                                         "Default Icon",
+                                                        GDK_TYPE_PIXBUF,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+                                   PROP_ICON_FRAME,
+                                   g_param_spec_object ("icon-frame",
+                                                        "Icon frame",
+                                                        "Frame to display around icons",
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -173,122 +192,19 @@ peek_context_free (PeekContext *ctx)
 }
 
 static GdkPixbuf *
-overview_add_frame (GdkPixbuf *pixbuf) {
-  cairo_t *cr;
-  cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
-  int width, height;
-  int border = 10;
+ephy_overview_store_add_frame (EphyOverviewStore *store,
+                               GdkPixbuf *snapshot)
+{
   GdkPixbuf *framed;
 
-  width = gdk_pixbuf_get_width (pixbuf) + 2*border;
-  height = gdk_pixbuf_get_height (pixbuf) + 2*border;
-
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-  cr = cairo_create (surface);
-
-  /* FIXME: This could be done as two masks that are later rotated
-     and moved, instead of repeating the same code 4 times. */
-
-  /* Draw the left-shadow. */
-  cairo_save(cr);
-  pattern = cairo_pattern_create_linear (border, border, 0, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0, 0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, 0, border, border, height - 2*border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore (cr);
-
-  /* Draw the up-left quarter-circle. */
-  cairo_save(cr);
-  pattern = cairo_pattern_create_radial (border, border, 0, border, border, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0,  0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, 0, 0, border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore(cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_linear (border, border, border, 0);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0, 0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, border, 0, width - 2*border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore (cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_radial (width - border, border, 0, width - border, border, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0,  0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, width - border, 0, border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore(cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_linear (width - border, border, width, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0, 0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, width - border, border, width, height - 2*border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore (cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_radial (border, height - border, 0, border, height - border, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0,  0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, 0, height - border, border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore(cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_linear (border, height - border, border, height);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0, 0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, border, height - border, width - 2*border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore (cr);
-
-  cairo_save(cr);
-  pattern = cairo_pattern_create_radial (width - border, height - border, 0, width - border, height - border, border);
-  cairo_pattern_add_color_stop_rgba (pattern, 0, 0, 0, 0,  0.5);
-  cairo_pattern_add_color_stop_rgba (pattern, 1, 0, 0, 0, 0.0);
-  cairo_rectangle (cr, width - border, height - border, border, border);
-  cairo_clip (cr);
-  cairo_set_source (cr, pattern);
-  cairo_mask (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_restore(cr);
-
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, border, border);
-  cairo_rectangle (cr, border, border, width - 2*border, height - 2*border);
-  cairo_clip(cr);
-  cairo_paint (cr);
-
-  framed = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  if (store->priv->icon_frame) {
+    framed = gdk_pixbuf_copy (store->priv->icon_frame);
+    gdk_pixbuf_copy_area (snapshot, 0, 0,
+                          gdk_pixbuf_get_width (snapshot),
+                          gdk_pixbuf_get_height (snapshot),
+                          framed, 10, 9);
+  } else
+    framed = g_object_ref (snapshot);
 
   return framed;
 }
@@ -301,7 +217,7 @@ ephy_overview_store_set_snapshot_internal (EphyOverviewStore *store,
 {
   GdkPixbuf *framed;
 
-  framed = overview_add_frame (snapshot);
+  framed = ephy_overview_store_add_frame (store, snapshot);
   gtk_list_store_set (GTK_LIST_STORE (store), iter,
                       EPHY_OVERVIEW_STORE_SNAPSHOT, framed,
                       EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, mtime,
@@ -500,19 +416,43 @@ void
 ephy_overview_store_set_default_icon (EphyOverviewStore *store,
                                       GdkPixbuf *default_icon)
 {
-  if (store->priv->default_icon == default_icon)
-    return;
-
   if (store->priv->default_icon)
     g_object_unref (store->priv->default_icon);
 
-  store->priv->default_icon = g_object_ref (default_icon);
+  store->priv->default_icon = ephy_overview_store_add_frame (store, default_icon);
 
   gtk_tree_model_foreach (GTK_TREE_MODEL (store),
                           (GtkTreeModelForeachFunc) set_default_icon_helper,
                           NULL);
 
   g_object_notify (G_OBJECT (store), "default-icon");
+}
+
+void
+ephy_overview_store_set_icon_frame (EphyOverviewStore *store,
+                                    GdkPixbuf *icon_frame)
+{
+  gboolean update_default = FALSE;
+  GdkPixbuf *old_default_icon;
+
+  if (store->priv->icon_frame == icon_frame)
+    return;
+
+  if (store->priv->icon_frame)
+    g_object_unref (store->priv->icon_frame);
+  else if (store->priv->default_icon)
+    update_default = TRUE;
+
+  store->priv->icon_frame = g_object_ref (icon_frame);
+
+  if (update_default) {
+    old_default_icon = g_object_ref (store->priv->default_icon);
+    ephy_overview_store_set_default_icon (store,
+                                          old_default_icon);
+    g_object_unref (old_default_icon);
+  }
+
+  g_object_notify (G_OBJECT (store), "icon-frame");
 }
 
 gboolean
