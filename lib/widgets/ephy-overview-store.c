@@ -90,12 +90,26 @@ ephy_overview_store_get_property (GObject *object,
 }
 
 static void
+ephy_overview_store_dispose (GObject *object)
+{
+  EphyOverviewStorePrivate *priv = EPHY_OVERVIEW_STORE (object)->priv;
+
+  if (priv->history_service)
+    g_clear_object (&priv->history_service);
+  if (priv->default_icon)
+    g_clear_object (&priv->default_icon);
+
+  G_OBJECT_CLASS (ephy_overview_store_parent_class)->dispose (object);
+}
+
+static void
 ephy_overview_store_class_init (EphyOverviewStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_overview_store_set_property;
   object_class->get_property = ephy_overview_store_get_property;
+  object_class->dispose      = ephy_overview_store_dispose;
 
   g_object_class_install_property (object_class,
                                    PROP_HISTORY_SERVICE,
