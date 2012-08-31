@@ -209,7 +209,6 @@ is_in_notebook_window (EphyNotebook *notebook,
 static gint
 find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 {
-	GtkPositionType tab_pos;
 	int page_num = 0;
 	GtkNotebook *nb = GTK_NOTEBOOK (notebook);
 	GtkWidget *page;
@@ -220,8 +219,6 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 	{
 		return NOT_IN_APP_WINDOWS;
 	}
-
-	tab_pos = gtk_notebook_get_tab_pos (nb);
 
 	while ((page = gtk_notebook_get_nth_page (nb, page_num)))
 	{
