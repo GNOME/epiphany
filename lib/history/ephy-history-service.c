@@ -425,13 +425,15 @@ ephy_history_service_execute_job_callback (gpointer data)
 {
   EphyHistoryServiceMessage *message = (EphyHistoryServiceMessage*) data;
 
-  g_assert (message->callback);
+  g_assert (message->callback || message->type == CLEAR);
 
   if (g_cancellable_is_cancelled (message->cancellable)) {
     ephy_history_service_message_free (message);
     return FALSE;
   }
-  message->callback (message->service, message->success, message->result, message->user_data);
+
+  if (message->callback)
+    message->callback (message->service, message->success, message->result, message->user_data);
 
   if (message->type == CLEAR)
     g_signal_emit (message->service, signals[CLEARED], 0);
@@ -967,7 +969,7 @@ ephy_history_service_process_message (EphyHistoryService *self,
   message->result = NULL;
   message->success = method (message->service, message->method_argument, &message->result);
 
-  if (message->callback)
+  if (message->callback || message->type == CLEAR)
     g_idle_add ((GSourceFunc)ephy_history_service_execute_job_callback, message);
   else
     ephy_history_service_message_free (message);
