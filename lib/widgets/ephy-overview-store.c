@@ -56,7 +56,7 @@ ephy_overview_store_set_property (GObject *object,
   switch (prop_id)
   {
   case PROP_HISTORY_SERVICE:
-    store->priv->history_service = g_value_get_object (value);
+    store->priv->history_service = g_value_dup_object (value);
     g_object_notify (object, "history-service");
     break;
   case PROP_DEFAULT_ICON:
