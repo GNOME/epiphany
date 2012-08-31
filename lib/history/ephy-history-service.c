@@ -479,6 +479,35 @@ ephy_history_service_execute_job_callback (gpointer data)
   return FALSE;
 }
 
+typedef struct {
+  EphyHistoryService *service;
+  gpointer user_data;
+  GDestroyNotify destroy_func;
+} SignalEmissionContext;
+
+static void
+signal_emission_context_free (SignalEmissionContext *ctx)
+{
+  g_object_unref (ctx->service);
+  if (ctx->destroy_func && ctx->user_data)
+    ctx->destroy_func (ctx->user_data);
+  g_slice_free (SignalEmissionContext, ctx);
+}
+
+static SignalEmissionContext *
+signal_emission_context_new (EphyHistoryService *service,
+                             gpointer user_data,
+                             GDestroyNotify destroy_func)
+{
+  SignalEmissionContext *ctx = g_slice_new0 (SignalEmissionContext);
+
+  ctx->service = g_object_ref (service);
+  ctx->user_data = user_data;
+  ctx->destroy_func = destroy_func;
+
+  return ctx;
+}
+
 static gboolean
 ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHistoryPageVisit *visit)
 {
@@ -711,6 +740,16 @@ ephy_history_service_query_hosts (EphyHistoryService *self,
 }
 
 static gboolean
+set_url_title_signal_emit (SignalEmissionContext *ctx)
+{
+  EphyHistoryURL *url = (EphyHistoryURL *)ctx->user_data;
+
+  g_signal_emit (ctx->service, signals[URL_TITLE_CHANGED], 0, url->url, url->title);
+
+  return FALSE;
+}
+
+static gboolean
 ephy_history_service_execute_set_url_title (EphyHistoryService *self,
                                             EphyHistoryURL *url,
                                             gpointer *result)
@@ -722,11 +761,19 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
     g_free (title);
     return FALSE;
   } else {
+    SignalEmissionContext *ctx;
+
     g_free (url->title);
     url->title = title;
     ephy_history_service_update_url_row (self, url);
     ephy_history_service_schedule_commit (self);
-    g_signal_emit (self, signals[URL_TITLE_CHANGED], 0, url->url, url->title);
+
+    ctx = signal_emission_context_new (self,
+                                       ephy_history_url_copy (url),
+                                       (GDestroyNotify)ephy_history_url_free);
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                     (GSourceFunc)set_url_title_signal_emit,
+                     ctx, (GDestroyNotify)signal_emission_context_free);
     return TRUE;
   }
 }
@@ -947,17 +994,34 @@ ephy_history_service_get_host_for_url (EphyHistoryService *self,
 }
 
 static gboolean
+delete_urls_signal_emit (SignalEmissionContext *ctx)
+{
+  char *url = (char *)ctx->user_data;
+
+  g_signal_emit (ctx->service, signals[URL_DELETED], 0, url);
+
+  return FALSE;
+}
+
+static gboolean
 ephy_history_service_execute_delete_urls (EphyHistoryService *self,
                                           GList *urls,
                                           gpointer *result)
 {
   GList *l;
   EphyHistoryURL *url;
+  SignalEmissionContext *ctx;
 
   for (l = urls; l != NULL; l = l->next) {
     url = l->data;
     ephy_history_service_delete_url (self, url);
-    g_signal_emit (self, signals[URL_DELETED], 0, url->url);
+
+    ctx = signal_emission_context_new (self, g_strdup (url->url),
+                                       (GDestroyNotify) g_free);
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                     (GSourceFunc)delete_urls_signal_emit,
+                     ctx,
+                     (GDestroyNotify)signal_emission_context_free);
   }
 
   ephy_history_service_delete_orphan_hosts (self);
@@ -967,14 +1031,32 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
 }
 
 static gboolean
+delete_host_signal_emit (SignalEmissionContext *ctx)
+{
+  char *host = (char *)ctx->user_data;
+
+  g_signal_emit (ctx->service, signals[HOST_DELETED], 0, host);
+
+  return FALSE;
+}
+
+static gboolean
 ephy_history_service_execute_delete_host (EphyHistoryService *self,
                                           EphyHistoryHost *host,
                                           EphyHistoryJobCallback callback,
                                           gpointer user_data)
 {
+  SignalEmissionContext *ctx;
+
   ephy_history_service_delete_host_row (self, host);
   ephy_history_service_schedule_commit (self);
-  g_signal_emit (self, signals[HOST_DELETED], 0, host->url);
+
+  ctx = signal_emission_context_new (self, g_strdup (host->url),
+                                     (GDestroyNotify)g_free);
+  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                   (GSourceFunc) delete_host_signal_emit,
+                   ctx,
+                   (GDestroyNotify) signal_emission_context_free);
 
   return TRUE;
 }
