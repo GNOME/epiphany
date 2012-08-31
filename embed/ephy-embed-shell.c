@@ -179,19 +179,15 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 }
 
 static GdkPixbuf *
-ephy_embed_shell_get_icon (const char *icon_name)
+ephy_embed_shell_get_overview_icon (const char *icon_name)
 {
   GError *error = NULL;
-  GtkIconTheme *icon_theme;
   GdkPixbuf *pixbuf;
+  char *filename;
 
-  icon_theme = gtk_icon_theme_get_default ();
-
-  pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                     icon_name,
-                                     EPHY_THUMBNAIL_WIDTH,
-                                     0,
-                                     &error);
+  filename = g_build_filename (ICONS_DIR, icon_name, NULL);
+  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+  g_free (filename);
 
   if (!pixbuf) {
     g_warning ("Couldn't load icon: %s", error->message);
@@ -220,7 +216,7 @@ ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
 	if (shell->priv->frecent_store == NULL)
 	{
 		shell->priv->frecent_store = ephy_frecent_store_new ();
-		default_icon = ephy_embed_shell_get_icon ("text-html");
+		default_icon = ephy_embed_shell_get_overview_icon ("missing-thumbnail.png");
 		g_object_set (shell->priv->frecent_store,
 			      "history-service",
 			      ephy_embed_shell_get_global_history_service (shell),
