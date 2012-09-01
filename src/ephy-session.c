@@ -3,6 +3,7 @@
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005, 2006, 2008 Christian Persch
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +57,6 @@ typedef struct
 struct _EphySessionPrivate
 {
 	GList *windows;
-	GList *tool_windows;
 	GtkWidget *resume_window;
 
 	GQueue *queue;
@@ -65,8 +65,6 @@ struct _EphySessionPrivate
 	guint dont_save : 1;
 };
 
-#define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
-#define HISTORY_WINDOW_ID	"HistoryWindow"
 #define SESSION_STATE		"type:session_state"
 
 static void ephy_session_iface_init	(EphyExtensionIface *iface);
@@ -262,8 +260,7 @@ session_command_autoresume (EphySession *session,
 
 	if (crashed_session == FALSE ||
 	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER ||
-	    priv->windows != NULL ||
-	    priv->tool_windows != NULL)
+	    priv->windows != NULL)
 	{
 		/* If we are auto-resuming, and we never want to
 		 * restore the session, clobber the session state
@@ -423,8 +420,7 @@ session_command_dispatch (EphySession *session)
 			break;
 		case EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW:
 			/* FIXME: maybe just check for normal windows? */
-			if (priv->windows == NULL &&
-			    priv->tool_windows == NULL)
+			if (priv->windows == NULL)
 			{
 				ephy_shell_new_tab_full (ephy_shell_get_default (),
 							 NULL /* window */, NULL /* tab */,
@@ -584,7 +580,6 @@ ephy_session_finalize (GObject *object)
 
 	/* FIXME: those should be NULL already!? */
 	g_list_free (session->priv->windows);
-	g_list_free (session->priv->tool_windows);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->finalize (object);
 }
@@ -750,39 +745,6 @@ write_window_geometry (xmlTextWriterPtr writer,
 }
 
 static int
-write_tool_window (xmlTextWriterPtr writer,
-		   GtkWindow *window)
-{
-	const xmlChar *id;
-	int ret;
-
-	if (EPHY_IS_BOOKMARKS_EDITOR (window))
-	{
-		id = (const xmlChar *) BOOKMARKS_EDITOR_ID;
-	}
-	else if (EPHY_IS_HISTORY_WINDOW (window))
-	{
-		id = (const xmlChar *) HISTORY_WINDOW_ID;
-	}
-	else
-	{
-		g_return_val_if_reached (-1);
-	}
-
-	ret = xmlTextWriterStartElement (writer, (const xmlChar *) "toolwindow");
-	if (ret < 0) return ret;
-
-	ret = xmlTextWriterWriteAttribute (writer, (const xmlChar *) "id", id);
-	if (ret < 0) return ret;
-
-	ret = write_window_geometry (writer, window);
-	if (ret < 0) return ret;
-
-	ret = xmlTextWriterEndElement (writer); /* toolwindow */
-	return ret;
-}
-
-static int
 write_ephy_window (xmlTextWriterPtr writer,
 		   EphyWindow *window)
 {
@@ -852,7 +814,7 @@ ephy_session_save (EphySession *session,
 
 	LOG ("ephy_sesion_save %s", filename);
 
-	if (priv->windows == NULL && priv->tool_windows == NULL)
+	if (priv->windows == NULL)
 	{
 		session_delete (session, filename);
 		return TRUE;
@@ -892,12 +854,6 @@ ephy_session_save (EphySession *session,
 	for (w = session->priv->windows; w != NULL && ret >= 0; w = w->next)
 	{
 		ret = write_ephy_window (writer, EPHY_WINDOW (w->data));
-	}
-	if (ret < 0) goto out;
-
-	for (w = session->priv->tool_windows; w != NULL && ret >= 0; w = w->next)
-	{
-		ret = write_tool_window (writer, GTK_WINDOW (w->data));
 	}
 	if (ret < 0) goto out;
 
@@ -1157,37 +1113,6 @@ ephy_session_load_from_string (EphySession *session,
 				gtk_widget_show (widget);
 			}
 		}
-		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
-		{
-			xmlChar *id;
-
-			id = xmlGetProp (child, (const xmlChar *) "id");
-
-			if (id && xmlStrEqual ((const xmlChar *) BOOKMARKS_EDITOR_ID, id))
-			{
-				if (!g_settings_get_boolean
-				    (EPHY_SETTINGS_LOCKDOWN,
-				     EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
-				{
-					widget = ephy_shell_get_bookmarks_editor (ephy_shell);
-				}
-			}
-			else if (id && xmlStrEqual ((const xmlChar *) HISTORY_WINDOW_ID, id))
-			{
-				if (!g_settings_get_boolean
-				    (EPHY_SETTINGS_LOCKDOWN,
-				     EPHY_PREFS_LOCKDOWN_HISTORY))
-				{
-					widget = ephy_shell_get_history_window (ephy_shell);
-				}
-			}
-
-			restore_geometry (GTK_WINDOW (widget), child);
-
-			ephy_gui_window_update_user_time (widget, user_time);
-
-			gtk_widget_show (widget);
-		}
 
 		child = child->next;
 	}
@@ -1201,7 +1126,7 @@ ephy_session_load_from_string (EphySession *session,
 
 	g_object_unref (ephy_shell_get_default ());
 
-	return (priv->windows != NULL || priv->tool_windows != NULL);
+	return priv->windows != NULL;
 }
 
 /**
@@ -1265,48 +1190,6 @@ ephy_session_get_windows (EphySession *session)
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
 	return g_list_copy (session->priv->windows);
-}
-
-/**
- * ephy_session_add_window:
- * @session: a #EphySession
- * @window: a #EphyWindow
- *
- * Add a tool window to the session. #EphyWindow take care of adding
- * itself to session.
- **/
-void
-ephy_session_add_window (EphySession *session,
-			 GtkWindow *window)
-{
-	LOG ("ephy_session_add_window %p", window);
-
-	session->priv->tool_windows =
-		g_list_append (session->priv->tool_windows, window);
-	gtk_application_add_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
-
-	ephy_session_save (session, SESSION_STATE);
-}
-
-/**
- * ephy_session_remove_window:
- * @session: a #EphySession.
- * @window: a #GtkWindow, which must be either the bookmarks editor or the
- * history window.
- *
- * Remove a tool window from the session.
- **/
-void
-ephy_session_remove_window (EphySession *session,
-			    GtkWindow *window)
-{
-	LOG ("ephy_session_remove_window %p", window);
-
-	session->priv->tool_windows =
-		g_list_remove (session->priv->tool_windows, window);
-	gtk_application_remove_window (GTK_APPLICATION (ephy_shell_get_default ()), window);
-
-	ephy_session_save (session, SESSION_STATE);
 }
 
 /**

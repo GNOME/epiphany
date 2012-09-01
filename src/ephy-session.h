@@ -88,12 +88,6 @@ void		 ephy_session_close		(EphySession *session);
 
 GList		*ephy_session_get_windows	(EphySession *session);
 
-void		 ephy_session_add_window	(EphySession *session,
-						 GtkWindow *window);
-
-void		 ephy_session_remove_window	(EphySession *session,
-						 GtkWindow *window);
-
 void		 ephy_session_queue_command	(EphySession *session,
 						 EphySessionCommand op,
 						 const char *arg,

@@ -969,22 +969,6 @@ ephy_shell_get_net_monitor (EphyShell *shell)
   return G_OBJECT (priv->network_monitor);
 }
 
-static void
-toolwindow_show_cb (GtkWidget *widget, EphyShell *es)
-{
-  LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget));
-
-  ephy_session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
-}
-
-static void
-toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
-{
-  LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget));
-
-  ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
-}
-
 /**
  * ephy_shell_get_bookmarks_editor:
  *
@@ -999,11 +983,6 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
     bookmarks = ephy_shell_get_bookmarks (ephy_shell);
     g_assert (bookmarks != NULL);
     shell->priv->bme = ephy_bookmarks_editor_new (bookmarks);
-
-    g_signal_connect (shell->priv->bme, "show",
-                      G_CALLBACK (toolwindow_show_cb), shell);
-    g_signal_connect (shell->priv->bme, "hide",
-                      G_CALLBACK (toolwindow_hide_cb), shell);
   }
 
   return shell->priv->bme;
@@ -1023,11 +1002,6 @@ ephy_shell_get_history_window (EphyShell *shell)
     service = EPHY_HISTORY_SERVICE
       (ephy_embed_shell_get_global_history_service (embed_shell));
     shell->priv->history_window = ephy_history_window_new (service);
-
-    g_signal_connect (shell->priv->history_window, "show",
-                      G_CALLBACK (toolwindow_show_cb), shell);
-    g_signal_connect (shell->priv->history_window, "hide",
-                      G_CALLBACK (toolwindow_hide_cb), shell);
   }
 
   return shell->priv->history_window;
