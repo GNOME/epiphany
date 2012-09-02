@@ -247,30 +247,37 @@ test_ephy_shell_tab_from_external ()
    * loop, fake one so we get a working test. */
   ephy_web_view_load_homepage (ephy_embed_get_web_view (embed2));
 
+  while (g_main_context_pending (NULL))
+      g_main_context_iteration (NULL, FALSE);
+
   embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:memory",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
   g_assert (gtk_widget_get_toplevel (GTK_WIDGET (embed3)) == window);
 
   /* This one should fail, because the active embed is not @embed2. */
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "about:blank");
+  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
   g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 0);
 
   embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:applications",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_FROM_EXTERNAL);
   g_assert (embed4 != embed2);
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "about:blank");
+  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
   g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed4)), ==, "ephy-about:applications");
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), 1);
 
   /* This should work */
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "about:blank");
+  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
   g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 1);
-
+  
   embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:applications",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_FROM_EXTERNAL);
+
+  while (g_main_context_pending (NULL))
+      g_main_context_iteration (NULL, FALSE);
+
   g_assert (embed5 == embed2);
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:applications");
+  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed5)), ==, "ephy-about:applications");
 
   gtk_widget_destroy (window);
 }
