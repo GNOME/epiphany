@@ -174,6 +174,8 @@ main (int argc, char *argv[])
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
   g_assert (ephy_shell);
 
+  g_application_register (G_APPLICATION (ephy_shell), NULL, NULL);
+
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
 
