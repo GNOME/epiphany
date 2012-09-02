@@ -147,7 +147,7 @@ test_ephy_shell_tab_load ()
 
   g_assert (EPHY_IS_EMBED (embed));
   view = ephy_embed_get_web_view (embed);
-  g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:blank");
+  g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:overview");
   g_assert_cmpstr (ephy_web_view_get_typed_address (view), ==, NULL);
 
   g_object_ref_sink (embed);
