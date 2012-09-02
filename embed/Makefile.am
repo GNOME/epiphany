@@ -76,7 +76,6 @@ endif
 
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
-	-DICONS_DIR=\"$(pkgdatadir)/icons\" \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
 

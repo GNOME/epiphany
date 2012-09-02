@@ -231,9 +231,11 @@ ephy_file (const char *filename)
 	{
 #ifdef GNOME_ENABLE_DEBUG
 		TOP_SRC_DATADIR "/",
+		TOP_SRC_DATADIR "/icons/",
 		TOP_SRC_DATADIR "/pages/",
 #endif
 		SHARE_DIR "/",
+		SHARE_DIR "/icons/",
 		SHARE_DIR "/pages/"
 	};
 

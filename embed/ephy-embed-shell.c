@@ -183,11 +183,10 @@ ephy_embed_shell_get_overview_icon (const char *icon_name)
 {
   GError *error = NULL;
   GdkPixbuf *pixbuf;
-  char *filename;
+  const char *filename;
 
-  filename = g_build_filename (ICONS_DIR, icon_name, NULL);
+  filename = ephy_file (icon_name);
   pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-  g_free (filename);
 
   if (!pixbuf) {
     g_warning ("Couldn't load icon: %s", error->message);
