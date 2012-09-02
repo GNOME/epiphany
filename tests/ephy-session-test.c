@@ -106,7 +106,7 @@ test_ephy_session_load_empty_session ()
     g_assert (embed);
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
-    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:blank");
+    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:overview");
 
     /* FIXME: Destroy the window. I think ideally we'd like something
      * like 'ephy_session_clear ()' to reset everything to its initial
