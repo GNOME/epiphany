@@ -754,8 +754,9 @@ ephy_shell_new_tab_full (EphyShell *shell,
     /* If the active embed is blank, use that to open the url and jump to it */
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
     if (embed != NULL) {
-      if (ephy_web_view_get_is_blank (ephy_embed_get_web_view (embed)) &&
-          ephy_web_view_is_loading (ephy_embed_get_web_view (embed)) == FALSE) {
+      EphyWebView *view = ephy_embed_get_web_view (embed);
+      if ((ephy_web_view_get_is_blank (view) || ephy_embed_get_overview_mode (embed)) &&
+          ephy_web_view_is_loading (view) == FALSE) {
         active_is_blank = TRUE;
       }
     }
