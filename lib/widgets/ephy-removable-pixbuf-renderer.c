@@ -119,6 +119,9 @@ ephy_removable_pixbuf_renderer_activate (GtkCellRenderer      *cell,
   GdkEventButton *ev = (GdkEventButton *) gtk_get_current_event();
   EphyRemovablePixbufRendererPrivate *priv = EPHY_REMOVABLE_PIXBUF_RENDERER (cell)->priv;
 
+  if (priv->policy ==  EPHY_REMOVABLE_PIXBUF_RENDER_NEVER)
+    return FALSE;
+
   get_icon_rectangle (widget, cell, cell_area, priv->close_icon, &icon_area);
   if (icon_area.x <= ev->x && ev->x <= icon_area.x + icon_area.width &&
       icon_area.y <= ev->y && ev->y <= icon_area.y + icon_area.height) {
