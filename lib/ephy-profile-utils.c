@@ -199,19 +199,19 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
   char *index = NULL, *version = NULL;
   int status;
   char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
+  int i = 2; /* index for argv, start filling at 2. */
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
-  argv[2] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
+  argv[i++] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
 
   if (test_to_run != -1) {
     index = g_strdup_printf ("%d", test_to_run);
 
-    argv[3] = "-d";
-    argv[4] = index;
-    argv[5] = NULL;
-  } else {
-    argv[3] = NULL;
+    argv[i++] = "-d";
+    argv[i++] = index;
   }
+
+  argv[i++] = NULL;
 
   if (debug)
     argv[0] = ABS_TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
