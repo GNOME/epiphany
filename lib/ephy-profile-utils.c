@@ -198,7 +198,7 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
   GError *error = NULL;
   char *index = NULL, *version = NULL;
   int status;
-  char *argv[5] = { EPHY_PROFILE_MIGRATOR, "-v" };
+  char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
   char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
   argv[2] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
