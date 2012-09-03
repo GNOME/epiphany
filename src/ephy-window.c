@@ -2144,7 +2144,7 @@ overview_open_link_cb (EphyOverview *overview,
 		       const char *url,
 		       EphyWindow *window)
 {
-	ephy_link_open (EPHY_LINK (window), url, NULL, 0);
+	ephy_link_open (EPHY_LINK (window), url, NULL, ephy_link_flags_from_current_event ());
 }
 
 static void
