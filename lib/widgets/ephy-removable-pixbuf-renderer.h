@@ -40,8 +40,8 @@ typedef struct _EphyRemovablePixbufRendererClass EphyRemovablePixbufRendererClas
 typedef struct _EphyRemovablePixbufRendererPrivate EphyRemovablePixbufRendererPrivate;
 
 typedef enum {
-  EPHY_REMOVABLE_PIXBUF_RENDER_NEVER = 0,
-  EPHY_REMOVABLE_PIXBUF_RENDER_PRELIT,
+  EPHY_REMOVABLE_PIXBUF_RENDER_PRELIT = 0,
+  EPHY_REMOVABLE_PIXBUF_RENDER_NEVER,
   EPHY_REMOVABLE_PIXBUF_RENDER_ALWAYS
 } EphyRemovablePixbufRenderPolicy;
 
