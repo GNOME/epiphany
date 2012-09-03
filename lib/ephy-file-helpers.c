@@ -58,7 +58,7 @@
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
-static gboolean keep_temp_directory = FALSE; /* for debug purposes */
+static gboolean keep_directory = FALSE;
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
@@ -312,7 +312,7 @@ ephy_file_helpers_init (const char *profile_dir,
 				       (GDestroyNotify) g_free,
 				       (GDestroyNotify) g_free);
 
-	keep_temp_directory = flags & EPHY_FILE_HELPERS_KEEP_TEMP_DIR;
+	keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
 	private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
 
 	if (private_profile && profile_dir != NULL)
@@ -385,7 +385,7 @@ ephy_file_helpers_shutdown (void)
 
 	if (tmp_dir != NULL)
 	{
-		if (!keep_temp_directory)
+		if (!keep_directory)
 		{
 			GFile *tmp_dir_file;
 			tmp_dir_file = g_file_new_for_path (tmp_dir);

@@ -38,7 +38,7 @@ typedef struct {
 static const FileInitTest private_tests[] =
 {
   { "private", EPHY_FILE_HELPERS_PRIVATE_PROFILE },
-  { "private, keep-dir", EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_KEEP_TEMP_DIR }
+  { "private, keep-dir", EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_KEEP_DIR }
 };
 
 static void
@@ -53,19 +53,19 @@ test_ephy_file_helpers_init ()
     char *dot_dir = NULL;
 
     gboolean private_profile = FALSE;
-    gboolean keep_tmp = FALSE;
+    gboolean keep_dir = FALSE;
     gboolean ensure_exists = FALSE;
 
     test = private_tests[i];
 
     if (test.flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE) private_profile = TRUE;
-    if (test.flags & EPHY_FILE_HELPERS_KEEP_TEMP_DIR) keep_tmp = TRUE;
+    if (test.flags & EPHY_FILE_HELPERS_KEEP_DIR) keep_dir = TRUE;
     if (test.flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) ensure_exists = TRUE;
 
-    g_test_message ("INIT: dir: %s; private: %s; keep_tmp: %s; ensure_exists: %s",
+    g_test_message ("INIT: dir: %s; private: %s; keep_dir: %s; ensure_exists: %s",
                     test.dir,
                     private_profile ? "TRUE" : "FALSE",
-                    keep_tmp ? "TRUE" : "FALSE",
+                    keep_dir ? "TRUE" : "FALSE",
                     ensure_exists ? "TRUE" : "FALSE");
 
     g_assert (ephy_dot_dir () == NULL);
@@ -84,11 +84,11 @@ test_ephy_file_helpers_init ()
     ephy_file_helpers_shutdown ();
 
     /* Private profiles have their dot_dir inside tmp_dir. */
-    g_assert (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_tmp);
-    g_assert (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == (keep_tmp && ensure_exists));
+    g_assert (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_dir);
+    g_assert (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
 
-    /* Cleanup tmp-dir left behind. */
-    if (keep_tmp) {
+    /* Cleanup dir left behind. */
+    if (keep_dir) {
       GFile *file;
 
       file = g_file_new_for_path (tmp_dir);

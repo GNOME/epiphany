@@ -404,7 +404,7 @@ main (int argc,
   if (private_instance || application_mode)
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
   if (keep_temp_directory || profile_directory)
-    flags |= EPHY_FILE_HELPERS_KEEP_TEMP_DIR;
+    flags |= EPHY_FILE_HELPERS_KEEP_DIR;
 
   if (!ephy_file_helpers_init (profile_directory, flags,
                                &error)) {
