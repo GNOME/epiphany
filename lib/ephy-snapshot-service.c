@@ -194,6 +194,7 @@ webview_retrieve_snapshot (SnapshotOp *op)
   }
 
   op->snapshot = ephy_snapshot_service_crop_snapshot (surface);
+  cairo_surface_destroy (surface);
 
   g_io_scheduler_push_job ((GIOSchedulerJobFunc)io_scheduler_save_thumbnail,
                            op, NULL, G_PRIORITY_LOW, NULL);
