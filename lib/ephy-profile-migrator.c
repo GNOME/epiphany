@@ -53,6 +53,7 @@
 
 static int do_step_n = -1;
 static int version = -1;
+static char *profile_dir = NULL;
 
 /*
  * What to do to add new migration steps:
@@ -889,6 +890,8 @@ static const GOptionEntry option_entries[] =
     N_("Executes only the n-th migration step"), NULL },
   { "version", 'v', 0, G_OPTION_ARG_INT, &version,
     N_("Specifies the required version for the migrator"), NULL },
+  { "profile-dir", 'p', 0, G_OPTION_ARG_FILENAME, &profile_dir,
+    N_("Specifies the profile where the migrator should run"), NULL },
   { NULL }
 };
 
@@ -898,6 +901,7 @@ main (int argc, char *argv[])
   GOptionContext *option_context;
   GOptionGroup *option_group;
   GError *error = NULL;
+  EphyFileHelpersFlags file_helpers_flags = EPHY_FILE_HELPERS_NONE;
 
   g_type_init ();
 
@@ -930,7 +934,11 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
 
-  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_NONE, NULL)) {
+  if (profile_dir != NULL)
+    file_helpers_flags = EPHY_FILE_HELPERS_PRIVATE_PROFILE |
+      EPHY_FILE_HELPERS_KEEP_DIR;
+
+  if (!ephy_file_helpers_init (profile_dir, file_helpers_flags, NULL)) {
     LOG ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }
