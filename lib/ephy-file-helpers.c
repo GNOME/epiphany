@@ -62,6 +62,7 @@ static gboolean keep_directory = FALSE;
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
+static gboolean is_default_dot_dir = FALSE;
 
 GQuark ephy_file_helpers_error_quark;
 
@@ -276,6 +277,20 @@ ephy_dot_dir (void)
 }
 
 /**
+ * ephy_dot_dir_is_default:
+ *
+ * Returns whether the dot directory in use is the default one, found in
+ * ~/.config
+ *
+ * Returns: %TRUE if it is the default dot dir, %FALSE for others
+ **/
+gboolean
+ephy_dot_dir_is_default (void)
+{
+	return is_default_dot_dir;
+}
+
+/**
  * ephy_file_helpers_init:
  * @profile_dir: directory to use as Epiphany's profile
  * @flags: the %EphyFileHelpersFlags for this session
@@ -340,6 +355,7 @@ ephy_file_helpers_init (const char *profile_dir,
 		dot_dir = g_build_filename (g_get_user_config_dir (),
 					    "epiphany",
 					    NULL);
+		is_default_dot_dir = TRUE;
 	}
 
 	if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
