@@ -19,6 +19,7 @@
  *
  */
 
+#include "ephy-overview-store.h"
 #include "ephy-removable-pixbuf-renderer.h"
 #include "gd-main-icon-view.h"
 #include "gd-main-view.h"
@@ -119,6 +120,8 @@ gd_main_icon_view_constructed (GObject *obj)
                                  "active", GD_MAIN_COLUMN_SELECTED);
   gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self), cell,
                                  "pixbuf", GD_MAIN_COLUMN_ICON);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self), cell,
+				 "render-policy", EPHY_OVERVIEW_STORE_CLOSE_BUTTON_RENDER_POLICY);
 
   cell = gd_two_lines_renderer_new ();
   g_object_set (cell,
