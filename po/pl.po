@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2012-09-02 22:13+0200\n"
-"PO-Revision-Date: 2012-09-02 22:14+0200\n"
+"POT-Creation-Date: 2012-09-03 21:29+0200\n"
+"PO-Revision-Date: 2012-09-03 21:30+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -49,7 +49,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.pl/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:481 ../src/window-commands.c:1349
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
 msgid "Web"
 msgstr "WWW"
 
@@ -511,7 +511,7 @@ msgstr "F11"
 msgid "Web Inspector"
 msgstr "Web Inspector"
 
-#: ../embed/ephy-embed-shell.c:267
+#: ../embed/ephy-embed-shell.c:266
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr ""
 "Nie można teraz użyć programu Epiphany. Zainicjowanie się nie powiodło."
@@ -1015,26 +1015,26 @@ msgid "All files"
 msgstr "Wszystkie pliki"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:113 ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
 msgid "Downloads"
 msgstr "Pobrane"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:166
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "Pulpit"
 
-#: ../lib/ephy-file-helpers.c:327
+#: ../lib/ephy-file-helpers.c:344
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nie można utworzyć katalogu tymczasowego w \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:427
+#: ../lib/ephy-file-helpers.c:445
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Plik \"%s\" istnieje. Proszę przenieść go w inne miejsce."
 
-#: ../lib/ephy-file-helpers.c:448
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Utworzenie katalogu \"%s\" się nie powiodło."
@@ -1086,11 +1086,11 @@ msgstr ""
 "Aby je zaimportować do programu Epiphany, należy wprowadzić hasło główne "
 "poniżej."
 
-#: ../lib/ephy-profile-migrator.c:97
+#: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Skopiowanie ciasteczek z Mozilli się nie powiodło."
 
-#: ../lib/ephy-profile-migrator.c:649
+#: ../lib/ephy-profile-migrator.c:650
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1099,19 +1099,23 @@ msgstr ""
 "przestarzały, a jego zawartość została przeniesiona do katalogu ~/.config/"
 "epiphany"
 
-#: ../lib/ephy-profile-migrator.c:889
+#: ../lib/ephy-profile-migrator.c:890
 msgid "Executes only the n-th migration step"
 msgstr "Wykonuje tylko podany krok migracji"
 
-#: ../lib/ephy-profile-migrator.c:891
+#: ../lib/ephy-profile-migrator.c:892
 msgid "Specifies the required version for the migrator"
 msgstr "Podaje wymaganą wersję dla migracji"
 
-#: ../lib/ephy-profile-migrator.c:905
+#: ../lib/ephy-profile-migrator.c:894
+msgid "Specifies the profile where the migrator should run"
+msgstr "Podaje profil dla migracji"
+
+#: ../lib/ephy-profile-migrator.c:909
 msgid "Epiphany profile migrator"
 msgstr "Migracja profilu przeglądarki Epiphany"
 
-#: ../lib/ephy-profile-migrator.c:906
+#: ../lib/ephy-profile-migrator.c:910
 msgid "Epiphany profile migrator options"
 msgstr "Opcje migracji profilu przeglądarki Epiphany"
 
@@ -1320,13 +1324,13 @@ msgid "Clear"
 msgstr "Wyczyść"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
 msgid "Title"
 msgstr "Tytuł"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1691
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
 msgid "Address"
 msgstr "Adres"
 
@@ -1716,7 +1720,7 @@ msgid "Export Bookmarks"
 msgstr "Wyeksportowanie zakładek"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:762
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Zakładki"
@@ -1752,7 +1756,7 @@ msgstr "_Skopiuj adres"
 msgid "_Search:"
 msgstr "Wy_szukaj:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1610
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
 msgid "Topics"
 msgstr "Tematy"
 
