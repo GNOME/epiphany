@@ -36,7 +36,7 @@ test_do_migration_simple (void)
 {
     gboolean ret;
 
-    ret = ephy_profile_utils_do_migration (-1, TRUE);
+    ret = ephy_profile_utils_do_migration (NULL, -1, TRUE);
     g_assert (ret);
 }
 
@@ -45,7 +45,7 @@ test_do_migration_invalid (void)
 {
     gboolean ret;
 
-    ret = ephy_profile_utils_do_migration (EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
+    ret = ephy_profile_utils_do_migration (NULL, EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
     g_assert (ret == FALSE);
 }
 

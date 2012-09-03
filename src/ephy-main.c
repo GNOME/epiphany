@@ -392,7 +392,7 @@ main (int argc,
   /* TODO: we want to migrate each WebApp profile too. */
   if (!private_instance && !application_mode) {
     /* If the migration fails we don't really want to continue. */
-    if (!ephy_profile_utils_do_migration (-1, FALSE)) {
+    if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.");
       exit (1);
     }

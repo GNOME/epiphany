@@ -200,7 +200,7 @@ _ephy_profile_utils_query_form_auth_data (const char *uri,
 #define EPHY_PROFILE_MIGRATOR "ephy-profile-migrator"
 
 gboolean
-ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
+ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug)
 {
   gboolean ret;
   GError *error = NULL;
@@ -217,6 +217,11 @@ ephy_profile_utils_do_migration (int test_to_run, gboolean debug)
 
     argv[i++] = "-d";
     argv[i++] = index;
+  }
+
+  if (profile_directory != NULL) {
+    argv[i++] = "-p";
+    argv[i++] = (char *)profile_directory;
   }
 
   argv[i++] = NULL;
