@@ -24,6 +24,8 @@
 #include "ephy-history-service.h"
 #include "ephy-snapshot-service.h"
 
+#include <libsoup/soup.h>
+
 #define EPHY_FRECENT_STORE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FRECENT_STORE, EphyFrecentStorePrivate))
 
 struct _EphyFrecentStorePrivate
