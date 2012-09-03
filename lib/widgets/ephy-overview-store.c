@@ -416,14 +416,18 @@ void
 ephy_overview_store_set_default_icon (EphyOverviewStore *store,
                                       GdkPixbuf *default_icon)
 {
+  GdkPixbuf *new_default_icon;
+
   if (store->priv->default_icon)
     g_object_unref (store->priv->default_icon);
 
-  store->priv->default_icon = ephy_overview_store_add_frame (store, default_icon);
+  new_default_icon = ephy_overview_store_add_frame (store, default_icon);
 
   gtk_tree_model_foreach (GTK_TREE_MODEL (store),
                           (GtkTreeModelForeachFunc) set_default_icon_helper,
-                          NULL);
+                          new_default_icon);
+
+  store->priv->default_icon = new_default_icon;
 
   g_object_notify (G_OBJECT (store), "default-icon");
 }
