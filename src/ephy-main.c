@@ -389,8 +389,9 @@ main (int argc,
   /* Work-around Flash Player crash */
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
-  /* TODO: we want to migrate each WebApp profile too. */
-  if (!private_instance && !application_mode) {
+  /* Run the migration in all cases, except when running a private
+     instance without a given profile directory. */
+  if (!(private_instance && profile_directory == FALSE)) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.");
