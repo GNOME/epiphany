@@ -95,9 +95,12 @@ libephymisc_la_CPPFLAGS = \
 
 libephymisc_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
-libephymisc_la_LIBADD = -lm
+libephymisc_la_LIBADD = \
+	-lm \
+	$(CODE_COVERAGE_LDFLAGS)
 
 bin_PROGRAMS = ephy-profile-migrator
 

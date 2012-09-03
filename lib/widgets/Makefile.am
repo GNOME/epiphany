@@ -126,4 +126,5 @@ libephywidgets_la_CPPFLAGS = \
 
 libephywidgets_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)

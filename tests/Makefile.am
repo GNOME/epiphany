@@ -100,6 +100,7 @@ INCLUDES = \
 
 CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) \
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
 LDADD = \
@@ -111,6 +112,7 @@ LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DBUS_LIBS) \
+	$(CODE_COVERAGE_LDFLAGS) \
 	$(DEPENDENCIES_LIBS) 
 
 test_ephy_download_SOURCES = \

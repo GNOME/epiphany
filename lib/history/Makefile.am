@@ -22,6 +22,7 @@ libephyhistory_la_CPPFLAGS = \
 
 libephyhistory_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
 TYPES_H_FILES = ephy-history-types.h

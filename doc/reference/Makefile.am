@@ -107,6 +107,7 @@ GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
 		-I$(top_srcdir)/lib/history \
 		$(DEPENDENCIES_CFLAGS) \
 		$(DBUS_CFLAGS) \
+		$(CODE_COVERAGE_CFLAGS) \
 		$(INCINTL)
 
 GTKDOC_LIBS = \
@@ -119,6 +120,7 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/egg/libegg.la \
         $(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
+	$(CODE_COVERAGE_LDFLAGS) \
 	$(LIBINTL)
 
 # If you need to override some of the declarations, place them in the

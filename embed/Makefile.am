@@ -77,6 +77,7 @@ endif
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(DEPENDENCIES_CFLAGS) 	\
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)

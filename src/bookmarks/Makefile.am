@@ -111,6 +111,7 @@ libephybookmarks_la_CPPFLAGS = \
 
 libephybookmarks_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
+	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
 libephybookmarks_la_LIBADD =

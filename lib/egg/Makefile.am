@@ -26,5 +26,6 @@ libegg_la_CPPFLAGS = \
 
 libegg_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)		\
+	$(CODE_COVERAGE_CFLAGS)		\
 	$(AM_CFLAGS)
 

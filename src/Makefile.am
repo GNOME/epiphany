@@ -108,6 +108,7 @@ endif
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	  \
 	$(WEBKIT_CFLAGS)	  \
+	$(CODE_COVERAGE_CFLAGS)   \
 	$(AM_CFLAGS)
 
 UI_FILES = \
@@ -168,6 +169,7 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
+	$(CODE_COVERAGE_LDFLAGS) \
 	$(LIBINTL)
 
 if !WITH_WEBKIT2

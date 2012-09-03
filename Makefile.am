@@ -20,6 +20,8 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-debug			\
 	--enable-gtk-doc
 
+@GNOME_CODE_COVERAGE_RULES@
+
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 

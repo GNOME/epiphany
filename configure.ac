@@ -71,6 +71,8 @@ GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
+GNOME_CODE_COVERAGE
+
 MORE_WARN_FLAGS="-Wdeclaration-after-statement"
 DEPRECATION_FLAGS=
 
@@ -302,13 +304,14 @@ AC_OUTPUT
 echo "
 Epiphany was configured with the following options:
         
-	Source code location       : $srcdir
-	Compiler                   : $CC
-	Prefix                     : $prefix
-	Extra debugging support    : $enable_debug
-
- 	GObject introspection      : $found_introspection
- 	NSS support                : $enable_nss
+	Source code location	   : $srcdir
+	Compiler		   : $CC
+	Prefix			   : $prefix
+	Extra debugging support	   : $enable_debug
 	Build tests		   : $enable_tests
-	WebKit2                    : $with_webkit2
+	Code coverage		   : $enable_code_coverage
+
+	GObject introspection	   : $found_introspection
+	NSS support		   : $enable_nss
+	WebKit2			   : $with_webkit2
 "
