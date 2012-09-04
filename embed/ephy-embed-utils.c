@@ -37,40 +37,37 @@ ephy_embed_utils_link_message_parse (const char *message)
   
   char *status_message;
   char **splitted_message;
+  int i = 1;
+  char *p;
+  GString *tmp;
 
   status_message = ephy_string_blank_chr (g_strdup (message));
   
-  if (status_message && g_str_has_prefix (status_message, "mailto:")) {
-    int i = 1;
-    char *p;
-    GString *tmp;
-    
-    /* We first want to eliminate all the things after "?", like
-     * cc, subject and alike.
-     */
-    
-    p = strchr (status_message, '?');
-    if (p != NULL) *p = '\0';
-    
-    /* Then we also want to check if there is more than an email address
-     * in the mailto: list.
-     */
-    
-    splitted_message = g_strsplit_set (status_message, ";", -1);
-    tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
-                                         (splitted_message[0] + 7)));
-    
-    while (splitted_message [i] != NULL) {
-      g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
-      i++;
-    }
-
-    g_free (status_message);
-    g_strfreev (splitted_message);
-
-    return g_string_free (tmp, FALSE);
-  } else
+  if (!status_message || !g_str_has_prefix (status_message, "mailto:"))
     return status_message;
+
+  /* We first want to eliminate all the things after "?", like cc,
+   * subject and alike.
+   */
+  p = strchr (status_message, '?');
+  if (p != NULL) *p = '\0';
+    
+  /* Then we also want to check if there is more than an email address
+   * in the mailto: list.
+   */
+  splitted_message = g_strsplit_set (status_message, ";", -1);
+  tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
+                                       (splitted_message[0] + 7)));
+    
+  while (splitted_message [i] != NULL) {
+    g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
+    i++;
+  }
+
+  g_free (status_message);
+  g_strfreev (splitted_message);
+
+  return g_string_free (tmp, FALSE);
 }
 
 gboolean
