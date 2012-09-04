@@ -2781,7 +2781,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      G_CALLBACK (ephy_window_visibility_cb),
 					      window);
 
-	g_signal_handlers_disconnect_by_func (view,
+	g_signal_handlers_disconnect_by_func (embed,
 					      G_CALLBACK (sync_embed_is_overview),
 					      window);
 
