@@ -950,6 +950,7 @@ ephy_file_delete_dir_recursively (GFile *directory, GError **error)
 			ret = g_file_delete (child, NULL, error);
 
 		g_object_unref (info);
+		g_object_unref (child);
 
 		if (!ret)
 			goto out;
