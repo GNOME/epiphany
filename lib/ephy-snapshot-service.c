@@ -40,34 +40,6 @@ struct _EphySnapshotServicePrivate
 
 G_DEFINE_TYPE (EphySnapshotService, ephy_snapshot_service, G_TYPE_OBJECT)
 
-typedef struct {
-  WebKitWebView *webview;
-  char *url;
-  time_t mtime;
-  GdkPixbuf *snapshot;
-  GCancellable *cancellable;
-  GAsyncReadyCallback callback;
-  gpointer user_data;
-} SnapshotOp;
-
-static gboolean ephy_snapshot_service_complete_async (SnapshotOp *op);
-static gboolean ephy_snapshot_service_take_from_webview (SnapshotOp *op);
-
-static void
-snapshot_op_free (SnapshotOp *op)
-{
-  g_free (op->url);
-
-  if (op->cancellable)
-    g_object_unref (op->cancellable);
-  if (op->webview)
-    g_object_unref (op->webview);
-  if (op->snapshot)
-    g_object_unref (op->snapshot);
-
-  g_slice_free (SnapshotOp, op);
-}
-
 /* GObject boilerplate methods. */
 
 static void
@@ -85,119 +57,147 @@ ephy_snapshot_service_init (EphySnapshotService *self)
   self->priv->factory = gnome_desktop_thumbnail_factory_new (GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
 }
 
-/* IO scheduler methods, used for IO. */
+typedef struct {
+  char *url;
+  time_t mtime;
 
-static GdkPixbuf *
-io_scheduler_get_cached_snapshot (EphySnapshotService *service,
-                                  char *url, time_t mtime)
-{
   GdkPixbuf *snapshot;
-  char *uri;
+} SnapshotForURLAsyncData;
 
-  uri =  gnome_desktop_thumbnail_factory_lookup (service->priv->factory,
-                                                 url, mtime);
-  if (uri == NULL)
-    return NULL;
+static SnapshotForURLAsyncData *
+snapshot_for_url_async_data_new (const char *url,
+                                 time_t mtime)
+{
+  SnapshotForURLAsyncData *data;
 
-  snapshot = gdk_pixbuf_new_from_file (uri, NULL);
-  g_free (uri);
+  data = g_slice_new0 (SnapshotForURLAsyncData);
+  data->url = g_strdup (url);
+  data->mtime = mtime;
 
-  return snapshot;
+  return data;
 }
 
-static gboolean
-io_scheduler_try_cache_query (GIOSchedulerJob *job,
-                              GCancellable *cancellable,
-                              gpointer user_data)
+static void
+snapshot_for_url_async_data_free (SnapshotForURLAsyncData *data)
 {
-  SnapshotOp *op;
-  EphySnapshotService *service = ephy_snapshot_service_get_default ();
-  GSourceFunc func;
+  g_free (data->url);
+  g_clear_object (&data->snapshot);
 
-  op = (SnapshotOp*) user_data;
+  g_slice_free (SnapshotForURLAsyncData, data);
+}
 
-  if (g_cancellable_is_cancelled (op->cancellable)) {
-    func = (GSourceFunc)ephy_snapshot_service_complete_async;
-    goto out;
+static void
+get_snapshot_for_url_thread (GSimpleAsyncResult *result,
+                             EphySnapshotService *service,
+                             GCancellable *cancellable)
+{
+  SnapshotForURLAsyncData *data;
+  gchar *uri;
+  GError *error = NULL;
+
+  data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
+
+  uri = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
+  if (uri == NULL) {
+    g_simple_async_result_set_error (result,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
+                                     "Snapshot for url \"%s\" not found in cache", data->url);
+    return;
   }
 
-  op->snapshot = io_scheduler_get_cached_snapshot (service, op->url, op->mtime);
+  data->snapshot = gdk_pixbuf_new_from_file (uri, &error);
+  if (data->snapshot == NULL) {
+    g_simple_async_result_set_error (result,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR_INVALID,
+                                     "Error creating pixbuf for snapshot file \"%s\": %s",
+                                     uri, error->message);
+    g_error_free (error);
+  }
 
-  /* If we do have a cached snapshot or we don't have a webview
-     already, just complete early. */
-  if (op->snapshot || !op->webview)
-    func = (GSourceFunc)ephy_snapshot_service_complete_async;
-  else
-    func = (GSourceFunc)ephy_snapshot_service_take_from_webview;
+  g_free (uri);
+}
 
-out:
-  g_io_scheduler_job_send_to_mainloop (job, func, op, NULL);
-  return FALSE;
+typedef struct {
+  WebKitWebView *web_view;
+  time_t mtime;
+  GCancellable *cancellable;
+
+  GdkPixbuf *snapshot;
+} SnapshotAsyncData;
+
+static SnapshotAsyncData *
+snapshot_async_data_new (WebKitWebView *web_view,
+                         time_t mtime,
+                         GCancellable *cancellable)
+{
+  SnapshotAsyncData *data;
+
+  data = g_slice_new0 (SnapshotAsyncData);
+  data->web_view = g_object_ref (web_view);
+  data->mtime = mtime;
+  data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+
+  return data;
+}
+
+static void
+snapshot_async_data_free (SnapshotAsyncData *data)
+{
+  g_object_unref (data->web_view);
+  g_clear_object (&data->cancellable);
+  g_clear_object (&data->snapshot);
+
+  g_slice_free (SnapshotAsyncData, data);
+}
+
+static void
+snapshot_saved (EphySnapshotService *service,
+                GAsyncResult *result,
+                GSimpleAsyncResult *simple)
+{
+  ephy_snapshot_service_save_snapshot_finish (service, result, NULL);
+  g_simple_async_result_complete (simple);
+  g_object_unref (simple);
 }
 
 static gboolean
-io_scheduler_save_thumbnail (GIOSchedulerJob *job,
-                             GCancellable *cancellable,
-                             gpointer user_data)
+retrieve_snapshot_from_web_view (GSimpleAsyncResult *result)
 {
-  SnapshotOp *op;
   EphySnapshotService *service;
-
-  op = (SnapshotOp*) user_data;
-  service = ephy_snapshot_service_get_default ();
-  gnome_desktop_thumbnail_factory_save_thumbnail (service->priv->factory,
-                                                  op->snapshot,
-                                                  op->url,
-                                                  op->mtime);
-
-  g_io_scheduler_job_send_to_mainloop_async (job,
-                                             (GSourceFunc)ephy_snapshot_service_complete_async,
-                                             op, NULL);
-
-  return FALSE;
-}
-
-/* Methods that run in the mainloop. */
-
-static gboolean
-ephy_snapshot_service_complete_async (SnapshotOp *op)
-{
-  GSimpleAsyncResult *res;
-
-  res = g_simple_async_result_new (G_OBJECT (ephy_snapshot_service_get_default ()),
-                                   op->callback,
-                                   op->user_data,
-                                   ephy_snapshot_service_complete_async);
-  g_simple_async_result_set_check_cancellable (res, op->cancellable);
-  g_simple_async_result_set_op_res_gpointer (res, op, (GDestroyNotify)snapshot_op_free);
-  g_simple_async_result_complete (res);
-  g_object_unref (res);
-
-  return FALSE;
-}
-
-static gboolean
-webview_retrieve_snapshot (SnapshotOp *op)
-{
   cairo_surface_t *surface;
+  SnapshotAsyncData *data;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
 #ifdef HAVE_WEBKIT2
   /* FIXME: We need to add this API to WebKit2. */
   surface = NULL;
 #else
-  surface = webkit_web_view_get_snapshot (WEBKIT_WEB_VIEW (op->webview));
+  surface = webkit_web_view_get_snapshot (data->web_view);
 #endif
 
   if (surface == NULL) {
-    ephy_snapshot_service_complete_async (op);
+    g_simple_async_result_set_error (result,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
+                                     "%s", "Error getting snapshot from web view");
+    g_simple_async_result_complete (result);
+    g_object_unref (result);
+
     return FALSE;
   }
 
-  op->snapshot = ephy_snapshot_service_crop_snapshot (surface);
+  data->snapshot = ephy_snapshot_service_crop_snapshot (surface);
   cairo_surface_destroy (surface);
 
-  g_io_scheduler_push_job ((GIOSchedulerJobFunc)io_scheduler_save_thumbnail,
-                           op, NULL, G_PRIORITY_LOW, NULL);
+  service = (EphySnapshotService *)g_async_result_get_source_object (G_ASYNC_RESULT (result));
+  ephy_snapshot_service_save_snapshot_async (service, data->snapshot,
+                                             webkit_web_view_get_uri (data->web_view),
+                                             data->mtime, data->cancellable,
+                                             (GAsyncReadyCallback)snapshot_saved, result);
+
   return FALSE;
 }
 
@@ -205,18 +205,18 @@ webview_retrieve_snapshot (SnapshotOp *op)
 static void
 webview_load_changed_cb (WebKitWebView *webview,
                          WebKitLoadEvent load_event,
-                         SnapshotOp *op)
+                         GSimpleAsyncResult *result)
 {
-  switch (load_event) {
-  case WEBKIT_LOAD_FINISHED:
-    /* Load finished doesn't ensure that we actually have visible content yet,
-       so hold a bit before retrieving the snapshot. */
-    g_idle_add ((GSourceFunc) webview_retrieve_snapshot, op);
-    /* Some pages might end up causing this condition to happen twice, so remove
-       the handler in order to avoid calling the above idle function twice. */
-    g_signal_handlers_disconnect_by_func (webview, webview_load_changed_cb, op);
-    break;
-  }
+  if (load_event != WEBKIT_LOAD_FINISHED)
+    return;
+
+  /* Load finished doesn't ensure that we actually have visible content yet,
+     so hold a bit before retrieving the snapshot. */
+  g_idle_add ((GSourceFunc) retrieve_snapshot_from_web_view, result);
+
+  /* Some pages might end up causing this condition to happen twice, so remove
+     the handler in order to avoid calling the above idle function twice. */
+  g_signal_handlers_disconnect_by_func (webview, webview_load_changed_cb, result);
 }
 
 static gboolean
@@ -224,9 +224,16 @@ webview_load_failed_cb (WebKitWebView *webview,
                         WebKitLoadEvent load_event,
                         const char failing_uri,
                         GError *error,
-                        SnapshotOp *op)
+                        GSimpleAsyncResult *result)
 {
-  ephy_snapshot_service_complete_async (op);
+  g_signal_handlers_disconnect_by_func (webview, webview_load_changed_cb, result);
+  g_simple_async_result_set_error (result,
+                                   EPHY_SNAPSHOT_SERVICE_ERROR,
+                                   EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
+                                   "Error getting snapshot, web view failed to load: %s",
+                                   error->message);
+  g_simple_async_result_complete_in_idle (result);
+  g_object_unref (result);
 
   return FALSE;
 }
@@ -234,22 +241,23 @@ webview_load_failed_cb (WebKitWebView *webview,
 static void
 webview_load_status_changed_cb (WebKitWebView *webview,
                                 GParamSpec *pspec,
-                                SnapshotOp *op)
+                                GSimpleAsyncResult *result)
 {
-  WebKitLoadStatus status;
-
-  status = webkit_web_view_get_load_status (webview);
-
-  switch (status) {
+  switch (webkit_web_view_get_load_status (webview)) {
   case WEBKIT_LOAD_FINISHED:
     /* Load finished doesn't ensure that we actually have visible
        content yet, so hold a bit before retrieving the snapshot. */
-    g_idle_add ((GSourceFunc) webview_retrieve_snapshot, op);
-    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, op);
+    g_idle_add ((GSourceFunc) retrieve_snapshot_from_web_view, result);
+    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, result);
     break;
   case WEBKIT_LOAD_FAILED:
-    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, op);
-    ephy_snapshot_service_complete_async (op);
+    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, result);
+    g_simple_async_result_set_error (result,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
+                                     "%s", "Error getting snapshot, web view failed to load");
+    g_simple_async_result_complete_in_idle (result);
+    g_object_unref (result);
     break;
   default:
     break;
@@ -258,34 +266,81 @@ webview_load_status_changed_cb (WebKitWebView *webview,
 #endif
 
 static gboolean
-ephy_snapshot_service_take_from_webview (SnapshotOp *op)
+ephy_snapshot_service_take_from_webview (GSimpleAsyncResult *result)
 {
-  WebKitWebView *webview = op->webview;
+  SnapshotAsyncData *data;
 
-  if (g_cancellable_is_cancelled (op->cancellable)) {
-    ephy_snapshot_service_complete_async (op);
-    return FALSE;
-  }
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
 #ifdef HAVE_WEBKIT2
-  if (webkit_web_view_get_estimated_load_progress (WEBKIT_WEB_VIEW (webview))== 1.0)
-    webview_retrieve_snapshot (op);
+  if (webkit_web_view_get_estimated_load_progress (WEBKIT_WEB_VIEW (data->web_view)) == 1.0)
+    retrieve_snapshot_from_web_view (result);
   else {
-    g_signal_connect (webview, "load-changed",
-                      G_CALLBACK (webview_load_changed_cb), op);
-    g_signal_connect (webview, "load-failed",
-                      G_CALLBACK (webview_load_failed_cb), op);
+    g_signal_connect (data->web_view, "load-changed",
+                      G_CALLBACK (webview_load_changed_cb), result);
+    g_signal_connect (data->web_view, "load-failed",
+                      G_CALLBACK (webview_load_failed_cb), result);
   }
 #else
-  if (webkit_web_view_get_load_status (webview) == WEBKIT_LOAD_FINISHED)
-    webview_retrieve_snapshot (op);
+  if (webkit_web_view_get_load_status (data->web_view) == WEBKIT_LOAD_FINISHED)
+    retrieve_snapshot_from_web_view (result);
   else
-    g_signal_connect (webview, "notify::load-status",
+    g_signal_connect (data->web_view, "notify::load-status",
                       G_CALLBACK (webview_load_status_changed_cb),
-                      op);
+                      result);
 #endif
 
   return FALSE;
+}
+
+typedef struct {
+  GdkPixbuf *snapshot;
+  char *url;
+  time_t mtime;
+} SaveSnapshotAsyncData;
+
+static SaveSnapshotAsyncData *
+save_snapshot_async_data_new (GdkPixbuf *snapshot,
+                              const char *url,
+                              time_t mtime)
+{
+  SaveSnapshotAsyncData *data;
+
+  data = g_slice_new (SaveSnapshotAsyncData);
+  data->snapshot = g_object_ref (snapshot);
+  data->url = g_strdup (url);
+  data->mtime = mtime;
+
+  return data;
+}
+
+static void
+save_snapshot_async_data_free (SaveSnapshotAsyncData *data)
+{
+  g_object_unref (data->snapshot);
+  g_free (data->url);
+
+  g_slice_free (SaveSnapshotAsyncData, data);
+}
+
+static void
+save_snapshot_thread (GSimpleAsyncResult *result,
+                      EphySnapshotService *service,
+                      GCancellable *cancellable)
+{
+  SaveSnapshotAsyncData *data;
+
+  data = (SaveSnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
+  gnome_desktop_thumbnail_factory_save_thumbnail (service->priv->factory,
+                                                  data->snapshot,
+                                                  data->url,
+                                                  data->mtime);
+}
+
+GQuark
+ephy_snapshot_service_error_quark (void)
+{
+  return g_quark_from_static_string ("ephy-snapshot-service-error-quark");
 }
 
 /**
@@ -307,12 +362,104 @@ ephy_snapshot_service_get_default (void)
 }
 
 /**
- * ephy_snapshot_service_get_snapshot:
+ * ephy_snapshot_service_get_snapshot_for_url:
  * @service: a #EphySnapshotService
  * @url: the URL for which a snapshot is needed
  * @mtime: @the last
  * @callback: a #EphySnapshotServiceCallback
- * @userdata: user data to pass to @callback
+ * @user_data: user data to pass to @callback
+ *
+ * Schedules a query for a snapshot of @url. If there is an up-to-date
+ * snapshot in the cache, this will be retrieved.
+ *
+ **/
+void
+ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
+                                                  const char *url,
+                                                  const time_t mtime,
+                                                  GCancellable *cancellable,
+                                                  GAsyncReadyCallback callback,
+                                                  gpointer user_data)
+{
+  GSimpleAsyncResult *result;
+
+  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_return_if_fail (url != NULL);
+
+  result = g_simple_async_result_new (G_OBJECT (service), callback, user_data,
+                                      ephy_snapshot_service_get_snapshot_for_url_async);
+
+  g_simple_async_result_set_op_res_gpointer (result,
+                                             snapshot_for_url_async_data_new (url, mtime),
+                                             (GDestroyNotify)snapshot_for_url_async_data_free);
+  g_simple_async_result_run_in_thread (result,
+                                       (GSimpleAsyncThreadFunc)get_snapshot_for_url_thread,
+                                       G_PRIORITY_LOW, cancellable);
+  g_object_unref (result);
+}
+
+/**
+ * ephy_snapshot_service_get_snapshot_for_url_finish:
+ * @service: a #EphySnapshotService
+ * @result: a #GAsyncResult
+ * @error: a location to store a #GError or %NULL
+ *
+ * Finishes the retrieval of a snapshot. Call from the
+ * #GAsyncReadyCallback passed to
+ * ephy_snapshot_service_get_snapshot_for_url_async().
+ *
+ * Returns: (transfer full): the snapshot.
+ **/
+GdkPixbuf *
+ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
+                                                   GAsyncResult *result,
+                                                   GError **error)
+{
+  GSimpleAsyncResult *simple;
+  SnapshotForURLAsyncData *data;
+
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
+  g_return_val_if_fail (g_simple_async_result_is_valid (result,
+                                                        G_OBJECT (service),
+                                                        ephy_snapshot_service_get_snapshot_for_url_async),
+                        NULL);
+
+  simple = (GSimpleAsyncResult *)result;
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    return NULL;
+
+  data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
+
+  return data->snapshot ? g_object_ref (data->snapshot) : NULL;
+}
+
+static void
+got_snapshot_for_url (EphySnapshotService *service,
+                      GAsyncResult *result,
+                      GSimpleAsyncResult *simple)
+{
+  SnapshotAsyncData *data;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
+  data->snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (service, result, NULL);
+  if (data->snapshot) {
+    g_simple_async_result_complete (simple);
+    g_object_unref (simple);
+
+    return;
+  }
+
+  ephy_snapshot_service_take_from_webview (simple);
+}
+
+/**
+ * ephy_snapshot_service_get_snapshot_async:
+ * @service: a #EphySnapshotService
+ * @web_view: the #WebKitWebView for which a snapshot is needed
+ * @mtime: @the last
+ * @callback: a #EphySnapshotServiceCallback
+ * @user_data: user data to pass to @callback
  *
  * Schedules a query for a snapshot of @url. If there is an up-to-date
  * snapshot in the cache, this will be retrieved. Otherwise, this
@@ -321,30 +468,34 @@ ephy_snapshot_service_get_default (void)
  **/
 void
 ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
-                                          WebKitWebView *webview,
-                                          const char *url,
+                                          WebKitWebView *web_view,
                                           const time_t mtime,
                                           GCancellable *cancellable,
                                           GAsyncReadyCallback callback,
                                           gpointer user_data)
 {
-  SnapshotOp *op;
+  GSimpleAsyncResult *result;
+  const char *uri;
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (url != NULL);
+  g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
 
-  op = g_slice_alloc0 (sizeof(SnapshotOp));
-  op->url = g_strdup (url);
-  op->mtime = mtime;
-  op->webview = webview ? g_object_ref (webview) : NULL;
-  op->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-  op->callback = callback;
-  op->user_data = user_data;
+  result = g_simple_async_result_new (G_OBJECT (service), callback, user_data,
+                                      ephy_snapshot_service_get_snapshot_async);
 
-  /* Query for the snapshot from the cache using the IO scheduler, so
-     that there is no UI blocking during the cache query. */
-  g_io_scheduler_push_job (io_scheduler_try_cache_query,
-                           op, NULL, G_PRIORITY_LOW, NULL);
+  g_simple_async_result_set_op_res_gpointer (result,
+                                             snapshot_async_data_new (web_view, mtime, cancellable),
+                                             (GDestroyNotify)snapshot_async_data_free);
+
+  /* Try to get the snapshot from the cache first if we have a URL */
+  uri = webkit_web_view_get_uri (web_view);
+  if (uri)
+    ephy_snapshot_service_get_snapshot_for_url_async (service,
+                                                      uri, mtime, cancellable,
+                                                      (GAsyncReadyCallback)got_snapshot_for_url,
+                                                      result);
+  else
+    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, result);
 }
 
 /**
@@ -365,21 +516,22 @@ ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
                                            GError **error)
 {
   GSimpleAsyncResult *simple;
-  SnapshotOp *op;
+  SnapshotAsyncData *data;
 
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
   g_return_val_if_fail (g_simple_async_result_is_valid (result,
                                                         G_OBJECT (service),
-                                                        ephy_snapshot_service_complete_async),
+                                                        ephy_snapshot_service_get_snapshot_async),
                         NULL);
 
-  simple  = (GSimpleAsyncResult *) result;
+  simple = (GSimpleAsyncResult *)result;
 
   if (g_simple_async_result_propagate_error (simple, error))
     return NULL;
 
-  op = g_simple_async_result_get_op_res_gpointer (simple);
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
 
-  return op->snapshot ? g_object_ref (op->snapshot) : NULL;
+  return data->snapshot ? g_object_ref (data->snapshot) : NULL;
 }
 
 void
@@ -391,22 +543,35 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
                                            GAsyncReadyCallback callback,
                                            gpointer user_data)
 {
-  SnapshotOp *op;
+  GSimpleAsyncResult *result;
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_return_if_fail (GDK_IS_PIXBUF (snapshot));
   g_return_if_fail (url != NULL);
 
-  op = g_slice_alloc0 (sizeof(SnapshotOp));
-  op->snapshot = g_object_ref (snapshot);
-  op->url = g_strdup (url);
-  op->mtime = mtime;
-  op->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-  op->callback = callback;
-  op->user_data = user_data;
+  result = g_simple_async_result_new (G_OBJECT (service), callback, user_data,
+                                      ephy_snapshot_service_save_snapshot_async);
 
-  g_io_scheduler_push_job (io_scheduler_save_thumbnail,
-                           op, NULL, G_PRIORITY_LOW, NULL);
+  g_simple_async_result_set_op_res_gpointer (result,
+                                             save_snapshot_async_data_new (snapshot, url, mtime),
+                                             (GDestroyNotify)save_snapshot_async_data_free);
+  g_simple_async_result_run_in_thread (result,
+                                       (GSimpleAsyncThreadFunc)save_snapshot_thread,
+                                       G_PRIORITY_LOW, cancellable);
+}
+
+gboolean
+ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
+                                            GAsyncResult *result,
+                                            GError **error)
+{
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), FALSE);
+  g_return_val_if_fail (g_simple_async_result_is_valid (result,
+                                                        G_OBJECT (service),
+                                                        ephy_snapshot_service_save_snapshot_async),
+                        FALSE);
+
+  return !g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error);
 }
 
 GdkPixbuf *

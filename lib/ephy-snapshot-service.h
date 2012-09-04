@@ -39,6 +39,8 @@ G_BEGIN_DECLS
 #define EPHY_IS_SNAPSHOT_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_SNAPSHOT_SERVICE))
 #define EPHY_SNAPSHOT_SERVICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_SNAPSHOT_SERVICE, EphySnapshotServiceClass))
 
+#define EPHY_SNAPSHOT_SERVICE_ERROR           (ephy_snapshot_service_error_quark())
+
 typedef struct _EphySnapshotService        EphySnapshotService;
 typedef struct _EphySnapshotServiceClass   EphySnapshotServiceClass;
 typedef struct _EphySnapshotServicePrivate EphySnapshotServicePrivate;
@@ -56,38 +58,56 @@ struct _EphySnapshotServiceClass
   GObjectClass parent_class;
 };
 
+typedef enum {
+  EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
+  EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
+  EPHY_SNAPSHOT_SERVICE_ERROR_INVALID
+} EphySnapshotServiceError;
+
 /* Values taken from the Web mockups. */
 #define EPHY_THUMBNAIL_WIDTH 180
 #define EPHY_THUMBNAIL_HEIGHT 135
 
-typedef void (* EphySnapshotServiceCallback) (GdkPixbuf *snapshot,
-                                              gpointer user_data);
+GType                ephy_snapshot_service_get_type                    (void) G_GNUC_CONST;
+GQuark               ephy_snapshot_service_error_quark                 (void);
 
-GType                ephy_snapshot_service_get_type (void) G_GNUC_CONST;
+EphySnapshotService *ephy_snapshot_service_get_default                 (void);
 
-EphySnapshotService *ephy_snapshot_service_get_default (void);
+void                 ephy_snapshot_service_get_snapshot_for_url_async  (EphySnapshotService *service,
+                                                                        const char *url,
+                                                                        const time_t mtime,
+                                                                        GCancellable *cancellable,
+                                                                        GAsyncReadyCallback callback,
+                                                                        gpointer user_data);
 
-void ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
-                                               WebKitWebView *webview,
-                                               const char *url,
-                                               const time_t mtime,
-                                               GCancellable *cancellable,
-                                               GAsyncReadyCallback callback,
-                                               gpointer user_data);
+GdkPixbuf           *ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
+                                                                        GAsyncResult *result,
+                                                                        GError **error);
 
-GdkPixbuf * ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
-                                                       GAsyncResult *result,
-                                                       GError **error);
+void                 ephy_snapshot_service_get_snapshot_async          (EphySnapshotService *service,
+                                                                        WebKitWebView *web_view,
+                                                                        const time_t mtime,
+                                                                        GCancellable *cancellable,
+                                                                        GAsyncReadyCallback callback,
+                                                                        gpointer user_data);
 
-void ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
-                                                GdkPixbuf *snapshot,
-                                                const char *url,
-                                                time_t mtime,
-                                                GCancellable *cancellable,
-                                                GAsyncReadyCallback callback,
-                                                gpointer user_data);
+GdkPixbuf           *ephy_snapshot_service_get_snapshot_finish         (EphySnapshotService *service,
+                                                                        GAsyncResult *result,
+                                                                        GError **error);
 
-GdkPixbuf*  ephy_snapshot_service_crop_snapshot (cairo_surface_t *surface);
+void                 ephy_snapshot_service_save_snapshot_async         (EphySnapshotService *service,
+                                                                        GdkPixbuf *snapshot,
+                                                                        const char *url,
+                                                                        time_t mtime,
+                                                                        GCancellable *cancellable,
+                                                                        GAsyncReadyCallback callback,
+                                                                        gpointer user_data);
+
+gboolean             ephy_snapshot_service_save_snapshot_finish        (EphySnapshotService *service,
+                                                                        GAsyncResult *result,
+                                                                        GError **error);
+
+GdkPixbuf           *ephy_snapshot_service_crop_snapshot               (cairo_surface_t *surface);
 
 G_END_DECLS
 

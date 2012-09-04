@@ -292,39 +292,60 @@ ephy_overview_store_set_default_icon_internal (EphyOverviewStore *store,
 }
 
 static void
+set_snapshot (EphyOverviewStore *store,
+              GdkPixbuf *snapshot,
+              GtkTreeRowReference *ref,
+              time_t timestamp)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+
+  if (snapshot)
+    ephy_overview_store_set_snapshot_internal (store, &iter, snapshot, timestamp);
+  else
+    ephy_overview_store_set_default_icon_internal (store, &iter, store->priv->default_icon);
+
+  gtk_list_store_set (GTK_LIST_STORE (store), &iter,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE, NULL,
+                      -1);
+}
+
+static void
 on_snapshot_retrieved_cb (GObject *object,
                           GAsyncResult *res,
                           PeekContext *ctx)
 {
-  EphyOverviewStore *store;
-  GtkTreePath *path;
-  GtkTreeIter iter;
   GdkPixbuf *snapshot;
-  GError *error = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_finish (EPHY_SNAPSHOT_SERVICE (object),
-                                                        res, &error);
+                                                        res, NULL);
 
-  if (error) {
-    g_error_free (error);
-    error = NULL;
-  } else {
-    store = EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ctx->ref));
-    path = gtk_tree_row_reference_get_path (ctx->ref);
-    gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
-    gtk_tree_path_free (path);
-    if (snapshot) {
-      ephy_overview_store_set_snapshot_internal (store, &iter, snapshot, ctx->timestamp);
-      g_object_unref (snapshot);
+  set_snapshot (EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ctx->ref)),
+                snapshot, ctx->ref, ctx->timestamp);
+  if (snapshot)
+    g_object_unref (snapshot);
 
-    } else {
-      ephy_overview_store_set_default_icon_internal (store, &iter,
-                                                     store->priv->default_icon);
-    }
-    gtk_list_store_set (GTK_LIST_STORE (store), &iter,
-                        EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE, NULL,
-                        -1);
-  }
+  peek_context_free (ctx);
+}
+
+static void
+on_snapshot_retrieved_for_url_cb (GObject *object,
+                                  GAsyncResult *res,
+                                  PeekContext *ctx)
+{
+  GdkPixbuf *snapshot;
+
+  snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (EPHY_SNAPSHOT_SERVICE (object),
+                                                                res, NULL);
+
+  set_snapshot (EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ctx->ref)),
+                snapshot, ctx->ref, ctx->timestamp);
+  if (snapshot)
+    g_object_unref (snapshot);
 
   peek_context_free (ctx);
 }
@@ -341,10 +362,16 @@ history_service_url_cb (gpointer service,
 
   ctx->timestamp = url->thumbnail_time;
 
-  ephy_snapshot_service_get_snapshot_async (snapshot_service,
-                                            ctx->webview, ctx->url, ctx->timestamp, ctx->cancellable,
-                                            (GAsyncReadyCallback) on_snapshot_retrieved_cb,
-                                            ctx);
+  if (ctx->webview)
+    ephy_snapshot_service_get_snapshot_async (snapshot_service,
+                                              ctx->webview, ctx->timestamp, ctx->cancellable,
+                                              (GAsyncReadyCallback) on_snapshot_retrieved_cb,
+                                              ctx);
+  else
+    ephy_snapshot_service_get_snapshot_for_url_async (snapshot_service,
+                                                      ctx->url, ctx->timestamp, ctx->cancellable,
+                                                      (GAsyncReadyCallback) on_snapshot_retrieved_for_url_cb,
+                                                      ctx);
   ephy_history_url_free (url);
 }
 

@@ -84,7 +84,6 @@ test_snapshot (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI);
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI,
                                             mtime,
                                             NULL,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -102,7 +101,6 @@ test_cached_snapshot (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI);
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI,
                                             mtime,
                                             NULL,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -121,7 +119,6 @@ test_many_snapshots (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI "/some");
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/some",
                                             mtime,
                                             NULL,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -131,7 +128,6 @@ test_many_snapshots (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI "/other");
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/other",
                                             mtime,
                                             NULL,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -141,7 +137,6 @@ test_many_snapshots (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI "/place");
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/place",
                                             mtime,
                                             NULL,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -160,7 +155,6 @@ test_snapshot_with_cancellable (void)
   webkit_web_view_load_uri (webview, TEST_SERVER_URI "/and");
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/and",
                                             mtime,
                                             cancellable,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -180,7 +174,6 @@ test_already_cancelled_snapshot (void)
   g_cancellable_cancel (cancellable);
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/so",
                                             mtime,
                                             cancellable,
                                             (GAsyncReadyCallback)on_snapshot_ready,
@@ -207,7 +200,6 @@ test_snapshot_and_timed_cancellation (void)
 
   ephy_snapshot_service_get_snapshot_async (service,
                                             webview,
-                                            TEST_SERVER_URI "/on",
                                             mtime,
                                             cancellable,
                                             (GAsyncReadyCallback)on_snapshot_ready,
