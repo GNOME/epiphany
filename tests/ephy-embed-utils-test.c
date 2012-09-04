@@ -38,6 +38,12 @@ typedef struct {
   const char *result;
 } NormalizeTest;
 
+typedef struct {
+  const char *name;
+  const char *test;
+  gboolean result;
+} IsEmptyTest;
+
 static const SchemeTest tests_has_scheme[] = {
   { "http", "http://www.gnome.org/" },
   { "http_with_port", "http://www.gnome.org:8080" },
@@ -81,6 +87,15 @@ static const NormalizeTest tests_normalize[] = {
   { "untouched_http", "http://gnome.org", "http://gnome.org" },
 };
 
+static const IsEmptyTest tests_is_empty[] = {
+  { "NULL", NULL, TRUE },
+  { "zero-length", "", TRUE },
+  { "about:blank", "about:blank", TRUE },
+  { "about:blanco", "about:blanco", FALSE },
+  { "non-blank-URI", "http://www.gnome.org", FALSE },
+  { "random", "what is this, I don't even", FALSE }
+};
+
 static void
 test_address_no_web_scheme (const char *test)
 {
@@ -102,6 +117,12 @@ test_normalize_address (const NormalizeTest *test)
 
   g_assert_cmpstr (test->result, ==, normalized);
   g_free (normalized);
+}
+
+static void
+test_is_empty (const IsEmptyTest *test)
+{
+  g_assert (ephy_embed_utils_url_is_empty (test->test) == test->result);
 }
 
 int
@@ -148,6 +169,20 @@ main (int argc, char *argv[])
 
     g_test_add_data_func (test_name, tests_normalize + i,
                           (GTestDataFunc)test_normalize_address);
+
+    g_free (test_name);
+  }
+
+  for (i = 0; i < G_N_ELEMENTS (tests_is_empty); i++) {
+    IsEmptyTest test;
+    char *test_name;
+
+    test = tests_is_empty[i];
+    test_name = g_strconcat ("/embed/ephy-embed-utils/is_empty_",
+                             test.name, NULL);
+
+    g_test_add_data_func (test_name, tests_is_empty + i,
+                          (GTestDataFunc)test_is_empty);
 
     g_free (test_name);
   }
