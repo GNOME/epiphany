@@ -2103,12 +2103,15 @@ web_view_check_snapshot (WebKitWebView *web_view)
 {
   EphyOverviewStore *store;
   GtkTreeIter iter;
+  cairo_surface_t *surface;
 
   store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
   if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
-      ephy_overview_store_needs_snapshot (store, &iter))
-    ephy_overview_store_set_snapshot (store, &iter,
-                                      webkit_web_view_get_snapshot (web_view));
+      ephy_overview_store_needs_snapshot (store, &iter)) {
+    surface = webkit_web_view_get_snapshot (web_view);
+    ephy_overview_store_set_snapshot (store, &iter, surface);
+    cairo_surface_destroy (surface);
+  }
 
   return FALSE;
 }
