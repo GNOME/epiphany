@@ -686,22 +686,16 @@ save_session_in_thread (GIOSchedulerJob *job,
 			gpointer user_data)
 {
 	SaveData *data = (SaveData *)user_data;
+	xmlBufferPtr buffer;
 	xmlTextWriterPtr writer;
 	GList *w;
-	char *tmp_file_path, *save_to_file_path;
-	GFile *tmp_file;
 	int ret;
 
-	save_to_file_path = g_file_get_path (data->save_file);
-	tmp_file_path = g_strconcat (save_to_file_path, ".tmp", NULL);
-	g_free (save_to_file_path);
-	tmp_file = g_file_new_for_path (tmp_file_path);
-
-	/* FIXME: do we want to turn on compression? */
-	writer = xmlNewTextWriterFilename (tmp_file_path, 0);
+	buffer = xmlBufferCreate ();
+	writer = xmlNewTextWriterMemory (buffer, 0);
 	if (writer == NULL)
 	{
-		g_free (tmp_file_path);
+		xmlBufferFree (buffer);
 
 		return FALSE;
 	}
@@ -738,14 +732,23 @@ out:
 
 	if (ret >= 0 && !g_cancellable_is_cancelled (cancellable))
 	{
-		if (ephy_file_switch_temp_file (data->save_file, tmp_file) == FALSE)
+		GError *error = NULL;
+
+		if (!g_file_replace_contents (data->save_file,
+					      (const char *)buffer->content,
+					      buffer->use,
+					      NULL, TRUE, 0, NULL,
+					      cancellable, &error))
 		{
-			ret = -1;
+			if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+			{
+				g_warning ("Error saving session: %s", error->message);
+			}
+			g_error_free (error);
 		}
 	}
 
-	g_free (tmp_file_path);
-	g_object_unref (tmp_file);
+	xmlBufferFree (buffer);
 
 	g_io_scheduler_job_send_to_mainloop_async (job,
 						   (GSourceFunc) session_save_finished,
