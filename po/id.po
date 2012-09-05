@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-17 15:33+0000\n"
-"PO-Revision-Date: 2012-08-13 21:49+0700\n"
+"POT-Creation-Date: 2012-09-05 11:58+0000\n"
+"PO-Revision-Date: 2012-09-04 17:44+0700\n"
 "Last-Translator: Dirgita <dirgitadevina@yahoo.co.id>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -45,7 +45,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.co.id/search?q=%s&hl=id&ie=UTF-8&oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1349
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
 msgid "Web"
 msgstr "Web"
 
@@ -487,29 +487,29 @@ msgstr "Daftar aplikasi web yang terpasang"
 msgid "Installed on:"
 msgstr "Dipasang pada:"
 
-#: ../embed/ephy-embed.c:597
+#: ../embed/ephy-embed.c:657
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Tekan %s untuk keluar dari layar penuh"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:600
+#: ../embed/ephy-embed.c:660
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:600
+#: ../embed/ephy-embed.c:660
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:900
+#: ../embed/ephy-embed.c:960
 msgid "Web Inspector"
 msgstr "Pemeriksa Web"
 
-#: ../embed/ephy-embed-shell.c:207
+#: ../embed/ephy-embed-shell.c:267
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany tidak dapat digunakan sekarang. Inisialisasi gagal."
 
-#: ../embed/ephy-embed-utils.c:60
+#: ../embed/ephy-embed-utils.c:59
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Kirim pesan surel ke \"%s\""
@@ -838,16 +838,20 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Tak dikenal (%s)"
 
+#: ../embed/ephy-overview.h:53
+msgid "Most Visited"
+msgstr "Sering Dikunjungi"
+
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:3739
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3768
 msgid "Blank page"
 msgstr "Halaman kosong"
 
-#: ../embed/ephy-web-view.c:733
+#: ../embed/ephy-web-view.c:741
 msgid "Not now"
 msgstr "Jangan sekarang"
 
-#: ../embed/ephy-web-view.c:734
+#: ../embed/ephy-web-view.c:742
 msgid "Store password"
 msgstr "Simpan sandi"
 
@@ -855,44 +859,44 @@ msgstr "Simpan sandi"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:747
+#: ../embed/ephy-web-view.c:755
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Apakah Anda ingin menyimpan sandi untuk <b>%s</b> dalam <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1102
+#: ../embed/ephy-web-view.c:1110
 msgid "Plugins"
 msgstr "Pengaya"
 
-#: ../embed/ephy-web-view.c:1937
+#: ../embed/ephy-web-view.c:1948
 msgid "Deny"
 msgstr "Tolak"
 
-#: ../embed/ephy-web-view.c:1938
+#: ../embed/ephy-web-view.c:1949
 msgid "Allow"
 msgstr "Ijinkan"
 
-#: ../embed/ephy-web-view.c:1952
+#: ../embed/ephy-web-view.c:1963
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Halaman pada <b>%s</b> ingin tahu lokasi Anda."
 
-#: ../embed/ephy-web-view.c:2441
+#: ../embed/ephy-web-view.c:2476
 msgid "None specified"
 msgstr "Tak dinyatakan apapun"
 
-#: ../embed/ephy-web-view.c:2450 ../embed/ephy-web-view.c:2468
+#: ../embed/ephy-web-view.c:2485 ../embed/ephy-web-view.c:2503
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Ups! Galat saat memuat %s"
 
-#: ../embed/ephy-web-view.c:2452
+#: ../embed/ephy-web-view.c:2487
 msgid "Oops! It was not possible to show this website"
 msgstr "Ups! Tak mungkin menampilkan situs web ini"
 
-#: ../embed/ephy-web-view.c:2453
+#: ../embed/ephy-web-view.c:2488
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -905,17 +909,17 @@ msgstr ""
 "pindah ke alamat baru. Jangan lupa memeriksa apakah koneksi internet Anda "
 "bekerja dengan baik.</p>"
 
-#: ../embed/ephy-web-view.c:2462
+#: ../embed/ephy-web-view.c:2497
 msgid "Try again"
 msgstr "Coba lagi"
 
-#: ../embed/ephy-web-view.c:2470
+#: ../embed/ephy-web-view.c:2505
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Ups! Situs ini mungkin telah menyebabkan peramban web tertutup secara tak "
 "terduga"
 
-#: ../embed/ephy-web-view.c:2472
+#: ../embed/ephy-web-view.c:2507
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -926,29 +930,29 @@ msgstr ""
 "p><p>Ini mungkin terjadi lagi bila Anda memuat ulang halaman. Bila demikian, "
 "mohon laporkan masalah ke para pengembang <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2480
+#: ../embed/ephy-web-view.c:2515
 msgid "Load again anyway"
 msgstr "Muat ulang saja"
 
-#: ../embed/ephy-web-view.c:2918
+#: ../embed/ephy-web-view.c:2947
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&hl=id&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3212
+#: ../embed/ephy-web-view.c:3241
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Memuat \"%s\"…"
 
-#: ../embed/ephy-web-view.c:3214
+#: ../embed/ephy-web-view.c:3243
 msgid "Loading…"
 msgstr "Memuat…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3995
+#: ../embed/ephy-web-view.c:4024
 #, c-format
 msgid "%s Files"
 msgstr "Berkas %s"
@@ -1005,26 +1009,26 @@ msgid "All files"
 msgstr "Semua berkas"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:116 ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
 msgid "Downloads"
 msgstr "Download"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:169
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "Desktop"
 
-#: ../lib/ephy-file-helpers.c:330
+#: ../lib/ephy-file-helpers.c:344
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Tidak bisa membuat direktori sementara dalam \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:430
+#: ../lib/ephy-file-helpers.c:445
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Berkas \"%s\" telah ada, harap pindahkan terlebih dulu."
 
-#: ../lib/ephy-file-helpers.c:441
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Gagal buat direktori \"%s\"."
@@ -1077,11 +1081,11 @@ msgstr ""
 "Sandi dari versi sebelumnya (Gecko) dikunci dengan sandi utama. Bila Anda "
 "ingin Epiphany mengimpor mereka, silakan masukkan sandi utama di bawah."
 
-#: ../lib/ephy-profile-migrator.c:89
+#: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Gagal menyalin berkas cookie dari Mozilla."
 
-#: ../lib/ephy-profile-migrator.c:641
+#: ../lib/ephy-profile-migrator.c:650
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1089,15 +1093,23 @@ msgstr ""
 "Epiphany 3.6 membuat usang direktori ini dan mencoba memigrasi konfigurasi "
 "ini ke ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:831
+#: ../lib/ephy-profile-migrator.c:890
 msgid "Executes only the n-th migration step"
 msgstr "Laksanakan hanya langkah migrasi ke-n"
 
-#: ../lib/ephy-profile-migrator.c:845
+#: ../lib/ephy-profile-migrator.c:892
+msgid "Specifies the required version for the migrator"
+msgstr "Menentukan versi migrator yang diperlukan"
+
+#: ../lib/ephy-profile-migrator.c:894
+msgid "Specifies the profile where the migrator should run"
+msgstr "Menentukan profil yang seharusnya dijalankan oleh migrator"
+
+#: ../lib/ephy-profile-migrator.c:909
 msgid "Epiphany profile migrator"
 msgstr "Pemigrasi profil Epiphany"
 
-#: ../lib/ephy-profile-migrator.c:846
+#: ../lib/ephy-profile-migrator.c:910
 msgid "Epiphany profile migrator options"
 msgstr "Opsi pemigrasi profil Epiphany"
 
@@ -1298,13 +1310,13 @@ msgid "Clear"
 msgstr "Hapus"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
 msgid "Title"
 msgstr "Judul"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1691
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
 msgid "Address"
 msgstr "Alamat"
 
@@ -1686,7 +1698,7 @@ msgid "Export Bookmarks"
 msgstr "Ekspor Alamat"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:762
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Buku Alamat"
@@ -1722,7 +1734,7 @@ msgstr "_Salin Alamat"
 msgid "_Search:"
 msgstr "_Cari:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1610
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
 msgid "Topics"
 msgstr "Topik"
 
@@ -2181,7 +2193,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Opsi web"
 
-#: ../src/ephy-notebook.c:606
+#: ../src/ephy-notebook.c:595
 msgid "Close tab"
 msgstr "Tutup tab"
 
@@ -2373,27 +2385,27 @@ msgstr "_Hentikan Animasi"
 msgid "Inspect _Element"
 msgstr "Periksa _Elemen"
 
-#: ../src/ephy-window.c:455
+#: ../src/ephy-window.c:456
 msgid "There are unsubmitted changes to form elements"
 msgstr "Ada perubahan yang belum dikirimkan ke bagian formulir"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:457
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jika Anda menutup dokumen, Anda akan kehilangan informasi."
 
-#: ../src/ephy-window.c:458
+#: ../src/ephy-window.c:459
 msgid "Close _Document"
 msgstr "Tutup _Dokumen"
 
-#: ../src/ephy-window.c:476
+#: ../src/ephy-window.c:477
 msgid "There are ongoing downloads in this window"
 msgstr "Ada pengunduhan sedang berlangsung di jendela ini"
 
-#: ../src/ephy-window.c:477
+#: ../src/ephy-window.c:478
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Bila Anda menutup jendela ini, pengunduhan akan dibatalkan"
 
-#: ../src/ephy-window.c:478
+#: ../src/ephy-window.c:479
 msgid "Close window and cancel downloads"
 msgstr "Tutup jendela dan batalkan pengunduhan"
 
@@ -2442,6 +2454,10 @@ msgstr "Perbesar"
 #: ../src/ephy-window.c:1442
 msgid "New _Tab"
 msgstr "_Tab Baru"
+
+#: ../src/ephy-window.c:1450
+msgid "Go to most visited"
+msgstr "Menuju yang sering dikunjungi"
 
 #: ../src/pdm-dialog.c:361
 msgid "<b>Select the personal data you want to clear</b>"
@@ -2699,4 +2715,3 @@ msgstr ""
 #: ../src/window-commands.c:1514
 msgid "_Enable"
 msgstr "_Aktifkan"
-
