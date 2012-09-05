@@ -74,6 +74,26 @@ main_view_item_activated (GtkWidget *widget,
   g_free (url);
 }
 
+static gboolean
+iconview_motion_notify (GtkWidget *widget,
+                        GdkEvent *event,
+                        EphyOverview *overview)
+{
+  GdkCursor *cursor;
+  GtkIconView *iconview = GTK_ICON_VIEW (widget);
+  GdkEventMotion *ev = (GdkEventMotion *)event;
+
+  if (gtk_icon_view_get_item_at_pos (iconview, ev->x, ev->y, NULL, NULL)) {
+    cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_HAND2);
+    gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
+    g_object_unref (cursor);
+  } else {
+    gdk_window_set_cursor (gtk_widget_get_window (widget), NULL);
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_overview_constructed (GObject *object)
 {
@@ -91,6 +111,9 @@ ephy_overview_constructed (GObject *object)
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   iconview = gtk_bin_get_child (GTK_BIN (self->priv->frecent_view));
   gtk_icon_view_set_columns (GTK_ICON_VIEW (iconview), 5);
+  g_signal_connect (iconview, "motion-notify-event",
+                    G_CALLBACK (iconview_motion_notify),
+                    self);
   g_object_set (self->priv->frecent_view,
                 "halign", GTK_ALIGN_FILL,
                 "valign", GTK_ALIGN_FILL, NULL);
