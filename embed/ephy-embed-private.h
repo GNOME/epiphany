@@ -22,6 +22,8 @@
 #error "Only <epiphany/epiphany.h> can be included directly."
 #endif
 
+#include "ephy-embed-shell.h"
+#include "ephy-frecent-store.h"
 #include "ephy-history-types.h"
 #include "ephy-web-view.h"
 
@@ -68,6 +70,8 @@ gboolean                   ephy_web_view_is_loading_homepage      (EphyWebView  
 
 char*                      ephy_web_view_normalize_or_autosearch_url (EphyWebView            *view,
                                                                       const char             *url);
+
+EphyFrecentStore          *ephy_embed_shell_get_frecent_store      (EphyEmbedShell *shell);
 
 G_END_DECLS
 

@@ -25,6 +25,7 @@
 #include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
 #include "ephy-download.h"
+#include "ephy-embed-private.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
