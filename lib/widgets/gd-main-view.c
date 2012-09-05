@@ -444,8 +444,7 @@ on_button_release_event (GtkWidget *view,
 
   if (!selection_mode)
     {
-      if ((event->button == 3) ||
-          ((event->button == 1) && (event->state & GDK_CONTROL_MASK)))
+      if (event->button == 3)
         {
           g_signal_emit (self, signals[SELECTION_MODE_REQUEST], 0);
           selection_mode = TRUE;
