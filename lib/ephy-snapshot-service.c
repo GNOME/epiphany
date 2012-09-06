@@ -558,6 +558,7 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
   g_simple_async_result_run_in_thread (result,
                                        (GSimpleAsyncThreadFunc)save_snapshot_thread,
                                        G_PRIORITY_LOW, cancellable);
+  g_object_unref (result);
 }
 
 gboolean
