@@ -22,6 +22,7 @@
 #include "config.h"
 #include "ephy-overview.h"
 
+#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
 #include "ephy-frecent-store.h"
 
