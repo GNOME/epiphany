@@ -155,7 +155,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   if (error) {
     g_error ("Could not build visits table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
+    return NULL;
   }
 
   if (query->from >= 0) {

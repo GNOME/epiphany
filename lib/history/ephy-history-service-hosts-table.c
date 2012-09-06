@@ -300,7 +300,6 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
   if (error) {
     g_error ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return NULL;
   }
   if (query->from > 0) {
@@ -451,7 +450,6 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   if (error) {
     g_error ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 

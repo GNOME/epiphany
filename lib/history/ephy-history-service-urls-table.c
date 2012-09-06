@@ -295,7 +295,6 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   if (error) {
     g_error ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return NULL;
   }
 
@@ -392,7 +391,6 @@ ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
   if (error) {
     g_error ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
