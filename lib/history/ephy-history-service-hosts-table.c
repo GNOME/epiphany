@@ -77,6 +77,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
       ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE) {
     g_error ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
+    g_object_unref (statement);
     return;
   }
 
@@ -84,7 +85,6 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
   if (error) {
     g_error ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
-    return;
   } else {
     host->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
   }
@@ -118,6 +118,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
       ephy_sqlite_statement_bind_int (statement, 4, host->id, &error) == FALSE) {
     g_error ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
+    g_object_unref (statement);
     return;
   }
 
@@ -173,6 +174,8 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   }
 
   if (ephy_sqlite_statement_step (statement, &error) == FALSE) {
+    if (error)
+      g_error_free (error);
     g_object_unref (statement);
     return NULL;
   }

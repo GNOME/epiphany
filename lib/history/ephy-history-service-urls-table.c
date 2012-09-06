@@ -151,6 +151,7 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
       ephy_sqlite_statement_bind_int (statement, 5, url->host->id, &error) == FALSE) {
     g_error ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
+    g_object_unref (statement);
     return;
   }
 
@@ -193,6 +194,7 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
       ephy_sqlite_statement_bind_int (statement, 6, url->id, &error) == FALSE) {
     g_error ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
+    g_object_unref (statement);
     return;
   }
 

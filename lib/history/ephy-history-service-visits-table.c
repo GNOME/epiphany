@@ -72,6 +72,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
       ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE ) {
     g_error ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
+    g_object_unref (statement);
     return;
   }
 
