@@ -50,6 +50,7 @@ typedef enum {
 
 enum {
   VISIT_URL,
+  URLS_VISITED,
   CLEARED,
   URL_TITLE_CHANGED,
   URL_DELETED,
@@ -130,6 +131,36 @@ ephy_history_service_finalize (GObject *self)
   G_OBJECT_CLASS (ephy_history_service_parent_class)->finalize (self);
 }
 
+static void
+ephy_history_service_dispose (GObject *self)
+{
+  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
+
+  if (priv->queue_urls_visited_id) {
+    g_source_remove (priv->queue_urls_visited_id);
+    priv->queue_urls_visited_id = 0;
+  }
+}
+
+static gboolean
+emit_urls_visited (EphyHistoryService *self)
+{
+  g_signal_emit (self, signals[URLS_VISITED], 0);
+  self->priv->queue_urls_visited_id = 0;
+
+  return FALSE;
+}
+
+static void
+ephy_history_service_queue_urls_visited (EphyHistoryService *self)
+{
+  if (self->priv->queue_urls_visited_id)
+    return;
+
+  self->priv->queue_urls_visited_id =
+    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)emit_urls_visited, self, NULL);
+}
+
 static gboolean
 impl_visit_url (EphyHistoryService *self, const char *url, EphyHistoryPageVisitType visit_type)
 {
@@ -142,6 +173,8 @@ impl_visit_url (EphyHistoryService *self, const char *url, EphyHistoryPageVisitT
                                   visit, NULL, NULL, NULL);
   ephy_history_page_visit_free (visit);
 
+  ephy_history_service_queue_urls_visited (self);
+
   return FALSE;
 }
 
@@ -151,6 +184,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize = ephy_history_service_finalize;
+  gobject_class->dispose  = ephy_history_service_dispose;
   gobject_class->get_property = ephy_history_service_get_property;
   gobject_class->set_property = ephy_history_service_set_property;
 
@@ -167,6 +201,25 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                   EPHY_TYPE_HISTORY_PAGE_VISIT_TYPE);
+
+/**
+ * EphyHistoryService::urls-visited:
+ * @service: the #EphyHistoryService that received the signal
+ *
+ * The ::urls-visited signal is emitted after one or more visits to
+ * URLS have taken place. This signal is intended for use-cases when
+ * precise information of the actual URLS visited is not important and
+ * there is only interest in the fact that there have been changes in
+ * the history. For more precise information, you can use ::visit-url
+ **/
+  signals[URLS_VISITED] =
+    g_signal_new ("urls-visited",
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   signals[CLEARED] =
     g_signal_new ("cleared",

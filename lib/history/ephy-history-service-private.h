@@ -29,6 +29,7 @@ struct _EphyHistoryServicePrivate {
   GAsyncQueue *queue;
   gboolean scheduled_to_quit;
   gboolean scheduled_to_commit;
+  int queue_urls_visited_id;
 };
 
 void                     ephy_history_service_schedule_commit         (EphyHistoryService *self); 
