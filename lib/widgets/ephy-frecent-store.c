@@ -129,10 +129,8 @@ ephy_frecent_store_fetch_urls (EphyFrecentStore *store,
 }
 
 static gboolean
-on_visit_url_cb (EphyHistoryService *service,
-                 char *url,
-                 EphyHistoryPageVisitType visit_type,
-                 EphyFrecentStore *store)
+on_urls_visited_cb (EphyHistoryService *service,
+                    EphyFrecentStore *store)
 {
   ephy_frecent_store_fetch_urls (store, service);
 
@@ -254,8 +252,8 @@ setup_history_service (EphyFrecentStore *store)
 
   ephy_frecent_store_fetch_urls (store, service);
 
-  g_signal_connect_after (service, "visit-url",
-                    G_CALLBACK (on_visit_url_cb), store);
+  g_signal_connect (service, "urls-visited",
+                    G_CALLBACK (on_urls_visited_cb), store);
   g_signal_connect (service, "cleared",
                     G_CALLBACK (on_cleared_cb), store);
   g_signal_connect (service, "url-title-changed",

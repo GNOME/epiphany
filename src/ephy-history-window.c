@@ -1098,10 +1098,8 @@ filter_now (EphyHistoryWindow *editor,
 }
 
 static gboolean
-on_visit_url_cb (EphyHistoryService *service,
-		 gchar *url,
-		 EphyHistoryPageVisitType visit_type,
-		 EphyHistoryWindow *editor)
+on_urls_visited_cb (EphyHistoryService *service,
+		    EphyHistoryWindow *editor)
 {
 	filter_now (editor, TRUE, TRUE);
 
@@ -1297,7 +1295,7 @@ ephy_history_window_constructed (GObject *object)
 	filter_now (editor, TRUE, TRUE);
 
 	g_signal_connect_after (editor->priv->history_service,
-				"visit-url", G_CALLBACK (on_visit_url_cb),
+				"urls-visited", G_CALLBACK (on_urls_visited_cb),
 				editor);
 
 	if (G_OBJECT_CLASS (ephy_history_window_parent_class)->constructed)
