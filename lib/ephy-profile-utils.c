@@ -208,11 +208,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   int status;
   char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
   int i = 2; /* index for argv, start filling at 2. */
-  char **envp;
-
-  envp = g_environ_setenv (g_get_environ (),
-                           "EPHY_LOG_MODULES", "ephy-profile",
-                           TRUE);
+  char *envp[1] = { "EPHY_LOG_MODULES=ephy-profile" };
 
   argv[i++] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
 
@@ -238,7 +234,6 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
                       &status, &error);
   g_free (index);
   g_free (version);
-  g_strfreev (envp);
     
   if (error) {
     LOG ("Failed to run migrator: %s", error->message);
