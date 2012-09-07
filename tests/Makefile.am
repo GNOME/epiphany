@@ -1,6 +1,7 @@
 SUBDIRS = data
 
 noinst_PROGRAMS = \
+	test-ephy-bookmarks \
 	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
@@ -114,6 +115,9 @@ LDADD = \
 	$(DBUS_LIBS) \
 	$(CODE_COVERAGE_LDFLAGS) \
 	$(DEPENDENCIES_LIBS) 
+
+test_ephy_bookmarks_SOURCES = \
+	ephy-bookmarks-test.c
 
 test_ephy_download_SOURCES = \
 	ephy-download-test.c
