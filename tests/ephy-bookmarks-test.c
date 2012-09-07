@@ -76,6 +76,26 @@ test_ephy_bookmarks_add ()
   clear_bookmark_files ();
 }
 
+static void
+test_ephy_bookmarks_set_address ()
+{
+  EphyBookmarks *bookmarks;
+  EphyNode *node;
+
+  bookmarks = ephy_bookmarks_new ();
+  g_assert (bookmarks);
+  node = ephy_bookmarks_add (bookmarks, "GNOME", "http://www.gnome.org");
+  g_assert (node);
+  ephy_bookmarks_set_address (bookmarks, node, "http://www.google.com");
+  node = ephy_bookmarks_find_bookmark (bookmarks, "http://www.gnome.org");
+  g_assert (node == NULL);
+  node = ephy_bookmarks_find_bookmark (bookmarks, "http://www.google.com");
+  g_assert (node);
+
+  g_object_unref (bookmarks);
+  clear_bookmark_files ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -96,6 +116,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/bookmarks/ephy-bookmarks/add",
                    test_ephy_bookmarks_add);
+
+  g_test_add_func ("/src/bookmarks/ephy-bookmarks/set_address",
+                   test_ephy_bookmarks_set_address);
 
   ret = g_test_run ();
 
