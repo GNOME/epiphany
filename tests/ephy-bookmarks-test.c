@@ -24,6 +24,27 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 
+const char* bookmarks_paths[] = { "ephy-bookmarks.xml", "bookmarks.rdf", NULL };
+
+static void
+clear_bookmark_files ()
+{
+  GFile *file;
+  char *path;
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (bookmarks_paths); i++) {
+
+    path = g_build_filename (ephy_dot_dir (),
+                             bookmarks_paths[i],
+                             NULL);
+    file = g_file_new_for_path (path);
+    g_file_delete (file, NULL, NULL);
+    g_object_unref (file);
+    g_free (path);
+  }
+}
+
 static void
 test_ephy_bookmarks_create ()
 {
@@ -32,6 +53,8 @@ test_ephy_bookmarks_create ()
   bookmarks = ephy_bookmarks_new ();
   g_assert (bookmarks);
   g_object_unref (bookmarks);
+
+  clear_bookmark_files ();
 }
 
 static void
@@ -49,6 +72,8 @@ test_ephy_bookmarks_add ()
   g_assert (node == result);
   
   g_object_unref (bookmarks);
+
+  clear_bookmark_files ();
 }
 
 int
