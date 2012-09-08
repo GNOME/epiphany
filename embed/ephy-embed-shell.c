@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2011 Igalia S.L.
@@ -40,10 +40,10 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-#define PAGE_SETUP_FILENAME	"page-setup-gtk.ini"
-#define PRINT_SETTINGS_FILENAME	"print-settings.ini"
+#define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
+#define PRINT_SETTINGS_FILENAME "print-settings.ini"
 
-#define LEGACY_PAGE_SETUP_FILENAME	"page-setup.ini"
+#define LEGACY_PAGE_SETUP_FILENAME  "page-setup.ini"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -51,33 +51,33 @@
 
 struct _EphyEmbedShellPrivate
 {
-	EphyHistoryService *global_history_service;
-	GList *downloads;
-	EphyEmbedSingle *embed_single;
-	EphyEncodings *encodings;
-	EphyAdBlockManager *adblock_manager;
-	GtkPageSetup *page_setup;
-	GtkPrintSettings *print_settings;
-	EphyEmbedShellMode mode;
-	EphyFrecentStore *frecent_store;
-	guint single_initialised : 1;
+  EphyHistoryService *global_history_service;
+  GList *downloads;
+  EphyEmbedSingle *embed_single;
+  EphyEncodings *encodings;
+  EphyAdBlockManager *adblock_manager;
+  GtkPageSetup *page_setup;
+  GtkPrintSettings *print_settings;
+  EphyEmbedShellMode mode;
+  EphyFrecentStore *frecent_store;
+  guint single_initialised : 1;
 };
 
 enum
 {
-	DOWNLOAD_ADDED,
-	DOWNLOAD_REMOVED,
-	PREPARE_CLOSE,
-	LAST_SIGNAL
+  DOWNLOAD_ADDED,
+  DOWNLOAD_REMOVED,
+  PREPARE_CLOSE,
+  LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL];
 
 enum
 {
-	PROP_0,
-	PROP_MODE,
-	N_PROPERTIES
+  PROP_0,
+  PROP_MODE,
+  N_PROPERTIES
 };
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
@@ -89,33 +89,32 @@ G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
 static void
 ephy_embed_shell_dispose (GObject *object)
 {
-	EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
+  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
-	g_clear_object (&priv->encodings);
-	g_clear_object (&priv->page_setup);
-	g_clear_object (&priv->print_settings);
-	g_clear_object (&priv->frecent_store);
-	g_clear_object (&priv->global_history_service);
-	g_clear_object (&priv->embed_single);
-	g_clear_object (&priv->adblock_manager);
+  g_clear_object (&priv->encodings);
+  g_clear_object (&priv->page_setup);
+  g_clear_object (&priv->print_settings);
+  g_clear_object (&priv->frecent_store);
+  g_clear_object (&priv->global_history_service);
+  g_clear_object (&priv->embed_single);
+  g_clear_object (&priv->adblock_manager);
 
-	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
 
 static void
 ephy_embed_shell_finalize (GObject *object)
 {
-	EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
+  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
-	if (priv->downloads != NULL)
-	{
-		LOG ("Destroying downloads list");
-		g_list_foreach (priv->downloads, (GFunc)g_object_unref, NULL);
-		g_list_free (priv->downloads);
-		priv->downloads = NULL;
-	}
+  if (priv->downloads != NULL) {
+    LOG ("Destroying downloads list");
+    g_list_foreach (priv->downloads, (GFunc)g_object_unref, NULL);
+    g_list_free (priv->downloads);
+    priv->downloads = NULL;
+  }
 
-	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
 /**
@@ -127,19 +126,18 @@ ephy_embed_shell_finalize (GObject *object)
 GObject *
 ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->global_history_service == NULL)
-	{
-		char *filename;
+  if (shell->priv->global_history_service == NULL) {
+    char *filename;
 
-		filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
-		shell->priv->global_history_service = ephy_history_service_new (filename);
-		g_free (filename);
-		g_return_val_if_fail (shell->priv->global_history_service, NULL);
-	}
+    filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+    shell->priv->global_history_service = ephy_history_service_new (filename);
+    g_free (filename);
+    g_return_val_if_fail (shell->priv->global_history_service, NULL);
+  }
 
-	return G_OBJECT (shell->priv->global_history_service);
+  return G_OBJECT (shell->priv->global_history_service);
 }
 
 static GdkPixbuf *
@@ -172,72 +170,66 @@ ephy_embed_shell_get_overview_icon (const char *icon_name)
 EphyFrecentStore *
 ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
 {
-	GdkPixbuf *default_icon;
-	GdkPixbuf *frame;
+  GdkPixbuf *default_icon;
+  GdkPixbuf *frame;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->frecent_store == NULL)
-	{
-		shell->priv->frecent_store = ephy_frecent_store_new ();
-		default_icon = ephy_embed_shell_get_overview_icon ("missing-thumbnail.png");
-		frame = ephy_embed_shell_get_overview_icon ("thumbnail-frame.png");
-		g_object_set (shell->priv->frecent_store,
-			      "history-service",
-			      ephy_embed_shell_get_global_history_service (shell),
-			      "history-length", 10,
-			      "default-icon", default_icon,
-			      "icon-frame", frame,
-			      NULL);
-		g_object_unref (default_icon);
-		g_object_unref (frame);
-	}
+  if (shell->priv->frecent_store == NULL) {
+    shell->priv->frecent_store = ephy_frecent_store_new ();
+    default_icon = ephy_embed_shell_get_overview_icon ("missing-thumbnail.png");
+    frame = ephy_embed_shell_get_overview_icon ("thumbnail-frame.png");
+    g_object_set (shell->priv->frecent_store,
+                  "history-service",
+                  ephy_embed_shell_get_global_history_service (shell),
+                  "history-length", 10,
+                  "default-icon", default_icon,
+                  "icon-frame", frame,
+                  NULL);
+    g_object_unref (default_icon);
+    g_object_unref (frame);
+  }
 
-	return shell->priv->frecent_store;
+  return shell->priv->frecent_store;
 }
 
 static GObject *
 impl_get_embed_single (EphyEmbedShell *shell)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	priv = shell->priv;
+  priv = shell->priv;
 
-	if (priv->embed_single != NULL &&
-	    !priv->single_initialised)
-	{
-		g_warning ("ephy_embed_shell_get_embed_single called while the single is being initialised!\n");
-		return G_OBJECT (priv->embed_single);
-	}
+  if (priv->embed_single != NULL &&
+      !priv->single_initialised) {
+    g_warning ("ephy_embed_shell_get_embed_single called while the single is being initialised!\n");
+    return G_OBJECT (priv->embed_single);
+  }
 
-	if (priv->embed_single == NULL)
-	{
-		priv->embed_single = EPHY_EMBED_SINGLE
-                  (g_object_new (EPHY_TYPE_EMBED_SINGLE, NULL));
-		g_assert (priv->embed_single != NULL);
+  if (priv->embed_single == NULL) {
+    priv->embed_single = EPHY_EMBED_SINGLE (g_object_new (EPHY_TYPE_EMBED_SINGLE, NULL));
+    g_assert (priv->embed_single != NULL);
 
-		if (!ephy_embed_single_initialize (priv->embed_single))
-		{
-			GtkWidget *dialog;
+    if (!ephy_embed_single_initialize (priv->embed_single)) {
+      GtkWidget *dialog;
 
-			dialog = gtk_message_dialog_new
-					(NULL,
-					 GTK_DIALOG_MODAL,
-					 GTK_MESSAGE_ERROR,
-					 GTK_BUTTONS_CLOSE,
-					 _("Epiphany can't be used now. "
-					   "Initialization failed."));
-			gtk_dialog_run (GTK_DIALOG (dialog));
+      dialog = gtk_message_dialog_new (NULL,
+                                       GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Epiphany can't be used now. "
+                                         "Initialization failed."));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      
+      exit (0);
+    }
+    
+    priv->single_initialised = TRUE;
+  }
 
-			exit (0);
-		}
-
-		priv->single_initialised = TRUE;
-	}
-
-	return G_OBJECT (shell->priv->embed_single);
+  return G_OBJECT (shell->priv->embed_single);
 }
 
 /**
@@ -249,9 +241,9 @@ impl_get_embed_single (EphyEmbedShell *shell)
 GObject *
 ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 {
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
+  EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
 
-	return klass->get_embed_single (shell);
+  return klass->get_embed_single (shell);
 }
 
 /**
@@ -263,95 +255,91 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 GObject *
 ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->encodings == NULL)
-	{
-		shell->priv->encodings = ephy_encodings_new ();
-	}
+  if (shell->priv->encodings == NULL)
+    shell->priv->encodings = ephy_encodings_new ();
 
-	return G_OBJECT (shell->priv->encodings);
+  return G_OBJECT (shell->priv->encodings);
 }
 
 void
 ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
 {
-	g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
+  g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
 }
 
 static void
 ephy_embed_shell_set_property (GObject *object,
-			       guint prop_id,
-			       const GValue *value,
-			       GParamSpec *pspec)
+             guint prop_id,
+             const GValue *value,
+             GParamSpec *pspec)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
 
-  switch (prop_id)
-  {
+  switch (prop_id) {
   case PROP_MODE:
-	  embed_shell->priv->mode = g_value_get_enum (value);
-	  break;
+    embed_shell->priv->mode = g_value_get_enum (value);
+    break;
   default:
-	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
 static void
 ephy_embed_shell_get_property (GObject *object,
-			       guint prop_id,
-			       GValue *value,
-			       GParamSpec *pspec)
+             guint prop_id,
+             GValue *value,
+             GParamSpec *pspec)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
 
-  switch (prop_id)
-  {
+  switch (prop_id) {
   case PROP_MODE:
-	  g_value_set_enum (value, embed_shell->priv->mode);
-	  break;
+    g_value_set_enum (value, embed_shell->priv->mode);
+    break;
   default:
-	  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
 static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
-	shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
+  shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
 
-	/* globally accessible singleton */
-	g_assert (embed_shell == NULL);
-	embed_shell = shell;
+  /* globally accessible singleton */
+  g_assert (embed_shell == NULL);
+  embed_shell = shell;
 
-	shell->priv->downloads = NULL;
+  shell->priv->downloads = NULL;
 }
 
 static void
 ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->dispose = ephy_embed_shell_dispose;
-	object_class->finalize = ephy_embed_shell_finalize;
-	object_class->set_property = ephy_embed_shell_set_property;
-	object_class->get_property = ephy_embed_shell_get_property;
+  object_class->dispose = ephy_embed_shell_dispose;
+  object_class->finalize = ephy_embed_shell_finalize;
+  object_class->set_property = ephy_embed_shell_set_property;
+  object_class->get_property = ephy_embed_shell_get_property;
 
-	klass->get_embed_single = impl_get_embed_single;
+  klass->get_embed_single = impl_get_embed_single;
 
-	object_properties[PROP_MODE] =
-		g_param_spec_enum ("mode",
-				   "Mode",
-				   "The	 global mode for this instance of Epiphany .",
-				   EPHY_TYPE_EMBED_SHELL_MODE,
-				   EPHY_EMBED_SHELL_MODE_BROWSER,
-				   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-				   G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
-	
-	g_object_class_install_properties (object_class,
-					   N_PROPERTIES,
-					   object_properties);
-
+  object_properties[PROP_MODE] =
+    g_param_spec_enum ("mode",
+                       "Mode",
+                       "The  global mode f  or this instance of Epiphany .",
+                       EPHY_TYPE_EMBED_SHELL_MODE,
+                       EPHY_EMBED_SHELL_MODE_BROWSER,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
+                       G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+  
+  g_object_class_install_properties (object_class,
+                                     N_PROPERTIES,
+                                     object_properties);
+  
 /**
  * EphyEmbed::download-added:
  * @shell: the #EphyEmbedShell
@@ -360,15 +348,15 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
  * Emitted when a #EphyDownload has been added to the global watch list of
  * @shell, via ephy_embed_shell_add_download.
  **/
-	signals[DOWNLOAD_ADDED] =
-		g_signal_new ("download-added",
-			      EPHY_TYPE_EMBED_SHELL,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedShellClass, download_added),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
-
+  signals[DOWNLOAD_ADDED] =
+    g_signal_new ("download-added",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (EphyEmbedShellClass, download_added),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
+  
 /**
  * EphyEmbed::download-removed:
  * @shell: the #EphyEmbedShell
@@ -377,14 +365,14 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
  * Emitted when a #EphyDownload has been removed from the global watch list of
  * @shell, via ephy_embed_shell_remove_download.
  **/
-	signals[DOWNLOAD_REMOVED] =
-		g_signal_new ("download-removed",
-			      EPHY_TYPE_EMBED_SHELL,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedShellClass, download_removed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
+  signals[DOWNLOAD_REMOVED] =
+    g_signal_new ("download-removed",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (EphyEmbedShellClass, download_removed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
 
 /**
  * EphyEmbed::prepare-close:
@@ -394,16 +382,16 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
  * quit on command from the session manager. You can use it when you need
  * to do something special (shut down a service, for example).
  **/
-	signals[PREPARE_CLOSE] =
-		g_signal_new ("prepare-close",
-			      EPHY_TYPE_EMBED_SHELL,
-			      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedShellClass, prepare_close),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
+  signals[PREPARE_CLOSE] =
+    g_signal_new ("prepare-close",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (EphyEmbedShellClass, prepare_close),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
-	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
+  g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
 
 /**
@@ -416,7 +404,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 EphyEmbedShell *
 ephy_embed_shell_get_default (void)
 {
-	return embed_shell;
+  return embed_shell;
 }
 
 /**
@@ -430,45 +418,37 @@ ephy_embed_shell_get_default (void)
 GObject *
 ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->adblock_manager == NULL)
-	{
-		shell->priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
-	}
+  if (shell->priv->adblock_manager == NULL)
+    shell->priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
 
-	return G_OBJECT (shell->priv->adblock_manager);
+  return G_OBJECT (shell->priv->adblock_manager);
 }
 
 void
-ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
-				 GtkPageSetup *page_setup)
+ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
+         GtkPageSetup *page_setup)
 {
-	EphyEmbedShellPrivate *priv;
-	char *path;
+  EphyEmbedShellPrivate *priv;
+  char *path;
 
-	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-	priv = shell->priv;
+  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  priv = shell->priv;
 
-	if (page_setup != NULL)
-	{
-		g_object_ref (page_setup);
-	}
-	else
-	{
-		page_setup = gtk_page_setup_new ();
-	}
+  if (page_setup != NULL)
+    g_object_ref (page_setup);
+  else
+    page_setup = gtk_page_setup_new ();
 
-	if (priv->page_setup != NULL)
-	{
-		g_object_unref (priv->page_setup);
-	}
+  if (priv->page_setup != NULL)
+    g_object_unref (priv->page_setup);
 
-	priv->page_setup = page_setup;
+  priv->page_setup = page_setup;
 
-	path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
-	gtk_page_setup_to_file (page_setup, path, NULL);
-	g_free (path);
+  path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+  gtk_page_setup_to_file (page_setup, path, NULL);
+  g_free (path);
 }
 
 /**
@@ -477,53 +457,47 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
  * Return value: (transfer none):
  **/
 GtkPageSetup *
-ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
+ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-	priv = shell->priv;
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  priv = shell->priv;
 
-	if (priv->page_setup == NULL)
-	{
-		GError *error = NULL;
-		char *path;
+  if (priv->page_setup == NULL) {
+    GError *error = NULL;
+    char *path;
 
-		path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
-		priv->page_setup = gtk_page_setup_new_from_file (path, &error);
-		g_free (path);
+    path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+    priv->page_setup = gtk_page_setup_new_from_file (path, &error);
+    g_free (path);
 
 #ifdef ENABLE_MIGRATION
-		/* If the file doesn't exist, try to fall back to the old format */
-		if (error != NULL &&
-		    error->domain == G_FILE_ERROR &&
-		    error->code == G_FILE_ERROR_NOENT)
-		{
-			path = g_build_filename (ephy_dot_dir (), LEGACY_PAGE_SETUP_FILENAME, NULL);
-			priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
-			if (priv->page_setup != NULL)
-			{
-				/* Delete the old file, so we don't migrate again */
-				g_unlink (path);
-			}
-			g_free (path);
-		} else if (error != NULL)
-			g_warning ("error: %s\n", error->message);
+    /* If the file doesn't exist, try to fall back to the old format */
+    if (error != NULL &&
+        error->domain == G_FILE_ERROR &&
+        error->code == G_FILE_ERROR_NOENT)
+    {
+      path = g_build_filename (ephy_dot_dir (), LEGACY_PAGE_SETUP_FILENAME, NULL);
+      priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
+      if (priv->page_setup != NULL) {
+        /* Delete the old file, so we don't migrate again */
+        g_unlink (path);
+      }
+      g_free (path);
+    } else if (error != NULL)
+      g_warning ("error: %s\n", error->message);
 #endif /* ENABLE_MIGRATION */
 
-		if (error)
-		{
-			g_error_free (error);
-		}
+    if (error)
+      g_error_free (error);
 
-		/* If that still didn't work, create a new, empty one */
-		if (priv->page_setup == NULL)
-		{
-			priv->page_setup = gtk_page_setup_new ();
-		}
-	}
+    /* If that still didn't work, create a new, empty one */
+    if (priv->page_setup == NULL)
+      priv->page_setup = gtk_page_setup_new ();
+  }
 
-	return priv->page_setup;
+  return priv->page_setup;
 }
 
 /**
@@ -536,29 +510,25 @@ ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
  **/
 void
 ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
-				     GtkPrintSettings *settings)
+             GtkPrintSettings *settings)
 {
-	EphyEmbedShellPrivate *priv;
-	char *path;
+  EphyEmbedShellPrivate *priv;
+  char *path;
 
-	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-	priv = shell->priv;
+  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  priv = shell->priv;
 
-	if (settings != NULL)
-	{
-		g_object_ref (settings);
-	}
+  if (settings != NULL)
+    g_object_ref (settings);
 
-	if (priv->print_settings != NULL)
-	{
-		g_object_unref (priv->print_settings);
-	}
+  if (priv->print_settings != NULL)
+    g_object_unref (priv->print_settings);
 
-	priv->print_settings = settings ? settings : gtk_print_settings_new ();
+  priv->print_settings = settings ? settings : gtk_print_settings_new ();
 
-	path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
-	gtk_print_settings_to_file (settings, path, NULL);
-	g_free (path);
+  path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+  gtk_print_settings_to_file (settings, path, NULL);
+  g_free (path);
 }
 
 /**
@@ -572,31 +542,28 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 GtkPrintSettings *
 ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-	priv = shell->priv;
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  priv = shell->priv;
 
-	if (priv->print_settings == NULL)
-	{
-		GError *error = NULL;
-		char *path;
+  if (priv->print_settings == NULL) {
+    GError *error = NULL;
+    char *path;
 
-		path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
-		priv->print_settings = gtk_print_settings_new_from_file (path, &error);
-		g_free (path);
+    path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+    priv->print_settings = gtk_print_settings_new_from_file (path, &error);
+    g_free (path);
 
-		/* Note: the gtk print settings file format is the same as our
-		 * legacy one, so no need to migrate here.
-		 */
+    /* Note: the gtk print settings file format is the same as our
+     * legacy one, so no need to migrate here.
+     */
 
-		if (priv->print_settings == NULL)
-		{
-			priv->print_settings = gtk_print_settings_new ();
-		}
-	}
+    if (priv->print_settings == NULL)
+      priv->print_settings = gtk_print_settings_new ();
+  }
 
-	return priv->print_settings;
+  return priv->print_settings;
 }
 
 /**
@@ -610,38 +577,38 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 GList *
 ephy_embed_shell_get_downloads (EphyEmbedShell *shell)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-	priv = shell->priv;
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  priv = shell->priv;
 
-	return priv->downloads;
+  return priv->downloads;
 }
 
 void
 ephy_embed_shell_add_download (EphyEmbedShell *shell, EphyDownload *download)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 
-	priv = shell->priv;
-	priv->downloads = g_list_prepend (priv->downloads, download);
+  priv = shell->priv;
+  priv->downloads = g_list_prepend (priv->downloads, download);
 
-	g_signal_emit_by_name (shell, "download-added", download, NULL);
+  g_signal_emit_by_name (shell, "download-added", download, NULL);
 }
 
 void
 ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
 {
-	EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv;
 
-	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 
-	priv = shell->priv;
-	priv->downloads = g_list_remove (priv->downloads, download);
+  priv = shell->priv;
+  priv->downloads = g_list_remove (priv->downloads, download);
 
-	g_signal_emit_by_name (shell, "download-removed", download, NULL);
+  g_signal_emit_by_name (shell, "download-removed", download, NULL);
 }
 
 /**
@@ -653,7 +620,7 @@ ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
 EphyEmbedShellMode
 ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_EMBED_SHELL_MODE_BROWSER);
-	
-	return shell->priv->mode;
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_EMBED_SHELL_MODE_BROWSER);
+  
+  return shell->priv->mode;
 }
