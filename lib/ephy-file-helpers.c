@@ -265,8 +265,8 @@ ephy_file (const char *filename)
 /**
  * ephy_dot_dir:
  *
- * Gets Epiphany's configuration directory, usually .gnome2/epiphany under
- * user's homedir.
+ * Gets Epiphany's configuration directory, usually .config/epiphany
+ * under user's homedir.
  *
  * Returns: the full path to Epiphany's configuration directory
  **/
