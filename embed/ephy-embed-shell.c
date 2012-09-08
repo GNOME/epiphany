@@ -31,7 +31,6 @@
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
-#include "ephy-print-utils.h"
 #include "ephy-snapshot-service.h"
 
 #include <glib.h>
@@ -42,8 +41,6 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
-
-#define LEGACY_PAGE_SETUP_FILENAME  "page-setup.ini"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -471,23 +468,6 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
     path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
     priv->page_setup = gtk_page_setup_new_from_file (path, &error);
     g_free (path);
-
-#ifdef ENABLE_MIGRATION
-    /* If the file doesn't exist, try to fall back to the old format */
-    if (error != NULL &&
-        error->domain == G_FILE_ERROR &&
-        error->code == G_FILE_ERROR_NOENT)
-    {
-      path = g_build_filename (ephy_dot_dir (), LEGACY_PAGE_SETUP_FILENAME, NULL);
-      priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
-      if (priv->page_setup != NULL) {
-        /* Delete the old file, so we don't migrate again */
-        g_unlink (path);
-      }
-      g_free (path);
-    } else if (error != NULL)
-      g_warning ("error: %s\n", error->message);
-#endif /* ENABLE_MIGRATION */
 
     if (error)
       g_error_free (error);

@@ -38,7 +38,6 @@ IGNORE_HFILES = \
 	ephy-node-filter.h \
 	ephy-node.h \
 	ephy-prefs.h \
-	ephy-print-utils.h \
 	ephy-state.h \
 	ephy-stock-icons.h \
 	ephy-string.h \
