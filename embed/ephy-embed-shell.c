@@ -423,7 +423,7 @@ ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
 
 void
 ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
-         GtkPageSetup *page_setup)
+                                 GtkPageSetup *page_setup)
 {
   EphyEmbedShellPrivate *priv;
   char *path;
