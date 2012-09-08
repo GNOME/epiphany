@@ -33,7 +33,6 @@ IGNORE_HFILES = \
 	ephy-file-chooser.h \
 	ephy-gui.h \
 	ephy-langs.h \
-	ephy-marshal.h \
 	ephy-node-common.h \
 	ephy-node-filter.h \
 	ephy-node.h \
