@@ -271,9 +271,9 @@ ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
 
 static void
 ephy_embed_shell_set_property (GObject *object,
-             guint prop_id,
-             const GValue *value,
-             GParamSpec *pspec)
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
 
@@ -288,9 +288,9 @@ ephy_embed_shell_set_property (GObject *object,
 
 static void
 ephy_embed_shell_get_property (GObject *object,
-             guint prop_id,
-             GValue *value,
-             GParamSpec *pspec)
+                               guint prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
 
@@ -510,7 +510,7 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
  **/
 void
 ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
-             GtkPrintSettings *settings)
+                                     GtkPrintSettings *settings)
 {
   EphyEmbedShellPrivate *priv;
   char *path;
