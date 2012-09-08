@@ -82,9 +82,6 @@ enum
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
-static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
-static void ephy_embed_shell_init	(EphyEmbedShell *shell);
-
 EphyEmbedShell *embed_shell = NULL;
 
 G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
@@ -92,8 +89,7 @@ G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
 static void
 ephy_embed_shell_dispose (GObject *object)
 {
-	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
-	EphyEmbedShellPrivate *priv = shell->priv;
+	EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
 	g_clear_object (&priv->encodings);
 	g_clear_object (&priv->page_setup);
@@ -109,14 +105,14 @@ ephy_embed_shell_dispose (GObject *object)
 static void
 ephy_embed_shell_finalize (GObject *object)
 {
-	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
+	EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
-	if (shell->priv->downloads != NULL)
+	if (priv->downloads != NULL)
 	{
 		LOG ("Destroying downloads list");
-		g_list_foreach (shell->priv->downloads, (GFunc) g_object_unref, NULL);
-		g_list_free (shell->priv->downloads);
-		shell->priv->downloads = NULL;
+		g_list_foreach (priv->downloads, (GFunc)g_object_unref, NULL);
+		g_list_free (priv->downloads);
+		priv->downloads = NULL;
 	}
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
