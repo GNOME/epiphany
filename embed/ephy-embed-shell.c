@@ -44,8 +44,6 @@
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
-#define ENABLE_MIGRATION
-
 struct _EphyEmbedShellPrivate
 {
   EphyHistoryService *global_history_service;
