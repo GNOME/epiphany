@@ -1011,8 +1011,9 @@ ephy_file_delete_uri (const char *uri)
  * Returns: a new allocated string containg the data uri, or %NULL if the
  *   data uri could not be created
  */
-char *ephy_file_create_data_uri_for_filename (const char *filename,
-					      const char *mime_type)
+char *
+ephy_file_create_data_uri_for_filename (const char *filename,
+					const char *mime_type)
 {
 	gchar *data;
 	gsize data_length;
