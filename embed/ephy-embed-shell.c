@@ -33,9 +33,7 @@
 #include "ephy-history-service.h"
 #include "ephy-snapshot-service.h"
 
-#include <glib.h>
 #include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
