@@ -184,7 +184,6 @@ test_already_cancelled_snapshot (void)
 static gboolean
 cancel (GCancellable *cancellable)
 {
-  g_print ("CANCELLING NOW!!!\n");
   g_cancellable_cancel (cancellable);
   return FALSE;
 }
@@ -219,12 +218,10 @@ server_callback (SoupServer *server, SoupMessage *msg,
 		soup_message_set_status (msg, SOUP_STATUS_OK);
 		soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,
                               response, strlen (response));
-		g_print ("Client asked for path: %s\n", path);
 		soup_message_body_complete (msg->response_body);
   }
   else
     soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
-  g_print ("Server responding to this\n");
 }
 
 int
