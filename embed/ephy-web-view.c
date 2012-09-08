@@ -2328,6 +2328,7 @@ load_status_cb (WebKitWebView *web_view,
       security_level = priv->tls_errors == 0 ?
         EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
     }
+    g_object_unref (response);
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
 
