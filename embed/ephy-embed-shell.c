@@ -95,27 +95,13 @@ ephy_embed_shell_dispose (GObject *object)
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 	EphyEmbedShellPrivate *priv = shell->priv;
 
-	if (priv->encodings != NULL)
-	{
-		LOG ("Unref encodings");
-		g_object_unref (priv->encodings);
-		priv->encodings = NULL;
-	}
-
-	if (priv->page_setup != NULL)
-	{
-		g_object_unref (priv->page_setup);
-		priv->page_setup = NULL;
-	}
-
-	if (priv->print_settings != NULL)
-	{
-		g_object_unref (priv->print_settings);
-		priv->print_settings = NULL;
-	}
-
-	if (priv->frecent_store != NULL)
-		g_clear_object (&priv->frecent_store);
+	g_clear_object (&priv->encodings);
+	g_clear_object (&priv->page_setup);
+	g_clear_object (&priv->print_settings);
+	g_clear_object (&priv->frecent_store);
+	g_clear_object (&priv->global_history_service);
+	g_clear_object (&priv->embed_single);
+	g_clear_object (&priv->adblock_manager);
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -131,25 +117,6 @@ ephy_embed_shell_finalize (GObject *object)
 		g_list_foreach (shell->priv->downloads, (GFunc) g_object_unref, NULL);
 		g_list_free (shell->priv->downloads);
 		shell->priv->downloads = NULL;
-	}
-
-	if (shell->priv->global_history_service)
-	{
-		LOG ("Unref history service");
-		g_object_unref (shell->priv->global_history_service);
-	}
-
-	if (shell->priv->embed_single)
-	{
-		LOG ("Unref embed single");
-		g_object_unref (G_OBJECT (shell->priv->embed_single));
-	}
-
-	if (shell->priv->adblock_manager != NULL)
-	{
-		LOG ("Unref adblock manager");
-		g_object_unref (shell->priv->adblock_manager);
-		shell->priv->adblock_manager = NULL;
 	}
 
 	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
