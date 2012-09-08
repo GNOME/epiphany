@@ -2,6 +2,7 @@ SUBDIRS = data
 
 noinst_PROGRAMS = \
 	test-ephy-bookmarks \
+	test-ephy-completion-model \
 	test-ephy-download \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
@@ -118,6 +119,9 @@ LDADD = \
 
 test_ephy_bookmarks_SOURCES = \
 	ephy-bookmarks-test.c
+
+test_ephy_completion_model_SOURCES = \
+	ephy-completion-model-test.c
 
 test_ephy_download_SOURCES = \
 	ephy-download-test.c
