@@ -360,6 +360,39 @@ test_ephy_file_switch_temp_file ()
   ephy_file_helpers_shutdown ();
 }
 
+typedef struct {
+  const char *filename;
+  const char *expected;
+} SanitizeFilenameTest;
+
+static const SanitizeFilenameTest sanitize_filename_tests[] =
+{
+  { "Normal Filename", "Normal Filename" },
+  { "filename/with/slashes", "filename_with_slashes" }
+};
+
+static void
+test_ephy_sanitize_filename ()
+{
+  guint i;
+
+  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (sanitize_filename_tests); i++) {
+    SanitizeFilenameTest test;
+    char *filename;
+
+    test = sanitize_filename_tests[i];
+    g_test_message ("SANITIZE FILENAME: testing for %s", test.filename);
+
+    filename = g_strdup (test.filename);
+    g_assert_cmpstr (ephy_sanitize_filename (filename), ==, test.expected);
+    g_free (filename);
+  }
+
+  ephy_file_helpers_shutdown ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -394,6 +427,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/lib/ephy-file-helpers/switch_temp_file",
                    test_ephy_file_switch_temp_file);
+
+  g_test_add_func ("/lib/ephy-file-helpers/sanitize_filename",
+                   test_ephy_sanitize_filename);
 
   ret = g_test_run ();
 
