@@ -1050,3 +1050,24 @@ ephy_file_create_data_uri_for_filename (const char *filename,
 
 	return uri;
 }
+
+/**
+ * ephy_sanitize_filename:
+ * @filename: a filename
+ *
+ * Sanitize @filename to make sure it's a valid filename. If the
+ * filename contains directory separators, they will be converted to
+ * underscores, so that they are not interpreted as a path by the
+ * filesystem.
+ *
+ * Note that it modifies string in place. The return value is to allow nesting.
+ *
+ * Returns: the sanitized filename
+ */
+char *
+ephy_sanitize_filename (char *filename)
+{
+	g_return_val_if_fail (filename != NULL, NULL);
+
+	return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
+}

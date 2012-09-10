@@ -91,6 +91,7 @@ gboolean           ephy_file_delete_dir_recursively (GFile *file,
 void               ephy_file_delete_uri          (const char  *uri);
 char       *       ephy_file_create_data_uri_for_filename (const char *filename,
                                                            const char *mime_type);
+char       *       ephy_sanitize_filename        (char *filename);
 
 G_END_DECLS
 
