@@ -351,7 +351,7 @@ window_cmd_file_save_as (GtkAction *action,
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
 	view = ephy_embed_get_web_view (embed);
-	suggested_filename = get_suggested_filename (view);
+	suggested_filename = ephy_sanitize_filename (get_suggested_filename (view));
 
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
 	g_free (suggested_filename);
