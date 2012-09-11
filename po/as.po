@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-09 12:51+0000\n"
-"PO-Revision-Date: 2012-08-09 21:30+0530\n"
+"POT-Creation-Date: 2012-09-03 18:38+0000\n"
+"PO-Revision-Date: 2012-09-11 20:11+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -41,7 +41,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:476 ../src/window-commands.c:1345
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
 msgid "Web"
 msgstr "ৱেব"
 
@@ -90,8 +90,8 @@ msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 msgstr ""
-"যেতিয়া ফাইলসমূহ ব্ৰাউছাৰ দ্বাৰা খুলিব নোৱাৰি সিহতক স্বচালিতভাৱে ডাউনল'ড "
-"ফোল্ডাৰলে ডাউনল'ড কৰা হয় আৰু সঠিক এপ্লিকেচনৰ সৈতে খোলা হয়।"
+"যেতিয়া ফাইলসমূহ ব্ৰাউছাৰ দ্বাৰা খুলিব নোৱাৰি সিহতক স্বচালিতভাৱে ডাউনল'ড ফোল্ডাৰলে "
+"ডাউনল'ড কৰা হয় আৰু সঠিক এপ্লিকেচনৰ সৈতে খোলা হয়।"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:8
 msgid "Middle click to open the web page pointed to by the currently selected text"
@@ -398,9 +398,9 @@ msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"ফোল্ডাৰৰ পথ যত ফাইলসমূহ ডাউনল'ড কৰা হব; অথবা \"Downloads\" অবিকল্পিত "
-"ডাউনল'ডসমূহ ফোল্ডাৰ হিচাপে ব্যৱহাৰ কৰিবলে, অথবা \"Desktop\" ডেস্কটপ ফোল্ডাৰ "
-"হিচাপে ব্যৱহাৰ কৰিবলে।"
+"ফোল্ডাৰৰ পথ যত ফাইলসমূহ ডাউনল'ড কৰা হব; অথবা \"Downloads\" অবিকল্পিত ডাউনল'ডসমূহ "
+"ফোল্ডাৰ হিচাপে ব্যৱহাৰ কৰিবলে, অথবা \"Desktop\" ডেস্কটপ ফোল্ডাৰ হিচাপে ব্যৱহাৰ "
+"কৰিবলে।"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
@@ -473,25 +473,25 @@ msgstr "ইনস্টল থকা ৱেব এপ্লিকেচনসম
 msgid "Installed on:"
 msgstr "ত ইনস্টল আছে:"
 
-#: ../embed/ephy-embed.c:597
+#: ../embed/ephy-embed.c:657
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "পূৰ্ণপৰ্দা প্ৰস্থান কৰিবলে %s টিপক"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:600
+#: ../embed/ephy-embed.c:660
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:600
+#: ../embed/ephy-embed.c:660
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:900
+#: ../embed/ephy-embed.c:960
 msgid "Web Inspector"
 msgstr "বেৱ নিৰীক্ষক"
 
-#: ../embed/ephy-embed-shell.c:207
+#: ../embed/ephy-embed-shell.c:266
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany ক এতিয়া ব্যৱহাৰ কৰিব নোৱাৰি। আৰম্ভ কৰা ব্যৰ্থ হল।"
 
@@ -824,16 +824,22 @@ msgstr "ইউনিক'ড (UTF-32 LE) (_2)"
 msgid "Unknown (%s)"
 msgstr "অজ্ঞাত (%s)"
 
+#: ../embed/ephy-overview.h:53
+#| msgctxt "bookmarks"
+#| msgid "Most Visited"
+msgid "Most Visited"
+msgstr "সৰ্বাধিক ভ্ৰমণ কৰা"
+
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:3700
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3765
 msgid "Blank page"
 msgstr "পৰিষ্কাৰ পৃষ্ঠা"
 
-#: ../embed/ephy-web-view.c:732
+#: ../embed/ephy-web-view.c:741
 msgid "Not now"
 msgstr "এতিয়া নহয়"
 
-#: ../embed/ephy-web-view.c:733
+#: ../embed/ephy-web-view.c:742
 msgid "Store password"
 msgstr "পাছৱাৰ্ড সংৰক্ষণ কৰক"
 
@@ -841,43 +847,43 @@ msgstr "পাছৱাৰ্ড সংৰক্ষণ কৰক"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:746
+#: ../embed/ephy-web-view.c:755
 #, c-format
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>আপুনি <b>%s</b> ৰ বাবে পাছৱাৰ্ড <b>%s</b> ত সংৰক্ষণ কৰিব বিচাৰে নেকি?</big>"
 
-#: ../embed/ephy-web-view.c:1101
+#: ../embed/ephy-web-view.c:1110
 msgid "Plugins"
 msgstr "প্লাগিনসমূহ"
 
-#: ../embed/ephy-web-view.c:1936
+#: ../embed/ephy-web-view.c:1948
 msgid "Deny"
 msgstr "নাকচ কৰক"
 
-#: ../embed/ephy-web-view.c:1937
+#: ../embed/ephy-web-view.c:1949
 msgid "Allow"
 msgstr "অনুমতি দিয়ক"
 
-#: ../embed/ephy-web-view.c:1951
+#: ../embed/ephy-web-view.c:1963
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b> ত থকা পৃষ্ঠায় আপোনাৰ অৱস্থান জানিব বিচাৰে।"
 
-#: ../embed/ephy-web-view.c:2419
+#: ../embed/ephy-web-view.c:2473
 msgid "None specified"
 msgstr "কাকো ধাৰ্য্য কৰা হোৱা নাই"
 
-#: ../embed/ephy-web-view.c:2428 ../embed/ephy-web-view.c:2446
+#: ../embed/ephy-web-view.c:2482 ../embed/ephy-web-view.c:2500
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "ইচ্চ! %s ল'ড কৰোতে ত্ৰুটি হল"
 
-#: ../embed/ephy-web-view.c:2430
+#: ../embed/ephy-web-view.c:2484
 msgid "Oops! It was not possible to show this website"
 msgstr "ইচ্চ! এই ৱেবছাইটক দেখুৱা সম্ভব নাছিল"
 
-#: ../embed/ephy-web-view.c:2431
+#: ../embed/ephy-web-view.c:2485
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -890,15 +896,15 @@ msgstr ""
 "স্থানান্তৰ কৰিব পাৰি। আপোনাৰ ইন্টাৰনেট সংযোগ সঠিকভাৱে কাম কৰি আছে নে নিৰীক্ষণ "
 "কৰিব নাপাহৰিব।</p>"
 
-#: ../embed/ephy-web-view.c:2440
+#: ../embed/ephy-web-view.c:2494
 msgid "Try again"
 msgstr "পুনৰ চেষ্টা কৰক"
 
-#: ../embed/ephy-web-view.c:2448
+#: ../embed/ephy-web-view.c:2502
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "ইচ্চ! এই ছাইটৰ বাবে হয়তো ৱেব ব্ৰাউছাৰ অপ্ৰত্যাশিতভাৱে বন্ধ হৈছে"
 
-#: ../embed/ephy-web-view.c:2450
+#: ../embed/ephy-web-view.c:2504
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -909,29 +915,29 @@ msgstr ""
 "আকো হব পাৰে যদি আপুনি পৃষ্ঠা পুনৰ ল'ড কৰি। যদি এনে হয়, অনুগ্ৰহ কৰি সমস্যাক <strong>"
 "%s</strong> উন্নয়নকাৰীসমূহলে সংবাদন কৰক।</p>"
 
-#: ../embed/ephy-web-view.c:2458
+#: ../embed/ephy-web-view.c:2512
 msgid "Load again anyway"
 msgstr "যিনেহলেও আকো ল'ড কৰক"
 
-#: ../embed/ephy-web-view.c:2879
+#: ../embed/ephy-web-view.c:2944
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3173
+#: ../embed/ephy-web-view.c:3238
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” ল'ড কৰা হৈ আছে…"
 
-#: ../embed/ephy-web-view.c:3175
+#: ../embed/ephy-web-view.c:3240
 msgid "Loading…"
 msgstr "ল'ড কৰা হৈ আছে…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3907
+#: ../embed/ephy-web-view.c:4021
 #, c-format
 msgid "%s Files"
 msgstr "%s ফাইলসমূহ"
@@ -975,39 +981,39 @@ msgstr "এটা লঞ্চ কৰিব পৰা বস্তু নহয়"
 msgid "All supported types"
 msgstr "সকলো সমৰ্থিত ধৰন"
 
-#: ../lib/ephy-file-chooser.c:221
+#: ../lib/ephy-file-chooser.c:222
 msgid "Web pages"
 msgstr "ৱেবপৃষ্ঠাসমূহ"
 
-#: ../lib/ephy-file-chooser.c:229
+#: ../lib/ephy-file-chooser.c:231
 msgid "Images"
 msgstr "ছবিসমূহ"
 
-#: ../lib/ephy-file-chooser.c:237 ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../lib/ephy-file-chooser.c:239 ../src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "All files"
 msgstr "সকলো ধৰণৰ ফাইল"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:116 ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
 msgid "Downloads"
 msgstr "ডাউনল'ডসমূহ"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:169
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "ডেস্কটপ"
 
-#: ../lib/ephy-file-helpers.c:330
+#: ../lib/ephy-file-helpers.c:344
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” ৰ ভিতৰ এটা অস্থায়ী ডাইৰেকটৰি সৃষ্টি কৰা নাযায়।"
 
-#: ../lib/ephy-file-helpers.c:430
+#: ../lib/ephy-file-helpers.c:445
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s” এতিয়াও অস্তিত্ববান।  অনুগ্ৰহ কৰি ইয়াক পথৰ পৰা দূৰ কৰক।"
 
-#: ../lib/ephy-file-helpers.c:441
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "“%s” নামক ডাইৰেকটৰি সৃষ্টি কৰা নাযায়।"
@@ -1035,8 +1041,7 @@ msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
-"এই নামে এটা ফাইল আগৰ পৰাই অস্তিত্ববান আৰু ইয়াৰ উপৰত একো লিখাৰ অনুমতি আপোনাৰ "
-"নাই।"
+"এই নামে এটা ফাইল আগৰ পৰাই অস্তিত্ববান আৰু ইয়াৰ উপৰত একো লিখাৰ অনুমতি আপোনাৰ নাই।"
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
@@ -1061,11 +1066,11 @@ msgstr ""
 "হৈছে। যদি আপুনি Epiphany ক সিহতক ইমপোৰ্ট কৰা বিচাৰে, অনুগ্ৰহ কৰি আপোনাৰ মাস্টাৰ "
 "পাছৱাৰ্ড তলত সুমুৱাওক।"
 
-#: ../lib/ephy-profile-migrator.c:89
+#: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Mozilla ৰ পৰা কুকি ফাইল কপি কৰিবলে ব্যৰ্থ।"
 
-#: ../lib/ephy-profile-migrator.c:641
+#: ../lib/ephy-profile-migrator.c:650
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1073,15 +1078,23 @@ msgstr ""
 "Epiphany 3.6 এ এই ডাইৰেকটৰি স্খলিত কৰিছে আৰু এই সংৰূপক ~/.config/epiphany লে "
 "প্ৰব্ৰজন কৰাৰ চেষ্টা কৰিছে "
 
-#: ../lib/ephy-profile-migrator.c:831
+#: ../lib/ephy-profile-migrator.c:890
 msgid "Executes only the n-th migration step"
 msgstr "কেৱল n-তম প্ৰব্ৰজন স্তৰ এক্সিকিউট কৰে"
 
-#: ../lib/ephy-profile-migrator.c:845
+#: ../lib/ephy-profile-migrator.c:892
+msgid "Specifies the required version for the migrator"
+msgstr "প্ৰব্ৰজকৰ বাবে প্ৰয়োজনীয় সংস্কৰণ ধাৰ্য্য কৰে"
+
+#: ../lib/ephy-profile-migrator.c:894
+msgid "Specifies the profile where the migrator should run"
+msgstr "প্ৰব্ৰজক চলিব লগিয়া আলেখ্য ধাৰ্য্য কৰে"
+
+#: ../lib/ephy-profile-migrator.c:909
 msgid "Epiphany profile migrator"
 msgstr "Epiphany আলেখ্য প্ৰব্ৰজক"
 
-#: ../lib/ephy-profile-migrator.c:846
+#: ../lib/ephy-profile-migrator.c:910
 msgid "Epiphany profile migrator options"
 msgstr "Epiphany আলেখ্য প্ৰব্ৰজক বিকল্পসমূহ"
 
@@ -1172,7 +1185,6 @@ msgid "The certificate does not match the expected identity"
 msgstr "প্ৰমাণপত্ৰ প্ৰত্যাশিত পৰিচয়ৰ সৈতে মিল নাখায়"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:95
-#| msgid "Certificate _Fields"
 msgid "The certificate has expired"
 msgstr "প্ৰমাণপত্ৰৰ অৱসান ঘটিছে"
 
@@ -1243,11 +1255,11 @@ msgstr "সমাপ্ত হল"
 msgid "Error downloading: %s"
 msgstr "ডাউনল'ড কৰোতে ত্ৰুটি: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:552
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:556
 msgid "Cancel"
 msgstr "বাতিল কৰক"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1352
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1368
 #: ../src/window-commands.c:268
 msgid "Open"
 msgstr "খোলক"
@@ -1287,13 +1299,13 @@ msgid "Clear"
 msgstr "পৰিষ্কাৰ কৰক"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1680
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
 msgid "Title"
 msgstr "শীৰ্ষক"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1691
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
 msgid "Address"
 msgstr "ঠিকনা"
 
@@ -1345,51 +1357,51 @@ msgstr "বিষয়সমূহ (_o):"
 msgid "Sho_w all topics"
 msgstr "সকলো বিষয় দেখুৱাওক (_w)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:92
+#: ../src/bookmarks/ephy-bookmarks.c:87
 msgid "Entertainment"
 msgstr "বিনোদন"
 
-#: ../src/bookmarks/ephy-bookmarks.c:93
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "News"
 msgstr "বাতৰি"
 
-#: ../src/bookmarks/ephy-bookmarks.c:94
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "Shopping"
 msgstr "বজাৰ কৰা"
 
-#: ../src/bookmarks/ephy-bookmarks.c:95
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Sports"
 msgstr "খেলসমূহ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:91
 msgid "Travel"
 msgstr "ভ্ৰমণ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:92
 msgid "Work"
 msgstr "কৰ্ম"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:960
+#: ../src/bookmarks/ephy-bookmarks.c:935
 msgctxt "bookmarks"
 msgid "All"
 msgstr "সকলো"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:964
+#: ../src/bookmarks/ephy-bookmarks.c:939
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "শ্ৰেণীভুক্ত নহয়"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:969
+#: ../src/bookmarks/ephy-bookmarks.c:943
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "কাষৰীয়া ছাইটসমূহ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1192
+#: ../src/bookmarks/ephy-bookmarks.c:1161
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "শীৰ্ষকহীন"
@@ -1654,8 +1666,8 @@ msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
-"পত্ৰচিহ্নৰ ফাইল “%s” ত্ৰুটিপূৰ্ণ হোৱাৰ বাবে বা ইয়াৰ ধৰন অসমৰ্থিত হোৱাৰ বাবে তাৰ "
-"পৰা পত্ৰচিহ্ন ইমপোৰ্ট কৰা নাযায়।"
+"পত্ৰচিহ্নৰ ফাইল “%s” ত্ৰুটিপূৰ্ণ হোৱাৰ বাবে বা ইয়াৰ ধৰন অসমৰ্থিত হোৱাৰ বাবে তাৰ পৰা "
+"পত্ৰচিহ্ন ইমপোৰ্ট কৰা নাযায়।"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:616
 msgid "Import Bookmarks from File"
@@ -1678,7 +1690,7 @@ msgid "Export Bookmarks"
 msgstr "পত্ৰচিহ্নসমূহ এক্সপোৰ্ট কৰক"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:762
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "পত্ৰচিহ্নসমূহ"
@@ -1714,7 +1726,7 @@ msgstr "ঠিকনা কপি কৰক (_C)"
 msgid "_Search:"
 msgstr "সন্ধান কৰক:(_S)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1610
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
 msgid "Topics"
 msgstr "বিষয়সমূহ"
 
@@ -2171,7 +2183,7 @@ msgstr ""
 msgid "Web options"
 msgstr "ৱেব বিকল্পসমূহ"
 
-#: ../src/ephy-notebook.c:606
+#: ../src/ephy-notebook.c:595
 msgid "Close tab"
 msgstr "টেব বন্ধ কৰক"
 
@@ -2363,75 +2375,80 @@ msgstr "জীৱন্তকৰণ বন্ধ কৰক (_o)"
 msgid "Inspect _Element"
 msgstr "উপাদান নিৰীক্ষণ কৰক (_E)"
 
-#: ../src/ephy-window.c:455
+#: ../src/ephy-window.c:456
 msgid "There are unsubmitted changes to form elements"
 msgstr "ফৰ্ম উপাদানসমূহত জমা নিদিয়া পৰিবৰ্তনসমূহ আছে।"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:457
 msgid "If you close the document anyway, you will lose that information."
 msgstr "এ অবস্থাত দস্তাবেজটো বন্ধ কৰিলে সেই তথ্যটো হেৰাই যাব।"
 
-#: ../src/ephy-window.c:458
+#: ../src/ephy-window.c:459
 msgid "Close _Document"
 msgstr "দস্তাবেজ বন্ধ কৰক (_D)"
 
-#: ../src/ephy-window.c:476
+#: ../src/ephy-window.c:477
 msgid "There are ongoing downloads in this window"
 msgstr "এই উইন্ডোত ডাউনল'ডসমূহ চলি আছে"
 
-#: ../src/ephy-window.c:477
+#: ../src/ephy-window.c:478
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "আপুনি যদি এই উইন্ডো বন্ধ কৰে, ডাউনল'ডসমূহ বাতিল কৰা হব"
 
-#: ../src/ephy-window.c:478
+#: ../src/ephy-window.c:479
 msgid "Close window and cancel downloads"
 msgstr "উইন্ডো বন্ধ কৰক আৰু ডাউনল'ডসমূহ বাতিল কৰক"
 
-#: ../src/ephy-window.c:1354
+#: ../src/ephy-window.c:1370
 msgid "Save As"
 msgstr "এই হিচাপে সংৰক্ষণ কৰক"
 
-#: ../src/ephy-window.c:1356
+#: ../src/ephy-window.c:1372
 msgid "Save As Application"
 msgstr "এপ্লিকেচন হিচাপে সংৰক্ষণ কৰক"
 
-#: ../src/ephy-window.c:1358
+#: ../src/ephy-window.c:1374
 msgid "Print"
 msgstr "প্ৰিন্ট কৰক"
 
-#: ../src/ephy-window.c:1360
+#: ../src/ephy-window.c:1376
 msgid "Bookmark"
 msgstr "পত্ৰচিহ্ন"
 
-#: ../src/ephy-window.c:1362
+#: ../src/ephy-window.c:1378
 msgid "Find"
 msgstr "সন্ধান কৰক"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1371
+#: ../src/ephy-window.c:1387
 msgid "Larger"
 msgstr "আৰু ডাঙৰ"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1374
+#: ../src/ephy-window.c:1390
 msgid "Smaller"
 msgstr "আৰু সৰু"
 
-#: ../src/ephy-window.c:1394
+#: ../src/ephy-window.c:1410
 msgid "Back"
 msgstr "পিছলৈ"
 
-#: ../src/ephy-window.c:1406
+#: ../src/ephy-window.c:1422
 msgid "Forward"
 msgstr "আগলৈ"
 
-#: ../src/ephy-window.c:1418
+#: ../src/ephy-window.c:1434
 msgid "Zoom"
 msgstr "জুম কৰক"
 
-#: ../src/ephy-window.c:1426
+#: ../src/ephy-window.c:1442
 msgid "New _Tab"
 msgstr "নতুন টেব (_T)"
+
+#: ../src/ephy-window.c:1450
+#| msgid "Go to the next visited page"
+msgid "Go to most visited"
+msgstr "সৰ্বাধিক ভ্ৰমণ কৰালৈ যাওক"
 
 #: ../src/pdm-dialog.c:361
 msgid "<b>Select the personal data you want to clear</b>"
@@ -2553,52 +2570,53 @@ msgstr[1] "চিস্টেমৰ ভাষাসমূহ (%s)"
 msgid "Select a Directory"
 msgstr "এটা ডাইৰেকটৰি বাছক"
 
-#: ../src/window-commands.c:342
+#: ../src/window-commands.c:346
 msgid "Save"
 msgstr "সংৰক্ষণ কৰক"
 
-#: ../src/window-commands.c:549
+#: ../src/window-commands.c:553
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
-"'%s' নামৰ এটা ৱেব এপ্লিকেচন ইতিমধ্যে অস্তিত্ববান। আপুনি ইয়াক প্ৰতিস্থাপন কৰিব বিচাৰে "
-"নে?"
+"'%s' নামৰ এটা ৱেব এপ্লিকেচন ইতিমধ্যে অস্তিত্ববান। আপুনি ইয়াক প্ৰতিস্থাপন কৰিব "
+"বিচাৰে নে?"
 
-#: ../src/window-commands.c:554
+#: ../src/window-commands.c:558
 msgid "Replace"
 msgstr "প্ৰতিস্থাপন কৰক"
 
-#: ../src/window-commands.c:558
+#: ../src/window-commands.c:562
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
-"একে নামৰ এটা এপ্লিকেচন ইতিমধ্যে অস্তিত্ববান। প্ৰতিস্থাপন কৰিলে ইযাক অভাৰৰাইট কৰা হব।"
+"একে নামৰ এটা এপ্লিকেচন ইতিমধ্যে অস্তিত্ববান। প্ৰতিস্থাপন কৰিলে ইযাক অভাৰৰাইট কৰা "
+"হব।"
 
-#: ../src/window-commands.c:594
+#: ../src/window-commands.c:598
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "এপ্লিকেচন '%s' ব্যৱহাৰ কৰিবলে প্ৰস্তুত"
 
-#: ../src/window-commands.c:597
+#: ../src/window-commands.c:601
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "এপ্লিকেচন '%s' সৃষ্টি কৰিব নোৱাৰি"
 
-#: ../src/window-commands.c:605
+#: ../src/window-commands.c:609
 msgid "Launch"
 msgstr "লঞ্চ কৰক"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:638
+#: ../src/window-commands.c:642
 msgid "Create Web Application"
 msgstr "ৱেব এপ্লিকেচন সৃষ্টি কৰক"
 
-#: ../src/window-commands.c:643
+#: ../src/window-commands.c:647
 msgid "C_reate"
 msgstr "সৃষ্টি কৰক (_r)"
 
-#: ../src/window-commands.c:1234
+#: ../src/window-commands.c:1238
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2609,7 +2627,7 @@ msgstr ""
 "General Public License ৰ চুক্তিসমূহৰ অন্তৰ্গত ইয়াক পুনৰ বিলাব পাৰিব অথবা সলনি  "
 "কৰিব পাৰিব; হৈতো অনুজ্ঞাৰ সংস্কৰণ ২, অথবা (আপুনাৰ বিকল্পত) যিকোনো পৰৱৰ্তী সংস্কৰণ।"
 
-#: ../src/window-commands.c:1238
+#: ../src/window-commands.c:1242
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2620,7 +2638,7 @@ msgstr ""
 "নথকাকৈ; ব্যৱসায়ীক  অথবা কোনো এটা বিশেষ কাৰণৰ যোগ্যতাৰ বাবে বুজুৱা ৱাৰেন্টি  "
 "নথকাকৈ। অধিক যানিবলৈ  GNU General Public License চাওক।"
 
-#: ../src/window-commands.c:1242
+#: ../src/window-commands.c:1246
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2630,20 +2648,20 @@ msgstr ""
 "পাইছে। যদি নহয়, Free Software Foundation, Inc., 51 Franklin Street, Fifth "
 "Floor, Boston, MA  02110-1301  USA লে লিখক"
 
-#: ../src/window-commands.c:1288 ../src/window-commands.c:1304
-#: ../src/window-commands.c:1315
+#: ../src/window-commands.c:1292 ../src/window-commands.c:1308
+#: ../src/window-commands.c:1319
 msgid "Contact us at:"
 msgstr "আমাক যোগাযোগ কৰক:"
 
-#: ../src/window-commands.c:1291
+#: ../src/window-commands.c:1295
 msgid "Contributors:"
 msgstr "অৱদানকাৰীসমূহ:"
 
-#: ../src/window-commands.c:1294
+#: ../src/window-commands.c:1298
 msgid "Past developers:"
 msgstr "প্ৰাক্তন উন্নয়নকাৰীসমূহ:"
 
-#: ../src/window-commands.c:1325 ../src/window-commands.c:1331
+#: ../src/window-commands.c:1329 ../src/window-commands.c:1335
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2660,21 +2678,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1361
+#: ../src/window-commands.c:1365
 msgid "translator-credits"
 msgstr ""
 "অমিতাক্ষ ফুকন (aphukan@fedoraproject.org), নীলমদ্যুতি গোস্বামী (ngoswami@redhat."
 "com)"
 
-#: ../src/window-commands.c:1364
+#: ../src/window-commands.c:1368
 msgid "Web Website"
 msgstr "ৱেব ৱেবছাইট"
 
-#: ../src/window-commands.c:1504
+#: ../src/window-commands.c:1508
 msgid "Enable caret browsing mode?"
 msgstr "caret ব্ৰাউছিং অৱস্থা সামৰ্থবান কৰিব নে?"
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1511
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2684,7 +2702,7 @@ msgstr ""
 "স্থানান্তৰ কৰিব পৰা কাৰ্চাৰ স্থাপন কৰি, যি আপোনাক আপোনাৰ কিবৰ্ডত ঘুৰি ফুৰাৰ অনুমতি "
 "দিয়ে। আপুনি caret ব্ৰাউছিং অন কৰিব বিচাৰে নে?"
 
-#: ../src/window-commands.c:1510
+#: ../src/window-commands.c:1514
 msgid "_Enable"
 msgstr "সামৰ্থবান কৰক (_E)"
 
@@ -2944,10 +2962,6 @@ msgstr "সামৰ্থবান কৰক (_E)"
 #~ msgid "Update Bookmark?"
 #~ msgstr "পত্ৰচিহ্ন আপডেইট কৰা হব কি?"
 
-#~ msgctxt "bookmarks"
-#~ msgid "Most Visited"
-#~ msgstr "সৰ্বাধিক ভ্ৰমণ কৰা"
-
 #~ msgid "_Show on Toolbar"
 #~ msgstr "টুলবাৰ ত প্ৰদৰ্শন কৰক (_S)"
 
@@ -2983,9 +2997,6 @@ msgstr "সামৰ্থবান কৰক (_E)"
 
 #~ msgid "Go to the previous visited page"
 #~ msgstr "পূৰ্বতে ভ্ৰমণ কৰা ৱেব পৃষ্ঠাটো প্ৰদৰ্শন কৰক"
-
-#~ msgid "Go to the next visited page"
-#~ msgstr "পৰবৰ্তী ভ্ৰমণ কৰা ৱেবপৃষ্ঠা প্ৰদৰ্শন কৰক"
 
 #~ msgid "Forward history"
 #~ msgstr "ইতিহাস আগবঢ়াওক"
