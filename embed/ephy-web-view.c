@@ -2098,6 +2098,7 @@ ephy_web_view_is_history_frozen (EphyWebView *view)
   return view->priv->history_frozen;
 }
 
+#ifndef HAVE_WEBKIT2
 static gboolean
 web_view_check_snapshot (WebKitWebView *web_view)
 {
@@ -2115,6 +2116,7 @@ web_view_check_snapshot (WebKitWebView *web_view)
 
   return FALSE;
 }
+#endif
 
 #ifdef HAVE_WEBKIT2
 static void
