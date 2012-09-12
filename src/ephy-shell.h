@@ -77,6 +77,7 @@ extern EphyShell *ephy_shell;
  *        blank.
  * @EPHY_NEW_TAB_DONT_COPY_HISTORY: do not copy the back-forward history
  *        from the current active tab to the new one.
+ * @EPHY_NEW_TAB_PRESENT_WINDOW: present the active window.
  *
  * Controls how new tabs/windows are created and handled.
  */
@@ -89,6 +90,7 @@ typedef enum {
   /* Page mode */
   EPHY_NEW_TAB_FULLSCREEN_MODE  = 1 << 4,
   EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 5,
+  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 6,
 
   /* Tabs */
   EPHY_NEW_TAB_APPEND_LAST  = 1 << 7,

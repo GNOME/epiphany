@@ -337,7 +337,8 @@ session_command_open_uris (EphySession *session,
 		 new_windows_in_tabs)
 	{
 		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			 EPHY_NEW_TAB_JUMP;
+			 EPHY_NEW_TAB_JUMP |
+			 EPHY_NEW_TAB_PRESENT_WINDOW;
 	}
 
 	for (i = 0; uris[i] != NULL; ++i)
