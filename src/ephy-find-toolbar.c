@@ -607,13 +607,19 @@ ephy_find_toolbar_grab_focus (GtkWidget *widget)
 }
 
 static void
+close_button_clicked_cb (GtkButton *button, EphyFindToolbar *toolbar)
+{
+        ephy_find_toolbar_request_close (toolbar);
+}
+
+static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv;
 	GtkToolbar *gtoolbar;
 	GtkToolItem *item;
 	GtkWidget *alignment, *arrow, *box;
-	GtkWidget *checkbox;
+	GtkWidget *checkbox, *close_button, *image;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
 	gtoolbar = GTK_TOOLBAR (toolbar);
@@ -626,6 +632,12 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
 	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_container_add (GTK_CONTAINER (alignment), box);
+
+	close_button = gtk_button_new ();
+	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (close_button), image);
+	gtk_box_pack_start (GTK_BOX (box), close_button, FALSE, FALSE, 0);
 
 	priv->label = gtk_label_new (NULL);
 	gtk_box_pack_start (GTK_BOX (box), priv->label, FALSE, FALSE, 0);
@@ -696,6 +708,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 				  G_CALLBACK (find_prev_cb), toolbar);
 	g_signal_connect (priv->case_sensitive, "toggled",
 			  G_CALLBACK (case_sensitive_toggled_cb), toolbar);
+	g_signal_connect (close_button, "clicked",
+			  G_CALLBACK (close_button_clicked_cb), toolbar);
 }
 
 G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_TOOLBAR)
