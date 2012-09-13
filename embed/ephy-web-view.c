@@ -2140,6 +2140,9 @@ load_changed_cb (WebKitWebView *web_view,
     loading_uri = webkit_web_view_get_uri (web_view);
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
+    if (ephy_embed_utils_is_no_show_address (loading_uri))
+      ephy_web_view_freeze_history (view);
+
     if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
 
@@ -2295,6 +2298,9 @@ load_status_cb (WebKitWebView *web_view,
     loading_uri = webkit_network_request_get_uri (request);
 
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
+
+    if (ephy_embed_utils_is_no_show_address (loading_uri))
+      ephy_web_view_freeze_history (view);
 
     if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
