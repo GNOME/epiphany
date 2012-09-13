@@ -838,9 +838,9 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 EphyFindToolbar *
 ephy_find_toolbar_new (EphyWindow *window)
 {
-	return EPHY_FIND_TOOLBAR (g_object_new (EPHY_TYPE_FIND_TOOLBAR,
-						"window", window,
-						NULL));
+	return g_object_new (EPHY_TYPE_FIND_TOOLBAR,
+			     "window", window,
+			     NULL);
 }
 
 const char *
