@@ -2558,6 +2558,9 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (button_label);
   g_free (image_data);
 
+  if (icon_info)
+    gtk_icon_info_free (icon_info);
+
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
 #ifdef HAVE_WEBKIT2
