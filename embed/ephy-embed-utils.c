@@ -163,3 +163,21 @@ ephy_embed_utils_url_is_empty (const char *location)
   return is_empty;
 }
 
+/* This is the list of addresses that should never be shown in the
+ * window's location entry. */
+static const char * do_not_show_address[] = {
+  "about:blank",
+  "ephy-about:overview",
+  NULL
+};
+
+gboolean
+ephy_embed_utils_is_no_show_address (const char *address)
+{
+  int i;
+  for (i = 0; do_not_show_address[i]; i++)
+    if (g_str_equal (address, do_not_show_address[i]))
+      return TRUE;
+
+  return FALSE;
+}
