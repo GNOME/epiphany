@@ -393,6 +393,8 @@ ephy_dialog_dispose (GObject *object)
 		dialog->priv->dialog = NULL;
 	}
 
+	g_clear_object (&dialog->priv->builder);
+
 	parent_class->dispose (object);
 }
 
