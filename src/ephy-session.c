@@ -969,6 +969,9 @@ parse_embed (xmlNodePtr child,
 				xmlChar* title = xmlGetProp (child, (const xmlChar *) "title");
 			
 				confirm_before_recover (window, (char*) url, (char*) title);
+
+				if (title)
+					xmlFree (title);
 			}
 
 			xmlFree (url);
