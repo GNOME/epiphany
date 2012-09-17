@@ -1036,6 +1036,25 @@ update_navigation_flags (EphyWebView *view)
 }
 
 static void
+ephy_web_view_freeze_history (EphyWebView *view)
+{
+  view->priv->history_frozen = TRUE;
+}
+
+static void
+ephy_web_view_thaw_history (EphyWebView *view)
+{
+  view->priv->history_frozen = FALSE;
+}
+
+static gboolean
+ephy_web_view_is_history_frozen (EphyWebView *view)
+{
+  return view->priv->history_frozen;
+}
+
+
+static void
 ephy_web_view_clear_history (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
@@ -1282,6 +1301,7 @@ static void
 impl_loading_homepage (EphyWebView *view)
 {
   view->priv->loading_homepage = TRUE;
+  ephy_web_view_freeze_history (view);
 }
 
 static void
@@ -2080,24 +2100,6 @@ ephy_web_view_location_changed (EphyWebView *view,
   g_object_thaw_notify (object);
 }
 
-static void
-ephy_web_view_freeze_history (EphyWebView *view)
-{
-  view->priv->history_frozen = TRUE;
-}
-
-static void
-ephy_web_view_thaw_history (EphyWebView *view)
-{
-  view->priv->history_frozen = FALSE;
-}
-
-static gboolean
-ephy_web_view_is_history_frozen (EphyWebView *view)
-{
-  return view->priv->history_frozen;
-}
-
 #ifndef HAVE_WEBKIT2
 static gboolean
 web_view_check_snapshot (WebKitWebView *web_view)
@@ -2183,8 +2185,7 @@ load_changed_cb (WebKitWebView *web_view,
     restore_zoom_level (view, uri);
 
     /* History. */
-    if (!ephy_web_view_is_loading_homepage (view) &&
-        !ephy_web_view_is_history_frozen (view)) {
+    if (!ephy_web_view_is_history_frozen (view)) {
       char *history_uri = NULL;
 
       /* TODO: move the normalization down to the history service? */
@@ -2344,8 +2345,7 @@ load_status_cb (WebKitWebView *web_view,
     restore_zoom_level (view, uri);
 
     /* History. */
-    if (!ephy_web_view_is_loading_homepage (view) &&
-        !ephy_web_view_is_history_frozen (view)) {
+    if (!ephy_web_view_is_history_frozen (view)) {
       char *history_uri = NULL;
 
       /* TODO: move the normalization down to the history service? */
