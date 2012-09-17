@@ -75,7 +75,6 @@ struct _EphyWebViewPrivate {
   /* Flags */
   guint is_blank : 1;
   guint visibility : 1;
-  guint loading_homepage : 1;
   guint is_setting_zoom : 1;
 #ifdef HAVE_WEBKIT2
   guint is_loading : 1;
@@ -1300,7 +1299,6 @@ ephy_web_view_constructed (GObject *object)
 static void
 impl_loading_homepage (EphyWebView *view)
 {
-  view->priv->loading_homepage = TRUE;
   ephy_web_view_freeze_history (view);
 }
 
@@ -2209,7 +2207,6 @@ load_changed_cb (WebKitWebView *web_view,
     SoupURI *uri;
 
     priv->is_loading = FALSE;
-    priv->loading_homepage = FALSE;
 
     g_free (priv->status_message);
     priv->status_message = NULL;
@@ -2365,8 +2362,6 @@ load_status_cb (WebKitWebView *web_view,
   }
   case WEBKIT_LOAD_FINISHED: {
     SoupURI *uri;
-
-    priv->loading_homepage = FALSE;
 
     g_free (priv->status_message);
     priv->status_message = NULL;
@@ -4165,14 +4160,6 @@ ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int heig
   cairo_surface_destroy (surface);
 
   return snapshot;
-}
-
-gboolean
-ephy_web_view_is_loading_homepage (EphyWebView *view)
-{
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
-
-  return view->priv->loading_homepage;
 }
 
 /**
