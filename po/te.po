@@ -3,6 +3,7 @@
 # Copyright (C) 2005,2007, 2011, 2012 Swecha localisation team.
 # This file is distributed under the same license as the epiphany package.
 #
+#
 # Prajasakti Localisation Team <localisation@prajasakti.com>, 2005.
 # Pramod <pramodfsf@gmail.com>, 2007.
 # Krishna Babu K <kkrothap@redhat.com>, 2009.
@@ -10,21 +11,21 @@
 # Krishnababu Krothapalli <kkrothap@redhat.com>, 2011, 2012.
 # Praveen Illa <mail2ipn@gmail.com>, 2012.
 # # Sasi Bhushan Boddepalli<sasi@swecha.net>,2011,2012.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master.te\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-22 14:43+0000\n"
-"PO-Revision-Date: 2012-03-23 22:17+0530\n"
-"Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
-"Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-09-03 18:38+0000\n"
+"PO-Revision-Date: 2012-09-19 02:16+0530\n"
+"Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
+"Language-Team: Telugu <Fedora-trans-te@redhat.com>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.4\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -45,11 +46,8 @@ msgstr "http://www.google.com"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1
-#: ../src/ephy-main.c:73
-#: ../src/ephy-main.c:321
-#: ../src/ephy-main.c:467
-#: ../src/window-commands.c:1218
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
 msgid "Web"
 msgstr "జాలం"
 
@@ -65,737 +63,931 @@ msgstr "ఎపిఫని జాల విహారిణి"
 msgid "Browse the web"
 msgstr "జాలంలో విహరించండి"
 
-#: ../data/ui/epiphany-application-menu.ui.h:1
-msgid "_New Window"
-msgstr "కొత్త కిటికీ (_N)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:1
+msgid "Browse with caret"
+msgstr "హంస పాదు తో అన్వేషించు"
 
-#. Toplevel
-#: ../data/ui/epiphany-application-menu.ui.h:2
-#: ../src/ephy-window.c:87
-msgid "_Bookmarks"
-msgstr "ఇష్టాంశాలు (_B)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:2
+#| msgid "_Search:"
+msgid "URL Search"
+msgstr "URL వెతుకు"
 
-#: ../data/ui/epiphany-application-menu.ui.h:3
-msgid "_History"
-msgstr "చరిత్ర (_H)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:3
+msgid "Search string for keywords entered in the URL bar."
+msgstr "URL పట్టీనందు ప్రవేశపెట్టిన కీపదాలకు స్ట్రింగ్ వెతుకు."
 
-#: ../data/ui/epiphany-application-menu.ui.h:4
-#: ../data/ui/prefs-dialog.ui.h:3
-msgid "Preferences"
-msgstr "ప్రాధాన్యతలు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:4
+#| msgid "User Name"
+msgid "User agent"
+msgstr "వాడుకరి ఏజెంట్"
 
-#: ../data/ui/epiphany-application-menu.ui.h:5
-#: ../data/ui/epiphany.ui.h:10
-msgid "Personal Data"
-msgstr "వ్యక్తిగత డేటా"
+#: ../data/org.gnome.epiphany.gschema.xml.h:5
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"వాడుకరి ఏజెంట్‌గా వుపయోగించబడు స్ట్రింగ్, బ్రౌజర్‌ను వెబ్ సేవికలకు "
+"తెలియపరచుటకు."
 
-#: ../data/ui/epiphany-application-menu.ui.h:6
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:131
-msgid "_Help"
-msgstr "సహాయం (_H)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:6
+msgid "Automatic downloads"
+msgstr "స్వయంచాలక దిగుమతులు"
 
-#: ../data/ui/epiphany-application-menu.ui.h:7
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:172
-msgid "_About"
-msgstr "గురించి (_A)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:7
+msgid ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
+msgstr ""
+"బ్రౌజర్ చేత ఫైళ్ళు తెరువలేనప్పుడు అవి స్వయంచాలకంగా డౌన్‌లోడ్ సంచయంకు "
+"డౌన్‌లోడ్ చేయబడి తరువాత "
+"తగిన అనువర్తనంచేత తెరువబడును."
 
-#: ../data/ui/epiphany-application-menu.ui.h:8
-msgid "_Quit"
-msgstr "నిష్క్రమించు (_Q)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:8
+msgid ""
+"Middle click to open the web page pointed to by the currently selected text"
+msgstr ""
+"ప్రస్తుతం ఎంపికకాబడివున్న పాఠ్యము ద్వారా సూచించబడిన వెబ్ పుటను తెరుచుటకు మద్య "
+"నొక్కునొక్కండి"
 
-#: ../data/ui/epiphany.ui.h:1
-msgid "Cookie properties"
-msgstr "కుకీ లక్షణాలు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:9
+msgid ""
+"Middle clicking on the main view pane will open the web page pointed to by "
+"the currently selected text."
+msgstr ""
+"ముఖ్యంగా దర్శించు పలకపైన మధ్య నొక్కు నొక్కుటవలన ప్రస్తుతం ఎంపికకాబడివున్న "
+"పాఠ్యము ద్వారా సూచించబడిన "
+"వెబ్‌పేజీ తెరువబడుతుంది."
 
-#: ../data/ui/epiphany.ui.h:2
-msgid "Content:"
-msgstr "సారము:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+msgid "Force new windows to be opened in tabs"
+msgstr "కొత్త విండోలు టాబ్లనందు మాత్రమే తెరుచునట్లు నిర్దిష్టంచేయుము"
 
-#: ../data/ui/epiphany.ui.h:3
-msgid "Path:"
-msgstr "పథం:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
+msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+"కొత్త విండో తెరువలసివచ్చినప్పుడు కొత్త విండోను వుపయోగించుటకు బదులుగా "
+"టాబ్‌నందు మాత్రమే తెరుచునట్లు "
+"నిర్ధిష్టంచేయుము"
 
-#: ../data/ui/epiphany.ui.h:4
-msgid "Send for:"
-msgstr "పంపుట కొరకు:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
+#| msgid "_Remember passwords"
+msgid "Remember passwords"
+msgstr "సంకేతపదాలను గుర్తుంచుకొను"
 
-#: ../data/ui/epiphany.ui.h:5
-msgid "Expires:"
-msgstr "కాలంచెల్లునది:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
+msgid "Whether to store and prefill passwords in web sites."
+msgstr "ముందుగానింపు సంకేతపదాలను వెబ్ సైట్లనందు నిల్వవుంచాలా"
 
-#: ../data/ui/epiphany.ui.h:6
-msgid "Text Encoding"
-msgstr "పాఠం సంకేతరచన"
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "అల్లిక అభికర్త తో లైనువెలుపల సుస్థితిని స్వయంచాలకము గా పర్యవేక్షించు"
 
-#: ../data/ui/epiphany.ui.h:7
-msgid "<b>_Automatic</b>"
-msgstr "<b>స్వయంచాలకం (_A)</b>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
+msgid "Enable smooth scrolling"
+msgstr "మృదువుగా జరుపుటను ఉపయోగించు"
 
-#: ../data/ui/epiphany.ui.h:8
-#: ../src/ephy-encoding-menu.c:338
-msgid "Use the encoding specified by the document"
-msgstr "సంకేతరచన ప్రత్యేకమైన పత్రం ద్వారా వాడుము"
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
+#| msgid "Lists the active extensions."
+msgid "Active extensions"
+msgstr "క్రియాశీల పొడగింపులు"
 
-#: ../data/ui/epiphany.ui.h:9
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>వేరొక సంకేతరచన వాడు (_U):</b>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid "Lists the active extensions."
+msgstr "క్రియాశీల పొడగింపుల జాబితా."
 
-#: ../data/ui/epiphany.ui.h:11
-#: ../data/ui/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "కుకీస్"
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid "Don't use an external application to view page source."
+msgstr "పేజ్ మూలం చూడుటకు బాహ్య అనువర్తనం వుపయోగించవద్దు."
 
-#: ../data/ui/epiphany.ui.h:12
-msgid "_Show passwords"
-msgstr "సంకేతపదాలను చూపించు (_S)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
+msgid "Whether to automatically restore the last session"
+msgstr "ఆఖరి సెషన్ స్వయంచాలకంగా తిరిగివుంచాలా"
 
-#: ../data/ui/epiphany.ui.h:13
-#: ../data/ui/prefs-dialog.ui.h:27
-msgid "Passwords"
-msgstr "సంకేతపదములు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
+msgid ""
+"Defines how the session will be restored during startup. Allowed values are "
+"'always' (the previous state of the application is always restored), "
+"'crashed' (the session is only restored if the application crashes) and "
+"'never' (the homepage is always shown)."
+msgstr ""
+"ప్రారంభమునందు సెషన్ అనునది యెలా తిరిగివుంచబడునో నిర్వచించును. అనుమతించదగు "
+"విలువలు "
+"'always' (అనువర్తనం యొక్క గత స్థితి యెల్లప్పుడు తిరిగివుంచబడును), "
+"'crashed' (అనువర్తనం క్రాష్ అయితే మాత్రమే సెషన్ తిరిగివుంచబడును) మరియు "
+"'never' (ఎల్లప్పుడూ నివాసపుట చూపును)."
 
-#: ../data/ui/prefs-dialog.ui.h:1
-msgid "Add Language"
-msgstr "భాషను జతచేయి"
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#| msgid "Hide menubar by default"
+msgid "Show toolbars by default"
+msgstr "అప్రమేయముగా  సాధనపట్టీలను చూపు"
 
-#: ../data/ui/prefs-dialog.ui.h:2
-msgid "Choose a l_anguage:"
-msgstr "భాషను ఎంచుకొను (_a):"
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#| msgid "_Toolbars"
+msgid "Toolbar style"
+msgstr "సాధనపట్టీ శైలి"
 
-#. If we don't have XDG user dirs info, return an educated guess.
-#: ../data/ui/prefs-dialog.ui.h:4
-#: ../lib/ephy-file-helpers.c:116
-msgid "Downloads"
-msgstr "దింపుకున్నవి"
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
+msgid ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+msgstr ""
+"సాధనపట్టీ శైలి. అనుమతించదగు విలువలు \"\" (GNOME అప్రమేయ శైలి వుపయోగించు), "
+"\"both "
+"\" (పాఠం మరియు ప్రతిమలు), \"both-horiz\" (ప్రతిమల పక్కని పాఠం), \"icons\", "
+"మరియు "
+"\"text\"."
 
-#: ../data/ui/prefs-dialog.ui.h:5
-msgid "_Download folder:"
-msgstr "దింపుకొను సంచయం (_D):"
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
+msgid "[Deprecated]"
+msgstr "[తీసివేయబడెను]"
 
-#: ../data/ui/prefs-dialog.ui.h:6
-msgid "A_utomatically open downloaded files"
-msgstr "దింపుకున్న ఫైళ్ళను స్వయంచాలకముగా తెరువు (_u)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
+msgid ""
+"[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
+"instead."
+msgstr ""
+"[తీసివేయబడెను] ఈ అమర్పు తీసివేయబడెను, బదులుగా 'tabs-bar-visibility-policy' "
+"వుపయోగించు."
 
-#: ../data/ui/prefs-dialog.ui.h:7
-msgid "General"
-msgstr "సాధారణం"
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#| msgid "Close the bookmarks window"
+msgid "Visibility of the downloads window"
+msgstr "డౌన్‌లోడ్స్ విండో దృశ్యనీయత"
 
-#: ../data/ui/prefs-dialog.ui.h:8
-msgid "Fonts"
-msgstr "ఖతులు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
+msgid ""
+"Hide or show the downloads window. When hidden, a notification will be shown "
+"when new downloads are started."
+msgstr ""
+"డౌనులోడుల విండోను చూపుము లేదా మరుగుపరచుము. మురగునవుండి, కొత్త డౌనులోడులు "
+"ప్రారంభించబడినప్పుడు వొక నోటీసు చూపించబడుతుంది."
 
-#: ../data/ui/prefs-dialog.ui.h:9
-msgid "_Use system fonts"
-msgstr "వ్యవస్థ ఫాంట్లను ఉపయోగించు (_U)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
+msgid "The visibility policy for the tabs bar."
+msgstr "టాబ్స్ పట్టీకు విజిబులిటీ పాలసీ."
 
-#: ../data/ui/prefs-dialog.ui.h:10
-msgid "Sans serif font:"
-msgstr "సాంస్ సెరీఫ్ ఫాంటు:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
+msgid ""
+"Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
+"bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
+"two or more tabs) and 'never' (the tabs bar is never shown)."
+msgstr ""
+"టాబ్స్ పట్టీ చూపునప్పుడు నియంత్రికలు. సాధ్యమగు విలువలు 'always' (టాబ్స్ పట్టీ "
+"యెల్లప్పుడూ చూపబడును), "
+"'more-than-one' (టాబ్స్ పట్టీ వొకటి లేక యెక్కువ టాబ్‌లు వున్నప్పుడు మాత్రమే "
+"చూపబడును) మరియు "
+"'never' (టాబ్ పట్టీ యెప్పుడూ చూపబడదు)."
 
-#: ../data/ui/prefs-dialog.ui.h:11
-msgid "Serif font:"
-msgstr "సెరిఫ్ ఫాంటు:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
+msgid "Minimum font size"
+msgstr "అత్యధిక అక్షరశైలి పరిమాణం"
 
-#: ../data/ui/prefs-dialog.ui.h:12
-msgid "Monospace font:"
-msgstr "మోనోస్పేస్ ఫాంటు:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#| msgid "_Use system fonts"
+msgid "Use GNOME fonts"
+msgstr "GNOME ఫాంట్లను వుపయోగించు"
 
-#: ../data/ui/prefs-dialog.ui.h:13
-msgid "Style"
-msgstr "శైలి"
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
+msgid "Use GNOME desktop wide font configuration."
+msgstr "GNOME డెస్కుటాబ్ వ్యాప్త ఫాంట్ ఆకృతీకరణను వుపయోగించు."
 
-#: ../data/ui/prefs-dialog.ui.h:14
-msgid "Use custom _stylesheet"
-msgstr "అనురూపిత స్టైలుషీటును వాడు (_s)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#| msgid "Sans serif font:"
+msgid "Custom sans-serif font"
+msgstr "మలచుకొనిన sans-serif ఫాంట్"
 
-#: ../data/ui/prefs-dialog.ui.h:15
-msgid "_Edit Stylesheet…"
-msgstr "శైలిపుటను సవరించు...(_E)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
+msgid ""
+"A value to be used to override sans-serif desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+"use-gnome-fonts అమర్చి వున్నప్పుడు sans-serif డెస్కుటాప్ ఫాంట్‌ను వోవర్‌రైడ్ "
+"చేయుటకు వుపయోగించవలసిన "
+"విలువ."
 
-#: ../data/ui/prefs-dialog.ui.h:16
-msgid "Fonts & Style"
-msgstr "ఖతులు మరియు శైలి"
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#| msgid "Sans serif font:"
+msgid "Custom serif font"
+msgstr "మలచుకొనిన serif ఫాంట్"
 
-#: ../data/ui/prefs-dialog.ui.h:17
-msgid "Web Content"
-msgstr "జాల సారము"
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
+msgid ""
+"A value to be used to override serif desktop font when use-gnome-fonts is "
+"set."
+msgstr ""
+"use-gnome-fonts అమర్చి వున్నప్పుడు serif డెస్కుటాప్ ఫాంట్‌ను వోవర్‌రైడ్ "
+"చేయుటకు వుపయోగించవలసిన "
+"విలువ."
 
-#: ../data/ui/prefs-dialog.ui.h:18
-msgid "Allow popup _windows"
-msgstr "ప్రత్యక్షమయ్యే కిటికీలను అనుమతించు (_w)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#| msgid "Monospace font:"
+msgid "Custom monospace font"
+msgstr "మలచుకొనిన monospace ఫాంట్"
 
-#: ../data/ui/prefs-dialog.ui.h:19
-msgid "Enable _plugins"
-msgstr "ప్లగిన్‌లను చేతనపరుచు (_p)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
+msgid ""
+"A value to be used to override monospace desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+"use-gnome-fonts అమర్చి వున్నప్పుడు monospace డెస్కుటాప్ ఫాంట్‌ను వోవర్‌రైడ్ "
+"చేయుటకు వుపయోగించవలసిన "
+"విలువ."
 
-#: ../data/ui/prefs-dialog.ui.h:20
-msgid "Enable Java_Script"
-msgstr "జావా స్ర్కిప్ట్ ను చేతనపరుచు (_S)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
+msgid "Use own colors"
+msgstr "స్వంత రంగులు వుపయోగించు"
 
-#: ../data/ui/prefs-dialog.ui.h:22
-msgid "_Always accept"
-msgstr "ఎల్లప్పుడు ఆమోదించు (_A)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
+msgid "Use your own colors instead of the colors the page requests."
+msgstr "పేజీ అభ్యర్దించిన రంగుల బదులు మీ స్వంత రంగులు వుపయోగించు."
 
-#: ../data/ui/prefs-dialog.ui.h:23
-msgid "Only _from sites you visit"
-msgstr "మీరు సందర్శించే సైట్ల నుండి మాత్రమే (_f)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#| msgid "_Use system fonts"
+msgid "Use own fonts"
+msgstr "స్వంత ఫాంట్లను వుపయోగించు"
 
-#. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/ui/prefs-dialog.ui.h:25
-msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>ఉదాహరణకు, ఈ సైటుల నందలి ప్రకటనకర్తల నుండి వద్దు</small>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
+msgid "Use your own fonts instead of the fonts the page requests."
+msgstr "పేజీ అభ్యర్దించిన ఫాంట్ల బదులు మీ స్వంత ఫాంట్లు వుపయోగించు."
 
-#: ../data/ui/prefs-dialog.ui.h:26
-msgid "_Never accept"
-msgstr "ఎప్పటికి ఆమోదించవద్దు (_N)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
+msgid "Use a custom CSS"
+msgstr "మలచుకొనిన CSS వుపయోగించు"
 
-#: ../data/ui/prefs-dialog.ui.h:28
-msgid "_Remember passwords"
-msgstr "సంకేతపదాలను గుర్తుంచుకొను (_R)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
+msgid "Use a custom CSS file to modify websites own CSS."
+msgstr "వెబ్‌సైట్ల స్వంత CSS సవరించుటకు మలచుకొనిన CSS ఫైల్ వుపయోగించు."
 
-#: ../data/ui/prefs-dialog.ui.h:29
-msgid "Temporary Files"
-msgstr "తాత్కాలిక ఫైళ్ళు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#| msgid "_Enable spell checking"
+msgid "Enable spell checking"
+msgstr "అక్షరదోషతనిఖీ చేతనపరుచు"
 
-#: ../data/ui/prefs-dialog.ui.h:30
-msgid "_Disk space:"
-msgstr "డిస్కు స్థలం (_D):"
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
+msgid "Spell check any text typed in editable areas."
+msgstr "సరికూర్చ దగిన ప్రాంతములనందు టైపు చేసిన పాఠపు అక్షరదోషం పరిశీలించు."
 
-#: ../data/ui/prefs-dialog.ui.h:31
-msgid "MB"
-msgstr "మెబై"
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
+msgid "Default encoding"
+msgstr "అప్రమేయ సంకేతరచన"
 
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../data/ui/prefs-dialog.ui.h:32
-#: ../lib/widgets/ephy-location-entry.c:462
-#: ../src/ephy-history-window.c:230
-#: ../src/pdm-dialog.c:352
-msgid "Cl_ear"
-msgstr "శుభ్రపరుచు (_e)"
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
+msgid ""
+"Default encoding. Accepted values are the ones WebKitGTK+ can understand."
+msgstr ""
+"అప్రమేయ యెన్కోడింగ్. అంగీకరించబడిన విలువలు WebKitGTK+ అర్ధంచేసుకోగలిగినవే."
 
-#: ../data/ui/prefs-dialog.ui.h:33
-msgid "Privacy"
-msgstr "గోప్యత"
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
+msgid "Size of disk cache"
+msgstr "డిస్కు క్యాచీ పరిమాణం"
 
-#: ../data/ui/prefs-dialog.ui.h:34
-#: ../src/ephy-encoding-dialog.c:302
-msgid "Encodings"
-msgstr "సంకేత రచనలు"
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
+msgid "Size of disk cache, in MB."
+msgstr "డిస్కు క్యాచీ పరిమాణం. మెబై నందు."
 
-#: ../data/ui/prefs-dialog.ui.h:35
-msgid "De_fault:"
-msgstr "అప్రమేయం (_f):"
-
-#: ../data/ui/prefs-dialog.ui.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "భాషలు"
 
-#: ../data/ui/prefs-dialog.ui.h:37
-msgid "Spell checking"
-msgstr "ఉచ్ఛారణా  తనిఖీ"
-
-#: ../data/ui/prefs-dialog.ui.h:38
-msgid "_Enable spell checking"
-msgstr "ఉచ్ఛారణా  తనిఖీ చేతనపరుచు (_E)"
-
-#: ../data/ui/prefs-dialog.ui.h:39
-#: ../src/prefs-dialog.c:773
-msgid "Language"
-msgstr "భాష"
-
-#: ../embed/ephy-download.c:217
-msgctxt "file type"
-msgid "Unknown"
-msgstr "తెలియదు"
-
-#: ../embed/ephy-embed.c:692
-msgid "Web Inspector"
-msgstr "జాల ఇన్‌స్పెక్టర్"
-
-#: ../embed/ephy-embed-shell.c:207
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "ఎఫిఫని ప్రస్తుతం ఉపయోగించబడలేదు. సిద్దీకరణ విఫలమైంది."
-
-#: ../embed/ephy-embed-utils.c:61
-#, c-format
-msgid "Send an email message to “%s”"
-msgstr "“%s”నకు ఈ-మెయిల్ సందేశమును పంపుము"
-
-#: ../embed/ephy-encodings.c:59
-msgid "Arabic (_IBM-864)"
-msgstr "అరబిక్ (_IBM-864)"
-
-#: ../embed/ephy-encodings.c:60
-msgid "Arabic (ISO-_8859-6)"
-msgstr "అరబిక్ (ISO-_8859-6)"
-
-#: ../embed/ephy-encodings.c:61
-msgid "Arabic (_MacArabic)"
-msgstr "అరబిక్ (_MacArabic)"
-
-#: ../embed/ephy-encodings.c:62
-msgid "Arabic (_Windows-1256)"
-msgstr "అరబిక్ (_Windows-1256)"
-
-#: ../embed/ephy-encodings.c:63
-msgid "Baltic (_ISO-8859-13)"
-msgstr "బాల్టిక్ (_ISO-8859-13)"
-
-#: ../embed/ephy-encodings.c:64
-msgid "Baltic (I_SO-8859-4)"
-msgstr "బాల్టిక్  (I_SO-8859-4)"
-
-#: ../embed/ephy-encodings.c:65
-msgid "Baltic (_Windows-1257)"
-msgstr "బాల్టిక్  (_Windows-1257)"
-
-#: ../embed/ephy-encodings.c:66
-msgid "_Armenian (ARMSCII-8)"
-msgstr "అర్మేనియా (ARMSCII-8) (_A)"
-
-#: ../embed/ephy-encodings.c:67
-msgid "_Georgian (GEOSTD8)"
-msgstr "జార్జియా (GEOSTD8) (_G)"
-
-#: ../embed/ephy-encodings.c:68
-msgid "Central European (_IBM-852)"
-msgstr "మధ్య ఐరోపా (_IBM-852)"
-
-#: ../embed/ephy-encodings.c:69
-msgid "Central European (I_SO-8859-2)"
-msgstr "మధ్య ఐరోపా  (I_SO-8859-2)"
-
-#: ../embed/ephy-encodings.c:70
-msgid "Central European (_MacCE)"
-msgstr "మధ్య ఐరోపా  (_MacCE)"
-
-#: ../embed/ephy-encodings.c:71
-msgid "Central European (_Windows-1250)"
-msgstr "మధ్య ఐరోపా  (_Windows-1250)"
-
-#: ../embed/ephy-encodings.c:72
-msgid "Chinese Simplified (_GB18030)"
-msgstr "సరళ చైనీయ (_GB18030)"
-
-#: ../embed/ephy-encodings.c:73
-msgid "Chinese Simplified (G_B2312)"
-msgstr "సరళ చైనీయ  (G_B2312)"
-
-#: ../embed/ephy-encodings.c:74
-msgid "Chinese Simplified (GB_K)"
-msgstr "సరళ చైనీయ  (GB_K)"
-
-#: ../embed/ephy-encodings.c:75
-msgid "Chinese Simplified (_HZ)"
-msgstr "సరళ చైనీయ  (_HZ)"
-
-#: ../embed/ephy-encodings.c:76
-msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr "సరళ చైనీయ  (_ISO-2022-CN)"
-
-#: ../embed/ephy-encodings.c:77
-msgid "Chinese Traditional (Big_5)"
-msgstr "సాంప్రదాయ చైనీయ  (Big_5)"
-
-#: ../embed/ephy-encodings.c:78
-msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr "సాంప్రదాయ  చైనీయ  (Big5-HK_SCS)"
-
-#: ../embed/ephy-encodings.c:79
-msgid "Chinese Traditional (_EUC-TW)"
-msgstr "సాంప్రదాయ  చైనీయ   (_EUC-TW)"
-
-#: ../embed/ephy-encodings.c:80
-msgid "Cyrillic (_IBM-855)"
-msgstr "సిరిల్లిక్ (_IBM-855)"
-
-#: ../embed/ephy-encodings.c:81
-msgid "Cyrillic (I_SO-8859-5)"
-msgstr "సిరిల్లిక్ (I_SO-8859-5)"
-
-#: ../embed/ephy-encodings.c:82
-msgid "Cyrillic (IS_O-IR-111)"
-msgstr "సిరిల్లిక్ (IS_O-IR-111)"
-
-#: ../embed/ephy-encodings.c:83
-msgid "Cyrillic (_KOI8-R)"
-msgstr "సిరిల్లిక్ (_KOI8-R)"
-
-#: ../embed/ephy-encodings.c:84
-msgid "Cyrillic (_MacCyrillic)"
-msgstr "సిరిల్లిక్ (_MacCyrillic)"
-
-#: ../embed/ephy-encodings.c:85
-msgid "Cyrillic (_Windows-1251)"
-msgstr "సిరిల్లిక్ (_Windows-1251)"
-
-#: ../embed/ephy-encodings.c:86
-msgid "Cyrillic/_Russian (IBM-866)"
-msgstr "సిరిల్లిక్/_Russian (IBM-866)"
-
-#: ../embed/ephy-encodings.c:87
-msgid "Greek (_ISO-8859-7)"
-msgstr "గ్రీక్ (_ISO-8859-7)"
-
-#: ../embed/ephy-encodings.c:88
-msgid "Greek (_MacGreek)"
-msgstr "గ్రీక్ (_MacGreek)"
-
-#: ../embed/ephy-encodings.c:89
-msgid "Greek (_Windows-1253)"
-msgstr "గ్రీక్ (_Windows-1253)"
-
-#: ../embed/ephy-encodings.c:90
-msgid "Gujarati (_MacGujarati)"
-msgstr "గుజరాతి (_MacGujarati)"
-
-#: ../embed/ephy-encodings.c:91
-msgid "Gurmukhi (Mac_Gurmukhi)"
-msgstr "గుర్ ముఖి (Mac_Gurmukhi)"
-
-#: ../embed/ephy-encodings.c:92
-msgid "Hindi (Mac_Devanagari)"
-msgstr "హిందీ (Mac_Devanagari)"
-
-#: ../embed/ephy-encodings.c:93
-msgid "Hebrew (_IBM-862)"
-msgstr "హిబ్రూ (_IBM-862)"
-
-#: ../embed/ephy-encodings.c:94
-msgid "Hebrew (IS_O-8859-8-I)"
-msgstr "హిబ్రూ (IS_O-8859-8-I)"
-
-#: ../embed/ephy-encodings.c:95
-msgid "Hebrew (_MacHebrew)"
-msgstr "హిబ్రూ (_MacHebrew)"
-
-#: ../embed/ephy-encodings.c:96
-msgid "Hebrew (_Windows-1255)"
-msgstr "హిబ్రూ (_Windows-1255)"
-
-#: ../embed/ephy-encodings.c:97
-msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr "విజువల్ హిబ్రూ (ISO-8859-8) (_V)"
-
-#: ../embed/ephy-encodings.c:98
-msgid "Japanese (_EUC-JP)"
-msgstr "జపనీస్ (_EUC-JP)"
-
-#: ../embed/ephy-encodings.c:99
-msgid "Japanese (_ISO-2022-JP)"
-msgstr "జపనీస్ (_ISO-2022-JP)"
-
-#: ../embed/ephy-encodings.c:100
-msgid "Japanese (_Shift-JIS)"
-msgstr "జపనీస్ (_Shift-JIS)"
-
-#: ../embed/ephy-encodings.c:101
-msgid "Korean (_EUC-KR)"
-msgstr "కొరియన్ (_EUC-KR)"
-
-#: ../embed/ephy-encodings.c:102
-msgid "Korean (_ISO-2022-KR)"
-msgstr "కొరియన్ (_ISO-2022-KR)"
-
-#: ../embed/ephy-encodings.c:103
-msgid "Korean (_JOHAB)"
-msgstr "కొరియన్ (_JOHAB)"
-
-#: ../embed/ephy-encodings.c:104
-msgid "Korean (_UHC)"
-msgstr "కొరియన్ (_UHC)"
-
-#: ../embed/ephy-encodings.c:105
-msgid "_Celtic (ISO-8859-14)"
-msgstr "సెల్టిక్ (ISO-8859-14) (_C)"
-
-#: ../embed/ephy-encodings.c:106
-msgid "_Icelandic (MacIcelandic)"
-msgstr "ఐస్‌ల్యాండిక్ (MacIcelandic) (_I)"
-
-#: ../embed/ephy-encodings.c:107
-msgid "_Nordic (ISO-8859-10)"
-msgstr "నార్డిక్ (ISO-8859-10) (_N)"
-
-#: ../embed/ephy-encodings.c:108
-msgid "_Persian (MacFarsi)"
-msgstr "పర్షియన్ (MacFarsi) (_P)"
-
-#: ../embed/ephy-encodings.c:109
-msgid "Croatian (Mac_Croatian)"
-msgstr "క్రోటియన్ (Mac_Croatian) (_C)"
-
-#: ../embed/ephy-encodings.c:110
-msgid "_Romanian (MacRomanian)"
-msgstr "రొమానియన్ (MacRomanian) (_R)"
-
-#: ../embed/ephy-encodings.c:111
-msgid "R_omanian (ISO-8859-16)"
-msgstr "రొమానియన్ (ISO-8859-16) (_o)"
-
-#: ../embed/ephy-encodings.c:112
-msgid "South _European (ISO-8859-3)"
-msgstr "సౌత్ యురోపియన్ (ISO-8859-3) (_E)"
-
-#: ../embed/ephy-encodings.c:113
-msgid "Thai (TIS-_620)"
-msgstr "థాయ్ (TIS-_620)"
-
-#: ../embed/ephy-encodings.c:114
-msgid "Thai (IS_O-8859-11)"
-msgstr "థాయ్ (IS_O-8859-11)"
-
-#: ../embed/ephy-encodings.c:115
-msgid "_Thai (Windows-874)"
-msgstr "థాయ్ (Windows-874) (_T)"
-
-#: ../embed/ephy-encodings.c:116
-msgid "Turkish (_IBM-857)"
-msgstr "టర్కిష్ (_IBM-857)"
-
-#: ../embed/ephy-encodings.c:117
-msgid "Turkish (I_SO-8859-9)"
-msgstr "టర్కిష్ (I_SO-8859-9)"
-
-#: ../embed/ephy-encodings.c:118
-msgid "Turkish (_MacTurkish)"
-msgstr "టర్కిష్ (_MacTurkish)"
-
-#: ../embed/ephy-encodings.c:119
-msgid "Turkish (_Windows-1254)"
-msgstr "టర్కిష్ (_Windows-1254)"
-
-#: ../embed/ephy-encodings.c:120
-msgid "Unicode (UTF-_8)"
-msgstr "యునికోడ్ (UTF-_8)"
-
-#: ../embed/ephy-encodings.c:121
-msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr "సిరిల్లిక్/యుక్రైనియన్ (_KOI8-U)"
-
-#: ../embed/ephy-encodings.c:122
-msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr "సిరిల్లిక్/యుక్రైనియన్ (Mac_యుక్రైనియన్)"
-
-#: ../embed/ephy-encodings.c:123
-msgid "Vietnamese (_TCVN)"
-msgstr "వియత్నామీస్ (_TCVN)"
-
-#: ../embed/ephy-encodings.c:124
-msgid "Vietnamese (_VISCII)"
-msgstr "వియత్నామీస్ (_VISCII)"
-
-#: ../embed/ephy-encodings.c:125
-msgid "Vietnamese (V_PS)"
-msgstr "వియత్నామీస్ (V_PS)"
-
-#: ../embed/ephy-encodings.c:126
-msgid "Vietnamese (_Windows-1258)"
-msgstr "వియత్నామిస్ (_Windows-1258)"
-
-#: ../embed/ephy-encodings.c:127
-msgid "Western (_IBM-850)"
-msgstr "వెస్ట్రన్ (_IBM-850)"
-
-#: ../embed/ephy-encodings.c:128
-msgid "Western (_ISO-8859-1)"
-msgstr "వెస్ట్రన్ (_ISO-8859-1)"
-
-#: ../embed/ephy-encodings.c:129
-msgid "Western (IS_O-8859-15)"
-msgstr "వెస్ట్రన్ (IS_O-8859-15)"
-
-#: ../embed/ephy-encodings.c:130
-msgid "Western (_MacRoman)"
-msgstr "వెస్ట్రన్ (_MacRoman)"
-
-#: ../embed/ephy-encodings.c:131
-msgid "Western (_Windows-1252)"
-msgstr "వెస్ట్రన్ (_Windows-1252)"
-
-#. the following encodings are so rarely used that we don't want to pollute the "related"
-#. * part of the encodings menu with them, so we set the language group to 0 here
-#.
-#: ../embed/ephy-encodings.c:136
-msgid "English (_US-ASCII)"
-msgstr "ఇంగ్లీష్ (_US-ASCII)"
-
-#: ../embed/ephy-encodings.c:137
-msgid "Unicode (UTF-_16 BE)"
-msgstr "యునికోడ్ (UTF-_16 BE)"
-
-#: ../embed/ephy-encodings.c:138
-msgid "Unicode (UTF-1_6 LE)"
-msgstr "యునికోడ్ (UTF-1_6 LE)"
-
-#: ../embed/ephy-encodings.c:139
-msgid "Unicode (UTF-_32 BE)"
-msgstr "యునికోడ్ (UTF-_32 BE)"
-
-#: ../embed/ephy-encodings.c:140
-msgid "Unicode (UTF-3_2 LE)"
-msgstr "యునికోడ్ (UTF-3_2 LE)"
-
-#. translators: this is the title that an unknown encoding will
-#. * be displayed as.
-#.
-#: ../embed/ephy-encodings.c:281
-#, c-format
-msgid "Unknown (%s)"
-msgstr "తెలియని (%s)"
-
-#: ../embed/ephy-request-about.c:101
-#: ../embed/ephy-request-about.c:104
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
+msgid "Preferred languages, two letter codes."
+msgstr "అభీష్ట భాషలు, ద్వంద్వ అక్షర కోడ్స్."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
+msgid "Cookie accept"
+msgstr "కుకి అనుమతించు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
+msgid ""
+"Where to accept cookies from. Possible values are \"anywhere\", \"current "
+"site\" and \"nowhere\"."
+msgstr ""
+"కుకీలను యెచటనుండి ఆమోదించాలి. సాధ్యమగు విలువలు \"anywhere\", \"current "
+"site\" మరియు \"nowhere\"."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
+msgid "Image animation mode"
+msgstr "ప్రతిరూప సచేతన విధము"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
+"సచేతనపరచిన  దృశ్యాలములను ఎలా సమర్పించాలి. సాధ్యమైన విలువలు  \"సాధారణం\", "
+"\"ఒకసారి\" మరియు "
+"\"నిరుపయోగమైనది\"."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
+msgid "Allow popups"
+msgstr "ప్రత్యక్షమవుటను అనుమతించు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgstr ""
+"జావాస్క్రిప్టు వుపయోగిస్తూ (ఒకవేళ జావాస్క్రిప్టు చేతనమైవుంటే) సైటులు కొత్త "
+"విండోలను తెరుచుటకు "
+"అనుమతించుము."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#| msgid "Enable _plugins"
+msgid "Enable Plugins"
+msgstr "చొప్పింతలను చేతనపరుచు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
+msgid "Enable JavaScript"
+msgstr "జావా లిపి ఉపయోగించు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#| msgid "Enabled"
+msgid "Enable WebGL"
+msgstr "WebGL చేతనపరచు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
+msgid "Whether to enable support for WebGL contexts."
+msgstr "WebGL సందర్భాలకు తోడ్పాటును చేతనంచేయాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#| msgid "Enabled"
+msgid "Enable WebAudio"
+msgstr "WebAudio చేతనపరచు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
+msgid "Whether to enable support for WebAudio."
+msgstr "WebAudio కొరకు తోడ్పాటు చేతనం చేయాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
+msgid "Do Not Track"
+msgstr "జాడ పట్టవద్దు"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
+msgid ""
+"Whether to tell websites that we do not wish to be tracked. Please note that "
+"web pages are not forced to follow this setting."
+msgstr ""
+"మా జాడ పట్టవద్దని వెబ్‌సైట్లకు చెప్పాలా. వెబ్ పేజీలు యీ అమరికను అనుసరించుటకు "
+"బలవంతపెట్టబడవని గమనించండి."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#| msgid "_Download folder:"
+msgid "The downloads folder"
+msgstr "డౌన్‌లోడ్ల సంచయం"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
+msgid ""
+"The path of the folder where to download files to; or \"Downloads\" to use "
+"the default downloads folder, or \"Desktop\" to use the desktop folder."
+msgstr ""
+"ఫైళ్ళను యెచటకు డౌన్‌లోడ్ చేయాలో ఆ సంచయం పాత్; లేదా \"Downloads\" ను అప్రమేయ "
+"డౌన్‌లోడ్స్ సంచయంగా "
+"వుపయోగించు, లేదా \"Desktop\" డెస్కుటాప్ సంచయం వుపయోగించుటకు."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
+msgid "History pages time range"
+msgstr "చరిత్ర పుటల సమయ శ్రేణి"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
+msgid "Whether to show the title column in the history window."
+msgstr "చరిత్ర విండో నందు శీర్షిక నిలువవరుస చూపాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
+msgid "Whether to show the address column in the history window."
+msgstr "చరిత్ర విండో నందు చిరునామా నిలువవరుస చూపాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
+msgid "Whether to show the date-time column in the history window."
+msgstr "చరిత్ర విండో నందు తేదీ-సమయం నిలువవరుస చూపాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
+msgid "Whether to show the title column in the bookmarks window."
+msgstr "ఇష్టాంశముల విండో నందు శీర్షిక నిలువవరుస చూపాలా."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
+msgid "Whether to show the address column in the bookmarks window."
+msgstr "ఇష్టాంశముల విండో నందు చిరునామా నిలువవరుస చూపాలా."
+
+#: ../embed/ephy-about-handler.c:64 ../embed/ephy-about-handler.c:67
+#: ../embed/ephy-about-handler.c:117 ../embed/ephy-about-handler.c:120
 msgid "Installed plugins"
 msgstr "స్థాపించబడిన ప్లగిన్లు"
 
-#: ../embed/ephy-request-about.c:116
+#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
 msgid "Enabled"
 msgstr "చేతనమైవుంది"
 
-#: ../embed/ephy-request-about.c:116
+#. webkit_plugin_get_enabled (plugin)
+#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
 msgid "Yes"
 msgstr "అవును "
 
-#: ../embed/ephy-request-about.c:116
+#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
 msgid "No"
 msgstr "కాదు"
 
-#: ../embed/ephy-request-about.c:117
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "MIME type"
 msgstr "MIME రకము "
 
-#: ../embed/ephy-request-about.c:117
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Description"
 msgstr "వివరణ"
 
-#: ../embed/ephy-request-about.c:117
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Suffixes"
 msgstr "సఫిక్స్ లు"
 
-#: ../embed/ephy-request-about.c:146
-#: ../embed/ephy-request-about.c:149
+#: ../embed/ephy-about-handler.c:172 ../embed/ephy-about-handler.c:175
 msgid "Memory usage"
 msgstr "మెమొరి వినియోగం"
 
-#: ../embed/ephy-request-about.c:175
-#: ../embed/ephy-request-about.c:177
+#: ../embed/ephy-about-handler.c:208 ../embed/ephy-about-handler.c:210
 msgid "Applications"
 msgstr "అనువర్తనాలు"
 
-#: ../embed/ephy-request-about.c:178
+#: ../embed/ephy-about-handler.c:211
 msgid "List of installed web applications"
 msgstr "స్థాపించబడిన జాల అనువర్తనముల జాబితా"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-request-about.c:195
+#: ../embed/ephy-about-handler.c:227
 msgid "Installed on:"
 msgstr "స్థాపించబడిన తేదీ:"
 
+#: ../embed/ephy-embed.c:657
+#, c-format
+#| msgid "Browse at full screen"
+msgid "Press %s to exit fullscreen"
+msgstr "నిండుతెర నిష్క్రమణకు %s వత్తు"
+
+#. Translators: 'ESC' and 'F11' are keyboard keys.
+#: ../embed/ephy-embed.c:660
+msgid "ESC"
+msgstr "ESC"
+
+#: ../embed/ephy-embed.c:660
+msgid "F11"
+msgstr "F11"
+
+#: ../embed/ephy-embed.c:960
+msgid "Web Inspector"
+msgstr "జాల ఇన్‌స్పెక్టర్"
+
+#: ../embed/ephy-embed-shell.c:266
+msgid "Epiphany can't be used now. Initialization failed."
+msgstr "ఎఫిఫని ప్రస్తుతం ఉపయోగించబడలేదు. సిద్దీకరణ విఫలమైంది."
+
+#: ../embed/ephy-embed-utils.c:60
+#, c-format
+msgid "Send an email message to “%s”"
+msgstr "“%s”నకు ఈ-మెయిల్ సందేశమును పంపుము"
+
+#: ../embed/ephy-encodings.c:54
+msgid "Arabic (_IBM-864)"
+msgstr "అరబిక్ (_IBM-864)"
+
+#: ../embed/ephy-encodings.c:55
+msgid "Arabic (ISO-_8859-6)"
+msgstr "అరబిక్ (ISO-_8859-6)"
+
+#: ../embed/ephy-encodings.c:56
+msgid "Arabic (_MacArabic)"
+msgstr "అరబిక్ (_MacArabic)"
+
+#: ../embed/ephy-encodings.c:57
+msgid "Arabic (_Windows-1256)"
+msgstr "అరబిక్ (_Windows-1256)"
+
+#: ../embed/ephy-encodings.c:58
+msgid "Baltic (_ISO-8859-13)"
+msgstr "బాల్టిక్ (_ISO-8859-13)"
+
+#: ../embed/ephy-encodings.c:59
+msgid "Baltic (I_SO-8859-4)"
+msgstr "బాల్టిక్  (I_SO-8859-4)"
+
+#: ../embed/ephy-encodings.c:60
+msgid "Baltic (_Windows-1257)"
+msgstr "బాల్టిక్  (_Windows-1257)"
+
+#: ../embed/ephy-encodings.c:61
+msgid "_Armenian (ARMSCII-8)"
+msgstr "అర్మేనియా (ARMSCII-8) (_A)"
+
+#: ../embed/ephy-encodings.c:62
+msgid "_Georgian (GEOSTD8)"
+msgstr "జార్జియా (GEOSTD8) (_G)"
+
+#: ../embed/ephy-encodings.c:63
+msgid "Central European (_IBM-852)"
+msgstr "మధ్య ఐరోపా (_IBM-852)"
+
+#: ../embed/ephy-encodings.c:64
+msgid "Central European (I_SO-8859-2)"
+msgstr "మధ్య ఐరోపా  (I_SO-8859-2)"
+
+#: ../embed/ephy-encodings.c:65
+msgid "Central European (_MacCE)"
+msgstr "మధ్య ఐరోపా  (_MacCE)"
+
+#: ../embed/ephy-encodings.c:66
+msgid "Central European (_Windows-1250)"
+msgstr "మధ్య ఐరోపా  (_Windows-1250)"
+
+#: ../embed/ephy-encodings.c:67
+msgid "Chinese Simplified (_GB18030)"
+msgstr "సరళ చైనీయ (_GB18030)"
+
+#: ../embed/ephy-encodings.c:68
+msgid "Chinese Simplified (G_B2312)"
+msgstr "సరళ చైనీయ  (G_B2312)"
+
+#: ../embed/ephy-encodings.c:69
+msgid "Chinese Simplified (GB_K)"
+msgstr "సరళ చైనీయ  (GB_K)"
+
+#: ../embed/ephy-encodings.c:70
+msgid "Chinese Simplified (_HZ)"
+msgstr "సరళ చైనీయ  (_HZ)"
+
+#: ../embed/ephy-encodings.c:71
+msgid "Chinese Simplified (_ISO-2022-CN)"
+msgstr "సరళ చైనీయ  (_ISO-2022-CN)"
+
+#: ../embed/ephy-encodings.c:72
+msgid "Chinese Traditional (Big_5)"
+msgstr "సాంప్రదాయ చైనీయ  (Big_5)"
+
+#: ../embed/ephy-encodings.c:73
+msgid "Chinese Traditional (Big5-HK_SCS)"
+msgstr "సాంప్రదాయ  చైనీయ  (Big5-HK_SCS)"
+
+#: ../embed/ephy-encodings.c:74
+msgid "Chinese Traditional (_EUC-TW)"
+msgstr "సాంప్రదాయ  చైనీయ   (_EUC-TW)"
+
+#: ../embed/ephy-encodings.c:75
+msgid "Cyrillic (_IBM-855)"
+msgstr "సిరిల్లిక్ (_IBM-855)"
+
+#: ../embed/ephy-encodings.c:76
+msgid "Cyrillic (I_SO-8859-5)"
+msgstr "సిరిల్లిక్ (I_SO-8859-5)"
+
+#: ../embed/ephy-encodings.c:77
+msgid "Cyrillic (IS_O-IR-111)"
+msgstr "సిరిల్లిక్ (IS_O-IR-111)"
+
+#: ../embed/ephy-encodings.c:78
+msgid "Cyrillic (_KOI8-R)"
+msgstr "సిరిల్లిక్ (_KOI8-R)"
+
+#: ../embed/ephy-encodings.c:79
+msgid "Cyrillic (_MacCyrillic)"
+msgstr "సిరిల్లిక్ (_MacCyrillic)"
+
+#: ../embed/ephy-encodings.c:80
+msgid "Cyrillic (_Windows-1251)"
+msgstr "సిరిల్లిక్ (_Windows-1251)"
+
+#: ../embed/ephy-encodings.c:81
+msgid "Cyrillic/_Russian (IBM-866)"
+msgstr "సిరిల్లిక్/_Russian (IBM-866)"
+
+#: ../embed/ephy-encodings.c:82
+msgid "Greek (_ISO-8859-7)"
+msgstr "గ్రీక్ (_ISO-8859-7)"
+
+#: ../embed/ephy-encodings.c:83
+msgid "Greek (_MacGreek)"
+msgstr "గ్రీక్ (_MacGreek)"
+
+#: ../embed/ephy-encodings.c:84
+msgid "Greek (_Windows-1253)"
+msgstr "గ్రీక్ (_Windows-1253)"
+
+#: ../embed/ephy-encodings.c:85
+msgid "Gujarati (_MacGujarati)"
+msgstr "గుజరాతి (_MacGujarati)"
+
+#: ../embed/ephy-encodings.c:86
+msgid "Gurmukhi (Mac_Gurmukhi)"
+msgstr "గుర్ ముఖి (Mac_Gurmukhi)"
+
+#: ../embed/ephy-encodings.c:87
+msgid "Hindi (Mac_Devanagari)"
+msgstr "హిందీ (Mac_Devanagari)"
+
+#: ../embed/ephy-encodings.c:88
+msgid "Hebrew (_IBM-862)"
+msgstr "హిబ్రూ (_IBM-862)"
+
+#: ../embed/ephy-encodings.c:89
+msgid "Hebrew (IS_O-8859-8-I)"
+msgstr "హిబ్రూ (IS_O-8859-8-I)"
+
+#: ../embed/ephy-encodings.c:90
+msgid "Hebrew (_MacHebrew)"
+msgstr "హిబ్రూ (_MacHebrew)"
+
+#: ../embed/ephy-encodings.c:91
+msgid "Hebrew (_Windows-1255)"
+msgstr "హిబ్రూ (_Windows-1255)"
+
+#: ../embed/ephy-encodings.c:92
+msgid "_Visual Hebrew (ISO-8859-8)"
+msgstr "విజువల్ హిబ్రూ (ISO-8859-8) (_V)"
+
+#: ../embed/ephy-encodings.c:93
+msgid "Japanese (_EUC-JP)"
+msgstr "జపనీస్ (_EUC-JP)"
+
+#: ../embed/ephy-encodings.c:94
+msgid "Japanese (_ISO-2022-JP)"
+msgstr "జపనీస్ (_ISO-2022-JP)"
+
+#: ../embed/ephy-encodings.c:95
+msgid "Japanese (_Shift-JIS)"
+msgstr "జపనీస్ (_Shift-JIS)"
+
+#: ../embed/ephy-encodings.c:96
+msgid "Korean (_EUC-KR)"
+msgstr "కొరియన్ (_EUC-KR)"
+
+#: ../embed/ephy-encodings.c:97
+msgid "Korean (_ISO-2022-KR)"
+msgstr "కొరియన్ (_ISO-2022-KR)"
+
+#: ../embed/ephy-encodings.c:98
+msgid "Korean (_JOHAB)"
+msgstr "కొరియన్ (_JOHAB)"
+
+#: ../embed/ephy-encodings.c:99
+msgid "Korean (_UHC)"
+msgstr "కొరియన్ (_UHC)"
+
+#: ../embed/ephy-encodings.c:100
+msgid "_Celtic (ISO-8859-14)"
+msgstr "సెల్టిక్ (ISO-8859-14) (_C)"
+
+#: ../embed/ephy-encodings.c:101
+msgid "_Icelandic (MacIcelandic)"
+msgstr "ఐస్‌ల్యాండిక్ (MacIcelandic) (_I)"
+
+#: ../embed/ephy-encodings.c:102
+msgid "_Nordic (ISO-8859-10)"
+msgstr "నార్డిక్ (ISO-8859-10) (_N)"
+
+#: ../embed/ephy-encodings.c:103
+msgid "_Persian (MacFarsi)"
+msgstr "పర్షియన్ (MacFarsi) (_P)"
+
+#: ../embed/ephy-encodings.c:104
+msgid "Croatian (Mac_Croatian)"
+msgstr "క్రోటియన్ (Mac_Croatian) (_C)"
+
+#: ../embed/ephy-encodings.c:105
+msgid "_Romanian (MacRomanian)"
+msgstr "రొమానియన్ (MacRomanian) (_R)"
+
+#: ../embed/ephy-encodings.c:106
+msgid "R_omanian (ISO-8859-16)"
+msgstr "రొమానియన్ (ISO-8859-16) (_o)"
+
+#: ../embed/ephy-encodings.c:107
+msgid "South _European (ISO-8859-3)"
+msgstr "సౌత్ యురోపియన్ (ISO-8859-3) (_E)"
+
+#: ../embed/ephy-encodings.c:108
+msgid "Thai (TIS-_620)"
+msgstr "థాయ్ (TIS-_620)"
+
+#: ../embed/ephy-encodings.c:109
+msgid "Thai (IS_O-8859-11)"
+msgstr "థాయ్ (IS_O-8859-11)"
+
+#: ../embed/ephy-encodings.c:110
+msgid "_Thai (Windows-874)"
+msgstr "థాయ్ (Windows-874) (_T)"
+
+#: ../embed/ephy-encodings.c:111
+msgid "Turkish (_IBM-857)"
+msgstr "టర్కిష్ (_IBM-857)"
+
+#: ../embed/ephy-encodings.c:112
+msgid "Turkish (I_SO-8859-9)"
+msgstr "టర్కిష్ (I_SO-8859-9)"
+
+#: ../embed/ephy-encodings.c:113
+msgid "Turkish (_MacTurkish)"
+msgstr "టర్కిష్ (_MacTurkish)"
+
+#: ../embed/ephy-encodings.c:114
+msgid "Turkish (_Windows-1254)"
+msgstr "టర్కిష్ (_Windows-1254)"
+
+#: ../embed/ephy-encodings.c:115
+msgid "Unicode (UTF-_8)"
+msgstr "యునికోడ్ (UTF-_8)"
+
+#: ../embed/ephy-encodings.c:116
+msgid "Cyrillic/Ukrainian (_KOI8-U)"
+msgstr "సిరిల్లిక్/యుక్రైనియన్ (_KOI8-U)"
+
+#: ../embed/ephy-encodings.c:117
+msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
+msgstr "సిరిల్లిక్/యుక్రైనియన్ (Mac_యుక్రైనియన్)"
+
+#: ../embed/ephy-encodings.c:118
+msgid "Vietnamese (_TCVN)"
+msgstr "వియత్నామీస్ (_TCVN)"
+
+#: ../embed/ephy-encodings.c:119
+msgid "Vietnamese (_VISCII)"
+msgstr "వియత్నామీస్ (_VISCII)"
+
+#: ../embed/ephy-encodings.c:120
+msgid "Vietnamese (V_PS)"
+msgstr "వియత్నామీస్ (V_PS)"
+
+#: ../embed/ephy-encodings.c:121
+msgid "Vietnamese (_Windows-1258)"
+msgstr "వియత్నామిస్ (_Windows-1258)"
+
+#: ../embed/ephy-encodings.c:122
+msgid "Western (_IBM-850)"
+msgstr "వెస్ట్రన్ (_IBM-850)"
+
+#: ../embed/ephy-encodings.c:123
+msgid "Western (_ISO-8859-1)"
+msgstr "వెస్ట్రన్ (_ISO-8859-1)"
+
+#: ../embed/ephy-encodings.c:124
+msgid "Western (IS_O-8859-15)"
+msgstr "వెస్ట్రన్ (IS_O-8859-15)"
+
+#: ../embed/ephy-encodings.c:125
+msgid "Western (_MacRoman)"
+msgstr "వెస్ట్రన్ (_MacRoman)"
+
+#: ../embed/ephy-encodings.c:126
+msgid "Western (_Windows-1252)"
+msgstr "వెస్ట్రన్ (_Windows-1252)"
+
+#. The following encodings are so rarely used that we don't want to
+#. * pollute the "related" part of the encodings menu with them, so we
+#. * set the language group to 0 here.
+#.
+#: ../embed/ephy-encodings.c:132
+msgid "English (_US-ASCII)"
+msgstr "ఇంగ్లీష్ (_US-ASCII)"
+
+#: ../embed/ephy-encodings.c:133
+msgid "Unicode (UTF-_16 BE)"
+msgstr "యునికోడ్ (UTF-_16 BE)"
+
+#: ../embed/ephy-encodings.c:134
+msgid "Unicode (UTF-1_6 LE)"
+msgstr "యునికోడ్ (UTF-1_6 LE)"
+
+#: ../embed/ephy-encodings.c:135
+msgid "Unicode (UTF-_32 BE)"
+msgstr "యునికోడ్ (UTF-_32 BE)"
+
+#: ../embed/ephy-encodings.c:136
+msgid "Unicode (UTF-3_2 LE)"
+msgstr "యునికోడ్ (UTF-3_2 LE)"
+
+#. Translators: this is the title that an unknown encoding will
+#. * be displayed as.
+#.
+#: ../embed/ephy-encodings.c:218
+#, c-format
+msgid "Unknown (%s)"
+msgstr "తెలియని (%s)"
+
+#: ../embed/ephy-overview.h:53
+#| msgctxt "bookmarks"
+#| msgid "Most Visited"
+msgid "Most Visited"
+msgstr "ఎక్కువగా సందర్శించినవి"
+
 #. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-web-view.c:70
-#: ../embed/ephy-web-view.c:3441
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3765
 msgid "Blank page"
 msgstr "ఖాళీ పుట"
 
-#: ../embed/ephy-web-view.c:770
-msgid "_Not now"
-msgstr "ఇప్పుడు కాదు (_N)"
+#: ../embed/ephy-web-view.c:741
+#| msgid "_Not now"
+msgid "Not now"
+msgstr "ఇప్పుడు కాదు"
 
-#: ../embed/ephy-web-view.c:775
-msgid "_Store password"
-msgstr "సంకేతపదాలను భద్రపరుచు (_S)"
+#: ../embed/ephy-web-view.c:742
+#| msgid "_Store password"
+msgid "Store password"
+msgstr "సంకేతపదాలను నిల్వవుంచు"
 
 #. Translators: The first %s is the username and the second one is the
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:786
+#: ../embed/ephy-web-view.c:755
 #, c-format
-msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
+msgid ""
+"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big><b>%s</b> కొరకు <b>%s</b>లో సంకేతపదం బద్రపరుచమంటారా?</big>"
 
-#: ../embed/ephy-web-view.c:1133
+#: ../embed/ephy-web-view.c:1110
 msgid "Plugins"
 msgstr "ప్లగిన్లు"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1948
 msgid "Deny"
 msgstr "నిరాకరించు"
 
-#. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1949
 msgid "Allow"
 msgstr "అనుమతించు"
 
-#: ../embed/ephy-web-view.c:1797
+#: ../embed/ephy-web-view.c:1963
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "ఇక్కడ <b>%s</b> ఉన్న పుట మీరున్న ప్రదేశాన్ని తెలుసుకోవాలనుకుంటున్నది."
 
-#: ../embed/ephy-web-view.c:2118
+#: ../embed/ephy-web-view.c:2473
 msgid "None specified"
 msgstr "ఎమీ తెలుపలేదు"
 
-#: ../embed/ephy-web-view.c:2127
-#: ../embed/ephy-web-view.c:2145
+#: ../embed/ephy-web-view.c:2482 ../embed/ephy-web-view.c:2500
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "అయ్యో! %s నింపుటలో దోషం"
 
-#: ../embed/ephy-web-view.c:2129
+#: ../embed/ephy-web-view.c:2484
 msgid "Oops! It was not possible to show this website"
 msgstr "అయ్యో! ఈ జాలప్రదేశమును చూపించుట సాధ్యముకాదు"
 
-#: ../embed/ephy-web-view.c:2130
+#: ../embed/ephy-web-view.c:2485
 #, c-format
-msgid "<p>The website at <strong>%s</strong> seems to be unavailable. The precise error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or moved to a new address. Don't forget to check that your internet connection is working correctly.</p>"
-msgstr "<p>వెబ్ సైటు <strong>%s</strong> వద్ద అందుబాటులో లేనట్టుంది .సరియైన దోశం:</p><p><em>%s</em></p><p> ఇది తత్కాలికము అపివేయుము లేక కొత్త  చిరునామాకు జరిగినది.మీ అంతర్జాల అనుసంధానం  సరిగ్గా పనిచేస్తుందా చూసుకొవడం మరిచి పొవద్దు </p>"
+msgid ""
+"<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
+"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
+"moved to a new address. Don't forget to check that your internet connection "
+"is working correctly.</p>"
+msgstr ""
+"<p>వెబ్ సైటు <strong>%s</strong> వద్ద అందుబాటులో లేనట్టుంది .సరియైన దోశం:</p>"
+"<p><em>%s</"
+"em></p><p> ఇది తత్కాలికము అపివేయుము లేక కొత్త  చిరునామాకు జరిగినది.మీ "
+"అంతర్జాల అనుసంధానం  సరిగ్గా "
+"పనిచేస్తుందా చూసుకొవడం మరిచి పొవద్దు </p>"
 
-#: ../embed/ephy-web-view.c:2139
+#: ../embed/ephy-web-view.c:2494
 msgid "Try again"
 msgstr "మరలా ప్రయత్నించండి"
 
-#: ../embed/ephy-web-view.c:2147
+#: ../embed/ephy-web-view.c:2502
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "అయ్యో! ఈ సైటు కారణంగా మహాతలం  అన్వేషి  అనుకొకుండా  రద్దు అయినది"
 
-#: ../embed/ephy-web-view.c:2149
+#: ../embed/ephy-web-view.c:2504
 #, c-format
-msgid "<p>This page was loading when the web browser closed unexpectedly.</p><p>This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers.</p>"
-msgstr "<p>ఈ జాల విహారిణి అనుకోకుండా పేజీ లోడవుచున్నప్పుడు మూయబడినది.</p><p> ఒకవేళ మీరు తిరిగి లోడుచేస్తే ఇది మరలా జరుగవచ్చు. ఒకవేళ మరలా ఇలా జరిగితే, దయచేసి సమస్యను <strong>%s</strong> అభివృద్ధికారులకు తెలియపర్చండి.</p>"
+msgid ""
+"<p>This page was loading when the web browser closed unexpectedly.</"
+"p><p>This might happen again if you reload the page. If it does, please "
+"report the problem to the <strong>%s</strong> developers.</p>"
+msgstr ""
+"<p>ఈ జాల విహారిణి అనుకోకుండా పేజీ లోడవుచున్నప్పుడు మూయబడినది.</p><p> ఒకవేళ "
+"మీరు తిరిగి లోడుచేస్తే "
+"ఇది మరలా జరుగవచ్చు. ఒకవేళ మరలా ఇలా జరిగితే, దయచేసి సమస్యను <strong>%s</strong>"
+" "
+"అభివృద్ధికారులకు తెలియపర్చండి.</p>"
 
-#: ../embed/ephy-web-view.c:2157
+#: ../embed/ephy-web-view.c:2512
 msgid "Load again anyway"
 msgstr "ఏమైనప్పటికీ మళ్ళీ లోడుచేయి"
 
-#: ../embed/ephy-web-view.c:2428
+#: ../embed/ephy-web-view.c:2944
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2773
+#: ../embed/ephy-web-view.c:3238
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s”ను లోడుచేస్తున్నది..."
 
-#: ../embed/ephy-web-view.c:2775
+#: ../embed/ephy-web-view.c:3240
 msgid "Loading…"
 msgstr "లోడవుతుంది…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3645
+#: ../embed/ephy-web-view.c:4021
 #, c-format
 msgid "%s Files"
 msgstr "%s ఫైళ్ళు"
@@ -835,69 +1027,43 @@ msgstr "'Type=Link' డెస్కుటాపు ప్రవేశమున�
 msgid "Not a launchable item"
 msgstr "ఆరంభించదగిన అంశము కాదు"
 
-#: ../lib/egg/eggsmclient.c:225
-msgid "Disable connection to session manager"
-msgstr "సెషన్ నిర్వాహికకు అనుసంధానమును అచేతనముచేయి"
-
-#: ../lib/egg/eggsmclient.c:228
-msgid "Specify file containing saved configuration"
-msgstr "దాచిన ఆకృతీకరణ కలిగిన ఫైలును తెలుపండి"
-
-#: ../lib/egg/eggsmclient.c:228
-#: ../src/ephy-main.c:88
-#: ../src/ephy-main.c:90
-msgid "FILE"
-msgstr "ఫైల్"
-
-#: ../lib/egg/eggsmclient.c:231
-msgid "Specify session management ID"
-msgstr "సెషన్ నిర్వాహిక IDను తెలుపండి"
-
-#: ../lib/egg/eggsmclient.c:231
-msgid "ID"
-msgstr "ID"
-
-#: ../lib/egg/eggsmclient.c:252
-msgid "Session management options:"
-msgstr "సెషన్ నిర్వాహిక ఐచ్చికములు:"
-
-#: ../lib/egg/eggsmclient.c:253
-msgid "Show session management options"
-msgstr "సెషన్ నిర్వాహిక ఐచ్చికములను చూపుము"
-
-#: ../lib/ephy-file-chooser.c:382
+#: ../lib/ephy-file-chooser.c:210
 msgid "All supported types"
 msgstr "అన్ని మద్ధతునిచ్చు రకములు"
 
-#: ../lib/ephy-file-chooser.c:393
+#: ../lib/ephy-file-chooser.c:222
 msgid "Web pages"
 msgstr "జాల పుటలు"
 
-#: ../lib/ephy-file-chooser.c:401
+#: ../lib/ephy-file-chooser.c:231
 msgid "Images"
 msgstr "బొమ్మలు"
 
-#: ../lib/ephy-file-chooser.c:409
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../lib/ephy-file-chooser.c:239 ../src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "All files"
 msgstr "అన్ని ఫైళ్ళు"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:162
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
+msgid "Downloads"
+msgstr "దింపుకున్నవి"
+
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "డెస్క్‍టాప్"
 
-#: ../lib/ephy-file-helpers.c:326
+#: ../lib/ephy-file-helpers.c:344
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” లో తాత్కాలిక డైరెక్టరీని సృష్టించలేము."
 
-#: ../lib/ephy-file-helpers.c:422
+#: ../lib/ephy-file-helpers.c:445
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s” ఫైలు ఉనికిలో ఉన్నది. దయచేసి దాన్ని దారి నుండి కదపండి."
 
-#: ../lib/ephy-file-helpers.c:433
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "“%s” వివరణ  సృష్టించుటలో విఫలమైనది."
@@ -921,8 +1087,12 @@ msgid "Cannot overwrite existing file “%s”"
 msgstr "“%s” కలిగివున్న దస్త్రాన్ని చెరిపిరాయలేవు"
 
 #: ../lib/ephy-gui.c:246
-msgid "A file with this name already exists and you don't have permission to overwrite it."
-msgstr "ఈ దస్త్ర నామము ఇది వరకే కలిగి వుంది మరియు దాన్ని చెరిపిరాయుటకు మీకు అనుమతి లేదు."
+msgid ""
+"A file with this name already exists and you don't have permission to "
+"overwrite it."
+msgstr ""
+"ఈ దస్త్ర నామము ఇది వరకే కలిగి వుంది మరియు దాన్ని చెరిపిరాయుటకు మీకు అనుమతి "
+"లేదు."
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
@@ -938,12 +1108,47 @@ msgid "Master password needed"
 msgstr "ముఖ్య(మాస్టర్) సంకేతపదము అవసరమైంది"
 
 #: ../lib/ephy-nss-glue.c:64
-msgid "The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."
-msgstr "మునుపటి వర్షన్ (Gecko) నుండి సంకేతపదములు ముఖ్య సంకేతపదముతో లాకైనవి. మీరు ఎఫిఫని వాటిని దిగుమతి చేయాలని కోరుకుంటే, దయచేసి మీ ముఖ్య సంకేతపదమును ప్రవేశపెట్టుము."
+msgid ""
+"The passwords from the previous version (Gecko) are locked with a master "
+"password. If you want Epiphany to import them, please enter your master "
+"password below."
+msgstr ""
+"మునుపటి వర్షన్ (Gecko) నుండి సంకేతపదములు ముఖ్య సంకేతపదముతో లాకైనవి. మీరు "
+"ఎఫిఫని వాటిని దిగుమతి "
+"చేయాలని కోరుకుంటే, దయచేసి మీ ముఖ్య సంకేతపదమును ప్రవేశపెట్టుము."
 
-#: ../lib/ephy-profile-migrator.c:82
+#: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "మొజిల్లానుండి కుకీల దస్త్రమును నకలుతీయుటకు విఫలమైంది."
+
+#: ../lib/ephy-profile-migrator.c:650
+msgid ""
+"Epiphany 3.6 deprecated this directory and tried migrating this "
+"configuration to ~/.config/epiphany"
+msgstr ""
+"ఎపిఫనీ 3.6 ఈ సంచయం తీసివేసెను మరియు యీ ఆకృతీకరణను ~/.config/epiphany కు "
+"మైగ్రేట్ చేయుటకు ప్రయత్నించెను."
+
+#: ../lib/ephy-profile-migrator.c:890
+msgid "Executes only the n-th migration step"
+msgstr "n-th మైగ్రేషన్ అంచెను మాత్రమే నిర్వర్తించును"
+
+#: ../lib/ephy-profile-migrator.c:892
+msgid "Specifies the required version for the migrator"
+msgstr "మైగ్రేటర్ యొక్క కావలసిన వర్షన్ తెలుపును"
+
+#: ../lib/ephy-profile-migrator.c:894
+msgid "Specifies the profile where the migrator should run"
+msgstr "మైగ్రేటర్ నడుపవలసిన ప్రొఫైల్ తెలుపును"
+
+#: ../lib/ephy-profile-migrator.c:909
+#| msgid "Epiphany Web Browser"
+msgid "Epiphany profile migrator"
+msgstr "ఎపిఫని ప్రొఫైల్ మైగ్రేట్‌చేయునది"
+
+#: ../lib/ephy-profile-migrator.c:910
+msgid "Epiphany profile migrator options"
+msgstr "ఎపిఫనీ ప్రొఫైల్ మైగ్రేటర్ ఐచ్చికాలు"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1027,63 +1232,100 @@ msgstr "ఇతరములు"
 msgid "Local files"
 msgstr "స్థానిక ఫైళ్ళు"
 
-#: ../lib/widgets/ephy-download-widget.c:88
+#: ../lib/widgets/ephy-certificate-dialog.c:92
+msgid "The certificate does not match the expected identity"
+msgstr "కావలసిన గుర్తింపునకు ధృవీకరణపత్రం సరిపోలలేదు"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:95
+#| msgid "Certificate _Fields"
+msgid "The certificate has expired"
+msgstr "ధృవీకరణపత్రము గడువుతీరెను"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:98
+msgid "The signing certificate authority is not known"
+msgstr "ధృవీకరణపత్రం ధృవీకరణ సంతకం తెలియనిది"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:101
+msgid "The certificate contains errors"
+msgstr "ధృవీకరణపత్రం దోషాలను కలిగివుంది"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:104
+msgid "The certificate has been revoked"
+msgstr "ధృవీకరణపత్రం తొలగించబడెను"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:107
+msgid "The certificate is signed using a weak signature algorithm"
+msgstr "ధృవీకరమపత్రం బలహీనమైన అల్గార్దెమ్ సంతకంతో సంతకం చేయబడెను"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:110
+msgid "The certificate activation time is still in the future"
+msgstr "ధృవీకరణపత్రం క్రీయాశీలమగు సమయం యింకా భవిష్యత్తులోనే వుంది"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:149
+msgid "The identity of this website has been verified"
+msgstr "ఈ వెబ్‌సైట్ యొక్క గుర్తింపు నిర్థారించబడెను"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:150
+msgid "The identity of this website has not been verified"
+msgstr "ఈ వెబ్‌సైట్ యొక్క గుర్తింపు నిర్థారించబడలేదు"
+
+#: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
 msgid "%u:%02u hour left"
 msgid_plural "%u:%02u hours left"
 msgstr[0] "%u:%02u గంట మిగిలివుంది"
 msgstr[1] "%u:%02u గంటలు మిగిలివున్నాయి"
 
-#: ../lib/widgets/ephy-download-widget.c:90
+#: ../lib/widgets/ephy-download-widget.c:121
 #, c-format
 msgid "%u hour left"
 msgid_plural "%u hours left"
 msgstr[0] "%u గంట మిగిలివుంది"
 msgstr[1] "%u గంటలు మిగిలివున్నాయి"
 
-#: ../lib/widgets/ephy-download-widget.c:93
+#: ../lib/widgets/ephy-download-widget.c:124
 #, c-format
 msgid "%u:%02u minute left"
 msgid_plural "%u:%02u minutes left"
 msgstr[0] "%u:%02u నిమిషాలు మిగిలివున్నాయి"
 msgstr[1] "%u:%02u నిమిషాలు మిగిలివున్నాయి"
 
-#: ../lib/widgets/ephy-download-widget.c:95
+#: ../lib/widgets/ephy-download-widget.c:126
 #, c-format
 msgid "%u second left"
 msgid_plural "%u seconds left"
 msgstr[0] "%u సెకను మిగిలివుంది"
 msgstr[1] "%u సెకనులు మిగిలివున్నాయి"
 
-#: ../lib/widgets/ephy-download-widget.c:164
+#: ../lib/widgets/ephy-download-widget.c:296
+#: ../lib/widgets/ephy-download-widget.c:313
 msgid "Finished"
 msgstr "పూర్తయినది"
 
-#: ../lib/widgets/ephy-download-widget.c:203
+#: ../lib/widgets/ephy-download-widget.c:328
+#: ../lib/widgets/ephy-download-widget.c:346
 #, c-format
 msgid "Error downloading: %s"
 msgstr "దిగుమతిలో దోషం: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:271
-#: ../src/window-commands.c:482
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:556
 msgid "Cancel"
 msgstr "రద్దుచేయి"
 
-#: ../lib/widgets/ephy-download-widget.c:280
-#: ../src/ephy-window.c:1283
-#: ../src/window-commands.c:263
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1368
+#: ../src/window-commands.c:268
 msgid "Open"
 msgstr "తెరువు"
 
-#: ../lib/widgets/ephy-download-widget.c:286
+#: ../lib/widgets/ephy-download-widget.c:429
 msgid "Show in folder"
 msgstr "సంచయములో చుపించు"
 
-#: ../lib/widgets/ephy-download-widget.c:458
+#: ../lib/widgets/ephy-download-widget.c:628
 msgid "Starting…"
 msgstr "ప్రారంభించుచున్నది..."
 
-#: ../lib/widgets/ephy-hosts-store.c:166
+#: ../lib/widgets/ephy-hosts-store.c:262
 msgid "All sites"
 msgstr "అన్ని సైట్లు"
 
@@ -1091,7 +1333,17 @@ msgstr "అన్ని సైట్లు"
 msgid "Sites"
 msgstr "జాలస్థలాలు"
 
-#: ../lib/widgets/ephy-location-entry.c:742
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../lib/widgets/ephy-location-entry.c:591
+#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:231
+#: ../src/pdm-dialog.c:380
+msgid "Cl_ear"
+msgstr "శుభ్రపరుచు (_e)"
+
+#: ../lib/widgets/ephy-location-entry.c:871
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ఈ పేజీకు లింకు సృష్టించుటకు ఈ ప్రతిమను లాగి ఇక్కడ వదులు"
 
@@ -1100,13 +1352,13 @@ msgid "Clear"
 msgstr "శుభ్రంచేయి"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1662
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
 msgid "Title"
 msgstr "శీర్షిక"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
 msgid "Address"
 msgstr "చిరునామా"
 
@@ -1158,51 +1410,51 @@ msgstr "సంగతులు (_o):"
 msgid "Sho_w all topics"
 msgstr "అన్ని సంగతులు చూపించు (_w):"
 
-#: ../src/bookmarks/ephy-bookmarks.c:92
+#: ../src/bookmarks/ephy-bookmarks.c:87
 msgid "Entertainment"
 msgstr "మనోరంజకం"
 
-#: ../src/bookmarks/ephy-bookmarks.c:93
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "News"
 msgstr "వార్తలు"
 
-#: ../src/bookmarks/ephy-bookmarks.c:94
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "Shopping"
 msgstr "కొనుగోలు"
 
-#: ../src/bookmarks/ephy-bookmarks.c:95
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Sports"
 msgstr "క్రీడలు"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:91
 msgid "Travel"
 msgstr "ప్రయాణం"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:92
 msgid "Work"
 msgstr "పని"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:951
+#: ../src/bookmarks/ephy-bookmarks.c:935
 msgctxt "bookmarks"
 msgid "All"
 msgstr "అన్ని"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:955
+#: ../src/bookmarks/ephy-bookmarks.c:939
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "వర్గీకరించనివి"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:960
+#: ../src/bookmarks/ephy-bookmarks.c:943
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "దగ్గరలోని సైట్లు"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1179
+#: ../src/bookmarks/ephy-bookmarks.c:1161
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "శీర్షికలేని"
@@ -1221,19 +1473,24 @@ msgstr "ఈ సంగతి నుండి తొలగించు"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:128
+#: ../src/ephy-history-window.c:129
 msgid "_File"
 msgstr "ఫైల్ (_F)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:129
+#: ../src/ephy-history-window.c:130
 msgid "_Edit"
 msgstr "సవరణ (_E)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:130
+#: ../src/ephy-history-window.c:131
 msgid "_View"
 msgstr "వీక్షణం (_V)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/ephy-history-window.c:132
+msgid "_Help"
+msgstr "సహాయం (_H)"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:159
@@ -1246,9 +1503,8 @@ msgstr "కొత్త సంగతిని సృష్టించు"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:135
-#: ../src/ephy-history-window.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
+#: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:639
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "కొత్త కిటికీలో తెరువు (_W)"
@@ -1259,9 +1515,8 @@ msgid "Open the selected bookmark in a new window"
 msgstr "ఎంపికచేసిన ఇష్టాంశాన్ని కొత్త కిటికీలో తెరువు"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
-#: ../src/ephy-history-window.c:138
-#: ../src/ephy-history-window.c:641
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
+#: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:642
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "కొత్త నెట్టులో తెరువు (_T)"
@@ -1293,7 +1548,8 @@ msgstr "ఇష్టాంశాల దిగుమతి… (_I)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Import bookmarks from another browser or a bookmarks file"
-msgstr "ఇష్టాంశాలను ఇతర విహారకం నుండి గాని ఇష్టాంశాల ఫైలు నుండి గాని దిగుమతి చేసుకోండి"
+msgstr ""
+"ఇష్టాంశాలను ఇతర విహారకం నుండి గాని ఇష్టాంశాల ఫైలు నుండి గాని దిగుమతి చేసుకోండి"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "_Export Bookmarks…"
@@ -1304,8 +1560,7 @@ msgid "Export bookmarks to a file"
 msgstr "ఇష్టాంశాలను ఫైలుకు ఎగుమతిచేయి"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:144
-#: ../src/ephy-window.c:105
+#: ../src/ephy-history-window.c:145 ../src/ephy-window.c:111
 msgid "_Close"
 msgstr "మూసివేయి (_C)"
 
@@ -1315,42 +1570,39 @@ msgstr "ఇష్టాంశాల కిటికీని మూసివే�
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:149
-#: ../src/ephy-window.c:114
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:120
 msgid "Cu_t"
 msgstr "కత్తిరించు (_t)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:150
+#: ../src/ephy-history-window.c:151
 msgid "Cut the selection"
 msgstr "ఎంపికను కత్తిరించు"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1174
-#: ../src/ephy-history-window.c:152
-#: ../src/ephy-history-window.c:651
-#: ../src/ephy-window.c:116
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1171
+#: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:652
+#: ../src/ephy-window.c:122
 msgid "_Copy"
 msgstr "నకలు (_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:153
+#: ../src/ephy-history-window.c:154
 msgid "Copy the selection"
 msgstr "ఎంపికను నకలుతీయి"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:155
-#: ../src/ephy-window.c:118
+#: ../src/ephy-history-window.c:156 ../src/ephy-window.c:124
 msgid "_Paste"
 msgstr "అతుకు (_P)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:156
+#: ../src/ephy-history-window.c:157
 msgid "Paste the clipboard"
 msgstr "క్లిప్‌బోర్డును అతికించు"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:158
+#: ../src/ephy-history-window.c:159
 msgid "_Delete"
 msgstr "తొలగించు (_D)"
 
@@ -1359,8 +1611,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "ఎంపిక చేసిన ఇష్టాంశాన్ని లేదా సంగతిని తొలగించు"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:161
-#: ../src/ephy-window.c:122
+#: ../src/ephy-history-window.c:162 ../src/ephy-window.c:128
 msgid "Select _All"
 msgstr "అన్నింటిని ఎంపికచేయి (_A)"
 
@@ -1370,7 +1621,7 @@ msgstr "అన్ని ఇష్టాంశాలను లేదా పాఠ
 
 #. Help Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:169
+#: ../src/ephy-history-window.c:170
 msgid "_Contents"
 msgstr "విషయసూచిక (_C)"
 
@@ -1378,24 +1629,30 @@ msgstr "విషయసూచిక (_C)"
 msgid "Display bookmarks help"
 msgstr "ఇష్టాంశాల సహాయమును ప్రదర్శించు"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/resources/epiphany-application-menu.ui.h:6
 #: ../src/ephy-history-window.c:173
+msgid "_About"
+msgstr "గురించి (_A)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/ephy-history-window.c:174
 msgid "Display credits for the web browser creators"
 msgstr "జాల విహారిణి సృష్టికర్తల పరపతులను ప్రదర్శించు"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:187
+#: ../src/ephy-history-window.c:188
 msgid "_Title"
 msgstr "శీర్షిక (_T)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:188
+#: ../src/ephy-history-window.c:189
 msgid "Show the title column"
 msgstr "శీర్షిక నిలువువరుసను చూపించు"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:190
+#: ../src/ephy-history-window.c:191
 msgid "Show the address column"
 msgstr "చిరునామా నిలువువరుసను చూపుము"
 
@@ -1413,8 +1670,13 @@ msgid "Delete this topic?"
 msgstr "ఈ సంగతి తొలగించాలా?"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:380
-msgid "Deleting this topic will cause all its bookmarks to become uncategorized, unless they also belong to other topics. The bookmarks will not be deleted."
-msgstr "ఈ ప్రస్తావన(టాపిక్)ను తొలగించుట వలన దానియొక్క అన్ని ఇష్టాంశాలు వర్గీకరణలేకుండా పోతాయి, ఒకవేళ అవి వేరొక ప్రస్తావనకు చెంది వుండకపోతే. ఇష్టాంశాలు తొలగించబడవు."
+msgid ""
+"Deleting this topic will cause all its bookmarks to become uncategorized, "
+"unless they also belong to other topics. The bookmarks will not be deleted."
+msgstr ""
+"ఈ ప్రస్తావన(టాపిక్)ను తొలగించుట వలన దానియొక్క అన్ని ఇష్టాంశాలు "
+"వర్గీకరణలేకుండా పోతాయి, ఒకవేళ అవి వేరొక "
+"ప్రస్తావనకు చెంది వుండకపోతే. ఇష్టాంశాలు తొలగించబడవు."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:383
 msgid "_Delete Topic"
@@ -1455,8 +1717,12 @@ msgstr "దిగుమతి విఫలమైంది"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:553
 #, c-format
-msgid "The bookmarks from “%s” could not be imported because the file is corrupted or of an unsupported type."
-msgstr "“%s” నుండి బుక్‌మార్కులు దిగుమతి కాలేకపోయినవి యెంచేతంటే ఫైలు పాడైవుంది లేదా మద్దతించని రకమువంటిది."
+msgid ""
+"The bookmarks from “%s” could not be imported because the file is corrupted "
+"or of an unsupported type."
+msgstr ""
+"“%s” నుండి బుక్‌మార్కులు దిగుమతి కాలేకపోయినవి యెంచేతంటే ఫైలు పాడైవుంది లేదా "
+"మద్దతించని రకమువంటిది."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:616
 msgid "Import Bookmarks from File"
@@ -1478,44 +1744,44 @@ msgstr "ఎపిఫని ఇష్టాంశాలు"
 msgid "Export Bookmarks"
 msgstr "ఇష్టాంశాలను ఎగుమతిచేయి"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1536
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "ఇష్టాంశాలు"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "File f_ormat:"
 msgstr "ఫైల్ ఫార్మేటు (_o):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:815
+#: ../src/bookmarks/ephy-bookmarks-editor.c:814
 msgid "Import Bookmarks"
 msgstr "గుర్తింపుల దిగుమతి"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:820
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
 msgid "I_mport"
 msgstr "దిగుమతి (_m)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:836
+#: ../src/bookmarks/ephy-bookmarks-editor.c:835
 msgid "Import bookmarks from:"
 msgstr "గుర్తింపులు దిగుమతి నుండి:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:856
+#: ../src/bookmarks/ephy-bookmarks-editor.c:855
 msgid "File"
 msgstr "ఫైలు"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1170
-#: ../src/ephy-history-window.c:647
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
+#: ../src/ephy-history-window.c:648
 msgid "_Copy Address"
 msgstr "చిరునామాను నకలుతీయు (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1411
-#: ../src/ephy-history-window.c:800
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1408
+#: ../src/ephy-history-window.c:801
 msgid "_Search:"
 msgstr "వెతుకు (_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1592
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
 msgid "Topics"
 msgstr "సంగతులు"
 
@@ -1533,6 +1799,218 @@ msgstr "కొత్త నెట్టులలోని సంగతులల�
 msgid "Create topic “%s”"
 msgstr "“%s” కొత్త సంగతి సృష్టించు"
 
+#: ../src/resources/epiphany-application-menu.ui.h:1
+msgid "_New Window"
+msgstr "కొత్త కిటికీ (_N)"
+
+#. Toplevel
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:93
+msgid "_Bookmarks"
+msgstr "ఇష్టాంశాలు (_B)"
+
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "_History"
+msgstr "చరిత్ర (_H)"
+
+#: ../src/resources/epiphany-application-menu.ui.h:4
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "ప్రాధాన్యతలు"
+
+#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "వ్యక్తిగత డేటా"
+
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Quit"
+msgstr "నిష్క్రమించు (_Q)"
+
+#: ../src/resources/epiphany.ui.h:1
+msgid "Cookie properties"
+msgstr "కుకీ లక్షణాలు"
+
+#: ../src/resources/epiphany.ui.h:2
+msgid "Content:"
+msgstr "సారము:"
+
+#: ../src/resources/epiphany.ui.h:3
+msgid "Path:"
+msgstr "పథం:"
+
+#: ../src/resources/epiphany.ui.h:4
+msgid "Send for:"
+msgstr "పంపుట కొరకు:"
+
+#: ../src/resources/epiphany.ui.h:5
+msgid "Expires:"
+msgstr "కాలంచెల్లునది:"
+
+#: ../src/resources/epiphany.ui.h:6
+msgid "Text Encoding"
+msgstr "పాఠం సంకేతరచన"
+
+#: ../src/resources/epiphany.ui.h:7
+msgid "<b>_Automatic</b>"
+msgstr "<b>స్వయంచాలకం (_A)</b>"
+
+#: ../src/resources/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:349
+msgid "Use the encoding specified by the document"
+msgstr "సంకేతరచన ప్రత్యేకమైన పత్రం ద్వారా వాడుము"
+
+#: ../src/resources/epiphany.ui.h:9
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>వేరొక సంకేతరచన వాడు (_U):</b>"
+
+#: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "కుకీస్"
+
+#: ../src/resources/epiphany.ui.h:12
+msgid "_Show passwords"
+msgstr "సంకేతపదాలను చూపించు (_S)"
+
+#: ../src/resources/epiphany.ui.h:13 ../src/resources/prefs-dialog.ui.h:29
+msgid "Passwords"
+msgstr "సంకేతపదములు"
+
+#: ../src/resources/prefs-dialog.ui.h:1
+msgid "Add Language"
+msgstr "భాషను జతచేయి"
+
+#: ../src/resources/prefs-dialog.ui.h:2
+msgid "Choose a l_anguage:"
+msgstr "భాషను ఎంచుకొను (_a):"
+
+#: ../src/resources/prefs-dialog.ui.h:5
+msgid "_Download folder:"
+msgstr "దింపుకొను సంచయం (_D):"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "A_utomatically open downloaded files"
+msgstr "దింపుకున్న ఫైళ్ళను స్వయంచాలకముగా తెరువు (_u)"
+
+#: ../src/resources/prefs-dialog.ui.h:7
+msgid "General"
+msgstr "సాధారణం"
+
+#: ../src/resources/prefs-dialog.ui.h:8
+msgid "Fonts"
+msgstr "ఖతులు"
+
+#: ../src/resources/prefs-dialog.ui.h:9
+msgid "_Use system fonts"
+msgstr "వ్యవస్థ ఫాంట్లను ఉపయోగించు (_U)"
+
+#: ../src/resources/prefs-dialog.ui.h:10
+msgid "Sans serif font:"
+msgstr "సాంస్ సెరీఫ్ ఫాంటు:"
+
+#: ../src/resources/prefs-dialog.ui.h:11
+msgid "Serif font:"
+msgstr "సెరిఫ్ ఫాంటు:"
+
+#: ../src/resources/prefs-dialog.ui.h:12
+msgid "Monospace font:"
+msgstr "మోనోస్పేస్ ఫాంటు:"
+
+#: ../src/resources/prefs-dialog.ui.h:13
+msgid "Style"
+msgstr "శైలి"
+
+#: ../src/resources/prefs-dialog.ui.h:14
+msgid "Use custom _stylesheet"
+msgstr "అనురూపిత స్టైలుషీటును వాడు (_s)"
+
+#: ../src/resources/prefs-dialog.ui.h:15
+msgid "_Edit Stylesheet…"
+msgstr "శైలిపుటను సవరించు...(_E)"
+
+#: ../src/resources/prefs-dialog.ui.h:16
+msgid "Fonts & Style"
+msgstr "ఖతులు మరియు శైలి"
+
+#: ../src/resources/prefs-dialog.ui.h:17
+msgid "Web Content"
+msgstr "జాల సారము"
+
+#: ../src/resources/prefs-dialog.ui.h:18
+msgid "Allow popup _windows"
+msgstr "ప్రత్యక్షమయ్యే కిటికీలను అనుమతించు (_w)"
+
+#: ../src/resources/prefs-dialog.ui.h:19
+msgid "Enable _plugins"
+msgstr "ప్లగిన్‌లను చేతనపరుచు (_p)"
+
+#: ../src/resources/prefs-dialog.ui.h:20
+msgid "Enable Java_Script"
+msgstr "జావా స్ర్కిప్ట్ ను చేతనపరుచు (_S)"
+
+#: ../src/resources/prefs-dialog.ui.h:22
+msgid "_Always accept"
+msgstr "ఎల్లప్పుడు ఆమోదించు (_A)"
+
+#: ../src/resources/prefs-dialog.ui.h:23
+msgid "Only _from sites you visit"
+msgstr "మీరు సందర్శించే సైట్ల నుండి మాత్రమే (_f)"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../src/resources/prefs-dialog.ui.h:25
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr "<small>ఉదాహరణకు, ఈ సైటుల నందలి ప్రకటనకర్తల నుండి వద్దు</small>"
+
+#: ../src/resources/prefs-dialog.ui.h:26
+msgid "_Never accept"
+msgstr "ఎప్పటికి ఆమోదించవద్దు (_N)"
+
+#: ../src/resources/prefs-dialog.ui.h:27
+msgid "Tracking"
+msgstr "ఆరాతీస్తోంది"
+
+#: ../src/resources/prefs-dialog.ui.h:28
+msgid "_Tell web sites I do not want to be tracked"
+msgstr "నా జాడ తెలుసుకొనవద్దని వెబ్ సైట్లకు చెప్పు (_T)"
+
+#: ../src/resources/prefs-dialog.ui.h:30
+msgid "_Remember passwords"
+msgstr "సంకేతపదాలను గుర్తుంచుకొను (_R)"
+
+#: ../src/resources/prefs-dialog.ui.h:31
+msgid "Temporary Files"
+msgstr "తాత్కాలిక ఫైళ్ళు"
+
+#: ../src/resources/prefs-dialog.ui.h:32
+msgid "_Disk space:"
+msgstr "డిస్కు స్థలం (_D):"
+
+#: ../src/resources/prefs-dialog.ui.h:33
+msgid "MB"
+msgstr "మెబై"
+
+#: ../src/resources/prefs-dialog.ui.h:35
+msgid "Privacy"
+msgstr "గోప్యత"
+
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
+msgid "Encodings"
+msgstr "సంకేత రచనలు"
+
+#: ../src/resources/prefs-dialog.ui.h:37
+msgid "De_fault:"
+msgstr "అప్రమేయం (_f):"
+
+#: ../src/resources/prefs-dialog.ui.h:39
+msgid "Spell checking"
+msgstr "ఉచ్ఛారణా  తనిఖీ"
+
+#: ../src/resources/prefs-dialog.ui.h:40
+msgid "_Enable spell checking"
+msgstr "ఉచ్ఛారణా  తనిఖీ చేతనపరుచు (_E)"
+
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+msgid "Language"
+msgstr "భాష"
+
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
 msgstr "ఆపివేయి"
@@ -1541,8 +2019,7 @@ msgstr "ఆపివేయి"
 msgid "Stop current data transfer"
 msgstr "ప్రస్తుత దత్తాంశ బదిలీని ఆపివేయి"
 
-#: ../src/ephy-combined-stop-reload-action.c:44
-#: ../src/ephy-window.c:137
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:143
 msgid "_Reload"
 msgstr "మళ్ళీనింపు (_R)"
 
@@ -1550,206 +2027,206 @@ msgstr "మళ్ళీనింపు (_R)"
 msgid "Display the latest content of the current page"
 msgstr "ప్రస్తుత పుట యొక్క తాజా సారమును ప్రదర్శించు"
 
-#: ../src/ephy-encoding-menu.c:330
+#: ../src/ephy-encoding-menu.c:341
 msgid "_Other…"
 msgstr "ఇతరములు… (_O)"
 
-#: ../src/ephy-encoding-menu.c:331
+#: ../src/ephy-encoding-menu.c:342
 msgid "Other encodings"
 msgstr "ఇతర సంకేత రచనలు"
 
-#: ../src/ephy-encoding-menu.c:337
+#: ../src/ephy-encoding-menu.c:348
 msgid "_Automatic"
 msgstr "స్వయంచాలకం (_A)"
 
-#: ../src/ephy-find-toolbar.c:153
+#: ../src/ephy-find-toolbar.c:168
 msgid "Not found"
 msgstr "దొరకలేదు"
 
-#: ../src/ephy-find-toolbar.c:165
+#: ../src/ephy-find-toolbar.c:180
 msgid "Wrapped"
 msgstr "పొట్లం కట్టబడిన"
 
-#: ../src/ephy-find-toolbar.c:185
+#: ../src/ephy-find-toolbar.c:200
 msgid "Find links:"
 msgstr "జోడింపులు కనిపెట్టు:"
 
-#: ../src/ephy-find-toolbar.c:185
+#: ../src/ephy-find-toolbar.c:200
 msgid "Find:"
 msgstr "కనిపెట్టు:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:459
-#: ../src/ephy-find-toolbar.c:582
+#: ../src/ephy-find-toolbar.c:540 ../src/ephy-find-toolbar.c:663
 msgid "_Case sensitive"
 msgstr "చిన్నాపెద్దా అక్షరంతేడా (_C)"
 
-#: ../src/ephy-find-toolbar.c:565
+#: ../src/ephy-find-toolbar.c:646
 msgid "Find Previous"
 msgstr "మునుపటిది వెతుకు"
 
-#: ../src/ephy-find-toolbar.c:568
+#: ../src/ephy-find-toolbar.c:649
 msgid "Find previous occurrence of the search string"
 msgstr "మునుపటి సంభవము యొక్క పదబంధ వెతికి కనిపెట్టు"
 
-#: ../src/ephy-find-toolbar.c:574
+#: ../src/ephy-find-toolbar.c:655
 msgid "Find Next"
 msgstr "తదుపరిది వెతుకు"
 
-#: ../src/ephy-find-toolbar.c:577
+#: ../src/ephy-find-toolbar.c:658
 msgid "Find next occurrence of the search string"
 msgstr "తరువాతి సంభవము యొక్క పదబంధం వెతికి కనిపెట్టు"
 
-#. exit button
-#: ../src/ephy-fullscreen-popup.c:232
-msgid "Leave Fullscreen"
-msgstr "నిండు తెరను వదిలివెళ్ళు"
-
-#: ../src/ephy-history-window.c:136
+#: ../src/ephy-history-window.c:137
 msgid "Open the selected history link in a new window"
 msgstr "ఎంపిక చేసిన  చారిత్రిక జోడింపును కొత్త గవాక్షంలో తెరువుము"
 
-#: ../src/ephy-history-window.c:139
+#: ../src/ephy-history-window.c:140
 msgid "Open the selected history link in a new tab"
 msgstr "ఎంపిక చేసిన  చారిత్రిక జోడింపును కొత్త నెట్టులో తెరువుము"
 
-#: ../src/ephy-history-window.c:141
+#: ../src/ephy-history-window.c:142
 msgid "Add _Bookmark…"
 msgstr "ఇష్టాంశాన్ని జతచేయి…(_B)"
 
-#: ../src/ephy-history-window.c:142
+#: ../src/ephy-history-window.c:143
 msgid "Bookmark the selected history link"
 msgstr "ఎంపికచేయబడిన చారిత్ర జోడింపును గుర్తించు"
 
-#: ../src/ephy-history-window.c:145
+#: ../src/ephy-history-window.c:146
 msgid "Close the history window"
 msgstr "చారిత్ర కిటికీని మూసివేయి"
 
-#: ../src/ephy-history-window.c:159
+#: ../src/ephy-history-window.c:160
 msgid "Delete the selected history link"
 msgstr "ఎంపిక చేసిన చారిత్రి జోడింపును తొలగించు"
 
-#: ../src/ephy-history-window.c:162
+#: ../src/ephy-history-window.c:163
 msgid "Select all history links or text"
 msgstr "అన్ని చారిత్రక జోడింపులు లేదా పాఠాలను ఎంచుకొనుము"
 
-#: ../src/ephy-history-window.c:164
+#: ../src/ephy-history-window.c:165
 msgid "Clear _History"
 msgstr "చరిత్రను శుభ్రపరచు (_H)"
 
-#: ../src/ephy-history-window.c:165
+#: ../src/ephy-history-window.c:166
 msgid "Clear your browsing history"
 msgstr "అన్వేషణ చరిత్రను శుభ్రపరచు"
 
-#: ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:171
 msgid "Display history help"
 msgstr "చరిత్ర సహాయమును ప్రదర్శించు"
 
-#: ../src/ephy-history-window.c:189
+#: ../src/ephy-history-window.c:190
 msgid "_Address"
 msgstr "చిరునామా (_A)"
 
-#: ../src/ephy-history-window.c:191
+#: ../src/ephy-history-window.c:192
 msgid "_Date and Time"
 msgstr "తేదీ మరియు సమయం (_D)"
 
-#: ../src/ephy-history-window.c:192
+#: ../src/ephy-history-window.c:193
 msgid "Show the date and time column"
 msgstr "తేదీ మరియు సమయం నిలువువరుసను చూపుము"
 
-#: ../src/ephy-history-window.c:220
+#: ../src/ephy-history-window.c:221
 msgid "Clear browsing history?"
 msgstr "విహారణ చరిత్రను శుభ్రపరచాలా?"
 
-#: ../src/ephy-history-window.c:224
-msgid "Clearing the browsing history will cause all history links to be permanently deleted."
-msgstr "విహారణ చరిత్రను శుభ్రపరచినచో చారిత్రక జోడింపులన్నీ శాశ్వతముగా  తొలగించబడును."
+#: ../src/ephy-history-window.c:225
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
+msgstr ""
+"విహారణ చరిత్రను శుభ్రపరచినచో చారిత్రక జోడింపులన్నీ శాశ్వతముగా  తొలగించబడును."
 
-#: ../src/ephy-history-window.c:239
+#: ../src/ephy-history-window.c:240
 msgid "Clear History"
 msgstr "చరిత్రను శుభ్రపరచు"
 
-#: ../src/ephy-history-window.c:809
+#: ../src/ephy-history-window.c:810
 msgid "Last 30 minutes"
 msgstr "చివరి ౩౦ నిమిషములు"
 
-#: ../src/ephy-history-window.c:810
+#: ../src/ephy-history-window.c:811
 msgid "Today"
 msgstr "నేడు"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:812
-#: ../src/ephy-history-window.c:816
-#: ../src/ephy-history-window.c:822
+#: ../src/ephy-history-window.c:813 ../src/ephy-history-window.c:817
+#: ../src/ephy-history-window.c:823
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "గత %d రోజు"
 msgstr[1] "గత %d రోజులు"
 
-#: ../src/ephy-history-window.c:826
+#: ../src/ephy-history-window.c:827
 msgid "All history"
 msgstr "మొత్తం చరిత్ర"
 
-#: ../src/ephy-history-window.c:1123
+#: ../src/ephy-history-window.c:1128
 msgid "History"
 msgstr "చరిత్ర"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:84
 msgid "Open a new tab in an existing browser window"
 msgstr "ఇప్పటికికలిగివున్న అన్వేషి గవాక్షంలో కొత్త నెట్టును తెరువుము"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:86
 msgid "Open a new browser window"
 msgstr "ఒక కొత్త విహారక కిటికీని తెరువు"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:88
 msgid "Launch the bookmarks editor"
 msgstr "గుర్తింపులను సరిచేయు సరిచేయునది ప్రయోగించు"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:90
 msgid "Import bookmarks from the given file"
 msgstr "పేర్కొన్న ఫైలు నుండి ఇష్టాంశాలను దిగుమతి చేయు"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+msgid "FILE"
+msgstr "ఫైల్"
+
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "పేర్కొన్న సమకూర్పులోని ఫైలు నింపుము"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "ఇష్టాంశాన్ని జతచేయి"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "యుఆర్ఎల్"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr "గోప్య దృష్టాంతాన్ని తెరువు"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:98
 msgid "Start the browser in application mode"
 msgstr "విహారకాన్ని అనువర్తన విధములో ప్రారంభించు"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:100
 msgid "Profile directory to use in the private instance"
 msgstr "గోప్య దృష్టాంతములో నందు వుపయోగించుటకు ప్రొఫైల్ డైరెక్టరీ"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:100
 msgid "DIR"
 msgstr "డి ఐ ఆర్"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:102
 msgid "URL …"
 msgstr "యు ఆర్ ఎల్ …"
 
-#: ../src/ephy-main.c:208
+#: ../src/ephy-main.c:210
 msgid "Could not start Web"
 msgstr "జాలాన్ని ప్రారంభించుట వీలుకాదు"
 
-#: ../src/ephy-main.c:211
+#: ../src/ephy-main.c:213
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -1758,386 +2235,368 @@ msgstr ""
 "ఈ క్రింది దోషము కారణంగా ప్రారంభం విఫలమైంది:\n"
 "%s"
 
-#: ../src/ephy-main.c:322
+#: ../src/ephy-main.c:325
 msgid "Web options"
 msgstr "జాల ఐచ్ఛికాలు"
 
-#: ../src/ephy-notebook.c:592
+#: ../src/ephy-notebook.c:595
 msgid "Close tab"
 msgstr "నెట్టు మూసివేయి"
 
-#: ../src/ephy-session.c:115
-#, c-format
-msgid "Downloads will be aborted and logout proceed in %d second."
-msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
-msgstr[0] "డౌనులోడులు అర్దాంతరంగా ఆపబడతాయి మరియు లాగ్అవుట్ %d సెకనులో ప్రారంభించబడుతుంది."
-msgstr[1] "డౌనులోడులు అర్దాంతరంగా ఆపబడతాయి మరియు లాగ్అవుట్ %d సెకనులలో ప్రారంభించబడుతుంది."
-
-#: ../src/ephy-session.c:219
-msgid "Abort pending downloads?"
-msgstr "పెండింగులో ఉన్న దిగుమతులు అర్థాంతరంగా ఆపివేయాలా?"
-
-#: ../src/ephy-session.c:224
-msgid "There are still downloads pending. If you log out, they will be aborted and lost."
-msgstr "అక్కడ డౌనులోడులు యింకా వాయిదాలోవున్నాయి. మీరు లాగ్అవుట్ అయితే, అవి అర్దాంతరముగా నిలిపివేయబడతాయి మరియు కోల్పోతాయి."
-
-#: ../src/ephy-session.c:228
-msgid "_Cancel Logout"
-msgstr "నిష్క్రమణను రద్దుచేయి (_C)"
-
-#: ../src/ephy-session.c:230
-msgid "_Abort Downloads"
-msgstr "దిగుమతులు అర్థాంతరంగా ఆపు (_A)"
-
-#: ../src/ephy-session.c:770
-msgid "_Don't recover"
-msgstr "తిరిగి కోలుకోవద్దు (_D)"
-
-#: ../src/ephy-session.c:775
-msgid "_Recover session"
-msgstr "చర్యాకాలాన్ని కోలుకొను (_R)"
-
-#: ../src/ephy-session.c:780
-msgid "Do you want to recover the previous browser windows and tabs?"
-msgstr "మునుపటి అన్వేషి విండోలు మరియు నెట్టులను తిరిగి స్వాధీనపరచుకోవాలని అనుకుంటున్నావా?"
-
-#: ../src/ephy-window.c:91
+#: ../src/ephy-window.c:97
 msgid "_Extensions"
 msgstr "పొడగింతలు (_E)"
 
 #. File actions.
-#: ../src/ephy-window.c:95
+#: ../src/ephy-window.c:101
 msgid "_Open…"
 msgstr "తెరువు…(_O)"
 
-#: ../src/ephy-window.c:97
+#: ../src/ephy-window.c:103
 msgid "Save _As…"
 msgstr "ఇలా భద్రపరుచు…(_A)"
 
-#: ../src/ephy-window.c:99
+#: ../src/ephy-window.c:105
 msgid "Save As _Web Application…"
 msgstr "జాల అనువర్తనముగా భద్రపరుచు…(_W)"
 
-#: ../src/ephy-window.c:101
+#: ../src/ephy-window.c:107
 msgid "_Print…"
 msgstr "ముద్రించు...(_P)"
 
-#: ../src/ephy-window.c:103
+#: ../src/ephy-window.c:109
 msgid "S_end Link by Email…"
 msgstr "జోడిని ఈ-తపాలా ద్వారా పంపు…(_e)"
 
 #. Edit actions.
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:116
 msgid "_Undo"
 msgstr "చేసింది రద్దుచేయి (_U)"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:118
 msgid "Re_do"
 msgstr "మరలా చేయు (_d)"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:130
 msgid "_Find…"
 msgstr "కనిపెట్టు... (_F)"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:132
 msgid "Find Ne_xt"
 msgstr "తర్వాతది వెతుకు (_x)"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:134
 msgid "Find Pre_vious"
 msgstr "ముందుది వెతుకు (_v)"
 
 #. View actions.
-#: ../src/ephy-window.c:133
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:139 ../src/ephy-window.c:141
 msgid "_Stop"
 msgstr "ఆపివేయి (_S)"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:145
 msgid "_Larger Text"
 msgstr "పెద్ద పాఠ్యం (_L)"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:147
 msgid "S_maller Text"
 msgstr "చిన్న పాఠ్యం (_m)"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:149
 msgid "_Normal Size"
 msgstr "సహజ పరిమాణం (_N)"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:151
 msgid "Text _Encoding"
 msgstr "పాఠ్య సంకేత రచన (_E)"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:152
 msgid "_Page Source"
 msgstr " పుట మూలము (_P)"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:157
 msgid "_Add Bookmark…"
 msgstr "ఇష్టాంశాన్ని జతచేయి…(_A)"
 
 #. Go actions.
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:162
 msgid "_Location…"
 msgstr "స్థానం... (_L)"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:167
 msgid "_Previous Tab"
 msgstr "మునుపటి నెట్టు (_P)"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:169
 msgid "_Next Tab"
 msgstr "తదుపరి నెట్టు (_N)"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:171
 msgid "Move Tab _Left"
 msgstr "నెట్టును ఎడమవైపు జరుపు (_L)"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:173
 msgid "Move Tab _Right"
 msgstr "నెట్టును కుడివైపుకు జరుపుము (_R)"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:175
 msgid "_Detach Tab"
 msgstr "నెట్టును వేరుచేయి (_D)"
 
 #. File actions.
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:183
 msgid "_Work Offline"
 msgstr "ఆఫ్‌లైనులో పనిచేయి (_W)"
 
 #. View actions.
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:188
 msgid "_Downloads Bar"
 msgstr "దిగుమతుల పట్టీ (_D)"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:191
 msgid "_Fullscreen"
 msgstr "నిండు తెర (_F)"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:193
 msgid "Popup _Windows"
 msgstr "ప్రత్యక్షమయ్యే కిటికీలు (_W)"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:195
 msgid "Selection Caret"
 msgstr "ఎంపికచేయు హంసపాదు"
 
 #. Document.
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:202
 msgid "Add Boo_kmark…"
 msgstr "ఇష్టాంశాలను జతచేయి…(_k)"
 
 #. Links.
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:207
 msgid "_Open Link"
 msgstr "జోడి తెరువుము (_O)"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:209
 msgid "Open Link in New _Window"
 msgstr "లింకుని కొత్త కిటికీలో తెరువు (_W)"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:211
 msgid "Open Link in New _Tab"
 msgstr "లింకుని కొత్త నెట్టులో తెరువు (_T)"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:213
 msgid "_Download Link"
 msgstr "దిగుమతి లింకు (_D)"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:215
 msgid "_Save Link As…"
 msgstr "లింకుని ఇలా భద్రపరుచు…(_S)"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:217
 msgid "_Bookmark Link…"
 msgstr "ఇష్టాంశపు లింకు…(_B)"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:219
 msgid "_Copy Link Address"
 msgstr "లింకు చిరునామాను నకలుతీయు (_C)"
 
 #. Images.
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:224
 msgid "Open _Image"
 msgstr "బొమ్మని తెరువు (_I)"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:226
 msgid "_Save Image As…"
 msgstr "బొమ్మని ఇలా భద్రపరుచు…(_S)"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:228
 msgid "_Use Image As Background"
 msgstr "బొమ్మని నేపథ్యం వలె వాడు (_U)"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:230
 msgid "Copy I_mage Address"
 msgstr "బొమ్మ చిరునామాను నకలుతీయి (_m)"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:232
 msgid "St_art Animation"
 msgstr "చిత్రచాలనాన్ని ప్రారంభించు (_a)"
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:234
 msgid "St_op Animation"
 msgstr "చిత్రచాలనాన్ని ఆపివేయి (_o)"
 
 #. Inspector.
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:250
 msgid "Inspect _Element"
 msgstr "వస్తువు చూచుట(_E)"
 
-#: ../src/ephy-window.c:449
+#: ../src/ephy-window.c:456
 msgid "There are unsubmitted changes to form elements"
 msgstr "అక్కడ ఫారము మూలకములకు అప్పగించనటువంటి మార్పులు వున్నాయి"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:457
 msgid "If you close the document anyway, you will lose that information."
-msgstr "ఒకవేళ నీవు పత్రమును ఏవిధంగానైనా మూసివేసినచో, నీవు ఆ సమాచారాన్ని కోల్పోతావు."
+msgstr ""
+"ఒకవేళ నీవు పత్రమును ఏవిధంగానైనా మూసివేసినచో, నీవు ఆ సమాచారాన్ని కోల్పోతావు."
 
-#: ../src/ephy-window.c:452
+#: ../src/ephy-window.c:459
 msgid "Close _Document"
 msgstr "పత్రమును మూసివేయి (_D)"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:477
 msgid "There are ongoing downloads in this window"
 msgstr "స్వీకరణలు జరుగుచున్నవి "
 
-#: ../src/ephy-window.c:471
+#: ../src/ephy-window.c:478
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "ఒకవేళ మీరు ఈ కిటికీని మూసినట్టయితే , దిగుమతులు రద్దుచేయబడతాయి"
 
-#: ../src/ephy-window.c:472
+#: ../src/ephy-window.c:479
 msgid "Close window and cancel downloads"
 msgstr "కిటికీని ముసివేసి, దిగుమతులను రద్దుచేయి"
 
-#: ../src/ephy-window.c:1285
+#: ../src/ephy-window.c:1370
 msgid "Save As"
 msgstr "ఇలా భద్రపరుచు"
 
-#: ../src/ephy-window.c:1287
+#: ../src/ephy-window.c:1372
 msgid "Save As Application"
 msgstr "అనువర్తనములుగా భద్రపరుచు"
 
-#: ../src/ephy-window.c:1289
+#: ../src/ephy-window.c:1374
 msgid "Print"
 msgstr "ముద్రించు"
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1376
 msgid "Bookmark"
 msgstr "ఇష్టాంశం"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1378
 msgid "Find"
 msgstr "వెతుకు"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1302
+#: ../src/ephy-window.c:1387
 msgid "Larger"
 msgstr "పెద్దది"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1305
+#: ../src/ephy-window.c:1390
 msgid "Smaller"
 msgstr "చిన్నది"
 
-#: ../src/ephy-window.c:1325
+#: ../src/ephy-window.c:1410
 msgid "Back"
 msgstr "వెనక్కి"
 
-#: ../src/ephy-window.c:1337
+#: ../src/ephy-window.c:1422
 msgid "Forward"
 msgstr "ముందుకు"
 
-#: ../src/ephy-window.c:1349
+#: ../src/ephy-window.c:1434
 msgid "Zoom"
 msgstr "జూమ్"
 
-#: ../src/ephy-window.c:1357
+#: ../src/ephy-window.c:1442
 msgid "New _Tab"
 msgstr "కొత్త నెట్టు (_T)"
 
-#: ../src/pdm-dialog.c:333
+#: ../src/ephy-window.c:1450
+#| msgid "Go to the next visited page"
+msgid "Go to most visited"
+msgstr "ఎక్కువగా సందర్శించన వాటికి వెళ్లు"
+
+#: ../src/pdm-dialog.c:361
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>మీరు శుభ్రపరచాలని అనుకొనుచున్న వ్యక్తిగత డాటాను ఎంపికచేయి</b>"
 
-#: ../src/pdm-dialog.c:336
-msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
-msgstr "మీరు దర్శించినటువంటి వెబ్‌పేజీల గురించి నిల్వవున్న వ్యక్తిగత డాటాను మీరు శుభ్రపరచబోతున్నారు. ఉపక్రమించుటకు ముందుగా, మీరు తీసివేద్దామని అనుకొనుచున్న సమాచారపు రకాన్ని గుర్తుంచుము:"
+#: ../src/pdm-dialog.c:364
+msgid ""
+"You are about to clear personal data that is stored about the web pages you "
+"have visited. Before proceeding, check the types of information that you "
+"want to remove:"
+msgstr ""
+"మీరు దర్శించినటువంటి వెబ్‌పేజీల గురించి నిల్వవున్న వ్యక్తిగత డాటాను మీరు "
+"శుభ్రపరచబోతున్నారు. "
+"ఉపక్రమించుటకు ముందుగా, మీరు తీసివేద్దామని అనుకొనుచున్న సమాచారపు రకాన్ని "
+"గుర్తుంచుము:"
 
-#: ../src/pdm-dialog.c:341
+#: ../src/pdm-dialog.c:369
 msgid "Clear All Personal Data"
 msgstr "వ్యక్తిగత డాటా అంతటినీ శుభ్రముచేయి"
 
 #. Cookies
-#: ../src/pdm-dialog.c:375
+#: ../src/pdm-dialog.c:403
 msgid "C_ookies"
 msgstr "కుకీస్ (_o)"
 
 #. Passwords
-#: ../src/pdm-dialog.c:387
+#: ../src/pdm-dialog.c:415
 msgid "Saved _passwords"
 msgstr "దాచిన సంకేతపదములు (_p)"
 
 #. History
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:427
 msgid "Hi_story"
 msgstr "చరిత్ర (_s)"
 
 #. Cache
-#: ../src/pdm-dialog.c:411
+#: ../src/pdm-dialog.c:439
 msgid "_Temporary files"
 msgstr "తాత్కాలిక ఫైళ్ళు (_T)"
 
-#: ../src/pdm-dialog.c:427
-msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
-msgstr "<small><i><b>గమనిక:</b> ఈ చర్యను మీరు రద్దుచేయ లేరు. మీరు శుభ్రముచేయుటకు యెంచుకొనుచున్న డాటా శాశ్వతంగా తొలగించబడుతుంది.</i></small>"
+#: ../src/pdm-dialog.c:455
+msgid ""
+"<small><i><b>Note:</b> You cannot undo this action. The data you are "
+"choosing to clear will be deleted forever.</i></small>"
+msgstr ""
+"<small><i><b>గమనిక:</b> ఈ చర్యను మీరు రద్దుచేయ లేరు. మీరు శుభ్రముచేయుటకు "
+"యెంచుకొనుచున్న "
+"డాటా శాశ్వతంగా తొలగించబడుతుంది.</i></small>"
 
-#: ../src/pdm-dialog.c:646
+#: ../src/pdm-dialog.c:678
 msgid "Encrypted connections only"
 msgstr "రహస్యపరచిన అనుసంధానాలు మాత్రమే"
 
-#: ../src/pdm-dialog.c:647
+#: ../src/pdm-dialog.c:679
 msgid "Any type of connection"
 msgstr "ఏ రకమైన బంధమైనా"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:652
+#: ../src/pdm-dialog.c:684
 msgid "End of current session"
 msgstr "ప్రస్తుత సమకూర్పుకు అంతం"
 
-#: ../src/pdm-dialog.c:771
+#: ../src/pdm-dialog.c:806
 msgid "Domain"
 msgstr "అధికార క్షేత్రం"
 
-#: ../src/pdm-dialog.c:783
+#: ../src/pdm-dialog.c:818
 msgid "Name"
 msgstr "పేరు"
 
-#: ../src/pdm-dialog.c:1197
+#: ../src/pdm-dialog.c:1314
 msgid "Host"
 msgstr "అతిథ్యం"
 
-#: ../src/pdm-dialog.c:1210
+#: ../src/pdm-dialog.c:1327
 msgid "User Name"
 msgstr "వాడుకరి పేరు"
 
-#: ../src/pdm-dialog.c:1223
+#: ../src/pdm-dialog.c:1340
 msgid "User Password"
 msgstr "వాడుకరి సంకేతపదం"
 
-#: ../src/popup-commands.c:279
+#: ../src/popup-commands.c:282
 msgid "Download Link"
 msgstr "దిగుమతి లింకు"
 
-#: ../src/popup-commands.c:287
+#: ../src/popup-commands.c:290
 msgid "Save Link As"
 msgstr "జోడిని ఇలా దాచు"
 
-#: ../src/popup-commands.c:294
+#: ../src/popup-commands.c:297
 msgid "Save Image As"
 msgstr "బొమ్మని ఇలా భద్రపరుచు"
 
@@ -2145,8 +2604,7 @@ msgstr "బొమ్మని ఇలా భద్రపరుచు"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:467
-#: ../src/prefs-dialog.c:473
+#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2155,97 +2613,124 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:489
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "వినియోగదారి నిర్వచించిన (%s)"
 
-#: ../src/prefs-dialog.c:504
+#: ../src/prefs-dialog.c:511
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "వ్యవస్థ భాష (%s)"
 msgstr[1] "వ్యవస్థ భాషలు (%s)"
 
-#: ../src/prefs-dialog.c:862
+#: ../src/prefs-dialog.c:869
 msgid "Select a Directory"
 msgstr "వివరమును ఎంచుకొనుము"
 
-#: ../src/window-commands.c:316
+#: ../src/window-commands.c:346
 msgid "Save"
 msgstr "భద్రపరుచు"
 
-#: ../src/window-commands.c:479
+#: ../src/window-commands.c:553
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "'%s' అనే వెబ్ ఉపయోగం ఇప్పటికే ఉంది. మీరు స్థానంలో అనుకుంటున్నారా"
 
-#: ../src/window-commands.c:484
+#: ../src/window-commands.c:558
 msgid "Replace"
 msgstr "ప్రతిస్థాపించు"
 
-#: ../src/window-commands.c:488
-msgid "An application with the same name already exists. Replacing it will overwrite it."
-msgstr "ఈ అనువర్తనంనామము ఇది వరకే కలిగి వుంది మరియు దాన్ని చెరిపిరాయుటవలన తిరిగిరాస్తుం ది ."
+#: ../src/window-commands.c:562
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"ఈ అనువర్తనంనామము ఇది వరకే కలిగి వుంది మరియు దాన్ని చెరిపిరాయుటవలన "
+"తిరిగిరాస్తుం ది ."
 
-#: ../src/window-commands.c:530
+#: ../src/window-commands.c:598
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "ఈ '%s'అనువర్తనము పనిచెయుటకు  సిద్ధం గా ఉన్నది "
 
-#: ../src/window-commands.c:533
+#: ../src/window-commands.c:601
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "'%s' అనువర్తనమును తయారు చెయ్యలేము  "
 
-#: ../src/window-commands.c:541
+#: ../src/window-commands.c:609
 msgid "Launch"
 msgstr "ప్రారంభించు"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:574
+#: ../src/window-commands.c:642
 msgid "Create Web Application"
 msgstr "జాల అనువర్తనం సృష్టించండి"
 
-#: ../src/window-commands.c:579
+#: ../src/window-commands.c:647
 msgid "C_reate"
 msgstr "సృష్టించు (_r)"
 
-#: ../src/window-commands.c:1115
-msgid "Web is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
-msgstr "జాలం అనేది ఉచిత సాఫ్టువేర్; ఫ్రీ సాఫ్టువేర్ సంస్థ తరుపున ప్రచురితమైన గ్నూ జనరల్ పబ్లిక్ లైసెన్సుకు లోబడి దీనిని మీరు పునఃపంపిణి మరియు/లేదా సవరణ చేయవచ్చు; మీరు అనుసరించవలిసినది లైసెన్సు యొక్క వర్షన్ 2, లేదా(మీ ఐచ్చికం వద్ద) దాని తరువాతి వర్షన్ కాని."
+#: ../src/window-commands.c:1238
+msgid ""
+"Web is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"జాలం అనేది ఉచిత సాఫ్టువేర్; ఫ్రీ సాఫ్టువేర్ సంస్థ తరుపున ప్రచురితమైన గ్నూ "
+"జనరల్ పబ్లిక్ లైసెన్సుకు లోబడి "
+"దీనిని మీరు పునఃపంపిణి మరియు/లేదా సవరణ చేయవచ్చు; మీరు అనుసరించవలిసినది "
+"లైసెన్సు యొక్క వర్షన్ 2, లేదా"
+"(మీ ఐచ్చికం వద్ద) దాని తరువాతి వర్షన్ కాని."
 
-#: ../src/window-commands.c:1119
-msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
-msgstr "గ్నోమ్ జాల విహారకం ఉపయోగపడుతుందనే నమ్మకంతో పంపిణీ చేయబడింది,అయితే ఏ హామి లేదు; వ్యాపారసంబంధితంగా కాని లేదా ప్రతిపాదిత ప్రయోజనం కొరకుకాని హామీ లేదు. అధికవివరములకొరకు గ్నూ జనరల్ పబ్లిక్ లైసెన్సును చూడండి."
+#: ../src/window-commands.c:1242
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"గ్నోమ్ జాల విహారకం ఉపయోగపడుతుందనే నమ్మకంతో పంపిణీ చేయబడింది,అయితే ఏ హామి "
+"లేదు; వ్యాపారసంబంధితంగా కాని "
+"లేదా ప్రతిపాదిత ప్రయోజనం కొరకుకాని హామీ లేదు. అధికవివరములకొరకు గ్నూ జనరల్ "
+"పబ్లిక్ లైసెన్సును చూడండి."
 
-#: ../src/window-commands.c:1123
-msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr "గ్నోమ్ జాల విహారకంతో గ్నూ జనరల్ పబ్లిక్ లైసెన్సు నకలును పొంది ఉంటారు; ఒకవేళ పొందకపోతే, Free Software Foundation, Inc., 51 Franklin Street, FifthFloor, Boston. MA02110-1301, USA కు వ్రాయండి."
+#: ../src/window-commands.c:1246
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
+msgstr ""
+"గ్నోమ్ జాల విహారకంతో గ్నూ జనరల్ పబ్లిక్ లైసెన్సు నకలును పొంది ఉంటారు; ఒకవేళ "
+"పొందకపోతే, Free "
+"Software Foundation, Inc., 51 Franklin Street, FifthFloor, Boston. "
+"MA02110-1301, USA కు వ్రాయండి."
 
-#: ../src/window-commands.c:1169
-#: ../src/window-commands.c:1185
-#: ../src/window-commands.c:1196
+#: ../src/window-commands.c:1292 ../src/window-commands.c:1308
+#: ../src/window-commands.c:1319
 msgid "Contact us at:"
 msgstr "మమ్ములను సంప్రదించండి:"
 
-#: ../src/window-commands.c:1172
+#: ../src/window-commands.c:1295
 msgid "Contributors:"
 msgstr "సహాయకులు:"
 
-#: ../src/window-commands.c:1175
+#: ../src/window-commands.c:1298
 msgid "Past developers:"
 msgstr "గత అభివృద్ధికారులు:"
 
-#: ../src/window-commands.c:1205
+#: ../src/window-commands.c:1329 ../src/window-commands.c:1335
 #, c-format
 msgid ""
-"Lets you view web pages and find information on the internet.\n"
+"A simple, clean, beautiful view of the web.\n"
 "Powered by WebKit %d.%d.%d"
 msgstr ""
-"అంతర్జాలంలోని వెబ్ పేజీలను మరియు సమాచారమును సందర్శించనిస్తుంది.\n"
-"వెబ్‌కిట్ %d.%d.%d సౌజన్యంతో శక్తివంతమైనది"
+"సులువైన, తేటైన, అందమైన వెబ్ దర్శనం.\n"
+"సంపాదకులు వెబ్‌కిట్ %d.%d.%d"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -2255,28 +2740,98 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1234
+#: ../src/window-commands.c:1365
 msgid "translator-credits"
 msgstr ""
 "Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Pramod <pramodfsf@gmail.com>\n"
 "Praveen Illa <mail2ipn@gmail.com>, 2011-12"
 
-#: ../src/window-commands.c:1237
+#: ../src/window-commands.c:1368
 msgid "Web Website"
 msgstr "జాల జాలస్థలం"
 
-#: ../src/window-commands.c:1379
+#: ../src/window-commands.c:1508
 msgid "Enable caret browsing mode?"
 msgstr "కారెట్ విహారణ రీతిని చేతనపరచాలా?"
 
-#: ../src/window-commands.c:1382
-msgid "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, allowing you to move around with your keyboard. Do you want to enable caret browsing on?"
-msgstr "F7 నొక్కడం caret ఆన్ లేదా ఆఫ్ బ్రౌజింగ్ చేస్తుంది. ఈ ఫీచర్ ఒక moveable ప్రదేశాలుమీరు మీ కీబోర్డు తో చుట్టూ తరలించడానికి అనుమతిస్తూ వెబ్ పేజీలలో కర్సర్,. మీరుcaret న బ్రౌజింగ్ను ప్రారంభించు అనుకుంటున్నారా?"
+#: ../src/window-commands.c:1511
+msgid ""
+"Pressing F7 turns caret browsing on or off. This feature places a moveable "
+"cursor in web pages, allowing you to move around with your keyboard. Do you "
+"want to enable caret browsing on?"
+msgstr ""
+"F7 నొక్కడం caret ఆన్ లేదా ఆఫ్ బ్రౌజింగ్ చేస్తుంది. ఈ ఫీచర్ ఒక moveable "
+"ప్రదేశాలుమీరు మీ కీబోర్డు తో "
+"చుట్టూ తరలించడానికి అనుమతిస్తూ వెబ్ పేజీలలో కర్సర్,. మీరుcaret న బ్రౌజింగ్ను "
+"ప్రారంభించు "
+"అనుకుంటున్నారా?"
 
-#: ../src/window-commands.c:1385
+#: ../src/window-commands.c:1514
 msgid "_Enable"
 msgstr "చేతనపరుచు (_E)"
+
+#~ msgctxt "file type"
+#~ msgid "Unknown"
+#~ msgstr "తెలియదు"
+
+#~ msgid "Disable connection to session manager"
+#~ msgstr "సెషన్ నిర్వాహికకు అనుసంధానమును అచేతనముచేయి"
+
+#~ msgid "Specify file containing saved configuration"
+#~ msgstr "దాచిన ఆకృతీకరణ కలిగిన ఫైలును తెలుపండి"
+
+#~ msgid "Specify session management ID"
+#~ msgstr "సెషన్ నిర్వాహిక IDను తెలుపండి"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Session management options:"
+#~ msgstr "సెషన్ నిర్వాహిక ఐచ్చికములు:"
+
+#~ msgid "Show session management options"
+#~ msgstr "సెషన్ నిర్వాహిక ఐచ్చికములను చూపుము"
+
+#~ msgid "Leave Fullscreen"
+#~ msgstr "నిండు తెరను వదిలివెళ్ళు"
+
+#~ msgid "Downloads will be aborted and logout proceed in %d second."
+#~ msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+#~ msgstr[0] "డౌనులోడులు అర్దాంతరంగా ఆపబడతాయి మరియు లాగ్అవుట్ %d సెకనులో ప్రారంభించబడుతుంది."
+#~ msgstr[1] "డౌనులోడులు అర్దాంతరంగా ఆపబడతాయి మరియు లాగ్అవుట్ %d సెకనులలో ప్రారంభించబడుతుంది."
+
+#~ msgid "Abort pending downloads?"
+#~ msgstr "పెండింగులో ఉన్న దిగుమతులు అర్థాంతరంగా ఆపివేయాలా?"
+
+#~ msgid ""
+#~ "There are still downloads pending. If you log out, they will be aborted "
+#~ "and lost."
+#~ msgstr ""
+#~ "అక్కడ డౌనులోడులు యింకా వాయిదాలోవున్నాయి. మీరు లాగ్అవుట్ అయితే, అవి అర్దాంతరముగా నిలిపివేయబడతాయి మరియు "
+#~ "కోల్పోతాయి."
+
+#~ msgid "_Cancel Logout"
+#~ msgstr "నిష్క్రమణను రద్దుచేయి (_C)"
+
+#~ msgid "_Abort Downloads"
+#~ msgstr "దిగుమతులు అర్థాంతరంగా ఆపు (_A)"
+
+#~ msgid "_Don't recover"
+#~ msgstr "తిరిగి కోలుకోవద్దు (_D)"
+
+#~ msgid "_Recover session"
+#~ msgstr "చర్యాకాలాన్ని కోలుకొను (_R)"
+
+#~ msgid "Do you want to recover the previous browser windows and tabs?"
+#~ msgstr "మునుపటి అన్వేషి విండోలు మరియు నెట్టులను తిరిగి స్వాధీనపరచుకోవాలని అనుకుంటున్నావా?"
+
+#~ msgid ""
+#~ "Lets you view web pages and find information on the internet.\n"
+#~ "Powered by WebKit %d.%d.%d"
+#~ msgstr ""
+#~ "అంతర్జాలంలోని వెబ్ పేజీలను మరియు సమాచారమును సందర్శించనిస్తుంది.\n"
+#~ "వెబ్‌కిట్ %d.%d.%d సౌజన్యంతో శక్తివంతమైనది"
 
 #~ msgid "All"
 #~ msgstr "అన్నీ"
@@ -2295,10 +2850,6 @@ msgstr "చేతనపరుచు (_E)"
 
 #~ msgid "Update Bookmark?"
 #~ msgstr "ఇష్టాంశాన్ని నవీకరించాలా?"
-#~ msgctxt "bookmarks"
-
-#~ msgid "Most Visited"
-#~ msgstr "ఎక్కువగా సందర్శించినవి"
 
 #~ msgid "Browse and organize your bookmarks"
 #~ msgstr "మీ ఇష్టాంశాలను విహరించి నిర్వహించండి"
@@ -2311,9 +2862,6 @@ msgstr "చేతనపరుచు (_E)"
 
 #~ msgid "Epiphany"
 #~ msgstr "ఎపిఫని"
-
-#~ msgid "Certificate _Fields"
-#~ msgstr "ధృవీకరణపత్రము క్షేత్రాలు (_F)"
 
 #~ msgid "Certificate _Hierarchy"
 #~ msgstr "ధృవీకరణ పత్రముపారంపర్యం (_H)"
@@ -2442,9 +2990,6 @@ msgstr "చేతనపరుచు (_E)"
 #~ msgid "T_ools"
 #~ msgstr "పనిముట్లు (_o)"
 
-#~ msgid "_Toolbars"
-#~ msgstr "పనిముట్ల పట్టీలు (_T)"
-
 #~ msgid "Open a file"
 #~ msgstr "ఫైలును తెరువు"
 
@@ -2571,9 +3116,6 @@ msgstr "చేతనపరుచు (_E)"
 #~ msgid "Show the active downloads for this window"
 #~ msgstr "ఈ కిటికీలో క్రియాశీల దిగుమతులు చూపించు"
 
-#~ msgid "Browse at full screen"
-#~ msgstr "నిండుతెర వద్ద విహరించు"
-
 #~ msgid "Show or hide unrequested popup windows from this site"
 #~ msgstr "ఈ ప్రదేశం నుండి కోరబడని ప్రత్యక్షమయ్యే కిటికీలను చూపించు లేక భద్రపరుచు"
 
@@ -2603,9 +3145,6 @@ msgstr "చేతనపరుచు (_E)"
 
 #~ msgid "Go to the previous visited page"
 #~ msgstr "ముందు దర్శించిన పుటకు వెళ్ళుము"
-
-#~ msgid "Go to the next visited page"
-#~ msgstr "తరువాత సందర్శించిన పుటకు వెళ్ళు"
 
 #~ msgid "Enter a web address to open, or a phrase to search for"
 #~ msgstr "తెరుచుటకు, లేదా పదాలనుగాని వెతుకుటకు కొరకు జాల చిరునామాను ప్రవేశపెట్టు"
@@ -2757,24 +3296,24 @@ msgstr "చేతనపరుచు (_E)"
 
 #~ msgid "Go to the address entered in the address entry"
 #~ msgstr "చిరునామా ప్రవేశములో ప్రవేశపెట్టిన చిరునామాకు వెళ్ళు"
-#~ msgctxt "toolbar style"
 
+#~ msgctxt "toolbar style"
 #~ msgid "Default"
 #~ msgstr "అప్రమేయం"
-#~ msgctxt "toolbar style"
 
+#~ msgctxt "toolbar style"
 #~ msgid "Text below icons"
 #~ msgstr "ప్రతిమల క్రిందని పాఠ్యము"
-#~ msgctxt "toolbar style"
 
+#~ msgctxt "toolbar style"
 #~ msgid "Text beside icons"
 #~ msgstr "ప్రతిమల ప్రక్కని పాఠ్యము"
-#~ msgctxt "toolbar style"
 
+#~ msgctxt "toolbar style"
 #~ msgid "Icons only"
 #~ msgstr "ప్రతిమలు మాత్రమే"
-#~ msgctxt "toolbar style"
 
+#~ msgctxt "toolbar style"
 #~ msgid "Text only"
 #~ msgstr "పాఠ్యము మాత్రమే"
 
@@ -2873,9 +3412,6 @@ msgstr "చేతనపరుచు (_E)"
 #~ msgid "Epiphany cannot quit"
 #~ msgstr "ఎపిఫని త్యజించలేవు"
 
-#~ msgid "Hide menubar by default"
-#~ msgstr "అప్రమేయము ద్వారా జాబితా పట్టీని దాచుము"
-
 #~ msgid "Hide the menubar by default."
 #~ msgstr "మెనూబార్‌ను అప్రమేయంగా మరుగునవుంచుము."
 
@@ -2891,33 +3427,8 @@ msgstr "చేతనపరుచు (_E)"
 #~ msgid "Address of the user's home page."
 #~ msgstr "వినియోగదారుల చిరునామా నివాస పుట."
 
-#~ msgid "Allow popups"
-#~ msgstr "ప్రత్యక్షమవుటను అనుమతించు"
-
-#~ msgid ""
-#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
-#~ "enabled)."
-#~ msgstr ""
-#~ "జావాస్క్రిప్టు వుపయోగిస్తూ (ఒకవేళ జావాస్క్రిప్టు చేతనమైవుంటే) సైటులు కొత్త విండోలను తెరుచుటకు "
-#~ "అనుమతించుము."
-
 #~ msgid "Always show the tab bar"
 #~ msgstr "నెట్టు పట్టీని ఎల్లప్పుడు చూపుము"
-
-#~ msgid "Automatic downloads"
-#~ msgstr "స్వయంచాలక దిగుమతులు"
-
-#~ msgid "Automatically manage offline status with NetworkManager"
-#~ msgstr "అల్లిక అభికర్త తో లైనువెలుపల సుస్థితిని స్వయంచాలకము గా పర్యవేక్షించు"
-
-#~ msgid "Browse with caret"
-#~ msgstr "హంస పాదు తో అన్వేషించు"
-
-#~ msgid "Cookie accept"
-#~ msgstr "కుకి అనుమతించు"
-
-#~ msgid "Default encoding"
-#~ msgstr "అప్రమేయ సంకేతరచన"
 
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
@@ -2964,41 +3475,8 @@ msgstr "చేతనపరుచు (_E)"
 #~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 #~ msgstr "అప్రమేయ అక్షరశైలి పద్దతి. సాధ్యమైన విలువలు \"serif\" మరియు \"sans-serif\"."
 
-#~ msgid "Enable JavaScript"
-#~ msgstr "జావా లిపి ఉపయోగించు"
-
 #~ msgid "Enable Web Inspector"
 #~ msgstr "వెబ్ యిన్‌స్పెక్టర్‌ను చేతనముచేయి"
-
-#~ msgid "Enable smooth scrolling"
-#~ msgstr "మృదువుగా జరుపుటను ఉపయోగించు"
-
-#~ msgid ""
-#~ "Force new window requests to be opened in tabs instead of using a new "
-#~ "window."
-#~ msgstr ""
-#~ "కొత్త విండో తెరువలసివచ్చినప్పుడు కొత్త విండోను వుపయోగించుటకు బదులుగా టాబ్‌నందు మాత్రమే "
-#~ "తెరుచునట్లు నిర్ధిష్టంచేయుము"
-
-#~ msgid "Force new windows to be opened in tabs"
-#~ msgstr "కొత్త విండోలు టాబ్లనందు మాత్రమే తెరుచునట్లు నిర్దిష్టంచేయుము"
-
-#~ msgid ""
-#~ "Hide or show the downloads window. When hidden, a notification will be "
-#~ "shown when new downloads are started."
-#~ msgstr ""
-#~ "డౌనులోడుల విండోను చూపుము లేదా మరుగుపరచుము. మురగునవుండి, కొత్త డౌనులోడులు "
-#~ "ప్రారంభించబడినప్పుడు వొక నోటీసు చూపించబడుతుంది."
-
-#~ msgid "History pages time range"
-#~ msgstr "చరిత్ర పుటల సమయ శ్రేణి"
-
-#~ msgid ""
-#~ "How to present animated images. Possible values are \"normal\", \"once\" "
-#~ "and \"disabled\"."
-#~ msgstr ""
-#~ "సచేతనపరచిన  దృశ్యాలములను ఎలా సమర్పించాలి. సాధ్యమైన విలువలు  \"సాధారణం\", \"ఒకసారి\" మరియు "
-#~ "\"నిరుపయోగమైనది\"."
 
 #~ msgid "How to print frames"
 #~ msgstr "చట్రములను ఎలా ముద్రించాలి"
@@ -3012,25 +3490,3 @@ msgstr "చేతనపరుచు (_E)"
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
-
-#~ msgid "Image animation mode"
-#~ msgstr "ప్రతిరూప సచేతన విధము"
-
-#~ msgid "Lists the active extensions."
-#~ msgstr "క్రియాశీల పొడగింపుల జాబితా."
-
-#~ msgid ""
-#~ "Middle click to open the web page pointed to by the currently selected "
-#~ "text"
-#~ msgstr ""
-#~ "ప్రస్తుతం ఎంపికకాబడివున్న పాఠ్యము ద్వారా సూచించబడిన వెబ్ పుటను తెరుచుటకు మద్య నొక్కునొక్కండి"
-
-#~ msgid ""
-#~ "Middle clicking on the main view pane will open the web page pointed to "
-#~ "by the currently selected text."
-#~ msgstr ""
-#~ "ముఖ్యంగా దర్శించు పలకపైన మధ్య నొక్కు నొక్కుటవలన ప్రస్తుతం ఎంపికకాబడివున్న పాఠ్యము ద్వారా "
-#~ "సూచించబడిన వెబ్‌పేజీ తెరువబడుతుంది."
-
-#~ msgid "Minimum font size"
-#~ msgstr "అత్యధిక అక్షరశైలి పరిమాణం"
