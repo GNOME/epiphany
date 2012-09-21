@@ -2577,58 +2577,72 @@ decide_policy_cb (WebKitWebView *web_view,
 		return return_value;
 	}
 
-	if (navigation_type != WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
-		return FALSE;
-
-
-	button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
-	state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
-	flags = EPHY_NEW_TAB_OPEN_PAGE;
-
-	ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
-				      EPHY_PAGE_VISIT_LINK);
-
-	/* New tab in new window for control+shift+click */
-	if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
 	{
-		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-	}
-	/* New tab in existing window for middle click and
-	 * control+click */
-	else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK))
-	{
-		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
-	}
-	/* Because we connect to button-press-event *after*
-	 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
-	 * a link when you shift+click it. Otherwise when you
-	 * shift+click a link to download it you would also be taken to
-	 * the link destination. */
-	else if (button == 1 && state == GDK_SHIFT_MASK)
-	{
+		gint button;
+		gint state;
+		EphyNewTabFlags flags;
+
+		button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
+		state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
+		flags = EPHY_NEW_TAB_OPEN_PAGE;
+
+		ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
+					      EPHY_PAGE_VISIT_LINK);
+
+		/* New tab in new window for control+shift+click */
+		if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+		{
+			flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		}
+		/* New tab in existing window for middle click and
+		 * control+click */
+		else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK))
+		{
+			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
+		}
+		/* Because we connect to button-press-event *after*
+		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
+		 * a link when you shift+click it. Otherwise when you
+		 * shift+click a link to download it you would also be taken to
+		 * the link destination. */
+		else if (button == 1 && state == GDK_SHIFT_MASK)
+		{
+			webkit_policy_decision_ignore (decision);
+
+			return TRUE;
+		}
+		/* Those were our special cases, we won't handle this */
+		else
+		{
+			return FALSE;
+		}
+
+		embed = ephy_embed_container_get_active_child
+			(EPHY_EMBED_CONTAINER (window));
+
+		ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 window,
+					 embed,
+					 request,
+					 flags,
+					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
+
 		webkit_policy_decision_ignore (decision);
 
 		return TRUE;
 	}
-	/* Those were our special cases, we won't handle this */
-	else
+
+	if (navigation_type == WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED && uri &&
+	    g_str_has_prefix (uri, "ephy-about:applications"))
 	{
-		return FALSE;
+		delete_web_app (uri);
+		webkit_policy_decision_use (decision);
+
+		return TRUE;
 	}
 
-	embed = ephy_embed_container_get_active_child
-		(EPHY_EMBED_CONTAINER (window));
-
-	ephy_shell_new_tab_full (ephy_shell_get_default (),
-				 window,
-				 embed,
-				 request,
-				 flags,
-				 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
-
-	webkit_policy_decision_ignore (decision);
-
-	return TRUE;
+	return FALSE;
 }
 #else
 static gboolean
