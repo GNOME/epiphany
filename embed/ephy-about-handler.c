@@ -210,7 +210,7 @@ ephy_about_handler_handle_applications (GString *data_str)
                           _("Applications"),
                           _("List of installed web applications"));
 
-  g_string_append (data_str, "<form><table>");
+  g_string_append (data_str, "<table>");
 
   applications = ephy_web_application_get_application_list ();
   for (p = applications; p; p = p->next) {
@@ -220,16 +220,21 @@ ephy_about_handler_handle_applications (GString *data_str)
 
     if (g_file_get_contents (app->icon_url, &img_data, &data_length, NULL))
       img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
-    g_string_append_printf (data_str, "<tbody><tr><td class=\"icon\"><img width=64 height=64 src=\"data:image/png;base64,%s\">" \
-                            " </img></td><td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td><td class=\"input\"><input type=\"submit\" value=\"Delete\" id=\"%s\"></td><td class=\"date\">%s <br /> %s</td></tr>",
-                            img_data_base64, app->name, app->url, app->name,
+    g_string_append_printf (data_str,
+                            "<form>" \
+                            "<tbody><tr>" \
+                            "<td class=\"icon\"><img width=64 height=64 src=\"data:image/png;base64,%s\"></img></td>" \
+                            "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>" \
+                            "<td class=\"input\"><input type=\"hidden\" name=\"app_id\" value=\"%s\"><input type=\"submit\" value=\"Delete\" id=\"%s\">" \
+                            "</td><td class=\"date\">%s <br /> %s</td></tr></tbody></form>",
+                            img_data_base64, app->name, app->url, app->name, app->name,
                             /* Note for translators: this refers to the installation date. */
                             _("Installed on:"), app->install_date);
     g_free (img_data_base64);
     g_free (img_data);
   }
 
-  g_string_append (data_str, "</form></table></body>");
+  g_string_append (data_str, "</table></body>");
 
   ephy_web_application_free_application_list (applications);
 }

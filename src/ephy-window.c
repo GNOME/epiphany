@@ -54,6 +54,7 @@
 #include "ephy-shell.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom-action.h"
 #include "ephy-zoom.h"
@@ -2466,6 +2467,28 @@ create_web_view_cb (WebKitWebView *web_view,
 	return new_web_view;
 }
 
+static void
+delete_web_app (const char *request_uri)
+{
+	SoupURI *uri = soup_uri_new (request_uri);
+
+	if (uri->query)
+	{
+		GHashTable *form;
+		const char *app_id;
+
+		form = soup_form_decode (uri->query);
+		app_id = g_hash_table_lookup (form, "app_id");
+		if (app_id)
+		{
+			ephy_web_application_delete (app_id);
+		}
+		g_hash_table_destroy (form);
+	}
+
+	soup_uri_free (uri);
+}
+
 #ifdef HAVE_WEBKIT2
 static gboolean
 decide_policy_cb (WebKitWebView *web_view,
@@ -2733,6 +2756,15 @@ policy_decision_required_cb (WebKitWebView *web_view,
 					 request,
 					 flags,
 					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
+
+		return TRUE;
+	}
+
+	if (reason == WEBKIT_WEB_NAVIGATION_REASON_FORM_SUBMITTED && uri &&
+	    g_str_has_prefix (uri, "ephy-about:applications"))
+	{
+		delete_web_app (uri);
+		webkit_web_policy_decision_use (decision);
 
 		return TRUE;
 	}

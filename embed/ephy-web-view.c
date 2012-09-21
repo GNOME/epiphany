@@ -2013,26 +2013,6 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
   return TRUE;
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: DOM Bindings */
-#else
-static gboolean
-delete_web_app_cb (WebKitDOMHTMLElement *button,
-                   WebKitDOMEvent *dom_event,
-                   EphyWebView *web_view)
-{
-  char *id = NULL;
-
-  id = webkit_dom_html_element_get_id (button);
-  if (id)
-    ephy_web_application_delete (id);
-
-  g_free (id);
-
-  return FALSE;
-}
-#endif
-
 static void
 get_host_for_url_cb (gpointer service,
                      gboolean success,
@@ -2220,9 +2200,7 @@ load_changed_cb (WebKitWebView *web_view,
 
     break;
   }
-  case WEBKIT_LOAD_FINISHED: {
-    SoupURI *uri;
-
+  case WEBKIT_LOAD_FINISHED:
     g_free (priv->status_message);
     priv->status_message = NULL;
     g_object_notify (object, "status-message");
@@ -2241,37 +2219,6 @@ load_changed_cb (WebKitWebView *web_view,
     _ephy_web_view_hook_into_links (view);
 #endif
 
-    /* FIXME: It sucks to do this here, but it's not really possible
-     * to hook the DOM actions nicely in the about: generator. */
-    uri = soup_uri_new (webkit_web_view_get_uri (web_view));
-    if (uri &&
-        !g_strcmp0 (uri->scheme, "ephy-about") &&
-        !g_strcmp0 (uri->path, "applications")) {
-#if 0
-      /* TODO: DOM bindings */
-      WebKitDOMDocument *document;
-      WebKitDOMNodeList *buttons;
-      gulong buttons_n;
-      int i;
-
-      document = webkit_web_view_get_dom_document (web_view);
-      buttons = webkit_dom_document_get_elements_by_tag_name (document, "input");
-      buttons_n = webkit_dom_node_list_get_length (buttons);
-
-      for (i = 0; i < buttons_n; i++) {
-        WebKitDOMNode *button;
-
-        button = webkit_dom_node_list_item (buttons, i);
-        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (button), "click",
-                                                    G_CALLBACK (delete_web_app_cb), false,
-                                                    NULL);
-      }
-#endif
-    }
-
-    if (uri)
-      soup_uri_free (uri);
-
     /* Ensure we load the icon for this web view, if available. */
     _ephy_web_view_update_icon (view);
 
@@ -2279,7 +2226,6 @@ load_changed_cb (WebKitWebView *web_view,
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
     break;
-  }
   }
 
   g_object_thaw_notify (object);
@@ -2378,9 +2324,7 @@ load_status_cb (WebKitWebView *web_view,
 
     break;
   }
-  case WEBKIT_LOAD_FINISHED: {
-    SoupURI *uri;
-
+  case WEBKIT_LOAD_FINISHED:
     g_free (priv->status_message);
     priv->status_message = NULL;
     g_object_notify (object, "status-message");
@@ -2396,34 +2340,6 @@ load_status_cb (WebKitWebView *web_view,
 
     _ephy_web_view_hook_into_links (view);
 
-    /* FIXME: It sucks to do this here, but it's not really possible
-     * to hook the DOM actions nicely in the about: generator. */
-    uri = soup_uri_new (webkit_web_view_get_uri (web_view));
-    if (uri &&
-        !g_strcmp0 (uri->scheme, "ephy-about") &&
-        !g_strcmp0 (uri->path, "applications")) {
-      WebKitDOMDocument *document;
-      WebKitDOMNodeList *buttons;
-      gulong buttons_n;
-      int i;
-
-      document = webkit_web_view_get_dom_document (web_view);
-      buttons = webkit_dom_document_get_elements_by_tag_name (document, "input");
-      buttons_n = webkit_dom_node_list_get_length (buttons);
-
-      for (i = 0; i < buttons_n; i++) {
-        WebKitDOMNode *button;
-
-        button = webkit_dom_node_list_item (buttons, i);
-        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (button), "click",
-                                                    G_CALLBACK (delete_web_app_cb), false,
-                                                    NULL);
-      }
-    }
-
-    if (uri)
-      soup_uri_free (uri);
-
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
@@ -2435,7 +2351,6 @@ load_status_cb (WebKitWebView *web_view,
 
     ephy_web_view_thaw_history (view);
     break;
-  }
   case WEBKIT_LOAD_FAILED:
     priv->load_failed = TRUE;
     ephy_web_view_set_link_message (view, NULL);
