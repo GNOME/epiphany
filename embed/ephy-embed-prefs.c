@@ -82,14 +82,11 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
 }
 
 static char *
-webkit_pref_get_internal_user_agent (void)
+webkit_pref_get_vendor_user_agent (void)
 {
-  char *user_agent;
-  char *webkit_user_agent;
-  char *vendor_user_agent;
+  char *vendor_user_agent = NULL;
   GKeyFile *branding_keyfile;
 
-  vendor_user_agent = NULL;
   branding_keyfile = g_key_file_new ();
 
   if (g_key_file_load_from_file (branding_keyfile, SHARE_DIR"/branding.conf",
@@ -122,10 +119,44 @@ webkit_pref_get_internal_user_agent (void)
 
   g_key_file_free (branding_keyfile);
 
+  return vendor_user_agent;
+}
+
 #ifdef HAVE_WEBKIT2
-  /* TODO: User agent */
-  return g_strdup ("");
+static const char *
+webkit_pref_get_internal_user_agent (void)
+{
+  static char *user_agent = NULL;
+  static gboolean initialized = FALSE;
+  char *vendor_user_agent;
+  const char *webkit_user_agent;
+
+  if (initialized)
+    return user_agent;
+
+  initialized = TRUE;
+
+  vendor_user_agent = webkit_pref_get_vendor_user_agent ();
+  if (!vendor_user_agent)
+    return NULL;
+
+  webkit_user_agent = webkit_settings_get_user_agent (webkit_settings);
+  user_agent = g_strdup_printf ("%s %s Epiphany/%s", webkit_user_agent,
+                                vendor_user_agent, VERSION);
+  g_free (vendor_user_agent);
+
+  return user_agent;
+}
 #else
+static char *
+webkit_pref_get_internal_user_agent (void)
+{
+  char *user_agent;
+  char *webkit_user_agent;
+  char *vendor_user_agent;
+
+  vendor_user_agent = webkit_pref_get_vendor_user_agent ();
+
   g_object_get (webkit_settings, "user-agent", &webkit_user_agent, NULL);
 
   user_agent = g_strconcat (webkit_user_agent, " ",
@@ -138,8 +169,8 @@ webkit_pref_get_internal_user_agent (void)
   g_free (webkit_user_agent);
 
   return user_agent;
-#endif
 }
+#endif
 
 static void
 webkit_pref_callback_user_agent (GSettings *settings,
@@ -147,7 +178,23 @@ webkit_pref_callback_user_agent (GSettings *settings,
                                  gpointer data)
 {
 #ifdef HAVE_WEBKIT2
-  /* TODO: User agent */
+  char *value;
+  const char *internal_user_agent;
+
+  value = g_settings_get_string (settings, key);
+  if (value != NULL && value[0] != '\0') {
+    webkit_settings_set_user_agent (webkit_settings, value);
+    g_free (value);
+    return;
+  }
+  g_free (value);
+
+  internal_user_agent = webkit_pref_get_internal_user_agent ();
+  if (internal_user_agent)
+    webkit_settings_set_user_agent (webkit_settings, internal_user_agent);
+  else
+    webkit_settings_set_user_agent_with_application_details (webkit_settings,
+                                                             "Epiphany", VERSION);
 #else
   char *value = NULL;
   static char *internal_user_agent = NULL;
