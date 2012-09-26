@@ -76,9 +76,6 @@ struct _EphyWebViewPrivate {
   guint is_blank : 1;
   guint visibility : 1;
   guint is_setting_zoom : 1;
-#ifdef HAVE_WEBKIT2
-  guint is_loading : 1;
-#endif
   guint load_failed : 1;
   guint history_frozen : 1;
 
@@ -1238,7 +1235,11 @@ uri_changed_cb (WebKitWebView *web_view,
   const char *current_address;
 
 #ifdef HAVE_WEBKIT2
-  if (!EPHY_WEB_VIEW (web_view)->priv->is_loading)
+  /* We already update the URI manually while loading, so only
+   * update the URI when it changes after the page has been loaded
+   * which is usually the result of navigation within the same page action.
+   */
+  if (webkit_web_view_is_loading (web_view))
     return;
 #endif
 
@@ -2134,7 +2135,6 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_STARTED: {
     const char *loading_uri = NULL;
 
-    priv->is_loading = TRUE;
     priv->load_failed = FALSE;
 
     loading_uri = webkit_web_view_get_uri (web_view);
@@ -2205,8 +2205,6 @@ load_changed_cb (WebKitWebView *web_view,
   }
   case WEBKIT_LOAD_FINISHED: {
     SoupURI *uri;
-
-    priv->is_loading = FALSE;
 
     g_free (priv->status_message);
     priv->status_message = NULL;
@@ -3268,7 +3266,7 @@ gboolean
 ephy_web_view_is_loading (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
-  return view->priv->is_loading;
+  return webkit_web_view_is_loading (WEBKIT_WEB_VIEW (view));
 #else
   WebKitLoadStatus status;
 
