@@ -88,6 +88,8 @@ void		 ephy_session_close		(EphySession *session);
 
 GList		*ephy_session_get_windows	(EphySession *session);
 
+gboolean         ephy_session_close_all_windows (EphySession *session);
+
 void		 ephy_session_queue_command	(EphySession *session,
 						 EphySessionCommand op,
 						 const char *arg,

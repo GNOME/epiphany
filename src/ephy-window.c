@@ -970,67 +970,8 @@ static gboolean
 ephy_window_delete_event (GtkWidget *widget,
 			  GdkEventAny *event)
 {
-	EphyWindow *window = EPHY_WINDOW (widget);
-	EphySession *session;
-	EphyEmbed *modified_embed = NULL;
-	GList *tabs, *l, *windows;
-	guint number_windows;
-	gboolean modified = FALSE;
-
-	/* We ignore the delete_event if the disable_quit lockdown has been set
-	 */
-	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-				    EPHY_PREFS_LOCKDOWN_QUIT)) return TRUE;
-
-	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyEmbed *embed = (EphyEmbed *) l->data;
-
-		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
-
-		if (ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)))
-		{
-			modified = TRUE;
-			modified_embed = embed;
-			break;
-		}
-	}
-	g_list_free (tabs);
-
-	if (modified)
-	{
-		/* jump to the first tab with modified forms */
-		impl_set_active_child (EPHY_EMBED_CONTAINER (window),
-				       modified_embed);
-
-		if (confirm_close_with_modified_forms (window) == FALSE)
-		{
-			/* stop window close */
-			return TRUE;
-		}
-	}
-
-
-	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
-	{
-		/* stop window close */
-		return TRUE;
-	}
-
-	/* If this is the last window, save its state in the session. */
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	windows = ephy_session_get_windows (session);
-	number_windows = g_list_length (windows);
-	g_list_free (windows);
-
-	if (number_windows == 1)
-	{
-		ephy_session_close (session);
-	}
-
-	/* See bug #114689 */
-	gtk_widget_hide (widget);
+	if (!ephy_window_close (EPHY_WINDOW (widget)))
+	    return TRUE;
 
 	/* proceed with window close */
 	if (GTK_WIDGET_CLASS (ephy_window_parent_class)->delete_event)
@@ -4164,4 +4105,81 @@ ephy_window_get_location_controller (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return window->priv->location_controller;
+}
+
+/**
+ * ephy_window_close:
+ * @window: an #EphyWindow
+ *
+ * Try to close the window. The window might refuse to close
+ * if there are ongoing download operations or unsubmitted
+ * modifed forms.
+ *
+ * Returns: %TRUE if the window is closed, or %FALSE otherwise
+ **/
+gboolean
+ephy_window_close (EphyWindow *window)
+{
+	EphySession *session;
+	EphyEmbed *modified_embed = NULL;
+	GList *tabs, *l, *windows;
+	guint number_windows;
+	gboolean modified = FALSE;
+
+	/* We ignore the delete_event if the disable_quit lockdown has been set
+	 */
+	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_QUIT)) return FALSE;
+
+	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyEmbed *embed = (EphyEmbed *) l->data;
+
+		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+		if (ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)))
+		{
+			modified = TRUE;
+			modified_embed = embed;
+			break;
+		}
+	}
+	g_list_free (tabs);
+
+	if (modified)
+	{
+		/* jump to the first tab with modified forms */
+		impl_set_active_child (EPHY_EMBED_CONTAINER (window),
+				       modified_embed);
+
+		if (confirm_close_with_modified_forms (window) == FALSE)
+		{
+			/* stop window close */
+			return FALSE;
+		}
+	}
+
+
+	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
+	{
+		/* stop window close */
+		return FALSE;
+	}
+
+	/* If this is the last window, save its state in the session. */
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+	windows = ephy_session_get_windows (session);
+	number_windows = g_list_length (windows);
+	g_list_free (windows);
+
+	if (number_windows == 1)
+	{
+		ephy_session_close (session);
+	}
+
+	/* See bug #114689 */
+	gtk_widget_hide (GTK_WIDGET (window));
+
+	return TRUE;
 }

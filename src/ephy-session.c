@@ -1236,6 +1236,43 @@ ephy_session_get_active_window (EphySession *session)
 }
 
 /**
+ * ephy_session_close_all_windows:
+ * @session: a #EphySession
+ *
+ * Try to close all browser windows. A window might refuse to
+ * close if there are ongoing download operations or unsubmitted
+ * modifed forms.
+ *
+ * Returns: %TRUE if all windows were closed, or %FALSE otherwise
+ **/
+gboolean
+ephy_session_close_all_windows (EphySession *session)
+{
+	GList *l;
+	gboolean retval = TRUE;
+
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+
+	ephy_session_close (session);
+
+	for (l = session->priv->windows; l != NULL; l = l->next)
+	{
+		EphyWindow *window = EPHY_WINDOW (l->data);
+
+		if (ephy_window_close (window))
+		{
+			gtk_widget_destroy (GTK_WIDGET (window));
+		}
+		else
+		{
+			retval = FALSE;
+		}
+	}
+
+	return retval;
+}
+
+/**
  * ephy_session_queue_command:
  * @session: a #EphySession
  **/

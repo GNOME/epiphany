@@ -238,11 +238,8 @@ quit_application (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
-  if (!g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                               EPHY_PREFS_LOCKDOWN_QUIT)) {
-    ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell)));
+  if (ephy_session_close_all_windows (EPHY_SESSION (ephy_shell_get_session (ephy_shell))))
     g_application_quit (g_application_get_default ());
-  }
 }
 
 static GActionEntry app_entries[] = {
