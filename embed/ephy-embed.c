@@ -96,6 +96,8 @@ struct _EphyEmbedPrivate
 
   gulong status_handler_id;
   gulong progress_update_handler_id;
+
+  gulong adblock_handler_id;
 };
 
 enum
@@ -406,6 +408,11 @@ ephy_embed_dispose (GObject *object)
   if (priv->fullscreen_message_id) {
     g_source_remove (priv->fullscreen_message_id);
     priv->fullscreen_message_id = 0;
+  }
+
+  if (priv->adblock_handler_id) {
+    g_signal_handler_disconnect (priv->web_view, priv->adblock_handler_id);
+    priv->adblock_handler_id = 0;
   }
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
@@ -824,6 +831,26 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
 
+#ifndef HAVE_WEBKIT2
+static void
+setup_adblock (GSettings *settings,
+               char *key,
+               EphyEmbed *embed)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+  EphyWebView *web_view = ephy_embed_get_web_view (embed);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
+      priv->adblock_handler_id == 0) {
+    priv->adblock_handler_id = g_signal_connect (web_view, "resource_request_starting",
+                                                 G_CALLBACK (resource_request_starting_cb), embed);
+  } else if (priv->adblock_handler_id) {
+    g_signal_handler_disconnect (web_view, priv->adblock_handler_id);
+    priv->adblock_handler_id = 0;
+  }
+}
+#endif
+
 static void
 ephy_embed_constructed (GObject *object)
 {
@@ -919,11 +946,16 @@ ephy_embed_constructed (GObject *object)
 #else
   g_object_connect (web_view,
                     "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
-                    "signal::resource-request-starting", G_CALLBACK (resource_request_starting_cb), embed,
                     "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
                     "signal::entering-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leaving-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
+
+  g_signal_connect (EPHY_SETTINGS_WEB,
+                    "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                    G_CALLBACK (setup_adblock), embed);
+
+  setup_adblock (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK, embed);
 #endif
 
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",

@@ -108,6 +108,7 @@ typedef enum
 #define EPHY_PREFS_WEB_IMAGE_ANIMATION_MODE  "image-animation-mode"
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING      "default-encoding"
 #define EPHY_PREFS_WEB_DO_NOT_TRACK          "do-not-track"
+#define EPHY_PREFS_WEB_ENABLE_ADBLOCK        "enable-adblock"
 
 #define EPHY_PREFS_SCHEMA                         "org.gnome.Epiphany"
 #define EPHY_PREFS_USER_AGENT                     "user-agent"
