@@ -78,7 +78,7 @@ uri_tester_ensure_data_dir ()
   char *folder = NULL;
 
   /* Ensure adblock's dir is there. */
-  folder = g_build_filename (ephy_dot_dir (), "extensions", "data", "adblock", NULL);
+  folder = g_build_filename (ephy_dot_dir (), "adblock", NULL);
   g_mkdir_with_parents (folder, 0700);
 
   return folder;
