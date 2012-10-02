@@ -17,7 +17,6 @@ header_DATA = \
 	$(INST_H_FILES)
 
 NOINST_H_FILES = \
-	adblock-ui.h				\
 	ephy-action-helper.h			\
 	ephy-adblock-extension.h		\
 	ephy-combined-stop-reload-action.h	\
@@ -54,7 +53,6 @@ INST_H_FILES = \
 	$(NULL)
 
 libephymain_la_SOURCES = \
-	adblock-ui.c				\
 	ephy-action-helper.c			\
 	ephy-adblock-extension.c		\
 	ephy-completion-model.c			\
@@ -118,7 +116,6 @@ libephymain_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 UI_FILES = \
-	resources/adblock.ui                      \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany-history-window-ui.xml  \
 	resources/epiphany-ui.xml		  \
