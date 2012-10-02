@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -20,22 +21,19 @@
  */
 
 #include "config.h"
-#include "ephy-debug.h"
-
 #include "ephy-adblock-manager.h"
+
 #include "ephy-adblock.h"
+#include "ephy-debug.h"
 
 struct _EphyAdBlockManagerPrivate
 {
-       	EphyAdBlock *blocker;
+  EphyAdBlock *blocker;
 };
 
 G_DEFINE_TYPE (EphyAdBlockManager, ephy_adblock_manager, G_TYPE_OBJECT);
 
-#define EPHY_ADBLOCK_MANAGER_GET_PRIVATE(object) \
-	(G_TYPE_INSTANCE_GET_PRIVATE ((object), \
-         EPHY_TYPE_ADBLOCK_MANAGER, EphyAdBlockManagerPrivate))
-
+#define EPHY_ADBLOCK_MANAGER_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ADBLOCK_MANAGER, EphyAdBlockManagerPrivate))
 
 /**
  * ephy_adblock_manager_set_blocker:
@@ -48,9 +46,12 @@ G_DEFINE_TYPE (EphyAdBlockManager, ephy_adblock_manager, G_TYPE_OBJECT);
  **/
 void
 ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
-			  	  EphyAdBlock *blocker)
+                                  EphyAdBlock *blocker)
 {
-	self->priv->blocker = blocker;
+  g_return_if_fail (EPHY_IS_ADBLOCK_MANAGER (self));
+  g_return_if_fail (EPHY_IS_ADBLOCK (blocker));
+
+  self->priv->blocker = blocker;
 }
 
 /**
@@ -65,46 +66,48 @@ ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
  **/
 gboolean
 ephy_adblock_manager_should_load (EphyAdBlockManager *self,
-				  EphyEmbed *embed,
-	    	 	    	  const char *url,
-	    	 	    	  AdUriCheckType check_type)
+                                  EphyEmbed *embed,
+                                  const char *url,
+                                  AdUriCheckType check_type)
 {
-	if (self->priv->blocker != NULL)
-	{
-		return ephy_adblock_should_load (self->priv->blocker,	
-						 embed,
-						 url,
-						 check_type);
-	}
+  g_return_val_if_fail (EPHY_IS_ADBLOCK_MANAGER (self), TRUE);
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), TRUE);
+  g_return_val_if_fail (url, TRUE);
 
-	/* default: let's process any url */
-	return TRUE;
+  if (self->priv->blocker != NULL)
+    return ephy_adblock_should_load (self->priv->blocker, 
+                                     embed,
+                                     url,
+                                     check_type);
+
+  /* Default: let's process any url. */
+  return TRUE;
 }
 
 static void
 ephy_adblock_manager_init (EphyAdBlockManager *self)
 {
-	LOG ("ephy_adblock_manager_init");
+  LOG ("ephy_adblock_manager_init");
 
-	self->priv = EPHY_ADBLOCK_MANAGER_GET_PRIVATE(self);
+  self->priv = EPHY_ADBLOCK_MANAGER_GET_PRIVATE(self);
 }
 
 static void
 ephy_adblock_manager_class_init (EphyAdBlockManagerClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_signal_new ("rules_changed",
-		      G_OBJECT_CLASS_TYPE (object_class),
-		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyAdBlockManagerClass, rules_changed),
-		      NULL, NULL,
-		      g_cclosure_marshal_VOID__VOID,
-		      G_TYPE_NONE,
-		      0,
-		      0);
+  g_signal_new ("rules_changed",
+                G_OBJECT_CLASS_TYPE (object_class),
+                G_SIGNAL_RUN_FIRST,
+                G_STRUCT_OFFSET (EphyAdBlockManagerClass, rules_changed),
+                NULL, NULL,
+                g_cclosure_marshal_VOID__VOID,
+                G_TYPE_NONE,
+                0,
+                0);
 
-	g_type_class_add_private (object_class, sizeof (EphyAdBlockManagerPrivate));
+  g_type_class_add_private (object_class, sizeof (EphyAdBlockManagerPrivate));
 }
 
 /**
@@ -118,15 +121,16 @@ ephy_adblock_manager_class_init (EphyAdBlockManagerClass *klass)
  **/
 void
 ephy_adblock_manager_edit_rule (EphyAdBlockManager *self,
-	    	 	    	const char *url,
-	    	 	    	gboolean allowed)
+                                const char *url,
+                                gboolean allowed)
 {
-	if (self->priv->blocker != NULL)
-	{
-		ephy_adblock_edit_rule (self->priv->blocker,	
-					url,
-					allowed);
-	}
+  g_return_if_fail (EPHY_IS_ADBLOCK_MANAGER (self));
+  g_return_if_fail (url);
+
+  if (self->priv->blocker != NULL)
+    ephy_adblock_edit_rule (self->priv->blocker,  
+                            url,
+                            allowed);
 }
 
 /**
@@ -140,5 +144,7 @@ ephy_adblock_manager_edit_rule (EphyAdBlockManager *self,
 gboolean
 ephy_adblock_manager_has_blocker (EphyAdBlockManager *self)
 {
-	return self->priv->blocker != NULL;
+  g_return_val_if_fail (EPHY_IS_ADBLOCK_MANAGER (self), FALSE);
+
+  return self->priv->blocker != NULL;
 } 

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -44,34 +45,30 @@ typedef struct _EphyAdBlockManagerClass        EphyAdBlockManagerClass;
 typedef struct _EphyAdBlockManagerPrivate      EphyAdBlockManagerPrivate;
 
 struct _EphyAdBlockManager {
-        GObject parent;
+  GObject parent;
 
-	/* < private > */
-	EphyAdBlockManagerPrivate *priv;
+  /* < private > */
+  EphyAdBlockManagerPrivate *priv;
 };
 
 struct _EphyAdBlockManagerClass {
-        GObjectClass parent_class;
+  GObjectClass parent_class;
 
-	/* Signals */
-	void	(* rules_changed)      (EphyAdBlockManager *manager);
+  /* Signals */
+  void  (* rules_changed)      (EphyAdBlockManager *manager);
 };
 
-GType 			ephy_adblock_manager_get_type (void);
-
-gboolean		ephy_adblock_manager_should_load (EphyAdBlockManager *self,
-				    	 	    	  EphyEmbed *embed,
-				    	 	    	  const char *url,
-				    	 	    	  AdUriCheckType check_type);
-
-void 			ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
-							  EphyAdBlock *blocker);
-
-void			ephy_adblock_manager_edit_rule   (EphyAdBlockManager *self,
-				    	 	    	  const char *url,
-				    	 	    	  gboolean allowed);
-
-gboolean		ephy_adblock_manager_has_blocker (EphyAdBlockManager *self);
+GType    ephy_adblock_manager_get_type    (void);
+gboolean ephy_adblock_manager_should_load (EphyAdBlockManager *self,
+                                           EphyEmbed          *embed,
+                                           const char         *url,
+                                           AdUriCheckType      check_type);
+void     ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
+                                           EphyAdBlock        *blocker);
+void     ephy_adblock_manager_edit_rule   (EphyAdBlockManager *self,
+                                           const char         *url,
+                                           gboolean            allowed);
+gboolean ephy_adblock_manager_has_blocker (EphyAdBlockManager *self);
 
 G_END_DECLS
 
