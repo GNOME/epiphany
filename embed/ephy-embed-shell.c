@@ -411,12 +411,20 @@ ephy_embed_shell_get_default (void)
 GObject *
 ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv;
+
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-  if (shell->priv->adblock_manager == NULL)
-    shell->priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
+  priv = shell->priv;
 
-  return G_OBJECT (shell->priv->adblock_manager);
+  if (priv->adblock_manager == NULL) {
+    priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
+
+    ephy_adblock_manager_set_blocker (priv->adblock_manager,
+                                      g_object_new (EPHY_TYPE_ADBLOCK, NULL));
+  }
+
+  return G_OBJECT (priv->adblock_manager);
 }
 
 void

@@ -23,7 +23,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#include "ephy-adblock-extension.h"
 #include "ephy-adblock-manager.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
@@ -1057,8 +1056,6 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 void
 _ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
-  EphyAdBlockManager *adblock_manager;
-
   g_assert (ephy_shell == NULL);
 
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
@@ -1067,11 +1064,6 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
                                          NULL));
   /* FIXME weak ref */
   g_assert (ephy_shell != NULL);
-
-  /* FIXME not the best place to have this */
-  adblock_manager = EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
-  ephy_adblock_manager_set_blocker (adblock_manager,
-                                    g_object_new (EPHY_TYPE_ADBLOCK_EXTENSION, NULL));
 }
 
 /**
