@@ -65,9 +65,6 @@ gboolean ephy_adblock_manager_should_load (EphyAdBlockManager *self,
                                            AdUriCheckType      check_type);
 void     ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
                                            EphyAdBlock        *blocker);
-void     ephy_adblock_manager_edit_rule   (EphyAdBlockManager *self,
-                                           const char         *url,
-                                           gboolean            allowed);
 gboolean ephy_adblock_manager_has_blocker (EphyAdBlockManager *self);
 
 G_END_DECLS

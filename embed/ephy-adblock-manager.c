@@ -111,29 +111,6 @@ ephy_adblock_manager_class_init (EphyAdBlockManagerClass *klass)
 }
 
 /**
- * ephy_adblock_manager_edit_rule:
- * @shell: a #EphyAdBlockManager
- * @url: the target url on which the rule is based
- * @allowed: TRUE if the url has to be blocked.
- *
- * Ask to the blocker a new rule based on @url.
- *
- **/
-void
-ephy_adblock_manager_edit_rule (EphyAdBlockManager *self,
-                                const char *url,
-                                gboolean allowed)
-{
-  g_return_if_fail (EPHY_IS_ADBLOCK_MANAGER (self));
-  g_return_if_fail (url);
-
-  if (self->priv->blocker != NULL)
-    ephy_adblock_edit_rule (self->priv->blocker,  
-                            url,
-                            allowed);
-}
-
-/**
  * ephy_adblock_manager_has_blocker:
  * @shell: a #EphyAdBlockManager
  *

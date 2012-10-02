@@ -79,10 +79,6 @@ struct _EphyAdBlockIface
 					 EphyEmbed *embed,
 				         const char *url,
 				         AdUriCheckType check_type);
-
-	void		(* edit_rule)	(EphyAdBlock *adblock,
-				         const char *url,
-				         gboolean allowed);
 };
 
 GType		ephy_adblock_get_type		(void);
@@ -91,10 +87,6 @@ gboolean	ephy_adblock_should_load 	(EphyAdBlock *adblock,
 						 EphyEmbed *embed,
 				    	 	 const char *url,
 				    	 	 AdUriCheckType check_type);
-
-void		ephy_adblock_edit_rule	 	(EphyAdBlock *adblock,
-				    	 	 const char *url,
-				    	 	 gboolean allowed);
 
 G_END_DECLS
 

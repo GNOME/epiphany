@@ -113,15 +113,7 @@ ephy_adblock_impl_should_load (EphyAdBlock *blocker,
 }
 
 static void
-ephy_adblock_impl_edit_rule (EphyAdBlock *blocker,
-                             const char *url,
-                             gboolean allowed)
-{
-}
-
-static void
 ephy_adblock_adblock_iface_init (EphyAdBlockIface *iface)
 {
   iface->should_load = ephy_adblock_impl_should_load;
-  iface->edit_rule = ephy_adblock_impl_edit_rule;
 }
