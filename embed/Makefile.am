@@ -9,12 +9,14 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	ephy-about-handler.h		\
+	ephy-adblock-extension.h	\
 	ephy-embed-dialog.h		\
 	ephy-embed-private.h		\
 	ephy-encoding.h			\
 	ephy-encodings.h		\
 	ephy-file-monitor.h		\
-	ephy-request-about.h
+	ephy-request-about.h		\
+	uri-tester.h
 
 INST_H_FILES = \
 	ephy-adblock.h			\
@@ -39,6 +41,7 @@ BUILT_SOURCES = \
 libephyembed_la_SOURCES = \
 	ephy-about-handler.c		\
 	ephy-adblock.c			\
+	ephy-adblock-extension.c	\
 	ephy-adblock-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
@@ -56,6 +59,7 @@ libephyembed_la_SOURCES = \
 	ephy-request-about.c		\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
+	uri-tester.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
