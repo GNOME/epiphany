@@ -107,7 +107,7 @@ ephy_overview_constructed (GObject *object)
 
   self->priv->frecent_view = GTK_WIDGET (gd_main_view_new (GD_MAIN_VIEW_ICON));
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self->priv->frecent_view),
-                                       GTK_SHADOW_NONE);
+                                       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (self->priv->frecent_view),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   iconview = gtk_bin_get_child (GTK_BIN (self->priv->frecent_view));
