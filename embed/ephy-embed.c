@@ -1057,6 +1057,8 @@ ephy_embed_init (EphyEmbed *embed)
 #ifndef HAVE_WEBKIT2
   gtk_scrolled_window_set_policy (priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (priv->scrolled_window,
+                                       GTK_SHADOW_IN);
 #endif
 }
 
