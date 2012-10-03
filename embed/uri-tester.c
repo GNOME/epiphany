@@ -31,7 +31,9 @@
 #include <gio/gio.h>
 #include <glib/gstdio.h>
 #include <string.h>
+#ifndef HAVE_WEBKIT2
 #include <webkit/webkit.h>
+#endif
 
 #define DEFAULT_FILTER_URL "http://adblockplus.mozdev.org/easylist/easylist.txt"
 #define FILTERS_LIST_FILENAME "filters.list"
@@ -113,6 +115,7 @@ uri_tester_download_notify_status_cb (WebKitDownload *download,
                                       GParamSpec *pspec,
                                       UriTester *tester)
 {
+#ifndef HAVE_WEBKIT2
   const char *dest = NULL;
 
   if (webkit_download_get_status (download) != WEBKIT_DOWNLOAD_STATUS_FINISHED)
@@ -125,11 +128,13 @@ uri_tester_download_notify_status_cb (WebKitDownload *download,
   /* Parse the file from disk. */
   dest = webkit_download_get_destination_uri (download);
   uri_tester_parse_file_at_uri (tester, dest);
+#endif
 }
 
 static void
 uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *fileuri)
 {
+#ifndef HAVE_WEBKIT2
   WebKitNetworkRequest *request = NULL;
   WebKitDownload *download = NULL;
 
@@ -147,6 +152,7 @@ uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *file
                     G_CALLBACK (uri_tester_download_notify_status_cb), tester);
 
   webkit_download_start (download);
+#endif
 }
 
 static gboolean
