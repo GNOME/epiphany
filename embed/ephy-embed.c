@@ -1038,22 +1038,24 @@ ephy_embed_constructed (GObject *object)
 static void
 ephy_embed_init (EphyEmbed *embed)
 {
-  embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
+  EphyEmbedPrivate *priv;
+
+  priv = embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
                                   GTK_ORIENTATION_VERTICAL);
 
 #ifndef HAVE_WEBKIT2
-  embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
+  priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
 #endif
-  embed->priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
-  embed->priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
-  embed->priv->seq_context_id = 1;
-  embed->priv->seq_message_id = 1;
-  embed->priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
+  priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
+  priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  priv->seq_context_id = 1;
+  priv->seq_message_id = 1;
+  priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 
 #ifndef HAVE_WEBKIT2
-  gtk_scrolled_window_set_policy (embed->priv->scrolled_window,
+  gtk_scrolled_window_set_policy (priv->scrolled_window,
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 #endif
 }
