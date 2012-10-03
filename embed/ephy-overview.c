@@ -26,7 +26,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-frecent-store.h"
 
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #define EPHY_OVERVIEW_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_OVERVIEW, EphyOverviewPrivate))
@@ -88,9 +87,8 @@ iconview_motion_notify (GtkWidget *widget,
     cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_HAND2);
     gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
     g_object_unref (cursor);
-  } else {
+  } else
     gdk_window_set_cursor (gtk_widget_get_window (widget), NULL);
-  }
 
   return FALSE;
 }
