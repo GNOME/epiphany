@@ -68,6 +68,7 @@
 	</popup>
 
 	<popup name="PagePopup" action="PagePopupAction" accelerators="true">
+                <menuitem name="FileNewWindowMenu" action="FileNewWindow"/>
                 <menuitem name="FileNewTabMenu" action="FileNewTab"/>
                 <menuitem name="FileOpenMenu" action="FileOpen"/>
                 <separator name="FileSep1"/>	
@@ -79,9 +80,11 @@
                 <menuitem name="EditPasteMenu" action="EditPaste"/>
                 <separator name="EditSep3"/> 
                 <menuitem name="FilePrintMenu" action="FilePrint"/>
-                <separator name="FileSep4"/>
                 <menuitem name="EditFindMenu" action="EditFind"/>
+                <menuitem name="EditPreferencesMenu" action="EditPreferences"/>
+                <menuitem name="EditPersonalDataMenu" action="EditPersonalData"/>
                 <separator name="FileSep5"/>
+                <menuitem name="BookmarksEditMenu" action="EditBookmarks"/>
 		<menu name="BookmarksMenu" action="Bookmarks">
 			<menuitem name="BookmarksAddBookmarkMenu" action="FileBookmarkPage"/>
 			<separator name="BookmarksSep1"/>
@@ -93,7 +96,9 @@
                 <menuitem name="ViewPageSourceMenu" action="ViewPageSource"/>
 		<menu name="ExtensionsMenu" action="Extensions"/>
                 <separator name="FileSep7"/>
+                <menuitem name="HelpAboutMenu" action="HelpAbout"/>
                 <menuitem name="FileCloseWindowMenu" action="FileCloseTab"/>
+                <menuitem name="FileQuitMenu" action="FileQuit"/>
 	</popup>
 
 	<accelerator name="AlwaysStopAccel" action="ViewAlwaysStop"/>
