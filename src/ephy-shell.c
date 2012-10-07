@@ -570,65 +570,21 @@ ephy_shell_init (EphyShell *shell)
 static void
 ephy_shell_dispose (GObject *object)
 {
-  EphyShell *shell = EPHY_SHELL (object);
-  EphyShellPrivate *priv = shell->priv;
+  EphyShellPrivate *priv = EPHY_SHELL (object)->priv;
 
   LOG ("EphyShell disposing");
 
-  if (shell->priv->extensions_manager != NULL) {
-    LOG ("Unref extension manager");
-    /* this will unload the extensions */
-    g_object_unref (priv->extensions_manager);
-    priv->extensions_manager = NULL;
-  }
+  /* This will unload the extensions. */
+  g_clear_object (&priv->extensions_manager);
 
-  if (priv->session != NULL) {
-    LOG ("Unref session manager");
-    g_object_unref (priv->session);
-    priv->session = NULL;
-  }
-
-  if (priv->lockdown != NULL) {
-    LOG ("Unref lockdown controller");
-    g_object_unref (priv->lockdown);
-    priv->lockdown = NULL;
-  }
-
-  if (priv->bme != NULL) {
-    LOG ("Unref Bookmarks Editor");
-    gtk_widget_destroy (GTK_WIDGET (priv->bme));
-    priv->bme = NULL;
-  }
-
-  if (priv->history_window != NULL) {
-    LOG ("Unref History Window");
-    gtk_widget_destroy (GTK_WIDGET (priv->history_window));
-    priv->history_window = NULL;
-  }
-
-  if (priv->pdm_dialog != NULL) {
-    LOG ("Unref PDM Dialog");
-    g_object_unref (priv->pdm_dialog);
-    priv->pdm_dialog = NULL;
-  }
-
-  if (priv->prefs_dialog != NULL) {
-    LOG ("Unref prefs dialog");
-    g_object_unref (priv->prefs_dialog);
-    priv->prefs_dialog = NULL;
-  }
-
-  if (priv->bookmarks != NULL) {
-    LOG ("Unref bookmarks");
-    g_object_unref (priv->bookmarks);
-    priv->bookmarks = NULL;
-  }
-
-  if (priv->network_monitor != NULL) {
-    LOG ("Unref net monitor ");
-    g_object_unref (priv->network_monitor);
-    priv->network_monitor = NULL;
-  }
+  g_clear_object (&priv->session);
+  g_clear_object (&priv->lockdown);
+  g_clear_pointer (&priv->bme, gtk_widget_destroy);
+  g_clear_pointer (&priv->history_window, gtk_widget_destroy);
+  g_clear_object (&priv->pdm_dialog);
+  g_clear_object (&priv->prefs_dialog);
+  g_clear_object (&priv->bookmarks);
+  g_clear_object (&priv->network_monitor);
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
