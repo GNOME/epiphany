@@ -98,6 +98,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File actions. */
 
+	{ "FileNewWindow", NULL, N_("_New Window"), "<control>N", NULL,
+	  G_CALLBACK (window_cmd_file_new_window) },
 	{ "FileOpen", NULL, N_("_Open…"), "<control>O", NULL,
 	  G_CALLBACK (window_cmd_file_open) },
 	{ "FileSaveAs", NULL, N_("Save _As…"), "<shift><control>S", NULL,
@@ -110,6 +112,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_file_send_to) },
 	{ "FileCloseTab", NULL, N_("_Close"), "<control>W", NULL,
 	  G_CALLBACK (window_cmd_file_close_window) },
+	{ "FileQuit", NULL, N_("_Quit"), "<control>Q", NULL,
+	  G_CALLBACK (window_cmd_file_quit) },
 
 	/* Edit actions. */
 
@@ -133,6 +137,14 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_edit_find_next) },
 	{ "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G", NULL,
 	  G_CALLBACK (window_cmd_edit_find_prev) },
+	{ "EditBookmarks", NULL, N_("Edit _Bookmarks…"), "<control>B", NULL,
+	  G_CALLBACK (window_cmd_edit_bookmarks) },
+	{ "EditHistory", NULL, N_("Edit _History…"), "<control>H", NULL,
+	  G_CALLBACK (window_cmd_edit_history) },
+	{ "EditPreferences", NULL, N_("Preferences"), "<control>e", NULL,
+	  G_CALLBACK (window_cmd_edit_preferences) },
+	{ "EditPersonalData", NULL, N_("Personal Data"), "<control>m", NULL,
+	  G_CALLBACK (window_cmd_edit_personal_data) },
 
 	/* View actions. */
 
@@ -174,6 +186,11 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_tabs_move_right) },
         { "TabsDetach", NULL, N_("_Detach Tab"), NULL, NULL,
           G_CALLBACK (window_cmd_tabs_detach) },
+
+	/* Help. */
+
+	{ "HelpAbout", NULL, N_("_About"), NULL, NULL,
+	  G_CALLBACK (window_cmd_help_about) }
 };
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
@@ -354,6 +371,7 @@ struct _EphyWindowPrivate
 	EphyLocationController *location_controller;
 
 	gulong set_focus_handler;
+	gulong app_menu_visibility_handler;
 
 	guint closing : 1;
 	guint has_size : 1;
@@ -3355,6 +3373,10 @@ ephy_window_finalize (GObject *object)
 		g_signal_handler_disconnect (window,
 					     priv->set_focus_handler);
 
+	if (priv->app_menu_visibility_handler != 0)
+		g_signal_handler_disconnect (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
+					     priv->app_menu_visibility_handler);
+
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
@@ -3529,6 +3551,38 @@ _gtk_css_provider_load_from_resource (GtkCssProvider* provider,
 	g_bytes_unref (data);
 	
 	return res;
+}
+
+static const gchar* app_actions[] = {
+	"FileNewWindow",
+	"EditPreferences",
+	"EditPersonalData",
+	"EditBookmarks",
+	"EditHistory",
+	"FileQuit",
+	"HelpAbout"
+};
+
+static void
+ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
+{
+	const gchar *action_name;
+	gboolean shows_app_menu;
+	GtkSettings *settings;
+	GtkAction *action;
+	gint idx;
+
+	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)));
+	g_object_get (settings,
+		      "gtk-shell-shows-app-menu", &shows_app_menu,
+		      NULL);
+
+	for (idx = 0; idx < G_N_ELEMENTS (app_actions); idx++) {
+		action_name = app_actions[idx];
+		action = gtk_action_group_get_action (window->priv->action_group, action_name);
+
+		gtk_action_set_visible (action, !shows_app_menu);
+	}
 }
 
 static GObject *
@@ -3711,6 +3765,15 @@ ephy_window_constructor (GType type,
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 		}
 	}
+
+	/* We never want the menubar shown, we merge the app menu into
+	 * our super menu manually when running outside the Shell. */
+	gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
+
+	ephy_window_toggle_visibility_for_app_menu (window);
+	priv->app_menu_visibility_handler =  g_signal_connect_swapped (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
+								       "notify::gtk-shell-shows-app-menu",
+								       G_CALLBACK (ephy_window_toggle_visibility_for_app_menu), window);
 
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (priv->manager);

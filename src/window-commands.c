@@ -43,6 +43,7 @@
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
+#include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
@@ -718,6 +719,22 @@ window_cmd_file_close_window (GtkAction *action,
 }
 
 void
+window_cmd_file_quit (GtkAction *action,
+		      EphyWindow *window)
+{
+	if (ephy_session_close_all_windows (EPHY_SESSION (ephy_shell_get_session (ephy_shell))))
+		g_application_quit (g_application_get_default ());
+}
+
+void
+window_cmd_file_new_window (GtkAction *action,
+			    EphyWindow *window)
+{
+	ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
+			    EPHY_NEW_TAB_IN_NEW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
+}
+
+void
 window_cmd_edit_undo (GtkAction *action,
 		      EphyWindow *window)
 {
@@ -927,6 +944,52 @@ window_cmd_edit_find_prev (GtkAction *action,
 
 	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
 	ephy_find_toolbar_find_previous (toolbar);
+}
+
+void
+window_cmd_edit_bookmarks (GtkAction *action,
+			   EphyWindow *window)
+{
+	GtkWidget *bwindow;
+	
+	bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
+	gtk_window_present (GTK_WINDOW (bwindow));
+}
+
+void
+window_cmd_edit_history (GtkAction *action,
+			 EphyWindow *window)
+{
+	GtkWidget *hwindow;
+	
+	hwindow = ephy_shell_get_history_window (ephy_shell);
+	gtk_window_present (GTK_WINDOW (hwindow));
+}
+
+void
+window_cmd_edit_preferences (GtkAction *action,
+			     EphyWindow *window)
+{
+	EphyDialog *dialog;
+	
+	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
+	
+	ephy_dialog_show (dialog);
+}
+
+void
+window_cmd_edit_personal_data (GtkAction *action,
+			       EphyWindow *window)
+{
+	PdmDialog *dialog;
+	
+	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
+	/* FIXME?: pdm_dialog_open is supposed to scroll to the host passed
+	 * as second parameters in the cookies tab. Honestly I think this
+	 * has been broken for a while. In any case it's probably not
+	 * relevant here, although we could get the host of the last active
+	 * ephy window, I guess. */
+	pdm_dialog_open (dialog, NULL);
 }
 
 void

@@ -166,8 +166,7 @@ new_window (GSimpleAction *action,
             GVariant *parameter,
             gpointer user_data)
 {
-  ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
-                      EPHY_NEW_TAB_IN_NEW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
+  window_cmd_file_new_window (NULL, NULL);
 }
 
 static void
@@ -175,10 +174,7 @@ show_bookmarks (GSimpleAction *action,
                 GVariant *parameter,
                 gpointer user_data)
 {
-  GtkWidget *bwindow;
-
-  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
-  gtk_window_present (GTK_WINDOW (bwindow));
+  window_cmd_edit_bookmarks (NULL, NULL);
 }
 
 static void
@@ -186,10 +182,7 @@ show_history (GSimpleAction *action,
               GVariant *parameter,
               gpointer user_data)
 {
-  GtkWidget *hwindow;
-
-  hwindow = ephy_shell_get_history_window (ephy_shell);
-  gtk_window_present (GTK_WINDOW (hwindow));
+  window_cmd_edit_history (NULL, NULL);
 }
 
 static void
@@ -197,11 +190,7 @@ show_preferences (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
-  EphyDialog *dialog;
-
-  dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
-
-  ephy_dialog_show (dialog);
+  window_cmd_edit_preferences (NULL, NULL);
 }
 
 static void
@@ -209,15 +198,7 @@ show_pdm (GSimpleAction *action,
           GVariant *parameter,
           gpointer user_data)
 {
-  PdmDialog *dialog;
-
-  dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
-  /* FIXME?: pdm_dialog_open is supposed to scroll to the host passed
-   * as second parameters in the cookies tab. Honestly I think this
-   * has been broken for a while. In any case it's probably not
-   * relevant here, although we could get the host of the last active
-   * ephy window, I guess. */
-  pdm_dialog_open (dialog, NULL);
+  window_cmd_edit_personal_data (NULL, NULL);
 }
 
 static void
@@ -239,8 +220,7 @@ quit_application (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
-  if (ephy_session_close_all_windows (EPHY_SESSION (ephy_shell_get_session (ephy_shell))))
-    g_application_quit (g_application_get_default ());
+  window_cmd_file_quit (NULL, NULL);
 }
 
 static GActionEntry app_entries[] = {

@@ -100,6 +100,18 @@ void window_cmd_load_location            (GtkAction  *action,
                                           EphyWindow *window);
 void window_cmd_browse_with_caret        (GtkAction  *action,
                                           EphyWindow *window);
+void window_cmd_file_quit                (GtkAction *action,
+                                          EphyWindow *window);
+void window_cmd_edit_bookmarks           (GtkAction *action,
+                                          EphyWindow *window);
+void window_cmd_edit_history             (GtkAction *action,
+                                          EphyWindow *window);
+void window_cmd_file_new_window          (GtkAction *action,
+                                          EphyWindow *window);
+void window_cmd_edit_preferences         (GtkAction *action,
+                                          EphyWindow *window);
+void window_cmd_edit_personal_data       (GtkAction *action,
+                                          EphyWindow *window);
 
 G_END_DECLS
 
