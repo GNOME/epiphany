@@ -33,7 +33,6 @@
 #include "ephy-settings.h"
 
 #include <gtk/gtk.h>
-#include <string.h>
 
 #define LOCKDOWN_FLAG 1 << 8
 
@@ -41,7 +40,7 @@ static int
 find_name (GtkActionGroup *action_group,
 	   const char *name)
 {
-	return strcmp (gtk_action_group_get_name (action_group), name);
+	return g_strcmp0 (gtk_action_group_get_name (action_group), name);
 }
 
 static GtkActionGroup *
