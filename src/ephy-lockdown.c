@@ -182,7 +182,7 @@ bind_location_controller (GSettings *settings,
                           EphyLocationController *controller)
 {
   g_settings_bind (settings, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL,
-                   controller, "editable  ",
+                   controller, "editable",
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 }
@@ -232,7 +232,7 @@ window_added_cb (GtkApplication *application,
   g_settings_bind_writable (settings, "picture-filename",
                             action, "sensitive", FALSE);
 
-  action_group = find_action_group (manager, "SpecialToo  lbarActions");
+  action_group = find_action_group (manager, "SpecialToolbarActions");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group, special_toolbar_actions,
                              G_N_ELEMENTS (special_toolbar_actions));
