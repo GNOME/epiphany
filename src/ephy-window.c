@@ -858,24 +858,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 }
 
 static gboolean 
-scroll_event_cb (GtkWidget *widget,
-		 GdkEventScroll *event,
-		 EphyWindow *window)
-{
-	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
-
-	if (modifier != GDK_CONTROL_MASK)
-		return FALSE;
-
-	if (event->direction == GDK_SCROLL_UP)
-		ephy_window_set_zoom (window, ZOOM_IN);
-	else if (event->direction == GDK_SCROLL_DOWN)
-		ephy_window_set_zoom (window, ZOOM_OUT);
-
-	return TRUE;
-}
-
-static gboolean 
 ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
 {
@@ -2818,15 +2800,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (web_view, "notify::zoom-level",
 				 G_CALLBACK (sync_tab_zoom),
 				 window, 0);
-	/* FIXME: we should set our own handler for
-	   scroll-event, but right now it's pointless because
-	   GtkScrolledWindow will eat all the events, even
-	   those with modifier keys we want to catch to zoom
-	   in and out. See bug #562630
-	*/
-	g_signal_connect_object (web_view, "scroll-event",
-				 G_CALLBACK (scroll_event_cb),
-				 window, 0);
+
 #ifdef HAVE_WEBKIT2
 	g_signal_connect_object (web_view, "create",
 				 G_CALLBACK (create_web_view_cb),
@@ -2932,9 +2906,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (sync_tab_zoom),
-					      window);
-	g_signal_handlers_disconnect_by_func (web_view,
-					      G_CALLBACK (scroll_event_cb),
 					      window);
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (create_web_view_cb),
