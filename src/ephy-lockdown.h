@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
@@ -30,31 +31,31 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_LOCKDOWN		(ephy_lockdown_get_type ())
-#define EPHY_LOCKDOWN(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LOCKDOWN, EphyLockdown))
-#define EPHY_LOCKDOWN_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LOCKDOWN, EphyLockdownClass))
-#define EPHY_IS_LOCKDOWN(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LOCKDOWN))
-#define EPHY_IS_LOCKDOWN_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LOCKDOWN))
-#define EPHY_LOCKDOWN_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LOCKDOWN, EphyLockdownClass))
+#define EPHY_TYPE_LOCKDOWN          (ephy_lockdown_get_type ())
+#define EPHY_LOCKDOWN(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LOCKDOWN, EphyLockdown))
+#define EPHY_LOCKDOWN_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LOCKDOWN, EphyLockdownClass))
+#define EPHY_IS_LOCKDOWN(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LOCKDOWN))
+#define EPHY_IS_LOCKDOWN_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LOCKDOWN))
+#define EPHY_LOCKDOWN_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LOCKDOWN, EphyLockdownClass))
 
-typedef struct _EphyLockdownClass	EphyLockdownClass;
-typedef struct _EphyLockdown		EphyLockdown;
-typedef struct _EphyLockdownPrivate	EphyLockdownPrivate;
+typedef struct _EphyLockdownClass   EphyLockdownClass;
+typedef struct _EphyLockdown        EphyLockdown;
+typedef struct _EphyLockdownPrivate EphyLockdownPrivate;
 
 struct _EphyLockdownClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 struct _EphyLockdown
 {
-	GObject parent_instance;
+  GObject parent_instance;
 
-	/*< private >*/
-	EphyLockdownPrivate *priv;
+  /*< private >*/
+  EphyLockdownPrivate *priv;
 };
 
-GType	ephy_lockdown_get_type		(void);
+GType ephy_lockdown_get_type    (void);
 
 G_END_DECLS
 
