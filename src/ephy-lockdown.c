@@ -2,7 +2,7 @@
 /*
  *  Copyright © 2000, 2001, 2002, 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
- *  Copyright © 2010 Igalia S.L.
+ *  Copyright © 2010, 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,18 +28,14 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-extension.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
 #include "ephy-settings.h"
-#include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
 #include <string.h>
 
 #define LOCKDOWN_FLAG 1 << 8
-
-static void ephy_lockdown_iface_init (EphyExtensionIface *iface);
 
 static int
 find_name (GtkActionGroup *action_group,
@@ -198,14 +194,18 @@ bind_location_controller (GSettings *settings,
 }
 
 static void
-impl_attach_window (EphyExtension *extension,
-		    EphyWindow *window)
+window_added_cb (GtkApplication *application,
+		 GtkWindow *window,
+		 EphyLockdown *lockdown)
 {
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GSettings *settings;
 	EphyLocationController *location_controller;
+
+	if (!EPHY_IS_WINDOW (window))
+		return;
 
 	g_signal_connect (EPHY_SETTINGS_LOCKDOWN,
 			  "changed::" EPHY_PREFS_LOCKDOWN_FULLSCREEN,
@@ -216,11 +216,11 @@ impl_attach_window (EphyExtension *extension,
 
 	/* Trigger an initial state on these elements. */
 	fullscreen_cb (EPHY_SETTINGS_LOCKDOWN,
-		       EPHY_PREFS_LOCKDOWN_FULLSCREEN, window);
+		       EPHY_PREFS_LOCKDOWN_FULLSCREEN, EPHY_WINDOW (window));
 	arbitrary_url_cb (EPHY_SETTINGS_LOCKDOWN,
-			  EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, window);
+			  EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, EPHY_WINDOW (window));
 
-	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
+	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (EPHY_WINDOW (window)));
 
 	action_group = find_action_group (manager, "WindowActions");
 	bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
@@ -243,24 +243,23 @@ impl_attach_window (EphyExtension *extension,
 				   action_group, special_toolbar_actions,
 				   G_N_ELEMENTS (special_toolbar_actions));
 
-	location_controller = ephy_window_get_location_controller (window);
+	location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
 	bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
 }
+
+G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
 
 static void
 ephy_lockdown_init (EphyLockdown *lockdown)
 {
+	EphyShell *shell;
+
 	LOG ("EphyLockdown initialising");
-}
 
-G_DEFINE_TYPE_WITH_CODE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
-						ephy_lockdown_iface_init))
+	shell = ephy_shell_get_default ();
 
-static void
-ephy_lockdown_iface_init (EphyExtensionIface *iface)
-{
-	iface->attach_window = impl_attach_window;
+	g_signal_connect (shell, "window-added",
+			  G_CALLBACK (window_added_cb), lockdown);
 }
 
 static void

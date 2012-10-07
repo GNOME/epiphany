@@ -901,16 +901,8 @@ ephy_shell_get_lockdown (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (shell->priv->lockdown == NULL) {
-    EphyExtensionsManager *manager;
-
+  if (shell->priv->lockdown == NULL)
     shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
-
-    manager = EPHY_EXTENSIONS_MANAGER
-      (ephy_shell_get_extensions_manager (shell));
-    ephy_extensions_manager_register (manager,
-                                      G_OBJECT (shell->priv->lockdown));
-  }
 
   return G_OBJECT (shell->priv->session);
 }
