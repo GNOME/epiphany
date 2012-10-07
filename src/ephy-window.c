@@ -278,7 +278,7 @@ static const struct
 	/* FIXME: PageMenu should have its accel without being in the
 	 * extra keybindings, but does not seem to work for some
 	 * reason. */
-	{ GDK_KEY_e,		GDK_MOD1_MASK,	        "PageMenu",		 TRUE },
+	{ GDK_KEY_F10,		0,			"PageMenu",		 TRUE },
 	{ GDK_KEY_Home,		GDK_MOD1_MASK,	        "FileHome",		 TRUE },
 	/* FIXME: these are not in any menu for now, so add them here. */
 	{ GDK_KEY_F11,          0,                      "ViewFullscreen",        FALSE },
