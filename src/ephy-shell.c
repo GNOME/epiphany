@@ -469,6 +469,17 @@ ephy_shell_window_removed (GtkApplication *application,
   GTK_APPLICATION_CLASS (ephy_shell_parent_class)->window_removed (application, window);
 }
 
+static GObject *
+ephy_shell_get_lockdown (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->priv->lockdown == NULL)
+    shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
+
+  return G_OBJECT (shell->priv->session);
+}
+
 static void
 ephy_shell_constructed (GObject *object)
 {
@@ -479,6 +490,12 @@ ephy_shell_constructed (GObject *object)
     flags |= G_APPLICATION_NON_UNIQUE;
     g_application_set_flags (G_APPLICATION (object), flags);
   }
+
+  /* FIXME: not sure if this is the best place to put this stuff. */
+  ephy_shell_get_lockdown (EPHY_SHELL (object));
+  
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_TEST)
+    ephy_embed_shell_get_adblock_manager (EPHY_EMBED_SHELL (object));
 
   if (G_OBJECT_CLASS (ephy_shell_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
@@ -590,17 +607,6 @@ download_started_cb (WebKitWebContext *web_context,
 }
 #endif
 
-static GObject *
-ephy_shell_get_lockdown (EphyShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  if (shell->priv->lockdown == NULL)
-    shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
-
-  return G_OBJECT (shell->priv->session);
-}
-
 static void
 ephy_shell_init (EphyShell *shell)
 {
@@ -619,10 +625,6 @@ ephy_shell_init (EphyShell *shell)
                     G_CALLBACK (download_started_cb),
                     shell);
 #endif
-
-    /* FIXME */
-    ephy_shell_get_lockdown (shell);
-    ephy_embed_shell_get_adblock_manager (embed_shell);
 }
 
 static void
