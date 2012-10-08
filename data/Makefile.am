@@ -25,9 +25,6 @@ aboutdialog_DATA = about.ini
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
-m4datadir = $(datadir)/aclocal
-m4data_DATA = epiphany.m4
-
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-$(EPIPHANY_API_VERSION).pc
 
@@ -70,7 +67,6 @@ EXTRA_DIST = \
 	$(pkgconfig_DATA)		\
 	$(xsl_DATA)			\
 	$(service_DATA)			\
-	$(m4data_DATA)			\
 	$(default_bookmarks_in_files)	\
 	$(gsettings_SCHEMAS)		\
 	$(convert_DATA)			\

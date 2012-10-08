@@ -122,7 +122,6 @@ typedef enum
 #define EPHY_PREFS_MANAGED_NETWORK                "managed-network"
 #define EPHY_PREFS_ENABLE_SMOOTH_SCROLLING        "enable-smooth-scrolling"
 #define EPHY_PREFS_ENABLE_CARET_BROWSING          "enable-caret-browsing"
-#define EPHY_PREFS_ENABLED_EXTENSIONS             "enabled-extensions"
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE           "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY         "restore-session-policy"
 

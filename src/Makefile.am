@@ -40,8 +40,6 @@ NOINST_H_FILES = \
 	window-commands.h
 
 INST_H_FILES = \
-	ephy-extension.h		\
-	ephy-extensions-manager.h	\
 	ephy-link.h			\
 	ephy-notebook.h			\
 	ephy-session.h			\
@@ -57,8 +55,6 @@ libephymain_la_SOURCES = \
 	ephy-combined-stop-reload-action.c	\
 	ephy-encoding-dialog.c			\
 	ephy-encoding-menu.c			\
-	ephy-extension.c			\
-	ephy-extensions-manager.c		\
 	ephy-find-toolbar.c			\
 	ephy-home-action.c			\
 	ephy-history-window.c			\
@@ -95,7 +91,6 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DEXTENSIONS_DIR=\""$(pkglibdir)/$(EPIPHANY_API_VERSION)/extensions"\" 	\
 	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
@@ -172,13 +167,6 @@ epiphany_LDADD = \
 	$(CODE_COVERAGE_LDFLAGS) \
 	$(LIBINTL)
 
-if !WITH_WEBKIT2
-if HAVE_INTROSPECTION
-epiphany_CFLAGS += $(INTROSPECTION_CFLAGS)
-epiphany_LDADD += $(INTROSPECTION_LIBS)
-endif
-endif
-
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
 	ephy-type-builtins.h
@@ -232,105 +220,3 @@ stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-
-if !WITH_WEBKIT2
-if HAVE_INTROSPECTION
-EPHY_GIR_H_FILES = \
-	$(top_srcdir)/embed/ephy-download.h \
-	$(top_srcdir)/embed/ephy-embed.h \
-	$(top_srcdir)/embed/ephy-embed-container.h \
-	$(top_srcdir)/embed/ephy-embed-event.h \
-	$(top_srcdir)/embed/ephy-embed-shell.h \
-	$(top_srcdir)/embed/ephy-embed-single.h \
-	$(top_srcdir)/embed/ephy-overview.h \
-	$(top_srcdir)/embed/ephy-permission-manager.h \
-	$(top_srcdir)/embed/ephy-web-view.h \
-	$(top_srcdir)/lib/ephy-dialog.h \
-	$(top_srcdir)/lib/ephy-node-db.h \
-	$(top_srcdir)/lib/ephy-node.h \
-	$(top_srcdir)/lib/ephy-state.h \
-	$(top_srcdir)/lib/widgets/ephy-download-widget.h \
-	$(top_srcdir)/lib/widgets/ephy-frecent-store.h \
-	$(top_srcdir)/lib/widgets/ephy-search-entry.h \
-	$(top_srcdir)/src/bookmarks/ephy-bookmarks.h \
-	$(top_srcdir)/src/ephy-extension.h \
-	$(top_srcdir)/src/ephy-extensions-manager.h \
-	$(top_srcdir)/src/ephy-find-toolbar.h \
-	$(top_srcdir)/src/ephy-link-action.h \
-	$(top_srcdir)/src/ephy-link.h \
-	$(top_srcdir)/src/ephy-location-controller.h \
-	$(top_srcdir)/src/ephy-notebook.h \
-	$(top_srcdir)/src/ephy-session.h \
-	$(top_srcdir)/src/ephy-shell.h \
-	$(top_srcdir)/src/ephy-window.h \
-	$(NULL)
-
-EPHY_GIR_C_FILES = \
-	$(top_srcdir)/embed/ephy-download.c \
-	$(top_srcdir)/embed/ephy-embed.c \
-	$(top_srcdir)/embed/ephy-embed-container.c \
-	$(top_srcdir)/embed/ephy-embed-event.c \
-	$(top_srcdir)/embed/ephy-embed-shell.c \
-	$(top_srcdir)/embed/ephy-embed-single.c \
-	$(top_srcdir)/embed/ephy-overview.c \
-	$(top_srcdir)/embed/ephy-permission-manager.c \
-	$(top_srcdir)/embed/ephy-web-view.c \
-	$(top_srcdir)/lib/ephy-dialog.c \
-	$(top_srcdir)/lib/ephy-node-db.c \
-	$(top_srcdir)/lib/ephy-node.c \
-	$(top_srcdir)/lib/ephy-state.c \
-	$(top_srcdir)/lib/widgets/ephy-download-widget.c \
-	$(top_srcdir)/lib/widgets/ephy-frecent-store.c \
-	$(top_srcdir)/lib/widgets/ephy-search-entry.c \
-	$(top_srcdir)/src/bookmarks/ephy-bookmarks.c \
-	$(top_srcdir)/src/ephy-extension.c \
-	$(top_srcdir)/src/ephy-extensions-manager.c \
-	$(top_srcdir)/src/ephy-find-toolbar.c \
-	$(top_srcdir)/src/ephy-link-action.c \
-	$(top_srcdir)/src/ephy-link.c \
-	$(top_srcdir)/src/ephy-location-controller.c \
-	$(top_srcdir)/src/ephy-notebook.c \
-	$(top_srcdir)/src/ephy-session.c \
-	$(top_srcdir)/src/ephy-shell.c \
-	$(top_srcdir)/src/ephy-window.c \
-	$(NULL)
-
-Epiphany-$(EPIPHANY_API_VERSION).gir: $(INTROSPECTION_SCANNER) $(EPHY_GIR_H_FILES) \
-                                      $(EPHY_GIR_C_FILES) epiphany
-	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir)/data:$$PKG_CONFIG_PATH \
-	$(INTROSPECTION_SCANNER) -v --warn-all \
-		--identifier-prefix=Ephy \
-		--symbol-prefix=ephy \
-		--namespace=Epiphany \
-		--nsversion=$(EPIPHANY_API_VERSION) \
-		--add-include-path=. \
-		--add-include-path=$(srcdir) \
-		--include=Gtk-3.0 \
-		--include=libxml2-2.0 \
-		--include=WebKit-3.0 \
-		--program=./epiphany \
-		--output=$@ \
-		--pkg=epiphany-$(EPIPHANY_API_VERSION) \
-		-DEPIPHANY_COMPILATION \
-		-I$(top_srcdir)/embed \
-		-I$(top_srcdir)/lib \
-		-I$(top_srcdir)/lib/egg \
-		-I$(top_srcdir)/lib/widgets \
-		-I$(top_srcdir)/src \
-		-I$(top_srcdir)/src/bookmarks \
-		$(EPHY_GIR_H_FILES) \
-		$(EPHY_GIR_C_FILES)
-
-girdir = $(datadir)/gir-1.0
-gir_DATA = Epiphany-$(EPIPHANY_API_VERSION).gir
-
-typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = Epiphany-$(EPIPHANY_API_VERSION).typelib
-
-Epiphany-$(EPIPHANY_API_VERSION).typelib: Epiphany-$(EPIPHANY_API_VERSION).gir $(INTROSPECTION_COMPILER)
-	$(AM_V_GEN) $(INTROSPECTION_COMPILER) Epiphany-$(EPIPHANY_API_VERSION).gir --includedir=$(top_builddir)/src --includedir=$(srcdir) -o Epiphany-$(EPIPHANY_API_VERSION).typelib
-
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
-
-endif # HAVE_INTROSPECTION
-endif # !WITH_WEBKIT2

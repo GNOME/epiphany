@@ -30,7 +30,6 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
-#include "ephy-extensions-manager.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
@@ -57,7 +56,6 @@ struct _EphyShellPrivate {
   GList *windows;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
-  EphyExtensionsManager *extensions_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *bme;
   GtkWidget *history_window;
@@ -592,6 +590,17 @@ download_started_cb (WebKitWebContext *web_context,
 }
 #endif
 
+static GObject *
+ephy_shell_get_lockdown (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->priv->lockdown == NULL)
+    shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
+
+  return G_OBJECT (shell->priv->session);
+}
+
 static void
 ephy_shell_init (EphyShell *shell)
 {
@@ -610,6 +619,10 @@ ephy_shell_init (EphyShell *shell)
                     G_CALLBACK (download_started_cb),
                     shell);
 #endif
+
+    /* FIXME */
+    ephy_shell_get_lockdown (shell);
+    ephy_embed_shell_get_adblock_manager (embed_shell);
 }
 
 static void
@@ -618,9 +631,6 @@ ephy_shell_dispose (GObject *object)
   EphyShellPrivate *priv = EPHY_SHELL (object)->priv;
 
   LOG ("EphyShell disposing");
-
-  /* This will unload the extensions. */
-  g_clear_object (&priv->extensions_manager);
 
   g_clear_object (&priv->session);
   g_clear_object (&priv->lockdown);
@@ -868,25 +878,6 @@ ephy_shell_get_session (EphyShell *shell)
 }
 
 /**
- * ephy_shell_get_lockdown:
- * @shell: the #EphyShell
- *
- * Returns the lockdown controller.
- *
- * Return value: the lockdown controller
- **/
-static GObject *
-ephy_shell_get_lockdown (EphyShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  if (shell->priv->lockdown == NULL)
-    shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
-
-  return G_OBJECT (shell->priv->session);
-}
-
-/**
  * ephy_shell_get_bookmarks:
  *
  * Return value: (transfer none):
@@ -899,31 +890,6 @@ ephy_shell_get_bookmarks (EphyShell *shell)
   }
 
   return shell->priv->bookmarks;
-}
-
-/**
- * ephy_shell_get_extensions_manager:
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_shell_get_extensions_manager (EphyShell *es)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (es), NULL);
-
-  if (es->priv->extensions_manager == NULL) {
-    /* Instantiate extensions manager */
-    es->priv->extensions_manager =
-      g_object_new (EPHY_TYPE_EXTENSIONS_MANAGER, NULL);
-
-    ephy_extensions_manager_startup (es->priv->extensions_manager);
-
-    /* FIXME */
-    ephy_shell_get_lockdown (es);
-    ephy_embed_shell_get_adblock_manager (embed_shell);
-  }
-
-  return G_OBJECT (es->priv->extensions_manager);
 }
 
 /**

@@ -66,7 +66,6 @@ IGNORE_HFILES = \
 	ephy-completion-model.h \
 	ephy-encoding-dialog.h \
 	ephy-encoding-menu.h \
-	ephy-extension.h \
 	ephy-favicon-action.h \
 	ephy-favorites-menu.h \
 	ephy-history-window.h \

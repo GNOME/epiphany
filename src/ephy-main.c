@@ -42,10 +42,6 @@
 #include <libxml/xmlversion.h>
 #include <string.h>
 
-#ifdef ENABLE_INTROSPECTION
-#include <girepository.h>
-#endif
-
 static GQuark startup_error_quark = 0;
 #define STARTUP_ERROR_QUARK (startup_error_quark)
 
@@ -330,10 +326,6 @@ main (int argc,
   g_option_group_add_entries (option_group, option_entries);
 
   g_option_context_set_main_group (option_context, option_group);
-
-#ifdef ENABLE_INTROSPECTION
-  g_option_context_add_group (option_context, g_irepository_get_option_group ());
-#endif
 
   g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
 

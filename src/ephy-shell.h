@@ -167,8 +167,6 @@ GObject        *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarks  *ephy_shell_get_bookmarks                (EphyShell *shell);
 
-GObject        *ephy_shell_get_extensions_manager       (EphyShell *shell);
-
 GtkWidget      *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
 
 GtkWidget      *ephy_shell_get_history_window           (EphyShell *shell);

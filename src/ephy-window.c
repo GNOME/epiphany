@@ -37,7 +37,6 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
 #include "ephy-encoding-menu.h"
-#include "ephy-extension.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
@@ -94,7 +93,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "PopupAction", NULL, "" },
 	{ "PagePopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
-	{ "Extensions", NULL, N_("_Extensions") },
 
 	/* File actions. */
 
@@ -2926,7 +2924,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 			EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyExtension *manager;
 
 	LOG ("page-added notebook %p embed %p position %u\n", notebook, embed, position);
 
@@ -2940,10 +2937,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	g_signal_connect_object (ephy_embed_get_web_view (embed), "ge-modal-alert",
 				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
-
-	/* Let the extensions attach themselves to the tab */
-	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-	ephy_extension_attach_tab (manager, window, embed);
 
         if (priv->present_on_insert)
         {
@@ -2961,17 +2954,12 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 			  EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyExtension *manager;
 
 	LOG ("page-removed notebook %p embed %p position %u\n", notebook, embed, position);
 
 	if (priv->closing) return;
 
 	g_return_if_fail (EPHY_IS_EMBED (embed));
-
-	/* Let the extensions remove themselves from the tab */
-	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-	ephy_extension_detach_tab (manager, window, embed);
 
 #if 0
 	g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
@@ -3233,13 +3221,8 @@ ephy_window_dispose (GObject *object)
 	/* Only do these once */
 	if (window->priv->closing == FALSE)
 	{
-		EphyExtension *manager;
-
 		window->priv->closing = TRUE;
 
-		/* Let the extensions detach themselves from the window */
-		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-		ephy_extension_detach_window (manager, window);
 		ephy_bookmarks_ui_detach_window (window);
 
 		g_signal_handlers_disconnect_by_func
@@ -3593,7 +3576,6 @@ ephy_window_constructor (GType type,
 	GObject *object;
 	EphyWindow *window;
 	EphyWindowPrivate *priv;
-	EphyExtension *manager;
 	EphyEmbedSingle *single;
 	GtkSettings *settings;
 	GtkAction *action;
@@ -3711,9 +3693,6 @@ ephy_window_constructor (GType type,
 	/* Initialize the menus */
 	priv->enc_menu = ephy_encoding_menu_new (window);
 
-	/* Once the window is sufficiently created let the extensions attach to it */
-	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-	ephy_extension_attach_window (manager, window);
 	ephy_bookmarks_ui_attach_window (window);
 
 	/* other notifiers */

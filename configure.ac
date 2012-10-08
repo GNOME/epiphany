@@ -158,23 +158,6 @@ AC_TYPE_SIZE_T
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
 
-EPIPHANY_FEATURES=
-
-# *********************
-# GObject Introspection
-# *********************
-
-GOBJECT_INTROSPECTION_CHECK([0.9.5])
-
-if test "$with_webkit2" = "no"; then
-   if test "$found_introspection" = "yes"; then
-      EPIPHANY_FEATURES="$EPIPHANY_FEATURES introspection"
-      AC_DEFINE([ENABLE_INTROSPECTION], [1], [Define to enable introspection support])
-   fi
-else
-   found_introspection=no
-fi
-
 # ***
 # NSS
 # ***
@@ -192,8 +175,6 @@ if test "$enable_nss" = "yes"; then
 fi
 
 AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
-
-AC_SUBST([EPIPHANY_FEATURES])
 
 # *******************************
 # Add warning flags
@@ -309,7 +290,6 @@ Epiphany was configured with the following options:
 	Build tests		   : $enable_tests
 	Code coverage		   : $enable_code_coverage
 
-	GObject introspection	   : $found_introspection
 	NSS support		   : $enable_nss
 	WebKit2			   : $with_webkit2
 "

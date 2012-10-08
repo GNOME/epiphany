@@ -14,13 +14,11 @@ NOINST_H_FILES = \
 	ephy-file-helpers.h			\
 	ephy-gui.h				\
 	ephy-langs.h				\
-	ephy-module.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-object-helpers.h			\
 	ephy-prefs.h				\
 	ephy-profile-utils.h			\
-	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
 	ephy-smaps.h				\
 	ephy-sqlite.h				\
@@ -53,7 +51,6 @@ libephymisc_la_SOURCES = \
 	ephy-gui.c				\
 	ephy-langs.c				\
 	ephy-loader.c				\
-	ephy-module.c				\
 	ephy-node.c				\
 	ephy-node.h				\
 	ephy-node-filter.c			\
@@ -64,7 +61,6 @@ libephymisc_la_SOURCES = \
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
 	ephy-settings.c				\
-	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\
 	ephy-smaps.c				\
 	ephy-snapshot-service.c			\
@@ -88,7 +84,6 @@ libephymisc_la_CPPFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		    \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"    \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\" \
-	-DEXTENSIONS_DIR=\""$(pkglibdir)/$(EPIPHANY_API_VERSION)/extensions"\" 	\
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
