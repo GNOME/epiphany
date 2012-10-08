@@ -87,7 +87,7 @@ main (int argc, char *argv[])
     return -1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_PRIVATE);
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   g_test_add_func ("/src/ephy-completion-model/create",
                    test_ephy_completion_model_create);

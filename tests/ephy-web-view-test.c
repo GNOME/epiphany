@@ -450,7 +450,7 @@ main (int argc, char *argv[])
     return -1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_PRIVATE);
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   server = soup_server_new (SOUP_SERVER_PORT, SERVER_PORT, NULL);
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);
