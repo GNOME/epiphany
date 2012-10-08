@@ -36,7 +36,6 @@ TYPES_H_FILES = \
 
 INST_H_FILES = \
 	ephy-dialog.h				\
-	ephy-loader.h				\
 	ephy-node.h				\
 	ephy-node-db.h				\
 	ephy-settings.h				\
@@ -50,7 +49,6 @@ libephymisc_la_SOURCES = \
 	ephy-file-helpers.c			\
 	ephy-gui.c				\
 	ephy-langs.c				\
-	ephy-loader.c				\
 	ephy-node.c				\
 	ephy-node.h				\
 	ephy-node-filter.c			\
