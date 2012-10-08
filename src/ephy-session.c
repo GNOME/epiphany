@@ -280,12 +280,31 @@ session_command_open_uris (EphySession *session,
 	g_object_unref (shell);
 }
 
+static void
+session_maybe_open_window (EphySession *session,
+			   guint32 user_time)
+{
+	EphyShell *shell = ephy_shell_get_default ();
+
+	/* FIXME: maybe just check for normal windows? */
+	if (ephy_shell_get_n_windows (shell) == 0)
+	{
+		ephy_shell_new_tab_full (shell,
+					 NULL /* window */, NULL /* tab */,
+					 NULL /* NetworkRequest */,
+					 EPHY_NEW_TAB_IN_NEW_WINDOW |
+					 EPHY_NEW_TAB_HOME_PAGE,
+					 EPHY_WEB_VIEW_CHROME_ALL,
+					 FALSE /* is popup? */,
+					 user_time);
+	}
+}
+
 static gboolean
 session_command_dispatch (EphySession *session)
 {
 	EphySessionPrivate *priv = session->priv;
 	SessionCommand *cmd;
-	EphyShell *shell = ephy_shell_get_default ();
 	gboolean run_again = TRUE;
 
 	cmd = g_queue_pop_head (priv->queue);
@@ -297,20 +316,6 @@ session_command_dispatch (EphySession *session)
 	{
 		case EPHY_SESSION_CMD_OPEN_URIS:
 			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
-			break;
-		case EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW:
-			/* FIXME: maybe just check for normal windows? */
-			if (ephy_shell_get_n_windows (shell) == 0)
-			{
-				ephy_shell_new_tab_full (shell,
-							 NULL /* window */, NULL /* tab */,
-							 NULL /* NetworkRequest */,
-							 EPHY_NEW_TAB_IN_NEW_WINDOW |
-							 EPHY_NEW_TAB_HOME_PAGE,
-							 EPHY_WEB_VIEW_CHROME_ALL,
-							 FALSE /* is popup? */,
-							 cmd->user_time);
-			}
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1004,9 +1009,7 @@ load_stream_complete_error (GSimpleAsyncResult *simple,
 
 	data = g_simple_async_result_get_op_res_gpointer (simple);
 	context = (SessionParserContext *)g_markup_parse_context_get_user_data (data->parser);
-	ephy_session_queue_command (session,
-				    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
-				    NULL, NULL, context->user_time, FALSE);
+	session_maybe_open_window (session, context->user_time);
 	g_object_unref (session);
 
 	g_object_unref (simple);
@@ -1345,9 +1348,7 @@ ephy_session_resume (EphySession *session,
 		if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 			session_delete (session, SESSION_STATE);
 
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
-					    NULL, NULL, user_time, FALSE);
+		session_maybe_open_window (session, user_time);
 	}
 	else if (ephy_shell_get_n_windows (shell) == 0)
 	{
