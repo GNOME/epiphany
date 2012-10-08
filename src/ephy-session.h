@@ -68,9 +68,8 @@ void             ephy_session_open_uris               (EphySession *session,
                                                        const char **uris,
                                                        EphyStartupFlags startup_flags,
                                                        guint32 user_time);
-gboolean         ephy_session_save                    (EphySession *session,
+void 	         ephy_session_save		      (EphySession *session,
                                                        const char *filename);
-
 void             ephy_session_load                    (EphySession *session,
                                                        const char *filename,
                                                        guint32 user_time,

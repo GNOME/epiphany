@@ -45,6 +45,7 @@
 struct _EphySessionPrivate
 {
 	guint open_uris_idle_id;
+	GCancellable *save_cancellable;
 	guint dont_save : 1;
 };
 
@@ -438,35 +439,169 @@ ephy_session_close (EphySession *session)
 	}
 }
 
+static void
+get_window_geometry (GtkWindow *window,
+		     GdkRectangle *rectangle)
+{
+	gtk_window_get_size (window, &rectangle->width, &rectangle->height);
+	gtk_window_get_position (window, &rectangle->x, &rectangle->y);
+}
+
+typedef struct {
+	char *url;
+	char *title;
+	gboolean loading;
+} SessionTab;
+
+static SessionTab *
+session_tab_new (EphyEmbed *embed)
+{
+	SessionTab *session_tab;
+	const char *address;
+	EphyWebView *web_view = ephy_embed_get_web_view (embed);
+
+	session_tab = g_slice_new (SessionTab);
+
+	address = ephy_web_view_get_address (web_view);
+	/* Do not store ephy-about: URIs, they are not valid for loading. */
+	if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
+	{
+		session_tab->url = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
+	}
+	else
+	{
+		session_tab->url = g_strdup (address);
+	}
+
+	session_tab->title = g_strdup (ephy_web_view_get_title (web_view));
+	session_tab->loading = ephy_web_view_is_loading (web_view);
+
+	return session_tab;
+}
+
+static void
+session_tab_free (SessionTab *tab)
+{
+	g_free (tab->url);
+	g_free (tab->title);
+
+	g_slice_free (SessionTab, tab);
+}
+
+typedef struct {
+	GdkRectangle geometry;
+	char *role;
+
+	GList *tabs;
+	gint active_tab;
+} SessionWindow;
+
+static SessionWindow *
+session_window_new (EphyWindow *window)
+{
+	SessionWindow *session_window;
+	GList *tabs, *l;
+	GtkNotebook *notebook;
+
+	tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
+	/* Do not save an empty EphyWindow.
+	 * This only happens when the window was newly opened.
+	 */
+	if (!tabs)
+	{
+		return NULL;
+	}
+
+	session_window = g_slice_new0 (SessionWindow);
+	get_window_geometry (GTK_WINDOW (window), &session_window->geometry);
+	session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
+
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		SessionTab *tab;
+
+		tab = session_tab_new (EPHY_EMBED (l->data));
+		session_window->tabs = g_list_prepend (session_window->tabs, tab);
+	}
+	g_list_free (tabs);
+	session_window->tabs = g_list_reverse (session_window->tabs);
+
+	notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	session_window->active_tab = gtk_notebook_get_current_page (notebook);
+
+	return session_window;
+}
+
+static void
+session_window_free (SessionWindow *session_window)
+{
+	g_free (session_window->role);
+	g_list_free_full (session_window->tabs, (GDestroyNotify)session_tab_free);
+
+	g_slice_free (SessionWindow, session_window);
+}
+
+typedef struct {
+	EphySession *session;
+	GFile *save_file;
+
+	GList *windows;
+} SaveData;
+
+static SaveData *
+save_data_new (EphySession *session,
+	       const char *filename)
+{
+	SaveData *data;
+	EphyShell *shell = ephy_shell_get_default ();
+	GList *windows, *w;
+
+	data = g_slice_new0 (SaveData);
+	data->session = g_object_ref (session);
+	data->save_file = get_session_file (filename);
+
+	windows = ephy_shell_get_windows (shell);
+	for (w = windows; w != NULL ; w = w->next)
+	{
+		SessionWindow *session_window;
+
+		session_window = session_window_new (EPHY_WINDOW (w->data));
+		if (session_window)
+			data->windows = g_list_prepend (data->windows, session_window);
+	}
+	g_list_free (windows);
+	data->windows = g_list_reverse (data->windows);
+
+	return data;
+}
+
+static void
+save_data_free (SaveData *data)
+{
+	g_list_free_full (data->windows, (GDestroyNotify)session_window_free);
+
+	g_object_unref (data->save_file);
+	g_object_unref (data->session);
+}
+
 static int
 write_tab (xmlTextWriterPtr writer,
-	   EphyEmbed *embed)
+	   SessionTab *tab)
 {
-	const char *address, *title;
-	char *new_address = NULL;
 	int ret;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-	/* Do not store ephy-about: URIs, they are not valid for
-	 * loading. */
-	if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
-	{
-		new_address = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
-	}
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
-					   (const xmlChar *) (new_address ? new_address : address));
-	g_free (new_address);
+					   (const xmlChar *) tab->url);
 	if (ret < 0) return ret;
 
-	title = ephy_web_view_get_title (ephy_embed_get_web_view (embed));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
-					   (const xmlChar *) title);
+					   (const xmlChar *) tab->title);
 	if (ret < 0) return ret;
 
-	if (ephy_web_view_is_loading (ephy_embed_get_web_view (embed)))
+	if (tab->loading)
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",
@@ -479,126 +614,85 @@ write_tab (xmlTextWriterPtr writer,
 }
 
 static int
-write_active_tab (xmlTextWriterPtr writer,
-		  GtkWidget *notebook)
-{
-	int ret;
-	int current;
-
-	current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-    
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d", current);
-	return ret;
-}
-    
-
-static int
 write_window_geometry (xmlTextWriterPtr writer,
-		       GtkWindow *window)
+		       GdkRectangle *geometry)
 {
-	int x = 0, y = 0, width = -1, height = -1;
 	int ret;
-
-	/* get window geometry */
-	gtk_window_get_size (window, &width, &height);
-	gtk_window_get_position (window, &x, &y);
 
 	/* set window properties */
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "x", "%d", x);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "x", "%d",
+						 geometry->x);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "y", "%d", y);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "y", "%d",
+						 geometry->y);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "width", "%d", width);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "width", "%d",
+						 geometry->width);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "height", "%d", height);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "height", "%d",
+						 geometry->height);
 	return ret;
 }
 
 static int
 write_ephy_window (xmlTextWriterPtr writer,
-		   EphyWindow *window)
+		   SessionWindow *window)
 {
-	GList *tabs, *l;
-	GtkWidget *notebook;
-	const char *role;
+	GList *l;
 	int ret;
-
-	tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
-	notebook = ephy_window_get_notebook (window);
-
-	/* Do not save an empty EphyWindow.
-	 * This only happens when the window was newly opened.
-	 */
-	if (tabs == NULL) return 0;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "window");
 	if (ret < 0) return ret;
 
-	ret = write_window_geometry (writer, GTK_WINDOW (window));
+	ret = write_window_geometry (writer, &window->geometry);
 	if (ret < 0) return ret;
 
-	ret = write_active_tab (writer, notebook);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d",
+						 window->active_tab);
 	if (ret < 0) return ret;
 
-	role = gtk_window_get_role (GTK_WINDOW (window));
-	if (role != NULL)
+	if (window->role != NULL)
 	{
-		ret = xmlTextWriterWriteAttribute (writer, 
-						   (const xmlChar *)"role", 
-						   (const xmlChar *)role);
+		ret = xmlTextWriterWriteAttribute (writer,
+						   (const xmlChar *) "role",
+						   (const xmlChar *) window->role);
 		if (ret < 0) return ret;
 	}
 
-	for (l = tabs; l != NULL; l = l->next)
+	for (l = window->tabs; l != NULL; l = l->next)
 	{
-		EphyEmbed *embed = EPHY_EMBED (l->data);
-		ret = write_tab (writer, embed);
+		SessionTab *tab = (SessionTab *) l->data;
+		ret = write_tab (writer, tab);
 		if (ret < 0) break;
 	}
-	g_list_free (tabs);
 	if (ret < 0) return ret;
 
 	ret = xmlTextWriterEndElement (writer); /* window */
 	return ret;
 }
 
-gboolean
-ephy_session_save (EphySession *session,
-		   const char *filename)
+static void
+session_save_finished (EphySession *session)
 {
-	EphySessionPrivate *priv;
-	EphyShell *shell;
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+}
+
+static gboolean
+save_session_in_thread (GIOSchedulerJob *job,
+			GCancellable *cancellable,
+			gpointer user_data)
+{
+	SaveData *data = (SaveData *)user_data;
 	xmlTextWriterPtr writer;
 	GList *w;
-	GList *windows;
-	GFile *save_to_file, *tmp_file;
 	char *tmp_file_path, *save_to_file_path;
+	GFile *tmp_file;
 	int ret;
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-
-	priv = session->priv;
-
-	if (priv->dont_save)
-	{
-		return TRUE;
-	}
-
-	LOG ("ephy_sesion_save %s", filename);
-
-	shell = ephy_shell_get_default ();
-
-	if (ephy_shell_get_n_windows (shell) == 0)
-	{
-		session_delete (session, filename);
-		return TRUE;
-	}
-
-	save_to_file = get_session_file (filename);
-	save_to_file_path = g_file_get_path (save_to_file);
+	save_to_file_path = g_file_get_path (data->save_file);
 	tmp_file_path = g_strconcat (save_to_file_path, ".tmp", NULL);
 	g_free (save_to_file_path);
 	tmp_file = g_file_new_for_path (tmp_file_path);
@@ -628,12 +722,10 @@ ephy_session_save (EphySession *session,
 	if (ret < 0) goto out;
 
 	/* iterate through all the windows */
-	windows = ephy_shell_get_windows (shell);
-	for (w = windows; w != NULL && ret >= 0; w = w->next)
+	for (w = data->windows; w != NULL && ret >= 0; w = w->next)
 	{
-		ret = write_ephy_window (writer, EPHY_WINDOW (w->data));
+		ret = write_ephy_window (writer, (SessionWindow *) w->data);
 	}
-	g_list_free (windows);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterEndElement (writer); /* session */
@@ -644,21 +736,66 @@ ephy_session_save (EphySession *session,
 out:
 	xmlFreeTextWriter (writer);
 
-	if (ret >= 0)
+	if (ret >= 0 && !g_cancellable_is_cancelled (cancellable))
 	{
-		if (ephy_file_switch_temp_file (save_to_file, tmp_file) == FALSE)
+		if (ephy_file_switch_temp_file (data->save_file, tmp_file) == FALSE)
 		{
 			ret = -1;
 		}
 	}
 
 	g_free (tmp_file_path);
-	g_object_unref (save_to_file);
 	g_object_unref (tmp_file);
+
+	g_io_scheduler_job_send_to_mainloop_async (job,
+						   (GSourceFunc) session_save_finished,
+						   g_object_ref (data->session),
+						   (GDestroyNotify) g_object_unref);
 
 	STOP_PROFILER ("Saving session")
 
-	return ret >= 0 ? TRUE : FALSE;
+	return FALSE;
+}
+
+void
+ephy_session_save (EphySession *session,
+		   const char *filename)
+{
+	EphySessionPrivate *priv;
+	EphyShell *shell;
+	SaveData *data;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+
+	priv = session->priv;
+
+	if (priv->save_cancellable)
+	{
+		g_cancellable_cancel (priv->save_cancellable);
+		g_object_unref (priv->save_cancellable);
+		priv->save_cancellable = NULL;
+	}
+
+	if (priv->dont_save)
+	{
+		return;
+	}
+
+	LOG ("ephy_sesion_save %s", filename);
+
+	shell = ephy_shell_get_default ();
+
+	if (ephy_shell_get_n_windows (shell) == 0)
+	{
+		session_delete (session, filename);
+		return;
+	}
+
+	priv->save_cancellable = g_cancellable_new ();
+	data = save_data_new (session, filename);
+	g_application_hold (G_APPLICATION (shell));
+	g_io_scheduler_push_job (save_session_in_thread, data, (GDestroyNotify)save_data_free,
+				 G_PRIORITY_DEFAULT, priv->save_cancellable);
 }
 
 static void
