@@ -192,56 +192,6 @@ session_command_free (SessionCommand *cmd)
 	g_object_unref (ephy_shell_get_default ());
 }
 
-static int
-session_command_find (const SessionCommand *cmd,
-		      gpointer cmdptr)
-{
-	EphySessionCommand command = GPOINTER_TO_INT (cmdptr);
-
-	return command != cmd->command;
-}
-
-static void
-session_command_autoresume (EphySession *session,
-			    guint32 user_time)
-{
-	GFile *saved_session_file;
-	char *saved_session_file_path;
-	gboolean has_session_state;
-	EphyPrefsRestoreSessionPolicy policy;
-	EphyShell *shell;
-
-	LOG ("ephy_session_autoresume");
-
-	saved_session_file = get_session_file (SESSION_STATE);
-	saved_session_file_path = g_file_get_path (saved_session_file);
-	g_object_unref (saved_session_file);
-	has_session_state = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
-	
-	g_free (saved_session_file_path);
-
-	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
-				      EPHY_PREFS_RESTORE_SESSION_POLICY);
-
-	shell = ephy_shell_get_default ();
-
-	if (has_session_state == FALSE ||
-	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-	{
-		/* If we are auto-resuming, and we never want to
-		 * restore the session, clobber the session state
-		 * file. */
-		if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-			session_delete (session, SESSION_STATE);
-
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
-					    NULL, NULL, user_time, FALSE);
-	}
-	else if (ephy_shell_get_n_windows (shell) == 0)
-		ephy_session_load (session, SESSION_STATE, user_time, NULL, NULL, NULL);
-}
-
 static void
 session_command_open_uris (EphySession *session,
 			   char **uris,
@@ -345,9 +295,6 @@ session_command_dispatch (EphySession *session)
 
 	switch (cmd->command)
 	{
-		case EPHY_SESSION_CMD_RESUME_SESSION:
-			session_command_autoresume (session, cmd->user_time);
-			break;
 		case EPHY_SESSION_CMD_OPEN_URIS:
 			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
 			break;
@@ -1335,6 +1282,101 @@ ephy_session_load_finish (EphySession *session,
 	return !g_simple_async_result_propagate_error (simple, error);
 }
 
+static gboolean
+session_state_file_exists (EphySession *session)
+{
+	GFile *saved_session_file;
+	char *saved_session_file_path;
+	gboolean retval;
+
+	saved_session_file = get_session_file (SESSION_STATE);
+	saved_session_file_path = g_file_get_path (saved_session_file);
+	g_object_unref (saved_session_file);
+	retval = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
+	g_free (saved_session_file_path);
+
+	return retval;
+}
+
+static void
+session_resumed_cb (GObject *object,
+		    GAsyncResult *result,
+		    gpointer user_data)
+{
+	EphySession *session = EPHY_SESSION (object);
+	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GError *error = NULL;
+
+	if (!ephy_session_load_finish (session, result, &error))
+		g_simple_async_result_take_error (simple, error);
+	g_simple_async_result_complete (simple);
+	g_object_unref (simple);
+}
+
+void
+ephy_session_resume (EphySession *session,
+		     guint32 user_time,
+		     GCancellable *cancellable,
+		     GAsyncReadyCallback callback,
+		     gpointer user_data)
+{
+	GSimpleAsyncResult *result;
+	gboolean has_session_state;
+	EphyPrefsRestoreSessionPolicy policy;
+	EphyShell *shell;
+
+	LOG ("ephy_session_autoresume");
+
+	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_resume);
+
+	has_session_state = session_state_file_exists (session);
+
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
+				      EPHY_PREFS_RESTORE_SESSION_POLICY);
+
+	shell = ephy_shell_get_default ();
+
+	if (has_session_state == FALSE ||
+	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
+	{
+		/* If we are auto-resuming, and we never want to
+		 * restore the session, clobber the session state
+		 * file. */
+		if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
+			session_delete (session, SESSION_STATE);
+
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+					    NULL, NULL, user_time, FALSE);
+	}
+	else if (ephy_shell_get_n_windows (shell) == 0)
+	{
+		ephy_session_load (session, SESSION_STATE, user_time, cancellable,
+				   session_resumed_cb, result);
+		return;
+	}
+
+	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (result);
+}
+
+
+gboolean
+ephy_session_resume_finish (EphySession *session,
+			    GAsyncResult *result,
+			    GError **error)
+{
+	GSimpleAsyncResult *simple;
+
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+	simple = G_SIMPLE_ASYNC_RESULT (result);
+	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_resume);
+
+	return !g_simple_async_result_propagate_error (simple, error);
+}
+
 /**
  * ephy_session_queue_command:
  * @session: a #EphySession
@@ -1348,7 +1390,6 @@ ephy_session_queue_command (EphySession *session,
 			    gboolean priority)
 {
 	EphySessionPrivate *priv;
-	GList *element;
 	SessionCommand *cmd;
 
 	LOG ("queue_command command:%d", command);
@@ -1357,28 +1398,6 @@ ephy_session_queue_command (EphySession *session,
 	g_return_if_fail (command != EPHY_SESSION_CMD_OPEN_URIS || args != NULL);
 
 	priv = session->priv;
-
-	/* First look if the same command is already queued */
-	if (command > EPHY_SESSION_CMD_RESUME_SESSION &&
-	    command < EPHY_SESSION_CMD_OPEN_URIS)
-	{
-		element = g_queue_find_custom (priv->queue,
-					       GINT_TO_POINTER (command),
-					       (GCompareFunc) session_command_find);
-		if (element != NULL)
-		{
-			cmd = (SessionCommand *) element->data;
-
-			if (command == EPHY_SESSION_CMD_RESUME_SESSION)
-			{
-				cmd->user_time = user_time;
-				g_queue_remove (priv->queue, cmd);
-				g_queue_push_tail (priv->queue, cmd);
-
-				return;
-			}
-		}
-	}
 
 	cmd = g_slice_new0 (SessionCommand);
 	cmd->command = command;

@@ -123,13 +123,6 @@ queue_commands (EphyShell *shell)
 
   ctx = shell->priv->startup_context;
 
-  /* We only get here when starting a new instance, so autoresume the
-   * session unless we are in application mode. */
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION)
-    ephy_session_queue_command (session,
-                                EPHY_SESSION_CMD_RESUME_SESSION,
-                                NULL, NULL, ctx->user_time, TRUE);
-
   if (ctx->session_filename != NULL)
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
@@ -261,13 +254,36 @@ ephy_shell_startup (GApplication* application)
 }
 
 static void
+session_load_cb (GObject *object,
+                 GAsyncResult *result,
+                 gpointer user_data)
+{
+  EphySession *session = EPHY_SESSION (object);
+  EphyShell *shell = EPHY_SHELL (user_data);
+
+  ephy_session_resume_finish (session, result, NULL);
+  queue_commands (shell);
+}
+
+static void
 ephy_shell_activate (GApplication *application)
 {
+  EphyShell *shell = EPHY_SHELL (application);
+
   /*
-   * We get here on each new instance (remote or not). Queue the
+   * We get here on each new instance (remote or not). Autoresume the
+   * session unless we are in application mode and queue the
    * commands.
    */
-  queue_commands (EPHY_SHELL (application));
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    EphyShellStartupContext *ctx;
+
+    ctx = shell->priv->startup_context;
+    ephy_session_resume (EPHY_SESSION (ephy_shell_get_session (shell)),
+                         ctx->user_time, NULL, session_load_cb, shell);
+  }
+  else
+    queue_commands (shell);
 }
 
 /*

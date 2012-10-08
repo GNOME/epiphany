@@ -223,12 +223,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
      */
     ephy_session_save (session, "type:session_state");
 
-    ephy_session_queue_command (session,
-                                EPHY_SESSION_CMD_RESUME_SESSION,
-                                "type:session_state",
-                                NULL,
-                                user_time,
-                                FALSE);
+    ephy_session_resume (session, user_time, NULL, NULL, NULL);
 
     /* Ensure the queue is processed. */
     while (gtk_events_pending ())

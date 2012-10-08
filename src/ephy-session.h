@@ -45,7 +45,6 @@ typedef struct _EphySessionClass	EphySessionClass;
 
 typedef enum
 {
-	EPHY_SESSION_CMD_RESUME_SESSION,
 	EPHY_SESSION_CMD_OPEN_URIS,
 	EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
 	EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW_RESTORE,
@@ -89,6 +88,15 @@ void             ephy_session_load_from_stream        (EphySession *session,
 gboolean         ephy_session_load_from_stream_finish (EphySession *session,
                                                        GAsyncResult *result,
                                                        GError **error);
+void             ephy_session_resume                  (EphySession *session,
+                                                       guint32 user_time,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
+gboolean         ephy_session_resume_finish           (EphySession *session,
+                                                       GAsyncResult *result,
+                                                       GError **error);
+
 
 void             ephy_session_close                   (EphySession *session);
 
