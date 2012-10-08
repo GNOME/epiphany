@@ -746,6 +746,10 @@ ephy_embed_prefs_init (void)
                    EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
                    webkit_settings, "enable-webaudio",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_MAIN,
+                   EPHY_PREFS_ENABLE_SMOOTH_SCROLLING,
+                   webkit_settings, "enable-smooth-scrolling",
+                   G_SETTINGS_BIND_GET);
 }
 
 void
