@@ -48,7 +48,6 @@ static GQuark startup_error_quark = 0;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
-/*static gboolean reload_plugins = FALSE;*/
 
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
