@@ -351,7 +351,7 @@ session_command_dispatch (EphySession *session)
 			session_command_autoresume (session, cmd->user_time);
 			break;
 		case EPHY_SESSION_CMD_LOAD_SESSION:
-			ephy_session_load (session, cmd->arg, cmd->user_time);
+			ephy_session_load (session, cmd->arg, cmd->user_time, NULL, NULL, NULL);
 			break;
 		case EPHY_SESSION_CMD_OPEN_URIS:
 			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
@@ -768,7 +768,7 @@ out:
 }
 
 static void
-confirm_before_recover (EphyWindow* window, char* url, char* title)
+confirm_before_recover (EphyWindow *window, const char *url, const char *title)
 {
 	EphyEmbed *embed;
 
@@ -781,266 +781,563 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 			               EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL);
 }
 
-static void 
-parse_embed (xmlNodePtr child,
-	     EphyWindow *window,
-	     EphySession *session)
+static void
+restore_geometry (GtkWindow *window,
+		  GdkRectangle *geometry)
 {
-	while (child != NULL)
+	if (geometry->x >= 0 && geometry->y >= 0)
 	{
-		if (strcmp ((char *) child->name, "embed") == 0)
+		gtk_window_move (window, geometry->x, geometry->y);
+	}
+
+	if (geometry->width > 0 && geometry->height > 0)
+	{
+		gtk_window_set_default_size (window, geometry->width, geometry->height);
+	}
+}
+
+typedef struct {
+	EphySession *session;
+	guint32 user_time;
+
+	EphyWindow *window;
+	gboolean is_first_window;
+	gint active_tab;
+
+	gboolean is_first_tab;
+} SessionParserContext;
+
+static SessionParserContext *
+session_parser_context_new (EphySession *session,
+			    guint32 user_time)
+{
+	SessionParserContext *context;
+
+	context = g_slice_new0 (SessionParserContext);
+	context->session = g_object_ref (session);
+	context->user_time = user_time;
+	context->is_first_window = TRUE;
+
+	return context;
+}
+
+static void
+session_parser_context_free (SessionParserContext *context)
+{
+	g_object_unref (context->session);
+
+	g_slice_free (SessionParserContext, context);
+}
+
+static void
+session_parse_window (SessionParserContext *context,
+		      const gchar **names,
+		      const gchar **values)
+{
+	GdkRectangle geometry = { -1, -1, 0, 0 };
+	guint i;
+
+	context->window = ephy_window_new ();
+
+	for (i = 0; names[i]; i++)
+	{
+		gulong int_value;
+
+		if (strcmp (names[i], "x") == 0)
 		{
-			xmlChar *url, *attr;
-			char *recover_url;
-			gboolean was_loading;
-
-			g_return_if_fail (window != NULL);
-
-			/* Check if that tab wasn't fully loaded yet
-			 * when the session crashed. */
-			attr = xmlGetProp (child, (const xmlChar *) "loading");
-			was_loading = attr != NULL &&
-				      xmlStrEqual (attr, (const xmlChar *) "true");
-			xmlFree (attr);
-
-			url = xmlGetProp (child, (const xmlChar *) "url");
-			if (url == NULL) 
-				continue;
-
-			/* In the case that crash happens before we receive the URL from the server, this will
-			   open an about:blank tab. See http://bugzilla.gnome.org/show_bug.cgi?id=591294
-			   Otherwise, if the web was fully loaded, it is reloaded again. */
-			if (!was_loading ||
-			    strcmp ((const char *) url, "about:blank") == 0 ||
-			    strcmp ((const char *) url, "about:overview") == 0)
-			{
-				recover_url = (char *) url;
-				
-				ephy_shell_new_tab (ephy_shell_get_default (),
-						    window, NULL, recover_url,
-						    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-						    EPHY_NEW_TAB_OPEN_PAGE |
-						    EPHY_NEW_TAB_APPEND_LAST);
-			}
-			else if (was_loading)
-			{
-				/* Shows a message to the user that warns that this page was
-				   loading during crash and make Epiphany crash again,
-				   in this case we know the URL. */
-				xmlChar* title = xmlGetProp (child, (const xmlChar *) "title");
-			
-				confirm_before_recover (window, (char*) url, (char*) title);
-
-				if (title)
-					xmlFree (title);
-			}
-
-			xmlFree (url);
+			ephy_string_to_int (values[i], &int_value);
+			geometry.x = int_value;
 		}
+		else if (strcmp (names[i], "y") == 0)
+		{
+			ephy_string_to_int (values[i], &int_value);
+			geometry.y = int_value;
+		}
+		else if (strcmp (names[i], "width") == 0)
+		{
+			ephy_string_to_int (values[i], &int_value);
+			geometry.width = int_value;
+		}
+		else if (strcmp (names[i], "height") == 0)
+		{
+			ephy_string_to_int (values[i], &int_value);
+			geometry.height = int_value;
+		}
+		else if (strcmp (names[i], "role") == 0)
+		{
+			gtk_window_set_role (GTK_WINDOW (context->window), values[i]);
+		}
+		else if (strcmp (names[i], "active-tab") == 0)
+		{
+			ephy_string_to_int (values[i], &int_value);
+			context->active_tab = int_value;
+		}
+	}
 
-		child = child->next;
+	restore_geometry (GTK_WINDOW (context->window), &geometry);
+	ephy_gui_window_update_user_time (GTK_WIDGET (context->window), context->user_time);
+}
+
+static void
+session_parse_embed (SessionParserContext *context,
+		     const gchar **names,
+		     const gchar **values)
+{
+	const char *url = NULL;
+	const char *title = NULL;
+	gboolean was_loading = FALSE;
+	gboolean is_blank_page = FALSE;
+	guint i;
+
+	for (i = 0; names[i]; i++)
+	{
+		if (strcmp (names[i], "url") == 0)
+		{
+			url = values[i];
+			is_blank_page = (strcmp (url, "about:blank") == 0 ||
+					 strcmp (url, "about:overview") == 0);
+		}
+		else if (strcmp (names[i], "title") == 0)
+		{
+			title = values[i];
+		}
+		else if (strcmp (names[i], "loading") == 0)
+		{
+			was_loading = strcmp (values[i], "true") == 0;
+		}
+	}
+
+	/* In the case that crash happens before we receive the URL from the server,
+	 * this will open an about:blank tab.
+	 * See http://bugzilla.gnome.org/show_bug.cgi?id=591294
+	 * Otherwise, if the web was fully loaded, it is reloaded again.
+	 */
+	if (!was_loading || is_blank_page)
+	{
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    context->window, NULL, url,
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_APPEND_LAST);
+	}
+	else if (was_loading && url != NULL)
+	{
+		/* Shows a message to the user that warns that this page was
+		 * loading during crash and make Epiphany crash again,
+		 * in this case we know the URL.
+		 */
+		confirm_before_recover (context->window, url, title);
 	}
 }
 
 static void
-restore_geometry (GtkWindow *window,
-		  xmlNodePtr node)
+session_start_element (GMarkupParseContext  *ctx,
+		       const gchar          *element_name,
+		       const gchar         **names,
+		       const gchar         **values,
+		       gpointer              user_data,
+		       GError              **error)
 {
-	xmlChar *tmp;
-	gulong x = 0, y = 0, width = 0, height = 0;
-	gboolean success = TRUE;
+	SessionParserContext *context = (SessionParserContext *)user_data;
 
-	g_return_if_fail (window != NULL);
-
-	tmp = xmlGetProp (node, (xmlChar *) "x");
-	success &= ephy_string_to_int ((char *) tmp, &x);
-	xmlFree (tmp);
-	tmp = xmlGetProp (node, (xmlChar *) "y");
-	success &= ephy_string_to_int ((char *) tmp, &y);
-	xmlFree (tmp);
-	tmp = xmlGetProp (node, (xmlChar *) "width");
-	success &= ephy_string_to_int ((char *) tmp, &width);
-	xmlFree (tmp);
-	tmp = xmlGetProp (node, (xmlChar *) "height");
-	success &= ephy_string_to_int ((char *) tmp, &height);
-	xmlFree (tmp);
-
-	if (success)
+	if (strcmp (element_name, "window") == 0)
 	{
-		tmp = xmlGetProp (node, (xmlChar *)"role");
-		if (tmp != NULL)
-		{
-			gtk_window_set_role (GTK_WINDOW (window), (const char *)tmp);
-			xmlFree (tmp);
-		}
-
-		gtk_window_move (window, x, y);
-		gtk_window_set_default_size (window, width, height);
+		session_parse_window (context, names, values);
+		context->is_first_tab = TRUE;
+	}
+	else if (strcmp (element_name, "embed") == 0)
+	{
+		session_parse_embed (context, names, values);
 	}
 }
 
-/**
- * ephy_session_load_from_string:
- * @session: an #EphySession
- * @session_data: a string with the session data to load
- * @length: the length of @session_data, or -1 to assume %NULL terminated
- * @user_time: a user time, or 0
- * 
- * Loads the session described in @session_data, restoring windows and
- * their state.
- * 
- * Returns: TRUE if at least a window has been opened
- **/
-gboolean
-ephy_session_load_from_string (EphySession *session,
-			       const char *session_data,
-			       gssize length,
-			       guint32 user_time)
+static void
+session_end_element (GMarkupParseContext  *ctx,
+		     const gchar          *element_name,
+		     gpointer              user_data,
+		     GError              **error)
 {
-	EphySessionPrivate *priv;
-	EphyShell *shell;
-	xmlDocPtr doc;
-	xmlNodePtr child;
-	EphyWindow *window;
-	GtkWidget *widget = NULL;
-	gboolean retval;
+	SessionParserContext *context = (SessionParserContext *)user_data;
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-	g_return_val_if_fail (session_data, FALSE);
-
-	priv = session->priv;
-
-	/* If length is -1 assume the data is a NULL-terminated, UTF-8
-	 * encoded string. */
-	if (length == -1)
-		length = g_utf8_strlen (session_data, -1);
-
-	doc = xmlParseMemory (session_data, (int)length);
-
-	if (doc == NULL)
+	if (strcmp (element_name, "window") == 0)
 	{
-		/* If the session fails to load for whatever reason,
-		 * delete the file and open an empty window. */
-		session_delete (session, SESSION_STATE);
-		ephy_session_queue_command (session,
-					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
-					    NULL, NULL, user_time, FALSE);
-		return FALSE;
-	}
+		GtkWidget *notebook;
 
-	shell = g_object_ref (ephy_shell_get_default ());
+		notebook = ephy_window_get_notebook (context->window);
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), context->active_tab);
 
-	priv->dont_save = TRUE;
-
-	child = xmlDocGetRootElement (doc);
-
-	/* skip the session node */
-	child = child->children;
-
-	while (child != NULL)
-	{
-		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
+		if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST)
 		{
-			xmlChar *tmp;
 			EphyEmbed *active_child;
-		    
-			window = ephy_window_new ();
 
-			widget = GTK_WIDGET (window);
-			restore_geometry (GTK_WINDOW (widget), child);
-
-			ephy_gui_window_update_user_time (widget, user_time);
-
-			/* Now add the tabs */
-			parse_embed (child->children, window, session);
-
-			/* Set focus to something sane */
-			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
-			if (tmp != NULL)
-			{
-				gboolean success;
-				gulong active_tab;
-
-				success = ephy_string_to_int ((char *) tmp, &active_tab);
-				xmlFree (tmp);
-				if (success)
-				{
-					GtkWidget *notebook;
-					notebook = ephy_window_get_notebook (window);
-					gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), active_tab);
-				}
-			}
-
-			if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST)
-			{
-				active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-				gtk_widget_grab_focus (GTK_WIDGET (active_child));
-				gtk_widget_show (widget);
-			}
+			active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (context->window));
+			gtk_widget_grab_focus (GTK_WIDGET (active_child));
+			gtk_widget_show (GTK_WIDGET (context->window));
 		}
 
-		child = child->next;
+		context->window = NULL;
+		context->active_tab = 0;
+		context->is_first_window = FALSE;
 	}
+	else if (strcmp (element_name, "embed") == 0)
+	{
+		context->is_first_tab = FALSE;
+	}
+}
 
-	xmlFreeDoc (doc);
+static const GMarkupParser session_parser = {
+	session_start_element,
+	session_end_element,
+	NULL,
+	NULL,
+	NULL
+};
 
-	priv->dont_save = FALSE;
+typedef struct {
+	EphyShell *shell;
+	GMarkupParseContext *parser;
+	GCancellable *cancellable;
+	char buffer[1024];
+} LoadFromStreamAsyncData;
+
+static LoadFromStreamAsyncData *
+load_from_stream_async_data_new (GMarkupParseContext *parser,
+				 GCancellable *cancellable)
+{
+	LoadFromStreamAsyncData *data;
+
+	data = g_slice_new (LoadFromStreamAsyncData);
+	data->shell = g_object_ref (ephy_shell_get_default ());
+	data->parser = parser;
+	data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+
+	return data;
+}
+
+static void
+load_from_stream_async_data_free (LoadFromStreamAsyncData *data)
+{
+	g_object_unref (data->shell);
+	g_markup_parse_context_free (data->parser);
+	g_clear_object (&data->cancellable);
+
+	g_slice_free (LoadFromStreamAsyncData, data);
+}
+
+static void
+load_stream_complete (GSimpleAsyncResult *simple)
+{
+	EphySession *session;
+
+	g_simple_async_result_complete (simple);
+
+	session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
+	session->priv->dont_save = FALSE;
 
 	ephy_session_save (session, SESSION_STATE);
+	g_object_unref (session);
 
-	retval = ephy_shell_get_n_windows (shell) > 0;
+	g_object_unref (simple);
 
-	g_object_unref (shell);
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+}
 
-	return retval;
+static void
+load_stream_complete_error (GSimpleAsyncResult *simple,
+			    GError *error)
+{
+	EphySession *session;
+	LoadFromStreamAsyncData *data;
+	SessionParserContext *context;
+
+	g_simple_async_result_take_error (simple, error);
+	g_simple_async_result_complete (simple);
+
+	session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
+	session->priv->dont_save = FALSE;
+	/* If the session fails to load for whatever reason,
+	 * delete the file and open an empty window.
+	 */
+	session_delete (session, SESSION_STATE);
+
+	data = g_simple_async_result_get_op_res_gpointer (simple);
+	context = (SessionParserContext *)g_markup_parse_context_get_user_data (data->parser);
+	ephy_session_queue_command (session,
+				    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+				    NULL, NULL, context->user_time, FALSE);
+	g_object_unref (session);
+
+	g_object_unref (simple);
+
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+}
+
+static void
+load_stream_read_cb (GObject *object,
+		     GAsyncResult *result,
+		     gpointer user_data)
+{
+	GInputStream *stream = G_INPUT_STREAM (object);
+	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	LoadFromStreamAsyncData *data;
+	gssize bytes_read;
+	GError *error = NULL;
+
+	bytes_read = g_input_stream_read_finish (stream, result, &error);
+	if (bytes_read < 0)
+	{
+		load_stream_complete_error (simple, error);
+
+		return;
+	}
+
+	data = g_simple_async_result_get_op_res_gpointer (simple);
+	if (bytes_read == 0)
+	{
+		if (!g_markup_parse_context_end_parse (data->parser, &error))
+		{
+			load_stream_complete_error (simple, error);
+		}
+		else
+		{
+			load_stream_complete (simple);
+		}
+
+		return;
+	}
+
+	if (!g_markup_parse_context_parse (data->parser, data->buffer, bytes_read, &error))
+	{
+		load_stream_complete_error (simple, error);
+
+		return;
+	}
+
+	g_input_stream_read_async (stream, data->buffer, sizeof (data->buffer),
+				   G_PRIORITY_HIGH, data->cancellable,
+				   load_stream_read_cb, simple);
+}
+
+/**
+ * ephy_session_load_from_stream:
+ * @session: an #EphySession
+ * @stream: a #GInputStream to read the session data from
+ * @user_time: a user time, or 0
+ * @cancellable: (allow-none): optional #GCancellable object, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *    request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously loads the session reading the session data from @stream,
+ * restoring windows and their state.
+ *
+ * When the operation is finished, @callback will be called. You can
+ * then call ephy_session_load_from_stream_finish() to get the result of
+ * the operation.
+ **/
+void
+ephy_session_load_from_stream (EphySession *session,
+			       GInputStream *stream,
+			       guint32 user_time,
+			       GCancellable *cancellable,
+			       GAsyncReadyCallback callback,
+			       gpointer user_data)
+{
+	GSimpleAsyncResult *result;
+	SessionParserContext *context;
+	GMarkupParseContext *parser;
+	LoadFromStreamAsyncData *data;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+	g_return_if_fail (G_IS_INPUT_STREAM (stream));
+
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+
+	session->priv->dont_save = TRUE;
+
+	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_load_from_stream);
+
+	context = session_parser_context_new (session, user_time);
+	parser = g_markup_parse_context_new (&session_parser, 0, context, (GDestroyNotify)session_parser_context_free);
+	data = load_from_stream_async_data_new (parser, cancellable);
+	g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)load_from_stream_async_data_free);
+
+	g_input_stream_read_async (stream, data->buffer, sizeof (data->buffer), G_PRIORITY_HIGH, cancellable,
+				   load_stream_read_cb, result);
+}
+
+/**
+ * ephy_session_load_from_stream_finish:
+ * @session: an #EphySession
+ * @result: a #GAsyncResult
+ * @error: a #GError
+ *
+ * Finishes an async session load operation started with
+ * ephy_session_load_from_stream().
+ *
+ * Returns: %TRUE if at least a window has been opened
+ **/
+gboolean
+ephy_session_load_from_stream_finish (EphySession *session,
+				      GAsyncResult *result,
+				      GError **error)
+{
+	GSimpleAsyncResult *simple;
+
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+	simple = G_SIMPLE_ASYNC_RESULT (result);
+	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_load_from_stream);
+
+	return !g_simple_async_result_propagate_error (simple, error);
+}
+
+typedef struct {
+	guint32 user_time;
+	GCancellable *cancellable;
+} LoadAsyncData;
+
+static LoadAsyncData *
+load_async_data_new (guint32 user_time,
+		     GCancellable *cancellable)
+{
+	LoadAsyncData *data;
+
+	data = g_slice_new (LoadAsyncData);
+	data->user_time = user_time;
+	data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+
+	return data;
+}
+
+static void
+load_async_data_free (LoadAsyncData *data)
+{
+	g_clear_object (&data->cancellable);
+
+	g_slice_free (LoadAsyncData, data);
+}
+
+static void
+load_from_stream_cb (GObject *object,
+		     GAsyncResult *result,
+		     gpointer user_data)
+{
+	EphySession *session = EPHY_SESSION (object);
+	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GError *error = NULL;
+
+	if (!ephy_session_load_from_stream_finish (session, result, &error))
+	{
+		g_simple_async_result_take_error (simple, error);
+	}
+	g_simple_async_result_complete (simple);
+	g_object_unref (simple);
+}
+
+static void
+session_read_cb (GObject *object,
+		 GAsyncResult *result,
+		 gpointer user_data)
+{
+	GFileInputStream *stream;
+	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GError *error = NULL;
+
+	stream = g_file_read_finish (G_FILE (object), result, &error);
+	if (stream)
+	{
+		EphySession *session;
+		LoadAsyncData *data;
+
+		session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
+		data = g_simple_async_result_get_op_res_gpointer (simple);
+		ephy_session_load_from_stream (session, G_INPUT_STREAM (stream), data->user_time,
+					       data->cancellable, load_from_stream_cb, simple);
+		g_object_unref (stream);
+		g_object_unref (session);
+	}
+	else
+	{
+		g_simple_async_result_take_error (simple, error);
+		g_simple_async_result_complete (simple);
+		g_object_unref (simple);
+	}
+
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
 
 /**
  * ephy_session_load:
- * @session: a #EphySession
+ * @session: an #EphySession
  * @filename: the path of the source file
- * @user_time: a user_time, or 0
+ * @user_time: a user time, or 0
+ * @cancellable: (allow-none): optional #GCancellable object, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *    request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
- * Load a session from disk, restoring the windows and their state
+ * Asynchronously loads the session reading the session data from @filename,
+ * restoring windows and their state.
  *
- * Return value: TRUE if at least a window has been opened
+ * When the operation is finished, @callback will be called. You can
+ * then call ephy_session_load_finish() to get the result of
+ * the operation.
  **/
-gboolean
+void
 ephy_session_load (EphySession *session,
 		   const char *filename,
-		   guint32 user_time)
+		   guint32 user_time,
+		   GCancellable *cancellable,
+		   GAsyncReadyCallback callback,
+		   gpointer user_data)
 {
 	GFile *save_to_file;
-	char *save_to_path;
-	gboolean ret_value;
-	char *contents;
-	gsize length;
-	GError *error = NULL;
+	GSimpleAsyncResult *result;
+	LoadAsyncData *data;
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-	g_return_val_if_fail (filename, FALSE);
+	g_return_if_fail (EPHY_IS_SESSION (session));
+	g_return_if_fail (filename);
 
 	LOG ("ephy_sesion_load %s", filename);
 
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+
+	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_load);
+
 	save_to_file = get_session_file (filename);
-	save_to_path = g_file_get_path (save_to_file);
+	data = load_async_data_new (user_time, cancellable);
+	g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)load_async_data_free);
+	g_file_read_async (save_to_file, G_PRIORITY_HIGH, cancellable, session_read_cb, result);
 	g_object_unref (save_to_file);
+}
 
-	if (!g_file_get_contents (save_to_path, &contents, &length, &error))
-	{
-		LOG ("Could not load session, error reading session file: %s", error->message);
-		g_error_free (error);
-		g_free (save_to_path);
+/**
+ * ephy_session_load_finish:
+ * @session: an #EphySession
+ * @result: a #GAsyncResult
+ * @error: a #GError
+ *
+ * Finishes an async session load operation started with
+ * ephy_session_load().
+ *
+ * Returns: %TRUE if at least a window has been opened
+ **/
+gboolean
+ephy_session_load_finish (EphySession *session,
+			  GAsyncResult *result,
+			  GError **error)
+{
+	GSimpleAsyncResult *simple;
 
-		return FALSE;
-	}
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-	ret_value = ephy_session_load_from_string (session, contents, length, user_time);
+	simple = G_SIMPLE_ASYNC_RESULT (result);
+	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_load);
 
-	g_free (contents);
-	g_free (save_to_path);
-
-	return ret_value;
+	return !g_simple_async_result_propagate_error (simple, error);
 }
 
 /**

@@ -42,6 +42,35 @@ const char *session_data =
 	 "</window>"
 "</session>";
 
+static gboolean load_stream_retval;
+
+static void
+load_from_stream_cb (GObject *object,
+                     GAsyncResult *result,
+                     gpointer user_data)
+{
+  GMainLoop *loop = (GMainLoop *)user_data;
+
+  load_stream_retval = ephy_session_load_from_stream_finish (EPHY_SESSION (object), result, NULL);
+  g_main_loop_quit (loop);
+}
+
+static gboolean
+load_session_from_string (EphySession *session,
+                          const char *data)
+{
+  GMainLoop *loop;
+  GInputStream *stream;
+
+  loop = g_main_loop_new (NULL, FALSE);
+  stream = g_memory_input_stream_new_from_data (data, -1, NULL);
+  ephy_session_load_from_stream (session, stream, 0, NULL, load_from_stream_cb, loop);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
+
+  return load_stream_retval;
+}
+
 static void
 test_ephy_session_load (void)
 {
@@ -54,7 +83,7 @@ test_ephy_session_load (void)
     session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
-    ret = ephy_session_load_from_string (session, session_data, -1, 0);
+    ret = load_session_from_string (session, session_data);
     g_assert (ret);
 
     l = ephy_shell_get_windows (ephy_shell_get_default ());
@@ -89,7 +118,7 @@ test_ephy_session_load_empty_session (void)
     session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
-    ret = ephy_session_load_from_string (session, session_data_empty, -1, 0);
+    ret = load_session_from_string (session, session_data_empty);
     g_assert (ret == FALSE);
 
     /* Loading the session should have failed, but we should still get
@@ -139,7 +168,7 @@ test_ephy_session_load_many_windows (void)
     session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
-    ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
+    ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
 
     l = ephy_shell_get_windows (ephy_shell_get_default ());
@@ -174,7 +203,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
 
     user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
 
-    ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
+    ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
 
     l = ephy_shell_get_windows (ephy_shell_get_default ());

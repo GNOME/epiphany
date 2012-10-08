@@ -67,28 +67,38 @@ struct _EphySessionClass
         GObjectClass parent_class;
 };
 
-GType		 ephy_session_get_type		(void);
+GType            ephy_session_get_type                (void);
 
-gboolean	 ephy_session_save		(EphySession *session,
-						 const char *filename);
+gboolean         ephy_session_save                    (EphySession *session,
+                                                       const char *filename);
 
-gboolean	 ephy_session_load		(EphySession *session,
-						 const char *filename,
-						 guint32 user_time);
+void             ephy_session_load                    (EphySession *session,
+                                                       const char *filename,
+                                                       guint32 user_time,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
+gboolean         ephy_session_load_finish             (EphySession *session,
+                                                       GAsyncResult *result,
+                                                       GError **error);
+void             ephy_session_load_from_stream        (EphySession *session,
+                                                       GInputStream *stream,
+                                                       guint32 user_time,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
+gboolean         ephy_session_load_from_stream_finish (EphySession *session,
+                                                       GAsyncResult *result,
+                                                       GError **error);
 
-gboolean	 ephy_session_load_from_string	(EphySession *session,
-						 const char *session_data,
-						 gssize length,
-						 guint32 user_time);
+void             ephy_session_close                   (EphySession *session);
 
-void		 ephy_session_close		(EphySession *session);
-
-void		 ephy_session_queue_command	(EphySession *session,
-						 EphySessionCommand op,
-						 const char *arg,
-						 const char **args,
-						 guint32 user_time,
-						 gboolean priority);
+void             ephy_session_queue_command           (EphySession *session,
+                                                       EphySessionCommand op,
+                                                       const char *arg,
+                                                       const char **args,
+                                                       guint32 user_time,
+                                                       gboolean priority);
 
 G_END_DECLS
 
