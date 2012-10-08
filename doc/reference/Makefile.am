@@ -28,7 +28,6 @@ CFILE_GLOB=$(top_srcdir)/lib/*.c
 # Header files to ignore when scanning.
 IGNORE_HFILES = \
 	config.h \
-	eel-gconf-extensions.h \
 	ephy-dnd.h \
 	ephy-file-chooser.h \
 	ephy-gui.h \
@@ -59,20 +58,16 @@ IGNORE_HFILES = \
 	ephy-bookmarks.h \
 	ephy-bookmarks-import.h \
 	ephy-bookmarks-menu.h \
-	ephy-new-bookmark.h \
 	ephy-topic-action.h \
 	ephy-topics-selector.h \
-	ephy-automation.h \
 	ephy-completion-model.h \
 	ephy-encoding-dialog.h \
 	ephy-encoding-menu.h \
 	ephy-favicon-action.h \
-	ephy-favorites-menu.h \
 	ephy-history-window.h \
 	ephy-navigation-action.h \
 	ephy-notebook.h \
 	ephy-tabs-menu.h \
-	ephy-toolbars-model.h \
 	ephy-shell \
 	pdm-dialog.h \
 	popup-commands.h \
