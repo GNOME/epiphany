@@ -1495,9 +1495,6 @@ icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GtkTreeRo
 static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
-#ifdef HAVE_WEBKIT2
-        /* TODO: Favicons */
-#else
 	const char *page_location;
 	GdkPixbuf *favicon = NULL;
 
@@ -1506,6 +1503,9 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 
 	LOG ("Get favicon for %s", page_location ? page_location : "None");
 
+#ifdef HAVE_WEBKIT2
+        /* TODO: Favicons */
+#else
 	if (page_location)
         {
 		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
@@ -1533,10 +1533,9 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 			}
 		}
         }
-
+#endif
 	g_value_init (value, GDK_TYPE_PIXBUF);
 	g_value_take_object (value, favicon);
-#endif
 }
 
 static void
