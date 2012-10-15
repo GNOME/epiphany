@@ -1795,6 +1795,8 @@ decide_policy_cb (WebKitWebView *web_view,
 
   /* If WebKit can't handle the mime type start the download
      process */
+  /* FIXME: we need to trigger the download only if this is the main
+   * resource, see the WK1 implementation and 'is_main_resource'. */
   if (webkit_web_view_can_show_mime_type (web_view, mime_type))
     return FALSE;
 
