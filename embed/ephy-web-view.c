@@ -1815,6 +1815,24 @@ decide_policy_cb (WebKitWebView *web_view,
 }
 #else
 static gboolean
+is_main_resource (WebKitWebFrame *frame, WebKitNetworkRequest *request)
+{
+  const char *request_uri = NULL, *main_resource_uri = NULL;
+  WebKitWebDataSource *frame_data_source;
+
+  request_uri = webkit_network_request_get_uri (request);
+  frame_data_source = webkit_web_frame_get_data_source (frame);
+  if (frame_data_source) {
+    WebKitWebResource *resource;
+
+    resource = webkit_web_data_source_get_main_resource (frame_data_source);
+    main_resource_uri = webkit_web_resource_get_uri (resource);
+  }
+
+  return g_strcmp0 (request_uri, main_resource_uri) == 0;
+}
+
+static gboolean
 mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
                                         WebKitWebFrame *frame,
                                         WebKitNetworkRequest *request,
@@ -1852,6 +1870,8 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
   /* If WebKit can't handle the mime type start the download
      process */
   should_download = !webkit_web_view_can_show_mime_type (web_view, mime_type);
+  if (should_download)
+    should_download = is_main_resource (frame, request);
 
   /* FIXME: need to use ephy_file_check_mime if auto-downloading */
   if (should_download) {
