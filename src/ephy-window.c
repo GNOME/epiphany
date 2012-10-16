@@ -2268,7 +2268,7 @@ ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 	EphyWindowPrivate *priv = window->priv;
 
 	if (priv->hit_test_result)
-		g_object_unref (hit_test_result);
+		g_object_unref (priv->hit_test_result);
 	priv->hit_test_result = g_object_ref (hit_test_result);
 }
 #endif
