@@ -1763,10 +1763,11 @@ decide_policy_cb (WebKitWebView *web_view,
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
   WebKitURIRequest *request;
+  WebKitWebResource *main_resource;
   EphyWebViewDocumentType type;
   GObject *single;
   const char *mime_type;
-  const char *uri;
+  const char *request_uri;
   gboolean handled = FALSE;
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
@@ -1795,18 +1796,17 @@ decide_policy_cb (WebKitWebView *web_view,
 
   /* If WebKit can't handle the mime type start the download
      process */
-  /* FIXME: we need to trigger the download only if this is the main
-   * resource, see the WK1 implementation and 'is_main_resource'. */
   if (webkit_web_view_can_show_mime_type (web_view, mime_type))
     return FALSE;
 
-  /* TODO: Check also Content-Disposition header before emitting
-   * handle-content signal. We need API for that in WebKit2.
-   */
-  single = ephy_embed_shell_get_embed_single (embed_shell);
   request = webkit_response_policy_decision_get_request (response_decision);
-  uri = webkit_uri_request_get_uri (request);
-  g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
+  request_uri = webkit_uri_request_get_uri (request);
+  main_resource = webkit_web_view_get_main_resource (web_view);
+  if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
+    return FALSE;
+
+  single = ephy_embed_shell_get_embed_single (embed_shell);
+  g_signal_emit_by_name (single, "handle-content", mime_type, request_uri, &handled);
 
   if (handled)
     webkit_policy_decision_ignore (decision);
