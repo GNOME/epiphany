@@ -903,8 +903,6 @@ main (int argc, char *argv[])
   GError *error = NULL;
   EphyFileHelpersFlags file_helpers_flags = EPHY_FILE_HELPERS_NONE;
 
-  g_type_init ();
-
   option_group = g_option_group_new ("ephy-profile-migrator",
                                      N_("Epiphany profile migrator"),
                                      N_("Epiphany profile migrator options"),
