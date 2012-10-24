@@ -1,4 +1,29 @@
 ==============
+Epiphany 3.7.1
+==============
+
+Changes:
+
+  - *NOTE* this release removes support for traditional extensions (as
+    found in the 'epiphany-extensions' module and elsewhere). They
+    will *not* work anymore, and won't be loaded on startup. See
+    https://mail.gnome.org/archives/epiphany-list/2012-October/msg00006.html
+    for a longer explanation. (#685630)
+
+  - Adblock is now imported into the core browser, disabled by
+    default. See Preferences->Privacy to enable it (#681657)
+  - Remove JavaScript preference from the UI. Pretty much every single
+    page the average user visits needs JavaScript, so this is a
+    "Please break my web" preference in disguise. For those concerned
+    about security and/or privacy the GSetting remains
+    available. (#685393)
+  - Merge the application menu in the gear menu when not running under
+    the Shell. (#673054)
+  - Do not automatically load resources we cannot handle unless they
+    are the main resource in the page. (#683635)
+  - Many other bugfixes.
+
+==============
 Epiphany 3.6.0
 ==============
 
