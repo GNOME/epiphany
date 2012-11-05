@@ -93,7 +93,7 @@ test_create_history_entry (void)
 }
 
 static GList *
-create_test_page_visit_list ()
+create_test_page_visit_list (void)
 {
   GList *visits = NULL;
   int i;
@@ -463,7 +463,7 @@ perform_query_after_clear (EphyHistoryService *service,
 }
 
 static void
-test_clear ()
+test_clear (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
   EphyHistoryService *service = ensure_empty_history (temporary_file);

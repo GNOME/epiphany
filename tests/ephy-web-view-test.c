@@ -161,7 +161,7 @@ static const URLTest test_load_url[] = {
 
 /* Tests that EphyWebView is successfully loading the given URL. */
 static void
-test_ephy_web_view_load_url ()
+test_ephy_web_view_load_url (void)
 {
   int i;
 
@@ -234,7 +234,7 @@ static const RegexTest test_non_search_regex[] = {
 };
 
 static void
-test_ephy_web_view_non_search_regex ()
+test_ephy_web_view_non_search_regex (void)
 {
   GRegex *regex_non_search, *regex_domain;
   GError *error = NULL;
@@ -296,7 +296,7 @@ static struct {
 };
 
 static void
-test_ephy_web_view_normalize_or_autosearch ()
+test_ephy_web_view_normalize_or_autosearch (void)
 {
   int i;
   EphyWebView *view;
@@ -345,7 +345,7 @@ quit_main_loop_when_load_finished (WebKitWebView *view, GParamSpec *spec, GMainL
 #endif
 
 static void
-test_ephy_web_view_provisional_load_failure_updates_back_forward_list ()
+test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 {
     GMainLoop *loop;
     EphyWebView *view;
@@ -401,7 +401,7 @@ visit_url_cb (EphyHistoryService *service,
 }
 
 static void
-test_ephy_web_view_error_pages_not_stored_in_history ()
+test_ephy_web_view_error_pages_not_stored_in_history (void)
 {
     GMainLoop *loop;
     EphyWebView *view;

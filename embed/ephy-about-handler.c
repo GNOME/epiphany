@@ -36,7 +36,7 @@
 static gchar *css_style = NULL;
 
 static void
-read_css_style ()
+read_css_style (void)
 {
   GError *error = NULL;
   const gchar *file;

@@ -33,7 +33,7 @@
 #define NUM_ENCODINGS 78
 
 static void
-test_ephy_encodings_create ()
+test_ephy_encodings_create (void)
 {
   EphyEncoding *encoding;
 
@@ -50,7 +50,7 @@ test_ephy_encodings_create ()
 }
 
 static void
-test_ephy_encodings_get ()
+test_ephy_encodings_get (void)
 {
   EphyEncodings *encodings;
   GList *all, *p;

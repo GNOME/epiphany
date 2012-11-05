@@ -51,7 +51,7 @@ ephy_sqlite_connection_init (EphySQLiteConnection *self)
   self->priv->database = NULL;
 }
 
-static GQuark get_ephy_sqlite_quark ()
+static GQuark get_ephy_sqlite_quark (void)
 {
   return g_quark_from_static_string ("ephy-sqlite");
 }

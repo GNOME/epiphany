@@ -171,7 +171,7 @@ typedef struct
 
 #ifdef HAVE_WEBKIT2
 static WebKitCookieManager *
-get_cookie_manager ()
+get_cookie_manager (void)
 {
 	WebKitWebContext *web_context;
 
@@ -180,7 +180,7 @@ get_cookie_manager ()
 }
 #else
 static SoupCookieJar*
-get_cookie_jar ()
+get_cookie_jar (void)
 {
 	SoupSession* session;
 
@@ -243,7 +243,7 @@ got_network_passwords_list_cb (GnomeKeyringResult result,
 }
 
 static void
-_ephy_pdm_delete_all_passwords ()
+_ephy_pdm_delete_all_passwords (void)
 {
 	gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
 				     got_network_passwords_list_cb,

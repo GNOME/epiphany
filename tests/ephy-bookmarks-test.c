@@ -27,7 +27,7 @@
 const char* bookmarks_paths[] = { "ephy-bookmarks.xml", "bookmarks.rdf", NULL };
 
 static void
-clear_bookmark_files ()
+clear_bookmark_files (void)
 {
   GFile *file;
   char *path;
@@ -46,7 +46,7 @@ clear_bookmark_files ()
 }
 
 static void
-test_ephy_bookmarks_create ()
+test_ephy_bookmarks_create (void)
 {
   EphyBookmarks *bookmarks;
 
@@ -58,7 +58,7 @@ test_ephy_bookmarks_create ()
 }
 
 static void
-test_ephy_bookmarks_add ()
+test_ephy_bookmarks_add (void)
 {
   EphyBookmarks *bookmarks;
   EphyNode *node, *result;
@@ -77,7 +77,7 @@ test_ephy_bookmarks_add ()
 }
 
 static void
-test_ephy_bookmarks_set_address ()
+test_ephy_bookmarks_set_address (void)
 {
   EphyBookmarks *bookmarks;
   EphyNode *node;

@@ -42,7 +42,7 @@ const char *session_data =
 "</session>";
 
 static void
-test_ephy_session_load ()
+test_ephy_session_load (void)
 {
     EphySession *session;
     gboolean ret;
@@ -77,7 +77,7 @@ const char *session_data_empty =
 "";
 
 static void
-test_ephy_session_load_empty_session ()
+test_ephy_session_load_empty_session (void)
 {
     EphySession *session;
     gboolean ret;
@@ -127,7 +127,7 @@ const char *session_data_many_windows =
 "</session>";
 
 static void
-test_ephy_session_load_many_windows ()
+test_ephy_session_load_many_windows (void)
 {
     EphySession *session;
     gboolean ret;

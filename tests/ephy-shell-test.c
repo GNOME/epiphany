@@ -38,7 +38,7 @@
 #include <gtk/gtk.h>
 
 static void
-test_ephy_shell_basic_embeds ()
+test_ephy_shell_basic_embeds (void)
 {
   GtkWidget *window;
 
@@ -87,7 +87,7 @@ test_ephy_shell_basic_embeds ()
 }
 
 static void
-test_ephy_shell_parent_windows ()
+test_ephy_shell_parent_windows (void)
 {
   GtkWidget *window;
   GtkWidget *window2;
@@ -132,7 +132,7 @@ test_ephy_shell_parent_windows ()
 }
 
 static void
-test_ephy_shell_tab_load ()
+test_ephy_shell_tab_load (void)
 {
   GtkWidget *window;
   EphyEmbed *embed;
@@ -172,7 +172,7 @@ get_notebook_page_num (GtkWidget *notebook, EphyEmbed *embed)
 }
 
 static void
-test_ephy_shell_tab_append ()
+test_ephy_shell_tab_append (void)
 {
   GtkWidget *window;
   GtkWidget *notebook;
@@ -220,7 +220,7 @@ test_ephy_shell_tab_append ()
 }
 
 static void
-test_ephy_shell_tab_from_external ()
+test_ephy_shell_tab_from_external (void)
 {
   GtkWidget *window;
   GtkWidget *notebook;
@@ -283,7 +283,7 @@ test_ephy_shell_tab_from_external ()
 }
 
 static void
-test_ephy_shell_tab_no_history ()
+test_ephy_shell_tab_no_history (void)
 {
   GtkWidget *window;
 

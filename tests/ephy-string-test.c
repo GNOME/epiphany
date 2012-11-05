@@ -40,7 +40,7 @@ static const HostnameTest hostname_tests[] = {
 };
 
 static void
-test_ephy_string_get_hostname ()
+test_ephy_string_get_hostname (void)
 {
   int i;
 

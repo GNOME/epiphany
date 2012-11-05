@@ -258,7 +258,7 @@ out:
 }
 
 #ifdef HAVE_WEBKIT2
-static SoupCookieJar *get_current_cookie_jar ()
+static SoupCookieJar *get_current_cookie_jar (void)
 {
   char *filename;
   SoupCookieJar *jar;
@@ -274,7 +274,7 @@ static SoupCookieJar *get_current_cookie_jar ()
   return jar;
 }
 #else
-static SoupCookieJar *get_current_cookie_jar ()
+static SoupCookieJar *get_current_cookie_jar (void)
 {
   SoupSession *session = webkit_get_default_session ();
   SoupCookieJar *jar;

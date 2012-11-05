@@ -52,7 +52,7 @@ static const WebAppTest test_web_app[] = {
 };
 
 static void
-test_web_app_lifetime ()
+test_web_app_lifetime (void)
 {
   int i;
 

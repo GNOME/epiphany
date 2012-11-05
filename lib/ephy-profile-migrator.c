@@ -64,13 +64,13 @@ static char *profile_dir = NULL;
 typedef void (*EphyProfileMigrator) (void);
 
 static gboolean
-profile_dir_exists ()
+profile_dir_exists (void)
 {
   return g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
 }
 
 static void
-migrate_cookies ()
+migrate_cookies (void)
 {
   const char *cookies_file_sqlite = "cookies.sqlite";
   const char *cookies_file_txt = "cookies.txt";
@@ -335,7 +335,7 @@ parse_and_decrypt_signons (const char *signons,
 #endif
 
 static void
-migrate_passwords ()
+migrate_passwords (void)
 {
 #ifdef ENABLE_NSS
   char *dest, *contents, *gecko_passwords_backup;
@@ -383,7 +383,7 @@ migrate_passwords ()
 }
 
 static void
-migrate_passwords2 ()
+migrate_passwords2 (void)
 {
 #ifdef ENABLE_NSS
   char *dest, *contents;
@@ -549,7 +549,7 @@ static GMarkupParser history_parse_funcs =
 };
 
 static void
-migrate_history ()
+migrate_history (void)
 {
   GFileInputStream *input;
   GMarkupParseContext *context;
@@ -620,7 +620,7 @@ migrate_history ()
 }
 
 static void
-migrate_tabs_visibility ()
+migrate_tabs_visibility (void)
 {
   gboolean always_show_tabs;
 
@@ -670,7 +670,7 @@ migrate_profile (const char *old_dir,
 }
 
 static void
-migrate_profile_gnome2_to_xdg ()
+migrate_profile_gnome2_to_xdg (void)
 {
   char *old_dir;
   char *new_dir;
@@ -723,7 +723,7 @@ fix_desktop_file_and_return_new_location (const char *dir)
 }
 
 static void
-migrate_web_app_links ()
+migrate_web_app_links (void)
 {
   GList *apps, *p;
 
@@ -773,7 +773,7 @@ migrate_web_app_links ()
 }
 
 static void
-migrate_new_urls_table ()
+migrate_new_urls_table (void)
 {
   EphySQLiteConnection *history_database;
   char *filename;
@@ -831,7 +831,7 @@ const EphyProfileMigrator migrators[] = {
 };
 
 static gboolean
-ephy_migrator ()
+ephy_migrator (void)
 {
   int latest, i;
   EphyProfileMigrator m;

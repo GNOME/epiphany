@@ -42,7 +42,7 @@ static const FileInitTest private_tests[] =
 };
 
 static void
-test_ephy_file_helpers_init ()
+test_ephy_file_helpers_init (void)
 {
   int i;
 
@@ -124,7 +124,7 @@ static const DownloadsDirTest downloads_tests[] =
 };
 
 static void
-test_ephy_file_get_downloads_dir ()
+test_ephy_file_get_downloads_dir (void)
 {
   int i;
 
@@ -177,7 +177,7 @@ static const DirTest dir_tests[] =
 };
 
 static void
-test_ephy_file_create_delete_dir ()
+test_ephy_file_create_delete_dir (void)
 {
   int i;
 
@@ -209,7 +209,7 @@ test_ephy_file_create_delete_dir ()
 }
 
 static void
-test_ephy_file_desktop_dir ()
+test_ephy_file_desktop_dir (void)
 {
   char *desktop_dir;
   const char *xdg_desktop;
@@ -226,7 +226,7 @@ test_ephy_file_desktop_dir ()
 }
 
 static void
-test_ephy_file_create_delete_tmp ()
+test_ephy_file_create_delete_tmp (void)
 {
   char *tmp_file = NULL;
   char *tmp_path = NULL;
@@ -291,7 +291,7 @@ test_ephy_file_create_delete_tmp ()
 }
 
 static void
-test_ephy_file_switch_temp_file ()
+test_ephy_file_switch_temp_file (void)
 {
   char *tmp_file;
 
@@ -372,7 +372,7 @@ static const SanitizeFilenameTest sanitize_filename_tests[] =
 };
 
 static void
-test_ephy_sanitize_filename ()
+test_ephy_sanitize_filename (void)
 {
   guint i;
 

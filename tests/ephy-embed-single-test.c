@@ -32,7 +32,7 @@
 #include <gtk/gtk.h>
 
 static void
-test_embed_single_new ()
+test_embed_single_new (void)
 {
   EphyEmbedSingle *single;
 
@@ -43,7 +43,7 @@ test_embed_single_new ()
 }
 
 static void
-test_embed_single_get_from_shell ()
+test_embed_single_get_from_shell (void)
 {
   EphyEmbedSingle *single;
 
@@ -52,7 +52,7 @@ test_embed_single_get_from_shell ()
 }
 
 static void
-test_embed_single_form_auth ()
+test_embed_single_form_auth (void)
 {
   EphyEmbedSingle *single;
   GSList *results = NULL;

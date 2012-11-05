@@ -28,7 +28,7 @@
 #include "ephy-shell.h"
 
 static void
-test_ephy_completion_model_create ()
+test_ephy_completion_model_create (void)
 {
     EphyCompletionModel *model;
     model = ephy_completion_model_new ();
@@ -51,7 +51,7 @@ update_empty_cb (EphyHistoryService *service,
 }
 
 static void
-test_ephy_completion_model_update_empty ()
+test_ephy_completion_model_update_empty (void)
 {
     EphyCompletionModel *model;
     GMainLoop *loop = NULL;

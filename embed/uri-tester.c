@@ -75,7 +75,7 @@ static gboolean
 uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri);
 
 static char *
-uri_tester_ensure_data_dir ()
+uri_tester_ensure_data_dir (void)
 {
   char *folder = NULL;
 
