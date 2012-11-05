@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-29 21:32+0000\n"
-"PO-Revision-Date: 2012-10-30 10:34+0000\n"
+"POT-Creation-Date: 2012-11-01 22:36+0000\n"
+"PO-Revision-Date: 2012-11-04 21:34+0000\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -39,11 +39,10 @@ msgstr "http://www.google.sk"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.sk/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-# PM: treba nahlásiť bug, že sa tu spomína viackrát aj epiphany a používateľ bude mierne dezorientovaný
+# https://bugzilla.gnome.org/show_bug.cgi?id=687595
 # desktop entry name
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:70
 #: ../src/ephy-main.c:319 ../src/ephy-main.c:473 ../src/window-commands.c:1412
-#, fuzzy
 msgid "Web"
 msgstr "Web"
 
@@ -62,12 +61,10 @@ msgstr "Epiphany - webový prehliadač"
 msgid "Browse the web"
 msgstr "Prehliada web"
 
-# PM: inde pomocou klávesnice - treba ujednotiť prejdi celý preklad
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
-#, fuzzy
 msgid "Browse with caret"
-msgstr "Prehliadať s kurzorom"
+msgstr "Prehliadať pomocou klávesnice"
 
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:2
@@ -134,8 +131,7 @@ msgstr "Vynútiť otvorenie nových okien na kartách"
 #: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr ""
-"Vynúti otvorenie stránok na kartách namiesto otvorenia v novom okne."
+msgstr "Vynúti otvorenie stránok na kartách namiesto otvorenia v novom okne."
 
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:12
@@ -181,7 +177,7 @@ msgstr ""
 "bude obnovená iba po páde aplikácie) a „never“ (vždy bude zobrazená domovská "
 "stránka)."
 
-# PM: je to názov konkrétnoho widgetu a v slovníku máme panely
+#  PM: je to názov konkrétnoho widgetu a v slovníku máme panely
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
@@ -199,9 +195,9 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
-"Štýl panela nástrojov. Povolené hodnoty sú „“ (použiť predvolený štýl GNOME), "
-"„both“ (text a ikony), „both-horiz“ (text vedľa ikon), „icons“ (ikony), a "
-"„text“."
+"Štýl panela nástrojov. Povolené hodnoty sú „“ (použiť predvolený štýl "
+"GNOME), „both“ (text a ikony), „both-horiz“ (text vedľa ikon), "
+"„icons“ (ikony), a „text“."
 
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:22
@@ -335,7 +331,8 @@ msgstr "Použiť vlastné CSS"
 # gsettings description
 #: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
-msgstr "Použiť vlastný súbor štýlov CSS na úpravu pôvodných štýlov webovej stránky."
+msgstr ""
+"Použiť vlastný súbor štýlov CSS na úpravu pôvodných štýlov webovej stránky."
 
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:43
@@ -405,8 +402,8 @@ msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
 msgstr ""
-"Určuje, ako budú zobrazované animované obrázky. Voľby sú „normal“ (normálne), "
-"„once“ (iba raz) a „disabled“ (zakázané)."
+"Určuje, ako budú zobrazované animované obrázky. Voľby sú "
+"„normal“ (normálne), „once“ (iba raz) a „disabled“ (zakázané)."
 
 # gsettings summary
 #: ../data/org.gnome.epiphany.gschema.xml.h:55
@@ -958,7 +955,8 @@ msgstr "Uložiť heslo"
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>Chcete uložiť heslo používateľa <b>%s</b> zo stránky <b>%s</b>?</big>"
+msgstr ""
+"<big>Chcete uložiť heslo používateľa <b>%s</b> zo stránky <b>%s</b>?</big>"
 
 #: ../embed/ephy-web-view.c:1125
 msgid "Plugins"
@@ -1179,7 +1177,8 @@ msgid ""
 "password below."
 msgstr ""
 "Heslá z predošlej verzie (Gecko) sú uzamknuté hlavným heslo. Ak chcete aby "
-"ich aplikácia Epiphany naimportovala, prosím, zadajte nižšie požadované heslo. "
+"ich aplikácia Epiphany naimportovala, prosím, zadajte nižšie požadované "
+"heslo. "
 
 #: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
@@ -1335,16 +1334,14 @@ msgstr "Identita tejto webovej stránky bola overená"
 msgid "The identity of this website has not been verified"
 msgstr "Identita tejto webovej stránky zatiaľ nebola overená"
 
-# DK: je to v zatvorke za percentami pri stahovani suboru
-# PM: nepovieme "4:20 hodina" ale 4 hodiny a 20 minut
-# PM: treba nahlasit bug report nech to rozdelia
+# https://bugzilla.gnome.org/show_bug.cgi?id=687592
 #: ../lib/widgets/ephy-download-widget.c:119
-#, fuzzy, c-format
+#, c-format
 msgid "%u:%02u hour left"
 msgid_plural "%u:%02u hours left"
-msgstr[0] "zostáva %u:%02u hodín"
-msgstr[1] "zostáva %u:%02u hodina"
-msgstr[2] "zostávajú %u:%02u hodiny"
+msgstr[0] "zostáva %u hodín %02u"
+msgstr[1] "zostáva %u hodina %02u"
+msgstr[2] "zostávajú %u hodiny %02u"
 
 #: ../lib/widgets/ephy-download-widget.c:121
 #, c-format
@@ -1354,14 +1351,14 @@ msgstr[0] "zostáva %u hodín"
 msgstr[1] "zostáva %u hodina"
 msgstr[2] "zostávajú %u hodiny"
 
-# PM: to 4 minúty a 20 sekúnd
+# https://bugzilla.gnome.org/show_bug.cgi?id=687592
 #: ../lib/widgets/ephy-download-widget.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "%u:%02u minute left"
 msgid_plural "%u:%02u minutes left"
-msgstr[0] "zostáva %u:%02u minút"
-msgstr[1] "zostáva %u:%02u minúta"
-msgstr[2] "zostávajú %u:%02u minúty"
+msgstr[0] "zostáva %u minút %02u"
+msgstr[1] "zostáva %u minúta %02u"
+msgstr[2] "zostávajú %u minúty %02u"
 
 #: ../lib/widgets/ephy-download-widget.c:126
 #, c-format
@@ -1455,14 +1452,13 @@ msgstr[0] "%d _podobných"
 msgstr[1] "%d _podobná"
 msgstr[2] "%d _podobné"
 
-# PM: myslím že identical ni sú podobné
 #: ../src/bookmarks/ephy-bookmark-properties.c:256
-#, fuzzy, c-format
+#, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] "_Zjednotiť s %d podobnými záložkami"
-msgstr[1] "_Zjednotiť s %d podobnou záložkou"
-msgstr[2] "_Zjednotiť s %d podobnými záložkami"
+msgstr[0] "_Zjednotiť s %d rovnakými záložkami"
+msgstr[1] "_Zjednotiť s %d rovnakou záložkou"
+msgstr[2] "_Zjednotiť s %d rovnakými záložkami"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:276
 #: ../src/bookmarks/ephy-bookmark-properties.c:298
@@ -1770,15 +1766,13 @@ msgstr "Odstrániť tému „%s“?"
 msgid "Delete this topic?"
 msgstr "Odstrániť túto tému?"
 
-# PM: znie to neprirodzene
 #: ../src/bookmarks/ephy-bookmarks-editor.c:376
-#, fuzzy
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
-"Odstránenie tejto témy spôsobí, že všetky záložky v nej budú bez kategórie, "
-"okrem tých čo patria do iných tém. Záložky nebudú odstránené."
+"Odstránením tejto témy zostanú všetky jej záložky bez kategórie. Odstránenie "
+"sa nevzťahuje na záložky z iných tém. Záložky odstránené nebudú."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:379
 msgid "_Delete Topic"
@@ -2016,7 +2010,7 @@ msgstr "_Priečinok na preberanie:"
 msgid "A_utomatically open downloaded files"
 msgstr "A_utomaticky otvoriť prebrané súbory"
 
-# tab 
+# tab
 #: ../src/resources/prefs-dialog.ui.h:7
 msgid "General"
 msgstr "Všeobecné"
@@ -2097,13 +2091,11 @@ msgstr "_Prijímať vždy"
 msgid "Only _from sites you visit"
 msgstr "_Len zo stránok, ktoré navštívite"
 
-# PM: ide o to že nebude prijímať cookies z embendovaných stránok, takže nie zo stránok, ktoré na týchto stránkach inzerujú
 # GtkLabel label
 #. Refers to "Only from sites you visit" option under Cookies.
 #: ../src/resources/prefs-dialog.ui.h:25
-#, fuzzy
 msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>Napríklad, nie z týchto inzerujúcich stránok</small>"
+msgstr "<small>Napríklad nie od inzerentov na týchto stránkach</small>"
 
 # GtkRadioButton label
 #: ../src/resources/prefs-dialog.ui.h:26
@@ -2539,12 +2531,10 @@ msgstr "O_dpojiť kartu"
 msgid "_Work Offline"
 msgstr "_Pracovať bez pripojenia"
 
-# PM: asi panel preberaných súborov
 #. View actions.
 #: ../src/ephy-window.c:203
-#, fuzzy
 msgid "_Downloads Bar"
-msgstr "_Lišta preberaní"
+msgstr "_Panel preberaných súborov"
 
 #: ../src/ephy-window.c:206
 msgid "_Fullscreen"
@@ -2576,16 +2566,15 @@ msgstr "Otvoriť odkaz v novom _okne"
 msgid "Open Link in New _Tab"
 msgstr "Otvoriť odkaz na novej kar_te"
 
-# PM: nepreberá sa obsah ale cieľ odkazu neviem či to netreba nahlásiť aj ako chybu
+# https://bugzilla.gnome.org/show_bug.cgi?id=687594
 #: ../src/ephy-window.c:228
-#, fuzzy
 msgid "_Download Link"
-msgstr "_Prevziať odkaz"
+msgstr "_Prevziať cieľ odkazu"
 
+# https://bugzilla.gnome.org/show_bug.cgi?id=687594
 #: ../src/ephy-window.c:230
-#, fuzzy
 msgid "_Save Link As…"
-msgstr "_Uložiť odkaz ako…"
+msgstr "_Uložiť cieľ odkazu ako…"
 
 #: ../src/ephy-window.c:232
 msgid "_Bookmark Link…"
@@ -2637,21 +2626,17 @@ msgstr "Ak aj napriek tomu dokument zavriete, tieto informácie stratíte."
 msgid "Close _Document"
 msgstr "Zavrieť _dokument"
 
-# PM: buď prebieha preberanie alebo sa stále preberajú súbory
 #: ../src/ephy-window.c:494
-#, fuzzy
 msgid "There are ongoing downloads in this window"
-msgstr "V tomto okne stále prebiehajú preberania"
+msgstr "V tomto okne stále prebieha preberanie"
 
 #: ../src/ephy-window.c:495
-#, fuzzy
 msgid "If you close this window, the downloads will be cancelled"
-msgstr "Ak zavriete toto okno, aktívne preberania budú zrušené"
+msgstr "Ak zavriete toto okno, aktívne preberanie bude zrušené"
 
 #: ../src/ephy-window.c:496
-#, fuzzy
 msgid "Close window and cancel downloads"
-msgstr "Zavrieť okno a zrušiť preberania"
+msgstr "Zavrieť okno a zrušiť preberanie"
 
 #: ../src/ephy-window.c:1326
 msgid "Save As"
@@ -2787,16 +2772,15 @@ msgstr "Meno používateľa"
 msgid "User Password"
 msgstr "Heslo používateľa"
 
-# PM: preberá sa cieľ odkazu
+# https://bugzilla.gnome.org/show_bug.cgi?id=687594
 #: ../src/popup-commands.c:302
-#, fuzzy
 msgid "Download Link"
-msgstr "Prevziať odkaz"
+msgstr "Prevziať cieľ odkazu"
 
+# https://bugzilla.gnome.org/show_bug.cgi?id=687594
 #: ../src/popup-commands.c:310
-#, fuzzy
 msgid "Save Link As"
-msgstr "Uložiť odkaz ako"
+msgstr "Uložiť cieľ odkaz ako"
 
 #: ../src/popup-commands.c:317
 msgid "Save Image As"
@@ -2899,8 +2883,8 @@ msgid ""
 msgstr ""
 "Webový prehliadač pre GNOME je rozširovaný v nádeji, že bude užitočný, avšak "
 "BEZ AKEJKOĽVEK ZÁRUKY. Neposkytujú sa ani odvodené záruky PREDAJNOSTI alebo "
-"VHODNOSTI NA URČITÝ ÚČEL. Ďalšie podrobnosti hľadajte v licencii GNU "
-"General Public License."
+"VHODNOSTI NA URČITÝ ÚČEL. Ďalšie podrobnosti hľadajte v licencii GNU General "
+"Public License."
 
 #: ../src/window-commands.c:1309
 msgid ""
@@ -2908,9 +2892,9 @@ msgid ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
-"Kópiu licencie GNU General Public License ste mali dostať spolu s týmto programom. Ak "
-"sa tak nestalo, napíšte na adresu Free Software Foundation, Inc., 51 "
-"Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
+"Kópiu licencie GNU General Public License ste mali dostať spolu s týmto "
+"programom. Ak sa tak nestalo, napíšte na adresu Free Software Foundation, "
+"Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
 # emails
 #: ../src/window-commands.c:1355 ../src/window-commands.c:1371
