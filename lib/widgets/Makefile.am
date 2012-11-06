@@ -85,8 +85,6 @@ libephywidgets_la_SOURCES = \
 	ephy-overview-store.h			\
 	ephy-removable-pixbuf-renderer.c	\
 	ephy-removable-pixbuf-renderer.h	\
-	ephy-search-entry.c			\
-	ephy-search-entry.h			\
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\

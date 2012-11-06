@@ -11,7 +11,6 @@ noinst_PROGRAMS = \
 	test-ephy-history \
 	test-ephy-location-entry \
 	test-ephy-migration \
-	test-ephy-search-entry \
 	test-ephy-session \
 	test-ephy-shell \
 	test-ephy-snapshot-service \
@@ -149,9 +148,6 @@ test_ephy_location_entry_SOURCES = \
 
 test_ephy_migration_SOURCES = \
 	ephy-migration-test.c
-
-test_ephy_search_entry_SOURCES = \
-	ephy-search-entry-test.c
 
 test_ephy_session_SOURCES = \
 	ephy-session-test.c \
