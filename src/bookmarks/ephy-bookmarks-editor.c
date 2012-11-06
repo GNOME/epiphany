@@ -33,7 +33,6 @@
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-prefs.h"
-#include "ephy-search-entry.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -1323,7 +1322,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 	}
 	else
 	{
-		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
+		gtk_entry_set_text (GTK_ENTRY (editor->priv->search_entry), "");
 		bookmarks_filter (editor, node);
 	}
 }
@@ -1341,9 +1340,10 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 }
 
 static void
-search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarksEditor *editor)
+search_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
 {
 	EphyNode *all;
+	const char *search_text;
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (editor->priv->key_view),
@@ -1356,6 +1356,8 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 		(G_OBJECT (editor->priv->key_view),
 		 G_CALLBACK (keyword_node_selected_cb),
 		 editor);
+
+	search_text = gtk_entry_get_text (GTK_ENTRY (entry));
 
 	ephy_node_filter_empty (editor->priv->bookmarks_filter);
 	ephy_node_filter_add_expression (editor->priv->bookmarks_filter,
@@ -1388,11 +1390,11 @@ build_search_box (EphyBookmarksEditor *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
-	entry = ephy_search_entry_new ();
+	entry = gtk_search_entry_new ();
 	editor->priv->search_entry = entry;
 	
-	g_signal_connect (G_OBJECT (entry), "search",
-			  G_CALLBACK (search_entry_search_cb),
+	g_signal_connect (G_OBJECT (entry), "changed",
+			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
 	add_entry_monitor (editor, entry);
 	add_focus_monitor (editor, entry);

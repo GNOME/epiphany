@@ -31,7 +31,6 @@
 #include "ephy-hosts-store.h"
 #include "ephy-hosts-view.h"
 #include "ephy-prefs.h"
-#include "ephy-search-entry.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -90,8 +89,7 @@ static void cmd_select_all		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
-static void search_entry_search_cb	  (GtkWidget *entry,
-					   char *search_text,
+static void search_entry_changed_cb	  (GtkWidget *entry,
 					   EphyHistoryWindow *editor);
 static void
 filter_now (EphyHistoryWindow *editor, gboolean hosts, gboolean pages);
@@ -764,7 +762,7 @@ key_pressed_cb (GtkWidget *view,
 }
 
 static void
-search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *editor)
+search_entry_changed_cb (GtkWidget *entry, EphyHistoryWindow *editor)
 {
 	filter_now (editor, FALSE, TRUE);
 }
@@ -786,7 +784,7 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
-	entry = ephy_search_entry_new ();
+	entry = gtk_search_entry_new ();
 	add_focus_monitor (editor, entry);
 	add_entry_monitor (editor, entry);
 	editor->priv->search_entry = entry;
@@ -840,8 +838,8 @@ build_search_box (EphyHistoryWindow *editor)
 	g_signal_connect (combo, "changed",
 			  G_CALLBACK (time_combo_changed_cb),
 			  editor);
-	g_signal_connect (G_OBJECT (entry), "search",
-			  G_CALLBACK (search_entry_search_cb),
+	g_signal_connect (G_OBJECT (entry), "changed",
+			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
 
 	return box;
