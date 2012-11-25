@@ -2,12 +2,10 @@ NULL =
 
 EGGSOURCES = \
 	eggtreemultidnd.c \
-        eggdesktopfile.c \
         $(NULL)
 
 EGGHEADERS = \
 	eggtreemultidnd.h \
-        eggdesktopfile.h \
         $(NULL)
 
 noinst_HEADERS = \
