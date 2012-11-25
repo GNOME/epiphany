@@ -304,7 +304,7 @@ get_target_window (EphyHistoryWindow *editor)
 	}
 	else
 	{
-		return GTK_WIDGET (ephy_shell_get_active_window (ephy_shell));
+		return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell)));
 	}
 }
 

@@ -179,8 +179,6 @@ GList          *ephy_shell_get_windows                  (EphyShell *shell);
 
 guint           ephy_shell_get_n_windows                (EphyShell *shell);
 
-EphyWindow     *ephy_shell_get_active_window            (EphyShell *shell);
-
 gboolean        ephy_shell_close_all_windows            (EphyShell *shell);
 
 G_END_DECLS

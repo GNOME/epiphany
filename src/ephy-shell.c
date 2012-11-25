@@ -207,7 +207,7 @@ show_about (GSimpleAction *action,
 {
   EphyWindow *window;
 
-  window = ephy_shell_get_active_window (ephy_shell);
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
   window_cmd_help_about (NULL, GTK_WIDGET (window));
 }
@@ -600,7 +600,7 @@ download_started_cb (WebKitWebContext *web_context,
     return;
   }
 
-  window = ephy_shell_get_active_window (shell);
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
   ed = ephy_download_new_for_download (download);
   ephy_download_set_window (ed, GTK_WIDGET (window));
@@ -1039,23 +1039,6 @@ ephy_shell_get_n_windows (EphyShell *shell)
   g_return_val_if_fail (EPHY_IS_SHELL (shell), 0);
 
   return g_list_length (shell->priv->windows);
-}
-
-EphyWindow *
-ephy_shell_get_active_window (EphyShell *shell)
-{
-  GList *l;
-
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  for (l = shell->priv->windows; l != NULL; l = l->next) {
-    EphyEmbedContainer *window = EPHY_EMBED_CONTAINER (l->data);
-
-    if (!ephy_embed_container_get_is_popup (window))
-      return EPHY_WINDOW (window);
-  }
-
-  return NULL;
 }
 
 gboolean

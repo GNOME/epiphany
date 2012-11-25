@@ -70,8 +70,6 @@ struct _EphySessionClass
 
 GType		 ephy_session_get_type		(void);
 
-EphyWindow	*ephy_session_get_active_window	(EphySession *session);
-
 gboolean	 ephy_session_save		(EphySession *session,
 						 const char *filename);
 
