@@ -205,7 +205,7 @@ show_about (GSimpleAction *action,
             GVariant *parameter,
             gpointer user_data)
 {
-  EphyWindow *window;
+  GtkWindow *window;
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
