@@ -307,6 +307,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 		{
 			EphyEmbedShell *shell;
 			EphyEmbedSingle *single;
+			WebKitFaviconDatabase *database;
 
 			shell = ephy_embed_shell_get_default ();
 
@@ -315,10 +316,11 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			ephy_embed_single_clear_cache (single);
 
 #ifdef HAVE_WEBKIT2
-			/* TODO: Favicons */
+			database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
 #else
-			webkit_favicon_database_clear (webkit_get_favicon_database ());
+			database = webkit_get_favicon_database ();
 #endif
+			webkit_favicon_database_clear (database);
 		}
 	}
 	gtk_widget_destroy (GTK_WIDGET (dialog));
