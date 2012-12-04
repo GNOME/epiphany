@@ -33,6 +33,7 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
 #include "ephy-history-service.h"
@@ -652,7 +653,6 @@ find_username_and_password_elements (WebKitDOMNode *form_node,
 
   g_object_unref(elements);
 }
-#endif
 
 typedef struct {
   EphyEmbed *embed;
@@ -801,9 +801,6 @@ should_store_cb (GnomeKeyringResult retval,
   request_decision_on_storing (store_data);
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: DOM bindings */
-#else
 static gboolean
 form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
                    WebKitDOMEvent *dom_event,
@@ -1086,6 +1083,52 @@ ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
 }
 
 static void
+_ephy_web_view_update_icon (EphyWebView *view)
+{
+  GObject *object = G_OBJECT (view);
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (priv->icon != NULL) {
+    g_object_unref (priv->icon);
+    priv->icon = NULL;
+  }
+
+  if (priv->address) {
+#ifdef HAVE_WEBKIT2
+    cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
+    if (icon_surface)
+      priv->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+#else
+    priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (),
+                                                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)),
+                                                                 FAVICON_SIZE, FAVICON_SIZE);
+#endif
+  }
+
+  g_object_notify (G_OBJECT (view), "icon");
+}
+
+#ifdef HAVE_WEBKIT2
+static void
+icon_changed_cb (EphyWebView *view,
+                 GParamSpec *pspec,
+                 gpointer user_data)
+{
+  _ephy_web_view_update_icon (view);
+}
+
+#else
+
+static void
+icon_loaded_cb (EphyWebView *view,
+                const char *address,
+                gpointer user_data)
+{
+  _ephy_web_view_update_icon (view);
+}
+#endif
+
+static void
 ephy_web_view_finalize (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
@@ -1093,6 +1136,10 @@ ephy_web_view_finalize (GObject *object)
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
+
+#ifdef HAVE_WEBKIT2
+  g_signal_handlers_disconnect_by_func (object, icon_changed_cb, NULL);
+#endif
 
   if (priv->non_search_regex) {
     g_regex_unref (priv->non_search_regex);
@@ -1178,6 +1225,7 @@ title_changed_cb (WebKitWebView *web_view,
   const char *uri;
   char *title;
   EphyHistoryService *history = EPHY_WEB_VIEW (web_view)->priv->history_service;
+
 #ifndef HAVE_WEBKIT2
   WebKitWebFrame *frame;
 
@@ -1292,6 +1340,7 @@ ephy_web_view_constructed (GObject *object)
    * have both enabled at the same time in WebKit now (although our
    * API does not reflect this atm). See r67274 in WebKit. */
 #ifndef HAVE_WEBKIT2
+
   /* This is the default behaviour in WebKit2 */
   webkit_web_view_set_full_content_zoom (WEBKIT_WEB_VIEW (object), TRUE);
 #endif
@@ -1682,52 +1731,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: Favicons */
-#else
-static void
-_ephy_web_view_load_icon (EphyWebView *view)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  const char* uri;
-
-  if (priv->icon != NULL)
-    return;
-
-  uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
-  priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (), uri,
-                                                               FAVICON_SIZE, FAVICON_SIZE);
-
-  g_object_notify (G_OBJECT (view), "icon");
-}
-
-static void
-_ephy_web_view_set_icon_address (EphyWebView *view,
-                                 const char *icon_address)
-{
-  GObject *object = G_OBJECT (view);
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->icon != NULL) {
-    g_object_unref (priv->icon);
-    priv->icon = NULL;
-
-    g_object_notify (object, "icon");
-  }
-
-  if (icon_address && priv->address)
-    _ephy_web_view_load_icon (view);
-}
-
-static void
-favicon_cb (EphyWebView *view,
-            const char *address,
-            gpointer user_data)
-{
-  _ephy_web_view_set_icon_address (view, address);
-}
-#endif
-
 static void
 new_window_cb (EphyWebView *view,
                EphyWebView *new_view,
@@ -2085,11 +2088,8 @@ ephy_web_view_location_changed (EphyWebView *view,
   }
 
   ephy_web_view_set_link_message (view, NULL);
-#ifdef HAVE_WEBKIT2
-  /* TODO: Favicons */
-#else
-  _ephy_web_view_set_icon_address (view, NULL);
-#endif
+
+  _ephy_web_view_update_icon (view);
 
   update_navigation_flags (view);
 
@@ -2251,6 +2251,9 @@ load_changed_cb (WebKitWebView *web_view,
 
     if (uri)
       soup_uri_free (uri);
+
+    /* Ensure we load the icon for this web view, if available. */
+    _ephy_web_view_update_icon (view);
 
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
@@ -2532,11 +2535,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_file_get_contents (html_file, &template, NULL, NULL);
 
   ephy_web_view_set_title (view, page_title);
-#ifdef HAVE_WEBKIT2
-  /* TODO: Favicons */
-#else
-  _ephy_web_view_set_icon_address (view, NULL);
-#endif
+
+  _ephy_web_view_update_icon (view);
 
   g_string_printf (html, template,
                    lang, lang,
@@ -2840,10 +2840,12 @@ ephy_web_view_init (EphyWebView *web_view)
 #endif
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: Favicons */
+  g_signal_connect (web_view, "notify::favicon",
+                    G_CALLBACK (icon_changed_cb),
+                    NULL);
 #else
   g_signal_connect (web_view, "icon-loaded",
-                    G_CALLBACK (favicon_cb),
+                    G_CALLBACK (icon_loaded_cb),
                     NULL);
 #endif
 
@@ -3009,6 +3011,7 @@ ephy_web_view_load_request (EphyWebView *view,
 #endif
 }
 
+#ifndef HAVE_WEBKIT2
 typedef struct {
   EphyWebView *view;
   char *original_uri;
@@ -3048,6 +3051,7 @@ effective_url_head_cb (SoupSession *session,
   g_free (data->original_uri);
   g_slice_free (HEADAttemptData, data);
 }
+#endif
 
 /**
  * ephy_web_view_load_url:
