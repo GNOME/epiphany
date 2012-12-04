@@ -612,6 +612,12 @@ ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
 
+#ifdef HAVE_WEBKIT2
+  WebKitWebContext *web_context;
+  EphyEmbedShellMode mode;
+  char *favicon_db_path;
+#endif
+
   shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
   /* globally accessible singleton */
@@ -621,9 +627,20 @@ ephy_shell_init (EphyShell *shell)
                              (gpointer *)ptr);
 
 #ifdef HAVE_WEBKIT2
-  g_signal_connect (webkit_web_context_get_default (), "download-started",
+  web_context = webkit_web_context_get_default ();
+  g_signal_connect (web_context, "download-started",
                     G_CALLBACK (download_started_cb),
                     shell);
+
+  /* Initialize the favicon cache as early as possible, or further
+     calls to webkit_web_context_get_favicon_database will fail. */
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+  favicon_db_path = g_build_filename (mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
+                                      ephy_dot_dir () : g_get_user_cache_dir (),
+                                      g_get_prgname (), "icondatabase", NULL);
+
+  webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
+  g_free (favicon_db_path);
 #endif
 }
 

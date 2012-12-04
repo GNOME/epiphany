@@ -417,7 +417,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *filename;
   char *cookie_policy;
 
-  /* TODO: SoupCache, SSL, favicons */
+  /* TODO: SoupCache, SSL */
   web_context = webkit_web_context_get_default ();
 
   /* Store cookies in moz-compatible SQLite format */
