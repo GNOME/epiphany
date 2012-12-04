@@ -30,6 +30,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-service.h"
 #include "ephy-link.h"
@@ -240,19 +241,23 @@ item_leave_notify_event_cb (GtkWidget *widget,
   return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: favicons */
-#else
 static void
 icon_loaded_cb (GObject *source,
                 GAsyncResult *result,
                 GtkImageMenuItem *item)
 {
-  WebKitFaviconDatabase* database;
-  GdkPixbuf *favicon;
+  WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+  GdkPixbuf *favicon = NULL;
 
-  database = webkit_get_favicon_database ();
+#ifdef HAVE_WEBKIT2
+  cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  if (icon_surface) {
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    cairo_surface_destroy (icon_surface);
+  }
+#else
   favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
+#endif
 
   if (favicon) {
     GtkWidget *image;
@@ -263,8 +268,9 @@ icon_loaded_cb (GObject *source,
 
     g_object_unref (favicon);
   }
+
+  g_object_unref (item);
 }
-#endif
 
 static GtkWidget *
 new_history_menu_item (EphyWebView *view,
@@ -273,10 +279,8 @@ new_history_menu_item (EphyWebView *view,
 {
   GtkWidget *item;
   GtkLabel *label;
-#ifdef HAVE_WEBKIT2
-  /* TODO: favicons */
-#else
   WebKitFaviconDatabase* database;
+#ifndef HAVE_WEBKIT2
   GdkPixbuf *favicon;
 #endif
 
@@ -287,8 +291,13 @@ new_history_menu_item (EphyWebView *view,
   label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
   gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
+
 #ifdef HAVE_WEBKIT2
-  /* TODO: favicons */
+  database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+  webkit_favicon_database_get_favicon (database, address,
+                                       NULL,
+                                       (GAsyncReadyCallback)icon_loaded_cb,
+                                       g_object_ref (item));
 #else
   database = webkit_get_favicon_database ();
   favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, address,
@@ -306,7 +315,7 @@ new_history_menu_item (EphyWebView *view,
     webkit_favicon_database_get_favicon_pixbuf (database, address,
                                                 FAVICON_SIZE, FAVICON_SIZE, NULL,
                                                 (GAsyncReadyCallback) icon_loaded_cb,
-                                                GTK_IMAGE_MENU_ITEM (item));
+                                                GTK_IMAGE_MENU_ITEM (g_object_ref (item)));
   }
 #endif
 
