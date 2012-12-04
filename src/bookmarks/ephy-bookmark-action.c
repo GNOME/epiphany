@@ -27,6 +27,7 @@
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -66,13 +67,10 @@ typedef struct
 
 G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
 
-#ifdef HAVE_WEBKIT2
-/* TODO: Favicons */
-#else
 static void
-favicon_loaded_cb (WebKitFaviconDatabase *database,
-		   const char *page_address,
-		   EphyBookmarkAction *action)
+favicon_changed_cb (WebKitFaviconDatabase *database,
+                    const char *page_address,
+                    EphyBookmarkAction *action)
 {
 	const char *icon;
 	char *icon_address;
@@ -93,60 +91,108 @@ favicon_loaded_cb (WebKitFaviconDatabase *database,
 
 	g_free (icon_address);
 }
+
+static void
+async_get_favicon_pixbuf_callback (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+       GtkWidget *proxy = GTK_WIDGET (user_data);
+       WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+       GdkPixbuf *pixbuf = NULL;
+
+#ifdef HAVE_WEBKIT2
+       cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+       if (icon_surface)
+       {
+               pixbuf = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+               cairo_surface_destroy (icon_surface);
+       }
+#else
+       pixbuf = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
 #endif
+
+       if (pixbuf)
+       {
+               if (GTK_IS_MENU_ITEM (proxy))
+               {
+                       GtkWidget *image;
+
+                       image = gtk_image_new_from_pixbuf (pixbuf);
+                       gtk_widget_show (image);
+
+                       gtk_image_menu_item_set_image
+                         (GTK_IMAGE_MENU_ITEM (proxy), image);
+                       gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (proxy),
+                                                                  TRUE);
+               }
+               g_object_unref (pixbuf);
+       }
+
+       g_object_unref (proxy);
+}
 
 static void
 ephy_bookmark_action_sync_icon (GtkAction *action,
 				GParamSpec *pspec,
 				GtkWidget *proxy)
 {
-#ifdef HAVE_WEBKIT2
-        /* TODO: Favicons */
-#else
 	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
 	const char *page_location;
 	WebKitFaviconDatabase *database;
-	GdkPixbuf *pixbuf = NULL;
 
 	g_return_if_fail (bma->priv->node != NULL);
 
 	page_location = ephy_node_get_property_string (bma->priv->node,
 						       EPHY_NODE_BMK_PROP_LOCATION);
 
-	database = webkit_get_favicon_database ();
+#ifdef HAVE_WEBKIT2
+        database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+#else
+        database = webkit_get_favicon_database ();
+#endif
 	if (page_location && *page_location)
 	{
-		pixbuf = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
-									 FAVICON_SIZE, FAVICON_SIZE);
+#ifndef HAVE_WEBKIT2
+                GdkPixbuf *pixbuf = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
+                                                                                    FAVICON_SIZE, FAVICON_SIZE);
+                if (pixbuf == NULL && bma->priv->cache_handler == 0)
+                {
+                        bma->priv->cache_handler =
+                        g_signal_connect_object (database, "icon-loaded",
+                                                 G_CALLBACK (favicon_changed_cb),
+                                                 action, 0);
+                }
 
-		if (pixbuf == NULL && bma->priv->cache_handler == 0)
-		{
-			bma->priv->cache_handler =
-				g_signal_connect_object
-					(database, "icon-loaded",
-					 G_CALLBACK (favicon_loaded_cb),
-					 action, 0);
-		}
-	}
+                if (GTK_IS_MENU_ITEM (proxy) && pixbuf)
+                {
+                        GtkWidget *image;
 
-	if (GTK_IS_MENU_ITEM (proxy) && pixbuf)
-	{
-		GtkWidget *image;
+                        image = gtk_image_new_from_pixbuf (pixbuf);
+                        gtk_widget_show (image);
 
-		image = gtk_image_new_from_pixbuf (pixbuf);
-		gtk_widget_show (image);
+                        gtk_image_menu_item_set_image
+                                (GTK_IMAGE_MENU_ITEM (proxy), image);
+                        gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (proxy),
+                                                                  TRUE);
+                }
 
-		gtk_image_menu_item_set_image
-			(GTK_IMAGE_MENU_ITEM (proxy), image);
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (proxy),
-							   TRUE);
-	}
-
-	if (pixbuf)
-	{
-		g_object_unref (pixbuf);
-	}
+                if (pixbuf)
+                {
+                        g_object_unref (pixbuf);
+                }
+#else
+                webkit_favicon_database_get_favicon (database, page_location,
+                                                     0, async_get_favicon_pixbuf_callback,
+                                                     g_object_ref (proxy));
+                if (bma->priv->cache_handler == 0)
+                {
+	                bma->priv->cache_handler =
+			g_signal_connect_object
+				(database, "favicon-ready",
+				 G_CALLBACK (favicon_changed_cb),
+				 action, 0);
+                }
 #endif
+	}
 }
 
 void
@@ -384,13 +430,14 @@ ephy_bookmark_action_dispose (GObject *object)
 
 	if (priv->cache_handler != 0)
 	{
+		WebKitFaviconDatabase *database;
 #ifdef HAVE_WEBKIT2
-                /* TODO: Favicons */
+                database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
 #else
-		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
+                database = webkit_get_favicon_database ();
+#endif
 		g_signal_handler_disconnect (database, priv->cache_handler);
 		priv->cache_handler = 0;
-#endif
 	}
 
 	G_OBJECT_CLASS (ephy_bookmark_action_parent_class)->dispose (object);
