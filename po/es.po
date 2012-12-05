@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-05 10:32+0000\n"
-"PO-Revision-Date: 2012-11-20 14:20+0100\n"
+"POT-Creation-Date: 2012-11-27 19:48+0000\n"
+"PO-Revision-Date: 2012-12-05 19:09+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español <gnome-es-list@gnome.org>\n"
+"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 2.91.5\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -59,6 +59,10 @@ msgstr "Navegador web Epiphany"
 #: ../data/epiphany.desktop.in.in.h:4
 msgid "Browse the web"
 msgstr "Navegue por la web"
+
+#: ../data/epiphany.desktop.in.in.h:5
+msgid "web;browser;internet;"
+msgstr "web;navegador;internet;"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
@@ -189,8 +193,8 @@ msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
 msgstr ""
-"[Obsoleto] Esta configuración está obsoleta, use «tabs-bar-visibility-policy» "
-"en su lugar."
+"[Obsoleto] Esta configuración está obsoleta, use «tabs-bar-visibility-"
+"policy» en su lugar."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
@@ -215,9 +219,9 @@ msgid ""
 "two or more tabs) and 'never' (the tabs bar is never shown)."
 msgstr ""
 "Controla cuándo se muestra la barra de pestañas. Los valores posibles son "
-"«always» (la barra de pestañas se muestra siempre), «more-than-one» (la barra "
-"de pestañas se muestra solo si hay dos o más pestañas) y «never» (no es "
-"muestra nunca)."
+"«always» (la barra de pestañas se muestra siempre), «more-than-one» (la "
+"barra de pestañas se muestra solo si hay dos o más pestañas) y «never» (no "
+"es muestra nunca)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Minimum font size"
@@ -969,42 +973,6 @@ msgstr "Cargando…"
 #, c-format
 msgid "%s Files"
 msgstr "%s archivos"
-
-#: ../lib/egg/eggdesktopfile.c:165
-#, c-format
-msgid "File is not a valid .desktop file"
-msgstr "El archivo no es un archivo .desktop válido"
-
-#: ../lib/egg/eggdesktopfile.c:188
-#, c-format
-msgid "Unrecognized desktop file Version '%s'"
-msgstr "No se reconoce la versión «%s» del archivo desktop"
-
-#: ../lib/egg/eggdesktopfile.c:958
-#, c-format
-msgid "Starting %s"
-msgstr "Iniciando %s"
-
-#: ../lib/egg/eggdesktopfile.c:1100
-#, c-format
-msgid "Application does not accept documents on command line"
-msgstr "La aplicación no acepta documentos en la línea de comandos"
-
-#: ../lib/egg/eggdesktopfile.c:1168
-#, c-format
-msgid "Unrecognized launch option: %d"
-msgstr "Opción de lanzamiento no reconocida: %d"
-
-#: ../lib/egg/eggdesktopfile.c:1373
-#, c-format
-msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr ""
-"No se pueden pasar los URI de documentos a entradas de escritorio Type=Link"
-
-#: ../lib/egg/eggdesktopfile.c:1392
-#, c-format
-msgid "Not a launchable item"
-msgstr "No es un elemento lanzable"
 
 #: ../lib/ephy-file-chooser.c:210
 msgid "All supported types"
@@ -1918,7 +1886,6 @@ msgid "Allow popup _windows"
 msgstr "Permitir ventanas e_mergentes"
 
 #: ../src/resources/prefs-dialog.ui.h:19
-#| msgid "Allow  _advertisements"
 msgid "Allow _advertisements"
 msgstr "Permitir _anuncios"
 
@@ -2744,6 +2711,29 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Activar"
 
+#~ msgid "File is not a valid .desktop file"
+#~ msgstr "El archivo no es un archivo .desktop válido"
+
+#~ msgid "Unrecognized desktop file Version '%s'"
+#~ msgstr "No se reconoce la versión «%s» del archivo desktop"
+
+#~ msgid "Starting %s"
+#~ msgstr "Iniciando %s"
+
+#~ msgid "Application does not accept documents on command line"
+#~ msgstr "La aplicación no acepta documentos en la línea de comandos"
+
+#~ msgid "Unrecognized launch option: %d"
+#~ msgstr "Opción de lanzamiento no reconocida: %d"
+
+#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+#~ msgstr ""
+#~ "No se pueden pasar los URI de documentos a entradas de escritorio "
+#~ "Type=Link"
+
+#~ msgid "Not a launchable item"
+#~ msgstr "No es un elemento lanzable"
+
 #~ msgid "Active extensions"
 #~ msgstr "Activar extensiones"
 
@@ -3553,41 +3543,41 @@ msgstr "_Activar"
 #~ msgid ""
 #~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
 #~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
-#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
-#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
-#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
-#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
-#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
-#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
-#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
-#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
-#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
-#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
-#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
-#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
-#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
-#~ "and \"x-windows-949\"."
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 #~ msgstr ""
 #~ "Codificación predeterminada. Los valores aceptados son : \"armscii-8\", "
-#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312"
-#~ "\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", "
-#~ "\"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
-#~ "2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3"
-#~ "\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-"
-#~ "8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11"
-#~ "\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", "
-#~ "\"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-"
-#~ "7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-"
-#~ "1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-"
-#~ "1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw"
-#~ "\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-"
-#~ "croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", "
-#~ "\"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew"
-#~ "\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-"
-#~ "turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", "
-#~ "\"x-viet-vps\" y \"x-windows-949\"."
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
+#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
+#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
+#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
+#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
+#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
+#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
+#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
+#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
+#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
+#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
+#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
+#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
+#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" y \"x-windows-949\"."
 
 #~ msgid "Enable Web Inspector"
 #~ msgstr "Activar el inspector web"
@@ -3600,7 +3590,8 @@ msgstr "_Activar"
 #~ "\"separately\" and \"selected\"."
 #~ msgstr ""
 #~ "Cómo se imprimen las páginas que contienen marcos. Los valores posibles "
-#~ "son \"normal\", «separately» (por separado) y \"selected\" (seleccionados)."
+#~ "son \"normal\", «separately» (por separado) y \"selected"
+#~ "\" (seleccionados)."
 
 #~ msgid "ISO-8859-1"
 #~ msgstr "ISO-8859-1"
@@ -3660,7 +3651,8 @@ msgstr "_Activar"
 #~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 #~ msgstr ""
 #~ "La información de la página mostrada en la vista del histórico. Los "
-#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y «VerFechaHora»."
+#~ "valores válidos en la lista son «VerTítulo», «VerDirección» y "
+#~ "«VerFechaHora»."
 
 #~ msgid "Whether to print the background color"
 #~ msgstr "Indica si debe imprimir el color del fondo"
