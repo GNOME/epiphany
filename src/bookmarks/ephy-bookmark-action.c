@@ -67,6 +67,26 @@ typedef struct
 
 G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
 
+#ifdef HAVE_WEBKIT2
+static void
+favicon_changed_cb (WebKitFaviconDatabase *database,
+                    const char *page_address,
+                    const char *icon_address,
+                    EphyBookmarkAction *action)
+{
+        const char *icon;
+
+        icon = ephy_node_get_property_string (action->priv->node,
+                                              EPHY_NODE_BMK_PROP_ICON);
+        if (g_strcmp0 (icon, icon_address) == 0)
+        {
+                g_signal_handler_disconnect (database, action->priv->cache_handler);
+                action->priv->cache_handler = 0;
+
+                g_object_notify (G_OBJECT (action), "icon");
+        }
+}
+#else
 static void
 favicon_changed_cb (WebKitFaviconDatabase *database,
                     const char *page_address,
@@ -91,6 +111,7 @@ favicon_changed_cb (WebKitFaviconDatabase *database,
 
 	g_free (icon_address);
 }
+#endif
 
 static void
 async_get_favicon_pixbuf_callback (GObject *source, GAsyncResult *result, gpointer user_data)
@@ -187,7 +208,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
                 {
 	                bma->priv->cache_handler =
 			g_signal_connect_object
-				(database, "favicon-ready",
+				(database, "favicon-changed",
 				 G_CALLBACK (favicon_changed_cb),
 				 action, 0);
                 }

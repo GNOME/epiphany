@@ -230,6 +230,16 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 	}
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+icon_updated_cb (WebKitFaviconDatabase *favicon_database,
+		 const char *address,
+		 const char *icon,
+		 EphyBookmarks *eb)
+{
+	ephy_bookmarks_set_icon (eb, address, icon);
+}
+#else
 static void
 icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 		 const char *address,
@@ -241,6 +251,7 @@ icon_updated_cb (WebKitFaviconDatabase *favicon_database,
 	ephy_bookmarks_set_icon (eb, address, icon);
 	g_free (icon);
 }
+#endif
 
 static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
@@ -249,7 +260,7 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 
 #ifdef HAVE_WEBKIT2
 	favicon_database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
-	g_signal_connect (favicon_database, "favicon-ready",
+	g_signal_connect (favicon_database, "favicon-changed",
 			  G_CALLBACK (icon_updated_cb), eb);
 #else
 	favicon_database = webkit_get_favicon_database ();
