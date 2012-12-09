@@ -1085,7 +1085,6 @@ ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
 static void
 _ephy_web_view_update_icon (EphyWebView *view)
 {
-  GObject *object = G_OBJECT (view);
   EphyWebViewPrivate *priv = view->priv;
 
   if (priv->icon != NULL) {
