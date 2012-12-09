@@ -892,6 +892,16 @@ ephy_embed_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
 #endif
 
+  /* The overview */
+  priv->overview = ephy_overview_new ();
+  gtk_widget_set_halign (priv->overview, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (priv->overview, GTK_ALIGN_FILL);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->overview);
+
+  g_object_bind_property (embed, "overview-mode",
+                          priv->overview, "visible",
+                          G_BINDING_SYNC_CREATE);
+
   /* Floating message popup for fullscreen mode. */
   priv->fullscreen_message_label = gtk_label_new (NULL);
   gtk_widget_set_name (priv->fullscreen_message_label, "fullscreen-popup");
@@ -1022,22 +1032,6 @@ ephy_embed_constructed (GObject *object)
                     embed,
                     NULL);
 #endif
-
-  /* The overview */
-  priv->overview = ephy_overview_new ();
-  gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (priv->overview),
-                      TRUE, TRUE, 0);
-  g_object_bind_property (embed, "overview-mode",
-                          priv->overview, "visible",
-                          G_BINDING_SYNC_CREATE
-                          | G_BINDING_BIDIRECTIONAL);
-
-  g_object_bind_property (embed, "overview-mode",
-                          paned, "visible",
-                          G_BINDING_SYNC_CREATE
-                          | G_BINDING_INVERT_BOOLEAN
-                          | G_BINDING_BIDIRECTIONAL);
 
   ephy_embed_prefs_add_embed (embed);
 }
