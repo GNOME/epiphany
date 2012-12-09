@@ -819,7 +819,8 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   }
 
   uri = webkit_web_view_get_uri (priv->web_view);
-  if (!uri || g_str_equal (uri, "about:blank"))
+  if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
+      g_str_has_prefix (uri, "about:"))
     return;
 
 #ifdef HAVE_WEBKIT2
