@@ -1382,9 +1382,7 @@ static GtkWidget *
 build_search_box (EphyBookmarksEditor *editor)
 {
 	GtkWidget *box;
-	GtkWidget *label;
 	GtkWidget *entry;
-	char *str;
 
 	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
@@ -1401,16 +1399,6 @@ build_search_box (EphyBookmarksEditor *editor)
 	
 	gtk_widget_show_all (entry);
 
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Search:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-
-	gtk_box_pack_start (GTK_BOX (box),
-			    label, FALSE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
 			    entry, TRUE, TRUE, 0);
 

@@ -776,7 +776,7 @@ time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 static GtkWidget *
 build_search_box (EphyHistoryWindow *editor)
 {
-	GtkWidget *box, *label, *entry;
+	GtkWidget *box, *entry;
 	GtkWidget *combo;
 	char *str;
 
@@ -790,14 +790,6 @@ build_search_box (EphyHistoryWindow *editor)
 	editor->priv->search_entry = entry;
     
 	gtk_widget_show_all (entry);
-
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Search:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
 
 	combo = gtk_combo_box_text_new ();
 	gtk_widget_show (combo);
@@ -828,8 +820,6 @@ build_search_box (EphyHistoryWindow *editor)
 
 	editor->priv->time_combo = combo;
 
-	gtk_box_pack_start (GTK_BOX (box),
-			    label, FALSE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
 			    entry, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
