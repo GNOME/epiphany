@@ -76,6 +76,8 @@ const char       *ephy_window_get_location        (EphyWindow *window);
 
 gboolean          ephy_window_close               (EphyWindow *window);
 
+gboolean      ephy_window_is_on_current_workspace (EphyWindow *window);
+
 G_END_DECLS
 
 #endif

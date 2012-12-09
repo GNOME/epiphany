@@ -261,7 +261,7 @@ session_command_open_uris (EphySession *session,
 
 	g_object_ref (shell);
 
-	window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+	window = ephy_shell_get_main_window (shell);
 
 	new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 						      EPHY_PREFS_NEW_WINDOWS_IN_TABS);

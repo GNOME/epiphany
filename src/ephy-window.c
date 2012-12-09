@@ -61,10 +61,15 @@
 #include "window-commands.h"
 
 #include <gdk/gdkkeysyms.h>
+#include <gdk/gdkx.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
+
+#define WNCK_I_KNOW_THIS_IS_UNSTABLE
+#include <libwnck/libwnck.h>
+
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
@@ -4387,6 +4392,40 @@ ephy_window_get_location_controller (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return window->priv->location_controller;
+}
+
+/**
+ * ephy_window_is_on_current_workspace:
+ * @window: an #EphyWindow
+ *
+ * Returns whether @window is on the current workspace
+ *
+ * Returns: %TRUE if the window is on the current workspace, %FALSE otherwise
+ **/
+gboolean
+ephy_window_is_on_current_workspace (EphyWindow *window)
+{
+	GdkWindow *gdk_window = NULL;
+	WnckWorkspace *workspace = NULL;
+	WnckWindow *wnck_window = NULL;
+
+	if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+		return TRUE;
+
+	workspace = wnck_screen_get_active_workspace (wnck_screen_get_default ());
+
+	/* From WNCK docs:
+	 * "May return NULL sometimes, if libwnck is in a weird state due to
+	 *  the asynchronous nature of the interaction with the window manager."
+	 * In such a case we cannot really check, so assume we are.
+	 */
+	if (!workspace)
+		return TRUE;
+
+	gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+	wnck_window = wnck_window_get (GDK_WINDOW_XID (gdk_window));
+
+	return wnck_window_is_on_workspace (wnck_window, workspace);
 }
 
 /**

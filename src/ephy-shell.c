@@ -1061,6 +1061,44 @@ ephy_shell_get_n_windows (EphyShell *shell)
   return g_list_length (shell->priv->windows);
 }
 
+EphyWindow*
+ephy_shell_get_main_window (EphyShell *shell)
+{
+  EphyWindow *window = NULL;
+  GList *windows;
+  GList *iter;
+
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  /* Select the window with most tabs in the current workspace as the window to
+   * use for opening a new tab on, if that turns out to be the case.
+   */
+  windows = ephy_shell_get_windows (shell);
+
+  for (iter = windows; iter != NULL; iter = iter->next) {
+    EphyWindow *candidate = EPHY_WINDOW (iter->data);
+    GtkWidget *cur_notebook;
+    GtkWidget *cand_notebook;
+
+    if (!ephy_window_is_on_current_workspace (candidate))
+      continue;
+
+    if (!window) {
+      window = candidate;
+      continue;
+    }
+
+    cur_notebook = ephy_window_get_notebook (window);
+    cand_notebook =  ephy_window_get_notebook (candidate);
+    if (gtk_notebook_get_n_pages (cand_notebook) > gtk_notebook_get_n_pages (cur_notebook))
+      window = candidate;
+  }
+
+  g_list_free (windows);
+
+  return window;
+}
+
 gboolean
 ephy_shell_close_all_windows (EphyShell *shell)
 {
