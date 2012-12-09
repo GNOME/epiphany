@@ -501,6 +501,9 @@ case_sensitive_toggled_cb (GtkWidget *check,
 			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
 	}
 
+	if (gtk_entry_get_text_length (GTK_ENTRY (toolbar->priv->entry)) == 0)
+		return;
+
 #ifdef HAVE_WEBKIT2
         do_search (toolbar);
 #else
