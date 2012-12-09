@@ -736,7 +736,9 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
   } else {
     /* A short timeout before hiding the statusbar ensures that while moving
       over a series of links, the overlay widget doesn't flicker on and off. */
-    priv->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+    if (priv->pop_statusbar_later_source_id == 0) {
+      priv->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+    }
   }
 }
 
