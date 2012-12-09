@@ -25,6 +25,8 @@
 #include "ephy-debug.h"
 #include "ephy-embed-utils.h"
 
+#include <math.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -35,7 +37,7 @@
 #include <webkit/webkit.h>
 #endif
 
-#define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
+#define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
 struct _EphyFindToolbarPrivate
 {
@@ -45,15 +47,8 @@ struct _EphyFindToolbarPrivate
         WebKitFindController *controller;
 #endif
 	GtkWidget *entry;
-	GtkWidget *label;
-	GtkToolItem *next;
-	GtkToolItem *prev;
-	GtkToolItem *sep;
-	GtkToolItem *status_item;
-	GtkWidget *status_label;
-	GtkWidget *case_sensitive;
-	gulong set_focus_handler;
-	guint source_id;
+	GtkWidget *next;
+	GtkWidget *prev;
 	guint find_again_source_id;
 	guint find_source_id;
 	char *find_string;
@@ -92,6 +87,8 @@ typedef enum
 } EphyFindDirection;
 
 static guint signals[LAST_SIGNAL];
+
+G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_BOX)
 
 /* private functions */
 
@@ -133,59 +130,39 @@ scroll_pages (WebKitWebView *web_view,
 #endif
 }
 
-static gboolean
-set_status_notfound_cb (EphyFindToolbar *toolbar)
-{
-	EphyFindToolbarPrivate *priv;
-	PangoFontDescription *pango_desc = NULL;
-
-	priv = toolbar->priv;
-
-	pango_desc = pango_font_description_new ();
-	gtk_widget_override_font (priv->status_label, pango_desc);
-	pango_font_description_free (pango_desc);
-
-	priv->source_id = 0;
-
-	return FALSE;
-}
-
 static void
 set_status (EphyFindToolbar *toolbar,
 	    EphyFindResult result)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	char *text = NULL;
-	PangoFontDescription *pango_desc = NULL;
+	const char *icon_name = "edit-find-symbolic";
+	const char *tooltip = NULL;
 
 	switch (result)
 	{
 		case EPHY_FIND_RESULT_FOUND:
-			text = NULL;
 			break;
 		case EPHY_FIND_RESULT_NOTFOUND:
-			{
-				text = _("Not found");
+			icon_name = "face-uncertain-symbolic";
+			tooltip = _("Text not found");
+			gtk_widget_error_bell (GTK_WIDGET (priv->window));
 
-				pango_desc = pango_font_description_new ();
-				pango_font_description_set_weight (pango_desc, PANGO_WEIGHT_BOLD);
-				gtk_widget_override_font (priv->status_label, pango_desc);
-				pango_font_description_free (pango_desc);
-
-				gtk_widget_error_bell (GTK_WIDGET (priv->window));
-				priv->source_id = g_timeout_add (500, (GSourceFunc) set_status_notfound_cb, toolbar);
-			}
 			break;
 		case EPHY_FIND_RESULT_FOUNDWRAPPED:
-			text = _("Wrapped");
+			icon_name = "view-wrapped-symbolic";
+			tooltip = _("Search wrapped back to the top");
 			break;
 	}
 
-	gtk_label_set_text (GTK_LABEL (priv->status_label),
-			    text != NULL ? text : "");
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), result != EPHY_FIND_RESULT_NOTFOUND);
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), result != EPHY_FIND_RESULT_NOTFOUND);
 
-	g_object_set (priv->sep, "visible", text != NULL, NULL);
-	g_object_set (priv->status_item, "visible", text != NULL, NULL);
+	g_object_set (priv->entry,
+		      "primary-icon-name", icon_name,
+		      "primary-icon-activatable", FALSE,
+		      "primary-icon-sensitive", FALSE,
+		      "primary-icon-tooltip-text", tooltip,
+		      NULL);
 }
 
 static void
@@ -193,11 +170,14 @@ clear_status (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	gtk_widget_hide (GTK_WIDGET (priv->sep));
-	gtk_widget_hide (GTK_WIDGET (priv->status_item));
-	gtk_label_set_text (GTK_LABEL (priv->status_label), "");
-	gtk_label_set_text (GTK_LABEL (priv->label),
-			    priv->links_only ? _("Find links:") : _("Find:"));
+	g_object_set (priv->entry,
+		      "primary-icon-name", "edit-find-symbolic",
+		      NULL);
+
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
+
+	webkit_web_view_unmark_text_matches (priv->web_view);
 }
 
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
@@ -242,6 +222,23 @@ find_prev_cb (EphyFindToolbar *toolbar)
 	g_signal_emit (toolbar, signals[PREVIOUS], 0);
 }
 
+static gboolean
+str_has_uppercase (const char *str)
+{
+	while (str != NULL && *str != '\0') {
+		gunichar c;
+
+		c = g_utf8_get_char (str);
+
+		if (g_unichar_isupper (c))
+			return TRUE;
+
+		str = g_utf8_next_char (str);
+	}
+
+	return FALSE;
+}
+
 #ifndef HAVE_WEBKIT2
 static void
 ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
@@ -250,7 +247,7 @@ ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
         WebKitWebView *web_view = priv->web_view;
         gboolean case_sensitive;
 
-        case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+        case_sensitive = str_has_uppercase (priv->find_string);
 
         webkit_web_view_unmark_text_matches (web_view);
         if (priv->find_string != NULL && priv->find_string[0] != '\0')
@@ -272,7 +269,7 @@ real_find (EphyFindToolbarPrivate *priv,
         if (!g_strcmp0 (priv->find_string, ""))
                 return;
 
-        if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive)))
+        if (!str_has_uppercase (priv->find_string))
                 options |= WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
         if (direction == EPHY_FIND_DIRECTION_PREV)
                 options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
@@ -286,9 +283,10 @@ real_find (EphyFindToolbarPrivate *priv,
 	   EphyFindDirection direction)
 {
         WebKitWebView *web_view = priv->web_view;
-        gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+        gboolean case_sensitive;
         gboolean forward = (direction == EPHY_FIND_DIRECTION_NEXT);
 
+        case_sensitive = str_has_uppercase (priv->find_string);
         if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
                 return EPHY_FIND_RESULT_NOTFOUND;
 
@@ -364,9 +362,9 @@ failed_to_find_text_cb (WebKitFindController *controller,
 }
 #endif
 
+
 static void
-entry_changed_cb (GtkEntry *entry,
-		  EphyFindToolbar *toolbar)
+update_find_string (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
@@ -378,8 +376,10 @@ entry_changed_cb (GtkEntry *entry,
 		priv->find_source_id = 0;
 	}
 
-	if (strlen (priv->find_string) == 0)
-                return;
+	if (strlen (priv->find_string) == 0) {
+		clear_status (toolbar);
+		return;
+	}
 
 	priv->find_source_id = g_timeout_add (300, (GSourceFunc)do_search, toolbar);
 }
@@ -466,138 +466,12 @@ entry_activate_cb (GtkWidget *entry,
 }
 
 static void
-case_sensitive_menu_toggled_cb (GtkWidget *check,
-				EphyFindToolbar *toolbar)
-{
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-	gboolean case_sensitive;
-
-	case_sensitive = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (check));
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->case_sensitive),
-				      case_sensitive);
-}
-
-static void
-case_sensitive_toggled_cb (GtkWidget *check,
-			   EphyFindToolbar *toolbar)
-{
-	gboolean case_sensitive;
-	GtkWidget *proxy;
-
-	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
-
-	proxy = gtk_tool_item_get_proxy_menu_item (GTK_TOOL_ITEM (gtk_widget_get_parent (check)),
-						   "menu-proxy");
-
-	if (proxy != NULL)
-	{
-		g_signal_handlers_block_by_func
-			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
-
-		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
-						case_sensitive);
-		g_signal_handlers_unblock_by_func
-			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
-	}
-
-	if (gtk_entry_get_text_length (GTK_ENTRY (toolbar->priv->entry)) == 0)
-		return;
-
-#ifdef HAVE_WEBKIT2
-        do_search (toolbar);
-#else
-
-	ephy_find_toolbar_mark_matches (toolbar);
-
-	/*
-	 * If we now use the stricter method (and are case sensitive),
-	 * check that the current selection still matches. If not, find the
-	 * next one.
-	 * This currently requires going back and then forward, because
-	 * there's no function in WebKit that would verify the current selection.
-	 */
-	if (case_sensitive)
-	{
-		EphyFindResult result;
-
-		result = real_find (toolbar->priv, EPHY_FIND_DIRECTION_PREV);
-		if (result != EPHY_FIND_RESULT_NOTFOUND)
-			result = real_find (toolbar->priv,
-					    EPHY_FIND_DIRECTION_NEXT);
-
-		set_status (toolbar, result);
-	}
-#endif
-}
-
-static gboolean
-toolitem_create_menu_proxy_cb (GtkToolItem *toolitem,
-			       EphyFindToolbar *toolbar)
-{
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-	GtkWidget *checkbox_menu;
-	gboolean case_sensitive;
-
-	/* Create a menu item, and sync it */
-	checkbox_menu = gtk_check_menu_item_new_with_mnemonic (_("_Case sensitive"));
-	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (checkbox_menu),
-					case_sensitive);
-
-	g_signal_connect (checkbox_menu, "toggled",
-			  G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
-
-	gtk_tool_item_set_proxy_menu_item (toolitem, "menu-proxy",
-					   checkbox_menu);
-
-	return TRUE;
-}
-
-static void
-set_focus_cb (EphyWindow *window,
-	      GtkWidget *widget,
-	      EphyFindToolbar *toolbar)
-{
-	GtkWidget *wtoolbar = GTK_WIDGET (toolbar);
-
-	while (widget != NULL && widget != wtoolbar)
-	{
-		widget = gtk_widget_get_parent (widget);
-	}
-
-	/* if widget == toolbar, the new focus widget is in the toolbar */
-	if (widget != wtoolbar)
-	{
-		ephy_find_toolbar_request_close (toolbar);
-	}
-}
-
-static void
 ephy_find_toolbar_set_window (EphyFindToolbar *toolbar,
 			      EphyWindow *window)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
 	priv->window = window;
-}
-
-static void
-ephy_find_toolbar_parent_set (GtkWidget *widget,
-			      GtkWidget *previous_parent)
-{
-	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (widget);
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-	GtkWidget *toplevel;
-
-	if (gtk_widget_get_parent (widget) != NULL &&
-	    priv->set_focus_handler == 0)
-	{
-		toplevel = gtk_widget_get_toplevel (widget);
-		priv->set_focus_handler =
-			g_signal_connect (toplevel, "set-focus",
-					  G_CALLBACK (set_focus_cb), toolbar);
-	}
 }
 
 static void
@@ -615,119 +489,199 @@ close_button_clicked_cb (GtkButton *button, EphyFindToolbar *toolbar)
         ephy_find_toolbar_request_close (toolbar);
 }
 
+static gboolean
+ephy_find_toolbar_draw (GtkWidget *widget,
+			cairo_t *cr)
+{
+	GtkStyleContext *context;
+
+	context = gtk_widget_get_style_context (widget);
+
+	gtk_style_context_save (context);
+	gtk_style_context_set_state (context, gtk_widget_get_state_flags (widget));
+
+	gtk_render_background (context, cr, 0, 0,
+			       gtk_widget_get_allocated_width (widget),
+			       gtk_widget_get_allocated_height (widget));
+
+	gtk_render_frame (context, cr, 0, 0,
+			  gtk_widget_get_allocated_width (widget),
+			  gtk_widget_get_allocated_height (widget));
+
+	gtk_style_context_restore (context);
+
+	return GTK_WIDGET_CLASS (ephy_find_toolbar_parent_class)->draw (widget, cr);
+}
+
+static void
+search_entry_clear_cb (GtkEntry *entry,
+                       gpointer  user_data)
+{
+  gtk_entry_set_text (entry, "");
+}
+
+static void
+search_entry_changed_cb (GtkEntry *entry,
+                         EphyFindToolbar *toolbar)
+{
+        const char *str;
+        const char *primary_icon_name = "edit-find-symbolic";
+        const char *secondary_icon_name = NULL;
+        gboolean primary_active = FALSE;
+        gboolean secondary_active = FALSE;
+
+        str = gtk_entry_get_text (entry);
+
+        if (str == NULL || *str == '\0') {
+                primary_icon_name = "edit-find-symbolic";
+        } else {
+                if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+                        secondary_icon_name = "edit-clear-rtl-symbolic";
+                else
+                        secondary_icon_name = "edit-clear-symbolic";
+                secondary_active = TRUE;
+        }
+
+        g_object_set (entry,
+                      "primary-icon-name", primary_icon_name,
+                      "primary-icon-activatable", primary_active,
+                      "primary-icon-sensitive", primary_active,
+                      "secondary-icon-name", secondary_icon_name,
+                      "secondary-icon-activatable", secondary_active,
+                      "secondary-icon-sensitive", secondary_active,
+                      NULL);
+
+        update_find_string (toolbar);
+}
+
 static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv;
-	GtkToolbar *gtoolbar;
-	GtkToolItem *item;
-	GtkWidget *alignment, *arrow, *box;
-	GtkWidget *checkbox, *close_button, *image;
+	GtkWidget *inner_box;
+	GtkWidget *box;
+	GtkWidget *center_box;
+	GtkWidget *left_box;
+	GtkWidget *right_box;
+	GtkWidget *close_button, *image;
+	GtkSizeGroup *size_group;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
-	gtoolbar = GTK_TOOLBAR (toolbar);
 
-	gtk_toolbar_set_style (gtoolbar, GTK_TOOLBAR_BOTH_HORIZ);
+	gtk_container_set_border_width (GTK_CONTAINER (toolbar), 0);
+	gtk_box_set_spacing (GTK_BOX (toolbar), 5);
+	gtk_widget_set_hexpand (GTK_WIDGET (toolbar), TRUE);
+	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
+				     GTK_STYLE_CLASS_TOOLBAR);
+	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
+				     GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+
+	inner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_container_set_border_width (GTK_CONTAINER (inner_box), 3);
+	gtk_widget_show (inner_box);
+	gtk_widget_set_hexpand (GTK_WIDGET (toolbar), TRUE);
+	gtk_container_add (GTK_CONTAINER (toolbar), inner_box);
+
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
+
+	left_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_container_add (GTK_CONTAINER (inner_box), left_box);
+	gtk_widget_show (GTK_WIDGET (left_box));
+	gtk_widget_set_halign (left_box, GTK_ALIGN_START);
+	gtk_widget_set_hexpand (left_box, TRUE);
+	gtk_size_group_add_widget (size_group, left_box);
+
+	center_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_container_add (GTK_CONTAINER (inner_box), center_box);
+	gtk_widget_show (GTK_WIDGET (center_box));
+	gtk_widget_set_halign (center_box, GTK_ALIGN_CENTER);
+
+	right_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_container_add (GTK_CONTAINER (inner_box), right_box);
+	gtk_widget_show (GTK_WIDGET (right_box));
+	gtk_widget_set_halign (right_box, GTK_ALIGN_END);
+	gtk_widget_set_hexpand (right_box, TRUE);
+	gtk_size_group_add_widget (size_group, right_box);
 
 	/* Find: |_____| */
-	alignment = gtk_alignment_new (0.0, 0.5, 1.0, 0.0);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 2, 2);
-
-	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-	gtk_container_add (GTK_CONTAINER (alignment), box);
-
-	close_button = gtk_button_new ();
-	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (close_button), image);
-	gtk_box_pack_start (GTK_BOX (box), close_button, FALSE, FALSE, 0);
-
-	priv->label = gtk_label_new (NULL);
-	gtk_box_pack_start (GTK_BOX (box), priv->label, FALSE, FALSE, 0);
-
 	priv->entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 32);
 	gtk_entry_set_max_length (GTK_ENTRY (priv->entry), 512);
-	gtk_box_pack_start (GTK_BOX (box), priv->entry, TRUE, TRUE, 0);
 
-	item = gtk_tool_item_new ();
-	gtk_container_add (GTK_CONTAINER (item), alignment);
-	/* gtk_tool_item_set_expand (item, TRUE); */
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-	gtk_widget_show_all (GTK_WIDGET (item));
+	gtk_container_add (GTK_CONTAINER (center_box), priv->entry);
+	gtk_widget_show (priv->entry);
+
+	/* Prev & Next */
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_style_context_add_class (gtk_widget_get_style_context (box),
+				     GTK_STYLE_CLASS_RAISED);
+	gtk_style_context_add_class (gtk_widget_get_style_context (box),
+				     GTK_STYLE_CLASS_LINKED);
+	gtk_container_add (GTK_CONTAINER (center_box), box);
+	gtk_widget_show (box);
 
 	/* Prev */
-	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
-	priv->prev = gtk_tool_button_new (arrow, _("Find Previous"));
-	gtk_tool_item_set_is_important (priv->prev, TRUE);
-	gtk_tool_item_set_tooltip_text (priv->prev,
-					_("Find previous occurrence of the search string"));
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->prev, -1);
+	priv->prev = gtk_button_new ();
+	image = gtk_image_new ();
+	g_object_set (image, "margin", 2, NULL);
+	gtk_image_set_from_icon_name (GTK_IMAGE (image), "go-up-symbolic",
+				      GTK_ICON_SIZE_MENU);
+	gtk_button_set_image (GTK_BUTTON (priv->prev), image);
+	gtk_widget_set_tooltip_text (priv->prev,
+				     _("Find previous occurrence of the search string"));
+	gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->prev));
 	gtk_widget_show_all (GTK_WIDGET (priv->prev));
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
 
 	/* Next */
-	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
-	priv->next = gtk_tool_button_new (arrow, _("Find Next"));
-	gtk_tool_item_set_is_important (priv->next, TRUE);
-	gtk_tool_item_set_tooltip_text (priv->next,
-					_("Find next occurrence of the search string"));
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->next, -1);
+	priv->next = gtk_button_new ();
+	image = gtk_image_new ();
+	g_object_set (image, "margin", 2, NULL);
+	gtk_image_set_from_icon_name (GTK_IMAGE (image), "go-down-symbolic",
+				      GTK_ICON_SIZE_MENU);
+	gtk_button_set_image (GTK_BUTTON (priv->next), image);
+	gtk_widget_set_tooltip_text (priv->next,
+                                     _("Find next occurrence of the search string"));
+	gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->next));
 	gtk_widget_show_all (GTK_WIDGET (priv->next));
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
 
-	/* Case sensitivity */
-	checkbox = gtk_check_button_new_with_mnemonic (_("_Case sensitive"));
-	priv->case_sensitive = checkbox;
-	item = gtk_tool_item_new ();
-	gtk_container_add (GTK_CONTAINER (item), checkbox);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-	gtk_widget_show_all (GTK_WIDGET (item));
-
-	/* Populate the overflow menu */
-	g_signal_connect (item, "create-menu-proxy",
-			  G_CALLBACK (toolitem_create_menu_proxy_cb), toolbar);
-
-	priv->sep = gtk_separator_tool_item_new ();
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->sep, -1);
-
-	priv->status_item = gtk_tool_item_new ();
-	gtk_tool_item_set_expand (priv->status_item, TRUE);
-	priv->status_label = gtk_label_new ("");
-	gtk_misc_set_alignment (GTK_MISC (priv->status_label), 0.0, 0.5);
-	gtk_label_set_ellipsize (GTK_LABEL (priv->status_label), PANGO_ELLIPSIZE_END);
-	gtk_container_add (GTK_CONTAINER (priv->status_item), priv->status_label);
-	gtk_widget_show (priv->status_label);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->status_item, -1);
+	/* Close button */
+	close_button = gtk_button_new ();
+	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_container_add (GTK_CONTAINER (close_button), image);
+	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+	gtk_box_pack_end (GTK_BOX (right_box), close_button, FALSE, FALSE, 0);
+	gtk_widget_show_all (close_button);
+	gtk_style_context_add_class (gtk_widget_get_style_context (close_button),
+				     GTK_STYLE_CLASS_RAISED);
+	gtk_style_context_add_class (gtk_widget_get_style_context (close_button),
+				     "close");
 
 	/* connect signals */
+	g_signal_connect (priv->entry, "icon-release",
+			  G_CALLBACK (search_entry_clear_cb), toolbar);
 	g_signal_connect (priv->entry, "key-press-event",
 			  G_CALLBACK (entry_key_press_event_cb), toolbar);
 	g_signal_connect_after (priv->entry, "changed",
-				G_CALLBACK (entry_changed_cb), toolbar);
+				G_CALLBACK (search_entry_changed_cb), toolbar);
 	g_signal_connect (priv->entry, "activate",
 			  G_CALLBACK (entry_activate_cb), toolbar);
 	g_signal_connect_swapped (priv->next, "clicked",
 				  G_CALLBACK (find_next_cb), toolbar);
 	g_signal_connect_swapped (priv->prev, "clicked",
 				  G_CALLBACK (find_prev_cb), toolbar);
-	g_signal_connect (priv->case_sensitive, "toggled",
-			  G_CALLBACK (case_sensitive_toggled_cb), toolbar);
 	g_signal_connect (close_button, "clicked",
 			  G_CALLBACK (close_button_clicked_cb), toolbar);
-}
 
-G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_TOOLBAR)
+	search_entry_changed_cb (GTK_ENTRY (priv->entry), toolbar);
+}
 
 static void
 ephy_find_toolbar_dispose (GObject *object)
 {
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	if (priv->source_id != 0)
-	{
-		g_source_remove (priv->source_id);
-		priv->source_id = 0;
-	}
 
 	if (priv->find_again_source_id != 0)
 	{
@@ -791,7 +745,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 	object_class->get_property = ephy_find_toolbar_get_property;
 	object_class->set_property = ephy_find_toolbar_set_property;
 
-	widget_class->parent_set = ephy_find_toolbar_parent_set;
+	widget_class->draw = ephy_find_toolbar_draw;
 	widget_class->grab_focus = ephy_find_toolbar_grab_focus;
 
 	klass->next = ephy_find_toolbar_find_next;

@@ -3878,19 +3878,19 @@ ephy_window_constructor (GType type,
 	g_signal_connect (priv->location_controller, "lock-clicked",
 			  G_CALLBACK (lock_clicked_cb), window);
 
-	g_signal_connect_swapped (priv->notebook, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
-			    GTK_WIDGET (priv->notebook),
-			    TRUE, TRUE, 0);
-	gtk_widget_show (GTK_WIDGET (priv->notebook));
-
 	priv->find_toolbar = ephy_find_toolbar_new (window);
 	g_signal_connect (priv->find_toolbar, "close",
 			  G_CALLBACK (find_toolbar_close_cb), window);
 
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
+
+	g_signal_connect_swapped (priv->notebook, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
+			    GTK_WIDGET (priv->notebook),
+			    TRUE, TRUE, 0);
+	gtk_widget_show (GTK_WIDGET (priv->notebook));
 
 	priv->downloads_box = setup_downloads_box (window);
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
