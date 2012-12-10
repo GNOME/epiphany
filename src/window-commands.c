@@ -65,6 +65,8 @@
 #include <webkit/webkit.h>
 #endif
 
+#define DEFAULT_ICON_SIZE 144
+
 void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
@@ -370,6 +372,7 @@ typedef struct {
 	GtkWidget *spinner;
 	GtkWidget *box;
 	char *icon_href;
+	GdkRGBA icon_rgba;
 } EphyApplicationDialogData;
 
 static void
@@ -380,18 +383,154 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
 }
 
 static void
+rounded_rectangle (cairo_t *cr,
+                   gdouble  aspect,
+                   gdouble  x,
+                   gdouble  y,
+                   gdouble  corner_radius,
+                   gdouble  width,
+                   gdouble  height)
+{
+        gdouble radius;
+        gdouble degrees;
+
+        radius = corner_radius / aspect;
+        degrees = G_PI / 180.0;
+
+        cairo_new_sub_path (cr);
+        cairo_arc (cr,
+                   x + width - radius,
+                   y + radius,
+                   radius,
+                   -90 * degrees,
+                   0 * degrees);
+        cairo_arc (cr,
+                   x + width - radius,
+                   y + height - radius,
+                   radius,
+                   0 * degrees,
+                   90 * degrees);
+        cairo_arc (cr,
+                   x + radius,
+                   y + height - radius,
+                   radius,
+                   90 * degrees,
+                   180 * degrees);
+        cairo_arc (cr,
+                   x + radius,
+                   y + radius,
+                   radius,
+                   180 * degrees,
+                   270 * degrees);
+        cairo_close_path (cr);
+}
+
+static GdkPixbuf *
+frame_pixbuf (GdkPixbuf  *pixbuf,
+	      GdkRGBA    *rgba,
+	      int         width,
+	      int         height)
+{
+	GdkPixbuf *framed;
+	cairo_surface_t *surface;
+	cairo_t *cr;
+	int frame_width;
+	int radius;
+
+	surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+					      width, height);
+	cr = cairo_create (surface);
+
+	frame_width = 0;
+	radius = 20;
+
+	rounded_rectangle (cr,
+			   1.0,
+			   frame_width + 0.5,
+			   frame_width + 0.5,
+			   radius,
+			   width - frame_width * 2 - 1,
+			   height - frame_width * 2 - 1);
+	if (rgba != NULL)
+			cairo_set_source_rgba (cr,
+					       rgba->red,
+					       rgba->green,
+					       rgba->blue,
+					       rgba->alpha);
+	else
+		cairo_set_source_rgba (cr, 0.5, 0.5, 0.5, 0.3);
+	cairo_fill_preserve (cr);
+
+	if (pixbuf != NULL) {
+		GdkPixbuf *scaled;
+		int w;
+		int h;
+
+		w = gdk_pixbuf_get_width (pixbuf);
+		h = gdk_pixbuf_get_height (pixbuf);
+
+		if (w < 48 || h < 48) {
+			scaled = gdk_pixbuf_scale_simple (pixbuf, w * 3, h * 3, GDK_INTERP_NEAREST);
+		} else if (w > width || h > height) {
+			double ws, hs, s;
+
+			ws = (double) width / w;
+			hs = (double) height / h;
+			s = MIN (ws, hs);
+			scaled = gdk_pixbuf_scale_simple (pixbuf, w * s, h * s, GDK_INTERP_BILINEAR);
+		} else {
+			scaled = g_object_ref (pixbuf);
+		}
+
+		w = gdk_pixbuf_get_width (scaled);
+		h = gdk_pixbuf_get_height (scaled);
+
+		gdk_cairo_set_source_pixbuf (cr, scaled,
+					     (width - w) / 2,
+					     (height - h) / 2);
+		g_object_unref (scaled);
+		cairo_fill (cr);
+	}
+
+	framed = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+	cairo_destroy (cr);
+	cairo_surface_destroy (surface);
+
+	return framed;
+}
+
+static void
 take_page_snapshot_and_set_image (EphyApplicationDialogData *data)
 {
 	GdkPixbuf *snapshot;
+	GdkPixbuf *framed;
 	int x, y, w, h;
 
 	x = y = 0;
-	w = h = 128; /* GNOME hi-res icon size. */
+	w = h = DEFAULT_ICON_SIZE;
 
 	snapshot = ephy_web_view_get_snapshot (data->view, x, y, w, h);
-
-	gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), snapshot);
+	framed = frame_pixbuf (snapshot, NULL, w, h);
 	g_object_unref (snapshot);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), framed);
+	g_object_unref (framed);
+}
+
+static void
+set_app_icon_from_filename (EphyApplicationDialogData *data,
+			    const char *filename)
+{
+	GdkPixbuf *pixbuf;
+	GdkPixbuf *framed;
+
+	pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+	if (pixbuf == NULL)
+		return;
+
+	framed = frame_pixbuf (pixbuf, &data->icon_rgba, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+	g_object_unref (pixbuf);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), framed);
+	g_object_unref (framed);
 }
 
 #ifdef HAVE_WEBKIT2
@@ -402,7 +541,7 @@ download_finished_cb (WebKitDownload *download,
 	char *filename;
 
 	filename = g_filename_from_uri (webkit_download_get_destination (download), NULL, NULL);
-	gtk_image_set_from_file (GTK_IMAGE (data->image), filename);
+	set_app_icon_from_filename (data, filename);
 	g_free (filename);
 }
 
@@ -429,7 +568,7 @@ download_status_changed_cb (WebKitDownload *download,
 	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
 		filename = g_filename_from_uri (webkit_download_get_destination_uri (download),
 						   NULL, NULL);
-		gtk_image_set_from_file (GTK_IMAGE (data->image), filename);
+		set_app_icon_from_filename (data, filename);
 		g_free (filename);
 		break;
 	case WEBKIT_DOWNLOAD_STATUS_ERROR:
@@ -486,39 +625,28 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 #endif
 }
 
+
 static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: DOM Bindindgs */
-#else
-	WebKitDOMDocument *document;
-	WebKitDOMNodeList *links;
-	gulong length, i;
+	gboolean res;
 
-	document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
-	links = webkit_dom_document_get_elements_by_tag_name (document, "link");
-	length = webkit_dom_node_list_get_length (links);
+	data->icon_rgba.red = 0.5;
+	data->icon_rgba.green = 0.5;
+	data->icon_rgba.blue = 0.5;
+	data->icon_rgba.alpha = 0.3;
 
-	for (i = 0; i < length; i++)
+	res = ephy_web_view_get_best_icon (WEBKIT_WEB_VIEW (data->view),
+					   &data->icon_href,
+					   &data->icon_rgba);
+	if (res)
 	{
-		char *rel;
-		WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
-		rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
-		/* TODO: support more than one possible icon. */
-		if (g_strcmp0 (rel, "apple-touch-icon") == 0 ||
-		    g_strcmp0 (rel, "apple-touch-icon-precomposed") == 0)
-		{
-			data->icon_href = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
-			download_icon_and_set_image (data);
-			g_free (rel);
-			return;
-		}
+		download_icon_and_set_image (data);
 	}
-#endif
-	/* If we make it here, no "apple-touch-icon" link was
-	 * found. Take a snapshot of the page. */
-	take_page_snapshot_and_set_image (data);
+	else
+	{
+		take_page_snapshot_and_set_image (data);
+	}
 }
 
 typedef struct {
@@ -718,6 +846,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 	GtkWidget *dialog, *box, *image, *entry, *content_area;
 	EphyWebView *view;
 	EphyApplicationDialogData *data;
+	GdkPixbuf *pixbuf;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
@@ -742,8 +871,11 @@ window_cmd_file_save_as_application (GtkAction *action,
 	gtk_container_add (GTK_CONTAINER (content_area), box);
 
 	image = gtk_image_new ();
-	gtk_widget_set_size_request (image, 128, 128);
+	gtk_widget_set_size_request (image, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
 	gtk_container_add (GTK_CONTAINER (box), image);
+	pixbuf = frame_pixbuf (NULL, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+	g_object_unref (pixbuf);
 
 	entry = gtk_entry_new ();
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);

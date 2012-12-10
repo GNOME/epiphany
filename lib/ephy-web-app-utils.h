@@ -27,6 +27,12 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
+#include <webkit/webkit.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef struct {
@@ -51,6 +57,10 @@ GList   *ephy_web_application_get_application_list (void);
 void     ephy_web_application_free_application_list (GList *list);
 
 gboolean ephy_web_application_exists (const char *name);
+
+gboolean ephy_web_view_get_best_icon (WebKitWebView *view,
+                                      char         **uri,
+                                      GdkRGBA       *rgba);
 
 G_END_DECLS
 
