@@ -30,7 +30,6 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
-#include "ephy-history-window.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
