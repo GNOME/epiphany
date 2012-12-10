@@ -505,6 +505,11 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   object_class->get_property = ephy_embed_get_property;
   widget_class->grab_focus = ephy_embed_grab_focus;
 
+/**
+ * EphyEmbed:overview-mode:
+ *
+ * If %TRUE activates the overview mode in this #EphyEmbed.
+ **/
   g_object_class_install_property (object_class,
                                    PROP_OVERVIEW_MODE,
                                    g_param_spec_boolean ("overview-mode",
