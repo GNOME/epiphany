@@ -3942,10 +3942,10 @@ ephy_window_constructor (GType type,
 	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		/* FileNewTab is sort of special. */
 		action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
 						      TRUE);
+		gtk_action_set_visible (action, FALSE);
 
 		action = gtk_action_group_get_action (priv->popups_action_group, "ContextBookmarkPage");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
@@ -3960,6 +3960,7 @@ ephy_window_constructor (GType type,
 			action = gtk_action_group_get_action (priv->action_group,
 							      disabled_actions_for_app_mode[i]);
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
+			gtk_action_set_visible (action, FALSE);
 		}
 	}
 
