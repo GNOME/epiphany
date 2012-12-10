@@ -310,7 +310,7 @@ gd_two_lines_renderer_get_preferred_width (GtkCellRenderer *cell,
 
   /* Fetch the average size of a charachter */
   context = gtk_widget_get_pango_context (widget);
-  font_desc = gtk_style_context_get_font (style_context, 0);
+  gtk_style_context_get (style_context, 0, "font", &font_desc, NULL);
   metrics = pango_context_get_metrics (context, font_desc,
                                        pango_context_get_language (context));
 

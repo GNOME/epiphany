@@ -306,7 +306,7 @@ gd_main_view_get_counter_icon (GdMainView *self,
   pango_attr_list_insert (attr_list, attr);
   pango_layout_set_attributes (layout, attr_list);
 
-  desc = gtk_style_context_get_font (context, 0);
+  gtk_style_context_get (context, 0, "font", &desc, NULL);
   pango_layout_set_font_description (layout, desc);
 
   gtk_style_context_get_color (context, 0, &color);

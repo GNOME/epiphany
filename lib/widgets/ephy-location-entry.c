@@ -657,6 +657,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	char *title = NULL, *address = NULL;
 	GString *text;
 	GtkStyleContext *style;
+	const PangoFontDescription *font_desc;
 	cairo_surface_t *surface;
 	PangoContext *context;
 	PangoLayout  *layout;
@@ -700,8 +701,10 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	layout = pango_layout_new (context);
 
 	style = gtk_widget_get_style_context (GTK_WIDGET (entry));
+	gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL,
+			       "font", &font_desc, NULL);
 	metrics = pango_context_get_metrics (context,
-		                             gtk_style_context_get_font (style, GTK_STATE_FLAG_NORMAL),
+		                             font_desc,
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
