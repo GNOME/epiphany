@@ -209,6 +209,7 @@ session_command_autoresume (EphySession *session,
 	char *saved_session_file_path;
 	gboolean crashed_session;
 	EphyPrefsRestoreSessionPolicy policy;
+	EphyShell *shell;
 
 	LOG ("ephy_session_autoresume");
 
@@ -222,6 +223,8 @@ session_command_autoresume (EphySession *session,
 	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
 				      EPHY_PREFS_RESTORE_SESSION_POLICY);
 
+	shell = ephy_shell_get_default ();
+
 	if (crashed_session == FALSE ||
 	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 	{
@@ -234,13 +237,11 @@ session_command_autoresume (EphySession *session,
 		ephy_session_queue_command (session,
 					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
 					    NULL, NULL, user_time, FALSE);
-
-		return;
 	}
-
-	ephy_session_queue_command (session,
-				    EPHY_SESSION_CMD_LOAD_SESSION,
-				    SESSION_STATE, NULL, user_time, TRUE);
+	else if (ephy_shell_get_n_windows (shell) == 0)
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_LOAD_SESSION,
+					    SESSION_STATE, NULL, user_time, TRUE);
 }
 
 static void
