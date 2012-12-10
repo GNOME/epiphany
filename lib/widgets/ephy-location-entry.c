@@ -945,7 +945,8 @@ do_dns_prefetch (PrefetchHelper *helper)
 #else
 	SoupSession *session = webkit_get_default_session ();
 
-	soup_session_prepare_for_uri (session, helper->uri);
+	if (helper->uri)
+		soup_session_prefetch_dns (session, helper->uri->host, NULL, NULL, NULL);
 #endif
 
 	helper->entry->priv->dns_prefetch_handler = 0;
