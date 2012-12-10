@@ -521,11 +521,99 @@ fill_default_application_image (EphyApplicationDialogData *data)
 	take_page_snapshot_and_set_image (data);
 }
 
+typedef struct {
+	const char *host;
+	const char *name;
+} SiteInfo;
+
+static SiteInfo sites[] = {
+	{ "www.facebook.com", "Facebook" },
+	{ "twitter.com", "Twitter" },
+	{ "gmail.com", "GMail" },
+	{ "plus.google.com", "Google+" },
+	{ "youtube.com", "YouTube" },
+};
+
+static char *
+get_special_case_application_title_for_host (const char *host)
+{
+	char *title = NULL;
+	int i;
+
+	for (i = 0; i < G_N_ELEMENTS (sites) && title == NULL; i++)
+	{
+		SiteInfo *info = &sites[i];
+		if (strcmp (host, info->host) == 0)
+		{
+			title = g_strdup (info->name);
+		}
+	}
+
+	return title;
+}
+
 static void
 fill_default_application_title (EphyApplicationDialogData *data)
 {
-	const char *title = ephy_web_view_get_title (data->view);
+	char *title = NULL;
+#ifdef HAVE_WEBKIT2
+	/* TODO: DOM Bindindgs */
+#else
+	WebKitDOMDocument *document;
+	WebKitDOMNodeList *metas;
+	gulong length, i;
+
+	document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
+	metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
+	length = webkit_dom_node_list_get_length (metas);
+
+	for (i = 0; i < length && title == NULL; i++)
+	{
+		char *name;
+		char *property;
+		WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+
+		name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
+		property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
+		if (g_strcmp0 (name, "application-name") == 0
+		    || g_strcmp0 (property, "og:site_name") == 0)
+		{
+			title = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+		}
+		g_free (property);
+		g_free (name);
+	}
+#endif
+
+	if (title == NULL)
+	{
+		SoupURI *uri;
+		const char *host;
+
+		uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)));
+		host = soup_uri_get_host (uri);
+
+		if (host != NULL && host[0] != '\0')
+			title = get_special_case_application_title_for_host (host);
+
+		if (title == NULL)
+		{
+			if (g_str_has_prefix (host, "www."))
+				title = g_strdup (host + strlen ("www."));
+			else
+				title = g_strdup (host);
+		}
+
+		soup_uri_free (uri);
+	}
+
+	if (title == NULL)
+	{
+		title = g_strdup (ephy_web_view_get_title (data->view));
+	}
+
 	gtk_entry_set_text (GTK_ENTRY (data->entry), title);
+	g_free (title);
 }
 
 static void
