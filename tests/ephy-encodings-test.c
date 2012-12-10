@@ -52,6 +52,7 @@ test_ephy_encodings_create (void)
 static void
 test_ephy_encodings_get (void)
 {
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
   EphyEncodings *encodings;
   GList *all, *p;
 

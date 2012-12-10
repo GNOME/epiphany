@@ -165,7 +165,7 @@ popups_manager_show (PopupInfo *popup,
   /* Only show popup with non NULL url */
   if (popup->url != NULL) {
     single = EPHY_EMBED_SINGLE
-             (ephy_embed_shell_get_embed_single (embed_shell));
+             (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
 
     ephy_embed_single_open_window (single, EPHY_EMBED (view), popup->url,
                                    popup->name, popup->features);
@@ -292,7 +292,7 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
   EphyPermission permission;
 
   manager = EPHY_PERMISSION_MANAGER
-            (ephy_embed_shell_get_embed_single (embed_shell));
+            (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
   g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
 
   permission = allowed ? EPHY_PERMISSION_ALLOWED
@@ -321,7 +321,7 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
   gboolean allow;
 
   permission_manager = EPHY_PERMISSION_MANAGER
-                       (ephy_embed_shell_get_embed_single (embed_shell));
+                       (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
   g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
                         FALSE);
 
@@ -709,7 +709,7 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
   /* Update internal caching */
   host = ephy_string_get_host_name (uri);
 
-  ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell)),
+  ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ())),
                                    host,
                                    name_field_name,
                                    password_field_name,
@@ -861,6 +861,7 @@ pre_fill_form (WebKitDOMNode *username_node,
   GSList *p = NULL;
   GSList *l = NULL;
   SoupURI *uri = NULL;
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
   uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
   if (uri)
@@ -1807,7 +1808,7 @@ decide_policy_cb (WebKitWebView *web_view,
   if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
     return FALSE;
 
-  single = ephy_embed_shell_get_embed_single (embed_shell);
+  single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
   g_signal_emit_by_name (single, "handle-content", mime_type, request_uri, &handled);
 
   if (handled)
@@ -1883,7 +1884,7 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
     const char *uri;
     gboolean handled = FALSE;
 
-    single = ephy_embed_shell_get_embed_single (embed_shell);
+    single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
     uri = webkit_network_request_get_uri (request);
     g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
 
@@ -2102,6 +2103,7 @@ web_view_check_snapshot (WebKitWebView *web_view)
   EphyOverviewStore *store;
   GtkTreeIter iter;
   cairo_surface_t *surface;
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
   store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
   if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
@@ -2212,7 +2214,7 @@ load_changed_cb (WebKitWebView *web_view,
 
 #if 0
     /* TODO: DOM bindings */
-    if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
         g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);
@@ -2368,7 +2370,7 @@ load_status_cb (WebKitWebView *web_view,
     if (priv->is_blank)
       ephy_web_view_set_title (view, NULL);
 
-    if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
         g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);
@@ -2759,7 +2761,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->domain_regex = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
                                     G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
 
-  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
   priv->history_service_cancellable = g_cancellable_new ();
 
   g_signal_connect (priv->history_service,

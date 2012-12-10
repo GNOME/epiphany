@@ -101,7 +101,7 @@ ephy_completion_model_init (EphyCompletionModel *model)
 
   model->priv = priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 
-  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
   bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
   priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks_service);

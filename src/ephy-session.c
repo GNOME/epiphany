@@ -531,7 +531,7 @@ ephy_session_close (EphySession *session)
 
 		session_command_queue_clear (session);
 
-		ephy_embed_shell_prepare_close (embed_shell);
+		ephy_embed_shell_prepare_close (ephy_embed_shell_get_default ());
 
 	}
 }
@@ -961,7 +961,7 @@ ephy_session_load_from_string (EphySession *session,
 				}
 			}
 
-			if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST)
+			if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST)
 			{
 				active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 				gtk_widget_grab_focus (GTK_WIDGET (active_child));

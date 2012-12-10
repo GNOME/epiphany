@@ -1611,7 +1611,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	PdmActionInfo *cookies, *passwords;
 	GtkWidget *window;
 	gboolean has_private_profile = 
-		ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_PRIVATE;
+		ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_PRIVATE;
 
 
 	priv = dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
@@ -1690,7 +1690,7 @@ pdm_dialog_finalize (GObject *object)
 	PdmDialog *dialog = EPHY_PDM_DIALOG (object);
 	GObject *single;
 
-	single = ephy_embed_shell_get_embed_single (embed_shell);
+	single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
 
 	g_signal_handlers_disconnect_matched
 		(single, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, object);

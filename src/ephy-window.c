@@ -697,7 +697,7 @@ get_chromes_visibility (EphyWindow *window,
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewChrome flags = priv->chrome;
 
-	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
 		*show_toolbar = FALSE;
 		*show_tabsbar = FALSE;
@@ -1033,7 +1033,7 @@ update_popup_actions_visibility (EphyWindow *window,
 
 	action_group = window->priv->popups_action_group;
 
-	if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
 		action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 		gtk_action_set_visible (action, FALSE);
@@ -1893,7 +1893,7 @@ populate_context_menu (WebKitWebView *web_view,
 	_ephy_window_set_context_event (window, embed_event);
 	g_object_unref (embed_event);
 
-	app_mode = ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION;
+	app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION;
 
 	update_edit_actions_sensitivity (window, FALSE);
 
@@ -2505,7 +2505,7 @@ decide_policy_cb (WebKitWebView *web_view,
 	navigation_type = webkit_navigation_policy_decision_get_navigation_type (navigation_decision);
 
 	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED &&
-	    ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	    ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
 		/* The only thing we allow here is to either navigate
 		 * in the same window and tab to the current domain,
@@ -2643,7 +2643,7 @@ policy_decision_required_cb (WebKitWebView *web_view,
 	}
 
 	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
-	    ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	    ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
 		/* The only thing we allow here is to either navigate
 		 * in the same window and tab to the current domain,
@@ -3463,14 +3463,15 @@ ephy_window_dispose (GObject *object)
 		ephy_bookmarks_ui_detach_window (window);
 
 		g_signal_handlers_disconnect_by_func
-			(embed_shell, download_added_cb, window);
+			(ephy_embed_shell_get_default (),
+			 download_added_cb, window);
 
 		/* Deactivate menus */
 		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
 		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 		g_slist_free (popups);
 	
-		single = ephy_embed_shell_get_embed_single (embed_shell);
+		single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
 		g_signal_handlers_disconnect_by_func
 			(single, G_CALLBACK (sync_network_status), window);
 
@@ -3952,7 +3953,7 @@ ephy_window_constructor (GType type,
 			  G_CALLBACK (show_toolbars_setting_cb), window);
 
 	/* network status */
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
 	sync_network_status (single, NULL, window);
 	g_signal_connect (single, "notify::network-status",
 			  G_CALLBACK (sync_network_status), window);
@@ -3968,7 +3969,7 @@ ephy_window_constructor (GType type,
 					      priv->is_popup);
 
 	/* Disabled actions not needed for application mode. */
-	mode = ephy_embed_shell_get_mode (embed_shell);
+	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
 		/* FileNewTab and FileNewWindow are sort of special. */
@@ -4116,7 +4117,7 @@ ephy_window_init (EphyWindow *window)
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
-	g_signal_connect (embed_shell,
+	g_signal_connect (ephy_embed_shell_get_default (),
 			 "download-added", G_CALLBACK (download_added_cb),
 			 window);
 

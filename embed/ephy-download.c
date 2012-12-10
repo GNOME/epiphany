@@ -715,7 +715,7 @@ ephy_download_dispose (GObject *object)
     priv->widget = NULL;
   }
 
-  ephy_embed_shell_remove_download (embed_shell, download);
+  ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -955,7 +955,7 @@ download_finished_cb (WebKitDownload *wk_download,
   else
     ephy_download_do_download_action (download, priv->action);
 
-  ephy_embed_shell_remove_download (embed_shell, download);
+  ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
 }
 #else
 static void
@@ -980,11 +980,11 @@ download_status_changed_cb (GObject *object,
       ephy_download_do_download_action (download, priv->action);
     }
 
-    ephy_embed_shell_remove_download (embed_shell, download);
+    ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
   } else if (status == WEBKIT_DOWNLOAD_STATUS_CANCELLED ||
              status == WEBKIT_DOWNLOAD_STATUS_ERROR) {
   } else if (status == WEBKIT_DOWNLOAD_STATUS_STARTED) {
-    ephy_embed_shell_add_download (embed_shell, download);
+    ephy_embed_shell_add_download (ephy_embed_shell_get_default (), download);
   }
 }
 #endif
@@ -1090,7 +1090,7 @@ ephy_download_new_for_download (WebKitDownload *download)
 
 #ifdef HAVE_WEBKIT2
   /* In WebKit2 the download has already started */
-  ephy_embed_shell_add_download (embed_shell, ephy_download);
+  ephy_embed_shell_add_download (ephy_embed_shell_get_default (), ephy_download);
 #endif
 
   return ephy_download;

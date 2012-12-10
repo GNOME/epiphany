@@ -159,7 +159,7 @@ ephy_navigation_history_action_init (EphyNavigationHistoryAction *action)
 {
   action->priv = EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE (action);
 
-  action->priv->history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  action->priv->history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
   action->priv->menu_timeout = 0;
 

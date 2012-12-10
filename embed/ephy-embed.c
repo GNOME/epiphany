@@ -249,7 +249,7 @@ resource_request_starting_cb (WebKitWebView *web_view,
                               WebKitNetworkResponse *response,
                               EphyEmbed *embed)
 {
-  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
+  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (ephy_embed_shell_get_default ()));
   const char *uri = webkit_network_request_get_uri (request);
 
   /* FIXME: How do we implement the other CHECK_TYPEs?  Perhaps we

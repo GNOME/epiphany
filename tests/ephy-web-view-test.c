@@ -407,6 +407,7 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
     EphyWebView *view;
     const char *bad_url;
     EphyHistoryService *history_service;
+    EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
     view = EPHY_WEB_VIEW (ephy_web_view_new ());
     loop = g_main_loop_new (NULL, FALSE);

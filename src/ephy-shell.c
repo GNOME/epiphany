@@ -720,6 +720,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
                          gboolean is_popup,
                          guint32 user_time)
 {
+  EphyEmbedShell *embed_shell;
   EphyWindow *window;
   EphyEmbed *embed = NULL;
   gboolean fullscreen_lockdown = FALSE;
@@ -730,6 +731,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean copy_history = TRUE;
   gboolean is_empty = FALSE;
   int position = -1;
+
+  embed_shell = ephy_embed_shell_get_default ();
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
@@ -951,7 +954,10 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
 GtkWidget *
 ephy_shell_get_history_window (EphyShell *shell)
 {
+  EphyEmbedShell *embed_shell;
   EphyHistoryService *service;
+
+  embed_shell = ephy_embed_shell_get_default ();
 
   if (shell->priv->history_window == NULL) {
     service = EPHY_HISTORY_SERVICE

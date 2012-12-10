@@ -690,7 +690,7 @@ window_cmd_file_work_offline (GtkAction *action,
 	EphyEmbedSingle *single;
 	gboolean offline;
 
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
 	offline = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	ephy_embed_single_set_network_status (single, !offline);
 #endif

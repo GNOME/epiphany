@@ -45,6 +45,7 @@ test_embed_single_new (void)
 static void
 test_embed_single_get_from_shell (void)
 {
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
   EphyEmbedSingle *single;
 
   single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));

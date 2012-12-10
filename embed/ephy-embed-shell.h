@@ -43,8 +43,6 @@ typedef struct _EphyEmbedShellClass EphyEmbedShellClass;
 typedef struct _EphyEmbedShell    EphyEmbedShell;
 typedef struct _EphyEmbedShellPrivate EphyEmbedShellPrivate;
 
-extern EphyEmbedShell *embed_shell;
-
 typedef enum
 {
   EPHY_EMBED_SHELL_MODE_BROWSER,
