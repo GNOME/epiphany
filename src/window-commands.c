@@ -370,6 +370,7 @@ typedef struct {
 	GtkWidget *image;
 	GtkWidget *entry;
 	GtkWidget *spinner;
+	GtkWidget *spinner_box;
 	GtkWidget *box;
 	char *icon_href;
 	GdkRGBA icon_rgba;
@@ -540,6 +541,8 @@ download_finished_cb (WebKitDownload *download,
 {
 	char *filename;
 
+	gtk_widget_show (data->image);
+
 	filename = g_filename_from_uri (webkit_download_get_destination (download), NULL, NULL);
 	set_app_icon_from_filename (data, filename);
 	g_free (filename);
@@ -550,6 +553,8 @@ download_failed_cb (WebKitDownload *download,
 		    GError *error,
 		    EphyApplicationDialogData *data)
 {
+	gtk_widget_show (data->image);
+
 	g_signal_handlers_disconnect_by_func (download, download_finished_cb, data);
 	/* Something happened, default to a page snapshot. */
 	take_page_snapshot_and_set_image (data);
@@ -562,6 +567,8 @@ download_status_changed_cb (WebKitDownload *download,
 {
 	WebKitDownloadStatus status = webkit_download_get_status (download);
 	char *filename;
+
+	gtk_widget_show (data->image);
 
 	switch (status)
 	{
@@ -645,6 +652,7 @@ fill_default_application_image (EphyApplicationDialogData *data)
 	}
 	else
 	{
+		gtk_widget_show (data->image);
 		take_page_snapshot_and_set_image (data);
 	}
 }
@@ -844,9 +852,14 @@ window_cmd_file_save_as_application (GtkAction *action,
 {
 	EphyEmbed *embed;
 	GtkWidget *dialog, *box, *image, *entry, *content_area;
+	GtkWidget *label;
+	GtkWidget *spinner;
+	GtkWidget *alignment;
 	EphyWebView *view;
 	EphyApplicationDialogData *data;
 	GdkPixbuf *pixbuf;
+	GtkStyleContext *context;
+	char *markup;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
@@ -856,7 +869,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 	/* Show dialog with icon, title. */
 	dialog = gtk_dialog_new_with_buttons (_("Create Web Application"),
 					      GTK_WINDOW (window),
-					      0,
+					      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_CANCEL,
 					      _("C_reate"),
@@ -864,27 +877,53 @@ window_cmd_file_save_as_application (GtkAction *action,
 					      NULL);
 
 	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 14 + 2 * 5 = 24 */
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
 
-	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 	gtk_container_add (GTK_CONTAINER (content_area), box);
+	gtk_container_set_border_width (GTK_CONTAINER (box), 5);
 
 	image = gtk_image_new ();
+	gtk_widget_set_no_show_all (image, TRUE);
 	gtk_widget_set_size_request (image, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+	gtk_widget_set_margin_bottom (image, 10);
 	gtk_container_add (GTK_CONTAINER (box), image);
 	pixbuf = frame_pixbuf (NULL, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 	g_object_unref (pixbuf);
 
+	alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
+	gtk_widget_set_no_show_all (alignment, TRUE);
+	gtk_widget_set_size_request (alignment, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+	gtk_container_add (GTK_CONTAINER (box), alignment);
+	gtk_widget_show (alignment);
+
+	spinner = gtk_spinner_new ();
+	gtk_widget_set_size_request (spinner, 22, 22);
+	gtk_spinner_start (GTK_SPINNER (spinner));
+	gtk_container_add (GTK_CONTAINER (alignment), spinner);
+	gtk_widget_show (spinner);
+
 	entry = gtk_entry_new ();
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	gtk_box_pack_end (GTK_BOX (box), entry, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 0);
+
+	markup = g_strdup_printf ("<small>%s</small>", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+	label = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (label), markup);
+	g_free (markup);
+	gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
+	context = gtk_widget_get_style_context (label);
+	gtk_style_context_add_class (context, "dim-label");
 
 	data = g_slice_new0 (EphyApplicationDialogData);
 	data->view = view;
 	data->image = image;
 	data->entry = entry;
+	data->spinner = spinner;
+	data->spinner_box = alignment;
+
+	g_object_bind_property (image, "visible", data->spinner_box, "visible", G_BINDING_INVERT_BOOLEAN);
 
 	fill_default_application_image (data);
 	fill_default_application_title (data);
