@@ -831,7 +831,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
     }
   }
 
-  if (flags & EPHY_NEW_TAB_PRESENT_WINDOW)
+  if (flags & EPHY_NEW_TAB_PRESENT_WINDOW &&
+      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (embed_shell)) != EPHY_EMBED_SHELL_MODE_TEST)
     gtk_window_present_with_time (GTK_WINDOW (window), user_time);
 
   return embed;
