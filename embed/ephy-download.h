@@ -36,8 +36,6 @@
 #include <webkit/webkit.h>
 #endif
 
-#include "ephy-embed.h"
-
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_DOWNLOAD              ephy_download_get_type()
