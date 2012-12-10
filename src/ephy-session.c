@@ -207,7 +207,7 @@ session_command_autoresume (EphySession *session,
 {
 	GFile *saved_session_file;
 	char *saved_session_file_path;
-	gboolean crashed_session;
+	gboolean has_session_state;
 	EphyPrefsRestoreSessionPolicy policy;
 	EphyShell *shell;
 
@@ -216,7 +216,7 @@ session_command_autoresume (EphySession *session,
 	saved_session_file = get_session_file (SESSION_STATE);
 	saved_session_file_path = g_file_get_path (saved_session_file);
 	g_object_unref (saved_session_file);
-	crashed_session = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
+	has_session_state = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
 	
 	g_free (saved_session_file_path);
 
@@ -225,7 +225,7 @@ session_command_autoresume (EphySession *session,
 
 	shell = ephy_shell_get_default ();
 
-	if (crashed_session == FALSE ||
+	if (has_session_state == FALSE ||
 	    policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 	{
 		/* If we are auto-resuming, and we never want to
