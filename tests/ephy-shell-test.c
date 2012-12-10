@@ -40,12 +40,15 @@
 static void
 test_ephy_shell_basic_embeds (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
 
   EphyEmbed *embed1;
   EphyEmbed *embed2;
 
   GList *children;
+
+  ephy_shell = ephy_shell_get_default ();
 
   /* Both embed and window should be created. */
   embed1 = ephy_shell_new_tab_full
@@ -89,10 +92,12 @@ test_ephy_shell_basic_embeds (void)
 static void
 test_ephy_shell_parent_windows (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
   GtkWidget *window2;
   EphyEmbed *embed;
 
+  ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
 
   /* parent-window provided */
@@ -134,10 +139,12 @@ test_ephy_shell_parent_windows (void)
 static void
 test_ephy_shell_tab_load (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
   EphyEmbed *embed;
   EphyWebView *view;
 
+  ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
 
   /* homepage is "about:blank" for now, see embed/ephy-web-view.c */
@@ -174,6 +181,7 @@ get_notebook_page_num (GtkWidget *notebook, EphyEmbed *embed)
 static void
 test_ephy_shell_tab_append (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
   GtkWidget *notebook;
 
@@ -183,6 +191,7 @@ test_ephy_shell_tab_append (void)
   EphyEmbed *embed4;
   EphyEmbed *embed5;
 
+  ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
   notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
 
@@ -222,6 +231,7 @@ test_ephy_shell_tab_append (void)
 static void
 test_ephy_shell_tab_from_external (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
   GtkWidget *notebook;
 
@@ -231,6 +241,7 @@ test_ephy_shell_tab_from_external (void)
   EphyEmbed *embed4;
   EphyEmbed *embed5;
 
+  ephy_shell = ephy_shell_get_default ();
   embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, "about:epiphany",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
   window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
@@ -285,6 +296,7 @@ test_ephy_shell_tab_from_external (void)
 static void
 test_ephy_shell_tab_no_history (void)
 {
+  EphyShell *ephy_shell;
   GtkWidget *window;
 
   EphyEmbed *embed;
@@ -297,6 +309,7 @@ test_ephy_shell_tab_no_history (void)
   WebKitWebBackForwardList *bflist;
   WebKitWebHistoryItem *item;
 
+  ephy_shell = ephy_shell_get_default ();
   embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
@@ -345,7 +358,7 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
-  g_application_register (G_APPLICATION (ephy_shell), NULL, NULL);
+  g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
 
   g_test_add_func ("/src/ephy-shell/basic_embeds",
                    test_ephy_shell_basic_embeds);
@@ -367,7 +380,7 @@ main (int argc, char *argv[])
 
   ret = g_test_run ();
 
-  g_object_unref (ephy_shell);
+  g_object_unref (ephy_shell_get_default ());
   ephy_file_helpers_shutdown ();
 
   return ret;

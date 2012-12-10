@@ -1087,7 +1087,7 @@ prefs_dialog_init (PrefsDialog *pd)
 			  G_CALLBACK (clear_cache_button_clicked_cb), dialog);
 
 	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-					(EPHY_EMBED_SHELL (ephy_shell)));
+					(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 
 	create_node_combo (dialog, encodings, "ISO-8859-1");
 

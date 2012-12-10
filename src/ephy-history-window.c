@@ -302,7 +302,7 @@ get_target_window (EphyHistoryWindow *editor)
 	}
 	else
 	{
-		return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell)));
+		return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
 	}
 }
 
@@ -320,8 +320,10 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyHistoryURL *url = l->data;
-		ephy_shell_new_tab (ephy_shell, window, NULL, url->url,
-			EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    window, NULL, url->url,
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
 
 	g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
@@ -341,7 +343,8 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyHistoryURL *url = l->data;
-		ephy_shell_new_tab (ephy_shell, window, NULL, url->url,
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    window, NULL, url->url,
 				    EPHY_NEW_TAB_OPEN_PAGE |
 				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
@@ -566,7 +569,8 @@ ephy_history_window_row_activated_cb (GtkTreeView *view,
 						 path);
 	g_return_if_fail (url != NULL);
 
-	ephy_shell_new_tab (ephy_shell, NULL, NULL, url->url,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    NULL, NULL, url->url,
 			    EPHY_NEW_TAB_OPEN_PAGE);
 	ephy_history_url_free (url);
 }
@@ -583,7 +587,8 @@ ephy_history_window_row_middle_clicked_cb (EphyHistoryView *view,
 	url = ephy_urls_store_get_url_from_path (editor->priv->urls_store, path);
 	g_return_if_fail (url != NULL);
 
-	ephy_shell_new_tab (ephy_shell, window, NULL, url->url,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    window, NULL, url->url,
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	ephy_history_url_free (url);

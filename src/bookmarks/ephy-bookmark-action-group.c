@@ -140,7 +140,7 @@ ephy_bookmark_group_new (EphyNode *node)
 	GtkActionGroup *action_group;
 	guint i;
 	
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 
 	action_group = (GtkActionGroup *) ephy_link_action_group_new ("BA");

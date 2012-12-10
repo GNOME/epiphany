@@ -90,7 +90,7 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
-  g_assert (ephy_shell);
+  g_assert (ephy_shell_get_default ());
 
   g_test_add_func ("/src/ephy-encodings/create",
                    test_ephy_encodings_create);
@@ -101,7 +101,7 @@ main (int argc, char *argv[])
   ret = g_test_run ();
 
   ephy_file_helpers_shutdown ();
-  g_object_unref (ephy_shell);
+  g_object_unref (ephy_shell_get_default ());
 
   return ret;
 }

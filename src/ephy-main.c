@@ -235,6 +235,7 @@ main (int argc,
   EphyShellStartupContext *ctx;
   EphyStartupFlags startup_flags;
   EphyEmbedShellMode mode;
+  EphyShell *ephy_shell;
   int status;
   EphyFileHelpersFlags flags;
 
@@ -476,6 +477,7 @@ main (int argc,
                                         arguments,
                                         user_time);
   g_strfreev (arguments);
+  ephy_shell = ephy_shell_get_default ();
   ephy_shell_set_startup_context (ephy_shell, ctx);
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 

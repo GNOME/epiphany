@@ -319,7 +319,7 @@ void
 ephy_bookmark_action_updated (EphyBookmarkAction *action)
 {
 	GValue value = { 0, };
-	EphyBookmarks *bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	EphyBookmarks *bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	EphyNode *smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 	EphyNode *node = action->priv->node;
 	const char *title;

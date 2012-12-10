@@ -199,7 +199,7 @@ ephy_bookmarks_menu_build (GString *string, EphyNode *parent)
 	gint priority;
 	guint flags, id, i;
 	
-	eb = ephy_shell_get_bookmarks (ephy_shell);
+	eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 
 	children = ephy_node_get_children (ephy_bookmarks_get_keywords (eb));        
 	topics = g_ptr_array_sized_new (children->len);

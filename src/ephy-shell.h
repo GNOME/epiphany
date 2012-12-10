@@ -53,8 +53,6 @@ typedef struct _EphyShell   EphyShell;
 typedef struct _EphyShellClass    EphyShellClass;
 typedef struct _EphyShellPrivate  EphyShellPrivate;
 
-extern EphyShell *ephy_shell;
-
 /**
  * EphyNewTabFlags:
  * @EPHY_NEW_TAB_HOME_PAGE: loads the home page in the new tab.

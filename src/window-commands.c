@@ -722,7 +722,7 @@ void
 window_cmd_file_quit (GtkAction *action,
 		      EphyWindow *window)
 {
-	if (ephy_shell_close_all_windows (ephy_shell))
+	if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
 		g_application_quit (g_application_get_default ());
 }
 
@@ -730,8 +730,10 @@ void
 window_cmd_file_new_window (GtkAction *action,
 			    EphyWindow *window)
 {
-	ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
-			    EPHY_NEW_TAB_IN_NEW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    NULL, NULL, NULL,
+			    EPHY_NEW_TAB_IN_NEW_WINDOW |
+			    EPHY_NEW_TAB_HOME_PAGE);
 }
 
 void
@@ -952,7 +954,7 @@ window_cmd_edit_bookmarks (GtkAction *action,
 {
 	GtkWidget *bwindow;
 	
-	bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
+	bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
 	gtk_window_present (GTK_WINDOW (bwindow));
 }
 
@@ -962,7 +964,7 @@ window_cmd_edit_history (GtkAction *action,
 {
 	GtkWidget *hwindow;
 	
-	hwindow = ephy_shell_get_history_window (ephy_shell);
+	hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
 	gtk_window_present (GTK_WINDOW (hwindow));
 }
 
@@ -972,7 +974,7 @@ window_cmd_edit_preferences (GtkAction *action,
 {
 	EphyDialog *dialog;
 	
-	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
+	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
 	
 	ephy_dialog_show (dialog);
 }
@@ -983,7 +985,7 @@ window_cmd_edit_personal_data (GtkAction *action,
 {
 	PdmDialog *dialog;
 	
-	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
+	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell_get_default ()));
 	/* FIXME?: pdm_dialog_open is supposed to scroll to the host passed
 	 * as second parameters in the cookies tab. Honestly I think this
 	 * has been broken for a while. In any case it's probably not

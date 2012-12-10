@@ -757,7 +757,7 @@ ephy_location_controller_init (EphyLocationController *controller)
 
 	priv->address = g_strdup ("");
 	priv->editable = TRUE;
-	priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
 		(controller->priv->bookmarks);
 	priv->sync_address_is_blocked = FALSE;

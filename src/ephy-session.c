@@ -764,7 +764,8 @@ confirm_before_recover (EphyWindow* window, char* url, char* title)
 {
 	EphyEmbed *embed;
 
-	embed = ephy_shell_new_tab (ephy_shell, window, NULL, NULL,
+	embed = ephy_shell_new_tab (ephy_shell_get_default (),
+				    window, NULL, NULL,
 				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 				    EPHY_NEW_TAB_APPEND_LAST);
 
@@ -807,7 +808,8 @@ parse_embed (xmlNodePtr child,
 			{
 				recover_url = (char *) url;
 				
-				ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
+				ephy_shell_new_tab (ephy_shell_get_default (),
+						    window, NULL, recover_url,
 						    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 						    EPHY_NEW_TAB_OPEN_PAGE |
 						    EPHY_NEW_TAB_APPEND_LAST);

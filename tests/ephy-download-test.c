@@ -194,7 +194,7 @@ main (int argc, char *argv[])
 
   ret = g_test_run ();
 
-  g_object_unref (ephy_shell);
+  g_object_unref (ephy_shell_get_default ());
   ephy_file_helpers_shutdown ();
 
   return ret;

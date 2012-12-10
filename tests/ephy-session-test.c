@@ -51,13 +51,13 @@ test_ephy_session_load (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
     ret = ephy_session_load_from_string (session, session_data, -1, 0);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -86,7 +86,7 @@ test_ephy_session_load_empty_session (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
     ret = ephy_session_load_from_string (session, session_data_empty, -1, 0);
@@ -99,7 +99,7 @@ test_ephy_session_load_empty_session (void)
     while (g_main_context_pending (NULL))
       g_main_context_iteration (NULL, FALSE);
 
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -136,13 +136,13 @@ test_ephy_session_load_many_windows (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
     ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -170,7 +170,7 @@ test_ephy_session_open_uri_after_loading_session (void)
     guint32 user_time;
     const char* uris[] = { "ephy-about:epiphany", NULL };
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
 
     user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
@@ -178,7 +178,7 @@ test_ephy_session_open_uri_after_loading_session (void)
     ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -206,7 +206,7 @@ test_ephy_session_open_uri_after_loading_session (void)
     while (gtk_events_pending ())
         gtk_main_iteration_do (FALSE);
 
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -227,7 +227,7 @@ test_ephy_session_open_uri_after_loading_session (void)
     /* We should still have 2 windows here, since the new URI should be
      * in a new tab of an existing window.
      */
-    l = ephy_shell_get_windows (ephy_shell);
+    l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 }
@@ -250,9 +250,9 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
-  g_assert (ephy_shell);
+  g_assert (ephy_shell_get_default ());
 
-  g_application_register (G_APPLICATION (ephy_shell), NULL, NULL);
+  g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
 
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
@@ -268,7 +268,7 @@ main (int argc, char *argv[])
 
   ret = g_test_run ();
 
-  g_object_unref (ephy_shell);
+  g_object_unref (ephy_shell_get_default ());
   ephy_file_helpers_shutdown ();
 
   return ret;

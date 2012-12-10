@@ -75,7 +75,7 @@ ephy_encoding_menu_init (EphyEncodingMenu *menu)
 
 	menu->priv->encodings =
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-				(EPHY_EMBED_SHELL (ephy_shell)));
+				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 }
 
 static int

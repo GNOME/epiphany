@@ -290,7 +290,7 @@ get_target_window (EphyBookmarksEditor *editor)
 	}
 	else
 	{
-		return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell)));
+		return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
 	}
 }
 
@@ -314,7 +314,8 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 		location = ephy_node_get_property_string (node,
 						EPHY_NODE_BMK_PROP_LOCATION);
 
-		new_embed = ephy_shell_new_tab (ephy_shell, window, NULL, location,
+		new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+						window, NULL, location,
 				 	        EPHY_NEW_TAB_OPEN_PAGE |
 					        EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 		/* if there was no target window, a new one was opened. Get it
@@ -350,8 +351,10 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 		location = ephy_node_get_property_string (node,
 						EPHY_NODE_BMK_PROP_LOCATION);
 
-		ephy_shell_new_tab (ephy_shell, window, NULL, location,
-				    EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_NEW_WINDOW);
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    window, NULL, location,
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
 
 	g_list_free (selection);
@@ -1043,7 +1046,8 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
 
-	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    NULL, NULL, location,
 			    EPHY_NEW_TAB_OPEN_PAGE);
 }
 
@@ -1061,7 +1065,8 @@ ephy_bookmarks_editor_node_middle_clicked_cb (GtkWidget *view,
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
 
-	ephy_shell_new_tab (ephy_shell, window, NULL, location,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    window, NULL, location,
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 }

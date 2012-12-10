@@ -58,7 +58,8 @@ popup_cmd_link_in_new_window (GtkAction *action,
 
 	ephy_embed_event_get_property (event, "link-uri", &value);
 
-	ephy_shell_new_tab (ephy_shell, NULL, embed,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    NULL, embed,
 			    g_value_get_string (&value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
@@ -81,7 +82,8 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 
 	ephy_embed_event_get_property (event, "link-uri", &value);
 
-	ephy_shell_new_tab (ephy_shell, window, embed,
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    window, embed,
 			    g_value_get_string (&value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
@@ -398,7 +400,8 @@ image_open_uri (GFile *file,
 
 	if (!success)
 	{
-		ephy_shell_new_tab (ephy_shell, NULL, NULL, remote_address,
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    NULL, NULL, remote_address,
 				    EPHY_NEW_TAB_OPEN_PAGE |
 				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}

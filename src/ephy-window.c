@@ -606,7 +606,7 @@ ephy_window_open_link (EphyLink *link,
 		}
 
 		new_embed = ephy_shell_new_tab
-				(ephy_shell,
+				(ephy_shell_get_default (),
 				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
 				 embed, address, ntflags);
 	}
@@ -1724,7 +1724,7 @@ sync_network_status (EphyEmbedSingle *single,
 	GtkAction *action;
 	gboolean is_online;
 
-	GNetworkMonitor *monitor = G_NETWORK_MONITOR (ephy_shell_get_net_monitor (ephy_shell));
+	GNetworkMonitor *monitor = G_NETWORK_MONITOR (ephy_shell_get_net_monitor (ephy_shell_get_default ()));
 	is_online = g_network_monitor_get_network_available (monitor);
 
 	action = gtk_action_group_get_action (priv->action_group,
@@ -4137,7 +4137,7 @@ EphyWindow *
 ephy_window_new (void)
 {
 	return g_object_new (EPHY_TYPE_WINDOW,
-			     "application", GTK_APPLICATION (ephy_shell),
+			     "application", GTK_APPLICATION (ephy_shell_get_default ()),
 			     NULL);
 }
 
@@ -4157,7 +4157,7 @@ ephy_window_new_with_chrome (EphyWebViewChrome chrome,
 	return g_object_new (EPHY_TYPE_WINDOW,
 			     "chrome", chrome,
 			     "is-popup", is_popup,
-			     "application", GTK_APPLICATION (ephy_shell),
+			     "application", GTK_APPLICATION (ephy_shell_get_default ()),
 			     NULL);
 }
 
@@ -4448,9 +4448,9 @@ ephy_window_close (EphyWindow *window)
 	}
 
 	/* If this is the last window, save its state in the session. */
-	if (ephy_shell_get_n_windows (ephy_shell) == 1)
+	if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1)
 	{
-		ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell)));
+		ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ())));
 	}
 
 	/* See bug #114689 */

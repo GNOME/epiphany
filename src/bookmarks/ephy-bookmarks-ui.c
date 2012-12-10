@@ -169,7 +169,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	GtkActionGroup *actions;
 	GtkAction *action;
 
-	eb = ephy_shell_get_bookmarks (ephy_shell);
+	eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	bookmarks = ephy_bookmarks_get_bookmarks (eb);
 	topics = ephy_bookmarks_get_keywords (eb);
 	data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
@@ -238,7 +238,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 void
 ephy_bookmarks_ui_detach_window (EphyWindow *window)
 {
-	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell);
+	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	EphyNode *bookmarks = ephy_bookmarks_get_bookmarks (eb);
 	EphyNode *topics = ephy_bookmarks_get_keywords (eb);
 
