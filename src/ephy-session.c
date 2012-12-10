@@ -55,8 +55,6 @@ typedef struct
 
 struct _EphySessionPrivate
 {
-	GtkWidget *resume_window;
-
 	GQueue *queue;
 	guint queue_idle_id;
 
@@ -209,7 +207,6 @@ static void
 session_command_autoresume (EphySession *session,
 			    guint32 user_time)
 {
-	EphySessionPrivate *priv = session->priv;
 	GFile *saved_session_file;
 	char *saved_session_file_path;
 	gboolean crashed_session;
@@ -247,14 +244,6 @@ session_command_autoresume (EphySession *session,
 		return;
 	}
 
-	if (priv->resume_window)
-	{
-		gtk_window_present_with_time (GTK_WINDOW (priv->resume_window),
-					      user_time);
-
-		return;
-	}
-
 	ephy_session_queue_command (session,
 				    EPHY_SESSION_CMD_LOAD_SESSION,
 				    SESSION_STATE, NULL, user_time, TRUE);
@@ -280,12 +269,9 @@ session_command_open_uris (EphySession *session,
 	EphyShell *shell;
 	EphyWindow *window;
 	EphyEmbed *embed;
-	EphySessionPrivate *priv;
 	EphyNewTabFlags flags = 0;
 	guint i;
 	gboolean new_windows_in_tabs;
-
-	priv = session->priv;
 
 	shell = ephy_shell_get_default ();
 
@@ -337,29 +323,13 @@ session_command_open_uris (EphySession *session,
 #endif
 		}
 
-		/* For the first URI, if we have a valid recovery
-		 * window, reuse the already existing embed instead of
-		 * creating a new one, except if we still want to
-		 * present the option to resume a crashed session, in
-		 * that case use a new tab in the same window */
-		if (i == 0 && priv->resume_window != NULL)
-		{
-			EphyWebView *web_view;
-			
-			embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->resume_window));
-			web_view = ephy_embed_get_web_view (embed);
-			ephy_web_view_load_url (web_view, url);
-		}
-		else
-		{
-			embed = ephy_shell_new_tab_full (shell, window,
-							 NULL /* parent tab */,
-							 request,
-							 flags | page_flags,
-							 EPHY_WEB_VIEW_CHROME_ALL,
-							 FALSE /* is popup? */,
-							 user_time);
-		}
+		embed = ephy_shell_new_tab_full (shell, window,
+						 NULL /* parent tab */,
+						 request,
+						 flags | page_flags,
+						 EPHY_WEB_VIEW_CHROME_ALL,
+						 FALSE /* is popup? */,
+						 user_time);
 
 		if (request)
 			g_object_unref (request);
@@ -826,11 +796,6 @@ parse_embed (xmlNodePtr child,
 	     EphyWindow *window,
 	     EphySession *session)
 {
-	EphySessionPrivate *priv = session->priv;
-	gboolean is_first_window;
-
-	is_first_window = window == EPHY_WINDOW (priv->resume_window);
-
 	while (child != NULL)
 	{
 		if (strcmp ((char *) child->name, "embed") == 0)
@@ -861,25 +826,10 @@ parse_embed (xmlNodePtr child,
 			{
 				recover_url = (char *) url;
 				
-				/* Reuse the window holding the recovery infobar instead of creating a new one. */
-				if (is_first_window == TRUE && window != NULL)
-				{
-					EphyWebView *web_view;
-					EphyEmbed *embed;
-
-					embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-					web_view = ephy_embed_get_web_view (embed);
-					ephy_web_view_load_url (web_view, recover_url);
-
-					is_first_window = FALSE;
-				}
-				else
-				{
-					ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
-							    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-							    EPHY_NEW_TAB_OPEN_PAGE |
-							    EPHY_NEW_TAB_APPEND_LAST);
-				}
+				ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
+						    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+						    EPHY_NEW_TAB_OPEN_PAGE |
+						    EPHY_NEW_TAB_APPEND_LAST);
 			}
 			else if (was_loading)
 			{
@@ -962,7 +912,6 @@ ephy_session_load_from_string (EphySession *session,
 	xmlNodePtr child;
 	EphyWindow *window;
 	GtkWidget *widget = NULL;
-	gboolean first_window_created = FALSE;
 	gboolean retval;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
@@ -1004,13 +953,7 @@ ephy_session_load_from_string (EphySession *session,
 			xmlChar *tmp;
 			EphyEmbed *active_child;
 		    
-			if (first_window_created == FALSE && priv->resume_window != NULL)
-			{
-				window = EPHY_WINDOW (priv->resume_window);
-				first_window_created = TRUE;
-			}
-			else
-				window = ephy_window_new ();
+			window = ephy_window_new ();
 
 			widget = GTK_WIDGET (window);
 			restore_geometry (GTK_WINDOW (widget), child);
@@ -1051,7 +994,6 @@ ephy_session_load_from_string (EphySession *session,
 	xmlFreeDoc (doc);
 
 	priv->dont_save = FALSE;
-	priv->resume_window = NULL;
 
 	ephy_session_save (session, SESSION_STATE);
 
@@ -1178,10 +1120,4 @@ ephy_session_queue_command (EphySession *session,
 	session_command_queue_next (session);
 
 	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
-
-	if (priv->resume_window != NULL)
-	{
-		gtk_window_present_with_time (GTK_WINDOW (priv->resume_window),
-					      user_time);
-	}
 }
