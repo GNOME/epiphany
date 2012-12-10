@@ -30,6 +30,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -152,6 +153,83 @@ test_ephy_session_load_many_windows (void)
       g_assert (view);
       g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
     }
+
+    /* FIXME: See comments above. */
+    for (p = l; p; p = p->next)
+      gtk_widget_destroy (GTK_WIDGET (p->data));
+}
+
+static void
+test_ephy_session_open_uri_after_loading_session (void)
+{
+    EphySession *session;
+    gboolean ret;
+    GList *l, *p;
+    EphyEmbed *embed;
+    EphyWebView *view;
+    guint32 user_time;
+    const char* uris[] = { "ephy-about:epiphany", NULL };
+
+    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+    g_assert (session);
+
+    user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
+
+    ret = ephy_session_load_from_string (session, session_data_many_windows, -1, 0);
+    g_assert (ret);
+
+    l = ephy_shell_get_windows (ephy_shell);
+    g_assert (l);
+    g_assert_cmpint (g_list_length (l), ==, 2);
+
+    for (p = l; p; p = p->next) {
+      embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->data));
+      g_assert (embed);
+      view = ephy_embed_get_web_view (embed);
+      g_assert (view);
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
+    }
+
+    /* Causing a session load here should not create new windows, since we
+     * already have some.
+     */
+    ephy_session_save (session, "type:session_state");
+
+    ephy_session_queue_command (session,
+                                EPHY_SESSION_CMD_RESUME_SESSION,
+                                "type:session_state",
+                                NULL,
+                                user_time,
+                                FALSE);
+
+    /* Ensure the queue is processed. */
+    while (gtk_events_pending ())
+        gtk_main_iteration_do (FALSE);
+
+    l = ephy_shell_get_windows (ephy_shell);
+    g_assert (l);
+    g_assert_cmpint (g_list_length (l), ==, 2);
+
+    /* We should still have only 2 windows after the session load
+     * command - it should bail after noticing there are windows
+     * already.
+     */
+    ephy_session_queue_command (session,
+                                EPHY_SESSION_CMD_OPEN_URIS,
+                                NULL,
+                                uris,
+                                user_time,
+                                FALSE);
+
+    while (gtk_events_pending ())
+        gtk_main_iteration_do (FALSE);
+
+    /* We should still have 2 windows here, since the new URI should be
+     * in a new tab of an existing window.
+     */
+    l = ephy_shell_get_windows (ephy_shell);
+    g_assert (l);
+    g_assert_cmpint (g_list_length (l), ==, 2);
 }
 
 int
@@ -184,6 +262,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/load-many-windows",
                    test_ephy_session_load_many_windows);
+
+  g_test_add_func ("/src/ephy-session/open-uri-after-loading_session",
+                   test_ephy_session_open_uri_after_loading_session);
 
   ret = g_test_run ();
 
