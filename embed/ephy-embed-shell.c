@@ -323,7 +323,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   object_properties[PROP_MODE] =
     g_param_spec_enum ("mode",
                        "Mode",
-                       "The  global mode f  or this instance of Epiphany .",
+                       "The  global mode for this instance of Epiphany .",
                        EPHY_TYPE_EMBED_SHELL_MODE,
                        EPHY_EMBED_SHELL_MODE_BROWSER,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
