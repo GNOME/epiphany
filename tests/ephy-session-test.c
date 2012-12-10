@@ -160,7 +160,7 @@ test_ephy_session_load_many_windows (void)
 }
 
 static void
-test_ephy_session_open_uri_after_loading_session (void)
+open_uris_after_loading_session (const char** uris, int final_num_windows)
 {
     EphySession *session;
     gboolean ret;
@@ -168,7 +168,6 @@ test_ephy_session_open_uri_after_loading_session (void)
     EphyEmbed *embed;
     EphyWebView *view;
     guint32 user_time;
-    const char* uris[] = { "ephy-about:epiphany", NULL };
 
     session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
     g_assert (session);
@@ -229,7 +228,27 @@ test_ephy_session_open_uri_after_loading_session (void)
      */
     l = ephy_shell_get_windows (ephy_shell_get_default ());
     g_assert (l);
-    g_assert_cmpint (g_list_length (l), ==, 2);
+    g_assert_cmpint (g_list_length (l), ==, final_num_windows);
+
+    /* FIXME: See comments above. */
+    for (p = l; p; p = p->next)
+      gtk_widget_destroy (GTK_WIDGET (p->data));
+}
+
+static void
+test_ephy_session_open_uri_after_loading_session (void)
+{
+    const char* uris[] = { "ephy-about:epiphany", NULL };
+
+    open_uris_after_loading_session (uris, 2);
+}
+
+static void
+test_ephy_session_open_empty_uri_forces_new_window (void)
+{
+    const char* uris[] = { "", NULL };
+
+    open_uris_after_loading_session (uris, 3);
 }
 
 int
@@ -265,6 +284,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/open-uri-after-loading_session",
                    test_ephy_session_open_uri_after_loading_session);
+
+  g_test_add_func ("/src/ephy-session/open-empty-uri-forces-new-window",
+                   test_ephy_session_open_empty_uri_forces_new_window);
 
   ret = g_test_run ();
 

@@ -256,6 +256,7 @@ session_command_open_uris (EphySession *session,
 	EphyNewTabFlags flags = 0;
 	guint i;
 	gboolean new_windows_in_tabs;
+	gboolean have_uris;
 
 	shell = ephy_shell_get_default ();
 
@@ -265,6 +266,8 @@ session_command_open_uris (EphySession *session,
 
 	new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 						      EPHY_PREFS_NEW_WINDOWS_IN_TABS);
+
+	have_uris = ! (g_strv_length (uris) == 1 && g_str_equal (uris[0], ""));
 
 	if (options != NULL && strstr (options, "external") != NULL)
 	{
@@ -276,11 +279,16 @@ session_command_open_uris (EphySession *session,
 		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 	}
 	else if ((options != NULL && strstr (options, "new-tab") != NULL) ||
-		 new_windows_in_tabs)
+		 (new_windows_in_tabs && have_uris))
 	{
 		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 			 EPHY_NEW_TAB_JUMP |
 			 EPHY_NEW_TAB_PRESENT_WINDOW;
+	}
+	else if (!have_uris)
+	{
+		window = NULL;
+		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 	}
 
 	for (i = 0; uris[i] != NULL; ++i)
