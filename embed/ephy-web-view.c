@@ -1099,9 +1099,10 @@ _ephy_web_view_update_icon (EphyWebView *view)
     if (icon_surface)
       priv->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
 #else
-    priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (),
-                                                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)),
-                                                                 FAVICON_SIZE, FAVICON_SIZE);
+    const char *page_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+    if (page_uri)
+      priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (), page_uri,
+                                                                   FAVICON_SIZE, FAVICON_SIZE);
 #endif
   }
 
