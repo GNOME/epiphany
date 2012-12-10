@@ -204,6 +204,10 @@ popup_cmd_copy_link_address (GtkAction *action,
 	{
 		ephy_embed_event_get_property (event, "link-uri", &value);
 		address = g_value_get_string (&value);
+
+		if (g_str_has_prefix (address, "mailto:"))
+			address = address + 7;
+
 		popup_cmd_copy_to_clipboard (window, address);
 		g_value_unset (&value);
 	}

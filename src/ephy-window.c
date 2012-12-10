@@ -240,6 +240,8 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
+	{ "CopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Images. */
 
@@ -1920,8 +1922,17 @@ populate_context_menu (WebKitWebView *web_view,
 			add_action_to_context_menu (context_menu,
 						    priv->popups_action_group, "BookmarkLink");
 		}
-		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "CopyLinkAddress");
+
+		if (g_str_has_prefix (uri, "mailto:"))
+		{
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "CopyEmailAddress");
+		}
+		else
+		{
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "CopyLinkAddress");
+		}
 	}
 	else if (webkit_hit_test_result_context_is_editable (hit_test_result))
 	{
@@ -2021,6 +2032,7 @@ show_embed_popup (EphyWindow *window,
 	guint context;
 	const char *popup;
 	gboolean can_open_in_new;
+	gboolean mailto;
 	GtkWidget *widget;
 	guint button;
 	char *uri;
@@ -2028,6 +2040,7 @@ show_embed_popup (EphyWindow *window,
 
 	g_object_get (hit_test_result, "link-uri", &uri, NULL);
 	can_open_in_new = uri && ephy_embed_utils_address_has_web_scheme (uri);
+	mailto = g_str_has_prefix (uri, "mailto:");
 	g_free (uri);
 
 	g_object_get (hit_test_result, "context", &context, NULL);
@@ -2036,6 +2049,13 @@ show_embed_popup (EphyWindow *window,
 
 	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
 	{
+		GtkAction *action;
+
+		action = gtk_action_group_get_action (priv->popups_action_group, "CopyEmailAddress");
+		gtk_action_set_visible (action, mailto);
+		action = gtk_action_group_get_action (priv->popups_action_group, "CopyLinkAddress");
+		gtk_action_set_visible (action, !mailto);
+
 		popup = "/EphyLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
