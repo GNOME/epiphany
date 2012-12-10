@@ -47,7 +47,6 @@ static GQuark startup_error_quark = 0;
 
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
-static gboolean open_as_bookmarks_editor = FALSE;
 
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
@@ -79,8 +78,6 @@ static const GOptionEntry option_entries[] =
     N_("Open a new tab in an existing browser window"), NULL },
   { "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
     N_("Open a new browser window"), NULL },
-  { "bookmarks-editor", 'b', 0, G_OPTION_ARG_NONE, &open_as_bookmarks_editor,
-    N_("Launch the bookmarks editor"), NULL },
   { "import-bookmarks", '\0', 0, G_OPTION_ARG_FILENAME, &bookmarks_file,
     N_("Import bookmarks from the given file"), N_("FILE") },
   { "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
@@ -222,8 +219,6 @@ get_startup_flags (void)
     flags |= EPHY_STARTUP_NEW_TAB;
   if (open_in_new_window)
     flags |= EPHY_STARTUP_NEW_WINDOW;
-  if (open_as_bookmarks_editor)
-    flags |= EPHY_STARTUP_BOOKMARKS_EDITOR;
 
   return flags;
 }
@@ -349,11 +344,6 @@ main (int argc,
   /* Some argument sanity checks*/
   if (application_to_delete != NULL && argc > 3) {
     g_print ("Cannot pass any other parameter when using --delete-application\n");
-    exit (1);
-  }
-
-  if (arguments != NULL && (session_filename != NULL || open_as_bookmarks_editor)) {
-    g_print ("Cannot use --bookmarks-editor or --load-session with URL arguments  \n");
     exit (1);
   }
 

@@ -24,7 +24,6 @@
 #include "ephy-session.h"
 
 #include "ephy-about-handler.h"
-#include "ephy-bookmarks-editor.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
@@ -246,17 +245,6 @@ session_command_autoresume (EphySession *session,
 }
 
 static void
-session_command_open_bookmarks_editor (EphySession *session,
-				       guint32 user_time)
-{
-	GtkWidget *editor;
-
-	editor = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
-	
-	gtk_window_present_with_time (GTK_WINDOW (editor), user_time);
-}
-
-static void
 session_command_open_uris (EphySession *session,
 			   char **uris,
 			   const char *options,
@@ -356,9 +344,6 @@ session_command_dispatch (EphySession *session)
 			break;
 		case EPHY_SESSION_CMD_LOAD_SESSION:
 			ephy_session_load (session, cmd->arg, cmd->user_time);
-			break;
-		case EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR:
-			session_command_open_bookmarks_editor (session, cmd->user_time);
 			break;
 		case EPHY_SESSION_CMD_OPEN_URIS:
 			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
@@ -1084,7 +1069,6 @@ ephy_session_queue_command (EphySession *session,
 
 			if ((command == EPHY_SESSION_CMD_LOAD_SESSION &&
 			     strcmp (cmd->arg, arg) == 0) ||
-			    command == EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR ||
 			    command == EPHY_SESSION_CMD_RESUME_SESSION)
 			{
 				cmd->user_time = user_time;

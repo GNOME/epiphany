@@ -130,11 +130,7 @@ queue_commands (EphyShell *shell)
                                 EPHY_SESSION_CMD_RESUME_SESSION,
                                 NULL, NULL, ctx->user_time, TRUE);
 
-  if (ctx->startup_flags & EPHY_STARTUP_BOOKMARKS_EDITOR)
-    ephy_session_queue_command (session,
-                                EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR,
-                                NULL, NULL, ctx->user_time, FALSE);
-  else if (ctx->session_filename != NULL)
+  if (ctx->session_filename != NULL)
     ephy_session_queue_command (session,
                                 EPHY_SESSION_CMD_LOAD_SESSION,
                                 (const char *)ctx->session_filename, NULL,
