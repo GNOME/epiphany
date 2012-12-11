@@ -534,10 +534,7 @@ notify_launch_cb (NotifyNotification *notification,
 		  gpointer user_data)
 {
 	char * desktop_file = user_data;
-	/* A gross hack to be able to launch epiphany from within
-	 * Epiphany. Might be a good idea to figure out a better
-	 * solution... */
-	g_unsetenv (EPHY_UUID_ENVVAR);
+
 	ephy_file_launch_desktop_file (desktop_file, NULL, 0, NULL);
 	g_free (desktop_file);
 }

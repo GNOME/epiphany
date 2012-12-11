@@ -213,8 +213,6 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   envp = g_environ_setenv (g_get_environ (),
                            "EPHY_LOG_MODULES", "ephy-profile",
                            TRUE);
-  /* To avoid breaking test-ephy-migrator */
-  envp = g_environ_unsetenv (envp, EPHY_UUID_ENVVAR);
 
   argv[i++] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
 

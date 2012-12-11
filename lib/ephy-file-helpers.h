@@ -50,8 +50,6 @@ typedef enum
 	EPHY_FILE_HELPERS_ENSURE_EXISTS	   = 1 << 3,
 } EphyFileHelpersFlags;
 
-#define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
-
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
                                                              EphyFileHelpersFlags   flags,
                                                              GError               **error);

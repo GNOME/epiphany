@@ -49,9 +49,6 @@
  * atomically.
  */
 
-#define EPHY_UUID		"0d82d98f-7079-401c-abff-203fcde1ece3"
-#define EPHY_UUID_ENVSTRING	EPHY_UUID_ENVVAR "=" EPHY_UUID
-
 #define DELAY_MAX_TICKS	64
 #define INITIAL_TICKS	2
 
@@ -306,19 +303,7 @@ ephy_file_helpers_init (const char *profile_dir,
 			EphyFileHelpersFlags flags,
 			GError **error)
 {
-	const char *uuid;
 	gboolean private_profile;
-
-	/* See if we've been calling ourself, and abort if we have */
-	uuid = g_getenv (EPHY_UUID_ENVVAR);
-	if (uuid && strcmp (uuid, EPHY_UUID) == 0)
-	{
-		g_warning ("Self call detected, exiting!\n");
-		exit (1);
-	}
-
-	/* Put marker in env */
-	g_setenv (EPHY_UUID_ENVVAR, EPHY_UUID, TRUE);
 
 	ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
 
@@ -417,8 +402,6 @@ ephy_file_helpers_shutdown (void)
 		g_free (tmp_dir);
 		tmp_dir = NULL;
 	}
-
-	g_unsetenv (EPHY_UUID_ENVVAR);
 }
 
 /**
