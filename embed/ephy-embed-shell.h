@@ -91,6 +91,10 @@ void               ephy_embed_shell_add_download               (EphyEmbedShell  
 void               ephy_embed_shell_remove_download            (EphyEmbedShell   *shell,
                                                                 EphyDownload     *download);
 EphyEmbedShellMode ephy_embed_shell_get_mode                   (EphyEmbedShell   *shell);
+gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell   *shell,
+                                                                GFile            *file,
+                                                                const char       *mime_type,
+                                                                guint32           user_time);
 
 G_END_DECLS
 

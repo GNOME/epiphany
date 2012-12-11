@@ -4,6 +4,7 @@ noinst_PROGRAMS = \
 	test-ephy-bookmarks \
 	test-ephy-completion-model \
 	test-ephy-download \
+	test-ephy-embed-shell \
 	test-ephy-embed-single \
 	test-ephy-embed-utils \
 	test-ephy-encodings \
@@ -100,7 +101,8 @@ INCLUDES = \
 	-I$(top_srcdir)/src/bookmarks
 
 CFLAGS = \
-	$(DEPENDENCIES_CFLAGS) \
+	-DTEST_DIR=\"$(srcdir)\"\
+	$(DEPENDENCIES_CFLAGS)  \
 	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
@@ -124,6 +126,9 @@ test_ephy_completion_model_SOURCES = \
 
 test_ephy_download_SOURCES = \
 	ephy-download-test.c
+
+test_ephy_embed_shell_SOURCES = \
+	ephy-embed-shell-test.c
 
 test_ephy_embed_single_SOURCES = \
 	ephy-embed-single-test.c
@@ -173,3 +178,8 @@ test_ephy_web_app_utils_SOURCES = \
 
 test_ephy_web_view_SOURCES = \
 	ephy-web-view-test.c
+
+EXTRA_DIST = \
+	data/test.html \
+	applications/epiphany.desktop \
+	applications/defaults.list

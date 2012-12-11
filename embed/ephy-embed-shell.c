@@ -608,3 +608,47 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
   
   return shell->priv->mode;
 }
+
+/**
+ * ephy_embed_shell_launch_application:
+ * @shell: an #EphyEmbedShell
+ * @file: a #GFile to open
+ * @mime_type: the mime type of @file or %NULL
+ * @user_time: user time to prevent focus stealing
+ * 
+ * Tries to open @file with the right application, making sure we will
+ * not call ourselves in the process. This is needed to avoid
+ * potential infinite loops when opening unknown file types.
+ * 
+ * Returns: %TRUE on success
+ **/
+gboolean
+ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
+                                 GFile *file,
+                                 const char *mime_type,
+                                 guint32 user_time)
+{
+  GAppInfo *app;
+  GList *list = NULL;
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), FALSE);
+  g_return_val_if_fail (file || mime_type, FALSE);
+
+  app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
+
+  /* Do not allow recursive calls into the browser, they can lead to
+   * infinite loops and they should never happen anyway. */
+
+  /* FIXME: eventually there should be a nice and safe way of getting
+   * the app ID from the GApplication itself, but for now let's
+   * hardcode the .desktop file name and use it here. */
+  if (!app || g_strcmp0 (g_app_info_get_id (app), "epiphany.desktop") == 0)
+    return ret;
+
+  list = g_list_append (list, file);
+  ret = ephy_file_launch_application (app, list, user_time, NULL);
+  g_list_free (list);
+
+  return ret;
+}

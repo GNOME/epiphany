@@ -825,6 +825,48 @@ ephy_file_launch_desktop_file (const char *filename,
 	return ret;
 }
 
+GAppInfo *
+ephy_file_launcher_get_app_info_for_file (GFile *file,
+					  const char *mime_type)
+{
+	GAppInfo *app = NULL;
+
+	g_return_val_if_fail (file || mime_type, FALSE);
+
+	if (mime_type != NULL)
+	{
+		app = g_app_info_get_default_for_type (mime_type,
+						       FALSE);
+	}
+	else
+	{
+		GFileInfo *file_info;
+		char *type;
+
+		/* Sniff mime type and check if it's safe to open */
+		file_info = g_file_query_info (file,
+					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+					       0, NULL, NULL);
+		if (file_info == NULL)
+		{
+			return FALSE;
+		}
+		type = g_strdup (g_file_info_get_content_type (file_info));
+		
+		g_object_unref (file_info);
+
+		if (type != NULL && type[0] != '\0' &&
+		    ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE)
+		{
+			/* FIXME rename tmp file to right extension ? */
+			app = g_app_info_get_default_for_type (type, FALSE);
+		}
+		g_free (type);
+	}
+
+	return app;
+}
+
 /**
  * ephy_file_launch_handler:
  * @mime_type: the mime type of @file or %NULL
@@ -846,35 +888,7 @@ ephy_file_launch_handler (const char *mime_type,
 
 	g_return_val_if_fail (file != NULL, FALSE);
 
-	if (mime_type != NULL)
-	{
-		app = g_app_info_get_default_for_type (mime_type,
-						       FALSE);
-	}
-	else
-	{
-		GFileInfo *file_info;
-		char *type;
-
-		/* Sniff mime type and check if it's safe to open */
-		file_info = g_file_query_info (file,
-					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-					       0, NULL, NULL);
-		if (file_info == NULL) {
-			return FALSE;
-		}
-		type = g_strdup (g_file_info_get_content_type (file_info));
-		
-		g_object_unref (file_info);
-
-		if (type != NULL && type[0] != '\0' &&
-		    ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE)
-		{
-			/* FIXME rename tmp file to right extension ? */
-			app = g_app_info_get_default_for_type (type, FALSE);
-		}
-		g_free (type);
-	}
+	app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 
 	if (app != NULL)
 	{
@@ -884,8 +898,6 @@ ephy_file_launch_handler (const char *mime_type,
 		ret = ephy_file_launch_application (app, list, user_time, NULL);
 		g_list_free (list);
 	}
-	else
-		ret = FALSE;
 
 	return ret;
 }

@@ -52,46 +52,48 @@ typedef enum
 
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
 
-gboolean           ephy_file_helpers_init        (const char  *profile_dir,
-                                                  EphyFileHelpersFlags flags,
-                                                  GError     **error);
-const char *       ephy_file                     (const char  *filename);
-const char *       ephy_dot_dir                  (void);
-gboolean           ephy_dot_dir_is_default       (void);
-void               ephy_file_helpers_shutdown    (void);
-char	   *       ephy_file_get_downloads_dir   (void);
-char       *       ephy_file_desktop_dir         (void);
-const char *       ephy_file_tmp_dir             (void);
-char       *       ephy_file_tmp_filename        (const char  *base,
-                                                  const char  *extension);
-gboolean           ephy_ensure_dir_exists        (const char  *dir,
-                                                  GError **);
-GSList     *       ephy_file_find                (const char  *path,
-                                                  const char  *fname,
-                                                  gint         maxdepth);
-gboolean           ephy_file_switch_temp_file    (GFile       *file_dest,
-                                                  GFile       *file_temp);
-void               ephy_file_delete_on_exit      (GFile       *file);
-EphyMimePermission ephy_file_check_mime          (const char  *mime_type);
-gboolean           ephy_file_launch_desktop_file (const char  *filename,
-                                                  const char  *parameter,
-                                                  guint32      user_time,
-                                                  GtkWidget   *widget);
-gboolean           ephy_file_launch_application  (GAppInfo    *app,
-                                                  GList       *files,
-                                                  guint32      user_time,
-                                                  GtkWidget   *widget);
-gboolean           ephy_file_launch_handler      (const char  *mime_type,
-                                                  GFile       *file,
-                                                  guint32      user_time);
-gboolean           ephy_file_browse_to           (GFile       *file,
-                                                  guint32      user_time);
-gboolean           ephy_file_delete_dir_recursively (GFile *file,
-                                                     GError      **error);
-void               ephy_file_delete_uri          (const char  *uri);
-char       *       ephy_file_create_data_uri_for_filename (const char *filename,
-                                                           const char *mime_type);
-char       *       ephy_sanitize_filename        (char *filename);
+gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
+                                                             EphyFileHelpersFlags   flags,
+                                                             GError               **error);
+const char *       ephy_file                                (const char            *filename);
+const char *       ephy_dot_dir                             (void);
+gboolean           ephy_dot_dir_is_default                  (void);
+void               ephy_file_helpers_shutdown               (void);
+char	   *          ephy_file_get_downloads_dir              (void);
+char       *       ephy_file_desktop_dir                    (void);
+const char *       ephy_file_tmp_dir                        (void);
+char       *       ephy_file_tmp_filename                   (const char            *base,
+                                                             const char            *extension);
+gboolean           ephy_ensure_dir_exists                   (const char            *dir,
+                                                             GError **);
+GSList     *       ephy_file_find                           (const char            *path,
+                                                             const char            *fname,
+                                                             gint                   maxdepth);
+gboolean           ephy_file_switch_temp_file               (GFile                 *file_dest,
+                                                             GFile                 *file_temp);
+void               ephy_file_delete_on_exit                 (GFile                 *file);
+EphyMimePermission ephy_file_check_mime                     (const char            *mime_type);
+gboolean           ephy_file_launch_desktop_file            (const char            *filename,
+                                                             const char            *parameter,
+                                                             guint32                user_time,
+                                                             GtkWidget             *widget);
+gboolean           ephy_file_launch_application             (GAppInfo              *app,
+                                                             GList                 *files,
+                                                             guint32                user_time,
+                                                             GtkWidget             *widget);
+gboolean           ephy_file_launch_handler                 (const char            *mime_type,
+                                                             GFile                 *file,
+                                                             guint32                user_time);
+gboolean           ephy_file_browse_to                      (GFile                 *file,
+                                                             guint32                user_time);
+gboolean           ephy_file_delete_dir_recursively         (GFile                 *file,
+                                                             GError               **error);
+void               ephy_file_delete_uri                     (const char            *uri);
+char       *       ephy_file_create_data_uri_for_filename   (const char            *filename,
+                                                             const char            *mime_type);
+char       *       ephy_sanitize_filename                   (char                  *filename);
+GAppInfo   *       ephy_file_launcher_get_app_info_for_file (GFile                 *file,
+                                                             const char            *mime_type);
 
 G_END_DECLS
 

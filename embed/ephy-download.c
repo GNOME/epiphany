@@ -670,7 +670,8 @@ ephy_download_do_download_action (EphyDownload *download,
         break;
       case EPHY_DOWNLOAD_ACTION_OPEN:
         LOG ("ephy_download_do_download_action: open");
-        ret = ephy_file_launch_handler (NULL, destination, priv->start_time);
+        ret = ephy_embed_shell_launch_handler (ephy_embed_shell_get_default (), 
+                                               destination, NULL, priv->start_time);
         break;
       case EPHY_DOWNLOAD_ACTION_NONE:
         LOG ("ephy_download_do_download_action: none");
