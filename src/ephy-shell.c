@@ -1077,8 +1077,8 @@ ephy_shell_get_main_window (EphyShell *shell)
 
   for (iter = windows; iter != NULL; iter = iter->next) {
     EphyWindow *candidate = EPHY_WINDOW (iter->data);
-    GtkWidget *cur_notebook;
-    GtkWidget *cand_notebook;
+    GtkNotebook *cur_notebook;
+    GtkNotebook *cand_notebook;
 
     if (!ephy_window_is_on_current_workspace (candidate))
       continue;
@@ -1088,8 +1088,8 @@ ephy_shell_get_main_window (EphyShell *shell)
       continue;
     }
 
-    cur_notebook = ephy_window_get_notebook (window);
-    cand_notebook =  ephy_window_get_notebook (candidate);
+    cur_notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+    cand_notebook =  GTK_NOTEBOOK (ephy_window_get_notebook (candidate));
     if (gtk_notebook_get_n_pages (cand_notebook) > gtk_notebook_get_n_pages (cur_notebook))
       window = candidate;
   }
