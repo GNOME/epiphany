@@ -21,7 +21,6 @@
 /* These defines need to go at the top because config.h or ephy-embed-single.h
  * may include soup.
  */
-#define LIBSOUP_I_HAVE_READ_BUG_594377_AND_KNOW_SOUP_PASSWORD_MANAGER_MIGHT_GO_AWAY
 #define LIBSOUP_USE_UNSTABLE_REQUEST_API
 
 #include "config.h"
@@ -499,15 +498,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   soup_session_add_feature (session, requester);
   soup_session_add_feature_by_type (session, EPHY_TYPE_REQUEST_ABOUT);
   g_object_unref (requester);
-
-#ifdef SOUP_TYPE_PASSWORD_MANAGER_GNOME
-  /* Use GNOME keyring to store passwords. Only add the manager if we
-     are not using a private session, otherwise we want any new
-     password to expire when we exit *and* we don't want to use any
-     existing password in the keyring */
-  if (mode != EPHY_EMBED_SHELL_MODE_PRIVATE)
-    soup_session_add_feature_by_type (session, SOUP_TYPE_PASSWORD_MANAGER_GNOME);
-#endif
 
   /* Initialize the favicon cache. */
   favicon_db_path = g_build_filename (g_get_user_data_dir (), g_get_prgname (), NULL);
