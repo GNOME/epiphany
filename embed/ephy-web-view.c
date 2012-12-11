@@ -517,6 +517,17 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   if (event->button == 3 && event->state == GDK_CONTROL_MASK)
     return FALSE;
 
+  /* Handle typical back/forward mouse buttons. */
+  if (event->button == 8) {
+    webkit_web_view_go_back (WEBKIT_WEB_VIEW (widget));
+    return TRUE;
+  }
+
+  if (event->button == 9) {
+    webkit_web_view_go_forward (WEBKIT_WEB_VIEW (widget));
+    return TRUE;
+  }
+
   /* Let WebKitWebView handle this. */
   return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
 }
