@@ -497,7 +497,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   /* about: URIs handler */
   requester = SOUP_SESSION_FEATURE (soup_requester_new());
   soup_session_add_feature (session, requester);
-  soup_session_feature_add_feature (requester, EPHY_TYPE_REQUEST_ABOUT);
+  soup_session_add_feature_by_type (session, EPHY_TYPE_REQUEST_ABOUT);
   g_object_unref (requester);
 
 #ifdef SOUP_TYPE_PASSWORD_MANAGER_GNOME
