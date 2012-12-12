@@ -315,15 +315,6 @@ main (int argc,
 
   g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
 
-#ifdef GNOME_ENABLE_DEBUG
-  option_group = g_option_group_new ("debug",
-                                     "Epiphany debug options",
-                                     "Epiphany debug options",
-                                     NULL, NULL);
-  g_option_group_add_entries (option_group, debug_option_entries);
-  g_option_context_add_group (option_context, option_group);
-#endif /* GNOME_ENABLE_DEBUG */
-
   if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
     g_print ("Failed to parse arguments: %s\n", error->message);
     g_error_free (error);
