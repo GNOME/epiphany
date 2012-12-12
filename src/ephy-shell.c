@@ -226,7 +226,7 @@ quit_application (GSimpleAction *action,
 
 static GActionEntry app_entries[] = {
   { "new", new_window, NULL, NULL, NULL },
-  { "incognito", new_incognito_window, NULL, NULL, NULL },
+  { "new-incognito", new_incognito_window, NULL, NULL, NULL },
   { "bookmarks", show_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
