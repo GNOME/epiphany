@@ -1481,10 +1481,8 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EphyWebViewDocumentType type;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
 	double zoom;
-	EphyEmbed *embed = window->priv->active_embed;
 
 	if (window->priv->closing) return;
 
