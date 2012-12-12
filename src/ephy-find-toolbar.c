@@ -966,7 +966,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	if (priv->web_view == NULL) return;
 #ifdef HAVE_WEBKIT2
-        webkit_find_controller_search_finish (toolbar->priv->controller);
+        webkit_find_controller_search_finish (priv->controller);
 #else
 	webkit_web_view_set_highlight_text_matches (priv->web_view, FALSE);
 #endif
