@@ -177,7 +177,11 @@ clear_status (EphyFindToolbar *toolbar)
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
 
+#ifdef HAVE_WEBKIT2
+        webkit_find_controller_search_finish (priv->controller);
+#else
 	webkit_web_view_unmark_text_matches (priv->web_view);
+#endif
 }
 
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
