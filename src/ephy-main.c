@@ -2,7 +2,7 @@
 /*
  *  Copyright © 2000-2002 Marco Pesenti Gritti
  *  Copyright © 2006, 2008 Christian Persch
- *  Copyright © 2011,2012 Igalia S.L.
+ *  Copyright © 2011, 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,9 +41,6 @@
 #include <libnotify/notify.h>
 #include <libxml/xmlversion.h>
 #include <string.h>
-
-static GQuark startup_error_quark = 0;
-#define STARTUP_ERROR_QUARK (startup_error_quark)
 
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
@@ -422,8 +419,6 @@ main (int argc,
   /* Get a timestamp manually if need be */
   if (user_time == 0)
       user_time = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
-
-  startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 
   /* Delete the requested web application, if any. Must happen after
    * ephy_file_helpers_init (). */
