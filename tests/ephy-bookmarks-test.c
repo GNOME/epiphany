@@ -25,7 +25,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-profile-utils.h"
 
-const char* bookmarks_paths[] = { EPHY_BOOKMARKS_FILE, EPHY_BOOKMARKS_FILE_RDF, NULL };
+const char* bookmarks_paths[] = { EPHY_BOOKMARKS_FILE, EPHY_BOOKMARKS_FILE_RDF };
 
 static void
 clear_bookmark_files (void)
