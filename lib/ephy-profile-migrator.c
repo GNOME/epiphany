@@ -559,11 +559,11 @@ migrate_history (void)
   char buffer[1024];
   HistoryParseData parse_data;
 
-  gchar *temporary_file = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+  gchar *temporary_file = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
   /* Do nothing if the history file already exists. Safer than wiping
    * it out. */
   if (g_file_test (temporary_file, G_FILE_TEST_EXISTS)) {
-    g_warning ("Did not migrate Epiphany's history, the ephy-history.db file already exists");
+    g_warning ("Did not migrate Epiphany's history, the %s file already exists", EPHY_HISTORY_FILE);
     g_free (temporary_file);
     return;
   }
@@ -779,7 +779,7 @@ migrate_new_urls_table (void)
   char *filename;
   GError *error = NULL;
 
-  filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+  filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
   history_database = ephy_sqlite_connection_new ();
   ephy_sqlite_connection_open (history_database, filename, &error);
 

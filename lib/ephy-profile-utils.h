@@ -28,6 +28,10 @@
 
 #define EPHY_PROFILE_MIGRATION_VERSION 8
 
+#define EPHY_HISTORY_FILE       "ephy-history.db"
+#define EPHY_BOOKMARKS_FILE     "ephy-bookmarks.xml"
+#define EPHY_BOOKMARKS_FILE_RDF "bookmarks.rdf"
+
 int ephy_profile_utils_get_migration_version (void);
 
 gboolean ephy_profile_utils_set_migration_version (int version);

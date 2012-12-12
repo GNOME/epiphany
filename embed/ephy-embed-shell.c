@@ -31,6 +31,7 @@
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
+#include "ephy-profile-utils.h"
 #include "ephy-snapshot-service.h"
 
 #include <glib/gi18n.h>
@@ -124,7 +125,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   if (shell->priv->global_history_service == NULL) {
     char *filename;
 
-    filename = g_build_filename (ephy_dot_dir (), "ephy-history.db", NULL);
+    filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
     shell->priv->global_history_service = ephy_history_service_new (filename);
     g_free (filename);
     g_return_val_if_fail (shell->priv->global_history_service, NULL);

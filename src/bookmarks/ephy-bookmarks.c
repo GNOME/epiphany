@@ -32,6 +32,7 @@
 #include "ephy-history-service.h"
 #include "ephy-node-common.h"
 #include "ephy-prefs.h"
+#include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
@@ -957,10 +958,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
-					       "ephy-bookmarks.xml",
+					       EPHY_BOOKMARKS_FILE,
 					       NULL);
 	eb->priv->rdf_file = g_build_filename (ephy_dot_dir (),
-					       "bookmarks.rdf",
+					       EPHY_BOOKMARKS_FILE_RDF,
 					       NULL);
 
 	/* Bookmarks */
