@@ -1477,25 +1477,12 @@ sync_tab_address (EphyWebView *view,
 }
 
 static void
-_ephy_window_action_set_zoom (EphyWindow *window,
-			      gboolean can_zoom,
-			      float zoom)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action = gtk_action_group_get_action (priv->toolbar_action_group,
-							 "Zoom");
-
-	gtk_action_set_sensitive (action, can_zoom);
-	g_object_set (action, "zoom", can_zoom ? zoom : 1.0, NULL);
-}
-
-static void
 sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	EphyWebViewDocumentType type;
-	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
+	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
 	double zoom;
 	EphyEmbed *embed = window->priv->active_embed;
 
@@ -1503,31 +1490,28 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 
 	zoom = webkit_web_view_get_zoom_level (web_view);
 
-	type = ephy_web_view_get_document_type (ephy_embed_get_web_view (embed));
-	can_zoom = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
-
 	if (zoom >= ZOOM_MAXIMAL)
 	{
 		can_zoom_in = FALSE;
 	}
+
 	if (zoom <= ZOOM_MINIMAL)
 	{
 		can_zoom_out = FALSE;
 	}
+
 	if (zoom != 1.0)
 	{
 		can_zoom_normal = TRUE;
 	}
 
-	_ephy_window_action_set_zoom (window, can_zoom, zoom);
-
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-	gtk_action_set_sensitive (action, can_zoom_in && can_zoom);
+	gtk_action_set_sensitive (action, can_zoom_in);
 	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-	gtk_action_set_sensitive (action, can_zoom_out && can_zoom);
+	gtk_action_set_sensitive (action, can_zoom_out);
 	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
-	gtk_action_set_sensitive (action, can_zoom_normal && can_zoom);
+	gtk_action_set_sensitive (action, can_zoom_normal);
 }
 
 static void
