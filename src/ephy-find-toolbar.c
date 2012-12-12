@@ -177,6 +177,7 @@ clear_status (EphyFindToolbar *toolbar)
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
 
+        if (priv->web_view == NULL) return;
 #ifdef HAVE_WEBKIT2
         webkit_find_controller_search_finish (priv->controller);
 #else
