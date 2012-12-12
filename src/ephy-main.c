@@ -2,7 +2,7 @@
 /*
  *  Copyright © 2000-2002 Marco Pesenti Gritti
  *  Copyright © 2006, 2008 Christian Persch
- *  Copyright © 2011 Igalia S.L.
+ *  Copyright © 2011,2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,11 +54,9 @@ static char *bookmarks_file = NULL;
 static char **arguments = NULL;
 static char *application_to_delete = NULL;
 
-/* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
-static gboolean keep_temp_directory = FALSE;
 static char *profile_directory = NULL;
 
 static gboolean
@@ -104,15 +102,6 @@ static const GOptionEntry option_entries[] =
   { NULL }
 };
 
-#ifdef GNOME_ENABLE_DEBUG
-static GOptionEntry debug_option_entries[] =
-{
-  { "keep-tempdir", 0, 0, G_OPTION_ARG_NONE, &keep_temp_directory,
-    "Don't delete the temporary directory on exit", NULL },
-  { NULL }
-};
-#endif /* GNOME_ENABLE_DEBUG */
- 
 /* adapted from gtk+/gdk/x11/gdkdisplay-x11.c */
 static guint32
 get_startup_id (void)
@@ -399,7 +388,7 @@ main (int argc,
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
   if (incognito_mode)
     flags |= EPHY_FILE_HELPERS_STEAL_DATA;
-  if ((keep_temp_directory || profile_directory) && !incognito_mode)
+  if (profile_directory && !incognito_mode)
     flags |= EPHY_FILE_HELPERS_KEEP_DIR;
 
   if (!ephy_file_helpers_init (profile_directory, flags,
