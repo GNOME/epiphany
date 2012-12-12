@@ -48,6 +48,7 @@ typedef enum
 	EPHY_FILE_HELPERS_KEEP_DIR	   = 1 << 1,
 	EPHY_FILE_HELPERS_PRIVATE_PROFILE  = 1 << 2,
 	EPHY_FILE_HELPERS_ENSURE_EXISTS	   = 1 << 3,
+	EPHY_FILE_HELPERS_STEAL_DATA       = 1 << 4
 } EphyFileHelpersFlags;
 
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,

@@ -3,6 +3,7 @@
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2004, 2005, 2006 Christian Persch
+ *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -303,7 +304,9 @@ ephy_file_helpers_init (const char *profile_dir,
 			EphyFileHelpersFlags flags,
 			GError **error)
 {
+	gboolean ret = TRUE;
 	gboolean private_profile;
+	gboolean steal_data_from_profile;
 
 	ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
 
@@ -314,8 +317,9 @@ ephy_file_helpers_init (const char *profile_dir,
 
 	keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
 	private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
+	steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
-	if (private_profile && profile_dir != NULL)
+	if (private_profile && profile_dir != NULL && !steal_data_from_profile)
 	{
 		dot_dir = g_strdup (profile_dir);
 	}
@@ -344,9 +348,46 @@ ephy_file_helpers_init (const char *profile_dir,
 	}
 
 	if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
-		return ephy_ensure_dir_exists (ephy_dot_dir (), error);
-	else
-		return TRUE;
+		ret = ephy_ensure_dir_exists (ephy_dot_dir (), error);
+
+	if (steal_data_from_profile && profile_dir)
+	{
+		int i;
+		char *files_to_copy[] = { "ephy-history.db", "ephy-bookmarks.xml" };
+		
+		for (i = 0; i < G_N_ELEMENTS (files_to_copy); i++)
+		{
+			char *filename;
+			GError *error = NULL;
+			GFile *source, *destination;
+
+			filename = g_build_filename (profile_dir,
+						     files_to_copy[i],
+						     NULL);
+			source = g_file_new_for_path (filename);
+			g_free (filename);
+			
+			filename = g_build_filename (dot_dir,
+						     files_to_copy[i],
+						     NULL);
+			destination = g_file_new_for_path (filename);
+			g_free (filename);
+
+			g_file_copy (source, destination,
+				     G_FILE_COPY_OVERWRITE,
+				     NULL, NULL, NULL, &error);
+			if (error)
+			{
+				printf("Error stealing file %s from profile: %s\n", files_to_copy[i], error->message);
+				g_error_free (error);
+			}
+				
+			g_object_unref (source);
+			g_object_unref (destination);
+		}
+	}
+
+	return ret;
 }
 
 static void

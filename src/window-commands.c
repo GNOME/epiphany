@@ -734,6 +734,15 @@ window_cmd_file_new_window (GtkAction *action,
 }
 
 void
+window_cmd_file_new_incognito_window (GtkAction *action,
+				      EphyWindow *window)
+{
+	char *str = g_strdup_printf ("epiphany --incognito-mode --profile %s", ephy_dot_dir ());
+	g_spawn_command_line_async (str, NULL);
+	g_free (str);
+}
+
+void
 window_cmd_edit_undo (GtkAction *action,
 		      EphyWindow *window)
 {

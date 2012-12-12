@@ -165,6 +165,14 @@ new_window (GSimpleAction *action,
 }
 
 static void
+new_incognito_window (GSimpleAction *action,
+                      GVariant *parameter,
+                      gpointer user_data)
+{
+  window_cmd_file_new_incognito_window (NULL, NULL);
+}
+
+static void
 show_bookmarks (GSimpleAction *action,
                 GVariant *parameter,
                 gpointer user_data)
@@ -218,6 +226,7 @@ quit_application (GSimpleAction *action,
 
 static GActionEntry app_entries[] = {
   { "new", new_window, NULL, NULL, NULL },
+  { "incognito", new_incognito_window, NULL, NULL, NULL },
   { "bookmarks", show_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },

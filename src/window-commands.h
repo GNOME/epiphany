@@ -30,88 +30,90 @@
 
 G_BEGIN_DECLS
 
-void window_cmd_edit_find                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_stop                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_go_location              (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_reload              (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_new                      (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_bookmark_page       (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_open                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_save_as             (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_save_as_application (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_print               (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_send_to             (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_work_offline        (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_close_window        (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_undo                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_redo                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_cut                 (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_copy                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_paste               (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_delete              (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_select_all          (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_find_next           (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_edit_find_prev           (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_fullscreen          (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_zoom_in             (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_zoom_out            (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_zoom_normal         (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_view_page_source         (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_help_about               (GtkAction  *action,
-                                          GtkWidget  *window);
-void window_cmd_tabs_next                (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_tabs_previous            (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_tabs_move_left           (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_tabs_move_right          (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_tabs_detach              (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_load_location            (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_browse_with_caret        (GtkAction  *action,
-                                          EphyWindow *window);
-void window_cmd_file_quit                (GtkAction *action,
-                                          EphyWindow *window);
-void window_cmd_edit_bookmarks           (GtkAction *action,
-                                          EphyWindow *window);
-void window_cmd_edit_history             (GtkAction *action,
-                                          EphyWindow *window);
-void window_cmd_file_new_window          (GtkAction *action,
-                                          EphyWindow *window);
-void window_cmd_edit_preferences         (GtkAction *action,
-                                          EphyWindow *window);
-void window_cmd_edit_personal_data       (GtkAction *action,
-                                          EphyWindow *window);
+void window_cmd_edit_find                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_stop                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_go_location               (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_reload               (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_new                       (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_bookmark_page        (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_open                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_save_as              (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_save_as_application  (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_print                (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_send_to              (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_work_offline         (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_close_window         (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_undo                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_redo                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_cut                  (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_copy                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_paste                (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_delete               (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_select_all           (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_find_next            (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_find_prev            (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_fullscreen           (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_zoom_in              (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_zoom_out             (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_zoom_normal          (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_view_page_source          (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_help_about                (GtkAction  *action,
+                                           GtkWidget  *window);
+void window_cmd_tabs_next                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_tabs_previous             (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_tabs_move_left            (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_tabs_move_right           (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_tabs_detach               (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_load_location             (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_browse_with_caret         (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_quit                 (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_bookmarks            (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_history              (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_new_window           (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_file_new_incognito_window (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_preferences          (GtkAction  *action,
+                                           EphyWindow *window);
+void window_cmd_edit_personal_data        (GtkAction  *action,
+                                           EphyWindow *window);
 
 G_END_DECLS
 

@@ -56,6 +56,7 @@ static char *application_to_delete = NULL;
 
 /* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
+static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
 static gboolean keep_temp_directory = FALSE;
 static char *profile_directory = NULL;
@@ -86,6 +87,10 @@ static const GOptionEntry option_entries[] =
     N_("Add a bookmark"), N_("URL") },
   { "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
     N_("Start a private instance"), NULL },
+  { "incognito-mode", 'i', 0, G_OPTION_ARG_NONE, &incognito_mode,
+    N_("Start an instance in incognito mode"), NULL },
+  { "netbank-mode", 0, 0, G_OPTION_ARG_NONE, &incognito_mode,
+    N_("Start an instance in netbank mode"), NULL },
   { "application-mode", 'a', 0, G_OPTION_ARG_NONE, &application_mode,
     N_("Start the browser in application mode"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
@@ -353,8 +358,8 @@ main (int argc,
     exit (1);
   }
 
-  if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE) {
-    g_print ("--profile can only be used in combination with --private-instance or --application-mode\n");
+  if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE && incognito_mode == FALSE) {
+    g_print ("--profile can only be used in combination with --private-instance, --incognito-mode or --application-mode\n");
     exit (1);
   }
 
@@ -368,12 +373,18 @@ main (int argc,
       exit (1);
   }
 
+  if (incognito_mode && profile_directory == NULL) {
+    g_print ("--incognito-mode needs a --profile parameter to steal the data from\n");
+    exit (1);
+  }
+
   /* Work-around Flash Player crash */
   g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
   /* Run the migration in all cases, except when running a private
-     instance without a given profile directory. */
-  if (!(private_instance && profile_directory == FALSE)) {
+     instance without a given profile directory or running in
+     incognito mode. */
+  if (!(private_instance && profile_directory == NULL) && incognito_mode == FALSE) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.");
@@ -384,8 +395,10 @@ main (int argc,
   /* Start our services */
   flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
 
-  if (private_instance || application_mode)
+  if (incognito_mode || private_instance || application_mode)
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
+  if (incognito_mode)
+    flags |= EPHY_FILE_HELPERS_STEAL_DATA;
   if (keep_temp_directory || profile_directory)
     flags |= EPHY_FILE_HELPERS_KEEP_DIR;
 
@@ -433,7 +446,15 @@ main (int argc,
   /* Now create the shell */
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-  else if (application_mode) {
+  else if (incognito_mode) {
+    /* Internally incognito mode is also a private mode. */
+    mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
+
+    /* Use the right theming. */
+    g_object_set (gtk_settings_get_default (),
+                  "gtk-application-prefer-dark-theme", TRUE,
+                  NULL);
+  } else if (application_mode) {
     char *app_name;
     char *app_icon;
 

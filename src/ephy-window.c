@@ -103,6 +103,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	{ "FileNewWindow", NULL, N_("_New Window"), "<control>N", NULL,
 	  G_CALLBACK (window_cmd_file_new_window) },
+	{ "FileNewWindowIncognito", NULL, N_("New _Incognito Window"), "<control><shift>N", NULL,
+	  G_CALLBACK (window_cmd_file_new_incognito_window) },
 	{ "FileOpen", NULL, N_("_Open…"), "<control>O", NULL,
 	  G_CALLBACK (window_cmd_file_open) },
 	{ "FileSaveAs", NULL, N_("Save _As…"), "<shift><control>S", NULL,
@@ -3777,6 +3779,7 @@ _gtk_css_provider_load_from_resource (GtkCssProvider* provider,
 
 static const gchar* app_actions[] = {
 	"FileNewWindow",
+	"FileNewWindowIncognito",
 	"EditPreferences",
 	"EditPersonalData",
 	"EditBookmarks",
