@@ -648,16 +648,6 @@ G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_APPLICATION_WINDOW,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
 						ephy_window_embed_container_iface_init))
 
-/* FIXME: fix this! */
-static void
-ephy_tab_get_size (EphyEmbed *embed,
-                   int *width,
-                   int *height)
-{
-        *width = -1;
-        *height = -1;
-}
-
 static void
 settings_change_notify (GtkSettings *settings,
 			EphyWindow  *window)
@@ -3997,22 +3987,16 @@ ephy_window_show (GtkWidget *widget)
 	if (!priv->has_size)
 	{
 		EphyEmbed *embed;
-		int width, height;
+		int flags = 0;
 
 		embed = priv->active_embed;
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
-		ephy_tab_get_size (embed, &width, &height);
-		if (width == -1 && height == -1)
-		{
-			int flags = 0;
-			if (!priv->is_popup)
-				flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+		if (!priv->is_popup)
+			flags = EPHY_STATE_WINDOW_SAVE_SIZE;
 
-			ephy_state_add_window (widget, "main_window", 600, 500,
-					       TRUE, flags);
-		}
-
+		ephy_state_add_window (widget, "main_window", 600, 500,
+				       TRUE, flags);
 		priv->has_size = TRUE;
 	}
 
