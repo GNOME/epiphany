@@ -369,7 +369,7 @@ build_accept_languages_header (GArray *languages)
 
   /* Get the result string */
   if (languages->len > 0)
-    langs_str = g_strjoinv (", ", langs);
+    langs_str = g_strjoinv (",", langs);
 
   return langs_str;
 }
