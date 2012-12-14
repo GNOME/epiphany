@@ -135,7 +135,10 @@ ephy_toolbar_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (back_forward), box);
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (back_forward));
   gtk_widget_show_all (GTK_WIDGET (back_forward));
-  gtk_widget_set_margin_right (GTK_WIDGET (back_forward), 12);
+  if (gtk_widget_get_direction (GTK_WIDGET (back_forward)) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (GTK_WIDGET (back_forward), 12);
+  else
+    gtk_widget_set_margin_right (GTK_WIDGET (back_forward), 12);
 
   /* Location and Reload/Stop */
   location_stop_reload = gtk_tool_item_new ();
@@ -170,7 +173,11 @@ ephy_toolbar_constructed (GObject *object)
   gtk_size_group_add_widget (size, location);
   g_object_unref (size);
 
-  gtk_widget_set_margin_right (GTK_WIDGET (location_stop_reload), 12);
+  if (gtk_widget_get_direction (GTK_WIDGET (location_stop_reload)) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (GTK_WIDGET (location_stop_reload), 12);
+  else
+    gtk_widget_set_margin_right (GTK_WIDGET (location_stop_reload), 12);
+
   gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
 
   /* Page Menu */
