@@ -219,6 +219,7 @@ static void
 ephy_removable_pixbuf_renderer_init (EphyRemovablePixbufRenderer *self)
 {
   GtkIconTheme *icon_theme;
+  GError *error = NULL;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, EPHY_TYPE_REMOVABLE_PIXBUF_RENDERER,
                                             EphyRemovablePixbufRendererPrivate);
@@ -226,7 +227,14 @@ ephy_removable_pixbuf_renderer_init (EphyRemovablePixbufRenderer *self)
   icon_theme = gtk_icon_theme_get_default ();
   self->priv->close_icon = gtk_icon_theme_load_icon (icon_theme,
 						     "window-close-symbolic",
-						     24, 0, NULL);
+						     24, 0, &error);
+
+  if (error != NULL) {
+      self->priv->close_icon = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, 24, 24);
+      gdk_pixbuf_fill (self->priv->close_icon, 0);
+      g_warning ("%s(): %s", G_STRFUNC, error->message);
+      g_error_free (error);
+    }
 }
 
 GtkCellRenderer *
