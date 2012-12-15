@@ -3702,6 +3702,8 @@ setup_toolbar (EphyWindow *window)
 	EphyWindowPrivate *priv = window->priv;
 
 	toolbar = ephy_toolbar_new (window);
+	gtk_widget_set_margin_left (toolbar, 4);
+	gtk_widget_set_margin_right (toolbar, 4);
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    toolbar, FALSE, FALSE, 0);
 
