@@ -309,6 +309,23 @@ create_window_node (const char *name,
   return node;
 }
 
+/**
+ * ephy_initial_state_add_window:
+ * @window: a #GtkWindow
+ * @name: the name we'll use to identify this window
+ * @default_width: the default width we want to give it
+ * @default_height: the default height we want to give it
+ * @maximize: whether it should be maximized by default
+ * @flags: #EphyInitialStateWindowFlags defining what state we want to saze
+ * 
+ * This method will set the correct default size and position for
+ * @window given the previously stored state information for its type
+ * (defined by @name). If there's no data available, the default
+ * values passed as parameters will be used. The @flags parameter
+ * controls whether we want to track the window's size or position in
+ * order to update our default values for this type.
+ * 
+ **/
 void
 ephy_initial_state_add_window (GtkWidget *window,
                                const char *name,
