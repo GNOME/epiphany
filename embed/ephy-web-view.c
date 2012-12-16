@@ -2032,26 +2032,70 @@ ephy_web_view_location_changed (EphyWebView *view,
   g_object_thaw_notify (object);
 }
 
-#ifndef HAVE_WEBKIT2
+#ifdef HAVE_WEBKIT2
+static void
+on_snapshot_ready (WebKitWebView *webview,
+                   GAsyncResult *res,
+                   GtkTreeRowReference *ref)
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  cairo_surface_t *surface;
+  GError *error = NULL;
+
+  surface = webkit_web_view_get_snapshot_finish (webview, res, &error);
+  if (error) {
+    g_warning ("%s(): %s", G_STRFUNC, error->message);
+    g_error_free (error);
+    return;
+  }
+
+  model = gtk_tree_row_reference_get_model (ref);
+  path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_path_free (path);
+
+  ephy_overview_store_set_snapshot (EPHY_OVERVIEW_STORE (model), &iter, surface);
+  cairo_surface_destroy (surface);
+}
+#endif
+
+/* FIXME: We should be using the snapshot service for this instead of
+   using the WK API directly. */
 static gboolean
 web_view_check_snapshot (WebKitWebView *web_view)
 {
   EphyOverviewStore *store;
   GtkTreeIter iter;
+#ifdef HAVE_WEBKIT2
+  GtkTreeRowReference *ref;
+  GtkTreePath *path;
+#else
   cairo_surface_t *surface;
+#endif
   EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
   store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
   if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
       ephy_overview_store_needs_snapshot (store, &iter)) {
+#ifdef HAVE_WEBKIT2
+    path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
+    ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store), path);
+    gtk_tree_path_free (path);
+    webkit_web_view_get_snapshot (web_view, WEBKIT_SNAPSHOT_REGION_VISIBLE,
+                                  WEBKIT_SNAPSHOT_OPTIONS_NONE,
+                                  NULL, (GAsyncReadyCallback)on_snapshot_ready,
+                                  ref);
+#else
     surface = webkit_web_view_get_snapshot (web_view);
     ephy_overview_store_set_snapshot (store, &iter, surface);
     cairo_surface_destroy (surface);
+#endif
   }
 
   return FALSE;
 }
-#endif
 
 #ifdef HAVE_WEBKIT2
 static void
@@ -2157,6 +2201,12 @@ load_changed_cb (WebKitWebView *web_view,
 
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
+
+    if (!ephy_web_view_is_history_frozen (view)) {
+      if (priv->snapshot_idle_id)
+        g_source_remove (priv->snapshot_idle_id);
+      priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)web_view_check_snapshot, web_view, NULL);
+    }
 
     break;
   }

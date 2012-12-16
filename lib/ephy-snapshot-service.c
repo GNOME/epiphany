@@ -162,21 +162,63 @@ snapshot_saved (EphySnapshotService *service,
   g_object_unref (simple);
 }
 
+static void
+save_snapshot (cairo_surface_t *surface,
+               GSimpleAsyncResult *result)
+{
+  SnapshotAsyncData *data;
+  EphySnapshotService *service;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
+  data->snapshot = ephy_snapshot_service_crop_snapshot (surface);
+
+  service = (EphySnapshotService *)g_async_result_get_source_object (G_ASYNC_RESULT (result));
+  ephy_snapshot_service_save_snapshot_async (service, data->snapshot,
+                                             webkit_web_view_get_uri (data->web_view),
+                                             data->mtime, data->cancellable,
+                                             (GAsyncReadyCallback)snapshot_saved, result);
+}
+
+#ifdef HAVE_WEBKIT2
+static void
+on_snapshot_ready (WebKitWebView *webview,
+                   GAsyncResult *result,
+                   GSimpleAsyncResult *simple)
+{
+  cairo_surface_t *surface;
+  GError *error = NULL;
+
+  surface = webkit_web_view_get_snapshot_finish (webview, result, &error);
+  if (error) {
+    g_simple_async_result_take_error (simple, error);
+    g_simple_async_result_complete (simple);
+    g_object_unref (simple);
+    return;
+  }
+
+  save_snapshot (surface, simple);
+  cairo_surface_destroy (surface);
+}
+#endif
+
 static gboolean
 retrieve_snapshot_from_web_view (GSimpleAsyncResult *result)
 {
-  EphySnapshotService *service;
+#ifndef HAVE_WEBKIT2
   cairo_surface_t *surface;
+#endif
   SnapshotAsyncData *data;
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
 #ifdef HAVE_WEBKIT2
-  /* FIXME: We need to add this API to WebKit2. */
-  surface = NULL;
+  webkit_web_view_get_snapshot (data->web_view,
+                                WEBKIT_SNAPSHOT_REGION_VISIBLE,
+                                WEBKIT_SNAPSHOT_OPTIONS_NONE,
+                                NULL, (GAsyncReadyCallback)on_snapshot_ready,
+                                result);
 #else
   surface = webkit_web_view_get_snapshot (data->web_view);
-#endif
 
   if (surface == NULL) {
     g_simple_async_result_set_error (result,
@@ -189,14 +231,9 @@ retrieve_snapshot_from_web_view (GSimpleAsyncResult *result)
     return FALSE;
   }
 
-  data->snapshot = ephy_snapshot_service_crop_snapshot (surface);
+  save_snapshot (surface, result);
   cairo_surface_destroy (surface);
-
-  service = (EphySnapshotService *)g_async_result_get_source_object (G_ASYNC_RESULT (result));
-  ephy_snapshot_service_save_snapshot_async (service, data->snapshot,
-                                             webkit_web_view_get_uri (data->web_view),
-                                             data->mtime, data->cancellable,
-                                             (GAsyncReadyCallback)snapshot_saved, result);
+#endif
 
   return FALSE;
 }
