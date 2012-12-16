@@ -25,12 +25,12 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-initial-state.h"
 #include "ephy-private.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-state.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 
@@ -483,7 +483,7 @@ main (int argc,
   if (notify_is_initted ())
     notify_uninit ();
 
-  ephy_state_save ();
+  ephy_initial_state_save ();
   ephy_embed_prefs_shutdown ();
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();

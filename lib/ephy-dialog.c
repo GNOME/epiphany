@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include "ephy-dialog.h"
-#include "ephy-state.h"
+#include "ephy-initial-state.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 
@@ -110,20 +110,20 @@ setup_default_size (EphyDialog *dialog)
 {
 	if (dialog->priv->has_default_size == FALSE)
 	{
-		EphyStateWindowFlags flags;
+		EphyInitialStateWindowFlags flags;
 
-		flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+		flags = EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE;
 
 		if (dialog->priv->persist_position)
 		{
-			flags |= EPHY_STATE_WINDOW_SAVE_POSITION;
+			flags |= EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION;
 		}
 
-		ephy_state_add_window (dialog->priv->dialog,
-				       dialog->priv->name,
-				       dialog->priv->default_width,
-				       dialog->priv->default_height,
-				       FALSE, flags);
+		ephy_initial_state_add_window (dialog->priv->dialog,
+                                               dialog->priv->name,
+                                               dialog->priv->default_width,
+                                               dialog->priv->default_height,
+                                               FALSE, flags);
 
 		dialog->priv->has_default_size = TRUE;
 	}

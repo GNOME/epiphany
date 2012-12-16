@@ -29,7 +29,7 @@
 #include "ephy-node-common.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
-#include "ephy-state.h"
+#include "ephy-initial-state.h"
 #include "ephy-gui.h"
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
@@ -512,11 +512,11 @@ ephy_bookmark_properties_constructor (GType type,
 
 	if (!priv->creating)
 	{
-		ephy_state_add_window (widget,
-				       "bookmark_properties",
-				       290, 280, FALSE,
-				       EPHY_STATE_WINDOW_SAVE_POSITION |
-				       EPHY_STATE_WINDOW_SAVE_SIZE);
+		ephy_initial_state_add_window (widget,
+                                               "bookmark_properties",
+                                               290, 280, FALSE,
+                                               EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION |
+                                               EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE);
 	}
 	/* Lockdown */
 	lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -598,7 +598,7 @@ ephy_bookmark_properties_constructor (GType type,
 
 	widget = gtk_expander_new (_("Sho_w all topics"));
 	gtk_expander_set_use_underline (GTK_EXPANDER (widget), TRUE);
-	ephy_state_add_expander (widget, "bookmark_properties_list", FALSE);
+	ephy_initial_state_add_expander (widget, "bookmark_properties_list", FALSE);
 	gtk_container_add (GTK_CONTAINER (widget), container);
 	gtk_widget_show (widget);
 	gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);

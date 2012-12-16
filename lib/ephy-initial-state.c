@@ -21,7 +21,7 @@
  */
 
 #include "config.h"
-#include "ephy-state.h"
+#include "ephy-initial-state.h"
 
 #include "ephy-file-helpers.h"
 #include "ephy-lib-type-builtins.h"
@@ -37,15 +37,15 @@
 
 enum
 {
-  EPHY_NODE_STATE_PROP_NAME = 2,
-  EPHY_NODE_STATE_PROP_WIDTH = 3,
-  EPHY_NODE_STATE_PROP_HEIGHT = 4,
-  EPHY_NODE_STATE_PROP_MAXIMIZE = 5,
-  EPHY_NODE_STATE_PROP_POSITION_X = 6,
-  EPHY_NODE_STATE_PROP_POSITION_Y = 7,
-  EPHY_NODE_STATE_PROP_SIZE = 8,
-  EPHY_NODE_STATE_PROP_POSITION = 9,
-  EPHY_NODE_STATE_PROP_ACTIVE = 10
+  EPHY_NODE_INITIAL_STATE_PROP_NAME = 2,
+  EPHY_NODE_INITIAL_STATE_PROP_WIDTH = 3,
+  EPHY_NODE_INITIAL_STATE_PROP_HEIGHT = 4,
+  EPHY_NODE_INITIAL_STATE_PROP_MAXIMIZE = 5,
+  EPHY_NODE_INITIAL_STATE_PROP_POSITION_X = 6,
+  EPHY_NODE_INITIAL_STATE_PROP_POSITION_Y = 7,
+  EPHY_NODE_INITIAL_STATE_PROP_SIZE = 8,
+  EPHY_NODE_INITIAL_STATE_PROP_POSITION = 9,
+  EPHY_NODE_INITIAL_STATE_PROP_ACTIVE = 10
 };
 
 static EphyNode *states = NULL;
@@ -86,7 +86,7 @@ find_by_name (const char *name)
     kid = g_ptr_array_index (children, i);
 
     node_name = ephy_node_get_property_string
-      (kid, EPHY_NODE_STATE_PROP_NAME);
+      (kid, EPHY_NODE_INITIAL_STATE_PROP_NAME);
 
     if (strcmp (node_name, name) == 0)
       result = kid;
@@ -121,10 +121,10 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
   int width, height, w = -1, h = -1;
   gboolean maximize, size;
 
-  width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
-  height = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_HEIGHT);
-  maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
-  size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_SIZE);
+  width = ephy_node_get_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_WIDTH);
+  height = ephy_node_get_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_HEIGHT);
+  maximize = ephy_node_get_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_MAXIMIZE);
+  size = ephy_node_get_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_SIZE);
 
   gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
 
@@ -158,13 +158,13 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
   /* Setting the default size doesn't work when the window is already showing. */
   g_return_if_fail (!gtk_widget_get_visible (window));
 
-  maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
-  size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION);
+  maximize = ephy_node_get_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_MAXIMIZE);
+  size = ephy_node_get_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION);
 
   /* Don't set the position of the window if it is maximized */
   if ((!maximize) && size) {
-    x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
-    y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
+    x = ephy_node_get_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION_X);
+    y = ephy_node_get_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION_Y);
 
     screen = gtk_window_get_screen (GTK_WINDOW (window));
     screen_width  = gdk_screen_get_width  (screen);
@@ -179,22 +179,22 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 static void
 ephy_state_save_unmaximized_size (EphyNode *node, int width, int height)
 {
-  ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_WIDTH,
+  ephy_node_set_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_WIDTH,
                               width);
-  ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_HEIGHT,
+  ephy_node_set_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_HEIGHT,
                               height);
-  ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_SIZE,
+  ephy_node_set_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_SIZE,
                                   TRUE);
 }
 
 static void
 ephy_state_save_position (EphyNode *node, int x, int y)
 {
-  ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X,
+  ephy_node_set_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION_X,
                               x);
-  ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y,
+  ephy_node_set_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION_Y,
                               y);
-  ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION,
+  ephy_node_set_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_POSITION,
                                   TRUE);
 }
 
@@ -216,7 +216,7 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
     ephy_state_save_unmaximized_size (node, width, height);
   
   ephy_node_set_property_boolean (node,
-                                  EPHY_NODE_STATE_PROP_MAXIMIZE,
+                                  EPHY_NODE_INITIAL_STATE_PROP_MAXIMIZE,
                                   maximize);
 }
 
@@ -240,14 +240,14 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 static void
 ephy_state_window_save (GtkWidget *widget, EphyNode *node)
 {
-  EphyStateWindowFlags flags;
+  EphyInitialStateWindowFlags flags;
 
   flags = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "state_flags"));
 
-  if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
+  if (flags & EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE)
     ephy_state_window_save_size (widget, node);
 
-  if (flags & EPHY_STATE_WINDOW_SAVE_POSITION)
+  if (flags & EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION)
     ephy_state_window_save_position (widget, node);
 }
 
@@ -282,25 +282,25 @@ create_window_node (const char *name,
                     int default_width,
                     int default_height,
                     gboolean maximize,
-                    EphyStateWindowFlags flags)
+                    EphyInitialStateWindowFlags flags)
 {
   EphyNode *node;
 
   node = ephy_node_new (states_db);
   ephy_node_add_child (states, node);
 
-  ephy_node_set_property_string (node, EPHY_NODE_STATE_PROP_NAME,
+  ephy_node_set_property_string (node, EPHY_NODE_INITIAL_STATE_PROP_NAME,
                                  name);
-  ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
+  ephy_node_set_property_boolean (node, EPHY_NODE_INITIAL_STATE_PROP_MAXIMIZE,
                                   maximize);
 
-  if (flags & EPHY_STATE_WINDOW_SAVE_SIZE) {
+  if (flags & EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE) {
     ephy_state_save_unmaximized_size (node,
                                       default_width,
                                       default_height);
   }
 
-  if (flags & EPHY_STATE_WINDOW_SAVE_POSITION) {
+  if (flags & EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION) {
     /* Constants for now, these should be default_wi  dth
        and default_height. */
     ephy_state_save_position (node, 0, 0);
@@ -310,12 +310,12 @@ create_window_node (const char *name,
 }
 
 void
-ephy_state_add_window (GtkWidget *window,
-                       const char *name,
-                       int default_width,
-                       int default_height,
-                       gboolean maximize,
-                       EphyStateWindowFlags flags)
+ephy_initial_state_add_window (GtkWidget *window,
+                               const char *name,
+                               int default_width,
+                               int default_height,
+                               gboolean maximize,
+                               EphyInitialStateWindowFlags flags)
 {
   EphyNode *node;
 
@@ -349,15 +349,15 @@ paned_sync_position_cb (GtkWidget *paned,
   int width;
 
   width = gtk_paned_get_position (GTK_PANED (paned));
-  ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_WIDTH,
+  ephy_node_set_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_WIDTH,
                               width);
   return FALSE;
 }
 
 void
-ephy_state_add_paned (GtkWidget *paned,
-                      const char *name,
-                      int default_width)
+ephy_initial_state_add_paned (GtkWidget *paned,
+                              const char *name,
+                              int default_width)
 {
   EphyNode *node;
   int width;
@@ -371,14 +371,14 @@ ephy_state_add_paned (GtkWidget *paned,
     ephy_node_add_child (states, node);
 
     ephy_node_set_property_string (node,
-                                   EPHY_NODE_STATE_PROP_NAME,
+                                   EPHY_NODE_INITIAL_STATE_PROP_NAME,
                                    name);
     ephy_node_set_property_int (node,
-                                EPHY_NODE_STATE_PROP_WIDTH,
+                                EPHY_NODE_INITIAL_STATE_PROP_WIDTH,
                                 default_width);
   }
 
-  width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
+  width = ephy_node_get_property_int (node, EPHY_NODE_INITIAL_STATE_PROP_WIDTH);
   gtk_paned_set_position (GTK_PANED (paned), width);
 
   g_signal_connect (paned, "notify::position",
@@ -394,7 +394,7 @@ sync_expander_cb (GtkExpander *expander,
 
   is_expanded = gtk_expander_get_expanded (expander);
   ephy_node_set_property_boolean (node,
-                                  EPHY_NODE_STATE_PROP_ACTIVE,
+                                  EPHY_NODE_INITIAL_STATE_PROP_ACTIVE,
                                   is_expanded);
 }
 
@@ -407,14 +407,14 @@ sync_toggle_cb (GtkToggleButton *toggle,
 
   is_active = gtk_toggle_button_get_active (toggle);
   ephy_node_set_property_boolean (node,
-                                  EPHY_NODE_STATE_PROP_ACTIVE,
+                                  EPHY_NODE_INITIAL_STATE_PROP_ACTIVE,
                                   is_active);
 }
 
 void 
-ephy_state_add_expander (GtkWidget *widget,
-                         const char *name,
-                         gboolean default_state)
+ephy_initial_state_add_expander (GtkWidget *widget,
+                                 const char *name,
+                                 gboolean default_state)
 {
   EphyNode *node;
   gboolean active;
@@ -428,15 +428,15 @@ ephy_state_add_expander (GtkWidget *widget,
     ephy_node_add_child (states, node);
 
     ephy_node_set_property_string (node,
-                                   EPHY_NODE_STATE_PROP_NAME,
+                                   EPHY_NODE_INITIAL_STATE_PROP_NAME,
                                    name);
     ephy_node_set_property_boolean (node,
-                                    EPHY_NODE_STATE_PROP_ACTIVE,
+                                    EPHY_NODE_INITIAL_STATE_PROP_ACTIVE,
                                     default_state);
   }
 
   active = ephy_node_get_property_boolean
-    (node, EPHY_NODE_STATE_PROP_ACTIVE);
+    (node, EPHY_NODE_INITIAL_STATE_PROP_ACTIVE);
 
   if (GTK_IS_TOGGLE_BUTTON (widget)) {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), active);
@@ -450,7 +450,7 @@ ephy_state_add_expander (GtkWidget *widget,
 }
 
 void
-ephy_state_save (void)
+ephy_initial_state_save (void)
 {
   if (states) {
     ephy_states_save ();

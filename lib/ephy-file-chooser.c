@@ -22,7 +22,6 @@
 
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
-#include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-settings.h"

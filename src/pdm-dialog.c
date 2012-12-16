@@ -28,7 +28,6 @@
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
-#include "ephy-state.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "ephy-time-helpers.h"

@@ -41,6 +41,7 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
 #include "ephy-home-action.h"
+#include "ephy-initial-state.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-navigation-history-action.h"
@@ -51,7 +52,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-state.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
@@ -4004,10 +4004,10 @@ ephy_window_show (GtkWidget *widget)
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
 		if (!priv->is_popup)
-			flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+			flags = EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE;
 
-		ephy_state_add_window (widget, "main_window", 600, 500,
-				       TRUE, flags);
+		ephy_initial_state_add_window (widget, "main_window", 600, 500,
+					       TRUE, flags);
 		priv->has_size = TRUE;
 	}
 

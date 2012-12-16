@@ -46,7 +46,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-state.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"

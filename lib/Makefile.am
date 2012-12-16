@@ -32,15 +32,15 @@ NOINST_H_FILES = \
 	ephy-zoom.h
 
 TYPES_H_FILES = \
-	ephy-node.h				\
-	ephy-state.h
+	ephy-initial-state.h			\
+	ephy-node.h
 
 INST_H_FILES = \
 	ephy-dialog.h				\
+	ephy-initial-state.h			\
 	ephy-node.h				\
 	ephy-node-db.h				\
-	ephy-settings.h				\
-	ephy-state.h
+	ephy-settings.h
 
 libephymisc_la_SOURCES = \
 	ephy-debug.c				\
@@ -50,6 +50,7 @@ libephymisc_la_SOURCES = \
 	ephy-file-chooser.c			\
 	ephy-file-helpers.c			\
 	ephy-gui.c				\
+	ephy-initial-state.c			\
 	ephy-langs.c				\
 	ephy-node.c				\
 	ephy-node.h				\
@@ -66,7 +67,6 @@ libephymisc_la_SOURCES = \
 	ephy-snapshot-service.c			\
 	ephy-sqlite-connection.c		\
 	ephy-sqlite-statement.c			\
-	ephy-state.c				\
 	ephy-string.c				\
 	ephy-time-helpers.c			\
 	ephy-web-app-utils.c			\

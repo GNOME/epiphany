@@ -36,7 +36,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-state.h"
+#include "ephy-initial-state.h"
 #include "ephy-topic-action.h"
 #include "ephy-window.h"
 #include "popup-commands.h"
@@ -1764,13 +1764,13 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
-	ephy_state_add_window (GTK_WIDGET(editor),
-			       "bookmarks_editor",
-			       450, 400, FALSE,
-			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
-	ephy_state_add_paned  (GTK_WIDGET (hpaned),
-			       "bookmarks_paned",
-			       130);
+	ephy_initial_state_add_window (GTK_WIDGET(editor),
+                                       "bookmarks_editor",
+                                       450, 400, FALSE,
+                                       EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE | EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION);
+	ephy_initial_state_add_paned  (GTK_WIDGET (hpaned),
+                                       "bookmarks_paned",
+                                       130);
 
 	/* Lockdown settings */
 	action = gtk_action_group_get_action (action_group, "Export");
