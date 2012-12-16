@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2001 Matthew Mueller
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
@@ -32,27 +33,24 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-	EPHY_STATE_WINDOW_SAVE_NONE = 0,
-	EPHY_STATE_WINDOW_SAVE_SIZE = 1 << 0,
-	EPHY_STATE_WINDOW_SAVE_POSITION = 1 << 1
+  EPHY_STATE_WINDOW_SAVE_NONE = 0,
+  EPHY_STATE_WINDOW_SAVE_SIZE = 1 << 0,
+  EPHY_STATE_WINDOW_SAVE_POSITION = 1 << 1
 } EphyStateWindowFlags;
 
-void  ephy_state_add_window	(GtkWidget *window,
-				 const char *name,
-				 int default_width,
-				 int default_heigth,
-				 gboolean maximize,
-				 EphyStateWindowFlags flags);
-
-void  ephy_state_add_paned	(GtkWidget *paned,
-				 const char *name,
-				 int default_width);
-
-void  ephy_state_add_expander	(GtkWidget *widget,
-				 const char *name,
-				 gboolean default_state);
-
-void  ephy_state_save		(void);
+void ephy_state_add_window   (GtkWidget            *window,
+                              const char           *name,
+                              int                   default_width,
+                              int                   default_heigth,
+                              gboolean              maximize,
+                              EphyStateWindowFlags  flags);
+void ephy_state_add_paned    (GtkWidget            *paned,
+                              const char           *name,
+                              int                   default_width);
+void ephy_state_add_expander (GtkWidget            *widget,
+                              const char           *name,
+                              gboolean              default_state);
+void ephy_state_save         (void);
 
 G_END_DECLS
 
