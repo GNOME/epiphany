@@ -880,8 +880,6 @@ ephy_embed_constructed (GObject *object)
   scrolled_window = GTK_WIDGET (priv->scrolled_window);
 #endif
   overlay = gtk_overlay_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (overlay),
-                               GTK_STYLE_CLASS_OSD);
 
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
@@ -910,6 +908,8 @@ ephy_embed_constructed (GObject *object)
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->floating_bar);
 
   priv->progress = gtk_progress_bar_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress),
+                               GTK_STYLE_CLASS_OSD);
   gtk_widget_set_halign (priv->progress, GTK_ALIGN_FILL);
   gtk_widget_set_valign (priv->progress, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->progress);
