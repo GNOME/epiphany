@@ -18,11 +18,6 @@
  *
  */
 
-/* These defines need to go at the top because config.h or ephy-embed-single.h
- * may include soup.
- */
-#define LIBSOUP_USE_UNSTABLE_REQUEST_API
-
 #include "config.h"
 #include "ephy-embed-single.h"
 
@@ -41,9 +36,6 @@
 
 #include <glib/gi18n.h>
 #include <gnome-keyring.h>
-#include <libsoup/soup-cache.h>
-#include <libsoup/soup-gnome.h>
-#include <libsoup/soup-requester.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
@@ -444,7 +436,6 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *cache_dir;
   char *favicon_db_path;
   EphyEmbedSinglePrivate *priv = single->priv;
-  SoupSessionFeature *requester;
   EphyEmbedShellMode mode;
 
   /* Initialise nspluginwrapper's plugins if available */
@@ -461,7 +452,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
 
   /* Store cookies in moz-compatible SQLite format */
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
-  jar = soup_cookie_jar_sqlite_new (filename, FALSE);
+  jar = soup_cookie_jar_db_new (filename, FALSE);
   g_free (filename);
   cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
@@ -471,8 +462,8 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   soup_session_add_feature (session, SOUP_SESSION_FEATURE (jar));
   g_object_unref (jar);
 
-  /* Use GNOME proxy settings through libproxy */
-  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+  /* Use GNOME proxy settings through libproxy. */
+  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
 
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
@@ -494,10 +485,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
                     single);
 
   /* about: URIs handler */
-  requester = SOUP_SESSION_FEATURE (soup_requester_new());
-  soup_session_add_feature (session, requester);
   soup_session_add_feature_by_type (session, EPHY_TYPE_REQUEST_ABOUT);
-  g_object_unref (requester);
 
   /* Initialize the favicon cache. */
   favicon_db_path = g_build_filename (g_get_user_data_dir (), g_get_prgname (), NULL);

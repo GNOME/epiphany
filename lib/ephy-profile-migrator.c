@@ -47,7 +47,6 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gnome-keyring.h>
-#include <libsoup/soup-gnome.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -105,7 +104,7 @@ migrate_cookies (void)
     SoupCookieJar *txt, *sqlite;
 
     txt = soup_cookie_jar_text_new (src_txt, TRUE);
-    sqlite = soup_cookie_jar_sqlite_new (dest, FALSE);
+    sqlite = soup_cookie_jar_db_new (dest, FALSE);
     cookies = soup_cookie_jar_all_cookies (txt);
 
     for (p = cookies; p; p = p->next) {

@@ -26,7 +26,6 @@
 #include "ephy-file-helpers.h"
 
 #include <glib/gstdio.h>
-#include <libsoup/soup-gnome.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
@@ -525,7 +524,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   /* Create the new cookie jar */
   filename = g_build_filename (directory, "cookies.sqlite", NULL);
-  new_jar = (SoupCookieJar*)soup_cookie_jar_sqlite_new (filename, FALSE);
+  new_jar = (SoupCookieJar*)soup_cookie_jar_db_new (filename, FALSE);
   g_free (filename);
 
   /* The app domain for the current view */
