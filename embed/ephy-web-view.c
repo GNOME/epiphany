@@ -51,6 +51,7 @@
 #include <glib/gstdio.h>
 #include <gnome-keyring.h>
 #include <gtk/gtk.h>
+#include <libsoup/soup.h>
 
 /**
  * SECTION:ephy-web-view

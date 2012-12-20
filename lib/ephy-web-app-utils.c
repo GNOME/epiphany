@@ -26,6 +26,7 @@
 #include "ephy-file-helpers.h"
 
 #include <glib/gstdio.h>
+#include <libsoup/soup.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
@@ -495,7 +496,7 @@ static SoupCookieJar *get_current_cookie_jar (void)
    * It would be better to have an API in WebKit to get the cookies instead.
    */
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
-  jar = (SoupCookieJar*)soup_cookie_jar_sqlite_new (filename, TRUE);
+  jar = (SoupCookieJar*)soup_cookie_jar_db_new (filename, TRUE);
   g_free (filename);
 
   return jar;

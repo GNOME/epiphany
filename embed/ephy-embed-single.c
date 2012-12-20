@@ -36,6 +36,7 @@
 
 #include <glib/gi18n.h>
 #include <gnome-keyring.h>
+#include <libsoup/soup.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else

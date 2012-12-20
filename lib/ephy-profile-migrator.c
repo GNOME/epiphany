@@ -47,6 +47,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gnome-keyring.h>
+#include <libsoup/soup.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
