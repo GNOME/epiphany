@@ -83,7 +83,7 @@ GLIB_REQUIRED=2.35.6
 GTK_REQUIRED=3.5.4
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
-WEBKIT_GTK_REQUIRED=1.11.2
+WEBKIT_GTK_REQUIRED=1.11.5
 LIBSOUP_REQUIRED=2.41.3
 GNOME_DESKTOP_REQUIRED=2.91.2
 GNOME_KEYRING_REQUIRED=2.26.0
@@ -136,6 +136,10 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  avahi-gobject >= $AVAHI_REQUIRED
 		  avahi-client >= $AVAHI_REQUIRED
 		  ])
+
+PKG_CHECK_MODULES(WEB_EXTENSION, [$WEBKIT_GTK_PC_NAME >= $WEBKIT_GTK_REQUIRED])
+AC_SUBST(WEB_EXTENSION_CFLAGS)
+AC_SUBST(WEB_EXTENSION_LIBS)
 
 # ******************
 # Portability checks
@@ -255,6 +259,7 @@ lib/egg/Makefile
 lib/history/Makefile
 lib/widgets/Makefile
 embed/Makefile
+embed/web-extension/Makefile
 src/Makefile
 src/bookmarks/Makefile
 po/Makefile.in

@@ -458,6 +458,12 @@ main (int argc,
     gtk_window_set_default_icon_name ("web-browser");
   }
 
+#ifdef HAVE_WEBKIT2
+  /* Set the web extensions dir ASAP before the process is launched */
+  webkit_web_context_set_web_extensions_directory (webkit_web_context_get_default (),
+                                                   EPHY_WEB_EXTENSIONS_DIR);
+#endif
+
   ephy_embed_prefs_init ();
   _ephy_shell_create_instance (mode);
 

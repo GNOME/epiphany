@@ -33,6 +33,9 @@
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-snapshot-service.h"
+#ifdef HAVE_WEBKIT2
+#include "ephy-web-extension.h"
+#endif
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -55,6 +58,9 @@ struct _EphyEmbedShellPrivate
   EphyEmbedShellMode mode;
   EphyFrecentStore *frecent_store;
   guint single_initialised : 1;
+#ifdef HAVE_WEBKIT2
+  GDBusProxy *web_extension;
+#endif
 };
 
 enum
@@ -93,6 +99,9 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->embed_single);
   g_clear_object (&priv->adblock_manager);
+#ifdef HAVE_WEBKIT2
+  g_clear_object (&priv->web_extension);
+#endif
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -677,3 +686,27 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 
   return ret;
 }
+
+#ifdef HAVE_WEBKIT2
+GDBusProxy *
+ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+  priv = shell->priv;
+  if (!priv->web_extension) {
+    priv->web_extension = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                         G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                                         NULL,
+                                                         EPHY_WEB_EXTENSION_SERVICE_NAME,
+                                                         EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                                         EPHY_WEB_EXTENSION_INTERFACE,
+                                                         NULL,
+                                                         NULL);
+  }
+
+  return priv->web_extension;
+}
+#endif

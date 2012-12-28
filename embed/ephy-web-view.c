@@ -3417,7 +3417,23 @@ gboolean
 ephy_web_view_has_modified_forms (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
-  /* TODO: DOM Bindings */
+  GVariant *result;
+  gboolean retval = FALSE;
+
+  /* FIXME: This should be async */
+  result = g_dbus_proxy_call_sync (ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ()),
+                                   "HasModifiedForms",
+                                   g_variant_new("(t)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view))),
+                                   G_DBUS_CALL_FLAGS_NONE,
+                                   -1,
+                                   NULL,
+                                   NULL);
+
+
+  g_variant_get (result, "(b)", &retval);
+  g_variant_unref (result);
+
+  return retval;
 #else
   WebKitDOMHTMLCollection *forms = NULL;
   WebKitDOMDocument *document = NULL;
@@ -3472,8 +3488,8 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
         }
     }
   }
-#endif
   return FALSE;
+#endif
 }
 
 /**

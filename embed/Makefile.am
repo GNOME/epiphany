@@ -1,5 +1,9 @@
 NULL =
 
+if WITH_WEBKIT2
+SUBDIRS = web-extension
+endif
+
 noinst_LTLIBRARIES = libephyembed.la
 
 NOINST_H_FILES = \
@@ -58,11 +62,12 @@ nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephyembed_la_CPPFLAGS = \
-	-I$(top_builddir)/lib       	\
-	-I$(top_srcdir)/lib       	\
-	-I$(top_srcdir)/lib/egg       	\
-	-I$(top_srcdir)/lib/history	\
-	-I$(top_srcdir)/lib/widgets     \
+	-I$(top_srcdir)/embed/web-extension \
+	-I$(top_builddir)/lib       	    \
+	-I$(top_srcdir)/lib       	    \
+	-I$(top_srcdir)/lib/egg       	    \
+	-I$(top_srcdir)/lib/history	    \
+	-I$(top_srcdir)/lib/widgets         \
 	$(AM_CPPFLAGS)
 
 if WITH_WEBKIT2

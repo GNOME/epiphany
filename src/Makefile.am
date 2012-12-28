@@ -140,6 +140,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	-DEPHY_WEB_EXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions"\" \
 	$(INCINTL)			\
 	$(AM_CPPFLAGS)
 
