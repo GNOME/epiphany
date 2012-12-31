@@ -1301,13 +1301,14 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 			 NULL,
 			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
 #ifdef HAVE_WEBKIT2
-	/* TODO: View Source */
+	webkit_web_view_set_view_mode
+		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), WEBKIT_VIEW_MODE_SOURCE);
 #else
 	webkit_web_view_set_view_source_mode
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), TRUE);
+#endif
 	webkit_web_view_load_uri
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
-#endif
 }
 
 
@@ -1529,16 +1530,12 @@ window_cmd_view_page_source (GtkAction *action,
 
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
-#ifdef HAVE_WEBKIT2
-	/* TODO: View Source */
-#else
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_INTERNAL_VIEW_SOURCE))
 	{
 		view_source_embedded (address, embed);
 		return;
 	}
-#endif
 
 	user_time = gtk_get_current_event_time ();
 
