@@ -606,9 +606,7 @@ download_started_cb (WebKitWebContext *web_context,
   }
 
   window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  ed = ephy_download_new_for_download (download);
-  ephy_download_set_window (ed, GTK_WIDGET (window));
+  ed = ephy_download_new_for_download (download, GTK_WINDOW (window));
 }
 #endif
 

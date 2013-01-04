@@ -78,9 +78,11 @@ typedef enum
 
 GType         ephy_download_get_type              (void) G_GNUC_CONST;
 
-EphyDownload *ephy_download_new                   (void);
-EphyDownload *ephy_download_new_for_uri           (const char *uri);
-EphyDownload *ephy_download_new_for_download      (WebKitDownload *download);
+EphyDownload *ephy_download_new                   (GtkWindow *parent);
+EphyDownload *ephy_download_new_for_uri           (const char *uri,
+                                                   GtkWindow *parent);
+EphyDownload *ephy_download_new_for_download      (WebKitDownload *download,
+                                                   GtkWindow *parent);
 
 
 void          ephy_download_start                 (EphyDownload *download);
@@ -99,9 +101,7 @@ char         *ephy_download_get_content_type      (EphyDownload *download);
 
 guint32       ephy_download_get_start_time        (EphyDownload *download);
 
-GtkWidget    *ephy_download_get_window            (EphyDownload *download);
-void          ephy_download_set_window            (EphyDownload *download,
-                                                   GtkWidget *window);
+GtkWindow    *ephy_download_get_window            (EphyDownload *download);
 
 EphyDownloadActionType ephy_download_get_action   (EphyDownload *download);
 void          ephy_download_set_action            (EphyDownload *download,

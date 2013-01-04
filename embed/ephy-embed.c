@@ -635,7 +635,7 @@ ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
 {
   EphyDownload *download;
 
-  download = ephy_download_new_for_uri (url);
+  download = ephy_download_new_for_uri (url, NULL);
   ephy_download_set_auto_destination (download);
   ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 }
@@ -647,17 +647,19 @@ download_requested_cb (WebKitWebView *web_view,
                        EphyEmbed *embed)
 {
   EphyDownload *ed;
-  GtkWidget *window;
+  GtkWidget *toplevel;
+  GtkWindow *window = NULL;
 
   /* Is download locked down? */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK))
     return FALSE;
 
-  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+  if (GTK_IS_WINDOW (toplevel))
+    window = GTK_WINDOW (toplevel);
 
-  ed = ephy_download_new_for_download (download);
-  ephy_download_set_window (ed, window);
+  ed = ephy_download_new_for_download (download, window);
   ephy_download_set_auto_destination (ed);
 
   return TRUE;

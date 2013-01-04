@@ -88,7 +88,7 @@ fixture_setup (Fixture *fixture, gconstpointer data)
   dest_file = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
 
   fixture->source = get_uri_for_path ("/default");
-  fixture->download = ephy_download_new_for_uri (fixture->source);
+  fixture->download = ephy_download_new_for_uri (fixture->source, NULL);
   fixture->destination = g_filename_to_uri (dest_file, NULL, NULL);
   fixture->loop = g_main_loop_new (NULL, TRUE);
 

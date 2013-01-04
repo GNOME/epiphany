@@ -245,8 +245,7 @@ save_property_url (GtkAction *action,
 	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (&value);
 
-	download = ephy_download_new_for_uri (location);
-	ephy_download_set_window (download, GTK_WIDGET (window));
+	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
 
 	if (ask_dest)
 	{
@@ -348,8 +347,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	ephy_embed_event_get_property (event, "image-uri", &value);
 	location = g_value_get_string (&value);
 
-	download = ephy_download_new_for_uri (location);
-	ephy_download_set_window (download, GTK_WIDGET (window));
+	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
@@ -459,7 +457,7 @@ save_temp_source (const char *address)
 	if (dest == NULL) return;
 
 	dest_uri = g_filename_to_uri (dest, NULL, NULL);
-	download = ephy_download_new_for_uri (address);
+	download = ephy_download_new_for_uri (address, NULL);
 	ephy_download_set_destination_uri (download, dest_uri);
 
 	g_signal_connect (download, "completed",
