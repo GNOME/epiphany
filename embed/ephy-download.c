@@ -1062,6 +1062,7 @@ ephy_download_new_for_download (WebKitDownload *download,
 
   ephy_download->priv->download = g_object_ref (download);
 #ifdef HAVE_WEBKIT2
+  g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
   request = webkit_download_get_request (download);
   ephy_download->priv->source = g_strdup (webkit_uri_request_get_uri (request));
 #else

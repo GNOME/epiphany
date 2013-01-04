@@ -595,10 +595,9 @@ download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload *download,
                      EphyShell *shell)
 {
-  EphyDownload *ed;
   GtkWindow *window = NULL;
   WebKitWebView *web_view;
-  GtkWidget *toplevel;
+  gboolean ephy_download_set;
 
   /* Is download locked down? */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -606,6 +605,15 @@ download_started_cb (WebKitWebContext *web_context,
     webkit_download_cancel (download);
     return;
   }
+
+  /* Only create an EphyDownload for the WebKitDownload if it doesn't exist yet.
+   * This can happen when the download has been started automatically by WebKit,
+   * due to a context menu action or policy checker decision. Downloads started
+   * explicitly by Epiphany are marked with ephy-download-set GObject data.
+   */
+  ephy_download_set = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (download), "ephy-download-set"));
+  if (ephy_download_set)
+    return;
 
   web_view = webkit_download_get_web_view (download);
   if (web_view) {
@@ -619,7 +627,7 @@ download_started_cb (WebKitWebContext *web_context,
   if (!window)
     window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
-  ed = ephy_download_new_for_download (download, window);
+  ephy_download_new_for_download (download, window);
 }
 #endif
 
