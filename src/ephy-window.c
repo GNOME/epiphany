@@ -3367,14 +3367,14 @@ download_added_cb (EphyEmbedShell *shell,
 		   gpointer data)
 {
 	EphyWindow *window = EPHY_WINDOW (data);
-	GtkWidget *download_window;
+	GtkWindow *download_window;
 	GtkWidget *widget;
 
 	download_window = ephy_download_get_window (download);
 	widget = ephy_download_get_widget (download);
 
 	if (widget == NULL &&
-	    (download_window == NULL || download_window == GTK_WIDGET (window)))
+	    (download_window == NULL || download_window == GTK_WINDOW (window)))
 	{
 		widget = ephy_download_widget_new (download);
 		gtk_box_pack_start (GTK_BOX (window->priv->downloads_box),
