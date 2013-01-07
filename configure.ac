@@ -53,10 +53,7 @@ AM_MAINTAINER_MODE([enable])
 LT_PREREQ(2.2)
 LT_INIT([dlopen disable-static])
 
-AC_ISC_POSIX
 AC_PROG_CC
-AM_PROG_CC_STDC
-AC_HEADER_STDC
 
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
@@ -96,7 +93,7 @@ GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
 AC_ARG_WITH(webkit2,
-        [AC_HELP_STRING([--with-webkit2], [build with WebKit2 [default=no]])],
+        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=no]])],
         [],[with_webkit2=no])
 
 if test "x$with_webkit2" != xno; then
