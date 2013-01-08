@@ -40,21 +40,10 @@
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 
-typedef struct
-{
-	EphySessionCommand command;
-	char *arg;
-	char **args;
-	guint32 user_time;
-} SessionCommand;
-
 #define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, EphySessionPrivate))
 
 struct _EphySessionPrivate
 {
-	GQueue *queue;
-	guint queue_idle_id;
-
 	guint open_uris_idle_id;
 	guint dont_save : 1;
 };
@@ -172,24 +161,6 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 			    EphySession *session)
 {
 	ephy_session_save (session, SESSION_STATE);
-}
-
-/* Queue worker */
-
-static void
-session_command_free (SessionCommand *cmd)
-{
-	g_assert (cmd != NULL);
-
-	g_free (cmd->arg);
-	if (cmd->args)
-	{
-		g_strfreev (cmd->args);
-	}
-
-	g_slice_free (SessionCommand, cmd);
-
-	g_object_unref (ephy_shell_get_default ());
 }
 
 typedef struct {
@@ -350,75 +321,6 @@ session_maybe_open_window (EphySession *session,
 	}
 }
 
-static gboolean
-session_command_dispatch (EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-	SessionCommand *cmd;
-	gboolean run_again = TRUE;
-
-	cmd = g_queue_pop_head (priv->queue);
-	g_assert (cmd != NULL);
-
-	LOG ("dispatching queue cmd:%d", cmd->command);
-
-	switch (cmd->command)
-	{
-		default:
-			g_assert_not_reached ();
-			break;
-	}
-
-	/* Look if there's anything else to dispatch */
-	if (g_queue_is_empty (priv->queue))
-	{
-		priv->queue_idle_id = 0;
-		run_again = FALSE;
-	}
-
-	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
-
-	/* This unrefs the shell! */
-	session_command_free (cmd);
-
-	return run_again;
-}
-
-static void
-session_command_queue_next (EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	LOG ("queue_next");
-
-	if (!g_queue_is_empty (priv->queue) &&
-	    priv->queue_idle_id == 0)
-	{
-		priv->queue_idle_id =
-			g_idle_add ((GSourceFunc) session_command_dispatch,
-				    session);
-	}
-}
-
-static void
-session_command_queue_clear (EphySession *session)
-{
-	EphySessionPrivate *priv = session->priv;
-
-	if (priv->queue_idle_id != 0)
-	{
-		g_source_remove (priv->queue_idle_id);
-		priv->queue_idle_id = 0;
-	}
-
-	if (priv->queue != NULL)
-	{
-		g_queue_foreach (priv->queue, (GFunc) session_command_free, NULL);
-		g_queue_free (priv->queue);
-		priv->queue = NULL;
-	}
-}
-
 static void
 window_added_cb (GtkApplication *application,
 		 GtkWindow *window,
@@ -481,7 +383,6 @@ ephy_session_init (EphySession *session)
 	LOG ("EphySession initialising");
 
 	session->priv = EPHY_SESSION_GET_PRIVATE (session);
-	session->priv->queue = g_queue_new ();
 
 	shell = ephy_shell_get_default ();
 	g_signal_connect (shell, "window-added",
@@ -502,8 +403,6 @@ ephy_session_dispose (GObject *object)
 		g_source_remove (session->priv->open_uris_idle_id);
 		session->priv->open_uris_idle_id = 0;
 	}
-
-	session_command_queue_clear (session);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
 }
@@ -535,10 +434,7 @@ ephy_session_close (EphySession *session)
 
 		priv->dont_save = TRUE;
 
-		session_command_queue_clear (session);
-
 		ephy_embed_shell_prepare_close (ephy_embed_shell_get_default ());
-
 	}
 }
 
@@ -1429,45 +1325,3 @@ ephy_session_resume_finish (EphySession *session,
 	return !g_simple_async_result_propagate_error (simple, error);
 }
 
-/**
- * ephy_session_queue_command:
- * @session: a #EphySession
- **/
-void
-ephy_session_queue_command (EphySession *session,
-			    EphySessionCommand command,
-			    const char *arg,
-			    const char **args,
-			    guint32 user_time,
-			    gboolean priority)
-{
-	EphySessionPrivate *priv;
-	SessionCommand *cmd;
-
-	LOG ("queue_command command:%d", command);
-
-	g_return_if_fail (EPHY_IS_SESSION (session));
-
-	priv = session->priv;
-
-	cmd = g_slice_new0 (SessionCommand);
-	cmd->command = command;
-	cmd->arg = arg ? g_strdup (arg) : NULL;
-	cmd->args = args ? g_strdupv ((gchar **)args) : NULL;
-	cmd->user_time = user_time;
-	/* This ref is released in session_command_free */
-	g_object_ref (ephy_shell_get_default ());
-
-	if (priority)
-	{
-		g_queue_push_head (priv->queue, cmd);
-	}
-	else
-	{
-		g_queue_push_tail (priv->queue, cmd);
-	}
-
-	session_command_queue_next (session);
-
-	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
-}

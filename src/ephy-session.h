@@ -101,13 +101,6 @@ gboolean         ephy_session_resume_finish           (EphySession *session,
 
 void             ephy_session_close                   (EphySession *session);
 
-void             ephy_session_queue_command           (EphySession *session,
-                                                       EphySessionCommand op,
-                                                       const char *arg,
-                                                       const char **args,
-                                                       guint32 user_time,
-                                                       gboolean priority);
-
 G_END_DECLS
 
 #endif
