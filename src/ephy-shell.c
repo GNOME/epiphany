@@ -113,7 +113,7 @@ ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
 }
 
 static void
-queue_commands (EphyShell *shell)
+ephy_shell_startup_continue (EphyShell *shell)
 {
   EphyShellStartupContext *ctx;
   EphySession *session;
@@ -129,21 +129,8 @@ queue_commands (EphyShell *shell)
   else if (ctx->arguments != NULL) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
-    GString *options;
-
-    options = g_string_sized_new (64);
-
-    if (ctx->startup_flags & EPHY_STARTUP_NEW_WINDOW)
-      g_string_append (options, "new-window,");
-
-    if (ctx->startup_flags & EPHY_STARTUP_NEW_TAB)
-      g_string_append (options, "new-tab,external,");
-
-    ephy_session_queue_command (session,
-                                EPHY_SESSION_CMD_OPEN_URIS,
-                                (const char*)options->str,
-                                (const char **)ctx->arguments,
-                                ctx->user_time, FALSE);
+    ephy_session_open_uris (session, (const char **)ctx->arguments,
+                            ctx->startup_flags, ctx->user_time);
   }
 }
 
@@ -262,7 +249,7 @@ session_load_cb (GObject *object,
   EphyShell *shell = EPHY_SHELL (user_data);
 
   ephy_session_resume_finish (session, result, NULL);
-  queue_commands (shell);
+  ephy_shell_startup_continue (shell);
 }
 
 static void
@@ -281,9 +268,8 @@ ephy_shell_activate (GApplication *application)
     ctx = shell->priv->startup_context;
     ephy_session_resume (EPHY_SESSION (ephy_shell_get_session (shell)),
                          ctx->user_time, NULL, session_load_cb, shell);
-  }
-  else
-    queue_commands (shell);
+  } else
+    ephy_shell_startup_continue (shell);
 }
 
 /*

@@ -26,6 +26,7 @@
 #ifndef EPHY_SESSION_H
 #define EPHY_SESSION_H
 
+#include "ephy-shell.h"
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
@@ -45,8 +46,7 @@ typedef struct _EphySessionClass	EphySessionClass;
 
 typedef enum
 {
-	EPHY_SESSION_CMD_OPEN_URIS,
-	EPHY_SESSION_CMD_LAST
+        EPHY_SESSION_CMD_LAST
 } EphySessionCommand;
 
 struct _EphySession
@@ -64,6 +64,10 @@ struct _EphySessionClass
 
 GType            ephy_session_get_type                (void);
 
+void             ephy_session_open_uris               (EphySession *session,
+                                                       const char **uris,
+                                                       EphyStartupFlags startup_flags,
+                                                       guint32 user_time);
 gboolean         ephy_session_save                    (EphySession *session,
                                                        const char *filename);
 

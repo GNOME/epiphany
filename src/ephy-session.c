@@ -32,7 +32,6 @@
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-window.h"
 
@@ -56,6 +55,7 @@ struct _EphySessionPrivate
 	GQueue *queue;
 	guint queue_idle_id;
 
+	guint open_uris_idle_id;
 	guint dont_save : 1;
 };
 
@@ -192,92 +192,142 @@ session_command_free (SessionCommand *cmd)
 	g_object_unref (ephy_shell_get_default ());
 }
 
-static void
-session_command_open_uris (EphySession *session,
-			   char **uris,
-			   const char *options,
-			   guint32 user_time)
-{
-	EphyShell *shell;
+typedef struct {
+	EphySession *session;
 	EphyWindow *window;
-	EphyEmbed *embed;
-	EphyNewTabFlags flags = 0;
-	guint i;
+	char **uris;
+	EphyNewTabFlags flags;
+	guint32 user_time;
+	guint current_uri;
+} OpenURIsData;
+
+static OpenURIsData *
+open_uris_data_new (EphySession *session,
+		    const char **uris,
+		    EphyStartupFlags startup_flags,
+		    guint32 user_time)
+{
+	OpenURIsData *data;
+	EphyShell *shell;
 	gboolean new_windows_in_tabs;
 	gboolean have_uris;
 
 	shell = ephy_shell_get_default ();
 
-	g_object_ref (shell);
+	data = g_slice_new0 (OpenURIsData);
+	data->session = g_object_ref (session);
+	data->uris = g_strdupv ((char **)uris);
+	data->user_time = user_time;
 
-	window = ephy_shell_get_main_window (shell);
+	data->window = ephy_shell_get_main_window (shell);
 
 	new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 						      EPHY_PREFS_NEW_WINDOWS_IN_TABS);
 
-	have_uris = ! (g_strv_length (uris) == 1 && g_str_equal (uris[0], ""));
+	have_uris = ! (g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
 
-	if (options != NULL && strstr (options, "external") != NULL)
+	if (startup_flags & EPHY_STARTUP_NEW_TAB)
 	{
-		flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
+		data->flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
 	}
-	if (options != NULL && strstr (options, "new-window") != NULL)
+	if (startup_flags & EPHY_STARTUP_NEW_WINDOW)
 	{
-		window = NULL;
-		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		data->window = NULL;
+		data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 	}
-	else if ((options != NULL && strstr (options, "new-tab") != NULL) ||
-		 (new_windows_in_tabs && have_uris))
+	else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris))
 	{
-		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			 EPHY_NEW_TAB_JUMP |
-			 EPHY_NEW_TAB_PRESENT_WINDOW;
+		data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
 	}
 	else if (!have_uris)
 	{
-		window = NULL;
-		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		data->window = NULL;
+		data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 	}
 
-	for (i = 0; uris[i] != NULL; ++i)
+	g_application_hold (G_APPLICATION (shell));
+
+	return data;
+}
+
+static void
+open_uris_data_free (OpenURIsData *data)
+{
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+	g_object_unref (data->session);
+	g_strfreev (data->uris);
+
+	g_slice_free (OpenURIsData, data);
+}
+
+static gboolean
+ephy_session_open_uris_idle (OpenURIsData *data)
+{
+	EphyEmbed *embed;
+	EphyNewTabFlags page_flags;
+	const char *url;
+#ifdef HAVE_WEBKIT2
+	WebKitURIRequest *request = NULL;
+#else
+	WebKitNetworkRequest *request = NULL;
+#endif
+
+	url = data->uris[data->current_uri];
+	if (url[0] == '\0')
 	{
-		const char *url = uris[i];
-		EphyNewTabFlags page_flags;
+		page_flags = EPHY_NEW_TAB_HOME_PAGE;
+	}
+	else
+	{
+		page_flags = EPHY_NEW_TAB_OPEN_PAGE;
 #ifdef HAVE_WEBKIT2
-		WebKitURIRequest *request = NULL;
+		request = webkit_uri_request_new (url);
 #else
-		WebKitNetworkRequest *request = NULL;
+		request = webkit_network_request_new (url);
 #endif
-
-		if (url[0] == '\0')
-		{
-			page_flags = EPHY_NEW_TAB_HOME_PAGE;
-		}
-		else
-		{
-			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
-#ifdef HAVE_WEBKIT2
-			request = webkit_uri_request_new (url);
-#else
-			request = webkit_network_request_new (url);
-#endif
-		}
-
-		embed = ephy_shell_new_tab_full (shell, window,
-						 NULL /* parent tab */,
-						 request,
-						 flags | page_flags,
-						 EPHY_WEB_VIEW_CHROME_ALL,
-						 FALSE /* is popup? */,
-						 user_time);
-
-		if (request)
-			g_object_unref (request);
-
-		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 	}
 
-	g_object_unref (shell);
+	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 data->window,
+					 NULL /* parent tab */,
+					 request,
+					 data->flags | page_flags,
+					 EPHY_WEB_VIEW_CHROME_ALL,
+					 FALSE /* is popup? */,
+					 data->user_time);
+
+	if (request)
+	{
+		g_object_unref (request);
+	}
+
+	data->window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
+	data->current_uri++;
+
+	return data->uris[data->current_uri] != NULL;
+}
+
+static void
+ephy_session_open_uris_idle_done (OpenURIsData *data)
+{
+	data->session->priv->open_uris_idle_id = 0;
+	open_uris_data_free (data);
+}
+
+void
+ephy_session_open_uris (EphySession *session,
+			const char **uris,
+			EphyStartupFlags startup_flags,
+			guint32 user_time)
+{
+	if (session->priv->open_uris_idle_id == 0)
+	{
+		session->priv->open_uris_idle_id =
+			g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+					 (GSourceFunc)ephy_session_open_uris_idle,
+					 open_uris_data_new (session, uris, startup_flags, user_time),
+					 (GDestroyNotify)ephy_session_open_uris_idle_done);
+	}
 }
 
 static void
@@ -314,9 +364,6 @@ session_command_dispatch (EphySession *session)
 
 	switch (cmd->command)
 	{
-		case EPHY_SESSION_CMD_OPEN_URIS:
-			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
-			break;
 		default:
 			g_assert_not_reached ();
 			break;
@@ -429,14 +476,12 @@ window_removed_cb (GtkApplication *application,
 static void
 ephy_session_init (EphySession *session)
 {
-	EphySessionPrivate *priv;
 	EphyShell *shell;
 
 	LOG ("EphySession initialising");
 
-	priv = session->priv = EPHY_SESSION_GET_PRIVATE (session);
-
-	priv->queue = g_queue_new ();
+	session->priv = EPHY_SESSION_GET_PRIVATE (session);
+	session->priv->queue = g_queue_new ();
 
 	shell = ephy_shell_get_default ();
 	g_signal_connect (shell, "window-added",
@@ -451,6 +496,12 @@ ephy_session_dispose (GObject *object)
 	EphySession *session = EPHY_SESSION (object);
 
 	LOG ("EphySession disposing");
+
+	if (session->priv->open_uris_idle_id > 0)
+	{
+		g_source_remove (session->priv->open_uris_idle_id);
+		session->priv->open_uris_idle_id = 0;
+	}
 
 	session_command_queue_clear (session);
 
@@ -1396,7 +1447,6 @@ ephy_session_queue_command (EphySession *session,
 	LOG ("queue_command command:%d", command);
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
-	g_return_if_fail (command != EPHY_SESSION_CMD_OPEN_URIS || args != NULL);
 
 	priv = session->priv;
 
