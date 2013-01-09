@@ -2087,6 +2087,17 @@ ephy_web_view_location_changed (EphyWebView *view,
     ephy_web_view_set_title (view, EMPTY_PAGE);
   } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME)) {
     char *new_address = g_strdup_printf ("about:%s", location + EPHY_ABOUT_SCHEME_LEN + 1);
+
+    if (g_str_has_prefix (new_address, "about:applications")) {
+      SoupURI *uri = soup_uri_new (new_address);
+
+      /* Strip the query from the URL for about:applications. */
+      soup_uri_set_query (uri, NULL);
+      g_free (new_address);
+
+      new_address = soup_uri_to_string (uri, FALSE);
+      soup_uri_free (uri);
+    }
     ephy_web_view_set_address (view, new_address);
     g_free (new_address);
   } else {
