@@ -1287,12 +1287,15 @@ uri_changed_cb (WebKitWebView *web_view,
   char *uri;
   const char *current_address;
 
-#ifdef HAVE_WEBKIT2
   /* We already update the URI manually while loading, so only
    * update the URI when it changes after the page has been loaded
    * which is usually the result of navigation within the same page action.
    */
+#ifdef HAVE_WEBKIT2
   if (webkit_web_view_is_loading (web_view))
+    return;
+#else
+  if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED)
     return;
 #endif
 
