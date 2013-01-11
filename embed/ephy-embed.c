@@ -295,7 +295,7 @@ load_changed_cb (WebKitWebView *web_view,
   if (load_event == WEBKIT_LOAD_COMMITTED) {
     ephy_embed_destroy_top_widgets (embed);
     address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-    ephy_embed_set_overview_mode (embed, strcmp (address, "about:overview") == 0);
+    ephy_embed_set_overview_mode (embed, strcmp (address, "ephy-about:overview") == 0);
   }
 }
 #else
@@ -310,7 +310,7 @@ load_status_changed_cb (WebKitWebView *web_view,
   if (status == WEBKIT_LOAD_COMMITTED) {
     ephy_embed_destroy_top_widgets (embed);
     address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-    ephy_embed_set_overview_mode (embed, strcmp (address, "about:overview") == 0);
+    ephy_embed_set_overview_mode (embed, strcmp (address, "ephy-about:overview") == 0);
   }
 }
 #endif
