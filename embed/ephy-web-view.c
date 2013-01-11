@@ -1180,8 +1180,6 @@ get_title_from_address (const char *address)
 {
   if (g_str_has_prefix (address, "file://"))
     return g_strdup (address + 7);
-  else if (!strcmp (address, EPHY_ABOUT_SCHEME":plugins"))
-    return g_strdup (_("Plugins"));
   else if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
            !strcmp (address, "about:overview"))
     return g_strdup (EPHY_OVERVIEW_TITLE);
