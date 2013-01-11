@@ -1208,19 +1208,14 @@ ephy_web_view_set_title (EphyWebView *view,
   EphyWebViewPrivate *priv = view->priv;
   char *title = g_strdup (view_title);
 
-  if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0')) {
+  if (title == NULL || g_strstrip (title)[0] == '\0') {
     g_free (title);
-    title = get_title_from_address (priv->address);
+    title = priv->address ? get_title_from_address (priv->address) : NULL;
 
-    /* Fallback */
     if (title == NULL || title[0] == '\0') {
       g_free (title);
       title = g_strdup (EMPTY_PAGE);
-      _ephy_web_view_set_is_blank (view, TRUE);
     }
-  } else if (priv->is_blank) {
-    g_free (title);
-    title = g_strdup (EMPTY_PAGE);
   }
 
   g_free (priv->title);
