@@ -433,7 +433,11 @@ ephy_string_get_host_name (const char *url)
   SoupURI *uri;
   char *ret;
   
-  if (url == NULL || g_str_has_prefix (url, "file://")) return NULL;
+  if (url == NULL ||
+      g_str_has_prefix (url, "file://") ||
+      g_str_has_prefix (url, "about:") ||
+      g_str_has_prefix (url, "ephy-about:"))
+    return NULL;
 
   uri = soup_uri_new (url);
   /* If uri is NULL it's very possible that we just got

@@ -35,6 +35,8 @@ static const HostnameTest hostname_tests[] = {
   { "www.google.com", "www.google.com" },
   { "google.com", "google.com" },
   { "file:///tmp/", NULL },
+  { "about:blank", NULL },
+  { "ephy-about:applications", NULL },
   { NULL, NULL },
   { "garbage garbage", "garbage garbage" } /* FIXME: should this be NULL? */
 };
