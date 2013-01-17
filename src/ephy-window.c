@@ -2137,81 +2137,6 @@ save_target_uri (EphyWindow *window,
 	return retval;
 }
 
-typedef struct
-{
-	EphyWindow *window;
-	EphyEmbed *embed;
-} ClipboardTextCBData;
-
-static void
-clipboard_text_received_cb (GtkClipboard *clipboard,
-			    const char *text,
-			    ClipboardTextCBData *data)
-{
-	if (data->embed != NULL && text != NULL)
-	{
-		ephy_link_open (EPHY_LINK (data->window), text, data->embed, 0);
-	}
-
-	if (data->embed != NULL)
-	{
-		EphyEmbed **embed_ptr = &(data->embed);
-		g_object_remove_weak_pointer (G_OBJECT (data->embed), (gpointer *) embed_ptr);
-	}
-
-	g_slice_free (ClipboardTextCBData, data);
-}
-
-static gboolean
-open_selected_url (EphyWindow *window,
-		   WebKitWebView *view,
-		   GdkEventButton *event,
-		   WebKitHitTestResult *hit_test_result)
-{
-	guint context;
-	ClipboardTextCBData *cb_data;
-	EphyEmbed *embed;
-	EphyEmbed **embed_ptr;
-
-	if (!g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_MIDDLE_CLICK_OPENS_URL) ||
-	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL))
-	{
-		return FALSE;
-	}
-
-	g_object_get (hit_test_result, "context", &context, NULL);
-
-	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
-	     event->button, context, event->state, (int)event->x, (int)event->y);
-
-	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK ||
-	    context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)
-	{
-		return FALSE;
-	}
-
-	/* See bug #133633 for why we do it this way */
-
-	/* We need to make sure we know if the embed is destroyed
-	 * between requesting the clipboard contents, and receiving
-	 * them.
-	 */
-	embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-
-	cb_data = g_slice_new0 (ClipboardTextCBData);
-	cb_data->embed = embed;
-	cb_data->window = window;
-	embed_ptr = &cb_data->embed;
-
-	g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *) embed_ptr);
-
-	gtk_clipboard_request_text (gtk_widget_get_clipboard (GTK_WIDGET (embed),
-							      GDK_SELECTION_PRIMARY),
-				    (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
-				    cb_data);
-	return TRUE;
-}
-
 static gboolean
 ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 				GdkEventButton *event,
@@ -2230,9 +2155,6 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	{
 	        case GDK_BUTTON_PRIMARY:
 			handled = save_target_uri (window, view, event, hit_test_result);
-			break;
-	        case GDK_BUTTON_MIDDLE:
-			handled = open_selected_url (window, view, event, hit_test_result);
 			break;
 #ifndef HAVE_WEBKIT2
 	        case GDK_BUTTON_SECONDARY:

@@ -116,7 +116,6 @@ typedef enum
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS            "new-windows-in-tabs"
 #define EPHY_PREFS_AUTO_DOWNLOADS                 "automatic-downloads"
 #define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA "warn-on-close-unsubmitted-data"
-#define EPHY_PREFS_MIDDLE_CLICK_OPENS_URL         "middle-click-opens-url"
 #define EPHY_PREFS_REMEMBER_PASSWORDS             "remember-passwords"
 #define EPHY_PREFS_KEYWORD_SEARCH_URL             "keyword-search-url"
 #define EPHY_PREFS_MANAGED_NETWORK                "managed-network"
