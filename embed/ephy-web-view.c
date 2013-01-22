@@ -3599,6 +3599,7 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
 {
   WebKitWebFrame *main_frame;
   GtkPrintOperation *operation;
+  GtkPrintSettings *settings;
   GError *error;
   EphyEmbedShell *shell;
 
@@ -3610,6 +3611,12 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
   gtk_print_operation_set_embed_page_setup (operation, TRUE);
   gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
 
+  settings = gtk_print_settings_new ();
+  gtk_print_settings_set (settings,
+                          GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
+                          ephy_web_view_get_title (view));
+  gtk_print_operation_set_print_settings (operation, settings);
+
   webkit_web_frame_print_full (main_frame, operation, action, &error);
 
   if (error) {
@@ -3619,6 +3626,7 @@ ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction actio
     ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
 
   g_object_unref (operation);
+  g_object_unref (settings);
 }
 #endif
 
@@ -3655,6 +3663,7 @@ ephy_web_view_print (EphyWebView *view)
 #ifdef HAVE_WEBKIT2
   WebKitPrintOperation *operation;
   EphyEmbedShell *shell;
+  GtkPrintSettings *settings;
 
   shell = ephy_embed_shell_get_default ();
 
@@ -3666,8 +3675,14 @@ ephy_web_view_print (EphyWebView *view)
                     G_CALLBACK (print_operation_failed_cb),
                     view);
   webkit_print_operation_set_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
+  settings = gtk_print_settings_new ();
+  gtk_print_settings_set (settings,
+                          GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
+                          ephy_web_view_get_title (view));
+  webkit_print_operation_set_print_settings (operation, settings);
   webkit_print_operation_run_dialog (operation, NULL);
   g_object_unref (operation);
+  g_object_unref (settings);
 #else
   ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
 #endif
