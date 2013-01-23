@@ -358,7 +358,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 
 static int
 ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
-				  const xmlChar *filename,
+				  xmlBuffer *buffer,
 				  const xmlChar *root,
 				  const xmlChar *version,
 				  const xmlChar *comment,
@@ -374,7 +374,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	START_PROFILER ("Saving node db")
 
 	/* FIXME: do we want to turn compression on ? */
-	writer = xmlNewTextWriterFilename ((const char *)filename, 0);
+	writer = xmlNewTextWriterMemory (buffer, 0);
 	if (writer == NULL)
 	{
 		return -1;
@@ -487,36 +487,33 @@ ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 				EphyNode *node, ...)
 {
 	va_list argptr;
+	xmlBuffer *buffer;
+	GError *error = NULL;
 	int ret = 0;
-	GFile *tmp_file, *file;
-	char *tmp_file_path;
-
-	tmp_file_path = g_strconcat ((const gchar *) filename, ".tmp", NULL);
-	tmp_file = g_file_new_for_path (tmp_file_path);
-	file = g_file_new_for_path ((const char *) filename);
 
 	va_start (argptr, node);
- 
+
+	buffer = xmlBufferCreate ();
 	ret = ephy_node_db_write_to_xml_valist
-		(db, (const xmlChar *)tmp_file_path, root, version, comment, node, argptr);
+		(db, buffer, root, version, comment, node, argptr);
 
 	va_end (argptr);
 
 	if (ret < 0)
 	{
-		g_warning ("Failed to write XML data to %s", tmp_file_path);
+		g_warning ("Failed to write XML data");
 		goto failed;
 	}
 
-	if (ephy_file_switch_temp_file (file, tmp_file) == FALSE)
+	if (g_file_set_contents ((const char *)filename, (const char *)buffer->content, buffer->use, &error) == FALSE)
 	{
+		g_warning ("Error saving EphyNodeDB as XML: %s", error->message);
+		g_error_free (error);
 		ret = -1;
 	}
 
 failed:
-	g_free (tmp_file_path);
-	g_object_unref (file);
-	g_object_unref (tmp_file);
+	xmlBufferFree (buffer);
 
 	return ret;
 }
