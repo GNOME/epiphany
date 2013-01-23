@@ -390,25 +390,24 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 			   const char *file_path)
 {
 	xmlTextWriterPtr writer;
-	GFile *file, *tmp_file;
-	char *tmp_file_path;
+	xmlBufferPtr buf;
+	GFile *file;
 	int ret;
 
 	LOG ("Exporting as RDF to %s", file_path);
 
 	START_PROFILER ("Exporting as RDF")
 
-	tmp_file_path = g_strconcat (file_path, ".tmp", NULL);
-	file = g_file_new_for_path (file_path);
-	tmp_file = g_file_new_for_path (tmp_file_path);
-
+	buf = xmlBufferCreate ();
+	if (buf == NULL)
+	{
+		return;
+	}
 	/* FIXME: do we want to turn on compression here? */
-	writer = xmlNewTextWriterFilename (tmp_file_path, 0);
+	writer = xmlNewTextWriterMemory (buf, 0);
 	if (writer == NULL)
 	{
-		g_object_unref (file);
-		g_object_unref (tmp_file);
-		g_free (tmp_file);
+		xmlBufferFree (buf);
 		return;
 	}
 
@@ -418,22 +417,23 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
 	if (ret < 0) goto out;
 	
+	file = g_file_new_for_path (file_path);
 	ret = write_rdf (bookmarks, file, writer);
+	g_object_unref (file);
 	if (ret < 0) goto out;
 
 	xmlFreeTextWriter (writer);
 out:
 	if (ret >= 0)
 	{
-		if (ephy_file_switch_temp_file (file, tmp_file) == FALSE)
+		if (g_file_set_contents (file_path,
+					 (const char *)buf->content,
+					 buf->use,
+					 NULL) == FALSE)
 		{
 			ret = -1;
 		}
 	}
-
-	g_object_unref (file);
-	g_object_unref (tmp_file);
-	g_free (tmp_file_path);
 
 	STOP_PROFILER ("Exporting as RDF")
 
