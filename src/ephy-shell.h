@@ -92,17 +92,18 @@ typedef enum {
   EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 6,
 
   /* Tabs */
-  EPHY_NEW_TAB_APPEND_LAST  = 1 << 7,
-  EPHY_NEW_TAB_APPEND_AFTER = 1 << 8,
-  EPHY_NEW_TAB_JUMP   = 1 << 9,
+  EPHY_NEW_TAB_FIRST        = 1 << 7,
+  EPHY_NEW_TAB_APPEND_LAST  = 1 << 8,
+  EPHY_NEW_TAB_APPEND_AFTER = 1 << 9,
+  EPHY_NEW_TAB_JUMP   = 1 << 10,
 
   /* Where */
-  EPHY_NEW_TAB_IN_NEW_WINDOW  = 1 << 10,
-  EPHY_NEW_TAB_IN_EXISTING_WINDOW = 1 << 11,
+  EPHY_NEW_TAB_IN_NEW_WINDOW  = 1 << 11,
+  EPHY_NEW_TAB_IN_EXISTING_WINDOW = 1 << 12,
 
   /* The way to load */
-  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 12,
-  EPHY_NEW_TAB_DONT_COPY_HISTORY  = 1 << 13,
+  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 13,
+  EPHY_NEW_TAB_DONT_COPY_HISTORY  = 1 << 14,
   
 } EphyNewTabFlags;
 

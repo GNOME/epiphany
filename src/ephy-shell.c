@@ -797,6 +797,9 @@ ephy_shell_new_tab_full (EphyShell *shell,
       g_warning ("Requested to append new tab after parent, but 'previous_embed' was NULL");
   }
 
+  if (flags & EPHY_NEW_TAB_FIRST)
+    position = 0;
+
   if (flags & EPHY_NEW_TAB_FROM_EXTERNAL) {
     /* If the active embed is blank, use that to open the url and jump to it */
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
