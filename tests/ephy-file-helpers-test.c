@@ -290,76 +290,6 @@ test_ephy_file_create_delete_tmp (void)
   ephy_file_helpers_shutdown ();
 }
 
-static void
-test_ephy_file_switch_temp_file (void)
-{
-  char *tmp_file;
-
-  GFile *orig;
-  char *orig_path;
-
-  GFile *dest;
-  char *dest_path;
-  char *file_cont = NULL;
-
-  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
-
-  /* Empty dest */
-  tmp_file = ephy_file_tmp_filename ("test-dest-XXXXXX", NULL);
-  dest_path = g_build_filename (ephy_file_tmp_dir (), tmp_file, NULL);
-  g_free (tmp_file);
-
-  g_assert (g_file_test (dest_path, G_FILE_TEST_EXISTS) == FALSE);
-  dest = g_file_new_for_path (dest_path);
-
-  tmp_file = ephy_file_tmp_filename ("test-orig-XXXXXX", NULL);
-  orig_path = g_build_filename (ephy_file_tmp_dir (), tmp_file, NULL);
-  g_free (tmp_file);
-
-  g_assert (g_file_test (orig_path, G_FILE_TEST_EXISTS) == FALSE);
-  orig = g_file_new_for_path (orig_path);
-
-  g_file_set_contents (orig_path, "orig", -1, NULL);
-  g_assert (g_file_test (orig_path, G_FILE_TEST_EXISTS));
-
-  g_test_message ("SWITCH: %s to %s", orig_path, dest_path);
-
-  g_assert (ephy_file_switch_temp_file (dest, orig));
-  g_assert (g_file_test (orig_path, G_FILE_TEST_EXISTS) == FALSE);
-  g_assert (g_file_test (dest_path, G_FILE_TEST_EXISTS));
-
-  g_assert (g_file_get_contents (dest_path, &file_cont, NULL, NULL));
-  g_assert_cmpstr ("orig", ==, file_cont);
-  g_free (file_cont);
-
-  ephy_file_delete_uri (g_file_get_uri (dest));
-  g_assert (g_file_test (dest_path, G_FILE_TEST_EXISTS) == FALSE);
-
-  /* Full replace */
-  g_file_set_contents (dest_path, "dest", -1, NULL);
-  g_assert (g_file_test (dest_path, G_FILE_TEST_EXISTS));
-
-  g_file_set_contents (orig_path, "orig", -1, NULL);
-  g_assert (g_file_test (orig_path, G_FILE_TEST_EXISTS));
-
-  g_test_message ("SWITCH REPLACE: %s to %s", orig_path, dest_path);
-  g_assert (ephy_file_switch_temp_file (dest, orig));
-  g_assert (g_file_test (dest_path, G_FILE_TEST_EXISTS));
-  g_assert (g_file_test (orig_path, G_FILE_TEST_EXISTS) == FALSE);
-
-  g_assert (g_file_get_contents (dest_path, &file_cont, NULL, NULL));
-  g_assert_cmpstr ("orig", ==, file_cont);
-  g_free (file_cont);
-
-  g_free (orig_path);
-  g_free (dest_path);
-
-  g_object_unref (orig);
-  g_object_unref (dest);
-
-  ephy_file_helpers_shutdown ();
-}
-
 typedef struct {
   const char *filename;
   const char *expected;
@@ -424,9 +354,6 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/lib/ephy-file-helpers/create_delete_tmp",
                    test_ephy_file_create_delete_tmp);
-
-  g_test_add_func ("/lib/ephy-file-helpers/switch_temp_file",
-                   test_ephy_file_switch_temp_file);
 
   g_test_add_func ("/lib/ephy-file-helpers/sanitize_filename",
                    test_ephy_sanitize_filename);
