@@ -95,6 +95,8 @@ gboolean         ephy_session_resume_finish           (EphySession *session,
 
 void             ephy_session_close                   (EphySession *session);
 
+void             ephy_session_undo_close_tab          (EphySession *session);
+
 G_END_DECLS
 
 #endif

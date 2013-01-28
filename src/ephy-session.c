@@ -30,6 +30,7 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+#include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -43,13 +44,23 @@
 
 #define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, EphySessionPrivate))
 
+typedef struct
+{
+	gpointer* parent_location;
+	int position;
+	char *url;
+	GList *bflist;
+} ClosedTab;
+
 struct _EphySessionPrivate
 {
+	GQueue *closed_tabs;
 	GCancellable *save_cancellable;
 	guint dont_save : 1;
 };
 
 #define SESSION_STATE		"type:session_state"
+#define MAX_CLOSED_TABS		10
 
 G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
@@ -121,6 +132,242 @@ load_status_notify_cb (EphyWebView *view,
 }
 #endif
 
+static gpointer *
+parent_location_new (EphyNotebook *notebook)
+{
+	gpointer *location = g_slice_new (gpointer);
+	*location = notebook;
+	g_object_add_weak_pointer (G_OBJECT (notebook), location);
+
+	return location;
+}
+
+static void
+parent_location_free (gpointer *location, gboolean last_reference)
+{
+	if (!location)
+		return;
+
+	if (*location && last_reference)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (*location), location);
+	}
+
+	g_slice_free (gpointer, location);
+}
+
+static void
+closed_tab_free (ClosedTab *tab)
+{
+	if (tab->bflist)
+	{
+		g_list_free_full (tab->bflist, g_object_unref);
+		tab->bflist = NULL;
+	}
+
+	if (tab->url)
+	{
+		g_free (tab->url);
+		tab->url = NULL;
+	}
+
+	g_slice_free (ClosedTab, tab);
+}
+
+static int
+compare_func (ClosedTab *iter, EphyNotebook *notebook)
+{
+	return (EphyNotebook *)*iter->parent_location - notebook;
+}
+
+static ClosedTab *
+find_tab_with_notebook (GQueue *queue, EphyNotebook *notebook)
+{
+	GList *item = g_queue_find_custom (queue, notebook, (GCompareFunc)compare_func);
+	return item ? (ClosedTab*)item->data : NULL;
+}
+
+static ClosedTab *
+closed_tab_new (GQueue *closed_tabs,
+		const char *address,
+		GList *bflist,
+		int position,
+		EphyNotebook *parent_notebook)
+{
+	ClosedTab *tab = g_slice_new0 (ClosedTab);
+	ClosedTab *sibling_tab;
+
+	tab->url = g_strdup (address);
+#ifndef HAVE_WEBKIT2
+	tab->bflist = g_list_copy_deep (bflist, (GCopyFunc)webkit_web_history_item_copy, NULL);
+#endif
+	tab->position = position;
+
+	sibling_tab = find_tab_with_notebook (closed_tabs, parent_notebook);
+	if (sibling_tab)
+		tab->parent_location = sibling_tab->parent_location;
+	else
+		tab->parent_location = parent_location_new (parent_notebook);
+
+	return tab;
+}
+
+static void
+post_restore_cleanup (GQueue *closed_tabs, ClosedTab *restored_tab, gboolean notebook_is_new)
+{
+
+	if (find_tab_with_notebook (closed_tabs, *restored_tab->parent_location))
+	{
+		if (notebook_is_new == TRUE)
+		{
+			/* If this is a newly opened notebook and
+			   there are other tabs that must be restored
+			   here, add a weak poiner to keep track of
+			   the lifetime of it. */
+			g_object_add_weak_pointer (G_OBJECT (*restored_tab->parent_location),
+						   restored_tab->parent_location);
+		}
+	}
+	else
+	{
+		/* If there are no other tabs that must be restored to this notebook,
+		   we can remove the pointer keeping track of its location.
+		   If this is a new window, we don't need to remove any weak
+		   pointer, as no one has been added yet. */
+		parent_location_free (restored_tab->parent_location, !notebook_is_new);
+	}
+}
+
+void
+ephy_session_undo_close_tab (EphySession *session)
+{
+	EphySessionPrivate *priv;
+	EphyEmbed *embed, *new_tab;
+	ClosedTab *tab;
+#ifndef HAVE_WEBKIT2
+	WebKitWebBackForwardList *dest;
+	GList *i;
+#endif
+	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE
+		| EPHY_NEW_TAB_PRESENT_WINDOW
+		| EPHY_NEW_TAB_JUMP
+		| EPHY_NEW_TAB_DONT_COPY_HISTORY;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+
+	priv = session->priv;
+
+	tab = g_queue_pop_head (priv->closed_tabs);
+	if (tab == NULL)
+		return;
+
+	LOG ("UNDO CLOSE TAB: %s", tab->url);
+	if (*tab->parent_location != NULL)
+	{
+		GtkWidget *window;
+
+		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+
+		if (tab->position > 0)
+		{
+			/* Append in the n-th position. */
+			embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (*tab->parent_location),
+								       tab->position - 1));
+			flags |= EPHY_NEW_TAB_APPEND_AFTER;
+		}
+		else
+		{
+			/* Just prepend in the first position. */
+			embed = NULL;
+			flags |= EPHY_NEW_TAB_FIRST;
+		}
+
+		window = gtk_widget_get_toplevel (GTK_WIDGET (*tab->parent_location));
+		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
+					      EPHY_WINDOW (window), embed, tab->url,
+					      flags);
+		post_restore_cleanup (priv->closed_tabs, tab, FALSE);
+	}
+	else
+	{
+		EphyNotebook *notebook;
+		flags |=  EPHY_NEW_TAB_IN_NEW_WINDOW;
+		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
+					      NULL, NULL, tab->url, flags);
+
+		/* FIXME: This makes the assumption that the notebook
+		   is the parent of the returned EphyEmbed. */
+		notebook = EPHY_NOTEBOOK (gtk_widget_get_parent (GTK_WIDGET (new_tab)));
+		*tab->parent_location = notebook;
+		post_restore_cleanup (priv->closed_tabs, tab, TRUE);
+	}
+
+	/* This is deficient: we need to recreate the whole
+	 * BackForward list. Also, WebKit2 doesn't have this API. */
+#ifndef HAVE_WEBKIT2
+	dest = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_tab));
+	for (i = tab->bflist; i; i = i->next)
+	{
+		LOG ("ADDING TO BF: %s",
+		     webkit_web_history_item_get_title ((WebKitWebHistoryItem*) i->data));
+		webkit_web_back_forward_list_add_item (dest,
+						       webkit_web_history_item_copy ((WebKitWebHistoryItem*) i->data));
+	}
+#endif
+	closed_tab_free (tab);
+}
+
+static void
+ephy_session_tab_closed (EphySession *session,
+			 EphyNotebook *notebook,
+			 EphyEmbed *embed,
+			 gint position)
+{
+	EphySessionPrivate *priv = session->priv;
+	EphyWebView *view;
+	const char *address;
+#ifdef HAVE_WEBKIT2
+	WebKitBackForwardList *source;
+#else
+	WebKitWebBackForwardList *source;
+#endif
+	ClosedTab *tab;
+	GList *items = NULL;
+
+	view = ephy_embed_get_web_view (embed);
+	address = ephy_web_view_get_address (view);
+
+	source = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
+#ifdef HAVE_WEBKIT2
+	items = webkit_back_forward_list_get_back_list_with_limit (source, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+#else
+	items = webkit_web_back_forward_list_get_back_list_with_limit (source, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
+#endif
+	if (items == NULL && g_strcmp0 (address, "ephy-about:overview") == 0)
+		return;
+
+	if (g_queue_get_length (priv->closed_tabs) == MAX_CLOSED_TABS)
+	{
+		tab = g_queue_pop_tail (priv->closed_tabs);
+		if (tab->parent_location && !find_tab_with_notebook (priv->closed_tabs, *tab->parent_location))
+		{
+			parent_location_free (tab->parent_location, TRUE);
+		}
+
+		closed_tab_free (tab);
+		tab = NULL;
+	}
+
+	items = g_list_reverse (items);
+	tab = closed_tab_new (priv->closed_tabs, address, items, position, notebook);
+	g_list_free (items);
+
+	g_queue_push_head (priv->closed_tabs, tab);
+
+	LOG ("Added: %s to the list (%d elements)",
+	     address, g_queue_get_legth (priv->closed_tabs));
+}
+
 static void
 notebook_page_added_cb (GtkWidget *notebook,
 			EphyEmbed *embed,
@@ -153,6 +400,7 @@ notebook_page_removed_cb (GtkWidget *notebook,
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),
 		 session);
 #endif
+	ephy_session_tab_closed (session, EPHY_NOTEBOOK (notebook), embed, position);
 }
 
 static void
@@ -247,6 +495,7 @@ ephy_session_init (EphySession *session)
 
 	session->priv = EPHY_SESSION_GET_PRIVATE (session);
 
+	session->priv->closed_tabs = g_queue_new ();
 	shell = ephy_shell_get_default ();
 	g_signal_connect (shell, "window-added",
 			  G_CALLBACK (window_added_cb), session);
