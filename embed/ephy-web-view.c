@@ -2207,7 +2207,7 @@ load_changed_cb (WebKitWebView *web_view,
 
 #if 0
     /* TODO: DOM bindings */
-    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+    if (!EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())) &&
         g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);
@@ -2329,7 +2329,7 @@ load_status_cb (WebKitWebView *web_view,
     if (priv->is_blank)
       ephy_web_view_set_title (view, NULL);
 
-    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_PRIVATE &&
+    if (!EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())) &&
         g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_REMEMBER_PASSWORDS))
       _ephy_web_view_hook_into_forms (view);

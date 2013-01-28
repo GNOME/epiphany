@@ -660,7 +660,7 @@ ephy_shell_init (EphyShell *shell)
   /* Initialize the favicon cache as early as possible, or further
      calls to webkit_web_context_get_favicon_database will fail. */
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-  favicon_db_path = g_build_filename (mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
+  favicon_db_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
                                       ephy_dot_dir () : g_get_user_cache_dir (),
                                       g_get_prgname (), "icondatabase", NULL);
 

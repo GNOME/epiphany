@@ -419,8 +419,7 @@ main (int argc,
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
   else if (incognito_mode) {
-    /* Internally incognito mode is also a private mode. */
-    mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
+    mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
 
     /* Use the right theming. */
     g_object_set (gtk_settings_get_default (),

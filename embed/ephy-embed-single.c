@@ -469,7 +469,7 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   /* WebKitSoupCache */
-  cache_dir = g_build_filename (mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
+  cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
                                 ephy_dot_dir () : g_get_user_cache_dir (),
                                 g_get_prgname (), NULL);
   priv->cache = soup_cache_new (cache_dir, SOUP_CACHE_SINGLE_USER);
