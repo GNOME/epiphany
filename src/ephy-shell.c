@@ -152,6 +152,14 @@ new_incognito_window (GSimpleAction *action,
 }
 
 static void
+reopen_closed_tab (GSimpleAction *action,
+                   GVariant *parameter,
+                   gpointer user_data)
+{
+  window_cmd_undo_close_tab (NULL, NULL);
+}
+
+static void
 show_bookmarks (GSimpleAction *action,
                 GVariant *parameter,
                 gpointer user_data)
@@ -214,6 +222,10 @@ static GActionEntry app_entries[] = {
   { "quit", quit_application, NULL, NULL, NULL },
 };
 
+static GActionEntry app_normal_mode_entries[] = {
+  { "reopen-closed-tab", reopen_closed_tab, NULL, NULL, NULL },
+};
+
 static void
 ephy_shell_startup (GApplication* application)
 {
@@ -230,6 +242,18 @@ ephy_shell_startup (GApplication* application)
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      application);
+
+    if (mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+      g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                       app_normal_mode_entries, G_N_ELEMENTS (app_normal_mode_entries),
+                                       application);
+      g_object_bind_property (G_OBJECT (ephy_shell_get_session (EPHY_SHELL (application))),
+                              "can-undo-tab-closed",
+                              g_action_map_lookup_action (G_ACTION_MAP (application),
+                                                          "reopen-closed-tab"),
+                              "enabled",
+                              G_BINDING_SYNC_CREATE);
+    }
 
     builder = gtk_builder_new ();
     gtk_builder_add_from_resource (builder,

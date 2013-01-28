@@ -82,6 +82,13 @@ window_cmd_file_print (GtkAction *action,
 }
 
 void
+window_cmd_undo_close_tab (GtkAction *action,
+			   EphyWindow *window)
+{
+	ephy_session_undo_close_tab (ephy_shell_get_session (ephy_shell_get_default ()));
+}
+
+void
 window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {

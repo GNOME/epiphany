@@ -50,6 +50,8 @@ void window_cmd_file_save_as_application  (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_print                (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_undo_close_tab            (GtkAction *action,
+                                           EphyWindow *window);
 void window_cmd_file_send_to              (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_work_offline         (GtkAction  *action,
