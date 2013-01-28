@@ -62,6 +62,12 @@ struct _EphySessionPrivate
 #define SESSION_STATE		"type:session_state"
 #define MAX_CLOSED_TABS		10
 
+enum
+{
+	PROP_0,
+	PROP_CAN_UNDO_TAB_CLOSED
+};
+
 G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
 /* Helper functions */
@@ -315,6 +321,9 @@ ephy_session_undo_close_tab (EphySession *session)
 	}
 #endif
 	closed_tab_free (tab);
+
+	if (g_queue_is_empty (priv->closed_tabs))
+		g_object_notify (G_OBJECT (session), "can-undo-tab-closed");
 }
 
 static void
@@ -364,8 +373,19 @@ ephy_session_tab_closed (EphySession *session,
 
 	g_queue_push_head (priv->closed_tabs, tab);
 
+	if (g_queue_get_length (priv->closed_tabs) == 1)
+		g_object_notify (G_OBJECT (session), "can-undo-tab-closed");
+
 	LOG ("Added: %s to the list (%d elements)",
 	     address, g_queue_get_legth (priv->closed_tabs));
+}
+
+gboolean
+ephy_session_get_can_undo_tab_closed (EphySession *session)
+{
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+
+	return g_queue_is_empty (session->priv->closed_tabs) == FALSE;
 }
 
 static void
@@ -504,9 +524,52 @@ ephy_session_init (EphySession *session)
 }
 
 static void
+ephy_session_dispose (GObject *object)
+{
+	EphySession *session = EPHY_SESSION (object);
+
+	LOG ("EphySession disposing");
+
+	g_queue_free_full (session->priv->closed_tabs,
+			   (GDestroyNotify)closed_tab_free);
+
+	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
+}
+
+static void
+ephy_session_get_property (GObject        *object,
+			   guint           property_id,
+			   GValue         *value,
+			   GParamSpec     *pspec)
+{
+	EphySession *session = EPHY_SESSION (object);
+
+	switch (property_id)
+	{
+	case PROP_CAN_UNDO_TAB_CLOSED:
+		g_value_set_boolean (value,
+				     ephy_session_get_can_undo_tab_closed (session));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+	}
+}
+
+static void
 ephy_session_class_init (EphySessionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+	object_class->dispose = ephy_session_dispose;
+	object_class->get_property = ephy_session_get_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_CAN_UNDO_TAB_CLOSED,
+					 g_param_spec_boolean ("can-undo-tab-closed",
+							       "Can undo tab close",
+							       "Session can undo a tab closure",
+							       FALSE,
+							       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }

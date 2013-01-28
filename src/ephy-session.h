@@ -97,6 +97,8 @@ void             ephy_session_close                   (EphySession *session);
 
 void             ephy_session_undo_close_tab          (EphySession *session);
 
+gboolean         ephy_session_get_can_undo_tab_closed (EphySession *session);
+
 G_END_DECLS
 
 #endif
