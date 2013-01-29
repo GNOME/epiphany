@@ -369,8 +369,6 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	EphyNode *node;
 	int ret;
 
-	LOG ("Saving node db to %s", filename);
-
 	START_PROFILER ("Saving node db")
 
 	/* FIXME: do we want to turn compression on ? */
@@ -490,6 +488,8 @@ ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 	xmlBuffer *buffer;
 	GError *error = NULL;
 	int ret = 0;
+
+	LOG ("Saving node db to %s", filename);
 
 	va_start (argptr, node);
 
