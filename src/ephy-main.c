@@ -355,9 +355,6 @@ main (int argc,
     exit (1);
   }
 
-  /* Work-around Flash Player crash */
-  g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
-
   /* Run the migration in all cases, except when running a private
      instance without a given profile directory or running in
      incognito mode. */
