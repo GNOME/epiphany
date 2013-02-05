@@ -559,13 +559,7 @@ static gboolean
 ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
                                 EphyEmbed *embed)
 {
-  GtkAllocation allocation;
-  gtk_widget_get_allocation (GTK_WIDGET (embed->priv->scrolled_window), &allocation);
-
   embed->priv->inspector_attached = TRUE;
-
-  /* Set a sane position for the mover */
-  gtk_paned_set_position (embed->priv->paned, allocation.height * 0.5);
 
   gtk_widget_hide (embed->priv->inspector_window);
   gtk_widget_reparent (GTK_WIDGET (embed->priv->inspector_scrolled_window),
@@ -601,8 +595,14 @@ ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
   if (!embed->priv->inspector_attached) {
     gtk_widget_show_all (embed->priv->inspector_window);
     gtk_window_present (GTK_WINDOW (embed->priv->inspector_window));
-  } else
+  } else {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation (GTK_WIDGET (embed->priv->scrolled_window), &allocation);
+
+    /* Set a sane position for the mover */
+    gtk_paned_set_position (embed->priv->paned, allocation.height * 0.5);
     gtk_widget_show (embed->priv->inspector_scrolled_window);
+  }
 
   return TRUE;
 }
@@ -1006,13 +1006,14 @@ ephy_embed_constructed (GObject *object)
                     G_CALLBACK (ephy_embed_attach_inspector_cb),
                     embed);
 #else
-  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  priv->inspector_attached = TRUE;
   priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->inspector_scrolled_window),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (priv->inspector_window),
+  gtk_container_add (GTK_CONTAINER (priv->paned),
                      priv->inspector_scrolled_window);
 
+  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (priv->inspector_window),
                         _("Web Inspector"));
   gtk_window_set_default_size (GTK_WINDOW (priv->inspector_window),
