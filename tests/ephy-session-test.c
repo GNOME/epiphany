@@ -96,11 +96,36 @@ test_ephy_session_load (void)
     g_assert (view);
     g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:memory");
 
-    /* FIXME: Destroy the window. I think ideally we'd like something
-     * like 'ephy_session_clear ()' to reset everything to its initial
-     * state here. That or allow EphyShell to be created more than
-     * once and do it once per test. */
-    gtk_widget_destroy (GTK_WIDGET (l->data));
+    ephy_session_clear (session);
+}
+
+const char *session_data_many_windows =
+"<?xml version=\"1.0\"?>"
+"<session>"
+	 "<window x=\"100\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-7da420dd\">"
+	   "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
+	 "</window>"
+	 "<window x=\"73\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-1261c786\">"
+	   "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
+	 "</window>"
+"</session>";
+
+static void
+test_ephy_session_clear (void)
+{
+  EphySession *session;
+  GList *l;
+
+  session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
+  load_session_from_string (session, session_data_many_windows);
+
+  l = ephy_shell_get_windows (ephy_shell_get_default ());
+  gtk_widget_destroy (GTK_WIDGET (l->data));
+
+  ephy_session_clear (session);
+
+  g_assert (ephy_shell_get_windows (ephy_shell_get_default ()) == NULL);
+  g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
 }
 
 const char *session_data_empty = 
@@ -138,23 +163,8 @@ test_ephy_session_load_empty_session (void)
     g_assert (view);
     g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:overview");
 
-    /* FIXME: Destroy the window. I think ideally we'd like something
-     * like 'ephy_session_clear ()' to reset everything to its initial
-     * state here. That or allow EphyShell to be created more than
-     * once and do it once per test. */
-    gtk_widget_destroy (GTK_WIDGET (l->data));
+    ephy_session_clear (session);
 }
-
-const char *session_data_many_windows = 
-"<?xml version=\"1.0\"?>"
-"<session>"
-	 "<window x=\"100\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-7da420dd\">"
-	 	 "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
-	 "</window>"
-	 "<window x=\"73\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-1261c786\">"
-	 	 "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
-	 "</window>"
-"</session>";
 
 static void
 test_ephy_session_load_many_windows (void)
@@ -183,9 +193,7 @@ test_ephy_session_load_many_windows (void)
       g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
     }
 
-    /* FIXME: See comments above. */
-    for (p = l; p; p = p->next)
-      gtk_widget_destroy (GTK_WIDGET (p->data));
+    ephy_session_clear (session);
 }
 
 static void
@@ -249,9 +257,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, final_num_windows);
 
-    /* FIXME: See comments above. */
-    for (p = l; p; p = p->next)
-      gtk_widget_destroy (GTK_WIDGET (p->data));
+    ephy_session_clear (session);
 }
 
 static void
@@ -294,6 +300,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
+
+  g_test_add_func ("/src/ephy-session/clear",
+                   test_ephy_session_clear);
 
   g_test_add_func ("/src/ephy-session/load-empty-session",
                    test_ephy_session_load_empty_session);
