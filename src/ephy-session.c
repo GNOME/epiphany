@@ -32,6 +32,7 @@
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
+#include "ephy-private.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -1621,3 +1622,22 @@ ephy_session_resume_finish (EphySession *session,
 	return !g_simple_async_result_propagate_error (simple, error);
 }
 
+
+void
+ephy_session_clear (EphySession *session)
+{
+	EphyShell *shell;
+	GList *windows, *p;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+
+	shell = ephy_shell_get_default ();
+	windows = ephy_shell_get_windows (shell);
+	for (p = windows; p; p = p->next)
+		gtk_widget_destroy (GTK_WIDGET (p->data));
+	g_queue_foreach (session->priv->closed_tabs,
+			 (GFunc)closed_tab_free, NULL);
+	g_queue_clear (session->priv->closed_tabs);
+
+	ephy_session_save (session, SESSION_STATE);
+}

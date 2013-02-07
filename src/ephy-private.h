@@ -29,6 +29,7 @@
 #include "ephy-embed-event.h"
 #include "ephy-embed-private.h"
 #include "ephy-location-controller.h"
+#include "ephy-session.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
@@ -61,6 +62,10 @@ EphyShellStartupContext *ephy_shell_startup_context_new       (EphyStartupFlags 
                                                                guint32                   user_time);
 
 void                     _ephy_shell_create_instance          (EphyEmbedShellMode        mode);
+
+/* EphySession */
+
+void                     ephy_session_clear                   (EphySession *session);
 
 #endif
 
