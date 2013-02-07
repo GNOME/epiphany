@@ -180,6 +180,10 @@ EphyWindow     *ephy_shell_get_main_window              (EphyShell *shell);
 
 gboolean        ephy_shell_close_all_windows            (EphyShell *shell);
 
+void            ephy_shell_open_uris                    (EphyShell *shell,
+                                                         const char **uris,
+                                                         EphyStartupFlags startup_flags,
+                                                         guint32 user_time);
 G_END_DECLS
 
 #endif

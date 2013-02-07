@@ -64,6 +64,7 @@ struct _EphyShellPrivate {
   GList *del_on_exit;
   EphyShellStartupContext *startup_context;
   guint embed_single_connected : 1;
+  guint open_uris_idle_id;
 };
 
 EphyShell *ephy_shell = NULL;
@@ -129,8 +130,8 @@ ephy_shell_startup_continue (EphyShell *shell)
   else if (ctx->arguments != NULL) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
-    ephy_session_open_uris (session, (const char **)ctx->arguments,
-                            ctx->startup_flags, ctx->user_time);
+    ephy_shell_open_uris (shell, (const char **)ctx->arguments,
+                          ctx->startup_flags, ctx->user_time);
   }
 }
 
@@ -690,6 +691,11 @@ ephy_shell_dispose (GObject *object)
     priv->windows = NULL;
   }
 
+  if (priv->open_uris_idle_id > 0)  {
+    g_source_remove (priv->open_uris_idle_id);
+    priv->open_uris_idle_id = 0;
+  }
+
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
 
@@ -1151,3 +1157,131 @@ ephy_shell_close_all_windows (EphyShell *shell)
 
   return retval;
 }
+
+typedef struct {
+  EphyShell *shell;
+  EphySession *session;
+  EphyWindow *window;
+  char **uris;
+  EphyNewTabFlags flags;
+  guint32 user_time;
+  guint current_uri;
+} OpenURIsData;
+
+static OpenURIsData *
+open_uris_data_new (EphyShell *shell,
+                    const char **uris,
+                    EphyStartupFlags startup_flags,
+                    guint32 user_time)
+{
+  OpenURIsData *data;
+  gboolean new_windows_in_tabs;
+  gboolean have_uris;
+
+  data = g_slice_new0 (OpenURIsData);
+  data->shell = shell;
+  data->session = g_object_ref (ephy_shell_get_session (shell));
+  data->uris = g_strdupv ((char **)uris);
+  data->user_time = user_time;
+
+  data->window = ephy_shell_get_main_window (shell);
+
+  new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                                EPHY_PREFS_NEW_WINDOWS_IN_TABS);
+
+  have_uris = ! (g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
+
+  if (startup_flags & EPHY_STARTUP_NEW_TAB)
+    data->flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
+
+  if (startup_flags & EPHY_STARTUP_NEW_WINDOW) {
+    data->window = NULL;
+    data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+  } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
+    data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
+  } else if (!have_uris) {
+    data->window = NULL;
+    data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+  }
+
+  g_application_hold (G_APPLICATION (shell));
+
+  return data;
+}
+
+static void
+open_uris_data_free (OpenURIsData *data)
+{
+  g_application_release (G_APPLICATION (data->shell));
+  g_object_unref (data->session);
+  g_strfreev (data->uris);
+
+  g_slice_free (OpenURIsData, data);
+}
+
+static gboolean
+ephy_shell_open_uris_idle (OpenURIsData *data)
+{
+  EphyEmbed *embed;
+  EphyNewTabFlags page_flags;
+  const char *url;
+#ifdef HAVE_WEBKIT2
+  WebKitURIRequest *request = NULL;
+#else
+  WebKitNetworkRequest *request = NULL;
+#endif
+
+  url = data->uris[data->current_uri];
+  if (url[0] == '\0') {
+    page_flags = EPHY_NEW_TAB_HOME_PAGE;
+  } else {
+    page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+#ifdef HAVE_WEBKIT2
+    request = webkit_uri_request_new (url);
+#else
+    request = webkit_network_request_new (url);
+#endif
+  }
+
+  embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+                                   data->window,
+                                   NULL /* parent tab */,
+                                   request,
+                                   data->flags | page_flags,
+                                   EPHY_WEB_VIEW_CHROME_ALL,
+                                   FALSE /* is popup? */,
+                                   data->user_time);
+
+  if (request)
+    g_object_unref (request);
+
+  data->window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
+  data->current_uri++;
+
+  return data->uris[data->current_uri] != NULL;
+}
+
+static void
+ephy_shell_open_uris_idle_done (OpenURIsData *data)
+{
+  data->shell->priv->open_uris_idle_id = 0;
+  open_uris_data_free (data);
+}
+
+void
+ephy_shell_open_uris (EphyShell *shell,
+                      const char **uris,
+                      EphyStartupFlags startup_flags,
+                      guint32 user_time)
+{
+  g_return_if_fail (EPHY_IS_SHELL (shell));
+
+  if (shell->priv->open_uris_idle_id == 0) {
+    shell->priv->open_uris_idle_id =
+      g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                       (GSourceFunc)ephy_shell_open_uris_idle,
+                       open_uris_data_new (shell, uris, startup_flags, user_time),
+                       (GDestroyNotify)ephy_shell_open_uris_idle_done);
+  }
+}
+

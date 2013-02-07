@@ -237,7 +237,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
      * command - it should bail after noticing there are windows
      * already.
      */
-    ephy_session_open_uris (session, uris, 0, user_time);
+    ephy_shell_open_uris (ephy_shell_get_default (), uris, 0, user_time);
 
     while (gtk_events_pending ())
         gtk_main_iteration_do (FALSE);

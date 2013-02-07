@@ -26,7 +26,6 @@
 #ifndef EPHY_SESSION_H
 #define EPHY_SESSION_H
 
-#include "ephy-shell.h"
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
@@ -64,10 +63,6 @@ struct _EphySessionClass
 
 GType            ephy_session_get_type                (void);
 
-void             ephy_session_open_uris               (EphySession *session,
-                                                       const char **uris,
-                                                       EphyStartupFlags startup_flags,
-                                                       guint32 user_time);
 void 	         ephy_session_save		      (EphySession *session,
                                                        const char *filename);
 void             ephy_session_load                    (EphySession *session,

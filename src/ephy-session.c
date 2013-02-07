@@ -32,6 +32,7 @@
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-window.h"
 
@@ -44,7 +45,6 @@
 
 struct _EphySessionPrivate
 {
-	guint open_uris_idle_id;
 	GCancellable *save_cancellable;
 	guint dont_save : 1;
 };
@@ -164,144 +164,6 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_STATE);
 }
 
-typedef struct {
-	EphySession *session;
-	EphyWindow *window;
-	char **uris;
-	EphyNewTabFlags flags;
-	guint32 user_time;
-	guint current_uri;
-} OpenURIsData;
-
-static OpenURIsData *
-open_uris_data_new (EphySession *session,
-		    const char **uris,
-		    EphyStartupFlags startup_flags,
-		    guint32 user_time)
-{
-	OpenURIsData *data;
-	EphyShell *shell;
-	gboolean new_windows_in_tabs;
-	gboolean have_uris;
-
-	shell = ephy_shell_get_default ();
-
-	data = g_slice_new0 (OpenURIsData);
-	data->session = g_object_ref (session);
-	data->uris = g_strdupv ((char **)uris);
-	data->user_time = user_time;
-
-	data->window = ephy_shell_get_main_window (shell);
-
-	new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-						      EPHY_PREFS_NEW_WINDOWS_IN_TABS);
-
-	have_uris = ! (g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
-
-	if (startup_flags & EPHY_STARTUP_NEW_TAB)
-	{
-		data->flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
-	}
-	if (startup_flags & EPHY_STARTUP_NEW_WINDOW)
-	{
-		data->window = NULL;
-		data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-	}
-	else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris))
-	{
-		data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
-	}
-	else if (!have_uris)
-	{
-		data->window = NULL;
-		data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-	}
-
-	g_application_hold (G_APPLICATION (shell));
-
-	return data;
-}
-
-static void
-open_uris_data_free (OpenURIsData *data)
-{
-	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
-	g_object_unref (data->session);
-	g_strfreev (data->uris);
-
-	g_slice_free (OpenURIsData, data);
-}
-
-static gboolean
-ephy_session_open_uris_idle (OpenURIsData *data)
-{
-	EphyEmbed *embed;
-	EphyNewTabFlags page_flags;
-	const char *url;
-#ifdef HAVE_WEBKIT2
-	WebKitURIRequest *request = NULL;
-#else
-	WebKitNetworkRequest *request = NULL;
-#endif
-
-	url = data->uris[data->current_uri];
-	if (url[0] == '\0')
-	{
-		page_flags = EPHY_NEW_TAB_HOME_PAGE;
-	}
-	else
-	{
-		page_flags = EPHY_NEW_TAB_OPEN_PAGE;
-#ifdef HAVE_WEBKIT2
-		request = webkit_uri_request_new (url);
-#else
-		request = webkit_network_request_new (url);
-#endif
-	}
-
-	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-					 data->window,
-					 NULL /* parent tab */,
-					 request,
-					 data->flags | page_flags,
-					 EPHY_WEB_VIEW_CHROME_ALL,
-					 FALSE /* is popup? */,
-					 data->user_time);
-
-	if (request)
-	{
-		g_object_unref (request);
-	}
-
-	data->window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
-	data->current_uri++;
-
-	return data->uris[data->current_uri] != NULL;
-}
-
-static void
-ephy_session_open_uris_idle_done (OpenURIsData *data)
-{
-	data->session->priv->open_uris_idle_id = 0;
-	open_uris_data_free (data);
-}
-
-void
-ephy_session_open_uris (EphySession *session,
-			const char **uris,
-			EphyStartupFlags startup_flags,
-			guint32 user_time)
-{
-	if (session->priv->open_uris_idle_id == 0)
-	{
-		session->priv->open_uris_idle_id =
-			g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-					 (GSourceFunc)ephy_session_open_uris_idle,
-					 open_uris_data_new (session, uris, startup_flags, user_time),
-					 (GDestroyNotify)ephy_session_open_uris_idle_done);
-	}
-}
-
 static void
 session_maybe_open_window (EphySession *session,
 			   guint32 user_time)
@@ -393,27 +255,9 @@ ephy_session_init (EphySession *session)
 }
 
 static void
-ephy_session_dispose (GObject *object)
-{
-	EphySession *session = EPHY_SESSION (object);
-
-	LOG ("EphySession disposing");
-
-	if (session->priv->open_uris_idle_id > 0)
-	{
-		g_source_remove (session->priv->open_uris_idle_id);
-		session->priv->open_uris_idle_id = 0;
-	}
-
-	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
-}
-
-static void
 ephy_session_class_init (EphySessionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-	object_class->dispose = ephy_session_dispose;
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
