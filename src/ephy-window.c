@@ -1697,7 +1697,7 @@ sync_network_status (EphyEmbedSingle *single,
 	GtkAction *action;
 	gboolean is_online;
 
-	GNetworkMonitor *monitor = G_NETWORK_MONITOR (ephy_shell_get_net_monitor (ephy_shell_get_default ()));
+	GNetworkMonitor *monitor = ephy_shell_get_net_monitor (ephy_shell_get_default ());
 	is_online = g_network_monitor_get_network_available (monitor);
 
 	action = gtk_action_group_get_action (priv->action_group,
@@ -4422,7 +4422,7 @@ ephy_window_close (EphyWindow *window)
 	/* If this is the last window, save its state in the session. */
 	if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1)
 	{
-		ephy_session_close (EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ())));
+		ephy_session_close (ephy_shell_get_session (ephy_shell_get_default ()));
 	}
 
 	/* See bug #114689 */

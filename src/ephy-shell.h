@@ -27,10 +27,11 @@
 #ifndef EPHY_SHELL_H
 #define EPHY_SHELL_H
 
-#include "ephy-embed-shell.h"
 #include "ephy-bookmarks.h"
-#include "ephy-window.h"
+#include "ephy-embed-shell.h"
 #include "ephy-embed.h"
+#include "ephy-session.h"
+#include "ephy-window.h"
 
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
@@ -158,21 +159,21 @@ EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
                                                          gboolean is_popup,
                                                          guint32 user_time);
 
-GObject        *ephy_shell_get_session                  (EphyShell *shell);
+EphySession     *ephy_shell_get_session                  (EphyShell *shell);
 
-GObject        *ephy_shell_get_net_monitor              (EphyShell *shell);
+GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
-EphyBookmarks  *ephy_shell_get_bookmarks                (EphyShell *shell);
+EphyBookmarks   *ephy_shell_get_bookmarks                (EphyShell *shell);
 
-GtkWidget      *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
+GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
 
-GtkWidget      *ephy_shell_get_history_window           (EphyShell *shell);
+GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 
-GObject        *ephy_shell_get_pdm_dialog               (EphyShell *shell);
+GObject         *ephy_shell_get_pdm_dialog               (EphyShell *shell);
 
-GObject        *ephy_shell_get_prefs_dialog             (EphyShell *shell);
+GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
-GList          *ephy_shell_get_windows                  (EphyShell *shell);
+GList           *ephy_shell_get_windows                  (EphyShell *shell);
 
 guint           ephy_shell_get_n_windows                (EphyShell *shell);
 

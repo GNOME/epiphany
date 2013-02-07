@@ -80,7 +80,7 @@ test_ephy_session_load (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
+    session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
     ret = load_session_from_string (session, session_data);
@@ -115,7 +115,7 @@ test_ephy_session_load_empty_session (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
+    session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
     ret = load_session_from_string (session, session_data_empty);
@@ -165,7 +165,7 @@ test_ephy_session_load_many_windows (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
+    session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
     ret = load_session_from_string (session, session_data_many_windows);
@@ -198,7 +198,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     EphyWebView *view;
     guint32 user_time;
 
-    session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
+    session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
     user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());

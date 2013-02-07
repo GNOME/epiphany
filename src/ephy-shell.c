@@ -119,7 +119,7 @@ ephy_shell_startup_continue (EphyShell *shell)
   EphyShellStartupContext *ctx;
   EphySession *session;
 
-  session = EPHY_SESSION (ephy_shell_get_session (shell));
+  session = ephy_shell_get_session (shell);
   g_assert (session != NULL);
 
   ctx = shell->priv->startup_context;
@@ -267,7 +267,7 @@ ephy_shell_activate (GApplication *application)
     EphyShellStartupContext *ctx;
 
     ctx = shell->priv->startup_context;
-    ephy_session_resume (EPHY_SESSION (ephy_shell_get_session (shell)),
+    ephy_session_resume (ephy_shell_get_session (shell),
                          ctx->user_time, NULL, session_load_cb, shell);
   } else
     ephy_shell_startup_continue (shell);
@@ -919,7 +919,7 @@ ephy_shell_new_tab (EphyShell *shell,
  *
  * Return value: (transfer none): the current session.
  **/
-GObject *
+EphySession *
 ephy_shell_get_session (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
@@ -927,7 +927,7 @@ ephy_shell_get_session (EphyShell *shell)
   if (shell->priv->session == NULL)
     shell->priv->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
-  return G_OBJECT (shell->priv->session);
+  return shell->priv->session;
 }
 
 /**
@@ -950,7 +950,7 @@ ephy_shell_get_bookmarks (EphyShell *shell)
  *
  * Return value: (transfer none):
  **/
-GObject *
+GNetworkMonitor *
 ephy_shell_get_net_monitor (EphyShell *shell)
 {
   EphyShellPrivate *priv = shell->priv;
@@ -958,7 +958,7 @@ ephy_shell_get_net_monitor (EphyShell *shell)
   if (priv->network_monitor == NULL)
     priv->network_monitor = g_network_monitor_get_default ();
 
-  return G_OBJECT (priv->network_monitor);
+  return priv->network_monitor;
 }
 
 /**
@@ -1141,7 +1141,7 @@ ephy_shell_close_all_windows (EphyShell *shell)
 
   g_return_val_if_fail (EPHY_IS_SHELL (shell), FALSE);
 
-  ephy_session_close (EPHY_SESSION (ephy_shell_get_session (shell)));
+  ephy_session_close (ephy_shell_get_session (shell));
 
   windows = shell->priv->windows;
   while (windows) {
