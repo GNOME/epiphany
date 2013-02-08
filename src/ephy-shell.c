@@ -455,50 +455,6 @@ ephy_shell_before_emit (GApplication *application,
                                                               platform_data);
 }
 
-static gboolean
-window_focus_in_event_cb (EphyWindow *window,
-                          GdkEventFocus *event,
-                          EphyShell *shell)
-{
-  LOG ("focus-in-event for window %p", window);
-
-  g_return_val_if_fail (g_list_find (shell->priv->windows, window) != NULL, FALSE);
-
-  /* move the active window to the front of the list */
-  shell->priv->windows = g_list_remove (shell->priv->windows, window);
-  shell->priv->windows = g_list_prepend (shell->priv->windows, window);
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-ephy_shell_window_added (GtkApplication *application,
-                         GtkWindow *window)
-{
-  EphyShell *shell = EPHY_SHELL (application);
-
-  if (EPHY_IS_WINDOW (window)) {
-    shell->priv->windows = g_list_append (shell->priv->windows, window);
-    g_signal_connect (window, "focus-in-event",
-                      G_CALLBACK (window_focus_in_event_cb),
-                      shell);
-  }
-
-  GTK_APPLICATION_CLASS (ephy_shell_parent_class)->window_added (application, window);
-}
-
-static void
-ephy_shell_window_removed (GtkApplication *application,
-                           GtkWindow *window)
-{
-  EphyShell *shell = EPHY_SHELL (application);
-
-  if (EPHY_IS_WINDOW (window))
-    shell->priv->windows = g_list_remove (shell->priv->windows, window);
-
-  GTK_APPLICATION_CLASS (ephy_shell_parent_class)->window_removed (application, window);
-}
-
 static GObject *
 ephy_shell_get_lockdown (EphyShell *shell)
 {
@@ -536,7 +492,6 @@ ephy_shell_class_init (EphyShellClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
-  GtkApplicationClass *gtk_application_class = GTK_APPLICATION_CLASS (klass);
   EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
 
   object_class->dispose = ephy_shell_dispose;
@@ -547,9 +502,6 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
-
-  gtk_application_class->window_added = ephy_shell_window_added;
-  gtk_application_class->window_removed = ephy_shell_window_removed;
 
   embed_shell_class->get_embed_single = impl_get_embed_single;
 
@@ -708,12 +660,6 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&priv->prefs_dialog);
   g_clear_object (&priv->bookmarks);
   g_clear_object (&priv->network_monitor);
-
-  if (priv->windows != NULL) {
-    LOG ("Free browser window list");
-    g_list_free (priv->windows);
-    priv->windows = NULL;
-  }
 
   if (priv->open_uris_idle_id > 0)  {
     g_source_remove (priv->open_uris_idle_id);
@@ -1106,20 +1052,15 @@ ephy_shell_set_startup_context (EphyShell *shell,
   shell->priv->startup_context = ctx;
 }
 
-GList *
-ephy_shell_get_windows (EphyShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  return g_list_copy (shell->priv->windows);
-}
-
 guint
 ephy_shell_get_n_windows (EphyShell *shell)
 {
+  GList *list;
+
   g_return_val_if_fail (EPHY_IS_SHELL (shell), 0);
 
-  return g_list_length (shell->priv->windows);
+  list = gtk_application_get_windows (GTK_APPLICATION (shell));
+  return g_list_length (list);
 }
 
 EphyWindow*
@@ -1134,7 +1075,7 @@ ephy_shell_get_main_window (EphyShell *shell)
   /* Select the window with most tabs in the current workspace as the window to
    * use for opening a new tab on, if that turns out to be the case.
    */
-  windows = ephy_shell_get_windows (shell);
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
 
   for (iter = windows; iter != NULL; iter = iter->next) {
     EphyWindow *candidate = EPHY_WINDOW (iter->data);
@@ -1155,8 +1096,6 @@ ephy_shell_get_main_window (EphyShell *shell)
       window = candidate;
   }
 
-  g_list_free (windows);
-
   return window;
 }
 
@@ -1170,7 +1109,7 @@ ephy_shell_close_all_windows (EphyShell *shell)
 
   ephy_session_close (ephy_shell_get_session (shell));
 
-  windows = shell->priv->windows;
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
   while (windows) {
     EphyWindow *window = EPHY_WINDOW (windows->data);
 

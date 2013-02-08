@@ -378,7 +378,7 @@ ephy_session_tab_closed (EphySession *session,
 		g_object_notify (G_OBJECT (session), "can-undo-tab-closed");
 
 	LOG ("Added: %s to the list (%d elements)",
-	     address, g_queue_get_legth (priv->closed_tabs));
+	     address, g_queue_get_length (priv->closed_tabs));
 }
 
 gboolean
@@ -717,7 +717,7 @@ save_data_new (EphySession *session,
 	data->session = g_object_ref (session);
 	data->save_file = get_session_file (filename);
 
-	windows = ephy_shell_get_windows (shell);
+	windows = gtk_application_get_windows (GTK_APPLICATION (shell));
 	for (w = windows; w != NULL ; w = w->next)
 	{
 		SessionWindow *session_window;
@@ -726,7 +726,6 @@ save_data_new (EphySession *session,
 		if (session_window)
 			data->windows = g_list_prepend (data->windows, session_window);
 	}
-	g_list_free (windows);
 	data->windows = g_list_reverse (data->windows);
 
 	return data;
@@ -1632,9 +1631,10 @@ ephy_session_clear (EphySession *session)
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
 	shell = ephy_shell_get_default ();
-	windows = ephy_shell_get_windows (shell);
+	windows = g_list_copy (gtk_application_get_windows (GTK_APPLICATION (shell)));
 	for (p = windows; p; p = p->next)
 		gtk_widget_destroy (GTK_WIDGET (p->data));
+	g_list_free (windows);
 	g_queue_foreach (session->priv->closed_tabs,
 			 (GFunc)closed_tab_free, NULL);
 	g_queue_clear (session->priv->closed_tabs);

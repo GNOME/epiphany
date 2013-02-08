@@ -174,8 +174,6 @@ GObject         *ephy_shell_get_pdm_dialog               (EphyShell *shell);
 
 GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
-GList           *ephy_shell_get_windows                  (EphyShell *shell);
-
 guint           ephy_shell_get_n_windows                (EphyShell *shell);
 
 EphyWindow     *ephy_shell_get_main_window              (EphyShell *shell);

@@ -86,7 +86,7 @@ test_ephy_session_load (void)
     ret = load_session_from_string (session, session_data);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -119,12 +119,12 @@ test_ephy_session_clear (void)
   session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
   load_session_from_string (session, session_data_many_windows);
 
-  l = ephy_shell_get_windows (ephy_shell_get_default ());
+  l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
   gtk_widget_destroy (GTK_WIDGET (l->data));
 
   ephy_session_clear (session);
 
-  g_assert (ephy_shell_get_windows (ephy_shell_get_default ()) == NULL);
+  g_assert (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ())) == NULL);
   g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
 }
 
@@ -153,7 +153,7 @@ test_ephy_session_load_empty_session (void)
     while (g_main_context_pending (NULL))
       g_main_context_iteration (NULL, FALSE);
 
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 1);
 
@@ -181,7 +181,7 @@ test_ephy_session_load_many_windows (void)
     ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -214,7 +214,8 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
 
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
+
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -237,7 +238,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     while (gtk_events_pending ())
         gtk_main_iteration_do (FALSE);
 
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, 2);
 
@@ -253,7 +254,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     /* We should still have 2 windows here, since the new URI should be
      * in a new tab of an existing window.
      */
-    l = ephy_shell_get_windows (ephy_shell_get_default ());
+    l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, final_num_windows);
 
@@ -298,7 +299,7 @@ test_ephy_session_restore_tabs (void)
   /* Nothing to restore, again. */
   g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
 
-  l = ephy_shell_get_windows (ephy_shell_get_default ());
+  l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
   url = g_strdup (ephy_web_view_get_address (ephy_embed_get_web_view (embed)));
   gtk_widget_destroy (GTK_WIDGET (embed));
@@ -325,19 +326,19 @@ test_ephy_session_restore_tabs (void)
   ret = load_session_from_string (session, session_data_many_windows);
   g_assert (ret);
 
-  l = ephy_shell_get_windows (ephy_shell_get_default ());
+  l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
   n_windows = g_list_length (l);
   /* We need more than one window for the next test to make sense. */
   g_assert_cmpint (n_windows, >, 1);
   gtk_widget_destroy (GTK_WIDGET (l->data));
   /* One window is gone. */
-  g_assert_cmpint (n_windows, ==, g_list_length (ephy_shell_get_windows (ephy_shell_get_default())) + 1);
+  g_assert_cmpint (n_windows, ==, g_list_length (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default()))) + 1);
   g_assert (ephy_session_get_can_undo_tab_closed (session) == TRUE);
   ephy_session_undo_close_tab (session);
   while (gtk_events_pending ())
     gtk_main_iteration_do (FALSE);
   /* We have the same amount of windows than before destroying one. */
-  g_assert_cmpint (n_windows, ==, g_list_length (ephy_shell_get_windows (ephy_shell_get_default())));
+  g_assert_cmpint (n_windows, ==, g_list_length (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default()))));
 
   ephy_session_clear (session);
 }
