@@ -831,30 +831,28 @@ write_ephy_window (xmlTextWriterPtr writer,
 }
 
 static void
-session_save_finished (EphySession *session)
+save_session_in_thread_cb (GObject *source_object,
+			   GAsyncResult *res,
+			   gpointer user_data)
 {
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
 
-static gboolean
-save_session_in_thread (GIOSchedulerJob *job,
-			GCancellable *cancellable,
-			gpointer user_data)
+static void
+save_session_sync (GTask *task,
+		   gpointer source_object,
+		   gpointer task_data,
+		   GCancellable *cancellable)
 {
-	SaveData *data = (SaveData *)user_data;
+	SaveData *data = (SaveData *)g_task_get_task_data (task);
 	xmlBufferPtr buffer;
 	xmlTextWriterPtr writer;
 	GList *w;
-	int ret;
+	int ret = -1;
 
 	buffer = xmlBufferCreate ();
 	writer = xmlNewTextWriterMemory (buffer, 0);
-	if (writer == NULL)
-	{
-		xmlBufferFree (buffer);
-
-		return FALSE;
-	}
+	if (writer == NULL) goto out;
 
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
@@ -884,7 +882,8 @@ save_session_in_thread (GIOSchedulerJob *job,
 	ret = xmlTextWriterEndDocument (writer);
 
 out:
-	xmlFreeTextWriter (writer);
+	if (writer)
+		xmlFreeTextWriter (writer);
 
 	if (ret >= 0 && !g_cancellable_is_cancelled (cancellable))
 	{
@@ -906,14 +905,9 @@ out:
 
 	xmlBufferFree (buffer);
 
-	g_io_scheduler_job_send_to_mainloop_async (job,
-						   (GSourceFunc) session_save_finished,
-						   g_object_ref (data->session),
-						   (GDestroyNotify) g_object_unref);
+	g_task_return_boolean (task, TRUE);
 
 	STOP_PROFILER ("Saving session")
-
-	return FALSE;
 }
 
 void
@@ -923,6 +917,7 @@ ephy_session_save (EphySession *session,
 	EphySessionPrivate *priv;
 	EphyShell *shell;
 	SaveData *data;
+	GTask *task;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
@@ -953,8 +948,11 @@ ephy_session_save (EphySession *session,
 	priv->save_cancellable = g_cancellable_new ();
 	data = save_data_new (session, filename);
 	g_application_hold (G_APPLICATION (shell));
-	g_io_scheduler_push_job (save_session_in_thread, data, (GDestroyNotify)save_data_free,
-				 G_PRIORITY_DEFAULT, priv->save_cancellable);
+
+	task = g_task_new (session, priv->save_cancellable,
+			   save_session_in_thread_cb, NULL);
+	g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
+	g_task_run_in_thread (task, save_session_sync);
 }
 
 static void
