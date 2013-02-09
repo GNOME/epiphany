@@ -62,6 +62,9 @@ void         ephy_embed_auto_download_url        (EphyEmbed  *embed,
                                                   const char *url);
 void         ephy_embed_entering_fullscreen      (EphyEmbed *embed);
 void         ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
+void         ephy_embed_set_delayed_load_request (EphyEmbed *embed,
+                                                  WebKitNetworkRequest *request);
+gboolean     ephy_embed_has_load_pending         (EphyEmbed *embed);
 void         ephy_embed_set_overview_mode        (EphyEmbed *embed,
                                                   gboolean   overview_mode);
 gboolean     ephy_embed_get_overview_mode        (EphyEmbed *embed);

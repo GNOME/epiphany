@@ -62,6 +62,7 @@ enum
   DOWNLOAD_ADDED,
   DOWNLOAD_REMOVED,
   PREPARE_CLOSE,
+  RESTORED_WINDOW,
   LAST_SIGNAL
 };
 
@@ -263,6 +264,12 @@ ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
   g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
 }
 
+void
+ephy_embed_shell_restored_window (EphyEmbedShell *shell)
+{
+  g_signal_emit (shell, signals[RESTORED_WINDOW], 0);
+}
+
 static void
 ephy_embed_shell_set_property (GObject *object,
                                guint prop_id,
@@ -384,6 +391,23 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+/**
+ * EphyEmbedShell::finished-restoring-window:
+ * @shell: the #EphyEmbedShell
+ *
+ * The ::finished-restoring-window signal is emitted when the
+ * session finishes restoring a window.
+ **/
+  signals[RESTORED_WINDOW] =
+    g_signal_new ("window-restored",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (EphyEmbedShellClass, restored_window),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

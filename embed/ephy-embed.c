@@ -43,13 +43,15 @@
 #include <webkit/webkit.h>
 #endif
 
-static void     ephy_embed_constructed      (GObject *object);
+static void     ephy_embed_constructed         (GObject *object);
 #ifndef HAVE_WEBKIT2
-static gboolean ephy_embed_inspect_show_cb  (WebKitWebInspector *inspector,
-                                             EphyEmbed *embed);
-static gboolean ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
-                                             EphyEmbed *embed);
+static gboolean ephy_embed_inspect_show_cb     (WebKitWebInspector *inspector,
+                                                EphyEmbed *embed);
+static gboolean ephy_embed_inspect_close_cb    (WebKitWebInspector *inspector,
+                                                EphyEmbed *embed);
 #endif
+static void     ephy_embed_restored_window_cb  (EphyEmbedShell *shell,
+                                                EphyEmbed *embed);
 
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
@@ -78,6 +80,8 @@ struct _EphyEmbedPrivate
   GtkWidget *progress;
   GtkWidget *fullscreen_message_label;
   char *fullscreen_string;
+
+  WebKitNetworkRequest *delayed_request;
 
   GtkWidget *overview;
   guint overview_mode : 1;
@@ -415,6 +419,8 @@ ephy_embed_dispose (GObject *object)
     priv->adblock_handler_id = 0;
   }
 
+  g_clear_object (&priv->delayed_request);
+
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
 }
 
@@ -423,7 +429,10 @@ ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
   EphyEmbedPrivate *priv = embed->priv;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GSList *list;
+
+  g_signal_handlers_disconnect_by_func(shell, ephy_embed_restored_window_cb, embed);
 
   list = priv->destroy_on_transition_list;
   for (; list; list = list->next) {
@@ -862,10 +871,50 @@ setup_adblock (GSettings *settings,
 #endif
 
 static void
+ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+  EphyWebView *web_view;
+
+  if (!priv->delayed_request)
+    return;
+
+  web_view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_load_request (web_view, priv->delayed_request);
+  g_clear_object (&priv->delayed_request);
+
+  /* This is to allow UI elements watching load status to show that the page is
+   * loading as soon as possible.
+   */
+#ifdef HAVE_WEBKIT2
+  g_signal_emit_by_name (web_view, "load-changed", WEBKIT_LOAD_STARTED);
+#else
+  g_object_notify (G_OBJECT (web_view), "load-status");
+#endif
+}
+
+static void
+ephy_embed_restored_window_cb (EphyEmbedShell *shell, EphyEmbed *embed)
+{
+  if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
+    return;
+
+  ephy_embed_maybe_load_delayed_request (embed);
+}
+
+static void
+ephy_embed_mapped_cb (GtkWidget *widget, gpointer data)
+{
+  ephy_embed_maybe_load_delayed_request ((EphyEmbed*)widget);
+}
+
+static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
   EphyEmbedPrivate *priv = embed->priv;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 #ifndef HAVE_WEBKIT2
   GtkWidget *scrolled_window;
 #endif
@@ -878,6 +927,12 @@ ephy_embed_constructed (GObject *object)
 #endif
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
+
+  g_signal_connect (shell, "window-restored",
+                    G_CALLBACK (ephy_embed_restored_window_cb), embed);
+
+  g_signal_connect (embed, "map",
+                    G_CALLBACK (ephy_embed_mapped_cb), NULL);
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
@@ -1158,6 +1213,42 @@ ephy_embed_get_overview_mode (EphyEmbed *embed)
   g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
   return embed->priv->overview_mode;
+}
+
+/**
+ * ephy_embed_set_delayed_load_request:
+ * @embed: a #EphyEmbed
+ * @request: a #WebKitNetworkRequest
+ *
+ * Sets the #WebKitNetworkRequest that should be loaded when the tab this embed
+ * is on is switched to.
+ */
+void
+ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitNetworkRequest *request)
+{
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST (request));
+
+  g_clear_object (&embed->priv->delayed_request);
+
+  g_object_ref (request);
+  embed->priv->delayed_request = request;
+}
+
+/**
+ * ephy_embed_has_load_pending:
+ * @embed: a #EphyEmbed
+ *
+ * Checks whether a load has been delayed for this #EphyEmbed.
+ *
+ * Returns: %TRUE or %FALSE
+ */
+gboolean
+ephy_embed_has_load_pending (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+  return !!embed->priv->delayed_request;
 }
 
 /**

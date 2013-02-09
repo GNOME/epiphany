@@ -72,6 +72,8 @@ struct _EphyEmbedShellClass
 
   void    (* prepare_close)    (EphyEmbedShell *shell);
 
+  void    (* restored_window)  (EphyEmbedShell *shell);
+
   /*< private >*/
   GObject * (* get_embed_single)  (EphyEmbedShell *shell);
 };
@@ -83,6 +85,7 @@ GObject           *ephy_embed_shell_get_encodings              (EphyEmbedShell  
 GObject           *ephy_embed_shell_get_embed_single           (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_adblock_manager        (EphyEmbedShell   *shell);
 void               ephy_embed_shell_prepare_close              (EphyEmbedShell   *shell);
+void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,
                                                                 GtkPageSetup     *page_setup);
 GtkPageSetup      *ephy_embed_shell_get_page_setup             (EphyEmbedShell   *shell);

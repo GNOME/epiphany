@@ -631,7 +631,7 @@ session_tab_new (EphyEmbed *embed)
 	}
 
 	session_tab->title = g_strdup (ephy_web_view_get_title (web_view));
-	session_tab->loading = ephy_web_view_is_loading (web_view);
+	session_tab->loading = ephy_web_view_is_loading (web_view) && !ephy_embed_has_load_pending (embed);
 
 	return session_tab;
 }
@@ -1102,11 +1102,19 @@ session_parse_embed (SessionParserContext *context,
 	 */
 	if (!was_loading || is_blank_page)
 	{
-		ephy_shell_new_tab (ephy_shell_get_default (),
-				    context->window, NULL, url,
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_APPEND_LAST);
+		EphyNewTabFlags flags;
+		EphyEmbed *embed;
+		EphyWebView *web_view;
+
+		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		flags |= EPHY_NEW_TAB_APPEND_LAST;
+	        flags |= EPHY_NEW_TAB_DELAYED_OPEN_PAGE;
+
+		embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					    context->window, NULL, url, flags);
+
+		web_view = ephy_embed_get_web_view (embed);
+		ephy_web_view_set_placeholder (web_view, url, title);
 	}
 	else if (was_loading && url != NULL)
 	{
@@ -1150,6 +1158,7 @@ session_end_element (GMarkupParseContext  *ctx,
 	if (strcmp (element_name, "window") == 0)
 	{
 		GtkWidget *notebook;
+		EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
 		notebook = ephy_window_get_notebook (context->window);
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), context->active_tab);
@@ -1162,6 +1171,8 @@ session_end_element (GMarkupParseContext  *ctx,
 			gtk_widget_grab_focus (GTK_WIDGET (active_child));
 			gtk_widget_show (GTK_WIDGET (context->window));
 		}
+
+		ephy_embed_shell_restored_window (shell);
 
 		context->window = NULL;
 		context->active_tab = 0;

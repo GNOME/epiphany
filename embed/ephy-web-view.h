@@ -165,6 +165,10 @@ const char *               ephy_web_view_get_title                (EphyWebView  
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
 const char *               ephy_web_view_get_title_composite      (EphyWebView               *view);
 
+void                       ephy_web_view_set_placeholder          (EphyWebView               *view,
+                                                                   const char                *uri,
+                                                                   const char                *title);
+
 void                       ephy_web_view_load_error_page          (EphyWebView               *view,
                                                                    const char                *uri,
                                                                    EphyWebViewErrorPage       page,

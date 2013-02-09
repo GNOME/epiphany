@@ -59,6 +59,8 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
  * @EPHY_NEW_TAB_HOME_PAGE: loads the home page in the new tab.
  * @EPHY_NEW_TAB_NEW_PAGE: legacy synonym for @EPHY_NEW_TAB_HOME_PAGE.
  * @EPHY_NEW_TAB_OPEN_PAGE: opens the provided network-request.
+ * @EPHY_NEW_TAB_DELAYED_OPEN_PAGE: store the provided network-request
+ *        so that it will be opened when the tab is switched to.
  * @EPHY_NEW_TAB_FULLSCREEN_MODE: calls gtk_window_fullscreen on the
  *        parent window of the new tab.
  * @EPHY_NEW_TAB_DONT_SHOW_WINDOW: do not show the window where the new
@@ -85,6 +87,7 @@ typedef enum {
   EPHY_NEW_TAB_HOME_PAGE    = 1 << 0,
   EPHY_NEW_TAB_NEW_PAGE   = 1 << 1,
   EPHY_NEW_TAB_OPEN_PAGE    = 1 << 2,
+  EPHY_NEW_TAB_DELAYED_OPEN_PAGE    = 1 << 3,
 
   /* Page mode */
   EPHY_NEW_TAB_FULLSCREEN_MODE  = 1 << 4,

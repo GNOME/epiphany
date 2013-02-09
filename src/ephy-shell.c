@@ -730,6 +730,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean fullscreen_lockdown = FALSE;
   gboolean in_new_window = TRUE;
   gboolean open_page = FALSE;
+  gboolean delayed_open_page = FALSE;
   gboolean jump_to = FALSE;
   gboolean active_is_blank = FALSE;
   gboolean copy_history = TRUE;
@@ -748,6 +749,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   embed_shell = EPHY_EMBED_SHELL (shell);
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
+  if (flags & EPHY_NEW_TAB_DELAYED_OPEN_PAGE) delayed_open_page = TRUE;
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
   if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
   if (flags & EPHY_NEW_TAB_DONT_COPY_HISTORY) copy_history = FALSE;
@@ -756,7 +758,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
   in_new_window = in_new_window && !fullscreen_lockdown;
-  g_return_val_if_fail (open_page == (gboolean)(request != NULL), NULL);
+  g_return_val_if_fail ((open_page || delayed_open_page) == (gboolean)(request != NULL), NULL);
 
   LOG ("Opening new tab parent-window %p parent-embed %p in-new-window:%s jump-to:%s",
        parent_window, previous_embed, in_new_window ? "t" : "f", jump_to ? "t" : "f");
@@ -822,7 +824,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
     ephy_window_activate_location (window);
     ephy_web_view_load_homepage (view);
     is_empty = TRUE;
-  } else if (flags & EPHY_NEW_TAB_OPEN_PAGE) {
+  } else if (open_page) {
     ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                 request);
 
@@ -831,7 +833,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 #else
     is_empty = ephy_embed_utils_url_is_empty (webkit_network_request_get_uri (request));
 #endif
-  }
+  } else if (delayed_open_page)
+      ephy_embed_set_delayed_load_request (embed, request);
 
   /* Make sure the initial focus is somewhere sensible and not, for
    * example, on the reload button.

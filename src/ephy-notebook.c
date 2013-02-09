@@ -467,12 +467,14 @@ static void
 sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *spinner, *icon;
+	EphyEmbed *embed;
 
 	spinner = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "spinner"));
 	icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 	g_return_if_fail (spinner != NULL && icon != NULL);
 
-	if (ephy_web_view_is_loading (view))
+	embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+	if (ephy_web_view_is_loading (view) && !ephy_embed_has_load_pending (embed))
 	{
 		gtk_widget_hide (icon);
 		gtk_widget_show (spinner);
