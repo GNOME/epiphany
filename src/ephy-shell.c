@@ -736,7 +736,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean is_empty = FALSE;
   int position = -1;
 
-  embed_shell = ephy_embed_shell_get_default ();
+  embed_shell = EPHY_EMBED_SHELL (shell);
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
   if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
