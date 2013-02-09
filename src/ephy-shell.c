@@ -736,6 +736,15 @@ ephy_shell_new_tab_full (EphyShell *shell,
   gboolean is_empty = FALSE;
   int position = -1;
 
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_return_val_if_fail (EPHY_IS_WINDOW (parent_window) || !parent_window, NULL);
+  g_return_val_if_fail (EPHY_IS_EMBED (previous_embed) || !previous_embed, NULL);
+#ifdef HAVE_WEBKIT2
+  g_return_val_if_fail (WEBKIT_IS_URI_REQUEST (request) || !request, NULL);
+#else
+  g_return_val_if_fail (WEBKIT_IS_NETWORK_REQUEST (request) || !request, NULL);
+#endif
+
   embed_shell = EPHY_EMBED_SHELL (shell);
 
   if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
