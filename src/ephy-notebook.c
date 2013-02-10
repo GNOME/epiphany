@@ -56,8 +56,6 @@ struct _EphyNotebookPrivate
 	guint tabs_allowed : 1;
 };
 
-static void ephy_notebook_init		 (EphyNotebook *notebook);
-static void ephy_notebook_class_init	 (EphyNotebookClass *klass);
 static void ephy_notebook_finalize	 (GObject *object);
 static int  ephy_notebook_insert_page	 (GtkNotebook *notebook,
 					  GtkWidget *child,
