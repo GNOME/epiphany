@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-02-07 01:38+0100\n"
-"PO-Revision-Date: 2013-02-07 01:38+0200\n"
+"POT-Creation-Date: 2013-02-10 13:38+0100\n"
+"PO-Revision-Date: 2013-02-10 13:39+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -49,7 +49,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:457 ../src/window-commands.c:1675
+#: ../src/ephy-main.c:306 ../src/ephy-main.c:456 ../src/window-commands.c:1682
 msgid "Web"
 msgstr "Web"
 
@@ -505,7 +505,7 @@ msgstr "ESC"
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1017
+#: ../embed/ephy-embed.c:1018
 msgid "Web Inspector"
 msgstr "Inspector Web"
 
@@ -1234,12 +1234,12 @@ msgstr "Rematado"
 msgid "Error downloading: %s"
 msgstr "Produciuse un erro ao descargar: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:777
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:784
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:270
+#: ../src/window-commands.c:277
 msgid "Open"
 msgstr "Abrir"
 
@@ -1552,7 +1552,7 @@ msgstr "Mostrar a axuda sobre os marcadores"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:8
 #: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
 msgid "_About"
 msgstr "_Sobre"
@@ -1725,26 +1725,30 @@ msgstr "_Xanela nova"
 msgid "New _Incognito Window"
 msgstr "Nova _xanela de incógnito"
 
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "Reabrir _lapela pechada"
+
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:3 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
 msgid "_Bookmarks"
 msgstr "_Marcadores"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
 msgid "_History"
 msgstr "_Historial"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany-application-menu.ui.h:6
 #: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
 msgid "Personal Data"
 msgstr "Datos persoais"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/resources/epiphany-application-menu.ui.h:7
 #: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
 msgid "_Quit"
 msgstr "_Saír"
 
@@ -2144,7 +2148,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Opcións de Web"
 
-#: ../src/ephy-notebook.c:598
+#: ../src/ephy-notebook.c:596
 msgid "Close tab"
 msgstr "Pechar a lapela"
 
@@ -2533,49 +2537,49 @@ msgstr[1] "Idiomas do sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccionar un cartafol"
 
-#: ../src/window-commands.c:348
+#: ../src/window-commands.c:355
 msgid "Save"
 msgstr "Gardar"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:781
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Xa existe un aplicativo web co nome «%s». Desexa substituilo?"
 
-#: ../src/window-commands.c:779
+#: ../src/window-commands.c:786
 msgid "Replace"
 msgstr "Substituír"
 
-#: ../src/window-commands.c:783
+#: ../src/window-commands.c:790
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Xa existe un aplicativo co mesmo nome. Ao substituilo sobrescribirase."
 
-#: ../src/window-commands.c:819
+#: ../src/window-commands.c:826
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "O aplicativo «%s» está listo para usarse"
 
-#: ../src/window-commands.c:822
+#: ../src/window-commands.c:829
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Non foi posíbel crear o aplicativo «%s»"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:837
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:876
 msgid "Create Web Application"
 msgstr "Crear un aplicativo web"
 
-#: ../src/window-commands.c:874
+#: ../src/window-commands.c:881
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/window-commands.c:1564
+#: ../src/window-commands.c:1571
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2587,7 +2591,7 @@ msgstr ""
 "publica a Free Software Foundation; tanto na versión 2 da Licenza como "
 "(segundo o seu criterio) en calquera versión posterior."
 
-#: ../src/window-commands.c:1568
+#: ../src/window-commands.c:1575
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2599,7 +2603,7 @@ msgstr ""
 "IDONEIDADE PARA UN PROPÓSITO PARTICULAR. Para máis detalles vexa a Licenza "
 "pública xeral de GNU."
 
-#: ../src/window-commands.c:1572
+#: ../src/window-commands.c:1579
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2609,20 +2613,20 @@ msgstr ""
 "web do GNOME; en caso contrario, escriba á Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:1618 ../src/window-commands.c:1634
-#: ../src/window-commands.c:1645
+#: ../src/window-commands.c:1625 ../src/window-commands.c:1641
+#: ../src/window-commands.c:1652
 msgid "Contact us at:"
 msgstr "Contacte con nós en:"
 
-#: ../src/window-commands.c:1621
+#: ../src/window-commands.c:1628
 msgid "Contributors:"
 msgstr "Colaboradores:"
 
-#: ../src/window-commands.c:1624
+#: ../src/window-commands.c:1631
 msgid "Past developers:"
 msgstr "Desenvolvedores anteriores:"
 
-#: ../src/window-commands.c:1655 ../src/window-commands.c:1661
+#: ../src/window-commands.c:1662 ../src/window-commands.c:1668
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2639,7 +2643,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1691
+#: ../src/window-commands.c:1698
 msgid "translator-credits"
 msgstr ""
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.\n"
@@ -2655,15 +2659,15 @@ msgstr ""
 "Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas\n"
 "colaborar connosco, podes atopar máis información en http://www.trasno.net"
 
-#: ../src/window-commands.c:1694
+#: ../src/window-commands.c:1701
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1834
+#: ../src/window-commands.c:1841
 msgid "Enable caret browsing mode?"
 msgstr "Quere activar o modo de navegación co cursor?"
 
-#: ../src/window-commands.c:1837
+#: ../src/window-commands.c:1844
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2674,7 +2678,7 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: ../src/window-commands.c:1840
+#: ../src/window-commands.c:1847
 msgid "_Enable"
 msgstr "_Activar"
 
