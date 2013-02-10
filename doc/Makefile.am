@@ -1,5 +1,3 @@
-SUBDIRS = reference
-
 NULL =
 
 man_MANS = epiphany.1

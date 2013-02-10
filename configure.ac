@@ -238,12 +238,6 @@ fi
 
 AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 
-# *****************
-# API Documentation
-# *****************
-
-GTK_DOC_CHECK([1.0])
-
 # ************
 # Output files
 # ************
@@ -257,7 +251,6 @@ data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/pages/Makefile
 doc/Makefile
-doc/reference/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/history/Makefile
