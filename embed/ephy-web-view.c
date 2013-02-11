@@ -1597,8 +1597,8 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * @title: the title of the news feed
  * @address: the URL to @embed's web site's search description
  *
- * The ::ge_rss signal is emitted when @embed discovers that a search
- * description is available for the site it is visiting.
+ * The ::ge-search-link signal is emitted when @embed discovers that a
+ * search description is available for the site it is visiting.
  **/
     g_signal_new ("ge_search_link",
             EPHY_TYPE_WEB_VIEW,
@@ -1619,8 +1619,8 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * @title: the title of the news feed
  * @address: the URL to @embed's web site's news feed
  *
- * The ::ge_rss signal is emitted when @embed discovers that a news feed
- * is available for the site it is visiting.
+ * The ::ge-feed-link signal is emitted when @embed discovers that a
+ * news feed is available for the site it is visiting.
  **/
     g_signal_new ("ge_feed_link",
             EPHY_TYPE_WEB_VIEW,
