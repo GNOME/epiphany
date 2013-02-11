@@ -844,6 +844,7 @@ dialog_save_as_application_response_cb (GtkDialog *dialog,
 
 		notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
 		notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
+		notify_notification_set_hint (notification, "desktop-entry", g_variant_new_string ("epiphany"));
 		notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
 		notify_notification_show (notification, NULL);
 	}
