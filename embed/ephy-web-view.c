@@ -3349,7 +3349,11 @@ ephy_web_view_get_navigation_flags (EphyWebView *view)
 const char *
 ephy_web_view_get_status_message (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = view->priv;
+  EphyWebViewPrivate *priv;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+
+  priv = view->priv;
 
   if (priv->link_message && priv->link_message[0] != '\0') {
     return priv->link_message;
@@ -3389,6 +3393,8 @@ ephy_web_view_get_link_message (EphyWebView *view)
 gboolean
 ephy_web_view_get_visibility (EphyWebView *view)
 {
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
+
   return view->priv->visibility;
 }
 
@@ -3404,7 +3410,11 @@ void
 ephy_web_view_set_link_message (EphyWebView *view,
                                 const char *link_message)
 {
-  EphyWebViewPrivate *priv = view->priv;
+  EphyWebViewPrivate *priv;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
+  priv = view->priv;
 
   g_free (priv->link_message);
 
@@ -3427,6 +3437,8 @@ ephy_web_view_set_security_level (EphyWebView *view,
 {
   EphyWebViewPrivate *priv = view->priv;
 
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
   if (priv->security_level != level) {
     priv->security_level = level;
 
@@ -3447,6 +3459,8 @@ ephy_web_view_set_visibility (EphyWebView *view,
                               gboolean visibility)
 {
   EphyWebViewPrivate *priv = view->priv;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
   if (priv->visibility != visibility) {
     priv->visibility = visibility;
@@ -3530,6 +3544,8 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
   WebKitDOMDocument *document = NULL;
   gulong forms_n;
   int i;
+
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
 
   document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
   forms = webkit_dom_document_get_forms (document);
@@ -3702,6 +3718,8 @@ ephy_web_view_print (EphyWebView *view)
   WebKitPrintOperation *operation;
   EphyEmbedShell *shell;
   GtkPrintSettings *settings;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
   shell = ephy_embed_shell_get_default ();
 
@@ -4053,6 +4071,9 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
   const GString *data;
 #endif
 
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_return_if_fail (uri);
+
   file = g_file_new_for_uri (uri);
 
 #ifdef HAVE_WEBKIT2
@@ -4100,6 +4121,8 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 void
 ephy_web_view_load_homepage (EphyWebView *view)
 {
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
   g_signal_emit_by_name (view, "loading-homepage");
 
   ephy_web_view_set_visit_type (view,
