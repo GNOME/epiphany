@@ -175,6 +175,10 @@ gboolean
 ephy_embed_utils_is_no_show_address (const char *address)
 {
   int i;
+
+  if (!address)
+    return FALSE;
+
   for (i = 0; do_not_show_address[i]; i++)
     if (g_str_equal (address, do_not_show_address[i]))
       return TRUE;
