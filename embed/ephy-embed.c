@@ -81,7 +81,11 @@ struct _EphyEmbedPrivate
   GtkWidget *fullscreen_message_label;
   char *fullscreen_string;
 
+#ifdef HAVE_WEBKIT2
+  WebKitURIRequest *delayed_request;
+#else
   WebKitNetworkRequest *delayed_request;
+#endif
 
   GtkWidget *overview;
   guint overview_mode : 1;
@@ -1223,11 +1227,20 @@ ephy_embed_get_overview_mode (EphyEmbed *embed)
  * Sets the #WebKitNetworkRequest that should be loaded when the tab this embed
  * is on is switched to.
  */
+#ifdef HAVE_WEBKIT2
+void
+ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request)
+#else
 void
 ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitNetworkRequest *request)
+#endif
 {
   g_return_if_fail (EPHY_IS_EMBED (embed));
+#ifdef HAVE_WEBKIT2
+  g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
+#else
   g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST (request));
+#endif
 
   g_clear_object (&embed->priv->delayed_request);
 
