@@ -2187,19 +2187,6 @@ ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 #endif
 
 static void
-ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
-{
-	gboolean visibility;
-
-	visibility = ephy_web_view_get_visibility (ephy_embed_get_web_view (embed));
-
-	if (visibility)
-		gtk_widget_show (GTK_WIDGET (window));
-	else
-		gtk_widget_hide (GTK_WIDGET (window));
-}
-
-static void
 sync_embed_is_overview (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
@@ -2795,10 +2782,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 				 window, G_CONNECT_AFTER);
 #endif
-	g_signal_connect_object (view, "notify::visibility",
-				 G_CALLBACK (ephy_window_visibility_cb),
-				 window, 0);
-
 	g_signal_connect_object (embed, "notify::overview-mode",
 				 G_CALLBACK (sync_embed_is_overview),
 				 window, 0);
@@ -2886,9 +2869,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      window);
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (sync_tab_icon),
-					      window);
-	g_signal_handlers_disconnect_by_func (view,
-					      G_CALLBACK (ephy_window_visibility_cb),
 					      window);
 
 	g_signal_handlers_disconnect_by_func (embed,

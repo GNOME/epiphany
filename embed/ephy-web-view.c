@@ -75,7 +75,6 @@ struct _EphyWebViewPrivate {
 
   /* Flags */
   guint is_blank : 1;
-  guint visibility : 1;
   guint is_setting_zoom : 1;
   guint load_failed : 1;
   guint history_frozen : 1;
@@ -133,7 +132,6 @@ enum {
   PROP_STATUS_MESSAGE,
   PROP_EMBED_TITLE,
   PROP_TYPED_ADDRESS,
-  PROP_VISIBLE,
   PROP_IS_BLANK,
 };
 
@@ -448,9 +446,6 @@ ephy_web_view_get_property (GObject *object,
     case PROP_STATUS_MESSAGE:
       g_value_set_string (value, priv->status_message);
       break;
-    case PROP_VISIBLE:
-      g_value_set_boolean (value, priv->visibility);
-      break;
     case PROP_IS_BLANK:
       g_value_set_boolean (value, priv->is_blank);
       break;
@@ -482,7 +477,6 @@ ephy_web_view_set_property (GObject *object,
     case PROP_SECURITY:
     case PROP_STATUS_MESSAGE:
     case PROP_EMBED_TITLE:
-    case PROP_VISIBLE:
     case PROP_IS_BLANK:
       /* read only */
       break;
@@ -1524,19 +1518,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                          "Whether popup windows are to be displayed",
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-/**
- * EphyWebView:visibility:
- *
- *
- **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_VISIBLE,
-                                   g_param_spec_boolean ("visibility",
-                                                         "Visibility",
-                                                         "The view's visibility",
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 /**
  * EphyWebView:is-blank:
@@ -3382,23 +3363,6 @@ ephy_web_view_get_link_message (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_visibility:
- * @view: an #EphyWebView
- *
- * Returns whether the @view's toplevel is visible or not. Used
- * mostly for popup visibility management.
- *
- * Return value: %TRUE if @view's "visibility" property is set
- **/
-gboolean
-ephy_web_view_get_visibility (EphyWebView *view)
-{
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
-
-  return view->priv->visibility;
-}
-
-/**
  * ephy_web_view_set_link_message:
  * @view: an #EphyWebView
  * @link_message: new value for link-message in @view
@@ -3443,29 +3407,6 @@ ephy_web_view_set_security_level (EphyWebView *view,
     priv->security_level = level;
 
     g_object_notify (G_OBJECT (view), "security-level");
-  }
-}
-
-/**
- * ephy_web_view_set_visibility:
- * @view: an #EphyWebView
- * @visibility: value for the visibility property of @view
- *
- * Sets whether the @view's toplevel is visible or not. See
- * ephy_web_view_get_visibility().
- **/
-void
-ephy_web_view_set_visibility (EphyWebView *view,
-                              gboolean visibility)
-{
-  EphyWebViewPrivate *priv = view->priv;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-
-  if (priv->visibility != visibility) {
-    priv->visibility = visibility;
-
-    g_object_notify (G_OBJECT (view), "visibility");
   }
 }
 
