@@ -144,13 +144,10 @@ EphyWebViewDocumentType    ephy_web_view_get_document_type        (EphyWebView  
 EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags     (EphyWebView               *view);
 const char *               ephy_web_view_get_status_message       (EphyWebView               *view);
 const char *               ephy_web_view_get_link_message         (EphyWebView               *view);
-gboolean                   ephy_web_view_get_visibility           (EphyWebView               *view);
 void                       ephy_web_view_set_link_message         (EphyWebView               *view,
                                                                    const char                *link_message);
 void                       ephy_web_view_set_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel   level);
-void                       ephy_web_view_set_visibility           (EphyWebView               *view,
-                                                                   gboolean                   visibility);
 const char *               ephy_web_view_get_typed_address        (EphyWebView               *view);
 void                       ephy_web_view_set_typed_address        (EphyWebView               *view,
                                                                    const char                *address);
