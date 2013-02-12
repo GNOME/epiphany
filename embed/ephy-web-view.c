@@ -3207,7 +3207,7 @@ ephy_web_view_set_loading_title (EphyWebView *view,
   g_free (priv->loading_title);
   priv->loading_title = NULL;
 
-  if (is_address) {
+  if (is_address && title) {
     title = freeme = get_title_from_address (title);
   }
 
