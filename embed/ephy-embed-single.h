@@ -81,8 +81,6 @@ GtkWidget      *ephy_embed_single_open_window        (EphyEmbedSingle *single,
 
 void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
 
-void            ephy_embed_single_clear_auth_cache   (EphyEmbedSingle *single);
-
 GSList *        ephy_embed_single_get_form_auth      (EphyEmbedSingle *single,
                                                       const char *uri);
 

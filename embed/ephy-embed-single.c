@@ -513,25 +513,6 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 }
 
 /**
- * ephy_embed_single_clear_auth_cache:
- * @single: the #EphyEmbedSingle
- * 
- * Clears the HTTP authentication cache.
- *
- * This does not clear regular website passwords; it only clears the HTTP
- * authentication cache. Websites which use HTTP authentication require the
- * browser to send a password along with every HTTP request; the browser will
- * ask the user for the password once and then cache the password for subsequent
- * HTTP requests. This function will clear the HTTP authentication cache,
- * meaning the user will have to re-enter a username and password the next time
- * Epiphany requests a web page secured with HTTP authentication.
- **/
-void
-ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
-{
-}
-
-/**
  * ephy_embed_single_open_window:
  * @single: the #EphyEmbedSingle
  * @parent: the requested window's parent #EphyEmbed
