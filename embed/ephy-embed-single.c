@@ -251,30 +251,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                 GTK_TYPE_WIDGET,
                 EPHY_TYPE_WEB_VIEW_CHROME);
 
-  /**
-   * EphyEmbedSingle::handle_content:
-   * @single:
-   * @mime_type: the MIME type of the content
-   * @address: the URL to the content
-   *
-   * The ::handle_content signal is emitted when encountering content of a mime
-   * type Epiphany is unable to handle itself.
-   *
-   * If a connected callback returns %TRUE, the signal will stop propagating. For
-   * example, this could be used by a download manager to prevent other
-   * ::handle_content listeners from being called.
-   **/
-  g_signal_new ("handle_content",
-                EPHY_TYPE_EMBED_SINGLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
-                g_signal_accumulator_true_handled, NULL,
-                g_cclosure_marshal_generic,
-                G_TYPE_BOOLEAN,
-                2,
-                G_TYPE_STRING,
-                G_TYPE_STRING);
-
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
 }
 

@@ -63,10 +63,6 @@ struct _EphyEmbedSingleClass
   EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
                                EphyEmbed *parent_embed,
                                EphyWebViewChrome chromemask);
-
-  gboolean (* handle_content) (EphyEmbedSingle *shell,
-                               char *mime_type,
-                               char *uri);
 };
 
 GType           ephy_embed_single_get_type           (void);

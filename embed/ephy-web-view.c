@@ -1797,13 +1797,7 @@ decide_policy_cb (WebKitWebView *web_view,
   if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
     return FALSE;
 
-  single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
-  g_signal_emit_by_name (single, "handle-content", mime_type, request_uri, &handled);
-
-  if (handled)
-    webkit_policy_decision_ignore (decision);
-  else
-    webkit_policy_decision_download (decision);
+  webkit_policy_decision_download (decision);
 
   return TRUE;
 }
@@ -1869,18 +1863,7 @@ mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
 
   /* FIXME: need to use ephy_file_check_mime if auto-downloading */
   if (should_download) {
-    GObject *single;
-    const char *uri;
-    gboolean handled = FALSE;
-
-    single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
-    uri = webkit_network_request_get_uri (request);
-    g_signal_emit_by_name (single, "handle-content", mime_type, uri, &handled);
-
-    if (handled)
-      webkit_web_policy_decision_ignore (decision);
-    else
-      webkit_web_policy_decision_download (decision);
+    webkit_web_policy_decision_download (decision);
 
     return TRUE;
   }
