@@ -162,11 +162,9 @@ popups_manager_show (PopupInfo *popup,
 
   /* Only show popup with non NULL url */
   if (popup->url != NULL) {
-    single = EPHY_EMBED_SINGLE
-             (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
-
-    ephy_embed_single_open_window (single, EPHY_EMBED (view), popup->url,
-                                   popup->name, popup->features);
+    /* FIXME: we need a way of opening windows in here. This used to
+     * be implemented in EphyEmbedSingle open_window method, but it's
+     * been a no-op for a while. */
   }
   popups_manager_free_info (popup);
 }

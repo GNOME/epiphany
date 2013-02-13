@@ -57,23 +57,11 @@ struct _EphyEmbedSingle {
 struct _EphyEmbedSingleClass
 {
   GObjectClass parent_class;
-
-  /* Signals */
-
-  EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
-                               EphyEmbed *parent_embed,
-                               EphyWebViewChrome chromemask);
 };
 
 GType           ephy_embed_single_get_type           (void);
 
 gboolean        ephy_embed_single_initialize         (EphyEmbedSingle *single);
-
-GtkWidget      *ephy_embed_single_open_window        (EphyEmbedSingle *single,
-                                                      EphyEmbed       *parent,
-                                                      const char      *address,
-                                                      const char      *name,
-                                                      const char      *features);
 
 void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
 

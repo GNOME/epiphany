@@ -230,27 +230,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
   object_class->finalize = ephy_embed_single_finalize;
   object_class->dispose = ephy_embed_single_dispose;
 
-  /**
-   * EphyEmbedSingle::new-window:
-   * @parent_embed: the #EphyEmbed requesting the new window, or %NULL
-   * @mask: a #EphyEmbedChrome
-   *
-   * The ::new_window signal is emitted when a new window needs to be opened.
-   * For example, when a JavaScript popup window was opened.
-   *
-   * Returns: (transfer none): a new #EphyEmbed.
-   **/
-  g_signal_new ("new-window",
-                EPHY_TYPE_EMBED_SINGLE,
-                G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
-                ephy_signal_accumulator_object, ephy_embed_get_type,
-                g_cclosure_marshal_generic,
-                GTK_TYPE_WIDGET,
-                2,
-                GTK_TYPE_WIDGET,
-                EPHY_TYPE_WEB_VIEW_CHROME);
-
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
 }
 
@@ -486,34 +465,6 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 #else
   soup_cache_clear (single->priv->cache);
 #endif
-}
-
-/**
- * ephy_embed_single_open_window:
- * @single: the #EphyEmbedSingle
- * @parent: the requested window's parent #EphyEmbed
- * @address: the URL to load
- * @name: a name for the window
- * @features: a Javascript features string
- *
- * Opens a new window, as if it were opened in @parent using the Javascript
- * method and arguments: <code>window.open(&quot;@address&quot;,
- * &quot;_blank&quot;, &quot;@features&quot;);</code>.
- * 
- * Returns: (transfer none): the new embed. This is either a #EphyEmbed, or,
- * when @features specified "chrome", a #GtkMozEmbed.
- *
- * NOTE: Use ephy_shell_new_tab() unless this handling of the @features string
- * is required.
- */
-GtkWidget *
-ephy_embed_single_open_window (EphyEmbedSingle *single,
-                               EphyEmbed *parent,
-                               const char *address,
-                               const char *name,
-                               const char *features)
-{
-  return NULL;
 }
 
 /**
