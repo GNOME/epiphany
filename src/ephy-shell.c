@@ -63,7 +63,6 @@ struct _EphyShellPrivate {
   GObject *prefs_dialog;
   GList *del_on_exit;
   EphyShellStartupContext *startup_context;
-  guint embed_single_connected : 1;
   guint open_uris_idle_id;
 };
 
@@ -73,7 +72,6 @@ static void ephy_shell_class_init (EphyShellClass *klass);
 static void ephy_shell_init   (EphyShell *shell);
 static void ephy_shell_dispose    (GObject *object);
 static void ephy_shell_finalize   (GObject *object);
-static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
@@ -492,7 +490,6 @@ ephy_shell_class_init (EphyShellClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
-  EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
 
   object_class->dispose = ephy_shell_dispose;
   object_class->finalize = ephy_shell_finalize;
@@ -503,67 +500,7 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
 
-  embed_shell_class->get_embed_single = impl_get_embed_single;
-
   g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
-}
-
-static EphyEmbed *
-ephy_shell_new_window_cb (EphyEmbedSingle *single,
-                          EphyEmbed *parent_embed,
-                          EphyWebViewChrome chromemask,
-                          EphyShell *shell)
-{
-  GtkWidget *parent = NULL;
-  gboolean is_popup;
-  EphyNewTabFlags flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW |
-    EPHY_NEW_TAB_APPEND_LAST |
-    EPHY_NEW_TAB_IN_NEW_WINDOW |
-    EPHY_NEW_TAB_JUMP;
-
-  LOG ("ephy_shell_new_window_cb tab chrome %d", chromemask);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME))
-    chromemask = EPHY_WEB_VIEW_CHROME_ALL;
-
-  if (parent_embed != NULL) {
-    /* this will either be a EphyWindow, or the embed itself
-     * (in case it's about to be destroyed, which means it's already
-     * removed from its tab)
-     */
-    parent = gtk_widget_get_toplevel (GTK_WIDGET (parent_embed));
-  }
-
-  /* Any window opened with a toolbar is *not* a popup.
-   */
-  is_popup = (chromemask & EPHY_WEB_VIEW_CHROME_TOOLBAR) == 0;
-
-  return ephy_shell_new_tab_full
-    (shell,
-     EPHY_IS_WINDOW (parent) ? EPHY_WINDOW (parent) : NULL,
-     NULL, NULL, flags, chromemask, is_popup, 0);
-}
-
-static GObject*
-impl_get_embed_single (EphyEmbedShell *embed_shell)
-{
-  EphyShell *shell = EPHY_SHELL (embed_shell);
-  EphyShellPrivate *priv = shell->priv;
-  GObject *embed_single;
-
-  embed_single = EPHY_EMBED_SHELL_CLASS (ephy_shell_parent_class)->get_embed_single (embed_shell);
-
-  if (embed_single != NULL &&
-      priv->embed_single_connected == FALSE) {
-    g_signal_connect_object (embed_single, "new-window",
-                             G_CALLBACK (ephy_shell_new_window_cb),
-                             shell, G_CONNECT_AFTER);
-
-    priv->embed_single_connected = TRUE;
-  }
-
-  return embed_single;
 }
 
 #ifdef HAVE_WEBKIT2
