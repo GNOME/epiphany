@@ -258,7 +258,6 @@ lib/widgets/Makefile
 embed/Makefile
 src/Makefile
 src/bookmarks/Makefile
-src/epiphany.h
 po/Makefile.in
 tests/Makefile
 tests/data/Makefile

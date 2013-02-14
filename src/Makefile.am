@@ -40,7 +40,6 @@ INST_H_FILES = \
 	ephy-session.h			\
 	ephy-shell.h			\
 	ephy-window.h			\
-	epiphany.h			\
 	$(NULL)
 
 libephymain_la_SOURCES = \
