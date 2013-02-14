@@ -247,7 +247,6 @@ AC_DEFINE([EPIPHANY_COMPILATION],[1],[Compiling epiphany])
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
-data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/pages/Makefile
 doc/Makefile
