@@ -2,11 +2,6 @@ NULL =
 
 noinst_LTLIBRARIES = libephyembed.la
 
-headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
-header_DATA = \
-	ephy-embed-type-builtins.h	\
-	$(INST_H_FILES)
-
 NOINST_H_FILES = \
 	ephy-about-handler.h		\
 	ephy-embed-dialog.h		\

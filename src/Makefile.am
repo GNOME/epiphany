@@ -11,11 +11,6 @@ EXTRA_DIST = \
 	$(UI_FILES)            \
 	$(NULL)
 
-headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
-header_DATA = \
-	ephy-type-builtins.h	\
-	$(INST_H_FILES)
-
 NOINST_H_FILES = \
 	ephy-action-helper.h			\
 	ephy-combined-stop-reload-action.h	\
