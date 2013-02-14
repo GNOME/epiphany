@@ -38,7 +38,6 @@
 #include "ephy-file-monitor.h"
 #include "ephy-history-service.h"
 #include "ephy-overview.h"
-#include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
@@ -283,24 +282,6 @@ static void
 ephy_web_view_set_popups_allowed (EphyWebView *view,
                                   gboolean allowed)
 {
-  const char *location;
-  EphyPermissionManager *manager;
-  EphyPermission permission;
-
-  manager = EPHY_PERMISSION_MANAGER
-            (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
-  g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
-
-  permission = allowed ? EPHY_PERMISSION_ALLOWED
-               : EPHY_PERMISSION_DENIED;
-
-  location = ephy_web_view_get_address (view);
-  g_return_if_fail (location != NULL);
-
-  ephy_permission_manager_add_permission (manager, location,
-                                          EPHY_PERMISSION_TYPE_POPUP,
-                                          permission);
-
   if (allowed) {
     popups_manager_show_all (view);
   } else {
@@ -311,38 +292,14 @@ ephy_web_view_set_popups_allowed (EphyWebView *view,
 static gboolean
 ephy_web_view_get_popups_allowed (EphyWebView *view)
 {
-  EphyPermissionManager *permission_manager;
-  EphyPermission response;
   const char *location;
   gboolean allow;
-
-  permission_manager = EPHY_PERMISSION_MANAGER
-                       (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
-  g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
-                        FALSE);
 
   location = ephy_web_view_get_address (view);
   if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
 
-  response = ephy_permission_manager_test_permission
-             (permission_manager, location, EPHY_PERMISSION_TYPE_POPUP);
-
-  switch (response) {
-    case EPHY_PERMISSION_ALLOWED:
-      allow = TRUE;
-      break;
-    case EPHY_PERMISSION_DENIED:
-      allow = FALSE;
-      break;
-    case EPHY_PERMISSION_DEFAULT:
-    default:
-      allow = g_settings_get_boolean (EPHY_SETTINGS_WEB,
-                                      EPHY_PREFS_WEB_ENABLE_POPUPS);
-      break;
-  }
-
-  LOG ("ephy_web_view_get_popups_allowed: view %p, allowed: %d", view, allow);
-
+  allow = g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                  EPHY_PREFS_WEB_ENABLE_POPUPS);
   return allow;
 }
 

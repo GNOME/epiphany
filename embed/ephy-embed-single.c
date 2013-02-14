@@ -27,7 +27,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-file-helpers.h"
-#include "ephy-permission-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-request-about.h"
@@ -54,11 +53,7 @@ struct _EphyEmbedSinglePrivate {
 #endif
 };
 
-static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
-                                                ephy_permission_manager_iface_init))
+G_DEFINE_TYPE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT)
 
 static void
 form_auth_data_free (EphyEmbedSingleFormAuthData *data)
@@ -231,54 +226,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
   object_class->dispose = ephy_embed_single_dispose;
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
-}
-
-static void
-impl_permission_manager_add (EphyPermissionManager *manager,
-                             const char *host,
-                             const char *type,
-                             EphyPermission permission)
-{
-}
-
-static void
-impl_permission_manager_remove (EphyPermissionManager *manager,
-                                const char *host,
-                                const char *type)
-{
-}
-
-static void
-impl_permission_manager_clear (EphyPermissionManager *manager)
-{
-}
-
-static EphyPermission
-impl_permission_manager_test (EphyPermissionManager *manager,
-                              const char *host,
-                              const char *type)
-{
-  g_return_val_if_fail (type != NULL && type[0] != '\0', EPHY_PERMISSION_DEFAULT);
-
-  return (EphyPermission)0;
-}
-
-static GList *
-impl_permission_manager_list (EphyPermissionManager *manager,
-                              const char *type)
-{
-  GList *list = NULL;
-  return list;
-}
-
-static void
-ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
-{
-  iface->add = impl_permission_manager_add;
-  iface->remove = impl_permission_manager_remove;
-  iface->clear = impl_permission_manager_clear;
-  iface->test = impl_permission_manager_test;
-  iface->list = impl_permission_manager_list;
 }
 
 #ifndef HAVE_WEBKIT2
