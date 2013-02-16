@@ -193,7 +193,11 @@ ephy_toolbar_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (tool_item), tool_button);
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_item));
 
-  gtk_widget_set_margin_right (GTK_WIDGET (tool_item), 4);
+  if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (GTK_WIDGET (tool_item), 4);
+  else
+    gtk_widget_set_margin_right (GTK_WIDGET (tool_item), 4);
+
   gtk_widget_show_all (GTK_WIDGET (tool_item));
 
 
