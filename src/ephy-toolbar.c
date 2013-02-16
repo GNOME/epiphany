@@ -180,6 +180,23 @@ ephy_toolbar_constructed (GObject *object)
 
   gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
 
+  /* New Tab */
+  tool_item = gtk_tool_item_new ();
+  tool_button = gtk_button_new ();
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  action = gtk_action_group_get_action (action_group, "FileNewTab");
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+                                      action);
+  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
+  gtk_container_add (GTK_CONTAINER (tool_item), tool_button);
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_item));
+
+  gtk_widget_set_margin_right (GTK_WIDGET (tool_item), 4);
+  gtk_widget_show_all (GTK_WIDGET (tool_item));
+
+
   /* Page Menu */
   tool_item = gtk_tool_item_new ();
   tool_button = gtk_button_new ();

@@ -1386,6 +1386,7 @@ setup_ui_manager (EphyWindow *window)
 
 	action = g_object_new (EPHY_TYPE_HOME_ACTION,
 			       "name", "FileNewTab",
+			       "icon-name", "tab-new-symbolic",
 			       "label", _("New _Tab"),
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
