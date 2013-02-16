@@ -10,17 +10,18 @@
 # Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
 # Nathan-J. Hirschauer <nathanhirschauer@verfriemelt.org>, 2009.
 # Christian Kirbach <Christian.Kirbach@gmail.com>, 2009, 2012.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2012.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2013.
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-17 22:58+0000\n"
-"PO-Revision-Date: 2013-01-13 19:10+0100\n"
-"Last-Translator: Tobias111 <tobiasendrigkeit@googlemail.com>\n"
+"POT-Creation-Date: 2013-02-16 12:34+0000\n"
+"PO-Revision-Date: 2013-02-16 19:04+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -51,7 +52,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.de/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:460 ../src/window-commands.c:1675
+#: ../src/ephy-main.c:306 ../src/ephy-main.c:456 ../src/window-commands.c:1683
 msgid "Web"
 msgstr "Webbrowser"
 
@@ -130,7 +131,7 @@ msgstr ""
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Automatically manage offline status with NetworkManager"
-msgstr "Automatisch den Offline-Modus mit Hilfe des Netzwerksmanager steuern"
+msgstr "Automatisch den Offline-Modus mit Hilfe der Netzwerkverwaltung steuern"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "Enable smooth scrolling"
@@ -161,7 +162,7 @@ msgstr ""
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Show toolbars by default"
-msgstr "Standardmäßig Toolbars anzeigen"
+msgstr "Standardmäßig Werkzeugleisten anzeigen"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid "Toolbar style"
@@ -191,7 +192,7 @@ msgstr ""
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Visibility of the downloads window"
-msgstr "Sichtbarkeit des Downloads-Fensters."
+msgstr "Sichtbarkeit des Downloads-Fensters"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
@@ -222,11 +223,11 @@ msgstr "Kleinste Schriftgröße"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid "Use GNOME fonts"
-msgstr "Die Standardschriftart von Gnome benutzen"
+msgstr "Die Standardschriftart von GNOME benutzen"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Use GNOME desktop wide font configuration."
-msgstr "Die GNOME-Desktop Schriftartkonfiguration benutzen."
+msgstr "Die Schriftartkonfiguration der GNOME-Arbeitsumgebung benutzen."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Custom sans-serif font"
@@ -237,7 +238,7 @@ msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"Ein Wert, der genutzt wird, um die Sans-Serif Desktopschriftart zu "
+"Ein Wert, der genutzt wird, um die Arbeitsflächenschriftart Sans-Serif zu "
 "überschreiben, wenn use-gnome-fonts eingestellt ist."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:31
@@ -249,8 +250,8 @@ msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
-"Ein Wert, der genutzt wird, um die Serif Desktopschriftart zu überschreiben, "
-"wenn use-gnome-fonts eingestellt ist."
+"Ein Wert, der genutzt wird, um die Arbeitsflächenschriftart Serif zu "
+"überschreiben, wenn use-gnome-fonts eingestellt ist."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom monospace font"
@@ -261,7 +262,7 @@ msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"Ein Wert, der genutzt wird, um die Monospace Desktopschriftart zu "
+"Ein Wert, der genutzt wird, um die Arbeitsflächenschriftart Monospace zu "
 "überschreiben, wenn use-gnome-fonts eingestellt ist."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:35
@@ -288,7 +289,7 @@ msgstr "Benutzerdefiniertes CSS benutzen"
 #: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
-"Eine benutzerdefinierte CSS Datei nutzen, um das CSS der Webseiten zu "
+"Eine benutzerdefinierte CSS-Datei nutzen, um das CSS der Webseiten zu "
 "verändern."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:41
@@ -301,13 +302,13 @@ msgstr "Jeden in editierbare Flächen eingegeben Text prüfen."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Default encoding"
-msgstr "Standardverschlüsselung"
+msgstr "Standardzeichenkodierung"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
-"Standardverschlüsselung. Akzeptierte Werte sind die, die von WebKitGTK+ "
+"Standardzeichenkodierung. Akzeptierte Werte sind die, die von WebKitGTK+ "
 "verstanden werden. "
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:45
@@ -388,7 +389,7 @@ msgstr "Legt fest, ob die Unterstützung für WebAudio-Kontexte aktiviert wird."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Do Not Track"
-msgstr "Do Not Track"
+msgstr "Nicht verfolgen"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
@@ -420,9 +421,9 @@ msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"Der Pfad des Ordners, wo die runtergeladenen Dateien gespeichert werden "
+"Der Pfad des Ordners, wo die heruntergeladenen Dateien gespeichert werden "
 "sollen; oder »Downloads«, um den voreingestellten Download-Ordner zu nutzen, "
-"oder »Arbeitsfläche«, um den Arbeitsflächen-Ordner zu nutzen."
+"oder »Schreibtisch«, um den Schreibtisch-Ordner zu nutzen."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "History pages time range"
@@ -496,25 +497,25 @@ msgstr "Liste der installierten Web-Anwendungen"
 msgid "Installed on:"
 msgstr "Installiert am:"
 
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:689
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "%s drücken, um den Vollbildmodus zu verlassen"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:692
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:692
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1017
+#: ../embed/ephy-embed.c:1077
 msgid "Web Inspector"
 msgstr "Web-Analysierer"
 
-#: ../embed/ephy-embed-shell.c:216
+#: ../embed/ephy-embed-shell.c:217
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr ""
 "Epiphany kann im Moment nicht verwendet werden, da die Initialisierung "
@@ -854,15 +855,15 @@ msgid "Most Visited"
 msgstr "Meistbesucht"
 
 #. characters
-#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3705
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3655
 msgid "Blank page"
 msgstr "Leere Seite"
 
-#: ../embed/ephy-web-view.c:748
+#: ../embed/ephy-web-view.c:697
 msgid "Not now"
 msgstr "Jetzt nicht"
 
-#: ../embed/ephy-web-view.c:749
+#: ../embed/ephy-web-view.c:698
 msgid "Store password"
 msgstr "Passwort speichern"
 
@@ -870,40 +871,40 @@ msgstr "Passwort speichern"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:762
+#: ../embed/ephy-web-view.c:711
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Wollen Sie das Passwort für <b>%s</b> in <b>%s</b> speichern?</big>"
 
-#: ../embed/ephy-web-view.c:1975
+#: ../embed/ephy-web-view.c:1894
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: ../embed/ephy-web-view.c:1976
+#: ../embed/ephy-web-view.c:1895
 msgid "Allow"
 msgstr "Erlauben"
 
-#: ../embed/ephy-web-view.c:1990
+#: ../embed/ephy-web-view.c:1909
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Die Seite <b>%s</b> möchte Ihren Aufenthaltsort wissen."
 
-#: ../embed/ephy-web-view.c:2409
+#: ../embed/ephy-web-view.c:2366
 msgid "None specified"
 msgstr "Nichts angegeben"
 
-#: ../embed/ephy-web-view.c:2418 ../embed/ephy-web-view.c:2436
+#: ../embed/ephy-web-view.c:2375 ../embed/ephy-web-view.c:2393
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Ups! Fehler beim Laden von %s"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2377
 msgid "Oops! It was not possible to show this website"
 msgstr "Ups! Es war nicht möglich, diese Webseite zu laden"
 
-#: ../embed/ephy-web-view.c:2421
+#: ../embed/ephy-web-view.c:2378
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -917,17 +918,17 @@ msgstr ""
 "p><p>Falls das Problem weiterhin besteht, sollten Sie Ihre "
 "Internetverbindung überprüfen.</p>"
 
-#: ../embed/ephy-web-view.c:2430
+#: ../embed/ephy-web-view.c:2387
 msgid "Try again"
 msgstr "Erneut versuchen"
 
-#: ../embed/ephy-web-view.c:2438
+#: ../embed/ephy-web-view.c:2395
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Diese Seite könnte verursacht haben, dass der Webbrowser unerwartet beendet "
 "wurde"
 
-#: ../embed/ephy-web-view.c:2440
+#: ../embed/ephy-web-view.c:2397
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -939,29 +940,29 @@ msgstr ""
 "Falls dies der Fall ist, so melden Sie das Problem den <strong>%s</strong>-"
 "Entwicklern.</p>"
 
-#: ../embed/ephy-web-view.c:2448
+#: ../embed/ephy-web-view.c:2405
 msgid "Load again anyway"
 msgstr "Trotzdem weiter laden"
 
-#: ../embed/ephy-web-view.c:2882
+#: ../embed/ephy-web-view.c:2839
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.de/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3178
+#: ../embed/ephy-web-view.c:3135
 #, c-format
 msgid "Loading “%s”…"
 msgstr "»%s« wird geladen …"
 
-#: ../embed/ephy-web-view.c:3180
+#: ../embed/ephy-web-view.c:3137
 msgid "Loading…"
 msgstr "Laden …"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3961
+#: ../embed/ephy-web-view.c:3911
 #, c-format
 msgid "%s Files"
 msgstr "%s-Dateien"
@@ -990,7 +991,7 @@ msgstr "Downloads"
 #. If we don't have XDG user dirs info, return an educated guess.
 #: ../lib/ephy-file-helpers.c:165
 msgid "Desktop"
-msgstr "Arbeitsfläche"
+msgstr "Schreibtisch"
 
 #: ../lib/ephy-file-helpers.c:333
 #, c-format
@@ -1067,8 +1068,8 @@ msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
 msgstr ""
-"Epiphany 3.6 lehnt dieses Verzeichnis ab und versucht diese Konfiguration "
-"nach ~/.config/epiphany zu migirieren."
+"Epiphany 3.6 lehnt diesen Ordner ab und versucht diese Konfiguration nach ~/."
+"config/epiphany zu migrieren."
 
 #: ../lib/ephy-profile-migrator.c:890
 msgid "Executes only the n-th migration step"
@@ -1194,7 +1195,7 @@ msgstr "Das Zertifikat wurde annulliert"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:107
 msgid "The certificate is signed using a weak signature algorithm"
-msgstr "Das Zertifikat nutzt einen schwachen Signaturalgorythmus"
+msgstr "Das Zertifikat nutzt einen schwachen Signaturalgorithmus"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:110
 msgid "The certificate activation time is still in the future"
@@ -1247,12 +1248,12 @@ msgstr "Abgeschlossen"
 msgid "Error downloading: %s"
 msgstr "Fehler beim Herunterladen: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:777
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:784
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:270
+#: ../src/window-commands.c:277
 msgid "Open"
 msgstr "Öffnen"
 
@@ -1285,8 +1286,8 @@ msgstr "_Leeren"
 #: ../lib/widgets/ephy-location-entry.c:874
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
-"Ziehen Sie dieses Symbol und legen Sie es ab, um einen Link zu dieser Seite "
-"zu erstellen"
+"Ziehen Sie dieses Symbol und legen Sie es ab, um einen Verweis zu dieser "
+"Seite zu erstellen"
 
 #: ../lib/widgets/ephy-urls-view.c:43
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1696
@@ -1569,7 +1570,7 @@ msgstr "Hilfe zu den Lesezeichen anzeigen"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:8
 #: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
 msgid "_About"
 msgstr "_Info"
@@ -1619,7 +1620,7 @@ msgstr ""
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:381
 msgid "_Delete Topic"
-msgstr "Thema _Löschen"
+msgstr "Thema _löschen"
 
 #. FIXME: proper i18n after freeze
 #: ../src/bookmarks/ephy-bookmarks-editor.c:491
@@ -1742,26 +1743,30 @@ msgstr "_Neues Fenster"
 msgid "New _Incognito Window"
 msgstr "Neues _Inkognito-Fenster öffnen"
 
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "Geschlossenen Rei_ter erneut öffnen"
+
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:3 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
 msgid "_Bookmarks"
 msgstr "_Lesezeichen"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
 msgid "_History"
 msgstr "C_hronik"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany-application-menu.ui.h:6
 #: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
 msgid "Personal Data"
 msgstr "Persönliche Daten"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/resources/epiphany-application-menu.ui.h:7
 #: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
 msgid "_Quit"
 msgstr "_Beenden"
 
@@ -1996,11 +2001,11 @@ msgstr "Das nächste Vorkommen dieser Zeichenkette suchen"
 
 #: ../src/ephy-history-window.c:135
 msgid "Open the selected history link in a new window"
-msgstr "Den gewählten Chronik-Link in einem neuen Fenster öffnen"
+msgstr "Den gewählten Chronik-Verweis in einem neuen Fenster öffnen"
 
 #: ../src/ephy-history-window.c:138
 msgid "Open the selected history link in a new tab"
-msgstr "Den gewählten Chronik-Link in einem neuen Reiter öffnen"
+msgstr "Den gewählten Chronik-Verweis in einem neuen Reiter öffnen"
 
 #: ../src/ephy-history-window.c:140
 msgid "Add _Bookmark…"
@@ -2008,7 +2013,7 @@ msgstr "Lesezeichen _hinzufügen …"
 
 #: ../src/ephy-history-window.c:141
 msgid "Bookmark the selected history link"
-msgstr "Den gewählten Chronik-Link zu den Lesezeichen hinzufügen"
+msgstr "Den gewählten Chronik-Verweis zu den Lesezeichen hinzufügen"
 
 #: ../src/ephy-history-window.c:144
 msgid "Close the history window"
@@ -2016,11 +2021,11 @@ msgstr "Das Chronikfenster schließen"
 
 #: ../src/ephy-history-window.c:158
 msgid "Delete the selected history link"
-msgstr "Den gewählten Chronik-Link löschen"
+msgstr "Den gewählten Chronik-Verweis löschen"
 
 #: ../src/ephy-history-window.c:161
 msgid "Select all history links or text"
-msgstr "Alle Chronik-Links auswählen bzw. den gesamten Text markieren"
+msgstr "Alle Chronik-Verweise auswählen bzw. den gesamten Text markieren"
 
 #: ../src/ephy-history-window.c:163
 msgid "Clear _History"
@@ -2055,8 +2060,8 @@ msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
-"Das Leeren der Browser-Chronik sorgt dafür, dass alle Links in der Chronik "
-"dauerhaft gelöscht werden."
+"Das Leeren der Browser-Chronik sorgt dafür, dass alle Verweise in der "
+"Chronik dauerhaft gelöscht werden."
 
 #: ../src/ephy-history-window.c:238
 msgid "Clear History"
@@ -2125,10 +2130,8 @@ msgid "Start an instance in incognito mode"
 msgstr "Fenster im Inkognito-Modus starten"
 
 #: ../src/ephy-main.c:88
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start an instance in netbank mode"
-msgstr "Fenster im Internetbanking-Modus starten"
+msgstr "Eine Instanz im Internetbanking-Modus starten"
 
 #: ../src/ephy-main.c:90
 msgid "Start the browser in application mode"
@@ -2185,7 +2188,7 @@ msgstr "_Drucken …"
 
 #: ../src/ephy-window.c:117
 msgid "S_end Link by Email…"
-msgstr "Link _verschicken an …"
+msgstr "Verweis _verschicken an …"
 
 #. Edit actions.
 #: ../src/ephy-window.c:126
@@ -2298,31 +2301,31 @@ msgstr "Lesezeichen _hinzufügen …"
 #. Links.
 #: ../src/ephy-window.c:230
 msgid "_Open Link"
-msgstr "Link ö_ffnen"
+msgstr "Verweis ö_ffnen"
 
 #: ../src/ephy-window.c:232
 msgid "Open Link in New _Window"
-msgstr "Link in _neuem Fenster öffnen"
+msgstr "Verweis in _neuem Fenster öffnen"
 
 #: ../src/ephy-window.c:234
 msgid "Open Link in New _Tab"
-msgstr "Link in neuem _Reiter öffnen"
+msgstr "Verweis in neuem _Reiter öffnen"
 
 #: ../src/ephy-window.c:236
 msgid "_Download Link"
-msgstr "Link herunter_laden"
+msgstr "Verweis herunter_laden"
 
 #: ../src/ephy-window.c:238
 msgid "_Save Link As…"
-msgstr "Link _speichern unter …"
+msgstr "Verweis _speichern unter …"
 
 #: ../src/ephy-window.c:240
 msgid "_Bookmark Link…"
-msgstr "Link zu Lesezeichen _hinzufügen …"
+msgstr "Verweis zu Lesezeichen _hinzufügen …"
 
 #: ../src/ephy-window.c:242
 msgid "_Copy Link Address"
-msgstr "Link-Adresse _kopieren"
+msgstr "Verweisadresse _kopieren"
 
 #: ../src/ephy-window.c:244
 msgid "_Copy E-mail Address"
@@ -2425,11 +2428,11 @@ msgstr "Vor"
 msgid "Zoom"
 msgstr "Vergrößerung"
 
-#: ../src/ephy-window.c:1389
+#: ../src/ephy-window.c:1390
 msgid "New _Tab"
 msgstr "Neuer _Reiter"
 
-#: ../src/ephy-window.c:1397
+#: ../src/ephy-window.c:1398
 msgid "Go to most visited"
 msgstr "Zu Meistbesucht gehen"
 
@@ -2477,7 +2480,7 @@ msgid ""
 "choosing to clear will be deleted forever.</i></small>"
 msgstr ""
 "<small><i><b>Hinweis:</b> Sie können diesen Schritt nicht rückgängig machen. "
-"Daten die Sie zum Löschen auswählen, werden unwiderruflich gelöscht.</i></"
+"Daten, die Sie zum Löschen auswählen, werden unwiderruflich gelöscht.</i></"
 "small>"
 
 #: ../src/pdm-dialog.c:679
@@ -2519,7 +2522,7 @@ msgstr "Inhalt herunterladen"
 
 #: ../src/popup-commands.c:315
 msgid "Save Link As"
-msgstr "Link speichern unter"
+msgstr "Verweis speichern unter"
 
 #: ../src/popup-commands.c:322
 msgid "Save Image As"
@@ -2555,22 +2558,22 @@ msgstr[1] "Systemsprachen (%s)"
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
-#: ../src/window-commands.c:348
+#: ../src/window-commands.c:355
 msgid "Save"
 msgstr "Speichern"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:781
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
 "Eine Web-Anwendung dieses namens »%s« existiert bereits. Wollen Sie sie "
 "ersetzen?"
 
-#: ../src/window-commands.c:779
+#: ../src/window-commands.c:786
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/window-commands.c:783
+#: ../src/window-commands.c:790
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2578,30 +2581,30 @@ msgstr ""
 "Eine Anwendung mit diesem Namen ist bereits vorhanden. Beim Überschreiben "
 "geht ihr Inhalt verloren."
 
-#: ../src/window-commands.c:819
+#: ../src/window-commands.c:826
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Die Anwendung »%s« ist bereit zur Benutzung"
 
-#: ../src/window-commands.c:822
+#: ../src/window-commands.c:829
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Die Anwendung »%s« konnte nicht erzeugt werden"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:837
 msgid "Launch"
 msgstr "Starten"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:877
 msgid "Create Web Application"
 msgstr "Web-Anwendung erzeugen"
 
-#: ../src/window-commands.c:874
+#: ../src/window-commands.c:882
 msgid "C_reate"
 msgstr "E_rstellen"
 
-#: ../src/window-commands.c:1564
+#: ../src/window-commands.c:1572
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2613,7 +2616,7 @@ msgstr ""
 "veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 2 "
 "der Lizenz oder (nach Ihrer Option) jeder späteren Version."
 
-#: ../src/window-commands.c:1568
+#: ../src/window-commands.c:1576
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2625,7 +2628,7 @@ msgstr ""
 "implizierte Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN "
 "BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License."
 
-#: ../src/window-commands.c:1572
+#: ../src/window-commands.c:1580
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2636,20 +2639,20 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
 "USA."
 
-#: ../src/window-commands.c:1618 ../src/window-commands.c:1634
-#: ../src/window-commands.c:1645
+#: ../src/window-commands.c:1626 ../src/window-commands.c:1642
+#: ../src/window-commands.c:1653
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: ../src/window-commands.c:1621
+#: ../src/window-commands.c:1629
 msgid "Contributors:"
 msgstr "Mitwirkende:"
 
-#: ../src/window-commands.c:1624
+#: ../src/window-commands.c:1632
 msgid "Past developers:"
 msgstr "Vorherige Entwickler:"
 
-#: ../src/window-commands.c:1655 ../src/window-commands.c:1661
+#: ../src/window-commands.c:1663 ../src/window-commands.c:1669
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2666,7 +2669,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1691
+#: ../src/window-commands.c:1699
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
@@ -2676,15 +2679,15 @@ msgstr ""
 "Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>"
 
-#: ../src/window-commands.c:1694
+#: ../src/window-commands.c:1702
 msgid "Web Website"
 msgstr "Webseite des GNOME-Webbrowsers"
 
-#: ../src/window-commands.c:1834
+#: ../src/window-commands.c:1842
 msgid "Enable caret browsing mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: ../src/window-commands.c:1837
+#: ../src/window-commands.c:1845
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2694,7 +2697,7 @@ msgstr ""
 "Funktionsmerkmal platziert einen beweglichen Cursor in Webseiten, den Sie "
 "mit der Tastatur steuern können. Wollen Sie den Caret-Modus einschalten?"
 
-#: ../src/window-commands.c:1840
+#: ../src/window-commands.c:1848
 msgid "_Enable"
 msgstr "_Aktivieren"
 
