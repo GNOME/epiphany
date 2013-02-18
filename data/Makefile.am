@@ -25,9 +25,6 @@ aboutdialog_DATA = about.ini
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = epiphany-$(EPIPHANY_API_VERSION).pc
-
 xsldir = $(pkgdatadir)
 xsl_DATA = \
 	epiphany-bookmarks-html.xsl
@@ -64,7 +61,6 @@ EXTRA_DIST = \
 	$(desktop_in_files)		\
 	$(about_DATA)			\
 	$(mimepermission_DATA)		\
-	$(pkgconfig_DATA)		\
 	$(xsl_DATA)			\
 	$(service_DATA)			\
 	$(default_bookmarks_in_files)	\
@@ -75,6 +71,5 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
 	$(service_DATA)			\
-	$(pkgconfig_DATA)		\
 	$(desktop_DATA)			\
 	$(default_bookmarks_DATA)
