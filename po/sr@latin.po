@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epipha"
 "ny&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-17 22:58+0000\n"
-"PO-Revision-Date: 2013-01-18 10:47+0200\n"
+"POT-Creation-Date: 2013-02-07 22:03+0000\n"
+"PO-Revision-Date: 2013-02-18 11:48+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -42,7 +42,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.co.rs/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:460 ../src/window-commands.c:1675
+#: ../src/ephy-main.c:306 ../src/ephy-main.c:456 ../src/window-commands.c:1682
 msgid "Web"
 msgstr "Veb"
 
@@ -382,7 +382,6 @@ msgstr ""
 "znajte da veb stranice nisu obavezne da poštuju ovo podešavanje."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
-#| msgid "Enable WebAudio"
 msgid "Enable Adblock"
 msgstr "Uključuje blokiranje oglasa"
 
@@ -490,7 +489,7 @@ msgstr "ESC"
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1017
+#: ../embed/ephy-embed.c:1018
 msgid "Web Inspector"
 msgstr "Veb inspektor"
 
@@ -832,7 +831,7 @@ msgid "Most Visited"
 msgstr "Najposećeniji"
 
 #. characters
-#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3705
+#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3720
 msgid "Blank page"
 msgstr "Prazna stranica"
 
@@ -935,7 +934,7 @@ msgstr "Učitavam…"
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3961
+#: ../embed/ephy-web-view.c:3976
 #, c-format
 msgid "%s Files"
 msgstr "Datoteke za %s"
@@ -1225,12 +1224,12 @@ msgstr "Završeno"
 msgid "Error downloading: %s"
 msgstr "Greška pri preuzimanju: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:777
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:784
 msgid "Cancel"
 msgstr "Otkaži"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:270
+#: ../src/window-commands.c:277
 msgid "Open"
 msgstr "Otvori"
 
@@ -1554,7 +1553,7 @@ msgstr "Prikažite pomoć za obeleživače"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:8
 #: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
 msgid "_About"
 msgstr "_O programu"
@@ -1725,30 +1724,33 @@ msgid "_New Window"
 msgstr "_Novi prozor"
 
 #: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
-#| msgid "_New Window"
 msgid "New _Incognito Window"
 msgstr "Novi _tajnoviti prozor"
 
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "Ponovo otvori zatvoreni _jezičak"
+
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:3 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
 msgid "_Bookmarks"
 msgstr "_Obeleživači"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
 msgid "_History"
 msgstr "_Istorijat"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany-application-menu.ui.h:6
 #: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
 msgid "Personal Data"
 msgstr "Lični podaci"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/resources/epiphany-application-menu.ui.h:7
 #: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
 msgid "Preferences"
 msgstr "Postavke"
 
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
 msgid "_Quit"
 msgstr "_Izađi"
 
@@ -1966,7 +1968,6 @@ msgid "_Automatic"
 msgstr "_Sam odredi"
 
 #: ../src/ephy-find-toolbar.c:147
-#| msgid "Not found"
 msgid "Text not found"
 msgstr "Nisam pronašao tekst"
 
@@ -2111,12 +2112,10 @@ msgid "Start a private instance"
 msgstr "Pokreće lični primerak"
 
 #: ../src/ephy-main.c:86
-#| msgid "Start the browser in application mode"
 msgid "Start an instance in incognito mode"
 msgstr "Pokreće primerak u režimu tajnovitosti"
 
 #: ../src/ephy-main.c:88
-#| msgid "Start a private instance"
 msgid "Start an instance in netbank mode"
 msgstr "Pokreće primerak u režimu mrežne banke"
 
@@ -2199,7 +2198,6 @@ msgid "Find Pre_vious"
 msgstr "Pronađi _prethodno"
 
 #: ../src/ephy-window.c:146
-#| msgid "_Bookmarks"
 msgid "Edit _Bookmarks"
 msgstr "Uredi _obeleživače"
 
@@ -2209,12 +2207,10 @@ msgid "_Stop"
 msgstr "_Zaustavi"
 
 #: ../src/ephy-window.c:163
-#| msgid "Zoom"
 msgid "Zoom _In"
 msgstr "U_većaj"
 
 #: ../src/ephy-window.c:165
-#| msgid "Zoom"
 msgid "Zoom O_ut"
 msgstr "U_manji"
 
@@ -2318,7 +2314,6 @@ msgid "_Copy Link Address"
 msgstr "Umnoži _adresu veze"
 
 #: ../src/ephy-window.c:244
-#| msgid "_Copy Link Address"
 msgid "_Copy E-mail Address"
 msgstr "_Umnoži adresu el. pošte"
 
@@ -2548,20 +2543,20 @@ msgstr[3] "Jezik na sistemu (%s)"
 msgid "Select a Directory"
 msgstr "Izaberite fasciklu"
 
-#: ../src/window-commands.c:348
+#: ../src/window-commands.c:355
 msgid "Save"
 msgstr "Sačuvaj"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:781
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Veb program pod nazivom „%s“ već postoji. Da li želite da ga zamenite?"
 
-#: ../src/window-commands.c:779
+#: ../src/window-commands.c:786
 msgid "Replace"
 msgstr "Zameni"
 
-#: ../src/window-commands.c:783
+#: ../src/window-commands.c:790
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2569,30 +2564,30 @@ msgstr ""
 "Program pod istim nazivom već postoji. Njegovom zamenom ćete prepisati njegov "
 "sadržaj."
 
-#: ../src/window-commands.c:819
+#: ../src/window-commands.c:826
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Program „%s“ je spreman za upotrebu"
 
-#: ../src/window-commands.c:822
+#: ../src/window-commands.c:829
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Program „%s“ ne može biti stvoren"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:837
 msgid "Launch"
 msgstr "Pokreni"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:876
 msgid "Create Web Application"
 msgstr "Napravite veb program"
 
-#: ../src/window-commands.c:874
+#: ../src/window-commands.c:881
 msgid "C_reate"
 msgstr "_Napravi"
 
-#: ../src/window-commands.c:1564
+#: ../src/window-commands.c:1571
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2603,7 +2598,7 @@ msgstr ""
 "Gnuove opšte javne licence koju je objavila Zadužbina slobodnog softvera; "
 "bilo verzije 2 licence ili (po vašem izboru) bilo koje novije verzije."
 
-#: ../src/window-commands.c:1568
+#: ../src/window-commands.c:1575
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2615,7 +2610,7 @@ msgstr ""
 "PRILAGOĐENOSTI ODREĐENOJ NAMENI.  Vidite GNU Opštu javnu licencu za više "
 "detalja."
 
-#: ../src/window-commands.c:1572
+#: ../src/window-commands.c:1579
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2626,20 +2621,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301  USA“"
 
-#: ../src/window-commands.c:1618 ../src/window-commands.c:1634
-#: ../src/window-commands.c:1645
+#: ../src/window-commands.c:1625 ../src/window-commands.c:1641
+#: ../src/window-commands.c:1652
 msgid "Contact us at:"
 msgstr "Stupite u vezu sa nama preko:"
 
-#: ../src/window-commands.c:1621
+#: ../src/window-commands.c:1628
 msgid "Contributors:"
 msgstr "Doprinosioci:"
 
-#: ../src/window-commands.c:1624
+#: ../src/window-commands.c:1631
 msgid "Past developers:"
 msgstr "Prethodni programeri:"
 
-#: ../src/window-commands.c:1655 ../src/window-commands.c:1661
+#: ../src/window-commands.c:1662 ../src/window-commands.c:1668
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2656,7 +2651,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1691
+#: ../src/window-commands.c:1698
 msgid "translator-credits"
 msgstr ""
 "Danilo Šegan <danilo@prevod.org>\n"
@@ -2665,15 +2660,15 @@ msgstr ""
 "\n"
 "http://prevod.org — prevod na srpski jezik."
 
-#: ../src/window-commands.c:1694
+#: ../src/window-commands.c:1701
 msgid "Web Website"
 msgstr "Veb stranica Gnomovog preglednika"
 
-#: ../src/window-commands.c:1834
+#: ../src/window-commands.c:1841
 msgid "Enable caret browsing mode?"
 msgstr "Da li da uključim pregled sa pokazivačem?"
 
-#: ../src/window-commands.c:1837
+#: ../src/window-commands.c:1844
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2684,6 +2679,6 @@ msgstr ""
 "listate sadržaj pomoću tastature. Da li želite da uključite pregled sa "
 "pokazivačem?"
 
-#: ../src/window-commands.c:1840
+#: ../src/window-commands.c:1847
 msgid "_Enable"
 msgstr "_Uključi"
