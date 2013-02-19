@@ -229,6 +229,7 @@ main (int argc,
   EphyShell *ephy_shell;
   int status;
   EphyFileHelpersFlags flags;
+  char *pid_str;
 
 #ifdef ENABLE_NLS
   /* Initialize the i18n stuff */
@@ -459,6 +460,10 @@ main (int argc,
   }
 
 #ifdef HAVE_WEBKIT2
+  pid_str = g_strdup_printf ("%u", getpid ());
+  g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
+  g_free (pid_str);
+
   /* Set the web extensions dir ASAP before the process is launched */
   webkit_web_context_set_web_extensions_directory (webkit_web_context_get_default (),
                                                    EPHY_WEB_EXTENSIONS_DIR);

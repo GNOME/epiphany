@@ -159,11 +159,15 @@ bus_acquired_cb (GDBusConnection *connection,
 G_MODULE_EXPORT void
 webkit_web_extension_initialize (WebKitWebExtension *extension)
 {
+  char *service_name;
+
+  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, g_getenv ("EPHY_WEB_EXTENSION_ID"));
   g_bus_own_name (G_BUS_TYPE_SESSION,
-                  EPHY_WEB_EXTENSION_SERVICE_NAME,
+                  service_name,
                   G_BUS_NAME_OWNER_FLAGS_NONE,
                   bus_acquired_cb,
                   NULL, NULL,
                   g_object_ref (extension),
                   (GDestroyNotify)g_object_unref);
+  g_free (service_name);
 }

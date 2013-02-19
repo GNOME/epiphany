@@ -697,14 +697,18 @@ ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
 
   priv = shell->priv;
   if (!priv->web_extension) {
+    char *service_name;
+
+    service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, getpid ());
     priv->web_extension = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                          G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
                                                          NULL,
-                                                         EPHY_WEB_EXTENSION_SERVICE_NAME,
+                                                         service_name,
                                                          EPHY_WEB_EXTENSION_OBJECT_PATH,
                                                          EPHY_WEB_EXTENSION_INTERFACE,
                                                          NULL,
                                                          NULL);
+    g_free (service_name);
   }
 
   return priv->web_extension;
