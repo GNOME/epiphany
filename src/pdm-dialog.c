@@ -33,7 +33,6 @@
 #include "ephy-time-helpers.h"
 #include "ephy-embed-single.h"
 #include "ephy-history-service.h"
-#include "ephy-password-info.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

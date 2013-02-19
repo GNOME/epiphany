@@ -24,7 +24,6 @@ NOINST_H_FILES = \
 	ephy-location-controller.h		\
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
-	ephy-password-info.h			\
 	ephy-private.h				\
 	ephy-toolbar.h				\
 	ephy-window-action.h			\
@@ -59,7 +58,6 @@ libephymain_la_SOURCES = \
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
 	ephy-page-menu-action.c			\
-	ephy-password-info.c	        	\
 	ephy-session.c				\
 	ephy-shell.c				\
 	ephy-toolbar.c				\
