@@ -3,7 +3,7 @@
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
- *  Copyright © 2009 Igalia S.L.
+ *  Copyright © 2009-2013 Igalia S.L.
  *  Copyright © 2009 Holger Hans Peter Freyther
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -37,14 +37,14 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#define SECRET_API_SUBJECT_TO_CHANGE
+#include <libsecret/secret.h>
 #include <libsoup/soup.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #else
 #include <webkit/webkit.h>
 #endif
-#include <gnome-keyring.h>
-#include <gnome-keyring-memory.h>
 
 #include <string.h>
 #include <time.h>
@@ -209,44 +209,16 @@ clear_all_cookies (SoupCookieJar *jar)
 #endif
 
 static void
-get_info_full_cb (GnomeKeyringResult result,
-		  GnomeKeyringItemInfo *info,
-		  gpointer data)
-{
-	if (result != GNOME_KEYRING_RESULT_OK)
-		return;
-
-	if (gnome_keyring_item_info_get_type (info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
-		gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
-					   GPOINTER_TO_UINT (data),
-					   NULL, NULL, NULL);
-}
-
-static void
-got_network_passwords_list_cb (GnomeKeyringResult result,
-			       GList *list,
-			       gpointer data)
-{
-	GList *l;
-
-	if (result != GNOME_KEYRING_RESULT_OK)
-		return;
-
-	for (l = list; l != NULL; l = l->next)
-		gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
-						  GPOINTER_TO_UINT (l->data),
-						  GNOME_KEYRING_ITEM_INFO_BASICS,
-						  (GnomeKeyringOperationGetItemInfoCallback) get_info_full_cb,
-						  l->data,
-						  NULL);
-}
-
-static void
 _ephy_pdm_delete_all_passwords (void)
 {
-	gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
-				     got_network_passwords_list_cb,
-				     NULL, NULL);
+	GHashTable *attributes;
+
+	attributes = secret_attributes_build (SECRET_SCHEMA_COMPAT_NETWORK, NULL);
+	secret_service_clear (NULL, SECRET_SCHEMA_COMPAT_NETWORK,
+			      attributes, NULL,
+			      (GAsyncReadyCallback)secret_service_clear_finish,
+			      NULL);
+	g_hash_table_unref (attributes);
 }
 
 static void
@@ -551,7 +523,7 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 #ifdef HAVE_WEBKIT2
 		action->remove (action, g_value_get_string (&val));
 #else
-		action->remove (action, g_value_get_boxed (&val));
+		action->remove (action, G_VALUE_HOLDS_OBJECT (&val) ? g_value_get_object (&val) : g_value_get_boxed (&val));
 #endif
 		g_value_unset (&val);
 
@@ -1191,36 +1163,34 @@ pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 
 /* "Passwords" tab */
 static void
-passwords_data_func_get_item_cb (GnomeKeyringResult result,
-				 GnomeKeyringItemInfo *info,
+passwords_data_func_get_item_cb (SecretItem *item,
+				 GAsyncResult *result,
 				 gpointer data)
 {
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	GtkTreeModel *model;
+	GError *error = NULL;
 	GtkTreeRowReference *rowref = (GtkTreeRowReference *)data;
 
-	if (result == GNOME_KEYRING_RESULT_OK) {
-		GtkTreeIter iter;
-		GtkTreePath *path;
-		GtkTreeModel *model;
+	secret_item_load_secret_finish (item, result, &error);
+	if (error) {
+		g_warning ("Couldn't load password for site: %s", error->message);
+		g_error_free (error);
+		return;
+	}
 
-		if (!gtk_tree_row_reference_valid (rowref))
-			return;
+	if (!gtk_tree_row_reference_valid (rowref))
+		return;
 
-		path = gtk_tree_row_reference_get_path (rowref);
-		model = gtk_tree_row_reference_get_model (rowref);
+	path = gtk_tree_row_reference_get_path (rowref);
+	model = gtk_tree_row_reference_get_model (rowref);
 
-		if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
-			EphyPasswordInfo *epinfo;
-			GValue val = {0, };
-
-			gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
-			epinfo = g_value_get_boxed (&val);
-			epinfo->secret = gnome_keyring_memory_strdup (gnome_keyring_item_info_get_secret (info));
-
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-					    COL_PASSWORDS_DATA, epinfo,
-					    COL_PASSWORDS_PASSWORD, epinfo->secret, -1);
-			g_value_unset (&val);
-		}
+	if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+		SecretValue *secret = secret_item_get_secret (item);
+		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+				    COL_PASSWORDS_PASSWORD, secret_value_get (secret, NULL),
+				    -1);
 	}
 }
 
@@ -1228,31 +1198,28 @@ static void
 passwords_data_func (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 		     GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
-	GValue val = { 0, };
-	EphyPasswordInfo *info;
+	SecretItem *item;
+	SecretValue *value;
 
 	if (!gtk_tree_view_column_get_visible (tree_column))
 		return;
 
-	gtk_tree_model_get_value (model, iter, COL_PASSWORDS_DATA, &val);
-	info = g_value_get_boxed (&val);
+	gtk_tree_model_get (model, iter, COL_PASSWORDS_DATA, &item, -1);
+	value = secret_item_get_secret (item);
 
-	if (info->secret == NULL) {
+	/* Value has not been loaded yet, do now. */
+	if (!value) {
 		GtkTreePath *path;
 		GtkTreeRowReference *rowref;
 
 		path = gtk_tree_model_get_path (model, iter);
 		rowref = gtk_tree_row_reference_new (model, path);
 
-		gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
-						  info->keyring_id,
-						  GNOME_KEYRING_ITEM_INFO_SECRET,
-						  (GnomeKeyringOperationGetItemInfoCallback) passwords_data_func_get_item_cb,
-						  rowref,
-						  (GDestroyNotify) gtk_tree_row_reference_free);
-		gtk_tree_path_free (path);
-	}
-	g_value_unset (&val);
+		secret_item_load_secret (item, NULL,
+					 (GAsyncReadyCallback)passwords_data_func_get_item_cb,
+					 rowref);
+	} else
+		secret_value_unref (value);
 }
 
 static void
@@ -1325,7 +1292,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
-					EPHY_TYPE_PASSWORD_INFO);
+					SECRET_TYPE_ITEM);
 
 	gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
 	gtk_tree_view_set_headers_visible (treeview, TRUE);
@@ -1391,18 +1358,27 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 }
 
 static void
-pdm_dialog_fill_passwords_list_async_cb (GnomeKeyringResult result,
-					 GList *list,
+pdm_dialog_fill_passwords_list_async_cb (SecretService *service,
+					 GAsyncResult *result,
 					 gpointer data)
 {
-	GList *l;
+	GList *list, *l;
+	GError *error = NULL;
 	PdmActionInfo *info = (PdmActionInfo *)data;
 
-	if (result != GNOME_KEYRING_RESULT_OK)
+	list = secret_service_search_finish (service, result, &error);
+	if (error) {
+		g_warning ("Couldn't fetch the network passwords: %s",
+			   error->message);
+		g_error_free (error);
 		return;
+	}
 
 	for (l = list; l != NULL; l = l->next)
 		info->add (info, l->data);
+
+	/* Items are stored in the model, no need to free them. */
+	g_list_free (list);
 
 	info->filled = TRUE;
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
@@ -1413,10 +1389,13 @@ pdm_dialog_fill_passwords_list_async_cb (GnomeKeyringResult result,
 static void
 pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 {
-	gnome_keyring_list_item_ids (GNOME_KEYRING_DEFAULT,
-				     pdm_dialog_fill_passwords_list_async_cb,
-				     info,
-				     NULL);
+	GHashTable *attributes;
+	attributes = secret_attributes_build (SECRET_SCHEMA_COMPAT_NETWORK, NULL);
+	secret_service_search (NULL, SECRET_SCHEMA_COMPAT_NETWORK,
+			       attributes,
+			       SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK,
+			       NULL, (GAsyncReadyCallback)pdm_dialog_fill_passwords_list_async_cb,
+			       info);
 }
 
 static void
@@ -1434,114 +1413,45 @@ pdm_dialog_passwords_destruct (PdmActionInfo *info)
 }
 
 static void
-pdm_dialog_password_add_item_attrs_cb (GnomeKeyringResult result,
-				       GnomeKeyringAttributeList *attributes,
-				       gpointer data)
-{
-	EphyPasswordInfo *pinfo;
-	PdmCallBackData *cbdata;
-	GnomeKeyringAttribute *attribute;
-	gchar *user, *host, *protocol;
-	GtkTreeIter iter;
-	int i;
-
-	if (result != GNOME_KEYRING_RESULT_OK)
-		return;
-
-	cbdata = (PdmCallBackData *)data;
-
-	user = host = protocol = NULL;
-	attribute = (GnomeKeyringAttribute *) attributes->data;
-	for (i = 0; i < attributes->len; ++i) {
-		if (attribute[i].type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING) {
-			if (strcmp (attribute[i].name, "server") == 0)
-				host = g_strdup (attribute[i].value.string);
-			else if (strcmp (attribute[i].name, "user") == 0)
-				user = g_strdup (attribute[i].value.string);
-			else if (strcmp (attribute[i].name, "protocol") == 0)
-				protocol = attribute[i].value.string;
-			}
-		}
-	if (!protocol || strncmp("http", protocol, 4) != 0)
-		return;
-
-	pinfo = ephy_password_info_new (cbdata->key);
-	if (!pinfo)
-		return;
-
-	gtk_list_store_append (cbdata->store, &iter);
-	gtk_list_store_set (cbdata->store, &iter,
-			    COL_PASSWORDS_HOST, host,
-			    COL_PASSWORDS_USER, user,
-			    COL_PASSWORDS_PASSWORD, NULL,
-			    COL_PASSWORDS_DATA, pinfo,
-			    -1);
-}
-
-static void
-pdm_dialog_password_add_item_info_cb (GnomeKeyringResult result,
-				      GnomeKeyringItemInfo *info,
-				      gpointer data)
-{
-	if (result != GNOME_KEYRING_RESULT_OK)
-		return;
-
-	if (gnome_keyring_item_info_get_type (info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
-		PdmCallBackData *cbdata = (PdmCallBackData *)data;
-		gnome_keyring_item_get_attributes (GNOME_KEYRING_DEFAULT,
-						   cbdata->key,
-						   (GnomeKeyringOperationGetAttributesCallback) pdm_dialog_password_add_item_attrs_cb,
-						   g_memdup (cbdata, sizeof (PdmCallBackData)),
-						   (GDestroyNotify) g_free);
-
-	}
-
-}
-
-static void
 pdm_dialog_password_add (PdmActionInfo *info,
 			 gpointer data)
 {
-	PdmCallBackData *cbdata;
-	guint key_id = GPOINTER_TO_UINT(data);
+	SecretItem *item  = (SecretItem*)data;
+	GtkTreeIter iter;
+	gchar *user, *host, *protocol;
+	GHashTable *attributes;
 
-	/*
-	 * We have the item id of the password. We will have to check if this
-	 * password entry is of the right type and then can proceed to get the
-	 * the private information. Seahorse is treating every protocol that
-	 * starts with http as Web Access and we will do the same here.
-	 */
+	attributes = secret_item_get_attributes (item);
 
-	cbdata = g_malloc (sizeof (PdmCallBackData));
-	cbdata->key = key_id;
-	cbdata->store = GTK_LIST_STORE (info->model);
+	protocol = g_hash_table_lookup (attributes, "protocol");
+	if (!protocol || strncmp("http", protocol, 4) != 0)
+		return;
 
-	/* Get the type of the key_id */
-	gnome_keyring_item_get_info_full (GNOME_KEYRING_DEFAULT,
-					  key_id,
-					  GNOME_KEYRING_ITEM_INFO_BASICS,
-					  (GnomeKeyringOperationGetItemInfoCallback) pdm_dialog_password_add_item_info_cb,
-					  cbdata,
-					  (GDestroyNotify) g_free);
-}
+	user = g_hash_table_lookup (attributes, "user");
+	host = g_hash_table_lookup (attributes, "server");
 
-static void
-pdm_dialog_password_remove_dummy_cb (GnomeKeyringResult result,
-				     gpointer data)
-{
+	gtk_list_store_append (GTK_LIST_STORE (info->model), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (info->model), &iter,
+			    COL_PASSWORDS_HOST, host,
+			    COL_PASSWORDS_USER, user,
+			    COL_PASSWORDS_PASSWORD, NULL,
+			    COL_PASSWORDS_DATA, item,
+			    -1);
+
+	g_hash_table_unref (attributes);
 }
 
 static void
 pdm_dialog_password_remove (PdmActionInfo *info,
 			    gpointer data)
 {
-	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
+	SecretItem *item = SECRET_ITEM (data);
 
-	gnome_keyring_item_delete (GNOME_KEYRING_DEFAULT,
-				   pinfo->keyring_id,
-				   (GnomeKeyringOperationDoneCallback) pdm_dialog_password_remove_dummy_cb,
-				   NULL,
-				   NULL);
+	/* We don't really do anything when the item is deleted, so
+	   just directly call finish(). The method signature fits well
+	   for this. */
+	secret_item_delete (item, NULL,
+			    (GAsyncReadyCallback)secret_item_delete_finish, NULL);
 }
 
 /* common routines */
