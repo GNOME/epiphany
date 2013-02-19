@@ -815,6 +815,138 @@ migrate_new_urls_table (void)
   g_free (filename);
 }
 
+/* Migrating form password data. */
+
+static int form_passwords_migrating = 0;
+
+
+static void
+password_cleared_cb (SecretService *service,
+                     GAsyncResult *res,
+                     gpointer userdata)
+{
+  secret_service_clear_finish (service, res, NULL);
+
+  form_passwords_migrating--;
+}
+
+static void
+store_form_auth_data_cb (GObject *object,
+                         GAsyncResult *res,
+                         GHashTable *attributes)
+{
+  GError *error = NULL;
+
+  _ephy_profile_utils_store_form_auth_data_finish (res, &error);
+  if (error) {
+    g_warning ("Couldn't store a form password: %s", error->message);
+    g_error_free (error);
+    goto out;
+  }
+
+  secret_service_clear (NULL, NULL,
+                        attributes, NULL, (GAsyncReadyCallback)password_cleared_cb,
+                        NULL);
+
+out:
+  g_hash_table_unref (attributes);
+}
+
+static void
+load_collection_items_cb (SecretCollection *collection,
+                          GAsyncResult *res,
+                          gpointer data)
+{
+  SecretItem *item;
+  SecretValue *secret;
+  GList *l;
+  GHashTable *attributes, *t;
+  const char *server, *username, *form_username, *form_password, *password;
+  char *actual_server;
+  SoupURI *uri;
+  GError *error = NULL;
+  GList *items;
+
+  secret_collection_load_items_finish (collection, res, &error);
+
+  if (error) {
+    g_warning ("Couldn't retrieve form data: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+  items = secret_collection_get_items (collection);
+
+  for (l = items; l; l = l->next) {
+    item = (SecretItem*)l->data;
+
+    attributes = secret_item_get_attributes (item);
+    server = g_hash_table_lookup (attributes, "server");
+    if (server &&
+        g_strstr_len (server, -1, "form%5Fusername") &&
+        g_strstr_len (server, -1, "form%5Fpassword")) {
+      form_passwords_migrating++;
+      /* This is one of the hackish ones that need to be migrated.
+         Fetch the rest of the data and take care of it. */
+      username = g_hash_table_lookup (attributes, "user");
+      uri = soup_uri_new (server);
+      t = soup_form_decode (uri->query);
+      form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
+      form_password = g_hash_table_lookup (t, FORM_PASSWORD_KEY);
+      soup_uri_set_query (uri, NULL);
+      actual_server = soup_uri_to_string (uri, FALSE);
+      secret_item_load_secret_sync (item, NULL, NULL);
+      secret = secret_item_get_secret (item);
+      password = secret_value_get (secret, NULL);
+      _ephy_profile_utils_store_form_auth_data (actual_server,
+                                                form_username,
+                                                form_password,
+                                                username,
+                                                password,
+                                                (GAsyncReadyCallback)store_form_auth_data_cb,
+                                                g_hash_table_ref (attributes));
+      g_free (actual_server);
+      secret_value_unref (secret);
+      g_hash_table_unref (t);
+      soup_uri_free (uri);
+    }
+    g_hash_table_unref (attributes);
+  }
+
+  /* And decrease here so that we finish eventually. */
+  form_passwords_migrating--;
+
+  g_list_free_full (items, (GDestroyNotify)g_object_unref);
+}
+
+static void
+migrate_form_passwords_to_libsecret (void)
+{
+  SecretService *service;
+  GList *collections, *c;
+  GError *error = NULL;
+
+  service = secret_service_get_sync (SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS, NULL, &error);
+  if (error) {
+    g_warning ("Could not get the secret service: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  collections = secret_service_get_collections (service);
+
+  for (c = collections; c; c = c->next) {
+    form_passwords_migrating++;
+    secret_collection_load_items ((SecretCollection*)c->data, NULL, (GAsyncReadyCallback)load_collection_items_cb,
+                                  NULL);
+  }
+
+  while (form_passwords_migrating)
+    g_main_context_iteration (NULL, FALSE);
+
+  g_list_free_full (collections, (GDestroyNotify)g_object_unref);
+  g_object_unref (service);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -828,6 +960,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_tabs_visibility,
   migrate_web_app_links,
   migrate_new_urls_table,
+  migrate_form_passwords_to_libsecret,
 };
 
 static gboolean

@@ -30,7 +30,7 @@
 #define FORM_PASSWORD_KEY "form_password"
 #define USERNAME_KEY      "username"
 
-#define EPHY_PROFILE_MIGRATION_VERSION 8
+#define EPHY_PROFILE_MIGRATION_VERSION 9
 
 #define EPHY_HISTORY_FILE       "ephy-history.db"
 #define EPHY_BOOKMARKS_FILE     "ephy-bookmarks.xml"
