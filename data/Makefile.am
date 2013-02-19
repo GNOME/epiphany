@@ -53,7 +53,8 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 iconsdir = $(pkgdatadir)/icons
 dist_icons_DATA =         \
     missing-thumbnail.png \
-    thumbnail-frame.png
+    thumbnail-frame.png   \
+    incognito.png
 
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\

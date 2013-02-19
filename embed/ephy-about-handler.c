@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-about-handler.h"
 
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-smaps.h"
 #include "ephy-web-app-utils.h"
@@ -239,6 +240,43 @@ ephy_about_handler_handle_applications (GString *data_str)
   ephy_web_application_free_application_list (applications);
 }
 
+static void
+ephy_about_handler_handle_incognito (GString *data_str)
+{
+  const char *filename;
+  char *img_data = NULL, *img_data_base64 = NULL;
+  gsize data_length;
+
+  filename = ephy_file ("incognito.png");
+  if (filename) {
+    g_file_get_contents (filename, &img_data, &data_length, NULL);
+    img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
+  }
+  g_string_append_printf (data_str,                                    \
+                          "<head>\n"                                   \
+                          "<title>%s</title>\n"                        \
+                          "<style type=\"text/css\">%s</style>\n"      \
+                          "</head>\n"                                  \
+                          "<body class=\"incognito-body\">\n"          \
+                          "  <div id=\"mainblock\">\n"                 \
+                          "    <div style=\"background: transparent url(data:image/png;base64,%s) no-repeat 10px center;\">\n" \
+                          "      <h1>%s</h1>\n"                        \
+                          "      <p>%s</p>\n"                          \
+                          "    </div>\n"                               \
+                          "  </div>\n"                                 \
+                          "</body>\n",
+                          _("Private Browsing"),
+                          css_style, img_data_base64 ? img_data_base64 : "",
+                          _("Private Browsing"),
+                          _("You are currently browsing <em>incognito</em>. Pages viewed in this "
+                            "mode will not show up in your browsing history and all stored "
+                            "information will be cleared when you close the window."));
+
+  g_free (img_data_base64);
+  g_free (img_data);
+
+}
+
 GString *
 ephy_about_handler_handle (const char *about)
 {
@@ -254,6 +292,10 @@ ephy_about_handler_handle (const char *about)
     ephy_about_handler_handle_epiphany (data_str);
   else if (!g_strcmp0 (about, "applications"))
     ephy_about_handler_handle_applications (data_str);
+  else if (!g_strcmp0 (about, "incognito") &&
+           ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())
+           == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    ephy_about_handler_handle_incognito (data_str);
 
   g_string_append (data_str, "</html>");
 

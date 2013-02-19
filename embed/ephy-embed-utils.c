@@ -167,6 +167,7 @@ ephy_embed_utils_url_is_empty (const char *location)
  * window's location entry. */
 static const char * do_not_show_address[] = {
   "about:blank",
+  "ephy-about:incognito",
   "ephy-about:overview",
   NULL
 };
