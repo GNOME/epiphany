@@ -2072,18 +2072,14 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_COMMITTED: {
     const char* uri;
     EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-    WebKitWebResource *resource;
-    WebKitURIResponse *response;
 
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
 
     /* Security status. */
-    resource = webkit_web_view_get_main_resource (web_view);
-    response = webkit_web_resource_get_response (resource);
     g_clear_object (&priv->certificate);
-    if (webkit_uri_response_get_https_status (response, &priv->certificate, &priv->tls_errors)) {
+    if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
       g_object_ref (priv->certificate);
       security_level = priv->tls_errors == 0 ?
         EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
