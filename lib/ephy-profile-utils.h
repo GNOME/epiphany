@@ -20,11 +20,15 @@
 #ifndef EPHY_PROFILE_UTILS_H
 #define EPHY_PROFILE_UTILS_H
 
-#include <glib.h>
-#include <gnome-keyring.h>
+#define SECRET_API_SUBJECT_TO_CHANGE
 
+#include <glib.h>
+#include <libsecret/secret.h>
+
+#define URI_KEY           "uri"
 #define FORM_USERNAME_KEY "form_username"
 #define FORM_PASSWORD_KEY "form_password"
+#define USERNAME_KEY      "username"
 
 #define EPHY_PROFILE_MIGRATION_VERSION 8
 
@@ -38,18 +42,29 @@ gboolean ephy_profile_utils_set_migration_version (int version);
 
 gboolean ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug);
 
-void _ephy_profile_utils_store_form_auth_data (const char *uri,
-                                               const char *form_username,
-                                               const char *form_password,
-                                               const char *username,
-                                               const char *password);
+void _ephy_profile_utils_store_form_auth_data            (const char *uri,
+							  const char *form_username,
+							  const char *form_password,
+							  const char *username,
+							  const char *password,
+							  GAsyncReadyCallback callback,
+							  gpointer userdata);
+
+gboolean _ephy_profile_utils_store_form_auth_data_finish (GAsyncResult *result,
+							  GError **error);
+
+typedef void (*EphyQueryFormDataCallback)                (const char *username, const char *password, gpointer user_data);
 
 void
-_ephy_profile_utils_query_form_auth_data (const char *uri,
-                                          const char *form_username,
-                                          const char *form_password,
-                                          GnomeKeyringOperationGetListCallback callback,
-                                          gpointer data,
-                                          GDestroyNotify destroy_data);
+_ephy_profile_utils_query_form_auth_data                 (const char *uri,
+							  const char *form_username,
+							  const char *form_password,
+							  EphyQueryFormDataCallback callback,
+							  gpointer data,
+							  GDestroyNotify destroy_data);
+
+const SecretSchema *ephy_profile_get_form_password_schema (void) G_GNUC_CONST;
+
+#define EPHY_FORM_PASSWORD_SCHEMA ephy_profile_get_form_password_schema ()
 
 #endif

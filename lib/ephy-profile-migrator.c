@@ -298,10 +298,11 @@ parse_and_decrypt_signons (const char *signons,
         char *u = soup_uri_to_string (uri, FALSE);
         /* We skip the '*' at the beginning of form_password. */
         _ephy_profile_utils_store_form_auth_data (u,
-                                                 form_username,
-                                                 form_password+1,
-                                                 username,
-                                                 password);
+                                                  form_username,
+                                                  form_password+1,
+                                                  username,
+                                                  password,
+                                                  NULL, NULL);
         g_free (u);
       } else if (!handle_forms && realm &&
                  username && password &&

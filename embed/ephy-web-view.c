@@ -49,7 +49,6 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <gnome-keyring.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
 
@@ -524,33 +523,23 @@ fill_data_free (gpointer data)
 }
 
 static void
-fill_form_cb (GnomeKeyringResult retval,
-              GList *results,
+fill_form_cb (const char *username,
+              const char *password,
               gpointer user_data)
 {
   FillData *fill_data = (FillData*)user_data;
-  GnomeKeyringNetworkPasswordData* keyring_data;
 
-  if (!results) {
+  if (username == NULL && password == NULL) {
     LOG ("No result");
     return;
   }
 
-  /* FIXME: We use only the first result, for now; We need to do
-   * something smarter here */
-  keyring_data = (GnomeKeyringNetworkPasswordData*)results->data;
-
-  if (retval != GNOME_KEYRING_RESULT_OK) {
-    LOG ("Query failed.");
-    return;
-  }
-
-  LOG ("Found: user %s pass (hidden)", keyring_data->user);
+  LOG ("Found: user %s pass (hidden)", username);
 
   g_object_set (fill_data->username_node,
-                "value", keyring_data->user, NULL);
+                "value", username, NULL);
   g_object_set (fill_data->password_node,
-                "value", keyring_data->password, NULL);
+                "value", password, NULL);
 }
 
 static void
@@ -663,7 +652,8 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
                                             name_field_name,
                                             password_field_name,
                                             name_field_value,
-                                            password_field_value);
+                                            password_field_value,
+                                            NULL, NULL);
 
   /* Update internal caching */
   host = ephy_string_get_host_name (uri);
@@ -732,25 +722,23 @@ request_decision_on_storing (StorePasswordData *store_data)
 }
 
 static void
-should_store_cb (GnomeKeyringResult retval,
-                 GList *results,
+should_store_cb (const char *username,
+                 const char *password,
                  gpointer user_data)
 {
   StorePasswordData *store_data = (StorePasswordData*)user_data;
-  GnomeKeyringNetworkPasswordData* keyring_data;
 
-  if (!results) {
+  if (username == NULL && password == NULL) {
     LOG ("No result on query; asking whether we should store.");
     request_decision_on_storing (store_data);
     return;
   }
 
+
   /* FIXME: We use only the first result, for now; We need to do
    * something smarter here */
-  keyring_data = (GnomeKeyringNetworkPasswordData*)results->data;
-
-  if (g_str_equal (keyring_data->user, store_data->name_value) &&
-      g_str_equal (keyring_data->password, store_data->password_value)) {
+  if (g_str_equal (username, store_data->name_value) &&
+      g_str_equal (password, store_data->password_value)) {
     LOG ("User/password already stored. Not asking about storing.");
     store_password_data_free (store_data);
     return;
@@ -800,7 +788,7 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   _ephy_profile_utils_query_form_auth_data (store_data->uri,
                                             store_data->name_field,
                                             store_data->password_field,
-                                            should_store_cb,
+                                            (EphyQueryFormDataCallback)should_store_cb,
                                             store_data,
                                             NULL);
 
@@ -847,7 +835,7 @@ pre_fill_form (WebKitDOMNode *username_node,
       _ephy_profile_utils_query_form_auth_data (uri_str,
                                                 data->form_username,
                                                 data->form_password,
-                                                fill_form_cb,
+                                                (EphyQueryFormDataCallback)fill_form_cb,
                                                 fill_data,
                                                 fill_data_free);
       g_free (uri_str);
