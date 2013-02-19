@@ -46,7 +46,7 @@
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <gnome-keyring.h>
+#include <libsecret/secret.h>
 #include <libsoup/soup.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -252,7 +252,6 @@ parse_and_decrypt_signons (const char *signons,
       char *password = NULL;
       char *form_username = NULL;
       char *form_password = NULL;
-      guint32 item_id;
 
       /* The username */
       if (handle_forms) {
@@ -308,16 +307,16 @@ parse_and_decrypt_signons (const char *signons,
                  username && password &&
                  !g_str_equal (username, "") &&
                  form_username == NULL && form_password == NULL) {
-        gnome_keyring_set_network_password_sync (NULL,
-                                                 username,
-                                                 realm,
-                                                 uri->host,
-                                                 NULL,
-                                                 uri->scheme,
-                                                 NULL,
-                                                 uri->port,
-                                                 password,
-                                                 &item_id);
+        char *u = soup_uri_to_string (uri, FALSE);
+        secret_password_store_sync (SECRET_SCHEMA_COMPAT_NETWORK,
+                                    SECRET_COLLECTION_DEFAULT,
+                                    u, password, NULL, NULL,
+                                    "user", username,
+                                    "domain", realm,
+                                    "server", uri->host,
+                                    "protocol", uri->scheme,
+                                    "port", (gint)uri->port,
+                                    NULL);
       }
 
       g_free (username);
