@@ -961,15 +961,18 @@ ephy_embed_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
 #endif
 
-  /* The overview */
-  priv->overview = ephy_overview_new ();
-  gtk_widget_set_halign (priv->overview, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (priv->overview, GTK_ALIGN_FILL);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->overview);
+  /* The overview. In incognito mode we don't use it. */
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) !=
+      EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    priv->overview = ephy_overview_new ();
+    gtk_widget_set_halign (priv->overview, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (priv->overview, GTK_ALIGN_FILL);
+    gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->overview);
 
-  g_object_bind_property (embed, "overview-mode",
-                          priv->overview, "visible",
-                          G_BINDING_SYNC_CREATE);
+    g_object_bind_property (embed, "overview-mode",
+                            priv->overview, "visible",
+                            G_BINDING_SYNC_CREATE);
+  }
 
   /* Floating message popup for fullscreen mode. */
   priv->fullscreen_message_label = gtk_label_new (NULL);

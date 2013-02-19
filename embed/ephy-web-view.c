@@ -3962,7 +3962,11 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   ephy_web_view_set_visit_type (view,
                                 EPHY_PAGE_VISIT_HOMEPAGE);
-  ephy_web_view_load_url (view, "about:overview");
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())
+      == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    ephy_web_view_load_url (view, "about:incognito");
+  else
+    ephy_web_view_load_url (view, "about:overview");
 }
 
 /**

@@ -2686,6 +2686,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	WebKitWebView *web_view;
 	EphyWebView *view;
 	EphyOverview *overview;
+	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
 
@@ -2787,10 +2788,13 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 G_CALLBACK (sync_embed_is_overview),
 				 window, 0);
 
-	overview = ephy_embed_get_overview (embed);
-	g_signal_connect_object (overview, "open-link",
-				 G_CALLBACK (overview_open_link_cb),
-				 window, 0);
+	shell_mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_embed_shell_get_default ()));
+	if (shell_mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+		overview = ephy_embed_get_overview (embed);
+		g_signal_connect_object (overview, "open-link",
+					 G_CALLBACK (overview_open_link_cb),
+					 window, 0);
+	}
 
 	g_object_notify (G_OBJECT (window), "active-child");
 }
@@ -2803,6 +2807,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	EphyWebView *view;
 	EphyOverview *overview;
 	guint sid;
+	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
 
@@ -2876,10 +2881,13 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 					      G_CALLBACK (sync_embed_is_overview),
 					      window);
 
-	overview = ephy_embed_get_overview (embed);
-	g_signal_handlers_disconnect_by_func (overview,
-					      G_CALLBACK (overview_open_link_cb),
-					      window);
+	shell_mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_embed_shell_get_default ()));
+	if (shell_mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+		overview = ephy_embed_get_overview (embed);
+		g_signal_handlers_disconnect_by_func (overview,
+						      G_CALLBACK (overview_open_link_cb),
+						      window);
+	}
 
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
