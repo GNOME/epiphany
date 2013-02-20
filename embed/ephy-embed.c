@@ -298,12 +298,19 @@ load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
                  EphyEmbed *embed)
 {
-  const char *address;
+  switch (load_event) {
+  case WEBKIT_LOAD_STARTED: {
+    const char *uri;
 
-  if (load_event == WEBKIT_LOAD_COMMITTED) {
+    uri = webkit_web_view_get_uri (web_view);
+    ephy_embed_set_overview_mode (embed, strcmp (uri, "ephy-about:overview") == 0);
+    break;
+  }
+  case WEBKIT_LOAD_COMMITTED:
     ephy_embed_destroy_top_widgets (embed);
-    address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-    ephy_embed_set_overview_mode (embed, strcmp (address, "ephy-about:overview") == 0);
+    break;
+  default:
+    break;
   }
 }
 #else
