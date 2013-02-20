@@ -303,7 +303,7 @@ load_changed_cb (WebKitWebView *web_view,
     const char *uri;
 
     uri = webkit_web_view_get_uri (web_view);
-    ephy_embed_set_overview_mode (embed, strcmp (uri, "ephy-about:overview") == 0);
+    ephy_embed_set_overview_mode (embed, uri && strcmp (uri, "ephy-about:overview") == 0);
     break;
   }
   case WEBKIT_LOAD_COMMITTED:
