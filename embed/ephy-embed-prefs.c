@@ -685,6 +685,7 @@ ephy_embed_prefs_init (void)
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,
                                                        "enable-site-specific-quirks", TRUE,
+                                                       "enable-dns-prefetching", TRUE,
                                                        NULL);
 #else
   webkit_settings = webkit_web_settings_new ();

@@ -30,11 +30,16 @@
 #include "ephy-gui.h"
 #include "ephy-signal-accumulator.h"
 
+#include <libsoup/soup.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#ifdef HAVE_WEBKIT2
+#include <webkit2/webkit2.h>
+#else
 #include <webkit/webkit.h>
+#endif
 
 /**
  * SECTION:ephy-location-entry
@@ -941,7 +946,10 @@ static gboolean
 do_dns_prefetch (PrefetchHelper *helper)
 {
 #ifdef HAVE_WEBKIT2
-	/* TODO: Network Features */
+	WebKitWebContext *context = webkit_web_context_get_default ();
+
+	if (helper->uri)
+		webkit_web_context_prefetch_dns (context, helper->uri->host);
 #else
 	SoupSession *session = webkit_get_default_session ();
 
