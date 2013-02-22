@@ -61,7 +61,9 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
 {
   gboolean value = FALSE;
   char *uri = NULL;
+#ifndef HAVE_WEBKIT2
   char *webkit_pref = data;
+#endif
 
   value = g_settings_get_boolean (settings, key);
 
@@ -597,7 +599,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
 #ifdef HAVE_WEBKIT2
   web_context = webkit_web_context_get_default ();
   webkit_web_context_set_spell_checking_enabled (web_context, value);
-  webkit_web_context_set_spell_checking_languages (web_context, languages);
+  webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)languages);
 #else
   g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
   g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
