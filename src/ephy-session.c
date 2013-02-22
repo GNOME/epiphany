@@ -1105,16 +1105,31 @@ session_parse_embed (SessionParserContext *context,
 		EphyNewTabFlags flags;
 		EphyEmbed *embed;
 		EphyWebView *web_view;
+		gboolean delay_loading;
+
+		delay_loading = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+							EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS);
 
 		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 		flags |= EPHY_NEW_TAB_APPEND_LAST;
-	        flags |= EPHY_NEW_TAB_DELAYED_OPEN_PAGE;
+
+		if (delay_loading)
+		{
+			flags |= EPHY_NEW_TAB_DELAYED_OPEN_PAGE;
+		}
+		else
+		{
+			flags |= EPHY_NEW_TAB_OPEN_PAGE;
+		}
 
 		embed = ephy_shell_new_tab (ephy_shell_get_default (),
 					    context->window, NULL, url, flags);
 
-		web_view = ephy_embed_get_web_view (embed);
-		ephy_web_view_set_placeholder (web_view, url, title);
+		if (delay_loading)
+		{
+			web_view = ephy_embed_get_web_view (embed);
+			ephy_web_view_set_placeholder (web_view, url, title);
+		}
 	}
 	else if (was_loading && url != NULL)
 	{

@@ -123,6 +123,7 @@ typedef enum
 #define EPHY_PREFS_ENABLE_CARET_BROWSING          "enable-caret-browsing"
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE           "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY         "restore-session-policy"
+#define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS "restore-session-delaying-loads"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"

@@ -25,6 +25,7 @@
 #include "ephy-embed-private.h"
 #include "ephy-file-helpers.h"
 #include "ephy-private.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-session.h"
 
@@ -72,6 +73,22 @@ load_session_from_string (EphySession *session,
 }
 
 static void
+enable_delayed_loading (void)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_MAIN,
+                          EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS,
+                          TRUE);
+}
+
+static void
+disable_delayed_loading (void)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_MAIN,
+                          EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS,
+                          FALSE);
+}
+
+static void
 test_ephy_session_load (void)
 {
     EphySession *session;
@@ -79,6 +96,8 @@ test_ephy_session_load (void)
     GList *l;
     EphyEmbed *embed;
     EphyWebView *view;
+
+    disable_delayed_loading ();
 
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
@@ -94,9 +113,11 @@ test_ephy_session_load (void)
     g_assert (embed);
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
-    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:memory");
+    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:memory");
 
     ephy_session_clear (session);
+
+    enable_delayed_loading ();
 }
 
 const char *session_data_many_windows =
@@ -115,6 +136,8 @@ test_ephy_session_clear (void)
 {
   EphySession *session;
   GList *l;
+
+  disable_delayed_loading ();
 
   session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
   load_session_from_string (session, session_data_many_windows);
@@ -140,6 +163,8 @@ test_ephy_session_load_empty_session (void)
     EphyEmbed *embed;
     EphyWebView *view;
 
+    disable_delayed_loading ();
+
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
@@ -163,6 +188,7 @@ test_ephy_session_load_empty_session (void)
     g_assert (view);
     g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:overview");
 
+    enable_delayed_loading ();
     ephy_session_clear (session);
 }
 
@@ -174,6 +200,8 @@ test_ephy_session_load_many_windows (void)
     GList *l, *p;
     EphyEmbed *embed;
     EphyWebView *view;
+
+    disable_delayed_loading ();
 
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
@@ -190,9 +218,10 @@ test_ephy_session_load_many_windows (void)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:epiphany");
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
     }
 
+    enable_delayed_loading ();
     ephy_session_clear (session);
 }
 
@@ -205,6 +234,8 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     EphyEmbed *embed;
     EphyWebView *view;
     guint32 user_time;
+
+    disable_delayed_loading ();
 
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
@@ -224,7 +255,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:epiphany");
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
     }
 
     /* Causing a session load here should not create new windows, since we
@@ -258,6 +289,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     g_assert (l);
     g_assert_cmpint (g_list_length (l), ==, final_num_windows);
 
+    enable_delayed_loading ();
     ephy_session_clear (session);
 }
 
@@ -288,6 +320,8 @@ test_ephy_session_restore_tabs (void)
   gchar *url;
   int n_windows;
   EphyEmbed *embed;
+
+  disable_delayed_loading ();
 
   /* Nothing to restore. */
   g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
@@ -340,6 +374,7 @@ test_ephy_session_restore_tabs (void)
   /* We have the same amount of windows than before destroying one. */
   g_assert_cmpint (n_windows, ==, g_list_length (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default()))));
 
+  enable_delayed_loading ();
   ephy_session_clear (session);
 }
 
@@ -347,6 +382,8 @@ int
 main (int argc, char *argv[])
 {
   int ret;
+
+  setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   gtk_test_init (&argc, &argv);
 
