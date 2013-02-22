@@ -2437,7 +2437,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (image_data);
 
   if (icon_info)
-    gtk_icon_info_free (icon_info);
+    g_object_unref (icon_info);
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
