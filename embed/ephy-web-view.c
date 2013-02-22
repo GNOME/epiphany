@@ -157,8 +157,6 @@ static void
 popups_manager_show (PopupInfo *popup,
                      EphyWebView *view)
 {
-  EphyEmbedSingle *single;
-
   /* Only show popup with non NULL url */
   if (popup->url != NULL) {
     /* FIXME: we need a way of opening windows in here. This used to
