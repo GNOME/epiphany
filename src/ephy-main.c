@@ -229,7 +229,9 @@ main (int argc,
   EphyShell *ephy_shell;
   int status;
   EphyFileHelpersFlags flags;
+#ifdef HAVE_WEBKIT2
   char *pid_str;
+#endif
 
 #ifdef ENABLE_NLS
   /* Initialize the i18n stuff */
