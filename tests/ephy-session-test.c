@@ -94,7 +94,7 @@ test_ephy_session_load (void)
     g_assert (embed);
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
-    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:memory");
+    g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:memory");
 
     ephy_session_clear (session);
 }
@@ -190,7 +190,7 @@ test_ephy_session_load_many_windows (void)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:epiphany");
     }
 
     ephy_session_clear (session);
@@ -224,7 +224,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
+      g_assert_cmpstr (ephy_web_view_get_address (view), ==, "about:epiphany");
     }
 
     /* Causing a session load here should not create new windows, since we
