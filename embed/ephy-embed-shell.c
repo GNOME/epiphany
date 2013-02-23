@@ -124,6 +124,7 @@ ephy_embed_shell_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
+#if HAVE_WEBKIT2
 static void
 web_extension_proxy_created_cb (GDBusConnection *connection,
                                 GAsyncResult *result,
@@ -180,6 +181,7 @@ ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell)
                       shell, NULL);
   g_free (service_name);
 }
+#endif
 
 /**
  * ephy_embed_shell_get_global_history_service:
@@ -384,7 +386,9 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
 
   shell->priv->downloads = NULL;
 
+#if HAVE_WEBKIT2
   ephy_embed_shell_watch_web_extension (shell);
+#endif
 }
 
 static void
