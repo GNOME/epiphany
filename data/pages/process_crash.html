@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+  Copyright © 2013 Igalia S.L.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%s" lang="%s" dir="%s">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>%s</title>
+  <style type="text/css">
+    body {
+      margin: 0 auto;
+      font: message-box;
+      background-color: #2e3436;
+      color: #d0d1cf;
+    }
+
+    #container {
+      padding: 10% 12% 5%;
+      margin: 0 auto;
+      max-width: 650px;
+    }
+
+    #main_icon {
+      float: left;
+      padding-right: 20px;
+    }
+
+    html[dir="rtl"] #main_icon {
+      padding-left: 20px;
+      padding-right: 0;
+      float: right;
+    }
+
+    #content {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+    #content h1 {
+      margin-top: 0;
+      font-size: 200%;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="container">
+      <div id="main_icon">
+      <!-- We do nothing with the URI for now: %s -->
+        <img width="150px" height="150px" src="%s" alt="Sad face icon"/>
+      </div>
+      <div id="content">
+          <h1>%s</h1>
+          <div class="explanation">
+            %s
+          </div>
+      </div>
+  </div>
+</body>
+</html>

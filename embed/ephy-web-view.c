@@ -102,6 +102,7 @@ struct _EphyWebViewPrivate {
   GCancellable *history_service_cancellable;
 
   guint snapshot_idle_id;
+  guint show_process_crash_page_id;
 
   EphyHistoryPageVisitType visit_type;
 
@@ -496,6 +497,11 @@ ephy_web_view_dispose (GObject *object)
   if (priv->snapshot_idle_id) {
     g_source_remove (priv->snapshot_idle_id);
     priv->snapshot_idle_id = 0;
+  }
+
+  if (priv->show_process_crash_page_id) {
+    g_source_remove (priv->show_process_crash_page_id);
+    priv->show_process_crash_page_id = 0;
   }
 
   g_clear_object(&priv->certificate);
@@ -1272,6 +1278,31 @@ hovering_over_link_cb (EphyWebView *web_view,
 }
 #endif
 
+#ifdef HAVE_WEBKIT2
+static gboolean
+load_process_crashed_page_cb (EphyWebView *web_view)
+{
+  const char *uri = ephy_web_view_get_address (web_view);
+  ephy_web_view_load_error_page (web_view, uri, EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL);
+
+  web_view->priv->show_process_crash_page_id = 0;
+
+  return FALSE;
+}
+
+static void
+process_crashed_cb (WebKitWebView *web_view, gpointer user_data)
+{
+  EphyWebViewPrivate *priv = web_view->priv;
+
+  g_return_if_fail (priv->show_process_crash_page_id == 0);
+  priv->show_process_crash_page_id = g_idle_add_full (G_PRIORITY_LOW,
+                                                      (GSourceFunc)load_process_crashed_page_cb,
+                                                      web_view,
+                                                      NULL);
+}
+#endif
+
 static void
 ephy_web_view_constructed (GObject *object)
 {
@@ -1289,6 +1320,11 @@ ephy_web_view_constructed (GObject *object)
 #endif
 
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", object);
+
+#ifdef HAVE_WEBKIT2
+  g_signal_connect (object, "web-process-crashed",
+                    G_CALLBACK (process_crashed_cb), object);
+#endif
 }
 
 static void
@@ -2388,6 +2424,16 @@ ephy_web_view_load_error_page (EphyWebView *view,
 
       html_file = ephy_file ("recovery.html");
       stock_icon = "dialog-information";
+      break;
+    case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
+      page_title = g_strdup_printf (_("Oops! Something went wrong displaying %s"), hostname);
+      msg_title = g_strdup (_("Oops!"));
+      msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
+      button_label = NULL;
+
+      html_file = ephy_file ("process_crash.html");
+      stock_icon = "computer-fail-symbolic";
+
       break;
     default:
       return;
