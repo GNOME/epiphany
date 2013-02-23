@@ -60,6 +60,7 @@ struct _EphyEmbedShellPrivate
   guint single_initialised : 1;
 #ifdef HAVE_WEBKIT2
   GDBusProxy *web_extension;
+  guint web_extension_watch_name_id;
 #endif
 };
 
@@ -101,6 +102,8 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->adblock_manager);
 #ifdef HAVE_WEBKIT2
   g_clear_object (&priv->web_extension);
+  if (priv->web_extension_watch_name_id > 0)
+    g_bus_unwatch_name (priv->web_extension_watch_name_id);
 #endif
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
@@ -119,6 +122,63 @@ ephy_embed_shell_finalize (GObject *object)
   }
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
+}
+
+static void
+web_extension_proxy_created_cb (GDBusConnection *connection,
+                                GAsyncResult *result,
+                                EphyEmbedShell *shell)
+{
+  GError *error = NULL;
+
+  shell->priv->web_extension = g_dbus_proxy_new_finish (result, &error);
+  if (!shell->priv->web_extension) {
+    g_warning ("Error creating web extension proxy: %s\n", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
+web_extension_appeared_cb (GDBusConnection *connection,
+                           const gchar *name,
+                           const gchar *name_owner,
+                           EphyEmbedShell *shell)
+{
+  g_dbus_proxy_new (connection,
+                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
+                    G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                    G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                    NULL,
+                    name,
+                    EPHY_WEB_EXTENSION_OBJECT_PATH,
+                    EPHY_WEB_EXTENSION_INTERFACE,
+                    NULL,
+                    (GAsyncReadyCallback)web_extension_proxy_created_cb,
+                    shell);
+}
+
+static void
+web_extension_vanished_cb (GDBusConnection *connection,
+                           const gchar *name,
+                           EphyEmbedShell *shell)
+{
+  g_clear_object (&shell->priv->web_extension);
+}
+
+static void
+ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell)
+{
+  char *service_name;
+
+  service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, getpid ());
+  shell->priv->web_extension_watch_name_id =
+    g_bus_watch_name (G_BUS_TYPE_SESSION,
+                      service_name,
+                      G_BUS_NAME_WATCHER_FLAGS_NONE,
+                      (GBusNameAppearedCallback) web_extension_appeared_cb,
+                      (GBusNameVanishedCallback) web_extension_vanished_cb,
+                      shell, NULL);
+  g_free (service_name);
 }
 
 /**
@@ -323,6 +383,8 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
   embed_shell = shell;
 
   shell->priv->downloads = NULL;
+
+  ephy_embed_shell_watch_web_extension (shell);
 }
 
 static void
@@ -691,26 +753,8 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 GDBusProxy *
 ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
 {
-  EphyEmbedShellPrivate *priv;
-
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-  priv = shell->priv;
-  if (!priv->web_extension) {
-    char *service_name;
-
-    service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, getpid ());
-    priv->web_extension = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                         G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                                                         NULL,
-                                                         service_name,
-                                                         EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                                         EPHY_WEB_EXTENSION_INTERFACE,
-                                                         NULL,
-                                                         NULL);
-    g_free (service_name);
-  }
-
-  return priv->web_extension;
+  return shell->priv->web_extension;
 }
 #endif
