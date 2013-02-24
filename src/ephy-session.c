@@ -1210,20 +1210,17 @@ static const GMarkupParser session_parser = {
 typedef struct {
 	EphyShell *shell;
 	GMarkupParseContext *parser;
-	GCancellable *cancellable;
 	char buffer[1024];
 } LoadFromStreamAsyncData;
 
 static LoadFromStreamAsyncData *
-load_from_stream_async_data_new (GMarkupParseContext *parser,
-				 GCancellable *cancellable)
+load_from_stream_async_data_new (GMarkupParseContext *parser)
 {
 	LoadFromStreamAsyncData *data;
 
 	data = g_slice_new (LoadFromStreamAsyncData);
 	data->shell = g_object_ref (ephy_shell_get_default ());
 	data->parser = parser;
-	data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 
 	return data;
 }
@@ -1233,53 +1230,49 @@ load_from_stream_async_data_free (LoadFromStreamAsyncData *data)
 {
 	g_object_unref (data->shell);
 	g_markup_parse_context_free (data->parser);
-	g_clear_object (&data->cancellable);
 
 	g_slice_free (LoadFromStreamAsyncData, data);
 }
 
 static void
-load_stream_complete (GSimpleAsyncResult *simple)
+load_stream_complete (GTask *task)
 {
 	EphySession *session;
 
-	g_simple_async_result_complete (simple);
+	g_task_return_boolean (task, TRUE);
 
-	session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
+	session = EPHY_SESSION (g_task_get_source_object (task));
 	session->priv->dont_save = FALSE;
 
 	ephy_session_save (session, SESSION_STATE);
-	g_object_unref (session);
 
-	g_object_unref (simple);
+	g_object_unref (task);
 
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
 
 static void
-load_stream_complete_error (GSimpleAsyncResult *simple,
+load_stream_complete_error (GTask *task,
 			    GError *error)
 {
 	EphySession *session;
 	LoadFromStreamAsyncData *data;
 	SessionParserContext *context;
 
-	g_simple_async_result_take_error (simple, error);
-	g_simple_async_result_complete (simple);
+	g_task_return_error (task, error);
 
-	session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
+	session = EPHY_SESSION (g_task_get_source_object (task));
 	session->priv->dont_save = FALSE;
 	/* If the session fails to load for whatever reason,
 	 * delete the file and open an empty window.
 	 */
 	session_delete (session, SESSION_STATE);
 
-	data = g_simple_async_result_get_op_res_gpointer (simple);
+	data = g_task_get_task_data (task);
 	context = (SessionParserContext *)g_markup_parse_context_get_user_data (data->parser);
 	session_maybe_open_window (session, context->user_time);
-	g_object_unref (session);
 
-	g_object_unref (simple);
+	g_object_unref (task);
 
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
@@ -1290,7 +1283,7 @@ load_stream_read_cb (GObject *object,
 		     gpointer user_data)
 {
 	GInputStream *stream = G_INPUT_STREAM (object);
-	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GTask *task = G_TASK (user_data);
 	LoadFromStreamAsyncData *data;
 	gssize bytes_read;
 	GError *error = NULL;
@@ -1298,21 +1291,21 @@ load_stream_read_cb (GObject *object,
 	bytes_read = g_input_stream_read_finish (stream, result, &error);
 	if (bytes_read < 0)
 	{
-		load_stream_complete_error (simple, error);
+		load_stream_complete_error (task, error);
 
 		return;
 	}
 
-	data = g_simple_async_result_get_op_res_gpointer (simple);
+	data = g_task_get_task_data (task);
 	if (bytes_read == 0)
 	{
 		if (!g_markup_parse_context_end_parse (data->parser, &error))
 		{
-			load_stream_complete_error (simple, error);
+			load_stream_complete_error (task, error);
 		}
 		else
 		{
-			load_stream_complete (simple);
+			load_stream_complete (task);
 		}
 
 		return;
@@ -1320,14 +1313,15 @@ load_stream_read_cb (GObject *object,
 
 	if (!g_markup_parse_context_parse (data->parser, data->buffer, bytes_read, &error))
 	{
-		load_stream_complete_error (simple, error);
+		load_stream_complete_error (task, error);
 
 		return;
 	}
 
 	g_input_stream_read_async (stream, data->buffer, sizeof (data->buffer),
-				   G_PRIORITY_HIGH, data->cancellable,
-				   load_stream_read_cb, simple);
+				   g_task_get_priority (task),
+				   g_task_get_cancellable (task),
+				   load_stream_read_cb, task);
 }
 
 /**
@@ -1355,7 +1349,7 @@ ephy_session_load_from_stream (EphySession *session,
 			       GAsyncReadyCallback callback,
 			       gpointer user_data)
 {
-	GSimpleAsyncResult *result;
+	GTask *task;
 	SessionParserContext *context;
 	GMarkupParseContext *parser;
 	LoadFromStreamAsyncData *data;
@@ -1367,15 +1361,17 @@ ephy_session_load_from_stream (EphySession *session,
 
 	session->priv->dont_save = TRUE;
 
-	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_load_from_stream);
+	task = g_task_new (session, cancellable, callback, user_data);
+	g_task_set_priority (task, G_PRIORITY_HIGH);
 
 	context = session_parser_context_new (session, user_time);
 	parser = g_markup_parse_context_new (&session_parser, 0, context, (GDestroyNotify)session_parser_context_free);
-	data = load_from_stream_async_data_new (parser, cancellable);
-	g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)load_from_stream_async_data_free);
+	data = load_from_stream_async_data_new (parser);
+	g_task_set_task_data (task, data, (GDestroyNotify)load_from_stream_async_data_free);
 
-	g_input_stream_read_async (stream, data->buffer, sizeof (data->buffer), G_PRIORITY_HIGH, cancellable,
-				   load_stream_read_cb, result);
+	g_input_stream_read_async (stream, data->buffer, sizeof (data->buffer),
+				   g_task_get_priority (task), cancellable,
+				   load_stream_read_cb, task);
 }
 
 /**
@@ -1394,31 +1390,22 @@ ephy_session_load_from_stream_finish (EphySession *session,
 				      GAsyncResult *result,
 				      GError **error)
 {
-	GSimpleAsyncResult *simple;
+	g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-
-	simple = G_SIMPLE_ASYNC_RESULT (result);
-	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_load_from_stream);
-
-	return !g_simple_async_result_propagate_error (simple, error);
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef struct {
 	guint32 user_time;
-	GCancellable *cancellable;
 } LoadAsyncData;
 
 static LoadAsyncData *
-load_async_data_new (guint32 user_time,
-		     GCancellable *cancellable)
+load_async_data_new (guint32 user_time)
 {
 	LoadAsyncData *data;
 
 	data = g_slice_new (LoadAsyncData);
 	data->user_time = user_time;
-	data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 
 	return data;
 }
@@ -1426,8 +1413,6 @@ load_async_data_new (guint32 user_time,
 static void
 load_async_data_free (LoadAsyncData *data)
 {
-	g_clear_object (&data->cancellable);
-
 	g_slice_free (LoadAsyncData, data);
 }
 
@@ -1437,15 +1422,19 @@ load_from_stream_cb (GObject *object,
 		     gpointer user_data)
 {
 	EphySession *session = EPHY_SESSION (object);
-	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GTask *task = G_TASK (user_data);
 	GError *error = NULL;
 
 	if (!ephy_session_load_from_stream_finish (session, result, &error))
 	{
-		g_simple_async_result_take_error (simple, error);
+		g_task_return_error (task, error);
 	}
-	g_simple_async_result_complete (simple);
-	g_object_unref (simple);
+	else
+	{
+		g_task_return_boolean (task, TRUE);
+	}
+
+	g_object_unref (task);
 }
 
 static void
@@ -1454,7 +1443,7 @@ session_read_cb (GObject *object,
 		 gpointer user_data)
 {
 	GFileInputStream *stream;
-	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GTask *task = G_TASK (user_data);
 	GError *error = NULL;
 
 	stream = g_file_read_finish (G_FILE (object), result, &error);
@@ -1463,18 +1452,16 @@ session_read_cb (GObject *object,
 		EphySession *session;
 		LoadAsyncData *data;
 
-		session = EPHY_SESSION (g_async_result_get_source_object (G_ASYNC_RESULT (simple)));
-		data = g_simple_async_result_get_op_res_gpointer (simple);
+		session = EPHY_SESSION (g_task_get_source_object (task));
+		data = g_task_get_task_data (task);
 		ephy_session_load_from_stream (session, G_INPUT_STREAM (stream), data->user_time,
-					       data->cancellable, load_from_stream_cb, simple);
+					       g_task_get_cancellable (task), load_from_stream_cb, task);
 		g_object_unref (stream);
-		g_object_unref (session);
 	}
 	else
 	{
-		g_simple_async_result_take_error (simple, error);
-		g_simple_async_result_complete (simple);
-		g_object_unref (simple);
+		g_task_return_error (task, error);
+		g_object_unref (task);
 	}
 
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
@@ -1506,7 +1493,7 @@ ephy_session_load (EphySession *session,
 		   gpointer user_data)
 {
 	GFile *save_to_file;
-	GSimpleAsyncResult *result;
+	GTask *task;
 	LoadAsyncData *data;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
@@ -1516,12 +1503,13 @@ ephy_session_load (EphySession *session,
 
 	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
-	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_load);
+	task = g_task_new (session, cancellable, callback, user_data);
+	g_task_set_priority (task, G_PRIORITY_HIGH);
 
 	save_to_file = get_session_file (filename);
-	data = load_async_data_new (user_time, cancellable);
-	g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)load_async_data_free);
-	g_file_read_async (save_to_file, G_PRIORITY_HIGH, cancellable, session_read_cb, result);
+	data = load_async_data_new (user_time);
+	g_task_set_task_data (task, data, (GDestroyNotify)load_async_data_free);
+	g_file_read_async (save_to_file, g_task_get_priority (task), cancellable, session_read_cb, task);
 	g_object_unref (save_to_file);
 }
 
@@ -1541,15 +1529,9 @@ ephy_session_load_finish (EphySession *session,
 			  GAsyncResult *result,
 			  GError **error)
 {
-	GSimpleAsyncResult *simple;
+	g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-
-	simple = G_SIMPLE_ASYNC_RESULT (result);
-	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_load);
-
-	return !g_simple_async_result_propagate_error (simple, error);
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static gboolean
@@ -1574,13 +1556,19 @@ session_resumed_cb (GObject *object,
 		    gpointer user_data)
 {
 	EphySession *session = EPHY_SESSION (object);
-	GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
+	GTask *task = G_TASK (user_data);
 	GError *error = NULL;
 
 	if (!ephy_session_load_finish (session, result, &error))
-		g_simple_async_result_take_error (simple, error);
-	g_simple_async_result_complete (simple);
-	g_object_unref (simple);
+	{
+		g_task_return_error (task, error);
+	}
+	else
+	{
+		g_task_return_boolean (task, TRUE);
+	}
+
+	g_object_unref (task);
 }
 
 void
@@ -1590,14 +1578,14 @@ ephy_session_resume (EphySession *session,
 		     GAsyncReadyCallback callback,
 		     gpointer user_data)
 {
-	GSimpleAsyncResult *result;
+	GTask *task;
 	gboolean has_session_state;
 	EphyPrefsRestoreSessionPolicy policy;
 	EphyShell *shell;
 
 	LOG ("ephy_session_autoresume");
 
-	result = g_simple_async_result_new (G_OBJECT (session), callback, user_data, ephy_session_resume);
+	task = g_task_new (session, cancellable, callback, user_data);
 
 	has_session_state = session_state_file_exists (session);
 
@@ -1620,29 +1608,22 @@ ephy_session_resume (EphySession *session,
 	else if (ephy_shell_get_n_windows (shell) == 0)
 	{
 		ephy_session_load (session, SESSION_STATE, user_time, cancellable,
-				   session_resumed_cb, result);
+				   session_resumed_cb, task);
 		return;
 	}
 
-	g_simple_async_result_complete_in_idle (result);
-	g_object_unref (result);
+	g_task_return_boolean (task, TRUE);
+	g_object_unref (task);
 }
-
 
 gboolean
 ephy_session_resume_finish (EphySession *session,
 			    GAsyncResult *result,
 			    GError **error)
 {
-	GSimpleAsyncResult *simple;
+	g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
 
-	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-
-	simple = G_SIMPLE_ASYNC_RESULT (result);
-	g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == ephy_session_resume);
-
-	return !g_simple_async_result_propagate_error (simple, error);
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 
