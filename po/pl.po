@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2013-02-17 14:44+0100\n"
-"PO-Revision-Date: 2013-02-17 14:45+0100\n"
+"POT-Creation-Date: 2013-02-24 01:57+0100\n"
+"PO-Revision-Date: 2013-02-24 01:58+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -49,7 +49,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.pl/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:456 ../src/window-commands.c:1683
+#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1683
 msgid "Web"
 msgstr "WWW"
 
@@ -153,14 +153,30 @@ msgstr ""
 "awarii) i \"never\" (zawsze wyświetlana jest strona domowa)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+"Określa, czy opóźniać wczytywanie kart, które nie są od razu widoczne "
+"podczas przywracania sesji"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Jeśli ta opcja jest ustawiona na \"true\", to podczas przywracania sesji "
+"karty nie będą wczytywane, dopóki użytkownik nie przełączy na nie."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
 msgstr "Domyślne wyświetlanie pasków narzędziowych"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Toolbar style"
 msgstr "Styl paska narzędziowego"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -170,11 +186,11 @@ msgstr ""
 "środowiska GNOME), \"both\" (tekst i ikony), \"both-horiz\" (tekst obok "
 "ikon), \"icons\" (ikony) i \"text\" (tekst)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "[Deprecated]"
 msgstr "[Przestarzałe]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -182,11 +198,11 @@ msgstr ""
 "[Przestarzałe] To ustawienie jest przestarzałe, należy używać opcji \"tabs-"
 "bar-visibility-policy\" zamiast tego."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
 msgstr "Widoczność okna pobierania"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -194,11 +210,11 @@ msgstr ""
 "Ukrywa lub wyświetla okno pobierania. Kiedy jest ukryte, wyświetlone "
 "zostanie powiadomienie po rozpoczęciu nowego pobierania."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "The visibility policy for the tabs bar."
 msgstr "Polityka widoczności paska kart."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -209,23 +225,23 @@ msgstr ""
 "wyświetlany tylko, jeśli otwarte są dwie lub więcej kart) i \"never\" (pasek "
 "nigdy nie jest wyświetlany)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Minimum font size"
 msgstr "Minimalny rozmiar czcionki"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Use GNOME fonts"
 msgstr "Użycie czcionek środowiska GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Use GNOME desktop wide font configuration."
 msgstr "Używa konfiguracji czcionek środowiska GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
 msgstr "Własna czcionka bezszeryfowa"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -233,11 +249,11 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki bezszeryfowej środowiska, kiedy "
 "ustawiona jest opcja \"use-gnome-fonts\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom serif font"
 msgstr "Własna czcionka szeryfowa"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -245,11 +261,11 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki szeryfowej środowiska, kiedy "
 "ustawiona jest opcja \"use-gnome-fonts\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "Custom monospace font"
 msgstr "Własna czcionka o stałej szerokości"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -257,71 +273,71 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki o stałej szerokości środowiska, "
 "kiedy ustawiona jest opcja \"use-gnome-fonts\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Use own colors"
 msgstr "Użycie własnych kolorów"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Używa własnych kolorów zamiast kolorów żądanych przez witrynę."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own fonts"
 msgstr "Użycie własnych czcionek"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Używa własnych czcionek zamiast czcionek żądanych przez witrynę."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use a custom CSS"
 msgstr "Użycie własnych stylów CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Używa własnego pliku stylów CSS, aby zmodyfikować styl witryny."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Enable spell checking"
 msgstr "Włączenie sprawdzania pisowni"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Spell check any text typed in editable areas."
 msgstr "Sprawdza pisownię tekstu wpisanego w pola tekstowe."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Default encoding"
 msgstr "Domyślne kodowanie"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Domyślne kodowanie. Przyjmowane są tylko wartości, które rozpoznaje "
 "biblioteka WebKitGTK+."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Size of disk cache"
 msgstr "Rozmiar pamięci podręcznej na dysku"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Size of disk cache, in MB."
 msgstr "Rozmiar pamięci podręcznej na dysku w megabajtach."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 #: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "Języki"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Preferred languages, two letter codes."
 msgstr "Preferowane języki jako dwuliterowe kody."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Cookie accept"
 msgstr "Akceptowanie ciasteczek"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -330,11 +346,11 @@ msgstr ""
 "witryny), \"current site\" (tylko z bieżącej witryny) i \"nowhere"
 "\" (nieakceptowanie ciasteczek)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Image animation mode"
 msgstr "Tryb animacji obrazów"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -343,46 +359,46 @@ msgstr ""
 "\" (wyświetlanie animacji), \"once\" (wyświetlanie animacji tylko raz) i "
 "\"disabled\" (bez animacji)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Allow popups"
 msgstr "Zezwalanie na otwieranie wyskakujących okien"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Zezwala witrynom na otwieranie nowych okien używając języka JavaScript "
 "(jeśli jest on włączony)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Enable Plugins"
 msgstr "Obsługa wtyczek"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Enable JavaScript"
 msgstr "Obsługa języka JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Enable WebGL"
 msgstr "Obsługa protokołu WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Określa, czy włączyć obsługę kontekstów protokołu WebGL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Enable WebAudio"
 msgstr "Obsługa protokołu WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Whether to enable support for WebAudio."
 msgstr "Określa, czy włączyć obsługę protokołu WebAudio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Do Not Track"
 msgstr "Bez śledzenia"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -390,21 +406,21 @@ msgstr ""
 "Określa, czy informować witryny, że użytkownik nie chce być śledzony. Proszę "
 "zauważyć, że witryny nie muszą uwzględniać tego ustawienia."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Adblock"
 msgstr "Włączenie blokowania reklam"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Określa, czy blokować osadzone reklamy na stronach WWW."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
 msgstr "Katalog pobierania"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -413,27 +429,27 @@ msgstr ""
 "spowoduje użycie domyślnego katalogu pobierania, a wartość \"Desktop\" "
 "spowoduje użyciu katalogu pulpitu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
 msgstr "Zakres historii witryn"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
 msgstr "Określa, czy wyświetlać kolumnę tytułu w oknie historii."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
 msgstr "Określa, czy wyświetlać kolumnę adresu w oknie historii."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
 msgstr "Określa, czy wyświetlać kolumnę daty w oknie historii."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Określa, czy wyświetlać kolumnę tytułu w oknie zakładek."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Określa, czy wyświetlać kolumnę adresu w oknie zakładek."
 
@@ -484,25 +500,25 @@ msgstr "Lista zainstalowanych programów WWW"
 msgid "Installed on:"
 msgstr "Zainstalowano:"
 
-#: ../embed/ephy-embed.c:689
+#: ../embed/ephy-embed.c:696
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Naciśnięcie klawisza %s wyłączy pełny ekran"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:692
+#: ../embed/ephy-embed.c:699
 msgid "ESC"
 msgstr "Esc"
 
-#: ../embed/ephy-embed.c:692
+#: ../embed/ephy-embed.c:699
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1077
+#: ../embed/ephy-embed.c:1084
 msgid "Web Inspector"
 msgstr "Web Inspector"
 
-#: ../embed/ephy-embed-shell.c:217
+#: ../embed/ephy-embed-shell.c:288
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr ""
 "Nie można teraz użyć programu Epiphany. Zainicjowanie się nie powiodło."
@@ -841,15 +857,15 @@ msgid "Most Visited"
 msgstr "Najczęściej odwiedzane"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3655
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3669
 msgid "Blank page"
 msgstr "Pusta strona"
 
-#: ../embed/ephy-web-view.c:697
+#: ../embed/ephy-web-view.c:695
 msgid "Not now"
 msgstr "Nie teraz"
 
-#: ../embed/ephy-web-view.c:698
+#: ../embed/ephy-web-view.c:696
 msgid "Store password"
 msgstr "Przechowaj hasło"
 
@@ -857,39 +873,39 @@ msgstr "Przechowaj hasło"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:711
+#: ../embed/ephy-web-view.c:709
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Przechować hasło dla użytkownika <b>%s</b> na <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1894
+#: ../embed/ephy-web-view.c:1892
 msgid "Deny"
 msgstr "Odmawianie"
 
-#: ../embed/ephy-web-view.c:1895
+#: ../embed/ephy-web-view.c:1893
 msgid "Allow"
 msgstr "Zezwalanie"
 
-#: ../embed/ephy-web-view.c:1909
+#: ../embed/ephy-web-view.c:1907
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Witryna <b>%s</b> chce poznać położenie użytkownika."
 
-#: ../embed/ephy-web-view.c:2366
+#: ../embed/ephy-web-view.c:2360
 msgid "None specified"
 msgstr "Nie podano nikogo"
 
-#: ../embed/ephy-web-view.c:2375 ../embed/ephy-web-view.c:2393
+#: ../embed/ephy-web-view.c:2369 ../embed/ephy-web-view.c:2387
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Błąd podczas wczytywania %s"
 
-#: ../embed/ephy-web-view.c:2377
+#: ../embed/ephy-web-view.c:2371
 msgid "Oops! It was not possible to show this website"
 msgstr "Wczytanie tej witryny jest niemożliwe"
 
-#: ../embed/ephy-web-view.c:2378
+#: ../embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -902,15 +918,15 @@ msgstr ""
 "przeniesiona na nowy adres. Proszę także sprawdzić, czy połączenie "
 "internetowe działa poprawnie.</p>"
 
-#: ../embed/ephy-web-view.c:2387
+#: ../embed/ephy-web-view.c:2381
 msgid "Try again"
 msgstr "Spróbuj ponownie"
 
-#: ../embed/ephy-web-view.c:2395
+#: ../embed/ephy-web-view.c:2389
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Ta witryna mogła spowodować nieoczekiwane zamknięcie przeglądarki"
 
-#: ../embed/ephy-web-view.c:2397
+#: ../embed/ephy-web-view.c:2391
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -922,29 +938,29 @@ msgstr ""
 "strony. Jeśli tak się stanie, to proszę zgłosić ten problem programistom "
 "<strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2405
+#: ../embed/ephy-web-view.c:2399
 msgid "Load again anyway"
 msgstr "Wczytaj ponownie mimo wszystko"
 
-#: ../embed/ephy-web-view.c:2839
+#: ../embed/ephy-web-view.c:2833
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.pl/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3135
+#: ../embed/ephy-web-view.c:3129
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Wczytywanie \"%s\"…"
 
-#: ../embed/ephy-web-view.c:3137
+#: ../embed/ephy-web-view.c:3131
 msgid "Loading…"
 msgstr "Wczytywanie…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3911
+#: ../embed/ephy-web-view.c:3925
 #, c-format
 msgid "%s Files"
 msgstr "Pliki %s"
@@ -2146,7 +2162,7 @@ msgstr ""
 "Uruchomienie się nie powiodło z powodu błędu:\n"
 "%s"
 
-#: ../src/ephy-main.c:307
+#: ../src/ephy-main.c:310
 msgid "Web options"
 msgstr "Opcje przeglądarki WWW"
 
@@ -2498,15 +2514,15 @@ msgstr "Nazwa użytkownika"
 msgid "User Password"
 msgstr "Hasło użytkownika"
 
-#: ../src/popup-commands.c:307
+#: ../src/popup-commands.c:321
 msgid "Download Link"
 msgstr "Pobierz odnośnik"
 
-#: ../src/popup-commands.c:315
+#: ../src/popup-commands.c:329
 msgid "Save Link As"
 msgstr "Zapis odnośnika jako"
 
-#: ../src/popup-commands.c:322
+#: ../src/popup-commands.c:336
 msgid "Save Image As"
 msgstr "Zapisz obraz jako"
 
