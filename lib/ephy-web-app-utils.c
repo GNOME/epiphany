@@ -209,6 +209,8 @@ get_icon_from_favicon (WebKitWebView *view,
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     if (g_strcmp0 (rel, "shortcut-icon") == 0 ||
         g_strcmp0 (rel, "shortcut icon") == 0 ||
+        g_strcmp0 (rel, "SHORTCUT ICON") == 0 ||
+        g_strcmp0 (rel, "Shortcut Icon") == 0 ||
         g_strcmp0 (rel, "icon shortcut") == 0 ||
         g_strcmp0 (rel, "icon") == 0) {
       image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
