@@ -66,6 +66,7 @@
 #endif
 
 #define DEFAULT_ICON_SIZE 144
+#define FAVICON_SIZE 16
 
 void
 window_cmd_file_print (GtkAction *action,
@@ -508,20 +509,34 @@ frame_pixbuf (GdkPixbuf  *pixbuf,
 }
 
 static void
-take_page_snapshot_and_set_image (EphyApplicationDialogData *data)
+set_image_from_favicon (EphyApplicationDialogData *data)
 {
-	GdkPixbuf *snapshot;
-	GdkPixbuf *framed;
-	int x, y, w, h;
+	GdkPixbuf *icon = NULL;
 
-	x = y = 0;
-	w = h = DEFAULT_ICON_SIZE;
+#ifdef HAVE_WEBKIT2
+	{
+		cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
+		if (icon_surface)
+			icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, 0, 0);
+	}
+#else
+	{
+		const char *page_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
+		if (page_uri)
+			icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (),
+									       page_uri,
+									       FAVICON_SIZE, FAVICON_SIZE);
+	}
+#endif
 
-	snapshot = ephy_web_view_get_snapshot (data->view, x, y, w, h);
-	framed = frame_pixbuf (snapshot, NULL, w, h);
-	g_object_unref (snapshot);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), framed);
-	g_object_unref (framed);
+	if (icon != NULL) {
+		GdkPixbuf *framed;
+
+		framed = frame_pixbuf (icon, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+		g_object_unref (icon);
+		gtk_image_set_from_pixbuf (GTK_IMAGE (data->image), framed);
+		g_object_unref (framed);
+	}
 }
 
 static void
@@ -564,7 +579,7 @@ download_failed_cb (WebKitDownload *download,
 
 	g_signal_handlers_disconnect_by_func (download, download_finished_cb, data);
 	/* Something happened, default to a page snapshot. */
-	take_page_snapshot_and_set_image (data);
+	set_image_from_favicon (data);
 }
 #else
 static void
@@ -588,7 +603,7 @@ download_status_changed_cb (WebKitDownload *download,
 	case WEBKIT_DOWNLOAD_STATUS_ERROR:
 	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
 		/* Something happened, default to a page snapshot. */
-		take_page_snapshot_and_set_image (data);
+		set_image_from_favicon (data);
 		break;
 	default:
 		break;
@@ -660,7 +675,7 @@ fill_default_application_image (EphyApplicationDialogData *data)
 	else
 	{
 		gtk_widget_show (data->image);
-		take_page_snapshot_and_set_image (data);
+		set_image_from_favicon (data);
 	}
 }
 
