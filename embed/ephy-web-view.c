@@ -43,6 +43,7 @@
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-web-dom-utils.h"
 #include "ephy-zoom.h"
 
 #include <gio/gio.h>
@@ -3396,11 +3397,14 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_object_notify (G_OBJECT (view), "typed-address");
 }
 
-#define MIN_INPUT_LENGTH 50
-
 /**
  * ephy_web_view_has_modified_forms:
  * @view: an #EphyWebView
+ *
+ * A small heuristic is used here. If there's only one input element modified
+ * and it does not have a lot of text the user is likely not very interested in
+ * saving this work, so it returns %FALSE in this case (eg, google search
+ * input).
  *
  * Returns %TRUE if the user has modified &lt;input&gt; or &lt;textarea&gt;
  * values in @view's loaded document.
@@ -3433,60 +3437,10 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
 
   return retval;
 #else
-  WebKitDOMHTMLCollection *forms = NULL;
-  WebKitDOMDocument *document = NULL;
-  gulong forms_n;
-  int i;
-
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
 
-  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
-  forms = webkit_dom_document_get_forms (document);
-  forms_n = webkit_dom_html_collection_get_length (forms);
-
-  for (i = 0; i < forms_n; i++) {
-    WebKitDOMHTMLCollection *elements;
-    WebKitDOMNode *form_element = webkit_dom_html_collection_item (forms, i);
-    gulong elements_n;
-    int j;
-    gboolean modified_input_element = FALSE;
-
-    elements = webkit_dom_html_form_element_get_elements (WEBKIT_DOM_HTML_FORM_ELEMENT (form_element));
-    elements_n = webkit_dom_html_collection_get_length (elements);
-
-    for (j = 0; j < elements_n; j++) {
-      WebKitDOMNode *element;
-
-      element = webkit_dom_html_collection_item (elements, j);
-
-      if (WEBKIT_DOM_IS_HTML_TEXT_AREA_ELEMENT (element))
-        if (webkit_dom_html_text_area_element_is_edited (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element)))
-          return TRUE;
-
-      if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
-        if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element))) {
-          glong length;
-          char *text;
-
-          /* A small heuristic here. If there's only one input element
-           * modified and it does not have a lot of text the user is
-           * likely not very interested in saving this work, so do
-           * nothing (eg, google search input). */
-          if (modified_input_element)
-            return TRUE;
-
-          modified_input_element = TRUE;
-
-          text = webkit_dom_html_input_element_get_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
-          length = g_utf8_strlen (text, -1);
-          g_free (text);
-
-          if (length > MIN_INPUT_LENGTH)
-            return TRUE;
-        }
-    }
-  }
-  return FALSE;
+  WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
+  return ephy_web_dom_has_modified_forms (document);
 #endif
 }
 

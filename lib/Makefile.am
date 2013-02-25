@@ -24,6 +24,7 @@ NOINST_H_FILES = \
 	ephy-snapshot-service.h			\
 	ephy-time-helpers.h			\
 	ephy-web-app-utils.h			\
+	ephy-web-dom-utils.h			\
 	ephy-zoom.h
 
 TYPES_H_FILES = \
@@ -65,6 +66,7 @@ libephymisc_la_SOURCES = \
 	ephy-string.c				\
 	ephy-time-helpers.c			\
 	ephy-web-app-utils.c			\
+	ephy-web-dom-utils.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)

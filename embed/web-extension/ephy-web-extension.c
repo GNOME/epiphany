@@ -19,6 +19,7 @@
 
 #include "config.h"
 #include "ephy-web-extension.h"
+#include "ephy-web-dom-utils.h"
 
 #include <gio/gio.h>
 #include <webkit2/webkit-web-extension.h>
@@ -32,66 +33,6 @@ static const char introspection_xml[] =
   "  </method>"
   " </interface>"
   "</node>";
-
-#define MIN_INPUT_LENGTH 50
-
-static gboolean
-ephy_web_extension_page_has_modified_forms (WebKitWebPage *web_page)
-{
-  WebKitDOMHTMLCollection *forms = NULL;
-  WebKitDOMDocument *document = NULL;
-  gulong forms_n;
-  int i;
-
-  document = webkit_web_page_get_dom_document (web_page);
-  forms = webkit_dom_document_get_forms (document);
-  forms_n = webkit_dom_html_collection_get_length (forms);
-
-  for (i = 0; i < forms_n; i++) {
-    WebKitDOMHTMLCollection *elements;
-    WebKitDOMNode *form_element = webkit_dom_html_collection_item (forms, i);
-    gulong elements_n;
-    int j;
-    gboolean modified_input_element = FALSE;
-
-    elements = webkit_dom_html_form_element_get_elements (WEBKIT_DOM_HTML_FORM_ELEMENT (form_element));
-    elements_n = webkit_dom_html_collection_get_length (elements);
-
-    for (j = 0; j < elements_n; j++) {
-      WebKitDOMNode *element;
-
-      element = webkit_dom_html_collection_item (elements, j);
-
-      if (WEBKIT_DOM_IS_HTML_TEXT_AREA_ELEMENT (element))
-        if (webkit_dom_html_text_area_element_is_edited (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element)))
-          return TRUE;
-
-      if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
-        if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element))) {
-          glong length;
-          char *text;
-
-          /* A small heuristic here. If there's only one input element
-           * modified and it does not have a lot of text the user is
-           * likely not very interested in saving this work, so do
-           * nothing (eg, google search input). */
-          if (modified_input_element)
-            return TRUE;
-
-          modified_input_element = TRUE;
-
-          text = webkit_dom_html_input_element_get_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
-          length = g_utf8_strlen (text, -1);
-          g_free (text);
-
-          if (length > MIN_INPUT_LENGTH)
-            return TRUE;
-        }
-    }
-  }
-
-  return FALSE;
-}
 
 static void
 handle_method_call (GDBusConnection *connection,
@@ -119,9 +60,9 @@ handle_method_call (GDBusConnection *connection,
   }
 
   if (g_strcmp0 (method_name, "HasModifiedForms") == 0) {
-    gboolean has_modifed_forms;
+    WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
+    gboolean has_modifed_forms = ephy_web_dom_has_modified_forms (document);
 
-    has_modifed_forms = ephy_web_extension_page_has_modified_forms (web_page);
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", has_modifed_forms));
   }
 }
