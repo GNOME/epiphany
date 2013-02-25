@@ -35,6 +35,8 @@ G_BEGIN_DECLS
 
 gboolean ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document);
 
+char * ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document);
+
 G_END_DECLS
 
 #endif

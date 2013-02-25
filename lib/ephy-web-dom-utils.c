@@ -96,3 +96,38 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
 
   return FALSE;
 }
+
+/**
+ * ephy_web_dom_utils_get_application_title:
+ * @document: the DOM document.
+ *
+ * Returns web application title if it is defined in &lt;meta&gt; elements of
+ * @document.
+ **/
+char *
+ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
+{
+  WebKitDOMNodeList *metas;
+  char *title = NULL;
+  gulong length, i;
+
+  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
+  length = webkit_dom_node_list_get_length (metas);
+
+  for (i = 0; i < length && title == NULL; i++) {
+    char *name;
+    char *property;
+    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+
+    name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
+    if (g_strcmp0 (name, "application-name") == 0
+        || g_strcmp0 (property, "og:site_name") == 0) {
+      title = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    }
+    g_free (property);
+    g_free (name);
+  }
+
+  return title;
+}
