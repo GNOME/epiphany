@@ -37,6 +37,11 @@ gboolean ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document);
 
 char * ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document);
 
+gboolean ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
+                                           const char        *base_uri,
+                                           char             **uri_out,
+                                           char             **color_out);
+
 G_END_DECLS
 
 #endif

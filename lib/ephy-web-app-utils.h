@@ -58,10 +58,6 @@ void     ephy_web_application_free_application_list (GList *list);
 
 gboolean ephy_web_application_exists (const char *name);
 
-gboolean ephy_web_view_get_best_icon (WebKitWebView *view,
-                                      char         **uri,
-                                      GdkRGBA       *rgba);
-
 G_END_DECLS
 
 #endif

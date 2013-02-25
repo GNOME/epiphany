@@ -658,6 +658,10 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
+	WebKitDOMDocument *document;
+	const char *base_uri;
+	char *image = NULL;
+	char *color = NULL;
 	gboolean res;
 
 	data->icon_rgba.red = 0.5;
@@ -665,9 +669,32 @@ fill_default_application_image (EphyApplicationDialogData *data)
 	data->icon_rgba.blue = 0.5;
 	data->icon_rgba.alpha = 0.3;
 
-	res = ephy_web_view_get_best_icon (WEBKIT_WEB_VIEW (data->view),
-					   &data->icon_href,
-					   &data->icon_rgba);
+	base_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
+
+#ifdef HAVE_WEBKIT2
+	/* TODO use web extension to get image and color */
+	res = FALSE;
+#else
+	document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
+	res = ephy_web_dom_utils_get_best_icon (document,
+						base_uri,
+						&image,
+						&color);
+#endif
+
+	if (image != NULL)
+	{
+		data->icon_href = g_strdup (image);
+	}
+
+	if (color != NULL)
+	{
+		gdk_rgba_parse (&data->icon_rgba, color);
+	}
+
+	g_free (image);
+	g_free (color);
+
 	if (res)
 	{
 		download_icon_and_set_image (data);

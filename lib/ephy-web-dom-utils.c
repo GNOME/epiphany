@@ -22,6 +22,7 @@
 #include "config.h"
 #include "ephy-web-dom-utils.h"
 
+#include <libsoup/soup.h>
 #ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
 #include <webkit2/webkit-web-extension.h>
@@ -130,4 +131,226 @@ ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
   }
 
   return title;
+}
+
+static char *
+resolve_uri (const char *base_uri,
+             const char *uri)
+{
+  SoupURI *base;
+  SoupURI *new;
+  char *ret;
+
+  if (uri == NULL)
+    return NULL;
+
+  if (base_uri == NULL)
+    return NULL;
+
+  base = soup_uri_new (base_uri);
+  new = soup_uri_new_with_base (base, uri);
+  soup_uri_free (base);
+  ret = soup_uri_to_string (new, FALSE);
+  soup_uri_free (new);
+
+  return ret;
+}
+
+static gboolean
+get_icon_from_mstile (WebKitDOMDocument *document,
+                      char              **uri_out,
+                      char              **color_out)
+{
+  gboolean ret;
+  WebKitDOMNodeList *metas;
+  gulong length, i;
+  char *image = NULL;
+  char *color = NULL;
+
+  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
+  length = webkit_dom_node_list_get_length (metas);
+
+  for (i = 0; i < length; i++) {
+    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+    char *name;
+
+    name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    if (g_strcmp0 (name, "msapplication-TileImage") == 0) {
+      if (image == NULL)
+        image = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    } else if (g_strcmp0 (name, "msapplication-TileColor") == 0) {
+      if (color == NULL)
+        color = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    }
+  }
+
+  ret = (image != NULL && *image != '\0');
+
+  if (uri_out != NULL)
+    *uri_out = g_strdup (image);
+  if (color_out != NULL)
+    *color_out = g_strdup (color);
+
+  g_free (image);
+  g_free (color);
+
+  return ret;
+}
+
+static gboolean
+get_icon_from_ogp (WebKitDOMDocument *document,
+                   char         **uri_out,
+                   char         **color_out)
+{
+  gboolean ret;
+  WebKitDOMNodeList *metas;
+  gulong length, i;
+  char *image = NULL;
+  char *color = NULL;
+
+  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
+  length = webkit_dom_node_list_get_length (metas);
+
+  for (i = 0; i < length && image == NULL; i++) {
+    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+    char *property;
+    char *itemprop;
+
+    property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
+    itemprop = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "itemprop");
+    if (g_strcmp0 (property, "og:image") == 0 ||
+        g_strcmp0 (itemprop, "image") == 0) {
+      image = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+    }
+    g_free (property);
+    g_free (itemprop);
+  }
+
+  ret = (image != NULL && *image != '\0');
+
+  if (uri_out != NULL)
+    *uri_out = g_strdup (image);
+  if (color_out != NULL)
+    *color_out = g_strdup (color);
+
+  return ret;
+}
+
+static gboolean
+get_icon_from_touch_icon (WebKitDOMDocument *document,
+                          char         **uri_out,
+                          char         **color_out)
+{
+  gboolean ret;
+  WebKitDOMNodeList *links;
+  gulong length, i;
+  char *image = NULL;
+  char *color = NULL;
+
+  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
+  length = webkit_dom_node_list_get_length (links);
+
+  for (i = 0; i < length && image == NULL; i++) {
+    char *rel;
+    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+
+    rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    /* TODO: support more than one possible icon. */
+    if (g_strcmp0 (rel, "apple-touch-icon") == 0 ||
+        g_strcmp0 (rel, "apple-touch-icon-precomposed") == 0) {
+      image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    }
+    g_free (rel);
+  }
+
+  ret = (image != NULL && *image != '\0');
+
+  if (uri_out != NULL)
+    *uri_out = g_strdup (image);
+  if (color_out != NULL)
+    *color_out = g_strdup (color);
+
+  return ret;
+}
+
+static gboolean
+get_icon_from_favicon (WebKitDOMDocument *document,
+                       char         **uri_out,
+                       char         **color_out)
+{
+  gboolean ret;
+  WebKitDOMNodeList *links;
+  gulong length, i;
+  char *image = NULL;
+  char *color = NULL;
+
+  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
+  length = webkit_dom_node_list_get_length (links);
+
+  for (i = 0; i < length; i++) {
+    char *rel;
+    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+
+    rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    if (g_strcmp0 (rel, "shortcut-icon") == 0 ||
+        g_strcmp0 (rel, "shortcut icon") == 0 ||
+        g_strcmp0 (rel, "SHORTCUT ICON") == 0 ||
+        g_strcmp0 (rel, "Shortcut Icon") == 0 ||
+        g_strcmp0 (rel, "icon shortcut") == 0 ||
+        g_strcmp0 (rel, "icon") == 0) {
+      image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    }
+    g_free (rel);
+  }
+
+  ret = (image != NULL && *image != '\0');
+
+  if (uri_out != NULL)
+    *uri_out = g_strdup (image);
+  if (color_out != NULL)
+    *color_out = g_strdup (color);
+
+  return ret;
+}
+
+/**
+ * ephy_web_dom_utils_get_best_icon:
+ * @document: the DOM document.
+ * @base_uri: base URI of the #WebKitWebView.
+ * @uri_out: Icon URI.
+ * @color_out: Icon background color.
+ *
+ * Tries to get the icon (and its background color if any) for a web application
+ * from the @document meta data. First try to get a mstile, then OGP, then touch
+ * icon and finally favicon.
+ *
+ * Returns %TRUE if it finds an icon in the @document.
+ **/
+gboolean
+ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
+                                  const char        *base_uri,
+                                  char             **uri_out,
+                                  char             **color_out)
+{
+  gboolean ret = FALSE;
+  char *image = NULL;
+  char *color = NULL;
+
+  ret = get_icon_from_mstile (document, &image, &color);
+  if (! ret)
+    ret = get_icon_from_ogp (document, &image, &color);
+  if (! ret)
+    ret = get_icon_from_touch_icon (document, &image, &color);
+  if (! ret)
+    ret = get_icon_from_favicon (document, &image, &color);
+
+  if (uri_out != NULL)
+    *uri_out = resolve_uri (base_uri, image);
+  if (color_out != NULL)
+    *color_out = g_strdup (color);
+
+  g_free (image);
+  g_free (color);
+
+  return ret;
 }
