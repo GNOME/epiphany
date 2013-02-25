@@ -1,4 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2012 Igalia S.L.
  *
@@ -19,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-web-extension.h"
+
 #include "ephy-web-dom-utils.h"
 
 #include <gio/gio.h>
@@ -35,8 +37,28 @@ static const char introspection_xml[] =
   "   <arg type='t' name='page_id' direction='in'/>"
   "   <arg type='s' name='title' direction='out'/>"
   "  </method>"
+  "  <method name='GetBestWebAppIcon'>"
+  "   <arg type='t' name='page_id' direction='in'/>"
+  "   <arg type='s' name='base_uri' direction='in'/>"
+  "   <arg type='b' name='result' direction='out'/>"
+  "   <arg type='s' name='uri' direction='out'/>"
+  "   <arg type='s' name='color' direction='out'/>"
+  "  </method>"
   " </interface>"
   "</node>";
+
+static WebKitWebPage*
+get_webkit_web_page_or_return_dbus_error (GDBusMethodInvocation *invocation,
+                                          WebKitWebExtension *web_extension,
+                                          guint64 page_id)
+{
+  WebKitWebPage *web_page = webkit_web_extension_get_page (web_extension, page_id);
+  if (!web_page) {
+    g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                           "Invalid page ID: %"G_GUINT64_FORMAT, page_id);
+  }
+  return web_page;
+}
 
 static void
 handle_method_call (GDBusConnection *connection,
@@ -49,31 +71,67 @@ handle_method_call (GDBusConnection *connection,
                     gpointer user_data)
 {
   WebKitWebExtension *web_extension = WEBKIT_WEB_EXTENSION (user_data);
-  WebKitWebPage *web_page;
-  guint64 page_id;
 
   if (g_strcmp0 (interface_name, EPHY_WEB_EXTENSION_INTERFACE) != 0)
     return;
 
-  g_variant_get(parameters, "(t)", &page_id);
-  web_page = webkit_web_extension_get_page (web_extension, page_id);
-  if (!web_page) {
-    g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                           "Invalid page ID: %"G_GUINT64_FORMAT, page_id);
-    return;
-  }
-
   if (g_strcmp0 (method_name, "HasModifiedForms") == 0) {
-    WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
-    gboolean has_modifed_forms = ephy_web_dom_utils_has_modified_forms (document);
+    WebKitWebPage *web_page;
+    WebKitDOMDocument *document;
+    guint64 page_id;
+    gboolean has_modifed_forms;
+
+    g_variant_get(parameters, "(t)", &page_id);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    if (!web_page)
+      return;
+
+    document = webkit_web_page_get_dom_document (web_page);
+    has_modifed_forms = ephy_web_dom_utils_has_modified_forms (document);
 
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", has_modifed_forms));
   } else if (g_strcmp0 (method_name, "GetWebAppTitle") == 0) {
-    WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
-    char *title = ephy_web_dom_utils_get_application_title (document);
+    WebKitWebPage *web_page;
+    WebKitDOMDocument *document;
+    char *title = NULL;
+    guint64 page_id;
+
+    g_variant_get(parameters, "(t)", &page_id);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    if (!web_page)
+      return;
+
+    document = webkit_web_page_get_dom_document (web_page);
+    title = ephy_web_dom_utils_get_application_title (document);
 
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", title ? title : ""));
+  } else if (g_strcmp0 (method_name, "GetBestWebAppIcon") == 0) {
+    WebKitWebPage *web_page;
+    WebKitDOMDocument *document;
+    char *base_uri = NULL;
+    char *uri = NULL;
+    char *color = NULL;
+    guint64 page_id;
+    gboolean result;
+
+    g_variant_get(parameters, "(ts)", &page_id, &base_uri);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    if (!web_page)
+      return;
+
+    if (base_uri == NULL || base_uri == '\0') {
+      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Base URI cannot be NULL or empty");
+      return;
+    }
+
+    document= webkit_web_page_get_dom_document (web_page);
+    result = ephy_web_dom_utils_get_best_icon (document, base_uri, &uri, &color);
+
+    g_dbus_method_invocation_return_value (invocation,
+                                           g_variant_new ("(bss)", result, uri ? uri : "", color ? color : ""));
   }
+
 }
 
 static const GDBusInterfaceVTable interface_vtable = {
