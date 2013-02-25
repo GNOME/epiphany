@@ -31,6 +31,10 @@ static const char introspection_xml[] =
   "   <arg type='t' name='page_id' direction='in'/>"
   "   <arg type='b' name='has_modified_forms' direction='out'/>"
   "  </method>"
+  "  <method name='GetWebAppTitle'>"
+  "   <arg type='t' name='page_id' direction='in'/>"
+  "   <arg type='s' name='title' direction='out'/>"
+  "  </method>"
   " </interface>"
   "</node>";
 
@@ -64,6 +68,11 @@ handle_method_call (GDBusConnection *connection,
     gboolean has_modifed_forms = ephy_web_dom_utils_has_modified_forms (document);
 
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", has_modifed_forms));
+  } else if (g_strcmp0 (method_name, "GetWebAppTitle") == 0) {
+    WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
+    char *title = ephy_web_dom_utils_get_application_title (document);
+
+    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", title ? title : ""));
   }
 }
 

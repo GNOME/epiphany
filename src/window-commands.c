@@ -696,17 +696,10 @@ get_special_case_application_title_for_host (const char *host)
 }
 
 static void
-fill_default_application_title (EphyApplicationDialogData *data)
+set_default_application_title (EphyApplicationDialogData *data,
+			       char *title)
 {
-	char *title = NULL;
-#ifdef HAVE_WEBKIT2
-	/* TODO: DOM Bindindgs */
-#else
-	WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
-	title = ephy_web_dom_utils_get_application_title (document);
-#endif
-
-	if (title == NULL)
+	if (title == NULL || title[0] == '\0')
 	{
 		SoupURI *uri;
 		const char *host;
@@ -717,7 +710,7 @@ fill_default_application_title (EphyApplicationDialogData *data)
 		if (host != NULL && host[0] != '\0')
 			title = get_special_case_application_title_for_host (host);
 
-		if (title == NULL)
+		if (title == NULL || title[0] == '\0')
 		{
 			if (g_str_has_prefix (host, "www."))
 				title = g_strdup (host + strlen ("www."));
@@ -728,13 +721,61 @@ fill_default_application_title (EphyApplicationDialogData *data)
 		soup_uri_free (uri);
 	}
 
-	if (title == NULL)
+	if (title == NULL || title[0] == '\0')
 	{
 		title = g_strdup (ephy_web_view_get_title (data->view));
 	}
 
 	gtk_entry_set_text (GTK_ENTRY (data->entry), title);
 	g_free (title);
+}
+
+#ifdef HAVE_WEBKIT2
+static void
+fill_default_application_title_cb (GObject *source,
+				   GAsyncResult *async_result,
+				   gpointer user_data)
+{
+	EphyApplicationDialogData *data = user_data;
+	GVariant *result;
+	char *title = NULL;
+
+	result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source),
+					   async_result,
+					   NULL);
+
+	if (result)
+	{
+		g_variant_get (result, "(s)", &title);
+		g_variant_unref (result);
+	}
+
+	set_default_application_title (data, title);
+}
+#endif
+
+static void
+fill_default_application_title (EphyApplicationDialogData *data)
+{
+#ifdef HAVE_WEBKIT2
+	GDBusProxy *web_extension;
+	web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
+	if (web_extension)
+		g_dbus_proxy_call (web_extension,
+				   "GetWebAppTitle",
+				   g_variant_new("(t)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (data->view))),
+				   G_DBUS_CALL_FLAGS_NONE,
+				   -1,
+				   NULL,
+				   fill_default_application_title_cb,
+				   data);
+	else
+		set_default_application_title (data, NULL);
+#else
+	WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
+	char *title = ephy_web_dom_utils_get_application_title (document);
+	set_default_application_title (data, title);
+#endif
 }
 
 static void
