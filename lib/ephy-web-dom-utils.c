@@ -30,7 +30,7 @@
 #endif
 
 /**
- * ephy_web_dom_has_modified_forms:
+ * ephy_web_dom_utils_has_modified_forms:
  * @document: the DOM document to check if there are or not modified forms.
  *
  * A small heuristic is used here. If there's only one input element modified
@@ -42,7 +42,7 @@
  * values in the @document.
  **/
 gboolean
-ephy_web_dom_has_modified_forms (WebKitDOMDocument *document)
+ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
 {
   WebKitDOMHTMLCollection *forms;
   gulong forms_n;

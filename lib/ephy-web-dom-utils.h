@@ -33,7 +33,7 @@
 
 G_BEGIN_DECLS
 
-gboolean ephy_web_dom_has_modified_forms (WebKitDOMDocument *document);
+gboolean ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document);
 
 G_END_DECLS
 

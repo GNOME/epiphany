@@ -61,7 +61,7 @@ handle_method_call (GDBusConnection *connection,
 
   if (g_strcmp0 (method_name, "HasModifiedForms") == 0) {
     WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
-    gboolean has_modifed_forms = ephy_web_dom_has_modified_forms (document);
+    gboolean has_modifed_forms = ephy_web_dom_utils_has_modified_forms (document);
 
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", has_modifed_forms));
   }

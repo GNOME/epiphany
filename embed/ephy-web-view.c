@@ -3440,7 +3440,7 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
 
   WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
-  return ephy_web_dom_has_modified_forms (document);
+  return ephy_web_dom_utils_has_modified_forms (document);
 #endif
 }
 
