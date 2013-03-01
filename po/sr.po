@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epipha"
 "ny&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-07 22:03+0000\n"
-"PO-Revision-Date: 2013-02-18 11:48+0200\n"
+"POT-Creation-Date: 2013-02-23 20:43+0000\n"
+"PO-Revision-Date: 2013-03-01 10:57+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -42,7 +42,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.co.rs/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:456 ../src/window-commands.c:1682
+#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1683
 msgid "Web"
 msgstr "Веб"
 
@@ -145,14 +145,30 @@ msgstr ""
 "„never“ (увек ће бити приказана почетна страница)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+"Да ли каснити са учитавањем језичака који нису одмах видљиви при повраћају "
+"сесије"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Када је ово изабрано, језичци неће започети са учитавањем све док се "
+"корисник не пребаци на њих, након повраћаја сесије."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
 msgstr "Приказује траку алата по основи"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Toolbar style"
 msgstr "Стил траке алата"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -162,11 +178,11 @@ msgstr ""
 "Гнома), „both“ (текст и иконице), „both-horiz“ (текст поред иконица), "
 "„icons“ (иконице), и „text“ (текст)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "[Deprecated]"
 msgstr "[Застарело]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -174,11 +190,11 @@ msgstr ""
 "[Застарело] Ово подешавање је застарело, уместо тога користите „tabs-bar-"
 "visibility-policy“."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
 msgstr "Видљивост прозора за преузимање"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -186,11 +202,11 @@ msgstr ""
 "Скрива или приказуује прозор за преузимање. Када је скривен, биће приказано "
 "обавештења када започне ново преузимање."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "The visibility policy for the tabs bar."
 msgstr "Видљивост траке језичака."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -201,23 +217,23 @@ msgstr ""
 "приказана само ако буду била отворена два или више језичка) и „“ (трака "
 "језичака неће никада бити приказана)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Minimum font size"
 msgstr "Најмања величина словног лика"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Use GNOME fonts"
 msgstr "Употреба Гномових словних ликова"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Use GNOME desktop wide font configuration."
 msgstr "Користиће подешавања широког словног лика Гномове радне површи."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
 msgstr "Произвољни без-серифни словни лик"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -225,11 +241,11 @@ msgstr ""
 "Вредност која ће бити коришћена за замену без-серифног словног лика радне "
 "површи када је подешено „use-gnome-fonts“ (користи гномове словне ликове)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom serif font"
 msgstr "Произвољни серифни словни лик"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -237,11 +253,11 @@ msgstr ""
 "Вредност која ће бити коришћена за замену серифног словног лика радне површи "
 "када је подешено „use-gnome-fonts“ (користи гномове словне ликове)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "Custom monospace font"
 msgstr "Произвољни словни лик утврђене ширине"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -249,72 +265,72 @@ msgstr ""
 "Вредност која ће бити коришћена за замену словног лика радне површи утврђене "
 "ширине када је подешено „use-gnome-fonts“ (користи гномове словне ликове)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Use own colors"
 msgstr "Користи сопствене боје"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Користиће боје које сте ви изабрали уместо боја које захтева страница."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own fonts"
 msgstr "Користи изабрана писма"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Користиће писма која сте ви изабрали уместо писама које захтева страница."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use a custom CSS"
 msgstr "Користи произвољно ЦСС"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Користиће произвољну ЦСС датотеку да измени ЦСС веб сајтова."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Enable spell checking"
 msgstr "Укључује проверу правописа"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Spell check any text typed in editable areas."
 msgstr "Провераваће исправност сваког текста уписаног у пољима за уређивање."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Default encoding"
 msgstr "Основно кодирање"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Основно кодирање. Прихваћене вредности су оне које Веб кит ГТК+ може да "
 "разуме."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Size of disk cache"
 msgstr "Величина оставе на диску"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Size of disk cache, in MB."
 msgstr "Величина оставе на диску, у мегабајтима."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 #: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "Језици"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Preferred languages, two letter codes."
 msgstr "Жељени језици, двословне ознаке."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Cookie accept"
 msgstr "Прихватање колачића"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -322,11 +338,11 @@ msgstr ""
 "Одакле да прихвата колачиће. Дозвољене вредности су „anywhere“ (одасвуд), "
 "„current site“ (са текућег сајта) и „nowhere“ (ниоткуд)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Image animation mode"
 msgstr "Режим покретних слика"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -334,46 +350,46 @@ msgstr ""
 "Како ће да представи покретне слике. Могуће вредности су „normal“ (обично), "
 "„once“ (једном) и „disabled“ (искључено)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Allow popups"
 msgstr "Допушта искачуће прозоре"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Допуштаће страницама да отварају нове прозоре помоћу Јава скрипте (уколико "
 "је Јава скрипт укључен)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Enable Plugins"
 msgstr "Укључује прикључке"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Enable JavaScript"
 msgstr "Укључује Јава скрипт"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Enable WebGL"
 msgstr "Укључује Веб ГЛ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Да ли ће да укључи подршку за Веб ГЛ садржај."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Enable WebAudio"
 msgstr "Укључује Веб аудио"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Whether to enable support for WebAudio."
 msgstr "Да ли ће да укључи подршку за Веб аудио."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Do Not Track"
 msgstr "Без праћења"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -381,22 +397,22 @@ msgstr ""
 "Да ли ће да саопшти веб сајтовима да не желимо да будемо праћени. Али ипак "
 "знајте да веб странице нису обавезне да поштују ово подешавање."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Adblock"
 msgstr "Укључује блокирање огласа"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr ""
 "Да ли ће да блокира угњеждене огласе које би веб странице могле да прикажу."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
 msgstr "Фасцикла за преузето"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -404,27 +420,27 @@ msgstr ""
 "Путања фасцикле у коју ће бити смештене преузете датотеке; или „Downloads“ "
 "за подразумевану фасциклу за преузето или „Desktop“ за фасциклу радне површи."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
 msgstr "Временски опсег за стране архивиране у историјату"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
 msgstr "Да ли ће бити приказан стубац наслова у прозору историјата."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
 msgstr "Да ли ће бити приказан стубац адресе у прозору историјата."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
 msgstr "Да ли ће бити приказан стубац датума-времена у прозору историјата."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Да ли ће бити приказан стубац наслова у прозору обележивача."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Да ли ће бити приказан стубац адресе у прозору обележивача."
 
@@ -475,25 +491,25 @@ msgstr "Списак инсталираних веб програма"
 msgid "Installed on:"
 msgstr "Инсталиран је:"
 
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:696
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Притисните „%s“ да напустите цео екран"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:699
 msgid "ESC"
 msgstr "ЕСЦ"
 
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:699
 msgid "F11"
 msgstr "Ф11"
 
-#: ../embed/ephy-embed.c:1018
+#: ../embed/ephy-embed.c:1084
 msgid "Web Inspector"
 msgstr "Веб инспектор"
 
-#: ../embed/ephy-embed-shell.c:216
+#: ../embed/ephy-embed-shell.c:288
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Тренутно не можете користити Спознају. Није успело покретање."
 
@@ -831,15 +847,15 @@ msgid "Most Visited"
 msgstr "Најпосећенији"
 
 #. characters
-#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3720
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3669
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: ../embed/ephy-web-view.c:748
+#: ../embed/ephy-web-view.c:695
 msgid "Not now"
 msgstr "Не сада"
 
-#: ../embed/ephy-web-view.c:749
+#: ../embed/ephy-web-view.c:696
 msgid "Store password"
 msgstr "Сачувај лозинку"
 
@@ -847,39 +863,39 @@ msgstr "Сачувај лозинку"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:762
+#: ../embed/ephy-web-view.c:709
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Да ли желите да сачувате лозинку за <b>%s</b> у <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1975
+#: ../embed/ephy-web-view.c:1892
 msgid "Deny"
 msgstr "Забрани"
 
-#: ../embed/ephy-web-view.c:1976
+#: ../embed/ephy-web-view.c:1893
 msgid "Allow"
 msgstr "Прихвати"
 
-#: ../embed/ephy-web-view.c:1990
+#: ../embed/ephy-web-view.c:1907
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Страница на <b>%s</b> жели да сазна вашу локацију."
 
-#: ../embed/ephy-web-view.c:2409
+#: ../embed/ephy-web-view.c:2360
 msgid "None specified"
 msgstr "Ништа није одређено"
 
-#: ../embed/ephy-web-view.c:2418 ../embed/ephy-web-view.c:2436
+#: ../embed/ephy-web-view.c:2369 ../embed/ephy-web-view.c:2387
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Грешка при учитавању %s"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2371
 msgid "Oops! It was not possible to show this website"
 msgstr "Упс! Не могу да прикажем ову веб страницу"
 
-#: ../embed/ephy-web-view.c:2421
+#: ../embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -892,15 +908,15 @@ msgstr ""
 "пребачена на нову адресу. Не заборавите да проверите да ли ваша интернет "
 "веза ради исправно.</p>"
 
-#: ../embed/ephy-web-view.c:2430
+#: ../embed/ephy-web-view.c:2381
 msgid "Try again"
 msgstr "Покушај поново"
 
-#: ../embed/ephy-web-view.c:2438
+#: ../embed/ephy-web-view.c:2389
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Упс! Овај сајт је можда изазвао неочекивано затварање веб прегледника"
 
-#: ../embed/ephy-web-view.c:2440
+#: ../embed/ephy-web-view.c:2391
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -912,29 +928,29 @@ msgstr ""
 "програм поново уруши, пријавите грешку програмерима програма <strong>%s</"
 "strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2448
+#: ../embed/ephy-web-view.c:2399
 msgid "Load again anyway"
 msgstr "Ипак учитај страницу"
 
-#: ../embed/ephy-web-view.c:2882
+#: ../embed/ephy-web-view.c:2833
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3178
+#: ../embed/ephy-web-view.c:3129
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Учитавам „%s“…"
 
-#: ../embed/ephy-web-view.c:3180
+#: ../embed/ephy-web-view.c:3131
 msgid "Loading…"
 msgstr "Учитавам…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3976
+#: ../embed/ephy-web-view.c:3925
 #, c-format
 msgid "%s Files"
 msgstr "Датотеке за %s"
@@ -2148,7 +2164,7 @@ msgstr ""
 "Покретање није успело због следеће грешке:\n"
 "%s"
 
-#: ../src/ephy-main.c:307
+#: ../src/ephy-main.c:310
 msgid "Web options"
 msgstr "Опције веба"
 
@@ -2413,11 +2429,11 @@ msgstr "Напред"
 msgid "Zoom"
 msgstr "Увећај"
 
-#: ../src/ephy-window.c:1389
+#: ../src/ephy-window.c:1390
 msgid "New _Tab"
 msgstr "Нови _лист"
 
-#: ../src/ephy-window.c:1397
+#: ../src/ephy-window.c:1398
 msgid "Go to most visited"
 msgstr "Иди на најпосећеније"
 
@@ -2499,15 +2515,15 @@ msgstr "Корисничко име"
 msgid "User Password"
 msgstr "Корисничка лозинка"
 
-#: ../src/popup-commands.c:307
+#: ../src/popup-commands.c:321
 msgid "Download Link"
 msgstr "Преузми везу"
 
-#: ../src/popup-commands.c:315
+#: ../src/popup-commands.c:329
 msgid "Save Link As"
 msgstr "Сачувај везу као"
 
-#: ../src/popup-commands.c:322
+#: ../src/popup-commands.c:336
 msgid "Save Image As"
 msgstr "Сачувај слику као"
 
@@ -2579,15 +2595,15 @@ msgid "Launch"
 msgstr "Покрени"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:876
+#: ../src/window-commands.c:877
 msgid "Create Web Application"
 msgstr "Направите веб програм"
 
-#: ../src/window-commands.c:881
+#: ../src/window-commands.c:882
 msgid "C_reate"
 msgstr "_Направи"
 
-#: ../src/window-commands.c:1571
+#: ../src/window-commands.c:1572
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2598,7 +2614,7 @@ msgstr ""
 "Гнуове опште јавне лиценце коју је објавила Задужбина слободног софтвера; "
 "било верзије 2 лиценце или (по вашем избору) било које новије верзије."
 
-#: ../src/window-commands.c:1575
+#: ../src/window-commands.c:1576
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2610,7 +2626,7 @@ msgstr ""
 "ПРИЛАГОЂЕНОСТИ ОДРЕЂЕНОЈ НАМЕНИ.  Видите ГНУ Општу јавну лиценцу за више "
 "детаља."
 
-#: ../src/window-commands.c:1579
+#: ../src/window-commands.c:1580
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2621,20 +2637,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301  USA“"
 
-#: ../src/window-commands.c:1625 ../src/window-commands.c:1641
-#: ../src/window-commands.c:1652
+#: ../src/window-commands.c:1626 ../src/window-commands.c:1642
+#: ../src/window-commands.c:1653
 msgid "Contact us at:"
 msgstr "Ступите у везу са нама преко:"
 
-#: ../src/window-commands.c:1628
+#: ../src/window-commands.c:1629
 msgid "Contributors:"
 msgstr "Доприносиоци:"
 
-#: ../src/window-commands.c:1631
+#: ../src/window-commands.c:1632
 msgid "Past developers:"
 msgstr "Претходни програмери:"
 
-#: ../src/window-commands.c:1662 ../src/window-commands.c:1668
+#: ../src/window-commands.c:1663 ../src/window-commands.c:1669
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2651,7 +2667,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1698
+#: ../src/window-commands.c:1699
 msgid "translator-credits"
 msgstr ""
 "Данило Шеган <danilo@prevod.org>\n"
@@ -2660,15 +2676,15 @@ msgstr ""
 "\n"
 "http://prevod.org — превод на српски језик."
 
-#: ../src/window-commands.c:1701
+#: ../src/window-commands.c:1702
 msgid "Web Website"
 msgstr "Веб страница Гномовог прегледника"
 
-#: ../src/window-commands.c:1841
+#: ../src/window-commands.c:1842
 msgid "Enable caret browsing mode?"
 msgstr "Да ли да укључим преглед са показивачем?"
 
-#: ../src/window-commands.c:1844
+#: ../src/window-commands.c:1845
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2679,6 +2695,6 @@ msgstr ""
 "листате садржај помоћу тастатуре. Да ли желите да укључите преглед са "
 "показивачем?"
 
-#: ../src/window-commands.c:1847
+#: ../src/window-commands.c:1848
 msgid "_Enable"
 msgstr "_Укључи"
