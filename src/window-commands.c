@@ -33,6 +33,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
