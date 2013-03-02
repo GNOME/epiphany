@@ -3978,44 +3978,6 @@ ephy_web_view_load_homepage (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_snapshot:
- * @view: the #EphyWebView
- * @x: the x coordinate of the snapshot
- * @y: the y coordinate of the snapshot
- * @width: the width of the snapshot
- * @height: the height of the snapshot
- *
- * Takes a snapshot of the requested region of a #EphyWebView.
- *
- * Returns: (transfer full): a #GdkPixbuf with a snapshot of the requested area.
- **/
-GdkPixbuf *
-ephy_web_view_get_snapshot (EphyWebView *view, int x, int y, int width, int height)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  GdkPixbuf *snapshot;
-  GtkAllocation allocation;
-
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
-
-  gtk_widget_get_allocation (GTK_WIDGET (view), &allocation);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-                                        allocation.width,
-                                        allocation.height);
-  cr = cairo_create (surface);
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_clip (cr);
-  gtk_widget_draw (GTK_WIDGET (view), cr);
-
-  snapshot = gdk_pixbuf_get_from_surface (surface, x, y, width, height);
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
-
-  return snapshot;
-}
-
-/**
  * ephy_web_view_get_visit_type:
  * @view: an #EphyWebView
  *

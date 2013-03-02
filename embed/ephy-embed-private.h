@@ -61,12 +61,6 @@ void                       ephy_web_view_load_homepage            (EphyWebView  
 char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
                                                                    const char                *title,
                                                                    GdkPixbuf                 *icon);
-GdkPixbuf *                ephy_web_view_get_snapshot             (EphyWebView               *view,
-                                                                   int                        x,
-                                                                   int                        y,
-                                                                   int                        width,
-                                                                   int                        height);
-
 char*                      ephy_web_view_normalize_or_autosearch_url (EphyWebView            *view,
                                                                       const char             *url);
 
