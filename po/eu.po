@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2013-01-31 16:00+0100\n"
-"PO-Revision-Date: 2013-01-31 16:04+0100\n"
+"POT-Creation-Date: 2013-03-04 22:30+0100\n"
+"PO-Revision-Date: 2013-03-03 20:47+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
-"Language: en_US\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
@@ -41,7 +41,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:306 ../src/ephy-main.c:460 ../src/window-commands.c:1675
+#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1746
 msgid "Web"
 msgstr "Weba"
 
@@ -145,14 +145,29 @@ msgstr ""
 "saioa; eta 'never' (inoiz ere ez) orrialde nagusia erakutsiko da beti."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+"Saioa leheneratzean berehala ikusgai ez dauden fitxen karga atzeratzea edo ez"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Aukera hau gaituta badago (TRUE gisa ezarrita), saioa leheneratzean  fitxak "
+"ez dira kargatuko erabiltzaileak haien gainean klik egin arte."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
 msgstr "Erakutsi tresna-barrak lehenespenez"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Toolbar style"
 msgstr "Tresna-barraren estiloa"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -162,11 +177,11 @@ msgstr ""
 "lehenetsia), \"both\" (biak: testu eta ikonoak), \"both-horiz\" (biak-"
 "horiz.: testua ikonoen alboan), \"icons\" (ikonoak), eta \"text\" (testua)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "[Deprecated]"
 msgstr "[Zaharkitua]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -174,11 +189,11 @@ msgstr ""
 "[Zaharkitua] Ezarpen hau zaharkitua dago, erabili 'tabs-bar-visibility-"
 "policy' horren ordez."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
 msgstr "Deskargen leihoaren ikusgaitasuna"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -186,11 +201,11 @@ msgstr ""
 "Ezkutatu edo erakutsi deskargen leihoa. Ezkutatuta badago, jakinarazpena "
 "erakutsiko da deskarga berriak hastean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "The visibility policy for the tabs bar."
 msgstr "Fitxa-barraren ikusgaitasunaren araua."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -201,23 +216,23 @@ msgstr ""
 "gehiago), fitxa-barra soilik erakutsiko da fitxa bat edo gehiago daudenean); "
 "eta 'never' (inoiz ere ez), fitxa-barra ez da inoiz erakusten."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Minimum font size"
 msgstr "Gutxieneko letra-tamaina"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Use GNOME fonts"
 msgstr "Erabili GNOMEko letra-tipoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Use GNOME desktop wide font configuration."
 msgstr "Erabili GNOME mahaigain osoaren letra-tipoaren konfigurazioa."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
 msgstr "Sans serif letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -225,11 +240,11 @@ msgstr ""
 "Balio bat mahaigaineko sans-serif letra-tipoa gainidazteko 'use-gnome-fonts' "
 "ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom serif font"
 msgstr "Serif letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -237,11 +252,11 @@ msgstr ""
 "Balio bat mahaigaineko serif letra-tipoa gainidazteko 'use-gnome-fonts' "
 "ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "Custom monospace font"
 msgstr "Tarte bakarreko letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -249,71 +264,71 @@ msgstr ""
 "Balio bat mahaigaineko tarte bakarreko letra-tipoa gainidazteko 'use-gnome-"
 "fonts' ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Use own colors"
 msgstr "Erabili norberaren koloreak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Orriak eskatzen dituen koloreen ordez, zeure koloreak erabili."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own fonts"
 msgstr "Erabili norberaren letra-tipoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Orriak eskatzen dituen letra-tipoen ordez, zeure letra-tipoak erabili."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use a custom CSS"
 msgstr "Erabili CSS pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Erabili CSS pertsonalizatua webguneetako CSS propioak aldatzeko."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Enable spell checking"
 msgstr "Gaitu ortografia-egiaztapena"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Spell check any text typed in editable areas."
 msgstr "Area editagarrietako edozein testuren ortografia zuzendu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Default encoding"
 msgstr "Kodeketa lehenetsia"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Kodeketa lehenetsia. Onartutako balioak WebKitGTK+-ek uler "
 "ditzakeenetarikoak dira."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Size of disk cache"
 msgstr "Diskoko cache-aren tamaina"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Size of disk cache, in MB."
 msgstr "Diskoko cache-aren tamaina (MB)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 #: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "Hizkuntzak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Preferred languages, two letter codes."
 msgstr "Hizkuntza hobetsiak, bi letrako kodeak."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Cookie accept"
 msgstr "Cookie-ak onartzea"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -321,11 +336,11 @@ msgstr ""
 "Nongo cookie-ak onartu. Balio posibleak  \"anywhere\" (edonongoak), "
 "\"current site\" (uneko gunekoak) eta \"nowhere\" (inongoak ere ez) dira."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Image animation mode"
 msgstr "Animaziozko irudi modua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -333,46 +348,46 @@ msgstr ""
 "Nola agertu animaziozko irudiak. Dauden balioak: \"normal\" (arrunta), \"once"
 "\" (behin) eta \"disabled\" (desgaituta)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Allow popups"
 msgstr "Onartu laster-leihoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Eman baimena guneei leiho berriak JavaScript-ekin irekitzeko (JavaScript "
 "gaituta badago)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Enable Plugins"
 msgstr "Gaitu pluginak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Enable JavaScript"
 msgstr "Gaitu JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Enable WebGL"
 msgstr "Gaitu WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Whether to enable support for WebGL contexts."
 msgstr "WebGL testuinguruaren euskarria gaitu edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Enable WebAudio"
 msgstr "Gaitu WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Whether to enable support for WebAudio."
 msgstr "Webaudio euskarria gaitu edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Do Not Track"
 msgstr "Jarraipenik ez egin"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -380,11 +395,11 @@ msgstr ""
 "Gure jarraipenik egiterik ez dugula nahi webguneei adierazi edo ez. Jakin "
 "ezazu webguneak ez daudela derrigortuta ezarpen honi kasu egiteko. "
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Adblock"
 msgstr "Gaitu Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -392,11 +407,11 @@ msgstr ""
 "Web orrialdeak erakutsi nahi dituzten kapsulatutako iragarkiak blokeatu edo "
 "ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
 msgstr "Deskargen karpeta"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -405,29 +420,29 @@ msgstr ""
 "deskargen karpeta lehenetsia erabiltzeko, edo \"Desktop\" (Mahaigaina) "
 "mahaigaina karpeta erabiltzeko."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
 msgstr "Historiako orrien bilaketa denbora-esparruan"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
 msgstr "Historiaren leihoan tituluaren zutabea erakutsi edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
 msgstr "Historiaren leihoan helbidearen zutabea erakutsi edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
 msgstr ""
 "Historiaren leihoan data-orduaren zutabea erakutsi edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
 msgstr ""
 "Laster-marken leihoan tituluaren zutabea erakutsi edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Laster-marken leihoan helbidearen zutabea erakutsi edo ez adierazten du."
@@ -479,25 +494,25 @@ msgstr "Instalatutako web aplikazioen zerrenda"
 msgid "Installed on:"
 msgstr "Instalatuta:"
 
-#: ../embed/ephy-embed.c:676
+#: ../embed/ephy-embed.c:696
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Sakatu %s pantaila osotik irteteko"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:699
 msgid "ESC"
 msgstr "Ihes"
 
-#: ../embed/ephy-embed.c:679
+#: ../embed/ephy-embed.c:699
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1017
+#: ../embed/ephy-embed.c:1084
 msgid "Web Inspector"
 msgstr "Web ikuskatzailea"
 
-#: ../embed/ephy-embed-shell.c:216
+#: ../embed/ephy-embed-shell.c:288
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany ezin da erabili orain. Huts egin du hasieratzean."
 
@@ -835,15 +850,15 @@ msgid "Most Visited"
 msgstr "Bisitatuenak"
 
 #. characters
-#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3720
+#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3623
 msgid "Blank page"
 msgstr "Orri hutsa"
 
-#: ../embed/ephy-web-view.c:748
+#: ../embed/ephy-web-view.c:696
 msgid "Not now"
 msgstr "Orain ez"
 
-#: ../embed/ephy-web-view.c:749
+#: ../embed/ephy-web-view.c:697
 msgid "Store password"
 msgstr "Gorde pasahitza"
 
@@ -851,39 +866,39 @@ msgstr "Gorde pasahitza"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:762
+#: ../embed/ephy-web-view.c:710
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Nahi duzu <b>%s</b>(r)en pasahitza <b>%s</b>(e)n gordetzea?</big>"
 
-#: ../embed/ephy-web-view.c:1975
+#: ../embed/ephy-web-view.c:1893
 msgid "Deny"
 msgstr "Ukatu"
 
-#: ../embed/ephy-web-view.c:1976
+#: ../embed/ephy-web-view.c:1894
 msgid "Allow"
 msgstr "Baimendu"
 
-#: ../embed/ephy-web-view.c:1990
+#: ../embed/ephy-web-view.c:1908
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b>(e)ngo orrialdeak zure kokalekua jakitea nahi du."
 
-#: ../embed/ephy-web-view.c:2409
+#: ../embed/ephy-web-view.c:2361
 msgid "None specified"
 msgstr "Ez da bat ere zehaztu"
 
-#: ../embed/ephy-web-view.c:2418 ../embed/ephy-web-view.c:2436
+#: ../embed/ephy-web-view.c:2370 ../embed/ephy-web-view.c:2388
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Errorea %s kargatzean"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:2372
 msgid "Oops! It was not possible to show this website"
 msgstr "Ezin izan da webgune hau erakutsi"
 
-#: ../embed/ephy-web-view.c:2421
+#: ../embed/ephy-web-view.c:2373
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -896,15 +911,15 @@ msgstr ""
 "itzalita egotea edo helbide berri batera aldatua izatea. Ez ahaztu zure "
 "interneteko konexioa ongi funtzionatzen duela ziurtatzeaz.</p>"
 
-#: ../embed/ephy-web-view.c:2430
+#: ../embed/ephy-web-view.c:2382
 msgid "Try again"
 msgstr "Saiatu berriro"
 
-#: ../embed/ephy-web-view.c:2438
+#: ../embed/ephy-web-view.c:2390
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Webgune honek web arakatzailea ustekabean ixtea eragin du"
 
-#: ../embed/ephy-web-view.c:2440
+#: ../embed/ephy-web-view.c:2392
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -916,29 +931,29 @@ msgstr ""
 "p><p>Horrela gertatzen bada, eskertuko genizuke arazoaren berri <strong>%s</"
 "strong>(e)ko garatzaileei bidaliko bazenie.</p>"
 
-#: ../embed/ephy-web-view.c:2448
+#: ../embed/ephy-web-view.c:2400
 msgid "Load again anyway"
 msgstr "Kargatu berriro dena den"
 
-#: ../embed/ephy-web-view.c:2882
+#: ../embed/ephy-web-view.c:2834
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3178
+#: ../embed/ephy-web-view.c:3130
 #, c-format
 msgid "Loading “%s”…"
 msgstr "'%s' kargatzen..."
 
-#: ../embed/ephy-web-view.c:3180
+#: ../embed/ephy-web-view.c:3132
 msgid "Loading…"
 msgstr "Kargatzen..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3976
+#: ../embed/ephy-web-view.c:3879
 #, c-format
 msgid "%s Files"
 msgstr "%s fitxategi"
@@ -1221,12 +1236,12 @@ msgstr "Amaituta"
 msgid "Error downloading: %s"
 msgstr "Errorea deskargatzean: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:777
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:847
 msgid "Cancel"
 msgstr "Utzi"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:270
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Ireki"
 
@@ -1540,7 +1555,7 @@ msgstr "Laster-marken laguntza erakutsi"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:8
 #: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
 msgid "_About"
 msgstr "Honi _buruz"
@@ -1713,26 +1728,30 @@ msgstr "_Leiho berria"
 msgid "New _Incognito Window"
 msgstr "Leiho berria isilka moduan"
 
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "Ireki berriro itxitako _fitxa"
+
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:3 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
 msgid "_Bookmarks"
 msgstr "Laster-_markak"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
 msgid "_History"
 msgstr "_Historia"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
+#: ../src/resources/epiphany-application-menu.ui.h:6
 #: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
 msgid "Personal Data"
 msgstr "Datu pertsonalak"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/resources/epiphany-application-menu.ui.h:7
 #: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
 msgid "Preferences"
 msgstr "Hobespenak"
 
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
 msgid "_Quit"
 msgstr "_Irten"
 
@@ -2128,7 +2147,7 @@ msgstr ""
 "Abioak huts egin du honako errorearengatik:\n"
 "%s"
 
-#: ../src/ephy-main.c:307
+#: ../src/ephy-main.c:310
 msgid "Web options"
 msgstr "Webaren aukerak"
 
@@ -2393,11 +2412,11 @@ msgstr "Aurrera"
 msgid "Zoom"
 msgstr "Zooma"
 
-#: ../src/ephy-window.c:1389
+#: ../src/ephy-window.c:1390
 msgid "New _Tab"
 msgstr "_Fitxa berria"
 
-#: ../src/ephy-window.c:1397
+#: ../src/ephy-window.c:1398
 msgid "Go to most visited"
 msgstr "Joan bisitatuenera"
 
@@ -2480,15 +2499,15 @@ msgstr "Erabiltzaile-izena"
 msgid "User Password"
 msgstr "Erabiltzailearen pasahitza"
 
-#: ../src/popup-commands.c:307
+#: ../src/popup-commands.c:321
 msgid "Download Link"
 msgstr "Deskargatu esteka"
 
-#: ../src/popup-commands.c:315
+#: ../src/popup-commands.c:329
 msgid "Save Link As"
 msgstr "Gorde esteka honela"
 
-#: ../src/popup-commands.c:322
+#: ../src/popup-commands.c:336
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
 
@@ -2522,21 +2541,21 @@ msgstr[1] "Sistemaren hizkuntzak (%s)"
 msgid "Select a Directory"
 msgstr "Hautatu direktorioa"
 
-#: ../src/window-commands.c:348
+#: ../src/window-commands.c:358
 msgid "Save"
 msgstr "Gorde"
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:844
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
 "'%s' izeneko web aplikazioa badago lehendik ere. Hori ordeztea nahi duzu?"
 
-#: ../src/window-commands.c:779
+#: ../src/window-commands.c:849
 msgid "Replace"
 msgstr "Ordeztu"
 
-#: ../src/window-commands.c:783
+#: ../src/window-commands.c:853
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2544,30 +2563,30 @@ msgstr ""
 "Izen bereko aplikazioa badago lehendik ere. Hau ordeztean gainidatzi egingo "
 "du."
 
-#: ../src/window-commands.c:819
+#: ../src/window-commands.c:889
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "'%s' aplikazioa prest dago erabiltzeko"
 
-#: ../src/window-commands.c:822
+#: ../src/window-commands.c:892
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "'%s' aplikazioa ezin izan da sortu"
 
-#: ../src/window-commands.c:830
+#: ../src/window-commands.c:900
 msgid "Launch"
 msgstr "Abiarazi"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:940
 msgid "Create Web Application"
 msgstr "Sortu web aplikazioa"
 
-#: ../src/window-commands.c:874
+#: ../src/window-commands.c:945
 msgid "C_reate"
 msgstr "_Sortu"
 
-#: ../src/window-commands.c:1564
+#: ../src/window-commands.c:1635
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2578,7 +2597,7 @@ msgstr ""
 "argitaratutako GNU Lizentzia Publiko Orokorraren 2. bertsioan, edo (nahiago "
 "baduzu) beste berriago batean, jasotako baldintzak betez gero."
 
-#: ../src/window-commands.c:1568
+#: ../src/window-commands.c:1639
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2590,7 +2609,7 @@ msgstr ""
 "MERKATURATZEKO edo HELBURU PARTIKULARRETARAKO ERABILTZEKO. Argibide gehiago "
 "nahi izanez gero, ikus GNU Lizentzia Publiko Orokorra."
 
-#: ../src/window-commands.c:1572
+#: ../src/window-commands.c:1643
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2600,20 +2619,20 @@ msgstr ""
 "zenuen; hala ez bada, idatzi hona: Free SoftwareFoundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:1618 ../src/window-commands.c:1634
-#: ../src/window-commands.c:1645
+#: ../src/window-commands.c:1689 ../src/window-commands.c:1705
+#: ../src/window-commands.c:1716
 msgid "Contact us at:"
 msgstr "Kontaktatu gurekin:"
 
-#: ../src/window-commands.c:1621
+#: ../src/window-commands.c:1692
 msgid "Contributors:"
 msgstr "Laguntzaileak:"
 
-#: ../src/window-commands.c:1624
+#: ../src/window-commands.c:1695
 msgid "Past developers:"
 msgstr "Iraganeko garatzaileak:"
 
-#: ../src/window-commands.c:1655 ../src/window-commands.c:1661
+#: ../src/window-commands.c:1726 ../src/window-commands.c:1732
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2630,21 +2649,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1691
+#: ../src/window-commands.c:1762
 msgid "translator-credits"
 msgstr ""
 "Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>"
 
-#: ../src/window-commands.c:1694
+#: ../src/window-commands.c:1765
 msgid "Web Website"
 msgstr "Web webgunea"
 
-#: ../src/window-commands.c:1834
+#: ../src/window-commands.c:1905
 msgid "Enable caret browsing mode?"
 msgstr "Gaitu kurtsorearekin arakatzea?"
 
-#: ../src/window-commands.c:1837
+#: ../src/window-commands.c:1908
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2655,7 +2674,7 @@ msgstr ""
 "teklatuarekin inguruan mugitzea baimenduz. Nahi duzu kurtsorearekin "
 "arakatzea aktibatzea?"
 
-#: ../src/window-commands.c:1840
+#: ../src/window-commands.c:1911
 msgid "_Enable"
 msgstr "_Gaitu"
 
