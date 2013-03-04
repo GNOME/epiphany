@@ -21,10 +21,16 @@
 #include "config.h"
 #include "ephy-web-extension.h"
 
+#include "ephy-debug.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-web-dom-utils.h"
+#include "uri-tester.h"
 
 #include <gio/gio.h>
 #include <webkit2/webkit-web-extension.h>
+
+static UriTester *uri_tester;
 
 static const char introspection_xml[] =
   "<node>"
@@ -164,10 +170,52 @@ bus_acquired_cb (GDBusConnection *connection,
   }
 }
 
+static gboolean
+web_page_send_request (WebKitWebPage *web_page,
+                       WebKitURIRequest *request,
+                       WebKitURIResponse *redirected_response,
+                       gpointer user_data)
+{
+  const char *request_uri;
+  const char *page_uri;
+
+  /* FIXME: Instead of checking the setting here, connect to the signal
+   * or not depending on the setting.
+   */
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+      return FALSE;
+
+  request_uri = webkit_uri_request_get_uri (request);
+  page_uri = webkit_web_page_get_uri (web_page);
+
+  /* Always load the main resource. */
+  if (g_strcmp0 (request_uri, page_uri) == 0)
+    return FALSE;
+
+  return uri_tester_test_uri (uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
+}
+
+static void
+web_page_created_callback (WebKitWebExtension *extension,
+                           WebKitWebPage *web_page,
+                           gpointer user_data)
+{
+  g_signal_connect_object (web_page, "send-request",
+                           G_CALLBACK (web_page_send_request),
+                           NULL, 0);
+}
+
 G_MODULE_EXPORT void
 webkit_web_extension_initialize (WebKitWebExtension *extension)
 {
   char *service_name;
+
+  ephy_debug_init ();
+  uri_tester = uri_tester_new (g_getenv ("EPHY_DOT_DIR"));
+
+  g_signal_connect (extension, "page-created",
+                    G_CALLBACK (web_page_created_callback),
+                    NULL);
 
   service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, g_getenv ("EPHY_WEB_EXTENSION_ID"));
   g_bus_own_name (G_BUS_TYPE_SESSION,

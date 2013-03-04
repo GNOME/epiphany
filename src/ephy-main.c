@@ -464,6 +464,7 @@ main (int argc,
 #ifdef HAVE_WEBKIT2
   pid_str = g_strdup_printf ("%u", getpid ());
   g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
+  g_setenv ("EPHY_DOT_DIR", ephy_dot_dir (), TRUE);
   g_free (pid_str);
 
   /* Set the web extensions dir ASAP before the process is launched */
