@@ -50,7 +50,7 @@ ephy_adblock_init (EphyAdBlock *adblock)
   LOG ("EphyAdblock initialising");
 
   adblock->priv = EPHY_ADBLOCK_GET_PRIVATE (adblock);
-  adblock->priv->tester = uri_tester_new ();
+  adblock->priv->tester = uri_tester_new (ephy_dot_dir ());
 }
 
 static void

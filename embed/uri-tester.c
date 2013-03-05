@@ -26,7 +26,6 @@
 #include "uri-tester.h"
 
 #include "ephy-debug.h"
-#include "ephy-file-helpers.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
@@ -42,6 +41,7 @@
 struct _UriTesterPrivate
 {
   GSList *filters;
+  char *data_dir;
 
   GHashTable *pattern;
   GHashTable *keys;
@@ -56,14 +56,12 @@ enum
 {
   PROP_0,
   PROP_FILTERS,
+  PROP_BASE_DATA_DIR,
 };
 
-G_DEFINE_TYPE (UriTester, uri_tester, G_TYPE_OBJECT);
+G_DEFINE_TYPE (UriTester, uri_tester, G_TYPE_OBJECT)
 
 /* Private functions. */
-
-static void uri_tester_class_init (UriTesterClass *klass);
-static void uri_tester_init (UriTester *dialog);
 
 static GString *
 uri_tester_fixup_regexp (const char *prefix, char *src);
@@ -72,37 +70,35 @@ static gboolean
 uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri);
 
 static char *
-uri_tester_ensure_data_dir (void)
+uri_tester_ensure_data_dir (const char *base_data_dir)
 {
-  char *folder = NULL;
+  char *folder;
 
   /* Ensure adblock's dir is there. */
-  folder = g_build_filename (ephy_dot_dir (), "adblock", NULL);
+  folder = g_build_filename (base_data_dir, "adblock", NULL);
   g_mkdir_with_parents (folder, 0700);
 
   return folder;
 }
 
 static char*
-uri_tester_get_fileuri_for_url (const char *url)
+uri_tester_get_fileuri_for_url (UriTester *tester,
+                                const char *url)
 {
   char *filename = NULL;
-  char *folder = NULL;
   char *path = NULL;
   char *uri = NULL;
 
   if (!strncmp (url, "file", 4))
     return g_strndup (url + 7, strlen (url) - 7);
 
-  folder = uri_tester_ensure_data_dir ();
   filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, url, -1);
 
-  path = g_build_filename (folder, filename, NULL);
+  path = g_build_filename (tester->priv->data_dir, filename, NULL);
   uri = g_filename_to_uri (path, NULL, NULL);
 
   g_free (filename);
   g_free (path);
-  g_free (folder);
 
   return uri;
 }
@@ -206,7 +202,7 @@ uri_tester_load_patterns (UriTester *tester)
   for (filter = tester->priv->filters; filter; filter = g_slist_next(filter))
     {
       url = (char*)filter->data;
-      fileuri = uri_tester_get_fileuri_for_url (url);
+      fileuri = uri_tester_get_fileuri_for_url (tester, url);
 
       if (!uri_tester_filter_is_valid (fileuri))
         uri_tester_retrieve_filter (tester, url, fileuri);
@@ -221,11 +217,9 @@ static void
 uri_tester_load_filters (UriTester *tester)
 {
   GSList *list = NULL;
-  char *data_dir = NULL;
   char *filepath = NULL;
 
-  data_dir =  uri_tester_ensure_data_dir ();
-  filepath = g_build_filename (data_dir, FILTERS_LIST_FILENAME, NULL);
+  filepath = g_build_filename (tester->priv->data_dir, FILTERS_LIST_FILENAME, NULL);
 
   if (g_file_test (filepath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
     {
@@ -276,11 +270,9 @@ static void
 uri_tester_save_filters (UriTester *tester)
 {
   FILE *file = NULL;
-  char *data_dir = NULL;
   char *filepath = NULL;
 
-  data_dir =  uri_tester_ensure_data_dir ();
-  filepath = g_build_filename (data_dir, FILTERS_LIST_FILENAME, NULL);
+  filepath = g_build_filename (tester->priv->data_dir, FILTERS_LIST_FILENAME, NULL);
 
   if ((file = g_fopen (filepath, "w")))
     {
@@ -765,6 +757,14 @@ uri_tester_init (UriTester *tester)
 
   priv->blockcss = g_string_new ("z-non-exist");
   priv->blockcssprivate = g_string_new ("");
+}
+
+static void
+uri_tester_constructed (GObject *object)
+{
+  UriTester *tester = URI_TESTER (object);
+
+  G_OBJECT_CLASS (uri_tester_parent_class)->constructed (object);
 
   uri_tester_load_filters (tester);
   uri_tester_load_patterns (tester);
@@ -783,6 +783,9 @@ uri_tester_set_property (GObject *object,
     case PROP_FILTERS:
       uri_tester_set_filters (tester, (GSList*) g_value_get_pointer (value));
       break;
+    case PROP_BASE_DATA_DIR:
+      tester->priv->data_dir = uri_tester_ensure_data_dir (g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -798,6 +801,7 @@ uri_tester_finalize (GObject *object)
 
   g_slist_foreach (priv->filters, (GFunc) g_free, NULL);
   g_slist_free (priv->filters);
+  g_free (priv->data_dir);
 
   g_hash_table_destroy (priv->pattern);
   g_hash_table_destroy (priv->keys);
@@ -816,6 +820,7 @@ uri_tester_class_init (UriTesterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = uri_tester_set_property;
+  object_class->constructed = uri_tester_constructed;
   object_class->finalize = uri_tester_finalize;
 
   g_object_class_install_property
@@ -825,14 +830,24 @@ uri_tester_class_init (UriTesterClass *klass)
                            "filters",
                            "filters",
                            G_PARAM_WRITABLE));
+  g_object_class_install_property
+    (object_class,
+     PROP_BASE_DATA_DIR,
+     g_param_spec_string ("base-data-dir",
+                          "Base data dir",
+                          "The base dir where to create the adblock data dir",
+                          NULL,
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (object_class, sizeof (UriTesterPrivate));
 }
 
 UriTester *
-uri_tester_new (void)
+uri_tester_new (const char *base_data_dir)
 {
-  return g_object_new (TYPE_URI_TESTER, NULL);
+  g_return_val_if_fail (base_data_dir != NULL, NULL);
+
+  return g_object_new (TYPE_URI_TESTER, "base-data-dir", base_data_dir, NULL);
 }
 
 gboolean
@@ -874,12 +889,9 @@ void
 uri_tester_reload (UriTester *tester)
 {
   GDir *g_data_dir = NULL;
-  const char *data_dir = NULL;
 
   /* Remove data files in the data dir first. */
-  data_dir = uri_tester_ensure_data_dir ();
-
-  g_data_dir = g_dir_open (data_dir, 0, NULL);
+  g_data_dir = g_dir_open (tester->priv->data_dir, 0, NULL);
   if (g_data_dir)
     {
       const char *filename = NULL;
@@ -891,7 +903,7 @@ uri_tester_reload (UriTester *tester)
           if (!g_strcmp0 (filename, FILTERS_LIST_FILENAME))
             continue;
 
-          filepath = g_build_filename (data_dir, filename, NULL);
+          filepath = g_build_filename (tester->priv->data_dir, filename, NULL);
           g_unlink (filepath);
 
           g_free (filepath);

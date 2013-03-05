@@ -54,7 +54,7 @@ GType      uri_tester_get_type    (void);
 
 void       uri_tester_register    (GTypeModule *module);
 
-UriTester *uri_tester_new         (void);
+UriTester *uri_tester_new         (const char *base_data_dir);
 
 gboolean   uri_tester_test_uri    (UriTester *tester,
                                    const char *req_uri,
