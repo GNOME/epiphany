@@ -31,9 +31,6 @@
 #include <gio/gio.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#ifndef HAVE_WEBKIT2
-#include <webkit/webkit.h>
-#endif
 
 #define DEFAULT_FILTER_URL "http://adblockplus.mozdev.org/easylist/easylist.txt"
 #define FILTERS_LIST_FILENAME "filters.list"
@@ -110,49 +107,56 @@ uri_tester_get_fileuri_for_url (const char *url)
   return uri;
 }
 
+typedef struct {
+  UriTester *tester;
+  char *dest_uri;
+} RetrieveFilterAsyncData;
+
 static void
-uri_tester_download_notify_status_cb (WebKitDownload *download,
-                                      GParamSpec *pspec,
-                                      UriTester *tester)
+uri_tester_retrieve_filter_finished (GFile *src,
+                                     GAsyncResult *result,
+                                     RetrieveFilterAsyncData *data)
 {
-#ifndef HAVE_WEBKIT2
-  const char *dest = NULL;
+  GError *error = NULL;
 
-  if (webkit_download_get_status (download) != WEBKIT_DOWNLOAD_STATUS_FINISHED)
-    return;
+  if (!g_file_copy_finish (src, result, &error)) {
+    LOG ("Error retrieving filter: %s\n", error->message);
+    g_error_free (error);
+  } else
+    uri_tester_parse_file_at_uri (data->tester, data->dest_uri);
 
-  LOG ("Download from %s to %s completed",
-       webkit_download_get_uri (download),
-       webkit_download_get_destination_uri (download));
-
-  /* Parse the file from disk. */
-  dest = webkit_download_get_destination_uri (download);
-  uri_tester_parse_file_at_uri (tester, dest);
-#endif
+  g_object_unref (data->tester);
+  g_free (data->dest_uri);
+  g_slice_free (RetrieveFilterAsyncData, data);
 }
 
 static void
 uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *fileuri)
 {
-#ifndef HAVE_WEBKIT2
-  WebKitNetworkRequest *request = NULL;
-  WebKitDownload *download = NULL;
+  GFile *src;
+  GFile *dest;
+  RetrieveFilterAsyncData *data;
 
   g_return_if_fail (IS_URI_TESTER (tester));
   g_return_if_fail (url != NULL);
   g_return_if_fail (fileuri != NULL);
 
-  request = webkit_network_request_new (url);
-  download = webkit_download_new (request);
-  g_object_unref (request);
+  src = g_file_new_for_uri (url);
+  dest = g_file_new_for_uri (fileuri);
 
-  webkit_download_set_destination_uri (download, fileuri);
+  data = g_slice_new (RetrieveFilterAsyncData);
+  data->tester = g_object_ref (tester);
+  data->dest_uri = g_file_get_uri (dest);
 
-  g_signal_connect (download, "notify::status",
-                    G_CALLBACK (uri_tester_download_notify_status_cb), tester);
+  g_file_copy_async (src, dest,
+                     G_FILE_COPY_NONE,
+                     G_PRIORITY_DEFAULT,
+                     NULL, NULL, NULL,
+                     (GAsyncReadyCallback)uri_tester_retrieve_filter_finished,
+                     data);
 
-  webkit_download_start (download);
-#endif
+  g_object_unref (src);
+  g_object_unref (dest);
 }
 
 static gboolean
