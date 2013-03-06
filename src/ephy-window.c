@@ -2391,11 +2391,8 @@ decide_policy_cb (WebKitWebView *web_view,
 	WebKitNavigationPolicyDecision *navigation_decision;
 	WebKitNavigationType navigation_type;
 	WebKitURIRequest *request;
-	gint button;
-	gint state;
 	const char *uri;
 	EphyEmbed *embed;
-	EphyNewTabFlags flags;
 
 	if (decision_type == WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
 		return FALSE;
@@ -2806,7 +2803,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	WebKitWebView *web_view;
 	EphyWebView *view;
 	EphyOverview *overview;
+#ifndef HAVE_WEBKIT2
 	guint sid;
+#endif
 	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
