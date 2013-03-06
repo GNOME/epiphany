@@ -1699,10 +1699,8 @@ decide_policy_cb (WebKitWebView *web_view,
   WebKitURIRequest *request;
   WebKitWebResource *main_resource;
   EphyWebViewDocumentType type;
-  GObject *single;
   const char *mime_type;
   const char *request_uri;
-  gboolean handled = FALSE;
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
