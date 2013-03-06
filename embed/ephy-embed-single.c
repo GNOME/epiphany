@@ -150,9 +150,9 @@ remove_form_auth_data (gpointer key, gpointer value, gpointer user_data)
 static void
 ephy_embed_single_dispose (GObject *object)
 {
+#ifndef HAVE_WEBKIT2
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
-#ifndef HAVE_WEBKIT2
   if (priv->cache) {
     soup_cache_flush (priv->cache);
     soup_cache_dump (priv->cache);
