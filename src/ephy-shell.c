@@ -1113,7 +1113,7 @@ open_uris_data_new (EphyShell *shell,
     data->window = NULL;
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
-    data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
+    data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_FROM_EXTERNAL;
   } else if (!have_uris) {
     data->window = NULL;
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
