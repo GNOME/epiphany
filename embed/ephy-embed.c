@@ -26,7 +26,9 @@
 #include "config.h"
 #include "ephy-embed.h"
 
+#ifndef HAVE_WEBKIT2
 #include "ephy-adblock-manager.h"
+#endif
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-embed-prefs.h"
@@ -105,7 +107,9 @@ struct _EphyEmbedPrivate
   gulong status_handler_id;
   gulong progress_update_handler_id;
 
+#ifndef HAVE_WEBKIT2
   gulong adblock_handler_id;
+#endif
 };
 
 enum
@@ -425,10 +429,12 @@ ephy_embed_dispose (GObject *object)
     priv->fullscreen_message_id = 0;
   }
 
+#ifndef HAVE_WEBKIT2
   if (priv->adblock_handler_id) {
     g_signal_handler_disconnect (priv->web_view, priv->adblock_handler_id);
     priv->adblock_handler_id = 0;
   }
+#endif
 
   g_clear_object (&priv->delayed_request);
 

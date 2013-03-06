@@ -13,12 +13,9 @@ NOINST_H_FILES = \
 	ephy-encoding.h			\
 	ephy-encodings.h		\
 	ephy-file-monitor.h		\
-	ephy-request-about.h		\
-	uri-tester.h
+	ephy-request-about.h
 
 INST_H_FILES = \
-	ephy-adblock.h			\
-	ephy-adblock-manager.h		\
 	ephy-download.h			\
 	ephy-embed.h			\
 	ephy-embed-container.h          \
@@ -37,8 +34,6 @@ BUILT_SOURCES = \
 
 libephyembed_la_SOURCES = \
 	ephy-about-handler.c		\
-	ephy-adblock.c			\
-	ephy-adblock-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-container.c          \
@@ -54,9 +49,18 @@ libephyembed_la_SOURCES = \
 	ephy-request-about.c		\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
-	uri-tester.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
+
+if !WITH_WEBKIT2
+libephyembed_la_SOURCES += \
+	ephy-adblock.c		\
+	ephy-adblock.h		\
+	ephy-adblock-manager.c	\
+	ephy-adblock-manager.h	\
+	uri-tester.c		\
+	uri-tester.h
+endif
 
 nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)

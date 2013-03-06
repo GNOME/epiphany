@@ -22,7 +22,9 @@
 #include <config.h>
 #include "ephy-embed-shell.h"
 
+#ifndef HAVE_WEBKIT2
 #include "ephy-adblock-manager.h"
+#endif
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-embed-private.h"
@@ -52,7 +54,9 @@ struct _EphyEmbedShellPrivate
   GList *downloads;
   EphyEmbedSingle *embed_single;
   EphyEncodings *encodings;
+#ifndef HAVE_WEBKIT2
   EphyAdBlockManager *adblock_manager;
+#endif
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
@@ -99,11 +103,12 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->embed_single);
-  g_clear_object (&priv->adblock_manager);
 #ifdef HAVE_WEBKIT2
   g_clear_object (&priv->web_extension);
   if (priv->web_extension_watch_name_id > 0)
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
+#else
+  g_clear_object (&priv->adblock_manager);
 #endif
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
@@ -511,6 +516,7 @@ ephy_embed_shell_get_default (void)
 GObject *
 ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
 {
+#ifndef HAVE_WEBKIT2
   EphyEmbedShellPrivate *priv;
 
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
@@ -525,6 +531,10 @@ ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
   }
 
   return G_OBJECT (priv->adblock_manager);
+#else
+  g_assert_not_reached ();
+  return NULL;
+#endif
 }
 
 void
