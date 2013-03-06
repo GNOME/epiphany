@@ -93,8 +93,8 @@ GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
 AC_ARG_WITH(webkit2,
-        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=no]])],
-        [],[with_webkit2=no])
+        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=yes]])],
+        [],[with_webkit2=yes])
 
 if test "x$with_webkit2" != xno; then
    WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
