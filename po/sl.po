@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-24 13:13+0000\n"
-"PO-Revision-Date: 2013-02-24 21:36+0100\n"
+"POT-Creation-Date: 2013-03-07 15:05+0000\n"
+"PO-Revision-Date: 2013-03-07 20:55+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -46,7 +46,7 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.si/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1683
+#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1790
 msgid "Web"
 msgstr "Splet"
 
@@ -447,73 +447,87 @@ msgstr "Ali naj bo v oknu zaznamkov prikazan stolpec zadev."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Ali naj bo v oknu zaznamkov prikazan stolpec elektronskih naslovov."
 
-#: ../embed/ephy-about-handler.c:64 ../embed/ephy-about-handler.c:67
-#: ../embed/ephy-about-handler.c:117 ../embed/ephy-about-handler.c:120
+#: ../embed/ephy-about-handler.c:65 ../embed/ephy-about-handler.c:68
+#: ../embed/ephy-about-handler.c:118 ../embed/ephy-about-handler.c:121
 msgid "Installed plugins"
 msgstr "Nameščeni vstavki"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Enabled"
 msgstr "Omogočeno"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Yes"
 msgstr "Da"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "No"
 msgstr "Ne"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "MIME type"
 msgstr "Vrsta MIME"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "Description"
 msgstr "Opis"
 
 # G:7 K:4 O:0
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "Suffixes"
 msgstr "Pripone"
 
-#: ../embed/ephy-about-handler.c:172 ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:173 ../embed/ephy-about-handler.c:176
 msgid "Memory usage"
 msgstr "Uporaba pomnilnika"
 
-#: ../embed/ephy-about-handler.c:208 ../embed/ephy-about-handler.c:210
+#: ../embed/ephy-about-handler.c:209 ../embed/ephy-about-handler.c:211
 msgid "Applications"
 msgstr "Programi"
 
-#: ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:212
 msgid "List of installed web applications"
 msgstr "Seznam nameščenih spletnih programov"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:232
+#: ../embed/ephy-about-handler.c:233
 msgid "Installed on:"
 msgstr "Nameščeno:"
 
-#: ../embed/ephy-embed.c:696
+#: ../embed/ephy-about-handler.c:268 ../embed/ephy-about-handler.c:270
+msgid "Private Browsing"
+msgstr "Zasebno brskanje"
+
+#: ../embed/ephy-about-handler.c:271
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window."
+msgstr ""
+"Trenutno je omogočeno brskanje v <em>zasebnem</em> načinu. Obiskane strani "
+"ne bodo prikazane v zgodovini brskanja in vsi podatki, pridobljeni to sejo, "
+"bodo po zaprtju okna izbrisani."
+
+#: ../embed/ephy-embed.c:702
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Pritisnite tipko %s za izhod iz celozaslonskega načina."
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:705
 msgid "ESC"
 msgstr "Esc"
 
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:705
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1084
+#: ../embed/ephy-embed.c:1093
 msgid "Web Inspector"
 msgstr "Spletni nadzornik"
 
-#: ../embed/ephy-embed-shell.c:288
+#: ../embed/ephy-embed-shell.c:293
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Programa Epiphany trenutno ni mogoče uporabljati. Začenjanje ni uspelo"
 
@@ -925,15 +939,15 @@ msgid "Most Visited"
 msgstr "Največkrat obiskano"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3669
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3609
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: ../embed/ephy-web-view.c:695
+#: ../embed/ephy-web-view.c:686
 msgid "Not now"
 msgstr "Ne zdaj"
 
-#: ../embed/ephy-web-view.c:696
+#: ../embed/ephy-web-view.c:687
 msgid "Store password"
 msgstr "Shrani geslo"
 
@@ -941,39 +955,39 @@ msgstr "Shrani geslo"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:709
+#: ../embed/ephy-web-view.c:700
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Ali želite shraniti geslo za <b>%s</b> v <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1892
+#: ../embed/ephy-web-view.c:1879
 msgid "Deny"
 msgstr "Zavrni"
 
-#: ../embed/ephy-web-view.c:1893
+#: ../embed/ephy-web-view.c:1880
 msgid "Allow"
 msgstr "Dovoli"
 
-#: ../embed/ephy-web-view.c:1907
+#: ../embed/ephy-web-view.c:1894
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Stran na <b>%s</b> želi pridobiti podatke o vašem nahajanju."
 
-#: ../embed/ephy-web-view.c:2360
+#: ../embed/ephy-web-view.c:2347
 msgid "None specified"
 msgstr "Ni določeno"
 
-#: ../embed/ephy-web-view.c:2369 ../embed/ephy-web-view.c:2387
+#: ../embed/ephy-web-view.c:2356 ../embed/ephy-web-view.c:2374
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Napaka med nalaganjem %s"
 
-#: ../embed/ephy-web-view.c:2371
+#: ../embed/ephy-web-view.c:2358
 msgid "Oops! It was not possible to show this website"
 msgstr "Spletne strani ni mogoče pokazati."
 
-#: ../embed/ephy-web-view.c:2372
+#: ../embed/ephy-web-view.c:2359
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -985,15 +999,15 @@ msgstr ""
 "s strežnika je:</p><p><em>%s</em>.</p><p>V kolikor se napaka ponavlja, "
 "preverite omrežno povezavo in pa ali je spletišče sploh na voljo.</p>"
 
-#: ../embed/ephy-web-view.c:2381
+#: ../embed/ephy-web-view.c:2368
 msgid "Try again"
 msgstr "Poskusi znova"
 
-#: ../embed/ephy-web-view.c:2389
+#: ../embed/ephy-web-view.c:2376
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Spletišče je morda vplivalo na nepričakovano zapiranje programa."
 
-#: ../embed/ephy-web-view.c:2391
+#: ../embed/ephy-web-view.c:2378
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -1004,23 +1018,23 @@ msgstr ""
 "ponovnem nalaganju strani, se napaka lahko ponovi. V kolikor se, pošljite "
 "poročilo razvijalcem <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2399
+#: ../embed/ephy-web-view.c:2386
 msgid "Load again anyway"
 msgstr "Vseeno znova naloži."
 
 # G:0 K:1 O:0
-#: ../embed/ephy-web-view.c:2833
+#: ../embed/ephy-web-view.c:2820
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.si/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3129
+#: ../embed/ephy-web-view.c:3116
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Nalaganje “%s” ..."
 
-#: ../embed/ephy-web-view.c:3131
+#: ../embed/ephy-web-view.c:3118
 msgid "Loading…"
 msgstr "Nalaganje ..."
 
@@ -1028,7 +1042,7 @@ msgstr "Nalaganje ..."
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3925
+#: ../embed/ephy-web-view.c:3865
 #, c-format
 msgid "%s Files"
 msgstr "%s datotek"
@@ -1136,25 +1150,34 @@ msgstr ""
 "Z različico programa Epiphany 3.6 je ta mapa opuščena, vsebina pa je "
 "premaknjena v mapo ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:890
+#: ../lib/ephy-profile-migrator.c:1023
 msgid "Executes only the n-th migration step"
 msgstr "Izvede le n-ti korak migracije"
 
-#: ../lib/ephy-profile-migrator.c:892
+#: ../lib/ephy-profile-migrator.c:1025
 msgid "Specifies the required version for the migrator"
 msgstr "Določa zahtevano različico migratorja"
 
-#: ../lib/ephy-profile-migrator.c:894
+#: ../lib/ephy-profile-migrator.c:1027
 msgid "Specifies the profile where the migrator should run"
 msgstr "Določa profil, v katerem naj se zažene migrator"
 
-#: ../lib/ephy-profile-migrator.c:907
+#: ../lib/ephy-profile-migrator.c:1040
 msgid "Epiphany profile migrator"
 msgstr "Pretvornih profilov Epiphany"
 
-#: ../lib/ephy-profile-migrator.c:908
+#: ../lib/ephy-profile-migrator.c:1041
 msgid "Epiphany profile migrator options"
 msgstr "Možnosti migratorja profilov Epiphany"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-profile-utils.c:190
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr "Geslo za %s na spletišču %s"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1331,12 +1354,12 @@ msgstr "Končano"
 msgid "Error downloading: %s"
 msgstr "Napaka med prejemanjem: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:784
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:891
 msgid "Cancel"
 msgstr "Prekliči"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:277
+#: ../src/window-commands.c:281
 msgid "Open"
 msgstr "Odpri"
 
@@ -1363,13 +1386,13 @@ msgstr "Mesta"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:591
+#: ../lib/widgets/ephy-location-entry.c:596
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
-#: ../src/pdm-dialog.c:381
+#: ../src/pdm-dialog.c:352
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: ../lib/widgets/ephy-location-entry.c:874
+#: ../lib/widgets/ephy-location-entry.c:879
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Povlecite in spustite ikono, da ustvarite povezavo do te strani."
 
@@ -2612,11 +2635,11 @@ msgstr "Nov _zavihek"
 msgid "Go to most visited"
 msgstr "Pojdi na najpogosteje obiskano"
 
-#: ../src/pdm-dialog.c:362
+#: ../src/pdm-dialog.c:333
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Izberite osebne podatke, ki jih želite počistiti</b>"
 
-#: ../src/pdm-dialog.c:365
+#: ../src/pdm-dialog.c:336
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2626,31 +2649,31 @@ msgstr ""
 "straneh. Preden nadaljujete, preverite vrste podatkov, ki jih boste "
 "odstranili:"
 
-#: ../src/pdm-dialog.c:370
+#: ../src/pdm-dialog.c:341
 msgid "Clear All Personal Data"
 msgstr "Počisti vse osebne podatke"
 
 #. Cookies
-#: ../src/pdm-dialog.c:404
+#: ../src/pdm-dialog.c:375
 msgid "C_ookies"
 msgstr "_Piškotki"
 
 #. Passwords
-#: ../src/pdm-dialog.c:416
+#: ../src/pdm-dialog.c:387
 msgid "Saved _passwords"
 msgstr "Shranjena _gesla"
 
 #. History
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:399
 msgid "Hi_story"
 msgstr "_Zgodovina"
 
 #. Cache
-#: ../src/pdm-dialog.c:440
+#: ../src/pdm-dialog.c:411
 msgid "_Temporary files"
 msgstr "_Začasne datoteke"
 
-#: ../src/pdm-dialog.c:456
+#: ../src/pdm-dialog.c:427
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2658,41 +2681,41 @@ msgstr ""
 "<small><i><b>Opomba:</b>Tega dejanja ni mogoče razveljaviti. Podatki bodo "
 "trajno izbrisani.</i></small>"
 
-#: ../src/pdm-dialog.c:679
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "Le šifrirane povezave"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "Katerakoli vrsta povezave"
 
 # G:12 K:1 O:7
 #. Session cookie
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "Konec trenutne seje"
 
 # G:0 K:4 O:0
-#: ../src/pdm-dialog.c:807
+#: ../src/pdm-dialog.c:778
 msgid "Domain"
 msgstr "Domena"
 
 # G:0 K:1 O:0
-#: ../src/pdm-dialog.c:819
+#: ../src/pdm-dialog.c:790
 msgid "Name"
 msgstr "Ime"
 
 # G:1 K:0 O:0
-#: ../src/pdm-dialog.c:1342
+#: ../src/pdm-dialog.c:1308
 msgid "Host"
 msgstr "Gostitelj"
 
 # G:3 K:4 O:1
-#: ../src/pdm-dialog.c:1355
+#: ../src/pdm-dialog.c:1321
 msgid "User Name"
 msgstr "Uporabniško ime"
 
-#: ../src/pdm-dialog.c:1368
+#: ../src/pdm-dialog.c:1334
 msgid "User Password"
 msgstr "Uporabnikovo geslo"
 
@@ -2744,50 +2767,50 @@ msgid "Select a Directory"
 msgstr "Izberite mapo"
 
 # G:1 K:0 O:0
-#: ../src/window-commands.c:355
+#: ../src/window-commands.c:359
 msgid "Save"
 msgstr "Shrani"
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:888
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Spletni program '%s' že obstaja. Ali ga želite zamenjati?"
 
-#: ../src/window-commands.c:786
+#: ../src/window-commands.c:893
 msgid "Replace"
 msgstr "Zamenjaj"
 
-#: ../src/window-commands.c:790
+#: ../src/window-commands.c:897
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Program s tem imenom že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:933
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Program '%s' je pripravljen za uporabo"
 
-#: ../src/window-commands.c:829
+#: ../src/window-commands.c:936
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Programa '%s' ni mogoče ustvariti"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:944
 msgid "Launch"
 msgstr "Zaženi"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:877
+#: ../src/window-commands.c:984
 msgid "Create Web Application"
 msgstr "Ustvari spletni program"
 
-#: ../src/window-commands.c:882
+#: ../src/window-commands.c:989
 msgid "C_reate"
 msgstr "Ustva_ri"
 
-#: ../src/window-commands.c:1572
+#: ../src/window-commands.c:1679
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2799,7 +2822,7 @@ msgstr ""
 "objavila organizacija Free Software Foundation; bodisi pod različico 2 ali "
 "(po vašem mnenju) katerokoli kasnejšo različico."
 
-#: ../src/window-commands.c:1576
+#: ../src/window-commands.c:1683
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2811,7 +2834,7 @@ msgstr ""
 "VREDNOSTI ali PRIMERNOSTI ZA DOLOČENO UPORABO. Za več podrobnosti si oglejte "
 "GNU General Public License."
 
-#: ../src/window-commands.c:1580
+#: ../src/window-commands.c:1687
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2821,20 +2844,20 @@ msgstr ""
 "licence GNU General Public License. Če je niste, pišite na Free Software "
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:1626 ../src/window-commands.c:1642
-#: ../src/window-commands.c:1653
+#: ../src/window-commands.c:1733 ../src/window-commands.c:1749
+#: ../src/window-commands.c:1760
 msgid "Contact us at:"
 msgstr "Stopite v stik:"
 
-#: ../src/window-commands.c:1629
+#: ../src/window-commands.c:1736
 msgid "Contributors:"
 msgstr "Sodelavci:"
 
-#: ../src/window-commands.c:1632
+#: ../src/window-commands.c:1739
 msgid "Past developers:"
 msgstr "Nekdanji razvijalci:"
 
-#: ../src/window-commands.c:1663 ../src/window-commands.c:1669
+#: ../src/window-commands.c:1770 ../src/window-commands.c:1776
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2851,7 +2874,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1699
+#: ../src/window-commands.c:1806
 msgid "translator-credits"
 msgstr ""
 "Matej Urbančič <mateju@svn.gnome.org>\n"
@@ -2860,16 +2883,16 @@ msgstr ""
 "Matjaž Horvat <m@owca.info>\n"
 "Tilen Travnik <tilen.travnik@guest.arnes.si>"
 
-#: ../src/window-commands.c:1702
+#: ../src/window-commands.c:1809
 msgid "Web Website"
 msgstr "Spletna stran"
 
 # G:1 K:0 O:0
-#: ../src/window-commands.c:1842
+#: ../src/window-commands.c:1949
 msgid "Enable caret browsing mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: ../src/window-commands.c:1845
+#: ../src/window-commands.c:1952
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2880,6 +2903,6 @@ msgstr ""
 "mogoče premikati po strani s pomočjo tipkovnice. Ali želite omogočiti "
 "kazalni način brskanja?"
 
-#: ../src/window-commands.c:1848
+#: ../src/window-commands.c:1955
 msgid "_Enable"
 msgstr "_Omogoči"
