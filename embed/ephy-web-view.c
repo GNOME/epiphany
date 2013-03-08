@@ -2864,7 +2864,7 @@ ephy_web_view_load_request (EphyWebView *view,
   url = webkit_uri_request_get_uri (request);
   effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
 
-  // TODO: webkit_uri_request_set_uri?
+  webkit_uri_request_set_uri (request, effective_url);
   webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
   g_free (effective_url);
 #else
