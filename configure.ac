@@ -17,7 +17,7 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[7])
-m4_define([epiphany_version_micro],[90])
+m4_define([epiphany_version_micro],[91])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
@@ -93,8 +93,8 @@ GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
 AC_ARG_WITH(webkit2,
-        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=yes]])],
-        [],[with_webkit2=yes])
+        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=no]])],
+        [],[with_webkit2=no])
 
 if test "x$with_webkit2" != xno; then
    WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
