@@ -17,8 +17,7 @@ EXTRA_DIST = 			\
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-debug			\
-	--enable-gtk-doc
+	--enable-debug
 
 @GNOME_CODE_COVERAGE_RULES@
 
