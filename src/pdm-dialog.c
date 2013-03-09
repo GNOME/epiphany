@@ -520,7 +520,7 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 		gtk_tree_model_get_iter (model, &iter, path);
 		gtk_tree_model_get_value (model, &iter, action->data_col, &val);
 #ifdef HAVE_WEBKIT2
-		action->remove (action, g_value_get_string (&val));
+		action->remove (action, (gpointer)g_value_get_string (&val));
 #else
 		action->remove (action, G_VALUE_HOLDS_OBJECT (&val) ? g_value_get_object (&val) : g_value_get_boxed (&val));
 #endif
@@ -696,6 +696,7 @@ cookies_properties_clicked_cb (GtkWidget *button,
 	g_list_free (l);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 				       PdmDialog *dialog)
@@ -709,6 +710,7 @@ cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 	widget = ephy_dialog_get_control (d, "cookies_properties_button");
 	gtk_widget_set_sensitive (widget, has_selection);
 }
+#endif
 
 static gboolean
 cookie_search_equal (GtkTreeModel *model,
