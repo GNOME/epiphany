@@ -41,12 +41,6 @@ typedef struct _EphyEmbedSingle   EphyEmbedSingle;
 typedef struct _EphyEmbedSingleClass    EphyEmbedSingleClass;
 typedef struct _EphyEmbedSinglePrivate  EphyEmbedSinglePrivate;
 
-typedef struct {
-  char *form_username;
-  char *form_password;
-  char *username;
-} EphyEmbedSingleFormAuthData;
-
 struct _EphyEmbedSingle {
   GObject parent;
 

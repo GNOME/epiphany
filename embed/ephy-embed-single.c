@@ -47,105 +47,13 @@
 #define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 struct _EphyEmbedSinglePrivate {
-  GHashTable *form_auth_data;
+  EphyFormAuthDataCache *form_auth_data_cache;
 #ifndef HAVE_WEBKIT2
   SoupCache *cache;
 #endif
 };
 
 G_DEFINE_TYPE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT)
-
-static void
-form_auth_data_free (EphyEmbedSingleFormAuthData *data)
-{
-  g_free (data->form_username);
-  g_free (data->form_password);
-  g_free (data->username);
-
-  g_slice_free (EphyEmbedSingleFormAuthData, data);
-}
-
-static EphyEmbedSingleFormAuthData*
-form_auth_data_new (const char *form_username,
-                    const char *form_password,
-                    const char *username)
-{
-  EphyEmbedSingleFormAuthData *data;
-
-  data = g_slice_new (EphyEmbedSingleFormAuthData);
-  data->form_username = g_strdup (form_username);
-  data->form_password = g_strdup (form_password);
-  data->username = g_strdup (username);
-
-  return data;
-}
-
-static void
-store_form_data_cb (SecretService *service, GAsyncResult *result, EphyEmbedSingle *single)
-{
-  GList *results, *p;
-  SecretItem *item;
-  GHashTable *attributes;
-  char *host, *form_username, *form_password, *username;
-
-  GError *error = NULL;
-
-  results = secret_service_search_finish (service, result, &error);
-  if (error != NULL) {
-    g_warning ("Error caching form data: %s", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  for (p = results; p; p = p->next) {
-    item = (SecretItem *)p->data;
-    attributes = secret_item_get_attributes (item);
-    host = ephy_string_get_host_name (g_hash_table_lookup (attributes, "uri"));
-    form_username = g_hash_table_lookup (attributes, FORM_USERNAME_KEY);
-    form_password = g_hash_table_lookup (attributes, FORM_PASSWORD_KEY);
-    username = g_hash_table_lookup (attributes, "username");
-
-    ephy_embed_single_add_form_auth (single, host, form_username, form_password, username);
-
-    g_free (host);
-    g_hash_table_unref (attributes);
-  }
-  g_list_free_full (results, (GDestroyNotify)g_object_unref);
-}
-
-static void
-cache_secret_form_data (EphyEmbedSingle *single)
-{
-  GHashTable *attributes;
-
-  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-  secret_service_search (NULL,
-                         EPHY_FORM_PASSWORD_SCHEMA,
-                         attributes,
-                         SECRET_SEARCH_UNLOCK | SECRET_SEARCH_ALL,
-                         NULL,
-                         (GAsyncReadyCallback)store_form_data_cb,
-                         single);
-  g_hash_table_unref (attributes);
-}
-
-static void
-free_form_auth_data_list (gpointer data)
-{
-  GSList *p, *l = (GSList*)data;
-
-  for (p = l; p; p = p->next)
-    form_auth_data_free ((EphyEmbedSingleFormAuthData*)p->data);
-
-  g_slist_free (l);
-}
-
-static void
-remove_form_auth_data (gpointer key, gpointer value, gpointer user_data)
-{
-  if (value)
-    free_form_auth_data_list ((GSList*)value);
-}
 
 static void
 ephy_embed_single_dispose (GObject *object)
@@ -169,12 +77,7 @@ ephy_embed_single_finalize (GObject *object)
 {
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
-  if (priv->form_auth_data) {
-    g_hash_table_foreach (priv->form_auth_data,
-                          (GHFunc)remove_form_auth_data,
-                          NULL);
-    g_hash_table_destroy (priv->form_auth_data);
-  }
+  ephy_form_auth_data_cache_free (priv->form_auth_data_cache);
 
   G_OBJECT_CLASS (ephy_embed_single_parent_class)->finalize (object);
 }
@@ -186,11 +89,7 @@ ephy_embed_single_init (EphyEmbedSingle *single)
 
   single->priv = priv = EPHY_EMBED_SINGLE_GET_PRIVATE (single);
 
-  priv->form_auth_data = g_hash_table_new_full (g_str_hash,
-                                                g_str_equal,
-                                                g_free,
-                                                NULL);
-  cache_secret_form_data (single);
+  priv->form_auth_data_cache = ephy_form_auth_data_cache_new ();
 }
 
 static void
@@ -396,13 +295,13 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
  * @uri: the URI of a web page
  * 
  * Gets a #GSList of all stored login/passwords, in
- * #EphyEmbedSingleFormAuthData format, for any form in @uri, or %NULL
+ * #EphyFormAuthData format, for any form in @uri, or %NULL
  * if we have none.
  * 
- * The #EphyEmbedSingleFormAuthData structs and the #GSList are owned
+ * The #EphyFormAuthData structs and the #GSList are owned
  * by @single and should not be freed by the user.
  * 
- * Returns: (transfer none) (element-type EphyEmbedSingleFormAuthData): #GSList with the possible auto-fills for the forms
+ * Returns: (transfer none) (element-type EphyFormAuthData): #GSList with the possible auto-fills for the forms
  * in @uri, or %NULL
  **/
 GSList *
@@ -412,11 +311,10 @@ ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
   EphyEmbedSinglePrivate *priv;
 
   g_return_val_if_fail (EPHY_IS_EMBED_SINGLE (single), NULL);
-  g_return_val_if_fail (uri, NULL);
 
   priv = single->priv;
 
-  return g_hash_table_lookup (priv->form_auth_data, uri);
+  return ephy_form_auth_data_cache_get_list (priv->form_auth_data_cache, uri);
 }
 
 /**
@@ -438,25 +336,14 @@ ephy_embed_single_add_form_auth (EphyEmbedSingle *single,
                                  const char *form_password,
                                  const char *username)
 {
-  EphyEmbedSingleFormAuthData *form_data;
   EphyEmbedSinglePrivate *priv;
-  GSList *l;
 
   g_return_if_fail (EPHY_IS_EMBED_SINGLE (single));
-  g_return_if_fail (uri);
-  g_return_if_fail (form_username);
-  g_return_if_fail (form_password);
-  g_return_if_fail (username);
 
   priv = single->priv;
 
   LOG ("Appending: name field: %s / pass field: %s / username: %s / uri: %s", form_username, form_password, username, uri);
 
-  form_data = form_auth_data_new (form_username, form_password, username);
-  l = g_hash_table_lookup (priv->form_auth_data,
-                           uri);
-  l = g_slist_append (l, form_data);
-  g_hash_table_replace (priv->form_auth_data,
-                        g_strdup (uri),
-                        l);
+  ephy_form_auth_data_cache_add (priv->form_auth_data_cache,
+                                 uri, form_username, form_password, username);
 }

@@ -22,6 +22,8 @@
 #include "config.h"
 #include "ephy-form-auth-data.h"
 
+#include "ephy-string.h"
+
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
 
@@ -249,3 +251,149 @@ ephy_form_auth_data_query (const char *uri,
   g_free (key_str);
 }
 
+static EphyFormAuthData *
+ephy_form_auth_data_new (const char *form_username,
+                         const char *form_password,
+                         const char *username)
+{
+  EphyFormAuthData *data;
+
+  data = g_slice_new (EphyFormAuthData);
+  data->form_username = g_strdup (form_username);
+  data->form_password = g_strdup (form_password);
+  data->username = g_strdup (username);
+
+  return data;
+}
+
+static void
+ephy_form_auth_data_free (EphyFormAuthData *data)
+{
+  g_free (data->form_username);
+  g_free (data->form_password);
+  g_free (data->username);
+
+  g_slice_free (EphyFormAuthData, data);
+}
+
+static void
+screcet_service_search_finished (SecretService *service,
+                                 GAsyncResult *result,
+                                 EphyFormAuthDataCache *cache)
+{
+  GList *results, *p;
+  GError *error = NULL;
+
+  results = secret_service_search_finish (service, result, &error);
+  if (error != NULL) {
+    g_warning ("Error caching form data: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  for (p = results; p; p = p->next) {
+    SecretItem *item = (SecretItem *)p->data;
+    GHashTable *attributes;
+    char *host;
+
+    attributes = secret_item_get_attributes (item);
+    host = ephy_string_get_host_name (g_hash_table_lookup (attributes, URI_KEY));
+    ephy_form_auth_data_cache_add (cache, host,
+                                   g_hash_table_lookup (attributes, FORM_USERNAME_KEY),
+                                   g_hash_table_lookup (attributes, FORM_PASSWORD_KEY),
+                                   g_hash_table_lookup (attributes, USERNAME_KEY));
+
+    g_free (host);
+    g_hash_table_unref (attributes);
+  }
+
+  g_list_free_full (results, g_object_unref);
+}
+
+static void
+ephy_form_auth_data_cache_init (EphyFormAuthDataCache *cache)
+{
+  GHashTable *attributes;
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  secret_service_search (NULL,
+                         EPHY_FORM_PASSWORD_SCHEMA,
+                         attributes,
+                         SECRET_SEARCH_UNLOCK | SECRET_SEARCH_ALL,
+                         NULL,
+                         (GAsyncReadyCallback)screcet_service_search_finished,
+                         cache);
+  g_hash_table_unref (attributes);
+}
+
+struct _EphyFormAuthDataCache {
+  GHashTable  *form_auth_data_map;
+};
+
+EphyFormAuthDataCache *
+ephy_form_auth_data_cache_new (void)
+{
+  EphyFormAuthDataCache *cache = g_slice_new (EphyFormAuthDataCache);
+
+  cache->form_auth_data_map = g_hash_table_new_full (g_str_hash,
+                                                     g_str_equal,
+                                                     g_free,
+                                                     NULL);
+  ephy_form_auth_data_cache_init (cache);
+
+  return cache;
+}
+
+static void
+form_auth_data_map_free_value (gpointer key,
+                               gpointer value,
+                               gpointer user_data)
+{
+  g_slist_free_full ((GSList *)value, (GDestroyNotify)ephy_form_auth_data_free);
+}
+
+void
+ephy_form_auth_data_cache_free (EphyFormAuthDataCache *cache)
+{
+  g_return_if_fail (cache);
+
+  g_hash_table_foreach (cache->form_auth_data_map,
+                        (GHFunc)form_auth_data_map_free_value,
+                        NULL);
+  g_hash_table_destroy (cache->form_auth_data_map);
+
+  g_slice_free (EphyFormAuthDataCache, cache);
+}
+
+void
+ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
+                               const char *uri,
+                               const char *form_username,
+                               const char *form_password,
+                               const char *username)
+{
+  EphyFormAuthData *data;
+  GSList *l;
+
+  g_return_if_fail (cache);
+  g_return_if_fail (uri);
+  g_return_if_fail (form_username);
+  g_return_if_fail (form_password);
+  g_return_if_fail (username);
+
+  data = ephy_form_auth_data_new (form_username, form_password, username);
+  l = g_hash_table_lookup (cache->form_auth_data_map, uri);
+  l = g_slist_append (l, data);
+  g_hash_table_replace (cache->form_auth_data_map,
+                        g_strdup (uri), l);
+}
+
+GSList *
+ephy_form_auth_data_cache_get_list (EphyFormAuthDataCache *cache,
+                                    const char *uri)
+{
+  g_return_val_if_fail (cache, NULL);
+  g_return_val_if_fail (uri, NULL);
+
+  return g_hash_table_lookup (cache->form_auth_data_map, uri);
+}

@@ -762,7 +762,7 @@ pre_fill_form (WebKitDOMNode *username_node,
   for (p = l; p; p = p->next) {
     char *username_field_name;
     char *password_field_name;
-    EphyEmbedSingleFormAuthData *data = (EphyEmbedSingleFormAuthData*)p->data;
+    EphyFormAuthData *data = (EphyFormAuthData *)p->data;
 
     g_object_get (username_node,
                   "name", &username_field_name, NULL);

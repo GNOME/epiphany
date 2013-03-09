@@ -56,4 +56,22 @@ const SecretSchema *ephy_form_auth_data_get_password_schema (void) G_GNUC_CONST;
 
 #define EPHY_FORM_PASSWORD_SCHEMA ephy_form_auth_data_get_password_schema ()
 
+typedef struct {
+  char *form_username;
+  char *form_password;
+  char *username;
+} EphyFormAuthData;
+
+typedef struct _EphyFormAuthDataCache EphyFormAuthDataCache;
+
+EphyFormAuthDataCache *ephy_form_auth_data_cache_new      (void);
+void                   ephy_form_auth_data_cache_free     (EphyFormAuthDataCache *cache);
+void                   ephy_form_auth_data_cache_add      (EphyFormAuthDataCache *cache,
+                                                           const char            *uri,
+                                                           const char            *form_username,
+                                                           const char            *form_password,
+                                                           const char            *username);
+GSList                *ephy_form_auth_data_cache_get_list (EphyFormAuthDataCache *cache,
+                                                           const char            *uri);
+
 #endif
