@@ -59,6 +59,31 @@ test_ephy_embed_shell_launch_handler (void)
     g_object_unref (file);
 }
 
+#if 0
+static void
+web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, gpointer user_data)
+{
+    gboolean *web_view_created = (gboolean*)user_data;
+    *web_view_created = TRUE;
+}
+
+static void
+test_ephy_embed_shell_web_view_created (void)
+{
+    EphyEmbedShell *embed_shell;
+    GtkWidget *view;
+    gboolean web_view_created = FALSE;
+
+    embed_shell = ephy_embed_shell_get_default ();
+    g_signal_connect (embed_shell, "web-view-created",
+                      G_CALLBACK (web_view_created_cb), &web_view_created);
+
+    view = ephy_web_view_new ();
+    g_assert (web_view_created);
+    gtk_widget_destroy (view);
+}
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -81,6 +106,13 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/embed/ephy-embed-shell/launch_handler",
                    test_ephy_embed_shell_launch_handler);
+
+/* FIXME: this won't run because of the XDG_DATA_{DIRS,HOME} stuff,
+ * see: https://bugzilla.gnome.org/show_bug.cgi?id=695620 */
+#if 0
+  g_test_add_func ("/embed/ephy-embed-shell/web-view-created",
+                   test_ephy_embed_shell_web_view_created);
+#endif
 
   ret = g_test_run ();
 

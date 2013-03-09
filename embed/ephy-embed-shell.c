@@ -74,6 +74,7 @@ enum
   DOWNLOAD_REMOVED,
   PREPARE_CLOSE,
   RESTORED_WINDOW,
+  WEB_VIEW_CREATED,
   LAST_SIGNAL
 };
 
@@ -488,6 +489,24 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * EphyEmbedShell::web-view-created:
+   * @shell: the #EphyEmbedShell
+   * @view: the newly created #EphyWebView
+   *
+   * The ::web-view-created signal will be emitted every time a new
+   * #EphyWebView is created.
+   *
+   **/
+  signals[WEB_VIEW_CREATED] =
+    g_signal_new ("web-view-created",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_WEB_VIEW);
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
