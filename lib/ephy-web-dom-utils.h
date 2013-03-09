@@ -24,12 +24,7 @@
 #ifndef EPHY_WEB_DOM_UTILS_H
 #define EPHY_WEB_DOM_UTILS_H
 
-#ifdef HAVE_WEBKIT2
-#include <webkit2/webkit2.h>
-#include <webkit2/webkit-web-extension.h>
-#else
-#include <webkit/webkit.h>
-#endif
+#include <webkitdom/webkitdom.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +36,10 @@ gboolean ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
                                            const char        *base_uri,
                                            char             **uri_out,
                                            char             **color_out);
+
+gboolean ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
+                                                     WebKitDOMNode           **username,
+                                                     WebKitDOMNode           **password);
 
 G_END_DECLS
 

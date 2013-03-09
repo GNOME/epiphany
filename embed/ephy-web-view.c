@@ -548,66 +548,6 @@ fill_form_cb (const char *username,
                 "value", password, NULL);
 }
 
-static void
-find_username_and_password_elements (WebKitDOMNode *form_node,
-                                     WebKitDOMNode **username_node,
-                                     WebKitDOMNode **password_node)
-{
-  WebKitDOMHTMLCollection *elements;
-  WebKitDOMHTMLFormElement *form = WEBKIT_DOM_HTML_FORM_ELEMENT (form_node);
-  gulong elements_n;
-  int j;
-
-  elements = webkit_dom_html_form_element_get_elements (form);
-  elements_n = webkit_dom_html_collection_get_length (elements);
-
-  if (elements_n == 0) {
-    LOG ("No elements found for this form.");
-    return;
-  }
-
-  for (j = 0; j < elements_n; j++) {
-    WebKitDOMNode *element;
-
-    element = webkit_dom_html_collection_item (elements, j);
-
-    if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)) {
-      char *element_type;
-
-      g_object_get (element, "type", &element_type, NULL);
-
-      if (g_str_equal ("text", element_type) || g_str_equal ("email", element_type)) {
-        /* We found more than one inputs of type text; we won't be
-         * saving here */
-        if (*username_node) {
-          g_object_unref (*username_node);
-          *username_node = NULL;
-          g_free (element_type);
-
-          break;
-        }
-
-        *username_node = g_object_ref (element);
-      }
-      else if (g_str_equal ("password", element_type)) {
-        if (*password_node) {
-          g_object_unref (*password_node);
-          *password_node = NULL;
-          g_free (element_type);
-
-          break;
-        }
-
-        *password_node = g_object_ref (element);
-      }
-
-      g_free (element_type);
-    }
-  }
-
-  g_object_unref(elements);
-}
-
 typedef struct {
   EphyEmbed *embed;
   char *uri;
@@ -771,8 +711,7 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
 
   soup_uri_set_query (uri, NULL);
 
-  find_username_and_password_elements (WEBKIT_DOM_NODE (dom_form),
-                                       &username_node, &password_node);
+  ephy_web_dom_utils_find_form_auth_elements (dom_form, &username_node, &password_node);
 
   store_data = g_slice_new (StorePasswordData);
 
@@ -872,15 +811,14 @@ _ephy_web_view_hook_into_forms (EphyWebView *web_view)
   }
 
   for (i = 0; i < forms_n; i++) {
-    WebKitDOMNode *form;
+    WebKitDOMHTMLFormElement *form;
     WebKitDOMNode *username_node = NULL;
     WebKitDOMNode *password_node = NULL;
 
-    form = webkit_dom_html_collection_item (forms, i);
-    find_username_and_password_elements (form, &username_node, &password_node);
+    form = WEBKIT_DOM_HTML_FORM_ELEMENT (webkit_dom_html_collection_item (forms, i));
 
     /* We have a field that may be the user, and one for a password. */
-    if (username_node && password_node) {
+    if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       LOG ("Hooking and pre-filling a form");
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "submit",
                                                   G_CALLBACK (form_submitted_cb), false,

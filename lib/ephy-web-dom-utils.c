@@ -23,12 +23,6 @@
 #include "ephy-web-dom-utils.h"
 
 #include <libsoup/soup.h>
-#ifdef HAVE_WEBKIT2
-#include <webkit2/webkit2.h>
-#include <webkit2/webkit-web-extension.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 /**
  * ephy_web_dom_utils_has_modified_forms:
@@ -353,4 +347,70 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
   g_free (color);
 
   return ret;
+}
+
+gboolean
+ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
+                                            WebKitDOMNode **username,
+                                            WebKitDOMNode **password)
+{
+  WebKitDOMHTMLCollection *elements;
+  WebKitDOMNode *username_node = NULL;
+  WebKitDOMNode *password_node = NULL;
+  guint i, n_elements;
+  gboolean found_auth_elements = FALSE;
+
+  elements = webkit_dom_html_form_element_get_elements (form);
+  n_elements = webkit_dom_html_collection_get_length (elements);
+
+  for (i = 0; i < n_elements; i++) {
+    WebKitDOMNode *element;
+    char *element_type;
+
+    element = webkit_dom_html_collection_item (elements, i);
+    if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
+      continue;
+
+    g_object_get (element, "type", &element_type, NULL);
+
+    if (g_str_equal (element_type, "text") || g_str_equal (element_type, "email")) {
+      /* We found more than one inputs of type text; we won't be saving here. */
+      if (username_node) {
+        g_free (element_type);
+        found_auth_elements = FALSE;
+        break;
+      }
+
+      username_node = g_object_ref (element);
+      found_auth_elements = TRUE;
+    } else if (g_str_equal (element_type, "password")) {
+      /* We found more than one inputs of type password; we won't be saving here. */
+      if (password_node) {
+        g_free (element_type);
+        found_auth_elements = FALSE;
+        break;
+      }
+
+      password_node = g_object_ref (element);
+      found_auth_elements = TRUE;
+    }
+
+    g_free (element_type);
+  }
+
+  g_object_unref(elements);
+
+  if (found_auth_elements && username_node && password_node) {
+    *username = username_node;
+    *password = password_node;
+
+    return TRUE;
+  }
+
+  if (username_node)
+    g_object_unref (username_node);
+  if (password_node)
+    g_object_unref (password_node);
+
+  return FALSE;
 }
