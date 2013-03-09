@@ -34,6 +34,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
@@ -296,12 +297,12 @@ parse_and_decrypt_signons (const char *signons,
           !g_str_equal (form_password, "*")) {
         char *u = soup_uri_to_string (uri, FALSE);
         /* We skip the '*' at the beginning of form_password. */
-        _ephy_profile_utils_store_form_auth_data (u,
-                                                  form_username,
-                                                  form_password+1,
-                                                  username,
-                                                  password,
-                                                  NULL, NULL);
+        ephy_form_auth_data_store (u,
+                                   form_username,
+                                   form_password+1,
+                                   username,
+                                   password,
+                                   NULL, NULL);
         g_free (u);
       } else if (!handle_forms && realm &&
                  username && password &&
@@ -837,7 +838,7 @@ store_form_auth_data_cb (GObject *object,
 {
   GError *error = NULL;
 
-  _ephy_profile_utils_store_form_auth_data_finish (res, &error);
+  ephy_form_auth_data_store_finish (res, &error);
   if (error) {
     g_warning ("Couldn't store a form password: %s", error->message);
     g_error_free (error);
@@ -897,13 +898,13 @@ load_collection_items_cb (SecretCollection *collection,
       secret_item_load_secret_sync (item, NULL, NULL);
       secret = secret_item_get_secret (item);
       password = secret_value_get (secret, NULL);
-      _ephy_profile_utils_store_form_auth_data (actual_server,
-                                                form_username,
-                                                form_password,
-                                                username,
-                                                password,
-                                                (GAsyncReadyCallback)store_form_auth_data_cb,
-                                                g_hash_table_ref (attributes));
+      ephy_form_auth_data_store (actual_server,
+                                 form_username,
+                                 form_password,
+                                 username,
+                                 password,
+                                 (GAsyncReadyCallback)store_form_auth_data_cb,
+                                 g_hash_table_ref (attributes));
       g_free (actual_server);
       secret_value_unref (secret);
       g_hash_table_unref (t);

@@ -36,10 +36,10 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
+#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
 #include "ephy-overview.h"
 #include "ephy-prefs.h"
-#include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
@@ -594,12 +594,12 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
   }
 
   LOG ("Response is GTK_RESPONSE_YES - saving!");
-  _ephy_profile_utils_store_form_auth_data (uri,
-                                            name_field_name,
-                                            password_field_name,
-                                            name_field_value,
-                                            password_field_value,
-                                            NULL, NULL);
+  ephy_form_auth_data_store (uri,
+                             name_field_name,
+                             password_field_name,
+                             name_field_value,
+                             password_field_value,
+                             NULL, NULL);
 
   /* Update internal caching */
   host = ephy_string_get_host_name (uri);
@@ -730,12 +730,12 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
        store_data->name_value,
        store_data->password_value);
 
-  _ephy_profile_utils_query_form_auth_data (store_data->uri,
-                                            store_data->name_field,
-                                            store_data->password_field,
-                                            (EphyQueryFormDataCallback)should_store_cb,
-                                            store_data,
-                                            NULL);
+  ephy_form_auth_data_query (store_data->uri,
+                             store_data->name_field,
+                             store_data->password_field,
+                             should_store_cb,
+                             store_data,
+                             NULL);
 
   soup_uri_free (uri);
 
@@ -777,12 +777,12 @@ pre_fill_form (WebKitDOMNode *username_node,
       fill_data->username_node = g_object_ref (username_node);
       fill_data->password_node = g_object_ref (password_node);
 
-      _ephy_profile_utils_query_form_auth_data (uri_str,
-                                                data->form_username,
-                                                data->form_password,
-                                                (EphyQueryFormDataCallback)fill_form_cb,
-                                                fill_data,
-                                                fill_data_free);
+      ephy_form_auth_data_query (uri_str,
+                                 data->form_username,
+                                 data->form_password,
+                                 fill_form_cb,
+                                 fill_data,
+                                 fill_data_free);
       g_free (uri_str);
     }
     g_free (username_field_name);
