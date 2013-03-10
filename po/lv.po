@@ -5,25 +5,25 @@
 #
 # Raivis Dejus <orvils@gmail.com>, 2006, 2009.
 # Rudolfs <rudolfs.mazurs@gmail.com>, 2011.
-# Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012.
+# Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012, 2013.
 # Peteris Krisjanis <pecisk@gmail.com>, 2010, 2012.
 # Anita Reitere <nitalynx@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-03 18:38+0000\n"
-"PO-Revision-Date: 2012-09-24 15:33+0300\n"
-"Last-Translator: Anita Reitere <nitalynx@gmail.com>\n"
-"Language-Team: Latviešu <kde-i18n-doc@kde.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-03-05 09:28+0000\n"
+"PO-Revision-Date: 2013-03-10 15:38+0200\n"
+"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
+"Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.4\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -44,8 +44,8 @@ msgstr "http://www.google.lv"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.lv/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
+#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1746
 msgid "Web"
 msgstr "Tīmeklis"
 
@@ -61,13 +61,15 @@ msgstr "Epiphany tīmekļa pārlūks"
 msgid "Browse the web"
 msgstr "Pārlūkot tīmekli"
 
+#: ../data/epiphany.desktop.in.in.h:5
+msgid "web;browser;internet;"
+msgstr "tīmeklis;pārlūks;internets;web;"
+
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
-#| msgid "Browse the web"
 msgid "Browse with caret"
 msgstr "Pārlūkot ar teksta kursoru"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:2
-#| msgid "_Search:"
 msgid "URL Search"
 msgstr "URL meklēšana"
 
@@ -76,7 +78,6 @@ msgid "Search string for keywords entered in the URL bar."
 msgstr "Meklēšanas virkne atslēgvārdiem, kas ievadīti URL joslā."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:4
-#| msgid "User Name"
 msgid "User agent"
 msgstr "Lietotāja aģents"
 
@@ -89,7 +90,6 @@ msgstr ""
 "tīmekļa serveriem."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:6
-#| msgid "A_utomatically open downloaded files"
 msgid "Automatic downloads"
 msgstr "Automātiskas lejupielādes"
 
@@ -98,68 +98,43 @@ msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 msgstr ""
-"Ja datnes nevar atvērt ar pārlūku, tās tiek automātiski lejupielādētas "
-"mapē Lejupielādes un atvērtas ar atbilstošo lietotni."
+"Ja datnes nevar atvērt ar pārlūku, tās tiek automātiski lejupielādētas mapē "
+"Lejupielādes un atvērtas ar atbilstošo lietotni."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:8
-msgid ""
-"Middle click to open the web page pointed to by the currently selected text"
-msgstr ""
-"Klikšķis ar vidējo peles pogu atver tīmekļa vietni, uz kuru norāda "
-"izvēlētais teksts"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:9
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr ""
-"Klikšķis ar vidējo peles pogu uz galvenās skata rūts atver tīmekļa vietni, "
-"uz kuru norāda izvēlētais teksts."
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:10
 msgid "Force new windows to be opened in tabs"
 msgstr "Piespiest jaunos logus atvērt cilnēs"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#: ../data/org.gnome.epiphany.gschema.xml.h:9
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Piespiest jaunu logu pieprasījumus atvērt cilnēs, nevis jaunos logos."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
-#| msgid "_Remember passwords"
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
 msgid "Remember passwords"
 msgstr "Atcerēties paroles"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "Whether to store and prefill passwords in web sites."
 msgstr "Vai saglabāt un automātiski aizpildīt paroles tīmekļa vietnēs."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Automatically manage offline status with NetworkManager"
 msgstr "Automātiski pārvaldīt nesaistes statusu ar NetworkManager"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "Enable smooth scrolling"
 msgstr "Aktivēt plūstošo ritināšanu"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
-#| msgid "_Extensions"
-msgid "Active extensions"
-msgstr "Aktīvie paplašinājumi"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:17
-msgid "Lists the active extensions."
-msgstr "Parāda aktīvo paplašinājumu sarakstu."
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid "Don't use an external application to view page source."
 msgstr "Neizmantot ārēju lietotni, lai skatītu lapas pirmkodu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Whether to automatically restore the last session"
 msgstr "Vai automātiski atjaunot pēdējo sesiju"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "'always' (the previous state of the application is always restored), "
@@ -167,46 +142,59 @@ msgid ""
 "'never' (the homepage is always shown)."
 msgstr ""
 "Nosaka, vai pēc palaišanas tiks atjaunota iepriekšējā sesija. Atļautās "
-"vērtības ir "
-"'always' (vienmēr), 'crashed' (tikai pēc avārijas) un 'never' (nekad)."
+"vērtības ir 'always' (vienmēr), 'crashed' (tikai pēc avārijas) un "
+"'never' (nekad)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+"Vai aizkavēt ciļņu ielādēšanu, kas nav uzreiz redzamas, atjaunojot sesiju"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Kad šī opcija ir iestatīta uz patiess, atjaunojot sesiju, cilnes nesāks "
+"ielādēties, līdz kamēr lietotājs uz tām nepārslēgsies."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
 msgstr "Rādīt rīkjoslas pēc noklusējuma"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
-#| msgid "_Toolbars"
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Toolbar style"
 msgstr "Rīkjoslu stils"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
 "Rīkjoslu stils. Atļautās vērtības ir \"\" (lietot GNOME noklusēto stilu), "
-"\"both\" (teksts un ikonas), \"both-horiz\" (teksts blakus ikonām), "
-"\"icons\" un \"text\"."
+"\"both\" (teksts un ikonas), \"both-horiz\" (teksts blakus ikonām), \"icons"
+"\" un \"text\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "[Deprecated]"
 msgstr "[Novecojis]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
 msgstr ""
-"[Novecojis] Šis iestatījums ir novecojis; tā vietā lietojiet "
-"'tabs-bar-visibility-policy'."
+"[Novecojis] Šis iestatījums ir novecojis; tā vietā lietojiet 'tabs-bar-"
+"visibility-policy'."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
-#| msgid "Close the bookmarks window"
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
 msgstr "Lejupielāžu loga redzamība"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -214,11 +202,11 @@ msgstr ""
 "Slēpt vai rādīt lejupielādes logu. Kad tas ir slēpts, par jaunu lejupielāžu "
 "sākšanu informē paziņojumi."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "The visibility policy for the tabs bar."
 msgstr "Ciļņu joslas redzamība."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -227,126 +215,118 @@ msgstr ""
 "Nosaka, kad rādīt ciļņu joslu. Iespējamās vērtības ir 'always' (vienmēr), "
 "'more-than-one' (ja atvērta vairāk kā viena cilne) un 'never' (nekad)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Minimum font size"
 msgstr "Minimālais fonta izmērs"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
-#| msgid "_Use system fonts"
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Use GNOME fonts"
 msgstr "Lietot GNOME fontus"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Use GNOME desktop wide font configuration."
 msgstr "Lietot GNOME vispārējo fontu konfigurāciju."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
-#| msgid "Sans serif font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
 msgstr "Pielāgots bezrēdzes fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"Fonts, ko lietot darbvirsmas bezrēdzes fonta vietā, kad iestatīts "
-"use-gnome-fonts."
+"Fonts, ko lietot darbvirsmas bezrēdzes fonta vietā, kad iestatīts use-gnome-"
+"fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
-#| msgid "Sans serif font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Custom serif font"
 msgstr "Pielāgots rēdzes fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
-"Fonts, ko lietot darbvirsmas rēdzes fonta vietā, kad iestatīts "
-"use-gnome-fonts."
+"Fonts, ko lietot darbvirsmas rēdzes fonta vietā, kad iestatīts use-gnome-"
+"fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
-#| msgid "Monospace font:"
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "Custom monospace font"
 msgstr "Pielāgots fiksēta platuma fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"Fonts, ko lietot darbvirsmas fiksēta platuma fonta vietā, kad iestatīts "
-"use-gnome-fonts."
+"Fonts, ko lietot darbvirsmas fiksēta platuma fonta vietā, kad iestatīts use-"
+"gnome-fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Use own colors"
 msgstr "Lietot savas krāsas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Lietot savas krāsas lapas pieprasīto krāsu vietā."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
-#| msgid "_Use system fonts"
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own fonts"
 msgstr "Lietot savus fontus"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Lietot savus fontus lapas pieprasīto fontu vietā."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use a custom CSS"
 msgstr "Lietot pielāgotu CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Lietot pielāgotu CSS, lai mainītu tīmekļa vietnes izskatu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
-#| msgid "_Enable spell checking"
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Enable spell checking"
 msgstr "Aktivēt pareizrakstības pārbaudi"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Spell check any text typed in editable areas."
 msgstr "Pārbaudīt jebkura teksta pareizrakstību rediģējamos laukos."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
-#| msgid "Text Encoding"
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Default encoding"
 msgstr "Noklusētais kodējums"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Noklusētais kodējums. Iespējamās vērtības ir tās, ko saprot WebKitGTK+."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Size of disk cache"
 msgstr "Diska kešatmiņas izmērs"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Size of disk cache, in MB."
 msgstr "Diska kešatmiņas izmērs, MB."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 #: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "Valodas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Preferred languages, two letter codes."
 msgstr "Vēlamās valodas, divu burtu kodi."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
-#| msgid "_Never accept"
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Cookie accept"
 msgstr "Pieņemt sīkdatnes"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -354,11 +334,11 @@ msgstr ""
 "No kurienes pieņemt sīkdatnes. Iespējamās vērtības ir \"anywhere\", "
 "\"current site\" un \"nowhere\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Image animation mode"
 msgstr "Attēlu animācijas režīms"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -366,51 +346,45 @@ msgstr ""
 "Kā attēlot attēlu animācijas. Iespējamās vērtības ir \"normal\", \"once\" un "
 "\"disabled\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
-#| msgid "Allow popup _windows"
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Allow popups"
 msgstr "Atļaut izlecošos logus"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"Atļaut lapām atvērt jaunus logus ar JavaScript (ja JavaScript ir "
-"ieslēgts)."
+"Atļaut lapām atvērt jaunus logus ar JavaScript (ja JavaScript ir ieslēgts)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
-#| msgid "Enable _plugins"
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Enable Plugins"
 msgstr "Aktivēt spraudņus"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
-#| msgid "Enable Java_Script"
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Enable JavaScript"
 msgstr "Atļaut JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
-#| msgid "Enabled"
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Enable WebGL"
 msgstr "Ieslēgt WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Vai ieslēgt WebGL kontekstu atbalstu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
-#| msgid "Enabled"
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Enable WebAudio"
 msgstr "Ieslēgt WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Whether to enable support for WebAudio."
 msgstr "Vai ieslēgt WebAudio atbalstu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Do Not Track"
 msgstr "Neizsekot"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -418,8 +392,18 @@ msgstr ""
 "Vai informēt tīmekļa vietnes, ka nevēlamies tikt izsekoti. Ņemiet vērā, ka "
 "šis iestatījums tīmekļa vietnēm nav saistošs."
 
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#| msgid "Enable WebAudio"
+msgid "Enable Adblock"
+msgstr "Aktivēt reklāmu bloķētāju"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
+msgid ""
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
+msgstr "Vai bloķēt iegultās reklāmas, ko varētu mēģināt parādīt tīmekļa lapas."
+
 #: ../data/org.gnome.epiphany.gschema.xml.h:67
-#| msgid "_Download folder:"
 msgid "The downloads folder"
 msgstr "Lejupielāžu mape"
 
@@ -429,8 +413,7 @@ msgid ""
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
 "Ceļš līdz mapei, kurā lejupielādēt datnes; vai \"Lejupielādes\", lai lietotu "
-"noklusēto lejupielāžu mapi, vai \"Darbvirsma\", lai lietotu darbvirsmas "
-"mapi."
+"noklusēto lejupielāžu mapi, vai \"Darbvirsma\", lai lietotu darbvirsmas mapi."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "History pages time range"
@@ -456,77 +439,90 @@ msgstr "Vai rādīt nosaukuma kolonnu grāmatzīmju logā."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Vai rādīt adreses kolonnu grāmatzīmju logā."
 
-#: ../embed/ephy-about-handler.c:64 ../embed/ephy-about-handler.c:67
-#: ../embed/ephy-about-handler.c:117 ../embed/ephy-about-handler.c:120
+#: ../embed/ephy-about-handler.c:65 ../embed/ephy-about-handler.c:68
+#: ../embed/ephy-about-handler.c:118 ../embed/ephy-about-handler.c:121
 msgid "Installed plugins"
 msgstr "Instalētie spraudņi"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Enabled"
 msgstr "Aktivēts"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "Yes"
 msgstr "Jā"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
 msgid "No"
 msgstr "Nē"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "MIME type"
 msgstr "MIME tips"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "Description"
 msgstr "Apraksts"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
 msgid "Suffixes"
 msgstr "Sufiksi"
 
-#: ../embed/ephy-about-handler.c:172 ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:173 ../embed/ephy-about-handler.c:176
 msgid "Memory usage"
 msgstr "Atmiņas lietojums"
 
-#: ../embed/ephy-about-handler.c:208 ../embed/ephy-about-handler.c:210
+#: ../embed/ephy-about-handler.c:209 ../embed/ephy-about-handler.c:211
 msgid "Applications"
 msgstr "Lietotnes"
 
-#: ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:212
 msgid "List of installed web applications"
 msgstr "Saraksts ar instalētajām tīmekļa lietotnēm"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:227
+#: ../embed/ephy-about-handler.c:233
 msgid "Installed on:"
 msgstr "Instalēts:"
 
-#: ../embed/ephy-embed.c:657
+#: ../embed/ephy-about-handler.c:268 ../embed/ephy-about-handler.c:270
+msgid "Private Browsing"
+msgstr "Privātā pārlūkošana"
+
+#: ../embed/ephy-about-handler.c:271
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window."
+msgstr ""
+"Jūs pašlaik pārlūkojat <em>inkognito</em> režīmā. Šajā režīmā aplūkotās lapas "
+"neparādīsies pārlūkošanas vēsturē un visa uzglabātā informācija tiks izdzēsta "
+"līdz ar loga aizvēršanu."
+
+#: ../embed/ephy-embed.c:696
 #, c-format
-#| msgid "Browse at full screen"
 msgid "Press %s to exit fullscreen"
 msgstr "Spiediet %s, lai pamestu pilnekrānu"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:660
+#: ../embed/ephy-embed.c:699
 msgid "ESC"
 msgstr "Esc"
 
-#: ../embed/ephy-embed.c:660
+#: ../embed/ephy-embed.c:699
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:960
+#: ../embed/ephy-embed.c:1087
 msgid "Web Inspector"
 msgstr "Tīmekļa inspektors"
 
-#: ../embed/ephy-embed-shell.c:266
+#: ../embed/ephy-embed-shell.c:288
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Šobrīd Epiphany nav iespējams lietot. Inicializēšana neizdevās."
 
-#: ../embed/ephy-embed-utils.c:60
+#: ../embed/ephy-embed-utils.c:59
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Sūtīt e-pasta vēstuli “%s”"
@@ -856,23 +852,19 @@ msgid "Unknown (%s)"
 msgstr "Nezināms (%s)"
 
 #: ../embed/ephy-overview.h:53
-#| msgctxt "bookmarks"
-#| msgid "Most Visited"
 msgid "Most Visited"
 msgstr "Biežāk apmeklētās"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3765
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3611
 msgid "Blank page"
 msgstr "Tukša lapa"
 
-#: ../embed/ephy-web-view.c:741
-#| msgid "_Not now"
+#: ../embed/ephy-web-view.c:686
 msgid "Not now"
 msgstr "Ne tagad"
 
-#: ../embed/ephy-web-view.c:742
-#| msgid "_Store password"
+#: ../embed/ephy-web-view.c:687
 msgid "Store password"
 msgstr "Saglabāt paroli"
 
@@ -880,43 +872,39 @@ msgstr "Saglabāt paroli"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:755
+#: ../embed/ephy-web-view.c:700
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Vai vēlaties glabāt <b>%s</b> paroli vietnei <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1110
-msgid "Plugins"
-msgstr "Spraudņi"
-
-#: ../embed/ephy-web-view.c:1948
+#: ../embed/ephy-web-view.c:1881
 msgid "Deny"
 msgstr "Liegt"
 
-#: ../embed/ephy-web-view.c:1949
+#: ../embed/ephy-web-view.c:1882
 msgid "Allow"
 msgstr "Atļaut"
 
-#: ../embed/ephy-web-view.c:1963
+#: ../embed/ephy-web-view.c:1896
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Vietnes <b>%s</b> lapa vēlas zināt jūsu atrašanās vietu."
 
-#: ../embed/ephy-web-view.c:2473
+#: ../embed/ephy-web-view.c:2349
 msgid "None specified"
 msgstr "Nav norādīts"
 
-#: ../embed/ephy-web-view.c:2482 ../embed/ephy-web-view.c:2500
+#: ../embed/ephy-web-view.c:2358 ../embed/ephy-web-view.c:2376
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Vai! Kļūda, ielādējot %s"
 
-#: ../embed/ephy-web-view.c:2484
+#: ../embed/ephy-web-view.c:2360
 msgid "Oops! It was not possible to show this website"
 msgstr "Vai! Neizdevās parādīt šo tīmekļa vietni"
 
-#: ../embed/ephy-web-view.c:2485
+#: ../embed/ephy-web-view.c:2361
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -929,125 +917,90 @@ msgstr ""
 "citu adresi. Neaizmirstiet pārbaudīt, vai jūsu interneta savienojums "
 "darbojas pareizi.</p>"
 
-#: ../embed/ephy-web-view.c:2494
+#: ../embed/ephy-web-view.c:2370
 msgid "Try again"
 msgstr "Mēģināt vēlreiz"
 
-#: ../embed/ephy-web-view.c:2502
+#: ../embed/ephy-web-view.c:2378
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Vai! Iespējams, šī vietne izraisīja negaidītu tīmekļa pārlūka aizvēršanos"
 
-#: ../embed/ephy-web-view.c:2504
+#: ../embed/ephy-web-view.c:2380
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
 "p><p>This might happen again if you reload the page. If it does, please "
 "report the problem to the <strong>%s</strong> developers.</p>"
 msgstr ""
-"<p>Šī lapa tika ielādēta brīdī, kad tīmekļa pārlūks negaidīti aizvērās. "
-"</p><p>Tas varētu notikt atkal, ja jūs pārlādēsiet lapu. Ja tā notiek, "
-"lūdzu, ziņojiet par problēmu <strong>%s</strong> izstrādātājiem.</p>"
+"<p>Šī lapa tika ielādēta brīdī, kad tīmekļa pārlūks negaidīti aizvērās. </"
+"p><p>Tas varētu notikt atkal, ja jūs pārlādēsiet lapu. Ja tā notiek, lūdzu, "
+"ziņojiet par problēmu <strong>%s</strong> izstrādātājiem.</p>"
 
-#: ../embed/ephy-web-view.c:2512
+#: ../embed/ephy-web-view.c:2388
 msgid "Load again anyway"
 msgstr "Tomēr ielādēt atkal"
 
-#: ../embed/ephy-web-view.c:2944
+#: ../embed/ephy-web-view.c:2822
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3238
+#: ../embed/ephy-web-view.c:3118
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ielādē “%s”..."
 
-#: ../embed/ephy-web-view.c:3240
+#: ../embed/ephy-web-view.c:3120
 msgid "Loading…"
 msgstr "Ielādē..."
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:4021
+#: ../embed/ephy-web-view.c:3867
 #, c-format
 msgid "%s Files"
 msgstr "%s datnes"
 
-#: ../lib/egg/eggdesktopfile.c:165
-#, c-format
-msgid "File is not a valid .desktop file"
-msgstr "Datne nav derīga .desktop datne"
-
-#: ../lib/egg/eggdesktopfile.c:188
-#, c-format
-msgid "Unrecognized desktop file Version '%s'"
-msgstr "Neatpazīta darbvirsmas datnes versija '%s'"
-
-#: ../lib/egg/eggdesktopfile.c:958
-#, c-format
-msgid "Starting %s"
-msgstr "Startē %s"
-
-#: ../lib/egg/eggdesktopfile.c:1100
-#, c-format
-msgid "Application does not accept documents on command line"
-msgstr "Lietotne nepieņem norādes uz dokumentiem no komandrindas"
-
-#: ../lib/egg/eggdesktopfile.c:1168
-#, c-format
-msgid "Unrecognized launch option: %d"
-msgstr "Neatpazīta palaišanas opcija: %d"
-
-#: ../lib/egg/eggdesktopfile.c:1373
-#, c-format
-msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr "Nevar padot dokumentu URI uz 'Type=Link' darbvirsmas ierakstu"
-
-#: ../lib/egg/eggdesktopfile.c:1392
-#, c-format
-msgid "Not a launchable item"
-msgstr "Nepalaižams vienums"
-
-#: ../lib/ephy-file-chooser.c:210
+#: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
 msgstr "Visi atbalstītie tipi"
 
-#: ../lib/ephy-file-chooser.c:222
+#: ../lib/ephy-file-chooser.c:221
 msgid "Web pages"
 msgstr "Tīmekļa lapas"
 
-#: ../lib/ephy-file-chooser.c:231
+#: ../lib/ephy-file-chooser.c:230
 msgid "Images"
 msgstr "Attēli"
 
-#: ../lib/ephy-file-chooser.c:239 ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:633
 msgid "All files"
 msgstr "Visas datnes"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:4
 msgid "Downloads"
 msgstr "Lejupielādes"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:167
+#: ../lib/ephy-file-helpers.c:165
 msgid "Desktop"
 msgstr "Darbvirsma"
 
-#: ../lib/ephy-file-helpers.c:344
+#: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Neizdevās izveidot pagaidu direktoriju mapē “%s”."
 
-#: ../lib/ephy-file-helpers.c:445
+#: ../lib/ephy-file-helpers.c:469
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datne “%s” jau eksistē. Lūdzu, pārvietojiet to citur."
 
-#: ../lib/ephy-file-helpers.c:466
+#: ../lib/ephy-file-helpers.c:490
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Neizdevās izveidot direktoriju “%s”."
@@ -1097,8 +1050,7 @@ msgid ""
 "password below."
 msgstr ""
 "Paroles no iepriekšējās versijas (Gecko) ir noslēgtas ar galveno paroli. Ja "
-"vēlaties, lai Epiphany tās importētu, lūdzu, zemāk ievadiet galveno "
-"paroli."
+"vēlaties, lai Epiphany tās importētu, lūdzu, zemāk ievadiet galveno paroli."
 
 #: ../lib/ephy-profile-migrator.c:98
 msgid "Failed to copy cookies file from Mozilla."
@@ -1112,52 +1064,60 @@ msgstr ""
 "Epiphany 3.6 uzskata šo mapi par novecojušu, tāpēc mēģināja pārnest "
 "konfigurāciju uz ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:890
+#: ../lib/ephy-profile-migrator.c:1023
 msgid "Executes only the n-th migration step"
 msgstr "Veic tikai n-to migrācijas soli"
 
-#: ../lib/ephy-profile-migrator.c:892
+#: ../lib/ephy-profile-migrator.c:1025
 msgid "Specifies the required version for the migrator"
 msgstr "Norāda migratoram nepieciešamo versiju"
 
-#: ../lib/ephy-profile-migrator.c:894
+#: ../lib/ephy-profile-migrator.c:1027
 msgid "Specifies the profile where the migrator should run"
 msgstr "Norāda profilu, kurā migratoram vajadzētu darboties"
 
-#: ../lib/ephy-profile-migrator.c:909
-#| msgid "Epiphany Web Browser"
+#: ../lib/ephy-profile-migrator.c:1040
 msgid "Epiphany profile migrator"
 msgstr "Epiphany profilu migrators"
 
-#: ../lib/ephy-profile-migrator.c:910
+#: ../lib/ephy-profile-migrator.c:1041
 msgid "Epiphany profile migrator options"
 msgstr "Epiphany profilu migratora opcijas"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-profile-utils.c:190
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr "%s parole formā vietnē %s "
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
 msgid "Today %I:%M %p"
-msgstr "Šodien %H:%M"
+msgstr "Šodien %H.%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:236
 msgid "Yesterday %I:%M %p"
-msgstr "Vakar %H:%M"
+msgstr "Vakar %H.%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:252
 msgid "%a %I:%M %p"
-msgstr "%A %H:%M"
+msgstr "%A %H.%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12:34 am"
 #.
 #: ../lib/ephy-time-helpers.c:264
 msgid "%b %d %I:%M %p"
-msgstr "%d. %B, %H:%M"
+msgstr "%d. %B, %H.%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
@@ -1171,47 +1131,47 @@ msgstr "%Y. gada %d. %B"
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: ../lib/ephy-zoom.h:44
+#: ../lib/ephy-zoom.h:45
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:46
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:47
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:48
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:49
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:50
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:51
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:52
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:52
+#: ../lib/ephy-zoom.h:53
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:360
+#: ../lib/history/ephy-history-service-hosts-table.c:362
 msgid "Others"
 msgstr "Citi"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:364
+#: ../lib/history/ephy-history-service-hosts-table.c:366
 msgid "Local files"
 msgstr "Vietējās datnes"
 
@@ -1220,7 +1180,6 @@ msgid "The certificate does not match the expected identity"
 msgstr "Sertifikāts neatbilst gaidāmajai identitātei"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:95
-#| msgid "Certificate _Fields"
 msgid "The certificate has expired"
 msgstr "Sertifikātam beidzies derīguma termiņš"
 
@@ -1256,9 +1215,9 @@ msgstr "Šīs tīmekļa vietnes identitāte NAV apstiprināta"
 #, c-format
 msgid "%u:%02u hour left"
 msgid_plural "%u:%02u hours left"
-msgstr[0] "Atlikusi %u:%02u stunda"
-msgstr[1] "Atlikušas %u:%02u stundas"
-msgstr[2] "Atlikušas %u:%02u stundas"
+msgstr[0] "Atlikusi %u.%02u stunda"
+msgstr[1] "Atlikušas %u.%02u stundas"
+msgstr[2] "Atlikušas %u.%02u stundas"
 
 #: ../lib/widgets/ephy-download-widget.c:121
 #, c-format
@@ -1272,9 +1231,9 @@ msgstr[2] "Atlikušas %u stundas"
 #, c-format
 msgid "%u:%02u minute left"
 msgid_plural "%u:%02u minutes left"
-msgstr[0] "Atlikusi %u:%02u minūte"
-msgstr[1] "Atlikušas %u:%02u minūtes"
-msgstr[2] "Atlikušas %u:%02u minūtes"
+msgstr[0] "Atlikusi %u.%02u minūte"
+msgstr[1] "Atlikušas %u.%02u minūtes"
+msgstr[2] "Atlikušas %u.%02u minūtes"
 
 #: ../lib/widgets/ephy-download-widget.c:126
 #, c-format
@@ -1295,12 +1254,12 @@ msgstr "Pabeigts"
 msgid "Error downloading: %s"
 msgstr "Kļūda lejupielādējot: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:556
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:847
 msgid "Cancel"
 msgstr "Atcelt"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1368
-#: ../src/window-commands.c:268
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Atvērt"
 
@@ -1312,7 +1271,7 @@ msgstr "Rādīt mapē"
 msgid "Starting…"
 msgstr "Uzsāk…"
 
-#: ../lib/widgets/ephy-hosts-store.c:262
+#: ../lib/widgets/ephy-hosts-store.c:303
 msgid "All sites"
 msgstr "Visas vietnes"
 
@@ -1325,27 +1284,23 @@ msgstr "Vietnes"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../lib/widgets/ephy-location-entry.c:591
-#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:231
-#: ../src/pdm-dialog.c:380
+#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
+#: ../src/pdm-dialog.c:352
 msgid "Cl_ear"
 msgstr "N_otīrīt"
 
-#: ../lib/widgets/ephy-location-entry.c:871
+#: ../lib/widgets/ephy-location-entry.c:874
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Velciet un nometiet šo ikonu, lai izveidotu saiti uz šo lapu"
 
-#: ../lib/widgets/ephy-search-entry.c:162
-msgid "Clear"
-msgstr "Attīrīt"
-
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
 msgid "Title"
 msgstr "Nosaukums"
 
 #: ../lib/widgets/ephy-urls-view.c:51
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1707
 msgid "Address"
 msgstr "Adrese"
 
@@ -1399,267 +1354,268 @@ msgstr "T_emati:"
 msgid "Sho_w all topics"
 msgstr "Parādī_t visus tematus"
 
-#: ../src/bookmarks/ephy-bookmarks.c:87
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
 msgstr "Izklaide"
 
-#: ../src/bookmarks/ephy-bookmarks.c:88
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "News"
 msgstr "Ziņas"
 
-#: ../src/bookmarks/ephy-bookmarks.c:89
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Shopping"
 msgstr "Iepirkšanās"
 
-#: ../src/bookmarks/ephy-bookmarks.c:90
+#: ../src/bookmarks/ephy-bookmarks.c:91
 msgid "Sports"
 msgstr "Sports"
 
-#: ../src/bookmarks/ephy-bookmarks.c:91
+#: ../src/bookmarks/ephy-bookmarks.c:92
 msgid "Travel"
 msgstr "Ceļošana"
 
-#: ../src/bookmarks/ephy-bookmarks.c:92
+#: ../src/bookmarks/ephy-bookmarks.c:93
 msgid "Work"
 msgstr "Darbs"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:935
+#: ../src/bookmarks/ephy-bookmarks.c:945
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Visas"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:939
+#: ../src/bookmarks/ephy-bookmarks.c:949
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Bez kategorijas"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:943
+#: ../src/bookmarks/ephy-bookmarks.c:953
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Tuvējās vietnes"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1161
+#: ../src/bookmarks/ephy-bookmarks.c:1167
 #: ../src/bookmarks/ephy-bookmarks-import.c:271
 msgid "Untitled"
 msgstr "Bez nosaukuma"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:76
+#: ../src/bookmarks/ephy-bookmarks-editor.c:75
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:77
+#: ../src/bookmarks/ephy-bookmarks-editor.c:76
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:124
 msgid "Remove from this topic"
 msgstr "Izņemt no šī temata"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:129
+#: ../src/bookmarks/ephy-bookmarks-editor.c:151
+#: ../src/ephy-history-window.c:127
 msgid "_File"
 msgstr "_Datne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:130
+#: ../src/bookmarks/ephy-bookmarks-editor.c:152
+#: ../src/ephy-history-window.c:128
 msgid "_Edit"
 msgstr "_Rediģēt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:131
+#: ../src/bookmarks/ephy-bookmarks-editor.c:153
+#: ../src/ephy-history-window.c:129
 msgid "_View"
 msgstr "_Skats"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:132
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/ephy-history-window.c:130
 msgid "_Help"
 msgstr "_Palīdzība"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_New Topic"
 msgstr "_Jauns temats"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "Create a new topic"
 msgstr "Izveidot jaunu tematu"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:639
+#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:639
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Atvērt jaunā _logā"
 msgstr[1] "Atvērt jaunos _logos"
 msgstr[2] "Atvērt jaunos _logos"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Open the selected bookmark in a new window"
 msgstr "Atvērt izvēlēto grāmatzīmi jaunā logā"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:642
+#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:642
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Atvērt jaunā _cilnē"
 msgstr[1] "Atvērt jaunās _cilnēs"
 msgstr[2] "Atvērt jaunās _cilnēs"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new tab"
 msgstr "Atvērt izvēlēto grāmatzīmi jaunā cilnē"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "_Rename…"
 msgstr "_Pārsaukt..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Rename the selected bookmark or topic"
 msgstr "Pārsaukt izvēlēto grāmatzīmi vai tematu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "_Properties"
 msgstr "Ī_pašības"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Aplūkot vai mainīt izvēlēto grāmatzīmju īpašības"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Import Bookmarks…"
 msgstr "_Importēt grāmatzīmes..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importēt grāmatzīmes no cita pārlūka vai grāmatzīmju datnes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Export Bookmarks…"
 msgstr "_Eksportēt grāmatzīmes..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "Eksportēt grāmatzīmes uz datni"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:145 ../src/ephy-window.c:111
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:119
 msgid "_Close"
 msgstr "_Aizvērt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "Aizvērt grāmatzīmju logu"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:130
 msgid "Cu_t"
 msgstr "Iz_griezt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/ephy-history-window.c:149
 msgid "Cut the selection"
 msgstr "Izgriezt izvēlēto"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:122
+#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
+#: ../src/ephy-window.c:132
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/ephy-history-window.c:152
 msgid "Copy the selection"
 msgstr "Kopēt izvēlēto"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:156 ../src/ephy-window.c:124
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:134
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/ephy-history-window.c:155
 msgid "Paste the clipboard"
 msgstr "Ielīmēt no starpliktuves"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/ephy-history-window.c:157
 msgid "_Delete"
 msgstr "_Dzēst"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Delete the selected bookmark or topic"
 msgstr "Dzēst izvēlēto grāmatzīmi vai tematu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:162 ../src/ephy-window.c:128
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:138
 msgid "Select _All"
 msgstr "Izvēlēties _visu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Select all bookmarks or text"
 msgstr "Izvēlēties visas grāmatzīmes vai tekstu"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/ephy-history-window.c:168
 msgid "_Contents"
 msgstr "_Saturs"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Display bookmarks help"
 msgstr "Parādīt palīdzību par grāmatzīmēm"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/ephy-history-window.c:173
+#. Help.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/resources/epiphany-application-menu.ui.h:8
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
 msgid "_About"
 msgstr "_Par"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:172
 msgid "Display credits for the web browser creators"
 msgstr "Rādīt informāciju par pārlūka veidotājiem"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/ephy-history-window.c:186
 msgid "_Title"
 msgstr "_Nosaukums"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:187
 msgid "Show the title column"
 msgstr "Rādīt nosaukuma kolonnu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:189
 msgid "Show the address column"
 msgstr "Rādīt adreses kolonnu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:256
+#: ../src/bookmarks/ephy-bookmarks-editor.c:255
 msgid "Type a topic"
 msgstr "Ievadiet tematu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:375
+#: ../src/bookmarks/ephy-bookmarks-editor.c:373
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Dzēst tematu “%s”?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:378
+#: ../src/bookmarks/ephy-bookmarks-editor.c:376
 msgid "Delete this topic?"
 msgstr "Dzēst šo tematu?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:380
+#: ../src/bookmarks/ephy-bookmarks-editor.c:378
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1667,96 +1623,96 @@ msgstr ""
 "Dzēšot šo tematu, tā grāmatzīmes paliks bez kategorijas, ja vien tās "
 "nepieder arī citiem tematiem. Grāmatzīmes netiks izdzēstas."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:383
+#: ../src/bookmarks/ephy-bookmarks-editor.c:381
 msgid "_Delete Topic"
 msgstr "_Dzēst tematu"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:493
-#: ../src/bookmarks/ephy-bookmarks-editor.c:497
+#: ../src/bookmarks/ephy-bookmarks-editor.c:491
+#: ../src/bookmarks/ephy-bookmarks-editor.c:495
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:502
-#: ../src/bookmarks/ephy-bookmarks-editor.c:506
+#: ../src/bookmarks/ephy-bookmarks-editor.c:500
+#: ../src/bookmarks/ephy-bookmarks-editor.c:504
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:511
+#: ../src/bookmarks/ephy-bookmarks-editor.c:509
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla “%s” profils"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:515
+#: ../src/bookmarks/ephy-bookmarks-editor.c:513
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:519
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:546
 msgid "Import failed"
 msgstr "Importēšana neizdevās"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:550
+#: ../src/bookmarks/ephy-bookmarks-editor.c:548
 msgid "Import Failed"
 msgstr "Importēšana neizdevās"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:553
+#: ../src/bookmarks/ephy-bookmarks-editor.c:551
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
-"Grāmatzīmes no “%s” nevar importēt, jo norādītā datne ir bojāta, vai arī "
-"tās formāts netiek atbalstīts."
+"Grāmatzīmes no “%s” nevar importēt, jo norādītā datne ir bojāta, vai arī tās "
+"formāts netiek atbalstīts."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:616
+#: ../src/bookmarks/ephy-bookmarks-editor.c:614
 msgid "Import Bookmarks from File"
 msgstr "Importēt grāmatzīmes no datnes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:621
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla grāmatzīmes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror grāmatzīmes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Epiphany bookmarks"
 msgstr "Epiphany grāmatzīmes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:753
 msgid "Export Bookmarks"
 msgstr "Eksportēt grāmatzīmes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:762
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1570
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Grāmatzīmes"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "File f_ormat:"
 msgstr "Datnes f_ormāts:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:814
+#: ../src/bookmarks/ephy-bookmarks-editor.c:812
 msgid "Import Bookmarks"
 msgstr "Importēt grāmatzīmes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:819
+#: ../src/bookmarks/ephy-bookmarks-editor.c:817
 msgid "I_mport"
 msgstr "I_mportēt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:835
+#: ../src/bookmarks/ephy-bookmarks-editor.c:833
 msgid "Import bookmarks from:"
 msgstr "Importēt grāmatzīmes no:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:853
 msgid "File"
 msgstr "Datne"
 
@@ -1765,12 +1721,7 @@ msgstr "Datne"
 msgid "_Copy Address"
 msgstr "_Kopēt adresi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1408
-#: ../src/ephy-history-window.c:801
-msgid "_Search:"
-msgstr "_Meklēt:"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1626
 msgid "Topics"
 msgstr "Temati"
 
@@ -1788,30 +1739,40 @@ msgstr "Atvērt temata grāmatzīmes jaunās cilnēs"
 msgid "Create topic “%s”"
 msgstr "Izveidot tematu “%s”"
 
-#: ../src/resources/epiphany-application-menu.ui.h:1
+#. File actions.
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:105
 msgid "_New Window"
 msgstr "_Jauns logs"
 
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
+#| msgid "_New Window"
+msgid "New _Incognito Window"
+msgstr "Jauns _inkognito logs"
+
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "A_tkārtoti atvērt aizvērtu cilni"
+
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:93
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
 msgid "_Bookmarks"
 msgstr "_Grāmatzīmes"
 
-#: ../src/resources/epiphany-application-menu.ui.h:3
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
 msgid "_History"
 msgstr "_Vēsture"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4
-#: ../src/resources/prefs-dialog.ui.h:3
-msgid "Preferences"
-msgstr "Iestatījumi"
-
-#: ../src/resources/epiphany-application-menu.ui.h:5
-#: ../src/resources/epiphany.ui.h:10
+#: ../src/resources/epiphany-application-menu.ui.h:6
+#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
 msgid "Personal Data"
 msgstr "Personīgie dati"
 
 #: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
+msgid "Preferences"
+msgstr "Iestatījumi"
+
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
 msgid "_Quit"
 msgstr "_Iziet"
 
@@ -1880,60 +1841,60 @@ msgid "A_utomatically open downloaded files"
 msgstr "A_utomātiski atvērt lejupielādētas datnes"
 
 #: ../src/resources/prefs-dialog.ui.h:7
-msgid "General"
-msgstr "Vispārīgi"
-
-#: ../src/resources/prefs-dialog.ui.h:8
-msgid "Fonts"
-msgstr "Fonti"
-
-#: ../src/resources/prefs-dialog.ui.h:9
-msgid "_Use system fonts"
-msgstr "Lietot sistēmas font_us"
-
-#: ../src/resources/prefs-dialog.ui.h:10
-msgid "Sans serif font:"
-msgstr "Bezrēdzes fonts:"
-
-#: ../src/resources/prefs-dialog.ui.h:11
-msgid "Serif font:"
-msgstr "Rēdzes fonts:"
-
-#: ../src/resources/prefs-dialog.ui.h:12
-msgid "Monospace font:"
-msgstr "Fiksēta platuma fonts:"
-
-#: ../src/resources/prefs-dialog.ui.h:13
-msgid "Style"
-msgstr "Stils"
-
-#: ../src/resources/prefs-dialog.ui.h:14
-msgid "Use custom _stylesheet"
-msgstr "Lietot pielāgotu _stila lapu"
-
-#: ../src/resources/prefs-dialog.ui.h:15
-msgid "_Edit Stylesheet…"
-msgstr "R_ediģēt stila lapu..."
-
-#: ../src/resources/prefs-dialog.ui.h:16
-msgid "Fonts & Style"
-msgstr "Fonti un stils"
-
-#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Web Content"
 msgstr "Tīmekļa saturs"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
 msgstr "Atļaut izlecošos _logus"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:9
+msgid "Allow _advertisements"
+msgstr "_Atļaut reklāmas"
+
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
 msgstr "Aktivēt s_praudņus"
 
+#: ../src/resources/prefs-dialog.ui.h:11
+msgid "General"
+msgstr "Vispārīgi"
+
+#: ../src/resources/prefs-dialog.ui.h:12
+msgid "Fonts"
+msgstr "Fonti"
+
+#: ../src/resources/prefs-dialog.ui.h:13
+msgid "_Use system fonts"
+msgstr "Lietot sistēmas font_us"
+
+#: ../src/resources/prefs-dialog.ui.h:14
+msgid "Sans serif font:"
+msgstr "Bezrēdzes fonts:"
+
+#: ../src/resources/prefs-dialog.ui.h:15
+msgid "Serif font:"
+msgstr "Rēdzes fonts:"
+
+#: ../src/resources/prefs-dialog.ui.h:16
+msgid "Monospace font:"
+msgstr "Fiksēta platuma fonts:"
+
+#: ../src/resources/prefs-dialog.ui.h:17
+msgid "Style"
+msgstr "Stils"
+
+#: ../src/resources/prefs-dialog.ui.h:18
+msgid "Use custom _stylesheet"
+msgstr "Lietot pielāgotu _stila lapu"
+
+#: ../src/resources/prefs-dialog.ui.h:19
+msgid "_Edit Stylesheet…"
+msgstr "R_ediģēt stila lapu..."
+
 #: ../src/resources/prefs-dialog.ui.h:20
-msgid "Enable Java_Script"
-msgstr "Aktivēt Java_Script atbalstu"
+msgid "Fonts & Style"
+msgstr "Fonti un stils"
 
 #: ../src/resources/prefs-dialog.ui.h:22
 msgid "_Always accept"
@@ -2008,7 +1969,7 @@ msgstr "Apstādināt"
 msgid "Stop current data transfer"
 msgstr "Apstādināt pašreizējo datu pārraidi"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:143
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:161
 msgid "_Reload"
 msgstr "_Pārlādēt"
 
@@ -2028,101 +1989,80 @@ msgstr "Citi kodējumi"
 msgid "_Automatic"
 msgstr "_Automātisks"
 
-#: ../src/ephy-find-toolbar.c:168
-msgid "Not found"
-msgstr "Nav atrasts"
+#: ../src/ephy-find-toolbar.c:147
+#| msgid "Not found"
+msgid "Text not found"
+msgstr "Teksts nav atrasts"
 
-#: ../src/ephy-find-toolbar.c:180
-msgid "Wrapped"
-msgstr "Turpināt no sākuma"
+#: ../src/ephy-find-toolbar.c:153
+msgid "Search wrapped back to the top"
+msgstr "Meklēšana atgriezās atpakaļ augšā"
 
-#: ../src/ephy-find-toolbar.c:200
-msgid "Find links:"
-msgstr "Meklēt saites:"
-
-#: ../src/ephy-find-toolbar.c:200
-msgid "Find:"
-msgstr "Meklēt:"
-
-#. Create a menu item, and sync it
-#. Case sensitivity
-#: ../src/ephy-find-toolbar.c:540 ../src/ephy-find-toolbar.c:663
-msgid "_Case sensitive"
-msgstr "_Reģistrjutīgs"
-
-#: ../src/ephy-find-toolbar.c:646
-msgid "Find Previous"
-msgstr "Meklēt iepriekšējo"
-
-#: ../src/ephy-find-toolbar.c:649
+#: ../src/ephy-find-toolbar.c:636
 msgid "Find previous occurrence of the search string"
 msgstr "Meklēt iepriekšējo meklētās virknes parādīšanos"
 
-#: ../src/ephy-find-toolbar.c:655
-msgid "Find Next"
-msgstr "Meklēt nākamo"
-
-#: ../src/ephy-find-toolbar.c:658
+#: ../src/ephy-find-toolbar.c:649
 msgid "Find next occurrence of the search string"
 msgstr "Meklēt nākamo meklētās virknes parādīšanos"
 
-#: ../src/ephy-history-window.c:137
+#: ../src/ephy-history-window.c:135
 msgid "Open the selected history link in a new window"
 msgstr "Atvērt izvēlēto vēstures saiti jaunā logā"
 
-#: ../src/ephy-history-window.c:140
+#: ../src/ephy-history-window.c:138
 msgid "Open the selected history link in a new tab"
 msgstr "Atvērt izvēlēto vēstures saiti jaunā cilnē"
 
-#: ../src/ephy-history-window.c:142
+#: ../src/ephy-history-window.c:140
 msgid "Add _Bookmark…"
 msgstr "Pievienot _grāmatzīmi..."
 
-#: ../src/ephy-history-window.c:143
+#: ../src/ephy-history-window.c:141
 msgid "Bookmark the selected history link"
 msgstr "Izveidot grāmatzīmi uz izvēlēto vēstures saiti"
 
-#: ../src/ephy-history-window.c:146
+#: ../src/ephy-history-window.c:144
 msgid "Close the history window"
 msgstr "Aizvērt vēstures logu"
 
-#: ../src/ephy-history-window.c:160
+#: ../src/ephy-history-window.c:158
 msgid "Delete the selected history link"
 msgstr "Dzēst izvēlēto vēstures saiti"
 
-#: ../src/ephy-history-window.c:163
+#: ../src/ephy-history-window.c:161
 msgid "Select all history links or text"
 msgstr "Atlasīt visas vēstures saites vai tekstu"
 
-#: ../src/ephy-history-window.c:165
+#: ../src/ephy-history-window.c:163
 msgid "Clear _History"
 msgstr "Attīrīt _vēsturi"
 
-#: ../src/ephy-history-window.c:166
+#: ../src/ephy-history-window.c:164
 msgid "Clear your browsing history"
 msgstr "Dzēst pārlūkošanas vēsturi"
 
-#: ../src/ephy-history-window.c:171
+#: ../src/ephy-history-window.c:169
 msgid "Display history help"
 msgstr "Rādīt vēstures palīdzību"
 
-#: ../src/ephy-history-window.c:190
+#: ../src/ephy-history-window.c:188
 msgid "_Address"
 msgstr "_Adrese"
 
-#: ../src/ephy-history-window.c:192
+#: ../src/ephy-history-window.c:190
 msgid "_Date and Time"
 msgstr "_Datums un laiks"
 
-#: ../src/ephy-history-window.c:193
+#: ../src/ephy-history-window.c:191
 msgid "Show the date and time column"
 msgstr "Rādīt datuma un laika kolonnu"
 
-#: ../src/ephy-history-window.c:221
+#: ../src/ephy-history-window.c:219
 msgid "Clear browsing history?"
 msgstr "Attīrīt pārlūkošanas vēsturi?"
 
-#: ../src/ephy-history-window.c:225
+#: ../src/ephy-history-window.c:223
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2130,22 +2070,22 @@ msgstr ""
 "Pārlūkošanas vēstures attīrīšana neatgriezeniski izdzēsīs visas vēsturē "
 "saglabātās saites."
 
-#: ../src/ephy-history-window.c:240
+#: ../src/ephy-history-window.c:238
 msgid "Clear History"
 msgstr "Attīrīt vēsturi"
 
-#: ../src/ephy-history-window.c:810
+#: ../src/ephy-history-window.c:802
 msgid "Last 30 minutes"
 msgstr "Pēdējās 30 minūtes"
 
-#: ../src/ephy-history-window.c:811
+#: ../src/ephy-history-window.c:803
 msgid "Today"
 msgstr "Šodiena"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:813 ../src/ephy-history-window.c:817
-#: ../src/ephy-history-window.c:823
+#: ../src/ephy-history-window.c:805 ../src/ephy-history-window.c:809
+#: ../src/ephy-history-window.c:815
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2153,71 +2093,77 @@ msgstr[0] "Pēdējā %d diena"
 msgstr[1] "Pēdējās %d dienas"
 msgstr[2] "Pēdējās %d dienas"
 
-#: ../src/ephy-history-window.c:827
+#: ../src/ephy-history-window.c:819
 msgid "All history"
 msgstr "Visa vēsture"
 
-#: ../src/ephy-history-window.c:1128
+#: ../src/ephy-history-window.c:1116
 msgid "History"
 msgstr "Vēsture"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:74
 msgid "Open a new tab in an existing browser window"
 msgstr "Atvērt jaunu cilni esošajā pārlūka logā"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:76
 msgid "Open a new browser window"
 msgstr "Atvērt jaunu pārlūka logu"
 
-#: ../src/ephy-main.c:88
-msgid "Launch the bookmarks editor"
-msgstr "Palaist grāmatzīmju redaktoru"
-
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:78
 msgid "Import bookmarks from the given file"
 msgstr "Importēt grāmatzīmes no dotās datnes"
 
-#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
 msgid "FILE"
 msgstr "DATNE"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:80
 msgid "Load the given session file"
 msgstr "Ielādēt doto sesijas datni"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:82
 msgid "Add a bookmark"
 msgstr "Pievienot grāmatzīmi"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:82
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:84
 msgid "Start a private instance"
 msgstr "Palaist privātu instanci"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:86
+#| msgid "Start the browser in application mode"
+msgid "Start an instance in incognito mode"
+msgstr "Palaist instanci inkognito režīmā"
+
+#: ../src/ephy-main.c:88
+#| msgid "Start a private instance"
+msgid "Start an instance in netbank mode"
+msgstr "Palaist instanci tīmekļa bankas režīmā"
+
+#: ../src/ephy-main.c:90
 msgid "Start the browser in application mode"
 msgstr "Palaist pārlūku lietotnes režīmā"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:92
 msgid "Profile directory to use in the private instance"
 msgstr "Profila direktorija, ko lietot privātajā instancē"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:92
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:94
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:210
+#: ../src/ephy-main.c:193
 msgid "Could not start Web"
 msgstr "Neizdevās palaist tīmekļa pārlūku"
 
-#: ../src/ephy-main.c:213
+#: ../src/ephy-main.c:196
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2226,282 +2172,288 @@ msgstr ""
 "Palaišana neizdevās šādas kļūdas dēļ:\n"
 "%s"
 
-#: ../src/ephy-main.c:325
+#: ../src/ephy-main.c:310
 msgid "Web options"
 msgstr "Tīmekļa pārlūka opcijas"
 
-#: ../src/ephy-notebook.c:595
+#: ../src/ephy-notebook.c:598
 msgid "Close tab"
 msgstr "Aizvērt cilni"
 
-#: ../src/ephy-window.c:97
-msgid "_Extensions"
-msgstr "_Paplašinājumi"
-
-#. File actions.
-#: ../src/ephy-window.c:101
+#: ../src/ephy-window.c:109
 msgid "_Open…"
 msgstr "_Atvērt..."
 
-#: ../src/ephy-window.c:103
+#: ../src/ephy-window.c:111
 msgid "Save _As…"
 msgstr "Saglabāt _kā..."
 
-#: ../src/ephy-window.c:105
+#: ../src/ephy-window.c:113
 msgid "Save As _Web Application…"
 msgstr "Saglabāt kā _tīmekļa lietotni..."
 
-#: ../src/ephy-window.c:107
+#: ../src/ephy-window.c:115
 msgid "_Print…"
 msgstr "_Drukāt…"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-window.c:117
 msgid "S_end Link by Email…"
 msgstr "Sūtīt saiti pa e-pastu..."
 
 #. Edit actions.
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:126
 msgid "_Undo"
 msgstr "_Atsaukt"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:128
 msgid "Re_do"
 msgstr "Atat_saukt"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:140
 msgid "_Find…"
 msgstr "_Meklēt…"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:142
 msgid "Find Ne_xt"
 msgstr "Meklēt nā_kamo"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:144
 msgid "Find Pre_vious"
 msgstr "Meklēt ie_priekšējo"
 
+#: ../src/ephy-window.c:146
+#| msgid "_Edit Bookmarks"
+msgid "Edit _Bookmarks"
+msgstr "_Rediģēt grāmatzīmes"
+
 #. View actions.
-#: ../src/ephy-window.c:139 ../src/ephy-window.c:141
+#: ../src/ephy-window.c:157 ../src/ephy-window.c:159
 msgid "_Stop"
 msgstr "_Apstādināt"
 
-#: ../src/ephy-window.c:145
-msgid "_Larger Text"
-msgstr "_Lielāks teksts"
+#: ../src/ephy-window.c:163
+#| msgid "Zoom"
+msgid "Zoom _In"
+msgstr "Tuv_ināt"
 
-#: ../src/ephy-window.c:147
-msgid "S_maller Text"
-msgstr "M_azāks teksts"
+#: ../src/ephy-window.c:165
+#| msgid "Zoom"
+msgid "Zoom O_ut"
+msgstr "Tā_lināt"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:167
 msgid "_Normal Size"
 msgstr "N_ormāls izmērs"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:169
 msgid "Text _Encoding"
 msgstr "Teksta _kodējums"
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:170
 msgid "_Page Source"
 msgstr "_Lapas pirmkods"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:175
 msgid "_Add Bookmark…"
 msgstr "_Ielikt grāmatzīmi..."
 
 #. Go actions.
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:180
 msgid "_Location…"
 msgstr "_Vieta..."
 
 #. Tabs actions.
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:185
 msgid "_Previous Tab"
 msgstr "Ie_priekšējā cilne"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:187
 msgid "_Next Tab"
 msgstr "_Nākamā cilne"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:189
 msgid "Move Tab _Left"
 msgstr "Pārvietot cilni pa _kreisi"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:191
 msgid "Move Tab _Right"
 msgstr "Pārvietot cilni pa _labi"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:193
 msgid "_Detach Tab"
 msgstr "_Atdalīt cilni"
 
 #. File actions.
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:206
 msgid "_Work Offline"
 msgstr "_Strādāt nesaistē"
 
 #. View actions.
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:211
 msgid "_Downloads Bar"
 msgstr "Lejupielā_des josla"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:214
 msgid "_Fullscreen"
 msgstr "_Pilnekrāns"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:216
 msgid "Popup _Windows"
 msgstr "Izlecošie _logi"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:218
 msgid "Selection Caret"
 msgstr "Izvēles kursors"
 
 #. Document.
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:225
 msgid "Add Boo_kmark…"
 msgstr "Pievienot grāmat_zīmi..."
 
 #. Links.
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:230
 msgid "_Open Link"
 msgstr "_Atvērt saiti"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:232
 msgid "Open Link in New _Window"
 msgstr "Atvērt saiti jaunā _logā"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:234
 msgid "Open Link in New _Tab"
 msgstr "Atvērt saiti jaunā _cilnē"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:236
 msgid "_Download Link"
 msgstr "_Lejupielādēt saiti"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:238
 msgid "_Save Link As…"
 msgstr "_Saglabāt saiti kā..."
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:240
 msgid "_Bookmark Link…"
 msgstr "_Grāmatzīme uz saiti..."
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:242
 msgid "_Copy Link Address"
 msgstr "_Kopēt saites adresi"
 
+#: ../src/ephy-window.c:244
+#| msgid "_Copy Email Address"
+msgid "_Copy E-mail Address"
+msgstr "_Kopēt e-pasta adresi"
+
 #. Images.
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:249
 msgid "Open _Image"
 msgstr "Atvērt _attēlu"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:251
 msgid "_Save Image As…"
 msgstr "_Saglabāt attēlu kā..."
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:253
 msgid "_Use Image As Background"
 msgstr "_Izmantot attēlu kā fonu"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:255
 msgid "Copy I_mage Address"
 msgstr "Kopēt a_ttēla adresi"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:257
 msgid "St_art Animation"
 msgstr "Sā_kt animāciju"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:259
 msgid "St_op Animation"
 msgstr "Ap_turēt animāciju"
 
 #. Inspector.
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:275
 msgid "Inspect _Element"
 msgstr "Inspicēt _elementu"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:483
 msgid "There are unsubmitted changes to form elements"
 msgstr "Formu elementos ir nenosūtītas izmaiņas"
 
-#: ../src/ephy-window.c:457
+#: ../src/ephy-window.c:484
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ja tomēr aizvērsiet dokumentu, jūs zaudēsiet šo informāciju."
 
-#: ../src/ephy-window.c:459
+#: ../src/ephy-window.c:486
 msgid "Close _Document"
 msgstr "Aizvērt _dokumentu"
 
-#: ../src/ephy-window.c:477
+#: ../src/ephy-window.c:504
 msgid "There are ongoing downloads in this window"
 msgstr "Šajā logā ir aktīvas lejupielādes"
 
-#: ../src/ephy-window.c:478
+#: ../src/ephy-window.c:505
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Ja aizvērsiet šo logu, visas lejupielādes tiks atceltas"
 
-#: ../src/ephy-window.c:479
+#: ../src/ephy-window.c:506
 msgid "Close window and cancel downloads"
 msgstr "Aizvērt logu un atcelt lejupielādes"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1309
 msgid "Save As"
 msgstr "Saglabāt kā"
 
-#: ../src/ephy-window.c:1372
+#: ../src/ephy-window.c:1311
 msgid "Save As Application"
 msgstr "Saglabāt kā lietotni"
 
-#: ../src/ephy-window.c:1374
+#: ../src/ephy-window.c:1313
 msgid "Print"
 msgstr "Drukāt"
 
-#: ../src/ephy-window.c:1376
+#: ../src/ephy-window.c:1315
 msgid "Bookmark"
 msgstr "Grāmatzīme"
 
-#: ../src/ephy-window.c:1378
+#: ../src/ephy-window.c:1317
 msgid "Find"
 msgstr "Meklēt"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1387
+#: ../src/ephy-window.c:1326
 msgid "Larger"
 msgstr "Lielāks"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1329
 msgid "Smaller"
 msgstr "Mazāks"
 
-#: ../src/ephy-window.c:1410
+#: ../src/ephy-window.c:1357
 msgid "Back"
 msgstr "Atpakaļ"
 
-#: ../src/ephy-window.c:1422
+#: ../src/ephy-window.c:1369
 msgid "Forward"
 msgstr "Uz priekšu"
 
-#: ../src/ephy-window.c:1434
+#: ../src/ephy-window.c:1381
 msgid "Zoom"
 msgstr "Tālummaiņa"
 
-#: ../src/ephy-window.c:1442
+#: ../src/ephy-window.c:1390
 msgid "New _Tab"
 msgstr "Jauna _cilne"
 
-#: ../src/ephy-window.c:1450
-#| msgid "Go to the next visited page"
+#: ../src/ephy-window.c:1398
 msgid "Go to most visited"
 msgstr "Doties uz biežāk apmeklēto"
 
-#: ../src/pdm-dialog.c:361
+#: ../src/pdm-dialog.c:333
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Izvēlieties personiskos datus, kurus vēlaties dzēst</b>"
 
-#: ../src/pdm-dialog.c:364
+#: ../src/pdm-dialog.c:336
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2510,31 +2462,31 @@ msgstr ""
 "Šeit var dzēst personiskos datus par jūsu apmeklētajām tīmekļa lapām. Pirms "
 "turpināt, atzīmējiet informācijas veidus, kurus vēlaties izņemt:"
 
-#: ../src/pdm-dialog.c:369
+#: ../src/pdm-dialog.c:341
 msgid "Clear All Personal Data"
 msgstr "Dzēst visus personiskos datus"
 
 #. Cookies
-#: ../src/pdm-dialog.c:403
+#: ../src/pdm-dialog.c:375
 msgid "C_ookies"
 msgstr "Sīk_datnes"
 
 #. Passwords
-#: ../src/pdm-dialog.c:415
+#: ../src/pdm-dialog.c:387
 msgid "Saved _passwords"
 msgstr "Saglabātās _paroles"
 
 #. History
-#: ../src/pdm-dialog.c:427
+#: ../src/pdm-dialog.c:399
 msgid "Hi_story"
 msgstr "Vē_sture"
 
 #. Cache
-#: ../src/pdm-dialog.c:439
+#: ../src/pdm-dialog.c:411
 msgid "_Temporary files"
 msgstr "_Pagaidu datnes"
 
-#: ../src/pdm-dialog.c:455
+#: ../src/pdm-dialog.c:427
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2542,48 +2494,48 @@ msgstr ""
 "<small><i><b>Piezīme:</b>Jūs nevarat atsaukt šo darbību. Datus, kurus jūs "
 "norādāt kā dzēšamus, nevarēs atgriezt.</i></small>"
 
-#: ../src/pdm-dialog.c:678
+#: ../src/pdm-dialog.c:650
 msgid "Encrypted connections only"
 msgstr "Tikai šifrēti savienojumi"
 
-#: ../src/pdm-dialog.c:679
+#: ../src/pdm-dialog.c:651
 msgid "Any type of connection"
 msgstr "Jebkurš savienojuma veids"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:684
+#: ../src/pdm-dialog.c:656
 msgid "End of current session"
 msgstr "Pašreizējās sesijas beigas"
 
-#: ../src/pdm-dialog.c:806
+#: ../src/pdm-dialog.c:778
 msgid "Domain"
 msgstr "Domēns"
 
-#: ../src/pdm-dialog.c:818
+#: ../src/pdm-dialog.c:790
 msgid "Name"
 msgstr "Nosaukums"
 
-#: ../src/pdm-dialog.c:1314
+#: ../src/pdm-dialog.c:1308
 msgid "Host"
 msgstr "Resursdatora nosaukums"
 
-#: ../src/pdm-dialog.c:1327
+#: ../src/pdm-dialog.c:1321
 msgid "User Name"
 msgstr "Lietotāja vārds"
 
-#: ../src/pdm-dialog.c:1340
+#: ../src/pdm-dialog.c:1334
 msgid "User Password"
 msgstr "Lietotāja parole"
 
-#: ../src/popup-commands.c:282
+#: ../src/popup-commands.c:321
 msgid "Download Link"
 msgstr "Lejupielādēt saiti"
 
-#: ../src/popup-commands.c:290
+#: ../src/popup-commands.c:329
 msgid "Save Link As"
 msgstr "Saglabāt saiti kā"
 
-#: ../src/popup-commands.c:297
+#: ../src/popup-commands.c:336
 msgid "Save Image As"
 msgstr "Saglabāt attēlu kā"
 
@@ -2618,63 +2570,62 @@ msgstr[2] "Sistēmas valodas (%s)"
 msgid "Select a Directory"
 msgstr "Izvēlieties direktoriju"
 
-#: ../src/window-commands.c:346
+#: ../src/window-commands.c:358
 msgid "Save"
 msgstr "Saglabāt"
 
-#: ../src/window-commands.c:553
+#: ../src/window-commands.c:844
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
 "Tīmekļa lietotne ar nosaukumu '%s' jau eksistē. Vai vēlaties to aizvietot?"
 
-#: ../src/window-commands.c:558
+#: ../src/window-commands.c:849
 msgid "Replace"
 msgstr "Aizvietot"
 
-#: ../src/window-commands.c:562
+#: ../src/window-commands.c:853
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Lietotne ar tādu nosaukumu jau eksistē. Aizvietošana to pārrakstīts."
 
-#: ../src/window-commands.c:598
+#: ../src/window-commands.c:889
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Lietotne '%s' ir gatava lietošanai"
 
-#: ../src/window-commands.c:601
+#: ../src/window-commands.c:892
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Lietotni '%s' neizdevās izveidot"
 
-#: ../src/window-commands.c:609
+#: ../src/window-commands.c:900
 msgid "Launch"
 msgstr "Palaist"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:642
+#: ../src/window-commands.c:940
 msgid "Create Web Application"
 msgstr "Izveidot tīmekļa lietotni"
 
-#: ../src/window-commands.c:647
+#: ../src/window-commands.c:945
 msgid "C_reate"
 msgstr "Iz_veidot"
 
-#: ../src/window-commands.c:1238
+#: ../src/window-commands.c:1635
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"GNOME tīmekļa pārlūks ir brīva programmatūra; jūs to varat brīvi izplatīt "
-"un/vai "
-"modificēt saskaņā ar Free Software Foundation publicētās GNU Vispārējās "
+"GNOME tīmekļa pārlūks ir brīva programmatūra; jūs to varat brīvi izplatīt un/"
+"vai modificēt saskaņā ar Free Software Foundation publicētās GNU Vispārējās "
 "Publiskās Licences noteikumiem. Derīga ir licences otrās versijas vai (pēc "
 "jūsu vēlmes) kādas vēlākas versijas redakcija."
 
-#: ../src/window-commands.c:1242
+#: ../src/window-commands.c:1639
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2686,7 +2637,7 @@ msgstr ""
 "PIEMĒROTĪBAS KONKRĒTIEM MĒRĶIEM garantijām.  Sīkāku informāciju meklējiet "
 "GNU Vispārējās Publiskās Licences tekstā."
 
-#: ../src/window-commands.c:1246
+#: ../src/window-commands.c:1643
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2696,20 +2647,20 @@ msgstr ""
 "GNOME tīmekļa pārlūku; ja tā nav noticis, rakstiet Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
-#: ../src/window-commands.c:1292 ../src/window-commands.c:1308
-#: ../src/window-commands.c:1319
+#: ../src/window-commands.c:1689 ../src/window-commands.c:1705
+#: ../src/window-commands.c:1716
 msgid "Contact us at:"
 msgstr "Sazinieties ar mums:"
 
-#: ../src/window-commands.c:1295
+#: ../src/window-commands.c:1692
 msgid "Contributors:"
 msgstr "Veidotāji:"
 
-#: ../src/window-commands.c:1298
+#: ../src/window-commands.c:1695
 msgid "Past developers:"
 msgstr "Bijušie izstrādātāji:"
 
-#: ../src/window-commands.c:1329 ../src/window-commands.c:1335
+#: ../src/window-commands.c:1726 ../src/window-commands.c:1732
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2726,21 +2677,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1365
+#: ../src/window-commands.c:1762
 msgid "translator-credits"
 msgstr ""
 "Pēteris Krišjānis <pecisk@gmail.com>\n"
 "Anita Reitere <nitalynx@gmail.com>"
 
-#: ../src/window-commands.c:1368
+#: ../src/window-commands.c:1765
 msgid "Web Website"
 msgstr "Tīmekļa pārlūka mājas lapa"
 
-#: ../src/window-commands.c:1508
+#: ../src/window-commands.c:1905
 msgid "Enable caret browsing mode?"
 msgstr "Aktivēt kursora pārlūkošanas režīmu?"
 
-#: ../src/window-commands.c:1511
+#: ../src/window-commands.c:1908
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2750,9 +2701,93 @@ msgstr ""
 "lapās novieto kursoru, kuru var pārvietot ar tastatūru. Vai vēlaties aktivēt "
 "kursora pārlūkošanu?"
 
-#: ../src/window-commands.c:1514
+#: ../src/window-commands.c:1911
 msgid "_Enable"
 msgstr "_Aktivēt"
+
+#~ msgid ""
+#~ "Middle click to open the web page pointed to by the currently selected "
+#~ "text"
+#~ msgstr ""
+#~ "Klikšķis ar vidējo peles pogu atver tīmekļa vietni, uz kuru norāda "
+#~ "izvēlētais teksts"
+
+#~ msgid ""
+#~ "Middle clicking on the main view pane will open the web page pointed to "
+#~ "by the currently selected text."
+#~ msgstr ""
+#~ "Klikšķis ar vidējo peles pogu uz galvenās skata rūts atver tīmekļa "
+#~ "vietni, uz kuru norāda izvēlētais teksts."
+
+#~| msgid "_Extensions"
+#~ msgid "Active extensions"
+#~ msgstr "Aktīvie paplašinājumi"
+
+#~ msgid "Lists the active extensions."
+#~ msgstr "Parāda aktīvo paplašinājumu sarakstu."
+
+#~ msgid "Plugins"
+#~ msgstr "Spraudņi"
+
+#~ msgid "File is not a valid .desktop file"
+#~ msgstr "Datne nav derīga .desktop datne"
+
+#~ msgid "Unrecognized desktop file Version '%s'"
+#~ msgstr "Neatpazīta darbvirsmas datnes versija '%s'"
+
+#~ msgid "Starting %s"
+#~ msgstr "Startē %s"
+
+#~ msgid "Application does not accept documents on command line"
+#~ msgstr "Lietotne nepieņem norādes uz dokumentiem no komandrindas"
+
+#~ msgid "Unrecognized launch option: %d"
+#~ msgstr "Neatpazīta palaišanas opcija: %d"
+
+#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+#~ msgstr "Nevar padot dokumentu URI uz 'Type=Link' darbvirsmas ierakstu"
+
+#~ msgid "Not a launchable item"
+#~ msgstr "Nepalaižams vienums"
+
+#~ msgid "Clear"
+#~ msgstr "Attīrīt"
+
+#~ msgid "_Search:"
+#~ msgstr "_Meklēt:"
+
+#~ msgid "Enable Java_Script"
+#~ msgstr "Aktivēt Java_Script atbalstu"
+
+#~ msgid "Wrapped"
+#~ msgstr "Turpināt no sākuma"
+
+#~ msgid "Find links:"
+#~ msgstr "Meklēt saites:"
+
+#~ msgid "Find:"
+#~ msgstr "Meklēt:"
+
+#~ msgid "_Case sensitive"
+#~ msgstr "_Reģistrjutīgs"
+
+#~ msgid "Find Previous"
+#~ msgstr "Meklēt iepriekšējo"
+
+#~ msgid "Find Next"
+#~ msgstr "Meklēt nākamo"
+
+#~ msgid "Launch the bookmarks editor"
+#~ msgstr "Palaist grāmatzīmju redaktoru"
+
+#~ msgid "_Extensions"
+#~ msgstr "_Paplašinājumi"
+
+#~ msgid "_Larger Text"
+#~ msgstr "_Lielāks teksts"
+
+#~ msgid "S_maller Text"
+#~ msgstr "M_azāks teksts"
 
 #~ msgctxt "file type"
 #~ msgid "Unknown"
@@ -3225,9 +3260,6 @@ msgstr "_Aktivēt"
 #~ msgid "Add a bookmark for the current page"
 #~ msgstr "Ielikt grāmatzīmi pašreizējajā lapā"
 
-#~ msgid "_Edit Bookmarks"
-#~ msgstr "_Rediģēt grāmatzīmes"
-
 #~ msgid "Open the bookmarks window"
 #~ msgstr "Atvērt grāmatzīmju logu"
 
@@ -3293,9 +3325,6 @@ msgstr "_Aktivēt"
 
 #~ msgid "_Send Email…"
 #~ msgstr "_Sūtīt e-pastu..."
-
-#~ msgid "_Copy Email Address"
-#~ msgstr "_Kopēt e-pasta adresi"
 
 #~ msgid "Insecure"
 #~ msgstr "Nedrošs"
