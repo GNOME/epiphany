@@ -136,6 +136,7 @@ test_ephy_shell_parent_windows (void)
   gtk_widget_destroy (window2);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 test_ephy_shell_tab_load (void)
 {
@@ -171,6 +172,7 @@ test_ephy_shell_tab_load (void)
 
   gtk_widget_destroy (window);
 }
+#endif
 
 static int
 get_notebook_page_num (GtkWidget *notebook, EphyEmbed *embed)
@@ -228,6 +230,7 @@ test_ephy_shell_tab_append (void)
   gtk_widget_destroy (window);
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 test_ephy_shell_tab_from_external (void)
 {
@@ -292,6 +295,7 @@ test_ephy_shell_tab_from_external (void)
 
   gtk_widget_destroy (window);
 }
+#endif
 
 static void
 test_ephy_shell_tab_no_history (void)
@@ -366,14 +370,20 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-shell/parent_windows",
                    test_ephy_shell_parent_windows);
 
+#ifndef HAVE_WEBKIT2
+  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695646 */
   g_test_add_func ("/src/ephy-shell/tab_load",
                    test_ephy_shell_tab_load);
+#endif
 
   g_test_add_func ("/src/ephy-shell/tab_append",
                    test_ephy_shell_tab_append);
 
+#ifndef HAVE_WEBKIT2
+  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695646 */
   g_test_add_func ("/src/ephy-shell/tab_from_external",
                    test_ephy_shell_tab_from_external);
+#endif
 
   g_test_add_func ("/src/ephy-shell/tab_no_history",
                    test_ephy_shell_tab_no_history);
