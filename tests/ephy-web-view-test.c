@@ -344,6 +344,7 @@ quit_main_loop_when_load_finished (WebKitWebView *view, GParamSpec *spec, GMainL
 }
 #endif
 
+#ifndef HAVE_WEBKIT2
 static void
 test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 {
@@ -386,6 +387,7 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 
     g_object_unref (g_object_ref_sink (view));
 }
+#endif
 
 static gboolean
 visit_url_cb (EphyHistoryService *service,
@@ -466,8 +468,11 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/ephy-web-view/load_url",
                    test_ephy_web_view_load_url);
 
+#ifndef HAVE_WEBKIT2
+  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695649 */
   g_test_add_func ("/embed/ephy-web-view/provisional_load_failure_updates_back_forward_list",
                    test_ephy_web_view_provisional_load_failure_updates_back_forward_list);
+#endif
 
   g_test_add_func ("/embed/ephy-web-view/error-pages-not-stored-in-history",
                    test_ephy_web_view_error_pages_not_stored_in_history);
