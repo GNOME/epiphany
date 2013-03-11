@@ -83,7 +83,7 @@ GLIB_REQUIRED=2.35.6
 GTK_REQUIRED=3.7.10
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
-WEBKIT_GTK_REQUIRED=1.11.5
+WEBKIT_GTK_REQUIRED=1.11.91
 LIBSOUP_REQUIRED=2.41.3
 GNOME_DESKTOP_REQUIRED=2.91.2
 LIBSECRET_REQUIRED=0.14
@@ -93,8 +93,8 @@ GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
 AC_ARG_WITH(webkit2,
-        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=no]])],
-        [],[with_webkit2=no])
+        [AS_HELP_STRING([--with-webkit2],[build with WebKit2 [default=yes]])],
+        [],[with_webkit2=yes])
 
 if test "x$with_webkit2" != xno; then
    WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
