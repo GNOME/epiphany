@@ -389,21 +389,21 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
 #endif
 {
   EphyEmbed *new_embed = NULL;
-  WebKitWebView *web_view;
 #ifndef HAVE_WEBKIT2
+  WebKitWebView *web_view;
   WebKitWebBackForwardList *history;
-#endif
   GList *list;
-  const gchar *url;
   guint current;
+#endif
+  const gchar *url;
   gint offset;
-
-  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
 #ifdef HAVE_WEBKIT2
   /* TODO: WebKitBackForwardList is read-only in WebKit2 */
   offset = 0;
 #else
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
   /* Save old history and item's offset from current */
   history = webkit_web_view_get_back_forward_list (web_view);
   if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
