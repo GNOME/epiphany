@@ -231,6 +231,7 @@ main (int argc,
   EphyFileHelpersFlags flags;
 #ifdef HAVE_WEBKIT2
   char *pid_str;
+  char *disk_cache_dir;
 #endif
 
 #ifdef ENABLE_NLS
@@ -470,6 +471,14 @@ main (int argc,
   /* Set the web extensions dir ASAP before the process is launched */
   webkit_web_context_set_web_extensions_directory (webkit_web_context_get_default (),
                                                    EPHY_WEB_EXTENSIONS_DIR);
+
+  /* Disk Cache */
+  disk_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
+                                     ephy_dot_dir () : g_get_user_cache_dir (),
+                                     g_get_prgname (), NULL);
+  webkit_web_context_set_disk_cache_directory (webkit_web_context_get_default (),
+                                               disk_cache_dir);
+  g_free (disk_cache_dir);
 #endif
 
   ephy_embed_prefs_init ();
