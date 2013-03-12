@@ -32,6 +32,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-private.h"
 #include "ephy-shell.h"
+#include "ephy-test-utils.h"
 #include "ephy-window.h"
 
 #include <glib.h>
@@ -136,7 +137,6 @@ test_ephy_shell_parent_windows (void)
   gtk_widget_destroy (window2);
 }
 
-#ifndef HAVE_WEBKIT2
 static void
 test_ephy_shell_tab_load (void)
 {
@@ -144,9 +144,12 @@ test_ephy_shell_tab_load (void)
   GtkWidget *window;
   EphyEmbed *embed;
   EphyWebView *view;
+  GMainLoop *loop;
 
   ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
+
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   /* homepage is "about:blank" for now, see embed/ephy-web-view.c */
   embed = ephy_shell_new_tab
@@ -154,12 +157,17 @@ test_ephy_shell_tab_load (void)
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
 
   g_assert (EPHY_IS_EMBED (embed));
+
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
   view = ephy_embed_get_web_view (embed);
-  g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:overview");
+  ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:overview");
   g_assert_cmpstr (ephy_web_view_get_typed_address (view), ==, NULL);
 
   g_object_ref_sink (embed);
   g_object_unref (embed);
+
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   /* open-page "about:epiphany" for testing. */
   embed = ephy_shell_new_tab
@@ -167,12 +175,13 @@ test_ephy_shell_tab_load (void)
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
 
   g_assert (EPHY_IS_EMBED (embed));
-  view = ephy_embed_get_web_view (embed);
-  g_assert_cmpstr (ephy_web_view_get_address (view), ==, "ephy-about:epiphany");
+
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
+  ephy_test_utils_check_ephy_embed_address (embed, "ephy-about:epiphany");
 
   gtk_widget_destroy (window);
 }
-#endif
 
 static int
 get_notebook_page_num (GtkWidget *notebook, EphyEmbed *embed)
@@ -230,13 +239,13 @@ test_ephy_shell_tab_append (void)
   gtk_widget_destroy (window);
 }
 
-#ifndef HAVE_WEBKIT2
 static void
 test_ephy_shell_tab_from_external (void)
 {
   EphyShell *ephy_shell;
   GtkWidget *window;
   GtkWidget *notebook;
+  GMainLoop *loop;
 
   EphyEmbed *embed;
   EphyEmbed *embed2;
@@ -245,6 +254,9 @@ test_ephy_shell_tab_from_external (void)
   EphyEmbed *embed5;
 
   ephy_shell = ephy_shell_get_default ();
+
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
+
   embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, "about:epiphany",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
   window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
@@ -261,41 +273,46 @@ test_ephy_shell_tab_from_external (void)
    * loop, fake one so we get a working test. */
   ephy_web_view_load_homepage (ephy_embed_get_web_view (embed2));
 
-  while (g_main_context_pending (NULL))
-      g_main_context_iteration (NULL, FALSE);
-
   embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:memory",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
   g_assert (gtk_widget_get_toplevel (GTK_WIDGET (embed3)) == window);
 
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
   /* This one should fail, because the active embed is not @embed2. */
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
+  ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
   g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 0);
+
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:applications",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_FROM_EXTERNAL);
   g_assert (embed4 != embed2);
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed4)), ==, "ephy-about:applications");
+
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
+  ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
+  ephy_test_utils_check_ephy_embed_address (embed4, "ephy-about:applications");
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), 1);
 
   /* This should work */
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed2)), ==, "ephy-about:overview");
+  ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
   g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 1);
   
+  loop = ephy_test_utils_setup_wait_until_load_is_committed (ephy_embed_get_web_view (embed2));
+
   embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:applications",
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_FROM_EXTERNAL);
 
-  while (g_main_context_pending (NULL))
-      g_main_context_iteration (NULL, FALSE);
-
   g_assert (embed5 == embed2);
-  g_assert_cmpstr (ephy_web_view_get_address (ephy_embed_get_web_view (embed5)), ==, "ephy-about:applications");
+
+  ephy_test_utils_wait_until_load_is_committed (loop);
+
+  ephy_test_utils_check_ephy_embed_address (embed5, "ephy-about:applications");
 
   gtk_widget_destroy (window);
 }
-#endif
 
 static void
 test_ephy_shell_tab_no_history (void)
@@ -370,20 +387,14 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-shell/parent_windows",
                    test_ephy_shell_parent_windows);
 
-#ifndef HAVE_WEBKIT2
-  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695646 */
   g_test_add_func ("/src/ephy-shell/tab_load",
                    test_ephy_shell_tab_load);
-#endif
 
   g_test_add_func ("/src/ephy-shell/tab_append",
                    test_ephy_shell_tab_append);
 
-#ifndef HAVE_WEBKIT2
-  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695646 */
   g_test_add_func ("/src/ephy-shell/tab_from_external",
                    test_ephy_shell_tab_from_external);
-#endif
 
   g_test_add_func ("/src/ephy-shell/tab_no_history",
                    test_ephy_shell_tab_no_history);

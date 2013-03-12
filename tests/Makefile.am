@@ -164,7 +164,9 @@ test_ephy_session_SOURCES = \
 test_ephy_shell_SOURCES = \
 	$(top_builddir)/src/epiphany-resources.c \
 	$(top_builddir)/src/epiphany-resources.h \
-	ephy-shell-test.c
+	ephy-shell-test.c \
+	ephy-test-utils.c \
+	ephy-test-utils.h
 
 test_ephy_snapshot_service_SOURCES = \
 	ephy-snapshot-service-test.c
