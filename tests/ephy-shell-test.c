@@ -317,16 +317,15 @@ test_ephy_shell_tab_from_external (void)
 static void
 test_ephy_shell_tab_no_history (void)
 {
+#ifdef HAVE_WEBKIT2
+  /* TODO: BackForwardList */
+#else
   EphyShell *ephy_shell;
   GtkWidget *window;
-
   EphyEmbed *embed;
   EphyEmbed *embed2;
   EphyEmbed *embed3;
 
-#ifdef HAVE_WEBKIT2
-  /* TODO: BackForwardList */
-#else
   WebKitWebBackForwardList *bflist;
   WebKitWebHistoryItem *item;
 
