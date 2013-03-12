@@ -677,6 +677,7 @@ ephy_download_dispose (GObject *object)
   priv = download->priv;
 
   if (priv->download) {
+    g_signal_handlers_disconnect_matched (priv->download, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, download);
     g_object_unref (priv->download);
     priv->download = NULL;
   }

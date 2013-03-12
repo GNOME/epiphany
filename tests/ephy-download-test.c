@@ -145,7 +145,6 @@ test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
                    ephy_download_get_source_uri (fixture->download));
 }
 
-#ifndef HAVE_WEBKIT2
 static void
 test_ephy_download_start (Fixture *fixture, gconstpointer data)
 {
@@ -155,7 +154,6 @@ test_ephy_download_start (Fixture *fixture, gconstpointer data)
   ephy_download_start (fixture->download);
   g_main_loop_run (fixture->loop);
 }
-#endif
 
 int
 main (int argc, char *argv[])
@@ -190,11 +188,9 @@ main (int argc, char *argv[])
   g_test_add ("/embed/ephy-download/new_for_uri",
               Fixture, NULL, fixture_setup,
               test_ephy_download_new_for_uri, fixture_teardown);
-#ifndef HAVE_WEBKIT2
   g_test_add ("/embed/ephy-download/start",
               Fixture, NULL, fixture_setup,
               test_ephy_download_start, fixture_teardown);
-#endif
 
   ret = g_test_run ();
 
