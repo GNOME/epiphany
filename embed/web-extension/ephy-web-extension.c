@@ -87,7 +87,7 @@ handle_method_call (GDBusConnection *connection,
     guint64 page_id;
     gboolean has_modifed_forms;
 
-    g_variant_get(parameters, "(t)", &page_id);
+    g_variant_get (parameters, "(t)", &page_id);
     web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
     if (!web_page)
       return;
@@ -102,7 +102,7 @@ handle_method_call (GDBusConnection *connection,
     char *title = NULL;
     guint64 page_id;
 
-    g_variant_get(parameters, "(t)", &page_id);
+    g_variant_get (parameters, "(t)", &page_id);
     web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
     if (!web_page)
       return;
@@ -120,7 +120,7 @@ handle_method_call (GDBusConnection *connection,
     guint64 page_id;
     gboolean result;
 
-    g_variant_get(parameters, "(ts)", &page_id, &base_uri);
+    g_variant_get (parameters, "(ts)", &page_id, &base_uri);
     web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
     if (!web_page)
       return;
