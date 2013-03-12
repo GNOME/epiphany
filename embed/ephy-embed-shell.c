@@ -106,8 +106,10 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->embed_single);
 #ifdef HAVE_WEBKIT2
   g_clear_object (&priv->web_extension);
-  if (priv->web_extension_watch_name_id > 0)
+  if (priv->web_extension_watch_name_id > 0) {
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
+    priv->web_extension_watch_name_id = 0;
+  }
 #else
   g_clear_object (&priv->adblock_manager);
 #endif
