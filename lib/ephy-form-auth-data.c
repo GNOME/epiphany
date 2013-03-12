@@ -54,6 +54,7 @@ normalize_and_prepare_uri (SoupURI *uri)
   if (uri->scheme == SOUP_URI_SCHEME_HTTPS)
     soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
 
+  soup_uri_set_query (uri, NULL);
   soup_uri_set_path (uri, "/");
 }
 
