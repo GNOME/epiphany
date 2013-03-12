@@ -156,6 +156,8 @@ test_ephy_migration_SOURCES = \
 
 test_ephy_session_SOURCES = \
 	ephy-session-test.c \
+	ephy-test-utils.c \
+	ephy-test-utils.h \
 	$(top_builddir)/src/epiphany-resources.c \
 	$(top_builddir)/src/epiphany-resources.h
 

@@ -29,6 +29,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-session.h"
+#include "ephy-test-utils.h"
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -89,78 +90,6 @@ disable_delayed_loading (void)
                           FALSE);
 }
 
-static guint web_view_ready_counter = 0;
-
-static void
-load_changed_cb (WebKitWebView *web_view,
-#ifdef HAVE_WEBKIT2
-                 WebKitLoadEvent status,
-#else
-                 GParamSpec *pspec,
-#endif
-                 GMainLoop *loop)
-{
-#ifndef HAVE_WEBKIT2
-  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
-#endif
-
-  if (status == WEBKIT_LOAD_COMMITTED) {
-    web_view_ready_counter--;
-    g_signal_handlers_disconnect_by_func (web_view, load_changed_cb, loop);
-
-    if (web_view_ready_counter == 0)
-      g_main_loop_quit (loop);
-  }
-
-}
-
-static void
-wait_until_load_is_committed (WebKitWebView *web_view, GMainLoop *loop)
-{
-#ifdef HAVE_WEBKIT2
-  g_signal_connect (web_view, "load-changed", G_CALLBACK (load_changed_cb), loop);
-#else
-  g_signal_connect (web_view, "notify::load-status", G_CALLBACK (load_changed_cb), loop);
-#endif
-}
-
-static void
-check_ephy_web_view_address (EphyWebView *view,
-                             const gchar *address)
-{
-  g_assert_cmpstr (ephy_web_view_get_address (view), ==, address);
-}
-
-static void
-web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, GMainLoop *loop)
-{
-  web_view_ready_counter++;
-  wait_until_load_is_committed (WEBKIT_WEB_VIEW (view), loop);
-}
-
-static GMainLoop* setup_ensure_web_views_are_loaded (void)
-{
-  GMainLoop *loop;
-
-  web_view_ready_counter = 0;
-
-  loop = g_main_loop_new (NULL, FALSE);
-  g_signal_connect (ephy_embed_shell_get_default (), "web-view-created",
-                    G_CALLBACK (web_view_created_cb), loop);
-
-  return loop;
-}
-
-static void ensure_web_views_are_loaded (GMainLoop *loop)
-{
-  if (web_view_ready_counter != 0)
-    g_main_loop_run (loop);
-
-  g_signal_handlers_disconnect_by_func (ephy_embed_shell_get_default (), G_CALLBACK (web_view_created_cb), loop);
-  g_assert_cmpint (web_view_ready_counter, ==, 0);
-  g_main_loop_unref (loop);
-}
-
 static void
 test_ephy_session_load (void)
 {
@@ -176,12 +105,12 @@ test_ephy_session_load (void)
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
-    loop = setup_ensure_web_views_are_loaded ();
+    loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
     ret = load_session_from_string (session, session_data);
     g_assert (ret);
 
-    ensure_web_views_are_loaded (loop);
+    ephy_test_utils_ensure_web_views_are_loaded (loop);
 
     l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
@@ -191,7 +120,7 @@ test_ephy_session_load (void)
     g_assert (embed);
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
-    check_ephy_web_view_address (view, "ephy-about:memory");
+    ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:memory");
 
     ephy_session_clear (session);
 
@@ -234,11 +163,11 @@ test_ephy_session_clear (void)
 
   session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
 
-  loop = setup_ensure_web_views_are_loaded ();
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   load_session_from_string (session, session_data_many_windows);
 
-  ensure_web_views_are_loaded (loop);
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
   gtk_widget_destroy (GTK_WIDGET (l->data));
@@ -267,7 +196,7 @@ test_ephy_session_load_empty_session (void)
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
-    loop = setup_ensure_web_views_are_loaded ();
+    loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
     ret = load_session_from_string (session, session_data_empty);
     g_assert (ret == FALSE);
@@ -276,7 +205,7 @@ test_ephy_session_load_empty_session (void)
      * the default empty window. Got to spin the mainloop though,
      * since the fallback is done by queueing another session
      * command. */
-    ensure_web_views_are_loaded (loop);
+    ephy_test_utils_ensure_web_views_are_loaded (loop);
 
     l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
@@ -286,7 +215,7 @@ test_ephy_session_load_empty_session (void)
     g_assert (embed);
     view = ephy_embed_get_web_view (embed);
     g_assert (view);
-    check_ephy_web_view_address (view, "ephy-about:overview");
+    ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:overview");
 
     enable_delayed_loading ();
     ephy_session_clear (session);
@@ -307,14 +236,14 @@ test_ephy_session_load_many_windows (void)
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
-    loop = setup_ensure_web_views_are_loaded ();
+    loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
     ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
-    g_assert_cmpint (web_view_ready_counter, >=, 0);
-    g_assert_cmpint (web_view_ready_counter, <=, 2);
+    g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), >=, 0);
+    g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), <=, 2);
 
-    ensure_web_views_are_loaded (loop);
+    ephy_test_utils_ensure_web_views_are_loaded (loop);
 
     l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
     g_assert (l);
@@ -327,7 +256,7 @@ test_ephy_session_load_many_windows (void)
       g_assert (view);
 #ifndef HAVE_WEBKIT2
       /* FIXME: This #ifndef should be removed once bug #695437 is fixed. */
-      check_ephy_web_view_address (view, "ephy-about:epiphany");
+      ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:epiphany");
 #endif
     }
 
@@ -351,16 +280,16 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     session = ephy_shell_get_session (ephy_shell_get_default ());
     g_assert (session);
 
-    loop = setup_ensure_web_views_are_loaded ();
+    loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
     user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
 
     ret = load_session_from_string (session, session_data_many_windows);
     g_assert (ret);
-    g_assert_cmpint (web_view_ready_counter, >=, 0);
-    g_assert_cmpint (web_view_ready_counter, <=, 2);
+    g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), >=, 0);
+    g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), <=, 2);
 
-    ensure_web_views_are_loaded (loop);
+    ephy_test_utils_ensure_web_views_are_loaded (loop);
 
     l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
 
@@ -374,7 +303,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
       g_assert (view);
 #ifndef HAVE_WEBKIT2
       /* FIXME: This #ifndef should be removed once bug #695437 is fixed. */
-      check_ephy_web_view_address (view, "ephy-about:epiphany");
+      ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:epiphany");
 #endif
     }
 
@@ -472,7 +401,7 @@ test_ephy_session_restore_tabs (void)
   /* The active child should now be pointing to the restored tab,
      whose address is the one we copied previously. */
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
-  check_ephy_web_view_address (ephy_embed_get_web_view (embed), url);
+  ephy_test_utils_check_ephy_web_view_address (ephy_embed_get_web_view (embed), url);
   g_free (url);
 
   ephy_session_clear (session);
