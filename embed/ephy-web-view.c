@@ -1231,7 +1231,7 @@ load_process_crashed_page_cb (EphyWebView *web_view)
 static void
 process_crashed_cb (WebKitWebView *web_view, gpointer user_data)
 {
-  EphyWebViewPrivate *priv = web_view->priv;
+  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
 
   g_return_if_fail (priv->show_process_crash_page_id == 0);
   priv->show_process_crash_page_id = g_idle_add_full (G_PRIORITY_LOW,
