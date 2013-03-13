@@ -512,6 +512,56 @@ ephy_web_view_dispose (GObject *object)
 #ifdef HAVE_WEBKIT2
 /* TODO: DOM bindings */
 #else
+static GtkWidget *
+ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
+                                                           const char *hostname,
+                                                           const char *username)
+{
+  GtkWidget *info_bar;
+  GtkWidget *action_area;
+  GtkWidget *content_area;
+  GtkWidget *label;
+  char *message;
+
+  LOG ("Going to show infobar about %s", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
+
+  info_bar = gtk_info_bar_new_with_buttons (_("Not now"), GTK_RESPONSE_NO,
+                                            _("Store password"), GTK_RESPONSE_YES,
+                                            NULL);
+
+  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
+                                  GTK_ORIENTATION_HORIZONTAL);
+
+  label = gtk_label_new (NULL);
+  /* Translators: The first %s is the username and the second one is the
+   * hostname where this is happening. Example: gnome@gmail.com and
+   * mail.google.com.
+   */
+  message = g_markup_printf_escaped (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
+                                     username, hostname);
+  gtk_label_set_markup (GTK_LABEL (label), message);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  g_free (message);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), label);
+  gtk_widget_show (label);
+
+  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+                             info_bar, FALSE);
+
+  /* We track the info_bar, so we only ever show one */
+  if (web_view->priv->password_info_bar)
+    gtk_widget_destroy (web_view->priv->password_info_bar);
+
+  web_view->priv->password_info_bar = info_bar;
+  g_object_add_weak_pointer (G_OBJECT (info_bar),
+                             (gpointer *)&web_view->priv->password_info_bar);
+
+  return info_bar;
+}
+
 typedef struct {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
@@ -583,9 +633,6 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
   char *password_field_value = store_data->password_value;
   char *host;
 
-  /* We are no longer showing a store password infobar */
-  web_view->priv->password_info_bar = NULL;
-
   if (response_id != GTK_RESPONSE_YES) {
     LOG ("Response is %d - not saving.", response_id);
     store_password_data_free (store_data);
@@ -603,7 +650,6 @@ store_password (GtkInfoBar *info_bar, gint response_id, gpointer data)
 
   /* Update internal caching */
   host = ephy_string_get_host_name (uri);
-
   ephy_embed_single_add_form_auth (EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ())),
                                    host,
                                    name_field_name,
@@ -627,44 +673,13 @@ request_decision_on_storing (StorePasswordData *store_data)
   char *message;
   char *hostname;
 
-  LOG ("Going to show infobar about %s", store_data->uri);
-
-  info_bar = gtk_info_bar_new_with_buttons (_("Not now"), GTK_RESPONSE_NO,
-                                            _("Store password"), GTK_RESPONSE_YES,
-                                            NULL);
-
-  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
-                                  GTK_ORIENTATION_HORIZONTAL);
-
-  label = gtk_label_new (NULL);
   hostname = ephy_string_get_host_name (store_data->uri);
-  /* Translators: The first %s is the username and the second one is the
-   * hostname where this is happening. Example: gnome@gmail.com and
-   * mail.google.com.
-   */
-  message = g_markup_printf_escaped (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
-                                     store_data->name_value,
-                                     hostname);
-  gtk_label_set_markup (GTK_LABEL (label), message);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view,
+                                                                        hostname,
+                                                                        store_data->name_value);
   g_free (hostname);
-  g_free (message);
-
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_container_add (GTK_CONTAINER (content_area), label);
-
-  gtk_widget_show_all (info_bar);
-
   g_signal_connect (info_bar, "response", G_CALLBACK (store_password), store_data);
-
-  ephy_embed_add_top_widget (embed, info_bar, FALSE);
-
-  /* We track the info_bar, so we only ever show one */
-  if (web_view->priv->password_info_bar)
-    gtk_widget_destroy (web_view->priv->password_info_bar);
-
-  web_view->priv->password_info_bar = info_bar;
+  gtk_widget_show (info_bar);
 }
 
 static void
