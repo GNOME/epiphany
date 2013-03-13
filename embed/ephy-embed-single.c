@@ -186,6 +186,10 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   char *filename;
   char *cookie_policy;
 
+  /* Initialise nspluginwrapper's plugins if available. */
+  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
+    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
+
   web_context = webkit_web_context_get_default ();
 
   /* Store cookies in moz-compatible SQLite format */
