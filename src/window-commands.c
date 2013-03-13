@@ -625,6 +625,12 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 #ifdef HAVE_WEBKIT2
 	download = webkit_web_context_download_uri (webkit_web_context_get_default (),
 						    data->icon_href);
+	/* We do not want this download to show up in the UI, so let's
+	 * set 'ephy-download-set' to make Epiphany think this is
+	 * already there. */
+	/* FIXME: it's probably better to just do this in a clean way
+	 * instead of using this workaround. */
+	g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
 #else
 	request = webkit_network_request_new (data->icon_href);
 	download = webkit_download_new (request);
