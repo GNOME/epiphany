@@ -80,9 +80,17 @@ web_page_send_request (WebKitWebPage *web_page,
   const char *request_uri;
   const char *page_uri;
 
-  /* FIXME: Instead of checking the setting here, connect to the signal
-   * or not depending on the setting.
-   */
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+    SoupMessageHeaders *headers;
+
+    headers = webkit_uri_request_get_http_headers (request);
+    if (headers) {
+      /* Do Not Track header. '1' means 'opt-out'. See:
+       * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
+      soup_message_headers_append (headers, "DNT", "1");
+    }
+  }
+
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
       return FALSE;
 

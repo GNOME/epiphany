@@ -2648,9 +2648,7 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
 }
 #endif
 
-#ifdef HAVE_WEBKIT2
-/* TODO: WebKitWebResource::send-request */
-#else
+#ifndef HAVE_WEBKIT2
 static void
 add_do_not_track_header_cb (WebKitWebView *view, WebKitWebFrame *frame,
                             WebKitWebResource *resource, WebKitNetworkRequest *request,
@@ -2815,9 +2813,7 @@ ephy_web_view_init (EphyWebView *web_view)
                     web_view);
 #endif
 
-#ifdef HAVE_WEBKIT2
-  /* TODO: WebKitWebResource::send-request */
-#else
+#ifndef HAVE_WEBKIT2
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
     priv->do_not_track_handler = g_signal_connect (web_view, "resource-request-starting",
                                                    G_CALLBACK (add_do_not_track_header_cb), NULL);
