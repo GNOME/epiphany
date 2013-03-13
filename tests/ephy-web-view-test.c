@@ -344,7 +344,53 @@ quit_main_loop_when_load_finished (WebKitWebView *view, GParamSpec *spec, GMainL
 }
 #endif
 
-#ifndef HAVE_WEBKIT2
+#ifdef HAVE_WEBKIT2
+static guint back_forward_list_counter = 0;
+
+static void
+back_forward_list_changed (WebKitBackForwardList *list,
+                           WebKitBackForwardListItem *added_item,
+                           GList *removed_items,
+                           GMainLoop *loop)
+{
+  back_forward_list_counter--;
+
+  if (back_forward_list_counter == 0)
+    g_main_loop_quit (loop);
+}
+
+static void
+wait_until_back_forward_list_changes (WebKitWebView *view,
+                                      GMainLoop *loop)
+{
+    WebKitBackForwardList *back_forward_list = webkit_web_view_get_back_forward_list (view);
+    g_signal_connect (back_forward_list, "changed", G_CALLBACK (back_forward_list_changed), loop);
+}
+
+static GMainLoop*
+setup_ensure_back_forward_list_changes (EphyWebView *view)
+{
+  GMainLoop *loop;
+
+  back_forward_list_counter = 1;
+
+  loop = g_main_loop_new (NULL, FALSE);
+  wait_until_back_forward_list_changes (WEBKIT_WEB_VIEW (view), loop);
+
+  return loop;
+}
+
+static void
+ensure_back_forward_list_changes (GMainLoop *loop)
+{
+  if (back_forward_list_counter != 0)
+    g_main_loop_run (loop);
+
+  g_assert_cmpint (back_forward_list_counter, ==, 0);
+  g_main_loop_unref (loop);
+}
+#endif
+
 static void
 test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 {
@@ -353,21 +399,24 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
     const char *bad_url;
 
     view = EPHY_WEB_VIEW (ephy_web_view_new ());
+#ifdef HAVE_WEBKIT2
+    loop = setup_ensure_back_forward_list_changes (view);
+#else
     loop = g_main_loop_new (NULL, FALSE);
+#endif
     bad_url = "http://localhost:2984375932/";
 
     ephy_web_view_load_url (view, bad_url);
 
 #ifdef HAVE_WEBKIT2
-    g_signal_connect (view, "load-changed",
-                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+    ensure_back_forward_list_changes (loop);
 #else
     g_signal_connect (view, "notify::load-status",
                       G_CALLBACK (quit_main_loop_when_load_finished), loop);
-#endif
 
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
+#endif
 
 #ifdef HAVE_WEBKIT2
     g_assert (webkit_back_forward_list_get_current_item (
@@ -387,7 +436,6 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 
     g_object_unref (g_object_ref_sink (view));
 }
-#endif
 
 static gboolean
 visit_url_cb (EphyHistoryService *service,
@@ -468,11 +516,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/ephy-web-view/load_url",
                    test_ephy_web_view_load_url);
 
-#ifndef HAVE_WEBKIT2
-  /* FIXME: see https://bugzilla.gnome.org/show_bug.cgi?id=695649 */
   g_test_add_func ("/embed/ephy-web-view/provisional_load_failure_updates_back_forward_list",
                    test_ephy_web_view_provisional_load_failure_updates_back_forward_list);
-#endif
 
   g_test_add_func ("/embed/ephy-web-view/error-pages-not-stored-in-history",
                    test_ephy_web_view_error_pages_not_stored_in_history);
