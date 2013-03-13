@@ -151,6 +151,7 @@ test_ephy_download_start (Fixture *fixture, gconstpointer data)
   g_signal_connect (G_OBJECT (fixture->download), "completed",
                     G_CALLBACK (completed_cb), fixture);
 
+  ephy_download_set_action (fixture->download, EPHY_DOWNLOAD_ACTION_DO_NOTHING);
   ephy_download_start (fixture->download);
   g_main_loop_run (fixture->loop);
 }
