@@ -27,7 +27,9 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-file-helpers.h"
+#ifndef HAVE_WEBKIT2
 #include "ephy-form-auth-data.h"
+#endif
 #include "ephy-prefs.h"
 #include "ephy-request-about.h"
 #include "ephy-settings.h"
@@ -42,23 +44,21 @@
 #include <webkit/webkit.h>
 #endif
 
-#define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
-
 #define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 struct _EphyEmbedSinglePrivate {
-  EphyFormAuthDataCache *form_auth_data_cache;
 #ifndef HAVE_WEBKIT2
+  EphyFormAuthDataCache *form_auth_data_cache;
   SoupCache *cache;
 #endif
 };
 
 G_DEFINE_TYPE (EphyEmbedSingle, ephy_embed_single, G_TYPE_OBJECT)
 
+#ifndef HAVE_WEBKIT2
 static void
 ephy_embed_single_dispose (GObject *object)
 {
-#ifndef HAVE_WEBKIT2
   EphyEmbedSinglePrivate *priv = EPHY_EMBED_SINGLE (object)->priv;
 
   if (priv->cache) {
@@ -67,7 +67,6 @@ ephy_embed_single_dispose (GObject *object)
     g_object_unref (priv->cache);
     priv->cache = NULL;
   }
-#endif
 
   G_OBJECT_CLASS (ephy_embed_single_parent_class)->dispose (object);
 }
@@ -81,26 +80,31 @@ ephy_embed_single_finalize (GObject *object)
 
   G_OBJECT_CLASS (ephy_embed_single_parent_class)->finalize (object);
 }
+#endif
 
 static void
 ephy_embed_single_init (EphyEmbedSingle *single)
 {
+#ifndef HAVE_WEBKIT2
   EphyEmbedSinglePrivate *priv;
 
-  single->priv = priv = EPHY_EMBED_SINGLE_GET_PRIVATE (single);
+  single->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (single, EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate);
 
   priv->form_auth_data_cache = ephy_form_auth_data_cache_new ();
+#endif
 }
 
 static void
 ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 {
+#ifndef HAVE_WEBKIT2
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ephy_embed_single_finalize;
   object_class->dispose = ephy_embed_single_dispose;
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedSinglePrivate));
+#endif
 }
 
 #ifndef HAVE_WEBKIT2
@@ -311,6 +315,7 @@ GSList *
 ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
                                  const char *uri)
 {
+#ifndef HAVE_WEBKIT2
   EphyEmbedSinglePrivate *priv;
 
   g_return_val_if_fail (EPHY_IS_EMBED_SINGLE (single), NULL);
@@ -318,6 +323,10 @@ ephy_embed_single_get_form_auth (EphyEmbedSingle *single,
   priv = single->priv;
 
   return ephy_form_auth_data_cache_get_list (priv->form_auth_data_cache, uri);
+#else
+  g_assert_not_reached();
+  return NULL;
+#endif
 }
 
 /**
@@ -339,6 +348,7 @@ ephy_embed_single_add_form_auth (EphyEmbedSingle *single,
                                  const char *form_password,
                                  const char *username)
 {
+#ifndef HAVE_WEBKIT2
   EphyEmbedSinglePrivate *priv;
 
   g_return_if_fail (EPHY_IS_EMBED_SINGLE (single));
@@ -349,4 +359,7 @@ ephy_embed_single_add_form_auth (EphyEmbedSingle *single,
 
   ephy_form_auth_data_cache_add (priv->form_auth_data_cache,
                                  uri, form_username, form_password, username);
+#else
+  g_assert_not_reached ();
+#endif
 }
