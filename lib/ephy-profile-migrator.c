@@ -55,6 +55,7 @@
 static int do_step_n = -1;
 static int version = -1;
 static char *profile_dir = NULL;
+static GMainLoop *loop = NULL;
 
 /*
  * What to do to add new migration steps:
@@ -828,7 +829,8 @@ password_cleared_cb (SecretService *service,
 {
   secret_service_clear_finish (service, res, NULL);
 
-  form_passwords_migrating--;
+  if (g_atomic_int_dec_and_test (&form_passwords_migrating))
+    g_main_loop_quit (loop);
 }
 
 static void
@@ -845,11 +847,15 @@ store_form_auth_data_cb (GObject *object,
     goto out;
   }
 
+  g_atomic_int_inc (&form_passwords_migrating);
   secret_service_clear (NULL, NULL,
                         attributes, NULL, (GAsyncReadyCallback)password_cleared_cb,
                         NULL);
 
 out:
+  if (g_atomic_int_dec_and_test (&form_passwords_migrating))
+    g_main_loop_quit (loop);
+
   g_hash_table_unref (attributes);
 }
 
@@ -885,7 +891,7 @@ load_collection_items_cb (SecretCollection *collection,
     if (server &&
         g_strstr_len (server, -1, "form%5Fusername") &&
         g_strstr_len (server, -1, "form%5Fpassword")) {
-      form_passwords_migrating++;
+      g_atomic_int_inc (&form_passwords_migrating);
       /* This is one of the hackish ones that need to be migrated.
          Fetch the rest of the data and take care of it. */
       username = g_hash_table_lookup (attributes, "user");
@@ -914,7 +920,8 @@ load_collection_items_cb (SecretCollection *collection,
   }
 
   /* And decrease here so that we finish eventually. */
-  form_passwords_migrating--;
+  if (g_atomic_int_dec_and_test (&form_passwords_migrating))
+    g_main_loop_quit (loop);
 
   g_list_free_full (items, (GDestroyNotify)g_object_unref);
 }
@@ -936,13 +943,13 @@ migrate_form_passwords_to_libsecret (void)
   collections = secret_service_get_collections (service);
 
   for (c = collections; c; c = c->next) {
-    form_passwords_migrating++;
+    g_atomic_int_inc (&form_passwords_migrating);
     secret_collection_load_items ((SecretCollection*)c->data, NULL, (GAsyncReadyCallback)load_collection_items_cb,
                                   NULL);
   }
 
-  while (form_passwords_migrating)
-    g_main_context_iteration (NULL, FALSE);
+  loop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (loop);
 
   g_list_free_full (collections, (GDestroyNotify)g_object_unref);
   g_object_unref (service);
