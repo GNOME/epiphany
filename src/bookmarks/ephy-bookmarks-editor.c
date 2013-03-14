@@ -1490,13 +1490,15 @@ icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GtkTreeRo
 static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
-	const char *page_location;
 	GdkPixbuf *favicon = NULL;
+#ifndef HAVE_WEBKIT2
+	const char *page_location;
 
 	page_location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 
 	LOG ("Get favicon for %s", page_location ? page_location : "None");
+#endif
 
 #ifdef HAVE_WEBKIT2
         /* TODO: Favicons */
