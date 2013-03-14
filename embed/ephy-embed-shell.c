@@ -65,6 +65,7 @@ struct _EphyEmbedShellPrivate
 #ifdef HAVE_WEBKIT2
   GDBusProxy *web_extension;
   guint web_extension_watch_name_id;
+  guint web_extension_form_auth_save_signal_id;
 #endif
 };
 
@@ -75,6 +76,8 @@ enum
   PREPARE_CLOSE,
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
+  FORM_AUTH_DATA_SAVE_REQUESTED,
+
   LAST_SIGNAL
 };
 
@@ -105,11 +108,16 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->embed_single);
 #ifdef HAVE_WEBKIT2
-  g_clear_object (&priv->web_extension);
   if (priv->web_extension_watch_name_id > 0) {
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
     priv->web_extension_watch_name_id = 0;
   }
+  if (priv->web_extension_form_auth_save_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (g_dbus_proxy_get_connection (priv->web_extension),
+                                          priv->web_extension_form_auth_save_signal_id);
+    priv->web_extension_form_auth_save_signal_id = 0;
+  }
+  g_clear_object (&priv->web_extension);
 #else
   g_clear_object (&priv->adblock_manager);
 #endif
@@ -134,7 +142,26 @@ ephy_embed_shell_finalize (GObject *object)
 
 #if HAVE_WEBKIT2
 static void
-web_extension_proxy_created_cb (GDBusConnection *connection,
+web_extension_form_auth_save_requested (GDBusConnection *connection,
+                                        const char *sender_name,
+                                        const char *object_path,
+                                        const char *interface_name,
+                                        const char *signal_name,
+                                        GVariant *parameters,
+                                        EphyEmbedShell *shell)
+{
+  guint request_id;
+  guint64 page_id;
+  const char *hostname;
+  const char *username;
+
+  g_variant_get (parameters, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
+  g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
+                 request_id, page_id, hostname, username);
+}
+
+static void
+web_extension_proxy_created_cb (GDBusProxy *proxy,
                                 GAsyncResult *result,
                                 EphyEmbedShell *shell)
 {
@@ -144,6 +171,18 @@ web_extension_proxy_created_cb (GDBusConnection *connection,
   if (!shell->priv->web_extension) {
     g_warning ("Error creating web extension proxy: %s\n", error->message);
     g_error_free (error);
+  } else {
+    shell->priv->web_extension_form_auth_save_signal_id =
+      g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (shell->priv->web_extension),
+                                          NULL,
+                                          EPHY_WEB_EXTENSION_INTERFACE,
+                                         "FormAuthDataSaveConfirmationRequired",
+                                          EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                          NULL,
+                                          G_DBUS_SIGNAL_FLAGS_NONE,
+                                          (GDBusSignalCallback)web_extension_form_auth_save_requested,
+                                          shell,
+                                          NULL);
   }
 }
 
@@ -509,6 +548,30 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_WEB_VIEW);
+
+  /*
+   * EphyEmbedShell::form-auth-data-save-requested:
+   * @shell: the #EphyEmbedShell
+   * @request_id: the identifier of the request
+   * @page_id: the identifier of the web page
+   * @hostname: the hostname
+   * @username: the username
+   *
+   * Emitted when a web page requests confirmation to save
+   * the form authentication data for the given @hostname and
+   * @username
+   **/
+  signals[FORM_AUTH_DATA_SAVE_REQUESTED] =
+    g_signal_new ("form-auth-data-save-requested",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_UINT,
+                  G_TYPE_UINT64,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

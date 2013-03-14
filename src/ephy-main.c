@@ -466,6 +466,8 @@ main (int argc,
   pid_str = g_strdup_printf ("%u", getpid ());
   g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
   g_setenv ("EPHY_DOT_DIR", ephy_dot_dir (), TRUE);
+  if (private_instance || incognito_mode)
+    g_setenv ("EPHY_PRIVATE_PROFILE", "1", TRUE);
   g_free (pid_str);
 
   /* Set the web extensions dir ASAP before the process is launched */

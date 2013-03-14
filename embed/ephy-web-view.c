@@ -509,9 +509,6 @@ ephy_web_view_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: DOM bindings */
-#else
 static GtkWidget *
 ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
                                                            const char *hostname,
@@ -562,6 +559,7 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   return info_bar;
 }
 
+#ifndef HAVE_WEBKIT2
 typedef struct {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
@@ -2139,16 +2137,6 @@ load_changed_cb (WebKitWebView *web_view,
     if (priv->is_blank || !webkit_web_view_get_title (web_view))
       ephy_web_view_set_title (view, NULL);
 
-#if 0
-    /* TODO: DOM bindings */
-    if (!EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())) &&
-        g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-                                EPHY_PREFS_REMEMBER_PASSWORDS))
-      _ephy_web_view_hook_into_forms (view);
-
-    _ephy_web_view_hook_into_links (view);
-#endif
-
     /* Ensure we load the icon for this web view, if available. */
     _ephy_web_view_update_icon (view);
 
@@ -2616,6 +2604,51 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 #ifdef HAVE_WEBKIT2
+static void
+form_auth_data_save_confirmation_response (GtkInfoBar *info_bar,
+                                           gint response_id,
+                                           gpointer user_data)
+{
+  GDBusProxy *web_extension;
+  guint request_id = GPOINTER_TO_INT (user_data);
+
+  gtk_widget_destroy (GTK_WIDGET (info_bar));
+
+  web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
+  if (!web_extension)
+    return;
+
+  g_dbus_proxy_call (web_extension,
+                     "FormAuthDataSaveConfirmationResponse",
+                     g_variant_new ("(ub)", request_id, response_id == GTK_RESPONSE_YES),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+static void
+form_auth_data_save_requested (EphyEmbedShell *shell,
+                               guint request_id,
+                               guint64 page_id,
+                               const char *hostname,
+                               const char *username,
+                               WebKitWebView *web_view)
+{
+  GtkWidget *info_bar;
+
+  if (webkit_web_view_get_page_id (web_view) != page_id)
+    return;
+
+  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (EPHY_WEB_VIEW (web_view),
+                                                                        hostname, username);
+  g_signal_connect (info_bar, "response",
+                    G_CALLBACK (form_auth_data_save_confirmation_response),
+                    GINT_TO_POINTER (request_id));
+
+  gtk_widget_show (info_bar);
+}
+#endif
+
+#ifdef HAVE_WEBKIT2
 /* TODO: WebKitWebResource::send-request */
 #else
 static void
@@ -2775,6 +2808,13 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect (web_view, "ge_popup_blocked",
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
+
+#ifdef HAVE_WEBKIT2
+  g_signal_connect (ephy_embed_shell_get_default (), "form-auth-data-save-requested",
+                    G_CALLBACK (form_auth_data_save_requested),
+                    web_view);
+#endif
+
 #ifdef HAVE_WEBKIT2
   /* TODO: WebKitWebResource::send-request */
 #else
