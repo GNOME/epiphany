@@ -435,6 +435,8 @@ out:
 		}
 	}
 
+	xmlBufferFree (buf);
+
 	STOP_PROFILER ("Exporting as RDF")
 
 	LOG ("Exporting as RDF %s.", ret >= 0 ? "succeeded" : "FAILED");
