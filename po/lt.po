@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-08 16:10+0000\n"
-"PO-Revision-Date: 2013-03-09 16:20+0200\n"
+"POT-Creation-Date: 2013-03-11 12:40+0000\n"
+"PO-Revision-Date: 2013-03-15 23:15+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -520,7 +520,7 @@ msgstr "F11"
 msgid "Web Inspector"
 msgstr "Žiniatinklio inspektorius"
 
-#: ../embed/ephy-embed-shell.c:293
+#: ../embed/ephy-embed-shell.c:294
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphany dabar naudoti negalima. Nepavyko inicializuoti."
 
@@ -858,15 +858,15 @@ msgid "Most Visited"
 msgstr "Dažniausiai lankyti"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3609
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3656
 msgid "Blank page"
 msgstr "Tuščias puslapis"
 
-#: ../embed/ephy-web-view.c:686
+#: ../embed/ephy-web-view.c:692
 msgid "Not now"
 msgstr "Ne dabar"
 
-#: ../embed/ephy-web-view.c:687
+#: ../embed/ephy-web-view.c:693
 msgid "Store password"
 msgstr "Įrašyti slaptažodį"
 
@@ -874,40 +874,40 @@ msgstr "Įrašyti slaptažodį"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:700
+#: ../embed/ephy-web-view.c:706
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Ar norėtumėte įrašyti <b>%s</b> slaptažodį svetainėje <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1879
+#: ../embed/ephy-web-view.c:1916
 msgid "Deny"
 msgstr "Drausti"
 
-#: ../embed/ephy-web-view.c:1880
+#: ../embed/ephy-web-view.c:1917
 msgid "Allow"
 msgstr "Leisti"
 
-#: ../embed/ephy-web-view.c:1894
+#: ../embed/ephy-web-view.c:1931
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Tinklapis <b>%s</b> nori žinotų jūsų buvimo vietą."
 
-#: ../embed/ephy-web-view.c:2347
+#: ../embed/ephy-web-view.c:2384
 msgid "None specified"
 msgstr "Joks nenurodytas"
 
-#: ../embed/ephy-web-view.c:2356 ../embed/ephy-web-view.c:2374
+#: ../embed/ephy-web-view.c:2393 ../embed/ephy-web-view.c:2411
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Oi! Klaida įkeliant %s"
 
-#: ../embed/ephy-web-view.c:2358
+#: ../embed/ephy-web-view.c:2395
 msgid "Oops! It was not possible to show this website"
 msgstr "Oi! Nepavyko parodyti šio tinklalapio"
 
-#: ../embed/ephy-web-view.c:2359
+#: ../embed/ephy-web-view.c:2396
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -920,15 +920,15 @@ msgstr ""
 "perkeltas į naują adresą. Nepamirškite patikrinti, ar jūsų interneto ryšys "
 "veikia gerai.</p>"
 
-#: ../embed/ephy-web-view.c:2368
+#: ../embed/ephy-web-view.c:2405
 msgid "Try again"
 msgstr "Bandyti dar kartą"
 
-#: ../embed/ephy-web-view.c:2376
+#: ../embed/ephy-web-view.c:2413
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Oi! Šis tinklapis greičiausiai privertė Epiphany netikėtai užsiverti"
 
-#: ../embed/ephy-web-view.c:2378
+#: ../embed/ephy-web-view.c:2415
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -939,29 +939,46 @@ msgstr ""
 "<p></p>Iš naujo įkėlus šį tinklalapį tai gali pasikartoti. Jeigu taip "
 "atsitiks, praneškite apie šią problemą <strong>%s</strong> kūrėjams.</p>"
 
-#: ../embed/ephy-web-view.c:2386
+#: ../embed/ephy-web-view.c:2423
 msgid "Load again anyway"
 msgstr "Vis tiek įkelti dar kartą"
 
-#: ../embed/ephy-web-view.c:2820
+#: ../embed/ephy-web-view.c:2429
+#, c-format
+msgid "Oops! Something went wrong displaying %s"
+msgstr "Oi! Atsitiko kažkas negero rodant %s"
+
+#: ../embed/ephy-web-view.c:2430
+msgid "Oops!"
+msgstr "Oi!"
+
+#: ../embed/ephy-web-view.c:2431
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Atsitiko kažkas negero rodant šį puslapį. Įkelkite iš naujo arba aplankykite "
+"kitą tinklapį, jei norite tęsti."
+
+#: ../embed/ephy-web-view.c:2867
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3116
+#: ../embed/ephy-web-view.c:3163
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Įkeliama „%s“…"
 
-#: ../embed/ephy-web-view.c:3118
+#: ../embed/ephy-web-view.c:3165
 msgid "Loading…"
 msgstr "Įkeliama…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3865
+#: ../embed/ephy-web-view.c:3912
 #, c-format
 msgid "%s Files"
 msgstr "%s failai"
@@ -2506,23 +2523,23 @@ msgstr "Bet kokiems ryšiams"
 msgid "End of current session"
 msgstr "Šio seanso pabaiga"
 
-#: ../src/pdm-dialog.c:778
+#: ../src/pdm-dialog.c:780
 msgid "Domain"
 msgstr "Domenas"
 
-#: ../src/pdm-dialog.c:790
+#: ../src/pdm-dialog.c:792
 msgid "Name"
 msgstr "Vardas"
 
-#: ../src/pdm-dialog.c:1308
+#: ../src/pdm-dialog.c:1310
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1321
+#: ../src/pdm-dialog.c:1323
 msgid "User Name"
 msgstr "Vartotojo vardas"
 
-#: ../src/pdm-dialog.c:1334
+#: ../src/pdm-dialog.c:1336
 msgid "User Password"
 msgstr "Naudotojo slaptažodis"
 
