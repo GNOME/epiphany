@@ -265,7 +265,7 @@ po/Makefile.in
 tests/Makefile
 tests/data/Makefile
 ],
-[],
+[])
 
 AC_OUTPUT
 
