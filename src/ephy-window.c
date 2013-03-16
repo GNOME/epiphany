@@ -1844,6 +1844,34 @@ find_item_in_context_menu (WebKitContextMenu *context_menu,
 	return NULL;
 }
 
+static GList *
+find_spelling_guess_context_menu_items (WebKitContextMenu *context_menu)
+{
+	GList *items, *iter;
+	GList *retval = NULL;
+
+	items = webkit_context_menu_get_items (context_menu);
+	for (iter = items; iter; iter = g_list_next (iter))
+	{
+		WebKitContextMenuItem *item = (WebKitContextMenuItem *)iter->data;
+
+		if (webkit_context_menu_item_get_stock_action (item) == WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS)
+		{
+			retval = g_list_prepend (retval, g_object_ref (item));
+		}
+		else
+		{
+			/* Spelling guesses are always at the beginning of the context menu, so
+			 * we can break the loop as soon as we find the first item that is not
+			 * spelling guess.
+			 */
+			break;
+		}
+	}
+
+	return g_list_reverse (retval);
+}
+
 static gboolean
 populate_context_menu (WebKitWebView *web_view,
 		       WebKitContextMenu *context_menu,
@@ -1852,14 +1880,18 @@ populate_context_menu (WebKitWebView *web_view,
 		       EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	WebKitContextMenuItem *input_methods_item;
-	WebKitContextMenuItem *unicode_item;
+	WebKitContextMenuItem *input_methods_item = NULL;
+	WebKitContextMenuItem *unicode_item = NULL;
+	GList *spelling_guess_items = NULL;
 	EphyEmbedEvent *embed_event;
 	gboolean is_document = FALSE;
 	gboolean app_mode;
 
-	input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
-	unicode_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_UNICODE);
+	if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
+		input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
+		unicode_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_UNICODE);
+		spelling_guess_items = find_spelling_guess_context_menu_items (context_menu);
+	}
 
 	webkit_context_menu_remove_all (context_menu);
 
@@ -1920,6 +1952,17 @@ populate_context_menu (WebKitWebView *web_view,
 	}
 	else if (webkit_hit_test_result_context_is_editable (hit_test_result))
 	{
+		GList *l;
+
+		for (l = spelling_guess_items; l; l = g_list_next (l))
+		{
+			WebKitContextMenuItem *item = WEBKIT_CONTEXT_MENU_ITEM (l->data);
+
+			webkit_context_menu_append (context_menu, item);
+			g_object_unref (item);
+		}
+		g_list_free (spelling_guess_items);
+
 		update_edit_actions_sensitivity (window, FALSE);
 
 		add_action_to_context_menu (context_menu,
