@@ -953,6 +953,7 @@ ephy_session_save (EphySession *session,
 			   save_session_in_thread_cb, NULL);
 	g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
 	g_task_run_in_thread (task, save_session_sync);
+	g_object_unref (task);
 }
 
 static void
