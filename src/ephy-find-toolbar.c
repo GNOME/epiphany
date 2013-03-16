@@ -607,6 +607,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_widget_set_halign (right_box, GTK_ALIGN_END);
 	gtk_widget_set_hexpand (right_box, TRUE);
 	gtk_size_group_add_widget (size_group, right_box);
+        g_object_unref (size_group);
 
 	/* Find: |_____| */
 	priv->entry = gtk_entry_new ();
