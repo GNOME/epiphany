@@ -106,6 +106,29 @@ action_activate (GtkAction *action)
   if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
     if (ephy_gui_is_middle_click () ||
         ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
+      /* FIXME: in WebKit2 the back/forward list is immutable, so we are not able to
+       * copy it. Ideally the webkit1 code path should also work for webkit2. */
+#ifdef HAVE_WEBKIT2
+      const char *back_uri;
+      WebKitBackForwardList *history;
+      WebKitBackForwardListItem *back_item;
+
+      history = webkit_web_view_get_back_forward_list (web_view);
+      back_item = webkit_back_forward_list_get_back_item (history);
+      back_uri = webkit_back_forward_list_item_get_original_uri (back_item);
+
+      embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                  NULL,
+                                  NULL,
+                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_DONT_COPY_HISTORY);
+
+      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+      webkit_web_view_load_uri (web_view, back_uri);
+      gtk_widget_grab_focus (GTK_WIDGET (embed));
+      return;
+    }
+#else
       embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
@@ -113,6 +136,8 @@ action_activate (GtkAction *action)
                                   EPHY_NEW_TAB_IN_EXISTING_WINDOW);
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
     }
+#endif
+
     webkit_web_view_go_back (web_view);
     gtk_widget_grab_focus (GTK_WIDGET (embed));
   } else if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
