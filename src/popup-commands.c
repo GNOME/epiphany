@@ -491,9 +491,7 @@ void
 popup_replace_spelling (GtkAction *action,
 			EphyWindow *window)
 {
-#ifdef HAVE_WEBKIT2
-	/* TODO: Context Menu, Spellchecker */
-#else
+#ifndef HAVE_WEBKIT2
 	EphyEmbed *embed;
 	WebKitWebView *view;
 	WebKitWebFrame *frame;
