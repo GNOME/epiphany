@@ -738,6 +738,8 @@ save_data_free (SaveData *data)
 
 	g_object_unref (data->save_file);
 	g_object_unref (data->session);
+
+	g_slice_free (SaveData, data);
 }
 
 static int
