@@ -55,19 +55,61 @@ static WebKitWebViewGroup *web_view_group = NULL;
 static WebKitWebSettings *webkit_settings = NULL;
 #endif
 
+#ifdef HAVE_WEBKIT2
+static void
+user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
+                                          GAsyncResult *result,
+                                          gpointer user_data)
+{
+  gssize bytes;
+
+  bytes = g_output_stream_splice_finish (output_stream, result, NULL);
+  if (bytes > 0) {
+    webkit_web_view_group_add_user_style_sheet (web_view_group,
+                                                g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
+                                                NULL, NULL, NULL, WEBKIT_INJECTED_CONTENT_FRAMES_ALL);
+  }
+}
+
+static void
+user_style_seet_read_cb (GFile *file,
+                         GAsyncResult *result,
+                         gpointer user_data)
+{
+  GFileInputStream *input_stream;
+  GOutputStream *output_stream;
+
+  input_stream = g_file_read_finish (file, result, NULL);
+  if (!input_stream)
+    return;
+
+  output_stream = g_memory_output_stream_new_resizable ();
+  g_output_stream_splice_async (output_stream, G_INPUT_STREAM (input_stream),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE |
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                (GAsyncReadyCallback)user_style_sheet_output_stream_splice_cb,
+                                NULL);
+  g_object_unref (input_stream);
+  g_object_unref (output_stream);
+}
+#endif
+
 static void
 webkit_pref_callback_user_stylesheet (GSettings *settings,
                                       char *key,
                                       gpointer data)
 {
-  gboolean value = FALSE;
-  char *uri = NULL;
+  gboolean value;
 #ifndef HAVE_WEBKIT2
+  char *uri = NULL;
   char *webkit_pref = data;
 #endif
 
   value = g_settings_get_boolean (settings, key);
 
+#ifndef HAVE_WEBKIT2
   if (value)
     /* We need the leading file://, so use g_strconcat instead
      * of g_build_filename */
@@ -76,12 +118,24 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
                        G_DIR_SEPARATOR_S,
                        USER_STYLESHEET_FILENAME,
                        NULL);
-#ifdef HAVE_WEBKIT2
-  /* TODO: user-stylesheet-uri setting */
-#else
   g_object_set (webkit_settings, webkit_pref, uri, NULL);
-#endif
   g_free (uri);
+#else
+  if (!value)
+    webkit_web_view_group_remove_all_user_style_sheets (web_view_group);
+  else {
+    GFile *file;
+    char *filename;
+
+    filename = g_build_filename (ephy_dot_dir (), USER_STYLESHEET_FILENAME, NULL);
+    file = g_file_new_for_path (filename);
+    g_free (filename);
+
+    g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
+                       (GAsyncReadyCallback)user_style_seet_read_cb, NULL);
+    g_object_unref (file);
+  }
+#endif
 }
 
 static char *
