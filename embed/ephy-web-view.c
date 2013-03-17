@@ -2835,7 +2835,11 @@ ephy_web_view_init (EphyWebView *web_view)
 GtkWidget *
 ephy_web_view_new (void)
 {
-  return g_object_new (EPHY_TYPE_WEB_VIEW, NULL);
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+#ifdef HAVE_WEBKIT2
+                       "group", ephy_embed_prefs_get_web_view_group (),
+#endif
+                       NULL);
 }
 
 static gboolean

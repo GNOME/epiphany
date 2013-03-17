@@ -48,6 +48,7 @@ typedef struct
 #define ENABLE_SCRIPTS_SETTING "enable-javascript"
 #define DEFAULT_ENCODING_SETTING "default-charset"
 static WebKitSettings *webkit_settings = NULL;
+static WebKitWebViewGroup *web_view_group = NULL;
 #else
 #define ENABLE_SCRIPTS_SETTING "enable-scripts"
 #define DEFAULT_ENCODING_SETTING "default-encoding"
@@ -665,28 +666,29 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_cookie_accept_policy },
   };
 
-#ifdef HAVE_WEBKIT2
-static void
-ephy_embed_prefs_apply (EphyEmbed *embed, WebKitSettings *settings)
-#else
+#ifndef HAVE_WEBKIT2
 static void
 ephy_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
-#endif
 {
   webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
                                 settings);
 }
+#endif
 
 void
 ephy_embed_prefs_init (void)
 {
   int i;
 #ifdef HAVE_WEBKIT2
-  webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
-                                                       "enable-fullscreen", TRUE,
-                                                       "enable-site-specific-quirks", TRUE,
-                                                       "enable-dns-prefetching", TRUE,
-                                                       NULL);
+  web_view_group = webkit_web_view_group_new ("Ephy WebView Group");
+  webkit_settings = webkit_web_view_group_get_settings (web_view_group);
+
+  g_object_set (webkit_settings,
+                "enable-developer-extras", TRUE,
+                "enable-fullscreen", TRUE,
+                "enable-site-specific-quirks", TRUE,
+                "enable-dns-prefetching", TRUE,
+                NULL);
 #else
   webkit_settings = webkit_web_settings_new ();
 
@@ -758,12 +760,23 @@ ephy_embed_prefs_init (void)
 void
 ephy_embed_prefs_shutdown (void)
 {
+#ifdef HAVE_WEBKIT2
+  g_object_unref (web_view_group);
+#else
   g_object_unref (webkit_settings);
+#endif
 }
 
+#ifdef HAVE_WEBKIT2
+WebKitWebViewGroup *
+ephy_embed_prefs_get_web_view_group (void)
+{
+  return web_view_group;
+}
+#else
 void
 ephy_embed_prefs_add_embed (EphyEmbed *embed)
 {
   ephy_embed_prefs_apply (embed, webkit_settings);
 }
-
+#endif

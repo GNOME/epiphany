@@ -1109,7 +1109,9 @@ ephy_embed_constructed (GObject *object)
                     NULL);
 #endif
 
+#ifndef HAVE_WEBKIT2
   ephy_embed_prefs_add_embed (embed);
+#endif
 }
 
 static void

@@ -38,15 +38,21 @@
 
 G_BEGIN_DECLS
 
-void ephy_embed_prefs_init                     (void);
-void ephy_embed_prefs_shutdown                 (void);
-void ephy_embed_prefs_add_embed                (EphyEmbed           *embed);
+void ephy_embed_prefs_init                              (void);
+void ephy_embed_prefs_shutdown                          (void);
+
 #ifdef HAVE_WEBKIT2
-void ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
-                                                const char          *settings_policy);
+WebKitWebViewGroup *ephy_embed_prefs_get_web_view_group (void);
 #else
-void ephy_embed_prefs_set_cookie_jar_policy    (SoupCookieJar       *jar,
-                                                const char          *gconf_policy);
+void ephy_embed_prefs_add_embed                         (EphyEmbed           *embed);
+#endif
+
+#ifdef HAVE_WEBKIT2
+void ephy_embed_prefs_set_cookie_accept_policy          (WebKitCookieManager *cookie_manager,
+                                                         const char          *settings_policy);
+#else
+void ephy_embed_prefs_set_cookie_jar_policy             (SoupCookieJar       *jar,
+                                                         const char          *gconf_policy);
 #endif
 
 G_END_DECLS
