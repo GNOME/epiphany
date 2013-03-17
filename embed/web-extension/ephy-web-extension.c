@@ -34,7 +34,7 @@
 #include <webkit2/webkit-web-extension.h>
 
 
-// FIXME: These global variables should be freed somehow.
+/* FIXME: These global variables should be freed somehow. */
 static UriTester *uri_tester;
 static EphyFormAuthDataCache *form_auth_data_cache;
 static GDBusConnection *dbus_connection;
