@@ -250,9 +250,7 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
   ephy_embed_statusbar_update (embed, msg ? msg->text : NULL);
 }
 
-#ifdef HAVE_WEBKIT2
-/* TODO: WebKitWebResource::send-request */
-#else
+#ifndef HAVE_WEBKIT2
 static void
 resource_request_starting_cb (WebKitWebView *web_view,
                               WebKitWebFrame *web_frame,
@@ -1032,7 +1030,6 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show_all (paned);
 
 #ifdef HAVE_WEBKIT2
-  /* TODO: WebKitWebResource::send-request, Downloads */
   g_object_connect (web_view,
                     "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
                     "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
