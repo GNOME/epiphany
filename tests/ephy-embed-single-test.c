@@ -52,6 +52,7 @@ test_embed_single_get_from_shell (void)
   g_assert (EPHY_IS_EMBED_SINGLE (single));
 }
 
+#ifndef HAVE_WEBKIT2
 static void
 test_embed_single_form_auth (void)
 {
@@ -76,6 +77,7 @@ test_embed_single_form_auth (void)
 
   g_object_unref (single);
 }
+#endif
 
 int
 main (int argc, char *argv[])
@@ -99,8 +101,10 @@ main (int argc, char *argv[])
                    test_embed_single_new);
   g_test_add_func ("/embed/ephy-embed-single/get_from_shell",
                    test_embed_single_get_from_shell);
+#ifndef HAVE_WEBKIT2
   g_test_add_func ("/embed/ephy-embed-single/form_auth",
                    test_embed_single_form_auth);
+#endif
 
   ret = g_test_run ();
 
