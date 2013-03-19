@@ -840,8 +840,7 @@ store_form_auth_data_cb (GObject *object,
 {
   GError *error = NULL;
 
-  ephy_form_auth_data_store_finish (res, &error);
-  if (error) {
+  if (ephy_form_auth_data_store_finish (res, &error) == FALSE) {
     g_warning ("Couldn't store a form password: %s", error->message);
     g_error_free (error);
     goto out;
