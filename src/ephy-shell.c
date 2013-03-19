@@ -30,6 +30,7 @@
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -226,15 +227,51 @@ static GActionEntry app_normal_mode_entries[] = {
   { "reopen-closed-tab", reopen_closed_tab, NULL, NULL, NULL },
 };
 
+#ifdef HAVE_WEBKIT2
+static void
+ephy_shell_setup_environment (EphyShell *shell)
+{
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
+  char *pid_str;
+
+  pid_str = g_strdup_printf ("%u", getpid ());
+  g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
+  g_setenv ("EPHY_DOT_DIR", ephy_dot_dir (), TRUE);
+  if (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode))
+    g_setenv ("EPHY_PRIVATE_PROFILE", "1", TRUE);
+  g_free (pid_str);
+}
+#endif
+
 static void
 ephy_shell_startup (GApplication* application)
 {
   EphyEmbedShellMode mode;
+#ifdef HAVE_WEBKIT2
+  char *disk_cache_dir;
+#endif
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
+
+#ifdef HAVE_WEBKIT2
+  ephy_shell_setup_environment (EPHY_SHELL (application));
+  /* Set the web extensions dir ASAP before the process is launched */
+  webkit_web_context_set_web_extensions_directory (webkit_web_context_get_default (),
+                                                   EPHY_WEB_EXTENSIONS_DIR);
+
+  /* Disk Cache */
+  disk_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
+                                     ephy_dot_dir () : g_get_user_cache_dir (),
+                                     g_get_prgname (), NULL);
+  webkit_web_context_set_disk_cache_directory (webkit_web_context_get_default (),
+                                               disk_cache_dir);
+  g_free (disk_cache_dir);
+#endif
+
+  ephy_embed_prefs_init ();
 
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     GtkBuilder *builder;
@@ -263,6 +300,14 @@ ephy_shell_startup (GApplication* application)
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
     g_object_unref (builder);
   }
+}
+
+static void
+ephy_shell_shutdown (GApplication* application)
+{
+  G_APPLICATION_CLASS (ephy_shell_parent_class)->shutdown (application);
+
+  ephy_embed_prefs_shutdown ();
 }
 
 static void
@@ -500,6 +545,7 @@ ephy_shell_class_init (EphyShellClass *klass)
   object_class->constructed = ephy_shell_constructed;
 
   application_class->startup = ephy_shell_startup;
+  application_class->shutdown = ephy_shell_shutdown;
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
