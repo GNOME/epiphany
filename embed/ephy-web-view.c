@@ -480,35 +480,6 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
 }
 
-static void
-ephy_web_view_dispose (GObject *object)
-{
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
-
-  g_clear_object (&priv->file_monitor);
-
-  g_clear_object (&priv->icon);
-
-  if (priv->history_service_cancellable) {
-    g_cancellable_cancel (priv->history_service_cancellable);
-    g_clear_object (&priv->history_service_cancellable);
-  }
-
-  if (priv->snapshot_idle_id) {
-    g_source_remove (priv->snapshot_idle_id);
-    priv->snapshot_idle_id = 0;
-  }
-
-  if (priv->show_process_crash_page_id) {
-    g_source_remove (priv->show_process_crash_page_id);
-    priv->show_process_crash_page_id = 0;
-  }
-
-  g_clear_object(&priv->certificate);
-
-  G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
-}
-
 static GtkWidget *
 ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
                                                            const char *hostname,
@@ -1079,7 +1050,7 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
 #endif
 
 static void
-ephy_web_view_finalize (GObject *object)
+ephy_web_view_dispose (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
 
@@ -1092,6 +1063,35 @@ ephy_web_view_finalize (GObject *object)
 
   g_signal_handlers_disconnect_by_func (ephy_embed_shell_get_default (), form_auth_data_save_requested, object);
 #endif
+
+  g_clear_object (&priv->file_monitor);
+
+  g_clear_object (&priv->icon);
+
+  if (priv->history_service_cancellable) {
+    g_cancellable_cancel (priv->history_service_cancellable);
+    g_clear_object (&priv->history_service_cancellable);
+  }
+
+  if (priv->snapshot_idle_id) {
+    g_source_remove (priv->snapshot_idle_id);
+    priv->snapshot_idle_id = 0;
+  }
+
+  if (priv->show_process_crash_page_id) {
+    g_source_remove (priv->show_process_crash_page_id);
+    priv->show_process_crash_page_id = 0;
+  }
+
+  g_clear_object(&priv->certificate);
+
+  G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
+}
+
+static void
+ephy_web_view_finalize (GObject *object)
+{
+  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
 
   if (priv->non_search_regex) {
     g_regex_unref (priv->non_search_regex);
