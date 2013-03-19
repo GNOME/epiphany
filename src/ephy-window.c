@@ -3730,10 +3730,14 @@ setup_toolbar (EphyWindow *window)
 }
 
 static const char* disabled_actions_for_app_mode[] = { "FileOpen",
-                                                       "FileSaveAs",
-                                                       "FileSaveAsApplication",
-                                                       "ViewEncoding",
-                                                       "FileBookmarkPage" };
+						       "FileSaveAs",
+						       "FileSaveAsApplication",
+						       "ViewEncoding",
+						       "FileBookmarkPage",
+						       "EditBookmarks",
+						       "EditHistory",
+						       "EditPreferences",
+						       "EditPersonalData" };
 
 static gboolean
 _gtk_css_provider_load_from_resource (GtkCssProvider* provider,
