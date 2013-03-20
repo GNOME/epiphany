@@ -3494,6 +3494,8 @@ gboolean
 ephy_web_view_has_modified_forms (EphyWebView *view)
 {
 #ifdef HAVE_WEBKIT2
+  return FALSE;
+#if 0
   GDBusProxy *web_extension;
   GVariant *result;
   gboolean retval = FALSE;
@@ -3515,6 +3517,7 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
   g_variant_unref (result);
 
   return retval;
+#endif
 #else
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
 
