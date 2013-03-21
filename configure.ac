@@ -89,16 +89,9 @@ LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
-# Set to 'no' to build with the WebKit1 backend
-with_webkit2=yes
-
-if test "x$with_webkit2" != xno; then
-   WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
-   AC_DEFINE([HAVE_WEBKIT2],[1],[Define if building with WebKit2])
-else
-   WEBKIT_GTK_PC_NAME=webkitgtk-3.0
-fi
-AM_CONDITIONAL(WITH_WEBKIT2, test "x$with_webkit2" != xno)
+WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
+AC_DEFINE([HAVE_WEBKIT2],[1],[Define if building with WebKit2])
+AM_CONDITIONAL(WITH_WEBKIT2, [test "yes" = "yes"])
 
 # Tests
 
@@ -283,5 +276,4 @@ Epiphany was configured with the following options:
 	Code coverage		   : $enable_code_coverage
 
 	NSS support		   : $enable_nss
-	WebKit2			   : $with_webkit2
 "
