@@ -386,6 +386,8 @@ struct _EphyWindowPrivate
 	guint key_theme_is_emacs : 1;
 	guint updating_address : 1;
 	guint show_lock : 1;
+	guint force_close : 1;
+	guint checking_modified_forms : 1;
 };
 
 enum
@@ -469,25 +471,19 @@ construct_confirm_close_dialog (EphyWindow *window,
 static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
-	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA))
-	{
-		GtkWidget *dialog;
-		int response;
+	GtkWidget *dialog;
+	int response;
 
-		dialog = construct_confirm_close_dialog (window,
-				_("There are unsubmitted changes to form elements"),
-				_("If you close the document anyway, "
-				  "you will lose that information."),
-				_("Close _Document"));
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+	dialog = construct_confirm_close_dialog (window,
+						 _("There are unsubmitted changes to form elements"),
+						 _("If you close the document anyway, "
+						   "you will lose that information."),
+						 _("Close _Document"));
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		gtk_widget_destroy (dialog);
+	gtk_widget_destroy (dialog);
 
-		return response == GTK_RESPONSE_ACCEPT;
-	}
-	
-	return TRUE;
+	return response == GTK_RESPONSE_ACCEPT;
 }
 
 static gboolean
@@ -3187,6 +3183,33 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 }
 
 static void
+ephy_window_close_tab (EphyWindow *window,
+		       EphyEmbed *tab)
+{
+	gtk_widget_destroy (GTK_WIDGET (tab));
+
+	/* If that was the last tab, destroy the window. */
+	if (gtk_notebook_get_n_pages (window->priv->notebook) == 0)
+	{
+		gtk_widget_destroy (GTK_WIDGET (window));
+	}
+}
+
+static void
+tab_has_modified_forms_cb (EphyWebView *view,
+			   GAsyncResult *result,
+			   EphyWindow *window)
+{
+	gboolean has_modified_forms;
+
+	has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
+	if (!has_modified_forms || confirm_close_with_modified_forms (window))
+	{
+		ephy_window_close_tab (window, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
+	}
+}
+
+static void
 notebook_page_close_request_cb (EphyNotebook *notebook,
 				EphyEmbed *embed,
 				EphyWindow *window)
@@ -3207,18 +3230,18 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 		}
 	}
 
-	if ((!ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)) ||
-	     confirm_close_with_modified_forms (window)))
+	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA))
 	{
-		gtk_widget_destroy (GTK_WIDGET (embed));
+		ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
+						  NULL,
+						  (GAsyncReadyCallback)tab_has_modified_forms_cb,
+						  window);
 	}
-
-	/* If that was the last tab, destroy the window. */
-	if (gtk_notebook_get_n_pages (priv->notebook) == 0)
+	else
 	{
-		gtk_widget_destroy (GTK_WIDGET (window));
+		ephy_window_close_tab (window, embed);
 	}
-
 }
 
 static GtkWidget *
@@ -4401,6 +4424,94 @@ ephy_window_is_on_current_workspace (EphyWindow *window)
 	return wnck_window_is_on_workspace (wnck_window, workspace);
 }
 
+typedef struct {
+	EphyWindow *window;
+	GCancellable *cancellable;
+
+	guint embeds_to_check;
+	EphyEmbed *modified_embed;
+} ModifiedFormsData;
+
+static void
+modified_forms_data_free (ModifiedFormsData *data)
+{
+	g_object_unref (data->cancellable);
+
+	g_slice_free (ModifiedFormsData, data);
+}
+
+static void
+continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
+{
+	gboolean should_close;
+
+	data->window->priv->checking_modified_forms = FALSE;
+
+	if (data->modified_embed)
+	{
+		/* jump to the first tab with modified forms */
+		impl_set_active_child (EPHY_EMBED_CONTAINER (data->window),
+				       data->modified_embed);
+		if (!confirm_close_with_modified_forms (data->window))
+			return;
+	}
+
+	data->window->priv->force_close = TRUE;
+	should_close = ephy_window_close (data->window);
+	data->window->priv->force_close = FALSE;
+	if (should_close)
+		gtk_widget_destroy (GTK_WIDGET (data->window));
+}
+
+static void
+has_modified_forms_cb (EphyWebView *view,
+		       GAsyncResult *result,
+		       ModifiedFormsData *data)
+{
+	gboolean has_modified_forms;
+
+	data->embeds_to_check--;
+	has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
+	if (has_modified_forms)
+	{
+		/* Cancel all others */
+		g_cancellable_cancel (data->cancellable);
+		data->modified_embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+	}
+
+	if (data->embeds_to_check > 0)
+		return;
+
+	continue_window_close_after_modified_forms_check (data);
+	modified_forms_data_free (data);
+}
+
+static void
+ephy_window_check_modified_forms (EphyWindow *window)
+{
+	GList *tabs, *l;
+	ModifiedFormsData *data;
+
+	window->priv->checking_modified_forms = TRUE;
+
+	data = g_slice_new0 (ModifiedFormsData);
+	data->window = window;
+	data->cancellable = g_cancellable_new ();
+	data->embeds_to_check = gtk_notebook_get_n_pages (window->priv->notebook);
+
+	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyEmbed *embed = (EphyEmbed *) l->data;
+
+		ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
+						  data->cancellable,
+						  (GAsyncReadyCallback)has_modified_forms_cb,
+						  data);
+	}
+	g_list_free (tabs);
+}
+
 /**
  * ephy_window_close:
  * @window: an #EphyWindow
@@ -4414,44 +4525,27 @@ ephy_window_is_on_current_workspace (EphyWindow *window)
 gboolean
 ephy_window_close (EphyWindow *window)
 {
-	EphyEmbed *modified_embed = NULL;
-	GList *tabs, *l;
-	gboolean modified = FALSE;
-
 	/* We ignore the delete_event if the disable_quit lockdown has been set
 	 */
 	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 				    EPHY_PREFS_LOCKDOWN_QUIT)) return FALSE;
 
-	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyEmbed *embed = (EphyEmbed *) l->data;
-
-		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
-
-		if (ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed)))
-		{
-			modified = TRUE;
-			modified_embed = embed;
-			break;
-		}
+	if (window->priv->checking_modified_forms) {
+		/* stop window close */
+		return FALSE;
 	}
-	g_list_free (tabs);
 
-	if (modified)
+	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA))
 	{
-		/* jump to the first tab with modified forms */
-		impl_set_active_child (EPHY_EMBED_CONTAINER (window),
-				       modified_embed);
-
-		if (confirm_close_with_modified_forms (window) == FALSE)
+		if (!window->priv->force_close &&
+		    gtk_notebook_get_n_pages (window->priv->notebook) > 0)
 		{
+			ephy_window_check_modified_forms (window);
 			/* stop window close */
 			return FALSE;
 		}
 	}
-
 
 	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
 	{

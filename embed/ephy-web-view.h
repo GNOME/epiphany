@@ -144,7 +144,13 @@ const char *               ephy_web_view_get_typed_address        (EphyWebView  
 void                       ephy_web_view_set_typed_address        (EphyWebView               *view,
                                                                    const char                *address);
 gboolean                   ephy_web_view_get_is_blank             (EphyWebView               *view);
-gboolean                   ephy_web_view_has_modified_forms       (EphyWebView               *view);
+void                       ephy_web_view_has_modified_forms       (EphyWebView               *view,
+                                                                   GCancellable              *cancellable,
+                                                                   GAsyncReadyCallback        callback,
+                                                                   gpointer                   user_data);
+gboolean                  ephy_web_view_has_modified_forms_finish (EphyWebView               *view,
+                                                                   GAsyncResult              *result,
+                                                                   GError                   **error);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphyWebViewSecurityLevel  *level,
                                                                    GTlsCertificate          **certificate,

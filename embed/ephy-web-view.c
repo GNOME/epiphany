@@ -2545,6 +2545,26 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_object_notify (G_OBJECT (view), "typed-address");
 }
 
+#ifdef HAVE_WEBKIT2
+static void
+has_modified_forms_cb (GDBusProxy *web_extension,
+                       GAsyncResult *result,
+                       GTask *task)
+{
+  GVariant *return_value;
+  gboolean retval = FALSE;
+
+  return_value = g_dbus_proxy_call_finish (web_extension, result, NULL);
+  if (return_value) {
+    g_variant_get (return_value, "(b)", &retval);
+    g_variant_unref (return_value);
+  }
+
+  g_task_return_boolean (task, retval);
+  g_object_unref (task);
+}
+#endif
+
 /**
  * ephy_web_view_has_modified_forms:
  * @view: an #EphyWebView
@@ -2559,33 +2579,46 @@ ephy_web_view_set_typed_address (EphyWebView *view,
  *
  * Return value: %TRUE if @view has user-modified forms
  **/
-gboolean
-ephy_web_view_has_modified_forms (EphyWebView *view)
+void
+ephy_web_view_has_modified_forms (EphyWebView *view,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
 {
-  return FALSE;
-#if 0
+  GTask *task = g_task_new (view, cancellable, callback, user_data);
+#ifdef HAVE_WEBKIT2
   GDBusProxy *web_extension;
-  GVariant *result;
-  gboolean retval = FALSE;
 
-  /* FIXME: This should be async */
   web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
-  if (!web_extension)
-    return FALSE;
-  result = g_dbus_proxy_call_sync (web_extension,
-                                   "HasModifiedForms",
-                                   g_variant_new ("(t)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view))),
-                                   G_DBUS_CALL_FLAGS_NONE,
-                                   -1,
-                                   NULL,
-                                   NULL);
+  if (web_extension) {
+    g_dbus_proxy_call (web_extension,
+                       "HasModifiedForms",
+                       g_variant_new ("(t)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view))),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       -1,
+                       cancellable,
+                       (GAsyncReadyCallback)has_modified_forms_cb,
+                       g_object_ref (task));
+  } else {
+    g_task_return_boolean (task, FALSE);
+  }
+#else
+  WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
 
-
-  g_variant_get (result, "(b)", &retval);
-  g_variant_unref (result);
-
-  return retval;
+  g_task_return_boolean (task, ephy_web_dom_utils_has_modified_forms (document));
 #endif
+
+  g_object_unref (task);
+}
+
+gboolean
+ephy_web_view_has_modified_forms_finish (EphyWebView *view,
+                                         GAsyncResult *result,
+                                         GError **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, view), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /**
