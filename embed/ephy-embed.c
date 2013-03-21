@@ -26,9 +26,6 @@
 #include "config.h"
 #include "ephy-embed.h"
 
-#ifndef HAVE_WEBKIT2
-#include "ephy-adblock-manager.h"
-#endif
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-embed-prefs.h"
@@ -39,19 +36,9 @@
 #include "nautilus-floating-bar.h"
 
 #include <glib/gi18n.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 static void     ephy_embed_constructed         (GObject *object);
-#ifndef HAVE_WEBKIT2
-static gboolean ephy_embed_inspect_show_cb     (WebKitWebInspector *inspector,
-                                                EphyEmbed *embed);
-static gboolean ephy_embed_inspect_close_cb    (WebKitWebInspector *inspector,
-                                                EphyEmbed *embed);
-#endif
 static void     ephy_embed_restored_window_cb  (EphyEmbedShell *shell,
                                                 EphyEmbed *embed);
 
@@ -68,13 +55,6 @@ typedef struct {
 struct _EphyEmbedPrivate
 {
   GtkBox *top_widgets_vbox;
-#ifndef HAVE_WEBKIT2
-  GtkScrolledWindow *scrolled_window;
-  GtkWidget *inspector_window;
-  GtkWidget *inspector_web_view;
-  GtkWidget *inspector_scrolled_window;
-  gboolean inspector_attached;
-#endif
   GtkPaned *paned;
   WebKitWebView *web_view;
   GSList *destroy_on_transition_list;
@@ -83,11 +63,7 @@ struct _EphyEmbedPrivate
   GtkWidget *fullscreen_message_label;
   char *fullscreen_string;
 
-#ifdef HAVE_WEBKIT2
   WebKitURIRequest *delayed_request;
-#else
-  WebKitNetworkRequest *delayed_request;
-#endif
 
   GtkWidget *overview;
   guint overview_mode : 1;
@@ -106,10 +82,6 @@ struct _EphyEmbedPrivate
 
   gulong status_handler_id;
   gulong progress_update_handler_id;
-
-#ifndef HAVE_WEBKIT2
-  gulong adblock_handler_id;
-#endif
 };
 
 enum
@@ -250,31 +222,6 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
   ephy_embed_statusbar_update (embed, msg ? msg->text : NULL);
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-resource_request_starting_cb (WebKitWebView *web_view,
-                              WebKitWebFrame *web_frame,
-                              WebKitWebResource *web_resource,
-                              WebKitNetworkRequest *request,
-                              WebKitNetworkResponse *response,
-                              EphyEmbed *embed)
-{
-  EphyAdBlockManager *adblock_manager = EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (ephy_embed_shell_get_default ()));
-  const char *uri = webkit_network_request_get_uri (request);
-
-  /* FIXME: How do we implement the other CHECK_TYPEs?  Perhaps we
-   * should figure out a way of adding more information about what the
-   * resource is for to WebResource? */
-  if (!ephy_adblock_manager_should_load (adblock_manager, embed, uri,
-                                         AD_URI_CHECK_TYPE_OTHER)) {
-    g_signal_emit_by_name (EPHY_WEB_VIEW (web_view),
-                           "content-blocked", uri);
-
-    webkit_network_request_set_uri (request, "about:blank");
-  }
-}
-#endif
-
 static void
 ephy_embed_destroy_top_widgets (EphyEmbed *embed)
 {
@@ -294,7 +241,6 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
   embed->priv->destroy_on_transition_list = list;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
@@ -315,22 +261,6 @@ load_changed_cb (WebKitWebView *web_view,
     break;
   }
 }
-#else
-static void
-load_status_changed_cb (WebKitWebView *web_view,
-                        GParamSpec *spec,
-                        EphyEmbed *embed)
-{
-  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
-  const char *address;
-
-  if (status == WEBKIT_LOAD_COMMITTED) {
-    ephy_embed_destroy_top_widgets (embed);
-    address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-    ephy_embed_set_overview_mode (embed, strcmp (address, "ephy-about:overview") == 0);
-  }
-}
-#endif
 
 static void
 ephy_embed_grab_focus (GtkWidget *widget)
@@ -381,25 +311,6 @@ ephy_embed_dispose (GObject *object)
   EphyEmbed *embed = EPHY_EMBED (object);
   EphyEmbedPrivate *priv = embed->priv;
 
-#ifndef HAVE_WEBKIT2
-  if (priv->inspector_window) {
-    WebKitWebInspector *inspector;
-
-    inspector = webkit_web_view_get_inspector (priv->web_view);
-
-    g_signal_handlers_disconnect_by_func (inspector,
-                                          ephy_embed_inspect_show_cb,
-                                          priv->inspector_window);
-
-    g_signal_handlers_disconnect_by_func (inspector,
-                                          ephy_embed_inspect_close_cb,
-                                          priv->inspector_window);
-
-    gtk_widget_destroy (GTK_WIDGET (priv->inspector_window));
-    priv->inspector_window = NULL;
-  }
-#endif
-
   if (priv->pop_statusbar_later_source_id) {
     g_source_remove (priv->pop_statusbar_later_source_id);
     priv->pop_statusbar_later_source_id = 0;
@@ -426,13 +337,6 @@ ephy_embed_dispose (GObject *object)
     g_source_remove (priv->fullscreen_message_id);
     priv->fullscreen_message_id = 0;
   }
-
-#ifndef HAVE_WEBKIT2
-  if (priv->adblock_handler_id) {
-    g_signal_handler_disconnect (priv->web_view, priv->adblock_handler_id);
-    priv->adblock_handler_id = 0;
-  }
-#endif
 
   g_clear_object (&priv->delayed_request);
 
@@ -545,7 +449,6 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
 
-#ifdef HAVE_WEBKIT2
 static gboolean
 ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
                                 EphyEmbed *embed)
@@ -563,96 +466,6 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
   return TRUE;
 }
-#else
-static WebKitWebView *
-ephy_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
-                                WebKitWebView *web_view,
-                                EphyEmbed *embed)
-{
-  EphyEmbedPrivate *priv = embed->priv;
-
-  priv->inspector_web_view = ephy_web_view_new();
-
-  gtk_container_add (GTK_CONTAINER (priv->inspector_scrolled_window),
-                     priv->inspector_web_view);
-
-  return WEBKIT_WEB_VIEW (priv->inspector_web_view);
-}
-
-static gboolean
-ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
-                                EphyEmbed *embed)
-{
-  embed->priv->inspector_attached = TRUE;
-
-  gtk_widget_hide (embed->priv->inspector_window);
-  gtk_widget_reparent (GTK_WIDGET (embed->priv->inspector_scrolled_window),
-                       GTK_WIDGET (embed->priv->paned));
-
-  return TRUE;
-}
-
-static void
-ephy_embed_detach_inspector (EphyEmbed *embed, WebKitWebInspector *inspector)
-{
-  embed->priv->inspector_attached = FALSE;
-
-  gtk_widget_reparent (GTK_WIDGET (embed->priv->inspector_scrolled_window),
-                       GTK_WIDGET (embed->priv->inspector_window));
-}
-
-static gboolean
-ephy_embed_detach_inspector_cb (WebKitWebInspector *inspector,
-                                EphyEmbed *embed)
-{
-  ephy_embed_detach_inspector (embed, inspector);
-
-  gtk_widget_show_all (embed->priv->inspector_window);
-
-  return TRUE;
-}
-
-static gboolean
-ephy_embed_inspect_show_cb (WebKitWebInspector *inspector,
-                            EphyEmbed *embed)
-{
-  if (!embed->priv->inspector_attached) {
-    gtk_widget_show_all (embed->priv->inspector_window);
-    gtk_window_present (GTK_WINDOW (embed->priv->inspector_window));
-  } else {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation (GTK_WIDGET (embed->priv->scrolled_window), &allocation);
-
-    /* Set a sane position for the mover */
-    gtk_paned_set_position (embed->priv->paned, allocation.height * 0.5);
-    gtk_widget_show (embed->priv->inspector_scrolled_window);
-  }
-
-  return TRUE;
-}
-
-static gboolean
-ephy_embed_inspect_close_cb (WebKitWebInspector *inspector,
-                             EphyEmbed *embed)
-{
-  EphyEmbedPrivate *priv = embed->priv;
-
-  if (!priv->inspector_window)
-    return TRUE;
-
-  gtk_widget_destroy (priv->inspector_web_view);
-  priv->inspector_web_view = NULL;
-
-  if (!priv->inspector_attached)
-    gtk_widget_hide (priv->inspector_window);
-  else
-    gtk_widget_hide (priv->inspector_scrolled_window);
-
-  ephy_embed_detach_inspector (embed, inspector);
-
-  return TRUE;
-}
-#endif
 
 void
 ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
@@ -663,32 +476,6 @@ ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
   ephy_download_set_auto_destination (download);
   ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 }
-
-#ifndef HAVE_WEBKIT2
-static gboolean
-download_requested_cb (WebKitWebView *web_view,
-                       WebKitDownload *download,
-                       EphyEmbed *embed)
-{
-  EphyDownload *ed;
-  GtkWidget *toplevel;
-  GtkWindow *window = NULL;
-
-  /* Is download locked down? */
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK))
-    return FALSE;
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-  if (GTK_IS_WINDOW (toplevel))
-    window = GTK_WINDOW (toplevel);
-
-  ed = ephy_download_new_for_download (download, window);
-  ephy_download_set_auto_destination (ed);
-
-  return TRUE;
-}
-#endif
 
 static void
 ephy_embed_set_fullscreen_message (EphyEmbed *embed,
@@ -708,9 +495,6 @@ ephy_embed_set_fullscreen_message (EphyEmbed *embed,
 
 static gboolean
 entering_fullscreen_cb (WebKitWebView *web_view,
-#ifndef HAVE_WEBKIT2
-                        GObject *element,
-#endif
                         EphyEmbed *embed)
 {
   ephy_embed_set_fullscreen_message (embed, TRUE);
@@ -719,9 +503,6 @@ entering_fullscreen_cb (WebKitWebView *web_view,
 
 static gboolean
 leaving_fullscreen_cb (WebKitWebView *web_view,
-#ifndef HAVE_WEBKIT2
-                       GObject *element,
-#endif
                        EphyEmbed *embed)
 {
   ephy_embed_set_fullscreen_message (embed, FALSE);
@@ -766,7 +547,6 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
   }
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 window_geometry_changed (WebKitWindowProperties *properties, GParamSpec *pspec, EphyEmbed *embed)
 {
@@ -788,36 +568,6 @@ window_geometry_changed (WebKitWindowProperties *properties, GParamSpec *pspec, 
   if (geometry.width > 0 && geometry.height > 0)
     gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
 }
-#else
-static void
-window_resize_requested (WebKitWebWindowFeatures *features, GParamSpec *pspec, EphyEmbed *embed)
-{
-  GtkWidget *window;
-  gboolean is_popup;
-  const char *property_name;
-  int width, height;
-
-  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-  if (!window || !gtk_widget_is_toplevel (window))
-    return;
-
-  g_object_get (window, "is-popup", &is_popup, NULL);
-  if (!is_popup)
-    return;
-
-  property_name = g_param_spec_get_name (pspec);
-
-  if (g_str_equal (property_name, "x") || g_str_equal (property_name, "y")) {
-    int x, y;
-    g_object_get (features, "x", &x, "y", &y, NULL);
-    gtk_window_move (GTK_WINDOW (window), x, y);
-    return;
-  }
-
-  g_object_get (features, "width", &width, "height", &height, NULL);
-  gtk_window_resize (GTK_WINDOW (window), width, height);
-}
-#endif
 
 static gboolean
 clear_progress_cb (EphyEmbed *embed)
@@ -847,11 +597,7 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
       g_str_has_prefix (uri, "about:"))
     return;
 
-#ifdef HAVE_WEBKIT2
   progress = webkit_web_view_get_estimated_load_progress (priv->web_view);
-#else
-  progress = webkit_web_view_get_progress (priv->web_view);
-#endif
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
 
   if (progress == 1.0 || !loading)
@@ -864,26 +610,6 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
-
-#ifndef HAVE_WEBKIT2
-static void
-setup_adblock (GSettings *settings,
-               char *key,
-               EphyEmbed *embed)
-{
-  EphyEmbedPrivate *priv = embed->priv;
-  EphyWebView *web_view = ephy_embed_get_web_view (embed);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
-      priv->adblock_handler_id == 0) {
-    priv->adblock_handler_id = g_signal_connect (web_view, "resource_request_starting",
-                                                 G_CALLBACK (resource_request_starting_cb), embed);
-  } else if (priv->adblock_handler_id) {
-    g_signal_handler_disconnect (web_view, priv->adblock_handler_id);
-    priv->adblock_handler_id = 0;
-  }
-}
-#endif
 
 static void
 ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
@@ -902,11 +628,7 @@ ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
   /* This is to allow UI elements watching load status to show that the page is
    * loading as soon as possible.
    */
-#ifdef HAVE_WEBKIT2
   g_signal_emit_by_name (web_view, "load-changed", WEBKIT_LOAD_STARTED);
-#else
-  g_object_notify (G_OBJECT (web_view), "load-status");
-#endif
 }
 
 static void
@@ -930,16 +652,9 @@ ephy_embed_constructed (GObject *object)
   EphyEmbed *embed = (EphyEmbed*)object;
   EphyEmbedPrivate *priv = embed->priv;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-#ifndef HAVE_WEBKIT2
-  GtkWidget *scrolled_window;
-#endif
   GtkWidget *paned;
   WebKitWebView *web_view;
-#ifdef HAVE_WEBKIT2
   WebKitWindowProperties *window_properties;
-#else
-  WebKitWebWindowFeatures *window_features;
-#endif
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
 
@@ -951,19 +666,12 @@ ephy_embed_constructed (GObject *object)
 
   /* Skeleton */
   web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
-#ifndef HAVE_WEBKIT2
-  scrolled_window = GTK_WIDGET (priv->scrolled_window);
-#endif
   overlay = gtk_overlay_new ();
 
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
-#ifdef HAVE_WEBKIT2
   gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (web_view));
-#else
-  gtk_container_add (GTK_CONTAINER (overlay), scrolled_window);
-#endif
 
   /* The overview. In incognito mode we don't use it. */
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) !=
@@ -1005,18 +713,8 @@ ephy_embed_constructed (GObject *object)
   paned = GTK_WIDGET (priv->paned);
 
   priv->web_view = web_view;
-#ifdef HAVE_WEBKIT2
   priv->progress_update_handler_id = g_signal_connect (web_view, "notify::estimated-load-progress",
                                                        G_CALLBACK (progress_update), object);
-#else
-  priv->progress_update_handler_id =  g_signal_connect (web_view, "notify::progress",
-                                                        G_CALLBACK (progress_update), object);
-#endif
-
-#ifndef HAVE_WEBKIT2
-  gtk_container_add (GTK_CONTAINER (scrolled_window),
-                     GTK_WIDGET (web_view));
-#endif
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
                    TRUE, FALSE);
 
@@ -1029,89 +727,27 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show (GTK_WIDGET (web_view));
   gtk_widget_show_all (paned);
 
-#ifdef HAVE_WEBKIT2
   g_object_connect (web_view,
                     "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
                     "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
-#else
-  g_object_connect (web_view,
-                    "signal::notify::load-status", G_CALLBACK (load_status_changed_cb), embed,
-                    "signal::download-requested", G_CALLBACK (download_requested_cb), embed,
-                    "signal::entering-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
-                    "signal::leaving-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
-                    NULL);
-
-  g_signal_connect (EPHY_SETTINGS_WEB,
-                    "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                    G_CALLBACK (setup_adblock), embed);
-
-  setup_adblock (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK, embed);
-#endif
 
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
                                               G_CALLBACK (status_message_notify_cb),
                                               embed);
-#ifdef HAVE_WEBKIT2
   /* Window properties */
   window_properties = webkit_web_view_get_window_properties (web_view);
   g_signal_connect (window_properties, "notify::geometry",
                     G_CALLBACK (window_geometry_changed),
                     embed);
-#else
-  /* Window features */
-  window_features = webkit_web_view_get_window_features (web_view);
-  g_object_connect (window_features,
-                    "signal::notify::x", G_CALLBACK (window_resize_requested), embed,
-                    "signal::notify::y", G_CALLBACK (window_resize_requested), embed,
-                    "signal::notify::width", G_CALLBACK (window_resize_requested), embed,
-                    "signal::notify::height", G_CALLBACK (window_resize_requested), embed,
-                    NULL);
-#endif
 
   /* The inspector */
   inspector = webkit_web_view_get_inspector (web_view);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (inspector, "attach",
                     G_CALLBACK (ephy_embed_attach_inspector_cb),
                     embed);
-#else
-  priv->inspector_attached = TRUE;
-  priv->inspector_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->inspector_scrolled_window),
-                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (priv->paned),
-                     priv->inspector_scrolled_window);
-
-  priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (priv->inspector_window),
-                        _("Web Inspector"));
-  gtk_window_set_default_size (GTK_WINDOW (priv->inspector_window),
-                               800, 600);
-
-  g_signal_connect (priv->inspector_window,
-                    "delete-event", G_CALLBACK (gtk_widget_hide_on_delete),
-                    NULL);
-
-  g_object_connect (inspector,
-                    "signal::inspect-web-view", G_CALLBACK (ephy_embed_inspect_web_view_cb),
-                    embed,
-                    "signal::show-window", G_CALLBACK (ephy_embed_inspect_show_cb),
-                    embed,
-                    "signal::close-window", G_CALLBACK (ephy_embed_inspect_close_cb),
-                    embed,
-                    "signal::attach-window", G_CALLBACK (ephy_embed_attach_inspector_cb),
-                    embed,
-                    "signal::detach-window", G_CALLBACK (ephy_embed_detach_inspector_cb),
-                    embed,
-                    NULL);
-#endif
-
-#ifndef HAVE_WEBKIT2
-  ephy_embed_prefs_add_embed (embed);
-#endif
 }
 
 static void
@@ -1124,21 +760,11 @@ ephy_embed_init (EphyEmbed *embed)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
                                   GTK_ORIENTATION_VERTICAL);
 
-#ifndef HAVE_WEBKIT2
-  priv->scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
-#endif
   priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
   priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
   priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
-
-#ifndef HAVE_WEBKIT2
-  gtk_scrolled_window_set_policy (priv->scrolled_window,
-                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (priv->scrolled_window,
-                                       GTK_SHADOW_IN);
-#endif
 }
 
 /**
@@ -1242,20 +868,11 @@ ephy_embed_get_overview_mode (EphyEmbed *embed)
  * Sets the #WebKitNetworkRequest that should be loaded when the tab this embed
  * is on is switched to.
  */
-#ifdef HAVE_WEBKIT2
 void
 ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request)
-#else
-void
-ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitNetworkRequest *request)
-#endif
 {
   g_return_if_fail (EPHY_IS_EMBED (embed));
-#ifdef HAVE_WEBKIT2
   g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
-#else
-  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST (request));
-#endif
 
   g_clear_object (&embed->priv->delayed_request);
 
