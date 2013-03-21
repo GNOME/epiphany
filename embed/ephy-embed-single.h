@@ -39,13 +39,9 @@ G_BEGIN_DECLS
 
 typedef struct _EphyEmbedSingle   EphyEmbedSingle;
 typedef struct _EphyEmbedSingleClass    EphyEmbedSingleClass;
-typedef struct _EphyEmbedSinglePrivate  EphyEmbedSinglePrivate;
 
 struct _EphyEmbedSingle {
   GObject parent;
-
-  /*< private >*/
-  EphyEmbedSinglePrivate *priv;
 };
 
 struct _EphyEmbedSingleClass
@@ -58,15 +54,6 @@ GType           ephy_embed_single_get_type           (void);
 gboolean        ephy_embed_single_initialize         (EphyEmbedSingle *single);
 
 void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
-
-GSList *        ephy_embed_single_get_form_auth      (EphyEmbedSingle *single,
-                                                      const char *uri);
-
-void            ephy_embed_single_add_form_auth      (EphyEmbedSingle *single,
-                                                      const char *uri,
-                                                      const char *form_username,
-                                                      const char *form_password,
-                                                      const char *username);
 
 G_END_DECLS
 
