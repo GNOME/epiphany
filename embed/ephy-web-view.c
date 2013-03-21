@@ -68,9 +68,6 @@ struct _EphyWebViewPrivate {
   EphyWebViewSecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
-#ifndef HAVE_WEBKIT2
-  WebKitLoadStatus load_status;
-#endif
 
   /* Flags */
   guint is_blank : 1;
@@ -926,29 +923,7 @@ ephy_web_view_is_history_frozen (EphyWebView *view)
 static void
 ephy_web_view_clear_history (EphyWebView *view)
 {
-#ifdef HAVE_WEBKIT2
   /* TODO: WebKitBackForwardList is read-only in WebKit2 */
-#else
-  WebKitWebBackForwardList *history_list;
-
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-
-  history_list = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
-  if (history_list != NULL) {
-    WebKitWebHistoryItem *current_item;
-
-    /* Save a ref to the first element to add it later */
-    current_item = webkit_web_back_forward_list_get_current_item (history_list);
-    g_object_ref (current_item);
-
-    /* Clear the history and add the first element once again */
-    webkit_web_back_forward_list_clear (history_list);
-    webkit_web_back_forward_list_add_item (history_list, current_item);
-    g_object_unref (current_item);
-
-    update_navigation_flags (view);
-  }
-#endif
 }
 
 static void
@@ -969,22 +944,14 @@ _ephy_web_view_update_icon (EphyWebView *view)
   }
 
   if (priv->address) {
-#ifdef HAVE_WEBKIT2
     cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
     if (icon_surface)
       priv->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
-#else
-    const char *page_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
-    if (page_uri)
-      priv->icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (), page_uri,
-                                                                   FAVICON_SIZE, FAVICON_SIZE);
-#endif
   }
 
   g_object_notify (G_OBJECT (view), "icon");
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 icon_changed_cb (EphyWebView *view,
                  GParamSpec *pspec,
@@ -993,18 +960,6 @@ icon_changed_cb (EphyWebView *view,
   _ephy_web_view_update_icon (view);
 }
 
-#else
-
-static void
-icon_loaded_cb (EphyWebView *view,
-                const char *address,
-                gpointer user_data)
-{
-  _ephy_web_view_update_icon (view);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 form_auth_data_save_confirmation_response (GtkInfoBar *info_bar,
                                            gint response_id,
@@ -1047,7 +1002,6 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
 
   gtk_widget_show (info_bar);
 }
-#endif
 
 static void
 ephy_web_view_dispose (GObject *object)
@@ -1058,11 +1012,9 @@ ephy_web_view_dispose (GObject *object)
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
 
-#ifdef HAVE_WEBKIT2
   g_signal_handlers_disconnect_by_func (object, icon_changed_cb, NULL);
 
   g_signal_handlers_disconnect_by_func (ephy_embed_shell_get_default (), form_auth_data_save_requested, object);
-#endif
 
   g_clear_object (&priv->file_monitor);
 
@@ -1231,13 +1183,8 @@ uri_changed_cb (WebKitWebView *web_view,
    * update the URI when it changes after the page has been loaded
    * which is usually the result of navigation within the same page action.
    */
-#ifdef HAVE_WEBKIT2
   if (webkit_web_view_is_loading (web_view))
     return;
-#else
-  if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED)
-    return;
-#endif
 
   /* We need to check if we get URI notifications without going
      through the usual load process, as this can happen when changing
@@ -1251,7 +1198,6 @@ uri_changed_cb (WebKitWebView *web_view,
   g_free (uri);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 mouse_target_changed_cb (EphyWebView *web_view,
                          WebKitHitTestResult *hit_test_result,
@@ -1265,18 +1211,6 @@ mouse_target_changed_cb (EphyWebView *web_view,
 
   ephy_web_view_set_link_message (web_view, message);
 }
-#else
-static void
-hovering_over_link_cb (EphyWebView *web_view,
-                       char *title,
-                       char *location,
-                       gpointer data)
-{
-  ephy_web_view_set_link_message (web_view, location);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static gboolean
 load_process_crashed_page_cb (EphyWebView *web_view)
 {
@@ -1299,7 +1233,6 @@ process_crashed_cb (WebKitWebView *web_view, gpointer user_data)
                                                       web_view,
                                                       NULL);
 }
-#endif
 
 static void
 ephy_web_view_constructed (GObject *object)
@@ -1312,17 +1245,10 @@ ephy_web_view_constructed (GObject *object)
    * different keys for text and full content zooming. AFAIK you can
    * have both enabled at the same time in WebKit now (although our
    * API does not reflect this atm). See r67274 in WebKit. */
-#ifndef HAVE_WEBKIT2
-  /* This is the default behaviour in WebKit2 */
-  webkit_web_view_set_full_content_zoom (WEBKIT_WEB_VIEW (object), TRUE);
-#endif
-
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", object);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (object, "web-process-crashed",
                     G_CALLBACK (process_crashed_cb), object);
-#endif
 }
 
 static void
@@ -1722,7 +1648,6 @@ ge_popup_blocked_cb (EphyWebView *view,
   popups_manager_add (view, url, name, features);
 }
 
-#ifdef HAVE_WEBKIT2
 static gboolean
 decide_policy_cb (WebKitWebView *web_view,
                   WebKitPolicyDecision *decision,
@@ -1776,78 +1701,7 @@ decide_policy_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
-#else
-static gboolean
-is_main_resource (WebKitWebFrame *frame, WebKitNetworkRequest *request)
-{
-  const char *request_uri = NULL, *main_resource_uri = NULL;
-  WebKitWebDataSource *frame_data_source;
 
-  request_uri = webkit_network_request_get_uri (request);
-  frame_data_source = webkit_web_frame_get_data_source (frame);
-  if (frame_data_source) {
-    WebKitWebResource *resource;
-
-    resource = webkit_web_data_source_get_main_resource (frame_data_source);
-    main_resource_uri = webkit_web_resource_get_uri (resource);
-  }
-
-  return g_strcmp0 (request_uri, main_resource_uri) == 0;
-}
-
-static gboolean
-mime_type_policy_decision_requested_cb (WebKitWebView *web_view,
-                                        WebKitWebFrame *frame,
-                                        WebKitNetworkRequest *request,
-                                        const char *mime_type,
-                                        WebKitWebPolicyDecision *decision,
-                                        gpointer user_data)
-{
-  EphyWebViewDocumentType type;
-  gboolean should_download;
-
-  g_return_val_if_fail (mime_type, FALSE);
-
-  /* Get the mime type for the page only from the main frame */
-  if (webkit_web_view_get_main_frame (web_view) == frame) {
-    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
-
-    if (!strcmp (mime_type, "text/html") ||
-        !strcmp (mime_type, "text/plain"))
-      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-    else if (!strcmp (mime_type, "application/xhtml+xml"))
-      type = EPHY_WEB_VIEW_DOCUMENT_XML;
-    else if (!strncmp (mime_type, "image/", 6))
-      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-
-    /* FIXME: maybe it makes more sense to have an API to query the mime
-     * type when the load of a page starts than doing this here.
-     */
-    if (EPHY_WEB_VIEW (web_view)->priv->document_type != type) {
-      EPHY_WEB_VIEW (web_view)->priv->document_type = type;
-
-      g_object_notify (G_OBJECT (web_view), "document-type");
-    }
-  }
-
-  /* If WebKit can't handle the mime type start the download
-     process */
-  should_download = !webkit_web_view_can_show_mime_type (web_view, mime_type);
-  if (should_download)
-    should_download = is_main_resource (frame, request);
-
-  /* FIXME: need to use ephy_file_check_mime if auto-downloading */
-  if (should_download) {
-    webkit_web_policy_decision_download (decision);
-
-    return TRUE;
-  }
-
-  return FALSE;
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 decide_on_geolocation_policy_request (GtkWidget *info_bar,
                                       int response,
@@ -1867,37 +1721,10 @@ decide_on_geolocation_policy_request (GtkWidget *info_bar,
   gtk_widget_destroy (info_bar);
   g_object_unref (request);
 }
-#else
-static void
-decide_on_geolocation_policy_request (GtkWidget *info_bar,
-                                      int response,
-                                      WebKitGeolocationPolicyDecision *decision)
-{
-  gtk_widget_destroy (info_bar);
 
-  /* Decide, and drop our ref on the decision object. */
-  if (response == GTK_RESPONSE_YES) {
-    webkit_geolocation_policy_allow (decision);
-    g_object_unref (decision);
-    return;
-  }
-
-  webkit_geolocation_policy_deny (decision);
-  g_object_unref (decision);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static gboolean
 permission_request_cb (WebKitWebView           *web_view,
                        WebKitPermissionRequest *decision)
-#else
-static gboolean
-geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
-                                          WebKitWebFrame *web_frame,
-                                          WebKitGeolocationPolicyDecision *decision,
-                                          gpointer data)
-#endif
 {
   GtkWidget *info_bar;
   GtkWidget *action_area;
@@ -1906,10 +1733,8 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
   char *message;
   char *host;
 
-#ifdef HAVE_WEBKIT2
   if (!WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
     return FALSE;
-#endif
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
@@ -1921,11 +1746,7 @@ geolocation_policy_decision_requested_cb (WebKitWebView *web_view,
                                   GTK_ORIENTATION_HORIZONTAL);
 
   /* Label */
-#ifdef HAVE_WEBKIT2
   host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
-#else
-  host = ephy_string_get_host_name (webkit_web_frame_get_uri (web_frame));
-#endif
   message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
                                      host);
   g_free (host);
@@ -2030,7 +1851,6 @@ ephy_web_view_location_changed (EphyWebView *view,
   g_object_thaw_notify (object);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 on_snapshot_ready (WebKitWebView *webview,
                    GAsyncResult *res,
@@ -2057,7 +1877,6 @@ on_snapshot_ready (WebKitWebView *webview,
   ephy_overview_store_set_snapshot (EPHY_OVERVIEW_STORE (model), &iter, surface);
   cairo_surface_destroy (surface);
 }
-#endif
 
 /* FIXME: We should be using the snapshot service for this instead of
    using the WK API directly. */
@@ -2066,18 +1885,13 @@ web_view_check_snapshot (WebKitWebView *web_view)
 {
   EphyOverviewStore *store;
   GtkTreeIter iter;
-#ifdef HAVE_WEBKIT2
   GtkTreeRowReference *ref;
   GtkTreePath *path;
-#else
-  cairo_surface_t *surface;
-#endif
   EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
   store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
   if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
       ephy_overview_store_needs_snapshot (store, &iter)) {
-#ifdef HAVE_WEBKIT2
     path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
     ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store), path);
     gtk_tree_path_free (path);
@@ -2085,17 +1899,11 @@ web_view_check_snapshot (WebKitWebView *web_view)
                                   WEBKIT_SNAPSHOT_OPTIONS_NONE,
                                   NULL, (GAsyncReadyCallback)on_snapshot_ready,
                                   ref);
-#else
-    surface = webkit_web_view_get_snapshot (web_view);
-    ephy_overview_store_set_snapshot (store, &iter, surface);
-    cairo_surface_destroy (surface);
-#endif
   }
 
   return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
@@ -2201,148 +2009,6 @@ load_changed_cb (WebKitWebView *web_view,
 
   g_object_thaw_notify (object);
 }
-#else
-static void
-load_status_cb (WebKitWebView *web_view,
-                GParamSpec *pspec,
-                gpointer user_data)
-{
-  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
-  EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  EphyWebViewPrivate *priv = view->priv;
-  GObject *object = G_OBJECT (web_view);
-
-  g_object_freeze_notify (object);
-
-  switch (status) {
-  /* FIXME: add REDIRECTING and NEGOTIATING states to WebKitGTK */
-  case WEBKIT_LOAD_PROVISIONAL: {
-    const char *loading_uri = NULL;
-    WebKitWebFrame *frame;
-
-    WebKitWebDataSource *source;
-    WebKitNetworkRequest *request;
-
-    priv->load_failed = FALSE;
-    frame = webkit_web_view_get_main_frame (web_view);
-
-    source = webkit_web_frame_get_provisional_data_source (frame);
-    request = webkit_web_data_source_get_initial_request (source);
-    loading_uri = webkit_network_request_get_uri (request);
-
-    g_signal_emit_by_name (view, "new-document-now", loading_uri);
-
-    if (ephy_embed_utils_is_no_show_address (loading_uri))
-      ephy_web_view_freeze_history (view);
-
-    if (priv->address == NULL || priv->address[0] == '\0')
-      ephy_web_view_set_address (view, loading_uri);
-
-    ephy_web_view_set_loading_title (view, loading_uri, TRUE);
-    
-    g_free (priv->status_message);
-    priv->status_message = g_strdup (priv->loading_title);
-    g_object_notify (object, "status-message");
-    
-    break;
-  }
-  case WEBKIT_LOAD_COMMITTED: {
-    const char* uri;
-    EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
-    WebKitWebFrame *frame;
-    WebKitNetworkResponse *response;
-    SoupMessage *message;
-
-    /* Title and location. */
-    uri = webkit_web_view_get_uri (web_view);
-    ephy_web_view_location_changed (view,
-                                    uri);
-
-    /* Security status. */
-    frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-    response = webkit_web_frame_get_network_response (frame);
-    message = webkit_network_response_get_message (response);
-
-    g_clear_object (&priv->certificate);
-    if (message && soup_message_get_https_status (message, &priv->certificate, &priv->tls_errors)) {
-      g_object_ref (priv->certificate);
-      security_level = priv->tls_errors == 0 ?
-        EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
-    }
-    g_object_unref (response);
-
-    ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
-
-    /* Zoom level. */
-    restore_zoom_level (view, uri);
-
-    /* History. */
-    if (!ephy_web_view_is_history_frozen (view)) {
-      char *history_uri = NULL;
-
-      /* TODO: move the normalization down to the history service? */
-      if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
-          history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-      else
-        history_uri = g_strdup (uri);
-
-      ephy_history_service_visit_url (priv->history_service,
-                                      history_uri,
-                                      priv->visit_type);
-
-      g_free (history_uri);
-    }
-
-    break;
-  }
-  case WEBKIT_LOAD_FINISHED:
-    g_free (priv->status_message);
-    priv->status_message = NULL;
-    g_object_notify (object, "status-message");
-    ephy_web_view_set_loading_title (view, NULL, FALSE);
-
-    if (priv->is_blank)
-      ephy_web_view_set_title (view, NULL);
-
-    if (!EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())) &&
-        g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-                                EPHY_PREFS_REMEMBER_PASSWORDS))
-      _ephy_web_view_hook_into_forms (view);
-
-    _ephy_web_view_hook_into_links (view);
-
-    /* Reset visit type. */
-    priv->visit_type = EPHY_PAGE_VISIT_NONE;
-
-    if (!ephy_web_view_is_history_frozen (view)) {
-      if (priv->snapshot_idle_id)
-        g_source_remove (priv->snapshot_idle_id);
-      priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc) web_view_check_snapshot, web_view, NULL);
-    }
-
-    ephy_web_view_thaw_history (view);
-    break;
-  case WEBKIT_LOAD_FAILED:
-    priv->load_failed = TRUE;
-    ephy_web_view_set_link_message (view, NULL);
-    ephy_web_view_set_loading_title (view, NULL, FALSE);
-
-    g_free (priv->status_message);
-    priv->status_message = NULL;
-    g_object_notify (object, "status-message");
-
-    update_navigation_flags (view);
-
-    /* Reset visit type. */
-    priv->visit_type = EPHY_PAGE_VISIT_NONE;
-    break;
-  default:
-    break;
-  }
-
-  g_object_thaw_notify (object);
-}
-#endif
 
 /**
  * ephy_web_view_set_placeholder:
@@ -2370,12 +2036,7 @@ ephy_web_view_set_placeholder (EphyWebView *view,
 
   html = g_markup_printf_escaped ("<head><title>%s</title></head>", title);
 
-#ifdef HAVE_WEBKIT2
   webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html, uri, NULL);
-#else
-  webkit_web_frame_load_alternate_string (webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view)),
-                                          html, uri, uri);
-#endif
 
   g_free (html);
 
@@ -2513,41 +2174,22 @@ ephy_web_view_load_error_page (EphyWebView *view,
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
-#ifdef HAVE_WEBKIT2
   webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
-#else
-  webkit_web_frame_load_alternate_string (webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view)),
-                                          html->str, uri, uri);
-#endif
   g_string_free (html, TRUE);
 }
 
-#ifdef HAVE_WEBKIT2
 static gboolean
 load_failed_cb (WebKitWebView *web_view,
                 WebKitLoadEvent load_event,
                 const char *uri,
                 GError *error,
                 gpointer user_data)
-#else
-static gboolean
-load_error_cb (WebKitWebView *web_view,
-               WebKitWebFrame *frame,
-               char *uri,
-               GError *error,
-               gpointer user_data)
-#endif
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-#ifdef HAVE_WEBKIT2
   view->priv->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
   update_navigation_flags (view);
-#else
-  if (webkit_web_view_get_main_frame (web_view) != frame)
-    return FALSE;
-#endif
 
   if (error->domain == SOUP_HTTP_ERROR) {
     ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
@@ -2565,11 +2207,7 @@ load_error_cb (WebKitWebView *web_view,
   case WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST:
   case WEBKIT_POLICY_ERROR_FAILED:
   case WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE:
-#ifdef HAVE_WEBKIT2
   case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI:
-#else
-  case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URL:
-#endif
   case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
   case WEBKIT_PLUGIN_ERROR_FAILED:
   case WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN:
@@ -2601,16 +2239,10 @@ load_error_cb (WebKitWebView *web_view,
   return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 close_web_view_cb (WebKitWebView *web_view,
                    gpointer user_data)
 
-#else
-static gboolean
-close_web_view_cb (WebKitWebView *web_view,
-                   gpointer user_data)
-#endif
 {
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
 
@@ -2621,10 +2253,6 @@ close_web_view_cb (WebKitWebView *web_view,
                                        EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
   else
     gtk_widget_destroy (widget);
-
-#ifndef HAVE_WEBKIT2
-  return TRUE;
-#endif
 }
 
 
@@ -2650,45 +2278,6 @@ zoom_changed_cb (WebKitWebView *web_view,
   }
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-add_do_not_track_header_cb (WebKitWebView *view, WebKitWebFrame *frame,
-                            WebKitWebResource *resource, WebKitNetworkRequest *request,
-                            WebKitNetworkResponse *response, gpointer user_data)
-{
-  SoupMessage *message;
-
-  message = webkit_network_request_get_message (request);
-
-  if (!message)
-    return;
-
-  /* Do Not Track header. '1' means 'opt-out'. See:
-   * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
-  soup_message_headers_append (message->request_headers, "DNT", "1");
-}
-
-static void
-do_not_track_setting_changed_cb (GSettings *settings,
-                                 char *key,
-                                 EphyWebView *view)
-{
-  gboolean do_not_track;
-  EphyWebViewPrivate *priv = view->priv;
-
-  do_not_track = g_settings_get_boolean (EPHY_SETTINGS_WEB,
-                                         EPHY_PREFS_WEB_DO_NOT_TRACK);
-
-  if (do_not_track && !priv->do_not_track_handler)
-    priv->do_not_track_handler = g_signal_connect (view, "resource-request-starting",
-                                                   G_CALLBACK (add_do_not_track_header_cb), NULL);
-  else {
-    g_signal_handlers_disconnect_by_func (view, add_do_not_track_header_cb, NULL);
-    priv->do_not_track_handler = 0;
-  }
-}
-#endif
-
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -2697,9 +2286,6 @@ ephy_web_view_init (EphyWebView *web_view)
   priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
 
   priv->is_blank = TRUE;
-#ifndef HAVE_WEBKIT2
-  priv->load_status = WEBKIT_LOAD_PROVISIONAL;
-#endif
   priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
@@ -2719,55 +2305,24 @@ ephy_web_view_init (EphyWebView *web_view)
                     "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
                     web_view);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "mime-type-policy-decision-requested",
-                    G_CALLBACK (mime_type_policy_decision_requested_cb),
-                    NULL);
-#endif
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "permission-request",
                     G_CALLBACK (permission_request_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "geolocation-policy-decision-requested",
-                    G_CALLBACK (geolocation_policy_decision_requested_cb),
-                    NULL);
-#endif
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "load-changed",
                     G_CALLBACK (load_changed_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "notify::load-status",
-                    G_CALLBACK (load_status_cb),
-                    NULL);
-#endif
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "close",
                     G_CALLBACK (close_web_view_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "close-web-view",
-                    G_CALLBACK (close_web_view_cb),
-                    NULL);
-#endif
-
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "load-failed",
                     G_CALLBACK (load_failed_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "load-error",
-                    G_CALLBACK (load_error_cb),
-                    NULL);
-#endif
 
   g_signal_connect (web_view, "notify::zoom-level",
                     G_CALLBACK (zoom_changed_cb),
@@ -2781,25 +2336,13 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (uri_changed_cb),
                     NULL);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "mouse-target-changed",
                     G_CALLBACK (mouse_target_changed_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "hovering-over-link",
-                    G_CALLBACK (hovering_over_link_cb),
-                    NULL);
-#endif
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "notify::favicon",
                     G_CALLBACK (icon_changed_cb),
                     NULL);
-#else
-  g_signal_connect (web_view, "icon-loaded",
-                    G_CALLBACK (icon_loaded_cb),
-                    NULL);
-#endif
 
   g_signal_connect (web_view, "new-window",
                     G_CALLBACK (new_window_cb),
@@ -2809,21 +2352,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (ephy_embed_shell_get_default (), "form-auth-data-save-requested",
                     G_CALLBACK (form_auth_data_save_requested),
                     web_view);
-#endif
-
-#ifndef HAVE_WEBKIT2
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
-    priv->do_not_track_handler = g_signal_connect (web_view, "resource-request-starting",
-                                                   G_CALLBACK (add_do_not_track_header_cb), NULL);
-
-  g_signal_connect (EPHY_SETTINGS_WEB,
-                    "changed::" EPHY_PREFS_WEB_DO_NOT_TRACK,
-                    G_CALLBACK (do_not_track_setting_changed_cb), web_view);
-#endif
 }
 
 /**
@@ -2838,9 +2369,7 @@ GtkWidget *
 ephy_web_view_new (void)
 {
   return g_object_new (EPHY_TYPE_WEB_VIEW,
-#ifdef HAVE_WEBKIT2
                        "group", ephy_embed_prefs_get_web_view_group (),
-#endif
                        NULL);
 }
 
@@ -2933,24 +2462,14 @@ ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
  *
  * Loads the given #WebKitNetworkRequest in the given #EphyWebView.
  **/
-#ifdef HAVE_WEBKIT2
 void
 ephy_web_view_load_request (EphyWebView *view,
                             WebKitURIRequest *request)
-#else
-void
-ephy_web_view_load_request (EphyWebView *view,
-                            WebKitNetworkRequest *request)
-#endif
 {
-#ifndef HAVE_WEBKIT2
-  WebKitWebFrame *main_frame;
-#endif
   const char *url;
   char *effective_url;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-#ifdef HAVE_WEBKIT2
   g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
 
   url = webkit_uri_request_get_uri (request);
@@ -2960,20 +2479,9 @@ ephy_web_view_load_request (EphyWebView *view,
   g_free (effective_url);
 
   webkit_web_view_load_request (WEBKIT_WEB_VIEW (view), request);
-#else
-  g_return_if_fail (WEBKIT_IS_NETWORK_REQUEST (request));
-
-  url = webkit_network_request_get_uri (request);
-  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
-  webkit_network_request_set_uri (request, effective_url);
-  g_free (effective_url);
-
-  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
-  webkit_web_frame_load_request (main_frame, request);
-#endif
 }
 
-#ifndef HAVE_WEBKIT2
+#if 0
 typedef struct {
   EphyWebView *view;
   char *original_uri;
@@ -3043,9 +2551,8 @@ ephy_web_view_load_url (EphyWebView *view,
    * typed in the location entry, which uses this method to do the
    * load. */
   if (!ephy_embed_utils_address_has_web_scheme (effective_url)) {
-#ifdef HAVE_WEBKIT2
-    /* TODO: Network features */
-#else
+#if 0
+    /* TODO: WebKit2, Network features */
     SoupMessage *message;
     SoupSession *session;
     char *temp_url;
@@ -3076,11 +2583,7 @@ ephy_web_view_load_url (EphyWebView *view,
     char *decoded_url;
 
     decoded_url = soup_uri_decode (effective_url);
-#ifdef HAVE_WEBKIT2
     webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view), decoded_url, NULL, NULL, NULL);
-#else
-    webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), decoded_url);
-#endif
     g_free (decoded_url);
   } else
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
@@ -3103,40 +2606,7 @@ void
 ephy_web_view_copy_back_history (EphyWebView *source,
                                  EphyWebView *dest)
 {
-#ifdef HAVE_WEBKIT2
-  /* TODO: BackForwardList */
-#else
-  WebKitWebView *source_view, *dest_view;
-  WebKitWebBackForwardList* source_bflist, *dest_bflist;
-  WebKitWebHistoryItem *item;
-  GList *items, *i;
-
-  g_return_if_fail(EPHY_IS_WEB_VIEW(source));
-  g_return_if_fail(EPHY_IS_WEB_VIEW(dest));
-
-  source_view = WEBKIT_WEB_VIEW (source);
-  dest_view = WEBKIT_WEB_VIEW (dest);
-
-  source_bflist = webkit_web_view_get_back_forward_list (source_view);
-  dest_bflist = webkit_web_view_get_back_forward_list (dest_view);
-
-  items = webkit_web_back_forward_list_get_back_list_with_limit (source_bflist, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-  /* We want to add the items in the reverse order here, so the
-     history ends up the same */
-  items = g_list_reverse (items);
-  for (i = items; i; i = i->next) {
-    item = webkit_web_history_item_copy ((WebKitWebHistoryItem*)i->data);
-    webkit_web_back_forward_list_add_item (dest_bflist, item);
-    g_object_unref (item);
-  }
-  g_list_free (items);
-
-  /* The ephy/gecko behavior is to add the current item of the source
-     embed at the end of the back history, so keep doing that */
-  item = webkit_web_back_forward_list_get_current_item (source_bflist);
-  if (item)
-    webkit_web_back_forward_list_add_item (dest_bflist, item);
-#endif
+  /* TODO: WebKit2, BackForwardList */
 }
 
 /**
@@ -3228,28 +2698,7 @@ ephy_web_view_set_loading_title (EphyWebView *view,
 gboolean
 ephy_web_view_is_loading (EphyWebView *view)
 {
-#ifdef HAVE_WEBKIT2
   return webkit_web_view_is_loading (WEBKIT_WEB_VIEW (view));
-#else
-  WebKitLoadStatus status;
-
-  status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
-
-  /* FIRST_VISUALLY_NON_EMPTY_LAYOUT might be emitted after
-   * LOAD_FINISHED or LOAD_FAILED. We just ignore any status other
-   * than WEBKIT_LOAD_PROVISIONAL once LOAD_FINISHED or LOAD_FAILED
-   * have been set, as WEBKIT_LOAD_PROVISIONAL probably means that
-   * webview has started a new load.
-   */
-  if ((view->priv->load_status == WEBKIT_LOAD_FINISHED ||
-       view->priv->load_status == WEBKIT_LOAD_FAILED) &&
-      status != WEBKIT_LOAD_PROVISIONAL)
-    return FALSE;
-
-  view->priv->load_status = status;
-
-  return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
-#endif
 }
 
 /**
@@ -3493,7 +2942,6 @@ ephy_web_view_set_typed_address (EphyWebView *view,
 gboolean
 ephy_web_view_has_modified_forms (EphyWebView *view)
 {
-#ifdef HAVE_WEBKIT2
   return FALSE;
 #if 0
   GDBusProxy *web_extension;
@@ -3517,12 +2965,6 @@ ephy_web_view_has_modified_forms (EphyWebView *view)
   g_variant_unref (result);
 
   return retval;
-#endif
-#else
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), FALSE);
-
-  WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
-  return ephy_web_dom_utils_has_modified_forms (document);
 #endif
 }
 
@@ -3576,44 +3018,6 @@ ephy_web_view_print_failed (EphyWebView *view, GError *error)
   gtk_widget_show_all (info_bar);
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-ephy_web_view_run_print_action (EphyWebView *view, GtkPrintOperationAction action)
-{
-  WebKitWebFrame *main_frame;
-  GtkPrintOperation *operation;
-  GtkPrintSettings *settings;
-  GError *error;
-  EphyEmbedShell *shell;
-
-  shell = ephy_embed_shell_get_default ();
-  error = NULL;
-  main_frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
-
-  operation = gtk_print_operation_new ();
-  gtk_print_operation_set_embed_page_setup (operation, TRUE);
-  gtk_print_operation_set_default_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
-
-  settings = gtk_print_settings_new ();
-  gtk_print_settings_set (settings,
-                          GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
-                          ephy_web_view_get_title (view));
-  gtk_print_operation_set_print_settings (operation, settings);
-
-  webkit_web_frame_print_full (main_frame, operation, action, &error);
-
-  if (error) {
-    ephy_web_view_print_failed (view, error);
-    g_error_free (error);
-  } else
-    ephy_embed_shell_set_page_setup (shell, gtk_print_operation_get_default_page_setup (operation));
-
-  g_object_unref (operation);
-  g_object_unref (settings);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 print_operation_finished_cb (WebKitPrintOperation *operation,
                              EphyWebView *view)
@@ -3630,7 +3034,6 @@ print_operation_failed_cb (WebKitPrintOperation *operation,
   g_signal_handlers_disconnect_by_func (operation, print_operation_finished_cb, view);
   ephy_web_view_print_failed (view, error);
 }
-#endif
 
 /**
  * ephy_web_view_print:
@@ -3643,7 +3046,6 @@ print_operation_failed_cb (WebKitPrintOperation *operation,
 void
 ephy_web_view_print (EphyWebView *view)
 {
-#ifdef HAVE_WEBKIT2
   WebKitPrintOperation *operation;
   EphyEmbedShell *shell;
   GtkPrintSettings *settings;
@@ -3668,9 +3070,6 @@ ephy_web_view_print (EphyWebView *view)
   webkit_print_operation_run_dialog (operation, NULL);
   g_object_unref (operation);
   g_object_unref (settings);
-#else
-  ephy_web_view_run_print_action (view, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
-#endif
 }
 
 /**
@@ -3708,7 +3107,6 @@ ephy_web_view_get_title_composite (EphyWebView *view)
   return title != NULL ? title : "";
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 web_resource_get_data_cb (WebKitWebResource *resource,
                           GAsyncResult *result,
@@ -3759,229 +3157,6 @@ ephy_web_view_save_main_resource_cb (GFile *file,
                                 (GAsyncReadyCallback)web_resource_get_data_cb,
                                 output_stream);
 }
-#else
-static void
-ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri);
-
-static void
-ephy_web_view_close_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
-{
-  GList *subresources;
-  char *destination_uri;
-  GError *error = NULL;
-
-  subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
-                                            "ephy-web-view-save-subresources");
-
-  destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
-                                              "ephy-web-view-save-dest-uri");
-
-  g_output_stream_close_finish (ostream, result, &error);
-  g_object_unref (ostream);
-
-  if (error) {
-    g_list_free (subresources);
-    g_free (destination_uri);
-    g_warning ("Unable to write to file: %s", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  if (!subresources || !subresources->next) {
-    g_list_free (subresources);
-    g_free (destination_uri);
-    return;
-  }
-
-  subresources = subresources->next;
-  ephy_web_view_save_sub_resource_start (subresources, destination_uri);
-}
-
-static void
-ephy_web_view_save_write_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
-{
-  GError *error = NULL;
-  gssize written;
-
-  written = g_output_stream_write_finish (ostream, result, &error);
-  if (error) {
-    GList *subresources;
-    char *destination_uri;
-
-    subresources = (GList*)g_object_get_data (G_OBJECT (ostream),
-                                             "ephy-web-view-save-subresources");
-    g_list_free (subresources);
-
-    destination_uri = (char*)g_object_get_data (G_OBJECT (ostream),
-                                                "ephy-web-view-save-dest-uri");
-    g_free (destination_uri);
-
-    g_string_free (data, FALSE);
-    g_object_unref (ostream);
-
-    g_warning ("Unable to write to file: %s", error->message);
-
-    g_error_free (error);
-    return;
-  }
-
-  if (written == data->len) {
-    g_string_free (data, FALSE);
-    g_output_stream_close_async (ostream, G_PRIORITY_DEFAULT, NULL,
-                                 (GAsyncReadyCallback)ephy_web_view_close_cb,
-                                 NULL);
-    return;
-  }
-
-  data->len -= written;
-  data->str += written;
-
-  g_output_stream_write_async (ostream,
-                               data->str, data->len,
-                               G_PRIORITY_DEFAULT, NULL,
-                               (GAsyncReadyCallback)ephy_web_view_save_write_cb,
-                               data);
-}
-
-static void
-ephy_web_view_save_replace_cb (GFile *file, GAsyncResult *result, GString *const_data)
-{
-  GFileOutputStream *ostream;
-  GList *subresources;
-  char *destination_uri;
-  GString *data;
-  GError *error = NULL;
-
-  subresources = (GList*)g_object_get_data (G_OBJECT (file),
-                                            "ephy-web-view-save-subresources");
-
-  destination_uri = (char*)g_object_get_data (G_OBJECT (file),
-                                              "ephy-web-view-save-dest-uri");
-
-  ostream = g_file_replace_finish (file, result, &error);
-  if (error) {
-    g_warning ("Failed to save page: %s", error->message);
-    g_list_free (subresources);
-    g_free (destination_uri);
-    g_error_free (error);
-    return;
-  }
-
-  if (const_data) {
-    data = g_string_sized_new (const_data->len);
-    data->str = const_data->str;
-    data->len = const_data->len;
-  } else
-    data = g_string_new ("");
-
-  /* If we have subresources to handle, pass the information along */
-  if (subresources) {
-    g_object_set_data (G_OBJECT (ostream),
-                       "ephy-web-view-save-subresources",
-                       subresources);
-
-    g_object_set_data (G_OBJECT (ostream),
-                       "ephy-web-view-save-dest-uri",
-                       destination_uri);
-  }
-
-  g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
-                               data->str, data->len,
-                               G_PRIORITY_DEFAULT, NULL,
-                               (GAsyncReadyCallback)ephy_web_view_save_write_cb,
-                               data);
-}
-
-static void
-ephy_web_view_save_sub_resource_start (GList *subresources, char *destination_uri)
-{
-  WebKitWebResource *resource;
-  GFile *file;
-  const char *resource_uri;
-  char *resource_basename;
-  char *resource_name;
-  char *resource_dest_uri;
-  const GString *data;
-
-  resource = WEBKIT_WEB_RESOURCE (subresources->data);
-
-  resource_uri = webkit_web_resource_get_uri (resource);
-  resource_basename = g_path_get_basename (resource_uri);
-
-  resource_name = g_uri_escape_string (resource_basename, NULL, TRUE);
-  g_free (resource_basename);
-
-  resource_dest_uri = g_strdup_printf ("%s/%s", destination_uri, resource_name);
-  g_free (resource_name);
-
-  file = g_file_new_for_uri (resource_dest_uri);
-  g_free (resource_dest_uri);
-
-  g_object_set_data (G_OBJECT (file),
-                     "ephy-web-view-save-dest-uri",
-                     destination_uri);
-
-  g_object_set_data (G_OBJECT (file),
-                     "ephy-web-view-save-subresources",
-                     subresources);
-
-  data = webkit_web_resource_get_data (resource);
-
-  g_file_replace_async (file, NULL, FALSE,
-                        G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
-                        G_PRIORITY_DEFAULT, NULL,
-                        (GAsyncReadyCallback)ephy_web_view_save_replace_cb,
-                        (GString*)data);
-
-  g_object_unref (file);
-}
-
-static void
-ephy_web_view_save_sub_resources (EphyWebView *view, const char *uri, GList *subresources)
-{
-  GFile *file;
-  char *filename;
-  char *dotpos;
-  char *directory_uri;
-  char *tmp;
-  char *destination_uri;
-  GError *error = NULL;
-
-  /* filename of the main resource without extension */
-  filename = g_path_get_basename (uri);
-  dotpos = g_strrstr (filename, ".");
-  if (dotpos)
-    *dotpos = '\0';
-
-  directory_uri = g_path_get_dirname (uri);
-
-  /* Translators: this is the directory name to store auxilary files
-   * when saving html files.
-   */
-  tmp = g_strdup_printf (_("%s Files"), filename);
-  g_free (filename);
-
-  destination_uri = g_strdup_printf ("%s/%s", directory_uri, tmp);
-  g_free (directory_uri);
-  g_free (tmp);
-
-  file = g_file_new_for_uri (destination_uri);
-
-  if (!g_file_make_directory (file, NULL, &error)) {
-    if (error->code != G_IO_ERROR_EXISTS) {
-      g_warning ("Could not create directory: %s", error->message);
-      g_error_free (error);
-      g_object_unref (file);
-      return;
-    }
-  }
-  g_object_unref (file);
-
-  /* Now, let's start saving sub resources */
-  ephy_web_view_save_sub_resource_start (subresources, destination_uri);
-}
-#endif
-
 /**
  * ephy_web_view_save:
  * @view: an #EphyWebView
@@ -3993,19 +3168,12 @@ void
 ephy_web_view_save (EphyWebView *view, const char *uri)
 {
   GFile *file;
-#ifndef HAVE_WEBKIT2
-  WebKitWebFrame *frame;
-  WebKitWebDataSource *data_source;
-  GList *subresources;
-  const GString *data;
-#endif
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (uri);
 
   file = g_file_new_for_uri (uri);
 
-#ifdef HAVE_WEBKIT2
   if (g_str_has_suffix (uri, ".mhtml"))
     webkit_web_view_save_to_file (WEBKIT_WEB_VIEW (view), file, WEBKIT_SAVE_MODE_MHTML,
                                   NULL, NULL, NULL);
@@ -4016,28 +3184,6 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
                           (GAsyncReadyCallback)ephy_web_view_save_main_resource_cb,
                           view);
   g_object_unref (file);
-#else
-  /* Save main resource */
-  frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW(view));
-  data_source = webkit_web_frame_get_data_source (frame);
-  data = webkit_web_data_source_get_data (data_source);
-
-  file = g_file_new_for_uri (uri);
-  g_file_replace_async (file, NULL, FALSE,
-                        G_FILE_CREATE_REPLACE_DESTINATION|G_FILE_CREATE_PRIVATE,
-                        G_PRIORITY_DEFAULT, NULL,
-                        (GAsyncReadyCallback)ephy_web_view_save_replace_cb,
-                        (GString*)data);
-
-  g_object_unref (file);
-
-  /* If subresources exist, save them */
-  subresources = webkit_web_data_source_get_subresources (data_source);
-  if (!subresources)
-    return;
-
-  ephy_web_view_save_sub_resources (view, uri, subresources);
-#endif
 }
 
 /**

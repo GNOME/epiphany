@@ -27,12 +27,7 @@
 #ifndef EPHY_WEB_VIEW_H
 #define EPHY_WEB_VIEW_H
 
-#include <gtk/gtk.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 G_BEGIN_DECLS
 
@@ -128,11 +123,7 @@ GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
 GtkWidget *                ephy_web_view_new                      (void);
 void                       ephy_web_view_load_request             (EphyWebView               *view,
-#ifdef HAVE_WEBKIT2
                                                                    WebKitURIRequest          *request);
-#else
-                                                                   WebKitNetworkRequest      *request);
-#endif
 void                       ephy_web_view_load_url                 (EphyWebView               *view,
                                                                    const char                *url);
 void                       ephy_web_view_copy_back_history        (EphyWebView               *source,
