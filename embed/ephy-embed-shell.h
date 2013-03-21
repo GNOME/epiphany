@@ -83,7 +83,6 @@ EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 GObject           *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_embed_single           (EphyEmbedShell   *shell);
-GObject           *ephy_embed_shell_get_adblock_manager        (EphyEmbedShell   *shell);
 void               ephy_embed_shell_prepare_close              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,
@@ -103,10 +102,7 @@ gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell  
                                                                 const char       *mime_type,
                                                                 guint32           user_time);
 void               ephy_embed_shell_clear_cache                (EphyEmbedShell *shell);
-
-#ifdef HAVE_WEBKIT2
 GDBusProxy        *ephy_embed_shell_get_web_extension_proxy    (EphyEmbedShell   *shell);
-#endif
 
 G_END_DECLS
 

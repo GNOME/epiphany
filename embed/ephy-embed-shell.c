@@ -22,9 +22,6 @@
 #include <config.h>
 #include "ephy-embed-shell.h"
 
-#ifndef HAVE_WEBKIT2
-#include "ephy-adblock-manager.h"
-#endif
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-embed-private.h"
@@ -35,9 +32,7 @@
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-snapshot-service.h"
-#ifdef HAVE_WEBKIT2
 #include "ephy-web-extension.h"
-#endif
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -54,19 +49,14 @@ struct _EphyEmbedShellPrivate
   GList *downloads;
   EphyEmbedSingle *embed_single;
   EphyEncodings *encodings;
-#ifndef HAVE_WEBKIT2
-  EphyAdBlockManager *adblock_manager;
-#endif
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
   EphyFrecentStore *frecent_store;
   guint single_initialised : 1;
-#ifdef HAVE_WEBKIT2
   GDBusProxy *web_extension;
   guint web_extension_watch_name_id;
   guint web_extension_form_auth_save_signal_id;
-#endif
 };
 
 enum
@@ -107,7 +97,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->embed_single);
-#ifdef HAVE_WEBKIT2
   if (priv->web_extension_watch_name_id > 0) {
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
     priv->web_extension_watch_name_id = 0;
@@ -118,9 +107,6 @@ ephy_embed_shell_dispose (GObject *object)
     priv->web_extension_form_auth_save_signal_id = 0;
   }
   g_clear_object (&priv->web_extension);
-#else
-  g_clear_object (&priv->adblock_manager);
-#endif
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -140,7 +126,6 @@ ephy_embed_shell_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
-#if HAVE_WEBKIT2
 static void
 web_extension_form_auth_save_requested (GDBusConnection *connection,
                                         const char *sender_name,
@@ -228,7 +213,6 @@ ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell)
                       shell, NULL);
   g_free (service_name);
 }
-#endif
 
 /**
  * ephy_embed_shell_get_global_history_service:
@@ -433,9 +417,7 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
 
   shell->priv->downloads = NULL;
 
-#if HAVE_WEBKIT2
   ephy_embed_shell_watch_web_extension (shell);
-#endif
 }
 
 static void
@@ -587,38 +569,6 @@ EphyEmbedShell *
 ephy_embed_shell_get_default (void)
 {
   return embed_shell;
-}
-
-/**
- * ephy_embed_shell_get_adblock_manager:
- * @shell: the #EphyEmbedShell
- *
- * Returns the adblock manager.
- *
- * Return value: (transfer none): the adblock manager
- **/
-GObject *
-ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
-{
-#ifndef HAVE_WEBKIT2
-  EphyEmbedShellPrivate *priv;
-
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-  priv = shell->priv;
-
-  if (priv->adblock_manager == NULL) {
-    priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
-
-    ephy_adblock_manager_set_blocker (priv->adblock_manager,
-                                      g_object_new (EPHY_TYPE_ADBLOCK, NULL));
-  }
-
-  return G_OBJECT (priv->adblock_manager);
-#else
-  g_assert_not_reached ();
-  return NULL;
-#endif
 }
 
 void
@@ -847,7 +797,6 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   return ret;
 }
 
-#ifdef HAVE_WEBKIT2
 GDBusProxy *
 ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
 {
@@ -855,7 +804,6 @@ ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
 
   return shell->priv->web_extension;
 }
-#endif
 
 /**
  * ephy_embed_shell_clear_cache:
