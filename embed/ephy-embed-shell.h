@@ -102,6 +102,8 @@ gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell  
                                                                 GFile            *file,
                                                                 const char       *mime_type,
                                                                 guint32           user_time);
+void               ephy_embed_shell_clear_cache                (EphyEmbedShell *shell);
+
 #ifdef HAVE_WEBKIT2
 GDBusProxy        *ephy_embed_shell_get_web_extension_proxy    (EphyEmbedShell   *shell);
 #endif

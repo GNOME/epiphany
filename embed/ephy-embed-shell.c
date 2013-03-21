@@ -856,3 +856,15 @@ ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
   return shell->priv->web_extension;
 }
 #endif
+
+/**
+ * ephy_embed_shell_clear_cache:
+ * @shell: an #EphyEmbedShell
+ * 
+ * Clears the HTTP cache (temporarily saved web pages).
+ **/
+void
+ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
+{
+  webkit_web_context_clear_cache (webkit_web_context_get_default ());
+}

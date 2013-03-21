@@ -53,8 +53,6 @@ GType           ephy_embed_single_get_type           (void);
 
 gboolean        ephy_embed_single_initialize         (EphyEmbedSingle *single);
 
-void            ephy_embed_single_clear_cache        (EphyEmbedSingle *single);
-
 G_END_DECLS
 
 #endif

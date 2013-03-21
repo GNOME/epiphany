@@ -147,14 +147,3 @@ ephy_embed_single_initialize (EphyEmbedSingle *single)
   return TRUE;
 }
 
-/**
- * ephy_embed_single_clear_cache:
- * @single: the #EphyEmbedSingle
- * 
- * Clears the HTTP cache (temporarily saved web pages).
- **/
-void
-ephy_embed_single_clear_cache (EphyEmbedSingle *single)
-{
-  webkit_web_context_clear_cache (webkit_web_context_get_default ());
-}

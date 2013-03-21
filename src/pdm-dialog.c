@@ -31,7 +31,7 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "ephy-time-helpers.h"
-#include "ephy-embed-single.h"
+#include "ephy-embed-shell.h"
 #include "ephy-history-service.h"
 
 #include <gtk/gtk.h>
@@ -276,14 +276,11 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 			(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
 		{
 			EphyEmbedShell *shell;
-			EphyEmbedSingle *single;
 			WebKitFaviconDatabase *database;
 
 			shell = ephy_embed_shell_get_default ();
 
-			single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
-
-			ephy_embed_single_clear_cache (single);
+			ephy_embed_shell_clear_cache (shell);
 
 #ifdef HAVE_WEBKIT2
 			database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
