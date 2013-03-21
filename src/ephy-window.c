@@ -744,9 +744,15 @@ set_toolbar_visibility (EphyWindow *window, gboolean show_toolbar)
 }
 
 static void
+#ifdef HAVE_WEBKIT2
+sync_tab_load_status (EphyWebView *view,
+		      WebKitLoadEvent load_event,
+		      EphyWindow *window)
+#else
 sync_tab_load_status (EphyWebView *view,
 		      GParamSpec *pspec,
 		      EphyWindow *window)
+#endif
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group = priv->action_group;
@@ -840,7 +846,11 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	/* sync status */
 	embed = window->priv->active_embed;
+#ifdef HAVE_WEBKIT2
+	sync_tab_load_status (ephy_embed_get_web_view (embed), WEBKIT_LOAD_STARTED, window);
+#else
 	sync_tab_load_status (ephy_embed_get_web_view (embed), NULL, window);
+#endif
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	sync_chromes_visibility (window);
@@ -2745,7 +2755,11 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
 	sync_tab_security	(view, NULL, window);
 	sync_tab_document_type	(view, NULL, window);
+#ifdef HAVE_WEBKIT2
+	sync_tab_load_status    (view, WEBKIT_LOAD_STARTED, window);
+#else
 	sync_tab_load_status	(view, NULL, window);
+#endif
 	sync_tab_is_blank	(view, NULL, window);
 	sync_tab_navigation	(view, NULL, window);
 	sync_tab_title		(view, NULL, window);
@@ -2804,9 +2818,15 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "notify::document-type",
 				 G_CALLBACK (sync_tab_document_type),
 				 window, 0);
+#ifndef HAVE_WEBKIT2
 	g_signal_connect_object (view, "notify::load-status",
 				 G_CALLBACK (sync_tab_load_status),
 				 window, 0);
+#else
+	g_signal_connect_object (view, "load-changed",
+				 G_CALLBACK (sync_tab_load_status),
+				 window, 0);
+#endif
 	g_signal_connect_object (view, "notify::navigation",
 				 G_CALLBACK (sync_tab_navigation),
 				 window, 0);
