@@ -152,12 +152,7 @@ ephy_download_set_property (GObject      *object,
 char *
 ephy_download_get_content_type (EphyDownload *download)
 {
-#ifdef HAVE_WEBKIT2
   WebKitURIResponse *response;
-#else
-  WebKitNetworkResponse *response;
-  SoupMessage *message;
-#endif
   char *content_type = NULL;
   GError *error = NULL;
 
@@ -185,17 +180,9 @@ ephy_download_get_content_type (EphyDownload *download)
     return content_type;
 
   /* Fallback to Soup */
-#ifdef HAVE_WEBKIT2
   response = webkit_download_get_response (download->priv->download);
   if (response)
     content_type = g_strdup (webkit_uri_response_get_mime_type (response));
-#else
-  response = webkit_download_get_network_response (download->priv->download);
-  message = webkit_network_response_get_message (response);
-
-  if (message != NULL)
-    content_type = g_strdup (soup_message_headers_get_content_type (message->response_headers, NULL));
-#endif
 
   LOG ("ephy_download_get_content_type: Soup: %s", content_type);
 
@@ -377,9 +364,6 @@ ephy_download_set_destination_uri (EphyDownload *download,
 
   priv->destination = g_strdup (destination);
 
-#ifndef HAVE_WEBKIT2
-  webkit_download_set_destination_uri (priv->download, priv->destination);
-#endif
   g_object_notify (G_OBJECT (download), "destination");
 }
 
@@ -392,19 +376,7 @@ ephy_download_set_destination_uri (EphyDownload *download,
 void
 ephy_download_set_auto_destination (EphyDownload *download)
 {
-#ifdef HAVE_WEBKIT2
-  /* In WebKit2 priv->destination == NULL means auto_destination */
-#else
-  char *dest;
-
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
-
-  dest = define_destination_uri (download,
-                                 webkit_download_get_suggested_filename (download->priv->download));
-  ephy_download_set_destination_uri (download, dest);
-
-  g_free (dest);
-#endif
+  /* TODO: in WebKit2 priv->destination == NULL means auto_destination, remove this? */
 }
 
 /**
@@ -585,9 +557,6 @@ ephy_download_start (EphyDownload *download)
 
   if (priv->destination == NULL)
     ephy_download_set_auto_destination (download);
-#ifndef HAVE_WEBKIT2
-  webkit_download_start (priv->download);
-#endif
 }
 
 /**
@@ -627,11 +596,7 @@ ephy_download_do_download_action (EphyDownload *download,
 
     priv = download->priv;
 
-#ifdef HAVE_WEBKIT2
     destination_uri = webkit_download_get_destination (priv->download);
-#else
-    destination_uri = webkit_download_get_destination_uri (priv->download);
-#endif
     destination = g_file_new_for_uri (destination_uri);
 
     switch ((action ? action : priv->action)) {
@@ -882,7 +847,6 @@ ephy_download_init (EphyDownload *download)
   download->priv->widget = NULL;
 }
 
-#ifdef HAVE_WEBKIT2
 static gboolean
 download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar *suggested_filename,
@@ -935,39 +899,7 @@ download_finished_cb (WebKitDownload *wk_download,
 
   ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
 }
-#else
-static void
-download_status_changed_cb (GObject *object,
-                            GParamSpec *pspec,
-                            EphyDownload *download)
-{
-  WebKitDownloadStatus status;
-  EphyDownloadPrivate *priv;
 
-  priv = download->priv;
-
-  status = webkit_download_get_status (priv->download);
-
-  if (status == WEBKIT_DOWNLOAD_STATUS_FINISHED) {
-    g_signal_emit_by_name (download, "completed");
-
-    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
-        priv->action == EPHY_DOWNLOAD_ACTION_NONE) {
-      ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
-    } else {
-      ephy_download_do_download_action (download, priv->action);
-    }
-
-    ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
-  } else if (status == WEBKIT_DOWNLOAD_STATUS_CANCELLED ||
-             status == WEBKIT_DOWNLOAD_STATUS_ERROR) {
-  } else if (status == WEBKIT_DOWNLOAD_STATUS_STARTED) {
-    ephy_embed_shell_add_download (ephy_embed_shell_get_default (), download);
-  }
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 download_failed_cb (WebKitDownload *wk_download,
                     GError *error,
@@ -980,26 +912,6 @@ download_failed_cb (WebKitDownload *wk_download,
   LOG ("error (%d - %d)! %s", error->code, 0, error->message);
   g_signal_emit_by_name (download, "error", 0, error->code, error->message, &ret);
 }
-#else
-static gboolean
-download_error_cb (WebKitDownload *download,
-                   gint error_code,
-                   gint error_detail,
-                   char *reason,
-                   gpointer user_data)
-{
-  EphyDownload *ephy_download;
-  gboolean ret = FALSE;
-
-  ephy_download = EPHY_DOWNLOAD (user_data);
-
-  LOG ("error (%d - %d)! %s", error_code, error_detail, reason);
-  g_signal_emit_by_name (ephy_download, "error",
-                         error_code, error_detail, reason, &ret);
-
-  return ret;
-}
-#endif
 
 /**
  * ephy_download_new:
@@ -1031,15 +943,12 @@ ephy_download_new_for_download (WebKitDownload *download,
                                 GtkWindow *parent)
 {
   EphyDownload *ephy_download;
-#ifdef HAVE_WEBKIT2
   WebKitURIRequest *request;
-#endif
 
   g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
 
   ephy_download = ephy_download_new (parent);
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
                     ephy_download);
@@ -1052,28 +961,14 @@ ephy_download_new_for_download (WebKitDownload *download,
   g_signal_connect (download, "failed",
                     G_CALLBACK (download_failed_cb),
                     ephy_download);
-#else
-  g_signal_connect (download, "notify::status",
-                    G_CALLBACK (download_status_changed_cb),
-                    ephy_download);
-  g_signal_connect (download, "error",
-                    G_CALLBACK (download_error_cb),
-                    ephy_download);
-#endif
 
   ephy_download->priv->download = g_object_ref (download);
-#ifdef HAVE_WEBKIT2
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
   request = webkit_download_get_request (download);
   ephy_download->priv->source = g_strdup (webkit_uri_request_get_uri (request));
-#else
-  ephy_download->priv->source = g_strdup (webkit_download_get_uri (download));
-#endif
 
-#ifdef HAVE_WEBKIT2
   /* In WebKit2 the download has already started */
   ephy_embed_shell_add_download (ephy_embed_shell_get_default (), ephy_download);
-#endif
 
   return ephy_download;
 }
@@ -1093,21 +988,10 @@ ephy_download_new_for_uri (const char *uri,
 {
   EphyDownload *ephy_download;
   WebKitDownload *download;
-#ifndef HAVE_WEBKIT2
-  WebKitNetworkRequest *request;
-#endif
 
   g_return_val_if_fail (uri != NULL, NULL);
 
-#ifdef HAVE_WEBKIT2
   download = webkit_web_context_download_uri (webkit_web_context_get_default (), uri);
-#else
-  request = webkit_network_request_new (uri);
-  download = webkit_download_new (request);
-
-  g_return_val_if_fail (download != NULL, NULL);
-  g_object_unref (request);
-#endif
 
   ephy_download = ephy_download_new_for_download (download, parent);
   g_object_unref (download);
