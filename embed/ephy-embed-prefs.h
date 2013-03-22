@@ -23,11 +23,7 @@
 
 #include "ephy-embed.h"
 
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <libsoup/soup.h>
-#endif
 
 #if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
 #error "Only <epiphany/epiphany.h> can be included directly."
@@ -40,20 +36,9 @@ G_BEGIN_DECLS
 
 void ephy_embed_prefs_init                              (void);
 void ephy_embed_prefs_shutdown                          (void);
-
-#ifdef HAVE_WEBKIT2
 WebKitWebViewGroup *ephy_embed_prefs_get_web_view_group (void);
-#else
-void ephy_embed_prefs_add_embed                         (EphyEmbed           *embed);
-#endif
-
-#ifdef HAVE_WEBKIT2
 void ephy_embed_prefs_set_cookie_accept_policy          (WebKitCookieManager *cookie_manager,
                                                          const char          *settings_policy);
-#else
-void ephy_embed_prefs_set_cookie_jar_policy             (SoupCookieJar       *jar,
-                                                         const char          *gconf_policy);
-#endif
 
 G_END_DECLS
 

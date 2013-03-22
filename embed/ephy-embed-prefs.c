@@ -30,11 +30,7 @@
 
 #include <glib.h>
 #include <math.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 typedef struct
 {
@@ -44,18 +40,11 @@ typedef struct
   void (*callback) (GSettings *settings, char *key, gpointer data);
 } PrefData;
 
-#ifdef HAVE_WEBKIT2
 #define ENABLE_SCRIPTS_SETTING "enable-javascript"
 #define DEFAULT_ENCODING_SETTING "default-charset"
 static WebKitSettings *webkit_settings = NULL;
 static WebKitWebViewGroup *web_view_group = NULL;
-#else
-#define ENABLE_SCRIPTS_SETTING "enable-scripts"
-#define DEFAULT_ENCODING_SETTING "default-encoding"
-static WebKitWebSettings *webkit_settings = NULL;
-#endif
 
-#ifdef HAVE_WEBKIT2
 static void
 user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
                                           GAsyncResult *result,
@@ -94,7 +83,6 @@ user_style_seet_read_cb (GFile *file,
   g_object_unref (input_stream);
   g_object_unref (output_stream);
 }
-#endif
 
 static void
 webkit_pref_callback_user_stylesheet (GSettings *settings,
@@ -102,25 +90,9 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
                                       gpointer data)
 {
   gboolean value;
-#ifndef HAVE_WEBKIT2
-  char *uri = NULL;
-  char *webkit_pref = data;
-#endif
 
   value = g_settings_get_boolean (settings, key);
 
-#ifndef HAVE_WEBKIT2
-  if (value)
-    /* We need the leading file://, so use g_strconcat instead
-     * of g_build_filename */
-    uri = g_strconcat ("file://",
-                       ephy_dot_dir (),
-                       G_DIR_SEPARATOR_S,
-                       USER_STYLESHEET_FILENAME,
-                       NULL);
-  g_object_set (webkit_settings, webkit_pref, uri, NULL);
-  g_free (uri);
-#else
   if (!value)
     webkit_web_view_group_remove_all_user_style_sheets (web_view_group);
   else {
@@ -135,7 +107,6 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
                        (GAsyncReadyCallback)user_style_seet_read_cb, NULL);
     g_object_unref (file);
   }
-#endif
 }
 
 static char *
@@ -179,7 +150,6 @@ webkit_pref_get_vendor_user_agent (void)
   return vendor_user_agent;
 }
 
-#ifdef HAVE_WEBKIT2
 static const char *
 webkit_pref_get_internal_user_agent (void)
 {
@@ -204,37 +174,12 @@ webkit_pref_get_internal_user_agent (void)
 
   return user_agent;
 }
-#else
-static char *
-webkit_pref_get_internal_user_agent (void)
-{
-  char *user_agent;
-  char *webkit_user_agent;
-  char *vendor_user_agent;
-
-  vendor_user_agent = webkit_pref_get_vendor_user_agent ();
-
-  g_object_get (webkit_settings, "user-agent", &webkit_user_agent, NULL);
-
-  user_agent = g_strconcat (webkit_user_agent, " ",
-                            vendor_user_agent ? vendor_user_agent : "",
-                            vendor_user_agent ? " " : "",
-                            "Epiphany/"VERSION,
-                            NULL);
-
-  g_free (vendor_user_agent);
-  g_free (webkit_user_agent);
-
-  return user_agent;
-}
-#endif
 
 static void
 webkit_pref_callback_user_agent (GSettings *settings,
                                  char *key,
                                  gpointer data)
 {
-#ifdef HAVE_WEBKIT2
   char *value;
   const char *internal_user_agent;
 
@@ -252,26 +197,8 @@ webkit_pref_callback_user_agent (GSettings *settings,
   else
     webkit_settings_set_user_agent_with_application_details (webkit_settings,
                                                              "Epiphany", VERSION);
-#else
-  char *value = NULL;
-  static char *internal_user_agent = NULL;
-  char *webkit_pref = data;
-
-  value = g_settings_get_string (settings, key);
-
-  if (value == NULL || value[0] == '\0') {
-    if (internal_user_agent == NULL)
-      internal_user_agent = webkit_pref_get_internal_user_agent ();
-
-    g_object_set (webkit_settings, webkit_pref, internal_user_agent, NULL);
-  } else
-    g_object_set (webkit_settings, webkit_pref, value, NULL);
-
-  g_free (value);
-#endif
 }
 
-#ifdef HAVE_WEBKIT2
 /* This doesn't contain WebKit2 specific API, but it's only used inside
  * HAVE_WEBKIT2 blocks, so it gives a compile warning when building
  * with WebKit1.
@@ -291,12 +218,10 @@ get_screen_dpi (GdkScreen *screen)
 
   return dp / di;
 }
-#endif
 
 static guint
 normalize_font_size (gdouble font_size)
 {
-#ifdef HAVE_WEBKIT2
   /* WebKit2 uses font sizes in pixels. */
   GdkScreen *screen;
   gdouble dpi;
@@ -308,9 +233,6 @@ normalize_font_size (gdouble font_size)
   dpi = screen ? get_screen_dpi (screen) : 96;
 
   return font_size / 72.0 * dpi;
-#else
-  return font_size;
-#endif
 }
 
 static void
@@ -387,51 +309,6 @@ webkit_pref_callback_font_family (GSettings *settings,
   g_free (value);
 }
 
-#ifndef HAVE_WEBKIT2
-/* Part of this code taken from libsoup (soup-session.c) */
-static gchar *
-build_accept_languages_header (GArray *languages)
-{
-  gchar **langs = NULL;
-  gchar *langs_str = NULL;
-  gint delta;
-  gint i;
-
-  g_return_val_if_fail (languages != NULL, NULL);
-
-  /* Calculate deltas for the quality values. */
-  if (languages->len < 10)
-    delta = 10;
-  else if (languages->len < 20)
-    delta = 5;
-  else
-    delta = 1;
-
-  /* Set quality values for each language. */
-  langs = (gchar **)languages->data;
-  for (i = 0; langs[i] != NULL; i++) {
-    gchar *lang = (gchar *)langs[i];
-    gint quality = 100 - i * delta;
-
-    if (quality > 0 && quality < 100) {
-      gchar buf[8];
-      g_ascii_formatd (buf, 8, "%.2f", quality / 100.0);
-      langs[i] = g_strdup_printf ("%s;q=%s", lang, buf);
-    } else {
-      /* Just dup the string in this case. */
-      langs[i] = g_strdup (lang);
-    }
-    g_free (lang);
-  }
-
-  /* Get the result string */
-  if (languages->len > 0)
-    langs_str = g_strjoinv (",", langs);
-
-  return langs_str;
-}
-#endif
-
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
 static void
@@ -439,11 +316,6 @@ webkit_pref_callback_accept_languages (GSettings *settings,
                                        char *key,
                                        gpointer data)
 {
-#ifndef HAVE_WEBKIT2
-  SoupSession *session;
-  char *webkit_pref = data;
-  char *langs_str;
-#endif
   GArray *array;
   char **languages;
   int i;
@@ -463,25 +335,14 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 
   ephy_langs_sanitise (array);
 
-#ifdef HAVE_WEBKIT2
   webkit_web_context_set_preferred_languages (webkit_web_context_get_default (),
                                               (const char * const *)array->data);
-#else
-  langs_str = build_accept_languages_header (array);
-
-  /* Update Soup session */
-  session = webkit_get_default_session ();
-  g_object_set (G_OBJECT (session), webkit_pref, langs_str, NULL);
-
-  g_free (langs_str);
-#endif
 
   g_strfreev (languages);
   g_array_free (array, TRUE);
 }
 
 
-#ifdef HAVE_WEBKIT2
 void
 ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
                                            const char *settings_policy)
@@ -501,37 +362,12 @@ ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
 
   webkit_cookie_manager_set_accept_policy (cookie_manager, policy);
 }
-#else
-void
-ephy_embed_prefs_set_cookie_jar_policy (SoupCookieJar *jar,
-                                        const char *settings_policy)
-{
-  SoupCookieJarAcceptPolicy policy;
-
-  g_return_if_fail (SOUP_IS_COOKIE_JAR (jar));
-  g_return_if_fail (settings_policy != NULL);
-
-  if (g_str_equal (settings_policy, "never"))
-    policy = SOUP_COOKIE_JAR_ACCEPT_NEVER;
-  else if (g_str_equal (settings_policy, "always"))
-    policy = SOUP_COOKIE_JAR_ACCEPT_ALWAYS;
-  else if (g_str_equal (settings_policy, "no-third-party"))
-    policy = SOUP_COOKIE_JAR_ACCEPT_NO_THIRD_PARTY;
-  else {
-    g_warn_if_reached ();
-    return;
-  }
-
-  g_object_set (G_OBJECT (jar), SOUP_COOKIE_JAR_ACCEPT_POLICY, policy, NULL);
-}
-#endif
 
 static void
 webkit_pref_callback_cookie_accept_policy (GSettings *settings,
                                            char *key,
                                            gpointer data)
 {
-#ifdef HAVE_WEBKIT2
   WebKitCookieManager *cookie_manager;
   char *value;
 
@@ -542,27 +378,6 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
   cookie_manager = webkit_web_context_get_cookie_manager (webkit_web_context_get_default ());
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, value);
   g_free (value);
-#else
-  SoupSession *session;
-  char *value = NULL;
-
-  value = g_settings_get_string (settings, key);
-
-  if (value) {
-    SoupSessionFeature *jar;
-
-    session = webkit_get_default_session ();
-    jar = soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
-    if (!jar) {
-      g_free (value);
-      return;
-    }
-    
-    ephy_embed_prefs_set_cookie_jar_policy (SOUP_COOKIE_JAR (jar), value);
-  }
-
-  g_free (value);
-#endif
 }
 
 static void
@@ -631,9 +446,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
                                             char *key,
                                             gpointer data)
 {
-#ifdef HAVE_WEBKIT2
   WebKitWebContext *web_context = NULL;
-#endif
   gboolean value = FALSE;
   char **languages = NULL;
   char *langs = NULL;
@@ -651,14 +464,9 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     langs = g_strjoinv (",", languages);
   }
 
-#ifdef HAVE_WEBKIT2
   web_context = webkit_web_context_get_default ();
   webkit_web_context_set_spell_checking_enabled (web_context, value);
   webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)languages);
-#else
-  g_object_set (webkit_settings, "enable-spell-checking", value, NULL);
-  g_object_set (webkit_settings, "spell-checking-languages", langs, NULL);
-#endif
 
   g_free (langs);
   g_strfreev (languages);
@@ -720,20 +528,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_cookie_accept_policy },
   };
 
-#ifndef HAVE_WEBKIT2
-static void
-ephy_embed_prefs_apply (EphyEmbed *embed, WebKitWebSettings *settings)
-{
-  webkit_web_view_set_settings (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed),
-                                settings);
-}
-#endif
-
 void
 ephy_embed_prefs_init (void)
 {
   int i;
-#ifdef HAVE_WEBKIT2
   web_view_group = webkit_web_view_group_new ("Ephy WebView Group");
   webkit_settings = webkit_web_view_group_get_settings (web_view_group);
 
@@ -743,18 +541,6 @@ ephy_embed_prefs_init (void)
                 "enable-site-specific-quirks", TRUE,
                 "enable-dns-prefetching", TRUE,
                 NULL);
-#else
-  webkit_settings = webkit_web_settings_new ();
-
-  /* Hardcoded settings */
-  g_object_set (webkit_settings,
-                "enable-default-context-menu", FALSE,
-                "enable-site-specific-quirks", TRUE,
-                "enable-page-cache", TRUE,
-                "enable-developer-extras", TRUE,
-                "enable-fullscreen", TRUE,
-                NULL);
-#endif
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
     GSettings *settings;
@@ -814,23 +600,11 @@ ephy_embed_prefs_init (void)
 void
 ephy_embed_prefs_shutdown (void)
 {
-#ifdef HAVE_WEBKIT2
   g_object_unref (web_view_group);
-#else
-  g_object_unref (webkit_settings);
-#endif
 }
 
-#ifdef HAVE_WEBKIT2
 WebKitWebViewGroup *
 ephy_embed_prefs_get_web_view_group (void)
 {
   return web_view_group;
 }
-#else
-void
-ephy_embed_prefs_add_embed (EphyEmbed *embed)
-{
-  ephy_embed_prefs_apply (embed, webkit_settings);
-}
-#endif
