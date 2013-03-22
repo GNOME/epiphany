@@ -33,12 +33,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)))
-#ifdef HAVE_WEBKIT2
-/* There's no scrolled window widget in WebKit2 */
 #define EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW(view) (EPHY_EMBED (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent ((GTK_WIDGET (view)))))))
-#else
-#define EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW(view) (EPHY_EMBED (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent ((GTK_WIDGET (view))))))))
-#endif
 
 #define EPHY_WEBKIT_BACK_FORWARD_LIMIT 100
 
