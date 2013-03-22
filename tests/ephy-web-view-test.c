@@ -479,6 +479,7 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
 #endif
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
+    g_signal_handlers_disconnect_by_func (history_service, G_CALLBACK (visit_url_cb), NULL);
 
     g_object_unref (g_object_ref_sink (view));
 }
