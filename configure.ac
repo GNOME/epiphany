@@ -16,8 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 m4_define([epiphany_version_major],[3])
-m4_define([epiphany_version_minor],[7])
-m4_define([epiphany_version_micro],[92])
+m4_define([epiphany_version_minor],[9])
+m4_define([epiphany_version_micro],[0])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
