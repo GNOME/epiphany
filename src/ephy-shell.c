@@ -23,9 +23,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#ifndef HAVE_WEBKIT2
-#include "ephy-adblock-manager.h"
-#endif
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
@@ -524,11 +521,6 @@ ephy_shell_constructed (GObject *object)
 
   /* FIXME: not sure if this is the best place to put this stuff. */
   ephy_shell_get_lockdown (EPHY_SHELL (object));
-
-#ifndef HAVE_WEBKIT2
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_TEST)
-    ephy_embed_shell_get_adblock_manager (EPHY_EMBED_SHELL (object));
-#endif
 
   if (G_OBJECT_CLASS (ephy_shell_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
