@@ -1,8 +1,6 @@
 NULL =
 
-if WITH_WEBKIT2
 SUBDIRS = web-extension
-endif
 
 noinst_LTLIBRARIES = libephyembed.la
 
@@ -52,16 +50,6 @@ libephyembed_la_SOURCES = \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
-if !WITH_WEBKIT2
-libephyembed_la_SOURCES += \
-	ephy-adblock.c		\
-	ephy-adblock.h		\
-	ephy-adblock-manager.c	\
-	ephy-adblock-manager.h	\
-	uri-tester.c		\
-	uri-tester.h
-endif
-
 nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
 
@@ -73,10 +61,6 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	    \
 	-I$(top_srcdir)/lib/widgets         \
 	$(AM_CPPFLAGS)
-
-if WITH_WEBKIT2
-libephyembed_la_CPPFLAGS += -DHAVE_WEBKIT2
-endif
 
 libephyembed_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
