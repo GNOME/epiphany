@@ -28,11 +28,7 @@
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 static gchar *css_style = NULL;
 
@@ -55,7 +51,6 @@ read_css_style (void)
 void
 _ephy_about_handler_handle_plugins (GString *data_str, GList *plugin_list)
 {
-#ifdef HAVE_WEBKIT2
   GList *p;
 
   read_css_style ();
@@ -103,57 +98,11 @@ _ephy_about_handler_handle_plugins (GString *data_str, GList *plugin_list)
   }
 
   g_string_append (data_str, "</body>");
-#endif
 }
 
 static void
 ephy_about_handler_handle_plugins (GString *data_str)
 {
-#ifndef HAVE_WEBKIT2
-  WebKitWebPluginDatabase* database = webkit_get_web_plugin_database ();
-  GSList *plugin_list, *p;
-
-  g_string_append_printf (data_str, "<head><title>%s</title>"           \
-                          "<style type=\"text/css\">%s</style></head><body>",
-                          _("Installed plugins"),
-                          css_style);
-
-  g_string_append_printf (data_str, "<h1>%s</h1>", _("Installed plugins"));
-  plugin_list = webkit_web_plugin_database_get_plugins (database);
-
-  for (p = plugin_list; p; p = p->next) {
-    WebKitWebPlugin *plugin = WEBKIT_WEB_PLUGIN (p->data);
-    GSList *m, *mime_types;
-
-    g_string_append_printf (data_str, "<h2>%s</h2>%s<br>%s: <b>%s</b>"  \
-                            "<table id=\"plugin-table\">"               \
-                            "  <thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>",
-                            webkit_web_plugin_get_name (plugin),
-                            webkit_web_plugin_get_description (plugin),
-                            _("Enabled"), webkit_web_plugin_get_enabled (plugin) ? _("Yes") : _("No"),
-                            _("MIME type"), _("Description"), _("Suffixes"));
-
-    mime_types = webkit_web_plugin_get_mimetypes (plugin);
-
-    for (m = mime_types; m; m = m->next) {
-      WebKitWebPluginMIMEType *mime_type = (WebKitWebPluginMIMEType*) m->data;
-      guint i;
-
-      g_string_append_printf (data_str, "<tr><td>%s</td><td>%s</td><td>",
-                              mime_type->name, mime_type->description);
-
-      for (i = 0; mime_type->extensions[i] != NULL; i++)
-        g_string_append_printf (data_str, "%s%c", mime_type->extensions[i],
-                                mime_type->extensions[i + 1] ? ',' : ' ');
-
-      g_string_append (data_str, "</td></tr>");
-    }
-
-    g_string_append (data_str, "</tbody></table>");
-  }
-
-  webkit_web_plugin_database_plugins_list_free (plugin_list);
-#endif
   g_string_append (data_str, "</body>");
 }
 
