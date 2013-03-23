@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-05 09:28+0000\n"
-"PO-Revision-Date: 2013-03-09 17:05+0200\n"
+"POT-Creation-Date: 2013-03-20 19:02+0000\n"
+"PO-Revision-Date: 2013-03-23 17:51+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -47,8 +47,8 @@ msgstr "http://www.google.fi"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.fi/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1746
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:64
+#: ../src/ephy-main.c:305 ../src/ephy-main.c:455 ../src/window-commands.c:1796
 msgid "Web"
 msgstr "Verkko"
 
@@ -90,9 +90,7 @@ msgstr "Käyttäjätunniste (user-agent)"
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
-msgstr ""
-"Selaimen tunniste, jonka avulla verkkopalvelimet "
-"tunnistavat selaimen."
+msgstr "Selaimen tunniste, jonka avulla verkkopalvelimet tunnistavat selaimen."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:6
 msgid "Automatic downloads"
@@ -189,9 +187,8 @@ msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
 msgstr ""
-"[Vanhennettu] Tämä asetus on vanhennettu, käytä asetusta "
-"'tabs-bar-visibility-policy' "
-"sen sijaan."
+"[Vanhennettu] Tämä asetus on vanhennettu, käytä asetusta 'tabs-bar-"
+"visibility-policy' sen sijaan."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Visibility of the downloads window"
@@ -387,7 +384,6 @@ msgstr ""
 "huomioon, etteivät sivustot välttämättä noudata tätä pyyntöä."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:65
-#| msgid "Enable WebAudio"
 msgid "Enable Adblock"
 msgstr "Käytä mainossuodatusta (Adblock)"
 
@@ -490,28 +486,27 @@ msgid ""
 msgstr ""
 "Selaat verkkoa parhaillaan <em>incognito-tilassa</em>. Tässä tilassa selatut "
 "sivut eivät näy selaushistoriassa, ja kaikki selaukseen liittyvät tiedot "
-"katoavat "
-"sulkiessasi selainikkunan."
+"katoavat sulkiessasi selainikkunan."
 
-#: ../embed/ephy-embed.c:696
+#: ../embed/ephy-embed.c:700
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Paina %s poistuaksesi koko näytön tilasta"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:703
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:703
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:1087
+#: ../embed/ephy-embed.c:1090
 msgid "Web Inspector"
 msgstr "Www-tutkain"
 
-#: ../embed/ephy-embed-shell.c:288
+#: ../embed/ephy-embed-shell.c:335
 msgid "Epiphany can't be used now. Initialization failed."
 msgstr "Epiphanya ei voi käyttää nyt: Alustus epäonnistui."
 
@@ -849,15 +844,15 @@ msgid "Most Visited"
 msgstr "Useimmin vieraillut"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3611
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3705
 msgid "Blank page"
 msgstr "Tyhjä sivu"
 
-#: ../embed/ephy-web-view.c:686
+#: ../embed/ephy-web-view.c:496
 msgid "Not now"
 msgstr "Ei nyt"
 
-#: ../embed/ephy-web-view.c:687
+#: ../embed/ephy-web-view.c:497
 msgid "Store password"
 msgstr "Tallenna salasana"
 
@@ -865,7 +860,7 @@ msgstr "Tallenna salasana"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:700
+#: ../embed/ephy-web-view.c:509
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
@@ -873,33 +868,33 @@ msgstr ""
 "<big>Haluatko tallentaa salasanan tunnukselle <b>%s</b> sivustolla <b>%s</b>?"
 "</big>"
 
-#: ../embed/ephy-web-view.c:1881
+#: ../embed/ephy-web-view.c:1914
 msgid "Deny"
 msgstr "Älä salli"
 
-#: ../embed/ephy-web-view.c:1882
+#: ../embed/ephy-web-view.c:1915
 msgid "Allow"
 msgstr "Salli"
 
-#: ../embed/ephy-web-view.c:1896
+#: ../embed/ephy-web-view.c:1929
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Sivu <b>%s</b> haluaa tietää sijaintisi."
 
-#: ../embed/ephy-web-view.c:2349
+#: ../embed/ephy-web-view.c:2422
 msgid "None specified"
 msgstr "Ei määritetty"
 
-#: ../embed/ephy-web-view.c:2358 ../embed/ephy-web-view.c:2376
+#: ../embed/ephy-web-view.c:2431 ../embed/ephy-web-view.c:2449
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Oho! Virhe ladattaessa kohteesta %s"
 
-#: ../embed/ephy-web-view.c:2360
+#: ../embed/ephy-web-view.c:2433
 msgid "Oops! It was not possible to show this website"
 msgstr "Oho! Ei ollut mahdollista näyttää tätä www-sivua"
 
-#: ../embed/ephy-web-view.c:2361
+#: ../embed/ephy-web-view.c:2434
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -912,16 +907,16 @@ msgstr ""
 "kytketty pois päältä tai siirretty uuteen osoitteeseen. Ethän unohda "
 "tarkistaa, että Internet-yhteytesi toimii oikein.</p>"
 
-#: ../embed/ephy-web-view.c:2370
+#: ../embed/ephy-web-view.c:2443
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
-#: ../embed/ephy-web-view.c:2378
+#: ../embed/ephy-web-view.c:2451
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "Oho! Tämä sivusto taisi saada selaimen sulkeutumaan odottamattomalla tavalla"
 
-#: ../embed/ephy-web-view.c:2380
+#: ../embed/ephy-web-view.c:2453
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -932,29 +927,46 @@ msgstr ""
 "p><p>Selain saattaa sulkeutua uudestaan, kun sivu ladataan uudelleen. Jos  "
 "näin tapahtuu, raportoi vika <strong>%s</strong>-kehittäjille.</p>"
 
-#: ../embed/ephy-web-view.c:2388
+#: ../embed/ephy-web-view.c:2461
 msgid "Load again anyway"
 msgstr "Lataa kuitenkin uudelleen"
 
-#: ../embed/ephy-web-view.c:2822
+#: ../embed/ephy-web-view.c:2467
+#, c-format
+msgid "Oops! Something went wrong displaying %s"
+msgstr "Hups! Jokin meni pieleen näyttäessä sivua %s"
+
+#: ../embed/ephy-web-view.c:2468
+msgid "Oops!"
+msgstr "Hups!"
+
+#: ../embed/ephy-web-view.c:2469
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Jokin meni pieleen sivua näyttäessä. Lataa sivu uudelleen tai "
+"siirry toiselle sivulle jatkaaksesi."
+
+#: ../embed/ephy-web-view.c:2912
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.fi/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3118
+#: ../embed/ephy-web-view.c:3209
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ladataan ”%s”…"
 
-#: ../embed/ephy-web-view.c:3120
+#: ../embed/ephy-web-view.c:3211
 msgid "Loading…"
 msgstr "Ladataan…"
 
 #. Translators: this is the directory name to store auxilary files
 #. * when saving html files.
 #.
-#: ../embed/ephy-web-view.c:3867
+#: ../embed/ephy-web-view.c:3961
 #, c-format
 msgid "%s Files"
 msgstr "%s tiedostoa"
@@ -999,6 +1011,15 @@ msgstr "Tiedosto ”%s” on jo olemassa, siirrä se pois tieltä."
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota ”%s” ei voi luoda."
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:126
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr "Käyttäjän %s salasana lomakkeelle sivustolla %s"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
@@ -1048,11 +1069,11 @@ msgstr ""
 "Salasanat aiemmasta versiosta (Gecko) on lukittu pääsalasanalla. Jos tahdot, "
 "että Epiphany tuo ne, syötä tähän pääsalasanasi."
 
-#: ../lib/ephy-profile-migrator.c:98
+#: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Evästeiden kopiointi Mozillasta epäonnistui."
 
-#: ../lib/ephy-profile-migrator.c:650
+#: ../lib/ephy-profile-migrator.c:652
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1060,34 +1081,25 @@ msgstr ""
 "Epiphany 3.6 hylkäsi tämän hakemiston ja yritti muuttaa asetuksia polkuun ~/."
 "config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:1023
+#: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: ../lib/ephy-profile-migrator.c:1025
+#: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
 msgstr ""
 
-#: ../lib/ephy-profile-migrator.c:1027
+#: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
 msgstr ""
 
-#: ../lib/ephy-profile-migrator.c:1040
+#: ../lib/ephy-profile-migrator.c:1047
 msgid "Epiphany profile migrator"
 msgstr "Epiphany-profiilin muuttaja"
 
-#: ../lib/ephy-profile-migrator.c:1041
+#: ../lib/ephy-profile-migrator.c:1048
 msgid "Epiphany profile migrator options"
 msgstr "Epiphany-profiilin muutosvalinnat"
-
-#. Translators: The first %s is the username and the second one is the
-#. * hostname where this is happening. Example: gnome@gmail.com and
-#. * mail.google.com.
-#.
-#: ../lib/ephy-profile-utils.c:190
-#, c-format
-msgid "Password for %s in a form in %s"
-msgstr "Käyttäjän %s salasana lomakkeelle sivustolla %s"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1197,7 +1209,7 @@ msgstr ""
 
 #: ../lib/widgets/ephy-certificate-dialog.c:110
 msgid "The certificate activation time is still in the future"
-msgstr ""
+msgstr "Varmenteen aktivointiaika on tulevaisuudessa"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
 msgid "The identity of this website has been verified"
@@ -1246,12 +1258,12 @@ msgstr "Valmis"
 msgid "Error downloading: %s"
 msgstr "Virhe ladattaessa: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:847
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:897
 msgid "Cancel"
 msgstr "Peru"
 
 #: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:280
+#: ../src/window-commands.c:281
 msgid "Open"
 msgstr "Avaa"
 
@@ -1275,24 +1287,24 @@ msgstr "Sivustot"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:591
+#: ../lib/widgets/ephy-location-entry.c:596
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
 #: ../src/pdm-dialog.c:352
 msgid "Cl_ear"
 msgstr "T_yhjennä"
 
-#: ../lib/widgets/ephy-location-entry.c:874
+#: ../lib/widgets/ephy-location-entry.c:879
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Vedä ja pudota tämä kuvake tehdäksesi tähän sivuun osoittavan linkin"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1698
 msgid "Title"
 msgstr "Otsikko"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1709
 msgid "Address"
 msgstr "Osoite"
 
@@ -1679,7 +1691,7 @@ msgid "Export Bookmarks"
 msgstr "Tuo kirjanmerkit"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:760
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1570
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1572
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
@@ -1710,7 +1722,7 @@ msgstr "Tiedosto"
 msgid "_Copy Address"
 msgstr "_Kopioi osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1626
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1628
 msgid "Topics"
 msgstr "Aiheet"
 
@@ -1734,7 +1746,6 @@ msgid "_New Window"
 msgstr "Uusi _ikkuna"
 
 #: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
-#| msgid "_New Window"
 msgid "New _Incognito Window"
 msgstr "Uusi _incognito-ikkuna"
 
@@ -1979,7 +1990,6 @@ msgid "_Automatic"
 msgstr "_Automaattinen"
 
 #: ../src/ephy-find-toolbar.c:147
-#| msgid "Not found"
 msgid "Text not found"
 msgstr "Tekstiä ei löytynyt"
 
@@ -1987,11 +1997,11 @@ msgstr "Tekstiä ei löytynyt"
 msgid "Search wrapped back to the top"
 msgstr "Haku palautui takaisin sivun yläosaan"
 
-#: ../src/ephy-find-toolbar.c:636
+#: ../src/ephy-find-toolbar.c:637
 msgid "Find previous occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon edellinen esiintymä"
 
-#: ../src/ephy-find-toolbar.c:649
+#: ../src/ephy-find-toolbar.c:650
 msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
@@ -2089,69 +2099,67 @@ msgstr "Koko historia"
 msgid "History"
 msgstr "Sivuhistoria"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:73
 msgid "Open a new tab in an existing browser window"
 msgstr "Avaa uusi välilehti olemassa olevaan selainikkunaan"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:75
 msgid "Open a new browser window"
 msgstr "Avaa uusi selainikkuna"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:77
 msgid "Import bookmarks from the given file"
 msgstr "Tuo kirjanmerkkejä annetusta tiedostosta"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:77 ../src/ephy-main.c:79
 msgid "FILE"
 msgstr "TIEDOSTO"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:79
 msgid "Load the given session file"
 msgstr "Lataa annettu istuntotiedosto"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81
 msgid "Add a bookmark"
 msgstr "Lisää kirjanmerkki"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:83
 msgid "Start a private instance"
 msgstr "Käynnistä erillinen instanssi"
 
-#: ../src/ephy-main.c:86
-#| msgid "Start the browser in application mode"
+#: ../src/ephy-main.c:85
 msgid "Start an instance in incognito mode"
 msgstr "Käynnistä selain incognito-tilassa"
 
-#: ../src/ephy-main.c:88
-#| msgid "Start a private instance"
+#: ../src/ephy-main.c:87
 msgid "Start an instance in netbank mode"
 msgstr "Käynnistä selain verkkopankkitilassa"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:89
 msgid "Start the browser in application mode"
 msgstr "Käynnistä selain sovellustilassa"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:91
 msgid "Profile directory to use in the private instance"
 msgstr "Henkilökohtaisille tiedoille käytetty profiilihakemisto"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:91
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:93
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:193
+#: ../src/ephy-main.c:192
 msgid "Could not start Web"
 msgstr "Verkkoselaimen käynnistys epäonnistui"
 
-#: ../src/ephy-main.c:196
+#: ../src/ephy-main.c:195
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2160,7 +2168,7 @@ msgstr ""
 "Käynnistys ei onnistunut seuraavan virheen takia:\n"
 "%s"
 
-#: ../src/ephy-main.c:310
+#: ../src/ephy-main.c:306
 msgid "Web options"
 msgstr "Verkkoasetukset"
 
@@ -2210,7 +2218,6 @@ msgid "Find Pre_vious"
 msgstr "Etsi e_dellinen"
 
 #: ../src/ephy-window.c:146
-#| msgid "_Bookmarks"
 msgid "Edit _Bookmarks"
 msgstr "M_uokkaa kirjanmerkkejä"
 
@@ -2220,12 +2227,10 @@ msgid "_Stop"
 msgstr "_Pysäytä"
 
 #: ../src/ephy-window.c:163
-#| msgid "Zoom"
 msgid "Zoom _In"
 msgstr "Lä_hennä"
 
 #: ../src/ephy-window.c:165
-#| msgid "Zoom"
 msgid "Zoom O_ut"
 msgstr "L_oitonna"
 
@@ -2329,7 +2334,6 @@ msgid "_Copy Link Address"
 msgstr "_Kopioi linkin osoite"
 
 #: ../src/ephy-window.c:244
-#| msgid "_Copy Link Address"
 msgid "_Copy E-mail Address"
 msgstr "Kopioi  s_ähköpostiosoite"
 
@@ -2496,23 +2500,23 @@ msgstr "Kaikki yhteydet"
 msgid "End of current session"
 msgstr "Nykyisen istunnon loppu"
 
-#: ../src/pdm-dialog.c:778
+#: ../src/pdm-dialog.c:780
 msgid "Domain"
 msgstr "Verkkoalue"
 
-#: ../src/pdm-dialog.c:790
+#: ../src/pdm-dialog.c:792
 msgid "Name"
 msgstr "Nimi"
 
-#: ../src/pdm-dialog.c:1308
+#: ../src/pdm-dialog.c:1310
 msgid "Host"
 msgstr "Verkkonimi"
 
-#: ../src/pdm-dialog.c:1321
+#: ../src/pdm-dialog.c:1323
 msgid "User Name"
 msgstr "Tunnus"
 
-#: ../src/pdm-dialog.c:1334
+#: ../src/pdm-dialog.c:1336
 msgid "User Password"
 msgstr "Käyttäjän salasanat"
 
@@ -2558,50 +2562,50 @@ msgstr[1] "Järjestelmän kielet (%s)"
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
-#: ../src/window-commands.c:358
+#: ../src/window-commands.c:359
 msgid "Save"
 msgstr "Tallenna"
 
-#: ../src/window-commands.c:844
+#: ../src/window-commands.c:894
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Verkkosovellus nimeltä ”%s” on jo olemassa. Korvataanko se?"
 
-#: ../src/window-commands.c:849
+#: ../src/window-commands.c:899
 msgid "Replace"
 msgstr "Korvaa"
 
-#: ../src/window-commands.c:853
+#: ../src/window-commands.c:903
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Tämän niminen sovellus on jo olemassa. Sen korvaaminen ylikirjoittaa sen."
 
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:939
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Sovellus ”%s” on valmiina käyttöön"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:942
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Sovellusta ”%s” ei voitu luoda"
 
-#: ../src/window-commands.c:900
+#: ../src/window-commands.c:950
 msgid "Launch"
 msgstr "Käynnistä"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:940
+#: ../src/window-commands.c:990
 msgid "Create Web Application"
 msgstr "Luo verkkosovellus"
 
-#: ../src/window-commands.c:945
+#: ../src/window-commands.c:995
 msgid "C_reate"
 msgstr "_Luo"
 
-#: ../src/window-commands.c:1635
+#: ../src/window-commands.c:1685
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2613,7 +2617,7 @@ msgstr ""
 "Free Software Foundation on ne julkaissut; joko Lisenssin version 2, tai "
 "(valinnan mukaan) minkä tahansa myöhemmän version mukaisesti."
 
-#: ../src/window-commands.c:1639
+#: ../src/window-commands.c:1689
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2625,7 +2629,7 @@ msgstr ""
 "hyväksyttävästä laadusta tai soveltuvuudesta tiettyyn tarkoitukseen. Katso "
 "GPL lisenssistä lisää yksityiskohtia."
 
-#: ../src/window-commands.c:1643
+#: ../src/window-commands.c:1693
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2635,20 +2639,20 @@ msgstr ""
 "kirjoita osoitteeseen Free Software Foundation Inc., 51 Franklin Street, "
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:1689 ../src/window-commands.c:1705
-#: ../src/window-commands.c:1716
+#: ../src/window-commands.c:1739 ../src/window-commands.c:1755
+#: ../src/window-commands.c:1766
 msgid "Contact us at:"
 msgstr "Ota yhteyttä osoitteessa:"
 
-#: ../src/window-commands.c:1692
+#: ../src/window-commands.c:1742
 msgid "Contributors:"
 msgstr "Avustajat:"
 
-#: ../src/window-commands.c:1695
+#: ../src/window-commands.c:1745
 msgid "Past developers:"
 msgstr "Aikaisemmat kehittäjät:"
 
-#: ../src/window-commands.c:1726 ../src/window-commands.c:1732
+#: ../src/window-commands.c:1776 ../src/window-commands.c:1782
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2665,7 +2669,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1762
+#: ../src/window-commands.c:1812
 msgid "translator-credits"
 msgstr ""
 "Jiri Grönroos, 2012\n"
@@ -2675,15 +2679,15 @@ msgstr ""
 "\n"
 "http://gnome.fi/"
 
-#: ../src/window-commands.c:1765
+#: ../src/window-commands.c:1815
 msgid "Web Website"
 msgstr "Gnomen WWW-selaimen WWW-sivut"
 
-#: ../src/window-commands.c:1905
+#: ../src/window-commands.c:1955
 msgid "Enable caret browsing mode?"
 msgstr "Käytetäänkö kohdistinselaintilaa?"
 
-#: ../src/window-commands.c:1908
+#: ../src/window-commands.c:1958
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2693,7 +2697,7 @@ msgstr ""
 "sijoittaa liikuteltavan kursorin www-sivuille, joka mahdollistaa liikkumisen "
 "ympäri näppäimistöllä. Haluatko ottaa käyttöön kohdistinselauksen?"
 
-#: ../src/window-commands.c:1911
+#: ../src/window-commands.c:1961
 msgid "_Enable"
 msgstr "_Käytä"
 
