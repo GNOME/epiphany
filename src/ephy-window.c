@@ -201,11 +201,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
-	/* File actions. */
-
-	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL, NULL,
-	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
-
 	/* View actions. */
 
 	{ "ViewDownloadsBar", NULL, N_("_Downloads Bar"), NULL, NULL,
