@@ -1699,27 +1699,6 @@ sync_tab_title (EphyWebView *view,
 			      ephy_web_view_get_title_composite (view));
 }
 
-static void
-sync_network_status (EphyEmbedSingle *single,
-		     GParamSpec *pspec,
-		     EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
-	gboolean is_online;
-
-	GNetworkMonitor *monitor = ephy_shell_get_net_monitor (ephy_shell_get_default ());
-	is_online = g_network_monitor_get_network_available (monitor);
-
-	action = gtk_action_group_get_action (priv->action_group,
-					      "FileWorkOffline");
-	g_signal_handlers_block_by_func
-		(action, G_CALLBACK (window_cmd_file_work_offline), window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !is_online);
-	g_signal_handlers_unblock_by_func
-		(action, G_CALLBACK (window_cmd_file_work_offline), window);	
-}
-
 #ifndef HAVE_WEBKIT2
 static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
@@ -3451,7 +3430,6 @@ ephy_window_dispose (GObject *object)
 {
 	EphyWindow *window = EPHY_WINDOW (object);
 	EphyWindowPrivate *priv = window->priv;
-	GObject *single;
 	GSList *popups;
 
 	LOG ("EphyWindow dispose %p", window);
@@ -3472,10 +3450,6 @@ ephy_window_dispose (GObject *object)
 		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 		g_slist_free (popups);
 	
-		single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
-		g_signal_handlers_disconnect_by_func
-			(single, G_CALLBACK (sync_network_status), window);
-
 		g_object_unref (priv->enc_menu);
 		priv->enc_menu = NULL;
 
@@ -3824,7 +3798,6 @@ ephy_window_constructor (GType type,
 	GObject *object;
 	EphyWindow *window;
 	EphyWindowPrivate *priv;
-	EphyEmbedSingle *single;
 	GtkSettings *settings;
 	GtkAction *action;
 	GtkActionGroup *toolbar_action_group;
@@ -3959,12 +3932,6 @@ ephy_window_constructor (GType type,
 	g_signal_connect (EPHY_SETTINGS_UI,
 			  "changed::" EPHY_PREFS_UI_SHOW_TOOLBARS,
 			  G_CALLBACK (show_toolbars_setting_cb), window);
-
-	/* network status */
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ()));
-	sync_network_status (single, NULL, window);
-	g_signal_connect (single, "notify::network-status",
-			  G_CALLBACK (sync_network_status), window);
 
 	/* Disable actions not needed for popup mode. */
 	toolbar_action_group = priv->toolbar_action_group;
