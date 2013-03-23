@@ -28,11 +28,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-# This should stay at the major version of the latest stable releases
-EPIPHANY_UA_VERSION=3.7
-
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
-AC_SUBST([EPIPHANY_UA_VERSION])
 
 # for EPHY_CHECK_VERSION
 AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
