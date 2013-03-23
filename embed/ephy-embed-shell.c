@@ -22,15 +22,18 @@
 #include <config.h>
 #include "ephy-embed-shell.h"
 
+#include "ephy-about-handler.h"
 #include "ephy-debug.h"
 #include "ephy-download.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
-#include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
+#include "ephy-request-about.h"
+#include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-extension.h"
 
@@ -40,6 +43,7 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
+#define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -47,13 +51,11 @@ struct _EphyEmbedShellPrivate
 {
   EphyHistoryService *global_history_service;
   GList *downloads;
-  EphyEmbedSingle *embed_single;
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
   EphyFrecentStore *frecent_store;
-  guint single_initialised : 1;
   GDBusProxy *web_extension;
   guint web_extension_watch_name_id;
   guint web_extension_form_auth_save_signal_id;
@@ -96,7 +98,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
-  g_clear_object (&priv->embed_single);
   if (priv->web_extension_watch_name_id > 0) {
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
     priv->web_extension_watch_name_id = 0;
@@ -290,59 +291,6 @@ ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
   return shell->priv->frecent_store;
 }
 
-static GObject *
-impl_get_embed_single (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv;
-
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-  priv = shell->priv;
-
-  if (priv->embed_single != NULL &&
-      !priv->single_initialised) {
-    g_warning ("ephy_embed_shell_get_embed_single called while the single is being initialised!\n");
-    return G_OBJECT (priv->embed_single);
-  }
-
-  if (priv->embed_single == NULL) {
-    priv->embed_single = EPHY_EMBED_SINGLE (g_object_new (EPHY_TYPE_EMBED_SINGLE, NULL));
-    g_assert (priv->embed_single != NULL);
-
-    if (!ephy_embed_single_initialize (priv->embed_single)) {
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (NULL,
-                                       GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("Epiphany can't be used now. "
-                                         "Initialization failed."));
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      
-      exit (0);
-    }
-    
-    priv->single_initialised = TRUE;
-  }
-
-  return G_OBJECT (shell->priv->embed_single);
-}
-
-/**
- * ephy_embed_shell_get_embed_single:
- * @shell: the #EphyEmbedShell
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
-{
-  EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-
-  return klass->get_embed_single (shell);
-}
-
 /**
  * ephy_embed_shell_get_encodings:
  * @shell: the #EphyEmbedShell
@@ -407,8 +355,67 @@ ephy_embed_shell_get_property (GObject *object,
 }
 
 static void
+complete_about_request_for_contents (WebKitURISchemeRequest *request,
+                                     gchar *data,
+                                     gsize data_length)
+{
+  GInputStream *stream;
+
+  stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+  webkit_uri_scheme_request_finish (request, stream, data_length, "text/html");
+  g_object_unref (stream);
+}
+
+static void
+get_plugins_cb (WebKitWebContext *web_context,
+                GAsyncResult *result,
+                WebKitURISchemeRequest *request)
+{
+  GList *plugins;
+  GString *data_str;
+  gsize data_length;
+
+  data_str = g_string_new("<html>");
+  plugins = webkit_web_context_get_plugins_finish (web_context, result, NULL);
+  _ephy_about_handler_handle_plugins (data_str, plugins);
+  g_string_append (data_str, "</html>");
+
+  data_length = data_str->len;
+  complete_about_request_for_contents (request, g_string_free (data_str, FALSE), data_length);
+  g_object_unref (request);
+}
+
+static void
+about_request_cb (WebKitURISchemeRequest *request,
+                  gpointer user_data)
+{
+  const gchar *path;
+
+  path = webkit_uri_scheme_request_get_path (request);
+  if (!g_strcmp0 (path, "plugins")) {
+    /* Plugins API is async in WebKit2 */
+    webkit_web_context_get_plugins (webkit_web_context_get_default (),
+                                    NULL,
+                                    (GAsyncReadyCallback)get_plugins_cb,
+                                    g_object_ref (request));
+  } else {
+    GString *contents;
+    gsize data_length;
+
+    contents = ephy_about_handler_handle (path);
+    data_length = contents->len;
+    complete_about_request_for_contents (request, g_string_free (contents, FALSE), data_length);
+  }
+}
+
+static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
+  WebKitWebContext *web_context;
+  WebKitCookieManager *cookie_manager;
+  char *filename;
+  char *cookie_policy;
+
   shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
 
   /* globally accessible singleton */
@@ -416,6 +423,30 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
   embed_shell = shell;
 
   shell->priv->downloads = NULL;
+
+  /* Initialise nspluginwrapper's plugins if available. */
+  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
+    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
+
+  web_context = webkit_web_context_get_default ();
+
+  /* Store cookies in moz-compatible SQLite format */
+  cookie_manager = webkit_web_context_get_cookie_manager (web_context);
+  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+  webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
+                                                WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
+  g_free (filename);
+
+  cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
+                                         EPHY_PREFS_WEB_COOKIES_POLICY);
+  ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
+  g_free (cookie_policy);
+
+  /* about: URIs handler */
+  webkit_web_context_register_uri_scheme (web_context,
+                                          EPHY_ABOUT_SCHEME,
+                                          about_request_cb,
+                                          NULL, NULL);
 
   ephy_embed_shell_watch_web_extension (shell);
 }
@@ -429,8 +460,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   object_class->finalize = ephy_embed_shell_finalize;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
-
-  klass->get_embed_single = impl_get_embed_single;
 
   object_properties[PROP_MODE] =
     g_param_spec_enum ("mode",

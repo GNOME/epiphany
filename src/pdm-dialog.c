@@ -1594,12 +1594,6 @@ static void
 pdm_dialog_finalize (GObject *object)
 {
 	PdmDialog *dialog = EPHY_PDM_DIALOG (object);
-	GObject *single;
-
-	single = ephy_embed_shell_get_embed_single (ephy_embed_shell_get_default ());
-
-	g_signal_handlers_disconnect_matched
-		(single, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, object);
 
 #ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func (get_cookie_manager (), cookie_changed_cb, object);

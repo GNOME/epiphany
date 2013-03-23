@@ -73,16 +73,12 @@ struct _EphyEmbedShellClass
   void    (* prepare_close)    (EphyEmbedShell *shell);
 
   void    (* restored_window)  (EphyEmbedShell *shell);
-
-  /*< private >*/
-  GObject * (* get_embed_single)  (EphyEmbedShell *shell);
 };
 
 GType              ephy_embed_shell_get_type                   (void);
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 GObject           *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
-GObject           *ephy_embed_shell_get_embed_single           (EphyEmbedShell   *shell);
 void               ephy_embed_shell_prepare_close              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,

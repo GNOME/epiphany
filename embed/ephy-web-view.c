@@ -29,7 +29,6 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"

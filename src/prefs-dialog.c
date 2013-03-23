@@ -28,7 +28,6 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
 #include "ephy-encodings.h"
 #include "ephy-file-chooser.h"

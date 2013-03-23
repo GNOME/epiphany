@@ -5,7 +5,6 @@ noinst_PROGRAMS = \
 	test-ephy-completion-model \
 	test-ephy-download \
 	test-ephy-embed-shell \
-	test-ephy-embed-single \
 	test-ephy-embed-utils \
 	test-ephy-encodings \
 	test-ephy-file-helpers \
@@ -129,9 +128,6 @@ test_ephy_download_SOURCES = \
 
 test_ephy_embed_shell_SOURCES = \
 	ephy-embed-shell-test.c
-
-test_ephy_embed_single_SOURCES = \
-	ephy-embed-single-test.c
 
 test_ephy_embed_utils_SOURCES = \
 	ephy-embed-utils-test.c

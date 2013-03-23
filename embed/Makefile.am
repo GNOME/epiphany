@@ -19,7 +19,6 @@ INST_H_FILES = \
 	ephy-embed-container.h          \
 	ephy-embed-event.h		\
 	ephy-embed-prefs.h		\
-	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
 	ephy-embed-utils.h              \
 	ephy-overview.h			\
@@ -37,7 +36,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-container.c          \
 	ephy-embed-dialog.c		\
 	ephy-embed-event.c		\
-	ephy-embed-single.c		\
 	ephy-embed-shell.c		\
 	ephy-embed-utils.c              \
 	ephy-encoding.c			\
