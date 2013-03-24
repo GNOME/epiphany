@@ -10,22 +10,23 @@
 # Petr Kovar <pknbe@volny.cz>, 2008, 2010.
 # Lucas Lommer <llommer@svn.gnome.org>, 2008, 2009, 2010, 2011, 2012.
 # Adam Matoušek <adamatousek@gmail.com>, 2012, 2013.
+# Marek Černocký <marek@manet.cz>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany gnome-3.8\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-02 14:38+0000\n"
-"PO-Revision-Date: 2013-03-04 21:33+0100\n"
-"Last-Translator: Adam Matoušek <adamatousek@gmail.com>\n"
+"POT-Creation-Date: 2013-03-24 22:47+0000\n"
+"PO-Revision-Date: 2013-03-25 00:00+0100\n"
+"Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -46,8 +47,8 @@ msgstr "http://www.google.cz"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.cz/search?q=%s&ie=UTF-8&oe=UTF-8&hl=cs"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:309 ../src/ephy-main.c:459 ../src/window-commands.c:1746
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:64
+#: ../src/ephy-main.c:305 ../src/ephy-main.c:455 ../src/window-commands.c:1780
 msgid "Web"
 msgstr "WWW"
 
@@ -444,74 +445,79 @@ msgstr "Zdali má být v okně záložek sloupec s nadpisy stránek."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Zdali má být v okně záložek sloupec s adresami stránek."
 
-#: ../embed/ephy-about-handler.c:64 ../embed/ephy-about-handler.c:67
-#: ../embed/ephy-about-handler.c:117 ../embed/ephy-about-handler.c:120
+#: ../embed/ephy-about-handler.c:60 ../embed/ephy-about-handler.c:63
 msgid "Installed plugins"
 msgstr "Instalované zásuvné moduly"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:75
 msgid "Enabled"
 msgstr "Povoleno"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:75
 msgid "Yes"
 msgstr "Ano"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:75
 msgid "No"
 msgstr "Ne"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:76
 msgid "MIME type"
 msgstr "Typ MIME"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:76
 msgid "Description"
 msgstr "Popis"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:76
 msgid "Suffixes"
 msgstr "Přípony"
 
-#: ../embed/ephy-about-handler.c:172 ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:122 ../embed/ephy-about-handler.c:125
 msgid "Memory usage"
 msgstr "Využití paměti"
 
-#: ../embed/ephy-about-handler.c:208 ../embed/ephy-about-handler.c:210
+#: ../embed/ephy-about-handler.c:158 ../embed/ephy-about-handler.c:160
 msgid "Applications"
 msgstr "Aplikace"
 
-#: ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:161
 msgid "List of installed web applications"
 msgstr "Seznam instalovaných aplikací WWW"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:232
+#: ../embed/ephy-about-handler.c:182
 msgid "Installed on:"
 msgstr "Instalováno:"
 
-#: ../embed/ephy-embed.c:696
+#: ../embed/ephy-about-handler.c:217 ../embed/ephy-about-handler.c:219
+msgid "Private Browsing"
+msgstr "Prohlížení v soukromí"
+
+#: ../embed/ephy-about-handler.c:220
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window."
+msgstr ""
+"Nyní si prohlížíte www <em>anonymně</em>. Stránky zobrazené v tomto režimu "
+"se nebudou zobrazovat v historii a po zavření okna budou vymazány všechny "
+"informace uložené během tohoto prohlížení."
+
+#: ../embed/ephy-embed.c:487
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Stisknutím %s ukončíte režim na celou obrazovku"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:490
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:699
+#: ../embed/ephy-embed.c:490
 msgid "F11"
 msgstr "F11"
-
-#: ../embed/ephy-embed.c:1084
-msgid "Web Inspector"
-msgstr "Web Inspector"
-
-#: ../embed/ephy-embed-shell.c:288
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "Nyní nelze Epiphany použít. Inicializace selhala."
 
 #: ../embed/ephy-embed-utils.c:59
 #, c-format
@@ -847,15 +853,15 @@ msgid "Most Visited"
 msgstr "Nejnavštěvovanější"
 
 #. characters
-#: ../embed/ephy-web-view.c:66 ../embed/ephy-web-view.c:3623
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2742
 msgid "Blank page"
 msgstr "Prázdná stránka"
 
-#: ../embed/ephy-web-view.c:696
+#: ../embed/ephy-web-view.c:492
 msgid "Not now"
 msgstr "Nyní ne"
 
-#: ../embed/ephy-web-view.c:697
+#: ../embed/ephy-web-view.c:493
 msgid "Store password"
 msgstr "Uložit heslo"
 
@@ -863,40 +869,40 @@ msgstr "Uložit heslo"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:710
+#: ../embed/ephy-web-view.c:505
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>Přejete si uložit heslo pro uživatele <b>%s</b> na <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1893
+#: ../embed/ephy-web-view.c:1377
 msgid "Deny"
 msgstr "Zakázat"
 
-#: ../embed/ephy-web-view.c:1894
+#: ../embed/ephy-web-view.c:1378
 msgid "Allow"
 msgstr "Povolit"
 
-#: ../embed/ephy-web-view.c:1908
+#: ../embed/ephy-web-view.c:1388
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Stránka <b>%s</b> chce zjistit vaši polohu."
 
-#: ../embed/ephy-web-view.c:2361
+#: ../embed/ephy-web-view.c:1721
 msgid "None specified"
 msgstr "Není specifikováno"
 
-#: ../embed/ephy-web-view.c:2370 ../embed/ephy-web-view.c:2388
+#: ../embed/ephy-web-view.c:1730 ../embed/ephy-web-view.c:1748
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Jejda! Chyba při nahrávání %s"
 
-#: ../embed/ephy-web-view.c:2372
+#: ../embed/ephy-web-view.c:1732
 msgid "Oops! It was not possible to show this website"
 msgstr "Jejda! Nebylo možno tuto stránku zobrazit"
 
-#: ../embed/ephy-web-view.c:2373
+#: ../embed/ephy-web-view.c:1733
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -909,15 +915,15 @@ msgstr ""
 "novou adresu. Nezapomeňte se ujistit, že vaše připojení k Internetu funguje "
 "správně.</p>"
 
-#: ../embed/ephy-web-view.c:2382
+#: ../embed/ephy-web-view.c:1742
 msgid "Try again"
 msgstr "Zkusit znovu"
 
-#: ../embed/ephy-web-view.c:2390
+#: ../embed/ephy-web-view.c:1750
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Jejda! Tato stránka možná způsobila nečekané ukončení prohlížeče"
 
-#: ../embed/ephy-web-view.c:2392
+#: ../embed/ephy-web-view.c:1752
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -929,32 +935,41 @@ msgstr ""
 "aktualizovat. V takovém případě oznamte prosím problém vývojářům projektu "
 "<strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2400
+#: ../embed/ephy-web-view.c:1760
 msgid "Load again anyway"
 msgstr "Přesto nahrát znovu"
 
-#: ../embed/ephy-web-view.c:2834
+#: ../embed/ephy-web-view.c:1766
+#, c-format
+msgid "Oops! Something went wrong displaying %s"
+msgstr "Zrada! Něco se stalo špatně při zobrazování %s"
+
+#: ../embed/ephy-web-view.c:1767
+msgid "Oops!"
+msgstr "Zrada!"
+
+#: ../embed/ephy-web-view.c:1768
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Něco se událo nesprávně při zobrazování této stránky. Pro pokračování ji "
+"prosím načtěte znovu nebo navštivte jinou stránku."
+
+#: ../embed/ephy-web-view.c:2079
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8&hl=cs"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3130
+#: ../embed/ephy-web-view.c:2317
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Načítá se „%s“…"
 
-#: ../embed/ephy-web-view.c:3132
+#: ../embed/ephy-web-view.c:2319
 msgid "Loading…"
 msgstr "Načítá se…"
-
-#. Translators: this is the directory name to store auxilary files
-#. * when saving html files.
-#.
-#: ../embed/ephy-web-view.c:3879
-#, c-format
-msgid "%s Files"
-msgstr "%s souborů"
 
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
@@ -985,7 +1000,7 @@ msgstr "Pracovní plocha"
 #: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
-msgstr "Nelze vytvořit dočasný adresář v „%s“."
+msgstr "Nelze vytvořit dočasnou složku v „%s“."
 
 #: ../lib/ephy-file-helpers.c:469
 #, c-format
@@ -995,20 +1010,29 @@ msgstr "Soubor „%s“ existuje. Přesuňte jej prosím jinam."
 #: ../lib/ephy-file-helpers.c:490
 #, c-format
 msgid "Failed to create directory “%s”."
-msgstr "Nelze vytvořit adresář „%s“."
+msgstr "Nelze vytvořit složku „%s“."
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:126
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr "Heslo pro uživatele %s ve formuláři na %s"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
 msgid "Directory “%s” is not writable"
-msgstr "Do adresáře „%s“ nelze zapisovat"
+msgstr "Do složky „%s“ nelze zapisovat"
 
 #: ../lib/ephy-gui.c:210
 msgid "You do not have permission to create files in this directory."
-msgstr "Nemáte oprávnění vytvářet v tomto adresáři soubory."
+msgstr "Nemáte oprávnění vytvářet v této složce soubory."
 
 #: ../lib/ephy-gui.c:213
 msgid "Directory not Writable"
-msgstr "Do adresáře nelze zapisovat"
+msgstr "Do složky nelze zapisovat"
 
 #: ../lib/ephy-gui.c:242
 #, c-format
@@ -1043,35 +1067,35 @@ msgstr ""
 "Hesla z předchozí verze (Gecko) jsou uzamčena hlavním heslem. Pokud chcete, "
 "aby byla importována do Epiphany, zadejte hlavní heslo níže."
 
-#: ../lib/ephy-profile-migrator.c:98
+#: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Nelze zkopírovat cookies z Mozilly."
 
-#: ../lib/ephy-profile-migrator.c:650
+#: ../lib/ephy-profile-migrator.c:652
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
 msgstr ""
-"Tento adresář je v Epiphany 3.6 zavržen. Aplikace se pokusila přenést "
-"předvolby do adresáře ~/.config/epiphany"
+"Tato složka je v Epiphany 3.6 zavržena. Aplikace se pokusila přenést "
+"předvolby do složky ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:890
+#: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
 msgstr "Provede pouze n-tý krok převodu"
 
-#: ../lib/ephy-profile-migrator.c:892
+#: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
 msgstr "Udává požadovanou verzi nástroje pro převod profilu"
 
-#: ../lib/ephy-profile-migrator.c:894
+#: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
 msgstr "Udává název profilu, ve kterém převod spustit"
 
-#: ../lib/ephy-profile-migrator.c:907
+#: ../lib/ephy-profile-migrator.c:1047
 msgid "Epiphany profile migrator"
 msgstr "Převod profilu Epiphany"
 
-#: ../lib/ephy-profile-migrator.c:908
+#: ../lib/ephy-profile-migrator.c:1048
 msgid "Epiphany profile migrator options"
 msgstr "Možnosti převodu profilu Epiphany"
 
@@ -1236,11 +1260,11 @@ msgstr "Dokončeno"
 msgid "Error downloading: %s"
 msgstr "Chyba při stahování: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:847
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:896
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1311
 #: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Otevřít"
@@ -1265,24 +1289,24 @@ msgstr "Servery"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:591
+#: ../lib/widgets/ephy-location-entry.c:596
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
-#: ../src/pdm-dialog.c:381
+#: ../src/pdm-dialog.c:349
 msgid "Cl_ear"
 msgstr "Vy_mazat"
 
-#: ../lib/widgets/ephy-location-entry.c:874
+#: ../lib/widgets/ephy-location-entry.c:879
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Odkaz na tuto stránku vytvoříte přetažením této ikony"
 
 #: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1698
 msgid "Title"
 msgstr "Nadpis"
 
 #: ../lib/widgets/ephy-urls-view.c:51
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1709
 msgid "Address"
 msgstr "Adresa"
 
@@ -1381,7 +1405,7 @@ msgid "Nearby Sites"
 msgstr "Místní stránky"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1167
-#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Nepojmenovaný"
 
@@ -1487,7 +1511,7 @@ msgid "Export bookmarks to a file"
 msgstr "Exportovat záložky do souboru"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
 msgid "_Close"
 msgstr "_Zavřít"
 
@@ -1497,7 +1521,7 @@ msgstr "Zavřít okno záložek"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:130
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
@@ -1509,7 +1533,7 @@ msgstr "Vyjmout výběr"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
 #: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:131
 msgid "_Copy"
 msgstr "_Kopírovat"
 
@@ -1519,7 +1543,7 @@ msgid "Copy the selection"
 msgstr "Kopírovat výběr"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:134
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:133
 msgid "_Paste"
 msgstr "V_ložit"
 
@@ -1538,7 +1562,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Odstranit vybranou záložku nebo téma"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:138
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:137
 msgid "Select _All"
 msgstr "Vy_brat vše"
 
@@ -1559,7 +1583,7 @@ msgstr "Zobrazit nápovědu záložek"
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 #: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:197
 msgid "_About"
 msgstr "O _aplikaci"
 
@@ -1672,7 +1696,7 @@ msgid "Export Bookmarks"
 msgstr "Exportovat záložky"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:760
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1570
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1572
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Záložky"
@@ -1703,7 +1727,7 @@ msgstr "Soubor"
 msgid "_Copy Address"
 msgstr "_Kopírovat adresu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1626
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1628
 msgid "Topics"
 msgstr "Témata"
 
@@ -1722,11 +1746,11 @@ msgid "Create topic “%s”"
 msgstr "Vytvořit téma „%s“"
 
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:105
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:104
 msgid "_New Window"
 msgstr "_Nové okno"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:106
 msgid "New _Incognito Window"
 msgstr "Nové _anonymní okno"
 
@@ -1735,25 +1759,25 @@ msgid "Reopen Closed _Tab"
 msgstr "Znovu otevřít _zavřenou kartu"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:97
 msgid "_Bookmarks"
 msgstr "Zá_ložky"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:147
 msgid "_History"
 msgstr "_Historie"
 
 #: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
+#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:151
 msgid "Personal Data"
 msgstr "Správce osobních dat"
 
 #: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
+#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:149
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:120
 msgid "_Quit"
 msgstr "U_končit"
 
@@ -1938,7 +1962,7 @@ msgstr "Kontrola pravopisu"
 msgid "_Enable spell checking"
 msgstr "_Povolit kontrolu pravopisu"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:779
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1950,7 +1974,7 @@ msgstr "Zastavit"
 msgid "Stop current data transfer"
 msgstr "Zastavit aktuální přenos dat"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:161
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:160
 msgid "_Reload"
 msgstr "_Obnovit"
 
@@ -1978,11 +2002,11 @@ msgstr "Text nenalezen"
 msgid "Search wrapped back to the top"
 msgstr "Hledání přeskočilo zpět na začátek"
 
-#: ../src/ephy-find-toolbar.c:636
+#: ../src/ephy-find-toolbar.c:637
 msgid "Find previous occurrence of the search string"
 msgstr "Hledat předchozí výskyt hledaného řetězce"
 
-#: ../src/ephy-find-toolbar.c:649
+#: ../src/ephy-find-toolbar.c:650
 msgid "Find next occurrence of the search string"
 msgstr "Hledat následující výskyt hledaného řetězce"
 
@@ -2080,67 +2104,67 @@ msgstr "Celá historie"
 msgid "History"
 msgstr "Historie"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:73
 msgid "Open a new tab in an existing browser window"
 msgstr "Otevřít novou kartu v existujícím okně prohlížeče"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:75
 msgid "Open a new browser window"
 msgstr "Otevřít nové okno prohlížeče"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:77
 msgid "Import bookmarks from the given file"
 msgstr "Importovat záložky z daného souboru"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:77 ../src/ephy-main.c:79
 msgid "FILE"
 msgstr "SOUBOR"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:79
 msgid "Load the given session file"
 msgstr "Načíst daný soubor sezení"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81
 msgid "Add a bookmark"
 msgstr "Přidat záložku"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:83
 msgid "Start a private instance"
 msgstr "Spustit soukromou instanci"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:85
 msgid "Start an instance in incognito mode"
 msgstr "Spustit instanci v režimu anonymity"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:87
 msgid "Start an instance in netbank mode"
 msgstr "Spustit instanci v režimu netbank"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:89
 msgid "Start the browser in application mode"
 msgstr "Spustit prohlížeč v režimu aplikací"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:91
 msgid "Profile directory to use in the private instance"
 msgstr "Složka s profilem, který se má používat v soukromé instanci"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:91
 msgid "DIR"
 msgstr "SLOŽKA"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:93
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:193
+#: ../src/ephy-main.c:192
 msgid "Could not start Web"
 msgstr "Nelze spustit WWW"
 
-#: ../src/ephy-main.c:196
+#: ../src/ephy-main.c:195
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2149,7 +2173,7 @@ msgstr ""
 "Spouštění selhalo kvůli následující chybě:\n"
 "%s"
 
-#: ../src/ephy-main.c:310
+#: ../src/ephy-main.c:306
 msgid "Web options"
 msgstr "Možnosti WWW"
 
@@ -2157,276 +2181,271 @@ msgstr "Možnosti WWW"
 msgid "Close tab"
 msgstr "Zavřít kartu"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-window.c:108
 msgid "_Open…"
 msgstr "_Otevřít…"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "Save _As…"
 msgstr "Uložit j_ako…"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "Save As _Web Application…"
 msgstr "Uložit jako aplikaci _WWW…"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:114
 msgid "_Print…"
 msgstr "_Tisk…"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:116
 msgid "S_end Link by Email…"
 msgstr "Odeslat odkaz _e-mailem…"
 
 #. Edit actions.
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:125
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Re_do"
 msgstr "Zn_ovu"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:139
 msgid "_Find…"
 msgstr "_Najít…"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:141
 msgid "Find Ne_xt"
 msgstr "Hledat _následující"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:143
 msgid "Find Pre_vious"
 msgstr "Hledat _předchozí"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "Edit _Bookmarks"
 msgstr "Upravit zá_ložky"
 
 #. View actions.
-#: ../src/ephy-window.c:157 ../src/ephy-window.c:159
+#: ../src/ephy-window.c:156 ../src/ephy-window.c:158
 msgid "_Stop"
 msgstr "Za_stavit"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:162
 msgid "Zoom _In"
 msgstr "_Přiblížit"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Zoom O_ut"
 msgstr "_Oddálit"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Normal Size"
 msgstr "_Normální velikost"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:168
 msgid "Text _Encoding"
 msgstr "_Kódování textu"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "_Page Source"
 msgstr "Z_droj stránky"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:174
 msgid "_Add Bookmark…"
 msgstr "Přid_at záložku…"
 
 #. Go actions.
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "_Location…"
 msgstr "_Umístění…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "_Previous Tab"
 msgstr "_Předchozí karta"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:186
 msgid "_Next Tab"
 msgstr "_Následující karta"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:188
 msgid "Move Tab _Left"
 msgstr "Přesunout kartu do_leva"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Move Tab _Right"
 msgstr "Přesunout kartu dop_rava"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:192
 msgid "_Detach Tab"
 msgstr "O_dpojit kartu"
 
-#. File actions.
-#: ../src/ephy-window.c:206
-msgid "_Work Offline"
-msgstr "Pracovat o_ff-line"
-
 #. View actions.
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:205
 msgid "_Downloads Bar"
 msgstr "Lišta _stahování"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:208
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:210
 msgid "Popup _Windows"
 msgstr "_Vyskakovací okna"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:212
 msgid "Selection Caret"
 msgstr "Kurzor výběru"
 
 #. Document.
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:219
 msgid "Add Boo_kmark…"
 msgstr "Přid_at záložku…"
 
 #. Links.
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:224
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:226
 msgid "Open Link in New _Window"
 msgstr "Otevřít odkaz v novém _okně"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:228
 msgid "Open Link in New _Tab"
 msgstr "Otevřít odkaz v nové _kartě"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:230
 msgid "_Download Link"
 msgstr "_Stáhnout odkaz"
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:232
 msgid "_Save Link As…"
 msgstr "_Uložit odkaz jako…"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:234
 msgid "_Bookmark Link…"
 msgstr "Přidat odkaz k _záložkám…"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:236
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:238
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
 #. Images.
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:243
 msgid "Open _Image"
 msgstr "Otevřít _obrázek"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:245
 msgid "_Save Image As…"
 msgstr "_Uložit obrázek jako…"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:247
 msgid "_Use Image As Background"
 msgstr "Použít obrázek jako _pozadí"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:249
 msgid "Copy I_mage Address"
 msgstr "Kopírovat adresu _obrázku"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:251
 msgid "St_art Animation"
 msgstr "_Spustit animaci"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:253
 msgid "St_op Animation"
 msgstr "Za_stavit animaci"
 
 #. Inspector.
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:269
 msgid "Inspect _Element"
 msgstr "Prozkoumat _element"
 
-#: ../src/ephy-window.c:483
+#: ../src/ephy-window.c:477
 msgid "There are unsubmitted changes to form elements"
 msgstr "V prvcích formuláře jsou neodeslané změny"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:478
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Pokud přesto dokument zavřete, ztratíte tyto informace."
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:480
 msgid "Close _Document"
 msgstr "_Zavřít dokument"
 
-#: ../src/ephy-window.c:504
+#: ../src/ephy-window.c:498
 msgid "There are ongoing downloads in this window"
 msgstr "V tomto okně probíhá stahování"
 
-#: ../src/ephy-window.c:505
+#: ../src/ephy-window.c:499
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Pokud toto okno zavřete, aktivní stahování budou zrušena"
 
-#: ../src/ephy-window.c:506
+#: ../src/ephy-window.c:500
 msgid "Close window and cancel downloads"
 msgstr "Zavřít okno a zrušit stahování"
 
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1313
 msgid "Save As"
 msgstr "Uložit jako"
 
-#: ../src/ephy-window.c:1311
+#: ../src/ephy-window.c:1315
 msgid "Save As Application"
 msgstr "Uložit jako aplikaci"
 
-#: ../src/ephy-window.c:1313
+#: ../src/ephy-window.c:1317
 msgid "Print"
 msgstr "Tisk"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1319
 msgid "Bookmark"
 msgstr "Záložka"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1321
 msgid "Find"
 msgstr "Hledat"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1326
+#: ../src/ephy-window.c:1330
 msgid "Larger"
 msgstr "Větší"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1333
 msgid "Smaller"
 msgstr "Menší"
 
-#: ../src/ephy-window.c:1357
+#: ../src/ephy-window.c:1361
 msgid "Back"
 msgstr "Zpět"
 
-#: ../src/ephy-window.c:1369
+#: ../src/ephy-window.c:1373
 msgid "Forward"
 msgstr "Vpřed"
 
-#: ../src/ephy-window.c:1381
+#: ../src/ephy-window.c:1385
 msgid "Zoom"
 msgstr "Zvětšení"
 
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1394
 msgid "New _Tab"
 msgstr "Nová _karta"
 
-#: ../src/ephy-window.c:1398
+#: ../src/ephy-window.c:1402
 msgid "Go to most visited"
 msgstr "Přejít na nejnavštěvovanější"
 
-#: ../src/pdm-dialog.c:362
+#: ../src/pdm-dialog.c:330
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Zvolte osobní informace, které chcete odstranit</b>"
 
-#: ../src/pdm-dialog.c:365
+#: ../src/pdm-dialog.c:333
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2436,31 +2455,31 @@ msgstr ""
 "WWW. Než bude akce provedena, zvolte všechny typy informací, které chcete "
 "odstranit:"
 
-#: ../src/pdm-dialog.c:370
+#: ../src/pdm-dialog.c:338
 msgid "Clear All Personal Data"
 msgstr "Vymazat uložená osobní data"
 
 #. Cookies
-#: ../src/pdm-dialog.c:404
+#: ../src/pdm-dialog.c:372
 msgid "C_ookies"
 msgstr "C_ookies"
 
 #. Passwords
-#: ../src/pdm-dialog.c:416
+#: ../src/pdm-dialog.c:384
 msgid "Saved _passwords"
 msgstr "Uložená _hesla"
 
 #. History
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:396
 msgid "Hi_story"
 msgstr "Hi_storie"
 
 #. Cache
-#: ../src/pdm-dialog.c:440
+#: ../src/pdm-dialog.c:408
 msgid "_Temporary files"
 msgstr "_Dočasné soubory"
 
-#: ../src/pdm-dialog.c:456
+#: ../src/pdm-dialog.c:424
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2468,36 +2487,36 @@ msgstr ""
 "<small><i><b>Poznámka:</b> Tuto akci nelze odvolat zpět. Data vybraná k "
 "odstranění budou permanentně vymazána.</i></small>"
 
-#: ../src/pdm-dialog.c:679
+#: ../src/pdm-dialog.c:647
 msgid "Encrypted connections only"
 msgstr "Jen šifrovaná spojení"
 
-#: ../src/pdm-dialog.c:680
+#: ../src/pdm-dialog.c:648
 msgid "Any type of connection"
 msgstr "Libovolný typ spojení"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:653
 msgid "End of current session"
 msgstr "Konec aktuálního sezení"
 
-#: ../src/pdm-dialog.c:807
+#: ../src/pdm-dialog.c:777
 msgid "Domain"
 msgstr "Doména"
 
-#: ../src/pdm-dialog.c:819
+#: ../src/pdm-dialog.c:789
 msgid "Name"
 msgstr "Název"
 
-#: ../src/pdm-dialog.c:1342
+#: ../src/pdm-dialog.c:1307
 msgid "Host"
 msgstr "Počítač"
 
-#: ../src/pdm-dialog.c:1355
+#: ../src/pdm-dialog.c:1320
 msgid "User Name"
 msgstr "Jméno uživatele"
 
-#: ../src/pdm-dialog.c:1368
+#: ../src/pdm-dialog.c:1333
 msgid "User Password"
 msgstr "Heslo uživatele"
 
@@ -2517,7 +2536,7 @@ msgstr "Uložit obrázek jako"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
+#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2526,13 +2545,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:489
+#: ../src/prefs-dialog.c:488
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definováno uživatelem (%s)"
 
-#: ../src/prefs-dialog.c:511
+#: ../src/prefs-dialog.c:510
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2540,54 +2559,54 @@ msgstr[0] "Jazyk systému (%s)"
 msgstr[1] "Jazyky systému (%s)"
 msgstr[2] "Jazyků systému (%s)"
 
-#: ../src/prefs-dialog.c:869
+#: ../src/prefs-dialog.c:868
 msgid "Select a Directory"
-msgstr "Vyberte adresář"
+msgstr "Vyberte složku"
 
 #: ../src/window-commands.c:358
 msgid "Save"
 msgstr "Uložit"
 
-#: ../src/window-commands.c:844
+#: ../src/window-commands.c:893
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Aplikace s názvem „%s“ již existuje. Chcete ji nahradit?"
 
-#: ../src/window-commands.c:849
+#: ../src/window-commands.c:898
 msgid "Replace"
 msgstr "Nahradit"
 
-#: ../src/window-commands.c:853
+#: ../src/window-commands.c:902
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Aplikace s tímto názvem již existuje. Nahrazením způsobíte její přepsání."
 
-#: ../src/window-commands.c:889
+#: ../src/window-commands.c:938
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Aplikace „%s“ je připravena k použití"
 
-#: ../src/window-commands.c:892
+#: ../src/window-commands.c:941
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Aplikaci „%s“ nelze vytvořit"
 
-#: ../src/window-commands.c:900
+#: ../src/window-commands.c:949
 msgid "Launch"
 msgstr "Spustit"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:940
+#: ../src/window-commands.c:989
 msgid "Create Web Application"
 msgstr "Vytvořit aplikaci WWW"
 
-#: ../src/window-commands.c:945
+#: ../src/window-commands.c:994
 msgid "C_reate"
 msgstr "V_ytvořit"
 
-#: ../src/window-commands.c:1635
+#: ../src/window-commands.c:1669
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2599,7 +2618,7 @@ msgstr ""
 "to buď verze 2 této licence anebo (podle vlastního uvážení) kterékoliv "
 "pozdější verze."
 
-#: ../src/window-commands.c:1639
+#: ../src/window-commands.c:1673
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2611,7 +2630,7 @@ msgstr ""
 "VHODNOSTI PRO URČITÝ ÚČEL. Další podrobnosti hledejte v GNU General Public "
 "License."
 
-#: ../src/window-commands.c:1643
+#: ../src/window-commands.c:1677
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2621,20 +2640,20 @@ msgstr ""
 "programem; pokud se tak nestalo, napište o ni Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
 
-#: ../src/window-commands.c:1689 ../src/window-commands.c:1705
-#: ../src/window-commands.c:1716
+#: ../src/window-commands.c:1723 ../src/window-commands.c:1739
+#: ../src/window-commands.c:1750
 msgid "Contact us at:"
 msgstr "Kontaktujte nás na:"
 
-#: ../src/window-commands.c:1692
+#: ../src/window-commands.c:1726
 msgid "Contributors:"
 msgstr "Přispěvatelé:"
 
-#: ../src/window-commands.c:1695
+#: ../src/window-commands.c:1729
 msgid "Past developers:"
 msgstr "Dřívější vývojáři:"
 
-#: ../src/window-commands.c:1726 ../src/window-commands.c:1732
+#: ../src/window-commands.c:1760 ../src/window-commands.c:1766
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2651,7 +2670,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1762
+#: ../src/window-commands.c:1796
 msgid "translator-credits"
 msgstr ""
 "Miloslav Trmač <mitr@volny.cz>\n"
@@ -2662,15 +2681,15 @@ msgstr ""
 "Petr Kovář <pknbe@volny.cz>\n"
 "Adam Matoušek <adamatousek@gmail.com>"
 
-#: ../src/window-commands.c:1765
+#: ../src/window-commands.c:1799
 msgid "Web Website"
 msgstr "Stránky prohlížeče WWW"
 
-#: ../src/window-commands.c:1905
+#: ../src/window-commands.c:1939
 msgid "Enable caret browsing mode?"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: ../src/window-commands.c:1908
+#: ../src/window-commands.c:1942
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2680,6 +2699,6 @@ msgstr ""
 "funkce vloží do stránky pohyblivý kurzor umožňující navigaci pomocí "
 "klávesnice. Přejete si povolit prohlížení s kurzorem?"
 
-#: ../src/window-commands.c:1911
+#: ../src/window-commands.c:1945
 msgid "_Enable"
 msgstr "_Povolit"
