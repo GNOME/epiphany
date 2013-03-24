@@ -20,19 +20,18 @@
  */
 
 #include "config.h"
-
-#include <glib.h>
-#include <gio/gio.h>
-#include <libxml/HTMLtree.h>
-#include <libxml/xmlreader.h>
-#include <string.h>
-
-#include <glib/gi18n.h>
-
 #include "ephy-bookmarks-import.h"
+
 #include "ephy-debug.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+
+#include <gio/gio.h>
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <libxml/HTMLtree.h>
+#include <libxml/xmlreader.h>
+#include <string.h>
 
 /**
  * NSItemType: netscape bookmark item type
