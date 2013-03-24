@@ -98,24 +98,19 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
+
   if (priv->web_extension_watch_name_id > 0) {
     g_bus_unwatch_name (priv->web_extension_watch_name_id);
     priv->web_extension_watch_name_id = 0;
   }
+
   if (priv->web_extension_form_auth_save_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (g_dbus_proxy_get_connection (priv->web_extension),
                                           priv->web_extension_form_auth_save_signal_id);
     priv->web_extension_form_auth_save_signal_id = 0;
   }
+
   g_clear_object (&priv->web_extension);
-
-  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
-}
-
-static void
-ephy_embed_shell_finalize (GObject *object)
-{
-  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
   if (priv->downloads != NULL) {
     LOG ("Destroying downloads list");
@@ -123,7 +118,7 @@ ephy_embed_shell_finalize (GObject *object)
     priv->downloads = NULL;
   }
 
-  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
 
 static void
@@ -456,7 +451,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_embed_shell_dispose;
-  object_class->finalize = ephy_embed_shell_finalize;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
 
