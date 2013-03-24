@@ -119,8 +119,7 @@ ephy_embed_shell_finalize (GObject *object)
 
   if (priv->downloads != NULL) {
     LOG ("Destroying downloads list");
-    g_list_foreach (priv->downloads, (GFunc)g_object_unref, NULL);
-    g_list_free (priv->downloads);
+    g_list_free_full (priv->downloads, (GDestroyNotify)g_object_unref);
     priv->downloads = NULL;
   }
 
