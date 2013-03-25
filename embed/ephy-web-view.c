@@ -1574,6 +1574,9 @@ load_changed_cb (WebKitWebView *web_view,
     priv->status_message = g_strdup (priv->loading_title);
     g_object_notify (object, "status-message");
 
+    /* Zoom level. */
+    restore_zoom_level (view, loading_uri);
+
     break;
   }
   case WEBKIT_LOAD_REDIRECTED:
@@ -1596,9 +1599,6 @@ load_changed_cb (WebKitWebView *web_view,
     }
 
     ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
-
-    /* Zoom level. */
-    restore_zoom_level (view, uri);
 
     /* History. */
     if (!ephy_web_view_is_history_frozen (view)) {
