@@ -119,13 +119,13 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 #ifdef HAVE_WEBKIT2
 	encoding = webkit_web_view_get_custom_charset (view);
-	if (encoding == NULL) return;
+	if (encoding == NULL) goto out;
 #else
 	encoding = webkit_web_view_get_custom_encoding (view);
 	if (encoding == NULL)
 	{
 		encoding = webkit_web_view_get_encoding (view);
-		if (encoding == NULL) return;
+		if (encoding == NULL) goto out;
 		is_automatic = TRUE;
 	}
 #endif
@@ -156,7 +156,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					  "automatic_button");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
-
+out:
 	dialog->priv->update_tag = FALSE;
 }
 
