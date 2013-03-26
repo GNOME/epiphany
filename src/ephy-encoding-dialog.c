@@ -162,9 +162,15 @@ out:
 
 
 static void
+#ifdef HAVE_WEBKIT2
+embed_net_stop_cb (EphyWebView *view,
+		   WebKitLoadEvent load_event,
+		   EphyEncodingDialog *dialog)
+#else
 embed_net_stop_cb (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyEncodingDialog *dialog)
+#endif
 {
 	if (ephy_web_view_is_loading (view) == FALSE)
 		sync_encoding_against_embed (dialog);
@@ -183,8 +189,13 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 						      dialog);
 	}
 
+#ifdef HAVE_WEBKIT2
+	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
+			  G_CALLBACK (embed_net_stop_cb), dialog);
+#else
 	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "notify::load-status",
 			  G_CALLBACK (embed_net_stop_cb), dialog);
+#endif
 	dialog->priv->embed = embed;
 
 	sync_encoding_against_embed (dialog);
