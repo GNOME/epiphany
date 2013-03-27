@@ -200,18 +200,18 @@ ephy_about_handler_handle_plugins (EphyAboutHandler *handler,
   return TRUE;
 }
 
-static gboolean
-ephy_about_handler_handle_memory (EphyAboutHandler *handler,
-                                  WebKitURISchemeRequest *request)
+static void
+handle_memory_finished_cb (EphyAboutHandler *handler,
+                           GAsyncResult *result,
+                           WebKitURISchemeRequest *request)
 {
   GString *data_str;
   gsize data_length;
   char *memory;
 
-  memory = ephy_smaps_to_html (ephy_about_handler_get_smaps (handler));
-
   data_str = g_string_new ("<html>");
 
+  memory = g_task_propagate_pointer (G_TASK (result), NULL);
   if (memory) {
     g_string_append_printf (data_str, "<head><title>%s</title>"         \
                             "<style type=\"text/css\">%s</style></head><body>",
@@ -227,6 +227,33 @@ ephy_about_handler_handle_memory (EphyAboutHandler *handler,
 
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+  g_object_unref (request);
+}
+
+static void
+handle_memory_sync (GTask *task,
+                    gpointer source_object,
+                    gpointer task_data,
+                    GCancellable *cancellable)
+{
+  EphyAboutHandler *handler = EPHY_ABOUT_HANDLER (source_object);
+
+  g_task_return_pointer (task,
+                         ephy_smaps_to_html (ephy_about_handler_get_smaps (handler)),
+                         g_free);
+}
+
+static gboolean
+ephy_about_handler_handle_memory (EphyAboutHandler *handler,
+                                  WebKitURISchemeRequest *request)
+{
+  GTask *task;
+
+  task = g_task_new (handler, NULL,
+                     (GAsyncReadyCallback)handle_memory_finished_cb,
+                     g_object_ref (request));
+  g_task_run_in_thread (task, handle_memory_sync);
+  g_object_unref (task);
 
   return TRUE;
 }
