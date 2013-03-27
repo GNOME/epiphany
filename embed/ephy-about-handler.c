@@ -28,40 +28,123 @@
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
-#include <webkit2/webkit2.h>
 
-static gchar *css_style = NULL;
+struct _EphyAboutHandlerPrivate {
+  char *style_sheet;
+  EphySMaps *smaps;
+};
+
+G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
 static void
-read_css_style (void)
+ephy_about_handler_finalize (GObject *object)
 {
-  GError *error = NULL;
-  const gchar *file;
+  EphyAboutHandler *handler = EPHY_ABOUT_HANDLER (object);
 
-  if (css_style)
-    return;
+  g_free (handler->priv->style_sheet);
+  g_clear_object (&handler->priv->smaps);
 
-  file = ephy_file ("about.css");
-  if (file && !g_file_get_contents (file, &css_style, NULL, &error)) {
-    g_debug ("%s", error->message);
-    g_error_free (error);
-  }
+  G_OBJECT_CLASS (ephy_about_handler_parent_class)->finalize (object);
 }
 
-void
-_ephy_about_handler_handle_plugins (GString *data_str, GList *plugin_list)
+static void
+ephy_about_handler_init (EphyAboutHandler *handler)
 {
-  GList *p;
+  handler->priv = G_TYPE_INSTANCE_GET_PRIVATE (handler, EPHY_TYPE_ABOUT_HANDLER, EphyAboutHandlerPrivate);
+}
 
-  read_css_style ();
+static void
+ephy_about_handler_class_init (EphyAboutHandlerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = ephy_about_handler_finalize;
+  g_type_class_add_private (object_class, sizeof (EphyAboutHandlerPrivate));
+}
+
+static const char *
+ephy_about_handler_get_style_sheet (EphyAboutHandler *handler)
+{
+  if (!handler->priv->style_sheet) {
+    const gchar *file;
+    GError *error = NULL;
+
+    file = ephy_file ("about.css");
+    if (file && !g_file_get_contents (file, &handler->priv->style_sheet, NULL, &error)) {
+      g_debug ("%s", error->message);
+      g_error_free (error);
+    }
+  }
+
+  return handler->priv->style_sheet;
+}
+
+static EphySMaps *
+ephy_about_handler_get_smaps (EphyAboutHandler *handler)
+{
+  if (!handler->priv->smaps)
+    handler->priv->smaps = ephy_smaps_new ();
+
+  return handler->priv->smaps;
+}
+
+static void
+ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
+                                   gchar *data,
+                                   gsize data_length)
+{
+  GInputStream *stream;
+
+  data_length = data_length != -1 ? data_length : strlen (data);
+  stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+  webkit_uri_scheme_request_finish (request, stream, data_length, "text/html");
+  g_object_unref (stream);
+}
+
+typedef struct {
+  EphyAboutHandler *handler;
+  WebKitURISchemeRequest *request;
+} EphyAboutRequest;
+
+static EphyAboutRequest *
+ephy_about_request_new (EphyAboutHandler *handler,
+                        WebKitURISchemeRequest *request)
+{
+  EphyAboutRequest *about_request;
+
+  about_request = g_slice_new (EphyAboutRequest);
+  about_request->handler = g_object_ref (handler);
+  about_request->request = g_object_ref (request);
+
+  return about_request;
+}
+
+static void
+ephy_about_request_free (EphyAboutRequest *about_request)
+{
+  g_object_unref (about_request->handler);
+  g_object_unref (about_request->request);
+
+  g_slice_free (EphyAboutRequest, about_request);
+}
+
+static void
+get_plugins_cb (WebKitWebContext *web_context,
+                GAsyncResult *result,
+                EphyAboutRequest *about_request)
+{
+  GString *data_str;
+  gsize data_length;
+  GList *plugin_list, *p;
+
+  data_str = g_string_new ("<html>");
   g_string_append_printf (data_str, "<head><title>%s</title>"           \
                           "<style type=\"text/css\">%s</style></head><body>",
                           _("Installed plugins"),
-                          css_style);
-
+                          ephy_about_handler_get_style_sheet (about_request->handler));
   g_string_append_printf (data_str, "<h1>%s</h1>", _("Installed plugins"));
 
+  plugin_list = webkit_web_context_get_plugins_finish (web_context, result, NULL);
   for (p = plugin_list; p; p = p->next) {
     WebKitPlugin *plugin = WEBKIT_PLUGIN (p->data);
     GList *m, *mime_types;
@@ -96,67 +179,97 @@ _ephy_about_handler_handle_plugins (GString *data_str, GList *plugin_list)
 
     g_string_append (data_str, "</tbody></table>");
   }
+  g_string_append (data_str, "</body></html>");
 
-  g_string_append (data_str, "</body>");
+  g_list_free_full (plugin_list, g_object_unref);
+
+  data_length = data_str->len;
+  ephy_about_handler_finish_request (about_request->request, g_string_free (data_str, FALSE), data_length);
+  ephy_about_request_free (about_request);
 }
 
-static void
-ephy_about_handler_handle_plugins (GString *data_str)
+static gboolean
+ephy_about_handler_handle_plugins (EphyAboutHandler *handler,
+                                   WebKitURISchemeRequest *request)
 {
-  g_string_append (data_str, "</body>");
+  webkit_web_context_get_plugins (webkit_web_context_get_default (),
+                                  NULL,
+                                  (GAsyncReadyCallback)get_plugins_cb,
+                                  ephy_about_request_new (handler, request));
+
+  return TRUE;
 }
 
-static void
-ephy_about_handler_handle_memory (GString *data_str)
+static gboolean
+ephy_about_handler_handle_memory (EphyAboutHandler *handler,
+                                  WebKitURISchemeRequest *request)
 {
+  GString *data_str;
+  gsize data_length;
   char *memory;
-  static EphySMaps *smaps = NULL;
-  if (!smaps)
-    smaps = ephy_smaps_new ();
 
-  memory = ephy_smaps_to_html (smaps);
+  memory = ephy_smaps_to_html (ephy_about_handler_get_smaps (handler));
+
+  data_str = g_string_new ("<html>");
 
   if (memory) {
     g_string_append_printf (data_str, "<head><title>%s</title>"         \
                             "<style type=\"text/css\">%s</style></head><body>",
                             _("Memory usage"),
-                            css_style);
+                            ephy_about_handler_get_style_sheet (handler));
 
     g_string_append_printf (data_str, "<h1>%s</h1>", _("Memory usage"));
     g_string_append (data_str, memory);
     g_free (memory);
   }
+
+  g_string_append (data_str, "</html>");
+
+  data_length = data_str->len;
+  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+
+  return TRUE;
 }
 
-static void
-ephy_about_handler_handle_epiphany (GString *data_str)
+static gboolean
+ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
+                                    WebKitURISchemeRequest *request)
 {
-  g_string_append_printf (data_str, "<head><title>Epiphany</title>"     \
-                          "<style type=\"text/css\">%s</style></head>"  \
-                          "<body style=\"background: #3369FF; color: white; font-style: italic;\">",
-                          css_style);
+  char *data;
 
-  g_string_append (data_str, "<div id=\"ephytext\">"                    \
-                   "Il semble que la perfection soit atteinte non quand il n'y a plus rien à" \
-                   " ajouter, mais quand il n'y a plus rien à retrancher." \
-                   "</div>"                                             \
-                   "<div id=\"from\">"                                  \
-                   "<!-- Terre des Hommes, III: L'Avion, p. 60 -->"     \
-                   "Antoine de Saint-Exupéry"                           \
-                   "</div></body>");
+  data = g_strdup_printf ("<html><head><title>Epiphany</title>"
+                          "<style type=\"text/css\">%s</style></head>"
+                          "<body style=\"background: #3369FF; color: white; font-style: italic;\">"
+                          "<div id=\"ephytext\">"
+                          "Il semble que la perfection soit atteinte non quand il n'y a plus rien à"
+                          " ajouter, mais quand il n'y a plus rien à retrancher."
+                          "</div>"
+                          "<div id=\"from\">"
+                          "<!-- Terre des Hommes, III: L'Avion, p. 60 -->"
+                          "Antoine de Saint-Exupéry"
+                          "</div></body></html>",
+                          ephy_about_handler_get_style_sheet (handler));
+
+  ephy_about_handler_finish_request (request, data, -1);
+
+  return TRUE;
 }
 
-static void
-ephy_about_handler_handle_applications (GString *data_str)
+static gboolean
+ephy_about_handler_handle_applications (EphyAboutHandler *handler,
+                                        WebKitURISchemeRequest *request)
 {
+  GString *data_str;
+  gsize data_length;
   GList *applications, *p;
 
-  g_string_append_printf (data_str, "<head><title>%s</title>"           \
+  data_str = g_string_new (NULL);
+  g_string_append_printf (data_str, "<html><head><title>%s</title>" \
                           "<style type=\"text/css\">%s</style></head>"  \
                           "<body class=\"applications-body\"><h1>%s</h1>" \
                           "<p>%s</p>",
                           _("Applications"),
-                          css_style,
+                          ephy_about_handler_get_style_sheet (handler),
                           _("Applications"),
                           _("List of installed web applications"));
 
@@ -184,24 +297,35 @@ ephy_about_handler_handle_applications (GString *data_str)
     g_free (img_data);
   }
 
-  g_string_append (data_str, "</table></body>");
+  g_string_append (data_str, "</table></body></html>");
 
   ephy_web_application_free_application_list (applications);
+
+  data_length = data_str->len;
+  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+
+  return TRUE;
 }
 
-static void
-ephy_about_handler_handle_incognito (GString *data_str)
+static gboolean
+ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
+                                     WebKitURISchemeRequest *request)
 {
   const char *filename;
   char *img_data = NULL, *img_data_base64 = NULL;
+  char *data;
   gsize data_length;
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    return FALSE;
 
   filename = ephy_file ("incognito.png");
   if (filename) {
     g_file_get_contents (filename, &img_data, &data_length, NULL);
     img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
   }
-  g_string_append_printf (data_str,                                    \
+
+  data = g_strdup_printf ("<html>\n"                                   \
                           "<head>\n"                                   \
                           "<title>%s</title>\n"                        \
                           "<style type=\"text/css\">%s</style>\n"      \
@@ -213,9 +337,11 @@ ephy_about_handler_handle_incognito (GString *data_str)
                           "      <p>%s</p>\n"                          \
                           "    </div>\n"                               \
                           "  </div>\n"                                 \
-                          "</body>\n",
+                          "</body>\n"                                  \
+                          "</html>\n",
                           _("Private Browsing"),
-                          css_style, img_data_base64 ? img_data_base64 : "",
+                          ephy_about_handler_get_style_sheet (handler),
+                          img_data_base64 ? img_data_base64 : "",
                           _("Private Browsing"),
                           _("You are currently browsing <em>incognito</em>. Pages viewed in this "
                             "mode will not show up in your browsing history and all stored "
@@ -224,29 +350,44 @@ ephy_about_handler_handle_incognito (GString *data_str)
   g_free (img_data_base64);
   g_free (img_data);
 
+  ephy_about_handler_finish_request (request, data, -1);
+
+  return TRUE;
 }
 
-GString *
-ephy_about_handler_handle (const char *about)
+static void
+ephy_about_handler_handle_blank (EphyAboutHandler *handler,
+                                 WebKitURISchemeRequest *request)
 {
-  GString *data_str = g_string_new("<html>");
+  ephy_about_handler_finish_request (request, g_strdup ("<html></html>"), -1);
+}
 
-  read_css_style ();
+EphyAboutHandler *
+ephy_about_handler_new (void)
+{
+  return EPHY_ABOUT_HANDLER (g_object_new (EPHY_TYPE_ABOUT_HANDLER, NULL));
+}
 
-  if (!g_strcmp0 (about, "plugins"))
-    ephy_about_handler_handle_plugins (data_str);
-  else if (!g_strcmp0 (about, "memory"))
-    ephy_about_handler_handle_memory (data_str);
-  else if (!g_strcmp0 (about, "epiphany"))
-    ephy_about_handler_handle_epiphany (data_str);
-  else if (!g_strcmp0 (about, "applications"))
-    ephy_about_handler_handle_applications (data_str);
-  else if (!g_strcmp0 (about, "incognito") &&
-           ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())
-           == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-    ephy_about_handler_handle_incognito (data_str);
+void
+ephy_about_handler_handle_request (EphyAboutHandler *handler,
+                                   WebKitURISchemeRequest *request)
+{
+  const char *path;
+  gboolean    handled = FALSE;
 
-  g_string_append (data_str, "</html>");
+  path = webkit_uri_scheme_request_get_path (request);
 
-  return data_str;
+  if (!g_strcmp0 (path, "plugins"))
+    handled = ephy_about_handler_handle_plugins (handler, request);
+  else if (!g_strcmp0 (path, "memory"))
+    handled = ephy_about_handler_handle_memory (handler, request);
+  else if (!g_strcmp0 (path, "epiphany"))
+    handled =  ephy_about_handler_handle_epiphany (handler, request);
+  else if (!g_strcmp0 (path, "applications"))
+    handled = ephy_about_handler_handle_applications (handler, request);
+  else if (!g_strcmp0 (path, "incognito"))
+    handled = ephy_about_handler_handle_incognito (handler, request);
+
+  if (!handled)
+    ephy_about_handler_handle_blank (handler, request);
 }

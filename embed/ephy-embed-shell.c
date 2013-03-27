@@ -55,6 +55,7 @@ struct _EphyEmbedShellPrivate
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
   EphyFrecentStore *frecent_store;
+  EphyAboutHandler *about_handler;
   GDBusProxy *web_extension;
   guint web_extension_watch_name_id;
   guint web_extension_form_auth_save_signal_id;
@@ -103,6 +104,8 @@ ephy_embed_shell_dispose (GObject *object)
     g_list_free_full (priv->downloads, (GDestroyNotify)g_object_unref);
     priv->downloads = NULL;
   }
+
+  g_clear_object (&priv->about_handler);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -315,57 +318,10 @@ ephy_embed_shell_setup_environment (EphyEmbedShell *shell)
 }
 
 static void
-complete_about_request_for_contents (WebKitURISchemeRequest *request,
-                                     gchar *data,
-                                     gsize data_length)
-{
-  GInputStream *stream;
-
-  stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
-  webkit_uri_scheme_request_finish (request, stream, data_length, "text/html");
-  g_object_unref (stream);
-}
-
-static void
-get_plugins_cb (WebKitWebContext *web_context,
-                GAsyncResult *result,
-                WebKitURISchemeRequest *request)
-{
-  GList *plugins;
-  GString *data_str;
-  gsize data_length;
-
-  data_str = g_string_new("<html>");
-  plugins = webkit_web_context_get_plugins_finish (web_context, result, NULL);
-  _ephy_about_handler_handle_plugins (data_str, plugins);
-  g_string_append (data_str, "</html>");
-
-  data_length = data_str->len;
-  complete_about_request_for_contents (request, g_string_free (data_str, FALSE), data_length);
-  g_object_unref (request);
-}
-
-static void
 about_request_cb (WebKitURISchemeRequest *request,
-                  gpointer user_data)
+                  EphyEmbedShell *shell)
 {
-  const gchar *path;
-
-  path = webkit_uri_scheme_request_get_path (request);
-  if (!g_strcmp0 (path, "plugins")) {
-    /* Plugins API is async in WebKit2 */
-    webkit_web_context_get_plugins (webkit_web_context_get_default (),
-                                    NULL,
-                                    (GAsyncReadyCallback)get_plugins_cb,
-                                    g_object_ref (request));
-  } else {
-    GString *contents;
-    gsize data_length;
-
-    contents = ephy_about_handler_handle (path);
-    data_length = contents->len;
-    complete_about_request_for_contents (request, g_string_free (contents, FALSE), data_length);
-  }
+  ephy_about_handler_handle_request (shell->priv->about_handler, request);
 }
 
 static void
@@ -399,6 +355,7 @@ ephy_embed_shell_startup (GApplication* application)
   g_free (disk_cache_dir);
 
   /* about: URIs handler */
+  shell->priv->about_handler = ephy_about_handler_new ();
   webkit_web_context_register_uri_scheme (web_context,
                                           EPHY_ABOUT_SCHEME,
                                           (WebKitURISchemeRequestCallback)about_request_cb,
@@ -415,7 +372,6 @@ ephy_embed_shell_startup (GApplication* application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
-
 
   ephy_embed_prefs_init ();
 }
