@@ -282,9 +282,10 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
   return TRUE;
 }
 
-static gboolean
-ephy_about_handler_handle_applications (EphyAboutHandler *handler,
-                                        WebKitURISchemeRequest *request)
+static void
+handle_applications_finished_cb (EphyAboutHandler *handler,
+                                 GAsyncResult *result,
+                                 WebKitURISchemeRequest *request)
 {
   GString *data_str;
   gsize data_length;
@@ -302,7 +303,7 @@ ephy_about_handler_handle_applications (EphyAboutHandler *handler,
 
   g_string_append (data_str, "<table>");
 
-  applications = ephy_web_application_get_application_list ();
+  applications = g_task_propagate_pointer (G_TASK (result), NULL);
   for (p = applications; p; p = p->next) {
     char *img_data = NULL, *img_data_base64 = NULL;
     gsize data_length;
@@ -330,6 +331,31 @@ ephy_about_handler_handle_applications (EphyAboutHandler *handler,
 
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+  g_object_unref (request);
+}
+
+static void
+handle_applications_sync (GTask *task,
+                          gpointer source_object,
+                          gpointer task_data,
+                          GCancellable *cancellable)
+{
+  g_task_return_pointer (task,
+                         ephy_web_application_get_application_list (),
+                         (GDestroyNotify)ephy_web_application_free_application_list);
+}
+
+static gboolean
+ephy_about_handler_handle_applications (EphyAboutHandler *handler,
+                                        WebKitURISchemeRequest *request)
+{
+  GTask *task;
+
+  task = g_task_new (handler, NULL,
+                     (GAsyncReadyCallback)handle_applications_finished_cb,
+                     g_object_ref (request));
+  g_task_run_in_thread (task, handle_applications_sync);
+  g_object_unref (task);
 
   return TRUE;
 }
