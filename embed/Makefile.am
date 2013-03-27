@@ -10,8 +10,7 @@ NOINST_H_FILES = \
 	ephy-embed-private.h		\
 	ephy-encoding.h			\
 	ephy-encodings.h		\
-	ephy-file-monitor.h		\
-	ephy-request-about.h
+	ephy-file-monitor.h
 
 INST_H_FILES = \
 	ephy-download.h			\
@@ -42,7 +41,6 @@ libephyembed_la_SOURCES = \
 	ephy-encodings.c		\
 	ephy-file-monitor.c		\
 	ephy-overview.c			\
-	ephy-request-about.c		\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
 	$(INST_H_FILES)			\

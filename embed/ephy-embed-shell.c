@@ -32,7 +32,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
-#include "ephy-request-about.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-extension.h"
