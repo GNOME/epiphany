@@ -8,7 +8,7 @@ bin_PROGRAMS = epiphany
 
 EXTRA_DIST = \
 	epiphany.gresource.xml \
-	$(UI_FILES)            \
+	$(RESOURCE_FILES)      \
 	$(NULL)
 
 NOINST_H_FILES = \
@@ -98,7 +98,7 @@ libephymain_la_CFLAGS = \
 	$(CODE_COVERAGE_CFLAGS)   \
 	$(AM_CFLAGS)
 
-UI_FILES = \
+RESOURCE_FILES = \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany-history-window-ui.xml  \
 	resources/epiphany-ui.xml		  \
@@ -106,12 +106,15 @@ UI_FILES = \
 	resources/epiphany-application-menu.ui	  \
 	resources/prefs-dialog.ui		  \
 	resources/epiphany.css                    \
+	resources/error.html			  \
+	resources/process-crash.html		  \
+	resources/recovery.html			  \
 	$(NULL)
 
-epiphany-resources.c: epiphany.gresource.xml $(UI_FILES)
+epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
-epiphany-resources.h: epiphany.gresource.xml $(UI_FILES)
+epiphany-resources.h: epiphany.gresource.xml $(RESOURCE_FILES)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \

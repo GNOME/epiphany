@@ -177,6 +177,7 @@ test_ephy_web_app_utils_SOURCES = \
 	ephy-web-app-utils-test.c
 
 test_ephy_web_view_SOURCES = \
+	$(top_builddir)/src/epiphany-resources.c \
 	ephy-web-view-test.c
 
 EXTRA_DIST = \
