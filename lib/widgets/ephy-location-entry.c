@@ -966,13 +966,20 @@ static void
 schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url)
 {
 	PrefetchHelper *helper;
+	SoupURI *uri;
+
+	uri = soup_uri_new (url);
+	if (!uri || !uri->host) {
+		soup_uri_free (uri);
+		return;
+	}
 
 	if (entry->priv->dns_prefetch_handler)
 		g_source_remove (entry->priv->dns_prefetch_handler);
 
 	helper = g_slice_new0 (PrefetchHelper);
 	helper->entry = g_object_ref (entry);
-	helper->uri = soup_uri_new (url);
+	helper->uri = uri;
 
 	entry->priv->dns_prefetch_handler =
 		g_timeout_add_full (G_PRIORITY_DEFAULT, interval,
