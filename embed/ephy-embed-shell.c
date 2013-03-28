@@ -99,19 +99,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
 
-  if (priv->web_extension_watch_name_id > 0) {
-    g_bus_unwatch_name (priv->web_extension_watch_name_id);
-    priv->web_extension_watch_name_id = 0;
-  }
-
-  if (priv->web_extension_form_auth_save_signal_id > 0) {
-    g_dbus_connection_signal_unsubscribe (g_dbus_proxy_get_connection (priv->web_extension),
-                                          priv->web_extension_form_auth_save_signal_id);
-    priv->web_extension_form_auth_save_signal_id = 0;
-  }
-
-  g_clear_object (&priv->web_extension);
-
   if (priv->downloads != NULL) {
     LOG ("Destroying downloads list");
     g_list_free_full (priv->downloads, (GDestroyNotify)g_object_unref);
@@ -315,37 +302,17 @@ ephy_embed_shell_restored_window (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_set_property (GObject *object,
-                               guint prop_id,
-                               const GValue *value,
-                               GParamSpec *pspec)
+ephy_embed_shell_setup_environment (EphyEmbedShell *shell)
 {
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+  EphyEmbedShellMode mode = shell->priv->mode;
+  char *pid_str;
 
-  switch (prop_id) {
-  case PROP_MODE:
-    embed_shell->priv->mode = g_value_get_enum (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
-ephy_embed_shell_get_property (GObject *object,
-                               guint prop_id,
-                               GValue *value,
-                               GParamSpec *pspec)
-{
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
-
-  switch (prop_id) {
-  case PROP_MODE:
-    g_value_set_enum (value, embed_shell->priv->mode);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
+  pid_str = g_strdup_printf ("%u", getpid ());
+  g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
+  g_setenv ("EPHY_DOT_DIR", ephy_dot_dir (), TRUE);
+  if (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode))
+    g_setenv ("EPHY_PRIVATE_PROFILE", "1", TRUE);
+  g_free (pid_str);
 }
 
 static void
@@ -403,26 +370,40 @@ about_request_cb (WebKitURISchemeRequest *request,
 }
 
 static void
-ephy_embed_shell_init (EphyEmbedShell *shell)
+ephy_embed_shell_startup (GApplication* application)
 {
+  EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
+  EphyEmbedShellMode mode;
+  char *disk_cache_dir;
   WebKitWebContext *web_context;
   WebKitCookieManager *cookie_manager;
   char *filename;
   char *cookie_policy;
 
-  shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
+  G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  /* globally accessible singleton */
-  g_assert (embed_shell == NULL);
-  embed_shell = shell;
-
-  shell->priv->downloads = NULL;
-
-  /* Initialise nspluginwrapper's plugins if available. */
-  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
-    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
-
+  /* We're not remoting, setup the Web Context. */
+  mode = shell->priv->mode;
   web_context = webkit_web_context_get_default ();
+
+  ephy_embed_shell_setup_environment (shell);
+
+  /* Set the web extensions dir ASAP before the process is launched. */
+  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
+  ephy_embed_shell_watch_web_extension (shell);
+
+  /* Disk Cache */
+  disk_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
+                                     ephy_dot_dir () : g_get_user_cache_dir (),
+                                     g_get_prgname (), NULL);
+  webkit_web_context_set_disk_cache_directory (web_context, disk_cache_dir);
+  g_free (disk_cache_dir);
+
+  /* about: URIs handler */
+  webkit_web_context_register_uri_scheme (web_context,
+                                          EPHY_ABOUT_SCHEME,
+                                          (WebKitURISchemeRequestCallback)about_request_cb,
+                                          shell, NULL);
 
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (web_context);
@@ -436,23 +417,95 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
 
-  /* about: URIs handler */
-  webkit_web_context_register_uri_scheme (web_context,
-                                          EPHY_ABOUT_SCHEME,
-                                          about_request_cb,
-                                          NULL, NULL);
 
-  ephy_embed_shell_watch_web_extension (shell);
+  ephy_embed_prefs_init ();
+}
+
+static void
+ephy_embed_shell_shutdown (GApplication* application)
+{
+  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (application)->priv;
+
+  G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->shutdown (application);
+
+  if (priv->web_extension_watch_name_id > 0) {
+    g_bus_unwatch_name (priv->web_extension_watch_name_id);
+    priv->web_extension_watch_name_id = 0;
+  }
+
+  if (priv->web_extension_form_auth_save_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (g_dbus_proxy_get_connection (priv->web_extension),
+                                          priv->web_extension_form_auth_save_signal_id);
+    priv->web_extension_form_auth_save_signal_id = 0;
+  }
+
+  g_clear_object (&priv->web_extension);
+
+  ephy_embed_prefs_shutdown ();
+}
+
+static void
+ephy_embed_shell_set_property (GObject *object,
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+
+  switch (prop_id) {
+  case PROP_MODE:
+    embed_shell->priv->mode = g_value_get_enum (value);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_embed_shell_get_property (GObject *object,
+                               guint prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
+{
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+
+  switch (prop_id) {
+  case PROP_MODE:
+    g_value_set_enum (value, embed_shell->priv->mode);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_embed_shell_init (EphyEmbedShell *shell)
+{
+  shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
+
+  /* globally accessible singleton */
+  g_assert (embed_shell == NULL);
+  embed_shell = shell;
+
+  shell->priv->downloads = NULL;
+
+  /* Initialise nspluginwrapper's plugins if available. */
+  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
+    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
 }
 
 static void
 ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ephy_embed_shell_dispose;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
+
+  application_class->startup = ephy_embed_shell_startup;
+  application_class->shutdown = ephy_embed_shell_shutdown;
 
   object_properties[PROP_MODE] =
     g_param_spec_enum ("mode",

@@ -86,7 +86,6 @@ libephymain_la_CPPFLAGS = \
 	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
-	-DEPHY_WEB_EXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions"\" \
 	$(AM_CPPFLAGS)
 
 if WITH_WEBKIT2
