@@ -141,7 +141,7 @@ web_extension_proxy_created_cb (GDBusProxy *proxy,
   } else {
     shell->priv->web_extension_form_auth_save_signal_id =
       g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (shell->priv->web_extension),
-                                          NULL,
+                                          g_dbus_proxy_get_name (shell->priv->web_extension),
                                           EPHY_WEB_EXTENSION_INTERFACE,
                                          "FormAuthDataSaveConfirmationRequired",
                                           EPHY_WEB_EXTENSION_OBJECT_PATH,
