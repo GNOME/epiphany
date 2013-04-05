@@ -146,9 +146,9 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_edit_bookmarks) },
 	{ "EditHistory", NULL, N_("_History"), "<control>H", NULL,
 	  G_CALLBACK (window_cmd_edit_history) },
-	{ "EditPreferences", NULL, N_("Preferences"), "<control>e", NULL,
+	{ "EditPreferences", NULL, N_("Pr_eferences"), "<control>e", NULL,
 	  G_CALLBACK (window_cmd_edit_preferences) },
-	{ "EditPersonalData", NULL, N_("Personal Data"), "<control>m", NULL,
+	{ "EditPersonalData", NULL, N_("_Personal Data"), "<control>m", NULL,
 	  G_CALLBACK (window_cmd_edit_personal_data) },
 
 	/* View actions. */
