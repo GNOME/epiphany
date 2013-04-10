@@ -145,7 +145,7 @@ uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *file
   data->dest_uri = g_file_get_uri (dest);
 
   g_file_copy_async (src, dest,
-                     G_FILE_COPY_NONE,
+                     G_FILE_COPY_OVERWRITE,
                      G_PRIORITY_DEFAULT,
                      NULL, NULL, NULL,
                      (GAsyncReadyCallback)uri_tester_retrieve_filter_finished,
