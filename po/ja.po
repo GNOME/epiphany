@@ -1,5 +1,5 @@
 # epiphany ja.po.
-# Copyright (C) 2000-2012 epiphany's COPYRIGHT HOLDER
+# Copyright (C) 2000-2013 epiphany's COPYRIGHT HOLDER
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000.
 # Takuro Ashie <ashie@homa.ne.jp>, 2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2001-2003, 2010-2012.
@@ -9,16 +9,16 @@
 # Hideki Yamane (Debian-JP) <henrich@debian.or.jp>, 2009.
 # Hideki Yamane <henrich@debian.org>, 2011.
 # Takayoshi OKANO <kano@na.rim.or.jp>, 2011.
-# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012.
+# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011-2013.
 # Hajime Taira <htaira@redhat.com>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-04-11 20:12+0900\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-04-11 12:26+0000\n"
 "PO-Revision-Date: 2013-04-11 14:26+0900\n"
-"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
+"Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -133,11 +133,11 @@ msgstr "起動時にセッションを復元する方法を定義します。指
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Whether to delay loading of tabs that are not immediately visible on session restore"
-msgstr ""
+msgstr "セッション復元時にすぐに表示できないタブの読み込みを遅延させる"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid "When this option is set to true, tabs will not start loading until the user switches to them, upon session restore."
-msgstr ""
+msgstr "このオプションを true に設定すると、セッション復元時に、ユーザーがタブを開くまで該当のタブのページ読み込みを開始しません。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Show toolbars by default"
@@ -330,7 +330,7 @@ msgstr "広告ブロック機能を有効にする"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Whether to block the embedded advertisements that web pages might want to show."
-msgstr ""
+msgstr "ウェブページが表示しようとする埋め込みの広告をブロックするかどうかの設定です。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "The downloads folder"
@@ -417,7 +417,7 @@ msgstr "プライベートブラウジング"
 
 #: ../embed/ephy-about-handler.c:271
 msgid "You are currently browsing <em>incognito</em>. Pages viewed in this mode will not show up in your browsing history and all stored information will be cleared when you close the window."
-msgstr ""
+msgstr "現在<em>匿名</em>でブラウジングしています。このモードで表示したページは閲覧履歴に残らず、ウィンドウを閉じた時点で保存情報はクリアされます。"
 
 #: ../embed/ephy-embed.c:700
 #, c-format
@@ -794,7 +794,7 @@ msgstr "パスワードを保存"
 #: ../embed/ephy-web-view.c:509
 #, c-format
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big><b>%s</b> のパスワードを <b>%s</b> に保存したいですか?</big>"
+msgstr "<big><b>%2$s</b> の <b>%1$s</b> のパスワードを保存しますか?</big>"
 
 #: ../embed/ephy-web-view.c:1914
 msgid "Deny"
@@ -833,7 +833,7 @@ msgstr "再度試す"
 
 #: ../embed/ephy-web-view.c:2451
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
-msgstr "おっと! このサイトによってウェブブラウザーが意図せずに終了してしまいました"
+msgstr "おっと! このサイトが原因でウェブブラウザーが意図せずに終了した可能性があります"
 
 #: ../embed/ephy-web-view.c:2453
 #, c-format
@@ -847,15 +847,15 @@ msgstr "とにかく再読み込みする"
 #: ../embed/ephy-web-view.c:2467
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
-msgstr ""
+msgstr "おっと! %s の表示中に問題が発生しました"
 
 #: ../embed/ephy-web-view.c:2468
 msgid "Oops!"
-msgstr ""
+msgstr "おっと!"
 
 #: ../embed/ephy-web-view.c:2469
 msgid "Something went wrong while displaying this page. Please reload or visit a different page to continue."
-msgstr ""
+msgstr "このページの表示中に何か問題が発生しました。使用を続けるには再読み込みするか他のページにアクセスしてください。"
 
 #: ../embed/ephy-web-view.c:2912
 #, c-format
@@ -928,7 +928,7 @@ msgstr "フォルダー \"%s\" の生成に失敗しました。"
 #: ../lib/ephy-form-auth-data.c:126
 #, c-format
 msgid "Password for %s in a form in %s"
-msgstr ""
+msgstr "%2$s のフォームの %1$s のパスワード"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
@@ -1630,7 +1630,7 @@ msgstr "新しい匿名ウィンドウ(_I)"
 
 #: ../src/resources/epiphany-application-menu.ui.h:3
 msgid "Reopen Closed _Tab"
-msgstr ""
+msgstr "閉じたタブを再度開く(_T)"
 
 #. Toplevel
 #: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
@@ -1725,15 +1725,15 @@ msgstr "ウェブのコンテンツ"
 
 #: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
-msgstr "ポップアップを許可(_W)"
+msgstr "ポップアップを許可する(_W)"
 
 #: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow _advertisements"
-msgstr ""
+msgstr "広告を許可する(_A)"
 
 #: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
-msgstr "プラグインを有効化(_P)"
+msgstr "プラグインを有効にする(_P)"
 
 #: ../src/resources/prefs-dialog.ui.h:11
 msgid "General"
@@ -1874,7 +1874,7 @@ msgstr "テキストが見つかりません"
 
 #: ../src/ephy-find-toolbar.c:153
 msgid "Search wrapped back to the top"
-msgstr ""
+msgstr "末尾まで検索して先頭に戻りました"
 
 #: ../src/ephy-find-toolbar.c:637
 msgid "Find previous occurrence of the search string"
@@ -2519,7 +2519,7 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "やまねひでき <henrich@debian.org>\n"
 "Takayoshi OKANO <kano@na.rim.or.jp>\n"
-"松澤 二郎 <jmatsuzawa@src.gnome.org>\n"
+"松澤 二郎 <jmatsuzawa@gnome.org>\n"
 "Hajime Taira <htaira@redhat.com>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp/>"
 
