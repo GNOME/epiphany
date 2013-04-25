@@ -68,7 +68,6 @@ ephy_embed_form_auth_new (WebKitWebPage *web_page,
 {
   EphyEmbedFormAuth *form_auth;
 
-  g_return_val_if_fail (WEBKIT_DOM_IS_NODE (username_node), NULL);
   g_return_val_if_fail (WEBKIT_DOM_IS_NODE (password_node), NULL);
 
   form_auth = EPHY_EMBED_FORM_AUTH (g_object_new (EPHY_TYPE_EMBED_FORM_AUTH, NULL));

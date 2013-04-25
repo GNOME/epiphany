@@ -44,7 +44,8 @@ ephy_form_auth_data_get_password_schema (void)
 }
 
 static void
-normalize_and_prepare_uri (SoupURI *uri)
+normalize_and_prepare_uri (SoupURI  *uri,
+                           gboolean  remove_path)
 {
   g_assert (uri != NULL);
 
@@ -55,7 +56,8 @@ normalize_and_prepare_uri (SoupURI *uri)
     soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
 
   soup_uri_set_query (uri, NULL);
-  soup_uri_set_path (uri, "/");
+  if (remove_path)
+    soup_uri_set_path (uri, "/");
 }
 
 static GHashTable *
@@ -64,12 +66,19 @@ ephy_form_auth_data_get_secret_attributes_table (const char *uri,
                                                  const char *field_password,
                                                  const char *username)
 {
-  return secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
-                                  URI_KEY, uri,
-                                  FORM_USERNAME_KEY, field_username,
-                                  FORM_PASSWORD_KEY, field_password,
-                                  username ? USERNAME_KEY : NULL, username,
-                                  NULL);
+  if (field_username)
+    return secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
+                                    URI_KEY, uri,
+                                    FORM_USERNAME_KEY, field_username,
+                                    FORM_PASSWORD_KEY, field_password,
+                                    username ? USERNAME_KEY : NULL, username,
+                                    NULL);
+  else
+    return secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
+                                    URI_KEY, uri,
+                                    FORM_PASSWORD_KEY, field_password,
+                                    username ? USERNAME_KEY : NULL, username,
+                                    NULL);
 }
 
 static void
@@ -104,27 +113,37 @@ ephy_form_auth_data_store (const char *uri,
   GSimpleAsyncResult *res;
 
   g_return_if_fail (uri);
-  g_return_if_fail (form_username);
   g_return_if_fail (form_password);
-  g_return_if_fail (username);
   g_return_if_fail (password);
+  g_return_if_fail ((form_username && username) || (!form_username && !username));
 
   fake_uri = soup_uri_new (uri);
   g_return_if_fail (fake_uri);
 
   res = g_simple_async_result_new (NULL, callback, userdata, ephy_form_auth_data_store);
 
-  normalize_and_prepare_uri (fake_uri);
+  /* Mailman passwords need the full URI */
+  if (!form_username && g_strcmp0 (form_password, "adminpw") == 0)
+    normalize_and_prepare_uri (fake_uri, FALSE);
+  else
+    normalize_and_prepare_uri (fake_uri, TRUE);
   fake_uri_str = soup_uri_to_string (fake_uri, FALSE);
   value = secret_value_new (password, -1, "text/plain");
   attributes = ephy_form_auth_data_get_secret_attributes_table (fake_uri_str, form_username,
                                                                 form_password, username);
-  /* Translators: The first %s is the username and the second one is the
-   * hostname where this is happening. Example: gnome@gmail.com and
-   * mail.google.com.
-   */
-  label = g_strdup_printf (_("Password for %s in a form in %s"),
-                           username, fake_uri_str);
+  if (username != NULL) {
+    /* Translators: The first %s is the username and the second one is the
+     * hostname where this is happening. Example: gnome@gmail.com and
+     * mail.google.com.
+     */
+    label = g_strdup_printf (_("Password for %s in a form in %s"),
+                             username, fake_uri_str);
+  } else {
+    /* Translators: The first %s is the hostname where this is happening.
+     * Example: mail.google.com.
+     */
+    label = g_strdup_printf (_("Password in a form in %s"), fake_uri_str);
+  }
   secret_service_store (NULL, EPHY_FORM_PASSWORD_SCHEMA,
                         attributes, NULL, label, value,
                         NULL,
@@ -223,13 +242,15 @@ ephy_form_auth_data_query (const char *uri,
   GHashTable *attributes;
 
   g_return_if_fail (uri);
-  g_return_if_fail (form_username);
   g_return_if_fail (form_password);
 
   key = soup_uri_new (uri);
   g_return_if_fail (key);
 
-  normalize_and_prepare_uri (key);
+  if (!form_username && g_strcmp0 (form_password, "adminpw") == 0)
+    normalize_and_prepare_uri (key, FALSE);
+  else
+    normalize_and_prepare_uri (key, TRUE);
 
   key_str = soup_uri_to_string (key, FALSE);
 
@@ -381,9 +402,7 @@ ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
 
   g_return_if_fail (cache);
   g_return_if_fail (uri);
-  g_return_if_fail (form_username);
   g_return_if_fail (form_password);
-  g_return_if_fail (username);
 
   data = ephy_form_auth_data_new (form_username, form_password, username);
   l = g_hash_table_lookup (cache->form_auth_data_map, uri);

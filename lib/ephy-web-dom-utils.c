@@ -359,6 +359,7 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
   WebKitDOMNode *password_node = NULL;
   guint i, n_elements;
   gboolean found_auth_elements = FALSE;
+  gboolean found_auth_no_username_elements = FALSE;
 
   elements = webkit_dom_html_form_element_get_elements (form);
   n_elements = webkit_dom_html_collection_get_length (elements);
@@ -366,12 +367,13 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
   for (i = 0; i < n_elements; i++) {
     WebKitDOMNode *element;
     char *element_type;
+    char *element_name;
 
     element = webkit_dom_html_collection_item (elements, i);
     if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
       continue;
 
-    g_object_get (element, "type", &element_type, NULL);
+    g_object_get (element, "type", &element_type, "name", &element_name, NULL);
 
     if (g_str_equal (element_type, "text") || g_str_equal (element_type, "email")) {
       /* We found more than one inputs of type text; we won't be saving here. */
@@ -393,12 +395,26 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
 
       password_node = g_object_ref (element);
       found_auth_elements = TRUE;
+
+      /* We found an input that usually doesn't require a separate login
+       * adminpw is used by mailman admin pages */
+      if (g_str_equal (element_name, "adminpw"))
+        found_auth_no_username_elements = TRUE;
     }
 
     g_free (element_type);
+    g_free (element_name);
   }
 
   g_object_unref(elements);
+
+  if (found_auth_no_username_elements && password_node) {
+    g_clear_object (&username_node);
+    *username = NULL;
+    *password = password_node;
+
+    return TRUE;
+  }
 
   if (found_auth_elements && username_node && password_node) {
     *username = username_node;
