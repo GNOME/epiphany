@@ -806,7 +806,7 @@ ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy
   }
 
   gtk_box_pack_end (embed->priv->top_widgets_vbox,
-                    GTK_WIDGET (widget), TRUE, TRUE, 0);
+                    GTK_WIDGET (widget), FALSE, FALSE, 0);
 }
 
 /**
