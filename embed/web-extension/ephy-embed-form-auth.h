@@ -50,11 +50,13 @@ struct _EphyEmbedFormAuthClass
 GType              ephy_embed_form_auth_get_type          (void);
 EphyEmbedFormAuth *ephy_embed_form_auth_new               (WebKitWebPage     *web_page,
                                                            WebKitDOMNode     *username_node,
-                                                           WebKitDOMNode     *password_node);
+                                                           WebKitDOMNode     *password_node,
+                                                           const char        *username);
 WebKitDOMNode     *ephy_embed_form_auth_get_username_node (EphyEmbedFormAuth *form_auth);
 WebKitDOMNode     *ephy_embed_form_auth_get_password_node (EphyEmbedFormAuth *form_auth);
 SoupURI           *ephy_embed_form_auth_get_uri           (EphyEmbedFormAuth *form_auth);
 guint64            ephy_embed_form_auth_get_page_id       (EphyEmbedFormAuth *form_auth);
+const char        *ephy_embed_form_auth_get_username      (EphyEmbedFormAuth *form_auth);
 
 G_END_DECLS
 

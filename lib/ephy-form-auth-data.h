@@ -48,6 +48,7 @@ typedef void (*EphyFormAuthDataQueryCallback) (const char *username,
 void ephy_form_auth_data_query                (const char *uri,
                                                const char *form_username,
                                                const char *form_password,
+                                               const char *username,
                                                EphyFormAuthDataQueryCallback callback,
                                                gpointer user_data,
                                                GDestroyNotify destroy_data);

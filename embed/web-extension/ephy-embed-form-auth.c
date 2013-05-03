@@ -27,6 +27,7 @@ struct _EphyEmbedFormAuthPrivate
   SoupURI *uri;
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
+  char *username;
 };
 
 G_DEFINE_TYPE (EphyEmbedFormAuth, ephy_embed_form_auth, G_TYPE_OBJECT)
@@ -62,7 +63,8 @@ ephy_embed_form_auth_class_init (EphyEmbedFormAuthClass *klass)
 EphyEmbedFormAuth *
 ephy_embed_form_auth_new (WebKitWebPage *web_page,
                           WebKitDOMNode *username_node,
-                          WebKitDOMNode *password_node)
+                          WebKitDOMNode *password_node,
+                          const char* username)
 {
   EphyEmbedFormAuth *form_auth;
 
@@ -75,6 +77,7 @@ ephy_embed_form_auth_new (WebKitWebPage *web_page,
   form_auth->priv->uri = soup_uri_new (webkit_web_page_get_uri (web_page));
   form_auth->priv->username_node = username_node;
   form_auth->priv->password_node = password_node;
+  form_auth->priv->username = g_strdup (username);
 
   return form_auth;
 }
@@ -101,4 +104,10 @@ guint64
 ephy_embed_form_auth_get_page_id (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->priv->page_id;
+}
+
+const char*
+ephy_embed_form_auth_get_username (EphyEmbedFormAuth *form_auth)
+{
+  return form_auth->priv->username;
 }

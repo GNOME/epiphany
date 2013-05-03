@@ -256,14 +256,19 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   WebKitDOMNode *username_node = NULL;
   WebKitDOMNode *password_node = NULL;
   char *username_field_name = NULL;
+  char *username_field_value = NULL;
   char *password_field_name = NULL;
   char *uri_str;
 
   if (!ephy_web_dom_utils_find_form_auth_elements (dom_form, &username_node, &password_node))
     return TRUE;
 
+  g_object_get (username_node,
+                "value", &username_field_value,
+                NULL);
+
   /* EphyEmbedFormAuth takes ownership of the nodes */
-  form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node);
+  form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node, username_field_value);
   uri = ephy_embed_form_auth_get_uri (form_auth);
   soup_uri_set_query (uri, NULL);
 
@@ -274,11 +279,13 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   ephy_form_auth_data_query (uri_str,
                              username_field_name,
                              password_field_name,
+                             username_field_value,
                              should_store_cb,
                              form_auth,
                              (GDestroyNotify)g_object_unref);
 
   g_free (username_field_name);
+  g_free (username_field_value);
   g_free (password_field_name);
   g_free (uri_str);
 
@@ -334,6 +341,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   EphyFormAuthData *form_data;
   SoupURI *uri;
   char *uri_str;
+  char *username;
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   if (!uri)
@@ -347,13 +355,39 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   form_data = (EphyFormAuthData *)l->data;
   uri_str = soup_uri_to_string (uri, FALSE);
 
+  g_object_get (ephy_embed_form_auth_get_username_node (form_auth),
+                "value", &username,
+                NULL);
+
+  /* The username node is empty, so pre-fill with the default. */
+  if (g_str_equal (username, ""))
+    g_clear_pointer (&username, g_free);
+
   ephy_form_auth_data_query (uri_str,
                              form_data->form_username,
                              form_data->form_password,
+                             username,
                              fill_form_cb,
                              g_object_ref (form_auth),
-                             (GDestroyNotify)g_object_unref);
+                             (GDestroyNotify) g_object_unref);
+
+  g_free (username);
   g_free (uri_str);
+}
+
+static gboolean
+username_changed_cb (WebKitDOMNode *username_node,
+                     WebKitDOMEvent *dom_event,
+                     EphyEmbedFormAuth *form_auth)
+{
+  pre_fill_form (form_auth);
+  return TRUE;
+}
+
+static void
+form_destroyed_cb (gpointer form_auth, GObject *form)
+{
+  g_object_unref (form_auth);
 }
 
 static void
@@ -393,12 +427,16 @@ web_page_document_loaded (WebKitWebPage *web_page,
       LOG ("Hooking and pre-filling a form");
 
       /* EphyEmbedFormAuth takes ownership of the nodes */
-      form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node);
+      form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node, NULL);
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "submit",
                                                   G_CALLBACK (form_submitted_cb), FALSE,
                                                   web_page);
+      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "blur",
+                                                  G_CALLBACK (username_changed_cb), FALSE,
+                                                  form_auth);
       pre_fill_form (form_auth);
-      g_object_unref (form_auth);
+
+      g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
     } else
       LOG ("No pre-fillable/hookable form found");
   }
