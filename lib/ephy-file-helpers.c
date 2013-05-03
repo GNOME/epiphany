@@ -319,7 +319,7 @@ ephy_file_helpers_init (const char *profile_dir,
 	private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
 	steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
-	if (private_profile && profile_dir != NULL && !steal_data_from_profile)
+	if (profile_dir != NULL && !steal_data_from_profile)
 	{
 		dot_dir = g_strdup (profile_dir);
 	}

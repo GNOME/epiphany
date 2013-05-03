@@ -334,11 +334,6 @@ main (int argc,
     exit (1);
   }
 
-  if (profile_directory != NULL && private_instance == FALSE && application_mode == FALSE && incognito_mode == FALSE) {
-    g_print ("--profile can only be used in combination with --private-instance, --incognito-mode or --application-mode\n");
-    exit (1);
-  }
-
   if (application_mode && profile_directory == NULL) {
     g_print ("--profile must be used when --application-mode is requested\n");
     exit (1);
@@ -417,7 +412,13 @@ main (int argc,
   /* Now create the shell */
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-  else if (incognito_mode) {
+  else if (profile_directory) {
+    /* This mode exists purely for letting EphyShell know it should
+     * not consider this instance part of the unique application
+     * represented by the BROWSER mode.
+     */
+    mode = EPHY_EMBED_SHELL_MODE_STANDALONE;
+  } else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
 
     /* Use the right theming. */
