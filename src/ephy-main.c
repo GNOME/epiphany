@@ -132,6 +132,10 @@ get_startup_id (void)
 }
 
 #ifdef GDK_WINDOWING_X11
+/*
+ * FIXME: Need a solution for windowing-systems other than X11.
+ */
+
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
  */
