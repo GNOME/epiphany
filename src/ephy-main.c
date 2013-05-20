@@ -34,12 +34,15 @@
 #include "ephy-web-app-utils.h"
 
 #include <errno.h>
-#include <gdk/gdkx.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 #include <libxml/xmlversion.h>
 #include <string.h>
+
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
 
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
@@ -128,6 +131,7 @@ get_startup_id (void)
   return retval;
 }
 
+#ifdef GDK_WINDOWING_X11
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
  */
@@ -178,6 +182,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
   
   return event.xproperty.time;
 }
+#endif
 
 static void
 show_error_message (GError **error)
@@ -398,9 +403,16 @@ main (int argc,
     arguments = args;
   }
 
+#ifdef GDK_WINDOWING_X11
   /* Get a timestamp manually if need be */
-  if (user_time == 0)
-      user_time = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
+  if (user_time == 0) {
+    GdkDisplay* display =
+      gdk_display_manager_get_default_display (gdk_display_manager_get ());
+    if (GDK_IS_X11_DISPLAY (display))
+      user_time =
+        slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (display));
+  }
+#endif
 
   /* Delete the requested web application, if any. Must happen after
    * ephy_file_helpers_init (). */
