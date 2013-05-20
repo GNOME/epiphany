@@ -770,18 +770,19 @@ title_changed_cb (WebKitWebView *web_view,
 {
   const char *uri;
   char *title;
-  EphyHistoryService *history = EPHY_WEB_VIEW (web_view)->priv->history_service;
+  EphyWebView *webview  = EPHY_WEB_VIEW (web_view);
+  EphyHistoryService *history = webview->priv->history_service;
 
   uri = webkit_web_view_get_uri (web_view);
 
   g_object_get (web_view, "title", &title, NULL);
 
-  ephy_web_view_set_title (EPHY_WEB_VIEW (web_view), title);
+  ephy_web_view_set_title (webview, title);
   
   if (!title && uri)
     title = get_title_from_address (uri);
 
-  if (uri && title)
+  if (uri && title && !ephy_web_view_is_history_frozen (webview))
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
 
   g_free (title);
