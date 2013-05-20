@@ -2171,8 +2171,6 @@ load_changed_cb (WebKitWebView *web_view,
       g_free (history_uri);
     }
 
-    ephy_web_view_thaw_history (view);
-
     break;
   }
   case WEBKIT_LOAD_FINISHED:
@@ -2195,6 +2193,8 @@ load_changed_cb (WebKitWebView *web_view,
         g_source_remove (priv->snapshot_idle_id);
       priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)web_view_check_snapshot, web_view, NULL);
     }
+
+    ephy_web_view_thaw_history (view);
 
     break;
   }
