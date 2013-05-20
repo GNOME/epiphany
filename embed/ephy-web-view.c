@@ -871,10 +871,12 @@ process_crashed_cb (WebKitWebView *web_view, gpointer user_data)
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
 
   g_return_if_fail (priv->show_process_crash_page_id == 0);
-  priv->show_process_crash_page_id = g_idle_add_full (G_PRIORITY_LOW,
-                                                      (GSourceFunc)load_process_crashed_page_cb,
-                                                      web_view,
-                                                      NULL);
+
+  if (!ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view)))
+    priv->show_process_crash_page_id = g_idle_add_full (G_PRIORITY_LOW,
+                                                        (GSourceFunc)load_process_crashed_page_cb,
+                                                        web_view,
+                                                        NULL);
 }
 
 static void
