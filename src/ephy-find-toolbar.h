@@ -53,7 +53,7 @@ struct _EphyFindToolbar
 
 struct _EphyFindToolbarClass
 {
-	GtkToolbarClass parent_class;
+	GtkBoxClass parent_class;
 
 	/* Signals */
 	void (* next)		(EphyFindToolbar *toolbar);
