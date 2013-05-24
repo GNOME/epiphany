@@ -19,6 +19,8 @@
  *
  */
 
+#include "config.h"
+
 #include "ephy-overview-store.h"
 #include "ephy-removable-pixbuf-renderer.h"
 #include "gd-main-icon-view.h"
