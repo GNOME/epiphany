@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-03-28 14:22+0200\n"
-"PO-Revision-Date: 2013-03-28 14:25+0200\n"
+"POT-Creation-Date: 2013-05-24 11:43+0300\n"
+"PO-Revision-Date: 2013-05-24 11:44+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "Language: he\n"
@@ -40,9 +40,9 @@ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.co.il/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
 #: ../data/epiphany.desktop.in.in.h:1
-#: ../src/ephy-main.c:64
-#: ../src/ephy-main.c:305
-#: ../src/ephy-main.c:455
+#: ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314
+#: ../src/ephy-main.c:472
 #: ../src/window-commands.c:1780
 msgid "Web"
 msgstr "דפדפן"
@@ -767,15 +767,15 @@ msgstr "הנצפים ביותר"
 
 #. characters
 #: ../embed/ephy-web-view.c:64
-#: ../embed/ephy-web-view.c:2742
+#: ../embed/ephy-web-view.c:2743
 msgid "Blank page"
 msgstr "דף ריק"
 
-#: ../embed/ephy-web-view.c:492
+#: ../embed/ephy-web-view.c:496
 msgid "Not now"
 msgstr "לא כעת"
 
-#: ../embed/ephy-web-view.c:493
+#: ../embed/ephy-web-view.c:497
 msgid "Store password"
 msgstr "אחסון הססמה"
 
@@ -783,85 +783,85 @@ msgstr "אחסון הססמה"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:505
+#: ../embed/ephy-web-view.c:509
 #, c-format
 msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>האם לאחסן את הססמה עבור <b>%s</b> ב־<b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1377
+#: ../embed/ephy-web-view.c:1384
 msgid "Deny"
 msgstr "דחייה"
 
-#: ../embed/ephy-web-view.c:1378
+#: ../embed/ephy-web-view.c:1385
 msgid "Allow"
 msgstr "אישור"
 
-#: ../embed/ephy-web-view.c:1388
+#: ../embed/ephy-web-view.c:1395
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "העמוד בכתובת <b>%s</b> מעוניין לדעת את מיקומך."
 
-#: ../embed/ephy-web-view.c:1721
+#: ../embed/ephy-web-view.c:1723
 msgid "None specified"
 msgstr "לא צוינה"
 
-#: ../embed/ephy-web-view.c:1730
-#: ../embed/ephy-web-view.c:1748
+#: ../embed/ephy-web-view.c:1732
+#: ../embed/ephy-web-view.c:1750
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "אופס! אירעה שגיאה בטעינת %s"
 
-#: ../embed/ephy-web-view.c:1732
+#: ../embed/ephy-web-view.c:1734
 msgid "Oops! It was not possible to show this website"
 msgstr "אופס! לא ניתן להציג אתר זה"
 
-#: ../embed/ephy-web-view.c:1733
+#: ../embed/ephy-web-view.c:1735
 #, c-format
 msgid "<p>The website at <strong>%s</strong> seems to be unavailable. The precise error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or moved to a new address. Don't forget to check that your internet connection is working correctly.</p>"
 msgstr "<p>כפי הנראה האתר <strong>%s</strong> אינו זמין, השגיאה המדויקת הייתה: </p><p><em>%s</em>.</p><p>בהחלט יתכן כי פעילות האתר הופסקה או שהועברה לכתובת חדשה. נא לא לשכוח לוודא כי חיבור האינטרנט פועל כראוי.</p>"
 
-#: ../embed/ephy-web-view.c:1742
+#: ../embed/ephy-web-view.c:1744
 msgid "Try again"
 msgstr "ניסיון חוזר"
 
-#: ../embed/ephy-web-view.c:1750
+#: ../embed/ephy-web-view.c:1752
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "אופס! אתר זה כנראה גרם לדפדפן להיסגר באופן בלתי צפוי"
 
-#: ../embed/ephy-web-view.c:1752
+#: ../embed/ephy-web-view.c:1754
 #, c-format
 msgid "<p>This page was loading when the web browser closed unexpectedly.</p><p>This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers.</p>"
 msgstr "<p>עמוד זה היה בטעינה בזמן שהדפדפן נסגר באופן לא צפוי.</p><p> פעולה זו עלולה לצוץ שוב אם הדף ייטען שוב. במידה שזה קורה שוב נא לדווח על התקלה למפתחי <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1760
+#: ../embed/ephy-web-view.c:1762
 msgid "Load again anyway"
 msgstr "טעינה מחדש בכל זאת"
 
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1768
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "אופס! משהו השתבש בעת הצגת %s"
 
-#: ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1769
 msgid "Oops!"
 msgstr "אופס!"
 
-#: ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1770
 msgid "Something went wrong while displaying this page. Please reload or visit a different page to continue."
 msgstr "משהו השתבש במהלך ההצגה של עמוד זה. נא לרענן או לבקר בעמוד אחר כדי להמשיך."
 
-#: ../embed/ephy-web-view.c:2079
+#: ../embed/ephy-web-view.c:2080
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.il/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2317
+#: ../embed/ephy-web-view.c:2318
 #, c-format
 msgid "Loading “%s”…"
 msgstr "„%s“ בטעינה…"
 
-#: ../embed/ephy-web-view.c:2319
+#: ../embed/ephy-web-view.c:2320
 msgid "Loading…"
 msgstr "בטעינה…"
 
@@ -1652,16 +1652,14 @@ msgid "_History"
 msgstr "היס_טוריה"
 
 #: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/resources/epiphany.ui.h:10
 #: ../src/ephy-window.c:151
-msgid "Personal Data"
-msgstr "מידע אישי"
+msgid "_Personal Data"
+msgstr "מידע _אישי"
 
 #: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/resources/prefs-dialog.ui.h:3
 #: ../src/ephy-window.c:149
-msgid "Preferences"
-msgstr "העדפות"
+msgid "Pr_eferences"
+msgstr "ה_עדפות"
 
 #: ../src/resources/epiphany-application-menu.ui.h:9
 #: ../src/ephy-window.c:120
@@ -1705,6 +1703,10 @@ msgstr "שימוש בקידוד המוגדר במסמך"
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_שימוש בקידוד אחר:</b>"
 
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "מידע אישי"
+
 #: ../src/resources/epiphany.ui.h:11
 #: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
@@ -1726,6 +1728,10 @@ msgstr "הוספת שפה"
 #: ../src/resources/prefs-dialog.ui.h:2
 msgid "Choose a l_anguage:"
 msgstr "בחירת _שפה:"
+
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "העדפות"
 
 #: ../src/resources/prefs-dialog.ui.h:5
 msgid "_Download folder:"
@@ -1994,68 +2000,68 @@ msgstr "כל ההיסטוריה"
 msgid "History"
 msgstr "היסטוריה"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Open a new tab in an existing browser window"
 
-#: ../src/ephy-main.c:75
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Open a new browser window"
 
-#: ../src/ephy-main.c:77
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Import bookmarks from the given file"
 
-#: ../src/ephy-main.c:77
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "Load the given session file"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "Add a bookmark"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "Start a private instance"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
 msgstr "Start an instance in incognito mode"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
 msgstr "Start an instance in netbank mode"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "Start the browser in application mode"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "Profile directory to use in the private instance"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:192
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "Could not start Web"
 
-#: ../src/ephy-main.c:195
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2064,7 +2070,7 @@ msgstr ""
 "Startup failed because of the following error:\n"
 "%s"
 
-#: ../src/ephy-main.c:306
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "Web options"
 
