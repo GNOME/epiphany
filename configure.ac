@@ -35,7 +35,7 @@ AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
 AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
 AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
 
-AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip tar-ustar])
+AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip tar-ustar])
 
 # Use AM_SILENT_RULES if present
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
