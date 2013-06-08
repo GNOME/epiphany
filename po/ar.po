@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-03-23 21:47+0200\n"
-"PO-Revision-Date: 2013-03-23 21:50+0200\n"
+"POT-Creation-Date: 2013-06-08 20:33+0200\n"
+"PO-Revision-Date: 2013-06-08 20:34+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -45,8 +45,8 @@ msgstr "http://www.google.com"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:64
-#: ../src/ephy-main.c:305 ../src/ephy-main.c:455 ../src/window-commands.c:1796
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1780
 msgid "Web"
 msgstr "الوب"
 
@@ -417,57 +417,57 @@ msgstr ""
 msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 
-#: ../embed/ephy-about-handler.c:60 ../embed/ephy-about-handler.c:63
+#: ../embed/ephy-about-handler.c:143 ../embed/ephy-about-handler.c:145
 msgid "Installed plugins"
 msgstr "الملحقات المثبّتة"
 
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "Enabled"
 msgstr "مُفعّل"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "Yes"
 msgstr "نعم"
 
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "No"
 msgstr "لا"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "MIME type"
 msgstr "نوع MIME"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "Description"
 msgstr "الوَصف"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "Suffixes"
 msgstr "اللواحق"
 
-#: ../embed/ephy-about-handler.c:122 ../embed/ephy-about-handler.c:125
+#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:221
 msgid "Memory usage"
 msgstr "استخدام الذاكرة"
 
-#: ../embed/ephy-about-handler.c:158 ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:299 ../embed/ephy-about-handler.c:301
 msgid "Applications"
 msgstr "التطبيقات"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:302
 msgid "List of installed web applications"
 msgstr "قائمة تطبيقات الوِب المثبّتة"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:182
+#: ../embed/ephy-about-handler.c:323
 msgid "Installed on:"
 msgstr "ثُبّت في:"
 
-#: ../embed/ephy-about-handler.c:217 ../embed/ephy-about-handler.c:219
+#: ../embed/ephy-about-handler.c:395 ../embed/ephy-about-handler.c:398
 msgid "Private Browsing"
 msgstr "التصفح الخاص"
 
-#: ../embed/ephy-about-handler.c:220
+#: ../embed/ephy-about-handler.c:399
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -489,10 +489,6 @@ msgstr "ESC"
 #: ../embed/ephy-embed.c:490
 msgid "F11"
 msgstr "F11"
-
-#: ../embed/ephy-embed-shell.c:319
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "لا يمكن استخدام إبِفَني الآن. فشل البدء."
 
 #: ../embed/ephy-embed-utils.c:59
 #, c-format
@@ -828,15 +824,15 @@ msgid "Most Visited"
 msgstr "الأكثر زيارة"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:2743
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2723
 msgid "Blank page"
 msgstr "صفحة فارغة"
 
-#: ../embed/ephy-web-view.c:493
+#: ../embed/ephy-web-view.c:495
 msgid "Not now"
 msgstr "ليس الآن"
 
-#: ../embed/ephy-web-view.c:494
+#: ../embed/ephy-web-view.c:496
 msgid "Store password"
 msgstr "خزّن كلمة السر"
 
@@ -844,39 +840,39 @@ msgstr "خزّن كلمة السر"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:506
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>أتريد حفظ كلمة سر <b>%s</b> في <b>%s</b>؟</big>"
 
-#: ../embed/ephy-web-view.c:1378
+#: ../embed/ephy-web-view.c:1364
 msgid "Deny"
 msgstr "ارفض"
 
-#: ../embed/ephy-web-view.c:1379
+#: ../embed/ephy-web-view.c:1365
 msgid "Allow"
 msgstr "اسمح"
 
-#: ../embed/ephy-web-view.c:1389
+#: ../embed/ephy-web-view.c:1375
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "تريد الصفحة في <b>%s</b> معرفة مكانك."
 
-#: ../embed/ephy-web-view.c:1722
+#: ../embed/ephy-web-view.c:1703
 msgid "None specified"
 msgstr "غير محدّد"
 
-#: ../embed/ephy-web-view.c:1731 ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1712 ../embed/ephy-web-view.c:1730
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "عطل أثناء تحميل %s"
 
-#: ../embed/ephy-web-view.c:1733
+#: ../embed/ephy-web-view.c:1714
 msgid "Oops! It was not possible to show this website"
 msgstr "تعذّر إظهار هذا الموقع"
 
-#: ../embed/ephy-web-view.c:1734
+#: ../embed/ephy-web-view.c:1715
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -888,15 +884,15 @@ msgstr ""
 "p><p><em>%s</em></p><p>قد يكون الموقع أُغلق مؤقتًا أو انتقل إلى عنوان جديد. لا "
 "تنسَ أن تتأكّد أنّ اتصال الإنترنت يعمل جيدا.</p>"
 
-#: ../embed/ephy-web-view.c:1743
+#: ../embed/ephy-web-view.c:1724
 msgid "Try again"
 msgstr "أعِد المحاولة"
 
-#: ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1732
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "قد يكون هذا الموقع تسبب في انهيار متصفِّح الوِب وإغلاقه"
 
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1734
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -907,20 +903,20 @@ msgstr ""
 "أعدت تحميل هذه الصفحة. إذا حدث هذا فأبلغ مطوري <strong>%s</strong> عن هذه "
 "المشكلة.</p>"
 
-#: ../embed/ephy-web-view.c:1761
+#: ../embed/ephy-web-view.c:1742
 msgid "Load again anyway"
 msgstr "أعِد التحميل مع هذا"
 
-#: ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1748
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "حدث عُطل ما أثناء عرض %s"
 
-#: ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1749
 msgid "Oops!"
 msgstr "عُطل!"
 
-#: ../embed/ephy-web-view.c:1769
+#: ../embed/ephy-web-view.c:1750
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -928,18 +924,18 @@ msgstr ""
 "حدث عُطل ما أثناء عرض هذه الصفحة. من فضلك أعِد تحميل الصفحة أو اذهب إلى صفحة "
 "أخرى لمواصلة تصفُّحِك."
 
-#: ../embed/ephy-web-view.c:2080
+#: ../embed/ephy-web-view.c:2060
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2318
+#: ../embed/ephy-web-view.c:2298
 #, c-format
 msgid "Loading “%s”…"
 msgstr "يُحمل ”%s“…"
 
-#: ../embed/ephy-web-view.c:2320
+#: ../embed/ephy-web-view.c:2300
 msgid "Loading…"
 msgstr "يُحمل…"
 
@@ -1243,12 +1239,12 @@ msgstr "تم"
 msgid "Error downloading: %s"
 msgstr "عطل أثناء التنزيل: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:897
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:896
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1317
-#: ../src/window-commands.c:281
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1311
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "افتح"
 
@@ -1394,7 +1390,7 @@ msgid "Nearby Sites"
 msgstr "مواقع قريبة"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1167
-#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "بدون عنوان"
 
@@ -1506,7 +1502,7 @@ msgid "Export bookmarks to a file"
 msgstr "صدّر العلامات إلى ملف"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:119
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
 msgid "_Close"
 msgstr "أ_غلق"
 
@@ -1516,7 +1512,7 @@ msgstr "أغلق نافذة العلامات"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:130
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "_قص"
 
@@ -1528,7 +1524,7 @@ msgstr "قص التحديد"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
 #: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:131
 msgid "_Copy"
 msgstr "ا_نسخ"
 
@@ -1538,7 +1534,7 @@ msgid "Copy the selection"
 msgstr "انسخ التحديد"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:134
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:133
 msgid "_Paste"
 msgstr "أ_لصق"
 
@@ -1557,7 +1553,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "احذف العلامة أو الموضوع المختار"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:138
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:137
 msgid "Select _All"
 msgstr "اخت_ر الكل"
 
@@ -1578,7 +1574,7 @@ msgstr "اعرض مساعدة العلامات"
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 #: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:197
 msgid "_About"
 msgstr "_عنْ"
 
@@ -1739,11 +1735,11 @@ msgid "Create topic “%s”"
 msgstr "أنشئ الموضوع ”%s“"
 
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:105
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:104
 msgid "_New Window"
 msgstr "نافذة _جديدة"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:106
 msgid "New _Incognito Window"
 msgstr "نافذة تصفح _خاص جديدة"
 
@@ -1752,25 +1748,23 @@ msgid "Reopen Closed _Tab"
 msgstr "أعد فتح اللسان المُ_غلق"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:97
 msgid "_Bookmarks"
 msgstr "ال_علامات"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:147
 msgid "_History"
 msgstr "ال_تأريخ"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
-msgid "Personal Data"
-msgstr "البيانات الشخصية"
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:151
+msgid "_Personal Data"
+msgstr "البيا_نات الشخصية"
 
-#: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
-msgid "Preferences"
-msgstr "التفضيلات"
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:149
+msgid "Pr_eferences"
+msgstr "ال_تفضيلات"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:120
 msgid "_Quit"
 msgstr "أ_نهِ"
 
@@ -1810,6 +1804,10 @@ msgstr "استخدم الترميز المحدد في المستند"
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>ا_ستخدم ترميزا مغايرا:</b>"
 
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "البيانات الشخصية"
+
 #: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "الكعكات"
@@ -1829,6 +1827,10 @@ msgstr "أضِف لغة"
 #: ../src/resources/prefs-dialog.ui.h:2
 msgid "Choose a l_anguage:"
 msgstr "اختر _لغة:"
+
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "التفضيلات"
 
 #: ../src/resources/prefs-dialog.ui.h:5
 msgid "_Download folder:"
@@ -1939,7 +1941,7 @@ msgstr "م.ب"
 msgid "Privacy"
 msgstr "الخصوصية"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:416
 msgid "Encodings"
 msgstr "الترميزات"
 
@@ -1955,7 +1957,7 @@ msgstr "التدقيق الإملائي"
 msgid "_Enable spell checking"
 msgstr "_فعّل التدقيق الإملائي"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:779
 msgid "Language"
 msgstr "اللغة"
 
@@ -1967,7 +1969,7 @@ msgstr "أوقف"
 msgid "Stop current data transfer"
 msgstr "أوقف نقل البيانات الحالي"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:161
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:160
 msgid "_Reload"
 msgstr "أ_عد التحميل"
 
@@ -2099,67 +2101,67 @@ msgstr "كل التأريخ"
 msgid "History"
 msgstr "التأريخ"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "افتح لسان جديد في نافذة متصفح موجودة"
 
-#: ../src/ephy-main.c:75
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "افتح نافذة متصفّح جديدة"
 
-#: ../src/ephy-main.c:77
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "استورد العلامات من الملف المحدّد"
 
-#: ../src/ephy-main.c:77 ../src/ephy-main.c:79
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "ملف"
 
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "حمّل ملف الجلسة المعطى"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "أضِف علامة موقع"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "مسار"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "ابدأ سيرورة خاصة"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
 msgstr "ابدأ المتصفّح في طور التصفح الخاص"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
 msgstr "ابدأ المتصفّح في طور التصفح البنكيّ"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "ابدأ المتصفّح في طور التطبيق"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "الدليل المستعمل للاحة السيرورة الخاص"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "دليل"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "مسار …"
 
-#: ../src/ephy-main.c:192
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "تعذّر بدأ متصفح الوب"
 
-#: ../src/ephy-main.c:195
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2168,276 +2170,271 @@ msgstr ""
 "فشل بدأ التشغيل للخطأ التالي:\n"
 "%s"
 
-#: ../src/ephy-main.c:306
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "خيارات الوب"
 
-#: ../src/ephy-notebook.c:598
+#: ../src/ephy-notebook.c:599
 msgid "Close tab"
 msgstr "أغلق اللسان"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-window.c:108
 msgid "_Open…"
 msgstr "ا_فتح…"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "Save _As…"
 msgstr "احفظ _ك‍…"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "Save As _Web Application…"
 msgstr "احفظ كتطبيق _وِب…"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:114
 msgid "_Print…"
 msgstr "ا_طبع…"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:116
 msgid "S_end Link by Email…"
 msgstr "أر_سل الوصلة بالبريد الإلكتروني…"
 
 #. Edit actions.
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:125
 msgid "_Undo"
 msgstr "تر_اجع"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Re_do"
 msgstr "أ_عد"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:139
 msgid "_Find…"
 msgstr "ا_بحث…"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:141
 msgid "Find Ne_xt"
 msgstr "ابحث عن الت_الي"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:143
 msgid "Find Pre_vious"
 msgstr "ابحث عن ال_سابق"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "Edit _Bookmarks"
 msgstr "_حرّر العلامات"
 
 #. View actions.
-#: ../src/ephy-window.c:157 ../src/ephy-window.c:159
+#: ../src/ephy-window.c:156 ../src/ephy-window.c:158
 msgid "_Stop"
 msgstr "أو_قف"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:162
 msgid "Zoom _In"
 msgstr "_قرّب"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Zoom O_ut"
 msgstr "بعّ_د"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Normal Size"
 msgstr "_حجم عادي"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:168
 msgid "Text _Encoding"
 msgstr "ت_رميز النص"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "_Page Source"
 msgstr "_مصدر الصفحة"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:174
 msgid "_Add Bookmark…"
 msgstr "أ_ضِف علامة…"
 
 #. Go actions.
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "_Location…"
 msgstr "_مكان…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "_Previous Tab"
 msgstr "اللسان ال_سابق"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:186
 msgid "_Next Tab"
 msgstr "اللسان ال_تالي"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:188
 msgid "Move Tab _Left"
 msgstr "انقل اللسان _يسارًا"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Move Tab _Right"
 msgstr "انقل اللسان _يمينًا"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:192
 msgid "_Detach Tab"
 msgstr "ا_فصل اللسان"
 
-#. File actions.
-#: ../src/ephy-window.c:206
-msgid "_Work Offline"
-msgstr "ا_عمل دون اتّصال"
-
 #. View actions.
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:205
 msgid "_Downloads Bar"
 msgstr "_شريط التنزيلات"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:208
 msgid "_Fullscreen"
 msgstr "_ملء الشاشة"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:210
 msgid "Popup _Windows"
 msgstr "_نوافذ منبثقة"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:212
 msgid "Selection Caret"
 msgstr "مؤشّر التحديد"
 
 #. Document.
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:219
 msgid "Add Boo_kmark…"
 msgstr "أضِف _علامة…"
 
 #. Links.
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:224
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:226
 msgid "Open Link in New _Window"
 msgstr "افتح الوصلة في نافذة _جديدة"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:228
 msgid "Open Link in New _Tab"
 msgstr "افتح الوصلة في _لسان جديد"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:230
 msgid "_Download Link"
 msgstr "_نزّل الوصلة"
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:232
 msgid "_Save Link As…"
 msgstr "ا_حفظ الوصلة ك‍…"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:234
 msgid "_Bookmark Link…"
 msgstr "_علّم الوصلة…"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:236
 msgid "_Copy Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:238
 msgid "_Copy E-mail Address"
 msgstr "ا_نسخ عنوان البريد الإلكتروني"
 
 #. Images.
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:243
 msgid "Open _Image"
 msgstr "افتح ال_صورة"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:245
 msgid "_Save Image As…"
 msgstr "ا_حفظ الصورة ك‍…"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:247
 msgid "_Use Image As Background"
 msgstr "ا_ستخدم الصورة كخلفية"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:249
 msgid "Copy I_mage Address"
 msgstr "انسخ عنوان ال_صورة"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:251
 msgid "St_art Animation"
 msgstr "ا_بدأ التحريك"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:253
 msgid "St_op Animation"
 msgstr "أ_وقف التحريك"
 
 #. Inspector.
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:269
 msgid "Inspect _Element"
 msgstr "افحص ال_عنصر"
 
-#: ../src/ephy-window.c:483
+#: ../src/ephy-window.c:477
 msgid "There are unsubmitted changes to form elements"
 msgstr "هناك تغييرات في عناصر النموذج غير مرسلة"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:478
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ستخسر تلك المعلومات إذا أغلقت المستند."
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:480
 msgid "Close _Document"
 msgstr "أغلق ال_مستند"
 
-#: ../src/ephy-window.c:504
+#: ../src/ephy-window.c:498
 msgid "There are ongoing downloads in this window"
 msgstr "هناك تنزيلات لم تكتمل في هذه النافذة"
 
-#: ../src/ephy-window.c:505
+#: ../src/ephy-window.c:499
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "إذا أغلقت هذه النافذة فستُلغى كل التنزيلات"
 
-#: ../src/ephy-window.c:506
+#: ../src/ephy-window.c:500
 msgid "Close window and cancel downloads"
 msgstr "أغلق النافذة وألغِ التنزيلات"
 
-#: ../src/ephy-window.c:1319
+#: ../src/ephy-window.c:1313
 msgid "Save As"
 msgstr "احفظ ك‍"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1315
 msgid "Save As Application"
 msgstr "احفظ كتطبيق"
 
-#: ../src/ephy-window.c:1323
+#: ../src/ephy-window.c:1317
 msgid "Print"
 msgstr "اطبع"
 
-#: ../src/ephy-window.c:1325
+#: ../src/ephy-window.c:1319
 msgid "Bookmark"
 msgstr "علامة"
 
-#: ../src/ephy-window.c:1327
+#: ../src/ephy-window.c:1321
 msgid "Find"
 msgstr "ابحث"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1336
+#: ../src/ephy-window.c:1330
 msgid "Larger"
 msgstr "أكبر"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1333
 msgid "Smaller"
 msgstr "أصغر"
 
-#: ../src/ephy-window.c:1367
+#: ../src/ephy-window.c:1361
 msgid "Back"
 msgstr "للخلف"
 
-#: ../src/ephy-window.c:1379
+#: ../src/ephy-window.c:1373
 msgid "Forward"
 msgstr "للأمام"
 
-#: ../src/ephy-window.c:1391
+#: ../src/ephy-window.c:1385
 msgid "Zoom"
 msgstr "قرّب"
 
-#: ../src/ephy-window.c:1400
+#: ../src/ephy-window.c:1394
 msgid "New _Tab"
 msgstr "_لسان جديد"
 
-#: ../src/ephy-window.c:1408
+#: ../src/ephy-window.c:1402
 msgid "Go to most visited"
 msgstr "اذهب إلى الأكثر زيارة"
 
@@ -2535,7 +2532,7 @@ msgstr "احفظ الصورة ك‍"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
+#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2544,13 +2541,13 @@ msgstr "‏%s ‏(%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:489
+#: ../src/prefs-dialog.c:488
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "حددها المستخدم (%s)"
 
-#: ../src/prefs-dialog.c:511
+#: ../src/prefs-dialog.c:510
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2561,53 +2558,53 @@ msgstr[3] "لغات النظام (%s)"
 msgstr[4] "لغات النظام (%s)"
 msgstr[5] "لغات النظام (%s)"
 
-#: ../src/prefs-dialog.c:869
+#: ../src/prefs-dialog.c:868
 msgid "Select a Directory"
 msgstr "اختر دليلا"
 
-#: ../src/window-commands.c:359
+#: ../src/window-commands.c:358
 msgid "Save"
 msgstr "احفظ"
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:893
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "يوجد بالفعل تطبيق بالاسم '%s'. أترغب في استبداله؟"
 
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:898
 msgid "Replace"
 msgstr "استبدل"
 
-#: ../src/window-commands.c:903
+#: ../src/window-commands.c:902
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "يوجد تطبيق بنفس الاسم. استبداله سيكتب فوقه."
 
-#: ../src/window-commands.c:939
+#: ../src/window-commands.c:938
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "التطبيق '%s' جاهز للاستخدام"
 
-#: ../src/window-commands.c:942
+#: ../src/window-commands.c:941
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "تعذّر إنشاء التطبيق '%s'"
 
-#: ../src/window-commands.c:950
+#: ../src/window-commands.c:949
 msgid "Launch"
 msgstr "أطلِق"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:990
+#: ../src/window-commands.c:989
 msgid "Create Web Application"
 msgstr "أنشئ تطبيق وِب"
 
-#: ../src/window-commands.c:995
+#: ../src/window-commands.c:994
 msgid "C_reate"
 msgstr "أن_شئ"
 
-#: ../src/window-commands.c:1685
+#: ../src/window-commands.c:1669
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2618,7 +2615,7 @@ msgstr ""
 "العمومية العامة لجنو والتي نشرتها منظمة البرمجيات الحرة؛ سواء الإصدارة 2 من "
 "الرخصة أو أي إصدارة بعدها حسب رغبتك."
 
-#: ../src/window-commands.c:1689
+#: ../src/window-commands.c:1673
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2629,7 +2626,7 @@ msgstr ""
 "حتى أي ضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك "
 "مراجعة الرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../src/window-commands.c:1693
+#: ../src/window-commands.c:1677
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2640,20 +2637,20 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301  USA."
 
-#: ../src/window-commands.c:1739 ../src/window-commands.c:1755
-#: ../src/window-commands.c:1766
+#: ../src/window-commands.c:1723 ../src/window-commands.c:1739
+#: ../src/window-commands.c:1750
 msgid "Contact us at:"
 msgstr "اتصل بنا على:"
 
-#: ../src/window-commands.c:1742
+#: ../src/window-commands.c:1726
 msgid "Contributors:"
 msgstr "المساهمون:"
 
-#: ../src/window-commands.c:1745
+#: ../src/window-commands.c:1729
 msgid "Past developers:"
 msgstr "المطورون السابقون:"
 
-#: ../src/window-commands.c:1776 ../src/window-commands.c:1782
+#: ../src/window-commands.c:1760 ../src/window-commands.c:1766
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2670,7 +2667,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1812
+#: ../src/window-commands.c:1796
 msgid "translator-credits"
 msgstr ""
 "فريق عربآيز للترجمة http://www.arabeyes.org:\n"
@@ -2680,15 +2677,15 @@ msgstr ""
 "خالد حسني\t<khaledhosny@eglug.org>\n"
 "عبد الرحيم الفاخوري <abdilra7eem@yahoo.com>"
 
-#: ../src/window-commands.c:1815
+#: ../src/window-commands.c:1799
 msgid "Web Website"
 msgstr "موقع متصفح وِب جنوم"
 
-#: ../src/window-commands.c:1955
+#: ../src/window-commands.c:1939
 msgid "Enable caret browsing mode?"
 msgstr "أأفعّل وضع التصفح بالمؤشر؟"
 
-#: ../src/window-commands.c:1958
+#: ../src/window-commands.c:1942
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2697,9 +2694,15 @@ msgstr ""
 "ضغط F7 يفعل أو يعطل وضع التصفح بالمؤشر. تضع هذه الخاصية مؤشرا متحركا في "
 "صفحات الوب يتيح لك التحرك بلوحة المفاتيح. أتريد تفعيل التصفح بالمؤشر؟"
 
-#: ../src/window-commands.c:1961
+#: ../src/window-commands.c:1945
 msgid "_Enable"
 msgstr "_فعّل"
+
+#~ msgid "Epiphany can't be used now. Initialization failed."
+#~ msgstr "لا يمكن استخدام إبِفَني الآن. فشل البدء."
+
+#~ msgid "_Work Offline"
+#~ msgstr "ا_عمل دون اتّصال"
 
 #~ msgid "Web Inspector"
 #~ msgstr "فاحِص الوِب"
