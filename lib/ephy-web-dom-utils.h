@@ -41,6 +41,13 @@ gboolean ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *f
                                                      WebKitDOMNode           **username,
                                                      WebKitDOMNode           **password);
 
+void ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
+                                                         long             *x,
+                                                         long             *y);
+
+void ephy_web_dom_utils_get_absolute_position_for_element(WebKitDOMElement *element,
+                                                          long             *x,
+                                                          long             *y);
 G_END_DECLS
 
 #endif

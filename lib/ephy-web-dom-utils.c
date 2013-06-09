@@ -414,3 +414,65 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
 
   return FALSE;
 }
+
+/**
+ * ephy_web_dom_utils_get_absolute_position_for_element:
+ * @element: the #WebKitDOMElement.
+ * @x: return address for the x coordinate.
+ * @y: return address for the y coordinate.
+ *
+ * Obtains the coordinate for the top-left of the #WebKitDOMElement, relative
+ * to the origin of the page.
+ **/
+void
+ephy_web_dom_utils_get_absolute_position_for_element (WebKitDOMElement *element,
+                                                      glong *x,
+                                                      glong *y)
+{
+  WebKitDOMElement *parent;
+  long offset_top, offset_left;
+  long parent_x, parent_y;
+
+  g_object_get (element,
+                "offset-left", &offset_left,
+                "offset-top", &offset_top,
+                "offset-parent", &parent,
+                NULL);
+
+  *x = offset_left;
+  *y = offset_top;
+
+  if (!parent)
+    return;
+
+  /* If there's a parent, we keep going. */
+  ephy_web_dom_utils_get_absolute_position_for_element (parent, &parent_x, &parent_y);
+
+  *x += parent_x;
+  *y += parent_y;
+}
+
+/**
+ * ephy_web_dom_utils_get_absolute_bottom_for_element:
+ * @element: the #WebKitDOMElement.
+ * @x: return address for the x coordinate.
+ * @y: return address for the y coordinate.
+ *
+ * Obtains the coordinate for the bottom-left of the #WebKitDOMElement, relative
+ * to the origin of the page.
+ **/
+void
+ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
+                                                    long *x,
+                                                    long *y)
+{
+  long offset_height;
+
+  ephy_web_dom_utils_get_absolute_position_for_element (element, x, y);
+
+  g_object_get (element,
+                "offset-height", &offset_height,
+                NULL);
+
+  *y += offset_height;
+}

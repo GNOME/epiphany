@@ -30,6 +30,7 @@
 #include "uri-tester.h"
 
 #include <gio/gio.h>
+#include <gtk/gtk.h>
 #include <libsoup/soup.h>
 #include <webkit2/webkit-web-extension.h>
 
@@ -375,12 +376,441 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   g_free (uri_str);
 }
 
+static void
+remove_user_choices (WebKitDOMDocument *document)
+{
+  WebKitDOMHTMLElement *body;
+  WebKitDOMElement *user_choices;
+
+  body = webkit_dom_document_get_body (document);
+
+  user_choices = webkit_dom_document_get_element_by_id (document, "ephy-user-choices-container");
+  if (user_choices) {
+    webkit_dom_node_remove_child (WEBKIT_DOM_NODE (body),
+                                  WEBKIT_DOM_NODE (user_choices),
+                                  NULL);
+  }
+}
+
 static gboolean
 username_changed_cb (WebKitDOMNode *username_node,
                      WebKitDOMEvent *dom_event,
                      EphyEmbedFormAuth *form_auth)
 {
   pre_fill_form (form_auth);
+  return TRUE;
+}
+
+static gboolean
+user_chosen_cb (WebKitDOMNode  *li,
+                WebKitDOMEvent *dom_event,
+                WebKitDOMNode  *username_node)
+{
+  WebKitDOMElement *anchor;
+  const char* username;
+
+  anchor = webkit_dom_element_get_first_element_child (WEBKIT_DOM_ELEMENT (li));
+
+  username = webkit_dom_node_get_text_content (WEBKIT_DOM_NODE (anchor));
+  webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (username_node), username);
+
+  remove_user_choices (webkit_dom_node_get_owner_document (li));
+
+  return TRUE;
+}
+
+GtkStyleContext *global_entry_context = NULL;
+static GtkStyleContext*
+get_entry_style_context ()
+{
+  GtkWidgetPath *path;
+
+  if (global_entry_context)
+    return global_entry_context;
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_ENTRY);
+  gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_ENTRY);
+
+  global_entry_context = gtk_style_context_new ();
+  gtk_style_context_set_path (global_entry_context, path);
+  gtk_widget_path_free (path);
+
+  return global_entry_context;
+}
+
+static char*
+get_selected_bgcolor ()
+{
+  GdkRGBA color;
+  gtk_style_context_get_background_color (get_entry_style_context (),
+                                          GTK_STATE_FLAG_SELECTED,
+                                          &color);
+  return gdk_rgba_to_string (&color);
+}
+
+static char*
+get_selected_fgcolor ()
+{
+  GdkRGBA color;
+  gtk_style_context_get_color (get_entry_style_context (),
+                               GTK_STATE_FLAG_SELECTED,
+                               &color);
+  return gdk_rgba_to_string (&color);
+}
+
+static char*
+get_bgcolor ()
+{
+  GdkRGBA color;
+  gtk_style_context_get_background_color (get_entry_style_context (),
+                                          GTK_STATE_FLAG_NORMAL,
+                                          &color);
+  return gdk_rgba_to_string (&color);
+}
+
+static char*
+get_fgcolor ()
+{
+  GdkRGBA color;
+  gtk_style_context_get_color (get_entry_style_context (),
+                               GTK_STATE_FLAG_NORMAL,
+                               &color);
+  return gdk_rgba_to_string (&color);
+}
+
+static char*
+get_user_choice_style (gboolean selected)
+{
+  char *style_attribute;
+  char *color;
+
+
+  color = selected ? get_selected_bgcolor () : get_bgcolor ();
+
+  style_attribute = g_strdup_printf ("list-style-type: none ! important;"
+                                     "background-image: none ! important;"
+                                     "padding: 3px 6px ! important;"
+                                     "margin: 0px;"
+                                     "background-color: %s;", color);
+
+  g_free (color);
+
+  return style_attribute;
+}
+
+static char*
+get_user_choice_anchor_style (gboolean selected)
+{
+  char *style_attribute;
+  char *color;
+
+  color = selected ? get_selected_fgcolor () : get_fgcolor ();
+
+  style_attribute = g_strdup_printf ("font-weight: normal ! important;"
+                                     "font-family: sans ! important;"
+                                     "text-decoration: none ! important;"
+                                     "-webkit-user-modify: read-only ! important;"
+                                     "color: %s;", color);
+
+  g_free (color);
+
+  return style_attribute;
+}
+
+void
+show_user_choices (WebKitDOMDocument *document,
+                   WebKitDOMNode     *username_node)
+{
+  WebKitDOMNode *body;
+  WebKitDOMElement *main_div;
+  WebKitDOMElement *ul;
+  GSList *iter;
+  GSList *auth_data_list;
+  gboolean username_node_ever_edited;
+  long x, y;
+  long input_width;
+  char *style_attribute;
+  const char* username;
+
+  g_object_get (username_node,
+                "value", &username,
+                "offset-width", &input_width,
+                NULL);
+
+  main_div = webkit_dom_document_create_element (document, "div", NULL);
+  webkit_dom_element_set_attribute (main_div, "id", "ephy-user-choices-container", NULL);
+
+  ephy_web_dom_utils_get_absolute_bottom_for_element (WEBKIT_DOM_ELEMENT (username_node), &x, &y);
+
+  /* 2147483647 is the maximum value browsers will take for z-index.
+   * See http://stackoverflow.com/questions/8565821/css-max-z-index-value
+   */
+  style_attribute = g_strdup_printf ("position: absolute; z-index: 2147483647;"
+                                     "cursor: default;"
+                                     "width: %ldpx;"
+                                     "background-color: white;"
+                                     "box-shadow: 5px 5px 5px black;"
+                                     "border-top: 0;"
+                                     "border-radius: 8px;"
+                                     "-webkit-user-modify: read-only ! important;"
+                                     "left: %ldpx; top: %ldpx;",
+                                     input_width, x, y);
+
+  webkit_dom_element_set_attribute (main_div, "style", style_attribute, NULL);
+  g_free (style_attribute);
+
+  ul = webkit_dom_document_create_element (document, "ul", NULL);
+  webkit_dom_element_set_attribute (ul, "tabindex", "-1", NULL);
+  webkit_dom_node_append_child (WEBKIT_DOM_NODE (main_div),
+                                WEBKIT_DOM_NODE (ul),
+                                NULL);
+
+  webkit_dom_element_set_attribute (ul, "style",
+                                    "margin: 0;"
+                                    "padding: 0;",
+                                    NULL);
+
+  auth_data_list = (GSList*)g_object_get_data (G_OBJECT (username_node),
+                                               "ephy-auth-data-list");
+
+  username_node_ever_edited =
+    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (username_node),
+                                        "ephy-user-ever-edited"));
+
+  for (iter = auth_data_list; iter; iter = iter->next) {
+    EphyFormAuthData *data;
+    WebKitDOMElement *li;
+    WebKitDOMElement *anchor;
+    char *child_style;
+    gboolean is_selected;
+
+    data = (EphyFormAuthData*)iter->data;
+
+    /* Filter out the available names that do not match, but show all options in
+     * case we have been triggered by something other than the user editing the
+     * input.
+     */
+    if (username_node_ever_edited && !g_str_has_prefix(data->username, username))
+      continue;
+
+    is_selected = !g_strcmp0 (username, data->username);
+
+    li = webkit_dom_document_create_element (document, "li", NULL);
+    webkit_dom_element_set_attribute (li, "tabindex", "-1", NULL);
+    webkit_dom_node_append_child (WEBKIT_DOM_NODE (ul),
+                                  WEBKIT_DOM_NODE (li),
+                                  NULL);
+
+    child_style = get_user_choice_style (is_selected);
+    webkit_dom_element_set_attribute (li, "style", child_style, NULL);
+    g_free (child_style);
+
+    /* Store the selected node, if any for ease of querying which user
+     * is currently selected.
+     */
+    if (is_selected)
+      g_object_set_data (G_OBJECT (main_div), "ephy-user-selected", li);
+
+    anchor = webkit_dom_document_create_element (document, "a", NULL);
+    webkit_dom_node_append_child (WEBKIT_DOM_NODE (li),
+                                  WEBKIT_DOM_NODE (anchor),
+                                  NULL);
+
+    child_style = get_user_choice_anchor_style (is_selected);
+    webkit_dom_element_set_attribute (anchor, "style", child_style, NULL);
+    g_free (child_style);
+
+    webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (li), "mousedown",
+                                                G_CALLBACK (user_chosen_cb), TRUE,
+                                                username_node);
+
+    webkit_dom_node_set_text_content (WEBKIT_DOM_NODE (anchor),
+                                      data->username,
+                                      NULL);
+  }
+
+  body = WEBKIT_DOM_NODE (webkit_dom_document_get_body (document));
+  webkit_dom_node_append_child (WEBKIT_DOM_NODE (body),
+                                WEBKIT_DOM_NODE (main_div),
+                                NULL);
+}
+
+static gboolean
+username_node_changed_cb (WebKitDOMNode  *username_node,
+                          WebKitDOMEvent *dom_event,
+                          WebKitWebPage  *web_page)
+{
+  WebKitDOMDocument *document;
+
+  document = webkit_web_page_get_dom_document (web_page);
+  remove_user_choices (document);
+
+  return TRUE;
+}
+
+static gboolean
+username_node_clicked_cb (WebKitDOMNode  *username_node,
+                          WebKitDOMEvent *dom_event,
+                          WebKitWebPage  *web_page)
+{
+  WebKitDOMDocument *document;
+
+  document = webkit_web_page_get_dom_document (web_page);
+  if (webkit_dom_document_get_element_by_id (document, "ephy-user-choices-container"))
+    return TRUE;
+
+  show_user_choices (document, username_node);
+
+  return TRUE;
+}
+
+static void
+clear_password_field (WebKitDOMNode *username_node)
+{
+  EphyEmbedFormAuth *form_auth;
+  WebKitDOMNode *password_node;
+
+  form_auth = (EphyEmbedFormAuth*)g_object_get_data (G_OBJECT (username_node),
+                                                     "ephy-form-auth");
+
+  password_node = ephy_embed_form_auth_get_password_node (form_auth);
+  webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (password_node), "");
+}
+
+static void
+pre_fill_password (WebKitDOMNode *username_node)
+{
+  EphyEmbedFormAuth *form_auth;
+
+  form_auth = (EphyEmbedFormAuth*)g_object_get_data (G_OBJECT (username_node),
+                                                     "ephy-form-auth");
+
+  pre_fill_form (form_auth);
+}
+
+static gboolean
+username_node_keydown_cb (WebKitDOMNode  *username_node,
+                          WebKitDOMEvent *dom_event,
+                          WebKitWebPage  *web_page)
+{
+  WebKitDOMDocument *document;
+  WebKitDOMElement *main_div;
+  WebKitDOMElement *container;
+  WebKitDOMElement *selected= NULL;
+  WebKitDOMElement *to_select = NULL;
+  WebKitDOMElement *anchor;
+  WebKitDOMKeyboardEvent *keyboard_event;
+  guint keyval = GDK_KEY_VoidSymbol;
+  char *li_style_attribute;
+  char *anchor_style_attribute;
+  const char *username;
+
+  keyboard_event = WEBKIT_DOM_KEYBOARD_EVENT (dom_event);
+  document = webkit_web_page_get_dom_document (web_page);
+
+  /* U+001B means the Esc key here; we should find a better way of testing which
+   * key has been pressed.
+   */
+  if (!g_strcmp0 (webkit_dom_keyboard_event_get_key_identifier (keyboard_event), "Up"))
+    keyval = GDK_KEY_Up;
+  else if (!g_strcmp0 (webkit_dom_keyboard_event_get_key_identifier (keyboard_event), "Down"))
+    keyval = GDK_KEY_Down;
+  else if (!g_strcmp0 (webkit_dom_keyboard_event_get_key_identifier (keyboard_event), "U+001B")) {
+    remove_user_choices (document);
+    return TRUE;
+  } else
+    return TRUE;
+
+  main_div = webkit_dom_document_get_element_by_id (document, "ephy-user-choices-container");
+
+  if (!main_div) {
+    show_user_choices (document, username_node);
+    return TRUE;
+  }
+
+  /* Grab the selected node. */
+  selected = WEBKIT_DOM_ELEMENT (g_object_get_data (G_OBJECT (main_div), "ephy-user-selected"));
+
+  /* Fetch the ul. */
+  container = webkit_dom_element_get_first_element_child (main_div);
+
+  /* We have a previous selection already, so perform any selection relative to
+   * it.
+   */
+  if (selected) {
+    if (keyval == GDK_KEY_Up)
+      to_select = webkit_dom_element_get_previous_element_sibling (selected);
+    else if (keyval == GDK_KEY_Down)
+      to_select = webkit_dom_element_get_next_element_sibling (selected);
+  }
+
+  if (!to_select) {
+    if (keyval == GDK_KEY_Up)
+      to_select = webkit_dom_element_get_last_element_child (container);
+    else if (keyval == GDK_KEY_Down)
+      to_select = webkit_dom_element_get_first_element_child (container);
+  }
+
+  /* Unselect the selected node. */
+  if (selected) {
+    li_style_attribute = get_user_choice_style (FALSE);
+    webkit_dom_element_set_attribute (selected, "style", li_style_attribute, NULL);
+    g_free (li_style_attribute);
+
+    anchor = webkit_dom_element_get_first_element_child (selected);
+
+    anchor_style_attribute = get_user_choice_anchor_style (FALSE);
+    webkit_dom_element_set_attribute (anchor, "style", anchor_style_attribute, NULL);
+    g_free (anchor_style_attribute);
+  }
+
+  /* Selected the new node. */
+  if (to_select) {
+    g_object_set_data (G_OBJECT (main_div), "ephy-user-selected", to_select);
+
+    li_style_attribute = get_user_choice_style (TRUE);
+    webkit_dom_element_set_attribute (to_select, "style", li_style_attribute, NULL);
+    g_free (li_style_attribute);
+
+    anchor = webkit_dom_element_get_first_element_child (to_select);
+
+    anchor_style_attribute = get_user_choice_anchor_style (TRUE);
+    webkit_dom_element_set_attribute (anchor, "style", anchor_style_attribute, NULL);
+    g_free (anchor_style_attribute);
+
+    username = webkit_dom_node_get_text_content (WEBKIT_DOM_NODE (anchor));
+    webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (username_node), username);
+
+    pre_fill_password (username_node);
+  } else
+    clear_password_field (username_node);
+
+  webkit_dom_event_prevent_default (dom_event);
+
+  return TRUE;
+}
+
+static gboolean
+username_node_input_cb (WebKitDOMNode  *username_node,
+                        WebKitDOMEvent *dom_event,
+                        WebKitWebPage  *web_page)
+{
+  WebKitDOMDocument *document;
+  WebKitDOMElement *main_div;
+
+  g_object_set_data (G_OBJECT (username_node), "ephy-user-ever-edited", GINT_TO_POINTER(TRUE));
+  document = webkit_web_page_get_dom_document (web_page);
+  remove_user_choices (document);
+  show_user_choices (document, username_node);
+
+  /* Check if a username has been selected, otherwise clear password field. */
+  main_div = webkit_dom_document_get_element_by_id (document, "ephy-user-choices-container");
+  if (g_object_get_data (G_OBJECT (main_div), "ephy-user-selected"))
+    pre_fill_password (username_node);
+  else
+    clear_password_field (username_node);
+
   return TRUE;
 }
 
@@ -423,6 +853,10 @@ web_page_document_loaded (WebKitWebPage *web_page,
     /* We have a field that may be the user, and one for a password. */
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       EphyEmbedFormAuth *form_auth;
+      GSList *auth_data_list;
+      GtkEntryCompletion *completion;
+      const char *uri_string;
+      SoupURI *uri;
 
       LOG ("Hooking and pre-filling a form");
 
@@ -434,6 +868,38 @@ web_page_document_loaded (WebKitWebPage *web_page,
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "blur",
                                                   G_CALLBACK (username_changed_cb), FALSE,
                                                   form_auth);
+
+      /* Plug in the user autocomplete */
+      uri_string = webkit_web_page_get_uri (web_page);
+      uri = soup_uri_new (uri_string);
+
+      auth_data_list = ephy_form_auth_data_cache_get_list (form_auth_data_cache, uri->host);
+
+      soup_uri_free (uri);
+
+      if (auth_data_list && auth_data_list->next) {
+        LOG ("More than 1 password saved, hooking menu for choosing which on focus");
+        g_object_set_data (G_OBJECT (username_node), "ephy-auth-data-list", auth_data_list);
+        g_object_set_data (G_OBJECT (username_node), "ephy-form-auth", form_auth);
+        g_object_set_data (G_OBJECT (username_node), "ephy-document", document);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "input",
+                                                    G_CALLBACK (username_node_input_cb), TRUE,
+                                                    web_page);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "keydown",
+                                                    G_CALLBACK (username_node_keydown_cb), FALSE,
+                                                    web_page);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "mouseup",
+                                                    G_CALLBACK (username_node_clicked_cb), FALSE,
+                                                    web_page);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "change",
+                                                    G_CALLBACK (username_node_changed_cb), FALSE,
+                                                    web_page);
+        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "blur",
+                                                    G_CALLBACK (username_node_changed_cb), FALSE,
+                                                    web_page);
+      } else
+        LOG ("No items or a single item in auth_data_list, not hooking menu for choosing.");
+
       pre_fill_form (form_auth);
 
       g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
