@@ -428,13 +428,7 @@ main (int argc,
   /* Now create the shell */
   if (private_instance)
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-  else if (profile_directory) {
-    /* This mode exists purely for letting EphyShell know it should
-     * not consider this instance part of the unique application
-     * represented by the BROWSER mode.
-     */
-    mode = EPHY_EMBED_SHELL_MODE_STANDALONE;
-  } else if (incognito_mode) {
+  else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
 
     /* Use the right theming. */
@@ -465,6 +459,12 @@ main (int argc,
     }
 
     g_free (app_icon);
+  } else if (profile_directory) {
+    /* This mode exists purely for letting EphyShell know it should
+     * not consider this instance part of the unique application
+     * represented by the BROWSER mode.
+     */
+    mode = EPHY_EMBED_SHELL_MODE_STANDALONE;
   } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
 
