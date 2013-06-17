@@ -482,7 +482,7 @@ uri_tester_compile_regexp (UriTester *tester,
     {
       g_warning ("%s: %s", G_STRFUNC, error->message);
       g_error_free (error);
-      g_regex_unref (regex);
+      g_clear_pointer (&regex, g_regex_unref);
       return TRUE;
     }
 
