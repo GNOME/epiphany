@@ -878,7 +878,7 @@ create_download_path_button (EphyDialog *dialog)
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), dir);
 	gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (button),
 						 DOWNLOAD_BUTTON_WIDTH);
-	g_signal_connect (button, "current-folder-changed",
+	g_signal_connect (button, "selection-changed",
 			  G_CALLBACK (download_path_changed_cb), dialog);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
 	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
