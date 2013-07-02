@@ -6,12 +6,12 @@
   <info>
     <link type="guide" xref="index#pref"/>
     <link type="guide" xref="pref"/>
-    <revision pkgversion="3.9" version="0.1" date="2013-04-12" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-04-12" status="review"/>
 
     <credit type="author copyright">
-      <name></name>
-      <email its:translate="no"></email>
-      <years></years>
+      <name>Gordon Hill</name>
+      <email its:translate="no">caseyweederman@gmail.com</email>
+      <years>2013</years>
     </credit>
     <credit type="copyright editor">
       <name></name>
@@ -26,17 +26,26 @@
 
   <title>Display theme</title>
 
-  <p></p>
+  <p>Epiphany allows custom CSS to change the look and feel of every web page you visit.</p>
 
   <steps>
     <item>
-      <p></p>
+      <p>With <app>Epiphany</app> in focus, open the <app>Web</app> <gui>Application menu</gui> and click on <gui>preferences</gui>.</p>
     </item>
     <item>
-      <p></p>
+      <p>Check the box marked <gui>Use custom stylesheet</gui> and then <gui>Edit Stylesheet</gui>.</p>
+    </item>
+    <item>
+      <p>Type your custom CSS into the <app>Gedit</app> window that appears and save the file.</p>
     </item>
   </steps>
-
-  <p></p>
+  <p>An example of custom CSS:</p>
+  <code><![CDATA[
+body{
+    /*Make everything upside-down*/
+    -webkit-transform: rotate(180deg);
+}
+]]></code>
+  <p>Every page load beyond this point will take your custom CSS into consideration.</p>
 
 </page>
