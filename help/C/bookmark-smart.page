@@ -1,0 +1,60 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic"
+      id="bookmark-smart">
+
+  <info>
+    <link type="guide" xref="index#bookmark"/>
+    <link type="guide" xref="bookmark"/>
+    <revision pkgversion="3.10" date="2013-07-02" status="review"/>
+
+    <credit type="author copyright">
+      <name>Ekaterina Gerasimova</name>
+      <email its:translate="no">kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+<!--    <credit type="copyright editor">
+      <name></name>
+      <email its:translate="no"></email>
+      <years></years>
+    </credit>-->
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <desc>What are smart bookmarks and how do I add one?</desc>
+  </info>
+
+  <title>Smart bookmarks</title>
+
+  <p>A smart bookmark is used to add a search to the address bar. This can be
+  useful if you prefer to use a specific search engine regularly.</p>
+
+  <steps>
+    <title>Add a smart bookmark</title>
+    <item>
+      <p>Perform a search using the search engine that you want to add.</p>
+    </item>
+    <item>
+      <p>Bookmark the page, replacing the search term with <input>%s</input>
+      in the URL.</p>
+    </item>
+  </steps>
+
+  <example>
+    <p>For example, if you want to be able to search the GNOME user help, start
+    by doing a test search such as for "epiphany". The resulting URL will look
+    like https://help.gnome.org/search?q=epiphany. To
+    <link xref="bookmark-add">add the "bookmark"</link>, replace
+    <input>epiphany</input> with <input>%s</input> when bookmarking the page so
+    that the <gui>Address</gui> looks like
+    <input>https://help.gnome.org/search?q=%s</input>. You may also want to use
+    a <gui>Title</gui> such as <input>Search GNOME help</input>.</p>
+    <p>When you next start typing in the address bar, you will see <gui>Search
+    GNOME help</gui> where your <link xref="history">browsing history</link>
+    would normally be shown. Click it to submit the search.</p>
+  </example>
+
+  <p>Apart from search engines, you can also use smart bookmarks for other
+  queries, such as searching an online show for a product.</p>
+
+</page>
