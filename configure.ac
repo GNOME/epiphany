@@ -209,6 +209,12 @@ AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
 
+# *******************************
+# User help
+# *******************************
+
+YELP_HELP_INIT
+
 # ****************
 # Distributor name
 # ****************
@@ -242,6 +248,7 @@ data/Makefile
 data/epiphany.desktop.in
 data/pages/Makefile
 doc/Makefile
+help/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/history/Makefile
