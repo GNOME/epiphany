@@ -1941,7 +1941,7 @@ window_cmd_browse_with_caret (GtkAction *action,
 		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 							  _("Pressing F7 turns caret browsing on or off. This feature "
 							    "places a moveable cursor in web pages, allowing you to move "
-							    "around with your keyboard. Do you want to enable caret browsing on?"));
+							    "around with your keyboard. Do you want to enable caret browsing?"));
 		gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Enable"), GTK_RESPONSE_ACCEPT);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
