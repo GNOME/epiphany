@@ -6,7 +6,7 @@
   <info>
     <link type="guide" xref="index#pref"/>
     <link type="guide" xref="pref"/>
-    <revision pkgversion="3.9" version="0.1" date="2013-04-12" status="review"/>
+    <revision pkgversion="3.10" date="2013-07-06" status="review"/>
 
     <credit type="author copyright">
       <name>Gordon Hill</name>
@@ -14,38 +14,52 @@
       <years>2013</years>
     </credit>
     <credit type="copyright editor">
-      <name></name>
-      <email its:translate="no"></email>
-      <years></years>
+      <name>Ekaterina Gerasimova</name>
+      <email its:translate="no">kittykat3756@gmail.com</email>
+      <years>2013</years>
     </credit>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>Set a custom CSS.</desc>
+    <desc>Override the theme which is used to display web pages.</desc>
   </info>
 
-  <title>Display theme</title>
+  <title>Custom CSS</title>
 
-  <p>Epiphany allows custom CSS to change the look and feel of every web page you visit.</p>
+  <p>Epiphany allows you to set a custom CSS to change the look and feel of
+  every web page that you visit. You may want to do this to set a preferred
+  font size or colour scheme.</p>
 
   <steps>
     <item>
-      <p>With <app>Epiphany</app> in focus, open the <app>Web</app> <gui>Application menu</gui> and click on <gui>preferences</gui>.</p>
+      <p>Open
+      <guiseq><gui style="menu">Web</gui><gui style="menuitem">Preferences</gui><gui style="tab">Fonts &amp; Styles</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Check the box marked <gui>Use custom stylesheet</gui> and then <gui>Edit Stylesheet</gui>.</p>
+      <p>Tick the <gui>Use custom stylesheet</gui> checkbox, then press
+      <gui style="button">Edit Stylesheet</gui>.</p>
     </item>
     <item>
-      <p>Type your custom CSS into the <app>Gedit</app> window that appears and save the file.</p>
+      <p>Your default text editor will open. Add you custom CSS and save
+      the file.</p>
     </item>
   </steps>
-  <p>An example of custom CSS:</p>
+
+  <comment>
+    <cite date="2013-07-06">Kat</cite>
+    <p>Maybe use a slightly more practical example. Custom CSS does not apear
+    to be working in 3.8.2 for me right now, so I cannot test it.</p>
+  </comment>
+
+  <p>An example of a custom CSS:</p>
   <code><![CDATA[
 body{
     /*Make everything upside-down*/
     -webkit-transform: rotate(180deg);
 }
 ]]></code>
-  <p>Every page load beyond this point will take your custom CSS into consideration.</p>
+
+  <p>Your custom CSS will override the style sheet on pages which you visit
+  after you enable it..</p>
 
 </page>
