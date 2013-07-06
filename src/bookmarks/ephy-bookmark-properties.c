@@ -381,7 +381,7 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 	{
 		case GTK_RESPONSE_HELP:
 			ephy_gui_help (GTK_WIDGET (dialog),
-				       "to-edit-bookmark-properties");
+				       "bookmark-add");
 			return;
 	 	case GTK_RESPONSE_ACCEPT:
 			priv->creating = FALSE;

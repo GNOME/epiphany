@@ -188,6 +188,18 @@ show_pdm (GSimpleAction *action,
 }
 
 static void
+show_help (GSimpleAction *action,
+           GVariant *parameter,
+           gpointer user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_help_contents (NULL, GTK_WIDGET (window));
+}
+
+static void
 show_about (GSimpleAction *action,
             GVariant *parameter,
             gpointer user_data)
@@ -214,6 +226,7 @@ static GActionEntry app_entries[] = {
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "pdm", show_pdm, NULL, NULL, NULL },
+  { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
 };

@@ -1659,6 +1659,13 @@ window_cmd_view_page_source (GtkAction *action,
 	}
 }
 
+void
+window_cmd_help_contents (GtkAction *action,
+			  GtkWidget *window)
+{
+	ephy_gui_help (window, NULL);
+}
+
 #define ABOUT_GROUP "About"
 
 void

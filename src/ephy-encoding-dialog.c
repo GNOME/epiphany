@@ -281,7 +281,7 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 {
 	if (response == GTK_RESPONSE_HELP)
 	{
-		ephy_gui_help (widget, "text-encoding");
+		ephy_gui_help (widget, NULL);
 		return;
 	}
 

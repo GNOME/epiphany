@@ -976,7 +976,7 @@ static void
 cmd_help_contents (GtkAction *action,
 		   EphyBookmarksEditor *editor)
 {
-	ephy_gui_help (GTK_WIDGET (editor), "ephy-managing-bookmarks");
+	ephy_gui_help (GTK_WIDGET (editor), "bookmark");
 }
 
 static void

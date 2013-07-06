@@ -269,25 +269,25 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 /**
  * ephy_gui_help:
  * @parent: the parent window where help is being called
- * @section: help section to open or %NULL
+ * @page: help page to open or %NULL
  *
- * Displays Epiphany's help, opening the section indicated by @section.
+ * Displays Epiphany's help, opening the page indicated by @page.
  *
  * Note that @parent is used to know the #GdkScreen where to open the help
  * window.
  **/
 void
 ephy_gui_help (GtkWidget *parent,
-	       const char *section)
+	       const char *page)
 {
 	GError *error = NULL;
 	GdkScreen *screen;
 	char *url;
 
-	if (section)
-		url = g_strdup_printf ("ghelp:epiphany?%s", section);
+	if (page)
+		url = g_strdup_printf ("help:epiphany/%s", page);
 	else
-		url = g_strdup ("ghelp:epiphany");
+		url = g_strdup ("help:epiphany");
 
 	if (parent)
 	    screen = gtk_widget_get_screen (parent);

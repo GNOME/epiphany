@@ -142,8 +142,8 @@ pdm_dialog_show_help (PdmDialog *pd)
 	int id;
 
 	static char * const help_preferences[] = {
-		"managing-cookies",
-		"managing-passwords"
+		"data-cookies",
+		"data-passwords"
 	};
 
 	ephy_dialog_get_controls (EPHY_DIALOG (pd),
