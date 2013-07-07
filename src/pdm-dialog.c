@@ -228,7 +228,7 @@ clear_all_dialog_response_cb (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_HELP)
 	{
 		/* Show help and return early */
-		ephy_gui_help (GTK_WIDGET (dialog), "clearing-personal-data");
+		ephy_gui_help (GTK_WIDGET (dialog), "data");
 		return;
 	}
 
