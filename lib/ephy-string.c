@@ -493,7 +493,7 @@ ephy_string_expand_initial_tilde (const char *path)
  * ephy_string_commandline_args_to_uris:
  * @arguments: a %NULL-terminated array of chars.
  *
- * Transform commandline arguments to URIs if they exist,
+ * Transform commandline arguments to URIs if they are native,
  * otherwise simply transform them to UTF-8.
  *
  * Returns: a newly allocated array with the URIs and
@@ -513,7 +513,7 @@ ephy_string_commandline_args_to_uris (char **arguments, GError **error)
 
   for (i = 0; arguments[i] != NULL; ++i) {
     file = g_file_new_for_commandline_arg (arguments [i]);
-    if (g_file_query_exists (file, NULL)) {
+    if (g_file_is_native (file) && g_file_query_exists (file, NULL)) {
       args[i] = g_file_get_uri (file);
     } else {
       args[i] = g_locale_to_utf8 (arguments [i], -1,
