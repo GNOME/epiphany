@@ -8,10 +8,10 @@
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 3.8.x\n"
+"Project-Id-Version: epiphany 3.9.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-05-16 13:34+0200\n"
-"PO-Revision-Date: 2013-05-16 13:37+0200\n"
+"POT-Creation-Date: 2013-07-18 13:45+0200\n"
+"PO-Revision-Date: 2013-07-18 13:49+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -39,8 +39,8 @@ msgstr "http://www.google.no/"
 msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 msgstr "http://www.google.no/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:64
-#: ../src/ephy-main.c:305 ../src/ephy-main.c:456 ../src/window-commands.c:1780
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1780
 msgid "Web"
 msgstr "Internett"
 
@@ -186,7 +186,7 @@ msgstr ""
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "The visibility policy for the tabs bar."
-msgstr ""
+msgstr "Synlighetsregler for fanelinjen."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
@@ -205,7 +205,7 @@ msgstr "Bruk skrifter fra GNOME"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Use GNOME desktop wide font configuration."
-msgstr ""
+msgstr "Bruk skriftkonfigurasjon fra GNOME skrivebordet."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
@@ -243,7 +243,7 @@ msgstr "Bruk egne farger"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use your own colors instead of the colors the page requests."
-msgstr ""
+msgstr "Bruk egne farger i stedet for fargene som siden ber om."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use own fonts"
@@ -251,7 +251,7 @@ msgstr "Bruk egne skrifter"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use your own fonts instead of the fonts the page requests."
-msgstr ""
+msgstr "Bruk egne skrifter i stedet for skriftene som siden ber om."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Use a custom CSS"
@@ -259,7 +259,7 @@ msgstr "Bruk egendefinert CSS"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Use a custom CSS file to modify websites own CSS."
-msgstr ""
+msgstr "Bruk egen CSS-fil til å endre nettstedets egen CSS."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Enable spell checking"
@@ -277,7 +277,7 @@ msgstr "Forvalgt koding"
 #: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
-msgstr ""
+msgstr "Forvalgt koding. Godkjente verdier er de samme som WebKitGTK+ kan forstå."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Size of disk cache"
@@ -386,80 +386,83 @@ msgstr "Tidsområde for sidehistorikk"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to show the title column in the history window."
-msgstr ""
+msgstr "Hvorvidt tittelkolonnen skal vises i historikkvinduet."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to show the address column in the history window."
-msgstr ""
+msgstr "Hvorvidt adressekolonnen skal vises i historikkvinduet."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to show the date-time column in the history window."
-msgstr ""
+msgstr "Hvorvidt dato-/tidkolonnen skal vises i historikkvinduet."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Whether to show the title column in the bookmarks window."
-msgstr ""
+msgstr "Hvorvidt tittelkolonnen skal vises i bokmerkevinduet."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to show the address column in the bookmarks window."
-msgstr ""
+msgstr "Hvorvidt adressekolonnen skal vises i bokmerkevinduet."
 
-#: ../embed/ephy-about-handler.c:60 ../embed/ephy-about-handler.c:63
+#: ../embed/ephy-about-handler.c:143 ../embed/ephy-about-handler.c:145
 msgid "Installed plugins"
 msgstr "Installerte tillegg"
 
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "Enabled"
 msgstr "Aktivert"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "Yes"
 msgstr "Ja"
 
-#: ../embed/ephy-about-handler.c:75
+#: ../embed/ephy-about-handler.c:158
 msgid "No"
 msgstr "Nei"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "MIME type"
 msgstr "MIME-type"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: ../embed/ephy-about-handler.c:76
+#: ../embed/ephy-about-handler.c:159
 msgid "Suffixes"
 msgstr "Suffiks"
 
-#: ../embed/ephy-about-handler.c:122 ../embed/ephy-about-handler.c:125
+#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:221
 msgid "Memory usage"
 msgstr "Minnebruk"
 
-#: ../embed/ephy-about-handler.c:158 ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:299 ../embed/ephy-about-handler.c:301
 msgid "Applications"
 msgstr "Programmer"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:302
 msgid "List of installed web applications"
 msgstr "Liste med installerte nettprogrammer"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:182
+#: ../embed/ephy-about-handler.c:323
 msgid "Installed on:"
 msgstr "Installert:"
 
-#: ../embed/ephy-about-handler.c:217 ../embed/ephy-about-handler.c:219
+#: ../embed/ephy-about-handler.c:395 ../embed/ephy-about-handler.c:398
 msgid "Private Browsing"
 msgstr "Privat nettlesing"
 
-#: ../embed/ephy-about-handler.c:220
+#: ../embed/ephy-about-handler.c:399
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
 "cleared when you close the window."
-msgstr "Du bruker nå nettleser <em>inkognito</em. Sider som vises vil ikke være synlig i nettleserhistorikken og all lagret informasjon vil fjernes når du lukker vinduet."
+msgstr ""
+"Du bruker nå nettleser <em>inkognito</em. Sider som vises vil ikke være "
+"synlig i nettleserhistorikken og all lagret informasjon vil fjernes når du "
+"lukker vinduet."
 
 #: ../embed/ephy-embed.c:487
 #, c-format
@@ -809,15 +812,15 @@ msgid "Most Visited"
 msgstr "Mest besøkte"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2740
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2723
 msgid "Blank page"
 msgstr "Tom side"
 
-#: ../embed/ephy-web-view.c:496
+#: ../embed/ephy-web-view.c:495
 msgid "Not now"
 msgstr "Ikke nå"
 
-#: ../embed/ephy-web-view.c:497
+#: ../embed/ephy-web-view.c:496
 msgid "Store password"
 msgstr "Lagre passord"
 
@@ -825,39 +828,39 @@ msgstr "Lagre passord"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:509
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Vil du lagre passordet for <b>%s</b> i <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1364
 msgid "Deny"
 msgstr "Nekt"
 
-#: ../embed/ephy-web-view.c:1382
+#: ../embed/ephy-web-view.c:1365
 msgid "Allow"
 msgstr "Tillat"
 
-#: ../embed/ephy-web-view.c:1392
+#: ../embed/ephy-web-view.c:1375
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Siden på <b>%s</b> ønsker å vite din plassering."
 
-#: ../embed/ephy-web-view.c:1720
+#: ../embed/ephy-web-view.c:1703
 msgid "None specified"
 msgstr "Ingen oppgitt"
 
-#: ../embed/ephy-web-view.c:1729 ../embed/ephy-web-view.c:1747
+#: ../embed/ephy-web-view.c:1712 ../embed/ephy-web-view.c:1730
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Oops! Feil under lasting av %s"
 
-#: ../embed/ephy-web-view.c:1731
+#: ../embed/ephy-web-view.c:1714
 msgid "Oops! It was not possible to show this website"
 msgstr "Oops! Det var umulig å vise dette nettstedet"
 
-#: ../embed/ephy-web-view.c:1732
+#: ../embed/ephy-web-view.c:1715
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -870,15 +873,15 @@ msgstr ""
 "eller ha flyttet til en ny adresse. Ikke glem å sjekke at tilkoblingen til "
 "internett fungerer.</p>"
 
-#: ../embed/ephy-web-view.c:1741
+#: ../embed/ephy-web-view.c:1724
 msgid "Try again"
 msgstr "Prøv igjen"
 
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1732
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Oops! Nettstedet kan ha forårsaket at nettleseren avsluttet uventet"
 
-#: ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1734
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -889,37 +892,39 @@ msgstr ""
 "p><p>Dette kan skje igjen hvis du laster siden på nytt. Vennligst rapporter "
 "problemet til utviklerene av <strong>%s</strong> hvis dette skjer.</p>"
 
-#: ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1742
 msgid "Load again anyway"
 msgstr "Last på nytt likevel"
 
-#: ../embed/ephy-web-view.c:1765
+#: ../embed/ephy-web-view.c:1748
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "Oops! Noe gikk galt ved visning av %s"
 
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1749
 msgid "Oops!"
 msgstr "Oops!"
 
-#: ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1750
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
-msgstr "Noe gikk galt ved visning av denne siden. Vennligst last den på nytt eller gå til et annet nettsted for å fortsette."
+msgstr ""
+"Noe gikk galt ved visning av denne siden. Vennligst last den på nytt eller "
+"gå til et annet nettsted for å fortsette."
 
-#: ../embed/ephy-web-view.c:2077
+#: ../embed/ephy-web-view.c:2060
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2315
+#: ../embed/ephy-web-view.c:2298
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster «%s» …"
 
-#: ../embed/ephy-web-view.c:2317
+#: ../embed/ephy-web-view.c:2300
 msgid "Loading…"
 msgstr "Laster …"
 
@@ -2059,67 +2064,67 @@ msgstr "All historikk"
 msgid "History"
 msgstr "Historie"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Åpne en ny fane i et eksisterende nettleservindu"
 
-#: ../src/ephy-main.c:75
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Åpne et nytt nettleservindu"
 
-#: ../src/ephy-main.c:77
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Importer bokmerker fra gitt fil"
 
-#: ../src/ephy-main.c:77 ../src/ephy-main.c:79
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "FIL"
 
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "Last oppgitt øktfil"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "Legg til bokmerke"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "Adresse"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "Start en privat instans"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
 msgstr "Start en instans i inkognitomodus"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
 msgstr "Start en instans i nettbankmodus"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "Start nettleser i applikasjonsmodus"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "Profilkatalog som skal brukes i den private instansen"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "KAT"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:192
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "Kunne ikke starte Nettleser"
 
-#: ../src/ephy-main.c:195
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2128,7 +2133,7 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:306
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "Alternativer for Nettleser"
 
@@ -2641,7 +2646,7 @@ msgstr "Slå på markør i nettleser?"
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
-"want to enable caret browsing on?"
+"want to enable caret browsing?"
 msgstr ""
 "Hvis du trykker F7 slår du av/på bruk av markør. Denne funksjonen gir deg en "
 "bevegelig markør på nettsidene som lar deg flytte rundt med tastaturet. Vil "
