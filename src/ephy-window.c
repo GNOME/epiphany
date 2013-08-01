@@ -3721,6 +3721,7 @@ static const char* disabled_actions_for_app_mode[] = { "FileOpen",
 						       "FileSaveAs",
 						       "FileSaveAsApplication",
 						       "ViewEncoding",
+						       "ViewPageSource",
 						       "FileBookmarkPage",
 						       "EditBookmarks",
 						       "EditHistory",
@@ -3945,6 +3946,14 @@ ephy_window_constructor (GType type,
 		action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
 						      TRUE);
+
+		action = gtk_action_group_get_action (priv->popups_action_group, "ContextBookmarkPage");
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
+		gtk_action_set_visible (action, FALSE);
+
+		action = gtk_action_group_get_action (priv->popups_action_group, "InspectElement");
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
+		gtk_action_set_visible (action, FALSE);
 
 		for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++)
 		{
