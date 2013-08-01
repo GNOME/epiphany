@@ -3941,7 +3941,7 @@ ephy_window_constructor (GType type,
 	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		/* FileNewTab and FileNewWindow are sort of special. */
+		/* FileNewTab is sort of special. */
 		action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
 						      TRUE);
