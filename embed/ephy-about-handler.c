@@ -139,6 +139,7 @@ get_plugins_cb (WebKitWebContext *web_context,
 
   data_str = g_string_new ("<html>");
   g_string_append_printf (data_str, "<head><title>%s</title>"           \
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
                           "<style type=\"text/css\">%s</style></head><body>",
                           _("Installed plugins"),
                           ephy_about_handler_get_style_sheet (about_request->handler));
@@ -214,6 +215,7 @@ handle_memory_finished_cb (EphyAboutHandler *handler,
   memory = g_task_propagate_pointer (G_TASK (result), NULL);
   if (memory) {
     g_string_append_printf (data_str, "<head><title>%s</title>"         \
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
                             "<style type=\"text/css\">%s</style></head><body>",
                             _("Memory usage"),
                             ephy_about_handler_get_style_sheet (handler));
@@ -265,6 +267,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
   char *data;
 
   data = g_strdup_printf ("<html><head><title>Epiphany</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<style type=\"text/css\">%s</style></head>"
                           "<body style=\"background: #3369FF; color: white; font-style: italic;\">"
                           "<div id=\"ephytext\">"
@@ -293,6 +296,7 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
 
   data_str = g_string_new (NULL);
   g_string_append_printf (data_str, "<html><head><title>%s</title>" \
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
                           "<style type=\"text/css\">%s</style></head>"  \
                           "<body class=\"applications-body\"><h1>%s</h1>" \
                           "<p>%s</p>",
@@ -381,6 +385,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
   data = g_strdup_printf ("<html>\n"                                   \
                           "<head>\n"                                   \
                           "<title>%s</title>\n"                        \
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
                           "<style type=\"text/css\">%s</style>\n"      \
                           "</head>\n"                                  \
                           "<body class=\"incognito-body\">\n"          \
