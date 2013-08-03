@@ -3718,6 +3718,8 @@ setup_toolbar (EphyWindow *window)
 }
 
 static const char* disabled_actions_for_app_mode[] = { "FileOpen",
+						       "FileNewWindow",
+						       "FileNewWindowIncognito",
 						       "FileSaveAs",
 						       "FileSaveAsApplication",
 						       "ViewEncoding",
