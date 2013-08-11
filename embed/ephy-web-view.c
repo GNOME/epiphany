@@ -1245,6 +1245,22 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+/**
+ * EphyWebView::donload-only-load:
+ * @view: the #EphyWebView that received the signal
+ *
+ * The ::download-only-load signal is emitted when the @view has its main load
+ * replaced by a download, and that is the only reason why the @view has been created.
+ **/
+    g_signal_new ("download-only-load",
+                  EPHY_TYPE_WEB_VIEW,
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
   g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
 
@@ -1852,10 +1868,15 @@ load_failed_cb (WebKitWebView *web_view,
       }
     }
     break;
-  /* In case we are downloading something or the resource is going to
-   * be showed with a plugin just let WebKit do it */
-  case WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD:
   case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
+    /* If we are going to download something, and this is the first
+     * page to load in this tab, we may want to close it down. */
+    if (!webkit_web_view_can_go_back (web_view))
+      g_signal_emit_by_name (view, "download-only-load", NULL);
+    break;
+  /* In case the resource is going to be showed with a plugin just let
+   * WebKit do it */
+  case WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD:
   default:
     break;
   }
