@@ -2605,6 +2605,31 @@ present_on_idle_cb (GtkWindow *window)
       return FALSE;
 }
 
+static gboolean
+delayed_remove_child (gpointer data)
+{
+	GtkWidget *widget = GTK_WIDGET (data);
+	EphyEmbedContainer *container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (widget));
+
+	ephy_embed_container_remove_child (container, widget);
+
+	return FALSE;
+}
+
+static void
+download_only_load_cb (EphyWebView *view,
+		       EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	if (gtk_notebook_get_n_pages (priv->notebook) == 1) {
+		ephy_web_view_load_homepage (view);
+		return;
+	}
+
+	g_idle_add (delayed_remove_child, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
+}
+
 static void
 notebook_page_added_cb (EphyNotebook *notebook,
 			EphyEmbed *embed,
@@ -2622,6 +2647,9 @@ notebook_page_added_cb (EphyNotebook *notebook,
 				 G_CALLBACK (ephy_link_open), window,
 				 G_CONNECT_SWAPPED);
 #endif
+
+	g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
+				 G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
 
 	g_signal_connect_object (ephy_embed_get_web_view (embed), "ge-modal-alert",
 				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
@@ -2654,6 +2682,9 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 					      G_CALLBACK (ephy_link_open),
 					      window);	
 #endif
+
+	g_signal_handlers_disconnect_by_func
+		(ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
 
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_modal_alert_cb), window);
