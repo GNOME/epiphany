@@ -47,6 +47,9 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#define WNCK_I_KNOW_THIS_IS_UNSTABLE
+#include <libwnck/libwnck.h>
+
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
 struct _EphyShellPrivate {
@@ -129,6 +132,12 @@ ephy_shell_startup_continue (EphyShell *shell)
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
                           ctx->startup_flags, ctx->user_time);
   }
+
+  /* Get an initial update on our windows and their workspaces,
+   * otherwise our first call to ephy_window_is_on_current_workspace
+   * will be unreliable.
+   */
+  wnck_screen_force_update (wnck_screen_get_default ());
 }
 
 static void
