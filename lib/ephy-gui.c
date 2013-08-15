@@ -392,8 +392,14 @@ ephy_gui_window_update_user_time (GtkWidget *window,
 	if (user_time != 0)
 	{
 		gtk_widget_realize (window);
-		gdk_x11_window_set_user_time (gtk_widget_get_window (window),
-					      user_time);
+
+#ifdef GDK_WINDOWING_X11
+		if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+		{
+			gdk_x11_window_set_user_time (gtk_widget_get_window (window),
+						      user_time);
+		}
+#endif
 	}
 
 }
