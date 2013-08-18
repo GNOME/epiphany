@@ -56,6 +56,9 @@ dist_icons_DATA =         \
     thumbnail-frame.png   \
     incognito.png
 
+searchproviderdir = $(datadir)/gnome-shell/search-providers
+dist_searchprovider_DATA = epiphany-search-provider.ini
+
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
 	$(service_in_files)		\

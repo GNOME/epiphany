@@ -7,6 +7,7 @@ noinst_LTLIBRARIES = libephymain.la
 bin_PROGRAMS = epiphany
 
 EXTRA_DIST = \
+	org.gnome.ShellSearchProvider2.xml \
 	epiphany.gresource.xml \
 	$(RESOURCE_FILES)      \
 	$(NULL)
@@ -25,6 +26,7 @@ NOINST_H_FILES = \
 	ephy-navigation-history-action.h	\
 	ephy-page-menu-action.h			\
 	ephy-private.h				\
+	ephy-search-provider.h			\
 	ephy-toolbar.h				\
 	ephy-window-action.h			\
 	languages.h				\
@@ -42,6 +44,7 @@ INST_H_FILES = \
 	$(NULL)
 
 libephymain_la_SOURCES = \
+	$(dbus_shell_search_provider_built_sources) \
 	ephy-action-helper.c			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
@@ -58,6 +61,7 @@ libephymain_la_SOURCES = \
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
 	ephy-page-menu-action.c			\
+	ephy-search-provider.c			\
 	ephy-session.c				\
 	ephy-shell.c				\
 	ephy-toolbar.c				\
@@ -123,6 +127,7 @@ EPIPHANY_RESOURCES = \
 	$(NULL)
 
 BUILT_SOURCES = \
+	$(dbus_shell_search_provider_built_sources) \
 	$(EPIPHANY_RESOURCES) \
 	$(TYPES_SOURCE)       \
 	$(NULL)
@@ -211,6 +216,20 @@ stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
+
+dbus_shell_search_provider_built_sources =	\
+	ephy-shell-search-provider-generated.c	\
+	ephy-shell-search-provider-generated.h
+
+# The upstream for the DBus interface definition is
+# at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
+$(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
+	gdbus-codegen							\
+		--interface-prefix org.gnome.				\
+		--c-namespace Ephy					\
+		--generate-c-code ephy-shell-search-provider-generated	\
+		$(srcdir)/org.gnome.ShellSearchProvider2.xml		\
+		$(NULL)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
