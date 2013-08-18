@@ -56,6 +56,7 @@ static char *application_to_delete = NULL;
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
+static gboolean headless_mode = FALSE;
 static char *profile_directory = NULL;
 
 static gboolean
@@ -90,6 +91,8 @@ static const GOptionEntry option_entries[] =
     N_("Start an instance in netbank mode"), NULL },
   { "application-mode", 'a', 0, G_OPTION_ARG_NONE, &application_mode,
     N_("Start the browser in application mode"), NULL },
+  { "headless-mode", 0, 0, G_OPTION_ARG_NONE, &headless_mode,
+    N_("Start the application without opening windows"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
@@ -213,6 +216,9 @@ static EphyStartupFlags
 get_startup_flags (void)
 {
   EphyStartupFlags flags = 0;
+
+  if (headless_mode)
+    return EPHY_STARTUP_OPEN_NOTHING;
 
   if (open_in_new_tab)
     flags |= EPHY_STARTUP_NEW_TAB;

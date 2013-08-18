@@ -296,21 +296,38 @@ session_load_cb (GObject *object,
 }
 
 static void
+ephy_shell_start_headless (EphyShell *shell)
+{
+  /* A bit of a hack: because we don't pass IS_SERVICE to GApplication
+     (because otherwise we would need a separate launcher binary), we
+     don't get the 10 seconds timeout for the first DBus call.
+     So just hold/release to get the inactivity timeout started instead.
+  */
+
+  g_application_hold (G_APPLICATION (shell));
+  g_application_release (G_APPLICATION (shell));
+  ephy_shell_startup_continue (shell);
+}
+
+static void
 ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
 
   /*
    * We get here on each new instance (remote or not). Autoresume the
-   * session unless we are in application mode and queue the
+   * session unless we are in application or headless mode and queue the
    * commands.
    */
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     EphyShellStartupContext *ctx;
 
     ctx = shell->priv->startup_context;
-    ephy_session_resume (ephy_shell_get_session (shell),
-                         ctx->user_time, NULL, session_load_cb, shell);
+    if (ctx->startup_flags != EPHY_STARTUP_OPEN_NOTHING)
+      ephy_session_resume (ephy_shell_get_session (shell),
+                           ctx->user_time, NULL, session_load_cb, shell);
+    else
+      ephy_shell_start_headless (shell);
   } else
     ephy_shell_startup_continue (shell);
 }
@@ -597,6 +614,8 @@ ephy_shell_init (EphyShell *shell)
   webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
   g_free (favicon_db_path);
 #endif
+
+  g_application_set_inactivity_timeout (G_APPLICATION (shell), 60 * 1000);
 }
 
 static void
