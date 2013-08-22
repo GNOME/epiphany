@@ -1499,7 +1499,8 @@ on_snapshot_ready (WebKitWebView *webview,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
 
-  ephy_overview_store_set_snapshot (EPHY_OVERVIEW_STORE (model), &iter, surface);
+  ephy_overview_store_set_snapshot (EPHY_OVERVIEW_STORE (model), &iter, surface,
+                                    webkit_web_view_get_favicon (webview));
   cairo_surface_destroy (surface);
 }
 

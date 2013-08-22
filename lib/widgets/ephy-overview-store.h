@@ -104,7 +104,8 @@ gboolean ephy_overview_store_find_url             (EphyOverviewStore *store,
 
 void     ephy_overview_store_set_snapshot         (EphyOverviewStore *store,
                                                    GtkTreeIter       *iter,
-                                                   cairo_surface_t   *snapshot);
+                                                   cairo_surface_t   *snapshot,
+                                                   cairo_surface_t   *favicon);
 
 G_END_DECLS
 

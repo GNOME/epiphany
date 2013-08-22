@@ -107,7 +107,8 @@ gboolean             ephy_snapshot_service_save_snapshot_finish        (EphySnap
                                                                         GAsyncResult *result,
                                                                         GError **error);
 
-GdkPixbuf           *ephy_snapshot_service_crop_snapshot               (cairo_surface_t *surface);
+GdkPixbuf           *ephy_snapshot_service_prepare_snapshot            (cairo_surface_t *surface,
+                                                                        cairo_surface_t *favicon);
 
 G_END_DECLS
 

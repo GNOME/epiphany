@@ -248,7 +248,8 @@ on_snapshot_saved_cb (EphySnapshotService *service,
 void
 ephy_overview_store_set_snapshot (EphyOverviewStore *store,
                                   GtkTreeIter *iter,
-                                  cairo_surface_t *snapshot)
+                                  cairo_surface_t *snapshot,
+                                  cairo_surface_t *favicon)
 {
   GdkPixbuf *pixbuf;
   char *url;
@@ -257,7 +258,7 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
   int mtime;
 
   mtime = time (NULL);
-  pixbuf = ephy_snapshot_service_crop_snapshot (snapshot);
+  pixbuf = ephy_snapshot_service_prepare_snapshot (snapshot, favicon);
   ephy_overview_store_set_snapshot_internal (store, iter, pixbuf, mtime);
   gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
                       EPHY_OVERVIEW_STORE_URI, &url,

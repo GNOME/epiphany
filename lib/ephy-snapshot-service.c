@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-snapshot-service.h"
 
+#include "ephy-favicon-helpers.h"
+
 #ifndef GNOME_DESKTOP_USE_UNSTABLE_API
 #define GNOME_DESKTOP_USE_UNSTABLE_API
 #endif
@@ -170,7 +172,8 @@ save_snapshot (cairo_surface_t *surface,
   EphySnapshotService *service;
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
-  data->snapshot = ephy_snapshot_service_crop_snapshot (surface);
+  data->snapshot = ephy_snapshot_service_prepare_snapshot (surface,
+                                                           webkit_web_view_get_favicon (data->web_view));
 
   service = (EphySnapshotService *)g_async_result_get_source_object (G_ASYNC_RESULT (result));
   ephy_snapshot_service_save_snapshot_async (service, data->snapshot,
@@ -613,7 +616,8 @@ ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
 }
 
 GdkPixbuf *
-ephy_snapshot_service_crop_snapshot (cairo_surface_t *surface)
+ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
+                                        cairo_surface_t *favicon)
 {
   GdkPixbuf *snapshot, *scaled;
   int orig_width, orig_height;
@@ -655,6 +659,19 @@ ephy_snapshot_service_crop_snapshot (cairo_surface_t *surface)
   }
 
   g_object_unref (snapshot);
+
+  if (favicon) {
+    GdkPixbuf* fav_pixbuf;
+    int favicon_size = 16;
+    int x_offset = 6;
+    int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
+    fav_pixbuf = ephy_pixbuf_get_from_surface_scaled (favicon, favicon_size, favicon_size);
+    gdk_pixbuf_composite (fav_pixbuf, scaled,
+                          x_offset, y_offset, favicon_size, favicon_size,
+                          x_offset, y_offset, 1, 1,
+                          GDK_INTERP_NEAREST, 255);
+    g_object_unref (fav_pixbuf);
+  }
 
   return scaled;
 }
