@@ -5,19 +5,33 @@
     <link>http://www.gnome.org/projects/epiphany/</link>
     <items>
       <rdf:Seq>
-        <rdf:li rdf:resource="http://www.google.com"/>
+        <rdf:li rdf:resource="http://duckduckgo.com"/>
       </rdf:Seq>
     </items>
   </channel>
-  <item rdf:about="http://www.google.com">
+  <item rdf:about="http://duckduckgo.com">
     <_title>Search the web</_title>
-    <!-- Translators you should change these links to respect your locale.
-         For instance in .nl these should be
-	 "http://www.google.nl" and "http://www.google.nl/search?q=%s" -->
-    <_link>http://www.google.com</_link>
-    <!-- Translators you should change these links to respect your locale.
-         For instance in .nl these should be
-	 "http://www.google.nl" and "http://www.google.nl/search?q=%s" -->
-    <_ephy:smartlink>http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8</_ephy:smartlink>
+    <!-- Translators: you can use the regions listed in
+         https://duckduckgo.com/params to boost a particular region
+         associated with your language. For instance, for translators
+         to Finnish, it might make sense to add kl=fi-fi to the search
+         URL in order to boost results from Finland. Additionally, the
+         'kad' parameter can be used to specify the locale in which
+         duckduckgo must be translated. So, for a Finnish localized
+         version of duckduckgo that will render results tailored for
+         Finland, the string would be:
+         http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kal=fi_FI
+    -->
+    <_link>http://duckduckgo.com/?t=epiphany</_link>
+    <!-- Translators: you can use the regions listed in
+         https://duckduckgo.com/params to boost a particular region
+         associated with your language. For instance, for translators
+         to Finnish, it might make sense to add kl=fi-fi to the search
+         URL in order to boost results from Finland. Additionally, the
+         'kad' parameter can be used to specify the locale in which
+         duckduckgo must be translated. For such case, the search url
+         would be
+         http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kal=fi_FI -->
+    <_ephy:smartlink>http://duckduckgo.com/?q=%s&amp;t=epiphany</_ephy:smartlink>
   </item>
 </rdf:RDF>
