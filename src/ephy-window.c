@@ -4535,16 +4535,14 @@ ephy_window_close (EphyWindow *window)
 		return FALSE;
 	}
 
-	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA))
+	if (!window->priv->force_close &&
+	    g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA) &&
+	    gtk_notebook_get_n_pages (window->priv->notebook) > 0)
 	{
-		if (!window->priv->force_close &&
-		    gtk_notebook_get_n_pages (window->priv->notebook) > 0)
-		{
-			ephy_window_check_modified_forms (window);
-			/* stop window close */
-			return FALSE;
-		}
+		ephy_window_check_modified_forms (window);
+		/* stop window close */
+		return FALSE;
 	}
 
 	if (window_has_ongoing_downloads (window) && confirm_close_with_downloads (window) == FALSE)
