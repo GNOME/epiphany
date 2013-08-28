@@ -854,7 +854,6 @@ web_page_document_loaded (WebKitWebPage *web_page,
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       EphyEmbedFormAuth *form_auth;
       GSList *auth_data_list;
-      GtkEntryCompletion *completion;
       const char *uri_string;
       SoupURI *uri;
 
