@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-08-28 00:42+0200\n"
-"PO-Revision-Date: 2013-08-28 00:44+0200\n"
+"POT-Creation-Date: 2013-08-30 00:55+0200\n"
+"PO-Revision-Date: 2013-08-30 00:55+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -42,7 +42,7 @@ msgstr "Buscar na web"
 #. duckduckgo must be translated. So, for a Finnish localized
 #. version of duckduckgo that will render results tailored for
 #. Finland, the string would be:
-#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kal=fi_FI
+#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #.
 #: ../data/default-bookmarks.rdf.in.h:13
 msgid "http://duckduckgo.com/?t=epiphany"
@@ -56,14 +56,14 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 #. 'kad' parameter can be used to specify the locale in which
 #. duckduckgo must be translated. For such case, the search url
 #. would be
-#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kal=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24 ../src/ephy-search-provider.c:290
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1787
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:68
+#: ../src/ephy-main.c:320 ../src/ephy-main.c:478 ../src/window-commands.c:1787
 msgid "Web"
 msgstr "Web"
 
@@ -882,7 +882,7 @@ msgid "Most Visited"
 msgstr "Máis visitadas"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2724
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2757
 msgid "Blank page"
 msgstr "Páxina en branco"
 
@@ -1290,7 +1290,7 @@ msgstr "Produciuse un erro ao descargar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1313
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1309
 #: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Abrir"
@@ -2134,67 +2134,71 @@ msgstr "Todo o historial"
 msgid "History"
 msgstr "Historial"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:77
 msgid "Open a new tab in an existing browser window"
 msgstr "Abrir unha lapela nova nunha xanela de navegador existente"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:79
 msgid "Open a new browser window"
 msgstr "Abrir unha nova xanela de navegador"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:81
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde o ficheiro indicado"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:83
 msgid "FILE"
 msgstr "FICHEIRO"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:83
 msgid "Load the given session file"
 msgstr "Cargar o ficheiro de sesión indicado"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:85
 msgid "Add a bookmark"
 msgstr "Engadir un marcador"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:85
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:87
 msgid "Start a private instance"
 msgstr "Iniciar unha instancia privada"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:89
 msgid "Start an instance in incognito mode"
 msgstr "Iniciar unha instancia en modo incógnito"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:91
 msgid "Start an instance in netbank mode"
 msgstr "Iniciar unha instancia en modo «netbank»"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:93
 msgid "Start the browser in application mode"
 msgstr "Iniciar o navegador en modo de aplicativo"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:95
+msgid "Start the application without opening windows"
+msgstr "Iniciar o aplicativo sen abrir as xanelas"
+
+#: ../src/ephy-main.c:97
 msgid "Profile directory to use in the private instance"
 msgstr "Directorio de perfil para usar na instancia privada"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:97
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:99
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:201
+#: ../src/ephy-main.c:204
 msgid "Could not start Web"
 msgstr "Non foi posíbel iniciar Web"
 
-#: ../src/ephy-main.c:204
+#: ../src/ephy-main.c:207
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2203,13 +2207,18 @@ msgstr ""
 "O inicio fallou polo seguinte erro:\n"
 "%s"
 
-#: ../src/ephy-main.c:315
+#: ../src/ephy-main.c:321
 msgid "Web options"
 msgstr "Opcións de Web"
 
 #: ../src/ephy-notebook.c:599
 msgid "Close tab"
 msgstr "Pechar a lapela"
+
+#: ../src/ephy-search-provider.c:202
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Busca no web por %s"
 
 #: ../src/ephy-window.c:108
 msgid "_Open…"
@@ -2397,77 +2406,77 @@ msgstr "_Deter a animación"
 msgid "Inspect _Element"
 msgstr "Inspeccionar o _elemento"
 
-#: ../src/ephy-window.c:479
+#: ../src/ephy-window.c:478
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hai cambios non enviados nos elementos do formulario"
 
-#: ../src/ephy-window.c:480
+#: ../src/ephy-window.c:479
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Se pecha o documento perderá esa información."
 
-#: ../src/ephy-window.c:482
+#: ../src/ephy-window.c:481
 msgid "Close _Document"
 msgstr "_Pechar o documento"
 
-#: ../src/ephy-window.c:500
+#: ../src/ephy-window.c:496
 msgid "There are ongoing downloads in this window"
 msgstr "Hai descargas en curso nesta xanela"
 
-#: ../src/ephy-window.c:501
+#: ../src/ephy-window.c:497
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Se pecha esta xanela, cancelaranse as descargas"
 
-#: ../src/ephy-window.c:502
+#: ../src/ephy-window.c:498
 msgid "Close window and cancel downloads"
 msgstr "Pechar a xanela e cancelar as descargas"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1311
 msgid "Save As"
 msgstr "Gardar como"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1313
 msgid "Save As Application"
 msgstr "Gardar como aplicativo"
 
-#: ../src/ephy-window.c:1319
+#: ../src/ephy-window.c:1315
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1317
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1323
+#: ../src/ephy-window.c:1319
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1332
+#: ../src/ephy-window.c:1328
 msgid "Larger"
 msgstr "Máis grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1335
+#: ../src/ephy-window.c:1331
 msgid "Smaller"
 msgstr "Máis pequeno"
 
-#: ../src/ephy-window.c:1363
+#: ../src/ephy-window.c:1359
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/ephy-window.c:1375
+#: ../src/ephy-window.c:1371
 msgid "Forward"
 msgstr "Adiante"
 
-#: ../src/ephy-window.c:1387
+#: ../src/ephy-window.c:1383
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1396
+#: ../src/ephy-window.c:1392
 msgid "New _Tab"
 msgstr "_Lapela nova"
 
-#: ../src/ephy-window.c:1404
+#: ../src/ephy-window.c:1400
 msgid "Go to most visited"
 msgstr "Ir á máis visitada"
 
