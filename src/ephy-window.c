@@ -3722,6 +3722,7 @@ setup_toolbar (EphyWindow *window)
 	gtk_widget_set_margin_right (toolbar, 8);
 	gtk_container_add (GTK_CONTAINER (event_box), toolbar);
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), TRUE);
+	gtk_widget_show (event_box);
 	gtk_window_set_titlebar (GTK_WINDOW (window), event_box);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
