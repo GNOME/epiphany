@@ -166,7 +166,6 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
   ephy_embed_prefs_init ();
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   if (!ephy_file_helpers_init (NULL,
                                EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_ENSURE_EXISTS,
@@ -174,6 +173,8 @@ main (int argc, char *argv[])
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }
+
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   server = soup_server_new (SOUP_SERVER_PORT, 0, NULL);
   soup_server_run_async (server);
