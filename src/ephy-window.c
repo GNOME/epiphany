@@ -3709,21 +3709,20 @@ lock_clicked_cb (EphyLocationController *controller,
 static GtkWidget *
 setup_toolbar (EphyWindow *window)
 {
-	GtkWidget *event_box;
+	GtkWidget *frame;
 	GtkWidget *toolbar;
 	GtkAction *action;
 	EphyWindowPrivate *priv = window->priv;
 
-	event_box = gtk_event_box_new ();
+	frame = gtk_frame_new (NULL);
 	toolbar = ephy_toolbar_new (window);
 	gtk_widget_set_margin_top (toolbar, 6);
 	gtk_widget_set_margin_bottom (toolbar, 6);
 	gtk_widget_set_margin_left (toolbar, 8);
 	gtk_widget_set_margin_right (toolbar, 8);
-	gtk_container_add (GTK_CONTAINER (event_box), toolbar);
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), TRUE);
-	gtk_widget_show (event_box);
-	gtk_window_set_titlebar (GTK_WINDOW (window), event_box);
+	gtk_container_add (GTK_CONTAINER (frame), toolbar);
+	gtk_widget_show (frame);
+	gtk_window_set_titlebar (GTK_WINDOW (window), frame);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationBack");
