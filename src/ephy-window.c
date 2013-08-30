@@ -3709,15 +3709,18 @@ lock_clicked_cb (EphyLocationController *controller,
 static GtkWidget *
 setup_toolbar (EphyWindow *window)
 {
+	GtkWidget *event_box;
 	GtkWidget *toolbar;
 	GtkAction *action;
 	EphyWindowPrivate *priv = window->priv;
 
+	event_box = gtk_event_box_new ();
 	toolbar = ephy_toolbar_new (window);
 	gtk_widget_set_margin_left (toolbar, 4);
 	gtk_widget_set_margin_right (toolbar, 4);
-	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
-			    toolbar, FALSE, FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (event_box), toolbar);
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), TRUE);
+	gtk_window_set_titlebar (GTK_WINDOW (window), event_box);
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationBack");
@@ -4121,9 +4124,6 @@ ephy_window_init (EphyWindow *window)
 	g_signal_connect (ephy_embed_shell_get_default (),
 			 "download-added", G_CALLBACK (download_added_cb),
 			 window);
-
-	gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window),
-						     TRUE);
 }
 
 /**
