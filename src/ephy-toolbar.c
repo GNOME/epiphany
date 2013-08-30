@@ -25,7 +25,7 @@
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
 
-G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_TOOLBAR)
+G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_BOX)
 
 #define EPHY_TOOLBAR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
 
@@ -83,8 +83,7 @@ ephy_toolbar_constructed (GObject *object)
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkToolItem *back_forward, *location_stop_reload, *tool_item;
-  GtkWidget *tool_button, *box, *location, *toolbar;
+  GtkWidget *toolbar, *box, *button;
   GtkSizeGroup *size;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
@@ -95,125 +94,112 @@ ephy_toolbar_constructed (GObject *object)
    * the stop/reload button. */
   size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
-  /* Set the MENUBAR style class so it's possible to drag the app
-   * using the toolbar. */
-  gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
-                               GTK_STYLE_CLASS_MENUBAR);
-
   /* Back and Forward */
-  back_forward = gtk_tool_item_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Back */
-  tool_button = ephy_middle_clickable_button_new ();
+  button = ephy_middle_clickable_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
   action_group = ephy_window_get_toolbar_action_group (priv->window);
   action = gtk_action_group_get_action (action_group, "NavigationBack");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
+  gtk_button_set_label (GTK_BUTTON (button), NULL);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   /* Forward */
-  tool_button = ephy_middle_clickable_button_new ();
+  button = ephy_middle_clickable_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "NavigationForward");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
+  gtk_button_set_label (GTK_BUTTON (button), NULL);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "raised");
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "linked");
 
-  gtk_container_add (GTK_CONTAINER (back_forward), box);
-  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (back_forward));
-  gtk_widget_show_all (GTK_WIDGET (back_forward));
-  if (gtk_widget_get_direction (GTK_WIDGET (back_forward)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (GTK_WIDGET (back_forward), 12);
+  gtk_container_add (GTK_CONTAINER (toolbar), box);
+  gtk_widget_show_all (box);
+
+  if (gtk_widget_get_direction (box) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (box, 27);
   else
-    gtk_widget_set_margin_right (GTK_WIDGET (back_forward), 12);
+    gtk_widget_set_margin_right (box, 27);
 
   /* Location and Reload/Stop */
-  location_stop_reload = gtk_tool_item_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_size_request (box, 530, -1);
+  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
   /* Location */
-  priv->entry = location = ephy_location_entry_new ();
-  gtk_box_pack_start (GTK_BOX (box), location,
-                      TRUE, TRUE, 0);
+  priv->entry = ephy_location_entry_new ();
+  gtk_box_pack_start (GTK_BOX (box), priv->entry, TRUE, TRUE, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "location-entry");
 
   /* Reload/Stop */
-  tool_button = gtk_button_new ();
+  button = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (tool_button));
+  gtk_container_add (GTK_CONTAINER (box), button);
 
-  gtk_container_add (GTK_CONTAINER (location_stop_reload), box);
-  gtk_container_child_set (GTK_CONTAINER (toolbar),
-                           GTK_WIDGET (location_stop_reload),
-                           "expand", TRUE,
-                           NULL);
-  
-  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (location_stop_reload));
+  gtk_box_pack_start (GTK_BOX (toolbar), box, TRUE, TRUE, 0);
+  gtk_widget_show_all (box);
 
-  gtk_size_group_add_widget (size, tool_button);
-  gtk_size_group_add_widget (size, location);
+  gtk_size_group_add_widget (size, button);
+  gtk_size_group_add_widget (size, priv->entry);
   g_object_unref (size);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (location_stop_reload)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (GTK_WIDGET (location_stop_reload), 12);
+  if (gtk_widget_get_direction (box) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (box, 12);
   else
-    gtk_widget_set_margin_right (GTK_WIDGET (location_stop_reload), 12);
-
-  gtk_widget_show_all (GTK_WIDGET (location_stop_reload));
+    gtk_widget_set_margin_right (box, 12);
 
   /* New Tab */
-  tool_item = gtk_tool_item_new ();
-  tool_button = gtk_button_new ();
+  button = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "FileNewTab");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_button_set_label (GTK_BUTTON (tool_button), NULL);
-  gtk_container_add (GTK_CONTAINER (tool_item), tool_button);
-  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_item));
+  gtk_button_set_label (GTK_BUTTON (button), NULL);
+  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_widget_show_all (button);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (GTK_WIDGET (tool_item), 4);
+  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_left (button, 6);
   else
-    gtk_widget_set_margin_right (GTK_WIDGET (tool_item), 4);
+    gtk_widget_set_margin_right (button, 6);
 
-  gtk_widget_show_all (GTK_WIDGET (tool_item));
-
+  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_right (button, 15);
+  else
+    gtk_widget_set_margin_left (button, 15);
 
   /* Page Menu */
-  tool_item = gtk_tool_item_new ();
-  tool_button = gtk_button_new ();
-  gtk_widget_set_name (GTK_WIDGET (tool_button), "ephy-page-menu-button");
+  button = gtk_button_new ();
+  gtk_widget_set_name (button, "ephy-page-menu-button");
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (tool_button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
   action = gtk_action_group_get_action (action_group, "PageMenu");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (tool_button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_container_add (GTK_CONTAINER (tool_item), tool_button);
-  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (tool_item));
-  gtk_widget_show_all (GTK_WIDGET (tool_item));
+  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_widget_show_all (button);
 }
 
 static void
