@@ -2,6 +2,7 @@ SUBDIRS = pages
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_XML_RULE@
 
 desktop_in_files = epiphany.desktop.in.in
 desktopdir = $(datadir)/applications
@@ -15,6 +16,9 @@ gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 
 gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 @GSETTINGS_RULES@
+
+appdatadir = $(datadir)/appdata
+appdata_DATA = epiphany.appdata.xml
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
@@ -61,6 +65,7 @@ dist_searchprovider_DATA = epiphany-search-provider.ini
 
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
+	$(appdata_DATA)			\
 	$(service_in_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
