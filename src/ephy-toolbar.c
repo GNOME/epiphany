@@ -78,21 +78,43 @@ ephy_toolbar_get_property (GObject *object,
 }
 
 static void
+close_button_clicked (GtkButton *button, gpointer data)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  gtk_window_close (GTK_WINDOW (toplevel));
+}
+
+static void
+smallify_boldify_label (GtkWidget *label)
+{
+  PangoAttrList *attrs;
+
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_MEDIUM));
+  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
+}
+
+static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkWidget *toolbar, *box, *button;
+  GtkWidget *toolbar, *box, *button, *reload, *separator, *label;
   GtkSizeGroup *size;
+  EphyEmbedShellMode mode;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
   toolbar = GTK_WIDGET (object);
 
-  /* Create a GtkSizeGroup to sync the height of the location entry, and
-   * the stop/reload button. */
-  size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   /* Back and Forward */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -145,22 +167,32 @@ ephy_toolbar_constructed (GObject *object)
                                "location-entry");
 
   /* Reload/Stop */
-  button = gtk_button_new ();
+  reload = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_button_set_image (GTK_BUTTON (reload), gtk_image_new ());
+  gtk_widget_set_valign (reload, GTK_ALIGN_CENTER);
   action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (reload),
                                       action);
-  gtk_container_add (GTK_CONTAINER (box), button);
+
+
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
+  {
+    gtk_container_add (GTK_CONTAINER (box), reload);
+
+    /* Create a GtkSizeGroup to sync the height of the location entry, and
+     * the stop/reload button. */
+    size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+
+    gtk_size_group_add_widget (size, reload);
+    gtk_size_group_add_widget (size, priv->entry);
+    g_object_unref (size);
+  }
 
   gtk_box_pack_start (GTK_BOX (toolbar), box, TRUE, TRUE, 0);
-  gtk_widget_show_all (box);
-
-  gtk_size_group_add_widget (size, button);
-  gtk_size_group_add_widget (size, priv->entry);
-  g_object_unref (size);
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
+    gtk_widget_show_all (box);
 
   if (gtk_widget_get_direction (box) == GTK_TEXT_DIR_RTL)
     gtk_widget_set_margin_left (box, 12);
@@ -177,7 +209,8 @@ ephy_toolbar_constructed (GObject *object)
                                       action);
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_container_add (GTK_CONTAINER (toolbar), button);
-  gtk_widget_show_all (button);
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
+    gtk_widget_show_all (button);
 
   if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
     gtk_widget_set_margin_left (button, 6);
@@ -200,6 +233,57 @@ ephy_toolbar_constructed (GObject *object)
                                       action);
   gtk_container_add (GTK_CONTAINER (toolbar), button);
   gtk_widget_show_all (button);
+
+  /* Add title only in application mode. */
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+  {
+    /* The title of the window in web application - need
+     * settings of padding same the location entry. */
+    label = gtk_label_new (NULL);
+    gtk_style_context_add_class (gtk_widget_get_style_context (label), "subtitle");
+    smallify_boldify_label (label);
+    gtk_label_set_line_wrap (GTK_LABEL (label), FALSE);
+    gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_widget_set_size_request (label, 530, -1);
+    gtk_box_pack_start (GTK_BOX (toolbar), label, TRUE, TRUE, 0);
+    gtk_widget_show_all (label);
+
+    if (gtk_widget_get_direction (GTK_WIDGET (label)) == GTK_TEXT_DIR_RTL)
+      gtk_widget_set_margin_left (GTK_WIDGET (label), 12);
+    else
+      gtk_widget_set_margin_right (GTK_WIDGET (label), 12);
+
+    g_object_bind_property (label, "label",
+                            priv->window, "title",
+                            G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+    /* Reload/Stop for web application. */
+    gtk_container_add (GTK_CONTAINER (toolbar), reload);
+  }
+
+  /* Separator and Close */
+  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+  gtk_container_add (GTK_CONTAINER (toolbar), separator);
+  gtk_widget_show_all (separator);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (separator)) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_right (GTK_WIDGET (separator), 8);
+  else
+    gtk_widget_set_margin_left (GTK_WIDGET (separator), 8);
+
+  button = gtk_button_new_from_icon_name ("window-close-symbolic",
+                                          GTK_ICON_SIZE_MENU);
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (close_button_clicked), NULL);
+  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_widget_show_all (button);
+
+  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_margin_right (button, 6);
+  else
+    gtk_widget_set_margin_left (button, 6);
 }
 
 static void
