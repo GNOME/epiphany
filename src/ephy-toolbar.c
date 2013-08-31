@@ -268,9 +268,9 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_show_all (separator);
 
   if (gtk_widget_get_direction (GTK_WIDGET (separator)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_right (GTK_WIDGET (separator), 8);
+    gtk_widget_set_margin_right (GTK_WIDGET (separator), 6);
   else
-    gtk_widget_set_margin_left (GTK_WIDGET (separator), 8);
+    gtk_widget_set_margin_left (GTK_WIDGET (separator), 6);
 
   button = gtk_button_new_from_icon_name ("window-close-symbolic",
                                           GTK_ICON_SIZE_MENU);
