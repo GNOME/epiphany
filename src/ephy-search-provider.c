@@ -194,7 +194,7 @@ handle_get_result_metas (EphyShellSearchProvider2  *skeleton,
 
   for (i = 0; results[i]; i++)
     {
-      if (g_str_has_prefix (results[i], "special:search:") == 0) {
+      if (g_str_has_prefix (results[i], "special:search:")) {
         g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
         g_variant_builder_add (&builder, "{sv}",
                                "id", g_variant_new_string ("special:search"));
