@@ -87,15 +87,17 @@ main (int argc, char *argv[])
 {
   int ret;
   const char *xdg_data_dirs;
-  char **dirs;
+  char **dirs = NULL;
   char *schemas_dir;
 
   /* Save XDG_DATA_DIRS to set GSETTINGS_SCHEME_DIR, otherwise we
    * won't find the sytem schemas. */
   xdg_data_dirs = g_getenv ("XDG_DATA_DIRS");
-  dirs = g_strsplit (xdg_data_dirs, ":", -1);
+  if (xdg_data_dirs)
+    dirs = g_strsplit (xdg_data_dirs, ":", -1);
+
   /* We can only use one directory, so use the first one or the system default. */
-  schemas_dir = g_build_filename (dirs[0] ? dirs[0] : "/usr/share", "glib-2.0", "schemas", NULL);
+  schemas_dir = g_build_filename (dirs ? dirs[0] : "/usr/share", "glib-2.0", "schemas", NULL);
   g_setenv ("GSETTINGS_SCHEMA_DIR", schemas_dir, TRUE);
   g_strfreev (dirs);
   g_free (schemas_dir);
