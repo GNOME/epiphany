@@ -275,7 +275,7 @@ test_ephy_web_view_non_search_regex (void)
   g_regex_unref (regex_domain);
 }
 
-/* FIXME: we hardcode the google search for now, since it's the
+/* FIXME: we hardcode the ddg search for now, since it's the
  * default. */
 static struct {
   char *url;
@@ -284,15 +284,15 @@ static struct {
   { "google.com", "http://google.com" },
   { "http://google.com", "http://google.com" },
   { "http://google.com/this/is/a/path", "http://google.com/this/is/a/path" },
-  { "search", "http://www.google.com/search?q=search&ie=UTF-8&oe=UTF-8" },
+  { "search", "http://duckduckgo.com/?q=search&t=epiphany" },
   { "search.me", "http://search.me" },
-  { "lala.lala", "http://www.google.com/search?q=lala%2Elala&ie=UTF-8&oe=UTF-8" },
+  { "lala.lala", "http://duckduckgo.com/?q=lala%2Elala&t=epiphany" },
   { "127.0.0.1", "http://127.0.0.1" },
   { "http://127.0.0.1", "http://127.0.0.1" },
-  { "totalgarbage0xdeadbeef", "http://www.google.com/search?q=totalgarbage0xdeadbeef&ie=UTF-8&oe=UTF-8" },
+  { "totalgarbage0xdeadbeef", "http://duckduckgo.com/?q=totalgarbage0xdeadbeef&t=epiphany" },
   { "planet.gnome.org", "http://planet.gnome.org" },
-  { "search separated words please", "http://www.google.com/search?q=search+separated+words+please&ie=UTF-8&oe=UTF-8" },
-  { "\"a quoted string should be searched\"", "http://www.google.com/search?q=%22a+quoted+string+should+be+searched%22&ie=UTF-8&oe=UTF-8" }
+  { "search separated words please", "http://duckduckgo.com/?q=search+separated+words+please&t=epiphany" },
+  { "\"a quoted string should be searched\"", "http://duckduckgo.com/?q=%22a+quoted+string+should+be+searched%22&t=epiphany" }
 };
 
 static void
