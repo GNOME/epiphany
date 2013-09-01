@@ -87,26 +87,13 @@ close_button_clicked (GtkButton *button, gpointer data)
 }
 
 static void
-smallify_boldify_label (GtkWidget *label)
-{
-  PangoAttrList *attrs;
-
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_MEDIUM));
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
-}
-
-static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkWidget *toolbar, *box, *button, *reload, *separator, *label;
+  GtkStyleContext *context;
   GtkSizeGroup *size;
   EphyEmbedShellMode mode;
 
@@ -240,8 +227,9 @@ ephy_toolbar_constructed (GObject *object)
     /* The title of the window in web application - need
      * settings of padding same the location entry. */
     label = gtk_label_new (NULL);
-    gtk_style_context_add_class (gtk_widget_get_style_context (label), "subtitle");
-    smallify_boldify_label (label);
+    context = gtk_widget_get_style_context (label);
+    gtk_style_context_add_class (context, "title");
+    gtk_style_context_add_class (context, "dim-label");
     gtk_label_set_line_wrap (GTK_LABEL (label), FALSE);
     gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
     gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
