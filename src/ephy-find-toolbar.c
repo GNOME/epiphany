@@ -88,7 +88,7 @@ typedef enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_BOX)
+G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_SEARCH_BAR)
 
 /* private functions */
 
@@ -485,13 +485,7 @@ ephy_find_toolbar_grab_focus (GtkWidget *widget)
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (widget);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
-}
-
-static void
-close_button_clicked_cb (GtkButton *button, EphyFindToolbar *toolbar)
-{
-        ephy_find_toolbar_request_close (toolbar);
+	gtk_widget_grab_focus (priv->entry);
 }
 
 static gboolean
@@ -563,106 +557,45 @@ static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv;
-	GtkWidget *inner_box;
 	GtkWidget *box;
-	GtkWidget *center_box;
-	GtkWidget *left_box;
-	GtkWidget *right_box;
-	GtkWidget *close_button, *image;
 	GtkSizeGroup *size_group;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
 
-	gtk_container_set_border_width (GTK_CONTAINER (toolbar), 0);
-	gtk_box_set_spacing (GTK_BOX (toolbar), 5);
-	gtk_widget_set_hexpand (GTK_WIDGET (toolbar), TRUE);
-	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
-				     GTK_STYLE_CLASS_TOOLBAR);
-	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
-				     GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
-	inner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (inner_box), 3);
-	gtk_widget_show (inner_box);
-	gtk_widget_set_hexpand (GTK_WIDGET (toolbar), TRUE);
-	gtk_container_add (GTK_CONTAINER (toolbar), inner_box);
-
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
-
-	left_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-	gtk_container_add (GTK_CONTAINER (inner_box), left_box);
-	gtk_widget_show (GTK_WIDGET (left_box));
-	gtk_widget_set_halign (left_box, GTK_ALIGN_START);
-	gtk_widget_set_hexpand (left_box, TRUE);
-	gtk_size_group_add_widget (size_group, left_box);
-
-	center_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-	gtk_container_add (GTK_CONTAINER (inner_box), center_box);
-	gtk_widget_show (GTK_WIDGET (center_box));
-	gtk_widget_set_halign (center_box, GTK_ALIGN_CENTER);
-
-	right_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-	gtk_container_add (GTK_CONTAINER (inner_box), right_box);
-	gtk_widget_show (GTK_WIDGET (right_box));
-	gtk_widget_set_halign (right_box, GTK_ALIGN_END);
-	gtk_widget_set_hexpand (right_box, TRUE);
-	gtk_size_group_add_widget (size_group, right_box);
-	g_object_unref (size_group);
-
-	/* Find: |_____| */
-	priv->entry = gtk_entry_new ();
-	gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 32);
-	gtk_entry_set_max_length (GTK_ENTRY (priv->entry), 512);
-
-	gtk_container_add (GTK_CONTAINER (center_box), priv->entry);
-	gtk_widget_show (priv->entry);
-
-	/* Prev & Next */
 	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_style_context_add_class (gtk_widget_get_style_context (box),
 				     GTK_STYLE_CLASS_RAISED);
 	gtk_style_context_add_class (gtk_widget_get_style_context (box),
 				     GTK_STYLE_CLASS_LINKED);
-	gtk_container_add (GTK_CONTAINER (center_box), box);
-	gtk_widget_show (box);
+	gtk_container_add (GTK_CONTAINER (toolbar), box);
+
+	priv->entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 32);
+	gtk_entry_set_max_length (GTK_ENTRY (priv->entry), 512);
+	gtk_entry_set_placeholder_text (GTK_ENTRY (priv->entry), _("Type to search…"));
+	gtk_container_add (GTK_CONTAINER (box), priv->entry);
 
 	/* Prev */
-	priv->prev = gtk_button_new ();
-	image = gtk_image_new ();
-	g_object_set (image, "margin", 2, NULL);
-	gtk_image_set_from_icon_name (GTK_IMAGE (image), "go-up-symbolic",
-				      GTK_ICON_SIZE_MENU);
-	gtk_button_set_image (GTK_BUTTON (priv->prev), image);
+	priv->prev = gtk_button_new_from_icon_name ("go-up-symbolic", GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (priv->prev,
 				     _("Find previous occurrence of the search string"));
-	gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->prev));
-	gtk_widget_show_all (GTK_WIDGET (priv->prev));
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
+	gtk_container_add (GTK_CONTAINER (box), priv->prev);
+	gtk_widget_show_all (priv->prev);
+	gtk_widget_set_sensitive (priv->prev, FALSE);
 
 	/* Next */
-	priv->next = gtk_button_new ();
-	image = gtk_image_new ();
-	g_object_set (image, "margin", 2, NULL);
-	gtk_image_set_from_icon_name (GTK_IMAGE (image), "go-down-symbolic",
-				      GTK_ICON_SIZE_MENU);
-	gtk_button_set_image (GTK_BUTTON (priv->next), image);
+	priv->next = gtk_button_new_from_icon_name ("go-down-symbolic", GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (priv->next,
-                                     _("Find next occurrence of the search string"));
-	gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->next));
-	gtk_widget_show_all (GTK_WIDGET (priv->next));
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
+				     _("Find next occurrence of the search string"));
+	gtk_container_add (GTK_CONTAINER (box), priv->next);
+	gtk_widget_set_sensitive (priv->next, FALSE);
 
-	/* Close button */
-	close_button = gtk_button_new ();
-	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_container_add (GTK_CONTAINER (close_button), image);
-	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-	gtk_box_pack_end (GTK_BOX (right_box), close_button, FALSE, FALSE, 0);
-	gtk_widget_show_all (close_button);
-	gtk_style_context_add_class (gtk_widget_get_style_context (close_button),
-				     GTK_STYLE_CLASS_RAISED);
-	gtk_style_context_add_class (gtk_widget_get_style_context (close_button),
-				     "close");
+	gtk_size_group_add_widget (size_group, priv->entry);
+	gtk_size_group_add_widget (size_group, priv->next);
+	gtk_size_group_add_widget (size_group, priv->prev);
+	g_object_unref (size_group);
 
 	/* connect signals */
 	g_signal_connect (priv->entry, "icon-release",
@@ -677,10 +610,12 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 				  G_CALLBACK (find_next_cb), toolbar);
 	g_signal_connect_swapped (priv->prev, "clicked",
 				  G_CALLBACK (find_prev_cb), toolbar);
-	g_signal_connect (close_button, "clicked",
-			  G_CALLBACK (close_button_clicked_cb), toolbar);
+	gtk_search_bar_connect_entry (GTK_SEARCH_BAR (toolbar),
+				      GTK_ENTRY (priv->entry));
 
 	search_entry_changed_cb (GTK_ENTRY (priv->entry), toolbar);
+
+	gtk_widget_show_all (GTK_WIDGET (toolbar));
 }
 
 static void
@@ -959,8 +894,9 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
 	gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
 
-	gtk_widget_show (GTK_WIDGET (toolbar));
-	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
+	gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (toolbar), TRUE);
+	gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (toolbar), TRUE);
+	gtk_widget_grab_focus (priv->entry);
 }
 
 void
@@ -968,7 +904,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	gtk_widget_hide (GTK_WIDGET (toolbar));
+	gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (toolbar), FALSE);
 
 	if (priv->web_view == NULL) return;
 #ifdef HAVE_WEBKIT2
@@ -981,7 +917,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 {
-	if (gtk_widget_get_visible (GTK_WIDGET (toolbar)))
+	if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (toolbar)))
 	{
 		g_signal_emit (toolbar, signals[CLOSE], 0);
 	}

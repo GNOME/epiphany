@@ -45,7 +45,7 @@ typedef struct _EphyFindToolbarClass	EphyFindToolbarClass;
 
 struct _EphyFindToolbar
 {
-	GtkBox parent;
+	GtkSearchBar parent;
 
 	/*< private >*/
 	EphyFindToolbarPrivate *priv;
@@ -53,7 +53,7 @@ struct _EphyFindToolbar
 
 struct _EphyFindToolbarClass
 {
-	GtkBoxClass parent_class;
+	GtkSearchBarClass parent_class;
 
 	/* Signals */
 	void (* next)		(EphyFindToolbar *toolbar);
