@@ -812,10 +812,10 @@ cmd_bookmarks_import (GtkAction *action,
 	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
 					      GTK_WINDOW (editor),
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_STOCK_CANCEL,
+					      _("_Cancel"),
 					      GTK_RESPONSE_CANCEL,
 					      _("I_mport"),
-					      GTK_RESPONSE_OK,
+					      _("_OK"),
 					      NULL);
 	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 

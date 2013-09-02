@@ -229,7 +229,7 @@ similar_toggled_cb (GtkWidget *button,
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	EphyNode *node;
 	GtkMenuShell *menu;
-	GtkWidget *item, *image;
+	GtkWidget *item;
 	GPtrArray *identical, *similar;
 	char *label;
 	gint i;
@@ -257,12 +257,9 @@ similar_toggled_cb (GtkWidget *button,
 							   "_Unify With %d Identical Bookmarks",
 							   identical->len),
 						 identical->len);
-			item = gtk_image_menu_item_new_with_mnemonic (label);
+			item = gtk_menu_item_new_with_mnemonic (label);
 			g_free (label);
-			image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
-			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 			g_signal_connect (item, "activate", G_CALLBACK (similar_merge_cb), properties);
-			gtk_widget_show (image);
 			gtk_widget_show (item);
 			gtk_menu_shell_append (menu, item);
 	
@@ -275,7 +272,7 @@ similar_toggled_cb (GtkWidget *button,
 				node = g_ptr_array_index (identical, i);
 				label = g_strdup_printf (_("Show “%s”"),
 							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
-				item = gtk_image_menu_item_new_with_label (label);
+				item = gtk_menu_item_new_with_mnemonic (label);
 				g_free (label);
 				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
 				gtk_widget_show (item);
@@ -297,7 +294,7 @@ similar_toggled_cb (GtkWidget *button,
 				node = g_ptr_array_index (similar, i);
 				label = g_strdup_printf (_("Show “%s”"),
 							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
-				item = gtk_image_menu_item_new_with_label (label);
+				item = gtk_menu_item_new_with_mnemonic (label);
 				g_free (label);
 				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
 				gtk_widget_show (item);
@@ -613,7 +610,7 @@ ephy_bookmark_properties_constructor (GType type,
 	text = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", 0), 0);
 	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
 	g_free (text);
-	widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_BUTTON);
+	widget = gtk_image_new_from_icon_name (_("dialog-warning"), GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show (widget);
 	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
 	g_object_set (priv->warning, "sensitive", FALSE, NULL);
@@ -626,7 +623,7 @@ ephy_bookmark_properties_constructor (GType type,
 			  G_CALLBACK (similar_release_cb), properties);
 		
 	gtk_dialog_add_button (dialog,
-			       GTK_STOCK_HELP,
+			       _("_Help"),
 			       GTK_RESPONSE_HELP);
 
 	action_area = gtk_dialog_get_action_area (dialog);
@@ -639,17 +636,17 @@ ephy_bookmark_properties_constructor (GType type,
 	if (priv->creating)
 	{
 		gtk_dialog_add_button (dialog,
-				       GTK_STOCK_CANCEL,
+				       _("_Cancel"),
 				       GTK_RESPONSE_CANCEL);
 		gtk_dialog_add_button (dialog,
-				       GTK_STOCK_ADD,
+				       _("_Add"),
 				       GTK_RESPONSE_ACCEPT);
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
 	}
 	else
 	{
 		gtk_dialog_add_button (dialog,
-				       GTK_STOCK_CLOSE,
+				       _("_Close"),
 				       GTK_RESPONSE_CLOSE);
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CLOSE);
 	}

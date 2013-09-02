@@ -2658,7 +2658,7 @@ ephy_web_view_print_failed (EphyWebView *view, GError *error)
   GtkContainer *content_area;
   EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
 
-  info_bar = gtk_info_bar_new_with_buttons (GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+  info_bar = gtk_info_bar_new_with_buttons (_("_OK"), GTK_RESPONSE_OK, NULL);
   label = gtk_label_new (error->message);
   content_area = GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar)));
 

@@ -209,7 +209,7 @@ confirmation_dialog_response_cb (GtkWidget *dialog,
 static GtkWidget *
 confirmation_dialog_construct (EphyHistoryWindow *editor)
 {
-	GtkWidget *dialog, *button, *image;
+	GtkWidget *dialog, *button;
 
 	dialog = gtk_message_dialog_new
 		(GTK_WINDOW (editor),
@@ -227,9 +227,6 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 				     GTK_WINDOW (dialog));
 	
 	button = gtk_button_new_with_mnemonic (_("Cl_ear"));
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image (GTK_BUTTON (button), image);
-	/* don't show the image! see bug #307818 */
 	gtk_widget_show (button);
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
 	

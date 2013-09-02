@@ -320,7 +320,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	GtkWidget *dialog, *vbox;
 	GtkWidget *check, *label, *content_area;
 	PdmClearAllDialogButtons *checkbuttons;
-	GtkWidget *button, *icon;
+	GtkWidget *button;
 
 	dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent),
 						     GTK_DIALOG_DESTROY_WITH_PARENT |
@@ -338,9 +338,9 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear All Personal Data"));
 
 	gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-				GTK_STOCK_HELP,
+				_("_Help"),
 				GTK_RESPONSE_HELP,
-				GTK_STOCK_CANCEL,
+				_("_Cancel"),
 				GTK_RESPONSE_CANCEL,
 				NULL);
 
@@ -348,8 +348,6 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	button = gtk_dialog_add_button (GTK_DIALOG (dialog),
 					_("Cl_ear"),
 					GTK_RESPONSE_OK);
-	icon = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image (GTK_BUTTON (button), icon);
 	gtk_widget_show (button);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog),

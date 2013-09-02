@@ -181,8 +181,8 @@ ephy_file_chooser_new (const char *title,
 	    action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					_("_Cancel"), GTK_RESPONSE_CANCEL,
+					_("_Open"), GTK_RESPONSE_ACCEPT,
 					NULL);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
 						 GTK_RESPONSE_ACCEPT);
@@ -190,8 +190,8 @@ ephy_file_chooser_new (const char *title,
 	else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					_("_Cancel"), GTK_RESPONSE_CANCEL,
+					_("_Save"), GTK_RESPONSE_ACCEPT,
 					NULL);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
 						 GTK_RESPONSE_ACCEPT);

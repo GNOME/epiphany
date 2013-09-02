@@ -579,22 +579,16 @@ entry_populate_popup_cb (GtkEntry *entry,
 			 EphyLocationEntry *lentry)
 {
 	EphyLocationEntryPrivate *priv = lentry->priv;
-	GtkWidget *image;
 	GtkWidget *clear_menuitem, *undo_menuitem, *redo_menuitem, *separator;
 	GList *children, *item;
 	int pos = 0, sep = 0;
 	gboolean is_editable;
 
-	/* Clear and Copy mnemonics conflict, make custom menuitem */
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image);
-
 	/* Translators: the mnemonic shouldn't conflict with any of the
 	 * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 	 * Select All, Input Methods and Insert Unicode control character.)
 	 */
-	clear_menuitem = gtk_image_menu_item_new_with_mnemonic (_("Cl_ear"));
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (clear_menuitem), image);
+	clear_menuitem = gtk_menu_item_new_with_mnemonic (_("Cl_ear"));
 	g_signal_connect (clear_menuitem , "activate",
 			  G_CALLBACK (entry_clear_activate_cb), lentry);
 	is_editable = gtk_editable_get_editable (GTK_EDITABLE (entry));
@@ -613,14 +607,14 @@ entry_populate_popup_cb (GtkEntry *entry,
 
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
 	
-	undo_menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_UNDO, NULL);
+	undo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Undo"));
 	gtk_widget_set_sensitive (undo_menuitem, priv->user_changed);
 	g_signal_connect (undo_menuitem, "activate",
 			  G_CALLBACK (entry_undo_activate_cb), lentry);
 	gtk_widget_show (undo_menuitem);
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), undo_menuitem, 0);
 	
-	redo_menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_REDO, NULL);
+	redo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Redo"));
 	gtk_widget_set_sensitive (redo_menuitem, priv->can_redo);
 	g_signal_connect (redo_menuitem, "activate",
 			  G_CALLBACK (entry_redo_activate_cb), lentry);
