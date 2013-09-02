@@ -2058,7 +2058,7 @@ ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
     if (url_search == NULL || url_search[0] == '\0') {
       g_free (url_search);
 
-      url_search = g_strdup (_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"));
+      url_search = g_strdup (_("http://duckduckgo.com/?q=%s&amp;t=epiphany"));
     }
 
     query_param = soup_form_encode ("q", url, NULL);
