@@ -65,7 +65,7 @@ dist_searchprovider_DATA = epiphany-search-provider.ini
 
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
-	$(appdata_DATA)			\
+	$(appdata_DATA).in		\
 	$(service_in_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
@@ -79,6 +79,7 @@ EXTRA_DIST = \
 	check-mime.py
 
 DISTCLEANFILES = \
+	$(appdata_DATA)			\
 	$(service_DATA)			\
 	$(desktop_DATA)			\
 	$(default_bookmarks_DATA)
