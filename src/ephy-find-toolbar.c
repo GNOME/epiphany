@@ -154,8 +154,8 @@ set_status (EphyFindToolbar *toolbar,
 			break;
 	}
 
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), result != EPHY_FIND_RESULT_NOTFOUND);
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), result != EPHY_FIND_RESULT_NOTFOUND);
+	gtk_widget_set_sensitive (priv->prev, result != EPHY_FIND_RESULT_NOTFOUND);
+	gtk_widget_set_sensitive (priv->next, result != EPHY_FIND_RESULT_NOTFOUND);
 
 	g_object_set (priv->entry,
 		      "primary-icon-name", icon_name,
@@ -174,8 +174,8 @@ clear_status (EphyFindToolbar *toolbar)
 		      "primary-icon-name", "edit-find-symbolic",
 		      NULL);
 
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), FALSE);
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), FALSE);
+	gtk_widget_set_sensitive (priv->prev, FALSE);
+	gtk_widget_set_sensitive (priv->next, FALSE);
 
         if (priv->web_view == NULL) return;
 #ifdef HAVE_WEBKIT2
