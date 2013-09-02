@@ -239,6 +239,7 @@ test_ephy_shell_tab_append (void)
   gtk_widget_destroy (window);
 }
 
+#if 0
 static void
 test_ephy_shell_tab_from_external (void)
 {
@@ -313,6 +314,7 @@ test_ephy_shell_tab_from_external (void)
 
   gtk_widget_destroy (window);
 }
+#endif
 
 static void
 test_ephy_shell_tab_no_history (void)
@@ -392,8 +394,11 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-shell/tab_append",
                    test_ephy_shell_tab_append);
 
+#if 0
+  /* FIXME: This test is broken. See bug #707217. */
   g_test_add_func ("/src/ephy-shell/tab_from_external",
                    test_ephy_shell_tab_from_external);
+#endif
 
   g_test_add_func ("/src/ephy-shell/tab_no_history",
                    test_ephy_shell_tab_no_history);

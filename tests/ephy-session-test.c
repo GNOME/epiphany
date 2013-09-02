@@ -181,6 +181,7 @@ test_ephy_session_clear (void)
 const char *session_data_empty = 
 "";
 
+#if 0
 static void
 test_ephy_session_load_empty_session (void)
 {
@@ -220,6 +221,7 @@ test_ephy_session_load_empty_session (void)
     enable_delayed_loading ();
     ephy_session_clear (session);
 }
+#endif
 
 static void
 test_ephy_session_load_many_windows (void)
@@ -458,9 +460,11 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-session/clear",
                    test_ephy_session_clear);
 
+#if 0
+  /* FIXME: This test needs fixing. See bug #707220. */
   g_test_add_func ("/src/ephy-session/load-empty-session",
                    test_ephy_session_load_empty_session);
-
+#endif
   g_test_add_func ("/src/ephy-session/load-many-windows",
                    test_ephy_session_load_many_windows);
 
