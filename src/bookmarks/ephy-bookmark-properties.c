@@ -610,7 +610,7 @@ ephy_bookmark_properties_constructor (GType type,
 	text = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", 0), 0);
 	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
 	g_free (text);
-	widget = gtk_image_new_from_icon_name (_("dialog-warning"), GTK_ICON_SIZE_BUTTON);
+	widget = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show (widget);
 	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
 	g_object_set (priv->warning, "sensitive", FALSE, NULL);
