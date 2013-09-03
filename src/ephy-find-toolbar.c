@@ -137,6 +137,7 @@ set_status (EphyFindToolbar *toolbar,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *icon_name = "edit-find-symbolic";
 	const char *tooltip = NULL;
+	gboolean rtl;
 
 	switch (result)
 	{
@@ -149,7 +150,8 @@ set_status (EphyFindToolbar *toolbar,
 
 			break;
 		case EPHY_FIND_RESULT_FOUNDWRAPPED:
-			icon_name = "view-wrapped-symbolic";
+			rtl = gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL;
+			icon_name = rtl ? "view-wrapped-rtl-symbolic" : "view-wrapped-symbolic";
 			tooltip = _("Search wrapped back to the top");
 			break;
 	}
