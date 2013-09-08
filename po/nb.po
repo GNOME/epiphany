@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany 3.9.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2013-08-14 14:59+0200\n"
-"PO-Revision-Date: 2013-08-14 15:00+0200\n"
+"POT-Creation-Date: 2013-09-08 19:25+0200\n"
+"PO-Revision-Date: 2013-09-08 19:27+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -25,23 +25,45 @@ msgstr ""
 msgid "Search the web"
 msgstr "Søk på nettet"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:5
-msgid "http://www.google.com"
-msgstr "http://www.google.no/"
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. So, for a Finnish localized
+#. version of duckduckgo that will render results tailored for
+#. Finland, the string would be:
+#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#.
+#: ../data/default-bookmarks.rdf.in.h:13
+msgid "http://duckduckgo.com/?t=epiphany"
+msgstr "http://duckduckgo.com/?t=epiphany"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:10
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. For such case, the search url
+#. would be
+#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2061
+#: ../src/ephy-search-provider.c:290
 #, no-c-format
-msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-msgstr "http://www.google.no/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1787
+#: ../data/epiphany.appdata.xml.in.h:1
+msgid ""
+"The web browser for the GNOME desktop, featuring tight integration with the "
+"desktop and a simple and intuitive user interface that allows you to focus "
+"on your web pages."
+msgstr "Nettleseren for GNOME skrivebordet, som er tett integrert med skrivebordet og har et enkelt og intuitivt brukergrensesnitt som lar deg fokusere på dine nettsider."
+
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:68
+#: ../src/ephy-main.c:320 ../src/ephy-main.c:478 ../src/window-commands.c:1787
 msgid "Web"
 msgstr "Internett"
 
@@ -102,7 +124,9 @@ msgstr "Tving nye vinduer til å åpnes i faner"
 #: ../data/org.gnome.epiphany.gschema.xml.h:9
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr "Tving forespørsler om nye vinduer til å åpnes i faner i stedet for nytt vindu."
+msgstr ""
+"Tving forespørsler om nye vinduer til å åpnes i faner i stedet for nytt "
+"vindu."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:10
 msgid "Remember passwords"
@@ -814,7 +838,7 @@ msgid "Most Visited"
 msgstr "Mest besøkte"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2723
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2757
 msgid "Blank page"
 msgstr "Tom side"
 
@@ -849,20 +873,20 @@ msgstr "Tillat"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Siden på <b>%s</b> ønsker å vite din plassering."
 
-#: ../embed/ephy-web-view.c:1703
+#: ../embed/ephy-web-view.c:1704
 msgid "None specified"
 msgstr "Ingen oppgitt"
 
-#: ../embed/ephy-web-view.c:1712 ../embed/ephy-web-view.c:1730
+#: ../embed/ephy-web-view.c:1713 ../embed/ephy-web-view.c:1731
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "Oops! Feil under lasting av %s"
 
-#: ../embed/ephy-web-view.c:1714
+#: ../embed/ephy-web-view.c:1715
 msgid "Oops! It was not possible to show this website"
 msgstr "Oops! Det var umulig å vise dette nettstedet"
 
-#: ../embed/ephy-web-view.c:1715
+#: ../embed/ephy-web-view.c:1716
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -875,15 +899,15 @@ msgstr ""
 "eller ha flyttet til en ny adresse. Ikke glem å sjekke at tilkoblingen til "
 "internett fungerer.</p>"
 
-#: ../embed/ephy-web-view.c:1724
+#: ../embed/ephy-web-view.c:1725
 msgid "Try again"
 msgstr "Prøv igjen"
 
-#: ../embed/ephy-web-view.c:1732
+#: ../embed/ephy-web-view.c:1733
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Oops! Nettstedet kan ha forårsaket at nettleseren avsluttet uventet"
 
-#: ../embed/ephy-web-view.c:1734
+#: ../embed/ephy-web-view.c:1735
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -894,20 +918,20 @@ msgstr ""
 "p><p>Dette kan skje igjen hvis du laster siden på nytt. Vennligst rapporter "
 "problemet til utviklerene av <strong>%s</strong> hvis dette skjer.</p>"
 
-#: ../embed/ephy-web-view.c:1742
+#: ../embed/ephy-web-view.c:1743
 msgid "Load again anyway"
 msgstr "Last på nytt likevel"
 
-#: ../embed/ephy-web-view.c:1748
+#: ../embed/ephy-web-view.c:1749
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "Oops! Noe gikk galt ved visning av %s"
 
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1750
 msgid "Oops!"
 msgstr "Oops!"
 
-#: ../embed/ephy-web-view.c:1750
+#: ../embed/ephy-web-view.c:1751
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -915,20 +939,34 @@ msgstr ""
 "Noe gikk galt ved visning av denne siden. Vennligst last den på nytt eller "
 "gå til et annet nettsted for å fortsette."
 
-#: ../embed/ephy-web-view.c:2060
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2298
+#: ../embed/ephy-web-view.c:2299
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster «%s» …"
 
-#: ../embed/ephy-web-view.c:2300
+#: ../embed/ephy-web-view.c:2301
 msgid "Loading…"
 msgstr "Laster …"
+
+#: ../embed/ephy-web-view.c:2661 ../src/bookmarks/ephy-bookmarks-editor.c:818
+msgid "_OK"
+msgstr "_OK"
+
+#: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
+#: ../src/bookmarks/ephy-bookmark-properties.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:815 ../src/pdm-dialog.c:343
+#: ../src/window-commands.c:992
+msgid "_Cancel"
+msgstr "A_vbryt"
+
+#: ../lib/ephy-file-chooser.c:185
+msgid "_Open"
+msgstr "_Åpne"
+
+#: ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "_Lagre"
 
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
@@ -1178,6 +1216,13 @@ msgstr "Identiteten for dette nettstedet er verifisert"
 msgid "The identity of this website has not been verified"
 msgstr "Identiteten for dette nettstedet er ikke verifisert"
 
+#: ../lib/widgets/ephy-certificate-dialog.c:323
+#: ../src/bookmarks/ephy-bookmark-properties.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
+msgid "_Close"
+msgstr "L_ukk"
+
 #: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
 msgid "%u:%02u hour left"
@@ -1221,7 +1266,7 @@ msgstr "Feil under nedlasting: %s"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1313
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1309
 #: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Åpne"
@@ -1246,13 +1291,22 @@ msgstr "Nettsteder"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:596
+#: ../lib/widgets/ephy-location-entry.c:591
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
 #: ../src/pdm-dialog.c:349
 msgid "Cl_ear"
 msgstr "Tø_m"
 
-#: ../lib/widgets/ephy-location-entry.c:879
+#. Edit actions.
+#: ../lib/widgets/ephy-location-entry.c:610 ../src/ephy-window.c:125
+msgid "_Undo"
+msgstr "_Angre"
+
+#: ../lib/widgets/ephy-location-entry.c:617
+msgid "_Redo"
+msgstr "_Gjenopprett"
+
+#: ../lib/widgets/ephy-location-entry.c:873
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Dra-og-slipp dette ikonet for å opprette en lenke til denne siden"
 
@@ -1274,7 +1328,7 @@ msgstr "Dato"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1288,33 +1342,46 @@ msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "Slå _sammen med %d identisk bokmerke"
 msgstr[1] "Slå _sammen med %d identiske bokmerker"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:276
-#: ../src/bookmarks/ephy-bookmark-properties.c:298
+#: ../src/bookmarks/ephy-bookmark-properties.c:273
+#: ../src/bookmarks/ephy-bookmark-properties.c:295
 #, c-format
 msgid "Show “%s”"
 msgstr "Vis «%s»"
 
 # (ugh)
-#: ../src/bookmarks/ephy-bookmark-properties.c:423
+#: ../src/bookmarks/ephy-bookmark-properties.c:420
 #, c-format
 msgid "“%s” Properties"
 msgstr "Egenskaper for «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:547
+#: ../src/bookmarks/ephy-bookmark-properties.c:544
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:564
+#: ../src/bookmarks/ephy-bookmark-properties.c:561
 msgid "A_ddress:"
 msgstr "A_dresse:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:576
+#: ../src/bookmarks/ephy-bookmark-properties.c:573
 msgid "T_opics:"
 msgstr "Em_ner:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "Sho_w all topics"
 msgstr "_Vis alle emner"
+
+#. Help.
+#: ../src/bookmarks/ephy-bookmark-properties.c:626
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:8
+#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:197
+#: ../src/pdm-dialog.c:341
+msgid "_Help"
+msgstr "_Hjelp"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:642
+msgid "_Add"
+msgstr "_Legg til"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1393,13 +1460,6 @@ msgstr "R_ediger"
 msgid "_View"
 msgstr "_Vis"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:197
-msgid "_Help"
-msgstr "_Hjelp"
-
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_New Topic"
@@ -1412,7 +1472,7 @@ msgstr "Opprett et nytt emne"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:639
+#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:636
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Åpne i nytt _vindu"
@@ -1424,7 +1484,7 @@ msgstr "Åpne valgte bokmerker i et nytt vindu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:642
+#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:639
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Åpne i ny _fane"
@@ -1467,11 +1527,6 @@ msgstr "_Eksporter bokmerker …"
 msgid "Export bookmarks to a file"
 msgstr "Eksporter bokmerker til en fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
-msgid "_Close"
-msgstr "L_ukk"
-
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "Lukk bokmerkevinduet"
@@ -1489,7 +1544,7 @@ msgstr "Klipp ut utvalget"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
+#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:649
 #: ../src/ephy-window.c:131
 msgid "_Copy"
 msgstr "_Kopier"
@@ -1680,7 +1735,7 @@ msgid "File"
 msgstr "Fil"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1167
-#: ../src/ephy-history-window.c:648
+#: ../src/ephy-history-window.c:645
 msgid "_Copy Address"
 msgstr "_Kopier adresse"
 
@@ -1959,19 +2014,23 @@ msgstr "Andre kodinger"
 msgid "_Automatic"
 msgstr "_Automatisk"
 
-#: ../src/ephy-find-toolbar.c:147
+#: ../src/ephy-find-toolbar.c:148
 msgid "Text not found"
 msgstr "Teksten ble ikke funnet"
 
-#: ../src/ephy-find-toolbar.c:153
+#: ../src/ephy-find-toolbar.c:155
 msgid "Search wrapped back to the top"
 msgstr "Søket gikk tilbake til toppen"
 
-#: ../src/ephy-find-toolbar.c:637
+#: ../src/ephy-find-toolbar.c:579
+msgid "Type to search…"
+msgstr "Skriv for å søke …"
+
+#: ../src/ephy-find-toolbar.c:585
 msgid "Find previous occurrence of the search string"
 msgstr "Finn forrige oppføring av søketeksten"
 
-#: ../src/ephy-find-toolbar.c:650
+#: ../src/ephy-find-toolbar.c:593
 msgid "Find next occurrence of the search string"
 msgstr "Finn neste oppføring av søketeksten"
 
@@ -2037,97 +2096,101 @@ msgid ""
 "deleted."
 msgstr "Tømming av historikken vil fjerne alle lenker permanent."
 
-#: ../src/ephy-history-window.c:238
+#: ../src/ephy-history-window.c:235
 msgid "Clear History"
 msgstr "Tøm historikk"
 
-#: ../src/ephy-history-window.c:802
+#: ../src/ephy-history-window.c:799
 msgid "Last 30 minutes"
 msgstr "Siste 30 minutter"
 
-#: ../src/ephy-history-window.c:803
+#: ../src/ephy-history-window.c:800
 msgid "Today"
 msgstr "I dag"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:805 ../src/ephy-history-window.c:809
-#: ../src/ephy-history-window.c:815
+#: ../src/ephy-history-window.c:802 ../src/ephy-history-window.c:806
+#: ../src/ephy-history-window.c:812
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Siste %d dag"
 msgstr[1] "Siste %d dager"
 
-#: ../src/ephy-history-window.c:819
+#: ../src/ephy-history-window.c:816
 msgid "All history"
 msgstr "All historikk"
 
-#: ../src/ephy-history-window.c:1116
+#: ../src/ephy-history-window.c:1113
 msgid "History"
 msgstr "Historie"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:77
 msgid "Open a new tab in an existing browser window"
 msgstr "Åpne en ny fane i et eksisterende nettleservindu"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:79
 msgid "Open a new browser window"
 msgstr "Åpne et nytt nettleservindu"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:81
 msgid "Import bookmarks from the given file"
 msgstr "Importer bokmerker fra gitt fil"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:83
 msgid "FILE"
 msgstr "FIL"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:83
 msgid "Load the given session file"
 msgstr "Last oppgitt øktfil"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:85
 msgid "Add a bookmark"
 msgstr "Legg til bokmerke"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:85
 msgid "URL"
 msgstr "Adresse"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:87
 msgid "Start a private instance"
 msgstr "Start en privat instans"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:89
 msgid "Start an instance in incognito mode"
 msgstr "Start en instans i inkognitomodus"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:91
 msgid "Start an instance in netbank mode"
 msgstr "Start en instans i nettbankmodus"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:93
 msgid "Start the browser in application mode"
 msgstr "Start nettleser i applikasjonsmodus"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:95
+msgid "Start the application without opening windows"
+msgstr "Start programmet uten å åpne vinduer"
+
+#: ../src/ephy-main.c:97
 msgid "Profile directory to use in the private instance"
 msgstr "Profilkatalog som skal brukes i den private instansen"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:97
 msgid "DIR"
 msgstr "KAT"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:99
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:201
+#: ../src/ephy-main.c:204
 msgid "Could not start Web"
 msgstr "Kunne ikke starte Nettleser"
 
-#: ../src/ephy-main.c:204
+#: ../src/ephy-main.c:207
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2136,13 +2199,18 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:315
+#: ../src/ephy-main.c:321
 msgid "Web options"
 msgstr "Alternativer for Nettleser"
 
 #: ../src/ephy-notebook.c:599
 msgid "Close tab"
 msgstr "Lukk fane"
+
+#: ../src/ephy-search-provider.c:202
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Søk på nettet etter %s"
 
 #: ../src/ephy-window.c:108
 msgid "_Open…"
@@ -2163,11 +2231,6 @@ msgstr "S_kriv ut …"
 #: ../src/ephy-window.c:116
 msgid "S_end Link by Email…"
 msgstr "S_end lenke i e-post …"
-
-#. Edit actions.
-#: ../src/ephy-window.c:125
-msgid "_Undo"
-msgstr "_Angre"
 
 #: ../src/ephy-window.c:127
 msgid "Re_do"
@@ -2330,77 +2393,77 @@ msgstr "St_opp animasjon"
 msgid "Inspect _Element"
 msgstr "Inspiser _element"
 
-#: ../src/ephy-window.c:479
+#: ../src/ephy-window.c:478
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:480
+#: ../src/ephy-window.c:479
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:482
+#: ../src/ephy-window.c:481
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:500
+#: ../src/ephy-window.c:496
 msgid "There are ongoing downloads in this window"
 msgstr "Det er pågående nedlastinger i dette vinduet"
 
-#: ../src/ephy-window.c:501
+#: ../src/ephy-window.c:497
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Hvis du lukker dette vinduet vil nedlastingene bli avbrutt"
 
-#: ../src/ephy-window.c:502
+#: ../src/ephy-window.c:498
 msgid "Close window and cancel downloads"
 msgstr "Lukk vinduet og avbryt nedlastinger"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1311
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1313
 msgid "Save As Application"
 msgstr "Lagre som program"
 
-#: ../src/ephy-window.c:1319
+#: ../src/ephy-window.c:1315
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1317
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../src/ephy-window.c:1323
+#: ../src/ephy-window.c:1319
 msgid "Find"
 msgstr "Finn"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1332
+#: ../src/ephy-window.c:1328
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1335
+#: ../src/ephy-window.c:1331
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1363
+#: ../src/ephy-window.c:1359
 msgid "Back"
 msgstr "Tilbake"
 
-#: ../src/ephy-window.c:1375
+#: ../src/ephy-window.c:1371
 msgid "Forward"
 msgstr "Fremover"
 
-#: ../src/ephy-window.c:1387
+#: ../src/ephy-window.c:1383
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1396
+#: ../src/ephy-window.c:1392
 msgid "New _Tab"
 msgstr "Ny _fane"
 
-#: ../src/ephy-window.c:1404
+#: ../src/ephy-window.c:1400
 msgid "Go to most visited"
 msgstr "Gå til mest besøkte"
 
@@ -2422,26 +2485,26 @@ msgid "Clear All Personal Data"
 msgstr "Fjern alle personlige data"
 
 #. Cookies
-#: ../src/pdm-dialog.c:372
+#: ../src/pdm-dialog.c:370
 msgid "C_ookies"
 msgstr "Inf_ormasjonskapsler"
 
 #. Passwords
-#: ../src/pdm-dialog.c:384
+#: ../src/pdm-dialog.c:382
 msgid "Saved _passwords"
 msgstr "Lagrede _passord"
 
 #. History
-#: ../src/pdm-dialog.c:396
+#: ../src/pdm-dialog.c:394
 msgid "Hi_story"
 msgstr "Hi_storikk"
 
 #. Cache
-#: ../src/pdm-dialog.c:408
+#: ../src/pdm-dialog.c:406
 msgid "_Temporary files"
 msgstr "Midler_tidige filer"
 
-#: ../src/pdm-dialog.c:424
+#: ../src/pdm-dialog.c:422
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2449,36 +2512,36 @@ msgstr ""
 "<small><i><b>Merk:</b> Du kan ikke angre denne handlingen. Data som fjernes "
 "vil forbli slettet for alltid.</i></small>"
 
-#: ../src/pdm-dialog.c:647
+#: ../src/pdm-dialog.c:645
 msgid "Encrypted connections only"
 msgstr "Kun krypterte tilkoblinger"
 
-#: ../src/pdm-dialog.c:648
+#: ../src/pdm-dialog.c:646
 msgid "Any type of connection"
 msgstr "Enhver type tilkobling"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:651
 msgid "End of current session"
 msgstr "Slutten på siste økt"
 
-#: ../src/pdm-dialog.c:777
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "Domene"
 
-#: ../src/pdm-dialog.c:789
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/pdm-dialog.c:1307
+#: ../src/pdm-dialog.c:1305
 msgid "Host"
 msgstr "Vert"
 
-#: ../src/pdm-dialog.c:1320
+#: ../src/pdm-dialog.c:1318
 msgid "User Name"
 msgstr "Brukernavn"
 
-#: ../src/pdm-dialog.c:1333
+#: ../src/pdm-dialog.c:1331
 msgid "User Password"
 msgstr "Brukerpassord"
 
