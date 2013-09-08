@@ -1615,7 +1615,7 @@ ephy_session_resume (EphySession *session,
 		return;
 	}
 
-	g_task_return_boolean (task, TRUE);
+	g_task_return_boolean (task, FALSE);
 	g_object_unref (task);
 }
 

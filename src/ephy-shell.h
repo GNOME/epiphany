@@ -114,6 +114,7 @@ typedef enum {
   EPHY_STARTUP_NEW_TAB          = 1 << 0,
   EPHY_STARTUP_NEW_WINDOW       = 1 << 1,
   EPHY_STARTUP_OPEN_NOTHING     = 1 << 2,
+  EPHY_STARTUP_RESUMING_SESSION = 1 << 3,
 } EphyStartupFlags;
 
 typedef struct {

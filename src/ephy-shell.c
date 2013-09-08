@@ -293,7 +293,9 @@ session_load_cb (GObject *object,
   EphySession *session = EPHY_SESSION (object);
   EphyShell *shell = EPHY_SHELL (user_data);
 
-  ephy_session_resume_finish (session, result, NULL);
+  if (ephy_session_resume_finish (session, result, NULL))
+    shell->priv->startup_context->startup_flags |= EPHY_STARTUP_RESUMING_SESSION;
+
   ephy_shell_startup_continue (shell);
 }
 
@@ -325,10 +327,10 @@ ephy_shell_activate (GApplication *application)
     EphyShellStartupContext *ctx;
 
     ctx = shell->priv->startup_context;
-    if (ctx->startup_flags != EPHY_STARTUP_OPEN_NOTHING)
+    if (ctx->startup_flags != EPHY_STARTUP_OPEN_NOTHING) {
       ephy_session_resume (ephy_shell_get_session (shell),
                            ctx->user_time, NULL, session_load_cb, shell);
-    else
+    } else
       ephy_shell_start_headless (shell);
   } else
     ephy_shell_startup_continue (shell);
@@ -1193,7 +1195,7 @@ open_uris_data_new (EphyShell *shell,
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
     data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_FROM_EXTERNAL;
-  } else if (!have_uris) {
+  } else if (!have_uris && !(startup_flags & EPHY_STARTUP_RESUMING_SESSION)) {
     data->window = NULL;
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   }
@@ -1224,6 +1226,9 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 #else
   WebKitNetworkRequest *request = NULL;
 #endif
+
+  if (!data->window && !data->flags)
+    return FALSE;
 
   url = data->uris[data->current_uri];
   if (url[0] == '\0') {
