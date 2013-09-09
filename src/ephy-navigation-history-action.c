@@ -651,10 +651,11 @@ tool_button_press_event_cb (GtkButton *button,
                                                      (GSourceFunc) menu_timeout_cb,
                                                      data,
                                                      (GDestroyNotify) g_free);
-  } else if (event->button == 3)
+    return FALSE;
+  } else if (event->button == 3) {
     popup_history_menu (action, GTK_WIDGET (button), event);
-
-  return FALSE;
+    return TRUE;
+  }
 }
 
 static gboolean

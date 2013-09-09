@@ -76,7 +76,7 @@ visible_cb (GtkWidget *menu, GParamSpec *pspec, GtkWidget *button)
                                     "active-menu");
 }
 
-static void
+static gboolean
 button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *action)
 {
   GtkWidget *menu;
@@ -91,7 +91,7 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
       button = GTK_WIDGET (l->data);
   }
 
-  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
 
   if (!action->priv->menu) {
     window = ephy_window_action_get_window (EPHY_WINDOW_ACTION (action));
@@ -114,6 +114,8 @@ button_press_cb (GtkWidget *button, GdkEventButton *event, EphyPageMenuAction *a
                   NULL, NULL,
                   (GtkMenuPositionFunc)menu_position_func, button,
                   event_button, event_time);
+
+  return TRUE;
 }
 
 static void
