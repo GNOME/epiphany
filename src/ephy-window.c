@@ -3718,16 +3718,8 @@ setup_toolbar (EphyWindow *window)
 	toolbar = ephy_toolbar_new (window);
 	gtk_widget_set_margin_top (toolbar, 6);
 	gtk_widget_set_margin_bottom (toolbar, 5);
-	if (gtk_widget_get_direction (toolbar) == GTK_TEXT_DIR_RTL)
-	{
-		gtk_widget_set_margin_left (toolbar, 8);
-		gtk_widget_set_margin_right (toolbar, 6);
-	}
-	else
-	{
-		gtk_widget_set_margin_left (toolbar, 6);
-		gtk_widget_set_margin_right (toolbar, 8);
-	}
+	gtk_widget_set_margin_left (toolbar, 6);
+	gtk_widget_set_margin_right (toolbar, 6);
 	gtk_container_add (GTK_CONTAINER (frame), toolbar);
 	gtk_widget_show (frame);
 	gtk_window_set_titlebar (GTK_WINDOW (window), frame);
