@@ -200,7 +200,7 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	g_return_val_if_fail (event != NULL, FALSE);
 
 	/* check for / and ' which open the find toolbar in text resp. link mode */
-	if (gtk_widget_get_visible (widget) == FALSE)
+	if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (widget)) == FALSE)
 	{
 		if (event->keyval == GDK_KEY_slash)
 		{
