@@ -558,12 +558,18 @@ static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
 	GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon;
+	GtkWidget *box;
 	EphyWebView *view;
+
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+	gtk_widget_show (box);
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_widget_show (hbox);
+	gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
+	gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
 	/* setup load feedback */
 	spinner = gtk_spinner_new ();
@@ -578,9 +584,8 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	label = gtk_label_new (NULL);
 	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_misc_set_padding (GTK_MISC (label), 0, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 	gtk_widget_show (label);
 
 	/* setup close button */
@@ -601,39 +606,39 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_widget_show (image);
 
-	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (box), close_button, FALSE, FALSE, 0);
 	gtk_widget_show (close_button);
 
 	/* Set minimal size */
-	g_signal_connect (hbox, "style-set",
+	g_signal_connect (box, "style-set",
 			  G_CALLBACK (tab_label_style_set_cb), NULL);
 
 	/* Set up drag-and-drop target */
-	g_signal_connect (hbox, "drag-data-received",
+	g_signal_connect (box, "drag-data-received",
 			  G_CALLBACK (notebook_drag_data_received_cb), embed);
-	gtk_drag_dest_set (hbox, GTK_DEST_DEFAULT_ALL,
+	gtk_drag_dest_set (box, GTK_DEST_DEFAULT_ALL,
 			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
-	gtk_drag_dest_add_text_targets (hbox);
+	gtk_drag_dest_add_text_targets (box);
 
-	g_object_set_data (G_OBJECT (hbox), "label", label);
-	g_object_set_data (G_OBJECT (hbox), "spinner", spinner);
-	g_object_set_data (G_OBJECT (hbox), "icon", icon);
-	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
+	g_object_set_data (G_OBJECT (box), "label", label);
+	g_object_set_data (G_OBJECT (box), "spinner", spinner);
+	g_object_set_data (G_OBJECT (box), "icon", icon);
+	g_object_set_data (G_OBJECT (box), "close-button", close_button);
 
 	/* Hook the label up to the tab properties */
 	view = ephy_embed_get_web_view (embed);
 	sync_icon (view, NULL, GTK_IMAGE (icon));
 	sync_label (view, NULL, label);
-	sync_load_status (view, NULL, hbox);
+	sync_load_status (view, NULL, box);
 
 	g_signal_connect_object (view, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
 	g_signal_connect_object (view, "notify::embed-title",
 				 G_CALLBACK (sync_label), label, 0);
 	g_signal_connect_object (view, "load-changed",
-				 G_CALLBACK (load_changed_cb), hbox, 0);
-	return hbox;
+				 G_CALLBACK (load_changed_cb), box, 0);
+	return box;
 }
 
 void
@@ -679,6 +684,10 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
 
 	gtk_notebook_set_tab_reorderable (gnotebook, tab_widget, TRUE);
         gtk_notebook_set_tab_detachable (gnotebook, tab_widget, TRUE);
+	gtk_container_child_set (GTK_CONTAINER (gnotebook),
+				 GTK_WIDGET (tab_widget),
+				 "tab-expand", TRUE,
+				 NULL);
 
 	return position;
 }
@@ -697,6 +706,11 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 					     GTK_WIDGET (embed),
 					     NULL,
 					     position);
+
+	gtk_container_child_set (GTK_CONTAINER (notebook),
+				 GTK_WIDGET (embed),
+				 "tab-expand", TRUE,
+				 NULL);
 
 	if (jump_to)
 	{
