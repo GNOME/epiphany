@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: epiphany 1.10\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2013-03-15 00:20+0100\n"
-"PO-Revision-Date: 2013-03-12 07:48+0100\n"
-"Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
+"POT-Creation-Date: 2013-10-06 22:03+0200\n"
+"PO-Revision-Date: 2013-09-16 00:05+0100\n"
+"Last-Translator: Josep Sànchez Mesegué <papapep@gmx.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca-XV\n"
 "MIME-Version: 1.0\n"
@@ -26,23 +26,48 @@ msgstr ""
 msgid "Search the web"
 msgstr "Cerca a la web"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:5
-msgid "http://www.google.com"
-msgstr "http://www.google.cat"
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. So, for a Finnish localized
+#. version of duckduckgo that will render results tailored for
+#. Finland, the string would be:
+#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#.
+#: ../data/default-bookmarks.rdf.in.h:13
+msgid "http://duckduckgo.com/?t=epiphany"
+msgstr "http://duckduckgo.com/?t=epiphany&amp;kp=1&amp;kl=ct-ca"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:10
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. For such case, the search url
+#. would be
+#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2061
+#: ../src/ephy-search-provider.c:290
 #, no-c-format
-msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-msgstr "http://www.google.cat/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kp=1&amp;kl=ct-ca"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:310 ../src/ephy-main.c:460 ../src/window-commands.c:1796
+#: ../data/epiphany.appdata.xml.in.h:1
+msgid ""
+"The web browser for the GNOME desktop, featuring tight integration with the "
+"desktop and a simple and intuitive user interface that allows you to focus "
+"on your web pages."
+msgstr ""
+"El navegador web de l'escriptori GNOME, amb una gran integració amb "
+"l'escriptori i una interfície d'usuari simple i intuïtiva que vos permet "
+"centrar-vos en els llocs web."
+
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:68
+#: ../src/ephy-main.c:320 ../src/ephy-main.c:478 ../src/window-commands.c:1787
 msgid "Web"
 msgstr "Web"
 
@@ -452,58 +477,57 @@ msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Si s'ha de mostrar la columna de l'adreça a la finestra d'adreces d'interés."
 
-#: ../embed/ephy-about-handler.c:65 ../embed/ephy-about-handler.c:68
-#: ../embed/ephy-about-handler.c:118 ../embed/ephy-about-handler.c:121
+#: ../embed/ephy-about-handler.c:144 ../embed/ephy-about-handler.c:146
 msgid "Installed plugins"
 msgstr "Connectors instal·lats"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "Enabled"
 msgstr "Habilitat"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "Yes"
 msgstr "Sí"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "No"
 msgstr "No"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "MIME type"
 msgstr "Tipus MIME"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "Description"
 msgstr "Descripció"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "Suffixes"
 msgstr "Sufixos"
 
-#: ../embed/ephy-about-handler.c:173 ../embed/ephy-about-handler.c:176
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:223
 msgid "Memory usage"
 msgstr "Ús de la memòria"
 
-#: ../embed/ephy-about-handler.c:209 ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:303 ../embed/ephy-about-handler.c:305
 msgid "Applications"
 msgstr "Aplicacions"
 
-#: ../embed/ephy-about-handler.c:212
+#: ../embed/ephy-about-handler.c:306
 msgid "List of installed web applications"
 msgstr "Llista de les aplicacions web instal·lades"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:233
+#: ../embed/ephy-about-handler.c:327
 msgid "Installed on:"
 msgstr "Data d'instal·lació:"
 
-#: ../embed/ephy-about-handler.c:268 ../embed/ephy-about-handler.c:270
+#: ../embed/ephy-about-handler.c:400 ../embed/ephy-about-handler.c:403
 msgid "Private Browsing"
 msgstr "Navegació privada"
 
-#: ../embed/ephy-about-handler.c:271
+#: ../embed/ephy-about-handler.c:404
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -513,27 +537,19 @@ msgstr ""
 "mode no es mostraran en l'historial de navegació i es netejarà tota la "
 "informació emmagatzemada quan tanqueu la finestra."
 
-#: ../embed/ephy-embed.c:702
+#: ../embed/ephy-embed.c:487
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Premeu %s per eixir de la pantalla completa"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:705
+#: ../embed/ephy-embed.c:490
 msgid "ESC"
 msgstr "Esc"
 
-#: ../embed/ephy-embed.c:705
+#: ../embed/ephy-embed.c:490
 msgid "F11"
 msgstr "F11"
-
-#: ../embed/ephy-embed.c:1093
-msgid "Web Inspector"
-msgstr "Inspector web"
-
-#: ../embed/ephy-embed-shell.c:335
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "No es pot utilitzar l'Epiphany. Ha fallat la inicialització."
 
 #: ../embed/ephy-embed-utils.c:59
 #, c-format
@@ -869,15 +885,15 @@ msgid "Most Visited"
 msgstr "Les més visitades"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3696
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2757
 msgid "Blank page"
 msgstr "Pàgina en blanc"
 
-#: ../embed/ephy-web-view.c:525
+#: ../embed/ephy-web-view.c:495
 msgid "Not now"
 msgstr "Ara no"
 
-#: ../embed/ephy-web-view.c:526
+#: ../embed/ephy-web-view.c:496
 msgid "Store password"
 msgstr "Guarda la contrasenya"
 
@@ -885,39 +901,39 @@ msgstr "Guarda la contrasenya"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:538
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr "<big>Voleu guardar la contrasenya de <b>%s</b> a <b>%s</b>?</big>"
 
-#: ../embed/ephy-web-view.c:1867
+#: ../embed/ephy-web-view.c:1364
 msgid "Deny"
 msgstr "Denega"
 
-#: ../embed/ephy-web-view.c:1868
+#: ../embed/ephy-web-view.c:1365
 msgid "Allow"
 msgstr "Permet"
 
-#: ../embed/ephy-web-view.c:1882
+#: ../embed/ephy-web-view.c:1375
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "La pàgina <b>%s</b> vol saber la vostra ubicació."
 
-#: ../embed/ephy-web-view.c:2375
+#: ../embed/ephy-web-view.c:1704
 msgid "None specified"
 msgstr "No se n'ha especificat cap"
 
-#: ../embed/ephy-web-view.c:2384 ../embed/ephy-web-view.c:2402
+#: ../embed/ephy-web-view.c:1713 ../embed/ephy-web-view.c:1731
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "S'ha produït un error en carregar %s"
 
-#: ../embed/ephy-web-view.c:2386
+#: ../embed/ephy-web-view.c:1715
 msgid "Oops! It was not possible to show this website"
 msgstr "No s'ha pogut mostrar este lloc web"
 
-#: ../embed/ephy-web-view.c:2387
+#: ../embed/ephy-web-view.c:1716
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -930,15 +946,15 @@ msgstr ""
 "temporalment o que haja canviat d'adreça. Comproveu també que vos funciona "
 "la connexió a Internet.</p>"
 
-#: ../embed/ephy-web-view.c:2396
+#: ../embed/ephy-web-view.c:1725
 msgid "Try again"
 msgstr "Torna-ho a provar"
 
-#: ../embed/ephy-web-view.c:2404
+#: ../embed/ephy-web-view.c:1733
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr "Este lloc web hauria fet que es tanqués inesperadament el navegador"
 
-#: ../embed/ephy-web-view.c:2406
+#: ../embed/ephy-web-view.c:1735
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -949,20 +965,20 @@ msgstr ""
 "navegador web.</p><p>Podria tornar a passar si la carregueu de nou. Si "
 "passa, informeu-ne als desenvolupadors de <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:2414
+#: ../embed/ephy-web-view.c:1743
 msgid "Load again anyway"
 msgstr "Torna-la a carregar igualment"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:1749
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "Alguna cosa no ha anat bé quan s'intentava mostrar %s"
 
-#: ../embed/ephy-web-view.c:2421
+#: ../embed/ephy-web-view.c:1750
 msgid "Oops!"
 msgstr "Errada"
 
-#: ../embed/ephy-web-view.c:2422
+#: ../embed/ephy-web-view.c:1751
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -970,28 +986,34 @@ msgstr ""
 "Alguna cosa no ha anat bé quan s'intentava mostrar esta pàgina. Torneu-la a "
 "carregar o aneu a una altra pàgina per continuar."
 
-#: ../embed/ephy-web-view.c:2906
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.cat/search?q=%s&ie=UTF-8&hl=ca&oe=UTF-8"
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3203
+#: ../embed/ephy-web-view.c:2299
 #, c-format
 msgid "Loading “%s”…"
 msgstr "S'està carregant «%s»…"
 
-#: ../embed/ephy-web-view.c:3205
+#: ../embed/ephy-web-view.c:2301
 msgid "Loading…"
 msgstr "S'està carregant…"
 
-#. Translators: this is the directory name to store auxilary files
-#. * when saving html files.
-#.
-#: ../embed/ephy-web-view.c:3952
-#, c-format
-msgid "%s Files"
-msgstr "%s Fitxers"
+#: ../embed/ephy-web-view.c:2661 ../src/bookmarks/ephy-bookmarks-editor.c:818
+msgid "_OK"
+msgstr "_D'acord"
+
+#: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
+#: ../src/bookmarks/ephy-bookmark-properties.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:815 ../src/pdm-dialog.c:343
+#: ../src/window-commands.c:992
+msgid "_Cancel"
+msgstr "_Cancel·la"
+
+#: ../lib/ephy-file-chooser.c:185
+msgid "_Open"
+msgstr "_Obri"
+
+#: ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "Al_ça"
 
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
@@ -1091,11 +1113,11 @@ msgstr ""
 "una contrasenya mestra, introduïu-la ací sota si voleu que l'Epiphany les "
 "importi."
 
-#: ../lib/ephy-profile-migrator.c:99
+#: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "No s'ha pogut copiar el fitxer de les galetes de Mozilla."
 
-#: ../lib/ephy-profile-migrator.c:651
+#: ../lib/ephy-profile-migrator.c:652
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1103,23 +1125,23 @@ msgstr ""
 "L'Epiphany 3.6 ha desfasat este directori i ha intentat migrar la "
 "configuració a ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:1024
+#: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
 msgstr "Executa només la passa de migració n-éssima"
 
-#: ../lib/ephy-profile-migrator.c:1026
+#: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
 msgstr "Especifica la versió necessària pel gestor de migració"
 
-#: ../lib/ephy-profile-migrator.c:1028
+#: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica el perfil que el gestor de migració hauria d'executar"
 
-#: ../lib/ephy-profile-migrator.c:1041
+#: ../lib/ephy-profile-migrator.c:1047
 msgid "Epiphany profile migrator"
 msgstr "Gestor de migració del perfil de l'Epiphany"
 
-#: ../lib/ephy-profile-migrator.c:1042
+#: ../lib/ephy-profile-migrator.c:1048
 msgid "Epiphany profile migrator options"
 msgstr "Opcions del gestor de migració de perfil de l'Epiphany"
 
@@ -1241,6 +1263,13 @@ msgstr "S'ha pogut verificar la identitat d'esta pàgina web"
 msgid "The identity of this website has not been verified"
 msgstr "No s'ha pogut verificar la identitat d'esta pàgina web"
 
+#: ../lib/widgets/ephy-certificate-dialog.c:323
+#: ../src/bookmarks/ephy-bookmark-properties.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
+msgid "_Close"
+msgstr "Tan_ca"
+
 #: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
 msgid "%u:%02u hour left"
@@ -1280,12 +1309,12 @@ msgstr "Acabat"
 msgid "Error downloading: %s"
 msgstr "S'ha produït un error en la baixada: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:897
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:896
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:281
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1309
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Obri"
 
@@ -1309,13 +1338,22 @@ msgstr "Llocs"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:596
+#: ../lib/widgets/ephy-location-entry.c:591
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
-#: ../src/pdm-dialog.c:352
+#: ../src/pdm-dialog.c:349
 msgid "Cl_ear"
 msgstr "N_eteja"
 
-#: ../lib/widgets/ephy-location-entry.c:879
+#. Edit actions.
+#: ../lib/widgets/ephy-location-entry.c:610 ../src/ephy-window.c:125
+msgid "_Undo"
+msgstr "_Desfés"
+
+#: ../lib/widgets/ephy-location-entry.c:617
+msgid "_Redo"
+msgstr "_Refés"
+
+#: ../lib/widgets/ephy-location-entry.c:873
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrossegueu i deixeu anar esta icona per crear un enllaç a esta pàgina"
 
@@ -1337,7 +1375,7 @@ msgstr "Data"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1351,32 +1389,45 @@ msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Unifica amb %d adreça d'interés igual"
 msgstr[1] "_Unifica amb %d adreces d'interés iguals"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:276
-#: ../src/bookmarks/ephy-bookmark-properties.c:298
+#: ../src/bookmarks/ephy-bookmark-properties.c:273
+#: ../src/bookmarks/ephy-bookmark-properties.c:295
 #, c-format
 msgid "Show “%s”"
 msgstr "Mostra «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:423
+#: ../src/bookmarks/ephy-bookmark-properties.c:420
 #, c-format
 msgid "“%s” Properties"
 msgstr "Propietats de «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:547
+#: ../src/bookmarks/ephy-bookmark-properties.c:544
 msgid "_Title:"
 msgstr "_Títol:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:564
+#: ../src/bookmarks/ephy-bookmark-properties.c:561
 msgid "A_ddress:"
 msgstr "A_dreça:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:576
+#: ../src/bookmarks/ephy-bookmark-properties.c:573
 msgid "T_opics:"
 msgstr "Te_mes:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "Sho_w all topics"
 msgstr "M_ostra tots els temes"
+
+#. Help.
+#: ../src/bookmarks/ephy-bookmark-properties.c:626
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:8
+#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:197
+#: ../src/pdm-dialog.c:341
+msgid "_Help"
+msgstr "A_juda"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:642
+msgid "_Add"
+msgstr "_Afig"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1423,7 +1474,7 @@ msgid "Nearby Sites"
 msgstr "Llocs propers"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1167
-#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Sense títol"
 
@@ -1455,11 +1506,6 @@ msgstr "_Edita"
 msgid "_View"
 msgstr "_Visualitza"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:130
-msgid "_Help"
-msgstr "A_juda"
-
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_New Topic"
@@ -1472,7 +1518,7 @@ msgstr "Crea un tema nou"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:639
+#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:636
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Obri en una _finestra nova"
@@ -1484,7 +1530,7 @@ msgstr "Obri l'adreça d'interés seleccionada en una finestra nova"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:642
+#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:639
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Obri en una pes_tanya nova"
@@ -1528,18 +1574,13 @@ msgstr "_Exporta les adreces d'interés…"
 msgid "Export bookmarks to a file"
 msgstr "Exporta les adreces d'interés a un fitxer"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:119
-msgid "_Close"
-msgstr "Tan_ca"
-
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "Tanca la finestra d'adreces d'interés"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:130
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "Re_talla"
 
@@ -1550,8 +1591,8 @@ msgstr "Retalla la selecció"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:132
+#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:649
+#: ../src/ephy-window.c:131
 msgid "_Copy"
 msgstr "_Copia"
 
@@ -1561,7 +1602,7 @@ msgid "Copy the selection"
 msgstr "Copia la selecció"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:134
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:133
 msgid "_Paste"
 msgstr "_Apega"
 
@@ -1580,7 +1621,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Suprimeix l'adreça d'interés o tema seleccionat"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:138
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:137
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
@@ -1598,10 +1639,9 @@ msgstr "_Continguts"
 msgid "Display bookmarks help"
 msgstr "Mostra l'ajuda de les adreces d'interés"
 
-#. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
+#: ../src/resources/epiphany-application-menu.ui.h:9
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:199
 msgid "_About"
 msgstr "_Quant a"
 
@@ -1742,7 +1782,7 @@ msgid "File"
 msgstr "Fitxer"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1167
-#: ../src/ephy-history-window.c:648
+#: ../src/ephy-history-window.c:645
 msgid "_Copy Address"
 msgstr "_Copia l'adreça"
 
@@ -1765,11 +1805,11 @@ msgid "Create topic “%s”"
 msgstr "Crea el tema «%s»"
 
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:105
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:104
 msgid "_New Window"
 msgstr "Finestra _nova"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:106
 msgid "New _Incognito Window"
 msgstr "Finestra d'_incògnit nova"
 
@@ -1778,25 +1818,23 @@ msgid "Reopen Closed _Tab"
 msgstr "Torna a obrir la _pestanya tancada"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:97
 msgid "_Bookmarks"
 msgstr "_Adreces d'interés"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:147
 msgid "_History"
 msgstr "_Historial"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
-msgid "Personal Data"
-msgstr "Dades personals"
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:151
+msgid "_Personal Data"
+msgstr "Dades _personals"
 
-#: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
-msgid "Preferences"
-msgstr "Preferències"
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:149
+msgid "Pr_eferences"
+msgstr "_Preferències"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:120
 msgid "_Quit"
 msgstr "I_x"
 
@@ -1836,6 +1874,10 @@ msgstr "Fes servir la codificació especificada en el document"
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Utilitza una codificació diferent:</b>"
 
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "Dades personals"
+
 #: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Galetes"
@@ -1855,6 +1897,10 @@ msgstr "Afig un idioma"
 #: ../src/resources/prefs-dialog.ui.h:2
 msgid "Choose a l_anguage:"
 msgstr "Trieu un idiom_a:"
+
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "Preferències"
 
 #: ../src/resources/prefs-dialog.ui.h:5
 msgid "_Download folder:"
@@ -1965,7 +2011,7 @@ msgstr "MB"
 msgid "Privacy"
 msgstr "Privadesa"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:416
 msgid "Encodings"
 msgstr "Codificacions"
 
@@ -1981,7 +2027,7 @@ msgstr "Verificació de l'ortografia"
 msgid "_Enable spell checking"
 msgstr "Habilita la _verificació de l'ortografia"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:755
 msgid "Language"
 msgstr "Idioma"
 
@@ -1993,7 +2039,7 @@ msgstr "Para"
 msgid "Stop current data transfer"
 msgstr "Para la transferència de dades actual"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:161
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:160
 msgid "_Reload"
 msgstr "To_rna a carregar"
 
@@ -2013,19 +2059,23 @@ msgstr "Altres codificacions"
 msgid "_Automatic"
 msgstr "_Automàtic"
 
-#: ../src/ephy-find-toolbar.c:147
+#: ../src/ephy-find-toolbar.c:148
 msgid "Text not found"
 msgstr "No s'ha trobat el text"
 
-#: ../src/ephy-find-toolbar.c:153
+#: ../src/ephy-find-toolbar.c:155
 msgid "Search wrapped back to the top"
 msgstr "La cerca torna a començar des de dalt"
 
-#: ../src/ephy-find-toolbar.c:636
+#: ../src/ephy-find-toolbar.c:579
+msgid "Type to search…"
+msgstr "Escriviu per cercar…"
+
+#: ../src/ephy-find-toolbar.c:585
 msgid "Find previous occurrence of the search string"
 msgstr "Troba l'anterior aparició de la cadena que s'ha de cercar"
 
-#: ../src/ephy-find-toolbar.c:649
+#: ../src/ephy-find-toolbar.c:593
 msgid "Find next occurrence of the search string"
 msgstr "Troba la següent aparició de la cadena que s'ha de cercar"
 
@@ -2093,97 +2143,101 @@ msgstr ""
 "En netejar l'historial de navegació, tots els enllaços de l'historial se "
 "suprimiran definitivament."
 
-#: ../src/ephy-history-window.c:238
+#: ../src/ephy-history-window.c:235
 msgid "Clear History"
 msgstr "Neteja l'historial"
 
-#: ../src/ephy-history-window.c:802
+#: ../src/ephy-history-window.c:799
 msgid "Last 30 minutes"
 msgstr "Els darrers 30 minuts"
 
-#: ../src/ephy-history-window.c:803
+#: ../src/ephy-history-window.c:800
 msgid "Today"
 msgstr "Hui"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:805 ../src/ephy-history-window.c:809
-#: ../src/ephy-history-window.c:815
+#: ../src/ephy-history-window.c:802 ../src/ephy-history-window.c:806
+#: ../src/ephy-history-window.c:812
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Fa %d dia"
 msgstr[1] "Fa %d dies"
 
-#: ../src/ephy-history-window.c:819
+#: ../src/ephy-history-window.c:816
 msgid "All history"
 msgstr "Tot l'historial"
 
-#: ../src/ephy-history-window.c:1116
+#: ../src/ephy-history-window.c:1113
 msgid "History"
 msgstr "Historial"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:77
 msgid "Open a new tab in an existing browser window"
 msgstr "Obri una pestanya nova en una finestra del navegador existent"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:79
 msgid "Open a new browser window"
 msgstr "Obri una finestra nova del navegador"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:81
 msgid "Import bookmarks from the given file"
 msgstr "Importa les adreces d'interés a partir del fitxer especificat"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:83
 msgid "FILE"
 msgstr "FITXER"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:83
 msgid "Load the given session file"
 msgstr "Carrega el fitxer de sessió especificat"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:85
 msgid "Add a bookmark"
 msgstr "Afig una adreça d'interés"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:85
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:87
 msgid "Start a private instance"
 msgstr "Inicia una instància privada"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:89
 msgid "Start an instance in incognito mode"
 msgstr "Inicieu una instància en mode d'incògnit"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:91
 msgid "Start an instance in netbank mode"
 msgstr "Inicia una instància en mode «netbank»"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:93
 msgid "Start the browser in application mode"
 msgstr "Inicieu el navegador en mode d'aplicació"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:95
+msgid "Start the application without opening windows"
+msgstr "Inicieu l'aplicació sense obrir cap finestra"
+
+#: ../src/ephy-main.c:97
 msgid "Profile directory to use in the private instance"
 msgstr "Directori de perfil que s'ha d'utilitzar en la instància privada"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:97
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:99
 msgid "URL …"
 msgstr "URL…"
 
-#: ../src/ephy-main.c:193
+#: ../src/ephy-main.c:204
 msgid "Could not start Web"
 msgstr "No s'ha pogut iniciar el Web"
 
-#: ../src/ephy-main.c:196
+#: ../src/ephy-main.c:207
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2192,284 +2246,279 @@ msgstr ""
 "No s'ha pogut iniciar degut a l'error següent:\n"
 "%s"
 
-#: ../src/ephy-main.c:311
+#: ../src/ephy-main.c:321
 msgid "Web options"
 msgstr "Opcions del Web"
 
-#: ../src/ephy-notebook.c:598
+#: ../src/ephy-notebook.c:599
 msgid "Close tab"
 msgstr "Tanca la pestanya"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-search-provider.c:202
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Cerqueu el web per a %s"
+
+#: ../src/ephy-window.c:108
 msgid "_Open…"
 msgstr "_Obri…"
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "Save _As…"
 msgstr "_Anomena i guarda…"
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "Save As _Web Application…"
 msgstr "Anomena i guarda com a aplicació _web…"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:114
 msgid "_Print…"
 msgstr "_Imprimeix…"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:116
 msgid "S_end Link by Email…"
 msgstr "_Envia un enllaç per correu electrònic…"
 
-#. Edit actions.
-#: ../src/ephy-window.c:126
-msgid "_Undo"
-msgstr "_Desfés"
-
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Re_do"
 msgstr "Torna a _fer"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:139
 msgid "_Find…"
 msgstr "_Cerca…"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:141
 msgid "Find Ne_xt"
 msgstr "Cerca la _següent"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:143
 msgid "Find Pre_vious"
 msgstr "Cerca l'ante_rior"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "Edit _Bookmarks"
 msgstr "Edita les _adreces d'interés"
 
 #. View actions.
-#: ../src/ephy-window.c:157 ../src/ephy-window.c:159
+#: ../src/ephy-window.c:156 ../src/ephy-window.c:158
 msgid "_Stop"
 msgstr "A_tura"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:162
 msgid "Zoom _In"
 msgstr "Ampl_ia"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Zoom O_ut"
 msgstr "Red_ueix"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Normal Size"
 msgstr "Mida _normal"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:168
 msgid "Text _Encoding"
 msgstr "Codificació d_el text"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:174
 msgid "_Add Bookmark…"
 msgstr "_Afig una adreça d'interés…"
 
 #. Go actions.
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "_Location…"
 msgstr "_Ubicació…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "_Previous Tab"
 msgstr "_Pestanya anterior"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:186
 msgid "_Next Tab"
 msgstr "Pesta_nya següent"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:188
 msgid "Move Tab _Left"
 msgstr "Mou _la pestanya a l'esquerra"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Move Tab _Right"
 msgstr "Mou la pestanya a la d_reta"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:192
 msgid "_Detach Tab"
 msgstr "_Separa la pestanya"
 
-#. File actions.
-#: ../src/ephy-window.c:206
-msgid "_Work Offline"
-msgstr "_Treballa desconnectat"
-
 #. View actions.
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:207
 msgid "_Downloads Bar"
 msgstr "Barra de _baixades"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:210
 msgid "_Fullscreen"
 msgstr "Pantalla _completa"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:212
 msgid "Popup _Windows"
 msgstr "_Finestres emergents"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:214
 msgid "Selection Caret"
 msgstr "Cursor de selecció"
 
 #. Document.
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:221
 msgid "Add Boo_kmark…"
 msgstr "Afegei_x una adreça d'interés…"
 
 #. Links.
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:226
 msgid "_Open Link"
 msgstr "_Obri l'enllaç"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:228
 msgid "Open Link in New _Window"
 msgstr "Obri l'enllaç en una finestra _nova"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:230
 msgid "Open Link in New _Tab"
 msgstr "Obri l'enllaç en una pes_tanya nova"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:232
 msgid "_Download Link"
 msgstr "_Baixa l'enllaç"
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:234
 msgid "_Save Link As…"
 msgstr "Anomena i guarda l'_enllaç…"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:236
 msgid "_Bookmark Link…"
 msgstr "_Enllaça l'adreça d'interés…"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:238
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:240
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça electrònica"
 
 #. Images.
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:245
 msgid "Open _Image"
 msgstr "Obri la _imatge"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:247
 msgid "_Save Image As…"
 msgstr "Anomena i guarda la _imatge…"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:249
 msgid "_Use Image As Background"
 msgstr "_Utilitza la imatge com a fons"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:251
 msgid "Copy I_mage Address"
 msgstr "Copia l'adreça de la i_matge"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:253
 msgid "St_art Animation"
 msgstr "Inici_a l'animació"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:255
 msgid "St_op Animation"
 msgstr "At_ura l'animació"
 
 #. Inspector.
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:271
 msgid "Inspect _Element"
 msgstr "Inspecciona l'_element"
 
-#: ../src/ephy-window.c:483
+#: ../src/ephy-window.c:478
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hi ha canvis no enviats als elements del formulari"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:479
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si de totes maneres tanqueu el document, perdreu esta informació."
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:481
 msgid "Close _Document"
 msgstr "Tanca el _document"
 
-#: ../src/ephy-window.c:504
+#: ../src/ephy-window.c:496
 msgid "There are ongoing downloads in this window"
 msgstr "Hi ha baixades en curs en esta finestra"
 
-#: ../src/ephy-window.c:505
+#: ../src/ephy-window.c:497
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Es cancel·laran les baixades si tanqueu la finestra"
 
-#: ../src/ephy-window.c:506
+#: ../src/ephy-window.c:498
 msgid "Close window and cancel downloads"
 msgstr "Tanca la finestra i cancel·la les baixades"
 
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1311
 msgid "Save As"
 msgstr "Anomena i guarda"
 
-#: ../src/ephy-window.c:1311
+#: ../src/ephy-window.c:1313
 msgid "Save As Application"
 msgstr "Anomena i guarda com a aplicació"
 
-#: ../src/ephy-window.c:1313
+#: ../src/ephy-window.c:1315
 msgid "Print"
 msgstr "Imprimeix"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1317
 msgid "Bookmark"
 msgstr "Adreça d'interés"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1319
 msgid "Find"
 msgstr "Cerca"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1326
+#: ../src/ephy-window.c:1328
 msgid "Larger"
 msgstr "Més gran"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1331
 msgid "Smaller"
 msgstr "Més petit"
 
-#: ../src/ephy-window.c:1357
+#: ../src/ephy-window.c:1359
 msgid "Back"
 msgstr "Arrere"
 
-#: ../src/ephy-window.c:1369
+#: ../src/ephy-window.c:1371
 msgid "Forward"
 msgstr "Avant"
 
-#: ../src/ephy-window.c:1381
+#: ../src/ephy-window.c:1383
 msgid "Zoom"
 msgstr "Ampliació"
 
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1392
 msgid "New _Tab"
 msgstr "Pes_tanya nova"
 
-#: ../src/ephy-window.c:1398
+#: ../src/ephy-window.c:1400
 msgid "Go to most visited"
 msgstr "Vés a la més visitada"
 
-#: ../src/pdm-dialog.c:333
+#: ../src/pdm-dialog.c:330
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Seleccioneu les dades personals que voleu netejar</b>"
 
-#: ../src/pdm-dialog.c:336
+#: ../src/pdm-dialog.c:333
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2479,31 +2528,31 @@ msgstr ""
 "web que heu visitat. Abans de continuar, marqueu els tipus d'informació que "
 "voleu suprimir:"
 
-#: ../src/pdm-dialog.c:341
+#: ../src/pdm-dialog.c:338
 msgid "Clear All Personal Data"
 msgstr "Neteja totes les dades personals"
 
 #. Cookies
-#: ../src/pdm-dialog.c:375
+#: ../src/pdm-dialog.c:370
 msgid "C_ookies"
 msgstr "_Galetes"
 
 #. Passwords
-#: ../src/pdm-dialog.c:387
+#: ../src/pdm-dialog.c:382
 msgid "Saved _passwords"
 msgstr "_Contrasenyes guardades"
 
 #. History
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:394
 msgid "Hi_story"
 msgstr "Hi_storial"
 
 #. Cache
-#: ../src/pdm-dialog.c:411
+#: ../src/pdm-dialog.c:406
 msgid "_Temporary files"
 msgstr "_Fitxers temporals"
 
-#: ../src/pdm-dialog.c:427
+#: ../src/pdm-dialog.c:422
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2511,36 +2560,36 @@ msgstr ""
 "<small><i><b>Nota:</b> No podeu desfer esta acció. Les dades que heu triat "
 "se suprimiran per sempre.</i></small>"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:645
 msgid "Encrypted connections only"
 msgstr "Només connexions xifrades"
 
-#: ../src/pdm-dialog.c:651
+#: ../src/pdm-dialog.c:646
 msgid "Any type of connection"
 msgstr "Qualsevol tipus de connexió"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:656
+#: ../src/pdm-dialog.c:651
 msgid "End of current session"
 msgstr "Fi de la sessió actual"
 
-#: ../src/pdm-dialog.c:780
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "Domini"
 
-#: ../src/pdm-dialog.c:792
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "Nom"
 
-#: ../src/pdm-dialog.c:1310
+#: ../src/pdm-dialog.c:1305
 msgid "Host"
 msgstr "Ordinador"
 
-#: ../src/pdm-dialog.c:1323
+#: ../src/pdm-dialog.c:1318
 msgid "User Name"
 msgstr "Nom d'usuari"
 
-#: ../src/pdm-dialog.c:1336
+#: ../src/pdm-dialog.c:1331
 msgid "User Password"
 msgstr "Contrasenya de l'usuari"
 
@@ -2560,7 +2609,7 @@ msgstr "Anomena i guarda la imatge"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
+#: ../src/prefs-dialog.c:449 ../src/prefs-dialog.c:455
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2569,37 +2618,37 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:489
+#: ../src/prefs-dialog.c:464
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definida per l'usuari (%s)"
 
-#: ../src/prefs-dialog.c:511
+#: ../src/prefs-dialog.c:486
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Llengua del sistema (%s)"
 msgstr[1] "Llengües del sistema (%s)"
 
-#: ../src/prefs-dialog.c:869
+#: ../src/prefs-dialog.c:844
 msgid "Select a Directory"
 msgstr "Seleccioneu un directori"
 
-#: ../src/window-commands.c:359
+#: ../src/window-commands.c:358
 msgid "Save"
 msgstr "Guarda"
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:893
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Ja existeix una aplicació web amb el nom «%s». Voleu reemplaçar-la?"
 
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:898
 msgid "Replace"
 msgstr "Reemplaça"
 
-#: ../src/window-commands.c:903
+#: ../src/window-commands.c:902
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2607,30 +2656,30 @@ msgstr ""
 "Ja existeix una aplicació amb este nom, si la reemplaceu l'estareu "
 "sobreescrivint."
 
-#: ../src/window-commands.c:939
+#: ../src/window-commands.c:938
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "L'aplicació «%s» ja és a punt per fer-se servir"
 
-#: ../src/window-commands.c:942
+#: ../src/window-commands.c:941
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "No s'ha pogut crear l'aplicació «%s»"
 
-#: ../src/window-commands.c:950
+#: ../src/window-commands.c:949
 msgid "Launch"
 msgstr "Executa"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:990
+#: ../src/window-commands.c:989
 msgid "Create Web Application"
 msgstr "Crea una aplicació web"
 
-#: ../src/window-commands.c:995
+#: ../src/window-commands.c:994
 msgid "C_reate"
 msgstr "_Crea"
 
-#: ../src/window-commands.c:1685
+#: ../src/window-commands.c:1676
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2642,7 +2691,7 @@ msgstr ""
 "Free Software Foundation, ja siga la versió 2 de la Llicència o bé (si ho "
 "preferiu) qualsevol altra versió posterior."
 
-#: ../src/window-commands.c:1689
+#: ../src/window-commands.c:1680
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2654,7 +2703,7 @@ msgstr ""
 "COMERCIABILITAT o ADEQUACIÓ PER A UN PROPÒSIT PARTICULAR. Vegeu la Llicència "
 "Pública General GNU per obtindre'n més detalls."
 
-#: ../src/window-commands.c:1693
+#: ../src/window-commands.c:1684
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2665,20 +2714,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
 "02110-1301 USA"
 
-#: ../src/window-commands.c:1739 ../src/window-commands.c:1755
-#: ../src/window-commands.c:1766
+#: ../src/window-commands.c:1730 ../src/window-commands.c:1746
+#: ../src/window-commands.c:1757
 msgid "Contact us at:"
 msgstr "Contacteu-nos a:"
 
-#: ../src/window-commands.c:1742
+#: ../src/window-commands.c:1733
 msgid "Contributors:"
 msgstr "Col·laboradors:"
 
-#: ../src/window-commands.c:1745
+#: ../src/window-commands.c:1736
 msgid "Past developers:"
 msgstr "Antics desenvolupadors:"
 
-#: ../src/window-commands.c:1776 ../src/window-commands.c:1782
+#: ../src/window-commands.c:1767 ../src/window-commands.c:1773
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2695,7 +2744,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1812
+#: ../src/window-commands.c:1803
 msgid "translator-credits"
 msgstr ""
 "Francesc Dorca <f.dorca@filnet.es>\n"
@@ -2703,2554 +2752,24 @@ msgstr ""
 "Xavier Conde Rueda <xavi.conde@gmail.com>\n"
 "Gil Forcada <gilforcada@guifi.net>"
 
-#: ../src/window-commands.c:1815
+#: ../src/window-commands.c:1806
 msgid "Web Website"
 msgstr "Lloc web del Web"
 
-#: ../src/window-commands.c:1955
+#: ../src/window-commands.c:1946
 msgid "Enable caret browsing mode?"
 msgstr "Voleu habilitar el mode de navegació amb cursor?"
 
-#: ../src/window-commands.c:1958
+#: ../src/window-commands.c:1949
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
-"want to enable caret browsing on?"
+"want to enable caret browsing?"
 msgstr ""
 "Si premeu F7 activareu o desactivareu la navegació per cursor. Esta funció "
-"permet moure's per les pàgines web amb el teclat, gràcies a un cursor amb el "
-"qual vos podeu desplaçar-vos. Voleu activar la navegació per cursor?"
+"permet moure's per les pàgines web amb el teclat. Voleu activar la navegació "
+"per cursor?"
 
-#: ../src/window-commands.c:1961
+#: ../src/window-commands.c:1952
 msgid "_Enable"
 msgstr "_Habilita"
-
-#~ msgid ""
-#~ "Middle click to open the web page pointed to by the currently selected "
-#~ "text"
-#~ msgstr ""
-#~ "Feu clic amb el botó del mig per obrir la pàgina web a la qual enllaça el "
-#~ "text seleccionat"
-
-#~ msgid ""
-#~ "Middle clicking on the main view pane will open the web page pointed to "
-#~ "by the currently selected text."
-#~ msgstr ""
-#~ "En fer clic al botó del mig a la subfinestra de la vista principal "
-#~ "s'obrirà la pàgina web a la qual enllaça el text seleccionat."
-
-#~ msgid "Active extensions"
-#~ msgstr "Extensions actives."
-
-#~ msgid "Lists the active extensions."
-#~ msgstr "Llista les extensions actives."
-
-#~ msgid "Plugins"
-#~ msgstr "Connectors"
-
-#~ msgid "File is not a valid .desktop file"
-#~ msgstr "El fitxer no és un fitxer .desktop vàlid"
-
-#~ msgid "Unrecognized desktop file Version '%s'"
-#~ msgstr "No s'ha reconegut la versió «%s» del fitxer d'escriptori"
-
-#~ msgid "Starting %s"
-#~ msgstr "S'està iniciant %s"
-
-#~ msgid "Application does not accept documents on command line"
-#~ msgstr "L'aplicació no accepta documents des de la línia d'ordres"
-
-#~ msgid "Unrecognized launch option: %d"
-#~ msgstr "No s'ha reconegut l'opció de llançament: %d"
-
-#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-#~ msgstr ""
-#~ "No es poden passar URI de documents a una entrada d'escriptori de tipus "
-#~ "«Type=Link»"
-
-#~ msgid "Not a launchable item"
-#~ msgstr "No és un element executable"
-
-#~ msgid "Clear"
-#~ msgstr "Neteja"
-
-#~ msgid "_Search:"
-#~ msgstr "_Cerca:"
-
-#~ msgid "Enable Java_Script"
-#~ msgstr "Habilita el Java_Script"
-
-#~ msgid "Wrapped"
-#~ msgstr "S'ha tornat al principi"
-
-#~ msgid "Find links:"
-#~ msgstr "Cerca enllaços:"
-
-#~ msgid "Find:"
-#~ msgstr "Cerca:"
-
-#~ msgid "_Case sensitive"
-#~ msgstr "_Diferencia entre majúscules i minúscules"
-
-#~ msgid "Find Previous"
-#~ msgstr "Cerca l'anterior"
-
-#~ msgid "Find Next"
-#~ msgstr "Cerca la següent"
-
-#~ msgid "Launch the bookmarks editor"
-#~ msgstr "Executa l'editor d'adreces d'interès"
-
-#~ msgid "_Extensions"
-#~ msgstr "_Extensions"
-
-#~ msgid "_Larger Text"
-#~ msgstr "Text més _gran"
-
-#~ msgid "S_maller Text"
-#~ msgstr "Text més _petit"
-
-#~ msgctxt "file type"
-#~ msgid "Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "Disable connection to session manager"
-#~ msgstr "Inhabilita la connexió al gestor de sessió"
-
-#~ msgid "Specify file containing saved configuration"
-#~ msgstr "Especifica el fitxer que conté la configuració desada"
-
-#~ msgid "Specify session management ID"
-#~ msgstr "Especifica l'identificador del gestor de sessió"
-
-#~ msgid "ID"
-#~ msgstr "IDENTIFICADOR"
-
-#~ msgid "Session management options:"
-#~ msgstr "Opcions del gestor de sessió:"
-
-#~ msgid "Show session management options"
-#~ msgstr "Mostra les opcions del gestor de sessió"
-
-#~ msgid "Leave Fullscreen"
-#~ msgstr "Surt de la pantalla completa"
-
-#~ msgid "Downloads will be aborted and logout proceed in %d second."
-#~ msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
-#~ msgstr[0] "S'interrompran les baixades i se sortirà d'aquí a %d segon."
-#~ msgstr[1] "S'interrompran les baixades i se sortirà d'aquí a %d segons."
-
-#~ msgid "Abort pending downloads?"
-#~ msgstr "Voleu interrompre les baixades pendents?"
-
-#~ msgid ""
-#~ "There are still downloads pending. If you log out, they will be aborted "
-#~ "and lost."
-#~ msgstr ""
-#~ "Encara hi ha baixades pendents. Si sortiu, s'interrompran i es perdran."
-
-#~ msgid "_Cancel Logout"
-#~ msgstr "_Cancel·la la sortida"
-
-#~ msgid "_Abort Downloads"
-#~ msgstr "_Interromp les baixades"
-
-#~ msgid "_Don't recover"
-#~ msgstr "_No la recuperis"
-
-#~ msgid "_Recover session"
-#~ msgstr "_Recupera la sessió"
-
-#~ msgid "Do you want to recover the previous browser windows and tabs?"
-#~ msgstr "Voleu recuperar les finestres i pestanyes que teníeu obertes?"
-
-#~ msgid ""
-#~ "Lets you view web pages and find information on the internet.\n"
-#~ "Powered by WebKit %d.%d.%d"
-#~ msgstr ""
-#~ "Us permet visualitzar pàgines web i cercar informació a Internet.\n"
-#~ "Funciona amb WebKit %d.%d.%d"
-
-#~ msgid "All"
-#~ msgstr "Tots"
-
-#~ msgid "Update bookmark “%s”?"
-#~ msgstr "Voleu actualitzar l'adreça d'interès «%s»?"
-
-#~ msgid "The bookmarked page has moved to “%s”."
-#~ msgstr "La pàgina d'adreça d'interès s'ha traslladat a «%s»."
-
-#~ msgid "_Don't Update"
-#~ msgstr "No l'a_ctualitzis"
-
-#~ msgid "_Update"
-#~ msgstr "Act_ualitza-la"
-
-#~ msgid "Update Bookmark?"
-#~ msgstr "Voleu actualitzar l'adreça d'interès?"
-
-#~ msgid "Browse and organize your bookmarks"
-#~ msgstr "Navegueu per les adreces d'interès i organitzeu-les"
-
-#~ msgid "Epiphany Web Bookmarks"
-#~ msgstr "Adreces web d'interès de l'Epiphany"
-
-#~ msgid "Web Bookmarks"
-#~ msgstr "Adreces web d'interès"
-
-#~ msgid "Epiphany"
-#~ msgstr "Epiphany"
-
-#~ msgid "Certificate _Fields"
-#~ msgstr "Camps del certi_ficat"
-
-#~ msgid "Certificate _Hierarchy"
-#~ msgstr "_Jerarquia de certificats"
-
-#~ msgid "Common Name:"
-#~ msgstr "Nom comú:"
-
-#~ msgid "Details"
-#~ msgstr "Detalls"
-
-#~ msgid "Expires On:"
-#~ msgstr "Caduca el:"
-
-#~ msgid "Field _Value"
-#~ msgstr "_Valor del camp"
-
-#~ msgid "Fingerprints"
-#~ msgstr "Empremtes"
-
-#~ msgid "Issued By"
-#~ msgstr "Emès per"
-
-#~ msgid "Issued On:"
-#~ msgstr "Emès el:"
-
-#~ msgid "Issued To"
-#~ msgstr "Emès per a"
-
-#~ msgid "MD5 Fingerprint:"
-#~ msgstr "Empremta MD5:"
-
-#~ msgid "Organization:"
-#~ msgstr "Organització:"
-
-#~ msgid "Organizational Unit:"
-#~ msgstr "Unitat organitzativa:"
-
-#~ msgid "SHA1 Fingerprint:"
-#~ msgstr "Empremta SHA1:"
-
-#~ msgid "Serial Number:"
-#~ msgstr "Número de sèrie:"
-
-#~ msgid "Validity"
-#~ msgstr "Validesa"
-
-#~ msgid "Clear _All..."
-#~ msgstr "Neteja-ho _tot..."
-
-#~ msgid "Sign Text"
-#~ msgstr "Signa el text"
-
-#~ msgid ""
-#~ "To confirm that you want to sign the above text, choose a certificate to "
-#~ "sign the text with and enter its password below."
-#~ msgstr ""
-#~ "Per confirmar que voleu signar el text d'aquí sobre, seleccioneu el "
-#~ "certificat amb el que ho vulgueu fer i escriviu la contrasenya a sota."
-
-#~ msgid "_Certificate:"
-#~ msgstr "_Certificat:"
-
-#~ msgid "_Password:"
-#~ msgstr "_Contrasenya:"
-
-#~ msgid "_View Certificate&#x2026;"
-#~ msgstr "_Visualitza el certificat&#x2026;"
-
-#~ msgid "Home page"
-#~ msgstr "Pàgina d'inici"
-
-#~ msgid "Set to Current _Page"
-#~ msgstr "Estableix-la com a la _pàgina actual"
-
-#~ msgid "Set to _Blank Page"
-#~ msgstr "Estableix-la com a pà_gina en blanc"
-
-#~ msgid "_Address:"
-#~ msgstr "_Adreça:"
-
-#~ msgid "As laid out on the _screen"
-#~ msgstr "Com es mostra a la _pantalla"
-
-#~ msgid "Background"
-#~ msgstr "Fons"
-
-#~ msgid "Footers"
-#~ msgstr "Peus de pàgina"
-
-#~ msgid "Frames"
-#~ msgstr "Marcs"
-
-#~ msgid "Headers"
-#~ msgstr "Capçaleres"
-
-#~ msgid "O_nly the selected frame"
-#~ msgstr "_Només el marc seleccionat"
-
-#~ msgid "P_age title"
-#~ msgstr "Títol de pàgin_a"
-
-#~ msgid "Page _numbers"
-#~ msgstr "_Números de pàgina"
-
-#~ msgid "Print background c_olors"
-#~ msgstr "Imprimeix els c_olors de fons"
-
-#~ msgid "Print background i_mages"
-#~ msgstr "Imprimeix la i_matge de fons"
-
-#~ msgid "_Date"
-#~ msgstr "_Data"
-
-#~ msgid "_Each frame separately"
-#~ msgstr "_Cada marc per separat"
-
-#~ msgid "_Page address"
-#~ msgstr "Adreça de la _pàgina"
-
-#~ msgid ""
-#~ "CA Certificates file we should use was not found, all SSL sites will be "
-#~ "considered to have a broken certificate."
-#~ msgstr ""
-#~ "No s'ha trobat el fitxer de certificats CA que s'hauria d'utilitzar. Es "
-#~ "considerarà que tots els llocs web SSL tenen el certificat trencat."
-
-#~ msgid "Show “_%s”"
-#~ msgstr "Mostra «_%s»"
-
-#~ msgid "_Move on Toolbar"
-#~ msgstr "_Mou a la barra d'eines"
-
-#~ msgid "Move the selected item on the toolbar"
-#~ msgstr "Mou l'element seleccionat a la barra d'eines"
-
-#~ msgid "_Remove from Toolbar"
-#~ msgstr "Sup_rimeix de la barra d'eines"
-
-#~ msgid "Remove the selected item from the toolbar"
-#~ msgstr "Suprimeix l'element seleccionat de la barra d'eines"
-
-#~ msgid "_Delete Toolbar"
-#~ msgstr "Sup_rimeix la barra d'eines"
-
-#~ msgid "Remove the selected toolbar"
-#~ msgstr "Suprimeix la barra d'eines seleccionada"
-
-#~ msgid "Separator"
-#~ msgstr "Separador"
-
-#~ msgid "Popup Windows"
-#~ msgstr "Finestres emergents"
-
-#~ msgid "Address Entry"
-#~ msgstr "Entrada d'adreça"
-
-#~ msgid "_Download"
-#~ msgstr "_Baixada"
-
-#~ msgid "%s:"
-#~ msgstr "%s:"
-
-#~ msgid "Executes the script “%s”"
-#~ msgstr "Executa l'script «%s»"
-
-#~ msgid "_Show on Toolbar"
-#~ msgstr "Mo_stra'l a la barra d'eines"
-
-#~ msgid "Show the selected bookmark on a toolbar"
-#~ msgstr "Mostra l'adreça d'interès seleccionada a la barra d'eines"
-
-#~ msgid "Show properties for this bookmark"
-#~ msgstr "Mostra les propietats d'aquesta adreça d'interès"
-
-#~ msgid "Open this bookmark in a new tab"
-#~ msgstr "Obre l'adreça d'interès en una pestanya nova"
-
-#~ msgid "Open this bookmark in a new window"
-#~ msgstr "Obre l'adreça d'interès en una finestra nova"
-
-#~ msgid "Related"
-#~ msgstr "Relacionat"
-
-#~ msgid "Topic"
-#~ msgstr "Temes"
-
-#~ msgid "Go"
-#~ msgstr "Vés"
-
-#~ msgid "GNOME Web Browser"
-#~ msgstr "Navegador web del GNOME"
-
-#~ msgid "GNOME Web Browser options"
-#~ msgstr "Opcions del navegador web del GNOME"
-
-#~ msgid "Switch to this tab"
-#~ msgstr "Canvia a aquesta pestanya"
-
-#~ msgid "_Back"
-#~ msgstr "_Endarrere"
-
-#~ msgid "Go to the previous visited page"
-#~ msgstr "Vés a l'anterior pàgina visitada"
-
-#~ msgid "_Forward"
-#~ msgstr "_Endavant"
-
-#~ msgid "Forward history"
-#~ msgstr "Historial de següents"
-
-#~ msgid "_Up"
-#~ msgstr "Am_unt"
-
-#~ msgid "Go up one level"
-#~ msgstr "Puja un nivell"
-
-#~ msgid "List of upper levels"
-#~ msgstr "Llista de nivells superiors"
-
-#~ msgid "Enter a web address to open, or a phrase to search for"
-#~ msgstr "Introduïu l'adreça web per obrir, o una frase per cercar a la web"
-
-#~ msgid "Adjust the text size"
-#~ msgstr "Ajusta la mida del text"
-
-#~ msgid "Go to the address entered in the address entry"
-#~ msgstr "Vés a l'adreça introduïda a l'entrada d'adreces"
-
-#~ msgid "_Home"
-#~ msgstr "_Inici"
-
-#~ msgid "Go to the home page"
-#~ msgstr "Vés a la pàgina d'inici"
-
-#~ msgid "Open a new tab"
-#~ msgstr "Obre una pestanya nova"
-
-#~ msgid "Open a new window"
-#~ msgstr "Obre una finestra nova"
-
-#~ msgctxt "toolbar style"
-#~ msgid "Default"
-#~ msgstr "Predeterminat"
-
-#~ msgctxt "toolbar style"
-#~ msgid "Text below icons"
-#~ msgstr "Text sota les icones"
-
-#~ msgctxt "toolbar style"
-#~ msgid "Text beside icons"
-#~ msgstr "Text al costat de les icones"
-
-#~ msgctxt "toolbar style"
-#~ msgid "Icons only"
-#~ msgstr "Només icones"
-
-#~ msgctxt "toolbar style"
-#~ msgid "Text only"
-#~ msgstr "Només text"
-
-#~ msgid "Toolbar Editor"
-#~ msgstr "Editor de barres d'eines"
-
-#~ msgid "Toolbar _button labels:"
-#~ msgstr "Etiquetes dels _botons de la barra d'eines:"
-
-#~ msgid "_Add a New Toolbar"
-#~ msgstr "_Afegeix una barra d'eines nova"
-
-#~ msgid "_Go"
-#~ msgstr "Vé_s"
-
-#~ msgid "T_ools"
-#~ msgstr "Ei_nes"
-
-#~ msgid "_Tabs"
-#~ msgstr "_Pestanyes"
-
-#~ msgid "_Toolbars"
-#~ msgstr "Barres d'_eines"
-
-#~ msgid "Open a file"
-#~ msgstr "Obre un fitxer"
-
-#~ msgid "Save the current page"
-#~ msgstr "Desa la pàgina actual"
-
-#~ msgid "Save the current page as a Web Application"
-#~ msgstr "Desa la pàgina actual com una aplicació web"
-
-#~ msgid "Page Set_up"
-#~ msgstr "_Configuració de la pàgina"
-
-#~ msgid "Setup the page settings for printing"
-#~ msgstr "Configura els paràmetres de pàgina per imprimir"
-
-#~ msgid "Print Pre_view"
-#~ msgstr "Pre_visualització d'impressió"
-
-#~ msgid "Print preview"
-#~ msgstr "Previsualització d'impressió"
-
-#~ msgid "Print the current page"
-#~ msgstr "Imprimeix la pàgina actual"
-
-#~ msgid "Send a link of the current page"
-#~ msgstr "Envia un enllaç de la pàgina actual"
-
-#~ msgid "Close this tab"
-#~ msgstr "Tanca la pestanya"
-
-#~ msgid "Undo the last action"
-#~ msgstr "Desfés l'última acció"
-
-#~ msgid "Redo the last undone action"
-#~ msgstr "Torna a fer l'última acció desfeta"
-
-#~ msgid "Paste clipboard"
-#~ msgstr "Enganxa el porta-retalls"
-
-#~ msgid "Delete text"
-#~ msgstr "Suprimeix el text"
-
-#~ msgid "Select the entire page"
-#~ msgstr "Selecciona tota la pàgina"
-
-#~ msgid "Find a word or phrase in the page"
-#~ msgstr "Cerca una paraula o frase en la pàgina"
-
-#~ msgid "Find next occurrence of the word or phrase"
-#~ msgstr "Cerca la següent aparició de la paraula o frase"
-
-#~ msgid "Find previous occurrence of the word or phrase"
-#~ msgstr "Cerca l'anterior aparició de la paraula o frase"
-
-#~ msgid "P_ersonal Data"
-#~ msgstr "Dad_es personals"
-
-#~ msgid "View and remove cookies and passwords"
-#~ msgstr "Mostra i elimina galetes i contrasenyes"
-
-#~ msgid "Certificate_s"
-#~ msgstr "Certi_ficats"
-
-#~ msgid "Manage Certificates"
-#~ msgstr "Gestiona els certificats"
-
-#~ msgid "P_references"
-#~ msgstr "P_referències"
-
-#~ msgid "Configure the web browser"
-#~ msgstr "Configura el navegador web"
-
-#~ msgid "_Customize Toolbars…"
-#~ msgstr "Per_sonalitza les barres d'eines…"
-
-#~ msgid "Customize toolbars"
-#~ msgstr "Personalitza les barres d'eines"
-
-#~ msgid "Increase the text size"
-#~ msgstr "Incrementa la mida del text"
-
-#~ msgid "Decrease the text size"
-#~ msgstr "Redueix la mida del text"
-
-#~ msgid "Use the normal text size"
-#~ msgstr "Utilitza la mida normal del text"
-
-#~ msgid "Change the text encoding"
-#~ msgstr "Canvia la codificació del text"
-
-#~ msgid "View the source code of the page"
-#~ msgstr "Mostra el codi font de la pàgina"
-
-#~ msgid "Page _Security Information"
-#~ msgstr "Informació de _seguretat de la pàgina"
-
-#~ msgid "Display security information for the web page"
-#~ msgstr "Mostra la informació de seguretat del lloc web"
-
-#~ msgid "Add a bookmark for the current page"
-#~ msgstr "Afegeix una adreça d'interès per a la pàgina actual"
-
-#~ msgid "Open the bookmarks window"
-#~ msgstr "Obre la finestra d'adreces d'interès"
-
-#~ msgid "Go to a specified location"
-#~ msgstr "Vés a una ubicació especificada"
-
-#~ msgid "Open the history window"
-#~ msgstr "Obre la finestra de l'historial"
-
-#~ msgid "Activate previous tab"
-#~ msgstr "Activa la pestanya anterior"
-
-#~ msgid "Activate next tab"
-#~ msgstr "Activa la pestanya següent"
-
-#~ msgid "Move current tab to left"
-#~ msgstr "Mou la pestanya actual a l'esquerra"
-
-#~ msgid "Move current tab to right"
-#~ msgstr "Mou pestanya actual a la dreta"
-
-#~ msgid "Detach current tab"
-#~ msgstr "Separa la pestanya actual"
-
-#~ msgid "Display web browser help"
-#~ msgstr "Mostra l'ajuda del navegador"
-
-#~ msgid "Switch to offline mode"
-#~ msgstr "Canvia a mode desconnectat"
-
-#~ msgid "_Hide Toolbars"
-#~ msgstr "_Amaga les barres d'eines"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Mostra o oculta la barra d'eines"
-
-#~ msgid "Show the active downloads for this window"
-#~ msgstr "Mostra les baixades en curs d'aquesta finestra"
-
-#~ msgid "Men_ubar"
-#~ msgstr "Barra de _menú"
-
-#~ msgid "Show or hide unrequested popup windows from this site"
-#~ msgstr ""
-#~ "Mostra o amaga les finestres emergents no sol·licitades d'aquest lloc"
-
-#~ msgid "Show Only _This Frame"
-#~ msgstr "Mostra només aquest _marc"
-
-#~ msgid "Show only this frame in this window"
-#~ msgstr "Mostra només aquest marc en aquesta finestra"
-
-#~ msgid "Open link in this window"
-#~ msgstr "Obre l'enllaç en aquesta finestra"
-
-#~ msgid "Open link in a new window"
-#~ msgstr "Obre l'enllaç en una finestra nova"
-
-#~ msgid "Open link in a new tab"
-#~ msgstr "Obre l'enllaç en una pestanya nova"
-
-#~ msgid "Save link with a different name"
-#~ msgstr "Desa l'enllaç amb un nom diferent"
-
-#~ msgid "_Send Email…"
-#~ msgstr "_Envia un correu electrònic…"
-
-#~ msgid "Insecure"
-#~ msgstr "Insegur"
-
-#~ msgid "Broken"
-#~ msgstr "Interromput"
-
-#~ msgid "Low"
-#~ msgstr "Baix"
-
-#~ msgid "High"
-#~ msgstr "Alt"
-
-#~ msgid "Security level: %s"
-#~ msgstr "Nivell de seguretat: %s"
-
-#~ msgid "Open image “%s”"
-#~ msgstr "Obre la imatge «%s»"
-
-#~ msgid "Use as desktop background “%s”"
-#~ msgstr "Utilitza com a fons de l'escriptori «%s»"
-
-#~ msgid "Save image “%s”"
-#~ msgstr "Desa la imatge «%s»"
-
-#~ msgid "Copy image address “%s”"
-#~ msgstr "Copia l'adreça de la imatge «%s»"
-
-#~ msgid "Send email to address “%s”"
-#~ msgstr "Envieu un correu a l'adreça «%s»"
-
-#~ msgid "Copy email address “%s”"
-#~ msgstr "Copia l'adreça electrònica «%s»"
-
-#~ msgid "Save link “%s”"
-#~ msgstr "Desa l'enllaç «%s»"
-
-#~ msgid "Bookmark link “%s”"
-#~ msgstr "Afegeix l'enllaç «%s» a les adreces d'interès"
-
-#~ msgid "Copy link's address “%s”"
-#~ msgstr "Copia l'adreça de l'enllaç «%s»"
-
-#~ msgid "GNOME Web Browser Website"
-#~ msgstr "Pàgina web del navegador web del GNOME"
-
-#~ msgid "<b>Fingerprints</b>"
-#~ msgstr "<b>Empremtes</b>"
-
-#~ msgid "<b>Issued By</b>"
-#~ msgstr "<b>Emès per</b>"
-
-#~ msgid "<b>Issued To</b>"
-#~ msgstr "<b>Emès a</b>"
-
-#~ msgid "<b>Cookies</b>"
-#~ msgstr "<b>Galetes</b>"
-
-#~ msgid "<b>Downloads</b>"
-#~ msgstr "<b>Baixades</b>"
-
-#~ msgid "<b>Encodings</b>"
-#~ msgstr "<b>Codificacions</b>"
-
-#~ msgid "<b>Fonts</b>"
-#~ msgstr "<b>Tipus de lletres</b>"
-
-#~ msgid "<b>Home page</b>"
-#~ msgstr "<b>Pàgina inicial</b>"
-
-#~ msgid "<b>Languages</b>"
-#~ msgstr "<b>Idiomes</b>"
-
-#~ msgid "<b>Passwords</b>"
-#~ msgstr "<b>Contrasenyes</b>"
-
-#~ msgid "<b>Style</b>"
-#~ msgstr "<b>Estil</b>"
-
-#~ msgid "<b>Temporary Files</b>"
-#~ msgstr "<b>Fitxers temporals</b>"
-
-#~ msgid "_Show Downloads"
-#~ msgstr "Mo_stra les baixades"
-
-#~ msgid "%u:%02u.%02u"
-#~ msgstr "%u:%02u.%02u"
-
-#~ msgid "%02u.%02u"
-#~ msgstr "%02u.%02u"
-
-#~ msgid "_Pause"
-#~ msgstr "Fes una _pausa"
-
-#~ msgid "_Resume"
-#~ msgstr "_Continua"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "%s of %s"
-#~ msgstr ""
-#~ "%s\n"
-#~ "%s de %s"
-
-#~ msgid "%d download"
-#~ msgid_plural "%d downloads"
-#~ msgstr[0] "%d baixada"
-#~ msgstr[1] "%d baixades"
-
-#~ msgctxt "download status"
-#~ msgid "Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgctxt "download status"
-#~ msgid "Failed"
-#~ msgstr "Fallada"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Remaining"
-#~ msgstr "Restant"
-
-#~ msgid "Download this potentially unsafe file?"
-#~ msgstr "Voleu baixar aquest fitxer potencialment insegur?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "It is unsafe to open “%s” as it could potentially damage your documents "
-#~ "or invade your privacy. You can download it instead."
-#~ msgstr ""
-#~ "Tipus de fitxer: %s\n"
-#~ "\n"
-#~ "No és segur obrir el fitxer «%s» ja que podria fer malbé els vostres "
-#~ "documents o envair la vostra privadesa. En canvi, el podeu baixar."
-
-#~ msgid "Open this file?"
-#~ msgstr "Voleu obrir aquest fitxer?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You can open “%s” using “%s” or save it."
-#~ msgstr ""
-#~ "Tipus de fitxer: «%s».\n"
-#~ "\n"
-#~ "Podeu obrir «%s» fent servir «%s» o bé desar-lo."
-
-#~ msgid "Download this file?"
-#~ msgstr "Voleu baixar el fitxer?"
-
-#~ msgid ""
-#~ "File Type: “%s”.\n"
-#~ "\n"
-#~ "You have no application able to open “%s”. You can download it instead."
-#~ msgstr ""
-#~ "Tipus de fitxer: «%s».\n"
-#~ "\n"
-#~ "No teniu cap aplicació per obrir «%s». En canvi, podeu baixar-lo."
-
-#~ msgid ""
-#~ "A list of protocols to be considered safe in addition to the default, "
-#~ "when disable_unsafe_protocols is enabled."
-#~ msgstr ""
-#~ "Una llista de protocols que s'han de considerar segurs a més dels "
-#~ "predeterminats, quan s'habiliti disable_unsafe_protocols."
-
-#~ msgid "Additional safe protocols"
-#~ msgstr "Protocols segurs addicionals"
-
-#~ msgid "Disable JavaScript chrome control"
-#~ msgstr "Inhabilita el control de cromat de JavaScript"
-
-#~ msgid "Disable JavaScript's control over window chrome."
-#~ msgstr "Inhabilita el control de JavaScript sobre el cromat de la finestra."
-
-#~ msgid ""
-#~ "Disable all historical information by disabling back and forward "
-#~ "navigation, not allowing the history dialog and hiding the most used "
-#~ "bookmarks list."
-#~ msgstr ""
-#~ "Inhabilita la informació d'historial: inhabilita la navegació endarrere i "
-#~ "endavant, prohibeix el diàleg d'historial i oculta la llista de les "
-#~ "adreces d'interès més utilitzades."
-
-#~ msgid "Disable arbitrary URLs"
-#~ msgstr "Inhabilita els URL arbitraris"
-
-#~ msgid "Disable bookmark editing"
-#~ msgstr "Inhabilita l'edició de les adreces d'interès"
-
-#~ msgid "Disable history"
-#~ msgstr "Inhabilita l'historial"
-
-#~ msgid "Disable the user's ability to add or edit bookmarks."
-#~ msgstr "No permetis que l'usuari pugui afegir o editar adreces d'interès."
-
-#~ msgid "Disable the user's ability to edit toolbars."
-#~ msgstr "No permetis que l'usuari editi les barres d'eines."
-
-#~ msgid "Disable the user's ability to type in a URL to Epiphany."
-#~ msgstr "No permetis que l'usuari escrigui un URL per a l'Epiphany."
-
-#~ msgid "Disable toolbar editing"
-#~ msgstr "Inhabilita l'edició de barres d'eines"
-
-#~ msgid "Disable unsafe protocols"
-#~ msgstr "Inhabilita els protocols insegurs"
-
-#~ msgid ""
-#~ "Disables loading of content from unsafe protocols. Safe protocols are "
-#~ "http and https."
-#~ msgstr ""
-#~ "Inhabilita la càrrega de contingut des de protocols insegurs. Els "
-#~ "protocols segurs són http i https."
-
-#~ msgid "Epiphany cannot quit"
-#~ msgstr "L'Epiphany no pot sortir"
-
-#~ msgid "Hide menubar by default"
-#~ msgstr "Oculta la barra de menús per defecte"
-
-#~ msgid "Hide the menubar by default."
-#~ msgstr "Oculta la barra de menús per defecte."
-
-#~ msgid "Lock in fullscreen mode"
-#~ msgstr "Bloca el mode pantalla completa"
-
-#~ msgid "Locks Epiphany in fullscreen mode."
-#~ msgstr "Bloca l'Epiphany en mode pantalla completa."
-
-#~ msgid "User is not allowed to close Epiphany"
-#~ msgstr "L'usuari no pot tancar l'Epiphany"
-
-#~ msgid "Address of the user's home page."
-#~ msgstr "Adreça de la pàgina d'inici de l'usuari."
-
-#~ msgid "Always show the tab bar"
-#~ msgstr "Mostra sempre la barra de pestanyes"
-
-#~ msgid ""
-#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
-#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
-#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
-#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
-#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
-#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
-#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
-#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
-#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
-#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
-#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
-#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
-#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
-#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
-#~ msgstr ""
-#~ "Codificació per defecte. Els valors acceptats són: «armscii-8», «Big5», "
-#~ "«Big5-HKSCS», «EUC-JP», «EUC-KR», «gb18030», «GB2312», «geostd8», «HZ-"
-#~ "GB-2312», «IBM850», «IBM852», «IBM855», «IBM857», «IBM862», «IBM864», "
-#~ "«IBM866», «ISO-2022-CN», «ISO-2022-JP», «ISO-2022-KR», «ISO-8859-1», "
-#~ "«ISO-8859-2», «ISO-8859-3», «ISO-8859-4», «ISO-8859-5», «ISO-8859-6», "
-#~ "«ISO-8859-7», «ISO-8859-8», «ISO-8859-8-I», «ISO-8859-9», «ISO-8859-10», "
-#~ "«ISO-8859-11», «ISO-8859-13», «ISO-8859-14», «ISO-8859-15», "
-#~ "«ISO-8859-16», «ISO-IR-111», «KOI8-R», «KOI8-U», «Shift_JIS», «TIS-620», "
-#~ "«UTF-7», «UTF-8», «VISCII», «windows-874», «windows-1250», "
-#~ "«windows-1251», «windows-1252», «windows-1253», «windows-1254», "
-#~ "«windows-1255», «windows-1256», «windows-1257», «windows-1258», «x-euc-"
-#~ "tw», «x-gbk», «x-johab», «x-mac-arabic», «x-mac-ce», «x-mac-croatian», «x-"
-#~ "mac-cyrillic», «x-mac-devanagari», «x-mac-farsi», «x-mac-greek», «x-mac-"
-#~ "gujarati», «x-mac-gurmukhi», «x-mac-hebrew», «x-mac-icelandic», «x-mac-"
-#~ "roman», «x-mac-romanian», «x-mac-turkish», «x-mac-ukrainian», «x-user-"
-#~ "defined», «x-viet-tcvn5712», «x-viet-vps» i «x-windows-949»."
-
-#~ msgid "Default font type"
-#~ msgstr "Tipus de lletra per defecte"
-
-#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-#~ msgstr ""
-#~ "Tipus de lletra per defecte. Els valors poden ser «serif» i «sans-serif»."
-
-#~ msgid "Enable Web Inspector"
-#~ msgstr "Habilita l'inspector web"
-
-#~ msgid "How to print frames"
-#~ msgstr "Com imprimir els quadres"
-
-#~ msgid ""
-#~ "How to print pages containing frames. Allowed values are \"normal\", "
-#~ "\"separately\" and \"selected\"."
-#~ msgstr ""
-#~ "Com s'han d'imprimir les pàgines amb quadres. Els valors possibles són "
-#~ "«normal», «separately» (separadament) i «selected» (seleccionat)."
-
-#~ msgid "ISO-8859-1"
-#~ msgstr "ISO-8859-1"
-
-#~ msgid "Show bookmarks bar by default"
-#~ msgstr "Mostra la barra d'adreces d'interès per defecte"
-
-#~ msgid "Show statusbar by default"
-#~ msgstr "Mostra barra d'estat per defecte"
-
-#~ msgid ""
-#~ "Show the history pages visited \"ever\", \"last_two_days\", "
-#~ "\"last_three_days\", \"today\"."
-#~ msgstr ""
-#~ "Mostra les pàgines de l'historial visitades sempre («ever»), els darrers "
-#~ "dos dies («last_two_days»), els darrers tres dies («last_three_days»), "
-#~ "avui («today»)."
-
-#~ msgid "Show the tab bar also when there is only one tab open."
-#~ msgstr "Mostra la barra de pestanyes encara que només hi hagi una pestanya."
-
-#~ msgid "The bookmark information shown in the editor view"
-#~ msgstr ""
-#~ "La informació de les adreces d'interès que es mostra en la visualització "
-#~ "de l'editor"
-
-#~ msgid ""
-#~ "The bookmark information shown in the editor view. Valid values in the "
-#~ "list are \"address\" and \"title\"."
-#~ msgstr ""
-#~ "La informació de les adreces d'interès que es mostra en la visualització "
-#~ "de l'editor. Els valors vàlids a la llista són «address» (adreça) i "
-#~ "«title» (títol)."
-
-#~ msgid "The currently selected fonts language"
-#~ msgstr "La llengua dels tipus de lletra seleccionats"
-
-#~ msgid ""
-#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
-#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
-#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
-#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
-#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
-#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
-#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
-#~ "devanagari\" (devanagari)."
-#~ msgstr ""
-#~ "Joc de caràcters de llengua seleccionat. Els valors possibles són "
-#~ "«ar» (àrab), «x-baltic» (llengües bàltiques), «x-central-euro» (llengües "
-#~ "centreeuropees), «x-cyrillic» (llengües escrites amb alfabet ciríl·lic), "
-#~ "«el» (grec), «he» (hebreu), «ja» (japonès), «ko» (coreà), «zh-CN» (xinès "
-#~ "simplificat), «th» (tailandès), «zh-TW» (xinès tradicional), «tr» (turc), "
-#~ "«x-unicode» (altres llengües), «x-western» (llengües amb escriptura "
-#~ "llatina), «x-tamil» (tamil) i «x-devanagari» (devanagari)."
-
-#~ msgid "The page information shown in the history view"
-#~ msgstr ""
-#~ "La informació de pàgina que es mostra en la visualització d'historial"
-
-#~ msgid ""
-#~ "The page information shown in the history view. Valid values in the list "
-#~ "are \"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-#~ msgstr ""
-#~ "La informació de la pàgina que es mostra en la visualització de "
-#~ "l'historial. Els valors vàlids a la llista són «ViewTitle» (veure el "
-#~ "títol), «ViewAddress» (veure l'adreça) i «ViewDateTime» (veure la data i "
-#~ "hora)."
-
-#~ msgid "Whether to print the background color"
-#~ msgstr "Si s'imprimirà el color de fons"
-
-#~ msgid "Whether to print the background images"
-#~ msgstr "Si s'imprimirà la imatge de fons"
-
-#~ msgid "Whether to print the date in the footer"
-#~ msgstr "Si s'imprimirà la data en el peu de pàgina"
-
-#~ msgid "Whether to print the page address in the header"
-#~ msgstr "Si s'imprimirà l'adreça de la pàgina a la capçalera"
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer"
-#~ msgstr ""
-#~ "Si s'imprimiran els números de pàgina (x del total) al peu de pàgina"
-
-#~ msgid "Whether to print the page title in the header"
-#~ msgstr "Si s'imprimirà el títol de la pàgina a la capçalera"
-
-#~ msgid "x-western"
-#~ msgstr "x-western"
-
-#~ msgid "<b>Web Development</b>"
-#~ msgstr "<b>Desenvolupament web</b>"
-
-#~ msgid "Let web pages specify their own _fonts"
-#~ msgstr ""
-#~ "Permet que les pàgines web especifiquin els seus propis tipus de _lletres"
-
-#~ msgid "Let web pages specify their own c_olors"
-#~ msgstr "Permet que les pàgines web especifiquin els seus propis c_olors"
-
-#~ msgid "_Minimum size:"
-#~ msgstr "_Mida mínima:"
-
-#~ msgid "The file “%s” has been downloaded."
-#~ msgstr "S'ha baixat el fitxer «%s»."
-
-#~ msgid "Download finished"
-#~ msgstr "S'ha finalitzat la baixada"
-
-#~ msgid "The file “%s” has been added to the downloads queue."
-#~ msgstr "S'ha afegit el fitxer «%s» a la cua de baixades."
-
-#~ msgid "Download started"
-#~ msgstr "S'ha iniciat la baixada"
-
-#~ msgid "_Save As..."
-#~ msgstr "Anomena i de_sa..."
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "S'ha produït un error del Gconf:\n"
-#~ "  %s"
-
-#~ msgid "Failed to read latest migration marker, aborting profile migration."
-#~ msgstr ""
-#~ "No s'ha pogut llegir l'últim marcador de migració, es cancel·la la "
-#~ "migració."
-
-#~ msgid "Show only the title column"
-#~ msgstr "Mostra només la columna de títols"
-
-#~ msgid "T_itle and Address"
-#~ msgstr "Tít_ol i adreça"
-
-#~ msgid "Show both the title and address columns"
-#~ msgstr "Mostra les columnes de títol i adreça"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "Utilitza el _desplaçament suau"
-
-#~ msgid "Redirecting to “%s”…"
-#~ msgstr "S'està redirigint a «%s»…"
-
-#~ msgid "Transferring data from “%s”…"
-#~ msgstr "S'estan transferint dades de «%s»…"
-
-#~ msgid "Waiting for authorization from “%s”…"
-#~ msgstr "S'està esperant l'autorització des de «%s»…"
-
-#~ msgid ""
-#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
-#~ "You can recover the opened windows and tabs."
-#~ msgstr ""
-#~ "Sembla que l'Epiphany va sortir inesperadament l'últim cop que es va "
-#~ "executar. Podeu recuperar les finestres i pestanyes obertes."
-
-#~ msgid "Crash Recovery"
-#~ msgstr "Recuperació d'una fallada"
-
-#~ msgid "Sidebar extension required"
-#~ msgstr "Es requereix l'extensió de la barra lateral"
-
-#~ msgid "Sidebar Extension Required"
-#~ msgstr "Es requereix l'extensió de la barra lateral"
-
-#~ msgid "The link you clicked needs the sidebar extension to be installed."
-#~ msgstr ""
-#~ "L'enllaç on heu fet clic necessita l'extensió de barra lateral per "
-#~ "instal·lar-se."
-
-#~ msgid "Caret"
-#~ msgstr "Caret"
-
-#~ msgid "In keyboard selection mode, press F7 to exit"
-#~ msgstr "En mode de selecció per teclat, premeu F7 per sortir"
-
-#~ msgid "St_atusbar"
-#~ msgstr "B_arra d'estat"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Mostra o amaga la barra d'estat"
-
-#~ msgid "%d hidden popup window"
-#~ msgid_plural "%d hidden popup windows"
-#~ msgstr[0] "%d finestra emergent amagada"
-#~ msgstr[1] "%d finestres emergents amagades"
-
-#~ msgid "_View Certificate…"
-#~ msgstr "_Visualitza el certificat…"
-
-#~ msgid "Enable _Java"
-#~ msgstr "Habilita el _Java"
-
-#~ msgid "First"
-#~ msgstr "Primer"
-
-#~ msgid "Go to the first page"
-#~ msgstr "Vés a la primera pàgina"
-
-#~ msgid "Last"
-#~ msgstr "Últim"
-
-#~ msgid "Go to the last page"
-#~ msgstr "Vés a l'última pàgina"
-
-#~ msgid "Previous"
-#~ msgstr "Anterior"
-
-#~ msgid "Go to the previous page"
-#~ msgstr "Vés a la pàgina anterior"
-
-#~ msgid "Next"
-#~ msgstr "Següent"
-
-#~ msgid "Go to next page"
-#~ msgstr "Vés a la pàgina següent"
-
-#~ msgid "Close"
-#~ msgstr "Tanca"
-
-#~ msgid "Close print preview"
-#~ msgstr "Tanca la previsualització"
-
-#~ msgid "The encoding autodetector. Empty string means autodetect is off"
-#~ msgstr ""
-#~ "El detector automàtic de jocs de caràcters. La cadena buida significa que "
-#~ "l'autodetecció està desactivada"
-
-#~ msgid ""
-#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
-#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
-#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
-#~ "encodings)."
-#~ msgstr ""
-#~ "El detector automàtic de jocs de caràcters. Les entrades vàlides són "
-#~ "«» (cadena buida, autodetectors off), "
-#~ "«cjk_parallel_state_machine» (autodetecció de codificacions asiàtiques "
-#~ "orientals), «ja_parallel_state_machine» (autodetecció de codificacions "
-#~ "japoneses), «ko_parallel_state_machine» (autodetecció de codificacions "
-#~ "coreanes), «ruprob» (autodetecció de codificacions russes), "
-#~ "«ukprob» (autodetecció de codificacions ucraïneses), "
-#~ "«zh_parallel_state_machine» (autodetecció de codificacions xineses), "
-#~ "«zhcn_parallel_state_machine» (autodetecció de codificacions de xinès "
-#~ "simplificat), «zhtw_parallel_state_machine» (autodetecció de "
-#~ "codificacions de xinès tradicional) i "
-#~ "«universal_charset_detector» (autodetecció de quasi totes les "
-#~ "codificacions)."
-
-#~ msgid "Au_todetect:"
-#~ msgstr "De_tecta automàticament:"
-
-#~ msgid "download status|Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "download status|Failed"
-#~ msgstr "Ha fallat"
-
-#~ msgid "autodetectors|Off"
-#~ msgstr "Desactivat"
-
-#~ msgid "automatically detect ... character encodings|Chinese"
-#~ msgstr "Xinès"
-
-#~ msgid "automatically detect ... character encodings|Simplified Chinese"
-#~ msgstr "Xinès simplificat"
-
-#~ msgid "automatically detect ... character encodings|Traditional Chinese"
-#~ msgstr "Xinès tradicional"
-
-#~ msgid "automatically detect ... character encodings|East Asian"
-#~ msgstr "Àsia oriental"
-
-#~ msgid "automatically detect ... character encodings|Japanese"
-#~ msgstr "Japonès"
-
-#~ msgid "automatically detect ... character encodings|Korean"
-#~ msgstr "Coreà"
-
-#~ msgid "automatically detect ... character encodings|Russian"
-#~ msgstr "Rus"
-
-#~ msgid "automatically detect ... character encodings|Universal"
-#~ msgstr "Universal"
-
-#~ msgid "automatically detect ... character encodings|Ukrainian"
-#~ msgstr "Ucraïnès"
-
-#~ msgid "select fonts for|Arabic"
-#~ msgstr "Àrab"
-
-#~ msgid "select fonts for|Baltic"
-#~ msgstr "Bàltic"
-
-#~ msgid "select fonts for|Central European"
-#~ msgstr "Centreeuropeu"
-
-#~ msgid "select fonts for|Cyrillic"
-#~ msgstr "Ciríl·lic"
-
-#~ msgid "select fonts for|Devanagari"
-#~ msgstr "Devanagari"
-
-#~ msgid "select fonts for|Greek"
-#~ msgstr "Grec"
-
-#~ msgid "select fonts for|Hebrew"
-#~ msgstr "Hebreu"
-
-#~ msgid "select fonts for|Japanese"
-#~ msgstr "Japonès"
-
-#~ msgid "select fonts for|Korean"
-#~ msgstr "Coreà"
-
-#~ msgid "select fonts for|Simplified Chinese"
-#~ msgstr "Xinès simplificat"
-
-#~ msgid "select fonts for|Tamil"
-#~ msgstr "Tamil"
-
-#~ msgid "select fonts for|Thai"
-#~ msgstr "Thai"
-
-#~ msgid "select fonts for|Traditional Chinese"
-#~ msgstr "Xinès tradicional"
-
-#~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
-#~ msgstr "Xinès tradicional (Hong Kong)"
-
-#~ msgid "select fonts for|Turkish"
-#~ msgstr "Turc"
-
-#~ msgid "select fonts for|Armenian"
-#~ msgstr "Armeni"
-
-#~ msgid "select fonts for|Bengali"
-#~ msgstr "Bengalí"
-
-#~ msgid "select fonts for|Unified Canadian Syllabics"
-#~ msgstr "Síl·labes canadenques unificades"
-
-#~ msgid "select fonts for|Ethiopic"
-#~ msgstr "Etíop"
-
-#~ msgid "select fonts for|Georgian"
-#~ msgstr "Georgià"
-
-#~ msgid "select fonts for|Gujarati"
-#~ msgstr "Gujarati"
-
-#~ msgid "select fonts for|Gurmukhi"
-#~ msgstr "Gurmukhi"
-
-#~ msgid "select fonts for|Khmer"
-#~ msgstr "Khmer"
-
-#~ msgid "select fonts for|Malayalam"
-#~ msgstr "Malai"
-
-#~ msgid "select fonts for|Western"
-#~ msgstr "Occidental"
-
-#~ msgid "select fonts for|Other Scripts"
-#~ msgstr "Altres alfabets"
-
-#~ msgid "_Username:"
-#~ msgstr "Nom d'_usuari:"
-
-#~ msgid "_Domain:"
-#~ msgstr "_Domini:"
-
-#~ msgid "_New password:"
-#~ msgstr "Contrasenya _nova:"
-
-#~ msgid "Con_firm password:"
-#~ msgstr "Con_firmeu la contrasenya:"
-
-#~ msgid "Password quality:"
-#~ msgstr "Qualitat de la contrasenya:"
-
-#~ msgid "Do not remember this password"
-#~ msgstr "No recordis aquesta contrasenya"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "_Recorda la contrasenya durant aquesta sessió"
-
-#~ msgid "Save password in _keyring"
-#~ msgstr "Desa la contrasenya a l'anell de _claus"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "Totes"
-
-#~ msgid "toolbar style|Default"
-#~ msgstr "Per defecte"
-
-#~ msgid "For l_anguage:"
-#~ msgstr "Per _a l'idioma:"
-
-#~ msgid "_Detailed Font Settings…"
-#~ msgstr "_Paràmetres detallats per als tipus de lletra…"
-
-#~ msgid "_Fixed width:"
-#~ msgstr "Amplada _fixa:"
-
-#~ msgid "_Variable width:"
-#~ msgstr "Amplada _variable:"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "“%s” Protocol is not Supported"
-#~ msgstr "El protocol «%s» no està disponible"
-
-#~ msgid "“%s” protocol is not supported."
-#~ msgstr "El protocol «%s» no està disponible."
-
-#~ msgid ""
-#~ "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
-#~ msgstr ""
-#~ "Els protocols disponibles són “http”, “https”, “ftp”, “file”, “smb” i "
-#~ "“sftp”."
-
-#~ msgid "File “%s” not Found"
-#~ msgstr "No s'ha trobat el fitxer «%s»"
-
-#~ msgid "File “%s” not found."
-#~ msgstr "No s'ha trobat el fitxer «%s»."
-
-#~ msgid "Check the location of the file and try again."
-#~ msgstr "Comproveu la ubicació del fitxer i torneu-ho a provar."
-
-#~ msgid "“%s” Could not be Found"
-#~ msgstr "No s'ha trobat «%s»"
-
-#~ msgid "“%s” could not be found."
-#~ msgstr "No s'ha trobat «%s»."
-
-#~ msgid ""
-#~ "Check that you are connected to the internet, and that the address is "
-#~ "correct."
-#~ msgstr ""
-#~ "Comproveu que esteu connectat a Internet i que l'adreça és correcta."
-
-#~ msgid "If this page used to exist, you may find an archived version:"
-#~ msgstr ""
-#~ "Si aquesta pàgina existia abans, pot ser que en trobeu una versió "
-#~ "arxivada:"
-
-#~ msgid "“%s” Refused the Connection"
-#~ msgstr "«%s» ha rebutjat la connexió"
-
-#~ msgid "“%s” refused the connection."
-#~ msgstr "«%s» ha rebutjat la connexió."
-
-#~ msgid "Likely causes of the problem are"
-#~ msgstr "Les causes probables del problema són"
-
-#~ msgid ""
-#~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
-#~ "Services Configuration Tool in System > Control Center, or</"
-#~ "ul><ul><li>the port number %d is wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>el servei %s no s'ha iniciat.</li>Proveu d'iniciar-lo fent servir "
-#~ "l'Eina de configuració de serveis, la qual podeu trobar a Sistema > "
-#~ "Centre de control, o bé</ul><ul><li>el número de port %d no és correcte.</"
-#~ "li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>no s'ha iniciat algun servei, o</li><li>el número de port %d és "
-#~ "erroni.</li></ul>"
-
-#~ msgid ""
-#~ "<ul><li>some service isn't started, or</li><li>you got the port number "
-#~ "wrong.</li></ul>"
-#~ msgstr ""
-#~ "<ul><li>no s'ha iniciat algun servei, o</li><li>el número de port és "
-#~ "erroni.</li></ul>"
-
-#~ msgid ""
-#~ "The server may be busy or you may have a network connection problem. Try "
-#~ "again later."
-#~ msgstr ""
-#~ "Pot ser que el servidor estigui ocupat o que hi hagi un problema de "
-#~ "connexió de xarxa. Torneu-ho a provar més tard."
-
-#~ msgid "There may be an old version of the page you wanted:"
-#~ msgstr "Pot ser que hi hagi una versió antiga de la pàgina que volíeu:"
-
-#~ msgid "“%s” Interrupted the Connection"
-#~ msgstr "«%s» ha interromput la connexió"
-
-#~ msgid "“%s” interrupted the connection."
-#~ msgstr "«%s» ha interromput la connexió."
-
-#~ msgid "“%s” is not Responding"
-#~ msgstr "«%s» no respon"
-
-#~ msgid "“%s” is not responding."
-#~ msgstr "«%s» no respon."
-
-#~ msgid "The connection was lost because the server took too long to respond."
-#~ msgstr ""
-#~ "S'ha perdut la connexió perquè el servidor ha trigat molt en respondre."
-
-#~ msgid "Invalid Address"
-#~ msgstr "Adreça invàlida"
-
-#~ msgid "Invalid address."
-#~ msgstr "Adreça invàlida."
-
-#~ msgid "The address you entered is not valid."
-#~ msgstr "L'adreça que heu entrat no és vàlida."
-
-#~ msgid "“%s” Redirected Too Many Times"
-#~ msgstr "«%s» ha redireccionat massa vegades"
-
-#~ msgid "This page cannot load because of a problem with the Web site."
-#~ msgstr ""
-#~ "No es pot carregar la pàgina perquè hi ha un problema amb el seu lloc web."
-
-#~ msgid "The server “%s” is redirecting in a way that will never complete."
-#~ msgstr ""
-#~ "El servidor «%s» fa servir un mètode de redirecció que provocarà que no "
-#~ "es completi mai."
-
-#~ msgid "“%s” Requires an Encrypted Connection"
-#~ msgstr "«%s» requereix una connexió xifrada"
-
-#~ msgid "“%s” requires an encrypted connection."
-#~ msgstr "«%s» requereix una connexió xifrada."
-
-#~ msgid ""
-#~ "The document could not be loaded because encryption support is not "
-#~ "installed."
-#~ msgstr ""
-#~ "No s'ha pogut carregar el document perquè no heu instal·lat el suport per "
-#~ "al xifratge."
-
-#~ msgid "“%s” Dropped the Connection"
-#~ msgstr "«%s» ha tancat la connexió"
-
-#~ msgid "“%s” dropped the connection."
-#~ msgstr "«%s» ha tancat la connexió."
-
-#~ msgid "The server dropped the connection before any data could be read."
-#~ msgstr "El servidor ha tancat la connexió abans de poder llegir cap dada."
-
-#~ msgid "Cannot Load Document Whilst Working Offline"
-#~ msgstr "No es pot carregar el document mentre s'està desconnectat"
-
-#~ msgid "Cannot load document whilst working offline."
-#~ msgstr "No es pot carregar el document mentre s'està desconnectat."
-
-#~ msgid "To view this document, disable “Work Offline” and try again."
-#~ msgstr ""
-#~ "Per veure aquest document, inhabiliteu «Treballa desconnectat» i torneu-"
-#~ "ho a provar."
-
-#~ msgid "Access Denied to Port “%d” of “%s”"
-#~ msgstr "S'ha denegat l'accés al port «%d» de «%s»"
-
-#~ msgid "Access denied to port “%d” of “%s”."
-#~ msgstr "S'ha denegat l'accés al port «%d» de «%s»."
-
-#~ msgid ""
-#~ "This address uses a network port which is normally used for purposes "
-#~ "other than Web browsing."
-#~ msgstr ""
-#~ "Aquesta adreça fa servir un port de xarxa que normalment es fa servir per "
-#~ "a fins diferents als de navegar."
-
-#~ msgid "The request has been cancelled for your protection."
-#~ msgstr "S'ha cancel·lat la sol·licitud per motius de seguretat."
-
-#~ msgid "Could not Connect to Proxy Server"
-#~ msgstr "No s'ha pogut connectar amb el servidor intermediari"
-
-#~ msgid "Could not connect to proxy server."
-#~ msgstr "No s'ha pogut connectar amb el servidor intermediari."
-
-#~ msgid ""
-#~ "Check your proxy server settings. If the connection still fails, there "
-#~ "may be a problem with your proxy server or your network connection."
-#~ msgstr ""
-#~ "Comproveu la configuració del vostre servidor intermediari. Si la "
-#~ "connexió encara falla, pot ser un problema amb el vostre servidor "
-#~ "intermediari o la vostra connexió de xarxa."
-
-#~ msgid "Could not Display Content"
-#~ msgstr "No s'ha pogut mostrar el contingut"
-
-#~ msgid "Could not display content."
-#~ msgstr "No s'ha pogut mostrar el contingut."
-
-#~ msgid "The page uses an unsupported or invalid form of compression."
-#~ msgstr ""
-#~ "La pàgina utilitza una forma de compressió no compatible o invàlida."
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "en la memòria cau del Google"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "a l'Internet Archive (l'arxiu d'Internet)"
-
-#~ msgid "_Abort Script"
-#~ msgstr "_Interromp la seqüència"
-
-#~ msgid "Don't Save"
-#~ msgstr "No desis"
-
-#~ msgid "Text files"
-#~ msgstr "Fitxers de text"
-
-#~ msgid "XML files"
-#~ msgstr "Fitxers XML"
-
-#~ msgid "XUL files"
-#~ msgstr "Fitxers XUL"
-
-#~ msgid "Accept cookie from %s?"
-#~ msgstr "Voleu acceptar la galeta de %s?"
-
-#~ msgid "Accept Cookie?"
-#~ msgstr "Voleu acceptar la galeta?"
-
-#~ msgid "The site wants to modify an existing cookie."
-#~ msgstr "El lloc vol modificar una galeta que ja existeix."
-
-#~ msgid "The site wants to set a cookie."
-#~ msgstr "Aquest lloc vol establir una galeta."
-
-#~ msgid "The site wants to set a second cookie."
-#~ msgstr "Aquest lloc vol establir una segona galeta."
-
-#~ msgid "You already have %d cookie from this site."
-#~ msgid_plural "You already have %d cookies from this site."
-#~ msgstr[0] "Ja teniu %d galeta d'aquest lloc."
-#~ msgstr[1] "Ja teniu %d galetes d'aquest lloc."
-
-#~ msgid "Apply this _decision to all cookies from this site"
-#~ msgstr "Aplica la mateixa _decisió a totes les galetes d'aquest lloc"
-
-#~ msgid "_Reject"
-#~ msgstr "_Rebutja"
-
-#~ msgid "_Accept"
-#~ msgstr "_Accepta"
-
-#~ msgid "The web site “%s” requests that you sign the following text:"
-#~ msgstr "El lloc web «%s» us demana que signeu el següent text:"
-
-#~ msgid "_Sign text"
-#~ msgstr "_Signa el text"
-
-#~ msgid "Print this page?"
-#~ msgstr "Voleu imprimir aquesta pàgina?"
-
-#~ msgid "Preparing to print"
-#~ msgstr "S'està preparant per a imprimir"
-
-#~ msgid "Page %d of %d"
-#~ msgstr "Pàgina %d de %d"
-
-#~ msgid "Cancelling print"
-#~ msgstr "S'està cancel·lant la impressió"
-
-#~ msgid "Spooling..."
-#~ msgstr "S'està enviant..."
-
-#~ msgid "Print error"
-#~ msgstr "S'ha produït un error en la impressió"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "S'està imprimint «%s»"
-
-#~ msgid "_Select Certificate"
-#~ msgstr "_Selecciona el certificat"
-
-#~ msgid "Choose a certificate to present as identification to “%s”."
-#~ msgstr ""
-#~ "Escolliu un certificat que es presentarà com a identificació per a «%s»."
-
-#~ msgid "Select a certificate to identify yourself."
-#~ msgstr "Seleccioneu un certificat per a identificar-vos."
-
-#~ msgid "Certificate _Details"
-#~ msgstr "_Detalls del certificat"
-
-#~ msgid ""
-#~ "The site “%s” returned security information for “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "El lloc «%s» ha retornat informació de seguretat de «%s». És possible que "
-#~ "algú estigui interceptant la comunicació per a obtenir la vostra "
-#~ "informació confidencial."
-
-#~ msgid ""
-#~ "You should only accept the security information if you trust “%s” and "
-#~ "“%s”."
-#~ msgstr ""
-#~ "Només hauríeu d'acceptar la informació de seguretat si confieu en «%s» i "
-#~ "«%s»."
-
-#~ msgid "Accept incorrect security information?"
-#~ msgstr "Voleu acceptar una informació de seguretat incorrecta?"
-
-#~ msgid ""
-#~ "It was not possible to automatically trust “%s”. It is possible that "
-#~ "someone is intercepting your communication to obtain your confidential "
-#~ "information."
-#~ msgstr ""
-#~ "No s'ha pogut confiar en «%s» automàticament. És possible que algú "
-#~ "estigui interceptant la comunicació per a obtenir informació confidencial "
-#~ "vostra."
-
-#~ msgid ""
-#~ "You should only connect to the site if you are certain you are connected "
-#~ "to “%s”."
-#~ msgstr ""
-#~ "Només hauríeu de connectar amb el lloc si esteu segur que esteu connectat "
-#~ "a «%s»."
-
-#~ msgid "Connect to untrusted site?"
-#~ msgstr "Voleu connectar a un lloc que no és de confiança?"
-
-#~ msgid "_Trust this security information from now on"
-#~ msgstr "Confia en aques_ta informació de seguretat a partir d'ara"
-
-#~ msgid "Co_nnect"
-#~ msgstr "Co_nnecta"
-
-#~ msgid "Accept expired security information?"
-#~ msgstr "Voleu acceptar la informació caducada de seguretat?"
-
-#~ msgid "The security information for “%s” expired on %s."
-#~ msgstr "La informació de seguretat per a «%s» va vèncer el %s."
-
-#~ msgid "Accept not yet valid security information?"
-#~ msgstr "Voleu acceptar la informació de seguretat no vàlida encara?"
-
-#~ msgid "The security information for “%s” isn't valid until %s."
-#~ msgstr "La informació de seguretat per a «%s» no és vàlida fins el %s."
-
-#~ msgid "%a %d %b %Y"
-#~ msgstr "%A, %d de %B del %Y "
-
-#~ msgid "You should ensure that your computer's time is correct."
-#~ msgstr "Assegureu-vos que l'hora del vostre ordinador és correcta."
-
-#~ msgid "Cannot establish connection to “%s”"
-#~ msgstr "No es pot establir connexió amb «%s»."
-
-#~ msgid ""
-#~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
-#~ "\n"
-#~ "Please ask your system administrator for assistance."
-#~ msgstr ""
-#~ "S'ha d'actualitzar la llista de rebuig de certificats (CRL) de «%s».\n"
-#~ "\n"
-#~ "Demaneu assistència al vostre administrador de sistema."
-
-#~ msgid "Trust new Certificate Authority?"
-#~ msgstr "Voleu confiar en la nova entitat de certificació?"
-
-#~ msgid "_Trust CA"
-#~ msgstr "_Confia en l'entitat de certificació"
-
-#~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
-#~ msgstr ""
-#~ "Voleu confiar en la nova entitat de certificació «%s» per a identificar "
-#~ "llocs web?"
-
-#~ msgid ""
-#~ "Before trusting a Certificate Authority (CA) you should verify the "
-#~ "certificate is authentic."
-#~ msgstr ""
-#~ "Abans de confiar en una entitat de certificació (CA) hauríeu de verificar "
-#~ "que el certificat és autèntic."
-
-#~ msgid "Certificate already exists."
-#~ msgstr "El certificat ja existeix."
-
-#~ msgid "Select Password"
-#~ msgstr "Seleccioneu una contrasenya"
-
-#~ msgid "Select a password to protect this certificate"
-#~ msgstr "Seleccioneu una contrasenya per a protegir aquest certificat"
-
-#~ msgid "Enter the password for this certificate"
-#~ msgstr "Introduïu la contrasenya per a aquest certificat"
-
-#~ msgid "Certificate Revocation List Imported"
-#~ msgstr "S'ha importat la llista de rebuig de certificats"
-
-#~ msgid "Certificate Revocation List (CRL) successfully imported"
-#~ msgstr ""
-#~ "S'ha importat correctament la llista de rebuig de certificats (CRL)."
-
-#~ msgid "Unit:"
-#~ msgstr "Unitat:"
-
-#~ msgid "Next Update:"
-#~ msgstr "Actualització següent:"
-
-#~ msgid "Not part of certificate"
-#~ msgstr "No forma part del certificat"
-
-#~ msgid "This certificate has been verified for the following uses:"
-#~ msgstr "S'ha verificat aquest certificat per als següents usos:"
-
-#~ msgid "Could not verify this certificate because it has been revoked."
-#~ msgstr "No s'ha pogut verificar aquest certificat perquè s'ha rebutjat."
-
-#~ msgid "Could not verify this certificate because it has expired."
-#~ msgstr "No s'ha pogut verificar aquest certificat perquè ha caducat."
-
-#~ msgid "Could not verify this certificate because it is not trusted."
-#~ msgstr "No s'ha pogut verificar aquest certificat perquè no està verificat."
-
-#~ msgid "Could not verify this certificate because the issuer is not trusted."
-#~ msgstr ""
-#~ "No s'ha pogut verificar aquest certificat perquè l'emissor no està "
-#~ "verificat."
-
-#~ msgid "Could not verify this certificate because the issuer is unknown."
-#~ msgstr ""
-#~ "No s'ha pogut verificar aquest certificat perquè no es coneix l'emissor."
-
-#~ msgid ""
-#~ "Could not verify this certificate because the CA certificate is invalid."
-#~ msgstr ""
-#~ "No s'ha pogut verificar aquest certificat perquè el certificat de l'EC no "
-#~ "és vàlid."
-
-#~ msgid "Could not verify this certificate for unknown reasons."
-#~ msgstr "No s'ha pogut verificar el certificat per motius desconeguts."
-
-#~ msgid "Change Token Password"
-#~ msgstr "Canvia la contrasenya del medi d'autenticació"
-
-#~ msgid "Choose a password for the “%s” token"
-#~ msgstr "Seleccioneu una contrasenya per al medi d'autenticació «%s»"
-
-#~ msgid "Change the password for the “%s” token"
-#~ msgstr "Canvieu la contrasenya per al medi d'autenticació «%s»"
-
-#~ msgid "Get Token Password"
-#~ msgstr "Obteniu la contrasenya del medi d'autenticació"
-
-#~ msgid "Please enter the password for the “%s” token"
-#~ msgstr "Introduïu la contrasenya per al medi d'autenticació «%s»"
-
-#~ msgid "Please select a token:"
-#~ msgstr "Seleccioneu un medi d'autenticació:"
-
-#~ msgid "_Select"
-#~ msgstr "_Selecciona"
-
-# FIXME (avalar? - dpm)
-#~ msgid "Escrow the secret key?"
-#~ msgstr "Voleu oferir en custòdia la clau privada?"
-
-#~ msgid ""
-#~ "The certificate authority “%s” requests that you give it a copy of the "
-#~ "newly generated secret key.\n"
-#~ "\n"
-#~ "This will enable the certificate authority read any communications "
-#~ "encrypted with this key without your knowledge or consent.\n"
-#~ "\n"
-#~ "It is strongly recommended not to allow it."
-#~ msgstr ""
-#~ "L'autoritat del certificat «%s» demana que li doneu una còpia de la clau "
-#~ "secreta acabada de generar.\n"
-#~ "\n"
-#~ "Això permetrà a l'autoritat del certificat llegir qualsevol comunicació "
-#~ "encriptada amb aquesta clau sense el vostre coneixement o consentiment.\n"
-#~ "\n"
-#~ "Es recomana fermament no permetre-ho."
-
-#~ msgid "Generating Private Key."
-#~ msgstr "S'està generant la clau privada."
-
-#~ msgid ""
-#~ "Please wait while a new private key is generated. This process could take "
-#~ "a few minutes."
-#~ msgstr ""
-#~ "Espereu mentre es genera una nova clau privada. Aquest procés pot trigar "
-#~ "uns quants minuts."
-
-#~ msgid "Security Notice"
-#~ msgstr "Informació de seguretat"
-
-#~ msgid "This page is loaded over a secure connection"
-#~ msgstr "Aquesta pàgina es carrega a través d'una connexió segura"
-
-#~ msgid ""
-#~ "For secure pages, the address entry has a distinct color and a locked "
-#~ "padlock icon is displayed.\n"
-#~ "\n"
-#~ "The padlock icon in the statusbar also indicates whether a page is secure."
-#~ msgstr ""
-#~ "En les pàgines segures, el quadre d'entrada d'adreces té un color "
-#~ "diferent i també es mostra una icona amb un cadenat tancat.\n"
-#~ "\n"
-#~ "La icona del cadenat en la barra d'estat també indica si la pàgina és "
-#~ "segura."
-
-#~ msgid "Security Warning"
-#~ msgstr "Avís de seguretat"
-
-#~ msgid "This page is loaded over a low security connection"
-#~ msgstr "Aquesta pàgina es carrega a través d'una connexió segura"
-
-#~ msgid ""
-#~ "Any information you see or enter on this page could easily be intercepted "
-#~ "by a third party."
-#~ msgstr ""
-#~ "Qualsevol informació que veieu o introduïu pot ser interceptada per un "
-#~ "tercer"
-
-#~ msgid "Some parts of this page are loaded over an insecure connection"
-#~ msgstr ""
-#~ "Algunes parts d'aquesta pàgina es carreguen a través d'una connexió no "
-#~ "segura"
-
-#~ msgid ""
-#~ "Some information you see or enter will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "Certa informació que veieu o introduïu serà enviada a través d'una "
-#~ "connexió no segura i pot ser interceptada fàcilment per un tercer."
-
-#~ msgid "Send this information over an insecure connection?"
-#~ msgstr "Voleu enviar aquesta informació a través d'una connexió no segura?"
-
-#~ msgid ""
-#~ "The information you have entered will be sent over an insecure "
-#~ "connection, and could easily be intercepted by a third party."
-#~ msgstr ""
-#~ "La informació que introduïu serà enviada a través d'una connexió no "
-#~ "segura i pot ser interceptada fàcilment per un tercer."
-
-#~ msgid "_Send"
-#~ msgstr "_Envia"
-
-#~ msgid ""
-#~ "Although this page was loaded over a secure connection, the information "
-#~ "you have entered will be sent over an insecure connection, and could "
-#~ "easily be intercepted by a third party."
-#~ msgstr ""
-#~ "Tot i que aquesta pàgina s'ha carregat a través d'una connexió segura, la "
-#~ "informació que heu introduït s'enviarà a través d'una connexió no segura, "
-#~ "i podria ser interceptada fàcilment per un tercer."
-
-#~ msgid "Opening %s"
-#~ msgstr "S'està obrint %s"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "S'està obrint %d element"
-#~ msgstr[1] "S'estan obrint %d elements"
-
-#~ msgid "Unsafe protocol."
-#~ msgstr "Protocol insegur."
-
-#~ msgid ""
-#~ "The address has not been loaded, because it refers to an unsafe protocol "
-#~ "and thereby presents a security risk to your system."
-#~ msgstr ""
-#~ "L'adreça no s'ha carregat, perquè fa referència a un protocol insegur i "
-#~ "per tant presenta un risc de seguretat per al vostre sistema."
-
-#~ msgid "No address found."
-#~ msgstr "No s'ha trobat cap adreça."
-
-#~ msgid "No web address could be found in this file."
-#~ msgstr "No s'ha trobat cap adreça web en aquest fitxer."
-
-#~ msgid "Epiphany Desktop File Plugin"
-#~ msgstr "Connector de fitxer d'escriptori de l'Epiphany"
-
-#~ msgid ""
-#~ "This plugin handles “.desktop” and “.url” files containing web links."
-#~ msgstr ""
-#~ "Aquest connector gestiona els fitxers «.desktop» i «.url» que contenen "
-#~ "enllaços web."
-
-#~ msgid ""
-#~ "The page “%s” in this tab was not fully loaded yet when the web browser "
-#~ "crashed; it could have caused the crash."
-#~ msgstr ""
-#~ "La pàgina «%s» en aquesta pestanya no es va carregar del tot quan el "
-#~ "navegador va fallar; potser fou el motiu de la fallada."
-
-#~ msgid "Title a_nd Address"
-#~ msgstr "Tít_ol i adreça"
-
-#~ msgid ""
-#~ "Hide the menubar by default. The menubar can still be accessed using F10."
-#~ msgstr ""
-#~ "Oculta la barra de menús per defecte. Encara es pot accedir a la barra de "
-#~ "menús utilitzant F10."
-
-#~ msgid "Quick Bookmark"
-#~ msgstr "Adreça d'interès ràpida"
-
-#~ msgid "Quick Topic"
-#~ msgstr "Tema ràpid"
-
-# FIXME: Candau és un castellanisme (josep)
-#~ msgid ""
-#~ "The padlock icon in the statusbar indicates whether a page is secure."
-#~ msgstr ""
-#~ "La icona del cadenat a la barra d'estat indica si una pàgina és segura."
-
-#~ msgid "_View Certificate..."
-#~ msgstr "_Visualitza el certificat..."
-
-#~ msgid "“%s” redirected too many times."
-#~ msgstr "«%s» ha redireccionat massa vegades."
-
-#~ msgid "_Import Bookmarks..."
-#~ msgstr "_Importa adreces d'interès..."
-
-#~ msgid "_Export Bookmarks..."
-#~ msgstr "_Exporta adreces d'interès..."
-
-#~ msgid "_Other..."
-#~ msgstr "_Altres..."
-
-#~ msgid "URL ..."
-#~ msgstr "URL..."
-
-#~ msgid "_Open..."
-#~ msgstr "_Obre..."
-
-#~ msgid "Save _As..."
-#~ msgstr "_Anomena i desa..."
-
-#~ msgid "Print Set_up..."
-#~ msgstr "Config_uració d'impressió..."
-
-#~ msgid "_Print..."
-#~ msgstr "_Imprimeix..."
-
-#~ msgid "_Find..."
-#~ msgstr "_Cerca..."
-
-#~ msgid "_Save Link As..."
-#~ msgstr "Anomena i de_sa l'enllaç..."
-
-#~ msgid "_Save Image As..."
-#~ msgstr "Anomena i de_sa la imatge..."
-
-#~ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
-#~ msgstr "<epiphany-list@gnome.org> o <gnome-doc-list@gnome.org>"
-
-#~ msgid "H_istory"
-#~ msgstr "H_istorial"
-
-#~ msgid "DYNAMIC"
-#~ msgstr "Dinàmic"
-
-#~ msgid "<b>Colors</b>"
-#~ msgstr "<b>Colors</b>"
-
-#~ msgid "C_olor"
-#~ msgstr "C_olor"
-
-#~ msgid "_Grayscale"
-#~ msgstr "Escala de _grisos"
-
-#~ msgid "Please ask your system administrator for assistance."
-#~ msgstr "Demaneu ajut a l'administrador del vostre sistema."
-
-#~ msgid "_Back Up Certificate"
-#~ msgstr "_Fes una còpia de seguretat del certificat"
-
-#~ msgid "I_mport Certificate"
-#~ msgstr "I_mporta certificat"
-
-#~ msgid "Password required."
-#~ msgstr "Es necessita contrasenya."
-
-#~ msgid "Generating PDF is not supported"
-#~ msgstr "No es pot generar un PDF"
-
-#~ msgid "Printing is not supported on this printer"
-#~ msgstr "No es pot imprimir en aquesta impressora"
-
-#~ msgid ""
-#~ "You were trying to print to a printer using the “%s” driver. This program "
-#~ "requires a PostScript printer driver."
-#~ msgstr ""
-#~ "Heu intentat imprimir a una impressora utilitzant el controlador \"%s\". "
-#~ "Aquest programa necessita un controlador d'impressora PostScript."
-
-#~ msgid "_From:"
-#~ msgstr "_Des de:"
-
-#~ msgid "Sets the start of the range of pages to be printed"
-#~ msgstr "Estableix l'inici del rang de pàgines que s'imprimiran"
-
-#~ msgid "_To:"
-#~ msgstr "_A:"
-
-#~ msgid "Sets the end of the range of pages to be printed"
-#~ msgstr "Estableix la fi del rang de pàgines que s'imprimiran"
-
-#~ msgid "Pages"
-#~ msgstr "Pàgines"
-
-#~ msgid "Using “%s” backend"
-#~ msgstr "S'està fent servir \"%s\""
-
-#~ msgid "Properties"
-#~ msgstr "Propietats"
-
-#~ msgid "_Create New"
-#~ msgstr "_Crea'n un de nou"
-
-#~ msgid "_View Properties"
-#~ msgstr "_Visualitza les propietats"
-
-#~ msgid "T_oolbars"
-#~ msgstr "B_arres d'eines"
-
-#~ msgid "Autowrap for find in page"
-#~ msgstr "Torna al començament automàticament per cercar a la pàgina"
-
-#~ msgid ""
-#~ "For find in page, whether to start again at the beginning after reaching "
-#~ "the end of the page."
-#~ msgstr ""
-#~ "En cercar dins la pàgina, si s'ha de començar una altra vegada després "
-#~ "d'arribar al final."
-
-#~ msgid "Match case for find in page"
-#~ msgstr "Considera diferents majúscules i minúscules en cercar a la pàgina"
-
-#~ msgid "Download Manager"
-#~ msgstr "Gestor de baixades"
-
-#~ msgid "Personal Data Manager"
-#~ msgstr "Gestor de dades personals"
-
-#~ msgid "_Next"
-#~ msgstr "Següe_nt"
-
-#~ msgid "_Previous"
-#~ msgstr "_Anterior"
-
-#~ msgid "_Wrap around"
-#~ msgstr "_Torna al principi"
-
-#~ msgid "Al_ways use the desktop theme colors"
-#~ msgstr "_Utilitza sempre els colors del tema de l'escriptori"
-
-#~ msgid "Always use _these fonts"
-#~ msgstr "U_tilitza sempre aquests tipus de lletra"
-
-#~ msgid "Appearance"
-#~ msgstr "Aparença"
-
-#~ msgid "Paper"
-#~ msgstr "Paper"
-
-#~ msgid ""
-#~ "This document cannot be viewed in offline mode. Set Epiphany to “online” "
-#~ "and try again."
-#~ msgstr ""
-#~ "Aquest document no es pot visualitzar en mode desconnectat. Establiu "
-#~ "l'Epiphany a “connectat” i proveu de nou."
-
-#~ msgid "File %s is not writable"
-#~ msgstr "No es pot escriure en el fitxer %s"
-
-#~ msgid "You do not have permission to overwrite this file."
-#~ msgstr "No teniu permís per a sobreescriure aquest fitxer."
-
-#~ msgid "File not writable"
-#~ msgstr "No es pot escriure el fitxer"
-
-#~ msgid "Overwrite \"%s\"?"
-#~ msgstr "Voleu sobreescriure \"%s\"?"
-
-#~ msgid "_Overwrite"
-#~ msgstr "S_obreescriu"
-
-#~ msgid "Move _Left"
-#~ msgstr "Mou a _l'esquerra"
-
-#~ msgid "Move Ri_ght"
-#~ msgstr "Mou a la d_reta"
-
-#~ msgid "_Show in bookmarks bar"
-#~ msgstr "Mo_stra a la barra d'adreces d'interès"
-
-#~ msgid "_Show in Bookmarks Bar"
-#~ msgstr "Mo_stra a la barra d'adreces d'interès"
-
-#~ msgid "Empty"
-#~ msgstr "Buit"
-
-#~ msgid "Run in full screen mode"
-#~ msgstr "Executa en mode pantalla completa"
-
-#~ msgid "Add a bookmark (don't open any window)"
-#~ msgstr "Afegeix una adreça d'interès (no obris cap finestra)"
-
-#~ msgid ""
-#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
-#~ "server files."
-#~ msgstr ""
-#~ "El Bonobo no ha pogut localitzar el fitxer GNOME_Epiphany_Automation. "
-#~ "Podeu fer servir bonobo-activation-sysconf per configurar el camí de "
-#~ "cerca dels fitxers del servidor bonobo."
-
-#~ msgid ""
-#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
-#~ "attempting to register the automation server"
-#~ msgstr ""
-#~ "No es pot usar l'Epiphany degut a un error inesperat del Bonobo en "
-#~ "intentar registrar el servidor de reconversió"
-
-#~ msgid ""
-#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
-#~ "attempting to locate the automation object."
-#~ msgstr ""
-#~ "No es pot usar l'Epiphany degut a un error inesperat del Bonobo en "
-#~ "intentar localitzar l'objecte de reconversió."
-
-#~ msgid "Loading %s..."
-#~ msgstr "S'està carregant %s..."
-
-#~ msgid "Go back"
-#~ msgstr "Vés endarrere"
-
-#~ msgid "Go forward"
-#~ msgstr "Vés endavant"
-
-#~ msgid "Up"
-#~ msgstr "Amunt"
-
-#~ msgid "S_end To..."
-#~ msgstr "_Envia a..."
-
-#~ msgid "_Bookmarks Bar"
-#~ msgstr "_Barra d'adreces d'interès"
-
-#~ msgid "_Save Background As..."
-#~ msgstr "Anomena i de_sa el fons..."
-
-#~ msgid "Save Background As"
-#~ msgstr "Anomena i desa el fons"
-
-#~ msgid "Check this out!"
-#~ msgstr "Què et sembla!"
-
-#~ msgid "Enable Java."
-#~ msgstr "Habilita el Java."
-
-#~ msgid "Enable JavaScript."
-#~ msgstr "Habilita el JavaScript."
-
-#~ msgid "Filename to print to"
-#~ msgstr "Nom del fitxer on imprimir"
-
-#~ msgid "Filename to print to."
-#~ msgstr "Nom del fitxer on imprimir."
-
-#~ msgid "Match case for find in page."
-#~ msgstr "Considera diferents majúscules i minúscules en cercar a la pàgina."
-
-#~ msgid "Paper type"
-#~ msgstr "Tipus de paper"
-
-#~ msgid ""
-#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
-#~ "\"Executive\"."
-#~ msgstr ""
-#~ "Tipus de paper. Els valors acceptats són \"A4\", \"Letter\", \"Legal\" i "
-#~ "\"Executive\"."
-
-#~ msgid "Printer name"
-#~ msgstr "Nom de la impressora"
-
-#~ msgid "Printer name."
-#~ msgstr "Nom de la impressora."
-
-#~ msgid "Printing bottom margin"
-#~ msgstr "Marge inferior d'impressió"
-
-#~ msgid "Printing bottom margin (in mm)."
-#~ msgstr "Marge inferior d'impressió (en mm)."
-
-#~ msgid "Printing left margin"
-#~ msgstr "Marge esquerre d'impressió"
-
-#~ msgid "Printing left margin (in mm)."
-#~ msgstr "Marge esquerre d'impressió (en mm)."
-
-#~ msgid "Printing right margin"
-#~ msgstr "Marge dret d'impressió"
-
-#~ msgid "Printing right margin (in mm)."
-#~ msgstr "Marge dret d'impressió (en mm)."
-
-#~ msgid "Printing top margin (in mm)."
-#~ msgstr "Marge superior d'impressió (en mm)."
-
-#~ msgid "Show bookmarks bar by default."
-#~ msgstr "Mostra la barra d'adreces d'interès per defecte."
-
-#~ msgid "Show statusbar by default."
-#~ msgstr "Mostra la barra d'estat per defecte."
-
-#~ msgid "Show toolbars by default."
-#~ msgstr "Mostra les barres d'eines per defecte."
-
-#~ msgid "The path of the folder where downloads are saved."
-#~ msgstr "El camí de la carpeta on es desen les baixades."
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer."
-#~ msgstr ""
-#~ "Si s'imprimiran els números de pàgina (x del total) al peu de pàgina."
-
-#~ msgid "<b>Margins (in mm)</b>"
-#~ msgstr "<b>Marges (en mm)</b>"
-
-#~ msgid "<b>Orientation</b>"
-#~ msgstr "<b>Orientació</b>"
-
-#~ msgid "<b>Page Range</b>"
-#~ msgstr "<b>Rang de pàgines</b>"
-
-#~ msgid "<b>Print To</b>"
-#~ msgstr "<b>Imprimeix a</b>"
-
-#~ msgid "A_4"
-#~ msgstr "A_4"
-
-#~ msgid "E_xecutive"
-#~ msgstr "E_xecutive"
-
-#~ msgid "L_egal"
-#~ msgstr "L_egal"
-
-#~ msgid "Lan_dscape"
-#~ msgstr "Horit_zontal"
-
-#~ msgid "P_rinter:"
-#~ msgstr "Imp_ressora:"
-
-#~ msgid "_All pages"
-#~ msgstr "Tot_es les pàgines"
-
-#~ msgid "_Bottom:"
-#~ msgstr "_Al capdavall:"
-
-#~ msgid "_Browse..."
-#~ msgstr "Na_vega..."
-
-#~ msgid "_File:"
-#~ msgstr "_Fitxer:"
-
-#~ msgid "_Left:"
-#~ msgstr "Es_querra:"
-
-#~ msgid "_Letter"
-#~ msgstr "_Letter"
-
-#~ msgid "_Right:"
-#~ msgstr "D_reta:"
-
-#~ msgid "_to:"
-#~ msgstr "_fins a:"
-
-#~ msgid "Open this file with \"%s\"?"
-#~ msgstr "Voleu obrir aquest fitxer amb \"%s\"?"
-
-#~ msgid ""
-#~ "It's not possible to view this file type directly in the browser. You can "
-#~ "open it with \"%s\" or save it."
-#~ msgstr ""
-#~ "No es pot visualitzar aquest tipus de fitxer directament en el navegador. "
-#~ "Podeu obrir-lo amb \"%s\" o desar-lo."
-
-#~ msgid ""
-#~ "It's not possible to view this file because there is no application "
-#~ "installed that can open it. You can save it instead."
-#~ msgstr ""
-#~ "No es pot visualitzar aquest tipus de fitxer perquè no hi ha cap "
-#~ "aplicació instal·lada que el pugui obrir. En canvi, podeu desar-lo."
-
-#~ msgid "_Don't show this message again for this site"
-#~ msgstr "No tornis a mostrar a_quest missatge per a aquest lloc"
-
-#~ msgid "Trust \"%s\" to identify:"
-#~ msgstr "Confieu en \"%s\" per identificar:"
-
-#~ msgid "Postscript files"
-#~ msgstr "Fitxers Postscript"
-
-#~ msgid "Failed to find %s"
-#~ msgstr "No s'ha pogut trobar %s"
-
-#~ msgid "select fonts for|Unicode"
-#~ msgstr "Unicode"
-
-#~ msgid "Ephy"
-#~ msgstr "Ephy"
-
-#~ msgid "toolbar style|Icons only"
-#~ msgstr "Només icones"
-
-#~ msgid "toolbar style|Text only"
-#~ msgstr "Només text"
-
-#~ msgid "Toggle network status"
-#~ msgstr "Commuta l'estat de la xarxa"
-
-#~ msgid "Afrikaans"
-#~ msgstr "Africà"
-
-#~ msgid "Arabic"
-#~ msgstr "Àrab"
-
-#~ msgid "Azerbaijani"
-#~ msgstr "Àzeri"
-
-#~ msgid "Byelorussian"
-#~ msgstr "Bielorús"
-
-#~ msgid "Bulgarian"
-#~ msgstr "Búlgar"
-
-#~ msgid "Breton"
-#~ msgstr "Bretó"
-
-#~ msgid "Catalan"
-#~ msgstr "Català"
-
-#~ msgid "Czech"
-#~ msgstr "Txec"
-
-#~ msgid "Danish"
-#~ msgstr "Danès"
-
-#~ msgid "German"
-#~ msgstr "Alemany"
-
-#~ msgid "English"
-#~ msgstr "Anglès"
-
-#~ msgid "Greek"
-#~ msgstr "Grec"
-
-#~ msgid "Esperanto"
-#~ msgstr "Esperanto"
-
-#~ msgid "Spanish"
-#~ msgstr "Espanyol"
-
-#~ msgid "Estonian"
-#~ msgstr "Estonià"
-
-#~ msgid "Basque"
-#~ msgstr "Basc"
-
-#~ msgid "Faeroese"
-#~ msgstr "Feroès"
-
-#~ msgid "French"
-#~ msgstr "Francès"
-
-#~ msgid "Irish"
-#~ msgstr "Irlandès"
-
-#~ msgid "Scots Gaelic"
-#~ msgstr "Gaèlic escocès"
-
-#~ msgid "Galician"
-#~ msgstr "Gallec"
-
-#~ msgid "Hebrew"
-#~ msgstr "Hebreu"
-
-#~ msgid "Croatian"
-#~ msgstr "Croat"
-
-#~ msgid "Hungarian"
-#~ msgstr "Hongarès"
-
-#~ msgid "Indonesian"
-#~ msgstr "Indonesi"
-
-#~ msgid "Icelandic"
-#~ msgstr "Islandès"
-
-#~ msgid "Italian"
-#~ msgstr "Italià"
-
-#~ msgid "Japanese"
-#~ msgstr "Japonès"
-
-#~ msgid "Korean"
-#~ msgstr "Coreà"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Lituà"
-
-#~ msgid "Latvian"
-#~ msgstr "Letó"
-
-#~ msgid "Macedonian"
-#~ msgstr "Macedoni"
-
-#~ msgid "Malay"
-#~ msgstr "Malai"
-
-#~ msgid "Dutch"
-#~ msgstr "Holandès"
-
-#~ msgid "Norwegian/Bokmal"
-#~ msgstr "Noruec/danonoruec"
-
-#~ msgid "Norwegian/Nynorsk"
-#~ msgstr "Noruec/neonoruec"
-
-#~ msgid "Norwegian"
-#~ msgstr "Noruec"
-
-#~ msgid "Polish"
-#~ msgstr "Polonès"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portuguès"
-
-#~ msgid "Portuguese of Brazil"
-#~ msgstr "Portuguès de Brasil"
-
-#~ msgid "Romanian"
-#~ msgstr "Romanès"
-
-#~ msgid "Russian"
-#~ msgstr "Rus"
-
-#~ msgid "Slovak"
-#~ msgstr "Eslovac"
-
-#~ msgid "Slovenian"
-#~ msgstr "Eslovè"
-
-#~ msgid "Albanian"
-#~ msgstr "Albanès"
-
-#~ msgid "Serbian"
-#~ msgstr "Serbi"
-
-#~ msgid "Swedish"
-#~ msgstr "Suec"
-
-#~ msgid "Tamil"
-#~ msgstr "Tàmil"
-
-#~ msgid "Turkish"
-#~ msgstr "Turc"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ucraïnès"
-
-#~ msgid "Vietnamese"
-#~ msgstr "Vietnamita"
-
-#~ msgid "Walloon"
-#~ msgstr "Való"
-
-#~ msgid "Chinese"
-#~ msgstr "Xinès"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Xinès simplificat"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Xinès tradicional"
-
-#~ msgid "Home"
-#~ msgstr "Inici"
-
-#~ msgid "Mozilla"
-#~ msgstr "Mozilla"
