@@ -13,39 +13,63 @@ msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-17 16:28+0000\n"
-"PO-Revision-Date: 2013-03-20 22:56+0330\n"
+"POT-Creation-Date: 2013-09-27 22:05+0000\n"
+"PO-Revision-Date: 2013-10-11 16:09+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
-"Language-Team: Persian\n"
+"Language-Team: Persian <>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
 msgstr "جستجو در وب"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:5
-msgid "http://www.google.com"
-msgstr "http://www.google.com"
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. So, for a Finnish localized
+#. version of duckduckgo that will render results tailored for
+#. Finland, the string would be:
+#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#.
+#: ../data/default-bookmarks.rdf.in.h:13
+msgid "http://duckduckgo.com/?t=epiphany"
+msgstr "http://duckduckgo.com/?t=epiphany"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:10
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. For such case, the search url
+#. would be
+#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2061
+#: ../src/ephy-search-provider.c:290
 #, no-c-format
-msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-msgstr "http://www.google.com/search?hl=fa&q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:310 ../src/ephy-main.c:460 ../src/window-commands.c:1796
+#: ../data/epiphany.appdata.xml.in.h:1
+msgid ""
+"The web browser for the GNOME desktop, featuring tight integration with the "
+"desktop and a simple and intuitive user interface that allows you to focus "
+"on your web pages."
+msgstr ""
+"مرورگر وب برای رومیزی گنوم، با امکاناتی نظیر یکپارچه‌سازی کامل با رومیزی و یک "
+"رابط کاربری ساده و جذاب که به شما اجازه می‌دهد بر روی صفحات وب تمرکز کنید."
+
+#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:68
+#: ../src/ephy-main.c:320 ../src/ephy-main.c:478 ../src/window-commands.c:1787
 msgid "Web"
 msgstr "وب"
 
@@ -448,58 +472,57 @@ msgstr "اینکه آیا ستون عنوان در پنجره نشانک‌ها 
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "اینکه آیا ستون آدرس در پنجره نشانک‌ها نمایش داده شود یا خیر."
 
-#: ../embed/ephy-about-handler.c:65 ../embed/ephy-about-handler.c:68
-#: ../embed/ephy-about-handler.c:118 ../embed/ephy-about-handler.c:121
+#: ../embed/ephy-about-handler.c:144 ../embed/ephy-about-handler.c:146
 msgid "Installed plugins"
 msgstr "افزونه‌های نصب شده"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "Enabled"
 msgstr "فعال شده"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "Yes"
 msgstr "بله"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:159
 msgid "No"
 msgstr "خیر"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "MIME type"
 msgstr "نوع MIME"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "Description"
 msgstr "توضیحات"
 
-#: ../embed/ephy-about-handler.c:81 ../embed/ephy-about-handler.c:134
+#: ../embed/ephy-about-handler.c:160
 msgid "Suffixes"
 msgstr "پسوندها"
 
-#: ../embed/ephy-about-handler.c:173 ../embed/ephy-about-handler.c:176
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:223
 msgid "Memory usage"
 msgstr "استفاده حافظه"
 
-#: ../embed/ephy-about-handler.c:209 ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:303 ../embed/ephy-about-handler.c:305
 msgid "Applications"
 msgstr "برنامه‌ها"
 
-#: ../embed/ephy-about-handler.c:212
+#: ../embed/ephy-about-handler.c:306
 msgid "List of installed web applications"
 msgstr "فهرست برنامه‌های وب نصب شده"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:233
+#: ../embed/ephy-about-handler.c:327
 msgid "Installed on:"
 msgstr "نصب شده در:"
 
-#: ../embed/ephy-about-handler.c:268 ../embed/ephy-about-handler.c:270
+#: ../embed/ephy-about-handler.c:400 ../embed/ephy-about-handler.c:403
 msgid "Private Browsing"
 msgstr "مرور خصوصی"
 
-#: ../embed/ephy-about-handler.c:271
+#: ../embed/ephy-about-handler.c:404
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -509,27 +532,19 @@ msgstr ""
 "در تاریخچه مرور شما نمایش داده نمی‌شوند و تمام اطلاعات ذخیره شده هنگام بستن "
 "پنجره پاک خواهند شد."
 
-#: ../embed/ephy-embed.c:700
+#: ../embed/ephy-embed.c:487
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "دکمه %s را فشار دهید تا از حالت تمام‌صفحه خارج شوید"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:703
+#: ../embed/ephy-embed.c:490
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:703
+#: ../embed/ephy-embed.c:490
 msgid "F11"
 msgstr "F11"
-
-#: ../embed/ephy-embed.c:1090
-msgid "Web Inspector"
-msgstr "بازرس وب"
-
-#: ../embed/ephy-embed-shell.c:335
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "اپیفانی هم‌اکنون قابل استفاده نیست. مقداردهیِ اولیه شکست خورد."
 
 #: ../embed/ephy-embed-utils.c:59
 #, c-format
@@ -865,15 +880,15 @@ msgid "Most Visited"
 msgstr "بیشتر بازدید شده"
 
 #. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3696
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2757
 msgid "Blank page"
 msgstr "صفحه‌ی سفید"
 
-#: ../embed/ephy-web-view.c:525
+#: ../embed/ephy-web-view.c:495
 msgid "Not now"
 msgstr "هم‌اکنون نه"
 
-#: ../embed/ephy-web-view.c:526
+#: ../embed/ephy-web-view.c:496
 msgid "Store password"
 msgstr "ذخیره‌ی گذرواژه"
 
@@ -881,40 +896,40 @@ msgstr "ذخیره‌ی گذرواژه"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:538
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid ""
 "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
 msgstr ""
 "<big>آیا می‌خواهید گذرواژه را برای <b>%s</b> در <b>%s</b> ذخیره کنید؟ </big>"
 
-#: ../embed/ephy-web-view.c:1867
+#: ../embed/ephy-web-view.c:1364
 msgid "Deny"
 msgstr "رد شود"
 
-#: ../embed/ephy-web-view.c:1868
+#: ../embed/ephy-web-view.c:1365
 msgid "Allow"
 msgstr "اجازه داده شود"
 
-#: ../embed/ephy-web-view.c:1882
+#: ../embed/ephy-web-view.c:1375
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "صفحه‌ی <b>%s</b> می‌خواهد مکان شما را بداند."
 
-#: ../embed/ephy-web-view.c:2375
+#: ../embed/ephy-web-view.c:1704
 msgid "None specified"
 msgstr "هیچکدام مشخص نشده"
 
-#: ../embed/ephy-web-view.c:2384 ../embed/ephy-web-view.c:2402
+#: ../embed/ephy-web-view.c:1713 ../embed/ephy-web-view.c:1731
 #, c-format
 msgid "Oops! Error loading %s"
 msgstr "اوه! خطا در بار کردن %s"
 
-#: ../embed/ephy-web-view.c:2386
+#: ../embed/ephy-web-view.c:1715
 msgid "Oops! It was not possible to show this website"
 msgstr "اوه! نمایش این وبسایت غیر ممکن بود"
 
-#: ../embed/ephy-web-view.c:2387
+#: ../embed/ephy-web-view.c:1716
 #, c-format
 msgid ""
 "<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
@@ -927,16 +942,16 @@ msgstr ""
 "دیگر منتقل شده باشد. فراموش نکنید که از صحت کارکرد اتصال اینترنت خود اطمینان "
 "حاصل نمایید.</p>"
 
-#: ../embed/ephy-web-view.c:2396
+#: ../embed/ephy-web-view.c:1725
 msgid "Try again"
 msgstr "تلاش دوباره"
 
-#: ../embed/ephy-web-view.c:2404
+#: ../embed/ephy-web-view.c:1733
 msgid "Oops! This site might have caused the web browser to close unexpectedly"
 msgstr ""
 "اوه! این سایت ممکن است باعث شده باشد که مرورگر به طور غیرمنتظره خارج شود"
 
-#: ../embed/ephy-web-view.c:2406
+#: ../embed/ephy-web-view.c:1735
 #, c-format
 msgid ""
 "<p>This page was loading when the web browser closed unexpectedly.</"
@@ -947,20 +962,20 @@ msgstr ""
 "p><p>بارگذاری مجدد صفحه ممکن است این مسئله را دوباره تکرار کند. اگر این "
 "اتفاق دوباره افتاد، لطفا به برنامه‌نویسان <strong>%s</strong> گزارش دهید.</p>"
 
-#: ../embed/ephy-web-view.c:2414
+#: ../embed/ephy-web-view.c:1743
 msgid "Load again anyway"
 msgstr "به هر حال مجدد بار شود"
 
-#: ../embed/ephy-web-view.c:2420
+#: ../embed/ephy-web-view.c:1749
 #, c-format
 msgid "Oops! Something went wrong displaying %s"
 msgstr "اُخ! هنگام نمایش یک چیزی اشتباه شد %s"
 
-#: ../embed/ephy-web-view.c:2421
+#: ../embed/ephy-web-view.c:1750
 msgid "Oops!"
 msgstr "اُخ!"
 
-#: ../embed/ephy-web-view.c:2422
+#: ../embed/ephy-web-view.c:1751
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -968,28 +983,37 @@ msgstr ""
 "یک چیزی زمان نمایش این صفحه اشتباه شد. لطفا برای ادامه، دوباره بارگیری کنید "
 "یا یک صفحه دیگر باز کنید."
 
-#: ../embed/ephy-web-view.c:2906
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3203
+#: ../embed/ephy-web-view.c:2299
 #, c-format
 msgid "Loading “%s”…"
 msgstr "در حال بارگیری «%s»..."
 
-#: ../embed/ephy-web-view.c:3205
+#: ../embed/ephy-web-view.c:2301
 msgid "Loading…"
 msgstr "در حال بارگیری..."
 
-#. Translators: this is the directory name to store auxilary files
-#. * when saving html files.
-#.
-#: ../embed/ephy-web-view.c:3952
-#, c-format
-msgid "%s Files"
-msgstr "پرونده‌های %s"
+#: ../embed/ephy-web-view.c:2661 ../src/bookmarks/ephy-bookmarks-editor.c:818
+msgid "_OK"
+msgstr "_تایید"
+
+#: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
+#: ../src/bookmarks/ephy-bookmark-properties.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:815 ../src/pdm-dialog.c:343
+#: ../src/window-commands.c:992
+#| msgid "Cancel"
+msgid "_Cancel"
+msgstr "_لغو"
+
+#: ../lib/ephy-file-chooser.c:185
+#| msgid "Open"
+msgid "_Open"
+msgstr "_باز کردن"
+
+#: ../lib/ephy-file-chooser.c:194
+#| msgid "Save"
+msgid "_Save"
+msgstr "_ذخیره"
 
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
@@ -1089,11 +1113,11 @@ msgstr ""
 "گذرواژه‌ها از یک نسخه‌ی پیشین (گِکو) با یک گذرواژه‌ی اصلی قفل شده‌اند. اگر "
 "می‌خواهید اِپیفانی آن‌ها را وارد کند، لطفا گذرواژه‌ی اصلی را در زیر وارد کنید."
 
-#: ../lib/ephy-profile-migrator.c:99
+#: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "رونوشت کوکی‌ها از موزیلا خراب شد."
 
-#: ../lib/ephy-profile-migrator.c:651
+#: ../lib/ephy-profile-migrator.c:652
 msgid ""
 "Epiphany 3.6 deprecated this directory and tried migrating this "
 "configuration to ~/.config/epiphany"
@@ -1101,23 +1125,23 @@ msgstr ""
 "اپیفانی ۳.۶ این شاخه را منسوخ کرده است و سعی کرده است این پیکربندی‌ها را ~/."
 "config/epiphany منتقل کند"
 
-#: ../lib/ephy-profile-migrator.c:1024
+#: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
 msgstr "تنها مرحله‌های مشخص تبدیل‌گر را اجرا می‌کند"
 
-#: ../lib/ephy-profile-migrator.c:1026
+#: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
 msgstr "نسخه‌ی مجموعه‌تنظیمات تبدیل‌گر را مشخص میکند"
 
-#: ../lib/ephy-profile-migrator.c:1028
+#: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
 msgstr "مجموعه‌تنظیماتی که باید در آن تبدیل‌گر اجرا شود را مشخص می‌کند"
 
-#: ../lib/ephy-profile-migrator.c:1041
+#: ../lib/ephy-profile-migrator.c:1047
 msgid "Epiphany profile migrator"
 msgstr "تبدیل‌گر مجموعه‌تنظیمات اپیفانی"
 
-#: ../lib/ephy-profile-migrator.c:1042
+#: ../lib/ephy-profile-migrator.c:1048
 msgid "Epiphany profile migrator options"
 msgstr "گزینه‌های تبدیل‌گر مجموعه‌تنظیمات اپیفانی"
 
@@ -1239,6 +1263,13 @@ msgstr "هویت این وب‌سایت تایید شده است"
 msgid "The identity of this website has not been verified"
 msgstr "هویت این وب‌سایت تایید نشده است"
 
+#: ../lib/widgets/ephy-certificate-dialog.c:323
+#: ../src/bookmarks/ephy-bookmark-properties.c:649
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:118
+msgid "_Close"
+msgstr "_بستن"
+
 #: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
 msgid "%u:%02u hour left"
@@ -1278,12 +1309,12 @@ msgstr "پایان یافت"
 msgid "Error downloading: %s"
 msgstr "خطا در بارکردن: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:897
+#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:896
 msgid "Cancel"
 msgstr "لغو"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1307
-#: ../src/window-commands.c:281
+#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1309
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "باز کردن"
 
@@ -1307,13 +1338,22 @@ msgstr "پایگاه‌ها"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:596
+#: ../lib/widgets/ephy-location-entry.c:591
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
-#: ../src/pdm-dialog.c:352
+#: ../src/pdm-dialog.c:349
 msgid "Cl_ear"
 msgstr "_پاک کردن"
 
-#: ../lib/widgets/ephy-location-entry.c:879
+#. Edit actions.
+#: ../lib/widgets/ephy-location-entry.c:610 ../src/ephy-window.c:125
+msgid "_Undo"
+msgstr "بر_گردان"
+
+#: ../lib/widgets/ephy-location-entry.c:617
+msgid "_Redo"
+msgstr "_انجام دوباره"
+
+#: ../lib/widgets/ephy-location-entry.c:873
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "این شمایل را بکشید و رها کنید تا پیوندی به این صفحه ایجاد کنید"
 
@@ -1335,7 +1375,7 @@ msgstr "تاریخ"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -1349,32 +1389,46 @@ msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_یکی کردن با %Id نشانک مشابه"
 msgstr[1] "_یکی کردن با %Id نشانک مشابه"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:276
-#: ../src/bookmarks/ephy-bookmark-properties.c:298
+#: ../src/bookmarks/ephy-bookmark-properties.c:273
+#: ../src/bookmarks/ephy-bookmark-properties.c:295
 #, c-format
 msgid "Show “%s”"
 msgstr "نمایش «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:423
+#: ../src/bookmarks/ephy-bookmark-properties.c:420
 #, c-format
 msgid "“%s” Properties"
 msgstr "ویژگی‌های «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:547
+#: ../src/bookmarks/ephy-bookmark-properties.c:544
 msgid "_Title:"
 msgstr "_عنوان:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:564
+#: ../src/bookmarks/ephy-bookmark-properties.c:561
 msgid "A_ddress:"
 msgstr "_نشانی:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:576
+#: ../src/bookmarks/ephy-bookmark-properties.c:573
 msgid "T_opics:"
 msgstr "_موضوعات:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "Sho_w all topics"
 msgstr "ن_مایش همه‌ی موضوعات"
+
+#. Help.
+#: ../src/bookmarks/ephy-bookmark-properties.c:626
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:8
+#: ../src/ephy-history-window.c:130 ../src/ephy-window.c:197
+#: ../src/pdm-dialog.c:341
+msgid "_Help"
+msgstr "_راهنما"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:642
+#| msgid "_Address"
+msgid "_Add"
+msgstr "_اضافه کردن"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1421,7 +1475,7 @@ msgid "Nearby Sites"
 msgstr "پایگاه‌های دوروبر"
 
 #: ../src/bookmarks/ephy-bookmarks.c:1167
-#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "بی‌عنوان"
 
@@ -1453,11 +1507,6 @@ msgstr "_ویرایش"
 msgid "_View"
 msgstr "_نما"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:130
-msgid "_Help"
-msgstr "_راهنما"
-
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_New Topic"
@@ -1470,7 +1519,7 @@ msgstr "ایجاد یک موضوع جدید"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:639
+#: ../src/ephy-history-window.c:134 ../src/ephy-history-window.c:636
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "باز کردن در _پنجره‌ی جدید"
@@ -1482,7 +1531,7 @@ msgstr "باز کردن نشانک انتخاب شده در یک پنجره‌ی
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:642
+#: ../src/ephy-history-window.c:137 ../src/ephy-history-window.c:639
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "باز کردن در _زبانه‌ی جدید"
@@ -1524,18 +1573,13 @@ msgstr "_صدور نشانک‌ها..."
 msgid "Export bookmarks to a file"
 msgstr "صدور نشانک‌ها به یک پرونده"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143 ../src/ephy-window.c:119
-msgid "_Close"
-msgstr "_بستن"
-
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "بستن پنجره‌ی نشانک‌ها"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:130
+#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "_بریدن"
 
@@ -1546,8 +1590,8 @@ msgstr "بریدن قسمت‌های انتخاب شده"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:132
+#: ../src/ephy-history-window.c:151 ../src/ephy-history-window.c:649
+#: ../src/ephy-window.c:131
 msgid "_Copy"
 msgstr "_رونوشت"
 
@@ -1557,7 +1601,7 @@ msgid "Copy the selection"
 msgstr "رونوشت از قسمت‌های انتخاب شده"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:134
+#: ../src/ephy-history-window.c:154 ../src/ephy-window.c:133
 msgid "_Paste"
 msgstr "_چسباندن"
 
@@ -1576,7 +1620,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "حذف نشانک یا موضوع انتخاب شده"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:138
+#: ../src/ephy-history-window.c:160 ../src/ephy-window.c:137
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -1594,10 +1638,9 @@ msgstr "_محتویات"
 msgid "Display bookmarks help"
 msgstr "نمایش راهنمای نشانک‌ها"
 
-#. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:198
+#: ../src/resources/epiphany-application-menu.ui.h:9
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:199
 msgid "_About"
 msgstr "_درباره‌"
 
@@ -1737,7 +1780,7 @@ msgid "File"
 msgstr "پرونده"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1167
-#: ../src/ephy-history-window.c:648
+#: ../src/ephy-history-window.c:645
 msgid "_Copy Address"
 msgstr "_رونوشت از نشانی"
 
@@ -1760,11 +1803,11 @@ msgid "Create topic “%s”"
 msgstr "ایجاد موضوع «%s»"
 
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:105
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:104
 msgid "_New Window"
 msgstr "_پنجره‌ی جدید"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:107
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:106
 msgid "New _Incognito Window"
 msgstr "_پنجره‌ی ناشناس جدید"
 
@@ -1773,25 +1816,25 @@ msgid "Reopen Closed _Tab"
 msgstr "دوباره بازکردن _زبانه بسته شده"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:98
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:97
 msgid "_Bookmarks"
 msgstr "_نشانک‌ها"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:148
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:147
 msgid "_History"
 msgstr "_تاریخچه"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/resources/epiphany.ui.h:10 ../src/ephy-window.c:152
-msgid "Personal Data"
-msgstr "داده‌های شخصی"
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:151
+#| msgid "Personal Data"
+msgid "_Personal Data"
+msgstr "_داده‌های شخصی"
 
-#: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/resources/prefs-dialog.ui.h:3 ../src/ephy-window.c:150
-msgid "Preferences"
-msgstr "ترجیحات"
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:149
+#| msgid "Preferences"
+msgid "Pr_eferences"
+msgstr "_ترجیحات"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:121
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:120
 msgid "_Quit"
 msgstr "_خروج"
 
@@ -1831,6 +1874,10 @@ msgstr "استفاده از کدگذاری مشخص شده در نوشتار"
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_استفاده از یک کدگذاری متفاوت</b>"
 
+#: ../src/resources/epiphany.ui.h:10
+msgid "Personal Data"
+msgstr "داده‌های شخصی"
+
 #: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "کوکی‌ها"
@@ -1850,6 +1897,10 @@ msgstr "اضافه کردن زبان"
 #: ../src/resources/prefs-dialog.ui.h:2
 msgid "Choose a l_anguage:"
 msgstr "یک ز_بان انتخاب کنید:"
+
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "Preferences"
+msgstr "ترجیحات"
 
 #: ../src/resources/prefs-dialog.ui.h:5
 msgid "_Download folder:"
@@ -1960,7 +2011,7 @@ msgstr "مگ"
 msgid "Privacy"
 msgstr "زندگی خصوصی"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:416
 msgid "Encodings"
 msgstr "کدگذاری‌ها"
 
@@ -1976,7 +2027,7 @@ msgstr "در حال غلط‌یابی املایی"
 msgid "_Enable spell checking"
 msgstr "_فعال‌سازی غلط‌یابی املایی"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:755
 msgid "Language"
 msgstr "زبان"
 
@@ -1988,7 +2039,7 @@ msgstr "توقف"
 msgid "Stop current data transfer"
 msgstr "توقف انتقال داده‌های جاری"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:161
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:160
 msgid "_Reload"
 msgstr "_بار کردن مجدد"
 
@@ -2008,19 +2059,23 @@ msgstr "کدگذاری‌های دیگر"
 msgid "_Automatic"
 msgstr "_خودکار"
 
-#: ../src/ephy-find-toolbar.c:147
+#: ../src/ephy-find-toolbar.c:148
 msgid "Text not found"
 msgstr "متن پیدا نشد"
 
-#: ../src/ephy-find-toolbar.c:153
+#: ../src/ephy-find-toolbar.c:155
 msgid "Search wrapped back to the top"
 msgstr "جست‌وجو به بالای صفحه بازگشت"
 
-#: ../src/ephy-find-toolbar.c:637
+#: ../src/ephy-find-toolbar.c:579
+msgid "Type to search…"
+msgstr "برای جستجو تایپ کنید..."
+
+#: ../src/ephy-find-toolbar.c:585
 msgid "Find previous occurrence of the search string"
 msgstr "پیدا کردن مورد قبلی رشته‌ی جستجو"
 
-#: ../src/ephy-find-toolbar.c:650
+#: ../src/ephy-find-toolbar.c:593
 msgid "Find next occurrence of the search string"
 msgstr "پیدا کردن مورد بعدی رشته‌ی جستجو"
 
@@ -2088,97 +2143,101 @@ msgstr ""
 "پاک کردن تاریخچه‌ی مرور سبب خواهد شد همه‌ی پیوندهای تاریخچه برای همیشه حذف "
 "شوند."
 
-#: ../src/ephy-history-window.c:238
+#: ../src/ephy-history-window.c:235
 msgid "Clear History"
 msgstr "پاک کردن تاریخچه"
 
-#: ../src/ephy-history-window.c:802
+#: ../src/ephy-history-window.c:799
 msgid "Last 30 minutes"
 msgstr "۳۰ دقیقه‌ی اخیر"
 
-#: ../src/ephy-history-window.c:803
+#: ../src/ephy-history-window.c:800
 msgid "Today"
 msgstr "امروز"
 
 #. keep this in sync with embed/ephy-history.c's
 #. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:805 ../src/ephy-history-window.c:809
-#: ../src/ephy-history-window.c:815
+#: ../src/ephy-history-window.c:802 ../src/ephy-history-window.c:806
+#: ../src/ephy-history-window.c:812
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "%Id روز گذشته"
 msgstr[1] "%Id روز گذشته"
 
-#: ../src/ephy-history-window.c:819
+#: ../src/ephy-history-window.c:816
 msgid "All history"
 msgstr "تمام تاریخچه"
 
-#: ../src/ephy-history-window.c:1116
+#: ../src/ephy-history-window.c:1113
 msgid "History"
 msgstr "تاریخچه"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:77
 msgid "Open a new tab in an existing browser window"
 msgstr "باز کردن یک زبانه‌ی جدید در پنجره‌ی مرورگر موجود"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:79
 msgid "Open a new browser window"
 msgstr "باز کردن یک پنجره‌ی مرورگر جدید"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:81
 msgid "Import bookmarks from the given file"
 msgstr "وارد کردن نشانک‌ها از پرونده‌ی داده شده"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:81 ../src/ephy-main.c:83
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:83
 msgid "Load the given session file"
 msgstr "بار کردن پرونده‌ی نشستِ داده‌شده"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:85
 msgid "Add a bookmark"
 msgstr "اضافه کردن نشانک"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:85
 msgid "URL"
 msgstr "نشانی اینترنتی"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:87
 msgid "Start a private instance"
 msgstr "شروع یک نمونه شخصی"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:89
 msgid "Start an instance in incognito mode"
 msgstr "آغاز یک نمونه در حالت ناشناس"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:91
 msgid "Start an instance in netbank mode"
 msgstr "شروع یک نمونه در حالت شبکه‌بانکی"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:93
 msgid "Start the browser in application mode"
 msgstr "آغاز مرورگر در حالت برنامه‌ای"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:95
+msgid "Start the application without opening windows"
+msgstr "برنامه را بدون باز کردن پنجره‌ها اجرا کنید"
+
+#: ../src/ephy-main.c:97
 msgid "Profile directory to use in the private instance"
 msgstr "فهرست اطلاعات شخصی برای استفاده در نمونه شخصی"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:97
 msgid "DIR"
 msgstr "شاخه"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:99
 msgid "URL …"
 msgstr "نشانی اینترنتی …"
 
-#: ../src/ephy-main.c:193
+#: ../src/ephy-main.c:204
 msgid "Could not start Web"
 msgstr "نمی‌توان مرورگر وب را آغاز کرد"
 
-#: ../src/ephy-main.c:196
+#: ../src/ephy-main.c:207
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2187,285 +2246,280 @@ msgstr ""
 "راه‌اندازی به دلیل خطای زیر شکست خورد:\n"
 "%s"
 
-#: ../src/ephy-main.c:311
+#: ../src/ephy-main.c:321
 msgid "Web options"
 msgstr "گزینه‌های وب"
 
-#: ../src/ephy-notebook.c:598
+#: ../src/ephy-notebook.c:599
 msgid "Close tab"
 msgstr "بستن زبانه"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-search-provider.c:202
+#, c-format
+#| msgid "Search the web"
+msgid "Search the Web for %s"
+msgstr "جستجو در وب برای %s"
+
+#: ../src/ephy-window.c:108
 msgid "_Open…"
 msgstr "_باز کردن..."
 
-#: ../src/ephy-window.c:111
+#: ../src/ephy-window.c:110
 msgid "Save _As…"
 msgstr "_ذخیره به نام..."
 
-#: ../src/ephy-window.c:113
+#: ../src/ephy-window.c:112
 msgid "Save As _Web Application…"
 msgstr "ذخیره به عنوان برنامه _وب"
 
-#: ../src/ephy-window.c:115
+#: ../src/ephy-window.c:114
 msgid "_Print…"
 msgstr "_چاپ..."
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:116
 msgid "S_end Link by Email…"
 msgstr "_ارسال پیوند با پست‌الکترونیکی..."
 
-#. Edit actions.
-#: ../src/ephy-window.c:126
-msgid "_Undo"
-msgstr "بر_گردان"
-
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:127
 msgid "Re_do"
 msgstr "دو_باره"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:139
 msgid "_Find…"
 msgstr "_پیدا کردن..."
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:141
 msgid "Find Ne_xt"
 msgstr "پیدا کردن ب_عدی"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:143
 msgid "Find Pre_vious"
 msgstr "پیدا کردن _قبلی"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "Edit _Bookmarks"
 msgstr "ویرایش _نشانک‌ها"
 
 #. View actions.
-#: ../src/ephy-window.c:157 ../src/ephy-window.c:159
+#: ../src/ephy-window.c:156 ../src/ephy-window.c:158
 msgid "_Stop"
 msgstr "_توقف"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:162
 msgid "Zoom _In"
 msgstr "_بزرگنمایی"
 
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:164
 msgid "Zoom O_ut"
 msgstr "_کوچک‌نمایی"
 
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:166
 msgid "_Normal Size"
 msgstr "اندازه‌ی _عادی"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:168
 msgid "Text _Encoding"
 msgstr "_کدگذاری متن"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:169
 msgid "_Page Source"
 msgstr "کد منبع _صفحه"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:174
 msgid "_Add Bookmark…"
 msgstr "_اضافه کردن نشانک..."
 
 #. Go actions.
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:179
 msgid "_Location…"
 msgstr "_محل..."
 
 #. Tabs actions.
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "_Previous Tab"
 msgstr "زبانه‌ی _قبلی"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:186
 msgid "_Next Tab"
 msgstr "زبانه‌ی _بعدی"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:188
 msgid "Move Tab _Left"
 msgstr "جابه‌جایی زبانه به _چپ"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:190
 msgid "Move Tab _Right"
 msgstr "جابه‌جایی زبانه به _راست"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:192
 msgid "_Detach Tab"
 msgstr "_جداکردن برگه"
 
-#. File actions.
-#: ../src/ephy-window.c:206
-msgid "_Work Offline"
-msgstr "_کار به صورت برون‌خط"
-
 #. View actions.
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:207
 msgid "_Downloads Bar"
 msgstr "نوار _بارگیری‌ها"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:210
 msgid "_Fullscreen"
 msgstr "_تمام‌صفحه"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:212
 msgid "Popup _Windows"
 msgstr "_پنجره‌های واشو"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:214
 msgid "Selection Caret"
 msgstr "مکان‌نمای انتخاب"
 
 #. Document.
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:221
 msgid "Add Boo_kmark…"
 msgstr "اضافه کردن _نشانک..."
 
 #. Links.
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:226
 msgid "_Open Link"
 msgstr "_باز کردن پیوند"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:228
 msgid "Open Link in New _Window"
 msgstr "باز کردن پیوند در پنجره‌ی _جدید"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:230
 msgid "Open Link in New _Tab"
 msgstr "باز کردن پیوند در _زبانه‌ی جدید"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:232
 msgid "_Download Link"
 msgstr "_بارگیری پیوند"
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:234
 msgid "_Save Link As…"
 msgstr "ذخیره‌ی _پیوند به نام"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:236
 msgid "_Bookmark Link…"
 msgstr "_نشانک‌گذاری پیوند..."
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:238
 msgid "_Copy Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: ../src/ephy-window.c:244
-#| msgid "_Copy Link Address"
+#: ../src/ephy-window.c:240
 msgid "_Copy E-mail Address"
 msgstr "_رونوشت از آدرس پست‌الکترونیکی"
 
 #. Images.
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:245
 msgid "Open _Image"
 msgstr "باز کردن _تصویر"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:247
 msgid "_Save Image As…"
 msgstr "_ذخیره‌ی تصویر با نام..."
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:249
 msgid "_Use Image As Background"
 msgstr "_استفاده از تصویر به عنوان پس‌زمینه"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:251
 msgid "Copy I_mage Address"
 msgstr "نسخه‌برداری از نشانی _تصویر"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:253
 msgid "St_art Animation"
 msgstr "_شروع پویانمایی"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:255
 msgid "St_op Animation"
 msgstr "_توقف پویانمایی"
 
 #. Inspector.
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:271
 msgid "Inspect _Element"
 msgstr "_بازرسی عناصر"
 
-#: ../src/ephy-window.c:483
+#: ../src/ephy-window.c:478
 msgid "There are unsubmitted changes to form elements"
 msgstr "در عناصر فرم تغییرات ارسال نشده‌ای وجود دارد"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:479
 msgid "If you close the document anyway, you will lose that information."
 msgstr "در هر صورتی که سند را ببندید، شما آن اطلاعات را از دست خواهید داد."
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:481
 msgid "Close _Document"
 msgstr "بستن _سند"
 
-#: ../src/ephy-window.c:504
+#: ../src/ephy-window.c:496
 msgid "There are ongoing downloads in this window"
 msgstr "تعدادی بارگیری درحال تکمیل در این پنجره وجود دارد"
 
-#: ../src/ephy-window.c:505
+#: ../src/ephy-window.c:497
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "اگر این پنجره را ببندی، بارگیری‌ها لغو خواهند شد"
 
-#: ../src/ephy-window.c:506
+#: ../src/ephy-window.c:498
 msgid "Close window and cancel downloads"
 msgstr "بستن پنجره و لغو بارگیری‌ها"
 
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1311
 msgid "Save As"
 msgstr "ذخیره به نام"
 
-#: ../src/ephy-window.c:1311
+#: ../src/ephy-window.c:1313
 msgid "Save As Application"
 msgstr "ذخیره به عنوان برنامه"
 
-#: ../src/ephy-window.c:1313
+#: ../src/ephy-window.c:1315
 msgid "Print"
 msgstr "چاپ"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1317
 msgid "Bookmark"
 msgstr "نشانک"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1319
 msgid "Find"
 msgstr "پیدا کردن"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1326
+#: ../src/ephy-window.c:1328
 msgid "Larger"
 msgstr "درشت‌تر"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1331
 msgid "Smaller"
 msgstr "ریزتر"
 
-#: ../src/ephy-window.c:1357
+#: ../src/ephy-window.c:1359
 msgid "Back"
 msgstr "عقب"
 
-#: ../src/ephy-window.c:1369
+#: ../src/ephy-window.c:1371
 msgid "Forward"
 msgstr "جلو"
 
-#: ../src/ephy-window.c:1381
+#: ../src/ephy-window.c:1383
 msgid "Zoom"
 msgstr "بزرگنمایی"
 
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1392
 msgid "New _Tab"
 msgstr "_زبانه‌ی جدید"
 
-#: ../src/ephy-window.c:1398
+#: ../src/ephy-window.c:1400
 msgid "Go to most visited"
 msgstr "رفتن به بیشترین بازدید"
 
-#: ../src/pdm-dialog.c:333
+#: ../src/pdm-dialog.c:330
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>اطلاعات شخصی را که می‌خواهید پاک کنید، انتخاب کنید</b>"
 
-#: ../src/pdm-dialog.c:336
+#: ../src/pdm-dialog.c:333
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -2474,31 +2528,31 @@ msgstr ""
 "شما دارید اطلاعات شخصی را پاک می‌کنید که درباره‌ی صفحه‌های وبی است که بازدید "
 "کرده‌اید. قبل از ادامه، نوع اطلاعاتی را که می‌خواهید پاک کنید را بررسی کنید:"
 
-#: ../src/pdm-dialog.c:341
+#: ../src/pdm-dialog.c:338
 msgid "Clear All Personal Data"
 msgstr "پاک‌کردن تمام اطلاعات شخصی"
 
 #. Cookies
-#: ../src/pdm-dialog.c:375
+#: ../src/pdm-dialog.c:370
 msgid "C_ookies"
 msgstr "_کوکی‌ها"
 
 #. Passwords
-#: ../src/pdm-dialog.c:387
+#: ../src/pdm-dialog.c:382
 msgid "Saved _passwords"
 msgstr "_گذرواژه‌های ذخیره شده"
 
 #. History
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:394
 msgid "Hi_story"
 msgstr "تار_یخچه"
 
 #. Cache
-#: ../src/pdm-dialog.c:411
+#: ../src/pdm-dialog.c:406
 msgid "_Temporary files"
 msgstr "_پرونده‌های موقت"
 
-#: ../src/pdm-dialog.c:427
+#: ../src/pdm-dialog.c:422
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -2506,36 +2560,36 @@ msgstr ""
 "<small><i><b>هشدار:</b> این کار قابل بازیابی نخواهد بود. اطلاعاتی که شما "
 "برای حذف انتخاب کرده‌اید برای همیشه پاک خواهد شد.</i></small>"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:645
 msgid "Encrypted connections only"
 msgstr "تنها اتصالات رمزنگاری شده"
 
-#: ../src/pdm-dialog.c:651
+#: ../src/pdm-dialog.c:646
 msgid "Any type of connection"
 msgstr "هر نوع اتصال"
 
 #. Session cookie
-#: ../src/pdm-dialog.c:656
+#: ../src/pdm-dialog.c:651
 msgid "End of current session"
 msgstr "پایان دادن نشست فعلی"
 
-#: ../src/pdm-dialog.c:780
+#: ../src/pdm-dialog.c:775
 msgid "Domain"
 msgstr "دامنه"
 
-#: ../src/pdm-dialog.c:792
+#: ../src/pdm-dialog.c:787
 msgid "Name"
 msgstr "نام"
 
-#: ../src/pdm-dialog.c:1310
+#: ../src/pdm-dialog.c:1305
 msgid "Host"
 msgstr "میزبان"
 
-#: ../src/pdm-dialog.c:1323
+#: ../src/pdm-dialog.c:1318
 msgid "User Name"
 msgstr "نام کاربری"
 
-#: ../src/pdm-dialog.c:1336
+#: ../src/pdm-dialog.c:1331
 msgid "User Password"
 msgstr "گذرواژه کاربر"
 
@@ -2555,7 +2609,7 @@ msgstr "ذخیره‌ی تصویر به نام"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
+#: ../src/prefs-dialog.c:449 ../src/prefs-dialog.c:455
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2564,38 +2618,38 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:489
+#: ../src/prefs-dialog.c:464
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "تعریف شده توسط کاربر (%s)"
 
-#: ../src/prefs-dialog.c:511
+#: ../src/prefs-dialog.c:486
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "زبان سیستم (%s)"
 msgstr[1] "زبان‌های سیستم (%s)"
 
-#: ../src/prefs-dialog.c:869
+#: ../src/prefs-dialog.c:844
 msgid "Select a Directory"
 msgstr "یک شاخه انتخاب کنید"
 
-#: ../src/window-commands.c:359
+#: ../src/window-commands.c:358
 msgid "Save"
 msgstr "ذخیره"
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:893
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
 "یک برنامه وب به نام «%s» از قبل وجود دارد. آیا می‌خواهید آن را جایگزین کنید؟"
 
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:898
 msgid "Replace"
 msgstr "جای‌گزینی"
 
-#: ../src/window-commands.c:903
+#: ../src/window-commands.c:902
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2603,30 +2657,30 @@ msgstr ""
 "برنامه‌ای با این نام از قبل موجود است. جای‌گزینی آن باعث رونویسی اطلاعات خواهد "
 "شد."
 
-#: ../src/window-commands.c:939
+#: ../src/window-commands.c:938
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "برنامه «%s» برای استفاده آماده است"
 
-#: ../src/window-commands.c:942
+#: ../src/window-commands.c:941
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "برنامه «%s» را نمی‌توان ایجاد کرد"
 
-#: ../src/window-commands.c:950
+#: ../src/window-commands.c:949
 msgid "Launch"
 msgstr "راه‌اندازی"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:990
+#: ../src/window-commands.c:989
 msgid "Create Web Application"
 msgstr "ایجاد برنامه وب"
 
-#: ../src/window-commands.c:995
+#: ../src/window-commands.c:994
 msgid "C_reate"
 msgstr "_ایجاد"
 
-#: ../src/window-commands.c:1685
+#: ../src/window-commands.c:1676
 msgid ""
 "Web is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -2637,7 +2691,7 @@ msgstr ""
 "عمومی گنو، که بنیاد نرم‌افزارهای آزاد منتشر کرده است،‌ تغییر دهید، یا دوباره "
 "توزیع کنید. یا نسخه‌ی ۲ اجازه‌نامه یا (به اختیار خودتان) هر نسخه‌ی بالاتر دیگری."
 
-#: ../src/window-commands.c:1689
+#: ../src/window-commands.c:1680
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2648,7 +2702,7 @@ msgstr ""
 "ضمانتی؛ حتی بدون ضمانت ضمنی قابل فروش بودن یا مناسب بودن برای یک هدف مشخص. "
 "برای جزئیات بیشتر به اجازه‌نامه‌ی همگانی عمومی گنو را ببینید."
 
-#: ../src/window-commands.c:1693
+#: ../src/window-commands.c:1684
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -2658,20 +2712,20 @@ msgstr ""
 "دریافت کرده باشید، در غیر این صورت برای سازمان جنبش نرم‌افزار آزاد به آدرس 51 "
 "Franklin St, Fifth Floor, Boston, MA  02110-1301 USA بنویسید."
 
-#: ../src/window-commands.c:1739 ../src/window-commands.c:1755
-#: ../src/window-commands.c:1766
+#: ../src/window-commands.c:1730 ../src/window-commands.c:1746
+#: ../src/window-commands.c:1757
 msgid "Contact us at:"
 msgstr "با ما تماس بگیرید:"
 
-#: ../src/window-commands.c:1742
+#: ../src/window-commands.c:1733
 msgid "Contributors:"
 msgstr "یاری‌دهندکان:"
 
-#: ../src/window-commands.c:1745
+#: ../src/window-commands.c:1736
 msgid "Past developers:"
 msgstr "سازندگان قبلی نرم‌افزار:"
 
-#: ../src/window-commands.c:1776 ../src/window-commands.c:1782
+#: ../src/window-commands.c:1767 ../src/window-commands.c:1773
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2688,7 +2742,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1812
+#: ../src/window-commands.c:1803
 msgid "translator-credits"
 msgstr ""
 "روزبه پورنادر <roozbeh@farsiweb.info>\n"
@@ -2697,27 +2751,52 @@ msgstr ""
 "مهیار مقیمی <mahyar.moqimi@gmail.com>\n"
 "آرش موسوی <mousavi.arash@gmail.com>"
 
-#: ../src/window-commands.c:1815
+#: ../src/window-commands.c:1806
 msgid "Web Website"
 msgstr "پایگاه‌وب مرورگر وب گنوم"
 
-#: ../src/window-commands.c:1955
+#: ../src/window-commands.c:1946
 msgid "Enable caret browsing mode?"
 msgstr "به‌کار انداختن حالت مرور با هشتک؟"
 
-#: ../src/window-commands.c:1958
+#: ../src/window-commands.c:1949
+#| msgid ""
+#| "Pressing F7 turns caret browsing on or off. This feature places a "
+#| "moveable cursor in web pages, allowing you to move around with your "
+#| "keyboard. Do you want to enable caret browsing on?"
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
-"want to enable caret browsing on?"
+"want to enable caret browsing?"
 msgstr ""
-"کلید F7 مرور با هشتک را خاموش یا روشن می‌کند. این ویژگی یک مکان‌نمای جابجا "
+"کلید F7 مرور با مکان‌نما را خاموش یا روشن می‌کند. این ویژگی یک مکان‌نمای جابجا "
 "شونده را در صفحه‌ی وب می‌گذارد، تا به شما اجازه دهد بوسیله‌ی صفحه‌ی کلید خود در "
-"صفحه جابجا شوید. آیا مایلید مرور با هشتک را روشن کنید؟"
+"صفحه جابجا شوید. آیا مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: ../src/window-commands.c:1961
+#: ../src/window-commands.c:1952
 msgid "_Enable"
 msgstr "_به کار انداختن"
+
+#~ msgid "http://www.google.com"
+#~ msgstr "http://www.google.com"
+
+#~ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+#~ msgstr "http://www.google.com/search?hl=fa&q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+
+#~ msgid "Web Inspector"
+#~ msgstr "بازرس وب"
+
+#~ msgid "Epiphany can't be used now. Initialization failed."
+#~ msgstr "اپیفانی هم‌اکنون قابل استفاده نیست. مقداردهیِ اولیه شکست خورد."
+
+#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+#~ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#~ msgid "%s Files"
+#~ msgstr "پرونده‌های %s"
+
+#~ msgid "_Work Offline"
+#~ msgstr "_کار به صورت برون‌خط"
 
 #~ msgid ""
 #~ "Middle click to open the web page pointed to by the currently selected "
