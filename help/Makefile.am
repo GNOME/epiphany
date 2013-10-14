@@ -34,4 +34,4 @@ HELP_FILES = \
 	pref-font.page \
 	pref-passwords.page
 
-HELP_LINGUAS = cs de es pt_BR
+HELP_LINGUAS = cs de es hu pt_BR
