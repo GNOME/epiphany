@@ -2152,21 +2152,20 @@ decide_policy_cb (WebKitWebView *web_view,
 		}
 		else
 		{
-			char *command_line;
 			GError *error = NULL;
+			const char *const child_argv[] = {"gvfs-open", uri, NULL};
 
 			return_value = TRUE;
 
-			command_line = g_strdup_printf ("gvfs-open %s", uri);
-			g_spawn_command_line_async (command_line, &error);
+			g_spawn_async (NULL, (char**)child_argv, NULL,
+				       G_SPAWN_SEARCH_PATH, NULL, NULL, NULL,
+				       &error);
 
 			if (error)
 			{
 				g_debug ("Error opening %s: %s", uri, error->message);
 				g_error_free (error);
 			}
-
-			g_free (command_line);
 
 			webkit_policy_decision_ignore (decision);
 		}
