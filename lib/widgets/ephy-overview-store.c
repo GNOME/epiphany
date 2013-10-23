@@ -606,6 +606,7 @@ ephy_overview_store_animated_remove (EphyOverviewStore *store,
   GtkTreePath *path;
   GtkTreeIter iter;
   AnimRemoveContext *ctx = g_slice_new0 (AnimRemoveContext);
+  guint id;
 
   ctx->ref = ref;
   ctx->callback = callback;
@@ -619,7 +620,8 @@ ephy_overview_store_animated_remove (EphyOverviewStore *store,
                       EPHY_OVERVIEW_STORE_CLOSE_BUTTON_RENDER_POLICY,
                       EPHY_REMOVABLE_PIXBUF_RENDER_NEVER, -1);
 
-  g_timeout_add (40, (GSourceFunc) animated_remove_func, ctx);
+  id = g_timeout_add (40, (GSourceFunc) animated_remove_func, ctx);
+  g_source_set_name_by_id (id, "[epiphany] animated_remove_func");
 }
 
 gboolean

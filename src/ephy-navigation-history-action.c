@@ -490,6 +490,7 @@ tool_button_press_event_cb (GtkButton *button,
                                                      (GSourceFunc) menu_timeout_cb,
                                                      data,
                                                      (GDestroyNotify) g_free);
+    g_source_set_name_by_id (action->priv->menu_timeout, "[epiphany] menu_timeout_cb");
   } else if (event->button == 3) {
     popup_history_menu (action, GTK_WIDGET (button), event);
     return TRUE;

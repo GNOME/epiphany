@@ -348,6 +348,7 @@ drag_motion_cb (GtkWidget *widget,
 			g_timeout_add (150, 
 				       scroll_timeout, 
 				       GTK_TREE_VIEW (view));
+		g_source_set_name_by_id (view->priv->scroll_id, "[epiphany] scroll_timeout");
 	}
 
 	gdk_drag_status (context, action, time);

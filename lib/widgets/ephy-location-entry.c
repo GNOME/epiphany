@@ -997,6 +997,7 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
 		g_timeout_add_full (G_PRIORITY_DEFAULT, interval,
 				    (GSourceFunc) do_dns_prefetch, helper,
 				    (GDestroyNotify) free_prefetch_helper);
+	g_source_set_name_by_id (entry->priv->dns_prefetch_handler, "[epiphany] do_dns_prefetch");
 }
 
 static gboolean

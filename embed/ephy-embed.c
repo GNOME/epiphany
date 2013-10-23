@@ -299,6 +299,7 @@ ephy_embed_entering_fullscreen (EphyEmbed *embed)
   embed->priv->fullscreen_message_id = g_timeout_add_seconds (5,
                                                               (GSourceFunc)fullscreen_message_label_hide,
                                                               embed);
+  g_source_set_name_by_id (embed->priv->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
 }
 
 void
@@ -556,6 +557,7 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
       over a series of links, the overlay widget doesn't flicker on and off. */
     if (priv->pop_statusbar_later_source_id == 0) {
       priv->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+      g_source_set_name_by_id (priv->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
     }
   }
 }
@@ -613,11 +615,12 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   progress = webkit_web_view_get_estimated_load_progress (priv->web_view);
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
 
-  if (progress == 1.0 || !loading)
+  if (progress == 1.0 || !loading) {
     priv->clear_progress_source_id = g_timeout_add (500,
                                                     (GSourceFunc)clear_progress_cb,
                                                     embed);
-  else
+    g_source_set_name_by_id (priv->clear_progress_source_id, "[epiphany] clear_progress_cb");
+  } else
     gtk_widget_show (priv->progress);
 
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),

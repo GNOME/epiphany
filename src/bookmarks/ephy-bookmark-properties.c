@@ -102,6 +102,7 @@ update_warning_idle (EphyBookmarkProperties *properties)
 	
 	priv->duplicate_idle = g_timeout_add 
 	  (500, (GSourceFunc)update_warning, properties);
+	g_source_set_name_by_id (priv->duplicate_idle, "[epiphany] update_warning");
 }
 
 static void

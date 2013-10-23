@@ -221,6 +221,7 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 				g_timeout_add_seconds (BOOKMARKS_SAVE_DELAY,
 					       (GSourceFunc) save_bookmarks_delayed,
 					       bookmarks);
+			g_source_set_name_by_id (bookmarks->priv->save_timeout_id, "[epiphany] save_bookmarks_delayed");
 		}
 		else
 		{

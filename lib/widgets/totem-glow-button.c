@@ -302,6 +302,7 @@ totem_glow_button_set_timeout (TotemGlowButton *button, gboolean set_timeout)
 					    100,
 					    (GSourceFunc) totem_glow_button_glow, button,
 					    (GDestroyNotify) totem_glow_button_clear_glow_start_timeout_id);
+		g_source_set_name_by_id (button->button_glow, "[epiphany] totem_glow_button_glow");
 	} else {
 		if (button->button_glow > 0) {
 			g_source_remove (button->button_glow);

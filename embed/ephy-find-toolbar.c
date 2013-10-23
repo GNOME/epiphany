@@ -277,6 +277,7 @@ update_find_string (EphyFindToolbar *toolbar)
 	}
 
 	priv->find_source_id = g_timeout_add (300, (GSourceFunc)do_search, toolbar);
+	g_source_set_name_by_id (priv->find_source_id, "[epiphany] do_search");
 }
 
 static gboolean
