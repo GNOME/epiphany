@@ -31,7 +31,7 @@
 #include <glib/gstdio.h>
 #include <string.h>
 
-#define DEFAULT_FILTER_URL "http://adblockplus.mozdev.org/easylist/easylist.txt"
+#define DEFAULT_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
 #define FILTERS_LIST_FILENAME "filters.list"
 #define SIGNATURE_SIZE 8
 #define UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
