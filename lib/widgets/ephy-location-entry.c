@@ -202,13 +202,27 @@ ephy_location_entry_finalize (GObject *object)
 }
 
 static void
+ephy_location_entry_get_preferred_width (GtkWidget       *widget,
+					 gint            *minimum_width,
+					 gint            *natural_width)
+{
+	if (minimum_width)
+		*minimum_width = -1;
+
+	if (natural_width)
+		*natural_width = 518;
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->get_property = ephy_location_entry_get_property;
 	object_class->set_property = ephy_location_entry_set_property;
 	object_class->finalize = ephy_location_entry_finalize;
+	widget_class->get_preferred_width = ephy_location_entry_get_preferred_width;
 
 	/**
 	* EphyLocationEntry:location:

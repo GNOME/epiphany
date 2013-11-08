@@ -145,7 +145,6 @@ ephy_toolbar_constructed (GObject *object)
 
   /* Location and Reload/Stop */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_size_request (box, 530, -1);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
   /* Location */
