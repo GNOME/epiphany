@@ -228,7 +228,7 @@ static const char*
 file_is_compressed (const char *filename)
 {
   int i;
-  static const char * const compression[] = {".gz", ".bz2", ".Z", ".lz", NULL};
+  static const char * const compression[] = {".gz", ".bz2", ".Z", ".lz", ".xz", NULL};
 
   for (i = 0; compression[i] != NULL; i++) {
     if (g_str_has_suffix (filename, compression[i]))
