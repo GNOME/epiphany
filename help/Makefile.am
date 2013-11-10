@@ -32,7 +32,6 @@ HELP_FILES = \
 	pref-css.page \
 	pref-downloads.page \
 	pref-font.page \
-	pref-passwords.page \
-	prob-passwords-show.page
+	pref-passwords.page
 
-HELP_LINGUAS = cs de es hu pt_BR
+HELP_LINGUAS = cs de el es hu pt_BR
