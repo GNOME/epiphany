@@ -1513,6 +1513,8 @@ web_view_check_snapshot (WebKitWebView *web_view)
   GtkTreeIter iter;
   GtkTreeRowReference *ref;
   GtkTreePath *path;
+  EphyWebView* view = EPHY_WEB_VIEW (web_view);
+
   EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
   store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
@@ -1526,6 +1528,8 @@ web_view_check_snapshot (WebKitWebView *web_view)
                                   NULL, (GAsyncReadyCallback)on_snapshot_ready,
                                   ref);
   }
+
+  view->priv->snapshot_idle_id = 0;
 
   return FALSE;
 }
