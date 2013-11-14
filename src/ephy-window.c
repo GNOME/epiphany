@@ -1956,6 +1956,12 @@ populate_context_menu (WebKitWebView *web_view,
 		update_edit_actions_sensitivity (window, FALSE);
 
 		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditUndo");
+		add_action_to_context_menu (context_menu,
+					    priv->action_group, "EditRedo");
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCut");
 		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCopy");
