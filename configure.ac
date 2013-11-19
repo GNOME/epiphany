@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 m4_define([epiphany_version_major],[3])
-m4_define([epiphany_version_minor],[10])
+m4_define([epiphany_version_minor],[11])
 m4_define([epiphany_version_micro],[1])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
