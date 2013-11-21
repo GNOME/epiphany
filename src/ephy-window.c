@@ -4413,6 +4413,11 @@ ephy_window_is_on_current_workspace (EphyWindow *window)
 	if (!gtk_widget_get_realized (GTK_WIDGET (window)))
 		return TRUE;
 
+	gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+	if(!GDK_IS_X11_WINDOW (gdk_window))
+		return TRUE;
+
 	workspace = wnck_screen_get_active_workspace (wnck_screen_get_default ());
 
 	/* From WNCK docs:
@@ -4423,7 +4428,6 @@ ephy_window_is_on_current_workspace (EphyWindow *window)
 	if (!workspace)
 		return TRUE;
 
-	gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
 	wnck_window = wnck_window_get (GDK_WINDOW_XID (gdk_window));
 
 	return wnck_window_is_on_workspace (wnck_window, workspace);
