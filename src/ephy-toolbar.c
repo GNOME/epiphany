@@ -26,7 +26,7 @@
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
 
-G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_BOX)
+G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
 
 #define EPHY_TOOLBAR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
 
@@ -79,21 +79,12 @@ ephy_toolbar_get_property (GObject *object,
 }
 
 static void
-close_button_clicked (GtkButton *button, gpointer data)
-{
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
-  gtk_window_close (GTK_WINDOW (toplevel));
-}
-
-static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkWidget *toolbar, *box, *button, *reload, *separator, *label;
+  GtkWidget *toolbar, *box, *button, *reload, *label;
   GtkStyleContext *context;
   GtkSizeGroup *size;
   EphyEmbedShellMode mode;
@@ -112,6 +103,7 @@ ephy_toolbar_constructed (GObject *object)
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   action_group = ephy_window_get_toolbar_action_group (priv->window);
   action = gtk_action_group_get_action (action_group, "NavigationBack");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
@@ -124,6 +116,7 @@ ephy_toolbar_constructed (GObject *object)
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   action = gtk_action_group_get_action (action_group, "NavigationForward");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
@@ -135,13 +128,8 @@ ephy_toolbar_constructed (GObject *object)
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "linked");
 
-  gtk_container_add (GTK_CONTAINER (toolbar), box);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
   gtk_widget_show_all (box);
-
-  if (gtk_widget_get_direction (box) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (box, 27);
-  else
-    gtk_widget_set_margin_right (box, 27);
 
   /* Location and Reload/Stop */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -175,39 +163,30 @@ ephy_toolbar_constructed (GObject *object)
     gtk_size_group_add_widget (size, reload);
     gtk_size_group_add_widget (size, priv->entry);
     g_object_unref (size);
-  }
 
-  gtk_box_pack_start (GTK_BOX (toolbar), box, TRUE, TRUE, 0);
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
+    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), box);
+    gtk_widget_set_margin_left (box, 27);
+    gtk_widget_set_margin_right (box, 27);
     gtk_widget_show_all (box);
-
-  if (gtk_widget_get_direction (box) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (box, 12);
+  }
   else
-    gtk_widget_set_margin_right (box, 12);
+  {
+    gtk_container_add (GTK_CONTAINER (toolbar), box);
+  }
 
   /* New Tab */
   button = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   action = gtk_action_group_get_action (action_group, "FileNewTab");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
   gtk_button_set_label (GTK_BUTTON (button), NULL);
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
     gtk_widget_show_all (button);
-
-  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_left (button, 6);
-  else
-    gtk_widget_set_margin_right (button, 6);
-
-  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_right (button, 15);
-  else
-    gtk_widget_set_margin_left (button, 15);
 
   /* Page Menu */
   button = gtk_button_new ();
@@ -215,10 +194,11 @@ ephy_toolbar_constructed (GObject *object)
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   action = gtk_action_group_get_action (action_group, "PageMenu");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
   gtk_widget_show_all (button);
 
   /* Add title only in application mode. */
@@ -234,44 +214,15 @@ ephy_toolbar_constructed (GObject *object)
     gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
     gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
     gtk_widget_set_size_request (label, 530, -1);
-    gtk_box_pack_start (GTK_BOX (toolbar), label, TRUE, TRUE, 0);
-    gtk_widget_show_all (label);
-
-    if (gtk_widget_get_direction (GTK_WIDGET (label)) == GTK_TEXT_DIR_RTL)
-      gtk_widget_set_margin_left (GTK_WIDGET (label), 12);
-    else
-      gtk_widget_set_margin_right (GTK_WIDGET (label), 12);
+    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), label);
 
     g_object_bind_property (label, "label",
                             priv->window, "title",
                             G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 
     /* Reload/Stop for web application. */
-    gtk_container_add (GTK_CONTAINER (toolbar), reload);
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), reload);
   }
-
-  /* Separator and Close */
-  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (toolbar), separator);
-  gtk_widget_show_all (separator);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (separator)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_right (GTK_WIDGET (separator), 6);
-  else
-    gtk_widget_set_margin_left (GTK_WIDGET (separator), 6);
-
-  button = gtk_button_new_from_icon_name ("window-close-symbolic",
-                                          GTK_ICON_SIZE_MENU);
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (close_button_clicked), NULL);
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
-  gtk_widget_show_all (button);
-
-  if (gtk_widget_get_direction (button) == GTK_TEXT_DIR_RTL)
-    gtk_widget_set_margin_right (button, 6);
-  else
-    gtk_widget_set_margin_left (button, 6);
 }
 
 static void
@@ -309,6 +260,7 @@ ephy_toolbar_new (EphyWindow *window)
     g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
     return GTK_WIDGET (g_object_new (EPHY_TYPE_TOOLBAR,
+                                     "show-close-button", TRUE,
                                      "window", window,
                                      NULL));
 }

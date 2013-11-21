@@ -43,14 +43,14 @@ typedef struct _EphyToolbarClass EphyToolbarClass;
 typedef struct _EphyToolbarPrivate EphyToolbarPrivate;
 
 struct _EphyToolbar {
-  GtkBox parent;
+  GtkHeaderBar parent;
 
   /*< private >*/
   EphyToolbarPrivate *priv;
 };
 
 struct _EphyToolbarClass {
-  GtkBoxClass parent_class;
+  GtkHeaderBarClass parent_class;
 };
 
 GType      ephy_toolbar_get_type (void) G_GNUC_CONST;
