@@ -165,8 +165,8 @@ ephy_toolbar_constructed (GObject *object)
     g_object_unref (size);
 
     gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), box);
-    gtk_widget_set_margin_left (box, 27);
-    gtk_widget_set_margin_right (box, 27);
+    gtk_widget_set_margin_start (box, 27);
+    gtk_widget_set_margin_end (box, 27);
     gtk_widget_show_all (box);
   }
   else
