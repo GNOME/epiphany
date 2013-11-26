@@ -108,6 +108,9 @@ ephy_history_view_button_release (GtkWidget *treeview,
 
   view = EPHY_HISTORY_VIEW (treeview);
 
+  if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview)))
+    return GTK_WIDGET_CLASS (ephy_history_view_parent_class)->button_release_event (treeview, event);
+
   if (view->priv->pressed_path && event->button == 2 &&
       gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
                                      event->x,
