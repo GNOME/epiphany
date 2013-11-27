@@ -476,7 +476,7 @@ uri_tester_compile_regexp (UriTester *tester,
   len = gpatt->len;
 
   /* TODO: Play with optimization flags */
-  regex = g_regex_new (patt, G_REGEX_OPTIMIZE,
+  regex = g_regex_new (patt, G_REGEX_OPTIMIZE | G_REGEX_JAVASCRIPT_COMPAT,
                        G_REGEX_MATCH_NOTEMPTY, &error);
   if (error)
     {
