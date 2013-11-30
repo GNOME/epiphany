@@ -927,6 +927,41 @@ ephy_file_delete_uri (const char *uri)
 }
 
 /**
+ * ephy_file_move_uri
+ * @source_uri: URI of the file to be moved
+ * @dest_uri: URI of the destination
+ *
+ * Move from source_uri to dest_uri, overwriting if necessary.
+ */
+gboolean
+ephy_file_move_uri (const char *source_uri, const char *dest_uri)
+{
+	GFile *src;
+	GFile *dest;
+	gboolean ret;
+
+	g_return_if_fail (source_uri && dest_uri);
+
+	src = g_file_new_for_uri (source_uri);
+	dest = g_file_new_for_uri (dest_uri);
+
+	ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL,
+				NULL);
+
+	if (ret == TRUE)
+	{
+		LOG ("Moved file '%s' to '%s'", source_uri, dest_uri);
+	}
+	else
+	{
+		LOG ("Couldn't move file '%s' to '%s'", source_uri, dest_uri);
+	}
+	g_object_unref (src);
+	g_object_unref (dest);
+	return ret;
+}
+
+/**
  * ephy_file_create_data_uri_for_filename:
  * @filename: the filename of a local path
  * @mime_type: the MIME type of the filename, or %NULL

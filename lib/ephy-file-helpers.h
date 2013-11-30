@@ -86,6 +86,8 @@ gboolean           ephy_file_browse_to                      (GFile              
 gboolean           ephy_file_delete_dir_recursively         (GFile                 *file,
                                                              GError               **error);
 void               ephy_file_delete_uri                     (const char            *uri);
+gboolean           ephy_file_move_uri                       (const char            *source_uri,
+                                                             const char            *dest_uri);
 char       *       ephy_file_create_data_uri_for_filename   (const char            *filename,
                                                              const char            *mime_type);
 char       *       ephy_sanitize_filename                   (char                  *filename);
