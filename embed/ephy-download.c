@@ -804,6 +804,22 @@ ephy_download_class_init (EphyDownloadClass *klass)
   /**
    * EphyDownload::completed:
    *
+   * The ::filename-suggested signal is emitted when we have received the
+   * suggested filename from WebKit.
+   **/
+  g_signal_new ("filename-suggested",
+                G_OBJECT_CLASS_TYPE (object_class),
+                G_SIGNAL_RUN_LAST,
+                G_STRUCT_OFFSET (EphyDownloadClass, filename_suggested),
+                NULL, NULL,
+                g_cclosure_marshal_generic,
+                G_TYPE_NONE,
+                1,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * EphyDownload::completed:
+   *
    * The ::completed signal is emitted when @download has finished downloading.
    **/
   g_signal_new ("completed",
@@ -854,6 +870,7 @@ download_decide_destination_cb (WebKitDownload *wk_download,
 {
   char *dest;
 
+  g_signal_emit_by_name (download, "filename-suggested", suggested_filename);
   if (download->priv->destination) {
     webkit_download_set_destination (wk_download, download->priv->destination);
     return TRUE;

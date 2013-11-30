@@ -56,6 +56,8 @@ struct _EphyDownloadClass
 {
   GObjectClass parent_class;
 
+  void (* filename_suggested) (EphyDownload *download,
+                               char *suggested_filename);
   void (* completed)  (EphyDownload *download);
   void (* error)      (EphyDownload *download,
                        gint error_code,
