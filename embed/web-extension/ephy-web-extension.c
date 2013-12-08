@@ -102,6 +102,10 @@ web_page_send_request (WebKitWebPage *web_page,
   if (g_strcmp0 (request_uri, page_uri) == 0)
     return FALSE;
 
+  /* Always load data requests, as uri_tester won't do any good here. */
+  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
+      return FALSE;
+
   return uri_tester_test_uri (uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
 }
 
