@@ -36,11 +36,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 void
 popup_cmd_link_in_new_window (GtkAction *action,
@@ -95,7 +91,6 @@ void
 popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
-#ifdef HAVE_WEBKIT2
 	EphyEmbedEvent *event;
 	WebKitHitTestResult *result;
 	const char *title;
@@ -117,64 +112,6 @@ popup_cmd_bookmark_link (GtkAction *action,
 	}
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
-#else
-	EphyEmbedEvent *event;
-	char *title;
-	char *location = NULL;
-	guint context;
-	WebKitHitTestResult *result;
-	WebKitDOMNode *node, *first_child;
-
-	event = ephy_window_get_context_event (window);
-	g_return_if_fail (event != NULL);
-
-	result = ephy_embed_event_get_hit_test_result (event);
-	g_object_get (result, "context", &context, NULL);
-	g_object_get (result, "inner-node", &node, NULL);
-
-	if (context != WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
-	{
-		node = WEBKIT_DOM_NODE (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (node)));
-		if (WEBKIT_DOM_IS_HTML_ANCHOR_ELEMENT (node))
-			location = webkit_dom_html_anchor_element_get_href (WEBKIT_DOM_HTML_ANCHOR_ELEMENT (node));
-	}
-	else
-	{
-		g_object_get (result, "link-uri", &location, NULL);
-	}
-
-	if (!node || !location)
-		return;
-
-	title = webkit_dom_html_element_get_title (WEBKIT_DOM_HTML_ELEMENT (node));
-	
-	if (title == NULL || title[0] == '\0')
-	{
-		title = webkit_dom_html_anchor_element_get_text (WEBKIT_DOM_HTML_ANCHOR_ELEMENT (node));
-	}
-
-	/* Sometimes boorkmaklets are presented as images inside a
-	 * link, try that. */
-	if (title == NULL || title[0] == '\0')
-	{
-		first_child = webkit_dom_node_get_first_child (WEBKIT_DOM_NODE (node));
-		if (first_child && WEBKIT_DOM_IS_HTML_IMAGE_ELEMENT (first_child))
-		{
-			title = webkit_dom_html_image_element_get_alt (WEBKIT_DOM_HTML_IMAGE_ELEMENT (first_child));
-			if (title == NULL || title[0] == '\0')
-				title = webkit_dom_html_image_element_get_name (WEBKIT_DOM_HTML_IMAGE_ELEMENT (first_child));
-		}
-	}
-
-	if (title == NULL || title[0] == '\0')
-	{
-		title = location;
-	}
-	
-	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
-	g_free (title);
-	g_free (location);
-#endif
 }
 
 static void
@@ -488,35 +425,6 @@ save_temp_source (const char *address)
 }
 
 void
-popup_replace_spelling (GtkAction *action,
-			EphyWindow *window)
-{
-#ifndef HAVE_WEBKIT2
-	EphyEmbed *embed;
-	WebKitWebView *view;
-	WebKitWebFrame *frame;
-	WebKitDOMDOMSelection *selection;
-	WebKitDOMDocument *document;
-	WebKitDOMDOMWindow *default_view;
-
-	embed = ephy_embed_container_get_active_child 
-		(EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
-	view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
-	g_return_if_fail (view != NULL);
-
-	document = webkit_web_view_get_dom_document (view);
-	default_view = webkit_dom_document_get_default_view (document);
-	selection = webkit_dom_dom_window_get_selection (default_view);
-	webkit_dom_dom_selection_modify (selection, "move", "backward", "word");
-	webkit_dom_dom_selection_modify (selection, "extend", "forward", "word");
-	frame = webkit_web_view_get_focused_frame (view);
-	webkit_web_frame_replace_selection (frame, gtk_action_get_label (action));
-#endif
-}
-
-void
 popup_cmd_open_image (GtkAction *action,
 		      EphyWindow *window)
 {
@@ -558,25 +466,3 @@ popup_cmd_open_image (GtkAction *action,
 	g_free (scheme);
 }
 
-void
-popup_cmd_inspect_element (GtkAction *action, EphyWindow *window)
-{
-#ifndef HAVE_WEBKIT2
-	EphyEmbedEvent *event;
-	EphyEmbed *embed;
-	WebKitWebInspector *inspector;
-	guint x, y;
-
-	embed = ephy_embed_container_get_active_child
-		(EPHY_EMBED_CONTAINER (window));
-
-	event = ephy_window_get_context_event (window);
-	g_return_if_fail (event != NULL);
-
-	inspector = webkit_web_view_get_inspector
-		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-
-	ephy_embed_event_get_coords (event, &x, &y);
-	webkit_web_inspector_inspect_coordinates (inspector, (gdouble)x, (gdouble)y);
-#endif
-}

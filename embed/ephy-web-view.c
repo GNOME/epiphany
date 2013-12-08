@@ -2549,7 +2549,6 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_object_notify (G_OBJECT (view), "typed-address");
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 has_modified_forms_cb (GDBusProxy *web_extension,
                        GAsyncResult *result,
@@ -2567,7 +2566,6 @@ has_modified_forms_cb (GDBusProxy *web_extension,
   g_task_return_boolean (task, retval);
   g_object_unref (task);
 }
-#endif
 
 /**
  * ephy_web_view_has_modified_forms:
@@ -2590,7 +2588,6 @@ ephy_web_view_has_modified_forms (EphyWebView *view,
                                   gpointer user_data)
 {
   GTask *task = g_task_new (view, cancellable, callback, user_data);
-#ifdef HAVE_WEBKIT2
   GDBusProxy *web_extension;
 
   web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
@@ -2606,11 +2603,6 @@ ephy_web_view_has_modified_forms (EphyWebView *view,
   } else {
     g_task_return_boolean (task, FALSE);
   }
-#else
-  WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (view));
-
-  g_task_return_boolean (task, ephy_web_dom_utils_has_modified_forms (document));
-#endif
 
   g_object_unref (task);
 }

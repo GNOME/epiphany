@@ -1448,89 +1448,14 @@ node_dropped_cb (EphyNodeView *view,
 	}
 }
 
-#ifdef HAVE_WEBKIT2
 /* TODO: Favicons */
-#else
-static gboolean
-webkit_favicon_database_has_favicon (WebKitFaviconDatabase *database, const char *page_uri)
-{
-    gboolean result;
-    char *uri;
-
-    uri = webkit_favicon_database_get_favicon_uri (database, page_uri);
-    result = (uri != NULL);
-    g_free (uri);
-
-    return result;
-}
-
-static void
-icon_loaded_cb (WebKitFaviconDatabase *database, GAsyncResult *result, GtkTreeRowReference *reference)
-{
-    GdkPixbuf *favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
-
-    if (favicon && gtk_tree_row_reference_valid (reference)) {
-	    GtkTreeModel *model = gtk_tree_row_reference_get_model (reference);
-	    GtkTreePath *path = gtk_tree_row_reference_get_path (reference);
-	    GtkTreeIter iter;
-
-	    /* Force repaint. */
-	    if (gtk_tree_model_get_iter (model, &iter, path))
-		    gtk_tree_model_row_changed (model, path, &iter);
-
-	    gtk_tree_path_free (path);
-    }
-
-    gtk_tree_row_reference_free (reference);
-    if (favicon)
-	    g_object_unref (favicon);
-}
-#endif
 
 static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
 	GdkPixbuf *favicon = NULL;
-#ifndef HAVE_WEBKIT2
-	const char *page_location;
 
-	page_location = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_LOCATION);
-
-	LOG ("Get favicon for %s", page_location ? page_location : "None");
-#endif
-
-#ifdef HAVE_WEBKIT2
         /* TODO: Favicons */
-#else
-	if (page_location)
-        {
-		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
-
-		/* Try with the sync version first as this method will be frequently called. */
-                favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, page_location,
-									  FAVICON_SIZE, FAVICON_SIZE);
-
-		if (!favicon && webkit_favicon_database_has_favicon (database, page_location)) {
-			GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (user_data));
-			GtkTreeIter iter;
-
-			if (ephy_node_view_get_iter_for_node (EPHY_NODE_VIEW (user_data), &iter, node)) {
-				GtkTreeRowReference *reference;
-				GtkTreePath *path;
-
-				path = gtk_tree_model_get_path (model, &iter);
-				reference = gtk_tree_row_reference_new (model, path);
-				gtk_tree_path_free (path);
-
-				webkit_favicon_database_get_favicon_pixbuf (database, page_location,
-									    FAVICON_SIZE, FAVICON_SIZE, NULL,
-									    (GAsyncReadyCallback) icon_loaded_cb,
-									    reference);
-			}
-		}
-        }
-#endif
 	g_value_init (value, GDK_TYPE_PIXBUF);
 	g_value_take_object (value, favicon);
 }

@@ -70,11 +70,7 @@
 #define WNCK_I_KNOW_THIS_IS_UNSTABLE
 #include <libwnck/libwnck.h>
 
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #ifdef HAVE_X11_XF86KEYSYM_H
 #include <X11/XF86keysym.h>
@@ -254,22 +250,6 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, NULL },
 	{ "StopImageAnimation", NULL, N_("St_op Animation"), NULL,
 	  NULL, NULL },
-
-	/* Spelling. */
-
-	{ "ReplaceWithSpellingSuggestion0", NULL, NULL, NULL,
-	  NULL, G_CALLBACK (popup_replace_spelling), },
-	{ "ReplaceWithSpellingSuggestion1", NULL, NULL, NULL,
-	  NULL, G_CALLBACK (popup_replace_spelling), },
-	{ "ReplaceWithSpellingSuggestion2", NULL, NULL, NULL,
-	  NULL, G_CALLBACK (popup_replace_spelling), },
-	{ "ReplaceWithSpellingSuggestion3", NULL, NULL, NULL,
-	  NULL, G_CALLBACK (popup_replace_spelling), },
-
-
-	/* Inspector. */
-	{ "InspectElement", NULL, N_("Inspect _Element"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_inspect_element) },
 };
 
 static const struct
@@ -736,15 +716,9 @@ set_toolbar_visibility (EphyWindow *window, gboolean show_toolbar)
 }
 
 static void
-#ifdef HAVE_WEBKIT2
 sync_tab_load_status (EphyWebView *view,
 		      WebKitLoadEvent load_event,
 		      EphyWindow *window)
-#else
-sync_tab_load_status (EphyWebView *view,
-		      GParamSpec *pspec,
-		      EphyWindow *window)
-#endif
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group = priv->action_group;
@@ -838,11 +812,7 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	/* sync status */
 	embed = window->priv->active_embed;
-#ifdef HAVE_WEBKIT2
 	sync_tab_load_status (ephy_embed_get_web_view (embed), WEBKIT_LOAD_STARTED, window);
-#else
-	sync_tab_load_status (ephy_embed_get_web_view (embed), NULL, window);
-#endif
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	sync_chromes_visibility (window);
@@ -1001,95 +971,6 @@ update_link_actions_sensitivity (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !link_has_web_scheme);
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-update_popup_actions_visibility (EphyWindow *window,
-				 WebKitWebView *view,
-				 guint context)
-{
-	GtkAction *action;
-	GtkActionGroup *action_group;
-	gboolean is_image = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE;
-	gboolean is_editable = context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE;
-	GtkWidget *separator;
-	char **guesses = NULL;
-	int i;
-
-	action_group = window->priv->popups_action_group;
-
-	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-	{
-		action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-		gtk_action_set_visible (action, FALSE);
-		action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
-		gtk_action_set_visible (action, FALSE);
-		action = gtk_action_group_get_action (action_group, "ContextBookmarkPage");
-		gtk_action_set_visible (action, FALSE);
-		action = gtk_action_group_get_action (action_group, "BookmarkLink");
-		gtk_action_set_visible (action, FALSE);
-	}
-
-	action = gtk_action_group_get_action (action_group, "OpenImage");
-	gtk_action_set_visible (action, is_image);
-	action = gtk_action_group_get_action (action_group, "SaveImageAs");
-	gtk_action_set_visible (action, is_image);
-	action = gtk_action_group_get_action (action_group, "SetImageAsBackground");
-	gtk_action_set_visible (action, is_image);
-	action = gtk_action_group_get_action (action_group, "CopyImageLocation");
-	gtk_action_set_visible (action, is_image);
-
-	if (is_editable)
-	{
-		char *text = NULL;
-		WebKitWebFrame *frame;
-		WebKitDOMRange *range;
-
-		frame = webkit_web_view_get_focused_frame (view);
-		range = webkit_web_frame_get_range_for_word_around_caret (frame);
-		text = webkit_dom_range_get_text (range);
-
-		if (text && *text != '\0')
-		{
-			int location, length;
-			WebKitSpellChecker *checker = (WebKitSpellChecker*)webkit_get_text_checker();
-			webkit_spell_checker_check_spelling_of_string (checker, text, &location, &length);
-			if (length)
-				guesses = webkit_spell_checker_get_guesses_for_word (checker, text, NULL);
-			
-		}
-
-		g_free (text);
-	}
-
-	for (i = 0; i < MAX_SPELL_CHECK_GUESSES; i++)
-	{
-		char *action_name;
-
-		action_name = g_strdup_printf("ReplaceWithSpellingSuggestion%d", i);
-		action = gtk_action_group_get_action (action_group, action_name);
-
-		if (guesses && i <= g_strv_length (guesses)) {
-			gtk_action_set_visible (action, TRUE);
-			gtk_action_set_label (action, guesses[i]);
-		} else
-			gtk_action_set_visible (action, FALSE);
-
-		g_free (action_name);
-	}
-
-	/* The separator! There must be a better way to do this? */
-	separator = gtk_ui_manager_get_widget (window->priv->manager,
-					       "/EphyInputPopup/SpellingSeparator");
-	if (guesses)
-		gtk_widget_show (separator);
-	else
-		gtk_widget_hide (separator);
-
-	if (guesses)
-		g_strfreev (guesses);
-}
-#endif
-
 static void
 update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
 {
@@ -1100,7 +981,6 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
 	gtk_action_set_visible (action, !hide || sensitive);
 }
 
-#ifdef HAVE_WEBKIT2
 typedef struct
 {
 	EphyWindow *window;
@@ -1150,7 +1030,6 @@ can_edit_command_callback (GObject *object, GAsyncResult *result, CanEditCommand
 
 	can_edit_command_async_data_free (data);
 }
-#endif
 
 static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
@@ -1178,16 +1057,13 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	{
 		EphyEmbed *embed;
 		WebKitWebView *view;
-#ifdef HAVE_WEBKIT2
 		CanEditCommandAsyncData *data;
-#endif
 
 		embed = window->priv->active_embed;
 		g_return_if_fail (embed != NULL);
 
 		view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-#ifdef HAVE_WEBKIT2
 		data = can_edit_command_async_data_new (window, "EditCopy", hide);
 		webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_COPY, NULL,
 							     (GAsyncReadyCallback)can_edit_command_callback,
@@ -1209,13 +1085,6 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 							     (GAsyncReadyCallback)can_edit_command_callback,
 							     data);
 		return;
-#else
-		can_copy = webkit_web_view_can_copy_clipboard (view);
-		can_cut = webkit_web_view_can_cut_clipboard (view);
-		can_paste = webkit_web_view_can_paste_clipboard (view);
-		can_undo = webkit_web_view_can_undo (view);
-		can_redo = webkit_web_view_can_redo (view);
-#endif
 	}
 
 	update_edit_action_sensitivity (window, "EditCopy", can_copy, hide);
@@ -1616,11 +1485,6 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action,
 					      flags, set);
 
-	action = gtk_action_group_get_action (priv->popups_action_group,
-					      "InspectElement");
-	ephy_action_change_sensitivity_flags (action,
-					      flags, set);
-
 	/* Toolbar */
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "ViewCombinedStopReload");
@@ -1691,27 +1555,6 @@ sync_tab_title (EphyWebView *view,
 			      ephy_web_view_get_title_composite (view));
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
-		      gpointer user_data)
-{
-	EphyWindow *window = EPHY_WINDOW (user_data);
-	EphyWindowPrivate *priv = window->priv;
-	guint ux, uy;
-
-	g_return_if_fail (priv->context_event != NULL);
-
-	ephy_embed_event_get_coords (priv->context_event, &ux, &uy);
-	*x = ux; *y = uy;
-
-	/* FIXME: better position the popup within the window bounds? */
-	ephy_gui_sanitise_popup_position (menu, GTK_WIDGET (window), x, y);
-
-	*push_in = TRUE;
-}
-#endif
-
 static gboolean
 idle_unref_context_event (EphyWindow *window)
 {
@@ -1764,7 +1607,6 @@ _ephy_window_unset_context_event (EphyWindow *window)
 	}
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 context_menu_dismissed_cb (WebKitWebView *webView,
 			   EphyWindow *window)
@@ -1778,23 +1620,7 @@ context_menu_dismissed_cb (WebKitWebView *webView,
 
 	_ephy_window_unset_context_event (window);
 }
-#else
-static void
-embed_popup_deactivate_cb (GtkWidget *popup,
-			   EphyWindow *window)
-{
-	LOG ("Deactivating popup menu");
 
-	enable_edit_actions_sensitivity (window);
-
-	g_signal_handlers_disconnect_by_func
-		(popup, G_CALLBACK (embed_popup_deactivate_cb), window);
-
-	_ephy_window_unset_context_event (window);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 add_action_to_context_menu (WebKitContextMenu *context_menu,
 			    GtkActionGroup *action_group,
@@ -2044,87 +1870,6 @@ populate_context_menu (WebKitWebView *web_view,
 
 	return FALSE;
 }
-#else
-static void
-show_embed_popup (EphyWindow *window,
-		  WebKitWebView *view,
-		  GdkEventButton *event,
-		  WebKitHitTestResult *hit_test_result)
-{
-	EphyWindowPrivate *priv = window->priv;
-	guint context;
-	const char *popup;
-	gboolean can_open_in_new;
-	gboolean mailto;
-	GtkWidget *widget;
-	guint button;
-	char *uri;
-	EphyEmbedEvent *embed_event;
-
-	g_object_get (hit_test_result, "link-uri", &uri, NULL);
-	can_open_in_new = uri && ephy_embed_utils_address_has_web_scheme (uri);
-	mailto = g_str_has_prefix (uri, "mailto:");
-	g_free (uri);
-
-	g_object_get (hit_test_result, "context", &context, NULL);
-
-	LOG ("show_embed_popup context %x", context);
-
-	if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
-	{
-		GtkAction *action;
-
-		action = gtk_action_group_get_action (priv->popups_action_group, "CopyEmailAddress");
-		gtk_action_set_visible (action, mailto);
-		action = gtk_action_group_get_action (priv->popups_action_group, "CopyLinkAddress");
-		gtk_action_set_visible (action, !mailto);
-
-		popup = "/EphyLinkPopup";
-		update_edit_actions_sensitivity (window, TRUE);
-	}
-	else if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)
-	{
-		popup = "/EphyInputPopup";
-		update_edit_actions_sensitivity (window, FALSE);
-	}
-	else
-	{
-		popup = "/EphyDocumentPopup";
-		update_edit_actions_sensitivity (window, TRUE);
-	}
-
-	widget = gtk_ui_manager_get_widget (priv->manager, popup);
-	g_return_if_fail (widget != NULL);
-
-	update_link_actions_sensitivity (window, can_open_in_new);
-	update_popup_actions_visibility (window,
-					 view,
-					 context);
-
-	embed_event = ephy_embed_event_new (event, hit_test_result);
-	_ephy_window_set_context_event (window, embed_event);
-	g_object_unref (embed_event);
-
-	g_signal_connect (widget, "deactivate",
-			  G_CALLBACK (embed_popup_deactivate_cb), window);
-
-	button = event->button;
-
-	if (button == 0)
-	{
-		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-				popup_menu_at_coords, window, 0,
-				gtk_get_current_event_time ());
-		gtk_menu_shell_select_first (GTK_MENU_SHELL (widget), FALSE);
-	}
-	else
-	{
-		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-				NULL, NULL, button,
-				gtk_get_current_event_time ());
-	}
-}
-#endif
 
 static gboolean
 save_target_uri (EphyWindow *window,
@@ -2185,23 +1930,13 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	WebKitHitTestResult *hit_test_result;
 	gboolean handled = FALSE;
 
-#ifdef HAVE_WEBKIT2
 	hit_test_result = g_object_ref (window->priv->hit_test_result);
-#else
-	hit_test_result = webkit_web_view_get_hit_test_result (view, event);
-#endif
 
 	switch (event->button)
 	{
 	        case GDK_BUTTON_PRIMARY:
 			handled = save_target_uri (window, view, event, hit_test_result);
 			break;
-#ifndef HAVE_WEBKIT2
-	        case GDK_BUTTON_SECONDARY:
-			show_embed_popup (window, view, event, hit_test_result);
-			handled = TRUE;
-			break;
-#endif
 	        default:
 			break;
 	}
@@ -2211,7 +1946,6 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	return handled;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 				     WebKitHitTestResult *hit_test_result,
@@ -2224,7 +1958,6 @@ ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 		g_object_unref (priv->hit_test_result);
 	priv->hit_test_result = g_object_ref (hit_test_result);
 }
-#endif
 
 static void
 sync_embed_is_overview (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
@@ -2255,7 +1988,6 @@ ephy_window_set_is_popup (EphyWindow *window,
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 ephy_window_configure_for_view (EphyWindow *window,
 				WebKitWebView *web_view)
@@ -2285,41 +2017,6 @@ ephy_window_configure_for_view (EphyWindow *window,
 		sync_chromes_visibility (window);
 	}
 }
-#else
-static void
-ephy_window_configure_for_view (EphyWindow *window,
-				WebKitWebView *web_view)
-{
-	int width, height;
-	gboolean toolbar_visible;
-	EphyWebViewChrome chrome_mask;
-	WebKitWebWindowFeatures *features;
-
-	toolbar_visible = TRUE;
-	features = webkit_web_view_get_window_features (web_view);
-
-	chrome_mask = window->priv->chrome;
-
-	g_object_get (features,
-		      "width", &width,
-		      "height", &height,
-		      "toolbar-visible", &toolbar_visible,
-		      NULL);
-
-	if (!toolbar_visible)
-		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-
-	/* We will consider windows with different chrome settings popups. */
-	if (chrome_mask != window->priv->chrome) {
-		gtk_window_set_default_size (GTK_WINDOW (window), width, height);
-
-		window->priv->is_popup = TRUE;
-		window->priv->chrome = chrome_mask;
-
-		sync_chromes_visibility (window);
-	}
-}
-#endif
 
 static gboolean
 web_view_ready_cb (WebKitWebView *web_view,
@@ -2344,16 +2041,9 @@ web_view_ready_cb (WebKitWebView *web_view,
 	return TRUE;
 }
 
-#ifdef HAVE_WEBKIT2
 static WebKitWebView *
 create_web_view_cb (WebKitWebView *web_view,
 		    EphyWindow *window)
-#else
-static WebKitWebView *
-create_web_view_cb (WebKitWebView *web_view,
-		    WebKitWebFrame *frame,
-		    EphyWindow *window)
-#endif
 {
 	EphyEmbed *embed;
 	WebKitWebView *new_web_view;
@@ -2385,15 +2075,9 @@ create_web_view_cb (WebKitWebView *web_view,
 					 0);
 
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-#ifdef HAVE_WEBKIT2
 	g_signal_connect (new_web_view, "ready-to-show",
 			  G_CALLBACK (web_view_ready_cb),
 			  web_view);
-#else
-	g_signal_connect (new_web_view, "web-view-ready",
-			  G_CALLBACK (web_view_ready_cb),
-			  web_view);
-#endif
 
 	return new_web_view;
 }
@@ -2420,7 +2104,6 @@ delete_web_app (const char *request_uri)
 	soup_uri_free (uri);
 }
 
-#ifdef HAVE_WEBKIT2
 static gboolean
 decide_policy_cb (WebKitWebView *web_view,
 		  WebKitPolicyDecision *decision,
@@ -2572,148 +2255,6 @@ decide_policy_cb (WebKitWebView *web_view,
 
 	return FALSE;
 }
-#else
-static gboolean
-policy_decision_required_cb (WebKitWebView *web_view,
-			     WebKitWebFrame *web_frame,
-			     WebKitNetworkRequest *request,
-			     WebKitWebNavigationAction *action,
-			     WebKitWebPolicyDecision *decision,
-			     EphyWindow *window)
-{
-	WebKitWebNavigationReason reason;
-	gint button;
-	gint state;
-	const char *uri;
-
-	reason = webkit_web_navigation_action_get_reason (action);
-	button = webkit_web_navigation_action_get_button (action);
-	state = webkit_web_navigation_action_get_modifier_state (action);
-	uri = webkit_network_request_get_uri (request);
-
-	if (!ephy_embed_utils_address_has_web_scheme (uri))
-	{
-		GError *error = NULL;
-		GdkScreen *screen;
-
-		screen = gtk_widget_get_screen (GTK_WIDGET (web_view));
-		gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
-
-		if (error)
-		{
-			LOG ("failed to handle non web scheme: %s", error->message);
-			g_error_free (error);
-
-			return FALSE;
-		}
-
-		webkit_web_policy_decision_ignore (decision);
-
-		return TRUE;
-	}
-
-	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
-	    ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-	{
-		/* The only thing we allow here is to either navigate
-		 * in the same window and tab to the current domain,
-		 * or launch a new (non app mode) epiphany instance
-		 * for all the other cases. */
-		gboolean return_value;
-		SoupURI *soup_uri = soup_uri_new (uri);
-		SoupURI *current_soup_uri = soup_uri_new (webkit_web_view_get_uri (web_view));
-
-		if (g_str_equal (soup_uri->host, current_soup_uri->host))
-		{
-			return_value = FALSE;
-		}
-		else
-		{
-			char *command_line;
-			GError *error = NULL;
-
-			return_value = TRUE;
-
-			command_line = g_strdup_printf ("gvfs-open %s", uri);
-			g_spawn_command_line_async (command_line, &error);
-
-			if (error)
-			{
-				g_debug ("Error opening %s: %s", uri, error->message);
-				g_error_free (error);
-			}
-
-			g_free (command_line);
-		}
-
-		soup_uri_free (soup_uri);
-		soup_uri_free (current_soup_uri);
-
-		return return_value;
-	}
-
-	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED) {
-		EphyEmbed *embed;
-		EphyNewTabFlags flags;
-
-		flags = EPHY_NEW_TAB_OPEN_PAGE;
-
-		ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
-					      EPHY_PAGE_VISIT_LINK);
-
-		/* New tab in new window for control+shift+click */
-		if (button == 1 &&
-		    state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-		{
-			flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-		}
-		/* New tab in existing window for middle click and
-		 * control+click */
-		else if (button == 2 ||
-			 (button == 1 && state == GDK_CONTROL_MASK))
-		{
-			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
-		}
-		/* Because we connect to button-press-event *after*
-		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
-		 * a link when you shift+click it. Otherwise when you
-		 * shift+click a link to download it you would also be taken to
-		 * the link destination. */
-		else if (button == 1 && state == GDK_SHIFT_MASK)
-		{
-			return TRUE;
-		}
-		/* Those were our special cases, we won't handle this */
-		else
-		{
-			return FALSE;
-		}
-
-		embed = ephy_embed_container_get_active_child
-			(EPHY_EMBED_CONTAINER (window));
-
-		ephy_shell_new_tab_full (ephy_shell_get_default (),
-					 window,
-					 embed,
-					 request,
-					 flags,
-					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
-
-		return TRUE;
-	}
-
-	if (reason == WEBKIT_WEB_NAVIGATION_REASON_FORM_SUBMITTED && uri &&
-	    g_str_has_prefix (uri, "ephy-about:applications"))
-	{
-		delete_web_app (uri);
-		webkit_web_policy_decision_use (decision);
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-#endif
 
 static void
 ephy_window_connect_active_embed (EphyWindow *window)
@@ -2732,11 +2273,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
 	sync_tab_security	(view, NULL, window);
 	sync_tab_document_type	(view, NULL, window);
-#ifdef HAVE_WEBKIT2
 	sync_tab_load_status    (view, WEBKIT_LOAD_STARTED, window);
-#else
-	sync_tab_load_status	(view, NULL, window);
-#endif
 	sync_tab_is_blank	(view, NULL, window);
 	sync_tab_navigation	(view, NULL, window);
 	sync_tab_title		(view, NULL, window);
@@ -2752,28 +2289,12 @@ ephy_window_connect_active_embed (EphyWindow *window)
 				 G_CALLBACK (sync_tab_zoom),
 				 window, 0);
 
-#ifdef HAVE_WEBKIT2
 	g_signal_connect_object (web_view, "create",
 				 G_CALLBACK (create_web_view_cb),
 				 window, 0);
-#else
-	g_signal_connect_object (web_view, "create-web-view",
-				 G_CALLBACK (create_web_view_cb),
-				 window, 0);
-#endif
-#ifdef HAVE_WEBKIT2
 	g_signal_connect_object (web_view, "decide-policy",
 				 G_CALLBACK (decide_policy_cb),
 				 window, 0);
-#else
-	g_signal_connect_object (web_view, "navigation-policy-decision-requested",
-				 G_CALLBACK (policy_decision_required_cb),
-				 window, 0);
-	g_signal_connect_object (web_view, "new-window-policy-decision-requested",
-				 G_CALLBACK (policy_decision_required_cb),
-				 window, 0);
-#endif
-
 	g_signal_connect_object (view, "notify::hidden-popup-count",
 				 G_CALLBACK (sync_tab_popup_windows),
 				 window, 0);
@@ -2795,22 +2316,15 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "notify::document-type",
 				 G_CALLBACK (sync_tab_document_type),
 				 window, 0);
-#ifndef HAVE_WEBKIT2
-	g_signal_connect_object (view, "notify::load-status",
-				 G_CALLBACK (sync_tab_load_status),
-				 window, 0);
-#else
 	g_signal_connect_object (view, "load-changed",
 				 G_CALLBACK (sync_tab_load_status),
 				 window, 0);
-#endif
 	g_signal_connect_object (view, "notify::navigation",
 				 G_CALLBACK (sync_tab_navigation),
 				 window, 0);
 	g_signal_connect_object (view, "notify::is-blank",
 				 G_CALLBACK (sync_tab_is_blank),
 				 window, 0);
-#ifdef HAVE_WEBKIT2
 	g_signal_connect_object (view, "button-press-event",
 				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 				 window, 0);
@@ -2820,16 +2334,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "mouse-target-changed",
 				 G_CALLBACK (ephy_window_mouse_target_changed_cb),
 				 window, 0);
-#else
-	/* We run our button-press-event after the default
-	 * handler to make sure pages have a chance to perform
-	 * their own handling - for instance, have their own
-	 * context menus, or provide specific functionality
-	 * for the right mouse button */
-	g_signal_connect_object (view, "button-press-event",
-				 G_CALLBACK (ephy_window_dom_mouse_click_cb),
-				 window, G_CONNECT_AFTER);
-#endif
 	g_signal_connect_object (embed, "notify::overview-mode",
 				 G_CALLBACK (sync_embed_is_overview),
 				 window, 0);
@@ -2852,9 +2356,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	WebKitWebView *web_view;
 	EphyWebView *view;
 	EphyOverview *overview;
-#ifndef HAVE_WEBKIT2
-	guint sid;
-#endif
 	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
@@ -2869,31 +2370,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	g_signal_handlers_disconnect_by_func (web_view,
 					      G_CALLBACK (create_web_view_cb),
 					      window);
-#ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (decide_policy_cb),
 					      window);
-#else
-	sid = g_signal_lookup ("navigation-policy-decision-requested",
-			       WEBKIT_TYPE_WEB_VIEW);
-	g_signal_handlers_disconnect_matched (web_view,
-					      G_SIGNAL_MATCH_ID |
-					      G_SIGNAL_MATCH_FUNC,
-					      sid,
-					      0, NULL,
-					      G_CALLBACK (policy_decision_required_cb),
-					      NULL);
-	sid = g_signal_lookup ("new-window-policy-decision-requested",
-			       WEBKIT_TYPE_WEB_VIEW);
-	g_signal_handlers_disconnect_matched (web_view,
-					      G_SIGNAL_MATCH_ID |
-					      G_SIGNAL_MATCH_FUNC,
-					      sid,
-					      0, NULL,
-					      G_CALLBACK (policy_decision_required_cb),
-					      NULL);
-#endif
-
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (sync_tab_popup_windows),
 					      window);
@@ -2939,14 +2418,12 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
-#ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (populate_context_menu),
 					      window);
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (ephy_window_mouse_target_changed_cb),
 					      window);
-#endif
 }
 
 static void
@@ -3984,10 +3461,6 @@ ephy_window_constructor (GType type,
 		gtk_action_set_visible (action, FALSE);
 
 		action = gtk_action_group_get_action (priv->popups_action_group, "ContextBookmarkPage");
-		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
-		gtk_action_set_visible (action, FALSE);
-
-		action = gtk_action_group_get_action (priv->popups_action_group, "InspectElement");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 		gtk_action_set_visible (action, FALSE);
 

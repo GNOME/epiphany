@@ -22,11 +22,7 @@
 #define _EPHY_SNAPSHOT_SERVICE_H
 
 #include <gtk/gtk.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #include <glib-object.h>
 

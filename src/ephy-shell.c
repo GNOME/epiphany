@@ -581,7 +581,6 @@ ephy_shell_class_init (EphyShellClass *klass)
   g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload *download,
@@ -621,18 +620,14 @@ download_started_cb (WebKitWebContext *web_context,
 
   ephy_download_new_for_download (download, window);
 }
-#endif
 
 static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
-
-#ifdef HAVE_WEBKIT2
   WebKitWebContext *web_context;
   EphyEmbedShellMode mode;
   char *favicon_db_path;
-#endif
 
   shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
@@ -642,7 +637,6 @@ ephy_shell_init (EphyShell *shell)
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
 
-#ifdef HAVE_WEBKIT2
   web_context = webkit_web_context_get_default ();
   g_signal_connect (web_context, "download-started",
                     G_CALLBACK (download_started_cb),
@@ -657,7 +651,6 @@ ephy_shell_init (EphyShell *shell)
 
   webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
   g_free (favicon_db_path);
-#endif
 
   shell->priv->search_provider = ephy_search_provider_new ();
 
@@ -734,11 +727,7 @@ EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
                          EphyWindow *parent_window,
                          EphyEmbed *previous_embed,
-#ifdef HAVE_WEBKIT2
                          WebKitURIRequest *request,
-#else
-                         WebKitNetworkRequest *request,
-#endif
                          EphyNewTabFlags flags,
                          EphyWebViewChrome chrome,
                          gboolean is_popup,
@@ -760,11 +749,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
   g_return_val_if_fail (EPHY_IS_WINDOW (parent_window) || !parent_window, NULL);
   g_return_val_if_fail (EPHY_IS_EMBED (previous_embed) || !previous_embed, NULL);
-#ifdef HAVE_WEBKIT2
   g_return_val_if_fail (WEBKIT_IS_URI_REQUEST (request) || !request, NULL);
-#else
-  g_return_val_if_fail (WEBKIT_IS_NETWORK_REQUEST (request) || !request, NULL);
-#endif
 
   embed_shell = EPHY_EMBED_SHELL (shell);
 
@@ -848,11 +833,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
     ephy_web_view_load_request (ephy_embed_get_web_view (embed),
                                 request);
 
-#ifdef HAVE_WEBKIT2
     is_empty = ephy_embed_utils_url_is_empty (webkit_uri_request_get_uri (request));
-#else
-    is_empty = ephy_embed_utils_url_is_empty (webkit_network_request_get_uri (request));
-#endif
   } else if (delayed_open_page)
       ephy_embed_set_delayed_load_request (embed, request);
 
@@ -900,11 +881,7 @@ ephy_shell_new_tab (EphyShell *shell,
                     EphyNewTabFlags flags)
 {
   EphyEmbed *embed;
-#ifdef HAVE_WEBKIT2
   WebKitURIRequest *request = url ? webkit_uri_request_new (url) : NULL;
-#else
-  WebKitNetworkRequest *request = url ? webkit_network_request_new (url) : NULL;
-#endif
 
   embed = ephy_shell_new_tab_full (shell, parent_window,
                                    previous_embed, request, flags,
@@ -1223,11 +1200,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   EphyEmbed *embed;
   EphyNewTabFlags page_flags;
   const char *url;
-#ifdef HAVE_WEBKIT2
   WebKitURIRequest *request = NULL;
-#else
-  WebKitNetworkRequest *request = NULL;
-#endif
 
   if (!data->window && !data->flags)
     return FALSE;
@@ -1237,11 +1210,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     page_flags = EPHY_NEW_TAB_HOME_PAGE;
   } else {
     page_flags = EPHY_NEW_TAB_OPEN_PAGE;
-#ifdef HAVE_WEBKIT2
     request = webkit_uri_request_new (url);
-#else
-    request = webkit_network_request_new (url);
-#endif
   }
 
   embed = ephy_shell_new_tab_full (ephy_shell_get_default (),

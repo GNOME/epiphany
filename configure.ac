@@ -79,8 +79,6 @@ GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
 WEBKIT_GTK_PC_NAME=webkit2gtk-3.0
-AC_DEFINE([HAVE_WEBKIT2],[1],[Define if building with WebKit2])
-AM_CONDITIONAL(WITH_WEBKIT2, [test "yes" = "yes"])
 
 # Tests
 

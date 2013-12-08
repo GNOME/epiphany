@@ -31,11 +31,7 @@
 #include "totem-glow-button.h"
 
 #include <glib/gi18n.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_BOX)
 
@@ -88,11 +84,7 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
   char *unescaped;
 
   download = ephy_download_get_webkit_download (ephy_download);
-#ifdef HAVE_WEBKIT2
   dest = webkit_download_get_destination (download);
-#else
-  dest = webkit_download_get_destination_uri (download);
-#endif
   if (!dest)
     return NULL;
 
@@ -134,17 +126,11 @@ get_remaining_time (WebKitDownload *download)
   gdouble elapsed_time;
   gdouble remaining_time;
   gdouble per_byte_time;
-#ifdef HAVE_WEBKIT2
   WebKitURIResponse *response;
 
   response = webkit_download_get_response (download);
   total = webkit_uri_response_get_content_length (response);
   cur = webkit_download_get_received_data_length (download);
-#else
-
-  total = webkit_download_get_total_size (download);
-  cur = webkit_download_get_current_size (download);
-#endif
   elapsed_time = webkit_download_get_elapsed_time (download);
 
   if (cur <= 0)
@@ -193,11 +179,7 @@ update_download_label_and_tooltip (EphyDownloadWidget *widget,
   char *destination;
 
   download = ephy_download_get_webkit_download (widget->priv->download);
-#ifdef HAVE_WEBKIT2
   destination = g_filename_display_basename (webkit_download_get_destination (download));
-#else
-  destination = g_filename_display_basename (webkit_download_get_destination_uri (download));
-#endif
 
   remaining_tooltip = g_markup_printf_escaped ("%s\n%s", destination, download_label);
   g_free (destination);
@@ -210,19 +192,10 @@ update_download_label_and_tooltip (EphyDownloadWidget *widget,
 static gboolean
 download_content_length_is_known (WebKitDownload *download)
 {
-#ifdef HAVE_WEBKIT2
   WebKitURIResponse *response;
 
   response = webkit_download_get_response (download);
   return webkit_uri_response_get_content_length (response);
-#else
-  WebKitNetworkResponse *response;
-  SoupMessage* message;
-
-  response = webkit_download_get_network_response (download);
-  message = webkit_network_response_get_message (response);
-  return soup_message_headers_get_content_length (message->response_headers) > 0;
-#endif
 }
 
 static void
@@ -233,14 +206,10 @@ widget_progress_cb (WebKitDownload *download,
   int progress;
   char *download_label = NULL;
 
-#ifdef HAVE_WEBKIT2
   if (!webkit_download_get_destination (download))
     return;
 
   progress = webkit_download_get_estimated_progress (download) * 100;
-#else
-  progress = webkit_download_get_progress (download) * 100;
-#endif
 
   if (progress % 10 == 0)
     update_download_icon (widget);
@@ -260,11 +229,7 @@ widget_progress_cb (WebKitDownload *download,
     gint64 current_size;
 
     /* Unknown content length, show received bytes instead. */
-#ifdef HAVE_WEBKIT2
     current_size = webkit_download_get_received_data_length (download);
-#else
-    current_size = webkit_download_get_current_size (download);
-#endif
     if (current_size > 0)
       download_label = g_format_size (current_size);
   }
@@ -275,7 +240,6 @@ widget_progress_cb (WebKitDownload *download,
   }
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 widget_destination_changed_cb (WebKitDownload *download,
                                GParamSpec *pspec,
@@ -296,26 +260,7 @@ widget_finished_cb (WebKitDownload *download,
   update_download_label_and_tooltip (widget, _("Finished"));
   totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
 }
-#else
-static void
-widget_status_cb (WebKitDownload *download,
-                  GParamSpec *pspec,
-                  EphyDownloadWidget *widget)
-{
-  WebKitDownloadStatus status;
 
-  status = webkit_download_get_status (download);
-
-  if (status != WEBKIT_DOWNLOAD_STATUS_FINISHED)
-    return;
-
-  widget->priv->finished = TRUE;
-  update_download_label_and_tooltip (widget, _("Finished"));
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 widget_failed_cb (WebKitDownload *download,
                   GError *error,
@@ -330,31 +275,6 @@ widget_failed_cb (WebKitDownload *download,
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
   g_free (error_msg);
 }
-#else
-static gboolean
-widget_error_cb (WebKitDownload *download,
-                 gint error_code,
-                 gint error_detail,
-                 char *reason,
-                 EphyDownloadWidget *widget)
-{
-  char *error_msg;
-
-  g_signal_handlers_disconnect_by_func (download, widget_status_cb, widget);
-  g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
-
-  error_msg = g_strdup_printf (_("Error downloading: %s"), reason);
-
-  gtk_label_set_text (GTK_LABEL (widget->priv->remaining), error_msg);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
-
-  g_free (error_msg);
-
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
-
-  return FALSE;
-}
-#endif
 
 static void
 open_activate_cb (GtkMenuItem *item, EphyDownloadWidget *widget)
@@ -391,11 +311,7 @@ download_menu_clicked_cb (GtkWidget *button,
 
   download = ephy_download_get_webkit_download (widget->priv->download);
 
-#ifdef HAVE_WEBKIT2
   basename = g_filename_display_basename (webkit_download_get_destination (download));
-#else
-  basename = g_filename_display_basename (webkit_download_get_destination_uri (download));
-#endif
   name = g_uri_unescape_string (basename, NULL);
 
   box = gtk_widget_get_parent (button);
@@ -491,16 +407,10 @@ ephy_download_widget_dispose (GObject *object)
   if (widget->priv->download != NULL) {
     download = ephy_download_get_webkit_download (widget->priv->download);
 
-#ifdef HAVE_WEBKIT2
     g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
     g_signal_handlers_disconnect_by_func (download, widget_destination_changed_cb, widget);
     g_signal_handlers_disconnect_by_func (download, widget_finished_cb, widget);
     g_signal_handlers_disconnect_by_func (download, widget_failed_cb, widget);
-#else
-    g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
-    g_signal_handlers_disconnect_by_func (download, widget_status_cb, widget);
-    g_signal_handlers_disconnect_by_func (download, widget_error_cb, widget);
-#endif
 
     g_object_unref (widget->priv->download);
     widget->priv->download = NULL;
@@ -642,7 +552,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
   widget->priv->remaining = remain;
   widget->priv->menu = menu;
 
-#ifdef HAVE_WEBKIT2
   g_signal_connect (download, "notify::estimated-progress",
                     G_CALLBACK (widget_progress_cb), widget);
   g_signal_connect (download, "notify::destination",
@@ -651,14 +560,6 @@ ephy_download_widget_new (EphyDownload *ephy_download)
                     G_CALLBACK (widget_finished_cb), widget);
   g_signal_connect (download, "failed",
                     G_CALLBACK (widget_failed_cb), widget);
-#else
-  g_signal_connect (download, "notify::progress",
-                    G_CALLBACK (widget_progress_cb), widget);
-  g_signal_connect (download, "notify::status",
-                    G_CALLBACK (widget_status_cb), widget);
-  g_signal_connect (download, "error",
-                    G_CALLBACK (widget_error_cb), widget);
-#endif
 
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
   gtk_button_set_relief (GTK_BUTTON (menu), GTK_RELIEF_NORMAL);

@@ -50,17 +50,9 @@ ephy_test_utils_check_ephy_embed_address (EphyEmbed *embed,
 
 static void
 load_changed_cb (WebKitWebView *web_view,
-#ifdef HAVE_WEBKIT2
                  WebKitLoadEvent status,
-#else
-                 GParamSpec *pspec,
-#endif
                  GMainLoop *loop)
 {
-#ifndef HAVE_WEBKIT2
-  WebKitLoadStatus status = webkit_web_view_get_load_status (web_view);
-#endif
-
   if (status == WEBKIT_LOAD_COMMITTED) {
     web_view_ready_counter--;
     g_signal_handlers_disconnect_by_func (web_view, load_changed_cb, loop);
@@ -74,11 +66,7 @@ load_changed_cb (WebKitWebView *web_view,
 static void
 wait_until_load_is_committed (WebKitWebView *web_view, GMainLoop *loop)
 {
-#ifdef HAVE_WEBKIT2
   g_signal_connect (web_view, "load-changed", G_CALLBACK (load_changed_cb), loop);
-#else
-  g_signal_connect (web_view, "notify::load-status", G_CALLBACK (load_changed_cb), loop);
-#endif
 }
 
 static void

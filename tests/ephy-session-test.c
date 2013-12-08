@@ -127,8 +127,6 @@ test_ephy_session_load (void)
     enable_delayed_loading ();
 }
 
-/* FIXME: This #ifdef should be removed once bug #695437 is fixed. */
-#ifdef HAVE_WEBKIT2
 const char *session_data_many_windows =
 "<?xml version=\"1.0\"?>"
 "<session>"
@@ -139,18 +137,6 @@ const char *session_data_many_windows =
 	   "<embed url=\"about:config\" title=\"Epiphany\"/>"
 	 "</window>"
 "</session>";
-#else
-const char *session_data_many_windows =
-"<?xml version=\"1.0\"?>"
-"<session>"
-	 "<window x=\"100\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-7da420dd\">"
-	   "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
-	 "</window>"
-	 "<window x=\"73\" y=\"26\" width=\"1067\" height=\"740\" active-tab=\"0\" role=\"epiphany-window-1261c786\">"
-	   "<embed url=\"about:epiphany\" title=\"Epiphany\"/>"
-	 "</window>"
-"</session>";
-#endif
 
 static void
 test_ephy_session_clear (void)
@@ -256,10 +242,6 @@ test_ephy_session_load_many_windows (void)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-#ifndef HAVE_WEBKIT2
-      /* FIXME: This #ifndef should be removed once bug #695437 is fixed. */
-      ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:epiphany");
-#endif
     }
 
     enable_delayed_loading ();
@@ -303,10 +285,6 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
       g_assert (embed);
       view = ephy_embed_get_web_view (embed);
       g_assert (view);
-#ifndef HAVE_WEBKIT2
-      /* FIXME: This #ifndef should be removed once bug #695437 is fixed. */
-      ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:epiphany");
-#endif
     }
 
     /* Causing a session load here should not create new windows, since we
@@ -360,76 +338,6 @@ test_ephy_session_open_empty_uri_forces_new_window (void)
     open_uris_after_loading_session (uris, 3);
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-test_ephy_session_restore_tabs (void)
-{
-  EphySession *session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
-  const char* uris[] = { "ephy-about:epiphany", "ephy-about:config", NULL };
-  guint32 user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
-  gboolean ret;
-  GList *l;
-  gchar *url;
-  int n_windows;
-  EphyEmbed *embed;
-
-  disable_delayed_loading ();
-
-  /* Nothing to restore. */
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
-
-  ephy_shell_open_uris (ephy_shell_get_default(), uris, 0, user_time);
-  while (gtk_events_pending ())
-    gtk_main_iteration_do (FALSE);
-
-  /* Nothing to restore, again. */
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
-
-  l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
-  url = g_strdup (ephy_web_view_get_address (ephy_embed_get_web_view (embed)));
-  gtk_widget_destroy (GTK_WIDGET (embed));
-
-  /* There should be now at least one tab that can be restored. */
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == TRUE);
-
-  ephy_session_undo_close_tab (session);
-  while (gtk_events_pending ())
-    gtk_main_iteration_do (FALSE);
-
-  /* Nothing to restore, again. */
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
-
-  /* The active child should now be pointing to the restored tab,
-     whose address is the one we copied previously. */
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
-  ephy_test_utils_check_ephy_web_view_address (ephy_embed_get_web_view (embed), url);
-  g_free (url);
-
-  ephy_session_clear (session);
-
-  ret = load_session_from_string (session, session_data_many_windows);
-  g_assert (ret);
-
-  l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  n_windows = g_list_length (l);
-  /* We need more than one window for the next test to make sense. */
-  g_assert_cmpint (n_windows, >, 1);
-  gtk_widget_destroy (GTK_WIDGET (l->data));
-  /* One window is gone. */
-  g_assert_cmpint (n_windows, ==, g_list_length (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default()))) + 1);
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == TRUE);
-  ephy_session_undo_close_tab (session);
-  while (gtk_events_pending ())
-    gtk_main_iteration_do (FALSE);
-  /* We have the same amount of windows than before destroying one. */
-  g_assert_cmpint (n_windows, ==, g_list_length (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default()))));
-
-  enable_delayed_loading ();
-  ephy_session_clear (session);
-}
-#endif
-
 int
 main (int argc, char *argv[])
 {
@@ -473,11 +381,6 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/open-empty-uri-forces-new-window",
                    test_ephy_session_open_empty_uri_forces_new_window);
-
-#ifndef HAVE_WEBKIT2
-  g_test_add_func("/src/ephy-session/restore-tabs",
-                  test_ephy_session_restore_tabs);
-#endif
 
   ret = g_test_run ();
 

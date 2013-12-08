@@ -64,7 +64,6 @@ server_callback (SoupServer *server,
   soup_message_body_complete (msg->response_body);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
 {
@@ -85,31 +84,6 @@ load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loo
   g_free (expected_url);
   g_main_loop_quit (loop);
 }
-#else
-static void
-notify_load_status_cb (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
-{
-  WebKitLoadStatus status;
-  char *expected_url;
-  const char *loaded_url;
-
-  status = webkit_web_view_get_load_status (view);
-
-  if (status != WEBKIT_LOAD_FINISHED)
-    return;
-
-  expected_url = g_object_get_data (G_OBJECT (view), "test.expected_url");
-  g_assert (expected_url != NULL);
-
-  loaded_url = webkit_web_view_get_uri (view);
-  g_assert_cmpstr (loaded_url, ==, expected_url);
-
-  g_signal_handlers_disconnect_by_func (view, notify_load_status_cb, loop);
-
-  g_free (expected_url);
-  g_main_loop_quit (loop);
-}
-#endif
 
 typedef struct {
   const char *url;
@@ -181,13 +155,8 @@ test_ephy_web_view_load_url (void)
 
     g_test_message ("[%s] \t-> %s", test.url, test.expected_url);
 
-#ifdef HAVE_WEBKIT2
     g_signal_connect (view, "load-changed",
                       G_CALLBACK (load_changed_cb), loop);
-#else
-    g_signal_connect (view, "notify::load-status",
-                      G_CALLBACK (notify_load_status_cb), loop);
-#endif
 
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
@@ -318,7 +287,6 @@ test_ephy_web_view_normalize_or_autosearch (void)
   g_object_unref (g_object_ref_sink (view));
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 quit_main_loop_when_load_finished (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
 {
@@ -328,24 +296,7 @@ quit_main_loop_when_load_finished (WebKitWebView *view, WebKitLoadEvent load_eve
   g_main_loop_quit (loop);
   g_signal_handlers_disconnect_by_func (view, quit_main_loop_when_load_finished, NULL);
 }
-#else
-static void
-quit_main_loop_when_load_finished (WebKitWebView *view, GParamSpec *spec, GMainLoop *loop)
-{
-  WebKitLoadStatus status;
 
-  status = webkit_web_view_get_load_status (view);
-
-  if (status != WEBKIT_LOAD_FINISHED)
-    return;
-
-  g_main_loop_quit (loop);
-  g_signal_handlers_disconnect_by_func (view, quit_main_loop_when_load_finished, loop);
-
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static guint back_forward_list_counter = 0;
 
 static void
@@ -390,7 +341,6 @@ ensure_back_forward_list_changes (GMainLoop *loop)
   g_assert_cmpint (back_forward_list_counter, ==, 0);
   g_main_loop_unref (loop);
 }
-#endif
 
 static void
 test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
@@ -400,40 +350,20 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
     const char *bad_url;
 
     view = EPHY_WEB_VIEW (ephy_web_view_new ());
-#ifdef HAVE_WEBKIT2
+
     loop = setup_ensure_back_forward_list_changes (view);
-#else
-    loop = g_main_loop_new (NULL, FALSE);
-#endif
     bad_url = "http://localhost:2984375932/";
 
     ephy_web_view_load_url (view, bad_url);
 
-#ifdef HAVE_WEBKIT2
     ensure_back_forward_list_changes (loop);
-#else
-    g_signal_connect (view, "notify::load-status",
-                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
 
-    g_main_loop_run (loop);
-    g_main_loop_unref (loop);
-#endif
-
-#ifdef HAVE_WEBKIT2
     g_assert (webkit_back_forward_list_get_current_item (
       webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
 
     g_assert_cmpstr (bad_url, ==, webkit_back_forward_list_item_get_uri (
       webkit_back_forward_list_get_current_item (
         webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
-#else
-    g_assert (webkit_web_back_forward_list_get_current_item (
-      webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
-
-    g_assert_cmpstr (bad_url, ==, webkit_web_history_item_get_uri (
-      webkit_web_back_forward_list_get_current_item (
-        webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
-#endif
 
     g_object_unref (g_object_ref_sink (view));
 }
@@ -471,13 +401,9 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
     
     ephy_web_view_load_url (view, bad_url);
 
-#ifdef HAVE_WEBKIT2
     g_signal_connect (view, "load-changed",
                       G_CALLBACK (quit_main_loop_when_load_finished), loop);
-#else
-    g_signal_connect (view, "notify::load-status",
-                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
-#endif
+
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
     g_signal_handlers_disconnect_by_func (history_service, G_CALLBACK (visit_url_cb), NULL);

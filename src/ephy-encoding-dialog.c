@@ -35,11 +35,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
 
@@ -117,18 +113,9 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-#ifdef HAVE_WEBKIT2
+
 	encoding = webkit_web_view_get_custom_charset (view);
 	if (encoding == NULL) goto out;
-#else
-	encoding = webkit_web_view_get_custom_encoding (view);
-	if (encoding == NULL)
-	{
-		encoding = webkit_web_view_get_encoding (view);
-		if (encoding == NULL) goto out;
-		is_automatic = TRUE;
-	}
-#endif
 
 	node = ephy_encodings_get_encoding (dialog->priv->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_ENCODING (node));
@@ -162,15 +149,9 @@ out:
 
 
 static void
-#ifdef HAVE_WEBKIT2
 embed_net_stop_cb (EphyWebView *view,
 		   WebKitLoadEvent load_event,
 		   EphyEncodingDialog *dialog)
-#else
-embed_net_stop_cb (EphyWebView *view,
-		   GParamSpec *pspec,
-		   EphyEncodingDialog *dialog)
-#endif
 {
 	if (ephy_web_view_is_loading (view) == FALSE)
 		sync_encoding_against_embed (dialog);
@@ -189,13 +170,9 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 						      dialog);
 	}
 
-#ifdef HAVE_WEBKIT2
 	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
 			  G_CALLBACK (embed_net_stop_cb), dialog);
-#else
-	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "notify::load-status",
-			  G_CALLBACK (embed_net_stop_cb), dialog);
-#endif
+
 	dialog->priv->embed = embed;
 
 	sync_encoding_against_embed (dialog);
@@ -252,11 +229,7 @@ activate_choice (EphyEncodingDialog *dialog)
 
 	if (is_automatic)
 	{
-#ifdef HAVE_WEBKIT2
 		webkit_web_view_set_custom_charset (view, NULL);
-#else
-		webkit_web_view_set_custom_encoding (view, NULL);
-#endif
 	}
 	else if (dialog->priv->selected_encoding != NULL)
 	{
@@ -264,11 +237,7 @@ activate_choice (EphyEncodingDialog *dialog)
 
 		code = dialog->priv->selected_encoding;
 
-#ifdef HAVE_WEBKIT2
 		webkit_web_view_set_custom_charset (view, code);
-#else
-		webkit_web_view_set_custom_encoding (view, code);
-#endif
 
 		ephy_encodings_add_recent (dialog->priv->encodings, code);
 	}

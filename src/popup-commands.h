@@ -63,9 +63,3 @@ void popup_cmd_download_link		(GtkAction *action,
 void popup_cmd_save_image_as		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_inspect_element		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_replace_spelling             (GtkAction *action,
-                                         EphyWindow *window);
-

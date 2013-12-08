@@ -60,11 +60,7 @@
 #include <libnotify/notify.h>
 #include <libsoup/soup.h>
 #include <string.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define DEFAULT_ICON_SIZE 144
 #define FAVICON_SIZE 16
@@ -293,45 +289,21 @@ get_suggested_filename (EphyWebView *view)
 {
 	char *suggested_filename = NULL;
 	const char *mimetype;
-#ifdef HAVE_WEBKIT2
 	WebKitURIResponse *response;
-#else
-	WebKitWebFrame *frame;
-	WebKitWebDataSource *data_source;
-#endif
 	WebKitWebResource *web_resource;
 
-#ifdef HAVE_WEBKIT2
 	web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
 	response = webkit_web_resource_get_response (web_resource);
 	mimetype = webkit_uri_response_get_mime_type (response);
-#else
-	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
-	data_source = webkit_web_frame_get_data_source (frame);
-	web_resource = webkit_web_data_source_get_main_resource (data_source);
-	mimetype = webkit_web_resource_get_mime_type (web_resource);
-#endif
 
 	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
 	{
 		/* Web Title will be used as suggested filename */
-#ifdef HAVE_WEBKIT2
 		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".mhtml", NULL);
-#else
-		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".html", NULL);
-#endif
 	}
 	else
 	{
-#ifdef HAVE_WEBKIT2
 		suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
-#else
-		WebKitNetworkResponse *response;
-
-		response = webkit_web_frame_get_network_response (frame);
-		suggested_filename = g_strdup (webkit_network_response_get_suggested_filename (response));
-#endif
-
 		if (!suggested_filename)
 		{
 			SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
@@ -513,22 +485,10 @@ static void
 set_image_from_favicon (EphyApplicationDialogData *data)
 {
 	GdkPixbuf *icon = NULL;
+	cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
 
-#ifdef HAVE_WEBKIT2
-	{
-		cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
-		if (icon_surface)
-			icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, 0, 0);
-	}
-#else
-	{
-		const char *page_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
-		if (page_uri)
-			icon = webkit_favicon_database_try_get_favicon_pixbuf (webkit_get_favicon_database (),
-									       page_uri,
-									       FAVICON_SIZE, FAVICON_SIZE);
-	}
-#endif
+	if (icon_surface)
+		icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, 0, 0);
 
 	if (icon != NULL) {
 		GdkPixbuf *framed;
@@ -557,7 +517,6 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
 	g_object_unref (framed);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 download_finished_cb (WebKitDownload *download,
 		      EphyApplicationDialogData *data)
@@ -582,46 +541,13 @@ download_failed_cb (WebKitDownload *download,
 	/* Something happened, default to a page snapshot. */
 	set_image_from_favicon (data);
 }
-#else
-static void
-download_status_changed_cb (WebKitDownload *download,
-			    GParamSpec *spec,
-			    EphyApplicationDialogData *data)
-{
-	WebKitDownloadStatus status = webkit_download_get_status (download);
-	char *filename;
-
-	gtk_widget_show (data->image);
-
-	switch (status)
-	{
-	case WEBKIT_DOWNLOAD_STATUS_FINISHED:
-		filename = g_filename_from_uri (webkit_download_get_destination_uri (download),
-						   NULL, NULL);
-		set_app_icon_from_filename (data, filename);
-		g_free (filename);
-		break;
-	case WEBKIT_DOWNLOAD_STATUS_ERROR:
-	case WEBKIT_DOWNLOAD_STATUS_CANCELLED:
-		/* Something happened, default to a page snapshot. */
-		set_image_from_favicon (data);
-		break;
-	default:
-		break;
-	}
-}
-#endif
 
 static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
-#ifndef HAVE_WEBKIT2
-	WebKitNetworkRequest *request;
-#endif
 	WebKitDownload *download;
 	char *destination, *destination_uri, *tmp_filename;
 
-#ifdef HAVE_WEBKIT2
 	download = webkit_web_context_download_uri (webkit_web_context_get_default (),
 						    data->icon_href);
 	/* We do not want this download to show up in the UI, so let's
@@ -630,35 +556,19 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 	/* FIXME: it's probably better to just do this in a clean way
 	 * instead of using this workaround. */
 	g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
-#else
-	request = webkit_network_request_new (data->icon_href);
-	download = webkit_download_new (request);
-	g_object_unref (request);
-#endif
 
 	tmp_filename = ephy_file_tmp_filename ("ephy-download-XXXXXX", NULL);
 	destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
 	destination_uri = g_filename_to_uri (destination, NULL, NULL);
-#ifdef HAVE_WEBKIT2
 	webkit_download_set_destination (download, destination_uri);
-#else
-	webkit_download_set_destination_uri (download, destination_uri);
-#endif
 	g_free (destination);
 	g_free (destination_uri);
 	g_free (tmp_filename);
 
-#ifdef HAVE_WEBKIT2
 	g_signal_connect (download, "finished",
 			  G_CALLBACK (download_finished_cb), data);
 	g_signal_connect (download, "failed",
 			  G_CALLBACK (download_failed_cb), data);
-#else
-	g_signal_connect (download, "notify::status",
-			  G_CALLBACK (download_status_changed_cb), data);
-
-	webkit_download_start (download);
-#endif
 }
 
 static void
@@ -693,7 +603,6 @@ download_icon_or_take_snapshot (EphyApplicationDialogData *data,
 	}
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 fill_default_application_image_cb (GObject *source,
 				   GAsyncResult *async_result,
@@ -717,23 +626,15 @@ fill_default_application_image_cb (GObject *source,
 
 	download_icon_or_take_snapshot (data, res, uri, color);
 }
-#endif
 
 static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
 	const char *base_uri;
-#ifdef HAVE_WEBKIT2
 	GDBusProxy *web_extension;
-#else
-	char *uri = NULL;
-	char *color = NULL;
-	gboolean res;
-#endif
 
 	base_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
 
-#ifdef HAVE_WEBKIT2
 	web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
 	if (web_extension)
 		g_dbus_proxy_call (web_extension,
@@ -746,14 +647,6 @@ fill_default_application_image (EphyApplicationDialogData *data)
 				   data);
 	else
 		download_icon_or_take_snapshot (data, FALSE, NULL, NULL);
-#else
-	res = ephy_web_dom_utils_get_best_icon (webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view)),
-						base_uri,
-						&uri,
-						&color);
-
-	download_icon_or_take_snapshot (data, res, uri, color);
-#endif
 }
 
 typedef struct {
@@ -822,7 +715,6 @@ set_default_application_title (EphyApplicationDialogData *data,
 	g_free (title);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 fill_default_application_title_cb (GObject *source,
 				   GAsyncResult *async_result,
@@ -844,13 +736,12 @@ fill_default_application_title_cb (GObject *source,
 
 	set_default_application_title (data, title);
 }
-#endif
 
 static void
 fill_default_application_title (EphyApplicationDialogData *data)
 {
-#ifdef HAVE_WEBKIT2
 	GDBusProxy *web_extension;
+
 	web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
 	if (web_extension)
 		g_dbus_proxy_call (web_extension,
@@ -863,11 +754,6 @@ fill_default_application_title (EphyApplicationDialogData *data)
 				   data);
 	else
 		set_default_application_title (data, NULL);
-#else
-	WebKitDOMDocument *document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (data->view));
-	char *title = ephy_web_dom_utils_get_application_title (document);
-	set_default_application_title (data, title);
-#endif
 }
 
 static void
@@ -1126,11 +1012,7 @@ window_cmd_edit_undo (GtkAction *action,
 
 		if (embed)
 		{
-#ifdef HAVE_WEBKIT2
 			webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Undo");
-#else
-			webkit_web_view_undo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
-#endif
 		}
 	}
 }
@@ -1155,11 +1037,7 @@ window_cmd_edit_redo (GtkAction *action,
 		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
 		if (embed)
 		{
-#ifdef HAVE_WEBKIT2
 			webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Redo");
-#else
-			webkit_web_view_redo (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)));
-#endif
 		}
 	}
 }
@@ -1179,11 +1057,7 @@ window_cmd_edit_cut (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-#ifdef HAVE_WEBKIT2
 		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
-#else
-		webkit_web_view_cut_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-#endif
 	}
 }
 
@@ -1203,11 +1077,8 @@ window_cmd_edit_copy (GtkAction *action,
 
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
-#ifdef HAVE_WEBKIT2
+
 		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
-#else
-		webkit_web_view_copy_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-#endif
 	}
 }
 
@@ -1228,11 +1099,7 @@ window_cmd_edit_paste (GtkAction *action,
 		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-#ifdef HAVE_WEBKIT2
 		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
-#else
-		webkit_web_view_paste_clipboard (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-#endif
 	}
 }
 
@@ -1279,11 +1146,7 @@ window_cmd_edit_select_all (GtkAction *action,
                   (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
-#ifdef HAVE_WEBKIT2
 		webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
-#else
-		webkit_web_view_select_all (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-#endif
 	}
 }
 
@@ -1405,13 +1268,9 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 			 embed,
 			 NULL,
 			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-#ifdef HAVE_WEBKIT2
+
 	webkit_web_view_set_view_mode
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), WEBKIT_VIEW_MODE_SOURCE);
-#else
-	webkit_web_view_set_view_source_mode
-		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), TRUE);
-#endif
 	webkit_web_view_load_uri
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
 }
@@ -1494,7 +1353,6 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 				     data);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GOutputStream *ostream)
 {
@@ -1521,20 +1379,12 @@ get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GO
 				     (GAsyncReadyCallback)save_temp_source_write_cb,
 				     data_str);
 }
-#endif
 
 static void
 save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed)
 {
 	EphyWebView *view;
-#ifdef HAVE_WEBKIT2
 	WebKitWebResource *resource;
-#else
-	WebKitWebFrame *frame;
-	WebKitWebDataSource *data_source;
-	GString *const_data;
-	GString *data;
-#endif
 	GFileOutputStream *ostream;
 	GError *error = NULL;
 
@@ -1563,29 +1413,10 @@ save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed
 				g_object_ref (embed),
 				g_object_unref);
 
-#ifdef HAVE_WEBKIT2
 	resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
 	webkit_web_resource_get_data (resource, NULL,
 				      (GAsyncReadyCallback)get_main_resource_data_cb,
 				      ostream);
-#else
-	frame = webkit_web_view_get_main_frame (WEBKIT_WEB_VIEW (view));
-	data_source = webkit_web_frame_get_data_source (frame);
-	const_data = webkit_web_data_source_get_data (data_source);
-
-	/* We create a new GString here because we need to make sure
-	 * we keep writing in case of partial writes */
-	if (const_data)
-		data = g_string_new_len (const_data->str, const_data->len);
-	else
-		data = g_string_new_len ("", 0);
-
-	g_output_stream_write_async (G_OUTPUT_STREAM (ostream),
-				     data->str, data->len,
-				     G_PRIORITY_DEFAULT, NULL,
-				     (GAsyncReadyCallback)save_temp_source_write_cb,
-				     data);
-#endif
 }
 
 static void
@@ -1763,19 +1594,11 @@ window_cmd_help_about (GtkAction *action,
 
 	g_key_file_free (key_file);
 
-#ifdef HAVE_WEBKIT2
 	comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
 				      "Powered by WebKit %d.%d.%d"),
 				    webkit_get_major_version (),
 				    webkit_get_minor_version (),
 				    webkit_get_micro_version ());
-#else
-	comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
-	                              "Powered by WebKit %d.%d.%d"),
-	                            webkit_major_version (),
-	                            webkit_minor_version (),
-	                            webkit_micro_version ());
-#endif
 
 	licence = g_strjoin ("\n\n",
 			     _(licence_part[0]),

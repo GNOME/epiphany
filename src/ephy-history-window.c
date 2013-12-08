@@ -869,13 +869,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
         {
 		/* No need to use the async version as this function will be
 		called many times by the treeview. */
-#ifdef HAVE_WEBKIT2
 		/* TODO: Favicons */
-#else
-		WebKitFaviconDatabase *database = webkit_get_favicon_database ();
-		pixbuf = webkit_favicon_database_get_favicon_pixbuf (database, page_location,
-								     FAVICON_SIZE, FAVICON_SIZE);
-#endif
         }
 
 	g_value_init (value, GDK_TYPE_PIXBUF);

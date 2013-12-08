@@ -92,10 +92,6 @@ libephymain_la_CPPFLAGS = \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS)
 
-if WITH_WEBKIT2
-libephymain_la_CPPFLAGS += -DHAVE_WEBKIT2
-endif
-
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	  \
 	$(WEBKIT_CFLAGS)	  \

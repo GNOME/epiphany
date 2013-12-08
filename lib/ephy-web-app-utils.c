@@ -27,11 +27,7 @@
 
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
 
@@ -257,7 +253,6 @@ out:
   return desktop_file_path;
 }
 
-#ifdef HAVE_WEBKIT2
 static SoupCookieJar *get_current_cookie_jar (void)
 {
   char *filename;
@@ -273,19 +268,6 @@ static SoupCookieJar *get_current_cookie_jar (void)
 
   return jar;
 }
-#else
-static SoupCookieJar *get_current_cookie_jar (void)
-{
-  SoupSession *session = webkit_get_default_session ();
-  SoupCookieJar *jar;
-
-  jar = (SoupCookieJar*)soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR);
-
-  /* WebKit might not have a cookie jar yet, if it has not needed one
-   * and none has been set by Epiphany. */
-  return jar ? g_object_ref (jar) : NULL;
-}
-#endif
 
 static void
 create_cookie_jar_for_domain (const char *address, const char *directory)

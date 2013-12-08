@@ -113,7 +113,6 @@ session_delete (EphySession *session,
 	g_object_unref (file);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (WebKitWebView *view,
 		 WebKitLoadEvent load_event,
@@ -122,22 +121,6 @@ load_changed_cb (WebKitWebView *view,
 	if (!ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
 		ephy_session_save (session, SESSION_STATE);
 }
-#else
-static void
-load_status_notify_cb (EphyWebView *view,
-		       GParamSpec *pspec,
-		       EphySession *session)
-{
-	WebKitLoadStatus status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (view));
-
-	/* We won't know the URL we are loading in PROVISIONAL because
-	   of bug #593149, but save session anyway */
-	if (status == WEBKIT_LOAD_PROVISIONAL ||
-	    status == WEBKIT_LOAD_COMMITTED || 
-	    status == WEBKIT_LOAD_FINISHED)
-		ephy_session_save (session, SESSION_STATE);
-}
-#endif
 
 static gpointer *
 parent_location_new (EphyNotebook *notebook)
@@ -205,9 +188,6 @@ closed_tab_new (GQueue *closed_tabs,
 	ClosedTab *sibling_tab;
 
 	tab->url = g_strdup (address);
-#ifndef HAVE_WEBKIT2
-	tab->bflist = g_list_copy_deep (bflist, (GCopyFunc)webkit_web_history_item_copy, NULL);
-#endif
 	tab->position = position;
 
 	sibling_tab = find_tab_with_notebook (closed_tabs, parent_notebook);
@@ -251,10 +231,6 @@ ephy_session_undo_close_tab (EphySession *session)
 	EphySessionPrivate *priv;
 	EphyEmbed *embed, *new_tab;
 	ClosedTab *tab;
-#ifndef HAVE_WEBKIT2
-	WebKitWebBackForwardList *dest;
-	GList *i;
-#endif
 	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE
 		| EPHY_NEW_TAB_PRESENT_WINDOW
 		| EPHY_NEW_TAB_JUMP
@@ -309,18 +285,6 @@ ephy_session_undo_close_tab (EphySession *session)
 		post_restore_cleanup (priv->closed_tabs, tab, TRUE);
 	}
 
-	/* This is deficient: we need to recreate the whole
-	 * BackForward list. Also, WebKit2 doesn't have this API. */
-#ifndef HAVE_WEBKIT2
-	dest = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_tab));
-	for (i = tab->bflist; i; i = i->next)
-	{
-		LOG ("ADDING TO BF: %s",
-		     webkit_web_history_item_get_title ((WebKitWebHistoryItem*) i->data));
-		webkit_web_back_forward_list_add_item (dest,
-						       webkit_web_history_item_copy ((WebKitWebHistoryItem*) i->data));
-	}
-#endif
 	closed_tab_free (tab);
 
 	if (g_queue_is_empty (priv->closed_tabs))
@@ -336,11 +300,7 @@ ephy_session_tab_closed (EphySession *session,
 	EphySessionPrivate *priv = session->priv;
 	EphyWebView *view;
 	const char *address;
-#ifdef HAVE_WEBKIT2
 	WebKitBackForwardList *source;
-#else
-	WebKitWebBackForwardList *source;
-#endif
 	ClosedTab *tab;
 	GList *items = NULL;
 
@@ -348,11 +308,7 @@ ephy_session_tab_closed (EphySession *session,
 	address = ephy_web_view_get_address (view);
 
 	source = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
-#ifdef HAVE_WEBKIT2
 	items = webkit_back_forward_list_get_back_list_with_limit (source, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-#else
-	items = webkit_web_back_forward_list_get_back_list_with_limit (source, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-#endif
 	if (items == NULL && g_strcmp0 (address, "ephy-about:overview") == 0)
 		return;
 
@@ -395,13 +351,8 @@ notebook_page_added_cb (GtkWidget *notebook,
 			guint position,
 			EphySession *session)
 {
-#ifdef HAVE_WEBKIT2
 	g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
 			  G_CALLBACK (load_changed_cb), session);
-#else
-	g_signal_connect (ephy_embed_get_web_view (embed), "notify::load-status",
-			  G_CALLBACK (load_status_notify_cb), session);
-#endif
 }
 
 static void
@@ -412,15 +363,10 @@ notebook_page_removed_cb (GtkWidget *notebook,
 {
 	ephy_session_save (session, SESSION_STATE);
 
-#ifdef HAVE_WEBKIT2
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
 		 session);
-#else
-	g_signal_handlers_disconnect_by_func
-		(ephy_embed_get_web_view (embed), G_CALLBACK (load_status_notify_cb),
-		 session);
-#endif
+
 	ephy_session_tab_closed (session, EPHY_NOTEBOOK (notebook), embed, position);
 }
 

@@ -199,10 +199,6 @@ webkit_pref_callback_user_agent (GSettings *settings,
                                                              "Epiphany", VERSION);
 }
 
-/* This doesn't contain WebKit2 specific API, but it's only used inside
- * HAVE_WEBKIT2 blocks, so it gives a compile warning when building
- * with WebKit1.
- */
 static gdouble
 get_screen_dpi (GdkScreen *screen)
 {

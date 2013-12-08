@@ -66,7 +66,6 @@ typedef enum {
   EPHY_PROCESS_OTHER
 } EphyProcess;
 
-#ifdef HAVE_WEBKIT2
 static const char *get_ephy_process_name (EphyProcess process)
 {
   switch (process) {
@@ -82,7 +81,6 @@ static const char *get_ephy_process_name (EphyProcess process)
 
   return NULL;
 }
-#endif
 
 static void vma_free (VMA_t* vma)
 {
@@ -306,9 +304,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
 
   g_slist_free (vma_entries);
 
-#ifdef HAVE_WEBKIT2
   g_string_append_printf (str, "<h2>%s</h2>", get_ephy_process_name (process));
-#endif
 
   /* Anon table. */
   print_vma_table (str, anon_hash, "Anonymous memory");
@@ -321,7 +317,6 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
   g_hash_table_unref (mapped_hash);
 }
 
-#ifdef HAVE_WEBKIT2
 static pid_t get_pid_from_proc_name (const char *name)
 {
   guint i;
@@ -442,7 +437,6 @@ static void ephy_smaps_pid_children_to_html (EphySMaps *smaps, GString *str, pid
   }
   g_dir_close (proc);
 }
-#endif
 
 char* ephy_smaps_to_html (EphySMaps *smaps)
 {
@@ -452,10 +446,7 @@ char* ephy_smaps_to_html (EphySMaps *smaps)
   g_string_append (str, "<body>");
 
   ephy_smaps_pid_to_html (smaps, str, pid, EPHY_PROCESS_EPIPHANY);
-
-#ifdef HAVE_WEBKIT2
   ephy_smaps_pid_children_to_html (smaps, str, pid);
-#endif
 
   g_string_append (str, "</body>");
 

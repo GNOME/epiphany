@@ -22,11 +22,7 @@
 #define _EPHY_OVERVIEW_STORE_H
 
 #include <gtk/gtk.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 #include "gd-main-view.h"
 
 G_BEGIN_DECLS

@@ -31,11 +31,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
@@ -43,9 +39,7 @@ struct _EphyFindToolbarPrivate
 {
 	EphyWindow *window;
 	WebKitWebView *web_view;
-#ifdef HAVE_WEBKIT2
         WebKitFindController *controller;
-#endif
 	GtkWidget *entry;
 	GtkWidget *next;
 	GtkWidget *prev;
@@ -91,44 +85,6 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_SEARCH_BAR)
 
 /* private functions */
-
-static void
-scroll_lines (WebKitWebView *web_view,
-              int num_lines)
-{
-#ifdef HAVE_WEBKIT2
-        /* TODO: Scroll API? */
-#else
-        GtkScrolledWindow *scrolled_window;
-        GtkAdjustment *vadj;
-        gdouble value;
-
-        scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
-        vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
-
-        value = gtk_adjustment_get_value (vadj) + (num_lines * gtk_adjustment_get_step_increment (vadj));
-        gtk_adjustment_set_value (vadj, value);
-#endif
-}
-
-static void
-scroll_pages (WebKitWebView *web_view,
-              int num_pages)
-{
-#ifdef HAVE_WEBKIT2
-        /* TODO: Scroll API */
-#else
-        GtkScrolledWindow *scrolled_window;
-        GtkAdjustment *vadj;
-        gdouble value;
-
-        scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
-        vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
-
-        value = gtk_adjustment_get_value (vadj) + (num_pages * gtk_adjustment_get_page_increment (vadj));
-        gtk_adjustment_set_value (vadj, value);
-#endif
-}
 
 static void
 set_status (EphyFindToolbar *toolbar,
@@ -180,11 +136,8 @@ clear_status (EphyFindToolbar *toolbar)
 	gtk_widget_set_sensitive (priv->next, FALSE);
 
         if (priv->web_view == NULL) return;
-#ifdef HAVE_WEBKIT2
+
         webkit_find_controller_search_finish (priv->controller);
-#else
-	webkit_web_view_unmark_text_matches (priv->web_view);
-#endif
 }
 
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
@@ -246,27 +199,6 @@ str_has_uppercase (const char *str)
 	return FALSE;
 }
 
-#ifndef HAVE_WEBKIT2
-static void
-ephy_find_toolbar_mark_matches (EphyFindToolbar *toolbar)
-{
-        EphyFindToolbarPrivate *priv = toolbar->priv;
-        WebKitWebView *web_view = priv->web_view;
-        gboolean case_sensitive;
-
-        case_sensitive = str_has_uppercase (priv->find_string);
-
-        webkit_web_view_unmark_text_matches (web_view);
-        if (priv->find_string != NULL && priv->find_string[0] != '\0')
-                webkit_web_view_mark_text_matches (web_view,
-                                                   priv->find_string,
-                                                   case_sensitive,
-                                                   0);
-        webkit_web_view_set_highlight_text_matches (web_view, TRUE);
-}
-#endif
-
-#ifdef HAVE_WEBKIT2
 static void
 real_find (EphyFindToolbarPrivate *priv,
            EphyFindDirection direction)
@@ -284,59 +216,18 @@ real_find (EphyFindToolbarPrivate *priv,
         webkit_find_controller_search (priv->controller, priv->find_string, options, G_MAXUINT);
 }
 
-#else
-static EphyFindResult
-real_find (EphyFindToolbarPrivate *priv,
-	   EphyFindDirection direction)
-{
-        WebKitWebView *web_view = priv->web_view;
-        gboolean case_sensitive;
-        gboolean forward = (direction == EPHY_FIND_DIRECTION_NEXT);
-
-        case_sensitive = str_has_uppercase (priv->find_string);
-        if (!priv->find_string || !g_strcmp0 (priv->find_string, ""))
-                return EPHY_FIND_RESULT_NOTFOUND;
-
-        if (!webkit_web_view_search_text
-            (web_view, priv->find_string, case_sensitive, forward, FALSE)) {
-                /* not found, try to wrap */
-                if (!webkit_web_view_search_text
-                    (web_view, priv->find_string, case_sensitive, forward, TRUE)) {
-                        /* there's no result */
-                        return EPHY_FIND_RESULT_NOTFOUND;
-                } else {
-                        /* found wrapped */
-                        return EPHY_FIND_RESULT_FOUNDWRAPPED;
-                }
-        }
-
-        return EPHY_FIND_RESULT_FOUND;
-}
-#endif
-
 static gboolean
 do_search (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-#ifndef HAVE_WEBKIT2
-	EphyFindResult result;
-#endif
 
 	priv->find_source_id = 0;
 
-#ifdef HAVE_WEBKIT2
         real_find (priv, EPHY_FIND_DIRECTION_NEXT);
-#else
-	ephy_find_toolbar_mark_matches (toolbar);
-
-	result = real_find (priv, EPHY_FIND_DIRECTION_NEXT);
-	set_status (toolbar, result);
-#endif
 
 	return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 found_text_cb (WebKitFindController *controller,
                guint n_matches,
@@ -367,8 +258,6 @@ failed_to_find_text_cb (WebKitFindController *controller,
         options |= WEBKIT_FIND_OPTIONS_WRAP_AROUND;
         webkit_find_controller_search (controller, priv->find_string, options, G_MAXUINT);
 }
-#endif
-
 
 static void
 update_find_string (EphyFindToolbar *toolbar)
@@ -412,22 +301,6 @@ entry_key_press_event_cb (GtkEntry *entry,
 		handled = TRUE;
 		switch (event->keyval)
 		{
-		case GDK_KEY_Up:
-		case GDK_KEY_KP_Up:
-			scroll_lines (priv->web_view, -1);
-			break;
-		case GDK_KEY_Down:
-		case GDK_KEY_KP_Down:
-			scroll_lines (priv->web_view, 1);
-			break;
-		case GDK_KEY_Page_Up:
-		case GDK_KEY_KP_Page_Up:
-			scroll_pages (priv->web_view, -1);
-			break;
-		case GDK_KEY_Page_Down:
-		case GDK_KEY_KP_Page_Down:
-			scroll_pages (priv->web_view, 1);
-			break;
 		case GDK_KEY_Escape:
 			/* Hide the toolbar when ESC is pressed */
 			ephy_find_toolbar_request_close (toolbar);
@@ -762,13 +635,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 
 	if (priv->web_view != NULL)
 	{
-#ifdef HAVE_WEBKIT2
                 g_signal_handlers_disconnect_matched (priv->controller,
-                                                      G_SIGNAL_MATCH_DATA,
-                                                      0, 0, NULL, NULL, toolbar);
-#endif
-
-                g_signal_handlers_disconnect_matched (EPHY_WEB_VIEW (web_view),
                                                       G_SIGNAL_MATCH_DATA,
                                                       0, 0, NULL, NULL, toolbar);
 	}
@@ -776,7 +643,6 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	priv->web_view = web_view;
 	if (web_view != NULL)
 	{
-#ifdef HAVE_WEBKIT2
                 priv->controller = webkit_web_view_get_find_controller (web_view);
                 g_signal_connect_object (priv->controller, "found-text",
                                          G_CALLBACK (found_text_cb),
@@ -784,7 +650,6 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
                 g_signal_connect_object (priv->controller, "failed-to-find-text",
                                          G_CALLBACK (failed_to_find_text_cb),
                                          toolbar, 0);
-#endif
 
 		clear_status (toolbar);
 
@@ -794,90 +659,16 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	}
 }
 
-#ifndef HAVE_WEBKIT2
-typedef struct
-{
-	EphyFindToolbar *toolbar;
-	gboolean direction;
-	gboolean highlight;
-} FindAgainCBStruct;
-
-static void
-find_again_data_destroy_cb (FindAgainCBStruct *data)
-{
-	g_slice_free (FindAgainCBStruct, data);
-}
-
-static gboolean
-find_again_cb (FindAgainCBStruct *data)
-{
-	EphyFindResult result;
-	EphyFindToolbarPrivate *priv = data->toolbar->priv;
-
-	result = real_find (priv, data->direction);
-
-	/* Highlight matches again if the toolbar was hidden when the user
-	 * requested find-again. */
-	if (result != EPHY_FIND_RESULT_NOTFOUND && data->highlight)
-		ephy_find_toolbar_mark_matches (data->toolbar);
-
-	set_status (data->toolbar, result);
-
-	priv->find_again_source_id = 0;
-
-	return FALSE;
-}
-
-static void
-find_again (EphyFindToolbar *toolbar, EphyFindDirection direction)
-{
-	GtkWidget *widget = GTK_WIDGET (toolbar);
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-	FindAgainCBStruct *data;
-	gboolean visible;
-
-	visible = gtk_widget_get_visible (widget);
-	if (!visible) {
-		gtk_widget_show (widget);
-		gtk_widget_grab_focus (widget);
-	}
-
-	/* We need to do this to give time to the embed to sync with the size
-	 * change due to the toolbar being shown, otherwise the toolbar can
-	 * obscure the result. See GNOME bug #415074.
-	 */
-	if (priv->find_again_source_id != 0) return;
-
-	data = g_slice_new0 (FindAgainCBStruct);
-	data->toolbar = toolbar;
-	data->direction = direction;
-	data->highlight = !visible;
-
-	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-						      (GSourceFunc) find_again_cb,
-						      data,
-						      (GDestroyNotify) find_again_data_destroy_cb);
-}
-#endif
-
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
-#ifdef HAVE_WEBKIT2
         webkit_find_controller_search_next (toolbar->priv->controller);
-#else
-	find_again (toolbar, EPHY_FIND_DIRECTION_NEXT);
-#endif
 }
 
 void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
-#ifdef HAVE_WEBKIT2
         webkit_find_controller_search_previous (toolbar->priv->controller);
-#else
-	find_again (toolbar, EPHY_FIND_DIRECTION_PREV);
-#endif
 }
 
 void
@@ -909,11 +700,8 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 	gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (toolbar), FALSE);
 
 	if (priv->web_view == NULL) return;
-#ifdef HAVE_WEBKIT2
+
         webkit_find_controller_search_finish (priv->controller);
-#else
-	webkit_web_view_set_highlight_text_matches (priv->web_view, FALSE);
-#endif
 }
 
 void

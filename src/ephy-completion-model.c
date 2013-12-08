@@ -180,16 +180,12 @@ icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
   IconLoadData *data = (IconLoadData *) user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   GdkPixbuf *favicon = NULL;
-
-#ifdef HAVE_WEBKIT2
   cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+
   if (icon_surface) {
     favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
     cairo_surface_destroy (icon_surface);
   }
-#else
-  favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
-#endif
 
   if (favicon) {
     /* The completion model might have changed its contents */
@@ -215,12 +211,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   IconLoadData *data;
   WebKitFaviconDatabase* database;
 
-#ifndef HAVE_WEBKIT2
-  GdkPixbuf *favicon;
-  database = webkit_get_favicon_database ();
-#else
   database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
-#endif
 
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
                                      EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
@@ -231,32 +222,14 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
                                      EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
                                      -1);
 
-#ifndef HAVE_WEBKIT2
-  /* We try first with the try_get_favicon_pixbuf() because if the icon
-     is in the DB it's faster than the async version. */
-  favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, row->location,
-                                                            FAVICON_SIZE, FAVICON_SIZE);
-  if (favicon) {
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter, EPHY_COMPLETION_FAVICON_COL, favicon, -1);
-    g_object_unref (favicon);
-    return;
-  }
-#endif
-
   data = g_slice_new (IconLoadData);
   data->model = GTK_LIST_STORE (g_object_ref(model));
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
   data->row_reference = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), path);
   gtk_tree_path_free (path);
 
-#ifdef HAVE_WEBKIT2
   webkit_favicon_database_get_favicon (database, row->location,
                                        NULL, icon_loaded_cb, data);
-#else
-  webkit_favicon_database_get_favicon_pixbuf (database, row->location,
-                                              FAVICON_SIZE, FAVICON_SIZE,
-                                              NULL, icon_loaded_cb, data);
-#endif
 }
 
 static void

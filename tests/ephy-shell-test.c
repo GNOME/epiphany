@@ -319,45 +319,7 @@ test_ephy_shell_tab_from_external (void)
 static void
 test_ephy_shell_tab_no_history (void)
 {
-#ifdef HAVE_WEBKIT2
   /* TODO: BackForwardList */
-#else
-  EphyShell *ephy_shell;
-  GtkWidget *window;
-  EphyEmbed *embed;
-  EphyEmbed *embed2;
-  EphyEmbed *embed3;
-
-  WebKitWebBackForwardList *bflist;
-  WebKitWebHistoryItem *item;
-
-  ephy_shell = ephy_shell_get_default ();
-  embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, NULL,
-                               EPHY_NEW_TAB_DONT_SHOW_WINDOW);
-  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-
-  /* Because we are not using a mainloop, we have to produce our own
-   * back/fwd data. */
-  bflist = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-  item = webkit_web_history_item_new_with_data ("http://www.gnome.org/", "GNOME");
-  webkit_web_back_forward_list_add_item (bflist, item);
-  g_object_unref (item);
-  item = webkit_web_history_item_new_with_data ("http://planet.gnome.org/", "Planet GNOME");
-  webkit_web_back_forward_list_add_item (bflist, item);
-  g_object_unref (item);
-
-  embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed, NULL,
-                               EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-  bflist = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed2));
-  g_assert_cmpint (webkit_web_back_forward_list_get_back_length (bflist), ==, 1);
-
-  embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed2, NULL,
-                               EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_DONT_COPY_HISTORY);
-  bflist = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed3));
-  g_assert_cmpint (webkit_web_back_forward_list_get_back_length (bflist), ==, 0);
-
-  gtk_widget_destroy (window);
-#endif
 }
 
 int

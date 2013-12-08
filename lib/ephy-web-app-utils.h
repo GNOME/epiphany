@@ -26,12 +26,7 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 G_BEGIN_DECLS
 

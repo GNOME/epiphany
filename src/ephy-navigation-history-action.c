@@ -41,11 +41,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE(object)		\
   (G_TYPE_INSTANCE_GET_PRIVATE ((object),				\
@@ -106,12 +102,12 @@ action_activate (GtkAction *action)
   if (history_action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
     if (ephy_gui_is_middle_click () ||
         ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
-      /* FIXME: in WebKit2 the back/forward list is immutable, so we are not able to
-       * copy it. Ideally the webkit1 code path should also work for webkit2. */
-#ifdef HAVE_WEBKIT2
       const char *back_uri;
       WebKitBackForwardList *history;
       WebKitBackForwardListItem *back_item;
+
+      /* FIXME: in WebKit2 the back/forward list is immutable, so we are not able to
+       * copy it. Ideally the webkit1 code path should also work for webkit2. */
 
       history = webkit_web_view_get_back_forward_list (web_view);
       back_item = webkit_back_forward_list_get_back_item (history);
@@ -128,15 +124,6 @@ action_activate (GtkAction *action)
       gtk_widget_grab_focus (GTK_WIDGET (embed));
       return;
     }
-#else
-      embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-                                  embed,
-                                  NULL,
-                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-    }
-#endif
 
     webkit_web_view_go_back (web_view);
     gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -144,25 +131,15 @@ action_activate (GtkAction *action)
     if (ephy_gui_is_middle_click () ||
         ephy_link_action_get_button (EPHY_LINK_ACTION (history_action)) == 2) {
       const char *forward_uri;
-#ifdef HAVE_WEBKIT2
       WebKitBackForwardList *history;
       WebKitBackForwardListItem *forward_item;
-#else
-      WebKitWebHistoryItem *forward_item;
-      WebKitWebBackForwardList *history;
-#endif
 
       /* Forward history is not copied when opening
          a new tab, so get the forward URI manually
          and load it */
       history = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-#ifdef HAVE_WEBKIT2
       forward_item = webkit_back_forward_list_get_forward_item (history);
       forward_uri = webkit_back_forward_list_item_get_original_uri (forward_item);
-#else
-      forward_item = webkit_web_back_forward_list_get_forward_item (history);
-      forward_uri = webkit_web_history_item_get_original_uri (forward_item);
-#endif
 
       embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
@@ -273,16 +250,12 @@ icon_loaded_cb (GObject *source,
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   GdkPixbuf *favicon = NULL;
-
-#ifdef HAVE_WEBKIT2
   cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+
   if (icon_surface) {
     favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
     cairo_surface_destroy (icon_surface);
   }
-#else
-  favicon = webkit_favicon_database_get_favicon_pixbuf_finish (database, result, NULL);
-#endif
 
   if (favicon) {
     GtkWidget *image;
@@ -305,9 +278,6 @@ new_history_menu_item (EphyWebView *view,
   GtkWidget *item;
   GtkLabel *label;
   WebKitFaviconDatabase* database;
-#ifndef HAVE_WEBKIT2
-  GdkPixbuf *favicon;
-#endif
 
   g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
 
@@ -317,32 +287,11 @@ new_history_menu_item (EphyWebView *view,
   gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
 
-#ifdef HAVE_WEBKIT2
   database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
   webkit_favicon_database_get_favicon (database, address,
                                        NULL,
                                        (GAsyncReadyCallback)icon_loaded_cb,
                                        g_object_ref (item));
-#else
-  database = webkit_get_favicon_database ();
-  favicon = webkit_favicon_database_try_get_favicon_pixbuf (database, address,
-                                                            FAVICON_SIZE, FAVICON_SIZE);
-
-  if (favicon) {
-    GtkWidget *image;
-
-    image = gtk_image_new_from_pixbuf (favicon);
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-    gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
-
-    g_object_unref (favicon);
-  } else {
-    webkit_favicon_database_get_favicon_pixbuf (database, address,
-                                                FAVICON_SIZE, FAVICON_SIZE, NULL,
-                                                (GAsyncReadyCallback) icon_loaded_cb,
-                                                GTK_IMAGE_MENU_ITEM (g_object_ref (item)));
-  }
-#endif
 
   g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify) g_free);
 
@@ -361,87 +310,20 @@ set_new_back_history (EphyEmbed *source,
                       EphyEmbed *dest,
                       gint offset)
 {
-#ifdef HAVE_WEBKIT2
   /* TODO: WebKitBackForwardList: In WebKit2 WebKitBackForwardList can't be modified */
-#else
-  WebKitWebView *source_view, *dest_view;
-  WebKitWebBackForwardList* source_list, *dest_list;
-  WebKitWebHistoryItem *item;
-  GList *items;
-  guint limit;
-  guint i;
-
-  source_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (source);
-  dest_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dest);
-
-  source_list = webkit_web_view_get_back_forward_list (source_view);
-  dest_list = webkit_web_view_get_back_forward_list (dest_view);
-
-  if (offset >= 0) {
-    /* Copy the whole back history in this case (positive offset) */
-    ephy_web_view_copy_back_history (ephy_embed_get_web_view (source),
-                                     ephy_embed_get_web_view (dest));
-
-    items = webkit_web_back_forward_list_get_forward_list_with_limit (source_list,
-                                                                      EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    limit = offset - 1;
-  } else {
-    items = webkit_web_back_forward_list_get_back_list_with_limit (source_list,
-                                                                   EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    limit = g_list_length (items) + offset;
-  }
-
-  /* Add the remaining items to the BackForward list */
-  items = g_list_reverse (items);
-  for (i = 0; i < limit; i++) {
-    item = webkit_web_history_item_copy ((WebKitWebHistoryItem *) items->data);
-    webkit_web_back_forward_list_add_item (dest_list, item);
-    g_object_unref (item);
-
-    items = items->next;
-  }
-  g_list_free (items);
-#endif
 }
 
 static void
 middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
                                           EphyEmbed *embed,
-#ifdef HAVE_WEBKIT2
                                           WebKitBackForwardListItem *item)
-#else
-                                          WebKitWebHistoryItem *item)
-#endif
 {
   EphyEmbed *new_embed = NULL;
-#ifndef HAVE_WEBKIT2
-  WebKitWebView *web_view;
-  WebKitWebBackForwardList *history;
-  GList *list;
-  guint current;
-#endif
   const gchar *url;
   gint offset;
 
-#ifdef HAVE_WEBKIT2
   /* TODO: WebKitBackForwardList is read-only in WebKit2 */
   offset = 0;
-#else
-  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-
-  /* Save old history and item's offset from current */
-  history = webkit_web_view_get_back_forward_list (web_view);
-  if (action->priv->direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
-    list = webkit_web_back_forward_list_get_back_list_with_limit (history,
-                                                                  EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    current = -1;
-  } else {
-    list = webkit_web_back_forward_list_get_forward_list_with_limit (history,
-                                                                     EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-    current = g_list_length (list);
-  }
-  offset = current - g_list_index (list, item);
-#endif
 
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
@@ -457,11 +339,7 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
   set_new_back_history (embed, new_embed, offset);
 
   /* Load the new URL */
-#ifdef HAVE_WEBKIT2
   url = webkit_back_forward_list_item_get_original_uri (item);
-#else
-  url = webkit_web_history_item_get_original_uri (item);
-#endif
   ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
 }
 
@@ -469,11 +347,7 @@ static void
 activate_menu_item_cb (GtkWidget *menuitem,
                        EphyNavigationHistoryAction *action)
 {
-#ifdef HAVE_WEBKIT2
   WebKitBackForwardListItem *item;
-#else
-  WebKitWebHistoryItem *item;
-#endif
   EphyWindow *window;
   EphyEmbed *embed;
 
@@ -481,11 +355,7 @@ activate_menu_item_cb (GtkWidget *menuitem,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-#ifdef HAVE_WEBKIT2
   item = (WebKitBackForwardListItem *) g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
-#else
-  item = (WebKitWebHistoryItem *) g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
-#endif
   g_return_if_fail (item != NULL);
 
   if (ephy_gui_is_middle_click ())
@@ -494,11 +364,7 @@ activate_menu_item_cb (GtkWidget *menuitem,
     WebKitWebView *web_view;
 
     web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-#ifdef HAVE_WEBKIT2
     webkit_web_view_go_to_back_forward_list_item (web_view, item);
-#else
-    webkit_web_view_go_to_back_forward_item (web_view, item);
-#endif
   }
 }
 
@@ -507,28 +373,12 @@ construct_webkit_history_list (WebKitWebView *web_view,
                                WebKitHistoryType hist_type,
                                int limit)
 {
-#ifdef HAVE_WEBKIT2
   WebKitBackForwardList *back_forward_list;
 
   back_forward_list = webkit_web_view_get_back_forward_list (web_view);
   return hist_type == WEBKIT_HISTORY_FORWARD ?
     g_list_reverse (webkit_back_forward_list_get_forward_list_with_limit (back_forward_list, limit)) :
     webkit_back_forward_list_get_back_list_with_limit (back_forward_list, limit);
-#else
-  WebKitWebBackForwardList *web_back_forward_list;
-  GList *webkit_items;
-
-  web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
-
-  if (hist_type == WEBKIT_HISTORY_FORWARD)
-    webkit_items = g_list_reverse (webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
-                                                                                             limit));
-  else
-    webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
-                                                                          limit);
-
-  return webkit_items;
-#endif
 }
 
 static GtkWidget *
@@ -557,25 +407,14 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
 
   for (l = list; l != NULL; l = l->next) {
     GtkWidget *item;
-#ifdef HAVE_WEBKIT2
     WebKitBackForwardListItem *hitem;
-#else
-    WebKitWebHistoryItem *hitem;
-#endif
     const char *uri;
     char *title;
 
-#ifdef HAVE_WEBKIT2
     hitem = (WebKitBackForwardListItem *) l->data;
-    uri =  webkit_back_forward_list_item_get_uri (hitem);
-
+    uri = webkit_back_forward_list_item_get_uri (hitem);
     title = g_strdup (webkit_back_forward_list_item_get_title (hitem));
-#else
-    hitem = (WebKitWebHistoryItem *) l->data;
-    uri = webkit_web_history_item_get_uri (hitem);
 
-    title = g_strdup (webkit_web_history_item_get_title (hitem));
-#endif
     /* The overview is not actually a webpage, so we need to hardcode
      * this here. */
     if (g_strcmp0 (uri, "ephy-about:overview") == 0)

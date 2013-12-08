@@ -488,13 +488,11 @@ sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 	}
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 load_changed_cb (EphyWebView *view, WebKitLoadEvent load_event, GtkWidget *proxy)
 {
 	sync_load_status (view, NULL, proxy);
 }
-#endif
 
 static void
 sync_icon (EphyWebView *view,
@@ -633,14 +631,8 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 				 G_CALLBACK (sync_icon), icon, 0);
 	g_signal_connect_object (view, "notify::embed-title",
 				 G_CALLBACK (sync_label), label, 0);
-#ifdef HAVE_WEBKIT2
 	g_signal_connect_object (view, "load-changed",
 				 G_CALLBACK (load_changed_cb), hbox, 0);
-#else
-	g_signal_connect_object (view, "notify::load-status",
-				 G_CALLBACK (sync_load_status), hbox, 0);
-#endif
-
 	return hbox;
 }
 

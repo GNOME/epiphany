@@ -27,11 +27,7 @@
 #define GNOME_DESKTOP_USE_UNSTABLE_API
 #endif
 #include <libgnome-desktop/gnome-desktop-thumbnail.h>
-#ifdef HAVE_WEBKIT2
 #include <webkit2/webkit2.h>
-#else
-#include <webkit/webkit.h>
-#endif
 
 #define EPHY_SNAPSHOT_SERVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_SNAPSHOT_SERVICE, EphySnapshotServicePrivate))
 
@@ -182,7 +178,6 @@ save_snapshot (cairo_surface_t *surface,
                                              (GAsyncReadyCallback)snapshot_saved, result);
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 on_snapshot_ready (WebKitWebView *webview,
                    GAsyncResult *result,
@@ -202,46 +197,22 @@ on_snapshot_ready (WebKitWebView *webview,
   save_snapshot (surface, simple);
   cairo_surface_destroy (surface);
 }
-#endif
 
 static gboolean
 retrieve_snapshot_from_web_view (GSimpleAsyncResult *result)
 {
-#ifndef HAVE_WEBKIT2
-  cairo_surface_t *surface;
-#endif
   SnapshotAsyncData *data;
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
-#ifdef HAVE_WEBKIT2
   webkit_web_view_get_snapshot (data->web_view,
                                 WEBKIT_SNAPSHOT_REGION_VISIBLE,
                                 WEBKIT_SNAPSHOT_OPTIONS_NONE,
                                 NULL, (GAsyncReadyCallback)on_snapshot_ready,
                                 result);
-#else
-  surface = webkit_web_view_get_snapshot (data->web_view);
-
-  if (surface == NULL) {
-    g_simple_async_result_set_error (result,
-                                     EPHY_SNAPSHOT_SERVICE_ERROR,
-                                     EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
-                                     "%s", "Error getting snapshot from web view");
-    g_simple_async_result_complete (result);
-    g_object_unref (result);
-
-    return FALSE;
-  }
-
-  save_snapshot (surface, result);
-  cairo_surface_destroy (surface);
-#endif
-
   return FALSE;
 }
 
-#ifdef HAVE_WEBKIT2
 static void
 webview_load_changed_cb (WebKitWebView *webview,
                          WebKitLoadEvent load_event,
@@ -277,33 +248,6 @@ webview_load_failed_cb (WebKitWebView *webview,
 
   return FALSE;
 }
-#else
-static void
-webview_load_status_changed_cb (WebKitWebView *webview,
-                                GParamSpec *pspec,
-                                GSimpleAsyncResult *result)
-{
-  switch (webkit_web_view_get_load_status (webview)) {
-  case WEBKIT_LOAD_FINISHED:
-    /* Load finished doesn't ensure that we actually have visible
-       content yet, so hold a bit before retrieving the snapshot. */
-    g_idle_add ((GSourceFunc) retrieve_snapshot_from_web_view, result);
-    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, result);
-    break;
-  case WEBKIT_LOAD_FAILED:
-    g_signal_handlers_disconnect_by_func (webview, webview_load_status_changed_cb, result);
-    g_simple_async_result_set_error (result,
-                                     EPHY_SNAPSHOT_SERVICE_ERROR,
-                                     EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
-                                     "%s", "Error getting snapshot, web view failed to load");
-    g_simple_async_result_complete_in_idle (result);
-    g_object_unref (result);
-    break;
-  default:
-    break;
-  }
-}
-#endif
 
 static gboolean
 ephy_snapshot_service_take_from_webview (GSimpleAsyncResult *result)
@@ -312,7 +256,6 @@ ephy_snapshot_service_take_from_webview (GSimpleAsyncResult *result)
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
-#ifdef HAVE_WEBKIT2
   if (webkit_web_view_get_estimated_load_progress (WEBKIT_WEB_VIEW (data->web_view)) == 1.0)
     retrieve_snapshot_from_web_view (result);
   else {
@@ -321,14 +264,6 @@ ephy_snapshot_service_take_from_webview (GSimpleAsyncResult *result)
     g_signal_connect (data->web_view, "load-failed",
                       G_CALLBACK (webview_load_failed_cb), result);
   }
-#else
-  if (webkit_web_view_get_load_status (data->web_view) == WEBKIT_LOAD_FINISHED)
-    retrieve_snapshot_from_web_view (result);
-  else
-    g_signal_connect (data->web_view, "notify::load-status",
-                      G_CALLBACK (webview_load_status_changed_cb),
-                      result);
-#endif
 
   return FALSE;
 }
