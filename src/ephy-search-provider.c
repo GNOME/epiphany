@@ -21,39 +21,36 @@
 
 #include "ephy-search-provider.h"
 
-#include "ephy-bookmarks.h"
 #include "ephy-completion-model.h"
 #include "ephy-file-helpers.h"
-#include "ephy-history-service.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
-#include "ephy-shell.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
-#include <gtk/gtk.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <libsoup/soup.h>
 
 struct _EphySearchProvider
 {
-  GObject parent;
+  GApplication parent;
 
   EphyShellSearchProvider2 *skeleton;
   GCancellable             *cancellable;
 
   GSettings                *settings;
+  EphyHistoryService       *history_service;
+  EphyBookmarks            *bookmarks;
   EphyCompletionModel      *model;
 };
 
 struct _EphySearchProviderClass
 {
-  GObjectClass parent_class;
+  GApplicationClass parent_class;
 };
 
-G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_OBJECT);
+G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_APPLICATION)
 
 static void
 on_model_updated (EphyHistoryService *service,
@@ -139,7 +136,7 @@ complete_request (GObject      *object,
     g_dbus_method_invocation_take_error (user_data, error);
   }
 
-  g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_release (G_APPLICATION (self));
 }
 
 static gboolean
@@ -148,7 +145,7 @@ handle_get_initial_result_set (EphyShellSearchProvider2  *skeleton,
                                char                     **terms,
                                EphySearchProvider        *self)
 {
-  g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_hold (G_APPLICATION (self));
   g_cancellable_reset (self->cancellable);
 
   gather_results_async (self, terms, self->cancellable,
@@ -164,7 +161,7 @@ handle_get_subsearch_result_set (EphyShellSearchProvider2  *skeleton,
                                  char                     **terms,
                                  EphySearchProvider        *self)
 {
-  g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_hold (G_APPLICATION (self));
   g_cancellable_reset (self->cancellable);
 
   gather_results_async (self, terms, self->cancellable,
@@ -187,7 +184,7 @@ handle_get_result_metas (EphyShellSearchProvider2  *skeleton,
   char *name, *url;
   gboolean is_bookmark;
 
-  g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
@@ -258,7 +255,7 @@ handle_get_result_metas (EphyShellSearchProvider2  *skeleton,
                                                          invocation,
                                                          g_variant_builder_end (&builder));
 
-  g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_release (G_APPLICATION (self));
 
   return TRUE;
 }
@@ -267,12 +264,12 @@ static void
 launch_uri (const char  *uri,
             guint        timestamp)
 {
-  const char *uris[2];
+  char *str;
 
-  uris[0] = uri;
-  uris[1] = NULL;
-
-  ephy_shell_open_uris (ephy_shell_get_default (), uris, 0, timestamp);
+  /* TODO: Handle the timestamp */
+  str = g_strdup_printf ("epiphany %s", uri);
+  g_spawn_command_line_async (str, NULL);
+  g_free (str);
 }
 
 static void
@@ -311,7 +308,7 @@ handle_activate_result (EphyShellSearchProvider2  *skeleton,
                         guint                      timestamp,
                         EphySearchProvider        *self)
 {
-  g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
 
   if (strcmp (identifier, "special:search") == 0)
@@ -320,7 +317,7 @@ handle_activate_result (EphyShellSearchProvider2  *skeleton,
     launch_uri (identifier, timestamp);
 
   ephy_shell_search_provider2_complete_activate_result (skeleton, invocation);
-  g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_release (G_APPLICATION (self));
 
   return TRUE;
 }
@@ -332,13 +329,13 @@ handle_launch_search (EphyShellSearchProvider2  *skeleton,
                       guint                      timestamp,
                       EphySearchProvider        *self)
 {
-  g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
 
   launch_search (self, terms, timestamp);
 
   ephy_shell_search_provider2_complete_launch_search (skeleton, invocation);
-  g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+  g_application_release (G_APPLICATION (self));
 
   return TRUE;
 }
@@ -346,6 +343,10 @@ handle_launch_search (EphyShellSearchProvider2  *skeleton,
 static void
 ephy_search_provider_init (EphySearchProvider *self)
 {
+  char *filename;
+
+  g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
+
   self->skeleton = ephy_shell_search_provider2_skeleton_new ();
 
   g_signal_connect (self->skeleton, "handle-get-initial-result-set",
@@ -361,35 +362,54 @@ ephy_search_provider_init (EphySearchProvider *self)
 
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
-  self->model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
-                                           ephy_shell_get_bookmarks (ephy_shell_get_default ()));
+  filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  self->history_service = ephy_history_service_new (filename, TRUE);
+  self->bookmarks = ephy_bookmarks_new ();
+  self->model = ephy_completion_model_new (self->history_service, self->bookmarks);
+  g_free (filename);
+
   self->cancellable = g_cancellable_new ();
 }
 
-gboolean
-ephy_search_provider_dbus_register (EphySearchProvider  *self,
-                                  GDBusConnection   *connection,
-                                  const gchar       *object_path,
-                                  GError           **error)
+static gboolean
+ephy_search_provider_dbus_register (GApplication    *application,
+                                    GDBusConnection *connection,
+                                    const gchar     *object_path,
+                                    GError         **error)
 {
+  EphySearchProvider *self;
   GDBusInterfaceSkeleton *skeleton;
 
+  if (!G_APPLICATION_CLASS (ephy_search_provider_parent_class)->dbus_register (application,
+                                                                               connection,
+                                                                               object_path,
+                                                                               error))
+    return FALSE;
+
+  self = EPHY_SEARCH_PROVIDER (application);
   skeleton = G_DBUS_INTERFACE_SKELETON (self->skeleton);
 
   return g_dbus_interface_skeleton_export (skeleton, connection, object_path, error);
 }
 
-void
-ephy_search_provider_dbus_unregister (EphySearchProvider *self,
-                                    GDBusConnection  *connection,
-                                    const gchar      *object_path)
+static void
+ephy_search_provider_dbus_unregister (GApplication    *application,
+                                      GDBusConnection *connection,
+                                      const gchar     *object_path)
 {
+  EphySearchProvider *self;
   GDBusInterfaceSkeleton *skeleton;
 
+  self = EPHY_SEARCH_PROVIDER (application);
   skeleton = G_DBUS_INTERFACE_SKELETON (self->skeleton);
-
   if (g_dbus_interface_skeleton_has_connection (skeleton, connection))
-      g_dbus_interface_skeleton_unexport_from_connection (skeleton, connection);
+    g_dbus_interface_skeleton_unexport_from_connection (skeleton, connection);
+
+  g_clear_object (&self->skeleton);
+
+  G_APPLICATION_CLASS (ephy_search_provider_parent_class)->dbus_unregister (application,
+                                                                            connection,
+                                                                            object_path);
 }
 
 static void
@@ -399,10 +419,11 @@ ephy_search_provider_dispose (GObject *object)
 
   self = EPHY_SEARCH_PROVIDER (object);
 
-  g_clear_object (&self->skeleton);
   g_clear_object (&self->settings);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->model);
+  g_clear_object (&self->history_service);
+  g_clear_object (&self->bookmarks);
 
   G_OBJECT_CLASS (ephy_search_provider_parent_class)->dispose (object);
 }
@@ -411,13 +432,19 @@ static void
 ephy_search_provider_class_init (EphySearchProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ephy_search_provider_dispose;
+
+  application_class->dbus_register = ephy_search_provider_dbus_register;
+  application_class->dbus_unregister = ephy_search_provider_dbus_unregister;
 }
 
 EphySearchProvider *
 ephy_search_provider_new (void)
 {
-  return g_object_new (EPHY_TYPE_SEARCH_PROVIDER, NULL);
+  return g_object_new (EPHY_TYPE_SEARCH_PROVIDER,
+                       "application-id", "org.gnome.EpiphanySearchProvider",
+                       NULL);
 }
 
