@@ -213,7 +213,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     char *filename;
 
     filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
-    shell->priv->global_history_service = ephy_history_service_new (filename);
+    shell->priv->global_history_service = ephy_history_service_new (filename, FALSE);
     g_free (filename);
     g_return_val_if_fail (shell->priv->global_history_service, NULL);
   }

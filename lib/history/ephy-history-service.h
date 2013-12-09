@@ -58,7 +58,7 @@ struct _EphyHistoryServiceClass {
 };
 
 GType                    ephy_history_service_get_type                (void);
-EphyHistoryService *     ephy_history_service_new                     (const char *history_filename);
+EphyHistoryService *     ephy_history_service_new                     (const char *history_filename, gboolean read_only);
 
 void                     ephy_history_service_add_visit               (EphyHistoryService *self, EphyHistoryPageVisit *visit, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_add_visits              (EphyHistoryService *self, GList *visits, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
