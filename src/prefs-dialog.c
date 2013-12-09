@@ -930,6 +930,9 @@ cookies_get_mapping (GValue *value,
 	setting = g_variant_get_string (variant, NULL);
 	name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
 
+	if (g_strcmp0 (name, "no_third_party") == 0)
+		name = "no-third-party";
+
 	/* If the button name matches the setting, it should be active. */
 	if (g_strcmp0 (name, setting) == 0)
 		g_value_set_boolean (value, TRUE);
@@ -950,7 +953,10 @@ cookies_set_mapping (const GValue *value,
 		return NULL;
 
 	name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
-	variant = g_variant_new_string (name);
+	if (g_strcmp0 (name, "no_third_party") == 0)
+		variant = g_variant_new_string ("no-third-party");
+	else
+		variant = g_variant_new_string (name);
 
 	return variant;
 }
