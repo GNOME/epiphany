@@ -37,7 +37,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "pdm-dialog.h"
+#include "clear-data-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -915,8 +915,13 @@ static void
 clear_cache_button_clicked_cb (GtkWidget *button,
 			       PrefsDialog *dialog)
 {
-	pdm_dialog_show_clear_all_dialog (NULL, GTK_WIDGET (dialog),
-					  CLEAR_ALL_CACHE);
+	ClearDataDialog *clear_dialog;
+
+	clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG, NULL);
+	clear_data_dialog_set_flags (clear_dialog, CLEAR_DATA_CACHE);
+	gtk_window_set_transient_for (GTK_WINDOW (clear_dialog), GTK_WINDOW (dialog));
+	gtk_window_set_modal (GTK_WINDOW (clear_dialog), TRUE);
+	gtk_window_present (GTK_WINDOW (clear_dialog));
 }
 
 static gboolean

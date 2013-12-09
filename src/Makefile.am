@@ -30,6 +30,7 @@ NOINST_H_FILES = \
 	ephy-window-action.h			\
 	languages.h				\
 	pdm-dialog.h				\
+	clear-data-dialog.h			\
 	popup-commands.h			\
 	prefs-dialog.h				\
 	window-commands.h
@@ -66,6 +67,7 @@ libephymain_la_SOURCES = \
 	ephy-window.c				\
 	ephy-window-action.c			\
 	pdm-dialog.c				\
+	clear-data-dialog.c			\
 	popup-commands.c			\
 	prefs-dialog.c				\
 	window-commands.c			\
@@ -104,6 +106,7 @@ RESOURCE_FILES = \
 	resources/epiphany-application-menu.ui	  \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
+	resources/clear-data-dialog.ui		  \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/process-crash.html		  \
