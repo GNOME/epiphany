@@ -35,7 +35,6 @@
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
-#include "ephy-search-provider.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-type-builtins.h"
@@ -54,7 +53,6 @@
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
 struct _EphyShellPrivate {
-  EphySearchProvider *search_provider;
   EphySession *session;
   GList *windows;
   GObject *lockdown;
@@ -518,42 +516,6 @@ ephy_shell_constructed (GObject *object)
     G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
 }
 
-static gboolean
-ephy_shell_dbus_register (GApplication    *application,
-                          GDBusConnection *connection,
-                          const gchar     *object_path,
-                          GError         **error)
-{
-  EphyShell *self;
-
-  if (!G_APPLICATION_CLASS (ephy_shell_parent_class)->dbus_register (application,
-                                                                     connection,
-                                                                     object_path,
-                                                                     error))
-    return FALSE;
-
-  self = EPHY_SHELL (application);
-
-  return ephy_search_provider_dbus_register (self->priv->search_provider, connection,
-                                             object_path, error);
-}
-
-static void
-ephy_shell_dbus_unregister (GApplication    *application,
-                            GDBusConnection *connection,
-                            const gchar     *object_path)
-{
-  EphyShell *self;
-
-  self = EPHY_SHELL (application);
-  if (self->priv->search_provider)
-    ephy_search_provider_dbus_unregister (self->priv->search_provider, connection, object_path);
-
-  G_APPLICATION_CLASS (ephy_shell_parent_class)->dbus_unregister (application,
-                                                                  connection,
-                                                                  object_path);
-}
-
 static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
@@ -568,8 +530,6 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
-  application_class->dbus_register = ephy_shell_dbus_register;
-  application_class->dbus_unregister = ephy_shell_dbus_unregister;
 
   g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
@@ -644,10 +604,6 @@ ephy_shell_init (EphyShell *shell)
 
   webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
   g_free (favicon_db_path);
-
-  shell->priv->search_provider = ephy_search_provider_new ();
-
-  g_application_set_inactivity_timeout (G_APPLICATION (shell), 60 * 1000);
 }
 
 static void
@@ -657,7 +613,6 @@ ephy_shell_dispose (GObject *object)
 
   LOG ("EphyShell disposing");
 
-  g_clear_object (&priv->search_provider);
   g_clear_object (&priv->session);
   g_clear_object (&priv->lockdown);
   g_clear_pointer (&priv->bme, gtk_widget_destroy);
@@ -1168,9 +1123,6 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   EphyNewTabFlags page_flags;
   const char *url;
   WebKitURIRequest *request = NULL;
-
-  if (!data->window && !data->flags)
-    return FALSE;
 
   url = data->uris[data->current_uri];
   if (url[0] == '\0') {

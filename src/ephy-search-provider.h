@@ -42,14 +42,6 @@ GType ephy_search_provider_get_type (void) G_GNUC_CONST;
 
 EphySearchProvider *ephy_search_provider_new (void);
 
-gboolean ephy_search_provider_dbus_register   (EphySearchProvider  *provider,
-                                               GDBusConnection     *connection,
-                                               const char          *object_path,
-                                               GError             **error);
-void     ephy_search_provider_dbus_unregister (EphySearchProvider  *provider,
-                                               GDBusConnection     *connection,
-                                               const char          *object_path);
-
 G_END_DECLS
 
 #endif /* _EPHY_SEARCH_PROVIDER_H */

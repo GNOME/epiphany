@@ -44,7 +44,6 @@ INST_H_FILES = \
 	$(NULL)
 
 libephymain_la_SOURCES = \
-	$(dbus_shell_search_provider_built_sources) \
 	ephy-action-helper.c			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
@@ -60,7 +59,6 @@ libephymain_la_SOURCES = \
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
 	ephy-page-menu-action.c			\
-	ephy-search-provider.c			\
 	ephy-session.c				\
 	ephy-shell.c				\
 	ephy-toolbar.c				\
@@ -161,6 +159,34 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
+	$(DEPENDENCIES_LIBS) \
+	$(CODE_COVERAGE_LDFLAGS) \
+	$(LIBINTL)
+
+libexec_PROGRAMS = epiphany-search-provider
+
+epiphany_search_provider_SOURCES = \
+	$(dbus_shell_search_provider_built_sources) \
+	ephy-search-provider.c \
+	ephy-search-provider-main.c
+
+epiphany_search_provider_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/lib   		\
+	-I$(top_srcdir)/lib/history	\
+	-I$(top_srcdir)/src/bookmarks   \
+	-DDATADIR=\""$(datadir)"\" 	\
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	$(INCINTL)			\
+	$(AM_CPPFLAGS)
+
+epiphany_search_provider_CFLAGS = $(epiphany_CFLAGS)
+
+epiphany_search_provider_LDADD = \
+	libephymain.la \
+	$(top_builddir)/src/bookmarks/libephybookmarks.la \
+	$(top_builddir)/lib/history/libephyhistory.la \
+	$(top_builddir)/lib/libephymisc.la \
 	$(DEPENDENCIES_LIBS) \
 	$(CODE_COVERAGE_LDFLAGS) \
 	$(LIBINTL)
