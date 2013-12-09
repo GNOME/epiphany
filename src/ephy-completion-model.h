@@ -24,6 +24,7 @@
 #ifndef EPHY_COMPLETION_MODEL_H
 #define EPHY_COMPLETION_MODEL_H
 
+#include "ephy-bookmarks.h"
 #include "ephy-history-service.h"
 
 #include <gtk/gtk.h>
@@ -66,7 +67,8 @@ typedef struct
 
 GType                ephy_completion_model_get_type	     (void);
 
-EphyCompletionModel *ephy_completion_model_new		     (void);
+EphyCompletionModel *ephy_completion_model_new		     (EphyHistoryService *history_service,
+                                                              EphyBookmarks *bookmarks);
 
 void                 ephy_completion_model_update_for_string (EphyCompletionModel *model,
                                                               const char *string,

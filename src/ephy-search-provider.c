@@ -361,7 +361,8 @@ ephy_search_provider_init (EphySearchProvider *self)
 
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
-  self->model = ephy_completion_model_new ();
+  self->model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
+                                           ephy_shell_get_bookmarks (ephy_shell_get_default ()));
   self->cancellable = g_cancellable_new ();
 }
 
