@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!--
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+-->
+<html xml:lang="%s" lang="%s" dir="%s">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>%s</title>
+  <style type="text/css">
+  body {
+      background-color: #f6f6f4;
+      background-image: -webkit-gradient(
+          linear,
+          left top,
+          left bottom,
+          color-stop(0, #eeeeec),
+          color-stop(1, #f6f6f4)
+      );
+      background-size: 100% 5em;
+      background-repeat: no-repeat;
+  }
+
+  #overview {
+      padding: 60px 5px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  #grid {
+      padding: 0;
+  }
+
+  #grid li {
+      list-style-type: none;
+  }
+
+  .overview-item {
+      width: 200px;
+      height: 200px;
+      float: left;
+      margin: 15px;
+      outline: 0;
+      transition: all 0.5s ease-in-out;
+  }
+
+  .title {
+      width: 100%;
+      height: 50px;
+      display: inline-block;
+      padding: 5px 0;
+      overflow: hidden;
+      font-family: Cantarell, sans-serif;
+      font-size: 11pt;
+      color: #2e3436;
+      text-overflow: ellipsis;
+      text-align: center;
+  }
+
+  .thumbnail {
+      width: 200px;
+      height: 150px;
+      display: block;
+      opacity: 0.6;
+      transition: opacity 0.2s ease-in-out;
+      background-repeat: no-repeat;
+      animation: fadeOut 0.5s;
+  }
+
+  .thumbnail:hover,
+  :focus .thumbnail {
+      opacity: 1.0;
+  }
+
+  .close-button {
+      -webkit-transition: opacity 250ms;
+      position: relative;
+      float: right;
+      top: -10px;
+      right: -5px;
+      opacity: 0;
+      z-index: 5;
+      color: #888;
+      font-size: 1.2em;
+  }
+
+  .overview-item:hover .close-button {
+      opacity: 1;
+  }
+
+  .removed .overview-item {
+      height: 0;
+      width: 0;
+      margin: 15px 0;
+      opacity: 0;
+  }
+
+  .removed .close-button {
+      display: none;
+  }
+  </style>
+
+  <script>
+
+  document.onkeypress =  listenKeypress;
+
+  function listenKeypress(event) {
+    // Remove from overview when Del is pressed
+    if (event.which == 127) {
+      var focused = document.activeElement;
+      if (focused.className == "overview-item") {
+        removeFromOverview(focused, event);
+      }
+    }
+  }
+
+  function removeFromOverview(elem, event) {
+    var listItemNode = elem.parentElement;
+    event.preventDefault();
+    listItemNode.className +=" removed ";
+    Overview.removeItemFromOverview(elem.href);
+  }
+  </script>
+
+</head>
+
+<body>
+
+  <div id="overview">
+    <div id="grid">
+      <ul>
+        %s
+      </ul>
+     </div>
+   </div>
+
+</body>
+
+</html>

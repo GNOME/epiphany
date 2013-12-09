@@ -26,6 +26,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-smaps.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-embed-private.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -35,6 +36,8 @@ struct _EphyAboutHandlerPrivate {
   char *style_sheet;
   EphySMaps *smaps;
 };
+
+#define EPHY_PAGE_TEMPLATE_OVERVIEW         "/org/gnome/epiphany/page-templates/overview.html"
 
 G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
@@ -426,6 +429,88 @@ ephy_about_handler_handle_applications (EphyAboutHandler *handler,
   return TRUE;
 }
 
+static GString *
+ephy_about_handler_generate_overview_html (EphyOverviewStore *store)
+{
+  GtkTreeIter iter;
+  GString *data_str;
+  char *row_url, *row_title, *row_snapshot_base64;
+  GdkPixbuf *row_snapshot;
+  guchar *buffer;
+  gsize buffersize;
+  gboolean valid;
+
+  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+  data_str = g_string_new (NULL);
+
+  while (valid) {
+    gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+      EPHY_OVERVIEW_STORE_URI, &row_url,
+      EPHY_OVERVIEW_STORE_TITLE, &row_title,
+      EPHY_OVERVIEW_STORE_SNAPSHOT, &row_snapshot,
+      -1);
+
+    /* FIXME: use a more efficient way to get the base64 snapshot */
+    gdk_pixbuf_save_to_buffer (row_snapshot, (gchar **) &buffer, &buffersize, "png", NULL, NULL);
+    row_snapshot_base64 = g_base64_encode (buffer, buffersize);
+    g_free (buffer);
+
+    g_string_append_printf (data_str,
+      "<li>" \
+      "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">" \
+      "    <div class=\"close-button\" onclick=\"removeFromOverview(this.parentNode,event)\" title=\"%s\">&#10006;</div>" \
+      "    <span class=\"thumbnail\" style=\"background-image: url(data:image/png;base64,%s);\"></span>" \
+      "    <span class=\"title\">%s</span>" \
+      "  </a>" \
+      "</li>",
+      g_markup_escape_text (row_title,-1), row_url, _("Remove from overview"),row_snapshot_base64, row_title);
+
+    g_free (row_title);
+    g_free (row_url);
+    g_free (row_snapshot_base64);
+
+    valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+  }
+  return data_str;
+}
+
+
+static gboolean
+ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
+                                        WebKitURISchemeRequest *request)
+{
+  GString *data_str;
+  GBytes *html_file;
+  GString *html = g_string_new ("");
+  gsize data_length;
+  EphyOverviewStore *store;
+  char *lang;
+
+  store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (ephy_embed_shell_get_default ()));
+
+  data_str = ephy_about_handler_generate_overview_html(store);
+  html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_OVERVIEW, 0, NULL);
+
+  lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
+  g_strdelimit (lang, "_-@", '\0');
+
+  g_string_printf (html,
+                   g_bytes_get_data (html_file, NULL),
+                   lang, lang,
+                   ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
+                   _("Most visited"),
+                   data_str->str);
+
+  data_length = html->len;
+  ephy_about_handler_finish_request (request, g_string_free (html, FALSE), data_length);
+
+  g_string_free (data_str,TRUE);
+  g_bytes_unref (html_file);
+  g_free (lang);
+
+  return TRUE;
+}
+
 static gboolean
 ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                                      WebKitURISchemeRequest *request)
@@ -511,6 +596,8 @@ ephy_about_handler_handle_request (EphyAboutHandler *handler,
     handled =  ephy_about_handler_handle_epiphany (handler, request);
   else if (!g_strcmp0 (path, "applications"))
     handled = ephy_about_handler_handle_applications (handler, request);
+  else if (!g_strcmp0 (path, "html-overview"))
+    handled = ephy_about_handler_handle_html_overview (handler, request);
   else if (!g_strcmp0 (path, "incognito"))
     handled = ephy_about_handler_handle_incognito (handler, request);
   else if (path == NULL || path[0] == '\0' || !g_strcmp0 (path, "Web") || !g_strcmp0 (path, "web"))

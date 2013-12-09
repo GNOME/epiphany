@@ -58,6 +58,7 @@ struct _EphyEmbedShellPrivate
   GList *web_extensions;
   guint web_extensions_page_created_signal_id;
   guint web_extensions_form_auth_save_signal_id;
+  guint web_extensions_remove_from_overview_signal_id;
 };
 
 enum
@@ -158,6 +159,26 @@ web_extension_page_created (GDBusConnection *connection,
   if (!web_extension)
     return;
   g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, web_extension);
+}
+
+static void
+web_extension_remove_from_overview (GDBusConnection *connection,
+                                    const char *sender_name,
+                                    const char *object_path,
+                                    const char *interface_name,
+                                    const char *signal_name,
+                                    GVariant *parameters,
+                                    EphyEmbedShell *shell)
+{
+  GtkTreeIter iter;
+  EphyFrecentStore *store;
+  const char *url_to_remove;
+
+  g_variant_get (parameters, "(&s)", &url_to_remove);
+  store = ephy_embed_shell_get_frecent_store (ephy_embed_shell_get_default ());
+  if (ephy_overview_store_find_url (EPHY_OVERVIEW_STORE(store), url_to_remove, &iter)) {
+	  ephy_frecent_store_set_hidden(store, &iter);
+  }
 }
 
 static void
@@ -356,6 +377,17 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
                                         (GDBusSignalCallback)web_extension_form_auth_save_requested,
                                         shell,
                                         NULL);
+  shell->priv->web_extensions_remove_from_overview_signal_id =
+    g_dbus_connection_signal_subscribe (shell->priv->bus,
+                                        NULL,
+                                        EPHY_WEB_EXTENSION_INTERFACE,
+                                        "RemoveItemFromOverview",
+                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        (GDBusSignalCallback)web_extension_remove_from_overview,
+                                        shell,
+                                        NULL);
 }
 
 static void
@@ -443,6 +475,11 @@ ephy_embed_shell_shutdown (GApplication* application)
   if (priv->web_extensions_form_auth_save_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_form_auth_save_signal_id);
     priv->web_extensions_form_auth_save_signal_id = 0;
+  }
+
+  if (priv->web_extensions_remove_from_overview_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_remove_from_overview_signal_id);
+    priv->web_extensions_remove_from_overview_signal_id = 0;
   }
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);

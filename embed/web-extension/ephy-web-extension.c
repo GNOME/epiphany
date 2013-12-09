@@ -34,7 +34,7 @@
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
 #include <webkit2/webkit-web-extension.h>
-
+#include <JavaScriptCore/JavaScript.h>
 
 /* FIXME: These global variables should be freed somehow. */
 static UriTester *uri_tester;
@@ -68,6 +68,9 @@ static const char introspection_xml[] =
   "   <arg type='t' name='page_id' direction='out'/>"
   "   <arg type='s' name='hostname' direction='out'/>"
   "   <arg type='s' name='username' direction='out'/>"
+  "  </signal>"
+  "  <signal name='RemoveItemFromOverview'>"
+  "   <arg type='s' name='url' direction='out'/>"
   "  </signal>"
   "  <method name='FormAuthDataSaveConfirmationResponse'>"
   "   <arg type='u' name='request_id' direction='in'/>"
@@ -235,6 +238,24 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 
   g_free (username_field_value);
   g_object_unref (form_auth);
+}
+
+static void
+remove_from_overview_emit_signal (char *url)
+{
+  GError *error = NULL;
+
+  g_dbus_connection_emit_signal (dbus_connection,
+                                 NULL,
+                                 EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                 EPHY_WEB_EXTENSION_INTERFACE,
+                                 "RemoveItemFromOverview",
+                                 g_variant_new ("(s)", url),
+                                 &error);
+  if (error) {
+    g_debug ("Error emitting signal RemoveItemFromOverview: %s\n", error->message);
+    g_error_free (error);
+  }
 }
 
 static void
@@ -1151,6 +1172,80 @@ bus_acquired_cb (GDBusConnection *connection,
   }
 }
 
+
+static JSValueRef
+remove_from_overview_cb (JSContextRef context,
+                         JSObjectRef function,
+                         JSObjectRef this_object,
+                         size_t argument_count,
+                         const JSValueRef arguments[],
+                         JSValueRef *exception)
+{
+  JSStringRef result_string_js;
+  size_t max_size;
+  char *result_string;
+
+  result_string_js = JSValueToStringCopy (context, arguments[0], NULL);
+  max_size = JSStringGetMaximumUTF8CStringSize (result_string_js);
+
+  result_string = g_malloc (max_size);
+  JSStringGetUTF8CString (result_string_js, result_string, max_size);
+  remove_from_overview_emit_signal (result_string);
+
+  JSStringRelease (result_string_js);
+  g_free (result_string);
+
+  return JSValueMakeUndefined (context);
+}
+
+static const JSStaticFunction overview_staticfuncs[] =
+{
+  { "removeItemFromOverview", remove_from_overview_cb, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete },
+  { NULL, NULL, 0 }
+};
+
+static const JSClassDefinition overview_notification_def =
+{
+  0,                     /* version */
+  kJSClassAttributeNone, /* attributes */
+  "Overview",            /* className */
+  NULL,                  /* parentClass */
+  NULL,                  /* staticValues */
+  overview_staticfuncs,  /* staticFunctions */
+  NULL,                  /* initialize */
+  NULL,                  /* finalize */
+  NULL,                  /* hasProperty */
+  NULL,                  /* getProperty */
+  NULL,                  /* setProperty */
+  NULL,                  /* deleteProperty */
+  NULL,                  /* getPropertyNames */
+  NULL,                  /* callAsFunction */
+  NULL,                  /* callAsConstructor */
+  NULL,                  /* hasInstance */
+  NULL                   /* convertToType */
+};
+
+static void
+window_object_cleared_cb (WebKitScriptWorld *world,
+                          WebKitWebPage     *web_page,
+                          WebKitFrame       *frame,
+                          gpointer           user_data)
+{
+  JSGlobalContextRef context;
+  JSObjectRef global_object;
+  JSClassRef class_def;
+  JSObjectRef class_object;
+  JSStringRef str;
+
+  context = webkit_frame_get_javascript_context_for_script_world (frame, world);
+  global_object = JSContextGetGlobalObject (context);
+
+  class_def = JSClassCreate (&overview_notification_def);
+  class_object = JSObjectMake (context, class_def, context);
+  str = JSStringCreateWithUTF8CString ("Overview");
+  JSObjectSetProperty (context, global_object, str, class_object, kJSPropertyAttributeNone, NULL);
+}
+
 G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
                                                 GVariant *user_data)
@@ -1180,4 +1275,9 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
                   g_object_ref (extension),
                   (GDestroyNotify)g_object_unref);
   g_free (service_name);
+
+  g_signal_connect (webkit_script_world_get_default (),
+                    "window-object-cleared",
+                    G_CALLBACK (window_object_cleared_cb),
+                    NULL);
 }

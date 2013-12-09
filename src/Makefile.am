@@ -116,6 +116,7 @@ RESOURCE_FILES = \
 	resources/incognito.png                   \
 	resources/incognito-tinted.png            \
 	resources/error.html			  \
+	resources/overview.html			  \
 	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
