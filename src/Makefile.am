@@ -103,6 +103,7 @@ RESOURCE_FILES = \
 	resources/epiphany.ui			  \
 	resources/epiphany-application-menu.ui	  \
 	resources/prefs-dialog.ui		  \
+	resources/prefs-lang-dialog.ui		  \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/process-crash.html		  \

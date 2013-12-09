@@ -189,7 +189,11 @@ show_preferences (GSimpleAction *action,
                   GVariant *parameter,
                   gpointer user_data)
 {
-  window_cmd_edit_preferences (NULL, NULL);
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_edit_preferences (NULL, EPHY_WINDOW (window));
 }
 
 static void
@@ -1015,14 +1019,11 @@ GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
   if (shell->priv->prefs_dialog == NULL) {
-    GObject **dialog;
-
     shell->priv->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
-
-    dialog  = &shell->priv->prefs_dialog;
-
-    g_object_add_weak_pointer (shell->priv->prefs_dialog,
-                               (gpointer *)dialog);
+    g_signal_connect (shell->priv->prefs_dialog,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &shell->priv->prefs_dialog);
   }
 
   return shell->priv->prefs_dialog;

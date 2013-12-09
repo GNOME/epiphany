@@ -21,10 +21,8 @@
 #ifndef PREFS_DIALOG_H
 #define PREFS_DIALOG_H
 
-#include "ephy-dialog.h"
-
 #include <glib-object.h>
-#include <glib.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -41,7 +39,7 @@ typedef struct PrefsDialogPrivate	PrefsDialogPrivate;
 
 struct PrefsDialog
 {
-        EphyDialog parent;
+        GtkDialog parent;
 
 	/*< private >*/
         PrefsDialogPrivate *priv;
@@ -49,7 +47,7 @@ struct PrefsDialog
 
 struct PrefsDialogClass
 {
-        EphyDialogClass parent_class;
+        GtkDialogClass parent_class;
 };
 
 GType         prefs_dialog_get_type           (void);

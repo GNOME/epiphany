@@ -1204,11 +1204,15 @@ void
 window_cmd_edit_preferences (GtkAction *action,
 			     EphyWindow *window)
 {
-	EphyDialog *dialog;
+	GtkWindow *dialog;
 	
-	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
-	
-	ephy_dialog_show (dialog);
+	dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+
+	if (GTK_WINDOW (window) != gtk_window_get_transient_for (dialog))
+		gtk_window_set_transient_for (dialog,
+                                              GTK_WINDOW (window));
+
+	gtk_window_present (dialog);
 }
 
 void

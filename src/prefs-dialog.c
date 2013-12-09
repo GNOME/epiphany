@@ -24,7 +24,6 @@
 #include "prefs-dialog.h"
 
 #include "ephy-debug.h"
-#include "ephy-dialog.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -57,17 +56,47 @@ enum
 	COL_LANG_CODE
 };
 
-#define EPHY_PREFS_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PREFS_DIALOG, PrefsDialogPrivate))
-
 struct PrefsDialogPrivate
 {
+	/* general */
+	GtkWidget *download_button_hbox;
+	GtkWidget *download_button_label;
+	GtkWidget *automatic_downloads_checkbutton;
+	GtkWidget *popups_allow_checkbutton;
+	GtkWidget *adblock_allow_checkbutton;
+	GtkWidget *enable_plugins_checkbutton;
+
+	/* fonts */
+	GtkWidget *use_gnome_fonts_checkbutton;
+	GtkWidget *custom_fonts_table;
+	GtkWidget *sans_fontbutton;
+	GtkWidget *serif_fontbutton;
+	GtkWidget *mono_fontbutton;
+	GtkWidget *css_checkbox;
+	GtkWidget *css_edit_button;
+
+	/* privacy */
+	GtkWidget *always;
+	GtkWidget *no_third_party;
+	GtkWidget *never;
+	GtkWidget *remember_passwords_checkbutton;
+	GtkWidget *do_not_track_checkbutton;
+	GtkWidget *disk_cache_spinbutton;
+	GtkWidget *clear_cache_button;
+
+	/* language */
+	GtkWidget *default_encoding_combo;
 	GtkTreeView *lang_treeview;
-	GtkTreeModel *lang_model;
-	EphyDialog *add_lang_dialog;
 	GtkWidget *lang_add_button;
 	GtkWidget *lang_remove_button;
 	GtkWidget *lang_up_button;
 	GtkWidget *lang_down_button;
+	GtkWidget *enable_spell_checking_checkbutton;
+
+	GtkDialog *add_lang_dialog;
+	GtkTreeView *add_lang_treeview;
+	GtkTreeModel *lang_model;
+
 	GHashTable *iso_639_table;
 	GHashTable *iso_3166_table;
 };
@@ -78,7 +107,7 @@ enum {
 	NUM_COLS
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, EPHY_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
 
 static void
 prefs_dialog_finalize (GObject *object)
@@ -88,11 +117,10 @@ prefs_dialog_finalize (GObject *object)
 
 	if (priv->add_lang_dialog != NULL)
 	{
-		EphyDialog **add_lang_dialog = &priv->add_lang_dialog;
+		GtkDialog **add_lang_dialog = &priv->add_lang_dialog;
 
-		g_object_remove_weak_pointer
-				(G_OBJECT (priv->add_lang_dialog),
-				 (gpointer *) add_lang_dialog);
+		g_object_remove_weak_pointer (G_OBJECT (priv->add_lang_dialog),
+					      (gpointer *) add_lang_dialog);
 		g_object_unref (priv->add_lang_dialog);
 	}
 
@@ -106,10 +134,46 @@ static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->finalize = prefs_dialog_finalize;
 
-	g_type_class_add_private (object_class, sizeof(PrefsDialogPrivate));
+	gtk_widget_class_set_template_from_resource (widget_class,
+	                                             "/org/gnome/epiphany/prefs-dialog.ui");
+	/* general */
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, automatic_downloads_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, popups_allow_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, adblock_allow_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_plugins_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, download_button_hbox);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, download_button_label);
+
+	/* fonts */
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, custom_fonts_table);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, sans_fontbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, serif_fontbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, mono_fontbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, css_checkbox);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, css_edit_button);
+
+	/* privacy */
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, always);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, no_third_party);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, never);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, remember_passwords_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, do_not_track_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, disk_cache_spinbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, clear_cache_button);
+
+	/* language */
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, default_encoding_combo);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_treeview);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_add_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_remove_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_up_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_down_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 }
 
 static void
@@ -191,7 +255,7 @@ combo_set_mapping (const GValue *value,
 }
 
 static void
-create_node_combo (EphyDialog *dialog,
+create_node_combo (PrefsDialog *dialog,
 		   EphyEncodings *encodings,
 		   const char *default_value)
 {
@@ -212,8 +276,7 @@ create_node_combo (EphyDialog *dialog,
 	}
 	g_free (code);
 
-	combo = GTK_COMBO_BOX (ephy_dialog_get_control (dialog,
-							"default_encoding_combo"));
+	combo = GTK_COMBO_BOX (dialog->priv->default_encoding_combo);
 
 	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	all_encodings = ephy_encodings_get_all (encodings);
@@ -354,12 +417,9 @@ language_editor_update_buttons (PrefsDialog *dialog)
 
 static void
 add_lang_dialog_selection_changed (GtkTreeSelection *selection,
-				   EphyDialog *dialog)
+				   GtkWidget *button)
 {
-	GtkWidget *button;
 	int n_selected;
-
-	button = ephy_dialog_get_control (dialog, "add_button");
 
 	n_selected = gtk_tree_selection_count_selected_rows (selection);
 	gtk_widget_set_sensitive (button, n_selected > 0);
@@ -370,8 +430,7 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 			     int response,
 			     PrefsDialog *pd)
 {
-	EphyDialog *dialog = pd->priv->add_lang_dialog;
-	GtkTreeView *treeview;
+	GtkDialog *dialog = pd->priv->add_lang_dialog;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
@@ -381,9 +440,7 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-				(dialog, "languages_treeview"));
-		selection = gtk_tree_view_get_selection (treeview);
+		selection = gtk_tree_view_get_selection (pd->priv->add_lang_treeview);
 
 		rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
@@ -394,18 +451,18 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 			if (gtk_tree_model_get_iter (model, &iter, path))
 			{
 				char *code, *desc;
-				
+
 				gtk_tree_model_get (model, &iter,
 						    COL_LANG_NAME, &desc,
 						    COL_LANG_CODE, &code,
 						    -1);
 
 				language_editor_add (pd, code, desc);
-		
+
 				g_free (desc);
 				g_free (code);
 			}
-		}			
+		}
 
 		g_list_foreach (rows, (GFunc) gtk_tree_path_free, NULL);
 		g_list_free (rows);
@@ -414,7 +471,7 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 		language_editor_update_buttons (pd);
 	}
 
-	g_object_unref (dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static char *
@@ -497,11 +554,11 @@ add_system_language_entry (GtkListStore *store)
 	g_free (text);
 }
 
-static EphyDialog *
-setup_add_language_dialog (PrefsDialog *pd)
+static GtkDialog *
+setup_add_language_dialog (PrefsDialog *dialog)
 {
-	EphyDialog *dialog;
-	GtkWidget *window, *parent;
+	GtkWidget *ad;
+	GtkWidget *add_button;
 	GtkListStore *store;
 	GtkTreeModel *sortmodel;
 	GtkTreeView *treeview;
@@ -510,19 +567,13 @@ setup_add_language_dialog (PrefsDialog *pd)
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
 	int i;
+	GtkBuilder *builder;
 
-	parent = ephy_dialog_get_control (EPHY_DIALOG (pd), "prefs_dialog");
-
-	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
-					     "parent-window", parent,
-					     "default-width", 260,
-					     "default-height", 230,
-					     NULL));
-
-	ephy_dialog_construct (dialog, 
-			       "/org/gnome/epiphany/prefs-dialog.ui",
-			       "add_language_dialog",
-			       NULL);
+	builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/prefs-lang-dialog.ui");
+	ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
+	add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
+	treeview = GTK_TREE_VIEW (gtk_builder_get_object (builder, "languages_treeview"));
+	dialog->priv->add_lang_treeview = treeview;
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -531,8 +582,8 @@ setup_add_language_dialog (PrefsDialog *pd)
 		const char *code = languages[i];
 		char *name;
 
-		name = get_name_for_lang_code (pd, code);
-		
+		name = get_name_for_lang_code (dialog, code);
+
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
 				    COL_LANG_NAME, name,
@@ -547,14 +598,9 @@ setup_add_language_dialog (PrefsDialog *pd)
 	gtk_tree_sortable_set_sort_column_id
 		(GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-	ephy_dialog_get_controls (dialog,
-				  "languages_treeview", &treeview,
-				  "add_language_dialog", &window,
-				  NULL);
-
-	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (parent)),
-				     GTK_WINDOW (window));
-	gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (dialog)),
+				     GTK_WINDOW (ad));
+	gtk_window_set_modal (GTK_WINDOW (ad), TRUE);
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);
 
@@ -575,18 +621,18 @@ setup_add_language_dialog (PrefsDialog *pd)
 
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	
-	add_lang_dialog_selection_changed (GTK_TREE_SELECTION (selection), dialog);
-	g_signal_connect (selection, "changed",
-			  G_CALLBACK (add_lang_dialog_selection_changed), dialog);
 
-	g_signal_connect (window, "response",
-			  G_CALLBACK (add_lang_dialog_response_cb), pd);
+	add_lang_dialog_selection_changed (GTK_TREE_SELECTION (selection), add_button);
+	g_signal_connect (selection, "changed",
+			  G_CALLBACK (add_lang_dialog_selection_changed), add_button);
+
+	g_signal_connect (ad, "response",
+			  G_CALLBACK (add_lang_dialog_response_cb), dialog);
 
 	g_object_unref (store);
 	g_object_unref (sortmodel);
 
-	return dialog;
+	return GTK_DIALOG (ad);
 }
 
 static void
@@ -595,7 +641,7 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 {
 	if (pd->priv->add_lang_dialog == NULL)
 	{
-		EphyDialog **add_lang_dialog;
+		GtkDialog **add_lang_dialog;
 
 		pd->priv->add_lang_dialog = setup_add_language_dialog (pd);
 
@@ -606,7 +652,7 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 			(gpointer *) add_lang_dialog);
 	}
 
-	ephy_dialog_show (pd->priv->add_lang_dialog);
+	gtk_window_present (GTK_WINDOW (pd->priv->add_lang_dialog));
 }
 
 static void
@@ -706,9 +752,9 @@ language_editor_selection_changed_cb (GtkTreeSelection *selection,
 }
 
 static void
-create_language_section (EphyDialog *dialog)
+create_language_section (PrefsDialog *dialog)
 {
-	PrefsDialog *pd = EPHY_PREFS_DIALOG (dialog);
+	PrefsDialogPrivate *priv = dialog->priv;
 	GtkListStore *store;
 	GtkTreeView *treeview;
 	GtkCellRenderer *renderer;
@@ -717,37 +763,28 @@ create_language_section (EphyDialog *dialog)
 	char **list = NULL;
 	int i;
 
-	pd->priv->iso_639_table = ephy_langs_iso_639_table ();
-	pd->priv->iso_3166_table = ephy_langs_iso_3166_table ();
+	priv->iso_639_table = ephy_langs_iso_639_table ();
+	priv->iso_3166_table = ephy_langs_iso_3166_table ();
 
-	ephy_dialog_get_controls
-		(dialog,
-		 "lang_treeview", &treeview,
-		 "lang_add_button", &pd->priv->lang_add_button,
-		 "lang_remove_button", &pd->priv->lang_remove_button,
-		 "lang_up_button", &pd->priv->lang_up_button,
-		 "lang_down_button", &pd->priv->lang_down_button,
-		 NULL);
-
-	g_signal_connect (pd->priv->lang_add_button, "clicked",
+	g_signal_connect (priv->lang_add_button, "clicked",
 			  G_CALLBACK (language_editor_add_button_clicked_cb), dialog);
-	g_signal_connect (pd->priv->lang_remove_button, "clicked",
+	g_signal_connect (priv->lang_remove_button, "clicked",
 			  G_CALLBACK (language_editor_remove_button_clicked_cb), dialog);
-	g_signal_connect (pd->priv->lang_up_button, "clicked",
+	g_signal_connect (priv->lang_up_button, "clicked",
 			  G_CALLBACK (language_editor_up_button_clicked_cb), dialog);
-	g_signal_connect (pd->priv->lang_down_button, "clicked",
+	g_signal_connect (priv->lang_down_button, "clicked",
 			  G_CALLBACK (language_editor_down_button_clicked_cb), dialog);
 
 	/* setup the languages treeview */
-	pd->priv->lang_treeview = treeview;
+	treeview = priv->lang_treeview;
 
 	gtk_tree_view_set_reorderable (treeview, TRUE);
 	gtk_tree_view_set_headers_visible (treeview, FALSE);
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-	pd->priv->lang_model = GTK_TREE_MODEL (store);
-	gtk_tree_view_set_model (treeview, pd->priv->lang_model);
+	priv->lang_model = GTK_TREE_MODEL (store);
+	gtk_tree_view_set_model (treeview, priv->lang_model);
 
 	renderer = gtk_cell_renderer_text_new ();
 
@@ -765,9 +802,9 @@ create_language_section (EphyDialog *dialog)
 
 	/* Connect treeview signals */
 	g_signal_connect (G_OBJECT (treeview), "drag_end",
-			  G_CALLBACK (language_editor_treeview_drag_end_cb), pd);
+			  G_CALLBACK (language_editor_treeview_drag_end_cb), dialog);
 	g_signal_connect (G_OBJECT (selection), "changed",
-			  G_CALLBACK (language_editor_selection_changed_cb), pd);
+			  G_CALLBACK (language_editor_selection_changed_cb), dialog);
 
 	list = g_settings_get_strv (EPHY_SETTINGS_WEB,
 				    EPHY_PREFS_WEB_LANGUAGE);
@@ -785,32 +822,32 @@ create_language_section (EphyDialog *dialog)
 		{
 			char *text;
 
-			text = get_name_for_lang_code (pd, code);
-			language_editor_add (pd, code, text);
+			text = get_name_for_lang_code (dialog, code);
+			language_editor_add (dialog, code, text);
 			g_free (text);
 		}
 	}
 	g_object_unref (store);
 
-	language_editor_update_buttons (pd);
+	language_editor_update_buttons (dialog);
 	g_strfreev (list);
 
 	/* Lockdown if key is not writable */
 	g_settings_bind_writable (EPHY_SETTINGS_WEB,
 				  EPHY_PREFS_WEB_LANGUAGE,
-				  pd->priv->lang_add_button, "sensitive", FALSE);
+				  priv->lang_add_button, "sensitive", FALSE);
 	g_settings_bind_writable (EPHY_SETTINGS_WEB,
 				  EPHY_PREFS_WEB_LANGUAGE,
-				  pd->priv->lang_remove_button, "sensitive", FALSE);
+				  priv->lang_remove_button, "sensitive", FALSE);
 	g_settings_bind_writable (EPHY_SETTINGS_WEB,
 				  EPHY_PREFS_WEB_LANGUAGE,
-				  pd->priv->lang_up_button, "sensitive", FALSE);
+				  priv->lang_up_button, "sensitive", FALSE);
 	g_settings_bind_writable (EPHY_SETTINGS_WEB,
 				  EPHY_PREFS_WEB_LANGUAGE,
-				  pd->priv->lang_down_button, "sensitive", FALSE);
+				  priv->lang_down_button, "sensitive", FALSE);
 	g_settings_bind_writable (EPHY_SETTINGS_WEB,
 				  EPHY_PREFS_WEB_LANGUAGE,
-				  pd->priv->lang_treeview, "sensitive", FALSE);
+				  priv->lang_treeview, "sensitive", FALSE);
 }
 
 static void
@@ -827,22 +864,16 @@ download_path_changed_cb (GtkFileChooser *button)
 }
 
 static void
-create_download_path_button (EphyDialog *dialog)
+create_download_path_button (PrefsDialog *dialog)
 {
-	GtkWidget *parent, *hbox, *label, *button;
+	GtkWidget *button;
 	EphyFileChooser *fc;
 	char *dir;
 
 	dir = ephy_file_get_downloads_dir ();
 
-	ephy_dialog_get_controls (dialog,
-				  "download_button_hbox", &hbox,
-				  "download_button_label", &label,
-				  "prefs_dialog", &parent,
-				  NULL);
-
 	fc = ephy_file_chooser_new (_("Select a Directory"),
-				    parent,
+				    GTK_WIDGET (dialog),
 				    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 				    EPHY_FILE_FILTER_NONE);
 
@@ -856,8 +887,8 @@ create_download_path_button (EphyDialog *dialog)
 						 DOWNLOAD_BUTTON_WIDTH);
 	g_signal_connect (button, "selection-changed",
 			  G_CALLBACK (download_path_changed_cb), dialog);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (dialog->priv->download_button_label), button);
+	gtk_box_pack_start (GTK_BOX (dialog->priv->download_button_hbox), button, TRUE, TRUE, 0);
 	gtk_widget_show (button);
 
 	g_settings_bind_writable (EPHY_SETTINGS_STATE,
@@ -869,26 +900,22 @@ create_download_path_button (EphyDialog *dialog)
 static void
 prefs_dialog_response_cb (GtkDialog *widget,
 			  int response,
-			  EphyDialog *dialog)
+			  GtkDialog *dialog)
 {
 	if (response == GTK_RESPONSE_HELP)
 	{
 		ephy_gui_help (GTK_WIDGET (widget), "pref");
 		return;
 	}
-		
-	g_object_unref (dialog);
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
 clear_cache_button_clicked_cb (GtkWidget *button,
 			       PrefsDialog *dialog)
 {
-	GtkWidget *parent;
-
-	parent = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  "prefs_dialog");
-	pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog), parent,
+	pdm_dialog_show_clear_all_dialog (NULL, GTK_WIDGET (dialog),
 					  CLEAR_ALL_CACHE);
 }
 
@@ -928,145 +955,183 @@ cookies_set_mapping (const GValue *value,
 	return variant;
 }
 
-typedef struct
+static void
+setup_general_page (PrefsDialog *dialog)
 {
-	char *obj;
-	char *prop;
-	char *schema;
-	char *key;
-	GSettingsBindFlags flags;
-	GSettingsBindGetMapping get_mapping;
-	GSettingsBindSetMapping set_mapping;
-} PrefsDialogPreference;
+	PrefsDialogPrivate *priv = dialog->priv;
+	GSettings *settings;
+	GSettings *web_settings;
 
-static const PrefsDialogPreference preferences[] =
-{
-	{ "automatic_downloads_checkbutton", "active",
-	  EPHY_PREFS_SCHEMA, EPHY_PREFS_AUTO_DOWNLOADS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "remember_passwords_checkbutton", "active",
-	  EPHY_PREFS_SCHEMA, EPHY_PREFS_REMEMBER_PASSWORDS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "do_not_track_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_DO_NOT_TRACK,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
+	web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
 
-	{ "disk_cache_spinbutton", "value",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_CACHE_SIZE,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "use_gnome_fonts_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_GNOME_FONTS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "popups_allow_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_POPUPS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "adblock_allow_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-	  G_SETTINGS_BIND_INVERT_BOOLEAN, NULL, NULL },
-	{ "enable_plugins_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_PLUGINS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "css_checkbox", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_USER_CSS,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "css_edit_button", "sensitive",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_USER_CSS,
-	  G_SETTINGS_BIND_GET, NULL, NULL },
-	{ "enable_spell_checking_checkbutton", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
+	g_settings_bind (settings,
+			 EPHY_PREFS_AUTO_DOWNLOADS,
+			 priv->automatic_downloads_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_POPUPS,
+			 priv->popups_allow_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+			 priv->adblock_allow_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_INVERT_BOOLEAN);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_PLUGINS,
+			 priv->enable_plugins_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_INVERT_BOOLEAN);
 
-	/* Font buttons */
-	{ "custom_fonts_table", "sensitive",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_USE_GNOME_FONTS,
-	  G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN, NULL, NULL },
-
-	{ "sans_fontbutton", "font-name",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_SANS_SERIF_FONT,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "serif_fontbutton", "font-name",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_SERIF_FONT,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-	{ "mono_fontbutton", "font-name",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_MONOSPACE_FONT,
-	  G_SETTINGS_BIND_DEFAULT, NULL, NULL },
-
-	/* Has mapping */
-	{ "always", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
-	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
-	{ "no-third-party", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
-	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
-	{ "never", "active",
-	  EPHY_PREFS_WEB_SCHEMA, EPHY_PREFS_WEB_COOKIES_POLICY,
-	  G_SETTINGS_BIND_DEFAULT, cookies_get_mapping, cookies_set_mapping },
-};
+	create_download_path_button (dialog);
+}
 
 static void
-prefs_dialog_init (PrefsDialog *pd)
+setup_fonts_page (PrefsDialog *dialog)
 {
-	EphyDialog *dialog = EPHY_DIALOG (pd);
+	PrefsDialogPrivate *priv = dialog->priv;
+	GSettings *web_settings;
+
+	web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_USE_GNOME_FONTS,
+			 priv->use_gnome_fonts_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_USE_GNOME_FONTS,
+			 priv->custom_fonts_table,
+			 "sensitive",
+			 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_SANS_SERIF_FONT,
+			 priv->sans_fontbutton,
+			 "font-name",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_SERIF_FONT,
+			 priv->serif_fontbutton,
+			 "font-name",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_MONOSPACE_FONT,
+			 priv->mono_fontbutton,
+			 "font-name",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_USER_CSS,
+			 priv->css_checkbox,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_USER_CSS,
+			 priv->css_edit_button,
+			 "sensitive",
+			 G_SETTINGS_BIND_GET);
+	g_signal_connect (priv->css_edit_button,
+			  "clicked",
+			  G_CALLBACK (css_edit_button_clicked_cb),
+			  dialog);
+}
+
+static void
+setup_privacy_page (PrefsDialog *dialog)
+{
+	PrefsDialogPrivate *priv = dialog->priv;
+	GSettings *settings;
+	GSettings *web_settings;
+
+	settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
+	web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+
+	g_settings_bind_with_mapping (web_settings,
+				      EPHY_PREFS_WEB_COOKIES_POLICY,
+				      priv->always,
+				      "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      cookies_get_mapping,
+				      cookies_set_mapping,
+				      priv->always,
+				      NULL);
+	g_settings_bind_with_mapping (web_settings,
+				      EPHY_PREFS_WEB_COOKIES_POLICY,
+				      priv->no_third_party,
+				      "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      cookies_get_mapping,
+				      cookies_set_mapping,
+				      priv->no_third_party,
+				      NULL);
+	g_settings_bind_with_mapping (web_settings,
+				      EPHY_PREFS_WEB_COOKIES_POLICY,
+				      priv->never,
+				      "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      cookies_get_mapping,
+				      cookies_set_mapping,
+				      priv->never,
+				      NULL);
+	g_settings_bind (settings,
+			 EPHY_PREFS_REMEMBER_PASSWORDS,
+			 priv->remember_passwords_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_DO_NOT_TRACK,
+			 priv->do_not_track_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_CACHE_SIZE,
+			 priv->disk_cache_spinbutton,
+			 "value",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	g_signal_connect (priv->clear_cache_button,
+			  "clicked",
+			  G_CALLBACK (clear_cache_button_clicked_cb),
+			  dialog);
+}
+
+static void
+setup_language_page (PrefsDialog *dialog)
+{
+	PrefsDialogPrivate *priv = dialog->priv;
+	GSettings *web_settings;
 	EphyEncodings *encodings;
-	GtkWidget *window;
-	GtkWidget *clear_cache_button;
-	GtkWidget *css_checkbox, *css_edit_button;
-	int i;
 
-	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
+	web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
 
-	ephy_dialog_construct (dialog,
-			       "/org/gnome/epiphany/prefs-dialog.ui",
-			       "prefs_dialog",
-			       NULL);
+	g_settings_bind (web_settings,
+			 EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
+			 priv->enable_spell_checking_checkbutton,
+			 "active",
+			 G_SETTINGS_BIND_DEFAULT);
 
-	for (i = 0; i < G_N_ELEMENTS (preferences); i++)
-	{
-		PrefsDialogPreference pref;
-		GtkWidget *widget;
-		GSettings *settings;
-
-		pref = preferences[i];
-		settings = ephy_settings_get (pref.schema);
-		widget = ephy_dialog_get_control (dialog, pref.obj);
-
-		if (pref.set_mapping != NULL || pref.get_mapping != NULL)
-			g_settings_bind_with_mapping (settings, pref.key,
-						      widget, pref.prop,
-						      pref.flags,
-						      pref.get_mapping,
-						      pref.set_mapping,
-						      widget, NULL);
-		else
-			g_settings_bind (settings, pref.key,
-					 widget, pref.prop,
-					 pref.flags);
-	}
-
-	ephy_dialog_get_controls (dialog,
-				  "prefs_dialog", &window,
-				  "css_checkbox", &css_checkbox,
-				  "css_edit_button", &css_edit_button,
-				  "clear_cache_button", &clear_cache_button,
-				  NULL);
-
-	ephy_gui_ensure_window_group (GTK_WINDOW (window));
-
-	g_signal_connect (window, "response",
-			  G_CALLBACK (prefs_dialog_response_cb), dialog);
-
-	g_signal_connect (css_edit_button, "clicked",
-			  G_CALLBACK (css_edit_button_clicked_cb), dialog);
-
-	g_signal_connect (clear_cache_button, "clicked",
-			  G_CALLBACK (clear_cache_button_clicked_cb), dialog);
-
-	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-					(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
+	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings (EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 
 	create_node_combo (dialog, encodings, "ISO-8859-1");
 
-	create_language_section	(dialog);
+	create_language_section (dialog);
+}
 
-	create_download_path_button (dialog);
+static void
+prefs_dialog_init (PrefsDialog *dialog)
+{
+	dialog->priv = prefs_dialog_get_instance_private (dialog);
+	gtk_widget_init_template (GTK_WIDGET (dialog));
+
+	setup_general_page (dialog);
+	setup_fonts_page (dialog);
+	setup_privacy_page (dialog);
+	setup_language_page (dialog);
+
+	ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (prefs_dialog_response_cb), dialog);
 }
