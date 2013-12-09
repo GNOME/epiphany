@@ -428,6 +428,18 @@ search_entry_changed_cb (GtkEntry *entry,
 }
 
 static void
+ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
+				   WebKitLoadEvent  load_event,
+				   EphyFindToolbar *toolbar)
+{
+	if (load_event == WEBKIT_LOAD_STARTED &&
+	    gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (toolbar)))
+	{
+		ephy_find_toolbar_close (toolbar);
+	}
+}
+
+static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv;
@@ -648,6 +660,9 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
                 g_signal_connect_object (priv->controller, "failed-to-find-text",
                                          G_CALLBACK (failed_to_find_text_cb),
                                          toolbar, 0);
+                g_signal_connect (web_view, "load-changed",
+				  G_CALLBACK (ephy_find_toolbar_load_changed_cb),
+				  toolbar);
 
 		clear_status (toolbar);
 
