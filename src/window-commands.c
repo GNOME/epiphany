@@ -51,7 +51,6 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-dom-utils.h"
 #include "ephy-zoom.h"
-#include "pdm-dialog.h"
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -1213,21 +1212,6 @@ window_cmd_edit_preferences (GtkAction *action,
                                               GTK_WINDOW (window));
 
 	gtk_window_present (dialog);
-}
-
-void
-window_cmd_edit_personal_data (GtkAction *action,
-			       EphyWindow *window)
-{
-	PdmDialog *dialog;
-	
-	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell_get_default ()));
-	/* FIXME?: pdm_dialog_open is supposed to scroll to the host passed
-	 * as second parameters in the cookies tab. Honestly I think this
-	 * has been broken for a while. In any case it's probably not
-	 * relevant here, although we could get the host of the last active
-	 * ephy window, I guess. */
-	pdm_dialog_open (dialog, NULL);
 }
 
 void

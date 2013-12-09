@@ -41,7 +41,6 @@
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
-#include "pdm-dialog.h"
 #include "prefs-dialog.h"
 #include "window-commands.h"
 
@@ -63,7 +62,6 @@ struct _EphyShellPrivate {
   GNetworkMonitor *network_monitor;
   GtkWidget *bme;
   GtkWidget *history_window;
-  GObject *pdm_dialog;
   GObject *prefs_dialog;
   GList *del_on_exit;
   EphyShellStartupContext *startup_context;
@@ -197,14 +195,6 @@ show_preferences (GSimpleAction *action,
 }
 
 static void
-show_pdm (GSimpleAction *action,
-          GVariant *parameter,
-          gpointer user_data)
-{
-  window_cmd_edit_personal_data (NULL, NULL);
-}
-
-static void
 show_help (GSimpleAction *action,
            GVariant *parameter,
            gpointer user_data)
@@ -242,7 +232,6 @@ static GActionEntry app_entries[] = {
   { "bookmarks", show_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
-  { "pdm", show_pdm, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
@@ -673,7 +662,6 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&priv->lockdown);
   g_clear_pointer (&priv->bme, gtk_widget_destroy);
   g_clear_pointer (&priv->history_window, gtk_widget_destroy);
-  g_clear_object (&priv->pdm_dialog);
   g_clear_object (&priv->prefs_dialog);
   g_clear_object (&priv->bookmarks);
   g_clear_object (&priv->network_monitor);
@@ -986,28 +974,6 @@ ephy_shell_get_history_window (EphyShell *shell)
   }
 
   return shell->priv->history_window;
-}
-
-/**
- * ephy_shell_get_pdm_dialog:
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_shell_get_pdm_dialog (EphyShell *shell)
-{
-  if (shell->priv->pdm_dialog == NULL) {
-    GObject **dialog;
-
-    shell->priv->pdm_dialog = g_object_new (EPHY_TYPE_PDM_DIALOG, NULL);
-
-    dialog = &shell->priv->pdm_dialog;
-
-    g_object_add_weak_pointer (shell->priv->pdm_dialog,
-                               (gpointer *)dialog);
-  }
-
-  return shell->priv->pdm_dialog;
 }
 
 /**

@@ -29,7 +29,6 @@ NOINST_H_FILES = \
 	ephy-toolbar.h				\
 	ephy-window-action.h			\
 	languages.h				\
-	pdm-dialog.h				\
 	clear-data-dialog.h			\
 	cookies-dialog.h			\
 	popup-commands.h			\
@@ -67,7 +66,6 @@ libephymain_la_SOURCES = \
 	ephy-toolbar.c				\
 	ephy-window.c				\
 	ephy-window-action.c			\
-	pdm-dialog.c				\
 	clear-data-dialog.c			\
 	cookies-dialog.c			\
 	popup-commands.c			\

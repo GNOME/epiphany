@@ -167,8 +167,6 @@ GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 
-GObject         *ephy_shell_get_pdm_dialog               (EphyShell *shell);
-
 GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
 guint           ephy_shell_get_n_windows                (EphyShell *shell);

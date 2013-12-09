@@ -114,8 +114,6 @@ void window_cmd_file_new_incognito_window (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_preferences          (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_edit_personal_data        (GtkAction  *action,
-                                           EphyWindow *window);
 
 G_END_DECLS
 
