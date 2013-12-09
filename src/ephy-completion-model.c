@@ -29,6 +29,12 @@
 
 #include <string.h>
 
+enum {
+  PROP_0,
+  PROP_HISTORY_SERVICE,
+  PROP_BOOKMARKS
+};
+
 G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
 #define EPHY_COMPLETION_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelPrivate))
@@ -65,6 +71,24 @@ free_search_terms (GSList *search_terms)
 }
 
 static void
+ephy_completion_model_set_property (GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+{
+  EphyCompletionModel *self = EPHY_COMPLETION_MODEL (object);
+
+  switch (property_id) {
+  case PROP_HISTORY_SERVICE:
+    self->priv->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
+    break;
+  case PROP_BOOKMARKS:
+    self->priv->bookmarks = ephy_bookmarks_get_bookmarks (EPHY_BOOKMARKS (g_value_get_pointer (value)));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
+    break;
+  }
+}
+
+static void
 ephy_completion_model_finalize (GObject *object)
 {
   EphyCompletionModelPrivate *priv = EPHY_COMPLETION_MODEL (object)->priv;
@@ -87,8 +111,22 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->set_property = ephy_completion_model_set_property;
   object_class->constructed = ephy_completion_model_constructed;
   object_class->finalize = ephy_completion_model_finalize;
+
+  g_object_class_install_property (object_class,
+                                   PROP_HISTORY_SERVICE,
+                                   g_param_spec_pointer ("history-service",
+                                                         "History Service",
+                                                         "The history service",
+                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (object_class,
+                                   PROP_BOOKMARKS,
+                                   g_param_spec_pointer ("bookmarks",
+                                                         "Bookmarks",
+                                                         "The bookmarks",
+                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }
@@ -96,15 +134,7 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
 static void
 ephy_completion_model_init (EphyCompletionModel *model)
 {
-  EphyCompletionModelPrivate *priv;
-  EphyBookmarks *bookmarks_service;
-
-  model->priv = priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
-
-  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
-
-  bookmarks_service = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks_service);
+  model->priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 }
 
 static gboolean
@@ -580,7 +610,14 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
 }
 
 EphyCompletionModel *
-ephy_completion_model_new (void)
+ephy_completion_model_new (EphyHistoryService *history_service,
+                           EphyBookmarks      *bookmarks)
 {
-  return g_object_new (EPHY_TYPE_COMPLETION_MODEL, NULL);
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (history_service), NULL);
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
+
+  return g_object_new (EPHY_TYPE_COMPLETION_MODEL,
+                       "history-service", history_service,
+                       "bookmarks", bookmarks,
+                       NULL);
 }

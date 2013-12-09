@@ -342,6 +342,8 @@ ephy_location_controller_constructed (GObject *object)
 {
 	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 	EphyLocationControllerPrivate *priv = controller->priv;
+	EphyHistoryService *history_service;
+	EphyBookmarks *bookmarks;
 	EphyCompletionModel *model;
 	GtkWidget *notebook, *widget;
 
@@ -353,7 +355,9 @@ ephy_location_controller_constructed (GObject *object)
 	g_signal_connect (notebook, "switch-page",
 			  G_CALLBACK (switch_page_cb), controller);
 
-	model = ephy_completion_model_new ();
+	history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	model = ephy_completion_model_new (history_service, bookmarks);
 	ephy_location_entry_set_completion (priv->location_entry,
 					    GTK_TREE_MODEL (model),
 					    EPHY_COMPLETION_TEXT_COL,
