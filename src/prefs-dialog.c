@@ -38,6 +38,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "clear-data-dialog.h"
+#include "cookies-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -131,6 +132,18 @@ prefs_dialog_finalize (GObject *object)
 }
 
 static void
+on_manage_cookies_button_clicked (GtkWidget *button,
+				  PrefsDialog *dialog)
+{
+	CookiesDialog *cookies_dialog;
+
+	cookies_dialog = g_object_new (EPHY_TYPE_COOKIES_DIALOG, NULL);
+	gtk_window_set_transient_for (GTK_WINDOW (cookies_dialog), GTK_WINDOW (dialog));
+	gtk_window_set_modal (GTK_WINDOW (cookies_dialog), TRUE);
+	gtk_window_present (GTK_WINDOW (cookies_dialog));
+}
+
+static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -174,6 +187,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_up_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_down_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
+
+	gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
 }
 
 static void
