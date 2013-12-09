@@ -570,7 +570,7 @@ migrate_history (void)
     return;
   }
 
-  history_service = ephy_history_service_new (temporary_file);
+  history_service = ephy_history_service_new (temporary_file, FALSE);
   g_free (temporary_file);
 
   memset (&parse_data, 0, sizeof (HistoryParseData));

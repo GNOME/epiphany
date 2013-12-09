@@ -34,7 +34,7 @@ ensure_empty_history (const char* filename)
   if (g_file_test (filename, G_FILE_TEST_IS_REGULAR))
     g_unlink (filename);
 
-  return ephy_history_service_new (filename);
+  return ephy_history_service_new (filename, FALSE);
 }
 
 static void
