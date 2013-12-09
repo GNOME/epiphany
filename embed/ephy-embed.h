@@ -22,6 +22,7 @@
 #ifndef EPHY_EMBED_H
 #define EPHY_EMBED_H
 
+#include "ephy-find-toolbar.h"
 #include "ephy-overview.h"
 #include "ephy-web-view.h"
 
@@ -51,24 +52,25 @@ struct _EphyEmbedClass {
   GtkBoxClass parent_class;
 };
 
-GType        ephy_embed_get_type                 (void);
-EphyWebView* ephy_embed_get_web_view             (EphyEmbed  *embed);
-void         ephy_embed_add_top_widget           (EphyEmbed  *embed,
-                                                  GtkWidget  *widget,
-                                                  gboolean    destroy_on_transition);
-void         ephy_embed_remove_top_widget        (EphyEmbed  *embed,
-                                                  GtkWidget  *widget);
-void         ephy_embed_auto_download_url        (EphyEmbed  *embed,
-                                                  const char *url);
-void         ephy_embed_entering_fullscreen      (EphyEmbed *embed);
-void         ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
-void         ephy_embed_set_delayed_load_request (EphyEmbed *embed,
-                                                  WebKitURIRequest     *request);
-gboolean     ephy_embed_has_load_pending         (EphyEmbed *embed);
-void         ephy_embed_set_overview_mode        (EphyEmbed *embed,
-                                                  gboolean   overview_mode);
-gboolean     ephy_embed_get_overview_mode        (EphyEmbed *embed);
-EphyOverview*ephy_embed_get_overview             (EphyEmbed *embed);
+GType            ephy_embed_get_type                 (void);
+EphyWebView*     ephy_embed_get_web_view             (EphyEmbed  *embed);
+EphyFindToolbar* ephy_embed_get_find_toolbar         (EphyEmbed  *embed);
+void             ephy_embed_add_top_widget           (EphyEmbed  *embed,
+                                                      GtkWidget  *widget,
+                                                      gboolean    destroy_on_transition);
+void             ephy_embed_remove_top_widget        (EphyEmbed  *embed,
+                                                      GtkWidget  *widget);
+void             ephy_embed_auto_download_url        (EphyEmbed  *embed,
+                                                      const char *url);
+void             ephy_embed_entering_fullscreen      (EphyEmbed *embed);
+void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
+void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
+                                                      WebKitURIRequest     *request);
+gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
+void             ephy_embed_set_overview_mode        (EphyEmbed *embed,
+                                                      gboolean   overview_mode);
+gboolean         ephy_embed_get_overview_mode        (EphyEmbed *embed);
+EphyOverview*    ephy_embed_get_overview             (EphyEmbed *embed);
 
 G_END_DECLS
 

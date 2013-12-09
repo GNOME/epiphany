@@ -43,7 +43,7 @@ EphyLocationController  *ephy_window_get_location_controller  (EphyWindow       
 
 EphyEmbedEvent          *ephy_window_get_context_event        (EphyWindow               *window);
 
-GtkWidget               *ephy_window_get_find_toolbar         (EphyWindow               *window);
+GtkWidget               *ephy_window_get_current_find_toolbar (EphyWindow               *window);
 
 void                     ephy_window_set_location             (EphyWindow               *window,
                                                                const char               *address);

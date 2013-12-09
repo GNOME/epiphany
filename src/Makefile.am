@@ -17,7 +17,6 @@ NOINST_H_FILES = \
 	ephy-combined-stop-reload-action.h	\
 	ephy-encoding-dialog.h			\
 	ephy-encoding-menu.h			\
-	ephy-find-toolbar.h			\
 	ephy-history-window.h			\
 	ephy-home-action.h			\
 	ephy-link-action.h			\
@@ -51,7 +50,6 @@ libephymain_la_SOURCES = \
 	ephy-combined-stop-reload-action.c	\
 	ephy-encoding-dialog.c			\
 	ephy-encoding-menu.c			\
-	ephy-find-toolbar.c			\
 	ephy-home-action.c			\
 	ephy-history-window.c			\
 	ephy-link.c				\

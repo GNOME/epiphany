@@ -345,7 +345,6 @@ struct _EphyWindowPrivate
 	EphyEncodingMenu *enc_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
-	EphyFindToolbar *find_toolbar;
 	EphyWebViewChrome chrome;
 	EphyWebViewChrome pre_fullscreen_chrome;
 	EphyEmbedEvent *context_event;
@@ -1329,7 +1328,6 @@ sync_tab_address (EphyWebView *view,
 	location = calculate_location (typed_address, address);
 	ephy_window_set_location (window, location);
 	g_free (location);
-	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
 static void
@@ -1402,7 +1400,7 @@ sync_tab_document_type (EphyWebView *view,
 
 	if (!can_find)
 	{
-		ephy_find_toolbar_request_close (priv->find_toolbar);
+		ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (priv->active_embed));
 	}
 }
 
@@ -2781,7 +2779,8 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 	/* update new tab */
 	ephy_window_set_active_tab (window, embed);
 
-	ephy_find_toolbar_set_embed (priv->find_toolbar, embed);
+	ephy_find_toolbar_set_web_view (ephy_embed_get_find_toolbar (embed),
+					EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 static GtkNotebook *
@@ -3083,23 +3082,6 @@ ephy_window_finalize (GObject *object)
 }
 
 static void
-find_toolbar_close_cb (EphyFindToolbar *toolbar,
-		       EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *embed;
-
-	if (priv->closing) return;
-
-	ephy_find_toolbar_close (priv->find_toolbar);
-
-	embed = priv->active_embed;
-	if (embed == NULL) return;
-
-	gtk_widget_grab_focus (GTK_WIDGET (embed));
-}
-
-static void
 allow_popups_notifier (GSettings *settings,
 		       char *key,
 		       EphyWindow *window)
@@ -3359,13 +3341,6 @@ ephy_window_constructor (GType type,
 				  G_CALLBACK (ephy_link_open), window);
 	g_signal_connect (priv->location_controller, "lock-clicked",
 			  G_CALLBACK (lock_clicked_cb), window);
-
-	priv->find_toolbar = ephy_find_toolbar_new (window);
-	g_signal_connect (priv->find_toolbar, "close",
-			  G_CALLBACK (find_toolbar_close_cb), window);
-
-	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
-			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
 
 	g_signal_connect_swapped (priv->notebook, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
@@ -3681,11 +3656,11 @@ ephy_window_get_notebook (EphyWindow *window)
  * Return value: (transfer none): the @window's #EphyFindToolbar
  **/
 GtkWidget *
-ephy_window_get_find_toolbar (EphyWindow *window)
+ephy_window_get_current_find_toolbar (EphyWindow *window)
 {
        g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-       return GTK_WIDGET (window->priv->find_toolbar);
+       return GTK_WIDGET (ephy_embed_get_find_toolbar (window->priv->active_embed));
 }
 
 /**

@@ -23,7 +23,7 @@
 #include "ephy-find-toolbar.h"
 
 #include "ephy-debug.h"
-#include "ephy-embed-utils.h"
+#include "ephy-web-view.h"
 
 #include <math.h>
 
@@ -37,7 +37,6 @@
 
 struct _EphyFindToolbarPrivate
 {
-	EphyWindow *window;
 	WebKitWebView *web_view;
         WebKitFindController *controller;
 	GtkWidget *entry;
@@ -56,7 +55,7 @@ struct _EphyFindToolbarPrivate
 enum
 {
 	PROP_0,
-	PROP_WINDOW
+	PROP_WEB_VIEW
 };
 
 enum
@@ -102,7 +101,7 @@ set_status (EphyFindToolbar *toolbar,
 		case EPHY_FIND_RESULT_NOTFOUND:
 			icon_name = "face-uncertain-symbolic";
 			tooltip = _("Text not found");
-			gtk_widget_error_bell (GTK_WIDGET (priv->window));
+			gtk_widget_error_bell (GTK_WIDGET (toolbar));
 
 			break;
 		case EPHY_FIND_RESULT_FOUNDWRAPPED:
@@ -144,7 +143,7 @@ clear_status (EphyFindToolbar *toolbar)
  * gtk_tree_view_real_start_interactive_seach()
  */
 static gboolean
-tab_search_key_press_cb (EphyEmbed *embed,
+tab_search_key_press_cb (WebKitWebView *web_view,
 			 GdkEventKey *event,
 			 EphyFindToolbar *toolbar)
 {
@@ -346,12 +345,12 @@ entry_activate_cb (GtkWidget *entry,
 }
 
 static void
-ephy_find_toolbar_set_window (EphyFindToolbar *toolbar,
-			      EphyWindow *window)
+_ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
+				 WebKitWebView *web_view)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	priv->window = window;
+	priv->web_view = web_view;
 }
 
 static void
@@ -534,8 +533,8 @@ ephy_find_toolbar_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_WINDOW:
-			ephy_find_toolbar_set_window (toolbar, (EphyWindow *) g_value_get_object (value));
+		case PROP_WEB_VIEW:
+			_ephy_find_toolbar_set_web_view (toolbar, (WebKitWebView *) g_value_get_object (value));
 			break;
 	}
 }
@@ -596,11 +595,11 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 
 	g_object_class_install_property
 		(object_class,
-		 PROP_WINDOW,
-		 g_param_spec_object ("window",
-				      "Window",
-				      "Parent window",
-				      EPHY_TYPE_WINDOW,
+		 PROP_WEB_VIEW,
+		 g_param_spec_object ("web-view",
+				      "WebView",
+				      "Parent web view",
+				      WEBKIT_TYPE_WEB_VIEW,
 				      (GParamFlags) (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY)));
 
 	g_type_class_add_private (klass, sizeof (EphyFindToolbarPrivate));
@@ -609,10 +608,10 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 /* public functions */
 
 EphyFindToolbar *
-ephy_find_toolbar_new (EphyWindow *window)
+ephy_find_toolbar_new (WebKitWebView *web_view)
 {
 	return g_object_new (EPHY_TYPE_FIND_TOOLBAR,
-			     "window", window,
+			     "web-view", web_view,
 			     NULL);
 }
 
@@ -625,11 +624,10 @@ ephy_find_toolbar_get_text (EphyFindToolbar *toolbar)
 }
 
 void
-ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
-			     EphyEmbed *embed)
+ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
+				WebKitWebView *web_view)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed);
 
 	if (priv->web_view == web_view) return;
 

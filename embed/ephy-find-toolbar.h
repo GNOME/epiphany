@@ -27,8 +27,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-embed.h"
-#include "ephy-window.h"
+#include "ephy-web-view.h"
 
 G_BEGIN_DECLS
 
@@ -63,12 +62,12 @@ struct _EphyFindToolbarClass
 
 GType		 ephy_find_toolbar_get_type	 (void) G_GNUC_CONST;
 
-EphyFindToolbar *ephy_find_toolbar_new		 (EphyWindow *window);
+EphyFindToolbar *ephy_find_toolbar_new		 (WebKitWebView *web_view);
 
 const char	*ephy_find_toolbar_get_text	 (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_set_embed	 (EphyFindToolbar *toolbar,
-						  EphyEmbed *embed);
+void		 ephy_find_toolbar_set_web_view	 (EphyFindToolbar *toolbar,
+						  WebKitWebView *web_view);
 
 void		 ephy_find_toolbar_find_next	 (EphyFindToolbar *toolbar);
 

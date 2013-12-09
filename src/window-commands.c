@@ -1156,7 +1156,7 @@ window_cmd_edit_find (GtkAction *action,
 {
 	EphyFindToolbar *toolbar;
 	
-	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
 	ephy_find_toolbar_open (toolbar, FALSE, FALSE);
 }
 
@@ -1166,7 +1166,7 @@ window_cmd_edit_find_next (GtkAction *action,
 {
 	EphyFindToolbar *toolbar;
 
-	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
 	ephy_find_toolbar_find_next (toolbar);
 }
 
@@ -1176,7 +1176,7 @@ window_cmd_edit_find_prev (GtkAction *action,
 {
 	EphyFindToolbar *toolbar;
 
-	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
 	ephy_find_toolbar_find_previous (toolbar);
 }
 

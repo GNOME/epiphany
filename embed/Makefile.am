@@ -20,6 +20,7 @@ INST_H_FILES = \
 	ephy-embed-prefs.h		\
 	ephy-embed-shell.h		\
 	ephy-embed-utils.h              \
+	ephy-find-toolbar.h		\
 	ephy-overview.h			\
 	ephy-web-view.h
 
@@ -40,6 +41,7 @@ libephyembed_la_SOURCES = \
 	ephy-encoding.c			\
 	ephy-encodings.c		\
 	ephy-file-monitor.c		\
+	ephy-find-toolbar.c		\
 	ephy-overview.c			\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\

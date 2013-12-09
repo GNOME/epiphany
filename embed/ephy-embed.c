@@ -30,6 +30,7 @@
 #include "ephy-download.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
+#include "ephy-find-toolbar.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-web-view.h"
@@ -54,6 +55,7 @@ typedef struct {
 
 struct _EphyEmbedPrivate
 {
+  EphyFindToolbar *find_toolbar;
   GtkBox *top_widgets_vbox;
   GtkPaned *paned;
   WebKitWebView *web_view;
@@ -421,6 +423,17 @@ ephy_embed_get_property (GObject *object,
 }
 
 static void
+ephy_embed_find_toolbar_close_cb (EphyFindToolbar *toolbar,
+                                  EphyEmbed *embed)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+
+  ephy_find_toolbar_close (priv->find_toolbar);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+}
+
+static void
 ephy_embed_class_init (EphyEmbedClass *klass)
 {
   GObjectClass *object_class = (GObjectClass *)klass;
@@ -710,6 +723,15 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_valign (priv->progress, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->progress);
 
+  priv->find_toolbar = ephy_find_toolbar_new (priv->web_view);
+  g_signal_connect (priv->find_toolbar, "close",
+                    G_CALLBACK (ephy_embed_find_toolbar_close_cb),
+                    embed);
+
+  gtk_box_pack_start (GTK_BOX (embed),
+                      GTK_WIDGET (priv->find_toolbar),
+                      FALSE, FALSE, 0);
+
   paned = GTK_WIDGET (priv->paned);
 
   priv->web_view = web_view;
@@ -782,6 +804,23 @@ ephy_embed_get_web_view (EphyEmbed *embed)
 
   return EPHY_WEB_VIEW (embed->priv->web_view);
 }
+
+/**
+ * ephy_embed_get_find_toolbar:
+ * @embed: and #EphyEmbed
+ * 
+ * Returns the #EphyFindToolbar wrapped by @embed.
+ * 
+ * Returns: (transfer none): an #EphyFindToolbar
+ **/
+EphyFindToolbar*
+ephy_embed_get_find_toolbar (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+  return EPHY_FIND_TOOLBAR (embed->priv->find_toolbar);
+}
+
 
 /**
  * ephy_embed_add_top_widget:
