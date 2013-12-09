@@ -291,23 +291,7 @@ session_load_cb (GObject *object,
   EphySession *session = EPHY_SESSION (object);
   EphyShell *shell = EPHY_SHELL (user_data);
 
-  if (ephy_session_resume_finish (session, result, NULL))
-    shell->priv->startup_context->startup_flags |= EPHY_STARTUP_RESUMING_SESSION;
-
-  ephy_shell_startup_continue (shell);
-}
-
-static void
-ephy_shell_start_headless (EphyShell *shell)
-{
-  /* A bit of a hack: because we don't pass IS_SERVICE to GApplication
-     (because otherwise we would need a separate launcher binary), we
-     don't get the 10 seconds timeout for the first DBus call.
-     So just hold/release to get the inactivity timeout started instead.
-  */
-
-  g_application_hold (G_APPLICATION (shell));
-  g_application_release (G_APPLICATION (shell));
+  ephy_session_resume_finish (session, result, NULL);
   ephy_shell_startup_continue (shell);
 }
 
@@ -318,18 +302,14 @@ ephy_shell_activate (GApplication *application)
 
   /*
    * We get here on each new instance (remote or not). Autoresume the
-   * session unless we are in application or headless mode and queue the
-   * commands.
+   * session unless we are in application mode and queue the commands.
    */
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     EphyShellStartupContext *ctx;
 
     ctx = shell->priv->startup_context;
-    if (ctx->startup_flags != EPHY_STARTUP_OPEN_NOTHING) {
-      ephy_session_resume (ephy_shell_get_session (shell),
-                           ctx->user_time, NULL, session_load_cb, shell);
-    } else
-      ephy_shell_start_headless (shell);
+    ephy_session_resume (ephy_shell_get_session (shell),
+                         ctx->user_time, NULL, session_load_cb, shell);
   } else
     ephy_shell_startup_continue (shell);
 }
@@ -1154,7 +1134,7 @@ open_uris_data_new (EphyShell *shell,
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
     data->flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_FROM_EXTERNAL;
-  } else if (!have_uris && !(startup_flags & EPHY_STARTUP_RESUMING_SESSION)) {
+  } else if (!have_uris) {
     data->window = NULL;
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   }
