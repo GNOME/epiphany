@@ -291,7 +291,6 @@ entry_key_press_event_cb (GtkEntry *entry,
 			  GdkEventKey *event,
 			  EphyFindToolbar *toolbar)
 {
-	EphyFindToolbarPrivate *priv = toolbar->priv;
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	gboolean handled = FALSE;
 
