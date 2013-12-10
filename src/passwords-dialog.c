@@ -56,6 +56,9 @@ struct PasswordsDialogPrivate
 	GtkWidget *clear_button;
 	GtkWidget *password_column;
 	GtkWidget *password_renderer;
+	GtkWidget *treeview_popup_menu;
+	GtkWidget *copy_password_menuitem;
+	GtkWidget *copy_username_menuitem;
 
 	SecretService *ss;
 	GCancellable *ss_cancellable;
@@ -269,6 +272,92 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static void
+get_selected_item (PasswordsDialog *dialog,
+		   char **o_username,
+		   char **o_password)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GList *selected;
+	GtkTreeIter iter;
+	char *username = NULL;
+	char *password = NULL;
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
+	selected = gtk_tree_selection_get_selected_rows (selection, &model);
+	gtk_tree_model_get_iter (model, &iter, selected->data);
+	gtk_tree_model_get (model, &iter,
+			    COL_PASSWORDS_USER, &username,
+			    COL_PASSWORDS_PASSWORD, &password,
+			    -1);
+	g_list_free_full (selected, (GDestroyNotify) gtk_tree_path_free);
+
+	if (o_username)
+		*o_username = g_strdup (username);
+	if (o_password)
+		*o_password = g_strdup (password);
+
+	g_free (username);
+	g_free (password);
+}
+
+static void
+on_copy_password_menuitem_activate (GtkMenuItem *menuitem,
+				    PasswordsDialog *dialog)
+{
+	char *password = NULL;
+
+	get_selected_item (dialog, NULL, &password);
+	if (password != NULL) {
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
+								  GDK_SELECTION_CLIPBOARD),
+					password, -1);
+	}
+	g_free (password);
+}
+
+static void
+on_copy_username_menuitem_activate (GtkMenuItem *menuitem,
+				    PasswordsDialog *dialog)
+{
+	char *username = NULL;
+
+	get_selected_item (dialog, &username, NULL);
+	if (username != NULL) {
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
+								  GDK_SELECTION_CLIPBOARD),
+					username, -1);
+	}
+	g_free (username);
+}
+
+static gboolean
+on_passwords_treeview_button_press_event (GtkWidget       *widget,
+					  GdkEventButton  *event,
+					  PasswordsDialog *dialog)
+{
+	if (event->button == 3) {
+		GtkTreeSelection *selection;
+		int n;
+
+		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
+		n = gtk_tree_selection_count_selected_rows (selection);
+		if (n == 0)
+			return FALSE;
+
+		gtk_widget_set_sensitive (dialog->priv->copy_password_menuitem, (n == 1));
+		gtk_widget_set_sensitive (dialog->priv->copy_username_menuitem, (n == 1));
+
+		gtk_menu_popup (GTK_MENU (dialog->priv->treeview_popup_menu),
+				NULL, NULL, NULL, NULL,
+				event->button, event->time);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void
 passwords_dialog_class_init (PasswordsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -288,12 +377,18 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_toolbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_renderer);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treeview_popup_menu);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, copy_password_menuitem);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, copy_username_menuitem);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_key_press_event);
+	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_remove_toolbutton_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_show_passwords_toolbutton_toggled);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+	gtk_widget_class_bind_template_callback (widget_class, on_copy_password_menuitem_activate);
+	gtk_widget_class_bind_template_callback (widget_class, on_copy_username_menuitem_activate);
 }
 
 static void
