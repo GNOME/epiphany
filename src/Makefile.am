@@ -31,6 +31,7 @@ NOINST_H_FILES = \
 	languages.h				\
 	clear-data-dialog.h			\
 	cookies-dialog.h			\
+	passwords-dialog.h			\
 	popup-commands.h			\
 	prefs-dialog.h				\
 	window-commands.h
@@ -66,6 +67,7 @@ libephymain_la_SOURCES = \
 	ephy-window-action.c			\
 	clear-data-dialog.c			\
 	cookies-dialog.c			\
+	passwords-dialog.c			\
 	popup-commands.c			\
 	prefs-dialog.c				\
 	window-commands.c			\

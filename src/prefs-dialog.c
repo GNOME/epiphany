@@ -39,6 +39,7 @@
 #include "ephy-shell.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
+#include "passwords-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -144,6 +145,18 @@ on_manage_cookies_button_clicked (GtkWidget *button,
 }
 
 static void
+on_manage_passwords_button_clicked (GtkWidget *button,
+				    PrefsDialog *dialog)
+{
+	PasswordsDialog *passwords_dialog;
+
+	passwords_dialog = g_object_new (EPHY_TYPE_PASSWORDS_DIALOG, NULL);
+	gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
+	gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);
+	gtk_window_present (GTK_WINDOW (passwords_dialog));
+}
+
+static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -189,6 +202,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
+	gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
 }
 
 static void
