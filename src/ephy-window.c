@@ -2611,7 +2611,7 @@ delayed_remove_child (gpointer data)
 	GtkWidget *widget = GTK_WIDGET (data);
 	EphyEmbedContainer *container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (widget));
 
-	ephy_embed_container_remove_child (container, widget);
+	ephy_embed_container_remove_child (container, EPHY_EMBED (widget));
 
 	return FALSE;
 }
