@@ -308,12 +308,54 @@ sort_messages (EphyHistoryServiceMessage* a, EphyHistoryServiceMessage* b, gpoin
   return a->type > b->type ? 1 : a->type == b->type ? 0 : -1;
 }
 
+static EphyHistoryServiceMessage *
+ephy_history_service_message_new (EphyHistoryService *service,
+                                  EphyHistoryServiceMessageType type,
+                                  gpointer method_argument,
+                                  GDestroyNotify method_argument_cleanup,
+                                  GCancellable *cancellable,
+                                  EphyHistoryJobCallback callback,
+                                  gpointer user_data)
+{
+  EphyHistoryServiceMessage *message = g_slice_alloc0 (sizeof (EphyHistoryServiceMessage));
+
+  message->service = service;
+  message->type = type;
+  message->method_argument = method_argument;
+  message->method_argument_cleanup = method_argument_cleanup;
+  message->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+  message->callback = callback;
+  message->user_data = user_data;
+
+  return message;
+}
+
+static void
+ephy_history_service_message_free (EphyHistoryServiceMessage *message)
+{
+  if (message->method_argument_cleanup)
+    message->method_argument_cleanup (message->method_argument);
+
+  if (message->cancellable)
+    g_object_unref (message->cancellable);
+
+  g_slice_free1 (sizeof (EphyHistoryServiceMessage), message);
+}
+
 static void
 ephy_history_service_send_message (EphyHistoryService *self, EphyHistoryServiceMessage *message)
 {
   EphyHistoryServicePrivate *priv = self->priv;
 
-  g_async_queue_push_sorted (priv->queue, message, (GCompareDataFunc)sort_messages, NULL);
+  if (priv->history_database)
+    g_async_queue_push_sorted (priv->queue, message, (GCompareDataFunc)sort_messages, NULL);
+  else {
+    message->result = NULL;
+    message->success = FALSE;
+    if (message->callback)
+      message->callback (message->service, message->success, message->result, message->user_data);
+    ephy_history_service_message_free (message);
+  }
 }
 
 static void
@@ -374,7 +416,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
   if (error) {
     g_object_unref (priv->history_database);
     priv->history_database = NULL;
-    g_error ("Could not open history database at %s: %s", priv->history_filename, error->message);
+    g_warning ("Could not open history database at %s: %s", priv->history_filename, error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -494,40 +536,6 @@ run_history_service_thread (EphyHistoryService *self)
   ephy_history_service_close_database_connections (self);
 
   return NULL;
-}
-
-static EphyHistoryServiceMessage *
-ephy_history_service_message_new (EphyHistoryService *service,
-                                  EphyHistoryServiceMessageType type,
-                                  gpointer method_argument,
-                                  GDestroyNotify method_argument_cleanup,
-                                  GCancellable *cancellable,
-                                  EphyHistoryJobCallback callback,
-                                  gpointer user_data)
-{
-  EphyHistoryServiceMessage *message = g_slice_alloc0 (sizeof (EphyHistoryServiceMessage));
-
-  message->service = service; 
-  message->type = type;
-  message->method_argument = method_argument;
-  message->method_argument_cleanup = method_argument_cleanup;
-  message->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-  message->callback = callback;
-  message->user_data = user_data;
-
-  return message;
-}
-
-static void
-ephy_history_service_message_free (EphyHistoryServiceMessage *message)
-{
-  if (message->method_argument_cleanup)
-    message->method_argument_cleanup (message->method_argument);
-
-  if (message->cancellable)
-    g_object_unref (message->cancellable);
-
-  g_slice_free1 (sizeof (EphyHistoryServiceMessage), message);
 }
 
 static gboolean
