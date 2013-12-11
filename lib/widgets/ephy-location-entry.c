@@ -386,13 +386,20 @@ update_favicon (EphyLocationEntry *lentry)
 	}
 	else if (priv->show_favicon)
 	{
+		const char *icon_name;
+
 		/* Here we could consider using fallback favicon that matches
 		 * the page MIME type, though text/html should be good enough
 		 * most of the time. See #337140
 		 */
+		if (gtk_entry_get_text_length (entry) > 0)
+			icon_name = "text-x-generic-symbolic";
+		else
+			icon_name = "edit-find-symbolic";
+
 		gtk_entry_set_icon_from_icon_name (entry,
 						   GTK_ENTRY_ICON_PRIMARY,
-						   "text-html");
+						   icon_name);
 	}
 	else
 	{
