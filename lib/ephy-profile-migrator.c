@@ -565,7 +565,7 @@ migrate_history (void)
   /* Do nothing if the history file already exists. Safer than wiping
    * it out. */
   if (g_file_test (temporary_file, G_FILE_TEST_EXISTS)) {
-    g_warning ("Did not migrate Epiphany's history, the %s file already exists", EPHY_HISTORY_FILE);
+    g_warning ("Did not migrate history, the %s file already exists", EPHY_HISTORY_FILE);
     g_free (temporary_file);
     return;
   }
@@ -590,7 +590,7 @@ migrate_history (void)
 
   if (error) {
     if (error->code != G_IO_ERROR_NOT_FOUND)
-      g_warning ("Could not load Epiphany history data, migration aborted: %s", error->message);
+      g_warning ("Could not load history data, migration aborted: %s", error->message);
 
     g_error_free (error);
     return;
@@ -649,7 +649,7 @@ migrate_profile (const char *old_dir,
 
   /* Test if we already attempted to migrate first. */
   updated = g_build_filename (old_dir, "DEPRECATED-DIRECTORY", NULL);
-  message = _("Epiphany 3.6 deprecated this directory and tried migrating "
+  message = _("Web 3.6 deprecated this directory and tried migrating "
               "this configuration to ~/.config/epiphany");
 
   parent_dir = g_path_get_dirname (new_dir);
@@ -1044,8 +1044,8 @@ main (int argc, char *argv[])
   EphyFileHelpersFlags file_helpers_flags = EPHY_FILE_HELPERS_NONE;
 
   option_group = g_option_group_new ("ephy-profile-migrator",
-                                     N_("Epiphany profile migrator"),
-                                     N_("Epiphany profile migrator options"),
+                                     N_("Web profile migrator"),
+                                     N_("Web profile migrator options"),
                                      NULL, NULL);
 
   g_option_group_set_translation_domain (option_group, GETTEXT_PACKAGE);

@@ -266,7 +266,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
 {
   char *data;
 
-  data = g_strdup_printf ("<html><head><title>Epiphany</title>"
+  data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<style type=\"text/css\">%s</style></head>"
                           "<body style=\"background: #3369FF; color: white; font-style: italic;\">"
@@ -278,6 +278,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
                           "<!-- Terre des Hommes, III: L'Avion, p. 60 -->"
                           "Antoine de Saint-Exupéry"
                           "</div></body></html>",
+                          _("Web"),
                           ephy_about_handler_get_style_sheet (handler));
 
   ephy_about_handler_finish_request (request, data, -1);

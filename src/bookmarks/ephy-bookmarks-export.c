@@ -182,7 +182,7 @@ write_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterWriteElement 
 		(writer,
 		 (xmlChar *) "title",
-		 (xmlChar *) "Epiphany bookmarks");
+		 (xmlChar *) "Web bookmarks");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterWriteElement

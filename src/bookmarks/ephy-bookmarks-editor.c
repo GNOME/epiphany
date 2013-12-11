@@ -72,7 +72,7 @@ static const struct
 export_formats [] = 
 /* Don't add or reoder those entries without updating export_dialog_response_cb too! */
 {
-	{ N_("Epiphany (RDF)"), "rdf" },
+	{ N_("Web (RDF)"), "rdf" },
 	{ N_("Mozilla (HTML)"), "html" }
 };
 
@@ -626,7 +626,7 @@ import_dialog_response_cb (GtkDialog *dialog,
 				 "application/x-xbel", NULL);
 
 			ephy_file_chooser_add_mime_filter
-				(dialog, _("Epiphany bookmarks"),
+				(dialog, _("Web bookmarks"),
 				 "text/rdf", "application/rdf+xml", NULL);
 
 			filter = ephy_file_chooser_add_pattern_filter (dialog,
