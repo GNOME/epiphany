@@ -1561,10 +1561,6 @@ window_cmd_help_about (GtkAction *action,
 	artists = g_new (char *, (list ? n_artists : 0) + 4 + 1);
 	i = 0;
 	APPEND_STRV_AND_FREE (artists, list);
-	APPEND (artists, "");
-	APPEND (artists, _("Contact us at:"));
-	APPEND (artists, "<gnome-art-list@gnome.org>");
-	APPEND (artists, "<gnome-themes-list@gnome.org>");
 	artists[i++] = NULL;
 	
 	list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
@@ -1613,7 +1609,7 @@ window_cmd_help_about (GtkAction *action,
 			        */
 			       "translator-credits", _("translator-credits"),
 			       "logo-icon-name", "web-browser",
-			       "website", "http://www.gnome.org/projects/epiphany",
+			       "website", "https://wiki.gnome.org/Apps/Web",
 			       "website-label", _("Web Website"),
 			       "license", licence,
 			       "wrap-license", TRUE,

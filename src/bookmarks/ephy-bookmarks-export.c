@@ -188,7 +188,7 @@ write_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterWriteElement
 		(writer,
 		 (xmlChar *) "link",
-		 (xmlChar *) "http://www.gnome.org/projects/epiphany/");
+		 (xmlChar *) "https://wiki.gnome.org/Apps/Web");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "items");
