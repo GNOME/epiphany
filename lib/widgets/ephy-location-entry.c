@@ -79,6 +79,9 @@ struct _EphyLocationEntryPrivate
 	guint needs_reset : 1;
 	guint show_lock : 1;
 	guint show_favicon : 1;
+
+	GtkTargetList *drag_targets;
+	GdkDragAction drag_actions;
 };
 
 static const GtkTargetEntry url_drag_types [] =
@@ -183,6 +186,11 @@ ephy_location_entry_finalize (GObject *object)
 	EphyLocationEntryPrivate *priv = entry->priv;
 	
 	g_free (priv->saved_text);
+
+	if (priv->drag_targets != NULL)
+	{
+		gtk_target_list_unref (priv->drag_targets);
+	}
 
 	if (priv->favicon != NULL)
 	{
@@ -872,18 +880,19 @@ static void
 ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 {
 	GtkWidget *entry = GTK_WIDGET (lentry);
-	GtkTargetList *targetlist;
+	EphyLocationEntryPrivate *priv = lentry->priv;
 
 	LOG ("EphyLocationEntry constructing contents %p", lentry);
 
 	/* Favicon */
-	targetlist = gtk_target_list_new (url_drag_types,
-					  G_N_ELEMENTS (url_drag_types));
+	priv->drag_targets = gtk_target_list_new (url_drag_types,
+						  G_N_ELEMENTS (url_drag_types));
+	priv->drag_actions = GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK;
+
 	gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
 					GTK_ENTRY_ICON_PRIMARY,
-					targetlist,
-					GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
-	gtk_target_list_unref (targetlist);
+					priv->drag_targets,
+					priv->drag_actions);
 
 	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_PRIMARY,
@@ -1327,10 +1336,18 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 			effective_text = g_strdup_printf ("about:%s",
 							  address + strlen (EPHY_ABOUT_SCHEME) + 1);
 		text = address;
+		gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+						GTK_ENTRY_ICON_PRIMARY,
+						priv->drag_targets,
+						priv->drag_actions);
 	}
 	else
 	{
 		text = "";
+		gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+						GTK_ENTRY_ICON_PRIMARY,
+						NULL,
+						GDK_ACTION_DEFAULT);
 	}
 
 	/* First record the new hash, then update the entry text */
