@@ -492,9 +492,9 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
 
   LOG ("Going to show infobar about %s", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
 
-  info_bar = gtk_info_bar_new_with_buttons (_("Not now"), GTK_RESPONSE_NO,
-                                            _("Store password"), GTK_RESPONSE_YES,
+  info_bar = gtk_info_bar_new_with_buttons (_("Save"), GTK_RESPONSE_YES,
                                             NULL);
+  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
@@ -505,8 +505,8 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
    * hostname where this is happening. Example: gnome@gmail.com and
    * mail.google.com.
    */
-  message = g_markup_printf_escaped (_("<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"),
-                                     username, hostname);
+  message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"),
+                                     hostname);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   g_free (message);
