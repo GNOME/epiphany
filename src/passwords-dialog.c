@@ -31,14 +31,14 @@
 #include "ephy-string.h"
 #include "passwords-dialog.h"
 
-enum
+typedef enum
 {
 	COL_PASSWORDS_HOST,
 	COL_PASSWORDS_USER,
 	COL_PASSWORDS_PASSWORD,
 	COL_PASSWORDS_INVISIBLE,
 	COL_PASSWORDS_DATA,
-};
+} PasswordsDialogColumn;
 
 #define URI_KEY           "uri"
 #define FORM_USERNAME_KEY "form_username"
@@ -271,43 +271,34 @@ on_search_entry_changed (GtkSearchEntry *entry,
 	gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->priv->treemodelfilter));
 }
 
-static void
+static char *
 get_selected_item (PasswordsDialog *dialog,
-		   char **o_username,
-		   char **o_password)
+		   PasswordsDialogColumn column)
 {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GList *selected;
 	GtkTreeIter iter;
-	char *username = NULL;
-	char *password = NULL;
+	char *value;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
 	selected = gtk_tree_selection_get_selected_rows (selection, &model);
 	gtk_tree_model_get_iter (model, &iter, selected->data);
 	gtk_tree_model_get (model, &iter,
-			    COL_PASSWORDS_USER, &username,
-			    COL_PASSWORDS_PASSWORD, &password,
+			    column, &value,
 			    -1);
 	g_list_free_full (selected, (GDestroyNotify) gtk_tree_path_free);
 
-	if (o_username)
-		*o_username = g_strdup (username);
-	if (o_password)
-		*o_password = g_strdup (password);
-
-	g_free (username);
-	g_free (password);
+	return value;
 }
 
 static void
 on_copy_password_menuitem_activate (GtkMenuItem *menuitem,
 				    PasswordsDialog *dialog)
 {
-	char *password = NULL;
+	char *password;
 
-	get_selected_item (dialog, NULL, &password);
+	password = get_selected_item (dialog, COL_PASSWORDS_PASSWORD);
 	if (password != NULL) {
 		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
 								  GDK_SELECTION_CLIPBOARD),
@@ -320,9 +311,9 @@ static void
 on_copy_username_menuitem_activate (GtkMenuItem *menuitem,
 				    PasswordsDialog *dialog)
 {
-	char *username = NULL;
+	char *username;
 
-	get_selected_item (dialog, &username, NULL);
+	username = get_selected_item (dialog, COL_PASSWORDS_USER);
 	if (username != NULL) {
 		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
 								  GDK_SELECTION_CLIPBOARD),
