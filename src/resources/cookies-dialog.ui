@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Mon Dec  9 18:02:43 2013 -->
+<!-- Generated with glade 3.16.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="liststore">
     <columns>
       <!-- column-name HOST -->
       <column type="gchararray"/>
       <!-- column-name HOST_KEY -->
-      <column type="gchararray"/>
-      <!-- column-name NAME -->
       <column type="gchararray"/>
       <!-- column-name DATA -->
       <column type="SoupCookie"/>
@@ -115,21 +113,6 @@
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
                             <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="title" translatable="yes">Cookie Name</property>
-                        <property name="reorderable">True</property>
-                        <property name="sort_column_id">2</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                          <attributes>
-                            <attribute name="text">2</attribute>
                           </attributes>
                         </child>
                       </object>

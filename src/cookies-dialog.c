@@ -35,7 +35,6 @@ enum
 {
 	COL_COOKIES_HOST,
 	COL_COOKIES_HOST_KEY,
-	COL_COOKIES_NAME,
 	COL_COOKIES_DATA,
 };
 
@@ -272,8 +271,8 @@ cookie_add (CookiesDialog *dialog,
 	char *domain = (char *) data;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	int column[4] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_NAME, COL_COOKIES_DATA };
-	GValue value[4] = { { 0, }, { 0, }, { 0, }, { 0, } };
+	int column[3] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_DATA };
+	GValue value[3] = { { 0, }, { 0, }, { 0, } };
 
 	store = GTK_LIST_STORE (dialog->priv->liststore);
 
@@ -285,8 +284,7 @@ cookie_add (CookiesDialog *dialog,
 
 	g_value_init (&value[0], G_TYPE_STRING);
 	g_value_init (&value[1], G_TYPE_STRING);
-	g_value_init (&value[2], G_TYPE_STRING);
-	g_value_init (&value[3], SOUP_TYPE_COOKIE);
+	g_value_init (&value[2], SOUP_TYPE_COOKIE);
 
 	g_value_set_static_string (&value[0], domain);
 	g_value_take_string (&value[1], ephy_string_collate_key_for_domain (domain, -1));
@@ -298,7 +296,6 @@ cookie_add (CookiesDialog *dialog,
 	g_value_unset (&value[0]);
 	g_value_unset (&value[1]);
 	g_value_unset (&value[2]);
-	g_value_unset (&value[3]);
 }
 
 static int
