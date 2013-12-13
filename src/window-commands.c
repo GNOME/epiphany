@@ -1491,21 +1491,7 @@ void
 window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
-	const char *licence_part[] = {
-		N_("Web is free software; you can redistribute it and/or modify "
-		   "it under the terms of the GNU General Public License as published by "
-		   "the Free Software Foundation; either version 2 of the License, or "
-		   "(at your option) any later version."),
-		N_("The GNOME Web Browser is distributed in the hope that it will be useful, "
-		   "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-		   "GNU General Public License for more details."),
-		N_("You should have received a copy of the GNU General Public License "
-		   "along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-		   "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA")
-	};
-
-	char *licence = NULL, *comments = NULL;
+	char *comments = NULL;
 	GKeyFile *key_file;
 	GError *error = NULL;
 	char **list, **authors, **contributors, **past_authors, **artists, **documenters;
@@ -1584,12 +1570,6 @@ window_cmd_help_about (GtkAction *action,
 				    webkit_get_minor_version (),
 				    webkit_get_micro_version ());
 
-	licence = g_strjoin ("\n\n",
-			     _(licence_part[0]),
-			     _(licence_part[1]),
-			     _(licence_part[2]),
-			    NULL);
-
 	gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
 			       "program-name", _("Web"),
 			       "version", VERSION,
@@ -1611,12 +1591,11 @@ window_cmd_help_about (GtkAction *action,
 			       "logo-icon-name", "web-browser",
 			       "website", "https://wiki.gnome.org/Apps/Web",
 			       "website-label", _("Web Website"),
-			       "license", licence,
+			       "license-type", GTK_LICENSE_GPL_2_0,
 			       "wrap-license", TRUE,
 			       NULL);
 
 	g_free (comments);
-	g_free (licence);
 	g_strfreev (artists);
 	g_strfreev (authors);
 	g_strfreev (documenters);
