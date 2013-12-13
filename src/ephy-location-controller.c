@@ -27,6 +27,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
+#include "ephy-dnd.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 
@@ -132,6 +133,53 @@ action_activated_cb (GtkEntryCompletion *completion,
 				ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
 
 		g_free (url);
+	}
+}
+
+static void
+entry_drag_data_received_cb (GtkWidget *widget,
+			     GdkDragContext *context,
+			     gint x, gint y,
+			     GtkSelectionData *selection_data,
+			     guint info,
+			     guint time,
+			     EphyLocationController *controller)
+{
+	GtkEntry *entry;
+	GdkAtom url_type;
+	GdkAtom text_type;
+	const guchar *sel_data;
+
+	sel_data = gtk_selection_data_get_data (selection_data);
+
+	url_type = gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE);
+	text_type = gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE);
+
+	if (gtk_selection_data_get_length (selection_data) <= 0 || sel_data == NULL)
+		return;
+
+	entry = GTK_ENTRY (widget);
+
+	if (gtk_selection_data_get_target (selection_data) == url_type)
+	{
+		char **uris;
+
+		uris = g_uri_list_extract_uris ((char *)sel_data);
+		if (uris != NULL && uris[0] != NULL && *uris[0] != '\0')
+		{
+			gtk_entry_set_text (entry, (char *)uris[0]);
+			ephy_link_open (EPHY_LINK (controller),
+					uris[0],
+					NULL,
+					ephy_link_flags_from_current_event ());
+		}
+		g_strfreev (uris);
+	} else if (gtk_selection_data_get_target (selection_data) == text_type) {
+		gtk_entry_set_text (entry, (const gchar *)sel_data);
+		ephy_link_open (EPHY_LINK (controller),
+				(const gchar *)sel_data,
+				NULL,
+				ephy_link_flags_from_current_event ());
 	}
 }
 
@@ -399,6 +447,9 @@ ephy_location_controller_constructed (GObject *object)
 				priv->location_entry, "show-lock",
 				G_BINDING_SYNC_CREATE);
 
+	g_signal_connect_object (widget, "drag-data-received",
+				 G_CALLBACK (entry_drag_data_received_cb),
+				 controller, 0);
 	g_signal_connect_object (widget, "activate",
 				 G_CALLBACK (entry_activate_cb),
 				 controller, 0);

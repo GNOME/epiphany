@@ -898,6 +898,12 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 					 GTK_ENTRY_ICON_PRIMARY,
 					 _("Drag and drop this icon to create a link to this page"));
 
+	gtk_drag_dest_set (entry,
+			   GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+			   url_drag_types,
+			   G_N_ELEMENTS (url_drag_types),
+			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
+
 	g_object_connect (entry,
 			  "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
 			  "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
@@ -907,7 +913,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 			  "signal::drag-drop", G_CALLBACK (entry_drag_drop_cb), lentry,
 			  "signal::drag-data-get", G_CALLBACK (favicon_drag_data_get_cb), lentry,
 			  NULL);
-			  
+
 	g_signal_connect_after (entry, "key-press-event",
 				G_CALLBACK (entry_key_press_after_cb), lentry);
 	g_signal_connect_after (entry, "activate",
