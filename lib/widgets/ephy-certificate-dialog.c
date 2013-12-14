@@ -249,7 +249,7 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
 static void
 ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 {
-  GtkWidget *vbox, *hbox;
+  GtkWidget *grid;
   GtkWidget *content_area, *action_area;
   EphyCertificateDialogPrivate *priv;
 
@@ -260,28 +260,30 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 600);
 
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   priv->icon = gtk_image_new ();
   gtk_widget_set_halign (priv->icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (priv->icon, GTK_ALIGN_START);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->icon, FALSE, FALSE, 0);
+  gtk_grid_attach (GTK_GRID (grid), priv->icon,
+                   0, 0, 1, 1);
   gtk_widget_show (priv->icon);
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
   priv->title = gtk_label_new (NULL);
   gtk_label_set_use_markup (GTK_LABEL (priv->title), TRUE);
   gtk_label_set_line_wrap  (GTK_LABEL (priv->title), TRUE);
   gtk_label_set_selectable (GTK_LABEL (priv->title), TRUE);
   gtk_widget_set_halign (priv->title, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->title, GTK_ALIGN_START);
-  gtk_misc_set_alignment (GTK_MISC (priv->title), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->title, FALSE, FALSE, 0);
+  gtk_widget_set_valign (priv->title, GTK_ALIGN_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (priv->title), 0.0, 0.5);
+  gtk_grid_attach_next_to (GTK_GRID (grid), priv->title,
+                           priv->icon, GTK_POS_RIGHT,
+                           1, 1);
   gtk_widget_show (priv->title);
 
   priv->text = gtk_label_new (NULL);
@@ -290,15 +292,14 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   gtk_widget_set_halign (priv->text, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->text, GTK_ALIGN_START);
   gtk_misc_set_alignment (GTK_MISC (priv->text), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->text, TRUE, TRUE, 0);
-
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_widget_show (vbox);
+  gtk_grid_attach_next_to (GTK_GRID (grid), priv->text,
+                           priv->title, GTK_POS_BOTTOM,
+                           1, 1);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_set_spacing (GTK_BOX (content_area), 14);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE, 0);
-  gtk_widget_show (hbox);
+  gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, FALSE, 0);
+  gtk_widget_show (grid);
 
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
