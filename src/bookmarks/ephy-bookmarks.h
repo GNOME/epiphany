@@ -31,6 +31,11 @@
 
 G_BEGIN_DECLS
 
+/* Name of a default smart bookmark, to NOT be displayed in the search engine
+ * combo in the preferences dialog. This should exactly match the smart bookmark
+ * in default-bookmarks.rdf. */
+#define DEFAULT_SMART_BOOKMARK_TEXT	_("Search the web")
+
 #define EPHY_TYPE_BOOKMARKS		(ephy_bookmarks_get_type ())
 #define EPHY_BOOKMARKS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarks))
 #define EPHY_BOOKMARKS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))

@@ -23,6 +23,7 @@
 #include "config.h"
 #include "prefs-dialog.h"
 
+#include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -64,6 +65,7 @@ struct PrefsDialogPrivate
 	GtkWidget *download_button_hbox;
 	GtkWidget *download_button_label;
 	GtkWidget *automatic_downloads_checkbutton;
+	GtkWidget *search_engine_combo;
 	GtkWidget *popups_allow_checkbutton;
 	GtkWidget *adblock_allow_checkbutton;
 	GtkWidget *enable_plugins_checkbutton;
@@ -107,6 +109,13 @@ enum {
 	COL_TITLE_ELIDED,
 	COL_ENCODING,
 	NUM_COLS
+};
+
+enum
+{
+	SEARCH_ENGINE_COL_NAME,
+	SEARCH_ENGINE_COL_URL,
+	SEARCH_ENGINE_NUM_COLS
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
@@ -168,6 +177,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	                                             "/org/gnome/epiphany/prefs-dialog.ui");
 	/* general */
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, automatic_downloads_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, search_engine_combo);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, popups_allow_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, adblock_allow_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_plugins_checkbutton);
@@ -996,6 +1006,147 @@ cookies_set_mapping (const GValue *value,
 }
 
 static void
+search_engine_combo_add_default_engines (GtkListStore *store)
+{
+	int i;
+	const char *default_engines[][3] = { /* Search engine option in the preferences dialog */
+					     { N_("DuckDuckGo"),
+					       /* For the preferences dialog. Must exactly match the URL
+					        * you chose in the gschema, but with & instead of &amp;
+					        * If the match is not exact, there will be a spurious, ugly
+					        * entry in the preferences combo, so please test this. */
+					       N_("http://duckduckgo.com/?q=%s&t=epiphany")},
+					     /* Search engine option in the preferences dialog */
+					     { N_("Google"),
+					       /* For the preferences dialog. Consider a regional variant, like google.co.uk */
+					       N_("http://google.com/search?q=%s")},
+					     /* Search engine option in the preferences dialog */
+					     { N_("Bing"),
+					       /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
+					       N_("http://www.bing.com/search?q=%s")} };
+
+	for (i = 0; i < G_N_ELEMENTS (default_engines); ++i)
+	{
+		gtk_list_store_insert_with_values (store, NULL, -1,
+						   SEARCH_ENGINE_COL_NAME,
+						   _(default_engines[i][0]),
+						   SEARCH_ENGINE_COL_URL,
+						   _(default_engines[i][1]),
+						   -1);
+	}
+}
+
+static void
+search_engine_combo_add_smart_bookmarks (GtkListStore *store)
+{
+	int i;
+	EphyBookmarks *bookmarks;
+	EphyNode *smart_bookmarks_parent_node;
+	GPtrArray *smart_bookmarks;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	smart_bookmarks_parent_node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+	smart_bookmarks = ephy_node_get_children (smart_bookmarks_parent_node);
+
+	if (!smart_bookmarks)
+		return;
+
+	for (i = 0; i < smart_bookmarks->len; ++i)
+	{
+		EphyNode *bookmark;
+		const char *bookmark_name;
+		const char *bookmark_url;
+
+		bookmark = g_ptr_array_index (smart_bookmarks, i);
+		bookmark_name = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_TITLE);
+		bookmark_url = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_LOCATION);
+
+		if (!bookmark_name || !bookmark_url)
+			continue;
+
+		if (strcmp (bookmark_name, DEFAULT_SMART_BOOKMARK_TEXT) == 0)
+			continue;
+
+		gtk_list_store_insert_with_values (store, NULL, -1,
+						   SEARCH_ENGINE_COL_NAME, bookmark_name,
+						   SEARCH_ENGINE_COL_URL, bookmark_url,
+						   -1);
+	}
+}
+
+/* Has the user manually set the engine to something not in the combo?
+ * If so, add that URL as an extra item in the combo. */
+static void
+search_engine_combo_add_current_engine (GtkListStore *store)
+{
+	GtkTreeIter iter;
+	char *original_url;
+	gboolean in_combo = FALSE;
+	gboolean has_next = FALSE;
+
+	original_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
+					      EPHY_PREFS_KEYWORD_SEARCH_URL);
+	if (!original_url)
+		return;
+
+	has_next = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+
+	while (!in_combo && has_next)
+	{
+		char *url;
+
+		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+				    SEARCH_ENGINE_COL_URL, &url, -1);
+
+		if (strcmp (original_url, url) == 0)
+			in_combo = TRUE;
+
+		g_free (url);
+		has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+	}
+
+	if (!in_combo)
+		gtk_list_store_insert_with_values (store, NULL, -1,
+						   SEARCH_ENGINE_COL_NAME, original_url,
+						   SEARCH_ENGINE_COL_URL, original_url,
+						   -1);
+
+	g_free (original_url);
+}
+
+static void
+create_search_engine_combo (GtkComboBox *combo)
+{
+	GtkCellRenderer *renderer;
+	GtkListStore *store;
+
+	store = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
+
+	search_engine_combo_add_default_engines (store);
+	search_engine_combo_add_smart_bookmarks (store);
+	search_engine_combo_add_current_engine (store);
+
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), SEARCH_ENGINE_COL_NAME,
+					      GTK_SORT_ASCENDING);
+	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+					"text", SEARCH_ENGINE_COL_NAME,
+					NULL);
+
+	g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
+				      EPHY_PREFS_KEYWORD_SEARCH_URL,
+				      combo, "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      combo_get_mapping,
+				      combo_set_mapping,
+				      combo,
+				      NULL);
+}
+
+static void
 setup_general_page (PrefsDialog *dialog)
 {
 	PrefsDialogPrivate *priv = dialog->priv;
@@ -1027,6 +1178,7 @@ setup_general_page (PrefsDialog *dialog)
 			 G_SETTINGS_BIND_DEFAULT);
 
 	create_download_path_button (dialog);
+	create_search_engine_combo (GTK_COMBO_BOX (dialog->priv->search_engine_combo));
 }
 
 static void
