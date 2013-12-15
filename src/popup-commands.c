@@ -188,6 +188,37 @@ response_cb (GtkDialog *dialog,
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
+static char *
+get_suggested_filename (EphyWebView *view)
+{
+	char *suggested_filename = NULL;
+	const char *mimetype;
+	WebKitURIResponse *response;
+	WebKitWebResource *web_resource;
+
+	web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
+	response = webkit_web_resource_get_response (web_resource);
+	mimetype = webkit_uri_response_get_mime_type (response);
+
+	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
+	{
+		/* Web Title will be used as suggested filename */
+		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".mhtml", NULL);
+	}
+	else
+	{
+		suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
+		if (!suggested_filename)
+		{
+			SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
+			suggested_filename = g_path_get_basename (soup_uri->path);
+			soup_uri_free (soup_uri);
+		}
+	}
+
+	return suggested_filename;
+}
+
 static void
 save_property_url (GtkAction *action,
 		   const char *title,
@@ -208,22 +239,26 @@ save_property_url (GtkAction *action,
 	if (ask_dest)
 	{
 		EphyFileChooser *dialog;
-		char *base;
+		EphyEmbed *embed;
+		EphyWebView *view;
+		char *suggested_filename;
 
-		base = g_path_get_basename (location);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+		view = ephy_embed_get_web_view (embed);
+
 		dialog = ephy_file_chooser_new (title, GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						EPHY_FILE_FILTER_NONE);
 
+		suggested_filename = ephy_sanitize_filename (get_suggested_filename (view));
+		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
+		g_free (suggested_filename);
+
 		gtk_file_chooser_set_do_overwrite_confirmation
 				(GTK_FILE_CHOOSER (dialog), TRUE);
-		gtk_file_chooser_set_current_name
-				(GTK_FILE_CHOOSER (dialog), base);
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (response_cb), g_strdup (location));
 		gtk_widget_show (GTK_WIDGET (dialog));
-
-		g_free (base);
 	}
 	else
 	{
