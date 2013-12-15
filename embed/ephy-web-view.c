@@ -1689,6 +1689,23 @@ ephy_web_view_set_placeholder (EphyWebView *view,
   ephy_web_view_set_address (view, uri);
 }
 
+
+static char *
+get_style_sheet (void)
+{
+  const gchar *file;
+  GError *error = NULL;
+  char *sheet;
+
+  file = ephy_file ("error.css");
+  if (file && !g_file_get_contents (file, &sheet, NULL, &error)) {
+    g_debug ("Unable to load error style sheet: %s", error->message);
+    g_error_free (error);
+  }
+
+  return sheet;
+}
+
 /**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
@@ -1713,10 +1730,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
   char *msg_title;
   char *msg;
   char *button_label;
+  char *stylesheet;
   GBytes *html_file;
-  const char *stock_icon;
-  GtkIconInfo *icon_info;
-  char *image_data;
 
   if (error)
     reason = error->message;
@@ -1730,49 +1745,43 @@ ephy_web_view_load_error_page (EphyWebView *view,
 
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
-      page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
+      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
 
-      msg_title = g_strdup (_("Oops! It was not possible to show this website"));
-      msg = g_strdup_printf (_("<p>The website at <strong>%s</strong> seems "
+      msg_title = g_strdup (_("Oops! Unable to display this website."));
+      msg = g_strdup_printf (_("<p>The site at “%s” seems "
                                "to be unavailable. The precise error was:</p>"
-                               "<p><em>%s</em></p>"
-                               "<p>It could be "
-                               "temporarily switched off or moved to a new "
-                               "address. Don't forget to check that your "
+                               "<p><code>%s</code></p>"
+                               "<p>It may be "
+                               "temporarily unavailable or moved to a new "
+                               "address. You may wish to verify that your "
                                "internet connection is working correctly.</p>"),
                              uri, reason);
 
-      button_label = g_strdup (_("Try again"));
+      button_label = g_strdup (_("Try Again"));
 
       html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_ERROR, 0, NULL);
-      stock_icon = "dialog-error";
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
-      page_title = g_strdup_printf (_("Oops! Error loading %s"), hostname);
+      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
 
-      msg_title = g_strdup (_("Oops! This site might have caused the web "
-                              "browser to close unexpectedly"));
-      msg = g_strdup_printf (_("<p>This page was loading when the web browser "
-                               "closed unexpectedly.</p>"
-                               "<p>This might happen again if you "
-                               "reload the page. If it does, "
+      msg_title = g_strdup (_("Oops! There may be a problem."));
+      msg = g_strdup_printf (_("<p>This site may have caused Web to close unexpectedly.</p>"
+                               "<p>If this happens again, "
                                "please report the problem to the "
                                "<strong>%s</strong> developers.</p>"),
                              LSB_DISTRIBUTOR);
 
-      button_label = g_strdup (_("Load again anyway"));
+      button_label = g_strdup (_("Reload Anyway"));
 
       html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_RECOVERY, 0, NULL);
-      stock_icon = "dialog-information";
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
-      page_title = g_strdup_printf (_("Oops! Something went wrong displaying %s"), hostname);
+      page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
       msg_title = g_strdup (_("Oops!"));
       msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
       button_label = NULL;
 
       html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_PROCESS_CRASH, 0, NULL);
-      stock_icon = "computer-fail-symbolic";
 
       break;
     default:
@@ -1781,36 +1790,27 @@ ephy_web_view_load_error_page (EphyWebView *view,
   }
   g_free (hostname);
 
-  icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                          stock_icon,
-                                          48,
-                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-
-  image_data = icon_info ? ephy_file_create_data_uri_for_filename (gtk_icon_info_get_filename (icon_info), NULL) : NULL;
-
   ephy_web_view_set_title (view, page_title);
 
   _ephy_web_view_update_icon (view);
 
+  stylesheet = get_style_sheet ();
   g_string_printf (html,
                    g_bytes_get_data (html_file, NULL),
                    lang, lang,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
+                   stylesheet,
                    uri,
-                   image_data ? image_data : "",
                    msg_title, msg, button_label);
 
   g_bytes_unref (html_file);
+  g_free (stylesheet);
   g_free (lang);
   g_free (page_title);
   g_free (msg_title);
   g_free (msg);
   g_free (button_label);
-  g_free (image_data);
-
-  if (icon_info)
-    g_object_unref (icon_info);
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);

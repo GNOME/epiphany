@@ -1,0 +1,49 @@
+/* Global CSS for error pages */
+
+h1 {
+        color: #babdb6;
+        text-shadow: 0 1px 0 white;
+        margin-bottom: 0;
+}
+
+body {
+        font-family: Cantarell, sans-serif;
+        font: 11pt cantarell;
+        color: #2e3436;
+        padding: 20px 20px 0 20px;
+        background-color: #f6f6f4;
+        background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #eeeeec),
+                color-stop(1, #f6f6f4)
+        );
+        background-size: 100% 5em;
+        background-repeat: no-repeat;
+}
+
+#container {
+    padding: 2em;
+    margin: 2em auto;
+    background-color: #fff;
+    border-radius: 1em;
+    border: 2px solid #d3d7cf;
+    max-width: 650px;
+}
+
+#content {
+    vertical-align: top;
+}
+
+#content h1 {
+    margin-top: 0;
+}
+
+#content .buttonbox {
+    text-align: right;
+}
+
+html[dir="rtl"] #content .buttonbox {
+    text-align: left;
+}
