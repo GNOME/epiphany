@@ -107,11 +107,9 @@ static const BindAction window_actions[] = {
 };
 
 static const BindAction popup_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLink", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLinkAs", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "SaveImageAs", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "OpenImage", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "BookmarkLink", "sensitive" }
+  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "ContextBookmarkPage", "sensitive" }
 };
 
 static const BindAction special_toolbar_actions[] = {

@@ -217,18 +217,12 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	
 	/* Links. */
 
-	{ "OpenLink", NULL, N_("_Open Link"), NULL, NULL,
-	  G_CALLBACK (popup_cmd_open_link) },
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_window) },
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
-	{ "DownloadLink", NULL, N_("_Download Link"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_download_link) },
 	{ "DownloadLinkAs", NULL, N_("_Save Link As…"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_download_link_as) },
-	{ "BookmarkLink", NULL, N_("_Bookmark Link…"),
-	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 	{ "CopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
@@ -236,14 +230,14 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	/* Images. */
 
-	{ "OpenImage", NULL, N_("Open _Image"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_open_image) },
-	{ "SaveImageAs", NULL, N_("_Save Image As…"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
-	{ "SetImageAsBackground", NULL, N_("_Use Image As Background"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
+	{ "ViewImage", NULL, N_("View _Image"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_view_image_in_new_tab) },
 	{ "CopyImageLocation", NULL, N_("Copy I_mage Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
+	{ "SaveImageAs", NULL, N_("_Save Image As…"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
+	{ "SetImageAsBackground", NULL, N_("Set as _Wallpaper"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
 	{ "StartImageAnimation", NULL, N_("St_art Animation"), NULL,
 	  NULL, NULL },
 	{ "StopImageAnimation", NULL, N_("St_op Animation"), NULL,
@@ -1690,6 +1684,9 @@ populate_context_menu (WebKitWebView *web_view,
 	EphyEmbedEvent *embed_event;
 	gboolean is_document = FALSE;
 	gboolean app_mode;
+	gboolean is_image;
+
+	is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
 	if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
 		input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
@@ -1721,8 +1718,6 @@ populate_context_menu (WebKitWebView *web_view,
 		if (!app_mode)
 		{
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "OpenLink");
-			add_action_to_context_menu (context_menu,
 						    priv->popups_action_group, "OpenLinkInNewTab");
 			add_action_to_context_menu (context_menu,
 						    priv->popups_action_group, "OpenLinkInNewWindow");
@@ -1734,14 +1729,7 @@ populate_context_menu (WebKitWebView *web_view,
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "DownloadLink");
-		add_action_to_context_menu (context_menu,
 					    priv->popups_action_group, "DownloadLinkAs");
-		if (!app_mode)
-		{
-			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "BookmarkLink");
-		}
 
 		if (g_str_has_prefix (uri, "mailto:"))
 		{
@@ -1814,17 +1802,22 @@ populate_context_menu (WebKitWebView *web_view,
 
 		update_edit_actions_sensitivity (window, TRUE);
 
-		add_action_to_context_menu (context_menu,
-					    priv->toolbar_action_group, "NavigationBack");
-		add_action_to_context_menu (context_menu,
-					    priv->toolbar_action_group, "NavigationForward");
-		add_action_to_context_menu (context_menu,
-					    priv->action_group, "ViewReload");
-		webkit_context_menu_append (context_menu,
-					    webkit_context_menu_item_new_separator ());
+		if (!is_image)
+		{
+			add_action_to_context_menu (context_menu,
+						    priv->toolbar_action_group, "NavigationBack");
+			add_action_to_context_menu (context_menu,
+						    priv->toolbar_action_group, "NavigationForward");
+			add_action_to_context_menu (context_menu,
+						    priv->action_group, "ViewReload");
+			webkit_context_menu_append (context_menu,
+						    webkit_context_menu_item_new_separator ());
+		}
+
 		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCopy");
-		if (!app_mode)
+
+		if (!app_mode && !is_image)
 		{
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
@@ -1833,18 +1826,18 @@ populate_context_menu (WebKitWebView *web_view,
 		}
 	}
 
-	if (webkit_hit_test_result_context_is_image (hit_test_result))
+	if (is_image)
 	{
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "OpenImage");
-		add_action_to_context_menu (context_menu,
 					    priv->popups_action_group, "SaveImageAs");
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "SetImageAsBackground");
-		add_action_to_context_menu (context_menu,
 					    priv->popups_action_group, "CopyImageLocation");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "ViewImage");
+		add_action_to_context_menu (context_menu,
+					    priv->popups_action_group, "SetImageAsBackground");
 	}
 
 	if (is_document)

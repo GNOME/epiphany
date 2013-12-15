@@ -232,34 +232,6 @@ save_property_url (GtkAction *action,
 }
 
 void
-popup_cmd_open_link (GtkAction *action,
-		     EphyWindow *window)
-{
-	EphyEmbedEvent *event;
-	const char *location;
-	GValue value = { 0, };
-	EphyEmbed *embed;
-
-	embed = ephy_embed_container_get_active_child 
-		(EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
-	event = ephy_window_get_context_event (window);
-	ephy_embed_event_get_property (event, "link-uri", &value);
-	location = g_value_get_string (&value);
-	ephy_web_view_load_url (ephy_embed_get_web_view (embed), location);
-	g_value_unset (&value);
-}
-
-void
-popup_cmd_download_link (GtkAction *action,
-			 EphyWindow *window)
-{
-	save_property_url (action, _("Download Link"), window, 
-			   FALSE, "link-uri");
-}
-
-void
 popup_cmd_download_link_as (GtkAction *action,
 			    EphyWindow *window)
 {
@@ -339,130 +311,28 @@ popup_cmd_copy_image_location (GtkAction *action,
 	g_value_unset (&value);
 }
 
-/* Opens an image URI using its associated handler. Or, if that
- * doesn't work, fallback to open the URI in a new browser window.
- */
-static void
-image_open_uri (GFile *file,
-                const char *remote_address,
-		guint32 user_time)
-{
-	gboolean success;
-
-	success = ephy_file_launch_handler (NULL, file, user_time);
-
-	if (!success)
-	{
-		ephy_shell_new_tab (ephy_shell_get_default (),
-				    NULL, NULL, remote_address,
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_IN_NEW_WINDOW);
-	}
-
-	if (strcmp (remote_address, g_file_get_uri (file)) != 0)
-	{
-		if (success)
-			ephy_file_delete_on_exit (file);
-		else
-			g_file_delete (file, NULL, NULL);
-	}
-}
-
-static void
-save_source_completed_cb (EphyDownload *download)
-{
-	const char *dest;
-	const char *source;
-	guint32 user_time;
-	GFile *file;
-
-	user_time = ephy_download_get_start_time (download);
-	dest = ephy_download_get_destination_uri (download);
-	source = ephy_download_get_source_uri (download);
-	g_return_if_fail (dest != NULL);
-	
-	file = g_file_new_for_uri (dest);
-
-	image_open_uri (file, source, user_time);
-	g_object_unref (file);
-}
-
-static void
-save_temp_source (const char *address)
-{
-	EphyDownload *download;
-	const char *static_temp_dir;
-	char *base, *tmp_name, *tmp_path, *dest, *dest_uri;
-
-	if (address == NULL) return;
-
-	static_temp_dir = ephy_file_tmp_dir ();
-	if (static_temp_dir == NULL) return;
-
-	base = g_path_get_basename (address);
-	tmp_name = g_strconcat (base, ".XXXXXX", NULL);
-	g_free (base);
-
-	tmp_path = g_build_filename (static_temp_dir, tmp_name, NULL);
-	g_free (tmp_name);
-
-	dest = ephy_file_tmp_filename (tmp_path, NULL);
-	g_free (tmp_path);
-
-	if (dest == NULL) return;
-
-	dest_uri = g_filename_to_uri (dest, NULL, NULL);
-	download = ephy_download_new_for_uri (address, NULL);
-	ephy_download_set_destination_uri (download, dest_uri);
-
-	g_signal_connect (download, "completed",
-			  G_CALLBACK (save_source_completed_cb), NULL);
-
-	ephy_download_start (download);
-
-	g_free (dest);
-	g_free (dest_uri);
-}
-
 void
-popup_cmd_open_image (GtkAction *action,
-		      EphyWindow *window)
+popup_cmd_view_image_in_new_tab (GtkAction *action,
+				 EphyWindow *window)
 {
 	EphyEmbedEvent *event;
-	const char *address;
-	char *scheme = NULL;
 	GValue value = { 0, };
 	EphyEmbed *embed;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_embed_container_get_active_child 
-		(EPHY_EMBED_CONTAINER (window));
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	ephy_embed_event_get_property (event, "image-uri", &value);
-	address = g_value_get_string (&value);
 
-	scheme = g_uri_parse_scheme (address);
-	if (scheme == NULL) goto out;
-
-	if (strcmp (scheme, "file") == 0)
-	{
-		GFile *file;
-		
-		file = g_file_new_for_uri (address);
-		image_open_uri (file, address,
-				gtk_get_current_event_time ());
-		g_object_unref (file);
-	}
-	else
-	{
-		save_temp_source (address);
-	}
-
- out:
+	ephy_shell_new_tab (ephy_shell_get_default (),
+			    window, embed,
+			    g_value_get_string (&value),
+			    EPHY_NEW_TAB_OPEN_PAGE |
+			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			    EPHY_NEW_TAB_APPEND_AFTER);
 	g_value_unset (&value);
-	g_free (scheme);
 }
 

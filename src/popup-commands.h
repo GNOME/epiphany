@@ -39,12 +39,6 @@ void popup_cmd_copy_link_address	(GtkAction *action,
 void popup_cmd_copy_link_location       (GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_link		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_download_link		(GtkAction *action,
-					 EphyWindow *window);
-
 void popup_cmd_download_link_as		(GtkAction *action,
 					 EphyWindow *window);
 
@@ -54,7 +48,7 @@ void popup_cmd_set_image_as_background  (GtkAction *action,
 void popup_cmd_copy_image_location	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_image		(GtkAction *action,
+void popup_cmd_view_image_in_new_tab	(GtkAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_download_link		(GtkAction *action,
