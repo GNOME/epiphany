@@ -51,8 +51,8 @@ struct PasswordsDialogPrivate
 	GtkWidget *liststore;
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
-	GtkWidget *remove_toolbutton;
-	GtkWidget *show_passwords_toolbutton;
+	GtkWidget *remove_button;
+	GtkWidget *show_passwords_button;
 	GtkWidget *clear_button;
 	GtkWidget *password_column;
 	GtkWidget *password_renderer;
@@ -224,22 +224,22 @@ on_passwords_treeview_key_press_event (GtkWidget     *widget,
 }
 
 static void
-on_remove_toolbutton_clicked (GtkToolButton *toolbutton,
-			      PasswordsDialog *dialog)
+on_remove_button_clicked (GtkButton *button,
+			  PasswordsDialog *dialog)
 {
 	delete_selection (dialog);
 
 	/* Restore the focus to the button */
-	gtk_widget_grab_focus (GTK_WIDGET (toolbutton));
+	gtk_widget_grab_focus (GTK_WIDGET (button));
 }
 
 static void
-on_show_passwords_toolbutton_toggled (GtkToggleToolButton *toolbutton,
-				      PasswordsDialog *dialog)
+on_show_passwords_button_toggled (GtkToggleButton *button,
+				  PasswordsDialog *dialog)
 {
 	gboolean active;
 
-	active = gtk_toggle_tool_button_get_active (toolbutton);
+	active = gtk_toggle_button_get_active (button);
 
 	gtk_tree_view_column_set_attributes (GTK_TREE_VIEW_COLUMN (dialog->priv->password_column),
 					     GTK_CELL_RENDERER (dialog->priv->password_renderer),
@@ -256,7 +256,7 @@ on_treeview_selection_changed (GtkTreeSelection *selection,
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
 
-	gtk_widget_set_sensitive (dialog->priv->remove_toolbutton, has_selection);
+	gtk_widget_set_sensitive (dialog->priv->remove_button, has_selection);
 }
 
 static void
@@ -364,8 +364,8 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, passwords_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, clear_button);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, remove_toolbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_toolbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, remove_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treeview_popup_menu);
@@ -375,8 +375,8 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
-	gtk_widget_class_bind_template_callback (widget_class, on_remove_toolbutton_clicked);
-	gtk_widget_class_bind_template_callback (widget_class, on_show_passwords_toolbutton_toggled);
+	gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
+	gtk_widget_class_bind_template_callback (widget_class, on_show_passwords_button_toggled);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_copy_password_menuitem_activate);
 	gtk_widget_class_bind_template_callback (widget_class, on_copy_username_menuitem_activate);
