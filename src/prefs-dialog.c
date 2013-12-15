@@ -1024,7 +1024,7 @@ setup_general_page (PrefsDialog *dialog)
 			 EPHY_PREFS_WEB_ENABLE_PLUGINS,
 			 priv->enable_plugins_checkbutton,
 			 "active",
-			 G_SETTINGS_BIND_INVERT_BOOLEAN);
+			 G_SETTINGS_BIND_DEFAULT);
 
 	create_download_path_button (dialog);
 }
