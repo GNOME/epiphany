@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-12-11 10:38+0100\n"
-"PO-Revision-Date: 2013-12-11 10:40+0200\n"
+"POT-Creation-Date: 2013-12-15 18:28+0100\n"
+"PO-Revision-Date: 2013-12-15 18:30+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -58,23 +58,24 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 #. would be
 #. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2086
-#: ../src/ephy-search-provider.c:290
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 
 #: ../data/epiphany.appdata.xml.in.h:1
 msgid ""
-"The web browser for the GNOME desktop, featuring tight integration with the "
-"desktop and a simple and intuitive user interface that allows you to focus "
-"on your web pages."
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages."
 msgstr ""
-"O navegador web para o escritorio GNOME conta cunha grande integración co "
-"escritorio e unha interface de usuario simple e intuitiva que lle permite "
-"enfocarse nas súas páxinas web."
+"O navegador web para GNOME conta cunha grande integración co escritorio e "
+"unha interface de usuario simple e intuitiva que lle permite enfocarse nas "
+"súas páxinas web."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:68
-#: ../src/ephy-main.c:320 ../src/ephy-main.c:478 ../src/window-commands.c:1598
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:281
+#: ../src/ephy-main.c:67 ../src/ephy-main.c:314 ../src/ephy-main.c:472
+#: ../src/window-commands.c:1594
 msgid "Web"
 msgstr "Web"
 
@@ -261,8 +262,8 @@ msgid "Use GNOME fonts"
 msgstr "Usar os tipos de letra de GNOME"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
-msgid "Use GNOME desktop wide font configuration."
-msgstr "Usar a configuración global dos tipos de letra de GNOME."
+msgid "Use GNOME font settings."
+msgstr "Usar as preferencias de tipo de letra de GNOME."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
@@ -352,7 +353,7 @@ msgid "Size of disk cache, in MB."
 msgstr "Tamaño da caché do disco en MB."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:49
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -518,24 +519,24 @@ msgstr "Sufixos"
 msgid "Memory usage"
 msgstr "Uso de memoria"
 
-#: ../embed/ephy-about-handler.c:303 ../embed/ephy-about-handler.c:305
+#: ../embed/ephy-about-handler.c:304 ../embed/ephy-about-handler.c:306
 msgid "Applications"
 msgstr "Aplicativos"
 
-#: ../embed/ephy-about-handler.c:306
+#: ../embed/ephy-about-handler.c:307
 msgid "List of installed web applications"
 msgstr "Lista dos aplicativos web instalados"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:327
+#: ../embed/ephy-about-handler.c:328
 msgid "Installed on:"
 msgstr "Activado o:"
 
-#: ../embed/ephy-about-handler.c:400 ../embed/ephy-about-handler.c:403
+#: ../embed/ephy-about-handler.c:401 ../embed/ephy-about-handler.c:404
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: ../embed/ephy-about-handler.c:404
+#: ../embed/ephy-about-handler.c:405
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -917,13 +918,9 @@ msgstr "Máis visitadas"
 msgid "Blank page"
 msgstr "Páxina en branco"
 
-#: ../embed/ephy-web-view.c:495
-msgid "Not now"
-msgstr "Agora non"
-
-#: ../embed/ephy-web-view.c:496
-msgid "Store password"
-msgstr "Almacenar contrasinal"
+#: ../embed/ephy-web-view.c:495 ../src/window-commands.c:329
+msgid "Save"
+msgstr "Gardar"
 
 #. Translators: The first %s is the username and the second one is the
 #. * hostname where this is happening. Example: gnome@gmail.com and
@@ -931,9 +928,8 @@ msgstr "Almacenar contrasinal"
 #.
 #: ../embed/ephy-web-view.c:508
 #, c-format
-msgid ""
-"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>Desexa almacenar o contrasinal para <b>%s</b> e <b>%s</b>?</big>"
+msgid "Do you want to save your password for “%s”?"
+msgstr "Desexa gardar o seu contrasinal para «%s»?"
 
 #: ../embed/ephy-web-view.c:1380
 msgid "Deny"
@@ -1134,13 +1130,11 @@ msgstr "Contrasinal mestre de usuario"
 
 #: ../lib/ephy-nss-glue.c:64
 msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
+"The passwords from the previous version are locked with a master password. "
+"If you want to import them, please enter your master password below."
 msgstr ""
-"Os contrasinais da versión previa (Gecko) están bloqueados cun contrasinal "
-"mestre. Se quere que Epiphany os importe, introduza a seguir o seu "
-"contrasinal mestre."
+"Os contrasinais da versión anterior están bloqueados cun contrasinal mestre. "
+"Se quere importalos, escriba o seu contrasinal mestre."
 
 #: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
@@ -1148,11 +1142,11 @@ msgstr "Produciuse un erro ao copiar os ficheiros de cookies de Mozilla."
 
 #: ../lib/ephy-profile-migrator.c:652
 msgid ""
-"Epiphany 3.6 deprecated this directory and tried migrating this "
-"configuration to ~/.config/epiphany"
+"Web 3.6 deprecated this directory and tried migrating this configuration to "
+"~/.config/epiphany"
 msgstr ""
-"Epiphany 3.6 marcou como obsoleto este cartafol e migrou a súa configuración "
-"a ~/.config/epiphany"
+"Web 3.6 marcou como obsoleto este cartafol e migrou a súa configuración a "
+"~/.config/epiphany"
 
 #: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
@@ -1167,12 +1161,12 @@ msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica o perfíl onde se executa o migrador"
 
 #: ../lib/ephy-profile-migrator.c:1047
-msgid "Epiphany profile migrator"
-msgstr "Migrador de perfiles de Epiphany"
+msgid "Web profile migrator"
+msgstr "Migrador de perfiles de Web"
 
 #: ../lib/ephy-profile-migrator.c:1048
-msgid "Epiphany profile migrator options"
-msgstr "Opcións do migrador de perfiles de Epiphany"
+msgid "Web profile migrator options"
+msgstr "Opcións do migrador de perfiles de Web"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1295,7 +1289,8 @@ msgstr "A identidade deste sitio web non foi verificada"
 #: ../lib/widgets/ephy-certificate-dialog.c:323
 #: ../src/bookmarks/ephy-bookmark-properties.c:649
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/resources/cookies-dialog.ui.h:3 ../src/ephy-history-window.c:143
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:3 ../src/ephy-history-window.c:143
 #: ../src/ephy-window.c:114
 msgid "_Close"
 msgstr "_Pechar"
@@ -1366,21 +1361,21 @@ msgstr "Sitios"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:601
-#: ../src/resources/prefs-dialog.ui.h:33 ../src/ephy-history-window.c:229
+#: ../lib/widgets/ephy-location-entry.c:616
+#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
 msgid "Cl_ear"
 msgstr "Limp_ar"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:620 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:635 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "_Desfacer"
 
-#: ../lib/widgets/ephy-location-entry.c:627
+#: ../lib/widgets/ephy-location-entry.c:642
 msgid "_Redo"
 msgstr "_Refacer"
 
-#: ../lib/widgets/ephy-location-entry.c:883
+#: ../lib/widgets/ephy-location-entry.c:899
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastrar e soltar esta icona para crear unha ligazón a esta páxina"
 
@@ -1452,7 +1447,7 @@ msgid "_Help"
 msgstr "_Axuda"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:642
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "_Add"
 msgstr "_Engadir"
 
@@ -1506,8 +1501,8 @@ msgid "Untitled"
 msgstr "Sen título"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:75
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
+msgid "Web (RDF)"
+msgstr "Web (RDF)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:76
 msgid "Mozilla (HTML)"
@@ -1772,8 +1767,8 @@ msgid "Galeon/Konqueror bookmarks"
 msgstr "Marcadores de Galeón/Konqueror"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:629
-msgid "Epiphany bookmarks"
-msgstr "Marcadores de Epiphany"
+msgid "Web bookmarks"
+msgstr "Marcadores web"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:753
 msgid "Export Bookmarks"
@@ -1876,18 +1871,17 @@ msgstr ""
 "eliminarase para sempre."
 
 #: ../src/resources/cookies-dialog.ui.h:2
+#: ../src/resources/passwords-dialog.ui.h:2
 msgid "C_lear All"
 msgstr "Limpar _todo"
 
 #: ../src/resources/cookies-dialog.ui.h:4
+#: ../src/resources/passwords-dialog.ui.h:5
 msgid "Site"
 msgstr "Sitio"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-msgid "Cookie Name"
-msgstr "Nome da cookie"
-
-#: ../src/resources/cookies-dialog.ui.h:6
+#: ../src/resources/passwords-dialog.ui.h:8
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -1936,6 +1930,35 @@ msgstr "Usar a codificación específicada polo documento"
 #: ../src/resources/epiphany.ui.h:4
 msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Usar unha codificación diferente:</b>"
+
+#: ../src/resources/passwords-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:28
+msgid "Passwords"
+msgstr "Contrasinais"
+
+#: ../src/resources/passwords-dialog.ui.h:4
+msgid "Search passwords"
+msgstr "Buscar contrasinais"
+
+#: ../src/resources/passwords-dialog.ui.h:6
+msgid "User Name"
+msgstr "Nome de usuario"
+
+#: ../src/resources/passwords-dialog.ui.h:7
+msgid "Password"
+msgstr "Contrasinal"
+
+#: ../src/resources/passwords-dialog.ui.h:9
+msgid "Show Passwords"
+msgstr "Mostrar contrasinais"
+
+#: ../src/resources/passwords-dialog.ui.h:10
+msgid "_Copy Password"
+msgstr "_Copiar contrasinal"
+
+#: ../src/resources/passwords-dialog.ui.h:11
+msgid "C_opy Username"
+msgstr "C_opiar nome de usuario"
 
 #: ../src/resources/prefs-dialog.ui.h:1
 msgid "Preferences"
@@ -2034,59 +2057,59 @@ msgstr "Seguimento"
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Indicar aos sitios web que non quere que o rastrexen"
 
-#: ../src/resources/prefs-dialog.ui.h:28
-msgid "Passwords"
-msgstr "Contrasinais"
-
 #: ../src/resources/prefs-dialog.ui.h:29
+msgid "Manage Passwords"
+msgstr "Xestionar contrasinais"
+
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "_Remember passwords"
 msgstr "_Lembrar os contrasinais"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "Temporary Files"
 msgstr "Ficheiros temporais"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Disk space:"
 msgstr "Espazo en _disco:"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "MB"
 msgstr "MB"
 
-#: ../src/resources/prefs-dialog.ui.h:34
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "Privacy"
 msgstr "Privacidade"
 
-#: ../src/resources/prefs-dialog.ui.h:35 ../src/ephy-encoding-dialog.c:385
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:385
 msgid "Encodings"
 msgstr "Codificacións"
 
-#: ../src/resources/prefs-dialog.ui.h:36
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "De_fault:"
 msgstr "Predeter_minado:"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Down"
 msgstr "A_baixo"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "Spell checking"
 msgstr "Verificación ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "_Enable spell checking"
 msgstr "_Activar verificación ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:44 ../src/prefs-dialog.c:807
+#: ../src/resources/prefs-dialog.ui.h:45 ../src/prefs-dialog.c:821
 msgid "Language"
 msgstr "Idioma"
 
@@ -2220,71 +2243,67 @@ msgstr "Todo o historial"
 msgid "History"
 msgstr "Historial"
 
-#: ../src/ephy-main.c:77
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Abrir unha lapela nova nunha xanela de navegador existente"
 
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Abrir unha nova xanela de navegador"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde o ficheiro indicado"
 
-#: ../src/ephy-main.c:81 ../src/ephy-main.c:83
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "FICHEIRO"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "Cargar o ficheiro de sesión indicado"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "Engadir un marcador"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "Iniciar unha instancia privada"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
 msgstr "Iniciar unha instancia en modo incógnito"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
 msgstr "Iniciar unha instancia en modo «netbank»"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "Iniciar o navegador en modo de aplicativo"
 
-#: ../src/ephy-main.c:95
-msgid "Start the application without opening windows"
-msgstr "Iniciar o aplicativo sen abrir as xanelas"
-
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "Directorio de perfil para usar na instancia privada"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:204
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "Non foi posíbel iniciar Web"
 
-#: ../src/ephy-main.c:207
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2293,7 +2312,7 @@ msgstr ""
 "O inicio fallou polo seguinte erro:\n"
 "%s"
 
-#: ../src/ephy-main.c:321
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "Opcións de Web"
 
@@ -2301,7 +2320,7 @@ msgstr "Opcións de Web"
 msgid "Close tab"
 msgstr "Pechar a lapela"
 
-#: ../src/ephy-search-provider.c:202
+#: ../src/ephy-search-provider.c:199
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Busca no web por %s"
@@ -2572,7 +2591,7 @@ msgstr "Gardar a imaxe como"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:521 ../src/prefs-dialog.c:527
+#: ../src/prefs-dialog.c:535 ../src/prefs-dialog.c:541
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2581,26 +2600,22 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:536
+#: ../src/prefs-dialog.c:550
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido polo usuario (%s)"
 
-#: ../src/prefs-dialog.c:558
+#: ../src/prefs-dialog.c:572
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:890
+#: ../src/prefs-dialog.c:904
 msgid "Select a Directory"
 msgstr "Seleccionar un cartafol"
-
-#: ../src/window-commands.c:329
-msgid "Save"
-msgstr "Gardar"
 
 #: ../src/window-commands.c:778
 #, c-format
@@ -2674,8 +2689,7 @@ msgstr ""
 "web do GNOME; en caso contrario, escriba á Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:1549 ../src/window-commands.c:1565
-#: ../src/window-commands.c:1576
+#: ../src/window-commands.c:1549 ../src/window-commands.c:1572
 msgid "Contact us at:"
 msgstr "Contacte con nós en:"
 
@@ -2687,7 +2701,7 @@ msgstr "Colaboradores:"
 msgid "Past developers:"
 msgstr "Desenvolvedores anteriores:"
 
-#: ../src/window-commands.c:1585
+#: ../src/window-commands.c:1581
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2704,7 +2718,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1614
+#: ../src/window-commands.c:1610
 msgid "translator-credits"
 msgstr ""
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.\n"
@@ -2720,15 +2734,15 @@ msgstr ""
 "Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas\n"
 "colaborar connosco, podes atopar máis información en http://www.trasno.net"
 
-#: ../src/window-commands.c:1617
+#: ../src/window-commands.c:1613
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1757
+#: ../src/window-commands.c:1753
 msgid "Enable caret browsing mode?"
 msgstr "Quere activar o modo de navegación co cursor?"
 
-#: ../src/window-commands.c:1760
+#: ../src/window-commands.c:1756
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2739,9 +2753,36 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: ../src/window-commands.c:1763
+#: ../src/window-commands.c:1759
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Use GNOME desktop wide font configuration."
+#~ msgstr "Usar a configuración global dos tipos de letra de GNOME."
+
+#~ msgid "Not now"
+#~ msgstr "Agora non"
+
+#~ msgid "Store password"
+#~ msgstr "Almacenar contrasinal"
+
+#~ msgid ""
+#~ "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</"
+#~ "big>"
+#~ msgstr ""
+#~ "<big>Desexa almacenar o contrasinal para <b>%s</b> e <b>%s</b>?</big>"
+
+#~ msgid "Epiphany (RDF)"
+#~ msgstr "Epiphany (RDF)"
+
+#~ msgid "Epiphany bookmarks"
+#~ msgstr "Marcadores de Epiphany"
+
+#~ msgid "Cookie Name"
+#~ msgstr "Nome da cookie"
+
+#~ msgid "Start the application without opening windows"
+#~ msgstr "Iniciar o aplicativo sen abrir as xanelas"
 
 #~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 #~ msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
@@ -2770,9 +2811,6 @@ msgstr "_Activar"
 #~ msgid "Personal Data"
 #~ msgstr "Datos persoais"
 
-#~ msgid "_Show passwords"
-#~ msgstr "_Mostrar contrasinais"
-
 #~ msgid "Inspect _Element"
 #~ msgstr "Inspeccionar o _elemento"
 
@@ -2799,9 +2837,6 @@ msgstr "_Activar"
 
 #~ msgid "Host"
 #~ msgstr "Servidor"
-
-#~ msgid "User Name"
-#~ msgstr "Nome de usuario"
 
 #~ msgid "User Password"
 #~ msgstr "Contrasinal de usuario"
@@ -2991,9 +3026,6 @@ msgstr "_Activar"
 #~ msgid "Epiphany Web Bookmarks"
 #~ msgstr "Marcadores web do Epiphany"
 
-#~ msgid "Web Bookmarks"
-#~ msgstr "Marcadores web"
-
 #~ msgid "Browse and organize your bookmarks"
 #~ msgstr "Examinar e organizar os seus marcadores"
 
@@ -3057,9 +3089,6 @@ msgstr "_Activar"
 
 #~ msgid "_Certificate:"
 #~ msgstr "_Certificado:"
-
-#~ msgid "_Password:"
-#~ msgstr "_Contrasinal:"
 
 #~ msgid "_View Certificate&#x2026;"
 #~ msgstr "_Ver certificado&#x2026;"
