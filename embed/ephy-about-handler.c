@@ -27,6 +27,7 @@
 #include "ephy-web-app-utils.h"
 
 #include <gio/gio.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 struct _EphyAboutHandlerPrivate {
@@ -261,6 +262,55 @@ ephy_about_handler_handle_memory (EphyAboutHandler *handler,
 }
 
 static gboolean
+ephy_about_handler_handle_about (EphyAboutHandler *handler,
+                                 WebKitURISchemeRequest *request)
+{
+  char *data;
+  char *version;
+  char *image_data = NULL;
+  const char *filename;
+  GtkIconInfo *icon_info;
+
+  version = g_strdup_printf (_("Version %s"), VERSION);
+
+  icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                          "web-browser",
+                                          256,
+                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+  if (icon_info != NULL) {
+    filename = gtk_icon_info_get_filename (icon_info);
+    image_data = ephy_file_create_data_uri_for_filename (filename, NULL);
+  }
+
+  data = g_strdup_printf ("<html><head><title>%s</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                          "<style type=\"text/css\">%s</style></head>"  \
+                          "<body>"
+                          "<div class=\"dialog\">"
+                          "<img src=\"%s\"/>"
+                          "<h1 id=\"about-title\">%s</h1>"
+                          "<h2 id=\"about-subtitle\">%s</h2>"
+                          "<p id=\"about-tagline\">“%s”</p>"
+                          "<table class=\"properties\">"
+                          "<tr><td class=\"prop-label\">%s</td><td class=\"prop-value\">%d.%d.%d</td></tr>"
+                          "</table>"
+                          "</div></body></html>",
+                          _("About Web"),
+                          ephy_about_handler_get_style_sheet (handler),
+                          image_data ? image_data : "",
+                          _("Web"),
+                          version,
+                          _("A simple, clean, beautiful view of the web"),
+                          "WebKit", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
+  g_free (version);
+  g_free (image_data);
+
+  ephy_about_handler_finish_request (request, data, -1);
+
+  return TRUE;
+}
+
+static gboolean
 ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
                                     WebKitURISchemeRequest *request)
 {
@@ -446,6 +496,8 @@ ephy_about_handler_handle_request (EphyAboutHandler *handler,
     handled = ephy_about_handler_handle_applications (handler, request);
   else if (!g_strcmp0 (path, "incognito"))
     handled = ephy_about_handler_handle_incognito (handler, request);
+  else if (path == NULL || path[0] == '\0' || !g_strcmp0 (path, "Web") || !g_strcmp0 (path, "web"))
+    handled = ephy_about_handler_handle_about (handler, request);
 
   if (!handled)
     ephy_about_handler_handle_blank (handler, request);

@@ -61,6 +61,7 @@ libephyembed_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephyembed_la_CFLAGS = \
+	-DDATADIR="\"$(datadir)\""	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	-DEPHY_WEB_EXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions"\" \
 	$(DEPENDENCIES_CFLAGS) 	\
