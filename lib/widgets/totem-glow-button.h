@@ -34,12 +34,7 @@ G_BEGIN_DECLS
 #define TOTEM_IS_GLOW_BUTTON(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TOTEM_TYPE_GLOW_BUTTON))
 
 typedef struct _TotemGlowButton TotemGlowButton;
-
-typedef struct _TotemGlowButtonClass {
-  GtkButtonClass parent_class;
-
-  gpointer __bla[4];
-} TotemGlowButtonClass;
+typedef struct _TotemGlowButtonClass TotemGlowButtonClass;
 
 GType		totem_glow_button_get_type	(void) G_GNUC_CONST;
 
