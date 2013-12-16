@@ -18,6 +18,8 @@ libephywebextension_la_SOURCES = \
 	$(top_srcdir)/lib/ephy-settings.h \
 	$(top_srcdir)/lib/ephy-string.c \
 	$(top_srcdir)/lib/ephy-string.h \
+	$(top_srcdir)/lib/ephy-uri-helpers.c \
+	$(top_srcdir)/lib/ephy-uri-helpers.h \
 	$(top_srcdir)/lib/ephy-web-dom-utils.c \
 	$(top_srcdir)/lib/ephy-web-dom-utils.h
 

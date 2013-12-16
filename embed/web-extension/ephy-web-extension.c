@@ -27,6 +27,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-web-dom-utils.h"
+#include "ephy-uri-helpers.h"
 #include "uri-tester.h"
 
 #include <gio/gio.h>
@@ -81,8 +82,11 @@ web_page_send_request (WebKitWebPage *web_page,
   const char *request_uri;
   const char *page_uri;
 
+  request_uri = webkit_uri_request_get_uri (request);
+
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers;
+    char *new_uri;
 
     headers = webkit_uri_request_get_http_headers (request);
     if (headers) {
@@ -90,12 +94,19 @@ web_page_send_request (WebKitWebPage *web_page,
        * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
       soup_message_headers_append (headers, "DNT", "1");
     }
+
+    /* Remove analytics from URL before loading */
+    new_uri = ephy_remove_tracking_from_uri (request_uri);
+    if (new_uri) {
+      webkit_uri_request_set_uri (request, new_uri);
+      request_uri = webkit_uri_request_get_uri (request);
+    }
+    g_free (new_uri);
   }
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
       return FALSE;
 
-  request_uri = webkit_uri_request_get_uri (request);
   page_uri = webkit_web_page_get_uri (web_page);
 
   /* Always load the main resource. */
