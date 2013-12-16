@@ -34,3 +34,5 @@ libephywebextension_la_LIBADD = \
 
 libephywebextension_la_LDFLAGS = \
 	-module -avoid-version -no-undefined
+
+-include $(top_srcdir)/git.mk

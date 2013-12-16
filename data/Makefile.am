@@ -79,3 +79,5 @@ DISTCLEANFILES = \
 	$(service_DATA)			\
 	$(desktop_DATA)			\
 	$(default_bookmarks_DATA)
+
+-include $(top_srcdir)/git.mk

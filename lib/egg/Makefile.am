@@ -27,3 +27,5 @@ libegg_la_CFLAGS = \
 	$(CODE_COVERAGE_CFLAGS)		\
 	$(AM_CFLAGS)
 
+
+-include $(top_srcdir)/git.mk

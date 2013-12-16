@@ -184,3 +184,5 @@ EXTRA_DIST = \
 	data/test.html \
 	applications/epiphany.desktop \
 	applications/defaults.list
+
+-include $(top_srcdir)/git.mk

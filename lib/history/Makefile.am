@@ -82,3 +82,5 @@ stamp-ephy-history-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
+
+-include $(top_srcdir)/git.mk

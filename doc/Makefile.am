@@ -7,3 +7,5 @@ EXTRA_DIST = 		\
 	bookmarks.txt	\
 	debugging.txt	\
 	$(NULL)
+
+-include $(top_srcdir)/git.mk

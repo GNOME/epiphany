@@ -114,3 +114,5 @@ libephybookmarks_la_LIBADD =
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+
+-include $(top_srcdir)/git.mk

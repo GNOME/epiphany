@@ -35,3 +35,5 @@ HELP_FILES = \
 	pref-passwords.page
 
 HELP_LINGUAS = cs de el es hu pt_BR
+
+-include $(top_srcdir)/git.mk
