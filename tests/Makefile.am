@@ -16,6 +16,7 @@ noinst_PROGRAMS = \
 	test-ephy-snapshot-service \
 	test-ephy-sqlite \
 	test-ephy-string \
+	ephy-uri-helpers-test \
 	test-ephy-web-app-utils \
 	test-ephy-web-view \
 	$(NULL)
@@ -173,6 +174,9 @@ test_ephy_sqlite_SOURCES = \
 
 test_ephy_string_SOURCES = \
 	ephy-string-test.c
+
+test_ephy_uri_helpers_SOURCES = \
+	ephy-uri-helpers-test.c
 
 test_ephy_web_app_utils_SOURCES = \
 	ephy-web-app-utils-test.c

@@ -24,6 +24,7 @@ NOINST_H_FILES = \
 	ephy-string.h				\
 	ephy-snapshot-service.h			\
 	ephy-time-helpers.h			\
+	ephy-uri-helpers.h			\
 	ephy-web-app-utils.h			\
 	ephy-web-dom-utils.h			\
 	ephy-zoom.h
@@ -67,6 +68,7 @@ libephymisc_la_SOURCES = \
 	ephy-sqlite-statement.c			\
 	ephy-string.c				\
 	ephy-time-helpers.c			\
+	ephy-uri-helpers.c			\
 	ephy-web-app-utils.c			\
 	ephy-web-dom-utils.c			\
 	ephy-zoom.c				\
