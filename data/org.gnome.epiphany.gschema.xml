@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema path="/org/gnome/epiphany/" id="org.gnome.Epiphany">
+	<schema path="/org/gnome/epiphany/" id="org.gnome.Epiphany" gettext-domain="">
 		<child schema="org.gnome.Epiphany.ui" name="ui"/>
 		<child schema="org.gnome.Epiphany.web" name="web"/>
 		<child schema="org.gnome.Epiphany.state" name="state"/>
@@ -10,7 +10,14 @@
 			<summary>Browse with caret</summary>
 		</key>
 		<key type="s" name="keyword-search-url">
-			<default>'http://duckduckgo.com/?q=%s&amp;t=epiphany'</default>
+			<!-- DuckDuckGo is the default search engine. Must exactly match the URL used
+			     in the preferences dialog, except this string is surrounded by single quotes
+			     and uses &amp; instead of simply &. If the match is not otherwise exact,
+			     there will be a spurious, ugly entry in the preferences combo, so please
+			     test this. Should ideally also match the default smart bookmark link in
+			     default-bookmarks.rdf. See the comment there for region parameters to
+			     the URL. -->
+			<default l10n="messages">'http://duckduckgo.com/?q=%s&amp;t=epiphany'</default>
 			<summary>URL Search</summary>
 			<description>Search string for keywords entered in the URL bar.</description>
 		</key>
