@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2013-12-11 16:27+0200\n"
-"PO-Revision-Date: 2013-12-11 16:36+0200\n"
+"POT-Creation-Date: 2013-12-17 17:57+0200\n"
+"PO-Revision-Date: 2013-12-17 18:23+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -59,16 +59,16 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #: ../data/epiphany.appdata.xml.in.h:1
 msgid ""
-"The web browser for the GNOME desktop, featuring tight integration with the "
-"desktop and a simple and intuitive user interface that allows you to focus "
-"on your web pages."
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages."
 msgstr ""
-"דפדפן האינטרנט עבור שולחן העבודה GNOME, הכולל שילוב הדוק עם שולחן העבודה "
-"וממשק משתמש פשוט המאפשר לך להתמקד בדפי האינטרנט שלך."
+"דפדפן האינטרנט עבור  GNOME, הכולל שילוב הדוק עם שולחן העבודה וממשק משתמש "
+"פשוט המאפשר לך להתמקד בדפי האינטרנט שלך."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:281
-#: ../src/ephy-main.c:67 ../src/ephy-main.c:314 ../src/ephy-main.c:472
-#: ../src/window-commands.c:1594
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:301
+#: ../embed/ephy-about-handler.c:331 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1574
 msgid "Web"
 msgstr "דפדפן"
 
@@ -251,8 +251,8 @@ msgid "Use GNOME fonts"
 msgstr "Use GNOME fonts"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
-msgid "Use GNOME desktop wide font configuration."
-msgstr "Use GNOME desktop wide font configuration."
+msgid "Use GNOME font settings."
+msgstr "Use GNOME font settings."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "Custom sans-serif font"
@@ -467,57 +467,70 @@ msgstr "Whether to show the title column in the bookmarks window."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Whether to show the address column in the bookmarks window."
 
-#: ../embed/ephy-about-handler.c:144 ../embed/ephy-about-handler.c:146
+#: ../embed/ephy-about-handler.c:145 ../embed/ephy-about-handler.c:147
 msgid "Installed plugins"
 msgstr "תוספים מותקנים"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "Enabled"
 msgstr "פעיל"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "Yes"
 msgstr "כן"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "No"
 msgstr "לא"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "MIME type"
 msgstr "סוג ה־MIME"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "Description"
 msgstr "תיאור"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "Suffixes"
 msgstr "סיומות"
 
-#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:223
+#: ../embed/ephy-about-handler.c:221 ../embed/ephy-about-handler.c:224
 msgid "Memory usage"
 msgstr "ניצול הזיכרון"
 
-#: ../embed/ephy-about-handler.c:304 ../embed/ephy-about-handler.c:306
+#: ../embed/ephy-about-handler.c:274
+#, c-format
+msgid "Version %s"
+msgstr "גרסה %s"
+
+#: ../embed/ephy-about-handler.c:298
+msgid "About Web"
+msgstr "על אודות דפדפן"
+
+#: ../embed/ephy-about-handler.c:303
+msgid "A simple, clean, beautiful view of the web"
+msgstr "הצגה פשוטה, נקייה ויפה של האינטרנט"
+
+#: ../embed/ephy-about-handler.c:354 ../embed/ephy-about-handler.c:356
 msgid "Applications"
 msgstr "יישומים"
 
-#: ../embed/ephy-about-handler.c:307
+#: ../embed/ephy-about-handler.c:357
 msgid "List of installed web applications"
 msgstr "רשימה של יישומי רשת מותקנים"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:328
+#: ../embed/ephy-about-handler.c:378
 msgid "Installed on:"
 msgstr "הותקן בתאריך:"
 
-#: ../embed/ephy-about-handler.c:401 ../embed/ephy-about-handler.c:404
+#: ../embed/ephy-about-handler.c:451 ../embed/ephy-about-handler.c:454
 msgid "Private Browsing"
 msgstr "גלישה פרטית"
 
-#: ../embed/ephy-about-handler.c:405
+#: ../embed/ephy-about-handler.c:455
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -924,64 +937,63 @@ msgstr "אישור"
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "העמוד בכתובת <b>%s</b> מעוניין לדעת את מיקומך."
 
-#: ../embed/ephy-web-view.c:1724
+#: ../embed/ephy-web-view.c:1739
 msgid "None specified"
 msgstr "לא צוינה"
 
-#: ../embed/ephy-web-view.c:1733 ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1748 ../embed/ephy-web-view.c:1765
 #, c-format
-msgid "Oops! Error loading %s"
-msgstr "אופס! אירעה שגיאה בטעינת %s"
+msgid "Problem loading “%s”"
+msgstr "בעיה בטעינת „%s”"
 
-#: ../embed/ephy-web-view.c:1735
-msgid "Oops! It was not possible to show this website"
-msgstr "אופס! לא ניתן להציג אתר זה"
+#: ../embed/ephy-web-view.c:1750
+msgid "Oops! Unable to display this website."
+msgstr "אופס! לא ניתן להציג אתר זה."
 
-#: ../embed/ephy-web-view.c:1736
+#: ../embed/ephy-web-view.c:1751
 #, c-format
 msgid ""
-"<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
-"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
-"moved to a new address. Don't forget to check that your internet connection "
-"is working correctly.</p>"
+"<p>The site at “%s” seems to be unavailable. The precise error was:</"
+"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
+"new address. You may wish to verify that your internet connection is working "
+"correctly.</p>"
 msgstr ""
-"<p>כפי הנראה האתר <strong>%s</strong> אינו זמין, השגיאה המדויקת הייתה: </"
-"p><p><em>%s</em>.</p><p>בהחלט יתכן כי פעילות האתר הופסקה או שהועברה לכתובת "
-"חדשה. נא לא לשכוח לוודא כי חיבור האינטרנט פועל כראוי.</p>"
+"<p>כפי הנראה האתר „%s” אינו זמין. השגיאה המדויקת הייתה: <p><code>%s</code></"
+"p>בהחלט יתכן כי האתר אינו זמין באופן זמני או שהועבר לכתובת חדשה. מומלץ לוודא "
+"כי חיבור האינטרנט פועל כראוי.</p>"
 
-#: ../embed/ephy-web-view.c:1745
-msgid "Try again"
+#: ../embed/ephy-web-view.c:1760
+msgid "Try Again"
 msgstr "ניסיון חוזר"
 
-#: ../embed/ephy-web-view.c:1753
-msgid "Oops! This site might have caused the web browser to close unexpectedly"
-msgstr "אופס! אתר זה כנראה גרם לדפדפן להיסגר באופן בלתי צפוי"
+#: ../embed/ephy-web-view.c:1767
+msgid "Oops! There may be a problem."
+msgstr "אופס! יתכן ויש בעיה."
 
-#: ../embed/ephy-web-view.c:1755
+#: ../embed/ephy-web-view.c:1768
 #, c-format
 msgid ""
-"<p>This page was loading when the web browser closed unexpectedly.</"
-"p><p>This might happen again if you reload the page. If it does, please "
-"report the problem to the <strong>%s</strong> developers.</p>"
+"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
+"happens again, please report the problem to the <strong>%s</strong> "
+"developers.</p>"
 msgstr ""
-"<p>עמוד זה היה בטעינה בזמן שהדפדפן נסגר באופן לא צפוי.</p><p> פעולה זו עלולה "
-"לצוץ שוב אם הדף ייטען שוב. במידה שזה קורה שוב נא לדווח על התקלה למפתחי "
-"<strong>%s</strong>.</p>"
+"<p>יתכן ואתר זה גרם לדפדפן להסגר באופן בלתי צפוי.</p><p> אם זה קורה שוב נא "
+"לדווח על התקלה למפתחי <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1763
-msgid "Load again anyway"
+#: ../embed/ephy-web-view.c:1774
+msgid "Reload Anyway"
 msgstr "טעינה מחדש בכל זאת"
 
-#: ../embed/ephy-web-view.c:1769
+#: ../embed/ephy-web-view.c:1779
 #, c-format
-msgid "Oops! Something went wrong displaying %s"
-msgstr "אופס! משהו השתבש בעת הצגת %s"
+msgid "Problem displaying “%s”"
+msgstr "בעיה בהצגת „%s”"
 
-#: ../embed/ephy-web-view.c:1770
+#: ../embed/ephy-web-view.c:1780
 msgid "Oops!"
 msgstr "אופס!"
 
-#: ../embed/ephy-web-view.c:1771
+#: ../embed/ephy-web-view.c:1781
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1262,7 +1274,7 @@ msgstr "זהות האתר הזה אומתה"
 msgid "The identity of this website has not been verified"
 msgstr "זהות האתר הזה לא אומתה"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:323
+#: ../lib/widgets/ephy-certificate-dialog.c:326
 #: ../src/bookmarks/ephy-bookmark-properties.c:649
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
 #: ../src/resources/cookies-dialog.ui.h:3
@@ -1312,7 +1324,7 @@ msgstr "שגיאה בהורדה: %s"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../lib/widgets/ephy-download-widget.c:339 ../src/ephy-window.c:1175
+#: ../lib/widgets/ephy-download-widget.c:339 ../src/ephy-window.c:1169
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "פתיחה"
@@ -1337,21 +1349,21 @@ msgstr "אתרים"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:608
+#: ../lib/widgets/ephy-location-entry.c:616
 #: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
 msgid "Cl_ear"
 msgstr "_ניקוי"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:627 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:635 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "בי_טול פעולה"
 
-#: ../lib/widgets/ephy-location-entry.c:634
+#: ../lib/widgets/ephy-location-entry.c:642
 msgid "_Redo"
 msgstr "_ביצוע שוב"
 
-#: ../lib/widgets/ephy-location-entry.c:890
+#: ../lib/widgets/ephy-location-entry.c:899
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "יש לגרור ולשחרר סמל זה כדי ליצור קישור לדף זה"
 
@@ -1853,10 +1865,6 @@ msgid "Site"
 msgstr "אתר"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-msgid "Cookie Name"
-msgstr "שם עוגיה"
-
-#: ../src/resources/cookies-dialog.ui.h:6
 #: ../src/resources/passwords-dialog.ui.h:8
 msgid "Remove"
 msgstr "הסרה"
@@ -2419,145 +2427,129 @@ msgstr "_הוספת סימנייה…"
 
 #. Links.
 #: ../src/ephy-window.c:220
-msgid "_Open Link"
-msgstr "פתיחת ה_קישור"
-
-#: ../src/ephy-window.c:222
 msgid "Open Link in New _Window"
 msgstr "פתיחת הקישור ב_חלון חדש"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:222
 msgid "Open Link in New _Tab"
 msgstr "פתיחת הקישור ב_לשונית חדשה"
 
-#: ../src/ephy-window.c:226
-msgid "_Download Link"
-msgstr "הור_דת הקישור"
-
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:224
 msgid "_Save Link As…"
 msgstr "_שמירת הקישור בשם…"
 
-#: ../src/ephy-window.c:230
-msgid "_Bookmark Link…"
-msgstr "הוספת הקישור ל_סימניות…"
-
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:226
 msgid "_Copy Link Address"
 msgstr "ה_עתקת כתובת הקישור"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:228
 msgid "_Copy E-mail Address"
 msgstr "העתקת כתובת _דוא״ל"
 
 #. Images.
-#: ../src/ephy-window.c:239
-msgid "Open _Image"
-msgstr "_פתיחת התמונה"
+#: ../src/ephy-window.c:233
+msgid "View _Image"
+msgstr "ה_צגת התמונה"
 
-#: ../src/ephy-window.c:241
-msgid "_Save Image As…"
-msgstr "שמירת התמונה ב_שם…"
-
-#: ../src/ephy-window.c:243
-msgid "_Use Image As Background"
-msgstr "_שימוש בתמונה כרקע"
-
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
 msgstr "ה_עתקת כתובת התמונה"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:237
+msgid "_Save Image As…"
+msgstr "שמירת התמונה ב_שם…"
+
+#: ../src/ephy-window.c:239
+msgid "Set as _Wallpaper"
+msgstr "הגדרה כ_רקע שולחן העבודה"
+
+#: ../src/ephy-window.c:241
 msgid "St_art Animation"
 msgstr "ה_פעלת ההנפשה"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:243
 msgid "St_op Animation"
 msgstr "ע_צירת ההנפשה"
 
-#: ../src/ephy-window.c:455
+#: ../src/ephy-window.c:449
 msgid "There are unsubmitted changes to form elements"
 msgstr "ישנם שינויים שלא נשלחו"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:450
 msgid "If you close the document anyway, you will lose that information."
 msgstr "אם המסמך ייסגר בכל זאת, המידע הזה יאבד."
 
-#: ../src/ephy-window.c:458
+#: ../src/ephy-window.c:452
 msgid "Close _Document"
 msgstr "סגירת ה_מסמך"
 
-#: ../src/ephy-window.c:473
+#: ../src/ephy-window.c:467
 msgid "There are ongoing downloads in this window"
 msgstr "ישנן הורדות פעילות בחלון זה"
 
-#: ../src/ephy-window.c:474
+#: ../src/ephy-window.c:468
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "אם חלון זה ייסגר על ידיך, ההורדות יבוטלו"
 
-#: ../src/ephy-window.c:475
+#: ../src/ephy-window.c:469
 msgid "Close window and cancel downloads"
 msgstr "סגירת החלון וביטול ההורדות"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1171
 msgid "Save As"
 msgstr "שמירה בשם"
 
-#: ../src/ephy-window.c:1179
+#: ../src/ephy-window.c:1173
 msgid "Save As Application"
 msgstr "שמירה כיישום"
 
-#: ../src/ephy-window.c:1181
+#: ../src/ephy-window.c:1175
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../src/ephy-window.c:1183
+#: ../src/ephy-window.c:1177
 msgid "Bookmark"
 msgstr "סימנייה"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1179
 msgid "Find"
 msgstr "חיפוש"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1194
+#: ../src/ephy-window.c:1188
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1191
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1225
+#: ../src/ephy-window.c:1219
 msgid "Back"
 msgstr "אחורה"
 
-#: ../src/ephy-window.c:1237
+#: ../src/ephy-window.c:1231
 msgid "Forward"
 msgstr "קדימה"
 
-#: ../src/ephy-window.c:1249
+#: ../src/ephy-window.c:1243
 msgid "Zoom"
 msgstr "תקריב"
 
-#: ../src/ephy-window.c:1258
+#: ../src/ephy-window.c:1252
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-window.c:1266
+#: ../src/ephy-window.c:1260
 msgid "Go to most visited"
 msgstr "מעבר לנצפים ביותר"
 
-#: ../src/popup-commands.c:258
-msgid "Download Link"
-msgstr "הורדת הקישור"
-
-#: ../src/popup-commands.c:266
+#: ../src/popup-commands.c:273
 msgid "Save Link As"
 msgstr "שמירת הקישור בשם"
 
-#: ../src/popup-commands.c:273
+#: ../src/popup-commands.c:280
 msgid "Save Image As"
 msgstr "שמירת התמונה בשם"
 
@@ -2629,52 +2621,19 @@ msgstr "יצירת יישום רשת"
 msgid "C_reate"
 msgstr "י_צירה"
 
-#: ../src/window-commands.c:1495
-msgid ""
-"Web is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-"‏Web הנה תכנה חופשית; באפשרותך להפיץ ו/או לשנות אותה תחת תנאי הרישיון הציבורי "
-"הכללי של גנו (GPL) כפי שפורסם על ידי המוסד לתכנה חופשית; או גרסה 2 של "
-"הרישיון או (לשיקול דעתך) כל גרסה עדכנית יותר."
-
-#: ../src/window-commands.c:1499
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
-msgstr ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
-
-#: ../src/window-commands.c:1503
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-
-#: ../src/window-commands.c:1549 ../src/window-commands.c:1572
+#: ../src/window-commands.c:1535 ../src/window-commands.c:1558
 msgid "Contact us at:"
 msgstr "ניתן ליצור אתנו קשר דרך:"
 
-#: ../src/window-commands.c:1552
+#: ../src/window-commands.c:1538
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: ../src/window-commands.c:1555
+#: ../src/window-commands.c:1541
 msgid "Past developers:"
 msgstr "מפתחים בעבר:"
 
-#: ../src/window-commands.c:1581
+#: ../src/window-commands.c:1567
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2691,7 +2650,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1610
+#: ../src/window-commands.c:1590
 msgid "translator-credits"
 msgstr ""
 "רועי קרשטיין <sf_kersteinroie@bezeqint.net>\n"
@@ -2703,15 +2662,15 @@ msgstr ""
 "מיזם תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/window-commands.c:1613
+#: ../src/window-commands.c:1593
 msgid "Web Website"
 msgstr "אתר אינטרנט בדפדפן"
 
-#: ../src/window-commands.c:1753
+#: ../src/window-commands.c:1732
 msgid "Enable caret browsing mode?"
 msgstr "האם לאפשר מצב ניווט באמצעות סמן?"
 
-#: ../src/window-commands.c:1756
+#: ../src/window-commands.c:1735
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2721,9 +2680,72 @@ msgstr ""
 "באתרי אינטרנט המאפשר לך לנווט באמצעות המקלדת. האם ברצונך להפעיל גלישה "
 "באמצעות סמן?"
 
-#: ../src/window-commands.c:1759
+#: ../src/window-commands.c:1738
 msgid "_Enable"
 msgstr "ה_פעלה"
+
+#~ msgid "Use GNOME desktop wide font configuration."
+#~ msgstr "Use GNOME desktop wide font configuration."
+
+#~ msgid "Oops! Error loading %s"
+#~ msgstr "אופס! אירעה שגיאה בטעינת %s"
+
+#~ msgid ""
+#~ "Oops! This site might have caused the web browser to close unexpectedly"
+#~ msgstr "אופס! אתר זה כנראה גרם לדפדפן להיסגר באופן בלתי צפוי"
+
+#~ msgid "Oops! Something went wrong displaying %s"
+#~ msgstr "אופס! משהו השתבש בעת הצגת %s"
+
+#~ msgid "Cookie Name"
+#~ msgstr "שם עוגיה"
+
+#~ msgid "_Open Link"
+#~ msgstr "פתיחת ה_קישור"
+
+#~ msgid "_Download Link"
+#~ msgstr "הור_דת הקישור"
+
+#~ msgid "_Bookmark Link…"
+#~ msgstr "הוספת הקישור ל_סימניות…"
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "_שימוש בתמונה כרקע"
+
+#~ msgid "Download Link"
+#~ msgstr "הורדת הקישור"
+
+#~ msgid ""
+#~ "Web is free software; you can redistribute it and/or modify it under the "
+#~ "terms of the GNU General Public License as published by the Free Software "
+#~ "Foundation; either version 2 of the License, or (at your option) any "
+#~ "later version."
+#~ msgstr ""
+#~ "‏Web הנה תכנה חופשית; באפשרותך להפיץ ו/או לשנות אותה תחת תנאי הרישיון "
+#~ "הציבורי הכללי של גנו (GPL) כפי שפורסם על ידי המוסד לתכנה חופשית; או גרסה "
+#~ "2 של הרישיון או (לשיקול דעתך) כל גרסה עדכנית יותר."
+
+#~ msgid ""
+#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
+#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
+#~ "Public License for more details."
+#~ msgstr ""
+#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
+#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
+#~ "Public License for more details."
+
+#~ msgid ""
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with the GNOME Web Browser; if not, write to the Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
+#~ msgstr ""
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with the GNOME Web Browser; if not, write to the Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
 
 #~ msgid "Not now"
 #~ msgstr "לא כעת"
@@ -4263,9 +4285,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Print error"
 #~ msgstr "שגיאה בהדפסה"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "מדפיס “%s“"
 
 #~ msgid "_Select Certificate"
 #~ msgstr "בחר _אישור"
