@@ -502,9 +502,8 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
                                   GTK_ORIENTATION_HORIZONTAL);
 
   label = gtk_label_new (NULL);
-  /* Translators: The first %s is the username and the second one is the
-   * hostname where this is happening. Example: gnome@gmail.com and
-   * mail.google.com.
+  /* Translators: The %s the hostname where this is happening. 
+   * Example: mail.google.com.
    */
   message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"),
                                      hostname);
