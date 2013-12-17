@@ -77,6 +77,7 @@ struct _EphyWebViewPrivate {
   guint is_setting_zoom : 1;
   guint load_failed : 1;
   guint history_frozen : 1;
+  guint ever_committed : 1;
 
   char *address;
   char *typed_address;
@@ -1594,6 +1595,8 @@ load_changed_cb (WebKitWebView *web_view,
     const char* uri;
     EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
+    priv->ever_committed = TRUE;
+
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
@@ -1826,8 +1829,9 @@ load_failed_cb (WebKitWebView *web_view,
                 gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyWebViewPrivate *priv = view->priv;
 
-  view->priv->load_failed = TRUE;
+  priv->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
   update_navigation_flags (view);
 
@@ -1858,8 +1862,6 @@ load_failed_cb (WebKitWebView *web_view,
     return TRUE;
   case WEBKIT_NETWORK_ERROR_CANCELLED:
     {
-      EphyWebViewPrivate *priv = view->priv;
-
       if (!priv->typed_address) {
         const char* prev_uri;
 
@@ -1871,7 +1873,7 @@ load_failed_cb (WebKitWebView *web_view,
   case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
     /* If we are going to download something, and this is the first
      * page to load in this tab, we may want to close it down. */
-    if (!webkit_web_view_can_go_back (web_view))
+    if (!priv->ever_committed)
       g_signal_emit_by_name (view, "download-only-load", NULL);
     break;
   /* In case the resource is going to be showed with a plugin just let
@@ -1931,6 +1933,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
 
   priv->is_blank = TRUE;
+  priv->ever_committed = FALSE;
   priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
