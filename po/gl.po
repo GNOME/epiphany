@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-12-15 18:28+0100\n"
-"PO-Revision-Date: 2013-12-15 18:30+0200\n"
+"POT-Creation-Date: 2013-12-18 23:15+0100\n"
+"PO-Revision-Date: 2013-12-18 23:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -57,7 +57,7 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2086
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2089
 #: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -73,9 +73,9 @@ msgstr ""
 "unha interface de usuario simple e intuitiva que lle permite enfocarse nas "
 "súas páxinas web."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:281
-#: ../src/ephy-main.c:67 ../src/ephy-main.c:314 ../src/ephy-main.c:472
-#: ../src/window-commands.c:1594
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:301
+#: ../embed/ephy-about-handler.c:331 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1574
 msgid "Web"
 msgstr "Web"
 
@@ -486,57 +486,70 @@ msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Indica se se debe mostrar a columna de enderezos na xanela de marcadores."
 
-#: ../embed/ephy-about-handler.c:144 ../embed/ephy-about-handler.c:146
+#: ../embed/ephy-about-handler.c:145 ../embed/ephy-about-handler.c:147
 msgid "Installed plugins"
 msgstr "Activar engadidos"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "Enabled"
 msgstr "Activado"
 
 #. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "Yes"
 msgstr "Si"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:160
 msgid "No"
 msgstr "Non"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "MIME type"
 msgstr "Tipo MIME"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "Description"
 msgstr "Descrición"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:161
 msgid "Suffixes"
 msgstr "Sufixos"
 
-#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:223
+#: ../embed/ephy-about-handler.c:221 ../embed/ephy-about-handler.c:224
 msgid "Memory usage"
 msgstr "Uso de memoria"
 
-#: ../embed/ephy-about-handler.c:304 ../embed/ephy-about-handler.c:306
+#: ../embed/ephy-about-handler.c:274
+#, c-format
+msgid "Version %s"
+msgstr "Versión %s"
+
+#: ../embed/ephy-about-handler.c:298
+msgid "About Web"
+msgstr "Sobre Web"
+
+#: ../embed/ephy-about-handler.c:303
+msgid "A simple, clean, beautiful view of the web"
+msgstr "Unha vista sinxela, limpa e bonita do web"
+
+#: ../embed/ephy-about-handler.c:354 ../embed/ephy-about-handler.c:356
 msgid "Applications"
 msgstr "Aplicativos"
 
-#: ../embed/ephy-about-handler.c:307
+#: ../embed/ephy-about-handler.c:357
 msgid "List of installed web applications"
 msgstr "Lista dos aplicativos web instalados"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:328
+#: ../embed/ephy-about-handler.c:378
 msgid "Installed on:"
 msgstr "Activado o:"
 
-#: ../embed/ephy-about-handler.c:401 ../embed/ephy-about-handler.c:404
+#: ../embed/ephy-about-handler.c:451 ../embed/ephy-about-handler.c:454
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: ../embed/ephy-about-handler.c:405
+#: ../embed/ephy-about-handler.c:455
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -546,17 +559,17 @@ msgstr ""
 "neste modo non se mostrarán no historial de navegación e toda a información "
 "será limpada cando peche a xanela."
 
-#: ../embed/ephy-embed.c:500
+#: ../embed/ephy-embed.c:501
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Prema %s para saír do modo a pantalla completa"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:503
+#: ../embed/ephy-embed.c:504
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:503
+#: ../embed/ephy-embed.c:504
 msgid "F11"
 msgstr "F11"
 
@@ -897,15 +910,15 @@ msgstr "Texto non atopado"
 msgid "Search wrapped back to the top"
 msgstr "Busca reiniciada desde a parte superior"
 
-#: ../embed/ephy-find-toolbar.c:462
+#: ../embed/ephy-find-toolbar.c:463
 msgid "Type to search…"
 msgstr "Escriba para buscar…"
 
-#: ../embed/ephy-find-toolbar.c:468
+#: ../embed/ephy-find-toolbar.c:469
 msgid "Find previous occurrence of the search string"
 msgstr "Buscar a anterior aparición da cadea de busca"
 
-#: ../embed/ephy-find-toolbar.c:476
+#: ../embed/ephy-find-toolbar.c:477
 msgid "Find next occurrence of the search string"
 msgstr "Busca a seguinte aparición da cadea de busca"
 
@@ -914,11 +927,11 @@ msgid "Most Visited"
 msgstr "Máis visitadas"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2774
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2777
 msgid "Blank page"
 msgstr "Páxina en branco"
 
-#: ../embed/ephy-web-view.c:495 ../src/window-commands.c:329
+#: ../embed/ephy-web-view.c:496 ../src/window-commands.c:329
 msgid "Save"
 msgstr "Gardar"
 
@@ -926,84 +939,83 @@ msgstr "Gardar"
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:508
+#: ../embed/ephy-web-view.c:509
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Desexa gardar o seu contrasinal para «%s»?"
 
-#: ../embed/ephy-web-view.c:1380
+#: ../embed/ephy-web-view.c:1381
 msgid "Deny"
 msgstr "Denegar"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1382
 msgid "Allow"
 msgstr "Permitir"
 
-#: ../embed/ephy-web-view.c:1391
+#: ../embed/ephy-web-view.c:1392
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "A páxina <b>%s</b> quere saber a súa localización."
 
-#: ../embed/ephy-web-view.c:1724
+#: ../embed/ephy-web-view.c:1742
 msgid "None specified"
 msgstr "Non especificado"
 
-#: ../embed/ephy-web-view.c:1733 ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1751 ../embed/ephy-web-view.c:1768
 #, c-format
-msgid "Oops! Error loading %s"
-msgstr "Recoiro! Produciuse un erro ao cargar %s"
+msgid "Problem loading “%s”"
+msgstr "Problema ao cargar «%s»"
 
-#: ../embed/ephy-web-view.c:1735
-msgid "Oops! It was not possible to show this website"
-msgstr "Recoiro! Non foi posíbel mostrar esta páxina"
+#: ../embed/ephy-web-view.c:1753
+msgid "Oops! Unable to display this website."
+msgstr "Recoiro! Non foi posíbel mostrar esta páxina web."
 
-#: ../embed/ephy-web-view.c:1736
+#: ../embed/ephy-web-view.c:1754
 #, c-format
 msgid ""
-"<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
-"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
-"moved to a new address. Don't forget to check that your internet connection "
-"is working correctly.</p>"
+"<p>The site at “%s” seems to be unavailable. The precise error was:</"
+"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
+"new address. You may wish to verify that your internet connection is working "
+"correctly.</p>"
 msgstr ""
-"<p>Semella que a páxina web <strong>%s</strong> non está dispoñíbel. O erro "
-"exacto foi: </p><p><em>%s</em>.<p>Puido ser temporalmente desactivada ou "
+"<p>Semella que a páxina web %s non está dispoñíbel. O erro exacto "
+"foi:</p><p><code>%s</code></p><p>Puido ser temporalmente desactivada ou "
 "movida a un novo enderezo. Non esqueza comprobar que a súa conexión a "
 "internet está funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:1745
-msgid "Try again"
+#: ../embed/ephy-web-view.c:1763
+msgid "Try Again"
 msgstr "Tentar de novo"
 
-#: ../embed/ephy-web-view.c:1753
-msgid "Oops! This site might have caused the web browser to close unexpectedly"
-msgstr ""
-"Recoiro! Este sitio puido causar que Epiphany se peche de forma inesperada"
+#: ../embed/ephy-web-view.c:1770
+msgid "Oops! There may be a problem."
+msgstr "Recoiro! Pode haber un problema."
 
-#: ../embed/ephy-web-view.c:1755
+#: ../embed/ephy-web-view.c:1771
 #, c-format
 msgid ""
-"<p>This page was loading when the web browser closed unexpectedly.</"
-"p><p>This might happen again if you reload the page. If it does, please "
-"report the problem to the <strong>%s</strong> developers.</p>"
+"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
+"happens again, please report the problem to the <strong>%s</strong> "
+"developers.</p>"
 msgstr ""
-"<p>Esta páxina estábase cargando cando o navegador se pechou de forma "
-"inesperada.<p></p>Isto podería acontecer de novo se recarga a páxina. Se é "
-"así, informe do problema aos desenvolvedores de <strong>%s</strong>.</p>"
+"<p>Este sitio puido causar que Web se pechara forma inesperada.<p></p>Se "
+"isto volve a pasar, informe do problema aos desenvolvedores de <strong>%"
+"s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1763
-msgid "Load again anyway"
-msgstr "Cargar todo de todas formas"
+#: ../embed/ephy-web-view.c:1777
+msgid "Reload Anyway"
+msgstr "Recargar de todos modos"
 
-#: ../embed/ephy-web-view.c:1769
+#: ../embed/ephy-web-view.c:1782
 #, c-format
-msgid "Oops! Something went wrong displaying %s"
-msgstr "Oops! Algo foi mal ao mostrar %s"
+msgid "Problem displaying “%s”"
+msgstr "Problema ao mostrar «%s»"
 
-#: ../embed/ephy-web-view.c:1770
+#: ../embed/ephy-web-view.c:1783
 msgid "Oops!"
 msgstr "Oops!"
 
-#: ../embed/ephy-web-view.c:1771
+#: ../embed/ephy-web-view.c:1784
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1012,21 +1024,21 @@ msgstr ""
 "páxina distinta para continuar."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2324
+#: ../embed/ephy-web-view.c:2327
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2326
+#: ../embed/ephy-web-view.c:2329
 msgid "Loading…"
 msgstr "Cargando…"
 
-#: ../embed/ephy-web-view.c:2678 ../src/bookmarks/ephy-bookmarks-editor.c:818
+#: ../embed/ephy-web-view.c:2681 ../src/bookmarks/ephy-bookmarks-editor.c:818
 msgid "_OK"
 msgstr "_Aceptar"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:639
+#: ../src/bookmarks/ephy-bookmark-properties.c:640
 #: ../src/bookmarks/ephy-bookmarks-editor.c:815
 #: ../src/resources/clear-data-dialog.ui.h:2 ../src/window-commands.c:877
 msgid "_Cancel"
@@ -1085,10 +1097,18 @@ msgstr "Produciuse un erro ao crear o cartafol «%s»."
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../lib/ephy-form-auth-data.c:126
+#: ../lib/ephy-form-auth-data.c:139
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Os contrasinais para %s nun formulario en %s"
+
+#. Translators: The first %s is the hostname where this is happening.
+#. * Example: mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:145
+#, c-format
+msgid "Password in a form in %s"
+msgstr "O contrasinal nun formulario en %s"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
@@ -1145,8 +1165,8 @@ msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
 msgstr ""
-"Web 3.6 marcou como obsoleto este cartafol e migrou a súa configuración a "
-"~/.config/epiphany"
+"Web 3.6 marcou como obsoleto este cartafol e migrou a súa configuración a ~/."
+"config/epiphany"
 
 #: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
@@ -1286,8 +1306,8 @@ msgstr "A identidade deste sitio web foi verificada"
 msgid "The identity of this website has not been verified"
 msgstr "A identidade deste sitio web non foi verificada"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:323
-#: ../src/bookmarks/ephy-bookmark-properties.c:649
+#: ../lib/widgets/ephy-certificate-dialog.c:326
+#: ../src/bookmarks/ephy-bookmark-properties.c:650
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
 #: ../src/resources/cookies-dialog.ui.h:3
 #: ../src/resources/passwords-dialog.ui.h:3 ../src/ephy-history-window.c:143
@@ -1336,7 +1356,7 @@ msgstr "Produciuse un erro ao descargar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:339 ../src/ephy-window.c:1175
+#: ../lib/widgets/ephy-download-widget.c:339 ../src/ephy-window.c:1169
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Abrir"
@@ -1397,56 +1417,56 @@ msgstr "Data"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:610
+#: ../src/bookmarks/ephy-bookmark-properties.c:611
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _similares"
 msgstr[1] "%d _similar"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:256
+#: ../src/bookmarks/ephy-bookmark-properties.c:257
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Unificar con %d marcador idéntico"
 msgstr[1] "_Unificar con %d marcadores idénticos"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:273
-#: ../src/bookmarks/ephy-bookmark-properties.c:295
+#: ../src/bookmarks/ephy-bookmark-properties.c:274
+#: ../src/bookmarks/ephy-bookmark-properties.c:296
 #, c-format
 msgid "Show “%s”"
 msgstr "Mostrar «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:420
+#: ../src/bookmarks/ephy-bookmark-properties.c:421
 #, c-format
 msgid "“%s” Properties"
 msgstr "«%s» propiedades"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:544
+#: ../src/bookmarks/ephy-bookmark-properties.c:545
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:561
+#: ../src/bookmarks/ephy-bookmark-properties.c:562
 msgid "A_ddress:"
 msgstr "En_derezo:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:573
+#: ../src/bookmarks/ephy-bookmark-properties.c:574
 msgid "T_opics:"
 msgstr "Te_mas:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:596
+#: ../src/bookmarks/ephy-bookmark-properties.c:597
 msgid "Sho_w all topics"
 msgstr "Mostra_r todos os temas"
 
 #. Help.
-#: ../src/bookmarks/ephy-bookmark-properties.c:626
+#: ../src/bookmarks/ephy-bookmark-properties.c:627
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
 #: ../src/resources/epiphany-application-menu.ui.h:7
 #: ../src/ephy-history-window.c:130 ../src/ephy-window.c:191
 msgid "_Help"
 msgstr "_Axuda"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:642
+#: ../src/bookmarks/ephy-bookmark-properties.c:643
 #: ../src/resources/prefs-dialog.ui.h:39
 msgid "_Add"
 msgstr "_Engadir"
@@ -1476,26 +1496,26 @@ msgid "Work"
 msgstr "Traballo"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:925
+#: ../src/bookmarks/ephy-bookmarks.c:926
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Todo"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:929
+#: ../src/bookmarks/ephy-bookmarks.c:930
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Sen categorizar"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:933
+#: ../src/bookmarks/ephy-bookmarks.c:934
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Sitios próximos"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1147
+#: ../src/bookmarks/ephy-bookmarks.c:1148
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Sen título"
@@ -2445,145 +2465,129 @@ msgstr "Engadir mar_cador…"
 
 #. Links.
 #: ../src/ephy-window.c:220
-msgid "_Open Link"
-msgstr "_Abrir ligazón"
-
-#: ../src/ephy-window.c:222
 msgid "Open Link in New _Window"
 msgstr "Abrir a ligazón nunha xanela _nova"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:222
 msgid "Open Link in New _Tab"
 msgstr "Abrir ligazón nunha _lapela nova"
 
-#: ../src/ephy-window.c:226
-msgid "_Download Link"
-msgstr "_Descargar a ligazón"
-
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:224
 msgid "_Save Link As…"
 msgstr "_Gardar a ligazón como…"
 
-#: ../src/ephy-window.c:230
-msgid "_Bookmark Link…"
-msgstr "_Engadir a ligazón aos marcadores…"
-
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:226
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:228
 msgid "_Copy E-mail Address"
 msgstr "_Copiar enderezo de correo"
 
 #. Images.
-#: ../src/ephy-window.c:239
-msgid "Open _Image"
-msgstr "Abrir a _imaxe"
+#: ../src/ephy-window.c:233
+msgid "View _Image"
+msgstr "Ver _imaxe"
 
-#: ../src/ephy-window.c:241
-msgid "_Save Image As…"
-msgstr "_Gardar a imaxe como…"
-
-#: ../src/ephy-window.c:243
-msgid "_Use Image As Background"
-msgstr "_Usar a imaxe como fondo"
-
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
 msgstr "Copiar o enderezo da i_maxe"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:237
+msgid "_Save Image As…"
+msgstr "_Gardar a imaxe como…"
+
+#: ../src/ephy-window.c:239
+msgid "Set as _Wallpaper"
+msgstr "Definir como _fondo do escritorio"
+
+#: ../src/ephy-window.c:241
 msgid "St_art Animation"
 msgstr "_Comezar a animación"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:243
 msgid "St_op Animation"
 msgstr "_Deter a animación"
 
-#: ../src/ephy-window.c:455
+#: ../src/ephy-window.c:449
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hai cambios non enviados nos elementos do formulario"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:450
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Se pecha o documento perderá esa información."
 
-#: ../src/ephy-window.c:458
+#: ../src/ephy-window.c:452
 msgid "Close _Document"
 msgstr "_Pechar o documento"
 
-#: ../src/ephy-window.c:473
+#: ../src/ephy-window.c:467
 msgid "There are ongoing downloads in this window"
 msgstr "Hai descargas en curso nesta xanela"
 
-#: ../src/ephy-window.c:474
+#: ../src/ephy-window.c:468
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Se pecha esta xanela, cancelaranse as descargas"
 
-#: ../src/ephy-window.c:475
+#: ../src/ephy-window.c:469
 msgid "Close window and cancel downloads"
 msgstr "Pechar a xanela e cancelar as descargas"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1171
 msgid "Save As"
 msgstr "Gardar como"
 
-#: ../src/ephy-window.c:1179
+#: ../src/ephy-window.c:1173
 msgid "Save As Application"
 msgstr "Gardar como aplicativo"
 
-#: ../src/ephy-window.c:1181
+#: ../src/ephy-window.c:1175
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1183
+#: ../src/ephy-window.c:1177
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1179
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1194
+#: ../src/ephy-window.c:1188
 msgid "Larger"
 msgstr "Máis grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1191
 msgid "Smaller"
 msgstr "Máis pequeno"
 
-#: ../src/ephy-window.c:1225
+#: ../src/ephy-window.c:1219
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/ephy-window.c:1237
+#: ../src/ephy-window.c:1231
 msgid "Forward"
 msgstr "Adiante"
 
-#: ../src/ephy-window.c:1249
+#: ../src/ephy-window.c:1243
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1258
+#: ../src/ephy-window.c:1252
 msgid "New _Tab"
 msgstr "_Lapela nova"
 
-#: ../src/ephy-window.c:1266
+#: ../src/ephy-window.c:1260
 msgid "Go to most visited"
 msgstr "Ir á máis visitada"
 
-#: ../src/popup-commands.c:258
-msgid "Download Link"
-msgstr "Descargar a ligazón"
-
-#: ../src/popup-commands.c:266
+#: ../src/popup-commands.c:273
 msgid "Save Link As"
 msgstr "Gardar a ligazón como"
 
-#: ../src/popup-commands.c:273
+#: ../src/popup-commands.c:280
 msgid "Save Image As"
 msgstr "Gardar a imaxe como"
 
@@ -2655,53 +2659,19 @@ msgstr "Crear un aplicativo web"
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/window-commands.c:1495
-msgid ""
-"Web is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-"O navegador web de GNOME é software libre; pode redistribuílo e/ou "
-"modificalo baixo as condicións da Licenza pública xeral GNU tal como a "
-"publica a Free Software Foundation; tanto na versión 2 da Licenza como "
-"(segundo o seu criterio) en calquera versión posterior."
-
-#: ../src/window-commands.c:1499
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
-msgstr ""
-"O navegador web do GNOME distribúese esperando que sexa útil, mais SEN "
-"NINGUNHA GARANTÍA; mesmo sen a garantía implícita de VALOR COMERCIAL ou "
-"IDONEIDADE PARA UN PROPÓSITO PARTICULAR. Para máis detalles vexa a Licenza "
-"pública xeral de GNU."
-
-#: ../src/window-commands.c:1503
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr ""
-"Debeu de recibir unha copia da Licenza pública xeral GNU xunto co Navegador "
-"web do GNOME; en caso contrario, escriba á Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-
-#: ../src/window-commands.c:1549 ../src/window-commands.c:1572
+#: ../src/window-commands.c:1535 ../src/window-commands.c:1558
 msgid "Contact us at:"
 msgstr "Contacte con nós en:"
 
-#: ../src/window-commands.c:1552
+#: ../src/window-commands.c:1538
 msgid "Contributors:"
 msgstr "Colaboradores:"
 
-#: ../src/window-commands.c:1555
+#: ../src/window-commands.c:1541
 msgid "Past developers:"
 msgstr "Desenvolvedores anteriores:"
 
-#: ../src/window-commands.c:1581
+#: ../src/window-commands.c:1567
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2718,7 +2688,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1610
+#: ../src/window-commands.c:1590
 msgid "translator-credits"
 msgstr ""
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.\n"
@@ -2734,15 +2704,15 @@ msgstr ""
 "Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas\n"
 "colaborar connosco, podes atopar máis información en http://www.trasno.net"
 
-#: ../src/window-commands.c:1613
+#: ../src/window-commands.c:1593
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1753
+#: ../src/window-commands.c:1732
 msgid "Enable caret browsing mode?"
 msgstr "Quere activar o modo de navegación co cursor?"
 
-#: ../src/window-commands.c:1756
+#: ../src/window-commands.c:1735
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2753,9 +2723,68 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: ../src/window-commands.c:1759
+#: ../src/window-commands.c:1738
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Oops! Error loading %s"
+#~ msgstr "Recoiro! Produciuse un erro ao cargar %s"
+
+#~ msgid ""
+#~ "Oops! This site might have caused the web browser to close unexpectedly"
+#~ msgstr ""
+#~ "Recoiro! Este sitio puido causar que Epiphany se peche de forma inesperada"
+
+#~ msgid "Oops! Something went wrong displaying %s"
+#~ msgstr "Oops! Algo foi mal ao mostrar %s"
+
+#~ msgid "_Open Link"
+#~ msgstr "_Abrir ligazón"
+
+#~ msgid "_Download Link"
+#~ msgstr "_Descargar a ligazón"
+
+#~ msgid "_Bookmark Link…"
+#~ msgstr "_Engadir a ligazón aos marcadores…"
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "_Usar a imaxe como fondo"
+
+#~ msgid "Download Link"
+#~ msgstr "Descargar a ligazón"
+
+#~ msgid ""
+#~ "Web is free software; you can redistribute it and/or modify it under the "
+#~ "terms of the GNU General Public License as published by the Free Software "
+#~ "Foundation; either version 2 of the License, or (at your option) any "
+#~ "later version."
+#~ msgstr ""
+#~ "O navegador web de GNOME é software libre; pode redistribuílo e/ou "
+#~ "modificalo baixo as condicións da Licenza pública xeral GNU tal como a "
+#~ "publica a Free Software Foundation; tanto na versión 2 da Licenza como "
+#~ "(segundo o seu criterio) en calquera versión posterior."
+
+#~ msgid ""
+#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
+#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
+#~ "Public License for more details."
+#~ msgstr ""
+#~ "O navegador web do GNOME distribúese esperando que sexa útil, mais SEN "
+#~ "NINGUNHA GARANTÍA; mesmo sen a garantía implícita de VALOR COMERCIAL ou "
+#~ "IDONEIDADE PARA UN PROPÓSITO PARTICULAR. Para máis detalles vexa a "
+#~ "Licenza pública xeral de GNU."
+
+#~ msgid ""
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with the GNOME Web Browser; if not, write to the Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
+#~ msgstr ""
+#~ "Debeu de recibir unha copia da Licenza pública xeral GNU xunto co "
+#~ "Navegador web do GNOME; en caso contrario, escriba á Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
 
 #~ msgid "Use GNOME desktop wide font configuration."
 #~ msgstr "Usar a configuración global dos tipos de letra de GNOME."
@@ -3315,9 +3344,6 @@ msgstr "_Activar"
 
 #~ msgid "Copy email address “%s”"
 #~ msgstr "Copiar o enderezo de correo «%s»"
-
-#~ msgid "Save link “%s”"
-#~ msgstr "Gardar a ligazón «%s»"
 
 #~ msgid "Bookmark link “%s”"
 #~ msgstr "Marcar a ligazón «%s»"
