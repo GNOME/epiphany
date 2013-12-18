@@ -107,6 +107,8 @@ RESOURCE_FILES = \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
 	resources/clear-data-dialog.ui		  \
+	resources/cookies-dialog.ui		  \
+	resources/passwords-dialog.ui		  \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/process-crash.html		  \
