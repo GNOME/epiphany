@@ -22,6 +22,7 @@
 #include "ephy-about-handler.h"
 
 #include "ephy-embed-shell.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-smaps.h"
 #include "ephy-web-app-utils.h"
@@ -137,6 +138,13 @@ get_plugins_cb (WebKitWebContext *web_context,
   GString *data_str;
   gsize data_length;
   GList *plugin_list, *p;
+  WebKitWebViewGroup *web_view_group;
+  WebKitSettings *webkit_settings;
+  gboolean enabled;
+
+  web_view_group = ephy_embed_prefs_get_web_view_group ();
+  webkit_settings = webkit_web_view_group_get_settings (web_view_group);
+  enabled = webkit_settings_get_enable_plugins (webkit_settings);
 
   data_str = g_string_new ("<html>");
   g_string_append_printf (data_str, "<head><title>%s</title>"           \
@@ -144,7 +152,10 @@ get_plugins_cb (WebKitWebContext *web_context,
                           "<style type=\"text/css\">%s</style></head><body>",
                           _("Installed plugins"),
                           ephy_about_handler_get_style_sheet (about_request->handler));
-  g_string_append_printf (data_str, "<h1>%s</h1>", _("Installed plugins"));
+  g_string_append_printf (data_str, "<h1>%s</h1>", _("Plugins"));
+
+  if (!enabled)
+    g_string_append_printf (data_str, "<p><b>%s</b></p>", _("Plugins are disabled in the preferences"));
 
   plugin_list = webkit_web_context_get_plugins_finish (web_context, result, NULL);
   for (p = plugin_list; p; p = p->next) {
@@ -157,7 +168,7 @@ get_plugins_cb (WebKitWebContext *web_context,
                             "  <thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>",
                             webkit_plugin_get_name (plugin),
                             webkit_plugin_get_description (plugin),
-                            _("Enabled"), /*webkit_plugin_get_enabled (plugin)*/ TRUE ? _("Yes") : _("No"),
+                            _("Enabled"), /*webkit_plugin_get_enabled (plugin) && */ enabled ? _("Yes") : _("No"),
                             _("MIME type"), _("Description"), _("Suffixes"));
 
     mime_types = webkit_plugin_get_mime_info_list (plugin);
