@@ -42,7 +42,6 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
-#define NSPLUGINWRAPPER_SETUP "/usr/bin/mozilla-plugin-config"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -443,10 +442,6 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
   embed_shell = shell;
 
   shell->priv->downloads = NULL;
-
-  /* Initialise nspluginwrapper's plugins if available. */
-  if (g_file_test (NSPLUGINWRAPPER_SETUP, G_FILE_TEST_EXISTS) != FALSE)
-    g_spawn_command_line_sync (NSPLUGINWRAPPER_SETUP, NULL, NULL, NULL, NULL);
 }
 
 static void
