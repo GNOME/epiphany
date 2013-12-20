@@ -154,7 +154,7 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
       priv->reload_scheduled_id =
         g_timeout_add (RELOAD_DELAY,
                        (GSourceFunc)ephy_file_monitor_reload_cb, file_monitor);
-      g_source_set_name_by_id (ephy_file_monitor_reload_cb, "[epiphany] file_monitor");
+      g_source_set_name_by_id (priv->reload_scheduled_id, "[epiphany] file_monitor");
     }
   }
 }
