@@ -347,15 +347,7 @@ ephy_history_service_send_message (EphyHistoryService *self, EphyHistoryServiceM
 {
   EphyHistoryServicePrivate *priv = self->priv;
 
-  if (priv->history_database)
-    g_async_queue_push_sorted (priv->queue, message, (GCompareDataFunc)sort_messages, NULL);
-  else {
-    message->result = NULL;
-    message->success = FALSE;
-    if (message->callback)
-      message->callback (message->service, message->success, message->result, message->user_data);
-    ephy_history_service_message_free (message);
-  }
+  g_async_queue_push_sorted (priv->queue, message, (GCompareDataFunc)sort_messages, NULL);
 }
 
 static void
@@ -1282,7 +1274,10 @@ ephy_history_service_process_message (EphyHistoryService *self,
 
   method = methods[message->type];
   message->result = NULL;
-  message->success = method (message->service, message->method_argument, &message->result);
+  if (message->service->priv->history_database)
+    message->success = method (message->service, message->method_argument, &message->result);
+  else
+    message->success = FALSE;
 
   if (message->callback || message->type == CLEAR)
     g_idle_add ((GSourceFunc)ephy_history_service_execute_job_callback, message);
