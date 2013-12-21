@@ -1243,7 +1243,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	 * with anything in the entry.
 	 */
 
-#define ROW_PADDING_VERT 2
+#define ROW_PADDING_VERT 4
 
 #define ICON_PADDING_LEFT 5
 #define ICON_CONTENT_WIDTH 16
