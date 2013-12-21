@@ -682,7 +682,7 @@ sanitize_location (char **url)
 	}
 }
 
-#define DRAG_ICON_LAYOUT_PADDING	4
+#define DRAG_ICON_LAYOUT_PADDING	5
 #define DRAG_ICON_ICON_PADDING		10
 #define DRAG_ICON_MAX_WIDTH_CHARS	32
 
@@ -768,7 +768,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	}
 
 	surface_width = layout_width + favicon_offset_x +
-			(DRAG_ICON_LAYOUT_PADDING * 2);
+			(DRAG_ICON_LAYOUT_PADDING * 3);
 	surface_height = MAX (layout_height, icon_height) +
 			(DRAG_ICON_LAYOUT_PADDING * 2);
 
