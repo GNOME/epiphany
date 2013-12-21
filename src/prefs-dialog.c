@@ -420,6 +420,10 @@ language_editor_update_pref (PrefsDialog *pd)
 		g_settings_set (EPHY_SETTINGS_WEB,
 				EPHY_PREFS_WEB_LANGUAGE,
 				"as", &builder);
+	} else {
+		g_settings_set (EPHY_SETTINGS_WEB,
+				EPHY_PREFS_WEB_LANGUAGE,
+				"as", NULL);
 	}
 }
 
