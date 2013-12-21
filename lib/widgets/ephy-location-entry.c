@@ -1247,7 +1247,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 
 #define ICON_PADDING_LEFT 5
 #define ICON_CONTENT_WIDTH 16
-#define ICON_PADDING_RIGHT 2
+#define ICON_PADDING_RIGHT 4
 
 #define ICON_CONTENT_HEIGHT 16
 
