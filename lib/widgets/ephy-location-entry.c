@@ -682,8 +682,8 @@ sanitize_location (char **url)
 	}
 }
 
-#define DRAG_ICON_LAYOUT_PADDING	2
-#define DRAG_ICON_ICON_PADDING		4
+#define DRAG_ICON_LAYOUT_PADDING	4
+#define DRAG_ICON_ICON_PADDING		10
 #define DRAG_ICON_MAX_WIDTH_CHARS	32
 
 static cairo_surface_t *
@@ -794,7 +794,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 		double y;
 
 		x = 1 + DRAG_ICON_LAYOUT_PADDING + DRAG_ICON_ICON_PADDING;
-		y = 1 + DRAG_ICON_LAYOUT_PADDING + (surface_height - icon_height) / 2;
+		y = (surface_height - icon_height) / 2;
 		gdk_cairo_set_source_pixbuf (cr, favicon, x, y);
 		cairo_rectangle (cr, x, y, icon_width, icon_height);
 		cairo_fill (cr);
