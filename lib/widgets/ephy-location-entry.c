@@ -706,6 +706,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	cairo_t *cr;
 	GtkStateFlags state;
 	GdkRGBA color;
+	GdkPixbuf *favicon;
 
 	state = gtk_widget_get_state_flags (widget);
 
@@ -730,9 +731,16 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	}
 
 	if (priv->favicon != NULL)
+		favicon = g_object_ref (priv->favicon);
+	else
+		favicon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+						    "text-x-generic-symbolic",
+						    16,
+						    0, NULL);
+	if (favicon != NULL)
 	{
-		icon_width = gdk_pixbuf_get_width (priv->favicon);
-		icon_height = gdk_pixbuf_get_height (priv->favicon);
+		icon_width = gdk_pixbuf_get_width (favicon);
+		icon_height = gdk_pixbuf_get_height (favicon);
 	}
 
 	context = gtk_widget_get_pango_context (widget);
@@ -754,7 +762,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 
 	pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
 
-	if (priv->favicon != NULL)
+	if (favicon != NULL)
 	{
 		favicon_offset_x = icon_width + (2 * DRAG_ICON_ICON_PADDING);
 	}
@@ -780,14 +788,14 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	gdk_cairo_set_source_rgba (cr, &color);
 	cairo_fill (cr);
 
-	if (priv->favicon != NULL)
+	if (favicon != NULL)
 	{
 		double x;
 		double y;
 
 		x = 1 + DRAG_ICON_LAYOUT_PADDING + DRAG_ICON_ICON_PADDING;
 		y = 1 + DRAG_ICON_LAYOUT_PADDING + (surface_height - icon_height) / 2;
-		gdk_cairo_set_source_pixbuf (cr, priv->favicon, x, y);
+		gdk_cairo_set_source_pixbuf (cr, favicon, x, y);
 		cairo_rectangle (cr, x, y, icon_width, icon_height);
 		cairo_fill (cr);
 	}
@@ -805,6 +813,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	g_free (address);
 	g_free (title);
 	g_string_free (text, TRUE);
+	g_clear_object (&favicon);
 
 	return surface;
 }
