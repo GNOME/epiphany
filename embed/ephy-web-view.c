@@ -1741,6 +1741,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
     reason = _("None specified");
 
   hostname = ephy_string_get_host_name (uri);
+  if (hostname == NULL)
+    hostname = g_strdup (uri);
 
   lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
   g_strdelimit (lang, "_-@", '\0');
