@@ -669,6 +669,19 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	g_free (title);
 }
 
+static void
+sanitize_location (char **url)
+{
+	char *str;
+
+	/* Do not show internal ephy-about: protocol to users */
+	if (g_str_has_prefix (*url, EPHY_ABOUT_SCHEME)) {
+		str = g_strdup_printf ("about:%s", *url + strlen (EPHY_ABOUT_SCHEME) + 1);
+		g_free (*url);
+		*url = str;
+	}
+}
+
 #define DRAG_ICON_LAYOUT_PADDING	2
 #define DRAG_ICON_ICON_PADDING		4
 #define DRAG_ICON_MAX_WIDTH_CHARS	32
@@ -697,6 +710,7 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	state = gtk_widget_get_state_flags (widget);
 
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
+	sanitize_location (&address);
 	g_signal_emit (entry, signals[GET_TITLE], 0, &title);
 	if (address == NULL || title == NULL) return NULL;
 
@@ -1061,12 +1075,7 @@ textcell_data_func (GtkCellLayout *cell_layout,
 
 	if (url)
 	{
-		/* Do not show internal ephy-about: protocol to users */
-		if (g_str_has_prefix (url, EPHY_ABOUT_SCHEME)) {
-			g_free (url);
-			url = g_strdup_printf ("about:%s", url + strlen (EPHY_ABOUT_SCHEME) + 1);
-		}
-
+		sanitize_location (&url);
 		ctext = g_strdup_printf ("%s\n%s", title, url);
 
 		style = gtk_widget_get_style_context (entry);
