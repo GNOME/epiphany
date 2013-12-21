@@ -1052,6 +1052,18 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	return TRUE;
 }
 
+static char *
+rgba_to_hex (GdkRGBA *color)
+{
+	char *hex;
+
+	hex = g_strdup_printf ("#%04X%04X%04X",
+			       (guint)(color->red * (gdouble)65535),
+			       (guint)(color->green * (gdouble)65535),
+			       (guint)(color->blue * (gdouble)65535));
+	return hex;
+}
+
 static void
 textcell_data_func (GtkCellLayout *cell_layout,
 		    GtkCellRenderer *cell,
@@ -1061,16 +1073,10 @@ textcell_data_func (GtkCellLayout *cell_layout,
 {
 	GtkWidget *entry;
 	EphyLocationEntryPrivate *priv;
-	PangoAttrList *list;
-	PangoAttribute *att;
-
 	char *ctext;
 	char *title;
 	char *url;
-
 	GtkStyleContext *style;
-	GdkRGBA color;
-
 	GValue text = { 0, };
 
 	entry = GTK_WIDGET (data);
@@ -1080,35 +1086,31 @@ textcell_data_func (GtkCellLayout *cell_layout,
 			priv->url_col, &url,
 			-1);
 
-	list = pango_attr_list_new ();
-
 	if (url)
 	{
+		GdkRGBA color;
+		char *color_text;
+
 		sanitize_location (&url);
-		ctext = g_strdup_printf ("%s\n%s", title, url);
 
 		style = gtk_widget_get_style_context (entry);
 		gtk_style_context_get_color (style, GTK_STATE_FLAG_INSENSITIVE,
 					     &color);
 
-		att = pango_attr_foreground_new
-		   (color.red * 65535, color.green * 65535, color.blue * 65535);
-		att->start_index = strlen (title)+1;
-		pango_attr_list_insert (list, att);
+		color_text = rgba_to_hex (&color);
+		ctext = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, color_text, url);
+		g_free (color_text);
 	        g_free (title);
 	}
 	else
 	{
 		ctext = title;
 	}
-	g_object_set (cell, "attributes", list, NULL);
 
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_take_string (&text, ctext);
-	g_object_set_property (G_OBJECT (cell), "text", &text);
+	g_object_set_property (G_OBJECT (cell), "markup", &text);
 	g_value_unset (&text);
-
-	pango_attr_list_unref (list);
 
 	g_free (url);
 }
