@@ -540,6 +540,7 @@ create_widget (EphyDownloadWidget *widget)
   GtkWidget *remain;
 
   grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
   button = totem_glow_button_new ();
   menu = gtk_button_new ();
