@@ -529,6 +529,16 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
 }
 
 static void
+smallify_label (GtkLabel *label)
+{
+        PangoAttrList *attrs;
+        attrs = pango_attr_list_new ();
+        pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_SMALL));
+        gtk_label_set_attributes (label, attrs);
+        pango_attr_list_unref (attrs);
+}
+
+static void
 create_widget (EphyDownloadWidget *widget)
 {
 
@@ -548,10 +558,12 @@ create_widget (EphyDownloadWidget *widget)
   icon = gtk_image_new ();
 
   text = gtk_label_new (NULL);
+  smallify_label (GTK_LABEL (text));
   gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
 
   remain = gtk_label_new (_("Starting…"));
+  smallify_label (GTK_LABEL (remain));
   gtk_misc_set_alignment (GTK_MISC (remain), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (remain), PANGO_ELLIPSIZE_END);
 
