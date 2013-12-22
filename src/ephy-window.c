@@ -2932,9 +2932,15 @@ setup_downloads_box (EphyWindow *window)
 
 	widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	close_button = gtk_button_new ();
-	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_container_set_border_width (GTK_CONTAINER (close_button), 6);
+	gtk_widget_set_valign (close_button, GTK_ALIGN_CENTER);
+	gtk_style_context_add_class (gtk_widget_get_style_context (close_button), "image-button");
+	gtk_style_context_add_class (gtk_widget_get_style_context (close_button), "close");
 
 	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+
+	image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_MENU);
+	g_object_set (image, "use-fallback", TRUE, NULL);
 
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_box_pack_end (GTK_BOX (widget), close_button, FALSE, FALSE, 4);
