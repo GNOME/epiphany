@@ -45,7 +45,7 @@ struct _EphyDownloadWidgetPrivate
   GtkWidget *text;
   GtkWidget *remaining;
   GtkWidget *button;
-  GtkWidget *menu;
+  GtkWidget *menu_button;
   GtkWidget *icon;
 
   gboolean finished;
@@ -204,9 +204,14 @@ update_download_label_and_tooltip (EphyDownloadWidget *widget,
   WebKitDownload *download;
   char *remaining_tooltip;
   char *destination;
+  const char *dest;
 
   download = ephy_download_get_webkit_download (widget->priv->download);
-  destination = g_filename_display_basename (webkit_download_get_destination (download));
+  dest = webkit_download_get_destination (download);
+  if (dest == NULL)
+    return;
+
+  destination = g_filename_display_basename (dest);
 
   remaining_tooltip = g_markup_printf_escaped ("%s\n%s", destination, download_label);
   g_free (destination);
@@ -268,14 +273,6 @@ widget_progress_cb (WebKitDownload *download,
 }
 
 static void
-widget_destination_changed_cb (WebKitDownload *download,
-                               GParamSpec *pspec,
-                               EphyDownloadWidget *widget)
-{
-  update_download_destination (widget);
-}
-
-static void
 widget_finished_cb (WebKitDownload *download,
                     EphyDownloadWidget *widget)
 {
@@ -325,28 +322,24 @@ cancel_activate_cb (GtkMenuItem *item, EphyDownloadWidget *widget)
 }
 
 static void
-download_menu_clicked_cb (GtkWidget *button,
-                          GdkEventButton *event,
-                          EphyDownloadWidget *widget)
+add_popup_menu (EphyDownloadWidget *widget)
 {
   GtkWidget *item;
   GtkWidget *menu;
-  GtkWidget *box;
-  GList *children = NULL;
   char *basename, *name;
   WebKitDownload *download;
+  const char *dest;
 
   download = ephy_download_get_webkit_download (widget->priv->download);
+  dest = webkit_download_get_destination (download);
+  if (dest == NULL)
+    return;
 
-  basename = g_filename_display_basename (webkit_download_get_destination (download));
+  basename = g_filename_display_basename (dest);
   name = g_uri_unescape_string (basename, NULL);
 
-  box = gtk_widget_get_parent (button);
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (children->data), FALSE);
-  g_list_free (children);
-
   menu = gtk_menu_new ();
+  gtk_widget_set_halign (menu, GTK_ALIGN_END);
 
   item = gtk_menu_item_new_with_label (name);
   gtk_widget_set_sensitive (item, FALSE);
@@ -377,9 +370,22 @@ download_menu_clicked_cb (GtkWidget *button,
 
   gtk_widget_show_all (menu);
 
-  gtk_menu_attach_to_widget (GTK_MENU (menu), button, NULL);
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                  event->button, event->time);
+  gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget->priv->menu_button), menu);
+}
+
+static void
+widget_destination_changed_cb (WebKitDownload *download,
+                               GParamSpec *pspec,
+                               EphyDownloadWidget *widget)
+{
+  update_download_destination (widget);
+  add_popup_menu (widget);
+}
+
+static void
+stop_glowing (EphyDownloadWidget *widget)
+{
+  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), FALSE);
 }
 
 static void
@@ -439,6 +445,7 @@ ephy_download_widget_set_download (EphyDownloadWidget *widget,
 
   update_download_icon (widget);
   update_download_destination (widget);
+  add_popup_menu (widget);
 
   g_object_notify (G_OBJECT (widget), "download");
 }
@@ -546,14 +553,15 @@ create_widget (EphyDownloadWidget *widget)
   GtkWidget *icon;
   GtkWidget *text;
   GtkWidget *button;
-  GtkWidget *menu;
+  GtkWidget *menu_button;
   GtkWidget *remain;
 
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
   button = totem_glow_button_new ();
-  menu = gtk_button_new ();
+  menu_button = gtk_menu_button_new ();
+  gtk_menu_button_set_direction (GTK_MENU_BUTTON (menu_button), GTK_ARROW_UP);
 
   icon = gtk_image_new ();
 
@@ -575,25 +583,22 @@ create_widget (EphyDownloadWidget *widget)
   widget->priv->icon = icon;
   widget->priv->button = button;
   widget->priv->remaining = remain;
-  widget->priv->menu = menu;
+  widget->priv->menu_button = menu_button;
 
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
-  gtk_button_set_relief (GTK_BUTTON (menu), GTK_RELIEF_NORMAL);
 
   gtk_container_add (GTK_CONTAINER (button), grid);
-  gtk_container_add (GTK_CONTAINER (menu),
-                     gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE));
 
   gtk_box_pack_start (GTK_BOX (widget), button, FALSE, FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (widget), menu, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (widget), menu_button, FALSE, FALSE, 0);
 
   g_signal_connect (button, "clicked",
                     G_CALLBACK (download_clicked_cb), widget);
-  g_signal_connect (menu, "button-press-event",
-                    G_CALLBACK (download_menu_clicked_cb), widget);
+  g_signal_connect_swapped (menu_button, "clicked",
+                            G_CALLBACK (stop_glowing), widget);
 
   gtk_widget_show_all (button);
-  gtk_widget_show_all (menu);
+  gtk_widget_show_all (menu_button);
 
 }
 
