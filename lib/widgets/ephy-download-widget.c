@@ -95,28 +95,45 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
   return unescaped;
 }
 
-static char *
-format_interval (gdouble interval)
+/* modified from telepathy-account-widgets/tpaw-time.c */
+static gchar *
+duration_to_string (guint seconds)
 {
-   int hours, mins, secs;
-
-   hours = (int) (interval / 3600);
-   interval -= hours * 3600;
-   mins = (int) (interval / 60);
-   interval -= mins * 60;
-   secs = (int) interval;
-
-   if (hours > 0) {
-     if (mins > 0)
-       return g_strdup_printf (ngettext ("%u:%02u hour left", "%u:%02u hours left", hours), hours, mins);
-     else
-       return g_strdup_printf (ngettext ("%u hour left", "%u hours left", hours), hours);
-   } else {
-     if (mins > 0)
-       return g_strdup_printf (ngettext ("%u:%02u minute left", "%u:%02u minutes left", mins), mins, secs);
-     else
-       return g_strdup_printf (ngettext ("%u second left", "%u seconds left", secs), secs);
-   }
+  if (seconds < 60)
+    {
+      return g_strdup_printf (ngettext ("%d second left",
+        "%d seconds left", seconds), seconds);
+    }
+  else if (seconds < (60 * 60))
+    {
+      seconds /= 60;
+      return g_strdup_printf (ngettext ("%d minute left",
+        "%d minutes left", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24))
+    {
+      seconds /= 60 * 60;
+      return g_strdup_printf (ngettext ("%d hour left",
+        "%d hours left", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24 * 7))
+    {
+      seconds /= 60 * 60 * 24;
+      return g_strdup_printf (ngettext ("%d day left",
+        "%d days left", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24 * 30))
+    {
+      seconds /= 60 * 60 * 24 * 7;
+      return g_strdup_printf (ngettext ("%d week left",
+        "%d weeks left", seconds), seconds);
+    }
+  else
+    {
+      seconds /= 60 * 60 * 24 * 30;
+      return g_strdup_printf (ngettext ("%d month left",
+        "%d months left", seconds), seconds);
+    }
 }
 
 static gdouble
@@ -231,7 +248,7 @@ widget_progress_cb (WebKitDownload *download,
     if (time > 0) {
       char *remaining;
 
-      remaining = format_interval (time);
+      remaining = duration_to_string ((guint)time);
       download_label = g_strdup_printf ("%d%% (%s)", progress, remaining);
       g_free (remaining);
     }
