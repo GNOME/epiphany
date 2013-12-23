@@ -815,7 +815,7 @@ cmd_bookmarks_import (GtkAction *action,
 					      _("_Cancel"),
 					      GTK_RESPONSE_CANCEL,
 					      _("I_mport"),
-					      _("_OK"),
+					      GTK_RESPONSE_OK,
 					      NULL);
 	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
