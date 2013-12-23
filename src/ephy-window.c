@@ -292,8 +292,10 @@ static const struct
 	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
 	 * They're KP_PageUp/Down again!
 	 */
+	{ GDK_KEY_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
 	{ GDK_KEY_KP_Left,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
 	{ GDK_KEY_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
