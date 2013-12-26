@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-19 18:23+0000\n"
-"PO-Revision-Date: 2013-12-20 11:18+0300\n"
+"POT-Creation-Date: 2013-12-23 19:11+0000\n"
+"PO-Revision-Date: 2013-12-24 17:25+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -74,7 +74,7 @@ msgstr "http://duckduckgo.com/?t=epiphany&amp;kl=gr-el&amp;kad=gr_EL"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2089
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2088
 #: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -116,20 +116,32 @@ msgstr "ιστός;εξερευνητής;διαδίκτυο;"
 msgid "Browse with caret"
 msgstr "Περιήγηση με caret"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:2
+#. DuckDuckGo is the default search engine. Must exactly match the URL used
+#. in the preferences dialog, except this string is surrounded by single quotes
+#. and uses &amp; instead of simply &. If the match is not otherwise exact,
+#. there will be a spurious, ugly entry in the preferences combo, so please
+#. test this. Should ideally also match the default smart bookmark link in
+#. default-bookmarks.rdf. See the comment there for region parameters to
+#. the URL.
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#, no-c-format
+msgid "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgstr "'http://duckduckgo.com/;q=%s&amp;t=epiphany'"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "URL Search"
 msgstr "URL αναζήτησης"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:3
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Search string for keywords entered in the URL bar."
 msgstr ""
 "Αλφαριθμητικό αναζήτησης για λέξεις που εισάγονται στη γραμμή διαδρομής URL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:4
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "User agent"
 msgstr "User agent"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:5
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -137,11 +149,11 @@ msgstr ""
 "Αλφαριθμητικό που θα χρησιμοποιείται ως user agent, ως αναγνωριστικό του "
 "περιηγητή στους εξυπηρετητές ιστού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:6
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
 msgstr "Αυτόματες λήψεις αρχείων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:7
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -149,45 +161,45 @@ msgstr ""
 "Όταν τα αρχεία δεν μπορούν να ανοιχθούν από τον περιηγητή, λαμβάνονται "
 "αυτόματα στο φάκελο λήψης και ανοίγονται με την κατάλληλη εφαρμογή."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:8
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Force new windows to be opened in tabs"
 msgstr "Εξαναγκασμός των νέων παραθύρων να ανοίγουν σε καρτέλες"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:9
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Ωθήστε τα αιτήματα για νέο παράθυρο να ανοίγουν σε καρτέλες αντί για τη "
 "χρήση νέου παραθύρου."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Remember passwords"
 msgstr "Απομνημόνευση κωδικών"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Whether to store and prefill passwords in web sites."
 msgstr ""
 "Αν θα αποθηκεύονται και θα προ-συμπληρώνονται οι κωδικοί σε ιστοσελίδες."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid "Automatically manage offline status with NetworkManager"
 msgstr "Αυτόματη διαχείριση εργασίας χωρίς σύνδεση με τον NetworkManager"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Enable smooth scrolling"
 msgstr "Ενεργοποίηση απαλής κύλισης"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid "Don't use an external application to view page source."
 msgstr ""
 "Μην χρησιμοποιείς μια εξωτερική εφαρμογή για την προβολή του κώδικα της "
 "σελίδας."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Whether to automatically restore the last session"
 msgstr "Αν θα επαναφέρεται αυτόματα η τελευταία συνεδρία"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "'always' (the previous state of the application is always restored), "
@@ -199,7 +211,7 @@ msgstr ""
 "επαναφέρεται πάντα), 'κατάρρευση' (η σύνοδος επαναφέρεται μόνο εάν μια "
 "εφαρμογή καταρρεύσει) και 'ποτέ' (η αρχική σελίδα εμφανίζεται πάντα)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:17
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -207,7 +219,7 @@ msgstr ""
 "Εάν θα καθυστερήσει η φόρτωση καρτελών που δεν είναι άμεσα ορατές σε μια "
 "επαναφορά συνεδρίας"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -216,15 +228,15 @@ msgstr ""
 "φορτώνονται μέχρι ο χρήστης να αλλάξει σε αυτές, κατά την επαναφορά της "
 "συνεδρίας."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Show toolbars by default"
 msgstr "Προεπιλεγμένη εμφάνιση εργαλειοθηκών"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Toolbar style"
 msgstr "Στυλ εργαλειοθήκης"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -234,11 +246,11 @@ msgstr ""
 "τεχνοτροπίας του GNOME), \"και τα δύο\" (κείμενο και εικονίδια), \"και τα "
 "δύο οριζόντια\" (κείμενο δίπλα στα εικονίδια), \"εικονίδια\" και \"κείμενο\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "[Deprecated]"
 msgstr "[Υπό κατάργηση]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -246,11 +258,11 @@ msgstr ""
 "[Υπό κατάργηση] Αυτή η ρύθμιση είναι υπό κατάργηση, χρησιμοποιείστε το 'tabs-"
 "bar-visibility-policy'."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Visibility of the downloads window"
 msgstr "Ορατότητα παραθύρου λήψεων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -258,11 +270,11 @@ msgstr ""
 "Προβολή ή απόκρυψη του παραθύρου λήψεων. Όταν είναι κρυμμένο, θα εμφανιστεί "
 "ειδοποίηση όταν ξεκινάνε νέες λήψεις."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "The visibility policy for the tabs bar."
 msgstr "Η πολιτική ορατότητας για τη γραμμή καρτελών."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -273,23 +285,23 @@ msgstr ""
 "γραμμή καρτελών εμφανίζεται μόνο αν υπάρχουν δύο ή περισσότερες καρτέλες) "
 "και 'ποτέ' (η γραμμή καρτελών δεν εμφανίζεται ποτέ)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Minimum font size"
 msgstr "Ελάχιστο μέγεθος γραμματοσειράς"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use GNOME fonts"
 msgstr "Χρήση γραμματοσειρών συστήματος"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use GNOME font settings."
 msgstr "Χρήση ρυθμίσεων γραμματοσειράς GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Custom sans-serif font"
 msgstr "Προσαρμοσμένη γραμματοσειρά Sans serif"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -297,11 +309,11 @@ msgstr ""
 "Μια τιμή που θα χρησιμοποιηθεί για να παρακάμψει τη γραμματοσειρά sans-serif "
 "όταν έχει ορισθεί η χρήση γραμματοσειρών του συστήματος."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Custom serif font"
 msgstr "Προσαρμοσμένη γραμματοσειρά serif"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -309,11 +321,11 @@ msgstr ""
 "Μια τιμή που θα χρησιμοποιηθεί για να παρακάμψει τη γραμματοσειρά serif όταν "
 "έχει ορισθεί η χρήση γραμματοσειρών του συστήματος."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Custom monospace font"
 msgstr "Προσαρμοσμένη γραμματοσειρά σταθερού πλάτους"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -321,77 +333,77 @@ msgstr ""
 "Μια τιμή που θα χρησιμοποιηθεί για να παρακάμψει τη γραμματοσειρά σταθερού "
 "πλάτους όταν έχει ορισθεί η χρήση γραμματοσειρών του συστήματος."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid "Use own colors"
 msgstr "Χρήση καθορισμένων χρωμάτων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Χρήση καθορισμένων χρωμάτων αντί για τα χρώματα που ζητάει η σελίδα."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Use own fonts"
 msgstr "Χρήση δικών σας γραμαμτοσειρών"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Χρήση καθορισμένων γραμματοσειρών αντί για τις γραμματοσειρές που ζητάει η "
 "σελίδα."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use a custom CSS"
 msgstr "Χρήση προσαρμοσμένου CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Χρησιμοποιήστε ένα προσαρμοσμένο αρχείο CSS για να τροποποιήσετε το CSS των "
 "ιστοσελίδων."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Enable spell checking"
 msgstr "Ενεργοποίηση ορθογραφικού ελέγχου"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 "Ορθογραφικός έλεγχος κάθε κειμένου που πληκτρολογείται σε επεξεργάσιμες "
 "περιοχές."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Default encoding"
 msgstr "Προεπιλεγμένη κωδικοποίηση"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Προεπιλεγμένη κωδικοποίηση. Αποδεκτές τιμές είναι αυτές που μπορεί να "
 "καταλάβει το WebKitGTK+."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid "Size of disk cache"
 msgstr "Μέγεθος της cache του δίσκου"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Size of disk cache, in MB."
 msgstr "Μέγεθος της cache του δίσκου, σε ΜB."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "Languages"
 msgstr "Γλώσσες"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Preferred languages, two letter codes."
 msgstr "Προτιμώμενες γλώσσες, κωδικοί δύο γραμμάτων."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Cookie accept"
 msgstr "Αποδοχή cookie"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -399,11 +411,11 @@ msgstr ""
 "Από που θα γίνεται αποδοχή cookies. Πιθανές τιμές είναι \"anywhere\", "
 "\"current site\" και \"nowhere\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Image animation mode"
 msgstr "Λειτουργία κινούμενων εικόνων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -411,46 +423,46 @@ msgstr ""
 "Πως θα εμφανίζονται οι κινούμενες εικόνες. Οι πιθανές τιμές είναι \"κανονικά"
 "\", \"μια φορά\" και \"ανενεργό\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid "Allow popups"
 msgstr "Να επιτρέπονται τα αναδυόμενα παράθυρα"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Να επιτρέπεται στις ιστοσελίδες να ανοίγουν νέα παράθυρα με τη χρήση "
 "JavaScript (αν είναι ενεργή η JavaScript)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Enable Plugins"
 msgstr "Ενεργοποίηση πρόσθετων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable JavaScript"
 msgstr "Ενεργοποίηση JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Enable WebGL"
 msgstr "Ενεργοποίηση WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Αν θα ενεργοποιηθεί η υποστήριξη για WebGL περιβάλλοντα."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Enable WebAudio"
 msgstr "Ενεργοποίηση WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to enable support for WebAudio."
 msgstr "Αν θα ενεργοποιηθεί η υποστήριξη για WebAudio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Do Not Track"
 msgstr "Do Not Track"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -459,11 +471,11 @@ msgstr ""
 "σημειώστε ότι οι ιστοσελίδες δεν είναι αναγκασμένες να ακολουθήσουν αυτήν τη "
 "ρύθμιση."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Enable Adblock"
 msgstr "Ενεργοποίηση Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -471,11 +483,11 @@ msgstr ""
 "Εάν θα φραχτούν οι ενσωματωμένες διαφημίσεις που οι ιστοσελίδες μπορεί να "
 "θέλουν να εμφανίσουν."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid "The downloads folder"
 msgstr "Φάκελος ληφθέντων αρχείων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -483,27 +495,27 @@ msgstr ""
 "Η διαδρομή για τον φάκελο που θα αποθηκεύονται τα αρχεία που έχουν ληφθεί ή "
 "ο προεπιλεγμένος φάκελος \"Λήψεις αρχείων\", ή ο φάκελος \"Desktop\"."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid "History pages time range"
 msgstr "Εύρος ώρας ιστορικού σελίδων"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "Whether to show the title column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη τίτλων στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid "Whether to show the address column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη διευθύνσεων στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:81
 msgid "Whether to show the date-time column in the history window."
 msgstr "Αν θα εμφανίζεται η στήλη ημερομηνίας-ώρας στο παράθυρο του ιστορικού."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:82
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Αν θα εμφανίζεται η στήλη τίτλων στο παράθυρο των σελιδοδεικτών."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:83
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Αν θα εμφανίζεται η στήλη διευθύνσεων στο παράθυρο των σελιδοδεικτών."
 
@@ -949,7 +961,7 @@ msgid "Most Visited"
 msgstr "Πιο δημοφιλή"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2777
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2776
 msgid "Blank page"
 msgstr "Κενή σελίδα"
 
@@ -957,42 +969,41 @@ msgstr "Κενή σελίδα"
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#. Translators: The first %s is the username and the second one is the
-#. * hostname where this is happening. Example: gnome@gmail.com and
-#. * mail.google.com.
+#. Translators: The %s the hostname where this is happening.
+#. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:509
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Θέλετε να αποθηκεύσετε τον κωδικό πρόσβασης για “%s”;"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1380
 msgid "Deny"
 msgstr "Να μην επιτρέπεται"
 
-#: ../embed/ephy-web-view.c:1382
+#: ../embed/ephy-web-view.c:1381
 msgid "Allow"
 msgstr "Να επιτρέπεται"
 
-#: ../embed/ephy-web-view.c:1392
+#: ../embed/ephy-web-view.c:1391
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Η σελίδα σε <b>%s</b> επιθυμεί να γνωρίζει την τοποθεσία σας."
 
-#: ../embed/ephy-web-view.c:1742
+#: ../embed/ephy-web-view.c:1741
 msgid "None specified"
 msgstr "Απροσδιόριστο"
 
-#: ../embed/ephy-web-view.c:1751 ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1750 ../embed/ephy-web-view.c:1767
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Πρόβλημα κατά τη φόρτωση του “%s”"
 
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1752
 msgid "Oops! Unable to display this website."
 msgstr "Ουπς! Αδύνατη η εμφάνιση αυτής της ιστοσελίδας."
 
-#: ../embed/ephy-web-view.c:1754
+#: ../embed/ephy-web-view.c:1753
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1005,15 +1016,15 @@ msgstr ""
 "να έχει μετακινηθεί σε νέα διεύθυνση. Μην ξεχάσετε να ελέγξετε την σύνδεση "
 "σας στο διαδίκτυο ότι λειτουργεί σωστά.</p>"
 
-#: ../embed/ephy-web-view.c:1763
+#: ../embed/ephy-web-view.c:1762
 msgid "Try Again"
 msgstr "Ξαναπροσπαθήστε"
 
-#: ../embed/ephy-web-view.c:1770
+#: ../embed/ephy-web-view.c:1769
 msgid "Oops! There may be a problem."
 msgstr "Όπα! Μπορεί να υπάρχει πρόβλημα."
 
-#: ../embed/ephy-web-view.c:1771
+#: ../embed/ephy-web-view.c:1770
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1024,20 +1035,20 @@ msgstr ""
 "</p><p> Αν αυτό ξανασυμβεί, παρακαλούμε αναφέρτε το πρόβλημα στους "
 "προγραμματιστές.<strong>%s</strong></p>"
 
-#: ../embed/ephy-web-view.c:1777
+#: ../embed/ephy-web-view.c:1776
 msgid "Reload Anyway"
 msgstr "Επαναφόρτωση σε κάθε περίπτωση"
 
-#: ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1781
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Πρόβλημα εμφάνισης του “%s”"
 
-#: ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1782
 msgid "Oops!"
 msgstr "Όπα!"
 
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1783
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1046,16 +1057,16 @@ msgstr ""
 "ή επισκεφτείτε μια διαφορετική σελίδα για να συνεχίσετε."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2327
+#: ../embed/ephy-web-view.c:2326
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Γίνεται φόρτωση “%s”…"
 
-#: ../embed/ephy-web-view.c:2329
+#: ../embed/ephy-web-view.c:2328
 msgid "Loading…"
 msgstr "Γίνεται φόρτωση…"
 
-#: ../embed/ephy-web-view.c:2681 ../src/bookmarks/ephy-bookmarks-editor.c:818
+#: ../embed/ephy-web-view.c:2680
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -1407,7 +1418,7 @@ msgstr "Τοποθεσίες"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../lib/widgets/ephy-location-entry.c:616
-#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:229
 msgid "Cl_ear"
 msgstr "Ε_κκαθάριση"
 
@@ -1494,7 +1505,7 @@ msgid "_Help"
 msgstr "_Βοήθεια"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:643
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Add"
 msgstr "_Προσθήκη"
 
@@ -1894,7 +1905,7 @@ msgstr ""
 
 #: ../src/resources/clear-data-dialog.ui.h:6
 #: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -1979,7 +1990,7 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Χρήση μιας διαφορετικής κωδικοποίησης</b>"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "Κωδικοί"
 
@@ -2016,144 +2027,152 @@ msgid "A_utomatically open downloaded files"
 msgstr "Α_υτόματο άνοιγμα ληφθέντων αρχείων"
 
 #: ../src/resources/prefs-dialog.ui.h:5
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "_Engine:"
+msgstr "_Μηχανή:"
+
+#: ../src/resources/prefs-dialog.ui.h:7
 msgid "Web Content"
 msgstr "Περιεχόμενο Ιστού"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
 msgstr "Να επιτρέπονται τα αναδυόμενα _παράθυρα"
 
-#: ../src/resources/prefs-dialog.ui.h:7
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow _advertisements"
 msgstr "Να επιτρέπονται _διαφημίσεις"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
 msgstr "Ενεργοποίηση _πρόσθετων λειτουργιών"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "General"
 msgstr "Γενικά"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "Fonts"
 msgstr "Γραμματοσειρές"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "_Use system fonts"
 msgstr "Χ_ρήση γραμματοσειρών συστήματος"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "Sans serif font:"
 msgstr "Γραμματοσειρά Sans serif:"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "Serif font:"
 msgstr "Γραμματοσειρά Serif:"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Monospace font:"
 msgstr "Γραμματοσειρά σταθερού πλάτους:"
 
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Style"
 msgstr "Στυλ"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Use custom _stylesheet"
 msgstr "Χρήση προσαρμοσμένου _stylesheet"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "_Edit Stylesheet…"
 msgstr "_Επεξεργασία Stylesheet…"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "Fonts & Style"
 msgstr "Γραμματοσειρές & Στυλ"
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Manage Cookies"
 msgstr "Διαχείριση μπισκότων"
 
-#: ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
 msgstr "_Πάντα αποδοχή"
 
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Only _from sites you visit"
 msgstr "Μόνο _από τοποθεσίες που επισκέπτεστε"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr ""
 "<small>Για παράδειγμα, όχι από διαφημιστές σε αυτές τις σελίδες</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:25
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "_Never accept"
 msgstr "Π_οτέ αποδοχή"
 
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "Tracking"
 msgstr "Καταγραφή"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "Π_είτε στις ιστοσελίδες πως δεν θέλω να παρακολουθούμε"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "Manage Passwords"
 msgstr "Διαχείριση κωδικών πρόσβασης"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "Α_πομνημόνευση κωδικών"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Temporary Files"
 msgstr "Προσωρινά αρχεία"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Disk space:"
 msgstr "Χώρος _δίσκου:"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "MB"
 msgstr "MB"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Privacy"
 msgstr "Απόρρητο"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:385
+#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:385
 msgid "Encodings"
 msgstr "Κωδικοποιήσεις"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "De_fault:"
 msgstr "_Προεπιλογή:"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Remove"
 msgstr "_Αφαίρεση"
 
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Up"
 msgstr "_Επάνω"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "_Down"
 msgstr "_Κάτω"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "Spell checking"
 msgstr "Ορθογραφικός έλεγχος"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "_Enable spell checking"
 msgstr "_Ενεργοποίηση ορθογραφικού ελέγχου"
 
-#: ../src/resources/prefs-dialog.ui.h:45 ../src/prefs-dialog.c:821
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:831
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -2619,7 +2638,7 @@ msgstr "Αποθήκευση εικόνας ως"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:535 ../src/prefs-dialog.c:541
+#: ../src/prefs-dialog.c:545 ../src/prefs-dialog.c:551
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2628,22 +2647,58 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:550
+#: ../src/prefs-dialog.c:560
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Καθορισμένη από το χρήστη (%s)"
 
-#: ../src/prefs-dialog.c:572
+#: ../src/prefs-dialog.c:582
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Γλώσσα συστήματος (%s)"
 msgstr[1] "Γλώσσες συστήματος (%s)"
 
-#: ../src/prefs-dialog.c:904
+#: ../src/prefs-dialog.c:914
 msgid "Select a Directory"
 msgstr "Επιλογή ενός καταλόγου"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1013
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:1018
+#, c-format
+msgid "http://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1020
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:1022
+#, c-format
+msgid "http://google.com/search?q=%s"
+msgstr "http://google.com/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1024
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:1026
+#, c-format
+msgid "http://www.bing.com/search?q=%s"
+msgstr "http://www.bing.com/search?q=%s"
 
 #: ../src/window-commands.c:778
 #, c-format
@@ -2896,9 +2951,6 @@ msgstr "Ε_νεργοποίηση"
 #~ "Το Epiphany δε μπορεί να χρησιμοποιηθεί αυτή τη στιγμή. Αποτυχία "
 #~ "αρχικοποίησης."
 
-#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-#~ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
 #~ msgid "%s Files"
 #~ msgstr "%s Αρχεία"
 
@@ -2950,9 +3002,6 @@ msgstr "Ε_νεργοποίηση"
 
 #~ msgid "Not a launchable item"
 #~ msgstr "Δεν αποτελεί καθορισμένο στοιχείο"
-
-#~ msgid "_Search:"
-#~ msgstr "_Αναζήτηση:"
 
 #~ msgid "Enable Java_Script"
 #~ msgstr "Ενεργοποίηση Java_Script"
