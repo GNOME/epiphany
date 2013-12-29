@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: "
 "http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2013-12-18 23:15+0100\n"
-"PO-Revision-Date: 2013-12-18 23:19+0200\n"
+"POT-Creation-Date: 2013-12-30 00:00+0100\n"
+"PO-Revision-Date: 2013-12-30 00:00+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -57,7 +57,7 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gl-ES&amp;kad=gl_ES"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2089
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2088
 #: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -99,19 +99,31 @@ msgstr "web;navegador;internet;"
 msgid "Browse with caret"
 msgstr "Navegar co cursor"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:2
+#. DuckDuckGo is the default search engine. Must exactly match the URL used
+#. in the preferences dialog, except this string is surrounded by single quotes
+#. and uses &amp; instead of simply &. If the match is not otherwise exact,
+#. there will be a spurious, ugly entry in the preferences combo, so please
+#. test this. Should ideally also match the default smart bookmark link in
+#. default-bookmarks.rdf. See the comment there for region parameters to
+#. the URL.
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#, no-c-format
+msgid "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgstr "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "URL Search"
 msgstr "Buscar URL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:3
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Search string for keywords entered in the URL bar."
 msgstr "Buscar a cadea polas palabras chave inseridas na barra da URL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:4
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "User agent"
 msgstr "Axente de usuario"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:5
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -119,11 +131,11 @@ msgstr ""
 "Cadea que será empregada como o user agent, para identificar o navegador nos "
 "servidores web."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:6
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
 msgstr "Descargas automáticas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:7
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -131,44 +143,44 @@ msgstr ""
 "Cando non sexa posíbel abrir os ficheiros no navegador, estes descargaranse "
 "automaticamente ao cartafol de descargas e o aplicativo apropiado abriraos."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:8
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Force new windows to be opened in tabs"
 msgstr "Obrigar a que as novas xanelas se abran en lapelas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:9
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Obrigar a que as novas xanelas se abran en lapelas en lugar de empregar unha "
 "xanela nova."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Remember passwords"
 msgstr "Lembrar os contrasinais"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Whether to store and prefill passwords in web sites."
 msgstr ""
 "Indica se se almacenan e completan automaticamente os contrasinais nos "
 "sitios web."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid "Automatically manage offline status with NetworkManager"
 msgstr "Xestionar automaticamente o estado desconectado co NetworkManager"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Enable smooth scrolling"
 msgstr "Activar o desprazamento suave"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid "Don't use an external application to view page source."
 msgstr "Non usar un aplicativo externo para ver o código fonte da páxina."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Whether to automatically restore the last session"
 msgstr "Indica se se debe restaurar automaticamente a última sesión"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "'always' (the previous state of the application is always restored), "
@@ -180,7 +192,7 @@ msgstr ""
 "«crashed» (só se restaura a sesión se fallou o aplicativo) e «never» (sempre "
 "se mostra a páxina de inicio)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:17
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -188,7 +200,7 @@ msgstr ""
 "Indica se atrasar a carga de lapelas que non son visíbeis inmediatamente na "
 "restauración da sesión"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -196,15 +208,15 @@ msgstr ""
 "Cando esta opción está activada, as lapelas non se comezaran a cargar até "
 "que o usuario cambie a elas, durante a restauración dunha sesión"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Show toolbars by default"
 msgstr "Mostrar as barras de ferramentas por omisión"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Toolbar style"
 msgstr "Estilo da barra de ferramentas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -214,11 +226,11 @@ msgstr ""
 "estilo predefinido do GNOME), «both» (texto e iconas), «both-horiz» (texto "
 "ao lado das iconas), «icons» e «text»."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid "[Deprecated]"
 msgstr "[Obsoleto]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -226,11 +238,11 @@ msgstr ""
 "[Obsoleto] Esta configuración está obsoleta, use «tabs-bar-visibility-"
 "policy» no seu lugar."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Visibility of the downloads window"
 msgstr "Visibilidade da xanela de descargas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -238,11 +250,11 @@ msgstr ""
 "Ocultar ou mostrar a xanela de descargas. Cando estea oculta, mostrarase "
 "unha notificación ao iniciar novas descargas."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid "The visibility policy for the tabs bar."
 msgstr "A política de visibilidade para a barra de lapelas."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -253,23 +265,23 @@ msgstr ""
 "lapelas móstrase só se hai dúas ou máis lapelas) e «never» (non se mostra "
 "nunca)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "Minimum font size"
 msgstr "Tamaño mínimo do tipo de letra"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Use GNOME fonts"
 msgstr "Usar os tipos de letra de GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use GNOME font settings."
 msgstr "Usar as preferencias de tipo de letra de GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Custom sans-serif font"
 msgstr "Tipo de letra Sans Serif personalizada"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -277,11 +289,11 @@ msgstr ""
 "O valor que usar para sobreescribir o tipo de letra Sans Serif do escritorio "
 "cando «use-gnome-fonts» é certo."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Custom serif font"
 msgstr "Tipo de letra Serif personalizado"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -289,11 +301,11 @@ msgstr ""
 "O valor que usar para sobrescribir o tipo de letra Serif do escritorio cando "
 "«use-gnome-fonts» é certo."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Custom monospace font"
 msgstr "Tipo de letra monoespaciado personalizado"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -301,71 +313,71 @@ msgstr ""
 "O valor que usar para sobrescribir o tipo de letra monoespaciado do "
 "escritorio cando «use-gnome-fonts» é certo."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid "Use own colors"
 msgstr "Usar as súas propias cores"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Usar as súas propias cores en vez das que pide a páxina."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Use own fonts"
 msgstr "Usar os seus propios tipos de letra"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Usar os seus propios tipos de letra en vez dos que pide a páxina."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use a custom CSS"
 msgstr "Usar CSS personalizado"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Usar un ficheiro CSS personalizado para o CSS das páxinas web."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Enable spell checking"
 msgstr "Activar verificación ortográfica"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Spell check any text typed in editable areas."
 msgstr "Comprobar a ortografía de calquera texto escrito en áreas editábeis."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Default encoding"
 msgstr "Codificación predefinida"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Codificación predeterminada. Os valores aceptados son os que WebKitGTK+ pode "
 "entender."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid "Size of disk cache"
 msgstr "Tamaño da caché do disco"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Size of disk cache, in MB."
 msgstr "Tamaño da caché do disco en MB."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Preferred languages, two letter codes."
 msgstr "Idiomas preferidos: código de dúas letras."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Cookie accept"
 msgstr "Aceptar as cookies"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -374,11 +386,11 @@ msgstr ""
 "«anywhere» (de calquera sitio), «current site» (do sitio actual) e "
 "«nowhere» (de ningún sitio)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Image animation mode"
 msgstr "Modo de animación de imaxes"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -386,46 +398,46 @@ msgstr ""
 "Como presentar as imaxes animadas. Os valores posíbeis son «normal», «once» "
 "e «disabled»."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid "Allow popups"
 msgstr "Permitir as xanelas emerxentes"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permitirlles aos sitios abrir novas xanelas usando JavaScript (se JavaScript "
 "está activado)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Enable Plugins"
 msgstr "Activar engadidos"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable JavaScript"
 msgstr "Activar JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Enable WebGL"
 msgstr "Activar WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Indica se se debe activar a compatibilidade para contextos WebGL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Enable WebAudio"
 msgstr "Activar WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Whether to enable support for WebAudio."
 msgstr "Indica se se debe activar a compatibilidade para WebAudio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Do Not Track"
 msgstr "Non rastrexar"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -434,11 +446,11 @@ msgstr ""
 "en conta que as páxinas web non están obrigadas a respectar esta "
 "configuración."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Enable Adblock"
 msgstr "Activar Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -446,11 +458,11 @@ msgstr ""
 "Indica se bloquear as publicidades incrustadas na páxinas web que quere "
 "mostrar."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid "The downloads folder"
 msgstr "O cartafol de descargas"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -459,29 +471,29 @@ msgstr ""
 "usar o cartafol de descargas predefinido e \"Escritorio\" para usar o "
 "escritorio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid "History pages time range"
 msgstr "Intervalo temporal das páxinas do historial"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "Whether to show the title column in the history window."
 msgstr "Indica se se debe mostrar a columna de título na xanela do historial."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid "Whether to show the address column in the history window."
 msgstr ""
 "Indica se se debe mostrar a columna de enderezos na xanela do historial."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:81
 msgid "Whether to show the date-time column in the history window."
 msgstr ""
 "Indica se se debe mostrar a columna de data/hora na xanela do historial."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:82
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Indica se se debe mostrar a columna de título na xanela de marcadores."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:83
 msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Indica se se debe mostrar a columna de enderezos na xanela de marcadores."
@@ -927,7 +939,7 @@ msgid "Most Visited"
 msgstr "Máis visitadas"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2777
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2776
 msgid "Blank page"
 msgstr "Páxina en branco"
 
@@ -935,42 +947,41 @@ msgstr "Páxina en branco"
 msgid "Save"
 msgstr "Gardar"
 
-#. Translators: The first %s is the username and the second one is the
-#. * hostname where this is happening. Example: gnome@gmail.com and
-#. * mail.google.com.
+#. Translators: The %s the hostname where this is happening.
+#. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:509
+#: ../embed/ephy-web-view.c:508
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Desexa gardar o seu contrasinal para «%s»?"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1380
 msgid "Deny"
 msgstr "Denegar"
 
-#: ../embed/ephy-web-view.c:1382
+#: ../embed/ephy-web-view.c:1381
 msgid "Allow"
 msgstr "Permitir"
 
-#: ../embed/ephy-web-view.c:1392
+#: ../embed/ephy-web-view.c:1391
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "A páxina <b>%s</b> quere saber a súa localización."
 
-#: ../embed/ephy-web-view.c:1742
+#: ../embed/ephy-web-view.c:1741
 msgid "None specified"
 msgstr "Non especificado"
 
-#: ../embed/ephy-web-view.c:1751 ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1750 ../embed/ephy-web-view.c:1767
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Problema ao cargar «%s»"
 
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1752
 msgid "Oops! Unable to display this website."
 msgstr "Recoiro! Non foi posíbel mostrar esta páxina web."
 
-#: ../embed/ephy-web-view.c:1754
+#: ../embed/ephy-web-view.c:1753
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -978,20 +989,20 @@ msgid ""
 "new address. You may wish to verify that your internet connection is working "
 "correctly.</p>"
 msgstr ""
-"<p>Semella que a páxina web %s non está dispoñíbel. O erro exacto "
-"foi:</p><p><code>%s</code></p><p>Puido ser temporalmente desactivada ou "
-"movida a un novo enderezo. Non esqueza comprobar que a súa conexión a "
-"internet está funcionando correctamente.</p>"
+"<p>Semella que a páxina web %s non está dispoñíbel. O erro exacto foi:</"
+"p><p><code>%s</code></p><p>Puido ser temporalmente desactivada ou movida a "
+"un novo enderezo. Non esqueza comprobar que a súa conexión a internet está "
+"funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:1763
+#: ../embed/ephy-web-view.c:1762
 msgid "Try Again"
 msgstr "Tentar de novo"
 
-#: ../embed/ephy-web-view.c:1770
+#: ../embed/ephy-web-view.c:1769
 msgid "Oops! There may be a problem."
 msgstr "Recoiro! Pode haber un problema."
 
-#: ../embed/ephy-web-view.c:1771
+#: ../embed/ephy-web-view.c:1770
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -999,23 +1010,23 @@ msgid ""
 "developers.</p>"
 msgstr ""
 "<p>Este sitio puido causar que Web se pechara forma inesperada.<p></p>Se "
-"isto volve a pasar, informe do problema aos desenvolvedores de <strong>%"
-"s</strong>.</p>"
+"isto volve a pasar, informe do problema aos desenvolvedores de <strong>%s</"
+"strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1777
+#: ../embed/ephy-web-view.c:1776
 msgid "Reload Anyway"
 msgstr "Recargar de todos modos"
 
-#: ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1781
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Problema ao mostrar «%s»"
 
-#: ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1782
 msgid "Oops!"
 msgstr "Oops!"
 
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1783
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1024,16 +1035,16 @@ msgstr ""
 "páxina distinta para continuar."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2327
+#: ../embed/ephy-web-view.c:2326
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2329
+#: ../embed/ephy-web-view.c:2328
 msgid "Loading…"
 msgstr "Cargando…"
 
-#: ../embed/ephy-web-view.c:2681 ../src/bookmarks/ephy-bookmarks-editor.c:818
+#: ../embed/ephy-web-view.c:2680
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1382,7 +1393,7 @@ msgstr "Sitios"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../lib/widgets/ephy-location-entry.c:616
-#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:229
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:229
 msgid "Cl_ear"
 msgstr "Limp_ar"
 
@@ -1467,7 +1478,7 @@ msgid "_Help"
 msgstr "_Axuda"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:643
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Add"
 msgstr "_Engadir"
 
@@ -1866,7 +1877,7 @@ msgstr ""
 
 #: ../src/resources/clear-data-dialog.ui.h:6
 #: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -1901,7 +1912,6 @@ msgid "Site"
 msgstr "Sitio"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-#: ../src/resources/passwords-dialog.ui.h:8
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -1952,7 +1962,7 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Usar unha codificación diferente:</b>"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "Contrasinais"
 
@@ -1968,15 +1978,11 @@ msgstr "Nome de usuario"
 msgid "Password"
 msgstr "Contrasinal"
 
-#: ../src/resources/passwords-dialog.ui.h:9
-msgid "Show Passwords"
-msgstr "Mostrar contrasinais"
-
-#: ../src/resources/passwords-dialog.ui.h:10
+#: ../src/resources/passwords-dialog.ui.h:8
 msgid "_Copy Password"
 msgstr "_Copiar contrasinal"
 
-#: ../src/resources/passwords-dialog.ui.h:11
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "C_opy Username"
 msgstr "C_opiar nome de usuario"
 
@@ -1993,143 +1999,151 @@ msgid "A_utomatically open downloaded files"
 msgstr "Abrir a_utomaticamente os ficheiros descargados"
 
 #: ../src/resources/prefs-dialog.ui.h:5
+msgid "Search"
+msgstr "Buscar"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "_Engine:"
+msgstr "_Motor:"
+
+#: ../src/resources/prefs-dialog.ui.h:7
 msgid "Web Content"
 msgstr "Contido web"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
 msgstr "Permitir as _xanelas emerxentes"
 
-#: ../src/resources/prefs-dialog.ui.h:7
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow _advertisements"
 msgstr "Permitir _publicidade"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
 msgstr "Activar _engadidos"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "General"
 msgstr "Xeral"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "Fonts"
 msgstr "Tipos de letra"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "_Use system fonts"
 msgstr "_Usar os tipos de letra do sistema"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "Sans serif font:"
 msgstr "Tipo de letra sans serif:"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "Serif font:"
 msgstr "Tipo de letra serifa:"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Monospace font:"
 msgstr "Tipo de letra monoespaciado:"
 
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Style"
 msgstr "Estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Use custom _stylesheet"
 msgstr "Usar _follas de estilo personalizadas"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "_Edit Stylesheet…"
 msgstr "_Editar folla de estilos…"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "Fonts & Style"
 msgstr "Tipos de fonte e estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Manage Cookies"
 msgstr "Xestionar Cookies"
 
-#: ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
 msgstr "Aceptar _sempre"
 
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Only _from sites you visit"
 msgstr "Só _desde os sitios que visite"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Por exemplo para non ter publicidade neses sitios</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:25
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "_Never accept"
 msgstr "_Non aceptar nunca"
 
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "Tracking"
 msgstr "Seguimento"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Indicar aos sitios web que non quere que o rastrexen"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "Manage Passwords"
 msgstr "Xestionar contrasinais"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "_Lembrar os contrasinais"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Temporary Files"
 msgstr "Ficheiros temporais"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Disk space:"
 msgstr "Espazo en _disco:"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "MB"
 msgstr "MB"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Privacy"
 msgstr "Privacidade"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:385
+#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:385
 msgid "Encodings"
 msgstr "Codificacións"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "De_fault:"
 msgstr "Predeter_minado:"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "_Down"
 msgstr "A_baixo"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "Spell checking"
 msgstr "Verificación ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "_Enable spell checking"
 msgstr "_Activar verificación ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:45 ../src/prefs-dialog.c:821
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:831
 msgid "Language"
 msgstr "Idioma"
 
@@ -2595,7 +2609,7 @@ msgstr "Gardar a imaxe como"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:535 ../src/prefs-dialog.c:541
+#: ../src/prefs-dialog.c:545 ../src/prefs-dialog.c:551
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2604,22 +2618,58 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:550
+#: ../src/prefs-dialog.c:560
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido polo usuario (%s)"
 
-#: ../src/prefs-dialog.c:572
+#: ../src/prefs-dialog.c:582
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:904
+#: ../src/prefs-dialog.c:914
 msgid "Select a Directory"
 msgstr "Seleccionar un cartafol"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1013
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:1018
+#, c-format
+msgid "http://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1020
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:1022
+#, c-format
+msgid "http://google.com/search?q=%s"
+msgstr "http://google.com/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1024
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:1026
+#, c-format
+msgid "http://www.bing.com/search?q=%s"
+msgstr "http://www.bing.com/search?q=%s"
 
 #: ../src/window-commands.c:778
 #, c-format
@@ -2727,6 +2777,9 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Activar"
 
+#~ msgid "Show Passwords"
+#~ msgstr "Mostrar contrasinais"
+
 #~ msgid "Oops! Error loading %s"
 #~ msgstr "Recoiro! Produciuse un erro ao cargar %s"
 
@@ -2812,9 +2865,6 @@ msgstr "_Activar"
 
 #~ msgid "Start the application without opening windows"
 #~ msgstr "Iniciar o aplicativo sen abrir as xanelas"
-
-#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-#~ msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #~ msgid "dialog-warning"
 #~ msgstr "dialog-warning"
@@ -2927,9 +2977,6 @@ msgstr "_Activar"
 
 #~ msgid "Not a launchable item"
 #~ msgstr "Non é un elemento executábel"
-
-#~ msgid "_Search:"
-#~ msgstr "_Buscar:"
 
 #~ msgid "Wrapped"
 #~ msgstr "Dar a volta"
