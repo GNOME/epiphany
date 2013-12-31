@@ -153,7 +153,7 @@ ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 {
   EphyEmbedPrivate *priv = embed->priv;
 
-  nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
+  nautilus_floating_bar_set_primary_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
 
   if (label == NULL || label[0] == '\0') {
     gtk_widget_hide (priv->floating_bar);
@@ -712,7 +712,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
-  priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
+  priv->floating_bar = nautilus_floating_bar_new (NULL, NULL, FALSE);
   gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
   gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
