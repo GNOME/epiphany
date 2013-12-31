@@ -20,9 +20,6 @@ gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 appdatadir = $(datadir)/appdata
 appdata_DATA = epiphany.appdata.xml
 
-aboutdir = $(pkgdatadir)
-about_DATA = epiphany.xhtml
-
 aboutdialogdir = $(pkgdatadir)
 aboutdialog_DATA = about.ini
 
