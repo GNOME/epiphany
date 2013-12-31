@@ -5,7 +5,8 @@ BUILT_SOURCES = \
 	ephy-widgets-type-builtins.h
 
 TYPES_H_FILES = \
-	ephy-removable-pixbuf-renderer.h
+	ephy-removable-pixbuf-renderer.h \
+	ephy-location-entry.h
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

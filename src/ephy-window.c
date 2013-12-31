@@ -738,14 +738,14 @@ sync_tab_load_status (EphyWebView *view,
 static void
 _ephy_window_set_security_state (EphyWindow *window,
 				 gboolean show_lock,
-				 const char *stock_id)
+				 EphyLocationLockState state)
 {
 	EphyWindowPrivate *priv = window->priv;
 
 	priv->show_lock = show_lock != FALSE;
 
 	g_object_set (priv->location_controller,
-		      "lock-stock-id", stock_id,
+		      "lock-state", state,
 		      "show-lock", priv->show_lock,
 		      NULL);
 }
@@ -757,7 +757,7 @@ sync_tab_security (EphyWebView *view,
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebViewSecurityLevel level;
-	const char *stock_id = STOCK_LOCK_INSECURE;
+	EphyLocationLockState state = EPHY_LOCATION_LOCK_STATE_INSECURE;
 	gboolean show_lock = FALSE;
 
 	if (priv->closing) return;
@@ -771,7 +771,7 @@ sync_tab_security (EphyWebView *view,
 			/* Nothing to do. */
 			break;
 		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
-			stock_id = STOCK_LOCK_BROKEN;
+			state = EPHY_LOCATION_LOCK_STATE_INSECURE;
                         show_lock = TRUE;
                         break;
 		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
@@ -779,10 +779,10 @@ sync_tab_security (EphyWebView *view,
 			/* We deliberately don't show the 'secure' icon
 			 * for low & medium secure sites; see bug #151709.
 			 */
-			stock_id = STOCK_LOCK_INSECURE;
+			state = EPHY_LOCATION_LOCK_STATE_INSECURE;
 			break;
 		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
-			stock_id = STOCK_LOCK_SECURE;
+			state = EPHY_LOCATION_LOCK_STATE_SECURE;
 			show_lock = TRUE;
 			break;
 		default:
@@ -790,7 +790,7 @@ sync_tab_security (EphyWebView *view,
 			break;
 	}
 
-	_ephy_window_set_security_state (window, show_lock, stock_id);
+	_ephy_window_set_security_state (window, show_lock, state);
 }
 
 static void

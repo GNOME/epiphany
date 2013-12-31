@@ -24,6 +24,7 @@
 #include "config.h"
 #include "ephy-location-entry.h"
 
+#include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
@@ -109,7 +110,7 @@ enum
 	PROP_0,
 	PROP_LOCATION,
 	PROP_FAVICON,
-	PROP_LOCK_STOCK,
+	PROP_LOCK_STATE,
 	PROP_SHOW_LOCK,
 	PROP_SHOW_FAVICON
 };
@@ -144,9 +145,9 @@ ephy_location_entry_set_property (GObject *object,
 		ephy_location_entry_set_favicon (entry,
 						 g_value_get_object (value));
 		break;
-	case PROP_LOCK_STOCK:
-		ephy_location_entry_set_lock_stock (entry,
-						    g_value_get_string (value));
+	case PROP_LOCK_STATE:
+		ephy_location_entry_set_lock_state (entry,
+						    g_value_get_enum (value));
 		break;
 	case PROP_SHOW_LOCK:
 		ephy_location_entry_set_show_lock (entry,
@@ -255,17 +256,18 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationEntry:lock-stock-id:
+	* EphyLocationEntry:lock-state:
 	*
-	* Stock id of the security icon.
+	* State of the security icon.
 	*/
 	g_object_class_install_property (object_class,
-					 PROP_LOCK_STOCK,
-					 g_param_spec_string  ("lock-stock-id",
-							       "Lock Stock ID",
-							       "Stock id of the security icon",
-							       NULL,
-							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+					 PROP_LOCK_STATE,
+					 g_param_spec_enum  ("lock-state",
+							     "Lock state",
+							     "State of the security icon",
+							     EPHY_TYPE_LOCATION_LOCK_STATE,
+							     EPHY_LOCATION_LOCK_STATE_UNKNOWN,
+							     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
 	* EphyLocationEntry:show-lock:
@@ -1610,17 +1612,17 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 }
 
 /**
- * ephy_location_entry_set_lock_stock:
+ * ephy_location_entry_set_lock_state:
  * @entry: an #EphyLocationEntry widget
- * @stock_id: a stock_id from GTK+ stock icons
+ * @state: the #EphyLocationLockState
  *
  * Set the lock icon to be displayed, to actually show the icon see 
  * ephy_location_entry_set_show_lock.
  *
  **/
 void
-ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
-				    const char *stock_id)
+ephy_location_entry_set_lock_state (EphyLocationEntry *entry,
+				    EphyLocationLockState state)
 
 {
 	EphyLocationEntryPrivate *priv;
@@ -1638,10 +1640,10 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 	 * their security infrastructure (broken cert, etc). For
 	 * everything else, nothing is shown.
 	 */
-	if (!stock_id || g_str_equal (stock_id, STOCK_LOCK_BROKEN))
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
-	else
+	if (state == EPHY_LOCATION_LOCK_STATE_SECURE)
 		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
+	else
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
 
 	if (priv->show_lock)
 		gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),

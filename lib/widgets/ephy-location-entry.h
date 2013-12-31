@@ -61,9 +61,12 @@ struct _EphyLocationEntry
 	EphyLocationEntryPrivate *priv;
 };
 
-#define STOCK_LOCK_INSECURE        "lock-insecure"
-#define STOCK_LOCK_SECURE          "lock-secure"
-#define STOCK_LOCK_BROKEN          "lock-broken"
+typedef enum {
+  EPHY_LOCATION_LOCK_STATE_UNKNOWN = 0,
+  EPHY_LOCATION_LOCK_STATE_BROKEN,
+  EPHY_LOCATION_LOCK_STATE_INSECURE,
+  EPHY_LOCATION_LOCK_STATE_SECURE
+} EphyLocationLockState;
 
 GType		ephy_location_entry_get_type		(void);
 
@@ -110,8 +113,8 @@ void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entr
 void		ephy_location_entry_set_show_lock	(EphyLocationEntry *entry,
 							 gboolean show_lock);
 
-void		ephy_location_entry_set_lock_stock	(EphyLocationEntry *entry,
-							 const char *stock_id);
+void		ephy_location_entry_set_lock_state	(EphyLocationEntry *entry,
+							 EphyLocationLockState state);
 
 void		ephy_location_entry_set_lock_tooltip	(EphyLocationEntry *entry,
 							 const char *tooltip);
