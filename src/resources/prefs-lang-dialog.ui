@@ -23,14 +23,12 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton1">
-                <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -40,14 +38,12 @@
             </child>
             <child>
               <object class="GtkButton" id="add_button">
-                <property name="label">gtk-add</property>
-                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_Add</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -64,10 +60,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox198">
+          <object class="GtkBox" id="vbox198">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1309">
