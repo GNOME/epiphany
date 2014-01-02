@@ -25,3 +25,29 @@
     padding: 12px;
     border-radius: 10px;
 }
+
+EphyToolbar.incognito-mode {
+    background-color: transparent;
+    background-image: url("resource://org/gnome/epiphany/incognito-tinted.png"),
+                      linear-gradient(to bottom,
+                                      #e4ecf5,
+                                      #c5cfd8);
+    background-repeat: no-repeat;
+    background-position: 6ex center, 0 0;
+    background-size: auto 180%;
+    border-color: shade(#c5cfd8, 0.90);
+    box-shadow: none;
+}
+
+EphyToolbar.incognito-mode *:insensitive {
+    background-color: transparent;
+}
+
+EphyToolbar.incognito-mode EphyMiddleClickableButton,
+EphyToolbar.incognito-mode > .button {
+    background-image: linear-gradient(to bottom,
+                                      #e4ecf5,
+                                      #c5cfd8);
+    border-color: shade(#c5cfd8, 0.90);
+}
+

@@ -3198,9 +3198,14 @@ setup_toolbar (EphyWindow *window)
 	GtkWidget *toolbar;
 	GtkAction *action;
 	EphyWindowPrivate *priv = window->priv;
+	EphyEmbedShellMode app_mode;
 
 	toolbar = ephy_toolbar_new (window);
 	gtk_window_set_titlebar (GTK_WINDOW (window), toolbar);
+
+	app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+	if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+		gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "incognito-mode");
 
 	action = gtk_action_group_get_action (priv->toolbar_action_group,
 					      "NavigationBack");

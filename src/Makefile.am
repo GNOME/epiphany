@@ -111,6 +111,7 @@ RESOURCE_FILES = \
 	resources/passwords-dialog.ui		  \
 	resources/epiphany.css                    \
 	resources/incognito.png                   \
+	resources/incognito-tinted.png            \
 	resources/error.html			  \
 	resources/process-crash.html		  \
 	resources/recovery.html			  \

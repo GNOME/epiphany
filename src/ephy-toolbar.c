@@ -109,6 +109,7 @@ ephy_toolbar_constructed (GObject *object)
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
   gtk_button_set_label (GTK_BUTTON (button), NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_container_add (GTK_CONTAINER (box), button);
 
   /* Forward */
@@ -121,6 +122,7 @@ ephy_toolbar_constructed (GObject *object)
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
   gtk_button_set_label (GTK_BUTTON (button), NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),

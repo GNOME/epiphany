@@ -430,11 +430,6 @@ main (int argc,
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
   else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
-
-    /* Use the right theming. */
-    g_object_set (gtk_settings_get_default (),
-                  "gtk-application-prefer-dark-theme", TRUE,
-                  NULL);
   } else if (application_mode) {
     char *app_name;
     char *app_icon;
