@@ -91,7 +91,7 @@ test-report perf-report full-report: ${TEST_PROGS}
 # run tests in cwd as part of make check
 check-local: test-nonrecursive
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/embed    \
 	-I$(top_srcdir)/lib      \
 	-I$(top_srcdir)/lib/history \
