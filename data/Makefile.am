@@ -54,8 +54,7 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 iconsdir = $(pkgdatadir)/icons
 dist_icons_DATA =         \
     missing-thumbnail.png \
-    thumbnail-frame.png   \
-    incognito.png
+    thumbnail-frame.png
 
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini

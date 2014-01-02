@@ -110,6 +110,7 @@ RESOURCE_FILES = \
 	resources/cookies-dialog.ui		  \
 	resources/passwords-dialog.ui		  \
 	resources/epiphany.css                    \
+	resources/incognito.png                   \
 	resources/error.html			  \
 	resources/process-crash.html		  \
 	resources/recovery.html			  \

@@ -419,18 +419,21 @@ static gboolean
 ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                                      WebKitURISchemeRequest *request)
 {
-  const char *filename;
-  char *img_data = NULL, *img_data_base64 = NULL;
+  GBytes *img_data;
+  char *img_data_base64 = NULL;
   char *data;
-  gsize data_length;
+  GError *error;
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO)
     return FALSE;
 
-  filename = ephy_file ("incognito.png");
-  if (filename) {
-    g_file_get_contents (filename, &img_data, &data_length, NULL);
-    img_data_base64 = g_base64_encode ((guchar*)img_data, data_length);
+  img_data = g_resources_lookup_data ("/org/gnome/epiphany/incognito.png", 0, &error);
+  if (img_data != NULL) {
+    img_data_base64 = g_base64_encode ((guchar*)g_bytes_get_data (img_data, NULL),
+                                       g_bytes_get_size (img_data));
+  } else {
+    g_debug ("%s", error->message);
+    g_error_free (error);
   }
 
   data = g_strdup_printf ("<html>\n"                                   \
@@ -457,7 +460,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                             "information will be cleared when you close the window."));
 
   g_free (img_data_base64);
-  g_free (img_data);
+  g_bytes_unref (img_data);
 
   ephy_about_handler_finish_request (request, data, -1);
 
