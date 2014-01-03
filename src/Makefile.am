@@ -101,7 +101,6 @@ libephymain_la_CFLAGS = \
 
 RESOURCE_FILES = \
 	resources/epiphany-bookmark-editor-ui.xml \
-	resources/epiphany-history-window-ui.xml  \
 	resources/epiphany-ui.xml		  \
 	resources/epiphany.ui			  \
 	resources/epiphany-application-menu.ui	  \

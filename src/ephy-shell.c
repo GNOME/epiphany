@@ -178,7 +178,11 @@ show_history (GSimpleAction *action,
               GVariant *parameter,
               gpointer user_data)
 {
-  window_cmd_edit_history (NULL, NULL);
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_edit_history (NULL, EPHY_WINDOW (window));
 }
 
 static void
@@ -906,6 +910,10 @@ ephy_shell_get_history_window (EphyShell *shell)
     service = EPHY_HISTORY_SERVICE
       (ephy_embed_shell_get_global_history_service (embed_shell));
     shell->priv->history_window = ephy_history_window_new (service);
+    g_signal_connect (shell->priv->history_window,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &shell->priv->history_window);
   }
 
   return shell->priv->history_window;

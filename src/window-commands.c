@@ -1126,6 +1126,10 @@ window_cmd_edit_history (GtkAction *action,
 	GtkWidget *hwindow;
 	
 	hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
+
+	if (GTK_WINDOW (window) != gtk_window_get_transient_for (GTK_WINDOW (hwindow)))
+		gtk_window_set_transient_for (GTK_WINDOW (hwindow),
+                                              GTK_WINDOW (window));
 	gtk_window_present (GTK_WINDOW (hwindow));
 }
 

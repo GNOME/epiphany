@@ -41,7 +41,7 @@ typedef struct _EphyHistoryWindowPrivate EphyHistoryWindowPrivate;
 
 typedef struct
 {
-	GtkWindow parent;
+	GtkDialog parent;
 
 	/*< private >*/
 	EphyHistoryWindowPrivate *priv;
@@ -49,7 +49,7 @@ typedef struct
 
 typedef struct
 {
-	GtkWindowClass parent;
+	GtkDialogClass parent;
 } EphyHistoryWindowClass;
 
 GType		     ephy_history_window_get_type (void);
