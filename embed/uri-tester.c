@@ -665,6 +665,9 @@ uri_tester_parse_line (UriTester *tester, char *line)
   /* FIXME: No support for [include] and [exclude] tags */
   if (line[0] == '[')
     return NULL;
+  /* FIXME: No support for domain= */
+  if (strstr (line, "domain="))
+    return NULL;
 
   /* Skip garbage */
   if (line[0] == ' ' || !line[0])
