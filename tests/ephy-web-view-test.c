@@ -245,10 +245,12 @@ test_ephy_web_view_non_search_regex (void)
   g_regex_unref (regex_domain);
 }
 
-static struct {
+typedef struct {
   char *url;
   char *expected;
-} normalize_or_autosearch[] = {
+} normalize_or_autosearch_t;
+
+normalize_or_autosearch_t normalize_or_autosearch_test_ddg[] = {
   { "google.com", "http://google.com" },
   { "http://google.com", "http://google.com" },
   { "http://google.com/this/is/a/path", "http://google.com/this/is/a/path" },
@@ -264,10 +266,32 @@ static struct {
   { "\"a quoted string should be searched\"", "http://duckduckgo.com/?q=%22a+quoted+string+should+be+searched%22&t=epiphany" }
 };
 
+normalize_or_autosearch_t normalize_or_autosearch_test_google[] = {
+  { "search", "http://www.google.com/search?q=search" },
+  { "lala/lala", "http://www.google.com/search/?q=lala%2Flala" },
+};
+
+static void
+verify_normalize_or_autosearch_urls (EphyWebView *view,
+                                     normalize_or_autosearch_t *test)
+{
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (test); i++) {
+    char *url, *result;
+
+    url = test[i].url;
+
+    result = ephy_web_view_normalize_or_autosearch_url (view, url);
+    g_assert_cmpstr (result, ==, test[i].expected);
+
+    g_free (result);
+  }
+}
+
 static void
 test_ephy_web_view_normalize_or_autosearch (void)
 {
-  int i;
   char *default_engine_url;
   EphyWebView *view;
   
@@ -279,16 +303,13 @@ test_ephy_web_view_normalize_or_autosearch (void)
                          EPHY_PREFS_KEYWORD_SEARCH_URL,
                          "http://duckduckgo.com/?q=%s&t=epiphany");
 
-  for (i = 0; i < G_N_ELEMENTS (normalize_or_autosearch); i++) {
-    char *url, *result;
+  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg);
 
-    url = normalize_or_autosearch[i].url;
+  g_settings_set_string (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_KEYWORD_SEARCH_URL,
+                         "http://www.google.com/?q=%s");
 
-    result = ephy_web_view_normalize_or_autosearch_url (view, url);
-    g_assert_cmpstr (result, ==, normalize_or_autosearch[i].expected);
-
-    g_free (result);
-  }
+  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google);
 
   g_settings_set_string (EPHY_SETTINGS_MAIN,
                          EPHY_PREFS_KEYWORD_SEARCH_URL,
