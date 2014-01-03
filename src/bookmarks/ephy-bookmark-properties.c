@@ -472,6 +472,7 @@ static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *properties)
 {
 	properties->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (properties);
+	gtk_window_set_modal (GTK_WINDOW (properties), TRUE);
 }
 
 static GObject *
