@@ -70,12 +70,6 @@ libephywidgets_la_SOURCES = \
 	ephy-download-widget.h			\
 	ephy-frecent-store.c			\
 	ephy-frecent-store.h			\
-	ephy-history-view.c			\
-	ephy-history-view.h			\
-	ephy-hosts-store.c			\
-	ephy-hosts-store.h			\
-	ephy-hosts-view.c			\
-	ephy-hosts-view.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-middle-clickable-button.c		\
@@ -90,10 +84,6 @@ libephywidgets_la_SOURCES = \
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
 	ephy-tree-model-sort.h			\
-	ephy-urls-store.c			\
-	ephy-urls-store.h			\
-	ephy-urls-view.c			\
-	ephy-urls-view.h			\
 	ephy-zoom-action.h			\
 	ephy-zoom-action.c			\
 	gd-main-icon-view.c			\
