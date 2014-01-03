@@ -29,6 +29,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-private.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
 
@@ -244,8 +245,6 @@ test_ephy_web_view_non_search_regex (void)
   g_regex_unref (regex_domain);
 }
 
-/* FIXME: we hardcode the ddg search for now, since it's the
- * default. */
 static struct {
   char *url;
   char *expected;
@@ -269,9 +268,16 @@ static void
 test_ephy_web_view_normalize_or_autosearch (void)
 {
   int i;
+  char *default_engine_url;
   EphyWebView *view;
   
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
+  default_engine_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
+                                              EPHY_PREFS_KEYWORD_SEARCH_URL);
+
+  g_settings_set_string (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_KEYWORD_SEARCH_URL,
+                         "http://duckduckgo.com/?q=%s&t=epiphany");
 
   for (i = 0; i < G_N_ELEMENTS (normalize_or_autosearch); i++) {
     char *url, *result;
@@ -284,6 +290,11 @@ test_ephy_web_view_normalize_or_autosearch (void)
     g_free (result);
   }
 
+  g_settings_set_string (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_KEYWORD_SEARCH_URL,
+                         default_engine_url);
+
+  g_free (default_engine_url);
   g_object_unref (g_object_ref_sink (view));
 }
 
