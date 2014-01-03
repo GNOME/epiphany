@@ -945,8 +945,8 @@ ephy_file_move_uri (const char *source_uri, const char *dest_uri)
 	src = g_file_new_for_uri (source_uri);
 	dest = g_file_new_for_uri (dest_uri);
 
-	ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL,
-				NULL);
+	ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE | G_FILE_COPY_ALL_METADATA,
+			   NULL, NULL, NULL, NULL);
 
 	if (ret == TRUE)
 	{
