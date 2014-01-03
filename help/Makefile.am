@@ -35,4 +35,4 @@ HELP_FILES = \
 	pref-passwords.page \
 	prob-passwords-show.page
 
-HELP_LINGUAS = cs de es hu pt_BR
+HELP_LINGUAS = cs de el es hu pt_BR
