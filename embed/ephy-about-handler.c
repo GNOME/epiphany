@@ -437,6 +437,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
   }
 
   data = g_strdup_printf ("<html>\n"                                   \
+                          "<div dir=\"%s\">\n"                         \
                           "<head>\n"                                   \
                           "<title>%s</title>\n"                        \
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
@@ -450,7 +451,9 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                           "    </div>\n"                               \
                           "  </div>\n"                                 \
                           "</body>\n"                                  \
+                          "</div>\n"                                   \
                           "</html>\n",
+                          gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr",
                           _("Private Browsing"),
                           ephy_about_handler_get_style_sheet (handler),
                           img_data_base64 ? img_data_base64 : "",
