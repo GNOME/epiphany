@@ -176,6 +176,19 @@ ephy_toolbar_constructed (GObject *object)
     gtk_container_add (GTK_CONTAINER (toolbar), box);
   }
 
+  /* Page Menu */
+  button = gtk_button_new ();
+  gtk_widget_set_name (button, "ephy-page-menu-button");
+  /* FIXME: apparently we need an image inside the button for the action
+   * icon to appear. */
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  action = gtk_action_group_get_action (action_group, "PageMenu");
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+                                      action);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+  gtk_widget_show_all (button);
+
   /* New Tab */
   button = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
@@ -189,19 +202,6 @@ ephy_toolbar_constructed (GObject *object)
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
     gtk_widget_show_all (button);
-
-  /* Page Menu */
-  button = gtk_button_new ();
-  gtk_widget_set_name (button, "ephy-page-menu-button");
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "PageMenu");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
-  gtk_widget_show_all (button);
 
   /* Add title only in application mode. */
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
