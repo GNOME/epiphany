@@ -99,6 +99,7 @@ libephybookmarks_la_CPPFLAGS = \
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/embed		\
 	-I$(top_srcdir)/lib/widgets	\
+	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/egg		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\

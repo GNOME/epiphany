@@ -96,6 +96,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/lib      \
 	-I$(top_srcdir)/lib/history \
 	-I$(top_srcdir)/lib/widgets \
+	-I$(top_builddir)/lib/widgets \
 	-I$(top_srcdir)/src      \
 	-I$(top_srcdir)/src/bookmarks
 

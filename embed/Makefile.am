@@ -58,6 +58,7 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg       	    \
 	-I$(top_srcdir)/lib/history	    \
 	-I$(top_srcdir)/lib/widgets         \
+	-I$(top_builddir)/lib/widgets       \
 	$(AM_CPPFLAGS)
 
 libephyembed_la_CFLAGS = \
