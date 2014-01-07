@@ -6,7 +6,8 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Text Encoding</property>
     <property name="role">epiphany-encoding-chooser</property>
-    <property name="default_width">300</property>
+    <property name="modal">True</property>
+    <property name="default_width">400</property>
     <property name="default_height">420</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -22,14 +23,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="okbutton2">
-                <property name="label">gtk-close</property>
+                <property name="label">_Close</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,25 +46,38 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox144">
+          <object class="GtkBox" id="vbox144">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkVBox" id="vbox148">
+              <object class="GtkBox" id="vbox148">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="automatic_button">
-                    <property name="label" translatable="yes">&lt;b&gt;_Automatic&lt;/b&gt;</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Automatic</property>
+                        <property name="use_underline">True</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -73,18 +86,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment8">
+                  <object class="GtkLabel" id="label1246">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label1246">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Use the encoding specified by the document</property>
-                        <property name="wrap">True</property>
-                      </object>
-                    </child>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Use the encoding specified by the document</property>
+                    <property name="wrap">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -100,21 +107,32 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="manual_vbox">
+              <object class="GtkBox" id="manual_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="manual_button">
-                    <property name="label" translatable="yes">&lt;b&gt;_Use a different encoding:&lt;/b&gt;</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">automatic_button</property>
+                    <child>
+                      <object class="GtkLabel" id="label1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Use a different encoding:</property>
+                        <property name="use_underline">True</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -123,21 +141,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment9">
+                  <object class="GtkScrolledWindow" id="scrolled_window">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_height">300</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolled_window">
-                        <property name="expand">True</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
