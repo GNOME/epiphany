@@ -3618,6 +3618,7 @@ ephy_window_new (void)
 {
 	return g_object_new (EPHY_TYPE_WINDOW,
 			     "application", GTK_APPLICATION (ephy_shell_get_default ()),
+			     "icon-name", "web-browser",
 			     NULL);
 }
 
