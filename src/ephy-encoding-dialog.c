@@ -248,12 +248,6 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 				  int response,
 				  EphyEncodingDialog *dialog)
 {
-	if (response == GTK_RESPONSE_HELP)
-	{
-		ephy_gui_help (widget, NULL);
-		return;
-	}
-
 	g_object_unref (dialog);
 }
 
