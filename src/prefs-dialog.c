@@ -945,12 +945,6 @@ prefs_dialog_response_cb (GtkDialog *widget,
 			  int response,
 			  GtkDialog *dialog)
 {
-	if (response == GTK_RESPONSE_HELP)
-	{
-		ephy_gui_help (GTK_WIDGET (widget), "pref");
-		return;
-	}
-
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
