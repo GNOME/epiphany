@@ -271,6 +271,7 @@ widget_failed_cb (WebKitDownload *download,
   g_signal_handlers_disconnect_by_func (download, widget_finished_cb, widget);
   g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
 
+  widget->priv->finished = TRUE;
   error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
   gtk_label_set_text (GTK_LABEL (widget->priv->remaining), error_msg);
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
