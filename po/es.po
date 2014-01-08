@@ -6,15 +6,15 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2004, 2005, 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011., 2012, 2013.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011., 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-29 18:17+0000\n"
-"PO-Revision-Date: 2013-12-30 11:18+0100\n"
+"POT-Creation-Date: 2014-01-07 23:11+0000\n"
+"PO-Revision-Date: 2014-01-08 10:38+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -52,7 +52,7 @@ msgstr "http://duckduckgo.com/?t=epiphany&amp;kl=es-es&amp;kad=es_ES"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2088
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2090
 #: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -68,9 +68,9 @@ msgstr ""
 "con el escritorio y una interfaz de usuario simple e intuitiva que le "
 "permite centrarse en sus páginas web."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:301
-#: ../embed/ephy-about-handler.c:331 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1574
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:312
+#: ../embed/ephy-about-handler.c:342 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:467 ../src/window-commands.c:1574
 msgid "Web"
 msgstr "Web"
 
@@ -103,7 +103,6 @@ msgstr "Navegar con cursor"
 #. the URL.
 #: ../data/org.gnome.epiphany.gschema.xml.h:10
 #, no-c-format
-#| msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgid "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
 msgstr "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
 
@@ -363,7 +362,7 @@ msgid "Size of disk cache, in MB."
 msgstr "Tamaño de la caché de disco, en MB."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:58
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -498,70 +497,78 @@ msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Indica si debe mostrar la columna de direcciones en la ventana de marcadores."
 
-#: ../embed/ephy-about-handler.c:145 ../embed/ephy-about-handler.c:147
+#: ../embed/ephy-about-handler.c:153
 msgid "Installed plugins"
 msgstr "Complementos instalados"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:155
+msgid "Plugins"
+msgstr "Complementos"
+
+#: ../embed/ephy-about-handler.c:158
+msgid "Plugins are disabled in the preferences"
+msgstr "Los complementos están desactivados en las preferencias"
+
+#: ../embed/ephy-about-handler.c:171
 msgid "Enabled"
 msgstr "Activado"
 
-#. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:160
+#. webkit_plugin_get_enabled (plugin) &&
+#: ../embed/ephy-about-handler.c:171
 msgid "Yes"
 msgstr "Sí"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:171
 msgid "No"
 msgstr "No"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:172
 msgid "MIME type"
 msgstr "Tipo MIME"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:172
 msgid "Description"
 msgstr "Descripción"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:172
 msgid "Suffixes"
 msgstr "Sufijos"
 
-#: ../embed/ephy-about-handler.c:221 ../embed/ephy-about-handler.c:224
+#: ../embed/ephy-about-handler.c:232 ../embed/ephy-about-handler.c:235
 msgid "Memory usage"
 msgstr "Uso de la memoria"
 
-#: ../embed/ephy-about-handler.c:274
+#: ../embed/ephy-about-handler.c:285
 #, c-format
 msgid "Version %s"
 msgstr "Versión %s"
 
-#: ../embed/ephy-about-handler.c:298
+#: ../embed/ephy-about-handler.c:309
 msgid "About Web"
 msgstr "Acerca de Web"
 
-#: ../embed/ephy-about-handler.c:303
+#: ../embed/ephy-about-handler.c:314
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Una vista simple, limpia y bonita de la web"
 
-#: ../embed/ephy-about-handler.c:354 ../embed/ephy-about-handler.c:356
+#: ../embed/ephy-about-handler.c:365 ../embed/ephy-about-handler.c:367
 msgid "Applications"
 msgstr "Aplicaciones"
 
-#: ../embed/ephy-about-handler.c:357
+#: ../embed/ephy-about-handler.c:368
 msgid "List of installed web applications"
 msgstr "Lista de las aplicaciones web instaladas"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:378
+#: ../embed/ephy-about-handler.c:389
 msgid "Installed on:"
 msgstr "Instalada el:"
 
-#: ../embed/ephy-about-handler.c:451 ../embed/ephy-about-handler.c:454
+#: ../embed/ephy-about-handler.c:468 ../embed/ephy-about-handler.c:471
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: ../embed/ephy-about-handler.c:455
+#: ../embed/ephy-about-handler.c:472
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -939,7 +946,7 @@ msgid "Most Visited"
 msgstr "Más visitados"
 
 #. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2776
+#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2778
 msgid "Blank page"
 msgstr "Página en blanco"
 
@@ -972,16 +979,16 @@ msgstr "La página <b>%s</b> quiere saber su ubicación."
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
-#: ../embed/ephy-web-view.c:1750 ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1752 ../embed/ephy-web-view.c:1769
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Hubo un problema al cargar «%s»"
 
-#: ../embed/ephy-web-view.c:1752
+#: ../embed/ephy-web-view.c:1754
 msgid "Oops! Unable to display this website."
 msgstr "No se ha podido cargar esta página web."
 
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1755
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -994,15 +1001,15 @@ msgstr ""
 "se haya movido a otra dirección. Puede querer comprobar que su conexión a "
 "Internet está funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:1762
+#: ../embed/ephy-web-view.c:1764
 msgid "Try Again"
 msgstr "Intentarlo de nuevo"
 
-#: ../embed/ephy-web-view.c:1769
+#: ../embed/ephy-web-view.c:1771
 msgid "Oops! There may be a problem."
 msgstr "Es posible que haya un problema."
 
-#: ../embed/ephy-web-view.c:1770
+#: ../embed/ephy-web-view.c:1772
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1013,20 +1020,20 @@ msgstr ""
 "a pasar, informe del problema a los desarrolladores de <strong>%s</strong>.</"
 "p>"
 
-#: ../embed/ephy-web-view.c:1776
+#: ../embed/ephy-web-view.c:1778
 msgid "Reload Anyway"
 msgstr "Recargar de todas formas"
 
-#: ../embed/ephy-web-view.c:1781
+#: ../embed/ephy-web-view.c:1783
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Hubo un problema al mostrar «%s»"
 
-#: ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1784
 msgid "Oops!"
 msgstr "¡Ups!"
 
-#: ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1785
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1035,23 +1042,24 @@ msgstr ""
 "diferente para continuar."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2326
+#: ../embed/ephy-web-view.c:2328
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: ../embed/ephy-web-view.c:2328
+#: ../embed/ephy-web-view.c:2330
 msgid "Loading…"
 msgstr "Cargando…"
 
-#: ../embed/ephy-web-view.c:2680
+#: ../embed/ephy-web-view.c:2682
 msgid "_OK"
 msgstr "_Aceptar"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
 #: ../src/bookmarks/ephy-bookmark-properties.c:640
 #: ../src/bookmarks/ephy-bookmarks-editor.c:815
-#: ../src/resources/clear-data-dialog.ui.h:2 ../src/window-commands.c:877
+#: ../src/resources/clear-data-dialog.ui.h:2
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:877
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1080,7 +1088,7 @@ msgid "All files"
 msgstr "Todos los archivos"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:3
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -1322,7 +1330,8 @@ msgstr "No se ha verificado la identidad de este sitio web"
 #: ../src/bookmarks/ephy-bookmark-properties.c:650
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
 #: ../src/resources/cookies-dialog.ui.h:3
-#: ../src/resources/passwords-dialog.ui.h:3 ../src/ephy-history-window.c:143
+#: ../src/resources/passwords-dialog.ui.h:3
+#: ../src/resources/prefs-dialog.ui.h:2 ../src/ephy-history-window.c:143
 #: ../src/ephy-window.c:114
 msgid "_Close"
 msgstr "_Cerrar"
@@ -1359,25 +1368,25 @@ msgstr[1] "quedan %u segundos"
 msgid "Finished"
 msgstr "Terminado"
 
-#: ../lib/widgets/ephy-download-widget.c:273
+#: ../lib/widgets/ephy-download-widget.c:275
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Error al descargar: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:330 ../src/window-commands.c:781
+#: ../lib/widgets/ephy-download-widget.c:334 ../src/window-commands.c:781
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:339 ../src/ephy-window.c:1169
+#: ../lib/widgets/ephy-download-widget.c:343 ../src/ephy-window.c:1171
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Abrir"
 
-#: ../lib/widgets/ephy-download-widget.c:345
+#: ../lib/widgets/ephy-download-widget.c:349
 msgid "Show in folder"
 msgstr "Mostrar en una carpeta"
 
-#: ../lib/widgets/ephy-download-widget.c:538
+#: ../lib/widgets/ephy-download-widget.c:542
 msgid "Starting…"
 msgstr "Iniciando…"
 
@@ -1393,21 +1402,21 @@ msgstr "Sitios"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:616
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:229
+#: ../lib/widgets/ephy-location-entry.c:618
+#: ../src/resources/prefs-dialog.ui.h:37 ../src/ephy-history-window.c:229
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:635 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:637 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: ../lib/widgets/ephy-location-entry.c:642
+#: ../lib/widgets/ephy-location-entry.c:644
 msgid "_Redo"
 msgstr "_Rehacer"
 
-#: ../lib/widgets/ephy-location-entry.c:899
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastre y suelte este icono para crear un enlace a esta página"
 
@@ -1479,7 +1488,8 @@ msgid "_Help"
 msgstr "Ay_uda"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:643
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Añadir"
 
@@ -1878,7 +1888,7 @@ msgstr ""
 
 #: ../src/resources/clear-data-dialog.ui.h:6
 #: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -1950,20 +1960,21 @@ msgstr "_Salir"
 msgid "Text Encoding"
 msgstr "Codificación del texto"
 
-#: ../src/resources/epiphany.ui.h:2
-msgid "<b>_Automatic</b>"
-msgstr "<b>_Automática</b>"
+#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "_Automático"
 
 #: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
 msgid "Use the encoding specified by the document"
 msgstr "Usar la codificación especificada por el documento"
 
 #: ../src/resources/epiphany.ui.h:4
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_Usar una codificación diferente:</b>"
+#| msgid "<b>_Use a different encoding:</b>"
+msgid "_Use a different encoding:"
+msgstr "_Usar una codificación diferente:"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "Passwords"
 msgstr "Contraseñas"
 
@@ -1991,162 +2002,161 @@ msgstr "C_opiar nombre de usuario"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../src/resources/prefs-dialog.ui.h:3
+#: ../src/resources/prefs-dialog.ui.h:4
 msgid "_Download folder:"
 msgstr "Carpeta de de_scarga:"
 
-#: ../src/resources/prefs-dialog.ui.h:4
+#: ../src/resources/prefs-dialog.ui.h:5
 msgid "A_utomatically open downloaded files"
 msgstr "Abrir _automáticamente los archivos descargados"
 
-#: ../src/resources/prefs-dialog.ui.h:5
-#| msgid "_Search:"
+#: ../src/resources/prefs-dialog.ui.h:6
 msgid "Search"
 msgstr "Buscar"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:7
 msgid "_Engine:"
 msgstr "_Motor:"
 
-#: ../src/resources/prefs-dialog.ui.h:7
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Web Content"
 msgstr "Contenido web"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow popup _windows"
 msgstr "Permitir ventanas e_mergentes"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Allow _advertisements"
 msgstr "Permitir _anuncios"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "Enable _plugins"
 msgstr "Activar co_mplementos"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "General"
 msgstr "General"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "Fonts"
 msgstr "Tipografías"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "_Use system fonts"
 msgstr "_Usar tipografías del sistema"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "Sans serif font:"
 msgstr "Tipografía Sans Serif:"
 
 # Esto es de gestión de cookies (serrador)
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Serif font:"
 msgstr "Tipografía Serif:"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Monospace font:"
 msgstr "Tipografía monoespaciada:"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Style"
 msgstr "Estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "Use custom _stylesheet"
 msgstr "Usar hoja de _estilos personalizada"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "_Edit Stylesheet…"
 msgstr "Editar _hoja de estilos…"
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Fonts & Style"
 msgstr "Tipografías y estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "Manage Cookies"
 msgstr "Administrar cookies"
 
-#: ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "_Always accept"
 msgstr "_Aceptar siempre"
 
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:25
 msgid "Only _from sites you visit"
 msgstr "Sólo desde los sitios que _visita"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Por ejemplo, no de publicidad de estos sitios</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "_Never accept"
 msgstr "_Nunca aceptar"
 
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "Tracking"
 msgstr "Seguimiento"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Indicar a los sitios web que no quiere que le rastreen"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "Manage Passwords"
 msgstr "Gestionar contraseñas"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "_Remember passwords"
 msgstr "_Recordar la contraseñas"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "Temporary Files"
 msgstr "Archivos temporales"
 
-#: ../src/resources/prefs-dialog.ui.h:34
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "_Disk space:"
 msgstr "Espacio en el _disco:"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "MB"
 msgstr "MiB"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "Privacy"
 msgstr "Privacidad"
 
-#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:385
+#: ../src/resources/prefs-dialog.ui.h:39 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "Codificaciones"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "De_fault:"
 msgstr "Pre_determinada:"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Down"
 msgstr "_Abajo"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "Spell checking"
 msgstr "Corrección ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:46
+#: ../src/resources/prefs-dialog.ui.h:47
 msgid "_Enable spell checking"
 msgstr "_Activar corrección ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:831
+#: ../src/resources/prefs-dialog.ui.h:48 ../src/prefs-dialog.c:835
 msgid "Language"
 msgstr "Idioma"
 
@@ -2154,7 +2164,7 @@ msgstr "Idioma"
 msgid "Add Language"
 msgstr "Añadir idioma"
 
-#: ../src/resources/prefs-lang-dialog.ui.h:2
+#: ../src/resources/prefs-lang-dialog.ui.h:4
 msgid "Choose a l_anguage:"
 msgstr "Elija un _idioma:"
 
@@ -2181,10 +2191,6 @@ msgstr "_Otros…"
 #: ../src/ephy-encoding-menu.c:321
 msgid "Other encodings"
 msgstr "Otras codificaciones"
-
-#: ../src/ephy-encoding-menu.c:327
-msgid "_Automatic"
-msgstr "_Automático"
 
 #: ../src/ephy-history-window.c:135
 msgid "Open the selected history link in a new window"
@@ -2527,77 +2533,77 @@ msgstr "_Iniciar animación"
 msgid "St_op Animation"
 msgstr "_Detener animación"
 
-#: ../src/ephy-window.c:449
+#: ../src/ephy-window.c:451
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:452
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:452
+#: ../src/ephy-window.c:454
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:467
+#: ../src/ephy-window.c:469
 msgid "There are ongoing downloads in this window"
 msgstr "Hay descargas en curso en esta ventana"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:470
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Si cierra esta ventana, se cancelarán las descargas"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:471
 msgid "Close window and cancel downloads"
 msgstr "Cerrar la ventana y cancelar las descargas"
 
-#: ../src/ephy-window.c:1171
+#: ../src/ephy-window.c:1173
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1173
+#: ../src/ephy-window.c:1175
 msgid "Save As Application"
 msgstr "Guardar como aplicación"
 
-#: ../src/ephy-window.c:1175
+#: ../src/ephy-window.c:1177
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1179
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1179
+#: ../src/ephy-window.c:1181
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1188
+#: ../src/ephy-window.c:1190
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1191
+#: ../src/ephy-window.c:1193
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1219
+#: ../src/ephy-window.c:1221
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/ephy-window.c:1231
+#: ../src/ephy-window.c:1233
 msgid "Forward"
 msgstr "Adelante"
 
-#: ../src/ephy-window.c:1243
+#: ../src/ephy-window.c:1245
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-window.c:1252
+#: ../src/ephy-window.c:1254
 msgid "New _Tab"
 msgstr "Pe_staña nueva"
 
-#: ../src/ephy-window.c:1260
+#: ../src/ephy-window.c:1262
 msgid "Go to most visited"
 msgstr "Ir a los más visitados"
 
@@ -2613,7 +2619,7 @@ msgstr "Guardar imagen como"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:545 ../src/prefs-dialog.c:551
+#: ../src/prefs-dialog.c:549 ../src/prefs-dialog.c:555
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2622,25 +2628,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:560
+#: ../src/prefs-dialog.c:564
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido por el usuario (%s)"
 
-#: ../src/prefs-dialog.c:582
+#: ../src/prefs-dialog.c:586
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: ../src/prefs-dialog.c:914
+#: ../src/prefs-dialog.c:918
 msgid "Select a Directory"
 msgstr "Seleccione una carpeta"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1013
+#: ../src/prefs-dialog.c:1011
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2648,33 +2654,30 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1018
+#: ../src/prefs-dialog.c:1016
 #, c-format
-#| msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgid "http://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "http://duckduckgo.com/?q=%s&t=epiphany"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:1018
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:1020
 #, c-format
-#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgid "http://google.com/search?q=%s"
 msgstr "http://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1024
+#: ../src/prefs-dialog.c:1022
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1026
+#: ../src/prefs-dialog.c:1024
 #, c-format
-#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgid "http://www.bing.com/search?q=%s"
 msgstr "http://www.bing.com/search?q=%s"
 
@@ -2774,6 +2777,9 @@ msgstr ""
 #: ../src/window-commands.c:1738
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "<b>_Automatic</b>"
+#~ msgstr "<b>_Automática</b>"
 
 #~ msgid "Show Passwords"
 #~ msgstr "Mostrar contraseñas"
@@ -2947,9 +2953,6 @@ msgstr "_Activar"
 #~ msgstr ""
 #~ "Al pulsar el botón central del ratón en el panel principal de abrirá la "
 #~ "dirección apuntada por el texto seleccionado en ese momento."
-
-#~ msgid "Plugins"
-#~ msgstr "Complementos"
 
 #~ msgid "Wrapped"
 #~ msgstr "Desde el inicio"
