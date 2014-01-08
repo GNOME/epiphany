@@ -138,9 +138,8 @@ ephy_download_set_property (GObject      *object,
  * ephy_download_get_content_type:
  * @download: an #EphyDownload
  *
- * Gets content-type information for @download. If the file is already
- * present on the filesystem and readable, uses GIO to get the
- * content-type. Otherwise it uses WebKit and Soup.
+ * Gets content-type information for @download. If the server didn't
+ * provide a content type, the destination file is queried.
  *
  * Returns: content-type for @download, must be freed with g_free()
  **/
@@ -148,40 +147,38 @@ char *
 ephy_download_get_content_type (EphyDownload *download)
 {
   WebKitURIResponse *response;
+  GFile *destination;
+  GFileInfo *info;
   char *content_type = NULL;
   GError *error = NULL;
 
-  if (download->priv->destination) {
-    GFile *destination;
-    GFileInfo *info;
-
-    destination = g_file_new_for_uri (download->priv->destination);
-    info = g_file_query_info (destination, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                              G_FILE_QUERY_INFO_NONE, NULL, &error);
-    if (info) {
-      content_type = g_strdup (g_file_info_get_content_type (info));
-      LOG ("ephy_download_get_content_type: GIO: %s", content_type);
-      g_object_unref (info);
-    } else {
-      LOG ("ephy_download_get_content_type: error getting file "
-           "content-type: %s", error->message);
-      g_error_free (error);
-    }
-
-    g_object_unref (destination);
-  }
-
-  if (content_type)
-    return content_type;
-
-  /* Fallback to Soup */
   response = webkit_download_get_response (download->priv->download);
-  if (response)
+  if (response) {
     content_type = g_strdup (webkit_uri_response_get_mime_type (response));
 
-  LOG ("ephy_download_get_content_type: Soup: %s", content_type);
+    LOG ("ephy_download_get_content_type: WebKit: %s", content_type);
 
-  LOG ("ephy_download_get_content_type: %s", content_type);
+    if (content_type)
+      return content_type;
+  }
+
+  if (!download->priv->destination)
+    return NULL;
+
+  destination = g_file_new_for_uri (download->priv->destination);
+  info = g_file_query_info (destination, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                            G_FILE_QUERY_INFO_NONE, NULL, &error);
+  if (info) {
+    content_type = g_strdup (g_file_info_get_content_type (info));
+    LOG ("ephy_download_get_content_type: GIO: %s", content_type);
+    g_object_unref (info);
+  } else {
+    LOG ("ephy_download_get_content_type: error getting file "
+         "content-type: %s", error->message);
+    g_error_free (error);
+  }
+
+  g_object_unref (destination);
 
   return content_type;
 }
