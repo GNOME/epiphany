@@ -954,6 +954,41 @@ migrate_form_passwords_to_libsecret (void)
   g_object_unref (service);
 }
 
+static void
+migrate_app_desktop_file_categories (void)
+{
+  GList *web_apps, *l;
+
+  web_apps = ephy_web_application_get_application_list ();
+
+  for (l = web_apps; l; l = l->next) {
+    EphyWebApplication *app = (EphyWebApplication *) l->data;
+    GKeyFile *file;
+    char *data = NULL;
+    char *app_path;
+    char *desktop_file_path;
+
+    file = g_key_file_new ();
+
+    app_path = ephy_web_application_get_profile_directory (app->name);
+    desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
+    g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
+
+    LOG ("migrate_app_desktop_file_categories: adding Categories to %s", app->name);
+    g_key_file_set_value (file, "Desktop Entry", "Categories", "Network;GNOME;GTK;");
+
+    data = g_key_file_to_data (file, NULL, NULL);
+    g_file_set_contents (desktop_file_path, data, -1, NULL);
+
+    g_free (app_path);
+    g_free (desktop_file_path);
+    g_free (data);
+    g_key_file_free (file);
+  }
+
+  ephy_web_application_free_application_list (web_apps);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -968,6 +1003,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_web_app_links,
   migrate_new_urls_table,
   migrate_form_passwords_to_libsecret,
+  migrate_app_desktop_file_categories,
 };
 
 static gboolean
