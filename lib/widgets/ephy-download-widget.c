@@ -171,6 +171,16 @@ update_download_icon (EphyDownloadWidget *widget)
 }
 
 static void
+update_download_destination (EphyDownloadWidget *widget)
+{
+  char *dest;
+
+  dest = get_destination_basename_from_download (widget->priv->download);
+  gtk_label_set_text (GTK_LABEL (widget->priv->text), dest);
+  g_free (dest);
+}
+
+static void
 update_download_label_and_tooltip (EphyDownloadWidget *widget,
                                    const char *download_label)
 {
@@ -245,11 +255,7 @@ widget_destination_changed_cb (WebKitDownload *download,
                                GParamSpec *pspec,
                                EphyDownloadWidget *widget)
 {
-  char *dest;
-
-  dest = get_destination_basename_from_download (widget->priv->download);
-  gtk_label_set_text (GTK_LABEL (widget->priv->text), dest);
-  g_free (dest);
+  update_download_destination (widget);
 }
 
 static void
@@ -360,6 +366,67 @@ download_menu_clicked_cb (GtkWidget *button,
 }
 
 static void
+disconnect_download (EphyDownloadWidget *widget)
+{
+  WebKitDownload *download;
+
+  download = ephy_download_get_webkit_download (widget->priv->download);
+
+  g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
+  g_signal_handlers_disconnect_by_func (download, widget_destination_changed_cb, widget);
+  g_signal_handlers_disconnect_by_func (download, widget_finished_cb, widget);
+  g_signal_handlers_disconnect_by_func (download, widget_failed_cb, widget);
+
+  ephy_download_set_widget (widget->priv->download, NULL);
+}
+
+static void
+connect_download (EphyDownloadWidget *widget)
+{
+  WebKitDownload *download;
+
+  download = ephy_download_get_webkit_download (widget->priv->download);
+
+  g_signal_connect (download, "notify::estimated-progress",
+                    G_CALLBACK (widget_progress_cb), widget);
+  g_signal_connect (download, "notify::destination",
+                    G_CALLBACK (widget_destination_changed_cb), widget);
+  g_signal_connect (download, "finished",
+                    G_CALLBACK (widget_finished_cb), widget);
+  g_signal_connect (download, "failed",
+                    G_CALLBACK (widget_failed_cb), widget);
+
+  ephy_download_set_widget (widget->priv->download, GTK_WIDGET (widget));
+}
+
+static void
+ephy_download_widget_set_download (EphyDownloadWidget *widget,
+                                   EphyDownload       *download)
+{
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget), NULL);
+
+  if (widget->priv->download == download)
+    return;
+
+  if (widget->priv->download != NULL) {
+    disconnect_download (widget);
+    g_object_unref (widget->priv->download);
+  }
+
+  widget->priv->download = NULL;
+
+  if (download != NULL) {
+    widget->priv->download = g_object_ref (download);
+    connect_download (widget);
+  }
+
+  update_download_icon (widget);
+  update_download_destination (widget);
+
+  g_object_notify (G_OBJECT (widget), "download");
+}
+
+static void
 ephy_download_widget_get_property (GObject    *object,
                                    guint       property_id,
                                    GValue     *value,
@@ -390,7 +457,7 @@ ephy_download_widget_set_property (GObject      *object,
 
   switch (property_id) {
     case PROP_DOWNLOAD:
-      widget->priv->download = g_object_ref (g_value_get_object (value));
+      ephy_download_widget_set_download (widget, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -402,20 +469,13 @@ static void
 ephy_download_widget_dispose (GObject *object)
 {
   EphyDownloadWidget *widget;
-  WebKitDownload *download;
 
   LOG ("EphyDownloadWidget %p dispose", object);
 
   widget = EPHY_DOWNLOAD_WIDGET (object);
 
   if (widget->priv->download != NULL) {
-    download = ephy_download_get_webkit_download (widget->priv->download);
-
-    g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
-    g_signal_handlers_disconnect_by_func (download, widget_destination_changed_cb, widget);
-    g_signal_handlers_disconnect_by_func (download, widget_finished_cb, widget);
-    g_signal_handlers_disconnect_by_func (download, widget_failed_cb, widget);
-
+    disconnect_download (widget);
     g_object_unref (widget->priv->download);
     widget->priv->download = NULL;
   }
@@ -452,11 +512,69 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
 }
 
 static void
+create_widget (EphyDownloadWidget *widget)
+{
+
+  GtkWidget *grid;
+  GtkWidget *icon;
+  GtkWidget *text;
+  GtkWidget *button;
+  GtkWidget *menu;
+  GtkWidget *remain;
+
+  grid = gtk_grid_new ();
+
+  button = totem_glow_button_new ();
+  menu = gtk_button_new ();
+
+  icon = gtk_image_new ();
+
+  text = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
+  gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
+
+  remain = gtk_label_new (_("Starting…"));
+  gtk_misc_set_alignment (GTK_MISC (remain), 0, 0.5);
+  gtk_label_set_ellipsize (GTK_LABEL (remain), PANGO_ELLIPSIZE_END);
+
+  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), text, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), remain, 1, 1, 1, 1);
+
+  widget->priv->text = text;
+  widget->priv->icon = icon;
+  widget->priv->button = button;
+  widget->priv->remaining = remain;
+  widget->priv->menu = menu;
+
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
+  gtk_button_set_relief (GTK_BUTTON (menu), GTK_RELIEF_NORMAL);
+
+  gtk_container_add (GTK_CONTAINER (button), grid);
+  gtk_container_add (GTK_CONTAINER (menu),
+                     gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE));
+
+  gtk_box_pack_start (GTK_BOX (widget), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (widget), menu, FALSE, FALSE, 0);
+
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (download_clicked_cb), widget);
+  g_signal_connect (menu, "button-press-event",
+                    G_CALLBACK (download_menu_clicked_cb), widget);
+
+  gtk_widget_show_all (button);
+  gtk_widget_show_all (menu);
+
+}
+
+static void
 ephy_download_widget_init (EphyDownloadWidget *self)
 {
   GtkStyleContext *context;
 
   self->priv = DOWNLOAD_WIDGET_PRIVATE (self);
+
+  create_widget (self);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self),
                                   GTK_ORIENTATION_HORIZONTAL);
@@ -508,82 +626,10 @@ ephy_download_widget_new (EphyDownload *ephy_download)
 {
   EphyDownloadWidget *widget;
 
-  GtkWidget *grid;
-  GtkWidget *icon;
-  GtkWidget *text;
-  GtkWidget *button;
-  GtkWidget *menu;
-  GtkWidget *remain;
-
-  char *dest;
-  WebKitDownload *download;
-  GIcon *gicon;
-
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (ephy_download), NULL);
 
   widget = g_object_new (EPHY_TYPE_DOWNLOAD_WIDGET,
                          "download", ephy_download, NULL);
-  download = ephy_download_get_webkit_download (ephy_download);
-
-  grid = gtk_grid_new ();
-
-  button = totem_glow_button_new ();
-  menu = gtk_button_new ();
-
-  gicon = get_gicon_from_download (ephy_download);
-  icon = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
-  g_object_unref (gicon);
-
-  dest = get_destination_basename_from_download (ephy_download);
-  text = gtk_label_new (dest);
-  gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
-  gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
-
-  remain = gtk_label_new (_("Starting…"));
-  gtk_misc_set_alignment (GTK_MISC (remain), 0, 0.5);
-  gtk_label_set_ellipsize (GTK_LABEL (remain), PANGO_ELLIPSIZE_END);
-
-  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 2);
-  gtk_grid_attach (GTK_GRID (grid), text, 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), remain, 1, 1, 1, 1);
-
-  gtk_widget_set_tooltip_text (GTK_WIDGET (widget), dest);
-  g_free (dest);
-
-  widget->priv->text = text;
-  widget->priv->icon = icon;
-  widget->priv->button = button;
-  widget->priv->remaining = remain;
-  widget->priv->menu = menu;
-
-  g_signal_connect (download, "notify::estimated-progress",
-                    G_CALLBACK (widget_progress_cb), widget);
-  g_signal_connect (download, "notify::destination",
-                    G_CALLBACK (widget_destination_changed_cb), widget);
-  g_signal_connect (download, "finished",
-                    G_CALLBACK (widget_finished_cb), widget);
-  g_signal_connect (download, "failed",
-                    G_CALLBACK (widget_failed_cb), widget);
-
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
-  gtk_button_set_relief (GTK_BUTTON (menu), GTK_RELIEF_NORMAL);
-
-  gtk_container_add (GTK_CONTAINER (button), grid);
-  gtk_container_add (GTK_CONTAINER (menu),
-                     gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-
-  gtk_box_pack_start (GTK_BOX (widget), button, FALSE, FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (widget), menu, FALSE, FALSE, 0);
-
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (download_clicked_cb), widget);
-  g_signal_connect (menu, "button-press-event",
-                    G_CALLBACK (download_menu_clicked_cb), widget);
-
-  gtk_widget_show_all (button);
-  gtk_widget_show_all (menu);
-
-  ephy_download_set_widget (ephy_download, GTK_WIDGET (widget));
 
   return GTK_WIDGET (widget);
 }
