@@ -61,7 +61,6 @@ enum
   PROP_0,
   PROP_DOWNLOAD,
   PROP_DESTINATION,
-  PROP_SOURCE,
   PROP_ACTION,
   PROP_START_TIME,
   PROP_WINDOW,
@@ -92,9 +91,6 @@ ephy_download_get_property (GObject    *object,
       break;
     case PROP_DESTINATION:
       g_value_set_string (value, ephy_download_get_destination_uri (download));
-      break;
-    case PROP_SOURCE:
-      g_value_set_string (value, ephy_download_get_source_uri (download));
       break;
     case PROP_ACTION:
       g_value_set_enum (value, ephy_download_get_action (download));
@@ -131,7 +127,6 @@ ephy_download_set_property (GObject      *object,
       ephy_download_set_widget (download, g_value_get_object (value));
       break;
     case PROP_DOWNLOAD:
-    case PROP_SOURCE:
     case PROP_START_TIME:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -476,22 +471,6 @@ ephy_download_get_destination_uri (EphyDownload *download)
 }
 
 /**
- * ephy_download_get_source_uri:
- * @download: an #EphyDownload
- *
- * Gets the source URI that this download is/will download.
- *
- * Returns: source URI.
- **/
-const char *
-ephy_download_get_source_uri (EphyDownload *download)
-{
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
-
-  return download->priv->source;
-}
-
-/**
  * ephy_download_get_action:
  * @download: an #EphyDownload
  *
@@ -639,7 +618,6 @@ ephy_download_finalize (GObject *object)
   priv = download->priv;
 
   g_free (priv->destination);
-  g_free (priv->source);
 
   LOG ("EphyDownload finalised %p", object);
 
@@ -684,20 +662,6 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                                         "Destination file URI",
                                                         NULL,
                                                         G_PARAM_READWRITE |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
-  /**
-   * EphyDownload::source:
-   *
-   * Download's origin URI
-   */
-  g_object_class_install_property (object_class, PROP_SOURCE,
-                                   g_param_spec_string ("source",
-                                                        "Source",
-                                                        "Source URI",
-                                                        NULL,
-                                                        G_PARAM_READABLE |
                                                         G_PARAM_STATIC_NAME |
                                                         G_PARAM_STATIC_NICK |
                                                         G_PARAM_STATIC_BLURB));
@@ -912,7 +876,6 @@ ephy_download_new_for_download (WebKitDownload *download,
                                 GtkWindow *parent)
 {
   EphyDownload *ephy_download;
-  WebKitURIRequest *request;
 
   g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
 
@@ -933,8 +896,6 @@ ephy_download_new_for_download (WebKitDownload *download,
 
   ephy_download->priv->download = g_object_ref (download);
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
-  request = webkit_download_get_request (download);
-  ephy_download->priv->source = g_strdup (webkit_uri_request_get_uri (request));
 
   /* In WebKit2 the download has already started */
   ephy_embed_shell_add_download (ephy_embed_shell_get_default (), ephy_download);
