@@ -1013,11 +1013,11 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 					        * you chose in the gschema, but with & instead of &amp;
 					        * If the match is not exact, there will be a spurious, ugly
 					        * entry in the preferences combo, so please test this. */
-					       N_("http://duckduckgo.com/?q=%s&t=epiphany")},
+					       N_("https://duckduckgo.com/?q=%s&t=epiphany")},
 					     /* Search engine option in the preferences dialog */
 					     { N_("Google"),
 					       /* For the preferences dialog. Consider a regional variant, like google.co.uk */
-					       N_("http://google.com/search?q=%s")},
+					       N_("https://google.com/search?q=%s")},
 					     /* Search engine option in the preferences dialog */
 					     { N_("Bing"),
 					       /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
