@@ -161,8 +161,6 @@ save_property_url_to_destination (EphyWindow *window,
 
 	if (destination)
 		ephy_download_set_destination_uri (download, destination);
-	else
-		ephy_download_set_auto_destination (download);
 
 	ephy_download_start (download);
 }

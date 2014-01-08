@@ -487,7 +487,6 @@ ephy_embed_auto_download_url (EphyEmbed *embed, const char *url)
   EphyDownload *download;
 
   download = ephy_download_new_for_uri (url, NULL);
-  ephy_download_set_auto_destination (download);
   ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 }
 

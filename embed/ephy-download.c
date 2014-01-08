@@ -368,18 +368,6 @@ ephy_download_set_destination_uri (EphyDownload *download,
 }
 
 /**
- * ephy_download_set_auto_destination:
- * @download: an #EphyDownload
- *
- * Tells @download to automatically determine a destination for itself.
- **/
-void
-ephy_download_set_auto_destination (EphyDownload *download)
-{
-  /* TODO: in WebKit2 priv->destination == NULL means auto_destination, remove this? */
-}
-
-/**
  * ephy_download_set_action:
  * @download: an #EphyDownload
  * @action: #EphyDownloadActionType to execute
@@ -554,9 +542,6 @@ ephy_download_start (EphyDownload *download)
 
   priv = download->priv;
   priv->start_time = gtk_get_current_event_time ();
-
-  if (priv->destination == NULL)
-    ephy_download_set_auto_destination (download);
 }
 
 /**

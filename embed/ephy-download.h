@@ -85,7 +85,6 @@ EphyDownload *ephy_download_new_for_download      (WebKitDownload *download,
 void          ephy_download_start                 (EphyDownload *download);
 void          ephy_download_cancel                (EphyDownload *download);
 
-void          ephy_download_set_auto_destination  (EphyDownload *download);
 void          ephy_download_set_destination_uri   (EphyDownload *download,
                                                    const char *destination);
 
