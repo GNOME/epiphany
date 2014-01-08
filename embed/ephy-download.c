@@ -515,7 +515,7 @@ ephy_download_get_action (EphyDownload *download)
  * @download: an #EphyDownload
  *
  * Gets the time (returned by gtk_get_current_event_time ()) when @download was
- * started with ephy_download_start (). Defaults to 0.
+ * started. Defaults to 0.
  *
  * Returns: the time when @download was started.
  **/
@@ -525,23 +525,6 @@ ephy_download_get_start_time (EphyDownload *download)
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), 0);
 
   return download->priv->start_time;
-}
-
-/**
- * ephy_download_start:
- * @download: an #EphyDownload
- *
- * Starts the wrapped #WebKitDownload.
- **/
-void
-ephy_download_start (EphyDownload *download)
-{
-  EphyDownloadPrivate *priv;
-
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
-
-  priv = download->priv;
-  priv->start_time = gtk_get_current_event_time ();
 }
 
 /**
@@ -842,7 +825,7 @@ ephy_download_init (EphyDownload *download)
 
   download->priv->action = EPHY_DOWNLOAD_ACTION_NONE;
 
-  download->priv->start_time = 0;
+  download->priv->start_time = gtk_get_current_event_time ();
 
   download->priv->window = NULL;
   download->priv->widget = NULL;

@@ -82,7 +82,6 @@ EphyDownload *ephy_download_new_for_download      (WebKitDownload *download,
                                                    GtkWindow *parent);
 
 
-void          ephy_download_start                 (EphyDownload *download);
 void          ephy_download_cancel                (EphyDownload *download);
 
 void          ephy_download_set_destination_uri   (EphyDownload *download,

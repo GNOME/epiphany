@@ -161,8 +161,6 @@ save_property_url_to_destination (EphyWindow *window,
 
 	if (destination)
 		ephy_download_set_destination_uri (download, destination);
-
-	ephy_download_start (download);
 }
 
 static void
@@ -319,8 +317,6 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	g_signal_connect (download, "completed",
 			  G_CALLBACK (background_download_completed), window);
-
-	ephy_download_start (download);
 
 	g_value_unset (&value);
 	g_free (base);
