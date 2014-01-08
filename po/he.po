@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2014-01-08 01:26+0200\n"
-"PO-Revision-Date: 2014-01-08 01:27+0200\n"
+"POT-Creation-Date: 2014-01-08 17:03+0200\n"
+"PO-Revision-Date: 2014-01-08 17:14+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
@@ -36,10 +36,10 @@ msgstr "חיפוש באינטרנט"
 #. duckduckgo must be translated. So, for a Finnish localized
 #. version of duckduckgo that will render results tailored for
 #. Finland, the string would be:
-#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#. https://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #.
 #: ../data/default-bookmarks.rdf.in.h:13
-msgid "http://duckduckgo.com/?t=epiphany"
+msgid "https://duckduckgo.com/?t=epiphany"
 msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #. Translators: you can use the regions listed in
@@ -50,11 +50,10 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 #. 'kad' parameter can be used to specify the locale in which
 #. duckduckgo must be translated. For such case, the search url
 #. would be
-#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-web-view.c:2090
-#: ../src/ephy-search-provider.c:287
+#. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24
 #, no-c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #: ../data/epiphany.appdata.xml.in.h:1
@@ -101,7 +100,7 @@ msgstr "Browse with caret"
 #. the URL.
 #: ../data/org.gnome.epiphany.gschema.xml.h:10
 #, no-c-format
-msgid "'http://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
 msgstr ""
 "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL'"
 
@@ -560,17 +559,17 @@ msgstr ""
 "מצב הגלישה הנוכחי שלך הוא <em>מוסתר</em>. עמודים שיוצגו במצב זה לא יופיעו "
 "בהיסטוריית הגלישה שלך וכל הפרטים שנשמרים יימחקו עם סגירת החלון."
 
-#: ../embed/ephy-embed.c:501
+#: ../embed/ephy-embed.c:500
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "יש ללחוץ על %s כדי לצאת ממסך מלא"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:504
+#: ../embed/ephy-embed.c:503
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:504
+#: ../embed/ephy-embed.c:503
 msgid "F11"
 msgstr "F11"
 
@@ -1020,6 +1019,11 @@ msgid ""
 msgstr ""
 "משהו השתבש במהלך ההצגה של עמוד זה. נא לרענן או לבקר בעמוד אחר כדי להמשיך."
 
+#: ../embed/ephy-web-view.c:2090 ../src/ephy-search-provider.c:287
+#, c-format
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
+
 #. translators: %s here is the address of the web page
 #: ../embed/ephy-web-view.c:2328
 #, c-format
@@ -1313,57 +1317,77 @@ msgstr "זהות האתר הזה לא אומתה"
 msgid "_Close"
 msgstr "_סגירה"
 
-#: ../lib/widgets/ephy-download-widget.c:111
+#: ../lib/widgets/ephy-download-widget.c:104
 #, c-format
-msgid "%u:%02u hour left"
-msgid_plural "%u:%02u hours left"
-msgstr[0] "%u:%02u שעות נותרו"
-msgstr[1] "%u:%02u שעות נותרו"
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "נותרה שנייה אחת"
+msgstr[1] "נותרו %d שניות"
+msgstr[2] "נותרו שתי שניות"
 
-#: ../lib/widgets/ephy-download-widget.c:113
+#: ../lib/widgets/ephy-download-widget.c:110
 #, c-format
-msgid "%u hour left"
-msgid_plural "%u hours left"
-msgstr[0] "שעה אחת נותרה"
-msgstr[1] "נותרו %u שעות"
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "נותרה דקה אחת"
+msgstr[1] "נותרו %d דקות"
+msgstr[2] "נותרו שתי דקות"
 
 #: ../lib/widgets/ephy-download-widget.c:116
 #, c-format
-msgid "%u:%02u minute left"
-msgid_plural "%u:%02u minutes left"
-msgstr[0] "%u:%02u דקות נותרו"
-msgstr[1] "%u:%02u דקות נותרו"
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "נותרה שעה אחת"
+msgstr[1] "נותרו %d שעות"
+msgstr[2] "נותרו שעתיים"
 
-#: ../lib/widgets/ephy-download-widget.c:118
+#: ../lib/widgets/ephy-download-widget.c:122
 #, c-format
-msgid "%u second left"
-msgid_plural "%u seconds left"
-msgstr[0] "נותרה שנייה אחת"
-msgstr[1] "נותרו %u שניות"
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "נותר יום אחד"
+msgstr[1] "נותרו %d ימים"
+msgstr[2] "נותרו יומיים"
 
-#: ../lib/widgets/ephy-download-widget.c:260
+#: ../lib/widgets/ephy-download-widget.c:128
+#, c-format
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "נותר שבוע אחד"
+msgstr[1] "נותרו %d שבועות"
+msgstr[2] "נותרו שבועיים"
+
+#: ../lib/widgets/ephy-download-widget.c:134
+#, c-format
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "נותר חודש אחד"
+msgstr[1] "נותרו %d חודשים"
+msgstr[2] "נותרו חודשיים"
+
+#: ../lib/widgets/ephy-download-widget.c:280
 msgid "Finished"
 msgstr "הסתיימה"
 
-#: ../lib/widgets/ephy-download-widget.c:275
+#: ../lib/widgets/ephy-download-widget.c:295
 #, c-format
 msgid "Error downloading: %s"
 msgstr "שגיאה בהורדה: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:334 ../src/window-commands.c:781
+#: ../lib/widgets/ephy-download-widget.c:350 ../src/window-commands.c:781
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../lib/widgets/ephy-download-widget.c:343 ../src/ephy-window.c:1171
+#: ../lib/widgets/ephy-download-widget.c:359 ../src/ephy-window.c:1171
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "פתיחה"
 
-#: ../lib/widgets/ephy-download-widget.c:349
+#: ../lib/widgets/ephy-download-widget.c:365
 msgid "Show in folder"
 msgstr "הצגה בתיקייה"
 
-#: ../lib/widgets/ephy-download-widget.c:542
+#: ../lib/widgets/ephy-download-widget.c:573
 msgid "Starting…"
 msgstr "הפעלה…"
 
@@ -1421,6 +1445,7 @@ msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "אחת _דומה"
 msgstr[1] "%d _דומות"
+msgstr[2] "%d _דומות"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:257
 #, c-format
@@ -1428,6 +1453,7 @@ msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "איחוד עם _סימנייה אחת זהה"
 msgstr[1] "איחוד עם %d _סימניות זהות"
+msgstr[2] "איחוד עם %d _סימניות זהות"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:274
 #: ../src/bookmarks/ephy-bookmark-properties.c:296
@@ -1564,6 +1590,7 @@ msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "פתיחה ב_חלון חדש"
 msgstr[1] "פתיחה ב_חלונות חדשים"
+msgstr[2] "פתיחה ב_חלונות חדשים"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Open the selected bookmark in a new window"
@@ -1576,6 +1603,7 @@ msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "פתיחה ב_לשונית חדשה"
 msgstr[1] "פתיחה ב_לשוניות חדשות"
+msgstr[2] "פתיחה ב_לשוניות חדשות"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new tab"
@@ -2246,6 +2274,7 @@ msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "אתמול"
 msgstr[1] "%d הימים האחרונים"
+msgstr[2] "היומיים האחרונים"
 
 #: ../src/ephy-history-window.c:816
 msgid "All history"
@@ -2575,11 +2604,11 @@ msgstr "ל_שונית חדשה"
 msgid "Go to most visited"
 msgstr "מעבר לנצפים ביותר"
 
-#: ../src/popup-commands.c:273
+#: ../src/popup-commands.c:269
 msgid "Save Link As"
 msgstr "שמירת הקישור בשם"
 
-#: ../src/popup-commands.c:280
+#: ../src/popup-commands.c:276
 msgid "Save Image As"
 msgstr "שמירת התמונה בשם"
 
@@ -2608,6 +2637,7 @@ msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "שפת המערכת (%s)"
 msgstr[1] "שפות המערכת (%s)"
+msgstr[2] "שפות המערכת (%s)"
 
 #: ../src/prefs-dialog.c:918
 msgid "Select a Directory"
@@ -2624,7 +2654,7 @@ msgstr "DuckDuckGo"
 #. * entry in the preferences combo, so please test this.
 #: ../src/prefs-dialog.c:1016
 #, c-format
-msgid "http://duckduckgo.com/?q=%s&t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #. Search engine option in the preferences dialog
@@ -2635,7 +2665,7 @@ msgstr "Google"
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
 #: ../src/prefs-dialog.c:1020
 #, c-format
-msgid "http://google.com/search?q=%s"
+msgid "https://google.com/search?q=%s"
 msgstr "https://www.google.co.il/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. Search engine option in the preferences dialog
@@ -2749,6 +2779,11 @@ msgstr ""
 #: ../src/window-commands.c:1738
 msgid "_Enable"
 msgstr "ה_פעלה"
+
+#~ msgid "%u:%02u hour left"
+#~ msgid_plural "%u:%02u hours left"
+#~ msgstr[0] "%u:%02u שעות נותרו"
+#~ msgstr[1] "%u:%02u שעות נותרו"
 
 #~ msgid "<b>_Automatic</b>"
 #~ msgstr "<b>_אוטומטי</b>"
