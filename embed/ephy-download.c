@@ -863,7 +863,7 @@ download_failed_cb (WebKitDownload *wk_download,
 }
 
 /**
- * ephy_download_new_for_download:
+ * ephy_download_new:
  * @download: a #WebKitDownload to wrap
  * @parent: the #GtkWindow parent of the download, or %NULL
  *
@@ -872,8 +872,8 @@ download_failed_cb (WebKitDownload *wk_download,
  * Returns: an #EphyDownload.
  **/
 EphyDownload *
-ephy_download_new_for_download (WebKitDownload *download,
-                                GtkWindow *parent)
+ephy_download_new (WebKitDownload *download,
+                   GtkWindow *parent)
 {
   EphyDownload *ephy_download;
 
@@ -923,7 +923,7 @@ ephy_download_new_for_uri (const char *uri,
 
   download = webkit_web_context_download_uri (webkit_web_context_get_default (), uri);
 
-  ephy_download = ephy_download_new_for_download (download, parent);
+  ephy_download = ephy_download_new (download, parent);
   g_object_unref (download);
 
   return ephy_download;

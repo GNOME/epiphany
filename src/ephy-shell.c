@@ -551,7 +551,7 @@ download_started_cb (WebKitWebContext *web_context,
   if (!window)
     window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
-  ephy_download_new_for_download (download, window);
+  ephy_download_new (download, window);
 }
 
 static void

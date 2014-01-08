@@ -76,11 +76,10 @@ typedef enum
 
 GType         ephy_download_get_type              (void) G_GNUC_CONST;
 
+EphyDownload *ephy_download_new                   (WebKitDownload *download,
+                                                   GtkWindow *parent);
 EphyDownload *ephy_download_new_for_uri           (const char *uri,
                                                    GtkWindow *parent);
-EphyDownload *ephy_download_new_for_download      (WebKitDownload *download,
-                                                   GtkWindow *parent);
-
 
 void          ephy_download_cancel                (EphyDownload *download);
 
