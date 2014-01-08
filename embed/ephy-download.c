@@ -931,22 +931,6 @@ download_failed_cb (WebKitDownload *wk_download,
 }
 
 /**
- * ephy_download_new:
- * @parent: the #GtkWindow parent of the download, or %NULL
- *
- * Creates a new #EphyDownload. You can use ephy_download_new_for_download and
- * ephy_download_new_for_uri as convenience functions to create #EphyDownload
- * objects.
- *
- * Returns: an #EphyDownload.
- **/
-EphyDownload *
-ephy_download_new (GtkWindow *parent)
-{
-  return g_object_new (EPHY_TYPE_DOWNLOAD, "window", parent, NULL);
-}
-
-/**
  * ephy_download_new_for_download:
  * @download: a #WebKitDownload to wrap
  * @parent: the #GtkWindow parent of the download, or %NULL
@@ -964,7 +948,7 @@ ephy_download_new_for_download (WebKitDownload *download,
 
   g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
 
-  ephy_download = ephy_download_new (parent);
+  ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, "window", parent, NULL);
 
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
