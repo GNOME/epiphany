@@ -28,8 +28,6 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-download.h"
-
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_SHELL   (ephy_embed_shell_get_type ())
@@ -68,9 +66,6 @@ struct _EphyEmbedShellClass
 {
   GtkApplicationClass parent_class;
 
-  void    (* download_added)   (EphyEmbedShell *shell, EphyDownload *download);
-  void    (* download_removed) (EphyEmbedShell *shell, EphyDownload *download);
-
   void    (* prepare_close)    (EphyEmbedShell *shell);
 
   void    (* restored_window)  (EphyEmbedShell *shell);
@@ -88,11 +83,6 @@ GtkPageSetup      *ephy_embed_shell_get_page_setup             (EphyEmbedShell  
 void               ephy_embed_shell_set_print_settings         (EphyEmbedShell   *shell,
                                                                 GtkPrintSettings *settings);
 GtkPrintSettings  *ephy_embed_shell_get_print_settings         (EphyEmbedShell   *shell);
-GList             *ephy_embed_shell_get_downloads              (EphyEmbedShell   *shell);
-void               ephy_embed_shell_add_download               (EphyEmbedShell   *shell,
-                                                                EphyDownload     *download);
-void               ephy_embed_shell_remove_download            (EphyEmbedShell   *shell,
-                                                                EphyDownload     *download);
 EphyEmbedShellMode ephy_embed_shell_get_mode                   (EphyEmbedShell   *shell);
 gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell   *shell,
                                                                 GFile            *file,

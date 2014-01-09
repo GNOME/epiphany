@@ -29,7 +29,6 @@
 #include "ephy-combined-stop-reload-action.h"
 #include "ephy-debug.h"
 #include "ephy-download-widget.h"
-#include "ephy-download.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -1904,7 +1903,12 @@ save_target_uri (EphyWindow *window,
 		retval = ephy_embed_utils_address_has_web_scheme (location);
 		if (retval)
 		{
-			ephy_embed_auto_download_url (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view), location);
+			EphyDownload *download;
+
+			download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
+			ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
+			ephy_window_add_download (window, download);
+			g_object_unref (download);
 		}
 
 		g_free (location);
@@ -2863,27 +2867,17 @@ ephy_window_set_downloads_box_visibility (EphyWindow *window,
 	}
 }
 
-static void
-download_added_cb (EphyEmbedShell *shell,
-		   EphyDownload *download,
-		   gpointer data)
+void
+ephy_window_add_download (EphyWindow *window,
+			  EphyDownload *download)
 {
-	EphyWindow *window = EPHY_WINDOW (data);
-	GtkWindow *download_window;
 	GtkWidget *widget;
 
-	download_window = ephy_download_get_window (download);
-	widget = ephy_download_get_widget (download);
-
-	if (widget == NULL &&
-	    (download_window == NULL || download_window == GTK_WINDOW (window)))
-	{
-		widget = ephy_download_widget_new (download);
-		gtk_box_pack_start (GTK_BOX (window->priv->downloads_box),
-				    widget, FALSE, FALSE, 0);
-		gtk_widget_show (widget);
-		ephy_window_set_downloads_box_visibility (window, TRUE);
-	}
+	widget = ephy_download_widget_new (download);
+	gtk_box_pack_start (GTK_BOX (window->priv->downloads_box),
+			    widget, FALSE, FALSE, 0);
+	gtk_widget_show (widget);
+	ephy_window_set_downloads_box_visibility (window, TRUE);
 }
 
 static void
@@ -2970,10 +2964,6 @@ ephy_window_dispose (GObject *object)
 		window->priv->closing = TRUE;
 
 		ephy_bookmarks_ui_detach_window (window);
-
-		g_signal_handlers_disconnect_by_func
-			(ephy_embed_shell_get_default (),
-			 download_added_cb, window);
 
 		/* Deactivate menus */
 		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
@@ -3605,10 +3595,6 @@ ephy_window_init (EphyWindow *window)
 	LOG ("EphyWindow initialising %p", window);
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
-
-	g_signal_connect (ephy_embed_shell_get_default (),
-			 "download-added", G_CALLBACK (download_added_cb),
-			 window);
 }
 
 /**

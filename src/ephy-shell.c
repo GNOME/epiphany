@@ -26,6 +26,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
+#include "ephy-download.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -521,6 +522,7 @@ download_started_cb (WebKitWebContext *web_context,
 {
   GtkWindow *window = NULL;
   WebKitWebView *web_view;
+  EphyDownload *ephy_download;
   gboolean ephy_download_set;
 
   /* Is download locked down? */
@@ -551,7 +553,9 @@ download_started_cb (WebKitWebContext *web_context,
   if (!window)
     window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
-  ephy_download_new (download, window);
+  ephy_download = ephy_download_new (download, window);
+  ephy_window_add_download (EPHY_WINDOW (window), ephy_download);
+  g_object_unref (ephy_download);
 }
 
 static void

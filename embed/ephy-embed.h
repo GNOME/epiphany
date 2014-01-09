@@ -60,8 +60,6 @@ void             ephy_embed_add_top_widget           (EphyEmbed  *embed,
                                                       gboolean    destroy_on_transition);
 void             ephy_embed_remove_top_widget        (EphyEmbed  *embed,
                                                       GtkWidget  *widget);
-void             ephy_embed_auto_download_url        (EphyEmbed  *embed,
-                                                      const char *url);
 void             ephy_embed_entering_fullscreen      (EphyEmbed *embed);
 void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
 void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,

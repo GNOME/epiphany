@@ -24,6 +24,7 @@
 #ifndef EPHY_WINDOW_H
 #define EPHY_WINDOW_H
 
+#include "ephy-download.h"
 #include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
@@ -75,6 +76,9 @@ void		  ephy_window_activate_location	  (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);
 
 gboolean          ephy_window_close               (EphyWindow *window);
+
+void              ephy_window_add_download        (EphyWindow *window,
+                                                   EphyDownload *download);
 
 gboolean      ephy_window_is_on_current_workspace (EphyWindow *window);
 

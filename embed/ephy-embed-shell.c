@@ -24,7 +24,6 @@
 
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
-#include "ephy-download.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
 #include "ephy-embed-type-builtins.h"
@@ -48,7 +47,6 @@
 struct _EphyEmbedShellPrivate
 {
   EphyHistoryService *global_history_service;
-  GList *downloads;
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
@@ -62,8 +60,6 @@ struct _EphyEmbedShellPrivate
 
 enum
 {
-  DOWNLOAD_ADDED,
-  DOWNLOAD_REMOVED,
   PREPARE_CLOSE,
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
@@ -97,13 +93,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
-
-  if (priv->downloads != NULL) {
-    LOG ("Destroying downloads list");
-    g_list_free_full (priv->downloads, (GDestroyNotify)g_object_unref);
-    priv->downloads = NULL;
-  }
-
   g_clear_object (&priv->about_handler);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
@@ -440,8 +429,6 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
   /* globally accessible singleton */
   g_assert (embed_shell == NULL);
   embed_shell = shell;
-
-  shell->priv->downloads = NULL;
 }
 
 static void
@@ -469,40 +456,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
                                      object_properties);
-  
-/**
- * EphyEmbed::download-added:
- * @shell: the #EphyEmbedShell
- * @download: the #EphyDownload added
- *
- * Emitted when a #EphyDownload has been added to the global watch list of
- * @shell, via ephy_embed_shell_add_download.
- **/
-  signals[DOWNLOAD_ADDED] =
-    g_signal_new ("download-added",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (EphyEmbedShellClass, download_added),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
-  
-/**
- * EphyEmbed::download-removed:
- * @shell: the #EphyEmbedShell
- * @download: the #EphyDownload being removed
- *
- * Emitted when a #EphyDownload has been removed from the global watch list of
- * @shell, via ephy_embed_shell_remove_download.
- **/
-  signals[DOWNLOAD_REMOVED] =
-    g_signal_new ("download-removed",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (EphyEmbedShellClass, download_removed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, EPHY_TYPE_DOWNLOAD);
 
 /**
  * EphyEmbed::prepare-close:
@@ -717,51 +670,6 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
   }
 
   return priv->print_settings;
-}
-
-/**
- * ephy_embed_shell_get_downloads:
- * @shell: the #EphyEmbedShell
- *
- * Gets the global #GList object listing active downloads.
- *
- * Returns: (transfer none) (element-type EphyDownload): a #GList object
- **/
-GList *
-ephy_embed_shell_get_downloads (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv;
-
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-  priv = shell->priv;
-
-  return priv->downloads;
-}
-
-void
-ephy_embed_shell_add_download (EphyEmbedShell *shell, EphyDownload *download)
-{
-  EphyEmbedShellPrivate *priv;
-
-  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-
-  priv = shell->priv;
-  priv->downloads = g_list_prepend (priv->downloads, download);
-
-  g_signal_emit_by_name (shell, "download-added", download, NULL);
-}
-
-void
-ephy_embed_shell_remove_download (EphyEmbedShell *shell, EphyDownload *download)
-{
-  EphyEmbedShellPrivate *priv;
-
-  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-
-  priv = shell->priv;
-  priv->downloads = g_list_remove (priv->downloads, download);
-
-  g_signal_emit_by_name (shell, "download-removed", download, NULL);
 }
 
 /**

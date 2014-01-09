@@ -595,8 +595,6 @@ ephy_download_dispose (GObject *object)
     priv->widget = NULL;
   }
 
-  ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
-
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
 
@@ -800,8 +798,6 @@ download_finished_cb (WebKitDownload *wk_download,
     ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
   else
     ephy_download_do_download_action (download, priv->action);
-
-  ephy_embed_shell_remove_download (ephy_embed_shell_get_default (), download);
 }
 
 static void
@@ -848,9 +844,6 @@ ephy_download_new (WebKitDownload *download,
 
   ephy_download->priv->download = g_object_ref (download);
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
-
-  /* In WebKit2 the download has already started */
-  ephy_embed_shell_add_download (ephy_embed_shell_get_default (), ephy_download);
 
   return ephy_download;
 }
