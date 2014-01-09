@@ -216,14 +216,16 @@ get_suggested_filename (EphyWebView *view)
 }
 
 static void
-save_property_url (GtkAction *action,
-		   const char *title,
+save_property_url (const char *title,
 		   EphyWindow *window,
-		   gboolean ask_dest,
 		   const char *property)
 {
 	EphyEmbedEvent *event;
 	const char *location;
+	EphyFileChooser *dialog;
+	EphyEmbed *embed;
+	EphyWebView *view;
+	char *suggested_filename;
 	GValue value = { 0, };
 
 	event = ephy_window_get_context_event (window);
@@ -232,49 +234,37 @@ save_property_url (GtkAction *action,
 	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (&value);
 
-	if (ask_dest)
-	{
-		EphyFileChooser *dialog;
-		EphyEmbed *embed;
-		EphyWebView *view;
-		char *suggested_filename;
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+	view = ephy_embed_get_web_view (embed);
 
-		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-		view = ephy_embed_get_web_view (embed);
+	dialog = ephy_file_chooser_new (title, GTK_WIDGET (window),
+					GTK_FILE_CHOOSER_ACTION_SAVE,
+					EPHY_FILE_FILTER_NONE);
 
-		dialog = ephy_file_chooser_new (title, GTK_WIDGET (window),
-						GTK_FILE_CHOOSER_ACTION_SAVE,
-						EPHY_FILE_FILTER_NONE);
+	suggested_filename = ephy_sanitize_filename (get_suggested_filename (view));
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
+	g_free (suggested_filename);
 
-		suggested_filename = ephy_sanitize_filename (get_suggested_filename (view));
-		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
-		g_free (suggested_filename);
+	gtk_file_chooser_set_do_overwrite_confirmation
+		(GTK_FILE_CHOOSER (dialog), TRUE);
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (response_cb), g_strdup (location));
+	gtk_widget_show (GTK_WIDGET (dialog));
 
-		gtk_file_chooser_set_do_overwrite_confirmation
-				(GTK_FILE_CHOOSER (dialog), TRUE);
-		g_signal_connect (dialog, "response",
-				  G_CALLBACK (response_cb), g_strdup (location));
-		gtk_widget_show (GTK_WIDGET (dialog));
-	}
-	else
-	{
-		save_property_url_to_destination (window, location, NULL);
-	}
+	g_value_unset (&value);
 }
 
 void
 popup_cmd_download_link_as (GtkAction *action,
 			    EphyWindow *window)
 {
-	save_property_url (action, _("Save Link As"), window, 
-			   TRUE, "link-uri");
+	save_property_url (_("Save Link As"), window, "link-uri");
 }
 void
 popup_cmd_save_image_as (GtkAction *action,
 			 EphyWindow *window)
 {
-	save_property_url (action, _("Save Image As"),
-			   window, TRUE, "image-uri");
+	save_property_url (_("Save Image As"), window, "image-uri");
 }
 
 static void
