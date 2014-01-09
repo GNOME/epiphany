@@ -147,6 +147,7 @@ char *
 ephy_download_get_content_type (EphyDownload *download)
 {
   WebKitURIResponse *response;
+  const char *destination_uri;
   GFile *destination;
   GFileInfo *info;
   char *content_type = NULL;
@@ -162,10 +163,11 @@ ephy_download_get_content_type (EphyDownload *download)
       return content_type;
   }
 
-  if (!download->priv->destination)
+  destination_uri = webkit_download_get_destination (download->priv->download);
+  if (!destination_uri)
     return NULL;
 
-  destination = g_file_new_for_uri (download->priv->destination);
+  destination = g_file_new_for_uri (destination_uri);
   info = g_file_query_info (destination, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                             G_FILE_QUERY_INFO_NONE, NULL, &error);
   if (info) {
@@ -265,8 +267,8 @@ parse_extension (const char *filename)
   return strrchr ((last_separator) ? last_separator : filename, '.');
 }
 
-static char *
-define_destination_uri (EphyDownload *download, const char *suggested_filename)
+static gboolean
+set_destination_uri_for_suggested_filename (EphyDownload *download, const char *suggested_filename)
 {
   char *dest_dir;
   char *dest_name;
@@ -280,7 +282,7 @@ define_destination_uri (EphyDownload *download, const char *suggested_filename)
     g_critical ("Could not create downloads directory \"%s\": %s",
                 dest_dir, strerror (errno));
     g_free (dest_dir);
-    return NULL;
+    return FALSE;
   }
 
   if (suggested_filename != NULL) {
@@ -326,8 +328,10 @@ define_destination_uri (EphyDownload *download, const char *suggested_filename)
   g_free (destination_filename);
 
   g_assert (destination_uri);
+  webkit_download_set_destination (download->priv->download, destination_uri);
+  g_free (destination_uri);
 
-  return destination_uri;
+  return TRUE;
 }
 
 /**
@@ -342,20 +346,10 @@ void
 ephy_download_set_destination_uri (EphyDownload *download,
                                    const char *destination)
 {
-  EphyDownloadPrivate *priv;
-  char *scheme;
-
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
   g_return_if_fail (destination != NULL);
 
-  priv = download->priv;
-
-  scheme = g_uri_parse_scheme (destination);
-  g_return_if_fail (scheme != NULL);
-  g_free (scheme);
-
-  priv->destination = g_strdup (destination);
-
+  webkit_download_set_destination (download->priv->download, destination);
   g_object_notify (G_OBJECT (download), "destination");
 }
 
@@ -464,7 +458,7 @@ ephy_download_get_destination_uri (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
 
-  return download->priv->destination;
+  return webkit_download_get_destination (download->priv->download);
 }
 
 /**
@@ -607,21 +601,6 @@ ephy_download_dispose (GObject *object)
 }
 
 static void
-ephy_download_finalize (GObject *object)
-{
-  EphyDownload *download = EPHY_DOWNLOAD (object);
-  EphyDownloadPrivate *priv;
-
-  priv = download->priv;
-
-  g_free (priv->destination);
-
-  LOG ("EphyDownload finalised %p", object);
-
-  G_OBJECT_CLASS (ephy_download_parent_class)->finalize (object);
-}
-
-static void
 ephy_download_class_init (EphyDownloadClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -631,7 +610,6 @@ ephy_download_class_init (EphyDownloadClass *klass)
   object_class->get_property = ephy_download_get_property;
   object_class->set_property = ephy_download_set_property;
   object_class->dispose = ephy_download_dispose;
-  object_class->finalize = ephy_download_finalize;
 
   /**
    * EphyDownload::download:
@@ -782,7 +760,6 @@ ephy_download_init (EphyDownload *download)
   LOG ("EphyDownload initialising %p", download);
 
   download->priv->download = NULL;
-  download->priv->destination = NULL;
 
   download->priv->action = EPHY_DOWNLOAD_ACTION_NONE;
 
@@ -797,34 +774,15 @@ download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar *suggested_filename,
                                 EphyDownload *download)
 {
-  char *dest;
+  if (webkit_download_get_destination (wk_download))
+    return TRUE;
 
   g_signal_emit_by_name (download, "filename-suggested", suggested_filename);
-  if (download->priv->destination) {
-    webkit_download_set_destination (wk_download, download->priv->destination);
+
+  if (webkit_download_get_destination (wk_download))
     return TRUE;
-  }
 
-  dest = define_destination_uri (download, suggested_filename);
-  if (!dest)
-    return FALSE;
-
-  ephy_download_set_destination_uri (download, dest);
-  webkit_download_set_destination (wk_download, dest);
-  g_free (dest);
-
-  return TRUE;
-}
-
-static void
-download_created_destination_cb (WebKitDownload *wk_download,
-                                 const gchar *destination,
-                                 EphyDownload *download)
-{
-  if (download->priv->destination)
-    return;
-
-  ephy_download_set_destination_uri (download, destination);
+  return set_destination_uri_for_suggested_filename (download, suggested_filename);
 }
 
 static void
@@ -880,9 +838,6 @@ ephy_download_new (WebKitDownload *download,
 
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
-                    ephy_download);
-  g_signal_connect (download, "created-destination",
-                    G_CALLBACK (download_created_destination_cb),
                     ephy_download);
   g_signal_connect (download, "finished",
                     G_CALLBACK (download_finished_cb),
