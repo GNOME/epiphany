@@ -803,7 +803,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 	/* Show dialog with icon, title. */
 	dialog = gtk_dialog_new_with_buttons (_("Create Web Application"),
 					      GTK_WINDOW (window),
-					      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+					      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
 					      _("_Cancel"),
 					      GTK_RESPONSE_CANCEL,
 					      _("C_reate"),
