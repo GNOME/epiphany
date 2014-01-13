@@ -1783,7 +1783,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
       msg_title = g_strdup (_("Oops!"));
       msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
-      button_label = NULL;
+      button_label = g_strdup (_("Reload Anyway"));
 
       html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_PROCESS_CRASH, 0, NULL);
 

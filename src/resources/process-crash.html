@@ -21,6 +21,12 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>%s</title>
   <style type="text/css">%s</style>
+  <script type="text/javascript">
+    function load_anyway()
+    {
+      window.location = '%s';
+    }
+  </script>
 </head>
 <body>
   <div id="container">
@@ -28,6 +34,9 @@
           <h1>%s</h1>
           <div class="explanation">
             %s
+          </div>
+          <div class="buttonbox">
+            <button onclick="javascript:load_anyway()">%s</button>
           </div>
       </div>
   </div>
