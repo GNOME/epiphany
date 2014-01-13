@@ -1329,7 +1329,7 @@ decide_policy_cb (WebKitWebView *web_view,
 
   /* If WebKit can't handle the mime type start the download
      process */
-  if (webkit_web_view_can_show_mime_type (web_view, mime_type))
+  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
     return FALSE;
 
   request = webkit_response_policy_decision_get_request (response_decision);
