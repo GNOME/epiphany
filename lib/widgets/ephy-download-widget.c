@@ -47,6 +47,9 @@ struct _EphyDownloadWidgetPrivate
   GtkWidget *button;
   GtkWidget *menu_button;
   GtkWidget *icon;
+  GtkWidget *open_menuitem;
+  GtkWidget *cancel_menuitem;
+  GtkWidget *show_folder_menuitem;
 
   gboolean finished;
 };
@@ -273,10 +276,20 @@ widget_progress_cb (WebKitDownload *download,
 }
 
 static void
+update_popup_menu (EphyDownloadWidget *widget)
+{
+  gtk_widget_set_sensitive (widget->priv->cancel_menuitem, !widget->priv->finished);
+  gtk_widget_set_visible (widget->priv->cancel_menuitem, !widget->priv->finished);
+  gtk_widget_set_sensitive (widget->priv->open_menuitem, widget->priv->finished);
+  gtk_widget_set_sensitive (widget->priv->show_folder_menuitem, widget->priv->finished);
+}
+
+static void
 widget_finished_cb (WebKitDownload *download,
                     EphyDownloadWidget *widget)
 {
   widget->priv->finished = TRUE;
+  update_popup_menu (widget);
   update_download_label_and_tooltip (widget, _("Finished"));
   totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
 }
@@ -292,6 +305,7 @@ widget_failed_cb (WebKitDownload *download,
   g_signal_handlers_disconnect_by_func (download, widget_progress_cb, widget);
 
   widget->priv->finished = TRUE;
+  update_popup_menu (widget);
   error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
   gtk_label_set_text (GTK_LABEL (widget->priv->remaining), error_msg);
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
@@ -347,26 +361,25 @@ add_popup_menu (EphyDownloadWidget *widget)
   g_free (basename);
   g_free (name);
 
-  item = gtk_menu_item_new_with_label (_("Cancel"));
+  widget->priv->cancel_menuitem = item = gtk_menu_item_new_with_label (_("Cancel"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, !widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (cancel_activate_cb), widget);
 
   item = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  item = gtk_menu_item_new_with_label (_("Open"));
+  widget->priv->open_menuitem = item = gtk_menu_item_new_with_label (_("Open"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (open_activate_cb), widget);
 
-  item = gtk_menu_item_new_with_label (_("Show in folder"));
+  widget->priv->show_folder_menuitem = item = gtk_menu_item_new_with_label (_("Show in folder"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_set_sensitive (item, widget->priv->finished);
   g_signal_connect (item, "activate",
                     G_CALLBACK (folder_activate_cb), widget);
+
+  update_popup_menu (widget);
 
   gtk_widget_show_all (menu);
 
