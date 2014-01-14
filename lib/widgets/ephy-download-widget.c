@@ -426,7 +426,7 @@ static void
 ephy_download_widget_set_download (EphyDownloadWidget *widget,
                                    EphyDownload       *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget), NULL);
+  g_return_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget));
 
   if (widget->priv->download == download)
     return;

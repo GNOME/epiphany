@@ -932,6 +932,8 @@ ephy_file_delete_uri (const char *uri)
  * @dest_uri: URI of the destination
  *
  * Move from source_uri to dest_uri, overwriting if necessary.
+ *
+ * Returns: %TRUE on successful move, %FALSE otherwise.
  */
 gboolean
 ephy_file_move_uri (const char *source_uri, const char *dest_uri)
@@ -940,7 +942,7 @@ ephy_file_move_uri (const char *source_uri, const char *dest_uri)
 	GFile *dest;
 	gboolean ret;
 
-	g_return_if_fail (source_uri && dest_uri);
+	g_return_val_if_fail (source_uri && dest_uri, FALSE);
 
 	src = g_file_new_for_uri (source_uri);
 	dest = g_file_new_for_uri (dest_uri);
