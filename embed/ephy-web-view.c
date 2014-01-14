@@ -1310,6 +1310,18 @@ decide_policy_cb (WebKitWebView *web_view,
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
 
+  /* If WebKit can't handle the mime type start the download
+     process */
+  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
+    return FALSE;
+
+  /* If it's not the main resource we don't need to set the document type. */
+  request = webkit_response_policy_decision_get_request (response_decision);
+  request_uri = webkit_uri_request_get_uri (request);
+  main_resource = webkit_web_view_get_main_resource (web_view);
+  if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
+    return FALSE;
+
   type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
   if (!strcmp (mime_type, "text/html") || !strcmp (mime_type, "text/plain"))
     type = EPHY_WEB_VIEW_DOCUMENT_HTML;
@@ -1326,17 +1338,6 @@ decide_policy_cb (WebKitWebView *web_view,
 
     g_object_notify (G_OBJECT (web_view), "document-type");
   }
-
-  /* If WebKit can't handle the mime type start the download
-     process */
-  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
-    return FALSE;
-
-  request = webkit_response_policy_decision_get_request (response_decision);
-  request_uri = webkit_uri_request_get_uri (request);
-  main_resource = webkit_web_view_get_main_resource (web_view);
-  if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
-    return FALSE;
 
   webkit_policy_decision_download (decision);
 
