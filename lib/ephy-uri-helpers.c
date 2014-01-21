@@ -169,6 +169,7 @@ is_garbage (const char *name,
     { "utm_term",		NULL },
     { "utm_content",	NULL },
     { "utm_campaign",	NULL },
+    { "utm_reader",	NULL },
     /* metrika.yandex.ru */
     { "yclid",		NULL },
     /* youtube.com */
@@ -185,7 +186,9 @@ is_garbage (const char *name,
     { "fref",		"facebook.com" },
     { "hc_location",	"facebook.com" },
     /* imdb.com */
-    { "ref_",		"imdb.com" }
+    { "ref_",		"imdb.com" },
+    /* addons.mozilla.org */
+    { "src",		"addons.mozilla.org" }
   };
   guint i;
 
