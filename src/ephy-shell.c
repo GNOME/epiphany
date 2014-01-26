@@ -717,7 +717,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_FIRST)
     position = 0;
 
-  if (flags & EPHY_NEW_TAB_FROM_EXTERNAL) {
+  if (flags & EPHY_NEW_TAB_FROM_EXTERNAL && position == -1) {
     /* If the active embed is blank, use that to open the url and jump to it */
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
     if (embed != NULL) {
@@ -1046,6 +1046,7 @@ typedef struct {
   char **uris;
   EphyNewTabFlags flags;
   guint32 user_time;
+  EphyEmbed *previous_embed;
   guint current_uri;
 } OpenURIsData;
 
@@ -1113,12 +1114,14 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     page_flags = EPHY_NEW_TAB_HOME_PAGE;
   } else {
     page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+    if (data->previous_embed)
+      page_flags |= EPHY_NEW_TAB_APPEND_AFTER;
     request = webkit_uri_request_new (url);
   }
 
   embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
                                    data->window,
-                                   NULL /* parent tab */,
+                                   data->previous_embed,
                                    request,
                                    data->flags | page_flags,
                                    EPHY_WEB_VIEW_CHROME_ALL,
@@ -1130,6 +1133,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 
   data->window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
   data->current_uri++;
+  data->previous_embed = embed;
 
   return data->uris[data->current_uri] != NULL;
 }

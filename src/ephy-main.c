@@ -425,10 +425,15 @@ main (int argc,
     exit (0);
   }
 
+  startup_flags = get_startup_flags ();
+
   /* Now create the shell */
-  if (private_instance)
+  if (private_instance) {
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-  else if (incognito_mode) {
+    /* In private mode the session autoresume will always open an empty window.
+     * If there are arguments, we want the URIs to be opened in thet existing window. */
+    startup_flags |= EPHY_STARTUP_NEW_TAB;
+  } else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
   } else if (application_mode) {
     char *app_name;
@@ -471,7 +476,6 @@ main (int argc,
 
   _ephy_shell_create_instance (mode);
 
-  startup_flags = get_startup_flags ();
   ctx = ephy_shell_startup_context_new (startup_flags,
                                         bookmarks_file,
                                         session_filename,
