@@ -292,24 +292,25 @@ ephy_embed_shell_restored_window (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_setup_environment (EphyEmbedShell *shell)
-{
-  EphyEmbedShellMode mode = shell->priv->mode;
-  char *pid_str;
-
-  pid_str = g_strdup_printf ("%u", getpid ());
-  g_setenv ("EPHY_WEB_EXTENSION_ID", pid_str, TRUE);
-  g_setenv ("EPHY_DOT_DIR", ephy_dot_dir (), TRUE);
-  if (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode))
-    g_setenv ("EPHY_PRIVATE_PROFILE", "1", TRUE);
-  g_free (pid_str);
-}
-
-static void
 about_request_cb (WebKitURISchemeRequest *request,
                   EphyEmbedShell *shell)
 {
   ephy_about_handler_handle_request (shell->priv->about_handler, request);
+}
+
+static void
+initialize_web_extensions (WebKitWebContext* web_context,
+                           EphyEmbedShell *shell)
+{
+  GVariant *user_data;
+  gboolean private_profile;
+
+  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
+  ephy_embed_shell_watch_web_extension (shell);
+
+  private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (shell->priv->mode);
+  user_data = g_variant_new ("(usb)", getpid (), ephy_dot_dir (), private_profile);
+  webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
 }
 
 static void
@@ -328,12 +329,9 @@ ephy_embed_shell_startup (GApplication* application)
   /* We're not remoting, setup the Web Context. */
   mode = shell->priv->mode;
   web_context = webkit_web_context_get_default ();
-
-  ephy_embed_shell_setup_environment (shell);
-
-  /* Set the web extensions dir ASAP before the process is launched. */
-  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
-  ephy_embed_shell_watch_web_extension (shell);
+  g_signal_connect (web_context, "initialize-web-extensions",
+                    G_CALLBACK (initialize_web_extensions),
+                    shell);
 
   /* Disk Cache */
   disk_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?

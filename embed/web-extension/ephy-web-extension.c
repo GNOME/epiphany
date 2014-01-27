@@ -1094,20 +1094,26 @@ bus_acquired_cb (GDBusConnection *connection,
 }
 
 G_MODULE_EXPORT void
-webkit_web_extension_initialize (WebKitWebExtension *extension)
+webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
+                                                GVariant *user_data)
 {
   char *service_name;
+  guint extension_id;
+  const char *dot_dir;
+  gboolean private_profile;
+
+  g_variant_get (user_data, "(u&sb)", &extension_id, &dot_dir, &private_profile);
 
   ephy_debug_init ();
-  uri_tester = uri_tester_new (g_getenv ("EPHY_DOT_DIR"));
-  if (!g_getenv ("EPHY_PRIVATE_PROFILE"))
+  uri_tester = uri_tester_new (dot_dir);
+  if (!private_profile)
     form_auth_data_cache = ephy_form_auth_data_cache_new ();
 
   g_signal_connect (extension, "page-created",
                     G_CALLBACK (web_page_created_callback),
                     NULL);
 
-  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, g_getenv ("EPHY_WEB_EXTENSION_ID"));
+  service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, extension_id);
   g_bus_own_name (G_BUS_TYPE_SESSION,
                   service_name,
                   G_BUS_NAME_OWNER_FLAGS_NONE,
