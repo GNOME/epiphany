@@ -58,8 +58,6 @@ test_ephy_shell_basic_embeds (void)
                    NULL, /* embed */
                    NULL, /* network-request */
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_NEW_WINDOW, /* flags */
-                   EPHY_WEB_VIEW_CHROME_ALL, /* chrome */
-                   FALSE, /* popup */
                    gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed1));
 
@@ -77,8 +75,6 @@ test_ephy_shell_basic_embeds (void)
                    NULL, /* embed */
                    NULL, /* network-request */
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_IN_EXISTING_WINDOW, /* flags */
-                   EPHY_WEB_VIEW_CHROME_ALL, /* chrome */
-                   FALSE, /* popup */
                    gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed2));
 

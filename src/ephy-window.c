@@ -2065,8 +2065,6 @@ create_web_view_cb (WebKitWebView *web_view,
 					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
 					 NULL,
 					 flags,
-					 EPHY_WEB_VIEW_CHROME_ALL,
-					 FALSE, /* is popup? */
 					 0);
 
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -2231,7 +2229,7 @@ decide_policy_cb (WebKitWebView *web_view,
 					 embed,
 					 request,
 					 flags,
-					 EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
+					 0);
 
 		webkit_policy_decision_ignore (decision);
 
@@ -3611,26 +3609,6 @@ ephy_window_new (void)
 	return g_object_new (EPHY_TYPE_WINDOW,
 			     "application", GTK_APPLICATION (ephy_shell_get_default ()),
 			     "icon-name", "web-browser",
-			     NULL);
-}
-
-/**
- * ephy_window_new_with_chrome:
- * @chrome: an #EphyWebViewChrome
- * @is_popup: whether the new window is a popup window
- *
- * Identical to ephy_window_new(), but allows you to specify a chrome.
- *
- * Return value: a new #EphyWindow
- **/
-EphyWindow *
-ephy_window_new_with_chrome (EphyWebViewChrome chrome,
-			     gboolean is_popup)
-{
-	return g_object_new (EPHY_TYPE_WINDOW,
-			     "chrome", chrome,
-			     "is-popup", is_popup,
-			     "application", GTK_APPLICATION (ephy_shell_get_default ()),
 			     NULL);
 }
 

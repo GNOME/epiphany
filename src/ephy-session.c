@@ -393,8 +393,6 @@ session_maybe_open_window (EphySession *session,
 					 NULL /* NetworkRequest */,
 					 EPHY_NEW_TAB_IN_NEW_WINDOW |
 					 EPHY_NEW_TAB_HOME_PAGE,
-					 EPHY_WEB_VIEW_CHROME_ALL,
-					 FALSE /* is popup? */,
 					 user_time);
 	}
 }

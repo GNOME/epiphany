@@ -151,8 +151,6 @@ EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
                                                          EphyEmbed *previous_embed,
                                                          WebKitURIRequest *request,
                                                          EphyNewTabFlags flags,
-                                                         EphyWebViewChrome chrome,
-                                                         gboolean is_popup,
                                                          guint32 user_time);
 
 EphySession     *ephy_shell_get_session                  (EphyShell *shell);

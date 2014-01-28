@@ -645,8 +645,6 @@ ephy_shell_get_default (void)
  * @parent_window: the target #EphyWindow or %NULL
  * @previous_embed: the referrer embed, or %NULL
  * @request: a #WebKitNetworkRequest to load or %NULL
- * @chrome: a #EphyEmbedChrome mask to use if creating a new window
- * @is_popup: whether the new window is a popup
  * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
@@ -660,8 +658,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
                          EphyEmbed *previous_embed,
                          WebKitURIRequest *request,
                          EphyNewTabFlags flags,
-                         EphyWebViewChrome chrome,
-                         gboolean is_popup,
                          guint32 user_time)
 {
   EphyEmbedShell *embed_shell;
@@ -702,7 +698,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (!in_new_window && parent_window != NULL)
     window = parent_window;
   else
-    window = ephy_window_new_with_chrome (chrome, is_popup);
+    window = ephy_window_new ();
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
     if (previous_embed) {
@@ -816,7 +812,7 @@ ephy_shell_new_tab (EphyShell *shell,
 
   embed = ephy_shell_new_tab_full (shell, parent_window,
                                    previous_embed, request, flags,
-                                   EPHY_WEB_VIEW_CHROME_ALL, FALSE, 0);
+                                   0);
 
   if (request)
     g_object_unref (request);
@@ -1124,8 +1120,6 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
                                    data->previous_embed,
                                    request,
                                    data->flags | page_flags,
-                                   EPHY_WEB_VIEW_CHROME_ALL,
-                                   FALSE /* is popup? */,
                                    data->user_time);
 
   if (request)

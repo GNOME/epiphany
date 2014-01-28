@@ -59,9 +59,6 @@ GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
-EphyWindow	 *ephy_window_new_with_chrome	  (EphyWebViewChrome chrome,
-						   gboolean is_popup);
-
 GtkUIManager	 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
