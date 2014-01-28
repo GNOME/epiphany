@@ -551,28 +551,6 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
   }
 }
 
-static void
-window_geometry_changed (WebKitWindowProperties *properties, GParamSpec *pspec, EphyEmbed *embed)
-{
-  GtkWidget *window;
-  gboolean is_popup;
-  GdkRectangle geometry;
-
-  window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-  if (!window || !gtk_widget_is_toplevel (window))
-    return;
-
-  g_object_get (window, "is-popup", &is_popup, NULL);
-  if (!is_popup)
-    return;
-
-  webkit_window_properties_get_geometry (properties, &geometry);
-  if (geometry.x >= 0 && geometry.y >= 0)
-    gtk_window_move (GTK_WINDOW (window), geometry.x, geometry.y);
-  if (geometry.width > 0 && geometry.height > 0)
-    gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
-}
-
 static gboolean
 clear_progress_cb (EphyEmbed *embed)
 {
@@ -659,7 +637,6 @@ ephy_embed_constructed (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *paned;
   WebKitWebView *web_view;
-  WebKitWindowProperties *window_properties;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
 
@@ -750,11 +727,6 @@ ephy_embed_constructed (GObject *object)
   priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
                                               G_CALLBACK (status_message_notify_cb),
                                               embed);
-  /* Window properties */
-  window_properties = webkit_web_view_get_window_properties (web_view);
-  g_signal_connect (window_properties, "notify::geometry",
-                    G_CALLBACK (window_geometry_changed),
-                    embed);
 
   /* The inspector */
   inspector = webkit_web_view_get_inspector (web_view);

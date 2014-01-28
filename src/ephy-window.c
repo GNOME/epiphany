@@ -1984,6 +1984,20 @@ ephy_window_set_is_popup (EphyWindow *window,
 }
 
 static void
+window_properties_geometry_changed (WebKitWindowProperties *properties,
+				    GParamSpec *pspec,
+				    EphyWindow *window)
+{
+	GdkRectangle geometry;
+
+	webkit_window_properties_get_geometry (properties, &geometry);
+	if (geometry.x >= 0 && geometry.y >= 0)
+		gtk_window_move (GTK_WINDOW (window), geometry.x, geometry.y);
+	if (geometry.width > 0 && geometry.height > 0)
+		gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
+}
+
+static void
 ephy_window_configure_for_view (EphyWindow *window,
 				WebKitWebView *web_view)
 {
@@ -2008,6 +2022,9 @@ ephy_window_configure_for_view (EphyWindow *window,
 
 		window->priv->is_popup = TRUE;
 		window->priv->chrome = chrome_mask;
+		g_signal_connect (properties, "notify::geometry",
+				  G_CALLBACK (window_properties_geometry_changed),
+				  window);
 
 		sync_chromes_visibility (window);
 	}
