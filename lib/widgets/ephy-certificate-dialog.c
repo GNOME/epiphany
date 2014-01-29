@@ -321,6 +321,7 @@ ephy_certificate_dialog_new (GtkWindow *parent,
 				     "address", address,
 				     "certificate", certificate,
 				     "tls-errors", tls_errors,
+                                     "modal", TRUE,
 				     NULL));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Close"), GTK_RESPONSE_CLOSE,
