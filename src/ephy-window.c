@@ -654,7 +654,6 @@ settings_changed_cb (GtkSettings *settings)
 
 static void
 get_chromes_visibility (EphyWindow *window,
-			gboolean *show_toolbar,
 			gboolean *show_tabsbar,
 			gboolean *show_downloads_box)
 {
@@ -663,12 +662,10 @@ get_chromes_visibility (EphyWindow *window,
 
 	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		*show_toolbar = TRUE;
 		*show_tabsbar = FALSE;
 	}
 	else
 	{
-		*show_toolbar = (flags & EPHY_WEB_VIEW_CHROME_TOOLBAR) != 0;
 		*show_tabsbar = !(priv->is_popup || priv->fullscreen_mode);
 	}
 
@@ -679,32 +676,16 @@ static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	gboolean show_toolbar, show_tabsbar, show_downloads_box;
+	gboolean show_tabsbar, show_downloads_box;
 
 	if (priv->closing) return;
 
 	get_chromes_visibility (window,
-				&show_toolbar,
 				&show_tabsbar,
 				&show_downloads_box);
 
-	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
-
 	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 	gtk_widget_set_visible (priv->downloads_box, show_downloads_box);
-}
-
-static void
-set_toolbar_visibility (EphyWindow *window, gboolean show_toolbar)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	if (show_toolbar)
-		priv->chrome |= EPHY_WEB_VIEW_CHROME_TOOLBAR;
-	else
-		priv->chrome &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-
-	sync_chromes_visibility (window);
 }
 
 static void
@@ -2857,15 +2838,7 @@ setup_notebook (EphyWindow *window)
 static void
 ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
 {
-	EphyWebViewChrome chrome_mask = mask;
-
-	if (!g_settings_get_boolean (EPHY_SETTINGS_UI,
-				     EPHY_PREFS_UI_SHOW_TOOLBARS))
-	{
-		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
-	}
-
-	window->priv->chrome = chrome_mask;
+	window->priv->chrome = mask;
 }
 
 static void
@@ -3135,19 +3108,6 @@ allow_popups_notifier (GSettings *settings,
 		g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
 	}
 	g_list_free (tabs);
-}
-
-static void
-show_toolbars_setting_cb (GSettings *settings,
-			  char *key,
-			  EphyWindow *window)
-{
-	gboolean show_toolbars;
-
-	show_toolbars = g_settings_get_boolean (EPHY_SETTINGS_UI,
-						EPHY_PREFS_UI_SHOW_TOOLBARS);
-
-	set_toolbar_visibility (window, show_toolbars);
 }
 
 static void
@@ -3443,10 +3403,6 @@ ephy_window_constructor (GType type,
 	g_signal_connect (EPHY_SETTINGS_WEB,
 			  "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
 			  G_CALLBACK (allow_popups_notifier), window);
-
-	g_signal_connect (EPHY_SETTINGS_UI,
-			  "changed::" EPHY_PREFS_UI_SHOW_TOOLBARS,
-			  G_CALLBACK (show_toolbars_setting_cb), window);
 
 	/* Disable actions not needed for popup mode. */
 	toolbar_action_group = priv->toolbar_action_group;

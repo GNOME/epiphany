@@ -69,7 +69,6 @@ typedef enum
 
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR       "always-show-tabs-bar"
-#define EPHY_PREFS_UI_SHOW_TOOLBARS              "show-toolbars"
 #define EPHY_PREFS_UI_TOOLBAR_STYLE              "toolbar-style"
 #define EPHY_PREFS_UI_DOWNLOADS_HIDDEN           "downloads-hidden"
 #define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
