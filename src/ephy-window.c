@@ -347,7 +347,6 @@ struct _EphyWindowPrivate
 
 	EphyLocationController *location_controller;
 
-	gulong set_focus_handler;
 	gulong app_menu_visibility_handler;
 
 	guint closing : 1;
@@ -3075,10 +3074,6 @@ ephy_window_finalize (GObject *object)
 	EphyWindow *window = EPHY_WINDOW (object);
 	EphyWindowPrivate *priv = window->priv;
 
-	if (priv->set_focus_handler != 0)
-		g_signal_handler_disconnect (window,
-					     priv->set_focus_handler);
-
 	if (priv->app_menu_visibility_handler != 0)
 		g_signal_handler_disconnect (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
 					     priv->app_menu_visibility_handler);
@@ -3175,6 +3170,7 @@ setup_toolbar (EphyWindow *window)
 
 	toolbar = ephy_toolbar_new (window);
 	gtk_window_set_titlebar (GTK_WINDOW (window), toolbar);
+	gtk_widget_show (toolbar);
 
 	app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
@@ -3517,49 +3513,6 @@ ephy_window_class_init (EphyWindowClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
 
-static void 
-maybe_finish_activation_cb (EphyWindow *window,
-			    GtkWidget *widget,
-			    GtkWidget *toolbar)
-{
-	while (widget != NULL && widget != toolbar)
-	{
-		widget = gtk_widget_get_parent (widget);
-	}
-
-	/* if widget == toolbar, the new focus widget is in the toolbar, so we
-	 * don't deactivate.
-	 */
-	if (widget != toolbar)
-	{
-		g_signal_handler_disconnect (window, window->priv->set_focus_handler);
-		window->priv->set_focus_handler = 0;
-		sync_chromes_visibility (window);
-	}
-}
-
-static void
-_ephy_window_activate_location (EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *entry;
-	gboolean visible;
-
-	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
-
-	g_object_get (G_OBJECT (priv->toolbar), "visible", &visible, NULL);
-	if (visible == FALSE)
-	{
-		gtk_widget_show (GTK_WIDGET (priv->toolbar));
-		window->priv->set_focus_handler =
-			g_signal_connect (window, "set-focus",
-					  G_CALLBACK (maybe_finish_activation_cb),
-					  priv->toolbar);
-	}
-
-	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
-}
-
 static void
 ephy_window_init (EphyWindow *window)
 {
@@ -3661,7 +3614,11 @@ ephy_window_load_url (EphyWindow *window,
 void
 ephy_window_activate_location (EphyWindow *window)
 {
-	_ephy_window_activate_location (window);
+	EphyWindowPrivate *priv = window->priv;
+	GtkWidget *entry;
+
+	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
+	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
 /**
