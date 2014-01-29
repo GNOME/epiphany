@@ -38,6 +38,16 @@ G_BEGIN_DECLS
 #define EPHY_IS_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WINDOW))
 #define EPHY_WINDOW_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WINDOW, EphyWindowClass))
 
+typedef enum
+{
+        EPHY_WINDOW_CHROME_TOOLBAR       = 1 << 0,
+        EPHY_WINDOW_CHROME_MENU          = 1 << 1,
+        EPHY_WINDOW_CHROME_LOCATION      = 1 << 2,
+        EPHY_WINDOW_CHROME_DOWNLOADS_BOX = 1 << 3,
+        EPHY_WINDOW_CHROME_TABSBAR       = 1 << 4,
+        EPHY_WINDOW_CHROME_DEFAULT       = (EPHY_WINDOW_CHROME_TOOLBAR | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR)
+} EphyWindowChrome;
+
 typedef struct _EphyWindowClass		EphyWindowClass;
 typedef struct _EphyWindow		EphyWindow;
 typedef struct _EphyWindowPrivate	EphyWindowPrivate;

@@ -32,13 +32,6 @@ ephy_embed_container_base_init (gpointer g_class)
     initialized = TRUE;
 
     g_object_interface_install_property (g_class,
-                                         g_param_spec_flags ("chrome", NULL, NULL,
-                                                             EPHY_TYPE_WEB_VIEW_CHROME,
-                                                             EPHY_WEB_VIEW_CHROME_ALL,
-                                                             G_PARAM_CONSTRUCT_ONLY |
-                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-    g_object_interface_install_property (g_class,
                                          g_param_spec_boolean ("is-popup", NULL, NULL,
                                                                FALSE,
                                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
@@ -198,23 +191,4 @@ ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
   return iface->get_is_popup (container);
 }
 
-/**
- * ephy_embed_container_get_chrome:
- * @container: an #EphyEmbedContainer
- *
- * Returns the #EphyWebViewChrome flags indicating the visibility of several parts
- * of the UI.
- *
- * Return value: #EphyWebViewChrome flags.
- **/
-EphyWebViewChrome
-ephy_embed_container_get_chrome (EphyEmbedContainer *container)
-{
-  EphyEmbedContainerIface *iface;
-
-  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), 0);
-
-  iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  return iface->get_chrome (container);
-}
 

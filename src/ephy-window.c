@@ -338,8 +338,7 @@ struct _EphyWindowPrivate
 	EphyEncodingMenu *enc_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
-	EphyWebViewChrome chrome;
-	EphyWebViewChrome pre_fullscreen_chrome;
+	EphyWindowChrome chrome;
 	EphyEmbedEvent *context_event;
 	WebKitHitTestResult *hit_test_result;
 	guint idle_worker;
@@ -506,12 +505,6 @@ impl_get_is_popup (EphyEmbedContainer *container)
 	return EPHY_WINDOW (container)->priv->is_popup;
 }
 
-static EphyWebViewChrome
-impl_get_chrome (EphyEmbedContainer *container)
-{
-	return EPHY_WINDOW (container)->priv->chrome;
-}
-
 static void
 ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
 {
@@ -521,7 +514,6 @@ ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
 	iface->get_active_child = impl_get_active_child;
 	iface->get_children = impl_get_children;
 	iface->get_is_popup = impl_get_is_popup;
-	iface->get_chrome = impl_get_chrome;
 }
 
 static EphyEmbed *
@@ -652,39 +644,33 @@ settings_changed_cb (GtkSettings *settings)
 }
 
 static void
-get_chromes_visibility (EphyWindow *window,
-			gboolean *show_tabsbar,
-			gboolean *show_downloads_box)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyWebViewChrome flags = priv->chrome;
-
-	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-	{
-		*show_tabsbar = FALSE;
-	}
-	else
-	{
-		*show_tabsbar = !(priv->is_popup || priv->fullscreen_mode);
-	}
-
-	*show_downloads_box = (flags & EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX);
-}
-
-static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	gboolean show_tabsbar, show_downloads_box;
 
-	if (priv->closing) return;
+	if (priv->closing)
+		return;
 
-	get_chromes_visibility (window,
-				&show_tabsbar,
-				&show_downloads_box);
+	show_tabsbar = (priv->chrome & EPHY_WINDOW_CHROME_TABSBAR);
+	show_downloads_box = (priv->chrome & EPHY_WINDOW_CHROME_DOWNLOADS_BOX);
 
-	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
-	gtk_widget_set_visible (priv->downloads_box, show_downloads_box);
+	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook),
+					show_tabsbar && !(priv->is_popup || priv->fullscreen_mode));
+	gtk_widget_set_visible (priv->downloads_box,
+				show_downloads_box && !priv->fullscreen_mode);
+}
+
+static void
+ephy_window_set_chrome (EphyWindow *window,
+			EphyWindowChrome chrome)
+{
+	if (window->priv->chrome == chrome)
+		return;
+
+	window->priv->chrome = chrome;
+	g_object_notify (G_OBJECT (window), "chrome");
+	sync_chromes_visibility (window);
 }
 
 static void
@@ -779,8 +765,6 @@ ephy_window_fullscreen (EphyWindow *window)
 	EphyEmbed *embed;
 
 	priv->fullscreen_mode = TRUE;
-	priv->pre_fullscreen_chrome = priv->chrome;
-	priv->chrome = 0;
 
 	/* sync status */
 	embed = window->priv->active_embed;
@@ -788,6 +772,7 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	sync_chromes_visibility (window);
+	gtk_widget_hide (priv->toolbar);
 	ephy_embed_entering_fullscreen (embed);
 }
 
@@ -795,8 +780,8 @@ static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->fullscreen_mode = FALSE;
-	window->priv->chrome = window->priv->pre_fullscreen_chrome;
 
+	gtk_widget_show (window->priv->toolbar);
 	sync_chromes_visibility (window);
 	ephy_embed_leaving_fullscreen (window->priv->active_embed);
 }
@@ -1982,32 +1967,23 @@ ephy_window_configure_for_view (EphyWindow *window,
 				WebKitWebView *web_view)
 {
 	WebKitWindowProperties *properties;
-	EphyWebViewChrome chrome_mask;
+	GdkRectangle geometry;
 
 	properties = webkit_web_view_get_window_properties (web_view);
 
-	chrome_mask = window->priv->chrome;
-	if (!webkit_window_properties_get_toolbar_visible (properties))
-		chrome_mask &= ~EPHY_WEB_VIEW_CHROME_TOOLBAR;
+	gtk_widget_set_visible (window->priv->toolbar, webkit_window_properties_get_toolbar_visible (properties));
 
-	/* We will consider windows with different chrome settings popups. */
-	if (chrome_mask != window->priv->chrome) {
-		GdkRectangle geometry;
+	webkit_window_properties_get_geometry (properties, &geometry);
+	gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
 
-		webkit_window_properties_get_geometry (properties, &geometry);
-		gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
+	if (!webkit_window_properties_get_resizable (properties))
+		gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-		if (!webkit_window_properties_get_resizable (properties))
-			gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-		window->priv->is_popup = TRUE;
-		window->priv->chrome = chrome_mask;
-		g_signal_connect (properties, "notify::geometry",
-				  G_CALLBACK (window_properties_geometry_changed),
-				  window);
-
-		sync_chromes_visibility (window);
-	}
+	window->priv->is_popup = TRUE;
+	sync_chromes_visibility (window);
+	g_signal_connect (properties, "notify::geometry",
+			  G_CALLBACK (window_properties_geometry_changed),
+			  window);
 }
 
 static gboolean
@@ -2831,27 +2807,24 @@ setup_notebook (EphyWindow *window)
 	g_signal_connect (notebook, "tab-close-request",
 			  G_CALLBACK (notebook_page_close_request_cb), window);
 
-	return notebook;
-}
+	g_signal_connect_swapped (notebook, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 
-static void
-ephy_window_set_chrome (EphyWindow *window, EphyWebViewChrome mask)
-{
-	window->priv->chrome = mask;
+	return notebook;
 }
 
 static void
 ephy_window_set_downloads_box_visibility (EphyWindow *window,
 					  gboolean show)
 {
+	EphyWindowChrome chrome = window->priv->chrome;
 
-	if (show) {
-		gtk_widget_show (window->priv->downloads_box);
-		window->priv->chrome |= EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX;
-	} else {
-		gtk_widget_hide (window->priv->downloads_box);
-		window->priv->chrome &= ~EPHY_WEB_VIEW_CHROME_DOWNLOADS_BOX;
-	}
+	if (show)
+		chrome |= EPHY_WINDOW_CHROME_DOWNLOADS_BOX;
+	else
+		chrome &= ~EPHY_WINDOW_CHROME_DOWNLOADS_BOX;
+
+	ephy_window_set_chrome (window, chrome);
 }
 
 void
@@ -3199,6 +3172,27 @@ setup_toolbar (EphyWindow *window)
 	return toolbar;
 }
 
+static EphyLocationController *
+setup_location_controller (EphyWindow *window,
+			   EphyToolbar *toolbar)
+{
+	EphyLocationController *location_controller;
+
+	location_controller =
+		g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
+			      "window", window,
+			      "location-entry", ephy_toolbar_get_location_entry (toolbar),
+			      NULL);
+	g_signal_connect (location_controller, "notify::address",
+			  G_CALLBACK (sync_user_input_cb), window);
+	g_signal_connect_swapped (location_controller, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
+	g_signal_connect (location_controller, "lock-clicked",
+			  G_CALLBACK (lock_clicked_cb), window);
+
+	return location_controller;
+}
+
 static const char* disabled_actions_for_app_mode[] = { "FileOpen",
 						       "FileNewWindow",
 						       "FileNewWindowIncognito",
@@ -3316,27 +3310,11 @@ ephy_window_constructor (GType type,
 	setup_ui_manager (window);
 	setup_tab_accels (window);
 
-	/* Create the notebook. */
-	/* FIXME: the notebook needs to exist before the toolbar,
-	 * because EphyLocationEntry uses it... */
 	priv->notebook = setup_notebook (window);
 
 	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
-	priv->location_controller =
-		g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
-			      "window", window,
-			      "location-entry", ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar)),
-			      NULL);
-	g_signal_connect (priv->location_controller, "notify::address",
-			  G_CALLBACK (sync_user_input_cb), window);
-	g_signal_connect_swapped (priv->location_controller, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-	g_signal_connect (priv->location_controller, "lock-clicked",
-			  G_CALLBACK (lock_clicked_cb), window);
-
-	g_signal_connect_swapped (priv->notebook, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
+	priv->location_controller = setup_location_controller (window, EPHY_TOOLBAR (priv->toolbar));
 	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    GTK_WIDGET (priv->notebook),
 			    TRUE, TRUE, 0);
@@ -3351,7 +3329,7 @@ ephy_window_constructor (GType type,
 	g_object_bind_property (action, "active",
 				priv->downloads_box, "visible",
 				G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-	
+
 	/* Now load the UI definition. */
 	gtk_ui_manager_add_ui_from_resource (priv->manager,
 					     "/org/gnome/epiphany/epiphany-ui.xml",
@@ -3451,7 +3429,7 @@ ephy_window_constructor (GType type,
 
 	init_menu_updaters (window);
 
-	sync_chromes_visibility (window);
+	ephy_window_set_chrome (window, EPHY_WINDOW_CHROME_DEFAULT);
 
 	return object;
 }
@@ -3506,9 +3484,17 @@ ephy_window_class_init (EphyWindowClass *klass)
 					  PROP_SINGLE_TAB_MODE,
 					  "is-popup");
 
-	g_object_class_override_property (object_class,
-					  PROP_CHROME,
-					  "chrome");
+	g_object_class_install_property (object_class,
+					 PROP_CHROME,
+					 g_param_spec_flags ("chrome",
+							     NULL,
+							     NULL,
+							     EPHY_TYPE_WINDOW_CHROME,
+							     EPHY_WINDOW_CHROME_DEFAULT,
+							     G_PARAM_READWRITE |
+							     G_PARAM_STATIC_NAME |
+							     G_PARAM_STATIC_NICK |
+							     G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
