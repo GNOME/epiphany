@@ -556,7 +556,7 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 	 * instead of using this workaround. */
 	g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
 
-	tmp_filename = ephy_file_tmp_filename ("ephy-download-XXXXXX", NULL);
+	tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
 	destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
 	destination_uri = g_filename_to_uri (destination, NULL, NULL);
 	webkit_download_set_destination (download, destination_uri);

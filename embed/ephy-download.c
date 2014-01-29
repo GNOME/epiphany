@@ -288,7 +288,7 @@ set_destination_uri_for_suggested_filename (EphyDownload *download, const char *
   if (suggested_filename != NULL) {
     dest_name = ephy_sanitize_filename (g_strdup (suggested_filename));
   } else {
-    dest_name = ephy_file_tmp_filename ("ephy-download-XXXXXX", NULL);
+    dest_name = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
   }
 
   destination_filename = g_build_filename (dest_dir, dest_name, NULL);
