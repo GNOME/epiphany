@@ -1968,10 +1968,20 @@ ephy_window_configure_for_view (EphyWindow *window,
 {
 	WebKitWindowProperties *properties;
 	GdkRectangle geometry;
+	EphyWindowChrome chrome = 0;
 
 	properties = webkit_web_view_get_window_properties (web_view);
 
-	gtk_widget_set_visible (window->priv->toolbar, webkit_window_properties_get_toolbar_visible (properties));
+	if (webkit_window_properties_get_toolbar_visible (properties))
+		chrome |= EPHY_WINDOW_CHROME_TOOLBAR;
+
+	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
+	{
+		if (webkit_window_properties_get_menubar_visible (properties))
+			chrome |= EPHY_WINDOW_CHROME_MENU;
+		if (webkit_window_properties_get_locationbar_visible (properties))
+			chrome |= EPHY_WINDOW_CHROME_LOCATION;
+	}
 
 	webkit_window_properties_get_geometry (properties, &geometry);
 	gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
@@ -1980,7 +1990,7 @@ ephy_window_configure_for_view (EphyWindow *window,
 		gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
 	window->priv->is_popup = TRUE;
-	sync_chromes_visibility (window);
+	ephy_window_set_chrome (window, chrome);
 	g_signal_connect (properties, "notify::geometry",
 			  G_CALLBACK (window_properties_geometry_changed),
 			  window);
@@ -3278,6 +3288,7 @@ ephy_window_constructor (GType type,
 	GtkCssProvider *css_provider;
 	int i;
 	EphyEmbedShellMode mode;
+	EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
 
 	object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
 		(type, n_construct_properties, construct_params);
@@ -3413,6 +3424,7 @@ ephy_window_constructor (GType type,
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 			gtk_action_set_visible (action, FALSE);
 		}
+		chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
 	}
 
 	/* We never want the menubar shown, we merge the app menu into
@@ -3429,7 +3441,7 @@ ephy_window_constructor (GType type,
 
 	init_menu_updaters (window);
 
-	ephy_window_set_chrome (window, EPHY_WINDOW_CHROME_DEFAULT);
+	ephy_window_set_chrome (window, chrome);
 
 	return object;
 }
@@ -3931,4 +3943,12 @@ ephy_window_close (EphyWindow *window)
 	gtk_widget_hide (GTK_WIDGET (window));
 
 	return TRUE;
+}
+
+EphyWindowChrome
+ephy_window_get_chrome (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), EPHY_WINDOW_CHROME_DEFAULT);
+
+	return window->priv->chrome;
 }

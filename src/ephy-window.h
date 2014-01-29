@@ -87,6 +87,8 @@ gboolean          ephy_window_close               (EphyWindow *window);
 void              ephy_window_add_download        (EphyWindow *window,
                                                    EphyDownload *download);
 
+EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
+
 gboolean      ephy_window_is_on_current_workspace (EphyWindow *window);
 
 G_END_DECLS

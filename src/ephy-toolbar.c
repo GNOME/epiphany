@@ -41,6 +41,10 @@ static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 struct _EphyToolbarPrivate {
   EphyWindow *window;
   GtkWidget *entry;
+  GtkWidget *navigation_box;
+  GtkWidget *location_box;
+  GtkWidget *page_menu_button;
+  GtkWidget *new_tab_button;
 };
 
 static void
@@ -79,6 +83,20 @@ ephy_toolbar_get_property (GObject *object,
 }
 
 static void
+sync_chromes_visibility (EphyToolbar *toolbar)
+{
+  EphyToolbarPrivate *priv = toolbar->priv;
+  EphyWindowChrome chrome;
+
+  chrome = ephy_window_get_chrome (priv->window);
+
+  gtk_widget_set_visible (priv->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
+  gtk_widget_set_visible (priv->location_box, chrome & EPHY_WINDOW_CHROME_LOCATION);
+  gtk_widget_set_visible (priv->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
+  gtk_widget_set_visible (priv->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
+}
+
+static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
@@ -95,8 +113,12 @@ ephy_toolbar_constructed (GObject *object)
 
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
+  g_signal_connect_swapped (priv->window, "notify::chrome",
+                            G_CALLBACK (sync_chromes_visibility), toolbar);
+
   /* Back and Forward */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->navigation_box = box;
 
   /* Back */
   button = ephy_middle_clickable_button_new ();
@@ -131,10 +153,10 @@ ephy_toolbar_constructed (GObject *object)
                                "linked");
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
-  gtk_widget_show_all (box);
 
   /* Location and Reload/Stop */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->location_box = box;
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
   /* Location */
@@ -178,6 +200,7 @@ ephy_toolbar_constructed (GObject *object)
 
   /* Page Menu */
   button = gtk_button_new ();
+  priv->page_menu_button = button;
   gtk_widget_set_name (button, "ephy-page-menu-button");
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
@@ -187,10 +210,10 @@ ephy_toolbar_constructed (GObject *object)
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
-  gtk_widget_show_all (button);
 
   /* New Tab */
   button = gtk_button_new ();
+  priv->new_tab_button = button;
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
@@ -200,8 +223,6 @@ ephy_toolbar_constructed (GObject *object)
                                       action);
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
-    gtk_widget_show_all (button);
 
   /* Add title only in application mode. */
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
