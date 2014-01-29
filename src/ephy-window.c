@@ -1977,6 +1977,11 @@ ephy_window_configure_for_view (EphyWindow *window,
 
 	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
+		GtkWidget *entry;
+
+		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->priv->toolbar));
+		gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+
 		if (webkit_window_properties_get_menubar_visible (properties))
 			chrome |= EPHY_WINDOW_CHROME_MENU;
 		if (webkit_window_properties_get_locationbar_visible (properties))
