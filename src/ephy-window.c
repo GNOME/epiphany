@@ -266,6 +266,8 @@ static const struct
 	                        GDK_SHIFT_MASK,         "EditFindPrev",          FALSE },
 
 	{ GDK_KEY_s,		GDK_CONTROL_MASK,	"FileSaveAs",		 FALSE },
+	{ GDK_KEY_r,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
+	{ GDK_KEY_R,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
 	{ GDK_KEY_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		 FALSE },
 	/* Tab navigation */
