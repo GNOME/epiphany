@@ -66,6 +66,11 @@
                         <summary>Whether to delay loading of tabs that are not immediately visible on session restore</summary>
                         <description>When this option is set to true, tabs will not start loading until the user switches to them, upon session restore.</description>
                 </key>
+                <key name="process-model" enum="org.gnome.Epiphany.EphyPrefsProcessModel">
+                        <default>'shared-secondary-process'</default>
+                        <summary>Process model</summary>
+                        <description>This option allows to set the process model used. Use 'shared-secondary-process' to use a single web process shared by all the tabs and 'one-secondary-process-per-web-view' to use a different web process for each tab.</description>
+                </key>
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key name="toolbar-style" enum="org.gnome.Epiphany.EphyPrefsUIToolbarStyle">

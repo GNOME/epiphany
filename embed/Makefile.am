@@ -22,7 +22,8 @@ INST_H_FILES = \
 	ephy-embed-utils.h              \
 	ephy-find-toolbar.h		\
 	ephy-overview.h			\
-	ephy-web-view.h
+	ephy-web-view.h			\
+	ephy-web-extension-proxy.h
 
 
 BUILT_SOURCES = \
@@ -45,6 +46,7 @@ libephyembed_la_SOURCES = \
 	ephy-overview.c			\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
+	ephy-web-extension-proxy.c	\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 

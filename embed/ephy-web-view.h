@@ -160,6 +160,23 @@ void                       ephy_web_view_load_error_page          (EphyWebView  
                                                                    const char                *uri,
                                                                    EphyWebViewErrorPage       page,
                                                                    GError                    *error);
+void                       ephy_web_view_get_best_web_app_icon    (EphyWebView               *view,
+                                                                   GCancellable              *cancellable,
+                                                                   GAsyncReadyCallback        callback,
+                                                                   gpointer                   user_data);
+gboolean               ephy_web_view_get_best_web_app_icon_finish (EphyWebView               *view,
+                                                                   GAsyncResult              *result,
+                                                                   gboolean                  *icon_result,
+                                                                   char                     **icon_uri,
+                                                                   GdkRGBA                   *icon_color,
+                                                                   GError                   **error);
+void                       ephy_web_view_get_web_app_title        (EphyWebView               *view,
+                                                                   GCancellable              *cancellable,
+                                                                   GAsyncReadyCallback        callback,
+                                                                   gpointer                   user_data);
+char                      *ephy_web_view_get_web_app_title_finish (EphyWebView               *view,
+                                                                   GAsyncResult              *result,
+                                                                   GError                   **error);
 
 G_END_DECLS
 

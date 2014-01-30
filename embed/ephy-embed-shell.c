@@ -34,6 +34,7 @@
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-extension.h"
+#include "ephy-web-extension-proxy.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -53,9 +54,10 @@ struct _EphyEmbedShellPrivate
   EphyEmbedShellMode mode;
   EphyFrecentStore *frecent_store;
   EphyAboutHandler *about_handler;
-  GDBusProxy *web_extension;
-  guint web_extension_watch_name_id;
-  guint web_extension_form_auth_save_signal_id;
+  GDBusConnection *bus;
+  GList *web_extensions;
+  guint web_extensions_page_created_signal_id;
+  guint web_extensions_form_auth_save_signal_id;
 };
 
 enum
@@ -63,7 +65,7 @@ enum
   PREPARE_CLOSE,
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
-  FORM_AUTH_DATA_SAVE_REQUESTED,
+  PAGE_CREATED,
 
   LAST_SIGNAL
 };
@@ -98,6 +100,24 @@ ephy_embed_shell_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
 
+static gint
+web_extension_compare (EphyWebExtensionProxy *proxy,
+                       const char *name_owner)
+{
+  return g_strcmp0 (ephy_web_extension_proxy_get_name_owner (proxy), name_owner);
+}
+
+static EphyWebExtensionProxy *
+ephy_embed_shell_find_web_extension (EphyEmbedShell *shell,
+                                     const char *name_owner)
+{
+  GList *l;
+
+  l = g_list_find_custom (shell->priv->web_extensions, name_owner, (GCompareFunc)web_extension_compare);
+
+  return l ? EPHY_WEB_EXTENSION_PROXY (l->data) : NULL;
+}
+
 static void
 web_extension_form_auth_save_requested (GDBusConnection *connection,
                                         const char *sender_name,
@@ -107,83 +127,68 @@ web_extension_form_auth_save_requested (GDBusConnection *connection,
                                         GVariant *parameters,
                                         EphyEmbedShell *shell)
 {
+  EphyWebExtensionProxy *web_extension;
   guint request_id;
   guint64 page_id;
   const char *hostname;
   const char *username;
 
   g_variant_get (parameters, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
-  g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
-                 request_id, page_id, hostname, username);
+  web_extension = ephy_embed_shell_find_web_extension (shell, sender_name);
+  if (!web_extension)
+    return;
+  ephy_web_extension_proxy_form_auth_save_requested (web_extension, request_id, page_id, hostname, username);
 }
 
 static void
-web_extension_proxy_created_cb (GDBusProxy *proxy,
-                                GAsyncResult *result,
-                                EphyEmbedShell *shell)
+web_extension_page_created (GDBusConnection *connection,
+                            const char *sender_name,
+                            const char *object_path,
+                            const char *interface_name,
+                            const char *signal_name,
+                            GVariant *parameters,
+                            EphyEmbedShell *shell)
 {
-  GError *error = NULL;
+  EphyWebExtensionProxy *web_extension;
+  guint64 page_id;
 
-  shell->priv->web_extension = g_dbus_proxy_new_finish (result, &error);
-  if (!shell->priv->web_extension) {
-    g_warning ("Error creating web extension proxy: %s\n", error->message);
-    g_error_free (error);
-  } else {
-    shell->priv->web_extension_form_auth_save_signal_id =
-      g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (shell->priv->web_extension),
-                                          g_dbus_proxy_get_name (shell->priv->web_extension),
-                                          EPHY_WEB_EXTENSION_INTERFACE,
-                                         "FormAuthDataSaveConfirmationRequired",
-                                          EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                          NULL,
-                                          G_DBUS_SIGNAL_FLAGS_NONE,
-                                          (GDBusSignalCallback)web_extension_form_auth_save_requested,
-                                          shell,
-                                          NULL);
-  }
+  g_variant_get (parameters, "(t)", &page_id);
+
+  web_extension = ephy_embed_shell_find_web_extension (shell, sender_name);
+  if (!web_extension)
+    return;
+  g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, web_extension);
 }
 
 static void
-web_extension_appeared_cb (GDBusConnection *connection,
-                           const gchar *name,
-                           const gchar *name_owner,
-                           EphyEmbedShell *shell)
+web_extension_destroyed (EphyEmbedShell *shell,
+                         GObject *web_extension)
 {
-  g_dbus_proxy_new (connection,
-                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
-                    G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                    G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                    NULL,
-                    name,
-                    EPHY_WEB_EXTENSION_OBJECT_PATH,
-                    EPHY_WEB_EXTENSION_INTERFACE,
-                    NULL,
-                    (GAsyncReadyCallback)web_extension_proxy_created_cb,
-                    shell);
+  shell->priv->web_extensions = g_list_remove (shell->priv->web_extensions, web_extension);
 }
 
 static void
-web_extension_vanished_cb (GDBusConnection *connection,
-                           const gchar *name,
-                           EphyEmbedShell *shell)
+ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell,
+                                      const char *web_extension_id)
 {
-  g_clear_object (&shell->priv->web_extension);
-}
-
-static void
-ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell)
-{
+  EphyWebExtensionProxy *web_extension;
   char *service_name;
 
-  service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, getpid ());
-  shell->priv->web_extension_watch_name_id =
-    g_bus_watch_name (G_BUS_TYPE_SESSION,
-                      service_name,
-                      G_BUS_NAME_WATCHER_FLAGS_NONE,
-                      (GBusNameAppearedCallback) web_extension_appeared_cb,
-                      (GBusNameVanishedCallback) web_extension_vanished_cb,
-                      shell, NULL);
+  if (!shell->priv->bus)
+    return;
+
+  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, web_extension_id);
+  web_extension = ephy_web_extension_proxy_new (shell->priv->bus, service_name);
+  shell->priv->web_extensions = g_list_prepend (shell->priv->web_extensions, web_extension);
+  g_object_weak_ref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
   g_free (service_name);
+}
+
+static void
+ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
+                                        EphyEmbedShell *shell)
+{
+  g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
 }
 
 /**
@@ -304,13 +309,70 @@ initialize_web_extensions (WebKitWebContext* web_context,
 {
   GVariant *user_data;
   gboolean private_profile;
+  char *web_extension_id;
+  static guint web_extension_count = 0;
 
   webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
-  ephy_embed_shell_watch_web_extension (shell);
+
+  web_extension_id = g_strdup_printf ("%u-%u", getpid (), ++web_extension_count);
+  ephy_embed_shell_watch_web_extension (shell, web_extension_id);
 
   private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (shell->priv->mode);
-  user_data = g_variant_new ("(usb)", getpid (), ephy_dot_dir (), private_profile);
+  user_data = g_variant_new ("(ssb)", web_extension_id, ephy_dot_dir (), private_profile);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
+}
+
+static void
+ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
+{
+  GError *error = NULL;
+
+  shell->priv->bus = g_application_get_dbus_connection (G_APPLICATION (shell));
+  if (!shell->priv->bus) {
+    g_warning ("Application not connected to session bus: %s\n", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  shell->priv->web_extensions_page_created_signal_id =
+    g_dbus_connection_signal_subscribe (shell->priv->bus,
+                                        NULL,
+                                        EPHY_WEB_EXTENSION_INTERFACE,
+                                        "PageCreated",
+                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        (GDBusSignalCallback)web_extension_page_created,
+                                        shell,
+                                        NULL);
+  shell->priv->web_extensions_form_auth_save_signal_id =
+    g_dbus_connection_signal_subscribe (shell->priv->bus,
+                                        NULL,
+                                        EPHY_WEB_EXTENSION_INTERFACE,
+                                        "FormAuthDataSaveConfirmationRequired",
+                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        (GDBusSignalCallback)web_extension_form_auth_save_requested,
+                                        shell,
+                                        NULL);
+}
+
+static void
+ephy_embed_shell_setup_process_model (EphyEmbedShell *shell,
+                                      WebKitWebContext *web_context)
+{
+  EphyPrefsProcessModel process_model;
+
+  process_model = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_PROCESS_MODEL);
+  switch (process_model) {
+  case EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS:
+    webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS);
+    break;
+  case EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW:
+    webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW);
+    break;
+  }
 }
 
 static void
@@ -328,7 +390,11 @@ ephy_embed_shell_startup (GApplication* application)
 
   /* We're not remoting, setup the Web Context. */
   mode = shell->priv->mode;
+
+  ephy_embed_shell_setup_web_extensions_connection (shell);
+
   web_context = webkit_web_context_get_default ();
+  ephy_embed_shell_setup_process_model (shell, web_context);
   g_signal_connect (web_context, "initialize-web-extensions",
                     G_CALLBACK (initialize_web_extensions),
                     shell);
@@ -369,18 +435,17 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->shutdown (application);
 
-  if (priv->web_extension_watch_name_id > 0) {
-    g_bus_unwatch_name (priv->web_extension_watch_name_id);
-    priv->web_extension_watch_name_id = 0;
+  if (priv->web_extensions_page_created_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_page_created_signal_id);
+    priv->web_extensions_page_created_signal_id = 0;
   }
 
-  if (priv->web_extension_form_auth_save_signal_id > 0) {
-    g_dbus_connection_signal_unsubscribe (g_dbus_proxy_get_connection (priv->web_extension),
-                                          priv->web_extension_form_auth_save_signal_id);
-    priv->web_extension_form_auth_save_signal_id = 0;
+  if (priv->web_extensions_form_auth_save_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_form_auth_save_signal_id);
+    priv->web_extensions_form_auth_save_signal_id = 0;
   }
 
-  g_clear_object (&priv->web_extension);
+  g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
   ephy_embed_prefs_shutdown ();
 }
@@ -507,29 +572,23 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_WEB_VIEW);
 
-  /*
-   * EphyEmbedShell::form-auth-data-save-requested:
+  /**
+   * EphyEmbedShell::page-created:
    * @shell: the #EphyEmbedShell
-   * @request_id: the identifier of the request
-   * @page_id: the identifier of the web page
-   * @hostname: the hostname
-   * @username: the username
+   * @page_id: the identifier of the web page created
+   * @web_extension: the #EphyWebExtensionProxy
    *
-   * Emitted when a web page requests confirmation to save
-   * the form authentication data for the given @hostname and
-   * @username
-   **/
-  signals[FORM_AUTH_DATA_SAVE_REQUESTED] =
-    g_signal_new ("form-auth-data-save-requested",
+   * Emitted when a web page is created in the web process.
+   */
+  signals[PAGE_CREATED] =
+    g_signal_new ("page-created",
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
                   g_cclosure_marshal_generic,
-                  G_TYPE_NONE, 4,
-                  G_TYPE_UINT,
+                  G_TYPE_NONE, 2,
                   G_TYPE_UINT64,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING);
+                  EPHY_TYPE_WEB_EXTENSION_PROXY);
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
@@ -726,14 +785,6 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   g_list_free (list);
 
   return ret;
-}
-
-GDBusProxy *
-ephy_embed_shell_get_web_extension_proxy (EphyEmbedShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-  return shell->priv->web_extension;
 }
 
 /**

@@ -40,10 +40,14 @@
 static UriTester *uri_tester;
 static EphyFormAuthDataCache *form_auth_data_cache;
 static GDBusConnection *dbus_connection;
+static GArray *page_created_signals_pending;
 
 static const char introspection_xml[] =
   "<node>"
   " <interface name='org.gnome.Epiphany.WebExtension'>"
+  "  <signal name='PageCreated'>"
+  "   <arg type='t' name='page_id' direction='out'/>"
+  "  </signal>"
   "  <method name='HasModifiedForms'>"
   "   <arg type='t' name='page_id' direction='in'/>"
   "   <arg type='b' name='has_modified_forms' direction='out'/>"
@@ -945,10 +949,63 @@ web_page_document_loaded (WebKitWebPage *web_page,
 }
 
 static void
+emit_page_created (guint64 page_id)
+{
+  GError *error = NULL;
+
+  g_dbus_connection_emit_signal (dbus_connection,
+                                 NULL,
+                                 EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                 EPHY_WEB_EXTENSION_INTERFACE,
+                                 "PageCreated",
+                                 g_variant_new ("(t)", page_id),
+                                 &error);
+  if (error) {
+    g_warning ("Error emitting signal PageCreated: %s\n", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
+emit_page_created_signals_pending (void)
+{
+  guint i;
+
+  if (!page_created_signals_pending)
+    return;
+
+  for (i = 0; i < page_created_signals_pending->len; i++) {
+    guint64 page_id;
+
+    page_id = g_array_index (page_created_signals_pending, guint64, i);
+    emit_page_created (page_id);
+  }
+
+  g_array_free (page_created_signals_pending, TRUE);
+  page_created_signals_pending = NULL;
+}
+
+static void
+queue_page_created_signal_emission (guint64 page_id)
+{
+  if (!page_created_signals_pending)
+    page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
+  page_created_signals_pending = g_array_append_val (page_created_signals_pending, page_id);
+}
+
+static void
 web_page_created_callback (WebKitWebExtension *extension,
                            WebKitWebPage *web_page,
                            gpointer user_data)
 {
+  guint64 page_id;
+
+  page_id = webkit_web_page_get_id (web_page);
+  if (dbus_connection)
+    emit_page_created (page_id);
+  else
+    queue_page_created_signal_emission (page_id);
+
   g_signal_connect_object (web_page, "send-request",
                            G_CALLBACK (web_page_send_request),
                            NULL, 0);
@@ -1090,6 +1147,7 @@ bus_acquired_cb (GDBusConnection *connection,
   } else {
     dbus_connection = connection;
     g_object_add_weak_pointer (G_OBJECT (connection), (gpointer *)&dbus_connection);
+    emit_page_created_signals_pending ();
   }
 }
 
@@ -1098,11 +1156,11 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
                                                 GVariant *user_data)
 {
   char *service_name;
-  guint extension_id;
+  const char *extension_id;
   const char *dot_dir;
   gboolean private_profile;
 
-  g_variant_get (user_data, "(u&sb)", &extension_id, &dot_dir, &private_profile);
+  g_variant_get (user_data, "(&s&sb)", &extension_id, &dot_dir, &private_profile);
 
   ephy_debug_init ();
   uri_tester = uri_tester_new (dot_dir);
@@ -1113,7 +1171,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
                     G_CALLBACK (web_page_created_callback),
                     NULL);
 
-  service_name = g_strdup_printf ("%s-%u", EPHY_WEB_EXTENSION_SERVICE_NAME, extension_id);
+  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, extension_id);
   g_bus_own_name (G_BUS_TYPE_SESSION,
                   service_name,
                   G_BUS_NAME_OWNER_FLAGS_NONE,

@@ -571,26 +571,19 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 }
 
 static void
-download_icon_or_take_snapshot (EphyApplicationDialogData *data,
-				gboolean res,
-				char *uri,
-				char *color)
+fill_default_application_image_cb (GObject *source,
+				   GAsyncResult *async_result,
+				   gpointer user_data)
 {
-	if (uri != NULL && uri[0] != '\0')
-		data->icon_href = uri;
+	EphyApplicationDialogData *data = user_data;
+	char *uri = NULL;
+	GdkRGBA color = { 0.5, 0.5, 0.5, 0.3 };
+	gboolean res = FALSE;
 
-	if (color != NULL && color[0] != '\0')
-	{
-		gdk_rgba_parse (&data->icon_rgba, color);
-	}
-	else
-	{
-		data->icon_rgba.red = 0.5;
-		data->icon_rgba.green = 0.5;
-		data->icon_rgba.blue = 0.5;
-		data->icon_rgba.alpha = 0.3;
-	}
+	ephy_web_view_get_best_web_app_icon_finish (EPHY_WEB_VIEW (source), async_result, &res, &uri, &color, NULL);
 
+	data->icon_href = uri;
+	data->icon_rgba = color;
 	if (res)
 	{
 		download_icon_and_set_image (data);
@@ -603,49 +596,9 @@ download_icon_or_take_snapshot (EphyApplicationDialogData *data,
 }
 
 static void
-fill_default_application_image_cb (GObject *source,
-				   GAsyncResult *async_result,
-				   gpointer user_data)
-{
-	EphyApplicationDialogData *data = user_data;
-	GVariant *result;
-	char *uri = NULL;
-	char *color = NULL;
-	gboolean res = FALSE;
-
-	result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source),
-					   async_result,
-					   NULL);
-
-	if (result)
-	{
-		g_variant_get (result, "(bss)", &res, &uri, &color);
-		g_variant_unref (result);
-	}
-
-	download_icon_or_take_snapshot (data, res, uri, color);
-}
-
-static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
-	const char *base_uri;
-	GDBusProxy *web_extension;
-
-	base_uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
-
-	web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
-	if (web_extension)
-		g_dbus_proxy_call (web_extension,
-				   "GetBestWebAppIcon",
-				   g_variant_new("(ts)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (data->view)), base_uri),
-				   G_DBUS_CALL_FLAGS_NONE,
-				   -1,
-				   NULL,
-				   fill_default_application_image_cb,
-				   data);
-	else
-		download_icon_or_take_snapshot (data, FALSE, NULL, NULL);
+	ephy_web_view_get_best_web_app_icon (data->view, NULL, fill_default_application_image_cb, data);
 }
 
 typedef struct {
@@ -720,39 +673,16 @@ fill_default_application_title_cb (GObject *source,
 				   gpointer user_data)
 {
 	EphyApplicationDialogData *data = user_data;
-	GVariant *result;
-	char *title = NULL;
+	char *title;
 
-	result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source),
-					   async_result,
-					   NULL);
-
-	if (result)
-	{
-		g_variant_get (result, "(s)", &title);
-		g_variant_unref (result);
-	}
-
+	title = ephy_web_view_get_web_app_title_finish (EPHY_WEB_VIEW (source), async_result, NULL);
 	set_default_application_title (data, title);
 }
 
 static void
 fill_default_application_title (EphyApplicationDialogData *data)
 {
-	GDBusProxy *web_extension;
-
-	web_extension = ephy_embed_shell_get_web_extension_proxy (ephy_embed_shell_get_default ());
-	if (web_extension)
-		g_dbus_proxy_call (web_extension,
-				   "GetWebAppTitle",
-				   g_variant_new("(t)", webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (data->view))),
-				   G_DBUS_CALL_FLAGS_NONE,
-				   -1,
-				   NULL,
-				   fill_default_application_title_cb,
-				   data);
-	else
-		set_default_application_title (data, NULL);
+	ephy_web_view_get_web_app_title (data->view, NULL, fill_default_application_title_cb, data);
 }
 
 static void

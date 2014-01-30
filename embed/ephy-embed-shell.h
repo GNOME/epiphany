@@ -89,7 +89,6 @@ gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell  
                                                                 const char       *mime_type,
                                                                 guint32           user_time);
 void               ephy_embed_shell_clear_cache                (EphyEmbedShell *shell);
-GDBusProxy        *ephy_embed_shell_get_web_extension_proxy    (EphyEmbedShell   *shell);
 
 G_END_DECLS
 

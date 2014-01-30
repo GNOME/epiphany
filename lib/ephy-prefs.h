@@ -67,6 +67,12 @@ typedef enum
   EPHY_PREFS_STATE_HISTORY_DATE_FILTER_EVER,
 } EphyPrefsStateHistoryDateFilter;
 
+typedef enum
+{
+  EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS,
+  EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW
+} EphyPrefsProcessModel;
+
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR       "always-show-tabs-bar"
 #define EPHY_PREFS_UI_TOOLBAR_STYLE              "toolbar-style"
@@ -123,6 +129,7 @@ typedef enum
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE           "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY         "restore-session-policy"
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS "restore-session-delaying-loads"
+#define EPHY_PREFS_PROCESS_MODEL                  "process-model"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"
