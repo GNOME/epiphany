@@ -290,15 +290,17 @@ fullscreen_message_label_hide (EphyEmbed *embed)
 void
 ephy_embed_entering_fullscreen (EphyEmbed *embed)
 {
-  gtk_widget_show (embed->priv->fullscreen_message_label);
+  if (!g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN)) {
+    gtk_widget_show (embed->priv->fullscreen_message_label);
 
-  if (embed->priv->fullscreen_message_id)
-    g_source_remove (embed->priv->fullscreen_message_id);
+    if (embed->priv->fullscreen_message_id)
+      g_source_remove (embed->priv->fullscreen_message_id);
 
-  embed->priv->fullscreen_message_id = g_timeout_add_seconds (5,
-                                                              (GSourceFunc)fullscreen_message_label_hide,
-                                                              embed);
-  g_source_set_name_by_id (embed->priv->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
+    embed->priv->fullscreen_message_id = g_timeout_add_seconds (5,
+                                                                (GSourceFunc)fullscreen_message_label_hide,
+                                                                embed);
+    g_source_set_name_by_id (embed->priv->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
+  }
 }
 
 void
