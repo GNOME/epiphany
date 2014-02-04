@@ -118,7 +118,7 @@ ephy_frecent_store_fetch_urls (EphyFrecentStore *store,
   EphyHistoryQuery *query;
 
   query = ephy_history_query_new ();
-  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->limit = store->priv->history_length;
   query->ignore_hidden = TRUE;
 

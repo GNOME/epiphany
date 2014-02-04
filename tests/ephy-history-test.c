@@ -373,7 +373,7 @@ perform_complex_url_query (EphyHistoryService *service,
   query = ephy_history_query_new ();
   query->substring_list = g_list_prepend (query->substring_list, "k");
   query->limit = 1;
-  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 
   /* The expected result. */
   url = ephy_history_url_new ("http://www.wikipedia.org",
@@ -412,7 +412,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
   query = ephy_history_query_new ();
   query->substring_list = g_list_prepend (query->substring_list, "k");
   query->limit = 1;
-  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->from = 500;
 
   /* The expected result. */
@@ -467,7 +467,7 @@ perform_query_after_clear (EphyHistoryService *service,
   query = ephy_history_query_new ();
   query->substring_list = g_list_prepend (query->substring_list, "gnome");
   query->limit = 10;
-  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 
   ephy_history_service_query_urls (service, query, NULL, verify_query_after_clear, NULL);
 }

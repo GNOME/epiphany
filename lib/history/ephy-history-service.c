@@ -1306,7 +1306,7 @@ ephy_history_service_find_urls (EphyHistoryService *self,
   query->from = from;
   query->to = to;
   query->substring_list = substring_list;
-  query->sort_type = EPHY_HISTORY_SORT_MV;
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->host = host;
 
   if (limit != 0)

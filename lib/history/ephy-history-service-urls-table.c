@@ -274,10 +274,10 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   statement_str = g_string_append (statement_str, "1 ");
 
   switch (query->sort_type) {
-  case EPHY_HISTORY_SORT_MV:
+  case EPHY_HISTORY_SORT_MOST_VISITED:
     statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count DESC ");
     break;
-  case EPHY_HISTORY_SORT_LV:
+  case EPHY_HISTORY_SORT_LEAST_VISITED:
     statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count ");
     break;
   default:

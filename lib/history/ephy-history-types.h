@@ -48,10 +48,10 @@ typedef enum {
 
 typedef enum {
   EPHY_HISTORY_SORT_NONE = 0,
-  EPHY_HISTORY_SORT_MRV, /* Most recently visited first. */
-  EPHY_HISTORY_SORT_LRV, /* Least recently visited first. */
-  EPHY_HISTORY_SORT_MV,  /* Most visited first. */
-  EPHY_HISTORY_SORT_LV   /* Least visited first. */
+  EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED,
+  EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED,
+  EPHY_HISTORY_SORT_MOST_VISITED,
+  EPHY_HISTORY_SORT_LEAST_VISITED
 } EphyHistorySortType;
 
 typedef struct
