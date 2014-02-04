@@ -280,6 +280,12 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   case EPHY_HISTORY_SORT_LEAST_VISITED:
     statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count ");
     break;
+  case EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED:
+    statement_str = g_string_append (statement_str, "ORDER BY urls.last_visit_time DESC ");
+    break;
+  case EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED:
+    statement_str = g_string_append (statement_str, "ORDER BY urls.last_visit_time ");
+    break;
   default:
     g_warning ("We don't support this sorting method yet.");
   }
