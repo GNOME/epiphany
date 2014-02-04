@@ -65,8 +65,6 @@
 #define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
 
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
-#define EPHY_PAGE_TEMPLATE_RECOVERY      "/org/gnome/epiphany/page-templates/recovery.html"
-#define EPHY_PAGE_TEMPLATE_PROCESS_CRASH "/org/gnome/epiphany/page-templates/process-crash.html"
 
 struct _EphyWebViewPrivate {
   EphyWebViewSecurityLevel security_level;
@@ -1758,6 +1756,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   char *msg;
   char *button_label;
   char *stylesheet;
+  const char *custom_class;
   GBytes *html_file;
 
   if (error)
@@ -1772,6 +1771,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
   lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
   g_strdelimit (lang, "_-@", '\0');
 
+  html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_ERROR, 0, NULL);
+
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
       page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
@@ -1785,10 +1786,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "address. You may wish to verify that your "
                                "internet connection is working correctly.</p>"),
                              uri, reason);
-
-      button_label = g_strdup (_("Try Again"));
-
-      html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_ERROR, 0, NULL);
+      button_label = g_strdup (_("Try again"));
+      custom_class = "network-error";
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
@@ -1799,19 +1798,15 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "please report the problem to the "
                                "<strong>%s</strong> developers.</p>"),
                              LSB_DISTRIBUTOR);
-
       button_label = g_strdup (_("Reload Anyway"));
-
-      html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_RECOVERY, 0, NULL);
+      custom_class = "page-crash";
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
       page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
       msg_title = g_strdup (_("Oops!"));
       msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
       button_label = g_strdup (_("Reload Anyway"));
-
-      html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_PROCESS_CRASH, 0, NULL);
-
+      custom_class = "process-crash";
       break;
     default:
       return;
@@ -1831,6 +1826,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                    page_title,
                    stylesheet,
                    uri,
+                   custom_class,
                    msg_title, msg, button_label);
 
   g_bytes_unref (html_file);
