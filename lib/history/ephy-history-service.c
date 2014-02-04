@@ -1294,6 +1294,7 @@ ephy_history_service_find_urls (EphyHistoryService *self,
                                 gint64 from, gint64 to,
                                 guint limit, gint host,
                                 GList *substring_list,
+                                EphyHistorySortType sort_type,
                                 GCancellable *cancellable,
                                 EphyHistoryJobCallback callback,
                                 gpointer user_data)
@@ -1306,7 +1307,7 @@ ephy_history_service_find_urls (EphyHistoryService *self,
   query->from = from;
   query->to = to;
   query->substring_list = substring_list;
-  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
+  query->sort_type = sort_type;
   query->host = host;
 
   if (limit != 0)

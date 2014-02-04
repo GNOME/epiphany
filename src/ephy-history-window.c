@@ -1072,7 +1072,8 @@ filter_now (EphyHistoryWindow *editor,
 		ephy_history_service_find_urls (editor->priv->history_service,
 						from, to,
 						0, host ? host->id : 0,
-						substrings, editor->priv->cancellable,
+						substrings, EPHY_HISTORY_SORT_MOST_VISITED,
+						editor->priv->cancellable,
 						(EphyHistoryJobCallback)on_find_urls_cb, editor);
 		ephy_history_host_free (host);
 	}
