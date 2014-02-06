@@ -173,7 +173,7 @@ confirmation_dialog_construct (EphyHistoryWindow *self)
 
 	dialog = gtk_message_dialog_new
 		(GTK_WINDOW (self),
-		 GTK_DIALOG_DESTROY_WITH_PARENT,
+		 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_CANCEL,
 		 _("Clear browsing history?"));
@@ -191,8 +191,6 @@ confirmation_dialog_construct (EphyHistoryWindow *self)
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
 	
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear History"));
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (confirmation_dialog_response_cb),
