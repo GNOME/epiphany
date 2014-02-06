@@ -3,13 +3,20 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="encoding_dialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Text Encoding</property>
+    <property name="border_width">0</property>
     <property name="role">epiphany-encoding-chooser</property>
     <property name="modal">True</property>
     <property name="default_width">400</property>
     <property name="default_height">420</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerbar">
+        <property name="title" translatable="yes">Text Encoding</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show-close-button">True</property>
+      </object>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox30">
         <property name="visible">True</property>
@@ -18,25 +25,9 @@
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area30">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="okbutton2">
-                <property name="label" translatable="yes">_Close</property>
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -173,8 +164,5 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-7">okbutton2</action-widget>
-    </action-widgets>
   </object>
 </interface>
