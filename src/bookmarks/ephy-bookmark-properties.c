@@ -81,11 +81,9 @@ update_warning (EphyBookmarkProperties *properties)
 	
         /* Translators: This string is used when counting bookmarks that
          * are similar to each other */
-	label = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", priv->duplicate_count), priv->duplicate_count);
-	gtk_button_set_label (GTK_BUTTON (priv->warning), label);
+	label = g_strdup_printf (ngettext("%d bookmark is similar", "%d bookmarks are similar", priv->duplicate_count), priv->duplicate_count);
+	gtk_label_set_text (GTK_LABEL (priv->warning), label);
 	g_free (label);
-
-	g_object_set (priv->warning, "sensitive", priv->duplicate_count > 0, NULL);
 
 	return FALSE;
 }
@@ -167,187 +165,6 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 }
 
 static void
-similar_merge_cb (GtkMenuItem *item,
-		  EphyBookmarkProperties *properties)
-{
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	GPtrArray *topics;
-	EphyNode *node, *topic;
-	gint i, j, priority;
-
-	GPtrArray *identical = g_ptr_array_new ();
-	
-	ephy_bookmarks_get_similar
-	  (priv->bookmarks, priv->bookmark, identical, NULL);
-	
-	node = ephy_bookmarks_get_keywords (priv->bookmarks);
-	topics = ephy_node_get_children (node);
-
-	for (i = 0; i < identical->len; i++)
-	{	
-		node = g_ptr_array_index (identical, i);
-		for (j = 0; j < topics->len; j++)
-		{
-			topic = g_ptr_array_index (topics, j);
-			
-			priority = ephy_node_get_property_int
-			  (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-			if (priority != EPHY_NODE_NORMAL_PRIORITY)
-			  continue;
-
-			if (ephy_node_has_child (topic, node))
-			{
-				ephy_bookmarks_set_keyword
-				  (priv->bookmarks, topic, priv->bookmark);
-			}
-		}
-		ephy_node_unref (node);
-	}	
-	
-	g_ptr_array_free (identical, TRUE);
-	
-	update_warning (properties);
-}
-
-static void
-similar_show_cb (GtkMenuItem *item,
-		 EphyNode *node)
-{
-	ephy_bookmarks_ui_show_bookmark (node);
-}
-
-static void
-similar_deactivate_cb (GtkMenuShell *ms,
-		       GtkWidget *button)
-{
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-}
-
-static void
-similar_toggled_cb (GtkWidget *button,
-		    EphyBookmarkProperties *properties)
-{
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	EphyNode *node;
-	GtkMenuShell *menu;
-	GtkWidget *item;
-	GPtrArray *identical, *similar;
-	char *label;
-	gint i;
-	
-	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-	{
-		return;
-	}
-	
-	identical = g_ptr_array_new ();
-	similar = g_ptr_array_new ();
-
-	ephy_bookmarks_get_similar (priv->bookmarks,
-				    priv->bookmark,
-				    identical,
-				    similar);
-	
-	if (identical->len + similar->len > 0)
-	{
-		menu = GTK_MENU_SHELL (gtk_menu_new ());
-		
-		if (identical->len > 0)
-		{
-			label = g_strdup_printf (ngettext ("_Unify With %d Identical Bookmark",
-							   "_Unify With %d Identical Bookmarks",
-							   identical->len),
-						 identical->len);
-			item = gtk_menu_item_new_with_mnemonic (label);
-			g_free (label);
-			g_signal_connect (item, "activate", G_CALLBACK (similar_merge_cb), properties);
-			gtk_widget_show (item);
-			gtk_menu_shell_append (menu, item);
-	
-			item = gtk_separator_menu_item_new ();
-			gtk_widget_show (item);
-			gtk_menu_shell_append (menu, item);
-	
-			for (i = 0; i < identical->len; i++)
-			{
-				node = g_ptr_array_index (identical, i);
-				label = g_strdup_printf (_("Show “%s”"),
-							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
-				item = gtk_menu_item_new_with_mnemonic (label);
-				g_free (label);
-				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
-				gtk_widget_show (item);
-				gtk_menu_shell_append (menu, item);
-			}
-		}
-		
-		if (identical->len > 0 && similar->len > 0)
-		{
-			item = gtk_separator_menu_item_new ();
-			gtk_widget_show (item);
-			gtk_menu_shell_append (menu, item);
-		}
-		
-		if (similar->len > 0)
-		{
-			for (i = 0; i < similar->len; i++)
-			{
-				node = g_ptr_array_index (similar, i);
-				label = g_strdup_printf (_("Show “%s”"),
-							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
-				item = gtk_menu_item_new_with_mnemonic (label);
-				g_free (label);
-				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
-				gtk_widget_show (item);
-				gtk_menu_shell_append (menu, item);
-			}
-		}
-		
-		g_signal_connect_object (menu, "deactivate",
-					 G_CALLBACK (similar_deactivate_cb), button, 0);
-		
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-				ephy_gui_menu_position_under_widget, button,
-				1, gtk_get_current_event_time ());
-	}
-		
-	g_ptr_array_free (similar, TRUE);
-	g_ptr_array_free (identical, TRUE);
-}
-
-static gboolean
-similar_release_cb (GtkWidget *button,
-		    GdkEventButton *event,
-		    EphyBookmarkProperties *properties)
-{
-	if (event->button == 1)
-	{
-		gtk_toggle_button_set_active
-			(GTK_TOGGLE_BUTTON (button), FALSE);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-similar_press_cb (GtkWidget *button,
-		  GdkEventButton *event,
-		  EphyBookmarkProperties *properties)
-{
-	if (event->button == 1)
-	{
-		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-		{
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-static void
 bookmark_properties_destroy_cb (GtkDialog *dialog,
 				gpointer data)
 {
@@ -377,10 +194,6 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 
 	switch (response_id)
 	{
-		case GTK_RESPONSE_HELP:
-			ephy_gui_help (GTK_WIDGET (dialog),
-				       "bookmark-add");
-			return;
 	 	case GTK_RESPONSE_ACCEPT:
 			priv->creating = FALSE;
 			break;
@@ -484,12 +297,11 @@ ephy_bookmark_properties_constructor (GType type,
 	EphyBookmarkProperties *properties;
 	EphyBookmarkPropertiesPrivate *priv;
 	GtkWidget *widget, *grid, *label, *entry, *container;
-	GtkWidget *content_area, *action_area;
+	GtkWidget *content_area;
 	GtkWindow *window;
 	GtkDialog *dialog;
 	gboolean lockdown;
 	const char *tmp;
-	char *text;
 
 	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
                                                                                       n_construct_properties,
@@ -603,38 +415,13 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
 	gtk_widget_set_hexpand (widget, TRUE);
 	gtk_widget_set_vexpand (widget, TRUE);
-	
-	gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
-	
-	priv->warning = gtk_toggle_button_new ();
-	gtk_button_set_focus_on_click (GTK_BUTTON (priv->warning), FALSE);
-	gtk_button_set_use_underline (GTK_BUTTON (priv->warning), TRUE);
-	text = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", 0), 0);
-	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
-	g_free (text);
-	widget = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show (widget);
-	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
-	g_object_set (priv->warning, "sensitive", FALSE, NULL);
-	gtk_widget_show (priv->warning);
-	g_signal_connect (priv->warning, "toggled",
-			  G_CALLBACK (similar_toggled_cb), properties);
-	g_signal_connect (priv->warning, "button-press-event",
-			  G_CALLBACK (similar_press_cb), properties);
-	g_signal_connect (priv->warning, "button-release-event",
-			  G_CALLBACK (similar_release_cb), properties);
-		
-	gtk_dialog_add_button (dialog,
-			       _("_Help"),
-			       GTK_RESPONSE_HELP);
 
-	action_area = gtk_dialog_get_action_area (dialog);
-	
-	gtk_box_pack_end (GTK_BOX (action_area),
-			  priv->warning, FALSE, TRUE, 0);
-	gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area),
-					    priv->warning, TRUE);
-	
+	priv->warning = gtk_label_new (NULL);
+	gtk_grid_attach (GTK_GRID (grid), priv->warning, 0, 4, 2, 1);
+	gtk_widget_show (priv->warning);
+
+	gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
+
 	if (priv->creating)
 	{
 		gtk_dialog_add_button (dialog,
@@ -766,6 +553,7 @@ ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
 			   		 "bookmarks", bookmarks,
 					 "bookmark", bookmark,
 					 "creating", creating,
+					 "use-header-bar", TRUE,
 					 NULL));
 }
 
