@@ -147,7 +147,9 @@ on_manage_cookies_button_clicked (GtkWidget *button,
 {
 	CookiesDialog *cookies_dialog;
 
-	cookies_dialog = g_object_new (EPHY_TYPE_COOKIES_DIALOG, NULL);
+	cookies_dialog = g_object_new (EPHY_TYPE_COOKIES_DIALOG,
+				       "use-header-bar", TRUE,
+				       NULL);
 	gtk_window_set_transient_for (GTK_WINDOW (cookies_dialog), GTK_WINDOW (dialog));
 	gtk_window_set_modal (GTK_WINDOW (cookies_dialog), TRUE);
 	gtk_window_present (GTK_WINDOW (cookies_dialog));
