@@ -200,7 +200,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 		{
 			dialog = gtk_message_dialog_new (
 					parent ? GTK_WINDOW(parent) : NULL,
-					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_ERROR,
 					GTK_BUTTONS_CLOSE,
 					_("Directory “%s” is not writable"), path);
@@ -236,7 +236,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 	{
 		dialog = gtk_message_dialog_new (
 				parent ? GTK_WINDOW(parent) : NULL,
-				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
 				_("Cannot overwrite existing file “%s”"), display_name);
@@ -301,7 +301,7 @@ ephy_gui_help (GtkWidget *parent,
 		GtkWidget *dialog;
 
 		dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK,
 						 _("Could not display help: %s"),

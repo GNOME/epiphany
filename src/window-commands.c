@@ -702,7 +702,8 @@ confirm_web_application_overwrite (GtkWindow *parent, const char *title)
   GtkResponseType response;
   GtkWidget *dialog;
 
-  dialog = gtk_message_dialog_new (parent, 0,
+  dialog = gtk_message_dialog_new (parent,
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
 				   _("A web application named '%s' already exists. Do you want to replace it?"),
@@ -1661,7 +1662,7 @@ window_cmd_browse_with_caret (GtkAction *action,
 		int response;
 
 		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 						 GTK_MESSAGE_QUESTION, GTK_BUTTONS_CANCEL,
 						 _("Enable caret browsing mode?"));
 
