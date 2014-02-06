@@ -704,6 +704,7 @@ ephy_history_window_new (EphyHistoryService *history_service)
 	g_return_val_if_fail (history_service != NULL, NULL);
 
 	self = g_object_new (EPHY_TYPE_HISTORY_WINDOW,
+			     "use-header-bar" , TRUE,
 			     "history-service", history_service,
 			     NULL);
 
