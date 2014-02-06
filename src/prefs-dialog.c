@@ -958,7 +958,9 @@ clear_cache_button_clicked_cb (GtkWidget *button,
 {
 	ClearDataDialog *clear_dialog;
 
-	clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG, NULL);
+	clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG,
+				     "use-header-bar", TRUE,
+				     NULL);
 	clear_data_dialog_set_flags (clear_dialog, CLEAR_DATA_CACHE);
 	gtk_window_set_transient_for (GTK_WINDOW (clear_dialog), GTK_WINDOW (dialog));
 	gtk_window_set_modal (GTK_WINDOW (clear_dialog), TRUE);
