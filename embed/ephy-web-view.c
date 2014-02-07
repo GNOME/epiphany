@@ -2022,9 +2022,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
 
-  g_signal_connect (ephy_embed_shell_get_default (), "page-created",
-                    G_CALLBACK (page_created_cb),
-                    web_view);
+  g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
+                           G_CALLBACK (page_created_cb),
+                           web_view, 0);
 }
 
 /**
