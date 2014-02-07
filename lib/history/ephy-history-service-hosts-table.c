@@ -322,7 +322,8 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
     int j = 4;
     char *string = ephy_sqlite_create_match_pattern (substring->data);
     while (j--)
-      if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
+      /* The bitwise operation ensures we only skip two characters for titles. */
+      if (ephy_sqlite_statement_bind_string (statement, i++, string + 2*((j+1) & 1), &error) == FALSE) {
         g_error ("Could not build hosts table query statement: %s", error->message);
         g_error_free (error);
         g_object_unref (statement);

@@ -191,7 +191,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
       g_free (string);
       return NULL;
     }
-    if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
+    if (ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error) == FALSE) {
       g_error ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);

@@ -255,7 +255,7 @@ ephy_sqlite_create_match_pattern (const char *match_string)
   char *string, *pattern;
 
   string = g_strndup (match_string, EPHY_SQLITE_LIMIT_LIKE_PATTERN_LENGTH - 2);
-  pattern = g_strdup_printf ("%%%s%%", string);
+  pattern = g_strdup_printf ("%%:%%%s%%", string);
   g_free (string);
 
   return pattern;
