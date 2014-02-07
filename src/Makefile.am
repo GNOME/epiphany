@@ -108,6 +108,7 @@ RESOURCE_FILES = \
 	resources/prefs-lang-dialog.ui		  \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
+	resources/history-dialog.ui		  \
 	resources/passwords-dialog.ui		  \
 	resources/epiphany.css                    \
 	resources/incognito.png                   \
