@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-06 18:01+0000\n"
-"PO-Revision-Date: 2014-02-06 16:55-0300\n"
+"POT-Creation-Date: 2014-02-08 04:47+0000\n"
+"PO-Revision-Date: 2014-02-08 10:49-0300\n"
 "Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -86,7 +86,7 @@ msgstr ""
 
 #: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:312
 #: ../embed/ephy-about-handler.c:342 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1508
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1509
 msgid "Web"
 msgstr "Web"
 
@@ -388,7 +388,7 @@ msgid "Size of disk cache, in MB."
 msgstr "Tamanho de cache de disco, em MB."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:59
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -1064,14 +1064,14 @@ msgid "_OK"
 msgstr "_OK"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:641
+#: ../src/bookmarks/ephy-bookmark-properties.c:428
 #: ../src/bookmarks/ephy-bookmarks-editor.c:815
-#: ../src/resources/clear-data-dialog.ui.h:2
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:807
+#: ../src/resources/clear-data-dialog.ui.h:3
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:808
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:8
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
 msgid "_Open"
 msgstr "A_brir"
 
@@ -1096,7 +1096,7 @@ msgid "All files"
 msgstr "Todos os arquivos"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:3
+#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -1291,11 +1291,11 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:362
+#: ../lib/history/ephy-history-service-hosts-table.c:363
 msgid "Others"
 msgstr "Outros"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:366
+#: ../lib/history/ephy-history-service-hosts-table.c:367
 msgid "Local files"
 msgstr "Arquivos locais"
 
@@ -1334,16 +1334,6 @@ msgstr "A identidade deste website foi verificada"
 #: ../lib/widgets/ephy-certificate-dialog.c:150
 msgid "The identity of this website has not been verified"
 msgstr "A identidade deste website não foi verificada"
-
-#: ../lib/widgets/ephy-certificate-dialog.c:327
-#: ../src/bookmarks/ephy-bookmark-properties.c:651
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/resources/cookies-dialog.ui.h:3 ../src/resources/epiphany.ui.h:2
-#: ../src/resources/history-dialog.ui.h:3
-#: ../src/resources/passwords-dialog.ui.h:3
-#: ../src/resources/prefs-dialog.ui.h:2 ../src/ephy-window.c:113
-msgid "_Close"
-msgstr "_Fechar"
 
 #: ../lib/widgets/ephy-download-widget.c:107
 #, c-format
@@ -1396,7 +1386,7 @@ msgstr "Terminado"
 msgid "Error downloading: %s"
 msgstr "Erro ao baixar: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:711
+#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:712
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1418,7 +1408,7 @@ msgstr "Iniciando…"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../lib/widgets/ephy-location-entry.c:618
-#: ../src/resources/prefs-dialog.ui.h:37 ../src/ephy-history-window.c:189
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:189
 msgid "Cl_ear"
 msgstr "_Limpar"
 
@@ -1438,59 +1428,43 @@ msgstr "Arraste e solte esse ícone para criar um link para essa página"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:612
 #, c-format
-msgid "%d _Similar"
-msgid_plural "%d _Similar"
-msgstr[0] "%d _similar"
-msgstr[1] "%d _similares"
+msgid "%d bookmark is similar"
+msgid_plural "%d bookmarks are similar"
+msgstr[0] "%d favorito é igual"
+msgstr[1] "%d favoritos são iguais"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:257
-#, c-format
-msgid "_Unify With %d Identical Bookmark"
-msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] "_Unificar com %d favorito idêntico"
-msgstr[1] "_Unificar com %d favoritos idênticos"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:274
-#: ../src/bookmarks/ephy-bookmark-properties.c:296
-#, c-format
-msgid "Show “%s”"
-msgstr "Mostrar \"%s\""
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:421
+#: ../src/bookmarks/ephy-bookmark-properties.c:234
 #, c-format
 msgid "“%s” Properties"
 msgstr "Propriedades de \"%s\""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:546
+#: ../src/bookmarks/ephy-bookmark-properties.c:358
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:563
+#: ../src/bookmarks/ephy-bookmark-properties.c:375
 msgid "A_ddress:"
 msgstr "_Endereço:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:575
+#: ../src/bookmarks/ephy-bookmark-properties.c:387
 msgid "T_opics:"
 msgstr "Tópic_os:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:598
+#: ../src/bookmarks/ephy-bookmark-properties.c:410
 msgid "Sho_w all topics"
 msgstr "Mos_trar todos os tópicos"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmark-properties.c:628
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:190
-msgid "_Help"
-msgstr "Aj_uda"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:644
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/bookmarks/ephy-bookmark-properties.c:431
+#: ../src/resources/prefs-dialog.ui.h:41
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Adicionar"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:438
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:113
+msgid "_Close"
+msgstr "_Fechar"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1565,6 +1539,12 @@ msgstr "_Editar"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:153
 msgid "_View"
 msgstr "_Ver"
+
+#. Help.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:190
+msgid "_Help"
+msgstr "Aj_uda"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
@@ -1660,7 +1640,7 @@ msgid "Paste the clipboard"
 msgstr "Cola a área de transferência"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:11
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -1857,7 +1837,7 @@ msgstr "Criar o tópico \"%s\""
 msgid "Clear Personal Data"
 msgstr "Limpar dados pessoais"
 
-#: ../src/resources/clear-data-dialog.ui.h:3
+#: ../src/resources/clear-data-dialog.ui.h:2
 msgid "C_lear"
 msgstr "_Limpar"
 
@@ -1875,7 +1855,7 @@ msgstr ""
 
 #: ../src/resources/clear-data-dialog.ui.h:6
 #: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -1905,12 +1885,12 @@ msgstr ""
 msgid "C_lear All"
 msgstr "_Limpar tudo"
 
-#: ../src/resources/cookies-dialog.ui.h:4
-#: ../src/resources/passwords-dialog.ui.h:5
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:4
 msgid "Site"
 msgstr "Site"
 
-#: ../src/resources/cookies-dialog.ui.h:5
+#: ../src/resources/cookies-dialog.ui.h:4
 msgid "Remove"
 msgstr "Remover"
 
@@ -1949,15 +1929,15 @@ msgstr "_Sair"
 msgid "Text Encoding"
 msgstr "Codificação de texto"
 
-#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:327
+#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
 msgid "_Automatic"
 msgstr "_Automático"
 
-#: ../src/resources/epiphany.ui.h:4 ../src/ephy-encoding-menu.c:328
+#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
 msgid "Use the encoding specified by the document"
 msgstr "Usar a codificação especificada pelo documento"
 
-#: ../src/resources/epiphany.ui.h:5
+#: ../src/resources/epiphany.ui.h:4
 msgid "_Use a different encoding:"
 msgstr "Usar uma _codificação diferente:"
 
@@ -1965,57 +1945,52 @@ msgstr "Usar uma _codificação diferente:"
 msgid "History"
 msgstr "Histórico"
 
-#: ../src/resources/history-dialog.ui.h:4
-#| msgid "Clear History"
+#: ../src/resources/history-dialog.ui.h:3
 msgid "Search history"
 msgstr "Pesquisar histórico"
 
-#: ../src/resources/history-dialog.ui.h:5
+#: ../src/resources/history-dialog.ui.h:4
 msgid "Date"
 msgstr "Data"
 
-#: ../src/resources/history-dialog.ui.h:6
-#| msgid "User Name"
+#: ../src/resources/history-dialog.ui.h:5
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/resources/history-dialog.ui.h:7
-#| msgid "_Location…"
+#: ../src/resources/history-dialog.ui.h:6
 msgid "Location"
 msgstr "Localização"
 
-#: ../src/resources/history-dialog.ui.h:9
-#| msgid "_Location…"
+#: ../src/resources/history-dialog.ui.h:8
 msgid "_Copy Location"
 msgstr "Co_piar localização"
 
-#: ../src/resources/history-dialog.ui.h:10
-#| msgid "Add _Bookmark…"
+#: ../src/resources/history-dialog.ui.h:9
 msgid "Add _Bookmark"
 msgstr "A_dicionar favorito"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "Senhas"
 
-#: ../src/resources/passwords-dialog.ui.h:4
+#: ../src/resources/passwords-dialog.ui.h:3
 msgid "Search passwords"
 msgstr "Pesquisar senhas"
 
-#: ../src/resources/passwords-dialog.ui.h:6
+#: ../src/resources/passwords-dialog.ui.h:5
 msgid "User Name"
 msgstr "Nome de usuário"
 
-#: ../src/resources/passwords-dialog.ui.h:7
+#: ../src/resources/passwords-dialog.ui.h:6
 msgid "Password"
 msgstr "Senha"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:7
 msgid "_Copy Password"
 msgstr "_Copiar senha"
 
-#: ../src/resources/passwords-dialog.ui.h:9
+#: ../src/resources/passwords-dialog.ui.h:8
 msgid "C_opy Username"
 msgstr "C_opiar nome de usuário"
 
@@ -2023,161 +1998,161 @@ msgstr "C_opiar nome de usuário"
 msgid "Preferences"
 msgstr "Preferências"
 
-#: ../src/resources/prefs-dialog.ui.h:4
+#: ../src/resources/prefs-dialog.ui.h:3
 msgid "_Download folder:"
 msgstr "Pasta de _downloads:"
 
-#: ../src/resources/prefs-dialog.ui.h:5
+#: ../src/resources/prefs-dialog.ui.h:4
 msgid "A_utomatically open downloaded files"
 msgstr "Abrir arquivos baixados a_utomaticamente"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:5
 msgid "Search"
 msgstr "Pesquisar"
 
 # Tradução baseada na ideia de "motor de pesquisa" (ex.: google, bing, yahoo, etc.)
-#: ../src/resources/prefs-dialog.ui.h:7
+#: ../src/resources/prefs-dialog.ui.h:6
 msgid "_Engine:"
 msgstr "_Motor:"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:7
 msgid "Web Content"
 msgstr "Conteúdo da web"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
 msgstr "Aceitar janelas _instantâneas"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow _advertisements"
 msgstr "Permitir prop_agandas"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
 msgstr "Habilitar _plug-ins"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "General"
 msgstr "Geral"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "Fonts"
 msgstr "Fontes"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "_Use system fonts"
 msgstr "_Usar fontes do sistema"
 
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "Sans serif font:"
 msgstr "Fonte sem serifa:"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "Serif font:"
 msgstr "Fonte com serifa:"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Monospace font:"
 msgstr "Fonte monoespaçada:"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Style"
 msgstr "Estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Use custom _stylesheet"
 msgstr "Usar folha de e_stilos personalizada"
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "_Edit Stylesheet…"
 msgstr "_Editar folha de estilo…"
 
-#: ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "Fonts & Style"
 msgstr "Fontes e estilos"
 
-#: ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Manage Cookies"
 msgstr "Gerenciar cookies"
 
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
 msgstr "Sempre _aceitar"
 
-#: ../src/resources/prefs-dialog.ui.h:25
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Only _from sites you visit"
 msgstr "Apenas de sites que você _visita"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Por exemplo, não de anunciantes nesses sites</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "_Never accept"
 msgstr "_Nunca aceitar"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "Tracking"
 msgstr "Rastreamento"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Avisar aos websites que eu não quero ser rastreado"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "Manage Passwords"
 msgstr "Gerenciar senhas"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "_Lembrar senhas"
 
-#: ../src/resources/prefs-dialog.ui.h:34
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Temporary Files"
 msgstr "Arquivos temporários"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Disk space:"
 msgstr "Espaço em _disco:"
 
-#: ../src/resources/prefs-dialog.ui.h:36
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "MB"
 msgstr "MB"
 
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Privacy"
 msgstr "Privacidade"
 
-#: ../src/resources/prefs-dialog.ui.h:39 ../src/ephy-encoding-dialog.c:379
+#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "Codificações"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "De_fault:"
 msgstr "_Padrão:"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Up"
 msgstr "_Cima"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "_Down"
 msgstr "_Baixo"
 
-#: ../src/resources/prefs-dialog.ui.h:46
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "Spell checking"
 msgstr "Correção ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:47
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "_Enable spell checking"
 msgstr "_Habilitar correção ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:48 ../src/prefs-dialog.c:835
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:839
 msgid "Language"
 msgstr "Idioma"
 
@@ -2224,10 +2199,6 @@ msgid ""
 msgstr ""
 "Limpar o histórico de navegação fará com que todos os links do histórico "
 "sejam apagados."
-
-#: ../src/ephy-history-window.c:195
-msgid "Clear History"
-msgstr "Limpar histórico"
 
 #: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
@@ -2561,7 +2532,7 @@ msgstr "Salvar imagem como"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:549 ../src/prefs-dialog.c:555
+#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2570,25 +2541,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:564
+#: ../src/prefs-dialog.c:568
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido pelo usuário (%s)"
 
-#: ../src/prefs-dialog.c:586
+#: ../src/prefs-dialog.c:590
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:918
+#: ../src/prefs-dialog.c:922
 msgid "Select a Directory"
 msgstr "Selecione um diretório"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1011
+#: ../src/prefs-dialog.c:1017
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2597,85 +2568,85 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1016
+#: ../src/prefs-dialog.c:1022
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=br-pt"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1018
+#: ../src/prefs-dialog.c:1024
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:1026
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com.br/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:1028
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1024
+#: ../src/prefs-dialog.c:1030
 #, c-format
 msgid "http://www.bing.com/search?q=%s"
 msgstr "http://br.bing.com/search?q=%s"
 
-#: ../src/window-commands.c:708
+#: ../src/window-commands.c:709
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "O aplicativo web com o nome \"%s\" já existe. Você quer substituí-lo?"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:714
 msgid "Replace"
 msgstr "Substituir"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:718
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Um aplicativo com mesmo nome já existe. Substituí-lo irá sobrescrevê-lo."
 
-#: ../src/window-commands.c:753
+#: ../src/window-commands.c:754
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "O aplicativo \"%s\" está pronto para ser usado"
 
-#: ../src/window-commands.c:756
+#: ../src/window-commands.c:757
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "O aplicativo \"%s\" não pôde ser criado"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:765
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:805
 msgid "Create Web Application"
 msgstr "Cria um aplicativo web"
 
-#: ../src/window-commands.c:809
+#: ../src/window-commands.c:810
 msgid "C_reate"
 msgstr "C_riar"
 
-#: ../src/window-commands.c:1469 ../src/window-commands.c:1492
+#: ../src/window-commands.c:1470 ../src/window-commands.c:1493
 msgid "Contact us at:"
 msgstr "Contate-nos em:"
 
-#: ../src/window-commands.c:1472
+#: ../src/window-commands.c:1473
 msgid "Contributors:"
 msgstr "Contribuidores:"
 
-#: ../src/window-commands.c:1475
+#: ../src/window-commands.c:1476
 msgid "Past developers:"
 msgstr "Desenvolvedores no passado:"
 
-#: ../src/window-commands.c:1501
+#: ../src/window-commands.c:1502
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2692,7 +2663,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1524
+#: ../src/window-commands.c:1525
 msgid "translator-credits"
 msgstr ""
 "Afonso Celso Medina <medina@maua.br>\n"
@@ -2717,15 +2688,15 @@ msgstr ""
 "Enrico Nicoletto <liverig@gmail.com>\n"
 "Rafael Ferreira <rafael.f.f1@gmail.com>"
 
-#: ../src/window-commands.c:1527
+#: ../src/window-commands.c:1528
 msgid "Web Website"
 msgstr "Website do Navegador web"
 
-#: ../src/window-commands.c:1666
+#: ../src/window-commands.c:1667
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: ../src/window-commands.c:1669
+#: ../src/window-commands.c:1670
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2735,9 +2706,25 @@ msgstr ""
 "funcionalidade insere um cursor nas páginas web, permitindo-lhe navegar pela "
 "página com o seu teclado. Você quer ativar o modo de navegação com cursor?"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1673
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid "%d _Similar"
+#~ msgid_plural "%d _Similar"
+#~ msgstr[0] "%d _similar"
+#~ msgstr[1] "%d _similares"
+
+#~ msgid "_Unify With %d Identical Bookmark"
+#~ msgid_plural "_Unify With %d Identical Bookmarks"
+#~ msgstr[0] "_Unificar com %d favorito idêntico"
+#~ msgstr[1] "_Unificar com %d favoritos idênticos"
+
+#~ msgid "Show “%s”"
+#~ msgstr "Mostrar \"%s\""
+
+#~ msgid "Clear History"
+#~ msgstr "Limpar histórico"
 
 #~ msgid "History pages time range"
 #~ msgstr "Intervalo de tempo do histórico de páginas"
