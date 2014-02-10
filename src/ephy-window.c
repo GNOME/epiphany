@@ -1273,6 +1273,45 @@ calculate_location (const char *typed_address, const char *address)
 }
 
 static void
+_ephy_window_set_default_actions_sensitive (EphyWindow *window,
+					    guint flags,
+					    gboolean set)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	int i;
+	const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
+					       "FileSendTo", "FileBookmarkPage", "EditFind",
+					       "EditFindPrev", "EditFindNext", "ViewEncoding",
+					       "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
+					       NULL };
+
+	action_group = priv->action_group;
+
+	/* Page menu */
+	for (i = 0; action_group_actions[i] != NULL; i++)
+	{
+		action = gtk_action_group_get_action (action_group,
+						      action_group_actions[i]);
+		ephy_action_change_sensitivity_flags (action,
+						      flags, set);
+	}
+
+	/* Page context popup */
+	action = gtk_action_group_get_action (priv->popups_action_group,
+					      "ContextBookmarkPage");
+	ephy_action_change_sensitivity_flags (action,
+					      flags, set);
+
+	/* Toolbar */
+	action = gtk_action_group_get_action (priv->toolbar_action_group,
+					      "ViewCombinedStopReload");
+	ephy_action_change_sensitivity_flags (action,
+					      flags, set);
+}
+
+static void
 sync_tab_address (EphyWebView *view,
 	          GParamSpec *pspec,
 		  EphyWindow *window)
@@ -1286,6 +1325,10 @@ sync_tab_address (EphyWebView *view,
 
 	address = ephy_web_view_get_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
+
+	_ephy_window_set_default_actions_sensitive (window,
+						    SENS_FLAG_IS_BLANK,
+						    ephy_web_view_is_overview (view));
 
 	location = calculate_location (typed_address, address);
 	ephy_window_set_location (window, location);
@@ -1411,45 +1454,6 @@ sync_tab_navigation (EphyWebView *view,
 
 	_ephy_window_set_navigation_flags (window,
 					   ephy_web_view_get_navigation_flags (view));
-}
-
-static void
-_ephy_window_set_default_actions_sensitive (EphyWindow *window,
-					    guint flags,
-					    gboolean set)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group;
-	GtkAction *action;
-	int i;
-	const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
-					       "FileSendTo", "FileBookmarkPage", "EditFind",
-					       "EditFindPrev", "EditFindNext", "ViewEncoding",
-					       "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
-					       NULL };
-
-	action_group = priv->action_group;
-
-	/* Page menu */
-	for (i = 0; action_group_actions[i] != NULL; i++)
-	{
-		action = gtk_action_group_get_action (action_group,
-						      action_group_actions[i]);
-		ephy_action_change_sensitivity_flags (action,
-						      flags, set);
-	}
-
-	/* Page context popup */
-	action = gtk_action_group_get_action (priv->popups_action_group,
-					      "ContextBookmarkPage");
-	ephy_action_change_sensitivity_flags (action,
-					      flags, set);
-
-	/* Toolbar */
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
-					      "ViewCombinedStopReload");
-	ephy_action_change_sensitivity_flags (action,
-					      flags, set);
 }
 
 static void
@@ -1924,24 +1928,6 @@ ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-sync_embed_is_overview (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
-{
-	if (window->priv->closing) return;
-
-	_ephy_window_set_default_actions_sensitive (window,
-						    SENS_FLAG_IS_BLANK,
-						    ephy_embed_get_overview_mode (embed));;
-}
-
-static void
-overview_open_link_cb (EphyOverview *overview,
-		       const char *url,
-		       EphyWindow *window)
-{
-	ephy_link_open (EPHY_LINK (window), url, NULL, ephy_link_flags_from_current_event ());
-}
-
-static void
 ephy_window_set_is_popup (EphyWindow *window,
 			  gboolean is_popup)
 {
@@ -2248,8 +2234,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	EphyEmbed *embed;
 	WebKitWebView *web_view;
 	EphyWebView *view;
-	EphyOverview *overview;
-	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
 
@@ -2267,7 +2251,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	sync_tab_icon		(view, NULL, window);
 	sync_tab_popup_windows	(view, NULL, window);
 	sync_tab_popups_allowed	(view, NULL, window);
-	sync_embed_is_overview  (embed, NULL, window);
 
 	sync_tab_zoom		(web_view, NULL, window);
 
@@ -2320,17 +2303,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "mouse-target-changed",
 				 G_CALLBACK (ephy_window_mouse_target_changed_cb),
 				 window, 0);
-	g_signal_connect_object (embed, "notify::overview-mode",
-				 G_CALLBACK (sync_embed_is_overview),
-				 window, 0);
-
-	shell_mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_embed_shell_get_default ()));
-	if (shell_mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-		overview = ephy_embed_get_overview (embed);
-		g_signal_connect_object (overview, "open-link",
-					 G_CALLBACK (overview_open_link_cb),
-					 window, 0);
-	}
 
 	g_object_notify (G_OBJECT (window), "active-child");
 }
@@ -2341,8 +2313,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	EphyEmbed *embed;
 	WebKitWebView *web_view;
 	EphyWebView *view;
-	EphyOverview *overview;
-	EphyEmbedShellMode shell_mode;
 
 	g_return_if_fail (window->priv->active_embed != NULL);
 
@@ -2389,18 +2359,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (sync_tab_icon),
 					      window);
-
-	g_signal_handlers_disconnect_by_func (embed,
-					      G_CALLBACK (sync_embed_is_overview),
-					      window);
-
-	shell_mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_embed_shell_get_default ()));
-	if (shell_mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-		overview = ephy_embed_get_overview (embed);
-		g_signal_handlers_disconnect_by_func (overview,
-						      G_CALLBACK (overview_open_link_cb),
-						      window);
-	}
 
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);

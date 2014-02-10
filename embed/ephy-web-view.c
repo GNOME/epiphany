@@ -37,7 +37,6 @@
 #include "ephy-file-monitor.h"
 #include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
-#include "ephy-overview.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -739,7 +738,7 @@ get_title_from_address (const char *address)
     return g_strdup (address + 7);
   else if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
            !strcmp (address, "about:overview"))
-    return g_strdup (EPHY_OVERVIEW_TITLE);
+    return g_strdup (_("Most Visited"));
   else
     return ephy_string_get_host_name (address);
 }
@@ -2300,6 +2299,18 @@ gboolean
 ephy_web_view_get_is_blank (EphyWebView *view)
 {
   return view->priv->is_blank;
+}
+
+gboolean
+ephy_web_view_is_overview (EphyWebView *view)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  if (!priv->address)
+    return FALSE;
+
+  return (!strcmp (priv->address, EPHY_ABOUT_SCHEME":overview") ||
+          !strcmp (priv->address, "about:overview"));
 }
 
 /**

@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ephy-history-service.h"
 #include "ephy-overview-store.h"
-#include "ephy-removable-pixbuf-renderer.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-widgets-type-builtins.h"
 
@@ -165,7 +164,6 @@ ephy_overview_store_init (EphyOverviewStore *self)
   types[EPHY_OVERVIEW_STORE_SELECTED] = G_TYPE_BOOLEAN;
   types[EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE] = G_TYPE_CANCELLABLE;
   types[EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME] = G_TYPE_INT;
-  types[EPHY_OVERVIEW_STORE_CLOSE_BUTTON_RENDER_POLICY] = EPHY_TYPE_REMOVABLE_PIXBUF_RENDER_POLICY;
 
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
                                    EPHY_OVERVIEW_STORE_NCOLS, types);
@@ -615,10 +613,6 @@ ephy_overview_store_animated_remove (EphyOverviewStore *store,
   path = gtk_tree_row_reference_get_path (ref);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
   gtk_tree_path_free (path);
-
-  gtk_list_store_set (GTK_LIST_STORE (store), &iter,
-                      EPHY_OVERVIEW_STORE_CLOSE_BUTTON_RENDER_POLICY,
-                      EPHY_REMOVABLE_PIXBUF_RENDER_NEVER, -1);
 
   id = g_timeout_add (40, (GSourceFunc) animated_remove_func, ctx);
   g_source_set_name_by_id (id, "[epiphany] animated_remove_func");

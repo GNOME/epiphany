@@ -34,7 +34,6 @@
 #include "ephy-gui.h"
 #include "ephy-history-service.h"
 #include "ephy-link.h"
-#include "ephy-overview.h"
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-window.h"
@@ -414,11 +413,6 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
     hitem = (WebKitBackForwardListItem *) l->data;
     uri = webkit_back_forward_list_item_get_uri (hitem);
     title = g_strdup (webkit_back_forward_list_item_get_title (hitem));
-
-    /* The overview is not actually a webpage, so we need to hardcode
-     * this here. */
-    if (g_strcmp0 (uri, "ephy-about:overview") == 0)
-      title = g_strdup (EPHY_OVERVIEW_TITLE);
 
     if (title == NULL || g_strstrip (title)[0] == '\0')
       item = new_history_menu_item (EPHY_WEB_VIEW (web_view), uri, uri);

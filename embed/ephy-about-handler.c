@@ -596,7 +596,7 @@ ephy_about_handler_handle_request (EphyAboutHandler *handler,
     handled =  ephy_about_handler_handle_epiphany (handler, request);
   else if (!g_strcmp0 (path, "applications"))
     handled = ephy_about_handler_handle_applications (handler, request);
-  else if (!g_strcmp0 (path, "html-overview"))
+  else if (!g_strcmp0 (path, "overview"))
     handled = ephy_about_handler_handle_html_overview (handler, request);
   else if (!g_strcmp0 (path, "incognito"))
     handled = ephy_about_handler_handle_incognito (handler, request);

@@ -23,7 +23,6 @@
 #define EPHY_EMBED_H
 
 #include "ephy-find-toolbar.h"
-#include "ephy-overview.h"
 #include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
@@ -65,10 +64,6 @@ void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
 void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
                                                       WebKitURIRequest     *request);
 gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
-void             ephy_embed_set_overview_mode        (EphyEmbed *embed,
-                                                      gboolean   overview_mode);
-gboolean         ephy_embed_get_overview_mode        (EphyEmbed *embed);
-EphyOverview*    ephy_embed_get_overview             (EphyEmbed *embed);
 
 G_END_DECLS
 

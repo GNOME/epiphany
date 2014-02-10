@@ -66,8 +66,6 @@ struct _EphyEmbedPrivate
 
   WebKitURIRequest *delayed_request;
 
-  GtkWidget *overview;
-  guint overview_mode : 1;
   GSList *messages;
   GSList *keys;
 
@@ -89,7 +87,6 @@ enum
 {
   PROP_0,
   PROP_WEB_VIEW,
-  PROP_OVERVIEW_MODE,
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -248,20 +245,8 @@ load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
                  EphyEmbed *embed)
 {
-  switch (load_event) {
-  case WEBKIT_LOAD_STARTED: {
-    const char *uri;
-
-    uri = webkit_web_view_get_uri (web_view);
-    ephy_embed_set_overview_mode (embed, g_strcmp0 (uri, "ephy-about:overview") == 0);
-    break;
-  }
-  case WEBKIT_LOAD_COMMITTED:
+  if (load_event == WEBKIT_LOAD_COMMITTED)
     ephy_embed_destroy_top_widgets (embed);
-    break;
-  default:
-    break;
-  }
 }
 
 static void
@@ -400,9 +385,6 @@ ephy_embed_set_property (GObject *object,
   case PROP_WEB_VIEW:
     embed->priv->web_view = g_value_get_object (value);
     break;
-  case PROP_OVERVIEW_MODE:
-    ephy_embed_set_overview_mode (embed, g_value_get_boolean (value));
-    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -421,9 +403,6 @@ ephy_embed_get_property (GObject *object,
   {
   case PROP_WEB_VIEW:
     g_value_set_object (value, ephy_embed_get_web_view (embed));
-    break;
-  case PROP_OVERVIEW_MODE:
-    g_value_set_boolean (value, ephy_embed_get_overview_mode (embed));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -462,18 +441,6 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                                                         "The WebView contained in the embed",
                                                         EPHY_TYPE_WEB_VIEW,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-/**
- * EphyEmbed:overview-mode:
- *
- * If %TRUE activates the overview mode in this #EphyEmbed.
- **/
-  g_object_class_install_property (object_class,
-                                   PROP_OVERVIEW_MODE,
-                                   g_param_spec_boolean ("overview-mode",
-                                                         "Overview mode",
-                                                         "Whether the embed is showing the overview",
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
@@ -669,19 +636,6 @@ ephy_embed_constructed (GObject *object)
                          GDK_LEAVE_NOTIFY_MASK);
   gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (priv->web_view));
 
-  /* The overview. In incognito mode we don't use it. */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) !=
-      EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-    priv->overview = ephy_overview_new ();
-    gtk_widget_set_halign (priv->overview, GTK_ALIGN_FILL);
-    gtk_widget_set_valign (priv->overview, GTK_ALIGN_FILL);
-    gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->overview);
-
-    g_object_bind_property (embed, "overview-mode",
-                            priv->overview, "visible",
-                            G_BINDING_SYNC_CREATE);
-  }
-
   /* Floating message popup for fullscreen mode. */
   priv->fullscreen_message_label = gtk_label_new (NULL);
   gtk_widget_set_name (priv->fullscreen_message_label, "fullscreen-popup");
@@ -851,31 +805,6 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
                         GTK_WIDGET (widget));
 }
 
-void
-ephy_embed_set_overview_mode (EphyEmbed *embed, gboolean overview_mode)
-{
-  EphyEmbedPrivate *priv;
-
-  g_return_if_fail (EPHY_IS_EMBED (embed));
-
-  priv = embed->priv;
-
-  if (priv->overview_mode == overview_mode)
-    return;
-
-  priv->overview_mode = overview_mode;
-
-  g_object_notify (G_OBJECT (embed), "overview-mode");
-}
-
-gboolean
-ephy_embed_get_overview_mode (EphyEmbed *embed)
-{
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
-
-  return embed->priv->overview_mode;
-}
-
 /**
  * ephy_embed_set_delayed_load_request:
  * @embed: a #EphyEmbed
@@ -912,18 +841,3 @@ ephy_embed_has_load_pending (EphyEmbed *embed)
   return !!embed->priv->delayed_request;
 }
 
-/**
- * ephy_embed_get_overview:
- * @embed: a #EphyEmbed
- *
- * Gets the #EphyOverview in this @embed
- *
- * Returns: (transfer none): the overview widget
- **/
-EphyOverview *
-ephy_embed_get_overview (EphyEmbed *embed)
-{
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
-
-  return EPHY_OVERVIEW (embed->priv->overview);
-}
