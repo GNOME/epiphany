@@ -389,6 +389,7 @@ session_maybe_open_window (EphySession *session,
 	if (ephy_shell_get_n_windows (shell) == 0)
 	{
 		ephy_shell_new_tab_full (shell,
+					 NULL /* related view */,
 					 NULL /* window */, NULL /* tab */,
 					 NULL /* NetworkRequest */,
 					 EPHY_NEW_TAB_IN_NEW_WINDOW |

@@ -2043,6 +2043,15 @@ ephy_web_view_new (void)
                        NULL);
 }
 
+GtkWidget *
+ephy_web_view_new_with_related_view (WebKitWebView *related_view)
+{
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+                       "related-view", related_view,
+                       "group", ephy_embed_prefs_get_web_view_group (),
+                       NULL);
+}
+
 static gboolean
 is_public_domain (EphyWebView *view, const char *url)
 {

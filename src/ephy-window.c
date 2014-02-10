@@ -2049,6 +2049,7 @@ create_web_view_cb (WebKitWebView *web_view,
 	}
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 web_view,
 					 parent_window,
 					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
 					 NULL,
@@ -2213,6 +2214,7 @@ decide_policy_cb (WebKitWebView *web_view,
 			(EPHY_EMBED_CONTAINER (window));
 
 		ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 NULL,
 					 window,
 					 embed,
 					 request,

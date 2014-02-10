@@ -88,6 +88,7 @@ struct _EphyEmbedPrivate
 enum
 {
   PROP_0,
+  PROP_WEB_VIEW,
   PROP_OVERVIEW_MODE,
 };
 
@@ -396,6 +397,9 @@ ephy_embed_set_property (GObject *object,
 
   switch (prop_id)
   {
+  case PROP_WEB_VIEW:
+    embed->priv->web_view = g_value_get_object (value);
+    break;
   case PROP_OVERVIEW_MODE:
     ephy_embed_set_overview_mode (embed, g_value_get_boolean (value));
     break;
@@ -415,6 +419,9 @@ ephy_embed_get_property (GObject *object,
 
   switch (prop_id)
   {
+  case PROP_WEB_VIEW:
+    g_value_set_object (value, ephy_embed_get_web_view (embed));
+    break;
   case PROP_OVERVIEW_MODE:
     g_value_set_boolean (value, ephy_embed_get_overview_mode (embed));
     break;
@@ -448,6 +455,13 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   object_class->get_property = ephy_embed_get_property;
   widget_class->grab_focus = ephy_embed_grab_focus;
 
+  g_object_class_install_property (object_class,
+                                   PROP_WEB_VIEW,
+                                   g_param_spec_object ("web-view",
+                                                        "Web View",
+                                                        "The WebView contained in the embed",
+                                                        EPHY_TYPE_WEB_VIEW,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 /**
  * EphyEmbed:overview-mode:
  *
@@ -638,7 +652,6 @@ ephy_embed_constructed (GObject *object)
   EphyEmbedPrivate *priv = embed->priv;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *paned;
-  WebKitWebView *web_view;
   WebKitWebInspector *inspector;
   GtkWidget *overlay;
 
@@ -649,13 +662,12 @@ ephy_embed_constructed (GObject *object)
                     G_CALLBACK (ephy_embed_mapped_cb), NULL);
 
   /* Skeleton */
-  web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
   overlay = gtk_overlay_new ();
 
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
-  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (web_view));
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (priv->web_view));
 
   /* The overview. In incognito mode we don't use it. */
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) !=
@@ -705,8 +717,7 @@ ephy_embed_constructed (GObject *object)
 
   paned = GTK_WIDGET (priv->paned);
 
-  priv->web_view = web_view;
-  priv->progress_update_handler_id = g_signal_connect (web_view, "notify::estimated-load-progress",
+  priv->progress_update_handler_id = g_signal_connect (priv->web_view, "notify::estimated-load-progress",
                                                        G_CALLBACK (progress_update), object);
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
                    TRUE, FALSE);
@@ -717,21 +728,21 @@ ephy_embed_constructed (GObject *object)
   gtk_box_pack_start (GTK_BOX (embed), paned, TRUE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (priv->top_widgets_vbox));
-  gtk_widget_show (GTK_WIDGET (web_view));
+  gtk_widget_show (GTK_WIDGET (priv->web_view));
   gtk_widget_show_all (paned);
 
-  g_object_connect (web_view,
+  g_object_connect (priv->web_view,
                     "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
                     "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
 
-  priv->status_handler_id = g_signal_connect (web_view, "notify::status-message",
+  priv->status_handler_id = g_signal_connect (priv->web_view, "notify::status-message",
                                               G_CALLBACK (status_message_notify_cb),
                                               embed);
 
   /* The inspector */
-  inspector = webkit_web_view_get_inspector (web_view);
+  inspector = webkit_web_view_get_inspector (priv->web_view);
 
   g_signal_connect (inspector, "attach",
                     G_CALLBACK (ephy_embed_attach_inspector_cb),

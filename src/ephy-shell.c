@@ -658,6 +658,7 @@ ephy_shell_get_default (void)
  **/
 EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
+                         WebKitWebView *related_view,
                          EphyWindow *parent_window,
                          EphyEmbed *previous_embed,
                          WebKitURIRequest *request,
@@ -730,7 +731,17 @@ ephy_shell_new_tab_full (EphyShell *shell,
   }
 
   if (active_is_blank == FALSE) {
-    embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, NULL));
+    GtkWidget *web_view;
+
+#ifdef HAVE_WEBKIT_WEB_VIEW_NEW_WITH_RELATED_VIEW
+    if (related_view)
+      web_view = ephy_web_view_new_with_related_view (related_view);
+    else
+      web_view = ephy_web_view_new ();
+#else
+    web_view = ephy_web_view_new ();
+#endif
+    embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, "web-view", web_view, NULL));
     g_assert (embed != NULL);
     gtk_widget_show (GTK_WIDGET (embed));
 
@@ -814,7 +825,7 @@ ephy_shell_new_tab (EphyShell *shell,
   EphyEmbed *embed;
   WebKitURIRequest *request = url ? webkit_uri_request_new (url) : NULL;
 
-  embed = ephy_shell_new_tab_full (shell, parent_window,
+  embed = ephy_shell_new_tab_full (shell, NULL, parent_window,
                                    previous_embed, request, flags,
                                    0);
 
@@ -1126,6 +1137,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   }
 
   embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+                                   NULL,
                                    data->window,
                                    data->previous_embed,
                                    request,
