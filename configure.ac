@@ -233,6 +233,12 @@ AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 
 AC_DEFINE([EPIPHANY_COMPILATION],[1],[Compiling epiphany])
 
+# Remove this when new WebKit version is released with this API.
+ephy_save_LIBS=$LIBS
+LIBS="$LIBS $WEB_EXTENSION_LIBS"
+AC_CHECK_FUNCS(webkit_web_view_new_with_related_view)
+LIBS=$ephy_save_LIBS
+
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
