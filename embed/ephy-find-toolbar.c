@@ -85,6 +85,8 @@ G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_SEARCH_BAR)
 
 /* private functions */
 
+static void ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar, WebKitWebView *web_view);
+
 static void
 set_status (EphyFindToolbar *toolbar,
 	    EphyFindResult result)
@@ -345,15 +347,6 @@ entry_activate_cb (GtkWidget *entry,
 }
 
 static void
-_ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
-				 WebKitWebView *web_view)
-{
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	priv->web_view = web_view;
-}
-
-static void
 ephy_find_toolbar_grab_focus (GtkWidget *widget)
 {
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (widget);
@@ -546,7 +539,7 @@ ephy_find_toolbar_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_WEB_VIEW:
-			_ephy_find_toolbar_set_web_view (toolbar, (WebKitWebView *) g_value_get_object (value));
+			ephy_find_toolbar_set_web_view (toolbar, (WebKitWebView *) g_value_get_object (value));
 			break;
 	}
 }
@@ -635,7 +628,7 @@ ephy_find_toolbar_get_text (EphyFindToolbar *toolbar)
 	return gtk_entry_get_text (GTK_ENTRY (priv->entry));
 }
 
-void
+static void
 ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
 				WebKitWebView *web_view)
 {

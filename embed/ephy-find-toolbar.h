@@ -66,9 +66,6 @@ EphyFindToolbar *ephy_find_toolbar_new		 (WebKitWebView *web_view);
 
 const char	*ephy_find_toolbar_get_text	 (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_set_web_view	 (EphyFindToolbar *toolbar,
-						  WebKitWebView *web_view);
-
 void		 ephy_find_toolbar_find_next	 (EphyFindToolbar *toolbar);
 
 void		 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);

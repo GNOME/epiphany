@@ -2793,9 +2793,6 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
 	/* update new tab */
 	ephy_window_set_active_tab (window, embed);
-
-	ephy_find_toolbar_set_web_view (ephy_embed_get_find_toolbar (embed),
-					EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 static GtkNotebook *
