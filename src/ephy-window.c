@@ -2026,7 +2026,9 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyWindow *parent_window;
 
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-				    EPHY_PREFS_NEW_WINDOWS_IN_TABS))
+				    EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
+	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				    EPHY_PREFS_LOCKDOWN_FULLSCREEN))
 	{
 		parent_window = window;
 		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW |
@@ -2175,7 +2177,9 @@ decide_policy_cb (WebKitWebView *web_view,
 					      EPHY_PAGE_VISIT_LINK);
 
 		/* New tab in new window for control+shift+click */
-		if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+		if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK) &&
+		    !g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+					     EPHY_PREFS_LOCKDOWN_FULLSCREEN))
 		{
 			flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 		}

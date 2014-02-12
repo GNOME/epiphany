@@ -1082,6 +1082,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_normal = FALSE;
 	gboolean cut, copy, paste, select_all;
 	gboolean mutable = TRUE;
+        gboolean fullscreen_lockdown;
 
 	GtkActionGroup *action_group;
 	GtkAction *action;
@@ -1171,7 +1172,9 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		copy_label = _("_Copy");
 	}
 
-	open_in_window = (bmk_focus && bmk_selection);
+        fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                                                      EPHY_PREFS_LOCKDOWN_FULLSCREEN);
+	open_in_window = (bmk_focus && bmk_selection && !fullscreen_lockdown);
 	open_in_tab = (bmk_focus && bmk_selection);
 	rename = (bmk_focus && single_bmk_selected && mutable) ||
 		 (key_selection && key_focus && key_normal);

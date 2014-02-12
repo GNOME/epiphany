@@ -668,7 +668,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
   EphyEmbedShell *embed_shell;
   EphyWindow *window;
   EphyEmbed *embed = NULL;
-  gboolean fullscreen_lockdown = FALSE;
   gboolean in_new_window = TRUE;
   gboolean open_page = FALSE;
   gboolean delayed_open_page = FALSE;
@@ -690,9 +689,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
   if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
 
-  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                                                EPHY_PREFS_LOCKDOWN_FULLSCREEN);
-  in_new_window = in_new_window && !fullscreen_lockdown;
   g_return_val_if_fail ((open_page || delayed_open_page) == (gboolean)(request != NULL), NULL);
 
   LOG ("Opening new tab parent-window %p parent-embed %p in-new-window:%s jump-to:%s",
@@ -1065,6 +1061,7 @@ open_uris_data_new (EphyShell *shell,
 {
   OpenURIsData *data;
   gboolean new_windows_in_tabs;
+  gboolean fullscreen_lockdown;
   gboolean have_uris;
 
   data = g_slice_new0 (OpenURIsData);
@@ -1077,13 +1074,15 @@ open_uris_data_new (EphyShell *shell,
 
   new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                                 EPHY_PREFS_NEW_WINDOWS_IN_TABS);
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                                                EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
   have_uris = ! (g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
 
   if (startup_flags & EPHY_STARTUP_NEW_TAB)
     data->flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
 
-  if (startup_flags & EPHY_STARTUP_NEW_WINDOW) {
+  if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = NULL;
     data->flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {

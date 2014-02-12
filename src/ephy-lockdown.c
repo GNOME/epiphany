@@ -103,13 +103,17 @@ static const BindAction window_actions[] = {
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "FileSaveAs", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" }
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" },
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" },
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindowIncognito", "sensitive" }
 };
 
 static const BindAction popup_actions[] = {
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLinkAs", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "SaveImageAs", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "ContextBookmarkPage", "sensitive" }
+  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "ContextBookmarkPage", "sensitive" },
+
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "OpenLinkInNewWindow", "sensitive" }
 };
 
 static const BindAction special_toolbar_actions[] = {
