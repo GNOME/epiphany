@@ -81,18 +81,17 @@ typedef enum {
   EPHY_NEW_TAB_DELAYED_OPEN_PAGE    = 1 << 3,
 
   /* Page mode */
-  EPHY_NEW_TAB_FULLSCREEN_MODE  = 1 << 4,
-  EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 5,
-  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 6,
+  EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 4,
+  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 5,
 
   /* Tabs */
-  EPHY_NEW_TAB_FIRST        = 1 << 7,
-  EPHY_NEW_TAB_APPEND_LAST  = 1 << 8,
-  EPHY_NEW_TAB_APPEND_AFTER = 1 << 9,
+  EPHY_NEW_TAB_FIRST        = 1 << 6,
+  EPHY_NEW_TAB_APPEND_LAST  = 1 << 7,
+  EPHY_NEW_TAB_APPEND_AFTER = 1 << 8,
   EPHY_NEW_TAB_JUMP   = 1 << 10,
 
   /* The way to load */
-  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 11,
+  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 9,
 } EphyNewTabFlags;
 
 typedef enum {

@@ -909,7 +909,7 @@ window_cmd_file_new_window (GtkAction *action,
 	EphyWindow *new_window = ephy_window_new ();
 
 	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, new_window, NULL,
+			    new_window, NULL, NULL,
 			    EPHY_NEW_TAB_HOME_PAGE);
 }
 
