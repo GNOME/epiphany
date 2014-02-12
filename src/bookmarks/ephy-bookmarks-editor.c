@@ -316,8 +316,7 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 
 		new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
 						window, NULL, location,
-				 	        EPHY_NEW_TAB_OPEN_PAGE |
-					        EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+				 	        EPHY_NEW_TAB_OPEN_PAGE);
 		/* if there was no target window, a new one was opened. Get it
 		 * from the new tab so we open the remaining links in the
 		 * same window. See bug 138343.
@@ -340,7 +339,7 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 	GList *selection;
 	GList *l;
 
-	window = EPHY_WINDOW (get_target_window (editor));
+	window = ephy_window_new ();
 	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 
 	for (l = selection; l; l = l->next)
@@ -353,8 +352,7 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 
 		ephy_shell_new_tab (ephy_shell_get_default (),
 				    window, NULL, location,
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_IN_NEW_WINDOW);
+				    EPHY_NEW_TAB_OPEN_PAGE);
 	}
 
 	g_list_free (selection);
@@ -1067,8 +1065,7 @@ ephy_bookmarks_editor_node_middle_clicked_cb (GtkWidget *view,
 
 	ephy_shell_new_tab (ephy_shell_get_default (),
 			    window, NULL, location,
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+			    EPHY_NEW_TAB_OPEN_PAGE);
 }
 
 static void

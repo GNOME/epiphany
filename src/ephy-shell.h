@@ -66,9 +66,6 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
  * @EPHY_NEW_TAB_APPEND_AFTER: appends the new tab right after the
  *        current one in the notebook.
  * @EPHY_NEW_TAB_JUMP: jumps to the new tab immediately.
- * @EPHY_NEW_TAB_IN_NEW_WINDOW: creates the new tab in a new window.
- * @EPHY_NEW_TAB_IN_EXISTING_WINDOW: creates the new tab in the current
- *        active window, if there is none, creates a window.
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.
@@ -94,12 +91,8 @@ typedef enum {
   EPHY_NEW_TAB_APPEND_AFTER = 1 << 9,
   EPHY_NEW_TAB_JUMP   = 1 << 10,
 
-  /* Where */
-  EPHY_NEW_TAB_IN_NEW_WINDOW  = 1 << 11,
-  EPHY_NEW_TAB_IN_EXISTING_WINDOW = 1 << 12,
-
   /* The way to load */
-  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 13,
+  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 11,
 } EphyNewTabFlags;
 
 typedef enum {

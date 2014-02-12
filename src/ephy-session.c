@@ -248,8 +248,6 @@ ephy_session_undo_close_tab (EphySession *session)
 	{
 		GtkWidget *window;
 
-		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
-
 		if (tab->position > 0)
 		{
 			/* Append in the n-th position. */
@@ -273,9 +271,10 @@ ephy_session_undo_close_tab (EphySession *session)
 	else
 	{
 		EphyNotebook *notebook;
-		flags |=  EPHY_NEW_TAB_IN_NEW_WINDOW;
+		EphyWindow *window = ephy_window_new ();
+
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
-					      NULL, NULL, tab->url, flags);
+					      window, NULL, tab->url, flags);
 
 		/* FIXME: This makes the assumption that the notebook
 		   is the parent of the returned EphyEmbed. */
@@ -387,11 +386,12 @@ session_maybe_open_window (EphySession *session,
 	/* FIXME: maybe just check for normal windows? */
 	if (ephy_shell_get_n_windows (shell) == 0)
 	{
+		EphyWindow *window = ephy_window_new ();
+
 		ephy_shell_new_tab_full (shell,
 					 NULL /* related view */,
-					 NULL /* window */, NULL /* tab */,
+					 window, NULL /* tab */,
 					 NULL /* NetworkRequest */,
-					 EPHY_NEW_TAB_IN_NEW_WINDOW |
 					 EPHY_NEW_TAB_HOME_PAGE,
 					 user_time);
 	}
@@ -909,7 +909,6 @@ confirm_before_recover (EphyWindow *window, const char *url, const char *title)
 
 	embed = ephy_shell_new_tab (ephy_shell_get_default (),
 				    window, NULL, NULL,
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 				    EPHY_NEW_TAB_APPEND_LAST);
 
 	ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
@@ -1057,8 +1056,7 @@ session_parse_embed (SessionParserContext *context,
 		delay_loading = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 							EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS);
 
-		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW;
-		flags |= EPHY_NEW_TAB_APPEND_LAST;
+		flags = EPHY_NEW_TAB_APPEND_LAST;
 
 		if (delay_loading)
 		{

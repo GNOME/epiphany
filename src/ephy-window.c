@@ -548,6 +548,7 @@ ephy_window_open_link (EphyLink *link,
 		      EPHY_LINK_NEW_WINDOW))
 	{
 		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
+		EphyWindow *target_window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 
 		if (flags & EPHY_LINK_JUMP_TO)
 		{
@@ -556,11 +557,7 @@ ephy_window_open_link (EphyLink *link,
 		if (flags & EPHY_LINK_NEW_WINDOW ||
 		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
 		{
-			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-		}
-		else
-		{
-			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+			target_window = ephy_window_new ();
 		}
 
 		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
@@ -573,7 +570,7 @@ ephy_window_open_link (EphyLink *link,
 
 		new_embed = ephy_shell_new_tab
 				(ephy_shell_get_default (),
-				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+				 target_window,
 				 embed, address, ntflags);
 	}
 	else
@@ -2023,28 +2020,26 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyEmbed *embed;
 	WebKitWebView *new_web_view;
 	EphyNewTabFlags flags;
-	EphyWindow *parent_window;
+	EphyWindow *target_window;
 
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
 	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 				    EPHY_PREFS_LOCKDOWN_FULLSCREEN))
 	{
-		parent_window = window;
-		flags = EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			EPHY_NEW_TAB_JUMP |
+		target_window = window;
+		flags = EPHY_NEW_TAB_JUMP |
 			EPHY_NEW_TAB_APPEND_AFTER;
 	}
 	else
 	{
-		parent_window = NULL;
-		flags = EPHY_NEW_TAB_IN_NEW_WINDOW |
-			EPHY_NEW_TAB_DONT_SHOW_WINDOW;
+		target_window = ephy_window_new ();
+		flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW;
 	}
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
 					 web_view,
-					 parent_window,
+					 target_window,
 					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
 					 NULL,
 					 flags,
@@ -2168,6 +2163,7 @@ decide_policy_cb (WebKitWebView *web_view,
 		gint button;
 		gint state;
 		EphyNewTabFlags flags;
+		EphyWindow *target_window = window;
 
 		button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
 		state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
@@ -2181,13 +2177,13 @@ decide_policy_cb (WebKitWebView *web_view,
 		    !g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 					     EPHY_PREFS_LOCKDOWN_FULLSCREEN))
 		{
-			flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+			target_window = ephy_window_new ();
 		}
 		/* New tab in existing window for middle click and
 		 * control+click */
 		else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK))
 		{
-			flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER;
+			flags |= EPHY_NEW_TAB_APPEND_AFTER;
 		}
 		/* Because we connect to button-press-event *after*
 		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
@@ -2211,7 +2207,7 @@ decide_policy_cb (WebKitWebView *web_view,
 
 		ephy_shell_new_tab_full (ephy_shell_get_default (),
 					 NULL,
-					 window,
+					 target_window,
 					 embed,
 					 request,
 					 flags,

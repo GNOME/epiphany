@@ -42,6 +42,7 @@ void
 popup_cmd_link_in_new_window (GtkAction *action,
 		              EphyWindow *window)
 {
+	EphyWindow *new_window;
 	EphyEmbedEvent *event;
 	EphyEmbed *embed;
 	GValue value = { 0, };
@@ -52,13 +53,13 @@ popup_cmd_link_in_new_window (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
+	new_window = ephy_window_new ();
 	ephy_embed_event_get_property (event, "link-uri", &value);
 
 	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, embed,
+			    new_window, embed,
 			    g_value_get_string (&value),
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_NEW_WINDOW);
+			    EPHY_NEW_TAB_OPEN_PAGE);
 	g_value_unset (&value);
 }
 
@@ -82,7 +83,6 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 			    window, embed,
 			    g_value_get_string (&value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 			    EPHY_NEW_TAB_APPEND_AFTER);
 	g_value_unset (&value);
 }
@@ -325,7 +325,6 @@ popup_cmd_view_image_in_new_tab (GtkAction *action,
 			    window, embed,
 			    g_value_get_string (&value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 			    EPHY_NEW_TAB_APPEND_AFTER);
 	g_value_unset (&value);
 }

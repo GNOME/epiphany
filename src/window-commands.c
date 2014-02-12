@@ -906,9 +906,10 @@ void
 window_cmd_file_new_window (GtkAction *action,
 			    EphyWindow *window)
 {
+	EphyWindow *new_window = ephy_window_new ();
+
 	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, NULL, NULL,
-			    EPHY_NEW_TAB_IN_NEW_WINDOW |
+			    NULL, new_window, NULL,
 			    EPHY_NEW_TAB_HOME_PAGE);
 }
 
@@ -1190,7 +1191,7 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 			 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
 			 embed,
 			 NULL,
-			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_IN_EXISTING_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
+			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_APPEND_AFTER);
 
 	webkit_web_view_set_view_mode
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), WEBKIT_VIEW_MODE_SOURCE);

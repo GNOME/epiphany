@@ -116,7 +116,7 @@ action_activate (GtkAction *action)
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   NULL,
                                   NULL,
-                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+                                  0);
 
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
       webkit_web_view_load_uri (web_view, back_uri);
@@ -144,7 +144,7 @@ action_activate (GtkAction *action)
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
                                   NULL,
-                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+                                  0);
 
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
       webkit_web_view_load_uri (web_view, forward_uri);
@@ -328,7 +328,7 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
                                   NULL,
-                                  EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+                                  0);
   g_return_if_fail (new_embed != NULL);
 
   /* We manually set the back history instead of trusting
