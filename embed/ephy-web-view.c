@@ -2264,24 +2264,6 @@ ephy_web_view_load_url (EphyWebView *view,
 }
 
 /**
- * ephy_web_view_copy_back_history:
- * @source: the #EphyWebView from which to get the back history
- * @dest: the #EphyWebView to copy the history to
- *
- * Sets the back history (up to the current item) of @source as the
- * back history of @dest.
- *
- * Useful to keep the history when opening links in new tabs or
- * windows.
- **/
-void
-ephy_web_view_copy_back_history (EphyWebView *source,
-                                 EphyWebView *dest)
-{
-  /* TODO: WebKit2, BackForwardList */
-}
-
-/**
  * ephy_web_view_get_is_blank:
  * @view: an #EphyWebView
  *

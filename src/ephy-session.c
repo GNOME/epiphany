@@ -233,8 +233,7 @@ ephy_session_undo_close_tab (EphySession *session)
 	ClosedTab *tab;
 	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE
 		| EPHY_NEW_TAB_PRESENT_WINDOW
-		| EPHY_NEW_TAB_JUMP
-		| EPHY_NEW_TAB_DONT_COPY_HISTORY;
+		| EPHY_NEW_TAB_JUMP;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 

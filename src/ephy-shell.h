@@ -72,8 +72,6 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.
- * @EPHY_NEW_TAB_DONT_COPY_HISTORY: do not copy the back-forward history
- *        from the current active tab to the new one.
  * @EPHY_NEW_TAB_PRESENT_WINDOW: present the active window.
  *
  * Controls how new tabs/windows are created and handled.
@@ -102,8 +100,6 @@ typedef enum {
 
   /* The way to load */
   EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 13,
-  EPHY_NEW_TAB_DONT_COPY_HISTORY  = 1 << 14,
-  
 } EphyNewTabFlags;
 
 typedef enum {
