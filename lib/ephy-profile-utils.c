@@ -105,6 +105,12 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
 
   argv[i++] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
 
+  /* If we're not trying to run a migration step in a test and there
+     is nothing to migrate, don't spawn the migrator at all. */
+  if (test_to_run == -1 &&
+      EPHY_PROFILE_MIGRATION_VERSION == ephy_profile_utils_get_migration_version ())
+    return TRUE;
+
   if (test_to_run != -1) {
     index = g_strdup_printf ("%d", test_to_run);
 

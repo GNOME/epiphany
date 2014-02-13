@@ -358,17 +358,6 @@ main (int argc,
     exit (1);
   }
 
-  /* Run the migration in all cases, except when running a private
-     instance without a given profile directory or running in
-     incognito mode. */
-  if (!(private_instance && profile_directory == NULL) && incognito_mode == FALSE) {
-    /* If the migration fails we don't really want to continue. */
-    if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
-      g_print ("Failed to run the migrator process, Web will now abort.");
-      exit (1);
-    }
-  }
-
   /* Start our services */
   flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
 
@@ -383,6 +372,17 @@ main (int argc,
                                &error)) {
     show_error_message (&error);
     exit (1);
+  }
+
+  /* Run the migration in all cases, except when running a private
+     instance without a given profile directory or running in
+     incognito mode. */
+  if (!(private_instance && profile_directory == NULL) && incognito_mode == FALSE) {
+    /* If the migration fails we don't really want to continue. */
+    if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
+      g_print ("Failed to run the migrator process, Web will now abort.");
+      exit (1);
+    }
   }
 
   arbitrary_url = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
