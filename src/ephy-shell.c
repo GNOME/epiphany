@@ -709,10 +709,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
     gtk_widget_show (GTK_WIDGET (window));
   }
 
-  if (flags & EPHY_NEW_TAB_PRESENT_WINDOW &&
-      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (embed_shell)) != EPHY_EMBED_SHELL_MODE_TEST)
-    gtk_window_present_with_time (GTK_WINDOW (window), user_time);
-
   return embed;
 }
 
@@ -1007,7 +1003,7 @@ open_uris_data_new (EphyShell *shell,
   if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
-    data->flags |= EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
+    data->flags |= EPHY_NEW_TAB_JUMP;
     data->window = ephy_shell_get_main_window (shell);
     data->reuse_empty_tab = TRUE;
   } else if (!have_uris) {
@@ -1062,6 +1058,9 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     /* When reusing an empty tab, the focus is in the location entry */
     if (reusing_empty_tab || data->flags & EPHY_NEW_TAB_JUMP)
       gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+    if (data->flags & EPHY_NEW_TAB_JUMP && ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell)) != EPHY_EMBED_SHELL_MODE_TEST)
+      gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
   } else {
     ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
     ephy_window_activate_location (data->window);

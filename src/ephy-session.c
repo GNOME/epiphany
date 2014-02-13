@@ -231,7 +231,8 @@ ephy_session_undo_close_tab (EphySession *session)
 	EphySessionPrivate *priv;
 	EphyEmbed *embed, *new_tab;
 	ClosedTab *tab;
-	EphyNewTabFlags flags = EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_JUMP;
+	EphyWindow *window;
+	EphyNewTabFlags flags = EPHY_NEW_TAB_JUMP;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
@@ -244,8 +245,6 @@ ephy_session_undo_close_tab (EphySession *session)
 	LOG ("UNDO CLOSE TAB: %s", tab->url);
 	if (*tab->parent_location != NULL)
 	{
-		GtkWidget *window;
-
 		if (tab->position > 0)
 		{
 			/* Append in the n-th position. */
@@ -260,17 +259,17 @@ ephy_session_undo_close_tab (EphySession *session)
 			flags |= EPHY_NEW_TAB_FIRST;
 		}
 
-		window = gtk_widget_get_toplevel (GTK_WIDGET (*tab->parent_location));
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (*tab->parent_location)));
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
-					      EPHY_WINDOW (window), embed,
+					      window, embed,
 					      flags);
 		post_restore_cleanup (priv->closed_tabs, tab, FALSE);
 	}
 	else
 	{
 		EphyNotebook *notebook;
-		EphyWindow *window = ephy_window_new ();
 
+		window = ephy_window_new ();
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
 					      window, NULL, flags);
 
@@ -283,6 +282,8 @@ ephy_session_undo_close_tab (EphySession *session)
 
 	ephy_web_view_load_url (ephy_embed_get_web_view (new_tab), tab->url);
 	gtk_widget_grab_focus (GTK_WIDGET (new_tab));
+	gtk_window_present (GTK_WINDOW (window));
+
 	closed_tab_free (tab);
 
 	if (g_queue_is_empty (priv->closed_tabs))

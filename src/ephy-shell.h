@@ -61,20 +61,18 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.
- * @EPHY_NEW_TAB_PRESENT_WINDOW: present the active window.
  *
  * Controls how new tabs/windows are created and handled.
  */
 typedef enum {
   /* Page mode */
   EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 0,
-  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 1,
 
   /* Tabs */
-  EPHY_NEW_TAB_FIRST        = 1 << 2,
-  EPHY_NEW_TAB_APPEND_LAST  = 1 << 3,
-  EPHY_NEW_TAB_APPEND_AFTER = 1 << 4,
-  EPHY_NEW_TAB_JUMP   = 1 << 5,
+  EPHY_NEW_TAB_FIRST        = 1 << 1,
+  EPHY_NEW_TAB_APPEND_LAST  = 1 << 2,
+  EPHY_NEW_TAB_APPEND_AFTER = 1 << 3,
+  EPHY_NEW_TAB_JUMP   = 1 << 4,
 } EphyNewTabFlags;
 
 typedef enum {
