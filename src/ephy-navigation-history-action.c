@@ -115,7 +115,6 @@ action_activate (GtkAction *action)
       embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   NULL,
-                                  NULL,
                                   0);
 
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -143,7 +142,6 @@ action_activate (GtkAction *action)
       embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
-                                  NULL,
                                   0);
 
       web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -327,7 +325,6 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
-                                  NULL,
                                   0);
   g_return_if_fail (new_embed != NULL);
 

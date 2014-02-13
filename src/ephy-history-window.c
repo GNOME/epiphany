@@ -307,9 +307,11 @@ open_selected (EphyHistoryWindow *self)
 	window = EPHY_WINDOW (get_target_window (self));
 	for (l = selection; l; l = l->next) {
 		EphyHistoryURL *url = l->data;
-		ephy_shell_new_tab (ephy_shell_get_default (),
-				    window, NULL, url->url,
-				    EPHY_NEW_TAB_OPEN_PAGE);
+		EphyEmbed *embed;
+
+		embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					    window, NULL, 0);
+		ephy_web_view_load_url (ephy_embed_get_web_view (embed), url->url);
 	}
 
 	g_list_free_full (selection, (GDestroyNotify) ephy_history_url_free);
@@ -421,15 +423,16 @@ on_treeview_row_activated (GtkTreeView *view,
 {
 	EphyWindow *window;
 	EphyHistoryURL *url;
+	EphyEmbed *embed;
 
 	window = EPHY_WINDOW (get_target_window (self));
 	url = get_url_from_path (gtk_tree_view_get_model (view),
 				 path);
 	g_return_if_fail (url != NULL);
 
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    window, NULL, url->url,
-			    EPHY_NEW_TAB_OPEN_PAGE);
+	embed = ephy_shell_new_tab (ephy_shell_get_default (),
+				    window, NULL, 0);
+	ephy_web_view_load_url (ephy_embed_get_web_view (embed), url->url);
 	ephy_history_url_free (url);
 }
 

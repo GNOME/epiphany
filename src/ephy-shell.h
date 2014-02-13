@@ -52,20 +52,12 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
 
 /**
  * EphyNewTabFlags:
- * @EPHY_NEW_TAB_HOME_PAGE: loads the home page in the new tab.
- * @EPHY_NEW_TAB_NEW_PAGE: legacy synonym for @EPHY_NEW_TAB_HOME_PAGE.
- * @EPHY_NEW_TAB_OPEN_PAGE: opens the provided network-request.
- * @EPHY_NEW_TAB_DELAYED_OPEN_PAGE: store the provided network-request
- *        so that it will be opened when the tab is switched to.
- * @EPHY_NEW_TAB_FULLSCREEN_MODE: calls gtk_window_fullscreen on the
- *        parent window of the new tab.
  * @EPHY_NEW_TAB_DONT_SHOW_WINDOW: do not show the window where the new
  *        tab is attached.
  * @EPHY_NEW_TAB_APPEND_LAST: appends the new tab at the end of the
  *        notebook.
  * @EPHY_NEW_TAB_APPEND_AFTER: appends the new tab right after the
  *        current one in the notebook.
- * @EPHY_NEW_TAB_JUMP: jumps to the new tab immediately.
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.
@@ -74,24 +66,15 @@ typedef struct _EphyShellPrivate  EphyShellPrivate;
  * Controls how new tabs/windows are created and handled.
  */
 typedef enum {
-  /* Page types */
-  EPHY_NEW_TAB_HOME_PAGE    = 1 << 0,
-  EPHY_NEW_TAB_NEW_PAGE   = 1 << 1,
-  EPHY_NEW_TAB_OPEN_PAGE    = 1 << 2,
-  EPHY_NEW_TAB_DELAYED_OPEN_PAGE    = 1 << 3,
-
   /* Page mode */
-  EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 4,
-  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 5,
+  EPHY_NEW_TAB_DONT_SHOW_WINDOW = 1 << 0,
+  EPHY_NEW_TAB_PRESENT_WINDOW     = 1 << 1,
 
   /* Tabs */
-  EPHY_NEW_TAB_FIRST        = 1 << 6,
-  EPHY_NEW_TAB_APPEND_LAST  = 1 << 7,
-  EPHY_NEW_TAB_APPEND_AFTER = 1 << 8,
-  EPHY_NEW_TAB_JUMP   = 1 << 10,
-
-  /* The way to load */
-  EPHY_NEW_TAB_FROM_EXTERNAL      = 1 << 9,
+  EPHY_NEW_TAB_FIRST        = 1 << 2,
+  EPHY_NEW_TAB_APPEND_LAST  = 1 << 3,
+  EPHY_NEW_TAB_APPEND_AFTER = 1 << 4,
+  EPHY_NEW_TAB_JUMP   = 1 << 5,
 } EphyNewTabFlags;
 
 typedef enum {
@@ -131,14 +114,12 @@ EphyShell      *ephy_shell_get_default                  (void);
 EphyEmbed      *ephy_shell_new_tab                      (EphyShell *shell,
                                                          EphyWindow *parent_window,
                                                          EphyEmbed *previous_embed,
-                                                         const char *url,
                                                          EphyNewTabFlags flags);
 
 EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
                                                          WebKitWebView *related_view,
                                                          EphyWindow *parent_window,
                                                          EphyEmbed *previous_embed,
-                                                         WebKitURIRequest *request,
                                                          EphyNewTabFlags flags,
                                                          guint32 user_time);
 

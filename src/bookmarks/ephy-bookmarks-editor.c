@@ -295,6 +295,17 @@ get_target_window (EphyBookmarksEditor *editor)
 }
 
 static void
+load_bookmark_in_tab (EphyNode *node,
+                      EphyEmbed *embed)
+{
+        const char *location;
+
+        location = ephy_node_get_property_string (node,
+                                                  EPHY_NODE_BMK_PROP_LOCATION);
+        ephy_web_view_load_url (ephy_embed_get_web_view (embed), location);
+}
+
+static void
 cmd_open_bookmarks_in_tabs (GtkAction *action,
 			    EphyBookmarksEditor *editor)
 {
@@ -309,14 +320,12 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 	{
 		EphyNode *node = l->data;
 		EphyEmbed *new_embed;
-		const char *location;
-
-		location = ephy_node_get_property_string (node,
-						EPHY_NODE_BMK_PROP_LOCATION);
 
 		new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-						window, NULL, location,
-				 	        EPHY_NEW_TAB_OPEN_PAGE);
+						window, NULL,
+				 	        0);
+                load_bookmark_in_tab (node, new_embed);
+
 		/* if there was no target window, a new one was opened. Get it
 		 * from the new tab so we open the remaining links in the
 		 * same window. See bug 138343.
@@ -345,14 +354,11 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyNode *node = l->data;
-		const char *location;
+                EphyEmbed *embed;
 
-		location = ephy_node_get_property_string (node,
-						EPHY_NODE_BMK_PROP_LOCATION);
-
-		ephy_shell_new_tab (ephy_shell_get_default (),
-				    window, NULL, location,
-				    EPHY_NEW_TAB_OPEN_PAGE);
+                embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                            window, NULL, 0);
+                load_bookmark_in_tab (node, embed);
 	}
 
 	g_list_free (selection);
@@ -1038,15 +1044,11 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 					 EphyNode *node,
 					 EphyBookmarksEditor *editor)
 {
-	const char *location;
+        EphyEmbed *embed;
 
-	location = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_return_if_fail (location != NULL);
-
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, NULL, location,
-			    EPHY_NEW_TAB_OPEN_PAGE);
+	embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                    NULL, NULL, 0);
+        load_bookmark_in_tab (node, embed);
 }
 
 static void
@@ -1055,17 +1057,13 @@ ephy_bookmarks_editor_node_middle_clicked_cb (GtkWidget *view,
 					      EphyBookmarksEditor *editor)
 {
 	EphyWindow *window;
-	const char *location;
+        EphyEmbed *embed;
 
 	window = EPHY_WINDOW (get_target_window (editor));
 
-	location = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_return_if_fail (location != NULL);
-
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    window, NULL, location,
-			    EPHY_NEW_TAB_OPEN_PAGE);
+	embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                    window, NULL, 0);
+        load_bookmark_in_tab (node, embed);
 }
 
 static void

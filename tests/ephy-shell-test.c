@@ -60,7 +60,6 @@ test_ephy_shell_basic_embeds (void)
                    NULL, /* related view */
                    window,
                    NULL, /* embed */
-                   NULL, /* network-request */
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW, /* flags */
                    gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed1));
@@ -77,7 +76,6 @@ test_ephy_shell_basic_embeds (void)
                    NULL, /* related view */
                    window, /* window */
                    NULL, /* embed */
-                   NULL, /* network-request */
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW, /* flags */
                    gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed2));
@@ -103,7 +101,7 @@ test_ephy_shell_parent_windows (void)
 
   /* parent-window provided */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL, NULL,
+                  (ephy_shell, EPHY_WINDOW (window), NULL,
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW);
 
   g_assert (EPHY_IS_EMBED (embed));
@@ -114,7 +112,7 @@ test_ephy_shell_parent_windows (void)
   /* Another new-window */
   window2 = GTK_WIDGET (ephy_window_new ());
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window2), NULL, NULL,
+                  (ephy_shell, EPHY_WINDOW (window2), NULL,
                    EPHY_NEW_TAB_DONT_SHOW_WINDOW);
 
   /* The parent window should be a completely new one. */
@@ -142,8 +140,9 @@ test_ephy_shell_tab_load (void)
 
   /* homepage is "about:blank" for now, see embed/ephy-web-view.c */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL, NULL,
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_HOME_PAGE);
+                  (ephy_shell, EPHY_WINDOW (window), NULL,
+                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
 
   g_assert (EPHY_IS_EMBED (embed));
 
@@ -160,8 +159,9 @@ test_ephy_shell_tab_load (void)
 
   /* open-page "about:epiphany" for testing. */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL, "about:epiphany",
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
+                  (ephy_shell, EPHY_WINDOW (window), NULL,
+                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+  ephy_web_view_load_url (ephy_embed_get_web_view (embed), "about:epiphany");
 
   g_assert (EPHY_IS_EMBED (embed));
 
@@ -195,29 +195,29 @@ test_ephy_shell_tab_append (void)
   window = GTK_WIDGET (ephy_window_new ());
   notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
 
-  embed1 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, NULL,
+  embed1 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
 
-  embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1, NULL,
+  embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
   g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 1);
 
-  embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1, NULL,
+  embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
   g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
   g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);
   g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 2);
 
-  embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1, NULL,
+  embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
   g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
   g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);
   g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 2);
   g_assert_cmpint (get_notebook_page_num (notebook, embed4), ==, 3);
 
-  embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed3, NULL,
+  embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed3,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
   g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
   g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);

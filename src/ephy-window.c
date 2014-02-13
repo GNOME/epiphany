@@ -547,13 +547,14 @@ ephy_window_open_link (EphyLink *link,
 		      EPHY_LINK_NEW_TAB | 
 		      EPHY_LINK_NEW_WINDOW))
 	{
-		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
+		EphyNewTabFlags ntflags = 0;
 		EphyWindow *target_window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 
 		if (flags & EPHY_LINK_JUMP_TO)
 		{
 			ntflags |= EPHY_NEW_TAB_JUMP;
 		}
+
 		if (flags & EPHY_LINK_NEW_WINDOW ||
 		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
 		{
@@ -563,15 +564,23 @@ ephy_window_open_link (EphyLink *link,
 		if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
 			ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
 
-		if (flags & EPHY_LINK_HOME_PAGE)
-		{
-			ntflags |= EPHY_NEW_TAB_HOME_PAGE;
-		}
-
 		new_embed = ephy_shell_new_tab
 				(ephy_shell_get_default (),
 				 target_window,
-				 embed, address, ntflags);
+				 embed, ntflags);
+		if (flags & EPHY_LINK_HOME_PAGE)
+		{
+			ephy_web_view_load_homepage (ephy_embed_get_web_view (new_embed));
+			ephy_window_activate_location (window);
+		}
+		else
+		{
+			ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), address);
+			if (flags & EPHY_LINK_JUMP_TO)
+			{
+				gtk_widget_grab_focus (GTK_WIDGET (new_embed));
+			}
+		}
 	}
 	else
 	{
@@ -2041,9 +2050,10 @@ create_web_view_cb (WebKitWebView *web_view,
 					 web_view,
 					 target_window,
 					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-					 NULL,
 					 flags,
 					 0);
+	if (target_window == window)
+		gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	g_signal_connect (new_web_view, "ready-to-show",
@@ -2162,12 +2172,12 @@ decide_policy_cb (WebKitWebView *web_view,
 	{
 		gint button;
 		gint state;
-		EphyNewTabFlags flags;
+		EphyEmbed *new_embed;
+		EphyNewTabFlags flags = 0;
 		EphyWindow *target_window = window;
 
 		button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
 		state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
-		flags = EPHY_NEW_TAB_OPEN_PAGE;
 
 		ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
 					      EPHY_PAGE_VISIT_LINK);
@@ -2205,13 +2215,13 @@ decide_policy_cb (WebKitWebView *web_view,
 		embed = ephy_embed_container_get_active_child
 			(EPHY_EMBED_CONTAINER (window));
 
-		ephy_shell_new_tab_full (ephy_shell_get_default (),
-					 NULL,
-					 target_window,
-					 embed,
-					 request,
-					 flags,
-					 0);
+		new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+						     NULL,
+						     target_window,
+						     embed,
+						     flags,
+						     0);
+		ephy_web_view_load_request (ephy_embed_get_web_view (new_embed), request);
 
 		webkit_policy_decision_ignore (decision);
 

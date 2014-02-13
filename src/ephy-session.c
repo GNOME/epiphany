@@ -231,9 +231,7 @@ ephy_session_undo_close_tab (EphySession *session)
 	EphySessionPrivate *priv;
 	EphyEmbed *embed, *new_tab;
 	ClosedTab *tab;
-	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE
-		| EPHY_NEW_TAB_PRESENT_WINDOW
-		| EPHY_NEW_TAB_JUMP;
+	EphyNewTabFlags flags = EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_JUMP;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
@@ -264,7 +262,7 @@ ephy_session_undo_close_tab (EphySession *session)
 
 		window = gtk_widget_get_toplevel (GTK_WIDGET (*tab->parent_location));
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
-					      EPHY_WINDOW (window), embed, tab->url,
+					      EPHY_WINDOW (window), embed,
 					      flags);
 		post_restore_cleanup (priv->closed_tabs, tab, FALSE);
 	}
@@ -274,7 +272,7 @@ ephy_session_undo_close_tab (EphySession *session)
 		EphyWindow *window = ephy_window_new ();
 
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
-					      window, NULL, tab->url, flags);
+					      window, NULL, flags);
 
 		/* FIXME: This makes the assumption that the notebook
 		   is the parent of the returned EphyEmbed. */
@@ -283,6 +281,8 @@ ephy_session_undo_close_tab (EphySession *session)
 		post_restore_cleanup (priv->closed_tabs, tab, TRUE);
 	}
 
+	ephy_web_view_load_url (ephy_embed_get_web_view (new_tab), tab->url);
+	gtk_widget_grab_focus (GTK_WIDGET (new_tab));
 	closed_tab_free (tab);
 
 	if (g_queue_is_empty (priv->closed_tabs))
@@ -387,13 +387,15 @@ session_maybe_open_window (EphySession *session,
 	if (ephy_shell_get_n_windows (shell) == 0)
 	{
 		EphyWindow *window = ephy_window_new ();
+		EphyEmbed *embed;
 
-		ephy_shell_new_tab_full (shell,
-					 NULL /* related view */,
-					 window, NULL /* tab */,
-					 NULL /* NetworkRequest */,
-					 EPHY_NEW_TAB_HOME_PAGE,
-					 user_time);
+		embed = ephy_shell_new_tab_full (shell,
+						 NULL /* related view */,
+						 window, NULL /* tab */,
+						 0,
+						 user_time);
+		ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
+		ephy_window_activate_location (window);
 	}
 }
 
@@ -908,7 +910,7 @@ confirm_before_recover (EphyWindow *window, const char *url, const char *title)
 	EphyEmbed *embed;
 
 	embed = ephy_shell_new_tab (ephy_shell_get_default (),
-				    window, NULL, NULL,
+				    window, NULL,
 				    EPHY_NEW_TAB_APPEND_LAST);
 
 	ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
@@ -1058,22 +1060,21 @@ session_parse_embed (SessionParserContext *context,
 
 		flags = EPHY_NEW_TAB_APPEND_LAST;
 
+		embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					    context->window, NULL, flags);
+
+		web_view = ephy_embed_get_web_view (embed);
 		if (delay_loading)
 		{
-			flags |= EPHY_NEW_TAB_DELAYED_OPEN_PAGE;
+			WebKitURIRequest *request = webkit_uri_request_new (url);
+
+			ephy_embed_set_delayed_load_request (embed, request);
+			ephy_web_view_set_placeholder (web_view, url, title);
+			g_object_unref (request);
 		}
 		else
 		{
-			flags |= EPHY_NEW_TAB_OPEN_PAGE;
-		}
-
-		embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					    context->window, NULL, url, flags);
-
-		if (delay_loading)
-		{
-			web_view = ephy_embed_get_web_view (embed);
-			ephy_web_view_set_placeholder (web_view, url, title);
+			ephy_web_view_load_url (web_view, url);
 		}
 	}
 	else if (was_loading && url != NULL)

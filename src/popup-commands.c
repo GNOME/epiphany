@@ -45,6 +45,7 @@ popup_cmd_link_in_new_window (GtkAction *action,
 	EphyWindow *new_window;
 	EphyEmbedEvent *event;
 	EphyEmbed *embed;
+	EphyEmbed *new_embed;
 	GValue value = { 0, };
 
 	embed = ephy_embed_container_get_active_child 
@@ -56,10 +57,11 @@ popup_cmd_link_in_new_window (GtkAction *action,
 	new_window = ephy_window_new ();
 	ephy_embed_event_get_property (event, "link-uri", &value);
 
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    new_window, embed,
-			    g_value_get_string (&value),
-			    EPHY_NEW_TAB_OPEN_PAGE);
+	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					new_window, embed,
+					0);
+	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
+				g_value_get_string (&value));
 	g_value_unset (&value);
 }
 
@@ -69,6 +71,7 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 {
 	EphyEmbedEvent *event;
 	EphyEmbed *embed;
+	EphyEmbed *new_embed;
 	GValue value = { 0, };
 
 	embed = ephy_embed_container_get_active_child
@@ -79,11 +82,11 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 
 	ephy_embed_event_get_property (event, "link-uri", &value);
 
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    window, embed,
-			    g_value_get_string (&value),
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_APPEND_AFTER);
+	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					window, embed,
+					EPHY_NEW_TAB_APPEND_AFTER);
+	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
+				g_value_get_string (&value));
 	g_value_unset (&value);
 }
 
@@ -312,6 +315,7 @@ popup_cmd_view_image_in_new_tab (GtkAction *action,
 	EphyEmbedEvent *event;
 	GValue value = { 0, };
 	EphyEmbed *embed;
+	EphyEmbed *new_embed;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
@@ -321,11 +325,11 @@ popup_cmd_view_image_in_new_tab (GtkAction *action,
 
 	ephy_embed_event_get_property (event, "image-uri", &value);
 
-	ephy_shell_new_tab (ephy_shell_get_default (),
-			    window, embed,
-			    g_value_get_string (&value),
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_APPEND_AFTER);
+	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					window, embed,
+					EPHY_NEW_TAB_APPEND_AFTER);
+	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
+				g_value_get_string (&value));
 	g_value_unset (&value);
 }
 

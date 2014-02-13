@@ -648,7 +648,6 @@ ephy_shell_get_default (void)
  * @shell: a #EphyShell
  * @window: the target #EphyWindow or %NULL
  * @previous_embed: the referrer embed, or %NULL
- * @request: a #WebKitNetworkRequest to load or %NULL
  * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
@@ -661,31 +660,22 @@ ephy_shell_new_tab_full (EphyShell *shell,
                          WebKitWebView *related_view,
                          EphyWindow *window,
                          EphyEmbed *previous_embed,
-                         WebKitURIRequest *request,
                          EphyNewTabFlags flags,
                          guint32 user_time)
 {
   EphyEmbedShell *embed_shell;
+  GtkWidget *web_view;
   EphyEmbed *embed = NULL;
-  gboolean open_page = FALSE;
-  gboolean delayed_open_page = FALSE;
   gboolean jump_to = FALSE;
-  gboolean active_is_blank = FALSE;
-  gboolean is_empty = FALSE;
   int position = -1;
 
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
   g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
   g_return_val_if_fail (EPHY_IS_EMBED (previous_embed) || !previous_embed, NULL);
-  g_return_val_if_fail (WEBKIT_IS_URI_REQUEST (request) || !request, NULL);
 
   embed_shell = EPHY_EMBED_SHELL (shell);
 
-  if (flags & EPHY_NEW_TAB_OPEN_PAGE) open_page = TRUE;
-  if (flags & EPHY_NEW_TAB_DELAYED_OPEN_PAGE) delayed_open_page = TRUE;
   if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
-
-  g_return_val_if_fail ((open_page || delayed_open_page) == (gboolean)(request != NULL), NULL);
 
   LOG ("Opening new tab window %p parent-embed %p jump-to:%s",
        window, previous_embed, jump_to ? "t" : "f");
@@ -703,70 +693,20 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (flags & EPHY_NEW_TAB_FIRST)
     position = 0;
 
-  if (flags & EPHY_NEW_TAB_FROM_EXTERNAL && position == -1) {
-    /* If the active embed is blank, use that to open the url and jump to it */
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    if (embed != NULL) {
-      EphyWebView *view = ephy_embed_get_web_view (embed);
-      if ((ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view)) &&
-          ephy_web_view_is_loading (view) == FALSE) {
-        active_is_blank = TRUE;
-      }
-    }
-  }
+  if (related_view)
+    web_view = ephy_web_view_new_with_related_view (related_view);
+  else
+    web_view = ephy_web_view_new ();
 
-  if (active_is_blank == FALSE) {
-    GtkWidget *web_view;
-
-    if (related_view)
-      web_view = ephy_web_view_new_with_related_view (related_view);
-    else
-      web_view = ephy_web_view_new ();
-
-    embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, "web-view", web_view, NULL));
-    g_assert (embed != NULL);
-    gtk_widget_show (GTK_WIDGET (embed));
-
-    ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
-  }
+  embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, "web-view", web_view, NULL));
+  gtk_widget_show (GTK_WIDGET (embed));
+  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
 
   ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
     gtk_widget_show (GTK_WIDGET (window));
-  }
-
-  if (flags & EPHY_NEW_TAB_HOME_PAGE ||
-      flags & EPHY_NEW_TAB_NEW_PAGE) {
-    EphyWebView *view = ephy_embed_get_web_view (embed);
-    ephy_web_view_set_typed_address (view, "");
-    ephy_window_activate_location (window);
-    ephy_web_view_load_homepage (view);
-    is_empty = TRUE;
-  } else if (open_page) {
-    ephy_web_view_load_request (ephy_embed_get_web_view (embed),
-                                request);
-
-    is_empty = ephy_embed_utils_url_is_empty (webkit_uri_request_get_uri (request));
-  } else if (delayed_open_page)
-      ephy_embed_set_delayed_load_request (embed, request);
-
-  /* Make sure the initial focus is somewhere sensible and not, for
-   * example, on the reload button.
-   */
-  if (jump_to) {
-    /* If the location entry is blank, focus that, except if the
-     * page was a copy */
-    if (is_empty) {
-      /* empty page, focus location entry */
-      ephy_window_activate_location (window);
-    } else if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 && embed != NULL &&
-               ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
-      /* non-empty page, focus the page. but make sure the widget is realised first! */
-      gtk_widget_realize (GTK_WIDGET (embed));
-      gtk_widget_grab_focus (GTK_WIDGET (embed));
-    }
   }
 
   if (flags & EPHY_NEW_TAB_PRESENT_WINDOW &&
@@ -781,7 +721,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
  * @shell: a #EphyShell
  * @parent_window: the target #EphyWindow or %NULL
  * @previous_embed: the referrer embed, or %NULL
- * @url: an url to load or %NULL
  *
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
@@ -792,20 +731,11 @@ EphyEmbed *
 ephy_shell_new_tab (EphyShell *shell,
                     EphyWindow *parent_window,
                     EphyEmbed *previous_embed,
-                    const char *url,
                     EphyNewTabFlags flags)
 {
-  EphyEmbed *embed;
-  WebKitURIRequest *request = url ? webkit_uri_request_new (url) : NULL;
-
-  embed = ephy_shell_new_tab_full (shell, NULL, parent_window,
-                                   previous_embed, request, flags,
-                                   0);
-
-  if (request)
-    g_object_unref (request);
-
-  return embed;
+  return ephy_shell_new_tab_full (shell, NULL, parent_window,
+                                  previous_embed, flags,
+                                  0);
 }
 
 /**
@@ -1029,6 +959,15 @@ ephy_shell_close_all_windows (EphyShell *shell)
   return retval;
 }
 
+static gboolean
+tab_is_empty (EphyEmbed *embed)
+{
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+
+  return ((ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view)) &&
+          !ephy_web_view_is_loading (view));
+}
+
 typedef struct {
   EphyShell *shell;
   EphySession *session;
@@ -1038,6 +977,7 @@ typedef struct {
   guint32 user_time;
   EphyEmbed *previous_embed;
   guint current_uri;
+  gboolean reuse_empty_tab;
 } OpenURIsData;
 
 static OpenURIsData *
@@ -1067,8 +1007,9 @@ open_uris_data_new (EphyShell *shell,
   if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
-    data->flags |= EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW | EPHY_NEW_TAB_FROM_EXTERNAL;
+    data->flags |= EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_PRESENT_WINDOW;
     data->window = ephy_shell_get_main_window (shell);
+    data->reuse_empty_tab = TRUE;
   } else if (!have_uris) {
     data->window = ephy_window_new ();
   }
@@ -1091,34 +1032,40 @@ open_uris_data_free (OpenURIsData *data)
 static gboolean
 ephy_shell_open_uris_idle (OpenURIsData *data)
 {
-  EphyEmbed *embed;
-  EphyNewTabFlags page_flags;
+  EphyEmbed *embed = NULL;
+  EphyNewTabFlags page_flags = 0;
+  gboolean reusing_empty_tab = FALSE;
   const char *url;
-  WebKitURIRequest *request = NULL;
-
-  url = data->uris[data->current_uri];
-  if (url[0] == '\0') {
-    page_flags = EPHY_NEW_TAB_HOME_PAGE;
-  } else {
-    page_flags = EPHY_NEW_TAB_OPEN_PAGE;
-    if (data->previous_embed)
-      page_flags |= EPHY_NEW_TAB_APPEND_AFTER;
-    request = webkit_uri_request_new (url);
-  }
 
   if (!data->window)
     data->window = ephy_window_new ();
+  else if (data->previous_embed)
+    page_flags |= EPHY_NEW_TAB_APPEND_AFTER;
+  else if (data->reuse_empty_tab) {
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (data->window));
+    reusing_empty_tab = tab_is_empty (embed);
+  }
 
-  embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-                                   NULL,
-                                   data->window,
-                                   data->previous_embed,
-                                   request,
-                                   data->flags | page_flags,
-                                   data->user_time);
+  if (!reusing_empty_tab) {
+    embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+                                     NULL,
+                                     data->window,
+                                     data->previous_embed,
+                                     data->flags | page_flags,
+                                     data->user_time);
+  }
 
-  if (request)
-    g_object_unref (request);
+  url = data->uris[data->current_uri];
+  if (url[0] != '\0') {
+    ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
+
+    /* When reusing an empty tab, the focus is in the location entry */
+    if (reusing_empty_tab || data->flags & EPHY_NEW_TAB_JUMP)
+      gtk_widget_grab_focus (GTK_WIDGET (embed));
+  } else {
+    ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
+    ephy_window_activate_location (data->window);
+  }
 
   data->current_uri++;
   data->previous_embed = embed;
