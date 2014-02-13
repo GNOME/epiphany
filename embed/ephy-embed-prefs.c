@@ -524,10 +524,11 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_cookie_accept_policy },
   };
 
-void
-ephy_embed_prefs_init (void)
+static gpointer
+ephy_embed_prefs_init (gpointer user_data)
 {
   int i;
+
   web_view_group = webkit_web_view_group_new ("Ephy WebView Group");
   webkit_settings = webkit_web_view_group_get_settings (web_view_group);
 
@@ -591,16 +592,14 @@ ephy_embed_prefs_init (void)
                    EPHY_PREFS_ENABLE_SMOOTH_SCROLLING,
                    webkit_settings, "enable-smooth-scrolling",
                    G_SETTINGS_BIND_GET);
-}
 
-void
-ephy_embed_prefs_shutdown (void)
-{
-  g_object_unref (web_view_group);
+  return web_view_group;
 }
 
 WebKitWebViewGroup *
 ephy_embed_prefs_get_web_view_group (void)
 {
-  return web_view_group;
+  static GOnce once_init = G_ONCE_INIT;
+
+  return g_once (&once_init, ephy_embed_prefs_init, NULL);
 }

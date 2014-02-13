@@ -139,7 +139,6 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv);
 
   ephy_debug_init ();
-  ephy_embed_prefs_init ();
 
   g_test_add_func ("/embed/ephy-web-app-utils/lifetime",
                    test_web_app_lifetime);

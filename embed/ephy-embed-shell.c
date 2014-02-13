@@ -611,8 +611,6 @@ ephy_embed_shell_startup (GApplication* application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
-
-  ephy_embed_prefs_init ();
 }
 
 static void
@@ -639,7 +637,7 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
-  ephy_embed_prefs_shutdown ();
+  g_object_unref (ephy_embed_prefs_get_web_view_group ());
 }
 
 static void
