@@ -1309,7 +1309,10 @@ ephy_session_load_from_stream (EphySession *session,
 	session->priv->dont_save = TRUE;
 
 	task = g_task_new (session, cancellable, callback, user_data);
-	g_task_set_priority (task, G_PRIORITY_HIGH);
+	/* Use a priority lower than drawing events (HIGH_IDLE + 20) to make sure
+	 * the main window is shown as soon as possible at startup
+	 */
+	g_task_set_priority (task, G_PRIORITY_HIGH_IDLE + 30);
 
 	context = session_parser_context_new (session, user_time);
 	parser = g_markup_parse_context_new (&session_parser, 0, context, (GDestroyNotify)session_parser_context_free);
@@ -1451,7 +1454,10 @@ ephy_session_load (EphySession *session,
 	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
 	task = g_task_new (session, cancellable, callback, user_data);
-	g_task_set_priority (task, G_PRIORITY_HIGH);
+	/* Use a priority lower than drawing events (HIGH_IDLE + 20) to make sure
+	 * the main window is shown as soon as possible at startup
+	 */
+	g_task_set_priority (task, G_PRIORITY_HIGH_IDLE + 30);
 
 	save_to_file = get_session_file (filename);
 	data = load_async_data_new (user_time);
