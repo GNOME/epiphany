@@ -78,6 +78,7 @@ void                 ephy_snapshot_service_get_snapshot_for_url_async  (EphySnap
 
 GdkPixbuf           *ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
                                                                         GAsyncResult *result,
+                                                                        gchar **path,
                                                                         GError **error);
 
 void                 ephy_snapshot_service_get_snapshot_async          (EphySnapshotService *service,
@@ -89,6 +90,7 @@ void                 ephy_snapshot_service_get_snapshot_async          (EphySnap
 
 GdkPixbuf           *ephy_snapshot_service_get_snapshot_finish         (EphySnapshotService *service,
                                                                         GAsyncResult *result,
+                                                                        gchar **path,
                                                                         GError **error);
 
 void                 ephy_snapshot_service_save_snapshot_async         (EphySnapshotService *service,
@@ -99,7 +101,7 @@ void                 ephy_snapshot_service_save_snapshot_async         (EphySnap
                                                                         GAsyncReadyCallback callback,
                                                                         gpointer user_data);
 
-gboolean             ephy_snapshot_service_save_snapshot_finish        (EphySnapshotService *service,
+char                *ephy_snapshot_service_save_snapshot_finish        (EphySnapshotService *service,
                                                                         GAsyncResult *result,
                                                                         GError **error);
 

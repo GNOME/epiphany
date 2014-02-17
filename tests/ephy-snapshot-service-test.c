@@ -52,7 +52,7 @@ on_snapshot_ready (GObject *source,
   GError *error = NULL;
 
   pixbuf = ephy_snapshot_service_get_snapshot_finish (EPHY_SNAPSHOT_SERVICE (source),
-                                                      res, &error);
+                                                      res, NULL, &error);
   g_assert (GDK_IS_PIXBUF (pixbuf) || error != NULL);
 
   if (error) {

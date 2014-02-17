@@ -44,6 +44,14 @@ enum
   PROP_ICON_FRAME,
 };
 
+enum {
+  SNAPSHOT_SAVED,
+
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 G_DEFINE_TYPE (EphyOverviewStore, ephy_overview_store, GTK_TYPE_LIST_STORE)
 
 static void
@@ -147,6 +155,16 @@ ephy_overview_store_class_init (EphyOverviewStoreClass *klass)
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+  signals[SNAPSHOT_SAVED] =
+    g_signal_new ("snapshot-saved",
+                  EPHY_TYPE_OVERVIEW_STORE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
+
   g_type_class_add_private (object_class, sizeof(EphyOverviewStorePrivate));
 }
 
@@ -164,6 +182,7 @@ ephy_overview_store_init (EphyOverviewStore *self)
   types[EPHY_OVERVIEW_STORE_SELECTED] = G_TYPE_BOOLEAN;
   types[EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE] = G_TYPE_CANCELLABLE;
   types[EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME] = G_TYPE_INT;
+  types[EPHY_OVERVIEW_STORE_SNAPSHOT_PATH] = G_TYPE_STRING;
 
   gtk_list_store_set_column_types (GTK_LIST_STORE (self),
                                    EPHY_OVERVIEW_STORE_NCOLS, types);
@@ -214,6 +233,7 @@ static void
 ephy_overview_store_set_snapshot_internal (EphyOverviewStore *store,
                                            GtkTreeIter *iter,
                                            GdkPixbuf *snapshot,
+                                           char *path,
                                            int mtime)
 {
   GdkPixbuf *framed;
@@ -222,13 +242,25 @@ ephy_overview_store_set_snapshot_internal (EphyOverviewStore *store,
   gtk_list_store_set (GTK_LIST_STORE (store), iter,
                       EPHY_OVERVIEW_STORE_SNAPSHOT, framed,
                       EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME, mtime,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_PATH, path,
                       -1);
   g_object_unref (framed);
+
+  if (path) {
+    char *url;
+
+    gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+                        EPHY_OVERVIEW_STORE_URI, &url,
+                        -1);
+    g_signal_emit (store, signals[SNAPSHOT_SAVED], 0, url, path);
+    g_free (url);
+  }
 }
 
 typedef struct {
   EphyHistoryURL *url;
   EphyHistoryService *history_service;
+  GtkTreeRowReference *ref;
 } ThumbnailTimeContext;
 
 static void
@@ -236,6 +268,25 @@ on_snapshot_saved_cb (EphySnapshotService *service,
                       GAsyncResult *res,
                       ThumbnailTimeContext *ctx)
 {
+  char *path;
+  GtkTreeModel *model;
+  GtkTreePath *tree_path;
+  GtkTreeIter iter;
+
+  path = ephy_snapshot_service_save_snapshot_finish (service, res, NULL);
+
+  model = gtk_tree_row_reference_get_model (ctx->ref);
+  tree_path = gtk_tree_row_reference_get_path (ctx->ref);
+  gtk_tree_model_get_iter (model, &iter, tree_path);
+  gtk_tree_path_free (tree_path);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                      EPHY_OVERVIEW_STORE_SNAPSHOT_PATH, path,
+                      -1);
+  g_signal_emit (model, signals[SNAPSHOT_SAVED], 0, ctx->url->url, path);
+  g_free (path);
+  gtk_tree_row_reference_free (ctx->ref);
+
   ephy_history_service_set_url_thumbnail_time (ctx->history_service,
                                                ctx->url->url, ctx->url->thumbnail_time,
                                                NULL, NULL, NULL);
@@ -245,7 +296,7 @@ on_snapshot_saved_cb (EphySnapshotService *service,
 
 void
 ephy_overview_store_set_snapshot (EphyOverviewStore *store,
-                                  GtkTreeIter *iter,
+                                  GtkTreeRowReference *ref,
                                   cairo_surface_t *snapshot,
                                   cairo_surface_t *favicon)
 {
@@ -254,11 +305,17 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
   ThumbnailTimeContext *ctx;
   EphySnapshotService *snapshot_service;
   int mtime;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
 
   mtime = time (NULL);
   pixbuf = ephy_snapshot_service_prepare_snapshot (snapshot, favicon);
-  ephy_overview_store_set_snapshot_internal (store, iter, pixbuf, mtime);
-  gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+  ephy_overview_store_set_snapshot_internal (store, &iter, pixbuf, NULL, mtime);
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
                       EPHY_OVERVIEW_STORE_URI, &url,
                       -1);
 
@@ -266,6 +323,7 @@ ephy_overview_store_set_snapshot (EphyOverviewStore *store,
   ctx->url = ephy_history_url_new (url, NULL, 0, 0, 0);
   ctx->url->thumbnail_time = mtime;
   ctx->history_service = store->priv->history_service;
+  ctx->ref = gtk_tree_row_reference_copy (ref);
   g_free (url);
 
   snapshot_service = ephy_snapshot_service_get_default ();
@@ -293,18 +351,19 @@ ephy_overview_store_set_default_icon_internal (EphyOverviewStore *store,
 static void
 set_snapshot (EphyOverviewStore *store,
               GdkPixbuf *snapshot,
+              char *path,
               GtkTreeRowReference *ref,
               time_t timestamp)
 {
-  GtkTreePath *path;
+  GtkTreePath *tree_path;
   GtkTreeIter iter;
 
-  path = gtk_tree_row_reference_get_path (ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
-  gtk_tree_path_free (path);
+  tree_path = gtk_tree_row_reference_get_path (ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, tree_path);
+  gtk_tree_path_free (tree_path);
 
   if (snapshot)
-    ephy_overview_store_set_snapshot_internal (store, &iter, snapshot, timestamp);
+    ephy_overview_store_set_snapshot_internal (store, &iter, snapshot, path, timestamp);
   else
     ephy_overview_store_set_default_icon_internal (store, &iter, store->priv->default_icon);
 
@@ -319,14 +378,16 @@ on_snapshot_retrieved_cb (GObject *object,
                           PeekContext *ctx)
 {
   GdkPixbuf *snapshot;
+  char *path = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_finish (EPHY_SNAPSHOT_SERVICE (object),
-                                                        res, NULL);
+                                                        res, &path, NULL);
 
   set_snapshot (EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ctx->ref)),
-                snapshot, ctx->ref, ctx->timestamp);
+                snapshot, path, ctx->ref, ctx->timestamp);
   if (snapshot)
     g_object_unref (snapshot);
+  g_free (path);
 
   peek_context_free (ctx);
 }
@@ -337,14 +398,16 @@ on_snapshot_retrieved_for_url_cb (GObject *object,
                                   PeekContext *ctx)
 {
   GdkPixbuf *snapshot;
+  char *path = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (EPHY_SNAPSHOT_SERVICE (object),
-                                                                res, NULL);
+                                                                res, &path, NULL);
 
   set_snapshot (EPHY_OVERVIEW_STORE (gtk_tree_row_reference_get_model (ctx->ref)),
-                snapshot, ctx->ref, ctx->timestamp);
+                snapshot, path, ctx->ref, ctx->timestamp);
   if (snapshot)
     g_object_unref (snapshot);
+  g_free (path);
 
   peek_context_free (ctx);
 }

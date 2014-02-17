@@ -59,6 +59,7 @@ enum {
   EPHY_OVERVIEW_STORE_SELECTED,
   EPHY_OVERVIEW_STORE_SNAPSHOT_CANCELLABLE,
   EPHY_OVERVIEW_STORE_SNAPSHOT_MTIME,
+  EPHY_OVERVIEW_STORE_SNAPSHOT_PATH,
   EPHY_OVERVIEW_STORE_NCOLS
 };
 
@@ -97,7 +98,7 @@ gboolean ephy_overview_store_find_url             (EphyOverviewStore *store,
                                                    GtkTreeIter       *iter);
 
 void     ephy_overview_store_set_snapshot         (EphyOverviewStore *store,
-                                                   GtkTreeIter       *iter,
+                                                   GtkTreeRowReference *ref,
                                                    cairo_surface_t   *snapshot,
                                                    cairo_surface_t   *favicon);
 

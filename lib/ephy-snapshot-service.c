@@ -60,6 +60,7 @@ typedef struct {
   time_t mtime;
 
   GdkPixbuf *snapshot;
+  char *path;
 } SnapshotForURLAsyncData;
 
 static SnapshotForURLAsyncData *
@@ -80,6 +81,7 @@ snapshot_for_url_async_data_free (SnapshotForURLAsyncData *data)
 {
   g_free (data->url);
   g_clear_object (&data->snapshot);
+  g_free (data->path);
 
   g_slice_free (SnapshotForURLAsyncData, data);
 }
@@ -90,13 +92,12 @@ get_snapshot_for_url_thread (GSimpleAsyncResult *result,
                              GCancellable *cancellable)
 {
   SnapshotForURLAsyncData *data;
-  gchar *uri;
   GError *error = NULL;
 
   data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
 
-  uri = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
-  if (uri == NULL) {
+  data->path = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
+  if (data->path == NULL) {
     g_simple_async_result_set_error (result,
                                      EPHY_SNAPSHOT_SERVICE_ERROR,
                                      EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
@@ -104,17 +105,15 @@ get_snapshot_for_url_thread (GSimpleAsyncResult *result,
     return;
   }
 
-  data->snapshot = gdk_pixbuf_new_from_file (uri, &error);
+  data->snapshot = gdk_pixbuf_new_from_file (data->path, &error);
   if (data->snapshot == NULL) {
     g_simple_async_result_set_error (result,
                                      EPHY_SNAPSHOT_SERVICE_ERROR,
                                      EPHY_SNAPSHOT_SERVICE_ERROR_INVALID,
                                      "Error creating pixbuf for snapshot file \"%s\": %s",
-                                     uri, error->message);
+                                     data->path, error->message);
     g_error_free (error);
   }
-
-  g_free (uri);
 }
 
 typedef struct {
@@ -123,6 +122,7 @@ typedef struct {
   GCancellable *cancellable;
 
   GdkPixbuf *snapshot;
+  char *path;
 } SnapshotAsyncData;
 
 static SnapshotAsyncData *
@@ -146,6 +146,7 @@ snapshot_async_data_free (SnapshotAsyncData *data)
   g_object_unref (data->web_view);
   g_clear_object (&data->cancellable);
   g_clear_object (&data->snapshot);
+  g_free (data->path);
 
   g_slice_free (SnapshotAsyncData, data);
 }
@@ -155,7 +156,10 @@ snapshot_saved (EphySnapshotService *service,
                 GAsyncResult *result,
                 GSimpleAsyncResult *simple)
 {
-  ephy_snapshot_service_save_snapshot_finish (service, result, NULL);
+  SnapshotAsyncData *data;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
+  data->path = ephy_snapshot_service_save_snapshot_finish (service, result, NULL);
   g_simple_async_result_complete (simple);
   g_object_unref (simple);
 }
@@ -272,6 +276,7 @@ typedef struct {
   GdkPixbuf *snapshot;
   char *url;
   time_t mtime;
+  char *path;
 } SaveSnapshotAsyncData;
 
 static SaveSnapshotAsyncData *
@@ -281,7 +286,7 @@ save_snapshot_async_data_new (GdkPixbuf *snapshot,
 {
   SaveSnapshotAsyncData *data;
 
-  data = g_slice_new (SaveSnapshotAsyncData);
+  data = g_slice_new0 (SaveSnapshotAsyncData);
   data->snapshot = g_object_ref (snapshot);
   data->url = g_strdup (url);
   data->mtime = mtime;
@@ -294,6 +299,7 @@ save_snapshot_async_data_free (SaveSnapshotAsyncData *data)
 {
   g_object_unref (data->snapshot);
   g_free (data->url);
+  g_free (data->path);
 
   g_slice_free (SaveSnapshotAsyncData, data);
 }
@@ -310,6 +316,7 @@ save_snapshot_thread (GSimpleAsyncResult *result,
                                                   data->snapshot,
                                                   data->url,
                                                   data->mtime);
+  data->path = gnome_desktop_thumbnail_path_for_uri (data->url, GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
 }
 
 GQuark
@@ -388,6 +395,7 @@ ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
 GdkPixbuf *
 ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
                                                    GAsyncResult *result,
+                                                   gchar **path,
                                                    GError **error)
 {
   GSimpleAsyncResult *simple;
@@ -406,6 +414,11 @@ ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
 
   data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
 
+  if (path) {
+    *path = data->path;
+    data->path = NULL;
+  }
+
   return data->snapshot ? g_object_ref (data->snapshot) : NULL;
 }
 
@@ -417,7 +430,7 @@ got_snapshot_for_url (EphySnapshotService *service,
   SnapshotAsyncData *data;
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
-  data->snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (service, result, NULL);
+  data->snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (service, result, &data->path, NULL);
   if (data->snapshot) {
     g_simple_async_result_complete (simple);
     g_object_unref (simple);
@@ -488,6 +501,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
 GdkPixbuf *
 ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
                                            GAsyncResult *result,
+                                           gchar **path,
                                            GError **error)
 {
   GSimpleAsyncResult *simple;
@@ -505,6 +519,10 @@ ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
     return NULL;
 
   data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
+  if (path) {
+    *path = data->path;
+    data->path = NULL;
+  }
 
   return data->snapshot ? g_object_ref (data->snapshot) : NULL;
 }
@@ -536,18 +554,28 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
   g_object_unref (result);
 }
 
-gboolean
+char *
 ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
                                             GAsyncResult *result,
                                             GError **error)
 {
+  SaveSnapshotAsyncData *data;
+  char *retval;
+
   g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), FALSE);
   g_return_val_if_fail (g_simple_async_result_is_valid (result,
                                                         G_OBJECT (service),
                                                         ephy_snapshot_service_save_snapshot_async),
                         FALSE);
 
-  return !g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error);
+  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+    return NULL;
+
+  data = (SaveSnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+  retval = data->path;
+  data->path = NULL;
+
+  return retval;
 }
 
 GdkPixbuf *
