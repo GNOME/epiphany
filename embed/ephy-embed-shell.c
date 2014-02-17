@@ -370,11 +370,7 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell,
     webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS);
     break;
   case EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW:
-#ifdef HAVE_WEBKIT_WEB_VIEW_NEW_WITH_RELATED_VIEW
     webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
-#else
-    webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW);
-#endif
     break;
   }
 }

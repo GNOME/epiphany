@@ -733,14 +733,11 @@ ephy_shell_new_tab_full (EphyShell *shell,
   if (active_is_blank == FALSE) {
     GtkWidget *web_view;
 
-#ifdef HAVE_WEBKIT_WEB_VIEW_NEW_WITH_RELATED_VIEW
     if (related_view)
       web_view = ephy_web_view_new_with_related_view (related_view);
     else
       web_view = ephy_web_view_new ();
-#else
-    web_view = ephy_web_view_new ();
-#endif
+
     embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, "web-view", web_view, NULL));
     g_assert (embed != NULL);
     gtk_widget_show (GTK_WIDGET (embed));
