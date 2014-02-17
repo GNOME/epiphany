@@ -40,9 +40,9 @@ static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 struct _EphyToolbarPrivate {
   EphyWindow *window;
+  EphyTitleBox *title_box;
   GtkWidget *entry;
   GtkWidget *navigation_box;
-  GtkWidget *location_box;
   GtkWidget *page_menu_button;
   GtkWidget *new_tab_button;
 };
@@ -91,7 +91,6 @@ sync_chromes_visibility (EphyToolbar *toolbar)
   chrome = ephy_window_get_chrome (priv->window);
 
   gtk_widget_set_visible (priv->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
-  gtk_widget_set_visible (priv->location_box, chrome & EPHY_WINDOW_CHROME_LOCATION);
   gtk_widget_set_visible (priv->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
   gtk_widget_set_visible (priv->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
@@ -102,9 +101,7 @@ ephy_toolbar_constructed (GObject *object)
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkWidget *toolbar, *box, *button, *reload, *label;
-  GtkStyleContext *context;
-  GtkSizeGroup *size;
+  GtkWidget *toolbar, *box, *button;
   EphyEmbedShellMode mode;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
@@ -154,49 +151,11 @@ ephy_toolbar_constructed (GObject *object)
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
 
-  /* Location and Reload/Stop */
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  priv->location_box = box;
-  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
-
-  /* Location */
-  priv->entry = ephy_location_entry_new ();
-  gtk_box_pack_start (GTK_BOX (box), priv->entry, TRUE, TRUE, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box),
-                               "location-entry");
-
-  /* Reload/Stop */
-  reload = gtk_button_new ();
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (reload), gtk_image_new ());
-  gtk_widget_set_valign (reload, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (reload),
-                                      action);
-
-
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
-  {
-    gtk_container_add (GTK_CONTAINER (box), reload);
-
-    /* Create a GtkSizeGroup to sync the height of the location entry, and
-     * the stop/reload button. */
-    size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-
-    gtk_size_group_add_widget (size, reload);
-    gtk_size_group_add_widget (size, priv->entry);
-    g_object_unref (size);
-
-    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), box);
-    gtk_widget_set_margin_start (box, 27);
-    gtk_widget_set_margin_end (box, 27);
-    gtk_widget_show_all (box);
-  }
-  else
-  {
-    gtk_container_add (GTK_CONTAINER (toolbar), box);
-  }
+  /* Location bar + Title */
+  priv->title_box = ephy_title_box_new (priv->window);
+  priv->entry = ephy_title_box_get_location_entry (priv->title_box);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), GTK_WIDGET (priv->title_box));
+  gtk_widget_show (GTK_WIDGET (priv->title_box));
 
   /* Page Menu */
   button = gtk_button_new ();
@@ -224,27 +183,19 @@ ephy_toolbar_constructed (GObject *object)
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
 
-  /* Add title only in application mode. */
+  /* Reload/Stop for web application. */
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
   {
-    /* The title of the window in web application - need
-     * settings of padding same the location entry. */
-    label = gtk_label_new (NULL);
-    context = gtk_widget_get_style_context (label);
-    gtk_style_context_add_class (context, "title");
-    gtk_style_context_add_class (context, "dim-label");
-    gtk_label_set_line_wrap (GTK_LABEL (label), FALSE);
-    gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-    gtk_widget_set_size_request (label, 530, -1);
-    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), label);
-
-    g_object_bind_property (label, "label",
-                            priv->window, "title",
-                            G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-
-    /* Reload/Stop for web application. */
-    gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), reload);
+    button = gtk_button_new ();
+    /* FIXME: apparently we need an image inside the button for the action
+     * icon to appear. */
+    gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
+    gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+                                        action);
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+    gtk_widget_show (button);
   }
 }
 
@@ -292,4 +243,10 @@ GtkWidget *
 ephy_toolbar_get_location_entry (EphyToolbar *toolbar)
 {
   return toolbar->priv->entry;
+}
+
+EphyTitleBox *
+ephy_toolbar_get_title_box (EphyToolbar *toolbar)
+{
+  return toolbar->priv->title_box;
 }

@@ -27,6 +27,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-title-box.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS
@@ -58,6 +59,8 @@ GType      ephy_toolbar_get_type (void) G_GNUC_CONST;
 GtkWidget *ephy_toolbar_new      (EphyWindow *window);
 
 GtkWidget *ephy_toolbar_get_location_entry (EphyToolbar *toolbar);
+
+EphyTitleBox *ephy_toolbar_get_title_box (EphyToolbar *toolbar);
 
 G_END_DECLS
 

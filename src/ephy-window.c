@@ -50,6 +50,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-title-box.h"
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-app-utils.h"
@@ -706,13 +707,14 @@ _ephy_window_set_security_state (EphyWindow *window,
 				 EphyLocationLockState state)
 {
 	EphyWindowPrivate *priv = window->priv;
+	EphyTitleBox *title_box;
+
+	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar));
 
 	priv->show_lock = show_lock != FALSE;
 
-	g_object_set (priv->location_controller,
-		      "lock-state", state,
-		      "show-lock", priv->show_lock,
-		      NULL);
+	ephy_title_box_set_lock_state (title_box, state);
+	ephy_title_box_set_show_lock (title_box, priv->show_lock);
 }
 
 static void
@@ -2793,6 +2795,9 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
 	/* update new tab */
 	ephy_window_set_active_tab (window, embed);
+
+	ephy_title_box_set_web_view (ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar)),
+				     EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 static GtkNotebook *
@@ -3618,6 +3623,9 @@ ephy_window_activate_location (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *entry;
+
+	ephy_title_box_set_mode (ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar)),
+				 EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
 	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
 	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
