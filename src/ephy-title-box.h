@@ -43,7 +43,6 @@ typedef struct _EphyTitleBoxClass EphyTitleBoxClass;
 
 typedef enum
 {
-  EPHY_TITLE_BOX_MODE_NONE,
   EPHY_TITLE_BOX_MODE_LOCATION_ENTRY,
   EPHY_TITLE_BOX_MODE_TITLE
 } EphyTitleBoxMode;

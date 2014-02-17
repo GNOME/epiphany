@@ -59,6 +59,7 @@ typedef struct
   GBinding *title_binding;
   GBinding *uri_binding;
 
+  guint location_disabled;
   guint button_down : 1;
   guint switch_to_entry_timeout_id;
 
@@ -226,9 +227,25 @@ ephy_title_box_add_title_bar (EphyTitleBox *title_box)
 }
 
 static void
+sync_chromes_visibility (EphyTitleBox *title_box)
+{
+  EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
+  EphyWindowChrome     chrome;
+
+  chrome = ephy_window_get_chrome (priv->window);
+  priv->location_disabled = !(chrome & EPHY_WINDOW_CHROME_LOCATION);
+
+  if (priv->location_disabled)
+    ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_TITLE);
+}
+
+
+static void
 ephy_title_box_constructed (GObject *object)
 {
-  EphyTitleBox *title_box = EPHY_TITLE_BOX (object);
+  EphyTitleBox        *title_box = EPHY_TITLE_BOX (object);
+  EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
+  EphyWindowChrome     chrome;
 
   LOG ("EphyTitleBox constructed");
 
@@ -241,6 +258,20 @@ ephy_title_box_constructed (GObject *object)
 
   ephy_title_box_add_address_bar (title_box);
   ephy_title_box_add_title_bar (title_box);
+
+  chrome = ephy_window_get_chrome (priv->window);
+  priv->location_disabled = !(chrome & EPHY_WINDOW_CHROME_LOCATION);
+  if (priv->location_disabled) {
+    priv->mode = EPHY_TITLE_BOX_MODE_TITLE;
+    gtk_stack_set_visible_child_name (GTK_STACK (title_box), "title-bar");
+  } else {
+    priv->mode = EPHY_TITLE_BOX_MODE_LOCATION_ENTRY;
+    gtk_stack_set_visible_child_name (GTK_STACK (title_box), "address-bar");
+  }
+
+  g_signal_connect_swapped (priv->window, "notify::chrome",
+                            G_CALLBACK (sync_chromes_visibility),
+                            title_box);
 }
 
 static gboolean
@@ -324,14 +355,10 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (widget);
   EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
-  EphyEmbedShellMode   mode;
 
   if (priv->mode != EPHY_TITLE_BOX_MODE_TITLE
-      || event->button != GDK_BUTTON_PRIMARY)
-    return GDK_EVENT_PROPAGATE;
-
-  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+      || event->button != GDK_BUTTON_PRIMARY
+      || priv->location_disabled)
     return GDK_EVENT_PROPAGATE;
 
   LOG ("button-press-event title-box %p event %p", title_box, event);
@@ -409,9 +436,8 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
                                                     "Mode",
                                                     "The mode of the title box",
                                                     EPHY_TYPE_TITLE_BOX_MODE,
-                                                    EPHY_TITLE_BOX_MODE_NONE,
+                                                    EPHY_TITLE_BOX_MODE_LOCATION_ENTRY,
                                                     G_PARAM_READWRITE |
-                                                    G_PARAM_CONSTRUCT |
                                                     G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class,
@@ -501,7 +527,6 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
                              WebKitWebView *web_view)
 {
   EphyTitleBoxPrivate *priv;
-  EphyEmbedShellMode   mode;
   const gchar         *title;
 
   g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
@@ -513,19 +538,15 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
 
   LOG ("ephy_title_box_set_web_view title-box %p web_view %p", title_box, web_view);
 
-  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-
   if (priv->web_view != NULL) {
-    if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-      g_signal_handlers_disconnect_by_func (priv->entry,
-                                            G_CALLBACK (ephy_title_box_entry_key_press_cb),
-                                            title_box);
-      g_signal_handlers_disconnect_by_func (priv->web_view,
-                                            G_CALLBACK (ephy_title_box_view_focus_in_cb),
-                                            title_box);
-      if (priv->title_sig_id > 0)
-        g_signal_handler_disconnect (priv->web_view, priv->title_sig_id);
-    }
+    g_signal_handlers_disconnect_by_func (priv->entry,
+                                          G_CALLBACK (ephy_title_box_entry_key_press_cb),
+                                          title_box);
+    g_signal_handlers_disconnect_by_func (priv->web_view,
+                                          G_CALLBACK (ephy_title_box_view_focus_in_cb),
+                                          title_box);
+    if (priv->title_sig_id > 0)
+      g_signal_handler_disconnect (priv->web_view, priv->title_sig_id);
 
     g_clear_object (&priv->title_binding);
     g_clear_object (&priv->uri_binding);
@@ -555,15 +576,13 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
                                                    ephy_title_box_transform_uri_to_label,
                                                    NULL, NULL, NULL);
 
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    priv->title_sig_id = g_signal_connect (priv->web_view, "notify::title",
-                                           G_CALLBACK (ephy_title_box_title_changed_cb),
-                                           title_box);
-    g_signal_connect (priv->entry, "key-press-event",
-                      G_CALLBACK (ephy_title_box_entry_key_press_cb), title_box);
-    g_signal_connect (priv->web_view, "focus-in-event",
-                      G_CALLBACK (ephy_title_box_view_focus_in_cb), title_box);
-  }
+  priv->title_sig_id = g_signal_connect (priv->web_view, "notify::title",
+                                         G_CALLBACK (ephy_title_box_title_changed_cb),
+                                         title_box);
+  g_signal_connect (priv->entry, "key-press-event",
+                    G_CALLBACK (ephy_title_box_entry_key_press_cb), title_box);
+  g_signal_connect (priv->web_view, "focus-in-event",
+                    G_CALLBACK (ephy_title_box_view_focus_in_cb), title_box);
 }
 
 /**
@@ -579,7 +598,7 @@ ephy_title_box_get_mode (EphyTitleBox *title_box)
 {
   EphyTitleBoxPrivate *priv;
 
-  g_return_val_if_fail (EPHY_IS_TITLE_BOX (title_box), EPHY_TITLE_BOX_MODE_NONE);
+  g_return_val_if_fail (EPHY_IS_TITLE_BOX (title_box), EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
   priv = ephy_title_box_get_instance_private (title_box);
 
@@ -598,27 +617,22 @@ ephy_title_box_set_mode (EphyTitleBox    *title_box,
                          EphyTitleBoxMode mode)
 {
   EphyTitleBoxPrivate *priv;
-  EphyEmbedShellMode   shell_mode;
-  const gchar         *uri;
 
   g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
 
-  if (mode == EPHY_TITLE_BOX_MODE_NONE)
-    return;
-
   priv = ephy_title_box_get_instance_private (title_box);
-  shell_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-
-  uri = priv->web_view ? webkit_web_view_get_uri (priv->web_view) : NULL;
 
   ephy_title_box_cancel_switch_to_entry_after_double_click_time (title_box);
 
-  if (!uri || g_str_has_prefix (uri, "about:") ||
-      g_str_has_prefix (uri, "ephy-about:")) {
-    mode = EPHY_TITLE_BOX_MODE_LOCATION_ENTRY;
-  }
+  if (!priv->location_disabled) {
+    const gchar *uri;
 
-  if (shell_mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    uri = priv->web_view ? webkit_web_view_get_uri (priv->web_view) : NULL;
+    if (!uri || g_str_has_prefix (uri, "about:") ||
+        g_str_has_prefix (uri, "ephy-about:")) {
+      mode = EPHY_TITLE_BOX_MODE_LOCATION_ENTRY;
+    }
+  } else
     mode = EPHY_TITLE_BOX_MODE_TITLE;
 
   if (priv->mode == mode)

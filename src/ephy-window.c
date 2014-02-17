@@ -3585,6 +3585,9 @@ ephy_window_activate_location (EphyWindow *window)
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *entry;
 
+	if (!(priv->chrome & EPHY_WINDOW_CHROME_LOCATION))
+		return;
+
 	ephy_title_box_set_mode (ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar)),
 				 EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
