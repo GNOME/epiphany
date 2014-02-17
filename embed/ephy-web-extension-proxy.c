@@ -22,6 +22,7 @@
 #include "ephy-web-extension-proxy.h"
 
 #include "ephy-web-extension.h"
+#include "ephy-history-service.h"
 
 struct _EphyWebExtensionProxyPrivate
 {
@@ -397,4 +398,99 @@ ephy_web_extension_proxy_get_web_app_title_finish (EphyWebExtensionProxy *web_ex
   g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
 
   return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+void
+ephy_web_extension_proxy_history_set_urls (EphyWebExtensionProxy *web_extension,
+                                           GList *urls)
+{
+  GList *l;
+  GVariantBuilder builder;
+
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ss)"));
+  for (l = urls; l; l = g_list_next (l)) {
+    EphyHistoryURL *url = (EphyHistoryURL *)l->data;
+
+    g_variant_builder_add (&builder, "(ss)", url->url, url->title);
+  }
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistorySetURLs",
+                     g_variant_new ("(@a(ss))", g_variant_builder_end (&builder)),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_history_set_url_thumbnail (EphyWebExtensionProxy *web_extension,
+                                                    const char *url,
+                                                    const char *path)
+{
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistorySetURLThumbnail",
+                     g_variant_new ("(ss)", url, path),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_history_set_url_title (EphyWebExtensionProxy *web_extension,
+                                                const char *url,
+                                                const char *title)
+{
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistorySetURLTitle",
+                     g_variant_new ("(ss)", url, title),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_history_delete_url (EphyWebExtensionProxy *web_extension,
+                                             const char *url)
+{
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistoryDeleteURL",
+                     g_variant_new ("(s)", url),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_history_delete_host (EphyWebExtensionProxy *web_extension,
+                                              const char *host)
+{
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistoryDeleteHost",
+                     g_variant_new ("(s)", host),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_history_clear (EphyWebExtensionProxy *web_extension)
+{
+  if (!web_extension->priv->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->priv->proxy,
+                     "HistoryClear",
+                     NULL,
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, NULL, NULL, NULL);
 }

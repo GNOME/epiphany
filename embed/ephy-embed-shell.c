@@ -212,6 +212,117 @@ ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
   g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
 }
 
+static void
+history_service_query_urls_cb (EphyHistoryService *service,
+                               gboolean success,
+                               GList *urls,
+                               EphyEmbedShell *shell)
+{
+  GList *l;
+
+  if (!success)
+    return;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_set_urls (web_extension, urls);
+  }
+}
+
+static void
+history_service_urls_visited_cb (EphyHistoryService *history,
+                                 EphyEmbedShell *shell)
+{
+  EphyHistoryQuery *query;
+
+  query = ephy_history_query_new ();
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
+  query->limit = ephy_frecent_store_get_history_length (ephy_embed_shell_get_frecent_store (shell));
+  query->ignore_hidden = TRUE;
+
+  ephy_history_service_query_urls (history, query, NULL,
+                                   (EphyHistoryJobCallback) history_service_query_urls_cb,
+                                   shell);
+  ephy_history_query_free (query);
+}
+
+static void
+history_service_url_title_changed_cb (EphyHistoryService *service,
+                                      const char *url,
+                                      const char *title,
+                                      EphyEmbedShell *shell)
+{
+  GList *l;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_set_url_title (web_extension, url, title);
+  }
+}
+
+static void
+history_service_url_deleted_cb (EphyHistoryService *service,
+                                const char *url,
+                                EphyEmbedShell *shell)
+{
+  GList *l;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_delete_url (web_extension, url);
+  }
+}
+
+static void
+history_service_host_deleted_cb (EphyHistoryService *service,
+                                 const char *deleted_url,
+                                 EphyEmbedShell *shell)
+{
+  GList *l;
+  SoupURI *deleted_uri;
+
+  deleted_uri = soup_uri_new (deleted_url);
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_delete_host (web_extension, soup_uri_get_host (deleted_uri));
+  }
+
+  soup_uri_free (deleted_uri);
+}
+
+static void
+history_service_cleared_cb (EphyHistoryService *service,
+                            EphyEmbedShell *shell)
+{
+  GList *l;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_clear (web_extension);
+  }
+}
+
+static void
+frecent_store_snapshot_saved_cb (EphyOverviewStore *store,
+                                 const char *url,
+                                 const char *path,
+                                 EphyEmbedShell *shell)
+{
+  GList *l;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_set_url_thumbnail (web_extension, url, path);
+  }
+}
+
 /**
  * ephy_embed_shell_get_global_history_service:
  * @shell: the #EphyEmbedShell
@@ -230,6 +341,24 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     shell->priv->global_history_service = ephy_history_service_new (filename, FALSE);
     g_free (filename);
     g_return_val_if_fail (shell->priv->global_history_service, NULL);
+    g_signal_connect (shell->priv->global_history_service, "urls-visited",
+                      G_CALLBACK (history_service_urls_visited_cb),
+                      shell);
+    g_signal_connect (shell->priv->global_history_service, "url-title-changed",
+                      G_CALLBACK (history_service_url_title_changed_cb),
+                      shell);
+    g_signal_connect (shell->priv->global_history_service, "url-deleted",
+                      G_CALLBACK (history_service_url_deleted_cb),
+                      shell);
+    g_signal_connect (shell->priv->global_history_service, "host-deleted",
+                      G_CALLBACK (history_service_host_deleted_cb),
+                      shell);
+    g_signal_connect (shell->priv->global_history_service, "cleared",
+                      G_CALLBACK (history_service_cleared_cb),
+                      shell);
+    g_signal_connect (ephy_embed_shell_get_frecent_store (shell), "snapshot-saved",
+                      G_CALLBACK (frecent_store_snapshot_saved_cb),
+                      shell);
   }
 
   return G_OBJECT (shell->priv->global_history_service);

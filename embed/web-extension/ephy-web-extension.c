@@ -30,6 +30,7 @@
 #include "ephy-web-dom-utils.h"
 #include "ephy-uri-helpers.h"
 #include "uri-tester.h"
+#include "ephy-web-overview.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -43,6 +44,7 @@ static UriTester *uri_tester;
 static EphyFormAuthDataCache *form_auth_data_cache;
 static GDBusConnection *dbus_connection;
 static GArray *page_created_signals_pending;
+static EphyWebOverviewModel *overview_model;
 
 static const char introspection_xml[] =
   "<node>"
@@ -78,6 +80,24 @@ static const char introspection_xml[] =
   "   <arg type='u' name='request_id' direction='in'/>"
   "   <arg type='b' name='should_store' direction='in'/>"
   "  </method>"
+  "  <method name='HistorySetURLs'>"
+  "   <arg type='a(ss)' name='urls' direction='in'/>"
+  "  </method>"
+  "  <method name='HistorySetURLThumbnail'>"
+  "   <arg type='s' name='url' direction='in'/>"
+  "   <arg type='s' name='path' direction='in'/>"
+  "  </method>"
+  "  <method name='HistorySetURLTitle'>"
+  "   <arg type='s' name='url' direction='in'/>"
+  "   <arg type='s' name='title' direction='in'/>"
+  "  </method>"
+  "  <method name='HistoryDeleteURL'>"
+  "   <arg type='s' name='url' direction='in'/>"
+  "  </method>"
+  "  <method name='HistoryDeleteHost'>"
+  "   <arg type='s' name='host' direction='in'/>"
+  "  </method>"
+  "  <method name='HistoryClear'/>"
   " </interface>"
   "</node>";
 
@@ -255,7 +275,8 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 }
 
 static void
-remove_from_overview_emit_signal (char *url)
+overview_item_removed (EphyWebOverview *overview,
+                       const char *url)
 {
   GError *error = NULL;
 
@@ -1041,12 +1062,12 @@ web_page_created_callback (WebKitWebExtension *extension,
   else
     queue_page_created_signal_emission (page_id);
 
-  g_signal_connect_object (web_page, "send-request",
-                           G_CALLBACK (web_page_send_request),
-                           NULL, 0);
-  g_signal_connect_object (web_page, "document-loaded",
-                           G_CALLBACK (web_page_document_loaded),
-                           NULL, 0);
+  g_signal_connect (web_page, "send-request",
+                    G_CALLBACK (web_page_send_request),
+                    NULL);
+  g_signal_connect (web_page, "document-loaded",
+                    G_CALLBACK (web_page_document_loaded),
+                    NULL);
 }
 
 static WebKitWebPage *
@@ -1147,8 +1168,63 @@ handle_method_call (GDBusConnection *connection,
     if (should_store)
       store_password (form_auth);
     g_hash_table_remove (requests, GINT_TO_POINTER (request_id));
-  }
+  } else if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
+    if (overview_model) {
+      GVariantIter iter;
+      GVariant *array;
+      const char *url;
+      const char *title;
+      GList *items = NULL;
 
+      g_variant_get (parameters, "(@a(ss))", &array);
+      g_variant_iter_init (&iter, array);
+
+      while (g_variant_iter_loop (&iter, "(&s&s)", &url, &title))
+        items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
+      g_variant_unref (array);
+
+      ephy_web_overview_model_set_urls (overview_model, g_list_reverse (items));
+    }
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "HistorySetURLThumbnail") == 0) {
+    if (overview_model) {
+      const char *url;
+      const char *path;
+
+      g_variant_get (parameters, "(&s&s)", &url, &path);
+      ephy_web_overview_model_set_url_thumbnail (overview_model, url, path);
+    }
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "HistorySetURLTitle") == 0) {
+    if (overview_model) {
+      const char *url;
+      const char *title;
+
+      g_variant_get (parameters, "(&s&s)", &url, &title);
+      ephy_web_overview_model_set_url_title (overview_model, url, title);
+    }
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "HistoryDeleteURL") == 0) {
+    if (overview_model) {
+      const char *url;
+
+      g_variant_get (parameters, "(&s)", &url);
+      ephy_web_overview_model_delete_url (overview_model, url);
+    }
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "HistoryDeleteHost") == 0) {
+    if (overview_model) {
+      const char *host;
+
+      g_variant_get (parameters, "(&s)", &host);
+      ephy_web_overview_model_delete_host (overview_model, host);
+    }
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "HistoryClear") == 0) {
+    if (overview_model)
+      ephy_web_overview_model_clear (overview_model);
+    g_dbus_method_invocation_return_value (invocation, NULL);
+  }
 }
 
 static const GDBusInterfaceVTable interface_vtable = {
@@ -1186,59 +1262,6 @@ bus_acquired_cb (GDBusConnection *connection,
   }
 }
 
-
-static JSValueRef
-remove_from_overview_cb (JSContextRef context,
-                         JSObjectRef function,
-                         JSObjectRef this_object,
-                         size_t argument_count,
-                         const JSValueRef arguments[],
-                         JSValueRef *exception)
-{
-  JSStringRef result_string_js;
-  size_t max_size;
-  char *result_string;
-
-  result_string_js = JSValueToStringCopy (context, arguments[0], NULL);
-  max_size = JSStringGetMaximumUTF8CStringSize (result_string_js);
-
-  result_string = g_malloc (max_size);
-  JSStringGetUTF8CString (result_string_js, result_string, max_size);
-  remove_from_overview_emit_signal (result_string);
-
-  JSStringRelease (result_string_js);
-  g_free (result_string);
-
-  return JSValueMakeUndefined (context);
-}
-
-static const JSStaticFunction overview_staticfuncs[] =
-{
-  { "removeItemFromOverview", remove_from_overview_cb, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete },
-  { NULL, NULL, 0 }
-};
-
-static const JSClassDefinition overview_notification_def =
-{
-  0,                     /* version */
-  kJSClassAttributeNone, /* attributes */
-  "Overview",            /* className */
-  NULL,                  /* parentClass */
-  NULL,                  /* staticValues */
-  overview_staticfuncs,  /* staticFunctions */
-  NULL,                  /* initialize */
-  NULL,                  /* finalize */
-  NULL,                  /* hasProperty */
-  NULL,                  /* getProperty */
-  NULL,                  /* setProperty */
-  NULL,                  /* deleteProperty */
-  NULL,                  /* getPropertyNames */
-  NULL,                  /* callAsFunction */
-  NULL,                  /* callAsConstructor */
-  NULL,                  /* hasInstance */
-  NULL                   /* convertToType */
-};
-
 static void
 window_object_cleared_cb (WebKitScriptWorld *world,
                           WebKitWebPage     *web_page,
@@ -1246,18 +1269,17 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                           gpointer           user_data)
 {
   JSGlobalContextRef context;
-  JSObjectRef global_object;
-  JSClassRef class_def;
-  JSObjectRef class_object;
-  JSStringRef str;
+  EphyWebOverview *overview;
 
+  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") != 0)
+    return;
+
+  overview = ephy_web_overview_new (web_page, overview_model);
+  g_signal_connect (overview, "item-removed",
+                    G_CALLBACK (overview_item_removed),
+                    NULL);
   context = webkit_frame_get_javascript_context_for_script_world (frame, world);
-  global_object = JSContextGetGlobalObject (context);
-
-  class_def = JSClassCreate (&overview_notification_def);
-  class_object = JSObjectMake (context, class_def, context);
-  str = JSStringCreateWithUTF8CString ("Overview");
-  JSObjectSetProperty (context, global_object, str, class_object, kJSPropertyAttributeNone, NULL);
+  ephy_web_overview_init_js (overview, context);
 }
 
 G_MODULE_EXPORT void
@@ -1279,6 +1301,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
 
   ephy_debug_init ();
   uri_tester = uri_tester_new (dot_dir);
+  overview_model = ephy_web_overview_model_new ();
   if (!private_profile)
     form_auth_data_cache = ephy_form_auth_data_cache_new ();
 

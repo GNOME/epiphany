@@ -8,6 +8,10 @@ libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.h \
 	ephy-web-extension.c \
 	ephy-web-extension.h \
+	ephy-web-overview.h \
+	ephy-web-overview.c \
+	ephy-web-overview-model.h \
+	ephy-web-overview-model.c \
 	$(top_srcdir)/embed/uri-tester.c \
 	$(top_srcdir)/embed/uri-tester.h \
 	$(top_srcdir)/lib/ephy-debug.c \

@@ -94,6 +94,19 @@ void                   ephy_web_extension_proxy_get_web_app_title               
 char                  *ephy_web_extension_proxy_get_web_app_title_finish                  (EphyWebExtensionProxy *web_extension,
                                                                                            GAsyncResult          *result,
                                                                                            GError               **error);
+void                   ephy_web_extension_proxy_history_set_urls                          (EphyWebExtensionProxy *web_extension,
+                                                                                           GList                 *urls);
+void                   ephy_web_extension_proxy_history_set_url_thumbnail                 (EphyWebExtensionProxy *web_extension,
+                                                                                           const char            *url,
+                                                                                           const char            *path);
+void                   ephy_web_extension_proxy_history_set_url_title                     (EphyWebExtensionProxy *web_extension,
+                                                                                           const char            *url,
+                                                                                           const char            *title);
+void                   ephy_web_extension_proxy_history_delete_url                        (EphyWebExtensionProxy *web_extension,
+                                                                                           const char            *url);
+void                   ephy_web_extension_proxy_history_delete_host                       (EphyWebExtensionProxy *web_extension,
+                                                                                           const char            *host);
+void                   ephy_web_extension_proxy_history_clear                             (EphyWebExtensionProxy *web_extension);
 
 G_END_DECLS
 
