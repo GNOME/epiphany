@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-embed-form-auth.h"
+#include "ephy-file-helpers.h"
 #include "ephy-form-auth-data.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -33,6 +34,7 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
+#include <string.h>
 #include <webkit2/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
 
@@ -90,6 +92,18 @@ web_page_send_request (WebKitWebPage *web_page,
   const char *page_uri;
 
   request_uri = webkit_uri_request_get_uri (request);
+
+  if (g_str_has_prefix (request_uri, "ephy-about:/")) {
+    char *about_resource;
+
+    /* Ideally we should use resource:// uris directly in about pages, but in multiprocess mode the
+     * Network Process doesn't have access to the resources compiled in the Web Process */
+    about_resource = g_filename_to_uri (ephy_file (request_uri + strlen ("ephy-about:/")), NULL, NULL);
+    webkit_uri_request_set_uri (request, about_resource);
+    g_free (about_resource);
+
+    return FALSE;
+  }
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers;
@@ -1254,8 +1268,14 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
   const char *extension_id;
   const char *dot_dir;
   gboolean private_profile;
+  GError *error = NULL;
 
   g_variant_get (user_data, "(&s&sb)", &extension_id, &dot_dir, &private_profile);
+
+  if (!ephy_file_helpers_init (dot_dir, 0, &error)) {
+    g_printerr ("Failed to initialize file helpers: %s\n", error->message);
+    g_error_free (error);
+  }
 
   ephy_debug_init ();
   uri_tester = uri_tester_new (dot_dir);

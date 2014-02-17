@@ -434,10 +434,9 @@ ephy_about_handler_generate_overview_html (EphyOverviewStore *store)
 {
   GtkTreeIter iter;
   GString *data_str;
-  char *row_url, *row_title, *row_snapshot_base64;
-  GdkPixbuf *row_snapshot;
-  guchar *buffer;
-  gsize buffersize;
+  char *row_url, *row_title;
+  char *row_snapshot;
+  char *thumbnail_style;
   gboolean valid;
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
@@ -447,27 +446,26 @@ ephy_about_handler_generate_overview_html (EphyOverviewStore *store)
     gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
       EPHY_OVERVIEW_STORE_URI, &row_url,
       EPHY_OVERVIEW_STORE_TITLE, &row_title,
-      EPHY_OVERVIEW_STORE_SNAPSHOT, &row_snapshot,
+      EPHY_OVERVIEW_STORE_SNAPSHOT_PATH, &row_snapshot,
       -1);
 
-    /* FIXME: use a more efficient way to get the base64 snapshot */
-    gdk_pixbuf_save_to_buffer (row_snapshot, (gchar **) &buffer, &buffersize, "png", NULL, NULL);
-    row_snapshot_base64 = g_base64_encode (buffer, buffersize);
-    g_free (buffer);
+    thumbnail_style = row_snapshot ? g_strdup_printf (" style=\"background: url(ephy-about:/thumbnail-frame.png), url(file://%s) no-repeat 10px 9px;\"", row_snapshot) : NULL;
+    g_free (row_snapshot);
 
     g_string_append_printf (data_str,
       "<li>" \
       "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">" \
       "    <div class=\"close-button\" onclick=\"removeFromOverview(this.parentNode,event)\" title=\"%s\">&#10006;</div>" \
-      "    <span class=\"thumbnail\" style=\"background-image: url(data:image/png;base64,%s);\"></span>" \
+      "    <span class=\"thumbnail\"%s></span>" \
       "    <span class=\"title\">%s</span>" \
       "  </a>" \
       "</li>",
-      g_markup_escape_text (row_title,-1), row_url, _("Remove from overview"),row_snapshot_base64, row_title);
+      g_markup_escape_text (row_title,-1), row_url, _("Remove from overview"),
+                            thumbnail_style ? thumbnail_style : "", row_title);
 
     g_free (row_title);
     g_free (row_url);
-    g_free (row_snapshot_base64);
+    g_free (thumbnail_style);
 
     valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
   }

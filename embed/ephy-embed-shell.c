@@ -445,6 +445,10 @@ ephy_embed_shell_startup (GApplication* application)
                                           (WebKitURISchemeRequestCallback)about_request_cb,
                                           shell, NULL);
 
+  /* Register about scheme as local so that it can contain file resources */
+  webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (web_context),
+                                                        EPHY_ABOUT_SCHEME);
+
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (web_context);
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);

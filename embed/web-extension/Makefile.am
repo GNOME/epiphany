@@ -12,6 +12,8 @@ libephywebextension_la_SOURCES = \
 	$(top_srcdir)/embed/uri-tester.h \
 	$(top_srcdir)/lib/ephy-debug.c \
 	$(top_srcdir)/lib/ephy-debug.h \
+	$(top_srcdir)/lib/ephy-file-helpers.c \
+	$(top_srcdir)/lib/ephy-file-helpers.h \
 	$(top_srcdir)/lib/ephy-form-auth-data.c \
 	$(top_srcdir)/lib/ephy-form-auth-data.h \
 	$(top_srcdir)/lib/ephy-settings.c \
@@ -29,6 +31,8 @@ libephywebextension_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephywebextension_la_CFLAGS = \
+	-DSHARE_DIR=\"$(pkgdatadir)\" \
+	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\" \
 	$(WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_LIBADD = \
