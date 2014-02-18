@@ -496,7 +496,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
                    g_bytes_get_data (html_file, NULL),
                    lang, lang,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
-                   _("Most visited"),
+                   _("Most Visited"),
                    data_str->str);
 
   data_length = html->len;
