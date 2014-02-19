@@ -87,23 +87,31 @@ main (int argc, char *argv[])
 {
   int ret;
   const char *xdg_data_dirs;
+  char *new_xdg_data_dirs;
   char **dirs = NULL;
   char *schemas_dir;
 
-  /* Save XDG_DATA_DIRS to set GSETTINGS_SCHEME_DIR, otherwise we
+  /* Save XDG_DATA_DIRS to set GSETTINGS_SCHEMA_DIR, otherwise we
    * won't find the sytem schemas. */
   xdg_data_dirs = g_getenv ("XDG_DATA_DIRS");
-  if (xdg_data_dirs)
-    dirs = g_strsplit (xdg_data_dirs, ":", -1);
+  if (!xdg_data_dirs)
+    xdg_data_dirs = "/usr/local/share/:/usr/share/";
+
+  dirs = g_strsplit (xdg_data_dirs, ":", -1);
 
   /* We can only use one directory, so use the first one or the system default. */
-  schemas_dir = g_build_filename (dirs ? dirs[0] : "/usr/share", "glib-2.0", "schemas", NULL);
+  schemas_dir = g_build_filename (dirs[0], "glib-2.0", "schemas", NULL);
   g_setenv ("GSETTINGS_SCHEMA_DIR", schemas_dir, TRUE);
   g_strfreev (dirs);
   g_free (schemas_dir);
 
-  g_setenv ("XDG_DATA_DIRS", TEST_DIR, TRUE);
+  /* We need to make sure that XDG_DATA_DIRS includes a sensible
+     directory where to find the mimetype database, otherwise bad
+     stuff will happen. Prefix TEST_DIR for the test purposes. */
+  new_xdg_data_dirs = g_strconcat (TEST_DIR, ":", xdg_data_dirs, NULL);
+  g_setenv ("XDG_DATA_DIRS", new_xdg_data_dirs, TRUE);
   g_setenv ("XDG_DATA_HOME", TEST_DIR, TRUE);
+  g_free (new_xdg_data_dirs);
 
   gtk_test_init (&argc, &argv);
 
