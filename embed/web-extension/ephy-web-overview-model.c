@@ -139,8 +139,6 @@ ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
                                            const char *path)
 {
   const char *thumbnail_path;
-  GList *l;
-  gboolean changed = FALSE;
 
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 

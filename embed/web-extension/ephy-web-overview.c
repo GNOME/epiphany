@@ -260,7 +260,6 @@ ephy_web_overview_model_title_changed (EphyWebOverviewModel *model,
 
   for (l = overview->priv->items; l; l = g_list_next (l)) {
     OverviewItem *item = (OverviewItem *)l->data;
-    char *style;
 
     if (g_strcmp0 (item->url, url) != 0)
       continue;
