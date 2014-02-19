@@ -395,7 +395,7 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
                                                         "Window",
                                                         "The parent window",
                                                         EPHY_TYPE_WINDOW,
-                                                        G_PARAM_READWRITE |
+                                                        G_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS);
 
