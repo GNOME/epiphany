@@ -670,6 +670,9 @@ ephy_window_set_chrome (EphyWindow *window,
 		return;
 
 	window->priv->chrome = chrome;
+	if (window->priv->closing)
+		return;
+
 	g_object_notify (G_OBJECT (window), "chrome");
 	sync_chromes_visibility (window);
 }
