@@ -43,22 +43,30 @@
       padding: 0;
   }
 
+  #item-list {
+    text-align: center;
+  }
+
   #grid li {
       list-style-type: none;
+      display: inline-block;
   }
 
   .overview-item {
       width: 180px;
-      height: 180px;
-      float: left;
-      margin: 15px;
+      height: 220px;
+      display: table-cell;
+      vertical-align: top;
+      overflow: hidden;
+      padding: 15px;
       outline: 0;
-      transition: all 0.5s ease-in-out;
       position: relative;
+      transition: all 0.5s ease-in-out;
+      top: 0;
   }
 
   .title {
-      width: 100%;
+      width: 180px;
       height: 50px;
       display: inline-block;
       padding: 5px 0;
@@ -93,12 +101,12 @@
       border: 1px solid #999;
       box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
   }
-  
+
   .close-button {
       -webkit-transition: all 250ms;
       position: absolute;
-      top: 9px;
-      right: 6px;
+      top: 20px;
+      right: 20px;
       opacity: 0;
       z-index: 5;
       color: #888;
@@ -106,17 +114,17 @@
       width: 14px;
       height: 14px;
       color: #fff;
-      padding: 1px 1px 3px 3px;
-      text-shadow: 0 1px 1px rgba(0,0,0,.5);
+      padding: 3px 3px 4px 4px;
+      text-shadow: 0 1px 0 rgba(0,0,0,.3);
       background-color: rgba(80,80,80,.2);
       border-radius: 50%;
   }
   .close-button:hover {
-      background-color: rgba(80,80,80,.5);
+      background-color: rgba(0,0,0,.8);
   }
   .close-button:active {
       text-shadow: none;
-      background-color: #333;
+      background-color: #000;
   }
 
   .overview-item:hover .close-button {
@@ -134,13 +142,9 @@
       display: none;
   }
 
-  html[dir="rtl"] .overview-item {
-      float: right;
-  }
-
   html[dir="rtl"] .close-button {
-      float: left;
-      right: 5px;
+      left: 20px;
+      right: inherit;
   }
   </style>
 
