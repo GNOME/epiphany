@@ -380,7 +380,7 @@ ephy_web_overview_web_view_destroyed (EphyWebOverview *overview,
   g_object_unref (overview);
 }
 
-void
+static void
 ephy_web_overview_finalize (GObject *object)
 {
   EphyWebOverview *overview = EPHY_WEB_OVERVIEW (object);
