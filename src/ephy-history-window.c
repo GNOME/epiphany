@@ -46,7 +46,9 @@ struct _EphyHistoryWindowPrivate
 
 	GtkWidget *treeview;
 	GtkWidget *liststore;
-	GtkWidget *date_column;
+	GtkTreeViewColumn *date_column;
+	GtkTreeViewColumn *name_column;
+	GtkTreeViewColumn *location_column;
 	GtkWidget *date_renderer;
 	GtkWidget *remove_button;
 	GtkWidget *open_button;
@@ -58,6 +60,10 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *treeview_popup_menu;
 
 	char *search_text;
+
+	gboolean  sort_ascending;
+	gint      sort_column;
+
 	GtkWidget *window;
 
 	GtkWidget *confirmation_dialog;
@@ -138,15 +144,29 @@ filter_now (EphyHistoryWindow *self)
 {
 	gint64 from, to;
 	GList *substrings;
+	EphyHistorySortType type = EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
 
 	substrings = substrings_filter (self);
 
 	from = to = -1; /* all */
+
+	switch (self->priv->sort_column)
+	{
+	case COLUMN_DATE:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED : EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
+		break;
+	case COLUMN_NAME:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_TITLE_ASCENDING : EPHY_HISTORY_SORT_TITLE_DESCENDING;
+		break;
+	case COLUMN_LOCATION:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_URL_ASCENDING : EPHY_HISTORY_SORT_URL_DESCENDING;
+		break;
+	}
 	ephy_history_service_find_urls (self->priv->history_service,
 					from, to,
 					NUM_RESULTS_LIMIT, 0,
 					substrings,
-					EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED,
+					type,
 					self->priv->cancellable,
 					(EphyHistoryJobCallback)on_find_urls_cb, self);
 }
@@ -462,6 +482,44 @@ on_treeview_selection_changed (GtkTreeSelection *selection,
 }
 
 static void
+on_treeview_column_clicked_event (GtkTreeViewColumn *column,
+				  EphyHistoryWindow *self)
+{
+	gint new_sort_column = COLUMN_DATE;
+	GtkTreeViewColumn *previous_sortby;
+
+	if (column == self->priv->date_column)
+	{
+		new_sort_column = COLUMN_DATE;
+	}
+	else if (column == self->priv->name_column)
+	{
+		new_sort_column = COLUMN_NAME;
+	}
+        else if (column == self->priv->location_column)
+	{
+		new_sort_column = COLUMN_LOCATION;
+	}
+
+	if (new_sort_column == self->priv->sort_column)
+	{
+		self->priv->sort_ascending = !(self->priv->sort_ascending);
+	}
+	else
+	{
+		previous_sortby = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
+		gtk_tree_view_column_set_sort_indicator (previous_sortby, FALSE);
+
+		self->priv->sort_column = new_sort_column;
+		self->priv->sort_ascending = self->priv->sort_column == COLUMN_DATE ? FALSE : TRUE;
+	}
+
+	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+	gtk_tree_view_column_set_sort_indicator (column, TRUE);
+	filter_now (self);
+}
+
+static void
 on_remove_button_clicked (GtkButton *button,
 			  EphyHistoryWindow *self)
 {
@@ -616,6 +674,8 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, name_column);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, copy_location_menuitem);
@@ -627,6 +687,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
+	gtk_widget_class_bind_template_callback (widget_class, on_treeview_column_clicked_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_open_button_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
@@ -717,6 +778,9 @@ ephy_history_window_init (EphyHistoryWindow *self)
 	gtk_widget_init_template (GTK_WIDGET (self));
 
 	self->priv->cancellable = g_cancellable_new ();
+
+	self->priv->sort_ascending = FALSE;
+	self->priv->sort_column = COLUMN_DATE;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (self));
 

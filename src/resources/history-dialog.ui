@@ -127,8 +127,10 @@
                             <property name="sizing">fixed</property>
                             <property name="fixed-width">150</property>
                             <property name="title" translatable="yes">Date</property>
+                            <property name="clickable">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_order">descending</property>
+                            <signal name="clicked" handler="on_treeview_column_clicked_event" object="EphyHistoryWindow" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="date_renderer"/>
                               <attributes>
@@ -138,10 +140,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                          <object class="GtkTreeViewColumn" id="name_column">
                             <property name="sizing">fixed</property>
                             <property name="fixed-width">500</property>
                             <property name="title" translatable="yes">Name</property>
+                            <property name="clickable">True</property>
+                            <signal name="clicked" handler="on_treeview_column_clicked_event" object="EphyHistoryWindow" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext2">
                                 <property name="ellipsize">end</property>
@@ -154,9 +158,11 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="location_column">
-                           <property name="sizing">fixed</property>
+                            <property name="sizing">fixed</property>
                             <property name="fixed-width">200</property>
                             <property name="title" translatable="yes">Location</property>
+                            <property name="clickable">True</property>
+                            <signal name="clicked" handler="on_treeview_column_clicked_event" object="EphyHistoryWindow" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="location_renderer">
                                 <property name="ellipsize">end</property>
