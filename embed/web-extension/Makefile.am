@@ -8,6 +8,7 @@ libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.h \
 	ephy-web-extension.c \
 	ephy-web-extension.h \
+	ephy-web-extension-main.c \
 	ephy-web-overview.h \
 	ephy-web-overview.c \
 	ephy-web-overview-model.h \

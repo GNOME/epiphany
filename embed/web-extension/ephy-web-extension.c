@@ -39,12 +39,20 @@
 #include <webkit2/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
 
-/* FIXME: These global variables should be freed somehow. */
-static UriTester *uri_tester;
-static EphyFormAuthDataCache *form_auth_data_cache;
-static GDBusConnection *dbus_connection;
-static GArray *page_created_signals_pending;
-static EphyWebOverviewModel *overview_model;
+struct _EphyWebExtensionPrivate
+{
+  WebKitWebExtension *extension;
+  gboolean initialized;
+
+  GDBusConnection *dbus_connection;
+  guint registration_id;
+  GArray *page_created_signals_pending;
+
+  UriTester *uri_tester;
+  EphyFormAuthDataCache *form_auth_data_cache;
+  GHashTable *form_auth_data_save_requests;
+  EphyWebOverviewModel *overview_model;
+};
 
 static const char introspection_xml[] =
   "<node>"
@@ -101,12 +109,13 @@ static const char introspection_xml[] =
   " </interface>"
   "</node>";
 
+G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean
 web_page_send_request (WebKitWebPage *web_page,
                        WebKitURIRequest *request,
                        WebKitURIResponse *redirected_response,
-                       gpointer user_data)
+                       EphyWebExtension *extension)
 {
   const char *request_uri;
   const char *page_uri;
@@ -158,23 +167,21 @@ web_page_send_request (WebKitWebPage *web_page,
   if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
       return FALSE;
 
-  return uri_tester_test_uri (uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
+  return uri_tester_test_uri (extension->priv->uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
 }
 
 static GHashTable *
-get_form_auth_data_save_requests (void)
+ephy_web_extension_get_form_auth_data_save_requests (EphyWebExtension *extension)
 {
-  static GHashTable *form_auth_data_save_requests = NULL;
-
-  if (!form_auth_data_save_requests) {
-    form_auth_data_save_requests =
+  if (!extension->priv->form_auth_data_save_requests) {
+    extension->priv->form_auth_data_save_requests =
       g_hash_table_new_full (g_direct_hash,
                              g_direct_equal,
                              NULL,
                              (GDestroyNotify)g_object_unref);
   }
 
-  return form_auth_data_save_requests;
+  return extension->priv->form_auth_data_save_requests;
 }
 
 static guint
@@ -195,6 +202,7 @@ store_password (EphyEmbedFormAuth *form_auth)
   char *password_field_name = NULL;
   char *password_field_value = NULL;
   WebKitDOMNode *username_node;
+  EphyWebExtension *extension = ephy_web_extension_get ();
 
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node)
@@ -218,7 +226,7 @@ store_password (EphyEmbedFormAuth *form_auth)
   g_free (uri_str);
 
   /* Update internal caching */
-  ephy_form_auth_data_cache_add (form_auth_data_cache,
+  ephy_form_auth_data_cache_add (extension->priv->form_auth_data_cache,
                                  uri->host,
                                  username_field_name,
                                  password_field_name,
@@ -238,8 +246,9 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   SoupURI *uri;
   GError *error = NULL;
   WebKitDOMNode *username_node;
+  EphyWebExtension *extension = ephy_web_extension_get ();
 
-  if (!dbus_connection) {
+  if (!extension->priv->dbus_connection) {
     g_object_unref (form_auth);
     return;
   }
@@ -250,7 +259,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   if (username_node)
     g_object_get (username_node, "value", &username_field_value, NULL);
 
-  g_dbus_connection_emit_signal (dbus_connection,
+  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
                                  NULL,
                                  EPHY_WEB_EXTENSION_OBJECT_PATH,
                                  EPHY_WEB_EXTENSION_INTERFACE,
@@ -265,7 +274,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
     g_warning ("Error emitting signal FormAuthDataSaveConfirmationRequired: %s\n", error->message);
     g_error_free (error);
   } else {
-    g_hash_table_insert (get_form_auth_data_save_requests (),
+    g_hash_table_insert (ephy_web_extension_get_form_auth_data_save_requests (extension),
                          GINT_TO_POINTER (request_id),
                          g_object_ref (form_auth));
   }
@@ -276,11 +285,15 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 
 static void
 overview_item_removed (EphyWebOverview *overview,
-                       const char *url)
+                       const char *url,
+                       EphyWebExtension *extension)
 {
   GError *error = NULL;
 
-  g_dbus_connection_emit_signal (dbus_connection,
+  if (!extension->priv->dbus_connection)
+    return;
+
+  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
                                  NULL,
                                  EPHY_WEB_EXTENSION_OBJECT_PATH,
                                  EPHY_WEB_EXTENSION_INTERFACE,
@@ -434,12 +447,14 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   char *uri_str;
   char *username;
   WebKitDOMNode *username_node;
+  EphyWebExtension *extension;
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   if (!uri)
     return;
 
-  form_auth_data_list = ephy_form_auth_data_cache_get_list (form_auth_data_cache, uri->host);
+  extension = ephy_web_extension_get ();
+  form_auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri->host);
   l = g_slist_find_custom (form_auth_data_list, form_auth, (GCompareFunc)ephy_form_auth_data_compare);
   if (!l)
     return;
@@ -611,7 +626,7 @@ get_user_choice_anchor_style (gboolean selected)
   return style_attribute;
 }
 
-void
+static void
 show_user_choices (WebKitDOMDocument *document,
                    WebKitDOMNode     *username_node)
 {
@@ -915,14 +930,14 @@ form_destroyed_cb (gpointer form_auth, GObject *form)
 
 static void
 web_page_document_loaded (WebKitWebPage *web_page,
-                          gpointer user_data)
+                          EphyWebExtension *extension)
 {
   WebKitDOMHTMLCollection *forms = NULL;
   WebKitDOMDocument *document = NULL;
   gulong forms_n;
   int i;
 
-  if (!form_auth_data_cache ||
+  if (!extension->priv->form_auth_data_cache ||
       !g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_REMEMBER_PASSWORDS))
     return;
 
@@ -967,7 +982,7 @@ web_page_document_loaded (WebKitWebPage *web_page,
       uri_string = webkit_web_page_get_uri (web_page);
       uri = soup_uri_new (uri_string);
 
-      auth_data_list = ephy_form_auth_data_cache_get_list (form_auth_data_cache, uri->host);
+      auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri->host);
 
       soup_uri_free (uri);
 
@@ -1005,11 +1020,12 @@ web_page_document_loaded (WebKitWebPage *web_page,
 }
 
 static void
-emit_page_created (guint64 page_id)
+ephy_web_extension_emit_page_created (EphyWebExtension *extension,
+                                      guint64 page_id)
 {
   GError *error = NULL;
 
-  g_dbus_connection_emit_signal (dbus_connection,
+  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
                                  NULL,
                                  EPHY_WEB_EXTENSION_OBJECT_PATH,
                                  EPHY_WEB_EXTENSION_INTERFACE,
@@ -1023,51 +1039,51 @@ emit_page_created (guint64 page_id)
 }
 
 static void
-emit_page_created_signals_pending (void)
+ephy_web_extension_emit_page_created_signals_pending (EphyWebExtension *extension)
 {
   guint i;
 
-  if (!page_created_signals_pending)
+  if (!extension->priv->page_created_signals_pending)
     return;
 
-  for (i = 0; i < page_created_signals_pending->len; i++) {
+  for (i = 0; i < extension->priv->page_created_signals_pending->len; i++) {
     guint64 page_id;
 
-    page_id = g_array_index (page_created_signals_pending, guint64, i);
-    emit_page_created (page_id);
+    page_id = g_array_index (extension->priv->page_created_signals_pending, guint64, i);
+    ephy_web_extension_emit_page_created (extension, page_id);
   }
 
-  g_array_free (page_created_signals_pending, TRUE);
-  page_created_signals_pending = NULL;
+  g_array_free (extension->priv->page_created_signals_pending, TRUE);
+  extension->priv->page_created_signals_pending = NULL;
 }
 
 static void
-queue_page_created_signal_emission (guint64 page_id)
+ephy_web_extension_queue_page_created_signal_emission (EphyWebExtension *extension,
+                                                       guint64 page_id)
 {
-  if (!page_created_signals_pending)
-    page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
-  page_created_signals_pending = g_array_append_val (page_created_signals_pending, page_id);
+  if (!extension->priv->page_created_signals_pending)
+    extension->priv->page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
+  extension->priv->page_created_signals_pending = g_array_append_val (extension->priv->page_created_signals_pending, page_id);
 }
 
 static void
-web_page_created_callback (WebKitWebExtension *extension,
-                           WebKitWebPage *web_page,
-                           gpointer user_data)
+ephy_web_extension_page_created_cb (EphyWebExtension *extension,
+                                    WebKitWebPage *web_page)
 {
   guint64 page_id;
 
   page_id = webkit_web_page_get_id (web_page);
-  if (dbus_connection)
-    emit_page_created (page_id);
+  if (extension->priv->dbus_connection)
+    ephy_web_extension_emit_page_created (extension, page_id);
   else
-    queue_page_created_signal_emission (page_id);
+    ephy_web_extension_queue_page_created_signal_emission (extension, page_id);
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
-                    NULL);
+                    extension);
   g_signal_connect (web_page, "document-loaded",
                     G_CALLBACK (web_page_document_loaded),
-                    NULL);
+                    extension);
 }
 
 static WebKitWebPage *
@@ -1093,7 +1109,7 @@ handle_method_call (GDBusConnection *connection,
                     GDBusMethodInvocation *invocation,
                     gpointer user_data)
 {
-  WebKitWebExtension *web_extension = WEBKIT_WEB_EXTENSION (user_data);
+  EphyWebExtension *extension = EPHY_WEB_EXTENSION (user_data);
 
   if (g_strcmp0 (interface_name, EPHY_WEB_EXTENSION_INTERFACE) != 0)
     return;
@@ -1105,7 +1121,7 @@ handle_method_call (GDBusConnection *connection,
     gboolean has_modifed_forms;
 
     g_variant_get (parameters, "(t)", &page_id);
-    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, extension->priv->extension, page_id);
     if (!web_page)
       return;
 
@@ -1120,7 +1136,7 @@ handle_method_call (GDBusConnection *connection,
     guint64 page_id;
 
     g_variant_get (parameters, "(t)", &page_id);
-    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, extension->priv->extension, page_id);
     if (!web_page)
       return;
 
@@ -1138,7 +1154,7 @@ handle_method_call (GDBusConnection *connection,
     gboolean result;
 
     g_variant_get (parameters, "(ts)", &page_id, &base_uri);
-    web_page = get_webkit_web_page_or_return_dbus_error (invocation, web_extension, page_id);
+    web_page = get_webkit_web_page_or_return_dbus_error (invocation, extension->priv->extension, page_id);
     if (!web_page)
       return;
 
@@ -1157,7 +1173,9 @@ handle_method_call (GDBusConnection *connection,
     EphyEmbedFormAuth *form_auth;
     guint request_id;
     gboolean should_store;
-    GHashTable *requests = get_form_auth_data_save_requests ();
+    GHashTable *requests;
+
+    requests = ephy_web_extension_get_form_auth_data_save_requests (extension);
 
     g_variant_get (parameters, "(ub)", &request_id, &should_store);
 
@@ -1169,7 +1187,7 @@ handle_method_call (GDBusConnection *connection,
       store_password (form_auth);
     g_hash_table_remove (requests, GINT_TO_POINTER (request_id));
   } else if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
-    if (overview_model) {
+    if (extension->priv->overview_model) {
       GVariantIter iter;
       GVariant *array;
       const char *url;
@@ -1183,46 +1201,46 @@ handle_method_call (GDBusConnection *connection,
         items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
       g_variant_unref (array);
 
-      ephy_web_overview_model_set_urls (overview_model, g_list_reverse (items));
+      ephy_web_overview_model_set_urls (extension->priv->overview_model, g_list_reverse (items));
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistorySetURLThumbnail") == 0) {
-    if (overview_model) {
+    if (extension->priv->overview_model) {
       const char *url;
       const char *path;
 
       g_variant_get (parameters, "(&s&s)", &url, &path);
-      ephy_web_overview_model_set_url_thumbnail (overview_model, url, path);
+      ephy_web_overview_model_set_url_thumbnail (extension->priv->overview_model, url, path);
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistorySetURLTitle") == 0) {
-    if (overview_model) {
+    if (extension->priv->overview_model) {
       const char *url;
       const char *title;
 
       g_variant_get (parameters, "(&s&s)", &url, &title);
-      ephy_web_overview_model_set_url_title (overview_model, url, title);
+      ephy_web_overview_model_set_url_title (extension->priv->overview_model, url, title);
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistoryDeleteURL") == 0) {
-    if (overview_model) {
+    if (extension->priv->overview_model) {
       const char *url;
 
       g_variant_get (parameters, "(&s)", &url);
-      ephy_web_overview_model_delete_url (overview_model, url);
+      ephy_web_overview_model_delete_url (extension->priv->overview_model, url);
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistoryDeleteHost") == 0) {
-    if (overview_model) {
+    if (extension->priv->overview_model) {
       const char *host;
 
       g_variant_get (parameters, "(&s)", &host);
-      ephy_web_overview_model_delete_host (overview_model, host);
+      ephy_web_overview_model_delete_host (extension->priv->overview_model, host);
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistoryClear") == 0) {
-    if (overview_model)
-      ephy_web_overview_model_clear (overview_model);
+    if (extension->priv->overview_model)
+      ephy_web_overview_model_clear (extension->priv->overview_model);
     g_dbus_method_invocation_return_value (invocation, NULL);
   }
 }
@@ -1234,39 +1252,10 @@ static const GDBusInterfaceVTable interface_vtable = {
 };
 
 static void
-bus_acquired_cb (GDBusConnection *connection,
-                 const char *name,
-                 gpointer user_data)
-{
-  guint registration_id;
-  GError *error = NULL;
-  static GDBusNodeInfo *introspection_data = NULL;
-
-  if (!introspection_data)
-    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-
-  registration_id = g_dbus_connection_register_object (connection,
-                                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                                       introspection_data->interfaces[0],
-                                                       &interface_vtable,
-                                                       g_object_ref (user_data),
-                                                       (GDestroyNotify)g_object_unref,
-                                                       &error);
-  if (!registration_id) {
-    g_warning ("Failed to register object: %s\n", error->message);
-    g_error_free (error);
-  } else {
-    dbus_connection = connection;
-    g_object_add_weak_pointer (G_OBJECT (connection), (gpointer *)&dbus_connection);
-    emit_page_created_signals_pending ();
-  }
-}
-
-static void
 window_object_cleared_cb (WebKitScriptWorld *world,
                           WebKitWebPage     *web_page,
                           WebKitFrame       *frame,
-                          gpointer           user_data)
+                          EphyWebExtension  *extension)
 {
   JSGlobalContextRef context;
   EphyWebOverview *overview;
@@ -1274,53 +1263,131 @@ window_object_cleared_cb (WebKitScriptWorld *world,
   if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") != 0)
     return;
 
-  overview = ephy_web_overview_new (web_page, overview_model);
+  overview = ephy_web_overview_new (web_page, extension->priv->overview_model);
   g_signal_connect (overview, "item-removed",
                     G_CALLBACK (overview_item_removed),
-                    NULL);
+                    extension);
   context = webkit_frame_get_javascript_context_for_script_world (frame, world);
   ephy_web_overview_init_js (overview, context);
 }
 
-G_MODULE_EXPORT void
-webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
-                                                GVariant *user_data)
+static void
+ephy_web_extension_dispose (GObject *object)
 {
-  char *service_name;
-  const char *extension_id;
-  const char *dot_dir;
-  gboolean private_profile;
-  GError *error = NULL;
+  EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
 
-  g_variant_get (user_data, "(&s&sb)", &extension_id, &dot_dir, &private_profile);
+  g_clear_object (&extension->priv->uri_tester);
+  g_clear_object (&extension->priv->overview_model);
+  g_clear_pointer (&extension->priv->form_auth_data_cache,
+                   ephy_form_auth_data_cache_free);
 
-  if (!ephy_file_helpers_init (dot_dir, 0, &error)) {
-    g_printerr ("Failed to initialize file helpers: %s\n", error->message);
-    g_error_free (error);
+  if (extension->priv->form_auth_data_save_requests) {
+    g_hash_table_destroy (extension->priv->form_auth_data_save_requests);
+    extension->priv->form_auth_data_save_requests = NULL;
   }
 
-  ephy_debug_init ();
-  uri_tester = uri_tester_new (dot_dir);
-  overview_model = ephy_web_overview_model_new ();
-  if (!private_profile)
-    form_auth_data_cache = ephy_form_auth_data_cache_new ();
+  if (extension->priv->page_created_signals_pending) {
+      g_array_free (extension->priv->page_created_signals_pending, TRUE);
+      extension->priv->page_created_signals_pending = NULL;
+    }
 
-  g_signal_connect (extension, "page-created",
-                    G_CALLBACK (web_page_created_callback),
-                    NULL);
+  if (extension->priv->dbus_connection) {
+    g_dbus_connection_unregister_object (extension->priv->dbus_connection,
+                                         extension->priv->registration_id);
+    extension->priv->registration_id = 0;
+    extension->priv->dbus_connection = NULL;
+  }
 
-  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, extension_id);
-  g_bus_own_name (G_BUS_TYPE_SESSION,
-                  service_name,
-                  G_BUS_NAME_OWNER_FLAGS_NONE,
-                  bus_acquired_cb,
-                  NULL, NULL,
-                  g_object_ref (extension),
-                  (GDestroyNotify)g_object_unref);
-  g_free (service_name);
+  g_clear_object (&extension->priv->extension);
+
+  G_OBJECT_CLASS (ephy_web_extension_parent_class)->dispose (object);
+}
+
+static void
+ephy_web_extension_class_init (EphyWebExtensionClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ephy_web_extension_dispose;
+
+  g_type_class_add_private (object_class, sizeof(EphyWebExtensionPrivate));
+}
+
+static void
+ephy_web_extension_init (EphyWebExtension *extension)
+{
+  extension->priv = G_TYPE_INSTANCE_GET_PRIVATE (extension, EPHY_TYPE_WEB_EXTENSION, EphyWebExtensionPrivate);
+  extension->priv->overview_model = ephy_web_overview_model_new ();
 
   g_signal_connect (webkit_script_world_get_default (),
                     "window-object-cleared",
                     G_CALLBACK (window_object_cleared_cb),
-                    NULL);
+                    extension);
+}
+
+static gpointer
+ephy_web_extension_create_instance(gpointer data)
+{
+  return g_object_new (EPHY_TYPE_WEB_EXTENSION, NULL);
+}
+
+EphyWebExtension *
+ephy_web_extension_get (void)
+{
+  static GOnce once_init = G_ONCE_INIT;
+  return EPHY_WEB_EXTENSION (g_once (&once_init, ephy_web_extension_create_instance, NULL));
+}
+
+void
+ephy_web_extension_initialize (EphyWebExtension *extension,
+                               WebKitWebExtension *wk_extension,
+                               const char *dot_dir,
+                               gboolean is_private_profile)
+{
+  g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
+
+  if (extension->priv->initialized)
+    return;
+
+  extension->priv->initialized = TRUE;
+
+  extension->priv->extension = g_object_ref (wk_extension);
+  extension->priv->uri_tester = uri_tester_new (dot_dir);
+  if (!is_private_profile)
+    extension->priv->form_auth_data_cache = ephy_form_auth_data_cache_new ();
+
+  g_signal_connect_swapped (extension->priv->extension, "page-created",
+                            G_CALLBACK (ephy_web_extension_page_created_cb),
+                            extension);
+}
+
+void
+ephy_web_extension_dbus_register (EphyWebExtension *extension,
+                                  GDBusConnection *connection)
+{
+  GError *error = NULL;
+  static GDBusNodeInfo *introspection_data = NULL;
+
+  g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
+  g_return_if_fail (G_IS_DBUS_CONNECTION (connection));
+
+  if (!introspection_data)
+    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
+
+  extension->priv->registration_id =
+    g_dbus_connection_register_object (connection,
+                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                       introspection_data->interfaces[0],
+                                       &interface_vtable,
+                                       extension,
+                                       NULL,
+                                       &error);
+  if (!extension->priv->registration_id) {
+    g_warning ("Failed to register web extension object: %s\n", error->message);
+    g_error_free (error);
+  } else {
+    extension->priv->dbus_connection = connection;
+    g_object_add_weak_pointer (G_OBJECT (connection), (gpointer *)&extension->priv->dbus_connection);
+    ephy_web_extension_emit_page_created_signals_pending (extension);
+  }
 }
