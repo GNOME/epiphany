@@ -54,6 +54,7 @@
       margin: 15px;
       outline: 0;
       transition: all 0.5s ease-in-out;
+      position: relative;
   }
 
   .title {
@@ -73,28 +74,49 @@
       width: 200px;
       height: 150px;
       display: block;
-      opacity: 0.6;
-      transition: opacity 0.2s ease-in-out;
-      background: url(ephy-about:/thumbnail-frame.png), url(ephy-about:/missing-thumbnail.png) 10px 9px;
+      transition: all 0.2s ease-in-out;
+      border: 1px solid #ccc;
+      background: url(ephy-about:/missing-thumbnail.png) center no-repeat,
+                  linear-gradient(to bottom, #e8e8e8, #fff);
       background-repeat: no-repeat;
       animation: fadeOut 0.5s;
+      position: relative;
   }
 
   .thumbnail:hover,
   :focus .thumbnail {
-      opacity: 1.0;
+      border: 1px solid #999;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.3);
   }
 
+  .thumbnail:active {
+      border: 1px solid #999;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
+  }
+  
   .close-button {
-      -webkit-transition: opacity 250ms;
-      position: relative;
-      float: right;
-      top: -10px;
-      right: -5px;
+      -webkit-transition: all 250ms;
+      position: absolute;
+      top: 9px;
+      right: 6px;
       opacity: 0;
       z-index: 5;
       color: #888;
-      font-size: 1.2em;
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      color: #fff;
+      padding: 1px 1px 3px 3px;
+      text-shadow: 0 1px 1px rgba(0,0,0,.5);
+      background-color: rgba(80,80,80,.2);
+      border-radius: 50%;
+  }
+  .close-button:hover {
+      background-color: rgba(80,80,80,.5);
+  }
+  .close-button:active {
+      text-shadow: none;
+      background-color: #333;
   }
 
   .overview-item:hover .close-button {
