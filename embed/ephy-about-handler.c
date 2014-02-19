@@ -449,7 +449,7 @@ ephy_about_handler_generate_overview_html (EphyOverviewStore *store)
       EPHY_OVERVIEW_STORE_SNAPSHOT_PATH, &row_snapshot,
       -1);
 
-    thumbnail_style = row_snapshot ? g_strdup_printf (" style=\"background: url(ephy-about:/thumbnail-frame.png), url(file://%s) no-repeat 10px 9px;\"", row_snapshot) : NULL;
+    thumbnail_style = row_snapshot ? g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", row_snapshot) : NULL;
     g_free (row_snapshot);
 
     g_string_append_printf (data_str,

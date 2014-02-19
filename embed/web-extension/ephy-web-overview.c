@@ -155,7 +155,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       if (thumbnail_path) {
         char *style;
 
-        style = g_strdup_printf ("background: url(ephy-about:/thumbnail-frame.png), url(file://%s) no-repeat 10px 9px;", thumbnail_path);
+        style = g_strdup_printf ("background: url(file://%s) no-repeat;", thumbnail_path);
         webkit_dom_element_set_attribute (item->thumbnail, "style", style, NULL);
         g_free (style);
       } else {
@@ -195,7 +195,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       if (thumbnail_path) {
         char *style;
 
-        style = g_strdup_printf ("background: url(ephy-about:/thumbnail-frame.png), url(file://%s) no-repeat 10px 9px;", thumbnail_path);
+        style = g_strdup_printf ("background: url(file://%s) no-repeat;", thumbnail_path);
         webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "style", style, NULL);
         g_free (style);
       }
@@ -244,7 +244,7 @@ ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
     if (g_strcmp0 (item->url, url) != 0)
       continue;
 
-    style = g_strdup_printf ("background: url(ephy-about:/thumbnail-frame.png), url(file://%s) no-repeat 10px 9px;", path);
+    style = g_strdup_printf ("background: url(file://%s) no-repeat;", path);
     webkit_dom_element_set_attribute (item->thumbnail, "style", style, NULL);
     g_free (style);
   }

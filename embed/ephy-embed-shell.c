@@ -395,23 +395,19 @@ EphyFrecentStore *
 ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
 {
   GdkPixbuf *default_icon;
-  GdkPixbuf *frame;
 
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
   if (shell->priv->frecent_store == NULL) {
     shell->priv->frecent_store = ephy_frecent_store_new ();
     default_icon = ephy_embed_shell_get_overview_icon ("missing-thumbnail.png");
-    frame = ephy_embed_shell_get_overview_icon ("thumbnail-frame.png");
     g_object_set (shell->priv->frecent_store,
                   "history-service",
                   ephy_embed_shell_get_global_history_service (shell),
                   "history-length", 10,
                   "default-icon", default_icon,
-                  "icon-frame", frame,
                   NULL);
     g_object_unref (default_icon);
-    g_object_unref (frame);
   }
 
   return shell->priv->frecent_store;
