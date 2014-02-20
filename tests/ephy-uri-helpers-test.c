@@ -44,6 +44,9 @@ test_ephy_uri_helpers_remove_tracking (void)
     { "http://www.test.com/?utm_source=feedburner", "http://www.test.com/" },
     { "http://www.test.com/?feature=foo", "http://www.test.com/?feature=foo" },
     { "http://foo.youtube.com/?feature=foo", "http://foo.youtube.com/" },
+    /* https://bugzilla.gnome.org/show_bug.cgi?id=724724 */
+    { "http://git.savannah.gnu.org/gitweb/?p=grep.git;a=commit;h=97318f5e59a1ef6feb8a378434a00932a3fc1e0b",
+      "http://git.savannah.gnu.org/gitweb/?p=grep.git;a=commit;h=97318f5e59a1ef6feb8a378434a00932a3fc1e0b"},
   };
   guint i;
 

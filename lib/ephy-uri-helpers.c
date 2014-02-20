@@ -32,6 +32,8 @@
  * URI related functions, including functions to clean up URI.
  */
 
+/* QueryItem holds a query parameter name/value pair. The name is unescaped in
+ * query_decode() with form_decode(), the value is not altered. */
 typedef struct {
   char *name;
   char *value;
@@ -98,7 +100,7 @@ encode_pair (GString *str, const char *name, const char *value)
     g_string_append_c (str, '&');
   append_form_encoded (str, name);
   g_string_append_c (str, '=');
-  append_form_encoded (str, value);
+  g_string_append (str, value);
 }
 
 /* Adapted from soup_form_decode in libsoup */
@@ -121,7 +123,7 @@ query_decode (const char *query)
       value = eq + 1;
     } else
       value = NULL;
-    if (!value || !form_decode (name) || !form_decode (value)) {
+    if (!value || !form_decode (name)) {
       g_free (name);
       continue;
     }
