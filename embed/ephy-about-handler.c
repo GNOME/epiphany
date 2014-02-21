@@ -33,11 +33,11 @@
 #include <glib/gi18n.h>
 
 struct _EphyAboutHandlerPrivate {
-  char *style_sheet;
   EphySMaps *smaps;
 };
 
 #define EPHY_PAGE_TEMPLATE_OVERVIEW         "/org/gnome/epiphany/page-templates/overview.html"
+#define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
 
 G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
@@ -46,7 +46,6 @@ ephy_about_handler_finalize (GObject *object)
 {
   EphyAboutHandler *handler = EPHY_ABOUT_HANDLER (object);
 
-  g_free (handler->priv->style_sheet);
   g_clear_object (&handler->priv->smaps);
 
   G_OBJECT_CLASS (ephy_about_handler_parent_class)->finalize (object);
@@ -65,23 +64,6 @@ ephy_about_handler_class_init (EphyAboutHandlerClass *klass)
 
   object_class->finalize = ephy_about_handler_finalize;
   g_type_class_add_private (object_class, sizeof (EphyAboutHandlerPrivate));
-}
-
-static const char *
-ephy_about_handler_get_style_sheet (EphyAboutHandler *handler)
-{
-  if (!handler->priv->style_sheet) {
-    const gchar *file;
-    GError *error = NULL;
-
-    file = ephy_file ("about.css");
-    if (file && !g_file_get_contents (file, &handler->priv->style_sheet, NULL, &error)) {
-      g_debug ("%s", error->message);
-      g_error_free (error);
-    }
-  }
-
-  return handler->priv->style_sheet;
 }
 
 static EphySMaps *
@@ -150,11 +132,11 @@ get_plugins_cb (WebKitWebContext *web_context,
   enabled = webkit_settings_get_enable_plugins (webkit_settings);
 
   data_str = g_string_new ("<html>");
-  g_string_append_printf (data_str, "<head><title>%s</title>"           \
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
-                          "<style type=\"text/css\">%s</style></head><body>",
-                          _("Installed plugins"),
-                          ephy_about_handler_get_style_sheet (about_request->handler));
+  g_string_append_printf (data_str, "<head><title>%s</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "</head><body>",
+                          _("Installed plugins"));
   g_string_append_printf (data_str, "<h1>%s</h1>", _("Plugins"));
 
   if (!enabled)
@@ -229,11 +211,11 @@ handle_memory_finished_cb (EphyAboutHandler *handler,
 
   memory = g_task_propagate_pointer (G_TASK (result), NULL);
   if (memory) {
-    g_string_append_printf (data_str, "<head><title>%s</title>"         \
-                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
-                            "<style type=\"text/css\">%s</style></head><body>",
-                            _("Memory usage"),
-                            ephy_about_handler_get_style_sheet (handler));
+    g_string_append_printf (data_str, "<head><title>%s</title>"
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                            "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                            "</head><body>",
+                            _("Memory usage"));
 
     g_string_append_printf (data_str, "<h1>%s</h1>", _("Memory usage"));
     g_string_append (data_str, memory);
@@ -292,8 +274,8 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<style type=\"text/css\">%s</style></head>"  \
-                          "<body>"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "</head><body>"
                           "<div class=\"dialog\">"
                           "<img src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
@@ -304,7 +286,6 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
                           "</table>"
                           "</div></body></html>",
                           _("About Web"),
-                          ephy_about_handler_get_style_sheet (handler),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
                           _("Web"),
                           version,
@@ -327,8 +308,8 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<style type=\"text/css\">%s</style></head>"
-                          "<body class=\"epiphany-body\">"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "</head><body class=\"epiphany-body\">"
                           "<div id=\"ephytext\">"
                           "“Il semble que la perfection soit atteinte non quand il n'y a plus rien à"
                           " ajouter, mais quand il n'y a plus rien à retrancher.”"
@@ -337,8 +318,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
                           "<!-- Terre des Hommes, III: L'Avion, p. 60 -->"
                           "Antoine de Saint-Exupéry"
                           "</div></body></html>",
-                          _("Web"),
-                          ephy_about_handler_get_style_sheet (handler));
+                          _("Web"));
 
   ephy_about_handler_finish_request (request, data, -1);
 
@@ -355,13 +335,12 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
   GList *applications, *p;
 
   data_str = g_string_new (NULL);
-  g_string_append_printf (data_str, "<html><head><title>%s</title>" \
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
-                          "<style type=\"text/css\">%s</style></head>"  \
-                          "<body class=\"applications-body\"><h1>%s</h1>" \
+  g_string_append_printf (data_str, "<html><head><title>%s</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "</head><body class=\"applications-body\"><h1>%s</h1>"
                           "<p>%s</p>",
                           _("Applications"),
-                          ephy_about_handler_get_style_sheet (handler),
                           _("Applications"),
                           _("List of installed web applications"));
 
@@ -507,26 +486,25 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO)
     return FALSE;
 
-  data = g_strdup_printf ("<html>\n"                                   \
-                          "<div dir=\"%s\">\n"                         \
-                          "<head>\n"                                   \
-                          "<title>%s</title>\n"                        \
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" \
-                          "<style type=\"text/css\">%s</style>\n"      \
-                          "</head>\n"                                  \
-                          "<body class=\"incognito-body\">\n"          \
-                          "  <div id=\"mainblock\">\n"                 \
+  data = g_strdup_printf ("<html>\n"
+                          "<div dir=\"%s\">\n"
+                          "<head>\n"
+                          "<title>%s</title>\n"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">\n"
+                          "</head>\n"
+                          "<body class=\"incognito-body\">\n"
+                          "  <div id=\"mainblock\">\n"
                           "    <div style=\"background: transparent url(ephy-resource:///org/gnome/epiphany/incognito.png) no-repeat 10px center;\">\n" \
-                          "      <h1>%s</h1>\n"                        \
-                          "      <p>%s</p>\n"                          \
-                          "    </div>\n"                               \
-                          "  </div>\n"                                 \
-                          "</body>\n"                                  \
-                          "</div>\n"                                   \
+                          "      <h1>%s</h1>\n"
+                          "      <p>%s</p>\n"
+                          "    </div>\n"
+                          "  </div>\n"
+                          "</body>\n"
+                          "</div>\n"
                           "</html>\n",
                           gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr",
                           _("Private Browsing"),
-                          ephy_about_handler_get_style_sheet (handler),
                           _("Private Browsing"),
                           _("You are currently browsing <em>incognito</em>. Pages viewed in this "
                             "mode will not show up in your browsing history and all stored "
