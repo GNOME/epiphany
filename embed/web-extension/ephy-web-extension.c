@@ -122,18 +122,6 @@ web_page_send_request (WebKitWebPage *web_page,
 
   request_uri = webkit_uri_request_get_uri (request);
 
-  if (g_str_has_prefix (request_uri, "ephy-about:/")) {
-    char *about_resource;
-
-    /* Ideally we should use resource:// uris directly in about pages, but in multiprocess mode the
-     * Network Process doesn't have access to the resources compiled in the Web Process */
-    about_resource = g_filename_to_uri (ephy_file (request_uri + strlen ("ephy-about:/")), NULL, NULL);
-    webkit_uri_request_set_uri (request, about_resource);
-    g_free (about_resource);
-
-    return FALSE;
-  }
-
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers;
     char *new_uri;
