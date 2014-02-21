@@ -69,9 +69,6 @@ void     ephy_overview_store_peek_snapshot        (EphyOverviewStore *self,
                                                    WebKitWebView *webview,
                                                    GtkTreeIter *iter);
 
-void     ephy_overview_store_set_default_icon     (EphyOverviewStore *store,
-                                                   GdkPixbuf         *default_icon);
-
 gboolean ephy_overview_store_needs_snapshot       (EphyOverviewStore *store,
                                                    GtkTreeIter       *iter);
 

@@ -53,7 +53,6 @@ on_find_urls_cb (EphyHistoryService *service,
   gboolean valid;
   GList *iter;
   gboolean peek_snapshot;
-  GdkPixbuf *default_icon;
 
   if (success != TRUE)
     return;
@@ -61,9 +60,6 @@ on_find_urls_cb (EphyHistoryService *service,
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store),
                                          &treeiter);
 
-  g_object_get (store,
-                "default-icon", &default_icon,
-                NULL);
   for (iter = urls; iter != NULL; iter = iter->next) {
     peek_snapshot = FALSE;
     url = (EphyHistoryURL *)iter->data;
@@ -91,7 +87,6 @@ on_find_urls_cb (EphyHistoryService *service,
                                          EPHY_OVERVIEW_STORE_TITLE, url->title,
                                          EPHY_OVERVIEW_STORE_URI, url->url,
                                          EPHY_OVERVIEW_STORE_LAST_VISIT, url->last_visit_time,
-                                         EPHY_OVERVIEW_STORE_SNAPSHOT, default_icon,
                                          -1);
       peek_snapshot = TRUE;
     }
@@ -104,8 +99,6 @@ on_find_urls_cb (EphyHistoryService *service,
   }
 
   g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
-
-  g_object_unref (default_icon);
 
   while (valid)
     valid = ephy_overview_store_remove (EPHY_OVERVIEW_STORE (store), &treeiter);

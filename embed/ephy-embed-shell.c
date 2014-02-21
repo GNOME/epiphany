@@ -364,24 +364,6 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   return G_OBJECT (shell->priv->global_history_service);
 }
 
-static GdkPixbuf *
-ephy_embed_shell_get_overview_icon (const char *icon_name)
-{
-  GError *error = NULL;
-  GdkPixbuf *pixbuf;
-  const char *filename;
-
-  filename = ephy_file (icon_name);
-  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-
-  if (!pixbuf) {
-    g_warning ("Couldn't load icon: %s", error->message);
-    g_error_free (error);
-  }
-
-  return pixbuf;
-}
-
 /**
  * ephy_embed_shell_get_frecent_store:
  * @shell: a #EphyEmbedShell
@@ -394,20 +376,15 @@ ephy_embed_shell_get_overview_icon (const char *icon_name)
 EphyFrecentStore *
 ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
 {
-  GdkPixbuf *default_icon;
-
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
   if (shell->priv->frecent_store == NULL) {
     shell->priv->frecent_store = ephy_frecent_store_new ();
-    default_icon = ephy_embed_shell_get_overview_icon ("missing-thumbnail.png");
     g_object_set (shell->priv->frecent_store,
                   "history-service",
                   ephy_embed_shell_get_global_history_service (shell),
                   "history-length", 10,
-                  "default-icon", default_icon,
                   NULL);
-    g_object_unref (default_icon);
   }
 
   return shell->priv->frecent_store;
