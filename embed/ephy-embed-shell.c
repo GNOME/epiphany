@@ -450,6 +450,31 @@ about_request_cb (WebKitURISchemeRequest *request,
 }
 
 static void
+ephy_resource_request_cb (WebKitURISchemeRequest *request)
+{
+  const char *path;
+  GInputStream *stream;
+  gsize size;
+  GError *error = NULL;
+
+  path = webkit_uri_scheme_request_get_path (request);
+  if (!g_resources_get_info (path, 0, &size, NULL, &error)) {
+    webkit_uri_scheme_request_finish_error (request, error);
+    g_error_free (error);
+    return;
+  }
+
+  stream = g_resources_open_stream (path, 0, &error);
+  if (stream) {
+    webkit_uri_scheme_request_finish (request, stream, size, NULL);
+    g_object_unref (stream);
+  } else {
+    webkit_uri_scheme_request_finish_error (request, error);
+    g_error_free (error);
+  }
+}
+
+static void
 initialize_web_extensions (WebKitWebContext* web_context,
                            EphyEmbedShell *shell)
 {
@@ -573,6 +598,11 @@ ephy_embed_shell_startup (GApplication* application)
   /* Register about scheme as local so that it can contain file resources */
   webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (web_context),
                                                         EPHY_ABOUT_SCHEME);
+
+  /* ephy-resource handler */
+  webkit_web_context_register_uri_scheme (web_context, "ephy-resource",
+                                          (WebKitURISchemeRequestCallback)ephy_resource_request_cb,
+                                          NULL, NULL);
 
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (web_context);
