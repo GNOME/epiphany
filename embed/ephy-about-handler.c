@@ -281,8 +281,6 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
 {
   char *data;
   char *version;
-  char *image_data = NULL;
-  const char *filename;
   GtkIconInfo *icon_info;
 
   version = g_strdup_printf (_("Version %s"), VERSION);
@@ -291,17 +289,13 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
                                           "web-browser",
                                           256,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-  if (icon_info != NULL) {
-    filename = gtk_icon_info_get_filename (icon_info);
-    image_data = ephy_file_create_data_uri_for_filename (filename, NULL);
-  }
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<style type=\"text/css\">%s</style></head>"  \
                           "<body>"
                           "<div class=\"dialog\">"
-                          "<img src=\"%s\"/>"
+                          "<img src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
                           "<h2 id=\"about-subtitle\">%s</h2>"
                           "<p id=\"about-tagline\">“%s”</p>"
@@ -311,13 +305,14 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
                           "</div></body></html>",
                           _("About Web"),
                           ephy_about_handler_get_style_sheet (handler),
-                          image_data ? image_data : "",
+                          icon_info ? gtk_icon_info_get_filename (icon_info) : "",
                           _("Web"),
                           version,
                           _("A simple, clean, beautiful view of the web"),
                           "WebKit", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
   g_free (version);
-  g_free (image_data);
+  if (icon_info)
+    g_object_unref (icon_info);
 
   ephy_about_handler_finish_request (request, data, -1);
 
