@@ -43,7 +43,7 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
-#define OVERVIEW_RELOAD_DELAY 1000
+#define OVERVIEW_RELOAD_DELAY 500
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 

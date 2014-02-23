@@ -40,16 +40,21 @@
   }
 
   #grid {
+      /* Width for 5 thumbnails and their paddings */
+      max-width: 1060px;
+      margin-left: auto;
+      margin-right:auto;
       padding: 0;
   }
 
   #item-list {
-    text-align: center;
+    padding: 0;
   }
 
   #grid li {
       list-style-type: none;
       display: inline-block;
+      vertical-align:top;
   }
 
   .overview-item {
@@ -61,8 +66,9 @@
       padding: 15px;
       outline: 0;
       position: relative;
-      transition: all 0.5s ease-in-out;
+      transition: 0;
       top: 0;
+      float: left;
   }
 
   .title {
@@ -82,12 +88,10 @@
       width: 180px;
       height: 135px;
       display: block;
-      transition: all 0.2s ease-in-out;
       border: 1px solid #ccc;
       background: url(ephy-resource:///org/gnome/epiphany/missing-thumbnail.png) center no-repeat,
                   linear-gradient(to bottom, #e8e8e8, #fff);
       background-repeat: no-repeat;
-      animation: fadeOut 0.5s;
       position: relative;
   }
 
@@ -132,10 +136,11 @@
   }
 
   .removed .overview-item {
-      height: 0;
+      transition: all 0.75s ease-in-out;
       width: 0;
       margin: 15px 0;
       opacity: 0;
+      padding: 0;
   }
 
   .removed .close-button {
@@ -146,6 +151,11 @@
       left: 20px;
       right: inherit;
   }
+
+  html[dir="rtl"] .overview-item {
+      float: right;
+  }
+
   </style>
 
   <script>
