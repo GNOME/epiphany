@@ -42,6 +42,7 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
+#define OVERVIEW_RELOAD_DELAY 1000
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -162,6 +163,54 @@ web_extension_page_created (GDBusConnection *connection,
 }
 
 static void
+history_service_query_urls_cb (EphyHistoryService *service,
+                               gboolean success,
+                               GList *urls,
+                               EphyEmbedShell *shell)
+{
+  GList *l;
+
+  if (!success)
+    return;
+
+  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
+
+    ephy_web_extension_proxy_history_set_urls (web_extension, urls);
+  }
+}
+
+static void
+ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
+{
+  EphyHistoryQuery *query;
+
+  query = ephy_history_query_new ();
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
+  query->limit = ephy_frecent_store_get_history_length (ephy_embed_shell_get_frecent_store (shell));
+  query->ignore_hidden = TRUE;
+
+  ephy_history_service_query_urls (shell->priv->global_history_service, query, NULL,
+                                   (EphyHistoryJobCallback) history_service_query_urls_cb,
+                                   shell);
+  ephy_history_query_free (query);
+}
+
+static void
+history_service_urls_visited_cb (EphyHistoryService *history,
+                                 EphyEmbedShell *shell)
+{
+   ephy_embed_shell_update_overview_urls (shell);
+}
+
+static gboolean
+ephy_embed_shell_update_overview (EphyEmbedShell *shell)
+{
+    ephy_embed_shell_update_overview_urls (shell);
+    return FALSE;
+}
+
+static void
 web_extension_remove_from_overview (GDBusConnection *connection,
                                     const char *sender_name,
                                     const char *object_path,
@@ -175,9 +224,14 @@ web_extension_remove_from_overview (GDBusConnection *connection,
   const char *url_to_remove;
 
   g_variant_get (parameters, "(&s)", &url_to_remove);
-  store = ephy_embed_shell_get_frecent_store (ephy_embed_shell_get_default ());
+  store = ephy_embed_shell_get_frecent_store (shell);
+
   if (ephy_overview_store_find_url (EPHY_OVERVIEW_STORE(store), url_to_remove, &iter)) {
-	  ephy_frecent_store_set_hidden(store, &iter);
+	  ephy_frecent_store_set_hidden (store, &iter);
+
+	  /* Wait for the CSS animations to finish before refreshing */
+	  g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc) ephy_embed_shell_update_overview, shell);
+
   }
 }
 
@@ -210,41 +264,6 @@ ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
                                         EphyEmbedShell *shell)
 {
   g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
-}
-
-static void
-history_service_query_urls_cb (EphyHistoryService *service,
-                               gboolean success,
-                               GList *urls,
-                               EphyEmbedShell *shell)
-{
-  GList *l;
-
-  if (!success)
-    return;
-
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
-    EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
-
-    ephy_web_extension_proxy_history_set_urls (web_extension, urls);
-  }
-}
-
-static void
-history_service_urls_visited_cb (EphyHistoryService *history,
-                                 EphyEmbedShell *shell)
-{
-  EphyHistoryQuery *query;
-
-  query = ephy_history_query_new ();
-  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
-  query->limit = ephy_frecent_store_get_history_length (ephy_embed_shell_get_frecent_store (shell));
-  query->ignore_hidden = TRUE;
-
-  ephy_history_service_query_urls (history, query, NULL,
-                                   (EphyHistoryJobCallback) history_service_query_urls_cb,
-                                   shell);
-  ephy_history_query_free (query);
 }
 
 static void
