@@ -2,11 +2,6 @@
 
 HELP_ID = epiphany
 
-HELP_MEDIA = \
-	media/epiphany-3-8.png \
-	media/private-browsing-3-8.png \
-	media/web-browser.png
-
 HELP_FILES = \
 	index.page \
 	introduction.page \
@@ -31,8 +26,15 @@ HELP_FILES = \
 	pref-cookies.page \
 	pref-css.page \
 	pref-downloads.page \
+	pref-do-not-track.page \
 	pref-font.page \
-	pref-passwords.page
+	pref-passwords.page \
+	prob-restore-closed-page.page
+
+HELP_MEDIA = \
+	media/epiphany-3-12.png \
+	media/private-browsing-3-12.png \
+	media/web-browser.png
 
 HELP_LINGUAS = cs de el es hu pt_BR
 
