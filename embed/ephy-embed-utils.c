@@ -26,6 +26,7 @@
 
 #include "ephy-about-handler.h"
 #include "ephy-embed-private.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 
 #include <string.h>
@@ -224,6 +225,31 @@ ephy_embed_utils_normalize_address (const char *address)
   }
 
   return effective_address ? effective_address : g_strdup (address);
+}
+
+char *
+ephy_embed_utils_normalize_or_autosearch_address (const char *address)
+{
+  char *query_param, *url_search;
+  char *effective_address;
+
+  if (ephy_embed_utils_address_is_valid (address))
+    return ephy_embed_utils_normalize_address (address);
+
+  url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
+                                      EPHY_PREFS_KEYWORD_SEARCH_URL);
+  if (url_search == NULL || url_search[0] == '\0') {
+    g_free (url_search);
+    url_search = g_strdup (_("http://duckduckgo.com/?q=%s&amp;t=epiphany"));
+  }
+
+  query_param = soup_form_encode ("q", address, NULL);
+  /* + 2 here is getting rid of 'q=' */
+  effective_address = g_strdup_printf (url_search, query_param + 2);
+  g_free (query_param);
+  g_free (url_search);
+
+  return effective_address;
 }
 
 gboolean

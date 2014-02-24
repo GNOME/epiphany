@@ -176,11 +176,15 @@ entry_drag_data_received_cb (GtkWidget *widget,
 		}
 		g_strfreev (uris);
 	} else if (gtk_selection_data_get_target (selection_data) == text_type) {
+		char *address;
+
 		gtk_entry_set_text (entry, (const gchar *)sel_data);
+		address = ephy_embed_utils_normalize_or_autosearch_address ((const gchar *)sel_data);
 		ephy_link_open (EPHY_LINK (controller),
-				(const gchar *)sel_data,
+				address,
 				NULL,
 				ephy_link_flags_from_current_event ());
+		g_free (address);
 	}
 }
 
@@ -191,6 +195,7 @@ entry_activate_cb (GtkEntry *entry,
 	EphyBookmarks *bookmarks;
 	const char *content;
 	char *address;
+	char *effective_address;
 	EphyLocationControllerPrivate *priv;
 
 	priv = controller->priv;
@@ -209,10 +214,30 @@ entry_activate_cb (GtkEntry *entry,
 	address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
 	g_return_if_fail (address != NULL);
 
-	ephy_link_open (EPHY_LINK (controller), g_strstrip (address), NULL, 
+	effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
+	g_free (address);
+#if 0
+	if (!ephy_embed_utils_address_has_web_scheme (effective_address))
+	{
+		/* After normalization there are still some cases that are
+		 * impossible to tell apart. One example is <URI>:<PORT> and <NON
+		 * WEB SCHEME>:<DATA>. To fix this, let's do a HEAD request to the
+		 * effective URI prefxed with http://; if we get OK Status the URI
+		 * exists, and we'll go ahead, otherwise we'll try to launch a
+		 * proper handler through gtk_show_uri. We only do this in
+		 * ephy_web_view_load_url, since this case is only relevant for URIs
+		 * typed in the location entry, which uses this method to do the
+		 * load. */
+		/* TODO: however, this is not really possible, because normalize_or_autosearch_address
+		 * prepends http:// for anything that doesn't look like a URL.
+		 */
+	}
+#endif
+
+	ephy_link_open (EPHY_LINK (controller), effective_address, NULL,
 			ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
 
-	g_free (address);
+	g_free (effective_address);
 }
 
 static void

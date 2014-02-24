@@ -2030,48 +2030,6 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 }
 
 /**
- * ephy_web_view_normalize_or_autosearch_url:
- * @view: an %EphyWebView
- * @url: a URI
- * 
- * Returns a normalized representation of @url, or an autosearch
- * string for it when necessary.
- * 
- * Returns: the normalized @url or autosearch string.
- **/
-char*
-ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
-{
-  char *effective_url;
-
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
-  g_return_val_if_fail (url, NULL);
-
-  /* If the string doesn't look like an URI, let's search it; */
-  if (!ephy_embed_utils_address_is_valid (url)) {
-    char *query_param, *url_search;
-
-    url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                        EPHY_PREFS_KEYWORD_SEARCH_URL);
-
-    if (url_search == NULL || url_search[0] == '\0') {
-      g_free (url_search);
-
-      url_search = g_strdup (_("http://duckduckgo.com/?q=%s&amp;t=epiphany"));
-    }
-
-    query_param = soup_form_encode ("q", url, NULL);
-    /* + 2 here is getting rid of 'q=' */
-    effective_url = g_strdup_printf (url_search, query_param + 2);
-    g_free (query_param);
-    g_free (url_search);
-  } else
-    effective_url = ephy_embed_utils_normalize_address (url);
-
-  return effective_url;
-}
-
-/**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
  * @request: the #WebKitNetworkRequest to be loaded
@@ -2089,7 +2047,7 @@ ephy_web_view_load_request (EphyWebView *view,
   g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
 
   url = webkit_uri_request_get_uri (request);
-  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
+  effective_url = ephy_embed_utils_normalize_address (url);
 
   webkit_uri_request_set_uri (request, effective_url);
   g_free (effective_url);
@@ -2155,47 +2113,8 @@ ephy_web_view_load_url (EphyWebView *view,
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (url);
 
-  effective_url = ephy_web_view_normalize_or_autosearch_url (view, url);
-
-  /* After normalization there are still some cases that are
-   * impossible to tell apart. One example is <URI>:<PORT> and <NON
-   * WEB SCHEME>:<DATA>. To fix this, let's do a HEAD request to the
-   * effective URI prefxed with http://; if we get OK Status the URI
-   * exists, and we'll go ahead, otherwise we'll try to launch a
-   * proper handler through gtk_show_uri. We only do this in
-   * ephy_web_view_load_url, since this case is only relevant for URIs
-   * typed in the location entry, which uses this method to do the
-   * load. */
-  if (!ephy_embed_utils_address_has_web_scheme (effective_url)) {
-#if 0
-    /* TODO: WebKit2, Network features */
-    SoupMessage *message;
-    SoupSession *session;
-    char *temp_url;
-    HEADAttemptData *data;
-
-    temp_url = g_strconcat ("http://", effective_url, NULL);
-
-    session = webkit_get_default_session ();
-    message = soup_message_new (SOUP_METHOD_HEAD,
-                                temp_url);
-
-    if (message) {
-      data = g_slice_new (HEADAttemptData);
-      data->view = view;
-      data->original_uri = g_strdup (effective_url);
-      soup_session_queue_message (session, message,
-                                  effective_url_head_cb, data);
-    } else {
-      /* If we cannot even create a message fallback to the effective
-       * url, the gtk_show_uri code will make another attempt in
-       * EphyWindow's policy code. */
-      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
-    }
-
-    g_free (temp_url);
-#endif
-  } else if (g_str_has_prefix (effective_url, "javascript:")) {
+  effective_url = ephy_embed_utils_normalize_address (url);
+  if (g_str_has_prefix (effective_url, "javascript:")) {
     char *decoded_url;
 
     decoded_url = soup_uri_decode (effective_url);

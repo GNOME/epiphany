@@ -368,8 +368,12 @@ notebook_drag_data_received_cb (GtkWidget* widget,
 	       
 		text = (char *) gtk_selection_data_get_text (selection_data);
 		if (text != NULL) {
-			ephy_link_open (EPHY_LINK (notebook), text, embed,
+			char *address;
+
+			address = ephy_embed_utils_normalize_or_autosearch_address (text);
+			ephy_link_open (EPHY_LINK (notebook), address, embed,
 					embed ? 0 : EPHY_LINK_NEW_TAB);
+			g_free (address);
 			g_free (text);
 		}
 	}

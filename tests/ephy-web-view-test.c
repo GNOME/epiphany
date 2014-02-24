@@ -26,6 +26,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-private.h"
@@ -283,7 +284,7 @@ verify_normalize_or_autosearch_urls (EphyWebView *view,
 
     url = test[i].url;
 
-    result = ephy_web_view_normalize_or_autosearch_url (view, url);
+    result = ephy_embed_utils_normalize_or_autosearch_address (url);
     g_assert_cmpstr (result, ==, test[i].expected);
 
     g_free (result);
