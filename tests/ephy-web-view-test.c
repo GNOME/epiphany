@@ -267,17 +267,18 @@ normalize_or_autosearch_t normalize_or_autosearch_test_ddg[] = {
 };
 
 normalize_or_autosearch_t normalize_or_autosearch_test_google[] = {
-  { "search", "http://www.google.com/search?q=search" },
-  { "lala/lala", "http://www.google.com/search/?q=lala%2Flala" },
+  { "search", "http://www.google.com/?q=search" },
+  { "lala/lala", "http://www.google.com/?q=lala%2Flala" },
 };
 
 static void
 verify_normalize_or_autosearch_urls (EphyWebView *view,
-                                     normalize_or_autosearch_t *test)
+                                     normalize_or_autosearch_t *test,
+                                     gint n_tests)
 {
   int i;
 
-  for (i = 0; i < G_N_ELEMENTS (test); i++) {
+  for (i = 0; i < n_tests; i++) {
     char *url, *result;
 
     url = test[i].url;
@@ -303,13 +304,13 @@ test_ephy_web_view_normalize_or_autosearch (void)
                          EPHY_PREFS_KEYWORD_SEARCH_URL,
                          "http://duckduckgo.com/?q=%s&t=epiphany");
 
-  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg);
+  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg, G_N_ELEMENTS (normalize_or_autosearch_test_ddg));
 
   g_settings_set_string (EPHY_SETTINGS_MAIN,
                          EPHY_PREFS_KEYWORD_SEARCH_URL,
                          "http://www.google.com/?q=%s");
 
-  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google);
+  verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
   g_settings_set_string (EPHY_SETTINGS_MAIN,
                          EPHY_PREFS_KEYWORD_SEARCH_URL,
