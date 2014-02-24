@@ -25,11 +25,15 @@
 #include "ephy-embed-utils.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-embed-private.h"
 #include "ephy-string.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
+
+static GRegex *non_search_regex;
+static GRegex *domain_regex;
 
 char *
 ephy_embed_utils_link_message_parse (const char *message)
@@ -70,6 +74,38 @@ ephy_embed_utils_link_message_parse (const char *message)
   return g_string_free (tmp, FALSE);
 }
 
+static gpointer
+create_non_search_regex (gpointer user_data)
+{
+  non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
+                                  G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+  return non_search_regex;
+}
+
+static GRegex *
+get_non_search_regex (void)
+{
+  static GOnce once_init = G_ONCE_INIT;
+
+  return g_once (&once_init, create_non_search_regex, NULL);
+}
+
+static gpointer
+create_domain_regex (gpointer user_data)
+{
+  domain_regex = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
+                              G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+  return domain_regex;
+}
+
+static GRegex *
+get_domain_regex (void)
+{
+  static GOnce once_init = G_ONCE_INIT;
+
+  return g_once (&once_init, create_domain_regex, NULL);
+}
+
 gboolean
 ephy_embed_utils_address_has_web_scheme (const char *address)
 {
@@ -102,6 +138,54 @@ ephy_embed_utils_address_is_existing_absolute_filename (const char *address)
 {
   return g_path_is_absolute (address) &&
     g_file_test (address, G_FILE_TEST_EXISTS);
+}
+
+static gboolean
+is_public_domain (const char *address)
+{
+  char *host;
+  gboolean retval = FALSE;
+
+  host = ephy_string_get_host_name (address);
+  if (!host)
+    return FALSE;
+
+  if (g_regex_match (get_domain_regex (), host, 0, NULL)) {
+    if (g_str_equal (host, "localhost"))
+      retval = TRUE;
+    else {
+      const char *end;
+
+      end = g_strrstr (host, ".");
+      if (end && *end != '\0')
+        retval = soup_tld_domain_is_public_suffix (end);
+    }
+  }
+
+  g_free (host);
+
+  return retval;
+}
+
+gboolean
+ephy_embed_utils_address_is_valid (const char *address)
+{
+  char *scheme;
+  gboolean retval;
+
+  if (!address)
+    return FALSE;
+
+  scheme = g_uri_parse_scheme (address);
+
+  retval = scheme ||
+    ephy_embed_utils_address_is_existing_absolute_filename (address) ||
+    g_regex_match (get_non_search_regex (), address, 0, NULL) ||
+    is_public_domain (address);
+
+  g_free (scheme);
+
+  return retval;
 }
 
 char*
@@ -185,4 +269,11 @@ ephy_embed_utils_is_no_show_address (const char *address)
       return TRUE;
 
   return FALSE;
+}
+
+void
+ephy_embed_utils_shutdown (void)
+{
+  g_clear_pointer (&non_search_regex, (GDestroyNotify)g_regex_unref);
+  g_clear_pointer (&domain_regex, (GDestroyNotify)g_regex_unref);
 }

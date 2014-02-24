@@ -709,16 +709,6 @@ ephy_web_view_finalize (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
 
-  if (priv->non_search_regex) {
-    g_regex_unref (priv->non_search_regex);
-    priv->non_search_regex = NULL;
-  }
-
-  if (priv->domain_regex) {
-    g_regex_unref (priv->domain_regex);
-    priv->domain_regex = NULL;
-  }
-
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
 
   g_free (priv->address);
@@ -1955,12 +1945,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv->file_monitor = ephy_file_monitor_new (web_view);
 
-  priv->non_search_regex = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
-                                        G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
-
-  priv->domain_regex = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
-                                    G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
-
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
   priv->history_service_cancellable = g_cancellable_new ();
 
@@ -2045,34 +2029,6 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
                        NULL);
 }
 
-static gboolean
-is_public_domain (EphyWebView *view, const char *url)
-{
-  gboolean retval = FALSE;
-  char *host = NULL;
-  EphyWebViewPrivate *priv = view->priv;
-
-  host = ephy_string_get_host_name (url);
-  g_return_val_if_fail (host, FALSE);
-
-  if (g_regex_match (priv->domain_regex, host, 0, NULL)) {
-    if (g_str_equal (host, "localhost"))
-      retval = TRUE;
-    else {
-      const char *end;
-
-      end = g_strrstr (host, ".");
-
-      if (end && *end != '\0')
-        retval = soup_tld_domain_is_public_suffix (end);
-    }
-  }
-
-  g_free (host);
-
-  return retval;
-}
-
 /**
  * ephy_web_view_normalize_or_autosearch_url:
  * @view: an %EphyWebView
@@ -2087,21 +2043,12 @@ char*
 ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
 {
   char *effective_url;
-  char *scheme;
-  EphyWebViewPrivate *priv = view->priv;
 
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
   g_return_val_if_fail (url, NULL);
 
-  scheme = g_uri_parse_scheme (url);
-
   /* If the string doesn't look like an URI, let's search it; */
-  if (!ephy_embed_utils_address_has_web_scheme (url) &&
-      scheme == NULL &&
-      !ephy_embed_utils_address_is_existing_absolute_filename (url) &&
-      priv->non_search_regex &&
-      !g_regex_match (priv->non_search_regex, url, 0, NULL) &&
-      !is_public_domain (view, url)) {
+  if (!ephy_embed_utils_address_is_valid (url)) {
     char *query_param, *url_search;
 
     url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
@@ -2120,9 +2067,6 @@ ephy_web_view_normalize_or_autosearch_url (EphyWebView *view, const char *url)
     g_free (url_search);
   } else
     effective_url = ephy_embed_utils_normalize_address (url);
-
-  if (scheme)
-    g_free (scheme);
 
   return effective_url;
 }

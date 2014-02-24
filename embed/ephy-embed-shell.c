@@ -27,6 +27,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-embed-utils.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
@@ -638,6 +639,7 @@ ephy_embed_shell_shutdown (GApplication* application)
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
   g_object_unref (ephy_embed_prefs_get_web_view_group ());
+  ephy_embed_utils_shutdown ();
 }
 
 static void
