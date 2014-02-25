@@ -1980,7 +1980,8 @@ ephy_window_configure_for_view (EphyWindow *window,
 	}
 
 	webkit_window_properties_get_geometry (properties, &geometry);
-	gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
+	if (geometry.width > 0 && geometry.height > 0)
+		gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
 
 	if (!webkit_window_properties_get_resizable (properties))
 		gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
