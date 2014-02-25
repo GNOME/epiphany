@@ -54,8 +54,9 @@ struct _EphyEmbedShellPrivate
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
-  EphyFrecentStore *frecent_store;
   EphyAboutHandler *about_handler;
+  guint update_overview_timeout_id;
+  guint hiding_overview_item;
   GDBusConnection *bus;
   GList *web_extensions;
   guint web_extensions_page_created_signal_id;
@@ -93,10 +94,14 @@ ephy_embed_shell_dispose (GObject *object)
 {
   EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
 
+  if (priv->update_overview_timeout_id > 0) {
+    g_source_remove (priv->update_overview_timeout_id);
+    priv->update_overview_timeout_id = 0;
+  }
+
   g_clear_object (&priv->encodings);
   g_clear_object (&priv->page_setup);
   g_clear_object (&priv->print_settings);
-  g_clear_object (&priv->frecent_store);
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->about_handler);
 
@@ -188,7 +193,7 @@ ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
 
   query = ephy_history_query_new ();
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
-  query->limit = ephy_frecent_store_get_history_length (ephy_embed_shell_get_frecent_store (shell));
+  query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
   query->ignore_hidden = TRUE;
 
   ephy_history_service_query_urls (shell->priv->global_history_service, query, NULL,
@@ -205,10 +210,33 @@ history_service_urls_visited_cb (EphyHistoryService *history,
 }
 
 static gboolean
-ephy_embed_shell_update_overview (EphyEmbedShell *shell)
+ephy_embed_shell_update_overview_timeout_cb (EphyEmbedShell *shell)
 {
-    ephy_embed_shell_update_overview_urls (shell);
+  shell->priv->update_overview_timeout_id = 0;
+
+  if (shell->priv->hiding_overview_item > 0)
     return FALSE;
+
+  ephy_embed_shell_update_overview_urls (shell);
+
+  return FALSE;
+}
+
+static void
+history_set_url_hidden_cb (EphyHistoryService *service,
+                           gboolean success,
+                           gpointer result_data,
+                           EphyEmbedShell *shell)
+{
+  shell->priv->hiding_overview_item--;
+
+  if (!success)
+    return;
+
+  if (shell->priv->update_overview_timeout_id > 0)
+    return;
+
+  ephy_embed_shell_update_overview_urls (shell);
 }
 
 static void
@@ -220,20 +248,22 @@ web_extension_remove_from_overview (GDBusConnection *connection,
                                     GVariant *parameters,
                                     EphyEmbedShell *shell)
 {
-  GtkTreeIter iter;
-  EphyFrecentStore *store;
   const char *url_to_remove;
 
   g_variant_get (parameters, "(&s)", &url_to_remove);
-  store = ephy_embed_shell_get_frecent_store (shell);
 
-  if (ephy_overview_store_find_url (EPHY_OVERVIEW_STORE(store), url_to_remove, &iter)) {
-	  ephy_frecent_store_set_hidden (store, &iter);
+  shell->priv->hiding_overview_item++;
+  ephy_history_service_set_url_hidden (shell->priv->global_history_service,
+                                       url_to_remove, TRUE, NULL,
+                                       (EphyHistoryJobCallback) history_set_url_hidden_cb,
+                                       shell);
 
-	  /* Wait for the CSS animations to finish before refreshing */
-	  g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc) ephy_embed_shell_update_overview, shell);
+  if (shell->priv->update_overview_timeout_id > 0)
+    g_source_remove (shell->priv->update_overview_timeout_id);
 
-  }
+  /* Wait for the CSS animations to finish before refreshing */
+  shell->priv->update_overview_timeout_id =
+    g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc) ephy_embed_shell_update_overview_timeout_cb, shell);
 }
 
 static void
@@ -328,13 +358,17 @@ history_service_cleared_cb (EphyHistoryService *service,
   }
 }
 
-static void
-frecent_store_snapshot_saved_cb (EphyOverviewStore *store,
-                                 const char *url,
-                                 const char *path,
-                                 EphyEmbedShell *shell)
+void
+ephy_embed_shell_set_thumbanil_path (EphyEmbedShell *shell,
+                                     const char *url,
+                                     time_t mtime,
+                                     const char *path)
 {
   GList *l;
+
+  ephy_history_service_set_url_thumbnail_time (shell->priv->global_history_service,
+                                               url, mtime,
+                                               NULL, NULL, NULL);
 
   for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
@@ -376,38 +410,9 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     g_signal_connect (shell->priv->global_history_service, "cleared",
                       G_CALLBACK (history_service_cleared_cb),
                       shell);
-    g_signal_connect (ephy_embed_shell_get_frecent_store (shell), "snapshot-saved",
-                      G_CALLBACK (frecent_store_snapshot_saved_cb),
-                      shell);
   }
 
   return G_OBJECT (shell->priv->global_history_service);
-}
-
-/**
- * ephy_embed_shell_get_frecent_store:
- * @shell: a #EphyEmbedShell
- *
- * Gets the #EphyFrecentStore in the shell. This can be used
- * by EphyOverview implementors.
- *
- * Returns: (transfer none): a #EphyFrecentStore
- **/
-EphyFrecentStore *
-ephy_embed_shell_get_frecent_store (EphyEmbedShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-
-  if (shell->priv->frecent_store == NULL) {
-    shell->priv->frecent_store = ephy_frecent_store_new ();
-    g_object_set (shell->priv->frecent_store,
-                  "history-service",
-                  ephy_embed_shell_get_global_history_service (shell),
-                  "history-length", 10,
-                  NULL);
-  }
-
-  return shell->priv->frecent_store;
 }
 
 /**

@@ -24,7 +24,9 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-history-service.h"
 #include "ephy-smaps.h"
+#include "ephy-snapshot-service.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-embed-private.h"
 
@@ -397,64 +399,78 @@ ephy_about_handler_handle_applications (EphyAboutHandler *handler,
   return TRUE;
 }
 
-static GString *
-ephy_about_handler_generate_overview_html (EphyOverviewStore *store)
+typedef struct {
+  char *url;
+  time_t mtime;
+} GetSnapshotPathAsyncData;
+
+static void
+got_snapshot_path_for_url_cb (EphySnapshotService *service,
+                              GAsyncResult *result,
+                              GetSnapshotPathAsyncData *data)
 {
-  GtkTreeIter iter;
-  GString *data_str;
-  char *row_url, *row_title;
-  char *row_snapshot;
-  char *thumbnail_style;
-  gboolean valid;
+  char *snapshot;
 
-  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-  data_str = g_string_new (NULL);
-
-  while (valid) {
-    gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-      EPHY_OVERVIEW_STORE_URI, &row_url,
-      EPHY_OVERVIEW_STORE_TITLE, &row_title,
-      EPHY_OVERVIEW_STORE_SNAPSHOT_PATH, &row_snapshot,
-      -1);
-
-    thumbnail_style = row_snapshot ? g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", row_snapshot) : NULL;
-    g_free (row_snapshot);
-
-    g_string_append_printf (data_str,
-      "<li>" \
-      "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">" \
-      "    <div class=\"close-button\" onclick=\"removeFromOverview(this.parentNode,event)\" title=\"%s\">&#10006;</div>" \
-      "    <span class=\"thumbnail\"%s></span>" \
-      "    <span class=\"title\">%s</span>" \
-      "  </a>" \
-      "</li>",
-      g_markup_escape_text (row_title,-1), row_url, _("Remove from overview"),
-                            thumbnail_style ? thumbnail_style : "", row_title);
-
-    g_free (row_title);
-    g_free (row_url);
-    g_free (thumbnail_style);
-
-    valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+  snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
+  if (snapshot) {
+    ephy_embed_shell_set_thumbanil_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
+    g_free (snapshot);
   }
-  return data_str;
+  g_free (data->url);
+  g_free (data);
 }
 
-
-static gboolean
-ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
-                                        WebKitURISchemeRequest *request)
+static void
+history_service_query_urls_cb (EphyHistoryService *history,
+                               gboolean success,
+                               GList *urls,
+                               WebKitURISchemeRequest *request)
 {
   GString *data_str;
   GBytes *html_file;
   GString *html = g_string_new ("");
   gsize data_length;
-  EphyOverviewStore *store;
   char *lang;
+  GList *l;
 
-  store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (ephy_embed_shell_get_default ()));
+  data_str = g_string_new (NULL);
 
-  data_str = ephy_about_handler_generate_overview_html(store);
+  if (success) {
+    EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
+
+    for (l = urls; l; l = g_list_next (l)) {
+      EphyHistoryURL *url = (EphyHistoryURL *)l->data;
+      const char *snapshot;
+      char *thumbnail_style = NULL;
+
+      snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
+      if (!snapshot) {
+        GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
+
+        data->url = g_strdup (url->url);
+        data->mtime = url->thumbnail_time;
+        ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
+                                                               url->url, url->thumbnail_time, NULL,
+                                                               (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
+                                                               data);
+      } else {
+        thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
+      }
+
+      g_string_append_printf (data_str,
+                              "<li>"
+                              "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
+                              "    <div class=\"close-button\" onclick=\"removeFromOverview(this.parentNode,event)\" title=\"%s\">&#10006;</div>"
+                              "    <span class=\"thumbnail\"%s></span>"
+                              "    <span class=\"title\">%s</span>"
+                              "  </a>"
+                              "</li>",
+                              g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
+                              thumbnail_style ? thumbnail_style : "", url->title);
+      g_free (thumbnail_style);
+    }
+  }
+
   html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_OVERVIEW, 0, NULL);
 
   lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
@@ -469,10 +485,29 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
 
   data_length = html->len;
   ephy_about_handler_finish_request (request, g_string_free (html, FALSE), data_length);
+  g_object_unref (request);
 
   g_string_free (data_str,TRUE);
   g_bytes_unref (html_file);
   g_free (lang);
+}
+
+static gboolean
+ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
+                                         WebKitURISchemeRequest *request)
+{
+  EphyHistoryService *history;
+  EphyHistoryQuery *query;
+
+  history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  query = ephy_history_query_new ();
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
+  query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
+  query->ignore_hidden = TRUE;
+  ephy_history_service_query_urls (history, query, NULL,
+                                   (EphyHistoryJobCallback)history_service_query_urls_cb,
+                                   g_object_ref (request));
+  ephy_history_query_free (query);
 
   return TRUE;
 }

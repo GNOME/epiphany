@@ -88,7 +88,11 @@ gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell  
                                                                 GFile            *file,
                                                                 const char       *mime_type,
                                                                 guint32           user_time);
-void               ephy_embed_shell_clear_cache                (EphyEmbedShell *shell);
+void               ephy_embed_shell_clear_cache                (EphyEmbedShell   *shell);
+void               ephy_embed_shell_set_thumbanil_path         (EphyEmbedShell   *shell,
+                                                                const char       *url,
+                                                                time_t            mtime,
+                                                                const char       *path);
 
 G_END_DECLS
 

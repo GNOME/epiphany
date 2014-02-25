@@ -119,6 +119,17 @@ ephy_web_overview_web_page_uri_changed (WebKitWebPage *web_page,
 }
 
 static void
+update_thumbnail_element_style (WebKitDOMElement *thumbnail,
+                                const char *path)
+{
+  char *style;
+
+  style = g_strdup_printf ("background: url(file://%s) no-repeat;", path);
+  webkit_dom_element_set_attribute (thumbnail, "style", style, NULL);
+  g_free (style);
+}
+
+static void
 ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
                                       EphyWebOverview *overview)
 {
@@ -192,13 +203,8 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
       item->thumbnail = g_object_ref (new_node);
       webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "thumbnail");
-      if (thumbnail_path) {
-        char *style;
-
-        style = g_strdup_printf ("background: url(file://%s) no-repeat;", thumbnail_path);
-        webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "style", style, NULL);
-        g_free (style);
-      }
+      if (thumbnail_path)
+        update_thumbnail_element_style (WEBKIT_DOM_ELEMENT (new_node), thumbnail_path);
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
@@ -239,14 +245,9 @@ ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
 
   for (l = overview->priv->items; l; l = g_list_next (l)) {
     OverviewItem *item = (OverviewItem *)l->data;
-    char *style;
 
-    if (g_strcmp0 (item->url, url) != 0)
-      continue;
-
-    style = g_strdup_printf ("background: url(file://%s) no-repeat;", path);
-    webkit_dom_element_set_attribute (item->thumbnail, "style", style, NULL);
-    g_free (style);
+    if (g_strcmp0 (item->url, url) == 0)
+      update_thumbnail_element_style (item->thumbnail, path);
   }
 }
 
@@ -299,7 +300,13 @@ ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview *overv
       g_signal_handlers_unblock_by_func (overview->priv->model, G_CALLBACK (ephy_web_overview_model_thumbnail_changed), overview);
       g_free (thumbnail_path);
     }
+  } else {
+    const char *path;
 
+    /* Check whether the model was updated while the overview was loading */
+    path = ephy_web_overview_model_get_url_thumbnail (overview->priv->model, url);
+    if (path)
+      update_thumbnail_element_style (thumbnail, path);
   }
   g_free (background);
 }

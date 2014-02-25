@@ -159,6 +159,68 @@ snapshot_async_data_free (SnapshotAsyncData *data)
   g_slice_free (SnapshotAsyncData, data);
 }
 
+static GdkPixbuf *
+ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
+                                        cairo_surface_t *favicon)
+{
+  GdkPixbuf *snapshot, *scaled;
+  int orig_width, orig_height;
+  float orig_aspect_ratio, dest_aspect_ratio;
+  int x_offset, new_width = 0, new_height;
+
+  orig_width = cairo_image_surface_get_width (surface);
+  orig_height = cairo_image_surface_get_height (surface);
+
+  if (orig_width < EPHY_THUMBNAIL_WIDTH ||
+      orig_height < EPHY_THUMBNAIL_HEIGHT) {
+    snapshot = gdk_pixbuf_get_from_surface (surface,
+                                            0, 0,
+                                            orig_width, orig_height);
+    scaled = gdk_pixbuf_scale_simple (snapshot,
+                                      EPHY_THUMBNAIL_WIDTH,
+                                      EPHY_THUMBNAIL_HEIGHT,
+                                      GDK_INTERP_TILES);
+  } else {
+    orig_aspect_ratio = orig_width / (float)orig_height;
+    dest_aspect_ratio = EPHY_THUMBNAIL_WIDTH / (float)EPHY_THUMBNAIL_HEIGHT;
+
+    if (orig_aspect_ratio > dest_aspect_ratio) {
+      /* Wider than taller, crop the sides. */
+      new_width = orig_height * dest_aspect_ratio;
+      new_height = orig_height;
+      x_offset = (orig_width - new_width) / 2;
+    } else {
+      /* Crop the bottom otherwise. */
+      new_width = orig_width;
+      new_height = orig_width / (float)dest_aspect_ratio;
+      x_offset = 0;
+    }
+
+    snapshot = gdk_pixbuf_get_from_surface (surface, x_offset, 0, new_width, new_height);
+    scaled = gnome_desktop_thumbnail_scale_down_pixbuf (snapshot,
+                                                        EPHY_THUMBNAIL_WIDTH,
+                                                        EPHY_THUMBNAIL_HEIGHT);
+  }
+
+  g_object_unref (snapshot);
+
+  if (favicon) {
+    GdkPixbuf* fav_pixbuf;
+    int favicon_size = 16;
+    int x_offset = 6;
+    int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
+
+    fav_pixbuf = ephy_pixbuf_get_from_surface_scaled (favicon, favicon_size, favicon_size);
+    gdk_pixbuf_composite (fav_pixbuf, scaled,
+                          x_offset, y_offset, favicon_size, favicon_size,
+                          x_offset, y_offset, 1, 1,
+                          GDK_INTERP_NEAREST, 255);
+    g_object_unref (fav_pixbuf);
+  }
+
+  return scaled;
+}
+
 static void
 snapshot_saved (EphySnapshotService *service,
                 GAsyncResult *result,
@@ -586,67 +648,6 @@ ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
   data->path = NULL;
 
   return retval;
-}
-
-GdkPixbuf *
-ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
-                                        cairo_surface_t *favicon)
-{
-  GdkPixbuf *snapshot, *scaled;
-  int orig_width, orig_height;
-  float orig_aspect_ratio, dest_aspect_ratio;
-  int x_offset, new_width = 0, new_height;
-
-  orig_width = cairo_image_surface_get_width (surface);
-  orig_height = cairo_image_surface_get_height (surface);
-
-  if (orig_width < EPHY_THUMBNAIL_WIDTH ||
-      orig_height < EPHY_THUMBNAIL_HEIGHT) {
-    snapshot = gdk_pixbuf_get_from_surface (surface,
-                                            0, 0,
-                                            orig_width, orig_height);
-    scaled = gdk_pixbuf_scale_simple (snapshot,
-                                      EPHY_THUMBNAIL_WIDTH,
-                                      EPHY_THUMBNAIL_HEIGHT,
-                                      GDK_INTERP_TILES);
-  } else {
-    orig_aspect_ratio = orig_width / (float)orig_height;
-    dest_aspect_ratio = EPHY_THUMBNAIL_WIDTH / (float)EPHY_THUMBNAIL_HEIGHT;
-
-    if (orig_aspect_ratio > dest_aspect_ratio) {
-      /* Wider than taller, crop the sides. */
-      new_width = orig_height * dest_aspect_ratio;
-      new_height = orig_height;
-      x_offset = (orig_width - new_width) / 2;
-    } else {
-      /* Crop the bottom otherwise. */
-      new_width = orig_width;
-      new_height = orig_width / (float)dest_aspect_ratio;
-      x_offset = 0;
-    }
-
-    snapshot = gdk_pixbuf_get_from_surface (surface, x_offset, 0, new_width, new_height);
-    scaled = gnome_desktop_thumbnail_scale_down_pixbuf (snapshot,
-                                                        EPHY_THUMBNAIL_WIDTH,
-                                                        EPHY_THUMBNAIL_HEIGHT);
-  }
-
-  g_object_unref (snapshot);
-
-  if (favicon) {
-    GdkPixbuf* fav_pixbuf;
-    int favicon_size = 16;
-    int x_offset = 6;
-    int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
-    fav_pixbuf = ephy_pixbuf_get_from_surface_scaled (favicon, favicon_size, favicon_size);
-    gdk_pixbuf_composite (fav_pixbuf, scaled,
-                          x_offset, y_offset, favicon_size, favicon_size,
-                          x_offset, y_offset, 1, 1,
-                          GDK_INTERP_NEAREST, 255);
-    g_object_unref (fav_pixbuf);
-  }
-
-  return scaled;
 }
 
 const char *

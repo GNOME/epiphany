@@ -67,16 +67,12 @@ libephywidgets_la_SOURCES = \
 	ephy-certificate-dialog.h		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
-	ephy-frecent-store.c			\
-	ephy-frecent-store.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-middle-clickable-button.c		\
 	ephy-middle-clickable-button.h		\
 	ephy-node-view.c			\
 	ephy-node-view.h			\
-	ephy-overview-store.c			\
-	ephy-overview-store.h			\
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\

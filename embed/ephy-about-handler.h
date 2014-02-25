@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 
 #define EPHY_ABOUT_SCHEME "ephy-about"
 #define EPHY_ABOUT_SCHEME_LEN 10
+#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 10
 
 typedef struct _EphyAboutHandlerClass   EphyAboutHandlerClass;
 typedef struct _EphyAboutHandler        EphyAboutHandler;

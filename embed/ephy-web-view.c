@@ -39,6 +39,7 @@
 #include "ephy-history-service.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-snapshot-service.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-dom-utils.h"
@@ -100,7 +101,7 @@ struct _EphyWebViewPrivate {
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
 
-  guint snapshot_idle_id;
+  guint snapshot_timeout_id;
 
   EphyHistoryPageVisitType visit_type;
 
@@ -581,6 +582,50 @@ ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
   ephy_web_view_clear_history (view);
 }
 
+typedef struct {
+  char *url;
+  time_t mtime;
+} GetSnapshotPathAsyncData;
+
+static void
+got_snapshot_path_cb (EphySnapshotService *service,
+                      GAsyncResult *result,
+                      GetSnapshotPathAsyncData *data)
+{
+  char *snapshot;
+
+  snapshot = ephy_snapshot_service_get_snapshot_path_finish (service, result, NULL);
+  if (snapshot) {
+    ephy_embed_shell_set_thumbanil_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
+    g_free (snapshot);
+  }
+  g_free (data->url);
+  g_free (data);
+}
+
+static gboolean
+web_view_check_snapshot (WebKitWebView *web_view)
+{
+  EphyWebView* view = EPHY_WEB_VIEW (web_view);
+  EphySnapshotService *service = ephy_snapshot_service_get_default ();
+  const char *url = webkit_web_view_get_uri (web_view);
+  GetSnapshotPathAsyncData *data;
+
+  view->priv->snapshot_timeout_id = 0;
+
+  if (ephy_snapshot_service_lookup_snapshot_path (service, url))
+    return FALSE;
+
+  data = g_new (GetSnapshotPathAsyncData, 1);
+  data->url = g_strdup (url);
+  data->mtime = time (NULL);
+  ephy_snapshot_service_get_snapshot_path_async (service, web_view, data->mtime, NULL,
+                                                 (GAsyncReadyCallback)got_snapshot_path_cb,
+                                                 data);
+
+  return FALSE;
+}
+
 static void
 _ephy_web_view_update_icon (EphyWebView *view)
 {
@@ -605,6 +650,11 @@ icon_changed_cb (EphyWebView *view,
                  GParamSpec *pspec,
                  gpointer user_data)
 {
+  if (view->priv->snapshot_timeout_id == 0) {
+    view->priv->snapshot_timeout_id = g_timeout_add_full (G_PRIORITY_LOW, 0,
+                                                          (GSourceFunc)web_view_check_snapshot,
+                                                          view, NULL);
+  }
   _ephy_web_view_update_icon (view);
 }
 
@@ -694,9 +744,9 @@ ephy_web_view_dispose (GObject *object)
     g_clear_object (&priv->history_service_cancellable);
   }
 
-  if (priv->snapshot_idle_id) {
-    g_source_remove (priv->snapshot_idle_id);
-    priv->snapshot_idle_id = 0;
+  if (priv->snapshot_timeout_id) {
+    g_source_remove (priv->snapshot_timeout_id);
+    priv->snapshot_timeout_id = 0;
   }
 
   g_clear_object(&priv->certificate);
@@ -1505,58 +1555,6 @@ ephy_web_view_location_changed (EphyWebView *view,
 }
 
 static void
-on_snapshot_ready (WebKitWebView *webview,
-                   GAsyncResult *res,
-                   GtkTreeRowReference *ref)
-{
-  GtkTreeModel *model;
-  cairo_surface_t *surface;
-  GError *error = NULL;
-
-  surface = webkit_web_view_get_snapshot_finish (webview, res, &error);
-  if (error) {
-    g_warning ("%s(): %s", G_STRFUNC, error->message);
-    g_error_free (error);
-    return;
-  }
-
-  model = gtk_tree_row_reference_get_model (ref);
-  ephy_overview_store_set_snapshot (EPHY_OVERVIEW_STORE (model), ref, surface,
-                                    webkit_web_view_get_favicon (webview));
-  cairo_surface_destroy (surface);
-}
-
-/* FIXME: We should be using the snapshot service for this instead of
-   using the WK API directly. */
-static gboolean
-web_view_check_snapshot (WebKitWebView *web_view)
-{
-  EphyOverviewStore *store;
-  GtkTreeIter iter;
-  GtkTreeRowReference *ref;
-  GtkTreePath *path;
-  EphyWebView* view = EPHY_WEB_VIEW (web_view);
-
-  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
-
-  store = EPHY_OVERVIEW_STORE (ephy_embed_shell_get_frecent_store (embed_shell));
-  if (ephy_overview_store_find_url (store, webkit_web_view_get_uri (web_view), &iter) &&
-      ephy_overview_store_needs_snapshot (store, &iter)) {
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
-    ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store), path);
-    gtk_tree_path_free (path);
-    webkit_web_view_get_snapshot (web_view, WEBKIT_SNAPSHOT_REGION_VISIBLE,
-                                  WEBKIT_SNAPSHOT_OPTIONS_NONE,
-                                  NULL, (GAsyncReadyCallback)on_snapshot_ready,
-                                  ref);
-  }
-
-  view->priv->snapshot_idle_id = 0;
-
-  return FALSE;
-}
-
-static void
 load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
                  gpointer user_data)
@@ -1572,6 +1570,11 @@ load_changed_cb (WebKitWebView *web_view,
     const char *loading_uri = NULL;
 
     priv->load_failed = FALSE;
+
+    if (priv->snapshot_timeout_id) {
+      g_source_remove (priv->snapshot_timeout_id);
+      priv->snapshot_timeout_id = 0;
+    }
 
     loading_uri = webkit_web_view_get_uri (web_view);
     g_signal_emit_by_name (view, "new-document-now", loading_uri);
@@ -1650,10 +1653,18 @@ load_changed_cb (WebKitWebView *web_view,
     /* Reset visit type. */
     priv->visit_type = EPHY_PAGE_VISIT_NONE;
 
-    if (!ephy_web_view_is_history_frozen (view)) {
-      if (priv->snapshot_idle_id)
-        g_source_remove (priv->snapshot_idle_id);
-      priv->snapshot_idle_id = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)web_view_check_snapshot, web_view, NULL);
+    if (!ephy_web_view_is_history_frozen (view) &&
+        ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+      if (!ephy_snapshot_service_lookup_snapshot_path (ephy_snapshot_service_get_default (), webkit_web_view_get_uri (web_view))) {
+        /* If the snapshot check hasn't been scheduled already by the favicon callback,
+         * check the snapshot if we don't get a favicon in 1 second
+         */
+        if (priv->snapshot_timeout_id == 0) {
+          priv->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
+                                                                  (GSourceFunc)web_view_check_snapshot,
+                                                                  web_view, NULL);
+        }
+      }
     }
 
     ephy_web_view_thaw_history (view);

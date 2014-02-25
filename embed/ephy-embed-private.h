@@ -23,7 +23,6 @@
 #endif
 
 #include "ephy-embed-shell.h"
-#include "ephy-frecent-store.h"
 #include "ephy-history-types.h"
 #include "ephy-web-view.h"
 
@@ -61,8 +60,6 @@ void                       ephy_web_view_load_homepage            (EphyWebView  
 char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
                                                                    const char                *title,
                                                                    GdkPixbuf                 *icon);
-EphyFrecentStore          *ephy_embed_shell_get_frecent_store      (EphyEmbedShell *shell);
-
 G_END_DECLS
 
 #endif

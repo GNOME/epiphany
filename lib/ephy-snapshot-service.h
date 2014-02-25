@@ -105,9 +105,6 @@ char                *ephy_snapshot_service_save_snapshot_finish        (EphySnap
                                                                         GAsyncResult *result,
                                                                         GError **error);
 
-GdkPixbuf           *ephy_snapshot_service_prepare_snapshot            (cairo_surface_t *surface,
-                                                                        cairo_surface_t *favicon);
-
 const char          *ephy_snapshot_service_lookup_snapshot_path        (EphySnapshotService *service,
                                                                         const char *url);
 
