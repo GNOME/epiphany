@@ -306,7 +306,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
 {
   char *data;
 
-  data = g_strdup_printf ("<html><head><title>%s</title>"
+  data = g_strdup_printf ("<html class=\"epiphany-html\"><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body class=\"epiphany-body\">"
