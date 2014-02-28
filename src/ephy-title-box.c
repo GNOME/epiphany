@@ -480,14 +480,15 @@ ephy_title_box_transform_uri_to_label (GBinding     *binding,
                                        GValue       *to_value,
                                        gpointer      user_data)
 {
-  const gchar *label;
-  gboolean     rtl;
-  gchar       *uri;
+  gchar   *decode_uri;
+  gchar   *uri;
+  gboolean rtl;
 
   rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
 
-  label = g_value_get_string (from_value);
-  uri = g_strconcat (rtl ? "▾ " : label, rtl ? label : " ▾", NULL);
+  decode_uri = g_uri_unescape_string (g_value_get_string (from_value), NULL);
+  uri = g_strconcat (rtl ? "▾ " : decode_uri, rtl ? decode_uri : " ▾", NULL);
+  g_free (decode_uri);
   g_value_take_string (to_value, uri);
 
   return TRUE;
