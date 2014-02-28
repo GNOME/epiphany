@@ -34,6 +34,7 @@
 struct _EphySnapshotServicePrivate
 {
   GnomeDesktopThumbnailFactory *factory;
+  GHashTable *cache;
 };
 
 G_DEFINE_TYPE (EphySnapshotService, ephy_snapshot_service, G_TYPE_OBJECT)
@@ -50,9 +51,11 @@ ephy_snapshot_service_class_init (EphySnapshotServiceClass *klass)
 static void
 ephy_snapshot_service_init (EphySnapshotService *self)
 {
-
   self->priv = EPHY_SNAPSHOT_SERVICE_GET_PRIVATE (self);
   self->priv->factory = gnome_desktop_thumbnail_factory_new (GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
+  self->priv->cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                             (GDestroyNotify)g_free,
+                                             (GDestroyNotify)g_free);
 }
 
 typedef struct {
@@ -104,6 +107,8 @@ get_snapshot_for_url_thread (GSimpleAsyncResult *result,
                                      "Snapshot for url \"%s\" not found in cache", data->url);
     return;
   }
+
+  g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (data->path));
 
   data->snapshot = gdk_pixbuf_new_from_file (data->path, &error);
   if (data->snapshot == NULL) {
@@ -317,6 +322,7 @@ save_snapshot_thread (GSimpleAsyncResult *result,
                                                   data->url,
                                                   data->mtime);
   data->path = gnome_desktop_thumbnail_path_for_uri (data->url, GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
+  g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (data->path));
 }
 
 GQuark
@@ -637,4 +643,13 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
   }
 
   return scaled;
+}
+
+const char *
+ephy_snapshot_service_lookup_snapshot_path (EphySnapshotService *service,
+                                            const char *url)
+{
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
+
+  return g_hash_table_lookup (service->priv->cache, url);
 }
