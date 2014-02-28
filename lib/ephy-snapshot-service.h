@@ -111,6 +111,25 @@ GdkPixbuf           *ephy_snapshot_service_prepare_snapshot            (cairo_su
 const char          *ephy_snapshot_service_lookup_snapshot_path        (EphySnapshotService *service,
                                                                         const char *url);
 
+void             ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
+                                                                        const char *url,
+                                                                        const time_t mtime,
+                                                                        GCancellable *cancellable,
+                                                                        GAsyncReadyCallback callback,
+                                                                        gpointer user_data);
+char           *ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
+                                                                        GAsyncResult *result,
+                                                                        GError **error);
+void           ephy_snapshot_service_get_snapshot_path_async           (EphySnapshotService *service,
+                                                                        WebKitWebView *web_view,
+                                                                        const time_t mtime,
+                                                                        GCancellable *cancellable,
+                                                                        GAsyncReadyCallback callback,
+                                                                        gpointer user_data);
+char                *ephy_snapshot_service_get_snapshot_path_finish    (EphySnapshotService *service,
+                                                                        GAsyncResult *result,
+                                                                        GError **error);
+
 G_END_DECLS
 
 #endif /* _EPHY_SNAPSHOT_SERVICE_H */

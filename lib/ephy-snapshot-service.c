@@ -657,3 +657,164 @@ ephy_snapshot_service_lookup_snapshot_path (EphySnapshotService *service,
 
   return g_hash_table_lookup (service->priv->cache, url);
 }
+
+static void
+get_snapshot_path_for_url_thread (GSimpleAsyncResult *result,
+                                  EphySnapshotService *service,
+                                  GCancellable *cancellable)
+{
+  SnapshotForURLAsyncData *data;
+
+  data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (result);
+  data->path = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
+  if (!data->path) {
+    g_simple_async_result_set_error (result,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR,
+                                     EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
+                                     "Snapshot for url \"%s\" not found in cache", data->url);
+  } else {
+    g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (data->path));
+  }
+}
+
+void
+ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
+                                                       const char *url,
+                                                       const time_t mtime,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data)
+{
+  GSimpleAsyncResult *result;
+  SnapshotForURLAsyncData *data;
+  const char *path;
+
+  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_return_if_fail (url != NULL);
+
+  result = g_simple_async_result_new (G_OBJECT (service), callback, user_data,
+                                      ephy_snapshot_service_get_snapshot_path_for_url_async);
+
+  data = snapshot_for_url_async_data_new (url, mtime);
+  g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)snapshot_for_url_async_data_free);
+
+  path = g_hash_table_lookup (service->priv->cache, url);
+  if (path) {
+    data->path = g_strdup (path);
+    g_simple_async_result_complete_in_idle (result);
+  } else {
+    g_simple_async_result_run_in_thread (result,
+                                         (GSimpleAsyncThreadFunc)get_snapshot_path_for_url_thread,
+                                         G_PRIORITY_LOW, cancellable);
+  }
+  g_object_unref (result);
+}
+
+char *
+ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
+                                                        GAsyncResult *result,
+                                                        GError **error)
+{
+  SnapshotForURLAsyncData *data;
+  char *retval;
+
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
+  g_return_val_if_fail (g_simple_async_result_is_valid (result,
+                                                        G_OBJECT (service),
+                                                        ephy_snapshot_service_get_snapshot_path_for_url_async),
+                        NULL);
+
+  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+    return NULL;
+
+  data = (SnapshotForURLAsyncData *)g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+
+  retval = data->path;
+  data->path = NULL;
+
+  return retval;
+}
+
+static void
+got_snapshot_path_for_url (EphySnapshotService *service,
+                           GAsyncResult *result,
+                           GSimpleAsyncResult *simple)
+{
+  SnapshotAsyncData *data;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (simple);
+  data->path = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
+  if (data->path) {
+    g_simple_async_result_complete (simple);
+    g_object_unref (simple);
+  } else {
+    ephy_snapshot_service_take_from_webview (simple);
+  }
+}
+
+void
+ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
+                                               WebKitWebView *web_view,
+                                               const time_t mtime,
+                                               GCancellable *cancellable,
+                                               GAsyncReadyCallback callback,
+                                               gpointer user_data)
+{
+  GSimpleAsyncResult *result;
+  SnapshotAsyncData *data;
+  const char *uri;
+  time_t current_time = time (NULL);
+
+  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
+
+  result = g_simple_async_result_new (G_OBJECT (service), callback, user_data,
+                                      ephy_snapshot_service_get_snapshot_path_async);
+
+  data = snapshot_async_data_new (web_view, mtime, cancellable);
+  g_simple_async_result_set_op_res_gpointer (result, data, (GDestroyNotify)snapshot_async_data_free);
+
+  uri = webkit_web_view_get_uri (web_view);
+  if (uri && current_time - mtime <= SNAPSHOT_UPDATE_THRESHOLD) {
+    const char *path = g_hash_table_lookup (service->priv->cache, uri);
+
+    if (path) {
+      data->path = g_strdup (path);
+      g_simple_async_result_complete_in_idle (result);
+    } else {
+      ephy_snapshot_service_get_snapshot_path_for_url_async (service,
+                                                             uri, mtime, cancellable,
+                                                             (GAsyncReadyCallback)got_snapshot_path_for_url,
+                                                             g_object_ref (result));
+    }
+  } else {
+    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, g_object_ref (result));
+  }
+
+  g_object_unref (result);
+}
+
+char *
+ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService *service,
+                                                GAsyncResult *result,
+                                                GError **error)
+{
+  SnapshotAsyncData *data;
+  char *retval;
+
+  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), FALSE);
+  g_return_val_if_fail (g_simple_async_result_is_valid (result,
+                                                        G_OBJECT (service),
+                                                        ephy_snapshot_service_get_snapshot_path_async),
+                        FALSE);
+
+  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+    return NULL;
+
+  data = (SnapshotAsyncData *)g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+
+  retval = data->path;
+  data->path = NULL;
+
+  return retval;
+}
