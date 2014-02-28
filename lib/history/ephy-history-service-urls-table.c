@@ -218,7 +218,8 @@ create_url_from_statement (EphySQLiteStatement *statement)
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
   url->host = ephy_history_host_new (NULL, NULL, 0, 1.0);
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
-  url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 7);
+  url->thumbnail_time = ephy_sqlite_statement_get_column_as_int (statement, 7);
+  url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 8);
 
   return url;
 }
@@ -241,6 +242,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
       "urls.typed_count, "
       "urls.last_visit_time, "
       "urls.hidden_from_overview, "
+      "urls.thumbnail_update_time, "
       "urls.host "
     "FROM "
       "urls ";
