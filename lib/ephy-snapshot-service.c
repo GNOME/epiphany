@@ -31,6 +31,9 @@
 
 #define EPHY_SNAPSHOT_SERVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_SNAPSHOT_SERVICE, EphySnapshotServicePrivate))
 
+/* Update snapshots after one week. */
+#define SNAPSHOT_UPDATE_THRESHOLD (60 * 60 * 24 * 7)
+
 struct _EphySnapshotServicePrivate
 {
   GnomeDesktopThumbnailFactory *factory;
@@ -470,6 +473,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
 {
   GSimpleAsyncResult *result;
   const char *uri;
+  time_t current_time = time (NULL);
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
@@ -483,7 +487,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
 
   /* Try to get the snapshot from the cache first if we have a URL */
   uri = webkit_web_view_get_uri (web_view);
-  if (uri)
+  if (uri && current_time - mtime <= SNAPSHOT_UPDATE_THRESHOLD)
     ephy_snapshot_service_get_snapshot_for_url_async (service,
                                                       uri, mtime, cancellable,
                                                       (GAsyncReadyCallback)got_snapshot_for_url,
