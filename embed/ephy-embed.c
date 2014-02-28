@@ -559,8 +559,10 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 
   uri = webkit_web_view_get_uri (priv->web_view);
   if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
-      g_str_has_prefix (uri, "about:"))
+      g_str_has_prefix (uri, "about:")) {
+    gtk_widget_hide (priv->progress);
     return;
+  }
 
   progress = webkit_web_view_get_estimated_load_progress (priv->web_view);
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
