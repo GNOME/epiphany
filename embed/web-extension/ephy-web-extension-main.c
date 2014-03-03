@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-web-extension.h"
+#include "ephy-web-extension-names.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 

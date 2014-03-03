@@ -34,8 +34,8 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-web-extension.h"
 #include "ephy-web-extension-proxy.h"
+#include "ephy-web-extension-names.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>

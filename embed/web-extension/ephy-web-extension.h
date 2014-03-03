@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2012 Igalia S.L.
+ *  Copyright © 2014 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,10 +30,6 @@ G_BEGIN_DECLS
 #define EPHY_WEB_EXTENSION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_WEB_EXTENSION, EphyWebExtensionClass))
 #define EPHY_IS_WEB_EXTENSION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_WEB_EXTENSION))
 #define EPHY_WEB_EXTENSION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_WEB_EXTENSION, EphyWebExtensionClass))
-
-#define EPHY_WEB_EXTENSION_SERVICE_NAME "org.gnome.Epiphany.WebExtension"
-#define EPHY_WEB_EXTENSION_OBJECT_PATH  "/org/gnome/Epiphany/WebExtension"
-#define EPHY_WEB_EXTENSION_INTERFACE    "org.gnome.Epiphany.WebExtension"
 
 typedef struct _EphyWebExtension        EphyWebExtension;
 typedef struct _EphyWebExtensionClass   EphyWebExtensionClass;

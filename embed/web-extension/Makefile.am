@@ -9,6 +9,7 @@ libephywebextension_la_SOURCES = \
 	ephy-web-extension.c \
 	ephy-web-extension.h \
 	ephy-web-extension-main.c \
+	ephy-web-extension-names.h \
 	ephy-web-overview.h \
 	ephy-web-overview.c \
 	ephy-web-overview-model.h \

@@ -21,7 +21,7 @@
 #include <config.h>
 #include "ephy-web-extension-proxy.h"
 
-#include "ephy-web-extension.h"
+#include "ephy-web-extension-names.h"
 #include "ephy-history-service.h"
 
 struct _EphyWebExtensionProxyPrivate

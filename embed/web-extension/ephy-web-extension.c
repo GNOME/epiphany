@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
- *  Copyright © 2012 Igalia S.L.
+ *  Copyright © 2014 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "ephy-uri-helpers.h"
 #include "uri-tester.h"
 #include "ephy-web-overview.h"
+#include "ephy-web-extension-names.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
