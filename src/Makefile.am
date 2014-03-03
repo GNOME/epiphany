@@ -103,22 +103,22 @@ libephymain_la_CFLAGS = \
 
 RESOURCE_FILES = \
 	resources/about.css			  \
-	resources/epiphany-bookmark-editor-ui.xml \
-	resources/epiphany-ui.xml		  \
-	resources/epiphany.ui			  \
-	resources/epiphany-application-menu.ui	  \
-	resources/prefs-dialog.ui		  \
-	resources/prefs-lang-dialog.ui		  \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
-	resources/history-dialog.ui		  \
-	resources/passwords-dialog.ui		  \
+	resources/epiphany-application-menu.ui	  \
+	resources/epiphany-bookmark-editor-ui.xml \
+	resources/epiphany-ui.xml		  \
 	resources/epiphany.css                    \
-	resources/incognito.png                   \
-	resources/incognito-tinted.png            \
+	resources/epiphany.ui			  \
 	resources/error.html			  \
-	resources/overview.html			  \
+	resources/history-dialog.ui		  \
+	resources/incognito-tinted.png            \
+	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
+	resources/overview.html			  \
+	resources/passwords-dialog.ui		  \
+	resources/prefs-dialog.ui		  \
+	resources/prefs-lang-dialog.ui		  \
 	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
