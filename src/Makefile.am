@@ -102,6 +102,7 @@ libephymain_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 RESOURCE_FILES = \
+	resources/about.css			  \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany-ui.xml		  \
 	resources/epiphany.ui			  \
