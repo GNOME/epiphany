@@ -318,7 +318,7 @@ get_title_cb (EphyLocationEntry *entry,
 	embed = ephy_embed_container_get_active_child 
 	  (EPHY_EMBED_CONTAINER (controller->priv->window));
 
-	return g_strdup (ephy_web_view_get_title (ephy_embed_get_web_view (embed)));
+	return g_strdup (ephy_embed_get_title (embed));
 }
 
 static void

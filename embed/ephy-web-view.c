@@ -61,8 +61,6 @@
  */
 
 #define MAX_HIDDEN_POPUPS       5
-#define MAX_TITLE_LENGTH        512 /* characters */
-#define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
 
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
 
@@ -80,7 +78,6 @@ struct _EphyWebViewPrivate {
 
   char *address;
   char *typed_address;
-  char *title;
   char *loading_message;
   char *link_message;
   GdkPixbuf *icon;
@@ -131,7 +128,6 @@ enum {
   PROP_POPUPS_ALLOWED,
   PROP_SECURITY,
   PROP_STATUS_MESSAGE,
-  PROP_EMBED_TITLE,
   PROP_TYPED_ADDRESS,
   PROP_IS_BLANK,
 };
@@ -368,9 +364,6 @@ ephy_web_view_get_property (GObject *object,
     case PROP_ADDRESS:
       g_value_set_string (value, priv->address);
       break;
-    case PROP_EMBED_TITLE:
-      g_value_set_string (value, priv->title);
-      break;
     case PROP_TYPED_ADDRESS:
       g_value_set_string (value, priv->typed_address);
       break;
@@ -430,7 +423,6 @@ ephy_web_view_set_property (GObject *object,
     case PROP_NAVIGATION:
     case PROP_SECURITY:
     case PROP_STATUS_MESSAGE:
-    case PROP_EMBED_TITLE:
     case PROP_IS_BLANK:
       /* read only */
       break;
@@ -762,7 +754,6 @@ ephy_web_view_finalize (GObject *object)
 
   g_free (priv->address);
   g_free (priv->typed_address);
-  g_free (priv->title);
   g_free (priv->link_message);
   g_free (priv->loading_message);
 
@@ -782,52 +773,26 @@ _ephy_web_view_set_is_blank (EphyWebView *view,
 }
 
 static void
-ephy_web_view_set_title (EphyWebView *view,
-                         const char *view_title)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  char *title = g_strdup (view_title);
-
-  if (title == NULL || g_strstrip (title)[0] == '\0') {
-    g_free (title);
-    title = priv->address ? ephy_embed_utils_get_title_from_address (priv->address) : NULL;
-
-    if (title == NULL || title[0] == '\0') {
-      g_free (title);
-      title = g_strdup (EMPTY_PAGE);
-    }
-  }
-
-  g_free (priv->title);
-  priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
-
-  g_object_notify (G_OBJECT (view), "embed-title");
-}
-
-static void
 title_changed_cb (WebKitWebView *web_view,
                   GParamSpec *spec,
                   gpointer data)
 {
   const char *uri;
-  char *title;
+  const char *title;
+  char *title_from_address = NULL;
   EphyWebView *webview  = EPHY_WEB_VIEW (web_view);
   EphyHistoryService *history = webview->priv->history_service;
 
   uri = webkit_web_view_get_uri (web_view);
+  title = webkit_web_view_get_title (web_view);
 
-  g_object_get (web_view, "title", &title, NULL);
-
-  ephy_web_view_set_title (webview, title);
-  
   if (!title && uri)
-    title = ephy_embed_utils_get_title_from_address (uri);
+    title = title_from_address = ephy_embed_utils_get_title_from_address (uri);
 
   if (uri && title && !ephy_web_view_is_history_frozen (webview))
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
 
-  g_free (title);
-
+  g_free (title_from_address);
 }
 
 /*
@@ -971,19 +936,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                         "The typed address",
                                                         "",
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-/**
- * EphyWebView:embed-title:
- *
- * Title for this embed.
- **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_EMBED_TITLE,
-                                   g_param_spec_string ("embed-title",
-                                                        "Title",
-                                                        "The view's title",
-                                                        EMPTY_PAGE,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 /**
  * EphyWebView:security-level:
@@ -1545,7 +1497,6 @@ ephy_web_view_location_changed (EphyWebView *view,
 
   if (location == NULL || location[0] == '\0') {
     ephy_web_view_set_address (view, NULL);
-    ephy_web_view_set_title (view, EMPTY_PAGE);
   } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME":applications")) {
     SoupURI *uri = soup_uri_new (location);
     char *new_address;
@@ -1654,9 +1605,6 @@ load_changed_cb (WebKitWebView *web_view,
   }
   case WEBKIT_LOAD_FINISHED:
     ephy_web_view_set_loading_message (view, NULL);
-
-    if (priv->is_blank || !webkit_web_view_get_title (web_view))
-      ephy_web_view_set_title (view, NULL);
 
     /* Ensure we load the icon for this web view, if available. */
     _ephy_web_view_update_icon (view);
@@ -1819,8 +1767,6 @@ ephy_web_view_load_error_page (EphyWebView *view,
   }
   g_free (hostname);
 
-  ephy_web_view_set_title (view, page_title);
-
   _ephy_web_view_update_icon (view);
 
   stylesheet = get_style_sheet ();
@@ -1961,7 +1907,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   priv->is_blank = TRUE;
   priv->ever_committed = FALSE;
-  priv->title = g_strdup (EMPTY_PAGE);
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
 
@@ -2187,18 +2132,6 @@ ephy_web_view_get_address (EphyWebView *view)
 {
   EphyWebViewPrivate *priv = view->priv;
   return priv->address ? priv->address : "about:blank";
-}
-
-/**
- * ephy_web_view_get_title:
- * @view: an #EphyWebView
- *
- * Return value: the title of the web page displayed in @view
- **/
-const char *
-ephy_web_view_get_title (EphyWebView *view)
-{
-  return view->priv->title;
 }
 
 /**
@@ -2731,7 +2664,7 @@ ephy_web_view_print (EphyWebView *view)
   settings = gtk_print_settings_new ();
   gtk_print_settings_set (settings,
                           GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
-                          ephy_web_view_get_title (view));
+                          webkit_web_view_get_title (WEBKIT_WEB_VIEW (view)));
   webkit_print_operation_set_print_settings (operation, settings);
   webkit_print_operation_run_dialog (operation, NULL);
   g_object_unref (operation);

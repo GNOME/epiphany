@@ -29,9 +29,11 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-string.h"
 #include "ephy-web-view.h"
 #include "nautilus-floating-bar.h"
 
@@ -45,6 +47,8 @@ static void     ephy_embed_restored_window_cb  (EphyEmbedShell *shell,
 #define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
 
 #define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
+#define MAX_TITLE_LENGTH 512 /* characters */
+#define EMPTY_PAGE_TITLE _("Blank page") /* Title for the empty page */
 
 typedef struct {
   gchar *text;
@@ -64,6 +68,7 @@ struct _EphyEmbedPrivate
   GtkWidget *fullscreen_message_label;
   char *fullscreen_string;
 
+  char *title;
   WebKitURIRequest *delayed_request;
 
   GSList *messages;
@@ -87,6 +92,7 @@ enum
 {
   PROP_0,
   PROP_WEB_VIEW,
+  PROP_TITLE,
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -241,12 +247,60 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 }
 
 static void
+ephy_embed_set_title (EphyEmbed *embed,
+                      const char *title)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+  char *new_title;
+
+  new_title = g_strdup (title);
+  if (new_title == NULL || g_strstrip (new_title)[0] == '\0') {
+    const char *address;
+
+    g_free (new_title);
+    new_title = NULL;
+
+    address = ephy_web_view_get_address (EPHY_WEB_VIEW (priv->web_view));
+    if (address && strcmp (address, "about:blank") != 0)
+      new_title = ephy_embed_utils_get_title_from_address (address);
+
+    if (new_title == NULL || new_title[0] == '\0') {
+      g_free (new_title);
+      new_title = g_strdup (EMPTY_PAGE_TITLE);
+    }
+  }
+
+  g_free (priv->title);
+  priv->title = ephy_string_shorten (new_title, MAX_TITLE_LENGTH);
+
+  g_object_notify (G_OBJECT (embed), "title");
+}
+
+static void
+web_view_title_changed_cb (WebKitWebView *web_view,
+                           GParamSpec *spec,
+                           EphyEmbed *embed)
+{
+  ephy_embed_set_title (embed, webkit_web_view_get_title (web_view));
+}
+
+static void
 load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
                  EphyEmbed *embed)
 {
-  if (load_event == WEBKIT_LOAD_COMMITTED)
+  switch (load_event) {
+  case WEBKIT_LOAD_COMMITTED:
     ephy_embed_destroy_top_widgets (embed);
+    break;
+  case WEBKIT_LOAD_FINISHED:
+    if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) ||
+        !webkit_web_view_get_title (web_view))
+      ephy_embed_set_title (embed, NULL);
+    break;
+  default:
+    break;
+  }
 }
 
 static void
@@ -368,6 +422,7 @@ ephy_embed_finalize (GObject *object)
   priv->keys = NULL;
 
   g_free (embed->priv->fullscreen_string);
+  g_free (priv->title);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -403,6 +458,9 @@ ephy_embed_get_property (GObject *object,
   {
   case PROP_WEB_VIEW:
     g_value_set_object (value, ephy_embed_get_web_view (embed));
+    break;
+  case PROP_TITLE:
+    g_value_set_string (value, ephy_embed_get_title (embed));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -441,6 +499,13 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                                                         "The WebView contained in the embed",
                                                         EPHY_TYPE_WEB_VIEW,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_TITLE,
+                                   g_param_spec_string ("title",
+                                                        "Title",
+                                                        "The embed's title",
+                                                        EMPTY_PAGE_TITLE,
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
@@ -688,6 +753,7 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_show_all (paned);
 
   g_object_connect (priv->web_view,
+                    "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
                     "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
                     "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
@@ -843,3 +909,10 @@ ephy_embed_has_load_pending (EphyEmbed *embed)
   return !!embed->priv->delayed_request;
 }
 
+const char *
+ephy_embed_get_title (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+  return embed->priv->title;
+}

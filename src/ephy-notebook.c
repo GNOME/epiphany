@@ -507,13 +507,9 @@ sync_icon (EphyWebView *view,
 }
 
 static void
-sync_label (EphyWebView *view, GParamSpec *pspec, GtkWidget *label)
+sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
 {
-	const char *title;
-
-	title = ephy_web_view_get_title (view);
-
-	gtk_label_set_text (GTK_LABEL (label), title);
+	gtk_label_set_text (GTK_LABEL (label), ephy_embed_get_title (embed));
 }
 
 static void
@@ -633,12 +629,12 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	/* Hook the label up to the tab properties */
 	view = ephy_embed_get_web_view (embed);
 	sync_icon (view, NULL, GTK_IMAGE (icon));
-	sync_label (view, NULL, label);
+	sync_label (embed, NULL, label);
 	sync_load_status (view, NULL, box);
 
 	g_signal_connect_object (view, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
-	g_signal_connect_object (view, "notify::embed-title",
+	g_signal_connect_object (embed, "notify::title",
 				 G_CALLBACK (sync_label), label, 0);
 	g_signal_connect_object (view, "load-changed",
 				 G_CALLBACK (load_changed_cb), box, 0);
@@ -791,7 +787,7 @@ ephy_notebook_remove (GtkContainer *container,
 	g_signal_handlers_disconnect_by_func
 		(view, G_CALLBACK (sync_icon), tab_label_icon);
 	g_signal_handlers_disconnect_by_func
-		(view, G_CALLBACK (sync_label), tab_label_label);
+		(tab_widget, G_CALLBACK (sync_label), tab_label_label);
 	g_signal_handlers_disconnect_by_func
 	  (view, G_CALLBACK (sync_load_status), tab_label);
 

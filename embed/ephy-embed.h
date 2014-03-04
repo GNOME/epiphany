@@ -64,6 +64,7 @@ void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
 void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
                                                       WebKitURIRequest     *request);
 gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
+const char      *ephy_embed_get_title                (EphyEmbed *embed);
 
 G_END_DECLS
 

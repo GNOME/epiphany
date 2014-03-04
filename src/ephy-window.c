@@ -1514,7 +1514,7 @@ sync_tab_popups_allowed (EphyWebView *view,
 }
 
 static void
-sync_tab_title (EphyWebView *view,
+sync_tab_title (EphyEmbed *embed,
 		GParamSpec *pspec,
 		EphyWindow *window)
 {
@@ -1523,7 +1523,7 @@ sync_tab_title (EphyWebView *view,
 	if (priv->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
-			      ephy_web_view_get_title (view));
+			      ephy_embed_get_title (embed));
 }
 
 static gboolean
@@ -2251,7 +2251,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	sync_tab_load_status    (view, WEBKIT_LOAD_STARTED, window);
 	sync_tab_is_blank	(view, NULL, window);
 	sync_tab_navigation	(view, NULL, window);
-	sync_tab_title		(view, NULL, window);
+	sync_tab_title		(embed, NULL, window);
 	sync_tab_address	(view, NULL, window);
 	sync_tab_icon		(view, NULL, window);
 	sync_tab_popup_windows	(view, NULL, window);
@@ -2275,7 +2275,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	g_signal_connect_object (view, "notify::popups-allowed",
 				 G_CALLBACK (sync_tab_popups_allowed),
 				 window, 0);
-	g_signal_connect_object (view, "notify::embed-title",
+	g_signal_connect_object (embed, "notify::title",
 				 G_CALLBACK (sync_tab_title),
 				 window, 0);
 	g_signal_connect_object (view, "notify::address",
@@ -2355,7 +2355,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	g_signal_handlers_disconnect_by_func (view,
 					      G_CALLBACK (sync_tab_navigation),
 					      window);
-	g_signal_handlers_disconnect_by_func (view,
+	g_signal_handlers_disconnect_by_func (embed,
 					      G_CALLBACK (sync_tab_title),
 					      window);
 	g_signal_handlers_disconnect_by_func (view,

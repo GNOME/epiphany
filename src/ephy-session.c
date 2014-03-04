@@ -577,7 +577,7 @@ session_tab_new (EphyEmbed *embed)
 		session_tab->url = g_strdup (address);
 	}
 
-	session_tab->title = g_strdup (ephy_web_view_get_title (web_view));
+	session_tab->title = g_strdup (ephy_embed_get_title (embed));
 	session_tab->loading = ephy_web_view_is_loading (web_view) && !ephy_embed_has_load_pending (embed);
 
 	return session_tab;

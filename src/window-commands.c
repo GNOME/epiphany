@@ -101,7 +101,7 @@ window_cmd_file_send_to	(GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-	title = ephy_web_view_get_title (ephy_embed_get_web_view (embed));
+	title = ephy_embed_get_title (embed);
 
 	subject = g_uri_escape_string (title, NULL, TRUE);
 	body = g_uri_escape_string (location, NULL, TRUE);
@@ -212,7 +212,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
 					ephy_web_view_get_address (ephy_embed_get_web_view (embed)),
-					ephy_web_view_get_title (ephy_embed_get_web_view (embed)));
+					ephy_embed_get_title (embed));
 }
 
 static void
@@ -284,13 +284,15 @@ window_cmd_file_open (GtkAction *action,
 }
 
 static char *
-get_suggested_filename (EphyWebView *view)
+get_suggested_filename (EphyEmbed *embed)
 {
+	EphyWebView *view;
 	char *suggested_filename = NULL;
 	const char *mimetype;
 	WebKitURIResponse *response;
 	WebKitWebResource *web_resource;
 
+	view = ephy_embed_get_web_view (embed);
 	web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
 	response = webkit_web_resource_get_response (web_resource);
 	mimetype = webkit_uri_response_get_mime_type (response);
@@ -298,7 +300,7 @@ get_suggested_filename (EphyWebView *view)
 	if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0)
 	{
 		/* Web Title will be used as suggested filename */
-		suggested_filename = g_strconcat (ephy_web_view_get_title (view), ".mhtml", NULL);
+		suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
 	}
 	else
 	{
@@ -321,7 +323,6 @@ window_cmd_file_save_as (GtkAction *action,
 	EphyEmbed *embed;
 	EphyFileChooser *dialog;
 	char *suggested_filename;
-	EphyWebView *view;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
@@ -333,8 +334,7 @@ window_cmd_file_save_as (GtkAction *action,
 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
-	view = ephy_embed_get_web_view (embed);
-	suggested_filename = ephy_sanitize_filename (get_suggested_filename (view));
+	suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
 
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
 	g_free (suggested_filename);
@@ -660,7 +660,7 @@ set_default_application_title (EphyApplicationDialogData *data,
 
 	if (title == NULL || title[0] == '\0')
 	{
-		title = g_strdup (ephy_web_view_get_title (data->view));
+		title = g_strdup (webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
 	}
 
 	gtk_entry_set_text (GTK_ENTRY (data->entry), title);
