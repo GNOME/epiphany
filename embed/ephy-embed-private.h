@@ -49,9 +49,6 @@ G_BEGIN_DECLS
 void                       ephy_web_view_set_visit_type           (EphyWebView *view, 
                                                                    EphyHistoryPageVisitType visit_type);
 EphyHistoryPageVisitType   ephy_web_view_get_visit_type           (EphyWebView *view);
-void                       ephy_web_view_set_loading_title        (EphyWebView               *view,
-                                                                   const char                *title,
-                                                                   gboolean                   is_address);
 void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
 void                       ephy_web_view_save                     (EphyWebView               *view,
                                                                    const char                *uri);

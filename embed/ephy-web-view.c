@@ -81,8 +81,8 @@ struct _EphyWebViewPrivate {
   char *address;
   char *typed_address;
   char *title;
-  char *loading_title;
   char *status_message;
+  char *loading_message;
   char *link_message;
   GdkPixbuf *icon;
 
@@ -766,7 +766,7 @@ ephy_web_view_finalize (GObject *object)
   g_free (priv->title);
   g_free (priv->status_message);
   g_free (priv->link_message);
-  g_free (priv->loading_title);
+  g_free (priv->loading_message);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
@@ -1513,6 +1513,36 @@ restore_zoom_level (EphyWebView *view,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
+/**
+ * ephy_web_view_set_loading_message:
+ * @view: an #EphyWebView
+ * @address: the loading address
+ *
+ * Update @view's loading message
+ **/
+static void
+ephy_web_view_set_loading_message (EphyWebView *view,
+                                   const char *address)
+{
+  EphyWebViewPrivate *priv = view->priv;
+
+  g_clear_pointer (&priv->loading_message, g_free);
+  if (address) {
+    char *title;
+
+    title = get_title_from_address (address);
+
+    if (title != NULL && title[0] != '\0') {
+      /* translators: %s here is the address of the web page */
+      priv->loading_message = g_strdup_printf (_ ("Loading “%s”…"), title);
+    } else {
+      priv->loading_message = g_strdup (_("Loading…"));
+    }
+
+    g_free (title);
+  }
+}
+
 static void
 ephy_web_view_location_changed (EphyWebView *view,
                                 const char *location)
@@ -1542,7 +1572,7 @@ ephy_web_view_location_changed (EphyWebView *view,
   } else {
     /* We do this to get rid of an eventual password in the URL. */
     ephy_web_view_set_address (view, location);
-    ephy_web_view_set_loading_title (view, location, TRUE);
+    ephy_web_view_set_loading_message (view, location);
   }
 
   ephy_web_view_set_link_message (view, NULL);
@@ -1585,10 +1615,9 @@ load_changed_cb (WebKitWebView *web_view,
     if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
 
-    ephy_web_view_set_loading_title (view, loading_uri, TRUE);
-
     g_free (priv->status_message);
     priv->status_message = g_strdup (priv->loading_title);
+    ephy_web_view_set_loading_message (view, loading_uri);
     g_object_notify (object, "status-message");
 
     /* Zoom level. */
@@ -1641,8 +1670,8 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_FINISHED:
     g_free (priv->status_message);
     priv->status_message = NULL;
+    ephy_web_view_set_loading_message (view, NULL);
     g_object_notify (object, "status-message");
-    ephy_web_view_set_loading_title (view, NULL, FALSE);
 
     if (priv->is_blank || !webkit_web_view_get_title (web_view))
       ephy_web_view_set_title (view, NULL);
@@ -2191,40 +2220,6 @@ ephy_web_view_get_title (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_set_loading_title:
- * @view: an #EphyWebView
- * @title: new loading title for @view
- * @is_address: %TRUE if @title is an address
- *
- * Update @view's loading title to @title, if @is_address is %TRUE it will
- * retrieve the title of the page at @title.
- **/
-void
-ephy_web_view_set_loading_title (EphyWebView *view,
-                                 const char *title,
-                                 gboolean is_address)
-{
-  EphyWebViewPrivate *priv = view->priv;
-  char *freeme = NULL;
-
-  g_free (priv->loading_title);
-  priv->loading_title = NULL;
-
-  if (is_address && title) {
-    title = freeme = get_title_from_address (title);
-  }
-
-  if (title != NULL && title[0] != '\0') {
-    /* translators: %s here is the address of the web page */
-    priv->loading_title = g_strdup_printf (_ ("Loading “%s”…"), title);
-  } else {
-    priv->loading_title = g_strdup (_ ("Loading…"));
-  }
-
-  g_free (freeme);
-}
-
-/**
  * ephy_web_view_is_loading:
  * @view: an #EphyWebView
  *
@@ -2254,20 +2249,6 @@ gboolean
 ephy_web_view_load_failed (EphyWebView *view)
 {
   return view->priv->load_failed;
-}
-
-/**
- * ephy_web_view_get_loading_title:
- * @view: an #EphyWebView
- *
- * Returns the loading title for @view.
- *
- * Return value: the provisional title of @view while loading
- **/
-const char *
-ephy_web_view_get_loading_title (EphyWebView *view)
-{
-  return view->priv->loading_title;
 }
 
 /**

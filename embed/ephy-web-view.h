@@ -121,7 +121,6 @@ void                       ephy_web_view_load_url                 (EphyWebView  
                                                                    const char                *url);
 gboolean                   ephy_web_view_is_loading               (EphyWebView               *view);
 gboolean                   ephy_web_view_load_failed              (EphyWebView               *view);
-const char *               ephy_web_view_get_loading_title        (EphyWebView               *view);
 GdkPixbuf *                ephy_web_view_get_icon                 (EphyWebView               *view);
 EphyWebViewDocumentType    ephy_web_view_get_document_type        (EphyWebView               *view);
 EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags     (EphyWebView               *view);
