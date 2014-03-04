@@ -57,6 +57,7 @@ test_ephy_shell_basic_embeds (void)
   /* Embed should be created. */
   embed1 = ephy_shell_new_tab_full
                   (ephy_shell,
+                   NULL, /* title */
                    NULL, /* related view */
                    window,
                    NULL, /* embed */
@@ -73,6 +74,7 @@ test_ephy_shell_basic_embeds (void)
   /* Another embed should be created */
   embed2 = ephy_shell_new_tab_full
                   (ephy_shell,
+                   NULL, /* title */
                    NULL, /* related view */
                    window, /* window */
                    NULL, /* embed */

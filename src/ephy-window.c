@@ -2040,6 +2040,7 @@ create_web_view_cb (WebKitWebView *web_view,
 	}
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 NULL,
 					 web_view,
 					 target_window,
 					 EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
@@ -2209,7 +2210,7 @@ decide_policy_cb (WebKitWebView *web_view,
 			(EPHY_EMBED_CONTAINER (window));
 
 		new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-						     NULL,
+						     NULL, NULL,
 						     target_window,
 						     embed,
 						     flags,

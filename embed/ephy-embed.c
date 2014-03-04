@@ -440,6 +440,9 @@ ephy_embed_set_property (GObject *object,
   case PROP_WEB_VIEW:
     embed->priv->web_view = g_value_get_object (value);
     break;
+  case PROP_TITLE:
+    ephy_embed_set_title (embed, g_value_dup_string (value));
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -504,8 +507,9 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                                    g_param_spec_string ("title",
                                                         "Title",
                                                         "The embed's title",
-                                                        EMPTY_PAGE_TITLE,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }

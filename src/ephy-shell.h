@@ -115,6 +115,7 @@ EphyEmbed      *ephy_shell_new_tab                      (EphyShell *shell,
                                                          EphyNewTabFlags flags);
 
 EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
+                                                         const char *title,
                                                          WebKitWebView *related_view,
                                                          EphyWindow *parent_window,
                                                          EphyEmbed *previous_embed,

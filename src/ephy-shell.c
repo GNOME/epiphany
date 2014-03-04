@@ -657,6 +657,7 @@ ephy_shell_get_default (void)
  **/
 EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
+                         const char *title,
                          WebKitWebView *related_view,
                          EphyWindow *window,
                          EphyEmbed *previous_embed,
@@ -698,7 +699,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
   else
     web_view = ephy_web_view_new ();
 
-  embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED, "web-view", web_view, NULL));
+  embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED,
+                                    "web-view", web_view,
+                                    "title", title,
+                                    NULL));
   gtk_widget_show (GTK_WIDGET (embed));
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
 
@@ -729,7 +733,7 @@ ephy_shell_new_tab (EphyShell *shell,
                     EphyEmbed *previous_embed,
                     EphyNewTabFlags flags)
 {
-  return ephy_shell_new_tab_full (shell, NULL, parent_window,
+  return ephy_shell_new_tab_full (shell, NULL, NULL, parent_window,
                                   previous_embed, flags,
                                   0);
 }
@@ -1044,7 +1048,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 
   if (!reusing_empty_tab) {
     embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-                                     NULL,
+                                     NULL, NULL,
                                      data->window,
                                      data->previous_embed,
                                      data->flags | page_flags,

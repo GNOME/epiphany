@@ -391,6 +391,7 @@ session_maybe_open_window (EphySession *session,
 		EphyEmbed *embed;
 
 		embed = ephy_shell_new_tab_full (shell,
+						 NULL /* title */,
 						 NULL /* related view */,
 						 window, NULL /* tab */,
 						 0,
@@ -910,9 +911,11 @@ confirm_before_recover (EphyWindow *window, const char *url, const char *title)
 {
 	EphyEmbed *embed;
 
-	embed = ephy_shell_new_tab (ephy_shell_get_default (),
-				    window, NULL,
-				    EPHY_NEW_TAB_APPEND_LAST);
+	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 title, NULL,
+					 window, NULL,
+					 EPHY_NEW_TAB_APPEND_LAST,
+					 0);
 
 	ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
 			               EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL);
@@ -1061,8 +1064,10 @@ session_parse_embed (SessionParserContext *context,
 
 		flags = EPHY_NEW_TAB_APPEND_LAST;
 
-		embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					    context->window, NULL, flags);
+		embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+						 title, NULL,
+						 context->window, NULL, flags,
+						 0);
 
 		web_view = ephy_embed_get_web_view (embed);
 		if (delay_loading)
