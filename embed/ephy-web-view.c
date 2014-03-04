@@ -81,7 +81,6 @@ struct _EphyWebViewPrivate {
   char *address;
   char *typed_address;
   char *title;
-  char *status_message;
   char *loading_message;
   char *link_message;
   GdkPixbuf *icon;
@@ -399,7 +398,7 @@ ephy_web_view_get_property (GObject *object,
       g_value_set_enum (value, priv->security_level);
       break;
     case PROP_STATUS_MESSAGE:
-      g_value_set_string (value, priv->status_message);
+      g_value_set_string (value, ephy_web_view_get_status_message (EPHY_WEB_VIEW (object)));
       break;
     case PROP_IS_BLANK:
       g_value_set_boolean (value, priv->is_blank);
@@ -764,7 +763,6 @@ ephy_web_view_finalize (GObject *object)
   g_free (priv->address);
   g_free (priv->typed_address);
   g_free (priv->title);
-  g_free (priv->status_message);
   g_free (priv->link_message);
   g_free (priv->loading_message);
 
@@ -1541,6 +1539,8 @@ ephy_web_view_set_loading_message (EphyWebView *view,
 
     g_free (title);
   }
+
+  g_object_notify (G_OBJECT (view), "status-message");
 }
 
 static void
@@ -1615,10 +1615,7 @@ load_changed_cb (WebKitWebView *web_view,
     if (priv->address == NULL || priv->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
 
-    g_free (priv->status_message);
-    priv->status_message = g_strdup (priv->loading_title);
     ephy_web_view_set_loading_message (view, loading_uri);
-    g_object_notify (object, "status-message");
 
     /* Zoom level. */
     restore_zoom_level (view, loading_uri);
@@ -1668,10 +1665,7 @@ load_changed_cb (WebKitWebView *web_view,
     break;
   }
   case WEBKIT_LOAD_FINISHED:
-    g_free (priv->status_message);
-    priv->status_message = NULL;
     ephy_web_view_set_loading_message (view, NULL);
-    g_object_notify (object, "status-message");
 
     if (priv->is_blank || !webkit_web_view_get_title (web_view))
       ephy_web_view_set_title (view, NULL);
@@ -2318,13 +2312,13 @@ ephy_web_view_get_status_message (EphyWebView *view)
 
   priv = view->priv;
 
-  if (priv->link_message && priv->link_message[0] != '\0') {
+  if (priv->link_message && priv->link_message[0] != '\0')
     return priv->link_message;
-  } else if (priv->status_message) {
-    return priv->status_message;
-  } else {
-    return NULL;
-  }
+
+  if (priv->loading_message)
+    return priv->loading_message;
+
+  return NULL;
 }
 
 /**
