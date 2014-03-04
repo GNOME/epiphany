@@ -769,18 +769,6 @@ ephy_web_view_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
 
-static char*
-get_title_from_address (const char *address)
-{
-  if (g_str_has_prefix (address, "file://"))
-    return g_strdup (address + 7);
-  else if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
-           !strcmp (address, "about:overview"))
-    return g_strdup (_("Most Visited"));
-  else
-    return ephy_string_get_host_name (address);
-}
-
 static void
 _ephy_web_view_set_is_blank (EphyWebView *view,
                              gboolean is_blank)
@@ -802,7 +790,7 @@ ephy_web_view_set_title (EphyWebView *view,
 
   if (title == NULL || g_strstrip (title)[0] == '\0') {
     g_free (title);
-    title = priv->address ? get_title_from_address (priv->address) : NULL;
+    title = priv->address ? ephy_embed_utils_get_title_from_address (priv->address) : NULL;
 
     if (title == NULL || title[0] == '\0') {
       g_free (title);
@@ -833,7 +821,7 @@ title_changed_cb (WebKitWebView *web_view,
   ephy_web_view_set_title (webview, title);
   
   if (!title && uri)
-    title = get_title_from_address (uri);
+    title = ephy_embed_utils_get_title_from_address (uri);
 
   if (uri && title && !ephy_web_view_is_history_frozen (webview))
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
@@ -1528,7 +1516,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
   if (address) {
     char *title;
 
-    title = get_title_from_address (address);
+    title = ephy_embed_utils_get_title_from_address (address);
 
     if (title != NULL && title[0] != '\0') {
       /* translators: %s here is the address of the web page */

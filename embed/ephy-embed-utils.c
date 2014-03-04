@@ -289,6 +289,19 @@ ephy_embed_utils_is_no_show_address (const char *address)
   return FALSE;
 }
 
+char *
+ephy_embed_utils_get_title_from_address (const char *address)
+{
+  if (g_str_has_prefix (address, "file://"))
+    return g_strdup (address + 7);
+
+  if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
+      !strcmp (address, "about:overview"))
+    return g_strdup (_("Most Visited"));
+
+  return ephy_string_get_host_name (address);
+}
+
 void
 ephy_embed_utils_shutdown (void)
 {
