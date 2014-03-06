@@ -1851,7 +1851,7 @@ save_target_uri (EphyWindow *window,
 	char *location = NULL;
 	gboolean retval = FALSE;
 
-	if ((event->state & GDK_SHIFT_MASK) != GDK_SHIFT_MASK)
+	if (!(event->state & GDK_SHIFT_MASK))
 	{
 		return FALSE;
 	}
