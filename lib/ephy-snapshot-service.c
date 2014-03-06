@@ -312,6 +312,7 @@ webview_load_failed_cb (WebKitWebView *webview,
                         GSimpleAsyncResult *result)
 {
   g_signal_handlers_disconnect_by_func (webview, webview_load_changed_cb, result);
+  g_signal_handlers_disconnect_by_func (webview, webview_load_failed_cb, result);
   g_simple_async_result_set_error (result,
                                    EPHY_SNAPSHOT_SERVICE_ERROR,
                                    EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
