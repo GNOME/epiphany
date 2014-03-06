@@ -1851,11 +1851,6 @@ save_target_uri (EphyWindow *window,
 	char *location = NULL;
 	gboolean retval = FALSE;
 
-	if (!(event->state & GDK_SHIFT_MASK))
-	{
-		return FALSE;
-	}
-
 	g_object_get (hit_test_result, "context", &context, NULL);
 
 	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
@@ -1905,17 +1900,15 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 	WebKitHitTestResult *hit_test_result;
 	gboolean handled = FALSE;
 
-	hit_test_result = g_object_ref (window->priv->hit_test_result);
-
-	switch (event->button)
+	/* Since we're only dealing with shift+click, we can do these
+	   checks early. */
+	if (!(event->state & GDK_SHIFT_MASK) || event->button != GDK_BUTTON_PRIMARY)
 	{
-	        case GDK_BUTTON_PRIMARY:
-			handled = save_target_uri (window, view, event, hit_test_result);
-			break;
-	        default:
-			break;
+		return FALSE;
 	}
 
+	hit_test_result = g_object_ref (window->priv->hit_test_result);
+	handled = save_target_uri (window, view, event, hit_test_result);
 	g_object_unref (hit_test_result);
 
 	return handled;
