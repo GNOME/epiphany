@@ -1876,7 +1876,7 @@ save_target_uri (EphyWindow *window,
 		g_object_get (G_OBJECT (hit_test_result), "image-uri", &location, NULL);
 	}
 
-	if (!location)
+	if (location)
 	{
 		LOG ("Location: %s", location);
 
