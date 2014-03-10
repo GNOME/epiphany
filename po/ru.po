@@ -12,17 +12,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-03 07:23+0000\n"
-"PO-Revision-Date: 2013-09-09 16:22+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-03-10 04:41+0000\n"
+"PO-Revision-Date: 2014-03-10 14:52+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -37,11 +39,12 @@ msgstr "Поиск в веб"
 #. duckduckgo must be translated. So, for a Finnish localized
 #. version of duckduckgo that will render results tailored for
 #. Finland, the string would be:
-#. http://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#. https://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #.
 #: ../data/default-bookmarks.rdf.in.h:13
-msgid "http://duckduckgo.com/?t=epiphany"
-msgstr "http://duckduckgo.com/?t=epiphany"
+#| msgid "http://duckduckgo.com/?t=epiphany"
+msgid "https://duckduckgo.com/?t=epiphany"
+msgstr "https://duckduckgo.com/?t=epiphany"
 
 #. Translators: you can use the regions listed in
 #. https://duckduckgo.com/params to boost a particular region
@@ -51,23 +54,30 @@ msgstr "http://duckduckgo.com/?t=epiphany"
 #. 'kad' parameter can be used to specify the locale in which
 #. duckduckgo must be translated. For such case, the search url
 #. would be
-#. http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #: ../data/default-bookmarks.rdf.in.h:24
-#: ../embed/ephy-web-view.c:2061
-#: ../src/ephy-search-provider.c:290
 #, no-c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+#| msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 
 #: ../data/epiphany.appdata.xml.in.h:1
-msgid "The web browser for the GNOME desktop, featuring tight integration with the desktop and a simple and intuitive user interface that allows you to focus on your web pages."
-msgstr "Веб-браузер для рабочего стола GNOME; Тесная интеграция с рабочим столом, простой и интуитивно-понятный интерфейс позволяют вам сосредоточиться на веб-страницах."
+#| msgid ""
+#| "The web browser for the GNOME desktop, featuring tight integration with "
+#| "the desktop and a simple and intuitive user interface that allows you to "
+#| "focus on your web pages."
+msgid ""
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages."
+msgstr ""
+"Веб-браузер для рабочего стола GNOME, обеспечивающий тесную интеграцию с "
+"рабочим столом, имеющий простой и интуитивно-понятный интерфейс, который "
+"позволяет вам сосредоточиться на веб-страницах."
 
-#: ../data/epiphany.desktop.in.in.h:1
-#: ../src/ephy-main.c:68
-#: ../src/ephy-main.c:320
-#: ../src/ephy-main.c:478
-#: ../src/window-commands.c:1787
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1512
 msgid "Web"
 msgstr "Веб-браузер"
 
@@ -91,375 +101,510 @@ msgstr "веб;браузер;интернет;"
 msgid "Browse with caret"
 msgstr "Навигация с помощью каретки"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:2
+#. DuckDuckGo is the default search engine. Must exactly match the URL used
+#. in the preferences dialog, except this string is surrounded by single quotes
+#. and uses &amp; instead of simply &. If the match is not otherwise exact,
+#. there will be a spurious, ugly entry in the preferences combo, so please
+#. test this. Should ideally also match the default smart bookmark link in
+#. default-bookmarks.rdf. See the comment there for region parameters to
+#. the URL.
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#, no-c-format
+#| msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgstr "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "URL Search"
 msgstr "URL поиска"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:3
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Search string for keywords entered in the URL bar."
 msgstr "Строка поиска для ключевых слов, введённых в панель URL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:4
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "User agent"
 msgstr "User agent"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:5
-msgid "String that will be used as user agent, to identify the browser to the web servers."
-msgstr "Строка, используемая в качестве user agent, для идентификации браузера на серверах."
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+"Строка, используемая в качестве user agent, для идентификации браузера на "
+"серверах."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:6
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
 msgstr "Автоматические загрузки"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:7
-msgid "When files cannot be opened by the browser they are automatically downloaded to the download folder and opened with the appropriate application."
-msgstr "Когда браузере не удаётся открыть файлы, они автоматически загружаются в папку и открываются при помощи соответствующего приложения."
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
+msgid ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
+msgstr ""
+"Когда браузере не удаётся открыть файлы, они автоматически загружаются в "
+"папку и открываются при помощи соответствующего приложения."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:8
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Force new windows to be opened in tabs"
 msgstr "Принудительно открывать новые окна во вкладках"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:9
-msgid "Force new window requests to be opened in tabs instead of using a new window."
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
+msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Принудительно открывать новые окна во вкладках, а не в новом окне."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Remember passwords"
 msgstr "Запоминать пароли"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Whether to store and prefill passwords in web sites."
-msgstr "Сохранять ли пароли и выполнять ли автоматическое заполнение полей с паролями на веб-сайтах."
+msgstr ""
+"Сохранять ли пароли и выполнять ли автоматическое заполнение полей с "
+"паролями на веб-сайтах."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid "Automatically manage offline status with NetworkManager"
 msgstr "Автоматически управлять автономным состоянием с помощью NetworkManager"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Enable smooth scrolling"
 msgstr "Включить плавную прокрутку"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid "Don't use an external application to view page source."
 msgstr "Не использовать внешних приложений для просмотра кода страницы"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Whether to automatically restore the last session"
 msgstr "Восстанавливать ли последний сеанс"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
-msgid "Defines how the session will be restored during startup. Allowed values are 'always' (the previous state of the application is always restored), 'crashed' (the session is only restored if the application crashes) and 'never' (the homepage is always shown)."
-msgstr "Определяет, как будет восстанавливаться сеанс. Разрешённых значения: «always» (всегда восстанавливать предыдущее состояние приложения), «crashed» (восстанавливать сеанс, только если приложение завершилось с ошибкой), «never» (начинать с домашней страницы)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
+msgid ""
+"Defines how the session will be restored during startup. Allowed values are "
+"'always' (the previous state of the application is always restored), "
+"'crashed' (the session is only restored if the application crashes) and "
+"'never' (the homepage is always shown)."
+msgstr ""
+"Определяет, как будет восстанавливаться сеанс. Разрешённых значения: "
+"«always» (всегда восстанавливать предыдущее состояние приложения), "
+"«crashed» (восстанавливать сеанс, только если приложение завершилось с "
+"ошибкой), «never» (начинать с домашней страницы)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:17
-msgid "Whether to delay loading of tabs that are not immediately visible on session restore"
-msgstr "Задерживать ли загрузку вкладок, которые невозможно немедленно показать при восстановлении сеанса"
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+"Задерживать ли загрузку вкладок, которые невозможно немедленно показать при "
+"восстановлении сеанса"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
-msgid "When this option is set to true, tabs will not start loading until the user switches to them, upon session restore."
-msgstr "Если выбран этот параметр, вкладки не будут загружаться при восстановлении сеанса до тех пор, пока пользователь не переключится на них."
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Если выбран этот параметр, вкладки не будут загружаться при восстановлении "
+"сеанса до тех пор, пока пользователь не переключится на них."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
-msgid "Show toolbars by default"
-msgstr "Показывать панели инструментов по умолчанию"
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
+msgid "Process model"
+msgstr "Модель процессов"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
+msgid ""
+"This option allows to set the process model used. Use 'shared-secondary-"
+"process' to use a single web process shared by all the tabs and 'one-"
+"secondary-process-per-web-view' to use a different web process for each tab."
+msgstr ""
+"Этот параметр позволяет устанавливать используемую модель процессов: «shared-"
+"secondary-process» — использовать один процесс для всех вкладок; «one-"
+"secondary-process-per-web-view» — использовать отдельные процессы для каждой "
+"вкладки."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Toolbar style"
 msgstr "Стиль панели инструментов"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
-msgid "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and \"text\"."
-msgstr "Стиль панели инструментов. Разрешённые значение: «» (использовать стиль GNOME), «both» (текст и значки), «both-horiz» (текст рядом со значками), «icons» (значки) и «text» (текст)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
+msgid ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+msgstr ""
+"Стиль панели инструментов. Разрешённые значение: «» (использовать стиль "
+"GNOME), «both» (текст и значки), «both-horiz» (текст рядом со значками), "
+"«icons» (значки) и «text» (текст)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid "[Deprecated]"
 msgstr "[Устарело]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
-msgid "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' instead."
-msgstr "[Deprecated] Этот параметр устарел, используйте вместо него параметр «tabs-bar-visibility-policy»."
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
+msgid ""
+"[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
+"instead."
+msgstr ""
+"[Deprecated] Этот параметр устарел, используйте вместо него параметр «tabs-"
+"bar-visibility-policy»."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid "Visibility of the downloads window"
 msgstr "Видимость окна загрузок"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
-msgid "Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started."
-msgstr "Показывать или скрывать окно загрузок. Если окно скрыто, при запуске новых загрузок показывается уведомление."
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
+msgid ""
+"Hide or show the downloads window. When hidden, a notification will be shown "
+"when new downloads are started."
+msgstr ""
+"Показывать или скрывать окно загрузок. Если окно скрыто, при запуске новых "
+"загрузок показывается уведомление."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid "The visibility policy for the tabs bar."
 msgstr "Политика отображения панели вкладок."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
-msgid "Controls when the tabs bar is shown. Possible values are 'always' (the tabs bar is always shown), 'more-than-one' (the tabs bar is only shown if there's two or more tabs) and 'never' (the tabs bar is never shown)."
-msgstr "Управляет отображением панели вкладок. Возможные значения: «always» (панель отображается всегда), «more-than-one» (панель отображается, только если количество вкладок больше одной) и «never» (панель никогда не отображается)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
+msgid ""
+"Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
+"bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
+"two or more tabs) and 'never' (the tabs bar is never shown)."
+msgstr ""
+"Управляет отображением панели вкладок. Возможные значения: «always» (панель "
+"отображается всегда), «more-than-one» (панель отображается, только если "
+"количество вкладок больше одной) и «never» (панель никогда не отображается)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Minimum font size"
 msgstr "Минимальный размер шрифта"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use GNOME fonts"
 msgstr "Использовать шрифты GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
-msgid "Use GNOME desktop wide font configuration."
-msgstr "Использовать настройки шрифтов для GNOME."
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#| msgid "Use GNOME fonts"
+msgid "Use GNOME font settings."
+msgstr "Использовать шрифты GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Custom sans-serif font"
 msgstr "Другой шрифт без засечек"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
-msgid "A value to be used to override sans-serif desktop font when use-gnome-fonts is set."
-msgstr "Значение, используемое для замены шрифта без засечек (должен быть установлен параметр «use-gnome-fonts»)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
+msgid ""
+"A value to be used to override sans-serif desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+"Значение, используемое для замены шрифта без засечек (должен быть установлен "
+"параметр «use-gnome-fonts»)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Custom serif font"
 msgstr "Другой шрифт с засечками"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
-msgid "A value to be used to override serif desktop font when use-gnome-fonts is set."
-msgstr "Значение, используемое для замены шрифта с засечками (должен быть установлен параметр «use-gnome-fonts»)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
+msgid ""
+"A value to be used to override serif desktop font when use-gnome-fonts is "
+"set."
+msgstr ""
+"Значение, используемое для замены шрифта с засечками (должен быть установлен "
+"параметр «use-gnome-fonts»)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Custom monospace font"
 msgstr "Другой моноширный шрифт"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
-msgid "A value to be used to override monospace desktop font when use-gnome-fonts is set."
-msgstr "Значение, используемое для замены моноширного шрифта (должен быть установлен параметр «use-gnome-fonts»)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
+msgid ""
+"A value to be used to override monospace desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+"Значение, используемое для замены моноширного шрифта (должен быть установлен "
+"параметр «use-gnome-fonts»)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Use own colors"
 msgstr "Использовать собственные цвета"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Использовать собственные цвета вместо цветов, запрашиваемых страницей."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Use own fonts"
 msgstr "Использовать собственные шрифты"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Использовать собственные шрифты вместо запрашиваемых страницей."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use a custom CSS"
 msgstr "Использовать другой CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Использовать другой файл CSS, чтобы изменить CSS веб-сайтов."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Enable spell checking"
 msgstr "Включить проверку правописания"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Spell check any text typed in editable areas."
 msgstr "Проверять правописания любого текста в редактируемых областях."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Default encoding"
 msgstr "Кодировка по умолчанию"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
-msgid "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
-msgstr "Кодировка по умолчанию. Принимает значения, которые может понять WebKitGTK+."
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
+msgid ""
+"Default encoding. Accepted values are the ones WebKitGTK+ can understand."
+msgstr ""
+"Кодировка по умолчанию. Принимает значения, которые может понять WebKitGTK+."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Size of disk cache"
 msgstr "Размер кэша на диске"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Size of disk cache, in MB."
 msgstr "Размер кэша на диске, в МБ."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "Languages"
 msgstr "Языки"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Preferred languages, two letter codes."
 msgstr "Предпочтительные языки, двухбуквенные коды."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Cookie accept"
 msgstr "Получение cookie"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
-msgid "Where to accept cookies from. Possible values are \"anywhere\", \"current site\" and \"nowhere\"."
-msgstr "Откуда получать cookie. Возможные значения: «anywhere» (ото всех), «current site» (от текущего сайта) и «nowhere» (не получать)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
+msgid ""
+"Where to accept cookies from. Possible values are \"anywhere\", \"current "
+"site\" and \"nowhere\"."
+msgstr ""
+"Откуда получать cookie. Возможные значения: «anywhere» (ото всех), «current "
+"site» (от текущего сайта) и «nowhere» (не получать)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Image animation mode"
 msgstr "Режим анимации изображений"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
-msgid "How to present animated images. Possible values are \"normal\", \"once\" and \"disabled\"."
-msgstr "Как показывать анимационные изображения. Возможые значения: «normal» (обычный способ), «once» (одиночная анимация) и «disabled» (отключить анимацию)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
+"Как показывать анимационные изображения. Возможые значения: "
+"«normal» (обычный способ), «once» (одиночная анимация) и "
+"«disabled» (отключить анимацию)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Allow popups"
 msgstr "Разрешить всплывающие окна"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr "Разрешать ли сайтам открывать новые окна с помощью JavaScript (если включён JavaScript)."
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgstr ""
+"Разрешать ли сайтам открывать новые окна с помощью JavaScript (если включён "
+"JavaScript)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable Plugins"
 msgstr "Включить модули"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Enable JavaScript"
 msgstr "Включить JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable WebGL"
 msgstr "Включить WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Включить ли поддержку для контекста WebGL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Enable WebAudio"
 msgstr "Включить WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to enable support for WebAudio."
 msgstr "Включить ли поддержку WebAudio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Do Not Track"
 msgstr "Не следить"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
-msgid "Whether to tell websites that we do not wish to be tracked. Please note that web pages are not forced to follow this setting."
-msgstr "Сообщать ли веб-сайтам о нежелательности слежения. Заметьте, что веб-страницы не обязаны следовать этому параметру."
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
+msgid ""
+"Whether to tell websites that we do not wish to be tracked. Please note that "
+"web pages are not forced to follow this setting."
+msgstr ""
+"Сообщать ли веб-сайтам о нежелательности слежения. Заметьте, что веб-"
+"страницы не обязаны следовать этому параметру."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "Enable Adblock"
 msgstr "Включить Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
-msgid "Whether to block the embedded advertisements that web pages might want to show."
-msgstr "Блокировать ли встроенную рекламу, которую показывают некоторые веб-страницы."
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
+msgid ""
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
+msgstr ""
+"Блокировать ли встроенную рекламу, которую показывают некоторые веб-страницы."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "The downloads folder"
 msgstr "Папка для загрузок"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
-msgid "The path of the folder where to download files to; or \"Downloads\" to use the default downloads folder, or \"Desktop\" to use the desktop folder."
-msgstr "Путь к папке, в которую загружаются файлы; «Downloads» — использовать папку загрузок по умолчанию; «Desktop» — использовать папку рабочего стола."
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
+msgid ""
+"The path of the folder where to download files to; or \"Downloads\" to use "
+"the default downloads folder, or \"Desktop\" to use the desktop folder."
+msgstr ""
+"Путь к папке, в которую загружаются файлы; «Downloads» — использовать папку "
+"загрузок по умолчанию; «Desktop» — использовать папку рабочего стола."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
-msgid "History pages time range"
-msgstr "Диапазон истории страниц"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
-msgid "Whether to show the title column in the history window."
-msgstr "Показывать ли столбец названия заголовка в окне журнала."
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
-msgid "Whether to show the address column in the history window."
-msgstr "Показывать ли столбец адреса в окне журнала."
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
-msgid "Whether to show the date-time column in the history window."
-msgstr "Показывать ли столбец даты в окне журнала."
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Показывать ли столбец названия заголовка в окне закладок."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Показывать ли столбец адреса в окне закладок."
 
-#: ../embed/ephy-about-handler.c:144
-#: ../embed/ephy-about-handler.c:146
+#: ../embed/ephy-about-handler.c:141
 msgid "Installed plugins"
 msgstr "Установленные модели"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:142
+#| msgid "Enable Plugins"
+msgid "Plugins"
+msgstr "Модули"
+
+#: ../embed/ephy-about-handler.c:145
+msgid "Plugins are disabled in the preferences"
+msgstr "Модули отключены в параметрах"
+
+#: ../embed/ephy-about-handler.c:158
 msgid "Enabled"
 msgstr "Включён"
 
-#. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:159
+#. webkit_plugin_get_enabled (plugin) &&
+#: ../embed/ephy-about-handler.c:158
 msgid "Yes"
 msgstr "Да"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:158
 msgid "No"
 msgstr "Нет"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:159
 msgid "MIME type"
 msgstr "Тип MIME"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:159
 msgid "Description"
 msgstr "Описание"
 
-#: ../embed/ephy-about-handler.c:160
+#: ../embed/ephy-about-handler.c:159
 msgid "Suffixes"
 msgstr "Суффиксы"
 
-#: ../embed/ephy-about-handler.c:220
-#: ../embed/ephy-about-handler.c:223
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
 msgid "Memory usage"
 msgstr "Использование памяти"
 
-#: ../embed/ephy-about-handler.c:303
-#: ../embed/ephy-about-handler.c:305
+#: ../embed/ephy-about-handler.c:270
+#, c-format
+msgid "Version %s"
+msgstr "Версия %s"
+
+#: ../embed/ephy-about-handler.c:290
+#| msgid "_About"
+msgid "About Web"
+msgstr "О приложении"
+
+#: ../embed/ephy-about-handler.c:294
+#| msgid ""
+#| "A simple, clean, beautiful view of the web.\n"
+#| "Powered by WebKit %d.%d.%d"
+msgid "A simple, clean, beautiful view of the web"
+msgstr "Простой, красивый и удобный веб-браузер"
+
+#: ../embed/ephy-about-handler.c:345 ../embed/ephy-about-handler.c:346
 msgid "Applications"
 msgstr "Приложения"
 
-#: ../embed/ephy-about-handler.c:306
+#: ../embed/ephy-about-handler.c:347
 msgid "List of installed web applications"
 msgstr "Список установленных веб-приложений"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:327
+#: ../embed/ephy-about-handler.c:364
 msgid "Installed on:"
 msgstr "Установлено:"
 
-#: ../embed/ephy-about-handler.c:400
-#: ../embed/ephy-about-handler.c:403
+#: ../embed/ephy-about-handler.c:468
+#| msgid "Remove from this topic"
+msgid "Remove from overview"
+msgstr "Удалить"
+
+#: ../embed/ephy-about-handler.c:483 ../embed/ephy-web-view.c:781
+msgid "Most Visited"
+msgstr "Наиболее посещаемый"
+
+#: ../embed/ephy-about-handler.c:542 ../embed/ephy-about-handler.c:543
 msgid "Private Browsing"
 msgstr "Приватный просмотр"
 
-#: ../embed/ephy-about-handler.c:404
-msgid "You are currently browsing <em>incognito</em>. Pages viewed in this mode will not show up in your browsing history and all stored information will be cleared when you close the window."
-msgstr "В данный момент просмотр работает <em>инкогнито</em>. В этом режиме посещённые страницы не будут сохраняться в журнале посещений, а вся сохранённая информация будет удалена после закрытия окна."
+#: ../embed/ephy-about-handler.c:544
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window."
+msgstr ""
+"В данный момент просмотр работает <em>инкогнито</em>. В этом режиме "
+"посещённые страницы не будут сохраняться в журнале посещений, а вся "
+"сохранённая информация будет удалена после закрытия окна."
 
-#: ../embed/ephy-embed.c:487
+#: ../embed/ephy-embed.c:473
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Для перехода в полноэкранный режим нажмите %s"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:490
+#: ../embed/ephy-embed.c:476
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:490
+#: ../embed/ephy-embed.c:476
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed-utils.c:59
+#: ../embed/ephy-embed-utils.c:64
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Отправить электронное письмо по адресу «%s»"
+
+#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
+#, c-format
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
@@ -785,127 +930,162 @@ msgstr "Юникод (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Неизвестная (%s)"
 
-#: ../embed/ephy-overview.h:53
-msgid "Most Visited"
-msgstr "Наиболее посещаемый"
+#: ../embed/ephy-find-toolbar.c:105
+msgid "Text not found"
+msgstr "Текст не найден"
+
+#: ../embed/ephy-find-toolbar.c:112
+msgid "Search wrapped back to the top"
+msgstr "Поиск вернулся обратно к началу"
+
+#: ../embed/ephy-find-toolbar.c:456
+msgid "Type to search…"
+msgstr "Найти..."
+
+#: ../embed/ephy-find-toolbar.c:462
+msgid "Find previous occurrence of the search string"
+msgstr "Найти предыдущее вхождение строки поиска"
+
+#: ../embed/ephy-find-toolbar.c:470
+msgid "Find next occurrence of the search string"
+msgstr "Найти следующее вхождение строки поиска"
 
 #. characters
-#: ../embed/ephy-web-view.c:64
-#: ../embed/ephy-web-view.c:2757
+#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:2807
 msgid "Blank page"
 msgstr "Пустая страница"
 
-#: ../embed/ephy-web-view.c:495
-msgid "Not now"
-msgstr "Не сейчас"
+#: ../embed/ephy-web-view.c:497 ../src/window-commands.c:329
+msgid "Save"
+msgstr "Сохранить"
 
-#: ../embed/ephy-web-view.c:496
-msgid "Store password"
-msgstr "Сохранить пароль"
-
-#. Translators: The first %s is the username and the second one is the
-#. * hostname where this is happening. Example: gnome@gmail.com and
-#. * mail.google.com.
+#. Translators: The %s the hostname where this is happening.
+#. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:508
+#: ../embed/ephy-web-view.c:509
 #, c-format
-msgid "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>Сохранить пароль для <b>%s</b> в <b>%s</b>?</big>"
+msgid "Do you want to save your password for “%s”?"
+msgstr "Хотите сохранить пароль для «%s»?"
 
-#: ../embed/ephy-web-view.c:1364
+#: ../embed/ephy-web-view.c:1442
 msgid "Deny"
 msgstr "Запретить"
 
-#: ../embed/ephy-web-view.c:1365
+#: ../embed/ephy-web-view.c:1443
 msgid "Allow"
 msgstr "Разрешить"
 
-#: ../embed/ephy-web-view.c:1375
+#: ../embed/ephy-web-view.c:1453
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
-msgstr "Страница <b>%s</b> пытается получить информацию о вашем местоположении."
+msgstr ""
+"Страница <b>%s</b> пытается получить информацию о вашем местоположении."
 
-#: ../embed/ephy-web-view.c:1704
+#: ../embed/ephy-web-view.c:1759
 msgid "None specified"
 msgstr "Не определено"
 
-#: ../embed/ephy-web-view.c:1713
-#: ../embed/ephy-web-view.c:1731
+#: ../embed/ephy-web-view.c:1772 ../embed/ephy-web-view.c:1787
 #, c-format
-msgid "Oops! Error loading %s"
-msgstr "Ой! Ошибка загрузки %s"
+#| msgid "Loading “%s”…"
+msgid "Problem loading “%s”"
+msgstr "Проблема при загрузке «%s»"
 
-#: ../embed/ephy-web-view.c:1715
-msgid "Oops! It was not possible to show this website"
-msgstr "Ой! Невозможно загрузить этот веб-сайт"
+#: ../embed/ephy-web-view.c:1774
+#| msgid "Oops! It was not possible to show this website"
+msgid "Oops! Unable to display this website."
+msgstr "Ой! Невозможно отобразить этот веб-сайт"
 
-#: ../embed/ephy-web-view.c:1716
+#: ../embed/ephy-web-view.c:1775
 #, c-format
-msgid "<p>The website at <strong>%s</strong> seems to be unavailable. The precise error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or moved to a new address. Don't forget to check that your internet connection is working correctly.</p>"
-msgstr "<p>Возможно, веб-сайт <strong>%s</strong> недоступен. Ошибка:</p><p><em>%s</em></p><p>Сайт может быть временно недоступен, или изменился адрес сайта. Не забудьте проверить, что Интернет-соединение работает нормально.</p>"
+#| msgid ""
+#| "<p>The website at <strong>%s</strong> seems to be unavailable. The "
+#| "precise error was:</p><p><em>%s</em></p><p>It could be temporarily "
+#| "switched off or moved to a new address. Don't forget to check that your "
+#| "internet connection is working correctly.</p>"
+msgid ""
+"<p>The site at “%s” seems to be unavailable. The precise error was:</"
+"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
+"new address. You may wish to verify that your internet connection is working "
+"correctly.</p>"
+msgstr ""
+"<p>Возможно, веб-сайт «%s» недоступен. Ошибка:</p><p><code>%s</code></"
+"p><p>Сайт может быть временно недоступен, или изменился адрес сайта. Также "
+"проверьте Интернет-соединение.</p>"
 
-#: ../embed/ephy-web-view.c:1725
+#: ../embed/ephy-web-view.c:1783
 msgid "Try again"
 msgstr "Попробовать снова"
 
-#: ../embed/ephy-web-view.c:1733
-msgid "Oops! This site might have caused the web browser to close unexpectedly"
-msgstr "Ой! Этот сайт может привести к неожиданному завершению работы Epiphany"
+#: ../embed/ephy-web-view.c:1789
+msgid "Oops! There may be a problem."
+msgstr "Ой! Кажется возникла проблема."
 
-#: ../embed/ephy-web-view.c:1735
+#: ../embed/ephy-web-view.c:1790
 #, c-format
-msgid "<p>This page was loading when the web browser closed unexpectedly.</p><p>This might happen again if you reload the page. If it does, please report the problem to the <strong>%s</strong> developers.</p>"
-msgstr "<p>Эта страница загружалась, когда веб-браузер неожиданно закрылся.</p><p>Это может произойти снова, если вы перезагрузите страницу. Если это произойдёт, сообщите о проблеме разработчикам <strong>%s</strong>.</p>"
+#| msgid ""
+#| "<p>This page was loading when the web browser closed unexpectedly.</"
+#| "p><p>This might happen again if you reload the page. If it does, please "
+#| "report the problem to the <strong>%s</strong> developers.</p>"
+msgid ""
+"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
+"happens again, please report the problem to the <strong>%s</strong> "
+"developers.</p>"
+msgstr ""
+"<p>Эта страница загружалась, когда веб-браузер неожиданно закрылся.</"
+"p><p>Если это произойдёт ещё раз, сообщите о проблеме разработчикам <strong>"
+"%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1743
-msgid "Load again anyway"
-msgstr "Всё равно загрузить снова"
+#: ../embed/ephy-web-view.c:1795 ../embed/ephy-web-view.c:1802
+#| msgid "Load again anyway"
+msgid "Reload Anyway"
+msgstr "Всё равно перезагрузить"
 
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1799
 #, c-format
-msgid "Oops! Something went wrong displaying %s"
-msgstr "Ой! При попытке открыть %s что-то пошло не так"
+#| msgid "Loading “%s”…"
+msgid "Problem displaying “%s”"
+msgstr "Проблема при отображении «%s»"
 
-#: ../embed/ephy-web-view.c:1750
+#: ../embed/ephy-web-view.c:1800
 msgid "Oops!"
 msgstr "Ой!"
 
-#: ../embed/ephy-web-view.c:1751
-msgid "Something went wrong while displaying this page. Please reload or visit a different page to continue."
-msgstr "При просмотре этой страницы что-то пошло не так. Перезагрузите и откройте другую страницу."
+#: ../embed/ephy-web-view.c:1801
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"При просмотре этой страницы что-то пошло не так. Перезагрузите и откройте "
+"другую страницу."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2299
+#: ../embed/ephy-web-view.c:2219
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Загружается «%s»…"
 
-#: ../embed/ephy-web-view.c:2301
+#: ../embed/ephy-web-view.c:2221
 msgid "Loading…"
 msgstr "Загружается…"
 
-#: ../embed/ephy-web-view.c:2661
-#: ../src/bookmarks/ephy-bookmarks-editor.c:818
+#: ../embed/ephy-web-view.c:2711
 msgid "_OK"
 msgstr "_OK"
 
-#: ../lib/ephy-file-chooser.c:184
-#: ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:639
-#: ../src/bookmarks/ephy-bookmarks-editor.c:815
-#: ../src/pdm-dialog.c:343
-#: ../src/window-commands.c:992
-#| msgid "Cancel"
+#: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
+#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
+#: ../src/resources/clear-data-dialog.ui.h:3
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:808
 msgid "_Cancel"
 msgstr "_Отмена"
 
-#: ../lib/ephy-file-chooser.c:185
-#| msgid "Open"
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
 msgid "_Open"
 msgstr "_Открыть"
 
 #: ../lib/ephy-file-chooser.c:194
-#| msgid "Save"
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -921,14 +1101,12 @@ msgstr "Веб-страницы"
 msgid "Images"
 msgstr "Изображения"
 
-#: ../lib/ephy-file-chooser.c:238
-#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "Все файлы"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112
-#: ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Загрузки"
 
@@ -956,10 +1134,19 @@ msgstr "Не удалось создать каталог «%s»."
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: ../lib/ephy-form-auth-data.c:126
+#: ../lib/ephy-form-auth-data.c:139
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s в форме в %s"
+
+#. Translators: The first %s is the hostname where this is happening.
+#. * Example: mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:145
+#, c-format
+#| msgid "Password for %s in a form in %s"
+msgid "Password in a form in %s"
+msgstr "Пароль в форме в %s"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
@@ -980,8 +1167,12 @@ msgid "Cannot overwrite existing file “%s”"
 msgstr "Не удалось переписать существующий файл «%s»"
 
 #: ../lib/ephy-gui.c:246
-msgid "A file with this name already exists and you don't have permission to overwrite it."
-msgstr "Файл с таким именем уже существует и для его перезаписи не хватает прав доступа."
+msgid ""
+"A file with this name already exists and you don't have permission to "
+"overwrite it."
+msgstr ""
+"Файл с таким именем уже существует и для его перезаписи не хватает прав "
+"доступа."
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
@@ -997,16 +1188,30 @@ msgid "Master password needed"
 msgstr "Требуется главный пароль"
 
 #: ../lib/ephy-nss-glue.c:64
-msgid "The passwords from the previous version (Gecko) are locked with a master password. If you want Epiphany to import them, please enter your master password below."
-msgstr "Пароли от предыдущей версии (Gecko) защищены главным паролем. Чтобы импортировать пароли в Epiphany, введите главный пароль."
+#| msgid ""
+#| "The passwords from the previous version (Gecko) are locked with a master "
+#| "password. If you want Epiphany to import them, please enter your master "
+#| "password below."
+msgid ""
+"The passwords from the previous version are locked with a master password. "
+"If you want to import them, please enter your master password below."
+msgstr ""
+"Пароли от предыдущей версии защищены главным паролем. Чтобы импортировать "
+"пароли в Epiphany, введите главный пароль."
 
 #: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Не удалось скопировать файлы cookie из Mozilla."
 
 #: ../lib/ephy-profile-migrator.c:652
-msgid "Epiphany 3.6 deprecated this directory and tried migrating this configuration to ~/.config/epiphany"
-msgstr "Этот каталог устарел в Epiphany 3.6; настройки перенесены в ~/.config/epiphany"
+#| msgid ""
+#| "Epiphany 3.6 deprecated this directory and tried migrating this "
+#| "configuration to ~/.config/epiphany"
+msgid ""
+"Web 3.6 deprecated this directory and tried migrating this configuration to "
+"~/.config/epiphany"
+msgstr ""
+"Этот каталог устарел в Веб 3.6; настройки перенесены в ~/.config/epiphany"
 
 #: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
@@ -1021,12 +1226,14 @@ msgid "Specifies the profile where the migrator should run"
 msgstr "Указывает профиль, для которого нужно запустить модуль переноса"
 
 #: ../lib/ephy-profile-migrator.c:1047
-msgid "Epiphany profile migrator"
-msgstr "Помощник переноса профилей Epiphany"
+#| msgid "Epiphany profile migrator"
+msgid "Web profile migrator"
+msgstr "Помощник переноса профилей"
 
 #: ../lib/ephy-profile-migrator.c:1048
-msgid "Epiphany profile migrator options"
-msgstr "Параметры помощника переноса профилей Epiphany"
+#| msgid "Epiphany profile migrator options"
+msgid "Web profile migrator options"
+msgstr "Параметры помощника переноса профилей"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1102,11 +1309,11 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:362
+#: ../lib/history/ephy-history-service-hosts-table.c:363
 msgid "Others"
 msgstr "Другое"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:366
+#: ../lib/history/ephy-history-service-hosts-table.c:367
 msgid "Local files"
 msgstr "Локальные файлы"
 
@@ -1146,184 +1353,155 @@ msgstr "Идентичность веб-сайта была проверена"
 msgid "The identity of this website has not been verified"
 msgstr "Идентичность веб-сайта не была проверена"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:323
-#: ../src/bookmarks/ephy-bookmark-properties.c:649
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/ephy-history-window.c:143
-#: ../src/ephy-window.c:118
-msgid "_Close"
-msgstr "_Закрыть"
+#: ../lib/widgets/ephy-download-widget.c:107
+#, c-format
+#| msgid "%u second left"
+#| msgid_plural "%u seconds left"
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "Осталась %d секунда"
+msgstr[1] "Осталось %d секунды"
+msgstr[2] "Осталось %d секунд"
+
+#: ../lib/widgets/ephy-download-widget.c:113
+#, c-format
+#| msgid "%u:%02u minute left"
+#| msgid_plural "%u:%02u minutes left"
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "Осталась %d минута"
+msgstr[1] "Осталось %d минуты"
+msgstr[2] "Осталось %d минут"
 
 #: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
-msgid "%u:%02u hour left"
-msgid_plural "%u:%02u hours left"
-msgstr[0] "Осталось часов: %u:%02u"
-msgstr[1] "Осталось часов: %u:%02u"
-msgstr[2] "Осталось часов: %u:%02u"
+#| msgid "%u hour left"
+#| msgid_plural "%u hours left"
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "Остался %d час"
+msgstr[1] "Осталось %d часа"
+msgstr[2] "Осталось %d часов"
 
-#: ../lib/widgets/ephy-download-widget.c:121
+#: ../lib/widgets/ephy-download-widget.c:125
 #, c-format
-msgid "%u hour left"
-msgid_plural "%u hours left"
-msgstr[0] "Остался %u час"
-msgstr[1] "Осталось %u часа"
-msgstr[2] "Осталось %u часов"
+#| msgid "%u second left"
+#| msgid_plural "%u seconds left"
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "Остался %d день"
+msgstr[1] "Осталось %d дня"
+msgstr[2] "Осталось %d дней"
 
-#: ../lib/widgets/ephy-download-widget.c:124
+#: ../lib/widgets/ephy-download-widget.c:131
 #, c-format
-msgid "%u:%02u minute left"
-msgid_plural "%u:%02u minutes left"
-msgstr[0] "Осталось минут: %u:%02u"
-msgstr[1] "Осталось минут: %u:%02u"
-msgstr[2] "Осталось минут: %u:%02u"
+#| msgid "%u second left"
+#| msgid_plural "%u seconds left"
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "Осталось %d неделя"
+msgstr[1] "Осталось %d недели"
+msgstr[2] "Осталось %d недель"
 
-#: ../lib/widgets/ephy-download-widget.c:126
+#: ../lib/widgets/ephy-download-widget.c:137
 #, c-format
-msgid "%u second left"
-msgid_plural "%u seconds left"
-msgstr[0] "Осталась %u секунда"
-msgstr[1] "Осталось %u секунды"
-msgstr[2] "Осталось %u секунд"
+#| msgid "%u second left"
+#| msgid_plural "%u seconds left"
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "Остался %d месяц"
+msgstr[1] "Осталось %d месяца"
+msgstr[2] "Осталось %d месяцев"
 
-#: ../lib/widgets/ephy-download-widget.c:296
-#: ../lib/widgets/ephy-download-widget.c:313
+#: ../lib/widgets/ephy-download-widget.c:293
 msgid "Finished"
 msgstr "Завершено"
 
-#: ../lib/widgets/ephy-download-widget.c:328
-#: ../lib/widgets/ephy-download-widget.c:346
+#: ../lib/widgets/ephy-download-widget.c:309
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Ошибка загрузки: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414
-#: ../src/window-commands.c:896
+#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:712
 msgid "Cancel"
 msgstr "Отменить"
 
-#: ../lib/widgets/ephy-download-widget.c:423
-#: ../src/ephy-window.c:1309
-#: ../src/window-commands.c:280
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1146
+#: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Открыть"
 
-#: ../lib/widgets/ephy-download-widget.c:429
+#: ../lib/widgets/ephy-download-widget.c:377
 msgid "Show in folder"
 msgstr "Открыть папку"
 
-#: ../lib/widgets/ephy-download-widget.c:628
+#: ../lib/widgets/ephy-download-widget.c:586
 msgid "Starting…"
 msgstr "Запуск…"
-
-#: ../lib/widgets/ephy-hosts-store.c:303
-msgid "All sites"
-msgstr "Все сайты"
-
-#: ../lib/widgets/ephy-hosts-view.c:46
-msgid "Sites"
-msgstr "Сайты"
 
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:591
-#: ../src/resources/prefs-dialog.ui.h:34
-#: ../src/ephy-history-window.c:229
-#: ../src/pdm-dialog.c:349
+#: ../lib/widgets/ephy-location-entry.c:618
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:189
 msgid "Cl_ear"
 msgstr "О_чистить"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:610
-#: ../src/ephy-window.c:125
+#: ../lib/widgets/ephy-location-entry.c:637 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: ../lib/widgets/ephy-location-entry.c:617
+#: ../lib/widgets/ephy-location-entry.c:644
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: ../lib/widgets/ephy-location-entry.c:873
+#: ../lib/widgets/ephy-location-entry.c:924
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Перетащите этот значок, чтобы создать ссылку на эту страницу"
-
-#: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1698
-msgid "Title"
-msgstr "Заголовок"
-
-#: ../lib/widgets/ephy-urls-view.c:51
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1709
-msgid "Address"
-msgstr "Адрес"
-
-#: ../lib/widgets/ephy-urls-view.c:59
-msgid "Date"
-msgstr "Дата"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
-msgid "%d _Similar"
-msgid_plural "%d _Similar"
-msgstr[0] "%d _похожая"
-msgstr[1] "%d _похожие"
-msgstr[2] "%d _похожих"
+msgid "%d bookmark is similar"
+msgid_plural "%d bookmarks are similar"
+msgstr[0] "%d похожая закладка"
+msgstr[1] "%d похожие закладки"
+msgstr[2] "%d похожих закладок"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:256
-#, c-format
-msgid "_Unify With %d Identical Bookmark"
-msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] "_Объединить с %d похожей закладкой"
-msgstr[1] "_Объединить с %d похожими закладками"
-msgstr[2] "_Объединить с %d похожими закладками"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:273
-#: ../src/bookmarks/ephy-bookmark-properties.c:295
-#, c-format
-msgid "Show “%s”"
-msgstr "Показать «%s»"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:420
+#: ../src/bookmarks/ephy-bookmark-properties.c:234
 #, c-format
 msgid "“%s” Properties"
 msgstr "Свойства «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:544
+#: ../src/bookmarks/ephy-bookmark-properties.c:358
 msgid "_Title:"
 msgstr "_Заголовок:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:561
+#: ../src/bookmarks/ephy-bookmark-properties.c:375
 msgid "A_ddress:"
 msgstr "_Адрес:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:573
+#: ../src/bookmarks/ephy-bookmark-properties.c:387
 msgid "T_opics:"
 msgstr "Те_мы:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:596
+#: ../src/bookmarks/ephy-bookmark-properties.c:410
 msgid "Sho_w all topics"
 msgstr "Показывать все _темы"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmark-properties.c:626
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:8
-#: ../src/ephy-history-window.c:130
-#: ../src/ephy-window.c:197
-#: ../src/pdm-dialog.c:341
-msgid "_Help"
-msgstr "_Справка"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:642
-#| msgid "_Address"
+#: ../src/bookmarks/ephy-bookmark-properties.c:431
+#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Добавить"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:438
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "_Закрыть"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1350,33 +1528,33 @@ msgid "Work"
 msgstr "Работа"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:945
+#: ../src/bookmarks/ephy-bookmarks.c:926
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Все"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:949
+#: ../src/bookmarks/ephy-bookmarks.c:930
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Без категории"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:953
+#: ../src/bookmarks/ephy-bookmarks.c:934
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Сайты поблизости"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1167
+#: ../src/bookmarks/ephy-bookmarks.c:1148
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Неозаглавленное"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:75
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
+msgid "Web (RDF)"
+msgstr "Веб (RDF)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:76
 msgid "Mozilla (HTML)"
@@ -1388,19 +1566,22 @@ msgstr "Удалить из этой темы"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/ephy-history-window.c:127
 msgid "_File"
 msgstr "_Файл"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:128
 msgid "_Edit"
 msgstr "_Правка"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:129
 msgid "_View"
 msgstr "_Вид"
+
+#. Help.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:191
+msgid "_Help"
+msgstr "_Справка"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:158
@@ -1411,11 +1592,8 @@ msgstr "_Создать тему"
 msgid "Create a new topic"
 msgstr "Создать новую тему"
 
-#. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:134
-#: ../src/ephy-history-window.c:636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1154
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Открыть в _новом окне"
@@ -1427,9 +1605,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Открыть выбранную закладку в новом окне"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:137
-#: ../src/ephy-history-window.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Открыть в новой _вкладке"
@@ -1477,43 +1653,33 @@ msgid "Close the bookmarks window"
 msgstr "Закрыть окно закладок"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:148
-#: ../src/ephy-window.c:129
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:125
 msgid "Cu_t"
 msgstr "_Вырезать"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:149
 msgid "Cut the selection"
 msgstr "Вырезать выделенное"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:151
-#: ../src/ephy-history-window.c:649
-#: ../src/ephy-window.c:131
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:127
 msgid "_Copy"
 msgstr "_Копировать"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/ephy-history-window.c:152
 msgid "Copy the selection"
 msgstr "Копировать выделенное"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/ephy-history-window.c:154
-#: ../src/ephy-window.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:129
 msgid "_Paste"
 msgstr "Вст_авить"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:155
 msgid "Paste the clipboard"
 msgstr "Вставить из буфера обмена"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:157
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Delete"
 msgstr "У_далить"
 
@@ -1521,9 +1687,7 @@ msgstr "У_далить"
 msgid "Delete the selected bookmark or topic"
 msgstr "Удалить выбранную закладку или тему"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:160
-#: ../src/ephy-window.c:137
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:133
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
@@ -1533,7 +1697,6 @@ msgstr "Выделить все закладки или текст"
 
 #. Help Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:168
 msgid "_Contents"
 msgstr "_Содержание"
 
@@ -1542,30 +1705,29 @@ msgid "Display bookmarks help"
 msgstr "Показать справку по закладкам"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:9
-#: ../src/ephy-history-window.c:171
-#: ../src/ephy-window.c:199
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:193
 msgid "_About"
 msgstr "_О программе"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:172
 msgid "Display credits for the web browser creators"
 msgstr "Показать информацию о создателях веб-браузера"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:186
 msgid "_Title"
 msgstr "_Заголовок"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:187
 msgid "Show the title column"
 msgstr "Показывать столбец заголовка"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1632
+msgid "Address"
+msgstr "Адрес"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:189
 msgid "Show the address column"
 msgstr "Показывать столбец адреса"
 
@@ -1573,116 +1735,129 @@ msgstr "Показывать столбец адреса"
 msgid "Type a topic"
 msgstr "Введите тему"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:373
+#: ../src/bookmarks/ephy-bookmarks-editor.c:377
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Удалить тему «%s»?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:376
+#: ../src/bookmarks/ephy-bookmarks-editor.c:380
 msgid "Delete this topic?"
 msgstr "Удалить эту тему?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:378
-msgid "Deleting this topic will cause all its bookmarks to become uncategorized, unless they also belong to other topics. The bookmarks will not be deleted."
-msgstr "Удаление этой темы приведет к тому, что все закладки станут некатегоризированными, поскольку они принадлежали к этой теме. Закладки не будут удалены."
+#: ../src/bookmarks/ephy-bookmarks-editor.c:382
+msgid ""
+"Deleting this topic will cause all its bookmarks to become uncategorized, "
+"unless they also belong to other topics. The bookmarks will not be deleted."
+msgstr ""
+"Удаление этой темы приведет к тому, что все закладки станут "
+"некатегоризированными, поскольку они принадлежали к этой теме. Закладки не "
+"будут удалены."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:381
+#: ../src/bookmarks/ephy-bookmarks-editor.c:385
 msgid "_Delete Topic"
 msgstr "_Удалить тему"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:491
 #: ../src/bookmarks/ephy-bookmarks-editor.c:495
+#: ../src/bookmarks/ephy-bookmarks-editor.c:499
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:500
 #: ../src/bookmarks/ephy-bookmarks-editor.c:504
+#: ../src/bookmarks/ephy-bookmarks-editor.c:508
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
+#: ../src/bookmarks/ephy-bookmarks-editor.c:513
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Профиль «%s» программы Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:521
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:546
+#: ../src/bookmarks/ephy-bookmarks-editor.c:550
 msgid "Import failed"
 msgstr "Сбой импортирования"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:552
 msgid "Import Failed"
 msgstr "Сбой импортирования"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:551
+#: ../src/bookmarks/ephy-bookmarks-editor.c:555
 #, c-format
-msgid "The bookmarks from “%s” could not be imported because the file is corrupted or of an unsupported type."
-msgstr "Закладки из «%s» не могут быть импортированы, потому что файл повреждён или тип файла не поддерживается."
+msgid ""
+"The bookmarks from “%s” could not be imported because the file is corrupted "
+"or of an unsupported type."
+msgstr ""
+"Закладки из «%s» не могут быть импортированы, потому что файл повреждён или "
+"тип файла не поддерживается."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:614
+#: ../src/bookmarks/ephy-bookmarks-editor.c:618
 msgid "Import Bookmarks from File"
 msgstr "Импортировать закладки из файла"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:621
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Закладки Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Закладки Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
-msgid "Epiphany bookmarks"
-msgstr "Закладки Epiphany"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#| msgid "Bookmarks"
+msgid "Web bookmarks"
+msgstr "Закладки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Export Bookmarks"
 msgstr "Экспортировать закладки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1572
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Закладки"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:770
 msgid "File f_ormat:"
 msgstr "Формат _файла:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:812
+#: ../src/bookmarks/ephy-bookmarks-editor.c:816
 msgid "Import Bookmarks"
 msgstr "Импортировать закладки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:817
+#: ../src/bookmarks/ephy-bookmarks-editor.c:821
 msgid "I_mport"
 msgstr "И_мпортировать"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:833
+#: ../src/bookmarks/ephy-bookmarks-editor.c:837
 msgid "Import bookmarks from:"
 msgstr "Импортировать закладки из:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:853
+#: ../src/bookmarks/ephy-bookmarks-editor.c:857
 msgid "File"
 msgstr "Файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
-#: ../src/ephy-history-window.c:645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1163
 msgid "_Copy Address"
 msgstr "_Копировать адрес"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1551
 msgid "Topics"
 msgstr "Темы"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1621
+msgid "Title"
+msgstr "Заголовок"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
@@ -1698,14 +1873,86 @@ msgstr "Открыть закладки из этой темы в новых в�
 msgid "Create topic “%s”"
 msgstr "Создать тему «%s»"
 
+#: ../src/resources/clear-data-dialog.ui.h:1
+#| msgid "Clear All Personal Data"
+msgid "Clear Personal Data"
+msgstr "Удалить персональные данные"
+
+#: ../src/resources/clear-data-dialog.ui.h:2
+msgid "C_lear"
+msgstr "О_чистить"
+
+#: ../src/resources/clear-data-dialog.ui.h:4
+#| msgid "<b>Select the personal data you want to clear</b>"
+msgid "Select the personal data you wish to clear"
+msgstr "Выберите, какие персональные данные нужно удалить"
+
+#: ../src/resources/clear-data-dialog.ui.h:5
+#| msgid ""
+#| "You are about to clear personal data that is stored about the web pages "
+#| "you have visited. Before proceeding, check the types of information that "
+#| "you want to remove:"
+msgid ""
+"You are about to clear personal data that is stored about the web pages you "
+"have visited. Check the types of information that you want to remove:"
+msgstr ""
+"Вы собираетесь удалить персональные о тех веб-страницах, которые вы "
+"посещали. Выберите, какие виды сведений вы хотите удалить:"
+
+#: ../src/resources/clear-data-dialog.ui.h:6
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "Cookies"
+
+#: ../src/resources/clear-data-dialog.ui.h:7
+#| msgid "_Temporary files"
+msgid "Cache and temporary files"
+msgstr "Кэш и временные файлы"
+
+#: ../src/resources/clear-data-dialog.ui.h:8
+#| msgid "Clear browsing history?"
+msgid "Browsing history"
+msgstr "Журнал посещений"
+
+#: ../src/resources/clear-data-dialog.ui.h:9
+#| msgid "Saved _passwords"
+msgid "Saved passwords"
+msgstr "Сохранённые пароли"
+
+#: ../src/resources/clear-data-dialog.ui.h:10
+#| msgid ""
+#| "<small><i><b>Note:</b> You cannot undo this action. The data you are "
+#| "choosing to clear will be deleted forever.</i></small>"
+msgid ""
+"You cannot undo this action. The data you are choosing to clear will be "
+"removed forever."
+msgstr ""
+"Это действие нельзя отменить. Данные, которые вы выберете, будут удалены "
+"навсегда."
+
+#: ../src/resources/cookies-dialog.ui.h:2
+#: ../src/resources/history-dialog.ui.h:2
+#: ../src/resources/passwords-dialog.ui.h:2
+msgid "C_lear All"
+msgstr "О_чистить всё"
+
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:4
+#| msgid "Sites"
+msgid "Site"
+msgstr "Сайт"
+
+#: ../src/resources/cookies-dialog.ui.h:4
+msgid "Remove"
+msgstr "Удалить"
+
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1
-#: ../src/ephy-window.c:104
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
 msgid "_New Window"
 msgstr "_Создать окно"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2
-#: ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:102
 msgid "New _Incognito Window"
 msgstr "Создать _приватное окно"
 
@@ -1714,105 +1961,120 @@ msgid "Reopen Closed _Tab"
 msgstr "Повторно открыть _закрытую вкладку"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4
-#: ../src/ephy-window.c:97
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:93
 msgid "_Bookmarks"
 msgstr "_Закладки"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
-#: ../src/ephy-window.c:147
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:143
 msgid "_History"
 msgstr "_Журнал"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/ephy-window.c:151
-msgid "_Personal Data"
-msgstr "_Личные данные"
-
-#: ../src/resources/epiphany-application-menu.ui.h:7
-#: ../src/ephy-window.c:149
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:145
 msgid "Pr_eferences"
 msgstr "Па_раметры"
 
-#: ../src/resources/epiphany-application-menu.ui.h:10
-#: ../src/ephy-window.c:120
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:116
 msgid "_Quit"
 msgstr "_Завершить"
 
 #: ../src/resources/epiphany.ui.h:1
-msgid "Cookie properties"
-msgstr "Свойства Cookie"
-
-#: ../src/resources/epiphany.ui.h:2
-msgid "Content:"
-msgstr "Содержимое:"
-
-#: ../src/resources/epiphany.ui.h:3
-msgid "Path:"
-msgstr "Путь:"
-
-#: ../src/resources/epiphany.ui.h:4
-msgid "Send for:"
-msgstr "Посылать при:"
-
-#: ../src/resources/epiphany.ui.h:5
-msgid "Expires:"
-msgstr "Истекает:"
-
-#: ../src/resources/epiphany.ui.h:6
 msgid "Text Encoding"
 msgstr "Кодировка текста"
 
-#: ../src/resources/epiphany.ui.h:7
-msgid "<b>_Automatic</b>"
-msgstr "<b>_Автоматически</b>"
+#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "_Автоматически"
 
-#: ../src/resources/epiphany.ui.h:8
-#: ../src/ephy-encoding-menu.c:349
+#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
 msgid "Use the encoding specified by the document"
 msgstr "Использовать кодировку, определённую в документе"
 
-#: ../src/resources/epiphany.ui.h:9
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_Использовать другую кодировку:</b>"
+#: ../src/resources/epiphany.ui.h:4
+#| msgid "<b>_Use a different encoding:</b>"
+msgid "_Use a different encoding:"
+msgstr "_Использовать другую кодировку:"
 
-#: ../src/resources/epiphany.ui.h:10
-msgid "Personal Data"
-msgstr "Личные данные"
+#: ../src/resources/history-dialog.ui.h:1
+msgid "History"
+msgstr "Журнал"
 
-#: ../src/resources/epiphany.ui.h:11
-#: ../src/resources/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "Cookies"
+#: ../src/resources/history-dialog.ui.h:3
+#| msgid "Clear History"
+msgid "Search history"
+msgstr "Журнал поиска"
 
-#: ../src/resources/epiphany.ui.h:12
-msgid "_Show passwords"
-msgstr "По_казать пароли"
+#: ../src/resources/history-dialog.ui.h:4
+msgid "Date"
+msgstr "Дата"
 
-#: ../src/resources/epiphany.ui.h:13
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/history-dialog.ui.h:5
+msgid "Name"
+msgstr "Имя"
+
+#: ../src/resources/history-dialog.ui.h:6
+#| msgid "_Location…"
+msgid "Location"
+msgstr "Адрес"
+
+#: ../src/resources/history-dialog.ui.h:8
+#| msgid "_Location…"
+msgid "_Copy Location"
+msgstr "Копировать адрес"
+
+#: ../src/resources/history-dialog.ui.h:9
+#| msgid "Add _Bookmark…"
+msgid "Add _Bookmark"
+msgstr "Добавить _закладку"
+
+#: ../src/resources/passwords-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "Пароли"
 
+#: ../src/resources/passwords-dialog.ui.h:3
+#| msgid "_Show passwords"
+msgid "Search passwords"
+msgstr "Поиск паролей"
+
+#: ../src/resources/passwords-dialog.ui.h:5
+msgid "User Name"
+msgstr "Имя пользователя"
+
+#: ../src/resources/passwords-dialog.ui.h:6
+#| msgid "Passwords"
+msgid "Password"
+msgstr "Пароль"
+
+#: ../src/resources/passwords-dialog.ui.h:7
+#| msgid "Passwords"
+msgid "_Copy Password"
+msgstr "_Копировать пароль"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+#| msgid "User Name"
+msgid "C_opy Username"
+msgstr "К_опировать имя пользователя"
+
 #: ../src/resources/prefs-dialog.ui.h:1
-msgid "Add Language"
-msgstr "Добавить язык"
-
-#: ../src/resources/prefs-dialog.ui.h:2
-msgid "Choose a l_anguage:"
-msgstr "Выберите _язык:"
-
-#: ../src/resources/prefs-dialog.ui.h:3
 msgid "Preferences"
 msgstr "Параметры"
 
-#: ../src/resources/prefs-dialog.ui.h:5
+#: ../src/resources/prefs-dialog.ui.h:3
 msgid "_Download folder:"
 msgstr "Папка для _загрузок:"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:4
 msgid "A_utomatically open downloaded files"
 msgstr "_Автоматически открывать загруженные файлы"
+
+#: ../src/resources/prefs-dialog.ui.h:5
+#| msgid "URL Search"
+msgid "Search"
+msgstr "Поиск"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "_Engine:"
+msgstr "_Движок:"
 
 #: ../src/resources/prefs-dialog.ui.h:7
 msgid "Web Content"
@@ -1871,71 +2133,100 @@ msgid "Fonts & Style"
 msgstr "Шрифты и стиль"
 
 #: ../src/resources/prefs-dialog.ui.h:22
+#| msgid "Cookies"
+msgid "Manage Cookies"
+msgstr "Управление Cookie"
+
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
 msgstr "Принимать вс_егда"
 
-#: ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Only _from sites you visit"
 msgstr "Только с посе_щённых сайтов"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:25
-msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr "<small>Например, не от служб, показывающих рекламу на этих сайтах</small>"
-
 #: ../src/resources/prefs-dialog.ui.h:26
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr ""
+"<small>Например, не от служб, показывающих рекламу на этих сайтах</small>"
+
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "_Never accept"
 msgstr "Не принимать _никогда"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "Tracking"
 msgstr "Слежение"
 
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Сообщить веб-сайтам о нежелательности слежения"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:31
+#| msgid "Passwords"
+msgid "Manage Passwords"
+msgstr "Управление паролями"
+
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "_Запоминать пароли"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Temporary Files"
 msgstr "Временные файлы"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Disk space:"
 msgstr "_Пространство на диске:"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "MB"
 msgstr "МБ"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Privacy"
 msgstr "Приватность"
 
-#: ../src/resources/prefs-dialog.ui.h:36
-#: ../src/ephy-encoding-dialog.c:416
+#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "Кодировка"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "De_fault:"
 msgstr "По _умолчанию:"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:42
+msgid "_Remove"
+msgstr "_Удалить"
+
+#: ../src/resources/prefs-dialog.ui.h:43
+msgid "_Up"
+msgstr "В_верх"
+
+#: ../src/resources/prefs-dialog.ui.h:44
+msgid "_Down"
+msgstr "В_низ"
+
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "Spell checking"
 msgstr "Проверка правописания"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "_Enable spell checking"
 msgstr "_Включить проверку правописания"
 
-#: ../src/resources/prefs-dialog.ui.h:41
-#: ../src/prefs-dialog.c:755
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:839
 msgid "Language"
 msgstr "Язык"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:1
+msgid "Add Language"
+msgstr "Добавить язык"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:4
+msgid "Choose a l_anguage:"
+msgstr "Выберите _язык:"
 
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
@@ -1945,8 +2236,7 @@ msgstr "Остановить"
 msgid "Stop current data transfer"
 msgstr "Остановить текущую передачу данных"
 
-#: ../src/ephy-combined-stop-reload-action.c:44
-#: ../src/ephy-window.c:160
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:154
 msgid "_Reload"
 msgstr "Переза_грузить"
 
@@ -1954,196 +2244,85 @@ msgstr "Переза_грузить"
 msgid "Display the latest content of the current page"
 msgstr "Показать последнее содержимое текущей страницы"
 
-#: ../src/ephy-encoding-menu.c:341
+#: ../src/ephy-encoding-menu.c:320
 msgid "_Other…"
 msgstr "_Другая…"
 
-#: ../src/ephy-encoding-menu.c:342
+#: ../src/ephy-encoding-menu.c:321
 msgid "Other encodings"
 msgstr "Другие кодировки"
 
-#: ../src/ephy-encoding-menu.c:348
-msgid "_Automatic"
-msgstr "_Автоматически"
-
-#: ../src/ephy-find-toolbar.c:147
-msgid "Text not found"
-msgstr "Текст не найден"
-
-#: ../src/ephy-find-toolbar.c:153
-msgid "Search wrapped back to the top"
-msgstr "Поиск вернулся обратно к началу"
-
-#: ../src/ephy-find-toolbar.c:577
-msgid "Type to search…"
-msgstr "Найти..."
-
-#: ../src/ephy-find-toolbar.c:583
-msgid "Find previous occurrence of the search string"
-msgstr "Найти предыдущее вхождение строки поиска"
-
-#: ../src/ephy-find-toolbar.c:591
-msgid "Find next occurrence of the search string"
-msgstr "Найти следующее вхождение строки поиска"
-
-#: ../src/ephy-history-window.c:135
-msgid "Open the selected history link in a new window"
-msgstr "Открыть выбранную посещённую ссылку в новом окне"
-
-#: ../src/ephy-history-window.c:138
-msgid "Open the selected history link in a new tab"
-msgstr "Открыть выбранную посещённую ссылку в новой вкладке"
-
-#: ../src/ephy-history-window.c:140
-msgid "Add _Bookmark…"
-msgstr "Добавить _закладку…"
-
-#: ../src/ephy-history-window.c:141
-msgid "Bookmark the selected history link"
-msgstr "Добавить выбранную посещённую ссылку к закладкам"
-
-#: ../src/ephy-history-window.c:144
-msgid "Close the history window"
-msgstr "Закрыть окно журнала"
-
-#: ../src/ephy-history-window.c:158
-msgid "Delete the selected history link"
-msgstr "Удалить выбранную посещённую ссылку"
-
-#: ../src/ephy-history-window.c:161
-msgid "Select all history links or text"
-msgstr "Выбрать все посещённые ссылки или текст"
-
-#: ../src/ephy-history-window.c:163
-msgid "Clear _History"
-msgstr "Очистить _журнал"
-
-#: ../src/ephy-history-window.c:164
-msgid "Clear your browsing history"
-msgstr "Очистить журнал посещений"
-
-#: ../src/ephy-history-window.c:169
-msgid "Display history help"
-msgstr "Показать справку по журналу"
-
-#: ../src/ephy-history-window.c:188
-msgid "_Address"
-msgstr "_Адрес"
-
-#: ../src/ephy-history-window.c:190
-msgid "_Date and Time"
-msgstr "_Дата и время"
-
-#: ../src/ephy-history-window.c:191
-msgid "Show the date and time column"
-msgstr "Показывать столбец даты и времени"
-
-#: ../src/ephy-history-window.c:219
+#: ../src/ephy-history-window.c:179
 msgid "Clear browsing history?"
 msgstr "Очистить журнал посещений?"
 
-#: ../src/ephy-history-window.c:223
-msgid "Clearing the browsing history will cause all history links to be permanently deleted."
+#: ../src/ephy-history-window.c:183
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
 msgstr "Очистка журнала посещений полностью удалит все посещённые ссылки."
 
-#: ../src/ephy-history-window.c:235
-msgid "Clear History"
-msgstr "Очистить журнал"
-
-#: ../src/ephy-history-window.c:799
-msgid "Last 30 minutes"
-msgstr "Последние 30 минут"
-
-#: ../src/ephy-history-window.c:800
-msgid "Today"
-msgstr "сегодня"
-
-#. keep this in sync with embed/ephy-history.c's
-#. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:802
-#: ../src/ephy-history-window.c:806
-#: ../src/ephy-history-window.c:812
-#, c-format
-msgid "Last %d day"
-msgid_plural "Last %d days"
-msgstr[0] "последний %d день"
-msgstr[1] "последние %d дня"
-msgstr[2] "последние %d дней"
-
-#: ../src/ephy-history-window.c:816
-msgid "All history"
-msgstr "Весь журнал"
-
-#: ../src/ephy-history-window.c:1113
-msgid "History"
-msgstr "Журнал"
-
-#: ../src/ephy-main.c:77
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Открыть новую вкладку в существующем окне"
 
-#: ../src/ephy-main.c:79
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Открыть новое окно"
 
-#: ../src/ephy-main.c:81
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Импортировать закладки из указанного файла закладок"
 
-#: ../src/ephy-main.c:81
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: ../src/ephy-main.c:83
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "Загрузить указанный файл сеанса"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "Добавить закладку"
 
-#: ../src/ephy-main.c:85
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:87
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "Запуск отдельного экземпляра приложения"
 
-#: ../src/ephy-main.c:89
+#: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
 msgstr "Запустить в режиме инкогнито"
 
-#: ../src/ephy-main.c:91
+#: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
 msgstr "Запустить в режиме электронного банкинга"
 
-#: ../src/ephy-main.c:93
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "Запустить браузер в режиме приложения"
 
-#: ../src/ephy-main.c:95
-msgid "Start the application without opening windows"
-msgstr "Запустить приложение без открытия окон"
-
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "Каталог с настройками отдельного приложения"
 
-#: ../src/ephy-main.c:97
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:99
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:204
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "Не удалось запустить веб-браузер"
 
-#: ../src/ephy-main.c:207
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2152,354 +2331,263 @@ msgstr ""
 "Запуск завершился неудачно из-за следующей ошибки:\n"
 "%s"
 
-#: ../src/ephy-main.c:321
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "Параметры веб-браузера"
 
-#: ../src/ephy-notebook.c:599
+#: ../src/ephy-notebook.c:606
 msgid "Close tab"
 msgstr "Закрыть вкладку"
 
-#: ../src/ephy-search-provider.c:202
+#: ../src/ephy-search-provider.c:199
 #, c-format
-#| msgid "Search the web"
 msgid "Search the Web for %s"
 msgstr "Поиск %s в веб"
 
-#: ../src/ephy-window.c:108
+#: ../src/ephy-window.c:104
 msgid "_Open…"
 msgstr "_Открыть…"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:106
 msgid "Save _As…"
 msgstr "Сохранить _как…"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:108
 msgid "Save As _Web Application…"
 msgstr "Сохранить как _веб-приложение…"
 
-#: ../src/ephy-window.c:114
+#: ../src/ephy-window.c:110
 msgid "_Print…"
 msgstr "_Печать…"
 
-#: ../src/ephy-window.c:116
+#: ../src/ephy-window.c:112
 msgid "S_end Link by Email…"
 msgstr "_Отправить ссылку по почте…"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:123
 msgid "Re_do"
 msgstr "Ве_рнуть"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:135
 msgid "_Find…"
 msgstr "_Найти…"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:137
 msgid "Find Ne_xt"
 msgstr "Найти след_ующее"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:139
 msgid "Find Pre_vious"
 msgstr "Найти пред_ыдущее"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:141
 msgid "Edit _Bookmarks"
 msgstr "_Изменить закладки"
 
 #. View actions.
-#: ../src/ephy-window.c:156
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:150 ../src/ephy-window.c:152
 msgid "_Stop"
 msgstr "Ос_тановить"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:156
 msgid "Zoom _In"
 msgstr "У_величить"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:158
 msgid "Zoom O_ut"
 msgstr "У_меньшить"
 
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:160
 msgid "_Normal Size"
 msgstr "Обы_чный размер"
 
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:162
 msgid "Text _Encoding"
 msgstr "_Кодировка текста"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:163
 msgid "_Page Source"
 msgstr "_Исходный текст"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:168
 msgid "_Add Bookmark…"
 msgstr "Доб_авить закладку…"
 
 #. Go actions.
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:173
 msgid "_Location…"
 msgstr "_Адрес…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:178
 msgid "_Previous Tab"
 msgstr "На пред_ыдущую вкладку"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:180
 msgid "_Next Tab"
 msgstr "На след_ующую вкладку"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:182
 msgid "Move Tab _Left"
 msgstr "Передвинуть вкладку в_лево"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:184
 msgid "Move Tab _Right"
 msgstr "Передвинуть вкладку в_право"
 
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:186
 msgid "_Detach Tab"
 msgstr "_Отсоединить вкладку"
 
 #. View actions.
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:201
 msgid "_Downloads Bar"
 msgstr "_Панель загрузок"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:204
 msgid "_Fullscreen"
 msgstr "На весь _экран"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:206
 msgid "Popup _Windows"
 msgstr "Разрешить _всплывающие окна"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:208
 msgid "Selection Caret"
 msgstr "Курсор выделения"
 
 #. Document.
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:215
 msgid "Add Boo_kmark…"
 msgstr "Добавить _закладку…"
 
 #. Links.
-#: ../src/ephy-window.c:226
-msgid "_Open Link"
-msgstr "_Открыть ссылку"
-
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:220
 msgid "Open Link in New _Window"
 msgstr "Открыть ссылку в _новом окне"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:222
 msgid "Open Link in New _Tab"
 msgstr "Открыть ссылку в новой _вкладке"
 
-#: ../src/ephy-window.c:232
-msgid "_Download Link"
-msgstr "_Загрузить ссылку"
-
-#: ../src/ephy-window.c:234
+#: ../src/ephy-window.c:224
 msgid "_Save Link As…"
 msgstr "Сохранить сс_ылку как…"
 
-#: ../src/ephy-window.c:236
-msgid "_Bookmark Link…"
-msgstr "Добавить ссылку к _закладкам…"
-
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:226
 msgid "_Copy Link Address"
 msgstr "_Копировать адрес ссылки"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:228
 msgid "_Copy E-mail Address"
 msgstr "_Копировать адрес e-mail"
 
 #. Images.
-#: ../src/ephy-window.c:245
-msgid "Open _Image"
+#: ../src/ephy-window.c:233
+#| msgid "Open _Image"
+msgid "View _Image"
 msgstr "_Открыть изображение"
 
-#: ../src/ephy-window.c:247
-msgid "_Save Image As…"
-msgstr "Сохранить _изображение как…"
-
-#: ../src/ephy-window.c:249
-msgid "_Use Image As Background"
-msgstr "_Использовать изображение как фон"
-
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
 msgstr "_Копировать адрес изображения"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:237
+msgid "_Save Image As…"
+msgstr "Сохранить _изображение как…"
+
+#: ../src/ephy-window.c:239
+msgid "Set as _Wallpaper"
+msgstr "Использовать как _фон рабочего стола"
+
+#: ../src/ephy-window.c:241
 msgid "St_art Animation"
 msgstr "_Запустить анимацию"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:243
 msgid "St_op Animation"
 msgstr "_Остановить анимацию"
 
-#. Inspector.
-#: ../src/ephy-window.c:271
-msgid "Inspect _Element"
-msgstr "Изучить _элемент"
-
-#: ../src/ephy-window.c:478
+#: ../src/ephy-window.c:451
 msgid "There are unsubmitted changes to form elements"
 msgstr "В элементах формы есть непереданные изменения"
 
-#: ../src/ephy-window.c:479
+#: ../src/ephy-window.c:452
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Если документ будет закрыт, информация будет потеряна."
 
-#: ../src/ephy-window.c:481
+#: ../src/ephy-window.c:454
 msgid "Close _Document"
 msgstr "_Закрыть документ"
 
-#: ../src/ephy-window.c:496
+#: ../src/ephy-window.c:469
 msgid "There are ongoing downloads in this window"
 msgstr "В этом окне есть незавершённые загрузки"
 
-#: ../src/ephy-window.c:497
+#: ../src/ephy-window.c:470
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Если вы закроете это окно, загрузки будут отменены"
 
-#: ../src/ephy-window.c:498
+#: ../src/ephy-window.c:471
 msgid "Close window and cancel downloads"
 msgstr "Закрыть окно и отменить загрузки"
 
-#: ../src/ephy-window.c:1311
+#: ../src/ephy-window.c:1148
 msgid "Save As"
 msgstr "Сохранить как"
 
-#: ../src/ephy-window.c:1313
+#: ../src/ephy-window.c:1150
 msgid "Save As Application"
 msgstr "Сохранить как приложение"
 
-#: ../src/ephy-window.c:1315
+#: ../src/ephy-window.c:1152
 msgid "Print"
 msgstr "Печать"
 
-#: ../src/ephy-window.c:1317
+#: ../src/ephy-window.c:1154
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: ../src/ephy-window.c:1319
+#: ../src/ephy-window.c:1156
 msgid "Find"
 msgstr "Найти"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1328
+#: ../src/ephy-window.c:1165
 msgid "Larger"
 msgstr "Увеличить"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1331
+#: ../src/ephy-window.c:1168
 msgid "Smaller"
 msgstr "Уменьшить"
 
-#: ../src/ephy-window.c:1359
+#: ../src/ephy-window.c:1196
 msgid "Back"
 msgstr "Назад"
 
-#: ../src/ephy-window.c:1371
+#: ../src/ephy-window.c:1208
 msgid "Forward"
 msgstr "Вперёд"
 
-#: ../src/ephy-window.c:1383
+#: ../src/ephy-window.c:1220
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: ../src/ephy-window.c:1392
+#: ../src/ephy-window.c:1229
 msgid "New _Tab"
 msgstr "Создать _вкладку"
 
-#: ../src/ephy-window.c:1400
+#: ../src/ephy-window.c:1237
 msgid "Go to most visited"
 msgstr "Открыть наиболее посещаемый сайт"
 
-#: ../src/pdm-dialog.c:330
-msgid "<b>Select the personal data you want to clear</b>"
-msgstr "<b>Выберите, какие личные данные хотите очистить</b>"
-
-#: ../src/pdm-dialog.c:333
-msgid "You are about to clear personal data that is stored about the web pages you have visited. Before proceeding, check the types of information that you want to remove:"
-msgstr "Вы собираетесь очистить личные данные о тех веб-страницах, которые вы посещали. Выберите, какие виды сведений вы хотите удалить:"
-
-#: ../src/pdm-dialog.c:338
-msgid "Clear All Personal Data"
-msgstr "Очистить все личные данные"
-
-#. Cookies
-#: ../src/pdm-dialog.c:370
-msgid "C_ookies"
-msgstr "Coo_kies"
-
-#. Passwords
-#: ../src/pdm-dialog.c:382
-msgid "Saved _passwords"
-msgstr "Со_хранённые пароли"
-
-#. History
-#: ../src/pdm-dialog.c:394
-msgid "Hi_story"
-msgstr "_Журнал"
-
-#. Cache
-#: ../src/pdm-dialog.c:406
-msgid "_Temporary files"
-msgstr "В_ременные файлы"
-
-#: ../src/pdm-dialog.c:422
-msgid "<small><i><b>Note:</b> You cannot undo this action. The data you are choosing to clear will be deleted forever.</i></small>"
-msgstr "<small><i><b>Примечание:</b> Это действие нельзя отменить. Данные, которые вы выберете, будут удалены навсегда.</i></small>"
-
-#: ../src/pdm-dialog.c:645
-msgid "Encrypted connections only"
-msgstr "только защищённых соединениях"
-
-#: ../src/pdm-dialog.c:646
-msgid "Any type of connection"
-msgstr "любом типе соединения"
-
-#. Session cookie
-#: ../src/pdm-dialog.c:651
-msgid "End of current session"
-msgstr "Окончание текущего сеанса"
-
-#: ../src/pdm-dialog.c:775
-msgid "Domain"
-msgstr "Домен"
-
-#: ../src/pdm-dialog.c:787
-msgid "Name"
-msgstr "Имя"
-
-#: ../src/pdm-dialog.c:1305
-msgid "Host"
-msgstr "Узел"
-
-#: ../src/pdm-dialog.c:1318
-msgid "User Name"
-msgstr "Имя пользователя"
-
-#: ../src/pdm-dialog.c:1331
-msgid "User Password"
-msgstr "Пароль"
-
-#: ../src/popup-commands.c:321
-msgid "Download Link"
-msgstr "Загрзуить ссылку"
-
-#: ../src/popup-commands.c:329
+#: ../src/popup-commands.c:237
 msgid "Save Link As"
 msgstr "Сохранить ссылку как"
 
-#: ../src/popup-commands.c:336
+#: ../src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "Сохранить изображение как"
 
@@ -2507,8 +2595,7 @@ msgstr "Сохранить изображение как"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:449
-#: ../src/prefs-dialog.c:455
+#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2517,13 +2604,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:464
+#: ../src/prefs-dialog.c:568
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Определённый пользователем (%s)"
 
-#: ../src/prefs-dialog.c:486
+#: ../src/prefs-dialog.c:590
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2531,78 +2618,102 @@ msgstr[0] "Системный язык (%s)"
 msgstr[1] "Системные языки (%s)"
 msgstr[2] "Системные языки (%s)"
 
-#: ../src/prefs-dialog.c:844
+#: ../src/prefs-dialog.c:922
 msgid "Select a Directory"
 msgstr "Выберите каталог"
 
-#: ../src/window-commands.c:358
-msgid "Save"
-msgstr "Сохранить"
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1017
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
 
-#: ../src/window-commands.c:893
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:1022
+#, c-format
+#| msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1024
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:1026
+#, c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "https://google.com/search?q=%s"
+msgstr "https://google.com/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1028
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:1030
+#, c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "http://www.bing.com/search?q=%s"
+msgstr "http://www.bing.com/search?q=%s"
+
+#: ../src/window-commands.c:709
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Веб-приложение «%s» уже существует. Хотите его заменить?"
 
-#: ../src/window-commands.c:898
+#: ../src/window-commands.c:714
 msgid "Replace"
 msgstr "Заменить"
 
-#: ../src/window-commands.c:902
-msgid "An application with the same name already exists. Replacing it will overwrite it."
-msgstr "Приложение с таким именем уже существует. Его замена приведёт к перезаписи приложения."
+#: ../src/window-commands.c:718
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"Приложение с таким именем уже существует. Его замена приведёт к перезаписи "
+"приложения."
 
-#: ../src/window-commands.c:938
+#: ../src/window-commands.c:754
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Приложение «%s» готово к использованию"
 
-#: ../src/window-commands.c:941
+#: ../src/window-commands.c:757
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Не удалось создать приложение «%s»"
 
-#: ../src/window-commands.c:949
+#: ../src/window-commands.c:765
 msgid "Launch"
 msgstr "Запустить"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:989
+#: ../src/window-commands.c:805
 msgid "Create Web Application"
 msgstr "Создать веб-приложение"
 
-#: ../src/window-commands.c:994
+#: ../src/window-commands.c:810
 msgid "C_reate"
 msgstr "С_оздать"
 
-#: ../src/window-commands.c:1676
-msgid "Web is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
-msgstr "Веб-браузер GNOME — это свободное программное обеспечение. Вы можете распространять или изменять его на условиях GNU General Public License, опубликованной организацией Free Software Foundation; версии 2 либо (на ваше усмотрение) любой более поздней версии."
-
-#: ../src/window-commands.c:1680
-msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
-msgstr "Веб-браузер GNOME распространяется в надежде на то, что приложение будет полезно, но БЕЗ ВСЯКИХ ГАРАНТИЙ; не гарантируется даже ПРИГОДНОСТЬ или СООТВЕТСТВИЕ ЛЮБЫМ ТРЕБОВАНИЯМ. Для дальнейшей информации ознакомьтесь с GNU General Public License."
-
-#: ../src/window-commands.c:1684
-msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr "Вы должны получить копию GNU General Public License вместе с веб-браузером GNOME. Если это не так, напишите об этом Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-
-#: ../src/window-commands.c:1730
-#: ../src/window-commands.c:1746
-#: ../src/window-commands.c:1757
+#: ../src/window-commands.c:1473 ../src/window-commands.c:1496
 msgid "Contact us at:"
 msgstr "Свяжитесь с нами:"
 
-#: ../src/window-commands.c:1733
+#: ../src/window-commands.c:1476
 msgid "Contributors:"
 msgstr "Помощники:"
 
-#: ../src/window-commands.c:1736
+#: ../src/window-commands.c:1479
 msgid "Past developers:"
 msgstr "Предыдущие разработчики:"
 
-#: ../src/window-commands.c:1767
-#: ../src/window-commands.c:1773
+#: ../src/window-commands.c:1505
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2619,7 +2730,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1803
+#: ../src/window-commands.c:1528
 msgid "translator-credits"
 msgstr ""
 "Valek Filippov <frob@df.ru>, 2000-2002.\n"
@@ -2629,27 +2740,253 @@ msgstr ""
 "Yuri Kozlov <yuray@komyakino.ru>, 2010.\n"
 "Stas Solovey <whats_up@tut.by>, 2011, 2013."
 
-#: ../src/window-commands.c:1806
+#: ../src/window-commands.c:1531
 msgid "Web Website"
 msgstr "Веб-сайт браузера"
 
-#: ../src/window-commands.c:1946
+#: ../src/window-commands.c:1670
 msgid "Enable caret browsing mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: ../src/window-commands.c:1949
-msgid "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, allowing you to move around with your keyboard. Do you want to enable caret browsing?"
-msgstr "Нажатие клавиши F7 управляет включением клавишной навигации. Эта возможность помещает на страницу курсор, позволяющий перемещаться по странице с помощью клавиатуры. Включить клавишную навигацию?"
+#: ../src/window-commands.c:1673
+msgid ""
+"Pressing F7 turns caret browsing on or off. This feature places a moveable "
+"cursor in web pages, allowing you to move around with your keyboard. Do you "
+"want to enable caret browsing?"
+msgstr ""
+"Нажатие клавиши F7 управляет включением клавишной навигации. Эта возможность "
+"помещает на страницу курсор, позволяющий перемещаться по странице с помощью "
+"клавиатуры. Включить клавишную навигацию?"
 
-#: ../src/window-commands.c:1952
+#: ../src/window-commands.c:1676
 msgid "_Enable"
 msgstr "_Включить"
+
+#~ msgid "Show toolbars by default"
+#~ msgstr "Показывать панели инструментов по умолчанию"
+
+#~ msgid "Use GNOME desktop wide font configuration."
+#~ msgstr "Использовать настройки шрифтов для GNOME."
+
+#~ msgid "History pages time range"
+#~ msgstr "Диапазон истории страниц"
+
+#~ msgid "Whether to show the title column in the history window."
+#~ msgstr "Показывать ли столбец названия заголовка в окне журнала."
+
+#~ msgid "Whether to show the address column in the history window."
+#~ msgstr "Показывать ли столбец адреса в окне журнала."
+
+#~ msgid "Whether to show the date-time column in the history window."
+#~ msgstr "Показывать ли столбец даты в окне журнала."
+
+#~ msgid "Not now"
+#~ msgstr "Не сейчас"
+
+#~ msgid "Store password"
+#~ msgstr "Сохранить пароль"
+
+#~ msgid ""
+#~ "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</"
+#~ "big>"
+#~ msgstr "<big>Сохранить пароль для <b>%s</b> в <b>%s</b>?</big>"
+
+#~ msgid "Oops! Error loading %s"
+#~ msgstr "Ой! Ошибка загрузки %s"
+
+#~ msgid ""
+#~ "Oops! This site might have caused the web browser to close unexpectedly"
+#~ msgstr ""
+#~ "Ой! Этот сайт может привести к неожиданному завершению работы Epiphany"
+
+#~ msgid "Oops! Something went wrong displaying %s"
+#~ msgstr "Ой! При попытке открыть %s что-то пошло не так"
+
+#~ msgid "%u:%02u hour left"
+#~ msgid_plural "%u:%02u hours left"
+#~ msgstr[0] "Осталось часов: %u:%02u"
+#~ msgstr[1] "Осталось часов: %u:%02u"
+#~ msgstr[2] "Осталось часов: %u:%02u"
+
+#~ msgid "All sites"
+#~ msgstr "Все сайты"
+
+#~ msgid "%d _Similar"
+#~ msgid_plural "%d _Similar"
+#~ msgstr[0] "%d _похожая"
+#~ msgstr[1] "%d _похожие"
+#~ msgstr[2] "%d _похожих"
+
+#~ msgid "_Unify With %d Identical Bookmark"
+#~ msgid_plural "_Unify With %d Identical Bookmarks"
+#~ msgstr[0] "_Объединить с %d похожей закладкой"
+#~ msgstr[1] "_Объединить с %d похожими закладками"
+#~ msgstr[2] "_Объединить с %d похожими закладками"
+
+#~ msgid "Show “%s”"
+#~ msgstr "Показать «%s»"
+
+#~ msgid "Epiphany (RDF)"
+#~ msgstr "Epiphany (RDF)"
+
+#~ msgid "Epiphany bookmarks"
+#~ msgstr "Закладки Epiphany"
+
+#~ msgid "_Personal Data"
+#~ msgstr "_Личные данные"
+
+#~ msgid "Cookie properties"
+#~ msgstr "Свойства Cookie"
+
+#~ msgid "Content:"
+#~ msgstr "Содержимое:"
+
+#~ msgid "Path:"
+#~ msgstr "Путь:"
+
+#~ msgid "Send for:"
+#~ msgstr "Посылать при:"
+
+#~ msgid "Expires:"
+#~ msgstr "Истекает:"
+
+#~ msgid "<b>_Automatic</b>"
+#~ msgstr "<b>_Автоматически</b>"
+
+#~ msgid "Personal Data"
+#~ msgstr "Личные данные"
+
+#~ msgid "Open the selected history link in a new window"
+#~ msgstr "Открыть выбранную посещённую ссылку в новом окне"
+
+#~ msgid "Open the selected history link in a new tab"
+#~ msgstr "Открыть выбранную посещённую ссылку в новой вкладке"
+
+#~ msgid "Bookmark the selected history link"
+#~ msgstr "Добавить выбранную посещённую ссылку к закладкам"
+
+#~ msgid "Close the history window"
+#~ msgstr "Закрыть окно журнала"
+
+#~ msgid "Delete the selected history link"
+#~ msgstr "Удалить выбранную посещённую ссылку"
+
+#~ msgid "Select all history links or text"
+#~ msgstr "Выбрать все посещённые ссылки или текст"
+
+#~ msgid "Clear _History"
+#~ msgstr "Очистить _журнал"
+
+#~ msgid "Clear your browsing history"
+#~ msgstr "Очистить журнал посещений"
+
+#~ msgid "Display history help"
+#~ msgstr "Показать справку по журналу"
+
+#~ msgid "_Address"
+#~ msgstr "_Адрес"
+
+#~ msgid "_Date and Time"
+#~ msgstr "_Дата и время"
+
+#~ msgid "Show the date and time column"
+#~ msgstr "Показывать столбец даты и времени"
+
+#~ msgid "Last 30 minutes"
+#~ msgstr "Последние 30 минут"
+
+#~ msgid "Today"
+#~ msgstr "сегодня"
+
+#~ msgid "Last %d day"
+#~ msgid_plural "Last %d days"
+#~ msgstr[0] "последний %d день"
+#~ msgstr[1] "последние %d дня"
+#~ msgstr[2] "последние %d дней"
+
+#~ msgid "All history"
+#~ msgstr "Весь журнал"
+
+#~ msgid "Start the application without opening windows"
+#~ msgstr "Запустить приложение без открытия окон"
+
+#~ msgid "_Open Link"
+#~ msgstr "_Открыть ссылку"
+
+#~ msgid "_Download Link"
+#~ msgstr "_Загрузить ссылку"
+
+#~ msgid "_Bookmark Link…"
+#~ msgstr "Добавить ссылку к _закладкам…"
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "_Использовать изображение как фон"
+
+#~ msgid "Inspect _Element"
+#~ msgstr "Изучить _элемент"
+
+#~ msgid "C_ookies"
+#~ msgstr "Coo_kies"
+
+#~ msgid "Hi_story"
+#~ msgstr "_Журнал"
+
+#~ msgid "Encrypted connections only"
+#~ msgstr "только защищённых соединениях"
+
+#~ msgid "Any type of connection"
+#~ msgstr "любом типе соединения"
+
+#~ msgid "End of current session"
+#~ msgstr "Окончание текущего сеанса"
+
+#~ msgid "Domain"
+#~ msgstr "Домен"
+
+#~ msgid "Host"
+#~ msgstr "Узел"
+
+#~ msgid "User Password"
+#~ msgstr "Пароль"
+
+#~ msgid "Download Link"
+#~ msgstr "Загрзуить ссылку"
+
+#~ msgid ""
+#~ "Web is free software; you can redistribute it and/or modify it under the "
+#~ "terms of the GNU General Public License as published by the Free Software "
+#~ "Foundation; either version 2 of the License, or (at your option) any "
+#~ "later version."
+#~ msgstr ""
+#~ "Веб-браузер GNOME — это свободное программное обеспечение. Вы можете "
+#~ "распространять или изменять его на условиях GNU General Public License, "
+#~ "опубликованной организацией Free Software Foundation; версии 2 либо (на "
+#~ "ваше усмотрение) любой более поздней версии."
+
+#~ msgid ""
+#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
+#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
+#~ "Public License for more details."
+#~ msgstr ""
+#~ "Веб-браузер GNOME распространяется в надежде на то, что приложение будет "
+#~ "полезно, но БЕЗ ВСЯКИХ ГАРАНТИЙ; не гарантируется даже ПРИГОДНОСТЬ или "
+#~ "СООТВЕТСТВИЕ ЛЮБЫМ ТРЕБОВАНИЯМ. Для дальнейшей информации ознакомьтесь с "
+#~ "GNU General Public License."
+
+#~ msgid ""
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with the GNOME Web Browser; if not, write to the Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
+#~ msgstr ""
+#~ "Вы должны получить копию GNU General Public License вместе с веб-"
+#~ "браузером GNOME. Если это не так, напишите об этом Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
 
 #~ msgid "http://www.google.com"
 #~ msgstr "http://www.google.ru"
 
 #~ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 #~ msgstr "http://www.google.ru/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-
-#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-#~ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
