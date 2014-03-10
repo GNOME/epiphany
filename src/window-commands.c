@@ -912,7 +912,7 @@ window_cmd_file_new_window (GtkAction *action,
 	embed = ephy_shell_new_tab (ephy_shell_get_default (),
 				    new_window, NULL, 0);
 	ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-	ephy_window_activate_location (window);
+	ephy_window_activate_location (new_window);
 }
 
 void
