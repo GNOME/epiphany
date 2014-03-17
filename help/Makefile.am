@@ -35,6 +35,6 @@ HELP_MEDIA = \
 	media/private-browsing-3-12.png \
 	media/web-browser.png
 
-HELP_LINGUAS = cs de el es hu pt_BR ru
+HELP_LINGUAS = cs de el es fr hu pt_BR ru
 
 -include $(top_srcdir)/git.mk
