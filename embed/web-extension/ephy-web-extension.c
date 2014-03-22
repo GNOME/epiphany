@@ -120,6 +120,7 @@ web_page_send_request (WebKitWebPage *web_page,
 {
   const char *request_uri;
   const char *page_uri;
+  gboolean ret;
 
   request_uri = webkit_uri_request_get_uri (request);
 
@@ -156,7 +157,11 @@ web_page_send_request (WebKitWebPage *web_page,
   if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
       return FALSE;
 
-  return uri_tester_test_uri (extension->priv->uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
+  ret = uri_tester_test_uri (extension->priv->uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
+  if (ret)
+    g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
+
+  return ret;
 }
 
 static GHashTable *
