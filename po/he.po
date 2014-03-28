@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2014-02-18 17:27+0200\n"
-"PO-Revision-Date: 2014-02-19 23:47+0200\n"
+"POT-Creation-Date: 2014-03-28 16:25+0300\n"
+"PO-Revision-Date: 2014-03-28 16:26+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -65,9 +65,9 @@ msgstr ""
 "דפדפן האינטרנט עבור  GNOME, הכולל שילוב הדוק עם שולחן העבודה וממשק משתמש "
 "פשוט המאפשר לך להתמקד בדפי האינטרנט שלך."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:315
-#: ../embed/ephy-about-handler.c:345 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1509
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1512
 msgid "Web"
 msgstr "דפדפן"
 
@@ -473,86 +473,86 @@ msgstr "Whether to show the title column in the bookmarks window."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Whether to show the address column in the bookmarks window."
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:141
 msgid "Installed plugins"
 msgstr "תוספים מותקנים"
 
-#: ../embed/ephy-about-handler.c:158
+#: ../embed/ephy-about-handler.c:142
 msgid "Plugins"
 msgstr "תוספים"
 
-#: ../embed/ephy-about-handler.c:161
+#: ../embed/ephy-about-handler.c:145
 msgid "Plugins are disabled in the preferences"
 msgstr "התוספים מושבתים בהעדפות."
 
-#: ../embed/ephy-about-handler.c:174
+#: ../embed/ephy-about-handler.c:158
 msgid "Enabled"
 msgstr "פעיל"
 
 #. webkit_plugin_get_enabled (plugin) &&
-#: ../embed/ephy-about-handler.c:174
+#: ../embed/ephy-about-handler.c:158
 msgid "Yes"
 msgstr "כן"
 
-#: ../embed/ephy-about-handler.c:174
+#: ../embed/ephy-about-handler.c:158
 msgid "No"
 msgstr "לא"
 
-#: ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:159
 msgid "MIME type"
 msgstr "סוג ה־MIME"
 
-#: ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:159
 msgid "Description"
 msgstr "תיאור"
 
-#: ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:159
 msgid "Suffixes"
 msgstr "סיומות"
 
-#: ../embed/ephy-about-handler.c:235 ../embed/ephy-about-handler.c:238
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
 msgid "Memory usage"
 msgstr "ניצול הזיכרון"
 
-#: ../embed/ephy-about-handler.c:288
+#: ../embed/ephy-about-handler.c:270
 #, c-format
 msgid "Version %s"
 msgstr "גרסה %s"
 
-#: ../embed/ephy-about-handler.c:312
+#: ../embed/ephy-about-handler.c:290
 msgid "About Web"
 msgstr "על אודות דפדפן"
 
-#: ../embed/ephy-about-handler.c:317
+#: ../embed/ephy-about-handler.c:294
 msgid "A simple, clean, beautiful view of the web"
 msgstr "הצגה פשוטה, נקייה ויפה של האינטרנט"
 
-#: ../embed/ephy-about-handler.c:368 ../embed/ephy-about-handler.c:370
+#: ../embed/ephy-about-handler.c:345 ../embed/ephy-about-handler.c:346
 msgid "Applications"
 msgstr "יישומים"
 
-#: ../embed/ephy-about-handler.c:371
+#: ../embed/ephy-about-handler.c:347
 msgid "List of installed web applications"
 msgstr "רשימה של יישומי רשת מותקנים"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:392
+#: ../embed/ephy-about-handler.c:364
 msgid "Installed on:"
 msgstr "הותקן בתאריך:"
 
-#: ../embed/ephy-about-handler.c:463
+#: ../embed/ephy-about-handler.c:468
 msgid "Remove from overview"
 msgstr "הסרה מהסקירה"
 
-#: ../embed/ephy-about-handler.c:499 ../embed/ephy-web-view.c:741
+#: ../embed/ephy-about-handler.c:483 ../embed/ephy-embed-utils.c:300
 msgid "Most Visited"
 msgstr "הנצפים ביותר"
 
-#: ../embed/ephy-about-handler.c:551 ../embed/ephy-about-handler.c:554
+#: ../embed/ephy-about-handler.c:542 ../embed/ephy-about-handler.c:543
 msgid "Private Browsing"
 msgstr "גלישה פרטית"
 
-#: ../embed/ephy-about-handler.c:555
+#: ../embed/ephy-about-handler.c:544
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -561,24 +561,34 @@ msgstr ""
 "מצב הגלישה הנוכחי שלך הוא <em>מוסתר</em>. עמודים שיוצגו במצב זה לא יופיעו "
 "בהיסטוריית הגלישה שלך וכל הפרטים שנשמרים יימחקו עם סגירת החלון."
 
-#: ../embed/ephy-embed.c:473
+#. characters
+#: ../embed/ephy-embed.c:51
+msgid "Blank page"
+msgstr "דף ריק"
+
+#: ../embed/ephy-embed.c:542
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "יש ללחוץ על %s כדי לצאת ממסך מלא"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:476
+#: ../embed/ephy-embed.c:545
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:476
+#: ../embed/ephy-embed.c:545
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed-utils.c:59
+#: ../embed/ephy-embed-utils.c:64
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "שלח הודעת דוא״ל אל „%s“"
+
+#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
+#, c-format
+msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
@@ -924,50 +934,55 @@ msgstr "חיפוש המופע הקודמת של המילה או הביטוי"
 msgid "Find next occurrence of the search string"
 msgstr "חיפוש המופע הבא של המילה או הביטוי"
 
-#. characters
-#: ../embed/ephy-web-view.c:64 ../embed/ephy-web-view.c:2933
-msgid "Blank page"
-msgstr "דף ריק"
-
-#: ../embed/ephy-web-view.c:496 ../src/window-commands.c:329
+#: ../embed/ephy-web-view.c:488 ../src/window-commands.c:330
 msgid "Save"
 msgstr "שמירה"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:508
+#: ../embed/ephy-web-view.c:500
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "האם ברצונך לשמור ססמה עבור „%s”?"
 
-#: ../embed/ephy-web-view.c:1402
+#: ../embed/ephy-web-view.c:1380
 msgid "Deny"
 msgstr "דחייה"
 
-#: ../embed/ephy-web-view.c:1403
+#: ../embed/ephy-web-view.c:1381
 msgid "Allow"
 msgstr "אישור"
 
-#: ../embed/ephy-web-view.c:1413
+#: ../embed/ephy-web-view.c:1391
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "העמוד בכתובת <b>%s</b> מעוניין לדעת את מיקומך."
 
-#: ../embed/ephy-web-view.c:1758
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1475
+#, c-format
+msgid "Loading “%s”…"
+msgstr "‏„%s“ בטעינה…"
+
+#: ../embed/ephy-web-view.c:1477
+msgid "Loading…"
+msgstr "בטעינה…"
+
+#: ../embed/ephy-web-view.c:1718
 msgid "None specified"
 msgstr "לא צוינה"
 
-#: ../embed/ephy-web-view.c:1771 ../embed/ephy-web-view.c:1786
+#: ../embed/ephy-web-view.c:1731 ../embed/ephy-web-view.c:1746
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "בעיה בטעינת „%s”"
 
-#: ../embed/ephy-web-view.c:1773
+#: ../embed/ephy-web-view.c:1733
 msgid "Oops! Unable to display this website."
 msgstr "אופס! לא ניתן להציג אתר זה."
 
-#: ../embed/ephy-web-view.c:1774
+#: ../embed/ephy-web-view.c:1734
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -979,15 +994,15 @@ msgstr ""
 "p>בהחלט יתכן כי האתר אינו זמין באופן זמני או שהועבר לכתובת חדשה. מומלץ לוודא "
 "כי חיבור האינטרנט פועל כראוי.</p>"
 
-#: ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1742
 msgid "Try again"
 msgstr "ניסיון חוזר"
 
-#: ../embed/ephy-web-view.c:1788
+#: ../embed/ephy-web-view.c:1748
 msgid "Oops! There may be a problem."
 msgstr "אופס! יתכן ויש בעיה."
 
-#: ../embed/ephy-web-view.c:1789
+#: ../embed/ephy-web-view.c:1749
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -997,48 +1012,33 @@ msgstr ""
 "<p>יתכן ואתר זה גרם לדפדפן להסגר באופן בלתי צפוי.</p><p> אם זה קורה שוב נא "
 "לדווח על התקלה למפתחי <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1794 ../embed/ephy-web-view.c:1801
+#: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1761
 msgid "Reload Anyway"
 msgstr "טעינה מחדש בכל זאת"
 
-#: ../embed/ephy-web-view.c:1798
+#: ../embed/ephy-web-view.c:1758
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "בעיה בהצגת „%s”"
 
-#: ../embed/ephy-web-view.c:1799
+#: ../embed/ephy-web-view.c:1759
 msgid "Oops!"
 msgstr "אופס!"
 
-#: ../embed/ephy-web-view.c:1800
+#: ../embed/ephy-web-view.c:1760
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
 "משהו השתבש במהלך ההצגה של עמוד זה. נא לרענן או לבקר בעמוד אחר כדי להמשיך."
 
-#: ../embed/ephy-web-view.c:2113 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
-
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2345
-#, c-format
-msgid "Loading “%s”…"
-msgstr "‏„%s“ בטעינה…"
-
-#: ../embed/ephy-web-view.c:2347
-msgid "Loading…"
-msgstr "בטעינה…"
-
-#: ../embed/ephy-web-view.c:2837
+#: ../embed/ephy-web-view.c:2607
 msgid "_OK"
 msgstr "_אישור"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
 #: ../src/bookmarks/ephy-bookmark-properties.c:428
-#: ../src/bookmarks/ephy-bookmarks-editor.c:815
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
 #: ../src/resources/clear-data-dialog.ui.h:3
 #: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:808
 msgid "_Cancel"
@@ -1064,7 +1064,7 @@ msgstr "עמודי אינטרנט"
 msgid "Images"
 msgstr "תמונות"
 
-#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "כל הקבצים"
 
@@ -1366,7 +1366,7 @@ msgstr "שגיאה בהורדה: %s"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1137
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1146
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "פתיחה"
@@ -1533,7 +1533,7 @@ msgid "Create a new topic"
 msgstr "יצירת נושא חדש"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1154
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "פתיחה ב_חלון חדש"
@@ -1545,7 +1545,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "פתיחת הסימנייה הנבחרת בחלון חדש"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "פתיחה ב_לשונית חדשה"
@@ -1602,7 +1602,7 @@ msgid "Cut the selection"
 msgstr "גזירת הבחירה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1171 ../src/ephy-window.c:127
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:127
 msgid "_Copy"
 msgstr "_העתקה"
 
@@ -1663,7 +1663,7 @@ msgid "Show the title column"
 msgstr "הצגת עמודת הכותרת"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1632
 msgid "Address"
 msgstr "כתובת"
 
@@ -1675,16 +1675,16 @@ msgstr "הצגת עמודת הכתובת"
 msgid "Type a topic"
 msgstr "הזנת כותרת"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:373
+#: ../src/bookmarks/ephy-bookmarks-editor.c:377
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "האם ל_מחוק את הנושא „%s“?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:376
+#: ../src/bookmarks/ephy-bookmarks-editor.c:380
 msgid "Delete this topic?"
 msgstr "האם למחוק נושא זה?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:378
+#: ../src/bookmarks/ephy-bookmarks-editor.c:382
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1692,44 +1692,44 @@ msgstr ""
 "מחיקת נושא זה תגרום לכל הסימניות שבו להיות ללא נושא, אלא אם הן שייכות גם "
 "לנושאים אחרים. הסימניות לא ימחקו."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:381
+#: ../src/bookmarks/ephy-bookmarks-editor.c:385
 msgid "_Delete Topic"
 msgstr "_מחיקת נושא"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:491
 #: ../src/bookmarks/ephy-bookmarks-editor.c:495
+#: ../src/bookmarks/ephy-bookmarks-editor.c:499
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:500
 #: ../src/bookmarks/ephy-bookmarks-editor.c:504
+#: ../src/bookmarks/ephy-bookmarks-editor.c:508
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
+#: ../src/bookmarks/ephy-bookmarks-editor.c:513
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "פרופיל „%s“ של Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:521
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:546
+#: ../src/bookmarks/ephy-bookmarks-editor.c:550
 msgid "Import failed"
 msgstr "היבוא נכשל"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:552
 msgid "Import Failed"
 msgstr "היבוא נכשל"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:551
+#: ../src/bookmarks/ephy-bookmarks-editor.c:555
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1737,62 +1737,62 @@ msgid ""
 msgstr ""
 "הסימניות מ־“%s“ לא ניתנות ליבוא מכיוון שהקובץ לא תקין או מסוג שאינו נתמך."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:614
+#: ../src/bookmarks/ephy-bookmarks-editor.c:618
 msgid "Import Bookmarks from File"
 msgstr "יבוא סימניות מקובץ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:621
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
 msgid "Firefox/Mozilla bookmarks"
 msgstr "סימניות של Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Galeon/Konqueror bookmarks"
 msgstr "סימניות של Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
 msgid "Web bookmarks"
 msgstr "סימניות של Web"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:753
+#: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Export Bookmarks"
 msgstr "יצוא סימניות"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1497
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "סימניות"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:770
 msgid "File f_ormat:"
 msgstr "מ_בנה קובץ:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:812
+#: ../src/bookmarks/ephy-bookmarks-editor.c:816
 msgid "Import Bookmarks"
 msgstr "יבוא סימניות"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:817
+#: ../src/bookmarks/ephy-bookmarks-editor.c:821
 msgid "I_mport"
 msgstr "י_בוא"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:833
+#: ../src/bookmarks/ephy-bookmarks-editor.c:837
 msgid "Import bookmarks from:"
 msgstr "יבוא סימניות מ־:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:853
+#: ../src/bookmarks/ephy-bookmarks-editor.c:857
 msgid "File"
 msgstr "קובץ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1163
 msgid "_Copy Address"
 msgstr "ה_עתקת הכתובת"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1553
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1551
 msgid "Topics"
 msgstr "נושאים"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1621
 msgid "Title"
 msgstr "כותרת"
 
@@ -1816,7 +1816,7 @@ msgstr "ניקוי מידע אישי"
 
 #: ../src/resources/clear-data-dialog.ui.h:2
 msgid "C_lear"
-msgstr "_נקה"
+msgstr "_ניקוי"
 
 #: ../src/resources/clear-data-dialog.ui.h:4
 msgid "Select the personal data you wish to clear"
@@ -2441,61 +2441,61 @@ msgstr "אם חלון זה ייסגר על ידיך, ההורדות יבוטלו
 msgid "Close window and cancel downloads"
 msgstr "סגירת החלון וביטול ההורדות"
 
-#: ../src/ephy-window.c:1139
+#: ../src/ephy-window.c:1148
 msgid "Save As"
 msgstr "שמירה בשם"
 
-#: ../src/ephy-window.c:1141
+#: ../src/ephy-window.c:1150
 msgid "Save As Application"
 msgstr "שמירה כיישום"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1152
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../src/ephy-window.c:1145
+#: ../src/ephy-window.c:1154
 msgid "Bookmark"
 msgstr "סימנייה"
 
-#: ../src/ephy-window.c:1147
+#: ../src/ephy-window.c:1156
 msgid "Find"
 msgstr "חיפוש"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1156
+#: ../src/ephy-window.c:1165
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1159
+#: ../src/ephy-window.c:1168
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1187
+#: ../src/ephy-window.c:1196
 msgid "Back"
 msgstr "אחורה"
 
-#: ../src/ephy-window.c:1199
+#: ../src/ephy-window.c:1208
 msgid "Forward"
 msgstr "קדימה"
 
-#: ../src/ephy-window.c:1211
+#: ../src/ephy-window.c:1220
 msgid "Zoom"
 msgstr "תקריב"
 
-#: ../src/ephy-window.c:1220
+#: ../src/ephy-window.c:1229
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-window.c:1228
+#: ../src/ephy-window.c:1237
 msgid "Go to most visited"
 msgstr "מעבר לנצפים ביותר"
 
-#: ../src/popup-commands.c:234
+#: ../src/popup-commands.c:237
 msgid "Save Link As"
 msgstr "שמירת הקישור בשם"
 
-#: ../src/popup-commands.c:240
+#: ../src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "שמירת התמונה בשם"
 
@@ -2604,19 +2604,19 @@ msgstr "יצירת יישום רשת"
 msgid "C_reate"
 msgstr "י_צירה"
 
-#: ../src/window-commands.c:1470 ../src/window-commands.c:1493
+#: ../src/window-commands.c:1473 ../src/window-commands.c:1496
 msgid "Contact us at:"
 msgstr "ניתן ליצור אתנו קשר דרך:"
 
-#: ../src/window-commands.c:1473
+#: ../src/window-commands.c:1476
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: ../src/window-commands.c:1476
+#: ../src/window-commands.c:1479
 msgid "Past developers:"
 msgstr "מפתחים בעבר:"
 
-#: ../src/window-commands.c:1502
+#: ../src/window-commands.c:1505
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2633,7 +2633,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1525
+#: ../src/window-commands.c:1528
 msgid "translator-credits"
 msgstr ""
 "רועי קרשטיין <sf_kersteinroie@bezeqint.net>\n"
@@ -2645,15 +2645,15 @@ msgstr ""
 "מיזם תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/window-commands.c:1528
+#: ../src/window-commands.c:1531
 msgid "Web Website"
 msgstr "אתר אינטרנט בדפדפן"
 
-#: ../src/window-commands.c:1667
+#: ../src/window-commands.c:1670
 msgid "Enable caret browsing mode?"
 msgstr "האם לאפשר מצב ניווט באמצעות סמן?"
 
-#: ../src/window-commands.c:1670
+#: ../src/window-commands.c:1673
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2663,7 +2663,7 @@ msgstr ""
 "באתרי אינטרנט המאפשר לך לנווט באמצעות המקלדת. האם ברצונך להפעיל גלישה "
 "באמצעות סמן?"
 
-#: ../src/window-commands.c:1673
+#: ../src/window-commands.c:1676
 msgid "_Enable"
 msgstr "ה_פעלה"
 
