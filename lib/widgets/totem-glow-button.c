@@ -105,14 +105,20 @@ totem_glow_button_class_init (TotemGlowButtonClass *klass)
 static void
 totem_glow_button_init (TotemGlowButton *button)
 {
-	GtkCssProvider *provider;
+        static gsize initialization_value = 0;
 
-	provider = gtk_css_provider_new ();
-	gtk_css_provider_load_from_data (provider, css, -1, NULL);
-	gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-						   GTK_STYLE_PROVIDER (provider),
-						   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_object_unref (provider);
+        if (g_once_init_enter (&initialization_value)) {
+                GtkCssProvider *provider;
+
+                provider = gtk_css_provider_new ();
+                gtk_css_provider_load_from_data (provider, css, -1, NULL);
+                gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                                           GTK_STYLE_PROVIDER (provider),
+                                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                g_object_unref (provider);
+
+                g_once_init_leave (&initialization_value, 1);
+        }
 }
 
 GtkWidget *
