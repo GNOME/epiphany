@@ -441,14 +441,23 @@ editable_changed_cb (GtkEditable *editable,
 static gboolean
 entry_key_press_cb (GtkEntry *entry,
 		    GdkEventKey *event,
-		    EphyLocationEntry *lentry)
+		    EphyLocationEntry *location_entry)
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
+
 	if (event->keyval == GDK_KEY_Escape && state == 0)
 	{
-		ephy_location_entry_reset_internal (lentry, TRUE);
+		ephy_location_entry_reset_internal (location_entry, TRUE);
 		/* don't return TRUE since we want to cancel the autocompletion popup too */
+	}
+
+	if (event->keyval == GDK_KEY_l && state == GDK_CONTROL_MASK)
+	{
+		/* Make sure the location is activated on CTRL+l even when the
+		 * completion popup is shown and have an active keyboard grab.
+		 */
+		ephy_location_entry_activate (location_entry);
 	}
 
 	return FALSE;
