@@ -4,15 +4,15 @@
 #
 # Andraž Tori <andraz.tori1@guest.arnes.si>, 2003.
 # Matic Žgur <mr.zgur@gmail.com>, 2006-2007.
-# Matej Urbančič <mateju@svn.gnome.org>, 2008-2013.
+# Matej Urbančič <mateju@svn.gnome.org>, 2008-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-31 15:43+0000\n"
-"PO-Revision-Date: 2014-03-31 22:30+0100\n"
+"POT-Creation-Date: 2014-04-03 15:42+0000\n"
+"PO-Revision-Date: 2014-04-03 20:07+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -208,7 +208,7 @@ msgid ""
 "This option allows to set the process model used. Use 'shared-secondary-"
 "process' to use a single web process shared by all the tabs and 'one-"
 "secondary-process-per-web-view' to use a different web process for each tab."
-msgstr ""
+msgstr "Možnost omogoča nastavitev modela opravila za uporabo."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Toolbar style"
@@ -1062,16 +1062,16 @@ msgid "Oops! Unable to display this website."
 msgstr "Opa! Spletne strani ni mogoče pokazati."
 
 #: ../embed/ephy-web-view.c:1734
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
 "p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
 "new address. You may wish to verify that your internet connection is working "
 "correctly.</p>"
 msgstr ""
-"<p>Spletišče <strong>%s</strong> najverjetneje ni na voljo. Javljena napaka "
-"s strežnika je:</p><p><em>%s</em>.</p><p>V kolikor se napaka ponavlja, "
-"preverite omrežno povezavo in pa ali je spletišče sploh na voljo.</p>"
+"<p>Spletišče “%s” najverjetneje ni na voljo. Javljena napaka s strežnika je:"
+"</p><p><code>%s</code></p><p>V kolikor se napaka ponavlja, preverite omrežno "
+"povezavo in pa, ali je spletišče sploh še delujoče.</p>"
 
 #: ../embed/ephy-web-view.c:1742
 msgid "Try again"
@@ -1082,15 +1082,15 @@ msgid "Oops! There may be a problem."
 msgstr "Ops! Prišlo je do napake."
 
 #: ../embed/ephy-web-view.c:1749
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
 "happens again, please report the problem to the <strong>%s</strong> "
 "developers.</p>"
 msgstr ""
 "<p>Med nalaganjem strani, se je brskalnik nepričakovano zaprl.</p><p>Pri "
-"ponovnem nalaganju strani, se napaka lahko ponovi. V kolikor se, pošljite "
-"poročilo razvijalcem <strong>%s</strong>.</p>"
+"ponovnem poskusu se to lahko ponovi. V kolikor se, pošljite poročilo "
+"razvijalcem programa <strong>%s</strong>.</p>"
 
 #: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1761
 msgid "Reload Anyway"
@@ -1233,27 +1233,24 @@ msgid "Master password needed"
 msgstr "Zahtevano glavno geslo"
 
 #: ../lib/ephy-nss-glue.c:64
-#, fuzzy
 msgid ""
 "The passwords from the previous version are locked with a master password. "
 "If you want to import them, please enter your master password below."
 msgstr ""
-"Gesla predhodnje različice (Gecko) so zaklenjena z glavnim geslom. V "
-"primeru, da želite, da program Epiphany uvozi ta gesla, spodaj vpišite "
-"zahtevano glavno geslo."
+"Gesla predhodne različice so zaklenjena z glavnim geslom. Če želite gesla "
+"uvoziti, spodaj vpišite zahtevano glavno geslo."
 
 #: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Napaka med kopiranjem piškotkov iz Mozille"
 
 #: ../lib/ephy-profile-migrator.c:652
-#, fuzzy
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
 msgstr ""
-"Z različico programa Epiphany 3.6 je ta mapa opuščena, vsebina pa je "
-"premaknjena v mapo ~/.config/epiphany"
+"Z različico program Web 3.6 je ta mapa opuščena, vsebina pa je premaknjena v "
+"mapo ~/.config/epiphany."
 
 #: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
@@ -1268,14 +1265,12 @@ msgid "Specifies the profile where the migrator should run"
 msgstr "Določa profil, v katerem naj se zažene migrator"
 
 #: ../lib/ephy-profile-migrator.c:1047
-#, fuzzy
 msgid "Web profile migrator"
-msgstr "Izvedi tudi primerjalni preizkus _pisanja"
+msgstr "Prenos profila programa Web"
 
 #: ../lib/ephy-profile-migrator.c:1048
-#, fuzzy
 msgid "Web profile migrator options"
-msgstr "Nadaljnje izboljšave okolja GNOME"
+msgstr "Možnosti prenosa profila programa Web"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1971,17 +1966,15 @@ msgid "C_lear"
 msgstr "Po_čisti"
 
 #: ../src/resources/clear-data-dialog.ui.h:4
-#, fuzzy
 msgid "Select the personal data you wish to clear"
-msgstr "<b>Izberite osebne podatke, ki jih želite počistiti</b>"
+msgstr "Izberite osebne podatke, ki jih želite počistiti"
 
 #: ../src/resources/clear-data-dialog.ui.h:5
-#, fuzzy
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Check the types of information that you want to remove:"
 msgstr ""
-"Počistili boste osebne podatke, ki so shranjeni na obiskanih spletnih "
+"Počistili boste shranjene osebne podatke s strani obiskanih spletnih "
 "straneh. Preden nadaljujete, preverite vrste podatkov, ki jih boste "
 "odstranili:"
 
