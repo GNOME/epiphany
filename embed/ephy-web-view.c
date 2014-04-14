@@ -681,7 +681,8 @@ form_auth_data_save_requested (EphyWebExtensionProxy *web_extension,
   GtkWidget *info_bar;
   FormAuthRequestData *data;
 
-  g_assert (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) == page_id);
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
+    return;
 
   info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, hostname, username);
   data = g_slice_new (FormAuthRequestData);
