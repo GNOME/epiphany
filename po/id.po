@@ -5,23 +5,23 @@
 # tunggul <tunggul@matralintas.net>, 2003.
 # Mohammad DAMT <mdamt@bisnisweb.com>, 2004, 2005, 2006.
 # Ahmad Riza H Nst <rizahnst@eriagempita.co.id>, 2005, 2006.
-# Dirgita <dirgitadevina@yahoo.co.id>, 2011, 2012.
+# Dirgita <dirgitadevina@yahoo.co.id>, 2011, 2012, 2014.
 # Andika Triwidada <andika@gmail.com>, 2011, 2012, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-07 04:39+0000\n"
-"PO-Revision-Date: 2014-03-07 13:50+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian <gnome@i15n.org>\n"
+"POT-Creation-Date: 2014-04-05 15:43+0000\n"
+"PO-Revision-Date: 2014-04-09 05:42+0700\n"
+"Last-Translator: Dirgita <dirgitadevina@yahoo.co.id>\n"
+"Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -178,7 +178,7 @@ msgid ""
 "'never' (the homepage is always shown)."
 msgstr ""
 "Menentukan bagaimana sesi akan dipulihkan saat awal mula. Nilai yang "
-"diijinkan adalah 'always' (keadaan aplikasi sebelumnya selalu dipulihkan), "
+"diizinkan adalah 'always' (keadaan aplikasi sebelumnya selalu dipulihkan), "
 "'crashed' (hanya memulihkan sesi bila aplikasi crash), dan 'never' (selalu "
 "menampilkan halaman pembuka)."
 
@@ -222,7 +222,7 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
-"Gaya bilah perkakas. Nilai yang diijinkan adalah \"\" (memakai gaya baku "
+"Gaya bilah perkakas. Nilai yang diizinkan adalah \"\" (memakai gaya baku "
 "GNOME), \"both\" (teks dan ikon), \"both-horiz\" (teks di samping ikon), "
 "\"icons\" (ikon saja), dan \"text\" (teks saja)."
 
@@ -407,7 +407,7 @@ msgstr "Perbolehkan jendela popup"
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"Ijinkan situs membuka jendela baru memakai JavaScript (bila JavaScript "
+"Izinkan situs membuka jendela baru memakai JavaScript (bila JavaScript "
 "diaktifkan)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:67
@@ -480,7 +480,7 @@ msgstr "Apakah menampilkan kolom alamat dalam jendela penanda taut."
 
 #: ../embed/ephy-about-handler.c:141
 msgid "Installed plugins"
-msgstr "Plugin terpasang"
+msgstr "Pengaya terpasang"
 
 #: ../embed/ephy-about-handler.c:142
 msgid "Plugins"
@@ -549,7 +549,7 @@ msgstr "Dipasang pada:"
 msgid "Remove from overview"
 msgstr "Hapus dari ringkasan"
 
-#: ../embed/ephy-about-handler.c:483 ../embed/ephy-web-view.c:781
+#: ../embed/ephy-about-handler.c:483 ../embed/ephy-embed-utils.c:300
 msgid "Most Visited"
 msgstr "Sering Dikunjungi"
 
@@ -567,17 +567,22 @@ msgstr ""
 "mode ini tidak akan muncul dalam riwayat perambanan Anda dan semua informasi "
 "yang disimpan akan dibersihkan ketika Anda menutup jendela."
 
-#: ../embed/ephy-embed.c:473
+#. characters
+#: ../embed/ephy-embed.c:51
+msgid "Blank page"
+msgstr "Halaman kosong"
+
+#: ../embed/ephy-embed.c:542
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Tekan %s untuk keluar dari layar penuh"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:476
+#: ../embed/ephy-embed.c:545
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:476
+#: ../embed/ephy-embed.c:545
 msgid "F11"
 msgstr "F11"
 
@@ -935,50 +940,55 @@ msgstr "Cari kata yang dikehendaki ke arah belakang"
 msgid "Find next occurrence of the search string"
 msgstr "Cari lagi kata yang dikehendaki"
 
-#. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:2807
-msgid "Blank page"
-msgstr "Halaman kosong"
-
-#: ../embed/ephy-web-view.c:497 ../src/window-commands.c:329
+#: ../embed/ephy-web-view.c:488 ../src/window-commands.c:330
 msgid "Save"
 msgstr "Simpan"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:509
+#: ../embed/ephy-web-view.c:500
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Apakah Anda ingin menyimpan sandi Anda untuk \"%s\"?"
 
-#: ../embed/ephy-web-view.c:1442
+#: ../embed/ephy-web-view.c:1380
 msgid "Deny"
 msgstr "Tolak"
 
-#: ../embed/ephy-web-view.c:1443
+#: ../embed/ephy-web-view.c:1381
 msgid "Allow"
-msgstr "Ijinkan"
+msgstr "Izinkan"
 
-#: ../embed/ephy-web-view.c:1453
+#: ../embed/ephy-web-view.c:1391
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Halaman pada <b>%s</b> ingin tahu lokasi Anda."
 
-#: ../embed/ephy-web-view.c:1759
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1475
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Memuat \"%s\"…"
+
+#: ../embed/ephy-web-view.c:1477
+msgid "Loading…"
+msgstr "Memuat…"
+
+#: ../embed/ephy-web-view.c:1718
 msgid "None specified"
 msgstr "Tak dinyatakan apapun"
 
-#: ../embed/ephy-web-view.c:1772 ../embed/ephy-web-view.c:1787
+#: ../embed/ephy-web-view.c:1731 ../embed/ephy-web-view.c:1746
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Masalah saat memuat \"%s\""
 
-#: ../embed/ephy-web-view.c:1774
+#: ../embed/ephy-web-view.c:1733
 msgid "Oops! Unable to display this website."
 msgstr "Ups! Tak mungkin menampilkan situs web ini."
 
-#: ../embed/ephy-web-view.c:1775
+#: ../embed/ephy-web-view.c:1734
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -991,15 +1001,15 @@ msgstr ""
 "pindah ke alamat baru. Jangan lupa memeriksa apakah koneksi internet Anda "
 "bekerja dengan baik.</p>"
 
-#: ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1742
 msgid "Try again"
 msgstr "Coba lagi"
 
-#: ../embed/ephy-web-view.c:1789
+#: ../embed/ephy-web-view.c:1748
 msgid "Oops! There may be a problem."
 msgstr "Ups! Mungkin ada masalah."
 
-#: ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1749
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1010,20 +1020,20 @@ msgstr ""
 "ini terjadi lagi, mohon laporkan masalah ke para pengembang <strong>%s</"
 "strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1795 ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1761
 msgid "Reload Anyway"
 msgstr "Muat Ulang Saja"
 
-#: ../embed/ephy-web-view.c:1799
+#: ../embed/ephy-web-view.c:1758
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Masalah saat menampilkan \"%s\""
 
-#: ../embed/ephy-web-view.c:1800
+#: ../embed/ephy-web-view.c:1759
 msgid "Oops!"
 msgstr "Ups!"
 
-#: ../embed/ephy-web-view.c:1801
+#: ../embed/ephy-web-view.c:1760
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1031,17 +1041,7 @@ msgstr ""
 "Terjadi suatu kesalahan ketika menampilkan halaman ini. Harap muat ulang "
 "atau kunjungi halaman lain untuk melanjutkan."
 
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:2219
-#, c-format
-msgid "Loading “%s”…"
-msgstr "Memuat \"%s\"…"
-
-#: ../embed/ephy-web-view.c:2221
-msgid "Loading…"
-msgstr "Memuat…"
-
-#: ../embed/ephy-web-view.c:2711
+#: ../embed/ephy-web-view.c:2607
 msgid "_OK"
 msgstr "_OK"
 
@@ -1090,7 +1090,7 @@ msgstr "Desktop"
 #: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
-msgstr "Tidak bisa membuat direktori sementara dalam \"%s\"."
+msgstr "Tak dapat membuat direktori sementara dalam \"%s\"."
 
 #: ../lib/ephy-file-helpers.c:469
 #, c-format
@@ -1130,7 +1130,7 @@ msgstr "Anda tidak memiliki hak menulis berkas pada direktori ini."
 
 #: ../lib/ephy-gui.c:213
 msgid "Directory not Writable"
-msgstr "Direktori Tidak Dapat Ditulisi"
+msgstr "Direktori Tak Dapat Ditulisi"
 
 #: ../lib/ephy-gui.c:242
 #, c-format
@@ -1147,7 +1147,7 @@ msgstr ""
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
-msgstr "Berkas Tidak Dapat Ditimpa"
+msgstr "Berkas Tak Dapat Ditimpa"
 
 #: ../lib/ephy-gui.c:307
 #, c-format
@@ -1282,7 +1282,7 @@ msgstr "Berkas lokal"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:92
 msgid "The certificate does not match the expected identity"
-msgstr "Tidak ada kecocokan sertifikat terhadap identitas yang diharapkan"
+msgstr "Tak ada kecocokan sertifikat terhadap identitas yang diharapkan"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:95
 msgid "The certificate has expired"
@@ -1382,21 +1382,21 @@ msgstr "Memulai…"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:618
+#: ../lib/widgets/ephy-location-entry.c:627
 #: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:189
 msgid "Cl_ear"
 msgstr "B_ersihkan"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:637 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:646 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "_Batal"
 
-#: ../lib/widgets/ephy-location-entry.c:644
+#: ../lib/widgets/ephy-location-entry.c:653
 msgid "_Redo"
 msgstr "Jadi _Lagi"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/widgets/ephy-location-entry.c:933
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Seret dan jatuhkan icon ini untuk membuat sambungan ke halaman ini"
 
@@ -1406,7 +1406,7 @@ msgstr "Seret dan jatuhkan icon ini untuk membuat sambungan ke halaman ini"
 #, c-format
 msgid "%d bookmark is similar"
 msgid_plural "%d bookmarks are similar"
-msgstr[0] "%d bookmark mirip"
+msgstr[0] "%d penanda mirip"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:234
 #, c-format
@@ -1551,7 +1551,7 @@ msgstr "Buka alamat terpilih dalam tab baru"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "_Rename…"
-msgstr "_Ganti nama…"
+msgstr "_Ubah nama…"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Rename the selected bookmark or topic"
@@ -1682,7 +1682,7 @@ msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
-"Menghapus topik ini akan menyebabkan seluruh bookmarknya akan menjadi tidak "
+"Menghapus topik ini akan menyebabkan seluruh penandanya akan menjadi tidak "
 "terkategorikan lagi, kecuali mereka juga milik topik yang lain. Bookmark nya "
 "tidak dapat dihapus."
 
@@ -1798,7 +1798,7 @@ msgstr "Buka dalam _Tab baru"
 
 #: ../src/bookmarks/ephy-open-tabs-action.c:75
 msgid "Open the bookmarks in this topic in new tabs"
-msgstr "Buka bookmark topik ini dalam tab baru"
+msgstr "Buka penanda topik ini dalam tab baru"
 
 #: ../src/bookmarks/ephy-topics-entry.c:330
 #, c-format
@@ -1996,7 +1996,7 @@ msgstr "Perbolehkan _jendela popup"
 
 #: ../src/resources/prefs-dialog.ui.h:9
 msgid "Allow _advertisements"
-msgstr "Ijink_an iklan"
+msgstr "Izink_an iklan"
 
 #: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
@@ -2194,7 +2194,7 @@ msgstr "Muat berkas sesi ini"
 
 #: ../src/ephy-main.c:84
 msgid "Add a bookmark"
-msgstr "Tambah bookmark"
+msgstr "Tambah penanda"
 
 #: ../src/ephy-main.c:84
 msgid "URL"
@@ -2245,7 +2245,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Opsi web"
 
-#: ../src/ephy-notebook.c:606
+#: ../src/ephy-notebook.c:602
 msgid "Close tab"
 msgstr "Tutup tab"
 
@@ -2663,3 +2663,5 @@ msgstr ""
 #: ../src/window-commands.c:1676
 msgid "_Enable"
 msgstr "_Aktifkan"
+
+
