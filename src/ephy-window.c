@@ -2573,6 +2573,21 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 
 	if (event != NULL)
 	{
+		gint n_pages, page_num;
+
+		tab = GTK_WIDGET (window->priv->active_embed);
+		n_pages = gtk_notebook_get_n_pages (notebook);
+		page_num = gtk_notebook_page_num (notebook, tab);
+
+		/* enable/disable move left/right items*/
+		action = gtk_action_group_get_action (window->priv->action_group,
+						      "TabsMoveLeft");
+		gtk_action_set_sensitive (action, page_num > 0);
+
+		action = gtk_action_group_get_action (window->priv->action_group,
+						      "TabsMoveRight");
+		gtk_action_set_sensitive (action, page_num < n_pages - 1);
+
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 				NULL, NULL,
 				event->button, event->time);
