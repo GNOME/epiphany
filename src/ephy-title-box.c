@@ -157,6 +157,7 @@ ephy_title_box_add_address_bar (EphyTitleBox *title_box)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (box);
   gtk_style_context_add_class (gtk_widget_get_style_context (box), "location-entry");
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LINKED);
   gtk_stack_add_named (GTK_STACK (title_box), box, "address-bar");
 
   priv->entry = ephy_location_entry_new ();
