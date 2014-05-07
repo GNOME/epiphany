@@ -279,7 +279,6 @@ static const struct
 	                        GDK_SHIFT_MASK,         "TabsMoveRight",         FALSE },
 	/* Go */
 	{ GDK_KEY_l,            GDK_CONTROL_MASK,       "GoLocation",            FALSE },
-	{ GDK_KEY_F6,           0,			"GoLocation",            FALSE },
 	/* Support all the MSIE tricks as well ;) */
 	{ GDK_KEY_F5,		0,			"ViewReload",		 FALSE },
 	{ GDK_KEY_F5,		GDK_CONTROL_MASK,	"ViewReload",		 FALSE },
