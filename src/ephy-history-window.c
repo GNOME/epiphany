@@ -59,9 +59,6 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *copy_location_menuitem;
 	GtkWidget *treeview_popup_menu;
 
-	GList *urls;
-	guint sorter_source;
-
 	char *search_text;
 
 	gboolean  sort_ascending;
@@ -87,32 +84,22 @@ typedef enum
 	COLUMN_LOCATION
 } EphyHistoryWindowColumns;
 
-static gboolean
-add_urls_source (EphyHistoryWindow *self)
+static void
+add_urls (GtkListStore *store,
+	  GList *urls)
 {
-	GtkListStore *store = GTK_LIST_STORE (self->priv->liststore);
 	EphyHistoryURL *url;
-	GList *element = self->priv->urls;
+	GList *iter;
 
-	if (element) {
-		url = element->data;
+	for (iter = urls; iter != NULL; iter = iter->next) {
+		url = (EphyHistoryURL *)iter->data;
 		gtk_list_store_insert_with_values (store,
 						   NULL, G_MAXINT,
 						   COLUMN_DATE, url->last_visit_time,
 						   COLUMN_NAME, url->title,
 						   COLUMN_LOCATION, url->url,
 						   -1);
-		self->priv->urls = g_list_remove_link (self->priv->urls, element);
-		ephy_history_url_free (url);
-		g_list_free (element);
 	}
-
-	if (self->priv->urls == NULL)
-	{
-		self->priv->sorter_source = 0;
-		return G_SOURCE_REMOVE;
-	}
-	return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -122,32 +109,15 @@ on_find_urls_cb (gpointer service,
 		 gpointer user_data)
 {
 	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
-	GtkTreeViewColumn *column;
+	GList *urls;
 
 	if (success != TRUE)
 		return;
 
-	if (self->priv->sorter_source != 0)
-	{
-		g_source_remove (self->priv->sorter_source);
-		self->priv->sorter_source = 0;
-	}
-
-	if (self->priv->urls != NULL)
-		g_list_free_full (self->priv->urls, (GDestroyNotify)ephy_history_url_free);
-
-	self->priv->urls = (GList *)result_data;
-
-	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), NULL);
+	urls = (GList *)result_data;
 	gtk_list_store_clear (GTK_LIST_STORE (self->priv->liststore));
-	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), GTK_TREE_MODEL (self->priv->liststore));
-
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
-	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
-	gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-	self->priv->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
-
+	add_urls (GTK_LIST_STORE (self->priv->liststore), urls);
+	g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
 }
 
 static GList *
@@ -657,18 +627,6 @@ ephy_history_window_dispose (GObject *object)
 						      self);
 	g_clear_object (&self->priv->history_service);
 
-	if (self->priv->sorter_source != 0)
-	{
-		g_source_remove (self->priv->sorter_source);
-		self->priv->sorter_source = 0;
-	}
-
-	if (self->priv->urls != NULL)
-	{
-		g_list_free_full (self->priv->urls, (GDestroyNotify)ephy_history_url_free);
-		self->priv->urls = NULL;
-	}
-
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
 }
 
@@ -821,10 +779,8 @@ ephy_history_window_init (EphyHistoryWindow *self)
 
 	self->priv->cancellable = g_cancellable_new ();
 
-	self->priv->urls = NULL;
 	self->priv->sort_ascending = FALSE;
 	self->priv->sort_column = COLUMN_DATE;
-	self->priv->sorter_source = 0;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (self));
 
