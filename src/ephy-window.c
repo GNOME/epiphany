@@ -313,11 +313,7 @@ static const struct
 	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
 	 * They're KP_PageUp/Down again!
 	 */
-	{ GDK_KEY_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
-	{ GDK_KEY_KP_Left,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
 	{ GDK_KEY_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
-	{ GDK_KEY_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
-	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
 	{ GDK_KEY_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
 	{ GDK_KEY_KP_9,		GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
@@ -342,7 +338,17 @@ static const struct
 	{ XF86XK_ZoomOut,	0, 			"ViewZoomOut",		FALSE }
 	/* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
-};
+}, navigation_keybindings_ltr [] = {
+	{ GDK_KEY_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_KP_Left,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE }
+}, navigation_keybindings_rtl [] = {
+	{ GDK_KEY_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KEY_KP_Left,	GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KEY_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KEY_KP_Right,	GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE }
+}, *navigation_keybindings_rtl_ltr;
 
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
 
@@ -768,6 +774,59 @@ ephy_window_unfullscreen (EphyWindow *window)
 	ephy_embed_leaving_fullscreen (window->priv->active_embed);
 }
 
+static gboolean
+ephy_window_bound_accels (GtkWidget *widget,
+			  GdkEventKey *event)
+{
+	EphyWindow *window = EPHY_WINDOW (widget);
+	EphyWindowPrivate *priv = window->priv;
+	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
+	guint i;
+
+	navigation_keybindings_rtl_ltr = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ?
+					 navigation_keybindings_rtl : navigation_keybindings_ltr;
+
+	for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++)
+	{
+		if (event->keyval == extra_keybindings[i].keyval &&
+		    modifier == extra_keybindings[i].modifier)
+		{
+			GtkAction * action = gtk_action_group_get_action
+				(extra_keybindings[i].fromToolbar ? 
+					priv->toolbar_action_group :
+					priv->action_group,
+				extra_keybindings[i].action);
+			if (gtk_action_is_sensitive (action))
+			{
+				gtk_action_activate (action);
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	for (i = 0; i < G_N_ELEMENTS (navigation_keybindings_rtl); i++)
+	{
+		if (event->keyval == navigation_keybindings_rtl_ltr[i].keyval &&
+		    modifier == navigation_keybindings_rtl_ltr[i].modifier)
+		{
+			GtkAction * action = gtk_action_group_get_action
+				(navigation_keybindings_rtl_ltr[i].fromToolbar ?
+					priv->toolbar_action_group :
+					priv->action_group,
+				navigation_keybindings_rtl_ltr[i].action);
+			if (gtk_action_is_sensitive (action))
+			{
+				gtk_action_activate (action);
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	return FALSE;
+}
+
 static gboolean 
 ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
@@ -777,7 +836,6 @@ ephy_window_key_press_event (GtkWidget *widget,
 	GtkWidget *focus_widget;
 	gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
-	guint i;
 
 	/* In an attempt to get the mozembed playing nice with things like emacs keybindings
 	 * we are passing important events to the focused child widget before letting the window's
@@ -838,23 +896,9 @@ ephy_window_key_press_event (GtkWidget *widget,
 
 	/* Handle accelerators that we want bound, but aren't associated with
 	 * an action */
-	for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++)
+	if (ephy_window_bound_accels (widget, event))
 	{
-		if (event->keyval == extra_keybindings[i].keyval &&
-		    modifier == extra_keybindings[i].modifier)
-		{
-			GtkAction * action = gtk_action_group_get_action
-				(extra_keybindings[i].fromToolbar ? 
-					priv->toolbar_action_group :
-					priv->action_group,
-				extra_keybindings[i].action);
-			if (gtk_action_is_sensitive (action))
-			{
-				gtk_action_activate (action);
-				return TRUE;
-			}
-			break;
-		}
+		return TRUE;
 	}
 
 	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
