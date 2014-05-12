@@ -807,7 +807,12 @@ ephy_web_view_set_address (EphyWebView *view,
   EphyWebViewPrivate *priv = view->priv;
   GObject *object = G_OBJECT (view);
   gboolean is_blank;
+  gboolean was_empty;
 
+  if (g_strcmp0 (priv->address, address) == 0)
+    return;
+
+  was_empty = priv->address == NULL;
   g_free (priv->address);
   priv->address = g_strdup (address);
 
@@ -815,7 +820,8 @@ ephy_web_view_set_address (EphyWebView *view,
              strcmp (address, "about:blank") == 0;
   _ephy_web_view_set_is_blank (view, is_blank);
 
-  if (ephy_web_view_is_loading (view) && priv->typed_address != NULL)
+  /* If the view was empty there is no need to clean the typed address. */
+  if (!was_empty && ephy_web_view_is_loading (view) && priv->typed_address != NULL)
     ephy_web_view_set_typed_address (view, NULL);
 
   g_object_notify (object, "address");
