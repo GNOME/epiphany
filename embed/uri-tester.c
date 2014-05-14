@@ -493,7 +493,7 @@ uri_tester_compile_regexp (UriTester *tester,
 
       for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--) {
         sig = g_strndup (patt + pos, SIGNATURE_SIZE);
-        if (!g_regex_match_simple ("[\\*]", sig, G_REGEX_UNGREEDY, G_REGEX_MATCH_NOTEMPTY) &&
+        if (!strchr (sig, '*') &&
             !g_hash_table_lookup (tester->priv->keys, sig))
           {
             LOG ("sig: %s %s", sig, patt);
@@ -503,7 +503,7 @@ uri_tester_compile_regexp (UriTester *tester,
           }
         else
           {
-            if (g_regex_match_simple ("^\\*", sig, G_REGEX_UNGREEDY, G_REGEX_MATCH_NOTEMPTY) &&
+            if (sig[0] == '*' &&
                 !g_hash_table_lookup (tester->priv->pattern, patt))
               {
                 LOG ("patt2: %s %s", sig, patt);
