@@ -50,6 +50,11 @@ struct _UriTesterPrivate
 
   GString *blockcss;
   GString *blockcssprivate;
+
+  GRegex *regex_third_party;
+  GRegex *regex_pattern;
+  GRegex *regex_subdocument;
+  GRegex *regex_frame_add;
 };
 
 enum
@@ -303,8 +308,7 @@ uri_tester_check_rule (UriTester  *tester,
     return FALSE;
 
   opts = g_hash_table_lookup (tester->priv->optslist, patt);
-  if (opts && g_regex_match_simple (",third-party", opts,
-                                    G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY))
+  if (opts && g_regex_match (tester->priv->regex_third_party, opts, 0, NULL))
     {
       if (page_uri && g_regex_match_full (regex, page_uri, -1, 0, 0, NULL, NULL))
         return FALSE;
@@ -485,7 +489,7 @@ uri_tester_compile_regexp (UriTester *tester,
       return TRUE;
     }
 
-  if (!g_regex_match_simple ("^/.*[\\^\\$\\*].*/$", patt, G_REGEX_UNGREEDY, G_REGEX_MATCH_NOTEMPTY))
+  if (!g_regex_match (tester->priv->regex_pattern, patt, 0, NULL))
     {
       int signature_count = 0;
       int pos = 0;
@@ -568,8 +572,7 @@ uri_tester_add_url_pattern (UriTester *tester,
         opts = type;
     }
 
-    if (g_regex_match_simple ("subdocument", opts,
-                              G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY))
+    if (g_regex_match (tester->priv->regex_subdocument, opts, 0, NULL))
     {
         if (data[1] && data[2])
             g_free (patt);
@@ -602,8 +605,7 @@ uri_tester_frame_add (UriTester *tester, char *line)
   (void)*line++;
   if (strchr (line, '\'')
       || (strchr (line, ':')
-          && !g_regex_match_simple (".*\\[.*:.*\\].*", line,
-                                    G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY)))
+          && !g_regex_match (tester->priv->regex_frame_add, line, 0, NULL)))
     {
       return;
     }
@@ -622,8 +624,7 @@ uri_tester_frame_add_private (UriTester  *tester,
   if (!(data[1] && *data[1])
       ||  strchr (data[1], '\'')
       || (strchr (data[1], ':')
-          && !g_regex_match_simple (".*\\[.*:.*\\].*", data[1],
-                                    G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY)))
+          && !g_regex_match (tester->priv->regex_frame_add, data[1], 0, NULL)))
     {
       g_strfreev (data);
       return;
@@ -759,6 +760,23 @@ uri_tester_init (UriTester *tester)
 
   priv->blockcss = g_string_new ("z-non-exist");
   priv->blockcssprivate = g_string_new ("");
+
+  priv->regex_third_party = g_regex_new (",third-party",
+                                         G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                         G_REGEX_MATCH_NOTEMPTY,
+                                         NULL);
+  priv->regex_pattern = g_regex_new ("^/.*[\\^\\$\\*].*/$",
+                                     G_REGEX_UNGREEDY | G_REGEX_OPTIMIZE,
+                                     G_REGEX_MATCH_NOTEMPTY,
+                                     NULL);
+  priv->regex_subdocument = g_regex_new ("subdocument",
+                                         G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                         G_REGEX_MATCH_NOTEMPTY,
+                                         NULL);
+  priv->regex_frame_add = g_regex_new (".*\\[.*:.*\\].*",
+                                       G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                       G_REGEX_MATCH_NOTEMPTY,
+                                       NULL);
 }
 
 static void
@@ -812,6 +830,11 @@ uri_tester_finalize (GObject *object)
 
   g_string_free (priv->blockcss, TRUE);
   g_string_free (priv->blockcssprivate, TRUE);
+
+  g_regex_unref (priv->regex_third_party);
+  g_regex_unref (priv->regex_pattern);
+  g_regex_unref (priv->regex_subdocument);
+  g_regex_unref (priv->regex_frame_add);
 
   G_OBJECT_CLASS (uri_tester_parent_class)->finalize (object);
 }
