@@ -463,7 +463,7 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
   return str;
 }
 
-static gboolean
+static void
 uri_tester_compile_regexp (UriTester *tester,
                            GString   *gpatt,
                            char      *opts)
@@ -474,7 +474,7 @@ uri_tester_compile_regexp (UriTester *tester,
   int len;
 
   if (!gpatt)
-    return FALSE;
+    return;
 
   patt = gpatt->str;
   len = gpatt->len;
@@ -486,7 +486,7 @@ uri_tester_compile_regexp (UriTester *tester,
     {
       g_warning ("%s: %s", G_STRFUNC, error->message);
       g_error_free (error);
-      return TRUE;
+      return;
     }
 
   if (!g_regex_match (tester->priv->regex_pattern, patt, 0, NULL))
@@ -520,12 +520,7 @@ uri_tester_compile_regexp (UriTester *tester,
       g_regex_unref (regex);
 
       if (signature_count > 1 && g_hash_table_lookup (tester->priv->pattern, patt))
-        {
-          g_hash_table_steal (tester->priv->pattern, patt);
-          return TRUE;
-        }
-
-      return FALSE;
+        g_hash_table_steal (tester->priv->pattern, patt);
     }
   else
     {
@@ -533,11 +528,10 @@ uri_tester_compile_regexp (UriTester *tester,
       /* Pattern is a regexp chars */
       g_hash_table_insert (tester->priv->pattern, g_strdup (patt), regex);
       g_hash_table_insert (tester->priv->optslist, g_strdup (patt), g_strdup (opts));
-      return FALSE;
     }
 }
 
-static char*
+static void
 uri_tester_add_url_pattern (UriTester *tester,
                             char      *prefix,
                             char      *type,
@@ -547,13 +541,12 @@ uri_tester_add_url_pattern (UriTester *tester,
     char *patt;
     GString *format_patt;
     char *opts;
-    gboolean should_free;
 
     data = g_strsplit (line, "$", -1);
     if (!data || !data[0])
     {
         g_strfreev (data);
-        return NULL;
+        return;
     }
 
     if (data[1] && data[2])
@@ -579,13 +572,13 @@ uri_tester_add_url_pattern (UriTester *tester,
         if (data[1])
             g_free (opts);
         g_strfreev (data);
-        return NULL;
+        return;
     }
 
     format_patt = uri_tester_fixup_regexp (prefix, patt);
 
     LOG ("got: %s opts %s", format_patt->str, opts);
-    should_free = uri_tester_compile_regexp (tester, format_patt, opts);
+    uri_tester_compile_regexp (tester, format_patt, opts);
 
     if (data[1] && data[2])
         g_free (patt);
@@ -593,7 +586,7 @@ uri_tester_add_url_pattern (UriTester *tester,
         g_free (opts);
     g_strfreev (data);
 
-    return g_string_free (format_patt, should_free);
+    g_string_free (format_patt, TRUE);
 }
 
 static inline void
@@ -651,65 +644,68 @@ uri_tester_frame_add_private (UriTester  *tester,
   g_strfreev (data);
 }
 
-static char*
+static void
 uri_tester_parse_line (UriTester *tester, char *line)
 {
   if (!line)
-    return NULL;
+    return;
+
   g_strchomp (line);
   /* Ignore comments and new lines */
   if (line[0] == '!')
-    return NULL;
+    return;
   /* FIXME: No support for whitelisting */
   if (line[0] == '@' && line[1] == '@')
-    return NULL;
+    return;
   /* FIXME: No support for [include] and [exclude] tags */
   if (line[0] == '[')
-    return NULL;
+    return;
   /* FIXME: No support for domain= */
   if (strstr (line, "domain="))
-    return NULL;
+    return;
 
   /* Skip garbage */
   if (line[0] == ' ' || !line[0])
-    return NULL;
+    return;
 
   /* Got CSS block hider */
   if (line[0] == '#' && line[1] == '#' )
     {
       uri_tester_frame_add (tester, line);
-      return NULL;
+      return;
     }
   /* Got CSS block hider. Workaround */
   if (line[0] == '#')
-    return NULL;
+    return;
 
   /* Got per domain CSS hider rule */
   if (strstr (line, "##"))
     {
       uri_tester_frame_add_private (tester, line, "##");
-      return NULL;
+      return;
     }
 
   /* Got per domain CSS hider rule. Workaround */
   if (strchr (line, '#'))
     {
       uri_tester_frame_add_private (tester, line, "#");
-      return NULL;
+      return;
     }
   /* Got URL blocker rule */
   if (line[0] == '|' && line[1] == '|' )
     {
       (void)*line++;
       (void)*line++;
-      return uri_tester_add_url_pattern (tester, "", "fulluri", line);
+      uri_tester_add_url_pattern (tester, "", "fulluri", line);
+      return;
     }
   if (line[0] == '|')
     {
       (void)*line++;
-      return uri_tester_add_url_pattern (tester, "^", "fulluri", line);
+      uri_tester_add_url_pattern (tester, "^", "fulluri", line);
+      return;
     }
-  return uri_tester_add_url_pattern (tester, "", "uri", line);
+  uri_tester_add_url_pattern (tester, "", "uri", line);
 }
 
 static gboolean
@@ -724,7 +720,7 @@ uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
   if ((file = g_fopen (path, "r")))
     {
       while (fgets (line, 2000, file))
-        g_free (uri_tester_parse_line (tester, line));
+        uri_tester_parse_line (tester, line);
       fclose (file);
 
       result = TRUE;
