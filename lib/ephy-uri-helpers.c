@@ -223,6 +223,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   GList *items, *new_items, *l;
   const char *query, *host;
   char *new_query;
+  gboolean has_garbage = FALSE;
   char *ret = NULL;
 
   uri = soup_uri_new (uri_string);
@@ -241,20 +242,25 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   new_items = NULL;
   for (l = items; l != NULL; l = l->next) {
     QueryItem *item = l->data;
+
     if (!is_garbage (item->name, host))
       new_items = g_list_prepend (new_items, item);
+    else
+      has_garbage = TRUE;
   }
-  new_items = g_list_reverse (new_items);
 
-  new_query = query_encode (new_items);
+  if (has_garbage) {
+    new_items = g_list_reverse (new_items);
+    new_query = query_encode (new_items);
+
+    soup_uri_set_query (uri, new_query);
+    g_free (new_query);
+
+    ret = soup_uri_to_string (uri, FALSE);
+  }
 
   g_list_free_full (items, (GDestroyNotify) query_item_free);
   g_list_free (new_items);
-
-  soup_uri_set_query (uri, new_query);
-  g_free (new_query);
-
-  ret = soup_uri_to_string (uri, FALSE);
 
 bail:
   soup_uri_free (uri);
