@@ -32,19 +32,19 @@
  * URI related functions, including functions to clean up URI.
  */
 
-/* QueryItem holds a query parameter name/value pair. The name is unescaped in
- * query_decode() with form_decode(), the value is not altered. */
+/* QueryItem holds the decoded name for each parameter, as well as the untouched
+ * name/value pair. The name is unescaped in query_decode() with form_decode(),
+ * the pair is not altered. */
 typedef struct {
-  char *name;
-  char *value;
+  char *decoded_name;
+  char *pair;
 } QueryItem;
 
 static void
 query_item_free (QueryItem *item)
 {
-  g_free (item->name);
-  /* value is actually part of the name allocation,
-   * see query_decode() */
+  g_free (item->decoded_name);
+  g_free (item->pair);
   g_slice_free (QueryItem, item);
 }
 
@@ -74,63 +74,33 @@ form_decode (char *part)
   return TRUE;
 }
 
-static void
-append_form_encoded (GString *str, const char *in)
-{
-  const unsigned char *s = (const unsigned char *)in;
-
-  while (*s) {
-    if (*s == ' ') {
-      g_string_append_c (str, '+');
-      s++;
-    } else if (!g_ascii_isalnum (*s))
-      g_string_append_printf (str, "%%%02X", (int)*s++);
-    else
-      g_string_append_c (str, *s++);
-  }
-}
-
-static void
-encode_pair (GString *str, const char *name, const char *value)
-{
-  g_return_if_fail (name != NULL);
-  g_return_if_fail (value != NULL);
-
-  if (str->len)
-    g_string_append_c (str, '&');
-  append_form_encoded (str, name);
-  g_string_append_c (str, '=');
-  g_string_append (str, value);
-}
-
-/* Adapted from soup_form_decode in libsoup */
 static GList *
-query_decode (const char *query)
+query_split (const char *query)
 {
   GList *items;
-  char **pairs, *eq, *name, *value;
+  char **pairs;
   int i;
 
   items = NULL;
   pairs = g_strsplit (query, "&", -1);
   for (i = 0; pairs[i]; i++) {
     QueryItem *item;
+    char *decoded_name = NULL;
+    char *pair, *eq;
 
-    name = pairs[i];
-    eq = strchr (name, '=');
+    pair = pairs[i];
+    eq = strchr (pair, '=');
     if (eq) {
-      *eq = '\0';
-      value = eq + 1;
-    } else
-      value = NULL;
-    if (!value || !form_decode (name)) {
-      g_free (name);
-      continue;
+      decoded_name = g_strndup (pair, eq - pair);
+      if (!form_decode (decoded_name)) {
+        g_free (decoded_name);
+        decoded_name = NULL;
+      }
     }
 
     item = g_slice_new0 (QueryItem);
-    item->name = name;
-    item->value = value;
+    item->decoded_name = decoded_name;
+    item->pair = pair;
     items = g_list_prepend (items, item);
   }
   g_free (pairs);
@@ -139,22 +109,28 @@ query_decode (const char *query)
 }
 
 static char *
-query_encode (GList *items)
+query_concat (GList *items)
 {
   GList *l;
-  GString *str;
+  GPtrArray *array;
+  char *ret;
 
   if (!items)
     return NULL;
 
-  str = g_string_new (NULL);
+  array = g_ptr_array_new ();
+
   for (l = items; l != NULL; l = l->next) {
     QueryItem *item = l->data;
 
-    encode_pair (str, item->name, item->value);
+    g_ptr_array_add (array, item->pair);
   }
+  g_ptr_array_add (array, NULL);
 
-  return g_string_free (str, FALSE);
+  ret = g_strjoinv ("&", (char **) array->pdata);
+  g_ptr_array_free (array, TRUE);
+
+  return ret;
 }
 
 static gboolean
@@ -235,7 +211,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   if (!query)
     goto bail;
 
-  items = query_decode (query);
+  items = query_split (query);
   if (!items)
     goto bail;
 
@@ -243,7 +219,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   for (l = items; l != NULL; l = l->next) {
     QueryItem *item = l->data;
 
-    if (!is_garbage (item->name, host))
+    if (!is_garbage (item->decoded_name, host))
       new_items = g_list_prepend (new_items, item);
     else
       has_garbage = TRUE;
@@ -251,7 +227,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
 
   if (has_garbage) {
     new_items = g_list_reverse (new_items);
-    new_query = query_encode (new_items);
+    new_query = query_concat (new_items);
 
     soup_uri_set_query (uri, new_query);
     g_free (new_query);
