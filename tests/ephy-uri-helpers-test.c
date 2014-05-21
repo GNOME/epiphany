@@ -51,6 +51,9 @@ test_ephy_uri_helpers_remove_tracking (void)
     { "https://mail.google.com/mail/u/0/?ui=2&ik=37373eb942&rid=7cea..&auto=1&view=lno&_reqid=1168127&pcd=1&mb=0&rt=j",
       "https://mail.google.com/mail/u/0/?ui=2&ik=37373eb942&rid=7cea..&auto=1&view=lno&_reqid=1168127&pcd=1&mb=0&rt=j" },
     { "http://www.test.com/?utm_source=feedburner&view=lno&_reqid=1234", "http://www.test.com/?view=lno&_reqid=1234" },
+    { "http://www.test.com/?some&valid&query", "http://www.test.com/?some&valid&query" },
+    { "http://www.test.com/?utm_source=feedburner&some&valid&query", "http://www.test.com/?some&valid&query" },
+
   };
   guint i;
 

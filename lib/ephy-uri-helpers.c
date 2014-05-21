@@ -90,12 +90,14 @@ query_split (const char *query)
 
     pair = pairs[i];
     eq = strchr (pair, '=');
-    if (eq) {
+    if (eq)
       decoded_name = g_strndup (pair, eq - pair);
-      if (!form_decode (decoded_name)) {
-        g_free (decoded_name);
-        decoded_name = NULL;
-      }
+    else
+      decoded_name = g_strdup (pair);
+
+    if (!form_decode (decoded_name)) {
+      g_free (decoded_name);
+      decoded_name = NULL;
     }
 
     item = g_slice_new0 (QueryItem);
@@ -169,6 +171,9 @@ is_garbage (const char *name,
     { "src",		"addons.mozilla.org" }
   };
   guint i;
+
+  if (name == NULL)
+    return FALSE;
 
   for (i = 0; i < G_N_ELEMENTS (fields); i++) {
     if (fields[i].host != NULL &&
