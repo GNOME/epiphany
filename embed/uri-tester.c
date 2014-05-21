@@ -71,7 +71,7 @@ G_DEFINE_TYPE (UriTester, uri_tester, G_TYPE_OBJECT)
 static GString *
 uri_tester_fixup_regexp (const char *prefix, char *src);
 
-static gboolean
+static void
 uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri);
 
 static char *
@@ -708,26 +708,65 @@ uri_tester_parse_line (UriTester *tester, char *line)
   uri_tester_add_url_pattern (tester, "", "uri", line);
 }
 
-static gboolean
+static void
+file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester)
+{
+  char *line;
+  GError *error = NULL;
+
+  line = g_data_input_stream_read_line_finish (stream, result, NULL, &error);
+  if (!line) {
+    if (error) {
+      LOG ("Error parsing file: %s\n", error->message);
+      g_error_free (error);
+    }
+
+    return;
+  }
+
+  uri_tester_parse_line (tester, line);
+  g_free (line);
+
+  g_data_input_stream_read_line_async (stream, G_PRIORITY_DEFAULT_IDLE, NULL,
+                                       (GAsyncReadyCallback)file_parse_cb, tester);
+}
+
+static void
+file_read_cb (GFile *file, GAsyncResult *result, UriTester *tester)
+{
+  GFileInputStream *stream;
+  GDataInputStream *data_stream;
+  GError *error = NULL;
+
+  stream = g_file_read_finish (file, result, &error);
+  if (!stream) {
+    char *path;
+
+    path = g_file_get_path (file);
+    LOG ("Error opening file %s for parsing: %s\n", path, error->message);
+    g_free (path);
+    g_error_free (error);
+
+    return;
+  }
+
+  data_stream = g_data_input_stream_new (G_INPUT_STREAM (stream));
+  g_object_unref (stream);
+
+  g_data_input_stream_read_line_async (data_stream, G_PRIORITY_DEFAULT_IDLE, NULL,
+                                       (GAsyncReadyCallback)file_parse_cb, tester);
+  g_object_unref (data_stream);
+}
+
+static void
 uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
 {
-  FILE *file;
-  char line[2000];
-  char *path = NULL;
-  gboolean result = FALSE;
+  GFile *file;
+  GFileInputStream *stream;
 
-  path = g_filename_from_uri (fileuri, NULL, NULL);
-  if ((file = g_fopen (path, "r")))
-    {
-      while (fgets (line, 2000, file))
-        uri_tester_parse_line (tester, line);
-      fclose (file);
-
-      result = TRUE;
-    }
-  g_free (path);
-
-  return result;
+  file = g_file_new_for_uri (fileuri);
+  g_file_read_async (file, G_PRIORITY_DEFAULT_IDLE, NULL, (GAsyncReadyCallback)file_read_cb, tester);
+  g_object_unref (file);
 }
 
 static void
