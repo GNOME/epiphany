@@ -1121,7 +1121,6 @@ setup_ui_manager (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GtkUIManager *manager;
-	const char *prev_icon, *next_icon;
 
 	window->priv->main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (window->priv->main_vbox);
@@ -1181,20 +1180,12 @@ setup_ui_manager (EphyWindow *window)
 	window->priv->tab_accels_action_group = action_group;
 	g_object_unref (action_group);
 
-	if (gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_RTL) {
-		prev_icon = "go-previous-rtl-symbolic";
-		next_icon = "go-next-rtl-symbolic";
-	} else {
-		prev_icon = "go-previous-symbolic";
-		next_icon = "go-next-symbolic";
-	}
-
 	action_group = gtk_action_group_new ("SpecialToolbarActions");
 	action =
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationBack",
 			      "label", _("Back"),
-			      "icon-name", prev_icon,
+			      "icon-name", "go-previous-symbolic",
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
 			      NULL);
@@ -1206,7 +1197,7 @@ setup_ui_manager (EphyWindow *window)
 		g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
 			      "name", "NavigationForward",
 			      "label", _("Forward"),
-			      "icon-name", next_icon,
+			      "icon-name", "go-next-symbolic",
 			      "window", window,
 			      "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
 			      NULL);
