@@ -21,6 +21,7 @@ HELP_FILES = \
 	data-passwords.page \
 	history.page \
 	history-delete.page \
+	keyboard-shortcut.page \
 	pref.page \
 	pref-cookies.page \
 	pref-css.page \
