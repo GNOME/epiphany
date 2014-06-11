@@ -38,6 +38,8 @@
 #include <time.h>
 
 #define NUM_RESULTS_LIMIT -1
+/* 3/5 of gdkframeclockidle.c's FRAME_INTERVAL (16667 microsecs) */
+#define GTK_TREE_VIEW_TIME_MS_PER_IDLE 10
 
 struct _EphyHistoryWindowPrivate
 {
@@ -46,7 +48,9 @@ struct _EphyHistoryWindowPrivate
 
 	GtkWidget *treeview;
 	GtkWidget *liststore;
-	GtkWidget *date_column;
+	GtkTreeViewColumn *date_column;
+	GtkTreeViewColumn *name_column;
+	GtkTreeViewColumn *location_column;
 	GtkWidget *date_renderer;
 	GtkWidget *remove_button;
 	GtkWidget *open_button;
@@ -57,7 +61,14 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *copy_location_menuitem;
 	GtkWidget *treeview_popup_menu;
 
+	GList *urls;
+	guint sorter_source;
+
 	char *search_text;
+
+	gboolean  sort_ascending;
+	gint      sort_column;
+
 	GtkWidget *window;
 
 	GtkWidget *confirmation_dialog;
@@ -78,22 +89,41 @@ typedef enum
 	COLUMN_LOCATION
 } EphyHistoryWindowColumns;
 
-static void
-add_urls (GtkListStore *store,
-	  GList *urls)
+static gboolean
+add_urls_source (EphyHistoryWindow *self)
 {
+	GtkListStore *store = GTK_LIST_STORE (self->priv->liststore);
 	EphyHistoryURL *url;
-	GList *iter;
+	GTimer *timer;
+	GList *element;
 
-	for (iter = urls; iter != NULL; iter = iter->next) {
-		url = (EphyHistoryURL *)iter->data;
+	timer = g_timer_new ();
+	g_timer_start (timer);
+
+	do {
+		element = self->priv->urls;
+		url = element->data;
 		gtk_list_store_insert_with_values (store,
 						   NULL, G_MAXINT,
 						   COLUMN_DATE, url->last_visit_time,
 						   COLUMN_NAME, url->title,
 						   COLUMN_LOCATION, url->url,
 						   -1);
+		self->priv->urls = g_list_remove_link (self->priv->urls, element);
+		ephy_history_url_free (url);
+		g_list_free_1 (element);
+
+	} while (self->priv->urls &&
+		 g_timer_elapsed (timer, NULL) < GTK_TREE_VIEW_TIME_MS_PER_IDLE / 1000.);
+
+	g_timer_destroy (timer);
+
+	if (self->priv->urls == NULL)
+	{
+		self->priv->sorter_source = 0;
+		return G_SOURCE_REMOVE;
 	}
+	return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -103,15 +133,23 @@ on_find_urls_cb (gpointer service,
 		 gpointer user_data)
 {
 	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
-	GList *urls;
+	GtkTreeViewColumn *column;
 
 	if (success != TRUE)
 		return;
 
-	urls = (GList *)result_data;
+	self->priv->urls = (GList *)result_data;
+
+	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (self->priv->liststore));
-	add_urls (GTK_LIST_STORE (self->priv->liststore), urls);
-	g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), GTK_TREE_MODEL (self->priv->liststore));
+
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
+	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+	gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
+	self->priv->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+
 }
 
 static GList *
@@ -134,19 +172,54 @@ substrings_filter (EphyHistoryWindow *self)
 }
 
 static void
+remove_pending_sorter_source (EphyHistoryWindow *self) {
+
+	if (self->priv->sorter_source != 0)
+	{
+		g_source_remove (self->priv->sorter_source);
+		self->priv->sorter_source = 0;
+	}
+
+	if (self->priv->urls != NULL)
+	{
+		g_list_free_full (self->priv->urls, (GDestroyNotify)ephy_history_url_free);
+		self->priv->urls = NULL;
+	}
+}
+
+static void
 filter_now (EphyHistoryWindow *self)
 {
 	gint64 from, to;
 	GList *substrings;
+	EphyHistorySortType type;
 
 	substrings = substrings_filter (self);
 
 	from = to = -1; /* all */
+
+	switch (self->priv->sort_column)
+	{
+	case COLUMN_DATE:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED : EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
+		break;
+	case COLUMN_NAME:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_TITLE_ASCENDING : EPHY_HISTORY_SORT_TITLE_DESCENDING;
+		break;
+	case COLUMN_LOCATION:
+		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_URL_ASCENDING : EPHY_HISTORY_SORT_URL_DESCENDING;
+		break;
+	default:
+		type = EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
+	}
+
+	remove_pending_sorter_source (self);
+	
 	ephy_history_service_find_urls (self->priv->history_service,
 					from, to,
 					NUM_RESULTS_LIMIT, 0,
 					substrings,
-					EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED,
+					type,
 					self->priv->cancellable,
 					(EphyHistoryJobCallback)on_find_urls_cb, self);
 }
@@ -462,6 +535,31 @@ on_treeview_selection_changed (GtkTreeSelection *selection,
 }
 
 static void
+on_treeview_column_clicked_event (GtkTreeViewColumn *column,
+				  EphyHistoryWindow *self)
+{
+	GtkTreeViewColumn *previous_sortby;
+	gint new_sort_column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (column), "column"));
+
+	if (new_sort_column == self->priv->sort_column)
+	{
+		self->priv->sort_ascending = !(self->priv->sort_ascending);
+	}
+	else
+	{
+		previous_sortby = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
+		gtk_tree_view_column_set_sort_indicator (previous_sortby, FALSE);
+
+		self->priv->sort_column = new_sort_column;
+		self->priv->sort_ascending = self->priv->sort_column == COLUMN_DATE ? FALSE : TRUE;
+	}
+
+	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+	gtk_tree_view_column_set_sort_indicator (column, TRUE);
+	filter_now (self);
+}
+
+static void
 on_remove_button_clicked (GtkButton *button,
 			  EphyHistoryWindow *self)
 {
@@ -569,6 +667,8 @@ ephy_history_window_dispose (GObject *object)
 						      self);
 	g_clear_object (&self->priv->history_service);
 
+	remove_pending_sorter_source (self);
+
 	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
 }
 
@@ -616,6 +716,8 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, name_column);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, copy_location_menuitem);
@@ -627,6 +729,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
+	gtk_widget_class_bind_template_callback (widget_class, on_treeview_column_clicked_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_open_button_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
@@ -718,7 +821,19 @@ ephy_history_window_init (EphyHistoryWindow *self)
 
 	self->priv->cancellable = g_cancellable_new ();
 
+	self->priv->urls = NULL;
+	self->priv->sort_ascending = FALSE;
+	self->priv->sort_column = COLUMN_DATE;
+	self->priv->sorter_source = 0;
+
 	ephy_gui_ensure_window_group (GTK_WINDOW (self));
+
+	g_object_set_data (G_OBJECT (self->priv->date_column),
+			   "column", GINT_TO_POINTER (COLUMN_DATE));
+	g_object_set_data (G_OBJECT (self->priv->name_column),
+			   "column", GINT_TO_POINTER (COLUMN_NAME));
+	g_object_set_data (G_OBJECT (self->priv->location_column),
+			   "column", GINT_TO_POINTER (COLUMN_LOCATION));
 
 	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->priv->date_column),
 						 GTK_CELL_RENDERER (self->priv->date_renderer),
