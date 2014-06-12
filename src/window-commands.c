@@ -1194,8 +1194,10 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 			 embed,
 			 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_APPEND_AFTER);
 
-	webkit_web_view_set_view_mode
-		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), WEBKIT_VIEW_MODE_SOURCE);
+	/* FIXME: Implement embedded view source mode using a custom URI handler and a
+	 * javascript library for the syntax highlighting.
+	 * https://bugzilla.gnome.org/show_bug.cgi?id=731558
+	 */
 	webkit_web_view_load_uri
 		(EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
 	gtk_widget_grab_focus (GTK_WIDGET (new_embed));
