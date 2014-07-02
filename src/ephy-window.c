@@ -2111,6 +2111,24 @@ decide_policy_cb (WebKitWebView *web_view,
 		return TRUE;
 	}
 
+	if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
+	{
+		const char *frame_name = webkit_navigation_policy_decision_get_frame_name (navigation_decision);
+
+		if (g_strcmp0 (frame_name, "_evince_download") == 0)
+		{
+			/* The Evince Browser Plugin is requesting us to downlod the document */
+			webkit_policy_decision_download (decision);
+			return TRUE;
+		}
+
+		if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS))
+		{
+			webkit_policy_decision_ignore (decision);
+			return TRUE;
+		}
+	}
+
 	navigation_type = webkit_navigation_policy_decision_get_navigation_type (navigation_decision);
 
 	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED &&

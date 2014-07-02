@@ -537,6 +537,7 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-fullscreen", TRUE,
                                                        "enable-site-specific-quirks", TRUE,
                                                        "enable-dns-prefetching", TRUE,
+                                                       "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
@@ -563,10 +564,6 @@ ephy_embed_prefs_init (gpointer user_data)
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_ENABLE_CARET_BROWSING,
                    webkit_settings, "enable-caret-browsing",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_POPUPS,
-                   webkit_settings, "javascript-can-open-windows-automatically",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_PLUGINS,
