@@ -2008,6 +2008,9 @@ web_view_ready_cb (WebKitWebView *web_view,
 
 static WebKitWebView *
 create_web_view_cb (WebKitWebView *web_view,
+#if WEBKIT_CHECK_VERSION(2, 5, 0)
+		    WebKitNavigationAction *navigation_action,
+#endif
 		    EphyWindow *window)
 {
 	EphyEmbed *embed;
