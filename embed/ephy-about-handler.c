@@ -25,6 +25,8 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-app-utils.h"
@@ -125,13 +127,9 @@ get_plugins_cb (WebKitWebContext *web_context,
   GString *data_str;
   gsize data_length;
   GList *plugin_list, *p;
-  WebKitWebViewGroup *web_view_group;
-  WebKitSettings *webkit_settings;
   gboolean enabled;
 
-  web_view_group = ephy_embed_prefs_get_web_view_group ();
-  webkit_settings = webkit_web_view_group_get_settings (web_view_group);
-  enabled = webkit_settings_get_enable_plugins (webkit_settings);
+  enabled = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_PLUGINS);
 
   data_str = g_string_new ("<html>");
   g_string_append_printf (data_str, "<head><title>%s</title>"
