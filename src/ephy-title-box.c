@@ -206,7 +206,6 @@ ephy_title_box_add_title_bar (EphyTitleBox *title_box)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   context = gtk_widget_get_style_context (hbox);
   gtk_style_context_add_class (context, "subtitle");
-  gtk_style_context_add_class (context, "dim-label");
   gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
   gtk_widget_show (hbox);
