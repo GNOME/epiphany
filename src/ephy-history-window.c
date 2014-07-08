@@ -97,6 +97,12 @@ add_urls_source (EphyHistoryWindow *self)
 	GTimer *timer;
 	GList *element;
 
+	if (self->priv->urls == NULL)
+	{
+		self->priv->sorter_source = 0;
+		return G_SOURCE_REMOVE;
+	}
+
 	timer = g_timer_new ();
 	g_timer_start (timer);
 
@@ -118,11 +124,6 @@ add_urls_source (EphyHistoryWindow *self)
 
 	g_timer_destroy (timer);
 
-	if (self->priv->urls == NULL)
-	{
-		self->priv->sorter_source = 0;
-		return G_SOURCE_REMOVE;
-	}
 	return G_SOURCE_CONTINUE;
 }
 
