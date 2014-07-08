@@ -1242,7 +1242,7 @@ setup_ui_manager (EphyWindow *window)
 
 	action = g_object_new (EPHY_TYPE_PAGE_MENU_ACTION,
 			       "name", "PageMenu",
-			       "icon-name", "emblem-system-symbolic",
+			       "icon-name", "view-context-menu-symbolic",
 			       "window", window,
 			       NULL);
 	gtk_action_group_add_action_with_accel (action_group, action, "<alt>E");
