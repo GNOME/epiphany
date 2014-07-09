@@ -559,6 +559,5 @@ ephy_web_overview_init_js (EphyWebOverview *overview,
   str = JSStringCreateWithUTF8CString ("Overview");
   JSObjectSetProperty (context, global_object, str, class_object, kJSPropertyAttributeNone, NULL);
   JSStringRelease (str);
-
-  /* FIXME: check leaks here */
+  JSClassRelease (class_def);
 }
