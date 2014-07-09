@@ -123,6 +123,9 @@ ephy_embed_shell_find_web_extension (EphyEmbedShell *shell,
 
   l = g_list_find_custom (shell->priv->web_extensions, name_owner, (GCompareFunc)web_extension_compare);
 
+  if (!l)
+    g_warning ("Could not find extension with name owner `%s´.", name_owner);
+
   return l ? EPHY_WEB_EXTENSION_PROXY (l->data) : NULL;
 }
 
