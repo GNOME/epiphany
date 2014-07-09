@@ -26,9 +26,9 @@
 #include "ephy-file-helpers.h"
 
 static void
-bus_acquired_cb (GDBusConnection *connection,
-                 const char *name,
-                 EphyWebExtension *extension)
+name_acquired_cb (GDBusConnection *connection,
+                  const char *name,
+                  EphyWebExtension *extension)
 {
   ephy_web_extension_dbus_register (extension, connection);
 }
@@ -60,8 +60,9 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
   g_bus_own_name (G_BUS_TYPE_SESSION,
                   service_name,
                   G_BUS_NAME_OWNER_FLAGS_NONE,
-                  (GBusNameAcquiredCallback)bus_acquired_cb,
-                  NULL, NULL,
+                  NULL,
+                  (GBusNameAcquiredCallback)name_acquired_cb,
+                  NULL,
                   web_extension, NULL);
   g_free (service_name);
 }
