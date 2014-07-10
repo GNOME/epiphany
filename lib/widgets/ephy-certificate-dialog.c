@@ -250,7 +250,7 @@ static void
 ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 {
   GtkWidget *grid;
-  GtkWidget *content_area, *action_area;
+  GtkWidget *content_area;
   EphyCertificateDialogPrivate *priv;
 
   dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
@@ -300,10 +300,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   gtk_box_set_spacing (GTK_BOX (content_area), 14);
   gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, FALSE, 0);
   gtk_widget_show (grid);
-
-  action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 }
 
 GtkWidget *
