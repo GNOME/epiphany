@@ -89,7 +89,7 @@ get_error_messages_from_tls_errors (GTlsCertificateFlags tls_errors)
   char *retval;
 
   if (tls_errors & G_TLS_CERTIFICATE_BAD_IDENTITY)
-    g_ptr_array_add (errors, _("The certificate does not match the expected identity"));
+    g_ptr_array_add (errors, _("The certificate does not match this website"));
 
   if (tls_errors & G_TLS_CERTIFICATE_EXPIRED)
     g_ptr_array_add (errors, _("The certificate has expired"));
