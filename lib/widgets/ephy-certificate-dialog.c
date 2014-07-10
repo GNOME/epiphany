@@ -271,7 +271,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   gtk_widget_set_halign (priv->icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (priv->icon, GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid), priv->icon,
-                   0, 0, 1, 1);
+                   0, 0, 1, 2);
   gtk_widget_show (priv->icon);
 
   priv->title = gtk_label_new (NULL);
