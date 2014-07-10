@@ -258,7 +258,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 					      EphyCertificateDialogPrivate);
   priv = dialog->priv;
 
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 600);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
