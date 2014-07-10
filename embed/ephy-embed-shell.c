@@ -864,7 +864,7 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
 }
 
 /**
- * ephy_embed_shell_set_print_gettings:
+ * ephy_embed_shell_set_print_settings:
  * @shell: the #EphyEmbedShell
  * @settings: the new #GtkPrintSettings object
  *
@@ -944,7 +944,7 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 }
 
 /**
- * ephy_embed_shell_launch_application:
+ * ephy_embed_shell_launch_handler:
  * @shell: an #EphyEmbedShell
  * @file: a #GFile to open
  * @mime_type: the mime type of @file or %NULL
