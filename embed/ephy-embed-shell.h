@@ -93,6 +93,7 @@ void               ephy_embed_shell_set_thumbanil_path         (EphyEmbedShell  
                                                                 const char       *url,
                                                                 time_t            mtime,
                                                                 const char       *path);
+GObject *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 
 G_END_DECLS
 

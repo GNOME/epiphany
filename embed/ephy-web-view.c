@@ -1990,6 +1990,9 @@ GtkWidget *
 ephy_web_view_new (void)
 {
   return g_object_new (EPHY_TYPE_WEB_VIEW,
+#if WEBKIT_CHECK_VERSION(2, 5, 0)
+                       "user-content-manager", ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ()),
+#endif
                        "group", ephy_embed_prefs_get_web_view_group (),
                        NULL);
 }

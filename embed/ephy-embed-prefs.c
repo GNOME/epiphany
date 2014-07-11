@@ -54,9 +54,20 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
 
   bytes = g_output_stream_splice_finish (output_stream, result, NULL);
   if (bytes > 0) {
+#if WEBKIT_CHECK_VERSION(2, 5, 0)
+    WebKitUserStyleSheet *style_sheet;
+
+    style_sheet = webkit_user_style_sheet_new (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
+                                               WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES, WEBKIT_USER_STYLE_LEVEL_USER,
+                                               NULL, NULL);
+    webkit_user_content_manager_add_style_sheet (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ()),
+                                                 style_sheet);
+    webkit_user_style_sheet_unref (style_sheet);
+#else
     webkit_web_view_group_add_user_style_sheet (web_view_group,
                                                 g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
                                                 NULL, NULL, NULL, WEBKIT_INJECTED_CONTENT_FRAMES_ALL);
+#endif
   }
 }
 
@@ -94,7 +105,11 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
   value = g_settings_get_boolean (settings, key);
 
   if (!value)
+#if WEBKIT_CHECK_VERSION(2, 5, 0)
+    webkit_user_content_manager_remove_all_style_sheets (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ()));
+#else
     webkit_web_view_group_remove_all_user_style_sheets (web_view_group);
+#endif
   else {
     GFile *file;
     char *filename;
