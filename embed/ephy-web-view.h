@@ -29,6 +29,8 @@
 
 #include <webkit2/webkit2.h>
 
+#include "ephy-security-levels.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_WEB_VIEW         (ephy_web_view_get_type ())
@@ -47,16 +49,6 @@ typedef enum
   EPHY_WEB_VIEW_NAV_BACK    = 1 << 0,
   EPHY_WEB_VIEW_NAV_FORWARD = 1 << 1
 } EphyWebViewNavigationFlags;
-
-typedef enum
-{
-  EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
-  EPHY_WEB_VIEW_STATE_IS_INSECURE,
-  EPHY_WEB_VIEW_STATE_IS_BROKEN,
-  EPHY_WEB_VIEW_STATE_IS_SECURE_LOW,
-  EPHY_WEB_VIEW_STATE_IS_SECURE_MED,
-  EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH
-} EphyWebViewSecurityLevel;
 
 typedef enum
 {
@@ -130,7 +122,7 @@ const char *               ephy_web_view_get_link_message         (EphyWebView  
 void                       ephy_web_view_set_link_message         (EphyWebView               *view,
                                                                    const char                *link_message);
 void                       ephy_web_view_set_security_level       (EphyWebView               *view,
-                                                                   EphyWebViewSecurityLevel   level);
+                                                                   EphySecurityLevel          level);
 const char *               ephy_web_view_get_typed_address        (EphyWebView               *view);
 void                       ephy_web_view_set_typed_address        (EphyWebView               *view,
                                                                    const char                *address);
@@ -144,7 +136,7 @@ gboolean                  ephy_web_view_has_modified_forms_finish (EphyWebView  
                                                                    GAsyncResult              *result,
                                                                    GError                   **error);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
-                                                                   EphyWebViewSecurityLevel  *level,
+                                                                   EphySecurityLevel         *level,
                                                                    GTlsCertificate          **certificate,
                                                                    GTlsCertificateFlags      *errors);
 void                       ephy_web_view_print                    (EphyWebView               *view);

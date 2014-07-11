@@ -29,6 +29,7 @@
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-gui.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
 
 #include <libsoup/soup.h>
@@ -110,7 +111,7 @@ enum
 	PROP_0,
 	PROP_LOCATION,
 	PROP_FAVICON,
-	PROP_LOCK_STATE,
+	PROP_SECURITY_LEVEL,
 	PROP_SHOW_LOCK,
 	PROP_SHOW_FAVICON
 };
@@ -145,9 +146,9 @@ ephy_location_entry_set_property (GObject *object,
 		ephy_location_entry_set_favicon (entry,
 						 g_value_get_object (value));
 		break;
-	case PROP_LOCK_STATE:
-		ephy_location_entry_set_lock_state (entry,
-						    g_value_get_enum (value));
+	case PROP_SECURITY_LEVEL:
+		ephy_location_entry_set_security_level (entry,
+							g_value_get_enum (value));
 		break;
 	case PROP_SHOW_LOCK:
 		ephy_location_entry_set_show_lock (entry,
@@ -256,17 +257,17 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
-	* EphyLocationEntry:lock-state:
+	* EphyLocationEntry:security-level:
 	*
 	* State of the security icon.
 	*/
 	g_object_class_install_property (object_class,
-					 PROP_LOCK_STATE,
-					 g_param_spec_enum  ("lock-state",
-							     "Lock state",
+					 PROP_SECURITY_LEVEL,
+					 g_param_spec_enum  ("security-level",
+							     "Security level",
 							     "State of the security icon",
-							     EPHY_TYPE_LOCATION_LOCK_STATE,
-							     EPHY_LOCATION_LOCK_STATE_UNKNOWN,
+							     EPHY_TYPE_SECURITY_LEVEL,
+							     EPHY_SECURITY_LEVEL_NO_SECURITY,
 							     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
@@ -1598,9 +1599,7 @@ ephy_location_entry_set_show_favicon (EphyLocationEntry *entry,
  * of the page
  *
  * If @show_lock is TRUE, the location bar will show an icon reflecting the
- * security level of the page, by default it's shown only in secure and
- * insecure pages (insecure meaning secure pages with something broken in such
- * security)
+ * security level of the page, by default it's shown only in secure (HTTPS) pages
  *
  **/
 void
@@ -1621,17 +1620,17 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 }
 
 /**
- * ephy_location_entry_set_lock_state:
+ * ephy_location_entry_set_security_level:
  * @entry: an #EphyLocationEntry widget
- * @state: the #EphyLocationLockState
+ * @state: the #EphySecurityLevel
  *
  * Set the lock icon to be displayed, to actually show the icon see 
  * ephy_location_entry_set_show_lock.
  *
  **/
 void
-ephy_location_entry_set_lock_state (EphyLocationEntry *entry,
-				    EphyLocationLockState state)
+ephy_location_entry_set_security_level (EphyLocationEntry *entry,
+				        EphySecurityLevel security_level)
 
 {
 	EphyLocationEntryPrivate *priv;
@@ -1643,21 +1642,23 @@ ephy_location_entry_set_lock_state (EphyLocationEntry *entry,
 	if (priv->lock_gicon)
 		g_object_unref (priv->lock_gicon);
 
-	/* At the moment we basically only show two kinds of
-	 * locks. Full/green for secure sites, Broken/red for sites
-	 * that are supposed to be secure but have some issues in
-	 * their security infrastructure (broken cert, etc). For
-	 * everything else, nothing is shown.
-	 */
-	if (state == EPHY_LOCATION_LOCK_STATE_SECURE)
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
-	else
+	switch (security_level) {
+	case EPHY_SECURITY_LEVEL_NO_SECURITY:
+		/* Fall through, but this icon should not be displayed... */
+	case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
 		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
+		break;
+	case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
+		break;
+	}
 
-	if (priv->show_lock)
+	if (priv->show_lock) {
+		g_warn_if_fail (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
 		gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 					       GTK_ENTRY_ICON_SECONDARY,
 					       priv->lock_gicon);
+	}
 }
 
 /**

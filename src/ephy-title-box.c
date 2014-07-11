@@ -647,16 +647,16 @@ ephy_title_box_set_show_lock (EphyTitleBox *title_box,
 }
 
 /**
- * ephy_title_box_set_lock_state:
+ * ephy_title_box_set_security_level:
  * @title_box: an #EphyTitleBox
- * @mode: an #EphyLocationLockState
+ * @mode: an #EphySecurityLevel
  *
- * Set the lock icon to be displayed, to actually show the icon see
+ * Set the lock icon to be displayed; to actually show the icon see
  * ephy_title_box_set_show_lock.
  **/
 void
-ephy_title_box_set_lock_state (EphyTitleBox         *title_box,
-                               EphyLocationLockState state)
+ephy_title_box_set_security_level (EphyTitleBox         *title_box,
+                                   EphySecurityLevel     security_level)
 {
   EphyTitleBoxPrivate *priv;
 
@@ -664,11 +664,11 @@ ephy_title_box_set_lock_state (EphyTitleBox         *title_box,
 
   priv = ephy_title_box_get_instance_private (title_box);
 
-  g_object_set (priv->lock_image, "icon-name", state == EPHY_LOCATION_LOCK_STATE_SECURE ?
+  g_object_set (priv->lock_image, "icon-name", security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY ?
                                                "channel-secure-symbolic" : "channel-insecure-symbolic",
                                   NULL);
 
-  ephy_location_entry_set_lock_state (EPHY_LOCATION_ENTRY (priv->entry), state);
+  ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (priv->entry), security_level);
 }
 
 /**

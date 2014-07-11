@@ -28,6 +28,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-security-levels.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_LOCATION_ENTRY		(ephy_location_entry_get_type())
@@ -60,13 +62,6 @@ struct _EphyLocationEntry
 	/*< private >*/
 	EphyLocationEntryPrivate *priv;
 };
-
-typedef enum {
-  EPHY_LOCATION_LOCK_STATE_UNKNOWN = 0,
-  EPHY_LOCATION_LOCK_STATE_BROKEN,
-  EPHY_LOCATION_LOCK_STATE_INSECURE,
-  EPHY_LOCATION_LOCK_STATE_SECURE
-} EphyLocationLockState;
 
 GType		ephy_location_entry_get_type		(void);
 
@@ -113,8 +108,8 @@ void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entr
 void		ephy_location_entry_set_show_lock	(EphyLocationEntry *entry,
 							 gboolean show_lock);
 
-void		ephy_location_entry_set_lock_state	(EphyLocationEntry *entry,
-							 EphyLocationLockState state);
+void		ephy_location_entry_set_security_level	(EphyLocationEntry *entry,
+							 EphySecurityLevel security_level);
 
 void		ephy_location_entry_set_lock_tooltip	(EphyLocationEntry *entry,
 							 const char *tooltip);

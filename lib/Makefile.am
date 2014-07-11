@@ -30,7 +30,8 @@ NOINST_H_FILES = \
 
 TYPES_H_FILES = \
 	ephy-initial-state.h			\
-	ephy-node.h
+	ephy-node.h				\
+	ephy-security-levels.h
 
 INST_H_FILES = \
 	ephy-dialog.h				\

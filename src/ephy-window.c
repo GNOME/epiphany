@@ -713,7 +713,7 @@ sync_tab_load_status (EphyWebView *view,
 static void
 _ephy_window_set_security_state (EphyWindow *window,
 				 gboolean show_lock,
-				 EphyLocationLockState state)
+				 EphySecurityLevel security_level)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyTitleBox *title_box;
@@ -722,7 +722,7 @@ _ephy_window_set_security_state (EphyWindow *window,
 
 	priv->show_lock = show_lock != FALSE;
 
-	ephy_title_box_set_lock_state (title_box, state);
+	ephy_title_box_set_security_level (title_box, security_level);
 	ephy_title_box_set_show_lock (title_box, priv->show_lock);
 }
 
@@ -732,33 +732,21 @@ sync_tab_security (EphyWebView *view,
 		   EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyWebViewSecurityLevel level;
-	EphyLocationLockState state = EPHY_LOCATION_LOCK_STATE_INSECURE;
+	EphySecurityLevel security_level;
 	gboolean show_lock = FALSE;
 
 	if (priv->closing) return;
 
-	ephy_web_view_get_security_level (view, &level, NULL, NULL);
+	ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
 
-	switch (level)
+	switch (security_level)
 	{
-		case EPHY_WEB_VIEW_STATE_IS_UNKNOWN:
-		case EPHY_WEB_VIEW_STATE_IS_INSECURE:
-			/* Nothing to do. */
+		case EPHY_SECURITY_LEVEL_NO_SECURITY:
 			break;
-		case EPHY_WEB_VIEW_STATE_IS_BROKEN:
-			state = EPHY_LOCATION_LOCK_STATE_INSECURE;
+		case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
                         show_lock = TRUE;
                         break;
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_LOW:
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_MED:
-			/* We deliberately don't show the 'secure' icon
-			 * for low & medium secure sites; see bug #151709.
-			 */
-			state = EPHY_LOCATION_LOCK_STATE_INSECURE;
-			break;
-		case EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH:
-			state = EPHY_LOCATION_LOCK_STATE_SECURE;
+		case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
 			show_lock = TRUE;
 			break;
 		default:
@@ -766,7 +754,7 @@ sync_tab_security (EphyWebView *view,
 			break;
 	}
 
-	_ephy_window_set_security_state (window, show_lock, state);
+	_ephy_window_set_security_state (window, show_lock, security_level);
 }
 
 static void

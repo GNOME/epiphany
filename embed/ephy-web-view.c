@@ -37,6 +37,7 @@
 #include "ephy-file-monitor.h"
 #include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
@@ -65,7 +66,7 @@
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
 
 struct _EphyWebViewPrivate {
-  EphyWebViewSecurityLevel security_level;
+  EphySecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
 
@@ -974,15 +975,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 /**
  * EphyWebView:security-level:
  *
- * One of #EphyWebViewSecurityLevel, determining view's current security level.
+ * One of #EphySecurityLevel, determining view's current security level.
  **/
   g_object_class_install_property (gobject_class,
                                    PROP_SECURITY,
                                    g_param_spec_enum ("security-level",
                                                       "Security Level",
                                                       "The view's security level",
-                                                      EPHY_TYPE_WEB_VIEW_SECURITY_LEVEL,
-                                                      EPHY_WEB_VIEW_STATE_IS_UNKNOWN,
+                                                      EPHY_TYPE_SECURITY_LEVEL,
+                                                      EPHY_SECURITY_LEVEL_NO_SECURITY,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 /**
@@ -1600,7 +1601,7 @@ load_changed_cb (WebKitWebView *web_view,
     break;
   case WEBKIT_LOAD_COMMITTED: {
     const char* uri;
-    EphyWebViewSecurityLevel security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+    EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
 
     priv->ever_committed = TRUE;
 
@@ -1618,7 +1619,7 @@ load_changed_cb (WebKitWebView *web_view,
       if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
         g_object_ref (priv->certificate);
         security_level = priv->tls_errors == 0 ?
-          EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
+          EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_BROKEN_SECURITY;
       }
 
       ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
@@ -2031,7 +2032,7 @@ load_failed_with_tls_error_cb (WebKitWebView *web_view,
   priv->certificate = g_object_ref (certificate);
   priv->tls_errors = errors;
   priv->tls_error_page_host = g_strdup (host);
-  ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_WEB_VIEW_STATE_IS_BROKEN);
+  ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_SECURITY_LEVEL_BROKEN_SECURITY);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view),
                                  webkit_web_view_get_uri (web_view),
                                  EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
@@ -2088,7 +2089,7 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->is_blank = TRUE;
   priv->ever_committed = FALSE;
   priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  priv->security_level = EPHY_WEB_VIEW_STATE_IS_UNKNOWN;
+  priv->security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
 
   priv->file_monitor = ephy_file_monitor_new (web_view);
 
@@ -2473,13 +2474,13 @@ ephy_web_view_set_link_message (EphyWebView *view,
 /**
  * ephy_web_view_set_security_level:
  * @view: an #EphyWebView
- * @level: the new #EphyWebViewSecurityLevel for @view
+ * @level: the new #EphySecurityLevel for @view
  *
  * Sets @view's security-level property to @level.
  **/
 void
 ephy_web_view_set_security_level (EphyWebView *view,
-                                  EphyWebViewSecurityLevel level)
+                                  EphySecurityLevel level)
 {
   EphyWebViewPrivate *priv = view->priv;
 
@@ -2759,13 +2760,13 @@ ephy_web_view_get_web_app_title_finish (EphyWebView *view,
  * @certificate: (out) (transfer none): return value of TLS certificate
  * @errors: (out): return value of TLS errors
  *
- * Fetches the #EphyWebViewSecurityLevel and a #GTlsCertificate associated
+ * Fetches the #EphySecurityLevel and a #GTlsCertificate associated
  * with @view and a #GTlsCertificateFlags showing what problems, if any,
  * have been found with that certificate.
  **/
 void
 ephy_web_view_get_security_level (EphyWebView *view,
-                                  EphyWebViewSecurityLevel *level,
+                                  EphySecurityLevel *level,
                                   GTlsCertificate **certificate,
                                   GTlsCertificateFlags *errors)
 {
