@@ -636,9 +636,9 @@ ephy_title_box_set_security_level (EphyTitleBox         *title_box,
 
   priv = ephy_title_box_get_instance_private (title_box);
 
-  g_object_set (priv->lock_image, "icon-name", security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY ?
-                                               "channel-secure-symbolic" : "channel-insecure-symbolic",
-                                  NULL);
+  g_object_set (priv->lock_image,
+                "icon-name", ephy_security_level_to_icon_name (security_level),
+                NULL);
 
   gtk_widget_set_visible (priv->lock_image, security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
   ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (priv->entry), security_level);

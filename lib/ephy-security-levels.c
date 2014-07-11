@@ -19,27 +19,37 @@
  *
  */
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
+#include "config.h"
+#include "ephy-security-levels.h"
 
-#ifndef EPHY_SECURITY_LEVELS_H
-#define EPHY_SECURITY_LEVELS_H
-
-#include "glib.h"
-
-G_BEGIN_DECLS
-
-typedef enum
+/**
+ * ephy_security_level_to_icon_name:
+ * @level: an #EphySecurityLevel
+ *
+ * Returns: the icon name corresponding to this security level,
+ *   or NULL if no icon should be shown.
+ */
+const char *
+ephy_security_level_to_icon_name (EphySecurityLevel level)
 {
-  EPHY_SECURITY_LEVEL_NO_SECURITY,
-  EPHY_SECURITY_LEVEL_BROKEN_SECURITY,
-  EPHY_SECURITY_LEVEL_MIXED_CONTENT,
-  EPHY_SECURITY_LEVEL_STRONG_SECURITY,
-} EphySecurityLevel;
+	const char *result;
 
-const char         *ephy_security_level_to_icon_name    (EphySecurityLevel level);
+	switch (level) {
+	case EPHY_SECURITY_LEVEL_NO_SECURITY:
+		result = NULL;
+		break;
+	case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
+		result = "channel-insecure-symbolic";
+		break;
+	case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+		result = "dialog-warning-symbolic";
+		break;
+	case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+		result = "channel-secure-symbolic";
+		break;
+	default:
+		g_assert_not_reached ();
+	}
 
-G_END_DECLS
-
-#endif
+	return result;
+}

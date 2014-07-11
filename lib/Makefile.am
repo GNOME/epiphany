@@ -59,6 +59,7 @@ libephymisc_la_SOURCES = \
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
+	ephy-security-levels.c			\
 	ephy-settings.c				\
 	ephy-signal-accumulator.c		\
 	ephy-smaps.c				\

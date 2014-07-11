@@ -1586,30 +1586,24 @@ ephy_location_entry_set_security_level (EphyLocationEntry *entry,
 
 {
 	EphyLocationEntryPrivate *priv;
+	const char *icon_name;
 
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
 	priv = entry->priv;
 
-	if (priv->lock_gicon)
-		g_object_unref (priv->lock_gicon);
+	g_clear_object (&priv->lock_gicon);
 
-	switch (security_level) {
-	case EPHY_SECURITY_LEVEL_NO_SECURITY:
-		/* Fall through, but this icon should not be displayed... */
-	case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
-		break;
-	case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-		priv->lock_gicon = g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic");
-		break;
-	}
+	icon_name = ephy_security_level_to_icon_name (security_level);
+	if (icon_name == NULL)
+		return;
 
-	if (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY) {
-		gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-					       GTK_ENTRY_ICON_SECONDARY,
-					       priv->lock_gicon);
-	}
+	g_return_if_fail (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
+
+	priv->lock_gicon = g_themed_icon_new_with_default_fallbacks (icon_name);
+	gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
+				       GTK_ENTRY_ICON_SECONDARY,
+				       priv->lock_gicon);
 }
 
 /**
