@@ -25,7 +25,7 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
-#include "ephy-certificate-dialog.h"
+#include "ephy-certificate-popover.h"
 #include "ephy-combined-stop-reload-action.h"
 #include "ephy-debug.h"
 #include "ephy-download-widget.h"
@@ -3071,20 +3071,26 @@ lock_clicked_cb (EphyLocationController *controller,
 	EphyWebView *view;
 	GTlsCertificate *certificate;
 	GTlsCertificateFlags tls_errors;
-	GtkWidget *certificate_dialog;
+	EphySecurityLevel security_level;
+	GtkWidget *location_entry;
+	GtkWidget *certificate_popover;
+	GdkRectangle lock_position;
 
 	view = ephy_embed_get_web_view (priv->active_embed);
-	ephy_web_view_get_security_level (view, NULL, &certificate, &tls_errors);
+	ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
+	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
 
-	certificate_dialog = ephy_certificate_dialog_new (GTK_WINDOW (window),
-							  ephy_location_controller_get_address (controller),
-							  certificate,
-							  tls_errors);
-	gtk_window_set_destroy_with_parent (GTK_WINDOW (certificate_dialog), TRUE);
-	g_signal_connect (certificate_dialog, "response",
-			  G_CALLBACK (gtk_widget_destroy),
-			  NULL);
-	gtk_widget_show (certificate_dialog);
+	certificate_popover = ephy_certificate_popover_new (location_entry,
+							    ephy_location_controller_get_address (controller),
+							    certificate,
+							    tls_errors,
+							    security_level);
+
+	gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
+	gtk_popover_set_pointing_to (GTK_POPOVER (certificate_popover), &lock_position);
+	g_signal_connect (certificate_popover, "closed",
+			  G_CALLBACK (gtk_widget_destroy), NULL);
+	gtk_widget_show (certificate_popover);
 }
 
 static GtkWidget *

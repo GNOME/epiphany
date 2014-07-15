@@ -65,6 +65,8 @@ nodist_libephywidgets_la_SOURCES = \
 libephywidgets_la_SOURCES = \
 	ephy-certificate-dialog.c		\
 	ephy-certificate-dialog.h		\
+	ephy-certificate-popover.c		\
+	ephy-certificate-popover.h		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
 	ephy-location-entry.c			\

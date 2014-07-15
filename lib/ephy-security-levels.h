@@ -38,7 +38,7 @@ typedef enum
   EPHY_SECURITY_LEVEL_STRONG_SECURITY,
 } EphySecurityLevel;
 
-const char         *ephy_security_level_to_icon_name    (EphySecurityLevel level);
+const char *ephy_security_level_to_icon_name (EphySecurityLevel level);
 
 G_END_DECLS
 

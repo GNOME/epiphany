@@ -32,24 +32,24 @@
 const char *
 ephy_security_level_to_icon_name (EphySecurityLevel level)
 {
-	const char *result;
+  const char *result;
 
-	switch (level) {
-	case EPHY_SECURITY_LEVEL_NO_SECURITY:
-		result = NULL;
-		break;
-	case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
-		result = "channel-insecure-symbolic";
-		break;
-	case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-		result = "dialog-warning-symbolic";
-		break;
-	case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-		result = "channel-secure-symbolic";
-		break;
-	default:
-		g_assert_not_reached ();
-	}
+  switch (level) {
+  case EPHY_SECURITY_LEVEL_NO_SECURITY:
+    result = NULL;
+    break;
+  case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
+    result = "channel-insecure-symbolic";
+    break;
+  case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+    result = "dialog-warning-symbolic";
+    break;
+  case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+    result = "channel-secure-symbolic";
+    break;
+  default:
+    g_assert_not_reached ();
+  }
 
-	return result;
+  return result;
 }

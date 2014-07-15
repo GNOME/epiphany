@@ -1598,7 +1598,7 @@ ephy_location_entry_set_security_level (EphyLocationEntry *entry,
 	if (icon_name == NULL)
 		return;
 
-	g_return_if_fail (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
+	g_assert (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
 
 	priv->lock_gicon = g_themed_icon_new_with_default_fallbacks (icon_name);
 	gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
