@@ -2,7 +2,7 @@
 /* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2008, 2009 Gustavo Noronha Silva
- *  Copyright © 2009, 2010 Igalia S.L.
+ *  Copyright © 2009, 2010, 2014 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -106,6 +106,9 @@ struct _EphyWebViewPrivate {
   /* TLS information. */
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
+
+  gboolean loading_tls_error_page;
+  char *tls_error_page_host;
 
   /* Web Extension */
   EphyWebExtensionProxy *web_extension;
@@ -696,6 +699,25 @@ form_auth_data_save_requested (EphyWebExtensionProxy *web_extension,
 }
 
 static void
+allow_tls_certificate_cb (EphyWebExtensionProxy *shell,
+                          guint64 page_id,
+                          EphyWebView *web_view)
+{
+  EphyWebViewPrivate *priv = web_view->priv;
+
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
+    return;
+
+  g_return_if_fail (G_IS_TLS_CERTIFICATE (priv->certificate));
+  g_return_if_fail (priv->tls_error_page_host != NULL);
+
+  webkit_web_context_allow_tls_certificate_for_host (webkit_web_context_get_default (),
+                                                     priv->certificate,
+                                                     priv->tls_error_page_host);
+  ephy_web_view_load_url (web_view, ephy_web_view_get_address (web_view));
+}
+
+static void
 page_created_cb (EphyEmbedShell *shell,
                  guint64 page_id,
                  EphyWebExtensionProxy *web_extension,
@@ -711,6 +733,10 @@ page_created_cb (EphyEmbedShell *shell,
 
   g_signal_connect (priv->web_extension, "form-auth-data-save-requested",
                     G_CALLBACK (form_auth_data_save_requested),
+                    web_view);
+
+  g_signal_connect (priv->web_extension, "allow-tls-certificate",
+                    G_CALLBACK (allow_tls_certificate_cb),
                     web_view);
 }
 
@@ -757,6 +783,7 @@ ephy_web_view_finalize (GObject *object)
   g_free (priv->typed_address);
   g_free (priv->link_message);
   g_free (priv->loading_message);
+  g_free (priv->tls_error_page_host);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
@@ -1582,14 +1609,20 @@ load_changed_cb (WebKitWebView *web_view,
     ephy_web_view_location_changed (view, uri);
 
     /* Security status. */
-    g_clear_object (&priv->certificate);
-    if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
-      g_object_ref (priv->certificate);
-      security_level = priv->tls_errors == 0 ?
-        EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
-    }
+    if (priv->loading_tls_error_page) {
+      priv->loading_tls_error_page = FALSE;
+    } else {
+      g_clear_object (&priv->certificate);
+      g_clear_pointer (&priv->tls_error_page_host, g_free);
 
-    ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+      if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
+        g_object_ref (priv->certificate);
+        security_level = priv->tls_errors == 0 ?
+          EPHY_WEB_VIEW_STATE_IS_SECURE_HIGH : EPHY_WEB_VIEW_STATE_IS_BROKEN;
+      }
+
+      ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
+    }
 
     /* History. */
     if (!ephy_web_view_is_history_frozen (view)) {
@@ -1691,6 +1724,104 @@ get_style_sheet (void)
   return sheet;
 }
 
+static char *
+detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
+{
+  GPtrArray *errors = g_ptr_array_new ();
+  char *retval;
+
+  if (tls_errors & G_TLS_CERTIFICATE_BAD_IDENTITY) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site presented identification that belongs to a different web site."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_EXPIRED) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification is too old to trust. Check the date on your computer’s calendar."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_UNKNOWN_CA) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification was not issued by a trusted organization."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_GENERIC_ERROR) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification could not be processed. It may be corrupted."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_REVOKED) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification has been revoked by the trusted organization that issued it."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_INSECURE) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification uses very weak encryption. It has probably been forged."));
+  }
+
+  if (tls_errors & G_TLS_CERTIFICATE_NOT_ACTIVATED) {
+    /* Possible error message when a site presents a bad certificate. */
+    g_ptr_array_add (errors, _("This web site’s identification time-travelled from the future. Check the date on your computer’s calendar."));
+  }
+
+  if (errors->len == 1) {
+    retval = g_strdup (g_ptr_array_index (errors, 0));
+  } else if (errors->len > 1) {
+    GString *message = g_string_new ("<ul>");
+    guint i;
+
+    for (i = 0; i < errors->len; i++) {
+      g_string_append_printf (message, "<li>%s</li>", (char *)g_ptr_array_index (errors, i));
+    }
+
+    g_string_append (message, "</ul>");
+    retval = g_string_free (message, FALSE);
+  } else {
+    g_assert_not_reached ();
+  }
+
+  g_ptr_array_free (errors, TRUE);
+
+  return retval;
+}
+
+static char *
+get_tls_error_page_message (EphyWebView *view, const char *hostname)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  char *msg;
+  char *bold_hostname;
+  char *details;
+  char *warning;
+
+  bold_hostname = g_strconcat ("<strong>", hostname, "</strong>", NULL);
+  details = detailed_message_from_tls_errors (priv->tls_errors);
+  /* Message when a site's TLS certificate is invalid. %s is the site's hostname. */
+  warning = g_strdup_printf (_("This might not be the real %s."), bold_hostname);
+
+  msg = g_strdup_printf ("<p>%s</p><p>%s</p><p>%s</p><p>%s <strong>%s</strong></p>",
+                         warning,
+                         /* Message when a site's TLS certificate is invalid. */
+                         _("When you try to connect securely, web sites present "
+                           "identification to prove that your connection has not been "
+                           "maliciously intercepted. There is something wrong with "
+                           "this site’s identification:"),
+                         details,
+                         /* Message when a site's TLS certificate is invalid. */
+                         _("A criminal organization or government agency may have hijacked "
+                           "your connection. You should continue only if you know there is "
+                           "a good reason why this site does not use trusted identification."),
+                         /* Good advice from Firefox; displays when a site's TLS certificate is invalid. */
+                         _("Legitimate banks, stores, and other public sites will "
+                           "not ask you to do this."));
+  g_free (bold_hostname);
+  g_free (details);
+  g_free (warning);
+
+  return msg;
+}
+
 /**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
@@ -1716,6 +1847,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   char *msg;
   char *button_label;
   char *stylesheet;
+  char *load_anyway_js = NULL;
   const char *custom_class;
   GBytes *html_file;
 
@@ -1768,6 +1900,17 @@ ephy_web_view_load_error_page (EphyWebView *view,
       button_label = g_strdup (_("Reload Anyway"));
       custom_class = "process-crash";
       break;
+    case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
+      /* Page title when a site cannot be loaded. %s is the site's hostname. */
+      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
+      /* Title of error page when a website's TLS certificate is invalid. */
+      msg_title = g_strdup (_("Look out!"));
+      msg = get_tls_error_page_message (view, hostname);
+      /* Button on error page when a website's TLS certificate is invalid. */
+      button_label = g_strdup (_("Load Anyway"));
+      custom_class = "tls-error";
+      load_anyway_js = g_strdup ("EpiphanyTLSCertificateErrorPage.allowException();");
+      break;
     default:
       return;
       break;
@@ -1777,13 +1920,17 @@ ephy_web_view_load_error_page (EphyWebView *view,
   _ephy_web_view_update_icon (view);
 
   stylesheet = get_style_sheet ();
+
+  if (load_anyway_js == NULL)
+    load_anyway_js = g_strdup_printf ("window.location = '%s';", uri);
+
   g_string_printf (html,
                    g_bytes_get_data (html_file, NULL),
                    lang, lang,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
                    stylesheet,
-                   uri,
+                   load_anyway_js,
                    custom_class,
                    msg_title, msg, button_label);
 
@@ -1791,6 +1938,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   g_free (stylesheet);
   g_free (lang);
   g_free (page_title);
+  g_free (load_anyway_js);
   g_free (msg_title);
   g_free (msg);
   g_free (button_label);
@@ -1864,6 +2012,31 @@ load_failed_cb (WebKitWebView *web_view,
   }
 
   return FALSE;
+}
+
+static gboolean
+load_failed_with_tls_error_cb (WebKitWebView *web_view,
+                               GTlsCertificate *certificate,
+                               GTlsCertificateFlags errors,
+                               gchar *host,
+                               gpointer user_data)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyWebViewPrivate *priv = view->priv;
+
+  g_clear_object (&priv->certificate);
+  g_clear_pointer (&priv->tls_error_page_host, g_free);
+
+  priv->loading_tls_error_page = TRUE;
+  priv->certificate = g_object_ref (certificate);
+  priv->tls_errors = errors;
+  priv->tls_error_page_host = g_strdup (host);
+  ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_WEB_VIEW_STATE_IS_BROKEN);
+  ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view),
+                                 webkit_web_view_get_uri (web_view),
+                                 EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
+
+  return TRUE;
 }
 
 static void
@@ -1943,6 +2116,10 @@ ephy_web_view_init (EphyWebView *web_view)
                     NULL);
   g_signal_connect (web_view, "load-failed",
                     G_CALLBACK (load_failed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "load-failed-with-tls-errors",
+                    G_CALLBACK (load_failed_with_tls_error_cb),
                     NULL);
 
   g_signal_connect (web_view, "notify::zoom-level",

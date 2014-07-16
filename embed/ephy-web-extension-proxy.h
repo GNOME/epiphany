@@ -66,6 +66,8 @@ void                   ephy_web_extension_proxy_form_auth_save_requested        
 void                   ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
                                                                                            guint                  request_id,
                                                                                            gboolean               response);
+void                   ephy_web_extension_proxy_allow_tls_certificate                     (EphyWebExtensionProxy *web_extension,
+                                                                                           guint64                page_id);
 void                   ephy_web_extension_proxy_web_page_has_modified_forms               (EphyWebExtensionProxy *web_extension,
                                                                                            guint64                page_id,
                                                                                            GCancellable          *cancellable,

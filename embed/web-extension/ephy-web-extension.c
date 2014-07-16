@@ -107,6 +107,9 @@ static const char introspection_xml[] =
   "   <arg type='s' name='host' direction='in'/>"
   "  </method>"
   "  <method name='HistoryClear'/>"
+  "  <signal name='AllowTLSCertificate'>"
+  "   <arg type='t' name='page_id' direction='out'/>"
+  "  </signal>"
   " </interface>"
   "</node>";
 
@@ -1245,17 +1248,100 @@ static const GDBusInterfaceVTable interface_vtable = {
   NULL
 };
 
+typedef struct {
+  EphyWebExtension *extension;
+  guint64 page_id;
+} AllowTLSCertificateData;
+
+static JSValueRef
+allow_tls_certificate_cb (JSContextRef context,
+                          JSObjectRef function,
+                          JSObjectRef this_object,
+                          size_t argument_count,
+                          const JSValueRef arguments[],
+                          JSValueRef *exception)
+{
+  AllowTLSCertificateData *data;
+  EphyWebExtension *extension;
+  GError *error = NULL;
+
+  data = (AllowTLSCertificateData *)JSObjectGetPrivate (this_object);
+  extension = data->extension;
+
+  if (!extension->priv->dbus_connection)
+    return;
+
+  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
+                                 NULL,
+                                 EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                 EPHY_WEB_EXTENSION_INTERFACE,
+                                 "AllowTLSCertificate",
+                                 g_variant_new ("(t)", data->page_id),
+                                 &error);
+
+  if (error) {
+    g_warning ("Error emitting signal AllowTLSCertificate: %s\n", error->message);
+    g_error_free (error);
+  }
+
+  return JSValueMakeUndefined (context);
+}
+
+static const JSStaticFunction tls_certificate_error_page_static_funcs[] =
+{
+  { "allowException", allow_tls_certificate_cb, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete },
+  { NULL, NULL, 0 }
+};
+
 static void
-window_object_cleared_cb (WebKitScriptWorld *world,
-                          WebKitWebPage     *web_page,
-                          WebKitFrame       *frame,
-                          EphyWebExtension  *extension)
+tls_certificate_error_page_finalize (JSObjectRef object)
+{
+  g_slice_free (AllowTLSCertificateData, JSObjectGetPrivate (object));
+}
+
+static void
+prepare_certificate_exception_js (WebKitScriptWorld *world,
+                                  WebKitWebPage *web_page,
+                                  WebKitFrame *frame,
+                                  EphyWebExtension *extension)
 {
   JSGlobalContextRef context;
-  EphyWebOverview *overview;
+  JSObjectRef global_object;
+  JSClassDefinition class_def;
+  JSClassRef class;
+  JSObjectRef class_object;
+  JSStringRef str;
+  AllowTLSCertificateData *data;
 
-  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") != 0)
-    return;
+  context = webkit_frame_get_javascript_context_for_script_world (frame, world);
+  global_object = JSContextGetGlobalObject (context);
+
+  class_def = kJSClassDefinitionEmpty;
+  class_def.className = "EpiphanyTLSCertificateErrorPage";
+  class_def.staticFunctions = tls_certificate_error_page_static_funcs;
+  class_def.finalize = tls_certificate_error_page_finalize;
+
+  data = g_slice_alloc (sizeof (AllowTLSCertificateData));
+  data->extension = extension;
+  data->page_id = webkit_web_page_get_id (web_page);
+
+  class = JSClassCreate (&class_def);
+  class_object = JSObjectMake (context, class, data);
+  str = JSStringCreateWithUTF8CString ("EpiphanyTLSCertificateErrorPage");
+  JSObjectSetProperty (context, global_object, str, class_object, kJSPropertyAttributeNone, NULL);
+
+  JSClassRelease (class);
+  JSStringRelease (str);
+}
+
+static void
+prepare_overview (WebKitScriptWorld *world,
+                  WebKitWebPage *web_page,
+                  WebKitFrame *frame,
+                  EphyWebExtension *extension)
+{
+  EphyWebOverview *overview;
+  JSGlobalContextRef context;
 
   overview = ephy_web_overview_new (web_page, extension->priv->overview_model);
   g_signal_connect (overview, "item-removed",
@@ -1263,6 +1349,35 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                     extension);
   context = webkit_frame_get_javascript_context_for_script_world (frame, world);
   ephy_web_overview_init_js (overview, context);
+}
+
+static void
+window_object_cleared_cb (WebKitScriptWorld *world,
+                          WebKitWebPage     *web_page,
+                          WebKitFrame       *frame,
+                          EphyWebExtension  *extension)
+{
+  WebKitDOMDocument *dom_document;
+  WebKitDOMHTMLElement *html_element;
+  char *dom_url;
+
+  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") == 0) {
+    prepare_overview (world, web_page, frame, extension);
+    return;
+  }
+
+  dom_document = webkit_web_page_get_dom_document (web_page);
+  dom_url = webkit_dom_document_get_url (dom_document);
+
+  /* If webkit_web_page_get_uri is not about:blank and webkit_dom_document_get_url is
+   * about:blank, we are likely loading alternate content, so it's safe to make the
+   * certificate exception js available. This is needed by the TLS error page. */
+  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "about:blank") != 0 &&
+      g_strcmp0 (dom_url, "about:blank") == 0) {
+    prepare_certificate_exception_js (world, web_page, frame, extension);
+  }
+
+  g_free (dom_url);
 }
 
 static void

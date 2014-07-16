@@ -583,6 +583,9 @@ ephy_shell_init (EphyShell *shell)
                     G_CALLBACK (download_started_cb),
                     shell);
 
+  /* Do not ignore TLS errors. */
+  webkit_web_context_set_tls_errors_policy (web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
+
   /* Initialize the favicon cache as early as possible, or further
      calls to webkit_web_context_get_favicon_database will fail. */
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());

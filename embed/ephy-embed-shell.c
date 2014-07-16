@@ -63,6 +63,7 @@ struct _EphyEmbedShellPrivate
   guint web_extensions_page_created_signal_id;
   guint web_extensions_form_auth_save_signal_id;
   guint web_extensions_remove_from_overview_signal_id;
+  guint web_extensions_allow_tls_certificate_signal_id;
 };
 
 enum
@@ -269,6 +270,26 @@ web_extension_remove_from_overview (GDBusConnection *connection,
   /* Wait for the CSS animations to finish before refreshing */
   shell->priv->update_overview_timeout_id =
     g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc) ephy_embed_shell_update_overview_timeout_cb, shell);
+}
+
+static void
+web_extension_allow_tls_certificate (GDBusConnection *connection,
+                                     const char *sender_name,
+                                     const char *object_path,
+                                     const char *interface_name,
+                                     const char *signal_name,
+                                     GVariant *parameters,
+                                     EphyEmbedShell *shell)
+{
+  EphyWebExtensionProxy *web_extension;
+  guint64 page_id;
+
+  web_extension = ephy_embed_shell_find_web_extension (shell, sender_name);
+  if (!web_extension)
+    return;
+
+  g_variant_get (parameters, "(t)", &page_id);
+  ephy_web_extension_proxy_allow_tls_certificate (web_extension, page_id);
 }
 
 static void
@@ -545,6 +566,17 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
                                         (GDBusSignalCallback)web_extension_remove_from_overview,
                                         shell,
                                         NULL);
+  shell->priv->web_extensions_allow_tls_certificate_signal_id =
+    g_dbus_connection_signal_subscribe (shell->priv->bus,
+                                        NULL,
+                                        EPHY_WEB_EXTENSION_INTERFACE,
+                                        "AllowTLSCertificate",
+                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        (GDBusSignalCallback)web_extension_allow_tls_certificate,
+                                        shell,
+                                        NULL);
 }
 
 static void
@@ -644,6 +676,11 @@ ephy_embed_shell_shutdown (GApplication* application)
   if (priv->web_extensions_remove_from_overview_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_remove_from_overview_signal_id);
     priv->web_extensions_remove_from_overview_signal_id = 0;
+  }
+
+  if (priv->web_extensions_allow_tls_certificate_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_allow_tls_certificate_signal_id);
+    priv->web_extensions_allow_tls_certificate_signal_id = 0;
   }
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
