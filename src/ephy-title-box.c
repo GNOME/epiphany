@@ -515,36 +515,6 @@ ephy_title_box_new (EphyWindow *window)
                        NULL);
 }
 
-static void
-ephy_title_box_title_binding_destroyed_cb (gpointer data)
-{
-  EphyTitleBox        *title_box;
-  EphyTitleBoxPrivate *priv;
-
-  title_box = EPHY_TITLE_BOX (data);
-  priv = ephy_title_box_get_instance_private (title_box);
-
-  LOG ("uri_binding_destroyed_cb title_box %p", title_box);
-
-  /* Indicate that we do not need to unbind this binding */
-  priv->title_binding = NULL;
-}
-
-static void
-ephy_title_box_uri_binding_destroyed_cb (gpointer data)
-{
-  EphyTitleBox        *title_box;
-  EphyTitleBoxPrivate *priv;
-
-  title_box = EPHY_TITLE_BOX (data);
-  priv = ephy_title_box_get_instance_private (title_box);
-
-  LOG ("uri_binding_destroyed_cb title_box %p", title_box);
-
-  /* Indicate that we do not need to unbind this binding */
-  priv->uri_binding = NULL;
-}
-
 /**
  * ephy_title_box_set_web_view:
  * @title_box: an #EphyTitleBox
@@ -578,10 +548,8 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
     if (priv->title_sig_id > 0)
       g_signal_handler_disconnect (priv->web_view, priv->title_sig_id);
 
-    if (priv->title_binding != NULL)
-      g_clear_object (&priv->title_binding);
-    if (priv->uri_binding != NULL)
-      g_clear_object (&priv->uri_binding);
+    g_clear_object (&priv->title_binding);
+    g_clear_object (&priv->uri_binding);
 
     g_object_unref (priv->web_view);
   }
@@ -598,17 +566,15 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
   ephy_title_box_set_mode (title_box, title && *title != '\0' ?
                                       EPHY_TITLE_BOX_MODE_TITLE : EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
-  priv->title_binding = g_object_bind_property_full (priv->web_view, "title",
-                                                     priv->title, "label",
-                                                     G_BINDING_SYNC_CREATE,
-                                                     NULL, NULL,
-                                                     title_box, ephy_title_box_title_binding_destroyed_cb);
+  priv->title_binding = g_object_bind_property (priv->web_view, "title",
+                                                priv->title, "label",
+                                                G_BINDING_SYNC_CREATE);
 
   priv->uri_binding = g_object_bind_property_full (priv->web_view, "uri",
                                                    priv->uri, "label",
                                                    G_BINDING_SYNC_CREATE,
-                                                   ephy_title_box_transform_uri_to_label, NULL,
-                                                   title_box, ephy_title_box_uri_binding_destroyed_cb);
+                                                   ephy_title_box_transform_uri_to_label,
+                                                   NULL, NULL, NULL);
 
   priv->title_sig_id = g_signal_connect (priv->web_view, "notify::title",
                                          G_CALLBACK (ephy_title_box_title_changed_cb),
