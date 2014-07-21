@@ -62,6 +62,8 @@ typedef struct
   guint location_disabled;
   guint button_down : 1;
   guint switch_to_entry_timeout_id;
+
+  gulong title_sig_id;
 } EphyTitleBoxPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EphyTitleBox, ephy_title_box, GTK_TYPE_STACK)
@@ -574,9 +576,8 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
     g_signal_handlers_disconnect_by_func (priv->web_view,
                                           G_CALLBACK (ephy_title_box_view_focus_in_cb),
                                           title_box);
-    g_signal_handlers_disconnect_by_func (priv->web_view,
-                                          G_CALLBACK (ephy_title_box_title_changed_cb),
-                                          title_box);
+    if (priv->title_sig_id > 0)
+      g_signal_handler_disconnect (priv->web_view, priv->title_sig_id);
 
     if (priv->title_binding != NULL)
       g_clear_object (&priv->title_binding);
@@ -610,8 +611,9 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
                                                    ephy_title_box_transform_uri_to_label, NULL,
                                                    title_box, ephy_title_box_uri_binding_destroyed_cb);
 
-  g_signal_connect (priv->web_view, "notify::title",
-                    G_CALLBACK (ephy_title_box_title_changed_cb), title_box);
+  priv->title_sig_id = g_signal_connect (priv->web_view, "notify::title",
+                                         G_CALLBACK (ephy_title_box_title_changed_cb),
+                                         title_box);
   g_signal_connect (priv->entry, "key-press-event",
                     G_CALLBACK (ephy_title_box_entry_key_press_cb), title_box);
   g_signal_connect (priv->web_view, "focus-in-event",
