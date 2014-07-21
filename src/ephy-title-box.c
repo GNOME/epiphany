@@ -552,15 +552,15 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
     g_clear_object (&priv->title_binding);
     g_clear_object (&priv->uri_binding);
 
-    g_object_unref (priv->web_view);
+    g_object_remove_weak_pointer (G_OBJECT (priv->web_view), (gpointer *)&priv->web_view);
   }
 
-  priv->web_view = NULL;
+  priv->web_view = web_view;
 
   if (web_view == NULL)
     return;
 
-  priv->web_view = g_object_ref (web_view);
+  g_object_add_weak_pointer (G_OBJECT (web_view), (gpointer *)&priv->web_view);
 
   title = webkit_web_view_get_title (web_view);
 
