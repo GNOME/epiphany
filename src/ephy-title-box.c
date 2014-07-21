@@ -523,7 +523,7 @@ ephy_title_box_title_binding_destroyed_cb (gpointer data)
   title_box = EPHY_TITLE_BOX (data);
   priv = ephy_title_box_get_instance_private (title_box);
 
-  LOG ("title_binding_destroyed_cb title_box %p", title_box);
+  LOG ("uri_binding_destroyed_cb title_box %p", title_box);
 
   /* Indicate that we do not need to unbind this binding */
   priv->title_binding = NULL;
