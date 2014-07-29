@@ -1992,8 +1992,10 @@ ephy_web_view_new (void)
   return g_object_new (EPHY_TYPE_WEB_VIEW,
 #if WEBKIT_CHECK_VERSION(2, 5, 0)
                        "user-content-manager", ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ()),
+                       "settings", ephy_embed_prefs_get_settings (),
+#else
+                       "group", ephy_embed_prefs_get_settings (),
 #endif
-                       "group", ephy_embed_prefs_get_web_view_group (),
                        NULL);
 }
 
@@ -2002,7 +2004,11 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
-                       "group", ephy_embed_prefs_get_web_view_group (),
+#if WEBKIT_CHECK_VERSION(2, 5, 0)
+                       "settings", ephy_embed_prefs_get_settings (),
+#else
+                       "group", ephy_embed_prefs_get_settings (),
+#endif
                        NULL);
 }
 

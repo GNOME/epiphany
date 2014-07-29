@@ -652,7 +652,7 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
-  g_object_unref (ephy_embed_prefs_get_web_view_group ());
+  g_object_unref (ephy_embed_prefs_get_settings ());
   ephy_embed_utils_shutdown ();
 }
 
