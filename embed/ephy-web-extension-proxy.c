@@ -28,6 +28,7 @@ struct _EphyWebExtensionProxyPrivate
 {
   GDBusProxy *proxy;
   gchar *name_owner;
+  GCancellable *cancellable;
   guint watch_name_id;
   guint form_auth_save_signal_id;
 };
@@ -57,6 +58,8 @@ static void
 ephy_web_extension_proxy_dispose (GObject *object)
 {
   EphyWebExtensionProxyPrivate *priv = EPHY_WEB_EXTENSION_PROXY (object)->priv;
+
+  g_clear_object (&priv->cancellable);
 
   if (priv->watch_name_id > 0) {
     g_bus_unwatch_name (priv->watch_name_id);
@@ -130,6 +133,7 @@ web_extension_appeared_cb (GDBusConnection *connection,
                            EphyWebExtensionProxy *web_extension)
 {
   web_extension->priv->name_owner = g_strdup (name_owner);
+  web_extension->priv->cancellable = g_cancellable_new ();
   g_dbus_proxy_new (connection,
                     G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
                     G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
@@ -138,9 +142,18 @@ web_extension_appeared_cb (GDBusConnection *connection,
                     name,
                     EPHY_WEB_EXTENSION_OBJECT_PATH,
                     EPHY_WEB_EXTENSION_INTERFACE,
-                    NULL,
+                    web_extension->priv->cancellable,
                     (GAsyncReadyCallback)web_extension_proxy_created_cb,
                     web_extension);
+}
+
+static void
+web_extension_vanished_cb (GDBusConnection *connection,
+                           const gchar *name,
+                           EphyWebExtensionProxy *web_extension)
+{
+  if (web_extension->priv->name_owner)
+    g_object_unref (web_extension);
 }
 
 static void
@@ -155,9 +168,9 @@ ephy_web_extension_proxy_watch_name (EphyWebExtensionProxy *web_extension,
                                     service_name,
                                     G_BUS_NAME_WATCHER_FLAGS_NONE,
                                     (GBusNameAppearedCallback)web_extension_appeared_cb,
-                                    NULL,
+                                    (GBusNameVanishedCallback)web_extension_vanished_cb,
                                     web_extension,
-                                    (GDestroyNotify)g_object_unref);
+                                    NULL);
 }
 
 EphyWebExtensionProxy *
@@ -210,7 +223,9 @@ ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExten
                      "FormAuthDataSaveConfirmationResponse",
                      g_variant_new ("(ub)", request_id, response),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 static void
@@ -250,7 +265,7 @@ ephy_web_extension_proxy_web_page_has_modified_forms (EphyWebExtensionProxy *web
                        g_variant_new ("(t)", page_id),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1,
-                       cancellable,
+                       web_extension->priv->cancellable,
                        (GAsyncReadyCallback)has_modified_forms_cb,
                        g_object_ref (task));
   } else {
@@ -307,7 +322,7 @@ ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_exten
                        g_variant_new("(ts)", page_id, base_uri),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1,
-                       cancellable,
+                       web_extension->priv->cancellable,
                        (GAsyncReadyCallback)get_best_web_app_icon_cb,
                        g_object_ref (task));
   } else {
@@ -380,7 +395,7 @@ ephy_web_extension_proxy_get_web_app_title (EphyWebExtensionProxy *web_extension
                        g_variant_new("(t)", page_id),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1,
-                       NULL,
+                       web_extension->priv->cancellable,
                        (GAsyncReadyCallback)get_web_app_title_cb,
                        g_object_ref (task));
   } else {
@@ -421,7 +436,9 @@ ephy_web_extension_proxy_history_set_urls (EphyWebExtensionProxy *web_extension,
                      "HistorySetURLs",
                      g_variant_new ("(@a(ss))", g_variant_builder_end (&builder)),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 void
@@ -436,7 +453,9 @@ ephy_web_extension_proxy_history_set_url_thumbnail (EphyWebExtensionProxy *web_e
                      "HistorySetURLThumbnail",
                      g_variant_new ("(ss)", url, path),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 void
@@ -451,7 +470,9 @@ ephy_web_extension_proxy_history_set_url_title (EphyWebExtensionProxy *web_exten
                      "HistorySetURLTitle",
                      g_variant_new ("(ss)", url, title),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 void
@@ -465,7 +486,9 @@ ephy_web_extension_proxy_history_delete_url (EphyWebExtensionProxy *web_extensio
                      "HistoryDeleteURL",
                      g_variant_new ("(s)", url),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 void
@@ -479,7 +502,9 @@ ephy_web_extension_proxy_history_delete_host (EphyWebExtensionProxy *web_extensi
                      "HistoryDeleteHost",
                      g_variant_new ("(s)", host),
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
 
 void
@@ -492,5 +517,7 @@ ephy_web_extension_proxy_history_clear (EphyWebExtensionProxy *web_extension)
                      "HistoryClear",
                      NULL,
                      G_DBUS_CALL_FLAGS_NONE,
-                     -1, NULL, NULL, NULL);
+                     -1,
+                     web_extension->priv->cancellable,
+                     NULL, NULL);
 }
