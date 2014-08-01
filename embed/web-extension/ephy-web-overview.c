@@ -23,11 +23,9 @@
 
 #include <string.h>
 
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
 #define WEBKIT_DOM_USE_UNSTABLE_API
 #include <webkitdom/WebKitDOMElementUnstable.h>
 #include <webkitdom/WebKitDOMDOMTokenList.h>
-#endif
 
 struct _EphyWebOverviewPrivate
 {

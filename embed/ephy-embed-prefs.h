@@ -34,7 +34,7 @@
 
 G_BEGIN_DECLS
 
-GObject *ephy_embed_prefs_get_settings (void);
+WebKitSettings *ephy_embed_prefs_get_settings (void);
 void ephy_embed_prefs_set_cookie_accept_policy          (WebKitCookieManager *cookie_manager,
                                                          const char          *settings_policy);
 

@@ -54,9 +54,7 @@ struct _EphyEmbedShellPrivate
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
   WebKitUserContentManager *user_content;
-#endif
   EphyAboutHandler *about_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
@@ -107,9 +105,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->about_handler);
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
   g_clear_object (&priv->user_content);
-#endif
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -1005,15 +1001,11 @@ ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
   webkit_web_context_clear_cache (webkit_web_context_get_default ());
 }
 
-GObject *
+WebKitUserContentManager *
 ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
 {
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
   if (!shell->priv->user_content)
     shell->priv->user_content = webkit_user_content_manager_new ();
 
-  return G_OBJECT (shell->priv->user_content);
-#else
-  return NULL;
-#endif
+  return shell->priv->user_content;
 }

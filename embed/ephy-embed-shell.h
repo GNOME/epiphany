@@ -26,7 +26,7 @@
 #ifndef EPHY_EMBED_SHELL_H
 #define EPHY_EMBED_SHELL_H
 
-#include <gtk/gtk.h>
+#include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
@@ -93,7 +93,7 @@ void               ephy_embed_shell_set_thumbanil_path         (EphyEmbedShell  
                                                                 const char       *url,
                                                                 time_t            mtime,
                                                                 const char       *path);
-GObject *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
+WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 
 G_END_DECLS
 

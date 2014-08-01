@@ -43,9 +43,6 @@ typedef struct
 #define ENABLE_SCRIPTS_SETTING "enable-javascript"
 #define DEFAULT_ENCODING_SETTING "default-charset"
 static WebKitSettings *webkit_settings = NULL;
-#if !WEBKIT_CHECK_VERSION(2, 5, 0)
-static WebKitWebViewGroup *web_view_group = NULL;
-#endif
 
 static void
 user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
@@ -56,7 +53,6 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
 
   bytes = g_output_stream_splice_finish (output_stream, result, NULL);
   if (bytes > 0) {
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
     WebKitUserStyleSheet *style_sheet;
 
     style_sheet = webkit_user_style_sheet_new (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
@@ -65,11 +61,6 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
     webkit_user_content_manager_add_style_sheet (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())),
                                                  style_sheet);
     webkit_user_style_sheet_unref (style_sheet);
-#else
-    webkit_web_view_group_add_user_style_sheet (web_view_group,
-                                                g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
-                                                NULL, NULL, NULL, WEBKIT_INJECTED_CONTENT_FRAMES_ALL);
-#endif
   }
 }
 
@@ -107,11 +98,7 @@ webkit_pref_callback_user_stylesheet (GSettings *settings,
   value = g_settings_get_boolean (settings, key);
 
   if (!value)
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
     webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
-#else
-    webkit_web_view_group_remove_all_user_style_sheets (web_view_group);
-#endif
   else {
     GFile *file;
     char *filename;
@@ -546,22 +533,11 @@ ephy_embed_prefs_init (gpointer user_data)
 {
   int i;
 
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,
                                                        "enable-site-specific-quirks", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        NULL);
-#else
-  web_view_group = webkit_web_view_group_new ("Ephy WebView Group");
-  webkit_settings = webkit_web_view_group_get_settings (web_view_group);
-  g_object_set (webkit_settings,
-                "enable-developer-extras", TRUE,
-                "enable-fullscreen", TRUE,
-                "enable-site-specific-quirks", TRUE,
-                "enable-dns-prefetching", TRUE,
-                NULL);
-#endif
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
     GSettings *settings;
@@ -616,15 +592,10 @@ ephy_embed_prefs_init (gpointer user_data)
                    EPHY_PREFS_ENABLE_SMOOTH_SCROLLING,
                    webkit_settings, "enable-smooth-scrolling",
                    G_SETTINGS_BIND_GET);
-#if WEBKIT_CHECK_VERSION(2, 5, 0)
   return webkit_settings;
-#else
-  return web_view_group;
-#endif
 }
 
-/* FIXME: Use WebKitSettings * when we bump WebKitGTK requirements */
-GObject *
+WebKitSettings *
 ephy_embed_prefs_get_settings (void)
 {
   static GOnce once_init = G_ONCE_INIT;
