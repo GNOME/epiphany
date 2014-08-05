@@ -54,3 +54,25 @@ EphyToolbar.incognito-mode > .button {
 EphyTitleBox {
     -GtkWidget-window-dragging: true;
 }
+
+.floating-bar {
+  background-color: @theme_base_color;
+  border-width: 1px;
+  border-style: solid solid none;
+  border-color: @borders;
+  border-radius: 3px 3px 0 0;
+}
+
+.floating-bar.left { /* axes left border and border radius */
+  border-left-style: none;
+  border-top-left-radius: 0;
+}
+.floating-bar.right { /* axes right border and border radius */
+  border-right-style: none;
+  border-top-right-radius: 0;
+}
+
+.floating-bar:backdrop {
+  background-color: @theme_unfocused_base_color;
+  border-color: @unfocused_borders;
+}
