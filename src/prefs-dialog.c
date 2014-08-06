@@ -691,6 +691,7 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 		GtkDialog **add_lang_dialog;
 
 		pd->priv->add_lang_dialog = setup_add_language_dialog (pd);
+		gtk_window_set_transient_for (GTK_WINDOW (pd->priv->add_lang_dialog), GTK_WINDOW (pd));
 
 		add_lang_dialog = &pd->priv->add_lang_dialog;
 
