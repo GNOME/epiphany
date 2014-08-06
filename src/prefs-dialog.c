@@ -27,7 +27,6 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-encodings.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
@@ -82,7 +81,6 @@ struct PrefsDialogPrivate
 	GtkWidget *clear_personal_data_button;
 
 	/* language */
-	GtkWidget *default_encoding_combo;
 	GtkTreeView *lang_treeview;
 	GtkWidget *lang_add_button;
 	GtkWidget *lang_remove_button;
@@ -96,12 +94,6 @@ struct PrefsDialogPrivate
 
 	GHashTable *iso_639_table;
 	GHashTable *iso_3166_table;
-};
-
-enum {
-	COL_TITLE_ELIDED,
-	COL_ENCODING,
-	NUM_COLS
 };
 
 enum
@@ -198,7 +190,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, clear_personal_data_button);
 
 	/* language */
-	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, default_encoding_combo);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_add_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, lang_remove_button);
@@ -287,69 +278,6 @@ combo_set_mapping (const GValue *value,
 	}
 
 	return variant;
-}
-
-static void
-create_node_combo (PrefsDialog *dialog,
-		   EphyEncodings *encodings,
-		   const char *default_value)
-{
-	GtkComboBox *combo;
-	GtkCellRenderer *renderer;
-	GtkListStore *store;
-	GList *all_encodings, *p;
-	char *code;
-
-	code = g_settings_get_string (EPHY_SETTINGS_WEB,
-				      EPHY_PREFS_WEB_DEFAULT_ENCODING);
-	if (code == NULL || ephy_encodings_get_encoding (encodings, code, FALSE) == NULL)
-	{
-		/* safe default */
-		g_settings_set_string (EPHY_SETTINGS_WEB,
-				       EPHY_PREFS_WEB_DEFAULT_ENCODING,
-				       default_value);
-	}
-	g_free (code);
-
-	combo = GTK_COMBO_BOX (dialog->priv->default_encoding_combo);
-
-	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
-	all_encodings = ephy_encodings_get_all (encodings);
-	for (p = all_encodings; p; p = p->next) 
-	{
-		GtkTreeIter iter;
-		EphyEncoding *encoding = EPHY_ENCODING (p->data);
-		
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_TITLE_ELIDED, 
-				    ephy_encoding_get_title_elided (encoding),
-				    -1);
-		gtk_list_store_set (store, &iter,
-				    COL_ENCODING, 
-				    ephy_encoding_get_encoding (encoding),
-				    -1);
-	}
-	g_list_free (all_encodings);
-
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), COL_TITLE_ELIDED,
-					      GTK_SORT_ASCENDING);
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
-
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-					"text", COL_TITLE_ELIDED,
-					NULL);
-
-	g_settings_bind_with_mapping (EPHY_SETTINGS_WEB,
-				      EPHY_PREFS_WEB_DEFAULT_ENCODING,
-				      combo, "active",
-				      G_SETTINGS_BIND_DEFAULT,
-				      combo_get_mapping,
-				      combo_set_mapping,
-				      combo,
-				      NULL);
 }
 
 static void
@@ -1296,7 +1224,6 @@ setup_language_page (PrefsDialog *dialog)
 {
 	PrefsDialogPrivate *priv = dialog->priv;
 	GSettings *web_settings;
-	EphyEncodings *encodings;
 
 	web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
 
@@ -1305,10 +1232,6 @@ setup_language_page (PrefsDialog *dialog)
 			 priv->enable_spell_checking_checkbutton,
 			 "active",
 			 G_SETTINGS_BIND_DEFAULT);
-
-	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings (EPHY_EMBED_SHELL (ephy_shell_get_default ())));
-
-	create_node_combo (dialog, encodings, "ISO-8859-1");
 
 	create_language_section (dialog);
 }
