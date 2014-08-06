@@ -105,11 +105,11 @@ RESOURCE_FILES = \
 	resources/about.css			  \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
+	resources/encoding-dialog.ui		  \
 	resources/epiphany-application-menu.ui	  \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany-ui.xml		  \
 	resources/epiphany.css                    \
-	resources/epiphany.ui			  \
 	resources/error.html			  \
 	resources/history-dialog.ui		  \
 	resources/incognito-tinted.png            \

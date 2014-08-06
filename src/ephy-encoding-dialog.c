@@ -341,7 +341,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
-			       "/org/gnome/epiphany/epiphany.ui",
+			       "/org/gnome/epiphany/encoding-dialog.ui",
 			       "encoding_dialog",
 			       NULL);
 
