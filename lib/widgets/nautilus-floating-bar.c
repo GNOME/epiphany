@@ -262,8 +262,8 @@ nautilus_floating_bar_constructed (GObject *obj)
 	g_object_set (labels_box,
 		      "margin-top", 2,
 		      "margin-bottom", 2,
-		      "margin-left", 12,
-		      "margin-right", 12,
+		      "margin-start", 12,
+		      "margin-end", 12,
 		      NULL);
 	gtk_widget_show (labels_box);
 
