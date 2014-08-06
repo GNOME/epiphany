@@ -713,3 +713,16 @@ ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 		g_signal_emit (toolbar, signals[CLOSE], 0);
 	}
 }
+
+void
+ephy_find_toolbar_toggle_state (EphyFindToolbar *toolbar)
+{
+	if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (toolbar)))
+	{
+		ephy_find_toolbar_close (toolbar);
+	}
+	else
+	{
+		ephy_find_toolbar_open (toolbar, FALSE, FALSE);
+	}
+}
