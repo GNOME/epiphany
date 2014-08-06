@@ -13,7 +13,6 @@ NOINST_H_FILES = \
 	ephy-langs.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
-	ephy-object-helpers.h			\
 	ephy-prefs.h				\
 	ephy-profile-utils.h			\
 	ephy-signal-accumulator.h		\
@@ -56,7 +55,6 @@ libephymisc_la_SOURCES = \
 	ephy-node-filter.c			\
 	ephy-node-common.h			\
 	ephy-node-db.c				\
-	ephy-object-helpers.c			\
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
