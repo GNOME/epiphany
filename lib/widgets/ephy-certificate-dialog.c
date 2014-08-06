@@ -146,8 +146,8 @@ ephy_certificate_dialog_set_tls_errors (EphyCertificateDialog *dialog,
 
   markup = g_strdup_printf ("<span weight=\"bold\" size=\"large\">%s</span>",
 			    tls_errors == 0 ?
-			    _("The identity of this website has been verified") :
-			    _("The identity of this website has not been verified"));
+			    _("The identity of this website has been verified.") :
+			    _("The identity of this website has not been verified."));
   gtk_label_set_markup (GTK_LABEL (priv->title), markup);
   g_free (markup);
 
