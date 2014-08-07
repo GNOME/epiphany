@@ -2016,6 +2016,13 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyNewTabFlags flags;
 	EphyWindow *target_window;
 
+	/* FIXME: This should be blocked earlier in decide_policy_cb */
+	if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS) &&
+	    !webkit_navigation_action_is_user_gesture (navigation_action))
+	{
+		return NULL;
+	}
+
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
 	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -2122,11 +2129,17 @@ decide_policy_cb (WebKitWebView *web_view,
 			return TRUE;
 		}
 
+		/* FIXME: We should only ignore new window actions when not triggered by a user gesture,
+		 * but we don't have API for that in WebKit yet, so for now we let everything pass here,
+		 * and we block it in the create_web_view_cb. See https://bugs.webkit.org/show_bug.cgi?id=135695
+		 */
+#if 0
 		if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS))
 		{
 			webkit_policy_decision_ignore (decision);
 			return TRUE;
 		}
+#endif
 	}
 
 	navigation_type = webkit_navigation_policy_decision_get_navigation_type (navigation_decision);
