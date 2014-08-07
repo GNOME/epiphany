@@ -188,7 +188,7 @@ is_garbage (const char *name,
 
 /**
  * ephy_remove_tracking_from_uri:
- * @uri: a uri
+ * @uri_string: a uri
  *
  * Sanitize @uri to make sure it does not contain analytics tracking
  * information. Inspired by the Firefox PureURL add-on:
@@ -203,7 +203,6 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   SoupURI *uri;
   GList *items, *new_items, *l;
   const char *query, *host;
-  char *new_query;
   gboolean has_garbage = FALSE;
   char *ret = NULL;
 
@@ -231,6 +230,8 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   }
 
   if (has_garbage) {
+    char *new_query;
+
     new_items = g_list_reverse (new_items);
     new_query = query_concat (new_items);
 
