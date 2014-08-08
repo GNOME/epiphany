@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2014-07-13 15:37+0300\n"
-"PO-Revision-Date: 2014-07-13 15:38+0300\n"
+"POT-Creation-Date: 2014-08-08 18:01+0300\n"
+"PO-Revision-Date: 2014-08-08 18:19+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -57,6 +57,14 @@ msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #: ../data/epiphany.appdata.xml.in.h:1
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.appdata.xml.in.h:2
+msgid "Web browser for GNOME"
+msgstr "דפדפן אינטרנט עבור GNOME"
+
+#: ../data/epiphany.appdata.xml.in.h:3
 msgid ""
 "The web browser for GNOME, featuring tight integration with the desktop and "
 "a simple and intuitive user interface that allows you to focus on your web "
@@ -934,55 +942,139 @@ msgstr "חיפוש המופע הקודמת של המילה או הביטוי"
 msgid "Find next occurrence of the search string"
 msgstr "חיפוש המופע הבא של המילה או הביטוי"
 
-#: ../embed/ephy-web-view.c:488 ../src/window-commands.c:330
+#: ../embed/ephy-web-view.c:491 ../src/window-commands.c:330
 msgid "Save"
 msgstr "שמירה"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:500
+#: ../embed/ephy-web-view.c:503
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "האם ברצונך לשמור ססמה עבור „%s”?"
 
-#: ../embed/ephy-web-view.c:1387
+#: ../embed/ephy-web-view.c:1414
 msgid "Deny"
 msgstr "דחייה"
 
-#: ../embed/ephy-web-view.c:1388
+#: ../embed/ephy-web-view.c:1415
 msgid "Allow"
 msgstr "אישור"
 
-#: ../embed/ephy-web-view.c:1398
+#: ../embed/ephy-web-view.c:1425
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "העמוד בכתובת <b>%s</b> מעוניין לדעת את מיקומך."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1482
+#: ../embed/ephy-web-view.c:1509
 #, c-format
 msgid "Loading “%s”…"
 msgstr "‏„%s“ בטעינה…"
 
-#: ../embed/ephy-web-view.c:1484
+#: ../embed/ephy-web-view.c:1511
 msgid "Loading…"
 msgstr "בטעינה…"
 
-#: ../embed/ephy-web-view.c:1725
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1735
+msgid ""
+"This web site presented identification that belongs to a different web site."
+msgstr "אתר אינטרנט זה מציג מזהה השייך לאתר אינטרנט אחר."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1740
+msgid ""
+"This web site’s identification is too old to trust. Check the date on your "
+"computer’s calendar."
+msgstr ""
+"מזהה אתר אינטרנט זה ישן מדי כדי להיות בטוח. יש לבדוק את התאריך בלוח השנה של "
+"המחשב שלך."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1745
+msgid ""
+"This web site’s identification was not issued by a trusted organization."
+msgstr "מזהה אתר אינטרנט זה לא הונפק על ידי ארגון מהימן."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1750
+msgid ""
+"This web site’s identification could not be processed. It may be corrupted."
+msgstr "מזהה אתר אינטרנט זה לא ניתן לעיבוד. יתכן והוא פגום."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1755
+msgid ""
+"This web site’s identification has been revoked by the trusted organization "
+"that issued it."
+msgstr "מזהה אתר אינטרנט זה נשלל על ידי הארגון המהימן שהנפיק אותו."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1760
+msgid ""
+"This web site’s identification uses very weak encryption. It has probably "
+"been forged."
+msgstr "מזהה אתר אינטרנט זה משתמש בהצפנה חלשה מאוד. יתכן והוא מזויף."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1765
+msgid ""
+"This web site’s identification time-travelled from the future. Check the "
+"date on your computer’s calendar."
+msgstr ""
+"מזהה אתר אינטרנט זה נסע בזמן מהעתיד. יש לבדוק את התאריך בלוח השנה של המחשב "
+"שלך."
+
+#. Message when a site's TLS certificate is invalid. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1801
+#, c-format
+msgid "This might not be the real %s."
+msgstr "יתכן וזהו לא ה־%s האמתי."
+
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1806
+msgid ""
+"When you try to connect securely, web sites present identification to prove "
+"that your connection has not been maliciously intercepted. There is "
+"something wrong with this site’s identification:"
+msgstr ""
+"כאשר הנך מנסה להתחבר האופן בטוח, אתרי אינטרנט מציגים מזהה כדי להוכיח שהחיבור "
+"שלך לא יורט בזדון. יש משהו שגוי עם מזהה אתר אינטרנט זה."
+
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1812
+msgid ""
+"A criminal organization or government agency may have hijacked your "
+"connection. You should continue only if you know there is a good reason why "
+"this site does not use trusted identification."
+msgstr ""
+"יתכן וארגון פשע או סוכנות ממשלתית חטפו את החיבור שלך. רצוי להמשיך רק אם "
+"ידועה לך סיבה טובה למה אתר זה לא משתמש במזהה מהימן."
+
+#. Good advice from Firefox; displays when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1816
+msgid ""
+"Legitimate banks, stores, and other public sites will not ask you to do this."
+msgstr "בנקים חוקיים, חנויות ואתרים ציבוריים נוספים לא יבקשו ממך לעשות זאת."
+
+#: ../embed/ephy-web-view.c:1857
 msgid "None specified"
 msgstr "לא צוינה"
 
-#: ../embed/ephy-web-view.c:1738 ../embed/ephy-web-view.c:1753
+#. Page title when a site cannot be loaded. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1870 ../embed/ephy-web-view.c:1885
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "בעיה בטעינת „%s”"
 
-#: ../embed/ephy-web-view.c:1740
+#: ../embed/ephy-web-view.c:1872
 msgid "Oops! Unable to display this website."
 msgstr "אופס! לא ניתן להציג אתר זה."
 
-#: ../embed/ephy-web-view.c:1741
+#: ../embed/ephy-web-view.c:1873
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -994,15 +1086,15 @@ msgstr ""
 "p>בהחלט יתכן כי האתר אינו זמין באופן זמני או שהועבר לכתובת חדשה. מומלץ לוודא "
 "כי חיבור האינטרנט פועל כראוי.</p>"
 
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1881
 msgid "Try again"
 msgstr "ניסיון חוזר"
 
-#: ../embed/ephy-web-view.c:1755
+#: ../embed/ephy-web-view.c:1887
 msgid "Oops! There may be a problem."
 msgstr "אופס! יתכן ויש בעיה."
 
-#: ../embed/ephy-web-view.c:1756
+#: ../embed/ephy-web-view.c:1888
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1012,27 +1104,37 @@ msgstr ""
 "<p>יתכן ואתר זה גרם לדפדפן להסגר באופן בלתי צפוי.</p><p> אם זה קורה שוב נא "
 "לדווח על התקלה למפתחי <strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1761 ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1893 ../embed/ephy-web-view.c:1900
 msgid "Reload Anyway"
-msgstr "טעינה מחדש בכל זאת"
+msgstr "לטעון מחדש בכל זאת"
 
-#: ../embed/ephy-web-view.c:1765
+#: ../embed/ephy-web-view.c:1897
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "בעיה בהצגת „%s”"
 
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1898
 msgid "Oops!"
 msgstr "אופס!"
 
-#: ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1899
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
 "משהו השתבש במהלך ההצגה של עמוד זה. נא לרענן או לבקר בעמוד אחר כדי להמשיך."
 
-#: ../embed/ephy-web-view.c:2617
+#. Title of error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1907
+msgid "Look out!"
+msgstr "זהירות!"
+
+#. Button on error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1910
+msgid "Load Anyway"
+msgstr "לטעון בכל זאת"
+
+#: ../embed/ephy-web-view.c:2792
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1298,12 +1400,12 @@ msgid "The certificate activation time is still in the future"
 msgstr "מועד הפעלת האישור עדיין בעתיד"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-msgid "The identity of this website has been verified"
-msgstr "זהות האתר הזה אומתה"
+msgid "The identity of this website has been verified."
+msgstr "זהות אתר אינטרנט זה אומתה."
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-msgid "The identity of this website has not been verified"
-msgstr "זהות האתר הזה לא אומתה"
+msgid "The identity of this website has not been verified."
+msgstr "זהות אתר אינטרנט זה לא אומתה."
 
 #: ../lib/widgets/ephy-download-widget.c:107
 #, c-format
@@ -2125,7 +2227,7 @@ msgstr "בדיקת איות"
 msgid "_Enable spell checking"
 msgstr "ה_פעלת בדיקת האיות"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:839
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
 msgid "Language"
 msgstr "שפה"
 
@@ -2526,12 +2628,12 @@ msgstr[0] "שפת המערכת (%s)"
 msgstr[1] "שפות המערכת (%s)"
 msgstr[2] "שפות המערכת (%s)"
 
-#: ../src/prefs-dialog.c:922
+#: ../src/prefs-dialog.c:923
 msgid "Select a Directory"
 msgstr "בחירת תיקייה"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1017
+#: ../src/prefs-dialog.c:1018
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2539,29 +2641,29 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:1023
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1024
+#: ../src/prefs-dialog.c:1025
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1026
+#: ../src/prefs-dialog.c:1027
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://www.google.co.il/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1028
+#: ../src/prefs-dialog.c:1029
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1030
+#: ../src/prefs-dialog.c:1031
 #, c-format
 msgid "http://www.bing.com/search?q=%s"
 msgstr "http://www.bing.com/search?q=%s"
@@ -3079,9 +3181,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Epiphany Web Bookmarks"
 #~ msgstr "סימניות הרשת של Epiphany"
-
-#~ msgid "Epiphany"
-#~ msgstr "Epiphany"
 
 #~ msgid "Certificate _Fields"
 #~ msgstr "שדות האישור"
