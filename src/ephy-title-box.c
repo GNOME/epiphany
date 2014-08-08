@@ -44,6 +44,14 @@ enum {
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
+enum
+{
+  LOCK_CLICKED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 typedef struct
 {
   EphyWindow    *window;
@@ -326,6 +334,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (widget);
   EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
+  GtkAllocation        lock_allocation;
 
   if (priv->mode != EPHY_TITLE_BOX_MODE_TITLE
       || event->button != GDK_BUTTON_PRIMARY
@@ -334,7 +343,14 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
 
   LOG ("button-press-event title-box %p event %p", title_box, event);
 
-  if (event->type == GDK_BUTTON_PRESS) {
+  gtk_widget_get_allocation (priv->lock_image, &lock_allocation);
+
+  if (event->x >= lock_allocation.x &&
+      event->x < lock_allocation.x + lock_allocation.width &&
+      event->y >= lock_allocation.y &&
+      event->y < lock_allocation.y + lock_allocation.height) {
+    g_signal_emit (title_box, signals[LOCK_CLICKED], 0, (GdkRectangle *)&lock_allocation);
+  } else if (event->type == GDK_BUTTON_PRESS) {
     priv->button_down = TRUE;
   } else {
     priv->button_down = FALSE;
@@ -414,6 +430,23 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
                                      object_properties);
+
+  /**
+   * EphyTitleBox::lock-clicked:
+   * @title_box: the object on which the signal is emitted
+   * @lock_position: the position of the lock icon
+   *
+   * Emitted when the user clicks the security icon inside the
+   * #EphyTitleBox.
+   */
+  signals[LOCK_CLICKED] = g_signal_new ("lock-clicked",
+                                        EPHY_TYPE_TITLE_BOX,
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, NULL, NULL,
+                                        g_cclosure_marshal_generic,
+                                        G_TYPE_NONE,
+                                        1,
+                                        GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void

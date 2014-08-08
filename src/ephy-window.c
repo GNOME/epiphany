@@ -3064,8 +3064,9 @@ zoom_to_level_cb (GtkAction *action,
 }
 
 static void
-lock_clicked_cb (EphyLocationController *controller,
-		 EphyWindow *window)
+open_certificate_popover (EphyWindow *window,
+			  GtkWidget *relative_to,
+			  GdkRectangle *lock_position)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyWebView *view;
@@ -3074,23 +3075,45 @@ lock_clicked_cb (EphyLocationController *controller,
 	EphySecurityLevel security_level;
 	GtkWidget *location_entry;
 	GtkWidget *certificate_popover;
-	GdkRectangle lock_position;
 
 	view = ephy_embed_get_web_view (priv->active_embed);
 	ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
 	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
 
-	certificate_popover = ephy_certificate_popover_new (location_entry,
-							    ephy_location_controller_get_address (controller),
+	certificate_popover = ephy_certificate_popover_new (relative_to,
+							    ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (location_entry)),
 							    certificate,
 							    tls_errors,
 							    security_level);
 
-	gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
-	gtk_popover_set_pointing_to (GTK_POPOVER (certificate_popover), &lock_position);
 	g_signal_connect (certificate_popover, "closed",
 			  G_CALLBACK (gtk_widget_destroy), NULL);
+	gtk_popover_set_pointing_to (GTK_POPOVER (certificate_popover), lock_position);
 	gtk_widget_show (certificate_popover);
+}
+
+static void
+location_controller_lock_clicked_cb (EphyLocationController *controller,
+				     gpointer user_data)
+{
+	EphyWindow *window = EPHY_WINDOW (user_data);
+	EphyWindowPrivate *priv = window->priv;
+	GtkWidget *location_entry;
+	GdkRectangle lock_position;
+
+	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
+	gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
+	open_certificate_popover (window, location_entry, &lock_position);
+}
+
+static void
+title_box_lock_clicked_cb (EphyTitleBox *title_box,
+			   GdkRectangle *lock_position,
+			   gpointer user_data)
+{
+	EphyWindow *window = EPHY_WINDOW (user_data);
+
+	open_certificate_popover (window, GTK_WIDGET (title_box), lock_position);
 }
 
 static GtkWidget *
@@ -3100,6 +3123,7 @@ setup_toolbar (EphyWindow *window)
 	GtkAction *action;
 	EphyWindowPrivate *priv = window->priv;
 	EphyEmbedShellMode app_mode;
+	EphyTitleBox *title_box;
 
 	toolbar = ephy_toolbar_new (window);
 	gtk_window_set_titlebar (GTK_WINDOW (window), toolbar);
@@ -3129,6 +3153,10 @@ setup_toolbar (EphyWindow *window)
 	g_signal_connect (action, "zoom-to-level",
 			  G_CALLBACK (zoom_to_level_cb), window);
 
+	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (toolbar));
+	g_signal_connect (title_box, "lock-clicked",
+                          G_CALLBACK (title_box_lock_clicked_cb), window);
+
 	return toolbar;
 }
 
@@ -3148,7 +3176,7 @@ setup_location_controller (EphyWindow *window,
 	g_signal_connect_swapped (location_controller, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 	g_signal_connect (location_controller, "lock-clicked",
-			  G_CALLBACK (lock_clicked_cb), window);
+			  G_CALLBACK (location_controller_lock_clicked_cb), window);
 
 	return location_controller;
 }

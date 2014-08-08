@@ -44,15 +44,15 @@ typedef struct _EphyCertificatePopoverPrivate EphyCertificatePopoverPrivate;
 
 struct _EphyCertificatePopover
 {
-        GtkPopover parent_object;
+  GtkPopover parent_object;
 
-        /*< private >*/
-        EphyCertificatePopoverPrivate *priv;
+  /*< private >*/
+  EphyCertificatePopoverPrivate *priv;
 };
 
 struct _EphyCertificatePopoverClass
 {
-        GtkPopoverClass parent_class;
+  GtkPopoverClass parent_class;
 };
 
 GType      ephy_certificate_popover_get_type (void);
