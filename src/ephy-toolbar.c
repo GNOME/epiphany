@@ -102,10 +102,13 @@ ephy_toolbar_constructed (GObject *object)
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkWidget *toolbar, *box, *button;
+  EphyEmbedShellMode mode;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
   toolbar = GTK_WIDGET (object);
+
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   g_signal_connect_swapped (priv->window, "notify::chrome",
                             G_CALLBACK (sync_chromes_visibility), toolbar);
@@ -140,18 +143,6 @@ ephy_toolbar_constructed (GObject *object)
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_container_add (GTK_CONTAINER (box), button);
-
-  /* Reload/Stop */
-  button = gtk_button_new ();
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
-  gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_widget_show (button);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "raised");
@@ -192,6 +183,21 @@ ephy_toolbar_constructed (GObject *object)
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+
+  /* Reload/Stop for web application. */
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+  {
+    button = gtk_button_new ();
+    /* FIXME: apparently we need an image inside the button for the action
+     * icon to appear. */
+    gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
+    gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+                                        action);
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+    gtk_widget_show (button);
+  }
 }
 
 static void
