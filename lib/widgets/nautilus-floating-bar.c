@@ -347,7 +347,7 @@ nautilus_floating_bar_set_primary_label (NautilusFloatingBar *self,
 {
 	if (g_strcmp0 (self->priv->primary_label, label) != 0) {
 		g_free (self->priv->primary_label);
-		self->priv->primary_label = g_uri_unescape_string (label, NULL);
+		self->priv->primary_label = g_strdup (label);
 
 		g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_LABEL]);
 
