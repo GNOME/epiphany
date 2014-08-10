@@ -148,39 +148,10 @@ static void
 ephy_title_box_add_address_bar (EphyTitleBox *title_box)
 {
   EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
-  GtkActionGroup      *action_group;
-  GtkAction           *action;
-  GtkWidget           *box;
-  GtkWidget           *reload;
-  GtkSizeGroup        *size;
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_show (box);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), "location-entry");
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LINKED);
-  gtk_stack_add_named (GTK_STACK (title_box), box, "address-bar");
 
   priv->entry = ephy_location_entry_new ();
   gtk_widget_show (priv->entry);
-  gtk_box_pack_start (GTK_BOX (box), priv->entry, TRUE, TRUE, 0);
-
-  /* Reload/Stop */
-  reload = gtk_button_new ();
-  gtk_button_set_focus_on_click (GTK_BUTTON (reload), FALSE);
-  gtk_widget_show (reload);
-  /* FIXME: apparently we need an image inside the button for the action
-  * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (reload), gtk_image_new ());
-  gtk_widget_set_valign (reload, GTK_ALIGN_CENTER);
-  action_group = ephy_window_get_toolbar_action_group (priv->window);
-  action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (reload), action);
-  gtk_container_add (GTK_CONTAINER (box), reload);
-
-  size = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  gtk_size_group_add_widget (size, priv->entry);
-  gtk_size_group_add_widget (size, reload);
-  g_object_unref (size);
+  gtk_stack_add_named (GTK_STACK (title_box), priv->entry, "address-bar");
 }
 
 static void
