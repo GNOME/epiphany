@@ -54,10 +54,8 @@ struct _EphyLocationControllerPrivate
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
 	GdkPixbuf *icon;
-	EphyLocationLockState lock_state;
 	guint editable : 1;
 	guint show_icon : 1;
-	guint show_lock : 1;
 	gboolean sync_address_is_blocked;
 };
 
@@ -77,8 +75,6 @@ enum
 	PROP_EDITABLE,
 	PROP_ICON,
 	PROP_SHOW_ICON,
-	PROP_LOCK_STATE,
-	PROP_SHOW_LOCK,
 	PROP_WINDOW,
 	PROP_LOCATION_ENTRY
 };
@@ -465,14 +461,6 @@ ephy_location_controller_constructed (GObject *object)
 				priv->location_entry, "show-favicon",
 				G_BINDING_SYNC_CREATE);
 
-	g_object_bind_property (controller, "lock-state",
-				priv->location_entry, "lock-state",
-				G_BINDING_SYNC_CREATE);
-
-	g_object_bind_property (controller, "show-lock",
-				priv->location_entry, "show-lock",
-				G_BINDING_SYNC_CREATE);
-
 	g_signal_connect_object (widget, "drag-data-received",
 				 G_CALLBACK (entry_drag_data_received_cb),
 				 controller, 0);
@@ -520,12 +508,6 @@ ephy_location_controller_set_property (GObject *object,
 		case PROP_SHOW_ICON:
 			priv->show_icon = g_value_get_boolean (value);
 			break;
-		case PROP_LOCK_STATE:
-			priv->lock_state = g_value_get_enum (value);
-			break;
-		case PROP_SHOW_LOCK:
-			priv->show_lock = g_value_get_boolean (value);
-			break;
 		case PROP_WINDOW:
 			priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
@@ -559,12 +541,6 @@ ephy_location_controller_get_property (GObject *object,
 			break;
 		case PROP_SHOW_ICON:
 			g_value_set_boolean (value, priv->show_icon);
-			break;
-		case PROP_LOCK_STATE:
-			g_value_set_enum (value, priv->lock_state);
-			break;
-		case PROP_SHOW_LOCK:
-			g_value_set_boolean (value, priv->show_lock);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -675,33 +651,6 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 							       "Whether to show the favicon",
 							       TRUE,
 							       G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	/**
-	* EphyLocationController:lock-state:
-	*
-	* State of the security icon.
-	*/
-	g_object_class_install_property (object_class,
-					 PROP_LOCK_STATE,
-					 g_param_spec_enum  ("lock-state",
-							     "Lock State",
-							     "State of the security icon",
-							     EPHY_TYPE_LOCATION_LOCK_STATE,
-							     EPHY_LOCATION_LOCK_STATE_UNKNOWN,
-							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	/**
-	* EphyLocationController:show-lock:
-	*
-	* If we should show the security icon.
-	*/
-	g_object_class_install_property (object_class,
-					 PROP_SHOW_LOCK,
-					 g_param_spec_boolean ("show-lock",
-							       "Show Lock",
-							       "If we should show the security icon",
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	/**
 	* EphyLocationController:window:
