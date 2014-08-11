@@ -105,9 +105,6 @@ void		ephy_location_entry_set_favicon		(EphyLocationEntry *entry,
 void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entry,
 							 gboolean show_favicon);
 
-void		ephy_location_entry_set_show_lock	(EphyLocationEntry *entry,
-							 gboolean show_lock);
-
 void		ephy_location_entry_set_security_level	(EphyLocationEntry *entry,
 							 EphySecurityLevel security_level);
 

@@ -358,7 +358,6 @@ struct _EphyWindowPrivate
 	guint present_on_insert : 1;
 	guint key_theme_is_emacs : 1;
 	guint updating_address : 1;
-	guint show_lock : 1;
 	guint force_close : 1;
 	guint checking_modified_forms : 1;
 };
@@ -711,50 +710,19 @@ sync_tab_load_status (EphyWebView *view,
 }
 
 static void
-_ephy_window_set_security_state (EphyWindow *window,
-				 gboolean show_lock,
-				 EphySecurityLevel security_level)
-{
-	EphyWindowPrivate *priv = window->priv;
-	EphyTitleBox *title_box;
-
-	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar));
-
-	priv->show_lock = show_lock != FALSE;
-
-	ephy_title_box_set_security_level (title_box, security_level);
-	ephy_title_box_set_show_lock (title_box, priv->show_lock);
-}
-
-static void
 sync_tab_security (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
+	EphyTitleBox *title_box;
 	EphySecurityLevel security_level;
-	gboolean show_lock = FALSE;
 
 	if (priv->closing) return;
 
 	ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
-
-	switch (security_level)
-	{
-		case EPHY_SECURITY_LEVEL_NO_SECURITY:
-			break;
-		case EPHY_SECURITY_LEVEL_BROKEN_SECURITY:
-                        show_lock = TRUE;
-                        break;
-		case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-			show_lock = TRUE;
-			break;
-		default:
-			g_assert_not_reached ();
-			break;
-	}
-
-	_ephy_window_set_security_state (window, show_lock, security_level);
+	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar));
+	ephy_title_box_set_security_level (title_box, security_level);
 }
 
 static void

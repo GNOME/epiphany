@@ -68,9 +68,6 @@ EphyTitleBoxMode    ephy_title_box_get_mode             (EphyTitleBox         *t
 void                ephy_title_box_set_mode             (EphyTitleBox         *title_box,
                                                          EphyTitleBoxMode      mode);
 
-void                ephy_title_box_set_show_lock        (EphyTitleBox         *title_box,
-                                                         gboolean              show_lock);
-
 void                ephy_title_box_set_security_level   (EphyTitleBox         *title_box,
                                                          EphySecurityLevel     security_level);
 

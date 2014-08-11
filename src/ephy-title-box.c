@@ -620,39 +620,11 @@ ephy_title_box_set_mode (EphyTitleBox    *title_box,
 }
 
 /**
- * ephy_title_box_set_show_lock:
- * @title_box: an #EphyTitleBox
- * @show_lock: if @title_box should show a lock icon indicating the security level
- * of the page
- *
- * If @show_lock is TRUE, the title will show an icon reflecting the
- * security level of the page, by default it's shown only in secure and
- * insecure pages (insecure meaning secure pages with something broken in such
- * security).
- *
- **/
-void
-ephy_title_box_set_show_lock (EphyTitleBox *title_box,
-                              gboolean      show_lock)
-{
-  EphyTitleBoxPrivate *priv;
-
-  g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
-
-  priv = ephy_title_box_get_instance_private (title_box);
-
-  gtk_widget_set_visible (priv->lock_image, show_lock);
-
-  ephy_location_entry_set_show_lock (EPHY_LOCATION_ENTRY (priv->entry), show_lock);
-}
-
-/**
  * ephy_title_box_set_security_level:
  * @title_box: an #EphyTitleBox
  * @mode: an #EphySecurityLevel
  *
- * Set the lock icon to be displayed; to actually show the icon see
- * ephy_title_box_set_show_lock.
+ * Sets the lock icon to be displayed by the title box and location entry
  **/
 void
 ephy_title_box_set_security_level (EphyTitleBox         *title_box,
@@ -668,6 +640,7 @@ ephy_title_box_set_security_level (EphyTitleBox         *title_box,
                                                "channel-secure-symbolic" : "channel-insecure-symbolic",
                                   NULL);
 
+  gtk_widget_set_visible (priv->lock_image, security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
   ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (priv->entry), security_level);
 }
 

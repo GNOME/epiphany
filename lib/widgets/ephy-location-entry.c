@@ -79,7 +79,6 @@ struct _EphyLocationEntryPrivate
 	guint original_address : 1;
 	guint apply_colors : 1;
 	guint needs_reset : 1;
-	guint show_lock : 1;
 	guint show_favicon : 1;
 
 	GtkTargetList *drag_targets;
@@ -112,7 +111,6 @@ enum
 	PROP_LOCATION,
 	PROP_FAVICON,
 	PROP_SECURITY_LEVEL,
-	PROP_SHOW_LOCK,
 	PROP_SHOW_FAVICON
 };
 
@@ -149,10 +147,6 @@ ephy_location_entry_set_property (GObject *object,
 	case PROP_SECURITY_LEVEL:
 		ephy_location_entry_set_security_level (entry,
 							g_value_get_enum (value));
-		break;
-	case PROP_SHOW_LOCK:
-		ephy_location_entry_set_show_lock (entry,
-						   g_value_get_boolean (value));
 		break;
 	case PROP_SHOW_FAVICON:
 		ephy_location_entry_set_show_favicon (entry,
@@ -269,19 +263,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 							     EPHY_TYPE_SECURITY_LEVEL,
 							     EPHY_SECURITY_LEVEL_NO_SECURITY,
 							     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	/**
-	* EphyLocationEntry:show-lock:
-	*
-	* If we should show the security icon.
-	*/
-	g_object_class_install_property (object_class,
-					 PROP_SHOW_LOCK,
-					 g_param_spec_boolean ("show-lock",
-							       "Show Lock",
-							       "If we should show the security icon",
-							       FALSE,
-							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_FAVICON,
@@ -970,7 +951,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->user_changed = FALSE;
 	p->block_update = FALSE;
 	p->saved_text = NULL;
-	p->show_lock = FALSE;
 	p->show_favicon = TRUE;
 	p->dns_prefetch_handler = 0;
 
@@ -1593,39 +1573,11 @@ ephy_location_entry_set_show_favicon (EphyLocationEntry *entry,
 }
 
 /**
- * ephy_location_entry_set_show_lock:
- * @entry: an #EphyLocationEntry widget
- * @show_lock: if @entry should show a lock icon indicating the security level
- * of the page
- *
- * If @show_lock is TRUE, the location bar will show an icon reflecting the
- * security level of the page, by default it's shown only in secure (HTTPS) pages
- *
- **/
-void
-ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
-				   gboolean show_lock)
-{
-	EphyLocationEntryPrivate *priv;
-
-	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
-
-	priv = entry->priv;
-
-	priv->show_lock = show_lock != FALSE;
-
-	gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-				       GTK_ENTRY_ICON_SECONDARY,
-				       show_lock ? priv->lock_gicon : NULL);
-}
-
-/**
  * ephy_location_entry_set_security_level:
  * @entry: an #EphyLocationEntry widget
  * @state: the #EphySecurityLevel
  *
- * Set the lock icon to be displayed, to actually show the icon see 
- * ephy_location_entry_set_show_lock.
+ * Set the lock icon to be displayed
  *
  **/
 void
@@ -1653,8 +1605,7 @@ ephy_location_entry_set_security_level (EphyLocationEntry *entry,
 		break;
 	}
 
-	if (priv->show_lock) {
-		g_warn_if_fail (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
+	if (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY) {
 		gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 					       GTK_ENTRY_ICON_SECONDARY,
 					       priv->lock_gicon);
