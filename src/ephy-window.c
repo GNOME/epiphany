@@ -2016,13 +2016,6 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyNewTabFlags flags;
 	EphyWindow *target_window;
 
-	/* FIXME: This should be blocked earlier in decide_policy_cb */
-	if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS) &&
-	    !webkit_navigation_action_is_user_gesture (navigation_action))
-	{
-		return NULL;
-	}
-
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
 	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -2085,6 +2078,7 @@ decide_policy_cb (WebKitWebView *web_view,
 		  EphyWindow *window)
 {
 	WebKitNavigationPolicyDecision *navigation_decision;
+	WebKitNavigationAction *navigation_action;
 	WebKitNavigationType navigation_type;
 	WebKitURIRequest *request;
 	const char *uri;
@@ -2094,7 +2088,8 @@ decide_policy_cb (WebKitWebView *web_view,
 		return FALSE;
 
 	navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
-	request = webkit_navigation_policy_decision_get_request (navigation_decision);
+	navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+	request = webkit_navigation_action_get_request (navigation_action);
 	uri = webkit_uri_request_get_uri (request);
 
 	if (!ephy_embed_utils_address_has_web_scheme (uri))
@@ -2129,20 +2124,15 @@ decide_policy_cb (WebKitWebView *web_view,
 			return TRUE;
 		}
 
-		/* FIXME: We should only ignore new window actions when not triggered by a user gesture,
-		 * but we don't have API for that in WebKit yet, so for now we let everything pass here,
-		 * and we block it in the create_web_view_cb. See https://bugs.webkit.org/show_bug.cgi?id=135695
-		 */
-#if 0
-		if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS))
+		if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS) &&
+		    !webkit_navigation_action_is_user_gesture (navigation_action))
 		{
 			webkit_policy_decision_ignore (decision);
 			return TRUE;
 		}
-#endif
 	}
 
-	navigation_type = webkit_navigation_policy_decision_get_navigation_type (navigation_decision);
+	navigation_type = webkit_navigation_action_get_navigation_type (navigation_action);
 
 	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED &&
 	    ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
@@ -2193,8 +2183,8 @@ decide_policy_cb (WebKitWebView *web_view,
 		EphyNewTabFlags flags = 0;
 		EphyWindow *target_window = window;
 
-		button = webkit_navigation_policy_decision_get_mouse_button (navigation_decision);
-		state = webkit_navigation_policy_decision_get_modifiers (navigation_decision);
+		button = webkit_navigation_action_get_mouse_button (navigation_action);
+		state = webkit_navigation_action_get_modifiers (navigation_action);
 
 		ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
 					      EPHY_PAGE_VISIT_LINK);
