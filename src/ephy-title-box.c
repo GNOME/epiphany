@@ -484,14 +484,20 @@ ephy_title_box_transform_uri_to_label (GBinding     *binding,
                                        GValue       *to_value,
                                        gpointer      user_data)
 {
-  const gchar *label;
-  gboolean     rtl;
-  gchar       *uri;
-
-  rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
+  const gchar       *label;
+  gchar             *uri;
+  EphyEmbedShellMode mode;
 
   label = g_value_get_string (from_value);
-  uri = g_strconcat (rtl ? "▾ " : label, rtl ? label : " ▾", NULL);
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    uri = g_strdup (label);
+  } else {
+    gboolean rtl;
+    rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
+    uri = g_strconcat (rtl ? "▾ " : label, rtl ? label : " ▾", NULL);
+  }
   g_value_take_string (to_value, uri);
 
   return TRUE;
